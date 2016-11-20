@@ -31,7 +31,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common import kwalletbinding
 from common.i18n import Q_
 
 class FeaturesWindow:
@@ -70,7 +69,7 @@ class FeaturesWindow:
                 _('Feature not available under Windows.')),
             _('Password encryption'): (self.some_keyring_available,
                 _('Passwords can be stored securely and not just in plaintext.'),
-                _('Requires gnome-keyring and python-gnome2-desktop, or kwalletcli.'),
+                _('Requires libsecret and a provider (such as GNOME Keyring and KSecretService).'),
                 _('Feature not available under Windows.')),
             _('Spell Checker'): (self.speller_available,
                 _('Spellchecking of composed messages.'),
@@ -186,12 +185,10 @@ class FeaturesWindow:
     def some_keyring_available(self):
         if os.name == 'nt':
             return False
-        if kwalletbinding.kwallet_available():
-            return True
         try:
-            gi.require_version('GnomeKeyring', '1.0')
-            from gi.repository import GnomeKeyring
-        except Exception:
+            gi.require_version('Secret', '1')
+            from gi.repository import Secret
+        except (ValueError, ImportError):
             return False
         return True
 

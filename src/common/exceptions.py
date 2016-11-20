@@ -143,15 +143,3 @@ class PluginsystemError(Exception):
 
     def __str__(self):
         return self.text
-
-class GnomeKeyringError(Exception):
-    """
-    Error with Gnome Keyring
-    """
-
-    def __init__(self, error):
-        Exception.__init__(self)
-        self.error = error
-
-    def __str__(self):
-        return str(self.error)

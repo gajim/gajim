@@ -28,15 +28,8 @@ __all__ = ['get_password', 'save_password']
 
 import warnings
 from common import gajim
-from common import kwalletbinding
-from common.exceptions import GnomeKeyringError
 import gi
 
-USER_HAS_LIBSECRET = False
-USER_HAS_GNOMEKEYRING = False
-USER_USES_GNOMEKEYRING = False
-USER_HAS_KWALLETCLI = False
-GnomeKeyring = None
 Secret = None
 
 class PasswordStorage(object):
@@ -49,10 +42,8 @@ class PasswordStorage(object):
 class SimplePasswordStorage(PasswordStorage):
     def get_password(self, account_name):
         passwd = gajim.config.get_per('accounts', account_name, 'password')
-        if passwd and (passwd.startswith('gnomekeyring:') or passwd.startswith('libsecret:') or \
-        passwd == '<kwallet>'):
-            # this is not a real password, it's either a gnome
-            # keyring token or stored in the KDE wallet
+        if passwd and passwd.startswith('libsecret:'):
+            # this is not a real password, it’s stored through libsecret.
             return None
         else:
             return passwd
@@ -62,98 +53,6 @@ class SimplePasswordStorage(PasswordStorage):
         if account_name in gajim.connections:
             gajim.connections[account_name].password = password
 
-
-class GnomePasswordStorage(PasswordStorage):
-    def __init__(self):
-        (err, self.keyring) = GnomeKeyring.get_default_keyring_sync()
-        if err  != GnomeKeyring.Result.OK:
-            raise GnomeKeyringError(err)
-        if self.keyring is None:
-            self.keyring = 'login'
-        err = GnomeKeyring.create_sync(self.keyring, None)
-        if err not in (GnomeKeyring.Result.OK,
-        GnomeKeyring.Result.KEYRING_ALREADY_EXISTS):
-            raise GnomeKeyringError(err)
-
-    def get_password(self, account_name):
-        conf = gajim.config.get_per('accounts', account_name, 'password')
-        if conf is None or conf == '<kwallet>':
-            return None
-        if not (conf.startswith('gnomekeyring:') or conf.startswith('libsecret')):
-            password = conf
-            ## migrate the password over to keyring
-            try:
-                self.save_password(account_name, password)
-            except GnomeKeyringError as e:
-                if e.error == GnomeKeyring.Result.NO_KEYRING_DAEMON:
-                    ## no keyring daemon: in the future, stop using it
-                    set_storage(SimplePasswordStorage())
-            return password
-        server = gajim.config.get_per('accounts', account_name, 'hostname')
-        user = gajim.config.get_per('accounts', account_name, 'name')
-        attributes1 = GnomeKeyring.attribute_list_new()
-        GnomeKeyring.attribute_list_append_string(attributes1, 'server',
-            str(server))
-        GnomeKeyring.attribute_list_append_string(attributes1, 'user',
-            str(user))
-        GnomeKeyring.attribute_list_append_string(attributes1, 'protocol',
-            'xmpp')
-        attributes2 = GnomeKeyring.attribute_list_new()
-        GnomeKeyring.attribute_list_append_string(attributes2, 'account_name',
-            str(account_name))
-        GnomeKeyring.attribute_list_append_string(attributes2, 'gajim',
-            '1')
-        (err, items) = GnomeKeyring.find_items_sync(
-            GnomeKeyring.ItemType.NETWORK_PASSWORD, attributes1)
-        if err != GnomeKeyring.Result.OK:
-            (err, items) = GnomeKeyring.find_items_sync(
-                GnomeKeyring.ItemType.GENERIC_SECRET, attributes2)
-            if err == GnomeKeyring.Result.OK and len(items) > 0:
-                password = items[0].secret
-                self.save_password(account_name, password)
-                for item in items:
-                    GnomeKeyring.item_delete_sync(item.keyring,
-                        int(item.item_id))
-            else:
-                items = []
-        if len(items) > 1:
-            warnings.warn("multiple gnome keyring items found for account %s;"
-                " trying to use the first one..." % account_name)
-        if err == GnomeKeyring.Result.NO_KEYRING_DAEMON:
-            ## no keyring daemon: in the future, stop using it
-            set_storage(SimplePasswordStorage())
-        if items:
-            return items[0].secret
-        return None
-
-    def save_password(self, account_name, password, update=True):
-        server = gajim.config.get_per('accounts', account_name, 'hostname')
-        user = gajim.config.get_per('accounts', account_name, 'name')
-        display_name = _('XMPP account %s@%s') % (user, server)
-        attributes1 = GnomeKeyring.attribute_list_new()
-        GnomeKeyring.attribute_list_append_string(attributes1, 'server',
-            str(server))
-        GnomeKeyring.attribute_list_append_string(attributes1, 'user',
-            str(user))
-        GnomeKeyring.attribute_list_append_string(attributes1, 'protocol',
-            'xmpp')
-        if password is None:
-            password = str()
-        (err, auth_token) = GnomeKeyring.item_create_sync(self.keyring,
-            GnomeKeyring.ItemType.NETWORK_PASSWORD, display_name, attributes1,
-            password, update)
-        if err != GnomeKeyring.Result.OK:
-            if err in (GnomeKeyring.Result.DENIED,
-            GnomeKeyring.Result.CANCELLED):
-                set_storage(SimplePasswordStorage())
-                storage.save_password(account_name, password)
-                return
-            else:
-                raise GnomeKeyringError(err)
-        gajim.config.set_per('accounts', account_name, 'password',
-            'gnomekeyring:')
-        if account_name in gajim.connections:
-            gajim.connections[account_name].password = password
 
 class SecretPasswordStorage(PasswordStorage):
     def __init__(self):
@@ -170,14 +69,7 @@ class SecretPasswordStorage(PasswordStorage):
         conf = gajim.config.get_per('accounts', account_name, 'password')
         if conf is None:
             return None
-        if conf == '<kwallet>':
-            # Migrate from kwallet
-            if kwalletbinding.kwallet_available():
-                kw_storage = KWalletPasswordStorage()
-                password = kw_storage.get_password(account_name)
-                self.save_password(account_name, password)
-                return password
-        if not (conf.startswith('libsecret:') or conf.startswith('gnomekeyring:')):
+        if not conf.startswith('libsecret:'):
             password = conf
             ## migrate the password over to keyring
             try:
@@ -206,94 +98,22 @@ class SecretPasswordStorage(PasswordStorage):
         if account_name in gajim.connections:
             gajim.connections[account_name].password = password
 
-class KWalletPasswordStorage(PasswordStorage):
-    def get_password(self, account_name):
-        pw = gajim.config.get_per('accounts', account_name, 'password')
-        if not pw or pw.startswith('gnomekeyring:'):
-            # unset, empty or not ours
-            return None
-        if pw != '<kwallet>':
-            # migrate the password
-            if kwalletbinding.kwallet_put('gajim', account_name, pw):
-                gajim.config.set_per('accounts', account_name, 'password',
-                 '<kwallet>')
-            else:
-                # stop using the KDE Wallet
-                set_storage(SimplePasswordStorage())
-            return pw
-        pw = kwalletbinding.kwallet_get('gajim', account_name)
-        if pw is None:
-            # stop using the KDE Wallet
-            set_storage(SimplePasswordStorage())
-        if not pw:
-            # False, None, or the empty string
-            return None
-        return pw
-
-    def save_password(self, account_name, password):
-        if not kwalletbinding.kwallet_put('gajim', account_name, password):
-            # stop using the KDE Wallet
-            set_storage(SimplePasswordStorage())
-            storage.save_password(account_name, password)
-            return
-        pwtoken = '<kwallet>'
-        if not password:
-            # no sense in looking up the empty string in the KWallet
-            pwtoken = ''
-        gajim.config.set_per('accounts', account_name, 'password', pwtoken)
-        if account_name in gajim.connections:
-            gajim.connections[account_name].password = password
-
 
 storage = None
 def get_storage():
     global storage
     if storage is None: # None is only in first time get_storage is called
-        if gajim.config.get('use_gnomekeyring'):
-            global Secret
-            try:
-                gi.require_version('Secret', '1')
-                gir = __import__('gi.repository', globals(), locals(),
-                    ['Secret'], 0)
-                Secret = gir.Secret
-            except (ValueError, AttributeError):
-                global GnomeKeyring
-                try:
-                    gir = __import__('gi.repository', globals(), locals(),
-                        ['GnomeKeyring'], 0)
-                    GnomeKeyring = gir.GnomeKeyring
-                except (ImportError, AttributeError):
-                    pass
-                else:
-                    global USER_HAS_GNOMEKEYRING
-                    global USER_USES_GNOMEKEYRING
-                    USER_HAS_GNOMEKEYRING = True
-                    if GnomeKeyring.is_available():
-                        USER_USES_GNOMEKEYRING = True
-                    else:
-                        USER_USES_GNOMEKEYRING = False
-            else:
-                global USER_HAS_LIBSECRET
-                USER_HAS_LIBSECRET = True
-        if USER_HAS_LIBSECRET:
-            try:
-                storage = SecretPasswordStorage()
-                return storage
-            except Exception:
-                storage = None
-        if USER_USES_GNOMEKEYRING:
-            try:
-                storage = GnomePasswordStorage()
-            except GnomeKeyringError:
-                storage = None
-        if storage is None:
-            if gajim.config.get('use_kwalletcli'):
-                global USER_HAS_KWALLETCLI
-                if kwalletbinding.kwallet_available():
-                    USER_HAS_KWALLETCLI = True
-                if USER_HAS_KWALLETCLI:
-                    storage = KWalletPasswordStorage()
-        if storage is None:
+        global Secret
+        try:
+            gi.require_version('Secret', '1')
+            gir = __import__('gi.repository', globals(), locals(),
+                ['Secret'], 0)
+            Secret = gir.Secret
+        except (ValueError, AttributeError):
+            pass
+        try:
+            storage = SecretPasswordStorage()
+        except Exception:
             storage = SimplePasswordStorage()
     return storage
 
