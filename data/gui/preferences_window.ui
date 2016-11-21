@@ -270,7 +270,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="show_pep_in_roster_checkbutton">
-                            <property name="label" translatable="yes">Display e_xtra information of contacts in roster (mood, activity, ...)m_ood of contacts in roster</property>
+                            <property name="label" translatable="yes">Display e_xtra information of contacts in roster (mood, activity, ...)</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
