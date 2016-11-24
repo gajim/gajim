@@ -882,6 +882,11 @@ class ConnectionHandlersBase:
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
 
+        # IDs of sent messages (https://trac.gajim.org/ticket/8222)
+        self.sent_message_ids = []
+
+        self.received_message_hashes = []
+
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
@@ -1442,8 +1447,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         # ID of urn:xmpp:ping requests
         self.awaiting_xmpp_ping_id = None
         self.continue_connect_info = None
-        # IDs of sent messages (https://trac.gajim.org/ticket/8222)
-        self.sent_message_ids = []
 
         try:
             self.sleeper = common.sleepy.Sleepy()
