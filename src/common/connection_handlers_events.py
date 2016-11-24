@@ -1276,6 +1276,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if not form:
                     return
 
+                if not form.getField('FORM_TYPE'):
+                    return
+                
                 if form['FORM_TYPE'] == 'urn:xmpp:ssn':
                     self.session.handle_negotiation(form)
                 else:
