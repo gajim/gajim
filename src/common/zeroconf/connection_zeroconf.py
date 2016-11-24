@@ -346,7 +346,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             def on_send_ok(msg_id):
                 gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
                     jid=obj.jid, message=obj.message, keyID=obj.keyID,
-                    chatstate=None))
+                    automatic_message=obj.automatic_message, chatstate=None,
+                    msg_id=msg_id))
                 if obj.callback:
                     obj.callback(msg_iq, *obj.callback_args)
 
