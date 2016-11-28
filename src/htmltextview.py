@@ -871,6 +871,8 @@ class HtmlTextView(gtk.TextView):
                 return
             text = getattr(tag, 'title', False)
             if text:
+                if len(text) > 50:
+                    text = text[:47] + '...'
                 pointer = self.get_pointer()
                 position = self.window.get_origin()
                 self.tooltip.show_tooltip(text, 8, position[1] + pointer[1])
