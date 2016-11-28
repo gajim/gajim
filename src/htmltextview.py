@@ -913,6 +913,8 @@ class HtmlTextView(Gtk.TextView):
                 return
             text = getattr(tag, 'title', False)
             if text:
+                if len(text) > 50:
+                    text = text[:47] + '...'
                 position = w.get_origin()[1:]
                 self.tooltip.show_tooltip(text, 8, position[1] + y)
 
