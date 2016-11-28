@@ -1622,7 +1622,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
         iq.setID(id_)
         def _on_response(resp):
-            timePong = time_time()
+            timePong = time.time()
             if not nbxmpp.isResultNode(resp):
                 gajim.nec.push_incoming_event(PingErrorEvent(None, conn=self,
                     contact=pingTo))
@@ -1631,7 +1631,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(PingReplyEvent(None, conn=self,
                 contact=pingTo, seconds=timeDiff, control=control))
         if pingTo:
-            timePing = time_time()
+            timePing = time.time()
             self.connection.SendAndCallForResponse(iq, _on_response)
         else:
             self.connection.SendAndCallForResponse(iq, self._on_xmpp_ping_answer)
