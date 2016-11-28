@@ -102,7 +102,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;4&lt;/b&gt; def</property>
+                <property name="label" translatable="yes">&lt;b&gt;4&lt;/b&gt; ghi</property>
                 <property name="use_markup">True</property>
               </object>
             </child>
