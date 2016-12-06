@@ -498,7 +498,7 @@ atexit.register(on_exit)
 
 from gui_interface import Interface
 
-if __name__ == '__main__':
+if __name__.endswith('__main__'):
     def sigint_cb(num, stack):
         sys.exit(5)
     # ^C exits the application normally to delete pid file

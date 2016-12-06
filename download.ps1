@@ -1,6 +1,6 @@
 # Download the file to a specific location
 $clnt = new-object System.Net.WebClient
-$url = "http://www.funkroom.net/files/site-packages.zip"
+$url = "https://gajim.org/downloads/snap/win/build/site-packages.zip"
 $file = "c:\site-packages.zip"
 $clnt.DownloadFile($url,$file)
 

@@ -94,15 +94,6 @@ GTK_LIBS = {
               'gupnp-dlna-2.0', 'icons', 'ssl', 'themes', 'xml']
 }
 
-
-# share 'gobject-introspection-1.0'
-# , 'enchant' 'gir-1.0',
-
-
-#lib 'gobject-introspection'
-# 'aspell-0.60', 'enchant',  'gst-plugins-bad',
-
-
 # Create the list of includes as cx_freeze likes
 INCLUDE_FILES = []
 for dll in MISSING_DLL:
@@ -124,17 +115,12 @@ for language in next(os.walk('po'))[1]:
 
 OPTIONS = {
     'build_exe': {
-        'compressed': False,
-        'includes': ['gi', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
-                     'numbers', 'win32com.client', 'win32com.server',
-                     'cryptography', 'pkg_resources'],
+        'includes': ['gi', 'numbers', 'win32com.client', 'win32com.server'],
         'packages': ['gi', 'cffi', 'cryptography', 'google', 'axolotl',
-                     'pkg_resources'],
-        'base': 'Win32GUI',
+                     'pkg_resources', 'Crypto', 'pycparser'],
         'include_files': INCLUDE_FILES,
     }
 }
-
 
 setup(
     name='Gajim',
@@ -145,5 +131,6 @@ setup(
     download_url='http://gajim.org/downloads.php',
     license='GPL',
     options=OPTIONS,
-    executables=[Executable('src/gajim.py', icon='data/pixmaps/gajim.ico')],
+    executables=[Executable('src/gajim.py', icon='data/pixmaps/gajim.ico',
+                            base='Win32GUI')],
 )
