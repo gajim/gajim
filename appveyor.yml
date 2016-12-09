@@ -41,9 +41,20 @@ install:
   - rename exe.win32-3.4 build
 
   - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
-  
+  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-16.10.2-$($env:APPVEYOR_REPO_COMMIT).exe"
 
 build: off
 
-on_finish:
-  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-16.10.1-$($env:APPVEYOR_REPO_COMMIT).exe"
+deploy:
+    # FTP deployment provider settings
+  - provider: FTP
+    protocol: ftp
+    host: panoramix.gajim.org
+    username:
+      secure: SNcOJDhUtBjfddbKXudE2w==
+    password:
+      secure: tQkYbcUb6nChCp0cdqo4CA==
+    folder: win_snap
+    active_mode: false
+    beta: true      # enable alternative FTP library for 'ftp' and 'ftps' modes
+    debug: true
