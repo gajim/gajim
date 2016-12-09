@@ -1032,7 +1032,7 @@ class ConnectionHandlersBase:
             # Do not override assigned key
             obj.contact.keyID = obj.keyID
         if obj.timestamp:
-            obj.contact.last_status_time = obj.timestamp
+            obj.contact.last_status_time = localtime(obj.timestamp)
         elif not gajim.block_signed_in_notifications[account]:
             # We're connected since more that 30 seconds
             obj.contact.last_status_time = localtime()

@@ -1069,64 +1069,14 @@ class GroupchatControl(ChatControlBase):
                 # Like that xhtml messages are grayed too.
                 self.print_old_conversation(obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=None,
-                    displaymarking=obj.displaymarking)
+                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_)
             else:
-                if obj.nick in self.last_received_txt and obj.correct_id and \
-                obj.correct_id == self.last_received_id[obj.nick]:
-                    if obj.nick == self.nick:
-                        old_txt = self.last_sent_txt
-                        self.last_sent_txt = obj.msgtxt
-                        self.conv_textview.correct_last_sent_message(obj.msgtxt,
-                            obj.xhtml_msgtxt, obj.nick, old_txt)
-                    else:
-                        old_txt = self.last_received_txt[obj.nick]
-                        (highlight, sound) = self.highlighting_for_message(obj.msgtxt, obj.timestamp)
-                        other_tags_for_name = []
-                        other_tags_for_text = []
-                        if obj.nick in self.gc_custom_colors:
-                            other_tags_for_name.append('gc_nickname_color_' + \
-                                str(self.gc_custom_colors[obj.nick]))
-                        else:
-                            self.gc_count_nicknames_colors += 1
-                            if self.gc_count_nicknames_colors == \
-                            self.number_of_colors:
-                                self.gc_count_nicknames_colors = 0
-                            self.gc_custom_colors[obj.nick] = \
-                                self.gc_count_nicknames_colors
-                            other_tags_for_name.append('gc_nickname_color_' + \
-                                str(self.gc_count_nicknames_colors))
-                        if highlight:
-                            # muc-specific chatstate
-                            if self.parent_win:
-                                self.parent_win.redraw_tab(self, 'attention')
-                            else:
-                                self.attention_flag = True
-                            other_tags_for_name.append('bold')
-                            other_tags_for_text.append('marked')
-
-                            if obj.nick in self.attention_list:
-                                self.attention_list.remove(obj.nick)
-                            elif len(self.attention_list) > 6:
-                                self.attention_list.pop(0) # remove older
-                            self.attention_list.append(obj.nick)
-
-                        if obj.msgtxt.startswith('/me ') or \
-                        obj.msgtxt.startswith('/me\n'):
-                            other_tags_for_text.append('gc_nickname_color_' + \
-                                str(self.gc_custom_colors[obj.nick]))
-                        self.conv_textview.correct_last_received_message(
-                            obj.msgtxt, obj.xhtml_msgtxt, obj.nick, old_txt,
-                            other_tags_for_name=other_tags_for_name,
-                            other_tags_for_text=other_tags_for_text)
-                    self.last_received_txt[obj.nick] = obj.msgtxt
-                    self.last_received_id[obj.nick] = obj.stanza.getID()
-                    return
                 if obj.nick == self.nick:
                     self.last_sent_txt = obj.msgtxt
                 self.print_conversation(obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
                     displaymarking=obj.displaymarking,
-                    correct_id=(obj.stanza.getID(), None))
+                    correct_id=obj.correct_id, msg_stanza_id=obj.id_)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, msg, tim, xhtml, session, msg_log_id=None,
@@ -1181,7 +1131,7 @@ class GroupchatControl(ChatControlBase):
         return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
-    displaymarking=None):
+    displaymarking=None, msg_stanza_id=None):
         if contact:
             if contact == self.nick: # it's us
                 kind = 'outgoing'
@@ -1196,10 +1146,10 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             small_attr, small_attr + ['restored_message'],
             small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
-            displaymarking=displaymarking)
+            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
-    graphics=True, displaymarking=None, correct_id=None):
+    graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None):
         """
         Print a line in the conversation
 
@@ -1261,7 +1211,7 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             graphics=graphics, displaymarking=displaymarking,
-            correct_id=correct_id)
+            correct_id=correct_id, msg_stanza_id=msg_stanza_id)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
@@ -1422,8 +1372,8 @@ class GroupchatControl(ChatControlBase):
                 # print if a control is open
                 obj.session.control.print_conversation(obj.msgtxt,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking, correct_id=(obj.id_,
-                    obj.correct_id))
+                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
+                    correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick, obj.msgtxt, obj.timestamp,

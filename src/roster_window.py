@@ -1859,7 +1859,7 @@ class RosterWindow:
                 # with them
                 session = gajim.connections[account].make_new_session(jid)
 
-                tim = time.localtime(float(result[2]))
+                tim = float(result[2])
                 session.roster_message(jid, result[1], tim, msg_type='chat',
                     msg_log_id=result[0], additional_data=additional_data)
                 gajim.logger.set_shown_unread_msgs(result[0])
@@ -2745,7 +2745,7 @@ class RosterWindow:
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
                 xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-                msg_log_id=obj.msg_log_id, correct_id=(obj.id_, obj.correct_id),
+                msg_log_id=obj.msg_log_id, msg_stanza_id=obj.id_, correct_id=obj.correct_id,
                 xep0184_id=xep0184_id)
             if obj.msg_log_id:
                 pw = obj.session.control.parent_win

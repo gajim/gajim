@@ -523,9 +523,9 @@ class Logger:
         subject_col = subject
         additional_data_col = json.dumps(additional_data)
         if tim:
-            time_col = int(float(time.mktime(tim)))
+            time_col = float(tim)
         else:
-            time_col = int(float(time.time()))
+            time_col = float(time.time())
 
         kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
                 show)
@@ -1112,9 +1112,9 @@ class Logger:
 
     def save_if_not_exists(self, with_, direction, tim, msg='', nick=None, additional_data={}):
         if tim:
-            time_col = int(float(time.mktime(tim)))
+            time_col = float(tim)
         else:
-            time_col = int(float(time.time()))
+            time_col = float(time.time())
         if not msg:
             return
         if self.jid_is_from_pm(with_) or nick:
@@ -1157,7 +1157,7 @@ class Logger:
         self.write(type_, with_, message=msg, tim=tim, additional_data=additional_data)
 
     def _nec_gc_message_received(self, obj):
-        tim_f = float(time.mktime(obj.timestamp))
+        tim_f = float(obj.timestamp)
         tim_int = int(tim_f)
         if gajim.config.should_log(obj.conn.name, obj.jid) and not \
         tim_int < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
