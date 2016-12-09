@@ -74,14 +74,6 @@ if not HAS_NBXMPP:
     print('Gajim needs python-nbxmpp >= %s to run. Quiting...' % MIN_NBXMPP_VER)
     sys.exit()
 
-#from common import demandimport
-#demandimport.enable()
-#demandimport.ignore += ['GObject._gobject', 'libasyncns', 'i18n',
-#    'logging.NullHandler', 'dbus.service', 'OpenSSL.SSL', 'OpenSSL.crypto',
-#    'common.sleepy', 'DLFCN', 'dl', 'xml.sax', 'xml.sax.handler', 'ic',
-#    'Crypto.PublicKey', 'IPython', 'contextlib', 'imp', 'monotonic',
-#    'gtkexcepthook', 'libxml2', 'libxml2mod']
-
 if os.name == 'nt':
     import locale
     import gettext
@@ -498,7 +490,7 @@ atexit.register(on_exit)
 
 from gui_interface import Interface
 
-if __name__ == '__main__':
+if __name__.endswith('__main__'):
     def sigint_cb(num, stack):
         sys.exit(5)
     # ^C exits the application normally to delete pid file
