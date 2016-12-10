@@ -41,7 +41,8 @@ install:
   - rename exe.win32-3.4 build
 
   - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
-  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-16.10.2-$($env:APPVEYOR_REPO_COMMIT).exe"
+  - ps: $env:TIME_STRING=(get-date).ToString(‘d-M-yyyy’)
+  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-16.10.2-$($env:TIME_STRING).exe"
 
 build: off
 
