@@ -162,7 +162,7 @@ except ImportError:
 HAVE_GPG = True
 GPG_BINARY = 'gpg'
 try:
-    __import__('common.gnupg', globals(), locals(), [], 0)
+    __import__('gnupg', globals(), locals(), [], 0)
 except ImportError:
     HAVE_GPG = False
 else:
