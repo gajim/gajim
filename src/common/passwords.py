@@ -24,11 +24,21 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
+import logging
+import gi
+from common import gajim
+
 __all__ = ['get_password', 'save_password']
 
-import warnings
-from common import gajim
-import gi
+log = logging.getLogger('gajim.password')
+
+if os.name == 'nt':
+    try:
+        import keyring
+    except ImportError:
+        log.debug('python-keyring missing, falling back to plaintext storage')
+
 
 Secret = None
 
@@ -99,6 +109,32 @@ class SecretPasswordStorage(PasswordStorage):
             gajim.connections[account_name].password = password
 
 
+class SecretWindowsPasswordStorage(PasswordStorage):
+    """ Windows Keyring """
+
+    def __init__(self):
+        self.win_keyring = keyring.get_keyring()
+
+    def save_password(self, account_name, password):
+        self.win_keyring.set_password('gajim', account_name, password)
+        gajim.config.set_per('accounts', account_name, 'password', 'winvault:')
+
+    def get_password(self, account_name):
+        log.debug('getting password')
+        conf = gajim.config.get_per('accounts', account_name, 'password')
+        if conf is None:
+            return None
+        if not conf.startswith('winvault:'):
+            password = conf
+            # migrate the password over to keyring
+            try:
+                self.save_password(account_name, password)
+            except Exception:
+                log.exception('error: ')
+            return password
+        return self.win_keyring.get_password('gajim', account_name)
+
+
 storage = None
 def get_storage():
     global storage
@@ -112,7 +148,10 @@ def get_storage():
         except (ValueError, AttributeError):
             pass
         try:
-            storage = SecretPasswordStorage()
+            if os.name != 'nt':
+                storage = SecretPasswordStorage()
+            else:
+                storage = SecretWindowsPasswordStorage()
         except Exception:
             storage = SimplePasswordStorage()
     return storage
@@ -120,7 +159,6 @@ def get_storage():
 def set_storage(storage_):
     global storage
     storage = storage_
-
 
 def get_password(account_name):
     return get_storage().get_password(account_name)
