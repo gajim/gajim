@@ -23,6 +23,7 @@ install:
   - ps: Add-Content C:\Python34\Lib\site-packages\google\__init__.py " "
   - "%PYTHON%\\python.exe -m pip install pycryptodome"
   - "%PYTHON%\\python.exe -m pip install cx_freeze"
+  - "%PYTHON%\\python.exe -m pip install keyring"
   - "%PYTHON%\\python.exe -m pip install pypiwin32"
   - "%PYTHON%\\python.exe -m pip install pyopenssl"
   - "%PYTHON%\\python.exe -m pip install --no-dependencies python-axolotl"
