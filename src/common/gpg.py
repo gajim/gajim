@@ -25,9 +25,11 @@
 from gajim import HAVE_GPG, GPG_BINARY
 import os
 import locale
+import logging
 
 if HAVE_GPG:
     import gnupg
+    gnupg.logger = logging.getLogger('gajim.c.gnupg')
 
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):
