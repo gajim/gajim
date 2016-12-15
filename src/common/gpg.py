@@ -89,7 +89,7 @@ if HAVE_GPG:
 
             if result.fingerprint:
                 return self._stripHeaderFooter(str(result))
-            if result.status == 'key expired':
+            if hasattr(result, 'status') and result.status == 'key expired':
                 return 'KEYEXPIRED'
             return 'BAD_PASSPHRASE'
 
