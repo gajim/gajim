@@ -971,26 +971,31 @@ class Interface:
             sid=file_props.sid)
         ft_win = self.instances['file_transfers']
         h = Hashes()
+        hash_ = None
         try:
             file_ = open(file_props.file_name, 'rb')
+            hash_ = h.calculateHash(file_props.algo, file_)
+            file_.close()
         except:
-            return
-        hash_ = h.calculateHash(file_props.algo, file_)
-        file_.close()
+            pass
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
         jid = unicode(file_props.sender)
-        if file_props.hash_ == hash_:
+        if hash_ and file_props.hash_ == hash_:
             gobject.idle_add(self.popup_ft_result, account, jid, file_props)
             gobject.idle_add(ft_win.set_status, file_props, 'ok')
+            # End jingle session
+            if session:
+                session.end_session()
         else:
             # wrong hash, we need to get the file again!
             file_props.error = -10
             gobject.idle_add(self.popup_ft_result, account, jid, file_props)
             gobject.idle_add(ft_win.set_status, file_props, 'hash_error')
-        # End jingle session
-        if session:
-            session.end_session()
+            # End jingle session
+            # TODO: send media-error
+            if session:
+                session.end_session()
 
     def handle_event_file_rcv_completed(self, account, file_props):
         ft = self.instances['file_transfers']
