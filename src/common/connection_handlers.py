@@ -1203,11 +1203,12 @@ class ConnectionHandlersBase:
         self.name, 'request_receipt'):
             ctrl = obj.session.control
             if not ctrl:
-                # Received <message> doesn't have the <thread> element?
-                # search in all sessions
-                for s in self.get_sessions(obj.jid):
-                    if s.control:
-                        ctrl = s.control
+                # Received <message> doesn't have the <thread> element
+                # or control is not bound to session?
+                # --> search for it
+                ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+                    obj.conn.name, obj.resource)
+            
             if ctrl:
                 id_ = obj.receipt_received_tag.getAttr('id')
                 if not id_:
