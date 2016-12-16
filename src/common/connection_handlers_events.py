@@ -1657,6 +1657,20 @@ class AnonymousAuthEvent(nec.NetworkIncomingEvent):
     name = 'anonymous-auth'
     base_network_events = []
 
+class JingleSessionInitiateSendingEvent(nec.NetworkOutgoingEvent, HelperEvent):
+    name = 'jingle-session-initiate-sending'
+    base_network_events = []
+
+    def init(self):
+        self.jingle_content = None
+        self.FT_content = None
+
+    def generate(self):
+        self.get_id()
+        self.fjid = self.conn._ft_get_from(self.stanza)
+        self.jid = gajim.get_jid_without_resource(self.fjid)
+        return True
+
 class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-request-received'
     base_network_events = []

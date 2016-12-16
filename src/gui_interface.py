@@ -970,32 +970,32 @@ class Interface:
         session = gajim.connections[account].get_jingle_session(jid=None,
             sid=file_props.sid)
         ft_win = self.instances['file_transfers']
-        if not file_props.hash_:
-            # We disn't get the hash, sender probably don't support that
-            jid = unicode(file_props.sender)
-            self.popup_ft_result(account, jid, file_props)
-            ft_win.set_status(file_props, 'ok')
         h = Hashes()
+        hash_ = None
         try:
             file_ = open(file_props.file_name, 'rb')
+            hash_ = h.calculateHash(file_props.algo, file_)
+            file_.close()
         except:
-            return
-        hash_ = h.calculateHash(file_props.algo, file_)
-        file_.close()
+            pass
         # If the hash we received and the hash of the file are the same,
         # then the file is not corrupt
         jid = unicode(file_props.sender)
-        if file_props.hash_ == hash_:
+        if hash_ and file_props.hash_ == hash_:
             gobject.idle_add(self.popup_ft_result, account, jid, file_props)
             gobject.idle_add(ft_win.set_status, file_props, 'ok')
+            # End jingle session
+            if session:
+                session.end_session()
         else:
             # wrong hash, we need to get the file again!
             file_props.error = -10
             gobject.idle_add(self.popup_ft_result, account, jid, file_props)
             gobject.idle_add(ft_win.set_status, file_props, 'hash_error')
-        # End jingle session
-        if session:
-            session.end_session()
+            # End jingle session
+            # TODO: send media-error
+            if session:
+                session.end_session()
 
     def handle_event_file_rcv_completed(self, account, file_props):
         ft = self.instances['file_transfers']
@@ -1009,14 +1009,25 @@ class Interface:
         if file_props.stalled or file_props.paused:
             return
 
-        if file_props.type_ == 'r' and file_props.hash_: # we receive a file
+        if file_props.type_ == 'r': # we receive a file
             gajim.socks5queue.remove_receiver(file_props.sid, True, True)
-            # we compare hashes
             if file_props.session_type == 'jingle':
-                # Compare hashes in a new thread
-                self.hashThread = Thread(target=self.__compare_hashes,
-                    args=(account, file_props))
-                self.hashThread.start()
+                if file_props.hash_:
+                    # We compare hashes in a new thread
+                    self.hashThread = Thread(target=self.__compare_hashes,
+                        args=(account, file_props))
+                    self.hashThread.start()
+                else:
+                    # We disn't get the hash, sender probably don't support that
+                    jid = unicode(file_props.sender)
+                    self.popup_ft_result(account, jid, file_props)
+                    ft.set_status(file_props, 'ok')
+                    session = gajim.connections[account].get_jingle_session(jid=None,
+                        sid=file_props.sid)
+                    # End jingle session
+                    # TODO: only if there are no other parallel downloads in this session
+                    if session:
+                        session.end_session()
         else: # we send a file
             jid = unicode(file_props.receiver)
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
