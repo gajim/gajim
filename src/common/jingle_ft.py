@@ -31,7 +31,8 @@ from common.jingle_ftstates import StateCandReceived, JingleTransportSocks5, \
 from common.jingle_transport import TransportType
 from jingle_content import contents, JingleContent
 from common import helpers
-from common.connection_handlers_events import FileRequestReceivedEvent
+from common.connection_handlers_events import FileRequestReceivedEvent, \
+    JingleSessionInitiateSendingEvent
 import threading
 import logging
 
@@ -140,7 +141,10 @@ class JingleFileTransfer(JingleContent):
             self.session.accept_session()
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
-        pass
+        log.debug("Jingle FT session initiate sending")
+        gajim.nec.push_outgoing_event(JingleSessionInitiateSendingEvent(None,
+            conn=self.session.connection, stanza=stanza, jingle_content=content,
+            FT_content=self))
 
     def __send_hash(self):
         # Send hash in a session info
