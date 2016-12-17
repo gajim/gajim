@@ -1,5 +1,6 @@
 syntax: glob
 *.orig
+*.swp
 *.gmo
 *.in
 *.m4
@@ -15,6 +16,7 @@ po/POTFILES
 po/stamp-it
 stamp-h1
 Makefile
+__pycache__/
 
 syntax: regexp
 ^config\.*
