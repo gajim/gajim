@@ -684,8 +684,10 @@ class CommonConnection:
             else:
                 self.gpg.passphrase = passphrase
 
-    def ask_gpg_keys(self):
+    def ask_gpg_keys(self, keyID=None):
         if self.gpg:
+            if keyID:
+                return self.gpg.get_key(keyID)
             return self.gpg.get_keys()
         return None
 
@@ -2163,7 +2165,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
                     "session":session, "original_message":original_message, "subject":subject, "type_":type_,
                     "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
-            
+
         self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
             subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
             resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
@@ -2176,7 +2178,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if obj.conn.name != self.name:
             return
         obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
-        
+
         # obj in this function is the obj as seen in _nec_message_outgoing()
         def cb(obj, jid, msg, keyID, forward_from, session, original_message,
         subject, type_, msg_iq, xhtml, msg_id):
@@ -2197,7 +2199,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             else:
                 self.log_message(jid, msg, forward_from, session,
                     original_message, subject, type_, xhtml, obj.additional_data)
-        
+
         cb(msg_id=obj.msg_id, **obj._cb_parameters)
 
     def send_contacts(self, contacts, fjid, type_='message'):
