@@ -18,10 +18,13 @@
 ##
 
 from common import gajim
+import logging
 import select
 import socket
 import re
 from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN, C_TXT
+
+log = logging.getLogger('gajim.c.z.zeroconf_bonjour')
 
 try:
     import pybonjour
@@ -58,10 +61,11 @@ class Zeroconf:
         self.queried = []
 
     def browse_callback(self, sdRef, flags, interfaceIndex, errorCode, serviceName, regtype, replyDomain):
-        gajim.log.debug('Found service %s in domain %s on %i(type: %s).' % (serviceName, replyDomain, interfaceIndex, regtype))
+        log.debug('Found service %s in domain %s on %i(type: %s).' % (serviceName, replyDomain, interfaceIndex, regtype))
         if not self.connected:
             return
         if errorCode != pybonjour.kDNSServiceErr_NoError:
+            log.debug('Error in browse_callback: %s', str(errorCode))
             return
         if not (flags & pybonjour.kDNSServiceFlagsAdd):
             self.remove_service_callback(serviceName)
@@ -74,7 +78,7 @@ class Zeroconf:
             while not self.resolved:
                 ready = select.select([resolve_sdRef], [], [], resolve_timeout)
                 if resolve_sdRef not in ready[0]:
-                    gajim.log.debug('Resolve timed out')
+                    log.debug('Resolve timed out')
                     break
                 pybonjour.DNSServiceProcessResult(resolve_sdRef)
             else:
@@ -83,7 +87,7 @@ class Zeroconf:
             resolve_sdRef.close()
 
     def remove_service_callback(self, name):
-        gajim.log.debug('Service %s disappeared.' % name)
+        log.debug('Service %s disappeared.' % name)
         if not self.connected:
             return
         if name != self.name:
@@ -106,6 +110,7 @@ class Zeroconf:
                           rrtype, rrclass, rdata, ttl):
 
         if errorCode != pybonjour.kDNSServiceErr_NoError:
+            log.debug('Error in query_record_callback: %s', str(errorCode))
             return
 
         fullname, port, txtRecord = self.resolved_contacts[hosttarget]
@@ -129,9 +134,9 @@ class Zeroconf:
         txt = pybonjour.TXTRecord.parse(txtRecord)
         ip = socket.inet_ntoa(rdata)
 
-        gajim.log.debug('Service data for service %s on %i:'
+        log.debug('Service data for service %s on %i:'
             % (fullname, interfaceIndex))
-        gajim.log.debug('Host %s, ip %s, port %i, TXT data: %s'
+        log.debug('Host %s, ip %s, port %i, TXT data: %s'
             % (hosttarget, ip, port, txt._items))
 
         if not self.connected:
@@ -163,6 +168,7 @@ class Zeroconf:
                     hosttarget, port, txtRecord):
 
         if errorCode != pybonjour.kDNSServiceErr_NoError:
+            log.debug('Error in service_resolved_callback: %s', str(errorCode))
             return
 
         self.resolved_contacts[hosttarget] = (fullname, port, txtRecord)
@@ -189,11 +195,11 @@ class Zeroconf:
 
     def service_added_callback(self, sdRef, flags, errorCode, name, regtype, domain):
         if errorCode == pybonjour.kDNSServiceErr_NoError:
-            gajim.log.debug('Service successfully added')
+            log.debug('Service successfully added')
 
     def service_add_fail_callback(self, err):
         if err[0][0] == pybonjour.kDNSServiceErr_NameConflict:
-            gajim.log.debug('Error while adding service. %s' % str(err))
+            log.debug('Error while adding service. %s' % str(err))
             parts = self.username.split(' ')
 
             #check if last part is a number and if, increment it
@@ -243,7 +249,7 @@ class Zeroconf:
         except pybonjour.BonjourError, e:
             self.service_add_fail_callback(e)
         else:
-            gajim.log.debug('Publishing service %s of type %s' % (self.name, self.stype))
+            log.debug('Publishing service %s of type %s' % (self.name, self.stype))
 
             ready = select.select([sdRef], [], [], resolve_timeout)
             if sdRef in ready[0]:
@@ -265,7 +271,7 @@ class Zeroconf:
             self.announced = False
             return True
         except pybonjour.BonjourError, e:
-            gajim.log.debug(e)
+            log.debug(e)
             return False
 
 
@@ -295,7 +301,7 @@ class Zeroconf:
                 self.remove_announce()
 
     def browse_domain(self, domain=None):
-        gajim.log.debug('starting to browse')
+        log.debug('starting to browse')
         try:
             self.browse_sdRef = pybonjour.DNSServiceBrowse(regtype=self.stype, domain=domain, callBack=self.browse_callback)
         except pybonjour.BonjourError, e:
@@ -323,7 +329,7 @@ class Zeroconf:
             try:
                 ready = select.select([resolve_sdRef], [], [], resolve_timeout)
                 if resolve_sdRef not in ready[0]:
-                    gajim.log.debug('Resolve timed out (in resolve_all)')
+                    log.debug('Resolve timed out (in resolve_all)')
                     break
                 pybonjour.DNSServiceProcessResult(resolve_sdRef)
             finally:
