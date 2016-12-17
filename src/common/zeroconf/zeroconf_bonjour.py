@@ -19,6 +19,7 @@
 
 from common import gajim
 import select
+import socket
 import re
 from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN, C_TXT
 
@@ -52,8 +53,9 @@ class Zeroconf:
         self.connected = False
         self.announced = False
         self.invalid_self_contact = {}
+        self.resolved_contacts = {}
         self.resolved = []
-
+        self.queried = []
 
     def browse_callback(self, sdRef, flags, interfaceIndex, errorCode, serviceName, regtype, replyDomain):
         gajim.log.debug('Found service %s in domain %s on %i(type: %s).' % (serviceName, replyDomain, interfaceIndex, regtype))
@@ -100,11 +102,16 @@ class Zeroconf:
         items = pybonjour.TXTRecord.parse(txt)._items
         return dict((v[0], v[1]) for v in items.values())
 
-    def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname,
-                    hosttarget, port, txtRecord):
+    def query_record_callback(self, sdRef, flags, interfaceIndex, errorCode, hosttarget,
+                          rrtype, rrclass, rdata, ttl):
+
+        if errorCode != pybonjour.kDNSServiceErr_NoError:
+            return
+
+        fullname, port, txtRecord = self.resolved_contacts[hosttarget]
 
         # TODO: do proper decoding...
-        escaping= {
+        escaping = {
         r'\.': '.',
         r'\032': ' ',
         r'\064': '@',
@@ -120,9 +127,12 @@ class Zeroconf:
             name = name.replace(src, trg)
 
         txt = pybonjour.TXTRecord.parse(txtRecord)
+        ip = socket.inet_ntoa(rdata)
 
-        gajim.log.debug('Service data for service %s on %i:' % (fullname, interfaceIndex))
-        gajim.log.debug('Host %s, port %i, TXT data: %s' % (hosttarget, port, txt._items))
+        gajim.log.debug('Service data for service %s on %i:'
+            % (fullname, interfaceIndex))
+        gajim.log.debug('Host %s, ip %s, port %i, TXT data: %s'
+            % (hosttarget, ip, port, txt._items))
 
         if not self.connected:
             return
@@ -133,7 +143,7 @@ class Zeroconf:
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            resolved_info = [(interfaceIndex, protocol, hosttarget, -1, port)]
+            resolved_info = [(interfaceIndex, protocol, hosttarget, None, ip, port)]
             self.contacts[name] = (name, domain, resolved_info, bare_name, txtRecord)
 
             self.new_serviceCB(name)
@@ -142,37 +152,40 @@ class Zeroconf:
             # In case this is not our own record but of another
             # gajim instance on the same machine,
             # it will be used when we get a new name.
-            self.invalid_self_contact[name] = (name, domain, (interfaceIndex, protocol, hosttarget, -1, port), bare_name, txtRecord)
-        # count services
-        self.resolved.append(True)
+            self.invalid_self_contact[name] = \
+                (name, domain,
+                 (interfaceIndex, protocol, hosttarget, None, ip, port),
+                 bare_name, txtRecord)
 
-    # different handler when resolving all contacts
-    def service_resolved_all_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname, hosttarget, port, txtRecord):
-        if not self.connected:
+        self.queried.append(True)
+
+    def service_resolved_callback(self, sdRef, flags, interfaceIndex, errorCode, fullname,
+                    hosttarget, port, txtRecord):
+
+        if errorCode != pybonjour.kDNSServiceErr_NoError:
             return
 
-        escaping= {
-        r'\.': '.',
-        r'\032': ' ',
-        r'\064': '@',
-        }
+        self.resolved_contacts[hosttarget] = (fullname, port, txtRecord)
 
-        name, stype, protocol, domain, dummy = fullname.split('.')
+        query_sdRef = \
+            pybonjour.DNSServiceQueryRecord(interfaceIndex = interfaceIndex,
+                                            fullname = hosttarget,
+                                            rrtype = pybonjour.kDNSServiceType_A,
+                                            callBack = self.query_record_callback)
 
-        # Replace the escaped values
-        for src, trg in escaping.items():
-            name = name.replace(src, trg)
+        try:
+            while not self.queried:
+                ready = select.select([query_sdRef], [], [], resolve_timeout)
+                if query_sdRef not in ready[0]:
+                    print 'Query record timed out'
+                    break
+                pybonjour.DNSServiceProcessResult(query_sdRef)
+            else:
+                self.queried.pop()
+        finally:
+            query_sdRef.close()
 
-        bare_name = name
-        if name.find('@') == -1:
-            name = name + '@' + name
-
-        # we don't want to see ourselves in the list
-        if name != self.name:
-            # update TXT data only, as intended according to resolve_all comment
-            old_contact = self.contacts[name]
-            self.contacts[name] = old_contact[0:C_TXT] + (self.txt,) + old_contact[C_TXT+1:]
-
+        self.resolved.append(True)
 
     def service_added_callback(self, sdRef, flags, errorCode, name, regtype, domain):
         if errorCode == pybonjour.kDNSServiceErr_NoError:
@@ -305,7 +318,7 @@ class Zeroconf:
             resolve_sdRef = pybonjour.DNSServiceResolve(0,
                     pybonjour.kDNSServiceInterfaceIndexAny, val[C_BARE_NAME],
                     self.stype + '.', val[C_DOMAIN] + '.',
-                    self.service_resolved_all_callback)
+                    self.service_resolved_callback)
 
             try:
                 ready = select.select([resolve_sdRef], [], [], resolve_timeout)
