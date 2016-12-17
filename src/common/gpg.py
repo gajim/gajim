@@ -114,6 +114,9 @@ if HAVE_GPG:
 
             return ''
 
+        def get_key(self, keyID):
+            return super(GnuPG, self).list_keys(keys=[keyID])
+
         def get_keys(self, secret=False):
             keys = {}
             result = super(GnuPG, self).list_keys(secret=secret)
