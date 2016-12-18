@@ -582,8 +582,7 @@ class Logger:
                 exceptions.PysqliteOperationalError) as error:
             self.dispatch('DB_ERROR', error)
 
-    def get_last_conversation_lines(self, jid, restore_how_many_rows,
-                    pending_how_many, timeout, account):
+    def get_last_conversation_lines(self, jid, pending_how_many, account):
         """
         Accept how many rows to restore and when to time them out (in minutes)
         (mark them as too old) and number of messages that are in queue and are
@@ -598,8 +597,16 @@ class Logger:
             return []
         where_sql, jid_tuple = self._build_contact_where(account, jid)
 
+        # How many lines to restore and when to time them out
+        restore_how_many = gajim.config.get('restore_lines')
+        if restore_how_many <= 0:
+            return []
+        timeout = gajim.config.get('restore_timeout')  # in minutes
+
         now = int(float(time.time()))
-        timed_out = now - (timeout * 60) # before that they are too old
+        if timeout > 0:
+            timeout = now - (timeout * 60) # before that they are too old
+
         # so if we ask last 5 lines and we have 2 pending we get
         # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
         try:
@@ -609,8 +616,8 @@ class Logger:
                 ORDER BY time DESC LIMIT %d OFFSET %d
                 ''' % (where_sql, KindConstant.SINGLE_MSG_RECV,
                 KindConstant.CHAT_MSG_RECV, KindConstant.SINGLE_MSG_SENT,
-                KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timed_out,
-                restore_how_many_rows, pending_how_many), jid_tuple)
+                KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timeout,
+                restore_how_many, pending_how_many), jid_tuple)
 
             results = self.cur.fetchall()
             messages = []
