@@ -2991,12 +2991,6 @@ class ChatControl(ChatControlBase):
         if gajim.jid_is_transport(jid):
             return
 
-        # How many lines to restore and when to time them out
-        restore_how_many = gajim.config.get('restore_lines')
-        if restore_how_many <= 0:
-            return
-        timeout = gajim.config.get('restore_timeout') # in minutes
-
         # number of messages that are in queue and are already logged, we want
         # to avoid duplication
         pending_how_many = len(gajim.events.get_events(self.account, jid,
@@ -3006,8 +3000,8 @@ class ChatControl(ChatControlBase):
                     self.contact.get_full_jid(), ['chat', 'pm']))
 
         try:
-            rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
-                    pending_how_many, timeout, self.account)
+            rows = gajim.logger.get_last_conversation_lines(
+                jid, pending_how_many, self.account)
         except exceptions.DatabaseMalformed:
             import common.logger
             dialogs.ErrorDialog(_('Database Error'),
