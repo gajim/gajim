@@ -138,7 +138,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _on_resolve_timeout(self):
         if self.connected:
-            self.connection.resolve_all()
+            if not self.connection.resolve_all():
+                self._on_disconnected()
+                return False
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
@@ -221,7 +223,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 else: # result is None
                     gajim.nec.push_incoming_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
-                        msg=_('Please check if avahi-daemon is running.')))
+                        msg=_('Please check if avahi/bonjour-daemon is running.')))
                 self.disconnect()
                 return
         else:
