@@ -218,6 +218,10 @@ class ConversationTextview(gobject.GObject):
         # It's True when we scroll in the code, so we can detect scroll from user
         self.auto_scrolling = False
 
+        # This holds the last Nickname we received a msg from
+        # for chat_merge_consecutive_nickname feature
+        self.last_msg_name = None
+
         # connect signals
         id_ = self.tv.connect('motion_notify_event',
                 self.on_textview_motion_notify_event)
@@ -1228,7 +1232,7 @@ class ConversationTextview(gobject.GObject):
 
     def print_conversation_line(self, text, jid, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-    subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
+    subject=None, xhtml=None, simple=False, graphics=True,
     displaymarking=None, iter_=None):
         """
         Print 'chat' type messages
@@ -1275,8 +1279,6 @@ class ConversationTextview(gobject.GObject):
             self.marks_queue.put(mark)
         if kind == 'incoming_queue':
             kind = 'incoming'
-        if old_kind == 'incoming_queue':
-            old_kind = 'incoming'
         # print the time stamp
         if not tim:
             # We don't have tim for outgoing messages...
@@ -1325,13 +1327,20 @@ class ConversationTextview(gobject.GObject):
                 mark1 = mark
         else: # not status nor /me
             if gajim.config.get('chat_merge_consecutive_nickname'):
-                if kind != old_kind or self.just_cleared:
+                if self.last_msg_name != name or self.just_cleared:
+                    # Textview is empty or this is a msg from a new user
+                    # Print the Nickname
                     self.print_name(name, kind, other_tags_for_name,
                         direction_mark=direction_mark, iter_=end_iter)
                 else:
+                    # The last message was from the same Nickname
+                    # Dont print the Nickname
                     self.print_real_text(gajim.config.get(
                         'chat_merge_consecutive_nickname_indent'),
                         iter_=end_iter)
+                # Save the last Chatname so we know if we have to
+                # print the nickname on the next message
+                self.last_msg_name = name
             else:
                 self.print_name(name, kind, other_tags_for_name,
                     direction_mark=direction_mark, iter_=end_iter)
