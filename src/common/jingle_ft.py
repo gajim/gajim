@@ -25,10 +25,10 @@ import gajim
 import nbxmpp
 import configpaths
 import jingle_xtls
-from common.jingle_ftstates import StateCandReceived, JingleTransportSocks5, \
+from common.jingle_ftstates import StateCandReceived, \
     StateCandSent, StateCandSentAndRecv, StateInitialized, StateTransfering,\
     StateTransportReplace
-from common.jingle_transport import TransportType
+from common.jingle_transport import TransportType, JingleTransportSocks5
 from jingle_content import contents, JingleContent
 from common import helpers
 from common.connection_handlers_events import FileRequestReceivedEvent, \
