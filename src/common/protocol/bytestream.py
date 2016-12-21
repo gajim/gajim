@@ -768,7 +768,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         elif typ == 'result':
             self.SendHandler()
         elif typ == 'error':
-            gajim.socks5queue.error_cb()
+            gajim.socks5queue.error_cb('Error', stanza.getErrorMsg())
         else:
             conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_BAD_REQUEST))
         raise nbxmpp.NodeProcessed
