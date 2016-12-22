@@ -36,7 +36,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
-import os, sys
+import os
 import common.config
 import common.sleepy
 from common.i18n import Q_

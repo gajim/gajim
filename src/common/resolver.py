@@ -18,8 +18,6 @@
 ##
 
 import sys
-import os
-import re
 import logging
 import functools
 log = logging.getLogger('gajim.c.resolver')
@@ -30,8 +28,6 @@ if __name__ == '__main__':
     import common.configpaths
     common.configpaths.gajimpaths.init(None)
 
-from common import helpers
-from nbxmpp.idlequeue import IdleCommand
 from gi.repository import Gio, GLib
 
 
@@ -132,7 +128,6 @@ class GioResolver(CommonResolver):
 
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
-    from gi.repository import GLib
     from gi.repository import Gtk
     from nbxmpp import idlequeue
 

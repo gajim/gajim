@@ -24,7 +24,6 @@
 ##
 
 import os
-import sys
 import gi
 from gi.repository import Gtk
 import gtkgui_helpers

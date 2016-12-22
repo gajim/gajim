@@ -31,7 +31,6 @@
 
 import sys
 import re
-import locale
 import os
 import subprocess
 import urllib

@@ -33,7 +33,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 import os
 import time
-import locale
 from datetime import datetime
 from datetime import timedelta
 
