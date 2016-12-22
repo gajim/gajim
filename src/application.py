@@ -28,6 +28,9 @@ class GajimApplication(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
                                  flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('Show the application\'s version'))
         self.add_main_option('quiet', ord('q'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show only critical errors'))

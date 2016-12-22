@@ -35,8 +35,14 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
 import sys
+
+if '--version' in sys.argv or '-V' in sys.argv:
+    from common.defs import version
+    print(version)
+    sys.exit(0)
+
+import os
 import warnings
 import OpenSSL
 
