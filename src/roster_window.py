@@ -94,7 +94,7 @@ empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
 
 
-class RosterWindow:
+class RosterWindow(Gtk.ApplicationWindow):
     """
     Class for main window of the GTK+ interface
     """
@@ -2479,7 +2479,7 @@ class RosterWindow:
         When we quit the gtk interface - exit gtk
         """
         self.prepare_quit()
-        Gtk.main_quit()
+        self.application.quit()
 
     def on_quit_request(self, widget=None):
         """
@@ -6178,7 +6178,8 @@ class RosterWindow:
 ###
 ################################################################################
 
-    def __init__(self):
+    def __init__(self, app):
+        self.application = app
         self.filtering = False
         self.starting = False
         self.starting_filtering = False
@@ -6195,6 +6196,7 @@ class RosterWindow:
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         self.hpaned = self.xml.get_object('roster_hpaned')
+        self.window.set_application(app)
         gajim.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
         gajim.interface.msg_win_mgr.connect('window-delete',
             self.on_message_window_delete)

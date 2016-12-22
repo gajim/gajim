@@ -2719,11 +2719,11 @@ class Interface:
         view.updateNamespace({'gajim': gajim})
         gajim.ipython_window = window
 
-    def run(self):
+    def run(self, app):
         if gajim.config.get('trayicon') != 'never':
             self.show_systray()
 
-        self.roster = roster_window.RosterWindow()
+        self.roster = roster_window.RosterWindow(app)
         if self.msg_win_mgr.mode == \
         MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             self.msg_win_mgr.create_window(None, None, None)
