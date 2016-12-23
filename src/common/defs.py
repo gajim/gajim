@@ -23,20 +23,22 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-docdir = '../'
-basedir   = '../'
-localedir = '../po'
-
-version = '0.16.6'
 import subprocess
+import sys
+import os.path
+
+docdir = '../'
+basedir = '../'
+localedir = '../po'
+version = '0.16.6'
+
 try:
-    node = subprocess.Popen('hg tip --template "{node|short}"', shell=True,
+    node = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
     if node:
         version += '-' + node
 except Exception:
     pass
 
-import sys, os.path
 for base in ('.', 'common'):
     sys.path.append(os.path.join(base, '.libs'))
