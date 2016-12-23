@@ -39,7 +39,6 @@ import time
 import os
 import tooltips
 import dialogs
-import locale
 import queue
 import urllib
 

@@ -44,7 +44,6 @@
 # the functionality)
 # There are more methods, of course, but this is a basic set.
 
-import os
 import types
 import weakref
 from gi.repository import GLib

@@ -41,11 +41,11 @@ from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-import xml.sax, xml.sax.handler
+import xml.sax
+import xml.sax.handler
 import re
 from io import StringIO
 import urllib
-import operator
 
 if __name__ == '__main__':
     from common import i18n

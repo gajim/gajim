@@ -32,7 +32,6 @@ in turn based on the Fuzzy Clock Applet of Frerich Raabe (KDE).
 So most of the credit goes to this guys, thanks :-)
 """
 
-import time
 
 class FuzzyClock:
     HOUR_NAMES = [ _('twelve'), _('one'), _('two'), _('three'), _('four'),

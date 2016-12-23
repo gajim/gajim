@@ -17,20 +17,13 @@
 Handles Jingle RTP sessions (XEP 0167)
 """
 
-from collections import deque
-
-from gi.repository import GLib
 import socket
-
 import nbxmpp
-from gi.repository import Farstream
 import gi
+from gi.repository import Farstream
+
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
-gi.require_version('GdkX11', '3.0')
-from gi.repository import GdkX11
-gi.require_version('GstVideo', '1.0')
-from gi.repository import GstVideo
 from gi.repository import GLib
 
 from common import gajim
@@ -40,6 +33,7 @@ from common.jingle_content import contents, JingleContent, JingleContentSetupExc
 from common.connection_handlers_events import InformationEvent
 from common.jingle_session import FailedApplication
 
+from collections import deque
 
 import logging
 log = logging.getLogger('gajim.c.jingle_rtp')

@@ -24,7 +24,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os, sys
+import os
 
 from common import gajim
 from common import exceptions

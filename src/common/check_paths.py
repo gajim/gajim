@@ -26,7 +26,6 @@
 import os
 import shutil
 import sys
-import stat
 
 from common import gajim
 from common import logger

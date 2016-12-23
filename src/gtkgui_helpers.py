@@ -36,13 +36,11 @@ from gi.repository import GLib
 from gi.repository import Pango
 import os
 import sys
-import importlib
 try:
     from PIL import Image
 except:
     pass
 from io import BytesIO
-import array
 
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')

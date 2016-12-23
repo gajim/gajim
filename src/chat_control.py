@@ -29,9 +29,6 @@
 
 import os
 import time
-import gi
-gi.require_version('GdkX11', '3.0')
-from gi.repository import GdkX11
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -58,7 +55,6 @@ from message_textview import MessageTextView
 from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
-from common.pep import MOODS, ACTIVITIES
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO

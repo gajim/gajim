@@ -32,9 +32,7 @@
 ##
 
 
-import sys
 import re
-import copy
 from common import defs
 from gi.repository import GLib
 

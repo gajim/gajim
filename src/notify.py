@@ -33,7 +33,6 @@ from dialogs import PopupNotificationWindow
 from gi.repository import GObject
 from gi.repository import GLib
 import gtkgui_helpers
-from gi.repository import Gtk
 
 from common import gajim
 from common import helpers
