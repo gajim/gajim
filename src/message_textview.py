@@ -122,7 +122,7 @@ class MessageTextView(Gtk.TextView):
             start, finish = _buffer.get_bounds()
         return (start, finish)
 
-    def set_tag(self, widget, tag):
+    def set_tag(self, tag):
         _buffer = self.get_buffer()
         start, finish = self.get_active_iters()
         if start.has_tag(self.other_tags[tag]):
@@ -134,7 +134,7 @@ class MessageTextView(Gtk.TextView):
                 _buffer.remove_tag_by_name('underline', start, finish)
             _buffer.apply_tag_by_name(tag, start, finish)
 
-    def clear_tags(self, widget):
+    def clear_tags(self):
         _buffer = self.get_buffer()
         start, finish = self.get_active_iters()
         _buffer.remove_all_tags(start, finish)
