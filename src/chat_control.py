@@ -902,7 +902,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def print_conversation_line(self, text, kind, name, tim,
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
-    count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
+    count_as_new=True, subject=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
     correct_id=None):
         """
@@ -933,7 +933,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             textview.print_conversation_line(text, jid, kind, name, tim,
                 other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics,
+                subject, xhtml, simple=simple, graphics=graphics,
                 displaymarking=displaymarking)
 
         if xep0184_id is not None:
@@ -1454,7 +1454,6 @@ class ChatControl(ChatControlBase):
     ) = range(5)
 
     TYPE_ID = message_control.TYPE_CHAT
-    old_msg_kind = None # last kind of the printed message
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
@@ -2577,13 +2576,9 @@ class ChatControl(ChatControlBase):
                     if xhtml:
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
-            subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
+            subject=subject, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
             msg_log_id=msg_log_id, correct_id=correct_id)
-        if text.startswith('/me ') or text.startswith('/me\n'):
-            self.old_msg_kind = None
-        else:
-            self.old_msg_kind = kind
 
     def get_tab_label(self, chatstate):
         unread = ''
@@ -3008,7 +3003,6 @@ class ChatControl(ChatControlBase):
                 _('The database file (%s) cannot be read. Try to repair it or '
                 'remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
             rows = []
-        local_old_kind = None
         self.conv_textview.just_cleared = True
         for row in rows: # row[0] time, row[1] has kind, row[2] the message
             msg = row[2]
@@ -3040,12 +3034,7 @@ class ChatControl(ChatControlBase):
                     {'subject': row[3], 'message': msg}
             ChatControlBase.print_conversation_line(self, msg, kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
-                small_attr + ['restored_message'], False,
-                old_kind=local_old_kind, xhtml=xhtml)
-            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
-                local_old_kind = None
-            else:
-                local_old_kind = kind
+                small_attr + ['restored_message'], False, xhtml=xhtml)
         if len(rows):
             self.conv_textview.print_empty_line()
 
