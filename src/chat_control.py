@@ -373,10 +373,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         widget.set_sensitive(False)
         self.handlers[id_] = widget
 
-        widget = self.xml.get_object('formattings_button')
-        id_ = widget.connect('clicked', self.on_formattings_button_clicked)
-        self.handlers[id_] = widget
-
         # the following vars are used to keep history of user's messages
         self.sent_history = []
         self.sent_history_pos = 0
@@ -979,63 +975,24 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
         gajim.interface.popup_emoticons_under_button(widget, self.parent_win)
 
-    def on_formattings_button_clicked(self, widget):
-        """
-        Popup formattings menu
-        """
-        menu = Gtk.Menu()
-
-        menuitems = ((_('Bold'), 'bold'),
-        (_('Italic'), 'italic'),
-        (_('Underline'), 'underline'),
-        (_('Strike'), 'strike'))
-
-        active_tags = self.msg_textview.get_active_tags()
-
-        for menuitem in menuitems:
-            item = Gtk.CheckMenuItem.new_with_label(menuitem[0])
-            if menuitem[1] in active_tags:
-                item.set_active(True)
-            else:
-                item.set_active(False)
-            item.connect('activate', self.msg_textview.set_tag,
-                    menuitem[1])
-            menu.append(item)
-
-        item = Gtk.SeparatorMenuItem.new() # separator
-        menu.append(item)
-
-        item = Gtk.MenuItem.new_with_label(_('Color'))
-        item.connect('activate', self.on_color_menuitem_activale)
-        menu.append(item)
-
-        item = Gtk.MenuItem.new_with_label(_('Font'))
-        item.connect('activate', self.on_font_menuitem_activale)
-        menu.append(item)
-
-        item = Gtk.SeparatorMenuItem.new() # separator
-        menu.append(item)
-
-        item = Gtk.MenuItem.new_with_label(_('Clear formating'))
-        item.connect('activate', self.msg_textview.clear_tags)
-        menu.append(item)
-
-        menu.show_all()
-        menu.attach_to_widget(widget, None)
-        gtkgui_helpers.popup_emoticons_under_button(menu, widget,
-            self.parent_win)
-
-    def on_color_menuitem_activale(self, widget):
+    def on_color_menuitem_activate(self, widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
         color_dialog.set_use_alpha(False)
         color_dialog.connect('response', self.msg_textview.color_set)
         color_dialog.show_all()
 
-    def on_font_menuitem_activale(self, widget):
+    def on_font_menuitem_activate(self, widget):
         font_dialog = Gtk.FontChooserDialog(None, self.parent_win.window)
         start, finish = self.msg_textview.get_active_iters()
         font_dialog.connect('response', self.msg_textview.font_set, start, finish)
         font_dialog.show_all()
+
+    def on_formatting_menuitem_activate(self, widget):
+        tag = widget.get_name()
+        self.msg_textview.set_tag(tag)
+
+    def on_clear_formatting_menuitem_activate(self, widget):
+        self.msg_textview.clear_tags()
 
     def on_actions_button_clicked(self, widget):
         """
