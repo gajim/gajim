@@ -497,19 +497,6 @@ r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
         win32api.RegCloseKey(rkey)
     return val
 
-def get_my_pictures_path():
-    """
-    Windows-only atm
-    """
-    return get_windows_reg_env('My Pictures')
-
-def get_desktop_path():
-    if os.name == 'nt':
-        path = get_windows_reg_env('Desktop')
-    else:
-        path = os.path.join(os.path.expanduser('~'), 'Desktop')
-    return path
-
 def get_documents_path():
     if os.name == 'nt':
         path = get_windows_reg_env('Personal')

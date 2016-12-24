@@ -4960,13 +4960,7 @@ class ImageChooserDialog(FileChooserDialog):
                 else:
                     callback(widget, path_to_file)
 
-        try:
-            if os.name == 'nt':
-                path = helpers.get_my_pictures_path()
-            else:
-                path = os.environ['HOME']
-        except Exception:
-            path = ''
+        path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES)
         FileChooserDialog.__init__(self,
            title_text = _('Choose Image'),
            action = Gtk.FileChooserAction.OPEN,
