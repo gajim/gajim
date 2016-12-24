@@ -3215,6 +3215,9 @@ class RosterWindow:
         if not mw:
             mw = gajim.interface.msg_win_mgr.create_window(ctrl.contact,
                 ctrl.account, ctrl.type_id)
+            id_ = mw.window.connect('motion-notify-event',
+                ctrl._on_window_motion_notify)
+            ctrl.handlers[id_] = mw.window
         ctrl.parent_win = mw
         ctrl.set_tooltip()
         mw.new_tab(ctrl)
