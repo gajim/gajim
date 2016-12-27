@@ -1,4 +1,4 @@
-## setup_win32.py (run me as python setup_win32.py py2exe -O2)
+## setup_win32.py (run me as python setup_win32.py build_exe)
 ##
 ## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
@@ -20,37 +20,25 @@
 ##
 
 from cx_Freeze import setup, Executable
-import glob
 import sys
-import os
 
 sys.path.append('src')
 # Use local gtk folder instead of the one in PATH that is not latest gtk
-if 'gtk' in os.listdir('.'):
-    sys.path.append('gtk/bin')
+# if 'gtk' in os.listdir('.'):
+#     sys.path.append('gtk/bin')
+
+# probably not necessary anymore
+# includes 'dumbdbm', 'dbhash', 'bsddb',
+# 'gtk.keysyms', 'goocanvas' 'numbers', 'HTMLParser'
 
 options = {
    'build_exe': {
-       'includes': ['gtk.keysyms', 'dumbdbm', 'dbhash', 'bsddb', 'new',
-            'goocanvas', 'Crypto.PublicKey.DSA', 'Crypto.Hash.HMAC',
-            'numbers', 'win32com.client', 'win32com.server', 'HTMLParser', 'pkg_resources'],
-       'base': 'Win32GUI',
-       'packages': ['cffi', 'cryptography', 'PIL', 'axolotl', 'google'],
-	   'bin_excludes': [
-            'iconv.dll', 'intl.dll', 'libatk-1.0-0.dll',
-            'libgdk_pixbuf-2.0-0.dll', 'libgdk-win32-2.0-0.dll',
-			'libgio-2.0-0.dll',
-            'libglib-2.0-0.dll', 'libgmodule-2.0-0.dll',
-            'libgobject-2.0-0.dll', 'libgthread-2.0-0.dll',
-            'libgtk-win32-2.0-0.dll', 'libpango-1.0-0.dll',
-            'libpangowin32-1.0-0.dll', 'libcairo-2.dll',
-            'libpangocairo-1.0-0.dll', 'libpangoft2-1.0-0.dll',
-            'libfarstream-0.1-0.dll', 'libgcc_s_dw2-1.dll',
-            'libgstbase-0.10-0.dll', 'libgstcontroller-0.10-0.dll',
-            'libgstdataprotocol-0.10-0.dll', 'libgstinterfaces-0.10-0.dll',
-            'libgstnet-0.10-0.dll', 'libgstreamer-0.10-0.dll',
-            'libiconv-2.dll', 'libxml2.dll', 'libxml2-2.dll',
-        ],
+        'includes': ['win32com.server', 'win32com.client'],
+        'packages': ['pkg_resources', 'cffi', 'gtk',
+                     'cryptography', 'Crypto', 'PIL',
+                     'axolotl', 'google'],
+        'includes': ['new'],
+        'excludes': ['Tkinter', 'unittest', 'psutil'],
    }
 }
 
@@ -64,6 +52,11 @@ setup(
     download_url='http://gajim.org/downloads.php',
     license='GPL',
     options=options,
-    executables=[Executable('src/gajim.py', icon='data/pixmaps/gajim.ico'),
-		Executable('src/history_manager.py', icon='data/pixmaps/gajim.ico')],
+    executables=[
+        Executable(
+            'src/gajim.py', base='Win32GUI',
+            icon='data/pixmaps/gajim.ico'),
+        Executable(
+            'src/history_manager.py', base='Win32GUI',
+            icon='data/pixmaps/gajim.ico')],
 )

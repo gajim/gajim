@@ -17,6 +17,7 @@ po/stamp-it
 stamp-h1
 Makefile
 __pycache__/
+src/gtk/
 
 syntax: regexp
 ^config\.*
