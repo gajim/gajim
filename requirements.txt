@@ -1,0 +1,14 @@
+setuptools
+git+https://dev.gajim.org/gajim/python-nbxmpp.git
+https://gajim.org/downloads/snap/win/build/pybonjour-1.1.1.zip
+protobuf
+pycrypto
+cryptography
+cx_freeze==4.3.4
+keyring
+pypiwin32
+pyopenssl
+future
+gnupg
+pillow
+pycurl

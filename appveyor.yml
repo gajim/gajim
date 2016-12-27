@@ -1,0 +1,80 @@
+environment:
+
+  matrix:
+
+    - PYTHON: "C:\\Python27"
+
+branches:
+  only:
+    - gajim_0.16
+
+clone_depth: 1
+
+# Print Login Data for RDP Session on Build VM, in case the build has errors
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+install:
+  - git clone --depth=1 --branch=master https://dev.gajim.org/gajim/gajim-plugins.git c:\projects\gajim-plugins
+  - git clone https://dev.gajim.org/gajim/gtk-windows-bin.git c:\projects\gtk
+
+  # Download & Install Dependencys
+  - ps: c:\\projects\\gajim\\dependencys.ps1
+
+  - msiexec /i C:\cairo.msi /quiet
+  - msiexec /i C:\pygobject.msi /quiet
+  - msiexec /i C:\pygtk.msi /quiet
+  - msiexec /i C:\pygoocanvas.msi /quiet
+  - msiexec /i C:\bonjour.msi /quiet
+
+  - set PATH=C:\\MinGW\\bin;%PATH%
+  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
+  - "%PYTHON%\\python.exe -m pip install -r c:\\projects\\gajim\\requirements.txt"
+
+  - ps: Add-Content C:\Python27\Lib\site-packages\google\__init__.py " "
+  - "%PYTHON%\\python.exe -m pip install --no-dependencies python-axolotl"
+  - "%PYTHON%\\python.exe -m pip install --global-option=build_ext --global-option --compiler=mingw32 python-axolotl-curve25519"
+  
+  # Prepare Build Dir
+  - cd c:\projects\gajim\
+  - xcopy . ..\gajim_built /e /i
+  - cd ..\gajim_built
+
+  # Copy Shipped Plugins
+  - xcopy ..\gajim-plugins\plugin_installer plugins\plugin_installer /e /i
+
+  # Compile Translation Strings
+  - cmd: for %%l in (po\*.po) do mkdir po\%%~nl & mkdir po\%%~nl\LC_MESSAGES & msgfmt -o po\%%~nl\LC_MESSAGES\gajim.mo %%l
+ 
+  # Make Gajim.exe
+  - "%PYTHON%\\python.exe setup_win32.py build_exe"
+
+  - move build\exe.win32-2.7 .
+  - rmdir build
+  - rename exe.win32-2.7 bin
+
+  # Add GTK files so we can make the Installer
+  - xcopy ..\gtk bin\gtk /e /i
+
+  # Make Installer
+  - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
+
+  # Push Installer Exe
+  - ps: $env:TIME_STRING=(get-date).ToString(‘d-M-yyyy’)
+  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-0.16.6-$($env:TIME_STRING).exe"
+
+build: off
+
+deploy:
+    # FTP deployment provider settings
+  - provider: FTP
+    protocol: ftp
+    host: panoramix.gajim.org
+    username:
+      secure: SNcOJDhUtBjfddbKXudE2w==
+    password:
+      secure: tQkYbcUb6nChCp0cdqo4CA==
+    folder: win_snap
+    active_mode: false
+    beta: true      # enable alternative FTP library for 'ftp' and 'ftps' modes
+    debug: true
