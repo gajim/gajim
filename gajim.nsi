@@ -149,7 +149,6 @@ Section "Gajim" SecGajim
 	File "THANKS.artists"
 	File /r "build"
     SetOutPath "$INSTDIR\build"
-; File "msvcr100.dll"
 
 	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"

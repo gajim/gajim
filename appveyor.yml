@@ -11,39 +11,43 @@ branches:
 clone_depth: 1
 
 install:
-
   - git clone --depth=1 --branch=gtk3 https://dev.gajim.org/gajim/gajim-plugins.git c:\projects\gajim-plugins
-  - git clone https://dev.gajim.org/gajim/python-nbxmpp.git c:\projects\python-nbxmpp
-  - cd c:\\projects\\python-nbxmpp\\
-  - "%PYTHON%\\python.exe setup.py install"
-  - ps: c:\\projects\\gajim\\download.ps1
-  - set PATH=C:\\MinGW\\bin;C:\\Program Files (x86)\\gettext-iconv\\bin;%PATH%
+
+  # Download & Install Dependencys
+  - ps: c:\\projects\\gajim\\dependencys.ps1
+
+  - set PATH=C:\\MinGW\\bin;%PATH%
   - "%PYTHON%\\python.exe -m pip install --upgrade pip"
-  - "%PYTHON%\\python.exe -m pip install protobuf"
+  - "%PYTHON%\\python.exe -m pip install -r c:\\projects\\gajim\\requirements.txt"
+
   - ps: Add-Content C:\Python34\Lib\site-packages\google\__init__.py " "
-  - "%PYTHON%\\python.exe -m pip install pycryptodome"
-  - "%PYTHON%\\python.exe -m pip install cx_freeze"
-  - "%PYTHON%\\python.exe -m pip install keyring"
-  - "%PYTHON%\\python.exe -m pip install pypiwin32"
-  - "%PYTHON%\\python.exe -m pip install pyopenssl"
   - "%PYTHON%\\python.exe -m pip install --no-dependencies python-axolotl"
   - "%PYTHON%\\python.exe -m pip install --global-option=build_ext --global-option --compiler=mingw32 python-axolotl-curve25519"
+  
+  # Prepare Build Dir
   - cd c:\\projects\\gajim\\
   - xcopy . ..\gajim_built /e /i
-  - cd ..
-  - cd gajim_built
+  - cd ..\gajim_built
+
+  # Copy Shipped Plugins
   - xcopy ..\gajim-plugins\plugin_installer plugins\plugin_installer /e /i
 
+  # Compile Translation Strings
   - cmd: for %%l in (po\*.po) do mkdir po\%%~nl & mkdir po\%%~nl\LC_MESSAGES & msgfmt -o po\%%~nl\LC_MESSAGES\gajim.mo %%l
 
+  # Make Gajim.exe
   - "%PYTHON%\\python.exe setup_win32.py build_exe"
+
   - move build\exe.win32-3.4 .
   - rmdir build
   - rename exe.win32-3.4 build
 
+  # Make Installer
   - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
+
+  # Push Installer Exe
   - ps: $env:TIME_STRING=(get-date).ToString(‘d-M-yyyy’)
-  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-16.10.2-$($env:TIME_STRING).exe"
+  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-default-$($env:TIME_STRING).exe"
 
 build: off
 

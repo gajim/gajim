@@ -1,0 +1,12 @@
+setuptools
+git+https://dev.gajim.org/gajim/python-nbxmpp.git
+protobuf
+pycryptodome
+cryptography
+cx_freeze
+keyring
+pypiwin32
+pyopenssl
+gnupg
+pillow
+pycurl
