@@ -143,8 +143,12 @@ def puny_encode_url(url):
     _url = url
     if '//' not in _url:
         _url = '//' + _url
-    o = urllib.parse.urlparse(_url)
-    p_loc = idn_to_ascii(o.netloc)
+    try:
+        o = urllib.parse.urlparse(_url)
+        p_loc = idn_to_ascii(o.netloc)
+    except Exception:
+        log.debug('urlparse failed: %s', url)
+        return False
     return url.replace(o.netloc, p_loc)
 
 def parse_resource(resource):

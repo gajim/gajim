@@ -1232,6 +1232,8 @@ class ConversationTextview(GObject.GObject):
                     puny_tags = []
                     if use_other_tags:
                         puny_tags += other_tags
+                    if not puny_text:
+                        puny_text = _('Invalid URL')
                     puny_tags = [(ttt.lookup(t) if isinstance(t, str) else t) for t in puny_tags]
                     buffer_.insert_with_tags(end_iter, " (%s)" % puny_text, *puny_tags)
 
