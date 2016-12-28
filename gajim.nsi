@@ -163,6 +163,7 @@ Section "Gajim" SecGajim
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "URLInfoAbout" "http://www.gajim.org/"
 	WriteUninstaller "$INSTDIR\Uninstall.exe"
 
+	SetOutPath "$INSTDIR\bin"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 		SetShellVarContext current
 		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
