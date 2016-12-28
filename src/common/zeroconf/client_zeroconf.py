@@ -669,7 +669,7 @@ class ClientZeroconf:
 
     def resolve_all(self):
         if self.zeroconf:
-            self.zeroconf.resolve_all()
+            return self.zeroconf.resolve_all()
 
     def reannounce(self, txt):
         self.remove_announce()
