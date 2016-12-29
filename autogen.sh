@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-  gajimversion="0.16.10.2"
-  if [ -d ".hg" ]; then
-    node=$(hg  tip --template "{node}")
-    hgversion="-${node:0:12}"
-  else
-    hgversion=""
-  fi
-  echo "define([AC_PACKAGE_VERSION], [${gajimversion}${hgversion}])" > m4/hgversion.m4
-
   AM_ARGS="--add-missing --gnu --copy -Wno-portability"
   CONF_ARGS=""
 
