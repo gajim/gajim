@@ -12,3 +12,5 @@ future
 gnupg
 pillow
 pycurl
+docutils
+pygments
