@@ -1,23 +1,129 @@
-# Welcome to the Gajim project Wiki
-The goal of Gajim is to provide a full featured and easy to use Jabber/XMPP client. Gajim works nicely with GNOME, but does not require it to run. It is released under the GNU General Public License. If you find bugs or have ideas how Gajim can be better, please send tickets here.
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>Gajim - Read Me</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
 
-## Links
+<h1>Gajim Read Me</h1>
 
-- [Help and Documentation](https://dev.gajim.org/gajim/gajim/wikis/help/home)
-    * FAQ, Did you know that...
-    * Quickstart guides
-    * Advanced configuration
-- [Community](https://dev.gajim.org/gajim/gajim/wikis/community/home)
-    * Advanced use of gajim
-    * User groups
-    * Reviews
-- [Development](https://dev.gajim.org/gajim/gajim/wikis/development/home)
-    * Guidelines and documentation
-    * How to contribute
-    * The Gajim team
-- Latest release:
-    * [Gajim 0.16.6 (.tar.gz)](https://www.gajim.org/downloads/0.16/gajim-0.16.6.tar.gz)
-    * [Gajim 0.16.6-1 (.exe)](https://www.gajim.org/downloads/0.16/gajim-0.16.6-1.exe)
-    * [Daily snapshot (.tar.gz)](https://www.gajim.org/downloads/snap/?M=D)
+<p>Welcome to Gajim and thank you for trying out our client.</p>
 
-- [Bug reports and Feature requests](https://dev.gajim.org/gajim/gajim/issues)
+<h2>Runtime Requirements</h2>
+<ul>
+<li>python3.4 or higher</li>
+<li>python3-gi</li>
+<li>gir1.2-gtk-3.0</li>
+<li>python-nbxmpp</li>
+</ul>
+
+<h2>Optional Runtime Requirements</h2>
+<ul>
+<li>python3-openssl (>=0.14) for <em>secure</em> SSL/TLS. Python's default SSL is insecure, so this package is highly recommended!</li>
+<li>python3-pyasn1 to check SSL/TLS certificate</li>
+<li>python3-crypto to enable End to end encryption</li>
+<li>python3-gnupg to enable GPG encryption</li>
+<li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
+<li>dnsutils (or whatever package provides the nslookup binary) for SRV support</li>
+<li>gir1.2-gtkspell3-3.0 and aspell-LANG where lang is your locale eg. en, fr etc</li>
+<li>gir1.2-secret-1 for GNOME Keyring or KDE support as password storage</li>
+<li>gir1.2-notify-0.7 to get cooler popups</li>
+<li>D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.</li>
+<li>python3-dbus bindings (>=1.2.0)</li>
+<li>gir1.2-farstream-0.2, gir1.2-gstreamer-1.0 and gir1.2-gst-plugins-base-1.0 for audio and video calls</li>
+<li>gir1.2-gupnpigd-1.0 for better NAT traversing</li>
+<li>gir1.2-networkmanager-1.0 for network lose detection</li>
+</ul>
+
+<p>Some distributions also split too much python standard library. I know SUSE does. In such distros you also need python-xml the xml lib that *comes* with python and not pyxml or whatever.</p>
+
+<h2>Compile-time Requirements</h2>
+<ul>
+<li>intltool (>= 0.40.1)</li>
+</ul>
+
+<p><strong>NOTE:</strong> If you still have problems compiling, you may want to try removing the gtk1 series of the above dependencies.</p>
+
+<h2>Installation Procedure</h2>
+<ol>
+<li>tar jxvf gajim-version.tar.bz2</li>
+<li>cd gajim</li>
+<li>./configure</li>
+<li>make (builds translations)</li>
+<li>su -c make install</li>
+</ol>
+
+<p>To specify where to install do:</p>
+<pre>
+    ./configure --prefix=custom_path
+</pre>
+
+<h2>Running Gajim</h2>
+<p>Just do <em>gajim</em> or you can run Gajim from your GNOME/Xfce/KDE/whatever menus.<br/><br/>
+or if you use hg version and you didn't 'make install' you can also run from gajim folder with<em>./launch.sh</em></p>
+<hr />
+<h3>Note for hg users</h3>
+<p>You will need GNU autotools in order to install Gajim from svn. This includes:</p>
+<ul>
+<li>automake &gt;= 1.8 </li>
+<li>autoconf &gt;= 2.59 </li>
+<li>libtool</li>
+<li>intltool-0.40.1 </li>
+<li>pkgconfig &gt;= 0.19</li>
+</ul>
+<p>steps to compile gajim:</p>
+<pre>
+    $ ./autogen.sh
+    $ ./configure
+    $ make
+</pre>
+<p>Alternatively, if you don't want to install all these packages, you can get a nightly snapshot from <a href="http://www.gajim.org/downloads/snap/">here</a> and procede as usual:</p>
+<pre>
+    $ ./configure
+    $ make
+</pre>
+<h2>Uninstallation Procedure</h2>
+<pre>
+    su -c make uninstall
+</pre>
+<p>this will try to remove Gajim from the default directories.
+If you want to remove it from custom directory provide it as:
+</p>
+<pre>
+    ./configure --prefix=custom_path
+    make uninstall
+</pre>
+
+<h2>Miscellaneous</h2>
+<h3>XML &amp; Debugging</h3>
+<p>If you want to see the xml stanzas and/or help us debugging
+you're advised to enable verbose via advanced configuration window.
+If you don't want to make this permanent, execute gajim with --verbose
+everytime you want to have verbose output.</p>
+
+<h3>FAQ/Wiki</h3>
+<p>FAQ can be found at <a href="http://trac.gajim.org/wiki/GajimFaq">http://trac.gajim.org/wiki/GajimFaq</a><br/>
+Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/wiki</a></p>
+
+
+<p>That is all, <strong>enjoy!</strong></p>
+
+<p>
+<br/>
+<br/>
+<br/>
+(C) 2003-2015<br/>
+The Gajim Team<br/>
+https://gajim.org<br/>
+<br/>
+<br/>
+
+PS.
+We use original art and parts of sounds and other art from Psi, Gossip,
+Gnomebaker, Gaim and some icons from various gnome-icons
+(mostly Dropline Etiquette) we found at art.gnome.org
+If you think we're violating a license please inform us. Thank you.</p>
+</body></html>
