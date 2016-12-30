@@ -199,11 +199,9 @@ class GajimApplication(Gtk.Application):
         #import gtkexcepthook
 
         import signal
-        import gtkgui_helpers
 
         gajimpaths = common.configpaths.gajimpaths
 
-        pid_filename = gajimpaths['PID_FILE']
         config_filename = gajimpaths['CONFIG_FILE']
 
         # Seed the OpenSSL pseudo random number generator from file and initialize
@@ -226,151 +224,6 @@ class GajimApplication(Gtk.Application):
         except ImportError:
             log.info("PyOpenSSL PRNG not available")
 
-        import traceback
-        import errno
-        import dialogs
-
-        def pid_alive():
-            try:
-                pf = open(pid_filename)
-            except IOError:
-                # probably file not found
-                return False
-
-            try:
-                pid = int(pf.read().strip())
-                pf.close()
-            except Exception:
-                traceback.print_exc()
-                # PID file exists, but something happened trying to read PID
-                # Could be 0.10 style empty PID file, so assume Gajim is running
-                return True
-
-            if os.name == 'nt':
-                try:
-                    from ctypes import (windll, c_ulong, c_int, Structure, c_char)
-                    from ctypes import (POINTER, pointer, sizeof)
-                except Exception:
-                    return True
-
-                class PROCESSENTRY32(Structure):
-                    _fields_ = [
-                            ('dwSize', c_ulong, ),
-                            ('cntUsage', c_ulong, ),
-                            ('th32ProcessID', c_ulong, ),
-                            ('th32DefaultHeapID', c_ulong, ),
-                            ('th32ModuleID', c_ulong, ),
-                            ('cntThreads', c_ulong, ),
-                            ('th32ParentProcessID', c_ulong, ),
-                            ('pcPriClassBase', c_ulong, ),
-                            ('dwFlags', c_ulong, ),
-                            ('szExeFile', c_char*512, ),
-                            ]
-
-                kernel = windll.kernel32
-                kernel.CreateToolhelp32Snapshot.argtypes = c_ulong, c_ulong,
-                kernel.CreateToolhelp32Snapshot.restype = c_int
-                kernel.Process32First.argtypes = c_int, POINTER(PROCESSENTRY32),
-                kernel.Process32First.restype = c_int
-                kernel.Process32Next.argtypes = c_int, POINTER(PROCESSENTRY32),
-                kernel.Process32Next.restype = c_int
-
-                def get_p(pid_):
-                    TH32CS_SNAPPROCESS = 2
-                    CreateToolhelp32Snapshot = kernel.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
-                    assert CreateToolhelp32Snapshot > 0, 'CreateToolhelp32Snapshot failed'
-                    pe32 = PROCESSENTRY32()
-                    pe32.dwSize = sizeof( PROCESSENTRY32 )
-                    f3 = kernel.Process32First(CreateToolhelp32Snapshot, pointer(pe32))
-                    while f3:
-                        if pe32.th32ProcessID == pid_:
-                            return pe32.szExeFile
-                        f3 = kernel.Process32Next(CreateToolhelp32Snapshot, pointer(pe32))
-
-                if get_p(pid) in ('python.exe', 'gajim.exe'):
-                    return True
-                return False
-            try:
-                if not os.path.exists('/proc'):
-                    return True # no /proc, assume Gajim is running
-
-                try:
-                    f1 = open('/proc/%d/cmdline'% pid)
-                except IOError as e1:
-                    if e1.errno == errno.ENOENT:
-                        return False # file/pid does not exist
-                    raise
-
-                n = f1.read().lower()
-                f1.close()
-                if n.find('gajim') < 0:
-                    return False
-                return True # Running Gajim found at pid
-            except Exception:
-                traceback.print_exc()
-
-            # If we are here, pidfile exists, but some unexpected error occured.
-            # Assume Gajim is running.
-            return True
-
-        def show_remote_gajim_roster():
-            try:
-                import dbus
-
-                OBJ_PATH = '/org/gajim/dbus/RemoteObject'
-                INTERFACE = 'org.gajim.dbus.RemoteInterface'
-                SERVICE = 'org.gajim.dbus'
-
-                # Attempt to call show_roster
-                dbus.Interface(dbus.SessionBus().get_object(SERVICE, OBJ_PATH), INTERFACE).__getattr__("show_roster")()
-
-                return True
-            except Exception:
-                return False
-
-        if pid_alive():
-            if (show_remote_gajim_roster()):
-                print("Gajim is already running, bringing the roster to front...")
-                sys.exit(0)
-            pixs = []
-            for size in (16, 32, 48, 64, 128):
-                pix = gtkgui_helpers.get_icon_pixmap('gajim', size)
-                if pix:
-                    pixs.append(pix)
-            if pixs:
-                # set the icon to all windows
-                Gtk.Window.set_default_icon_list(pixs)
-            pritext = _('Gajim is already running')
-            sectext = _('Another instance of Gajim seems to be running\nRun anyway?')
-            dialog = dialogs.YesNoDialog(pritext, sectext)
-            dialog.popup()
-            if dialog.run() != Gtk.ResponseType.YES:
-                sys.exit(3)
-            dialog.destroy()
-            # run anyway, delete pid and useless global vars
-            if os.path.exists(pid_filename):
-                os.remove(pid_filename)
-            del pix
-            del pritext
-            del sectext
-            dialog.destroy()
-
-        # Create .gajim dir
-        pid_dir =  os.path.dirname(pid_filename)
-        if not os.path.exists(pid_dir):
-            check_paths.create_path(pid_dir)
-        # Create pid file
-        try:
-            f2 = open(pid_filename, 'w')
-            f2.write(str(os.getpid()))
-            f2.close()
-        except IOError as e2:
-            dlg = dialogs.ErrorDialog(_('Disk Write Error'), str(e2))
-            dlg.run()
-            dlg.destroy()
-            sys.exit()
-        del pid_dir
-
         def on_exit():
             # Save the entropy from OpenSSL PRNG
             if PYOPENSSL_PRNG_PRESENT:
@@ -378,9 +231,6 @@ class GajimApplication(Gtk.Application):
                     OpenSSL.rand.write_file(RNG_SEED)
                 except TypeError:
                     OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
-            # delete pid file on normal exit
-            if os.path.exists(pid_filename):
-                os.remove(pid_filename)
             # Shutdown GUI and save config
             if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
                 gajim.interface.roster.prepare_quit()
@@ -392,7 +242,7 @@ class GajimApplication(Gtk.Application):
 
         def sigint_cb(num, stack):
             sys.exit(5)
-        # ^C exits the application normally to delete pid file
+        # ^C exits the application normally
         signal.signal(signal.SIGINT, sigint_cb)
         signal.signal(signal.SIGTERM, sigint_cb)
 

@@ -180,7 +180,6 @@ class ConfigPaths:
 
     def init_profile(self, profile):
         conffile = windowsify('config')
-        pidfile = windowsify('gajim')
         secretsfile = windowsify('secrets')
         pluginsconfdir = windowsify('pluginsconfig')
         certsdir = windowsify(u'certs')
@@ -188,16 +187,13 @@ class ConfigPaths:
 
         if len(profile) > 0:
             conffile += '.' + profile
-            pidfile += '.' + profile
             secretsfile += '.' + profile
             pluginsconfdir += '.' + profile
             certsdir += u'.' + profile
             localcertsdir += u'.' + profile
 
-        pidfile += '.pid'
         self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
         self.add('MY_PEER_CERTS', TYPE_DATA, certsdir)
-        self.add('PID_FILE', TYPE_CACHE, pidfile)
         self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
         self.add('PLUGINS_CONFIG_DIR', TYPE_CONFIG, pluginsconfdir)
         self.add('MY_CERT', TYPE_CONFIG, localcertsdir)
