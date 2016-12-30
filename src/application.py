@@ -64,11 +64,18 @@ class GajimApplication(Gtk.Application):
         self.profile = ''
         self.config_path = None
         self.profile_separation = False
+        self.interface = None
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
 
     def do_activate(self):
+        # If a second instance starts do_activate() is called
+        # We bringt the Roster window to the front, GTK exits afterwards.
+        if self.interface:
+            self.interface.roster.window.present()
+            return
+
         Gtk.Application.do_activate(self)
 
         if os.name == 'nt':
@@ -424,9 +431,8 @@ class GajimApplication(Gtk.Application):
 
         check_paths.check_and_possibly_create_paths()
 
-        interface = Interface()
-        interface.run(self)
-
+        self.interface = Interface()
+        self.interface.run(self)
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
         Gtk.Application.do_command_line(self, command_line)
