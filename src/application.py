@@ -70,6 +70,9 @@ class GajimApplication(Gtk.Application):
         self.profile_separation = False
         self.interface = None
 
+        GLib.set_prgname('gajim')
+        GLib.set_application_name('Gajim')
+
     def do_startup(self):
         Gtk.Application.do_startup(self)
 
@@ -122,19 +125,6 @@ class GajimApplication(Gtk.Application):
                 'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
         #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
         #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-        # PyGTK2.10+ only throws a warning
-        warnings.filterwarnings('error', module='Gtk')
-        try:
-            from gi.repository import GObject
-            GObject.set_prgname('gajim')
-        except Warning as msg2:
-            if str(msg2) == 'could not open display':
-                print(_('Gajim needs X server to run. Quiting...'), file=sys.stderr)
-            else:
-                print(_('importing PyGTK failed: %s') % str(msg2), file=sys.stderr)
-            sys.exit()
-        warnings.resetwarnings()
 
         if os.name == 'nt':
             warnings.filterwarnings(action='ignore')
