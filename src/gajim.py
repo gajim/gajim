@@ -48,6 +48,7 @@ if '--windev' in sys.argv or '-w' in sys.argv:
     WINDEV = True
 
 if os.name == 'nt' and not WINDEV:
+    import warnings
     log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
     if not os.path.exists(log_path):
         os.mkdir(log_path, 0o700)
@@ -77,6 +78,7 @@ if os.name == 'nt' and not WINDEV:
     outerr = MyStd()
     sys.stdout = outerr
     sys.stderr = outerr
+    warnings.filterwarnings(action='ignore')
 
 
 # Test here for all required versions so we dont have to

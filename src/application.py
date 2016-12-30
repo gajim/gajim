@@ -20,7 +20,6 @@
 
 import sys
 import os
-import warnings
 import logging
 from gi.repository import GLib, Gio, Gtk
 from common import i18n
@@ -125,9 +124,6 @@ class GajimApplication(Gtk.Application):
                 'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
         #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
         #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-        if os.name == 'nt':
-            warnings.filterwarnings(action='ignore')
 
         if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
             i18n.direction_mark = '\u200F'
