@@ -163,15 +163,6 @@ class GajimApplication(Gtk.Application):
                 elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
                     libc.setproctitle('gajim')
 
-        #    if Gtk.pygtk_version < (2, 22, 0):
-        #        pritext = _('Gajim needs PyGTK 2.22 or above')
-        #        sectext = _('Gajim needs PyGTK 2.22 or above to run. Quiting...')
-        #    elif Gtk.gtk_version < (2, 22, 0):
-        #    if (Gtk.get_major_version(), Gtk.get_minor_version(),
-        #    Gtk.get_micro_version()) < (2, 22, 0):
-        #        pritext = _('Gajim needs GTK 2.22 or above')
-        #        sectext = _('Gajim needs GTK 2.22 or above to run. Quiting...')
-
             from common import check_paths
 
             if os.name == 'nt':
