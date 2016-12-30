@@ -187,13 +187,9 @@ class GajimApplication(Gtk.Application):
 
         del pritext
 
-        #import gtkexcepthook
-
         import signal
 
         gajimpaths = common.configpaths.gajimpaths
-
-        config_filename = gajimpaths['CONFIG_FILE']
 
         # Seed the OpenSSL pseudo random number generator from file and initialize
         RNG_SEED = gajimpaths['RNG_SEED']
