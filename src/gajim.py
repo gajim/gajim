@@ -36,25 +36,48 @@
 ##
 
 import sys
+import os
 
 if '--version' in sys.argv or '-V' in sys.argv:
     from common.defs import version
     print(version)
     sys.exit(0)
 
-import os
-import warnings
+WINDEV = False
+if '--windev' in sys.argv or '-w' in sys.argv:
+    WINDEV = True
 
-if os.name == 'nt':
+if os.name == 'nt' and not WINDEV:
     log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
     if not os.path.exists(log_path):
         os.mkdir(log_path, 0o700)
     log_file = os.path.join(log_path, 'gajim.log')
-    fout = open(log_file, 'a')
-    sys.stdout = fout
-    sys.stderr = fout
 
-    warnings.filterwarnings(action='ignore')
+    class MyStd(object):
+        _file = None
+        _error = None
+
+        def write(self, text):
+            if self._file is None and self._error is None:
+                try:
+                    self._file = open(log_file, 'a')
+                except Exception as details:
+                    self._error = details
+            if self._file is not None:
+                self._file.write(text)
+                self._file.flush()
+
+        def flush(self):
+            if self._file is not None:
+                self._file.flush()
+
+        def isatty(self):
+            return False
+
+    outerr = MyStd()
+    sys.stdout = outerr
+    sys.stderr = outerr
+
 
 # Test here for all required versions so we dont have to
 # test multiple times in every module. nbxmpp also needs GLib.

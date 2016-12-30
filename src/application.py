@@ -50,6 +50,10 @@ class GajimApplication(Gtk.Application):
                              GLib.OptionArg.NONE,
                              _('Print xml stanzas and other debug '
                                'information'))
+        self.add_main_option('windev', ord('w'), GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('Print stdout/stderr to the console '
+                               'on Windows'))
         self.add_main_option('profile', ord('p'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.STRING,
                              _('Use defined profile in configuration '
@@ -118,26 +122,6 @@ class GajimApplication(Gtk.Application):
                 'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
         #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
         #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-            class MyStderr(object):
-                _file = None
-                _error = None
-                def write(self, text):
-                    fname = os.path.join(common.configpaths.gajimpaths.cache_root,
-                        os.path.split(sys.executable)[1]+'.log')
-                    if self._file is None and self._error is None:
-                        try:
-                            self._file = open(fname, 'a')
-                        except Exception as details:
-                            self._error = details
-                    if self._file is not None:
-                        self._file.write(text)
-                        self._file.flush()
-                def flush(self):
-                    if self._file is not None:
-                        self._file.flush()
-
-            sys.stderr = MyStderr()
 
         # PyGTK2.10+ only throws a warning
         warnings.filterwarnings('error', module='Gtk')
