@@ -84,6 +84,34 @@ class GajimApplication(Gtk.Application):
 
         Gtk.Application.do_activate(self)
 
+        # Create and initialize Application Paths & Databases
+        import common.configpaths
+        common.configpaths.gajimpaths.init(
+            self.config_path, self.profile, self.profile_separation)
+        from common import gajim
+        from common import check_paths
+        from common import exceptions
+        from common import logger
+        from common import caps_cache
+        try:
+            gajim.logger = logger.Logger()
+            caps_cache.initialize(gajim.logger)
+            check_paths.check_and_possibly_create_paths()
+        except exceptions.DatabaseMalformed:
+            dlg = Gtk.MessageDialog(
+                None,
+                Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
+                Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.OK,
+                _('Database Error'))
+            dlg.format_secondary_text(
+                _('The database file (%s) cannot be read. Try to repair it '
+                  '(see http://trac.gajim.org/wiki/DatabaseBackup) or remove it '
+                  '(all history will be lost).') % gajim.gajimpaths['LOG_DB'])
+            dlg.run()
+            dlg.destroy()
+            sys.exit()
+
         if os.name == 'nt':
             import locale
             import gettext
@@ -115,10 +143,6 @@ class GajimApplication(Gtk.Application):
 
         import locale
 
-        import common.configpaths
-        common.configpaths.gajimpaths.init(
-            self.config_path, self.profile, self.profile_separation)
-
         if os.name == 'nt':
             plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
                 'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
@@ -127,62 +151,30 @@ class GajimApplication(Gtk.Application):
 
         if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
             i18n.direction_mark = '\u200F'
-        pritext = ''
 
-        from common import exceptions
-        try:
-            from common import gajim
-        except exceptions.DatabaseMalformed:
-            pritext = _('Database Error')
-            sectext = _('The database file (%s) cannot be read. Try to repair it (see '
-                'http://trac.gajim.org/wiki/DatabaseBackup) or remove it (all history '
-                'will be lost).') % common.logger.LOG_DB_PATH
-        else:
-            from common import logger
-            gajim.logger = logger.Logger()
-            from common import caps_cache
-            caps_cache.initialize(gajim.logger)
-            from common import dbus_support
-            if dbus_support.supported:
-                from music_track_listener import MusicTrackListener
+        from common import dbus_support
+        if dbus_support.supported:
+            from music_track_listener import MusicTrackListener
 
-            from ctypes import CDLL
-            from ctypes.util import find_library
-            import platform
+        from ctypes import CDLL
+        from ctypes.util import find_library
+        import platform
 
-            sysname = platform.system()
-            if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
-                libc = CDLL(find_library('c'))
+        sysname = platform.system()
+        if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
+            libc = CDLL(find_library('c'))
 
-                # The constant defined in <linux/prctl.h> which is used to set the name
-                # of the process.
-                PR_SET_NAME = 15
+            # The constant defined in <linux/prctl.h> which is used to set the name
+            # of the process.
+            PR_SET_NAME = 15
 
-                if sysname == 'Linux':
-                    libc.prctl(PR_SET_NAME, 'gajim')
-                elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
-                    libc.setproctitle('gajim')
-
-            from common import check_paths
-
-        if pritext:
-            dlg = Gtk.MessageDialog(None,
-                    Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
-                    Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, message_format = pritext)
-
-            dlg.format_secondary_text(sectext)
-            dlg.run()
-            dlg.destroy()
-            sys.exit()
-
-        del pritext
-
-        import signal
-
-        gajimpaths = common.configpaths.gajimpaths
+            if sysname == 'Linux':
+                libc.prctl(PR_SET_NAME, 'gajim')
+            elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
+                libc.setproctitle('gajim')
 
         # Seed the OpenSSL pseudo random number generator from file and initialize
-        RNG_SEED = gajimpaths['RNG_SEED']
+        RNG_SEED = gajim.gajimpaths['RNG_SEED']
         PYOPENSSL_PRNG_PRESENT = False
         try:
             import OpenSSL.rand
@@ -220,13 +212,12 @@ class GajimApplication(Gtk.Application):
         def sigint_cb(num, stack):
             sys.exit(5)
         # ^C exits the application normally
+        import signal
         signal.signal(signal.SIGINT, sigint_cb)
         signal.signal(signal.SIGTERM, sigint_cb)
 
         log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
                 sys.getfilesystemencoding(), locale.getpreferredencoding())
-
-        check_paths.check_and_possibly_create_paths()
 
         self.interface = Interface()
         self.interface.run(self)
