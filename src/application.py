@@ -21,11 +21,19 @@
 import sys
 import os
 import logging
+import signal
 from gi.repository import GLib, Gio, Gtk
 from common import i18n
 from common import logging_helpers
-logging_helpers.init(sys.stderr.isatty())
+from common import crypto
+try:
+    PYOPENSSL_PRNG_PRESENT = True
+    import OpenSSL.rand
+except ImportError:
+    print('PyOpenSSL not available, impossible to generate entropy', file=sys.stderr)
+    PYOPENSSL_PRNG_PRESENT = False
 
+logging_helpers.init(sys.stderr.isatty())
 log = logging.getLogger('gajim.gajim')
 
 
@@ -68,6 +76,7 @@ class GajimApplication(Gtk.Application):
         self.config_path = None
         self.profile_separation = False
         self.interface = None
+        self.rng_seed = None
 
         GLib.set_prgname('gajim')
         GLib.set_application_name('Gajim')
@@ -174,53 +183,44 @@ class GajimApplication(Gtk.Application):
                 libc.setproctitle('gajim')
 
         # Seed the OpenSSL pseudo random number generator from file and initialize
-        RNG_SEED = gajim.gajimpaths['RNG_SEED']
-        PYOPENSSL_PRNG_PRESENT = False
-        try:
-            import OpenSSL.rand
-            from common import crypto
-            PYOPENSSL_PRNG_PRESENT = True
+        if PYOPENSSL_PRNG_PRESENT:
+            self.rng_seed = gajim.gajimpaths['RNG_SEED']
             # Seed from file
             try:
-                OpenSSL.rand.load_file(RNG_SEED)
+                OpenSSL.rand.load_file(self.rng_seed)
             except TypeError:
-                OpenSSL.rand.load_file(RNG_SEED.encode('utf-8'))
+                OpenSSL.rand.load_file(self.rng_seed.encode('utf-8'))
             crypto.add_entropy_sources_OpenSSL()
             try:
-                OpenSSL.rand.write_file(RNG_SEED)
+                OpenSSL.rand.write_file(self.rng_seed)
             except TypeError:
-                OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
-        except ImportError:
-            log.info("PyOpenSSL PRNG not available")
-
-        def on_exit():
-            # Save the entropy from OpenSSL PRNG
-            if PYOPENSSL_PRNG_PRESENT:
-                try:
-                    OpenSSL.rand.write_file(RNG_SEED)
-                except TypeError:
-                    OpenSSL.rand.write_file(RNG_SEED.encode('utf-8'))
-            # Shutdown GUI and save config
-            if hasattr(gajim.interface, 'roster') and gajim.interface.roster:
-                gajim.interface.roster.prepare_quit()
-
-        import atexit
-        atexit.register(on_exit)
-
-        from gui_interface import Interface
+                OpenSSL.rand.write_file(self.rng_seed.encode('utf-8'))
 
         def sigint_cb(num, stack):
-            sys.exit(5)
+            print('SIGINT/SIGTERM received')
+            self.quit()
         # ^C exits the application normally
-        import signal
         signal.signal(signal.SIGINT, sigint_cb)
         signal.signal(signal.SIGTERM, sigint_cb)
 
-        log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(), \
-                sys.getfilesystemencoding(), locale.getpreferredencoding())
+        log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(),
+                 sys.getfilesystemencoding(), locale.getpreferredencoding())
 
+        from gui_interface import Interface
         self.interface = Interface()
         self.interface.run(self)
+
+    def do_shutdown(self, *args):
+        Gtk.Application.do_shutdown(self)
+        # Save the entropy from OpenSSL PRNG
+        if PYOPENSSL_PRNG_PRESENT and self.rng_seed:
+            try:
+                OpenSSL.rand.write_file(self.rng_seed)
+            except TypeError:
+                OpenSSL.rand.write_file(self.rng_seed.encode('utf-8'))
+        # Shutdown GUI and save config
+        if hasattr(self.interface, 'roster') and self.interface.roster:
+            self.interface.roster.prepare_quit()
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
         Gtk.Application.do_command_line(self, command_line)
