@@ -1943,9 +1943,9 @@ class Interface:
             # We match from our list of emoticons, but they must either have
             # whitespace, or another emoticon next to it to match successfully
             # [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-            emoticons_pattern = '|' + '(?:(?<![\w.]' + \
+            emoticons_pattern = '|' + r'(?:(?<![\w.]' + \
                 emoticons_pattern_prematch[:-1] + '))' + '(?:' + \
-                emoticons_pattern[:-1] + ')' + '(?:(?![\w]' + \
+                emoticons_pattern[:-1] + ')' + r'(?:(?![\w]' + \
                 emoticons_pattern_postmatch[:-1] + '))'
 
         # because emoticons match later (in the string) they need to be after
