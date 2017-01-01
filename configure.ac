@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		m4_esyscmd_s([python -c "import os;os.chdir('src');from common import defs; print defs.version"]),[https://dev.gajim.org/gajim/gajim],[gajim])
+		m4_esyscmd_s([python -c "import os;os.chdir('src');from common import defs; print(defs.version)"]),[https://dev.gajim.org/gajim/gajim],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
