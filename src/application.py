@@ -165,15 +165,6 @@ class GajimApplication(Gtk.Application):
 
             from common import check_paths
 
-            if os.name == 'nt':
-                try:
-                    import winsound # windows-only built-in module for playing wav
-                except Exception:
-                    pritext = _('Gajim needs pywin32 to run')
-                    sectext = _('Please make sure that Pywin32 is installed on your '
-                        'system. You can get it at %s') % \
-                        'http://sourceforge.net/project/showfiles.php?group_id=78018'
-
         if pritext:
             dlg = Gtk.MessageDialog(None,
                     Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,

@@ -52,8 +52,16 @@ from string import Template
 from common.i18n import Q_
 from common.i18n import ngettext
 
+if os.name == 'nt':
+    try:
+        HAS_WINSOUND = True
+        import winsound  # windows-only built-in module for playing wav
+    except ImportError:
+        HAS_WINSOUND = False
+        print('Gajim is not able to playback sound because'
+              'pywin32 is missing', file=sys.stderr)
+
 try:
-    import winsound # windows-only built-in module for playing wav
     import wave     # posix-only fallback wav playback
     import ossaudiodev as oss
 except Exception:
@@ -739,12 +747,12 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    elif os.name == 'nt':
+    elif os.name == 'nt' and HAS_WINSOUND:
         try:
             winsound.PlaySound(path_to_soundfile,
                     winsound.SND_FILENAME|winsound.SND_ASYNC)
         except Exception:
-            pass
+            log.exception('Sound Playback Error')
     elif os.name == 'posix':
         if gajim.config.get('soundplayer') == '':
             def _oss_play():
