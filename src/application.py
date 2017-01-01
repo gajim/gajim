@@ -161,10 +161,6 @@ class GajimApplication(Gtk.Application):
         if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
             i18n.direction_mark = '\u200F'
 
-        from common import dbus_support
-        if dbus_support.supported:
-            from music_track_listener import MusicTrackListener
-
         from ctypes import CDLL
         from ctypes.util import find_library
         import platform
