@@ -459,7 +459,7 @@ def get_output_of_command(command):
     return output
 
 def get_windows_reg_env(varname, default=''):
-    """
+    r"""
     Ask for paths commonly used but not exposed as ENVs in english Windows 2003
     those are:
             'AppData' = %USERPROFILE%\Application Data (also an ENV)

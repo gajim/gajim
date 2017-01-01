@@ -404,7 +404,7 @@ class PluginManager(metaclass=Singleton):
     @staticmethod
     @log_calls('PluginManager')
     def scan_dir_for_plugins(path, scan_dirs=True):
-        '''
+        r'''
         Scans given directory for plugin classes.
 
         :param path: directory to scan for plugins
