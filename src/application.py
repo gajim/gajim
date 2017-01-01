@@ -22,6 +22,7 @@ import sys
 import os
 import logging
 import signal
+import locale
 from gi.repository import GLib, Gio, Gtk
 from common import i18n
 from common import logging_helpers
@@ -122,8 +123,9 @@ class GajimApplication(Gtk.Application):
             sys.exit()
 
         if os.name == 'nt':
-            import locale
             import gettext
+            # needed for docutils
+            sys.path.append('.')
             APP = 'gajim'
             DIR = '../po'
             lang, enc = locale.getdefaultlocale()
@@ -132,6 +134,8 @@ class GajimApplication(Gtk.Application):
             gettext.textdomain(APP)
             gettext.install(APP, DIR)
 
+        # This is for Windows translation which is currently not
+        # working on GTK 3.18.9
         #    locale.setlocale(locale.LC_ALL, '')
         #    import ctypes
         #    import ctypes.util
@@ -145,16 +149,8 @@ class GajimApplication(Gtk.Application):
         #    libintl = ctypes.cdll.LoadLibrary(libintl_path)
         #    libintl.bindtextdomain(APP, DIR)
         #    libintl.bind_textdomain_codeset(APP, 'UTF-8')
-
-        if os.name == 'nt':
-            # needed for docutils
-            sys.path.append('.')
-
-        import locale
-
-        if os.name == 'nt':
-            plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
-                'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
+        #    plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
+        #       'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
         #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
         #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
 
