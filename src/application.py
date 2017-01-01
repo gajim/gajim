@@ -168,7 +168,6 @@ class GajimApplication(Gtk.Application):
             if os.name == 'nt':
                 try:
                     import winsound # windows-only built-in module for playing wav
-                    import win32api # do NOT remove. we req this module
                 except Exception:
                     pritext = _('Gajim needs pywin32 to run')
                     sectext = _('Please make sure that Pywin32 is installed on your '

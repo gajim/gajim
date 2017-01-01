@@ -1495,7 +1495,7 @@ class FileChooserDialog(Gtk.FileChooserDialog):
         if current_folder and os.path.isdir(current_folder):
             self.set_current_folder(current_folder)
         else:
-            self.set_current_folder(helpers.get_documents_path())
+            self.set_current_folder(os.path.expanduser('~'))
         self.response_ok, self.response_cancel = \
                 on_response_ok, on_response_cancel
         # in gtk+-2.10 clicked signal on some of the buttons in a dialog
@@ -5047,7 +5047,7 @@ class ArchiveChooserDialog(FileChooserDialog):
                     callback(path_to_file)
             self.destroy()
 
-        path = helpers.get_documents_path()
+        path = os.path.expanduser('~')
 
         FileChooserDialog.__init__(self,
             title_text=_('Choose Archive'),
