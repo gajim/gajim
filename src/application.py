@@ -94,6 +94,9 @@ class GajimApplication(Gtk.Application):
 
         Gtk.Application.do_activate(self)
 
+        import gtkexcepthook
+        gtkexcepthook.init()
+
         # Create and initialize Application Paths & Databases
         import common.configpaths
         common.configpaths.gajimpaths.init(
