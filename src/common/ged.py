@@ -85,7 +85,7 @@ class GlobalEventsDispatcher(object):
                                   %(handler, priority, event_name, error))
 
     def raise_event(self, event_name, *args, **kwargs):
-        log.debug('%s\nArgs: %s'%(event_name, str(args)))
+        log.debug('%s Args: %s'%(event_name, str(args)))
         if event_name in self.handlers:
             node_processed = False
             for priority, handler in self.handlers[event_name]:
