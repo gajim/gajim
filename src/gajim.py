@@ -51,8 +51,18 @@ if os.name == 'nt':
 
     warnings.filterwarnings(action='ignore')
 
+# Test here for all required versions so we dont have to
+# test multiple times in every module. nbxmpp also needs GLib.
+import gi
+gi.require_version('GLib', '2.0')
+gi.require_version('Gio', '2.0')
+gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('GObject', '2.0')
+gi.require_version('Pango', '1.0')
+
 MIN_NBXMPP_VER = "0.5.3"
-from gi.repository import GLib
+
 try:
     import nbxmpp
 except ImportError:
@@ -99,12 +109,6 @@ logging_helpers.init(sys.stderr.isatty())
 import logging
 # gajim.gui or gajim.gtk more appropriate ?
 log = logging.getLogger('gajim.gajim')
-
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gdk', '3.0')
-gi.require_version('GObject', '2.0')
-gi.require_version('Pango', '1.0')
 
 import getopt
 from common import i18n
