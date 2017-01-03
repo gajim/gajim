@@ -341,7 +341,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.was_at_the_end = True
         self.correcting = False
         self.last_sent_msg = None
-        self.last_sent_txt = None
         self.last_received_txt = {} # one per name
         self.last_received_id = {} # one per name
 
@@ -785,7 +784,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         def _cb(obj, msg, cb, *cb_args):
             self.last_sent_msg = msg
-            self.last_sent_txt = cb_args[0]
             if cb:
                 cb(obj, msg, *cb_args)
 
@@ -841,7 +839,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    correct_id=None, additional_data={}):
+    msg_stanza_id=None, correct_id=None, additional_data={}):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -852,26 +850,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         end = False
         if self.was_at_the_end or kind == 'outgoing':
             end = True
-        old_txt = ''
-        if name in self.last_received_txt:
-            old_txt = self.last_received_txt[name]
-        if correct_id and correct_id[1] and \
-        name in self.conv_textview.last_received_message_marks and \
-        correct_id[1] == self.last_received_id[name]:
-            self.conv_textview.correct_last_received_message(text, xhtml,
-                name, old_txt)
-        elif correct_id and correct_id[1] and \
-        self.conv_textview.last_sent_message_marks[0] and \
-        correct_id[1] == self.last_received_id[name]:
-            # this is for carbon copied messages that are sent from another
-            # resource
-            self.conv_textview.correct_last_sent_message(text, xhtml,
-                self.get_our_nick(), old_txt, additional_data=additional_data)
-        else:
-            textview.print_conversation_line(text, jid, kind, name, tim,
-                other_tags_for_name, other_tags_for_time, other_tags_for_text,
-                subject, old_kind, xhtml, simple=simple, graphics=graphics,
-                displaymarking=displaymarking, additional_data=additional_data)
+
+        textview.print_conversation_line(text, jid, kind, name, tim,
+            other_tags_for_name, other_tags_for_time, other_tags_for_text,
+            subject, old_kind, xhtml, simple=simple, graphics=graphics,
+            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
+            correct_id=correct_id, additional_data=additional_data)
 
         if xep0184_id is not None:
             textview.show_xep0184_warning(xep0184_id)
@@ -1364,6 +1348,7 @@ class ChatControl(ChatControlBase):
         self.gpg_is_active = False
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
+        self.last_message_timestamp = None
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
         self.actions_button = self.xml.get_object('message_window_actions_button')
@@ -2282,7 +2267,7 @@ class ChatControl(ChatControlBase):
                 GLib.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
-        def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label, old_txt):
+        def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label):
             id_ = msg_stanza.getID()
             if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
             'accounts', self.account, 'request_receipt'):
@@ -2293,22 +2278,21 @@ class ChatControl(ChatControlBase):
                 displaymarking = label.getTag('displaymarking')
             else:
                 displaymarking = None
-            if self.correcting and \
-            self.conv_textview.last_sent_message_marks[0]:
-                self.conv_textview.correct_last_sent_message(message, xhtml,
-                    self.get_our_nick(), old_txt, additional_data=obj.additional_data)
+            if self.correcting:
                 self.correcting = False
                 self.msg_textview.override_background_color(
                     Gtk.StateType.NORMAL, self.old_message_tv_color)
-                return
+
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
-                displaymarking=displaymarking, additional_data=obj.additional_data)
+                displaymarking=displaymarking, msg_stanza_id=id_,
+                correct_id=msg_stanza.getTagAttr('replace', 'id'),
+                additional_data=obj.additional_data)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
-            callback_args=[message, encrypted, xhtml, self.get_seclabel(),
-            self.last_sent_txt], process_commands=process_commands,
+            callback_args=[message, encrypted, xhtml, self.get_seclabel()],
+            process_commands=process_commands,
             attention=attention)
 
     def check_for_possible_paused_chatstate(self, arg):
@@ -2422,7 +2406,8 @@ class ChatControl(ChatControlBase):
 
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
-    displaymarking=None, msg_log_id=None, correct_id=None, additional_data={}):
+    displaymarking=None, msg_log_id=None, correct_id=None,
+    msg_stanza_id=None, additional_data={}):
         """
         Print a line in the conversation
 
@@ -2487,7 +2472,8 @@ class ChatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, name, tim,
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
-            msg_log_id=msg_log_id, correct_id=correct_id, additional_data=additional_data)
+            msg_log_id=msg_log_id, msg_stanza_id=msg_stanza_id,
+            correct_id=correct_id, additional_data=additional_data)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:
@@ -2961,7 +2947,7 @@ class ChatControl(ChatControlBase):
                 kind = 'status'
                 name = self.contact.get_shown_name()
 
-            tim = time.localtime(float(row[0]))
+            tim = float(row[0])
 
             if gajim.config.get('restored_messages_small'):
                 small_attr = ['small']

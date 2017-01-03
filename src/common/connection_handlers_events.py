@@ -94,12 +94,16 @@ class HelperEvent:
             self.gc_control = minimized.get(self.jid)
 
     def _generate_timestamp(self, tag):
+        # Make sure we use only int/float Epoch time
+        if not isinstance(tag, str):
+            self.timestamp = time_time()
+            return
         try:
             tim = helpers.datetime_tuple(tag)
+            self.timestamp = timegm(tim)
         except Exception:
             log.error('wrong timestamp, ignoring it: ' + tag)
-            tim = localtime()
-        self.timestamp = localtime(timegm(tim))
+            self.timestamp = time_time()
 
     def get_chatstate(self):
         """
@@ -1059,7 +1063,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
         tim = delay.getAttr('stamp')
         tim = helpers.datetime_tuple(tim)
-        self.tim = localtime(timegm(tim))
+        self.tim = timegm(tim)
         to_ = self.msg_.getAttr('to')
         if to_:
             to_ = gajim.get_jid_without_resource(to_)
@@ -1278,7 +1282,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
                 if not form.getField('FORM_TYPE'):
                     return
-                
+
                 if form['FORM_TYPE'] == 'urn:xmpp:ssn':
                     self.session.handle_negotiation(form)
                 else:
@@ -1301,6 +1305,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         self._generate_timestamp(self.stanza.getTimestamp())
+
 
         self.encrypted = False
         xep_200_encrypted = self.stanza.getTag('c',
@@ -1522,6 +1527,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.stanza = self.msg_obj.stanza
         if not hasattr(self, 'additional_data'):
             self.additional_data = self.msg_obj.additional_data
+        self.id_ = self.msg_obj.stanza.getID()
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
         self.jid = self.msg_obj.jid
