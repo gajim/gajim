@@ -51,28 +51,18 @@ if os.name == 'nt':
 
     warnings.filterwarnings(action='ignore')
 
-HAS_NBXMPP=True
 MIN_NBXMPP_VER = "0.5.3"
 from gi.repository import GLib
 try:
     import nbxmpp
 except ImportError:
-    HAS_NBXMPP=False
-
-if not HAS_NBXMPP:
     print('Gajim needs python-nbxmpp to run. Quiting...')
-    sys.exit()
+    sys.exit(1)
 
-try:
-    from distutils.version import LooseVersion as V
-    if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
-        HAS_NBXMPP=False
-except:
-    HAS_NBXMPP=False
-
-if not HAS_NBXMPP:
+from distutils.version import LooseVersion as V
+if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
     print('Gajim needs python-nbxmpp >= %s to run. Quiting...' % MIN_NBXMPP_VER)
-    sys.exit()
+    sys.exit(1)
 
 if os.name == 'nt':
     import locale
