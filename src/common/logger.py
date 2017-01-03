@@ -43,10 +43,9 @@ from common import ged
 
 import sqlite3 as sqlite
 
-from common import configpaths
-LOG_DB_PATH = configpaths.gajimpaths['LOG_DB']
+LOG_DB_PATH = gajim.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
-CACHE_DB_PATH = configpaths.gajimpaths['CACHE_DB']
+CACHE_DB_PATH = gajim.gajimpaths['CACHE_DB']
 
 import logging
 log = logging.getLogger('gajim.c.logger')

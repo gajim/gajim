@@ -52,10 +52,16 @@ from string import Template
 from common.i18n import Q_
 from common.i18n import ngettext
 
+if os.name == 'nt':
+    try:
+        HAS_WINSOUND = True
+        import winsound  # windows-only built-in module for playing wav
+    except ImportError:
+        HAS_WINSOUND = False
+        print('Gajim is not able to playback sound because'
+              'pywin32 is missing', file=sys.stderr)
+
 try:
-    import winsound # windows-only built-in module for playing wav
-    import win32api
-    import win32con
     import wave     # posix-only fallback wav playback
     import ossaudiodev as oss
 except Exception:
@@ -462,52 +468,6 @@ def get_output_of_command(command):
 
     return output
 
-def get_windows_reg_env(varname, default=''):
-    r"""
-    Ask for paths commonly used but not exposed as ENVs in english Windows 2003
-    those are:
-            'AppData' = %USERPROFILE%\Application Data (also an ENV)
-            'Desktop' = %USERPROFILE%\Desktop
-            'Favorites' = %USERPROFILE%\Favorites
-            'NetHood' = %USERPROFILE%\ NetHood
-            'Personal' = D:\My Documents (PATH TO MY DOCUMENTS)
-            'PrintHood' = %USERPROFILE%\PrintHood
-            'Programs' = %USERPROFILE%\Start Menu\Programs
-            'Recent' = %USERPROFILE%\Recent
-            'SendTo' = %USERPROFILE%\SendTo
-            'Start Menu' = %USERPROFILE%\Start Menu
-            'Startup' = %USERPROFILE%\Start Menu\Programs\Startup
-            'Templates' = %USERPROFILE%\Templates
-            'My Pictures' = D:\My Documents\My Pictures
-            'Local Settings' = %USERPROFILE%\Local Settings
-            'Local AppData' = %USERPROFILE%\Local Settings\Application Data
-            'Cache' = %USERPROFILE%\Local Settings\Temporary Internet Files
-            'Cookies' = %USERPROFILE%\Cookies
-            'History' = %USERPROFILE%\Local Settings\History
-    """
-    if os.name != 'nt':
-        return ''
-
-    val = default
-    try:
-        rkey = win32api.RegOpenKey(win32con.HKEY_CURRENT_USER,
-r'Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders')
-        try:
-            val = str(win32api.RegQueryValueEx(rkey, varname)[0])
-            val = win32api.ExpandEnvironmentStrings(val) # expand using environ
-        except Exception:
-            pass
-    finally:
-        win32api.RegCloseKey(rkey)
-    return val
-
-def get_documents_path():
-    if os.name == 'nt':
-        path = get_windows_reg_env('Personal')
-    else:
-        path = os.path.expanduser('~')
-    return path
-
 def sanitize_filename(filename):
     """
     Make sure the filename we will write does contain only acceptable and latin
@@ -787,12 +747,12 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    elif os.name == 'nt':
+    elif os.name == 'nt' and HAS_WINSOUND:
         try:
             winsound.PlaySound(path_to_soundfile,
                     winsound.SND_FILENAME|winsound.SND_ASYNC)
         except Exception:
-            pass
+            log.exception('Sound Playback Error')
     elif os.name == 'posix':
         if gajim.config.get('soundplayer') == '':
             def _oss_play():
