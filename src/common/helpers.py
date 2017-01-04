@@ -1078,13 +1078,14 @@ def get_notification_icon_tooltip_dict():
                             messages[jid], messages[jid], messages[jid])
                     contact = gajim.contacts.get_first_contact_from_jid(
                             account['name'], jid)
+                    text += ' '
                     if jid in gajim.gc_connected[account['name']]:
-                        text += _(' from room %s') % (jid)
+                        text += _('from room %s') % (jid)
                     elif contact:
                         name = contact.get_shown_name()
-                        text += _(' from user %s') % (name)
+                        text += _('from user %s') % (name)
                     else:
-                        text += _(' from %s') % (jid)
+                        text += _('from %s') % (jid)
                     account['event_lines'].append(text)
 
         # Display unseen events numbers, if any
@@ -1099,7 +1100,7 @@ def get_notification_icon_tooltip_dict():
                 for jid in non_messages.keys():
                     text = ngettext('%d event pending', '%d events pending',
                         non_messages[jid], non_messages[jid], non_messages[jid])
-                    text += _(' from user %s') % (jid)
+                    text += ' ' + _('from user %s') % (jid)
                     account[account]['event_lines'].append(text)
 
     return accounts
