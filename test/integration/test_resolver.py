@@ -50,15 +50,15 @@ class TestResolver(unittest.TestCase):
             return
         self.resolver = resolver.LibAsyncNSResolver()
 
-        for name, type, expect_results in TEST_LIST:
+        for name, type_, expect_results in TEST_LIST:
             self.expect_results = expect_results
             self._runLANSR(name, type)
             self.flag = False
 
-    def _runLANSR(self, name, type):
+    def _runLANSR(self, name, type_):
         self.resolver.resolve(
                 host = name,
-                type = type,
+                type_ = type_,
                 on_ready = self._myonready)
         while not self.flag:
             time.sleep(1)
@@ -90,10 +90,10 @@ class TestResolver(unittest.TestCase):
     def _testNSLR(self):
         if self.test_list == []:
             return
-        name, type, self.expect_results = self.test_list.pop()
+        name, type_, self.expect_results = self.test_list.pop()
         self.resolver.resolve(
                 host = name,
-                type = type,
+                type_ = type_,
                 on_ready = self._myonready)
 
 if __name__ == '__main__':
