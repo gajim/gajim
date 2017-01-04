@@ -36,7 +36,7 @@ import os
 import random
 import socket
 import operator
-
+import string
 import time
 import locale
 import hmac
@@ -182,8 +182,10 @@ class CommonConnection:
         resource = gajim.config.get_per('accounts', self.name, 'resource')
         # All valid resource substitution strings should be added to this hash.
         if resource:
+            rand = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
             resource = Template(resource).safe_substitute({
-                    'hostname': socket.gethostname()
+                    'hostname': socket.gethostname(),
+                    'rand': rand
             })
         return resource
 

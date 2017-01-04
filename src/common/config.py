@@ -325,7 +325,7 @@ class Config:
                     'client_cert_encrypted': [ opt_bool, False, '', False ],
                     'savepass': [ opt_bool, False ],
                     'password': [ opt_str, '' ],
-                    'resource': [ opt_str, 'gajim', '', True ],
+                    'resource': [ opt_str, 'gajim.$rand', '', True ],
                     'priority': [ opt_int, 5, '', True ],
                     'adjust_priority_with_status': [ opt_bool, True, _('Priority will change automatically according to your status. Priorities are defined in autopriority_* options.') ],
                     'autopriority_online': [ opt_int, 50],
