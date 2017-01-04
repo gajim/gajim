@@ -45,7 +45,7 @@ import gtkgui_helpers
 import dialogs
 import cell_renderer_image
 import message_control
-import chat_control
+from chat_control_base import ChatControlBase
 import dataforms_widget
 import profile_window
 
@@ -690,7 +690,7 @@ class PreferencesWindow:
 
     def apply_speller(self):
         for ctrl in self._get_all_controls():
-            if isinstance(ctrl, chat_control.ChatControlBase):
+            if isinstance(ctrl, ChatControlBase):
                 try:
                     spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
                 except (TypeError, RuntimeError, OSError):
@@ -701,7 +701,7 @@ class PreferencesWindow:
 
     def remove_speller(self):
         for ctrl in self._get_all_controls():
-            if isinstance(ctrl, chat_control.ChatControlBase):
+            if isinstance(ctrl, ChatControlBase):
                 try:
                     spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
                 except (TypeError, RuntimeError):

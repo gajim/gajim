@@ -61,7 +61,7 @@ import dialogs
 import notify
 import message_control
 
-from chat_control import ChatControlBase
+from chat_control_base import ChatControlBase
 from chat_control import ChatControl
 from groupchat_control import GroupchatControl
 from groupchat_control import PrivateChatControl

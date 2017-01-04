@@ -38,7 +38,7 @@ import common
 import gtkgui_helpers
 import message_control
 import dialogs
-from chat_control import ChatControlBase
+from chat_control_base import ChatControlBase
 
 from common import gajim
 
