@@ -29,7 +29,6 @@ plugins_locale_dir = os_path.join(gajim.PLUGINS_DIRS[1], 'locale')
 
 if os.name != 'nt':
     locale.setlocale(locale.LC_ALL, '')
-    locale.bindtextdomain(APP, plugins_locale_dir)
     gettext.bindtextdomain(APP, plugins_locale_dir)
     gettext.textdomain(APP)
 
