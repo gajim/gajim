@@ -75,6 +75,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[1][0].keycode
     except TypeError:
         keycode_ins = 118
+    except IndexError:
+        # There is no KEY_Insert (MacOS)
+        keycode_ins = None
 
     def make_href(self, match):
         url_color = gajim.config.get('urlmsgcolor')
