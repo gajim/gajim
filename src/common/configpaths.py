@@ -97,6 +97,13 @@ class ConfigPaths:
                 base = expand('~/.local/share')
             self.data_root = os.path.join(base, 'gajim')
 
+        basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
+        self.add('DATA', None, os.path.join(basedir, windowsify('data')))
+        self.add('ICONS', None, os.path.join(basedir, windowsify('icons')))
+        self.add('HOME', None, fse(os.path.expanduser('~')))
+        self.add('PLUGINS_BASE', None,
+                 os.path.join(basedir, windowsify('plugins')))
+
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)
 
@@ -125,12 +132,12 @@ class ConfigPaths:
             self.config_root = self.cache_root = self.data_root = root
 
         self.init_profile(profile)
-        
+
         if len(profile) > 0 and profile_separation:
             profile = u'.' + profile
         else:
             profile = ''
-            
+
         d = {'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
@@ -159,12 +166,6 @@ class ConfigPaths:
         else:
             self.add('MY_CONFIG', TYPE_CONFIG, '')
 
-        basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
-        self.add('DATA', None, os.path.join(basedir, windowsify('data')))
-        self.add('ICONS', None, os.path.join(basedir, windowsify('icons')))
-        self.add('HOME', None, fse(os.path.expanduser('~')))
-        self.add('PLUGINS_BASE', None, os.path.join(basedir,
-            windowsify('plugins')))
         try:
             self.add('TMP', None, fse(tempfile.gettempdir()))
         except IOError as e:
