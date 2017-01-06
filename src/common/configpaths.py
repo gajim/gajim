@@ -98,11 +98,10 @@ class ConfigPaths:
             self.data_root = os.path.join(base, 'gajim')
 
         basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
-        self.add('DATA', None, os.path.join(basedir, windowsify('data')))
-        self.add('ICONS', None, os.path.join(basedir, windowsify('icons')))
+        self.add('DATA', None, os.path.join(basedir, 'data'))
+        self.add('ICONS', None, os.path.join(basedir, 'icons'))
         self.add('HOME', None, os.path.expanduser('~'))
-        self.add('PLUGINS_BASE', None,
-                 os.path.join(basedir, windowsify('plugins')))
+        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'plugins'))
 
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)
