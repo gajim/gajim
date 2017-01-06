@@ -173,12 +173,6 @@ class ConfigPaths:
                 os.path.expanduser('~')), file=sys.stderr)
             self.add('TMP', None, fse(os.path.expanduser('~')))
 
-        try:
-            import svn_config
-            svn_config.configure(self)
-        except (ImportError, AttributeError):
-            pass
-
     def init_profile(self, profile):
         conffile = windowsify('config')
         secretsfile = windowsify('secrets')
