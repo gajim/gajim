@@ -52,16 +52,12 @@ TYPE_DATA
 # just leave it as is. Since these paths are meant to be internal to Gajim and
 # not displayed to the user, Unicode is not really necessary here.
 
-def fse(s):
-    """
-    Convert from filesystem encoding if not already Unicode
-    """
-    return s
 
 def windowsify(s):
     if os.name == 'nt':
         return s.capitalize()
     return s
+
 
 class ConfigPaths:
     def __init__(self):
@@ -77,7 +73,7 @@ class ConfigPaths:
                 # variable 'appdata' is in? Assuming it to be in filesystem
                 # encoding.
                 self.config_root = self.cache_root = self.data_root = \
-                        os.path.join(fse(os.environ['appdata']), 'Gajim')
+                        os.path.join(os.environ['appdata'], 'Gajim')
             except KeyError:
                 # win9x, in cwd
                 self.config_root = self.cache_root = self.data_root = '.'
@@ -97,10 +93,10 @@ class ConfigPaths:
                 base = expand('~/.local/share')
             self.data_root = os.path.join(base, 'gajim')
 
-        basedir = fse(os.environ.get('GAJIM_BASEDIR', defs.basedir))
+        basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
         self.add('DATA', None, os.path.join(basedir, windowsify('data')))
         self.add('ICONS', None, os.path.join(basedir, windowsify('icons')))
-        self.add('HOME', None, fse(os.path.expanduser('~')))
+        self.add('HOME', None, os.path.expanduser('~'))
         self.add('PLUGINS_BASE', None,
                  os.path.join(basedir, windowsify('plugins')))
 
@@ -167,11 +163,11 @@ class ConfigPaths:
             self.add('MY_CONFIG', TYPE_CONFIG, '')
 
         try:
-            self.add('TMP', None, fse(tempfile.gettempdir()))
+            self.add('TMP', None, tempfile.gettempdir())
         except IOError as e:
             print('Error opening tmp folder: %s\nUsing %s' % (str(e),
                 os.path.expanduser('~')), file=sys.stderr)
-            self.add('TMP', None, fse(os.path.expanduser('~')))
+            self.add('TMP', None, os.path.expanduser('~'))
 
     def init_profile(self, profile):
         conffile = windowsify('config')

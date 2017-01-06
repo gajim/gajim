@@ -130,9 +130,7 @@ def split_db():
     print('spliting database')
     if os.name == 'nt':
         try:
-            import configpaths
-            OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
-                os.environ['appdata']), 'Gajim')
+            OLD_LOG_DB_FOLDER = os.path.join(os.environ['appdata'], 'Gajim')
         except KeyError:
             OLD_LOG_DB_FOLDER = '.'
     else:
@@ -187,8 +185,7 @@ def check_and_possibly_move_config():
 
     if os.name == 'nt':
         try:
-            OLD_LOG_DB_FOLDER = os.path.join(configpaths.fse(
-                os.environ['appdata']), 'Gajim')
+            OLD_LOG_DB_FOLDER = os.path.join(os.environ['appdata'], 'Gajim')
         except KeyError:
             OLD_LOG_DB_FOLDER = '.'
     else:
