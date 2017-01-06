@@ -59,6 +59,10 @@ def windowsify(s):
     return s
 
 
+def get(key):
+    return gajimpaths[key]
+
+
 class ConfigPaths:
     def __init__(self):
         # {'name': (type, path), } type can be TYPE_CONFIG, TYPE_CACHE, TYPE_DATA
