@@ -99,6 +99,7 @@ class ConfigPaths:
 
         basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
         self.add('DATA', None, os.path.join(basedir, 'data'))
+        self.add('GUI', None, os.path.join(basedir, 'data', 'gui'))
         self.add('ICONS', None, os.path.join(basedir, 'icons'))
         self.add('HOME', None, os.path.expanduser('~'))
         self.add('PLUGINS_BASE', None, os.path.join(basedir, 'plugins'))
