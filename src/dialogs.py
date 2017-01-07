@@ -1308,7 +1308,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
             _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver,
             _('python-nbxmpp Version:'), nbxmpp_ver))
-        self.set_website('http://gajim.org/')
+        self.set_website('https://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
         if authors_file_path:
