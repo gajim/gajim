@@ -3,7 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkWindow" id="roster_window">
+  <object class="GtkApplicationWindow" id="roster_window">
     <property name="width_request">85</property>
     <property name="height_request">200</property>
     <property name="can_focus">False</property>
