@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gtkexcepthook.py
 ##
+## Copyright (C) 2016 Philipp Hörist <philipp AT hoerist.com>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
@@ -24,83 +25,61 @@ import sys
 import os
 import traceback
 import threading
+import webbrowser
+import gi
 
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Pango
-from common import i18n # installs _() function
-from dialogs import HigDialog
-
 from io import StringIO
-from common import helpers
+from common import configpaths
+
+glade_file = os.path.join(configpaths.get('GUI'), 'exception_dialog.ui')
 
 _exception_in_progress = threading.Lock()
 
-def _info(type_, value, tb):
+
+def _hook(type_, value, tb):
     if not _exception_in_progress.acquire(False):
         # Exceptions have piled up, so we use the default exception
         # handler for such exceptions
-        _excepthook_save(type_, value, tb)
+        sys.__excepthook__(type_, value, tb)
         return
 
-    dialog = HigDialog(None, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                            _('A programming error has been detected'),
-                            _('It probably is not fatal, but should be reported '
-                            'to the developers nonetheless.'))
-
-    dialog.set_modal(False)
-    #FIXME: add icon to this button
-    RESPONSE_REPORT_BUG = 42
-    dialog.add_buttons(Gtk.STOCK_CLOSE, Gtk.ButtonsType.CLOSE,
-            _('_Report Bug'), RESPONSE_REPORT_BUG)
-    report_button = dialog.action_area.get_children()[0] # right to left
-    report_button.grab_focus()
-
-    # Details
-    textview = Gtk.TextView()
-    textview.set_editable(False)
-    textview.override_font(Pango.FontDescription('Monospace'))
-    sw = Gtk.ScrolledWindow()
-    sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-    sw.add(textview)
-    frame = Gtk.Frame()
-    frame.set_shadow_type(Gtk.ShadowType.IN)
-    frame.add(sw)
-    frame.set_border_width(6)
-    textbuffer = textview.get_buffer()
-    trace = StringIO()
-    traceback.print_exception(type_, value, tb, None, trace)
-    textbuffer.set_text(trace.getvalue())
-    textview.set_size_request(
-            Gdk.Screen.width() / 3,
-            Gdk.Screen.height() / 4)
-    expander = Gtk.Expander(label=_('Details'))
-    expander.add(frame)
-    dialog.vbox.pack_start(expander, True, True, 0)
-
-    dialog.set_resizable(True)
-    # on expand the details the dialog remains centered on screen
-    dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-
-    def on_dialog_response(dialog, response):
-        if response == RESPONSE_REPORT_BUG:
-            url = 'http://trac.gajim.org/wiki/HowToCreateATicket'
-            helpers.launch_browser_mailer('url', url)
-        else:
-            dialog.destroy()
-    dialog.connect('response', on_dialog_response)
-    dialog.show_all()
-
+    ExceptionDialog(type_, value, tb)
     _exception_in_progress.release()
 
-# gdb/kdm etc if we use startx this is not True
-if os.name == 'nt' or not sys.stderr.isatty():
-    #FIXME: maybe always show dialog?
-    _excepthook_save = sys.excepthook
-    sys.excepthook = _info
+
+class ExceptionDialog():
+    def __init__(self, type_, value, tb):
+        builder = Gtk.Builder()
+        builder.add_from_file(glade_file)
+        self.dialog = builder.get_object("ExceptionDialog")
+        builder.connect_signals(self)
+        builder.get_object("report_btn").grab_focus()
+        self.exception_view = builder.get_object("exception_view")
+        buffer_ = self.exception_view.get_buffer()
+        trace = StringIO()
+        traceback.print_exception(type_, value, tb, None, trace)
+        buffer_.set_text(trace.getvalue())
+        self.exception_view.set_editable(False)
+        self.dialog.run()
+
+    def on_report_clicked(self, *args):
+        url = 'https://dev.gajim.org/gajim/gajim/issues'
+        webbrowser.open(url, new=2)
+
+    def on_close_clicked(self, *args):
+        self.dialog.destroy()
+
+
+def init():
+    # gdb/kdm etc if we use startx this is not True
+    if os.name == 'nt' or not sys.stderr.isatty():
+        # FIXME: maybe always show dialog?
+        sys.excepthook = _hook
 
 # this is just to assist testing (python gtkexcepthook.py)
 if __name__ == '__main__':
-    _excepthook_save = sys.excepthook
-    sys.excepthook = _info
+    init()
+    print(sys.version)
     raise Exception()
