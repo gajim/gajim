@@ -1283,32 +1283,32 @@ class AddNewContactWindow:
             if obj.prompt:
                 self.gateway_prompt[obj.jid]['prompt'] = obj.prompt
 
-class AboutDialog:
+class AboutDialog(Gtk.AboutDialog):
     """
     Class for about dialog
     """
 
     def __init__(self):
-        dlg = Gtk.AboutDialog()
-        dlg.set_transient_for(gajim.interface.roster.window)
-        dlg.set_name('Gajim')
-        dlg.set_version(gajim.version)
+        Gtk.AboutDialog.__init__(self)
+        self.set_transient_for(gajim.interface.roster.window)
+        self.set_name('Gajim')
+        self.set_version(gajim.version)
         s = 'Copyright © 2003-2014 Gajim Team'
-        dlg.set_copyright(s)
+        self.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
             with open(copying_file_path) as a_file:
                 text = a_file.read()
-            dlg.set_license(text)
+            self.set_license(text)
 
         gtk_ver = '%i.%i.%i' % (Gtk.get_major_version(),
             Gtk.get_minor_version(), Gtk.get_micro_version())
         gobject_ver = self.tuple2str(GObject.pygobject_version)
         nbxmpp_ver = nbxmpp.__version__
-        dlg.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
+        self.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
             _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver,
             _('python-nbxmpp Version:'), nbxmpp_ver))
-        dlg.set_website('http://gajim.org/')
+        self.set_website('http://gajim.org/')
 
         authors_file_path = self.get_path('AUTHORS')
         if authors_file_path:
@@ -1336,25 +1336,25 @@ class AboutDialog:
                     'thank all the package maintainers.')
                 authors.append(text)
 
-            dlg.set_authors(authors)
+            self.set_authors(authors)
 
-        dlg.props.wrap_license = True
+        self.props.wrap_license = True
 
         pixbuf = gtkgui_helpers.get_icon_pixmap('gajim', 128)
 
-        dlg.set_logo(pixbuf)
+        self.set_logo(pixbuf)
         #here you write your name in the form Name FamilyName <someone@somewhere>
-        dlg.set_translator_credits(_('translator-credits'))
+        self.set_translator_credits(_('translator-credits'))
 
         thanks_artists_file_path = self.get_path('THANKS.artists')
         if thanks_artists_file_path:
             with open(thanks_artists_file_path) as a_file:
                 artists_text = a_file.read()
             artists = artists_text.split('\n')
-            dlg.set_artists(artists)
+            self.set_artists(artists)
 
-        dlg.connect('response', self.on_response)
-        dlg.show_all()
+        self.connect('response', self.on_response)
+        self.show_all()
 
     def on_response(self, dialog, response_id):
         if response_id == Gtk.ResponseType.DELETE_EVENT:
