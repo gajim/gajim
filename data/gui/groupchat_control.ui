@@ -184,32 +184,21 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkBox" id="hbox3023">
+              <object class="GtkButton" id="emoticons_button">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
+                <property name="relief">none</property>
                 <child>
-                  <object class="GtkButton" id="emoticons_button">
+                  <object class="GtkImage" id="emoticons_button_image">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
-                    <property name="relief">none</property>
-                    <child>
-                      <object class="GtkImage" id="emoticons_button_image">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-missing-image</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
+                    <property name="can_focus">False</property>
+                    <property name="stock">gtk-missing-image</property>
+                    <property name="icon_size">1</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
               </object>
               <packing>
