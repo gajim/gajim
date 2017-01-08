@@ -36,7 +36,7 @@ options = {
         'includes': ['win32com.server', 'win32com.client'],
         'packages': ['pkg_resources', 'cffi', 'gtk',
                      'cryptography', 'Crypto', 'PIL',
-                     'axolotl', 'google'],
+                     'axolotl', 'google', 'common'],
         'includes': ['new'],
         'excludes': ['Tkinter', 'unittest', 'psutil'],
    }
