@@ -94,7 +94,7 @@ LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim.
 LangString DESC_SecGtk ${LANG_GERMAN} "Installert Gtk+ 2 (notwendig um Gajim zu benutzen)."
 LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon für Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
-LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed. Uninstall it?"
+LangString STR_Installed ${LANG_GERMAN} "Gajim ist bereits installiert. Soll es deinstalliert werden?"
 LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits läuft.$\n\
 		Bitte beenden Sie es und starten Sie den Installer erneut.."
 
