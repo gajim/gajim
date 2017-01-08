@@ -44,10 +44,12 @@ install:
 
   # Make Installer
   - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
+  - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim-portable.nsi'
 
   # Push Installer Exe
   - ps: $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
   - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-default-$($env:TIME_STRING).exe"
+  - ps: Push-AppveyorArtifact Gajim-Portable.exe -FileName "Gajim-portable-default-$($env:TIME_STRING).exe"
 
 build: off
 
