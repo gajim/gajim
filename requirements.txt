@@ -9,7 +9,7 @@ keyring
 pypiwin32
 pyopenssl
 future
-gnupg
+python-gnupg
 pillow
 pycurl
 docutils
