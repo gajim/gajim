@@ -7,6 +7,6 @@ cx_freeze
 keyring
 pypiwin32
 pyopenssl
-gnupg
+python-gnupg
 pillow
 pycurl
