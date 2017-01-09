@@ -10,3 +10,4 @@ pyopenssl
 python-gnupg
 pillow
 pycurl
+docutils
