@@ -1,3 +1,6 @@
+﻿; File encoding 'UTF-8 with BOM'
+
+Unicode true
 !include "MUI2.nsh"
 
 Name "Gajim"
@@ -77,21 +80,21 @@ LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 
 
 ; Russian
-LangString NAME_Emoticons ${LANG_RUSSIAN} "Ñìàéëèêè"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "Òåìû èêîíîê"
-LangString NAME_Languages ${LANG_RUSSIAN} "ßçûêè"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Äðóãîå"
-LangString NAME_Themes ${LANG_RUSSIAN} "Òåìû"
-LangString DESC_SecGajim ${LANG_RUSSIAN} "Óñòàíîâêà îñíîâíûõ ôàéëîâ Gajim."
+LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
+LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
+LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
+LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
+LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
+LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
 
 
 ; Hebrew
-LangString NAME_Emoticons ${LANG_HEBREW} "øâùåðéí"
-LangString NAME_Iconsets ${LANG_HEBREW} "îòøëé öìîéú"
-LangString NAME_Languages ${LANG_HEBREW} "ùôåú"
-LangString NAME_SecLanguagesOther ${LANG_HEBREW} "àçøåú"
-LangString NAME_Themes ${LANG_HEBREW} "òøëàåú ðåùà"
-LangString DESC_SecGajim ${LANG_HEBREW} "îú÷éï ÷áöé Gajim òé÷øééí."
+LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
+LangString NAME_Iconsets ${LANG_HEBREW} "מערכי צלמית"
+LangString NAME_Languages ${LANG_HEBREW} "שפות"
+LangString NAME_SecLanguagesOther ${LANG_HEBREW} "אחרות"
+LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
+LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -257,3 +260,7 @@ SectionGroupEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Function .onInit
+  	!insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd

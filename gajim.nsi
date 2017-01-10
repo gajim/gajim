@@ -1,3 +1,6 @@
+п»ї; File encoding 'UTF-8 with BOM'
+
+Unicode true
 !include "MUI2.nsh"
 
 Name "Gajim"
@@ -66,19 +69,19 @@ LangString STR_Running ${LANG_ENGLISH} "It appears that Gajim is currently runni
 		Please quit Gajim and restart the uninstaller."
 
 ; French
-LangString NAME_Emoticons ${LANG_FRENCH} "Emoticфnes"
-LangString NAME_Iconsets ${LANG_FRENCH} "Bibliothиque d'icфnes"
+LangString NAME_Emoticons ${LANG_FRENCH} "EmoticГґnes"
+LangString NAME_Iconsets ${LANG_FRENCH} "BibliothГЁque d'icГґnes"
 LangString NAME_Languages ${LANG_FRENCH} "Langues"
 LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
-LangString NAME_Themes ${LANG_FRENCH} "Thиmes"
-LangString NAME_SecDesktopIcon ${LANG_FRENCH} "Crйer une icфne sur le bureau"
-LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au dйmarrage de Windows"
+LangString NAME_Themes ${LANG_FRENCH} "ThГЁmes"
+LangString NAME_SecDesktopIcon ${LANG_FRENCH} "CrГ©er une icГґne sur le bureau"
+LangString NAME_SecAutostart ${LANG_FRENCH} "Lancer Gajim au dГ©marrage de Windows"
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
-LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionnй, un raccourci pour Gajim sera crйй sur le bureau."
-LangString DESC_SecAutostart ${LANG_FRENCH} "Si activй, Gajim sera automatiquement lancй au dйmarrage de Windows."
-LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement dйjа installй. Lancer la dйsinstallation ?"
-LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancй.$\n\
-		Fermez-le et redйmarrez le dйsinstallateur."
+LangString DESC_SecDesktopIcon ${LANG_FRENCH} "Si selectionnГ©, un raccourci pour Gajim sera crГ©Г© sur le bureau."
+LangString DESC_SecAutostart ${LANG_FRENCH} "Si activГ©, Gajim sera automatiquement lancГ© au dГ©marrage de Windows."
+LangString STR_Installed ${LANG_FRENCH} "Gajim est apparement dГ©jГ  installГ©. Lancer la dГ©sinstallation ?"
+LangString STR_Running ${LANG_FRENCH} "Gajim est apparament lancГ©.$\n\
+		Fermez-le et redГ©marrez le dГ©sinstallateur."
 
 ; German
 LangString NAME_Emoticons ${LANG_GERMAN} "Emoticons"
@@ -89,10 +92,10 @@ LangString NAME_Themes ${LANG_GERMAN} "Designs"
 LangString NAME_SecDesktopIcon ${LANG_GERMAN} "Desktop-Icon erstellen"
 LangString NAME_SecAutostart ${LANG_GERMAN} "Gajim mit Windows starten"
 LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim."
-LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon fьr Gajim auf dem Desktop erstellt."
+LangString DESC_SecDesktopIcon ${LANG_GERMAN} "Wenn dies aktiviert wird, wird ein Icon fГјr Gajim auf dem Desktop erstellt."
 LangString DESC_SecAutostart ${LANG_GERMAN} "Gajim wird automatisch gestartet, sowie Windows startet, wenn dies aktivier wird."
 LangString STR_Installed ${LANG_GERMAN} "Gajim is apparently already installed. Uninstall it?"
-LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits lдuft.$\n\
+LangString STR_Running ${LANG_GERMAN} "Es scheint, dass Gajim bereits lГ¤uft.$\n\
 		Bitte beenden Sie es und starten Sie den Installer erneut.."
 
 ; Italian
@@ -104,40 +107,41 @@ LangString NAME_Themes ${LANG_ITALIAN} "Temi"
 LangString NAME_SecDesktopIcon ${LANG_ITALIAN} "Crea un'icona sul desktop"
 LangString NAME_SecAutostart ${LANG_ITALIAN} "Lancia Gajim quando parte Windows"
 LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
-LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrа creata sul desktop."
-LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarа eseguito all'avvio di Windows."
+LangString DESC_SecDesktopIcon ${LANG_ITALIAN} "Se selezionato, un'icona verrГ  creata sul desktop."
+LangString DESC_SecAutostart ${LANG_ITALIAN} "Se selezionato, Gajim sarГ  eseguito all'avvio di Windows."
 LangString STR_Installed ${LANG_ITALIAN} "Gajim is apparently already installed. Uninstall it?"
 LangString STR_Running ${LANG_ITALIAN} "It appears that Gajim is currently running.$\n\
 		Close it and restart uninstaller."
 
 ; Russian
-LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
-LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
-LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
-LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "Создать ярлык на рабочем столе"
-LangString NAME_SecAutostart ${LANG_RUSSIAN} "Запускать Gajim при загрузке Windows"
-LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
-LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Если отмечено, на рабочем столе будет создан ярлык Gajim."
-LangString DESC_SecAutostart ${LANG_RUSSIAN} "Если отмечено, Gajim будет автоматически запускаться при загрузке Windows."
-LangString STR_Installed ${LANG_RUSSIAN} "Похоже, Gajim уже установлен. Деинсталлировать установленную версию?"
-LangString STR_Running ${LANG_RUSSIAN} "Похоже, Gajim уже запущен.$\nЗакройте его и запустите деинсталлятор снова."
+LangString NAME_Emoticons ${LANG_RUSSIAN} "РЎРјР°Р№Р»РёРєРё"
+LangString NAME_Iconsets ${LANG_RUSSIAN} "РўРµРјС‹ РёРєРѕРЅРѕРє"
+LangString NAME_Languages ${LANG_RUSSIAN} "РЇР·С‹РєРё"
+LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Р”СЂСѓРіРѕРµ"
+LangString NAME_Themes ${LANG_RUSSIAN} "РўРµРјС‹"
+LangString NAME_SecDesktopIcon ${LANG_RUSSIAN} "РЎРѕР·РґР°С‚СЊ СЏ Р»С‹Рє РЅР° Р°Р±РѕС‡РµРј СЃС‚РѕР»Рµ"
+LangString NAME_SecAutostart ${LANG_RUSSIAN} "Р—Р°РїСѓСЃРєР°С‚СЊ Gajim РїСЂРё Р·Р°РіСЂСѓР·РєРµ Windows"
+LangString DESC_SecGajim ${LANG_RUSSIAN} "РЈСЃС‚Р°РЅРѕРІРєР° РѕСЃРЅРѕРІРЅС‹С… С„Р°Р№Р»РѕРІ Gajim."
+LangString DESC_SecDesktopIcon ${LANG_RUSSIAN} "Р•СЃР»Рё РѕС‚РјРµС‡РµРЅРѕ, РЅР° СЂР°Р±РѕС‡РµРј СЃС‚РѕР»Рµ Р±СѓРґРµС‚ СЃРѕР·РґР°РЅ СЏСЂР»С‹Рє Gajim."
+LangString DESC_SecAutostart ${LANG_RUSSIAN} "Р•СЃР»Рё РѕС‚РјРµС‡РµРЅРѕ, Gajim Р±СѓРґРµС‚ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё Р·Р°РїСѓСЃРєР°С‚СЊСЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ Windows."
+LangString STR_Installed ${LANG_RUSSIAN} "РџРѕС…РѕР¶Рµ, Gajim СѓР¶Рµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ. Р”РµРёРЅСЃС‚Р°Р»Р»РёСЂРѕРІР°С‚СЊ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅСѓСЋ РІРµСЂСЃРёСЋ?"
+LangString STR_Running ${LANG_RUSSIAN} "РџРѕС…РѕР¶Рµ, Gajim СѓР¶Рµ Р·Р°РїСѓС‰РµРЅ.$\n\
+		Р—Р°РєСЂРѕР№С‚Рµ РµРіРѕ Рё Р·Р°РїСѓСЃС‚РёС‚Рµ РґРµРёРЅСЃС‚Р°Р»Р»СЏС‚РѕСЂ СЃРЅРѕРІР°."
 
 ; Hebrew
-LangString NAME_Emoticons ${LANG_HEBREW} "швщерйн"
-LangString NAME_Iconsets ${LANG_HEBREW} "отшлй цмойъ"
-LangString NAME_Languages ${LANG_HEBREW} "щфеъ"
-LangString NAME_SecLanguagesOther ${LANG_HEBREW} "азшеъ"
-LangString NAME_Themes ${LANG_HEBREW} "тшлаеъ реща"
-LangString NAME_SecDesktopIcon ${LANG_HEBREW} "цеш сом бщемзп тбегд"
-LangString NAME_SecAutostart ${LANG_HEBREW} "дфтм аъ Gajim лащш Windows оъзйм"
-LangString DESC_SecGajim ${LANG_HEBREW} "оъчйп чбцй Gajim тйчшййн."
-LangString DESC_SecDesktopIcon ${LANG_HEBREW} "бойгд ерчбтъ, чйцеш гшк тбеш Gajim йещн тм щемзп дтбегд."
-LangString DESC_SecAutostart ${LANG_HEBREW} "бойгд ерчбтъ, Gajim йефтм аеиеоийъ лащш Windows оъзйм."
-LangString STR_Installed ${LANG_HEBREW} "лфй дршад, Gajim лбш оеъчп. мдсйш аеъе?"
-LangString STR_Running ${LANG_HEBREW} "ршад щдъелрйъ Gajim оешцъ лтъ.$\n\
-        ара ца оп Gajim еаъзм аъ осйш ддъчрд."
+LangString NAME_Emoticons ${LANG_HEBREW} "ЧЁЧ’Ч©Ч•Ч Ч™Чќ"
+LangString NAME_Iconsets ${LANG_HEBREW} "ЧћЧўЧЁЧ›Ч™ Ч¦ЧњЧћЧ™ЧЄ"
+LangString NAME_Languages ${LANG_HEBREW} "Ч©Ч¤Ч•ЧЄ"
+LangString NAME_SecLanguagesOther ${LANG_HEBREW} "ЧђЧ—ЧЁЧ•ЧЄ"
+LangString NAME_Themes ${LANG_HEBREW} "ЧўЧЁЧ›ЧђЧ•ЧЄ Ч Ч•Ч©Чђ"
+LangString NAME_SecDesktopIcon ${LANG_HEBREW} "Ч¦Ч•ЧЁ ЧЎЧћЧњ Ч‘Ч©Ч•ЧњЧ—Чџ ЧўЧ‘Ч•Ч“Ч”"
+LangString NAME_SecAutostart ${LANG_HEBREW} "Ч”Ч¤ЧўЧњ ЧђЧЄ Gajim Ч›ЧђЧ©ЧЁ Windows ЧћЧЄЧ—Ч™Чњ"
+LangString DESC_SecGajim ${LANG_HEBREW} "ЧћЧЄЧ§Ч™Чџ Ч§Ч‘Ч¦Ч™ Gajim ЧўЧ™Ч§ЧЁЧ™Ч™Чќ."
+LangString DESC_SecDesktopIcon ${LANG_HEBREW} "Ч‘ЧћЧ™Ч“Ч” Ч•Ч Ч§Ч‘ЧўЧЄ, Ч§Ч™Ч¦Ч•ЧЁ Ч“ЧЁЧљ ЧўЧ‘Ч•ЧЁ Gajim Ч™Ч•Ч©Чќ ЧўЧњ Ч©Ч•ЧњЧ—Чџ Ч”ЧўЧ‘Ч•Ч“Ч”."
+LangString DESC_SecAutostart ${LANG_HEBREW} "Ч‘ЧћЧ™Ч“Ч” Ч•Ч Ч§Ч‘ЧўЧЄ, Gajim Ч™Ч•Ч¤ЧўЧњ ЧђЧ•ЧЧ•ЧћЧЧ™ЧЄ Ч›ЧђЧ©ЧЁ Windows ЧћЧЄЧ—Ч™Чњ."
+LangString STR_Installed ${LANG_HEBREW} "Ч›Ч¤Ч™ Ч”Ч ЧЁЧђЧ”, Gajim Ч›Ч‘ЧЁ ЧћЧ•ЧЄЧ§Чџ. ЧњЧ”ЧЎЧ™ЧЁ ЧђЧ•ЧЄЧ•?"
+LangString STR_Running ${LANG_HEBREW} "Ч ЧЁЧђЧ” Ч©Ч”ЧЄЧ•Ч›Ч Ч™ЧЄ Gajim ЧћЧ•ЧЁЧ¦ЧЄ Ч›ЧўЧЄ.$\n\
+        ЧђЧ Чђ Ч¦Чђ ЧћЧџ Gajim Ч•ЧђЧЄЧ—Чњ ЧђЧЄ ЧћЧЎЧ™ЧЁ Ч”Ч”ЧЄЧ§Ч Ч”."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -390,6 +394,7 @@ Function un.onInit
 	MessageBox MB_ICONSTOP|MB_OK $(STR_Running)
 	Quit
 Remove:
+	!insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
 Function .onInit
