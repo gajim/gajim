@@ -1,3 +1,6 @@
+﻿; File encoding 'UTF-8 with BOM'
+
+Unicode true
 !include "MUI2.nsh"
 
 Name "Gajim"
@@ -81,23 +84,23 @@ LangString DESC_SecGtk ${LANG_ITALIAN} "Installa Gtk+ 2 (necessario per eseguire
 
 
 ; Russian
-LangString NAME_Emoticons ${LANG_RUSSIAN} "Ñìàéëèêè"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "Òåìû èêîíîê"
-LangString NAME_Languages ${LANG_RUSSIAN} "ßçûêè"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Äðóãîå"
-LangString NAME_Themes ${LANG_RUSSIAN} "Òåìû"
-LangString DESC_SecGajim ${LANG_RUSSIAN} "Óñòàíîâêà îñíîâíûõ ôàéëîâ Gajim."
-LangString DESC_SecGtk ${LANG_RUSSIAN} "Óñòàíîâêà Gtk+ 2 (íåîáõîäèìî äëÿ ðàáîòû Gajim)."
+LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
+LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
+LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
+LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
+LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
+LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
+LangString DESC_SecGtk ${LANG_RUSSIAN} "Установка Gtk 2 (необходимо для работы Gajim)."
 
 
 ; Hebrew
-LangString NAME_Emoticons ${LANG_HEBREW} "øâùåðéí"
-LangString NAME_Iconsets ${LANG_HEBREW} "îòøëé öìîéú"
-LangString NAME_Languages ${LANG_HEBREW} "ùôåú"
-LangString NAME_SecLanguagesOther ${LANG_HEBREW} "àçøåú"
-LangString NAME_Themes ${LANG_HEBREW} "òøëàåú ðåùà"
-LangString DESC_SecGajim ${LANG_HEBREW} "îú÷éï ÷áöé Gajim òé÷øééí."
-LangString DESC_SecGtk ${LANG_HEBREW} "îú÷éï Gtk+ 2 (ðçåöä ìäøöú Gajim)."
+LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
+LangString NAME_Iconsets ${LANG_HEBREW} "מערכי צלמית"
+LangString NAME_Languages ${LANG_HEBREW} "שפות"
+LangString NAME_SecLanguagesOther ${LANG_HEBREW} "אחרות"
+LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
+LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
+LangString DESC_SecGtk ${LANG_HEBREW} "מתקין Gtk+ 2 (נחוצה להרצת Gajim)."
 
 Section "Gajim" SecGajim
 	SectionIn RO
@@ -413,3 +416,7 @@ SectionGroupEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
 	!insertmacro MUI_DESCRIPTION_TEXT ${SecGtk} $(DESC_SecGtk)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+Function .onInit
+  !insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
