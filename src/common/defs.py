@@ -36,7 +36,7 @@ try:
     node = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,
         stdout=subprocess.PIPE).communicate()[0]
     if node:
-        version += '-' + node
+        version += '-' + node.replace('\n', '')
 except Exception:
     pass
 
