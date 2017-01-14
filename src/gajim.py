@@ -93,7 +93,7 @@ from common import configpaths
 configpaths.gajimpaths.init(config_path)
 configpaths.gajimpaths.init_profile(profile)
 
-if os.name == 'nt':
+if hasattr(sys, 'frozen'):
     log_path = configpaths.gajimpaths.config_root
     if not os.path.exists(log_path):
         os.mkdir(log_path, 0700)
@@ -121,6 +121,7 @@ if os.name == 'nt':
 
     warnings.filterwarnings(action='ignore')
 
+if os.name == 'nt':
     if os.path.isdir('gtk'):
         # Used to create windows installer with GTK included
         paths = os.environ['PATH']
