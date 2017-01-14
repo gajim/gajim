@@ -175,12 +175,12 @@ logging_helpers.init(log_level, log_verbose, log_quiet)
 import logging
 log = logging.getLogger('gajim')
 
-import common.configpaths
-common.configpaths.gajimpaths.init(config_path)
-common.configpaths.gajimpaths.init_profile(profile)
+from common import configpaths
+configpaths.gajimpaths.init(config_path)
+configpaths.gajimpaths.init_profile(profile)
 
 if os.name == 'nt':
-    plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
+    plugins_locale_dir = os.path.join(configpaths.gajimpaths[
         'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
     libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
     libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
@@ -189,7 +189,7 @@ if os.name == 'nt':
         _file = None
         _error = None
         def write(self, text):
-            fname = os.path.join(common.configpaths.gajimpaths.cache_root,
+            fname = os.path.join(configpaths.gajimpaths.cache_root,
                 os.path.split(sys.executable)[1]+'.log')
             if self._file is None and self._error is None:
                 try:
@@ -293,7 +293,7 @@ import gtkexcepthook
 import signal
 import gtkgui_helpers
 
-gajimpaths = common.configpaths.gajimpaths
+gajimpaths = configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
