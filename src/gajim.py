@@ -89,12 +89,33 @@ for o, a in opts:
     elif o in ('-c', '--config-path'):
         config_path = unicode(a, locale.getpreferredencoding())
 
+from common import configpaths
+configpaths.gajimpaths.init(config_path)
+configpaths.gajimpaths.init_profile(profile)
+
 if os.name == 'nt':
-    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
+    log_path = configpaths.gajimpaths.config_root
     if not os.path.exists(log_path):
         os.mkdir(log_path, 0700)
-    log_file = os.path.join(log_path, 'gajim.log')
-    fout = open(log_file, 'a')
+
+    class MyStd(object):
+        _file = None
+        _error = None
+        def write(self, text):
+            logfile = os.path.join(log_path, 'gajim.log')
+            if self._file is None and self._error is None:
+                try:
+                    self._file = open(logfile, 'a')
+                except Exception, details:
+                    self._error = details
+            if self._file is not None:
+                self._file.write(text)
+                self._file.flush()
+        def flush(self):
+            if self._file is not None:
+                self._file.flush()
+
+    fout = MyStd()
     sys.stdout = fout
     sys.stderr = fout
 
@@ -175,35 +196,11 @@ logging_helpers.init(log_level, log_verbose, log_quiet)
 import logging
 log = logging.getLogger('gajim')
 
-from common import configpaths
-configpaths.gajimpaths.init(config_path)
-configpaths.gajimpaths.init_profile(profile)
-
 if os.name == 'nt':
     plugins_locale_dir = os.path.join(configpaths.gajimpaths[
         'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
     libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
     libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-    class MyStderr(object):
-        _file = None
-        _error = None
-        def write(self, text):
-            fname = os.path.join(configpaths.gajimpaths.cache_root,
-                os.path.split(sys.executable)[1]+'.log')
-            if self._file is None and self._error is None:
-                try:
-                    self._file = open(fname, 'a')
-                except Exception, details:
-                    self._error = details
-            if self._file is not None:
-                self._file.write(text)
-                self._file.flush()
-        def flush(self):
-            if self._file is not None:
-                self._file.flush()
-
-    sys.stderr = MyStderr()
 
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
