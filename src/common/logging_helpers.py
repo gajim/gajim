@@ -171,8 +171,8 @@ def init(levels, verbose, quiet):
         set_quiet()
 
 def set_verbose():
-    parseAndSetLogLevels('gajim=1')
-    parseAndSetLogLevels('.nbxmpp=1')
+    parseAndSetLogLevels('gajim=DEBUG')
+    parseAndSetLogLevels('.nbxmpp=INFO')
 
 def set_quiet():
     parseAndSetLogLevels('gajim=CRITICAL')
