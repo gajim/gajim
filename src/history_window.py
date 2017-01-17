@@ -75,6 +75,8 @@ class HistoryWindow:
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background = 'yellow')
         self.history_buffer.create_tag('invisible', invisible=True)
+        self.eom_tag = self.history_buffer.create_tag('endofmessage',
+            invisible=True)
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
             self.on_log_history_checkbutton_toggled)
@@ -515,7 +517,7 @@ class HistoryWindow:
         else:
             self.history_textview.print_real_text(message, name=contact_name,
                 xhtml=xhtml)
-        self.history_textview.print_real_text('\n')
+        self.history_textview.print_real_text('\n', ['endofmessage'])
 
     def on_query_entry_activate(self, widget):
         text = self.query_entry.get_text()
@@ -624,13 +626,10 @@ class HistoryWindow:
         self.calendar.select_day(day)
         unix_time = model[path][C_TIME]
         self._scroll_to_result(unix_time)
-        #FIXME: one day do not search just for unix_time but the whole and user
-        # specific format of the textbuffer line [time] nick: message
-        # and highlight all that
 
     def _scroll_to_result(self, unix_time):
         """
-        Scroll to the result using unix_time and highlight line
+        Scroll to the result using unix_time and highlight message
         """
         start_iter = self.history_buffer.get_start_iter()
         local_time = time.localtime(float(unix_time))
@@ -643,7 +642,9 @@ class HistoryWindow:
             match_start_iter, match_end_iter = result
             # include '[' or other character before time
             match_start_iter.backward_char()
-            match_end_iter.forward_line() # highlight all message not just time
+            while not match_end_iter.has_tag(self.eom_tag):
+                if not match_end_iter.forward_to_line_end():
+                    break
             self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
                 match_end_iter)
 
