@@ -21,6 +21,7 @@
 import logging
 import i18n
 import os
+import sys
 
 def parseLogLevel(arg):
     """
