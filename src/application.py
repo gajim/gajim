@@ -217,6 +217,15 @@ class GajimApplication(Gtk.Application):
         if hasattr(self.interface, 'roster') and self.interface.roster:
             self.interface.roster.prepare_quit()
 
+    def do_handle_local_options(self, options: GLib.VariantDict) -> int:
+        if options.contains('profile'):
+            # Incorporate profile name into application id
+            # to have a single app instance for each profile.
+            profile = options.lookup_value('profile').get_string()
+            app_id = '%s.%s' % (self.get_application_id(), profile)
+            self.set_application_id(app_id)
+        return -1
+
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
         Gtk.Application.do_command_line(self, command_line)
         options = command_line.get_options_dict()
