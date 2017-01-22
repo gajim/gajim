@@ -20,6 +20,7 @@
 
 import logging
 import i18n
+import os
 
 def parseLogLevel(arg):
     """
@@ -133,10 +134,14 @@ class FancyFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-def init(use_color=False):
+def init(levels, verbose, quiet):
     """
     Iinitialize the logging system
     """
+    use_color = False
+    if os.name != 'nt':
+        use_color = sys.stderr.isatty()
+
     consoleloghandler = logging.StreamHandler()
     consoleloghandler.setFormatter(
             FancyFormatter(
@@ -158,12 +163,16 @@ def init(use_color=False):
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 
-def set_loglevels(loglevels_string):
-    parseAndSetLogLevels(loglevels_string)
+    if levels:
+        parseAndSetLogLevels(levels)
+    if verbose:
+        set_verbose()
+    if quiet:
+        set_quiet()
 
 def set_verbose():
-    parseAndSetLogLevels('gajim=1')
-    parseAndSetLogLevels('.nbxmpp=1')
+    parseAndSetLogLevels('gajim=DEBUG')
+    parseAndSetLogLevels('.nbxmpp=INFO')
 
 def set_quiet():
     parseAndSetLogLevels('gajim=CRITICAL')
@@ -172,9 +181,7 @@ def set_quiet():
 
 # tests
 if __name__ == '__main__':
-    init(use_color=True)
-
-    set_loglevels('gajim.c=DEBUG,INFO')
+    init('gajim.c=DEBUG,INFO', None, None)
 
     log = logging.getLogger('gajim')
     log.debug('debug')

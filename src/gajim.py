@@ -38,18 +38,90 @@
 import os
 import sys
 import warnings
+import getopt
+import locale
+from common import i18n
 
-if os.name == 'nt':
-    log_path = os.path.join(os.environ['APPDATA'], 'Gajim')
+profile = ''
+config_path = None
+log_level = None
+log_quiet = False
+log_verbose = False
+
+try:
+    shortargs = 'hqvl:p:c:'
+    # add gtk/gnome session option as gtk_get_option_group is not wrapped
+    longargs = 'help quiet verbose loglevel= profile= config-path='
+    longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
+    longargs += ' sm-client-id= sm-client-state-file= sm-disable'
+    opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
+except getopt.error, msg1:
+    print msg1
+    print 'for help use --help'
+    sys.exit(2)
+for o, a in opts:
+    if o in ('-h', '--help'):
+        out = _('Usage:') + \
+            '\n  gajim [options] filename\n\n' + \
+            _('Options:') + \
+            '\n  -h, --help         ' + \
+                _('Show this help message and exit') + \
+            '\n  -q, --quiet        ' + \
+                _('Show only critical errors') + \
+            '\n  -v, --verbose      ' + \
+                _('Print xml stanzas and other debug information') + \
+            '\n  -p, --profile      ' + \
+                _('Use defined profile in configuration directory') + \
+            '\n  -c, --config-path  ' + \
+                _('Set configuration directory') + \
+            '\n  -l, --loglevel     ' + \
+                _('Configure logging system') + '\n'
+        print out.encode(locale.getpreferredencoding())
+        sys.exit()
+    elif o in ('-q', '--quiet'):
+        log_quiet = True
+    elif o in ('-v', '--verbose'):
+        log_verbose = True
+    elif o in ('-p', '--profile'): # gajim --profile name
+        profile = unicode(a, locale.getpreferredencoding())
+    elif o in ('-l', '--loglevel'):
+        log_level = a
+    elif o in ('-c', '--config-path'):
+        config_path = unicode(a, locale.getpreferredencoding())
+
+from common import configpaths
+configpaths.gajimpaths.init(config_path)
+configpaths.gajimpaths.init_profile(profile)
+
+if hasattr(sys, 'frozen'):
+    log_path = configpaths.gajimpaths.config_root
     if not os.path.exists(log_path):
         os.mkdir(log_path, 0700)
-    log_file = os.path.join(log_path, 'gajim.log')
-    fout = open(log_file, 'a')
+
+    class MyStd(object):
+        _file = None
+        _error = None
+        def write(self, text):
+            logfile = os.path.join(log_path, 'gajim.log')
+            if self._file is None and self._error is None:
+                try:
+                    self._file = open(logfile, 'a')
+                except Exception, details:
+                    self._error = details
+            if self._file is not None:
+                self._file.write(text)
+                self._file.flush()
+        def flush(self):
+            if self._file is not None:
+                self._file.flush()
+
+    fout = MyStd()
     sys.stdout = fout
     sys.stderr = fout
 
     warnings.filterwarnings(action='ignore')
 
+if os.name == 'nt':
     if os.path.isdir('gtk'):
         # Used to create windows installer with GTK included
         paths = os.environ['PATH']
@@ -120,100 +192,16 @@ if os.name == 'nt':
     sys.path.append('.')
 
 from common import logging_helpers
-logging_helpers.init(sys.stderr.isatty())
+logging_helpers.init(log_level, log_verbose, log_quiet)
 
 import logging
-# gajim.gui or gajim.gtk more appropriate ?
-log = logging.getLogger('gajim.gajim')
-
-import getopt
-from common import i18n
-
-def parseOpts():
-    profile_ = ''
-    config_path_ = None
-
-    try:
-        shortargs = 'hqvl:p:c:'
-        # add gtk/gnome session option as gtk_get_option_group is not wrapped
-        longargs = 'help quiet verbose loglevel= profile= config-path='
-        longargs += ' class= name= screen= gtk-module= sync g-fatal-warnings'
-        longargs += ' sm-client-id= sm-client-state-file= sm-disable'
-        opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
-    except getopt.error, msg1:
-        print msg1
-        print 'for help use --help'
-        sys.exit(2)
-    for o, a in opts:
-        if o in ('-h', '--help'):
-            out = _('Usage:') + \
-                '\n  gajim [options] filename\n\n' + \
-                _('Options:') + \
-                '\n  -h, --help         ' + \
-                    _('Show this help message and exit') + \
-                '\n  -q, --quiet        ' + \
-                    _('Show only critical errors') + \
-                '\n  -v, --verbose      ' + \
-                    _('Print xml stanzas and other debug information') + \
-                '\n  -p, --profile      ' + \
-                    _('Use defined profile in configuration directory') + \
-                '\n  -c, --config-path  ' + \
-                    _('Set configuration directory') + \
-                '\n  -l, --loglevel     ' + \
-                    _('Configure logging system') + '\n'
-            print out.encode(locale.getpreferredencoding())
-            sys.exit()
-        elif o in ('-q', '--quiet'):
-            logging_helpers.set_quiet()
-        elif o in ('-v', '--verbose'):
-            logging_helpers.set_verbose()
-        elif o in ('-p', '--profile'): # gajim --profile name
-            profile_ = a
-        elif o in ('-l', '--loglevel'):
-            logging_helpers.set_loglevels(a)
-        elif o in ('-c', '--config-path'):
-            config_path_ = a
-    return profile_, config_path_
-
-import locale
-profile, config_path = parseOpts()
-if config_path:
-    config_path = unicode(config_path, locale.getpreferredencoding())
-del parseOpts
-
-profile = unicode(profile, locale.getpreferredencoding())
-
-import common.configpaths
-common.configpaths.gajimpaths.init(config_path)
-del config_path
-common.configpaths.gajimpaths.init_profile(profile)
-del profile
+log = logging.getLogger('gajim')
 
 if os.name == 'nt':
-    plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
+    plugins_locale_dir = os.path.join(configpaths.gajimpaths[
         'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
     libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
     libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-    class MyStderr(object):
-        _file = None
-        _error = None
-        def write(self, text):
-            fname = os.path.join(common.configpaths.gajimpaths.cache_root,
-                os.path.split(sys.executable)[1]+'.log')
-            if self._file is None and self._error is None:
-                try:
-                    self._file = open(fname, 'a')
-                except Exception, details:
-                    self._error = details
-            if self._file is not None:
-                self._file.write(text)
-                self._file.flush()
-        def flush(self):
-            if self._file is not None:
-                self._file.flush()
-
-    sys.stderr = MyStderr()
 
 # PyGTK2.10+ only throws a warning
 warnings.filterwarnings('error', module='gtk')
@@ -303,7 +291,7 @@ import gtkexcepthook
 import signal
 import gtkgui_helpers
 
-gajimpaths = common.configpaths.gajimpaths
+gajimpaths = configpaths.gajimpaths
 
 pid_filename = gajimpaths['PID_FILE']
 config_filename = gajimpaths['CONFIG_FILE']
