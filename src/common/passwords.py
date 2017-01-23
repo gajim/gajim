@@ -52,7 +52,7 @@ class PasswordStorage(object):
 class SimplePasswordStorage(PasswordStorage):
     def get_password(self, account_name):
         passwd = gajim.config.get_per('accounts', account_name, 'password')
-        if passwd and passwd.startswith('libsecret:'):
+        if passwd and (passwd.startswith('libsecret:') or passwd.startswith('winvault:')):
             # this is not a real password, it’s stored through libsecret.
             return None
         else:
@@ -116,8 +116,14 @@ class SecretWindowsPasswordStorage(PasswordStorage):
         self.win_keyring = keyring.get_keyring()
 
     def save_password(self, account_name, password):
-        self.win_keyring.set_password('gajim', account_name, password)
-        gajim.config.set_per('accounts', account_name, 'password', 'winvault:')
+        try:
+            self.win_keyring.set_password('gajim', account_name, password)
+            gajim.config.set_per(
+                'accounts', account_name, 'password', 'winvault:')
+        except:
+            log.exception('error:')
+            set_storage(SimplePasswordStorage())
+            storage.save_password(account_name, password)
 
     def get_password(self, account_name):
         log.debug('getting password')
@@ -127,10 +133,7 @@ class SecretWindowsPasswordStorage(PasswordStorage):
         if not conf.startswith('winvault:'):
             password = conf
             # migrate the password over to keyring
-            try:
-                self.save_password(account_name, password)
-            except Exception:
-                log.exception('error: ')
+            self.save_password(account_name, password)
             return password
         return self.win_keyring.get_password('gajim', account_name)
 
