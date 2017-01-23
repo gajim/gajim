@@ -140,19 +140,22 @@ def get_storage():
     global storage
     if storage is None: # None is only in first time get_storage is called
         global Secret
-        try:
-            gi.require_version('Secret', '1')
-            gir = __import__('gi.repository', globals(), locals(),
-                ['Secret'], 0)
-            Secret = gir.Secret
-        except (ValueError, AttributeError):
-            pass
-        try:
-            if os.name != 'nt':
-                storage = SecretPasswordStorage()
-            else:
-                storage = SecretWindowsPasswordStorage()
-        except Exception:
+        if gajim.config.get('use_keyring'):
+            try:
+                gi.require_version('Secret', '1')
+                gir = __import__('gi.repository', globals(), locals(),
+                    ['Secret'], 0)
+                Secret = gir.Secret
+            except (ValueError, AttributeError):
+                pass
+            try:
+                if os.name != 'nt':
+                    storage = SecretPasswordStorage()
+                else:
+                    storage = SecretWindowsPasswordStorage()
+            except Exception:
+                storage = SimplePasswordStorage()
+        else:
             storage = SimplePasswordStorage()
     return storage
 
