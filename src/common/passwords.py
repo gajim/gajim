@@ -246,11 +246,12 @@ def get_storage():
                 if USER_HAS_KWALLETCLI:
                     storage = KWalletPasswordStorage()
         if storage is None and os.name == 'nt':
-            try:
-                storage = SecretWindowsPasswordStorage()
-            except:
-                log.exception('error:')
-                storage = None
+            if gajim.config.get('use_winvault'):
+                try:
+                    storage = SecretWindowsPasswordStorage()
+                except:
+                    log.exception('error:')
+                    storage = None
         if storage is None:
             storage = SimplePasswordStorage()
     return storage
