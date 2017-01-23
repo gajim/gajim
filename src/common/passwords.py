@@ -26,9 +26,20 @@
 
 __all__ = ['get_password', 'save_password']
 
+import os
+import logging
 import warnings
 from common import gajim
 from common import kwalletbinding
+
+log = logging.getLogger('gajim.password')
+
+if os.name == 'nt':
+    try:
+        import keyring
+    except ImportError:
+        log.exception(
+            'python-keyring missing, falling back to plaintext storage')
 
 USER_HAS_GNOMEKEYRING = False
 USER_USES_GNOMEKEYRING = False
@@ -46,9 +57,8 @@ class SimplePasswordStorage(PasswordStorage):
     def get_password(self, account_name):
         passwd = gajim.config.get_per('accounts', account_name, 'password')
         if passwd and (passwd.startswith('gnomekeyring:') or passwd.startswith('libsecret:') or \
-        passwd == '<kwallet>'):
-            # this is not a real password, it's either a gnome
-            # keyring token or stored in the KDE wallet
+        passwd == '<kwallet>' or passwd.startswith('winvault:')):
+            # this is not a real password
             return None
         else:
             return passwd
@@ -176,6 +186,34 @@ class KWalletPasswordStorage(PasswordStorage):
             gajim.connections[account_name].password = password
 
 
+class SecretWindowsPasswordStorage(PasswordStorage):
+    """ Windows Keyring """
+
+    def __init__(self):
+        self.win_keyring = keyring.get_keyring()
+
+    def save_password(self, account_name, password):
+        try:
+            self.win_keyring.set_password('gajim', account_name, password)
+            gajim.config.set_per(
+                'accounts', account_name, 'password', 'winvault:')
+        except:
+            log.exception('error:')
+            set_storage(SimplePasswordStorage())
+            storage.save_password(account_name, password)
+
+    def get_password(self, account_name):
+        conf = gajim.config.get_per('accounts', account_name, 'password')
+        if conf is None:
+            return None
+        if not conf.startswith('winvault:'):
+            password = conf
+            # migrate the password over to keyring
+            self.save_password(account_name, password)
+            return password
+        return self.win_keyring.get_password('gajim', account_name)
+
+
 storage = None
 def get_storage():
     global storage
@@ -207,6 +245,12 @@ def get_storage():
                     USER_HAS_KWALLETCLI = True
                 if USER_HAS_KWALLETCLI:
                     storage = KWalletPasswordStorage()
+        if storage is None and os.name == 'nt':
+            try:
+                storage = SecretWindowsPasswordStorage()
+            except:
+                log.exception('error:')
+                storage = None
         if storage is None:
             storage = SimplePasswordStorage()
     return storage
