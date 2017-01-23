@@ -314,6 +314,7 @@ class Config:
             'remember_opened_chat_controls': [ opt_bool, True, _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.')],
             'positive_184_ack': [ opt_bool, False, _('If enabled, Gajim will show an icon to show that sent message has been received by your contact')],
             'show_avatar_in_tabs': [ opt_bool, False, _('Show a mini avatar in chat window tabs and in window icon')],
+            'use_keyring': [opt_bool, True, _('If True, Gajim will use the Systems Keyring to store account passwords.')],
     }, {})
 
     __options_per_key = {

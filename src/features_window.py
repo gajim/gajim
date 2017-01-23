@@ -69,7 +69,7 @@ class FeaturesWindow:
             _('Password encryption'): (self.some_keyring_available,
                 _('Passwords can be stored securely and not just in plaintext.'),
                 _('Requires libsecret and a provider (such as GNOME Keyring and KSecretService).'),
-                _('Feature not available under Windows.')),
+                _('On Windows the Windows Credential Vault is used.')),
             _('Spell Checker'): (self.speller_available,
                 _('Spellchecking of composed messages.'),
                 _('Requires libgtkspell.'),
@@ -183,7 +183,7 @@ class FeaturesWindow:
 
     def some_keyring_available(self):
         if os.name == 'nt':
-            return False
+            return True
         try:
             gi.require_version('Secret', '1')
             from gi.repository import Secret
