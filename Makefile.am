@@ -50,7 +50,7 @@ MAINTAINERCLEANDIRS = \
 
 
 test:
-	python test/runtests.py
+	${PYTHON} test/runtests.py
 .PHONY: test
 
 doc:
