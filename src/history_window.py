@@ -640,8 +640,6 @@ class HistoryWindow:
                 None)
         if result is not None:
             match_start_iter, match_end_iter = result
-            # include '[' or other character before time
-            match_start_iter.backward_char()
             while not match_end_iter.has_tag(self.eom_tag):
                 if not match_end_iter.forward_to_line_end():
                     break
