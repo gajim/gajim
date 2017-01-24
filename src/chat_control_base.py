@@ -668,15 +668,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     self.scroll_messages('up', message_buffer, 'received')
                 else:  # Ctrl+UP
                     self.scroll_messages('up', message_buffer, 'sent')
-            return True
+                return True
         elif event.keyval == Gdk.KEY_Down:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+Down
                     self.scroll_messages('down', message_buffer, 'received')
                 else:  # Ctrl+Down
                     self.scroll_messages('down', message_buffer, 'sent')
-            return True
-
+                return True
         elif event.keyval == Gdk.KEY_Return or \
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
             if event_state & Gdk.ModifierType.SHIFT_MASK:
