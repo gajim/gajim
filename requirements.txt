@@ -11,3 +11,4 @@ python-gnupg
 pillow
 pycurl
 docutils
+qrcode
