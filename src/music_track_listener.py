@@ -198,7 +198,7 @@ class MusicTrackListener(gobject.GObject):
         info.title = props.get('title', None)
         info.album = props.get('album', None)
         info.artist = props.get('artist', None)
-        info.duration = int(props.get('~#length', 0))
+        info.duration = float(props.get('~#length', 0))
         return info
 
     def get_playing_track(self):
