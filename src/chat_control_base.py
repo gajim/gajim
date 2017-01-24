@@ -680,7 +680,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         elif event.keyval == Gdk.KEY_Return or \
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
             if event_state & Gdk.ModifierType.SHIFT_MASK:
-                return True
+                return False
             message_textview = widget
             message_buffer = message_textview.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
