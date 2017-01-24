@@ -622,10 +622,9 @@ class HistoryWindow:
             match_end_iter.forward_line() # highlight all message not just time
             self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
                     match_end_iter)
-
-            match_start_mark = self.history_buffer.create_mark('match_start',
-                    match_start_iter, True)
-            self.history_textview.tv.scroll_to_mark(match_start_mark, 0, True)
+            mark = self.history_buffer.create_mark('match', match_start_iter, True)
+            GLib.idle_add(self.history_textview.tv.scroll_to_mark, mark,
+                0, True, 0.0, 0.5)
 
     def on_log_history_checkbutton_toggled(self, widget):
         # log conversation history?
