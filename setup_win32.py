@@ -33,11 +33,10 @@ sys.path.append('src')
 
 options = {
    'build_exe': {
-        'includes': ['win32com.server', 'win32com.client'],
+        'includes': ['new', 'win32com.server', 'win32com.client'],
         'packages': ['pkg_resources', 'cffi', 'gtk',
-                     'cryptography', 'Crypto', 'PIL',
+                     'cryptography', 'Crypto', 'PIL', 'qrcode',
                      'axolotl', 'google', 'common', 'keyring'],
-        'includes': ['new'],
         'excludes': ['Tkinter', 'unittest', 'psutil'],
    }
 }
