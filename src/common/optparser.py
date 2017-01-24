@@ -240,6 +240,8 @@ class OptionsParser:
             self.update_config_to_01601()
         if old < [0, 16, 4, 1] and new >= [0, 16, 4, 1]:
             self.update_config_to_01641()
+        if old < [0, 16, 6, 1] and new >= [0, 16, 6, 1]:
+            self.update_config_to_01661()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -945,3 +947,10 @@ class OptionsParser:
             gajim.config.set_per('accounts', account, 'connection_types',
                 ' '.join(connection_types))
         gajim.config.set('version', '0.16.4.1')
+
+    def update_config_to_01661(self):
+        for account in self.old_values['accounts'].keys():
+            resource = self.old_values['accounts'][account]['resource']
+            if resource.lower() == 'gajim':
+                gajim.config.set_per('accounts', account, 'resource', 'gajim.$rand')
+        gajim.config.set('version', '0.16.6.1')
