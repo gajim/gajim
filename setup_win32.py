@@ -117,7 +117,8 @@ OPTIONS = {
     'build_exe': {
         'includes': ['gi', 'numbers', 'win32com.client', 'win32com.server'],
         'packages': ['gi', 'cffi', 'cryptography', 'google', 'axolotl',
-                     'pkg_resources', 'Crypto', 'pycparser', 'keyring'],
+                     'pkg_resources', 'Crypto', 'pycparser', 'keyring',
+                     'PIL', 'idna', 'qrcode'],
         'include_files': INCLUDE_FILES,
     }
 }
