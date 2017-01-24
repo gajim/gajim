@@ -16,8 +16,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from gi.repository import Gtk
+
 import gtkgui_helpers
 
+from common import helpers
+
+__all__ = ['show']
 
 class ShortcutsWindow:
     def __init__(self):
@@ -35,4 +40,11 @@ class ShortcutsWindow:
     def _on_window_destroy(self, widget):
         self.window = None
 
-show = ShortcutsWindow().show
+def show_shortcuts_webpage(self, parent=None):
+    helpers.launch_browser_mailer('url',
+        'https://dev.gajim.org/gajim/gajim/wikis/help/keyboardshortcuts')
+
+if (3, 19) <= (Gtk.get_major_version(), Gtk.get_minor_version()):
+    show = ShortcutsWindow().show
+else:
+    show = show_shortcuts_webpage
