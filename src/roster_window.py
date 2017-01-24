@@ -56,6 +56,7 @@ import tooltips
 import message_control
 import adhoc_commands
 import features_window
+import shortcuts_window
 import plugins
 import plugins.gui
 
@@ -3852,8 +3853,7 @@ class RosterWindow:
             'http://trac.gajim.org/wiki/GajimFaq')
 
     def on_keyboard_shortcuts_menuitem_activate(self, widget):
-        helpers.launch_browser_mailer('url',
-            'http://trac.gajim.org/wiki/KeyboardShortcuts')
+        shortcuts_window.show(self.window)
 
     def on_features_menuitem_activate(self, widget):
         features_window.FeaturesWindow()
