@@ -610,7 +610,6 @@ class HistoryWindow:
             None)
         if result is not None:
             match_start_iter, match_end_iter = result
-            match_start_iter.backward_char() # include '[' or other character before time
             match_end_iter.forward_to_tag_toggle(self.history_buffer.eol_tag)
             self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
                     match_end_iter)
