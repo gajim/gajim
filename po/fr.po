@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 03:05+0000\n"
+"POT-Creation-Date: 2017-01-25 03:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -10,9 +10,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 2.0.0b7\n"
+"X-Generator: Translate Toolkit 2.0.0rc2\n"
 "X-Pootle-Path: /fr/gajim-0.16/fr.po\n"
-"X-Pootle-Revision: 942\n"
+"X-Pootle-Revision: 1007\n"
 
 #: ../data/gui/account_context_menu.ui.h:1
 #: ../data/gui/zeroconf_context_menu.ui.h:1
@@ -2934,12 +2934,11 @@ msgstr "Personnel"
 
 #: ../data/gajim-remote.desktop.in.in.h:1
 msgid "Open URI using Gajim"
-msgstr ""
+msgstr "Ouvrir une URI avec Gajim"
 
 #: ../data/gajim-remote.desktop.in.in.h:2 ../data/gajim.desktop.in.in.h:4
-#, fuzzy
 msgid "chat;messaging;im;jabber;xmpp;bonjour;voip;"
-msgstr "discussion;messagerie;messagerie instantanée;jabber;xmpp;bonjour;voip"
+msgstr "discussion;messagerie;messagerie instantanée;jabber;xmpp;bonjour;voip;"
 
 #: ../data/gajim.desktop.in.in.h:2
 msgid "Jabber IM Client"
@@ -3279,11 +3278,11 @@ msgstr ""
 msgid "Pong! (%s s.)"
 msgstr "Pong ! (%s s.)"
 
-#: ../src/chat_control.py:3002 ../src/common/connection.py:556
+#: ../src/chat_control.py:3002 ../src/common/connection.py:558
 #: ../src/common/connection_handlers.py:1095
 #: ../src/common/connection_handlers.py:1271
 #: ../src/common/connection_handlers_events.py:955 ../src/common/logger.py:1172
-#: ../src/gajim.py:244 ../src/session.py:110
+#: ../src/gajim.py:232 ../src/session.py:110
 msgid "Database Error"
 msgstr "Erreur de base de données"
 
@@ -3882,9 +3881,9 @@ msgstr ""
 "repliés."
 
 #. sorted alphanum
-#: ../src/common/config.py:115 ../src/common/config.py:535
-#: ../src/common/optparser.py:310 ../src/common/optparser.py:506
-#: ../src/common/optparser.py:540 ../src/gui_interface.py:2877
+#: ../src/common/config.py:115 ../src/common/config.py:536
+#: ../src/common/optparser.py:312 ../src/common/optparser.py:508
+#: ../src/common/optparser.py:542 ../src/gui_interface.py:2877
 msgid "default"
 msgstr "Par défaut"
 
@@ -3992,7 +3991,6 @@ msgid "Add * and [n] in roster title?"
 msgstr "Ajouter * et [n] au titre de la liste des contacts ?"
 
 #: ../src/common/config.py:178
-#, fuzzy
 msgid ""
 "How many history messages should be restored when a chat tab/window is "
 "reopened?"
@@ -4003,6 +4001,8 @@ msgstr ""
 #: ../src/common/config.py:179
 msgid "How far back in time (minutes) history is restored. 0 means no limit."
 msgstr ""
+"Depuis combien de temps restaurer l'historique de conversation. 0 signifie "
+"pas de limite."
 
 #: ../src/common/config.py:180
 msgid ""
@@ -4447,6 +4447,15 @@ msgstr ""
 "stocker les mots de passe des comptes."
 
 #: ../src/common/config.py:289
+#, fuzzy
+msgid ""
+"If True, Gajim will use the Windows Credential Vault to store account "
+"passwords."
+msgstr ""
+"Si vrai, Gajim va utiliser Gnome Keyring (s'il est disponible) pour stocker "
+"les mots de passe des comptes."
+
+#: ../src/common/config.py:290
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
@@ -4454,7 +4463,7 @@ msgstr ""
 "Si vrai, Gajim montrera le nombre de contacts connectés et totaux sur les "
 "lignes de groupe et de compte"
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:291
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
@@ -4462,7 +4471,7 @@ msgstr ""
 "Peut être vide, 'chat' ou 'normal'. Si non vide, traite tous les messages "
 "entrant comme des messages de ce type"
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:292
 msgid ""
 "If True, Gajim will scroll and select the contact who sent you the last "
 "message, if chat window is not already opened."
@@ -4470,13 +4479,13 @@ msgstr ""
 "Si Activé, Gajim scrollera et sélectionnera le contact qui vous a envoyé le "
 "dernier message, si la fenêtre de conversation n'est pas déjà ouverte."
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:293
 msgid "Time of inactivity needed before the change status window closes down."
 msgstr ""
 "Temps d'inactivité nécessaire pour que la fenêtre de changement de statut se "
 "faire."
 
-#: ../src/common/config.py:293
+#: ../src/common/config.py:294
 msgid ""
 "Maximum number of lines that are printed in conversations. Oldest lines are "
 "cleared."
@@ -4484,7 +4493,7 @@ msgstr ""
 "Nombre maximum de lignes affichées dans les conversations. Les lignes les "
 "plus vieilles sont effacées."
 
-#: ../src/common/config.py:294
+#: ../src/common/config.py:295
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "notification icon."
@@ -4492,12 +4501,12 @@ msgstr ""
 "Si Activé, les fenêtres de notification du notification-daemon seront "
 "attachées à l'icône du Tray."
 
-#: ../src/common/config.py:295
+#: ../src/common/config.py:296
 msgid "Choose interval between 2 checks of idleness."
 msgstr ""
 "Choisissez l'intervalle en secondes entre deux vérifications de l'inactivité."
 
-#: ../src/common/config.py:296
+#: ../src/common/config.py:297
 msgid ""
 "Valid uri schemes. Only schemes in this list will be accepted as \"real\" "
 "uri. (mailto and xmpp are handled separately)"
@@ -4505,7 +4514,7 @@ msgstr ""
 "Schémas d'uri valides. Seuls les schémas dans cette liste seront acceptés "
 "comment « vraies » uri. (mailto et xmpp sont gérés séparément)"
 
-#: ../src/common/config.py:297
+#: ../src/common/config.py:298
 msgid ""
 "Ask offline status message to all offline contacts when connection to an "
 "account is established. WARNING: This causes a lot of requests to be sent!"
@@ -4514,12 +4523,12 @@ msgstr ""
 "connexion à un compte est établie. ATTENTION : cela provoque l'envoie de "
 "nombreuses requêtes !"
 
-#: ../src/common/config.py:298
+#: ../src/common/config.py:299
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr ""
 "Si Vrai, la complétion dans les salons sera similaire à celle d'un shell"
 
-#: ../src/common/config.py:299
+#: ../src/common/config.py:300
 msgid ""
 "When is self contact row displayed. Can be \"always\", \"when_other_resource"
 "\" or \"never\""
@@ -4528,22 +4537,22 @@ msgstr ""
 "» (toujours), « when_other_resource » (quand d'autres ressources sont "
 "connectées) ou « never » (jamais)"
 
-#: ../src/common/config.py:304
+#: ../src/common/config.py:305
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr ""
 "Fixe éventuellement le nombre d'image par seconde pour la sortie video "
 "jingle. Exemple : 10/1 ou 25/2"
 
-#: ../src/common/config.py:305
+#: ../src/common/config.py:306
 msgid "Optionally resize jingle output video. Example: 320x240"
 msgstr ""
 "Redimenssionne éventuellement la sortie video jingle. Exemple : 320x240"
 
-#: ../src/common/config.py:306
+#: ../src/common/config.py:307
 msgid "If True, You will also see your webcam"
 msgstr "Si vrai, vous verrai aussi votre propre webcam"
 
-#: ../src/common/config.py:309
+#: ../src/common/config.py:310
 msgid ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
@@ -4552,11 +4561,11 @@ msgstr ""
 "jingle. Celui défini dans l'option \"stun_server\", ou celui donné par le "
 "serveur jabber."
 
-#: ../src/common/config.py:310
+#: ../src/common/config.py:311
 msgid "STUN server to use when using jingle"
 msgstr "Serveur STUN a utiliser avec jingle"
 
-#: ../src/common/config.py:311
+#: ../src/common/config.py:312
 msgid ""
 "If True, Gajim will show affiliation of groupchat occupants by adding a "
 "colored square to the status icon"
@@ -4564,7 +4573,7 @@ msgstr ""
 "si vrai, Gajim affichera l'affiliation des occupant(e)s des salons de "
 "discussions en ajoutant un carré coloré a l'icône d'état"
 
-#: ../src/common/config.py:312
+#: ../src/common/config.py:313
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured"
@@ -4572,11 +4581,11 @@ msgstr ""
 "Proxy utilisé pour toutes les connexions sortantes si le compte n'a pas de "
 "proxy spécifique configuré"
 
-#: ../src/common/config.py:313
+#: ../src/common/config.py:314
 msgid "If True, Gajim will ignore incoming attention requestd (\"wizz\")."
 msgstr "Si vrai, Gajim ignorera les requêtes d'attention entrante (\"wizz\")"
 
-#: ../src/common/config.py:314
+#: ../src/common/config.py:315
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
@@ -4584,7 +4593,7 @@ msgstr ""
 "Si activé, Gajim ré-ouvrira les fenêtres de discussion qui étaient ouvertes "
 "la dernière fois que Gajim a été fermé."
 
-#: ../src/common/config.py:315
+#: ../src/common/config.py:316
 msgid ""
 "If enabled, Gajim will show an icon to show that sent message has been "
 "received by your contact"
@@ -4592,7 +4601,7 @@ msgstr ""
 "Si activé, Gajim montrera une icône montrant que les messages envoyés ont "
 "été reçus par votre contact"
 
-#: ../src/common/config.py:329
+#: ../src/common/config.py:330
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
@@ -4600,7 +4609,7 @@ msgstr ""
 "La priorité va changer automatiquement selon votre état. Les priorités sont "
 "définies dans les options autopriority_*."
 
-#: ../src/common/config.py:337
+#: ../src/common/config.py:338
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -4610,41 +4619,41 @@ msgstr ""
 "(indisponible), dnd (Occupé(e)) ou Invisible. NOTE : cette option n'est "
 "utilisée que si l'option restore_last_status est désactivée"
 
-#: ../src/common/config.py:338
+#: ../src/common/config.py:339
 msgid "If enabled, restore the last status that was used."
 msgstr "Si activé, restaure le dernier statut qui était utilisé."
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:341
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr ""
 "Si Vrai, les demandes d'autorisation de contact seront automatiquement "
 "acceptées."
 
-#: ../src/common/config.py:341
+#: ../src/common/config.py:342
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr ""
 "Si Faux, ce compte sera désactivé et n'apparaîtra plus dans votre roster."
 
-#: ../src/common/config.py:344
+#: ../src/common/config.py:345
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
 "Si désactivé, ne pas signaler les présences avec une clef GPG, même si GPG "
 "est configuré."
 
-#: ../src/common/config.py:346
+#: ../src/common/config.py:347
 msgid "Enable ESessions encryption for this account."
 msgstr "Activer le chiffrage ESessions pour ce compte."
 
-#: ../src/common/config.py:347
+#: ../src/common/config.py:348
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr ""
 "Gajim doit-il commencer automatiquement une discussion chiffrée quand cela "
 "est possible ?"
 
-#: ../src/common/config.py:348
+#: ../src/common/config.py:349
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
@@ -4652,7 +4661,7 @@ msgstr ""
 "Liste ordonnée de types de connexion, séparés par des virgules, à essayer. "
 "Peut contenir tls, ssl ou plain."
 
-#: ../src/common/config.py:351
+#: ../src/common/config.py:352
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
@@ -4662,7 +4671,7 @@ msgstr ""
 "essayer. Peut contenir ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-"
 "SHA-1, DIGEST-MD5, PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 
-#: ../src/common/config.py:352
+#: ../src/common/config.py:353
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
@@ -4671,24 +4680,24 @@ msgstr ""
 "connexion non-chiffrée. Peut prendre les valeurs 'warn', 'connect', "
 "'disconnect'"
 
-#: ../src/common/config.py:353
+#: ../src/common/config.py:354
 msgid "Show a warning dialog before using standard SSL library."
 msgstr ""
 "Afficher un message d'avertissement avant d'utiliser la librairie SSL "
 "standard."
 
-#: ../src/common/config.py:354
+#: ../src/common/config.py:355
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr ""
 "Afficher un message d'avertissement avant d'envoyer un mot de passe non-"
 "chiffré via une connexion non-chiffrée."
 
-#: ../src/common/config.py:356
+#: ../src/common/config.py:357
 msgid "Space separated list of ssl errors to ignore."
 msgstr "Liste d'erreurs ssl, séparées par une virgule, à ignorer."
 
-#: ../src/common/config.py:362
+#: ../src/common/config.py:363
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
@@ -4697,7 +4706,7 @@ msgstr ""
 "enregistrer les conversations. Vous pouvez également ajouter le nom d'un "
 "compte pour ne rien enregistrer pour ce compte."
 
-#: ../src/common/config.py:363
+#: ../src/common/config.py:364
 msgid ""
 "Download logs stored on server on Gajim startup if server supports XEP-0136 "
 "or XEP-0313"
@@ -4705,7 +4714,7 @@ msgstr ""
 "Télécharger l'historique stocké sur le serveur au démarrage de Gajim si le "
 "serveur support le XEP-0136 ou XEP-0313"
 
-#: ../src/common/config.py:364
+#: ../src/common/config.py:365
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
@@ -4713,15 +4722,15 @@ msgstr ""
 "Liste de jid, séparée par un espace, pour lesquels vous accepter de ne pas "
 "enregistrer les conversations s'il ne veut pas."
 
-#: ../src/common/config.py:367
+#: ../src/common/config.py:368
 msgid "Whitespace sent after inactivity"
 msgstr "Espace envoyée après inactivité"
 
-#: ../src/common/config.py:368
+#: ../src/common/config.py:369
 msgid "XMPP ping sent after inactivity"
 msgstr "ping XMPP envoyé après inactivité"
 
-#: ../src/common/config.py:372
+#: ../src/common/config.py:373
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
@@ -4730,11 +4739,11 @@ msgstr ""
 "Connexion avant de tenter de se connecter ?"
 
 #. yes, no, ask
-#: ../src/common/config.py:376
+#: ../src/common/config.py:377
 msgid "Jabberd2 workaround"
 msgstr "Contournement de bug de jabberd2"
 
-#: ../src/common/config.py:379
+#: ../src/common/config.py:380
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -4742,7 +4751,7 @@ msgstr ""
 "Si cette case est cochée, Gajim utilisera votre IP et les proxies définis "
 "dans l'option file_transfer_proxies pour les transferts de fichiers."
 
-#: ../src/common/config.py:380
+#: ../src/common/config.py:381
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
@@ -4751,26 +4760,26 @@ msgstr ""
 "être sûr qu'ils fonctionnent. Les proxys de Openfire sont connus pour "
 "échouer à ce test, même s'ils fonctionnent"
 
-#: ../src/common/config.py:394
+#: ../src/common/config.py:395
 msgid "Answer to receipt requests"
 msgstr "Répondre aux demandes d'accusés de réception"
 
-#: ../src/common/config.py:395
+#: ../src/common/config.py:396
 msgid "Sent receipt requests"
 msgstr "Envoyer des demandes d'accusés de réception"
 
-#: ../src/common/config.py:404
+#: ../src/common/config.py:405
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr ""
 "Si cette case est cochée, Gajim autorisera les autres à détecter le système "
 "d'exploitation que vous utilisez"
 
-#: ../src/common/config.py:405
+#: ../src/common/config.py:406
 msgid "Allow Gajim to send your local time."
 msgstr "Autorise Gajim à envoyer votre heure."
 
-#: ../src/common/config.py:406
+#: ../src/common/config.py:407
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
@@ -4778,15 +4787,15 @@ msgstr ""
 "Durant la négociation d'une session chiffrée, Gajim doit-il partir du "
 "principe que vous voulez archiver vos conversations ?"
 
-#: ../src/common/config.py:409
+#: ../src/common/config.py:410
 msgid "Message that is sent to contacts you want to add"
 msgstr "Message à envoyer aux contacts que vous souhaitez ajouter"
 
-#: ../src/common/config.py:410
+#: ../src/common/config.py:411
 msgid "Last time we syncronized with logs from server."
 msgstr "Date de la dernière synchronisation des logs avec le serveur."
 
-#: ../src/common/config.py:411
+#: ../src/common/config.py:412
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
@@ -4794,7 +4803,7 @@ msgstr ""
 "Si activé et si le serveur supporte cette fonctionnalité, Gajim recevra les "
 "messages envoyés et reçus par les autres resources."
 
-#: ../src/common/config.py:412
+#: ../src/common/config.py:413
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
@@ -4802,19 +4811,19 @@ msgstr ""
 "Si activé, Gajim enverra vos IPs publiques pour que vos contacts puissent se "
 "connecter à votre machine pour les transfert de fichiers."
 
-#: ../src/common/config.py:413
+#: ../src/common/config.py:414
 msgid "Latest token for Oauth2 authentication."
 msgstr "Dernier jeton pour l'authentification Oauth2."
 
-#: ../src/common/config.py:414
+#: ../src/common/config.py:415
 msgid "client_id for Oauth2 authentication."
 msgstr "client_id pour l'authentification Oauth2."
 
-#: ../src/common/config.py:415
+#: ../src/common/config.py:416
 msgid "redirect_url for Oauth2 authentication."
 msgstr "redirect_url pour l'authentification Oauth2."
 
-#: ../src/common/config.py:416
+#: ../src/common/config.py:417
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
@@ -4822,15 +4831,15 @@ msgstr ""
 "Liste de JIDs, séparée par un espace, pour lesquels vous voulez ré-ouvrir "
 "une fenêtre de conversation au prochain démarrage."
 
-#: ../src/common/config.py:417
+#: ../src/common/config.py:418
 msgid "Last MAM id we are syncronized with"
 msgstr "Dernier identifiant MAM avec lequel Gajim est synchronisé"
 
-#: ../src/common/config.py:479
+#: ../src/common/config.py:480
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "Est-ce que OpenPGP est activé pour ce contact ?"
 
-#: ../src/common/config.py:480
+#: ../src/common/config.py:481
 msgid ""
 "Should Gajim automatically start an encrypted session with this contact when "
 "possible?"
@@ -4838,11 +4847,11 @@ msgstr ""
 "Gajim doit-il commencer automatiquement une discussion chiffrée avec ce "
 "contact quand cela est possible ?"
 
-#: ../src/common/config.py:481 ../src/common/config.py:484
+#: ../src/common/config.py:482 ../src/common/config.py:485
 msgid "Language for which we want to check misspelled words"
 msgstr "Langue dans laquelle faire la vérification orthographique"
 
-#: ../src/common/config.py:485
+#: ../src/common/config.py:486
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
@@ -4850,7 +4859,7 @@ msgstr ""
 "Le nombre de lignes d'archives qui seront demandées en entrant dans un "
 "salon. -1 signifie pas de limitation, -2 signifie valeur globale"
 
-#: ../src/common/config.py:486
+#: ../src/common/config.py:487
 msgid ""
 "How many minutes back to request logs when entering a groupchat. -1 means no "
 "limit, -2 means global value"
@@ -4858,7 +4867,7 @@ msgstr ""
 "Le nombre de minutes d'archives qui seront demandées en entrant dans un "
 "salon. -1 signifie pas de limitation, -2 signifie valeur globale"
 
-#: ../src/common/config.py:489
+#: ../src/common/config.py:490
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
@@ -4868,83 +4877,83 @@ msgstr ""
 "s'eteint). Cette option NE DEVRAIT PAS être utilisée pour (dés)activer un "
 "plugin. Utiliser l'interface graphique pour cela."
 
-#: ../src/common/config.py:494 ../src/common/pep.py:157
+#: ../src/common/config.py:495 ../src/common/pep.py:157
 msgid "Sleeping"
 msgstr "Dort"
 
-#: ../src/common/config.py:495
+#: ../src/common/config.py:496
 msgid "Back soon"
 msgstr "Bientôt de retour"
 
-#: ../src/common/config.py:495
+#: ../src/common/config.py:496
 msgid "Back in some minutes."
 msgstr "De retour dans quelques minutes."
 
-#: ../src/common/config.py:496 ../src/common/pep.py:127
+#: ../src/common/config.py:497 ../src/common/pep.py:127
 msgid "Eating"
 msgstr "Mange"
 
-#: ../src/common/config.py:496
+#: ../src/common/config.py:497
 msgid "I'm eating, so leave me a message."
 msgstr "Je mange, donc laissez moi un message."
 
-#: ../src/common/config.py:497
+#: ../src/common/config.py:498
 msgid "Movie"
 msgstr "Film"
 
-#: ../src/common/config.py:497
+#: ../src/common/config.py:498
 msgid "I'm watching a movie."
 msgstr "Je regarde un film."
 
-#: ../src/common/config.py:498 ../src/common/pep.py:186
+#: ../src/common/config.py:499 ../src/common/pep.py:186
 msgid "Working"
 msgstr "Travaille"
 
-#: ../src/common/config.py:498
+#: ../src/common/config.py:499
 msgid "I'm working."
 msgstr "Je travaille."
 
-#: ../src/common/config.py:499
+#: ../src/common/config.py:500
 msgid "Phone"
 msgstr "Téléphone"
 
-#: ../src/common/config.py:499
+#: ../src/common/config.py:500
 msgid "I'm on the phone."
 msgstr "Je suis au téléphone."
 
-#: ../src/common/config.py:500
+#: ../src/common/config.py:501
 msgid "Out"
 msgstr "Dehors"
 
-#: ../src/common/config.py:500
+#: ../src/common/config.py:501
 msgid "I'm out enjoying life."
 msgstr "Je suis sorti profiter de la vie."
 
-#: ../src/common/config.py:511
+#: ../src/common/config.py:512
 msgid "I'm available."
 msgstr "Disponible"
 
-#: ../src/common/config.py:512
+#: ../src/common/config.py:513
 msgid "I'm free for chat."
 msgstr "Disponible pour discuter"
 
-#: ../src/common/config.py:513 ../src/config.py:1647
+#: ../src/common/config.py:514 ../src/config.py:1647
 msgid "Be right back."
 msgstr "Revient de suite."
 
-#: ../src/common/config.py:514
+#: ../src/common/config.py:515
 msgid "I'm not available."
 msgstr "Non disponible"
 
-#: ../src/common/config.py:515
+#: ../src/common/config.py:516
 msgid "Do not disturb."
 msgstr "Ne pas déranger."
 
-#: ../src/common/config.py:516 ../src/common/config.py:517
+#: ../src/common/config.py:517 ../src/common/config.py:518
 msgid "Bye!"
 msgstr "Au revoir !"
 
-#: ../src/common/config.py:528
+#: ../src/common/config.py:529
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
@@ -4952,27 +4961,27 @@ msgstr ""
 "Son à jouer lorsqu'un message de salon contient un des mots de "
 "muc_highlight_words, ou lorsqu'un message de salon contient votre surnom."
 
-#: ../src/common/config.py:529
+#: ../src/common/config.py:530
 msgid "Sound to play when any MUC message arrives."
 msgstr "Son émis lors de l'arrivée d'un message de salon de discussion."
 
-#: ../src/common/config.py:538 ../src/common/optparser.py:324
+#: ../src/common/config.py:539 ../src/common/optparser.py:326
 msgid "green"
 msgstr "vert"
 
-#: ../src/common/config.py:542 ../src/common/optparser.py:310
+#: ../src/common/config.py:543 ../src/common/optparser.py:312
 msgid "grocery"
 msgstr "épicerie"
 
-#: ../src/common/config.py:546
+#: ../src/common/config.py:547
 msgid "human"
 msgstr "Humain"
 
-#: ../src/common/config.py:550
+#: ../src/common/config.py:551
 msgid "marine"
 msgstr "Marine"
 
-#: ../src/common/config.py:557
+#: ../src/common/config.py:558
 msgid "Tor"
 msgstr "Tor"
 
@@ -5104,7 +5113,7 @@ msgstr "L'utilisation de la clé n'inclut pas la signature d'un certificat"
 msgid "Application verification failure"
 msgstr "Echec de la vérification de l'application"
 
-#: ../src/common/connection.py:294 ../src/common/connection.py:304
+#: ../src/common/connection.py:296 ../src/common/connection.py:306
 #: ../src/common/connection_handlers_events.py:1148
 #: ../src/common/connection_handlers_events.py:1194 ../src/config.py:2164
 #: ../src/config.py:2173 ../src/config.py:2243 ../src/config.py:3717
@@ -5112,40 +5121,40 @@ msgstr "Echec de la vérification de l'application"
 msgid "Invalid Jabber ID"
 msgstr "Identifiant Jabber invalide"
 
-#: ../src/common/connection.py:295 ../src/common/connection.py:305
+#: ../src/common/connection.py:297 ../src/common/connection.py:307
 #: ../src/dialogs.py:3261
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr ""
 "Il n'est pas possible d'envoyer un message à %s, ce JID n'est pas valide."
 
-#: ../src/common/connection.py:328
+#: ../src/common/connection.py:330
 msgid "Neither the remote presence is signed, nor a key was assigned."
 msgstr "Le présence distante n'est pas signée et aucune clef n'a été assignée."
 
-#: ../src/common/connection.py:331
+#: ../src/common/connection.py:333
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
 msgstr ""
 "La clef du contact (%s) ne correspond pas à la clef assignée dans Gajim."
 
 #. we're not english: one in locale and one en
-#: ../src/common/connection.py:389
+#: ../src/common/connection.py:391
 msgid "[This message is *encrypted* (See :XEP:`27`]"
 msgstr "[Ce message est *chiffré* (Voir : XEP:`27`]"
 
-#: ../src/common/connection.py:553 ../src/common/connection_handlers.py:356
+#: ../src/common/connection.py:555 ../src/common/connection_handlers.py:356
 #: ../src/common/connection_handlers.py:1093
 #: ../src/common/connection_handlers.py:1269
 #: ../src/common/connection_handlers_events.py:952 ../src/common/logger.py:1170
-#: ../src/gajim.py:464 ../src/session.py:107
+#: ../src/gajim.py:452 ../src/session.py:107
 msgid "Disk Write Error"
 msgstr "Erreur d'Écriture du disque"
 
-#: ../src/common/connection.py:557 ../src/common/connection_handlers.py:1096
+#: ../src/common/connection.py:559 ../src/common/connection_handlers.py:1096
 #: ../src/common/connection_handlers.py:1272
 #: ../src/common/connection_handlers_events.py:956 ../src/common/logger.py:1173
-#: ../src/gajim.py:245 ../src/session.py:111
+#: ../src/gajim.py:233 ../src/session.py:111
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -5155,86 +5164,86 @@ msgstr ""
 "(voir http://trac.gajim.org/wiki/DatabaseBackup) ou supprimez le (toutes les "
 "archives seront perdues)."
 
-#: ../src/common/connection.py:984
+#: ../src/common/connection.py:986
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "La connexion du compte \"%s\" a été perdue"
 
-#: ../src/common/connection.py:985
+#: ../src/common/connection.py:987
 msgid "Reconnect manually."
 msgstr "Reconnecter manuellement."
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:996
+#: ../src/common/connection.py:998
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Le serveur %(name)s a mal répondu à la requête d'enregistrement : %(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:1038
+#: ../src/common/connection.py:1040
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Le serveur %s a fourni une forme d'inscription différente"
 
-#: ../src/common/connection.py:1055
+#: ../src/common/connection.py:1057
 msgid "Invalid answer"
 msgstr "Réponse non valide"
 
-#: ../src/common/connection.py:1056
+#: ../src/common/connection.py:1058
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "La passerelle %(name)s a mal répondu à la requête d'enregistrement : "
 "%(error)s"
 
-#: ../src/common/connection.py:1183
+#: ../src/common/connection.py:1185
 msgid "Wrong Custom Hostname"
 msgstr "Maivais nom d'hôte personnalisé"
 
-#: ../src/common/connection.py:1365
+#: ../src/common/connection.py:1367
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Impossible de se connecter à \"%(host)s\" via le proxy \"%(proxy)s\""
 
-#: ../src/common/connection.py:1368
+#: ../src/common/connection.py:1370
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Impossible de se connecter à \"%(host)s\""
 
-#: ../src/common/connection.py:1370 ../src/common/connection.py:1545
+#: ../src/common/connection.py:1372 ../src/common/connection.py:1547
 #: ../src/gui_interface.py:544
 msgid "Check your connection or try again later."
 msgstr "Vérifiez votre connexion ou réessayez plus tard."
 
-#: ../src/common/connection.py:1375
+#: ../src/common/connection.py:1377
 #, python-format
 msgid "Server replied: %s"
 msgstr "le serveur a répondu : %s"
 
-#: ../src/common/connection.py:1390
+#: ../src/common/connection.py:1392
 msgid "Connection to proxy failed"
 msgstr "La connexion au proxy a échoué"
 
-#: ../src/common/connection.py:1428 ../src/common/connection.py:1520
+#: ../src/common/connection.py:1430 ../src/common/connection.py:1522
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Impossible de se connecter au compte %s"
 
-#: ../src/common/connection.py:1429 ../src/common/connection.py:1521
+#: ../src/common/connection.py:1431 ../src/common/connection.py:1523
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr ""
 "La connexion avec le compte %s a été perdue. Essayez de vous connecter à "
 "nouveau."
 
-#: ../src/common/connection.py:1463
+#: ../src/common/connection.py:1465
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "La validité du certificat %s pourrait être invalide"
 
-#: ../src/common/connection.py:1466
+#: ../src/common/connection.py:1468
 #, python-format
 msgid ""
 "\n"
@@ -5243,7 +5252,7 @@ msgstr ""
 "\n"
 "Erreur SSL : <b>%s</b>"
 
-#: ../src/common/connection.py:1468
+#: ../src/common/connection.py:1470
 #, python-format
 msgid ""
 "\n"
@@ -5252,7 +5261,7 @@ msgstr ""
 "\n"
 "Erreur SSL inconnue : %d"
 
-#: ../src/common/connection.py:1497
+#: ../src/common/connection.py:1499
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
@@ -5261,26 +5270,26 @@ msgstr ""
 "L'authentification du certificat %s peut être invalide.\n"
 "Le certificat ne couvre pas ce domaine."
 
-#: ../src/common/connection.py:1544 ../src/common/connection.py:2339
+#: ../src/common/connection.py:1546 ../src/common/connection.py:2341
 #: ../src/common/zeroconf/connection_zeroconf.py:210
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Impossible de se connecter à \"%s\""
 
-#: ../src/common/connection.py:1580
+#: ../src/common/connection.py:1582
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Echec de l'authentification avec \"%s\""
 
-#: ../src/common/connection.py:1581
+#: ../src/common/connection.py:1583
 msgid "Please check your login and password for correctness."
 msgstr "Vérifiez si votre identifiant et votre mot de passe sont corrects."
 
-#: ../src/common/connection.py:1657
+#: ../src/common/connection.py:1659
 msgid "Error while removing privacy list"
 msgstr "Une erreur s'est produite pendant la suppression de la liste privée"
 
-#: ../src/common/connection.py:1658
+#: ../src/common/connection.py:1660
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -5289,33 +5298,33 @@ msgstr ""
 "La liste privée %s n'a pas été supprimée. Elle est peut-être active dans une "
 "des ressources connectées. Désactivez la et réessayez."
 
-#: ../src/common/connection.py:1851 ../src/common/connection.py:1965
+#: ../src/common/connection.py:1853 ../src/common/connection.py:1967
 msgid "Invisibility not supported"
 msgstr "Invisibilité non-supportée"
 
-#: ../src/common/connection.py:1852 ../src/common/connection.py:1966
+#: ../src/common/connection.py:1854 ../src/common/connection.py:1968
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "Le compte %s ne supporte pas l'invisibilité."
 
-#: ../src/common/connection.py:2203
+#: ../src/common/connection.py:2205
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "Contact envoyé : « %s » (%s)"
 
-#: ../src/common/connection.py:2206
+#: ../src/common/connection.py:2208
 msgid "Sent contacts:"
 msgstr "Contacts envoyés :"
 
-#: ../src/common/connection.py:2356 ../src/common/connection.py:2378
+#: ../src/common/connection.py:2358 ../src/common/connection.py:2380
 msgid "Not fetched because of invisible status"
 msgstr "Non récupéré à cause du statut invisible"
 
-#: ../src/common/connection.py:2986
+#: ../src/common/connection.py:2988
 msgid "Unregister failed"
 msgstr "La désinscription a échoué"
 
-#: ../src/common/connection.py:2987
+#: ../src/common/connection.py:2989
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "Le désabonnement du server %(server)s a échoué : %(error)s"
@@ -6053,7 +6062,7 @@ msgstr "Entrée vidéo"
 msgid "video output"
 msgstr "Sortie audio"
 
-#: ../src/common/logging_helpers.py:33
+#: ../src/common/logging_helpers.py:35
 #, python-format
 msgid "%s is not a valid loglevel"
 msgstr "%s n'est pas un loglevel valide"
@@ -6138,15 +6147,15 @@ msgstr "X Window System (without Xv)"
 msgid "Error: cannot open %s for reading"
 msgstr "Erreur : impossible d'ouvrir %s en lecture"
 
-#: ../src/common/optparser.py:319 ../src/common/optparser.py:320
+#: ../src/common/optparser.py:321 ../src/common/optparser.py:322
 msgid "cyan"
 msgstr "cyan"
 
-#: ../src/common/optparser.py:399
+#: ../src/common/optparser.py:401
 msgid "migrating logs database to indices"
 msgstr "migration de la base de données de l'historique vers des index"
 
-#: ../src/common/passwords.py:123
+#: ../src/common/passwords.py:133
 #, python-format
 msgid "XMPP account %s@%s"
 msgstr "Compte XMPP %s@%s"
@@ -6926,9 +6935,8 @@ msgid "Unable to bind to port %d."
 msgstr "Impossible de débloquer le port %d."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:226
-#, fuzzy
 msgid "Please check if avahi/bonjour-daemon is running."
-msgstr "Vérifiez si avahi-daemon est actif."
+msgstr "Veuillez vérifiez si avahi/bonjour-daemon est actif."
 
 #: ../src/common/zeroconf/connection_zeroconf.py:310
 #: ../src/common/zeroconf/connection_zeroconf.py:323
@@ -7488,7 +7496,7 @@ msgstr "Message reçu dans un salon"
 msgid "GMail Email Received"
 msgstr "Courriel Gmail reçu"
 
-#: ../src/conversation_textview.py:483 ../src/conversation_textview.py:503
+#: ../src/conversation_textview.py:484 ../src/conversation_textview.py:504
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
@@ -7497,7 +7505,7 @@ msgstr ""
 "<b>Le message a été corrigé. Le message précédant était:</b>\n"
 "  %s"
 
-#: ../src/conversation_textview.py:640
+#: ../src/conversation_textview.py:641
 msgid ""
 "This icon indicates that this message has not yet\n"
 "been received by the remote end. If this icon stays\n"
@@ -7507,7 +7515,7 @@ msgstr ""
 "été reçu par le contact distant. Si cette icône reste\n"
 "pendant un long moment, le message a probablement été perdu."
 
-#: ../src/conversation_textview.py:660
+#: ../src/conversation_textview.py:661
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -7515,50 +7523,49 @@ msgstr ""
 "Le texte sous cette règle correspond à ce qui a été dit depuis\n"
 "la dernière fois que vous avez consulté ce salon de discussion"
 
-#: ../src/conversation_textview.py:781
+#: ../src/conversation_textview.py:782
 msgid "_Quote"
 msgstr "_Citation"
 
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:789
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Actions pour \"%s\""
 
-#: ../src/conversation_textview.py:801
+#: ../src/conversation_textview.py:802
 msgid "Read _Wikipedia Article"
 msgstr "Lire l'Article _Wikipédia"
 
-#: ../src/conversation_textview.py:806
+#: ../src/conversation_textview.py:807
 msgid "Look it up in _Dictionary"
 msgstr "Chercher dans le _Dictionnaire"
 
-#: ../src/conversation_textview.py:823
+#: ../src/conversation_textview.py:824
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
 "Il manque un \"%s\" dans l'URL du dictionnaire et ce n'est pas WIKTIONARY"
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:836
+#: ../src/conversation_textview.py:837
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "Il manque un \"%s\" dans l'URL de recherche sur Internet"
 
-#: ../src/conversation_textview.py:839
+#: ../src/conversation_textview.py:840
 msgid "Web _Search for it"
 msgstr "_Rechercher sur Internet"
 
-#: ../src/conversation_textview.py:845
+#: ../src/conversation_textview.py:846
 msgid "Open as _Link"
 msgstr "Ouvrir en tant que _lien"
 
-#: ../src/conversation_textview.py:1224
-#, fuzzy
+#: ../src/conversation_textview.py:1225
 msgid "Invalid URL"
-msgstr "Identifiant Jabber invalide"
+msgstr "URL non valide"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1401
+#: ../src/conversation_textview.py:1404
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -7566,7 +7573,7 @@ msgstr[0] "Hier"
 msgstr[1] "il y a %(nb_days)i jours"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1453 ../src/history_window.py:507
+#: ../src/conversation_textview.py:1456 ../src/history_window.py:507
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Sujet : %s\n"
@@ -8361,7 +8368,7 @@ msgid "Certificate for account %s"
 msgstr "Certificat pour le compte %s"
 
 #: ../src/dialogs.py:5405
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<b>Issued to:</b>\n"
 "Common Name (CN): %(scn)s\n"
@@ -8585,9 +8592,9 @@ msgid "Requires python-dbus."
 msgstr "Nécessite python-dbus."
 
 #: ../src/features_window.py:60 ../src/features_window.py:68
-#: ../src/features_window.py:72 ../src/features_window.py:76
-#: ../src/features_window.py:88 ../src/features_window.py:104
-#: ../src/features_window.py:108 ../src/features_window.py:112
+#: ../src/features_window.py:72 ../src/features_window.py:88
+#: ../src/features_window.py:104 ../src/features_window.py:108
+#: ../src/features_window.py:112
 msgid "Feature not available under Windows."
 msgstr "Fonctionnalité indisponible sous Windows."
 
@@ -8645,8 +8652,13 @@ msgstr ""
 "seulement en texte."
 
 #: ../src/features_window.py:75
-msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
+#, fuzzy
+msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli"
 msgstr "Nécessite gnome-keyring et python-gnome2-desktop, ou kwalletcli."
+
+#: ../src/features_window.py:76
+msgid "On Windows the Windows Credential Vault is used."
+msgstr ""
 
 #: ../src/features_window.py:77
 msgid "SRV"
@@ -9426,80 +9438,80 @@ msgstr "Pas d'uri donnée"
 msgid "Wrong uri"
 msgstr "Mauvaise adresse (URI)"
 
-#: ../src/gajim.py:149 ../src/history_manager.py:73
+#: ../src/gajim.py:64 ../src/history_manager.py:73
 msgid "Usage:"
 msgstr "Utilisation :"
 
-#: ../src/gajim.py:151 ../src/history_manager.py:75
+#: ../src/gajim.py:66 ../src/history_manager.py:75
 msgid "Options:"
 msgstr "Options :"
 
-#: ../src/gajim.py:153 ../src/history_manager.py:77
+#: ../src/gajim.py:68 ../src/history_manager.py:77
 msgid "Show this help message and exit"
 msgstr "Affiche ce message d'aide et quitte"
 
-#: ../src/gajim.py:155
+#: ../src/gajim.py:70
 msgid "Show only critical errors"
 msgstr "Ne le montrer que les erreurs critiques"
 
-#: ../src/gajim.py:157
+#: ../src/gajim.py:72
 msgid "Print xml stanzas and other debug information"
 msgstr "Afficher le flux XML and d'autres informations de déboguage"
 
-#: ../src/gajim.py:159
+#: ../src/gajim.py:74
 msgid "Use defined profile in configuration directory"
 msgstr "Utilise le profile défini dans le dossier de configuration"
 
-#: ../src/gajim.py:161
+#: ../src/gajim.py:76
 msgid "Set configuration directory"
 msgstr "Définit le dossier de configuration"
 
-#: ../src/gajim.py:163
+#: ../src/gajim.py:78
 msgid "Configure logging system"
 msgstr "Configurer le système d'enregistrement"
 
-#: ../src/gajim.py:226
+#: ../src/gajim.py:214
 msgid "Gajim needs X server to run. Quiting..."
 msgstr "Gajim a besoin d'un serveur X pour démarrer. Fermeture..."
 
-#: ../src/gajim.py:228
+#: ../src/gajim.py:216
 #, python-format
 msgid "importing PyGTK failed: %s"
 msgstr "l'import de PyGTK a échoué : %s"
 
-#: ../src/gajim.py:271
+#: ../src/gajim.py:259
 msgid "Gajim needs PyGTK 2.22 or above"
 msgstr "Gajim a besoin de PyGTK 2.22 ou supérieur"
 
-#: ../src/gajim.py:272
+#: ../src/gajim.py:260
 msgid "Gajim needs PyGTK 2.22 or above to run. Quiting..."
 msgstr ""
 "Gajim a besoin de PyGTK 2.22 ou supérieur pour s'exécuter. Fermeture..."
 
-#: ../src/gajim.py:274
+#: ../src/gajim.py:262
 msgid "Gajim needs GTK 2.22 or above"
 msgstr "Gajim a besoin de GTK 2.22 ou supérieur"
 
-#: ../src/gajim.py:275
+#: ../src/gajim.py:263
 msgid "Gajim needs GTK 2.22 or above to run. Quiting..."
 msgstr "Gajim a besoin de GTK 2.22 ou supérieur pour s'exécuter. Fermeture..."
 
-#: ../src/gajim.py:284
+#: ../src/gajim.py:272
 msgid "Gajim needs pywin32 to run"
 msgstr "Gajim a besoin de pywin32 pour s'exécuter"
 
-#: ../src/gajim.py:285
+#: ../src/gajim.py:273
 #, python-format
 msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr "Assurez-vous que Pywin32 est installé. Vous pouvez l'obtenir ici : %s"
 
-#: ../src/gajim.py:439
+#: ../src/gajim.py:427
 msgid "Gajim is already running"
 msgstr "Gajim est déjà en cours d'exécution"
 
-#: ../src/gajim.py:440
+#: ../src/gajim.py:428
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -10136,7 +10148,7 @@ msgid "Non Anonymous Server"
 msgstr "Serveur non anonyme"
 
 #: ../src/gui_interface.py:1424
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed  and is not "
 "valid or your connection is being hacked.\n"
@@ -10145,8 +10157,8 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Le certificat SSL du compte %(account)s semble avoir changé, ou votre "
-"connexion est en train d'être « hackée ».\n"
+"Le certificat SSL du compte %(account)s semble avoir changé et n'est pas "
+"valide, ou votre connexion est en train d'être « hackée ».\n"
 "Ancienne empreinte digitale : %(old)s\n"
 "Nouvelle empreinte digitale : %(new)s\n"
 "\n"
