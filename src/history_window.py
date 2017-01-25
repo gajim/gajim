@@ -512,9 +512,7 @@ class HistoryWindow:
         else:
             self.history_textview.print_real_text(message, name=contact_name,
                 xhtml=xhtml, additional_data=additional_data)
-        buffer_ = self.history_textview.tv.get_buffer()
-        eob = buffer_.get_end_iter()
-        buffer_.insert_with_tags_by_name(eob, '\n', 'eol')
+        self.history_textview.print_real_text('\n', text_tags=['eol'])
 
     def on_search_entry_activate(self, widget):
         text = self.search_entry.get_text()
