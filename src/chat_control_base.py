@@ -678,16 +678,17 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 return True
         elif event.keyval == Gdk.KEY_Return or \
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
-            if event_state & Gdk.ModifierType.SHIFT_MASK:
-                return False
             message_textview = widget
             message_buffer = message_textview.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             message = message_buffer.get_text(start_iter, end_iter, False)
             xhtml = self.msg_textview.get_xhtml()
 
-            is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
-            send_message = is_ctrl_enter == gajim.config.get('send_on_ctrl_enter')
+            if event_state & Gdk.ModifierType.SHIFT_MASK:
+                send_message = False
+            else:
+                is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
+                send_message = is_ctrl_enter == gajim.config.get('send_on_ctrl_enter')
 
             if send_message and gajim.connections[self.account].connected < 2:
                 # we are not connected
