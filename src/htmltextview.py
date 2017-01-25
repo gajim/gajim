@@ -850,7 +850,7 @@ class HtmlTextView(Gtk.TextView):
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
-        self.get_buffer().create_tag('eol')
+        self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
         self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
         self.interface = gajim.interface

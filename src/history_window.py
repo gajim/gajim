@@ -596,13 +596,10 @@ class HistoryWindow:
         self.calendar.select_day(day)
         unix_time = model[path][Column.TIME]
         self._scroll_to_result(unix_time)
-        #FIXME: one day do not search just for unix_time but the whole and user
-        # specific format of the textbuffer line [time] nick: message
-        # and highlight all that
 
     def _scroll_to_result(self, unix_time):
         """
-        Scroll to the result using unix_time and highlight line
+        Scroll to the result using unix_time and highlight message
         """
         start_iter = self.history_buffer.get_start_iter()
         local_time = time.localtime(float(unix_time))
@@ -614,7 +611,7 @@ class HistoryWindow:
         if result is not None:
             match_start_iter, match_end_iter = result
             match_start_iter.backward_char() # include '[' or other character before time
-            match_end_iter.forward_line() # highlight all message not just time
+            match_end_iter.forward_to_tag_toggle(self.history_buffer.eol_tag)
             self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
                     match_end_iter)
             mark = self.history_buffer.create_mark('match', match_start_iter, True)
