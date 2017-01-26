@@ -401,7 +401,7 @@ class MessageWindow(object):
             elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down):
                 # CTRL + PageUp | PageDown
                 # Create event and send it to notebook
-                event = Gdk.Event(Gdk.EventType.KEY_PRESS)
+                event = Gdk.Event.new(Gdk.EventType.KEY_PRESS)
                 event.window = self.window.get_window()
                 event.time = int(time.time())
                 event.state = Gdk.ModifierType.CONTROL_MASK

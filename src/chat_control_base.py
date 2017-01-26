@@ -668,49 +668,37 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     self.scroll_messages('up', message_buffer, 'received')
                 else:  # Ctrl+UP
                     self.scroll_messages('up', message_buffer, 'sent')
-            return True
+                return True
         elif event.keyval == Gdk.KEY_Down:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 if event_state & Gdk.ModifierType.SHIFT_MASK: # Ctrl+Shift+Down
                     self.scroll_messages('down', message_buffer, 'received')
                 else:  # Ctrl+Down
                     self.scroll_messages('down', message_buffer, 'sent')
-            return True
-
+                return True
         elif event.keyval == Gdk.KEY_Return or \
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
-            if event_state & Gdk.ModifierType.SHIFT_MASK:
-                return True
             message_textview = widget
             message_buffer = message_textview.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             message = message_buffer.get_text(start_iter, end_iter, False)
             xhtml = self.msg_textview.get_xhtml()
 
-            if gajim.config.get('send_on_ctrl_enter'):
-                if event_state & Gdk.ModifierType.CONTROL_MASK:  # CTRL + ENTER
-                    send_message = True
-                else:
-                    end_iter = message_buffer.get_end_iter()
-                    message_buffer.insert_at_cursor('\n')
-                    send_message = False
+            if event_state & Gdk.ModifierType.SHIFT_MASK:
+                send_message = False
+            else:
+                is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
+                send_message = is_ctrl_enter == gajim.config.get('send_on_ctrl_enter')
 
-            else: # send on Enter, do newline on Ctrl Enter
-                if event_state & Gdk.ModifierType.CONTROL_MASK:  # Ctrl + ENTER
-                    end_iter = message_buffer.get_end_iter()
-                    message_buffer.insert_at_cursor('\n')
-                    send_message = False
-                else: # ENTER
-                    send_message = True
-
-            if gajim.connections[self.account].connected < 2 and send_message:
+            if send_message and gajim.connections[self.account].connected < 2:
                 # we are not connected
                 dialogs.ErrorDialog(_('A connection is not available'),
-                        _('Your message can not be sent until you are connected.'))
-                send_message = False
+                    _('Your message can not be sent until you are connected.'))
+            elif send_message:
+                self.send_message(message, xhtml=xhtml)
+            else:
+                message_buffer.insert_at_cursor('\n')
 
-            if send_message:
-                self.send_message(message, xhtml=xhtml) # send the message
             return True
         elif event.keyval == Gdk.KEY_z: # CTRL+z
             if event_state & Gdk.ModifierType.CONTROL_MASK:
