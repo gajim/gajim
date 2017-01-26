@@ -56,7 +56,7 @@ if dbus_support.supported:
     import dbus
 
 import gtkgui_helpers
-
+import gui_menu_builder
 import dialogs
 import notify
 import message_control
@@ -843,7 +843,7 @@ class Interface:
         # We received a bookmark item from the server (JEP48)
         # Auto join GC windows if neccessary
 
-        self.roster.set_actions_menu_needs_rebuild()
+        gui_menu_builder.build_bookmark_menu(obj.conn.name)
         invisible_show = gajim.SHOW_LIST.index('invisible')
         # do not autojoin if we are invisible
         if obj.conn.connected == invisible_show:
@@ -2661,7 +2661,7 @@ class Interface:
         else:
             gajim.connections[account].bookmarks.append(bm)
         gajim.connections[account].store_bookmarks()
-        self.roster.set_actions_menu_needs_rebuild()
+        gui_menu_builder.build_bookmark_menu(account)
         dialogs.InformationDialog(
             _('Bookmark has been added successfully'),
             _('You can manage your bookmarks via Actions menu in your roster.'))

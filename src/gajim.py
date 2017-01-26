@@ -233,11 +233,23 @@ class GajimApplication(Gtk.Application):
         print("Encodings: d:{}, fs:{}, p:{}".format(sys.getdefaultencoding(),
               sys.getfilesystemencoding(), locale.getpreferredencoding()))
 
+        # Set Application Menu
+        gajim.app = self
+        path = os.path.join(configpaths.get('GUI'), 'application_menu.ui')
+        builder = Gtk.Builder()
+        builder.set_translation_domain(i18n.APP)
+        builder.add_from_file(path)
+        self.set_menubar(builder.get_object("menubar"))
+        self.set_app_menu(builder.get_object("appmenu"))
+
     def do_activate(self):
         Gtk.Application.do_activate(self)
         from gui_interface import Interface
         self.interface = Interface()
         self.interface.run(self)
+        self.add_actions()
+        import gui_menu_builder
+        gui_menu_builder.build_accounts_menu()
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
@@ -314,6 +326,91 @@ class GajimApplication(Gtk.Application):
         sys.stdout = outerr
         sys.stderr = outerr
         warnings.filterwarnings(action='ignore')
+
+    def add_actions(self):
+        ''' Build Application Actions '''
+        from app_actions import AppActions
+        action = AppActions(self)
+
+        self.account_actions = [
+            ('-start-single-chat', action.on_single_message, 'online', 's'),
+            ('-start-chat', action.on_new_chat, 'online', 's'),
+            ('-join-groupchat', action.on_join_gc, 'online', 's'),
+            ('-add-contact', action.on_add_contact, 'online', 's'),
+            ('-services', action.on_service_disco, 'online', 's'),
+            ('-profile', action.on_profile, 'feature', 's'),
+            ('-xml-console', action.on_xml_console, 'always', 's'),
+            ('-archive', action.on_archiving_preferences, 'feature', 's'),
+            ('-privacylists', action.on_privacy_lists, 'feature', 's'),
+            ('-send-server-message',
+                action.on_send_server_message, 'online', 's'),
+            ('-set-motd', action.on_set_motd, 'online', 's'),
+            ('-update-motd', action.on_update_motd, 'online', 's'),
+            ('-delete-motd', action.on_delete_motd, 'online', 's'),
+            ('-activate-bookmark',
+                action.on_activate_bookmark, 'online', 'a{sv}')
+        ]
+
+        self.general_actions = [
+            ('quit', action.on_quit),
+            ('accounts', action.on_accounts),
+            ('bookmarks', action.on_manage_bookmarks),
+            ('history-manager', action.on_history_manager),
+            ('preferences', action.on_preferences),
+            ('plugins', action.on_plugins),
+            ('file-transfer', action.on_file_transfers),
+            ('history', action.on_history),
+            ('shortcuts', action.on_keyboard_shortcuts),
+            ('features', action.on_features),
+            ('content', action.on_contents),
+            ('about', action.on_about),
+            ('faq', action.on_faq)
+        ]
+
+        for action in self.general_actions:
+            action_name, func = action
+            act = Gio.SimpleAction.new(action_name, None)
+            act.connect("activate", func)
+            self.add_action(act)
+
+        from common import gajim
+        accounts_list = sorted(gajim.contacts.get_accounts())
+        if not accounts_list:
+            return
+        if len(accounts_list) > 1:
+            for acc in accounts_list:
+                self.add_account_actions(acc)
+        else:
+            self.add_account_actions(accounts_list[0])
+
+    def add_account_actions(self, account):
+        for action in self.account_actions:
+            action_name, func, state, type_ = action
+            action_name = account + action_name
+            if self.lookup_action(action_name):
+                # We already added this action
+                continue
+            act = Gio.SimpleAction.new(
+                action_name, GLib.VariantType.new(type_))
+            act.connect("activate", func)
+            if state != 'always':
+                act.set_enabled(False)
+            self.add_action(act)
+
+    def remove_account_actions(self, account):
+        for action in self.account_actions:
+            action_name = account + action[0]
+            self.remove_action(action_name)
+
+    def set_account_actions_state(self, account, new_state=False):
+        for action in self.account_actions:
+            action_name, _, state, _ = action
+            if not new_state and state in ('online', 'feature'):
+                # We go offline
+                self.lookup_action(account + action_name).set_enabled(False)
+            elif new_state and state == 'online':
+                # We go online
+                self.lookup_action(account + action_name).set_enabled(True)
 
 
 app = GajimApplication()

@@ -48,6 +48,7 @@ import message_control
 from chat_control_base import ChatControlBase
 import dataforms_widget
 import profile_window
+import gui_menu_builder
 
 try:
     import gtkspell
@@ -2566,7 +2567,8 @@ class AccountsWindow:
         else:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+        gajim.app.remove_account_actions(account)
+        gui_menu_builder.build_accounts_menu()
 
     def _enable_account(self, account):
         if account == gajim.ZEROCONF_ACC_NAME:
@@ -2612,7 +2614,8 @@ class AccountsWindow:
         else:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+        gajim.app.add_account_actions(account)
+        gui_menu_builder.build_accounts_menu()
 
     def on_enable_zeroconf_checkbutton2_toggled(self, widget):
         # don't do anything if there is an account with the local name but is a
@@ -3154,7 +3157,8 @@ class RemoveAccountWindow:
         else:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+        gajim.app.remove_account_actions(self.account)
+        gui_menu_builder.build_accounts_menu()
         if 'accounts' in gajim.interface.instances:
             gajim.interface.instances['accounts'].init_accounts()
             gajim.interface.instances['accounts'].init_account()
@@ -3356,7 +3360,7 @@ class ManageBookmarksWindow:
                 gajim.connections[acct].bookmarks.append(bmdict)
 
             gajim.connections[acct].store_bookmarks()
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+            gui_menu_builder.build_bookmark_menu(acct)
         self.window.destroy()
 
     def on_cancel_button_clicked(self, widget):
@@ -4091,7 +4095,8 @@ class AccountCreationWizardWindow:
         else:
             gajim.interface.roster.regroup = False
         gajim.interface.roster.setup_and_draw_roster()
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+        gajim.app.add_account_actions(self.account)
+        gui_menu_builder.build_accounts_menu()
 
 class ManagePEPServicesWindow:
     def __init__(self, account):

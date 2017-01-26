@@ -62,6 +62,8 @@ from common import exceptions
 from common import check_X509
 from common.connection_handlers import *
 
+from gtkgui_helpers import get_action
+
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
 
@@ -2033,6 +2035,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                         break
                 if nbxmpp.NS_VCARD in obj.features:
                     self.vcard_supported = True
+                    get_action(self.name + '-profile').set_enabled(True)
                 if nbxmpp.NS_PUBSUB in obj.features:
                     self.pubsub_supported = True
                     if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
@@ -2044,6 +2047,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if nbxmpp.NS_MAM in obj.features:
                     self.archiving_supported = True
                     self.archiving_313_supported = True
+                    get_action(self.name + '-archive').set_enabled(True)
                 if nbxmpp.NS_ARCHIVE in obj.features:
                     self.archiving_supported = True
                     self.archiving_136_supported = True
@@ -2069,6 +2073,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.connection.send(iq)
                 if nbxmpp.NS_PRIVACY in obj.features:
                     self.privacy_rules_supported = True
+                    get_action(self.name + '-privacylists').set_enabled(True)
 
             if nbxmpp.NS_BYTESTREAM in obj.features and \
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):

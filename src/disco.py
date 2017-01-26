@@ -57,6 +57,7 @@ import gtkgui_helpers
 import groups
 import adhoc_commands
 import search_window
+import gui_menu_builder
 
 from common import gajim
 import nbxmpp
@@ -1852,7 +1853,7 @@ class MucBrowser(AgentBrowser):
         gajim.connections[self.account].bookmarks.append(bm)
         gajim.connections[self.account].store_bookmarks()
 
-        gajim.interface.roster.set_actions_menu_needs_rebuild()
+        gui_menu_builder.build_bookmark_menu(self.account)
 
         dialogs.InformationDialog(
             _('Bookmark has been added successfully'),

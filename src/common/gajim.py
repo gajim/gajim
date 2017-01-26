@@ -43,6 +43,7 @@ config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
 ipython_window = None
+app = None  # Gtk.Application
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
