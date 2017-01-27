@@ -1752,6 +1752,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         return max_order
 
     def block_contacts(self, contact_list, message):
+        if self.privacy_default_list is None:
+            self.privacy_default_list = 'block'
         if not self.privacy_rules_supported:
             if self.blocking_supported: #XEP-0191
                 iq = nbxmpp.Iq('set', xmlns='')
@@ -1770,11 +1772,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                         'value': contact.jid}
             self.blocked_list.append(new_rule)
             self.blocked_contacts.append(contact.jid)
-        self.set_privacy_list('block', self.blocked_list)
+        self.set_privacy_list(self.privacy_default_list, self.blocked_list)
         if len(self.blocked_list) == 1:
-            self.set_active_list('block')
-            self.set_default_list('block')
-        self.get_privacy_list('block')
+            self.set_active_list(self.privacy_default_list)
+            self.set_default_list(self.privacy_default_list)
+        self.get_privacy_list(self.privacy_default_list)
 
     def unblock_contacts(self, contact_list):
         if not self.privacy_rules_supported:
@@ -1796,15 +1798,15 @@ class Connection(CommonConnection, ConnectionHandlers):
             if rule['action'] != 'deny' or rule['type'] != 'jid' \
             or rule['value'] not in self.to_unblock:
                 self.new_blocked_list.append(rule)
-        self.set_privacy_list('block', self.new_blocked_list)
-        self.get_privacy_list('block')
+        self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
+        self.get_privacy_list(self.privacy_default_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
             self.blocked_groups = []
             self.set_default_list('')
             self.set_active_list('')
-            self.del_privacy_list('block')
+            self.del_privacy_list(self.privacy_default_list)
         if not gajim.interface.roster.regroup:
             show = gajim.SHOW_LIST[self.connected]
         else:   # accounts merged
@@ -1826,11 +1828,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'action': 'deny',
                     'value': group}
         self.blocked_list.append(new_rule)
-        self.set_privacy_list('block', self.blocked_list)
+        self.set_privacy_list(self.privacy_default_list, self.blocked_list)
         if len(self.blocked_list) == 1:
-            self.set_active_list('block')
-            self.set_default_list('block')
-        self.get_privacy_list('block')
+            self.set_active_list(self.privacy_default_list)
+            self.set_default_list(self.privacy_default_list)
+        self.get_privacy_list(self.privacy_default_list)
 
     def unblock_group(self, group, contact_list):
         if not self.privacy_rules_supported:
@@ -1842,15 +1844,15 @@ class Connection(CommonConnection, ConnectionHandlers):
             if rule['action'] != 'deny' or rule['type'] != 'group' or \
             rule['value'] != group:
                 self.new_blocked_list.append(rule)
-        self.set_privacy_list('block', self.new_blocked_list)
-        self.get_privacy_list('block')
+        self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
+        self.get_privacy_list(self.privacy_default_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
             self.blocked_groups = []
             self.set_default_list('')
             self.set_active_list('')
-            self.del_privacy_list('block')
+            self.del_privacy_list(self.privacy_default_list)
         if not gajim.interface.roster.regroup:
             show = gajim.SHOW_LIST[self.connected]
         else:   # accounts merged
@@ -2127,7 +2129,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _change_from_invisible(self):
         if self.privacy_rules_supported:
             if self.blocked_list:
-                self.activate_privacy_rule('block')
+                self.activate_privacy_rule(self.privacy_default_list)
             else:
                 iq = self.build_privacy_rule('visible', 'allow')
                 self.connection.send(iq)
@@ -2452,7 +2454,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         roster = gajim.interface.roster
         if obj.conn.name != self.name:
             return
-        if obj.list_name != 'block':
+        if obj.list_name != self.privacy_default_list:
             return
         self.blocked_contacts = []
         self.blocked_groups = []
