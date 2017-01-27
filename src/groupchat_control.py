@@ -2798,7 +2798,6 @@ class GroupchatControl(ChatControlBase):
             or rule['value'] != fjid:
                 connection.new_blocked_list.append(rule)
 
-        connection.set_privacy_list(default, connection.new_blocked_list)
         if len(connection.new_blocked_list) == 0:
             connection.blocked_list = []
             connection.blocked_contacts = []
@@ -2809,6 +2808,8 @@ class GroupchatControl(ChatControlBase):
             if 'privay_list_block' in gajim.interface.instances[self.account]:
                 del gajim.interface.instances[self.account]\
                     ['privay_list_block']
+        else:
+            connection.set_privacy_list(default, connection.new_blocked_list)
 
     def on_voice_checkmenuitem_activate(self, widget, nick):
         if widget.get_active():

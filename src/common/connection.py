@@ -1797,7 +1797,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             if rule['action'] != 'deny' or rule['type'] != 'jid' \
             or rule['value'] not in self.to_unblock:
                 self.new_blocked_list.append(rule)
-        self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
@@ -1805,6 +1804,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.set_default_list('')
             self.set_active_list('')
             self.del_privacy_list(self.privacy_default_list)
+        else:
+            self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
         if not gajim.interface.roster.regroup:
             show = gajim.SHOW_LIST[self.connected]
         else:   # accounts merged
@@ -1841,7 +1842,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             if rule['action'] != 'deny' or rule['type'] != 'group' or \
             rule['value'] != group:
                 self.new_blocked_list.append(rule)
-        self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
@@ -1849,6 +1849,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.set_default_list('')
             self.set_active_list('')
             self.del_privacy_list(self.privacy_default_list)
+        else:
+            self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
         if not gajim.interface.roster.regroup:
             show = gajim.SHOW_LIST[self.connected]
         else:   # accounts merged
