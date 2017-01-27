@@ -1762,7 +1762,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if len(self.blocked_list) == 1:
             self.set_active_list(self.privacy_default_list)
             self.set_default_list(self.privacy_default_list)
-        self.get_privacy_list(self.privacy_default_list)
 
     def unblock_contacts(self, contact_list):
         if not self.privacy_rules_supported:
@@ -1785,7 +1784,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             or rule['value'] not in self.to_unblock:
                 self.new_blocked_list.append(rule)
         self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
-        self.get_privacy_list(self.privacy_default_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
@@ -1818,7 +1816,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if len(self.blocked_list) == 1:
             self.set_active_list(self.privacy_default_list)
             self.set_default_list(self.privacy_default_list)
-        self.get_privacy_list(self.privacy_default_list)
 
     def unblock_group(self, group, contact_list):
         if not self.privacy_rules_supported:
@@ -1831,7 +1828,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             rule['value'] != group:
                 self.new_blocked_list.append(rule)
         self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
-        self.get_privacy_list(self.privacy_default_list)
         if len(self.new_blocked_list) == 0:
             self.blocked_list = []
             self.blocked_contacts = []
