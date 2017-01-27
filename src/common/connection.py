@@ -1764,9 +1764,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         for contact in contact_list:
             self.send_custom_status('offline', message, contact.jid)
             max_order = self.get_max_blocked_list_order()
-            new_rule = {'order': str(max_order + 1), 'type': 'jid', 'action': 'deny',
-                'value' : contact.jid, 'child': ['message', 'iq',
-                'presence-out']}
+            new_rule = {'order': str(max_order + 1),
+                        'type': 'jid',
+                        'action': 'deny',
+                        'value': contact.jid}
             self.blocked_list.append(new_rule)
             self.blocked_contacts.append(contact.jid)
         self.set_privacy_list('block', self.blocked_list)
@@ -1820,8 +1821,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         for contact in contact_list:
             self.send_custom_status('offline', message, contact.jid)
         max_order = self.get_max_blocked_list_order()
-        new_rule = {'order': str(max_order + 1), 'type': 'group', 'action': 'deny',
-            'value' : group, 'child': ['message', 'iq', 'presence-out']}
+        new_rule = {'order': str(max_order + 1),
+                    'type': 'group',
+                    'action': 'deny',
+                    'value': group}
         self.blocked_list.append(new_rule)
         self.set_privacy_list('block', self.blocked_list)
         if len(self.blocked_list) == 1:
@@ -2446,6 +2449,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
 
     def _nec_privacy_list_received(self, obj):
+        roster = gajim.interface.roster
         if obj.conn.name != self.name:
             return
         if obj.list_name != 'block':
@@ -2474,6 +2478,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.blocked_groups:
                     self.blocked_groups.append(rule['value'])
             self.blocked_list.append(rule)
+
+            if rule['type'] == 'jid':
+                roster.draw_contact(rule['value'], self.name)
+            if rule['type'] == 'group':
+                roster.draw_group(rule['value'], self.name)
 
     def _request_bookmarks_xml(self):
         if not gajim.account_is_connected(self.name):
