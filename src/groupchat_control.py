@@ -2783,7 +2783,6 @@ class GroupchatControl(ChatControlBase):
         if len(connection.blocked_list) == 1:
             connection.set_active_list(default)
             connection.set_default_list(default)
-        connection.get_privacy_list(default)
 
     def on_unblock(self, widget, nick):
         fjid = self.room_jid + '/' + nick
@@ -2800,7 +2799,6 @@ class GroupchatControl(ChatControlBase):
                 connection.new_blocked_list.append(rule)
 
         connection.set_privacy_list(default, connection.new_blocked_list)
-        connection.get_privacy_list(default)
         if len(connection.new_blocked_list) == 0:
             connection.blocked_list = []
             connection.blocked_contacts = []

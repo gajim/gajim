@@ -2061,6 +2061,11 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         if q:
             result.delChild(q)
         self.connection.send(result)
+
+        for list_ in iq_obj.getQueryPayload():
+            if list_.getName() == 'list':
+                self.get_privacy_list(list_.getAttr('name'))
+
         raise nbxmpp.NodeProcessed
 
     def _getRoster(self):
