@@ -2781,7 +2781,6 @@ class GroupchatControl(ChatControlBase):
         self.draw_contact(nick)
         connection.set_privacy_list(default, connection.blocked_list)
         if len(connection.blocked_list) == 1:
-            connection.set_active_list(default)
             connection.set_default_list(default)
 
     def on_unblock(self, widget, nick):
@@ -2803,7 +2802,6 @@ class GroupchatControl(ChatControlBase):
             connection.blocked_contacts = []
             connection.blocked_groups = []
             connection.set_default_list('')
-            connection.set_active_list('')
             connection.del_privacy_list(default)
             if 'privay_list_block' in gajim.interface.instances[self.account]:
                 del gajim.interface.instances[self.account]\
