@@ -1733,16 +1733,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq = self.build_invisible_rule()
         self.connection.send(iq)
 
-    def activate_privacy_rule(self, name):
-        """
-        Activate a privacy rule
-        """
-        if not gajim.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
-        iq.setQuery().setTag('active', {'name': name})
-        self.connection.send(iq)
-
     def get_max_blocked_list_order(self):
         max_order = 0
         for rule in self.blocked_list:
@@ -1887,7 +1877,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if iq_obj.getType() == 'error': # server doesn't support privacy lists
             return
         # active the privacy rule
-        self.activate_privacy_rule('invisible')
+        self.set_active_list('invisible')
         self.connected = gajim.SHOW_LIST.index('invisible')
         self.status = msg
         priority = gajim.get_priority(self.name, 'invisible')
@@ -2123,11 +2113,11 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _change_from_invisible(self):
         if self.privacy_rules_supported:
             if self.blocked_list:
-                self.activate_privacy_rule(self.privacy_default_list)
+                self.set_active_list(self.privacy_default_list)
             else:
                 iq = self.build_privacy_rule('visible', 'allow')
                 self.connection.send(iq)
-                self.activate_privacy_rule('visible')
+                self.set_active_list('visible')
 
     def _update_status(self, show, msg):
         xmpp_show = helpers.get_xmpp_show(show)
