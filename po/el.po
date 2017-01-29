@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-25 03:05+0000\n"
+"POT-Creation-Date: 2017-01-27 03:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:46+0200\n"
 "Last-Translator: Stavros Giannouris <stavrosg@hellug.gr>\n"
 "Language-Team:  <>\n"
@@ -1502,7 +1502,7 @@ msgstr "Ομαδικές συζητήσεις"
 msgid "All Chat Histories"
 msgstr "Παλιό όνομα - Κείμενο - Αριθμός"
 
-#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:339
+#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:341
 msgid "Conversation History"
 msgstr "Ιστορικό συζητήσεων"
 
@@ -5529,7 +5529,7 @@ msgstr "Ο %(nick)s άλλαξε κατάσταση"
 
 #: ../src/common/connection_handlers_events.py:2609
 #: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1905
-#: ../src/history_window.py:474
+#: ../src/history_window.py:476
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "Ο %(nick)s είναι τώρα %(status)s"
@@ -7163,7 +7163,7 @@ msgstr "κείμενο μηνύματος κατάστασης"
 #. Name column
 #: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
 #: ../src/dialogs.py:3553 ../src/disco.py:897 ../src/disco.py:1794
-#: ../src/disco.py:2098 ../src/history_window.py:94
+#: ../src/disco.py:2098 ../src/history_window.py:96
 msgid "Name"
 msgstr "Όνομα"
 
@@ -7750,7 +7750,7 @@ msgstr[0] "Χθες"
 msgstr[1] "Χθες"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1456 ../src/history_window.py:507
+#: ../src/conversation_textview.py:1456 ../src/history_window.py:509
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Θέμα: %s\n"
@@ -10466,7 +10466,7 @@ msgstr "Δεν ήταν δυνατή η εύρεση της βάσης δεδο�
 
 #. holds time
 #: ../src/history_manager.py:178 ../src/history_manager.py:222
-#: ../src/history_window.py:102
+#: ../src/history_window.py:104
 msgid "Date"
 msgstr "Ημερομηνία"
 
@@ -10477,7 +10477,7 @@ msgstr "Όνομα χρήστη"
 
 #. holds message
 #: ../src/history_manager.py:194 ../src/history_manager.py:229
-#: ../src/history_window.py:110
+#: ../src/history_window.py:112
 msgid "Message"
 msgstr "Μήνυμα"
 
@@ -10547,37 +10547,37 @@ msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 msgstr[1] "Θέλετε σίγουρα να διαγράψετε τα επιλεγμένα μηνύματα;"
 
-#: ../src/history_window.py:321
+#: ../src/history_window.py:323
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Ιστορικό κουβέντας με τον %s"
 
-#: ../src/history_window.py:371
+#: ../src/history_window.py:373
 #, fuzzy
 msgid "Disk Error"
 msgstr "Σφάλμα:"
 
-#: ../src/history_window.py:470
+#: ../src/history_window.py:472
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "Ο/Η %(nick)s είναι τώρα %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:481
+#: ../src/history_window.py:483
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Μήνυμα σφάλματος: %s"
 
-#: ../src/history_window.py:483
+#: ../src/history_window.py:485
 #, fuzzy
 msgid "Error"
 msgstr "Σφάλμα:"
 
-#: ../src/history_window.py:485
+#: ../src/history_window.py:487
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Η κατάσταση είναι τώρα: %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:488
+#: ../src/history_window.py:490
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Η κατάσταση είναι τώρα: %(status)s"

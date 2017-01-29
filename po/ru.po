@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-25 03:05+0000\n"
+"POT-Creation-Date: 2017-01-27 03:05+0000\n"
 "PO-Revision-Date: 2013-09-21 13:55+0300\n"
 "Last-Translator: Fomin Denis <fominde@gmail.com>\n"
 "Language-Team: Linux Support LLC\n"
@@ -1418,7 +1418,7 @@ msgstr "История конференций"
 msgid "All Chat Histories"
 msgstr "Вся история"
 
-#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:339
+#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:341
 msgid "Conversation History"
 msgstr "История"
 
@@ -5419,7 +5419,7 @@ msgstr "%(nick)s меняет статус"
 
 #: ../src/common/connection_handlers_events.py:2609
 #: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1905
-#: ../src/history_window.py:474
+#: ../src/history_window.py:476
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s теперь %(status)s"
@@ -6972,7 +6972,7 @@ msgstr "текст сообщения о статусе"
 #. Name column
 #: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
 #: ../src/dialogs.py:3553 ../src/disco.py:897 ../src/disco.py:1794
-#: ../src/disco.py:2098 ../src/history_window.py:94
+#: ../src/disco.py:2098 ../src/history_window.py:96
 msgid "Name"
 msgstr "Имя"
 
@@ -7537,7 +7537,7 @@ msgstr[1] "%(nb_days)i  дня назад"
 msgstr[2] "%(nb_days)i  дней назад"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1456 ../src/history_window.py:507
+#: ../src/conversation_textview.py:1456 ../src/history_window.py:509
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
@@ -10196,7 +10196,7 @@ msgstr "Не могу найти базу данных истории"
 
 #. holds time
 #: ../src/history_manager.py:178 ../src/history_manager.py:222
-#: ../src/history_window.py:102
+#: ../src/history_window.py:104
 msgid "Date"
 msgstr "Дата"
 
@@ -10207,7 +10207,7 @@ msgstr "Ник"
 
 #. holds message
 #: ../src/history_manager.py:194 ../src/history_manager.py:229
-#: ../src/history_window.py:110
+#: ../src/history_window.py:112
 msgid "Message"
 msgstr "Сообщение"
 
@@ -10274,35 +10274,35 @@ msgstr[0] "Вы точно хотите удалить выделенное со
 msgstr[1] "Вы точно хотите удалить выделенные сообщения?"
 msgstr[2] "Вы точно хотите удалить выделенные сообщения?"
 
-#: ../src/history_window.py:321
+#: ../src/history_window.py:323
 #, python-format
 msgid "Conversation History with %s"
 msgstr "История %s"
 
-#: ../src/history_window.py:371
+#: ../src/history_window.py:373
 msgid "Disk Error"
 msgstr "Ошибка записи на диск"
 
-#: ../src/history_window.py:470
+#: ../src/history_window.py:472
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s теперь %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:481
+#: ../src/history_window.py:483
 #, python-format
 msgid "Error: %s"
 msgstr "Ошибка: %s"
 
-#: ../src/history_window.py:483
+#: ../src/history_window.py:485
 msgid "Error"
 msgstr "Ошибка"
 
-#: ../src/history_window.py:485
+#: ../src/history_window.py:487
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Статус установлен в: %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:488
+#: ../src/history_window.py:490
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Статус установлен в: %(status)s"

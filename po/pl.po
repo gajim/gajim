@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-25 03:05+0000\n"
+"POT-Creation-Date: 2017-01-27 03:05+0000\n"
 "PO-Revision-Date: 2013-09-02 10:44+0100\n"
 "Last-Translator: Michał Olber <michal.olber@osworld.pl>\n"
 "Language-Team: Polish <dominik@kozaczko.info, translation-team-pl@lists."
@@ -1424,7 +1424,7 @@ msgstr "Pokoje"
 msgid "All Chat Histories"
 msgstr "Stare historie"
 
-#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:339
+#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:341
 msgid "Conversation History"
 msgstr "Historia rozmowy"
 
@@ -5454,7 +5454,7 @@ msgstr "%(nick)s zmienił status"
 
 #: ../src/common/connection_handlers_events.py:2609
 #: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1905
-#: ../src/history_window.py:474
+#: ../src/history_window.py:476
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s ma teraz status %(status)s"
@@ -7022,7 +7022,7 @@ msgstr "treść informacji o statusie"
 #. Name column
 #: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
 #: ../src/dialogs.py:3553 ../src/disco.py:897 ../src/disco.py:1794
-#: ../src/disco.py:2098 ../src/history_window.py:94
+#: ../src/disco.py:2098 ../src/history_window.py:96
 msgid "Name"
 msgstr "Nazwa"
 
@@ -7587,7 +7587,7 @@ msgstr[1] "%i dni temu"
 msgstr[2] "%i dni temu"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1456 ../src/history_window.py:507
+#: ../src/conversation_textview.py:1456 ../src/history_window.py:509
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Temat: %s\n"
@@ -10286,7 +10286,7 @@ msgstr "Nie można odnaleźć bazy danych z historią rozmów"
 
 #. holds time
 #: ../src/history_manager.py:178 ../src/history_manager.py:222
-#: ../src/history_window.py:102
+#: ../src/history_window.py:104
 msgid "Date"
 msgstr "Data"
 
@@ -10297,7 +10297,7 @@ msgstr "Pseudonim"
 
 #. holds message
 #: ../src/history_manager.py:194 ../src/history_manager.py:229
-#: ../src/history_window.py:110
+#: ../src/history_window.py:112
 msgid "Message"
 msgstr "Wiadomość"
 
@@ -10369,35 +10369,35 @@ msgstr[0] "Czy na pewno chcesz usunąć wybraną wiadomość?"
 msgstr[1] "Czy na pewno chcesz usunąć wybrane wiadomości?"
 msgstr[2] "Czy na pewno chcesz usunąć wybrane wiadomości?"
 
-#: ../src/history_window.py:321
+#: ../src/history_window.py:323
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Historia rozmowy z %s"
 
-#: ../src/history_window.py:371
+#: ../src/history_window.py:373
 msgid "Disk Error"
 msgstr "Błąd zapisu lub odczytu na dysku"
 
-#: ../src/history_window.py:470
+#: ../src/history_window.py:472
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s jes teraz %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:481
+#: ../src/history_window.py:483
 #, python-format
 msgid "Error: %s"
 msgstr "Błąd: %s"
 
-#: ../src/history_window.py:483
+#: ../src/history_window.py:485
 msgid "Error"
 msgstr "Błąd"
 
-#: ../src/history_window.py:485
+#: ../src/history_window.py:487
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Obecny status: %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:488
+#: ../src/history_window.py:490
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Obecny status: %(status)s"
