@@ -590,7 +590,11 @@ class ConnectionVcard:
         elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
             del self.awaiting_answers[id_]
             if iq_obj.getType() != 'error':
-                self.get_privacy_list('block')
+                for list_ in iq_obj.getQueryPayload():
+                    if list_.getName() == 'default':
+                        self.privacy_default_list = list_.getAttr('name')
+                        self.get_privacy_list(self.privacy_default_list)
+                        break
                 # Ask metacontacts before roster
                 self.get_metacontacts()
             else:
@@ -1465,6 +1469,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.awaiting_xmpp_ping_id = None
         self.continue_connect_info = None
 
+        self.privacy_default_list = None
+
         try:
             self.sleeper = common.sleepy.Sleepy()
             HAS_IDLE = True
@@ -2076,6 +2082,11 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         if q:
             result.delChild(q)
         self.connection.send(result)
+
+        for list_ in iq_obj.getQueryPayload():
+            if list_.getName() == 'list':
+                self.get_privacy_list(list_.getAttr('name'))
+
         raise nbxmpp.NodeProcessed
 
     def _getRoster(self):
