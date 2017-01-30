@@ -1,7 +1,16 @@
+Gajim 0.16.7 (30 January 2017)
+
+  * Better compatibility with XEP-0191: Blocking Command
+  * Windows Credential Vault is used for password storage on Windows
+  * Gajim now depends on python-gnupg for PGP encryption
+  * Add portable installer for Windows
+  * Remove usage of demandimport
+  * Many minor bugfixes
+
 Gajim 0.16.6 (02 October 2016)
 
   * Fix using gpg2
-  * Improve message receips usage
+  * Improve message receipts usage
   * Improve roster filtering
   * several minor bugs
 
