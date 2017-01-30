@@ -4,7 +4,7 @@
 ## Copyright (C) 2005 Sebastian Estienne
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Julien Pivotto <roidelapluie AT gmail.com>

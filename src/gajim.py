@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>

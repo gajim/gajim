@@ -2,7 +2,7 @@
 ## src/common/pep.py
 ##
 ## Copyright (C) 2007 Piotr Gaczkowski <doomhammerng AT gmail.com>
-## Copyright (C) 2007-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jean-Marie Traissard <jim AT lapin.org>
 ##                    Jonathan Schleifer <js-common.gajim AT webkeks.org>

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Gustavo Carneiro <gjcarneiro AT gmail.com>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ##                    Stephan Erb <steve-e AT h3c.de>

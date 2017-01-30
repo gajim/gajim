@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2005 Travis Shirk <travis AT pobox.com>
 ##                    Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>

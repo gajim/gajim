@@ -2,7 +2,7 @@
 ## src/common/pubsub.py
 ##
 ## Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
 ##

@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ##                    Travis Shirk <travis AT pobox.com>
-## Copyright (C) 2007-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 ##                    Jonathan Schleifer <js-gajim AT webkeks.org>
 ## Copyright (C) 2008-2009 Stephan Erb <steve-e AT h3c.de>

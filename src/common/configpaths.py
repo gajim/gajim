@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Jean-Marie Traissard <jim AT lapin.org>
 ##                    Junglecow J <junglecow AT gmail.com>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##

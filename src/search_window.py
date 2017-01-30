@@ -2,7 +2,7 @@
 ## src/search_window.py
 ##
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2007-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2017 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

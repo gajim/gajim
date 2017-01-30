@@ -1,6 +1,6 @@
 ## src/upower_listener.py
 ##
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

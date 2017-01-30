@@ -2,7 +2,7 @@
 ## src/common/defs.py
 ##
 ## Copyright (C) 2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ##                    Tomasz Melcer <liori AT exroot.org>

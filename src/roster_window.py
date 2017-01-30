@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ## src/roster_window.py
 ##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>

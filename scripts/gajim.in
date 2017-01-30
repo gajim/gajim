@@ -1,7 +1,7 @@
 #!/bin/sh
 ## scripts/gajim.in
 ##
-## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>

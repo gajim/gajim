@@ -3,7 +3,7 @@
 ##
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                    Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2007-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2007-2017 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

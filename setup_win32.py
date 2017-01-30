@@ -1,6 +1,6 @@
 ## setup_win32.py (run me as python setup_win32.py build_exe)
 ##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##

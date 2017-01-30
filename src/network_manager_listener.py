@@ -4,7 +4,7 @@
 ## Copyright (C) 2006 Jeffrey C. Ollie <jeff AT ocjtech.us>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

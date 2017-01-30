@@ -2,7 +2,7 @@
 ## src/dialogs.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ##                         Travis Shirk <travis AT pobox.com>

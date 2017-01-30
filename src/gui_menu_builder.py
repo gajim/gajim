@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gui_menu_builder.py
 ##
-## Copyright (C) 2009-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2009-2017 Yann Leboulanger <asterix AT lagaule.org>
 ##
 ## This file is part of Gajim.
 ##

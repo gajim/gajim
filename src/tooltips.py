@@ -5,7 +5,7 @@
 ##                    Stéphan Kochen <stephan AT kochen.nl>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2005-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Travis Shirk <travis AT pobox.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>

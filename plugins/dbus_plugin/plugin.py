@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-## Copyright (C) 2005-2006 Yann Leboulanger <asterix@lagaule.org>
+## Copyright (C) 2005-2017 Yann Leboulanger <asterix@lagaule.org>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem@gmail.com>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov@gmail.com>
 ## Copyright (C) 2005-2006 Andrew Sayman <lorien420@myrealbox.com>

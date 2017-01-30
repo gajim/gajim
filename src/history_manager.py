@@ -4,7 +4,7 @@
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 ## Copyright (C) 2006-2007 Jean-Marie Traissard <jim AT lapin.org>
 ##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
 ##

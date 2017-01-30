@@ -1,6 +1,6 @@
 ## src/common/gpg.py
 ##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005 Alex Mauer <hawke AT hawkesnest.net>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
