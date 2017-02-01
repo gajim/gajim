@@ -7754,7 +7754,7 @@ msgid ""
 "Are you sure you want to do that?"
 msgstr ""
 "Bekreft tilkobling til kontoen %(account)s (%(server)s) på usikkert vis. "
-"Dette betyr at dine samtaler ikke vil bli krypterte, og er sterkt frarådet.\n"
+"Dette betyr at dine samtaler ikke vil bli krypterte, og er sterkt frarådet."
 
 #: ../src/dialogs.py:1853
 #: ../src/gui_interface.py:1500
