@@ -2441,10 +2441,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.blocked_groups.append(rule['value'])
             self.blocked_list.append(rule)
 
-            if rule['type'] == 'jid':
-                roster.draw_contact(rule['value'], self.name)
-            if rule['type'] == 'group':
-                roster.draw_group(rule['value'], self.name)
+            if 'type' in rule:
+                if rule['type'] == 'jid':
+                    roster.draw_contact(rule['value'], self.name)
+                if rule['type'] == 'group':
+                    roster.draw_group(rule['value'], self.name)
 
     def _request_bookmarks_xml(self):
         if not gajim.account_is_connected(self.name):
