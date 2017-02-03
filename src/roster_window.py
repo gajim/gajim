@@ -3967,7 +3967,7 @@ class RosterWindow:
                 self.on_history(widget, contact, account)
 
     def on_roster_window_popup_menu(self, widget):
-        event = Gdk.Event(Gdk.EventType.KEY_PRESS)
+        event = Gdk.Event.new(Gdk.EventType.KEY_PRESS)
         self.show_treeview_menu(event)
 
     def on_row_activated(self, widget, path):
