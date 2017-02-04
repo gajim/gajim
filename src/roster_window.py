@@ -4536,7 +4536,7 @@ class RosterWindow:
                     self.remove_contact_from_groups(c_source.jid, account,
                         [grp_source])
 
-        if context.get_action() in (Gdk.DragAction.MOVE, Gdk.DragAction.COPY):
+        if context.get_actions() in (Gdk.DragAction.MOVE, Gdk.DragAction.COPY):
             context.finish(True, True, etime)
 
     def drag_drop(self, treeview, context, x, y, timestamp):
