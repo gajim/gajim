@@ -366,8 +366,8 @@ class ChatControl(ChatControlBase):
         else:
             self._formattings_button.set_sensitive(False)
             if self.contact.supports(NS_XHTML_IM):
-                self._formattings_button.set_tooltip_text(_('Formattings are '
-                    'not available when GPG is active'))
+                self._formattings_button.set_tooltip_text(_('Formatting is not '
+                    'available so long as GPG is active'))
             else:
                 self._formattings_button.set_tooltip_text(_('This contact does '
                     'not support HTML'))

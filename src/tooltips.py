@@ -835,13 +835,13 @@ class FileTransfersTooltip(BaseTooltip):
             file_name = file_props.name
         properties.append((_('Name: '), GLib.markup_escape_text(file_name)))
         if file_props.type_ == 'r':
-            type_ = _('Download')
+            type_ = _('?Noun:Download')
             actor = _('Sender: ')
             sender = file_props.sender.split('/')[0]
             name = gajim.contacts.get_first_contact_from_jid(
                     file_props.tt_account, sender).get_shown_name()
         else:
-            type_ = _('Upload')
+            type_ = _('?Noun:Upload')
             actor = _('Recipient: ')
             receiver = file_props.receiver
             if hasattr(receiver, 'name'):

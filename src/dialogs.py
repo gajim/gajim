@@ -92,7 +92,7 @@ class EditGroupsDialog:
             self.xml.get_object('nickname_label').set_markup(
                     _('Contact name: <i>%s</i>') % contact.get_shown_name())
             self.xml.get_object('jid_label').set_markup(
-                    _('Jabber ID: <i>%s</i>') % contact.jid)
+                    _('JID: <i>%s</i>') % contact.jid)
         else:
             self.xml.get_object('nickname_label').set_no_show_all(True)
             self.xml.get_object('nickname_label').hide()
@@ -851,7 +851,7 @@ class AddNewContactWindow:
     Class for AddNewContactWindow
     """
 
-    uid_labels = {'jabber': _('Jabber ID:'),
+    uid_labels = {'jabber': _('JID:'),
         'aim': _('AIM Address:'),
         'gadu-gadu': _('GG Number:'),
         'icq': _('ICQ Number:'),
@@ -936,11 +936,11 @@ class AddNewContactWindow:
         self.protocol_combobox.pack_start(cell, True)
         self.protocol_combobox.add_attribute(cell, 'text', 0)
         self.protocol_combobox.set_model(liststore)
-        uf_type = {'jabber': 'Jabber', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
+        uf_type = {'jabber': 'XMPP', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
             'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
         img = gajim.interface.jabber_state_images['16']['online']
-        liststore.append(['Jabber', img.get_pixbuf(), 'jabber'])
+        liststore.append(['XMPP', img.get_pixbuf(), 'jabber'])
         for type_ in self.agents:
             if type_ == 'jabber':
                 continue
@@ -1305,7 +1305,7 @@ class AboutDialog(Gtk.AboutDialog):
             Gtk.get_minor_version(), Gtk.get_micro_version())
         gobject_ver = self.tuple2str(GObject.pygobject_version)
         nbxmpp_ver = nbxmpp.__version__
-        self.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ Jabber/XMPP client'),
+        self.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ XMPP client'),
             _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver,
             _('python-nbxmpp Version:'), nbxmpp_ver))
         self.set_website('https://gajim.org/')
@@ -1875,10 +1875,9 @@ class PlainConnectionDialog(ConfirmationDialogDoubleCheck):
     def __init__(self, account, on_ok, on_cancel):
         pritext = _('Insecure connection')
         sectext = _('You are about to connect to the account %(account)s '
-            '(%(server)s) with an insecure connection. This means all your '
-            'conversations will be exchanged unencrypted. This type of '
-            'connection is really discouraged.\nAre you sure you want to do '
-            'that?') % {'account': account,
+            '(%(server)s) insecurely. This means conversations will not be '
+            'encrypted, and is strongly discouraged.\nAre you sure you want '
+            'to do that?') % {'account': account,
             'server': gajim.get_hostname_from_account(account)}
         checktext1 = _('Yes, I really want to connect insecurely')
         tooltip1 = _('Gajim will NOT connect unless you check this box')
@@ -2662,14 +2661,14 @@ class JoinGroupchatWindow:
             return
         user, server, resource = helpers.decompose_jid(room_jid)
         if not user or not server or resource:
-            ErrorDialog(_('Invalid group chat Jabber ID'),
-                    _('Please enter the group chat Jabber ID as room@server.'))
+            ErrorDialog(_('Invalid group chat JID'),
+                    _('Please enter the group chat JID as room@server.'))
             return
         try:
             room_jid = helpers.parse_jid(room_jid)
         except Exception:
-            ErrorDialog(_('Invalid group chat Jabber ID'),
-                    _('The group chat Jabber ID contains invalid characters.'))
+            ErrorDialog(_('Invalid group chat JID'),
+                    _('The group chat JID contains invalid characters.'))
             return
 
         if gajim.contacts.get_contact(self.account, room_jid) and \
@@ -2851,9 +2850,10 @@ class NewChatDialog(InputDialog):
             title = _('Start Chat with account %s') % account
         else:
             title = _('Start Chat')
-        prompt_text = _('Fill in the nickname or the Jabber ID of the contact you would like\nto send a chat message to:')
+        prompt_text = _('Fill in the nickname or the JID of the contact you '
+        	'would like\nto send a chat message to:')
         InputDialog.__init__(self, title, prompt_text, is_modal=False)
-        self.input_entry.set_placeholder_text(_('Nickname / Jabber ID'))
+        self.input_entry.set_placeholder_text(_('Nickname / JID'))
 
         self.completion_dict = {}
         liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
@@ -3299,7 +3299,7 @@ class SingleMessageWindow:
             try:
                 to_whom_jid = helpers.parse_jid(to_whom_jid)
             except helpers.InvalidFormat:
-                ErrorDialog(_('Invalid Jabber ID'),
+                ErrorDialog(_('Invalid JID'),
                     _('It is not possible to send a message to %s, this JID is not '
                     'valid.') % to_whom_jid)
                 return True
@@ -3573,7 +3573,7 @@ class RosterItemExchangeWindow:
         self.items_list_treeview.insert_column_with_attributes(-1, title,
             renderer1, active=0)
         renderer2 = Gtk.CellRendererText()
-        self.items_list_treeview.insert_column_with_attributes(-1, _('Jabber ID'),
+        self.items_list_treeview.insert_column_with_attributes(-1, _('JID'),
             renderer2, text=1)
         renderer3 = Gtk.CellRendererText()
         self.items_list_treeview.insert_column_with_attributes(-1, _('Name'),
@@ -4243,7 +4243,7 @@ class ItemArchiving313PreferencesWindow:
         for widget in ('jid_entry', 'pref_cb'):
             setattr(self, widget, self.xml.get_object(widget))
 
-        self.window.set_title(_('Add Jabber ID'))
+        self.window.set_title(_('Add JID'))
         self.pref_cb.set_active(0)
         self.window.show_all()
         self.xml.connect_signals(self)
@@ -5334,7 +5334,7 @@ class ESessionInfoWindow:
                     '<b><span size="x-large">%s</span></b>' % verification_status)
 
             self.xml.get_object('dialog-action_area1').set_no_show_all(True)
-            self.button_label.set_text(_('Verify again...'))
+            self.button_label.set_text(_('Verify again…'))
         else:
             if self.session.control:
                 self.session.control._show_lock_image(True, 'E2E', True,
@@ -5347,7 +5347,7 @@ class ESessionInfoWindow:
             self.xml.get_object('verification_status_label').set_markup(
                 '<b><span size="x-large">%s</span></b>' % verification_status)
 
-            self.button_label.set_text(_('Verify...'))
+            self.button_label.set_text(_('Verify…'))
 
         path = gtkgui_helpers.get_icon_path(security_image, 32)
         self.security_image.set_from_file(path)
@@ -5409,13 +5409,13 @@ class GPGInfoWindow:
             if error:
                 verification_status = _('''Contact's identity NOT verified''')
                 info = _('OpenPGP key is assigned to this contact, but <b>you '
-                    'do not trust his key</b>, so message <b>cannot</b> be '
-                    'encrypted. Use your OpenPGP client to trust this key.')
+                    'do not trust their key</b>, so message <b>cannot</b> be '
+                    'encrypted. Use your OpenPGP client to trust their key.')
                 image = 'security-low'
             else:
                 verification_status = _('''Contact's identity verified''')
                 info = _('OpenPGP Key is assigned to this contact, and you '
-                    'trust his key, so messages will be encrypted.')
+                    'trust their key, so messages will be encrypted.')
                 image = 'security-high'
 
         status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
@@ -5609,7 +5609,7 @@ Issued on: %(io)s
 Expires on: %(eo)s
 
 <b>Fingerprint</b>
-SHA1 Fingerprint: %(sha1)s
+SHA-1 Fingerprint: %(sha1)s
 
 SHA256 Fingerprint: %(sha256)s
 ''') % {
@@ -5641,7 +5641,7 @@ class CheckFingerprintDialog(YesNoDialog):
             checktext=checktext, on_response_yes=on_response_yes,
             on_response_no=on_response_no)
         self.set_title(_('SSL Certificate Verification for %s') % account)
-        b = Gtk.Button(label=_('View cert...'))
+        b = Gtk.Button(label=_('View cert…'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()
         area = self.get_action_area()
@@ -5658,7 +5658,7 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
         ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
             checktext1, checktext2, on_response_ok=on_response_ok,
             on_response_cancel=on_response_cancel, is_modal=False)
-        b = Gtk.Button(_('View cert...'))
+        b = Gtk.Button(_('View cert…'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()
         area = self.get_action_area()

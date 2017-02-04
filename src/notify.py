@@ -382,7 +382,7 @@ class DesktopNotification:
                 if self.text:
                     text = self.text
                     if len(self.text) > 200:
-                        text = '%s\n...' % self.text[:200]
+                        text = '%s\n…' % self.text[:200]
                 else:
                     text = ' '
                 if os.environ.get('KDE_FULL_SESSION') == 'true':

@@ -438,13 +438,13 @@ class VcardWindow:
             subscription_label.set_text(uf_sub)
             eb = self.xml.get_object('subscription_label_eventbox')
             if self.contact.sub == 'from':
-                tt_text = _("This contact is interested in your presence information, but you are not interested in his/her presence")
+                tt_text = _("This contact is interested in your presence information, but you are not interested in their presence")
             elif self.contact.sub == 'to':
-                tt_text = _("You are interested in the contact's presence information, but he/she is not interested in yours")
+                tt_text = _("You are interested in the contact's presence information, but it is not mutual")
             elif self.contact.sub == 'both':
-                tt_text = _("You and the contact are interested in each other's presence information")
+                tt_text = _("The contact and you want to exchange presence information")
             else: # None
-                tt_text = _("You are not interested in the contact's presence, and neither he/she is interested in yours")
+                tt_text = _("You and the contact have a mutual disinterest in each-others presence information")
             eb.set_tooltip_text(tt_text)
 
             uf_ask = helpers.get_uf_ask(self.contact.ask)

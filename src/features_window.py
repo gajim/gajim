@@ -59,7 +59,7 @@ class FeaturesWindow:
                 _('Requires python-dbus.'),
                 _('Feature not available under Windows.')),
             _('OpenPGP message encryption'): (self.gpg_available,
-                _('Encrypting chat messages with OpenPGP keys.'),
+                _('Ability to encrypting chat messages with OpenPGP.'),
                 _('Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/).'),
                 _('Requires gpg.exe in PATH.')),
             _('Network-manager'): (self.network_manager_available,

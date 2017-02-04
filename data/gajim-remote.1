@@ -57,13 +57,13 @@ Sets value of 'key' to 'value'.
 Writes the current state of Gajim preferences to the .config file
 .Ss remove_contact Ao jid Ac Bq account
 Removes contact from roster
-.Ss send_chat_message Ao jid Ac Ao message Ac Bo pgp key Bc Bq account
+.Ss send_chat_message Ao jid Ac Ao message Ac Bo PGP key Bc Bq account
 Sends new chat message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''.
 .Ss send_file Ao file Ac Ao jid Ac Bq account
 Sends file to a contact
 .Ss send_groupchat_message Ao room_jid Ac Ao message Ac Bq account
 Sends new message to a groupchat you've joined.
-.Ss send_single_message Ao jid subject Ac Ao message Ac Bo pgp key Bc Bq account
+.Ss send_single_message Ao jid subject Ac Ao message Ac Bo PGP key Bc Bq account
 Sends new single message to a contact in the roster. Both OpenPGP key and account are optional. If you want to set only 'account', without 'OpenPGP key', just set 'OpenPGP key' to ''.
 .Ss send_xml Ao xml Ac Bq account
 Sends custom XML

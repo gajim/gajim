@@ -1153,7 +1153,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.get_jid_resource()
         except helpers.InvalidFormat:
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self.conn,
-                level='error', pri_txt=_('Invalid Jabber ID'),
+                level='error', pri_txt=_('Invalid JID'),
                 sec_txt=_('A message from a non-valid JID arrived, it has been '
                 'ignored.')))
             return
@@ -1199,7 +1199,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 except helpers.InvalidFormat:
                     gajim.nec.push_incoming_event(InformationEvent(None,
                         conn=self.conn, level='error',
-                        pri_txt=_('Invalid Jabber ID'),
+                        pri_txt=_('Invalid JID'),
                         sec_txt=_('A message from a non-valid JID arrived, it '
                         'has been ignored.')))
                     return

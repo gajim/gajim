@@ -276,8 +276,8 @@ class CommonConnection:
                     new_list.append(self.check_jid(j))
                 except helpers.InvalidFormat:
                     gajim.nec.push_incoming_event(InformationEvent(None,
-                        conn=self, level='error', pri_txt=_('Invalid Jabber '
-                        'ID'), sec_txt=_('It is not possible to send a message '
+                        conn=self, level='error', pri_txt=_('Invalid JID'),
+                        sec_txt=_('It is not possible to send a message '
                         'to %s, this JID is not valid.') % j))
                     return
             fjid = new_list
@@ -286,7 +286,7 @@ class CommonConnection:
                 jid = self.check_jid(jid)
             except helpers.InvalidFormat:
                 gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
-                    level='error', pri_txt=_('Invalid Jabber ID'), sec_txt=_(
+                    level='error', pri_txt=_('Invalid JID'), sec_txt=_(
                     'It is not possible to send a message to %s, this JID is not '
                     'valid.') % jid))
                 return
@@ -1117,7 +1117,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def connect(self, data=None):
         """
-        Start a connection to the Jabber server
+        Start a connection to the XMPP server
 
         Returns connection, and connection type ('tls', 'ssl', 'plain', '') data
         MUST contain hostname, usessl, proxy, use_custom_host, custom_host (if

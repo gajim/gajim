@@ -45,7 +45,7 @@ def on_suspend(active):
         return
 
     # we're going for suspend, let's disconnect
-    log.debug('System suspend detected, disconnecting from network...')
+    log.debug('System suspend detected, disconnecting from network…')
     for name, conn in gajim.connections.items():
         if gajim.account_is_connected(name):
             conn.old_show = gajim.SHOW_LIST[conn.connected]

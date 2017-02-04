@@ -383,7 +383,7 @@ def get_uf_chatstate(chatstate):
     elif chatstate == 'inactive':
         return _('is doing something else')
     elif chatstate == 'composing':
-        return _('is composing a message...')
+        return _('is composing a message…')
     elif chatstate == 'paused':
         #paused means he or she was composing but has stopped for a while
         return _('paused composing a message')
@@ -498,7 +498,7 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
     """
     def _cut_if_long(string):
         if len(string) > max_chars:
-            string = string[:max_chars - 3] + '...'
+            string = string[:max_chars - 3] + '…'
         return string
 
     if max_lines == 0:
@@ -511,7 +511,7 @@ def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
     if lines:
         reduced_text = '\n'.join(lines)
         if reduced_text != text:
-            reduced_text += '...'
+            reduced_text += '…'
     else:
         reduced_text = ''
     return reduced_text

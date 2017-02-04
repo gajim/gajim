@@ -232,7 +232,7 @@ class StatusIcon:
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Change Status Message...'))
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Change Status Message…'))
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
 
@@ -332,7 +332,7 @@ class StatusIcon:
 
         newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
-        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
+        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks…'))
         newitem.connect('activate',
             gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
         gc_sub_menu.append(newitem)

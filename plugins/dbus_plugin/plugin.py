@@ -294,14 +294,14 @@ if dbus_support.supported:
             @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='b')
             def send_chat_message(self, jid, message, keyID, account):
                 '''Send chat 'message' to 'jid', using account (optional) 'account'.
-                if keyID is specified, encrypt the message with the pgp key '''
+                if keyID is specified, encrypt the message with the PGP key '''
                 jid = self._get_real_jid(jid, account)
                 return self._send_message(jid, message, keyID, account)
 
             @dbus.service.method(INTERFACE, in_signature='sssss', out_signature='b')
             def send_single_message(self, jid, subject, message, keyID, account):
                 '''Send single 'message' to 'jid', using account (optional) 'account'.
-                if keyID is specified, encrypt the message with the pgp key '''
+                if keyID is specified, encrypt the message with the PGP key '''
                 jid = self._get_real_jid(jid, account)
                 return self._send_message(jid, message, keyID, account, type, subject)
 
@@ -626,7 +626,7 @@ if dbus_support.supported:
                     elif len(prim_contact.keyID) == 16:
                         keyID = prim_contact.keyID[8:]
                     if keyID:
-                        contact_dict['openpgp'] = keyID
+                        contact_dict['openPGP'] = keyID
                 contact_dict['resources'] = dbus.Array([], signature='(sis)')
                 for contact in contacts:
                     resource_props = dbus.Struct((DBUS_STRING(contact.resource),

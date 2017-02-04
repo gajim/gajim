@@ -56,7 +56,7 @@ class GajimApplication(Gtk.Application):
                                'history db and plugins)'))
         self.add_main_option('verbose', ord('v'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
-                             _('Print xml stanzas and other debug '
+                             _('Print XML stanzas and other debug '
                                'information'))
         self.add_main_option('windev', ord('w'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,

@@ -621,7 +621,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="carbons_checkbutton1">
-                                <property name="label" translatable="yes">Receive conversations from other resources (If server supports it)</property>
+                                <property name="label" translatable="yes">Receive conversations from other resources (provided the server has support for it)</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
