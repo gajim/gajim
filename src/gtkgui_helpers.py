@@ -803,7 +803,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
     def on_cancel(widget):
         dialog.destroy()
 
-    dialog = dialogs.FileChooserDialog(title_text=_('Save Image as...'),
+    dialog = dialogs.FileChooserDialog(title_text=_('Save Image as…'),
         action=Gtk.FileChooserAction.SAVE, buttons=(Gtk.STOCK_CANCEL,
         Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
         default_response=Gtk.ResponseType.OK,

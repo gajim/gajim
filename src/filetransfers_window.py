@@ -280,8 +280,8 @@ class FileTransfersWindow:
         else:
             file_name = file_props.name
         dialogs.YesNoDialog(('File transfer error'),
-            _('The file %(file)s has been fully received, but it seems to be '
-            'wrongly received.\nDo you want to reload it?') % \
+            _('The file %(file)s has been received, but it seems to have '
+            'been damaged along the way.\nDo you want to download it again?') % \
             {'file': file_name}, on_response_yes=(on_yes, jid, file_props,
             account), type_=Gtk.MessageType.ERROR)
 
@@ -308,7 +308,7 @@ class FileTransfersWindow:
                 gajim.config.set('last_send_dir', file_dir)
                 dialog.destroy()
 
-        dialog = dialogs.FileChooserDialog(_('Choose File to Send...'),
+        dialog = dialogs.FileChooserDialog(_('Choose File to Send…'),
                 Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL),
                 Gtk.ResponseType.OK,
                 True, # select multiple true as we can select many files to send
@@ -338,8 +338,8 @@ class FileTransfersWindow:
         Start the real transfer(upload) of the file
         """
         if gtkgui_helpers.file_is_locked(file_path):
-            pritext = _('Gajim cannot access this file')
-            sextext = _('This file is being used by another process.')
+            pritext = _('Gajim can not read this file')
+            sextext = _('Another process is using this file.')
             dialogs.ErrorDialog(pritext, sextext)
             return
 
@@ -424,7 +424,7 @@ class FileTransfersWindow:
             gajim.connections[account].send_file_rejection(file_props)
 
         dialog2 = dialogs.FileChooserDialog(
-            title_text=_('Save File as...'),
+            title_text=_('Save File as…'),
             action=Gtk.FileChooserAction.SAVE,
             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
             Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
@@ -494,7 +494,7 @@ class FileTransfersWindow:
             self.model.set(iter_, C_PULSE, GLib.MAXINT32)
         elif status == 'computing':
             self.model.set(iter_, C_PULSE, 1)
-            text = _('Checking file...') + '\n'
+            text = _('Checking file…') + '\n'
             received_size = int(file_props.received_len)
             full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \

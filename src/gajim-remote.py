@@ -92,8 +92,7 @@ class GajimRemote:
                                 []
                         ],
                 'list_contacts': [
-                                _('Prints a list of all contacts in the roster. Each contact '
-                                'appears on a separate line'),
+                                _('Lists all contacts in roster, one for each line'),
                                 [
                                     (Q_('?CLI:account'), _('show only contacts of the given account'),
                                                 False)
@@ -105,7 +104,7 @@ class GajimRemote:
                                 []
                         ],
                 'change_status': [
-                                _('Changes the status of account or accounts'),
+                                _('Changes the status of account(s)'),
                                 [
 #offline, online, chat, away, xa, dnd, invisible should not be translated
                                     (Q_('?CLI:status'), _('one of: offline, online, chat, away, xa, dnd, invisible. If not set, use account\'s previous status'), False),
@@ -116,7 +115,7 @@ class GajimRemote:
                                 ]
                         ],
                 'set_priority': [
-                                _('Changes the priority of account or accounts'),
+                                _('Changes the priority of account(s)'),
                                 [
                                     (Q_('?CLI:priority'), _('priority you want to give to the account'),
                                                 True),
@@ -144,21 +143,21 @@ class GajimRemote:
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
-                                        (_('pgp key'), _('if specified, the message will be encrypted '
+                                        (_('PGP key'), _('if specified, the message will be encrypted '
                                                 'using this public key'), False),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]
                         ],
                 'send_single_message': [
-                                _('Sends new single message to a contact in the roster. Both OpenPGP key '
-                                'and account are optional. If you want to set only \'account\', '
-                                'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
+                                _('Sends a chat message to someone on your roster. '
+                                'Optionally with OpenPGP key and account. If you want '
+                                'to only set the latter, set OpenPGP key to "".'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (_('subject'), _('message subject'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
-                                        (_('pgp key'), _('if specified, the message will be encrypted '
+                                        (_('PGP key'), _('if specified, the message will be encrypted '
                                                 'using this public key'), False),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
@@ -202,7 +201,7 @@ class GajimRemote:
                                 _('Sets value of \'key\' to \'value\'.'),
                                 [
                                         (_('key=value'), _('\'key\' is the name of the preference, '
-                                                '\'value\' is the value to set it to'), True)
+                                                '\'value\' is what to set it to'), True)
                                 ]
                         ],
                 'prefs_del': [
@@ -261,8 +260,8 @@ class GajimRemote:
                                 _('Sends custom XML'),
                                 [
                                         ('xml', _('XML to send'), True),
-                                        ('account', _('Account in which the xml will be sent; '
-                                        'if not specified, xml will be sent to all accounts'),
+                                        ('account', _('Account to which the XML will be sent; '
+                                        'if not specified, XML will be sent to all accounts'),
                                                 False)
                                 ]
                         ],
@@ -276,7 +275,7 @@ class GajimRemote:
                                 ]
                         ],
                 'handle_uri': [
-                                _('Handle a xmpp:/ uri'),
+                                _('Handle a xmpp:/ URI'),
                                 [
                                         (Q_('?CLI:uri'), _('URI to handle'), True),
                                         (Q_('?CLI:account'), _('Account in which you want to handle it'),
@@ -399,6 +398,7 @@ class GajimRemote:
             raise exceptions.SessionBusNotPresent
 
         if not self.check_gajim_running():
+        	#Do not translate "gajim-remote"
             send_error(_('It seems Gajim is not running. So you can\'t use gajim-remote.'))
         obj = self.sbus.get_object(SERVICE, OBJ_PATH)
         interface = dbus.Interface(obj, INTERFACE)
@@ -534,9 +534,9 @@ class GajimRemote:
 
     def handle_uri(self):
         if len(sys.argv) < 3:
-            send_error(_('No uri given'))
+            send_error(_('No URI given'))
         if not sys.argv[2].startswith('xmpp:'):
-            send_error(_('Wrong uri'))
+            send_error(_('Wrong URI'))
         sys.argv[2] = sys.argv[2][5:]
         uri = sys.argv[2]
         if not '?' in uri:

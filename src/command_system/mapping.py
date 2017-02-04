@@ -258,7 +258,7 @@ def adapt_arguments(command, arguments, args, opts):
             for arg, (spec_key, spec_value) in zip(overlapped, spec_kwargs):
                 opts.append((spec_key, arg))
         else:
-            raise CommandError(_("Excessive arguments"), command)
+            raise CommandError(_("Too many arguments"), command)
 
     # Detect every switch and ensure it will not receive any arguments.
     # Normally this does not happen unless overlapping is enabled.

@@ -2068,8 +2068,8 @@ class RosterWindow:
         Authorize a contact (by re-sending auth menuitem)
         """
         gajim.connections[account].send_authorization(jid)
-        dialogs.InformationDialog(_('Authorization has been sent'),
-                _('Now "%s" will know your status.') %jid)
+        dialogs.InformationDialog(_('Authorization sent'),
+            _('"%s" will now see your status.') %jid)
 
     def req_sub(self, widget, jid, txt, account, groups=None, nickname=None,
                     auto_auth=False):
@@ -2107,8 +2107,8 @@ class RosterWindow:
         Revoke a contact's authorization
         """
         gajim.connections[account].refuse_authorization(jid)
-        dialogs.InformationDialog(_('Authorization has been removed'),
-                _('Now "%s" will always see you as offline.') %jid)
+        dialogs.InformationDialog(_('Authorization removed'),
+            _('Now "%s" will always see you as offline.') %jid)
 
     def set_state(self, account, state):
         child_iterA = self._get_account_iter(account, self.model)
@@ -2982,7 +2982,7 @@ class RosterWindow:
         pritext = _('You are about to block a contact. Are you sure you want'
             ' to continue?')
         sectext = _('This contact will see you offline and you will not '
-            'receive messages he will send you.')
+            'receive messages it sends you.')
         dialogs.ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=_block_it)
 
@@ -3661,7 +3661,7 @@ class RosterWindow:
         pritext = _('You are about to send a custom status. Are you sure you '
             'want to continue?')
         sectext = _('This contact will temporarily see you as %(status)s, '
-            'but only until you change your status. Then he or she will see '
+            'but only until you change your status. Then they will see '
             'your global status.') % {'status': show}
         dialogs.ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=send_it)
@@ -4490,7 +4490,7 @@ class RosterWindow:
             'want to continue?')
         sectext = _('Metacontacts are a way to regroup several contacts in one '
             'line. Generally it is used when the same person has several '
-            'Jabber accounts or transport accounts.')
+            'XMPP accounts or transport accounts.')
         dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=merge_contacts)
         if not confirm_metacontacts: # First time we see this window
@@ -5363,7 +5363,7 @@ class RosterWindow:
         newitem = Gtk.SeparatorMenuItem.new() # separator
         gc_sub_menu.append(newitem)
 
-        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks...'))
+        newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks…'))
         newitem.connect('activate', self.on_manage_bookmarks_menuitem_activate)
         gc_sub_menu.append(newitem)
         gc_sub_menu.show_all()
@@ -5513,7 +5513,7 @@ class RosterWindow:
                     self.on_publish_location_toggled)
 
                 pep_config = Gtk.MenuItem.new_with_label(
-                    _('Configure Services...'))
+                    _('Configure Services…'))
                 item = Gtk.SeparatorMenuItem.new()
                 pep_submenu.append(item)
                 pep_config.set_sensitive(True)
@@ -5722,7 +5722,7 @@ class RosterWindow:
             menu.append(item)
 
             # Rename
-            rename_item = Gtk.MenuItem.new_with_mnemonic(_('_Rename...'))
+            rename_item = Gtk.MenuItem.new_with_mnemonic(_('_Rename…'))
             menu.append(rename_item)
             rename_item.connect('activate', self.on_rename, 'group', group,
                 account)
@@ -5845,7 +5845,7 @@ class RosterWindow:
         menu.append(item)
 
         # Edit Groups
-        edit_groups_item = Gtk.MenuItem.new_with_mnemonic(_('Edit _Groups...'))
+        edit_groups_item = Gtk.MenuItem.new_with_mnemonic(_('Edit _Groups…'))
         manage_contacts_submenu.append(edit_groups_item)
         edit_groups_item.connect('activate', self.on_edit_groups, list_)
 
@@ -6296,7 +6296,7 @@ class RosterWindow:
         img.set_from_file(path)
         # sensitivity to False because by default we're offline
         self.status_message_menuitem_iter = liststore.append(
-            [_('Change Status Message...'), img, '', False])
+            [_('Change Status Message…'), img, '', False])
         # Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
         liststore.append(['SEPARATOR', None, '', True])
 

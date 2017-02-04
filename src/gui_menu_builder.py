@@ -538,7 +538,7 @@ def get_transport_menu(contact, account):
     menu = Gtk.Menu()
 
     # Send single message
-    item = Gtk.MenuItem.new_with_mnemonic(_('Send Single _Message...'))
+    item = Gtk.MenuItem.new_with_mnemonic(_('Send Single _Message…'))
     item.connect('activate', roster.on_send_single_message_menuitem_activate,
         account, contact)
     menu.append(item)
@@ -571,7 +571,7 @@ def get_transport_menu(contact, account):
     menu.append(item)
 
     # Execute Command
-    item = Gtk.MenuItem.new_with_mnemonic(_('E_xecute Command...'))
+    item = Gtk.MenuItem.new_with_mnemonic(_('E_xecute Command…'))
     menu.append(item)
     item.connect('activate', roster.on_execute_command, contact, account,
         contact.resource)
@@ -592,7 +592,7 @@ def get_transport_menu(contact, account):
         item.set_sensitive(False)
 
     # Rename
-    item = Gtk.MenuItem.new_with_mnemonic(_('_Rename...'))
+    item = Gtk.MenuItem.new_with_mnemonic(_('_Rename…'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_rename, 'agent', jid, account)
     if gajim.account_is_disconnected(account):

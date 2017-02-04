@@ -1333,8 +1333,8 @@ class GroupchatControl(ChatControlBase):
         if '103' in obj.status_code:
             changes.append(_('Room now does not show unavailable members'))
         if '104' in obj.status_code:
-            changes.append(_('A non-privacy-related room configuration change '
-                'has occurred'))
+            changes.append(_('A setting not related to privacy has been '
+                'changed'))
         if '170' in obj.status_code:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
@@ -1347,7 +1347,7 @@ class GroupchatControl(ChatControlBase):
             changes.append(_('Room is now semi-anonymous'))
             self.is_anonymous = True
         if '174' in obj.status_code:
-            changes.append(_('Room is now fully-anonymous'))
+            changes.append(_('Room is now fully anonymous'))
             self.is_anonymous = True
 
         for change in changes:
@@ -2257,16 +2257,16 @@ class GroupchatControl(ChatControlBase):
                 try:
                     jid = helpers.parse_jid(jid)
                 except Exception:
-                    dialogs.ErrorDialog(_('Invalid group chat Jabber ID'),
-                    _('The group chat Jabber ID has not allowed characters.'))
+                    dialogs.ErrorDialog(_('Invalid group chat JID'),
+                    _('The group chat JID has not allowed characters.'))
                     return
             gajim.connections[self.account].destroy_gc_room(self.room_jid,
                 reason, jid)
 
         # Ask for a reason
         dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
-            self.room_jid, _('You are going to definitively destroy this '
-            'room.\nYou may specify a reason below:'),
+            self.room_jid, _('You are going to remove this room permanently.'
+            '\nYou may specify a reason below:'),
             _('You may also enter an alternate venue:'), ok_handler=on_ok,
             transient_for=self.parent_win.window)
 

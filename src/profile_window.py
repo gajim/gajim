@@ -60,7 +60,7 @@ class ProfileWindow:
         self.avatar_mime_type = None
         self.avatar_encoded = None
         self.message_id = self.statusbar.push(self.context_id,
-            _('Retrieving profile...'))
+            _('Retrieving profile…'))
         self.update_progressbar_timeout_id = GLib.timeout_add(100,
             self.update_progressbar)
         self.remove_statusbar_timeout_id = None
@@ -386,7 +386,7 @@ class ProfileWindow:
         gajim.nicks[self.account] = nick
         gajim.connections[self.account].send_vcard(vcard_)
         self.message_id = self.statusbar.push(self.context_id,
-                _('Sending profile...'))
+                _('Sending profile…'))
         self.progressbar.show()
         self.update_progressbar_timeout_id = GLib.timeout_add(100,
             self.update_progressbar)

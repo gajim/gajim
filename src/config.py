@@ -1877,7 +1877,7 @@ class AccountsWindow:
             jid = gajim.config.get_per('accounts', account, 'hostname')
         else:
             self.xml.get_object('anonymous_checkbutton1').set_active(False)
-            self.xml.get_object('jid_label1').set_text(_('Jabber ID:'))
+            self.xml.get_object('jid_label1').set_text(_('JID:'))
             savepass = gajim.config.get_per('accounts', account, 'savepass')
             save_password = self.xml.get_object('save_password_checkbutton1')
             save_password.set_sensitive(True)
@@ -2173,7 +2173,7 @@ class AccountsWindow:
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat as s:
             if not widget.is_focus():
-                pritext = _('Invalid Jabber ID')
+                pritext = _('Invalid JID')
                 dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
@@ -2182,9 +2182,9 @@ class AccountsWindow:
         if len(jid_splited) != 2 and not gajim.config.get_per('accounts',
         self.current_account, 'anonymous_auth'):
             if not widget.is_focus():
-                pritext = _('Invalid Jabber ID')
+                pritext = _('Invalid JID')
                 sectext = \
-                    _('A Jabber ID must be in the form "user@servername".')
+                    _('A JID must be in the form "user@servername".')
                 dialogs.ErrorDialog(pritext, sectext, transient_for=self.window)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
@@ -2250,7 +2250,7 @@ class AccountsWindow:
             resource = helpers.parse_resource(resource)
         except helpers.InvalidFormat as s:
             if not widget.is_focus():
-                pritext = _('Invalid Jabber ID')
+                pritext = _('Invalid JID')
                 dialogs.ErrorDialog(pritext, str(s), transient_for=self.window)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
@@ -2507,7 +2507,7 @@ class AccountsWindow:
             return
 
         if not gajim.connections[self.current_account].vcard_supported:
-            dialogs.ErrorDialog(_("Your server doesn't support vCard"),
+            dialogs.ErrorDialog(_("Your server does not have vCard support"),
                 _("Your server can't save your personal information."),
                 transient_for=self.window)
             return
@@ -2949,17 +2949,17 @@ class GroupchatConfigWindow:
 
     def on_add_button_clicked(self, widget, affiliation):
         if affiliation == 'outcast':
-            title = _('Banning...')
+            title = _('Banning…')
             #You can move '\n' before user@domain if that line is TOO BIG
             prompt = _('<b>Whom do you want to ban?</b>\n\n')
         elif affiliation == 'member':
-            title = _('Adding Member...')
+            title = _('Adding Member…')
             prompt = _('<b>Whom do you want to make a member?</b>\n\n')
         elif affiliation == 'owner':
-            title = _('Adding Owner...')
+            title = _('Adding Owner…')
             prompt = _('<b>Whom do you want to make an owner?</b>\n\n')
         else:
-            title = _('Adding Administrator...')
+            title = _('Adding Administrator…')
             prompt = _('<b>Whom do you want to make an administrator?</b>\n\n')
         prompt += _('Can be one of the following:\n'
             '1. user@domain/resource (only that resource matches).\n'
@@ -3719,7 +3719,7 @@ class AccountCreationWizardWindow:
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
-                pritext = _('Invalid Jabber ID')
+                pritext = _('Invalid JID')
                 dialogs.ErrorDialog(pritext, str(s))
                 return
 
@@ -3820,7 +3820,7 @@ class AccountCreationWizardWindow:
                 self.is_form)
             self.xml.get_object('form_vbox').remove(self.data_form_widget)
             self.xml.get_object('progressbar_label').set_markup(
-                '<b>Account is being created</b>\n\nPlease wait...')
+                '<b>Account is being created</b>\n\nPlease wait…')
             self.notebook.set_current_page(5) # show creating page
             self.back_button.hide()
             self.forward_button.hide()
@@ -3899,8 +3899,8 @@ class AccountCreationWizardWindow:
                 'hostname': hostname, 'error': obj.ssl_msg})
             if obj.errnum in (18, 27):
                 text = _('Add this certificate to the list of trusted '
-                    'certificates.\nSHA1 fingerprint of the certificate:\n%s'
-                    '\nSHA256 fingerprint of the certificate:\n%s') \
+                    'certificates.\nSHA-1 fingerprint of the certificate:\n%s'
+                    '\nSHA-256 fingerprint of the certificate:\n%s') \
                     % (obj.ssl_fingerprint_sha1, obj.ssl_fingerprint_sha256)
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:

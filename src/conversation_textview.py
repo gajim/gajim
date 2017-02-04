@@ -1294,7 +1294,7 @@ class ConversationTextview(GObject.GObject):
                 index, insert_mark, old_txt = \
                     self.correct_message(correct_id, kind, name)
                 self.corrected_text_list[msg_stanza_id] = \
-                    '<b>Message was corrected. Last message was:</b>\n{}' \
+                    '<b>Message corrected. Previous message:</b>\n{}' \
                     .format(GLib.markup_escape_text(old_txt))
                 corrected = True
             except TypeError:

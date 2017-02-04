@@ -95,8 +95,8 @@ class GajimThemesWindow:
             return
         if old_name == 'default':
             dialogs.ErrorDialog(
-                    _('You cannot make changes to the default theme'),
-            _('Please create a clean new theme with your desired name.'))
+                _('You cannot make changes to the default theme'),
+            	_('Please create a new clean theme.'))
             return
         new_config_name = new_name.replace(' ', '_')
         if new_config_name in gajim.config.get_per('themes'):
@@ -185,7 +185,7 @@ class GajimThemesWindow:
         if self.current_theme == gajim.config.get('roster_theme'):
             dialogs.ErrorDialog(
                 _('You cannot delete your current theme'),
-                _('Please first choose another theme as your current theme.'))
+                _('Pick another theme to use first.'))
             return
         self.theme_options_vbox.set_sensitive(False)
         self.theme_options_table.set_sensitive(False)

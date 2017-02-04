@@ -162,7 +162,7 @@ class Interface:
         if obj.msg:
             sec_msg = obj.msg + '\n' + sec_msg
         dialog = dialogs.YesNoDialog(_('HTTP (%(method)s) Authorization for '
-            '%(url)s (id: %(id)s)') % {'method': obj.method, 'url': obj.url,
+            '%(url)s (ID: %(id)s)') % {'method': obj.method, 'url': obj.url,
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
 
@@ -303,7 +303,7 @@ class Interface:
                 # maximum user number reached
                 self.handle_gc_error(gc_control,
                     _('Unable to join group chat'),
-                    _('Maximum number of users for <b>%s</b> has been reached')\
+                    _('<b>%s</b> is full')\
                     % obj.room_jid)
             elif (obj.errcode == '401') or (obj.errcon == 'not-authorized'):
                 # password required to join
@@ -321,11 +321,11 @@ class Interface:
                     _('Group chat <b>%s</b> does not exist.') % obj.room_jid)
             elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Group chat creation is restricted.'))
+                    _('Group chat creation is not permitted.'))
             elif (obj.errcode == '406') or (obj.errcon == 'not-acceptable'):
-                self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Your registered nickname must be used in group chat '
-                    '<b>%s</b>.') % obj.room_jid)
+                self.handle_gc_error(gc_control, _('Unable to join groupchat'),
+                    _('You must use your registered nickname in <b>%s</b>.')\
+                    % obj.room_jid)
             elif (obj.errcode == '407') or (obj.errcon == \
             'registration-required'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
@@ -679,12 +679,12 @@ class Interface:
                 '\n')
             sectext += _('You are currently connected without your OpenPGP '
                 'key.')
-            dialogs.WarningDialog(_('Your passphrase is incorrect'), sectext)
+            dialogs.WarningDialog(_('Wrong passphrase'), sectext)
         else:
             path = gtkgui_helpers.get_icon_path('gtk-dialog-warning', 48)
             account = obj.conn.name
             notify.popup('warning', account, account, '', path,
-                _('OpenPGP Passphrase Incorrect'),
+                _('Wrong OpenPGP passphrase'),
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
@@ -698,7 +698,7 @@ class Interface:
                 obj.secure_tuple)
 
         dialogs.PassphraseDialog(_('Certificate Passphrase Required'),
-            _('Enter the passphrase for the certificate for account %s') % \
+            _('Enter the certificate passphrase for account %s') % \
             obj.conn.name, ok_handler=on_ok, cancel_handler=on_cancel)
 
     def handle_event_gpg_password_required(self, obj):
@@ -720,7 +720,7 @@ class Interface:
         def on_no():
             obj.callback(False)
 
-        dialogs.YesNoDialog(_('OpenPGP key not trusted'), _('The OpenPGP key '
+        dialogs.YesNoDialog(_('Untrusted OpenPGP key'), _('The OpenPGP key '
             'used to encrypt this chat is not trusted. Do you really want to '
             'encrypt this message?'), checktext=_('_Do not ask me again'),
             on_response_yes=on_yes, on_response_no=on_no)
@@ -868,10 +868,10 @@ class Interface:
         if not gajim.config.get('notify_on_new_gmail_email'):
             return
         path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
-        title = _('New mail on %(gmail_mail_address)s') % \
+        title = _('New e-mail on %(gmail_mail_address)s') % \
             {'gmail_mail_address': jid}
-        text = i18n.ngettext('You have %d new mail conversation',
-            'You have %d new mail conversations', gmail_new_messages,
+        text = i18n.ngettext('You have %d new e-mail conversation',
+            'You have %d new e-mail conversations', gmail_new_messages,
             gmail_new_messages, gmail_new_messages)
 
         if gajim.config.get('notify_on_new_gmail_email_extra'):
@@ -1084,8 +1084,8 @@ class Interface:
                     sender).get_shown_name()
                 filename = os.path.basename(file_props.file_name)
                 if event_type == _('File Transfer Completed'):
-                    txt = _('You successfully received %(filename)s from '
-                        '%(name)s.') % {'filename': filename, 'name': name}
+                    txt = _('%(filename)s received from %(name)s.')\
+                    	% {'filename': filename, 'name': name}
                     img_name = 'gajim-ft_done'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s from %(name)s '
@@ -1376,11 +1376,11 @@ class Interface:
 
         pritext = _('Error verifying SSL certificate')
         sectext = _('There was an error verifying the SSL certificate of your '
-            'jabber server: %(error)s\nDo you still want to connect to this '
+            'XMPP server: %(error)s\nDo you still want to connect to this '
             'server?') % {'error': obj.error_text}
         if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
-            'certificates.\nSHA1 fingerprint of the certificate:\n%s'
+            'certificates.\nSHA-1 fingerprint of the certificate:\n%s'
             '\nSHA256 fingerprint of the certificate:\n%s') % \
             (obj.fingerprint_sha1, obj.fingerprint_sha256)
         else:
@@ -1423,7 +1423,7 @@ class Interface:
 
         pritext = _('SSL certificate error')
         sectext = _('It seems the SSL certificate of account %(account)s has '
-            'changed and is not valid or your connection is being hacked.\n\n'
+            'changed and is not valid or your connection is being compromised.\n\n'
             'Old SHA-1 fingerprint: '
             '%(old_sha1)s\nOld SHA-256 fingerprint: %(old_sha256)s\n\n'
             'New SHA-1 fingerprint: %(new_sha1)s\nNew SHA-256 fingerprint: '

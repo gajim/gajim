@@ -78,7 +78,7 @@ def parseOpts():
                 _('Options:') + \
                 '\n  -h, --help         ' + \
                     _('Show this help message and exit') + \
-                '\n  -c, --config-path  ' + _('Set logs directory') + '\n')
+                '\n  -c, --config-path  ' + _('Choose folder for logfile') + '\n')
             sys.exit()
         elif o in ('-c', '--config-path'):
             config_path = a
@@ -165,7 +165,7 @@ class HistoryManager:
         self.jids_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         renderer_text = Gtk.CellRendererText()  # holds jid
-        col = Gtk.TreeViewColumn(_('Jabber ID'), renderer_text, text=0)
+        col = Gtk.TreeViewColumn(_('JID'), renderer_text, text=0)
         self.jids_listview.append_column(col)
 
         self.jids_listview.get_selection().connect('changed',
@@ -266,7 +266,7 @@ class HistoryManager:
             _('Normally allocated database size will not be freed, '
                 'it will just become reusable. If you really want to reduce '
                 'database filesize, click YES, else click NO.'
-                '\n\nIn case you click YES, please wait...'),
+                '\n\nIn case you click YES, please wait…'),
             on_response_yes=on_yes, on_response_no=on_no)
         dialog.set_title(_('Database Cleanup'))
         button_box = dialog.get_children()[0].get_children()[1]
@@ -483,7 +483,7 @@ class HistoryManager:
         xml.connect_signals(self)
 
         dlg = xml.get_object('filechooserdialog')
-        dlg.set_title(_('Exporting History Logs...'))
+        dlg.set_title(_('Exporting History Logs…'))
         dlg.set_current_folder(gajim.HOME_DIR)
         dlg.props.do_overwrite_confirmation = True
         response = dlg.run()
@@ -597,13 +597,13 @@ class HistoryManager:
 
         if paths_len == 1:
             jid_id = '<i>%s</i>' % liststore[list_of_paths[0]][0]
-            pri_text = _('Do you really want to delete the logs of %(jid)s?') \
+            pri_text = _('Do you wish to delete all correspondence with %(jid)s?') \
                 % {'jid': jid_id}
         else:
             pri_text = _(
-                'Do you really want to delete logs of the selected contacts?')
+                'Do you wish to delete all correspondence with the selected contacts?')
         dialog = dialogs.ConfirmationDialog('',
-            _('This is an irreversible operation.'), on_response_ok=(on_ok,
+            _('This can not be undone.'), on_response_ok=(on_ok,
             liststore, list_of_paths))
         dialog.set_title(_('Deletion Confirmation'))
         dialog.set_markup(pri_text)

@@ -639,12 +639,12 @@ class SingleForm(Gtk.Table, object):
         try:
             newtext = helpers.parse_jid(newtext)
         except helpers.InvalidFormat as s:
-            dialogs.ErrorDialog(_('Invalid Jabber ID'), str(s))
+            dialogs.ErrorDialog(_('Invalid JID'), str(s))
             return
         if newtext in field.values:
             dialogs.ErrorDialog(
-                    _('Jabber ID already in list'),
-                    _('The Jabber ID you entered is already in the list. Choose another one.'))
+                    _('JID already in list'),
+                    _('The JID you entered is already in the list. Choose another one.'))
             GLib.idle_add(treeview.set_cursor, path)
             return
         model[path][0]=newtext

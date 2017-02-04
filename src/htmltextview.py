@@ -914,7 +914,7 @@ class HtmlTextView(Gtk.TextView):
             text = getattr(tag, 'title', False)
             if text:
                 if len(text) > 50:
-                    text = text[:47] + '...'
+                    text = text[:47] + '…'
                 position = w.get_origin()[1:]
                 self.tooltip.show_tooltip(text, 8, position[1] + y)
 
@@ -1284,7 +1284,7 @@ return faciter(n,1)</pre>
         <p>
           <strong>examples@example.org wrote:</strong>
         </p>
-        <p>this cite - bla bla bla, smile- :-)  ...</p>
+        <p>this cite - bla bla bla, smile- :-)  …</p>
       </cite>
       <div>
         <p>some text</p>
