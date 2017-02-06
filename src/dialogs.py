@@ -4144,6 +4144,10 @@ class Archiving313PreferencesWindow:
         self.idle_id = GLib.timeout_add_seconds(3, self._nec_archiving_error)
         gajim.connections[self.account].request_archive_preferences()
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def set_widget_state(self, state):
         for widget in ('default_cb', 'save_button', 'add_button',
             'remove_button'):
