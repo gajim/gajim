@@ -55,7 +55,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 import time
-import locale
 
 import getopt
 from common import i18n
@@ -84,7 +83,7 @@ def parseOpts():
             config_path = a
     return config_path
 
-onfig_path = parseOpts()
+config_path = parseOpts()
 del parseOpts
 
 import common.configpaths
