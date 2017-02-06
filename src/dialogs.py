@@ -4370,6 +4370,10 @@ class PrivacyListWindow:
 
         self.xml.connect_signals(self)
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def on_privacy_list_edit_window_destroy(self, widget):
         key_name = 'privacy_list_%s' % self.privacy_list_name
         if key_name in gajim.interface.instances[self.account]:
@@ -4683,6 +4687,10 @@ class PrivacyListsWindow:
         self.window.show_all()
 
         self.xml.connect_signals(self)
+
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
     def on_privacy_lists_first_window_destroy(self, widget):
         if 'privacy_lists' in gajim.interface.instances[self.account]:
