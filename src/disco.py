@@ -603,6 +603,10 @@ _('Without a connection, you can not browse available services'))
         if self.browser:
             self.browser.account = value
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
         if (modifier & Gdk.ModifierType.CONTROL_MASK) and (keyval == Gdk.KEY_r):
             self.reload()
