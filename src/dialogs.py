@@ -3397,6 +3397,10 @@ class XMLConsoleWindow:
 
         self.xml.connect_signals(self)
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def on_xml_console_window_destroy(self, widget):
         del gajim.interface.instances[self.account]['xml_console']
         gajim.ged.remove_event_handler('stanza-received', ged.GUI1,
