@@ -25,7 +25,7 @@
 
 import os
 import gi
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import gtkgui_helpers
 
 from common import gajim
@@ -132,6 +132,10 @@ class FeaturesWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         self.xml.get_object('close_button').grab_focus()
+
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
