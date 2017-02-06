@@ -3256,6 +3256,10 @@ class ManageBookmarksWindow:
         # select root iter
         self.selection.select_iter(self.treestore.get_iter_first())
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def on_add_bookmark_button_clicked(self, widget):
         """
         Add a new bookmark
