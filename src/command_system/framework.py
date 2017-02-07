@@ -19,7 +19,6 @@ architecture to implement commands in a streight and flexible,
 declarative way.
 """
 
-import re
 from types import FunctionType
 from inspect import getargspec, getdoc
 

@@ -23,13 +23,9 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import time
-
 import nbxmpp
 
-from common import helpers
 from common import gajim
-from common.zeroconf import zeroconf
 from common.commands import ConnectionCommands
 from common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from common.connection_handlers_events import ZeroconfMessageReceivedEvent
@@ -51,7 +47,6 @@ except Exception:
     HAS_IDLE = False
 
 from common import connection_handlers
-from session import ChatControlSession
 
 class ConnectionVcard(connection_handlers.ConnectionVcard):
     def add_sha(self, p, send_caps = True):

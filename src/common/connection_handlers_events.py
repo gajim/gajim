@@ -21,7 +21,7 @@
 import datetime
 import sys
 import os
-from time import (localtime, time as time_time)
+from time import time as time_time
 from calendar import timegm
 import hmac
 import hashlib

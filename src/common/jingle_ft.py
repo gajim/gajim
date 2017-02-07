@@ -28,7 +28,6 @@ from . import jingle_xtls
 from common.jingle_content import contents, JingleContent
 from common.jingle_transport import *
 from common import helpers
-from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 from common.connection_handlers_events import FileRequestReceivedEvent
 import threading
 import logging

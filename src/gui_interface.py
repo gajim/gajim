@@ -80,13 +80,11 @@ from common import caps_cache
 from common import proxy65_manager
 from common import socks5
 from common import helpers
-from common import dataforms
 from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent, FileTransferCompletedEvent, InformationEvent
+    FileRequestErrorEvent, FileTransferCompletedEvent
 from common.connection import Connection
-from common import jingle
 from common.file_props import FilesProp
 from common import pep
 

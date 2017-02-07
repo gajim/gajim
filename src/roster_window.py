@@ -64,15 +64,11 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 from common import i18n
-from common import pep
 from common import location_listener
 from common import ged
+from common import dbus_support
 
 from message_window import MessageWindowMgr
-
-from common import dbus_support
-if dbus_support.supported:
-    import dbus
 
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 

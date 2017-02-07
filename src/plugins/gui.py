@@ -36,7 +36,7 @@ import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from htmltextview import HtmlTextView
 from common import gajim
-from plugins.helpers import log_calls, log
+from plugins.helpers import log_calls
 from plugins.helpers import GajimPluginActivateException
 from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
@@ -221,7 +221,6 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def on_configure_plugin_button_clicked(self, widget):
-        #log.debug('widget: %s'%(widget))
         selection = self.installed_plugins_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter:

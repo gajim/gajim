@@ -20,7 +20,6 @@ Handles Jingle contents (XEP 0166)
 import os
 from common import gajim
 import nbxmpp
-from common.jingle_transport import JingleTransportIBB
 from .jingle_xtls import SELF_SIGNED_CERTIFICATE
 from .jingle_xtls import load_cert_file
 

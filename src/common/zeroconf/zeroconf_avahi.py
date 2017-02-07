@@ -26,7 +26,7 @@ except ImportError:
     pass
 
 from common.zeroconf.zeroconf import C_BARE_NAME, C_RESOLVED_INFO, \
-C_RI_INTERFACE, C_RI_PROTOCOL, C_RI_APROTOCOL, C_DOMAIN, C_TXT
+C_RI_INTERFACE, C_RI_PROTOCOL, C_DOMAIN, C_TXT
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,

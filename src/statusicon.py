@@ -25,7 +25,6 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
 import os
 
 import dialogs
@@ -35,7 +34,6 @@ import gtkgui_helpers
 
 from common import gajim
 from common import helpers
-from common import pep
 
 class StatusIcon:
     """

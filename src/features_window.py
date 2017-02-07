@@ -29,7 +29,6 @@ from gi.repository import Gtk
 import gtkgui_helpers
 
 from common import gajim
-from common import helpers
 from common.i18n import Q_
 
 class FeaturesWindow:

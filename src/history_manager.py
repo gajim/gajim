@@ -89,7 +89,6 @@ del parseOpts
 import common.configpaths
 common.configpaths.gajimpaths.init(config_path)
 del config_path
-from common import exceptions
 from common import gajim
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants

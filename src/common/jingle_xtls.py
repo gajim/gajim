@@ -44,9 +44,7 @@ except ImportError:
     log.info("PyOpenSSL not available")
 
 if PYOPENSSL_PRESENT:
-    from OpenSSL import SSL
-    from OpenSSL.SSL import Context
-    from OpenSSL import crypto
+    from OpenSSL import SSL, crypto
     TYPE_RSA = crypto.TYPE_RSA
     TYPE_DSA = crypto.TYPE_DSA
 

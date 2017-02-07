@@ -50,8 +50,6 @@ from common.zeroconf import zeroconf
 from common.zeroconf.connection_handlers_zeroconf import *
 from common.connection_handlers_events import *
 
-import locale
-
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def __init__(self, name):
         ConnectionHandlersZeroconf.__init__(self)

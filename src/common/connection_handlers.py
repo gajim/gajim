@@ -30,14 +30,13 @@
 
 import os
 import base64
-import sys
 import operator
 import hashlib
-from gi.repository import GLib
 
-from time import (altzone, daylight, gmtime, localtime, mktime, strftime,
+from time import (altzone, daylight, gmtime, localtime, strftime,
         time as time_time, timezone, tzname)
-from calendar import timegm
+
+from gi.repository import GLib
 
 import nbxmpp
 from common import caps_cache as capscache
@@ -62,11 +61,6 @@ from common import nec
 from common.nec import NetworkEvent
 
 from common.jingle import ConnectionJingle
-
-from common import dbus_support
-if dbus_support.supported:
-    import dbus
-    from music_track_listener import MusicTrackListener
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers')
@@ -603,7 +597,7 @@ class ConnectionVcard:
             node = conf.getAttr('node')
             form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
             if form_tag:
-                form = common.dataforms.ExtendForm(node=form_tag)
+                form = dataforms.ExtendForm(node=form_tag)
                 gajim.nec.push_incoming_event(PEPConfigReceivedEvent(None,
                     conn=self, node=node, form=form))
 

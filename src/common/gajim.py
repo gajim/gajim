@@ -35,7 +35,6 @@ import uuid
 
 from common import config
 import nbxmpp
-from common import defs
 from common import ged as ged_module
 
 interface = None # The actual interface (the gtk one for the moment)

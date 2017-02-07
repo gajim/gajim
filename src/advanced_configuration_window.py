@@ -29,7 +29,6 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from common import gajim
-from common import helpers
 
 (
 OPT_TYPE,

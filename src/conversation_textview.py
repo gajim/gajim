@@ -51,7 +51,6 @@ from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
-from encodings.punycode import punycode_encode as puny_encode
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1

@@ -21,7 +21,6 @@
 from datetime import datetime
 
 from common import gajim
-from common import pep
 from common import dbus_support
 if dbus_support.supported:
     import dbus

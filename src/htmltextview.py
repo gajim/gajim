@@ -51,7 +51,6 @@ if __name__ == '__main__':
     from common import i18n
     import common.configpaths
     common.configpaths.gajimpaths.init(None)
-    import gtkgui_helpers
 from common import gajim
 from gtkgui_helpers import get_icon_pixmap
 from common import helpers
@@ -1130,8 +1129,6 @@ class HtmlTextView(Gtk.TextView):
 change_cursor = None
 
 if __name__ == '__main__':
-    import os
-
     from conversation_textview import ConversationTextview
     import gajim as gaj
 
