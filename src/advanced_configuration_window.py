@@ -31,17 +31,10 @@ from gi.repository import Pango
 from common import gajim
 
 (
-OPT_TYPE,
-OPT_VAL
-) = range(2)
-
-(
 C_PREFNAME,
 C_VALUE,
 C_TYPE
 ) = range(3)
-
-GTKGUI_GLADE = 'manage_accounts_window.ui'
 
 def rate_limit(rate):
     """
