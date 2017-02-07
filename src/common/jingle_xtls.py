@@ -152,7 +152,7 @@ def send_cert(con, jid_from, sid):
     certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
         '.cert'
     certificate = read_cert(certpath)
-    iq = nbxmpp.Iq('result', to=jid_from);
+    iq = nbxmpp.Iq('result', to=jid_from)
     iq.setAttr('id', sid)
 
     pubkey = iq.setTag('pubkeys')
