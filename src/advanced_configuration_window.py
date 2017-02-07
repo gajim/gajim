@@ -150,7 +150,8 @@ class AdvancedConfigurationWindow(object):
         else:
             cell.set_property('editable', True)
 
-    def get_option_path(self, model, iter_):
+    @staticmethod
+    def get_option_path(model, iter_):
         # It looks like path made from reversed array
         # path[0] is the true one optname
         # path[1] is the key name
@@ -255,7 +256,8 @@ class AdvancedConfigurationWindow(object):
         modelrow[1] = text
         self.check_for_restart()
 
-    def on_advanced_configuration_window_destroy(self, widget):
+    @staticmethod
+    def on_advanced_configuration_window_destroy(widget):
         del gajim.interface.instances['advanced_config']
 
     def on_reset_button_clicked(self, widget):
