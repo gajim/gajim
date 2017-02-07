@@ -38,7 +38,7 @@ from os.path import expanduser
 from gi.repository import GLib
 
 from ..framework import CommandContainer, command, doc
-from .hosts import *
+from .hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
 
 class Execute(CommandContainer):
     AUTOMATIC = True

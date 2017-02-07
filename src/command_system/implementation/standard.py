@@ -30,7 +30,7 @@ from ..errors import CommandError
 from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
-from .hosts import *
+from .hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
 from . import execute
 
 # This holds constants fron the logger, which we'll be using in some of our
