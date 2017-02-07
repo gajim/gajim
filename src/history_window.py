@@ -31,6 +31,8 @@ from gi.repository import GLib
 import time
 import calendar
 
+from enum import IntEnum
+
 import gtkgui_helpers
 import conversation_textview
 import dialogs
@@ -39,26 +41,21 @@ from common import gajim
 from common import helpers
 from common import exceptions
 
-from common.logger import Constants
+from common.logger import ShowConstant, KindConstant
 
-constants = Constants()
+class InfoColumn(IntEnum):
+    '''Completion dict'''
+    JID = 0
+    ACCOUNT = 1
+    NAME = 2
+    COMPLETION = 3
 
-# Completion dict
-(
-        C_INFO_JID,
-        C_INFO_ACCOUNT,
-        C_INFO_NAME,
-        C_INFO_COMPLETION
-) = range(4)
-
-# contact_name, date, message, time
-(
-        C_LOG_JID,
-        C_CONTACT_NAME,
-        C_UNIXTIME,
-        C_MESSAGE,
-        C_TIME
-) = range(5)
+class Column(IntEnum):
+    LOG_JID = 0
+    CONTACT_NAME = 1
+    UNIXTIME = 2
+    MESSAGE = 3
+    TIME = 4
 
 class HistoryWindow:
     """
@@ -95,23 +92,23 @@ class HistoryWindow:
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', C_CONTACT_NAME)
-        col.set_sort_column_id(C_CONTACT_NAME) # user can click this header and sort
+        col.add_attribute(renderer, 'text', Column.CONTACT_NAME)
+        col.set_sort_column_id(Column.CONTACT_NAME) # user can click this header and sort
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Date'))
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', C_UNIXTIME)
-        col.set_sort_column_id(C_UNIXTIME) # user can click this header and sort
+        col.add_attribute(renderer, 'text', Column.UNIXTIME)
+        col.set_sort_column_id(Column.UNIXTIME) # user can click this header and sort
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Message'))
         self.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', C_MESSAGE)
+        col.add_attribute(renderer, 'text', Column.MESSAGE)
         col.set_resizable(True)
 
         self.jid = None # The history we are currently viewing
@@ -372,17 +369,17 @@ class HistoryWindow:
             widget.mark_day(day)
 
     def _get_string_show_from_constant_int(self, show):
-        if show == constants.SHOW_ONLINE:
+        if show == ShowConstant.ONLINE:
             show = 'online'
-        elif show == constants.SHOW_CHAT:
+        elif show == ShowConstant.CHAT:
             show = 'chat'
-        elif show == constants.SHOW_AWAY:
+        elif show == ShowConstant.AWAY:
             show = 'away'
-        elif show == constants.SHOW_XA:
+        elif show == ShowConstant.XA:
             show = 'xa'
-        elif show == constants.SHOW_DND:
+        elif show == ShowConstant.DND:
             show = 'dnd'
-        elif show == constants.SHOW_OFFLINE:
+        elif show == ShowConstant.OFFLINE:
             show = 'offline'
 
         return show
@@ -402,8 +399,8 @@ class HistoryWindow:
             # line[0] is contact_name, line[1] is time of message
             # line[2] is kind, line[3] is show, line[4] is message, line[5] is subject
             # line[6] is additional_data
-            if not show_status and line[2] in (constants.KIND_GCSTATUS,
-            constants.KIND_STATUS):
+            if not show_status and line[2] in (KindConstant.GCSTATUS,
+            KindConstant.STATUS):
                 continue
             self._add_new_line(line[0], line[1], line[2], line[3], line[4],
                     line[5], line[6])
@@ -412,8 +409,8 @@ class HistoryWindow:
         """
         Add a new line in textbuffer
         """
-        if not message and kind not in (constants.KIND_STATUS,
-                constants.KIND_GCSTATUS):
+        if not message and kind not in (KindConstant.STATUS,
+                KindConstant.GCSTATUS):
             return
         buf = self.history_buffer
         end_iter = buf.get_end_iter()
@@ -444,15 +441,15 @@ class HistoryWindow:
 
         show = self._get_string_show_from_constant_int(show)
 
-        if kind == constants.KIND_GC_MSG:
+        if kind == KindConstant.GC_MSG:
             tag_name = 'incoming'
-        elif kind in (constants.KIND_SINGLE_MSG_RECV,
-        constants.KIND_CHAT_MSG_RECV):
-            contact_name = self.completion_dict[self.jid][C_INFO_NAME]
+        elif kind in (KindConstant.SINGLE_MSG_RECV,
+        KindConstant.CHAT_MSG_RECV):
+            contact_name = self.completion_dict[self.jid][InfoColumn.NAME]
             tag_name = 'incoming'
             tag_msg = 'incomingtxt'
-        elif kind in (constants.KIND_SINGLE_MSG_SENT,
-        constants.KIND_CHAT_MSG_SENT):
+        elif kind in (KindConstant.SINGLE_MSG_SENT,
+        KindConstant.CHAT_MSG_SENT):
             if self.account:
                 contact_name = gajim.nicks[self.account]
             else:
@@ -462,7 +459,7 @@ class HistoryWindow:
                 contact_name = gajim.nicks[account]
             tag_name = 'outgoing'
             tag_msg = 'outgoingtxt'
-        elif kind == constants.KIND_GCSTATUS:
+        elif kind == KindConstant.GCSTATUS:
             # message here (if not None) is status message
             if message:
                 message = _('%(nick)s is now %(status)s: %(status_msg)s') %\
@@ -492,7 +489,7 @@ class HistoryWindow:
         else:
             # do not do this if gcstats, avoid dupping contact_name
             # eg. nkour: nkour is now Offline
-            if contact_name and kind != constants.KIND_GCSTATUS:
+            if contact_name and kind != KindConstant.GCSTATUS:
                 # add stuff before and after contact name
                 before_str = gajim.config.get('before_nickname')
                 before_str = helpers.from_one_line(before_str)
@@ -532,7 +529,7 @@ class HistoryWindow:
         # perform search in preselected jids
         # jids are preselected with the query_entry
         for jid in self.jids_to_search:
-            account = self.completion_dict[jid][C_INFO_ACCOUNT]
+            account = self.completion_dict[jid][InfoColumn.ACCOUNT]
             if account is None:
                 # We do not know an account. This can only happen if the contact is offine,
                 # or if we browse a groupchat history. The account is not needed, a dummy can
@@ -554,16 +551,16 @@ class HistoryWindow:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
             for row in results:
-                if not show_status and row[2] in (constants.KIND_GCSTATUS,
-                constants.KIND_STATUS):
+                if not show_status and row[2] in (KindConstant.GCSTATUS,
+                KindConstant.STATUS):
                     continue
                 contact_name = row[0]
                 if not contact_name:
                     kind = row[2]
-                    if kind == constants.KIND_CHAT_MSG_SENT: # it's us! :)
+                    if kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
                         contact_name = gajim.nicks[account]
                     else:
-                        contact_name = self.completion_dict[jid][C_INFO_NAME]
+                        contact_name = self.completion_dict[jid][InfoColumn.NAME]
                 tim = row[1]
                 message = row[4]
                 local_time = time.localtime(tim)
@@ -583,14 +580,14 @@ class HistoryWindow:
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
         model = widget.get_model()
         # make it a tupple (Y, M, D, 0, 0, 0...)
-        tim = time.strptime(model[path][C_UNIXTIME], '%Y-%m-%d')
+        tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
         gtk_month = tim[1]
         month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
         day = tim[2]
 
         # switch to belonging logfile if necessary
-        log_jid = model[path][C_LOG_JID]
+        log_jid = model[path][Column.LOG_JID]
         if log_jid != self.jid:
             self._load_history(log_jid, None)
 
@@ -599,7 +596,7 @@ class HistoryWindow:
             self.calendar.select_month(month, year)
 
         self.calendar.select_day(day)
-        unix_time = model[path][C_TIME]
+        unix_time = model[path][Column.TIME]
         self._scroll_to_result(unix_time)
         #FIXME: one day do not search just for unix_time but the whole and user
         # specific format of the textbuffer line [time] nick: message

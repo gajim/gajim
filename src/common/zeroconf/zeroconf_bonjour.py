@@ -20,7 +20,7 @@
 from common import gajim
 import select
 import re
-from common.zeroconf.zeroconf import C_BARE_NAME, C_DOMAIN, C_TXT
+from common.zeroconf.zeroconf import Constant
 
 try:
     import pybonjour
@@ -86,7 +86,7 @@ class Zeroconf:
             return
         if name != self.name:
             for key in self.contacts.keys():
-                if self.contacts[key][C_BARE_NAME] == name:
+                if self.contacts[key][Constant.BARE_NAME] == name:
                     del self.contacts[key]
                     self.remove_serviceCB(key)
                     return
@@ -171,7 +171,7 @@ class Zeroconf:
         if name != self.name:
             # update TXT data only, as intended according to resolve_all comment
             old_contact = self.contacts[name]
-            self.contacts[name] = old_contact[0:C_TXT] + (self.txt,) + old_contact[C_TXT+1:]
+            self.contacts[name] = old_contact[0:Constant.TXT] + (self.txt,) + old_contact[Constant.TXT+1:]
 
 
     def service_added_callback(self, sdRef, flags, errorCode, name, regtype, domain):
@@ -303,8 +303,8 @@ class Zeroconf:
 
         for val in self.contacts.values():
             resolve_sdRef = pybonjour.DNSServiceResolve(0,
-                    pybonjour.kDNSServiceInterfaceIndexAny, val[C_BARE_NAME],
-                    self.stype + '.', val[C_DOMAIN] + '.',
+                    pybonjour.kDNSServiceInterfaceIndexAny, val[Constant.BARE_NAME],
+                    self.stype + '.', val[Constant.DOMAIN] + '.',
                     self.service_resolved_all_callback)
 
             try:

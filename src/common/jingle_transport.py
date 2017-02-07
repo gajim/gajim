@@ -21,6 +21,7 @@ import nbxmpp
 import socket
 from common import gajim
 import logging
+from enum import IntEnum
 
 log = logging.getLogger('gajim.c.jingle_transport')
 
@@ -33,7 +34,7 @@ def get_jingle_transport(node):
         return transports[namespace](node)
 
 
-class TransportType(object):
+class TransportType(IntEnum):
     """
     Possible types of a JingleTransport
     """

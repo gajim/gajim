@@ -17,8 +17,22 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-C_NAME, C_DOMAIN, C_RESOLVED_INFO, C_BARE_NAME, C_TXT = range(5)
-C_RI_INTERFACE, C_RI_PROTOCOL, C_RI_HOST, C_RI_APROTOCOL, C_RI_ADDRESS, C_RI_PORT = range(6)
+from enum import IntEnum
+
+class Constant(IntEnum):
+    NAME = 0
+    DOMAIN = 1
+    RESOLVED_INFO = 2
+    BARE_NAME = 3
+    TXT = 4
+
+class ConstantRI(IntEnum):
+    INTERFACE = 0
+    PROTOCOL = 1
+    HOST = 2
+    APROTOCOL = 3
+    ADDRESS = 4
+    PORT = 5
 
 def test_avahi():
     try:

@@ -25,8 +25,7 @@ try:
 except ImportError:
     pass
 
-from common.zeroconf.zeroconf import C_BARE_NAME, C_RESOLVED_INFO, \
-C_RI_INTERFACE, C_RI_PROTOCOL, C_DOMAIN, C_TXT
+from common.zeroconf.zeroconf import Constant, ConstantRI
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
@@ -95,15 +94,15 @@ class Zeroconf:
         if name != self.name:
             for key in self.contacts.keys():
                 val = self.contacts[key]
-                if val[C_BARE_NAME] == name:
+                if val[Constant.BARE_NAME] == name:
                     # try to reduce instead of delete first
-                    resolved_info = val[C_RESOLVED_INFO]
+                    resolved_info = val[Constant.RESOLVED_INFO]
                     if len(resolved_info) > 1:
                         for i in range(len(resolved_info)):
-                            if resolved_info[i][C_RI_INTERFACE] == interface and resolved_info[i][C_RI_PROTOCOL] == protocol:
-                                del self.contacts[key][C_RESOLVED_INFO][i]
+                            if resolved_info[i][ConstantRI.INTERFACE] == interface and resolved_info[i][ConstantRI.PROTOCOL] == protocol:
+                                del self.contacts[key][Constant.RESOLVED_INFO][i]
                         # if still something left, don't remove
-                        if len(self.contacts[key][C_RESOLVED_INFO]) > 1: return
+                        if len(self.contacts[key][Constant.RESOLVED_INFO]) > 1: return
                     del self.contacts[key]
                     self.remove_serviceCB(key)
                     return
@@ -201,7 +200,7 @@ class Zeroconf:
             name = name + '@' + name
         # update TXT data only, as intended according to resolve_all comment
         old_contact = self.contacts[name]
-        self.contacts[name] = old_contact[0:C_TXT] + (txt,) + old_contact[C_TXT+1:]
+        self.contacts[name] = old_contact[0:Constant.TXT] + (txt,) + old_contact[Constant.TXT+1:]
 
     def service_added_callback(self):
         log.debug('Service successfully added')
@@ -450,9 +449,9 @@ class Zeroconf:
         for val in self.contacts.values():
             # get txt data from last recorded resolved info
             # TODO: Better try to get it from last IPv6 mDNS, then last IPv4?
-            ri = val[C_RESOLVED_INFO][0]
-            self.server.ResolveService(int(ri[C_RI_INTERFACE]), int(ri[C_RI_PROTOCOL]),
-                    val[C_BARE_NAME], self.stype, val[C_DOMAIN],
+            ri = val[Constant.RESOLVED_INFO][0]
+            self.server.ResolveService(int(ri[ConstantRI.INTERFACE]), int(ri[ConstantRI.PROTOCOL]),
+                    val[Constant.BARE_NAME], self.stype, val[Constant.DOMAIN],
                     self.avahi.PROTO_UNSPEC, dbus.UInt32(0),
                     reply_handler=self.service_resolved_all_callback,
                     error_handler=self.error_callback)

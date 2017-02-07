@@ -19,6 +19,7 @@
 
 
 from common.zeroconf import zeroconf
+from common.zeroconf.zeroconf import Constant, ConstantRI
 
 class Roster:
     def __init__(self, zeroconf):
@@ -29,7 +30,7 @@ class Roster:
 
     def update_roster(self):
         for val in self.zeroconf.contacts.values():
-            self.setItem(val[zeroconf.C_NAME])
+            self.setItem(val[Constant.NAME])
 
     def getRoster(self):
         if self._data is None:
@@ -58,13 +59,13 @@ class Roster:
 
         addresses = []
         i = 0
-        for ri in contact[zeroconf.C_RESOLVED_INFO]:
+        for ri in contact[Constant.RESOLVED_INFO]:
             addresses += [{}]
-            addresses[i]['host'] = ri[zeroconf.C_RI_HOST]
-            addresses[i]['address'] = ri[zeroconf.C_RI_ADDRESS]
-            addresses[i]['port'] = ri[zeroconf.C_RI_PORT]
+            addresses[i]['host'] = ri[ConstantRI.HOST]
+            addresses[i]['address'] = ri[ConstantRI.ADDRESS]
+            addresses[i]['port'] = ri[ConstantRI.PORT]
             i += 1
-        txt = contact[zeroconf.C_TXT]
+        txt = contact[Constant.TXT]
 
         self._data[jid]={}
         self._data[jid]['ask'] = 'none'

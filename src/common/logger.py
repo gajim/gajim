@@ -36,6 +36,7 @@ import json
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
+from enum import IntEnum
 
 from common import exceptions
 from common import gajim
@@ -50,59 +51,50 @@ CACHE_DB_PATH = gajim.gajimpaths['CACHE_DB']
 import logging
 log = logging.getLogger('gajim.c.logger')
 
-class Constants:
-    def __init__(self):
-        (
-                self.JID_NORMAL_TYPE,
-                self.JID_ROOM_TYPE
-        ) = range(2)
+class JIDConstant(IntEnum):
+    NORMAL_TYPE = 0
+    ROOM_TYPE = 1
 
-        (
-                self.KIND_STATUS,
-                self.KIND_GCSTATUS,
-                self.KIND_GC_MSG,
-                self.KIND_SINGLE_MSG_RECV,
-                self.KIND_CHAT_MSG_RECV,
-                self.KIND_SINGLE_MSG_SENT,
-                self.KIND_CHAT_MSG_SENT,
-                self.KIND_ERROR
-        ) = range(8)
+class KindConstant(IntEnum):
+    STATUS = 0
+    GCSTATUS = 1
+    GC_MSG = 2
+    SINGLE_MSG_RECV = 3
+    CHAT_MSG_RECV = 4
+    SINGLE_MSG_SENT = 5
+    CHAT_MSG_SENT = 6
+    ERROR = 7
 
-        (
-                self.SHOW_ONLINE,
-                self.SHOW_CHAT,
-                self.SHOW_AWAY,
-                self.SHOW_XA,
-                self.SHOW_DND,
-                self.SHOW_OFFLINE
-        ) = range(6)
+class ShowConstant(IntEnum):
+    ONLINE = 0
+    CHAT = 1
+    AWAY = 2
+    XA = 3
+    DND = 4
+    OFFLINE = 5
 
-        (
-                self.TYPE_AIM,
-                self.TYPE_GG,
-                self.TYPE_HTTP_WS,
-                self.TYPE_ICQ,
-                self.TYPE_MSN,
-                self.TYPE_QQ,
-                self.TYPE_SMS,
-                self.TYPE_SMTP,
-                self.TYPE_TLEN,
-                self.TYPE_YAHOO,
-                self.TYPE_NEWMAIL,
-                self.TYPE_RSS,
-                self.TYPE_WEATHER,
-                self.TYPE_MRIM,
-                self.TYPE_NO_TRANSPORT,
-        ) = range(15)
+class TypeConstant(IntEnum):
+    AIM = 0
+    GG = 1
+    HTTP_WS = 2
+    ICQ = 3
+    MSN = 4
+    QQ = 5
+    SMS = 6
+    SMTP = 7
+    TLEN = 8
+    YAHOO = 9
+    NEWMAIL = 10
+    RSS = 11
+    WEATHER = 12
+    MRIM = 13
+    NO_TRANSPORT = 14
 
-        (
-                self.SUBSCRIPTION_NONE,
-                self.SUBSCRIPTION_TO,
-                self.SUBSCRIPTION_FROM,
-                self.SUBSCRIPTION_BOTH,
-        ) = range(4)
-
-constants = Constants()
+class SubscriptionConstant(IntEnum):
+    NONE = 0
+    TO = 1
+    FROM = 2
+    BOTH = 3
 
 class Logger:
     def __init__(self):
@@ -231,7 +223,7 @@ class Logger:
         if row is None:
             return None
         else:
-            if row[0] == constants.JID_ROOM_TYPE:
+            if row[0] == JIDConstant.ROOM_TYPE:
                 return True
             return False
 
@@ -255,9 +247,9 @@ class Logger:
                 return row[0]
         # oh! a new jid :), we add it now
         if typestr == 'ROOM':
-            typ = constants.JID_ROOM_TYPE
+            typ = JIDConstant.ROOM_TYPE
         else:
-            typ = constants.JID_NORMAL_TYPE
+            typ = JIDConstant.NORMAL_TYPE
         try:
             self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
                     typ))
@@ -277,34 +269,34 @@ class Logger:
         Convert from string style to constant ints for db
         """
         if kind == 'status':
-            kind_col = constants.KIND_STATUS
+            kind_col = KindConstant.STATUS
         elif kind == 'gcstatus':
-            kind_col = constants.KIND_GCSTATUS
+            kind_col = KindConstant.GCSTATUS
         elif kind == 'gc_msg':
-            kind_col = constants.KIND_GC_MSG
+            kind_col = KindConstant.GC_MSG
         elif kind == 'single_msg_recv':
-            kind_col = constants.KIND_SINGLE_MSG_RECV
+            kind_col = KindConstant.SINGLE_MSG_RECV
         elif kind == 'single_msg_sent':
-            kind_col = constants.KIND_SINGLE_MSG_SENT
+            kind_col = KindConstant.SINGLE_MSG_SENT
         elif kind == 'chat_msg_recv':
-            kind_col = constants.KIND_CHAT_MSG_RECV
+            kind_col = KindConstant.CHAT_MSG_RECV
         elif kind == 'chat_msg_sent':
-            kind_col = constants.KIND_CHAT_MSG_SENT
+            kind_col = KindConstant.CHAT_MSG_SENT
         elif kind == 'error':
-            kind_col = constants.KIND_ERROR
+            kind_col = KindConstant.ERROR
 
         if show == 'online':
-            show_col = constants.SHOW_ONLINE
+            show_col = ShowConstant.ONLINE
         elif show == 'chat':
-            show_col = constants.SHOW_CHAT
+            show_col = ShowConstant.CHAT
         elif show == 'away':
-            show_col = constants.SHOW_AWAY
+            show_col = ShowConstant.AWAY
         elif show == 'xa':
-            show_col = constants.SHOW_XA
+            show_col = ShowConstant.XA
         elif show == 'dnd':
-            show_col = constants.SHOW_DND
+            show_col = ShowConstant.DND
         elif show == 'offline':
-            show_col = constants.SHOW_OFFLINE
+            show_col = ShowConstant.OFFLINE
         elif show is None:
             show_col = None
         else: # invisible in GC when someone goes invisible
@@ -318,70 +310,70 @@ class Logger:
         Convert from string style to constant ints for db
         """
         if type_ == 'aim':
-            return constants.TYPE_AIM
+            return TypeConstant.AIM
         if type_ == 'gadu-gadu':
-            return constants.TYPE_GG
+            return TypeConstant.GG
         if type_ == 'http-ws':
-            return constants.TYPE_HTTP_WS
+            return TypeConstant.HTTP_WS
         if type_ == 'icq':
-            return constants.TYPE_ICQ
+            return TypeConstant.ICQ
         if type_ == 'msn':
-            return constants.TYPE_MSN
+            return TypeConstant.MSN
         if type_ == 'qq':
-            return constants.TYPE_QQ
+            return TypeConstant.QQ
         if type_ == 'sms':
-            return constants.TYPE_SMS
+            return TypeConstant.SMS
         if type_ == 'smtp':
-            return constants.TYPE_SMTP
+            return TypeConstant.SMTP
         if type_ in ('tlen', 'x-tlen'):
-            return constants.TYPE_TLEN
+            return TypeConstant.TLEN
         if type_ == 'yahoo':
-            return constants.TYPE_YAHOO
+            return TypeConstant.YAHOO
         if type_ == 'newmail':
-            return constants.TYPE_NEWMAIL
+            return TypeConstant.NEWMAIL
         if type_ == 'rss':
-            return constants.TYPE_RSS
+            return TypeConstant.RSS
         if type_ == 'weather':
-            return constants.TYPE_WEATHER
+            return TypeConstant.WEATHER
         if type_ == 'mrim':
-            return constants.TYPE_MRIM
+            return TypeConstant.MRIM
         if type_ == 'jabber':
-            return constants.TYPE_NO_TRANSPORT
+            return TypeConstant.NO_TRANSPORT
         return None
 
     def convert_api_values_to_human_transport_type(self, type_id):
         """
         Convert from constant ints for db to string style
         """
-        if type_id == constants.TYPE_AIM:
+        if type_id == TypeConstant.AIM:
             return 'aim'
-        if type_id == constants.TYPE_GG:
+        if type_id == TypeConstant.GG:
             return 'gadu-gadu'
-        if type_id == constants.TYPE_HTTP_WS:
+        if type_id == TypeConstant.HTTP_WS:
             return 'http-ws'
-        if type_id == constants.TYPE_ICQ:
+        if type_id == TypeConstant.ICQ:
             return 'icq'
-        if type_id == constants.TYPE_MSN:
+        if type_id == TypeConstant.MSN:
             return 'msn'
-        if type_id == constants.TYPE_QQ:
+        if type_id == TypeConstant.QQ:
             return 'qq'
-        if type_id == constants.TYPE_SMS:
+        if type_id == TypeConstant.SMS:
             return 'sms'
-        if type_id == constants.TYPE_SMTP:
+        if type_id == TypeConstant.SMTP:
             return 'smtp'
-        if type_id == constants.TYPE_TLEN:
+        if type_id == TypeConstant.TLEN:
             return 'tlen'
-        if type_id == constants.TYPE_YAHOO:
+        if type_id == TypeConstant.YAHOO:
             return 'yahoo'
-        if type_id == constants.TYPE_NEWMAIL:
+        if type_id == TypeConstant.NEWMAIL:
             return 'newmail'
-        if type_id == constants.TYPE_RSS:
+        if type_id == TypeConstant.RSS:
             return 'rss'
-        if type_id == constants.TYPE_WEATHER:
+        if type_id == TypeConstant.WEATHER:
             return 'weather'
-        if type_id == constants.TYPE_MRIM:
+        if type_id == TypeConstant.MRIM:
             return 'mrim'
-        if type_id == constants.TYPE_NO_TRANSPORT:
+        if type_id == TypeConstant.NO_TRANSPORT:
             return 'jabber'
 
     def convert_human_subscription_values_to_db_api_values(self, sub):
@@ -389,25 +381,25 @@ class Logger:
         Convert from string style to constant ints for db
         """
         if sub == 'none':
-            return constants.SUBSCRIPTION_NONE
+            return SubscriptionConstant.NONE
         if sub == 'to':
-            return constants.SUBSCRIPTION_TO
+            return SubscriptionConstant.TO
         if sub == 'from':
-            return constants.SUBSCRIPTION_FROM
+            return SubscriptionConstant.FROM
         if sub == 'both':
-            return constants.SUBSCRIPTION_BOTH
+            return SubscriptionConstant.BOTH
 
     def convert_db_api_values_to_human_subscription_values(self, sub):
         """
         Convert from constant ints for db to string style
         """
-        if sub == constants.SUBSCRIPTION_NONE:
+        if sub == SubscriptionConstant.NONE:
             return 'none'
-        if sub == constants.SUBSCRIPTION_TO:
+        if sub == SubscriptionConstant.TO:
             return 'to'
-        if sub == constants.SUBSCRIPTION_FROM:
+        if sub == SubscriptionConstant.FROM:
             return 'from'
-        if sub == constants.SUBSCRIPTION_BOTH:
+        if sub == SubscriptionConstant.BOTH:
             return 'both'
 
     def commit_to_db(self, values, write_unread=False):
@@ -539,12 +531,12 @@ class Logger:
             except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if show is None: # show is None (xmpp), but we say that 'online'
-                show_col = constants.SHOW_ONLINE
+                show_col = ShowConstant.ONLINE
 
         elif kind == 'gcstatus':
             # status in ROOM (for pm status see status)
             if show is None: # show is None (xmpp), but we say that 'online'
-                show_col = constants.SHOW_ONLINE
+                show_col = ShowConstant.ONLINE
             jid, nick = jid.split('/', 1)
             try:
                 # re-get jid_id for the new jid
@@ -608,9 +600,9 @@ class Logger:
                 SELECT time, kind, message, subject, additional_data FROM logs
                 WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
                 ORDER BY time DESC LIMIT %d OFFSET %d
-                ''' % (where_sql, constants.KIND_SINGLE_MSG_RECV,
-                constants.KIND_CHAT_MSG_RECV, constants.KIND_SINGLE_MSG_SENT,
-                constants.KIND_CHAT_MSG_SENT, constants.KIND_ERROR, timed_out,
+                ''' % (where_sql, KindConstant.SINGLE_MSG_RECV,
+                KindConstant.CHAT_MSG_RECV, KindConstant.SINGLE_MSG_SENT,
+                KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timed_out,
                 restore_how_many_rows, pending_how_many), jid_tuple)
 
             results = self.cur.fetchall()
@@ -736,7 +728,7 @@ class Logger:
             AND kind NOT IN (%d, %d)
             ORDER BY time
             ''' % (where_sql, start_of_month, last_second_of_month,
-            constants.KIND_STATUS, constants.KIND_GCSTATUS), jid_tuple)
+            KindConstant.STATUS, KindConstant.GCSTATUS), jid_tuple)
         result = self.cur.fetchall()
 
         # convert timestamps to day of month
@@ -765,7 +757,7 @@ class Logger:
             SELECT MAX(time) FROM logs
             WHERE (%s)
             AND kind NOT IN (%d, %d)
-            ''' % (where_sql, constants.KIND_STATUS, constants.KIND_GCSTATUS),
+            ''' % (where_sql, KindConstant.STATUS, KindConstant.GCSTATUS),
             jid_tuple)
 
         results = self.cur.fetchone()

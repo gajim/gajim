@@ -35,6 +35,7 @@ import nbxmpp
 from common import dataforms
 from common import exceptions
 from common.zeroconf import zeroconf
+from common.zeroconf.zeroconf import Constant
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from nbxmpp.protocol import NS_CHATSTATES
@@ -1328,7 +1329,7 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
         if self.fjid is None:
             for key in self.conn.connection.zeroconf.contacts:
                 if self.ip == self.conn.connection.zeroconf.contacts[key][
-                zeroconf.C_ADDRESS]:
+                Constant.ADDRESS]:
                     self.fjid = key
                     break
 

@@ -35,15 +35,15 @@
 import re
 from common import defs
 from gi.repository import GLib
+from enum import IntEnum
 
-(
-OPT_TYPE,
-OPT_VAL,
-OPT_DESC,
-# If OPT_RESTART is True - we need restart to use our changed option
-# OPT_DESC also should be there
-OPT_RESTART,
-) = range(4)
+class Option(IntEnum):
+    TYPE = 0
+    VAL = 1
+    DESC = 2
+    # If Option.RESTART is True - we need restart to use our changed option
+    # Option.DESC also should be there
+    RESTART = 3
 
 opt_int = [ 'integer', 0 ]
 opt_str = [ 'string', 0 ]
@@ -633,7 +633,7 @@ class Config:
     def set(self, optname, value):
         if optname not in self.__options[1]:
             return
-        value = self.is_valid(self.__options[0][optname][OPT_TYPE], value)
+        value = self.is_valid(self.__options[0][optname][Option.TYPE], value)
         if value is None:
             return
 
@@ -650,24 +650,24 @@ class Config:
     def get_default(self, optname):
         if optname not in self.__options[0]:
             return None
-        return self.__options[0][optname][OPT_VAL]
+        return self.__options[0][optname][Option.VAL]
 
     def get_type(self, optname):
         if optname not in self.__options[0]:
             return None
-        return self.__options[0][optname][OPT_TYPE][0]
+        return self.__options[0][optname][Option.TYPE][0]
 
     def get_desc(self, optname):
         if optname not in self.__options[0]:
             return None
-        if len(self.__options[0][optname]) > OPT_DESC:
-            return self.__options[0][optname][OPT_DESC]
+        if len(self.__options[0][optname]) > Option.DESC:
+            return self.__options[0][optname][Option.DESC]
 
     def get_restart(self, optname):
         if optname not in self.__options[0]:
             return None
-        if len(self.__options[0][optname]) > OPT_RESTART:
-            return self.__options[0][optname][OPT_RESTART]
+        if len(self.__options[0][optname]) > Option.RESTART:
+            return self.__options[0][optname][Option.RESTART]
 
     def add_per(self, typename, name): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -679,7 +679,7 @@ class Config:
             return 'you already have added %s before' % name
         opt[1][name] = {}
         for o in opt[0]:
-            opt[1][name][o] = opt[0][o][OPT_VAL]
+            opt[1][name][o] = opt[0][o][Option.VAL]
         self._timeout_save()
 
     def del_per(self, typename, name, subname = None): # per_group_of_option
@@ -705,7 +705,7 @@ class Config:
         obj = dict_[key]
         if subname not in obj:
             return
-        typ = self.__options_per_key[optname][0][subname][OPT_TYPE]
+        typ = self.__options_per_key[optname][0][subname][Option.TYPE]
         value = self.is_valid(typ, value)
         if value is None:
             return
@@ -735,7 +735,7 @@ class Config:
         dict_ = self.__options_per_key[optname][0]
         if subname not in dict_:
             return None
-        return dict_[subname][OPT_VAL]
+        return dict_[subname][Option.VAL]
 
     def get_type_per(self, optname, subname):
         if optname not in self.__options_per_key:
@@ -743,7 +743,7 @@ class Config:
         dict_ = self.__options_per_key[optname][0]
         if subname not in dict_:
             return None
-        return dict_[subname][OPT_TYPE][0]
+        return dict_[subname][Option.TYPE][0]
 
     def get_desc_per(self, optname, key=None, subname=None):
         if optname not in self.__options_per_key:
@@ -758,8 +758,8 @@ class Config:
             return None
         if subname not in obj:
             return None
-        if len(obj[subname]) > OPT_DESC:
-            return obj[subname][OPT_DESC]
+        if len(obj[subname]) > Option.DESC:
+            return obj[subname][Option.DESC]
         return None
 
     def get_restart_per(self, optname, key=None, subname=None):
@@ -775,8 +775,8 @@ class Config:
             return False
         if subname not in obj:
             return False
-        if len(obj[subname]) > OPT_RESTART:
-            return obj[subname][OPT_RESTART]
+        if len(obj[subname]) > Option.RESTART:
+            return obj[subname][Option.RESTART]
         return False
 
     def should_log(self, account, jid):
@@ -794,7 +794,7 @@ class Config:
 
     def _init_options(self):
         for opt in self.__options[0]:
-            self.__options[1][opt] = self.__options[0][opt][OPT_VAL]
+            self.__options[1][opt] = self.__options[0][opt][Option.VAL]
 
     def _really_save(self):
         from common import gajim
