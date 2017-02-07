@@ -279,7 +279,7 @@ class DataFormWidget(Gtk.Alignment, object):
         selection = self.records_treeview.get_selection()
         model, rowrefs = selection.get_selected_rows()
         # rowref is a list of paths
-        for i in list(range(len(rowrefs))):
+        for i in range(len(rowrefs)):
             rowrefs[i] = Gtk.TreeRowReference.new(model, rowrefs[i])
         # rowref is a list of row references; need to convert because we will
         # modify the model, paths would change

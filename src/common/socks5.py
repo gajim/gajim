@@ -825,7 +825,7 @@ class Socks5(object):
         auth_mechanisms = []
         try:
             num_auth = struct.unpack('!xB', buff[:2])[0]
-            for i in list(range(num_auth)):
+            for i in range(num_auth):
                 mechanism, = struct.unpack('!B', buff[1 + i])
                 auth_mechanisms.append(mechanism)
         except Exception:

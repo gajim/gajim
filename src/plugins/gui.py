@@ -270,9 +270,9 @@ class PluginsWindow(object):
                     return
                 model = self.installed_plugins_model
 
-                for row in list(range(len(model))):
-                    if plugin == model[row][PLUGIN]:
-                        model.remove(model.get_iter((row, PLUGIN)))
+                for i, row in enumerate(model):
+                    if plugin == row[PLUGIN]:
+                        model.remove(model.get_iter((i, PLUGIN)))
                         break
 
                 iter_ = model.append([plugin, plugin.name, False,
