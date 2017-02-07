@@ -435,8 +435,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 # it's an IPv6
                 return True
             ip_s = ip.split('.')
-            ip_l = long(ip_s[0])<<24 | long(ip_s[1])<<16 | long(ip_s[2])<<8 | \
-                 long(ip_s[3])
+            ip_l = int(ip_s[0])<<24 | int(ip_s[1])<<16 | int(ip_s[2])<<8 | \
+                 int(ip_s[3])
             # 10/8
             if ip_l & (255<<24) == 10<<24:
                 return True

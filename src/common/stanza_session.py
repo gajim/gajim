@@ -553,7 +553,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
 
                     n, e = (crypto.decode_mpi(base64.b64decode(
                             keyvalue.getTagData(x))) for x in ('Modulus', 'Exponent'))
-                    eir_pubkey = RSA.construct((n, long(e)))
+                    eir_pubkey = RSA.construct((n, int(e)))
 
                     pubkey_o = nbxmpp.c14n.c14n(keyvalue, self._is_buggy_gajim())
                 else:
