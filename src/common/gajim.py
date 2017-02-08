@@ -142,6 +142,10 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
 
+# These will be set in gajim.gui_interface.
+idlequeue = None
+socks5queue = None
+
 HAVE_ZEROCONF = True
 try:
     __import__('avahi')
