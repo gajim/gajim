@@ -485,7 +485,7 @@ class Socks5(object):
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
-                if not self.fingerprint is None:
+                if self.fingerprint is not None:
                     if self.file_props.type_ == 's':
                         remote_jid = gajim.get_jid_without_resource(
                             self.file_props.receiver)

@@ -159,7 +159,7 @@ class PluginsWindow(object):
         self.uninstall_plugin_button.set_property('sensitive',
             gajim.PLUGINS_DIRS[1] in plugin.__path__)
         self.configure_plugin_button.set_property(
-            'sensitive', not plugin.config_dialog is None)
+            'sensitive', plugin.config_dialog is not None)
 
     def _clear_installed_plugin_info(self):
         self.plugin_name_label.set_text('')

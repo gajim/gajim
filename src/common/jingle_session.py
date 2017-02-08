@@ -527,7 +527,7 @@ class JingleSession:
         # Check if there's already a session with this user:
         if contents[0][0] != 'file':
             for session in self.connection.iter_jingle_sessions(self.peerjid):
-                if not session is self:
+                if session is not self:
                     reason = nbxmpp.Node('reason')
                     alternative_session = reason.setTag('alternative-session')
                     alternative_session.setTagData('sid', session.sid)
