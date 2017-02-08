@@ -490,7 +490,7 @@ class Logger:
             all_messages.append(results[0])
         return all_messages
 
-    def write(self, kind, jid, message=None, show=None, tim=None, subject=None, additional_data={}):
+    def write(self, kind, jid, message=None, show=None, tim=None, subject=None, additional_data=None):
         """
         Write a row (status, gcstatus, message etc) to logs database
 
@@ -504,6 +504,8 @@ class Logger:
                 ROOM_JID/nick if pm-related.
         """
 
+        if additional_data is None:
+            additional_data = {}
         if self.jids_already_in == []: # only happens if we just created the db
             self.open_db()
 
@@ -1101,7 +1103,9 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None, additional_data={}):
+    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None, additional_data=None):
+        if additional_data is None:
+            additional_data = {}
         if tim:
             time_col = float(tim)
         else:

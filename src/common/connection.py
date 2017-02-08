@@ -526,7 +526,9 @@ class CommonConnection:
                      subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
-    subject, type_, xhtml=None, additional_data={}):
+    subject, type_, xhtml=None, additional_data=None):
+        if additional_data is None:
+            additional_data = {}
         if not forward_from and session and session.is_loggable():
             ji = gajim.get_jid_without_resource(jid)
             if gajim.config.should_log(self.name, ji):
@@ -567,7 +569,7 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def request_subscription(self, jid, msg='', name='', groups=[],
+    def request_subscription(self, jid, msg='', name='', groups=None,
                     auto_auth=False):
         """
         To be implemented by derivated classes
@@ -2251,10 +2253,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         p = nbxmpp.Presence(jid, 'unsubscribe')
         self.connection.send(p)
 
-    def request_subscription(self, jid, msg='', name='', groups=[],
+    def request_subscription(self, jid, msg='', name='', groups=None,
     auto_auth=False, user_nick=''):
         if not gajim.account_is_connected(self.name):
             return
+        if groups is None:
+            groups = []
         log.debug('subscription request for %s' % jid)
         if auto_auth:
             self.jids_for_auto_auth.append(jid)

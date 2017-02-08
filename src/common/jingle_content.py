@@ -127,10 +127,12 @@ class JingleContent(object):
         if candidates:
             self.add_remote_candidates(candidates)
 
-    def __content(self, payload=[]):
+    def __content(self, payload=None):
         """
         Build a XML content-wrapper for our data
         """
+        if payload is None:
+            payload = []
         return nbxmpp.Node('content',
                 attrs={'name': self.name, 'creator': self.creator},
                 payload=payload)

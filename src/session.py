@@ -267,12 +267,15 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
     subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
-    form_node=None, displaymarking=None, additional_data={}):
+    form_node=None, displaymarking=None, additional_data=None):
         """
         Display the message or show notification in the roster
         """
         contact = None
         fjid = jid
+
+        if additional_data is None:
+            additional_data = {}
 
         # Try to catch the contact with correct resource
         if resource:

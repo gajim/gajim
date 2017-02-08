@@ -62,7 +62,9 @@ else:
                 should return the validated text, or raise ValueError
         """
         def uri_reference_role(role, rawtext, text, lineno, inliner,
-                options={}, content=[]):
+                options=None, content=None):
+            if options is None:
+                options = {}
             try:
                 valid_text = validator(text)
             except ValueError as e:
@@ -102,9 +104,10 @@ else:
         It reuses the docutils.core.Publisher class, which means it is *not*
         threadsafe.
         """
-        def __init__(self, settings_spec=None,
-                        settings_overrides=dict(report_level=5, halt_level=5),
-                        config_section='general'):
+        def __init__(self, settings_spec=None, settings_overrides=None,
+                config_section='general'):
+            if settings_overrides is None:
+                settings_overrides = {'report_level': 5, 'halt_level': 5}
             self.pub = Publisher(reader=None, parser=None, writer=None,
                     settings=None,
                     source_class=io.StringInput,

@@ -247,11 +247,13 @@ class Events:
         event.account = account
         self.fire_event_added(event)
 
-    def remove_events(self, account, jid, event = None, types = []):
+    def remove_events(self, account, jid, event=None, types=None):
         """
         If event is not specified, remove all events from this jid, optionally
         only from given type return True if no such event found
         """
+        if types is None:
+            types = []
         if account not in self._events:
             return True
         if jid not in self._events[account]:
@@ -297,15 +299,19 @@ class Events:
             self._events[account][new_jid] = self._events[account][old_jid]
         del self._events[account][old_jid]
 
-    def get_nb_events(self, types = [], account = None):
+    def get_nb_events(self, types=None, account=None):
+        if types is None:
+            types = []
         return self._get_nb_events(types = types, account = account)
 
-    def get_events(self, account, jid = None, types = []):
+    def get_events(self, account, jid=None, types=None):
         """
         Return all events from the given account of the form {jid1: [], jid2:
         []}. If jid is given, returns all events from the given jid in a list: []
         optionally only from given type
         """
+        if types is None:
+            types = []
         if account not in self._events:
             return []
         if not jid:
@@ -342,11 +348,12 @@ class Events:
                 first_event = event
         return first_event
 
-    def _get_nb_events(self, account = None, jid = None, attribute = None, types
-                    = []):
+    def _get_nb_events(self, account=None, jid=None, attribute=None, types=None):
         """
         Return the number of pending events
         """
+        if types is None:
+            types = []
         nb = 0
         if account:
             accounts = [account]
@@ -411,11 +418,13 @@ class Events:
                         first_event = event
         return first_account, first_jid, first_event
 
-    def get_nb_systray_events(self, types = []):
+    def get_nb_systray_events(self, types=None):
         """
         Return the number of events displayed in roster
         """
-        return self._get_nb_events(attribute = 'systray', types = types)
+        if types is None:
+            types = []
+        return self._get_nb_events(attribute='systray', types=types)
 
     def get_systray_events(self):
         """
@@ -428,12 +437,14 @@ class Events:
         events = self.get_systray_events()
         return self._get_first_event_with_attribute(events)
 
-    def get_nb_roster_events(self, account = None, jid = None, types = []):
+    def get_nb_roster_events(self, account=None, jid=None, types=None):
         """
         Return the number of events displayed in roster
         """
-        return self._get_nb_events(attribute = 'roster', account = account,
-                jid = jid, types = types)
+        if types is None:
+            types = []
+        return self._get_nb_events(attribute='roster', account=account,
+                jid=jid, types=types)
 
     def get_roster_events(self):
         """

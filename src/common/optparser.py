@@ -241,7 +241,8 @@ class OptionsParser:
 
         caps_cache.capscache.initialize_from_db()
 
-    def assert_unread_msgs_table_exists(self):
+    @staticmethod
+    def assert_unread_msgs_table_exists():
         """
         Create table unread_messages if there is no such table
         """
@@ -265,7 +266,12 @@ class OptionsParser:
             pass
         con.close()
 
-    def update_ft_proxies(self, to_remove=[], to_add=[]):
+    @staticmethod
+    def update_ft_proxies(to_remove=None, to_add=None):
+        if to_remove is None:
+            to_remove = []
+        if to_add is None:
+            to_add = []
         for account in gajim.config.get_per('accounts'):
             proxies_str = gajim.config.get_per('accounts', account,
                     'file_transfer_proxies')

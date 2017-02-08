@@ -94,13 +94,15 @@ def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
         client_caps = ClientCaps(caps_hash, node, hash_method)
     return client_caps
 
-def compute_caps_hash(identities, features, dataforms=[], hash_method='sha-1'):
+def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1'):
     """
     Compute caps hash according to XEP-0115, V1.5
 
     dataforms are nbxmpp.DataForms objects as common.dataforms don't allow several
     values without a field type list-multi
     """
+    if dataforms is None:
+        dataforms = []
     def sort_identities_func(i1, i2):
         cat1 = i1['category']
         cat2 = i2['category']

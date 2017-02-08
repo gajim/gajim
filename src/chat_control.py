@@ -1151,7 +1151,7 @@ class ChatControl(ChatControlBase):
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
-    msg_stanza_id=None, additional_data={}):
+    msg_stanza_id=None, additional_data=None):
         """
         Print a line in the conversation
 
@@ -1165,6 +1165,9 @@ class ChatControl(ChatControlBase):
         If frm is not set: it's an incomming message.
         """
         contact = self.contact
+
+        if additional_data is None:
+            additional_data = {}
 
         if frm == 'status':
             if not gajim.config.get('print_status_in_chats'):

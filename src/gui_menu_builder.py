@@ -59,13 +59,15 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
 
     return sub_menu
 
-def build_invite_submenu(invite_menuitem, list_, ignore_rooms=[],
+def build_invite_submenu(invite_menuitem, list_, ignore_rooms=None,
 show_bookmarked=False, force_resource=False):
     """
     list_ in a list of (contact, account)
     force_resource means we want to send invitation even if there is only one
         resource
     """
+    if ignore_rooms is None:
+        ignore_rooms = []
     roster = gajim.interface.roster
     # used if we invite only one contact with several resources
     contact_list = []
