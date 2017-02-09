@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkImage" id="add_image">
@@ -43,6 +43,7 @@
     <property name="window_position">center</property>
     <property name="default_width">450</property>
     <signal name="destroy" handler="on_archiving_preferences_window_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>
       <object class="GtkGrid" id="pref_grid">
         <property name="visible">True</property>

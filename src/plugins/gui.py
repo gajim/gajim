@@ -29,7 +29,7 @@ __all__ = ['PluginsWindow']
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GLib
+from gi.repository import GLib, Gdk
 import os
 
 import gtkgui_helpers
@@ -116,6 +116,9 @@ class PluginsWindow(object):
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
     def on_plugins_notebook_switch_page(self, widget, page, page_num):
         GLib.idle_add(self.xml.get_object('close_button').grab_focus)

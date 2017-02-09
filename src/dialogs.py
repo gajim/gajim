@@ -3397,6 +3397,10 @@ class XMLConsoleWindow:
 
         self.xml.connect_signals(self)
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def on_xml_console_window_destroy(self, widget):
         del gajim.interface.instances[self.account]['xml_console']
         gajim.ged.remove_event_handler('stanza-received', ged.GUI1,
@@ -4144,6 +4148,10 @@ class Archiving313PreferencesWindow:
         self.idle_id = GLib.timeout_add_seconds(3, self._nec_archiving_error)
         gajim.connections[self.account].request_archive_preferences()
 
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def set_widget_state(self, state):
         for widget in ('default_cb', 'save_button', 'add_button',
             'remove_button'):
@@ -4361,6 +4369,10 @@ class PrivacyListWindow:
         self.add_edit_vbox.hide()
 
         self.xml.connect_signals(self)
+
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
     def on_privacy_list_edit_window_destroy(self, widget):
         key_name = 'privacy_list_%s' % self.privacy_list_name
@@ -4675,6 +4687,10 @@ class PrivacyListsWindow:
         self.window.show_all()
 
         self.xml.connect_signals(self)
+
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
 
     def on_privacy_lists_first_window_destroy(self, widget):
         if 'privacy_lists' in gajim.interface.instances[self.account]:
