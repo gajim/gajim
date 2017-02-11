@@ -44,6 +44,7 @@ class GajimApplication(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
                                  flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show the application\'s version'))
@@ -84,15 +85,6 @@ class GajimApplication(Gtk.Application):
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
-
-    def do_activate(self):
-        # If a second instance starts do_activate() is called
-        # We bringt the Roster window to the front, GTK exits afterwards.
-        if self.interface:
-            self.interface.roster.window.present()
-            return
-
-        Gtk.Application.do_activate(self)
 
         import gtkexcepthook
         gtkexcepthook.init()
@@ -204,6 +196,14 @@ class GajimApplication(Gtk.Application):
         from gui_interface import Interface
         self.interface = Interface()
         self.interface.run(self)
+
+    def do_activate(self):
+        Gtk.Application.do_activate(self)
+        # If a second instance starts do_activate() is called
+        # We bringt the Roster window to the front, GTK exits afterwards.
+        if self.interface:
+            self.interface.roster.window.present()
+            return
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
