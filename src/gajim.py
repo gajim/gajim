@@ -126,12 +126,12 @@ class GajimApplication(Gtk.Application):
             sys.exit(1)
 
         # Create and initialize Application Paths & Databases
-        import common.configpaths
-        common.configpaths.gajimpaths.init(
+        from common import configpaths
+        configpaths.gajimpaths.init(
             self.config_path, self.profile, self.profile_separation)
 
         if hasattr(sys, 'frozen'):
-            self.frozen_logging(common.configpaths.gajimpaths.config_root)
+            self.frozen_logging(configpaths.gajimpaths.config_root)
 
         from common import gajim
         from common import check_paths
