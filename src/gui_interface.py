@@ -520,8 +520,8 @@ class Interface:
         list_ = [(contact, account)]
         dialogs.YesNoDialog(
                 _('Contact "%s" removed subscription from you') % contact.jid,
-                _('You will always see him or her as offline.\nDo you want to '
-                        'remove him or her from your contact list?'),
+                _('You will always see them as offline.\nDo you want to '
+                        'remove them from your contact list?'),
                 on_response_yes=(on_yes, list_))
             # FIXME: Per RFC 3921, we can "deny" ack as well, but the GUI does
             # not show deny
