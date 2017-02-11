@@ -224,6 +224,11 @@ class GajimApplication(Gtk.Application):
             profile = options.lookup_value('profile').get_string()
             app_id = '%s.%s' % (self.get_application_id(), profile)
             self.set_application_id(app_id)
+            self.profile = profile
+        if options.contains('separate'):
+            self.profile_separation = True
+        if options.contains('config-path'):
+            self.config_path = options.lookup_value('config-path').get_string()
         return -1
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
@@ -231,19 +236,10 @@ class GajimApplication(Gtk.Application):
         options = command_line.get_options_dict()
         if options.contains('quiet'):
             logging_helpers.set_quiet()
-        if options.contains('separate'):
-            self.profile_separation = True
         if options.contains('verbose'):
             logging_helpers.set_verbose()
-        if options.contains('profile'):
-            variant = options.lookup_value('profile')
-            self.profile = variant.get_string()
         if options.contains('loglevel'):
-            variant = options.lookup_value('loglevel')
-            string = variant.get_string()
+            string = options.lookup_value('loglevel').get_string()
             logging_helpers.set_loglevels(string)
-        if options.contains('config-path'):
-            variant = options.lookup_value('config-path')
-            self.config_path = variant.get_string()
         self.activate()
         return 0
