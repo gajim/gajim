@@ -59,10 +59,6 @@ class GajimApplication(Gtk.Application):
                              GLib.OptionArg.NONE,
                              _('Print XML stanzas and other debug '
                                'information'))
-        self.add_main_option('windev', ord('w'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Print stdout/stderr to the console '
-                               'on Windows'))
         self.add_main_option('profile', ord('p'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.STRING,
                              _('Use defined profile in configuration '
@@ -93,6 +89,10 @@ class GajimApplication(Gtk.Application):
         import common.configpaths
         common.configpaths.gajimpaths.init(
             self.config_path, self.profile, self.profile_separation)
+
+        if hasattr(sys, 'frozen'):
+            self.frozen_logging(common.configpaths.gajimpaths.config_root)
+
         from common import gajim
         from common import check_paths
         from common import exceptions
@@ -243,3 +243,35 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(string)
         self.activate()
         return 0
+
+    def frozen_logging(self, path):
+        import warnings
+        if not os.path.exists(path):
+            os.mkdir(path, 0o700)
+
+        class MyStd(object):
+            _file = None
+            _error = None
+            log_file = os.path.join(path, 'gajim.log')
+
+            def write(self, text):
+                if self._file is None and self._error is None:
+                    try:
+                        self._file = open(self.log_file, 'a')
+                    except Exception as details:
+                        self._error = details
+                if self._file is not None:
+                    self._file.write(text)
+                    self._file.flush()
+
+            def flush(self):
+                if self._file is not None:
+                    self._file.flush()
+
+            def isatty(self):
+                return False
+
+        outerr = MyStd()
+        sys.stdout = outerr
+        sys.stderr = outerr
+        warnings.filterwarnings(action='ignore')
