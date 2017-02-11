@@ -43,6 +43,8 @@ import sys
 import time
 import locale
 
+from enum import IntEnum
+
 import common.sleepy
 import history_window
 import dialogs
@@ -64,32 +66,26 @@ from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
 from common import i18n
-from common import pep
 from common import location_listener
 from common import ged
+from common import dbus_support
 
 from message_window import MessageWindowMgr
 
-from common import dbus_support
-if dbus_support.supported:
-    import dbus
-
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
-#(icon, name, type, jid, account, editable, second pixbuf)
-(
-    C_IMG, # image to show state (online, new message etc)
-    C_NAME, # cellrenderer text that holds contact nickame
-    C_TYPE, # account, group or contact?
-    C_JID, # the jid of the row
-    C_ACCOUNT, # cellrenderer text that holds account name
-    C_MOOD_PIXBUF,
-    C_ACTIVITY_PIXBUF,
-    C_TUNE_PIXBUF,
-    C_LOCATION_PIXBUF,
-    C_AVATAR_PIXBUF, # avatar_pixbuf
-    C_PADLOCK_PIXBUF, # use for account row only
-) = range(11)
+class Column(IntEnum):
+    IMG = 0  # image to show state (online, new message etc)
+    NAME = 1  # cellrenderer text that holds contact nickame
+    TYPE = 2  # account, group or contact?
+    JID = 3  # the jid of the row
+    ACCOUNT = 4  # cellrenderer text that holds account name
+    MOOD_PIXBUF = 5
+    ACTIVITY_PIXBUF = 6
+    TUNE_PIXBUF = 7
+    LOCATION_PIXBUF = 8
+    AVATAR_PIXBUF = 9  # avatar_pixbuf
+    PADLOCK_PIXBUF = 10  # use for account row only
 
 empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
@@ -438,7 +434,7 @@ class RosterWindow:
         assert iters, '%s shall be removed but is not in roster' % contact.jid
 
         parent_iter = self.model.iter_parent(iters[0])
-        parent_type = self.model[parent_iter][C_TYPE]
+        parent_type = self.model[parent_iter][Column.TYPE]
 
         if groups:
             # Only remove from specified groups
@@ -455,12 +451,12 @@ class RosterWindow:
             return False
         # Remove us and empty groups from the model
         for i in iters:
-            assert self.model[i][C_JID] == contact.jid and \
-                    self.model[i][C_ACCOUNT] == account, \
+            assert self.model[i][Column.JID] == contact.jid and \
+                    self.model[i][Column.ACCOUNT] == account, \
                     "Invalidated iters of %s" % contact.jid
 
             parent_i = self.model.iter_parent(i)
-            parent_type = self.model[parent_i][C_TYPE]
+            parent_type = self.model[parent_i][Column.TYPE]
 
             to_be_removed = i
             while parent_type == 'group' and \
@@ -469,13 +465,13 @@ class RosterWindow:
                     account_group = 'MERGED'
                 else:
                     account_group = account
-                group = self.model[parent_i][C_JID]
+                group = self.model[parent_i][Column.JID]
                 if group in gajim.groups[account]:
                     del gajim.groups[account][group]
                 to_be_removed = parent_i
                 del self._iters[account_group]['groups'][group]
                 parent_i = self.model.iter_parent(parent_i)
-                parent_type = self.model[parent_i][C_TYPE]
+                parent_type = self.model[parent_i][Column.TYPE]
             self.model.remove(to_be_removed)
 
         del self._iters[account]['contacts'][contact.jid]
@@ -559,7 +555,7 @@ class RosterWindow:
             family_in_roster = True
 
             parent_iter = self.model.iter_parent(iters[0])
-            parent_type = self.model[parent_iter][C_TYPE]
+            parent_type = self.model[parent_iter][Column.TYPE]
 
             if parent_type != 'contact':
                 # The contact on top
@@ -607,7 +603,7 @@ class RosterWindow:
             big_brother_account, model=self.model)
         if child_iters:
             parent_iter = self.model.iter_parent(child_iters[0])
-            parent_type = self.model[parent_iter][C_TYPE]
+            parent_type = self.model[parent_iter][Column.TYPE]
 
             # Check if the current BigBrother has even been before.
             if parent_type == 'contact':
@@ -633,7 +629,7 @@ class RosterWindow:
             if not child_iters:
                 continue
             parent_iter = self.model.iter_parent(child_iters[0])
-            parent_type = self.model[parent_iter][C_TYPE]
+            parent_type = self.model[parent_iter][Column.TYPE]
             if parent_type != 'contact':
                 _contact = gajim.contacts.get_contact(_account, _jid)
                 self._remove_entity(_contact, _account)
@@ -814,7 +810,7 @@ class RosterWindow:
         self_iter = self._get_self_contact_iter(account, model=self.model)
         if not self_iter:
             return
-        self.model[self_iter][C_JID] = new_jid
+        self.model[self_iter][Column.JID] = new_jid
         self.draw_contact(new_jid, account)
 
     def add_groupchat(self, jid, account, status=''):
@@ -1052,9 +1048,9 @@ class RosterWindow:
             # the only way to create a pixbuf from stock
 #            tls_pixbuf = self.window.render_icon_pixbuf(
 #                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
-            self.model[child_iter][C_PADLOCK_PIXBUF] = tls_pixbuf
+            self.model[child_iter][Column.PADLOCK_PIXBUF] = tls_pixbuf
         else:
-            self.model[child_iter][C_PADLOCK_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.PADLOCK_PIXBUF] = empty_pixbuf
 
         if self.regroup:
             account_name = _('Merged accounts')
@@ -1074,34 +1070,34 @@ class RosterWindow:
                     accounts = accounts)
             account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
-        self.model[child_iter][C_NAME] = account_name
+        self.model[child_iter][Column.NAME] = account_name
 
         pep_dict = gajim.connections[account].pep
         if gajim.config.get('show_mood_in_roster') and 'mood' in pep_dict:
-            self.model[child_iter][C_MOOD_PIXBUF] = \
+            self.model[child_iter][Column.MOOD_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['mood'])
         else:
-            self.model[child_iter][C_MOOD_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.MOOD_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_activity_in_roster') and 'activity' in \
         pep_dict:
-            self.model[child_iter][C_ACTIVITY_PIXBUF] = \
+            self.model[child_iter][Column.ACTIVITY_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['activity'])
         else:
-            self.model[child_iter][C_ACTIVITY_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.ACTIVITY_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
-            self.model[child_iter][C_TUNE_PIXBUF] = \
+            self.model[child_iter][Column.TUNE_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['tune'])
         else:
-            self.model[child_iter][C_TUNE_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.TUNE_PIXBUF] = empty_pixbuf
 
         if gajim.config.get('show_location_in_roster') and 'location' in \
         pep_dict:
-            self.model[child_iter][C_LOCATION_PIXBUF] = \
+            self.model[child_iter][Column.LOCATION_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['location'])
         else:
-            self.model[child_iter][C_LOCATION_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.LOCATION_PIXBUF] = empty_pixbuf
 
     def _really_draw_accounts(self):
         for acct in self.accounts_to_draw:
@@ -1134,7 +1130,7 @@ class RosterWindow:
                     accounts = accounts, groups = [group])
             text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
-        self.model[child_iter][C_NAME] = text
+        self.model[child_iter][Column.NAME] = text
 
     def _really_draw_groups(self):
         for ag in self.groups_to_draw.values():
@@ -1157,11 +1153,11 @@ class RosterWindow:
         if not child_iters:
             return False
         parent_iter = self.model.iter_parent(child_iters[0])
-        if self.model[parent_iter][C_TYPE] != 'contact':
+        if self.model[parent_iter][Column.TYPE] != 'contact':
             # parent is not a contact
             return
-        parent_jid = self.model[parent_iter][C_JID]
-        parent_account = self.model[parent_iter][C_ACCOUNT]
+        parent_jid = self.model[parent_iter][Column.JID]
+        parent_account = self.model[parent_iter][Column.ACCOUNT]
         self.draw_contact(parent_jid, parent_account)
         return False
 
@@ -1273,8 +1269,8 @@ class RosterWindow:
                     iterC = self.model.iter_children(child_iter)
                     while iterC:
                         # a child has awaiting messages?
-                        jidC = self.model[iterC][C_JID]
-                        accountC = self.model[iterC][C_ACCOUNT]
+                        jidC = self.model[iterC][Column.JID]
+                        accountC = self.model[iterC][Column.ACCOUNT]
                         if len(gajim.events.get_events(accountC, jidC)):
                             icon_name = 'event'
                             break
@@ -1292,8 +1288,8 @@ class RosterWindow:
                 # Expand/collapse icon might differ per iter
                 # (group)
                 img = state_images[icon_name]
-                self.model[child_iter][C_IMG] = img
-                self.model[child_iter][C_NAME] = name
+                self.model[child_iter][Column.IMG] = img
+                self.model[child_iter][Column.NAME] = name
         else:
             # A normal contact or little brother
             state_images = self.get_appropriate_state_images(jid,
@@ -1302,8 +1298,8 @@ class RosterWindow:
             # All iters have the same icon (no expand/collapse)
             img = state_images[icon_name]
             for child_iter in child_iters:
-                self.model[child_iter][C_IMG] = img
-                self.model[child_iter][C_NAME] = name
+                self.model[child_iter][Column.IMG] = img
+                self.model[child_iter][Column.NAME] = name
 
             # We are a little brother
             if family and not is_big_brother and not self.starting:
@@ -1320,7 +1316,7 @@ class RosterWindow:
                 iterG = self._get_group_iter(g, account, model=self.model)
                 if iterG:
                     # it's not self contact
-                    self.model[iterG][C_JID] = self.model[iterG][C_JID]
+                    self.model[iterG][Column.JID] = self.model[iterG][Column.JID]
                 i += 1
 
         gajim.plugin_manager.gui_extension_point('roster_draw_contact', self,
@@ -1367,14 +1363,14 @@ class RosterWindow:
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters or not gajim.config.get('show_avatars_in_roster'):
             return
-        jid = self.model[iters[0]][C_JID]
+        jid = self.model[iters[0]][Column.JID]
         pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
         if pixbuf in (None, 'ask'):
             scaled_pixbuf = empty_pixbuf
         else:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
         for child_iter in iters:
-            self.model[child_iter][C_AVATAR_PIXBUF] = scaled_pixbuf
+            self.model[child_iter][Column.AVATAR_PIXBUF] = scaled_pixbuf
         return False
 
     def draw_completely(self, jid, account):
@@ -1517,9 +1513,9 @@ class RosterWindow:
 
     def _readjust_expand_collapse_state(self):
         def func(model, path, iter_, param):
-            type_ = model[iter_][C_TYPE]
-            acct = model[iter_][C_ACCOUNT]
-            jid = model[iter_][C_JID]
+            type_ = model[iter_][Column.TYPE]
+            acct = model[iter_][Column.ACCOUNT]
+            jid = model[iter_][Column.JID]
             key = None
             if type_ == 'account':
                 key = acct
@@ -1527,9 +1523,9 @@ class RosterWindow:
                 key = acct + jid
             elif type_ == 'contact':
                 parent_iter = model.iter_parent(iter_)
-                ptype = model[parent_iter][C_TYPE]
+                ptype = model[parent_iter][Column.TYPE]
                 if ptype == 'group':
-                    grp = model[parent_iter][C_JID]
+                    grp = model[parent_iter][Column.JID]
                     key = acct + grp + jid
             if key:
                 if key in self.collapsed_rows:
@@ -1624,18 +1620,18 @@ class RosterWindow:
         """
         if self.starting_filtering:
             return False
-        type_ = model[titer][C_TYPE]
+        type_ = model[titer][Column.TYPE]
         if not type_:
             return False
         if type_ == 'account':
             # Always show account
             return True
 
-        account = model[titer][C_ACCOUNT]
+        account = model[titer][Column.ACCOUNT]
         if not account:
             return False
 
-        jid = model[titer][C_JID]
+        jid = model[titer][Column.JID]
         if not jid:
             return False
 
@@ -1666,7 +1662,7 @@ class RosterWindow:
                 return True
 
             if self.regroup:
-                # C_ACCOUNT for groups depends on the order
+                # Column.ACCOUNT for groups depends on the order
                 # accounts were connected
                 # Check all accounts for online group contacts
                 accounts = gajim.contacts.get_accounts()
@@ -1689,10 +1685,10 @@ class RosterWindow:
                 if model.iter_has_child(titer):
                     iter_c = model.iter_children(titer)
                     while iter_c:
-                        if self.rfilter_string in model[iter_c][C_NAME].lower():
+                        if self.rfilter_string in model[iter_c][Column.NAME].lower():
                             return True
                         iter_c = model.iter_next(iter_c)
-                return self.rfilter_string in model[titer][C_NAME].lower()
+                return self.rfilter_string in model[titer][Column.NAME].lower()
             if gajim.config.get('showoffline'):
                 return True
             bb_jid = None
@@ -1717,7 +1713,7 @@ class RosterWindow:
                 return self.contact_is_visible(contact, account)
         if type_ == 'agent':
             if self.rfilter_enabled:
-                return self.rfilter_string in model[titer][C_NAME].lower()
+                return self.rfilter_string in model[titer][Column.NAME].lower()
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
             return self.contact_has_pending_roster_events(contact, account) or \
@@ -1725,30 +1721,30 @@ class RosterWindow:
                 (gajim.account_is_connected(account) or \
                 gajim.config.get('showoffline')))
         if type_ == 'groupchat' and self.rfilter_enabled:
-            return self.rfilter_string in model[titer][C_NAME].lower()
+            return self.rfilter_string in model[titer][Column.NAME].lower()
         return True
 
     def _compareIters(self, model, iter1, iter2, data=None):
         """
         Compare two iters to sort them
         """
-        name1 = model[iter1][C_NAME]
-        name2 = model[iter2][C_NAME]
+        name1 = model[iter1][Column.NAME]
+        name2 = model[iter2][Column.NAME]
         if not name1 or not name2:
             return 0
         name1 = name1
         name2 = name2
-        type1 = model[iter1][C_TYPE]
-        type2 = model[iter2][C_TYPE]
+        type1 = model[iter1][Column.TYPE]
+        type2 = model[iter2][Column.TYPE]
         if type1 == 'self_contact':
             return -1
         if type2 == 'self_contact':
             return 1
         if type1 == 'group':
-            name1 = model[iter1][C_JID]
+            name1 = model[iter1][Column.JID]
             if name1:
                 name1 = name1
-            name2 = model[iter2][C_JID]
+            name2 = model[iter2][Column.JID]
             if name2:
                 name2 = name2
             if name1 == _('Transports'):
@@ -1763,16 +1759,16 @@ class RosterWindow:
                 return 1
             if name2 == _('Groupchats'):
                 return -1
-        account1 = model[iter1][C_ACCOUNT]
-        account2 = model[iter2][C_ACCOUNT]
+        account1 = model[iter1][Column.ACCOUNT]
+        account2 = model[iter2][Column.ACCOUNT]
         if not account1 or not account2:
             return 0
         account1 = account1
         account2 = account2
         if type1 == 'account':
             return locale.strcoll(account1, account2)
-        jid1 = model[iter1][C_JID]
-        jid2 = model[iter2][C_JID]
+        jid1 = model[iter1][Column.JID]
+        jid2 = model[iter2][Column.JID]
         if type1 == 'contact':
             lcontact1 = gajim.contacts.get_contacts(account1, jid1)
             contact1 = gajim.contacts.get_first_contact_from_jid(account1, jid1)
@@ -2291,7 +2287,7 @@ class RosterWindow:
             else:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
-                    self.model[child_iterA][C_AVATAR_PIXBUF] = empty_pixbuf
+                    self.model[child_iterA][Column.AVATAR_PIXBUF] = empty_pixbuf
                 if account in gajim.con_types:
                     gajim.con_types[account] = None
                 for jid in list(gajim.contacts.get_jid_list(account)):
@@ -3053,7 +3049,7 @@ class RosterWindow:
                     win.redraw_tab(ctrl)
                     win.show_title()
             elif row_type == 'group':
-                # in C_JID column, we hold the group name (which is not escaped)
+                # in Column.JID column, we hold the group name (which is not escaped)
                 self.rename_group(old_text, new_text, account)
 
         def on_canceled():
@@ -3085,7 +3081,7 @@ class RosterWindow:
                 'attached_gpg_keys').split()
         keys = {}
         keyID = _('None')
-        for i in list(range(int(len(attached_keys)/2))):
+        for i in range(len(attached_keys) // 2):
             keys[attached_keys[2*i]] = attached_keys[2*i+1]
             if attached_keys[2*i] == contact.jid:
                 keyID = attached_keys[2*i+1]
@@ -3331,10 +3327,10 @@ class RosterWindow:
             if len(list_of_paths) != 1:
                 return
             path = list_of_paths[0]
-            type_ = model[path][C_TYPE]
+            type_ = model[path][Column.TYPE]
             if type_ in ('contact', 'group', 'agent'):
-                jid = model[path][C_JID]
-                account = model[path][C_ACCOUNT]
+                jid = model[path][Column.JID]
+                account = model[path][Column.ACCOUNT]
                 self.on_rename(widget, type_, jid, account)
 
         elif event.keyval == Gdk.KEY_Delete:
@@ -3342,17 +3338,17 @@ class RosterWindow:
             model, list_of_paths = treeselection.get_selected_rows()
             if not len(list_of_paths):
                 return
-            type_ = model[list_of_paths[0]][C_TYPE]
-            account = model[list_of_paths[0]][C_ACCOUNT]
+            type_ = model[list_of_paths[0]][Column.TYPE]
+            account = model[list_of_paths[0]][Column.ACCOUNT]
             if type_ in ('account', 'group', 'self_contact') or \
-            account == gajim.ZEROCONF_ACC_NAME:
+            account == gajim.ZEROCONF_ACConstant.NAME:
                 return
             list_ = []
             for path in list_of_paths:
-                if model[path][C_TYPE] != type_:
+                if model[path][Column.TYPE] != type_:
                     return
-                jid = model[path][C_JID]
-                account = model[path][C_ACCOUNT]
+                jid = model[path][Column.JID]
+                account = model[path][Column.ACCOUNT]
                 if not gajim.account_is_connected(account):
                     continue
                 contact = gajim.contacts.get_contact_with_highest_priority(
@@ -3466,11 +3462,11 @@ class RosterWindow:
             if list_of_paths != [path]:
                 self.tree.get_selection().unselect_all()
                 self.tree.get_selection().select_path(path)
-            type_ = model[path][C_TYPE]
+            type_ = model[path][Column.TYPE]
             if type_ in ('agent', 'contact', 'self_contact', 'groupchat'):
                 self.on_row_activated(widget, path)
             elif type_ == 'account':
-                account = model[path][C_ACCOUNT]
+                account = model[path][Column.ACCOUNT]
                 if account != 'all':
                     show = gajim.connections[account].connected
                     if show > 1: # We are connected
@@ -3495,7 +3491,7 @@ class RosterWindow:
 
         elif event.button == 1: # Left click
             model = self.modelfilter
-            type_ = model[path][C_TYPE]
+            type_ = model[path][Column.TYPE]
             # x_min is the x start position of status icon column
             if gajim.config.get('avatar_position_in_roster') == 'left':
                 x_min = gajim.config.get('roster_avatar_width')
@@ -3536,9 +3532,9 @@ class RosterWindow:
         iter = self.modelfilter.get_iter(path)
         child_iter = self.modelfilter.iter_children(iter)
         while child_iter:
-            type_ = self.modelfilter[child_iter][C_TYPE]
-            account = self.modelfilter[child_iter][C_ACCOUNT]
-            group = self.modelfilter[child_iter][C_JID]
+            type_ = self.modelfilter[child_iter][Column.TYPE]
+            account = self.modelfilter[child_iter][Column.ACCOUNT]
+            group = self.modelfilter[child_iter][Column.JID]
             if type_ == 'group' and account + group not in self.collapsed_rows:
                 self.expand_group_row(self.modelfilter.get_path(child_iter))
             child_iter = self.modelfilter.iter_next(child_iter)
@@ -3944,10 +3940,10 @@ class RosterWindow:
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
             for path in list_of_paths:
-                type_ = model[path][C_TYPE]
+                type_ = model[path][Column.TYPE]
                 if type_ in ('contact', 'agent'):
-                    jid = model[path][C_JID]
-                    account = model[path][C_ACCOUNT]
+                    jid = model[path][Column.JID]
+                    account = model[path][Column.ACCOUNT]
                     contact = gajim.contacts.get_first_contact_from_jid(account,
                         jid)
                     self.on_info(widget, contact, account)
@@ -3958,10 +3954,10 @@ class RosterWindow:
             if len(list_of_paths) != 1:
                 return
             path = list_of_paths[0]
-            type_ = model[path][C_TYPE]
+            type_ = model[path][Column.TYPE]
             if type_ in ('contact', 'agent'):
-                jid = model[path][C_JID]
-                account = model[path][C_ACCOUNT]
+                jid = model[path][Column.JID]
+                account = model[path][Column.ACCOUNT]
                 contact = gajim.contacts.get_first_contact_from_jid(account,
                     jid)
                 self.on_history(widget, contact, account)
@@ -3976,8 +3972,8 @@ class RosterWindow:
         this way)
         """
         model = self.modelfilter
-        account = model[path][C_ACCOUNT]
-        type_ = model[path][C_TYPE]
+        account = model[path][Column.ACCOUNT]
+        type_ = model[path][Column.TYPE]
         if type_ in ('group', 'account'):
             if self.tree.row_expanded(path):
                 self.tree.collapse_row(path)
@@ -3986,7 +3982,7 @@ class RosterWindow:
             return
         if self.rfilter_enabled:
             GObject.idle_add(self.disable_rfilter)
-        jid = model[path][C_JID]
+        jid = model[path][Column.JID]
         resource = None
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
         titer = model.get_iter(path)
@@ -4013,7 +4009,7 @@ class RosterWindow:
         if not first_ev and model.iter_has_child(titer):
             child_iter = model.iter_children(titer)
             while not first_ev and child_iter:
-                child_jid = model[child_iter][C_JID]
+                child_jid = model[child_iter][Column.JID]
                 first_ev = gajim.events.get_first_event(account, child_jid)
                 if first_ev:
                     jid = child_jid
@@ -4058,12 +4054,12 @@ class RosterWindow:
         if self.regroup: # merged accounts
             accounts = list(gajim.connections.keys())
         else:
-            accounts = [model[titer][C_ACCOUNT]]
+            accounts = [model[titer][Column.ACCOUNT]]
 
-        type_ = model[titer][C_TYPE]
+        type_ = model[titer][Column.TYPE]
         if type_ == 'group':
-            group = model[titer][C_JID]
-            child_model[child_iter][C_IMG] = \
+            group = model[titer][Column.JID]
+            child_model[child_iter][Column.IMG] = \
                 gajim.interface.jabber_state_images['16']['opened']
             if self.rfilter_enabled:
                 return
@@ -4095,8 +4091,8 @@ class RosterWindow:
                         self.tree.expand_row(path, False)
         elif type_ == 'contact':
             # Metacontact got toggled, update icon
-            jid = model[titer][C_JID]
-            account = model[titer][C_ACCOUNT]
+            jid = model[titer][Column.JID]
+            account = model[titer][Column.ACCOUNT]
             contact = gajim.contacts.get_contact(account, jid)
             for group in contact.groups:
                 if account + group + jid in self.collapsed_rows:
@@ -4122,15 +4118,15 @@ class RosterWindow:
         if self.regroup: # merged accounts
             accounts = list(gajim.connections.keys())
         else:
-            accounts = [model[titer][C_ACCOUNT]]
+            accounts = [model[titer][Column.ACCOUNT]]
 
-        type_ = model[titer][C_TYPE]
+        type_ = model[titer][Column.TYPE]
         if type_ == 'group':
-            child_model[child_iter][C_IMG] = gajim.interface.\
+            child_model[child_iter][Column.IMG] = gajim.interface.\
                 jabber_state_images['16']['closed']
             if self.rfilter_enabled:
                 return
-            group = model[titer][C_JID]
+            group = model[titer][Column.JID]
             for account in accounts:
                 if group in gajim.groups[account]: # This account has this group
                     gajim.groups[account][group]['expand'] = False
@@ -4143,8 +4139,8 @@ class RosterWindow:
             self.draw_account(account)
         elif type_ == 'contact':
             # Metacontact got toggled, update icon
-            jid = model[titer][C_JID]
-            account = model[titer][C_ACCOUNT]
+            jid = model[titer][Column.JID]
+            account = model[titer][Column.ACCOUNT]
             contact = gajim.contacts.get_contact(account, jid)
             groups = contact.groups
             if not groups:
@@ -4171,8 +4167,8 @@ class RosterWindow:
             # Signal is emitted when we write to our model
             return
 
-        type_ = model[titer][C_TYPE]
-        account = model[titer][C_ACCOUNT]
+        type_ = model[titer][Column.TYPE]
+        account = model[titer][Column.ACCOUNT]
         if not account:
             return
 
@@ -4183,10 +4179,10 @@ class RosterWindow:
                 # redraw us to show/hide expand icon
                 if self.filtering:
                     # Prevent endless loops
-                    jid = model[titer][C_JID]
+                    jid = model[titer][Column.JID]
                     GLib.idle_add(self.draw_contact, jid, account)
         elif type_ == 'group':
-            group = model[titer][C_JID]
+            group = model[titer][Column.JID]
             GLib.idle_add(self._adjust_group_expand_collapse_state, group, account)
         elif type_ == 'account':
             GLib.idle_add(self._adjust_account_expand_collapse_state, account)
@@ -4213,11 +4209,11 @@ class RosterWindow:
 #                       return
 #               for path in list_of_paths:
 #                       row = model[path]
-#                       if row[C_TYPE] != 'contact':
+#                       if row[Column.TYPE] != 'contact':
 #                               self._last_selected_contact = []
 #                               return
-#                       jid = row[C_JID]
-#                       account = row[C_ACCOUNT]
+#                       jid = row[Column.JID]
+#                       account = row[Column.ACCOUNT]
 #                       self._last_selected_contact.append((jid, account))
 #                       GLib.idle_add(self.draw_contact, jid, account, True)
 
@@ -4287,8 +4283,8 @@ class RosterWindow:
         # select first row
         self.tree.get_selection().unselect_all()
         def _func(model, path, iter_, param):
-            if model[iter_][C_TYPE] == 'contact' and self.rfilter_string in \
-            model[iter_][C_NAME].lower():
+            if model[iter_][Column.TYPE] == 'contact' and self.rfilter_string in \
+            model[iter_][Column.NAME].lower():
                 col = self.tree.get_column(0)
                 self.tree.set_cursor_on_cell(path, col, None, False)
                 return True
@@ -4365,7 +4361,7 @@ class RosterWindow:
         path = list_of_paths[0]
         data = ''
         if path.get_depth() >= 2:
-            data = model[path][C_JID]
+            data = model[path][Column.JID]
         selection.set_text(data, -1)
 
     def drag_begin(self, treeview, context):
@@ -4574,9 +4570,9 @@ class RosterWindow:
             path_dest = (path_dest[0], path_dest[1]-1)
         # destination: the row something got dropped on
         iter_dest = model.get_iter(path_dest)
-        type_dest = model[iter_dest][C_TYPE]
-        jid_dest = model[iter_dest][C_JID]
-        account_dest = model[iter_dest][C_ACCOUNT]
+        type_dest = model[iter_dest][Column.TYPE]
+        jid_dest = model[iter_dest][Column.JID]
+        account_dest = model[iter_dest][Column.ACCOUNT]
 
         # drop on account row in merged mode, we cannot know the desired account
         if account_dest == 'all':
@@ -4639,8 +4635,8 @@ class RosterWindow:
         # source: the row that was dragged
         path_source = treeview.get_selection().get_selected_rows()[1][0]
         iter_source = model.get_iter(path_source)
-        type_source = model[iter_source][C_TYPE]
-        account_source = model[iter_source][C_ACCOUNT]
+        type_source = model[iter_source][Column.TYPE]
+        account_source = model[iter_source][Column.ACCOUNT]
 
         if gajim.config.get_per('accounts', account_source, 'is_zeroconf'):
             return
@@ -4658,18 +4654,18 @@ class RosterWindow:
             if account_source != account_dest:
                 # drop on another account
                 return
-            grp_source = model[iter_source][C_JID]
+            grp_source = model[iter_source][Column.JID]
             delimiter = gajim.connections[account_source].nested_group_delimiter
             grp_source_list = grp_source.split(delimiter)
             new_grp = None
             if type_dest == 'account':
                 new_grp = grp_source_list[-1]
             elif type_dest == 'group':
-                grp_dest = model[iter_dest][C_JID]
+                grp_dest = model[iter_dest][Column.JID]
                 grp_dest_list = grp_dest.split(delimiter)
                 # Do not allow to drop on a subgroup of source group
                 if grp_source_list[0] != grp_dest_list[0]:
-                    new_grp = model[iter_dest][C_JID] + delimiter + \
+                    new_grp = model[iter_dest][Column.JID] + delimiter + \
                         grp_source_list[-1]
             if new_grp:
                 self.move_group(grp_source, new_grp, account_source)
@@ -4689,9 +4685,9 @@ class RosterWindow:
 
         # Get valid source group, jid and contact
         it = iter_source
-        while model[it][C_TYPE] == 'contact':
+        while model[it][Column.TYPE] == 'contact':
             it = model.iter_parent(it)
-        grp_source = model[it][C_JID]
+        grp_source = model[it][Column.JID]
         if grp_source in helpers.special_groups and \
                 grp_source not in ('Not in Roster', 'Observers'):
             # a transport or a minimized groupchat was dragged
@@ -4705,12 +4701,12 @@ class RosterWindow:
         # Get destination group
         grp_dest = None
         if type_dest == 'group':
-            grp_dest = model[iter_dest][C_JID]
+            grp_dest = model[iter_dest][Column.JID]
         elif type_dest in ('contact', 'agent'):
             it = iter_dest
-            while model[it][C_TYPE] != 'group':
+            while model[it][Column.TYPE] != 'group':
                 it = model.iter_parent(it)
-            grp_dest = model[it][C_JID]
+            grp_dest = model[it][Column.JID]
         if grp_dest in helpers.special_groups:
             return
 
@@ -4869,7 +4865,7 @@ class RosterWindow:
             show = gajim.SHOW_LIST[status]
         else: # accounts merged
             show = helpers.get_global_show()
-        self.model[child_iterA][C_IMG] = gajim.interface.jabber_state_images[
+        self.model[child_iterA][Column.IMG] = gajim.interface.jabber_state_images[
             '16'][show]
 
 ################################################################################
@@ -4910,9 +4906,9 @@ class RosterWindow:
         gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
 
     def _change_style(self, model, path, titer, option):
-        if option is None or model[titer][C_TYPE] == option:
+        if option is None or model[titer][Column.TYPE] == option:
             # We changed style for this type of row
-            model[titer][C_NAME] = model[titer][C_NAME]
+            model[titer][Column.NAME] = model[titer][Column.NAME]
 
     def change_roster_style(self, option):
         self.model.foreach(self._change_style, option)
@@ -4958,7 +4954,7 @@ class RosterWindow:
         When a row is added, set properties for icon renderer
         """
         try:
-            type_ = model[titer][C_TYPE]
+            type_ = model[titer][Column.TYPE]
         except TypeError:
             return
         if type_ == 'account':
@@ -4967,20 +4963,20 @@ class RosterWindow:
         elif type_ == 'group':
             self._set_group_row_background_color(renderer)
             parent_iter = model.iter_parent(titer)
-            if model[parent_iter][C_TYPE] == 'group':
+            if model[parent_iter][Column.TYPE] == 'group':
                 renderer.set_property('xalign', 0.4)
             else:
                 renderer.set_property('xalign', 0.2)
         elif type_:
             # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-            if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+            if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
                 # This can append when at the moment we add the row
                 return
-            jid = model[titer][C_JID]
-            account = model[titer][C_ACCOUNT]
+            jid = model[titer][Column.JID]
+            account = model[titer][Column.ACCOUNT]
             self._set_contact_row_background_color(renderer, jid, account)
             parent_iter = model.iter_parent(titer)
-            if model[parent_iter][C_TYPE] == 'contact':
+            if model[parent_iter][Column.TYPE] == 'contact':
                 renderer.set_property('xalign', 1)
             else:
                 renderer.set_property('xalign', 0.6)
@@ -4991,7 +4987,7 @@ class RosterWindow:
         When a row is added, set properties for name renderer
         """
         try:
-            type_ = model[titer][C_TYPE]
+            type_ = model[titer][Column.TYPE]
         except TypeError:
             return
         theme = gajim.config.get('roster_theme')
@@ -5015,18 +5011,18 @@ class RosterWindow:
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
             parent_iter = model.iter_parent(titer)
-            if model[parent_iter][C_TYPE] == 'group':
+            if model[parent_iter][Column.TYPE] == 'group':
                 renderer.set_property('xpad', 8)
             else:
                 renderer.set_property('xpad', 4)
             self._set_group_row_background_color(renderer)
         elif type_:
             # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-            if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+            if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
                 # This can append when at the moment we add the row
                 return
-            jid = model[titer][C_JID]
-            account = model[titer][C_ACCOUNT]
+            jid = model[titer][Column.JID]
+            account = model[titer][Column.ACCOUNT]
             color = None
             if type_ == 'groupchat':
                 ctrl = gajim.interface.minimized_controls[account].get(jid,
@@ -5046,7 +5042,7 @@ class RosterWindow:
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
             parent_iter = model.iter_parent(titer)
-            if model[parent_iter][C_TYPE] == 'contact':
+            if model[parent_iter][Column.TYPE] == 'contact':
                 renderer.set_property('xpad', 16)
             else:
                 renderer.set_property('xpad', 12)
@@ -5057,7 +5053,7 @@ class RosterWindow:
         When a row is added, draw the respective pep icon
         """
         try:
-            type_ = model[titer][C_TYPE]
+            type_ = model[titer][Column.TYPE]
         except TypeError:
             return
 
@@ -5071,11 +5067,11 @@ class RosterWindow:
                 self._set_account_row_background_color(renderer)
                 renderer.set_property('xalign', 1)
             elif type_:
-                if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+                if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
                     # This can append at the moment we add the row
                     return
-                jid = model[titer][C_JID]
-                account = model[titer][C_ACCOUNT]
+                jid = model[titer][Column.JID]
+                account = model[titer][Column.ACCOUNT]
                 self._set_contact_row_background_color(renderer, jid, account)
 
     def _fill_avatar_pixbuf_renderer(self, column, renderer, model, titer,
@@ -5084,7 +5080,7 @@ class RosterWindow:
         When a row is added, set properties for avatar renderer
         """
         try:
-            type_ = model[titer][C_TYPE]
+            type_ = model[titer][Column.TYPE]
         except TypeError:
             return
 
@@ -5093,20 +5089,20 @@ class RosterWindow:
             return
 
         # allocate space for the icon only if needed
-        if model[titer][C_AVATAR_PIXBUF] or \
+        if model[titer][Column.AVATAR_PIXBUF] or \
         gajim.config.get('avatar_position_in_roster') == 'left':
             renderer.set_property('visible', True)
             if type_:
                 # prevent type_ = None, see http://trac.gajim.org/ticket/2534
-                if not model[titer][C_JID] or not model[titer][C_ACCOUNT]:
+                if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
                     # This can append at the moment we add the row
                     return
-                jid = model[titer][C_JID]
-                account = model[titer][C_ACCOUNT]
+                jid = model[titer][Column.JID]
+                account = model[titer][Column.ACCOUNT]
                 self._set_contact_row_background_color(renderer, jid, account)
         else:
             renderer.set_property('visible', False)
-        if model[titer][C_AVATAR_PIXBUF] == empty_pixbuf and \
+        if model[titer][Column.AVATAR_PIXBUF] == empty_pixbuf and \
         gajim.config.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
@@ -5123,12 +5119,12 @@ class RosterWindow:
         When a row is added, set properties for padlock renderer
         """
         try:
-            type_ = model[titer][C_TYPE]
+            type_ = model[titer][Column.TYPE]
         except TypeError:
             return
 
         # allocate space for the icon only if needed
-        if type_ == 'account' and model[titer][C_PADLOCK_PIXBUF]:
+        if type_ == 'account' and model[titer][Column.PADLOCK_PIXBUF]:
             renderer.set_property('visible', True)
             self._set_account_row_background_color(renderer)
             renderer.set_property('xalign', 1) # align pixbuf to the right
@@ -5600,7 +5596,7 @@ class RosterWindow:
         Make account's popup menu
         """
         model = self.modelfilter
-        account = model[titer][C_ACCOUNT]
+        account = model[titer][Column.ACCOUNT]
 
         if account != 'all': # not in merged mode
             menu = self.build_account_menu(account)
@@ -5631,14 +5627,14 @@ class RosterWindow:
         """
         model = self.modelfilter
         path = model.get_path(titer)
-        group = model[titer][C_JID]
-        account = model[titer][C_ACCOUNT]
+        group = model[titer][Column.JID]
+        account = model[titer][Column.ACCOUNT]
 
         list_ = [] # list of (contact, account) tuples
         list_online = [] # list of (contact, account) tuples
 
         show_bookmarked = True
-        group = model[titer][C_JID]
+        group = model[titer][Column.JID]
         for jid in gajim.contacts.get_jid_list(account):
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                 jid)
@@ -5777,8 +5773,8 @@ class RosterWindow:
         Make contact's popup menu
         """
         model = self.modelfilter
-        jid = model[titer][C_JID]
-        account = model[titer][C_ACCOUNT]
+        jid = model[titer][Column.JID]
+        account = model[titer][Column.ACCOUNT]
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
         menu = gui_menu_builder.get_contact_menu(contact, account)
         event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -5795,8 +5791,8 @@ class RosterWindow:
         is_blocked = True
         privacy_rules_supported = True
         for titer in iters:
-            jid = model[titer][C_JID]
-            account = model[titer][C_ACCOUNT]
+            jid = model[titer][Column.JID]
+            account = model[titer][Column.ACCOUNT]
             if gajim.connections[account].connected < 2:
                 one_account_offline = True
             if not gajim.connections[account].privacy_rules_supported:
@@ -5885,9 +5881,9 @@ class RosterWindow:
         Make transport's popup menu
         """
         model = self.modelfilter
-        jid = model[titer][C_JID]
+        jid = model[titer][Column.JID]
         path = model.get_path(titer)
-        account = model[titer][C_ACCOUNT]
+        account = model[titer][Column.ACCOUNT]
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
         menu = gui_menu_builder.get_transport_menu(contact, account)
         event_button = gtkgui_helpers.get_possible_button_event(event)
@@ -5897,8 +5893,8 @@ class RosterWindow:
     def make_groupchat_menu(self, event, titer):
         model = self.modelfilter
 
-        jid = model[titer][C_JID]
-        account = model[titer][C_ACCOUNT]
+        jid = model[titer][Column.JID]
+        account = model[titer][Column.ACCOUNT]
         contact = gajim.contacts.get_contact_with_highest_priority(account, jid)
         menu = Gtk.Menu()
 
@@ -6067,9 +6063,9 @@ class RosterWindow:
     def show_appropriate_context_menu(self, event, iters):
         # iters must be all of the same type
         model = self.modelfilter
-        type_ = model[iters[0]][C_TYPE]
+        type_ = model[iters[0]][Column.TYPE]
         for titer in iters[1:]:
-            if model[titer][C_TYPE] != type_:
+            if model[titer][Column.TYPE] != type_:
                 return
         if type_ == 'group' and len(iters) == 1:
             self.make_group_menu(event, iters[0])
@@ -6141,9 +6137,9 @@ class RosterWindow:
         except Exception:
             return False
 
-        typ = model[iter_][C_TYPE]
-        account = model[iter_][C_ACCOUNT]
-        jid = model[iter_][C_JID]
+        typ = model[iter_][Column.TYPE]
+        account = model[iter_][Column.ACCOUNT]
+        jid = model[iter_][Column.JID]
         connected_contacts = []
 
         if typ in ('contact', 'self_contact'):
@@ -6344,9 +6340,9 @@ class RosterWindow:
         # cell_data_func, func_arg)
         self.renderers_list = []
         self.renderers_propertys ={}
-        self._pep_type_to_model_column = {'mood': C_MOOD_PIXBUF,
-            'activity': C_ACTIVITY_PIXBUF, 'tune': C_TUNE_PIXBUF,
-            'location': C_LOCATION_PIXBUF}
+        self._pep_type_to_model_column = {'mood': Column.MOOD_PIXBUF,
+            'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_PIXBUF,
+            'location': Column.LOCATION_PIXBUF}
 
         renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
@@ -6354,7 +6350,7 @@ class RosterWindow:
 
         def add_avatar_renderer():
             self.renderers_list.append(('avatar', Gtk.CellRendererPixbuf(),
-                False, 'pixbuf', C_AVATAR_PIXBUF,
+                False, 'pixbuf', Column.AVATAR_PIXBUF,
                 self._fill_avatar_pixbuf_renderer, None))
 
         if gajim.config.get('avatar_position_in_roster') == 'left':
@@ -6362,32 +6358,32 @@ class RosterWindow:
 
         self.renderers_list += (
                 ('icon', cell_renderer_image.CellRendererImage(0, 0), False,
-                'image', C_IMG, self._iconCellDataFunc, None),
+                'image', Column.IMG, self._iconCellDataFunc, None),
 
                 ('name', renderer_text, True,
-                'markup', C_NAME, self._nameCellDataFunc, None),
+                'markup', Column.NAME, self._nameCellDataFunc, None),
 
                 ('mood', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', C_MOOD_PIXBUF,
-                self._fill_pep_pixbuf_renderer, C_MOOD_PIXBUF),
+                'pixbuf', Column.MOOD_PIXBUF,
+                self._fill_pep_pixbuf_renderer, Column.MOOD_PIXBUF),
 
                 ('activity', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', C_ACTIVITY_PIXBUF,
-                self._fill_pep_pixbuf_renderer, C_ACTIVITY_PIXBUF),
+                'pixbuf', Column.ACTIVITY_PIXBUF,
+                self._fill_pep_pixbuf_renderer, Column.ACTIVITY_PIXBUF),
 
                 ('tune', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', C_TUNE_PIXBUF,
-                self._fill_pep_pixbuf_renderer, C_TUNE_PIXBUF),
+                'pixbuf', Column.TUNE_PIXBUF,
+                self._fill_pep_pixbuf_renderer, Column.TUNE_PIXBUF),
 
                 ('location', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', C_LOCATION_PIXBUF,
-                self._fill_pep_pixbuf_renderer, C_LOCATION_PIXBUF))
+                'pixbuf', Column.LOCATION_PIXBUF,
+                self._fill_pep_pixbuf_renderer, Column.LOCATION_PIXBUF))
 
         if gajim.config.get('avatar_position_in_roster') == 'right':
             add_avatar_renderer()
 
         self.renderers_list.append(('padlock', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', C_PADLOCK_PIXBUF,
+                'pixbuf', Column.PADLOCK_PIXBUF,
                 self._fill_padlock_pixbuf_renderer, None))
 
         # fill and append column

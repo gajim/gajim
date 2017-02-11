@@ -80,13 +80,11 @@ from common import caps_cache
 from common import proxy65_manager
 from common import socks5
 from common import helpers
-from common import dataforms
 from common import passwords
 from common import logging_helpers
 from common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent, FileTransferCompletedEvent, InformationEvent
+    FileRequestErrorEvent, FileTransferCompletedEvent
 from common.connection import Connection
-from common import jingle
 from common.file_props import FilesProp
 from common import pep
 
@@ -120,7 +118,8 @@ class Interface:
             self.db_error_dialog = None
         self.db_error_dialog.connect('destroy', destroyed)
 
-    def handle_event_information(self, obj):
+    @staticmethod
+    def handle_event_information(obj):
         if obj.popup:
             if obj.level == 'error':
                 cls = dialogs.ErrorDialog
@@ -147,7 +146,8 @@ class Interface:
             self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
                 account, room_jid, title, prompt, transient_for=parent_win)
 
-    def handle_event_http_auth(self, obj):
+    @staticmethod
+    def handle_event_http_auth(obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
         def response(account, answer):
             obj.conn.build_http_auth_answer(obj.stanza, answer)
@@ -200,14 +200,16 @@ class Interface:
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
             ctrl.print_conversation('Error %s: %s' % (obj.errcode, obj.errmsg))
 
-    def handle_event_connection_lost(self, obj):
+    @staticmethod
+    def handle_event_connection_lost(obj):
         # ('CONNECTION_LOST', account, [title, text])
         path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
         account = obj.conn.name
         notify.popup(_('Connection Failed'), account, account,
             '', path, obj.title, obj.msg)
 
-    def unblock_signed_in_notifications(self, account):
+    @staticmethod
+    def unblock_signed_in_notifications(account):
         gajim.block_signed_in_notifications[account] = False
 
     def handle_event_status(self, obj): # OUR status
@@ -247,7 +249,8 @@ class Interface:
             profile_window.ProfileWindow(account, gajim.interface.roster.window)
             gajim.connections[account].request_vcard(jid)
 
-    def handle_gc_error(self, gc_control, pritext, sectext):
+    @staticmethod
+    def handle_gc_error(gc_control, pritext, sectext):
         if gc_control and gc_control.autorejoin is not None:
             if gc_control.error_dialog:
                 gc_control.error_dialog.destroy()
@@ -339,7 +342,8 @@ class Interface:
             if gc_control and gc_control.autorejoin:
                 gc_control.autorejoin = False
 
-    def handle_event_gc_message(self, obj):
+    @staticmethod
+    def handle_event_gc_message(obj):
         if not obj.stanza.getTag('body'): # no <body>
             # It could be a voice request. See
             # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
@@ -443,14 +447,16 @@ class Interface:
         if session:
             session.roster_message(jid, msg, obj.time_, msg_type='error')
 
-    def handle_event_msgsent(self, obj):
+    @staticmethod
+    def handle_event_msgsent(obj):
         #('MSGSENT', account, (jid, msg, keyID))
         # do not play sound when standalone chatstate message (eg no msg)
         if obj.message and gajim.config.get_per('soundevents', 'message_sent',
         'enabled'):
             helpers.play_sound('message_sent')
 
-    def handle_event_msgnotsent(self, obj):
+    @staticmethod
+    def handle_event_msgnotsent(obj):
         #('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
         msg = _('error while sending %(message)s ( %(error)s )') % {
                 'message': obj.message, 'error': obj.error}
@@ -540,7 +546,8 @@ class Interface:
             notify.popup(event_type, obj.jid, account, 'unsubscribed', path,
                 event_type, obj.jid)
 
-    def handle_event_register_agent_info(self, obj):
+    @staticmethod
+    def handle_event_register_agent_info(obj):
         # ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
         # info in a dataform if is_form is True
         if obj.is_form or 'instructions' in obj.config:
@@ -688,7 +695,8 @@ class Interface:
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
 
-    def handle_event_client_cert_passphrase(self, obj):
+    @staticmethod
+    def handle_event_client_cert_passphrase(obj):
         def on_ok(passphrase, checked):
             obj.conn.on_client_cert_passphrase(passphrase, obj.con, obj.port,
                 obj.secure_tuple)
@@ -710,7 +718,8 @@ class Interface:
             self.gpg_passphrase[obj.keyid] = request
         request.add_callback(obj.conn.name, obj.callback)
 
-    def handle_event_gpg_trust_key(self, obj):
+    @staticmethod
+    def handle_event_gpg_trust_key(obj):
         #('GPG_ALWAYS_TRUST', account, callback)
         def on_yes(checked):
             if checked:
@@ -861,7 +870,8 @@ class Interface:
             notify.popup(event_type, jid, account, 'file-send-error', path,
                 event_type, file_props.name)
 
-    def handle_event_gmail_notify(self, obj):
+    @staticmethod
+    def handle_event_gmail_notify(obj):
         jid = obj.jid
         gmail_new_messages = int(obj.newmsgs)
         gmail_messages_list = obj.gmail_messages_list
@@ -963,7 +973,8 @@ class Interface:
             notify.popup(event_type, obj.jid, account, 'file-request',
                 path_to_image=path, title=event_type, text=txt)
 
-    def handle_event_file_error(self, title, message):
+    @staticmethod
+    def handle_event_file_error(title, message):
         dialogs.ErrorDialog(title, message)
 
     def handle_event_file_progress(self, account, file_props):
@@ -1129,7 +1140,8 @@ class Interface:
             notify.popup(event_type, jid, account, msg_type, path_to_image=path,
                     title=event_type, text=txt)
 
-    def ask_offline_status(self, account):
+    @staticmethod
+    def ask_offline_status(account):
         for contact in gajim.contacts.iter_contacts(account):
             gajim.connections[account].request_last_status_time(contact.jid,
                 contact.resource)
@@ -1187,13 +1199,16 @@ class Interface:
             location_listener.enable()
 
 
-    def handle_event_metacontacts(self, obj):
+    @staticmethod
+    def handle_event_metacontacts(obj):
         gajim.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
 
-    def handle_atom_entry(self, obj):
+    @staticmethod
+    def handle_atom_entry(obj):
         AtomWindow.newAtomEntry(obj.atom_entry)
 
-    def handle_event_failed_decrypt(self, obj):
+    @staticmethod
+    def handle_event_failed_decrypt(obj):
         details = _('Unable to decrypt message from %s\nIt may have been '
             'tampered with.') % obj.fjid
         dialogs.WarningDialog(_('Unable to decrypt message'), details)
@@ -1328,7 +1343,8 @@ class Interface:
         if ctrl:
             ctrl.set_audio_state('error', reason=obj.reason)
 
-    def handle_event_roster_item_exchange(self, obj):
+    @staticmethod
+    def handle_event_roster_item_exchange(obj):
         # data = (action in [add, delete, modify], exchange_list, jid_from)
         dialogs.RosterItemExchangeWindow(obj.conn.name, obj.action,
             obj.exchange_items_list, obj.fjid)
@@ -1821,7 +1837,8 @@ class Interface:
 ### Methods dealing with emoticons
 ################################################################################
 
-    def image_is_ok(self, image):
+    @staticmethod
+    def image_is_ok(image):
         if not os.path.exists(image):
             return False
         img = Gtk.Image()
@@ -2317,7 +2334,8 @@ class Interface:
 ### Other Methods
 ################################################################################
 
-    def change_awn_icon_status(self, status):
+    @staticmethod
+    def change_awn_icon_status(status):
         if not dbus_support.supported:
             # do nothing if user doesn't have D-Bus bindings
             return
@@ -2356,8 +2374,8 @@ class Interface:
         listener.disconnect(self.music_track_changed_signal)
         self.music_track_changed_signal = None
 
-    def music_track_changed(self, unused_listener, music_track_info,
-    account=None):
+    @staticmethod
+    def music_track_changed(unused_listener, music_track_info, account=None):
         if not account:
             accounts = gajim.connections.keys()
         else:
@@ -2478,7 +2496,8 @@ class Interface:
         self.systray_enabled = False
         self.systray.hide_icon()
 
-    def on_launch_browser_mailer(self, widget, url, kind):
+    @staticmethod
+    def on_launch_browser_mailer(widget, url, kind):
         helpers.launch_browser_mailer(kind, url)
 
     def process_connections(self):
@@ -2497,7 +2516,8 @@ class Interface:
             raise
         return True # renew timeout (loop for ever)
 
-    def save_config(self):
+    @staticmethod
+    def save_config():
         err_str = parser.write()
         if err_str is not None:
             print(err_str, file=sys.stderr)
@@ -2507,7 +2527,8 @@ class Interface:
                 'preferences'), err_str)
             sys.exit()
 
-    def save_avatar_files(self, jid, photo, puny_nick = None, local = False):
+    @staticmethod
+    def save_avatar_files(jid, photo, puny_nick = None, local = False):
         """
         Save an avatar to a separate file, and generate files for dbus
         notifications. An avatar can be given as a pixmap directly or as an
@@ -2567,7 +2588,8 @@ class Interface:
                     log.error('Error writing avatar file %s: %s' % \
                         (path_to_original_file, str(e)))
 
-    def remove_avatar_files(self, jid, puny_nick = None, local = False):
+    @staticmethod
+    def remove_avatar_files(jid, puny_nick = None, local = False):
         """
         Remove avatar files of a jid
         """
@@ -2657,7 +2679,8 @@ class Interface:
 
         return gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC
 
-    def get_pep_icon(self, pep_obj):
+    @staticmethod
+    def get_pep_icon(pep_obj):
         if isinstance(pep_obj, pep.UserMoodPEP):
             received_mood = pep_obj._pep_specific_data['mood']
             mood = received_mood if received_mood in pep.MOODS else 'unknown'
@@ -2688,7 +2711,8 @@ class Interface:
                 quiet=True)
             return icon
 
-    def create_ipython_window(self):
+    @staticmethod
+    def create_ipython_window():
         try:
             from ipython_view import IPythonView
         except ImportError:

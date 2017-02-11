@@ -737,13 +737,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
-    msg_id=None, resource=None, xhtml=None, callback=None, callback_args=[],
+    msg_id=None, resource=None, xhtml=None, callback=None, callback_args=None,
     process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
         """
         if not message or message == '\n':
             return None
+
+        if callback_args is None:
+            callback_args = []
 
         if process_commands and self.process_as_command(message):
             return
@@ -807,7 +810,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    msg_stanza_id=None, correct_id=None, additional_data={}):
+    msg_stanza_id=None, correct_id=None, additional_data=None):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -818,6 +821,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         end = False
         if self.was_at_the_end or kind == 'outgoing':
             end = True
+
+        if other_tags_for_name is None:
+            other_tags_for_name = []
+        if other_tags_for_time is None:
+            other_tags_for_time = []
+        if other_tags_for_text is None:
+            other_tags_for_text = []
+        if additional_data is None:
+            additional_data = {}
 
         textview.print_conversation_line(text, jid, kind, name, tim,
             other_tags_for_name, other_tags_for_time, other_tags_for_text,

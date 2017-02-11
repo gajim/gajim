@@ -57,7 +57,7 @@ def on_suspend(active):
     # close the file descriptor and let the computer suspend
     if fd >= 0:
         os.close(fd)
-        fd = -1;
+        fd = -1
     else:
         # something is wrong, the system is suspending but we don't have
         # a lock file

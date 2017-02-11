@@ -216,13 +216,10 @@ LOCATION_DATA = {
         'uri':          _('uri')}
 
 from gi.repository import GLib
-from gi.repository import Gtk
-from gi.repository import GdkPixbuf
 
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-from common import helpers
 import nbxmpp
 from common import gajim
 

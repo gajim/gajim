@@ -23,26 +23,19 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from enum import IntEnum
+
 from gi.repository import Gtk
 import gtkgui_helpers
 from gi.repository import GLib
 from gi.repository import Pango
 
 from common import gajim
-from common import helpers
 
-(
-OPT_TYPE,
-OPT_VAL
-) = range(2)
-
-(
-C_PREFNAME,
-C_VALUE,
-C_TYPE
-) = range(3)
-
-GTKGUI_GLADE = 'manage_accounts_window.ui'
+class Column(IntEnum):
+    PREFERENCE_NAME = 0
+    VALUE = 1
+    TYPE = 2
 
 def rate_limit(rate):
     """
@@ -143,14 +136,15 @@ class AdvancedConfigurationWindow(object):
         Check if it's boolen or holds password stuff and if yes  make the
         cellrenderertext not editable, else - it's editable
         """
-        optname = model[iter_][C_PREFNAME]
-        opttype = model[iter_][C_TYPE]
+        optname = model[iter_][Column.PREFERENCE_NAME]
+        opttype = model[iter_][Column.TYPE]
         if opttype == self.types['boolean'] or optname == 'password':
             cell.set_property('editable', False)
         else:
             cell.set_property('editable', True)
 
-    def get_option_path(self, model, iter_):
+    @staticmethod
+    def get_option_path(model, iter_):
         # It looks like path made from reversed array
         # path[0] is the true one optname
         # path[1] is the key name
@@ -255,7 +249,8 @@ class AdvancedConfigurationWindow(object):
         modelrow[1] = text
         self.check_for_restart()
 
-    def on_advanced_configuration_window_destroy(self, widget):
+    @staticmethod
+    def on_advanced_configuration_window_destroy(widget):
         del gajim.interface.instances['advanced_config']
 
     def on_reset_button_clicked(self, widget):
@@ -269,8 +264,8 @@ class AdvancedConfigurationWindow(object):
             elif len(opt_path) == 3:
                 default = gajim.config.get_default_per(opt_path[2], opt_path[0])
 
-            if model[iter_][C_TYPE] == self.types['boolean']:
-                if self.right_true_dict[default] == model[iter_][C_VALUE]:
+            if model[iter_][Column.TYPE] == self.types['boolean']:
+                if self.right_true_dict[default] == model[iter_][Column.VALUE]:
                     return
                 modelpath = self.modelfilter.convert_path_to_child_path(path)
                 modelrow = self.model[modelpath]
@@ -281,15 +276,15 @@ class AdvancedConfigurationWindow(object):
                     keyrow = self.model[modelpath[:2]]
                     key = keyrow[0]
                     self.remember_option(option + '\n' + key + '\n' + optname,
-                        modelrow[C_VALUE], default)
+                        modelrow[Column.VALUE], default)
                     gajim.config.set_per(optname, key, option, default)
                 else:
-                    self.remember_option(option, modelrow[C_VALUE], default)
+                    self.remember_option(option, modelrow[Column.VALUE], default)
                     gajim.config.set(option, default)
-                modelrow[C_VALUE] = self.right_true_dict[default]
+                modelrow[Column.VALUE] = self.right_true_dict[default]
                 self.check_for_restart()
             else:
-                if str(default) == model[iter_][C_VALUE]:
+                if str(default) == model[iter_][Column.VALUE]:
                     return
                 self.on_config_edited(None, path.to_string(), str(default))
 
@@ -323,14 +318,14 @@ class AdvancedConfigurationWindow(object):
     def visible_func(self, model, treeiter, data):
         search_string  = self.entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
-            if model[it][C_TYPE] != '':
+            if model[it][Column.TYPE] != '':
                 opt_path = self.get_option_path(model, it)
                 if len(opt_path) == 3:
                     desc = gajim.config.get_desc_per(opt_path[2], opt_path[1],
                             opt_path[0])
                 elif len(opt_path) == 1:
                     desc = gajim.config.get_desc(opt_path[0])
-                if search_string in model[it][C_PREFNAME] or (desc and \
+                if search_string in model[it][Column.PREFERENCE_NAME] or (desc and \
                 search_string in desc.lower()):
                     return True
         return False

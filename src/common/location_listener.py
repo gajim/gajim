@@ -21,7 +21,6 @@
 from datetime import datetime
 
 from common import gajim
-from common import pep
 from common import dbus_support
 if dbus_support.supported:
     import dbus
@@ -90,9 +89,11 @@ class LocationListener:
     def shut_down(self):
         pass
 
-    def _on_geoclue_address_changed(self, timestamp=None, address={},
+    def _on_geoclue_address_changed(self, timestamp=None, address=None,
     accuracy=None):
         # update data with info we just received
+        if address is None:
+            address = {}
         for field in ['country', 'countrycode', 'locality', 'postalcode',
         'region', 'street']:
             self._data[field] = address.get(field, None)
@@ -103,8 +104,10 @@ class LocationListener:
             self._data['accuracy'] = accuracy[1]
         self._send_location()
 
-    def _on_geoclue_position_changed(self, fields=[], timestamp=None, lat=None,
+    def _on_geoclue_position_changed(self, fields=None, timestamp=None, lat=None,
     lon=None, alt=None, accuracy=None):
+        if fields is None:
+            fields = []
         # update data with info we just received
         _dict = {'lat': lat, 'lon': lon, 'alt': alt}
         for field in _dict:

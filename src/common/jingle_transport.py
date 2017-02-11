@@ -17,11 +17,11 @@
 Handles Jingle Transports (currently only ICE-UDP)
 """
 
-import nbxmpp
-import socket
-from common import gajim
-from common.protocol.bytestream import ConnectionSocks5Bytestream
 import logging
+import socket
+from enum import IntEnum
+import nbxmpp
+from common import gajim
 
 log = logging.getLogger('gajim.c.jingle_transport')
 
@@ -34,7 +34,7 @@ def get_jingle_transport(node):
         return transports[namespace](node)
 
 
-class TransportType(object):
+class TransportType(IntEnum):
     """
     Possible types of a JingleTransport
     """
@@ -43,15 +43,23 @@ class TransportType(object):
     IBB = 3
 
 
-class JingleTransport(object):
+class JingleTransport:
     """
     An abstraction of a transport in Jingle sessions
     """
+
+    __slots__ = ['type_', 'candidates', 'remote_candidates', 'connection',
+                 'file_props', 'ourjid', 'sid']
 
     def __init__(self, type_):
         self.type_ = type_
         self.candidates = []
         self.remote_candidates = []
+
+        self.connection = None
+        self.file_props = None
+        self.ourjid = None
+        self.sid = None
 
     def _iter_candidates(self):
         for candidate in self.candidates:
@@ -110,9 +118,7 @@ class JingleTransportSocks5(JingleTransport):
 
 
     def make_candidate(self, candidate):
-        import logging
-        log = logging.getLogger()
-        log.info('candidate dict, %s' % candidate)
+        log.info('candidate dict, %s', candidate)
         attrs = {
             'cid': candidate['candidate_id'],
             'host': candidate['host'],
@@ -124,8 +130,8 @@ class JingleTransportSocks5(JingleTransport):
 
         return nbxmpp.Node('candidate', attrs=attrs)
 
-    def make_transport(self, candidates=None, add_candidates = True):
-        if  add_candidates:
+    def make_transport(self, candidates=None, add_candidates=True):
+        if add_candidates:
             self._add_local_ips_as_candidates()
             self._add_additional_candidates()
             self._add_proxy_candidates()
@@ -174,7 +180,7 @@ class JingleTransportSocks5(JingleTransport):
 
     def _add_local_ips_as_candidates(self):
         if not gajim.config.get_per('accounts', self.connection.name,
-        'ft_send_local_ips'):
+                                    'ft_send_local_ips'):
             return
         if not self.connection:
             return
@@ -186,30 +192,34 @@ class JingleTransportSocks5(JingleTransport):
         hosts = set()
         local_ip_cand = []
 
-        c = {'host': self.connection.peerhost[0],
-             'candidate_id': self.connection.connection.getAnID(),
-             'port': port,
-             'type': 'direct',
-             'jid': self.ourjid,
-             'priority': priority}
+        candidate = {
+            'host': self.connection.peerhost[0],
+            'candidate_id': self.connection.connection.getAnID(),
+            'port': port,
+            'type': 'direct',
+            'jid': self.ourjid,
+            'priority': priority
+        }
         hosts.add(self.connection.peerhost[0])
-        local_ip_cand.append(c)
+        local_ip_cand.append(candidate)
 
         try:
             for addrinfo in socket.getaddrinfo(socket.gethostname(), None):
                 addr = addrinfo[4][0]
                 if not addr in hosts and not addr.startswith('127.') and \
                 addr != '::1':
-                    c = {'host': addr,
-                         'candidate_id': self.connection.connection.getAnID(),
-                         'port': port,
-                         'type': 'direct',
-                         'jid': self.ourjid,
-                         'priority': priority,
-                         'initiator': self.file_props.sender,
-                         'target': self.file_props.receiver}
+                    candidate = {
+                        'host': addr,
+                        'candidate_id': self.connection.connection.getAnID(),
+                        'port': port,
+                        'type': 'direct',
+                        'jid': self.ourjid,
+                        'priority': priority,
+                        'initiator': self.file_props.sender,
+                        'target': self.file_props.receiver
+                    }
                     hosts.add(addr)
-                    local_ip_cand.append(c)
+                    local_ip_cand.append(candidate)
         except socket.gaierror:
             pass # ignore address-related errors for getaddrinfo
 
@@ -226,16 +236,18 @@ class JingleTransportSocks5(JingleTransport):
 
         if ft_add_hosts:
             hosts = [e.strip() for e in ft_add_hosts.split(',')]
-            for h in hosts:
-                c = {'host': h,
-                     'candidate_id': self.connection.connection.getAnID(),
-                     'port': port,
-                     'type': 'direct',
-                     'jid': self.ourjid,
-                     'priority': priority,
-                     'initiator': self.file_props.sender,
-                     'target': self.file_props.receiver}
-                additional_ip_cand.append(c)
+            for host in hosts:
+                candidate = {
+                    'host': host,
+                    'candidate_id': self.connection.connection.getAnID(),
+                    'port': port,
+                    'type': 'direct',
+                    'jid': self.ourjid,
+                    'priority': priority,
+                    'initiator': self.file_props.sender,
+                    'target': self.file_props.receiver
+                }
+                additional_ip_cand.append(candidate)
 
         self._add_candidates(additional_ip_cand)
 
@@ -252,21 +264,23 @@ class JingleTransportSocks5(JingleTransport):
             self.file_props.proxyhosts = proxyhosts
 
             for proxyhost in proxyhosts:
-                c = {'host': proxyhost['host'],
-                     'candidate_id': self.connection.connection.getAnID(),
-                     'port': int(proxyhost['port']),
-                     'type': 'proxy',
-                     'jid': proxyhost['jid'],
-                     'priority': priority,
-                     'initiator': self.file_props.sender,
-                     'target': self.file_props.receiver}
-                proxy_cand.append(c)
+                candidate = {
+                    'host': proxyhost['host'],
+                    'candidate_id': self.connection.connection.getAnID(),
+                    'port': int(proxyhost['port']),
+                    'type': 'proxy',
+                    'jid': proxyhost['jid'],
+                    'priority': priority,
+                    'initiator': self.file_props.sender,
+                    'target': self.file_props.receiver
+                }
+                proxy_cand.append(candidate)
 
         self._add_candidates(proxy_cand)
 
     def get_content(self):
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props.sid)
+                                                  self.file_props.sid)
         for content in sesn.contents.values():
             if content.transport == self:
                 return content
@@ -277,7 +291,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         sesn = self.connection.get_jingle_session(self.ourjid,
-            self.file_props.sid)
+                                                  self.file_props.sid)
         if sesn is None:
             return
 
@@ -294,8 +308,8 @@ class JingleTransportSocks5(JingleTransport):
 
         content = nbxmpp.Node('content')
         content.setAttr('creator', 'initiator')
-        c = self.get_content()
-        content.setAttr('name', c.name)
+        content_object = self.get_content()
+        content.setAttr('name', content_object.name)
         transport = nbxmpp.Node('transport')
         transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', proxy['sid'])
@@ -307,7 +321,7 @@ class JingleTransportSocks5(JingleTransport):
         else:
             for host in self.candidates:
                 if host['host'] == proxy['host'] and host['jid'] == proxy['jid'] \
-                and host['port'] == proxy['port']:
+                        and host['port'] == proxy['port']:
                     cid = host['candidate_id']
                     break
         if cid is None:
@@ -345,7 +359,7 @@ class JingleTransportIBB(JingleTransport):
 
 try:
     from gi.repository import Farstream
-except Exception:
+except ImportError:
     pass
 
 class JingleTransportICEUDP(JingleTransport):
@@ -353,11 +367,13 @@ class JingleTransportICEUDP(JingleTransport):
         JingleTransport.__init__(self, TransportType.ICEUDP)
 
     def make_candidate(self, candidate):
-        types = {Farstream.CandidateType.HOST: 'host',
+        types = {
+            Farstream.CandidateType.HOST: 'host',
             Farstream.CandidateType.SRFLX: 'srflx',
             Farstream.CandidateType.PRFLX: 'prflx',
             Farstream.CandidateType.RELAY: 'relay',
-            Farstream.CandidateType.MULTICAST: 'multicast'}
+            Farstream.CandidateType.MULTICAST: 'multicast'
+        }
         attrs = {
             'component': candidate.component_id,
             'foundation': '1', # hack
@@ -402,23 +418,26 @@ class JingleTransportICEUDP(JingleTransport):
                 # jingle
                 proto = Farstream.NetworkProtocol.TCP
             priority = int(candidate['priority'])
-            types = {'host': Farstream.CandidateType.HOST,
+            types = {
+                'host': Farstream.CandidateType.HOST,
                 'srflx': Farstream.CandidateType.SRFLX,
                 'prflx': Farstream.CandidateType.PRFLX,
                 'relay': Farstream.CandidateType.RELAY,
-                'multicast': Farstream.CandidateType.MULTICAST}
+                'multicast': Farstream.CandidateType.MULTICAST
+            }
             if 'type' in candidate and candidate['type'] in types:
                 type_ = types[candidate['type']]
             else:
-                log.warning('Unknown type %s' % candidate['type'])
+                log.warning('Unknown type %s', candidate['type'])
                 type_ = Farstream.CandidateType.HOST
             username = str(transport['ufrag'])
             password = str(transport['pwd'])
             ttl = 0
 
             cand = Farstream.Candidate.new_full(foundation, component_id, ip,
-                port, base_ip, base_port, proto, priority, type_, username,
-                password, ttl)
+                                                port, base_ip, base_port,
+                                                proto, priority, type_,
+                                                username, password, ttl)
 
             candidates.append(cand)
         self.remote_candidates.extend(candidates)

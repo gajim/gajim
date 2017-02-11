@@ -26,12 +26,12 @@ import os
 import sys
 import tempfile
 from common import defs
+from enum import Enum
 
-(
-TYPE_CONFIG,
-TYPE_CACHE,
-TYPE_DATA
-) = range(3)
+class Type(Enum):
+    CONFIG = 0
+    CACHE = 1
+    DATA = 2
 
 # Note on path and filename encodings:
 #
@@ -65,7 +65,7 @@ def get(key):
 
 class ConfigPaths:
     def __init__(self):
-        # {'name': (type, path), } type can be TYPE_CONFIG, TYPE_CACHE, TYPE_DATA
+        # {'name': (type, path), } type can be Type.CONFIG, Type.CACHE, Type.DATA
         # or None
         self.paths = {}
 
@@ -109,11 +109,11 @@ class ConfigPaths:
 
     def __getitem__(self, key):
         type_, path = self.paths[key]
-        if type_ == TYPE_CONFIG:
+        if type_ == Type.CONFIG:
             return os.path.join(self.config_root, path)
-        elif type_ == TYPE_CACHE:
+        elif type_ == Type.CACHE:
             return os.path.join(self.cache_root, path)
-        elif type_ == TYPE_DATA:
+        elif type_ == Type.DATA:
             return os.path.join(self.data_root, path)
         return path
 
@@ -145,26 +145,26 @@ class ConfigPaths:
             'RNG_SEED': 'rng_seed'}
         for name in d:
             d[name] += profile
-            self.add(name, TYPE_DATA, windowsify(d[name]))
+            self.add(name, Type.DATA, windowsify(d[name]))
         if len(profile):
-            self.add('MY_DATA', TYPE_DATA, 'data.dir')
+            self.add('MY_DATA', Type.DATA, 'data.dir')
         else:
-            self.add('MY_DATA', TYPE_DATA, '')
+            self.add('MY_DATA', Type.DATA, '')
 
         d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
                 'AVATAR': 'avatars'}
         for name in d:
             d[name] += profile
-            self.add(name, TYPE_CACHE, windowsify(d[name]))
+            self.add(name, Type.CACHE, windowsify(d[name]))
         if len(profile):
-            self.add('MY_CACHE', TYPE_CACHE, 'cache.dir')
+            self.add('MY_CACHE', Type.CACHE, 'cache.dir')
         else:
-            self.add('MY_CACHE', TYPE_CACHE, '')
+            self.add('MY_CACHE', Type.CACHE, '')
 
         if len(profile):
-            self.add('MY_CONFIG', TYPE_CONFIG, 'config.dir')
+            self.add('MY_CONFIG', Type.CONFIG, 'config.dir')
         else:
-            self.add('MY_CONFIG', TYPE_CONFIG, '')
+            self.add('MY_CONFIG', Type.CONFIG, '')
 
         try:
             self.add('TMP', None, tempfile.gettempdir())
@@ -187,10 +187,10 @@ class ConfigPaths:
             certsdir += u'.' + profile
             localcertsdir += u'.' + profile
 
-        self.add('SECRETS_FILE', TYPE_DATA, secretsfile)
-        self.add('MY_PEER_CERTS', TYPE_DATA, certsdir)
-        self.add('CONFIG_FILE', TYPE_CONFIG, conffile)
-        self.add('PLUGINS_CONFIG_DIR', TYPE_CONFIG, pluginsconfdir)
-        self.add('MY_CERT', TYPE_CONFIG, localcertsdir)
+        self.add('SECRETS_FILE', Type.DATA, secretsfile)
+        self.add('MY_PEER_CERTS', Type.DATA, certsdir)
+        self.add('CONFIG_FILE', Type.CONFIG, conffile)
+        self.add('PLUGINS_CONFIG_DIR', Type.CONFIG, pluginsconfdir)
+        self.add('MY_CERT', Type.CONFIG, localcertsdir)
 
 gajimpaths = ConfigPaths()

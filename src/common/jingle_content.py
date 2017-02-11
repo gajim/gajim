@@ -20,7 +20,6 @@ Handles Jingle contents (XEP 0166)
 import os
 from common import gajim
 import nbxmpp
-from common.jingle_transport import JingleTransportIBB
 from .jingle_xtls import SELF_SIGNED_CERTIFICATE
 from .jingle_xtls import load_cert_file
 
@@ -38,7 +37,7 @@ class JingleContentSetupException(Exception):
     """
 
 
-class JingleContent(object):
+class JingleContent:
     """
     An abstraction of content in Jingle sessions
     """
@@ -49,8 +48,8 @@ class JingleContent(object):
         # will be filled by JingleSession.add_content()
         # don't uncomment these lines, we will catch more buggy code then
         # (a JingleContent not added to session shouldn't send anything)
-        #self.creator = None
-        #self.name = None
+        self.creator = None
+        self.name = None
         self.accepted = False
         self.sent = False
         self.negotiated = False
@@ -60,35 +59,39 @@ class JingleContent(object):
         self.senders = 'both' #FIXME
         self.allow_sending = True # Used for stream direction, attribute 'senders'
 
+        # These were found by the Politie
+        self.file_props = None
+        self.use_security = None
+
         self.callbacks = {
-                # these are called when *we* get stanzas
-                'content-accept': [self.__on_transport_info,
-                        self.__on_content_accept],
-                'content-add': [self.__on_transport_info],
-                'content-modify': [],
-                'content-reject': [],
-                'content-remove': [],
-                'description-info': [],
-                'security-info': [],
-                'session-accept': [self.__on_transport_info,
-                        self.__on_content_accept],
-                'session-info': [],
-                'session-initiate': [self.__on_transport_info],
-                'session-terminate': [],
-                'transport-info': [self.__on_transport_info],
-                'transport-replace': [self.__on_transport_replace],
-                'transport-accept': [],
-                'transport-reject': [],
-                'iq-result': [],
-                'iq-error': [],
-                # these are called when *we* sent these stanzas
-                'content-accept-sent': [self.__fill_jingle_stanza,
-                        self.__on_content_accept],
-                'content-add-sent': [self.__fill_jingle_stanza],
-                'session-initiate-sent': [self.__fill_jingle_stanza],
-                'session-accept-sent': [self.__fill_jingle_stanza,
-                        self.__on_content_accept],
-                'session-terminate-sent': [],
+            # these are called when *we* get stanzas
+            'content-accept': [self.__on_transport_info,
+                               self.__on_content_accept],
+            'content-add': [self.__on_transport_info],
+            'content-modify': [],
+            'content-reject': [],
+            'content-remove': [],
+            'description-info': [],
+            'security-info': [],
+            'session-accept': [self.__on_transport_info,
+                               self.__on_content_accept],
+            'session-info': [],
+            'session-initiate': [self.__on_transport_info],
+            'session-terminate': [],
+            'transport-info': [self.__on_transport_info],
+            'transport-replace': [self.__on_transport_replace],
+            'transport-accept': [],
+            'transport-reject': [],
+            'iq-result': [],
+            'iq-error': [],
+            # these are called when *we* sent these stanzas
+            'content-accept-sent': [self.__fill_jingle_stanza,
+                                    self.__on_content_accept],
+            'content-add-sent': [self.__fill_jingle_stanza],
+            'session-initiate-sent': [self.__fill_jingle_stanza],
+            'session-accept-sent': [self.__fill_jingle_stanza,
+                                    self.__on_content_accept],
+            'session-terminate-sent': [],
         }
 
     def is_ready(self):
@@ -128,13 +131,15 @@ class JingleContent(object):
         if candidates:
             self.add_remote_candidates(candidates)
 
-    def __content(self, payload=[]):
+    def __content(self, payload=None):
         """
         Build a XML content-wrapper for our data
         """
+        if payload is None:
+            payload = []
         return nbxmpp.Node('content',
-                attrs={'name': self.name, 'creator': self.creator},
-                payload=payload)
+                           attrs={'name': self.name, 'creator': self.creator},
+                           payload=payload)
 
     def send_candidate(self, candidate):
         """
@@ -190,17 +195,16 @@ class JingleContent(object):
             file_tag.addChild(node=node)
         if self.file_props.type_ == 'r':
             if self.file_props.hash_:
-                h = file_tag.addChild('hash', attrs={
-                    'algo': self.file_props.algo}, namespace=nbxmpp.NS_HASHES,
-                    payload=self.file_props.hash_)
+                file_tag.addChild('hash', attrs={'algo': self.file_props.algo},
+                                  namespace=nbxmpp.NS_HASHES,
+                                  payload=self.file_props.hash_)
         else:
             # if the file is less than 10 mb, then it is small
             # lets calculate it right away
-            if self.file_props.size < 10000000 and not \
-                                        self.file_props.hash_:
-                h  = self._calcHash()
-                if h:
-                    file_tag.addChild(node=h)
+            if self.file_props.size < 10000000 and not self.file_props.hash_:
+                hash_data = content._compute_hash()
+                if hash_data:
+                    file_tag.addChild(node=hash_data)
                 pjid = gajim.get_jid_without_resource(self.session.peerjid)
                 file_info = {'name' : self.file_props.name,
                              'file-name' : self.file_props.file_name,
@@ -222,9 +226,9 @@ class JingleContent(object):
             cert = load_cert_file(certpath)
             if cert:
                 try:
-                    digest_algo = cert.get_signature_algorithm().decode('utf-8'
-                        ).split('With')[0]
-                except AttributeError as e:
+                    digest_algo = (cert.get_signature_algorithm()
+                                   .decode('utf-8').split('With')[0])
+                except AttributeError:
                     # Old py-OpenSSL is missing get_signature_algorithm
                     digest_algo = "sha256"
                 security.addChild('fingerprint').addData(cert.digest(
@@ -239,5 +243,3 @@ class JingleContent(object):
     def destroy(self):
         self.callbacks = None
         del self.session.contents[(self.creator, self.name)]
-
-

@@ -51,7 +51,6 @@ from common.fuzzyclock import FuzzyClock
 
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
-from encodings.punycode import punycode_encode as puny_encode
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
@@ -449,9 +448,10 @@ class ConversationTextview(GObject.GObject):
         self.auto_scrolling = False
         return False # when called in an idle_add, just do it once
 
-    def bring_scroll_to_end(self, diff_y = 0,
-    use_smooth=gajim.config.get('use_smooth_scrolling')):
+    def bring_scroll_to_end(self, diff_y=0, use_smooth=None):
         ''' scrolls to the end of textview if end is not visible '''
+        if use_smooth is None:
+            use_smooth = gajim.config.get('use_smooth_scrolling')
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         end_rect = self.tv.get_iter_location(end_iter)
@@ -1015,7 +1015,7 @@ class ConversationTextview(GObject.GObject):
                     helpers.launch_browser_mailer(kind, word)
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True,
-    iter_=None, additional_data={}):
+    iter_=None, additional_data=None):
         """
         Detect special text (emots & links & formatting), print normal text
         before any special text it founds, then print special text (that happens
@@ -1025,6 +1025,8 @@ class ConversationTextview(GObject.GObject):
         """
         if not otext:
             return
+        if additional_data is None:
+            additional_data = {}
         buffer_ = self.tv.get_buffer()
         if other_tags:
             insert_tags_func = buffer_.insert_with_tags_by_name
@@ -1080,11 +1082,13 @@ class ConversationTextview(GObject.GObject):
         return end_iter
 
     def print_special_text(self, special_text, other_tags, graphics=True,
-    iter_=None, additional_data={}):
+    iter_=None, additional_data=None):
         """
         Is called by detect_and_print_special_text and prints special text
         (emots, links, formatting)
         """
+        if additional_data is None:
+            additional_data = {}
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
@@ -1539,10 +1543,12 @@ class ConversationTextview(GObject.GObject):
             self.print_empty_line(end_iter)
 
     def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
-    graphics=True, mark=None, additional_data={}):
+    graphics=True, mark=None, additional_data=None):
         """
         Add normal and special text. call this to add text
         """
+        if additional_data is None:
+            additional_data = {}
         buffer_ = self.tv.get_buffer()
         if not mark:
             iter_ = buffer_.get_end_iter()

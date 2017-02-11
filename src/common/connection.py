@@ -71,39 +71,39 @@ import logging
 log = logging.getLogger('gajim.c.connection')
 
 ssl_error = {
-2: _("Unable to get issuer certificate"),
-3: _("Unable to get certificate CRL"),
-4: _("Unable to decrypt certificate's signature"),
-5: _("Unable to decrypt CRL's signature"),
-6: _("Unable to decode issuer public key"),
-7: _("Certificate signature failure"),
-8: _("CRL signature failure"),
-9: _("Certificate is not yet valid"),
-10: _("Certificate has expired"),
-11: _("CRL is not yet valid"),
-12: _("CRL has expired"),
-13: _("Format error in certificate's notBefore field"),
-14: _("Format error in certificate's notAfter field"),
-15: _("Format error in CRL's lastUpdate field"),
-16: _("Format error in CRL's nextUpdate field"),
-17: _("Out of memory"),
-18: _("Self signed certificate"),
-19: _("Self signed certificate in certificate chain"),
-20: _("Unable to get local issuer certificate"),
-21: _("Unable to verify the first certificate"),
-22: _("Certificate chain too long"),
-23: _("Certificate revoked"),
-24: _("Invalid CA certificate"),
-25: _("Path length constraint exceeded"),
-26: _("Unsupported certificate purpose"),
-27: _("Certificate not trusted"),
-28: _("Certificate rejected"),
-29: _("Subject issuer mismatch"),
-30: _("Authority and subject key identifier mismatch"),
-31: _("Authority and issuer serial number mismatch"),
-32: _("Key usage does not include certificate signing"),
-50: _("Application verification failure")
-#100 is for internal usage: host not correct
+    2: _("Unable to get issuer certificate"),
+    3: _("Unable to get certificate CRL"),
+    4: _("Unable to decrypt certificate's signature"),
+    5: _("Unable to decrypt CRL's signature"),
+    6: _("Unable to decode issuer public key"),
+    7: _("Certificate signature failure"),
+    8: _("CRL signature failure"),
+    9: _("Certificate is not yet valid"),
+    10: _("Certificate has expired"),
+    11: _("CRL is not yet valid"),
+    12: _("CRL has expired"),
+    13: _("Format error in certificate's notBefore field"),
+    14: _("Format error in certificate's notAfter field"),
+    15: _("Format error in CRL's lastUpdate field"),
+    16: _("Format error in CRL's nextUpdate field"),
+    17: _("Out of memory"),
+    18: _("Self signed certificate"),
+    19: _("Self signed certificate in certificate chain"),
+    20: _("Unable to get local issuer certificate"),
+    21: _("Unable to verify the first certificate"),
+    22: _("Certificate chain too long"),
+    23: _("Certificate revoked"),
+    24: _("Invalid CA certificate"),
+    25: _("Path length constraint exceeded"),
+    26: _("Unsupported certificate purpose"),
+    27: _("Certificate not trusted"),
+    28: _("Certificate rejected"),
+    29: _("Subject issuer mismatch"),
+    30: _("Authority and subject key identifier mismatch"),
+    31: _("Authority and issuer serial number mismatch"),
+    32: _("Key usage does not include certificate signing"),
+    50: _("Application verification failure")
+    #100 is for internal usage: host not correct
 }
 
 class CommonConnection:
@@ -526,7 +526,9 @@ class CommonConnection:
                      subject, type_, msg_iq, xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
-    subject, type_, xhtml=None, additional_data={}):
+    subject, type_, xhtml=None, additional_data=None):
+        if additional_data is None:
+            additional_data = {}
         if not forward_from and session and session.is_loggable():
             ji = gajim.get_jid_without_resource(jid)
             if gajim.config.should_log(self.name, ji):
@@ -567,7 +569,7 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def request_subscription(self, jid, msg='', name='', groups=[],
+    def request_subscription(self, jid, msg='', name='', groups=None,
                     auto_auth=False):
         """
         To be implemented by derivated classes
@@ -2251,10 +2253,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         p = nbxmpp.Presence(jid, 'unsubscribe')
         self.connection.send(p)
 
-    def request_subscription(self, jid, msg='', name='', groups=[],
+    def request_subscription(self, jid, msg='', name='', groups=None,
     auto_auth=False, user_nick=''):
         if not gajim.account_is_connected(self.name):
             return
+        if groups is None:
+            groups = []
         log.debug('subscription request for %s' % jid)
         if auto_auth:
             self.jids_for_auto_auth.append(jid)

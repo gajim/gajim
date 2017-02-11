@@ -28,18 +28,20 @@ Handles the jingle signalling protocol
 #   * config:
 #     - codecs
 
+import logging
+
 import nbxmpp
 from common import helpers
 from common import gajim
 
 from common.jingle_session import JingleSession, JingleStates
-if gajim.HAVE_FARSTREAM:
-    from common.jingle_rtp import JingleAudio, JingleVideo
 from common.jingle_ft import JingleFileTransfer
 from common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
+if gajim.HAVE_FARSTREAM:
+    from common.jingle_rtp import JingleAudio, JingleVideo
 
-import logging
 logger = logging.getLogger('gajim.c.jingle')
+
 
 class ConnectionJingle(object):
     """
@@ -80,7 +82,7 @@ class ConnectionJingle(object):
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
-            logger.warn('Invalid JID: %s, ignoring it' % stanza.getFrom())
+            logger.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
             return
         id_ = stanza.getID()
         if (jid, id_) in self.__iq_responses.keys():
@@ -102,14 +104,14 @@ class ConnectionJingle(object):
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
             newjingle = JingleSession(con=self, weinitiate=False, jid=jid,
-                iq_id=id_, sid=sid)
+                                      iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
         # we already have such session in dispatcher...
         self._sessions[sid].collect_iq_id(id_)
         self._sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
         if sid in self._sessions and \
-        self._sessions[sid].state == JingleStates.ended:
+        self._sessions[sid].state == JingleStates.ENDED:
             self.delete_jingle_session(sid)
         raise nbxmpp.NodeProcessed
 
@@ -132,20 +134,20 @@ class ConnectionJingle(object):
         jingle = self.get_jingle_session(jid, media='audio')
         if jingle:
             jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
-                out_xid=out_xid))
+                                                    out_xid=out_xid))
         else:
             jingle = JingleSession(self, weinitiate=True, jid=jid)
             self._sessions[jingle.sid] = jingle
             jingle.add_content('video', JingleVideo(jingle, in_xid=in_xid,
-                out_xid=out_xid))
+                                                    out_xid=out_xid))
             jingle.start_session()
         return jingle.sid
 
     def start_file_transfer(self, jid, file_props, request=False):
-        logger.info("start file transfer with file: %s" % file_props)
+        logger.info("start file transfer with file: %s", file_props)
         contact = gajim.contacts.get_contact_with_highest_priority(self.name,
-            gajim.get_jid_without_resource(jid))
-        if gajim.contacts.is_gc_contact(self.name,jid):
+                                                                   gajim.get_jid_without_resource(jid))
+        if gajim.contacts.is_gc_contact(self.name, jid):
             gcc = jid.split('/')
             if len(gcc) == 2:
                 contact = gajim.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
@@ -162,7 +164,8 @@ class ConnectionJingle(object):
         elif contact.supports(nbxmpp.NS_JINGLE_IBB):
             transport = JingleTransportIBB()
         c = JingleFileTransfer(jingle, transport=transport,
-            file_props=file_props, use_security=use_security)
+                               file_props=file_props,
+                               use_security=use_security)
         file_props.algo = self.__hash_support(contact)
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()

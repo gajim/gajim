@@ -22,7 +22,6 @@ import nbxmpp
 from nbxmpp.idlequeue import IdleObject
 from nbxmpp import dispatcher_nb, simplexml
 from nbxmpp.plugin import *
-from nbxmpp.simplexml import ustr
 from nbxmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
 from common.zeroconf import zeroconf
 

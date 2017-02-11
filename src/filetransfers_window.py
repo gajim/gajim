@@ -29,6 +29,8 @@ from gi.repository import Pango
 import os
 import time
 
+from enum import IntEnum
+
 import gtkgui_helpers
 import tooltips
 import dialogs
@@ -42,14 +44,15 @@ from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
 import logging
 log = logging.getLogger('gajim.filetransfer_window')
 
-C_IMAGE = 0
-C_LABELS = 1
-C_FILE = 2
-C_TIME = 3
-C_PROGRESS = 4
-C_PERCENT = 5
-C_PULSE = 6
-C_SID = 7
+class Column(IntEnum):
+    IMAGE = 0
+    LABELS = 1
+    FILE = 2
+    TIME = 3
+    PROGRESS = 4
+    PERCENT = 5
+    PULSE = 6
+    SID = 7
 
 
 class FileTransfersWindow:
@@ -85,11 +88,11 @@ class FileTransfersWindow:
         col = Gtk.TreeViewColumn(_('File'))
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, False)
-        col.add_attribute(renderer, 'markup', C_LABELS)
+        col.add_attribute(renderer, 'markup', Column.LABELS)
         renderer.set_property('yalign', 0.)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'markup', C_FILE)
+        col.add_attribute(renderer, 'markup', Column.FILE)
         renderer.set_property('xalign', 0.)
         renderer.set_property('yalign', 0.)
         renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
@@ -100,7 +103,7 @@ class FileTransfersWindow:
         col = Gtk.TreeViewColumn(_('Time'))
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, False)
-        col.add_attribute(renderer, 'markup', C_TIME)
+        col.add_attribute(renderer, 'markup', Column.TIME)
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
         renderer = Gtk.CellRendererText()
@@ -114,9 +117,9 @@ class FileTransfersWindow:
         renderer.set_property('yalign', 0.5)
         renderer.set_property('xalign', 0.5)
         col.pack_start(renderer, False)
-        col.add_attribute(renderer, 'text', C_PROGRESS)
-        col.add_attribute(renderer, 'value', C_PERCENT)
-        col.add_attribute(renderer, 'pulse', C_PULSE)
+        col.add_attribute(renderer, 'text', Column.PROGRESS)
+        col.add_attribute(renderer, 'value', Column.PERCENT)
+        col.add_attribute(renderer, 'pulse', Column.PULSE)
         col.set_resizable(True)
         col.set_expand(False)
         self.tree.append_column(col)
@@ -480,7 +483,7 @@ class FileTransfersWindow:
         iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
-        self.model[iter_][C_SID]
+        self.model[iter_][Column.SID]
         if status == 'stop':
             file_props.stopped = True
         elif status == 'ok':
@@ -490,21 +493,21 @@ class FileTransfersWindow:
             full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
-            self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
+            self.model.set(iter_, Column.PROGRESS, text)
+            self.model.set(iter_, Column.PULSE, GLib.MAXINT32)
         elif status == 'computing':
-            self.model.set(iter_, C_PULSE, 1)
+            self.model.set(iter_, Column.PULSE, 1)
             text = _('Checking file…') + '\n'
             received_size = int(file_props.received_len)
             full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
-            self.model.set(iter_, C_PROGRESS, text)
+            self.model.set(iter_, Column.PROGRESS, text)
             def pulse():
-                p = self.model.get(iter_, C_PULSE)[0]
+                p = self.model.get(iter_, Column.PULSE)[0]
                 if p == GLib.MAXINT32:
                     return False
-                self.model.set(iter_, C_PULSE, p + 1)
+                self.model.set(iter_, Column.PULSE, p + 1)
                 return True
             GLib.timeout_add(100, pulse)
         elif status == 'hash_error':
@@ -513,9 +516,9 @@ class FileTransfersWindow:
             full_size = file_props.size
             text += helpers.convert_bytes(received_size) + '/' + \
                 helpers.convert_bytes(full_size)
-            self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PULSE, GLib.MAXINT32)
-        self.model.set(iter_, C_IMAGE, self.get_icon(status))
+            self.model.set(iter_, Column.PROGRESS, text)
+            self.model.set(iter_, Column.PULSE, GLib.MAXINT32)
+        self.model.set(iter_, Column.IMAGE, self.get_icon(status))
         path = self.model.get_path(iter_)
         self.select_func(path)
 
@@ -609,7 +612,7 @@ class FileTransfersWindow:
             iter_ = self.get_iter_by_sid(typ, sid)
         if iter_ is not None:
             just_began = False
-            if self.model[iter_][C_PERCENT] == 0 and int(percent > 0):
+            if self.model[iter_][Column.PERCENT] == 0 and int(percent > 0):
                 just_began = True
             text = self._format_percent(percent)
             if transfered_size == 0:
@@ -631,8 +634,8 @@ class FileTransfersWindow:
             eta, speed = self._get_eta_and_speed(full_size, transfered_size,
                     file_props)
 
-            self.model.set(iter_, C_PROGRESS, text)
-            self.model.set(iter_, C_PERCENT, int(percent))
+            self.model.set(iter_, Column.PROGRESS, text)
+            self.model.set(iter_, Column.PERCENT, int(percent))
             text = self._format_time(eta)
             text += '\n'
             #This should make the string Kb/s,
@@ -640,7 +643,7 @@ class FileTransfersWindow:
             #Only the 's' after / (which means second) should be translated.
             text += _('(%(filesize_unit)s/s)') % {'filesize_unit':
                     helpers.convert_bytes(speed)}
-            self.model.set(iter_, C_TIME, text)
+            self.model.set(iter_, Column.TIME, text)
 
             # try to guess what should be the status image
             if file_props.type_ == 'r':
@@ -673,7 +676,7 @@ class FileTransfersWindow:
         """
         iter_ = self.model.get_iter_first()
         while iter_:
-            if typ + sid == self.model[iter_][C_SID]:
+            if typ + sid == self.model[iter_][Column.SID]:
                 return iter_
             iter_ = self.model.iter_next(iter_)
 
@@ -736,7 +739,7 @@ class FileTransfersWindow:
             file_name = file_props.name
         text_props = GLib.markup_escape_text(file_name) + '\n'
         text_props += contact.get_shown_name()
-        self.model.set(iter_, 1, text_labels, 2, text_props, C_PULSE, -1, C_SID,
+        self.model.set(iter_, 1, text_labels, 2, text_props, Column.PULSE, -1, Column.SID,
                 file_props.type_ + file_props.sid)
         self.set_progress(file_props.type_, file_props.sid, 0, iter_)
         if file_props.started is False:
@@ -767,7 +770,7 @@ class FileTransfersWindow:
             except Exception:
                 self.tooltip.hide_tooltip()
                 return
-            sid = self.model[iter_][C_SID]
+            sid = self.model[iter_][Column.SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if file_props is not None:
                 if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
@@ -825,7 +828,7 @@ class FileTransfersWindow:
             self.set_all_insensitive()
             return
         current_iter = self.model.get_iter(path)
-        sid = self.model[current_iter][C_SID]
+        sid = self.model[current_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self.remove_menuitem.set_sensitive(is_row_selected)
         self.open_folder_menuitem.set_sensitive(is_row_selected)
@@ -883,7 +886,7 @@ class FileTransfersWindow:
         i = len(self.model) - 1
         while i >= 0:
             iter_ = self.model.get_iter((i))
-            sid = self.model[iter_][C_SID]
+            sid = self.model[iter_][Column.SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if is_transfer_stopped(file_props):
                 self._remove_transfer(iter_, sid, file_props)
@@ -918,7 +921,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID]
+        sid = self.model[s_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if is_transfer_paused(file_props):
             file_props.last_time = time.time()
@@ -940,7 +943,7 @@ class FileTransfersWindow:
         if selected is None or selected[1] is None:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID]
+        sid = self.model[s_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         account = file_props.tt_account
         if account not in gajim.connections:
@@ -966,7 +969,7 @@ class FileTransfersWindow:
         # as it was before setting the timeout
         if props and self.tooltip.id == props[0]:
             iter_ = self.model.get_iter(props[0])
-            sid = self.model[iter_][C_SID]
+            sid = self.model[iter_][Column.SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             # bounding rectangle of coordinates for the cell within the treeview
             rect = self.tree.get_cell_area(props[0], props[1])
@@ -1054,7 +1057,7 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID]
+        sid = self.model[s_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if not file_props.file_name:
             return
@@ -1076,7 +1079,7 @@ class FileTransfersWindow:
         if not selected or not selected[1]:
             return
         s_iter = selected[1]
-        sid = self.model[s_iter][C_SID]
+        sid = self.model[s_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self._remove_transfer(s_iter, sid, file_props)
         self.set_all_insensitive()

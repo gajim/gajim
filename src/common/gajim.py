@@ -35,7 +35,6 @@ import uuid
 
 from common import config
 import nbxmpp
-from common import defs
 from common import ged as ged_module
 
 interface = None # The actual interface (the gtk one for the moment)
@@ -142,6 +141,10 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
+
+# These will be set in gajim.gui_interface.
+idlequeue = None
+socks5queue = None
 
 HAVE_ZEROCONF = True
 try:

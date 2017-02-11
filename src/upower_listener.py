@@ -33,8 +33,6 @@ def on_suspend(*args, **kwargs):
             conn.time_to_reconnect = 5
 
 if dbus_support.supported:
-    import dbus
-
     try:
         from common.dbus_support import system_bus
         bus = system_bus.bus()

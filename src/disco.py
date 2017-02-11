@@ -299,10 +299,12 @@ class ServicesCache:
         if not self._cbs[cbkey]:
             del self._cbs[cbkey]
 
-    def get_icon(self, identities = [], addr=''):
+    def get_icon(self, identities=None, addr=''):
         """
         Return the icon for an agent
         """
+        if identities is None:
+            identities = []
         # Grab the first identity with an icon
         quiet = False
         for identity in identities:
@@ -334,10 +336,14 @@ class ServicesCache:
         _icon_cache['jabber'] = pix
         return pix
 
-    def get_browser(self, identities=[], features=[]):
+    def get_browser(self, identities=None, features=None):
         """
         Return the browser class for an agent
         """
+        if identities is None:
+            identities = []
+        if features is None:
+            features = []
         # First pass, we try to find a ToplevelAgentBrowser
         for identity in identities:
             try:

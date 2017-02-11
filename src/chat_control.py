@@ -46,7 +46,7 @@ from common import ged
 from common import i18n
 from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
-from common.logger import constants
+from common.logger import KindConstant
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_RECEIPTS, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
@@ -1151,7 +1151,7 @@ class ChatControl(ChatControlBase):
     def print_conversation(self, text, frm='', tim=None, encrypted=False,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
-    msg_stanza_id=None, additional_data={}):
+    msg_stanza_id=None, additional_data=None):
         """
         Print a line in the conversation
 
@@ -1165,6 +1165,9 @@ class ChatControl(ChatControlBase):
         If frm is not set: it's an incomming message.
         """
         contact = self.contact
+
+        if additional_data is None:
+            additional_data = {}
 
         if frm == 'status':
             if not gajim.config.get('print_status_in_chats'):
@@ -1679,15 +1682,15 @@ class ChatControl(ChatControlBase):
             additional_data = row[4]
             if not msg: # message is empty, we don't print it
                 continue
-            if row[1] in (constants.KIND_CHAT_MSG_SENT,
-                            constants.KIND_SINGLE_MSG_SENT):
+            if row[1] in (KindConstant.CHAT_MSG_SENT,
+                            KindConstant.SINGLE_MSG_SENT):
                 kind = 'outgoing'
                 name = self.get_our_nick()
-            elif row[1] in (constants.KIND_SINGLE_MSG_RECV,
-                            constants.KIND_CHAT_MSG_RECV):
+            elif row[1] in (KindConstant.SINGLE_MSG_RECV,
+                            KindConstant.CHAT_MSG_RECV):
                 kind = 'incoming'
                 name = self.contact.get_shown_name()
-            elif row[1] == constants.KIND_ERROR:
+            elif row[1] == KindConstant.ERROR:
                 kind = 'status'
                 name = self.contact.get_shown_name()
 

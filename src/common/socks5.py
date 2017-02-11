@@ -485,7 +485,7 @@ class Socks5(object):
         for ai in self.ais:
             try:
                 self._sock = socket.socket(*ai[:3])
-                if not self.fingerprint is None:
+                if self.fingerprint is not None:
                     if self.file_props.type_ == 's':
                         remote_jid = gajim.get_jid_without_resource(
                             self.file_props.receiver)
@@ -825,7 +825,7 @@ class Socks5(object):
         auth_mechanisms = []
         try:
             num_auth = struct.unpack('!xB', buff[:2])[0]
-            for i in list(range(num_auth)):
+            for i in range(num_auth):
                 mechanism, = struct.unpack('!B', buff[1 + i])
                 auth_mechanisms.append(mechanism)
         except Exception:

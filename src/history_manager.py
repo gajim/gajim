@@ -89,7 +89,6 @@ del parseOpts
 import common.configpaths
 common.configpaths.gajimpaths.init(config_path)
 del config_path
-from common import exceptions
 from common import gajim
 import gtkgui_helpers
 from common.logger import LOG_DB_PATH, constants
@@ -100,13 +99,13 @@ status = dict((constants.__dict__[i], i[5:].lower()) for i in \
 from common import helpers
 import dialogs
 
-# time, message, subject
-(
-C_UNIXTIME,
-C_MESSAGE,
-C_SUBJECT,
-C_NICKNAME
-) = range(2, 6)
+from enum import IntEnum
+
+class Column(IntEnum):
+    UNIXTIME = 2
+    MESSAGE = 3
+    SUBJECT = 4
+    NICKNAME = 5
 
 
 import sqlite3 as sqlite
@@ -177,32 +176,32 @@ class HistoryManager:
         self.logs_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         renderer_text = Gtk.CellRendererText()  # holds time
-        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
+        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=Column.UNIXTIME)
         # user can click this header and sort
-        col.set_sort_column_id(C_UNIXTIME)
+        col.set_sort_column_id(Column.UNIXTIME)
         col.set_resizable(True)
         self.logs_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds nickname
-        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
+        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=Column.NICKNAME)
         # user can click this header and sort
-        col.set_sort_column_id(C_NICKNAME)
+        col.set_sort_column_id(Column.NICKNAME)
         col.set_resizable(True)
         col.set_visible(False)
         self.nickname_col_for_logs = col
         self.logs_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds message
-        col = Gtk.TreeViewColumn(_('Message'), renderer_text, markup=C_MESSAGE)
+        col = Gtk.TreeViewColumn(_('Message'), renderer_text, markup=Column.MESSAGE)
         # user can click this header and sort
-        col.set_sort_column_id(C_MESSAGE)
+        col.set_sort_column_id(Column.MESSAGE)
         col.set_resizable(True)
         self.message_col_for_logs = col
         self.logs_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds subject
-        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
-        col.set_sort_column_id(C_SUBJECT)  # user can click this header and sort
+        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=Column.SUBJECT)
+        col.set_sort_column_id(Column.SUBJECT)  # user can click this header and sort
         col.set_resizable(True)
         col.set_visible(False)
         self.subject_col_for_logs = col
@@ -221,28 +220,28 @@ class HistoryManager:
         self.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds time
-        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=C_UNIXTIME)
+        col = Gtk.TreeViewColumn(_('Date'), renderer_text, text=Column.UNIXTIME)
         # user can click this header and sort
-        col.set_sort_column_id(C_UNIXTIME)
+        col.set_sort_column_id(Column.UNIXTIME)
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds message
-        col = Gtk.TreeViewColumn(_('Message'), renderer_text, text=C_MESSAGE)
-        col.set_sort_column_id(C_MESSAGE)  # user can click this header and sort
+        col = Gtk.TreeViewColumn(_('Message'), renderer_text, text=Column.MESSAGE)
+        col.set_sort_column_id(Column.MESSAGE)  # user can click this header and sort
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds subject
-        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=C_SUBJECT)
-        col.set_sort_column_id(C_SUBJECT)  # user can click this header and sort
+        col = Gtk.TreeViewColumn(_('Subject'), renderer_text, text=Column.SUBJECT)
+        col.set_sort_column_id(Column.SUBJECT)  # user can click this header and sort
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 
         renderer_text = Gtk.CellRendererText()  # holds nickname
-        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=C_NICKNAME)
+        col = Gtk.TreeViewColumn(_('Nickname'), renderer_text, text=Column.NICKNAME)
         # user can click this header and sort
-        col.set_sort_column_id(C_NICKNAME)
+        col.set_sort_column_id(Column.NICKNAME)
         col.set_resizable(True)
         self.search_results_listview.append_column(col)
 

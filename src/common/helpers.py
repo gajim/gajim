@@ -45,7 +45,6 @@ import socket
 import time
 import datetime
 
-from gi.repository import GObject
 from encodings.punycode import punycode_encode
 from string import Template
 

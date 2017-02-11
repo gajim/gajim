@@ -18,33 +18,33 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+from calendar import timegm
 import datetime
+import hashlib
+import hmac
+import logging
 import sys
 import os
-from time import (localtime, time as time_time)
-from calendar import timegm
-import hmac
-import hashlib
+from time import time as time_time
 
+import nbxmpp
+from nbxmpp.protocol import NS_CHATSTATES
 from common import atom
 from common import nec
 from common import helpers
 from common import gajim
 from common import i18n
-import nbxmpp
 from common import dataforms
 from common import exceptions
-from common.zeroconf import zeroconf
+from common.zeroconf.zeroconf import Constant
 from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
-from nbxmpp.protocol import NS_CHATSTATES
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
 
-import logging
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
 CONDITION_TO_CODE = {
@@ -72,7 +72,7 @@ CONDITION_TO_CODE = {
 class HelperEvent:
     def get_jid_resource(self, check_fake_jid=False):
         if check_fake_jid and hasattr(self, 'id_') and \
-        self.id_ in self.conn.groupchat_jids:
+                self.id_ in self.conn.groupchat_jids:
             self.fjid = self.conn.groupchat_jids[self.id_]
             del self.conn.groupchat_jids[self.id_]
         else:
@@ -84,7 +84,7 @@ class HelperEvent:
 
     def get_gc_control(self):
         self.gc_control = gajim.interface.msg_win_mgr.get_gc_control(self.jid,
-            self.conn.name)
+                                                                     self.conn.name)
 
         # If gc_control is missing - it may be minimized. Try to get it
         # from there. If it's not there - then it's missing anyway and
@@ -247,7 +247,7 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         except ValueError:
             try:
                 t = datetime.datetime.strptime(utc_time,
-                    '%Y-%m-%dT%H:%M:%S.%f')
+                                               '%Y-%m-%dT%H:%M:%S.%f')
             except ValueError as e:
                 log.info('Wrong time format: %s' % str(e))
                 return
@@ -280,8 +280,7 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
             gmail_messages = mb.getTags('mail-thread-info')
             for gmessage in gmail_messages:
                 unread_senders = []
-                for sender in gmessage.getTag('senders').getTags(
-                'sender'):
+                for sender in gmessage.getTag('senders').getTags('sender'):
                     if sender.getAttr('unread') != '1':
                         continue
                     if sender.getAttr('name'):
@@ -309,8 +308,7 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
             self.conn.gmail_last_time = int(mb.getAttr('result-time'))
 
         self.jid = gajim.get_jid_from_account(self.name)
-        log.debug(('You have %s new gmail e-mails on %s.') % (self.newmsgs,
-            self.jid))
+        log.debug('You have %s new gmail e-mails on %s.', self.newmsgs, self.jid)
         return True
 
 class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -391,15 +389,15 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                     j = helpers.parse_jid(jid)
                 except Exception:
                     print(_('JID %s is not RFC compliant. It will not be added '
-                        'to your roster. Use roster management tools such as '
-                        'http://jru.jabberstudio.org/ to remove it') % jid,
-                        file=sys.stderr)
+                            'to your roster. Use roster management tools such as '
+                            'http://jru.jabberstudio.org/ to remove it') % jid,
+                          file=sys.stderr)
                 else:
                     infos = raw_roster[jid]
                     if jid != our_jid and (not infos['subscription'] or \
-                    infos['subscription'] == 'none') and (not infos['ask'] or \
-                    infos['ask'] == 'none') and not infos['name'] and \
-                    not infos['groups']:
+                            infos['subscription'] == 'none') and (not infos['ask'] or \
+                            infos['ask'] == 'none') and not infos['name'] and \
+                            not infos['groups']:
                         # remove this useless item, it won't be shown in roster
                         # anyway
                         self.conn.connection.getRoster().delItem(jid)
@@ -777,7 +775,8 @@ PresenceHelperEvent):
             sig_msg = sig_tag.getData()
             self.keyID = self.conn.gpg.verify(self.status, sig_msg)
             self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
-                self.jid, self.keyID)
+                                                                self.jid,
+                                                                self.keyID)
 
     def _generate_prio(self):
         self.prio = self.stanza.getPriority()
@@ -844,7 +843,7 @@ PresenceHelperEvent):
             # Error presences may not include sent stanza, so we don't detect
             # it's a muc presence. So detect it by ID
             h = hmac.new(self.conn.secret_hmac, self.jid.encode('utf-8'),
-                hashlib.md5).hexdigest()[:6]
+                         hashlib.md5).hexdigest()[:6]
             if self.id_.split('_')[-1] == h:
                 self.is_gc = True
         self.status = self.stanza.getStatus() or ''
@@ -856,8 +855,10 @@ PresenceHelperEvent):
         self.errmsg = self.stanza.getErrorMsg()
 
         if self.is_gc:
-            gajim.nec.push_incoming_event(GcPresenceReceivedEvent(None,
-                conn=self.conn, stanza=self.stanza, presence_obj=self))
+            gajim.nec.push_incoming_event(
+                GcPresenceReceivedEvent(
+                    None, conn=self.conn, stanza=self.stanza,
+                    presence_obj=self))
             return
 
         if self.ptype == 'subscribe':
@@ -877,11 +878,10 @@ PresenceHelperEvent):
 
         if not self.ptype or self.ptype == 'unavailable':
             our_jid = gajim.get_jid_from_account(self.conn.name)
-            if self.jid == our_jid and self.resource == \
-            self.conn.server_resource:
+            if self.jid == our_jid and self.resource == self.conn.server_resource:
                 # We got our own presence
                 gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
-                    show=self.show))
+                                                           show=self.show))
             elif self.jid in jid_list or self.jid == our_jid:
                 return True
 
@@ -947,18 +947,16 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 # we know real jid, save it in db
                 st += ' (%s)' % jid
             try:
-                gajim.logger.write('gcstatus', self.fjid, st,
-                    self.show)
+                gajim.logger.write('gcstatus', self.fjid, st, self.show)
             except exceptions.PysqliteOperationalError as e:
-                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'),
-                    str(e)))
+                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
             except exceptions.DatabaseMalformed:
                 pritext = _('Database Error')
                 sectext = _('The database file (%s) cannot be read. '
-                    'Try to repair it (see '
-                    'http://trac.gajim.org/wiki/DatabaseBackup) or '
-                    'remove it (all history will be lost).') % \
-                    LOG_DB_PATH
+                            'Try to repair it (see '
+                            'http://trac.gajim.org/wiki/DatabaseBackup) or '
+                            'remove it (all history will be lost).') % \
+                            LOG_DB_PATH
                 self.conn.dispatch('DB_ERROR', (pritext, sectext))
         if self.avatar_sha == '':
             # contact has no avatar
@@ -1260,10 +1258,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     self.session = self.conn.get_latest_session(self.fjid)
                 if not self.session:
                     self.session = self.conn.make_new_session(self.fjid,
-                        self.thread_id, type_='pm')
+                                                              self.thread_id,
+                                                              type_='pm')
             else:
                 self.session = self.conn.get_or_create_session(self.fjid,
-                    self.thread_id)
+                                                               self.thread_id)
 
             if self.thread_id and not self.session.received_thread_id:
                 self.session.received_thread_id = True
@@ -1272,10 +1271,10 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # check if the message is a XEP-0020 feature negotiation request
         if not self.forwarded and self.stanza.getTag('feature',
-        namespace=nbxmpp.NS_FEATURE):
+                                                     namespace=nbxmpp.NS_FEATURE):
             if gajim.HAVE_PYCRYPTO:
                 feature = self.stanza.getTag(name='feature',
-                    namespace=nbxmpp.NS_FEATURE)
+                                             namespace=nbxmpp.NS_FEATURE)
                 form = nbxmpp.DataForm(node=feature.getTag('x'))
                 if not form:
                     return
@@ -1295,9 +1294,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         if not self.forwarded and self.stanza.getTag('init',
-        namespace=nbxmpp.NS_ESESSION_INIT):
+                                                     namespace=nbxmpp.NS_ESESSION_INIT):
             init = self.stanza.getTag(name='init',
-                namespace=nbxmpp.NS_ESESSION_INIT)
+                                      namespace=nbxmpp.NS_ESESSION_INIT)
             form = nbxmpp.DataForm(node=init.getTag('x'))
 
             self.session.handle_negotiation(form)
@@ -1309,7 +1308,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.encrypted = False
         xep_200_encrypted = self.stanza.getTag('c',
-            namespace=nbxmpp.NS_STANZA_CRYPTO)
+                                               namespace=nbxmpp.NS_STANZA_CRYPTO)
         if xep_200_encrypted:
             if self.forwarded:
                 # Ignore E2E forwarded encrypted messages
@@ -1328,7 +1327,7 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
         if self.fjid is None:
             for key in self.conn.connection.zeroconf.contacts:
                 if self.ip == self.conn.connection.zeroconf.contacts[key][
-                zeroconf.C_ADDRESS]:
+                        Constant.ADDRESS]:
                     self.fjid = key
                     break
 
@@ -1336,7 +1335,7 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
 
     def generate(self):
         self.base_event = nec.NetworkIncomingEvent(None, conn=self.conn,
-            stanza=self.stanza)
+                                                   stanza=self.stanza)
         return super(ZeroconfMessageReceivedEvent, self).generate()
 
 class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
@@ -1350,8 +1349,8 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
             try:
                 self.room_jid = helpers.parse_jid(invite_tag.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it' % invite_tag.getAttr(
-                    'jid'))
+                log.warning('Invalid JID: %s, ignoring it', invite_tag.getAttr(
+                            'jid'))
                 return
             self.jid_from = self.msg_obj.fjid
             self.reason = invite_tag.getAttr('reason')

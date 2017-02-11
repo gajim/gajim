@@ -698,7 +698,7 @@ class SignalObject(dbus.service.Object):
             if self._is_first():
                 win.window.focus(Gtk.get_current_event_time())
             else:
-                win.window.focus(long(time()))
+                win.window.focus(int(time()))
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_roster(self):
@@ -711,7 +711,7 @@ class SignalObject(dbus.service.Object):
         if self._is_first():
             win.window.focus(Gtk.get_current_event_time())
         else:
-            win.window.focus(long(time()))
+            win.window.focus(int(time()))
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def toggle_ipython(self):

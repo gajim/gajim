@@ -32,22 +32,23 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib, Gdk
 import os
 
+from enum import IntEnum
+
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from htmltextview import HtmlTextView
 from common import gajim
-from plugins.helpers import log_calls, log
+from plugins.helpers import log_calls
 from plugins.helpers import GajimPluginActivateException
 from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
 
-(
-PLUGIN,
-NAME,
-ACTIVE,
-ACTIVATABLE,
-ICON,
-) = range(5)
+class Column(IntEnum):
+    PLUGIN = 0
+    NAME = 1
+    ACTIVE = 2
+    ACTIVATABLE = 3
+    ICON = 4
 
 
 class PluginsWindow(object):
@@ -78,19 +79,19 @@ class PluginsWindow(object):
         self.installed_plugins_treeview.set_rules_hint(True)
 
         renderer = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=NAME)
+        col = Gtk.TreeViewColumn(_('Plugin'))#, renderer, text=Column.NAME)
         cell = Gtk.CellRendererPixbuf()
         col.pack_start(cell, False)
-        col.add_attribute(cell, 'pixbuf', ICON)
+        col.add_attribute(cell, 'pixbuf', Column.ICON)
         col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', NAME)
+        col.add_attribute(renderer, 'text', Column.NAME)
         col.set_property('expand', True)
         self.installed_plugins_treeview.append_column(col)
 
         renderer = Gtk.CellRendererToggle()
         renderer.connect('toggled', self.installed_plugins_toggled_cb)
-        col = Gtk.TreeViewColumn(_('Active'), renderer, active=ACTIVE,
-            activatable=ACTIVATABLE)
+        col = Gtk.TreeViewColumn(_('Active'), renderer, active=Column.ACTIVE,
+            activatable=Column.ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
 
         self.def_icon = gtkgui_helpers.get_icon_pixmap('preferences-desktop')
@@ -127,9 +128,9 @@ class PluginsWindow(object):
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
         model, iter = treeview_selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, PLUGIN)
-            plugin_name = model.get_value(iter, NAME)
-            is_active = model.get_value(iter, ACTIVE)
+            plugin = model.get_value(iter, Column.PLUGIN)
+            plugin_name = model.get_value(iter, Column.NAME)
+            is_active = model.get_value(iter, Column.ACTIVE)
 
             self._display_installed_plugin_info(plugin)
         else:
@@ -161,7 +162,7 @@ class PluginsWindow(object):
         self.uninstall_plugin_button.set_property('sensitive',
             gajim.PLUGINS_DIRS[1] in plugin.__path__)
         self.configure_plugin_button.set_property(
-            'sensitive', not plugin.config_dialog is None)
+            'sensitive', plugin.config_dialog is not None)
 
     def _clear_installed_plugin_info(self):
         self.plugin_name_label.set_text('')
@@ -198,8 +199,8 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def installed_plugins_toggled_cb(self, cell, path):
-        is_active = self.installed_plugins_model[path][ACTIVE]
-        plugin = self.installed_plugins_model[path][PLUGIN]
+        is_active = self.installed_plugins_model[path][Column.ACTIVE]
+        plugin = self.installed_plugins_model[path][Column.PLUGIN]
 
         if is_active:
             gajim.plugin_manager.deactivate_plugin(plugin)
@@ -211,7 +212,7 @@ class PluginsWindow(object):
                     transient_for=self.window)
                 return
 
-        self.installed_plugins_model[path][ACTIVE] = not is_active
+        self.installed_plugins_model[path][Column.ACTIVE] = not is_active
 
     @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
@@ -224,13 +225,12 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def on_configure_plugin_button_clicked(self, widget):
-        #log.debug('widget: %s'%(widget))
         selection = self.installed_plugins_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, PLUGIN)
-            plugin_name = model.get_value(iter, NAME)
-            is_active = model.get_value(iter, ACTIVE)
+            plugin = model.get_value(iter, Column.PLUGIN)
+            plugin_name = model.get_value(iter, Column.NAME)
+            is_active = model.get_value(iter, Column.ACTIVE)
 
 
             result = plugin.config_dialog.run(self.window)
@@ -246,9 +246,9 @@ class PluginsWindow(object):
         selection = self.installed_plugins_treeview.get_selection()
         model, iter = selection.get_selected()
         if iter:
-            plugin = model.get_value(iter, PLUGIN)
-            plugin_name = model.get_value(iter, NAME)
-            is_active = model.get_value(iter, ACTIVE)
+            plugin = model.get_value(iter, Column.PLUGIN)
+            plugin_name = model.get_value(iter, Column.NAME)
+            is_active = model.get_value(iter, Column.ACTIVE)
             try:
                 gajim.plugin_manager.remove_plugin(plugin)
             except PluginsystemError as e:
@@ -274,9 +274,9 @@ class PluginsWindow(object):
                     return
                 model = self.installed_plugins_model
 
-                for row in list(range(len(model))):
-                    if plugin == model[row][PLUGIN]:
-                        model.remove(model.get_iter((row, PLUGIN)))
+                for i, row in enumerate(model):
+                    if plugin == row[Column.PLUGIN]:
+                        model.remove(model.get_iter((i, Column.PLUGIN)))
                         break
 
                 iter_ = model.append([plugin, plugin.name, False,

@@ -16,12 +16,14 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
-import nbxmpp
-
 import logging
+import os
+
+import nbxmpp
 from common import gajim
+
 log = logging.getLogger('gajim.c.jingle_xtls')
+
 
 PYOPENSSL_PRESENT = False
 
@@ -44,9 +46,7 @@ except ImportError:
     log.info("PyOpenSSL not available")
 
 if PYOPENSSL_PRESENT:
-    from OpenSSL import SSL
-    from OpenSSL.SSL import Context
-    from OpenSSL import crypto
+    from OpenSSL import SSL, crypto
     TYPE_RSA = crypto.TYPE_RSA
     TYPE_DSA = crypto.TYPE_DSA
 
@@ -55,7 +55,7 @@ DH_PARAMS = 'dh_params.pem'
 DEFAULT_DH_PARAMS = 'dh4096.pem'
 
 def default_callback(connection, certificate, error_num, depth, return_code):
-    log.info("certificate: %s" % certificate)
+    log.info("certificate: %s", certificate)
     return return_code
 
 def load_cert_file(cert_path, cert_store=None):
@@ -67,8 +67,8 @@ def load_cert_file(cert_path, cert_store=None):
     try:
         f = open(cert_path)
     except IOError as e:
-        log.warning('Unable to open certificate file %s: %s' % (cert_path,
-            str(e)))
+        log.warning('Unable to open certificate file %s: %s', cert_path,
+                    str(e))
         return None
     lines = f.readlines()
     i = 0
@@ -86,11 +86,11 @@ def load_cert_file(cert_path, cert_store=None):
                 f.close()
                 return x509cert
             except OpenSSL.crypto.Error as exception_obj:
-                log.warning('Unable to load a certificate from file %s: %s' %\
-                    (cert_path, exception_obj.args[0][0][2]))
+                log.warning('Unable to load a certificate from file %s: %s',
+                            cert_path, exception_obj.args[0][0][2])
             except:
                 log.warning('Unknown error while loading certificate from file '
-                    '%s' % cert_path)
+                            '%s', cert_path)
             begin = -1
         i += 1
     f.close()
@@ -107,7 +107,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
 
     if fingerprint == 'server': # for testing purposes only
         ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
-            verify_cb or default_callback)
+                       verify_cb or default_callback)
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
@@ -123,23 +123,23 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
         default_dh_params_name = os.path.join(gajim.DATA_DIR,
-            'other', DEFAULT_DH_PARAMS)
+                                              'other', DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r") as default_dh_params_file:
                 ctx.load_tmp_dh(default_dh_params_name.encode('utf-8'))
         except FileNotFoundError as err:
-            log.error('Unable to load default DH parameter file: %s , %s'
-                % (default_dh_params_name, err))
+            log.error('Unable to load default DH parameter file: %s, %s',
+                      default_dh_params_name, err)
             raise
 
     if remote_jid:
         store = ctx.get_cert_store()
         path = os.path.join(os.path.expanduser(gajim.MY_PEER_CERTS_PATH),
-            remote_jid) + '.cert'
+                            remote_jid) + '.cert'
         if os.path.exists(path):
             load_cert_file(path, cert_store=store)
-            log.debug('certificate file ' + path + ' loaded fingerprint ' + \
-                fingerprint)
+            log.debug('certificate file %s loaded fingerprint %s',
+                      path, fingerprint)
     return ctx
 
 def read_cert(certpath):
@@ -154,7 +154,7 @@ def send_cert(con, jid_from, sid):
     certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
         '.cert'
     certificate = read_cert(certpath)
-    iq = nbxmpp.Iq('result', to=jid_from);
+    iq = nbxmpp.Iq('result', to=jid_from)
     iq.setAttr('id', sid)
 
     pubkey = iq.setTag('pubkeys')
@@ -214,16 +214,16 @@ def send_cert_request(con, to_jid):
 
 # the following code is partly due to pyopenssl examples
 
-def createKeyPair(type, bits):
+def createKeyPair(type_, bits):
     """
     Create a public/private key pair.
 
-    Arguments: type - Key type, must be one of TYPE_RSA and TYPE_DSA
+    Arguments: type_ - Key type, must be one of TYPE_RSA and TYPE_DSA
                bits - Number of bits to use in the key
     Returns:   The public/private key pair in a PKey object
     """
     pkey = crypto.PKey()
-    pkey.generate_key(type, bits)
+    pkey.generate_key(type_, bits)
     return pkey
 
 def createCertRequest(pkey, digest="sha256", **name):
@@ -246,7 +246,7 @@ def createCertRequest(pkey, digest="sha256", **name):
     req = crypto.X509Req()
     subj = req.get_subject()
 
-    for (key,value) in name.items():
+    for (key, value) in name.items():
         setattr(subj, key, value)
 
     req.set_pubkey(pkey)

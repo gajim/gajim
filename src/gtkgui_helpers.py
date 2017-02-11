@@ -362,7 +362,7 @@ class HashDigest:
 
     def __str__(self):
         prettydigest = ''
-        for i in list(range(0, len(self.digest), 2)):
+        for i in range(0, len(self.digest), 2):
             prettydigest += self.digest[i:i + 2] + ':'
         return prettydigest[:-1]
 

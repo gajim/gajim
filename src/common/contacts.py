@@ -92,12 +92,14 @@ class Contact(CommonContact):
     """
     Information concerning a contact
     """
-    def __init__(self, jid, account, name='', groups=[], show='', status='',
+    def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
     our_chatstate=None, chatstate=None, last_status_time=None, msg_log_id=None,
     last_activity_time=None):
         if not isinstance(jid, str):
             print('no str')
+        if groups is None:
+            groups = []
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
             our_chatstate, chatstate, client_caps=client_caps)
@@ -244,10 +246,12 @@ class LegacyContactsAPI:
         del self._accounts[account]
         self._metacontact_manager.remove_account(account)
 
-    def create_contact(self, jid, account, name='', groups=[], show='',
+    def create_contact(self, jid, account, name='', groups=None, show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
     client_caps=None, our_chatstate=None, chatstate=None, last_status_time=None,
     last_activity_time=None):
+        if groups is None:
+            groups = []
         # Use Account object if available
         account = self._accounts.get(account, account)
         return Contact(jid=jid, account=account, name=name, groups=groups,
@@ -348,12 +352,14 @@ class LegacyContactsAPI:
             return contact
         return self.get_highest_prio_contact_from_contacts(contacts)
 
-    def get_nb_online_total_contacts(self, accounts=[], groups=[]):
+    def get_nb_online_total_contacts(self, accounts=None, groups=None):
         """
         Return the number of online contacts and the total number of contacts
         """
-        if accounts == []:
+        if not accounts:
             accounts = self.get_accounts()
+        if groups is None:
+            groups = []
         nbr_online = 0
         nbr_total = 0
         for account in accounts:

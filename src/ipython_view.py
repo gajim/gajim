@@ -166,7 +166,7 @@ class IterableIPShell:
         sys.stdout = IPython.utils.io.stdout
 
         orig_stdin = sys.stdin
-        sys.stdin = IPython.utils.io.stdin;
+        sys.stdin = IPython.utils.io.stdin
         self.prompt = self.generatePrompt(self.iter_more)
 
         self.IP.hooks.pre_prompt_hook()
