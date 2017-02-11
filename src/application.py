@@ -37,6 +37,8 @@ except ImportError:
 logging_helpers.init(sys.stderr.isatty())
 log = logging.getLogger('gajim.gajim')
 
+MIN_NBXMPP_VER = "0.5.3"
+
 
 class GajimApplication(Gtk.Application):
     '''Main class handling activation and command line.'''
@@ -84,6 +86,18 @@ class GajimApplication(Gtk.Application):
 
         import gtkexcepthook
         gtkexcepthook.init()
+
+        try:
+            import nbxmpp
+        except ImportError:
+            print('Gajim needs python-nbxmpp to run. Quitting…')
+            sys.exit(1)
+
+        from distutils.version import LooseVersion as V
+        if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
+            print('Gajim needs python-nbxmpp >= %s to run. '
+                  'Quitting…' % MIN_NBXMPP_VER)
+            sys.exit(1)
 
         # Create and initialize Application Paths & Databases
         import common.configpaths

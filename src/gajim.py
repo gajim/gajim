@@ -47,19 +47,6 @@ gi.require_version('Gdk', '3.0')
 gi.require_version('GObject', '2.0')
 gi.require_version('Pango', '1.0')
 
-MIN_NBXMPP_VER = "0.5.3"
-
-try:
-    import nbxmpp
-except ImportError:
-    print('Gajim needs python-nbxmpp to run. Quiting…')
-    sys.exit(1)
-
-from distutils.version import LooseVersion as V
-if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
-    print('Gajim needs python-nbxmpp >= %s to run. Quiting…' % MIN_NBXMPP_VER)
-    sys.exit(1)
-
 from application import GajimApplication
 
 app = GajimApplication()
