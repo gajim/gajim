@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 ## src/gajim.py
 ##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
 ##                    Norman Rasmussen <norman AT rasmussen.co.za>
@@ -19,6 +19,8 @@
 ##                         Julien Pivotto <roidelapluie AT gmail.com>
 ##                         Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2016-2017 Emmanuel Gil Peyrot <linkmauve AT linkmauve.fr>
+##                         Philipp Hörist <philipp AT hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
