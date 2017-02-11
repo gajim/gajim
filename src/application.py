@@ -229,6 +229,10 @@ class GajimApplication(Gtk.Application):
             self.profile_separation = True
         if options.contains('config-path'):
             self.config_path = options.lookup_value('config-path').get_string()
+        if options.contains('version'):
+            from common.defs import version
+            print(version)
+            return 0
         return -1
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:

@@ -37,11 +37,6 @@
 
 import sys
 
-if '--version' in sys.argv or '-V' in sys.argv:
-    from common.defs import version
-    print(version)
-    sys.exit(0)
-
 # Test here for all required versions so we dont have to
 # test multiple times in every module. nbxmpp also needs GLib.
 import gi
