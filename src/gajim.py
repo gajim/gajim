@@ -230,20 +230,14 @@ class GajimApplication(Gtk.Application):
         signal.signal(signal.SIGINT, sigint_cb)
         signal.signal(signal.SIGTERM, sigint_cb)
 
-        log.info("Encodings: d:%s, fs:%s, p:%s", sys.getdefaultencoding(),
-                 sys.getfilesystemencoding(), locale.getpreferredencoding())
-
-        from gui_interface import Interface
-        self.interface = Interface()
-        self.interface.run(self)
+        print("Encodings: d:{}, fs:{}, p:{}".format(sys.getdefaultencoding(),
+              sys.getfilesystemencoding(), locale.getpreferredencoding()))
 
     def do_activate(self):
         Gtk.Application.do_activate(self)
-        # If a second instance starts do_activate() is called
-        # We bringt the Roster window to the front, GTK exits afterwards.
-        if self.interface:
-            self.interface.roster.window.present()
-            return
+        from gui_interface import Interface
+        self.interface = Interface()
+        self.interface.run(self)
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
@@ -285,7 +279,8 @@ class GajimApplication(Gtk.Application):
         if options.contains('loglevel'):
             string = options.lookup_value('loglevel').get_string()
             logging_helpers.set_loglevels(string)
-        self.activate()
+        if not command_line.get_is_remote():
+            self.activate()
         return 0
 
     def frozen_logging(self, path):
