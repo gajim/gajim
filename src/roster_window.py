@@ -3575,7 +3575,7 @@ class RosterWindow:
             if contact.sub == 'to':
                 dialogs.ConfirmationDialog(pritext, sectext + \
                     _('By removing this contact you also remove authorization '
-                    'resulting in him or her always seeing you as offline.'),
+                    'resulting in them always seeing you as offline.'),
                     on_response_ok=(on_ok2, list_))
             elif _('Not in Roster') in contact.get_shown_groups():
                 # Contact is not in roster
@@ -3585,7 +3585,7 @@ class RosterWindow:
             else:
                 dialogs.ConfirmationDialogCheck(pritext, sectext + \
                     _('By removing this contact you also by default remove '
-                    'authorization resulting in him or her always seeing you as'
+                    'authorization resulting in them always seeing you as'
                     ' offline.'),
                     _('I want this contact to know my status after removal'),
                     on_response_ok=(on_ok, list_))

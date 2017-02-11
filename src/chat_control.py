@@ -429,7 +429,7 @@ class ChatControl(ChatControlBase):
             else:
                 self._send_file_button.set_tooltip_text(
                     _("You need to know the real JID of the contact to send "
-                    "him or her a file."))
+                    "them a file."))
 
         # Convert to GC
         if gajim.config.get_per('accounts', self.account, 'is_zeroconf'):
