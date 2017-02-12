@@ -3254,7 +3254,9 @@ class ManageBookmarksWindow:
         self.xml.connect_signals(self)
         self.window.show_all()
         # select root iter
-        self.selection.select_iter(self.treestore.get_iter_first())
+        first_iter = self.treestore.get_iter_first()
+        if first_iter:
+            self.selection.select_iter(first_iter)
 
     def on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
