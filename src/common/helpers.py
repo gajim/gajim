@@ -746,13 +746,13 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    elif os.name == 'nt' and HAS_WINSOUND:
+    elif sys.platform == 'win32' and HAS_WINSOUND:
         try:
             winsound.PlaySound(path_to_soundfile,
                     winsound.SND_FILENAME|winsound.SND_ASYNC)
         except Exception:
             log.exception('Sound Playback Error')
-    elif os.name == 'posix':
+    elif sys.platform == 'linux':
         if gajim.config.get('soundplayer') == '':
             def _oss_play():
                 sndfile = wave.open(path_to_soundfile, 'rb')
