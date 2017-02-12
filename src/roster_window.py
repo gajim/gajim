@@ -1558,6 +1558,8 @@ class RosterWindow:
         """
         if not self.tree.get_model():
             return
+        if account not in gajim.connections:
+            return
         delimiter = gajim.connections[account].nested_group_delimiter
         group_splited = group.split(delimiter)
         i = 1
