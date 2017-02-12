@@ -29,24 +29,6 @@
 ## the same can be said for history_window.py
 
 import os
-
-if os.name == 'nt':
-    import warnings
-    warnings.filterwarnings(action='ignore')
-
-    if os.path.isdir('gtk'):
-        # Used to create windows installer with GTK included
-        paths = os.environ['PATH']
-        list_ = paths.split(';')
-        new_list = []
-        for p in list_:
-            if p.find('gtk') < 0 and p.find('GTK') < 0:
-                new_list.append(p)
-        new_list.insert(0, 'gtk/lib')
-        new_list.insert(0, 'gtk/bin')
-        os.environ['PATH'] = ';'.join(new_list)
-        os.environ['GTK_BASEPATH'] = 'gtk'
-
 import sys
 import signal
 import gi
