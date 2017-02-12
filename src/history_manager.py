@@ -29,24 +29,6 @@
 ## the same can be said for history_window.py
 
 import os
-
-if os.name == 'nt':
-    import warnings
-    warnings.filterwarnings(action='ignore')
-
-    if os.path.isdir('gtk'):
-        # Used to create windows installer with GTK included
-        paths = os.environ['PATH']
-        list_ = paths.split(';')
-        new_list = []
-        for p in list_:
-            if p.find('gtk') < 0 and p.find('GTK') < 0:
-                new_list.append(p)
-        new_list.insert(0, 'gtk/lib')
-        new_list.insert(0, 'gtk/bin')
-        os.environ['PATH'] = ';'.join(new_list)
-        os.environ['GTK_BASEPATH'] = 'gtk'
-
 import sys
 import signal
 import gi
@@ -91,11 +73,7 @@ common.configpaths.gajimpaths.init(config_path)
 del config_path
 from common import gajim
 import gtkgui_helpers
-from common.logger import LOG_DB_PATH, constants
-
-#FIXME: constants should implement 2 way mappings
-status = dict((constants.__dict__[i], i[5:].lower()) for i in \
-        constants.__dict__.keys() if i.startswith('SHOW_'))
+from common.logger import LOG_DB_PATH, JIDConstant, KindConstant
 from common import helpers
 import dialogs
 
@@ -342,7 +320,7 @@ class HistoryManager:
         possible_room_jid = jid.split('/', 1)[0]
 
         self.cur.execute('SELECT jid_id FROM jids WHERE jid = ? AND type = ?',
-                (possible_room_jid, constants.JID_ROOM_TYPE))
+                (possible_room_jid, JIDConstant.ROOM_TYPE))
         row = self.cur.fetchone()
         if row is None:
             return False
@@ -357,7 +335,7 @@ class HistoryManager:
         row = self.cur.fetchone()
         if row is None:
             raise
-        elif row[0] == constants.JID_ROOM_TYPE:
+        elif row[0] == JIDConstant.ROOM_TYPE:
             return True
         else:  # normal type
             return False
@@ -399,15 +377,15 @@ class HistoryManager:
                 pass
             else:
                 color = None
-                if kind in (constants.KIND_SINGLE_MSG_RECV,
-                constants.KIND_CHAT_MSG_RECV, constants.KIND_GC_MSG):
+                if kind in (KindConstant.SINGLE_MSG_RECV,
+                KindConstant.CHAT_MSG_RECV, KindConstant.GC_MSG):
                     # it is the other side
                     color = gajim.config.get('inmsgcolor')  # so incoming color
-                elif kind in (constants.KIND_SINGLE_MSG_SENT,
-                constants.KIND_CHAT_MSG_SENT):  # it is us
+                elif kind in (KindConstant.SINGLE_MSG_SENT,
+                KindConstant.CHAT_MSG_SENT):  # it is us
                     color = gajim.config.get('outmsgcolor')  # so outgoing color
-                elif kind in (constants.KIND_STATUS,
-                constants.KIND_GCSTATUS):  # is is statuses
+                elif kind in (KindConstant.STATUS,
+                KindConstant.GCSTATUS):  # is is statuses
                     # so status color
                     color = gajim.config.get('statusmsgcolor')
                     # include status into (status) message
@@ -540,13 +518,13 @@ class HistoryManager:
             # in store: time, kind, message, contact_name FROM logs
             # in text: JID or You or nickname (if it's gc_msg), time, message
             time_, kind, message, nickname = row
-            if kind in (constants.KIND_SINGLE_MSG_RECV,
-                    constants.KIND_CHAT_MSG_RECV):
+            if kind in (KindConstant.SINGLE_MSG_RECV,
+                    KindConstant.CHAT_MSG_RECV):
                 who = self._get_jid_from_jid_id(jid_id)
-            elif kind in (constants.KIND_SINGLE_MSG_SENT,
-                    constants.KIND_CHAT_MSG_SENT):
+            elif kind in (KindConstant.SINGLE_MSG_SENT,
+                    KindConstant.CHAT_MSG_SENT):
                 who = _('You')
-            elif kind == constants.KIND_GC_MSG:
+            elif kind == KindConstant.GC_MSG:
                 who = nickname
             else:  # status or gc_status. do not save
                 #print kind
