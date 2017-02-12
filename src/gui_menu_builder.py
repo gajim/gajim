@@ -18,15 +18,17 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gio, GLib
 import os
 import gtkgui_helpers
 import message_control
 
 from common import gajim
 from common import helpers
+from common import i18n
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER, NS_CONFERENCE
+from gtkgui_helpers import get_action
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):
@@ -636,3 +638,146 @@ def get_transport_menu(contact, account):
     menu.show_all()
     return menu
 
+'''
+Build dynamic Application Menus
+'''
+
+
+def get_bookmarks_menu(account, rebuild=False):
+    if not gajim.connections[account].bookmarks:
+        return None
+    menu = Gio.Menu()
+
+    # Build Join Groupchat
+    action = 'app.{}-join-groupchat'.format(account)
+    menuitem = Gio.MenuItem.new(_('Join Group Chat'), action)
+    variant = GLib.Variant('s', account)
+    menuitem.set_action_and_target_value(action, variant)
+    menu.append_item(menuitem)
+
+    # Build Bookmarks
+    section = Gio.Menu()
+    for bookmark in gajim.connections[account].bookmarks:
+        name = bookmark['name']
+        if not name:
+            # No name was given for this bookmark.
+            # Use the first part of JID instead...
+            name = bookmark['jid'].split("@")[0]
+
+        # Shorten long names
+        name = (name[:42] + '..') if len(name) > 42 else name
+
+        action = 'app.{}-activate-bookmark'.format(account)
+        menuitem = Gio.MenuItem.new(name, action)
+
+        # Create Variant Dict
+        dict_ = {'account': GLib.Variant('s', account),
+                 'jid': GLib.Variant('s', bookmark['jid'])}
+        if bookmark['nick']:
+            dict_['nick'] = GLib.Variant('s', bookmark['nick'])
+        if bookmark['password']:
+            dict_['password'] = GLib.Variant('s', bookmark['password'])
+        variant_dict = GLib.Variant('a{sv}', dict_)
+
+        menuitem.set_action_and_target_value(action, variant_dict)
+        section.append_item(menuitem)
+    menu.append_section(None, section)
+    if not rebuild:
+        get_action(account + '-activate-bookmark').set_enabled(True)
+
+    return menu
+
+
+def get_account_menu(account):
+    '''
+    [(action, label/sub_menu)]
+        action: string
+        label: string
+        sub menu: list
+    '''
+    account_menu = [
+            ('-add-contact', _('Add Contact...')),
+            ('-join-groupchat', _('Join Group Chat')),
+            ('-profile', _('Profile')),
+            ('-services', _('Discover Services')),
+            ('-start-chat', _('Start Chat...')),
+            ('-start-single-chat', _('Send Single Message...')),
+            ('Advanced', [
+                ('-archive', _('Archiving Preferences')),
+                ('-privacylists', _('Privacy Lists')),
+                ('-xml-console', _('XML Console'))
+                ]),
+            ('Admin', [
+                ('-send-server-message', _('Send Server Message...')),
+                ('-set-motd', _('Set MOTD...')),
+                ('-update-motd', _('Update MOTD...')),
+                ('-delete-motd', _('Delete MOTD...'))
+                ]),
+            ]
+
+    def build_menu(preset):
+        menu = Gio.Menu()
+        for item in preset:
+            if isinstance(item[1], str):
+                action, label = item
+                if action == '-join-groupchat':
+                    bookmark_menu = get_bookmarks_menu(account, True)
+                    if bookmark_menu:
+                        menu.append_submenu(label, bookmark_menu)
+                        continue
+                action = 'app.{}{}'.format(account, action)
+                menuitem = Gio.MenuItem.new(label, action)
+                variant = GLib.Variant('s', account)
+                menuitem.set_action_and_target_value(action, variant)
+                menu.append_item(menuitem)
+            else:
+                label, sub_menu = item
+                # This is a submenu
+                submenu = build_menu(sub_menu)
+                menu.append_submenu(label, submenu)
+        return menu
+
+    return build_menu(account_menu)
+
+
+def build_accounts_menu():
+    menubar = gajim.app.get_menubar()
+    # Accounts Submenu
+    acc_menu = menubar.get_item_link(0, 'submenu')
+    acc_menu.remove_all()
+    accounts_list = sorted(gajim.contacts.get_accounts())
+    if not accounts_list:
+        no_accounts = _('No Accounts available')
+        acc_menu.append_item(Gio.MenuItem.new(no_accounts, None))
+        return
+    if len(accounts_list) > 1:
+        for acc in accounts_list:
+            acc_menu.append_submenu(
+                acc, get_account_menu(acc))
+    else:
+        acc_menu = get_account_menu(accounts_list[0])
+        menubar.remove(0)
+        menubar.insert_submenu(0, 'Accounts', acc_menu)
+
+
+def build_bookmark_menu(account):
+    menubar = gajim.app.get_menubar()
+    bookmark_menu = get_bookmarks_menu(account)
+    if not bookmark_menu:
+        return
+
+    # Accounts Submenu
+    acc_menu = menubar.get_item_link(0, 'submenu')
+
+    # We have more than one Account active
+    if acc_menu.get_item_link(0, 'submenu'):
+        for i in range(acc_menu.get_n_items()):
+            label = acc_menu.get_item_attribute_value(i, 'label')
+            if label.get_string() == account:
+                menu = acc_menu.get_item_link(i, 'submenu')
+    else:
+        # We have only one Account active
+        menu = acc_menu
+    label = menu.get_item_attribute_value(1, 'label').get_string()
+    menu.remove(1)
+    menu.insert_submenu(1, label, bookmark_menu)
