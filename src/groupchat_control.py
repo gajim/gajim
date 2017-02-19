@@ -75,18 +75,6 @@ class Column(IntEnum):
 empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
 
-def set_renderer_color(treeview, renderer, set_background=True):
-    """
-    Set style for group row, using PRELIGHT system color
-    """
-    context = treeview.get_style_context()
-    if set_background:
-        bgcolor = context.get_background_color(Gtk.StateFlags.PRELIGHT)
-        renderer.set_property('cell-background-rgba', bgcolor)
-    else:
-        fgcolor = context.get_color(Gtk.StateFlags.PRELIGHT)
-        renderer.set_property('foreground-rgba', fgcolor)
-
 def tree_cell_data_func(column, renderer, model, iter_, tv=None):
     # cell data func is global, because we don't want it to keep
     # reference to GroupchatControl instance (self)
@@ -123,17 +111,11 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
                 gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
     else: # it is root (eg. group)
         bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
-        if bgcolor:
-            renderer.set_property('cell-background', bgcolor)
-        else:
-            set_renderer_color(tv, renderer)
+        renderer.set_property('cell-background', bgcolor or None)
         if isinstance(renderer, Gtk.CellRendererText):
             # foreground property is only with CellRendererText
             color = gajim.config.get_per('themes', theme, 'grouptextcolor')
-            if color:
-                renderer.set_property('foreground', color)
-            else:
-                set_renderer_color(tv, renderer, False)
+            renderer.set_property('foreground', color or None)
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 

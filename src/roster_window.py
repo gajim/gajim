@@ -4814,19 +4814,6 @@ class RosterWindow:
         if ctrl:
             ctrl.show_avatar()
 
-    def set_renderer_color(self, renderer, style, set_background=True):
-        """
-        Set style for treeview cell, using PRELIGHT system color
-        """
-        if set_background:
-            context = self.tree.get_style_context()
-            bgcolor = context.get_background_color(style)
-            renderer.set_property('cell-background-rgba', bgcolor)
-        else:
-            context = self.tree.get_style_context()
-            fgcolor = context.get_color(style)
-            renderer.set_property('foreground-rgba', fgcolor)
-
     def _iconCellDataFunc(self, column, renderer, model, titer, data=None):
         """
         When a row is added, set properties for icon renderer
@@ -4871,10 +4858,7 @@ class RosterWindow:
         theme = gajim.config.get('roster_theme')
         if type_ == 'account':
             color = gajim.config.get_per('themes', theme, 'accounttextcolor')
-            if color:
-                renderer.set_property('foreground', color)
-            else:
-                self.set_renderer_color(renderer, Gtk.StateFlags.ACTIVE, False)
+            renderer.set_property('foreground', color or None)
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
             renderer.set_property('xpad', 0)
@@ -4882,10 +4866,7 @@ class RosterWindow:
             self._set_account_row_background_color(renderer)
         elif type_ == 'group':
             color = gajim.config.get_per('themes', theme, 'grouptextcolor')
-            if color:
-                renderer.set_property('foreground', color)
-            else:
-                self.set_renderer_color(renderer, Gtk.StateFlags.PRELIGHT, False)
+            renderer.set_property('foreground', color or None)
             renderer.set_property('font',
                 gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
             parent_iter = model.iter_parent(titer)
@@ -5012,10 +4993,7 @@ class RosterWindow:
     def _set_account_row_background_color(self, renderer):
         theme = gajim.config.get('roster_theme')
         color = gajim.config.get_per('themes', theme, 'accountbgcolor')
-        if color:
-            renderer.set_property('cell-background', color)
-        else:
-            self.set_renderer_color(renderer, Gtk.StateFlags.ACTIVE)
+        renderer.set_property('cell-background', color or None)
 
     def _set_contact_row_background_color(self, renderer, jid, account):
         theme = gajim.config.get('roster_theme')
@@ -5027,15 +5005,12 @@ class RosterWindow:
                 'just_disconnected_bg_color'))
         else:
             color = gajim.config.get_per('themes', theme, 'contactbgcolor')
-            renderer.set_property('cell-background', color if color else None)
+            renderer.set_property('cell-background', color or None)
 
     def _set_group_row_background_color(self, renderer):
         theme = gajim.config.get('roster_theme')
         color = gajim.config.get_per('themes', theme, 'groupbgcolor')
-        if color:
-            renderer.set_property('cell-background', color)
-        else:
-            self.set_renderer_color(renderer, Gtk.StateFlags.PRELIGHT)
+        renderer.set_property('cell-background', color or None)
 
 ################################################################################
 ### Everything about building menus
