@@ -671,33 +671,25 @@ class Logger:
             # Error trying to create a new jid_id. This means there is no log
             return []
 
-        if False: # query.startswith('SELECT '): # it's SQL query (FIXME)
-            try:
-                self.cur.execute(query)
-            except sqlite.OperationalError as e:
-                results = [('', '', '', '', str(e))]
-                return results
-
-        else: # user just typed something, we search in message column
-            where_sql, jid_tuple = self._build_contact_where(account, jid)
-            like_sql = '%' + query.replace("'", "''") + '%'
-            if year:
-                start_of_day = self.get_unix_time_from_date(year, month, day)
-                seconds_in_a_day = 86400 # 60 * 60 * 24
-                last_second_of_day = start_of_day + seconds_in_a_day - 1
-                self.cur.execute('''
-                SELECT contact_name, time, kind, show, message, subject FROM logs
-                WHERE (%s) AND message LIKE '%s'
-                AND time BETWEEN %d AND %d
-                ORDER BY time
-                ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
-                    jid_tuple)
-            else:
-                self.cur.execute('''
-                SELECT contact_name, time, kind, show, message, subject FROM logs
-                WHERE (%s) AND message LIKE '%s'
-                ORDER BY time
-                ''' % (where_sql, like_sql), jid_tuple)
+        where_sql, jid_tuple = self._build_contact_where(account, jid)
+        like_sql = '%' + query.replace("'", "''") + '%'
+        if year:
+            start_of_day = self.get_unix_time_from_date(year, month, day)
+            seconds_in_a_day = 86400 # 60 * 60 * 24
+            last_second_of_day = start_of_day + seconds_in_a_day - 1
+            self.cur.execute('''
+            SELECT contact_name, time, kind, show, message, subject FROM logs
+            WHERE (%s) AND message LIKE '%s'
+            AND time BETWEEN %d AND %d
+            ORDER BY time
+            ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
+                jid_tuple)
+        else:
+            self.cur.execute('''
+            SELECT contact_name, time, kind, show, message, subject FROM logs
+            WHERE (%s) AND message LIKE '%s'
+            ORDER BY time
+            ''' % (where_sql, like_sql), jid_tuple)
 
         results = self.cur.fetchall()
         return results
