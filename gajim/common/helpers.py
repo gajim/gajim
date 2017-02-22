@@ -53,6 +53,12 @@ import nbxmpp
 from common.i18n import Q_
 from common.i18n import ngettext
 
+try:
+    import precis_i18n.codec
+    HAS_PRECIS_I18N = True
+except ImportError:
+    HAS_PRECIS_I18N = False
+
 HAS_SOUND = True
 if sys.platform == 'win32':
     try:
@@ -244,8 +250,11 @@ def parse_resource(resource):
     """
     if resource:
         try:
-            from nbxmpp.stringprepare import resourceprep
-            return resourceprep.prepare(resource)
+            if HAS_PRECIS_I18N:
+                return resource.encode('Nickname').decode('utf-8')
+            else:
+                from nbxmpp.stringprepare import resourceprep
+                return resourceprep.prepare(resource)
         except UnicodeError:
             raise InvalidFormat('Invalid character in resource.')
 
@@ -274,8 +283,8 @@ def prep(user, server, resource):
 
     if not ip_address:
         if server is not None:
-            if len(server) < 1 or len(server) > 1023:
-                raise InvalidFormat(_('Server must be between 1 and 1023 chars'))
+            if len(server) < 1 or len(server.encode('utf-8')) > 1023:
+                raise InvalidFormat(_('Server must be between 1 and 1023 bytes'))
             try:
                 from nbxmpp.stringprepare import nameprep
                 server = nameprep.prepare(server)
@@ -285,22 +294,28 @@ def prep(user, server, resource):
             raise InvalidFormat(_('Server address required.'))
 
     if user is not None:
-        if len(user) < 1 or len(user) > 1023:
-            raise InvalidFormat(_('Username must be between 1 and 1023 chars'))
+        if len(user) < 1 or len(user.encode('utf-8')) > 1023:
+            raise InvalidFormat(_('Username must be between 1 and 1023 bytes'))
         try:
-            from nbxmpp.stringprepare import nodeprep
-            user = nodeprep.prepare(user)
+            if HAS_PRECIS_I18N:
+                user = user.encode('UsernameCaseMapped').decode('utf-8')
+            else:
+                from nbxmpp.stringprepare import nodeprep
+                user = nodeprep.prepare(user)
         except UnicodeError:
             raise InvalidFormat(_('Invalid character in username.'))
     else:
         user = None
 
     if resource is not None:
-        if len(resource) < 1 or len(resource) > 1023:
-            raise InvalidFormat(_('Resource must be between 1 and 1023 chars'))
+        if len(resource) < 1 or len(resource.encode('utf-8')) > 1023:
+            raise InvalidFormat(_('Resource must be between 1 and 1023 bytes'))
         try:
-            from nbxmpp.stringprepare import resourceprep
-            resource = resourceprep.prepare(resource)
+            if HAS_PRECIS_I18N:
+                resource = resource.encode('OpaqueString').decode('utf-8')
+            else:
+                from nbxmpp.stringprepare import resourceprep
+                resource = resourceprep.prepare(resource)
         except UnicodeError:
             raise InvalidFormat(_('Invalid character in resource.'))
     else:
