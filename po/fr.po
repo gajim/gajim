@@ -284,7 +284,7 @@ msgstr "Opérations d'administration"
 
 #: ../data/gui/accounts_window.ui.h:24
 msgid "_Client Cert File:"
-msgstr "Fichier du _certificat client:"
+msgstr "Fichier du _certificat client :"
 
 #: ../data/gui/accounts_window.ui.h:25
 msgid "Browse..."
@@ -1618,7 +1618,7 @@ msgstr "_Titre :"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:4
 msgid "Roo_m:"
-msgstr "_Salon:"
+msgstr "_Salon :"
 
 #: ../data/gui/manage_bookmarks_window.ui.h:7
 msgid "A_uto join"
@@ -1905,7 +1905,7 @@ msgstr "Comportement de la _fenêtre :"
 
 #: ../data/gui/preferences_window.ui.h:32
 msgid "_Show roster on startup:"
-msgstr "Montrer la _liste au démarrage:"
+msgstr "Montrer la _liste au démarrage :"
 
 #: ../data/gui/preferences_window.ui.h:33
 msgid "Ma_ke message windows compact"
@@ -3156,7 +3156,7 @@ msgstr "Montrer l'icone de la zone de notification :"
 
 #: ../src/application.py:52
 msgid "Show only critical errors"
-msgstr "Ne le montrer que les erreurs critiques"
+msgstr "Ne montrer que les erreurs critiques"
 
 #: ../src/application.py:55
 msgid "Separate profile files completely (even history db and plugins)"
@@ -8324,7 +8324,7 @@ msgstr "Voulez-vous accepter l'invitation ?"
 
 #: ../src/dialogs.py:4828
 msgid "Reason (if you decline):"
-msgstr "Raison (si vous refusez):"
+msgstr "Raison (si vous refusez) :"
 
 #: ../src/dialogs.py:4877
 msgid "Choose Client Cert #PCKS12"
