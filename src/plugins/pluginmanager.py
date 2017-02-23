@@ -493,11 +493,14 @@ class PluginManager(metaclass=Singleton):
 
             module = None
 
-            if module_name in sys.modules:
-            # do not load the module twice
-                continue
             try:
-                module = __import__(module_name)
+                if module_name in sys.modules:
+                    from imp import reload
+                    log.info('Reloading %s', module_name)
+                    module = reload(sys.modules[module_name])
+                else:
+                    log.info('Loading %s', module_name)
+                    module = __import__(module_name)
             except Exception as error:
                 log.warning(
                     "While trying to load {plugin}, exception occurred".format(plugin=elem_name),
