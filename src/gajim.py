@@ -60,9 +60,6 @@ except ImportError:
     print('PyOpenSSL not available, impossible to generate entropy', file=sys.stderr)
     PYOPENSSL_PRNG_PRESENT = False
 
-logging_helpers.init(sys.stderr.isatty())
-log = logging.getLogger('gajim.gajim')
-
 MIN_NBXMPP_VER = "0.5.3"
 
 
@@ -264,6 +261,9 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.prepare_quit()
 
     def do_handle_local_options(self, options: GLib.VariantDict) -> int:
+
+        logging_helpers.init()
+
         if options.contains('profile'):
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
@@ -279,18 +279,17 @@ class GajimApplication(Gtk.Application):
             from common.defs import version
             print(version)
             return 0
+        if options.contains('quiet'):
+            logging_helpers.set_quiet(True)
+        if options.contains('verbose'):
+            logging_helpers.set_verbose(True)
+        if options.contains('loglevel'):
+            loglevel = options.lookup_value('loglevel').get_string()
+            logging_helpers.set_loglevels(loglevel)
         return -1
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
         Gtk.Application.do_command_line(self, command_line)
-        options = command_line.get_options_dict()
-        if options.contains('quiet'):
-            logging_helpers.set_quiet()
-        if options.contains('verbose'):
-            logging_helpers.set_verbose()
-        if options.contains('loglevel'):
-            string = options.lookup_value('loglevel').get_string()
-            logging_helpers.set_loglevels(string)
         if not command_line.get_is_remote():
             self.activate()
         return 0

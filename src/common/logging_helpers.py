@@ -19,6 +19,8 @@
 ##
 
 import logging
+import os
+import sys
 
 def parseLogLevel(arg):
     """
@@ -132,10 +134,14 @@ class FancyFormatter(logging.Formatter):
         return logging.Formatter.format(self, record)
 
 
-def init(use_color=False):
+def init():
     """
     Iinitialize the logging system
     """
+    use_color = False
+    if os.name != 'nt':
+        use_color = sys.stderr.isatty()
+
     consoleloghandler = logging.StreamHandler()
     consoleloghandler.setFormatter(
             FancyFormatter(
@@ -171,7 +177,7 @@ def set_quiet():
 
 # tests
 if __name__ == '__main__':
-    init(use_color=True)
+    init()
 
     set_loglevels('gajim.c=DEBUG,INFO')
 
