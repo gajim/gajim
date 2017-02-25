@@ -403,12 +403,18 @@ class PluginManager(metaclass=Singleton):
 
     @staticmethod
     @log_calls('PluginManager')
-    def scan_dir_for_plugins(path, scan_dirs=True):
+    def scan_dir_for_plugins(path, scan_dirs=True, package=False):
         r'''
         Scans given directory for plugin classes.
 
         :param path: directory to scan for plugins
         :type path: str
+
+        :param scan_dirs: folders inside path are processed as modules
+        :type scan_dirs: boolean
+
+        :param package: if path points to a single package folder
+        :type package: boolean
 
         :return: list of found plugin classes (subclasses of `GajimPlugin`
         :rtype: [] of class objects
@@ -416,7 +422,6 @@ class PluginManager(metaclass=Singleton):
         :note: currently it only searches for plugin classes in '\*.py' files
                 present in given direcotory `path` (no recursion here)
 
-        :todo: add scanning packages
         :todo: add scanning zipped modules
         '''
         from plugins.plugins_i18n import _
@@ -427,7 +432,11 @@ class PluginManager(metaclass=Singleton):
         if not os.path.isdir(path):
             return plugins_found
 
-        dir_list = os.listdir(path)
+        if package:
+            path, package_name = os.path.split(path)
+            dir_list = [package_name]
+        else:
+            dir_list = os.listdir(path)
 
         sys.path.insert(0, path)
 
@@ -439,6 +448,8 @@ class PluginManager(metaclass=Singleton):
             elif os.path.isdir(file_path) and scan_dirs:
                 module_name = elem_name
                 file_path += os.path.sep
+            else:
+                continue
 
             manifest_path = os.path.join(os.path.dirname(file_path),
                 'manifest.ini')
@@ -482,11 +493,14 @@ class PluginManager(metaclass=Singleton):
 
             module = None
 
-            if module_name in sys.modules:
-            # do not load the module twice
-                continue
             try:
-                module = __import__(module_name)
+                if module_name in sys.modules:
+                    from imp import reload
+                    log.info('Reloading %s', module_name)
+                    module = reload(sys.modules[module_name])
+                else:
+                    log.info('Loading %s', module_name)
+                    module = __import__(module_name)
             except Exception as error:
                 log.warning(
                     "While trying to load {plugin}, exception occurred".format(plugin=elem_name),
