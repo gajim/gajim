@@ -114,10 +114,8 @@ class PluginsWindow(object):
         self.plugins_notebook.set_current_page(0)
         self.xml.get_object('close_button').grab_focus()
 
-        for plugin in gajim.plugin_manager.active_plugins:
-            if type(plugin).__name__ == 'PluginInstaller':
-                plugin.on_activate(self)
-                break
+        # Adding GUI extension point for Plugins that want to hook the Plugin Window
+        gajim.plugin_manager.gui_extension_point('plugin_window', self)
 
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
