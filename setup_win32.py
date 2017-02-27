@@ -118,7 +118,7 @@ OPTIONS = {
         'includes': ['gi', 'numbers', 'win32com.client', 'win32com.server'],
         'packages': ['gi', 'cffi', 'cryptography', 'google', 'axolotl',
                      'pkg_resources', 'Crypto', 'pycparser', 'keyring',
-                     'PIL', 'idna', 'qrcode'],
+                     'PIL', 'idna', 'qrcode', 'certifi'],
         'include_files': INCLUDE_FILES,
     }
 }

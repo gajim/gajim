@@ -12,3 +12,4 @@ pillow
 pycurl
 docutils
 qrcode
+certifi
