@@ -1249,6 +1249,11 @@ class AddNewContactWindow:
     def _nec_gateway_prompt_received(self, obj):
         if self.adding_jid:
             jid, transport, type_ = self.adding_jid
+            if obj.stanza.getError():
+                ErrorDialog(_('Error while adding transport contact'),
+                    _('This error occured while adding a contact for transport '
+                    '%s:\n\n%s') % (transport, obj.stanza.getErrorMsg()))
+                return
             if obj.prompt_jid:
                 self._add_jid(obj.prompt_jid, type_)
             else:
