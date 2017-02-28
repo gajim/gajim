@@ -98,7 +98,7 @@ class MessageWindow(object):
             else:
                 self.parent_paned.add(self.notebook)
                 self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
-            get_action('show-roster').set_enabled(True)
+            self.window.lookup_action('show-roster').set_enabled(True)
             orig_window.destroy()
             del orig_window
 
@@ -626,7 +626,7 @@ class MessageWindow(object):
                 # Don't close parent window, just remove the child
                 child = self.parent_paned.get_child2()
                 self.parent_paned.remove(child)
-                get_action('show-roster').set_enabled(False)
+                self.window.lookup_action('show-roster').set_enabled(False)
             else:
                 self.window.destroy()
             return # don't show_title, we are dead
@@ -1272,7 +1272,7 @@ class MessageWindowMgr(GObject.GObject):
                 # Don't close parent window, just remove the child
                 child = w.parent_paned.get_child2()
                 w.parent_paned.remove(child)
-                get_action('show-roster').set_enabled(False)
+                self.parent_win.lookup_action('show-roster').set_enabled(False)
                 gtkgui_helpers.resize_window(w.window,
                         gajim.config.get('roster_width'),
                         gajim.config.get('roster_height'))
