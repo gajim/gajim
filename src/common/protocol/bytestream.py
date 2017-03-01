@@ -819,7 +819,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         self.connection.send(nbxmpp.Protocol('iq',
             file_props.direction[1:], 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-            {'sid':file_props.sid})]))
+            {'sid':file_props.transport_sid})]))
         if file_props.session_type == 'jingle':
             peerjid = \
              file_props.receiver if file_props.type_ == 's' else file_props.sender
