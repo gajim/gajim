@@ -158,7 +158,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Derived types MAY implement this
         """
-        self._paint_banner()
         self.draw_banner()
 
     def _update_banner_state_image(self):
@@ -371,7 +370,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if gajim.config.get('use_speller') and HAS_GTK_SPELL:
             self.set_speller()
         self.conv_textview.tv.show()
-        self._paint_banner()
 
         # For XEP-0172
         self.user_nick = None
@@ -502,76 +500,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # send the message
         self.send_message(message, xhtml=xhtml)
-
-    def _paint_banner(self):
-        """
-        Repaint banner with theme color
-        """
-        theme = gajim.config.get('roster_theme')
-        bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
-        textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
-        # the backgrounds are colored by using an eventbox by
-        # setting the bg color of the eventbox and the fg of the name_label
-        banner_eventbox = self.xml.get_object('banner_eventbox')
-        banner_name_label = self.xml.get_object('banner_name_label')
-        self.disconnect_style_event(banner_name_label)
-        self.disconnect_style_event(self.banner_status_label)
-        if bgcolor:
-            color = Gdk.RGBA()
-            Gdk.RGBA.parse(color, bgcolor)
-            banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
-                color)
-            default_bg = False
-        else:
-            default_bg = True
-        if textcolor:
-            color = Gdk.RGBA()
-            Gdk.RGBA.parse(color, textcolor)
-            banner_name_label.override_color(Gtk.StateType.NORMAL,
-                color)
-            self.banner_status_label.override_color(
-                Gtk.StateType.NORMAL, color)
-            default_fg = False
-        else:
-            default_fg = True
-        if default_bg or default_fg:
-            self._on_style_set_event(banner_name_label, None, default_fg,
-                    default_bg)
-            if self.banner_status_label.get_realized():
-                # Widget is realized
-                self._on_style_set_event(self.banner_status_label, None, default_fg,
-                        default_bg)
-
-    def disconnect_style_event(self, widget):
-        # Try to find the event_id
-        for id_ in self.handlers.keys():
-            if self.handlers[id_] == widget:
-                widget.disconnect(id_)
-                del self.handlers[id_]
-                break
-
-    def connect_style_event(self, widget, set_fg=False, set_bg=False):
-        self.disconnect_style_event(widget)
-        id_ = widget.connect('style-set', self._on_style_set_event, set_fg,
-            set_bg)
-        self.handlers[id_] = widget
-
-    def _on_style_set_event(self, widget, style, *opts):
-        """
-        Set style of widget from style class *.Frame.Eventbox
-                opts[0] == True -> set fg color
-                opts[1] == True -> set bg color
-        """
-        banner_eventbox = self.xml.get_object('banner_eventbox')
-        self.disconnect_style_event(widget)
-        context = widget.get_style_context()
-        if opts[1]:
-            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
-            banner_eventbox.override_background_color(Gtk.StateType.NORMAL, bg_color)
-        if opts[0]:
-            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
-            widget.override_color(Gtk.StateType.NORMAL, fg_color)
-        self.connect_style_event(widget, opts[0], opts[1])
 
     def _conv_textview_key_press_event(self, widget, event):
         # translate any layout to latin_layout
@@ -1226,20 +1154,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         msg_type == 'sent' and not self.correcting and (not \
         history[pos - 1].startswith('/') or history[pos - 1].startswith('/me')):
             self.correcting = True
-            context = self.msg_textview.get_style_context()
-            state = Gtk.StateFlags.NORMAL
-            self.old_message_tv_color = context.get_background_color(state)
-            color = Gdk.RGBA()
-            Gdk.RGBA.parse(color, 'PaleGoldenrod')
-            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
-                color)
+            gtkgui_helpers.add_css_class(
+                self.msg_textview, 'msgcorrectingcolor')
             message = history[pos - 1]
             msg_buf.set_text(message)
             return
         if self.correcting:
             # We were previously correcting
-            self.msg_textview.override_background_color(Gtk.StateType.NORMAL,
-                self.old_message_tv_color)
+            gtkgui_helpers.remove_css_class(
+                self.msg_textview, 'msgcorrectingcolor')
         self.correcting = False
         pos += -1 if direction == 'up' else +1
         if pos == -1:

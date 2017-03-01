@@ -750,6 +750,7 @@ class PreferencesWindow:
         # begin repainting themed widgets throughout
         gajim.interface.roster.repaint_themed_widgets()
         gajim.interface.roster.change_roster_style(None)
+        gtkgui_helpers.load_css()
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')

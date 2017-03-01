@@ -1109,7 +1109,13 @@ def load_css():
 
 def convert_config_to_css():
     css = ''
-    themed_widgets = {}
+    themed_widgets = {
+        'ChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
+        'ChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
+        'ChatControl-BannerLabel': ('bannertextcolor', 'color'),
+        'Discovery-BannerEventBox': ('bannerbgcolor', 'background'),
+        'Discovery-BannerLabel': ('bannertextcolor', 'color')}
+
     classes = {'state_composing_color': ('', 'color'),
                'state_inactive_color': ('', 'color'),
                'state_gone_color': ('', 'color'),
@@ -1133,3 +1139,14 @@ def convert_config_to_css():
                 cls=key, node=node, attr=attr, color=value)
 
     return css
+
+def add_css_class(widget, class_name):
+    style = widget.get_style_context()
+    for css_cls in style.list_classes():
+        if css_cls.startswith('theme_'):
+            style.remove_class(css_cls)
+    style.add_class('theme_' + class_name)
+
+def remove_css_class(widget, class_name):
+    style = widget.get_style_context()
+    style.remove_class('theme_' + class_name)

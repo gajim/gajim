@@ -1024,8 +1024,8 @@ class ChatControl(ChatControlBase):
                 displaymarking = None
             if self.correcting:
                 self.correcting = False
-                self.msg_textview.override_background_color(
-                    Gtk.StateType.NORMAL, self.old_message_tv_color)
+                gtkgui_helpers.remove_css_class(
+                    self.msg_textview, 'msgcorrectingcolor')
 
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
