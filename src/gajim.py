@@ -280,9 +280,9 @@ class GajimApplication(Gtk.Application):
             print(version)
             return 0
         if options.contains('quiet'):
-            logging_helpers.set_quiet(True)
+            logging_helpers.set_quiet()
         if options.contains('verbose'):
-            logging_helpers.set_verbose(True)
+            logging_helpers.set_verbose()
         if options.contains('loglevel'):
             loglevel = options.lookup_value('loglevel').get_string()
             logging_helpers.set_loglevels(loglevel)
