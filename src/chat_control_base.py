@@ -343,8 +343,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.drag_dest_set(Gtk.DestDefaults.MOTION |
             Gtk.DestDefaults.HIGHLIGHT, self.dnd_list, Gdk.DragAction.COPY)
 
-        self.update_font()
-
         # Hook up send button
         widget = self.xml.get_object('send_button')
         id_ = widget.connect('clicked', self._on_send_button_clicked)
@@ -895,11 +893,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.attach_to_widget(widget, None)
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
                 self.parent_win)
-
-    def update_font(self):
-        font = Pango.FontDescription(gajim.config.get('conversation_font'))
-        self.conv_textview.tv.override_font(font)
-        self.msg_textview.override_font(font)
 
     def update_tags(self):
         self.conv_textview.update_tags()

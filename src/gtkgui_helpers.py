@@ -1141,6 +1141,8 @@ def convert_config_to_css():
             css += '.theme_{cls} {node} {{ {attr}: {color}; }}\n'.format(
                 cls=key, node=node, attr=attr, color=value)
 
+    css += add_css_font()
+
     return css
 
 def add_css_class(widget, class_name):
@@ -1154,3 +1156,24 @@ def add_css_class(widget, class_name):
 def remove_css_class(widget, class_name):
     style = widget.get_style_context()
     style.remove_class('theme_' + class_name)
+
+def add_css_font():
+    conversation_font = gajim.config.get('conversation_font')
+    if not conversation_font:
+        return ''
+    font = Pango.FontDescription(conversation_font)
+    unit = "pt" if Gtk.check_version(3, 22, 0) is None else "px"
+    css = """
+    .font_custom {{
+      font-family: {family};
+      font-size: {size}{unit};
+      font-weight: {weight};
+    }}""".format(
+        family=font.get_family(),
+        size=int(round(font.get_size() / Pango.SCALE)),
+        unit=unit,
+        weight=int(font.get_weight()))
+    css = css.replace("font-size: 0{unit};".format(unit=unit), "")
+    css = css.replace("font-weight: 0;", "")
+    css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
+    return css
