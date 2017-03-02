@@ -1120,7 +1120,10 @@ def convert_config_to_css():
                'state_inactive_color': ('', 'color'),
                'state_gone_color': ('', 'color'),
                'state_paused_color': ('', 'color'),
-               'msgcorrectingcolor': ('text', 'background')}
+               'msgcorrectingcolor': ('text', 'background'),
+               'state_muc_directed_msg_color': ('', 'color'),
+               'state_muc_msg_color': ('', 'color')}
+
 
     theme = gajim.config.get('roster_theme')
     for key, values in themed_widgets.items():
@@ -1145,7 +1148,8 @@ def add_css_class(widget, class_name):
     for css_cls in style.list_classes():
         if css_cls.startswith('theme_'):
             style.remove_class(css_cls)
-    style.add_class('theme_' + class_name)
+    if class_name:
+        style.add_class('theme_' + class_name)
 
 def remove_css_class(widget, class_name):
     style = widget.get_style_context()

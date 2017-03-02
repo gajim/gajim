@@ -3379,10 +3379,6 @@ class XMLConsoleWindow:
         self.enabled = True
         self.xml.get_object('enable_checkbutton').set_active(True)
 
-        col = Gdk.RGBA()
-        Gdk.RGBA.parse(col, color)
-        self.input_textview.override_color(Gtk.StateType.NORMAL, col)
-
         if len(gajim.connections) > 1:
             title = _('XML Console for %s') % self.account
         else:

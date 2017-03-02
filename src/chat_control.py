@@ -1226,7 +1226,7 @@ class ChatControl(ChatControlBase):
         else:
             self.old_msg_kind = kind
 
-    def get_tab_label(self, chatstate):
+    def get_tab_label(self):
         unread = ''
         if self.resource:
             jid = self.contact.get_full_jid()
@@ -1239,48 +1239,13 @@ class ChatControl(ChatControlBase):
         elif num_unread > 1:
             unread = '[' + str(num_unread) + ']'
 
-        # Draw tab label using chatstate
-        theme = gajim.config.get('roster_theme')
-        color_s = None
-        if not chatstate:
-            chatstate = self.contact.chatstate
-        if chatstate is not None:
-            if chatstate == 'composing':
-                color_s = gajim.config.get_per('themes', theme,
-                    'state_composing_color')
-            elif chatstate == 'inactive':
-                color_s = gajim.config.get_per('themes', theme,
-                    'state_inactive_color')
-            elif chatstate == 'gone':
-                color_s = gajim.config.get_per('themes', theme,
-                    'state_gone_color')
-            elif chatstate == 'paused':
-                color_s = gajim.config.get_per('themes', theme,
-                    'state_paused_color')
-
-        context = self.parent_win.notebook.get_style_context()
-        if color_s:
-            # We set the color for when it's the current tab or not
-            color = Gdk.RGBA()
-            ok = Gdk.RGBA.parse(color, color_s)
-            if not ok:
-                del color
-                color = context.get_color(Gtk.StateFlags.ACTIVE)
-            # In inactive tab color to be lighter against the darker inactive
-            # background
-            if chatstate in ('inactive', 'gone') and\
-            self.parent_win.get_active_control() != self:
-                color = self.lighten_color(color)
-        else: # active or not chatstate, get color from gtk
-            color = context.get_color(Gtk.StateFlags.ACTIVE)
-
         name = self.contact.get_shown_name()
         if self.resource:
             name += '/' + self.resource
         label_str = GLib.markup_escape_text(name)
         if num_unread: # if unread, text in the label becomes bold
             label_str = '<b>' + unread + label_str + '</b>'
-        return (label_str, color)
+        return label_str
 
     def get_tab_image(self, count_unread=True):
         if self.resource:

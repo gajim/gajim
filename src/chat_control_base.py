@@ -1181,14 +1181,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 message = '> %s\n' % message.replace('\n', '\n> ')
         msg_buf.set_text(message)
 
-    def lighten_color(self, color):
-        p = 0.4
-        mask = 0
-        color.red = int((color.red * p) + (mask * (1 - p)))
-        color.green = int((color.green * p) + (mask * (1 - p)))
-        color.blue = int((color.blue * p) + (mask * (1 - p)))
-        return color
-
     def widget_set_visible(self, widget, state):
         """
         Show or hide a widget
