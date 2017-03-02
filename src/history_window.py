@@ -56,6 +56,7 @@ class Column(IntEnum):
     UNIXTIME = 2
     MESSAGE = 3
     TIME = 4
+    LOG_LINE_ID = 5
 
 class HistoryWindow:
     """
@@ -85,8 +86,8 @@ class HistoryWindow:
         self.results_window = xml.get_object('results_scrolledwindow')
         self.search_in_date = xml.get_object('search_in_date')
 
-        # contact_name, date, message, time
-        model = Gtk.ListStore(str, str, str, str, str)
+        # jid, contact_name, date, message, time, log_line_id
+        model = Gtk.ListStore(str, str, str, str, str, int)
         self.results_treeview.set_model(model)
         col = Gtk.TreeViewColumn(_('Name'))
         self.results_treeview.append_column(col)
@@ -393,27 +394,30 @@ class HistoryWindow:
         show_status = self.show_status_checkbutton.get_active()
 
         lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
-        # lines holds list with tupples that have:
-        # contact_name, time, kind, show, message
         for line in lines:
             # line[0] is contact_name, line[1] is time of message
             # line[2] is kind, line[3] is show, line[4] is message, line[5] is subject
-            # line[6] is additional_data
+            # line[6] is additional_data, line[7] is log_line_id
             if not show_status and line[2] in (KindConstant.GCSTATUS,
             KindConstant.STATUS):
                 continue
             self._add_new_line(line[0], line[1], line[2], line[3], line[4],
-                    line[5], line[6])
+                    line[5], line[6], line[7])
 
-    def _add_new_line(self, contact_name, tim, kind, show, message, subject, additional_data):
+    def _add_new_line(self, contact_name, tim, kind, show, message, subject,
+                      additional_data, log_line_id):
         """
         Add a new line in textbuffer
         """
         if not message and kind not in (KindConstant.STATUS,
                 KindConstant.GCSTATUS):
             return
+
         buf = self.history_buffer
         end_iter = buf.get_end_iter()
+
+        # Make the beginning of every message searchable by its log_line_id
+        buf.create_mark(str(log_line_id), end_iter, left_gravity=True)
 
         if gajim.config.get('print_time') == 'always':
             timestamp_str = gajim.config.get('time_stamp')
@@ -429,12 +433,6 @@ class HistoryWindow:
                 tim = time.strftime('%X ', time.localtime(float(tim)))
                 buf.insert_with_tags_by_name(end_iter, tim + '\n',
                         'time_sometimes')
-        else: # don't print time. So we print it as invisible to be able to
-              # search for it
-            timestamp_str = gajim.config.get('time_stamp')
-            timestamp_str = helpers.from_one_line(timestamp_str)
-            tim = time.strftime(timestamp_str, time.localtime(float(tim)))
-            buf.insert_with_tags_by_name(end_iter, tim, 'invisible')
 
         tag_name = ''
         tag_msg = ''
@@ -561,12 +559,13 @@ class HistoryWindow:
                         contact_name = self.completion_dict[jid][InfoColumn.NAME]
                 tim = row[1]
                 message = row[4]
+                log_line_id = row[6]
                 local_time = time.localtime(tim)
                 date = time.strftime('%Y-%m-%d', local_time)
 
                 #  jid (to which log is assigned to), name, date, message,
                 # time (full unix time)
-                model.append((jid, contact_name, date, message, str(tim)))
+                model.append((jid, contact_name, date, message, str(tim), log_line_id))
 
     def on_results_treeview_row_activated(self, widget, path, column):
         """
@@ -594,28 +593,32 @@ class HistoryWindow:
             self.calendar.select_month(month, year)
 
         self.calendar.select_day(day)
-        unix_time = model[path][Column.TIME]
-        self._scroll_to_result(unix_time)
+        self._scroll_to_message_and_highlight(model[path][Column.LOG_LINE_ID])
 
-    def _scroll_to_result(self, unix_time):
+    def _scroll_to_message_and_highlight(self, log_line_id):
         """
-        Scroll to the result using unix_time and highlight message
+        Scroll to a message and highlight it
         """
-        start_iter = self.history_buffer.get_start_iter()
-        local_time = time.localtime(float(unix_time))
-        timestamp_str = gajim.config.get('time_stamp')
-        timestamp_str = helpers.from_one_line(timestamp_str)
-        tim = time.strftime(timestamp_str, local_time)
-        result = start_iter.forward_search(tim, Gtk.TextSearchFlags.TEXT_ONLY,
-            None)
-        if result is not None:
-            match_start_iter, match_end_iter = result
-            match_end_iter.forward_to_tag_toggle(self.history_buffer.eol_tag)
-            self.history_buffer.apply_tag_by_name('highlight', match_start_iter,
-                    match_end_iter)
-            mark = self.history_buffer.create_mark('match', match_start_iter, True)
-            GLib.idle_add(self.history_textview.tv.scroll_to_mark, mark,
-                0, True, 0.0, 0.5)
+
+        def iterator_has_mark(iterator, mark_name):
+            for mark in iterator.get_marks():
+                if mark.get_name() == mark_name:
+                    return True
+            return False
+
+        log_line_id = str(log_line_id)
+        line = self.history_buffer.get_start_iter()
+        while not iterator_has_mark(line, log_line_id):
+            if not line.forward_line():
+                return
+
+        match_start = line
+        match_end = match_start.copy()
+        match_end.forward_to_tag_toggle(self.history_buffer.eol_tag)
+
+        self.history_buffer.apply_tag_by_name('highlight', match_start, match_end)
+        mark = self.history_buffer.create_mark('match', match_start, True)
+        GLib.idle_add(self.history_textview.tv.scroll_to_mark, mark, 0, True, 0.0, 0.5)
 
     def on_log_history_checkbutton_toggled(self, widget):
         # log conversation history?
