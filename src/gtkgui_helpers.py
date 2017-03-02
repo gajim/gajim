@@ -48,6 +48,7 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 from common import i18n
 from common import gajim
 from common import pep
+from common import configpaths
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -1088,3 +1089,47 @@ def __label_size_allocate(widget, allocation):
 
 def get_action(action):
     return gajim.app.lookup_action(action)
+
+def load_css():
+    path = os.path.join(configpaths.get('DATA'), 'style', 'gajim.css')
+    try:
+        with open(path, "r") as f:
+            css = f.read()
+    except Exception as exc:
+        print('Error loading css: %s', exc)
+        return
+
+    provider = Gtk.CssProvider()
+    css = "\n".join((css, convert_config_to_css()))
+    provider.load_from_data(bytes(css.encode()))
+    Gtk.StyleContext.add_provider_for_screen(
+        Gdk.Screen.get_default(),
+        provider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+def convert_config_to_css():
+    css = ''
+    themed_widgets = {}
+    classes = {'state_composing_color': ('', 'color'),
+               'state_inactive_color': ('', 'color'),
+               'state_gone_color': ('', 'color'),
+               'state_paused_color': ('', 'color'),
+               'msgcorrectingcolor': ('text', 'background')}
+
+    theme = gajim.config.get('roster_theme')
+    for key, values in themed_widgets.items():
+        config, attr = values
+        css += '#{} {{'.format(key)
+        value = gajim.config.get_per('themes', theme, config)
+        if value:
+            css += '{attr}: {color};\n'.format(attr=attr, color=value)
+        css += '}\n'
+
+    for key, values in classes.items():
+        node, attr = values
+        value = gajim.config.get_per('themes', theme, key)
+        if value:
+            css += '.theme_{cls} {node} {{ {attr}: {color}; }}\n'.format(
+                cls=key, node=node, attr=attr, color=value)
+
+    return css

@@ -242,7 +242,9 @@ class GajimApplication(Gtk.Application):
     def do_activate(self):
         Gtk.Application.do_activate(self)
         from gui_interface import Interface
+        import gtkgui_helpers
         self.interface = Interface()
+        gtkgui_helpers.load_css()
         self.interface.run(self)
         self.add_actions()
         import gui_menu_builder
