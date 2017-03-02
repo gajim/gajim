@@ -94,6 +94,9 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('loglevel', ord('l'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.STRING,
                              _('Configure logging system'), 'LEVEL')
+        self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('Show all warnings'))
 
         self.profile = ''
         self.config_path = None
@@ -286,6 +289,8 @@ class GajimApplication(Gtk.Application):
         if options.contains('loglevel'):
             loglevel = options.lookup_value('loglevel').get_string()
             logging_helpers.set_loglevels(loglevel)
+        if options.contains('warnings'):
+            self.show_warnings()
         return -1
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
@@ -293,6 +298,19 @@ class GajimApplication(Gtk.Application):
         if not command_line.get_is_remote():
             self.activate()
         return 0
+
+    def show_warnings(self):
+        import traceback
+        import warnings
+
+        def warn_with_traceback(message, category, filename, lineno,
+                                file=None, line=None):
+            traceback.print_stack(file=sys.stderr)
+            sys.stderr.write(warnings.formatwarning(message, category,
+                                                    filename, lineno, line))
+
+        warnings.showwarning = warn_with_traceback
+        warnings.filterwarnings(action="always")
 
     def frozen_logging(self, path):
         import warnings
