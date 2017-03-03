@@ -573,7 +573,7 @@ class HistoryWindow:
         which results to showing conversation logs for that date
         """
         # get currently selected date
-        cur_year, cur_month = self.calendar.get_date()[0:2]
+        cur_year, cur_month, cur_day = self.calendar.get_date()
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
         model = widget.get_model()
         # make it a tupple (Y, M, D, 0, 0, 0...)
@@ -592,7 +592,9 @@ class HistoryWindow:
         if year != cur_year or gtk_month != cur_month:
             self.calendar.select_month(month, year)
 
-        self.calendar.select_day(day)
+        if year != cur_year or gtk_month != cur_month or day != cur_day:
+            self.calendar.select_day(day)
+
         self._scroll_to_message_and_highlight(model[path][Column.LOG_LINE_ID])
 
     def _scroll_to_message_and_highlight(self, log_line_id):
@@ -606,8 +608,14 @@ class HistoryWindow:
                     return True
             return False
 
+        # Clear previous search result by removing the highlighting. The scroll
+        # mark is automatically removed when the new one is set.
+        start = self.history_buffer.get_start_iter()
+        end = self.history_buffer.get_end_iter()
+        self.history_buffer.remove_tag_by_name('highlight', start, end)
+
         log_line_id = str(log_line_id)
-        line = self.history_buffer.get_start_iter()
+        line = start
         while not iterator_has_mark(line, log_line_id):
             if not line.forward_line():
                 return
