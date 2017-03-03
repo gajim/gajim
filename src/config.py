@@ -750,6 +750,7 @@ class PreferencesWindow:
         # begin repainting themed widgets throughout
         gajim.interface.roster.repaint_themed_widgets()
         gajim.interface.roster.change_roster_style(None)
+        gtkgui_helpers.load_css()
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')
@@ -880,14 +881,7 @@ class PreferencesWindow:
         else:
             font = ''
         gajim.config.set(text, font)
-        self.update_text_font()
-
-    def update_text_font(self):
-        """
-        Update text font in opened chat windows
-        """
-        for ctrl in self._get_all_controls():
-            ctrl.update_font()
+        gtkgui_helpers.load_css()
 
     def on_incoming_nick_colorbutton_color_set(self, widget):
         self.on_preference_widget_color_set(widget, 'inmsgcolor')

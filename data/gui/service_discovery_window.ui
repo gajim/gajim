@@ -24,6 +24,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkEventBox" id="banner_agent_eventbox">
+            <property name="name">Discovery-BannerEventBox</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -33,6 +34,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="banner_agent_label">
+                    <property name="name">Discovery-BannerLabel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="ypad">6</property>

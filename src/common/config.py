@@ -468,6 +468,7 @@ class Config:
                     'bannerbgcolor': [ opt_color, '', '', True ],
                     'bannerfont': [ opt_str, '', '', True ],
                     'bannerfontattrs': [ opt_str, 'B', '', True ],
+                    'msgcorrectingcolor': [opt_color, '#eee8aa'],
 
                     # http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
                     'state_inactive_color': [ opt_color, 'grey62' ],

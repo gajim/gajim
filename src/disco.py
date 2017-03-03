@@ -561,7 +561,6 @@ _('Without a connection, you can not browse available services'))
         self.banner_eventbox = self.xml.get_object('banner_agent_eventbox')
         self.style_event_id = 0
         self.banner.realize()
-        self.paint_banner()
         self.action_buttonbox = self.xml.get_object('action_buttonbox')
 
         # Address combobox
@@ -659,63 +658,6 @@ _('Without a connection, you can not browse available services'))
             markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
                 (markup, font.to_string(), text_after)
         self.banner.set_markup(markup)
-
-    def paint_banner(self):
-        """
-        Repaint the banner with theme color
-        """
-        theme = gajim.config.get('roster_theme')
-        bgcolor = gajim.config.get_per('themes', theme, 'bannerbgcolor')
-        textcolor = gajim.config.get_per('themes', theme, 'bannertextcolor')
-        self.disconnect_style_event()
-        if bgcolor:
-            color = Gdk.RGBA()
-            Gdk.RGBA.parse(color, bgcolor)
-            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
-                color)
-            default_bg = False
-        else:
-            default_bg = True
-
-        if textcolor:
-            color = Gdk.RGBA()
-            Gdk.RGBA.parse(color, textcolor)
-            self.banner.override_color(Gtk.StateType.NORMAL, color)
-            default_fg = False
-        else:
-            default_fg = True
-        if default_fg or default_bg:
-            self._on_style_set_event(self.banner, None, default_fg, default_bg)
-        if self.browser:
-            self.browser.update_theme()
-
-    def disconnect_style_event(self):
-        if self.style_event_id:
-            self.banner.disconnect(self.style_event_id)
-            self.style_event_id = 0
-
-    def connect_style_event(self, set_fg = False, set_bg = False):
-        self.disconnect_style_event()
-        self.style_event_id = self.banner.connect('style-set',
-                                self._on_style_set_event, set_fg, set_bg)
-
-    def _on_style_set_event(self, widget, style, *opts):
-        """
-        Set style of widget from style class *.Frame.Eventbox
-                opts[0] == True -> set fg color
-                opts[1] == True -> set bg color
-        """
-        self.disconnect_style_event()
-        context = widget.get_style_context()
-        if opts[1]:
-            bg_color = context.get_background_color(Gtk.StateFlags.SELECTED)
-            self.banner_eventbox.override_background_color(Gtk.StateType.NORMAL,
-                bg_color)
-        if opts[0]:
-            fg_color = context.get_color(Gtk.StateFlags.SELECTED)
-            self.banner.override_color(Gtk.StateType.NORMAL, fg_color)
-        self.banner.ensure_style()
-        self.connect_style_event(opts[0], opts[1])
 
     def destroy(self, chain = False):
         """

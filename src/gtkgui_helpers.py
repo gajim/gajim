@@ -48,6 +48,7 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 from common import i18n
 from common import gajim
 from common import pep
+from common import configpaths
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -1088,3 +1089,91 @@ def __label_size_allocate(widget, allocation):
 
 def get_action(action):
     return gajim.app.lookup_action(action)
+
+def load_css():
+    path = os.path.join(configpaths.get('DATA'), 'style', 'gajim.css')
+    try:
+        with open(path, "r") as f:
+            css = f.read()
+    except Exception as exc:
+        print('Error loading css: %s', exc)
+        return
+
+    provider = Gtk.CssProvider()
+    css = "\n".join((css, convert_config_to_css()))
+    provider.load_from_data(bytes(css.encode()))
+    Gtk.StyleContext.add_provider_for_screen(
+        Gdk.Screen.get_default(),
+        provider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+
+def convert_config_to_css():
+    css = ''
+    themed_widgets = {
+        'ChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
+        'ChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
+        'ChatControl-BannerLabel': ('bannertextcolor', 'color'),
+        'Discovery-BannerEventBox': ('bannerbgcolor', 'background'),
+        'Discovery-BannerLabel': ('bannertextcolor', 'color')}
+
+    classes = {'state_composing_color': ('', 'color'),
+               'state_inactive_color': ('', 'color'),
+               'state_gone_color': ('', 'color'),
+               'state_paused_color': ('', 'color'),
+               'msgcorrectingcolor': ('text', 'background'),
+               'state_muc_directed_msg_color': ('', 'color'),
+               'state_muc_msg_color': ('', 'color')}
+
+
+    theme = gajim.config.get('roster_theme')
+    for key, values in themed_widgets.items():
+        config, attr = values
+        css += '#{} {{'.format(key)
+        value = gajim.config.get_per('themes', theme, config)
+        if value:
+            css += '{attr}: {color};\n'.format(attr=attr, color=value)
+        css += '}\n'
+
+    for key, values in classes.items():
+        node, attr = values
+        value = gajim.config.get_per('themes', theme, key)
+        if value:
+            css += '.theme_{cls} {node} {{ {attr}: {color}; }}\n'.format(
+                cls=key, node=node, attr=attr, color=value)
+
+    css += add_css_font()
+
+    return css
+
+def add_css_class(widget, class_name):
+    style = widget.get_style_context()
+    for css_cls in style.list_classes():
+        if css_cls.startswith('theme_'):
+            style.remove_class(css_cls)
+    if class_name:
+        style.add_class('theme_' + class_name)
+
+def remove_css_class(widget, class_name):
+    style = widget.get_style_context()
+    style.remove_class('theme_' + class_name)
+
+def add_css_font():
+    conversation_font = gajim.config.get('conversation_font')
+    if not conversation_font:
+        return ''
+    font = Pango.FontDescription(conversation_font)
+    unit = "pt" if Gtk.check_version(3, 22, 0) is None else "px"
+    css = """
+    .font_custom {{
+      font-family: {family};
+      font-size: {size}{unit};
+      font-weight: {weight};
+    }}""".format(
+        family=font.get_family(),
+        size=int(round(font.get_size() / Pango.SCALE)),
+        unit=unit,
+        weight=int(font.get_weight()))
+    css = css.replace("font-size: 0{unit};".format(unit=unit), "")
+    css = css.replace("font-weight: 0;", "")
+    css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
+    return css

@@ -709,29 +709,17 @@ class GroupchatControl(ChatControlBase):
 
         has_focus = self.parent_win.window.get_property('has-toplevel-focus')
         current_tab = self.parent_win.get_active_control() == self
-        color_name = None
         color = None
-        theme = gajim.config.get('roster_theme')
-        context = self.parent_win.notebook.get_style_context()
         if chatstate == 'attention' and (not has_focus or not current_tab):
             self.attention_flag = True
-            color_name = gajim.config.get_per('themes', theme,
-                'state_muc_directed_msg_color')
-        elif chatstate:
-            if chatstate == 'active' or (current_tab and has_focus):
-                self.attention_flag = False
-                # get active color from gtk
-                color = context.get_color(Gtk.StateFlags.ACTIVE)
-            elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
-            and not self.attention_flag:
-                color_name = gajim.config.get_per('themes', theme,
-                    'state_muc_msg_color')
-        if color_name:
-            color = Gdk.RGBA()
-            ok = Gdk.RGBA.parse(color, color_name)
-            if not ok:
-                del color
-                color = context.get_color(Gtk.StateFlags.ACTIVE)
+            color = 'state_muc_directed_msg_color'
+        elif chatstate == 'active' or (current_tab and has_focus):
+            self.attention_flag = False
+            # get active color from gtk
+            color = 'active'
+        elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
+        and not self.attention_flag:
+            color = 'state_muc_msg_color'
 
         if self.is_continued:
             # if this is a continued conversation
@@ -1996,8 +1984,8 @@ class GroupchatControl(ChatControlBase):
                 self.last_sent_msg = msg
                 if self.correcting:
                     self.correcting = False
-                    self.msg_textview.override_background_color(
-                        Gtk.StateType.NORMAL, self.old_message_tv_color)
+                    gtkgui_helpers.remove_css_class(
+                        self.msg_textview, 'msgcorrectingcolor')
 
             if self.correcting and self.last_sent_msg:
                 correction_msg = self.last_sent_msg

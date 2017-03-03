@@ -4800,8 +4800,6 @@ class RosterWindow:
         for win in gajim.interface.msg_win_mgr.windows():
             win.repaint_themed_widgets()
         for account in gajim.connections:
-            for addr in gajim.interface.instances[account]['disco']:
-                gajim.interface.instances[account]['disco'][addr].paint_banner()
             for ctrl in list(gajim.interface.minimized_controls[account].values()):
                 ctrl.repaint_themed_widgets()
 

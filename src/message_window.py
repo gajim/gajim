@@ -39,6 +39,7 @@ import gtkgui_helpers
 import message_control
 import dialogs
 from chat_control_base import ChatControlBase
+from chat_control import ChatControl
 
 from common import gajim
 from gtkgui_helpers import get_action
@@ -636,7 +637,7 @@ class MessageWindow(object):
                 window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
-    def redraw_tab(self, ctrl, chatstate = None):
+    def redraw_tab(self, ctrl, chatstate=None):
         tab = self.notebook.get_tab_label(ctrl.widget)
         if not tab:
             return
@@ -653,11 +654,20 @@ class MessageWindow(object):
 
         # Update nick
         nick_label.set_max_width_chars(10)
-        (tab_label_str, tab_label_color) = ctrl.get_tab_label(chatstate)
+        if isinstance(ctrl, ChatControl):
+            tab_label_str = ctrl.get_tab_label()
+            # Set Label Color
+            class_name = 'state_{}_color'.format(chatstate)
+            gtkgui_helpers.add_css_class(nick_label, class_name)
+        else:
+            tab_label_str, color = ctrl.get_tab_label(chatstate)
+            # Set Label Color
+            if color == 'active':
+                gtkgui_helpers.add_css_class(nick_label, None)
+            elif color is not None:
+                gtkgui_helpers.add_css_class(nick_label, color)
+
         nick_label.set_markup(tab_label_str)
-        if tab_label_color:
-            nick_label.override_color(Gtk.StateFlags.NORMAL, tab_label_color)
-            nick_label.override_color(Gtk.StateFlags.ACTIVE, tab_label_color)
 
         tab_img = ctrl.get_tab_image()
         if tab_img:
