@@ -1113,6 +1113,9 @@ def convert_config_to_css():
         'ChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
         'ChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
         'ChatControl-BannerLabel': ('bannertextcolor', 'color'),
+        'GroupChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
+        'GroupChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
+        'GroupChatControl-BannerLabel': ('bannertextcolor', 'color'),
         'Discovery-BannerEventBox': ('bannerbgcolor', 'background'),
         'Discovery-BannerLabel': ('bannertextcolor', 'color')}
 

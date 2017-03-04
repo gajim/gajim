@@ -20,6 +20,7 @@
         <property name="spacing">5</property>
         <child>
           <object class="GtkEventBox" id="banner_eventbox">
+            <property name="name">GroupChatControl-BannerEventBox</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
@@ -48,6 +49,7 @@
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkLabel" id="banner_name_label">
+                        <property name="name">GroupChatControl-BannerNameLabel</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label">&lt;span weight="heavy" size="large"&gt;room jid&lt;/span&gt;</property>
@@ -62,6 +64,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="banner_label">
+                        <property name="name">GroupChatControl-BannerLabel</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label">label</property>
