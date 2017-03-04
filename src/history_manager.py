@@ -77,8 +77,9 @@ from common.logger import LOG_DB_PATH, JIDConstant, KindConstant
 from common import helpers
 import dialogs
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
+@unique
 class Column(IntEnum):
     UNIXTIME = 2
     MESSAGE = 3

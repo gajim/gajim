@@ -43,7 +43,7 @@ import os
 import time
 import locale
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import common.sleepy
 import history_window
@@ -69,6 +69,7 @@ from message_window import MessageWindowMgr
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
 
+@unique
 class Column(IntEnum):
     IMG = 0  # image to show state (online, new message etc)
     NAME = 1  # cellrenderer text that holds contact nickame

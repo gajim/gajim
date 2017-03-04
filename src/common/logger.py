@@ -36,7 +36,7 @@ import json
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
-from enum import IntEnum
+from enum import IntEnum, unique
 
 from common import exceptions
 from common import gajim
@@ -51,10 +51,12 @@ CACHE_DB_PATH = gajim.gajimpaths['CACHE_DB']
 import logging
 log = logging.getLogger('gajim.c.logger')
 
+@unique
 class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
 
+@unique
 class KindConstant(IntEnum):
     STATUS = 0
     GCSTATUS = 1
@@ -65,6 +67,7 @@ class KindConstant(IntEnum):
     CHAT_MSG_SENT = 6
     ERROR = 7
 
+@unique
 class ShowConstant(IntEnum):
     ONLINE = 0
     CHAT = 1
@@ -73,6 +76,7 @@ class ShowConstant(IntEnum):
     DND = 4
     OFFLINE = 5
 
+@unique
 class TypeConstant(IntEnum):
     AIM = 0
     GG = 1
@@ -90,6 +94,7 @@ class TypeConstant(IntEnum):
     MRIM = 13
     NO_TRANSPORT = 14
 
+@unique
 class SubscriptionConstant(IntEnum):
     NONE = 0
     TO = 1

@@ -17,8 +17,9 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
+@unique
 class Constant(IntEnum):
     NAME = 0
     DOMAIN = 1
@@ -26,6 +27,7 @@ class Constant(IntEnum):
     BARE_NAME = 3
     TXT = 4
 
+@unique
 class ConstantRI(IntEnum):
     INTERFACE = 0
     PROTOCOL = 1

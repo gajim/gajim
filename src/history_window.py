@@ -31,7 +31,7 @@ from gi.repository import GLib
 import time
 import calendar
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import gtkgui_helpers
 import conversation_textview
@@ -43,6 +43,7 @@ from common import exceptions
 
 from common.logger import ShowConstant, KindConstant
 
+@unique
 class InfoColumn(IntEnum):
     '''Completion dict'''
     JID = 0
@@ -50,6 +51,7 @@ class InfoColumn(IntEnum):
     NAME = 2
     COMPLETION = 3
 
+@unique
 class Column(IntEnum):
     LOG_JID = 0
     CONTACT_NAME = 1

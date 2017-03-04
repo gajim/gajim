@@ -32,7 +32,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib, Gdk
 import os
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import gtkgui_helpers
 from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
@@ -43,6 +43,7 @@ from plugins.helpers import GajimPluginActivateException
 from plugins.plugins_i18n import _
 from common.exceptions import PluginsystemError
 
+@unique
 class Column(IntEnum):
     PLUGIN = 0
     NAME = 1

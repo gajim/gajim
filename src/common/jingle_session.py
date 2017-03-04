@@ -29,7 +29,7 @@ Handles Jingle sessions (XEP 0166)
 # * timeout
 
 import logging
-from enum import Enum
+from enum import Enum, unique
 import nbxmpp
 from common import gajim
 from common.jingle_transport import get_jingle_transport, JingleTransportIBB
@@ -43,6 +43,7 @@ from common.connection_handlers_events import (
 log = logging.getLogger("gajim.c.jingle_session")
 
 # FIXME: Move it to JingleSession.States?
+@unique
 class JingleStates(Enum):
     """
     States in which jingle session may exist
