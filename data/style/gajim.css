@@ -1,0 +1,7 @@
+/* Gajim Application CSS File */
+
+/* ChatControl */
+#ChatControl-AuthenticationButton { padding-top: 0px; padding-bottom: 0px}
+
+/* VCardWindow */
+.VCard-GtkLinkButton { padding-left: 5px; border-left: none; }

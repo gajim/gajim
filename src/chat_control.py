@@ -157,15 +157,6 @@ class ChatControl(ChatControlBase):
         # Add lock image to show chat encryption
         self.lock_image = self.xml.get_object('lock_image')
 
-        # Remove padding from authentication button or else it will
-        # be higher than the message box
-        style_provider = Gtk.CssProvider()
-        css = 'GtkButton { padding-top: 0px; padding-bottom: 0px}'
-        style_provider.load_from_data(css.encode())
-        context = self.authentication_button.get_style_context()
-        context.add_provider(style_provider,
-                             Gtk.STYLE_PROVIDER_PRIORITY_USER)
-
         # Convert to GC icon
         img = self.xml.get_object('convert_to_gc_button_image')
         img.set_from_pixbuf(gtkgui_helpers.load_icon(

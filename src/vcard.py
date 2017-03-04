@@ -147,16 +147,10 @@ class VcardWindow:
             buffer_ = self.xml.get_object('textview_annotation').get_buffer()
             buffer_.set_text(annotations[self.contact.jid])
 
-        style_provider = Gtk.CssProvider()
-        css = 'GtkButton { padding-left: 5px; border-left: none; }'
-        style_provider.load_from_data(css.encode())
         for widget_name in ('URL_label',
                             'EMAIL_WORK_USERID_label',
                             'EMAIL_HOME_USERID_label'):
             widget = self.xml.get_object(widget_name)
-            context = widget.get_style_context()
-            context.add_provider(style_provider,
-                                 Gtk.STYLE_PROVIDER_PRIORITY_USER)
             widget.hide()
 
         self.xml.connect_signals(self)
