@@ -39,6 +39,7 @@ import gui_menu_builder
 import message_control
 import dialogs
 
+from common import logger
 from common import gajim
 from common import helpers
 from common import exceptions
@@ -1626,10 +1627,9 @@ class ChatControl(ChatControlBase):
             rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
                     pending_how_many, timeout, self.account)
         except exceptions.DatabaseMalformed:
-            import common.logger
             dialogs.ErrorDialog(_('Database Error'),
                 _('The database file (%s) cannot be read. Try to repair it or '
-                'remove it (all history will be lost).') % common.logger.LOG_DB_PATH)
+                'remove it (all history will be lost).') % logger.LOG_DB_PATH)
             rows = []
         local_old_kind = None
         self.conv_textview.just_cleared = True
