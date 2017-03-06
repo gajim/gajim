@@ -578,7 +578,7 @@ class HistoryWindow:
         cur_year, cur_month, cur_day = self.calendar.get_date()
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
         model = widget.get_model()
-        # make it a tupple (Y, M, D, 0, 0, 0...)
+        # make it a tuple (Y, M, D, 0, 0, 0...)
         tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
         gtk_month = tim[1]

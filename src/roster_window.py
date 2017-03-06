@@ -5793,7 +5793,7 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
-        # holds a list of (jid, account) tupples
+        # holds a list of (jid, account) tuples
         self._last_selected_contact = []
         self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
             'closed': {}}

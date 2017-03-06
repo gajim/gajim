@@ -157,7 +157,7 @@ class MessageControl(object):
 
         Derivded classes MUST implement this.
         """
-        # Return a markup'd label and optional Gtk.Color in a tupple like:
+        # Return a markup'd label and optional Gtk.Color in a tuple like:
         # return (label_str, None)
         pass
 

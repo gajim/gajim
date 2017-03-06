@@ -187,7 +187,7 @@ class Logger:
     def get_jids_already_in_db(self):
         try:
             self.cur.execute('SELECT jid FROM jids')
-            # list of tupples: [('aaa@bbb',), ('cc@dd',)]
+            # list of tuples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
@@ -588,8 +588,8 @@ class Logger:
         """
         Accept how many rows to restore and when to time them out (in minutes)
         (mark them as too old) and number of messages that are in queue and are
-        already logged but pending to be viewed, returns a list of tupples
-        containg time, kind, message, sibject list with empty tupple if nothing
+        already logged but pending to be viewed, returns a list of tuples
+        containg time, kind, message, subject list with empty tuple if nothing
         found to meet our demands
         """
         try:
@@ -630,7 +630,7 @@ class Logger:
         # returns time in seconds for the second that starts that date since epoch
         # gimme unixtime from year month day:
         d = datetime.date(year, month, day)
-        local_time = d.timetuple() # time tupple (compat with time.localtime())
+        local_time = d.timetuple() # time tuple (compat with time.localtime())
         # we have time since epoch baby :)
         start_of_day = int(time.mktime(local_time))
         return start_of_day
@@ -639,7 +639,7 @@ class Logger:
         """
         Return contact_name, time, kind, show, message, subject, additional_data, log_line_id
 
-        For each row in a list of tupples, returns list with empty tupple if we
+        For each row in a list of tuples, returns list with empty tuple if we
         found nothing to meet our demands
         """
         try:
@@ -676,7 +676,7 @@ class Logger:
         """
         Returns contact_name, time, kind, show, message, subject, log_line_id
 
-        For each row in a list of tupples, returns list with empty tupple if we
+        For each row in a list of tuples, returns list with empty tuple if we
         found nothing to meet our demands
         """
         try:
