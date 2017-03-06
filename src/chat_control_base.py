@@ -1068,15 +1068,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if self.conv_textview.at_the_end():
                 # we are at the end
                 self.conv_textview.bring_scroll_to_end(-18)
-            else:
-                self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value()\
             - adjustment.get_page_size()) < 18
 
     def on_conversation_vadjustment_value_changed(self, adjustment):
-        # stop automatic scroll when we manually scroll
-        if not self.conv_textview.auto_scrolling:
-            self.conv_textview.stop_scrolling()
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
             - adjustment.get_page_size()) < 18
         if self.resource:

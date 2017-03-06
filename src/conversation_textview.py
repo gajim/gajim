@@ -216,9 +216,6 @@ class ConversationTextview(GObject.GObject):
         # last_received_message_id[name] = (msg_stanza_id, line_start_mark)
         self.last_received_message_id = {}
 
-        # It's True when we scroll in the code, so we can detect scroll from user
-        self.auto_scrolling = False
-
         # connect signals
         id_ = self.tv.connect('populate_popup', self.on_textview_populate_popup)
         self.handlers[id_] = self.tv
@@ -325,7 +322,6 @@ class ConversationTextview(GObject.GObject):
         # holds a mark at the end of --- line
         self.focus_out_end_mark = None
 
-        self.smooth_id = None
         self.just_cleared = False
 
     def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
@@ -406,79 +402,26 @@ class ConversationTextview(GObject.GObject):
             return True
         return False
 
-    # Smooth scrolling inspired by Pidgin code
-    def smooth_scroll(self):
-        parent = self.tv.get_parent()
-        if not parent:
-            return False
-        vadj = parent.get_vadjustment()
-        max_val = vadj.get_upper() - vadj.get_page_size() + 1
-        cur_val = vadj.get_value()
-        # scroll by 1/3rd of remaining distance
-        onethird = cur_val + ((max_val - cur_val) / 3.0)
-        self.auto_scrolling = True
-        vadj.set_value(onethird)
-        self.auto_scrolling = False
-        if max_val - onethird < 0.01:
-            self.smooth_id = None
-            self.smooth_scroll_timer.cancel()
-            return False
-        return True
-
-    def smooth_scroll_timeout(self):
-        GLib.idle_add(self.do_smooth_scroll_timeout)
-        return
-
-    def do_smooth_scroll_timeout(self):
-        if not self.smooth_id:
-            # we finished scrolling
-            return
-        GLib.source_remove(self.smooth_id)
-        self.smooth_id = None
-        parent = self.tv.get_parent()
-        if parent:
-            vadj = parent.get_vadjustment()
-            self.auto_scrolling = True
-            vadj.set_value(vadj.get_upper() - vadj.get_page_size() + 1)
-            self.auto_scrolling = False
-
-    def smooth_scroll_to_end(self):
-        if self.smooth_id is not None:  # already scrolling
-            return False
-        self.smooth_id = GLib.timeout_add(self.SCROLL_DELAY,
-                self.smooth_scroll)
-        self.smooth_scroll_timer = Timer(self.MAX_SCROLL_TIME,
-                self.smooth_scroll_timeout)
-        self.smooth_scroll_timer.start()
-        return False
-
     def scroll_to_end(self):
         parent = self.tv.get_parent()
         buffer_ = self.tv.get_buffer()
         end_mark = buffer_.get_mark('end')
         if not end_mark:
             return False
-        self.auto_scrolling = True
         self.tv.scroll_to_mark(end_mark, 0, True, 0, 1)
         adjustment = parent.get_hadjustment()
         adjustment.set_value(0)
-        self.auto_scrolling = False
         return False # when called in an idle_add, just do it once
 
-    def bring_scroll_to_end(self, diff_y=0, use_smooth=None):
+    def bring_scroll_to_end(self, diff_y=0):
         ''' scrolls to the end of textview if end is not visible '''
-        if use_smooth is None:
-            use_smooth = gajim.config.get('use_smooth_scrolling')
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         end_rect = self.tv.get_iter_location(end_iter)
         visible_rect = self.tv.get_visible_rect()
         # scroll only if expected end is not visible
         if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-            if use_smooth:
-                GLib.idle_add(self.smooth_scroll_to_end)
-            else:
-                GLib.idle_add(self.scroll_to_end_iter)
+            GLib.idle_add(self.scroll_to_end_iter)
 
     def scroll_to_end_iter(self):
         buffer_ = self.tv.get_buffer()
@@ -487,12 +430,6 @@ class ConversationTextview(GObject.GObject):
             return False
         self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
         return False # when called in an idle_add, just do it once
-
-    def stop_scrolling(self):
-        if self.smooth_id:
-            GLib.source_remove(self.smooth_id)
-            self.smooth_id = None
-            self.smooth_scroll_timer.cancel()
 
     def correct_message(self, correct_id, kind, name):
         allowed = True
@@ -1372,10 +1309,7 @@ class ConversationTextview(GObject.GObject):
             if at_the_end or kind == 'outgoing':
                 # we are at the end or we are sending something
                 # scroll to the end (via idle in case the scrollbar has appeared)
-                if gajim.config.get('use_smooth_scrolling'):
-                    GLib.idle_add(self.smooth_scroll_to_end)
-                else:
-                    GLib.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end)
 
         self.just_cleared = False
         buffer_.end_user_action()
