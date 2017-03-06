@@ -394,34 +394,7 @@ class ConversationTextview(GObject.GObject):
         self.tv.tagSthAtSth.set_property('foreground', color)
 
     def at_the_end(self):
-        buffer_ = self.tv.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        end_rect = self.tv.get_iter_location(end_iter)
-        visible_rect = self.tv.get_visible_rect()
-        if end_rect.y <= (visible_rect.y + visible_rect.height):
-            return True
-        return False
-
-    def scroll_to_end(self):
-        parent = self.tv.get_parent()
-        buffer_ = self.tv.get_buffer()
-        end_mark = buffer_.get_mark('end')
-        if not end_mark:
-            return False
-        self.tv.scroll_to_mark(end_mark, 0, True, 0, 1)
-        adjustment = parent.get_hadjustment()
-        adjustment.set_value(0)
-        return False # when called in an idle_add, just do it once
-
-    def bring_scroll_to_end(self, diff_y=0):
-        ''' scrolls to the end of textview if end is not visible '''
-        buffer_ = self.tv.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        end_rect = self.tv.get_iter_location(end_iter)
-        visible_rect = self.tv.get_visible_rect()
-        # scroll only if expected end is not visible
-        if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-            GLib.idle_add(self.scroll_to_end_iter)
+        return gtkgui_helpers.at_the_end(self.tv.get_parent())
 
     def scroll_to_end_iter(self):
         buffer_ = self.tv.get_buffer()
@@ -586,7 +559,7 @@ class ConversationTextview(GObject.GObject):
             if scroll:
                 # scroll to the end (via idle in case the scrollbar has
                 # appeared)
-                GLib.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end_iter)
 
     def on_textview_draw(self, widget, ctx):
         return
@@ -1220,8 +1193,6 @@ class ConversationTextview(GObject.GObject):
         # even if we insert directly at the mark iter
         temp_mark = buffer_.create_mark('temp', iter_, left_gravity=True)
 
-        at_the_end = self.at_the_end()
-
         if text.startswith('/me '):
             direction_mark = i18n.paragraph_direction_mark(str(text[3:]))
         else:
@@ -1306,10 +1277,9 @@ class ConversationTextview(GObject.GObject):
             self.last_sent_message_id = (msg_stanza_id, new_mark)
 
         if not insert_mark:
-            if at_the_end or kind == 'outgoing':
+            if self.at_the_end() or kind == 'outgoing':
                 # we are at the end or we are sending something
-                # scroll to the end (via idle in case the scrollbar has appeared)
-                GLib.idle_add(self.scroll_to_end)
+                GLib.idle_add(self.scroll_to_end_iter)
 
         self.just_cleared = False
         buffer_.end_user_action()
