@@ -5723,5 +5723,5 @@ class BigAvatarWindow(Gtk.Window):
         """
         Just moved the mouse so show the cursor
         """
-        cursor = Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR)
+        cursor = gtkgui_helpers.get_cursor('LEFT_PTR')
         self.get_window().set_cursor(cursor)

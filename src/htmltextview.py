@@ -52,6 +52,7 @@ if __name__ == '__main__':
     import common.configpaths
     common.configpaths.gajimpaths.init(None)
 from common import gajim
+import gtkgui_helpers
 from gtkgui_helpers import get_icon_pixmap
 from common import helpers
 from common.exceptions import GajimGeneralException
@@ -896,18 +897,18 @@ class HtmlTextView(Gtk.TextView):
                         text = text[:47] + '…'
                     tooltip.set_text(text)
                 if not self._changed_cursor:
-                    window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                    window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
                     self._changed_cursor = True
                 return True
         if self._changed_cursor:
-            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             self._changed_cursor = False
         return False
 
     def __leave_event(self, widget, event):
         if self._changed_cursor:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             self._changed_cursor = False
 
     def on_open_link_activate(self, widget, kind, text):
@@ -1125,13 +1126,13 @@ if __name__ == '__main__':
         y = pointer[2]
         tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
         if change_cursor:
-            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            w.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
-                    w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                    w.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True
@@ -1146,7 +1147,7 @@ if __name__ == '__main__':
         #       line_tooltip.timeout = GLib.timeout_add(500,
         #               show_line_tooltip)
         #       htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-        #               Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
+        #               gtkgui_helpers.get_cursor('LEFT_PTR'))
         #       change_cursor = tag
 
     htmlview.tv.connect('motion_notify_event', on_textview_motion_notify_event)

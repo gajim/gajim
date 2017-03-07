@@ -701,7 +701,7 @@ class ConversationTextview(GObject.GObject):
             iter_ = iter_[1]
         tags = iter_.get_tags()
         if self.change_cursor:
-            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            w.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             self.change_cursor = False
         tag_table = self.tv.get_buffer().get_tag_table()
         xep0184_warning = False
@@ -709,7 +709,7 @@ class ConversationTextview(GObject.GObject):
         for tag in tags:
             if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
             tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
-                w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                w.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
                 self.change_cursor = True
             elif tag == tag_table.lookup('xep0184-warning'):
                 xep0184_warning = True
@@ -723,7 +723,7 @@ class ConversationTextview(GObject.GObject):
         if xep0184_warning and not self.xep0184_warning_tooltip.win:
             self.xep0184_warning_tooltip.timeout = GLib.timeout_add(500,
                     self.show_xep0184_warning_tooltip)
-            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR))
+            w.set_cursor(gtkgui_helpers.get_cursor('LEFT_PTR'))
             self.change_cursor = True
 
     def clear(self, tv = None):

@@ -664,11 +664,11 @@ class ChatControl(ChatControlBase):
         """
         Just moved the mouse so show the cursor
         """
-        cursor = Gdk.Cursor.new(Gdk.CursorType.LEFT_PTR)
+        cursor = gtkgui_helpers.get_cursor('LEFT_PTR')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def on_location_eventbox_enter_notify_event(self, widget, event):
-        cursor = Gdk.Cursor.new(Gdk.CursorType.HAND2)
+        cursor = gtkgui_helpers.get_cursor('HAND2')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def _on_window_motion_notify(self, widget, event):
