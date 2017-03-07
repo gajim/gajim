@@ -193,9 +193,10 @@ class ConversationTextview(GObject.GObject):
 
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView()
+        # we have to override HtmlTextView Event handlers
+        # because we dont inherit
         self.tv.hyperlink_handler = self.hyperlink_handler
-
-        self.tv.set_has_tooltip(True)
+        self.tv.connect_tooltip(self.query_tooltip)
 
         # set properties
         self.tv.set_border_width(1)
@@ -219,23 +220,16 @@ class ConversationTextview(GObject.GObject):
         self.auto_scrolling = False
 
         # connect signals
-        id_ = self.tv.connect('motion_notify_event',
-                self.on_textview_motion_notify_event)
-        self.handlers[id_] = self.tv
         id_ = self.tv.connect('populate_popup', self.on_textview_populate_popup)
         self.handlers[id_] = self.tv
         id_ = self.tv.connect('button_press_event',
                 self.on_textview_button_press_event)
         self.handlers[id_] = self.tv
-
         id_ = self.tv.connect('draw', self.on_textview_draw)
         self.handlers[id_] = self.tv
-        id_ = self.tv.connect('query-tooltip', self.query_tooltip)
-        self.handlers[id_] = self.tv
-
 
         self.account = account
-        self.change_cursor = False
+        self.cursor_changed = False
         self.last_time_printout = 0
 
         style = self.tv.get_style_context()
@@ -331,12 +325,11 @@ class ConversationTextview(GObject.GObject):
         # holds a mark at the end of --- line
         self.focus_out_end_mark = None
 
-        self.xep0184_warning_tooltip = tooltips.BaseTooltip()
-
         self.smooth_id = None
         self.just_cleared = False
 
     def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+        window = widget.get_window(Gtk.TextWindowType.TEXT)
         x_pos, y_pos = self.tv.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
         if Gtk.MINOR_VERSION > 18:
@@ -351,13 +344,37 @@ class ConversationTextview(GObject.GObject):
                     'been said since the\nlast time you paid attention to this '
                     'group chat'))
                 return True
-
+            if tag_name == 'xep0184-warning':
+                tooltip.set_text(_(
+                    'This icon indicates that this message has not '
+                    'yet\nbeen received by the remote '
+                    "end. If this icon stays\nfor a long time, it's likely the "
+                    'message got lost.'))
+                window.set_cursor(gtkgui_helpers.get_cursor('LEFT_PTR'))
+                self.cursor_changed = True
+                return True
+            if getattr(tag, 'is_anchor', False):
+                text = getattr(tag, 'title', False)
+                if text:
+                    if len(text) > 50:
+                        text = text[:47] + '…'
+                    tooltip.set_text(text)
+                    window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                    self.cursor_changed = True
+                    return True
+            if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
+                window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                self.cursor_changed = True
+                return False
             try:
                 text = self.corrected_text_list[tag_name]
                 tooltip.set_markup(text)
                 return True
             except KeyError:
                 pass
+        if self.cursor_changed:
+            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
+            self.cursor_changed = False
         return False
 
     def del_handlers(self):
@@ -634,31 +651,6 @@ class ConversationTextview(GObject.GObject):
                 # appeared)
                 GLib.idle_add(self.scroll_to_end)
 
-    def show_xep0184_warning_tooltip(self):
-        self.xep0184_warning_tooltip.timeout = 0
-        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        x = pointer[1]
-        y = pointer[2]
-        iter_ = self.tv.get_iter_at_location(x, y)
-        if isinstance(iter_, tuple):
-            iter_ = iter_[1]
-        tags = iter_.get_tags()
-        tag_table = self.tv.get_buffer().get_tag_table()
-        xep0184_warning = False
-        for tag in tags:
-            if tag == tag_table.lookup('xep0184-warning'):
-                xep0184_warning = True
-                break
-        if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            # check if the current pointer is still over the line
-            position = w.get_origin()[1:]
-            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates '
-                'that this message has not yet\nbeen received by the remote '
-                "end. If this icon stays\nfor a long time, it's likely the "
-                'message got lost.'), 8, position[1] + y)
-
     def on_textview_draw(self, widget, ctx):
         return
         #TODO
@@ -686,45 +678,6 @@ class ConversationTextview(GObject.GObject):
                 widget.propagate_expose(image, event)
                 return True
         return False
-
-    def on_textview_motion_notify_event(self, widget, event):
-        """
-        Change the cursor to a hand when we are over a mail or an url
-        """
-        w = self.tv.get_window(Gtk.TextWindowType.TEXT)
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        x, y = self.tv.window_to_buffer_coords(Gtk.TextWindowType.TEXT,
-            pointer[1], pointer[2])
-        iter_ = self.tv.get_iter_at_location(x, y)
-        if isinstance(iter_, tuple):
-            iter_ = iter_[1]
-        tags = iter_.get_tags()
-        if self.change_cursor:
-            w.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
-            self.change_cursor = False
-        tag_table = self.tv.get_buffer().get_tag_table()
-        xep0184_warning = False
-
-        for tag in tags:
-            if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
-            tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
-                w.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
-                self.change_cursor = True
-            elif tag == tag_table.lookup('xep0184-warning'):
-                xep0184_warning = True
-
-        if self.xep0184_warning_tooltip.timeout != 0 or \
-        self.xep0184_warning_tooltip.shown:
-            # Check if we should hide the XEP-184 warning tooltip
-            if not xep0184_warning:
-                self.xep0184_warning_tooltip.hide_tooltip()
-
-        if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            self.xep0184_warning_tooltip.timeout = GLib.timeout_add(500,
-                    self.show_xep0184_warning_tooltip)
-            w.set_cursor(gtkgui_helpers.get_cursor('LEFT_PTR'))
-            self.change_cursor = True
 
     def clear(self, tv = None):
         """
