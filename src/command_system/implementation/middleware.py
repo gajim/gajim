@@ -75,7 +75,7 @@ class ChatCommandProcessor(CommandProcessor):
             self.command_succeeded = True
 
     def looks_like_command(self, text, body, name, arguments):
-        # Command escape stuff ggoes here. If text was prepended by the
+        # Command escape stuff goes here. If text was prepended by the
         # command prefix twice, like //not_a_command (if prefix is set
         # to /) then it will be escaped, that is sent just as a regular
         # message with one (only one) prefix removed, so message will be

@@ -54,6 +54,13 @@ from common.connection_handlers_events import MessageOutgoingEvent
 from command_system.implementation.middleware import ChatCommandProcessor
 from command_system.implementation.middleware import CommandTools
 
+# The members of these modules are not referenced directly anywhere in this
+# module, but still they need to be kept around. Importing them automatically
+# registers the contained CommandContainers with the command system, thereby
+# populating the list of available commands.
+import command_system.implementation.standard
+import command_system.implementation.execute
+
 try:
     import gtkspell
     HAS_GTK_SPELL = True

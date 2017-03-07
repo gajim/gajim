@@ -15,7 +15,7 @@
 
 """
 Provides a tiny framework with simple, yet powerful and extensible
-architecture to implement commands in a streight and flexible,
+architecture to implement commands in a straight and flexible,
 declarative way.
 """
 
@@ -67,7 +67,7 @@ class CommandProcessor(object):
     """
 
     # This defines a command prefix (or an initializer), which should
-    # preceede a a text in order it to be processed as a command.
+    # precede a text in order for it to be processed as a command.
     COMMAND_PREFIX = '/'
 
     def process_as_command(self, text):

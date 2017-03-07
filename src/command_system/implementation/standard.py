@@ -24,17 +24,13 @@ import dialogs
 from common import gajim
 from common import helpers
 from common.exceptions import GajimGeneralException
-from common.logger import Constants
+from common.logger import KindConstant
 
 from ..errors import CommandError
 from ..framework import CommandContainer, command, doc
 from ..mapping import generate_usage
 
 from .hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
-
-# This holds constants fron the logger, which we'll be using in some of our
-# commands.
-lc = Constants()
 
 class StandardCommonCommands(CommandContainer):
     """
@@ -104,10 +100,10 @@ class StandardCommonCommands(CommandContainer):
                 raise CommandError(_("Limit must be an integer"))
 
         for row in results:
-            contact, time, kind, show, message, subject = row
+            contact, time, kind, show, message, subject, log_line_id = row
 
             if not contact:
-                if kind == lc.KIND_CHAT_MSG_SENT:
+                if kind == KindConstant.CHAT_MSG_SENT:
                     contact = gajim.nicks[self.account]
                 else:
                     contact = self.contact.name
