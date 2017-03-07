@@ -100,7 +100,7 @@ class StandardCommonCommands(CommandContainer):
                 raise CommandError(_("Limit must be an integer"))
 
         for row in results:
-            contact, time, kind, show, message, subject = row
+            contact, time, kind, show, message, subject, log_line_id = row
 
             if not contact:
                 if kind == KindConstant.CHAT_MSG_SENT:
