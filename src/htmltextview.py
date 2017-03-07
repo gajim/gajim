@@ -841,20 +841,20 @@ class HtmlTextView(Gtk.TextView):
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
         self._changed_cursor = False
-        self.connect('destroy', self.__destroy_event)
-        self.connect('motion-notify-event', self.__motion_notify_event)
+        self.set_has_tooltip(True)
         self.connect('leave-notify-event', self.__leave_event)
-        self.connect('enter-notify-event', self.__motion_notify_event)
         self.connect('realize', self.on_html_text_view_realized)
         self.connect('unrealize', self.on_html_text_view_unrealized)
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
-        self.tooltip = tooltips.BaseTooltip()
         self.config = gajim.config
         self.interface = gajim.interface
         # end big hack
+
+    def connect_tooltip(self, func=None):
+        self.connect('query-tooltip', func or self.__query_tooltip)
 
     def create_tags(self):
         buffer_ = self.get_buffer()
@@ -880,67 +880,35 @@ class HtmlTextView(Gtk.TextView):
         self.tagSthAtSth.set_property('underline', Pango.Underline.SINGLE)
         self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
 
-    def __destroy_event(self, widget):
-        if self.tooltip.timeout != 0 or self.tooltip.shown:
-            self.tooltip.hide_tooltip()
+    def __query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+        window = widget.get_window(Gtk.TextWindowType.TEXT)
+        x_pos, y_pos = self.window_to_buffer_coords(
+            Gtk.TextWindowType.TEXT, x_pos, y_pos)
+        if Gtk.MINOR_VERSION > 18:
+            iter_ = self.get_iter_at_position(x_pos, y_pos)[1]
+        else:
+            iter_ = self.get_iter_at_position(x_pos, y_pos)[0]
+        for tag in iter_.get_tags():
+            if getattr(tag, 'is_anchor', False):
+                text = getattr(tag, 'title', False)
+                if text:
+                    if len(text) > 50:
+                        text = text[:47] + '…'
+                    tooltip.set_text(text)
+                if not self._changed_cursor:
+                    window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
+                    self._changed_cursor = True
+                return True
+        if self._changed_cursor:
+            window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
+            self._changed_cursor = False
+        return False
 
     def __leave_event(self, widget, event):
         if self._changed_cursor:
             window = widget.get_window(Gtk.TextWindowType.TEXT)
             window.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
             self._changed_cursor = False
-
-    def show_tooltip(self, tag):
-        self.tooltip.timeout = 0
-        if not self.tooltip.win:
-            # check if the current pointer is still over the line
-            w = self.get_window(Gtk.TextWindowType.TEXT)
-            device = w.get_display().get_device_manager().get_client_pointer()
-            pointer = w.get_device_position(device)
-            x = pointer[1]
-            y = pointer[2]
-            iter_ = self.get_iter_at_location(x, y)
-            if isinstance(iter_, tuple):
-                iter_ = iter_[1]
-            tags = iter_.get_tags()
-            is_over_anchor = False
-            for tag_ in tags:
-                if getattr(tag_, 'is_anchor', False):
-                    is_over_anchor = True
-                    break
-            if not is_over_anchor:
-                return
-            text = getattr(tag, 'title', False)
-            if text:
-                if len(text) > 50:
-                    text = text[:47] + '…'
-                position = w.get_origin()[1:]
-                self.tooltip.show_tooltip(text, 8, position[1] + y)
-
-    def __motion_notify_event(self, widget, event):
-        w = widget.get_window(Gtk.TextWindowType.TEXT)
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        x = pointer[1]
-        y = pointer[2]
-        iter_ = widget.get_iter_at_location(x, y)
-        if isinstance(iter_, tuple):
-            iter_ = iter_[1]
-        tags = iter_.get_tags()
-        anchor_tags = [tag for tag in tags if getattr(tag, 'is_anchor', False)]
-        if self.tooltip.timeout != 0 or self.tooltip.shown:
-            # Check if we should hide the line tooltip
-            if not anchor_tags:
-                self.tooltip.hide_tooltip()
-        if not self._changed_cursor and anchor_tags:
-            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.HAND2))
-            self._changed_cursor = True
-            self.tooltip.timeout = GLib.timeout_add(500, self.show_tooltip,
-                anchor_tags[0])
-        elif self._changed_cursor and not anchor_tags:
-            w.set_cursor(Gdk.Cursor.new(Gdk.CursorType.XTERM))
-            self._changed_cursor = False
-        return False
 
     def on_open_link_activate(self, widget, kind, text):
         helpers.launch_browser_mailer(kind, text)

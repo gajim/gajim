@@ -70,6 +70,7 @@ class PluginsWindow(object):
             setattr(self, widget_name, self.xml.get_object(widget_name))
 
         self.plugin_description_textview = HtmlTextView()
+        self.plugin_description_textview.connect_tooltip()
         self.plugin_description_textview.set_wrap_mode(Gtk.WrapMode.WORD)
         sw = self.xml.get_object('scrolledwindow2')
         sw.add(self.plugin_description_textview)
