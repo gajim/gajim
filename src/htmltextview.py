@@ -843,7 +843,6 @@ class HtmlTextView(Gtk.TextView):
         self.set_editable(False)
         self._changed_cursor = False
         self.set_has_tooltip(True)
-        self.connect('leave-notify-event', self.__leave_event)
         self.connect('realize', self.on_html_text_view_realized)
         self.connect('unrealize', self.on_html_text_view_unrealized)
         self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
@@ -904,12 +903,6 @@ class HtmlTextView(Gtk.TextView):
             window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             self._changed_cursor = False
         return False
-
-    def __leave_event(self, widget, event):
-        if self._changed_cursor:
-            window = widget.get_window(Gtk.TextWindowType.TEXT)
-            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
-            self._changed_cursor = False
 
     def on_open_link_activate(self, widget, kind, text):
         helpers.launch_browser_mailer(kind, text)
