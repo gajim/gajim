@@ -323,7 +323,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = widget.connect('changed',
             self.on_conversation_vadjustment_changed)
         self.handlers[id_] = widget
-        self.scroll_to_end_id = None
         self.was_at_the_end = True
         self.correcting = False
         self.last_sent_msg = None
@@ -984,27 +983,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     # There were events to remove
                     self.redraw_after_event_removed(jid)
 
-    def bring_scroll_to_end(self, textview, diff_y=0):
-        """
-        Scroll to the end of textview if end is not visible
-        """
-        if self.scroll_to_end_id:
-            # a scroll is already planned
-            return
-        buffer_ = textview.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        end_rect = textview.get_iter_location(end_iter)
-        visible_rect = textview.get_visible_rect()
-        # scroll only if expected end is not visible
-        if end_rect.y >= (visible_rect.y + visible_rect.height + diff_y):
-            self.scroll_to_end_id = GLib.idle_add(self.scroll_to_end_iter,
-                    textview)
-
-    def scroll_to_end_iter(self, textview):
-        buffer_ = textview.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        textview.scroll_to_iter(end_iter, 0, False, 1, 1)
-        self.scroll_to_end_id = None
+    def scroll_to_end_iter(self):
+        self.conv_textview.scroll_to_end_iter()
         return False
 
     def on_configure_event(self, msg_textview, event):
@@ -1065,18 +1045,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # used to stay at the end of the textview when we shrink conversation
         # textview.
         if self.was_at_the_end:
-            if self.conv_textview.at_the_end():
-                # we are at the end
-                self.conv_textview.bring_scroll_to_end(-18)
-            else:
-                self.conv_textview.bring_scroll_to_end(-18, use_smooth=False)
+            self.scroll_to_end_iter()
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value()\
             - adjustment.get_page_size()) < 18
 
     def on_conversation_vadjustment_value_changed(self, adjustment):
-        # stop automatic scroll when we manually scroll
-        if not self.conv_textview.auto_scrolling:
-            self.conv_textview.stop_scrolling()
         self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
             - adjustment.get_page_size()) < 18
         if self.resource:

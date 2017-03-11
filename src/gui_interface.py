@@ -1831,7 +1831,7 @@ class Interface:
             # Using isinstance here because we want to catch all derived types
             if isinstance(ctrl, ChatControlBase):
                 tv = ctrl.conv_textview
-                tv.scroll_to_end()
+                tv.scroll_to_end_iter()
 
 ################################################################################
 ### Methods dealing with emoticons
