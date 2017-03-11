@@ -494,6 +494,11 @@ def get_invisible_cursor():
         cursor_pixbuf, 0, 0)
     return cursor
 
+def get_cursor(attr):
+    display = Gdk.Display.get_default()
+    cursor = getattr(Gdk.CursorType, attr)
+    return Gdk.Cursor.new_for_display(display, cursor)
+
 def get_current_desktop(window):
     """
     Return the current virtual desktop for given window
