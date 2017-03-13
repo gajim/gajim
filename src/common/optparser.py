@@ -234,6 +234,8 @@ class OptionsParser:
             self.update_config_to_016101()
         if old < [0, 16, 10, 2] and new >= [0, 16, 10, 2]:
             self.update_config_to_016102()
+        if old < [0, 16, 10, 3] and new >= [0, 16, 10, 3]:
+            self.update_config_to_016103()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -975,3 +977,25 @@ class OptionsParser:
         con.close()
 
         gajim.config.set('version', '0.16.10.2')
+
+    def update_config_to_016103(self):
+        back = os.getcwd()
+        os.chdir(logger.LOG_DB_FOLDER)
+        con = sqlite.connect(logger.LOG_DB_FILE)
+        os.chdir(back)
+        cur = con.cursor()
+        try:
+            cur.executescript(
+                    '''
+                    ALTER TABLE logs ADD COLUMN 'stanza_id' TEXT;
+                    ALTER TABLE logs ADD COLUMN 'mam_id' TEXT;
+                    ALTER TABLE logs ADD COLUMN 'encryption' TEXT;
+                    ALTER TABLE logs ADD COLUMN 'encryption_state' TEXT;
+                    ALTER TABLE logs ADD COLUMN 'marker' INTEGER;
+                    '''
+            )
+            con.commit()
+        except sqlite.OperationalError:
+            pass
+        con.close()
+        gajim.config.set('version', '0.16.10.3')
