@@ -598,11 +598,11 @@ class Logger:
         # How many lines to restore and when to time them out
         restore_how_many = gajim.config.get('restore_lines')
         if restore_how_many <= 0:
-            return
+            return []
         timeout = gajim.config.get('restore_timeout')  # in minutes
 
         now = int(float(time.time()))
-        if timeout != 0:
+        if timeout > 0:
             timeout = now - (timeout * 60) # before that they are too old
         # so if we ask last 5 lines and we have 2 pending we get
         # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
