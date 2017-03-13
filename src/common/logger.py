@@ -490,7 +490,8 @@ class Logger:
             all_messages.append(results[0])
         return all_messages
 
-    def write(self, kind, jid, message=None, show=None, tim=None, subject=None, additional_data=None):
+    def write(self, kind, jid, message=None, show=None, tim=None, subject=None,
+              additional_data=None, mam_query=False):
         """
         Write a row (status, gcstatus, message etc) to logs database
 
@@ -566,7 +567,7 @@ class Logger:
             except exceptions.PysqliteOperationalError as e:
                 raise exceptions.PysqliteOperationalError(str(e))
             if kind == 'chat_msg_recv':
-                if not self.jid_is_from_pm(jid):
+                if not self.jid_is_from_pm(jid) and not mam_query:
                     # Save in unread table only if it's not a pm
                     write_unread = True
 
@@ -1143,7 +1144,8 @@ class Logger:
             log.debug('Log already in DB, ignoring it')
             return
         log.debug('New log received from server archives, storing it')
-        self.write(type_, with_, message=msg, tim=tim, additional_data=additional_data)
+        self.write(type_, with_, message=msg, tim=tim,
+                   additional_data=additional_data, mam_query=True)
 
     def _nec_gc_message_received(self, obj):
         tim_f = float(obj.timestamp)
