@@ -244,16 +244,20 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             event_type = 'single_message_received'
 
         if self.control and obj.mtype != 'normal':
+            # We have a ChatControl open
+            obj.show_in_roster = False
+            obj.show_in_systray = False
+        elif obj.forwarded and obj.sent:
+            # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
         else:
+            # Everything else
             obj.show_in_roster = notify.get_show_in_roster(event_type,
                 self.conn.name, contact, self)
             obj.show_in_systray = notify.get_show_in_systray(event_type,
                 self.conn.name, contact)
 
-        if (not self.control and obj.mtype != 'normal') or \
-        (obj.mtype == 'normal' and not obj.popup):
             event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
                 obj.encrypted, obj.resource, obj.msg_log_id,
                 correct_id=(obj.id_, obj.correct_id), xhtml=obj.xhtml,
