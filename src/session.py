@@ -251,6 +251,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
+            gajim.events.remove_events(self.conn.name, fjid, types=['chat'])
         else:
             # Everything else
             obj.show_in_roster = notify.get_show_in_roster(event_type,
