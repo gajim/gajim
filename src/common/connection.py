@@ -355,7 +355,10 @@ class CommonConnection:
         else:
             msgtxt = obj.message
 
-        fjid = obj.get_full_jid()
+        if obj.jid == gajim.get_jid_from_account(self.name):
+            fjid = obj.jid
+        else:
+            fjid = obj.get_full_jid()
 
         if obj.correction_msg:
             id_ = obj.correction_msg.getID()

@@ -3916,7 +3916,7 @@ class RosterWindow:
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                     jid)
         if jid == gajim.get_jid_from_account(account):
-            resource = contact.resource
+            resource = None
 
         gajim.interface.on_open_chat_window(None, contact, account, \
             resource=resource, session=session)
