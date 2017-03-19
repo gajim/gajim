@@ -406,13 +406,16 @@ def jid_is_transport(jid):
         return True
     return False
 
-def get_jid_from_account(account_name):
+def get_jid_from_account(account_name, full=False):
     """
     Return the jid we use in the given account
     """
     name = config.get_per('accounts', account_name, 'name')
     hostname = config.get_per('accounts', account_name, 'hostname')
     jid = name + '@' + hostname
+    if full:
+        resource = connections[account_name].server_resource
+        jid += '/' + resource
     return jid
 
 def get_our_jids():
