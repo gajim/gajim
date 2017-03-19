@@ -298,6 +298,8 @@ class CommonConnection:
                         'to %s, this JID is not valid.') % j))
                     return
             fjid = new_list
+        elif jid == gajim.get_jid_from_account(self.name):
+            fjid = jid
         else:
             try:
                 jid = self.check_jid(jid)
