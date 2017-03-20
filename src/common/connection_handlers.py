@@ -1206,17 +1206,19 @@ class ConnectionHandlersBase:
             jid_to = gajim.get_jid_without_resource(fjid_to)
             if jid_to == gajim.get_jid_from_account(self.name):
                 reply = True
-        if obj.receipt_request_tag and gajim.config.get_per('accounts',
-        self.name, 'answer_receipts') and ((contact and contact.sub \
-        not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error' and \
-        reply:
-            receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
-            receipt.setTag('received', namespace='urn:xmpp:receipts',
-                attrs={'id': obj.id_})
 
-            if obj.thread_id:
-                receipt.setThread(obj.thread_id)
-            self.connection.send(receipt)
+        if obj.jid != gajim.get_jid_from_account(self.name):
+            if obj.receipt_request_tag and gajim.config.get_per('accounts',
+            self.name, 'answer_receipts') and ((contact and contact.sub \
+            not in (u'to', u'none')) or gc_contact) and obj.mtype != 'error' and \
+            reply:
+                receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
+                receipt.setTag('received', namespace='urn:xmpp:receipts',
+                    attrs={'id': obj.id_})
+
+                if obj.thread_id:
+                    receipt.setThread(obj.thread_id)
+                self.connection.send(receipt)
 
         # We got our message's receipt
         if obj.receipt_received_tag and gajim.config.get_per('accounts',
