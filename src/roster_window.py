@@ -2734,7 +2734,8 @@ class RosterWindow:
                 typ = 'error'
             if obj.forwarded and obj.sent:
                 typ = 'out'
-                xep0184_id = obj.id_
+                if obj.jid != gajim.get_jid_from_account(obj.conn.name):
+                    xep0184_id = obj.id_
 
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,

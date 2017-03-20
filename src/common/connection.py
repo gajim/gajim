@@ -467,10 +467,11 @@ class CommonConnection:
                                   namespace=nbxmpp.NS_MSG_HINTS)
 
             # XEP-0184
-            if msgtxt and gajim.config.get_per('accounts', self.name,
-            'request_receipt') and contact and contact.supports(
-            nbxmpp.NS_RECEIPTS):
-                msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
+            if obj.jid != gajim.get_jid_from_account(self.name):
+                if msgtxt and gajim.config.get_per('accounts', self.name,
+                'request_receipt') and contact and contact.supports(
+                nbxmpp.NS_RECEIPTS):
+                    msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
             if obj.forward_from:
                 addresses = msg_iq.addChild('addresses',

@@ -978,11 +978,11 @@ class ChatControl(ChatControlBase):
 
         def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label):
             id_ = msg_stanza.getID()
-            if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
-            'accounts', self.account, 'request_receipt'):
-                xep0184_id = id_
-            else:
-                xep0184_id = None
+            xep0184_id = None
+            if self.contact.jid != gajim.get_jid_from_account(self.account):
+                if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
+                'accounts', self.account, 'request_receipt'):
+                    xep0184_id = id_
             if label:
                 displaymarking = label.getTag('displaymarking')
             else:
