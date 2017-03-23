@@ -541,10 +541,7 @@ class HistoryWindow:
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
 
             show_status = self.show_status_checkbutton.get_active()
-
-            # contact_name, time, kind, show, message, subject
-            results = gajim.logger.get_search_results_for_query(
-                                    jid, text, account, year, month, day)
+            results = gajim.logger.search_log(jid, text, account, year, month, day)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)

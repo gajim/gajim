@@ -87,8 +87,7 @@ class StandardCommonCommands(CommandContainer):
     @command('lastlog', overlap=True)
     @doc(_("Show logged messages which mention given text"))
     def grep(self, text, limit=None):
-        results = gajim.logger.get_search_results_for_query(self.contact.jid,
-                text, self.account)
+        results = gajim.logger.search_log(self.contact.jid, text, self.account)
 
         if not results:
             raise CommandError(_("%s: Nothing found") % text)

@@ -676,8 +676,7 @@ class Logger:
             ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
              'log_line_id'])
 
-    def get_search_results_for_query(self, jid, query, account, year=False,
-        month=False, day=False):
+    def search_log(self, jid, query, account, year=None, month=None, day=None):
         """
         Search the conversation log for messages containing the `query` string.
 
@@ -697,7 +696,7 @@ class Logger:
 
         where_sql, jid_tuple = self._build_contact_where(account, jid)
         like_sql = '%' + query.replace("'", "''") + '%'
-        if year:
+        if year and month and day:
             start_of_day = self.get_unix_time_from_date(year, month, day)
             seconds_in_a_day = 86400 # 60 * 60 * 24
             last_second_of_day = start_of_day + seconds_in_a_day - 1
