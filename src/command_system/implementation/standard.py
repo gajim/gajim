@@ -100,23 +100,22 @@ class StandardCommonCommands(CommandContainer):
                 raise CommandError(_("Limit must be an integer"))
 
         for row in results:
-            contact, time, kind, show, message, subject, log_line_id = row
-
+            contact = row.contact_name
             if not contact:
-                if kind == KindConstant.CHAT_MSG_SENT:
+                if row.kind == KindConstant.CHAT_MSG_SENT:
                     contact = gajim.nicks[self.account]
                 else:
                     contact = self.contact.name
 
-            time_obj = localtime(time)
-            date_obj = date.fromtimestamp(time)
+            time_obj = localtime(row.time)
+            date_obj = date.fromtimestamp(row.time)
             date_ = strftime('%Y-%m-%d', time_obj)
             time_ = strftime('%H:%M:%S', time_obj)
 
             if date_obj == date.today():
-                formatted = "[%s] %s: %s" % (time_, contact, message)
+                formatted = "[%s] %s: %s" % (time_, contact, row.message)
             else:
-                formatted = "[%s, %s] %s: %s" % (date_, time_, contact, message)
+                formatted = "[%s, %s] %s: %s" % (date_, time_, contact, row.message)
 
             self.echo(formatted)
 

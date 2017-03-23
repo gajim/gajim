@@ -549,25 +549,22 @@ class HistoryWindow:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
             for row in results:
-                if not show_status and row[2] in (KindConstant.GCSTATUS,
-                KindConstant.STATUS):
+                if not show_status and row.kind in (KindConstant.GCSTATUS,
+                                                    KindConstant.STATUS):
                     continue
-                contact_name = row[0]
+
+                contact_name = row.contact_name
                 if not contact_name:
-                    kind = row[2]
-                    if kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
+                    if row.kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
                         contact_name = gajim.nicks[account]
                     else:
                         contact_name = self.completion_dict[jid][InfoColumn.NAME]
-                tim = row[1]
-                message = row[4]
-                log_line_id = row[6]
-                local_time = time.localtime(tim)
+
+                local_time = time.localtime(row.time)
                 date = time.strftime('%Y-%m-%d', local_time)
 
-                #  jid (to which log is assigned to), name, date, message,
-                # time (full unix time)
-                model.append((jid, contact_name, date, message, str(tim), log_line_id))
+                model.append((jid, contact_name, date, row.message,
+                              str(row.time), row.log_line_id))
 
     def on_results_treeview_row_activated(self, widget, path, column):
         """

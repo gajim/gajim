@@ -33,6 +33,7 @@ import sys
 import time
 import datetime
 import json
+from collections import namedtuple
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
@@ -671,13 +672,22 @@ class Logger:
 
         return messages
 
+    SearchResult = namedtuple('SearchResult',
+            ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
+             'log_line_id'])
+
     def get_search_results_for_query(self, jid, query, account, year=False,
         month=False, day=False):
         """
-        Returns contact_name, time, kind, show, message, subject, log_line_id
+        Search the conversation log for messages containing the `query` string.
 
-        For each row in a list of tuples, returns list with empty tuple if we
-        found nothing to meet our demands
+        The search can either span the complete log for the given `account` and
+        `jid` or be restriced to a single day by specifying `year`, `month` and
+        `day`, where `month` and `day` are 1-based.
+
+        All messages matching the specified criteria will be returned in a list
+        containing tuples of type `Logger.SearchResult`. If no messages match
+        the criteria, an empty list will be returned.
         """
         try:
             self.get_jid_id(jid)
@@ -705,8 +715,7 @@ class Logger:
             ORDER BY time
             ''' % (where_sql, like_sql), jid_tuple)
 
-        results = self.cur.fetchall()
-        return results
+        return [Logger.SearchResult(*row) for row in self.cur.fetchall()]
 
     def get_days_with_logs(self, jid, year, month, max_day, account):
         """
