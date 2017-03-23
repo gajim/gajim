@@ -907,10 +907,11 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     # notify the other side about stream closing
                     # notify the local user about sucessfull send
                     # delete the local stream
-                    self.connection.send(nbxmpp.Protocol('iq',
-                        file_props.direction[1:], 'set',
-                        payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-                        {'sid': file_props.transport_sid})]))
+                    self.last_sent_ibb_id = self.connection.send(
+                        nbxmpp.Protocol('iq',
+                            file_props.direction[1:], 'set',
+                            payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
+                            {'sid': file_props.transport_sid})]))
                     file_props.completed = True
 
     def IBBMessageHandler(self, conn, stanza):
@@ -1018,6 +1019,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     reply.delChild('data')
                     conn.send(reply)
                     raise nbxmpp.NodeProcessed
+            elif syn_id == self.last_sent_ibb_id and file_props.completed:
+                gajim.socks5queue.complete_transfer_cb(self.name, file_props)
             elif syn_id == self.last_sent_ibb_id:
                 self.SendHandler()
 
