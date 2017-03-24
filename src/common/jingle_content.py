@@ -202,7 +202,7 @@ class JingleContent:
             # if the file is less than 10 mb, then it is small
             # lets calculate it right away
             if self.file_props.size < 10000000 and not self.file_props.hash_:
-                hash_data = content._compute_hash()
+                hash_data = self._compute_hash()
                 if hash_data:
                     file_tag.addChild(node=hash_data)
                 pjid = gajim.get_jid_without_resource(self.session.peerjid)
