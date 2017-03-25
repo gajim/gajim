@@ -4059,7 +4059,7 @@ class RosterWindow:
         if event.keyval == gtk.keysyms.Escape:
             if self.rfilter_enabled:
                 self.disable_rfilter()
-                return
+                return True
             if gajim.interface.msg_win_mgr.mode == \
             MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER and \
             gajim.interface.msg_win_mgr.one_window_opened():
