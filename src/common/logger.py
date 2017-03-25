@@ -609,13 +609,16 @@ class Logger:
                 restore_how_many_rows, pending_how_many), jid_tuple)
 
             results = self.cur.fetchall()
+            messages = []
             for entry in results:
-                entry = list(entry)
-                entry[4] = json.loads(entry[4])
+                additional_data = json.loads(entry[4])
+                parsed_entry = entry[:4] + (additional_data, ) + entry[5:]
+                messages.append(parsed_entry)
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
-        results.reverse()
-        return results
+
+        messages.reverse()
+        return messages
 
     def get_unix_time_from_date(self, year, month, day):
         # year (fe 2005), month (fe 11), day (fe 25)
@@ -655,10 +658,13 @@ class Logger:
             ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
         results = self.cur.fetchall()
+        messages = []
         for entry in results:
-            entry = list(entry)
-            entry[6] = json.loads(entry[6])
-        return results
+            additional_data = json.loads(entry[6])
+            parsed_entry = entry[:6] + (additional_data, ) + entry[7:]
+            messages.append(parsed_entry)
+
+        return messages
 
     def get_search_results_for_query(self, jid, query, account, year=False,
         month=False, day=False):
