@@ -863,6 +863,13 @@ class ConversationTextview(GObject.GObject):
                 self.make_link_menu(event, kind, word)
                 return True
             else:
+                self.plugin_modified = False
+                gajim.plugin_manager.gui_extension_point(
+                    'hyperlink_handler', word, kind, self,
+                    self.tv.get_toplevel())
+                if self.plugin_modified:
+                    return
+
                 # we launch the correct application
                 if kind == 'xmpp':
                     word = word[5:]
