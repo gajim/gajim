@@ -7,7 +7,7 @@ dist_gajimplugins_PYTHON =
 
 pluginsdirs = ${sort ${dir ${wildcard ${srcdir}/*/ ${srcdir}/*/*/}}}
 
-pluginsfiles = $(wildcard ${p}/*.py ${p}/manifest.ini ${p}/*.ui ${p}/*.png)
+pluginsfiles = $(wildcard ${p}/*.py ${p}/manifest.ini ${p}/*.ui ${p}/*.png ${p}/*.pem)
 
 nobase_gajimplugins_DATA = $(foreach p, ${pluginsdirs}, $(pluginsfiles))
 
