@@ -1150,10 +1150,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         try:
             self.get_jid_resource()
         except helpers.InvalidFormat:
-            gajim.nec.push_incoming_event(InformationEvent(None, conn=self.conn,
-                level='error', pri_txt=_('Invalid JID'),
-                sec_txt=_('A message from a non-valid JID arrived, it has been '
-                'ignored.')))
+            log.warning('Invalid JID: %s, ignoring it',
+                        self.stanza.getFrom())
             return
 
         address_tag = self.stanza.getTag('addresses',
@@ -1165,8 +1163,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.fjid = helpers.parse_jid(address.getAttr('jid'))
                 except helpers.InvalidFormat:
-                    log.warning('Invalid JID: %s, ignoring it' % address.getAttr(
-                        'jid'))
+                    log.warning('Invalid JID: %s, ignoring it',
+                                address.getAttr('jid'))
                     return
                 self.jid = gajim.get_jid_without_resource(self.fjid)
 
@@ -1195,11 +1193,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:
-                    gajim.nec.push_incoming_event(InformationEvent(None,
-                        conn=self.conn, level='error',
-                        pri_txt=_('Invalid JID'),
-                        sec_txt=_('A message from a non-valid JID arrived, it '
-                        'has been ignored.')))
+                    log.warning('Invalid JID: %s, ignoring it',
+                                self.stanza.getFrom())
                     return
                 self.forwarded = True
 
