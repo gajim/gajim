@@ -22,19 +22,21 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gajim import HAVE_GPG, GPG_BINARY
 import os
 import locale
 import logging
+import gajim
 
-if HAVE_GPG:
+if gajim.HAVE_GPG:
     import gnupg
     gnupg.logger = logging.getLogger('gajim.c.gnupg')
 
     class GnuPG(gnupg.GPG):
         def __init__(self, use_agent=False):
-            gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY)
-            self.encoding = locale.getpreferredencoding()
+            gnupg.GPG.__init__(self, gpgbinary=gajim.GPG_BINARY)
+            encoding = gajim.config.get('pgp_encoding')
+            if encoding:
+                self.encoding = encoding
             self.decode_errors = 'replace'
             self.passphrase = None
             self.use_agent = use_agent
