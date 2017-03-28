@@ -315,6 +315,7 @@ class Config:
             'positive_184_ack': [ opt_bool, False, _('If enabled, Gajim will show an icon to show that sent message has been received by your contact')],
             'show_avatar_in_tabs': [ opt_bool, False, _('Show a mini avatar in chat window tabs and in window icon')],
             'use_keyring': [opt_bool, True, _('If True, Gajim will use the Systems Keyring to store account passwords.')],
+            'pgp_encoding': [ opt_str, '', _('Sets the encoding used by python-gnupg'), True],
     }, {})
 
     __options_per_key = {
