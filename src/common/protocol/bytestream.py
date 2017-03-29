@@ -251,7 +251,7 @@ class ConnectionBytestream:
         if field.getValue() == nbxmpp.NS_IBB:
             sid = file_props.sid
             file_props.transport_sid = sid
-            fp = open(file_props.file_name, 'r')
+            fp = open(file_props.file_name, 'rb')
             self.OpenStream(sid, file_props.receiver, fp)
             raise nbxmpp.NodeProcessed
 
@@ -815,7 +815,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.disconnect_cb = None
             file_props.continue_cb = None
             file_props.syn_id = stanza.getID()
-            file_props.fp = open(file_props.file_name, 'w')
+            file_props.fp = open(file_props.file_name, 'wb')
         conn.send(rep)
 
     def CloseIBBStream(self, file_props):
