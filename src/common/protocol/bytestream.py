@@ -816,8 +816,11 @@ class ConnectionIBBytestream(ConnectionBytestream):
         file_props.connected = False
         file_props.fp.close()
         file_props.stopped = True
-        self.connection.send(nbxmpp.Protocol('iq',
-            file_props.direction[1:], 'set',
+        to = file_props.receiver
+        if file_props.direction == '<':
+            to = file_props.sender
+        self.connection.send(
+            nbxmpp.Protocol('iq', to, 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
             {'sid':file_props.transport_sid})]))
         if file_props.completed:
@@ -840,7 +843,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         base64 encoding that increases size of data by 1/3.
         """
         file_props = FilesProp.getFilePropBySid(sid)
-        file_props.direction = '|>' + to
+        file_props.direction = '|>'
         file_props.block_size = blocksize
         file_props.fp = fp
         file_props.seq = 0
@@ -890,7 +893,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     if file_props.seq == 65536:
                         file_props.seq = 0
                     self.last_sent_ibb_id = self.connection.send(
-                        nbxmpp.Protocol(name='iq', to=file_props.direction[1:],
+                        nbxmpp.Protocol(name='iq', to=file_props.receiver,
                         typ='set', payload=[datanode]))
                     current_time = time.time()
                     file_props.elapsed_time += current_time - file_props.last_time
