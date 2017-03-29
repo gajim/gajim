@@ -837,8 +837,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Take into account that recommended stanza size is 4k and IBB uses
         base64 encoding that increases size of data by 1/3.
         """
-        if not nbxmpp.JID(to).getResource():
-            return
         file_props = FilesProp.getFilePropBySid(sid)
         file_props.direction = '|>' + to
         file_props.block_size = blocksize
