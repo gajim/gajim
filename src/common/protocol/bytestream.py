@@ -826,7 +826,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.direction[1:], 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
             {'sid':file_props.transport_sid})]))
-        if file_props.session_type == 'jingle':
+        if file_props.completed:
+            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+        elif file_props.session_type == 'jingle':
             peerjid = \
              file_props.receiver if file_props.type_ == 's' else file_props.sender
             session = self.get_jingle_session(peerjid, file_props.sid, 'file')
@@ -872,6 +874,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
             if not file_props.direction:
                 # it's socks5 bytestream
                 continue
+            if file_props.completed:
+                self.CloseIBBStream(file_props)
             sid = file_props.sid
             if file_props.direction[:2] == '|>':
                 # We waitthat other part accept stream
@@ -899,17 +903,12 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     file_props.elapsed_time += current_time - file_props.last_time
                     file_props.last_time = current_time
                     file_props.received_len += len(chunk)
+                    if file_props.size == file_props.received_len:
+                        file_props.completed = True
                     gajim.socks5queue.progress_transfer_cb(self.name,
                         file_props)
                 else:
-                    # notify the other side about stream closing
-                    # notify the local user about sucessfull send
-                    # delete the local stream
-                    self.connection.send(nbxmpp.Protocol('iq',
-                        file_props.direction[1:], 'set',
-                        payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-                        {'sid': file_props.transport_sid})]))
-                    file_props.completed = True
+                    log.debug('Nothing to read, but file not completed')
 
     def IBBMessageHandler(self, conn, stanza):
         """
