@@ -1012,7 +1012,7 @@ class Interface:
         if file_props.type_ == 'r': # we receive a file
             gajim.socks5queue.remove_receiver(file_props.sid, True, True)
             if file_props.session_type == 'jingle':
-                if file_props.hash_:
+                if file_props.hash_ and file_props.error == 0:
                     # We compare hashes in a new thread
                     self.hashThread = Thread(target=self.__compare_hashes,
                         args=(account, file_props))
@@ -1021,7 +1021,8 @@ class Interface:
                     # We disn't get the hash, sender probably don't support that
                     jid = unicode(file_props.sender)
                     self.popup_ft_result(account, jid, file_props)
-                    ft.set_status(file_props, 'ok')
+                    if file_props.error == 0:
+                        ft.set_status(file_props, 'ok')
                     session = gajim.connections[account].get_jingle_session(jid=None,
                         sid=file_props.sid)
                     # End jingle session
