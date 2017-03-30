@@ -679,10 +679,6 @@ class Logger:
 
         return results
 
-    SearchResult = namedtuple('SearchResult',
-            ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
-             'log_line_id'])
-
     def search_log(self, jid, query, account, year=None, month=None, day=None):
         """
         Search the conversation log for messages containing the `query` string.
@@ -692,8 +688,8 @@ class Logger:
         `day`, where `month` and `day` are 1-based.
 
         All messages matching the specified criteria will be returned in a list
-        containing tuples of type `Logger.SearchResult`. If no messages match
-        the criteria, an empty list will be returned.
+        containing tuples of type `Logger.Message`. If no messages match the
+        criteria, an empty list will be returned.
         """
         try:
             self.get_jid_id(jid)
@@ -708,7 +704,9 @@ class Logger:
             seconds_in_a_day = 86400 # 60 * 60 * 24
             last_second_of_day = start_of_day + seconds_in_a_day - 1
             self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject, log_line_id FROM logs
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id
+            FROM logs
             WHERE (%s) AND message LIKE '%s'
             AND time BETWEEN %d AND %d
             ORDER BY time
@@ -716,12 +714,18 @@ class Logger:
                 jid_tuple)
         else:
             self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject, log_line_id FROM logs
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id
+            FROM logs
             WHERE (%s) AND message LIKE '%s'
             ORDER BY time
             ''' % (where_sql, like_sql), jid_tuple)
 
-        return [Logger.SearchResult(*row) for row in self.cur.fetchall()]
+        results = [self.Message(*row) for row in self.cur.fetchall()]
+        for message in results:
+            message._replace(additional_data=json.loads(message.additional_data))
+
+        return results
 
     def get_days_with_logs(self, jid, year, month, max_day, account):
         """
