@@ -342,7 +342,7 @@ class HistoryWindow:
             return
         year, month, day = self.calendar.get_date() # integers
         month = gtkgui_helpers.make_gtk_month_python_month(month)
-        self._add_lines_for_date(year, month, day)
+        self._load_conversation(year, month, day)
 
     def on_calendar_month_changed(self, widget):
         """
@@ -387,9 +387,11 @@ class HistoryWindow:
 
         return show
 
-    def _add_lines_for_date(self, year, month, day):
+    def _load_conversation(self, year, month, day):
         """
-        Add all the lines for given date in textbuffer
+        Load the conversation between `self.jid` and `self.account` held on the
+        given date into the history textbuffer. Values for `month` and `day`
+        are 1-based.
         """
         self.history_buffer.set_text('')
         self.last_time_printout = 0
@@ -401,18 +403,21 @@ class HistoryWindow:
             if not show_status and message.kind in (KindConstant.GCSTATUS,
                                                     KindConstant.STATUS):
                 continue
-            self._add_new_line(message.contact_name, message.time, message.kind,
-                    message.show, message.message, message.subject,
-                    message.additional_data, message.log_line_id)
+            self._add_message(message)
 
-    def _add_new_line(self, contact_name, tim, kind, show, message, subject,
-                      additional_data, log_line_id):
-        """
-        Add a new line in textbuffer
-        """
-        if not message and kind not in (KindConstant.STATUS,
-                KindConstant.GCSTATUS):
+    def _add_message(self, msg):
+        if not msg.message and msg.kind not in (KindConstant.STATUS,
+                                                KindConstant.GCSTATUS):
             return
+
+        tim = msg.time
+        kind = msg.kind
+        show = msg.show
+        message = msg.message
+        subject = msg.subject
+        log_line_id = msg.log_line_id
+        contact_name = msg.contact_name
+        additional_data = msg.additional_data
 
         buf = self.history_buffer
         end_iter = buf.get_end_iter()
@@ -424,7 +429,7 @@ class HistoryWindow:
             timestamp_str = gajim.config.get('time_stamp')
             timestamp_str = helpers.from_one_line(timestamp_str)
             tim = time.strftime(timestamp_str, time.localtime(float(tim)))
-            buf.insert(end_iter, tim) # add time
+            buf.insert(end_iter, tim)
         elif gajim.config.get('print_time') == 'sometimes':
             every_foo_seconds = 60 * gajim.config.get(
                     'print_ichat_every_foo_minutes')
@@ -442,13 +447,11 @@ class HistoryWindow:
 
         if kind == KindConstant.GC_MSG:
             tag_name = 'incoming'
-        elif kind in (KindConstant.SINGLE_MSG_RECV,
-        KindConstant.CHAT_MSG_RECV):
+        elif kind in (KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
             contact_name = self.completion_dict[self.jid][InfoColumn.NAME]
             tag_name = 'incoming'
             tag_msg = 'incomingtxt'
-        elif kind in (KindConstant.SINGLE_MSG_SENT,
-        KindConstant.CHAT_MSG_SENT):
+        elif kind in (KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
             if self.account:
                 contact_name = gajim.nicks[self.account]
             else:
