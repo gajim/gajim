@@ -391,20 +391,19 @@ class HistoryWindow:
         """
         Add all the lines for given date in textbuffer
         """
-        self.history_buffer.set_text('') # clear the buffer first
+        self.history_buffer.set_text('')
         self.last_time_printout = 0
         show_status = self.show_status_checkbutton.get_active()
 
-        lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
-        for line in lines:
-            # line[0] is contact_name, line[1] is time of message
-            # line[2] is kind, line[3] is show, line[4] is message, line[5] is subject
-            # line[6] is additional_data, line[7] is log_line_id
-            if not show_status and line[2] in (KindConstant.GCSTATUS,
-            KindConstant.STATUS):
+        conversation = gajim.logger.get_conversation_for_date(
+                self.jid, year, month, day, self.account)
+        for message in conversation:
+            if not show_status and message.kind in (KindConstant.GCSTATUS,
+                                                    KindConstant.STATUS):
                 continue
-            self._add_new_line(line[0], line[1], line[2], line[3], line[4],
-                    line[5], line[6], line[7])
+            self._add_new_line(message.contact_name, message.time, message.kind,
+                    message.show, message.message, message.subject,
+                    message.additional_data, message.log_line_id)
 
     def _add_new_line(self, contact_name, tim, kind, show, message, subject,
                       additional_data, log_line_id):

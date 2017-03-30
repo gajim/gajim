@@ -636,12 +636,22 @@ class Logger:
         start_of_day = int(time.mktime(local_time))
         return start_of_day
 
+    Message = namedtuple('Message',
+            ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
+             'additional_data', 'log_line_id'])
+
     def get_conversation_for_date(self, jid, year, month, day, account):
         """
-        Return contact_name, time, kind, show, message, subject, additional_data, log_line_id
+        Load the complete conversation with a given jid on a specific date
 
-        For each row in a list of tuples, returns list with empty tuple if we
-        found nothing to meet our demands
+        The conversation contains all messages that were exchanged between
+        `account` and `jid` on the day specified by `year`, `month` and `day`,
+        where `month` and `day` are 1-based.
+
+        The conversation will be returned as a list of single messages of type
+        `Logger.Message`. Messages in the list are sorted chronologically. An
+        empty list will be returned if there are no messages in the log database
+        for the requested combination of `jid` and `account` on the given date.
         """
         try:
             self.get_jid_id(jid)
@@ -663,14 +673,11 @@ class Logger:
             ORDER BY time
             ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
-        results = self.cur.fetchall()
-        messages = []
-        for entry in results:
-            additional_data = json.loads(entry[6])
-            parsed_entry = entry[:6] + (additional_data, ) + entry[7:]
-            messages.append(parsed_entry)
+        results = [self.Message(*row) for row in self.cur.fetchall()]
+        for message in results:
+            message._replace(additional_data=json.loads(message.additional_data))
 
-        return messages
+        return results
 
     SearchResult = namedtuple('SearchResult',
             ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
