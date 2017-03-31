@@ -1365,9 +1365,12 @@ class GroupchatControl(ChatControlBase):
         if obj.gc_control == self and obj.resource:
             # We got a pm from this room
             nick = obj.resource
+            typ = ''
+            if obj.forwarded and obj.sent:
+                typ = 'out'
             if obj.session.control:
                 # print if a control is open
-                obj.session.control.print_conversation(obj.msgtxt,
+                obj.session.control.print_conversation(obj.msgtxt, typ,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, correct_id=(obj.id_,
                     obj.correct_id))
