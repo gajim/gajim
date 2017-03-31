@@ -19,7 +19,7 @@ Handles Jingle Transports (currently only ICE-UDP)
 
 import logging
 import socket
-from enum import IntEnum
+from enum import IntEnum, unique
 import nbxmpp
 from common import gajim
 
@@ -34,6 +34,7 @@ def get_jingle_transport(node):
         return transports[namespace](node)
 
 
+@unique
 class TransportType(IntEnum):
     """
     Possible types of a JingleTransport

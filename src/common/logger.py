@@ -33,10 +33,11 @@ import sys
 import time
 import datetime
 import json
+from collections import namedtuple
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
-from enum import IntEnum
+from enum import IntEnum, unique
 
 from common import exceptions
 from common import gajim
@@ -51,10 +52,12 @@ CACHE_DB_PATH = gajim.gajimpaths['CACHE_DB']
 import logging
 log = logging.getLogger('gajim.c.logger')
 
+@unique
 class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
 
+@unique
 class KindConstant(IntEnum):
     STATUS = 0
     GCSTATUS = 1
@@ -65,6 +68,7 @@ class KindConstant(IntEnum):
     CHAT_MSG_SENT = 6
     ERROR = 7
 
+@unique
 class ShowConstant(IntEnum):
     ONLINE = 0
     CHAT = 1
@@ -73,6 +77,7 @@ class ShowConstant(IntEnum):
     DND = 4
     OFFLINE = 5
 
+@unique
 class TypeConstant(IntEnum):
     AIM = 0
     GG = 1
@@ -90,6 +95,7 @@ class TypeConstant(IntEnum):
     MRIM = 13
     NO_TRANSPORT = 14
 
+@unique
 class SubscriptionConstant(IntEnum):
     NONE = 0
     TO = 1
@@ -182,7 +188,7 @@ class Logger:
     def get_jids_already_in_db(self):
         try:
             self.cur.execute('SELECT jid FROM jids')
-            # list of tupples: [('aaa@bbb',), ('cc@dd',)]
+            # list of tuples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed
@@ -583,8 +589,8 @@ class Logger:
         """
         Accept how many rows to restore and when to time them out (in minutes)
         (mark them as too old) and number of messages that are in queue and are
-        already logged but pending to be viewed, returns a list of tupples
-        containg time, kind, message, sibject list with empty tupple if nothing
+        already logged but pending to be viewed, returns a list of tuples
+        containg time, kind, message, subject list with empty tuple if nothing
         found to meet our demands
         """
         try:
@@ -625,17 +631,27 @@ class Logger:
         # returns time in seconds for the second that starts that date since epoch
         # gimme unixtime from year month day:
         d = datetime.date(year, month, day)
-        local_time = d.timetuple() # time tupple (compat with time.localtime())
+        local_time = d.timetuple() # time tuple (compat with time.localtime())
         # we have time since epoch baby :)
         start_of_day = int(time.mktime(local_time))
         return start_of_day
 
+    Message = namedtuple('Message',
+            ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
+             'additional_data', 'log_line_id'])
+
     def get_conversation_for_date(self, jid, year, month, day, account):
         """
-        Return contact_name, time, kind, show, message, subject, additional_data, log_line_id
+        Load the complete conversation with a given jid on a specific date
 
-        For each row in a list of tupples, returns list with empty tupple if we
-        found nothing to meet our demands
+        The conversation contains all messages that were exchanged between
+        `account` and `jid` on the day specified by `year`, `month` and `day`,
+        where `month` and `day` are 1-based.
+
+        The conversation will be returned as a list of single messages of type
+        `Logger.Message`. Messages in the list are sorted chronologically. An
+        empty list will be returned if there are no messages in the log database
+        for the requested combination of `jid` and `account` on the given date.
         """
         try:
             self.get_jid_id(jid)
@@ -657,22 +673,23 @@ class Logger:
             ORDER BY time
             ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
-        results = self.cur.fetchall()
-        messages = []
-        for entry in results:
-            additional_data = json.loads(entry[6])
-            parsed_entry = entry[:6] + (additional_data, ) + entry[7:]
-            messages.append(parsed_entry)
+        results = [self.Message(*row) for row in self.cur.fetchall()]
+        for message in results:
+            message._replace(additional_data=json.loads(message.additional_data))
 
-        return messages
+        return results
 
-    def get_search_results_for_query(self, jid, query, account, year=False,
-        month=False, day=False):
+    def search_log(self, jid, query, account, year=None, month=None, day=None):
         """
-        Returns contact_name, time, kind, show, message, subject, log_line_id
+        Search the conversation log for messages containing the `query` string.
 
-        For each row in a list of tupples, returns list with empty tupple if we
-        found nothing to meet our demands
+        The search can either span the complete log for the given `account` and
+        `jid` or be restriced to a single day by specifying `year`, `month` and
+        `day`, where `month` and `day` are 1-based.
+
+        All messages matching the specified criteria will be returned in a list
+        containing tuples of type `Logger.Message`. If no messages match the
+        criteria, an empty list will be returned.
         """
         try:
             self.get_jid_id(jid)
@@ -682,12 +699,14 @@ class Logger:
 
         where_sql, jid_tuple = self._build_contact_where(account, jid)
         like_sql = '%' + query.replace("'", "''") + '%'
-        if year:
+        if year and month and day:
             start_of_day = self.get_unix_time_from_date(year, month, day)
             seconds_in_a_day = 86400 # 60 * 60 * 24
             last_second_of_day = start_of_day + seconds_in_a_day - 1
             self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject, log_line_id FROM logs
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id
+            FROM logs
             WHERE (%s) AND message LIKE '%s'
             AND time BETWEEN %d AND %d
             ORDER BY time
@@ -695,12 +714,17 @@ class Logger:
                 jid_tuple)
         else:
             self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject, log_line_id FROM logs
+            SELECT contact_name, time, kind, show, message, subject,
+                   additional_data, log_line_id
+            FROM logs
             WHERE (%s) AND message LIKE '%s'
             ORDER BY time
             ''' % (where_sql, like_sql), jid_tuple)
 
-        results = self.cur.fetchall()
+        results = [self.Message(*row) for row in self.cur.fetchall()]
+        for message in results:
+            message._replace(additional_data=json.loads(message.additional_data))
+
         return results
 
     def get_days_with_logs(self, jid, year, month, max_day, account):

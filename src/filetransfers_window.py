@@ -29,7 +29,7 @@ from gi.repository import Pango
 import os
 import time
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import gtkgui_helpers
 import tooltips
@@ -44,6 +44,7 @@ from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
 import logging
 log = logging.getLogger('gajim.filetransfer_window')
 
+@unique
 class Column(IntEnum):
     IMAGE = 0
     LABELS = 1

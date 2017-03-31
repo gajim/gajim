@@ -31,7 +31,7 @@ from gi.repository import GLib
 import time
 import calendar
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import gtkgui_helpers
 import conversation_textview
@@ -43,6 +43,7 @@ from common import exceptions
 
 from common.logger import ShowConstant, KindConstant
 
+@unique
 class InfoColumn(IntEnum):
     '''Completion dict'''
     JID = 0
@@ -50,6 +51,7 @@ class InfoColumn(IntEnum):
     NAME = 2
     COMPLETION = 3
 
+@unique
 class Column(IntEnum):
     LOG_JID = 0
     CONTACT_NAME = 1
@@ -340,7 +342,7 @@ class HistoryWindow:
             return
         year, month, day = self.calendar.get_date() # integers
         month = gtkgui_helpers.make_gtk_month_python_month(month)
-        self._add_lines_for_date(year, month, day)
+        self._load_conversation(year, month, day)
 
     def on_calendar_month_changed(self, widget):
         """
@@ -385,33 +387,37 @@ class HistoryWindow:
 
         return show
 
-    def _add_lines_for_date(self, year, month, day):
+    def _load_conversation(self, year, month, day):
         """
-        Add all the lines for given date in textbuffer
+        Load the conversation between `self.jid` and `self.account` held on the
+        given date into the history textbuffer. Values for `month` and `day`
+        are 1-based.
         """
-        self.history_buffer.set_text('') # clear the buffer first
+        self.history_buffer.set_text('')
         self.last_time_printout = 0
         show_status = self.show_status_checkbutton.get_active()
 
-        lines = gajim.logger.get_conversation_for_date(self.jid, year, month, day, self.account)
-        for line in lines:
-            # line[0] is contact_name, line[1] is time of message
-            # line[2] is kind, line[3] is show, line[4] is message, line[5] is subject
-            # line[6] is additional_data, line[7] is log_line_id
-            if not show_status and line[2] in (KindConstant.GCSTATUS,
-            KindConstant.STATUS):
+        conversation = gajim.logger.get_conversation_for_date(
+                self.jid, year, month, day, self.account)
+        for message in conversation:
+            if not show_status and message.kind in (KindConstant.GCSTATUS,
+                                                    KindConstant.STATUS):
                 continue
-            self._add_new_line(line[0], line[1], line[2], line[3], line[4],
-                    line[5], line[6], line[7])
+            self._add_message(message)
 
-    def _add_new_line(self, contact_name, tim, kind, show, message, subject,
-                      additional_data, log_line_id):
-        """
-        Add a new line in textbuffer
-        """
-        if not message and kind not in (KindConstant.STATUS,
-                KindConstant.GCSTATUS):
+    def _add_message(self, msg):
+        if not msg.message and msg.kind not in (KindConstant.STATUS,
+                                                KindConstant.GCSTATUS):
             return
+
+        tim = msg.time
+        kind = msg.kind
+        show = msg.show
+        message = msg.message
+        subject = msg.subject
+        log_line_id = msg.log_line_id
+        contact_name = msg.contact_name
+        additional_data = msg.additional_data
 
         buf = self.history_buffer
         end_iter = buf.get_end_iter()
@@ -423,7 +429,7 @@ class HistoryWindow:
             timestamp_str = gajim.config.get('time_stamp')
             timestamp_str = helpers.from_one_line(timestamp_str)
             tim = time.strftime(timestamp_str, time.localtime(float(tim)))
-            buf.insert(end_iter, tim) # add time
+            buf.insert(end_iter, tim)
         elif gajim.config.get('print_time') == 'sometimes':
             every_foo_seconds = 60 * gajim.config.get(
                     'print_ichat_every_foo_minutes')
@@ -441,13 +447,11 @@ class HistoryWindow:
 
         if kind == KindConstant.GC_MSG:
             tag_name = 'incoming'
-        elif kind in (KindConstant.SINGLE_MSG_RECV,
-        KindConstant.CHAT_MSG_RECV):
+        elif kind in (KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
             contact_name = self.completion_dict[self.jid][InfoColumn.NAME]
             tag_name = 'incoming'
             tag_msg = 'incomingtxt'
-        elif kind in (KindConstant.SINGLE_MSG_SENT,
-        KindConstant.CHAT_MSG_SENT):
+        elif kind in (KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
             if self.account:
                 contact_name = gajim.nicks[self.account]
             else:
@@ -539,33 +543,27 @@ class HistoryWindow:
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
 
             show_status = self.show_status_checkbutton.get_active()
-
-            # contact_name, time, kind, show, message, subject
-            results = gajim.logger.get_search_results_for_query(
-                                    jid, text, account, year, month, day)
+            results = gajim.logger.search_log(jid, text, account, year, month, day)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
             for row in results:
-                if not show_status and row[2] in (KindConstant.GCSTATUS,
-                KindConstant.STATUS):
+                if not show_status and row.kind in (KindConstant.GCSTATUS,
+                                                    KindConstant.STATUS):
                     continue
-                contact_name = row[0]
+
+                contact_name = row.contact_name
                 if not contact_name:
-                    kind = row[2]
-                    if kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
+                    if row.kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
                         contact_name = gajim.nicks[account]
                     else:
                         contact_name = self.completion_dict[jid][InfoColumn.NAME]
-                tim = row[1]
-                message = row[4]
-                log_line_id = row[6]
-                local_time = time.localtime(tim)
+
+                local_time = time.localtime(row.time)
                 date = time.strftime('%Y-%m-%d', local_time)
 
-                #  jid (to which log is assigned to), name, date, message,
-                # time (full unix time)
-                model.append((jid, contact_name, date, message, str(tim), log_line_id))
+                model.append((jid, contact_name, date, row.message,
+                              str(row.time), row.log_line_id))
 
     def on_results_treeview_row_activated(self, widget, path, column):
         """
@@ -576,7 +574,7 @@ class HistoryWindow:
         cur_year, cur_month, cur_day = self.calendar.get_date()
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
         model = widget.get_model()
-        # make it a tupple (Y, M, D, 0, 0, 0...)
+        # make it a tuple (Y, M, D, 0, 0, 0...)
         tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
         gtk_month = tim[1]

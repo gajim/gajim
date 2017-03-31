@@ -23,7 +23,7 @@ import hashlib
 import logging
 import os
 import threading
-from enum import IntEnum
+from enum import IntEnum, unique
 import nbxmpp
 from common import gajim
 from common import configpaths
@@ -39,6 +39,7 @@ from common.jingle_ftstates import (
 log = logging.getLogger('gajim.c.jingle_ft')
 
 
+@unique
 class State(IntEnum):
     NOT_STARTED = 0
     INITIALIZED = 1

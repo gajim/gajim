@@ -46,7 +46,7 @@ import cell_renderer_image
 import dataforms_widget
 import nbxmpp
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 from common import events
 from common import gajim
@@ -65,6 +65,7 @@ from common.connection_handlers_events import GcMessageOutgoingEvent
 import logging
 log = logging.getLogger('gajim.groupchat_control')
 
+@unique
 class Column(IntEnum):
     IMG = 0 # image to show state (online, new message etc)
     NICK = 1 # contact nickame or ROLE name

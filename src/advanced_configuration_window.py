@@ -23,7 +23,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 from gi.repository import Gtk
 import gtkgui_helpers
@@ -32,6 +32,7 @@ from gi.repository import Pango
 
 from common import gajim
 
+@unique
 class Column(IntEnum):
     PREFERENCE_NAME = 0
     VALUE = 1

@@ -35,8 +35,9 @@
 import re
 from common import defs
 from gi.repository import GLib
-from enum import IntEnum
+from enum import IntEnum, unique
 
+@unique
 class Option(IntEnum):
     TYPE = 0
     VAL = 1

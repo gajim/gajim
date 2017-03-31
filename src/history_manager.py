@@ -77,8 +77,9 @@ from common.logger import LOG_DB_PATH, JIDConstant, KindConstant
 from common import helpers
 import dialogs
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
+@unique
 class Column(IntEnum):
     UNIXTIME = 2
     MESSAGE = 3
@@ -252,7 +253,7 @@ class HistoryManager:
         # get those jids that have at least one entry in logs
         self.cur.execute('SELECT jid, jid_id FROM jids WHERE jid_id IN ('
                 'SELECT distinct logs.jid_id FROM logs) ORDER BY jid')
-        # list of tupples: [('aaa@bbb',), ('cc@dd',)]
+        # list of tuples: [('aaa@bbb',), ('cc@dd',)]
         rows = self.cur.fetchall()
         for row in rows:
             self.jids_already_in.append(row[0])  # jid

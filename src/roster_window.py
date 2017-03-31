@@ -43,7 +43,7 @@ import os
 import time
 import locale
 
-from enum import IntEnum
+from enum import IntEnum, unique
 
 import common.sleepy
 import history_window
@@ -69,6 +69,7 @@ from message_window import MessageWindowMgr
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
 
+@unique
 class Column(IntEnum):
     IMG = 0  # image to show state (online, new message etc)
     NAME = 1  # cellrenderer text that holds contact nickame
@@ -5792,7 +5793,7 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
-        # holds a list of (jid, account) tupples
+        # holds a list of (jid, account) tuples
         self._last_selected_contact = []
         self.transports_state_images = {'16': {}, '32': {}, 'opened': {},
             'closed': {}}
