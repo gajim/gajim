@@ -1074,11 +1074,23 @@ class GroupchatControl(ChatControlBase):
                     correct_id=(obj.stanza.getID(), None))
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
-    def on_private_message(self, nick, msg, tim, xhtml, session, msg_log_id=None,
-    encrypted=False, displaymarking=None):
+    def on_private_message(self, nick, msg, tim, xhtml, session, sent_forwarded,
+    msg_log_id=None, encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
         no_queue = len(gajim.events.get_events(self.account, fjid)) == 0
+
+        if sent_forwarded:
+            '''
+            We remove all muc-pm events for that jid because the
+            Message was answered from one of our other devices
+            '''
+            gajim.events.remove_events(self.account, fjid, types=['pm'])
+            if self.parent_win:
+                self.parent_win.show_title()
+                self.parent_win.redraw_tab(self)
+            self.update_ui()
+            return
 
         event = events.PmEvent(msg, '', 'incoming', tim, encrypted, '',
             msg_log_id, xhtml=xhtml, session=session, form_node=None,
@@ -1365,16 +1377,21 @@ class GroupchatControl(ChatControlBase):
         if obj.gc_control == self and obj.resource:
             # We got a pm from this room
             nick = obj.resource
+            typ = ''
+            sent_forwarded = False
+            if obj.forwarded and obj.sent:
+                typ = 'out'
+                sent_forwarded = True
             if obj.session.control:
                 # print if a control is open
-                obj.session.control.print_conversation(obj.msgtxt,
+                obj.session.control.print_conversation(obj.msgtxt, typ,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, correct_id=(obj.id_,
                     obj.correct_id))
             else:
                 # otherwise pass it off to the control to be queued
                 self.on_private_message(nick, obj.msgtxt, obj.timestamp,
-                    obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
+                    obj.xhtml, self.session, sent_forwarded, msg_log_id=obj.msg_log_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
     def _nec_ping_reply(self, obj):
