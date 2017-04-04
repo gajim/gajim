@@ -296,63 +296,65 @@ class CommonConnection:
             return
 
         if obj.keyID and self.USE_GPG:
-            obj.xhtml = None
-            if obj.keyID == 'UNKNOWN':
-                error = _('Neither the remote presence is signed, nor a key was '
-                        'assigned.')
-            elif obj.keyID.endswith('MISMATCH'):
-                error = _('The contact\'s key (%s) does not match the key assigned '
-                        'in Gajim.' % obj.keyID[:8])
-            else:
-                myKeyID = gajim.config.get_per('accounts', self.name, 'keyid')
-                def encrypt_thread(msg, keyID, always_trust=False):
-                    # encrypt message. This function returns (msgenc, error)
-                    return self.gpg.encrypt(msg, [keyID, myKeyID],
-                        always_trust)
-                def _on_encrypted(output):
-                    msgenc, error = output
-                    if error.startswith('NOT_TRUSTED'):
-                        def _on_always_trust(answer):
-                            if answer:
-                                gajim.thread_interface(encrypt_thread, [obj.message, obj.keyID,
-                                        True], _on_encrypted, [])
-                            else:
-                                self._message_encrypted_cb(output, obj, callback)
-                        gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
-                            conn=self, keyID=error.split(' ')[-1],
-                            callback=_on_always_trust))
-                    else:
-                        self._message_encrypted_cb(output, obj, callback)
-                gajim.thread_interface(encrypt_thread, [obj.message, obj.keyID, False],
-                    _on_encrypted, [])
-                return
-
-            self._message_encrypted_cb((None, error), obj, callback)
+            self._encrypt_message(obj, callback)
             return
 
         self._on_continue_message(obj, callback)
 
-    def _message_encrypted_cb(self, output, obj, callback):
-        msgenc, error = output
+    def _encrypt_message(self, obj, callback):
+        obj.xhtml = None
+        if obj.keyID == 'UNKNOWN':
+            error = _('Neither the remote presence is signed, nor a key was '
+                      'assigned.')
+        elif obj.keyID.endswith('MISMATCH'):
+            error = _('The contact\'s key (%s) does not match the key assigned '
+                      'in Gajim.' % obj.keyID[:8])
+        else:
+            myKeyID = gajim.config.get_per('accounts', self.name, 'keyid')
+            key_list = [obj.keyID, myKeyID]
+            def _on_encrypted(output):
+                msgenc, error = output
+                if error.startswith('NOT_TRUSTED'):
+                    def _on_always_trust(answer):
+                        if answer:
+                            gajim.thread_interface(
+                                self.gpg.encrypt, [obj.message, key_list, True],
+                                _on_encrypted, [])
+                        else:
+                            self._finished_encrypt(
+                                obj, callback, msgenc=msgenc, error=error)
+                    gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
+                        conn=self, keyID=error.split(' ')[-1],
+                        callback=_on_always_trust))
+                else:
+                    self._finished_encrypt(
+                        obj, callback, msgenc=msgenc, error=error)
+            gajim.thread_interface(
+                self.gpg.encrypt, [obj.message, key_list, False],
+                _on_encrypted, [])
+            return
+        self._finished_encrypt(obj, callback, error=error)
 
-        if msgenc and not error:
+    def _finished_encrypt(self, obj, callback, msgenc=None, error=None):
+        if error:
+            gajim.nec.push_incoming_event(
+                MessageNotSentEvent(
+                    None, conn=self, jid=obj.jid, message=obj.message,
+                    error=error, time_=time.time(), session=obj.session))
+            return
+        self._on_continue_message(obj, callback, msgenc)
+
+    def _on_continue_message(self, obj, callback, msgenc=None):
+        if msgenc:
             msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
             lang = os.getenv('LANG')
             if lang is not None and not lang.startswith('en'):
                 # we're not english: one in locale and one en
                 msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
                         ' (' + msgtxt + ')'
-            self._on_continue_message(obj, callback, msgtxt=msgtxt, msgenc=msgenc)
-            return
-        # Encryption failed, do not send message
-        tim = time.localtime()
-        gajim.nec.push_incoming_event(MessageNotSentEvent(None, conn=self,
-            jid=obj.jid, message=msgtxt, error=error, time_=tim, session=obj.session))
-
-    def _on_continue_message(self, obj, callback, msgtxt=None, msgenc=None):
-
-        if not msgtxt:
+        else:
             msgtxt = obj.message
+
         fjid = obj.get_full_jid()
 
         if obj.correction_msg:
