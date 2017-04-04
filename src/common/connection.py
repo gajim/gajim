@@ -369,6 +369,13 @@ class CommonConnection:
             if obj.xhtml:
                 obj.correction_msg.setXHTML(obj.xhtml)
 
+            if msgenc:
+                encrypted_tag = obj.correction_msg.getTag(
+                    'x', namespace=nbxmpp.NS_ENCRYPTED)
+                obj.correction_msg.delChild(encrypted_tag)
+                obj.correction_msg.setTag(
+                    'x', namespace=nbxmpp.NS_ENCRYPTED).setData(msgenc)
+
             if obj.session:
                 obj.session.last_send = time.time()
 
@@ -398,7 +405,7 @@ class CommonConnection:
             msg_iq.setID(obj.msg_id)
 
         if msgenc:
-            msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
+            msg_iq.setTag('x', namespace=nbxmpp.NS_ENCRYPTED).setData(msgenc)
 
         if obj.form_node:
             msg_iq.addChild(node=obj.form_node)
