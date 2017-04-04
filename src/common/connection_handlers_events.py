@@ -2749,6 +2749,13 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.correction_msg = None
         self.automatic_message = True
 
+    def get_full_jid(self):
+        if self.resource:
+            return self.jid + '/' + self.resource
+        if self.session:
+            return self.session.get_to()
+        return self.jid
+
     def generate(self):
         return True
 

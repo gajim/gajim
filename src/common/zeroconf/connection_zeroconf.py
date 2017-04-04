@@ -367,12 +367,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     'Contact is offline. Your message could not be sent.'),
                     msg=None, time_=None, session=session))
 
-        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
-            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
-            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
-            label=obj.label, session=obj.session, forward_from=obj.forward_from,
-            form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, attention=obj.attention, callback=cb)
+        self._prepare_message(obj, cb)
 
     def send_stanza(self, stanza):
         # send a stanza untouched

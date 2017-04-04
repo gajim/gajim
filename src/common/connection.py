@@ -263,60 +263,46 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def _prepare_message(self, jid, msg, keyID, type_='chat', subject='',
-    chatstate=None, msg_id=None, resource=None, user_nick=None, xhtml=None,
-    session=None, forward_from=None, form_node=None, label=None,
-    original_message=None, delayed=None, attention=False, correction_msg=None,
-    callback=None):
+    def _prepare_message(self, obj, callback):
+
         if not self.connection or self.connected < 2:
             return 1
 
-        if isinstance(jid, list):
-            new_list = []
-            for j in jid:
+        if isinstance(obj.jid, list):
+            for jid in obj.jid:
                 try:
-                    new_list.append(self.check_jid(j))
+                    self.check_jid(jid)
                 except helpers.InvalidFormat:
                     gajim.nec.push_incoming_event(InformationEvent(None,
                         conn=self, level='error', pri_txt=_('Invalid JID'),
                         sec_txt=_('It is not possible to send a message '
-                        'to %s, this JID is not valid.') % j))
+                        'to %s, this JID is not valid.') % jid))
                     return
-            fjid = new_list
         else:
             try:
-                jid = self.check_jid(jid)
+                self.check_jid(obj.jid)
             except helpers.InvalidFormat:
                 gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                     level='error', pri_txt=_('Invalid JID'), sec_txt=_(
                     'It is not possible to send a message to %s, this JID is not '
-                    'valid.') % jid))
+                    'valid.') % obj.jid))
                 return
-            fjid = jid
-            if resource:
-                fjid += '/' + resource
 
-            if session:
-                fjid = session.get_to()
-
-        if msg and not xhtml and gajim.config.get(
+        if obj.message and not obj.xhtml and gajim.config.get(
         'rst_formatting_outgoing_messages'):
             from common.rst_xhtml_generator import create_xhtml
-            xhtml = create_xhtml(msg)
-        if not msg and chatstate is None and form_node is None:
+            obj.xhtml = create_xhtml(obj.message)
+        if not obj.message and obj.chatstate is None and obj.form_node is None:
             return
 
-        msgtxt = msg
-        msgenc = ''
-
-        if keyID and self.USE_GPG:
-            xhtml = None
-            if keyID ==  'UNKNOWN':
+        if obj.keyID and self.USE_GPG:
+            obj.xhtml = None
+            if obj.keyID == 'UNKNOWN':
                 error = _('Neither the remote presence is signed, nor a key was '
                         'assigned.')
-            elif keyID.endswith('MISMATCH'):
+            elif obj.keyID.endswith('MISMATCH'):
                 error = _('The contact\'s key (%s) does not match the key assigned '
-                        'in Gajim.' % keyID[:8])
+                        'in Gajim.' % obj.keyID[:8])
             else:
                 myKeyID = gajim.config.get_per('accounts', self.name, 'keyid')
                 def encrypt_thread(msg, keyID, always_trust=False):
@@ -325,47 +311,28 @@ class CommonConnection:
                         always_trust)
                 def _on_encrypted(output):
                     msgenc, error = output
-                    if error.startswith( 'NOT_TRUSTED'):
+                    if error.startswith('NOT_TRUSTED'):
                         def _on_always_trust(answer):
                             if answer:
-                                gajim.thread_interface(encrypt_thread, [msg, keyID,
+                                gajim.thread_interface(encrypt_thread, [obj.message, obj.keyID,
                                         True], _on_encrypted, [])
                             else:
-                                self._message_encrypted_cb(output, type_, msg,
-                                    msgtxt, original_message, fjid, resource,
-                                    jid, xhtml, subject, chatstate, msg_id,
-                                    label, forward_from, delayed, session,
-                                    form_node, user_nick, keyID, attention,
-                                    correction_msg, callback)
+                                self._message_encrypted_cb(output, obj, callback)
                         gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                             conn=self, keyID=error.split(' ')[-1],
                             callback=_on_always_trust))
                     else:
-                        self._message_encrypted_cb(output, type_, msg, msgtxt,
-                            original_message, fjid, resource, jid, xhtml,
-                            subject, chatstate, msg_id, label, forward_from,
-                            delayed, session, form_node, user_nick, keyID,
-                            attention, correction_msg, callback)
-                gajim.thread_interface(encrypt_thread, [msg, keyID, False],
+                        self._message_encrypted_cb(output, obj, callback)
+                gajim.thread_interface(encrypt_thread, [obj.message, obj.keyID, False],
                     _on_encrypted, [])
                 return
 
-            self._message_encrypted_cb(('', error), type_, msg, msgtxt,
-                original_message, fjid, resource, jid, xhtml, subject,
-                chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, keyID, attention, correction_msg,
-                callback)
+            self._message_encrypted_cb((None, error), obj, callback)
             return
 
-        self._on_continue_message(type_, msg, msgtxt, original_message, fjid,
-            resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-            label, forward_from, delayed, session, form_node, user_nick,
-            attention, correction_msg, callback)
+        self._on_continue_message(obj, callback)
 
-    def _message_encrypted_cb(self, output, type_, msg, msgtxt,
-    original_message, fjid, resource, jid, xhtml, subject, chatstate, msg_id,
-    label, forward_from, delayed, session, form_node, user_nick, keyID,
-    attention, correction_msg, callback):
+    def _message_encrypted_cb(self, output, obj, callback):
         msgenc, error = output
 
         if msgenc and not error:
@@ -375,120 +342,119 @@ class CommonConnection:
                 # we're not english: one in locale and one en
                 msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
                         ' (' + msgtxt + ')'
-            self._on_continue_message(type_, msg, msgtxt, original_message,
-                fjid, resource, jid, xhtml, subject, msgenc, keyID,
-                chatstate, msg_id, label, forward_from, delayed, session,
-                form_node, user_nick, attention, correction_msg, callback)
+            self._on_continue_message(obj, callback, msgtxt=msgtxt, msgenc=msgenc)
             return
         # Encryption failed, do not send message
         tim = time.localtime()
         gajim.nec.push_incoming_event(MessageNotSentEvent(None, conn=self,
-            jid=jid, message=msgtxt, error=error, time_=tim, session=session))
+            jid=obj.jid, message=msgtxt, error=error, time_=tim, session=obj.session))
 
-    def _on_continue_message(self, type_, msg, msgtxt, original_message, fjid,
-    resource, jid, xhtml, subject, msgenc, keyID, chatstate, msg_id,
-    label, forward_from, delayed, session, form_node, user_nick, attention,
-    correction_msg, callback):
+    def _on_continue_message(self, obj, callback, msgtxt=None, msgenc=None):
 
-        if correction_msg:
-            id_ = correction_msg.getID()
-            if correction_msg.getTag('replace'):
-                correction_msg.delChild('replace')
-            correction_msg.setTag('replace', attrs={'id': id_},
+        if not msgtxt:
+            msgtxt = obj.message
+        fjid = obj.get_full_jid()
+
+        if obj.correction_msg:
+            id_ = obj.correction_msg.getID()
+            if obj.correction_msg.getTag('replace'):
+                obj.correction_msg.delChild('replace')
+            obj.correction_msg.setTag('replace', attrs={'id': id_},
                 namespace=nbxmpp.NS_CORRECT)
             id2 = self.connection.getAnID()
-            correction_msg.setID(id2)
-            correction_msg.setBody(msgtxt)
-            if xhtml:
-                correction_msg.setXHTML(xhtml)
+            obj.correction_msg.setID(id2)
+            obj.correction_msg.setBody(msgtxt)
+            if obj.xhtml:
+                obj.correction_msg.setXHTML(obj.xhtml)
 
-            if session:
-                session.last_send = time.time()
+            if obj.session:
+                obj.session.last_send = time.time()
 
                 # XEP-0200
-                if session.enable_encryption:
-                    correction_msg = session.encrypt_stanza(correction_msg)
+                if obj.session.enable_encryption:
+                    obj.correction_msg = obj.session.encrypt_stanza(obj.correction_msg)
 
             if callback:
-                callback(jid, msg, keyID, forward_from, session, original_message,
-                    subject, type_, correction_msg, xhtml)
+                callback(
+                    obj.jid, obj.message, obj.keyID, obj.forward_from,
+                    obj.session, obj.original_message, obj.subject, obj.type_,
+                    obj.correction_msg, obj.xhtml)
             return
 
-
-        if type_ == 'chat':
-            msg_iq = nbxmpp.Message(body=msgtxt, typ=type_,
-                    xhtml=xhtml)
+        if obj.type_ == 'chat':
+            msg_iq = nbxmpp.Message(body=msgtxt, typ=obj.type_,
+                    xhtml=obj.xhtml)
         else:
-            if subject:
+            if obj.subject:
                 msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
-                        subject=subject, xhtml=xhtml)
+                        subject=obj.subject, xhtml=obj.xhtml)
             else:
                 msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
-                        xhtml=xhtml)
+                        xhtml=obj.xhtml)
 
-        if msg_id:
-            msg_iq.setID(msg_id)
+        if obj.msg_id:
+            msg_iq.setID(obj.msg_id)
 
         if msgenc:
             msg_iq.setTag(nbxmpp.NS_ENCRYPTED + ' x').setData(msgenc)
 
-        if form_node:
-            msg_iq.addChild(node=form_node)
-        if label:
-            msg_iq.addChild(node=label)
+        if obj.form_node:
+            msg_iq.addChild(node=obj.form_node)
+        if obj.label:
+            msg_iq.addChild(node=obj.label)
 
         # XEP-0172: user_nickname
-        if user_nick:
-            msg_iq.setTag('nick', namespace = nbxmpp.NS_NICK).setData(
-                    user_nick)
+        if obj.user_nick:
+            msg_iq.setTag('nick', namespace=nbxmpp.NS_NICK).setData(
+                    obj.user_nick)
 
         # XEP-0203
-        if delayed:
+        if obj.delayed:
             our_jid = gajim.get_jid_from_account(self.name) + '/' + \
                     self.server_resource
-            timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(delayed))
+            timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(obj.delayed))
             msg_iq.addChild('delay', namespace=nbxmpp.NS_DELAY2,
                     attrs={'from': our_jid, 'stamp': timestamp})
 
         # XEP-0224
-        if attention:
+        if obj.attention:
             msg_iq.setTag('attention', namespace=nbxmpp.NS_ATTENTION)
 
-        if isinstance(jid, list):
+        if isinstance(obj.jid, list):
             if self.addressing_supported:
                 msg_iq.setTo(gajim.config.get_per('accounts', self.name, 'hostname'))
                 addresses = msg_iq.addChild('addresses',
                     namespace=nbxmpp.NS_ADDRESS)
-                for j in jid:
+                for j in obj.jid:
                     addresses.addChild('address', attrs = {'type': 'to',
                         'jid': j})
             else:
                 iqs = []
-                for j in jid:
+                for j in obj.jid:
                     iq = nbxmpp.Message(node=msg_iq)
                     iq.setTo(j)
                     iqs.append(iq)
                 msg_iq = iqs
         else:
             msg_iq.setTo(fjid)
-            r_ = resource
-            if not r_ and jid != fjid: # Only if we're not in a pm
+            r_ = obj.resource
+            if not r_ and obj.jid != fjid: # Only if we're not in a pm
                 r_ = gajim.get_resource_from_jid(fjid)
             if r_:
-                contact = gajim.contacts.get_contact(self.name, jid, r_)
+                contact = gajim.contacts.get_contact(self.name, obj.jid, r_)
             else:
                 contact = gajim.contacts.get_contact_with_highest_priority(
-                    self.name, jid)
+                    self.name, obj.jid)
 
             # chatstates - if peer supports xep85, send chatstates
             # please note that the only valid tag inside a message containing a
             # <body> tag is the active event
-            if chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
-                msg_iq.setTag(chatstate, namespace=nbxmpp.NS_CHATSTATES)
+            if obj.chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
+                msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
                 only_chatste = False
                 if not msgtxt:
                     only_chatste = True
-                if only_chatste and not session.enable_encryption:
+                if only_chatste and not obj.session.enable_encryption:
                     msg_iq.setTag('no-store',
                                   namespace=nbxmpp.NS_MSG_HINTS)
 
@@ -498,20 +464,20 @@ class CommonConnection:
             nbxmpp.NS_RECEIPTS):
                 msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
-            if forward_from:
+            if obj.forward_from:
                 addresses = msg_iq.addChild('addresses',
                     namespace=nbxmpp.NS_ADDRESS)
                 addresses.addChild('address', attrs = {'type': 'ofrom',
-                    'jid': forward_from})
+                    'jid': obj.forward_from})
 
-            if session:
+            if obj.session:
                 # XEP-0201
-                session.last_send = time.time()
-                msg_iq.setThread(session.thread_id)
+                obj.session.last_send = time.time()
+                msg_iq.setThread(obj.session.thread_id)
 
                 # XEP-0200
-                if session.enable_encryption:
-                    msg_iq = session.encrypt_stanza(msg_iq)
+                if obj.session.enable_encryption:
+                    msg_iq = obj.session.encrypt_stanza(msg_iq)
                     if self.carbons_enabled:
                         msg_iq.addChild(name='private',
                                         namespace=nbxmpp.NS_CARBONS)
@@ -524,8 +490,9 @@ class CommonConnection:
                                         namespace=nbxmpp.NS_MSG_HINTS)
 
         if callback:
-            callback(jid, msg, keyID, forward_from, session, original_message,
-                     subject, type_, msg_iq, xhtml)
+            callback(obj.jid, obj.message, obj.keyID, obj.forward_from,
+                     obj.session, obj.original_message, obj.subject, obj.type_,
+                     msg_iq, obj.xhtml)
 
     def log_message(self, jid, msg, forward_from, session, original_message,
     subject, type_, xhtml=None, additional_data=None):
@@ -2159,13 +2126,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     "session":session, "original_message":original_message, "subject":subject, "type_":type_,
                     "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
 
-        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
-            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
-            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
-            label=obj.label, session=obj.session, forward_from=obj.forward_from,
-            form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, attention=obj.attention,
-            correction_msg=obj.correction_msg, callback=cb)
+
+        self._prepare_message(obj, cb)
 
     def _nec_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
