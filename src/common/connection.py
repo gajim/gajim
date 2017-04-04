@@ -299,7 +299,7 @@ class CommonConnection:
             self._encrypt_message(obj, callback)
             return
 
-        self._on_continue_message(obj, callback)
+        self._build_message_stanza(obj, callback)
 
     def _encrypt_message(self, obj, callback):
         obj.xhtml = None
@@ -342,9 +342,9 @@ class CommonConnection:
                     None, conn=self, jid=obj.jid, message=obj.message,
                     error=error, time_=time.time(), session=obj.session))
             return
-        self._on_continue_message(obj, callback, msgenc)
+        self._build_message_stanza(obj, callback, msgenc)
 
-    def _on_continue_message(self, obj, callback, msgenc=None):
+    def _build_message_stanza(self, obj, callback, msgenc=None):
         if msgenc:
             msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
             lang = os.getenv('LANG')
