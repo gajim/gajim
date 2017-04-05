@@ -1462,12 +1462,15 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.oob_url = oob_node.getTagData('url')
             self.oob_desc = oob_node.getTagData('desc')
             if self.oob_url:
-                self.msgtxt += '\n'
-                if self.oob_desc:
-                    self.msgtxt += self.oob_desc
+                if self.msgtxt in [None, '', self.oob_url]:
+                    self.msgtxt = ''
                 else:
-                    self.msgtxt += _('URL:')
-                self.msgtxt += ' ' + self.oob_url
+                    self.msgtxt += '\n'
+                if self.oob_desc:
+                    self.msgtxt += self.oob_desc + ' '
+                elif self.msgtxt != '':
+                    self.msgtxt += _('URL:') + ' '
+                self.msgtxt += self.oob_url
 
         replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
         if replace:
