@@ -263,7 +263,7 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def _prepare_message(self, obj, callback):
+    def _prepare_message(self, obj):
 
         if not self.connection or self.connected < 2:
             return 1
@@ -296,12 +296,12 @@ class CommonConnection:
             return
 
         if obj.keyID and self.USE_GPG:
-            self._encrypt_message(obj, callback)
+            self._encrypt_message(obj)
             return
 
-        self._build_message_stanza(obj, callback)
+        self._build_message_stanza(obj)
 
-    def _encrypt_message(self, obj, callback):
+    def _encrypt_message(self, obj):
         obj.xhtml = None
         if obj.keyID == 'UNKNOWN':
             error = _('Neither the remote presence is signed, nor a key was '
@@ -321,30 +321,29 @@ class CommonConnection:
                                 self.gpg.encrypt, [obj.message, key_list, True],
                                 _on_encrypted, [])
                         else:
-                            self._finished_encrypt(
-                                obj, callback, msgenc=msgenc, error=error)
+                            self._finished_encrypt(obj, msgenc=msgenc,
+                                                   error=error)
                     gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
                         conn=self, keyID=error.split(' ')[-1],
                         callback=_on_always_trust))
                 else:
-                    self._finished_encrypt(
-                        obj, callback, msgenc=msgenc, error=error)
+                    self._finished_encrypt(obj, msgenc=msgenc, error=error)
             gajim.thread_interface(
                 self.gpg.encrypt, [obj.message, key_list, False],
                 _on_encrypted, [])
             return
-        self._finished_encrypt(obj, callback, error=error)
+        self._finished_encrypt(obj, error=error)
 
-    def _finished_encrypt(self, obj, callback, msgenc=None, error=None):
+    def _finished_encrypt(self, obj, msgenc=None, error=None):
         if error:
             gajim.nec.push_incoming_event(
                 MessageNotSentEvent(
                     None, conn=self, jid=obj.jid, message=obj.message,
                     error=error, time_=time.time(), session=obj.session))
             return
-        self._build_message_stanza(obj, callback, msgenc)
+        self._build_message_stanza(obj, msgenc)
 
-    def _build_message_stanza(self, obj, callback, msgenc=None):
+    def _build_message_stanza(self, obj, msgenc=None):
         if msgenc:
             msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
             lang = os.getenv('LANG')
@@ -383,11 +382,7 @@ class CommonConnection:
                 if obj.session.enable_encryption:
                     obj.correction_msg = obj.session.encrypt_stanza(obj.correction_msg)
 
-            if callback:
-                callback(
-                    obj.jid, obj.message, obj.keyID, obj.forward_from,
-                    obj.session, obj.original_message, obj.subject, obj.type_,
-                    obj.correction_msg, obj.xhtml)
+            self._push_stanza_message_outgoing(obj, obj.correction_msg)
             return
 
         if obj.type_ == 'chat':
@@ -498,10 +493,19 @@ class CommonConnection:
                         msg_iq.addChild(name='no-store',
                                         namespace=nbxmpp.NS_MSG_HINTS)
 
-        if callback:
-            callback(obj.jid, obj.message, obj.keyID, obj.forward_from,
-                     obj.session, obj.original_message, obj.subject, obj.type_,
-                     msg_iq, obj.xhtml)
+        self._push_stanza_message_outgoing(obj, msg_iq)
+
+    def _push_stanza_message_outgoing(self, obj, msg_iq):    
+        obj.conn = self
+        if isinstance(msg_iq, list):
+            for iq in msg_iq:
+                obj.msg_iq = iq
+                gajim.nec.push_incoming_event(
+                    StanzaMessageOutgoingEvent(None, **vars(obj)))
+        else:
+            obj.msg_iq = msg_iq
+            gajim.nec.push_incoming_event(
+                StanzaMessageOutgoingEvent(None, **vars(obj)))
 
     def log_message(self, jid, msg, forward_from, session, original_message,
     subject, type_, xhtml=None, additional_data=None):
@@ -2118,53 +2122,35 @@ class Connection(CommonConnection, ConnectionHandlers):
         if obj.account != self.name:
             return
 
-        # parameters of this function are packet into _cb_parameters for later usage in _nec_stanza_message_outgoing's cb()
-        def cb(jid, msg, keyID, forward_from, session, original_message,
-        subject, type_, msg_iq, xhtml):
-            if isinstance(msg_iq, list):
-                for iq in msg_iq:
-                    gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(
-                        None, conn=self, msg_iq=iq, now=obj.now, automatic_message=obj.automatic_message, additional_data=obj.additional_data,
-                        _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
-                        "session":session, "original_message":original_message, "subject":subject, "type_":type_,
-                        "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
-            else:
-                gajim.nec.push_incoming_event(StanzaMessageOutgoingEvent(None,
-                    conn=self, msg_iq=msg_iq, now=obj.now, automatic_message=obj.automatic_message, additional_data=obj.additional_data,
-                    _cb_parameters={"jid":jid, "msg":msg, "keyID":keyID, "forward_from":forward_from,
-                    "session":session, "original_message":original_message, "subject":subject, "type_":type_,
-                    "msg_iq":msg_iq, "xhtml":xhtml, "obj":obj}))
-
-
-        self._prepare_message(obj, cb)
+        self._prepare_message(obj)
 
     def _nec_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
         obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
 
-        # obj in this function is the obj as seen in _nec_message_outgoing()
-        def cb(obj, jid, msg, keyID, forward_from, session, original_message,
-        subject, type_, msg_iq, xhtml, msg_id):
-            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=jid, message=msg, keyID=keyID, chatstate=obj.chatstate,
-                automatic_message=obj.automatic_message, msg_id=msg_id, additional_data=obj.additional_data))
-            if obj.callback:
-                obj.callback(obj, msg_iq, *obj.callback_args)
+        gajim.nec.push_incoming_event(MessageSentEvent(
+            None, conn=self, jid=obj.jid, message=obj.message, keyID=obj.keyID,
+            chatstate=obj.chatstate, automatic_message=obj.automatic_message,
+            msg_id=obj.msg_id, additional_data=obj.additional_data))
+        if obj.callback:
+            obj.callback(obj, obj.msg_iq, *obj.callback_args)
 
-            if not obj.is_loggable:
-                return
-            if isinstance(jid, list):
-                for j in jid:
-                    if session is None:
-                        session = self.get_or_create_session(j, '')
-                    self.log_message(j, msg, forward_from, session,
-                        original_message, subject, type_, xhtml, obj.additional_data)
-            else:
-                self.log_message(jid, msg, forward_from, session,
-                    original_message, subject, type_, xhtml, obj.additional_data)
-
-        cb(msg_id=obj.msg_id, **obj._cb_parameters)
+        if not obj.is_loggable:
+            return
+        if isinstance(obj.jid, list):
+            for j in obj.jid:
+                if obj.session is None:
+                    obj.session = self.get_or_create_session(j, '')
+                self.log_message(
+                    j, obj.message, obj.forward_from, obj.session,
+                    obj.original_message, obj.subject, obj.type_, obj.xhtml,
+                    obj.additional_data)
+        else:
+            self.log_message(
+                obj.jid, obj.message, obj.forward_from, obj.session,
+                obj.original_message, obj.subject, obj.type_, obj.xhtml,
+                obj.additional_data)
 
     def send_contacts(self, contacts, fjid, type_='message'):
         """
