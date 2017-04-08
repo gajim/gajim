@@ -64,8 +64,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         CommonConnection.__init__(self, name)
         self.is_zeroconf = True
 
-        gajim.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
-            self._nec_message_outgoing)
+        gajim.ged.register_event_handler('stanza-message-outgoing', ged.OUT_CORE,
+            self._nec_stanza_message_outgoing)
 
     def get_config_values_or_default(self):
         """
@@ -332,47 +332,37 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
-    def _nec_message_outgoing(self, obj):
-        if obj.account != self.name:
-            return
+    def _nec_stanza_message_outgoing(self, obj):
 
-        def cb(jid, msg, keyID, forward_from, session, original_message, subject,
-        type_, msg_iq, xhtml):
-            def on_send_ok(msg_id):
-                gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                    jid=obj.jid, message=obj.message, keyID=obj.keyID,
-                    automatic_message=obj.automatic_message, chatstate=None,
-                    msg_id=msg_id))
-                if obj.callback:
-                    obj.callback(msg_iq, *obj.callback_args)
+        def on_send_ok(msg_id):
+            gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
+                jid=obj.jid, message=obj.message, keyID=obj.keyID,
+                automatic_message=obj.automatic_message, chatstate=None,
+                msg_id=msg_id))
+            if obj.callback:
+                obj.callback(obj.msg_iq, *obj.callback_args)
 
-                if not obj.is_loggable:
-                    return
-                self.log_message(obj.jid, obj.message, obj.forward_from,
-                    obj.session, obj.original_message, obj.subject, obj.type_)
+            if not obj.is_loggable:
+                return
+            self.log_message(obj.jid, obj.message, obj.forward_from,
+                obj.session, obj.original_message, obj.subject, obj.type_)
 
-            def on_send_not_ok(reason):
-                reason += ' ' + _('Your message could not be sent.')
-                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                    fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
-                    time_=None, session=obj.session))
+        def on_send_not_ok(reason):
+            reason += ' ' + _('Your message could not be sent.')
+            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
+                time_=None, session=obj.session))
 
-            ret = self.connection.send(msg_iq, msg is not None, on_ok=on_send_ok,
-                    on_not_ok=on_send_not_ok)
+        ret = self.connection.send(
+            obj.msg_iq, obj.message is not None,
+            on_ok=on_send_ok, on_not_ok=on_send_not_ok)
 
-            if ret == -1:
-                # Contact Offline
-                gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                    fjid=jid, error_code=-1, error_msg=_(
-                    'Contact is offline. Your message could not be sent.'),
-                    msg=None, time_=None, session=session))
-
-        self._prepare_message(obj.jid, obj.message, obj.keyID, type_=obj.type_,
-            subject=obj.subject, chatstate=obj.chatstate, msg_id=obj.msg_id,
-            resource=obj.resource, user_nick=obj.user_nick, xhtml=obj.xhtml,
-            label=obj.label, session=obj.session, forward_from=obj.forward_from,
-            form_node=obj.form_node, original_message=obj.original_message,
-            delayed=obj.delayed, attention=obj.attention, callback=cb)
+        if ret == -1:
+            # Contact Offline
+            gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
+                fjid=obj.jid, error_code=-1, error_msg=_(
+                'Contact is offline. Your message could not be sent.'),
+                msg=None, time_=None, session=obj.session))
 
     def send_stanza(self, stanza):
         # send a stanza untouched
