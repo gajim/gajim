@@ -121,6 +121,9 @@ class Logger:
         gajim.ged.register_event_handler('gc-message-received',
             ged.POSTCORE, self._nec_gc_message_received)
 
+    def dispatch(self, event, error):
+        gajim.ged.raise_event(event, None, str(error))
+
     def close_db(self):
         if self.con:
             self.con.close()
@@ -191,7 +194,7 @@ class Logger:
             # list of tuples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed
+            raise exceptions.DatabaseMalformed(LOG_DB_PATH)
         self.jids_already_in = []
         for row in rows:
             # row[0] is first item of row (the only result here, the jid)
@@ -416,7 +419,7 @@ class Logger:
         except sqlite.OperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
         except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed
+            raise exceptions.DatabaseMalformed(LOG_DB_PATH)
         message_id = None
         if write_unread:
             try:
@@ -531,58 +534,53 @@ class Logger:
                 show)
 
         write_unread = False
-
-        # now we may have need to do extra care for some values in columns
-        if kind == 'status': # we store (not None) time, jid, show, msg
-            # status for roster items
-            try:
+        try:
+            # now we may have need to do extra care for some values in columns
+            if kind == 'status': # we store (not None) time, jid, show, msg
+                # status for roster items
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError as e:
-                raise exceptions.PysqliteOperationalError(str(e))
-            if show is None: # show is None (xmpp), but we say that 'online'
-                show_col = ShowConstant.ONLINE
+                if show is None: # show is None (xmpp), but we say that 'online'
+                    show_col = ShowConstant.ONLINE
 
-        elif kind == 'gcstatus':
-            # status in ROOM (for pm status see status)
-            if show is None: # show is None (xmpp), but we say that 'online'
-                show_col = ShowConstant.ONLINE
-            jid, nick = jid.split('/', 1)
-            try:
-                # re-get jid_id for the new jid
-                jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError as e:
-                raise exceptions.PysqliteOperationalError(str(e))
-            contact_name_col = nick
-
-        elif kind == 'gc_msg':
-            if jid.find('/') != -1: # if it has a /
+            elif kind == 'gcstatus':
+                # status in ROOM (for pm status see status)
+                if show is None: # show is None (xmpp), but we say that 'online'
+                    show_col = ShowConstant.ONLINE
                 jid, nick = jid.split('/', 1)
-            else:
-                # it's server message f.e. error message
-                # when user tries to ban someone but he's not allowed to
-                nick = None
-            try:
+
                 # re-get jid_id for the new jid
                 jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError as e:
-                raise exceptions.PysqliteOperationalError(str(e))
-            contact_name_col = nick
-        else:
-            try:
+                contact_name_col = nick
+
+            elif kind == 'gc_msg':
+                if jid.find('/') != -1: # if it has a /
+                    jid, nick = jid.split('/', 1)
+                else:
+                    # it's server message f.e. error message
+                    # when user tries to ban someone but he's not allowed to
+                    nick = None
+
+                # re-get jid_id for the new jid
+                jid_id = self.get_jid_id(jid, 'ROOM')
+
+                contact_name_col = nick
+            else:
                 jid_id = self.get_jid_id(jid)
-            except exceptions.PysqliteOperationalError as e:
-                raise exceptions.PysqliteOperationalError(str(e))
-            if kind == 'chat_msg_recv':
-                if not self.jid_is_from_pm(jid) and not mam_query:
-                    # Save in unread table only if it's not a pm
-                    write_unread = True
+                if kind == 'chat_msg_recv':
+                    if not self.jid_is_from_pm(jid) and not mam_query:
+                        # Save in unread table only if it's not a pm
+                        write_unread = True
 
-        if show_col == 'UNKNOWN': # unknown show, do not log
-            return
+            if show_col == 'UNKNOWN': # unknown show, do not log
+                return
 
-        values = (jid_id, contact_name_col, time_col, kind_col, show_col,
-                message_col, subject_col, additional_data_col)
-        return self.commit_to_db(values, write_unread)
+            values = (jid_id, contact_name_col, time_col, kind_col, show_col,
+                    message_col, subject_col, additional_data_col)
+            return self.commit_to_db(values, write_unread)
+
+        except (exceptions.DatabaseMalformed,
+                exceptions.PysqliteOperationalError) as error:
+            self.dispatch('DB_ERROR', error)
 
     def get_last_conversation_lines(self, jid, restore_how_many_rows,
                     pending_how_many, timeout, account):
@@ -621,7 +619,9 @@ class Logger:
                 parsed_entry = entry[:4] + (additional_data, ) + entry[5:]
                 messages.append(parsed_entry)
         except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed
+            self.dispatch('DB_ERROR',
+                          exceptions.DatabaseMalformed(LOG_DB_PATH))
+            return []
 
         messages.reverse()
         return messages
@@ -1186,19 +1186,8 @@ class Logger:
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
-            try:
-                self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp, additional_data=obj.additional_data)
-                # store in memory time of last message logged.
-                # this will also be saved in rooms_last_message_time table
-                # when we quit this muc
-                obj.conn.last_history_time[obj.jid] = tim_f
-
-            except exceptions.PysqliteOperationalError as e:
-                obj.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    LOG_DB_PATH
-                obj.conn.dispatch('DB_ERROR', (pritext, sectext))
+            self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp, additional_data=obj.additional_data)
+            # store in memory time of last message logged.
+            # this will also be saved in rooms_last_message_time table
+            # when we quit this muc
+            obj.conn.last_history_time[obj.jid] = tim_f

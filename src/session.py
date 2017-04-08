@@ -95,26 +95,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         log_type += end
 
         if self.is_loggable() and obj.msgtxt:
-            try:
-                if obj.xhtml and gajim.config.get('log_xhtml_messages'):
-                    msg_to_log = obj.xhtml
-                else:
-                    msg_to_log = obj.msgtxt
-                obj.msg_log_id = gajim.logger.write(log_type, obj.fjid,
-                    msg_to_log, tim=obj.timestamp, subject=obj.subject, additional_data=obj.additional_data)
-            except exceptions.PysqliteOperationalError as e:
-                gajim.nec.push_incoming_event(InformationEvent(None,
-                    conn=self.conn, level='error', pri_txt=_('Disk Write Error'),
-                    sec_txt=str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    gajim.logger.LOG_DB_PATH
-                gajim.nec.push_incoming_event(InformationEvent(None,
-                    conn=self.conn, level='error', pri_txt=pritext,
-                    sec_txt=sectext))
+            if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+                msg_to_log = obj.xhtml
+            else:
+                msg_to_log = obj.msgtxt
+            obj.msg_log_id = gajim.logger.write(log_type, obj.fjid,
+                msg_to_log, tim=obj.timestamp, subject=obj.subject, additional_data=obj.additional_data)
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:

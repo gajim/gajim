@@ -109,11 +109,11 @@ class Interface:
 ### Methods handling events from connection
 ################################################################################
 
-    def handle_event_db_error(self, unused, data):
-        #('DB_ERROR', account, (title_text, section_text))
+    def handle_event_db_error(self, unused, error):
+        #('DB_ERROR', account, error)
         if self.db_error_dialog:
             return
-        self.db_error_dialog = dialogs.ErrorDialog(data[0], data[1])
+        self.db_error_dialog = dialogs.ErrorDialog(_('Database Error'), error)
         def destroyed(win):
             self.db_error_dialog = None
         self.db_error_dialog.connect('destroy', destroyed)

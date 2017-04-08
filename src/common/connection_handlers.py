@@ -1069,17 +1069,7 @@ class ConnectionHandlersBase:
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):
-            try:
-                gajim.logger.write('status', obj.jid, obj.status, obj.show)
-            except exceptions.PysqliteOperationalError as e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
-            our_jid = gajim.get_jid_from_account(self.name)
+            gajim.logger.write('status', obj.jid, obj.status, obj.show)
 
     def _nec_gc_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -1244,18 +1234,8 @@ class ConnectionHandlersBase:
         subject = msg.getSubject()
 
         if session.is_loggable():
-            try:
-                gajim.logger.write('error', frm, error_msg, tim=tim,
-                    subject=subject)
-            except exceptions.PysqliteOperationalError as e:
-                self.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. Try to '
-                    'repair it (see http://trac.gajim.org/wiki/DatabaseBackup) '
-                    'or remove it (all history will be lost).') % \
-                    common.logger.LOG_DB_PATH
-                self.dispatch('DB_ERROR', (pritext, sectext))
+            gajim.logger.write('error', frm, error_msg, tim=tim,
+                subject=subject)
         gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
             fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
             msg=msgtxt, time_=tim, session=session, stanza=msg))

@@ -38,11 +38,15 @@ class DatabaseMalformed(Exception):
     The databas can't be read
     """
 
-    def __init__(self):
+    def __init__(self, path=''):
         Exception.__init__(self)
+        self.path = path
 
     def __str__(self):
-        return _('Database cannot be read.')
+        return _('The database file (%s) cannot be read. '
+                 'Try to repair it (see '
+                 'https://dev.gajim.org/gajim/gajim/wikis/help/DatabaseBackup)'
+                 ' or remove it (all history will be lost).') % self.path
 
 class ServiceNotAvailable(Exception):
     """

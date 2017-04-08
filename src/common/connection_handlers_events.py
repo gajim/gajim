@@ -946,18 +946,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if jid:
                 # we know real jid, save it in db
                 st += ' (%s)' % jid
-            try:
-                gajim.logger.write('gcstatus', self.fjid, st, self.show)
-            except exceptions.PysqliteOperationalError as e:
-                self.conn.dispatch('DB_ERROR', (_('Disk Write Error'), str(e)))
-            except exceptions.DatabaseMalformed:
-                pritext = _('Database Error')
-                sectext = _('The database file (%s) cannot be read. '
-                            'Try to repair it (see '
-                            'http://trac.gajim.org/wiki/DatabaseBackup) or '
-                            'remove it (all history will be lost).') % \
-                            LOG_DB_PATH
-                self.conn.dispatch('DB_ERROR', (pritext, sectext))
+            gajim.logger.write('gcstatus', self.fjid, st, self.show)
         if self.avatar_sha == '':
             # contact has no avatar
             puny_nick = helpers.sanitize_filename(self.nick)

@@ -529,20 +529,10 @@ class CommonConnection:
             kind = 'chat_msg_sent'
         else:
             kind = 'single_msg_sent'
-        try:
-            gajim.logger.write(
-                kind, obj.jid, message, subject=obj.subject,
-                additional_data=obj.additional_data)
-        except exceptions.PysqliteOperationalError as error:
-            self.dispatch('DB_ERROR', (_('Disk Write Error'), str(error)))
-        except exceptions.DatabaseMalformed:
-            pritext = _('Database Error')
-            sectext = _('The database file (%s) cannot be read. Try'
-                ' to repair it (see '
-                'https://dev.gajim.org/gajim/gajim/wikis/help/DatabaseBackup)'
-                ' or remove it (all history will be lost).') % \
-                common.logger.LOG_DB_PATH
-            self.dispatch('DB_ERROR', (pritext, sectext))
+
+        gajim.logger.write(
+            kind, obj.jid, message, subject=obj.subject,
+            additional_data=obj.additional_data)
 
     def ack_subscribed(self, jid):
         """

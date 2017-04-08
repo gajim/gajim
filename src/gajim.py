@@ -142,17 +142,14 @@ class GajimApplication(Gtk.Application):
             gajim.logger = logger.Logger()
             caps_cache.initialize(gajim.logger)
             check_paths.check_and_possibly_create_paths()
-        except exceptions.DatabaseMalformed:
+        except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
                 None,
                 Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
                 Gtk.MessageType.ERROR,
                 Gtk.ButtonsType.OK,
                 _('Database Error'))
-            dlg.format_secondary_text(
-                _('The database file (%s) cannot be read. Try to repair it '
-                  '(see http://trac.gajim.org/wiki/DatabaseBackup) or remove it '
-                  '(all history will be lost).') % gajim.gajimpaths['LOG_DB'])
+            dlg.format_secondary_text(str(error))
             dlg.run()
             dlg.destroy()
             sys.exit()

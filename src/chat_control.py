@@ -1623,14 +1623,9 @@ class ChatControl(ChatControlBase):
             pending_how_many += len(gajim.events.get_events(self.account,
                     self.contact.get_full_jid(), ['chat', 'pm']))
 
-        try:
-            rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
-                    pending_how_many, timeout, self.account)
-        except exceptions.DatabaseMalformed:
-            dialogs.ErrorDialog(_('Database Error'),
-                _('The database file (%s) cannot be read. Try to repair it or '
-                'remove it (all history will be lost).') % logger.LOG_DB_PATH)
-            rows = []
+        rows = gajim.logger.get_last_conversation_lines(jid, restore_how_many,
+                pending_how_many, timeout, self.account)
+
         local_old_kind = None
         self.conv_textview.just_cleared = True
         for row in rows: # row[0] time, row[1] has kind, row[2] the message, row[3] subject, row[4] additional_data
