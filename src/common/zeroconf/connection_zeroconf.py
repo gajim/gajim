@@ -342,10 +342,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             if obj.callback:
                 obj.callback(obj.msg_iq, *obj.callback_args)
 
-            if not obj.is_loggable:
-                return
-            self.log_message(obj.jid, obj.message, obj.forward_from,
-                obj.session, obj.original_message, obj.subject, obj.type_)
+            self.log_message(obj)
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')

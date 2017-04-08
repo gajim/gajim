@@ -507,37 +507,42 @@ class CommonConnection:
             gajim.nec.push_incoming_event(
                 StanzaMessageOutgoingEvent(None, **vars(obj)))
 
-    def log_message(self, jid, msg, forward_from, session, original_message,
-    subject, type_, xhtml=None, additional_data=None):
-        if additional_data is None:
-            additional_data = {}
-        if not forward_from and session and session.is_loggable():
-            ji = gajim.get_jid_without_resource(jid)
-            if gajim.config.should_log(self.name, ji):
-                log_msg = msg
-                if original_message is not None:
-                    log_msg = original_message
-                if log_msg:
-                    if type_ == 'chat':
-                        kind = 'chat_msg_sent'
-                    else:
-                        kind = 'single_msg_sent'
-                    try:
-                        if xhtml and gajim.config.get('log_xhtml_messages'):
-                            log_msg = '<body xmlns="%s">%s</body>' % (
-                                nbxmpp.NS_XHTML, xhtml)
-                        gajim.logger.write(kind, jid, log_msg, subject=subject, additional_data=additional_data)
-                    except exceptions.PysqliteOperationalError as e:
-                        self.dispatch('DB_ERROR', (_('Disk Write Error'),
-                            str(e)))
-                    except exceptions.DatabaseMalformed:
-                        pritext = _('Database Error')
-                        sectext = _('The database file (%s) cannot be read. Try'
-                            ' to repair it (see '
-                            'http://trac.gajim.org/wiki/DatabaseBackup)'
-                            ' or remove it (all history will be lost).') % \
-                            common.logger.LOG_DB_PATH
-                        self.dispatch('DB_ERROR', (pritext, sectext))
+    def log_message(self, obj):
+        if not obj.is_loggable:
+            return
+
+        if obj.forward_from or not obj.session or not obj.session.is_loggable():
+            return
+
+        if not gajim.config.should_log(self.name, obj.jid):
+            return
+
+        if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+            message = '<body xmlns="%s">%s</body>' % (nbxmpp.NS_XHTML,
+                                                      obj.xhtml)
+        else:
+            message = obj.original_message or obj.message
+        if not message:
+            return
+
+        if obj.type_ == 'chat':
+            kind = 'chat_msg_sent'
+        else:
+            kind = 'single_msg_sent'
+        try:
+            gajim.logger.write(
+                kind, obj.jid, message, subject=obj.subject,
+                additional_data=obj.additional_data)
+        except exceptions.PysqliteOperationalError as error:
+            self.dispatch('DB_ERROR', (_('Disk Write Error'), str(error)))
+        except exceptions.DatabaseMalformed:
+            pritext = _('Database Error')
+            sectext = _('The database file (%s) cannot be read. Try'
+                ' to repair it (see '
+                'https://dev.gajim.org/gajim/gajim/wikis/help/DatabaseBackup)'
+                ' or remove it (all history will be lost).') % \
+                common.logger.LOG_DB_PATH
+            self.dispatch('DB_ERROR', (pritext, sectext))
 
     def ack_subscribed(self, jid):
         """
@@ -2136,21 +2141,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         if obj.callback:
             obj.callback(obj, obj.msg_iq, *obj.callback_args)
 
-        if not obj.is_loggable:
-            return
         if isinstance(obj.jid, list):
             for j in obj.jid:
                 if obj.session is None:
                     obj.session = self.get_or_create_session(j, '')
-                self.log_message(
-                    j, obj.message, obj.forward_from, obj.session,
-                    obj.original_message, obj.subject, obj.type_, obj.xhtml,
-                    obj.additional_data)
+                self.log_message(obj)
         else:
-            self.log_message(
-                obj.jid, obj.message, obj.forward_from, obj.session,
-                obj.original_message, obj.subject, obj.type_, obj.xhtml,
-                obj.additional_data)
+            self.log_message(obj)
 
     def send_contacts(self, contacts, fjid, type_='message'):
         """
