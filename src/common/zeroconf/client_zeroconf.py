@@ -756,7 +756,7 @@ class ClientZeroconf:
         if to is None:
             # Can’t send undirected stanza over Zeroconf.
             return -1
-        to = gajim.get_jid_without_resource(to)
+        to = to.getStripped()
         stanza.setFrom(self.roster.zeroconf.name)
 
         try:
