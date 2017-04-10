@@ -53,7 +53,7 @@ from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from common.contacts import GC_Contact
 from common.logger import constants
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
-from nbxmpp.protocol import NS_RECEIPTS, NS_ESESSION
+from nbxmpp.protocol import NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
 from nbxmpp.protocol import NS_CHATSTATES
@@ -2382,8 +2382,7 @@ class ChatControl(ChatControlBase):
             id_ = msg_stanza.getID()
             xep0184_id = None
             if self.contact.jid != gajim.get_jid_from_account(self.account):
-                if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
-                'accounts', self.account, 'request_receipt'):
+                if gajim.config.get_per('accounts', self.account, 'request_receipt'):
                     xep0184_id = id_
             if label:
                 displaymarking = label.getTag('displaymarking')

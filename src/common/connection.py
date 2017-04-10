@@ -506,8 +506,7 @@ class CommonConnection:
             # XEP-0184
             if jid != gajim.get_jid_from_account(self.name):
                 if msgtxt and gajim.config.get_per('accounts', self.name,
-                'request_receipt') and contact and contact.supports(
-                nbxmpp.NS_RECEIPTS):
+                'request_receipt'):
                     msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
             if forward_from:
