@@ -801,7 +801,7 @@ class ClientZeroconf:
         """
         Generate a random id
         """
-        return ''.join(Random().sample(string.letters + string.digits, 6))
+        return ''.join(Random().sample(string.ascii_letters + string.digits, 6))
 
     def RegisterDisconnectHandler(self, handler):
         """
