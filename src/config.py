@@ -115,6 +115,19 @@ class PreferencesWindow:
                 'auto_xa_time_spinbutton')
         self.auto_xa_message_entry = self.xml.get_object('auto_xa_message_entry')
 
+        ### Default Window Size ###
+        tallest = 0
+        for n in range(0, self.notebook.get_n_pages()):
+            page = self.notebook.get_nth_page(n)
+            content = page.get_children()[0].get_children()[0]
+            width, height = content.size_request()
+            if height > tallest:
+                tallest = height
+
+        wwidth, wheight = self.window.get_size()
+        tallest += wheight
+        self.window.set_default_size(-1, min(gtk.gdk.screen_height(), tallest))
+
         ### General tab ###
         # Display avatars in roster
         st = gajim.config.get('show_avatars_in_roster')
