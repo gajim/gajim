@@ -210,7 +210,6 @@ class ConversationTextview(gobject.GObject):
         self.images = []
         self.image_cache = {}
         self.xep0184_marks = {}
-        self.xep0184_shown = {}
         self.last_sent_message_marks = [None, None]
         # A pair per occupant. Key is '' in normal chat
         self.last_received_message_marks = {}
@@ -318,9 +317,6 @@ class ConversationTextview(gobject.GObject):
         buffer_.create_tag('focus-out-line', justification = gtk.JUSTIFY_CENTER)
         self.displaymarking_tags = {}
 
-        tag = buffer_.create_tag('xep0184-warning')
-        tag.set_property('foreground', '#cc0000')
-
         tag = buffer_.create_tag('xep0184-received')
         tag.set_property('foreground', '#73d216')
 
@@ -332,8 +328,6 @@ class ConversationTextview(gobject.GObject):
         self.allow_focus_out_line = True
         # holds a mark at the end of --- line
         self.focus_out_end_mark = None
-
-        self.xep0184_warning_tooltip = tooltips.BaseTooltip()
 
         self.line_tooltip = tooltips.BaseTooltip()
         self.smooth_id = None
@@ -507,59 +501,32 @@ class ConversationTextview(gobject.GObject):
         self.last_received_message_marks[name][1] = buffer_.create_mark(None, i2,
             left_gravity=True)
 
-    def show_xep0184_warning(self, id_):
+    def add_xep0184_mark(self, id_):
         if id_ in self.xep0184_marks:
             return
 
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        self.xep0184_marks[id_] = buffer_.create_mark(None,
-                buffer_.get_end_iter(), left_gravity=True)
-        self.xep0184_shown[id_] = NOT_SHOWN
-
-        def show_it():
-            if (not id_ in self.xep0184_shown) or \
-            self.xep0184_shown[id_] == ALREADY_RECEIVED:
-                return False
-
-            end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert_with_tags_by_name(end_iter, ' ✖', 'xep0184-warning')
-
-            self.xep0184_shown[id_] = SHOWN
-            return False
-        gobject.timeout_add_seconds(3, show_it)
+        self.xep0184_marks[id_] = buffer_.create_mark(
+            None, buffer_.get_end_iter(), left_gravity=True)
 
         buffer_.end_user_action()
 
-    def hide_xep0184_warning(self, id_):
+    def show_xep0184_ack(self, id_):
         if id_ not in self.xep0184_marks:
             return
 
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        if self.xep0184_shown[id_] != NOT_SHOWN:
-            begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-
-            end_iter = begin_iter.copy()
-            # XXX: Is there a nicer way?
-            end_iter.forward_char()
-            end_iter.forward_char()
-
-            buffer_.delete(begin_iter, end_iter)
-
         if gajim.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
                 'xep0184-received')
 
-        self.xep0184_shown[id_] = ALREADY_RECEIVED
-
         buffer_.end_user_action()
-
         del self.xep0184_marks[id_]
-        del self.xep0184_shown[id_]
 
     def show_focus_out_line(self, scroll=True):
         if not self.allow_focus_out_line:
@@ -623,26 +590,6 @@ class ConversationTextview(gobject.GObject):
                 # appeared)
                 gobject.idle_add(self.scroll_to_end)
 
-    def show_xep0184_warning_tooltip(self):
-        self.xep0184_warning_tooltip.timeout = 0
-        pointer = self.tv.get_pointer()
-        x, y = self.tv.window_to_buffer_coords(gtk.TEXT_WINDOW_TEXT,
-                pointer[0], pointer[1])
-        tags = self.tv.get_iter_at_location(x, y).get_tags()
-        tag_table = self.tv.get_buffer().get_tag_table()
-        xep0184_warning = False
-        for tag in tags:
-            if tag == tag_table.lookup('xep0184-warning'):
-                xep0184_warning = True
-                break
-        if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            # check if the current pointer is still over the line
-            position = self.tv.window.get_origin()
-            self.xep0184_warning_tooltip.show_tooltip(_('This icon indicates '
-                'that this message has not yet\nbeen received by the remote '
-                "end. If this icon stays\nfor a long time, it's likely the "
-                'message got lost.'), 8, position[1] + pointer[1])
-
     def show_line_tooltip(self):
         self.line_tooltip.timeout = 0
         pointer = self.tv.get_pointer()
@@ -702,7 +649,6 @@ class ConversationTextview(gobject.GObject):
             self.change_cursor = False
         tag_table = self.tv.get_buffer().get_tag_table()
         over_line = False
-        xep0184_warning = False
         for tag in tags:
             if tag in (tag_table.lookup('url'), tag_table.lookup('mail'), \
             tag_table.lookup('xmpp'), tag_table.lookup('sth_at_sth')):
@@ -711,27 +657,15 @@ class ConversationTextview(gobject.GObject):
                 self.change_cursor = True
             elif tag == tag_table.lookup('focus-out-line'):
                 over_line = True
-            elif tag == tag_table.lookup('xep0184-warning'):
-                xep0184_warning = True
 
         if self.line_tooltip.timeout != 0 or self.line_tooltip.shown:
             # Check if we should hide the line tooltip
             if not over_line:
                 self.line_tooltip.hide_tooltip()
-        if self.xep0184_warning_tooltip.timeout != 0 or \
-        self.xep0184_warning_tooltip.shown:
-            # Check if we should hide the XEP-184 warning tooltip
-            if not xep0184_warning:
-                self.xep0184_warning_tooltip.hide_tooltip()
+
         if over_line and not self.line_tooltip.win:
             self.line_tooltip.timeout = gobject.timeout_add(500,
                     self.show_line_tooltip)
-            self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
-                    gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
-            self.change_cursor = True
-        if xep0184_warning and not self.xep0184_warning_tooltip.win:
-            self.xep0184_warning_tooltip.timeout = gobject.timeout_add(500,
-                    self.show_xep0184_warning_tooltip)
             self.tv.get_window(gtk.TEXT_WINDOW_TEXT).set_cursor(
                     gtk.gdk.Cursor(gtk.gdk.LEFT_PTR))
             self.change_cursor = True
