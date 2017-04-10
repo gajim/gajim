@@ -2759,7 +2759,8 @@ class RosterWindow:
                 typ = 'error'
             if obj.forwarded and obj.sent:
                 typ = 'out'
-                xep0184_id = obj.id_
+                if obj.jid != gajim.get_jid_from_account(obj.conn.name):
+                    xep0184_id = obj.id_
 
             obj.session.control.print_conversation(obj.msgtxt, typ,
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
@@ -4167,7 +4168,7 @@ class RosterWindow:
             contact = gajim.contacts.get_contact_with_highest_priority(account,
                     jid)
         if jid == gajim.get_jid_from_account(account):
-            resource = contact.resource
+            resource = None
 
         gajim.interface.on_open_chat_window(None, contact, account, \
             resource=resource, session=session)

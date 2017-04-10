@@ -234,7 +234,8 @@ class MessageControl(object):
         conn = gajim.connections[self.account]
 
         if not self.session:
-            if not obj.resource:
+            if (not obj.resource and
+                    obj.jid != gajim.get_jid_from_account(self.account)):
                 if self.resource:
                     obj.resource = self.resource
                 else:

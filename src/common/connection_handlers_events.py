@@ -1129,6 +1129,15 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         account = self.conn.name
 
+        our_full_jid = gajim.get_jid_from_account(account, full=True)
+        if self.stanza.getFrom() == our_full_jid:
+            # Drop messages sent from our own full jid
+            # It can happen that when we sent message to our own bare jid
+            # that the server routes that message back to us
+            log.info('Received message from self: %s, message is dropped'
+                     % self.stanza.getFrom())
+            return
+
         # check if the message is a roster item exchange (XEP-0144)
         if self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX):
             gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
@@ -1184,6 +1193,17 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         to = gajim.get_jid_from_account(account)
                     self.stanza.setFrom(to)
                     self.sent = True
+                elif carbon_marker.getName() == 'received':
+                    full_frm = str(self.stanza.getFrom())
+                    frm = gajim.get_jid_without_resource(full_frm)
+                    if frm == gajim.get_jid_from_account(account):
+                        # Drop 'received' Carbons from ourself, we already
+                        # got the message with the 'sent' Carbon or via the
+                        # message itself
+                        log.info(
+                            'Drop "received"-Carbon from ourself: %s'
+                            % full_frm)
+                        return
                 try:
                     self.get_jid_resource()
                 except helpers.InvalidFormat:

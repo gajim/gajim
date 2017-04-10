@@ -298,6 +298,8 @@ class CommonConnection:
                         'to %s, this JID is not valid.') % j))
                     return
             fjid = new_list
+        elif jid == gajim.get_jid_from_account(self.name):
+            fjid = jid
         else:
             try:
                 jid = self.check_jid(jid)
@@ -502,10 +504,11 @@ class CommonConnection:
                 msg_iq.setTag(chatstate, namespace=nbxmpp.NS_CHATSTATES)
 
             # XEP-0184
-            if msgtxt and gajim.config.get_per('accounts', self.name,
-            'request_receipt') and contact and contact.supports(
-            nbxmpp.NS_RECEIPTS):
-                msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
+            if jid != gajim.get_jid_from_account(self.name):
+                if msgtxt and gajim.config.get_per('accounts', self.name,
+                'request_receipt') and contact and contact.supports(
+                nbxmpp.NS_RECEIPTS):
+                    msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
             if forward_from:
                 addresses = msg_iq.addChild('addresses',

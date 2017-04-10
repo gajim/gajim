@@ -2362,7 +2362,10 @@ class ChatControl(ChatControlBase):
             if not keyID:
                 keyID = 'UNKNOWN'
 
-        chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
+        if self.contact.jid == gajim.get_jid_from_account(self.account):
+            chatstates_on = False
+        else:
+            chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
                 'disabled'
         chatstate_to_send = None
         if chatstates_on and contact is not None:
@@ -2377,11 +2380,11 @@ class ChatControl(ChatControlBase):
 
         def _on_sent(msg_stanza, message, encrypted, xhtml, label, old_txt):
             id_ = msg_stanza.getID()
-            if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
-            'accounts', self.account, 'request_receipt'):
-                xep0184_id = id_
-            else:
-                xep0184_id = None
+            xep0184_id = None
+            if self.contact.jid != gajim.get_jid_from_account(self.account):
+                if self.contact.supports(NS_RECEIPTS) and gajim.config.get_per(
+                'accounts', self.account, 'request_receipt'):
+                    xep0184_id = id_
             if label:
                 displaymarking = label.getTag('displaymarking')
             else:
@@ -2696,6 +2699,10 @@ class ChatControl(ChatControlBase):
         chatstate_setting = gajim.config.get('outgoing_chat_state_notifications')
         if chatstate_setting == 'disabled':
             return
+
+        if self.contact.jid == gajim.get_jid_from_account(self.account):
+            return
+
         elif chatstate_setting == 'composing_only' and state != 'active' and\
                 state != 'composing':
             return
