@@ -481,6 +481,7 @@ class Config:
             }, {}),
             'contacts': ({
                     'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
+                    'encryption': [ opt_str, '', _('Encryption used for this contact.')],
                     'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),

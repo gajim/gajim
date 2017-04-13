@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import Gio
 import gtkgui_helpers
 import message_control
 import dialogs
@@ -395,6 +396,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self._on_window_motion_notify)
             self.handlers[id_] = parent_win.window
 
+        self.encryption = 'disabled'
+        self.set_encryption_state()
+        self.add_window_actions()
+
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
         gajim.plugin_manager.gui_extension_point('chat_control_base', self)
@@ -411,6 +416,38 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # This is bascially a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
+
+    def add_window_actions(self):
+        action = Gio.SimpleAction.new_stateful(
+            "%s-encryptiongroup" % self.contact.jid,
+            GLib.VariantType.new("s"),
+            GLib.Variant("s", self.encryption))
+        action.connect("change-state", self.activate_encryption)
+        self.parent_win.window.add_action(action)
+
+    def activate_encryption(self, action, param):
+        encryption = param.get_string()
+        if self.encryption == encryption:
+            return
+
+        if encryption != 'disabled':
+            plugin = gajim.plugin_manager.encryption_plugins[encryption]
+            if not plugin.activate_encryption(self):
+                return
+        action.set_state(param)
+        gajim.config.set_per(
+            'contacts', self.contact.jid, 'encryption', encryption)
+        self.encryption = encryption
+        self.set_lock_image()
+
+    def set_encryption_state(self):
+        enc = gajim.config.get_per('contacts', self.contact.jid, 'encryption')
+        if enc not in gajim.plugin_manager.encryption_plugins:
+            self.encryption = 'disabled'
+            gajim.config.set_per(
+                'contacts', self.contact.jid, 'encryption', 'disabled')
+        else:
+            self.encryption = enc
 
     def set_speller(self):
         # now set the one the user selected
@@ -723,7 +760,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=_cb, callback_args=[callback] + callback_args,
-            control=self, attention=attention, correction_msg=correction_msg, automatic_message=False))
+            control=self, attention=attention, correction_msg=correction_msg,
+            automatic_message=False, encryption=self.encryption))
 
         # Record the history of sent messages
         self.save_message(message, 'sent')

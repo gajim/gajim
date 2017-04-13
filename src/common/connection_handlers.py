@@ -1091,6 +1091,12 @@ class ConnectionHandlersBase:
     def _nec_message_received(self, obj):
         if obj.conn.name != self.name:
             return
+
+        gajim.plugin_manager.gui_extension_point(
+            'decrypt', self, obj, self._on_message_received)
+        if not obj.encrypted:
+            self._on_message_received(obj)
+
         if obj.encrypted == 'xep200':
             try:
                 obj.stanza = obj.session.decrypt_stanza(obj.stanza)
@@ -1152,6 +1158,14 @@ class ConnectionHandlersBase:
                 cb, [obj2])
         gajim.nec.push_incoming_event(MamDecryptedMessageReceivedEvent(None,
             conn=self, msg_obj=obj))
+
+    def _on_message_received(self, obj):
+        if isinstance(obj, MessageReceivedEvent):
+            gajim.nec.push_incoming_event(
+                DecryptedMessageReceivedEvent(None, conn=self, msg_obj=obj))
+        else:
+            gajim.nec.push_incoming_event(
+                MamDecryptedMessageReceivedEvent(None, conn=self, msg_obj=obj))
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:

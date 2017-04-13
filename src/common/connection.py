@@ -499,7 +499,7 @@ class CommonConnection:
 
         self._push_stanza_message_outgoing(obj, msg_iq)
 
-    def _push_stanza_message_outgoing(self, obj, msg_iq):    
+    def _push_stanza_message_outgoing(self, obj, msg_iq):
         obj.conn = self
         if isinstance(msg_iq, list):
             for iq in msg_iq:
@@ -2136,6 +2136,14 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _nec_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
+        encryption = gajim.config.get_per('contacts', obj.jid, 'encryption')
+        if encryption != 'disabled':
+            gajim.plugin_manager.gui_extension_point(
+                'encrypt' + encryption, self, obj, self.send_message)
+        else:
+            self.send_message(obj)
+
+    def send_message(self, obj):
         obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
 
         gajim.nec.push_incoming_event(MessageSentEvent(

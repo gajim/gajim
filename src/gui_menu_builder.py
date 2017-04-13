@@ -781,3 +781,14 @@ def build_bookmark_menu(account):
     label = menu.get_item_attribute_value(1, 'label').get_string()
     menu.remove(1)
     menu.insert_submenu(1, label, bookmark_menu)
+
+
+def get_encryption_menu(contact):
+    menu = Gio.Menu()
+    menu.append(
+        'Disabled', 'win.{}-encryptiongroup::{}'.format(contact.jid, 'disabled'))
+    for encryption in gajim.plugin_manager.encryption_plugins:
+        menu_action = 'win.{}-encryptiongroup::{}'.format(
+            contact.jid, encryption)
+        menu.append(encryption, menu_action)
+    return menu

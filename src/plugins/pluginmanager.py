@@ -101,6 +101,12 @@ class PluginManager(metaclass=Singleton):
         '''
         Registered handlers of GUI extension points.
         '''
+
+        self.encryption_plugins = {}
+        '''
+        Registered names with instances of encryption Plugins.
+        '''
+
         for path in [gajim.PLUGINS_DIRS[1], gajim.PLUGINS_DIRS[0]]:
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
@@ -291,6 +297,10 @@ class PluginManager(metaclass=Singleton):
             elif issubclass(event_class, nec.NetworkOutgoingEvent):
                 gajim.nec.unregister_outgoing_event(event_class)
 
+    def _remove_name_from_encryption_plugins(self, plugin):
+        if plugin.encryption_name:
+            del self.encryption_plugins[plugin.encryption_name]
+
     @log_calls('PluginManager')
     def activate_plugin(self, plugin):
         '''
@@ -300,6 +310,7 @@ class PluginManager(metaclass=Singleton):
         if not plugin.active and plugin.activatable:
 
             self._add_gui_extension_points_handlers_from_plugin(plugin)
+            self._add_encryption_name_from_plugin(plugin)
             self._handle_all_gui_extension_points_with_plugin(plugin)
             self._register_events_handlers_in_ged(plugin)
             self._register_network_events_in_nec(plugin)
@@ -339,6 +350,7 @@ class PluginManager(metaclass=Singleton):
 
         self._remove_events_handler_from_ged(plugin)
         self._remove_network_events_from_nec(plugin)
+        self._remove_name_from_encryption_plugins(plugin)
 
         # removing plug-in from active plug-ins list
         plugin.deactivate()
@@ -356,6 +368,10 @@ class PluginManager(metaclass=Singleton):
         plugin.gui_extension_points.items():
             self.gui_extension_points_handlers.setdefault(gui_extpoint_name,
                 []).append(gui_extpoint_handlers)
+
+    def _add_encryption_name_from_plugin(self, plugin):
+        if plugin.encryption_name:
+            self.encryption_plugins[plugin.encryption_name] = plugin
 
     @log_calls('PluginManager')
     def _handle_all_gui_extension_points_with_plugin(self, plugin):

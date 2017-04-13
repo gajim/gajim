@@ -94,6 +94,7 @@ class ChatControl(ChatControlBase):
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
         self.last_message_timestamp = None
+
         # for muc use:
         # widget = self.xml.get_object('muc_window_actions_button')
         self.actions_button = self.xml.get_object('message_window_actions_button')
@@ -302,6 +303,11 @@ class ChatControl(ChatControlBase):
                 True)
 
         self.update_ui()
+        self.set_lock_image()
+
+        self.encryption_menu = self.xml.get_object('encryption_menu')
+        self.encryption_menu.set_menu_model(
+            gui_menu_builder.get_encryption_menu(self.contact))
         # restore previous conversation
         self.restore_conversation()
         self.msg_textview.grab_focus()
@@ -907,6 +913,21 @@ class ChatControl(ChatControlBase):
         self._show_lock_image(self.gpg_is_active, 'OpenPGP',
                 self.gpg_is_active, loggable, True)
 
+    def set_lock_image(self):
+        visible = self.encryption != 'disabled'
+        loggable = self.session and self.session.is_loggable()
+
+        encryption_state = {'visible': visible,
+                            'enc_type': self.encryption,
+                            'enc_enabled': False,
+                            'chat_logged': loggable,
+                            'authenticated': False}
+
+        gajim.plugin_manager.gui_extension_point(
+            'encryption_state' + self.encryption, self, encryption_state)
+
+        self._show_lock_image(**encryption_state)
+ 
     def _show_lock_image(self, visible, enc_type='', enc_enabled=False,
                     chat_logged=False, authenticated=False):
         """
@@ -940,6 +961,8 @@ class ChatControl(ChatControlBase):
         self.lock_image.set_sensitive(enc_enabled)
 
     def _on_authentication_button_clicked(self, widget):
+        gajim.plugin_manager.gui_extension_point(
+            'encryption_dialog' + self.encryption, self)
         if self.gpg_is_active:
             dialogs.GPGInfoWindow(self, self.parent_win.window)
         elif self.session and self.session.enable_encryption:
@@ -950,6 +973,14 @@ class ChatControl(ChatControlBase):
         """
         Send a message to contact
         """
+
+        if self.encryption:
+            self.sendmessage = True
+            gajim.plugin_manager.gui_extension_point(
+                    'send_message' + self.encryption, self)
+            if not self.sendmessage:
+                return
+
         message = helpers.remove_invalid_xml_chars(message)
         if message in ('', None, '\n'):
             return None
@@ -1481,6 +1512,8 @@ class ChatControl(ChatControlBase):
     def _on_message_tv_buffer_changed(self, textbuffer):
         super()._on_message_tv_buffer_changed(textbuffer)
         if textbuffer.get_char_count():
+            gajim.plugin_manager.gui_extension_point(
+                'typing' + self.encryption, self)
             e2e_is_active = self.session and \
                     self.session.enable_encryption
             e2e_pref = gajim.config.get_per('accounts', self.account,
