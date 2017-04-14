@@ -2769,6 +2769,7 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     def init(self):
         self.additional_data = {}
         self.message = ''
+        self.chatstate = None
         self.xhtml = None
         self.label = None
         self.callback = None

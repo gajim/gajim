@@ -2719,6 +2719,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             obj.xhtml = create_xhtml(obj.message)
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
                                 xhtml=obj.xhtml)
+        if obj.chatstate:
+            msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
         if obj.label is not None:
             msg_iq.addChild(node=obj.label)
         gajim.nec.push_incoming_event(GcStanzaMessageOutgoingEvent(

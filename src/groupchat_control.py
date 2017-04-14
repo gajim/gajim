@@ -343,7 +343,7 @@ class GroupchatControl(ChatControlBase):
             img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
 
         self.current_tooltip = None
-        if parent_win:
+        if parent_win is not None:
             # On AutoJoin with minimize Groupchats are created without parent
             # Tooltip Window has to be created with parent
             self.set_tooltip()
@@ -2034,6 +2034,53 @@ class GroupchatControl(ChatControlBase):
             status = self.subject)
 
         del win._controls[self.account][self.contact.jid]
+
+    def send_chatstate(self, state, contact):
+        """
+        Send OUR chatstate as STANDLONE chat state message (eg. no body)
+        to contact only if new chatstate is different from the previous one
+        if jid is not specified, send to active tab
+        """
+        # JEP 85 does not allow resending the same chatstate
+        # this function checks for that and just returns so it's safe to call it
+        # with same state.
+
+        # This functions also checks for violation in state transitions
+        # and raises RuntimeException with appropriate message
+        # more on that http://xmpp.org/extensions/xep-0085.html#statechart
+
+        # do not send if we have chat state notifications disabled
+        # that means we won't reply to the <active/> from other peer
+        # so we do not broadcast jep85 capabalities
+        chatstate_setting = gajim.config.get('outgoing_chat_state_notifications')
+        if chatstate_setting == 'disabled':
+            return
+
+        elif chatstate_setting == 'composing_only' and state != 'active' and\
+                state != 'composing':
+            return
+
+        # if the new state we wanna send (state) equals
+        # the current state (contact.our_chatstate) then return
+        if contact.our_chatstate == state:
+            return
+
+        # if wel're inactive prevent composing (XEP violation)
+        if contact.our_chatstate == 'inactive' and state == 'composing':
+            # go active before
+            gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
+                account=self.account, jid=self.contact.jid, chatstate='active',
+                control=self))
+            contact.our_chatstate = 'active'
+            self.reset_kbd_mouse_timeout_vars()
+
+        gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
+            account=self.account, jid=self.contact.jid, chatstate=state,
+            control=self))
+
+        contact.our_chatstate = state
+        if state == 'active':
+            self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self, status='offline'):
         # PluginSystem: calling shutdown of super class (ChatControlBase)
