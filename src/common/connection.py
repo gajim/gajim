@@ -296,65 +296,9 @@ class CommonConnection:
         if not obj.message and obj.chatstate is None and obj.form_node is None:
             return
 
-        if obj.keyID and self.USE_GPG:
-            self._encrypt_message(obj)
-            return
-
         self._build_message_stanza(obj)
 
-    def _encrypt_message(self, obj):
-        obj.xhtml = None
-        if obj.keyID == 'UNKNOWN':
-            error = _('Neither the remote presence is signed, nor a key was '
-                      'assigned.')
-        elif obj.keyID.endswith('MISMATCH'):
-            error = _('The contact\'s key (%s) does not match the key assigned '
-                      'in Gajim.' % obj.keyID[:8])
-        else:
-            myKeyID = gajim.config.get_per('accounts', self.name, 'keyid')
-            key_list = [obj.keyID, myKeyID]
-            def _on_encrypted(output):
-                msgenc, error = output
-                if error.startswith('NOT_TRUSTED'):
-                    def _on_always_trust(answer):
-                        if answer:
-                            gajim.thread_interface(
-                                self.gpg.encrypt, [obj.message, key_list, True],
-                                _on_encrypted, [])
-                        else:
-                            self._finished_encrypt(obj, msgenc=msgenc,
-                                                   error=error)
-                    gajim.nec.push_incoming_event(GPGTrustKeyEvent(None,
-                        conn=self, keyID=error.split(' ')[-1],
-                        callback=_on_always_trust))
-                else:
-                    self._finished_encrypt(obj, msgenc=msgenc, error=error)
-            gajim.thread_interface(
-                self.gpg.encrypt, [obj.message, key_list, False],
-                _on_encrypted, [])
-            return
-        self._finished_encrypt(obj, error=error)
-
-    def _finished_encrypt(self, obj, msgenc=None, error=None):
-        if error:
-            gajim.nec.push_incoming_event(
-                MessageNotSentEvent(
-                    None, conn=self, jid=obj.jid, message=obj.message,
-                    error=error, time_=time.time(), session=obj.session))
-            return
-        self._build_message_stanza(obj, msgenc)
-
-    def _build_message_stanza(self, obj, msgenc=None):
-        if msgenc:
-            msgtxt = '[This message is *encrypted* (See :XEP:`27`]'
-            lang = os.getenv('LANG')
-            if lang is not None and not lang.startswith('en'):
-                # we're not english: one in locale and one en
-                msgtxt = _('[This message is *encrypted* (See :XEP:`27`]') + \
-                        ' (' + msgtxt + ')'
-        else:
-            msgtxt = obj.message
-
+    def _build_message_stanza(self, obj):
         if obj.jid == gajim.get_jid_from_account(self.name):
             fjid = obj.jid
         else:
@@ -368,16 +312,9 @@ class CommonConnection:
                 namespace=nbxmpp.NS_CORRECT)
             id2 = self.connection.getAnID()
             obj.correction_msg.setID(id2)
-            obj.correction_msg.setBody(msgtxt)
+            obj.correction_msg.setBody(obj.message)
             if obj.xhtml:
                 obj.correction_msg.setXHTML(obj.xhtml)
-
-            if msgenc:
-                encrypted_tag = obj.correction_msg.getTag(
-                    'x', namespace=nbxmpp.NS_ENCRYPTED)
-                obj.correction_msg.delChild(encrypted_tag)
-                obj.correction_msg.setTag(
-                    'x', namespace=nbxmpp.NS_ENCRYPTED).setData(msgenc)
 
             if obj.session:
                 obj.session.last_send = time.time()
@@ -390,21 +327,18 @@ class CommonConnection:
             return
 
         if obj.type_ == 'chat':
-            msg_iq = nbxmpp.Message(body=msgtxt, typ=obj.type_,
+            msg_iq = nbxmpp.Message(body=obj.message, typ=obj.type_,
                     xhtml=obj.xhtml)
         else:
             if obj.subject:
-                msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(body=obj.message, typ='normal',
                         subject=obj.subject, xhtml=obj.xhtml)
             else:
-                msg_iq = nbxmpp.Message(body=msgtxt, typ='normal',
+                msg_iq = nbxmpp.Message(body=obj.message, typ='normal',
                         xhtml=obj.xhtml)
 
         if obj.msg_id:
             msg_iq.setID(obj.msg_id)
-
-        if msgenc:
-            msg_iq.setTag('x', namespace=nbxmpp.NS_ENCRYPTED).setData(msgenc)
 
         if obj.form_node:
             msg_iq.addChild(node=obj.form_node)
@@ -460,7 +394,7 @@ class CommonConnection:
             if obj.chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
                 msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
                 only_chatste = False
-                if not msgtxt:
+                if not obj.message:
                     only_chatste = True
                 if only_chatste and not obj.session.enable_encryption:
                     msg_iq.setTag('no-store',
@@ -468,8 +402,9 @@ class CommonConnection:
 
             # XEP-0184
             if obj.jid != gajim.get_jid_from_account(self.name):
-                if msgtxt and gajim.config.get_per('accounts', self.name,
-                'request_receipt'):
+                request = gajim.config.get_per('accounts', self.name,
+                                               'request_receipt')
+                if obj.message and request:
                     msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
             if obj.forward_from:

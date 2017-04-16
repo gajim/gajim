@@ -90,7 +90,6 @@ class ChatControl(ChatControlBase):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
             'chat_control', contact, acct, resource)
 
-        self.gpg_is_active = False
         self.last_recv_message_id = None
         self.last_recv_message_marks = None
         self.last_message_timestamp = None
@@ -282,25 +281,6 @@ class ChatControl(ChatControlBase):
         # Enable encryption if needed
         self.no_autonegotiation = False
         e2e_is_active = self.session and self.session.enable_encryption
-        gpg_pref = gajim.config.get_per('contacts', contact.jid, 'gpg_enabled')
-
-        # try GPG first
-        if not e2e_is_active and gpg_pref and \
-        gajim.config.get_per('accounts', self.account, 'keyid') and \
-        gajim.connections[self.account].USE_GPG:
-            self.gpg_is_active = True
-            gajim.encrypted_chats[self.account].append(contact.jid)
-            msg = _('OpenPGP encryption enabled')
-            ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                None)
-
-            if self.session:
-                self.session.loggable = gajim.config.get_per('accounts',
-                    self.account, 'log_encrypted_sessions')
-            # GPG is always authenticated as we use GPG's WoT
-            self._show_lock_image(self.gpg_is_active, 'OpenPGP',
-                self.gpg_is_active, self.session and self.session.is_loggable(),
-                True)
 
         self.update_ui()
         self.set_lock_image()
@@ -350,7 +330,8 @@ class ChatControl(ChatControlBase):
             send_button = self.xml.get_object('send_button')
             send_button.set_sensitive(True)
         # Formatting
-        if self.contact.supports(NS_XHTML_IM) and not self.gpg_is_active:
+        # TODO: find out what encryption allows for xhtml and which not
+        if self.contact.supports(NS_XHTML_IM):
             self._formattings_button.set_sensitive(True)
             self._formattings_button.set_tooltip_text(_(
                 'Show a list of formattings'))
@@ -862,57 +843,6 @@ class ChatControl(ChatControlBase):
     def on_video_button_toggled(self, widget):
         self.on_jingle_button_toggled(widget, 'video')
 
-    def _toggle_gpg(self):
-        if not self.gpg_is_active and not self.contact.keyID:
-            dialogs.ErrorDialog(_('No OpenPGP key assigned'),
-                _('No OpenPGP key is assigned to this contact. So you cannot '
-                'encrypt messages with OpenPGP.'))
-            return
-        ec = gajim.encrypted_chats[self.account]
-        if self.gpg_is_active:
-            # Disable encryption
-            ec.remove(self.contact.jid)
-            self.gpg_is_active = False
-            loggable = False
-            msg = _('OpenPGP encryption disabled')
-            ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                None)
-            if self.session:
-                self.session.loggable = True
-
-        else:
-            # Enable encryption
-            ec.append(self.contact.jid)
-            self.gpg_is_active = True
-            msg = _('OpenPGP encryption enabled')
-            ChatControlBase.print_conversation_line(self, msg, 'status', '',
-                None)
-
-            loggable = gajim.config.get_per('accounts', self.account,
-                'log_encrypted_sessions')
-
-            if self.session:
-                self.session.loggable = loggable
-
-                loggable = self.session.is_loggable()
-            else:
-                loggable = loggable and gajim.config.should_log(self.account,
-                        self.contact.jid)
-
-            if loggable:
-                msg = _('Session WILL be logged')
-            else:
-                msg = _('Session WILL NOT be logged')
-
-            ChatControlBase.print_conversation_line(self, msg,
-                    'status', '', None)
-
-        gajim.config.set_per('contacts', self.contact.jid,
-                'gpg_enabled', self.gpg_is_active)
-
-        self._show_lock_image(self.gpg_is_active, 'OpenPGP',
-                self.gpg_is_active, loggable, True)
-
     def set_lock_image(self):
         visible = self.encryption != 'disabled'
         loggable = self.session and self.session.is_loggable()
@@ -963,9 +893,7 @@ class ChatControl(ChatControlBase):
     def _on_authentication_button_clicked(self, widget):
         gajim.plugin_manager.gui_extension_point(
             'encryption_dialog' + self.encryption, self)
-        if self.gpg_is_active:
-            dialogs.GPGInfoWindow(self, self.parent_win.window)
-        elif self.session and self.session.enable_encryption:
+        if self.session and self.session.enable_encryption:
             dialogs.ESessionInfoWindow(self.session, self.parent_win.window)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
@@ -989,12 +917,11 @@ class ChatControl(ChatControlBase):
 
         encrypted = bool(self.session) and self.session.enable_encryption
 
-        keyID = ''
-        if self.gpg_is_active:
-            keyID = contact.keyID
-            encrypted = True
-            if not keyID:
-                keyID = 'UNKNOWN'
+        keyID = contact.keyID
+        encrypted = True
+
+        chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
+                'disabled'
 
         chatstate_to_send = None
         if contact is not None:
@@ -1123,20 +1050,6 @@ class ChatControl(ChatControlBase):
                     msg = _('The following message was NOT encrypted')
                     ChatControlBase.print_conversation_line(self, msg, 'status',
                         '',  tim)
-            else:
-                # GPG encryption
-                if encrypted and not self.gpg_is_active:
-                    msg = _('The following message was encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status',
-                        '', tim)
-                    # turn on OpenPGP if this was in fact a XEP-0027 encrypted
-                    # message
-                    if encrypted == 'xep27':
-                        self._toggle_gpg()
-                elif not encrypted and self.gpg_is_active:
-                    msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status',
-                        '', tim)
             if not frm:
                 kind = 'incoming'
                 name = contact.get_shown_name()
@@ -1146,7 +1059,7 @@ class ChatControl(ChatControlBase):
             else:
                 kind = 'outgoing'
                 name = self.get_our_nick()
-                if not xhtml and not (encrypted and self.gpg_is_active) and \
+                if not xhtml and not encrypted and \
                 gajim.config.get('rst_formatting_outgoing_messages'):
                     from common.rst_xhtml_generator import create_xhtml
                     xhtml = create_xhtml(text)
@@ -1223,9 +1136,8 @@ class ChatControl(ChatControlBase):
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
         Set compact view menuitem active state sets active and sensitivity state
-        for toggle_gpg_menuitem sets sensitivity for history_menuitem (False for
-        tranasports) and file_transfer_menuitem and hide()/show() for
-        add_to_roster_menuitem
+        for history_menuitem (False for tranasports) and file_transfer_menuitem 
+        and hide()/show() for add_to_roster_menuitem
         """
         if gajim.jid_is_transport(self.contact.jid):
             menu = gui_menu_builder.get_transport_menu(self.contact,
@@ -1520,7 +1432,7 @@ class ChatControl(ChatControlBase):
                     'enable_esessions') and gajim.config.get_per('accounts',
                     self.account, 'autonegotiate_esessions') and gajim.config.get_per(
                     'contacts', self.contact.jid, 'autonegotiate_esessions')
-            want_e2e = not e2e_is_active and not self.gpg_is_active \
+            want_e2e = not e2e_is_active and self.encryption == '' \
                     and e2e_pref
 
             if want_e2e and not self.no_autonegotiation \
@@ -1716,9 +1628,6 @@ class ChatControl(ChatControlBase):
 
     def _on_contact_information_menuitem_activate(self, widget):
         gajim.interface.roster.on_info(widget, self.contact, self.account)
-
-    def _on_toggle_gpg_menuitem_activate(self, widget):
-        self._toggle_gpg()
 
     def _on_convert_to_gc_menuitem_activate(self, widget):
         """

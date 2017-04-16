@@ -5391,64 +5391,6 @@ class ESessionInfoWindow:
         YesNoDialog(pritext, sectext, on_response_yes=on_yes,
             on_response_no=on_no, transient_for=self.window)
 
-class GPGInfoWindow:
-    """
-    Class for displaying information about a XEP-0116 encrypted session
-    """
-    def __init__(self, control, transient_for=None):
-        xml = gtkgui_helpers.get_gtk_builder('esession_info_window.ui')
-        security_image = xml.get_object('security_image')
-        status_label = xml.get_object('verification_status_label')
-        info_label = xml.get_object('info_display')
-        verify_now_button = xml.get_object('verify_now_button')
-        self.window = xml.get_object('esession_info_window')
-        account = control.account
-        keyID = control.contact.keyID
-        error = None
-
-        verify_now_button.set_no_show_all(True)
-        verify_now_button.hide()
-
-        if keyID.endswith('MISMATCH'):
-            verification_status = _('''Contact's identity NOT verified''')
-            info = _('The contact\'s key (%s) <b>does not match</b> the key '
-                'assigned in Gajim.') % keyID[:8]
-            image = 'security-low'
-        elif not keyID:
-            # No key assigned nor a key is used by remote contact
-            verification_status = _('No OpenPGP key assigned')
-            info = _('No OpenPGP key is assigned to this contact. So you cannot'
-                ' encrypt messages.')
-            image = 'security-low'
-        else:
-            error = gajim.connections[account].gpg.encrypt('test', [keyID])[1]
-            if error:
-                verification_status = _('''Contact's identity NOT verified''')
-                info = _('OpenPGP key is assigned to this contact, but <b>you '
-                    'do not trust their key</b>, so message <b>cannot</b> be '
-                    'encrypted. Use your OpenPGP client to trust their key.')
-                image = 'security-low'
-            else:
-                verification_status = _('''Contact's identity verified''')
-                info = _('OpenPGP Key is assigned to this contact, and you '
-                    'trust their key, so messages will be encrypted.')
-                image = 'security-high'
-
-        status_label.set_markup('<b><span size="x-large">%s</span></b>' % \
-            verification_status)
-        info_label.set_markup(info)
-
-        path = gtkgui_helpers.get_icon_path(image, 32)
-        security_image.set_from_file(path)
-
-        self.window.set_transient_for(transient_for)
-        xml.connect_signals(self)
-        self.window.show_all()
-
-    def on_close_button_clicked(self, widget):
-        self.window.destroy()
-
-
 
 class ResourceConflictDialog(TimeoutDialog, InputDialog):
     def __init__(self, title, text, resource, ok_handler):

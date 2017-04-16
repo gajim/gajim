@@ -180,11 +180,6 @@ class StandardCommonChatCommands(CommandContainer):
         self.conv_textview.clear()
 
     @command
-    @doc(_("Toggle the OpenPGP encryption"))
-    def gpg(self):
-        self._toggle_gpg()
-
-    @command
     @doc(_("Send a ping to the contact"))
     def ping(self):
         if self.account == gajim.ZEROCONF_ACC_NAME:

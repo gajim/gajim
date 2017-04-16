@@ -1035,6 +1035,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def init(self):
         self.additional_data = {}
+        self.encrypted = False
     
     def generate(self):
         if not self.stanza:
@@ -1067,7 +1068,6 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.with_ = to_
             self.direction = 'to'
             self.resource = gajim.get_resource_from_jid(self.msg_.getAttr('to'))
-        self.enc_tag = self.msg_.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
         return True
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -1216,33 +1216,31 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 conn=self.conn, stanza=forwarded))
             return
 
-        self.enc_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
-        if not self.enc_tag:
-            # Mediated invitation?
-            muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-            if muc_user:
-                if muc_user.getTag('decline'):
-                    gajim.nec.push_incoming_event(
-                        GcDeclineReceivedEvent(
-                            None, conn=self.conn,
-                            room_jid=self.fjid, stanza=muc_user))
-                    return
-                if muc_user.getTag('invite'):
-                    gajim.nec.push_incoming_event(
-                        GcInvitationReceivedEvent(
-                            None, conn=self.conn, jid_from=self.fjid,
-                            mediated=True, stanza=muc_user))
-                    return
-            else:
-                # Direct invitation?
-                direct = self.stanza.getTag(
-                    'x', namespace=nbxmpp.NS_CONFERENCE)
-                if direct:
-                    gajim.nec.push_incoming_event(
-                        GcInvitationReceivedEvent(
-                            None, conn=self.conn, jid_from=self.fjid,
-                            mediated=False, stanza=direct))
-                    return
+        # Mediated invitation?
+        muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user:
+            if muc_user.getTag('decline'):
+                gajim.nec.push_incoming_event(
+                    GcDeclineReceivedEvent(
+                        None, conn=self.conn,
+                        room_jid=self.fjid, stanza=muc_user))
+                return
+            if muc_user.getTag('invite'):
+                gajim.nec.push_incoming_event(
+                    GcInvitationReceivedEvent(
+                        None, conn=self.conn, jid_from=self.fjid,
+                        mediated=True, stanza=muc_user))
+                return
+        else:
+            # Direct invitation?
+            direct = self.stanza.getTag(
+                'x', namespace=nbxmpp.NS_CONFERENCE)
+            if direct:
+                gajim.nec.push_incoming_event(
+                    GcInvitationReceivedEvent(
+                        None, conn=self.conn, jid_from=self.fjid,
+                        mediated=False, stanza=direct))
+                return
 
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()

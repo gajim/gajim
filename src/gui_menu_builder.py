@@ -246,7 +246,6 @@ control=None, gc_contact=None, is_anonymous=True):
     manage_contact_menuitem = xml.get_object('manage_contact')
     convert_to_gc_menuitem = xml.get_object('convert_to_groupchat_menuitem')
     encryption_separator = xml.get_object('encryption_separator')
-    toggle_gpg_menuitem = xml.get_object('toggle_gpg_menuitem')
     toggle_e2e_menuitem = xml.get_object('toggle_e2e_menuitem')
     last_separator = xml.get_object('last_separator')
 
@@ -323,23 +322,10 @@ control=None, gc_contact=None, is_anonymous=True):
         items_to_hide.append(start_chat_menuitem)
 
     if not show_encryption or not control:
-        items_to_hide += [encryption_separator, toggle_gpg_menuitem,
-                toggle_e2e_menuitem]
+        items_to_hide += [encryption_separator, toggle_e2e_menuitem]
     else:
         e2e_is_active = control.session is not None and \
                 control.session.enable_encryption
-
-        # check if we support and use gpg
-        if not gajim.config.get_per('accounts', account, 'keyid') or \
-        not gajim.connections[account].USE_GPG or gajim.jid_is_transport(
-        contact.jid):
-            toggle_gpg_menuitem.set_sensitive(False)
-        else:
-            toggle_gpg_menuitem.set_sensitive(control.gpg_is_active or \
-                    not e2e_is_active)
-            toggle_gpg_menuitem.set_active(control.gpg_is_active)
-            toggle_gpg_menuitem.connect('activate',
-                    control._on_toggle_gpg_menuitem_activate)
 
         # disable esessions if we or the other client don't support them
         if not gajim.HAVE_PYCRYPTO or not contact.supports(NS_ESESSION) or \
@@ -347,8 +333,6 @@ control=None, gc_contact=None, is_anonymous=True):
             toggle_e2e_menuitem.set_sensitive(False)
         else:
             toggle_e2e_menuitem.set_active(e2e_is_active)
-            toggle_e2e_menuitem.set_sensitive(e2e_is_active or \
-                    not control.gpg_is_active)
             toggle_e2e_menuitem.connect('activate',
                     control._on_toggle_e2e_menuitem_activate)
 
