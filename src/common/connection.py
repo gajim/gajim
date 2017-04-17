@@ -319,10 +319,6 @@ class CommonConnection:
             if obj.session:
                 obj.session.last_send = time.time()
 
-                # XEP-0200
-                if obj.session.enable_encryption:
-                    obj.correction_msg = obj.session.encrypt_stanza(obj.correction_msg)
-
             self._push_stanza_message_outgoing(obj, obj.correction_msg)
             return
 
@@ -417,20 +413,6 @@ class CommonConnection:
                 # XEP-0201
                 obj.session.last_send = time.time()
                 msg_iq.setThread(obj.session.thread_id)
-
-                # XEP-0200
-                if obj.session.enable_encryption:
-                    msg_iq = obj.session.encrypt_stanza(msg_iq)
-                    if self.carbons_enabled:
-                        msg_iq.addChild(name='private',
-                                        namespace=nbxmpp.NS_CARBONS)
-                    msg_iq.addChild(name='no-permanent-store',
-                                    namespace=nbxmpp.NS_MSG_HINTS)
-                    msg_iq.addChild(name='no-copy',
-                                    namespace=nbxmpp.NS_MSG_HINTS)
-                    if only_chatste:
-                        msg_iq.addChild(name='no-store',
-                                        namespace=nbxmpp.NS_MSG_HINTS)
 
         self._push_stanza_message_outgoing(obj, msg_iq)
 

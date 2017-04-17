@@ -280,7 +280,6 @@ class ChatControl(ChatControlBase):
 
         # Enable encryption if needed
         self.no_autonegotiation = False
-        e2e_is_active = self.session and self.session.enable_encryption
 
         self.update_ui()
         self.set_lock_image()
@@ -893,8 +892,6 @@ class ChatControl(ChatControlBase):
     def _on_authentication_button_clicked(self, widget):
         gajim.plugin_manager.gui_extension_point(
             'encryption_dialog' + self.encryption, self)
-        if self.session and self.session.enable_encryption:
-            dialogs.ESessionInfoWindow(self.session, self.parent_win.window)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
     process_commands=True, attention=False):
@@ -914,11 +911,7 @@ class ChatControl(ChatControlBase):
             return None
 
         contact = self.contact
-
-        encrypted = bool(self.session) and self.session.enable_encryption
-
         keyID = contact.keyID
-        encrypted = True
 
         chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
                 'disabled'
@@ -957,7 +950,7 @@ class ChatControl(ChatControlBase):
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',
             chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
-            callback_args=[message, encrypted, xhtml, self.get_seclabel()],
+            callback_args=[message, self.encryption, xhtml, self.get_seclabel()],
             process_commands=process_commands,
             attention=attention)
 
@@ -1426,19 +1419,7 @@ class ChatControl(ChatControlBase):
         if textbuffer.get_char_count():
             gajim.plugin_manager.gui_extension_point(
                 'typing' + self.encryption, self)
-            e2e_is_active = self.session and \
-                    self.session.enable_encryption
-            e2e_pref = gajim.config.get_per('accounts', self.account,
-                    'enable_esessions') and gajim.config.get_per('accounts',
-                    self.account, 'autonegotiate_esessions') and gajim.config.get_per(
-                    'contacts', self.contact.jid, 'autonegotiate_esessions')
-            want_e2e = not e2e_is_active and self.encryption == '' \
-                    and e2e_pref
-
-            if want_e2e and not self.no_autonegotiation \
-            and gajim.HAVE_PYCRYPTO and self.contact.supports(NS_ESESSION):
-                self.begin_e2e_negotiation()
-            elif (not self.session or not self.session.status) and \
+            if (not self.session or not self.session.status) and \
             gajim.connections[self.account].archiving_136_supported:
                 self.begin_archiving_negotiation()
 
@@ -1635,21 +1616,22 @@ class ChatControl(ChatControlBase):
         """
         dialogs.TransformChatToMUC(self.account, [self.contact.jid])
 
-    def _on_toggle_e2e_menuitem_activate(self, widget):
-        if self.session and self.session.enable_encryption:
-            # e2e was enabled, disable it
-            jid = str(self.session.jid)
-            thread_id = self.session.thread_id
-
-            self.session.terminate_e2e()
-
-            gajim.connections[self.account].delete_session(jid, thread_id)
-
-            # presumably the user had a good reason to shut it off, so
-            # disable autonegotiation too
-            self.no_autonegotiation = True
-        else:
+    def activate_esessions(self):
+        if not (self.session and self.session.enable_encryption):
             self.begin_e2e_negotiation()
+
+    def terminate_esessions(self):
+        # e2e was enabled, disable it
+        jid = str(self.session.jid)
+        thread_id = self.session.thread_id
+
+        self.session.terminate_e2e()
+
+        gajim.connections[self.account].delete_session(jid, thread_id)
+
+        # presumably the user had a good reason to shut it off, so
+        # disable autonegotiation too
+        self.no_autonegotiation = True
 
     def begin_negotiation(self):
         self.no_autonegotiation = True

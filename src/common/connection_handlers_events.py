@@ -1122,6 +1122,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_id()
         self.forwarded = False
         self.sent = False
+        self.encrypted = False
         account = self.conn.name
 
         our_full_jid = gajim.get_jid_from_account(account, full=True)
@@ -1281,51 +1282,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
             self.session.last_receive = time_time()
 
-        # check if the message is a XEP-0020 feature negotiation request
-        if not self.forwarded and self.stanza.getTag('feature',
-                                                     namespace=nbxmpp.NS_FEATURE):
-            if gajim.HAVE_PYCRYPTO:
-                feature = self.stanza.getTag(name='feature',
-                                             namespace=nbxmpp.NS_FEATURE)
-                form = nbxmpp.DataForm(node=feature.getTag('x'))
-                if not form:
-                    return
-
-                if not form.getField('FORM_TYPE'):
-                    return
-
-                if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-                    self.session.handle_negotiation(form)
-                else:
-                    reply = self.stanza.buildReply()
-                    reply.setType('error')
-                    reply.addChild(feature)
-                    err = nbxmpp.ErrorNode('service-unavailable', typ='cancel')
-                    reply.addChild(node=err)
-                    self.conn.connection.send(reply)
-            return
-
-        if not self.forwarded and self.stanza.getTag('init',
-                                                     namespace=nbxmpp.NS_ESESSION_INIT):
-            init = self.stanza.getTag(name='init',
-                                      namespace=nbxmpp.NS_ESESSION_INIT)
-            form = nbxmpp.DataForm(node=init.getTag('x'))
-
-            self.session.handle_negotiation(form)
-
-            return
-
         self._generate_timestamp(self.stanza.getTimestamp())
-
-
-        self.encrypted = False
-        xep_200_encrypted = self.stanza.getTag('c',
-                                               namespace=nbxmpp.NS_STANZA_CRYPTO)
-        if xep_200_encrypted:
-            if self.forwarded:
-                # Ignore E2E forwarded encrypted messages
-                return False
-            self.encrypted = 'xep200'
 
         return True
 

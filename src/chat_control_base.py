@@ -434,6 +434,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             plugin = gajim.plugin_manager.encryption_plugins[encryption]
             if not plugin.activate_encryption(self):
                 return
+        else:
+            self.terminate_esessions()
         action.set_state(param)
         gajim.config.set_per(
             'contacts', self.contact.jid, 'encryption', encryption)

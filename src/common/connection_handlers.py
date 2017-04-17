@@ -1089,15 +1089,6 @@ class ConnectionHandlersBase:
         if not obj.encrypted:
             self._on_message_received(obj)
 
-        if obj.encrypted == 'xep200':
-            try:
-                obj.stanza = obj.session.decrypt_stanza(obj.stanza)
-                obj.msgtxt = obj.stanza.getBody()
-            except Exception:
-                gajim.nec.push_incoming_event(FailedDecryptEvent(None,
-                    conn=self, msg_obj=obj))
-                return
-
     def _on_message_received(self, obj):
         if isinstance(obj, MessageReceivedEvent):
             gajim.nec.push_incoming_event(
