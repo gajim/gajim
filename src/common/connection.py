@@ -162,6 +162,7 @@ class CommonConnection:
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
+        self.archiving_namespace = None
         self.archiving_supported = False
         self.archiving_313_supported = False
         self.archiving_136_supported = False
@@ -2008,7 +2009,14 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # Remove stored bookmarks accessible to everyone.
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
-                if nbxmpp.NS_MAM in obj.features:
+                if (nbxmpp.NS_MAM or nbxmpp.NS_MAM_1 or nbxmpp.NS_MAM_2) \
+                        in obj.features:
+                    if nbxmpp.NS_MAM_2 in obj.features:
+                        self.archiving_namespace = nbxmpp.NS_MAM_2
+                    elif nbxmpp.NS_MAM_1 in obj.features:
+                        self.archiving_namespace = nbxmpp.NS_MAM_1
+                    else:
+                        self.archiving_namespace = nbxmpp.NS_MAM
                     self.archiving_supported = True
                     self.archiving_313_supported = True
                     get_action(self.name + '-archive').set_enabled(True)
