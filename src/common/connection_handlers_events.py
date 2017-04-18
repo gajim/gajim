@@ -1836,7 +1836,6 @@ class ArchivingFinishedLegacyReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.type_
         self.fin = self.stanza.getTag('fin', namespace=nbxmpp.NS_MAM)
 
         if not self.fin:
