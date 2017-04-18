@@ -9,7 +9,7 @@ syntax: glob
 *~
 autom4te.cache
 data/defs.py
-data/gajim.desktop
+data/org.gajim.Gajim.desktop
 libtool
 po/.intltool-merge-cache
 po/POTFILES
