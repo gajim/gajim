@@ -1451,6 +1451,10 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             ArchivingPreferencesChangedReceivedEvent)
         gajim.nec.register_incoming_event(
             Archiving313PreferencesChangedReceivedEvent)
+        gajim.nec.register_incoming_event(
+            ArchivingFinishedLegacyReceivedEvent)
+        gajim.nec.register_incoming_event(
+            ArchivingFinishedReceivedEvent)
         gajim.nec.register_incoming_event(NotificationEvent)
 
         gajim.ged.register_event_handler('http-auth-received', ged.CORE,
