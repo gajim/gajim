@@ -2332,6 +2332,8 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_ARCHIVE)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM)
+        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
+        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
         con.RegisterHandler('iq', self._PubSubCB, 'result')
         con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'result')

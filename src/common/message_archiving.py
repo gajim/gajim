@@ -46,8 +46,10 @@ class ConnectionArchive313(ConnectionArchive):
         self.archiving_313_supported = False
         self.mam_awaiting_disco_result = {}
         self.iq_answer = []
-        gajim.ged.register_event_handler('raw-message-received', ged.CORE,
-            self._nec_raw_message_313_received)
+        gajim.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
+            self._nec_result_finished)
+        gajim.ged.register_event_handler('archiving-finished', ged.CORE,
+            self._nec_result_finished)
         gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
         gajim.ged.register_event_handler('agent-info-received', ged.CORE,
@@ -59,8 +61,10 @@ class ConnectionArchive313(ConnectionArchive):
             self._nec_archiving_313_preferences_changed_received)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('raw-message-received', ged.CORE,
-            self._nec_raw_message_313_received)
+        gajim.ged.remove_event_handler('archiving-finished-legacy', ged.CORE,
+            self._nec_result_finished)
+        gajim.ged.remove_event_handler('archiving-finished', ged.CORE,
+            self._nec_result_finished)
         gajim.ged.remove_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
         gajim.ged.remove_event_handler('agent-info-received', ged.CORE,
@@ -100,29 +104,23 @@ class ConnectionArchive313(ConnectionArchive):
                     msg=msg_txt)
             del self.mam_awaiting_disco_result[obj.jid]
 
-    def _nec_raw_message_313_received(self, obj):
+    def _nec_result_finished(self, obj):
         if obj.conn.name != self.name:
             return
 
-        fin_ = obj.stanza.getTag('fin', namespace=nbxmpp.NS_MAM)
-        if fin_:
-            queryid_ = fin_.getAttr('queryid')
-            if queryid_ not in self.awaiting_answers:
-                return
-        else:
+        if obj.queryid not in self.awaiting_answers:
             return
 
-        if self.awaiting_answers[queryid_][0] == MAM_RESULTS_ARRIVED:
-            set_ = fin_.getTag('set', namespace=nbxmpp.NS_RSM)
+        if self.awaiting_answers[obj.queryid][0] == MAM_RESULTS_ARRIVED:
+            set_ = obj.fin.getTag('set', namespace=nbxmpp.NS_RSM)
             if set_:
                 last = set_.getTagData('last')
                 if last:
                     gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
-                    complete = fin_.getAttr('complete')
+                    complete = obj.fin.getAttr('complete')
                     if complete != 'true':
                         self.request_archive(after=last)
-
-            del self.awaiting_answers[queryid_]
+            del self.awaiting_answers[obj.queryid]
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -133,9 +131,9 @@ class ConnectionArchive313(ConnectionArchive):
     def request_archive(self, start=None, end=None, with_=None, after=None,
     max=30):
         iq_ = nbxmpp.Iq('set')
-        query = iq_.addChild('query', namespace=nbxmpp.NS_MAM)
+        query = iq_.addChild('query', namespace=self.archiving_namespace)
         x = query.addChild(node=nbxmpp.DataForm(typ='submit'))
-        x.addChild(node=nbxmpp.DataField(typ='hidden', name='FORM_TYPE', value=nbxmpp.NS_MAM))
+        x.addChild(node=nbxmpp.DataField(typ='hidden', name='FORM_TYPE', value=self.archiving_namespace))
         if start:
             x.addChild(node=nbxmpp.DataField(typ='text-single', name='start', value=start))
         if end:
@@ -159,7 +157,7 @@ class ConnectionArchive313(ConnectionArchive):
         iq = nbxmpp.Iq(typ='get')
         id_ = self.connection.getAnID()
         iq.setID(id_)
-        iq.addChild(name='prefs', namespace=nbxmpp.NS_MAM)
+        iq.addChild(name='prefs', namespace=self.archiving_namespace)
         self.connection.send(iq)
 
     def set_archive_preferences(self, items, default):
@@ -169,7 +167,7 @@ class ConnectionArchive313(ConnectionArchive):
         id_ = self.connection.getAnID()
         self.iq_answer.append(id_)
         iq.setID(id_)
-        prefs = iq.addChild(name='prefs', namespace=nbxmpp.NS_MAM, attrs={'default': default})
+        prefs = iq.addChild(name='prefs', namespace=self.archiving_namespace, attrs={'default': default})
         always = prefs.addChild(name='always')
         never = prefs.addChild(name='never')
         for item in items:
