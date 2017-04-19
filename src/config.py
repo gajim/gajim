@@ -1541,6 +1541,7 @@ class AccountsWindow:
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
         self.remove_button = self.xml.get_object('remove_button')
         self.rename_button = self.xml.get_object('rename_button')
+        self.change_password_button = self.xml.get_object('change_password_button1')
         path_to_kbd_input_img = gtkgui_helpers.get_icon_path('gajim-kbd_input')
         img = self.xml.get_object('rename_image')
         img.set_from_file(path_to_kbd_input_img)
@@ -1604,6 +1605,7 @@ class AccountsWindow:
         """
         self.remove_button.set_sensitive(False)
         self.rename_button.set_sensitive(False)
+        self.change_password_button.set_sensitive(False)
         self.current_account = None
         model = self.accounts_treeview.get_model()
         model.clear()
@@ -1713,9 +1715,15 @@ class AccountsWindow:
         if account:
             self.remove_button.set_sensitive(True)
             self.rename_button.set_sensitive(True)
+
+            if account != gajim.ZEROCONF_ACC_NAME:
+                self.change_password_button.set_sensitive(
+                    gajim.connections[account].register_supported)
+
         else:
             self.remove_button.set_sensitive(False)
             self.rename_button.set_sensitive(False)
+            self.change_password_button.set_sensitive(False)
         if iter_:
             self.current_account = account
             if account == gajim.ZEROCONF_ACC_NAME:

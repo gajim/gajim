@@ -778,6 +778,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.music_track_info = 0
         self.location_info = {}
         self.pubsub_supported = False
+        self.register_supported = False
         self.pubsub_publish_options_supported = False
         # Do we auto accept insecure connection
         self.connection_auto_accepted = False
@@ -2000,6 +2001,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if nbxmpp.NS_VCARD in obj.features:
                     self.vcard_supported = True
                     get_action(self.name + '-profile').set_enabled(True)
+                if nbxmpp.NS_REGISTER in obj.features:
+                    self.register_supported = True
                 if nbxmpp.NS_PUBSUB in obj.features:
                     self.pubsub_supported = True
                     if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
