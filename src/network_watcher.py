@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-## src/network_manager_listener.py
+## src/network_watcher.py
 ##
 ## Copyright (C) 2006 Jeffrey C. Ollie <jeff AT ocjtech.us>
 ##                    Nikos Kouremenos <kourem AT gmail.com>

@@ -2971,7 +2971,7 @@ class Interface:
 
         if gajim.config.get('networkmanager_support') and \
         dbus_support.supported:
-            import network_manager_listener
+            import network_watcher
 
         if dbus_support.supported:
             import upower_listener
