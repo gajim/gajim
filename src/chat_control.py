@@ -1671,6 +1671,8 @@ class ChatControl(ChatControlBase):
         dialogs.BigAvatarWindow(avatar_pixbuf, pos_x, pos_y, avatar_w,
             avatar_h, self.show_avatar)
 
+        self.show_bigger_avatar_timeout_id = None
+
     def _on_send_file_menuitem_activate(self, widget):
         self._on_send_file()
 
