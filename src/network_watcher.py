@@ -5,6 +5,7 @@
 ##                    Nikos Kouremenos <kourem AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2017 Jörg Sommer <joerg@alea.gnuu.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -82,3 +83,14 @@ if dbus_support.supported:
                         '/org/freedesktop/NetworkManager')
             except Exception:
                 pass
+    elif 'org.freedesktop.network1' in bus.list_names():
+        """
+        For systemd-networkd
+        """
+        def state_changed(sender, data, junk):
+            if 'OperationalState' in data:
+                update_accounts(connection_is_up = data['OperationalState'] == 'routable')
+
+        bus.add_signal_receiver(state_changed, 'PropertiesChanged',
+                path = '/org/freedesktop/network1')
+        supported = True
