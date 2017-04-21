@@ -2856,13 +2856,15 @@ class RosterWindow:
         gajim.connections[account].send_motd(server)
 
     def on_history_manager_menuitem_activate(self, widget):
-        if os.name == 'nt':
-            if os.path.exists('history_manager.exe'): # user is running stable
-                helpers.exec_command('history_manager.exe')
-            else: # user is running svn
-                helpers.exec_command('%s history_manager.py' % sys.executable)
-        else: # Unix user
-            helpers.exec_command('%s history_manager.py' % sys.executable)
+        config_path = '-c %s' % gajim.gajimpaths.config_root
+        posix = os.name != 'nt'
+        if os.path.exists('history_manager.exe'):  # Windows
+            helpers.exec_command('history_manager.exe %s' % config_path,
+                                 posix=posix)
+        else:  # Linux or running from Git
+            helpers.exec_command(
+                '%s history_manager.py %s' % (sys.executable, config_path),
+                posix=posix)
 
     def on_info(self, widget, contact, account):
         """

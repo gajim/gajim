@@ -405,7 +405,7 @@ def is_in_path(command, return_abs_path=False):
             pass
     return False
 
-def exec_command(command, use_shell=False):
+def exec_command(command, use_shell=False, posix=True):
     """
     execute a command. if use_shell is True, we run the command as is it was
     typed in a console. So it may be dangerous if you are not sure about what
@@ -414,7 +414,7 @@ def exec_command(command, use_shell=False):
     if use_shell:
         subprocess.Popen('%s &' % command, shell=True).wait()
     else:
-        args = shlex.split(command.encode('utf-8'))
+        args = shlex.split(command.encode('utf-8'), posix=posix)
         p = subprocess.Popen(args)
         gajim.thread_interface(p.wait)
 
