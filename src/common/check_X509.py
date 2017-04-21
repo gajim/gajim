@@ -173,8 +173,8 @@ try:
             return True
         return False
 except ImportError:
-    log.warn('Import of PyOpenSSL or pyasn1 failed. Cannot correctly check '
-        'SSL certificate')
+    log.exception('Import of PyOpenSSL or pyasn1 failed.'
+                  'Cannot correctly check SSL certificate')
 
     def check_certificate(cert, domain):
         subject = cert.get_subject()
