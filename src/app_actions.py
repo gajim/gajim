@@ -60,16 +60,15 @@ class AppActions():
             gajim.interface.instances['accounts'] = config.AccountsWindow()
 
     def on_history_manager(self, action, param):
-        if os.name == 'nt':
-            if os.path.exists('history_manager.exe'):
-                # user is running frozen application
-                helpers.exec_command('history_manager.exe')
-            else:
-                # user is running from source
-                helpers.exec_command('%s history_manager.py' % sys.executable)
-        else:
-            # Unix user
-            helpers.exec_command('%s history_manager.py' % sys.executable)
+        config_path = '-c %s' % gajim.gajimpaths.config_root
+        posix = os.name != 'nt'
+        if os.path.exists('history_manager.exe'):  # Windows
+            helpers.exec_command('history_manager.exe %s' % config_path,
+                                 posix=posix)
+        else:  # Linux or running from Git
+            helpers.exec_command(
+                '%s history_manager.py %s' % (sys.executable, config_path),
+                posix=posix)
 
     def on_manage_bookmarks(self, action, param):
         config.ManageBookmarksWindow()
