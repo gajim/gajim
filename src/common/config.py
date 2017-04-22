@@ -193,7 +193,6 @@ class Config:
             'always_english_wikipedia': [opt_bool, False],
             'always_english_wiktionary': [opt_bool, True],
             'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
-            'networkmanager_support': [opt_bool, True, _('If True, listen to D-Bus signals from NetworkManager and change the status of accounts (provided they do not have listen_to_network_manager set to False and they sync with global status) based upon the status of the network connection.'), True],
             'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
             'displayed_chat_state_notifications': [opt_str, 'all', _('Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled.')],
             'autodetect_browser_mailer': [opt_bool, True, '', True],
@@ -387,7 +386,6 @@ class Config:
                     'msgwin-y-position': [opt_int, -1], # Default is to let the wm decide
                     'msgwin-width': [opt_int, 480],
                     'msgwin-height': [opt_int, 440],
-                    'listen_to_network_manager': [opt_bool, True],
                     'is_zeroconf': [opt_bool, False],
                     'last_status': [opt_str, 'online'],
                     'last_status_msg': [opt_str, ''],
