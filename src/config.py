@@ -3686,7 +3686,7 @@ class AccountCreationWizardWindow:
         if self.modify:
             img.set_from_stock(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
         else:
-            path_to_file = gtkgui_helpers.get_icon_path('gajim', 48)
+            path_to_file = gtkgui_helpers.get_icon_path('org.gajim.Gajim', 48)
             img.set_from_file(path_to_file)
         self.show_vcard_checkbutton.set_active(not self.modify)
         self.notebook.set_current_page(6) # show finish page

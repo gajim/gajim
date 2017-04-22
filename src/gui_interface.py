@@ -2352,7 +2352,7 @@ class Interface:
             status = status + '.png'
         elif status == 'online':
             prefix = ''
-            status = gtkgui_helpers.get_icon_path('gajim', 32)
+            status = gtkgui_helpers.get_icon_path('org.gajim.Gajim', 32)
         path = os.path.join(prefix, status)
         try:
             obj = bus.get_object('com.google.code.Awn', '/com/google/code/Awn')
@@ -3040,7 +3040,7 @@ class Interface:
 
         pixs = []
         for size in (16, 32, 48, 64, 128):
-            pix = gtkgui_helpers.get_icon_pixmap('gajim', size)
+            pix = gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', size)
             if pix:
                 pixs.append(pix)
         if pixs:
