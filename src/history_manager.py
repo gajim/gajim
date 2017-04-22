@@ -94,7 +94,7 @@ class HistoryManager:
     def __init__(self):
         pixs = []
         for size in (16, 32, 48, 64, 128):
-            pix = gtkgui_helpers.get_icon_pixmap('gajim', size)
+            pix = gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', size)
             if pix:
                 pixs.append(pix)
         if pixs:

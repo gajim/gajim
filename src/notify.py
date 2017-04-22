@@ -321,7 +321,7 @@ class DesktopNotification:
             notification_text = ('<html><img src="%(image)s" align=left />' \
                 '%(title)s<br/>%(text)s</html>') % {'title': self.title,
                 'text': self.text, 'image': self.path_to_image}
-            gajim_icon = gtkgui_helpers.get_icon_path('gajim', 48)
+            gajim_icon = gtkgui_helpers.get_icon_path('org.gajim.Gajim', 48)
             try:
                 self.notif.Notify(
                     dbus.String(_('Gajim')),        # app_name (string)
@@ -391,7 +391,7 @@ class DesktopNotification:
                         '<td>%s</td></tr></table>' % (self.path_to_image,
                         text)
                     self.path_to_image = os.path.abspath(
-                        gtkgui_helpers.get_icon_path('gajim', 48))
+                        gtkgui_helpers.get_icon_path('org.gajim.Gajim', 48))
                 actions = ()
                 if 'actions' in self.capabilities and self.msg_type:
                     actions = (dbus.String('default'), dbus.String(
