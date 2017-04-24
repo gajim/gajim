@@ -60,7 +60,7 @@ class AppActions():
             gajim.interface.instances['accounts'] = config.AccountsWindow()
 
     def on_history_manager(self, action, param):
-        config_path = '-c %s' % gajim.gajimpaths.config_root
+        config_path = '-c %s' % gajim.gajimpaths.data_root
         posix = os.name != 'nt'
         if os.path.exists('history_manager.exe'):  # Windows
             helpers.exec_command('history_manager.exe %s' % config_path,
