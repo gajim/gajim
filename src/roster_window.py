@@ -2856,7 +2856,7 @@ class RosterWindow:
         gajim.connections[account].send_motd(server)
 
     def on_history_manager_menuitem_activate(self, widget):
-        config_path = '-c %s' % gajim.gajimpaths.config_root
+        config_path = '-c %s' % gajim.gajimpaths.data_root
         posix = os.name != 'nt'
         if os.path.exists('history_manager.exe'):  # Windows
             helpers.exec_command('history_manager.exe %s' % config_path,
