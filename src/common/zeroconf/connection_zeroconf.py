@@ -120,7 +120,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def check_jid(self, jid):
         return jid
 
-    def _reconnect(self):
+    def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
         gajim.log.debug('reconnect')
@@ -163,7 +163,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         gajim.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
             None, conn=self, fjid=jid, show='offline', status=''))
 
-    def _disconnectedReconnCB(self):
+    def disconnectedReconnCB(self):
         """
         Called when we are disconnected. Comes from network manager for example
         we don't try to reconnect, network manager will tell us when we can
