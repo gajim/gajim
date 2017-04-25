@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-## src/network_manager_listener.py
+## src/network_watcher.py
 ##
 ## Copyright (C) 2006 Jeffrey C. Ollie <jeff AT ocjtech.us>
 ##                    Nikos Kouremenos <kourem AT gmail.com>
 ##                    Stefan Bethge <stefan AT lanpartei.de>
 ## Copyright (C) 2006-2017 Yann Leboulanger <asterix AT lagaule.org>
+## Copyright (C) 2017 Jörg Sommer <joerg@alea.gnuu.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,30 +24,8 @@
 
 from common import gajim
 
-
-def device_now_active(self, *args):
-    """
-    For Network Manager 0.6
-    """
-    for connection in gajim.connections.itervalues():
-        if gajim.config.get_per('accounts', connection.name,
-        'listen_to_network_manager') and connection.time_to_reconnect:
-            connection._reconnect()
-
-def device_no_longer_active(self, *args):
-    """
-    For Network Manager 0.6
-    """
-    for connection in gajim.connections.itervalues():
-        if gajim.config.get_per('accounts', connection.name,
-        'listen_to_network_manager') and connection.connected > 1:
-            connection._disconnectedReconnCB()
-
-def state_changed(state):
-    """
-    For Network Manager 0.7 - 0.9
-    """
-    if state == 70:
+def update_accounts(connection_is_up):
+    if connection_is_up:
         for connection in gajim.connections.itervalues():
             if gajim.config.get_per('accounts', connection.name,
             'listen_to_network_manager') and connection.time_to_reconnect:
@@ -64,37 +43,54 @@ from common import dbus_support
 if dbus_support.supported:
     import dbus
 
-    try:
-        from common.dbus_support import system_bus
+    from common.dbus_support import system_bus
 
-        bus = system_bus.bus()
+    bus = system_bus.bus()
 
-        if 'org.freedesktop.NetworkManager' in bus.list_names():
+    if 'org.freedesktop.NetworkManager' in bus.list_names():
+        try:
+            """
+            For Network Manager 0.7 - 0.9
+            """
             nm_object = bus.get_object('org.freedesktop.NetworkManager',
-                    '/org/freedesktop/NetworkManager')
+                                       '/org/freedesktop/NetworkManager')
             props = dbus.Interface(nm_object, "org.freedesktop.DBus.Properties")
-            bus.add_signal_receiver(state_changed,
+
+            bus.add_signal_receiver(lambda state: update_accounts(connection_is_up = state == 70),
                     'StateChanged',
                     'org.freedesktop.NetworkManager',
                     'org.freedesktop.NetworkManager',
                     '/org/freedesktop/NetworkManager')
             supported = True
 
-    except dbus.DBusException:
-        try:
-            if 'org.freedesktop.NetworkManager' in bus.list_names():
+        except dbus.DBusException:
+            try:
+                """
+                For Network Manager 0.6
+                """
                 supported = True
 
-                bus.add_signal_receiver(device_no_longer_active,
+                bus.add_signal_receiver(lambda *args: update_accounts(connection_is_up = False),
                         'DeviceNoLongerActive',
                         'org.freedesktop.NetworkManager',
                         'org.freedesktop.NetworkManager',
                         '/org/freedesktop/NetworkManager')
 
-                bus.add_signal_receiver(device_now_active,
+                bus.add_signal_receiver(lambda *args: update_accounts(connection_is_up = True),
                         'DeviceNowActive',
                         'org.freedesktop.NetworkManager',
                         'org.freedesktop.NetworkManager',
                         '/org/freedesktop/NetworkManager')
-        except Exception:
-            pass
+            except Exception:
+                pass
+    elif 'org.freedesktop.network1' in bus.list_names():
+        """
+        For systemd-networkd
+        """
+        def state_changed(sender, data, junk):
+            if 'OperationalState' in data:
+                update_accounts(connection_is_up = data['OperationalState'] == 'routable')
+
+        bus.add_signal_receiver(state_changed, 'PropertiesChanged',
+                path = '/org/freedesktop/network1')
+        supported = True

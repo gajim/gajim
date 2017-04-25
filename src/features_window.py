@@ -188,8 +188,8 @@ class FeaturesWindow:
     def network_manager_available(self):
         if os.name == 'nt':
             return False
-        import network_manager_listener
-        return network_manager_listener.supported
+        import network_watcher
+        return network_watcher.supported
 
     def session_management_available(self):
         if os.name == 'nt':
