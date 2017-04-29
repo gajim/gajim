@@ -1874,7 +1874,7 @@ class ChatControl(ChatControlBase):
             file_props.name)
         if file_props.desc:
             markup += ' (%s)' % file_props.desc
-        b1 = Gtk.Button(_('_Open Containing Folder'))
+        b1 = Gtk.Button.new_with_mnemonic(_('_Open Containing Folder'))
         b1.connect('clicked', self._on_open_ft_folder, file_props)
         b2 = Gtk.Button(stock=Gtk.STOCK_OK)
         b2.connect('clicked', self._on_ok, file_props, 'file-completed')

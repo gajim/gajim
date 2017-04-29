@@ -214,7 +214,7 @@ class FileTransfersWindow:
         dialog = dialogs.HigDialog(None, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE,
                         _('File transfer completed'), sectext)
         if file_props.type_ == 'r':
-            button = Gtk.Button(_('_Open Containing Folder'))
+            button = Gtk.Button.new_with_mnemonic(_('_Open Containing Folder'))
             button.connect('clicked', on_open, file_props)
             dialog.action_area.pack_start(button, True, True, 0)
         ok_button = dialog.add_button(Gtk.STOCK_OK, Gtk.ResponseType.OK)
