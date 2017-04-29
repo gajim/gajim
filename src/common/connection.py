@@ -198,7 +198,7 @@ class CommonConnection:
         """
         gajim.ged.raise_event(event, self.name, data)
 
-    def _reconnect(self):
+    def reconnect(self):
         """
         To be implemented by derivated classes
         """
@@ -849,7 +849,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
 
-    def _reconnect(self):
+    def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
         if self.connected < 2: # connection failed
@@ -894,7 +894,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             gajim.nec.push_incoming_event(OurShowEvent(None, conn=self,
                                     show=gajim.SHOW_LIST[self.connected]))
 
-    def _disconnectedReconnCB(self):
+    def disconnectedReconnCB(self):
         """
         Called when we are disconnected
         """
@@ -914,7 +914,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     show='error'))
             if self.connection:
                 self.connection.UnregisterDisconnectHandler(
-                    self._disconnectedReconnCB)
+                    self.disconnectedReconnCB)
             self.disconnect()
             if gajim.config.get_per('accounts', self.name, 'autoreconnect'):
                 self.connected = -1
@@ -925,7 +925,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.status = gajim.status_before_autoaway[self.name]
                     gajim.status_before_autoaway[self.name] = ''
                     self.old_show = 'online'
-                # this check has moved from _reconnect method
+                # this check has moved from reconnect method
                 # do exponential backoff until less than 5 minutes
                 if self.retrycount < 2 or self.last_time_to_reconnect is None:
                     self.last_time_to_reconnect = 5
@@ -1242,7 +1242,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self._connection_lost()
             else:
                 # try reconnect if connection has failed before auth to server
-                self._disconnectedReconnCB()
+                self.disconnectedReconnCB()
 
     def connect_to_next_type(self, retry=False):
         if self.redirected:
@@ -1409,7 +1409,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected_hostname = self._current_host['host']
         self.on_connect_failure = None
         con.UnregisterDisconnectHandler(self._on_disconnected)
-        con.RegisterDisconnectHandler(self._disconnectedReconnCB)
+        con.RegisterDisconnectHandler(self.disconnectedReconnCB)
         log.debug('Connected to server %s:%s with %s' % (
                 self._current_host['host'], self._current_host['port'], con_type))
 
@@ -3038,7 +3038,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.awaiting_xmpp_ping_id:
             # We haven't got the pong in time, disco and reconnect
             log.warning("No reply received for keepalive ping. Reconnecting.")
-            self._disconnectedReconnCB()
+            self.disconnectedReconnCB()
 
     def _reconnect_alarm(self):
         if not gajim.config.get_per('accounts', self.name, 'active'):
@@ -3046,7 +3046,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if self.time_to_reconnect:
             if self.connected < 2:
-                self._reconnect()
+                self.reconnect()
             else:
                 self.time_to_reconnect = None
 
