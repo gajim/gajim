@@ -251,7 +251,7 @@ class ConnectionBytestream:
         if field.getValue() == nbxmpp.NS_IBB:
             sid = file_props.sid
             file_props.transport_sid = sid
-            fp = open(file_props.file_name, 'r')
+            fp = open(file_props.file_name, 'rb')
             self.OpenStream(sid, file_props.receiver, fp)
             raise nbxmpp.NodeProcessed
 
@@ -759,7 +759,6 @@ class ConnectionIBBytestream(ConnectionBytestream):
     def __init__(self):
         ConnectionBytestream.__init__(self)
         self._streams = {}
-        self.last_sent_ibb_id = None
 
     def IBBIqHandler(self, conn, stanza):
         """
@@ -767,12 +766,22 @@ class ConnectionIBBytestream(ConnectionBytestream):
         """
         typ = stanza.getType()
         log.debug('IBBIqHandler called typ->%s' % typ)
-        if typ == 'set' and stanza.getTag('open', namespace=nbxmpp.NS_IBB):
+        if typ == 'set' and stanza.getTag('open'):
             self.StreamOpenHandler(conn, stanza)
-        elif typ == 'set' and stanza.getTag('close', namespace=nbxmpp.NS_IBB):
+        elif typ == 'set' and stanza.getTag('close'):
             self.StreamCloseHandler(conn, stanza)
-        elif typ == 'result':
-            self.SendHandler()
+        elif typ == 'set' and stanza.getTag('data'):
+            sid = stanza.getTagAttr('data', 'sid')
+            file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
+            if not file_props:
+                conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_ITEM_NOT_FOUND))
+            elif file_props.connected and self.IBBMessageHandler(conn,
+            stanza):
+                reply = stanza.buildReply('result')
+                reply.delChild('data')
+                conn.send(reply)
+            elif not file_props.connected:
+                log.debug('Received IQ for closed filetransfer, IQ dropped')
         elif typ == 'error':
             gajim.socks5queue.error_cb()
         else:
@@ -815,18 +824,23 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.disconnect_cb = None
             file_props.continue_cb = None
             file_props.syn_id = stanza.getID()
-            file_props.fp = open(file_props.file_name, 'w')
+            file_props.fp = open(file_props.file_name, 'wb')
         conn.send(rep)
 
     def CloseIBBStream(self, file_props):
         file_props.connected = False
         file_props.fp.close()
         file_props.stopped = True
-        self.connection.send(nbxmpp.Protocol('iq',
-            file_props.direction[1:], 'set',
+        to = file_props.receiver
+        if file_props.direction == '<':
+            to = file_props.sender
+        self.connection.send(
+            nbxmpp.Protocol('iq', to, 'set',
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-            {'sid':file_props.sid})]))
-        if file_props.session_type == 'jingle':
+            {'sid':file_props.transport_sid})]))
+        if file_props.completed:
+            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+        elif file_props.session_type == 'jingle':
             peerjid = \
              file_props.receiver if file_props.type_ == 's' else file_props.sender
             session = self.get_jingle_session(peerjid, file_props.sid, 'file')
@@ -844,7 +858,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         base64 encoding that increases size of data by 1/3.
         """
         file_props = FilesProp.getFilePropBySid(sid)
-        file_props.direction = '|>' + to
+        file_props.direction = '>'
         file_props.block_size = blocksize
         file_props.fp = fp
         file_props.seq = 0
@@ -863,53 +877,41 @@ class ConnectionIBBytestream(ConnectionBytestream):
         file_props.syn_id = syn.getID()
         return file_props
 
-    def SendHandler(self):
+    def SendHandler(self, file_props):
         """
         Send next portion of data if it is time to do it. Used internally.
         """
         log.debug('SendHandler called')
-        for file_props in FilesProp.getAllFileProp():
-            if not file_props.direction:
-                # it's socks5 bytestream
-                continue
-            sid = file_props.sid
-            if file_props.direction[:2] == '|>':
-                # We waitthat other part accept stream
-                continue
-            if file_props.direction[0] == '>':
-                if file_props.paused:
-                    continue
-                if not file_props.connected:
-                    #TODO: Reply with out of order error
-                    continue
-                chunk = file_props.fp.read(file_props.block_size)
-                if chunk:
-                    datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {
-                        'sid': file_props.transport_sid,
-                        'seq': file_props.seq}, base64.b64encode(chunk.encode(
-                        'utf-8')).decode('utf-8'))
-                    file_props.seq += 1
-                    file_props.started = True
-                    if file_props.seq == 65536:
-                        file_props.seq = 0
-                    self.last_sent_ibb_id = self.connection.send(
-                        nbxmpp.Protocol(name='iq', to=file_props.direction[1:],
-                        typ='set', payload=[datanode]))
-                    current_time = time.time()
-                    file_props.elapsed_time += current_time - file_props.last_time
-                    file_props.last_time = current_time
-                    file_props.received_len += len(chunk)
-                    gajim.socks5queue.progress_transfer_cb(self.name,
-                        file_props)
-                else:
-                    # notify the other side about stream closing
-                    # notify the local user about sucessfull send
-                    # delete the local stream
-                    self.connection.send(nbxmpp.Protocol('iq',
-                        file_props.direction[1:], 'set',
-                        payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
-                        {'sid': file_props.transport_sid})]))
-                    file_props.completed = True
+        if file_props.completed:
+            self.CloseIBBStream(file_props)
+        if file_props.paused:
+            return
+        if not file_props.connected:
+            #TODO: Reply with out of order error
+            return
+        chunk = file_props.fp.read(file_props.block_size)
+        if chunk:
+            datanode = nbxmpp.Node(nbxmpp.NS_IBB + ' data', {
+                'sid': file_props.transport_sid,
+                'seq': file_props.seq},
+                base64.b64encode(chunk).decode('ascii'))
+            file_props.seq += 1
+            file_props.started = True
+            if file_props.seq == 65536:
+                file_props.seq = 0
+            file_props.syn_id = self.connection.send(
+                nbxmpp.Protocol(name='iq', to=file_props.receiver,
+                typ='set', payload=[datanode]))
+            current_time = time.time()
+            file_props.elapsed_time += current_time - file_props.last_time
+            file_props.last_time = current_time
+            file_props.received_len += len(chunk)
+            if file_props.size == file_props.received_len:
+                file_props.completed = True
+            gajim.socks5queue.progress_transfer_cb(self.name,
+                file_props)
+        else:
+            log.debug('Nothing to read, but file not completed')
 
     def IBBMessageHandler(self, conn, stanza):
         """
@@ -978,6 +980,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         else:
             conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_ITEM_NOT_FOUND))
 
+
     def IBBAllIqHandler(self, conn, stanza):
         """
         Handle remote side reply about if it agree or not to receive our
@@ -999,25 +1002,9 @@ class ConnectionIBBytestream(ConnectionBytestream):
                     else:
                         conn.Event('IBB', 'ERROR ON SEND', file_props)
                 elif stanza.getType() == 'result':
-                    if file_props.direction[0] == '|':
-                        file_props.direction = file_props.direction[1:]
-                        self.SendHandler()
-                    else:
-                        conn.send(nbxmpp.Error(stanza,
-                            nbxmpp.ERR_UNEXPECTED_REQUEST))
+                    self.SendHandler(file_props)
                 break
-        else:
-            if stanza.getTag('data'):
-                sid = stanza.getTagAttr('data', 'sid')
-                file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
-                if file_props.connected and self.IBBMessageHandler(conn,
-                stanza):
-                    reply = stanza.buildReply('result')
-                    reply.delChild('data')
-                    conn.send(reply)
-                    raise nbxmpp.NodeProcessed
-            elif syn_id == self.last_sent_ibb_id:
-                self.SendHandler()
+
 
 class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
 

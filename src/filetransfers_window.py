@@ -70,8 +70,7 @@ class FileTransfersWindow:
                 'notify_ft_complete_checkbox')
 
         shall_notify = gajim.config.get('notify_on_file_complete')
-        self.notify_ft_checkbox.set_active(shall_notify
-                                                                                                )
+        self.notify_ft_checkbox.set_active(shall_notify)
         self.model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, int,
             int, str)
         self.tree.set_model(self.model)
@@ -841,7 +840,7 @@ class FileTransfersWindow:
         if not is_row_selected:
             # no selection, disable the buttons
             self.set_all_insensitive()
-        elif not is_stopped:
+        elif not is_stopped and file_props.continue_cb:
             if is_transfer_active(file_props):
                 # file transfer is active
                 self.toggle_pause_continue(True)

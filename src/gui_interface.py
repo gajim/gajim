@@ -988,11 +988,6 @@ class Interface:
         session = gajim.connections[account].get_jingle_session(jid=None,
             sid=file_props.sid)
         ft_win = self.instances['file_transfers']
-        if not file_props.hash_:
-            # We disn't get the hash, sender probably don't support that
-            jid = file_props.sender
-            self.popup_ft_result(account, jid, file_props)
-            ft_win.set_status(file_props, 'ok')
         h = Hashes()
         try:
             file_ = open(file_props.file_name, 'rb')
@@ -1027,14 +1022,26 @@ class Interface:
         if file_props.stalled or file_props.paused:
             return
 
-        if file_props.type_ == 'r' and file_props.hash_: # we receive a file
+        if file_props.type_ == 'r': # we receive a file
             gajim.socks5queue.remove_receiver(file_props.sid, True, True)
-            # we compare hashes
             if file_props.session_type == 'jingle':
-                # Compare hashes in a new thread
-                self.hashThread = Thread(target=self.__compare_hashes,
-                    args=(account, file_props))
-                self.hashThread.start()
+                if file_props.hash_ and file_props.error == 0:
+                    # We compare hashes in a new thread
+                    self.hashThread = Thread(target=self.__compare_hashes,
+                        args=(account, file_props))
+                    self.hashThread.start()
+                else:
+                    # We disn't get the hash, sender probably don't support that
+                    jid = file_props.sender
+                    self.popup_ft_result(account, jid, file_props)
+                    if file_props.error == 0:
+                        ft.set_status(file_props, 'ok')
+                    session = gajim.connections[account].get_jingle_session(jid=None,
+                        sid=file_props.sid)
+                    # End jingle session
+                    # TODO: only if there are no other parallel downloads in this session
+                    if session:
+                        session.end_session()
         else: # we send a file
             jid = file_props.receiver
             gajim.socks5queue.remove_sender(file_props.sid, True, True)
