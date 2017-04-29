@@ -156,7 +156,7 @@ class ConnectionJingle(object):
         use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)
         jingle = JingleSession(self, weinitiate=True, jid=jid, werequest=request)
         # this is a file transfer
-        jingle.session_type_FT = True
+        jingle.session_type_ft = True
         self._sessions[jingle.sid] = jingle
         file_props.sid = jingle.sid
         if contact.supports(nbxmpp.NS_JINGLE_BYTESTREAM):
