@@ -210,7 +210,6 @@ class ConversationTextview(GObject.GObject):
         self.images = []
         self.image_cache = {}
         self.xep0184_marks = {}
-        self.xep0184_shown = {}
         # self.last_sent_message_id = msg_stanza_id
         self.last_sent_message_id = None
         # last_received_message_id[name] = (msg_stanza_id, line_start_mark)
@@ -307,9 +306,6 @@ class ConversationTextview(GObject.GObject):
         buffer_.create_tag('focus-out-line', justification = Gtk.Justification.CENTER)
         self.displaymarking_tags = {}
 
-        tag = buffer_.create_tag('xep0184-warning')
-        tag.set_property('foreground', '#cc0000')
-
         tag = buffer_.create_tag('xep0184-received')
         tag.set_property('foreground', '#73d216')
 
@@ -339,15 +335,6 @@ class ConversationTextview(GObject.GObject):
                     'Text below this line is what has '
                     'been said since the\nlast time you paid attention to this '
                     'group chat'))
-                return True
-            if tag_name == 'xep0184-warning':
-                tooltip.set_text(_(
-                    'This icon indicates that this message has not '
-                    'yet\nbeen received by the remote '
-                    "end. If this icon stays\nfor a long time, it's likely the "
-                    'message got lost.'))
-                window.set_cursor(gtkgui_helpers.get_cursor('LEFT_PTR'))
-                self.cursor_changed = True
                 return True
             if getattr(tag, 'is_anchor', False):
                 text = getattr(tag, 'title', False)
@@ -445,59 +432,32 @@ class ConversationTextview(GObject.GObject):
 
         return index, end_mark, old_txt
 
-    def show_xep0184_warning(self, id_):
+    def add_xep0184_mark(self, id_):
         if id_ in self.xep0184_marks:
             return
 
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        self.xep0184_marks[id_] = buffer_.create_mark(None,
-                buffer_.get_end_iter(), left_gravity=True)
-        self.xep0184_shown[id_] = NOT_SHOWN
-
-        def show_it():
-            if (not id_ in self.xep0184_shown) or \
-            self.xep0184_shown[id_] == ALREADY_RECEIVED:
-                return False
-
-            end_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-            buffer_.insert_with_tags_by_name(end_iter, ' ✖', 'xep0184-warning')
-
-            self.xep0184_shown[id_] = SHOWN
-            return False
-        GLib.timeout_add_seconds(3, show_it)
+        self.xep0184_marks[id_] = buffer_.create_mark(
+            None, buffer_.get_end_iter(), left_gravity=True)
 
         buffer_.end_user_action()
 
-    def hide_xep0184_warning(self, id_):
+    def show_xep0184_ack(self, id_):
         if id_ not in self.xep0184_marks:
             return
 
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        if self.xep0184_shown[id_] != NOT_SHOWN:
-            begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
-
-            end_iter = begin_iter.copy()
-            # XXX: Is there a nicer way?
-            end_iter.forward_char()
-            end_iter.forward_char()
-
-            buffer_.delete(begin_iter, end_iter)
-
         if gajim.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
                 'xep0184-received')
 
-        self.xep0184_shown[id_] = ALREADY_RECEIVED
-
         buffer_.end_user_action()
-
         del self.xep0184_marks[id_]
-        del self.xep0184_shown[id_]
 
     def show_focus_out_line(self, scroll=True):
         if not self.allow_focus_out_line:

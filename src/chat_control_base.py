@@ -875,7 +875,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             correct_id=correct_id, additional_data=additional_data)
 
         if xep0184_id is not None:
-            textview.show_xep0184_warning(xep0184_id)
+            textview.add_xep0184_mark(xep0184_id)
 
         if not count_as_new:
             return

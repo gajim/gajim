@@ -1204,7 +1204,7 @@ class ConnectionHandlersBase:
                 if not id_:
                     # old XEP implementation
                     id_ = obj.id_
-                ctrl.conv_textview.hide_xep0184_warning(id_)
+                ctrl.conv_textview.show_xep0184_ack(id_)
 
         if obj.mtype == 'error':
             if not obj.msgtxt:
