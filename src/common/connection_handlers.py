@@ -1244,14 +1244,6 @@ class ConnectionHandlersBase:
             self.dispatch_error_message(obj.stanza, obj.msgtxt,
                 obj.session, obj.fjid, obj.timestamp)
             return True
-        elif obj.invite_tag is not None:
-            gajim.nec.push_incoming_event(GcInvitationReceivedEvent(None,
-                conn=self, msg_obj=obj))
-            return True
-        elif obj.decline_tag is not None:
-            gajim.nec.push_incoming_event(GcDeclineReceivedEvent(None,
-                conn=self, msg_obj=obj))
-            return True
         elif obj.mtype == 'groupchat':
             gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
                 conn=self, msg_obj=obj))

@@ -1652,16 +1652,11 @@ class Interface:
         gajim.events.add_event(account, jid, event)
 
         self.roster.show_title()
-        if no_queue: # We didn't have a queue: we change icons
-            if not gajim.contacts.get_contact_with_highest_priority(account,
-            jid):
-                if event.type_ == 'gc-invitation':
-                    self.roster.add_groupchat(jid, account, status='offline')
-                else:
-                    # add contact to roster ("Not In The Roster") if he is not
-                    self.roster.add_to_not_in_the_roster(account, jid)
-            else:
+        if no_queue:  # We didn't have a queue: we change icons
+            if gajim.contacts.get_contact_with_highest_priority(account, jid):
                 self.roster.draw_contact(jid, account)
+            else:
+                self.roster.add_to_not_in_the_roster(account, jid)
 
         # Select the big brother contact in roster, it's visible because it has
         # events.
