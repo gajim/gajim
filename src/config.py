@@ -1716,7 +1716,8 @@ class AccountsWindow:
             self.remove_button.set_sensitive(True)
             self.rename_button.set_sensitive(True)
 
-            if account != gajim.ZEROCONF_ACC_NAME:
+            if (account != gajim.ZEROCONF_ACC_NAME and
+                    account in gajim.connections):
                 self.change_password_button.set_sensitive(
                     gajim.connections[account].register_supported)
 
