@@ -701,7 +701,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # refresh timers
         self.reset_kbd_mouse_timeout_vars()
 
-        if gajim.config.get('outgoing_chat_state_notifications') == 'disabled':
+        notifications = gajim.config.get('outgoing_chat_state_notifications')
+        if (self.contact.jid == gajim.get_jid_from_account(self.account) or
+                notifications == 'disabled'):
             chatstate = None
 
         label = self.get_seclabel()

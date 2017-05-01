@@ -1233,6 +1233,9 @@ class ChatControl(ChatControlBase):
         if contact and contact.sub in ('to', 'none'):
             return
 
+        if self.contact.jid == gajim.get_jid_from_account(self.account):
+            return
+
         elif chatstate_setting == 'composing_only' and state != 'active' and\
                 state != 'composing':
             return
