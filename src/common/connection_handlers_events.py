@@ -1115,7 +1115,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def init(self):
         self.additional_data = {}
-    
+
     def generate(self):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
@@ -1197,24 +1197,32 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         self.enc_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
-
-        self.invite_tag = None
-        self.decline_tag = None
         if not self.enc_tag:
-            # Direct invitation?
-            self.invite_tag = self.stanza.getTag('x',
-                namespace=nbxmpp.NS_CONFERENCE)
             # Mediated invitation?
-            if not self.invite_tag:
-                self.invite_tag = self.stanza.getTag('x',
-                    namespace=nbxmpp.NS_MUC_USER)
-                if self.invite_tag and not self.invite_tag.getTag('invite'):
-                    self.invite_tag = None
-
-            self.decline_tag = self.stanza.getTag('x',
-                namespace=nbxmpp.NS_MUC_USER)
-            if self.decline_tag and not self.decline_tag.getTag('decline'):
-                self.decline_tag = None
+            muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+            if muc_user:
+                if muc_user.getTag('decline'):
+                    gajim.nec.push_incoming_event(
+                        GcDeclineReceivedEvent(
+                            None, conn=self.conn,
+                            room_jid=self.fjid, stanza=muc_user))
+                    return
+                if muc_user.getTag('invite'):
+                    gajim.nec.push_incoming_event(
+                        GcInvitationReceivedEvent(
+                            None, conn=self.conn, jid_from=self.fjid,
+                            mediated=True, stanza=muc_user))
+                    return
+            else:
+                # Direct invitation?
+                direct = self.stanza.getTag(
+                    'x', namespace=nbxmpp.NS_CONFERENCE)
+                if direct:
+                    gajim.nec.push_incoming_event(
+                        GcInvitationReceivedEvent(
+                            None, conn=self.conn, jid_from=self.fjid,
+                            mediated=False, stanza=direct))
+                    return
 
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()
@@ -1329,46 +1337,42 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        invite_tag = self.msg_obj.invite_tag
-        if invite_tag.getNamespace() == nbxmpp.NS_CONFERENCE:
+        account = self.conn.name
+        if not self.mediated:
             # direct invitation
             try:
-                self.room_jid = helpers.parse_jid(invite_tag.getAttr('jid'))
+                self.room_jid = helpers.parse_jid(self.stanza.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it', invite_tag.getAttr(
-                            'jid'))
+                log.warning('Invalid JID: %s, ignoring it',
+                            self.stanza.getAttr('jid'))
                 return
-            self.jid_from = self.msg_obj.fjid
-            self.reason = invite_tag.getAttr('reason')
-            self.password = invite_tag.getAttr('password')
+            self.reason = self.stanza.getAttr('reason')
+            self.password = self.stanza.getAttr('password')
             self.is_continued = False
-            if invite_tag.getAttr('continue') == 'true':
-                self.is_continued = True
+            self.is_continued = self.stanza.getAttr('continue') == 'true'
         else:
-            self.room_jid = self.msg_obj.fjid
-            item = self.msg_obj.invite_tag.getTag('invite')
+            self.invite = self.stanza.getTag('invite')
+            self.room_jid = self.jid_from
             try:
-                self.jid_from = helpers.parse_jid(item.getAttr('from'))
+                self.jid_from = helpers.parse_jid(self.invite.getAttr('from'))
             except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it' % item.getAttr(
-                    'from'))
+                log.warning('Invalid JID: %s, ignoring it',
+                            self.invite.getAttr('from'))
                 return
 
-            self.reason = item.getTagData('reason')
-            self.password = invite_tag.getTagData('password')
+            self.reason = self.invite.getTagData('reason')
+            self.password = self.stanza.getTagData('password')
+            self.is_continued = self.stanza.getTag('continue') is not None
 
-            self.is_continued = False
-            if item.getTag('continue'):
-                self.is_continued = True
-
-        if self.room_jid in gajim.gc_connected[self.conn.name] and \
-        gajim.gc_connected[self.conn.name][self.room_jid]:
+        if self.room_jid in gajim.gc_connected[account] and \
+                gajim.gc_connected[account][self.room_jid]:
             # We are already in groupchat. Ignore invitation
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
-        if gajim.config.get_per('accounts', self.conn.name,
-        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
-        self.conn.name, jid):
+
+        ignore = gajim.config.get_per(
+            'accounts', account, 'ignore_unknown_contacts')
+        if ignore and not gajim.contacts.get_contacts(account, jid):
             return
 
         return True
@@ -1378,20 +1382,20 @@ class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.room_jid = self.msg_obj.fjid
-
-        item = self.msg_obj.decline_tag.getTag('decline')
+        account = self.conn.name
+        decline = self.stanza.getTag('decline')
         try:
-            self.jid_from = helpers.parse_jid(item.getAttr('from'))
+            self.jid_from = helpers.parse_jid(decline.getAttr('from'))
         except helpers.InvalidFormat:
-            log.warning('Invalid JID: %s, ignoring it' % item.getAttr('from'))
+            log.warning('Invalid JID: %s, ignoring it',
+                        decline.getAttr('from'))
             return
         jid = gajim.get_jid_without_resource(self.jid_from)
-        if gajim.config.get_per('accounts', self.conn.name,
-        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
-        self.conn.name, jid):
+        ignore = gajim.config.get_per(
+            'accounts', account, 'ignore_unknown_contacts')
+        if ignore and not gajim.contacts.get_contacts(account, jid):
             return
-        self.reason = item.getTagData('reason')
+        self.reason = decline.getTagData('reason')
 
         return True
 
@@ -1408,8 +1412,6 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.fjid = self.msg_obj.fjid
         self.resource = self.msg_obj.resource
         self.mtype = self.msg_obj.mtype
-        self.invite_tag = self.msg_obj.invite_tag
-        self.decline_tag = self.msg_obj.decline_tag
         self.thread_id = self.msg_obj.thread_id
         self.msgtxt = self.msg_obj.msgtxt
         self.gc_control = self.msg_obj.gc_control
