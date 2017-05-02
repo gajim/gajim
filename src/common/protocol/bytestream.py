@@ -519,9 +519,11 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 'file_transfer_proxies')
         shall_use_proxies = gajim.config.get_per('accounts', self.name,
                 'use_ft_proxies')
-        if shall_use_proxies and configured_proxies:
+        if shall_use_proxies:
             proxyhost_dicts = []
-            proxies = [item.strip() for item in configured_proxies.split(',')]
+            proxies = []
+            if configured_proxies:
+                proxies = [item.strip() for item in configured_proxies.split(',')]
             default_proxy = gajim.proxy65_manager.get_default_for_name(self.name)
             if default_proxy:
                 # add/move default proxy at top of the others
