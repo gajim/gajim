@@ -2,6 +2,7 @@
 ## src/network_watcher.py
 ##
 ## Copyright (C) 2017 Philipp Hoerist <philipp AT hoerist.com>
+## Copyright © 2017 Jörg Sommer <joerg@alea.gnuu.de>
 ##
 ## This file is part of Gajim.
 ##
@@ -47,6 +48,11 @@ def signal_received(connection, sender_name, object_path,
     if interface_name == 'org.freedesktop.NetworkManager':
         # https://people.freedesktop.org/~lkundrak/nm-docs/nm-dbus-types.html
         connected = parameters[0] == 70
+    elif interface_name == 'org.freedesktop.DBus.Properties' and len(parameters) >= 2 \
+         and parameters[0] == 'org.freedesktop.network1.Manager' \
+         and 'OperationalState' in parameters[1]:
+        connected = parameters[1]['OperationalState'] == 'routable'
+
     if connected is not None:
         GLib.timeout_add_seconds(
             2, update_connection_state,
@@ -67,6 +73,16 @@ def appeared(connection, name, name_owner, *user_data):
             Gio.DBusSignalFlags.NONE,
             signal_received,
             None)
+    elif name == 'org.freedesktop.network1':
+        connection.signal_subscribe(
+            'org.freedesktop.network1',
+            None,
+            'PropertiesChanged',
+            '/org/freedesktop/network1',
+            None,
+            Gio.DBusSignalFlags.NONE,
+            signal_received,
+            None)
 
 
 def update_connection_state(connected):
@@ -82,3 +98,4 @@ def update_connection_state(connected):
 
 
 watch_name('org.freedesktop.NetworkManager')
+watch_name('org.freedesktop.network1')
