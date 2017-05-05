@@ -1917,8 +1917,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
-        gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(
-                self.connected_hostname), self._on_stun_resolved)
+        hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+        gajim.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
+                self._on_stun_resolved)
 
     def _on_stun_resolved(self, host, result_array):
         if len(result_array) != 0:
