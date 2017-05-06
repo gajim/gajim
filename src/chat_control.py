@@ -848,46 +848,31 @@ class ChatControl(ChatControlBase):
 
         encryption_state = {'visible': visible,
                             'enc_type': self.encryption,
-                            'enc_enabled': False,
-                            'chat_logged': loggable,
                             'authenticated': False}
 
         gajim.plugin_manager.gui_extension_point(
             'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
- 
-    def _show_lock_image(self, visible, enc_type='', enc_enabled=False,
-                    chat_logged=False, authenticated=False):
+
+    def _show_lock_image(self, visible, enc_type='',
+                         authenticated=False):
         """
         Set lock icon visibility and create tooltip
         """
-        #encryption %s active
-        status_string = enc_enabled and _('is') or _('is NOT')
-        #chat session %s be logged
-        logged_string = chat_logged and _('will') or _('will NOT')
-
         if authenticated:
-            #About encrypted chat session
             authenticated_string = _('and authenticated')
             img_path = gtkgui_helpers.get_icon_path('security-high')
         else:
-            #About encrypted chat session
             authenticated_string = _('and NOT authenticated')
             img_path = gtkgui_helpers.get_icon_path('security-low')
         self.lock_image.set_from_file(img_path)
 
-        #status will become 'is' or 'is not', authentificaed will become
-        #'and authentificated' or 'and not authentificated', logged will become
-        #'will' or 'will not'
-        tooltip = _('%(type)s encryption %(status)s active %(authenticated)s.\n'
-                'Your chat session %(logged)s be logged.') % {'type': enc_type,
-                'status': status_string, 'authenticated': authenticated_string,
-                'logged': logged_string}
+        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {'type': enc_type, 'authenticated': authenticated_string}
 
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
-        self.lock_image.set_sensitive(enc_enabled)
+        self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
         gajim.plugin_manager.gui_extension_point(
@@ -991,8 +976,8 @@ class ChatControl(ChatControlBase):
             msg = _('E2E encryption disabled')
             ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
-        self._show_lock_image(e2e_is_active, 'E2E', e2e_is_active, self.session and \
-                        self.session.is_loggable(), self.session and self.session.verified_identity)
+        self._show_lock_image(e2e_is_active, 'E2E',
+                              self.session and self.session.verified_identity)
 
     def print_session_details(self, old_session=None):
         if isinstance(self.session, EncryptedStanzaSession) or \
