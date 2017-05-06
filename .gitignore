@@ -9,6 +9,7 @@ syntax: glob
 *~
 autom4te.cache
 data/defs.py
+data/org.gajim.Gajim.appdata.xml
 data/org.gajim.Gajim.desktop
 libtool
 po/.intltool-merge-cache

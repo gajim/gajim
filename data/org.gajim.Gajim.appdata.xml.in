@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.gajim.Gajim.desktop</id>
+  <metadata_license>CC-BY-SA-3.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <name>Gajim</name>
+  <summary>A GTK+ Jabber client</summary>
+
+  <description>
+    <p>Gajim is a chat client to be used with Jabber.org, Google Talk, Hangouts,
+    Live Journal Talk, Nimbuzz, Ovi, Talkonaut, and thousands of other services
+    run by companies and ISPs, and volunteers around the world.
+    </p>
+    <p>If you have a few accounts on different servers, if you want to be in
+    contact with your friends and family all the time, then Gajim is for you.
+    </p>
+    <p>Features:</p>
+    <ul>
+     <li>Tabbed chat window and single window modes</li>
+     <li>Group chat support (with Multi-User Chat protocol), invitation, chat to group chat transformation, minimize group chat to roster</li>
+     <li>Emoticons, avatars, PEP (user activity, mood and tune)</li>
+     <li>Audio / video conferences</li>
+     <li>File transfer, room bookmarks</li>
+     <li>Metacontacts support</li>
+     <li>Trayicon, speller, extended chat history functionalities</li>
+     <li>TLS, GPG and End-To-End encryption support (with SSL legacy support)</li>
+     <li>Transport registration support</li>
+     <li>Service discovery including nodes, user search</li>
+     <li>Wikipedia, dictionary and search engine lookup</li>
+     <li>Multiple accounts support</li>
+     <li>XML console</li>
+     <li>Link local (bonjour / zeroconf), BOSH</li>
+     <li>Other features via plugins </li>
+    </ul>
+  </description>
+
+  <categories>
+​    <category>GNOME</category>
+​    <category>GTK</category>
+​    <category>InstantMessaging</category>
+​    <category>Network</category>
+​  </categories>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://gajim.org/imgs/gajim_roster.png</image>
+      <caption>Roster, list of contacts</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://gajim.org/imgs/gajim_tabbed_chat.png</image>
+      <caption>Tabbed chat window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://gajim.org/imgs/groupchat_window.png</image>
+      <caption>Group chat support</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://gajim.org/imgs/history_window.png</image>
+      <caption>Chat history</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://gajim.org/imgs/gajim_jingle.png</image>
+      <caption>Jingle video conference</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://gajim.org/imgs/gajim_plugins.png</image>
+      <caption>Plugin manager</caption>
+    </screenshot>
+  </screenshots>
+  <developer_name>Gajim Team</developer_name>
+  <update_contact>gajim-devel_AT_gajim.org</update_contact>
+
+  <url type="homepage">https://gajim.org/</url>
+  <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
+  <url type="faq">https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq</url>
+  <url type="help">https://dev.gajim.org/gajim/gajim/wikis/help/home</url>
+  <url type="translate">https://dev.gajim.org/gajim/gajim/wikis/development/DevTranslate</url>
+</component>
