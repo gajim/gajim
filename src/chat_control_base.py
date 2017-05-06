@@ -804,6 +804,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         It gets called no matter if it is the active window or not
         """
+        if not self.parent_win:
+            # when a groupchat is minimized there is no parent window
+            return
         if self.parent_win.get_active_jid() == self.contact.jid:
             # if window is the active one, change vars assisting chatstate
             self.mouse_over_in_last_5_secs = True
