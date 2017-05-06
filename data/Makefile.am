@@ -1,6 +1,11 @@
 SUBDIRS = gui emoticons pixmaps iconsets moods activities
 @INTLTOOL_DESKTOP_RULE@
 
+appstreamdir = $(datadir)/metainfo/
+appstream_in_files = org.gajim.Gajim.appdata.xml.in
+appstream_DATA = $(appstream_in_files:.xml.in=.xml)
+@INTLTOOL_XML_RULE@
+
 desktopdir = $(datadir)/applications
 desktop_in_files = org.gajim.Gajim.desktop.in.in gajim-remote.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
@@ -19,7 +24,8 @@ other_DATA = other/servers.xml other/dh4096.pem
 man_MANS = gajim.1 gajim-remote.1 gajim-history-manager.1
 
 
-EXTRA_DIST = $(desktop_in_files) \
+EXTRA_DIST = $(appstream_in_files) \
+			 $(desktop_in_files) \
 			 $(sounds_DATA) \
 			 $(other_DATA) \
 			 $(man_MANS) \
@@ -29,6 +35,8 @@ EXTRA_DIST = $(desktop_in_files) \
 DISTCLEANFILES = $(desktop_DATA) \
 				 $(installdefs_DATA)
 
-CLEANFILES = org.gajim.Gajim.desktop gajim-remote.desktop
+CLEANFILES = $(appstream_DATA) \
+			 org.gajim.Gajim.desktop \
+			 gajim-remote.desktop
 
 MAINTAINERCLEANFILES = Makefile.in
