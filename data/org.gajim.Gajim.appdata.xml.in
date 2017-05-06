@@ -35,11 +35,11 @@
   </description>
 
   <categories>
-​    <category>GNOME</category>
-​    <category>GTK</category>
-​    <category>InstantMessaging</category>
-​    <category>Network</category>
-​  </categories>
+    <category>GNOME</category>
+    <category>GTK</category>
+    <category>InstantMessaging</category>
+    <category>Network</category>
+  </categories>
 
   <screenshots>
     <screenshot type="default">
