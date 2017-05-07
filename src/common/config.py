@@ -480,8 +480,7 @@ class Config:
                     'state_muc_directed_msg_color': [ opt_color, 'red2' ],
             }, {}),
             'contacts': ({
-                    'gpg_enabled': [ opt_bool, False, _('Is OpenPGP enabled for this contact?')],
-                    'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session with this contact when possible?')],
+                    'encryption': [ opt_str, '', _('Encryption used for this contact.')],
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
             'rooms': ({

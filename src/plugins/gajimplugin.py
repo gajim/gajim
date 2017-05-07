@@ -59,6 +59,16 @@ class GajimPlugin(object):
     :todo: decide whether we really need this one, because class name (with
             module name) can act as such short name
     '''
+    encryption_name = ''
+    '''
+    Name of the encryption scheme.
+
+    The name that Gajim displays in the encryption menu.
+    Leave empty if the plugin is not an encryption plugin.
+
+    :type: str
+
+    '''
     version = ''
     '''
     Version of plugin.

@@ -245,9 +245,6 @@ control=None, gc_contact=None, is_anonymous=True):
             'remove_from_roster_menuitem')
     manage_contact_menuitem = xml.get_object('manage_contact')
     convert_to_gc_menuitem = xml.get_object('convert_to_groupchat_menuitem')
-    encryption_separator = xml.get_object('encryption_separator')
-    toggle_gpg_menuitem = xml.get_object('toggle_gpg_menuitem')
-    toggle_e2e_menuitem = xml.get_object('toggle_e2e_menuitem')
     last_separator = xml.get_object('last_separator')
 
     items_to_hide = []
@@ -321,36 +318,6 @@ control=None, gc_contact=None, is_anonymous=True):
 
     if not show_start_chat:
         items_to_hide.append(start_chat_menuitem)
-
-    if not show_encryption or not control:
-        items_to_hide += [encryption_separator, toggle_gpg_menuitem,
-                toggle_e2e_menuitem]
-    else:
-        e2e_is_active = control.session is not None and \
-                control.session.enable_encryption
-
-        # check if we support and use gpg
-        if not gajim.config.get_per('accounts', account, 'keyid') or \
-        not gajim.connections[account].USE_GPG or gajim.jid_is_transport(
-        contact.jid):
-            toggle_gpg_menuitem.set_sensitive(False)
-        else:
-            toggle_gpg_menuitem.set_sensitive(control.gpg_is_active or \
-                    not e2e_is_active)
-            toggle_gpg_menuitem.set_active(control.gpg_is_active)
-            toggle_gpg_menuitem.connect('activate',
-                    control._on_toggle_gpg_menuitem_activate)
-
-        # disable esessions if we or the other client don't support them
-        if not gajim.HAVE_PYCRYPTO or not contact.supports(NS_ESESSION) or \
-        not gajim.config.get_per('accounts', account, 'enable_esessions'):
-            toggle_e2e_menuitem.set_sensitive(False)
-        else:
-            toggle_e2e_menuitem.set_active(e2e_is_active)
-            toggle_e2e_menuitem.set_sensitive(e2e_is_active or \
-                    not control.gpg_is_active)
-            toggle_e2e_menuitem.connect('activate',
-                    control._on_toggle_e2e_menuitem_activate)
 
     if not show_buttonbar_items:
         items_to_hide += [history_menuitem, send_file_menuitem,
@@ -781,3 +748,23 @@ def build_bookmark_menu(account):
     label = menu.get_item_attribute_value(1, 'label').get_string()
     menu.remove(1)
     menu.insert_submenu(1, label, bookmark_menu)
+
+
+def get_encryption_menu(contact, type_id):
+    menu = Gio.Menu()
+    menu.append(
+        'Disabled', 'win.{}-encryptiongroup::{}'.format(contact.jid,
+                                                        'disabled'))
+    for name, plugin in gajim.plugin_manager.encryption_plugins.items():
+        if type_id == 'gc':
+            if not hasattr(plugin, 'allow_groupchat'):
+                continue
+        if type_id == 'pm':
+            if not hasattr(plugin, 'allow_privatchat'):
+                continue
+        menu_action = 'win.{}-encryptiongroup::{}'.format(
+            contact.jid, name)
+        menu.append(name, menu_action)
+    if menu.get_n_items() == 1:
+        return None
+    return menu

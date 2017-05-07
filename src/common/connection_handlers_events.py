@@ -1035,6 +1035,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def init(self):
         self.additional_data = {}
+        self.encrypted = False
     
     def generate(self):
         if not self.stanza:
@@ -1067,7 +1068,6 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.with_ = to_
             self.direction = 'to'
             self.resource = gajim.get_resource_from_jid(self.msg_.getAttr('to'))
-        self.enc_tag = self.msg_.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
         return True
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -1122,6 +1122,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_id()
         self.forwarded = False
         self.sent = False
+        self.encrypted = False
         account = self.conn.name
 
         our_full_jid = gajim.get_jid_from_account(account, full=True)
@@ -1216,33 +1217,31 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 conn=self.conn, stanza=forwarded))
             return
 
-        self.enc_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
-        if not self.enc_tag:
-            # Mediated invitation?
-            muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-            if muc_user:
-                if muc_user.getTag('decline'):
-                    gajim.nec.push_incoming_event(
-                        GcDeclineReceivedEvent(
-                            None, conn=self.conn,
-                            room_jid=self.fjid, stanza=muc_user))
-                    return
-                if muc_user.getTag('invite'):
-                    gajim.nec.push_incoming_event(
-                        GcInvitationReceivedEvent(
-                            None, conn=self.conn, jid_from=self.fjid,
-                            mediated=True, stanza=muc_user))
-                    return
-            else:
-                # Direct invitation?
-                direct = self.stanza.getTag(
-                    'x', namespace=nbxmpp.NS_CONFERENCE)
-                if direct:
-                    gajim.nec.push_incoming_event(
-                        GcInvitationReceivedEvent(
-                            None, conn=self.conn, jid_from=self.fjid,
-                            mediated=False, stanza=direct))
-                    return
+        # Mediated invitation?
+        muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user:
+            if muc_user.getTag('decline'):
+                gajim.nec.push_incoming_event(
+                    GcDeclineReceivedEvent(
+                        None, conn=self.conn,
+                        room_jid=self.fjid, stanza=muc_user))
+                return
+            if muc_user.getTag('invite'):
+                gajim.nec.push_incoming_event(
+                    GcInvitationReceivedEvent(
+                        None, conn=self.conn, jid_from=self.fjid,
+                        mediated=True, stanza=muc_user))
+                return
+        else:
+            # Direct invitation?
+            direct = self.stanza.getTag(
+                'x', namespace=nbxmpp.NS_CONFERENCE)
+            if direct:
+                gajim.nec.push_incoming_event(
+                    GcInvitationReceivedEvent(
+                        None, conn=self.conn, jid_from=self.fjid,
+                        mediated=False, stanza=direct))
+                return
 
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()
@@ -1283,51 +1282,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
             self.session.last_receive = time_time()
 
-        # check if the message is a XEP-0020 feature negotiation request
-        if not self.forwarded and self.stanza.getTag('feature',
-                                                     namespace=nbxmpp.NS_FEATURE):
-            if gajim.HAVE_PYCRYPTO:
-                feature = self.stanza.getTag(name='feature',
-                                             namespace=nbxmpp.NS_FEATURE)
-                form = nbxmpp.DataForm(node=feature.getTag('x'))
-                if not form:
-                    return
-
-                if not form.getField('FORM_TYPE'):
-                    return
-
-                if form['FORM_TYPE'] == 'urn:xmpp:ssn':
-                    self.session.handle_negotiation(form)
-                else:
-                    reply = self.stanza.buildReply()
-                    reply.setType('error')
-                    reply.addChild(feature)
-                    err = nbxmpp.ErrorNode('service-unavailable', typ='cancel')
-                    reply.addChild(node=err)
-                    self.conn.connection.send(reply)
-            return
-
-        if not self.forwarded and self.stanza.getTag('init',
-                                                     namespace=nbxmpp.NS_ESESSION_INIT):
-            init = self.stanza.getTag(name='init',
-                                      namespace=nbxmpp.NS_ESESSION_INIT)
-            form = nbxmpp.DataForm(node=init.getTag('x'))
-
-            self.session.handle_negotiation(form)
-
-            return
-
         self._generate_timestamp(self.stanza.getTimestamp())
-
-
-        self.encrypted = False
-        xep_200_encrypted = self.stanza.getTag('c',
-                                               namespace=nbxmpp.NS_STANZA_CRYPTO)
-        if xep_200_encrypted:
-            if self.forwarded:
-                # Ignore E2E forwarded encrypted messages
-                return False
-            self.encrypted = 'xep200'
 
         return True
 
@@ -2796,6 +2751,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.attention = False
         self.correction_msg = None
         self.automatic_message = True
+        self.encryption = ''
 
     def get_full_jid(self):
         if self.resource:

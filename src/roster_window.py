@@ -3220,7 +3220,7 @@ class RosterWindow:
                 ctrl._on_window_motion_notify)
             ctrl.handlers[id_] = mw.window
         ctrl.parent_win = mw
-        ctrl.set_tooltip()
+        ctrl.on_groupchat_maximize()
         mw.new_tab(ctrl)
         mw.set_active_tab(ctrl)
         mw.window.get_window().focus(Gtk.get_current_event_time())

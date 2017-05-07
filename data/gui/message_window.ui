@@ -64,7 +64,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkWindow" id="message_window">
+  <object class="GtkApplicationWindow" id="message_window">
     <property name="can_focus">False</property>
     <property name="default_width">480</property>
     <property name="default_height">440</property>
