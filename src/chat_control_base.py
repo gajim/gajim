@@ -398,7 +398,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.encryption = 'disabled'
         self.set_encryption_state()
-        self.add_window_actions()
+        if self.parent_win:
+            self.add_window_actions()
 
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
@@ -435,7 +436,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if not plugin.activate_encryption(self):
                 return
         else:
-            self.terminate_esessions()
+            if not self.widget_name == 'groupchat_control':
+                self.terminate_esessions()
         action.set_state(param)
         gajim.config.set_per(
             'contacts', self.contact.jid, 'encryption', encryption)

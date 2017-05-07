@@ -286,7 +286,7 @@ class ChatControl(ChatControlBase):
 
         self.encryption_menu = self.xml.get_object('encryption_menu')
         self.encryption_menu.set_menu_model(
-            gui_menu_builder.get_encryption_menu(self.contact))
+            gui_menu_builder.get_encryption_menu(self.contact, self.type_id))
         # restore previous conversation
         self.restore_conversation()
         self.msg_textview.grab_focus()

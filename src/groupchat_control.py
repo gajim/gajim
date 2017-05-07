@@ -481,6 +481,19 @@ class GroupchatControl(ChatControlBase):
 
         self.form_widget = None
 
+        # Encryption
+        self.lock_image = self.xml.get_object('lock_image')
+        self.authentication_button = self.xml.get_object(
+            'authentication_button')
+        id_ = self.authentication_button.connect('clicked',
+            self._on_authentication_button_clicked)
+        self.handlers[id_] = self.authentication_button
+        self.set_lock_image()
+
+        self.encryption_menu = self.xml.get_object('encryption_menu')
+        self.encryption_menu.set_menu_model(
+            gui_menu_builder.get_encryption_menu(self.contact, self.type_id))
+
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
         gajim.ged.register_event_handler('gc-message-received', ged.GUI1,
@@ -507,6 +520,11 @@ class GroupchatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         gajim.plugin_manager.gui_extension_point('groupchat_control', self)
+
+    def on_groupchat_maximize(self):
+        self.set_tooltip()
+        self.add_window_actions()
+        self.set_lock_image()
 
     def set_tooltip(self):
         widget = self.xml.get_object('list_treeview')
@@ -750,6 +768,42 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.update_ui(self)
         for nick in gajim.contacts.get_nick_list(self.account, self.room_jid):
             self.draw_contact(nick)
+
+    def set_lock_image(self):
+        visible = self.encryption != 'disabled'
+
+        encryption_state = {'visible': visible,
+                            'enc_type': self.encryption,
+                            'authenticated': False}
+
+        gajim.plugin_manager.gui_extension_point(
+            'encryption_state' + self.encryption, self, encryption_state)
+
+        self._show_lock_image(**encryption_state)
+
+    def _show_lock_image(self, visible, enc_type='',
+                         authenticated=False):
+        """
+        Set lock icon visibility and create tooltip
+        """
+        if authenticated:
+            authenticated_string = _('and authenticated')
+            img_path = gtkgui_helpers.get_icon_path('security-high')
+        else:
+            authenticated_string = _('and NOT authenticated')
+            img_path = gtkgui_helpers.get_icon_path('security-low')
+        self.lock_image.set_from_file(img_path)
+
+        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
+            'type': enc_type, 'authenticated': authenticated_string}
+
+        self.authentication_button.set_tooltip_text(tooltip)
+        self.widget_set_visible(self.authentication_button, not visible)
+        self.lock_image.set_sensitive(visible)
+
+    def _on_authentication_button_clicked(self, widget):
+        gajim.plugin_manager.gui_extension_point(
+            'encryption_dialog' + self.encryption, self)
 
     def _change_style(self, model, path, iter_, option):
         model[iter_][Column.NICK] = model[iter_][Column.NICK]
@@ -1965,6 +2019,13 @@ class GroupchatControl(ChatControlBase):
         """
         if not message:
             return
+
+        if self.encryption:
+            self.sendmessage = True
+            gajim.plugin_manager.gui_extension_point(
+                    'send_message' + self.encryption, self)
+            if not self.sendmessage:
+                return
 
         if process_commands and self.process_as_command(message):
             return

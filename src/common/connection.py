@@ -2672,6 +2672,14 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _nec_gc_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
+        encryption = gajim.config.get_per('contacts', obj.jid, 'encryption')
+        if encryption != 'disabled':
+            gajim.plugin_manager.gui_extension_point(
+                'gc_encrypt' + encryption, self, obj, self.send_gc_message)
+        else:
+            self.send_gc_message(obj)
+
+    def send_gc_message(self, obj):
         if obj.correction_msg:
             obj.msg_id = self.connection.send(obj.correction_msg)
         else:
