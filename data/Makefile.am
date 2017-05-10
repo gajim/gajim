@@ -16,6 +16,9 @@ installdefs_DATA = defs.py
 soundsdir = $(pkgdatadir)/data/sounds
 sounds_DATA = $(srcdir)/sounds/*.wav
 
+styledir = $(pkgdatadir)/data/style
+style_DATA = $(srcdir)/style/*.css
+
 otherdir = $(pkgdatadir)/data/other
 other_DATA = other/servers.xml other/dh4096.pem
 # other/cacert.pem is used only on Windows. On Unix platforms
@@ -27,6 +30,7 @@ man_MANS = gajim.1 gajim-remote.1 gajim-history-manager.1
 EXTRA_DIST = $(appstream_in_files) \
 			 $(desktop_in_files) \
 			 $(sounds_DATA) \
+			 $(style_DATA) \
 			 $(other_DATA) \
 			 $(man_MANS) \
 			 defs.py.in
