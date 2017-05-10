@@ -19,6 +19,7 @@ stamp-h1
 Makefile
 __pycache__/
 src/gtk/
+win/_build_root
 
 syntax: regexp
 ^config\.*
