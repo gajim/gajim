@@ -126,15 +126,15 @@ class FileTransfersWindow:
 
         self.images = {}
         self.icons = {
-                'upload': Gtk.STOCK_GO_UP,
-                'download': Gtk.STOCK_GO_DOWN,
-                'stop': Gtk.STOCK_STOP,
-                'waiting': Gtk.STOCK_REFRESH,
-                'pause': Gtk.STOCK_MEDIA_PAUSE,
-                'continue': Gtk.STOCK_MEDIA_PLAY,
-                'ok': Gtk.STOCK_APPLY,
-                'computing': Gtk.STOCK_EXECUTE,
-                'hash_error': Gtk.STOCK_STOP,
+                'upload': 'go-up',
+                'download': 'go-down',
+                'stop': 'window-close',
+                'waiting': 'view-refresh',
+                'pause': 'media-playback-pause',
+                'continue': 'media-playback-start',
+                'ok': 'emblem-ok-symbolic',
+                'computing': 'system-run',
+                'hash_error': 'network-error-symbolic',
         }
 
         self.tree.get_selection().set_mode(Gtk.SelectionMode.SINGLE)
