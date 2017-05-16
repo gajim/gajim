@@ -27,6 +27,7 @@ from common.zeroconf import zeroconf
 
 from nbxmpp.protocol import *
 import socket
+import ssl
 import errno
 import sys
 import os
@@ -515,14 +516,14 @@ class P2PConnection(IdleObject, PlugIn):
         except Exception as e:
             errnum = e.errno
             # "received" will be empty anyhow
-        if errnum == socket.SSL_ERROR_WANT_READ:
+        if errnum == ssl.SSL_ERROR_WANT_READ:
             pass
         elif errnum in [errno.ECONNRESET, errno.ENOTCONN, errno.ESHUTDOWN]:
             self.pollend()
             # don't proccess result, cas it will raise error
             return
         elif not received :
-            if errnum != socket.SSL_ERROR_EOF:
+            if errnum != ssl.SSL_ERROR_EOF:
                 # 8 EOF occurred in violation of protocol
                 self.pollend()
             if self.state >= 0:
@@ -583,7 +584,7 @@ class P2PConnection(IdleObject, PlugIn):
                 self._on_send()
 
         except socket.error as e:
-            if e.errno == socket.SSL_ERROR_WANT_WRITE:
+            if e.errno == ssl.SSL_ERROR_WANT_WRITE:
                 return True
             if self.state < 0:
                 self.disconnect()
