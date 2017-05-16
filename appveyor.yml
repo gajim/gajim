@@ -1,8 +1,7 @@
 environment:
 
   matrix:
-
-    - PYTHON: "C:\\Python34"
+    - MSYS: "C:\\msys64\\mingw32.exe"
 
 branches:
   only:
@@ -10,48 +9,35 @@ branches:
 
 clone_depth: 1
 
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
-  - git clone --depth=1 --branch=gtk3 https://dev.gajim.org/gajim/gajim-plugins.git c:\projects\gajim-plugins
 
-  # Download & Install Dependencys
-  - ps: c:\\projects\\gajim\\dependencys.ps1
+  - ps: |
+      function bash($command) {
+        Write-Host $command -NoNewline
+        cmd /c start /wait C:\msys64\usr\bin\sh.exe --login -c $command
+        Write-Host " - OK" -ForegroundColor Green
+      }
 
-  - set PATH=C:\\MinGW\\bin;%PATH%
-  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
-  - "%PYTHON%\\python.exe -m pip install -r c:\\projects\\gajim\\requirements.txt"
+      bash 'pacman -Sy --noconfirm git'
+      bash 'git clone https://dev.gajim.org/lovetox/gajim.git'
 
-  - ps: Add-Content C:\Python34\Lib\site-packages\google\__init__.py " "
-  - "%PYTHON%\\python.exe -m pip install --no-dependencies python-axolotl"
-  - "%PYTHON%\\python.exe -m pip install --global-option=build_ext --global-option --compiler=mingw32 python-axolotl-curve25519"
-  
-  # Prepare Build Dir
-  - cd c:\\projects\\gajim\\
-  - xcopy . ..\gajim_built /e /i
-  - cd ..\gajim_built
-
-  # Copy Shipped Plugins
-  - xcopy ..\gajim-plugins\plugin_installer plugins\plugin_installer /e /i
-
-  # Compile Translation Strings
-  - cmd: for %%l in (po\*.po) do mkdir po\%%~nl & mkdir po\%%~nl\LC_MESSAGES & msgfmt -o po\%%~nl\LC_MESSAGES\gajim.mo %%l
-
-  # Make Gajim.exe
-  - "%PYTHON%\\python.exe setup_win32.py build_exe"
-
-  - move build\exe.win32-3.4 .
-  - rmdir build
-  - rename exe.win32-3.4 build
-
-  # Make Installer
-  - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim.nsi'
-  - ps: '& "C:\Program Files (x86)\NSIS\makensis.exe" gajim-portable.nsi'
+  - cmd: '%MSYS% C:/msys64/home/appveyor/gajim/win/build.sh'
+  # Ugly workaround, because i found no way to tell when mingw32.exe returns
+  - cmd: timeout 900
 
   # Push Installer Exe
   - ps: $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
-  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-default-$($env:TIME_STRING).exe"
-  - ps: Push-AppveyorArtifact Gajim-Portable.exe -FileName "Gajim-portable-default-$($env:TIME_STRING).exe"
+  - ps: $env:BUILDROOT="C:\msys64\home\appveyor\gajim\win\_build_root"
+  - ps: Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:TIME_STRING).exe"
+  - ps: Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:TIME_STRING).exe"
 
 build: off
+
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 deploy:
     # FTP deployment provider settings
