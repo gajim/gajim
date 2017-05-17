@@ -843,15 +843,15 @@ class ChatControl(ChatControlBase):
         self.on_jingle_button_toggled(widget, 'video')
 
     def set_lock_image(self):
-        visible = self.encryption != 'disabled'
         loggable = self.session and self.session.is_loggable()
 
-        encryption_state = {'visible': visible,
+        encryption_state = {'visible': self.encryption is not None,
                             'enc_type': self.encryption,
                             'authenticated': False}
 
-        gajim.plugin_manager.gui_extension_point(
-            'encryption_state' + self.encryption, self, encryption_state)
+        if self.encryption:
+            gajim.plugin_manager.gui_extension_point(
+                'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
 
@@ -875,8 +875,9 @@ class ChatControl(ChatControlBase):
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
-        gajim.plugin_manager.gui_extension_point(
-            'encryption_dialog' + self.encryption, self)
+        if self.encryption:
+            gajim.plugin_manager.gui_extension_point(
+                'encryption_dialog' + self.encryption, self)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
     process_commands=True, attention=False):
@@ -1401,7 +1402,7 @@ class ChatControl(ChatControlBase):
 
     def _on_message_tv_buffer_changed(self, textbuffer):
         super()._on_message_tv_buffer_changed(textbuffer)
-        if textbuffer.get_char_count():
+        if textbuffer.get_char_count() and self.encryption:
             gajim.plugin_manager.gui_extension_point(
                 'typing' + self.encryption, self)
             if (not self.session or not self.session.status) and \

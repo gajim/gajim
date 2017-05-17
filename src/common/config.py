@@ -480,9 +480,10 @@ class Config:
                     'state_muc_directed_msg_color': [ opt_color, 'red2' ],
             }, {}),
             'contacts': ({
-                    'encryption': [ opt_str, '', _('Encryption used for this contact.')],
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
             }, {}),
+            'encryption': ({'encryption': [ opt_str, '', _('The currently active encryption for that contact')],
+            },{}),
             'rooms': ({
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
                     'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a groupchat. -1 means no limit, -2 means global value')],

@@ -770,14 +770,13 @@ class GroupchatControl(ChatControlBase):
             self.draw_contact(nick)
 
     def set_lock_image(self):
-        visible = self.encryption != 'disabled'
-
-        encryption_state = {'visible': visible,
+        encryption_state = {'visible': self.encryption is not None,
                             'enc_type': self.encryption,
                             'authenticated': False}
 
-        gajim.plugin_manager.gui_extension_point(
-            'encryption_state' + self.encryption, self, encryption_state)
+        if self.encryption:
+            gajim.plugin_manager.gui_extension_point(
+                'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
 

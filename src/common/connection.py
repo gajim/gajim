@@ -2053,8 +2053,10 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _nec_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
-        encryption = gajim.config.get_per('contacts', obj.jid, 'encryption')
-        if encryption != 'disabled':
+
+        config_key = '%s-%s' % (self.name, obj.jid)
+        encryption = gajim.config.get_per('encryption', config_key, 'encryption')
+        if encryption:
             gajim.plugin_manager.gui_extension_point(
                 'encrypt' + encryption, self, obj, self.send_message)
         else:
@@ -2672,8 +2674,10 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _nec_gc_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
-        encryption = gajim.config.get_per('contacts', obj.jid, 'encryption')
-        if encryption != 'disabled':
+
+        config_key = '%s-%s' % (self.name, obj.jid)
+        encryption = gajim.config.get_per('encryption', config_key, 'encryption')
+        if encryption:
             gajim.plugin_manager.gui_extension_point(
                 'gc_encrypt' + encryption, self, obj, self.send_gc_message)
         else:

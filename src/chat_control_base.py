@@ -396,8 +396,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self._on_window_motion_notify)
             self.handlers[id_] = parent_win.window
 
-        self.encryption = 'disabled'
-        self.set_encryption_state()
+        self.encryption = self.get_encryption_state()
         if self.parent_win:
             self.add_window_actions()
 
@@ -422,16 +421,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         action = Gio.SimpleAction.new_stateful(
             "%s-encryptiongroup" % self.contact.jid,
             GLib.VariantType.new("s"),
-            GLib.Variant("s", self.encryption))
+            GLib.Variant("s", self.encryption or 'disabled'))
         action.connect("change-state", self.activate_encryption)
         self.parent_win.window.add_action(action)
 
     def activate_encryption(self, action, param):
         encryption = param.get_string()
+        if encryption == 'disabled':
+            encryption = None
+
         if self.encryption == encryption:
             return
 
-        if encryption != 'disabled':
+        if encryption:
             plugin = gajim.plugin_manager.encryption_plugins[encryption]
             if not plugin.activate_encryption(self):
                 return
@@ -439,19 +441,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if not self.widget_name == 'groupchat_control':
                 self.terminate_esessions()
         action.set_state(param)
-        gajim.config.set_per(
-            'contacts', self.contact.jid, 'encryption', encryption)
-        self.encryption = encryption
+        self.set_encryption_state(encryption)
         self.set_lock_image()
 
-    def set_encryption_state(self):
-        enc = gajim.config.get_per('contacts', self.contact.jid, 'encryption')
-        if enc not in gajim.plugin_manager.encryption_plugins:
-            self.encryption = 'disabled'
-            gajim.config.set_per(
-                'contacts', self.contact.jid, 'encryption', 'disabled')
-        else:
-            self.encryption = enc
+    def set_encryption_state(self, encryption):
+        config_key = '%s-%s' % (self.account, self.contact.jid)
+        self.encryption = encryption
+        gajim.config.set_per('encryption', config_key,
+                             'encryption', self.encryption or '')
+
+    def get_encryption_state(self):
+        config_key = '%s-%s' % (self.account, self.contact.jid)
+        state = gajim.config.get_per('encryption', config_key, 'encryption')
+        return state or None
 
     def set_speller(self):
         # now set the one the user selected
