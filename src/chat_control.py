@@ -1606,6 +1606,8 @@ class ChatControl(ChatControlBase):
             self.begin_e2e_negotiation()
 
     def terminate_esessions(self):
+        if not (self.session and self.session.enable_encryption):
+            return
         # e2e was enabled, disable it
         jid = str(self.session.jid)
         thread_id = self.session.thread_id
