@@ -130,9 +130,6 @@ class GajimApplication(Gtk.Application):
         configpaths.gajimpaths.init(
             self.config_path, self.profile, self.profile_separation)
 
-        if hasattr(sys, 'frozen'):
-            self.frozen_logging(configpaths.gajimpaths.config_root)
-
         from common import gajim
         from common import check_paths
         from common import exceptions
@@ -310,38 +307,6 @@ class GajimApplication(Gtk.Application):
 
         warnings.showwarning = warn_with_traceback
         warnings.filterwarnings(action="always")
-
-    def frozen_logging(self, path):
-        import warnings
-        if not os.path.exists(path):
-            os.mkdir(path, 0o700)
-
-        class MyStd(object):
-            _file = None
-            _error = None
-            log_file = os.path.join(path, 'gajim.log')
-
-            def write(self, text):
-                if self._file is None and self._error is None:
-                    try:
-                        self._file = open(self.log_file, 'a')
-                    except Exception as details:
-                        self._error = details
-                if self._file is not None:
-                    self._file.write(text)
-                    self._file.flush()
-
-            def flush(self):
-                if self._file is not None:
-                    self._file.flush()
-
-            def isatty(self):
-                return False
-
-        outerr = MyStd()
-        sys.stdout = outerr
-        sys.stderr = outerr
-        warnings.filterwarnings(action='ignore')
 
     def add_actions(self):
         ''' Build Application Actions '''
