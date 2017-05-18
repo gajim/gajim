@@ -422,10 +422,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             "%s-encryptiongroup" % self.contact.jid,
             GLib.VariantType.new("s"),
             GLib.Variant("s", self.encryption or 'disabled'))
-        action.connect("change-state", self.activate_encryption)
+        action.connect("change-state", self.change_encryption)
         self.parent_win.window.add_action(action)
 
-    def activate_encryption(self, action, param):
+    def change_encryption(self, action, param):
         encryption = param.get_string()
         if encryption == 'disabled':
             encryption = None
