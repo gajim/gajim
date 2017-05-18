@@ -29,6 +29,7 @@ python-gnupg
 docutils
 qrcode
 keyring
+pillow
 "
 
     pip3 install --no-binary ":all:" \

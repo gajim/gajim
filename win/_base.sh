@@ -87,6 +87,7 @@ python-gnupg
 docutils
 qrcode
 keyring
+pillow
 "
 
     build_pip install --no-binary ":all:" \
