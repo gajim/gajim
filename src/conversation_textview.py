@@ -168,12 +168,8 @@ class ConversationTextview(GObject.GObject):
             )
     )
 
-    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap('gtk-spell-check',
-        quiet=True)
-    if not MESSAGE_CORRECTED_PIXBUF:
-        MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-            'gajim-message_corrected')
-
+    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+        'document-edit-symbolic')
 
     # smooth scroll constants
     MAX_SCROLL_TIME = 0.4 # seconds
