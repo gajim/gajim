@@ -10,8 +10,7 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in 	\
 	intltool-update.in	\
-	gajim.nsi \
-	setup_win32.py \
+	win \
 	scripts/gajim.in
 	
 DISTCLEANFILES = 		\
