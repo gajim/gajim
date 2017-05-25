@@ -13,7 +13,8 @@ function main {
         mingw-w64-i686-sqlite3 \
         mingw-w64-i686-python3 \
         mingw-w64-i686-python3-gobject \
-        mingw-w64-i686-python3-pip
+        mingw-w64-i686-python3-pip \
+        mingw-w64-i686-sqlite3
 
     pip3 install setuptools_scm
 
