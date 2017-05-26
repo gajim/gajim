@@ -315,6 +315,7 @@ class Config:
             'show_avatar_in_tabs': [ opt_bool, False, _('Show a mini avatar in chat window tabs and in window icon')],
             'use_keyring': [opt_bool, True, _('If True, Gajim will use the Systems Keyring to store account passwords.')],
             'pgp_encoding': [ opt_str, '', _('Sets the encoding used by python-gnupg'), True],
+            'remote_commands': [opt_bool, False, _('If True, Gajim will execute XEP-0146 Commands.')],
     }, {})
 
     __options_per_key = {

@@ -345,9 +345,10 @@ class ConnectionCommands:
     def __init__(self):
         # a list of all commands exposed: node -> command class
         self.__commands = {}
-        for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
-        LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
-            self.__commands[cmdobj.commandnode] = cmdobj
+        if gajim.config.get('remote_commands'):
+            for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
+            LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
+                self.__commands[cmdobj.commandnode] = cmdobj
 
         # a list of sessions; keys are tuples (jid, sessionid, node)
         self.__sessions = {}
