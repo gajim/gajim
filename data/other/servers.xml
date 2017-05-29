@@ -8,6 +8,7 @@
     -->
 <query xmlns:reg="urn:xmpp:vcard:registration:1">
   <item jid="0nl1ne.at" />
+  <item jid="404.city" />
   <item jid="brauchen.info" />
   <item jid="chatme.im" />
   <item jid="climm.org" />
