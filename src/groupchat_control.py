@@ -1378,9 +1378,6 @@ class GroupchatControl(ChatControlBase):
     def _nec_signed_in(self, obj):
         if obj.conn.name != self.account:
             return
-        if self.room_jid in gajim.gc_connected[obj.conn.name] and \
-        gajim.gc_connected[obj.conn.name][self.room_jid]:
-            return
         password = gajim.gc_passwords.get(self.room_jid, '')
         obj.conn.join_gc(self.nick, self.room_jid, password, rejoin=True)
 
