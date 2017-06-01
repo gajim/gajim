@@ -931,7 +931,7 @@ class ChatControl(ChatControlBase):
             self.print_conversation(message, self.contact.jid,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
                 displaymarking=displaymarking, msg_stanza_id=id_,
-                correct_id=msg_stanza.getTagAttr('replace', 'id'),
+                correct_id=obj.correct_id,
                 additional_data=obj.additional_data)
 
         ChatControlBase.send_message(self, message, keyID, type_='chat',

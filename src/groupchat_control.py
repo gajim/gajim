@@ -2035,24 +2035,23 @@ class GroupchatControl(ChatControlBase):
         if message != '' or message != '\n':
             self.save_message(message, 'sent')
 
-            def _cb(msg, msg_txt):
+            def _cb(obj):
                 # we'll save sent message text when we'll receive it in
                 # _nec_gc_message_received
-                self.last_sent_msg = msg
+                self.last_sent_msg = obj.msg_id
                 if self.correcting:
                     self.correcting = False
                     gtkgui_helpers.remove_css_class(
                         self.msg_textview, 'msgcorrectingcolor')
 
             if self.correcting and self.last_sent_msg:
-                correction_msg = self.last_sent_msg
+                correct_id = self.last_sent_msg
             else:
-                correction_msg = None
+                correct_id = None
             # Send the message
             gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
                 account=self.account, jid=self.room_jid, message=message,
-                xhtml=xhtml, label=label, callback=_cb,
-                callback_args=[_cb] + [message], correction_msg=correction_msg,
+                xhtml=xhtml, label=label, callback=_cb, correct_id=correct_id,
                 automatic_message=False))
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()

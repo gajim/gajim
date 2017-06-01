@@ -752,21 +752,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         label = self.get_seclabel()
 
         def _cb(obj, msg, cb, *cb_args):
-            self.last_sent_msg = msg
+            self.last_sent_msg = obj.msg_id
             if cb:
                 cb(obj, msg, *cb_args)
 
         if self.correcting and self.last_sent_msg:
-            correction_msg = self.last_sent_msg
+            correct_id = self.last_sent_msg
         else:
-            correction_msg = None
+            correct_id = None
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
             keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=_cb, callback_args=[callback] + callback_args,
-            control=self, attention=attention, correction_msg=correction_msg,
+            control=self, attention=attention, correct_id=correct_id,
             automatic_message=False, encryption=self.encryption))
 
         # Record the history of sent messages
