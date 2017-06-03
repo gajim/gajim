@@ -1,3 +1,15 @@
+Gajim 0.16.8 (04 June 2017)
+
+  * Fix rejoining MUCs after connection loss
+  * Fix Groupchat invites
+  * Fix encoding problems with newer GnuPG versions
+  * Fix old messages randomly reappearing in the chat window
+  * Fix some problems with IBB filetransfer
+  * Make XEP-0146 Commands opt-in
+  * Improve sending messages to your own resources
+  * Improve reliability of delivery recipes
+  * Many minor bugfixes
+
 Gajim 0.16.7 (30 January 2017)
 
   * Better compatibility with XEP-0191: Blocking Command
