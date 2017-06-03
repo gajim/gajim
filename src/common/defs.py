@@ -30,7 +30,7 @@ import os.path
 docdir = '../'
 basedir = '../'
 localedir = '../po'
-version = '0.16.7'
+version = '0.16.8'
 
 try:
     node = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,

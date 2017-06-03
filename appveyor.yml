@@ -62,8 +62,8 @@ install:
 
   # Push Installer Exe
   - ps: $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
-  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-0.16.7-$($env:TIME_STRING).exe"
-  - ps: Push-AppveyorArtifact Gajim-Portable.exe -FileName "Gajim-portable-0.16.7-$($env:TIME_STRING).exe"
+  - ps: Push-AppveyorArtifact Gajim.exe -FileName "Gajim-0.16.8-$($env:TIME_STRING).exe"
+  - ps: Push-AppveyorArtifact Gajim-Portable.exe -FileName "Gajim-portable-0.16.8-$($env:TIME_STRING).exe"
 
 build: off
 

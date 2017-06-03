@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-  gajimversion="0.16.7"
+  gajimversion="0.16.8"
   if [ -d ".hg" ]; then
     node=$(hg  tip --template "{node}")
     hgversion="-${node:0:12}"
