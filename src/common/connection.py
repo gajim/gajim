@@ -411,6 +411,8 @@ class CommonConnection:
             id_ = correction_msg.getID()
             if correction_msg.getTag('replace'):
                 correction_msg.delChild('replace')
+            if correction_msg.getTag('delay'):
+                correction_msg.delChild('delay')
             correction_msg.setTag('replace', attrs={'id': id_},
                 namespace=nbxmpp.NS_CORRECT)
             id2 = self.connection.getAnID()
@@ -2737,6 +2739,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             id_ = obj.correction_msg.getID()
             if obj.correction_msg.getTag('replace'):
                 obj.correction_msg.delChild('replace')
+            if obj.correction_msg.getTag('delay'):
+                obj.correction_msg.delChild('delay')
             obj.correction_msg.setTag('replace', attrs={'id': id_},
                                       namespace=nbxmpp.NS_CORRECT)
             id2 = self.connection.getAnID()
