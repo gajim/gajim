@@ -60,7 +60,7 @@ except ImportError:
     print('PyOpenSSL not available, impossible to generate entropy', file=sys.stderr)
     PYOPENSSL_PRNG_PRESENT = False
 
-MIN_NBXMPP_VER = "0.5.3"
+MIN_NBXMPP_VER = "0.5.6"
 
 
 class GajimApplication(Gtk.Application):
