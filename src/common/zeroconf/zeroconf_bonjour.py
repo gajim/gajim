@@ -43,7 +43,7 @@ class Zeroconf:
         self.port = port # listening port that gets announced
         self.username = name
         self.host = host
-        self.txt = pybonjour.TXTRecord()                # service data
+        self.txt = {}  # service data
 
         # XXX these CBs should be set to None when we destroy the object
         # (go offline), because they create a circular reference
@@ -245,7 +245,7 @@ class Zeroconf:
         txt = {}
 
         #remove empty keys
-        for key, val in self.txt:
+        for key, val in self.txt.iteritems():
             if val:
                 txt[key] = val
 
@@ -258,14 +258,13 @@ class Zeroconf:
             txt['status'] = self.replace_show(self.txt['status'])
         else:
             txt['status'] = 'avail'
-
-        self.txt = pybonjour.TXTRecord(txt, strict=True)
+        self.txt = txt
         try:
             self.service_sdRef = pybonjour.DNSServiceRegister(
                 name=self.name,
                 regtype=self.stype,
                 port=self.port,
-                txtRecord=self.txt,
+                txtRecord=pybonjour.TXTRecord(self.txt, strict=True),
                 callBack=self.service_added_callback)
 
             log.info('Publishing service %s of type %s' % (self.name, self.stype))
@@ -399,8 +398,9 @@ class Zeroconf:
         if show:
             self.txt['status'] = self.replace_show(show)
 
+        txt = pybonjour.TXTRecord(self.txt, strict=True)
         try:
-            pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, self.txt)
+            pybonjour.DNSServiceUpdateRecord(self.service_sdRef, None, 0, txt)
         except pybonjour.BonjourError:
             return False
         return True
