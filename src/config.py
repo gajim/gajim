@@ -4026,14 +4026,12 @@ class AccountCreationWizardWindow:
         config['hostname'] = server
         config['savepass'] = savepass
         config['password'] = password
-        config['resource'] = 'Gajim'
         config['anonymous_auth'] = anonymous
         config['priority'] = 5
         config['autoconnect'] = True
         config['no_log_for'] = ''
         config['sync_with_global_status'] = True
         config['proxy'] = ''
-        config['usessl'] = False
         config['use_custom_host'] = False
         config['custom_port'] = 0
         config['custom_host'] = ''
