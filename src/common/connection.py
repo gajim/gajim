@@ -1132,7 +1132,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         Start a connection to the Jabber server
 
         Returns connection, and connection type ('tls', 'ssl', 'plain', '') data
-        MUST contain hostname, usessl, proxy, use_custom_host, custom_host (if
+        MUST contain hostname, proxy, use_custom_host, custom_host (if
         use_custom_host), custom_port (if use_custom_host)
         """
         if self.connection:
@@ -1164,7 +1164,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 custom_p = data['custom_port']
         else:
             hostname = gajim.config.get_per('accounts', self.name, 'hostname')
-            usessl = gajim.config.get_per('accounts', self.name, 'usessl')
             self.try_connecting_for_foo_secs = gajim.config.get_per('accounts',
                     self.name, 'try_connecting_for_foo_secs')
             proxy = helpers.get_proxy_info(self.name)
