@@ -32,14 +32,14 @@ if HAVE_GPG:
     gnupg.logger = logging.getLogger('gajim.c.gnupg')
 
     class GnuPG(gnupg.GPG):
-        def __init__(self, use_agent=False):
-            gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY)
+        def __init__(self):
+            use_agent = gajim.config.get('use_gpg_agent')
+            gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY, use_agent=use_agent)
             encoding = gajim.config.get('pgp_encoding')
             if encoding:
                 self.encoding = encoding
             self.decode_errors = 'replace'
             self.passphrase = None
-            self.use_agent = use_agent
             self.always_trust = [] # list of keyID to always trust
 
         def _setup_my_options(self):

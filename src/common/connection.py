@@ -132,7 +132,7 @@ class CommonConnection:
         self.USE_GPG = False
         if gajim.HAVE_GPG:
             self.USE_GPG = True
-            self.gpg = gpg.GnuPG(gajim.config.get('use_gpg_agent'))
+            self.gpg = gpg.GnuPG()
         self.status = ''
         self.old_show = ''
         self.priority = gajim.get_priority(name, 'offline')
@@ -234,8 +234,7 @@ class CommonConnection:
         signed = ''
         keyID = gajim.config.get_per('accounts', self.name, 'keyid')
         if keyID and self.USE_GPG:
-            use_gpg_agent = gajim.config.get('use_gpg_agent')
-            if self.gpg.passphrase is None and not use_gpg_agent:
+            if self.gpg.passphrase is None and not self.gpg.use_agent:
                 # We didn't set a passphrase
                 return None
             signed = self.gpg.sign(msg, keyID)
@@ -566,8 +565,7 @@ class CommonConnection:
 
     def gpg_passphrase(self, passphrase):
         if self.gpg:
-            use_gpg_agent = gajim.config.get('use_gpg_agent')
-            if use_gpg_agent:
+            if self.gpg.use_agent:
                 self.gpg.passphrase = None
             else:
                 self.gpg.passphrase = passphrase
@@ -614,7 +612,7 @@ class CommonConnection:
             self.server_resource = self._compute_resource()
             if gajim.HAVE_GPG:
                 self.USE_GPG = True
-                self.gpg = gpg.GnuPG(gajim.config.get('use_gpg_agent'))
+                self.gpg = gpg.GnuPG()
             gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
                 conn=self, show=show, message=msg))
             self.connect_and_init(show, msg, sign_msg)
@@ -892,8 +890,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 return
                             if gajim.HAVE_GPG:
                                 self.USE_GPG = True
-                                self.gpg = gpg.GnuPG(gajim.config.get(
-                                        'use_gpg_agent'))
+                                self.gpg = gpg.GnuPG()
                             gajim.nec.push_incoming_event(
                                 AccountCreatedEvent(None, conn=self,
                                 account_info = self.new_account_info))
