@@ -122,7 +122,7 @@ class GajimApplication(Gtk.Application):
         from distutils.version import LooseVersion as V
         if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
             print('Gajim needs python-nbxmpp >= %s to run. '
-                  'Quitting…' % MIN_NBXMPP_VER)
+                  'Quitting...' % MIN_NBXMPP_VER)
             sys.exit(1)
 
         # Create and initialize Application Paths & Databases
