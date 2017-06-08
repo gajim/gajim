@@ -59,7 +59,7 @@ if HAVE_GPG:
                             return '', 'NOT_TRUSTED ' + key['keyid'][-8:]
                         else:
                             trust = True
-            result = super(GnuPG, self).encrypt(str_, recipients,
+            result = super(GnuPG, self).encrypt(str_.encode('utf8'), recipients,
                 always_trust=trust, passphrase=self.passphrase)
 
             if result.ok:
@@ -71,13 +71,13 @@ if HAVE_GPG:
 
         def decrypt(self, str_, keyID):
             data = self._addHeaderFooter(str_, 'MESSAGE')
-            result = super(GnuPG, self).decrypt(data,
+            result = super(GnuPG, self).decrypt(data.encode('utf8'),
                 passphrase=self.passphrase)
 
             return str(result)
 
         def sign(self, str_, keyID):
-            result = super(GnuPG, self).sign(str_, keyid=keyID, detach=True,
+            result = super(GnuPG, self).sign(str_.encode('utf8'), keyid=keyID, detach=True,
                 passphrase=self.passphrase)
 
             if result.fingerprint:
@@ -100,7 +100,7 @@ if HAVE_GPG:
                      str_,
                      self._addHeaderFooter(sign, 'SIGNATURE')]
                     )
-                result = super(GnuPG, self).verify(data)
+                result = super(GnuPG, self).verify(data.encode('utf8'))
                 if result.valid:
                     return result.key_id
 
