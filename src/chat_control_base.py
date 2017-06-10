@@ -894,7 +894,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    msg_stanza_id=None, correct_id=None, additional_data=None):
+    msg_stanza_id=None, correct_id=None, additional_data=None,
+    encrypted=None):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -919,7 +920,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             other_tags_for_name, other_tags_for_time, other_tags_for_text,
             subject, old_kind, xhtml, simple=simple, graphics=graphics,
             displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
-            correct_id=correct_id, additional_data=additional_data)
+            correct_id=correct_id, additional_data=additional_data,
+            encrypted=encrypted)
 
         if xep0184_id is not None:
             textview.add_xep0184_mark(xep0184_id)

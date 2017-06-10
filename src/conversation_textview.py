@@ -170,6 +170,8 @@ class ConversationTextview(GObject.GObject):
 
     MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'document-edit-symbolic')
+    MESSAGE_ENCRYPTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
+        'channel-secure-croped-symbolic')
 
     # smooth scroll constants
     MAX_SCROLL_TIME = 0.4 # seconds
@@ -1100,7 +1102,8 @@ class ConversationTextview(GObject.GObject):
     def print_conversation_line(self, text, jid, kind, name, tim,
     other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     subject=None, old_kind=None, xhtml=None, simple=False, graphics=True,
-    displaymarking=None, msg_stanza_id=None, correct_id=None, additional_data=None):
+    displaymarking=None, msg_stanza_id=None, correct_id=None, additional_data=None,
+    encrypted=None):
         """
         Print 'chat' type messages
         """
@@ -1167,6 +1170,9 @@ class ConversationTextview(GObject.GObject):
         # print the time stamp
         self.print_time(text, kind, tim, simple, direction_mark,
             other_tags_for_time, iter_)
+
+        if encrypted:
+            buffer_.insert_pixbuf(iter_, self.MESSAGE_ENCRYPTED_PIXBUF)
 
         # If there's a displaymarking, print it here.
         if displaymarking:
