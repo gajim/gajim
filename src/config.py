@@ -2935,7 +2935,6 @@ class GroupchatConfigWindow:
                 self.affiliation_treeview[affiliation].append_column(col)
 
             sw = Gtk.ScrolledWindow()
-            sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
             sw.add(self.affiliation_treeview[affiliation])
             add_on_vbox.pack_start(sw, True, True, 0)
             gajim.connections[self.account].get_affiliation_list(self.room_jid,
