@@ -493,6 +493,7 @@ class GroupchatControl(ChatControlBase):
         self.encryption_menu = self.xml.get_object('encryption_menu')
         self.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(self.contact, self.type_id))
+        self.set_encryption_menu_icon()
 
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)

@@ -53,9 +53,16 @@ from common import configpaths
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 
-def get_icon_pixmap(icon_name, size=16, quiet=False):
+class Color:
+    BLACK = Gdk.RGBA(red=0, green=0, blue=0, alpha=1)
+
+def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
     try:
-        return gtk_icon_theme.load_icon(icon_name, size, 0)
+        iconinfo = gtk_icon_theme.lookup_icon(icon_name, size, 0)
+        if color:
+            pixbuf, was_symbolic = iconinfo.load_symbolic(*color)
+            return pixbuf
+        return iconinfo.load_icon()
     except GLib.GError as e:
         if not quiet:
             log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
