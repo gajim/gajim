@@ -31,6 +31,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Pango
 import os
 import time
 from datetime import datetime
@@ -207,6 +208,7 @@ class StatusTable:
         self.table.insert_row(self.current_row)
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
+        self.text_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.text_label.set_max_width_chars(35)
         self.text_label.set_halign(Gtk.Align.START)
         self.text_label.set_valign(Gtk.Align.START)

@@ -404,11 +404,8 @@ class VcardWindow:
             if self.contact.status:
                 stats += ': ' + self.contact.status
         status_label = self.xml.get_object('status_label')
-        status_label.set_max_width_chars(15)
         status_label.set_text(stats)
-
-        status_label_eventbox = self.xml.get_object('status_label_eventbox')
-        status_label_eventbox.set_tooltip_text(stats)
+        status_label.set_tooltip_text(stats)
 
     def fill_jabber_page(self):
         self.xml.get_object('nickname_label').set_markup(
@@ -430,7 +427,6 @@ class VcardWindow:
         else:
             uf_sub = helpers.get_uf_sub(self.contact.sub)
             subscription_label.set_text(uf_sub)
-            eb = self.xml.get_object('subscription_label_eventbox')
             if self.contact.sub == 'from':
                 tt_text = _("This contact is interested in your presence information, but you are not interested in their presence")
             elif self.contact.sub == 'to':
@@ -439,16 +435,15 @@ class VcardWindow:
                 tt_text = _("The contact and you want to exchange presence information")
             else: # None
                 tt_text = _("You and the contact have a mutual disinterest in each-others presence information")
-            eb.set_tooltip_text(tt_text)
+            subscription_label.set_tooltip_text(tt_text)
 
             uf_ask = helpers.get_uf_ask(self.contact.ask)
             ask_label.set_text(uf_ask)
-            eb = self.xml.get_object('ask_label_eventbox')
             if self.contact.ask == 'subscribe':
                 tt_text = _("You are waiting contact's answer about your subscription request")
             else:
                 tt_text = _("There is no pending subscription request.")
-            eb.set_tooltip_text(tt_text)
+            ask_label.set_tooltip_text(tt_text)
 
         resources = '%s (%s)' % (self.contact.resource, str(
             self.contact.priority))
@@ -613,11 +608,8 @@ class ZeroconfVcardWindow:
             if self.contact.status:
                 stats += ': ' + self.contact.status
         status_label = self.xml.get_object('status_label')
-        status_label.set_max_width_chars(15)
         status_label.set_text(stats)
-
-        status_label_eventbox = self.xml.get_object('status_label_eventbox')
-        status_label_eventbox.set_tooltip_text(stats)
+        status_label.set_tooltip_text(stats)
 
     def fill_contact_page(self):
         self.xml.get_object('nickname_label').set_markup(
