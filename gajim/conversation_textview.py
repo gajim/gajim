@@ -37,21 +37,21 @@ from gi.repository import GObject
 from gi.repository import GLib
 import time
 import os
-import tooltips
-import dialogs
+from gajim import tooltips
+from gajim import dialogs
 import queue
 import urllib
 
-import gtkgui_helpers
-from common import gajim
-from common import helpers
-from common import i18n
+from gajim import gtkgui_helpers
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import i18n
 from calendar import timegm
-from common.fuzzyclock import FuzzyClock
-import emoticons
+from gajim.common.fuzzyclock import FuzzyClock
+from gajim import emoticons
 
-from htmltextview import HtmlTextView
-from common.exceptions import GajimGeneralException
+from gajim.htmltextview import HtmlTextView
+from gajim.common.exceptions import GajimGeneralException
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1

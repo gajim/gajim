@@ -25,10 +25,10 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-import dialogs
-import gtkgui_helpers
+from gajim import dialogs
+from gajim import gtkgui_helpers
 
-from common import gajim
+from gajim.common import gajim
 
 class GajimThemesWindow:
 

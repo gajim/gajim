@@ -18,7 +18,7 @@ The module defines a set of command hosts, which are bound to a
 different command processors, which are the source of commands.
 """
 
-from ..framework import CommandHost
+from gajim.command_system.framework import CommandHost
 
 class ChatCommands(CommandHost):
     """

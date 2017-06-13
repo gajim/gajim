@@ -32,16 +32,16 @@ import os
 import base64
 import mimetypes
 
-from common import gajim
-from common import helpers
+from gajim.common import gajim
+from gajim.common import helpers
 from time import time
-from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
-from common import ged
-from common.connection_handlers_events import MessageOutgoingEvent
-from common.connection_handlers_events import GcMessageOutgoingEvent
+from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from gajim.common import ged
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 
-from common import dbus_support
+from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
     if dbus_support:

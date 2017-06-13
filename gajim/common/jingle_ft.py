@@ -25,14 +25,14 @@ import os
 import threading
 from enum import IntEnum, unique
 import nbxmpp
-from common import gajim
-from common import configpaths
-from common import jingle_xtls
-from common.jingle_content import contents, JingleContent
-from common.jingle_transport import JingleTransportSocks5, TransportType
-from common import helpers
-from common.connection_handlers_events import FileRequestReceivedEvent
-from common.jingle_ftstates import (
+from gajim.common import gajim
+from gajim.common import configpaths
+from gajim.common import jingle_xtls
+from gajim.common.jingle_content import contents, JingleContent
+from gajim.common.jingle_transport import JingleTransportSocks5, TransportType
+from gajim.common import helpers
+from gajim.common.connection_handlers_events import FileRequestReceivedEvent
+from gajim.common.jingle_ftstates import (
     StateInitialized, StateCandSent, StateCandReceived, StateTransfering,
     StateCandSentAndRecv, StateTransportReplace)
 

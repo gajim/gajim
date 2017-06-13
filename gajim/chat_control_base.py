@@ -35,35 +35,35 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
-import gtkgui_helpers
-from gtkgui_helpers import Color
-import message_control
-import dialogs
-import history_window
-import notify
+from gajim import gtkgui_helpers
+from gajim.gtkgui_helpers import Color
+from gajim import message_control
+from gajim import dialogs
+from gajim import history_window
+from gajim import notify
 import re
 
-import emoticons
-from scrolled_window import ScrolledWindow
-from common import events
-from common import gajim
-from common import helpers
-from common import ged
-from message_control import MessageControl
-from conversation_textview import ConversationTextview
-from message_textview import MessageTextView
-from common.contacts import GC_Contact
-from common.connection_handlers_events import MessageOutgoingEvent
+from gajim import emoticons
+from gajim.scrolled_window import ScrolledWindow
+from gajim.common import events
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import ged
+from gajim.message_control import MessageControl
+from gajim.conversation_textview import ConversationTextview
+from gajim.message_textview import MessageTextView
+from gajim.common.contacts import GC_Contact
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
-from command_system.implementation.middleware import ChatCommandProcessor
-from command_system.implementation.middleware import CommandTools
+from gajim.command_system.implementation.middleware import ChatCommandProcessor
+from gajim.command_system.implementation.middleware import CommandTools
 
 # The members of these modules are not referenced directly anywhere in this
 # module, but still they need to be kept around. Importing them automatically
 # registers the contained CommandContainers with the command system, thereby
 # populating the list of available commands.
-import command_system.implementation.standard
-import command_system.implementation.execute
+from gajim.command_system.implementation import standard
+from gajim.command_system.implementation import execute
 
 try:
     import gtkspell

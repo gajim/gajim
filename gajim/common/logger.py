@@ -40,9 +40,9 @@ from io import BytesIO
 from gi.repository import GLib
 from enum import IntEnum, unique
 
-from common import exceptions
-from common import gajim
-from common import ged
+from gajim.common import exceptions
+from gajim.common import gajim
+from gajim.common import ged
 
 import sqlite3 as sqlite
 

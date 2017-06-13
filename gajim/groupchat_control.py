@@ -35,32 +35,32 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
-import gtkgui_helpers
-import gui_menu_builder
-import message_control
-import tooltips
-import dialogs
-import config
-import vcard
-import cell_renderer_image
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import message_control
+from gajim import tooltips
+from gajim import dialogs
+from gajim import config
+from gajim import vcard
+from gajim import cell_renderer_image
+from gajim import dataforms_widget
 import nbxmpp
 
 from enum import IntEnum, unique
 
-from common import events
-from common import gajim
-from common import helpers
-from common import dataforms
-from common import ged
-from common import i18n
+from gajim.common import events
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import dataforms
+from gajim.common import ged
+from gajim.common import i18n
 
-from chat_control import ChatControl
-from chat_control_base import ChatControlBase
+from gajim.chat_control import ChatControl
+from gajim.chat_control_base import ChatControlBase
 
-from command_system.implementation.hosts import PrivateChatCommands
-from command_system.implementation.hosts import GroupChatCommands
-from common.connection_handlers_events import GcMessageOutgoingEvent
+from gajim.command_system.implementation.hosts import PrivateChatCommands
+from gajim.command_system.implementation.hosts import GroupChatCommands
+from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.groupchat_control')

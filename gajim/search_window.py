@@ -23,15 +23,15 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from common import gajim
-from common import dataforms
-from common import ged
+from gajim.common import gajim
+from gajim.common import dataforms
+from gajim.common import ged
 
-import gtkgui_helpers
-import dialogs
-import vcard
-import config
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import dialogs
+from gajim import vcard
+from gajim import config
+from gajim import dataforms_widget
 
 class SearchWindow:
     def __init__(self, account, jid):

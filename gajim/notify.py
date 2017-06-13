@@ -29,16 +29,16 @@
 
 import os
 import time
-from dialogs import PopupNotificationWindow
+from gajim.dialogs import PopupNotificationWindow
 from gi.repository import GObject
 from gi.repository import GLib
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
-from common import gajim
-from common import helpers
-from common import ged
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import ged
 
-from common import dbus_support
+from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
 

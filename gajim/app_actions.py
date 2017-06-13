@@ -18,21 +18,22 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import helpers
-from common import gajim
-from common.exceptions import GajimGeneralException
+from gajim.common import gajim as c_gajim
+from gajim.common import helpers
+from gajim.common.gajim import interface
+from gajim.common.exceptions import GajimGeneralException
 from gi.repository import Gtk
 import sys
 import os
-import config
-import dialogs
-import features_window
-import shortcuts_window
-import plugins.gui
-import history_window
-import disco
-from history_sync import HistorySyncAssistant
-from server_info import ServerInfoDialog
+from gajim import config
+from gajim import dialogs
+from gajim import features_window
+from gajim import shortcuts_window
+import gajim.plugins.gui
+from gajim import history_window
+from gajim import disco
+from gajim.history_sync import HistorySyncAssistant
+from gajim.server_info import ServerInfoDialog
 
 
 class AppActions():
@@ -43,23 +44,23 @@ class AppActions():
     # Application Menu Actions
 
     def on_preferences(self, action, param):
-        if 'preferences' in gajim.interface.instances:
-            gajim.interface.instances['preferences'].window.present()
+        if 'preferences' in interface.instances:
+            interface.instances['preferences'].window.present()
         else:
-            gajim.interface.instances['preferences'] = \
+            interface.instances['preferences'] = \
                 config.PreferencesWindow()
 
     def on_plugins(self, action, param):
-        if 'plugins' in gajim.interface.instances:
-            gajim.interface.instances['plugins'].window.present()
+        if 'plugins' in interface.instances:
+            interface.instances['plugins'].window.present()
         else:
-            gajim.interface.instances['plugins'] = plugins.gui.PluginsWindow()
+            interface.instances['plugins'] = gajim.plugins.gui.PluginsWindow()
 
     def on_accounts(self, action, param):
-        if 'accounts' in gajim.interface.instances:
-            gajim.interface.instances['accounts'].window.present()
+        if 'accounts' in interface.instances:
+            interface.instances['accounts'].window.present()
         else:
-            gajim.interface.instances['accounts'] = config.AccountsWindow()
+            interface.instances['accounts'] = config.AccountsWindow()
 
     def on_history_manager(self, action, param):
         config_path = '-c %s' % gajim.gajimpaths.data_root
@@ -76,12 +77,12 @@ class AppActions():
         config.ManageBookmarksWindow()
 
     def on_quit(self, action, param):
-        gajim.interface.roster.on_quit_request()
+        interface.roster.on_quit_request()
 
     # Accounts Actions
 
     def on_profile(self, action, param):
-        gajim.interface.edit_own_details(param.get_string())
+        interface.edit_own_details(param.get_string())
 
     def on_activate_bookmark(self, action, param):
         dict_ = param.unpack()
@@ -91,19 +92,19 @@ class AppActions():
             nick = dict_['nick']
         if 'password' in dict_:
             password = dict_['password']
-        gajim.interface.join_gc_room(account, jid, nick, password)
+        interface.join_gc_room(account, jid, nick, password)
 
     def on_send_server_message(self, action, param):
         account = param.get_string()
-        server = gajim.config.get_per('accounts', account, 'hostname')
+        server = c_gajim.config.get_per('accounts', account, 'hostname')
         server += '/announce/online'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_service_disco(self, action, param):
         account = param.get_string()
-        server_jid = gajim.config.get_per('accounts', account, 'hostname')
-        if server_jid in gajim.interface.instances[account]['disco']:
-            gajim.interface.instances[account]['disco'][server_jid].\
+        server_jid = c_gajim.config.get_per('accounts', account, 'hostname')
+        if server_jid in interface.instances[account]['disco']:
+            interface.instances[account]['disco'][server_jid].\
                 window.present()
         else:
             try:
@@ -114,16 +115,16 @@ class AppActions():
 
     def on_join_gc(self, action, param):
         account = param.get_string()
-        invisible_show = gajim.SHOW_LIST.index('invisible')
-        if gajim.connections[account].connected == invisible_show:
+        invisible_show = c_gajim.SHOW_LIST.index('invisible')
+        if c_gajim.connections[account].connected == invisible_show:
             dialogs.ErrorDialog(_(
                 'You cannot join a group chat while you are invisible'))
             return
-        if 'join_gc' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['join_gc'].window.present()
+        if 'join_gc' in interface.instances[account]:
+            interface.instances[account]['join_gc'].window.present()
         else:
             try:
-                gajim.interface.instances[account]['join_gc'] = \
+                interface.instances[account]['join_gc'] = \
                     dialogs.JoinGroupchatWindow(account)
             except GajimGeneralException:
                 pass
@@ -141,64 +142,64 @@ class AppActions():
 
     def on_archiving_preferences(self, action, param):
         account = param.get_string()
-        if 'archiving_preferences' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['archiving_preferences'].window.\
+        if 'archiving_preferences' in interface.instances[account]:
+            interface.instances[account]['archiving_preferences'].window.\
                 present()
         else:
-            gajim.interface.instances[account]['archiving_preferences'] = \
+            interface.instances[account]['archiving_preferences'] = \
                 dialogs.Archiving313PreferencesWindow(account)
 
     def on_history_sync(self, action, param):
         account = param.get_string()
-        if 'history_sync' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['history_sync'].present()
+        if 'history_sync' in interface.instances[account]:
+            interface.instances[account]['history_sync'].present()
         else:
-            gajim.interface.instances[account]['history_sync'] = \
-                    HistorySyncAssistant(account, gajim.interface.roster.window)
+            interface.instances[account]['history_sync'] = \
+                    HistorySyncAssistant(account, interface.roster.window)
 
     def on_privacy_lists(self, action, param):
         account = param.get_string()
-        if 'privacy_lists' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['privacy_lists'].window.present()
+        if 'privacy_lists' in interface.instances[account]:
+            interface.instances[account]['privacy_lists'].window.present()
         else:
-            gajim.interface.instances[account]['privacy_lists'] = \
+            interface.instances[account]['privacy_lists'] = \
                     dialogs.PrivacyListsWindow(account)
 
     def on_server_info(self, action, param):
         account = param.get_string()
-        if 'server_info' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['server_info'].present()
+        if 'server_info' in interface.instances[account]:
+            interface.instances[account]['server_info'].present()
         else:
-            gajim.interface.instances[account]['server_info'] = \
+            interface.instances[account]['server_info'] = \
                     ServerInfoDialog(account)
 
     def on_xml_console(self, action, param):
         account = param.get_string()
-        if 'xml_console' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['xml_console'].present()
+        if 'xml_console' in interface.instances[account]:
+            interface.instances[account]['xml_console'].present()
         else:
-            gajim.interface.instances[account]['xml_console'] = \
+            interface.instances[account]['xml_console'] = \
                 dialogs.XMLConsoleWindow(account)
 
     # Admin Actions
 
     def on_set_motd(self, action, param):
         account = param.get_string()
-        server = gajim.config.get_per('accounts', account, 'hostname')
+        server = c_gajim.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_update_motd(self, action, param):
         account = param.get_string()
-        server = gajim.config.get_per('accounts', account, 'hostname')
+        server = c_gajim.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd/update'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_delete_motd(self, action, param):
         account = param.get_string()
-        server = gajim.config.get_per('accounts', account, 'hostname')
+        server = c_gajim.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd/delete'
-        gajim.connections[account].send_motd(server)
+        c_gajim.connections[account].send_motd(server)
 
     # Help Actions
 
@@ -222,15 +223,15 @@ class AppActions():
     # View Actions
 
     def on_file_transfers(self, action, param):
-        if gajim.interface.instances['file_transfers']. \
+        if interface.instances['file_transfers']. \
                 window.get_property('visible'):
-            gajim.interface.instances['file_transfers'].window.present()
+            interface.instances['file_transfers'].window.present()
         else:
-            gajim.interface.instances['file_transfers'].window.show_all()
+            interface.instances['file_transfers'].window.show_all()
 
     def on_history(self, action, param):
-        if 'logs' in gajim.interface.instances:
-            gajim.interface.instances['logs'].window.present()
+        if 'logs' in interface.instances:
+            interface.instances['logs'].window.present()
         else:
-            gajim.interface.instances['logs'] = history_window.\
+            interface.instances['logs'] = history_window.\
                 HistoryWindow()

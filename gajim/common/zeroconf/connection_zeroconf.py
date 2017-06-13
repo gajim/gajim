@@ -42,13 +42,13 @@ if os.name != 'nt':
 import getpass
 from gi.repository import GLib
 
-from common.connection import CommonConnection
-from common import gajim
-from common import ged
-from common.zeroconf import client_zeroconf
-from common.zeroconf import zeroconf
-from common.zeroconf.connection_handlers_zeroconf import *
-from common.connection_handlers_events import *
+from gajim.common.connection import CommonConnection
+from gajim.common import gajim
+from gajim.common import ged
+from gajim.common.zeroconf import client_zeroconf
+from gajim.common.zeroconf import zeroconf
+from gajim.common.zeroconf.connection_handlers_zeroconf import *
+from gajim.common.connection_handlers_events import *
 
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def __init__(self, name):

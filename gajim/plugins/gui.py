@@ -34,14 +34,14 @@ import os
 
 from enum import IntEnum, unique
 
-import gtkgui_helpers
-from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
-from htmltextview import HtmlTextView
-from common import gajim
-from plugins.helpers import log_calls
-from plugins.helpers import GajimPluginActivateException
-from plugins.plugins_i18n import _
-from common.exceptions import PluginsystemError
+from gajim import gtkgui_helpers
+from gajim.dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
+from gajim.htmltextview import HtmlTextView
+from gajim.common import gajim
+from gajim.plugins.helpers import log_calls
+from gajim.plugins.helpers import GajimPluginActivateException
+from gajim.plugins.plugins_i18n import _
+from gajim.common.exceptions import PluginsystemError
 
 @unique
 class Column(IntEnum):

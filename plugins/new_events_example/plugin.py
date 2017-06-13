@@ -29,13 +29,13 @@ based on existing one.
 #import new # Depricated in python3 for types module
 from pprint import pformat
 
-from common import helpers
-from common import gajim
+from gajim.common import helpers
+from gajim.common import gajim
 
-from plugins import GajimPlugin
-from plugins.helpers import log_calls, log
-from common import ged
-from common import nec
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log_calls, log
+from gajim.common import ged
+from gajim.common import nec
 
 class NewEventsExamplePlugin(GajimPlugin):
 

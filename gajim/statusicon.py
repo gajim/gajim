@@ -27,13 +27,13 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 import os
 
-import dialogs
-import config
-import tooltips
-import gtkgui_helpers
+from gajim import dialogs
+from gajim import config
+from gajim import tooltips
+from gajim import gtkgui_helpers
 
-from common import gajim
-from common import helpers
+from gajim.common import gajim
+from gajim.common import helpers
 
 class StatusIcon:
     """

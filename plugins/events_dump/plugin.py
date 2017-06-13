@@ -28,9 +28,9 @@ Dumps info about selected events to console.
 import types
 from pprint import pformat
 
-from plugins import GajimPlugin
-from plugins.helpers import log_calls, log
-from common import ged
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log_calls, log
+from gajim.common import ged
 
 class EventsDumpPlugin(GajimPlugin):
 

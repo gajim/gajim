@@ -45,60 +45,60 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 
-from common import i18n
-from common import gajim
-from common import events
+from gajim.common import i18n
+from gajim.common import gajim
+from gajim.common import events
 
-from common import dbus_support
+from gajim.common import dbus_support
 if dbus_support.supported:
-    from music_track_listener import MusicTrackListener
-    from common import location_listener
+    from gajim.music_track_listener import MusicTrackListener
+    from gajim.common import location_listener
     import dbus
 
-import gtkgui_helpers
-import gui_menu_builder
-import dialogs
-import notify
-import message_control
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import dialogs
+from gajim import notify
+from gajim import message_control
 
-from chat_control_base import ChatControlBase
-from chat_control import ChatControl
-from groupchat_control import GroupchatControl
-from groupchat_control import PrivateChatControl
-from message_window import MessageWindowMgr
+from gajim.chat_control_base import ChatControlBase
+from gajim.chat_control import ChatControl
+from gajim.groupchat_control import GroupchatControl
+from gajim.groupchat_control import PrivateChatControl
+from gajim.message_window import MessageWindowMgr
 
-from atom_window import AtomWindow
-from session import ChatControlSession
+from gajim.atom_window import AtomWindow
+from gajim.session import ChatControlSession
 
-from common import sleepy
+from gajim.common import sleepy
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
-from common.zeroconf import connection_zeroconf
-from common import resolver
-from common import caps_cache
-from common import proxy65_manager
-from common import socks5
-from common import helpers
-from common import passwords
-from common import logging_helpers
-from common.connection_handlers_events import OurShowEvent, \
+from gajim.common.zeroconf import connection_zeroconf
+from gajim.common import resolver
+from gajim.common import caps_cache
+from gajim.common import proxy65_manager
+from gajim.common import socks5
+from gajim.common import helpers
+from gajim.common import passwords
+from gajim.common import logging_helpers
+from gajim.common.connection_handlers_events import OurShowEvent, \
     FileRequestErrorEvent, FileTransferCompletedEvent
-from common.connection import Connection
-from common.file_props import FilesProp
-from common import pep
-import emoticons
+from gajim.common.connection import Connection
+from gajim.common.file_props import FilesProp
+from gajim.common import pep
+from gajim import emoticons
 
-import roster_window
-import profile_window
-import config
+from gajim import roster_window
+from gajim import profile_window
+from gajim import config
 from threading import Thread
-from common import ged
+from gajim.common import ged
 
-from common.configpaths import gajimpaths
+from gajim.common.configpaths import gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
 
-from common import optparser
+from gajim.common import optparser
 parser = optparser.OptionsParser(config_filename)
 
 import logging
@@ -2595,7 +2595,7 @@ class Interface:
             self.msg_win_mgr.create_window(None, None, None)
 
         # Creating plugin manager
-        import plugins
+        from gajim import plugins
         gajim.plugin_manager = plugins.PluginManager()
 
         self.roster._before_fill()
@@ -2618,7 +2618,7 @@ class Interface:
         def remote_init():
             if gajim.config.get('remote_control'):
                 try:
-                    import remote_control
+                    from gajim import remote_control
                     self.remote_ctrl = remote_control.Remote()
                 except Exception:
                     pass
@@ -2745,7 +2745,7 @@ class Interface:
         gajim.default_session_type = ChatControlSession
 
         # Creating Network Events Controller
-        from common import nec
+        from gajim.common import nec
         gajim.nec = nec.NetworkEventsController()
         gajim.notification = notify.Notification()
 
@@ -2801,11 +2801,11 @@ class Interface:
 
         self.remote_ctrl = None
 
-        import network_watcher
+        from gajim import network_watcher
 
         if dbus_support.supported:
-            import upower_listener
-            import logind_listener
+            from gajim import upower_listener
+            from gajim import logind_listener
 
         # Handle gnome screensaver
         if dbus_support.supported:
@@ -2868,7 +2868,7 @@ class Interface:
 
         self.systray_enabled = False
 
-        import statusicon
+        from gajim import statusicon
         self.systray = statusicon.StatusIcon()
 
         pixs = []
@@ -2893,7 +2893,7 @@ class Interface:
                 lang = gajim.LANG
             tv = Gtk.TextView()
             try:
-                import gtkspell
+                from gajim import gtkspell
                 spell = gtkspell.Spell(tv, lang)
             except (ImportError, TypeError, RuntimeError, OSError, ValueError):
                 dialogs.AspellDictError(lang)

@@ -48,17 +48,17 @@ from io import StringIO
 import urllib
 
 if __name__ == '__main__':
-    from common import i18n
-    import common.configpaths
-    common.configpaths.gajimpaths.init(None)
-from common import gajim
-import gtkgui_helpers
-from gtkgui_helpers import get_icon_pixmap
-from common import helpers
-from common.exceptions import GajimGeneralException
-import dialogs
+    from gajim.common import i18n
+    import gajim.common.configpaths
+    gajim.common.configpaths.gajimpaths.init(None)
+from gajim.common import gajim
+from gajim import gtkgui_helpers
+from gajim.gtkgui_helpers import get_icon_pixmap
+from gajim.common import helpers
+from gajim.common.exceptions import GajimGeneralException
+from gajim import dialogs
 
-import tooltips
+from gajim import tooltips
 import logging
 log = logging.getLogger('gajim.htmlview')
 
@@ -924,7 +924,7 @@ class HtmlTextView(Gtk.TextView):
         dialogs.AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        from gtkgui_helpers import get_gtk_builder
+        from gajim.gtkgui_helpers import get_gtk_builder
         xml = get_gtk_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()

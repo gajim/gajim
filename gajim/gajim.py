@@ -50,9 +50,9 @@ gi.require_version('Gdk', '3.0')
 gi.require_version('GObject', '2.0')
 gi.require_version('Pango', '1.0')
 from gi.repository import GLib, Gio, Gtk
-from common import i18n
-from common import logging_helpers
-from common import crypto
+from gajim.common import i18n
+from gajim.common import logging_helpers
+from gajim.common import crypto
 try:
     PYOPENSSL_PRNG_PRESENT = True
     import OpenSSL.rand
@@ -114,7 +114,7 @@ class GajimApplication(Gtk.Application):
     def do_startup(self):
         Gtk.Application.do_startup(self)
 
-        import gtkexcepthook
+        from gajim import gtkexcepthook
         gtkexcepthook.init()
 
         try:
@@ -130,15 +130,15 @@ class GajimApplication(Gtk.Application):
             sys.exit(1)
 
         # Create and initialize Application Paths & Databases
-        from common import configpaths
+        from gajim.common import configpaths
         configpaths.gajimpaths.init(
             self.config_path, self.profile, self.profile_separation)
 
-        from common import gajim
-        from common import check_paths
-        from common import exceptions
-        from common import logger
-        from common import caps_cache
+        from gajim.common import gajim
+        from gajim.common import check_paths
+        from gajim.common import exceptions
+        from gajim.common import logger
+        from gajim.common import caps_cache
         try:
             gajim.logger = logger.Logger()
             caps_cache.initialize(gajim.logger)
@@ -242,13 +242,13 @@ class GajimApplication(Gtk.Application):
 
     def do_activate(self):
         Gtk.Application.do_activate(self)
-        from gui_interface import Interface
-        import gtkgui_helpers
+        from gajim.gui_interface import Interface
+        from gajim import gtkgui_helpers
         self.interface = Interface()
         gtkgui_helpers.load_css()
         self.interface.run(self)
         self.add_actions()
-        import gui_menu_builder
+        from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
 
     def do_shutdown(self, *args):
@@ -264,7 +264,7 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.prepare_quit()
 
         # Commit any outstanding SQL transactions
-        from common import gajim
+        from gajim.common import gajim
         gajim.logger.commit()
 
     def do_handle_local_options(self, options: GLib.VariantDict) -> int:
@@ -283,7 +283,7 @@ class GajimApplication(Gtk.Application):
         if options.contains('config-path'):
             self.config_path = options.lookup_value('config-path').get_string()
         if options.contains('version'):
-            from common.defs import version
+            from gajim.common.defs import version
             print(version)
             return 0
         if options.contains('quiet'):
@@ -322,7 +322,7 @@ class GajimApplication(Gtk.Application):
 
     def add_actions(self):
         ''' Build Application Actions '''
-        from app_actions import AppActions
+        from gajim.app_actions import AppActions
         action = AppActions(self)
 
         self.account_actions = [
@@ -368,7 +368,7 @@ class GajimApplication(Gtk.Application):
             act.connect("activate", func)
             self.add_action(act)
 
-        from common import gajim
+        from gajim.common import gajim
         accounts_list = sorted(gajim.contacts.get_accounts())
         if not accounts_list:
             return

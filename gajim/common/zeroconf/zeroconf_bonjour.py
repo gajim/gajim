@@ -17,10 +17,10 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim
+from gajim.common import gajim
 import select
 import re
-from common.zeroconf.zeroconf import Constant
+from gajim.common.zeroconf.zeroconf import Constant
 
 try:
     import pybonjour

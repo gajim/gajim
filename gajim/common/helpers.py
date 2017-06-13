@@ -40,7 +40,7 @@ import select
 import base64
 import hashlib
 import shlex
-from common import caps_cache
+from gajim.common import caps_cache
 import socket
 import time
 from datetime import datetime, timedelta, timezone, tzinfo
@@ -50,8 +50,8 @@ from string import Template
 
 import nbxmpp
 
-from common.i18n import Q_
-from common.i18n import ngettext
+from gajim.common.i18n import Q_
+from gajim.common.i18n import ngettext
 
 try:
     import precis_i18n.codec
@@ -750,7 +750,7 @@ def parse_datetime(timestring, check_utc=False, convert='utc', epoch=False):
             return date_time
     return None
 
-from common import gajim
+from gajim.common import gajim
 if gajim.HAVE_PYCURL:
     import pycurl
     from io import StringIO

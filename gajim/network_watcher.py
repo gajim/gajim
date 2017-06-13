@@ -24,7 +24,7 @@ import logging
 
 from gi.repository import Gio, GLib
 
-from common import gajim
+from gajim.common import gajim
 
 log = logging.getLogger('gajim.network_watcher')
 

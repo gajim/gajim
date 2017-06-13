@@ -32,11 +32,11 @@ from gi.repository import GObject
 from gi.repository import GLib
 import base64
 
-import gtkgui_helpers
-import dialogs
+from gajim import gtkgui_helpers
+from gajim import dialogs
 
-import common.dataforms as dataforms
-from common import helpers
+from gajim.common import dataforms
+from gajim.common import helpers
 
 import itertools
 

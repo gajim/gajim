@@ -24,7 +24,7 @@
 import locale
 import gettext
 import os
-from common import defs
+from gajim.common import defs
 import unicodedata
 
 # May be changed after GTK is imported

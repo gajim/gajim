@@ -25,9 +25,9 @@ Module containing the network portion of XEP-115 (Entity Capabilities)
 import logging
 log = logging.getLogger('gajim.c.p.caps')
 
-from common import gajim
-from common import ged
-from common.connection_handlers_events import CapsPresenceReceivedEvent, \
+from gajim.common import gajim
+from gajim.common import ged
+from gajim.common.connection_handlers_events import CapsPresenceReceivedEvent, \
     CapsDiscoReceivedEvent, CapsReceivedEvent
 
 

@@ -37,11 +37,11 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
-from common import gajim
-from common import helpers
-from common.i18n import Q_
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common.i18n import Q_
 
 class BaseTooltip:
     """

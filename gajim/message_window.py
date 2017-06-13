@@ -34,15 +34,15 @@ from gi.repository import GObject
 from gi.repository import GLib
 import time
 
-import common
-import gtkgui_helpers
-import message_control
-import dialogs
-from chat_control_base import ChatControlBase
-from chat_control import ChatControl
+from gajim import common
+from gajim import gtkgui_helpers
+from gajim import message_control
+from gajim import dialogs
+from gajim.chat_control_base import ChatControlBase
+from gajim.chat_control import ChatControl
 
-from common import gajim
-from gtkgui_helpers import get_action
+from gajim.common import gajim
+from gajim.gtkgui_helpers import get_action
 
 ####################
 

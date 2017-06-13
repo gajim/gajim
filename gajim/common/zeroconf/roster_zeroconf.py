@@ -18,8 +18,8 @@
 ##
 
 
-from common.zeroconf import zeroconf
-from common.zeroconf.zeroconf import Constant, ConstantRI
+from gajim.common.zeroconf import zeroconf
+from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
 
 class Roster:
     def __init__(self, zeroconf):

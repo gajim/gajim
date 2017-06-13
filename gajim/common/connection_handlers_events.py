@@ -32,19 +32,19 @@ from time import time as time_time
 
 import nbxmpp
 from nbxmpp.protocol import NS_CHATSTATES
-from common import atom
-from common import nec
-from common import helpers
-from common import gajim
-from common import i18n
-from common import dataforms
-from common import exceptions
-from common.zeroconf.zeroconf import Constant
-from common.logger import LOG_DB_PATH, KindConstant
-from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
-from common.jingle_transport import JingleTransportSocks5
-from common.file_props import FilesProp
-from common.nec import NetworkEvent
+from gajim.common import atom
+from gajim.common import nec
+from gajim.common import helpers
+from gajim.common import gajim
+from gajim.common import i18n
+from gajim.common import dataforms
+from gajim.common import exceptions
+from gajim.common.zeroconf.zeroconf import Constant
+from gajim.common.logger import LOG_DB_PATH, KindConstant
+from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
+from gajim.common.jingle_transport import JingleTransportSocks5
+from gajim.common.file_props import FilesProp
+from gajim.common.nec import NetworkEvent
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
@@ -1831,7 +1831,7 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
             self.errnum = 0 # we don't have an errnum
         self.ssl_msg = ''
         if self.errnum > 0:
-            from common.connection import ssl_error
+            from gajim.common.connection import ssl_error
             self.ssl_msg = ssl_error.get(self.errnum,
                 _('Unknown SSL error: %d') % self.errnum)
         self.ssl_cert = ''

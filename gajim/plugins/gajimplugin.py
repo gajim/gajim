@@ -27,10 +27,10 @@ Base class for implementing plugin.
 import os
 import locale
 
-from common import gajim
+from gajim.common import gajim
 
-from plugins.helpers import log_calls, log
-from plugins.gui import GajimPluginConfigDialog
+from gajim.plugins.helpers import log_calls, log
+from gajim.plugins.gui import GajimPluginConfigDialog
 
 import logging
 log = logging.getLogger('gajim.p.plugin')

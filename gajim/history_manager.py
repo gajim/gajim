@@ -39,7 +39,7 @@ from gi.repository import GLib
 import time
 
 import getopt
-from common import i18n
+from gajim.common import i18n
 
 def parseOpts():
     config_path = None
@@ -68,14 +68,14 @@ def parseOpts():
 config_path = parseOpts()
 del parseOpts
 
-import common.configpaths
-common.configpaths.gajimpaths.init(config_path)
+import gajim.common.configpaths
+gajim.common.configpaths.gajimpaths.init(config_path)
 del config_path
-from common import gajim
-import gtkgui_helpers
-from common.logger import LOG_DB_PATH, JIDConstant, KindConstant
-from common import helpers
-import dialogs
+from gajim.common import gajim
+from gajim import gtkgui_helpers
+from gajim.common.logger import LOG_DB_PATH, JIDConstant, KindConstant
+from gajim.common import helpers
+from gajim import dialogs
 
 from enum import IntEnum, unique
 

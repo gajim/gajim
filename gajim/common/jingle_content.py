@@ -18,10 +18,10 @@ Handles Jingle contents (XEP 0166)
 """
 
 import os
-from common import gajim
+from gajim.common import gajim
 import nbxmpp
-from .jingle_xtls import SELF_SIGNED_CERTIFICATE
-from .jingle_xtls import load_cert_file
+from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
+from gajim.common.jingle_xtls import load_cert_file
 
 contents = {}
 

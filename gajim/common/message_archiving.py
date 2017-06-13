@@ -23,10 +23,10 @@ from datetime import datetime, timedelta
 
 import nbxmpp
 
-from common import gajim
-from common import ged
-from common.logger import KindConstant, JIDConstant
-import common.connection_handlers_events as ev
+from gajim.common import gajim
+from gajim.common import ged
+from gajim.common.logger import KindConstant, JIDConstant
+import gajim.common.connection_handlers_events as ev
 
 log = logging.getLogger('gajim.c.message_archiving')
 

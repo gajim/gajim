@@ -54,15 +54,16 @@ if os.name != 'nt':
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 import nbxmpp
-from common import helpers
-from common import gajim
-from common import gpg
-from common import passwords
-from common import exceptions
-from common import check_X509
-from common.connection_handlers import *
+from gajim import common
+from gajim.common import helpers
+from gajim.common import gajim
+from gajim.common import gpg
+from gajim.common import passwords
+from gajim.common import exceptions
+from gajim.common import check_X509
+from gajim.common.connection_handlers import *
 
-from gtkgui_helpers import get_action
+from gajim.gtkgui_helpers import get_action
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
@@ -289,7 +290,7 @@ class CommonConnection:
 
         if obj.message and not obj.xhtml and gajim.config.get(
         'rst_formatting_outgoing_messages'):
-            from common.rst_xhtml_generator import create_xhtml
+            from gajim.common.rst_xhtml_generator import create_xhtml
             obj.xhtml = create_xhtml(obj.message)
         if not obj.message and obj.chatstate is None and obj.form_node is None:
             return
@@ -2613,7 +2614,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         if not obj.xhtml and gajim.config.get('rst_formatting_outgoing_messages'):
-            from common.rst_xhtml_generator import create_xhtml
+            from gajim.common.rst_xhtml_generator import create_xhtml
             obj.xhtml = create_xhtml(obj.message)
         
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',

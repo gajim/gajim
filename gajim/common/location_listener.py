@@ -20,8 +20,8 @@
 
 from datetime import datetime
 
-from common import gajim
-from common import dbus_support
+from gajim.common import gajim
+from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
 

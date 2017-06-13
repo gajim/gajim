@@ -22,13 +22,13 @@
 ##
 
 import nbxmpp
-from common import gajim
+from gajim.common import gajim
 #TODO: Doesn't work
 #from common.connection_handlers import PEP_CONFIG
 PEP_CONFIG = 'pep_config'
-from common import ged
-from common.connection_handlers_events import PubsubReceivedEvent
-from common.connection_handlers_events import PubsubBookmarksReceivedEvent
+from gajim.common import ged
+from gajim.common.connection_handlers_events import PubsubReceivedEvent
+from gajim.common.connection_handlers_events import PubsubBookmarksReceivedEvent
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 

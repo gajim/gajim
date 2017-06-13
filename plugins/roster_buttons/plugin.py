@@ -27,10 +27,10 @@ Roster buttons plug-in.
 import sys
 
 import gtk
-from common import gajim
+from gajim.common import gajim
 
-from plugins import GajimPlugin
-from plugins.helpers import log, log_calls
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log, log_calls
 
 class RosterButtonsPlugin(GajimPlugin):
 

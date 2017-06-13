@@ -27,7 +27,7 @@ information how to use them, read documentation
 """
 
 import nbxmpp
-from common import helpers
+from gajim.common import helpers
 
 # exceptions used in this module
 # base class

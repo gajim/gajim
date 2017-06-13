@@ -24,9 +24,9 @@ from datetime import datetime, timedelta, timezone
 import nbxmpp
 from gi.repository import Gtk, GLib
 
-from common import gajim
-from common import ged
-from gtkgui_helpers import get_icon_pixmap
+from gajim.common import gajim
+from gajim.common import ged
+from gajim.gtkgui_helpers import get_icon_pixmap
 
 log = logging.getLogger('gajim.c.message_archiving')
 

@@ -23,24 +23,24 @@
 
 import nbxmpp
 
-from common import helpers
+from gajim.common import helpers
 
-from common import events
-from common import exceptions
-from common import gajim
-from common import stanza_session
-from common import contacts
-from common import ged
-from common.connection_handlers_events import ChatstateReceivedEvent, \
+from gajim.common import events
+from gajim.common import exceptions
+from gajim.common import gajim
+from gajim.common import stanza_session
+from gajim.common import contacts
+from gajim.common import ged
+from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
     InformationEvent
-from common.logger import KindConstant
+from gajim.common.logger import KindConstant
 
-import message_control
+from gajim import message_control
 
-import notify
+from gajim import notify
 
-import dialogs
-import negotiation
+from gajim import dialogs
+from gajim import negotiation
 
 class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def __init__(self, conn, jid, thread_id, type_='chat'):

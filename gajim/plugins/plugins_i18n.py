@@ -22,7 +22,7 @@ import locale
 import gettext
 from os import path as os_path
 import os
-from common import gajim
+from gajim.common import gajim
 
 APP = 'gajim_plugins'
 plugins_locale_dir = os_path.join(gajim.PLUGINS_DIRS[1], 'locale')
@@ -36,5 +36,5 @@ try:
     t = gettext.translation(APP, plugins_locale_dir)
     _ = t.gettext
 except IOError:
-    from common import i18n
+    from gajim.common import i18n
     _ = gettext.gettext

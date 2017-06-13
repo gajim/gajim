@@ -34,9 +34,9 @@ import gi
 import uuid
 from distutils.version import LooseVersion as V
 
-from common import config
+from gajim.common import config
 import nbxmpp
-from common import ged as ged_module
+from gajim.common import ged as ged_module
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -54,7 +54,7 @@ log = logging.getLogger('gajim')
 
 logger = None
 
-from common import configpaths
+from gajim.common import configpaths
 gajimpaths = configpaths.gajimpaths
 
 VCARD_PATH = gajimpaths['VCARD']
@@ -86,8 +86,8 @@ else:
 
 os_info = None # used to cache os information
 
-from common.contacts import LegacyContactsAPI
-from common.events import Events
+from gajim.common.contacts import LegacyContactsAPI
+from gajim.common.events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
 

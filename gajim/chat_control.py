@@ -34,29 +34,29 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
-import gtkgui_helpers
-import gui_menu_builder
-import message_control
-import dialogs
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import message_control
+from gajim import dialogs
 
-from common import logger
-from common import gajim
-from common import helpers
-from common import exceptions
-from common import ged
-from common import i18n
-from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
-from common.contacts import GC_Contact
-from common.logger import KindConstant
+from gajim.common import logger
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import exceptions
+from gajim.common import ged
+from gajim.common import i18n
+from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
+from gajim.common.contacts import GC_Contact
+from gajim.common.logger import KindConstant
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.protocol import NS_CHATSTATES
-from common.connection_handlers_events import MessageOutgoingEvent
-from common.exceptions import GajimGeneralException
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common.exceptions import GajimGeneralException
 
-from command_system.implementation.hosts import ChatCommands
+from gajim.command_system.implementation.hosts import ChatCommands
 
 try:
     import gtkspell
@@ -64,7 +64,7 @@ try:
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False
 
-from chat_control_base import ChatControlBase
+from gajim.chat_control_base import ChatControlBase
 
 ################################################################################
 class ChatControl(ChatControlBase):
@@ -1033,7 +1033,7 @@ class ChatControl(ChatControlBase):
                 name = self.get_our_nick()
                 if not xhtml and not encrypted and \
                 gajim.config.get('rst_formatting_outgoing_messages'):
-                    from common.rst_xhtml_generator import create_xhtml
+                    from gajim.common.rst_xhtml_generator import create_xhtml
                     xhtml = create_xhtml(text)
                     if xhtml:
                         xhtml = '<body xmlns="%s">%s</body>' % (NS_XHTML, xhtml)

@@ -8,13 +8,13 @@ lib.setup_env()
 
 from mock import Mock
 
-from common.protocol.bytestream import ConnectionIBBytestream, ConnectionSocks5Bytestream
+from gajim.common.protocol.bytestream import ConnectionIBBytestream, ConnectionSocks5Bytestream
 from common.xmpp import dispatcher_nb
 from common.xmpp import protocol
-from common.jingle import ConnectionJingle
-from common import gajim
-from common.socks5 import SocksQueue
-import common
+from gajim.common.jingle import ConnectionJingle
+from gajim.common import gajim
+from gajim.common.socks5 import SocksQueue
+import gajim.common
 
 
 session_init = '''

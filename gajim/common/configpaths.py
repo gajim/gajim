@@ -25,7 +25,7 @@
 import os
 import sys
 import tempfile
-from common import defs
+from gajim.common import defs
 from enum import Enum, unique
 
 @unique

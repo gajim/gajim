@@ -17,13 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
-from common import gajim
+from gajim.common import gajim
 import nbxmpp
 from nbxmpp.idlequeue import IdleObject
 from nbxmpp import dispatcher_nb, simplexml
 from nbxmpp.plugin import *
 from nbxmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
-from common.zeroconf import zeroconf
+from gajim.common.zeroconf import zeroconf
 
 from nbxmpp.protocol import *
 import socket
@@ -37,7 +37,7 @@ from random import Random
 import logging
 log = logging.getLogger('gajim.c.z.client_zeroconf')
 
-from common.zeroconf import roster_zeroconf
+from gajim.common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
 TYPE_SERVER, TYPE_CLIENT = range(2)

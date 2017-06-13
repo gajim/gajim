@@ -27,12 +27,12 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 from gi.repository import GLib
 
-from common import gajim
+from gajim.common import gajim
 
-from common.jingle_transport import JingleTransportICEUDP
-from common.jingle_content import contents, JingleContent, JingleContentSetupException
-from common.connection_handlers_events import InformationEvent
-from common.jingle_session import FailedApplication
+from gajim.common.jingle_transport import JingleTransportICEUDP
+from gajim.common.jingle_content import contents, JingleContent, JingleContentSetupException
+from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.jingle_session import FailedApplication
 
 from collections import deque
 

@@ -34,13 +34,13 @@ from shutil import rmtree
 import configparser
 from pkg_resources import parse_version
 
-from common import gajim
-from common import nec
-from common.exceptions import PluginsystemError
+from gajim.common import gajim
+from gajim.common import nec
+from gajim.common.exceptions import PluginsystemError
 
-from plugins.helpers import log, log_calls, Singleton
-from plugins.helpers import GajimPluginActivateException
-from plugins.gajimplugin import GajimPlugin, GajimPluginException
+from gajim.plugins.helpers import log, log_calls, Singleton
+from gajim.plugins.helpers import GajimPluginActivateException
+from gajim.plugins.gajimplugin import GajimPlugin, GajimPluginException
 
 class PluginManager(metaclass=Singleton):
     '''
@@ -460,7 +460,7 @@ class PluginManager(metaclass=Singleton):
 
         :todo: add scanning zipped modules
         '''
-        from plugins.plugins_i18n import _
+        from gajim.plugins.plugins_i18n import _
         plugins_found = []
         conf = configparser.ConfigParser()
         fields = ('name', 'short_name', 'version', 'description', 'authors',

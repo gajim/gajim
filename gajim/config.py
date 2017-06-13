@@ -37,18 +37,18 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 import os
-import common.config
-import common.sleepy
-from common.i18n import Q_
+from gajim.common import config as c_config
+from gajim.common import sleepy
+from gajim.common.i18n import Q_
 
-import gtkgui_helpers
-import dialogs
-import cell_renderer_image
-import message_control
-from chat_control_base import ChatControlBase
-import dataforms_widget
-import profile_window
-import gui_menu_builder
+from gajim import gtkgui_helpers
+from gajim import dialogs
+from gajim import cell_renderer_image
+from gajim import message_control
+from gajim.chat_control_base import ChatControlBase
+from gajim import dataforms_widget
+from gajim import profile_window
+from gajim import gui_menu_builder
 
 try:
     import gtkspell
@@ -56,24 +56,24 @@ try:
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False
 
-from common import helpers
-from common import gajim
-from common import connection
-from common import passwords
-from common.zeroconf import connection_zeroconf
-from common import dataforms
-from common import gpg
-from common import ged
+from gajim.common import helpers
+from gajim.common import gajim
+from gajim.common import connection
+from gajim.common import passwords
+from gajim.common.zeroconf import connection_zeroconf
+from gajim.common import dataforms
+from gajim.common import gpg
+from gajim.common import ged
 
 try:
-    from common.multimedia_helpers import AudioInputManager, AudioOutputManager
-    from common.multimedia_helpers import VideoInputManager, VideoOutputManager
+    from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
+    from gajim.common.multimedia_helpers import VideoInputManager, VideoOutputManager
     HAS_GST = True
 except (ImportError, ValueError):
     HAS_GST = False
 
-from common.exceptions import GajimGeneralException
-from common.connection_handlers_events import InformationEvent
+from gajim.common.exceptions import GajimGeneralException
+from gajim.common.connection_handlers_events import InformationEvent
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -175,7 +175,7 @@ class PreferencesWindow:
             emoticons_combobox.set_active(0)
 
         # Set default for single window type
-        choices = common.config.opt_one_window_types
+        choices = c_config.opt_one_window_types
         type_ = gajim.config.get('one_message_window')
         if type_ in choices:
             self.one_window_type_combobox.set_active(choices.index(type_))
@@ -184,7 +184,7 @@ class PreferencesWindow:
 
         # Show roster on startup
         show_roster_combobox = self.xml.get_object('show_roster_on_startup')
-        choices = common.config.opt_show_roster_on_startup
+        choices = c_config.opt_show_roster_on_startup
         type_ = gajim.config.get('show_roster_on_startup')
         if type_ in choices:
             show_roster_combobox.set_active(choices.index(type_))
@@ -389,7 +389,6 @@ class PreferencesWindow:
         self.auto_xa_message_entry.set_text(st)
         self.auto_xa_message_entry.set_sensitive(gajim.config.get('autoxa'))
 
-        from common import sleepy
         if not sleepy.SUPPORTED:
             self.xml.get_object('autoaway_table').set_sensitive(False)
 
@@ -670,13 +669,13 @@ class PreferencesWindow:
 
     def on_one_window_type_combo_changed(self, widget):
         active = widget.get_active()
-        config_type = common.config.opt_one_window_types[active]
+        config_type = c_config.opt_one_window_types[active]
         gajim.config.set('one_message_window', config_type)
         gajim.interface.msg_win_mgr.reconfig()
 
     def on_show_roster_on_startup_changed(self, widget):
         active = widget.get_active()
-        config_type = common.config.opt_show_roster_on_startup[active]
+        config_type = c_config.opt_show_roster_on_startup[active]
         gajim.config.set('show_roster_on_startup', config_type)
 
     def on_compact_view_checkbutton_toggled(self, widget):
@@ -991,7 +990,7 @@ class PreferencesWindow:
     def on_auto_away_time_spinbutton_value_changed(self, widget):
         aat = widget.get_value_as_int()
         gajim.config.set('autoawaytime', aat)
-        gajim.interface.sleeper = common.sleepy.Sleepy(
+        gajim.interface.sleeper = sleepy.Sleepy(
                                 gajim.config.get('autoawaytime') * 60,
                                 gajim.config.get('autoxatime') * 60)
 
@@ -1005,7 +1004,7 @@ class PreferencesWindow:
     def on_auto_xa_time_spinbutton_value_changed(self, widget):
         axt = widget.get_value_as_int()
         gajim.config.set('autoxatime', axt)
-        gajim.interface.sleeper = common.sleepy.Sleepy(
+        gajim.interface.sleeper = sleepy.Sleepy(
                                 gajim.config.get('autoawaytime') * 60,
                                 gajim.config.get('autoxatime') * 60)
 

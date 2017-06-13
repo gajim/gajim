@@ -52,18 +52,18 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 
-import dialogs
-import gtkgui_helpers
-import groups
-import adhoc_commands
-import search_window
-import gui_menu_builder
+from gajim import dialogs
+from gajim import gtkgui_helpers
+from gajim import groups
+from gajim import adhoc_commands
+from gajim import search_window
+from gajim import gui_menu_builder
 
-from common import gajim
+from gajim.common import gajim
 import nbxmpp
-from common.exceptions import GajimGeneralException
-from common import helpers
-from common import ged
+from gajim.common.exceptions import GajimGeneralException
+from gajim.common import helpers
+from gajim.common import ged
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),

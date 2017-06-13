@@ -27,7 +27,7 @@
 import os
 import logging
 import gi
-from common import gajim
+from gajim.common import gajim
 
 __all__ = ['get_password', 'save_password']
 

@@ -32,14 +32,14 @@ import time
 from enum import IntEnum, unique
 from datetime import datetime
 
-import gtkgui_helpers
-import tooltips
-import dialogs
+from gajim import gtkgui_helpers
+from gajim import tooltips
+from gajim import dialogs
 
-from common import gajim
-from common import helpers
-from common.file_props import FilesProp
-from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common.file_props import FilesProp
+from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 import logging
@@ -294,7 +294,7 @@ class FileTransfersWindow:
         win.set_shadow_type(Gtk.ShadowType.IN)
         win.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
-        from message_textview import MessageTextView
+        from gajim.message_textview import MessageTextView
         desc_entry = MessageTextView()
         win.add(desc_entry)
 

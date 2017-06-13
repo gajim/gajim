@@ -26,13 +26,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 import uuid
 
-from common import gajim
-from common import helpers
-from common import ged
-from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import ged
+from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'

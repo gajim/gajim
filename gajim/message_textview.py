@@ -28,8 +28,8 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Pango
 
-from common import gajim
-import gtkgui_helpers
+from gajim.common import gajim
+from gajim import gtkgui_helpers
 
 class MessageTextView(Gtk.TextView):
     """

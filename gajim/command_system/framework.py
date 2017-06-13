@@ -22,10 +22,10 @@ declarative way.
 from types import FunctionType
 from inspect import getargspec, getdoc
 
-from .dispatcher import Host, Container
-from .dispatcher import get_command, list_commands
-from .mapping import parse_arguments, adapt_arguments
-from .errors import DefinitionError, CommandError, NoCommandError
+from gajim.command_system.dispatcher import Host, Container
+from gajim.command_system.dispatcher import get_command, list_commands
+from gajim.command_system.mapping import parse_arguments, adapt_arguments
+from gajim.command_system.errors import DefinitionError, CommandError, NoCommandError
 
 class CommandHost(metaclass=Host):
     """

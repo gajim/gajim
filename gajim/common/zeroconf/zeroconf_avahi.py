@@ -25,7 +25,7 @@ try:
 except ImportError:
     pass
 
-from common.zeroconf.zeroconf import Constant, ConstantRI
+from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,

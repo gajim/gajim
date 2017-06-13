@@ -27,11 +27,11 @@ import logging
 log = logging.getLogger('gajim.c.proxy65_manager')
 
 import nbxmpp
-from common import gajim
-from common import helpers
-from common.socks5 import Socks5
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common.socks5 import Socks5
 from nbxmpp.idlequeue import IdleObject
-from common.file_props import FilesProp
+from gajim.common.file_props import FilesProp
 
 S_INITIAL = 0
 S_STARTED = 1

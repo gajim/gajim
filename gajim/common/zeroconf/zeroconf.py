@@ -56,8 +56,8 @@ def test_zeroconf():
     return test_avahi() or test_bonjour()
 
 if test_avahi():
-    from common.zeroconf import zeroconf_avahi
+    from gajim.common.zeroconf import zeroconf_avahi
     Zeroconf = zeroconf_avahi.Zeroconf
 elif test_bonjour():
-    from common.zeroconf import zeroconf_bonjour
+    from gajim.common.zeroconf import zeroconf_bonjour
     Zeroconf = zeroconf_bonjour.Zeroconf

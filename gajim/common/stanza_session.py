@@ -22,9 +22,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim
+from gajim.common import gajim
 import nbxmpp
-from common.exceptions import DecryptionError, NegotiationError
+from gajim.common.exceptions import DecryptionError, NegotiationError
 import nbxmpp.c14n
 
 import itertools
@@ -35,7 +35,7 @@ import base64
 import os
 from hashlib import sha256
 from hmac import HMAC
-from common import crypto
+from gajim.common import crypto
 
 import logging
 log = logging.getLogger('gajim.c.stanza_session')
@@ -44,8 +44,8 @@ if gajim.HAVE_PYCRYPTO:
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
 
-    from common import dh
-    import secrets
+    from gajim.common import dh
+    from gajim import secrets
 
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 

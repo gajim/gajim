@@ -32,12 +32,12 @@ import mimetypes
 import os
 import time
 
-import gtkgui_helpers
-import dialogs
-import vcard
+from gajim import gtkgui_helpers
+from gajim import dialogs
+from gajim import vcard
 
-from common import gajim
-from common import ged
+from gajim.common import gajim
+from gajim.common import ged
 
 
 class ProfileWindow:

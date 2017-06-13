@@ -21,7 +21,7 @@ import logging
 import socket
 from enum import IntEnum, unique
 import nbxmpp
-from common import gajim
+from gajim.common import gajim
 
 log = logging.getLogger('gajim.c.jingle_transport')
 

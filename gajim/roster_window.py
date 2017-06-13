@@ -45,27 +45,27 @@ import locale
 
 from enum import IntEnum, unique
 
-import common.sleepy
-import history_window
-import dialogs
-import vcard
-import config
-import disco
-import gtkgui_helpers
-import gui_menu_builder
-import cell_renderer_image
-import tooltips
-import message_control
-import adhoc_commands
+from gajim.common import sleepy
+from gajim import history_window
+from gajim import dialogs
+from gajim import vcard
+from gajim import config
+from gajim import disco
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import cell_renderer_image
+from gajim import tooltips
+from gajim import message_control
+from gajim import adhoc_commands
 
-from common import gajim
-from common import helpers
-from common.exceptions import GajimGeneralException
-from common import i18n
-from common import location_listener
-from common import ged
-from common import dbus_support
-from message_window import MessageWindowMgr
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common.exceptions import GajimGeneralException
+from gajim.common import i18n
+from gajim.common import location_listener
+from gajim.common import ged
+from gajim.common import dbus_support
+from gajim.message_window import MessageWindowMgr
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
 
@@ -2166,7 +2166,7 @@ class RosterWindow:
     def send_status_continue(self, account, status, txt, auto, to):
         if gajim.account_is_connected(account) and not to:
             if status == 'online' and gajim.interface.sleeper.getState() != \
-            common.sleepy.STATE_UNKNOWN:
+            sleepy.STATE_UNKNOWN:
                 gajim.sleeper_state[account] = 'online'
             elif gajim.sleeper_state[account] not in ('autoaway', 'autoxa') or \
             status == 'offline':
@@ -2508,7 +2508,7 @@ class RosterWindow:
 
         def on_continue2(message, pep_dict):
             # check if there is an active file transfer
-            from common.protocol.bytestream import (is_transfer_active)
+            from gajim.common.protocol.bytestream import (is_transfer_active)
             files_props = gajim.interface.instances['file_transfers'].\
                 files_props
             transfer_active = False
@@ -2688,7 +2688,7 @@ class RosterWindow:
             self.remove_contact(jid, obj.conn.name, backend=True)
 
     def _nec_pep_received(self, obj):
-        if obj.jid == common.gajim.get_jid_from_account(obj.conn.name):
+        if obj.jid == gajim.get_jid_from_account(obj.conn.name):
             self.draw_account(obj.conn.name)
 
         if obj.pep_type == 'nickname':
@@ -6030,7 +6030,7 @@ class RosterWindow:
             GLib.idle_add(_open_wizard)
         if not gajim.ZEROCONF_ACC_NAME in gajim.config.get_per('accounts'):
             # Create zeroconf in config file
-            from common.zeroconf import connection_zeroconf
+            from gajim.common.zeroconf import connection_zeroconf
             connection_zeroconf.ConnectionZeroconf(gajim.ZEROCONF_ACC_NAME)
 
         # Setting CTRL+J to be the shortcut for bringing up the dialog to join a

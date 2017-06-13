@@ -24,8 +24,8 @@
 
 import os
 import logging
-from common import gajim
-from common.gajim import HAVE_GPG, GPG_BINARY
+from gajim.common import gajim
+from gajim.common.gajim import HAVE_GPG, GPG_BINARY
 
 if HAVE_GPG:
     import gnupg

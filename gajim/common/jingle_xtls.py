@@ -20,7 +20,7 @@ import logging
 import os
 
 import nbxmpp
-from common import gajim
+from gajim.common import gajim
 
 log = logging.getLogger('gajim.c.jingle_xtls')
 

@@ -26,7 +26,7 @@ Network Events Controller.
 '''
 
 #from plugins.helpers import log
-from common import gajim
+from gajim.common import gajim
 
 class NetworkEventsController(object):
 

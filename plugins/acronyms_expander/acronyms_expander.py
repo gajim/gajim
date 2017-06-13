@@ -30,8 +30,8 @@ import os
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from plugins import GajimPlugin
-from plugins.helpers import log, log_calls
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log, log_calls
 
 class AcronymsExpanderPlugin(GajimPlugin):
 

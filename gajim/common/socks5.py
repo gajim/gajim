@@ -34,9 +34,9 @@ from errno import EISCONN
 from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from nbxmpp.idlequeue import IdleObject
-from common.file_props import FilesProp
-from common import gajim
-from common import jingle_xtls
+from gajim.common.file_props import FilesProp
+from gajim.common import gajim
+from gajim.common import jingle_xtls
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
 import logging

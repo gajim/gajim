@@ -34,15 +34,15 @@ import datetime
 
 from enum import IntEnum, unique
 
-import gtkgui_helpers
-import conversation_textview
-import dialogs
+from gajim import gtkgui_helpers
+from gajim import conversation_textview
+from gajim import dialogs
 
-from common import gajim
-from common import helpers
-from common import exceptions
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import exceptions
 
-from common.logger import ShowConstant, KindConstant
+from gajim.common.logger import ShowConstant, KindConstant
 
 @unique
 class InfoColumn(IntEnum):

@@ -14,9 +14,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import nbxmpp
-from common import gajim
-from common.jingle_transport import TransportType
-from common.socks5 import Socks5ReceiverClient, Socks5SenderClient
+from gajim.common import gajim
+from gajim.common.jingle_transport import TransportType
+from gajim.common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
 import logging
 log = logging.getLogger('gajim.c.jingle_ftstates')

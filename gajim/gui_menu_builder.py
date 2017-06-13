@@ -20,15 +20,15 @@
 
 from gi.repository import Gtk, Gio, GLib
 import os
-import gtkgui_helpers
-import message_control
+from gajim import gtkgui_helpers
+from gajim import message_control
 
-from common import gajim
-from common import helpers
-from common import i18n
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import i18n
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
-from gtkgui_helpers import get_action
+from gajim.gtkgui_helpers import get_action
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):

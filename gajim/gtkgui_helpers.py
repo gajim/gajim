@@ -45,10 +45,10 @@ from io import BytesIO
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')
 
-from common import i18n
-from common import gajim
-from common import pep
-from common import configpaths
+from gajim.common import i18n
+from gajim.common import gajim
+from gajim.common import pep
+from gajim.common import configpaths
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
@@ -82,8 +82,8 @@ def get_icon_path(icon_name, size=16):
     except GLib.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
-import vcard
-import dialogs
+from gajim import vcard
+from gajim import dialogs
 
 
 HAS_PYWIN32 = True
@@ -95,7 +95,7 @@ if os.name == 'nt':
     except ImportError:
         HAS_PYWIN32 = False
 
-from common import helpers
+from gajim.common import helpers
 
 screen_w = Gdk.Screen.width()
 screen_h = Gdk.Screen.height()

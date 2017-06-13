@@ -18,9 +18,9 @@
 
 from gi.repository import Gtk
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
-from common import helpers
+from gajim.common import helpers
 
 __all__ = ['show']
 

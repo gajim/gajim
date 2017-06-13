@@ -26,11 +26,11 @@
 from enum import IntEnum, unique
 
 from gi.repository import Gtk
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 from gi.repository import GLib
 from gi.repository import Pango
 
-from common import gajim
+from gajim.common import gajim
 
 @unique
 class Column(IntEnum):

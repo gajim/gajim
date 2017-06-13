@@ -24,9 +24,9 @@ log = logging.getLogger('gajim.c.resolver')
 
 if __name__ == '__main__':
     sys.path.append('..')
-    from common import i18n
-    import common.configpaths
-    common.configpaths.gajimpaths.init(None)
+    from gajim.common import i18n
+    from gajim.common import configpaths
+    configpaths.gajimpaths.init(None)
 
 from gi.repository import Gio, GLib
 

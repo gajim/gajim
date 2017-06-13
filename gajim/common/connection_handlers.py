@@ -39,27 +39,27 @@ from time import (altzone, daylight, gmtime, localtime, strftime,
 from gi.repository import GLib
 
 import nbxmpp
-from common import caps_cache as capscache
+from gajim.common import caps_cache as capscache
 
-from common.pep import LOCATION_DATA
-from common import helpers
-from common import gajim
-from common import exceptions
-from common import dataforms
-from common import jingle_xtls
-from common.commands import ConnectionCommands
-from common.pubsub import ConnectionPubSub
-from common.protocol.caps import ConnectionCaps
-from common.protocol.bytestream import ConnectionSocks5Bytestream
-from common.protocol.bytestream import ConnectionIBBytestream
-from common.message_archiving import ConnectionArchive313
-from common.connection_handlers_events import *
+from gajim.common.pep import LOCATION_DATA
+from gajim.common import helpers
+from gajim.common import gajim
+from gajim.common import exceptions
+from gajim.common import dataforms
+from gajim.common import jingle_xtls
+from gajim.common.commands import ConnectionCommands
+from gajim.common.pubsub import ConnectionPubSub
+from gajim.common.protocol.caps import ConnectionCaps
+from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
+from gajim.common.protocol.bytestream import ConnectionIBBytestream
+from gajim.common.message_archiving import ConnectionArchive313
+from gajim.common.connection_handlers_events import *
 
-from common import ged
-from common import nec
-from common.nec import NetworkEvent
+from gajim.common import ged
+from gajim.common import nec
+from gajim.common.nec import NetworkEvent
 
-from common.jingle import ConnectionJingle
+from gajim.common.jingle import ConnectionJingle
 
 import logging
 log = logging.getLogger('gajim.c.connection_handlers')
@@ -77,7 +77,7 @@ PEP_CONFIG = 'pep_config'
 HAS_IDLE = True
 try:
 #       import idle
-    import common.sleepy
+    from gajim.common import sleepy
 except Exception:
     log.debug(_('Unable to load idle module'))
     HAS_IDLE = False

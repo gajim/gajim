@@ -27,8 +27,8 @@ import os
 import shutil
 import sys
 
-from common import gajim
-from common import logger
+from gajim.common import gajim
+from gajim.common import logger
 
 # DO NOT MOVE ABOVE OF import gajim
 import sqlite3 as sqlite
@@ -179,7 +179,7 @@ def check_and_possibly_move_config():
     vars['MY_ICONSETS_PATH'] = gajim.MY_ICONSETS_PATH
     vars['MY_MOOD_ICONSETS_PATH'] = gajim.MY_MOOD_ICONSETS_PATH
     vars['MY_ACTIVITY_ICONSETS_PATH'] = gajim.MY_ACTIVITY_ICONSETS_PATH
-    from common import configpaths
+    from gajim.common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']
@@ -264,7 +264,7 @@ def check_and_possibly_create_paths():
 
     VCARD_PATH = gajim.VCARD_PATH
     AVATAR_PATH = gajim.AVATAR_PATH
-    from common import configpaths
+    from gajim.common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
     MY_CACHE = configpaths.gajimpaths['MY_CACHE']

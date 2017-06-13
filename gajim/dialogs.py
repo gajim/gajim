@@ -38,15 +38,15 @@ import os
 import nbxmpp
 import time
 
-import gtkgui_helpers
-import vcard
-import conversation_textview
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import vcard
+from gajim import conversation_textview
+from gajim import dataforms_widget
 
-from common import defs
+from gajim.common import defs
 from random import randrange
-from common import pep
-from common import ged
+from gajim.common import pep
+from gajim.common import ged
 
 try:
     import gtkspell
@@ -56,16 +56,16 @@ except (ImportError, ValueError):
 
 # those imports are not used in this file, but in files that 'import dialogs'
 # so they can do dialog.GajimThemesWindow() for example
-from filetransfers_window import FileTransfersWindow
-from gajim_themes_window import GajimThemesWindow
-from advanced_configuration_window import AdvancedConfigurationWindow
+from gajim.filetransfers_window import FileTransfersWindow
+from gajim.gajim_themes_window import GajimThemesWindow
+from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 
-from common import gajim
-from common import helpers
-from common import i18n
-from common import dataforms
-from common.exceptions import GajimGeneralException
-from common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import i18n
+from gajim.common import dataforms
+from gajim.common.exceptions import GajimGeneralException
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.dialogs')

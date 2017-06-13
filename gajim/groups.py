@@ -21,9 +21,9 @@
 
 '''Window to create new post for discussion groups service.'''
 
-from common import gajim
+from gajim.common import gajim
 from nbxmpp import Node
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
 class GroupsPostWindow:
     def __init__(self, account, servicejid, groupid):

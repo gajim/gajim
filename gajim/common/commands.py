@@ -23,10 +23,10 @@
 ##
 
 import nbxmpp
-from common import helpers
-from common import dataforms
-from common import gajim
-from common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common import helpers
+from gajim.common import dataforms
+from gajim.common import gajim
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.c.commands')

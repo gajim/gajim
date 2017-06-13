@@ -19,11 +19,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtkgui_helpers
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import dataforms_widget
 
-from common import dataforms
-from common import gajim
+from gajim.common import dataforms
+from gajim.common import gajim
 import nbxmpp
 
 def describe_features(features):

@@ -34,12 +34,12 @@ from gi.repository import GLib
 import time
 
 import nbxmpp
-from common import gajim
-from common import helpers
-from common import ged
-from common import jingle_xtls
-from common.file_props import FilesProp
-from common.socks5 import Socks5SenderClient
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import ged
+from gajim.common import jingle_xtls
+from gajim.common.file_props import FilesProp
+from gajim.common.socks5 import Socks5SenderClient
 
 import logging
 log = logging.getLogger('gajim.c.p.bytestream')
@@ -256,7 +256,7 @@ class ConnectionBytestream:
             raise nbxmpp.NodeProcessed
 
     def _siSetCB(self, con, iq_obj):
-        from common.connection_handlers_events import FileRequestReceivedEvent
+        from gajim.common.connection_handlers_events import FileRequestReceivedEvent
         gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed
@@ -274,7 +274,7 @@ class ConnectionBytestream:
             return
         jid = self._ft_get_from(iq_obj)
         file_props.error = -3
-        from common.connection_handlers_events import FileRequestErrorEvent
+        from gajim.common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise nbxmpp.NodeProcessed
@@ -308,7 +308,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if contact.get_full_jid() == receiver_jid:
                 file_props.error = -5
                 self.remove_transfer(file_props)
-                from common.connection_handlers_events import \
+                from gajim.common.connection_handlers_events import \
                     FileRequestErrorEvent
                 gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
@@ -360,7 +360,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 self._result_socks5_sid, file_props)
         if not listener:
             file_props.error = -5
-            from common.connection_handlers_events import FileRequestErrorEvent
+            from gajim.common.connection_handlers_events import FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=receiver, file_props=file_props, error_msg=''))
             self._connect_error(file_props.sid, error='not-acceptable',
@@ -400,7 +400,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             port = gajim.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
-            from common.connection_handlers_events import InformationEvent
+            from gajim.common.connection_handlers_events import InformationEvent
             gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Wrong host'),
                 sec_txt=_('Invalid local address? :-O')))
@@ -582,7 +582,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if msg:
             self.disconnect_transfer(file_props)
             file_props.error = -3
-            from common.connection_handlers_events import \
+            from gajim.common.connection_handlers_events import \
                 FileRequestErrorEvent
             gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
                 conn=self, jid=to, file_props=file_props, error_msg=msg))
@@ -616,7 +616,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if not file_props:
             return
         file_props.error = -4
-        from common.connection_handlers_events import FileRequestErrorEvent
+        from gajim.common.connection_handlers_events import FileRequestErrorEvent
         gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise nbxmpp.NodeProcessed

@@ -31,9 +31,9 @@
 from functools import cmp_to_key
 
 try:
-    from common import caps_cache
-    from common.account import Account
-    import common.gajim
+    from gajim.common import caps_cache
+    from gajim.common.account import Account
+    from gajim import common
 except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(str(e))

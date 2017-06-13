@@ -26,8 +26,8 @@
 
 import os
 
-from common import gajim
-from common import exceptions
+from gajim.common import gajim
+from gajim.common import exceptions
 
 _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 

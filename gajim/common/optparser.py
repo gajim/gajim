@@ -30,12 +30,12 @@ import os
 import sys
 import re
 from time import time
-from common import gajim
-from common import helpers
-from common import caps_cache
+from gajim.common import gajim
+from gajim.common import helpers
+from gajim.common import caps_cache
 
 import sqlite3 as sqlite
-from common import logger
+from gajim.common import logger
 
 import logging
 log = logging.getLogger('gajim.c.optparser')
@@ -580,7 +580,7 @@ class OptionsParser:
 
     def update_config_to_01121(self):
         # remove old unencrypted secrets file
-        from common.configpaths import gajimpaths
+        from gajim.common.configpaths import gajimpaths
 
         new_file = gajimpaths['SECRETS_FILE']
 

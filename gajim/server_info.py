@@ -22,9 +22,9 @@ from collections import namedtuple
 import nbxmpp
 from gi.repository import Gtk
 
-from common import gajim
-from common import ged
-from gtkgui_helpers import get_icon_pixmap, Color
+from gajim.common import gajim
+from gajim.common import ged
+from gajim.gtkgui_helpers import get_icon_pixmap, Color
 
 class ServerInfoDialog(Gtk.Dialog):
     def __init__(self, account):

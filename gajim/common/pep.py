@@ -221,7 +221,7 @@ import logging
 log = logging.getLogger('gajim.c.pep')
 
 import nbxmpp
-from common import gajim
+from gajim.common import gajim
 
 
 class AbstractPEP(object):

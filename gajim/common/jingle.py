@@ -31,14 +31,14 @@ Handles the jingle signalling protocol
 import logging
 
 import nbxmpp
-from common import helpers
-from common import gajim
+from gajim.common import helpers
+from gajim.common import gajim
 
-from common.jingle_session import JingleSession, JingleStates
-from common.jingle_ft import JingleFileTransfer
-from common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
+from gajim.common.jingle_session import JingleSession, JingleStates
+from gajim.common.jingle_ft import JingleFileTransfer
+from gajim.common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
 if gajim.HAVE_FARSTREAM:
-    from common.jingle_rtp import JingleAudio, JingleVideo
+    from gajim.common.jingle_rtp import JingleAudio, JingleVideo
 
 logger = logging.getLogger('gajim.c.jingle')
 
