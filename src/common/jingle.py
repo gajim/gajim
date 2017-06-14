@@ -172,7 +172,7 @@ class ConnectionJingle(object):
         return c.transport.sid
 
     def __hash_support(self, contact):
-        if contact.supports(nbxmpp.NS_HASHES):
+        if contact.supports(nbxmpp.NS_HASHES_2):
             if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_512):
                 return 'blake2b-512'
             elif contact.supports(nbxmpp.NS_HASHES_BLAKE2B_256):

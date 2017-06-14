@@ -253,7 +253,7 @@ gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_REGISTER, nbxmpp.NS_VERSION, nbxmpp.NS_DATA, nbxmpp.NS_ENCRYPTED,
     'msglog', 'sslc2s', 'stringprep', nbxmpp.NS_PING, nbxmpp.NS_TIME_REVISED,
     nbxmpp.NS_SSN, nbxmpp.NS_MOOD, nbxmpp.NS_ACTIVITY, nbxmpp.NS_NICK,
-    nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES,
+    nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES_2,
     nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
     nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CONFERENCE]
 
