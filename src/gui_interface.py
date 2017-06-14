@@ -73,7 +73,7 @@ from session import ChatControlSession
 from common import sleepy
 
 from nbxmpp import idlequeue
-from nbxmpp import Hashes
+from nbxmpp import Hashes2
 from common.zeroconf import connection_zeroconf
 from common import resolver
 from common import caps_cache
@@ -988,7 +988,7 @@ class Interface:
         session = gajim.connections[account].get_jingle_session(jid=None,
             sid=file_props.sid)
         ft_win = self.instances['file_transfers']
-        h = Hashes()
+        h = Hashes2()
         try:
             file_ = open(file_props.file_name, 'rb')
         except:

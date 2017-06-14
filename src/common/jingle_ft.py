@@ -176,7 +176,7 @@ class JingleFileTransfer(JingleContent):
         except IOError:
             # can't open file
             return
-        h = nbxmpp.Hashes()
+        h = nbxmpp.Hashes2()
         hash_ = h.calculateHash(self.file_props.algo, file_)
         file_.close()
         # DEBUG
