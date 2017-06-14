@@ -175,7 +175,7 @@ class JingleContent:
 
     def _fill_content(self, content):
         description_node = nbxmpp.simplexml.Node(
-            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER + ' description')
+            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER_5 + ' description')
         file_tag = description_node.setTag('file')
         if self.file_props.name:
             node = nbxmpp.simplexml.Node(tag='name')

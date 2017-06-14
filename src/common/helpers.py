@@ -1289,7 +1289,7 @@ def update_optional_features(account = None):
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
             gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
         gajim.gajim_optional_features[a].append(
-            nbxmpp.NS_JINGLE_FILE_TRANSFER)
+            nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
         gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
         gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
         gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
