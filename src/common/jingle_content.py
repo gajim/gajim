@@ -192,7 +192,7 @@ class JingleContent:
         if self.file_props.type_ == 'r':
             if self.file_props.hash_:
                 file_tag.addChild('hash', attrs={'algo': self.file_props.algo},
-                                  namespace=nbxmpp.NS_HASHES,
+                                  namespace=nbxmpp.NS_HASHES_2,
                                   payload=self.file_props.hash_)
         else:
             # if the file is less than 10 mb, then it is small
