@@ -39,11 +39,11 @@ log = logging.getLogger('gajim.c.caps_cache')
 
 from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
-    NS_JINGLE_FILE_TRANSFER)
+    NS_JINGLE_FILE_TRANSFER_5)
 # Features where we cannot safely assume that the other side supports them
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_ESESSION,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
-    NS_JINGLE_FILE_TRANSFER]
+    NS_JINGLE_FILE_TRANSFER_5]
 
 # Query entry status codes
 NEW = 0

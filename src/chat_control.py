@@ -51,7 +51,7 @@ from common.logger import KindConstant
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
-from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.protocol import NS_CHATSTATES
 from common.connection_handlers_events import MessageOutgoingEvent
 from common.exceptions import GajimGeneralException
@@ -387,7 +387,7 @@ class ChatControl(ChatControlBase):
 
         # Send file
         if ((self.contact.supports(NS_FILE) or \
-        self.contact.supports(NS_JINGLE_FILE_TRANSFER)) and \
+        self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and \
         (self.type_id == 'chat' or self.gc_contact.resource)) and \
         self.contact.show != 'offline':
             self._send_file_button.set_sensitive(True)
@@ -395,7 +395,7 @@ class ChatControl(ChatControlBase):
         else:
             self._send_file_button.set_sensitive(False)
             if not (self.contact.supports(NS_FILE) or self.contact.supports(
-            NS_JINGLE_FILE_TRANSFER)):
+            NS_JINGLE_FILE_TRANSFER_5)):
                 self._send_file_button.set_tooltip_text(_(
                     "This contact does not support file transfer."))
             else:

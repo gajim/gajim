@@ -27,7 +27,7 @@ from common import gajim
 from common import helpers
 from common import i18n
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER, NS_CONFERENCE
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
 from gtkgui_helpers import get_action
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
@@ -260,7 +260,7 @@ control=None, gc_contact=None, is_anonymous=True):
     else:
         start_chat_menuitem.connect('activate',
                 gajim.interface.on_open_chat_window, contact, account)
-        if contact.supports(NS_FILE) or contact.supports(NS_JINGLE_FILE_TRANSFER):
+        if contact.supports(NS_FILE) or contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             send_file_menuitem.set_sensitive(True)
             send_file_menuitem.connect('activate',
                     roster.on_send_file_menuitem_activate, contact, account)
