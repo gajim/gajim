@@ -287,6 +287,7 @@ class ChatControl(ChatControlBase):
         self.encryption_menu = self.xml.get_object('encryption_menu')
         self.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(self.contact, self.type_id))
+        self.set_encryption_menu_icon()
         # restore previous conversation
         self.restore_conversation()
         self.msg_textview.grab_focus()
@@ -990,7 +991,7 @@ class ChatControl(ChatControlBase):
     def get_our_nick(self):
         return gajim.nicks[self.account]
 
-    def print_conversation(self, text, frm='', tim=None, encrypted=False,
+    def print_conversation(self, text, frm='', tim=None, encrypted=None,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
     displaymarking=None, msg_log_id=None, correct_id=None,
     msg_stanza_id=None, additional_data=None):
@@ -1023,12 +1024,6 @@ class ChatControl(ChatControlBase):
             kind = 'info'
             name = ''
         else:
-            if self.session and self.session.enable_encryption:
-                # ESessions
-                if not encrypted:
-                    msg = _('The following message was NOT encrypted')
-                    ChatControlBase.print_conversation_line(self, msg, 'status',
-                        '',  tim)
             if not frm:
                 kind = 'incoming'
                 name = contact.get_shown_name()
@@ -1048,7 +1043,8 @@ class ChatControl(ChatControlBase):
             subject=subject, old_kind=self.old_msg_kind, xhtml=xhtml,
             simple=simple, xep0184_id=xep0184_id, displaymarking=displaymarking,
             msg_log_id=msg_log_id, msg_stanza_id=msg_stanza_id,
-            correct_id=correct_id, additional_data=additional_data)
+            correct_id=correct_id, additional_data=additional_data,
+            encrypted=encrypted)
         if text.startswith('/me ') or text.startswith('/me\n'):
             self.old_msg_kind = None
         else:

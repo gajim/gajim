@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkGrid" id="tooltip_grid">
@@ -10,8 +10,8 @@
       <object class="GtkLabel" id="nick">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -26,10 +26,11 @@
       <object class="GtkLabel" id="status">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="wrap">True</property>
+        <property name="wrap_mode">word-char</property>
         <property name="max_width_chars">40</property>
-        <property name="xalign">0</property>
         <attributes>
           <attribute name="style" value="italic"/>
         </attributes>
@@ -44,9 +45,9 @@
       <object class="GtkLabel" id="jid_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Jabber ID:</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -69,9 +70,9 @@
       <object class="GtkLabel" id="resource_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Resource:</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -82,8 +83,8 @@
       <object class="GtkLabel" id="affiliation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -95,8 +96,8 @@
       <object class="GtkLabel" id="user_show">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -108,6 +109,7 @@
       <object class="GtkLabel" id="fillelement">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="vexpand">True</property>
       </object>
       <packing>
@@ -120,8 +122,8 @@
       <object class="GtkLabel" id="resource">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -132,8 +134,8 @@
       <object class="GtkLabel" id="jid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">start</property>
         <property name="hexpand">True</property>
-        <property name="xalign">0</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

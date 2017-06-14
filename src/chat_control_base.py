@@ -36,6 +36,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 import gtkgui_helpers
+from gtkgui_helpers import Color
 import message_control
 import dialogs
 import history_window
@@ -442,6 +443,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.terminate_esessions()
         action.set_state(param)
         self.set_encryption_state(encryption)
+        self.set_encryption_menu_icon()
         self.set_lock_image()
 
     def set_encryption_state(self, encryption):
@@ -454,6 +456,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         config_key = '%s-%s' % (self.account, self.contact.jid)
         state = gajim.config.get_per('encryption', config_key, 'encryption')
         return state or None
+
+    def set_encryption_menu_icon(self):
+        for child in self.encryption_menu.get_children():
+            if isinstance(child, Gtk.Image):
+                image = child
+                break
+
+        if not self.encryption:
+            icon = gtkgui_helpers.get_icon_pixmap(
+                'channel-insecure-symbolic', color=[Color.BLACK])
+        else:
+            icon = gtkgui_helpers.get_icon_pixmap('channel-secure-symbolic')
+        image.set_from_pixbuf(icon)
 
     def set_speller(self):
         # now set the one the user selected
@@ -894,7 +909,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
-    msg_stanza_id=None, correct_id=None, additional_data=None):
+    msg_stanza_id=None, correct_id=None, additional_data=None,
+    encrypted=None):
         """
         Print 'chat' type messages
         correct_id = (message_id, correct_id)
@@ -919,7 +935,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             other_tags_for_name, other_tags_for_time, other_tags_for_text,
             subject, old_kind, xhtml, simple=simple, graphics=graphics,
             displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
-            correct_id=correct_id, additional_data=additional_data)
+            correct_id=correct_id, additional_data=additional_data,
+            encrypted=encrypted)
 
         if xep0184_id is not None:
             textview.add_xep0184_mark(xep0184_id)

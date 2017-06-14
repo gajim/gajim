@@ -493,6 +493,7 @@ class GroupchatControl(ChatControlBase):
         self.encryption_menu = self.xml.get_object('encryption_menu')
         self.encryption_menu.set_menu_model(
             gui_menu_builder.get_encryption_menu(self.contact, self.type_id))
+        self.set_encryption_menu_icon()
 
         gajim.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
@@ -1090,14 +1091,14 @@ class GroupchatControl(ChatControlBase):
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
                 self.print_old_conversation(obj.msgtxt, contact=obj.nick,
-                    tim=obj.timestamp, xhtml=None,
+                    tim=obj.timestamp, xhtml=None, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, msg_stanza_id=obj.id_)
             else:
                 if obj.nick == self.nick:
                     self.last_sent_txt = obj.msgtxt
                 self.print_conversation(obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
-                    displaymarking=obj.displaymarking,
+                    displaymarking=obj.displaymarking, encrypted=obj.encrypted,
                     correct_id=obj.correct_id, msg_stanza_id=obj.id_)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
@@ -1153,7 +1154,7 @@ class GroupchatControl(ChatControlBase):
         return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
-    displaymarking=None, msg_stanza_id=None):
+    displaymarking=None, msg_stanza_id=None, encrypted=None):
         if contact:
             if contact == self.nick: # it's us
                 kind = 'outgoing'
@@ -1165,13 +1166,16 @@ class GroupchatControl(ChatControlBase):
             small_attr = ['small']
         else:
             small_attr = []
+
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             small_attr, small_attr + ['restored_message'],
             small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
-            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id)
+            displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
+            encrypted=encrypted)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
-    graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None):
+    graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,
+    encrypted=None):
         """
         Print a line in the conversation
 
@@ -1233,7 +1237,7 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             graphics=graphics, displaymarking=displaymarking,
-            correct_id=correct_id, msg_stanza_id=msg_stanza_id)
+            correct_id=correct_id, msg_stanza_id=msg_stanza_id, encrypted=encrypted)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']

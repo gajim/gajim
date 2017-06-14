@@ -1497,6 +1497,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.nickname = self.msg_obj.resource
         self.timestamp = self.msg_obj.timestamp
         self.xhtml_msgtxt = self.stanza.getXHTML()
+        self.encrypted = self.msg_obj.encrypted
         self.correct_id = None # XEP-0308
 
         if gajim.config.get('ignore_incoming_xhtml'):
