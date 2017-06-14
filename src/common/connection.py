@@ -413,14 +413,14 @@ class CommonConnection:
             gajim.nec.push_incoming_event(
                 StanzaMessageOutgoingEvent(None, **vars(obj)))
 
-    def log_message(self, obj):
+    def log_message(self, obj, jid):
         if not obj.is_loggable:
             return
 
         if obj.forward_from or not obj.session or not obj.session.is_loggable():
             return
 
-        if not gajim.config.should_log(self.name, obj.jid):
+        if not gajim.config.should_log(self.name, jid):
             return
 
         if obj.xhtml and gajim.config.get('log_xhtml_messages'):
@@ -437,7 +437,7 @@ class CommonConnection:
             kind = 'single_msg_sent'
 
         gajim.logger.write(
-            kind, obj.jid, message, subject=obj.subject,
+            kind, jid, message, subject=obj.subject,
             additional_data=obj.additional_data)
 
     def ack_subscribed(self, jid):
@@ -2058,9 +2058,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             for j in obj.jid:
                 if obj.session is None:
                     obj.session = self.get_or_create_session(j, '')
-                self.log_message(obj)
+                self.log_message(obj, j)
         else:
-            self.log_message(obj)
+            self.log_message(obj, obj.jid)
 
     def send_contacts(self, contacts, fjid, type_='message'):
         """
