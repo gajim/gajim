@@ -24,6 +24,7 @@ class MockConnection(Mock, ConnectionHandlers):
         self.blocked_groups = {}
         self.sessions = {}
         self.nested_group_delimiter = '::'
+        self.server_resource = 'Gajim'
 
         gajim.interface.instances[account] = {'infos': {}, 'disco': {},
                 'gc_config': {}, 'search': {}, 'sub_request': {}}
