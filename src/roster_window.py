@@ -3279,7 +3279,7 @@ class RosterWindow:
             type_ = model[list_of_paths[0]][Column.TYPE]
             account = model[list_of_paths[0]][Column.ACCOUNT]
             if type_ in ('account', 'group', 'self_contact') or \
-            account == gajim.ZEROCONF_ACConstant.NAME:
+            account == gajim.ZEROCONF_ACC_NAME:
                 return
             list_ = []
             for path in list_of_paths:
