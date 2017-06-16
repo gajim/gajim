@@ -48,6 +48,7 @@ from common import helpers
 from common import i18n
 from calendar import timegm
 from common.fuzzyclock import FuzzyClock
+import emoticons
 
 from htmltextview import HtmlTextView
 from common.exceptions import GajimGeneralException
@@ -952,22 +953,17 @@ class ConversationTextview(GObject.GObject):
             end_iter = iter_
         else:
             end_iter = buffer_.get_end_iter()
-        if gajim.config.get('emoticons_theme') and \
-        possible_emot_ascii_caps in gajim.interface.emoticons.keys() and graphics:
-            # it's an emoticon
-            emot_ascii = possible_emot_ascii_caps
-            anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor,
-                GLib.markup_escape_text(special_text))
-            animations = gajim.interface.emoticons_animations
-            if not emot_ascii in animations:
-                animations[emot_ascii] = GdkPixbuf.PixbufAnimation.new_from_file(
-                    gajim.interface.emoticons[emot_ascii])
-            img.set_from_animation(animations[emot_ascii])
-            img.show()
-            self.images.append(img)
-            # add with possible animation
-            self.tv.add_child_at_anchor(img, anchor)
+        if gajim.config.get('emoticons_theme') and graphics:
+            pixbuf = emoticons.get_pixbuf(possible_emot_ascii_caps)
+            if pixbuf:
+                # it's an emoticon
+                anchor = buffer_.create_child_anchor(end_iter)
+                img = TextViewImage(anchor,
+                    GLib.markup_escape_text(special_text))
+                img.set_from_pixbuf(pixbuf)
+                img.show()
+                self.images.append(img)
+                self.tv.add_child_at_anchor(img, anchor)
         elif special_text.startswith('www.') or \
             special_text.startswith('ftp.') or \
             text_is_valid_uri and not is_xhtml_link:

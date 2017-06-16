@@ -438,7 +438,7 @@ class MessageWindow(object):
                 control.chat_buttons_set_visible(not control.hide_chat_buttons)
                 return True
             elif keyval == Gdk.KEY_m: # ALT + M show emoticons menu
-                control.show_emoticons_menu()
+                control.emoticons_button.get_popover().show()
                 return True
             elif keyval == Gdk.KEY_d: # ALT + D show actions menu
                 if Gtk.Settings.get_default().get_property(

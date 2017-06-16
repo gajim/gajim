@@ -102,6 +102,8 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = self.actions_button
 
         self._formattings_button = self.xml.get_object('formattings_button')
+        self.emoticons_button = self.xml.get_object('emoticons_button')
+        self.toggle_emoticons()
 
         self._add_to_roster_button = self.xml.get_object(
             'add_to_roster_button')
@@ -325,8 +327,6 @@ class ChatControl(ChatControlBase):
         if (gajim.connections[self.account].connected > 1 and not \
         self.TYPE_ID == 'pm') or (self.contact.show != 'offline' and \
         self.TYPE_ID == 'pm'):
-            emoticons_button = self.xml.get_object('emoticons_button')
-            emoticons_button.set_sensitive(True)
             send_button = self.xml.get_object('send_button')
             send_button.set_sensitive(True)
         # Formatting
@@ -1663,15 +1663,11 @@ class ChatControl(ChatControlBase):
         if contact:
             self.contact = contact
         self.draw_banner()
-        emoticons_button = self.xml.get_object('emoticons_button')
-        emoticons_button.set_sensitive(True)
         send_button = self.xml.get_object('send_button')
         send_button.set_sensitive(True)
 
     def got_disconnected(self):
         # Emoticons button
-        emoticons_button = self.xml.get_object('emoticons_button')
-        emoticons_button.set_sensitive(False)
         send_button = self.xml.get_object('send_button')
         send_button.set_sensitive(False)
         # Add to roster
