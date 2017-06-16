@@ -173,6 +173,35 @@ def prep(user, server, resource):
     """
     # This function comes from
     #http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
+
+    ip_address = False
+
+    try:
+        socket.inet_aton(server)
+        ip_address = True
+    except socket.error:
+        pass
+
+    if not ip_address and hasattr(socket, 'inet_pton'):
+        try:
+            socket.inet_pton(socket.AF_INET6, server.strip('[]'))
+            server = '[%s]' % server.strip('[]')
+            ip_address = True
+        except (socket.error, ValueError):
+            pass
+
+    if not ip_address:
+        if server is not None:
+            if len(server) < 1 or len(server) > 1023:
+                raise InvalidFormat(_('Server must be between 1 and 1023 chars'))
+            try:
+                from nbxmpp.stringprepare import nameprep
+                server = nameprep.prepare(server)
+            except UnicodeError:
+                raise InvalidFormat(_('Invalid character in hostname.'))
+        else:
+            raise InvalidFormat(_('Server address required.'))
+
     if user is not None:
         if len(user) < 1 or len(user) > 1023:
             raise InvalidFormat(_('Username must be between 1 and 1023 chars'))
@@ -183,17 +212,6 @@ def prep(user, server, resource):
             raise InvalidFormat(_('Invalid character in username.'))
     else:
         user = None
-
-    if server is not None:
-        if len(server) < 1 or len(server) > 1023:
-            raise InvalidFormat(_('Server must be between 1 and 1023 chars'))
-        try:
-            from nbxmpp.stringprepare import nameprep
-            server = nameprep.prepare(server)
-        except UnicodeError:
-            raise InvalidFormat(_('Invalid character in hostname.'))
-    else:
-        raise InvalidFormat(_('Server address required.'))
 
     if resource is not None:
         if len(resource) < 1 or len(resource) > 1023:
