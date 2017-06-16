@@ -155,7 +155,7 @@ class JingleFileTransfer(JingleContent):
         checksum = nbxmpp.Node(tag='checksum',
                                payload=[nbxmpp.Node(tag='file',
                                                     payload=[self._compute_hash()])])
-        checksum.setNamespace(nbxmpp.NS_JINGLE_FILE_TRANSFER)
+        checksum.setNamespace(nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
         self.session.__session_info(checksum)
         pjid = gajim.get_jid_without_resource(self.session.peerjid)
         file_info = {'name' : self.file_props.name,
@@ -176,7 +176,7 @@ class JingleFileTransfer(JingleContent):
         except IOError:
             # can't open file
             return
-        h = nbxmpp.Hashes()
+        h = nbxmpp.Hashes2()
         hash_ = h.calculateHash(self.file_props.algo, file_)
         file_.close()
         # DEBUG
@@ -410,4 +410,4 @@ class JingleFileTransfer(JingleContent):
 def get_content(desc):
     return JingleFileTransfer
 
-contents[nbxmpp.NS_JINGLE_FILE_TRANSFER] = get_content
+contents[nbxmpp.NS_JINGLE_FILE_TRANSFER_5] = get_content

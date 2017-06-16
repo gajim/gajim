@@ -40,7 +40,7 @@ from common import helpers
 from common.file_props import FilesProp
 from common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 import logging
 log = logging.getLogger('gajim.filetransfer_window')
 
@@ -357,7 +357,7 @@ class FileTransfersWindow:
                         file_path, file_name, file_desc)
         if file_props is None:
             return False
-        if contact.supports(NS_JINGLE_FILE_TRANSFER):
+        if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
             gajim.connections[account].start_file_transfer(contact.get_full_jid(),
                                                            file_props)

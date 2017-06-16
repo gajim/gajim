@@ -175,12 +175,8 @@ class JingleContent:
 
     def _fill_content(self, content):
         description_node = nbxmpp.simplexml.Node(
-            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER + ' description')
-        if self.session.werequest:
-            simode = nbxmpp.simplexml.Node(tag='request')
-        else:
-            simode = nbxmpp.simplexml.Node(tag='offer')
-        file_tag = simode.setTag('file')
+            tag=nbxmpp.NS_JINGLE_FILE_TRANSFER_5 + ' description')
+        file_tag = description_node.setTag('file')
         if self.file_props.name:
             node = nbxmpp.simplexml.Node(tag='name')
             node.addData(self.file_props.name)
@@ -196,7 +192,7 @@ class JingleContent:
         if self.file_props.type_ == 'r':
             if self.file_props.hash_:
                 file_tag.addChild('hash', attrs={'algo': self.file_props.algo},
-                                  namespace=nbxmpp.NS_HASHES,
+                                  namespace=nbxmpp.NS_HASHES_2,
                                   payload=self.file_props.hash_)
         else:
             # if the file is less than 10 mb, then it is small
@@ -217,7 +213,6 @@ class JingleContent:
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
-        description_node.addChild(node=simode)
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=nbxmpp.NS_JINGLE_XTLS + ' security')

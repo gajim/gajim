@@ -2306,12 +2306,12 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.file_props.session_type = 'jingle'
             self.file_props.stream_methods = nbxmpp.NS_BYTESTREAM
             desc = self.jingle_content.getTag('description')
-            if desc.getTag('offer'):
-                file_tag = desc.getTag('offer').getTag('file')
+            if self.jingle_content.getAttr('creator') == 'initiator':
+                file_tag = desc.getTag('file')
                 self.file_props.sender = self.fjid
                 self.file_props.receiver = self.conn._ft_get_our_jid()
             else:
-                file_tag = desc.getTag('request').getTag('file')
+                file_tag = desc.getTag('file')
                 h = file_tag.getTag('hash')
                 h = h.getData() if h else None
                 n = file_tag.getTag('name')

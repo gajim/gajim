@@ -926,10 +926,10 @@ class ConnectionIBBytestream(ConnectionBytestream):
         log.debug('ReceiveHandler called sid->%s seq->%s' % (sid, seq))
         try:
             seq = int(seq)
-            data = base64.b64decode(data.encode('utf-8')).decode('utf-8')
+            data = base64.b64decode(data.encode('utf-8'))
         except Exception:
             seq = ''
-            data = ''
+            data = b''
         err = None
         file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         if file_props is None:

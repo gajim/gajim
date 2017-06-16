@@ -187,7 +187,7 @@ class ConnectionDisco:
         query.setAttr('node', 'http://gajim.org#' + gajim.version.split('-', 1)[
             0])
         for f in (nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
-        nbxmpp.NS_COMMANDS, nbxmpp.NS_JINGLE_FILE_TRANSFER,
+        nbxmpp.NS_COMMANDS, nbxmpp.NS_JINGLE_FILE_TRANSFER_5,
         nbxmpp.NS_JINGLE_XTLS, nbxmpp.NS_PUBKEY_PUBKEY, nbxmpp.NS_PUBKEY_REVOKE,
         nbxmpp.NS_PUBKEY_ATTEST):
             feature = nbxmpp.Node('feature')
