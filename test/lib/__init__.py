@@ -12,9 +12,9 @@ for o, a in opts:
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
-# look for modules in the CWD, then gajim/test/lib, then gajim/src,
+# look for modules in the CWD, then gajim/test/lib, then gajim/gajim,
 # then everywhere else
-sys.path.insert(1, gajim_root + '/src')
+sys.path.insert(1, gajim_root + '/gajim')
 sys.path.insert(1, gajim_root + '/test/lib')
 
 # a temporary version of ~/.gajim for testing

@@ -26,7 +26,7 @@
 '''
 D-BUS Support plugin.
 
-Based on src/remote_control.py
+Based on gajim/remote_control.py
 
 :author: Mateusz Biliński <mateusz@bilinski.it>
 :since: 8th August 2008

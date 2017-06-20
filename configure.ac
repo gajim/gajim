@@ -1,5 +1,5 @@
 AC_INIT([Gajim - A Jabber Instant Messager],
-		m4_esyscmd_s([python -c "import os;os.chdir('src');from common import defs; print(defs.version)"]),[https://dev.gajim.org/gajim/gajim],[gajim])
+		m4_esyscmd_s([python -c "import os;os.chdir('gajim');from common import defs; print(defs.version)"]),[https://dev.gajim.org/gajim/gajim],[gajim])
 AC_PREREQ([2.59])
 
 AC_CONFIG_HEADER(config.h)
@@ -48,7 +48,7 @@ instead of DATADIR/gajim/src.])]
 ,
 AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
 ,
-AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/src])
+AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/gajim])
 )
 
 AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
@@ -76,7 +76,7 @@ AC_CONFIG_FILES([
 	data/org.gajim.Gajim.desktop.in
 	data/gajim-remote.desktop.in
 	data/defs.py
-	src/Makefile
+	gajim/Makefile
 	scripts/gajim
 	scripts/gajim-remote:scripts/gajim.in
 	scripts/gajim-history-manager:scripts/gajim.in

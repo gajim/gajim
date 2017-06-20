@@ -6,9 +6,9 @@
   && for p in `ls data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
   po/POTFILES.in; done \
   && ls -1 data/org.gajim.Gajim.appdata.xml.in data/org.gajim.Gajim.desktop.in.in data/gajim-remote.desktop.in.in \
-  src/*.py src/common/*.py src/command_system/*.py src/command_system/implementation/*.py src/common/zeroconf/*.py src/plugins/*.py | grep -v ipython_view.py >> \
+  gajim/*.py gajim/common/*.py gajim/command_system/*.py gajim/command_system/implementation/*.py gajim/common/zeroconf/*.py gajim/plugins/*.py | grep -v ipython_view.py >> \
   po/POTFILES.in \
-  && echo -e "data/org.gajim.Gajim.desktop.in\ndata/gajim-remote.desktop.in\nsrc/ipython_view.py" > po/POTFILES.skip  || exit 1
+  && echo -e "data/org.gajim.Gajim.desktop.in\ndata/gajim-remote.desktop.in\ngajim/ipython_view.py" > po/POTFILES.skip  || exit 1
   if [ $(find plugins/ -name '*.py' | wc -l) -gt 0 ];then
     ls -1 plugins/*/*.py plugins/*/*.ui >> po/POTFILES.skip
   fi

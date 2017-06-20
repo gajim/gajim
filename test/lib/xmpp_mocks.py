@@ -57,7 +57,7 @@ class IdleMock:
 
 class MockConnection(IdleMock, Mock):
     '''
-    Class simulating Connection class from src/common/connection.py
+    Class simulating Connection class from gajim/common/connection.py
 
     It is derived from Mock in order to avoid defining all methods
     from real Connection that are called from NBClient or Dispatcher
