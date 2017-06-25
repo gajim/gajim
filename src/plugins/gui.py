@@ -281,7 +281,7 @@ class PluginsWindow(object):
 
                 for i, row in enumerate(model):
                     if plugin == row[Column.PLUGIN]:
-                        model.remove(model.get_iter((i, Column.PLUGIN)))
+                        model.remove(row.iter)
                         break
 
                 iter_ = model.append([plugin, plugin.name, False,
@@ -308,7 +308,7 @@ class PluginsWindow(object):
                 return
             model = self.installed_plugins_model
             iter_ = model.append([plugin, plugin.name, False,
-                plugin.activatable], self.get_plugin_icon(plugin))
+                plugin.activatable, self.get_plugin_icon(plugin)])
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 

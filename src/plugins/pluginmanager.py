@@ -573,7 +573,7 @@ class PluginManager(metaclass=Singleton):
 
     def install_from_zip(self, zip_filename, owerwrite=None):
         '''
-        Install plagin from zip and return plugin
+        Install plugin from zip and return plugin
         '''
         try:
             zip_file = zipfile.ZipFile(zip_filename)
@@ -595,7 +595,7 @@ class PluginManager(metaclass=Singleton):
                 # members not safe
                 raise PluginsystemError(_('Archive is malformed'))
             if filename.endswith('/') and filename.find('/', 0, -1) < 0:
-                dirs.append(filename)
+                dirs.append(filename.strip('/'))
             if 'manifest.ini' in filename.split('/')[1]:
                 manifest = True
         if not manifest:
@@ -614,8 +614,8 @@ class PluginManager(metaclass=Singleton):
 
         zip_file.extractall(user_dir)
         zip_file.close()
-        path = os.path.join(user_dir, dirs[0])
-        plugins = self.scan_dir_for_plugins(plugin_dir, False)
+
+        plugins = self.scan_dir_for_plugins(plugin_dir, package=True)
         if not plugins:
             return
         self.add_plugin(plugins[0])
