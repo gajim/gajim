@@ -170,4 +170,6 @@ def get_password(account_name):
     return get_storage().get_password(account_name)
 
 def save_password(account_name, password):
+    if account_name in gajim.connections:
+        gajim.connections[account_name].set_password(password)
     return get_storage().save_password(account_name, password)
