@@ -2130,8 +2130,9 @@ class RosterWindow:
                 keyid = gajim.config.get_per('accounts', account, 'keyid')
                 if keyid and not gajim.connections[account].gpg:
                     dialogs.WarningDialog(_('OpenPGP is not usable'),
-                        _('You will be connected to %s without OpenPGP.') % \
-                        account)
+                        _('Gajim needs python-gnupg >= 0.3.8\n'
+                          'Beware there is an incompatible python package called gnupg.\n'
+                          'You will be connected to %s without OpenPGP.') % account)
 
         self.send_status_continue(account, status, txt, auto, to)
 
