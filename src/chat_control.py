@@ -851,7 +851,7 @@ class ChatControl(ChatControlBase):
                             'authenticated': False}
 
         if self.encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
@@ -877,7 +877,7 @@ class ChatControl(ChatControlBase):
 
     def _on_authentication_button_clicked(self, widget):
         if self.encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'encryption_dialog' + self.encryption, self)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
@@ -888,7 +888,7 @@ class ChatControl(ChatControlBase):
 
         if self.encryption:
             self.sendmessage = True
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                     'send_message' + self.encryption, self)
             if not self.sendmessage:
                 return
@@ -1399,7 +1399,7 @@ class ChatControl(ChatControlBase):
     def _on_message_tv_buffer_changed(self, textbuffer):
         super()._on_message_tv_buffer_changed(textbuffer)
         if textbuffer.get_char_count() and self.encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
             if (not self.session or not self.session.status) and \
             gajim.connections[self.account].archiving_136_supported:

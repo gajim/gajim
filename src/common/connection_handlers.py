@@ -1084,7 +1084,7 @@ class ConnectionHandlersBase:
         if obj.conn.name != self.name:
             return
 
-        gajim.plugin_manager.gui_extension_point(
+        gajim.plugin_manager.extension_point(
             'decrypt', self, obj, self._on_message_received)
         if not obj.encrypted:
             self._on_message_received(obj)

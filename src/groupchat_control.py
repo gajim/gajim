@@ -776,7 +776,7 @@ class GroupchatControl(ChatControlBase):
                             'authenticated': False}
 
         if self.encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
@@ -802,7 +802,7 @@ class GroupchatControl(ChatControlBase):
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
-        gajim.plugin_manager.gui_extension_point(
+        gajim.plugin_manager.extension_point(
             'encryption_dialog' + self.encryption, self)
 
     def _change_style(self, model, path, iter_, option):
@@ -2022,7 +2022,7 @@ class GroupchatControl(ChatControlBase):
 
         if self.encryption:
             self.sendmessage = True
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                     'send_message' + self.encryption, self)
             if not self.sendmessage:
                 return

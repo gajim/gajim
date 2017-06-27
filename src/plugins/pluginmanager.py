@@ -158,6 +158,26 @@ class PluginManager(metaclass=Singleton):
         return None
 
     @log_calls('PluginManager')
+    def extension_point(self, gui_extpoint_name, *args):
+        '''
+        Invokes all handlers (from plugins) for a particular extension point, but
+        doesnt add it to collection for further processing.
+        For example if you pass a message for encryption via extension point to a
+        plugin, its undesired that the call is stored and replayed on activating the
+        plugin. For example after an update.
+
+        :param gui_extpoint_name: name of GUI extension point.
+        :type gui_extpoint_name: str
+        :param args: parameters to be passed to extension point handlers
+                (typically and object that invokes `gui_extension_point`;
+                however, this can be practically anything)
+        :type args: tuple
+        '''
+
+        self._execute_all_handlers_of_gui_extension_point(gui_extpoint_name,
+            *args)
+
+    @log_calls('PluginManager')
     def gui_extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for particular GUI extension point

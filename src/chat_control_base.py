@@ -527,8 +527,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self)
         gajim.plugin_manager.remove_gui_extension_point(
             'chat_control_base_draw_banner', self)
-        gajim.plugin_manager.remove_gui_extension_point('print_special_text',
-            self)
         gajim.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
 

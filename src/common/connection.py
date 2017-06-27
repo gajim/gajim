@@ -2039,7 +2039,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         config_key = '%s-%s' % (self.name, obj.jid)
         encryption = gajim.config.get_per('encryption', config_key, 'encryption')
         if encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'encrypt' + encryption, self, obj, self.send_message)
         else:
             self.send_message(obj)
@@ -2646,7 +2646,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         config_key = '%s-%s' % (self.name, obj.jid)
         encryption = gajim.config.get_per('encryption', config_key, 'encryption')
         if encryption:
-            gajim.plugin_manager.gui_extension_point(
+            gajim.plugin_manager.extension_point(
                 'gc_encrypt' + encryption, self, obj, self.send_gc_message)
         else:
             self.send_gc_message(obj)

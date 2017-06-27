@@ -822,7 +822,7 @@ class ConversationTextview(GObject.GObject):
                 return True
             else:
                 self.plugin_modified = False
-                gajim.plugin_manager.gui_extension_point(
+                gajim.plugin_manager.extension_point(
                     'hyperlink_handler', word, kind, self,
                     self.tv.get_toplevel())
                 if self.plugin_modified:
@@ -920,7 +920,7 @@ class ConversationTextview(GObject.GObject):
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
-        gajim.plugin_manager.gui_extension_point('print_special_text', self,
+        gajim.plugin_manager.extension_point('print_special_text', self,
             special_text, other_tags, graphics, additional_data)
         if self.plugin_modified:
             return
@@ -1397,7 +1397,7 @@ class ConversationTextview(GObject.GObject):
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
-        gajim.plugin_manager.gui_extension_point('print_real_text', self,
+        gajim.plugin_manager.extension_point('print_real_text', self,
             text, text_tags, graphics, iter_, additional_data)
 
         if self.plugin_modified:
