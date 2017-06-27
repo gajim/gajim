@@ -439,7 +439,7 @@ class PreferencesWindow:
                 if config == value:
                     combobox.set_active(index)
 
-        if HAS_GST:
+        if HAS_GST and gajim.HAVE_FARSTREAM:
             create_av_combobox('audio_input', AudioInputManager().get_devices())
             create_av_combobox('audio_output', AudioOutputManager().get_devices(
                 ))
