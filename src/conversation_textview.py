@@ -1126,9 +1126,15 @@ class ConversationTextview(GObject.GObject):
             try:
                 index, insert_mark, old_txt = \
                     self.correct_message(correct_id, kind, name)
-                self.corrected_text_list[msg_stanza_id] = \
-                    '<b>Message corrected. Previous message:</b>\n{}' \
-                    .format(GLib.markup_escape_text(old_txt))
+                if correct_id in self.corrected_text_list:
+                    self.corrected_text_list[msg_stanza_id] = \
+                        self.corrected_text_list[correct_id] + '\n{}' \
+                        .format(GLib.markup_escape_text(old_txt))
+                    del self.corrected_text_list[correct_id]
+                else:
+                    self.corrected_text_list[msg_stanza_id] = \
+                        '<b>Message corrected. Previous message:</b>\n{}' \
+                        .format(GLib.markup_escape_text(old_txt))
                 corrected = True
             except TypeError:
                 log.debug('Message was not corrected !')
