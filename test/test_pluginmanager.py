@@ -30,7 +30,7 @@ import os
 import unittest
 
 gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
-sys.path.append(gajim_root + '/src')
+sys.path.append(gajim_root + '/gajim')
 
 # a temporary version of ~/.gajim for testing
 configdir = gajim_root + '/test/tmp'

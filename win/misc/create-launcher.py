@@ -87,13 +87,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_FrozenFlag = 1;
     Py_Initialize();
     PySys_SetArgvEx(__argc, szArglist, 0);
-    FILE* file = fopen("../gajim/src/%(filename)s", "r");
+    FILE* file = fopen("../gajim/gajim/%(filename)s", "r");
     PyRun_SimpleString("import sys; import os;"
-                       "os.chdir('../gajim/src');"
+                       "os.chdir('../gajim/gajim');"
                        "sys.path.append(os.getcwd());"
                        "sys.frozen=True;"
                         );
-    result = PyRun_SimpleFile(file, "../gajim/src/%(filename)s");
+    result = PyRun_SimpleFile(file, "../gajim/gajim/%(filename)s");
     Py_Finalize();
     return result;
 }

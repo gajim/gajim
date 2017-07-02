@@ -1,5 +1,5 @@
 '''
-Tests for the miscellaneous functions scattered throughout src/gajim.py
+Tests for the miscellaneous functions scattered throughout gajim/gajim.py
 '''
 import unittest
 
