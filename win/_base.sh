@@ -197,6 +197,9 @@ function cleanup_install {
     rm -Rf "${REPO_CLONE}"/plugins/new_events_example
     rm -Rf "${REPO_CLONE}"/plugins/roster_buttons
 
+    rm -Rf "${REPO_CLONE}"/data/emoticons/noto-emoticons/png
+    rm -Rf "${REPO_CLONE}"/data/emoticons/noto-emoticons/README.md
+
     find "${REPO_CLONE}"/* -maxdepth 0 -type f ! -regex ".*/\(AUTHORS\|COPYING\|THANKS\|THANKS.artists\)" -exec rm -f {} \;
     find "${REPO_CLONE}"/data/* -maxdepth 0 -type f -exec rm -f {} \;
 
