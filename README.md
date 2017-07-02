@@ -16,9 +16,9 @@ The goal of Gajim is to provide a full featured and easy to use Jabber/XMPP clie
     * How to contribute
     * The Gajim team
 - Latest release:
-    * [Gajim 0.16.7 (.tar.gz)](https://www.gajim.org/downloads/0.16/gajim-0.16.7.tar.gz)
-    * [Gajim 0.16.7-1 (.exe)](https://www.gajim.org/downloads/0.16/gajim-0.16.7-1.exe)
-    * [Gajim 0.16.7-1 portable (.exe)](https://www.gajim.org/downloads/0.16/gajim-portable-0.16.7-1.exe)
+    * [Gajim 0.16.8 (.tar.gz)](https://gajim.org/downloads/0.16/gajim-0.16.8.tar.gz)
+    * [Gajim 0.16.8-2 (.exe)](https://gajim.org/downloads/0.16/gajim-0.16.8-2.exe)
+    * [Gajim 0.16.8-2 portable (.exe)](https://gajim.org/downloads/0.16/gajim-portable-0.16.8-2.exe)
     * [Daily snapshot](https://www.gajim.org/downloads/snap/?M=D)
 
 - [Bug reports and Feature requests](https://dev.gajim.org/gajim/gajim/issues)
