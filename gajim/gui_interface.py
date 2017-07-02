@@ -87,6 +87,7 @@ from common.connection_handlers_events import OurShowEvent, \
 from common.connection import Connection
 from common.file_props import FilesProp
 from common import pep
+import emoticons
 
 import roster_window
 import profile_window
@@ -1839,20 +1840,6 @@ class Interface:
 ### Methods dealing with emoticons
 ################################################################################
 
-    @staticmethod
-    def image_is_ok(image):
-        if not os.path.exists(image):
-            return False
-        img = Gtk.Image()
-        try:
-            img.set_from_file(image)
-        except Exception:
-            return False
-        t = img.get_storage_type()
-        if t != Gtk.ImageType.PIXBUF and t != Gtk.ImageType.ANIMATION:
-            return False
-        return True
-
     @property
     def basic_pattern_re(self):
         if not self._basic_pattern_re:
@@ -1942,7 +1929,7 @@ class Interface:
             # NOT expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc
             # We still allow multiple emoticons side-by-side like :P:P:P
             # sort keys by length so :qwe emot is checked before :q
-            keys = sorted(self.emoticons, key=len, reverse=True)
+            keys = sorted(emoticons.codepoints.keys(), key=len, reverse=True)
             emoticons_pattern_prematch = ''
             emoticons_pattern_postmatch = ''
             emoticon_length = 0
@@ -1981,97 +1968,7 @@ class Interface:
         self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
             '[\ud800-\udfff]|[\ufffe-\uffff]'
 
-    def popup_emoticons_under_button(self, button, parent_win):
-        """
-        Popup the emoticons menu under button, located in parent_win
-        """
-        gtkgui_helpers.popup_emoticons_under_button(self.emoticons_menu,
-            button, parent_win)
-
-    def prepare_emoticons_menu(self):
-        menu = Gtk.Menu()
-        def emoticon_clicked(w, str_):
-            if self.emoticon_menuitem_clicked:
-                self.emoticon_menuitem_clicked(str_)
-                # don't keep reference to CB of object
-                # this will prevent making it uncollectable
-                self.emoticon_menuitem_clicked = None
-        def selection_done(widget):
-            # remove reference to CB of object, which will
-            # make it uncollectable
-            self.emoticon_menuitem_clicked = None
-        counter = 0
-        # Calculate the side lenght of the popup to make it a square
-        size = int(round(math.sqrt(len(self.emoticons_images))))
-        for image in self.emoticons_images:
-            # In Gtk 3.6, Gtk.MenuItem() doesn't contain a label child
-            item = Gtk.MenuItem.new_with_label('q')
-            img = Gtk.Image()
-            if isinstance(image[1], GdkPixbuf.PixbufAnimation):
-                img.set_from_animation(image[1])
-            else:
-                img.set_from_pixbuf(image[1])
-            c = item.get_child()
-            item.remove(c)
-            item.add(img)
-            item.connect('activate', emoticon_clicked, image[0])
-            # add tooltip with ascii
-            item.set_tooltip_text(image[0])
-            menu.attach(item, counter % size, counter % size + 1,
-                counter / size, counter / size + 1)
-            counter += 1
-        menu.connect('selection-done', selection_done)
-        menu.show_all()
-        return menu
-
-    def _init_emoticons(self, path, need_reload = False):
-        #initialize emoticons dictionary and unique images list
-        self.emoticons_images = list()
-        self.emoticons = dict()
-        self.emoticons_animations = dict()
-
-        sys.path.insert(0, path)
-        import emoticons
-        try:
-            if need_reload:
-                # we need to reload else that doesn't work when changing
-                # emoticons set
-                import imp
-                imp.reload(emoticons)
-            emots = emoticons.emoticons
-            self.emoticons_sorting = None
-            try:
-                self.emoticons_sorting = emoticons.sorting
-            except:
-                pass
-        except Exception as e:
-            return True
-        for emot_filename in emots:
-            emot_file = os.path.join(path, emot_filename)
-            if not self.image_is_ok(emot_file):
-                continue
-            for emot in emots[emot_filename]:
-                emot = emot
-                # This avoids duplicated emoticons with the same image eg. :)
-                # and :-)
-                if not emot_file in self.emoticons.values():
-                    if emot_file.endswith('.gif'):
-                        pix = GdkPixbuf.PixbufAnimation.new_from_file(emot_file)
-                    else:
-                        pix = GdkPixbuf.Pixbuf.new_from_file_at_size(emot_file,
-                            16, 16)
-                    self.emoticons_images.append((emot, pix))
-                self.emoticons[emot.upper()] = emot_file
-        def emoticons_sorter(item):
-            try:
-                return self.emoticons_sorting.index(item[0])
-            except:
-                return 0
-        self.emoticons_images = sorted(self.emoticons_images, key=emoticons_sorter)
-        del emoticons
-        sys.path.remove(path)
-
-    def init_emoticons(self, need_reload = False):
+    def init_emoticons(self):
         emot_theme = gajim.config.get('emoticons_theme')
         if not emot_theme:
             return
@@ -2092,40 +1989,14 @@ class Interface:
                     transient_for=transient_for)
                 gajim.config.set('emoticons_theme', '')
                 return
-        if self._init_emoticons(path, need_reload):
-            dialogs.WarningDialog(_('Emoticons disabled'),
-                    _('Your configured emoticons theme cannot been loaded. You '
-                    'maybe need to update the format of emoticons.py file. See '
-                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
+        if not emoticons.load(path):
+            dialogs.WarningDialog(
+                    _('Emoticons disabled'),
+                    _('Your configured emoticons theme could not be loaded.'
+                      ' See the log for more details.'),
                     transient_for=transient_for)
             gajim.config.set('emoticons_theme', '')
             return
-        if len(self.emoticons) == 0:
-            # maybe old format of emoticons file, try to convert it
-            try:
-                import pprint
-                import emoticons
-                emots = emoticons.emoticons
-                fd = open(os.path.join(path, 'emoticons.py'), 'w')
-                fd.write('emoticons = ')
-                pprint.pprint( dict([
-                    (file_, [i for i in emots.keys() if emots[i] == file_])
-                    for file_ in set(emots.values())]), fd)
-                fd.close()
-                del emoticons
-                self._init_emoticons(path, need_reload=True)
-            except Exception:
-                pass
-            if len(self.emoticons) == 0:
-                dialogs.WarningDialog(_('Emoticons disabled'),
-                    _('Your configured emoticons theme cannot been loaded. You '
-                    'maybe need to update the format of emoticons.py file. See '
-                    'http://trac.gajim.org/wiki/Emoticons for more details.'),
-                    transient_for=transient_for)
-                gajim.config.set('emoticons_theme', '')
-        if self.emoticons_menu:
-            self.emoticons_menu.destroy()
-        self.emoticons_menu = self.prepare_emoticons_menu()
 
 ################################################################################
 ### Methods for opening new messages controls
@@ -2791,9 +2662,6 @@ class Interface:
         self.msg_win_mgr = None
         self.jabber_state_images = {'16': {}, '24': {}, '32': {}, 'opened': {},
             'closed': {}}
-        self.emoticons_menu = None
-        # handler when an emoticon is clicked in emoticons_menu
-        self.emoticon_menuitem_clicked = None
         self.minimized_controls = {}
         self.status_sent_to_users = {}
         self.status_sent_to_groups = {}
@@ -2822,10 +2690,6 @@ class Interface:
         self.emot_and_basic = None
         self.sth_at_sth_dot_sth = None
         self.emot_only = None
-        self.emoticons = []
-        self.emoticons_animations = {}
-        self.emoticons_images = {}
-        self.emoticons_sorting = None
 
         cfg_was_read = parser.read()
 

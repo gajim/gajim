@@ -1,7 +1,7 @@
 emoticonsdir = $(pkgdatadir)/data/emoticons
 nobase_dist_emoticons_DATA = \
 	$(srcdir)/*/*.png \
-	$(srcdir)/*/*.gif \
-	$(srcdir)/*/emoticons.py
+	$(srcdir)/*/LICENSE \
+	$(srcdir)/*/emoticons_theme.py
 
 MAINTAINERCLEANFILES = Makefile.in

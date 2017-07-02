@@ -43,6 +43,7 @@ import history_window
 import notify
 import re
 
+import emoticons
 from common import events
 from common import gajim
 from common import helpers
@@ -263,12 +264,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = widget.connect('clicked', self._on_history_menuitem_activate)
         self.handlers[id_] = widget
 
-        # when/if we do XHTML we will put formatting buttons back
-        widget = self.xml.get_object('emoticons_button')
-        widget.set_sensitive(False)
-        id_ = widget.connect('clicked', self.on_emoticons_button_clicked)
-        self.handlers[id_] = widget
-
         # Create banner and connect signals
         widget = self.xml.get_object('banner_eventbox')
         id_ = widget.connect('button-press-event',
@@ -364,13 +359,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.received_history_pos = 0
         self.orig_msg = None
 
-        # Emoticons menu
-        # set image no matter if user wants at this time emoticons or not
-        # (so toggle works ok)
-        img = self.xml.get_object('emoticons_button_image')
-        img.set_from_file(os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
-            'smile.png'))
-        self.toggle_emoticons()
+        self.set_emoticon_popover()
 
         # Attach speller
         if gajim.config.get('use_speller') and HAS_GTK_SPELL:
@@ -568,6 +557,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         When send button is pressed: send the current message
         """
         message_buffer = self.msg_textview.get_buffer()
+        emoticons.replace_with_codepoint(message_buffer)
         start_iter = message_buffer.get_start_iter()
         end_iter = message_buffer.get_end_iter()
         message = message_buffer.get_text(start_iter, end_iter, False)
@@ -587,12 +577,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return False
         self.parent_win.notebook.event(event)
         return True
-
-    def show_emoticons_menu(self):
-        if not gajim.config.get('emoticons_theme'):
-            return
-        gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
-        gajim.interface.emoticons_menu.popup(None, None, None, None, 1, 0)
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:
@@ -683,6 +667,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
             message_textview = widget
             message_buffer = message_textview.get_buffer()
+            emoticons.replace_with_codepoint(message_buffer)
             start_iter, end_iter = message_buffer.get_bounds()
             message = message_buffer.get_text(start_iter, end_iter, False)
             xhtml = self.msg_textview.get_xhtml()
@@ -1012,31 +997,26 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def toggle_emoticons(self):
         """
-        Hide show emoticons_button and make sure emoticons_menu is always there
-        when needed
+        Hide show emoticons_button
         """
-        emoticons_button = self.xml.get_object('emoticons_button')
         if gajim.config.get('emoticons_theme'):
-            emoticons_button.show()
-            emoticons_button.set_no_show_all(False)
+            self.emoticons_button.set_no_show_all(False)
+            self.emoticons_button.show()
         else:
-            emoticons_button.hide()
-            emoticons_button.set_no_show_all(True)
+            self.emoticons_button.set_no_show_all(True)
+            self.emoticons_button.hide()
 
-    def append_emoticon(self, str_):
-        buffer_ = self.msg_textview.get_buffer()
-        if buffer_.get_char_count():
-            buffer_.insert_at_cursor(' %s ' % str_)
-        else: # we are the beginning of buffer
-            buffer_.insert_at_cursor('%s ' % str_)
-        self.msg_textview.grab_focus()
+    def set_emoticon_popover(self):
+        if not gajim.config.get('emoticons_theme'):
+            return
 
-    def on_emoticons_button_clicked(self, widget):
-        """
-        Popup emoticons menu
-        """
-        gajim.interface.emoticon_menuitem_clicked = self.append_emoticon
-        gajim.interface.popup_emoticons_under_button(widget, self.parent_win)
+        if not self.parent_win:
+            return
+
+        popover = emoticons.get_popover()
+        popover.set_callbacks(self.msg_textview)
+        emoticons_button = self.xml.get_object('emoticons_button')
+        emoticons_button.set_popover(popover)
 
     def on_color_menuitem_activate(self, widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)
@@ -1139,6 +1119,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def set_control_active(self, state):
         if state:
+            self.set_emoticon_popover()
             jid = self.contact.jid
             if self.was_at_the_end:
                 # we are at the end
