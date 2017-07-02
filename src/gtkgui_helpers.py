@@ -59,6 +59,8 @@ class Color:
 def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
     try:
         iconinfo = gtk_icon_theme.lookup_icon(icon_name, size, 0)
+        if not iconinfo:
+            raise GLib.GError
         if color:
             pixbuf, was_symbolic = iconinfo.load_symbolic(*color)
             return pixbuf
