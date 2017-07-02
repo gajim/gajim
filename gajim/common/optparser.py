@@ -236,6 +236,8 @@ class OptionsParser:
             self.update_config_to_016102()
         if old < [0, 16, 10, 3] and new >= [0, 16, 10, 3]:
             self.update_config_to_016103()
+        if old < [0, 16, 10, 4] and new >= [0, 16, 10, 4]:
+            self.update_config_to_016104()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -999,3 +1001,7 @@ class OptionsParser:
             pass
         con.close()
         gajim.config.set('version', '0.16.10.3')
+
+    def update_config_to_016104(self):
+        gajim.config.set('emoticons_theme', 'noto-emoticons')
+        gajim.config.set('version', '0.16.10.4')
