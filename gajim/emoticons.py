@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import logging
 import importlib.util as imp
 from collections import OrderedDict
@@ -58,8 +59,13 @@ class SubPixbuf:
         return subpixbuf
 
 def load(path):
-    theme_path = os.path.join(path, 'emoticons_theme.py')
-    spec = imp.spec_from_file_location("emoticons_theme.py", theme_path)
+    module_name = 'emoticons_theme.py'
+    theme_path = os.path.join(path, module_name)
+    if sys.platform == 'win32' and not os.path.exists(theme_path):
+        module_name = 'emoticons_theme.pyc'
+        theme_path = os.path.join(path, module_name)
+
+    spec = imp.spec_from_file_location(module_name, theme_path)
     try:
         theme = imp.module_from_spec(spec)
         spec.loader.exec_module(theme)
