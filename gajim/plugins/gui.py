@@ -58,22 +58,23 @@ class PluginsWindow(object):
     @log_calls('PluginsWindow')
     def __init__(self):
         '''Initialize Plugins window'''
-        self.xml = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
-        self.window = self.xml.get_object('plugins_window')
+        builder = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
+        self.window = builder.get_object('plugins_window')
         self.window.set_transient_for(gajim.interface.roster.window)
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
             'plugin_homepage_linkbutton', 'uninstall_plugin_button',
-            'configure_plugin_button', 'installed_plugins_treeview')
+            'configure_plugin_button', 'installed_plugins_treeview',
+            'close_button')
 
         for widget_name in widgets_to_extract:
-            setattr(self, widget_name, self.xml.get_object(widget_name))
+            setattr(self, widget_name, builder.get_object(widget_name))
 
         self.plugin_description_textview = HtmlTextView()
         self.plugin_description_textview.connect_tooltip()
         self.plugin_description_textview.set_wrap_mode(Gtk.WrapMode.WORD)
-        sw = self.xml.get_object('scrolledwindow2')
+        sw = builder.get_object('scrolledwindow2')
         sw.add(self.plugin_description_textview)
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
@@ -109,12 +110,12 @@ class PluginsWindow(object):
         self.fill_installed_plugins_model()
         root_iter = self.installed_plugins_model.get_iter_first()
         if root_iter:
-            selection.select_iter(root_iter )
+            selection.select_iter(root_iter)
 
-        self.xml.connect_signals(self)
+        builder.connect_signals(self)
 
         self.plugins_notebook.set_current_page(0)
-        self.xml.get_object('close_button').grab_focus()
+        self.close_button.grab_focus()
 
         # Adding GUI extension point for Plugins that want to hook the Plugin Window
         gajim.plugin_manager.gui_extension_point('plugin_window', self)
@@ -127,7 +128,7 @@ class PluginsWindow(object):
             self.window.destroy()
 
     def on_plugins_notebook_switch_page(self, widget, page, page_num):
-        GLib.idle_add(self.xml.get_object('close_button').grab_focus)
+        GLib.idle_add(self.close_button.grab_focus)
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
@@ -222,6 +223,7 @@ class PluginsWindow(object):
     @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
         '''Close window'''
+        gajim.plugin_manager.remove_gui_extension_point('plugin_window', self)
         del gajim.interface.instances['plugins']
 
     @log_calls('PluginsWindow')
