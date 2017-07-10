@@ -2598,7 +2598,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if last_date == 0:
                     last_date = time.time() - timeout
                 elif not rejoin:
-                    last_date = min(last_date, time.time() - timeout)
+                    last_date = max(last_date, time.time() - timeout)
                 last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
                     last_date))
                 tags['since'] = last_date
