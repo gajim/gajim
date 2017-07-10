@@ -746,21 +746,15 @@ class Config:
             return None
         return dict_[subname][Option.TYPE][0]
 
-    def get_desc_per(self, optname, key=None, subname=None):
+    def get_desc_per(self, optname, subname=None):
         if optname not in self.__options_per_key:
             return None
         dict_ = self.__options_per_key[optname][0]
-        if not key:
+        if subname not in dict_:
             return None
-        if key not in dict_:
-            return None
-        obj = dict_[key]
-        if not subname:
-            return None
-        if subname not in obj:
-            return None
-        if len(obj[subname]) > Option.DESC:
-            return obj[subname][Option.DESC]
+        obj = dict_[subname]
+        if len(obj) > Option.DESC:
+            return obj[Option.DESC]
         return None
 
     def get_restart_per(self, optname, key=None, subname=None):

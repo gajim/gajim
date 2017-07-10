@@ -166,8 +166,7 @@ class AdvancedConfigurationWindow(object):
             # Get text from first column in this row
             desc = None
             if len(opt_path) == 3:
-                desc = gajim.config.get_desc_per(opt_path[2], opt_path[1],
-                        opt_path[0])
+                desc = gajim.config.get_desc_per(opt_path[2], opt_path[0])
             elif len(opt_path) == 1:
                 desc = gajim.config.get_desc(opt_path[0])
             if desc:
@@ -322,8 +321,7 @@ class AdvancedConfigurationWindow(object):
             if model[it][Column.TYPE] != '':
                 opt_path = self.get_option_path(model, it)
                 if len(opt_path) == 3:
-                    desc = gajim.config.get_desc_per(opt_path[2], opt_path[1],
-                            opt_path[0])
+                    desc = gajim.config.get_desc_per(opt_path[2], opt_path[0])
                 elif len(opt_path) == 1:
                     desc = gajim.config.get_desc(opt_path[0])
                 if search_string in model[it][Column.PREFERENCE_NAME] or (desc and \
