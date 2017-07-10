@@ -238,6 +238,8 @@ class OptionsParser:
             self.update_config_to_016103()
         if old < [0, 16, 10, 4] and new >= [0, 16, 10, 4]:
             self.update_config_to_016104()
+        if old < [0, 16, 10, 5] and new >= [0, 16, 10, 5]:
+            self.update_config_to_016105()
 
         gajim.logger.init_vars()
         gajim.logger.attach_cache_database()
@@ -1005,3 +1007,8 @@ class OptionsParser:
     def update_config_to_016104(self):
         gajim.config.set('emoticons_theme', 'noto-emoticons')
         gajim.config.set('version', '0.16.10.4')
+
+    def update_config_to_016105(self):
+        gajim.config.set('muc_restore_timeout', -1)
+        gajim.config.set('restore_timeout', -1)
+        gajim.config.set('version', '0.16.10.5')
