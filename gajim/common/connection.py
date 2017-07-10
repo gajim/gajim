@@ -2592,16 +2592,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 'muc_restore_timeout')
             if timeout is None or timeout == -2:
                 timeout = gajim.config.get('muc_restore_timeout')
-            timeout *= 60
-            if timeout >= 0:
-                last_date = self.last_history_time[room_jid]
-                if last_date == 0:
-                    last_date = time.time() - timeout
-                elif not rejoin:
-                    last_date = max(last_date, time.time() - timeout)
-                last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
-                    last_date))
-                tags['since'] = last_date
+            last_date = self.last_history_time[room_jid]
+            if last_date == 0 and timeout >= 0:
+                last_date = time.time() - timeout * 60
+            elif not rejoin and timeout >= 0:
+                last_date = max(last_date, time.time() - timeout * 60)
+            last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
+                last_date))
+            tags['since'] = last_date
+
             nb = gajim.config.get_per('rooms', room_jid, 'muc_restore_lines')
             if nb is None or nb == -2:
                 nb = gajim.config.get('muc_restore_lines')
