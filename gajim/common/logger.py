@@ -168,7 +168,7 @@ class Logger:
         self.open_db()
         self.get_jids_already_in_db()
 
-    def _really_commit(self):
+    def commit(self):
         try:
             self.con.commit()
         except sqlite.OperationalError as e:
@@ -179,7 +179,7 @@ class Logger:
     def _timeout_commit(self):
         if self.commit_timout_id:
             return
-        self.commit_timout_id = GLib.timeout_add(500, self._really_commit)
+        self.commit_timout_id = GLib.timeout_add(500, self.commit)
 
     def simple_commit(self, sql_to_commit):
         """
