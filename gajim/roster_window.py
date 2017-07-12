@@ -1842,10 +1842,9 @@ class RosterWindow:
         old unread messages, delete them from unread table
         """
         results = gajim.logger.get_unread_msgs()
-        for result in results:
-            jid = result[4]
-            additional_data = result[5]
-            shown = result[6]
+        for result, shown in results:
+            jid = result.jid
+            additional_data = result.additional_data
             if gajim.contacts.get_first_contact_from_jid(account, jid) and not \
             shown:
                 # We have this jid in our contacts list
@@ -1853,17 +1852,17 @@ class RosterWindow:
                 # with them
                 session = gajim.connections[account].make_new_session(jid)
 
-                tim = float(result[2])
-                session.roster_message(jid, result[1], tim, msg_type='chat',
-                    msg_log_id=result[0], additional_data=additional_data)
-                gajim.logger.set_shown_unread_msgs(result[0])
+                tim = float(result.time)
+                session.roster_message(jid, result.message, tim, msg_type='chat',
+                    msg_log_id=result.log_line_id, additional_data=additional_data)
+                gajim.logger.set_shown_unread_msgs(result.log_line_id)
 
-            elif (time.time() - result[2]) > 2592000:
+            elif (time.time() - result.time) > 2592000:
                 # ok, here we see that we have a message in unread messages
                 # table that is older than a month. It is probably from someone
                 # not in our roster for accounts we usually launch, so we will
                 # delete this id from unread message tables.
-                gajim.logger.set_read_messages([result[0]])
+                gajim.logger.set_read_messages([result.log_line_id])
 
     def fill_contacts_and_groups_dicts(self, array, account):
         """

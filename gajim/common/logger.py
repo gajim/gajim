@@ -121,6 +121,20 @@ class Logger:
         gajim.ged.register_event_handler('gc-message-received',
             ged.POSTCORE, self._nec_gc_message_received)
 
+    @staticmethod
+    def namedtuple_factory(cursor, row):
+        """
+        Usage:
+        con.row_factory = namedtuple_factory
+        """
+        fields = [col[0] for col in cursor.description]
+        Row = namedtuple("Row", fields)
+        named_row = Row(*row)
+        if 'additional_data' in fields:
+            named_row = named_row._replace(
+                additional_data=json.loads(named_row.additional_data))
+        return named_row
+
     def dispatch(self, event, error):
         gajim.ged.raise_event(event, None, str(error))
 
@@ -145,6 +159,7 @@ class Logger:
         self.con = sqlite.connect(LOG_DB_FILE, timeout=20.0,
                 isolation_level='IMMEDIATE')
         os.chdir(back)
+        self.con.row_factory = self.namedtuple_factory
         self.cur = self.con.cursor()
         self.set_synchronous(False)
 
@@ -191,18 +206,16 @@ class Logger:
     def get_jids_already_in_db(self):
         try:
             self.cur.execute('SELECT jid FROM jids')
-            # list of tuples: [('aaa@bbb',), ('cc@dd',)]
             rows = self.cur.fetchall()
         except sqlite.DatabaseError:
             raise exceptions.DatabaseMalformed(LOG_DB_PATH)
         self.jids_already_in = []
         for row in rows:
-            # row[0] is first item of row (the only result here, the jid)
-            if row[0] == '':
+            if not row.jid:
                 # malformed jid, ignore line
                 pass
             else:
-                self.jids_already_in.append(row[0])
+                self.jids_already_in.append(row.jid)
 
     def get_jids_in_db(self):
         return self.jids_already_in
@@ -232,7 +245,7 @@ class Logger:
         if row is None:
             return None
         else:
-            if row[0] == JIDConstant.ROOM_TYPE:
+            if row.type == JIDConstant.ROOM_TYPE:
                 return True
             return False
 
@@ -253,7 +266,7 @@ class Logger:
             self.cur.execute('SELECT jid_id FROM jids WHERE jid=?', [jid])
             row = self.cur.fetchone()
             if row:
-                return row[0]
+                return row.jid_id
         # oh! a new jid :), we add it now
         if typestr == 'ROOM':
             typ = JIDConstant.ROOM_TYPE
@@ -476,8 +489,8 @@ class Logger:
         except Exception:
             unread_results = []
         for message in unread_results:
-            msg_log_id = message[0]
-            shown = message[1]
+            msg_log_id = message.message_id
+            shown = message.shown
             # here we get infos for that message, and related jid from jids table
             # do NOT change order of SELECTed things, unless you change function(s)
             # that called this function
@@ -488,15 +501,13 @@ class Logger:
                     WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
                     ''' % msg_log_id
                     )
-            results = self.cur.fetchall()
+            results = self.cur.fetchone()
             if len(results) == 0:
                 # Log line is no more in logs table. remove it from unread_messages
                 self.set_read_messages([msg_log_id])
                 continue
-            results[0] = list(results[0])
-            results[0][5] = json.loads(results[0][5])
-            results[0].append(shown)
-            all_messages.append(results[0])
+
+            all_messages.append((results, shown))
         return all_messages
 
     def write(self, kind, jid, message=None, show=None, tim=None, subject=None,
@@ -619,12 +630,7 @@ class Logger:
                 KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timeout,
                 restore_how_many, pending_how_many), jid_tuple)
 
-            results = self.cur.fetchall()
-            messages = []
-            for entry in results:
-                additional_data = json.loads(entry[4])
-                parsed_entry = entry[:4] + (additional_data, ) + entry[5:]
-                messages.append(parsed_entry)
+            messages = self.cur.fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
                           exceptions.DatabaseMalformed(LOG_DB_PATH))
@@ -642,10 +648,6 @@ class Logger:
         # we have time since epoch baby :)
         start_of_day = int(time.mktime(local_time))
         return start_of_day
-
-    Message = namedtuple('Message',
-            ['contact_name', 'time', 'kind', 'show', 'message', 'subject',
-             'additional_data', 'log_line_id'])
 
     def get_conversation_for_date(self, jid, year, month, day, account):
         """
@@ -680,11 +682,7 @@ class Logger:
             ORDER BY time
             ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
 
-        results = [self.Message(*row) for row in self.cur.fetchall()]
-        for message in results:
-            message._replace(additional_data=json.loads(message.additional_data))
-
-        return results
+        return self.cur.fetchall()
 
     def search_log(self, jid, query, account, year=None, month=None, day=None):
         """
@@ -728,11 +726,7 @@ class Logger:
             ORDER BY time
             ''' % (where_sql, like_sql), jid_tuple)
 
-        results = [self.Message(*row) for row in self.cur.fetchall()]
-        for message in results:
-            message._replace(additional_data=json.loads(message.additional_data))
-
-        return results
+        return self.cur.fetchall()
 
     def get_days_with_logs(self, jid, year, month, max_day, account):
         """
@@ -756,7 +750,7 @@ class Logger:
         # and take only one of the same values (distinct)
         # Now we have timestamps of time 0:00 of every day with logs
         self.cur.execute('''
-            SELECT DISTINCT time/(86400)*86400 FROM logs
+            SELECT DISTINCT time/(86400)*86400 as time FROM logs
             WHERE (%s)
             AND time BETWEEN %d AND %d
             AND kind NOT IN (%d, %d)
@@ -767,7 +761,7 @@ class Logger:
 
         # convert timestamps to day of month
         for line in result:
-            days_with_logs[0:0]=[time.gmtime(line[0])[2]]
+            days_with_logs[0:0]=[time.gmtime(line.time)[2]]
 
         return days_with_logs
 
@@ -788,7 +782,7 @@ class Logger:
             where_sql = 'jid_id = ?'
             jid_tuple = (jid_id,)
         self.cur.execute('''
-            SELECT MAX(time) FROM logs
+            SELECT MAX(time) as time FROM logs
             WHERE (%s)
             AND kind NOT IN (%d, %d)
             ''' % (where_sql, KindConstant.STATUS, KindConstant.GCSTATUS),
@@ -796,7 +790,7 @@ class Logger:
 
         results = self.cur.fetchone()
         if results is not None:
-            result = results[0]
+            result = results.time
         else:
             result = None
         return result
@@ -819,7 +813,7 @@ class Logger:
 
         results = self.cur.fetchone()
         if results is not None:
-            result = results[0]
+            result = results.time
         else:
             result = None
         return result
@@ -870,10 +864,9 @@ class Logger:
             return
         self.cur.execute(
                 'SELECT type from transports_cache WHERE transport = "%s"' % jid)
-        results = self.cur.fetchall()
+        results = self.cur.fetchone()
         if results:
-            result = results[0][0]
-            if result == type_id:
+            if results.type == type_id:
                 return
             sql = 'UPDATE transports_cache SET type = %d WHERE transport = "%s"' %\
                     (type_id, jid)
@@ -893,8 +886,8 @@ class Logger:
             return {}
         answer = {}
         for result in results:
-            answer[result[0]] = self.convert_api_values_to_human_transport_type(
-                    result[1])
+            answer[result.transport] = self.convert_api_values_to_human_transport_type(
+                    result.type)
         return answer
 
     # A longer note here:
@@ -924,16 +917,16 @@ class Logger:
 
         # list of corrupted entries that will be removed
         to_be_removed = []
-        for hash_method, hash_, data in self.cur:
+        for row in self.cur:
             # for each row: unpack the data field
             # (format: (category, type, name, category, type, name, ...
             #   ..., 'FEAT', feature1, feature2, ...).join(' '))
             # NOTE: if there's a need to do more gzip, put that to a function
             try:
-                data = GzipFile(fileobj=BytesIO(data)).read().decode('utf-8').split('\0')
+                data = GzipFile(fileobj=BytesIO(row.data)).read().decode('utf-8').split('\0')
             except IOError:
                 # This data is corrupted. It probably contains non-ascii chars
-                to_be_removed.append((hash_method, hash_))
+                to_be_removed.append((row.hash_method, row.hash))
                 continue
             i = 0
             identities = list()
@@ -952,7 +945,7 @@ class Logger:
                 i += 1
 
             # yield the row
-            yield hash_method, hash_, identities, features
+            yield row.hash_method, row.hash, identities, features
         for hash_method, hash_ in to_be_removed:
             sql = '''DELETE FROM caps_cache WHERE hash_method = "%s" AND
                     hash = "%s"''' % (hash_method, hash_)
@@ -1091,9 +1084,10 @@ class Logger:
                 SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
-        for jid, jid_id, name, subscription, ask in self.cur:
-            jid = jid
-            name = name
+        for row in self.cur:
+            #jid, jid_id, name, subscription, ask
+            jid = row.jid
+            name = row.name
             data[jid] = {}
             if name:
                 data[jid]['name'] = name
@@ -1101,14 +1095,14 @@ class Logger:
                 data[jid]['name'] = None
             data[jid]['subscription'] = \
                     self.convert_db_api_values_to_human_subscription_values(
-                    subscription)
+                    row.subscription)
             data[jid]['groups'] = []
             data[jid]['resources'] = {}
-            if ask:
+            if row.ask:
                 data[jid]['ask'] = 'subscribe'
             else:
                 data[jid]['ask'] = None
-            data[jid]['id'] = jid_id
+            data[jid]['id'] = row.jid_id
 
         # Then we add group for roster entries
         for jid in data:
@@ -1116,8 +1110,8 @@ class Logger:
                     SELECT group_name FROM roster_group
                     WHERE account_jid_id=? AND jid_id=?''',
                     (account_jid_id, data[jid]['id']))
-            for (group_name,) in self.cur:
-                group_name = group_name
+            for row in self.cur:
+                group_name = row.group_name
                 data[jid]['groups'].append(group_name)
             del data[jid]['id']
 

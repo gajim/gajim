@@ -1424,24 +1424,24 @@ class ChatControl(ChatControlBase):
 
         local_old_kind = None
         self.conv_textview.just_cleared = True
-        for row in rows: # row[0] time, row[1] has kind, row[2] the message, row[3] subject, row[4] additional_data
-            msg = row[2]
-            additional_data = row[4]
+        for row in rows: # time, kind, message, subject, additional_data
+            msg = row.message
+            additional_data = row.additional_data
             if not msg: # message is empty, we don't print it
                 continue
-            if row[1] in (KindConstant.CHAT_MSG_SENT,
+            if row.kind in (KindConstant.CHAT_MSG_SENT,
                             KindConstant.SINGLE_MSG_SENT):
                 kind = 'outgoing'
                 name = self.get_our_nick()
-            elif row[1] in (KindConstant.SINGLE_MSG_RECV,
+            elif row.kind in (KindConstant.SINGLE_MSG_RECV,
                             KindConstant.CHAT_MSG_RECV):
                 kind = 'incoming'
                 name = self.contact.get_shown_name()
-            elif row[1] == KindConstant.ERROR:
+            elif row.kind == KindConstant.ERROR:
                 kind = 'status'
                 name = self.contact.get_shown_name()
 
-            tim = float(row[0])
+            tim = float(row.time)
 
             if gajim.config.get('restored_messages_small'):
                 small_attr = ['small']
@@ -1450,14 +1450,14 @@ class ChatControl(ChatControlBase):
             xhtml = None
             if msg.startswith('<body '):
                 xhtml = msg
-            if row[3]:
+            if row.subject:
                 msg = _('Subject: %(subject)s\n%(message)s') % \
-                    {'subject': row[3], 'message': msg}
+                    {'subject': row.subject, 'message': msg}
             ChatControlBase.print_conversation_line(self, msg, kind, name,
                 tim, small_attr, small_attr + ['restored_message'],
                 small_attr + ['restored_message'], False,
                 old_kind=local_old_kind, xhtml=xhtml, additional_data=additional_data)
-            if row[2].startswith('/me ') or row[2].startswith('/me\n'):
+            if row.message.startswith('/me ') or row.message.startswith('/me\n'):
                 local_old_kind = None
             else:
                 local_old_kind = kind
