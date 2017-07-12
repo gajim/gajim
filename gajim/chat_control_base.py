@@ -444,7 +444,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def get_encryption_state(self):
         config_key = '%s-%s' % (self.account, self.contact.jid)
         state = gajim.config.get_per('encryption', config_key, 'encryption')
-        return state or None
+        if not state:
+            return None
+        if state not in gajim.plugin_manager.encryption_plugins:
+            self.set_encryption_state(None)
+            return None
+        return state
 
     def set_encryption_menu_icon(self):
         for child in self.encryption_menu.get_children():
