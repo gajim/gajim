@@ -68,6 +68,9 @@ class KindConstant(IntEnum):
     CHAT_MSG_SENT = 6
     ERROR = 7
 
+    def __str__(self):
+        return str(self.value)
+
 @unique
 class ShowConstant(IntEnum):
     ONLINE = 0
@@ -160,6 +163,10 @@ class Logger:
                 isolation_level='IMMEDIATE')
         os.chdir(back)
         self.con.row_factory = self.namedtuple_factory
+
+        # DB functions
+        self.con.create_function("get_timeout", 0, self._get_timeout)
+
         self.cur = self.con.cursor()
         self.set_synchronous(False)
 
@@ -182,6 +189,18 @@ class Logger:
     def init_vars(self):
         self.open_db()
         self.get_jids_already_in_db()
+
+    @staticmethod
+    def _get_timeout():
+        """
+        returns the timeout in epoch
+        """
+        timeout = gajim.config.get('restore_timeout')
+
+        now = int(time.time())
+        if timeout > 0:
+            timeout = now - (timeout * 60)
+        return timeout
 
     def commit(self):
         try:
@@ -248,6 +267,22 @@ class Logger:
             if row.type == JIDConstant.ROOM_TYPE:
                 return True
             return False
+
+    @staticmethod
+    def _get_family_jids(account, jid):
+        """
+        Get all jids of the metacontacts family
+
+        :param account: The account
+
+        :param jid:     The JID
+
+        returns a list of JIDs'
+        """
+        family = gajim.contacts.get_metacontacts_family(account, jid)
+        if family:
+            return [user['jid'] for user in family]
+        return [jid]
 
     def get_jid_id(self, jid, typestr=None):
         """
@@ -593,44 +628,49 @@ class Logger:
                 exceptions.PysqliteOperationalError) as error:
             self.dispatch('DB_ERROR', error)
 
-    def get_last_conversation_lines(self, jid, pending_how_many, account):
+    def get_last_conversation_lines(self, account, jid, pending):
         """
-        Accept how many rows to restore and when to time them out (in minutes)
-        (mark them as too old) and number of messages that are in queue and are
-        already logged but pending to be viewed, returns a list of tuples
-        containg time, kind, message, subject list with empty tuple if nothing
-        found to meet our demands
+        Get recent messages
+
+        Pending messages are already in queue to be printed when the
+        ChatControl is opened, so we dont want to request those messages.
+        How many messages are requested depends on the 'restore_lines'
+        config value. How far back in time messages are requested depends on
+        _get_timeout().
+
+        :param account: The account
+
+        :param jid:     The jid from which we request the conversation lines
+
+        :param pending: How many messages are currently pending so we dont
+                        request those messages
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
+
+        restore = gajim.config.get('restore_lines')
+        if restore <= 0:
             return []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
-        # How many lines to restore and when to time them out
-        restore_how_many = gajim.config.get('restore_lines')
-        if restore_how_many <= 0:
-            return []
-        timeout = gajim.config.get('restore_timeout')  # in minutes
+        kinds = map(str, [KindConstant.SINGLE_MSG_RECV,
+                          KindConstant.SINGLE_MSG_SENT,
+                          KindConstant.CHAT_MSG_RECV,
+                          KindConstant.CHAT_MSG_SENT,
+                          KindConstant.ERROR])
 
-        now = int(float(time.time()))
-        if timeout > 0:
-            timeout = now - (timeout * 60) # before that they are too old
+        jids = self._get_family_jids(account, jid)
 
-        # so if we ask last 5 lines and we have 2 pending we get
-        # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
+        sql = '''
+            SELECT time, kind, message, subject, additional_data
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
+            kind IN ({kinds}) AND time > get_timeout()
+            ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
+
         try:
-            self.cur.execute('''
-                SELECT time, kind, message, subject, additional_data FROM logs
-                WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
-                ORDER BY time DESC LIMIT %d OFFSET %d
-                ''' % (where_sql, KindConstant.SINGLE_MSG_RECV,
-                KindConstant.CHAT_MSG_RECV, KindConstant.SINGLE_MSG_SENT,
-                KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timeout,
-                restore_how_many, pending_how_many), jid_tuple)
-
-            messages = self.cur.fetchall()
+            messages = self.con.execute(
+                sql, (*jids, restore, pending)).fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
                           exceptions.DatabaseMalformed(LOG_DB_PATH))
