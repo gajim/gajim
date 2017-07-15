@@ -32,6 +32,7 @@ import os
 import sys
 import time
 import datetime
+import calendar
 import json
 from collections import namedtuple
 from gzip import GzipFile
@@ -766,42 +767,45 @@ class Logger:
 
         return self.con.execute(sql, (*jids, query)).fetchall()
 
-    def get_days_with_logs(self, jid, year, month, max_day, account):
+    def get_days_with_logs(self, account, jid, year, month):
         """
-        Return the list of days that have logs (not status messages)
+        Request the days in a month where we received messages
+        for a given `jid`.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the days
+
+        :param year:    The year
+
+        :param month:   The month
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
-        days_with_logs = []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
+        jids = self._get_family_jids(account, jid)
 
-        # First select all date of month whith logs we want
-        start_of_month = self.get_unix_time_from_date(year, month, 1)
-        seconds_in_a_day = 86400 # 60 * 60 * 24
-        last_second_of_month = start_of_month + (seconds_in_a_day * max_day) - 1
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
 
-        # Select times and 'floor' them to time 0:00
-        # (by dividing, they are integers)
-        # and take only one of the same values (distinct)
-        # Now we have timestamps of time 0:00 of every day with logs
-        self.cur.execute('''
-            SELECT DISTINCT time/(86400)*86400 as time FROM logs
-            WHERE (%s)
-            AND time BETWEEN %d AND %d
-            AND kind NOT IN (%d, %d)
+        # Calculate the start and end datetime of the month
+        date = datetime.datetime(year, month, 1)
+        days = calendar.monthrange(year, month)[1] - 1
+        delta = datetime.timedelta(
+            days=days, hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        sql = """
+            SELECT DISTINCT 
+            CAST(strftime('%d', time, 'unixepoch', 'localtime') AS INTEGER)
+            AS day FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND time BETWEEN ? AND ?
+            AND kind NOT IN ({kinds})
             ORDER BY time
-            ''' % (where_sql, start_of_month, last_second_of_month,
-            KindConstant.STATUS, KindConstant.GCSTATUS), jid_tuple)
-        result = self.cur.fetchall()
+            """.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
 
-        # convert timestamps to day of month
-        for line in result:
-            days_with_logs[0:0]=[time.gmtime(line.time)[2]]
-
-        return days_with_logs
+        return self.con.execute(sql, (*jids,
+                                      date.timestamp(),
+                                      (date + delta).timestamp())).fetchall()
 
     def get_last_date_that_has_logs(self, jid, account=None, is_room=False):
         """

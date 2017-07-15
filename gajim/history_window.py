@@ -357,20 +357,18 @@ class HistoryWindow:
             widget.select_day(1)
             return
 
-        # in gtk January is 1, in python January is 0,
-        # I want the second
-        # first day of month is 1 not 0
         widget.clear_marks()
         month = gtkgui_helpers.make_gtk_month_python_month(month)
-        days_in_this_month = calendar.monthrange(year, month)[1]
+
         try:
-            log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
-                days_in_this_month, self.account)
+            log_days = gajim.logger.get_days_with_logs(
+                self.account, self.jid, year, month)
         except exceptions.PysqliteOperationalError as e:
             dialogs.ErrorDialog(_('Disk Error'), str(e))
             return
-        for day in log_days:
-            widget.mark_day(day)
+
+        for date in log_days:
+            widget.mark_day(date.day)
 
     def _get_string_show_from_constant_int(self, show):
         if show == ShowConstant.ONLINE:
