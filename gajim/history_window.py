@@ -30,6 +30,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 import time
 import calendar
+import datetime
 
 from enum import IntEnum, unique
 
@@ -397,8 +398,11 @@ class HistoryWindow:
         self.last_time_printout = 0
         show_status = self.show_status_checkbutton.get_active()
 
+        date = datetime.datetime(year, month, day)
+
         conversation = gajim.logger.get_conversation_for_date(
-                self.jid, year, month, day, self.account)
+            self.account, self.jid, date)
+
         for message in conversation:
             if not show_status and message.kind in (KindConstant.GCSTATUS,
                                                     KindConstant.STATUS):

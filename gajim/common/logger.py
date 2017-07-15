@@ -689,40 +689,36 @@ class Logger:
         start_of_day = int(time.mktime(local_time))
         return start_of_day
 
-    def get_conversation_for_date(self, jid, year, month, day, account):
+    def get_conversation_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
 
-        The conversation contains all messages that were exchanged between
-        `account` and `jid` on the day specified by `year`, `month` and `day`,
-        where `month` and `day` are 1-based.
+        :param account: The account
 
-        The conversation will be returned as a list of single messages of type
-        `Logger.Message`. Messages in the list are sorted chronologically. An
-        empty list will be returned if there are no messages in the log database
-        for the requested combination of `jid` and `account` on the given date.
+        :param jid:     The jid for which we request the conversation
+
+        :param date:    datetime.datetime instance
+                        example: datetime.datetime(year, month, day)
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
-        start_of_day = self.get_unix_time_from_date(year, month, day)
-        seconds_in_a_day = 86400 # 60 * 60 * 24
-        last_second_of_day = start_of_day + seconds_in_a_day - 1
+        jids = self._get_family_jids(account, jid)
 
-        self.cur.execute('''
+        delta = datetime.timedelta(
+            hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        sql = '''
             SELECT contact_name, time, kind, show, message, subject,
                    additional_data, log_line_id
-            FROM logs
-            WHERE (%s)
-            AND time BETWEEN %d AND %d
-            ORDER BY time
-            ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND time BETWEEN ? AND ?
+            ORDER BY time, log_line_id
+            '''.format(jids=', '.join('?' * len(jids)))
 
-        return self.cur.fetchall()
+        return self.con.execute(sql, (*jids, 
+                                      date.timestamp(),
+                                      (date + delta).timestamp())).fetchall()
 
     def search_log(self, jid, query, account, year=None, month=None, day=None):
         """
