@@ -541,13 +541,15 @@ class HistoryWindow:
                 # This may leed to wrong self nick in the displayed history (Uggh!)
                 account = list(gajim.contacts.get_accounts())[0]
 
-            year, month, day = False, False, False
+            date = None
             if self.search_in_date.get_active():
                 year, month, day = self.calendar.get_date() # integers
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
+                date = datetime.datetime(year, month, day)
 
             show_status = self.show_status_checkbutton.get_active()
-            results = gajim.logger.search_log(jid, text, account, year, month, day)
+
+            results = gajim.logger.search_log(account, jid, text, date)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)

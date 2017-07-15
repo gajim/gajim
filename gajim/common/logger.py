@@ -165,6 +165,7 @@ class Logger:
         self.con.row_factory = self.namedtuple_factory
 
         # DB functions
+        self.con.create_function("like", 1, self._like)
         self.con.create_function("get_timeout", 0, self._get_timeout)
 
         self.cur = self.con.cursor()
@@ -201,6 +202,10 @@ class Logger:
         if timeout > 0:
             timeout = now - (timeout * 60)
         return timeout
+
+    @staticmethod
+    def _like(search_str):
+        return '%{}%'.format(search_str)
 
     def commit(self):
         try:
@@ -720,49 +725,46 @@ class Logger:
                                       date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
-    def search_log(self, jid, query, account, year=None, month=None, day=None):
+    def search_log(self, account, jid, query, date=None):
         """
         Search the conversation log for messages containing the `query` string.
 
-        The search can either span the complete log for the given `account` and
-        `jid` or be restriced to a single day by specifying `year`, `month` and
-        `day`, where `month` and `day` are 1-based.
+        The search can either span the complete log for the given
+        `account` and `jid` or be restriced to a single day by
+        specifying `date`.
 
-        All messages matching the specified criteria will be returned in a list
-        containing tuples of type `Logger.Message`. If no messages match the
-        criteria, an empty list will be returned.
+        :param account: The account
+
+        :param jid:     The jid for which we request the conversation
+
+        :param query:   A search string
+
+        :param date:    datetime.datetime instance
+                        example: datetime.datetime(year, month, day)
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
+        jids = self._get_family_jids(account, jid)
 
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
-        like_sql = '%' + query.replace("'", "''") + '%'
-        if year and month and day:
-            start_of_day = self.get_unix_time_from_date(year, month, day)
-            seconds_in_a_day = 86400 # 60 * 60 * 24
-            last_second_of_day = start_of_day + seconds_in_a_day - 1
-            self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
-            FROM logs
-            WHERE (%s) AND message LIKE '%s'
-            AND time BETWEEN %d AND %d
-            ORDER BY time
-            ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
-                jid_tuple)
-        else:
-            self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
-            FROM logs
-            WHERE (%s) AND message LIKE '%s'
-            ORDER BY time
-            ''' % (where_sql, like_sql), jid_tuple)
+        if date:
+            delta = datetime.timedelta(
+                hours=23, minutes=59, seconds=59, microseconds=999999)
 
-        return self.cur.fetchall()
+            between = '''
+                AND time BETWEEN {start} AND {end}
+                '''.format(start=date.timestamp(),
+                           end=(date + delta).timestamp())
+
+        sql = '''
+        SELECT contact_name, time, kind, show, message, subject,
+               additional_data, log_line_id
+        FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+        AND message LIKE like(?) {date_search}
+        ORDER BY time, log_line_id
+        '''.format(jids=', '.join('?' * len(jids)),
+                   date_search=between if date else '')
+
+        return self.con.execute(sql, (*jids, query)).fetchall()
 
     def get_days_with_logs(self, jid, year, month, max_day, account):
         """
