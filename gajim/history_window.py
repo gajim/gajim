@@ -305,7 +305,7 @@ class HistoryWindow:
             # select logs for last date we have logs with contact
             self.calendar.set_sensitive(True)
             last_log = \
-                    gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+                    gajim.logger.get_last_date_that_has_logs(self.account, self.jid)
 
             date = time.localtime(last_log)
 

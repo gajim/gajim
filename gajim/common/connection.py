@@ -2562,19 +2562,16 @@ class Connection(CommonConnection, ConnectionHandlers):
         # last date/time in history to avoid duplicate
         if room_jid not in self.last_history_time:
             # Not in memory, get it from DB
-            last_log = None
-            # Do not check if we are not logging for this room
+            last_log = 0
             if gajim.config.should_log(self.name, room_jid):
                 # Check time first in the FAST table
-                last_log = gajim.logger.get_room_last_message_time(room_jid)
-                if last_log is None:
-                    # Not in special table, get it from messages DB
-                    last_log = gajim.logger.get_last_date_that_has_logs(room_jid,
-                            is_room=True)
+                last_log = gajim.logger.get_room_last_message_time(
+                    self.name, room_jid)
+                if not last_log:
+                    last_log = 0
+
             # Create self.last_history_time[room_jid] even if not logging,
             # could be used in connection_handlers
-            if last_log is None:
-                last_log = 0
             self.last_history_time[room_jid] = last_log
 
         p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),

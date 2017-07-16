@@ -807,58 +807,51 @@ class Logger:
                                       date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
-    def get_last_date_that_has_logs(self, jid, account=None, is_room=False):
+    def get_last_date_that_has_logs(self, account, jid):
         """
-        Return last time (in seconds since EPOCH) for which we had logs
-        (excluding statuses)
+        Get the timestamp of the last message we received for the jid.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the last timestamp
+
+        returns a timestamp or None
         """
-        where_sql = ''
-        if not is_room:
-            where_sql, jid_tuple = self._build_contact_where(account, jid)
-        else:
-            try:
-                jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError:
-                # Error trying to create a new jid_id. This means there is no log
-                return None
-            where_sql = 'jid_id = ?'
-            jid_tuple = (jid_id,)
-        self.cur.execute('''
+        jids = self._get_family_jids(account, jid)
+
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+
+        sql = '''
             SELECT MAX(time) as time FROM logs
-            WHERE (%s)
-            AND kind NOT IN (%d, %d)
-            ''' % (where_sql, KindConstant.STATUS, KindConstant.GCSTATUS),
-            jid_tuple)
+            NATURAL JOIN jids WHERE jid IN ({jids})
+            AND kind NOT IN ({kinds})
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
 
-        results = self.cur.fetchone()
-        if results is not None:
-            result = results.time
-        else:
-            result = None
-        return result
+        # fetchone() returns always at least one Row with all
+        # attributes set to None because of the MAX() function
+        return self.con.execute(sql, (*jids,)).fetchone().time
 
-    def get_room_last_message_time(self, jid):
+    def get_room_last_message_time(self, account, jid):
         """
-        Return FASTLY last time (in seconds since EPOCH) for which we had logs
-        for that room from rooms_last_message_time table
-        """
-        try:
-            jid_id = self.get_jid_id(jid, 'ROOM')
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return None
-        where_sql = 'jid_id = %s' % jid_id
-        self.cur.execute('''
-                SELECT time FROM rooms_last_message_time
-                WHERE (%s)
-                ''' % (where_sql))
+        Get the timestamp of the last message we received in a room.
 
-        results = self.cur.fetchone()
-        if results is not None:
-            result = results.time
-        else:
-            result = None
-        return result
+        :param account: The account
+
+        :param jid:     The jid for which we request the last timestamp
+
+        returns a timestamp or None
+        """
+        sql = '''
+            SELECT time FROM rooms_last_message_time
+            NATURAL JOIN jids WHERE jid = ?
+            '''
+
+        row = self.con.execute(sql, (jid,)).fetchone()
+        if not row:
+            return self.get_last_date_that_has_logs(account, jid)
+        return row.time
 
     def set_room_last_message_time(self, jid, time):
         """
