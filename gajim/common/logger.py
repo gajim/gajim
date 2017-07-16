@@ -864,31 +864,6 @@ class Logger:
                 (jid_id, time)
         self.simple_commit(sql)
 
-    def _build_contact_where(self, account, jid):
-        """
-        Build the where clause for a jid, including metacontacts jid(s) if any
-        """
-        where_sql = ''
-        jid_tuple = ()
-        # will return empty list if jid is not associated with
-        # any metacontacts
-        family = gajim.contacts.get_metacontacts_family(account, jid)
-        if family:
-            for user in family:
-                try:
-                    jid_id = self.get_jid_id(user['jid'])
-                except exceptions.PysqliteOperationalError:
-                    continue
-                where_sql += 'jid_id = ?'
-                jid_tuple += (jid_id,)
-                if user != family[-1]:
-                    where_sql += ' OR '
-        else: # if jid was not associated with metacontacts
-            jid_id = self.get_jid_id(jid)
-            where_sql = 'jid_id = ?'
-            jid_tuple += (jid_id,)
-        return where_sql, jid_tuple
-
     def save_transport_type(self, jid, type_):
         """
         Save the type of the transport in DB
