@@ -38,19 +38,7 @@ AC_SUBST(ACLOCAL_AMFLAGS)
 
 AM_PATH_PYTHON([3.5])
 
-dnl ****
-dnl enable installation in python-2.x/site-packages/gajim
-dnl ****
-AC_ARG_ENABLE(site-packages,
-  [AS_HELP_STRING([--enable-site-packages],
-	[install gajim sources in PYTHONDIR/site-packages/gajim
-instead of DATADIR/gajim/src.])]
-,
 AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
-,
-AC_SUBST([gajim_srcdir], [\${datadir}/\${PACKAGE}/gajim])
-)
-
 AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
 
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
