@@ -529,6 +529,7 @@ class GroupchatControl(ChatControlBase):
         self.set_tooltip()
         self.add_window_actions()
         self.set_lock_image()
+        self._schedule_activity_timers()
 
     def set_tooltip(self):
         widget = self.xml.get_object('list_treeview')
@@ -2085,8 +2086,11 @@ class GroupchatControl(ChatControlBase):
         control = win.notebook.get_nth_page(ctrl_page)
 
         win.notebook.remove_page(ctrl_page)
+        GLib.source_remove(self.possible_paused_timeout_id)
+        GLib.source_remove(self.possible_inactive_timeout_id)
         control.unparent()
         ctrl.parent_win = None
+        self.send_chatstate('inactive', self.contact)
 
         gajim.interface.roster.add_groupchat(self.contact.jid, self.account,
             status = self.subject)

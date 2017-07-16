@@ -376,7 +376,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # chatstate timers and state
         self.reset_kbd_mouse_timeout_vars()
-        self._schedule_activity_timers()
+        self.possible_paused_timeout_id = None
+        self.possible_inactive_timeout_id = None
         message_tv_buffer = self.msg_textview.get_buffer()
         id_ = message_tv_buffer.connect('changed',
             self._on_message_tv_buffer_changed)
@@ -385,6 +386,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             id_ = parent_win.window.connect('motion-notify-event',
                 self._on_window_motion_notify)
             self.handlers[id_] = parent_win.window
+            self._schedule_activity_timers()
 
         self.encryption = self.get_encryption_state()
         if self.parent_win:
@@ -836,6 +838,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return True # loop forever
 
     def _schedule_activity_timers(self):
+        if self.possible_paused_timeout_id:
+            GLib.source_remove(self.possible_paused_timeout_id)
+        if self.possible_inactive_timeout_id:
+            GLib.source_remove(self.possible_inactive_timeout_id)
         self.possible_paused_timeout_id = GLib.timeout_add_seconds(5,
                 self.check_for_possible_paused_chatstate, None)
         self.possible_inactive_timeout_id = GLib.timeout_add_seconds(30,
@@ -1143,8 +1149,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             else:
                 self.send_chatstate('active', self.contact)
             self.reset_kbd_mouse_timeout_vars()
-            GLib.source_remove(self.possible_paused_timeout_id)
-            GLib.source_remove(self.possible_inactive_timeout_id)
             self._schedule_activity_timers()
         else:
             self.send_chatstate('inactive', self.contact)
