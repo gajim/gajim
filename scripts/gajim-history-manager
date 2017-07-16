@@ -1,0 +1,35 @@
+#!/usr/bin/python3 -OO
+##
+## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
+## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+##                    Stefan Bethge <stefan AT lanpartei.de>
+## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+##
+## This file is part of Gajim.
+##
+## Gajim is free software; you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published
+## by the Free Software Foundation; version 3 only.
+##
+## Gajim is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+##
+
+import os
+import sys
+
+if os.geteuid() == 0:
+    sys.exit("You must not launch gajim as root, it is insecure.")
+
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import gajim.history_manager as g
+
+g.HistoryManager()
+Gtk.main()

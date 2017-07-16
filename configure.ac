@@ -77,9 +77,6 @@ AC_CONFIG_FILES([
 	data/gajim-remote.desktop.in
 	data/defs.py
 	gajim/Makefile
-	scripts/gajim
-	scripts/gajim-remote:scripts/gajim.in
-	scripts/gajim-history-manager:scripts/gajim.in
 	po/Makefile.in
 	plugins/Makefile
 ])

@@ -1,5 +1,4 @@
-#!/bin/sh
-## scripts/gajim.in
+#!/usr/bin/python3 -OO
 ##
 ## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -21,13 +20,12 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-APP=`basename $0`
-if test $(id -u) -eq 0; then
-	echo "You must not launch $APP as root, it is INSECURE"
-	exit 1
-fi
+import os
+import sys
 
-[ "$APP" = "gajim-history-manager" ] && APP="history_manager"
+if os.geteuid() == 0:
+    sys.exit("You must not launch gajim as root, it is insecure.")
 
-cd "@GAJIM_SRCDIR@"
-exec "@PYTHON@" -OO $APP.py "$@"
+import gajim.gajim as g
+
+g.GajimApplication().run(sys.argv)
