@@ -4146,7 +4146,7 @@ class ManagePEPServicesWindow:
         self.treeview.append_column(col)
 
         cellrenderer_text = Gtk.CellRendererText()
-        col.pack_start(cellrenderer_text, True, True, 0)
+        col.pack_start(cellrenderer_text, True)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
         our_jid = gajim.get_jid_from_account(self.account)

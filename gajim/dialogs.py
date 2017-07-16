@@ -1384,8 +1384,8 @@ class AboutDialog(Gtk.AboutDialog):
 class Dialog(Gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
     on_response_ok=None, on_response_cancel=None):
-        GObject.GObject.__init__(self, title, parent,
-            Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.NO_SEPARATOR)
+        Gtk.Dialog.__init__(self, title, parent,
+            Gtk.DialogFlags.DESTROY_WITH_PARENT)
 
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
@@ -5296,11 +5296,11 @@ class DataFormWindow(Dialog):
     def __init__(self, form, on_response_ok):
         self.df_response_ok = on_response_ok
         Dialog.__init__(self, None, 'test', [(Gtk.STOCK_CANCEL,
-            Gtk.ResponseType.REJECT), (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT)],
+            Gtk.ResponseType.CANCEL), (Gtk.STOCK_OK, Gtk.ResponseType.OK)],
             on_response_ok=self.on_ok)
         self.set_resizable(True)
         gtkgui_helpers.resize_window(self, 600, 400)
-        self.dataform_widget =  dataforms_widget.DataFormWidget()
+        self.dataform_widget = dataforms_widget.DataFormWidget()
         self.dataform = dataforms.ExtendForm(node=form)
         self.dataform_widget.set_sensitive(True)
         self.dataform_widget.data_form = self.dataform
