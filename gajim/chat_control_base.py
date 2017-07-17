@@ -44,6 +44,7 @@ import notify
 import re
 
 import emoticons
+from scrolled_window import ScrolledWindow
 from common import events
 from common import gajim
 from common import helpers
@@ -327,14 +328,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.last_received_id = {} # one per name
 
         # add MessageTextView to UI and connect signals
-        self.msg_scrolledwindow = self.xml.get_object('message_scrolledwindow')
         self.msg_textview = MessageTextView()
+
+        self.msg_scrolledwindow = ScrolledWindow()
+        self.msg_scrolledwindow.set_max_content_height(100)
+        self.msg_scrolledwindow.set_min_content_height(23)
+
+        self.msg_scrolledwindow.set_property('shadow_type', Gtk.ShadowType.IN)
         self.msg_scrolledwindow.add(self.msg_textview)
+
+        hbox = self.xml.get_object('hbox')
+        hbox.pack_end(self.msg_scrolledwindow, True, True, 0)
+
         id_ = self.msg_textview.connect('key_press_event',
             self._on_message_textview_key_press_event)
-        self.handlers[id_] = self.msg_textview
-        id_ = self.msg_textview.connect('configure-event',
-            self.on_configure_event)
         self.handlers[id_] = self.msg_textview
         id_ = self.msg_textview.connect('populate_popup',
             self.on_msg_textview_populate_popup)
@@ -368,8 +375,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # For XEP-0172
         self.user_nick = None
-
-        self.smooth = True
 
         self.command_hits = []
         self.last_key_tabs = False
@@ -693,6 +698,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.send_message(message, xhtml=xhtml)
             else:
                 message_buffer.insert_at_cursor('\n')
+                mark = message_buffer.get_insert()
+                iter_ = message_buffer.get_iter_at_mark(mark)
+                if message_buffer.get_end_iter().equal(iter_):
+                    GLib.idle_add(gtkgui_helpers.scroll_to_end, self.msg_scrolledwindow)
 
             return True
         elif event.keyval == Gdk.KEY_z: # CTRL+z
@@ -1156,60 +1165,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def scroll_to_end_iter(self):
         self.conv_textview.scroll_to_end_iter()
         return False
-
-    def on_configure_event(self, msg_textview, event):
-        """
-        When message_textview changes its size: if the new height will enlarge
-        the window, enable the scrollbar automatic policy.  Also enable scrollbar
-        automatic policy for horizontal scrollbar if message we have in
-        message_textview is too big
-        """
-        if msg_textview.get_window() is None:
-            return
-
-        min_height = self.conv_scrolledwindow.get_property('height-request')
-        conversation_height = self.conv_textview.tv.get_window().get_size()[1]
-        message_height = msg_textview.get_window().get_size()[1]
-        message_width = msg_textview.get_window().get_size()[0]
-        # new tab is not exposed yet
-        if conversation_height < 2:
-            return
-
-        if conversation_height < min_height:
-            min_height = conversation_height
-
-        # we don't want to always resize in height the message_textview
-        # so we have minimum on conversation_textview's scrolled window
-        # but we also want to avoid window resizing so if we reach that
-        # minimum for conversation_textview and maximum for message_textview
-        # we set to automatic the scrollbar policy
-        diff_y = message_height - event.height
-        if diff_y != 0:
-            if conversation_height + diff_y < min_height:
-                if message_height + conversation_height - min_height > min_height:
-                    policy = self.msg_scrolledwindow.get_property(
-                            'vscrollbar-policy')
-                    if policy != Gtk.PolicyType.AUTOMATIC:
-                        self.msg_scrolledwindow.set_property('vscrollbar-policy',
-                                Gtk.PolicyType.AUTOMATIC)
-                        self.msg_scrolledwindow.set_property('height-request',
-                                message_height + conversation_height - min_height)
-            else:
-                self.msg_scrolledwindow.set_property('vscrollbar-policy',
-                        Gtk.PolicyType.NEVER)
-                self.msg_scrolledwindow.set_property('height-request', -1)
-
-        self.smooth = True # reinit the flag
-        # enable scrollbar automatic policy for horizontal scrollbar
-        # if message we have in message_textview is too big
-        if event.width > message_width:
-            self.msg_scrolledwindow.set_property('hscrollbar-policy',
-                    Gtk.PolicyType.AUTOMATIC)
-        else:
-            self.msg_scrolledwindow.set_property('hscrollbar-policy',
-                    Gtk.PolicyType.NEVER)
-
-        return True
 
     def on_conversation_vadjustment_changed(self, adjustment):
         # used to stay at the end of the textview when we shrink conversation

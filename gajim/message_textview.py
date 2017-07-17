@@ -29,6 +29,7 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from common import gajim
+import gtkgui_helpers
 
 class MessageTextView(Gtk.TextView):
     """
@@ -38,7 +39,7 @@ class MessageTextView(Gtk.TextView):
     UNDO_LIMIT = 20
 
     def __init__(self):
-        GObject.GObject.__init__(self)
+        Gtk.TextView.__init__(self)
 
         # set properties
         self.set_border_width(1)
@@ -78,6 +79,15 @@ class MessageTextView(Gtk.TextView):
         self.other_tags['strike'].set_property('strikethrough', True)
         self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
         self.end_tags['strike'] = '</span>'
+
+        self.connect_after('paste-clipboard', self.after_paste_clipboard)
+
+    def after_paste_clipboard(self, textview):
+        buffer_ = textview.get_buffer()
+        mark = buffer_.get_insert()
+        iter_ = buffer_.get_iter_at_mark(mark)
+        if iter_.get_offset() == buffer_.get_end_iter().get_offset():
+            GLib.idle_add(gtkgui_helpers.scroll_to_end, textview.get_parent())
 
     def make_clickable_urls(self, text):
         _buffer = self.get_buffer()
