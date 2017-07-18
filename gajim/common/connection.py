@@ -2501,16 +2501,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def request_roster(self):
         version = None
-        features =  self.connection.Dispatcher.Stream.features
+        features = self.connection.Dispatcher.Stream.features
         if features and features.getTag('ver',
         namespace=nbxmpp.NS_ROSTER_VER):
             version = gajim.config.get_per('accounts', self.name,
                 'roster_version')
-            if version and not gajim.contacts.get_contacts_jid_list(
-            self.name):
-                gajim.config.set_per('accounts', self.name, 'roster_version',
-                    '')
-                version = None
 
         iq_id = self.connection.initRoster(version=version)
         self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )

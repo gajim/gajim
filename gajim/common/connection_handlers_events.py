@@ -410,6 +410,9 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                 'roster_version')
             self.roster = gajim.logger.get_roster(gajim.get_jid_from_account(
                 self.conn.name))
+            if not self.roster:
+                gajim.config.set_per(
+                    'accounts', self.conn.name, 'roster_version', '')
         return True
 
 class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
