@@ -1867,7 +1867,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _nec_agent_info_error_received(self, obj):
         if obj.conn.name != self.name:
             return
-        if obj.id_[:6] == 'Gajim_':
+        hostname = gajim.config.get_per('accounts', self.name, 'hostname')
+        if obj.id_[:6] == 'Gajim_' and obj.fjid == hostname:
             self._continue_connection_request_privacy()
 
     def _nec_agent_info_received(self, obj):
@@ -1957,6 +1958,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.privacy_rules_supported = True
                     get_action(self.name + '-privacylists').set_enabled(True)
 
+                self._continue_connection_request_privacy()
+
             if nbxmpp.NS_BYTESTREAM in obj.features and \
             gajim.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \
@@ -1973,7 +1976,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.available_transports[transport_type].append(obj.fjid)
                 else:
                     self.available_transports[transport_type] = [obj.fjid]
-            self._continue_connection_request_privacy()
 
     def send_custom_status(self, show, msg, jid):
         if not show in gajim.SHOW_LIST:
