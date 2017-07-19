@@ -1,9 +1,0 @@
-# this file is automatically generate by configure
-# do not edit it!
-docdir = "@DOCDIR@"
-
-basedir = "@PKGDATADIR@"
-
-version = "@VERSION@"
-
-localedir = "@LOCALEDIR@"

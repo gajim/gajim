@@ -119,9 +119,8 @@ def get_image_button(icon_name, tooltip, toggle=False):
     button.set_tooltip_text(_(tooltip))
     return button
 
-GUI_DIR = os.path.join(app.DATA_DIR, 'gui')
 def get_gtk_builder(file_name, widget=None):
-    file_path = os.path.join(GUI_DIR, file_name)
+    file_path = os.path.join(configpaths.get('GUI'), file_name)
     builder = Gtk.Builder()
     builder.set_translation_domain(i18n.APP)
     if widget:

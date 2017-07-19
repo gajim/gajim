@@ -9,17 +9,15 @@ if sys.version_info[0] < 3:
 import codecs
 
 from setuptools import setup, find_packages
-# from distutils.core import setup
+from setuptools.command.build_py import build_py as _build
 from distutils import log
-from distutils.command.build import build as _build
-#from distutils.command.install import install as _install
-#from setuptools.command.build_py import build_py as _build # build_dir is unknown
 from distutils.util import convert_path, newer
 
 import gajim
 
 pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
 ALL_LINGUAS = sorted([os.path.split(x)[-1][:-3] for x in pos])
+cwd = os.path.dirname(os.path.realpath(__file__))
 
 def build_trans(build_cmd):
     '''
@@ -28,12 +26,9 @@ def build_trans(build_cmd):
     data_files = build_cmd.distribution.data_files
     for lang in ALL_LINGUAS:
         po_file = os.path.join('po', lang + '.po')
-        mo_file = os.path.join(build_cmd.build_base, 'mo', lang, 'LC_MESSAGES',
-                               'gajim.mo')
-        mo_file_unix = (build_cmd.build_base + '/mo/' + lang +
-                        '/LC_MESSAGES/gajim.mo')
+        mo_file = os.path.join(cwd, 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
         mo_dir = os.path.dirname(mo_file)
-        if not(os.path.isdir(mo_dir) or os.path.islink(mo_dir)):
+        if not (os.path.isdir(mo_dir) or os.path.islink(mo_dir)):
             os.makedirs(mo_dir)
 
         if newer(po_file, mo_file):
@@ -49,17 +44,17 @@ def build_trans(build_cmd):
 
         #linux specific piece:
         target = 'share/locale/' + lang + '/LC_MESSAGES'
-        data_files.append((target, [mo_file_unix]))
+        data_files.append((target, [mo_file]))
 
 def build_man(build_cmd):
     '''
-    Compresses Gajim manual files
+    Compress Gajim manual files
     '''
     data_files = build_cmd.distribution.data_files
     for man in ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']:
         filename = os.path.join('data', man)
-        newdir = os.path.join(build_cmd.build_base, 'man')
-        if not(os.path.isdir(newdir) or os.path.islink(newdir)):
+        newdir = os.path.join(cwd, 'man')
+        if not (os.path.isdir(newdir) or os.path.islink(newdir)):
             os.makedirs(newdir)
 
         import gzip
@@ -77,7 +72,7 @@ def build_man(build_cmd):
                 f_out.writelines(f_in)
                 log.info('Compiling %s >> %s', filename, man_file_gz)
 
-        src = build_cmd.build_base  + '/man' + '/' + man + '.gz'
+        src = cwd  + '/man' + '/' + man + '.gz'
         target = 'share/man/man1'
         data_files.append((target, [src]))
 
@@ -86,7 +81,7 @@ def build_intl(build_cmd):
     Merge translation files into desktop and mime files
     '''
     data_files = build_cmd.distribution.data_files
-    base = build_cmd.build_base
+    base = cwd
 
     merge_files = (('data/org.gajim.Gajim.desktop', 'share/applications', '-d'),
                    ('data/gajim-remote.desktop', 'share/applications', '-d'),
@@ -149,7 +144,7 @@ def merge(in_file, out_file, option, po_dir='po', cache=True):
 class build(_build):
     def run(self):
         build_trans(self)
-        if not sys.platform == 'win32':
+        if sys.platform != 'win32':
             build_man(self)
             build_intl(self)
         _build.run(self)
@@ -178,18 +173,14 @@ data_files_app_icon = [
 
 data_files = data_files_app_icon
 
-
 setup(
     name = "gajim",
     description = 'TODO',
     version=gajim.__version__,
     url = 'https://gajim.org',
     cmdclass = {
-        'build': build, # if setuptools use "'build_py': build"
+        'build_py': build,
     },
-    # TODO fix tests
-    # TODO configure_file defs.py.in
-    # TODO #install plugins
     scripts = [
         'scripts/gajim',
         'scripts/gajim-history-manager',
@@ -197,4 +188,9 @@ setup(
     packages = find_packages(),
     package_data = {'gajim': package_data},
     data_files = data_files,
+    install_requires=[
+          'dbus-python',
+          'nbxmpp',
+          'pyOpenSSL'
+      ],
 )

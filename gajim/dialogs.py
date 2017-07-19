@@ -43,7 +43,6 @@ from gajim import vcard
 from gajim import conversation_textview
 from gajim import dataforms_widget
 
-from gajim.common import defs
 from random import randrange
 from gajim.common import pep
 from gajim.common import ged

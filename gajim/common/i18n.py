@@ -24,7 +24,6 @@
 import locale
 import gettext
 import os
-from gajim.common import defs
 import unicodedata
 
 # May be changed after GTK is imported
@@ -47,7 +46,6 @@ def paragraph_direction_mark(text):
     return '\u200E'
 
 APP = 'gajim'
-DIR = defs.localedir
 
 # set '' so each part of the locale that should be modified is set
 # according to the environment variables
@@ -64,7 +62,8 @@ if os.name == 'nt':
     if lang:
         os.environ['LANG'] = lang
 
-gettext.install(APP, DIR)
+#gettext.install(APP, defs.localedir)
+gettext.install(APP)
 if gettext._translations:
     _translation = list(gettext._translations.values())[0]
 else:

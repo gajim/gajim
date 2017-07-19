@@ -33,9 +33,10 @@
 
 
 import re
-from gajim.common import defs
 from gi.repository import GLib
 from enum import IntEnum, unique
+
+import gajim
 
 @unique
 class Option(IntEnum):
@@ -188,7 +189,7 @@ class Config:
             'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
             'last_roster_visible': [opt_bool, True],
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
-            'version': [ opt_str, defs.version ], # which version created the config
+            'version': [ opt_str, gajim.__version__ ], # which version created the config
             'search_engine': [opt_str, 'https://www.google.com/search?&q=%s&sourceid=gajim'],
             'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %%s in it where %%s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
             'always_english_wikipedia': [opt_bool, False],
