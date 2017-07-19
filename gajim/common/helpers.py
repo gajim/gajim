@@ -51,14 +51,22 @@ from string import Template
 from common.i18n import Q_
 from common.i18n import ngettext
 
-if os.name == 'nt':
+HAS_SOUND = True
+if sys.platform == 'win32':
     try:
-        HAS_WINSOUND = True
         import winsound  # windows-only built-in module for playing wav
     except ImportError:
-        HAS_WINSOUND = False
+        HAS_SOUND = False
         print('Gajim is not able to playback sound because'
               'pywin32 is missing', file=sys.stderr)
+
+elif sys.platform == 'darwin':
+    try:
+        from AppKit import NSSound
+    except ImportError:
+        HAS_SOUND = False
+        print('Gajim is not able to playback sound because'
+              'pyobjc is missing', file=sys.stderr)
 
 try:
     import wave     # posix-only fallback wav playback
@@ -764,7 +772,7 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    elif sys.platform == 'win32' and HAS_WINSOUND:
+    elif sys.platform == 'win32' and HAS_SOUND:
         try:
             winsound.PlaySound(path_to_soundfile,
                     winsound.SND_FILENAME|winsound.SND_ASYNC)
@@ -785,6 +793,10 @@ def play_sound_file(path_to_soundfile):
         player = gajim.config.get('soundplayer')
         command = build_command(player, path_to_soundfile)
         exec_command(command)
+    elif sys.platform == 'darwin' and HAS_SOUND:
+        sound = NSSound.alloc()
+        sound.initWithContentsOfFile_byReference_(path_to_soundfile, True)
+        sound.play()
 
 def get_global_show():
     maxi = 0
