@@ -910,8 +910,6 @@ class ChatControl(ChatControlBase):
                 chatstate_to_send = 'active'
                 contact.our_chatstate = 'active'
 
-                GLib.source_remove(self.possible_paused_timeout_id)
-                GLib.source_remove(self.possible_inactive_timeout_id)
                 self._schedule_activity_timers()
 
         def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label):
