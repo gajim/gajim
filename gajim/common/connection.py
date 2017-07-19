@@ -1811,8 +1811,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
         if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            self.discoverInfo(gajim.config.get_per('accounts', self.name,
-                'hostname'), id_prefix='Gajim_')
+            our_jid = gajim.get_jid_from_account(self.name)
+            our_server = gajim.config.get_per('accounts', self.name, 'hostname')
+            self.discoverInfo(our_jid, id_prefix='Gajim_')
+            self.discoverInfo(our_server, id_prefix='Gajim_')
 
         self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
@@ -1891,6 +1893,19 @@ class Connection(CommonConnection, ConnectionHandlers):
         if obj.id_[:6] == 'Gajim_':
             hostname = gajim.config.get_per('accounts', self.name, 'hostname')
             our_jid = gajim.get_jid_from_account(self.name)
+
+            if obj.fjid == our_jid:
+                if nbxmpp.NS_MAM_2 in obj.features:
+                    self.archiving_namespace = nbxmpp.NS_MAM_2
+                elif nbxmpp.NS_MAM_1 in obj.features:
+                    self.archiving_namespace = nbxmpp.NS_MAM_1
+                elif nbxmpp.NS_MAM in obj.features:
+                    self.archiving_namespace = nbxmpp.NS_MAM
+                if self.archiving_namespace:
+                    self.archiving_supported = True
+                    self.archiving_313_supported = True
+                    get_action(self.name + '-archive').set_enabled(True)
+
             if obj.fjid == hostname:
                 if nbxmpp.NS_GMAILNOTIFY in obj.features:
                     gajim.gmail_domains.append(obj.fjid)
@@ -1915,16 +1930,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # Remove stored bookmarks accessible to everyone.
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
-                if nbxmpp.NS_MAM_2 in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM_2
-                elif nbxmpp.NS_MAM_1 in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM_1
-                elif nbxmpp.NS_MAM in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM
-                if self.archiving_namespace:
-                    self.archiving_supported = True
-                    self.archiving_313_supported = True
-                    get_action(self.name + '-archive').set_enabled(True)
                 if nbxmpp.NS_ARCHIVE in obj.features:
                     self.archiving_supported = True
                     self.archiving_136_supported = True
