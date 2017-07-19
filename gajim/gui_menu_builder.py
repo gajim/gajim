@@ -673,6 +673,7 @@ def get_account_menu(account):
                 ('-archive', _('Archiving Preferences')),
                 ('-sync-history', _('Synchronise History')),
                 ('-privacylists', _('Privacy Lists')),
+                ('-server-info', _('Server Info')),
                 ('-xml-console', _('XML Console'))
                 ]),
             ('Admin', [
