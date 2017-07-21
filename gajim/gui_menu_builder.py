@@ -671,6 +671,7 @@ def get_account_menu(account):
             ('-start-single-chat', _('Send Single Message...')),
             ('Advanced', [
                 ('-archive', _('Archiving Preferences')),
+                ('-sync-history', _('Synchronise History')),
                 ('-privacylists', _('Privacy Lists')),
                 ('-xml-console', _('XML Console'))
                 ]),

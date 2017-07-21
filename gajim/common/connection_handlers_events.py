@@ -1220,7 +1220,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                                 nbxmpp.NS_MAM_2):
             forwarded = result.getTag('forwarded', namespace=nbxmpp.NS_FORWARD)
             gajim.nec.push_incoming_event(MamMessageReceivedEvent(None,
-                conn=self.conn, stanza=forwarded))
+                conn=self.conn, stanza=forwarded, query_id=result.getAttr('queryid')))
             return
 
         # Mediated invitation?
@@ -1807,8 +1807,8 @@ class ArchivingFinishedReceivedEvent(nec.NetworkIncomingEvent):
         if self.type_ != 'result' or not self.fin:
             return
 
-        self.queryid = self.fin.getAttr('queryid')
-        if not self.queryid:
+        self.query_id = self.fin.getAttr('queryid')
+        if not self.query_id:
             return
 
         return True
@@ -1825,8 +1825,8 @@ class ArchivingFinishedLegacyReceivedEvent(nec.NetworkIncomingEvent):
         if not self.fin:
             return
 
-        self.queryid = self.fin.getAttr('queryid')
-        if not self.queryid:
+        self.query_id = self.fin.getAttr('queryid')
+        if not self.query_id:
             return
 
         return True

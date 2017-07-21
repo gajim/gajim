@@ -12,3 +12,12 @@ popover#EmoticonPopover flowboxchild > label { font-size: 24px; }
 popover#EmoticonPopover notebook label { font-size: 24px; }
 popover#EmoticonPopover flowbox { padding-left: 5px; padding-right: 6px; }
 popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
+
+/* HistorySyncAssistant */
+#HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
+#HistorySyncAssistant progressbar text { color: #000; font-size: 18px; padding: 10px;}
+#HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
+#HistorySyncAssistant list > row > label { color: @insensitive_fg_color }
+#HistorySyncAssistant list > row.activatable > label { color: @theme_text_color; }
+#HistorySyncAssistant list > row.activatable:selected > label { color: @theme_selected_fg_color; }
+#FinishedLabel { font-size: 14px; font-weight: bold }
