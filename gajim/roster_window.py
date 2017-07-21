@@ -2468,9 +2468,6 @@ class RosterWindow:
             gajim.interface.hide_systray()
         self.save_done = True
 
-        # Commit any outstanding SQL transactions
-        gajim.logger.commit()
-
     def quit_gtkgui_interface(self):
         """
         When we quit the gtk interface - exit gtk

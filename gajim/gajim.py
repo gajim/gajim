@@ -259,6 +259,10 @@ class GajimApplication(Gtk.Application):
         if hasattr(self.interface, 'roster') and self.interface.roster:
             self.interface.roster.prepare_quit()
 
+        # Commit any outstanding SQL transactions
+        from common import gajim
+        gajim.logger.commit()
+
     def do_handle_local_options(self, options: GLib.VariantDict) -> int:
 
         logging_helpers.init()
