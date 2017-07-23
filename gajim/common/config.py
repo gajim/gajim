@@ -350,7 +350,7 @@ class Config:
                     'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session when possible?')],
                     #keep tls, ssl and plain lowercase
                     'connection_types': [ opt_str, 'tls', _('Ordered list (space separated) of connection type to try. Can contain tls, ssl or plain')],
-                    'tls_version': [ opt_str, '1.0', '' ],
+                    'tls_version': [ opt_str, '1.2', '' ],
                     'cipher_list': [ opt_str, 'HIGH:!aNULL:RC4-SHA', '' ],
                     'authentication_mechanisms': [ opt_str, '', _('List (space separated) of authentication mechanisms to try. Can contain ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, PLAIN, X-MESSENGER-OAUTH2 or XEP-0078') ],
                     'action_when_plaintext_connection': [ opt_str, 'warn', _('Show a warning dialog before sending password on an plaintext connection. Can be \'warn\', \'connect\', \'disconnect\'') ],
