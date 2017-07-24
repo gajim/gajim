@@ -43,10 +43,12 @@ import shlex
 from common import caps_cache
 import socket
 import time
-import datetime
+from datetime import datetime, timedelta
 
 from encodings.punycode import punycode_encode
 from string import Template
+
+import nbxmpp
 
 from common.i18n import Q_
 from common.i18n import ngettext
@@ -589,15 +591,44 @@ def datetime_tuple(timestamp):
     tim = time.strptime(date + 'T' + tim, '%Y%m%dT%H:%M:%S')
     if zone:
         zone = zone.replace(':', '')
-        tim = datetime.datetime.fromtimestamp(time.mktime(tim))
+        tim = datetime.fromtimestamp(time.mktime(tim))
         if len(zone) > 2:
             zone = time.strptime(zone, '%H%M')
         else:
             zone = time.strptime(zone, '%H')
-        zone = datetime.timedelta(hours=zone.tm_hour, minutes=zone.tm_min)
+        zone = timedelta(hours=zone.tm_hour, minutes=zone.tm_min)
         tim += zone * sign
         tim = tim.timetuple()
     return tim
+
+def parse_delay(timestamp):
+    '''
+    Parse a timestamp
+    https://xmpp.org/extensions/xep-0203.html
+    Note: Not all delay tags should be parsed with this method
+    see https://xmpp.org/extensions/xep-0082.html for more information
+
+    :param timestamp: a XEP-0203 fomated timestring string or a delay Node
+    
+    Examples:
+    '2017-11-05T01:41:20Z'
+    '2017-11-05T01:41:20.123Z'
+
+    return epoch UTC timestamp
+    '''
+    if isinstance(timestamp, nbxmpp.protocol.Node):
+        timestamp = timestamp.getAttr('stamp')
+    timestamp += '+0000'
+    try:
+        datetime_ = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ%z')
+    except ValueError:
+        try:
+            datetime_ = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ%z')
+        except ValueError:
+            log.error('Could not parse delay timestamp: %s', timestamp)
+            raise
+    return datetime_.timestamp()
+
 
 from common import gajim
 if gajim.HAVE_PYCURL:
@@ -1280,7 +1311,6 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
     return keyID
 
 def update_optional_features(account = None):
-    import nbxmpp
     if account:
         accounts = [account]
     else:
