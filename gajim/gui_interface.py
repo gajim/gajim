@@ -1348,7 +1348,7 @@ class Interface:
         account = obj.conn.name
         ctrl = (self.msg_win_mgr.get_control(obj.fjid, account)
             or self.msg_win_mgr.get_control(obj.jid, account))
-        if ctrl:
+        if ctrl and obj.sid == ctrl.audio_sid:
             ctrl.set_audio_state('error', reason=obj.reason)
 
     @staticmethod
