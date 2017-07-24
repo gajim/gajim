@@ -1801,14 +1801,14 @@ class ChatControl(ChatControlBase):
 
     def _get_gc_invitation(self, event):
         markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.room_jid)
-        if event.comment:
-            markup += ' (%s)' % event.comment
-        b1 = Gtk.Button(_('_Join'))
+        if event.reason:
+            markup += ' (%s)' % event.reason
+        b1 = Gtk.Button.new_with_mnemonic(_('_Join'))
         b1.connect('clicked', self._on_accept_gc_invitation, event)
         b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_gc_invitation, event)
         self._add_info_bar_message(markup, [b1, b2], (event.room_jid,
-            event.comment), Gtk.MessageType.QUESTION)
+            event.reason), Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
         if event.account != self.account:
