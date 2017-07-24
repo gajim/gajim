@@ -481,5 +481,11 @@ def get_priority(account, show):
 
     if show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible') and \
     config.get_per('accounts', account, 'adjust_priority_with_status'):
-        return config.get_per('accounts', account, 'autopriority_' + show)
-    return config.get_per('accounts', account, 'priority')
+        prio = config.get_per('accounts', account, 'autopriority_' + show)
+    else:
+        prio = config.get_per('accounts', account, 'priority')
+    if prio < -128:
+        prio = -128
+    elif prio > 127:
+        prio = 127
+    return prio
