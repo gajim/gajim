@@ -18,6 +18,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+# pylint: disable=no-init
+# pylint: disable=attribute-defined-outside-init
+
 from calendar import timegm
 import datetime
 import hashlib
