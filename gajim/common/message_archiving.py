@@ -22,7 +22,7 @@ import nbxmpp
 from common import gajim
 from common import ged
 from common import helpers
-from common.connection_handlers_events import ArchivingReceivedEvent
+import common.connection_handlers_events as ev
 
 from calendar import timegm
 from time import localtime
@@ -48,6 +48,7 @@ class ConnectionArchive313(ConnectionArchive):
         self.iq_answer = []
         self.mam_query_date = None
         self.mam_query_id = None
+        gajim.nec.register_incoming_event(ev.MamMessageReceivedEvent)
         gajim.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
             self._nec_result_finished)
         gajim.ged.register_event_handler('archiving-finished', ged.CORE,
@@ -132,7 +133,7 @@ class ConnectionArchive313(ConnectionArchive):
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.tim,
+        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.timestamp,
             msg=obj.msgtxt, nick=obj.nick, additional_data=obj.additional_data)
 
     def get_query_id(self):
@@ -399,7 +400,7 @@ class ConnectionArchive136(ConnectionArchive):
         return ['may']
 
     def _ArchiveCB(self, con, iq_obj):
-        gajim.nec.push_incoming_event(ArchivingReceivedEvent(None, conn=self,
+        gajim.nec.push_incoming_event(ev.ArchivingReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed
 
