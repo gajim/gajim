@@ -325,6 +325,7 @@ class GajimApplication(Gtk.Application):
             ('-services', action.on_service_disco, 'online', 's'),
             ('-profile', action.on_profile, 'feature', 's'),
             ('-xml-console', action.on_xml_console, 'always', 's'),
+            ('-server-info', action.on_server_info, 'online', 's'),
             ('-archive', action.on_archiving_preferences, 'feature', 's'),
             ('-sync-history', action.on_history_sync, 'online', 's'),
             ('-privacylists', action.on_privacy_lists, 'feature', 's'),

@@ -32,6 +32,7 @@ import plugins.gui
 import history_window
 import disco
 from history_sync import HistorySyncAssistant
+from server_info import ServerInfoDialog
 
 
 class AppActions():
@@ -166,6 +167,14 @@ class AppActions():
         else:
             gajim.interface.instances[account]['privacy_lists'] = \
                     dialogs.PrivacyListsWindow(account)
+
+    def on_server_info(self, action, param):
+        account = param.get_string()
+        if 'server_info' in gajim.interface.instances[account]:
+            gajim.interface.instances[account]['server_info'].present()
+        else:
+            gajim.interface.instances[account]['server_info'] = \
+                    ServerInfoDialog(account)
 
     def on_xml_console(self, action, param):
         account = param.get_string()

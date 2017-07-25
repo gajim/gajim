@@ -55,6 +55,8 @@ gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
 
 class Color:
     BLACK = Gdk.RGBA(red=0, green=0, blue=0, alpha=1)
+    GREEN = Gdk.RGBA(red=115/255, green=210/255, blue=22/255, alpha=1)
+    RED = Gdk.RGBA(red=204/255, green=0, blue=0, alpha=1)
 
 def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
     try:
