@@ -753,6 +753,21 @@ class Connection(CommonConnection, ConnectionHandlers):
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
 
+    def get_own_jid(self, full=False):
+        """
+        Return our own jid as JID
+        If full = True, this raises an exception if we cant provide
+        the full JID
+        """
+        if self.connection:
+            full_jid = self.connection._registered_name
+            return nbxmpp.JID(full_jid)
+        else:
+            if full:
+                raise exceptions.GajimGeneralException(
+                    'We are not connected, full JID unknown.')
+            return nbxmpp.JID(gajim.get_jid_from_account(self.name))
+
     def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None

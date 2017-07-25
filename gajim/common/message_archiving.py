@@ -22,10 +22,11 @@ import nbxmpp
 from common import gajim
 from common import ged
 from common import helpers
-from common.connection_handlers_events import ArchivingReceivedEvent
+import common.connection_handlers_events as ev
 
 from calendar import timegm
 from time import localtime
+from datetime import datetime, timedelta
 
 import logging
 log = logging.getLogger('gajim.c.message_archiving')
@@ -33,7 +34,6 @@ log = logging.getLogger('gajim.c.message_archiving')
 ARCHIVING_COLLECTIONS_ARRIVED = 'archiving_collections_arrived'
 ARCHIVING_COLLECTION_ARRIVED = 'archiving_collection_arrived'
 ARCHIVING_MODIFICATIONS_ARRIVED = 'archiving_modifications_arrived'
-MAM_RESULTS_ARRIVED = 'mam_results_arrived'
 
 class ConnectionArchive:
     def __init__(self):
@@ -46,6 +46,9 @@ class ConnectionArchive313(ConnectionArchive):
         self.archiving_313_supported = False
         self.mam_awaiting_disco_result = {}
         self.iq_answer = []
+        self.mam_query_date = None
+        self.mam_query_id = None
+        gajim.nec.register_incoming_event(ev.MamMessageReceivedEvent)
         gajim.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
             self._nec_result_finished)
         gajim.ged.register_event_handler('archiving-finished', ged.CORE,
@@ -108,48 +111,78 @@ class ConnectionArchive313(ConnectionArchive):
         if obj.conn.name != self.name:
             return
 
-        if obj.queryid not in self.awaiting_answers:
+        if obj.query_id != self.mam_query_id:
             return
 
-        if self.awaiting_answers[obj.queryid][0] == MAM_RESULTS_ARRIVED:
-            set_ = obj.fin.getTag('set', namespace=nbxmpp.NS_RSM)
-            if set_:
-                last = set_.getTagData('last')
-                if last:
-                    gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
-                    complete = obj.fin.getAttr('complete')
-                    if complete != 'true':
-                        self.request_archive(after=last)
-            del self.awaiting_answers[obj.queryid]
+        set_ = obj.fin.getTag('set', namespace=nbxmpp.NS_RSM)
+        if set_:
+            last = set_.getTagData('last')
+            complete = obj.fin.getAttr('complete')
+            if last:
+                gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
+                if complete != 'true':
+                    self.request_archive(self.get_query_id(), after=last)
+            if complete == 'true':
+                self.mam_query_id = None
+                if self.mam_query_date:
+                    gajim.config.set_per(
+                        'accounts', self.name,
+                        'mam_start_date', self.mam_query_date.timestamp())
+                    self.mam_query_date = None
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.tim,
+        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.timestamp,
             msg=obj.msgtxt, nick=obj.nick, additional_data=obj.additional_data)
 
-    def request_archive(self, start=None, end=None, with_=None, after=None,
-    max=30):
-        iq_ = nbxmpp.Iq('set')
-        query = iq_.addChild('query', namespace=self.archiving_namespace)
-        x = query.addChild(node=nbxmpp.DataForm(typ='submit'))
-        x.addChild(node=nbxmpp.DataField(typ='hidden', name='FORM_TYPE', value=self.archiving_namespace))
+    def get_query_id(self):
+        self.mam_query_id = self.connection.getAnID()
+        return self.mam_query_id
+
+    def request_archive_on_signin(self):
+        mam_id = gajim.config.get_per('accounts', self.name, 'last_mam_id')
+        query_id = self.get_query_id()
+        if mam_id:
+            self.request_archive(query_id, after=mam_id)
+        else:
+            # First Start, we request the last week
+            self.mam_query_date = datetime.utcnow() - timedelta(days=7)
+            log.info('First start: query archive start: %s', self.mam_query_date)
+            self.request_archive(query_id, start=self.mam_query_date)
+
+    def request_archive(self, query_id, start=None, end=None, with_=None,
+                        after=None, max_=30):
+        namespace = self.archiving_namespace
+        iq = nbxmpp.Iq('set')
+        query = iq.addChild('query', namespace=namespace)
+        form = query.addChild(node=nbxmpp.DataForm(typ='submit'))
+        field = nbxmpp.DataField(typ='hidden',
+                                 name='FORM_TYPE',
+                                 value=namespace)
+        form.addChild(node=field)
         if start:
-            x.addChild(node=nbxmpp.DataField(typ='text-single', name='start', value=start))
+            field = nbxmpp.DataField(typ='text-single',
+                                     name='start',
+                                     value=start.strftime('%Y-%m-%dT%H:%M:%SZ'))
+            form.addChild(node=field)
         if end:
-            x.addChild(node=nbxmpp.DataField(typ='text-single', name='end', value=end))
+            field = nbxmpp.DataField(typ='text-single',
+                                     name='end',
+                                     value=end.strftime('%Y-%m-%dT%H:%M:%SZ'))
+            form.addChild(node=field)
         if with_:
-            x.addChild(node=nbxmpp.DataField(typ='jid-single', name='with', value=with_))
+            field = nbxmpp.DataField(typ='jid-single', name='with', value=with_)
+            form.addChild(node=field)
+
         set_ = query.setTag('set', namespace=nbxmpp.NS_RSM)
-        set_.setTagData('max', max)
+        set_.setTagData('max', max_)
         if after:
             set_.setTagData('after', after)
-        queryid_ = self.connection.getAnID()
-        query.setAttr('queryid', queryid_)
+        query.setAttr('queryid', query_id)
         id_ = self.connection.getAnID()
-        iq_.setID(id_)
-        self.awaiting_answers[queryid_] = (MAM_RESULTS_ARRIVED, )
-        self.connection.send(iq_)
+        iq.setID(id_)
+        self.connection.send(iq)
 
     def request_archive_preferences(self):
         if not gajim.account_is_connected(self.name):
@@ -367,8 +400,7 @@ class ConnectionArchive136(ConnectionArchive):
         return ['may']
 
     def _ArchiveCB(self, con, iq_obj):
-        log.debug('_ArchiveCB %s' % iq_obj.getType())
-        gajim.nec.push_incoming_event(ArchivingReceivedEvent(None, conn=self,
+        gajim.nec.push_incoming_event(ev.ArchivingReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed
 

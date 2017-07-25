@@ -31,6 +31,7 @@ import shortcuts_window
 import plugins.gui
 import history_window
 import disco
+from history_sync import HistorySyncAssistant
 
 
 class AppActions():
@@ -149,6 +150,14 @@ class AppActions():
             else:
                 gajim.interface.instances[account]['archiving_preferences'] = \
                     dialogs.ArchivingPreferencesWindow(account)
+
+    def on_history_sync(self, action, param):
+        account = param.get_string()
+        if 'history_sync' in gajim.interface.instances[account]:
+            gajim.interface.instances[account]['history_sync'].present()
+        else:
+            gajim.interface.instances[account]['history_sync'] = \
+                    HistorySyncAssistant(account, gajim.interface.roster.window)
 
     def on_privacy_lists(self, action, param):
         account = param.get_string()

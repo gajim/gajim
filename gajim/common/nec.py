@@ -154,8 +154,13 @@ class NetworkEvent(object):
 
     def _set_kwargs_as_attributes(self, **kwargs):
         for k, v in kwargs.items():
-            setattr(self, k, v)
+            if k not in ('name', 'base_network_events'):
+                setattr(self, k, v)
 
+    def _set_base_event_vars_as_attributes(self, event):
+        for k, v in vars(event).items():
+            if k not in ('name', 'base_network_events'):
+                setattr(self, k, v)
 
 class NetworkIncomingEvent(NetworkEvent):
     base_network_events = []

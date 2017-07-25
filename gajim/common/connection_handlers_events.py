@@ -18,6 +18,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+# pylint: disable=no-init
+# pylint: disable=attribute-defined-outside-init
+
 from calendar import timegm
 import datetime
 import hashlib
@@ -41,6 +44,7 @@ from common.logger import LOG_DB_PATH
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
+from common.nec import NetworkEvent
 
 if gajim.HAVE_PYOPENSSL:
     import OpenSSL.crypto
@@ -1034,43 +1038,70 @@ class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
 
 class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'mam-message-received'
-    base_network_events = []
+    base_network_events = ['raw-mam-message-received']
 
-    def init(self):
+    def __init__(self, name, base_event):
+        '''
+        Pre-Generated attributes on self:
+
+        :conn:          Connection instance
+        :stanza:        Complete stanza Node
+        :forwarded:     Forwarded Node
+        :result:        Result Node
+        '''
+        self._set_base_event_vars_as_attributes(base_event)
         self.additional_data = {}
         self.encrypted = False
-    
+        self.groupchat = False
+
     def generate(self):
-        if not self.stanza:
-            return
-        account = self.conn.name
-        self.msg_ = self.stanza.getTag('message')
-        # use timestamp of archived message, if available and archive timestamp otherwise
-        delay = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        delay2 = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if delay2:
-            delay = delay2
-        if not delay:
-            return
-        tim = delay.getAttr('stamp')
-        tim = helpers.datetime_tuple(tim)
-        self.tim = timegm(tim)
-        to_ = self.msg_.getAttr('to')
-        if to_:
-            to_ = gajim.get_jid_without_resource(to_)
-        else:
-            to_ = gajim.get_jid_from_account(account)
-        frm_ = gajim.get_jid_without_resource(self.msg_.getAttr('from'))
+        archive_jid = self.stanza.getFrom()
+        own_jid = self.conn.get_own_jid()
+        if archive_jid and not archive_jid.bareMatch(own_jid):
+            # MAM Message not from our Archive
+            log.info('MAM message not from our user archive')
+            return False
+
+        self.msg_ = self.forwarded.getTag('message')
+
+        if self.msg_.getType() == 'groupchat':
+            log.info('Received groupchat message from user archive')
+            return False
+
         self.msgtxt = self.msg_.getTagData('body')
-        if to_ == gajim.get_jid_from_account(account):
-            self.with_ = frm_
+        self.stanza_id = self.msg_.getID()
+        self.mam_id = self.result.getID()
+        self.query_id = self.result.getAttr('queryid')
+
+        # Use timestamp provided by archive,
+        # Fallback: Use timestamp provided by user and issue a warning
+        delay = self.forwarded.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+        if not delay:
+            log.warning('No timestamp on archive Message, try fallback')
+            delay = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
+        if not delay:
+            log.error('Received MAM message without timestamp')
+            return
+
+        self.timestamp = helpers.parse_delay(delay)
+
+        frm = self.msg_.getFrom()
+        to = self.msg_.getTo()
+
+        if not to or to.bareMatch(own_jid):
+            self.with_ = str(frm)
             self.direction = 'from'
-            self.resource = gajim.get_resource_from_jid(
-                self.msg_.getAttr('from'))
+            self.resource = frm.getResource()
         else:
-            self.with_ = to_
+            self.with_ = str(to)
             self.direction = 'to'
-            self.resource = gajim.get_resource_from_jid(self.msg_.getAttr('to'))
+            self.resource = to.getResource()
+
+        log_message = \
+            'received: mam-message: ' \
+            'stanza id: {:15} - mam id: {:15} - query id: {}'.format(
+                self.stanza_id, self.mam_id, self.query_id)
+        log.debug(log_message)
         return True
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -1084,14 +1115,14 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.additional_data = self.msg_obj.additional_data
         self.with_ = self.msg_obj.with_
         self.direction = self.msg_obj.direction
-        self.tim = self.msg_obj.tim
+        self.timestamp = self.msg_obj.timestamp
         res = self.msg_obj.resource
         self.msgtxt = self.msg_obj.msgtxt
         is_pm = gajim.logger.jid_is_room_jid(self.with_)
         if msg_.getAttr('type') == 'groupchat':
             if is_pm == False:
                 log.warn('JID %s is marked as normal contact in database '
-                         'but we got a groupchat message from it.')
+                         'but we got a groupchat message from it.', self.with_)
                 return
             if is_pm == None:
                 gajim.logger.get_jid_id(self.with_, 'ROOM')
@@ -1102,12 +1133,12 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 server = gajim.get_server_from_jid(self.with_)
                 if server not in self.conn.mam_awaiting_disco_result:
                     self.conn.mam_awaiting_disco_result[server] = [
-                        [self.with_, self.direction, self.tim, self.msgtxt,
+                        [self.with_, self.direction, self.timestamp, self.msgtxt,
                         res]]
                     self.conn.discoverInfo(server)
                 else:
                     self.conn.mam_awaiting_disco_result[server].append(
-                        [self.with_, self.direction, self.tim, self.msgtxt,
+                        [self.with_, self.direction, self.timestamp, self.msgtxt,
                         res])
                 return
         return True
@@ -1128,8 +1159,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.encrypted = False
         account = self.conn.name
 
-        our_full_jid = gajim.get_jid_from_account(account, full=True)
-        if self.stanza.getFrom() == our_full_jid:
+        if self.stanza.getFrom() == self.conn.get_own_jid(full=True):
             # Drop messages sent from our own full jid
             # It can happen that when we sent message to our own bare jid
             # that the server routes that message back to us
@@ -1216,8 +1246,16 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                                 nbxmpp.NS_MAM_1,
                                                 nbxmpp.NS_MAM_2):
             forwarded = result.getTag('forwarded', namespace=nbxmpp.NS_FORWARD)
-            gajim.nec.push_incoming_event(MamMessageReceivedEvent(None,
-                conn=self.conn, stanza=forwarded))
+            if not forwarded:
+                log.warning('Invalid MAM Message: no forwarded child')
+                return
+
+            gajim.nec.push_incoming_event(
+                NetworkEvent('raw-mam-message-received',
+                             conn=self.conn,
+                             stanza=self.stanza,
+                             forwarded=forwarded,
+                             result=result))
             return
 
         # Mediated invitation?
@@ -1804,8 +1842,8 @@ class ArchivingFinishedReceivedEvent(nec.NetworkIncomingEvent):
         if self.type_ != 'result' or not self.fin:
             return
 
-        self.queryid = self.fin.getAttr('queryid')
-        if not self.queryid:
+        self.query_id = self.fin.getAttr('queryid')
+        if not self.query_id:
             return
 
         return True
@@ -1822,8 +1860,8 @@ class ArchivingFinishedLegacyReceivedEvent(nec.NetworkIncomingEvent):
         if not self.fin:
             return
 
-        self.queryid = self.fin.getAttr('queryid')
-        if not self.queryid:
+        self.query_id = self.fin.getAttr('queryid')
+        if not self.query_id:
             return
 
         return True

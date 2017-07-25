@@ -1187,11 +1187,7 @@ class Interface:
                 time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
         if obj.conn.archiving_313_supported and gajim.config.get_per('accounts',
         account, 'sync_logs_with_server'):
-            mam_id = gajim.config.get_per('accounts', account, 'last_mam_id')
-            if mam_id:
-                obj.conn.request_archive(after=mam_id)
-            else:
-                obj.conn.request_archive(start='2013-02-24T03:51:42Z')
+            obj.conn.request_archive_on_signin()
 
         invisible_show = gajim.SHOW_LIST.index('invisible')
         # We cannot join rooms if we are invisible
