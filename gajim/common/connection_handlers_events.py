@@ -1077,7 +1077,9 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if frm.bareMatch(own_jid):
             self.stanza_id = self.msg_.getTag('origin-id', 
                                               namespace=nbxmpp.NS_SID)
-            if not self.stanza_id:
+            if self.stanza_id:
+                self.stanza_id.getID()
+            else:
                 self.stanza_id = self.msg_.getID()
 
             self.with_ = str(to)
