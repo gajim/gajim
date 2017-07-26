@@ -1069,9 +1069,33 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return False
 
         self.msgtxt = self.msg_.getTagData('body')
-        self.stanza_id = self.msg_.getID()
-        self.mam_id = self.result.getID()
         self.query_id = self.result.getAttr('queryid')
+
+        frm = self.msg_.getFrom()
+        to = self.msg_.getTo()
+
+        if frm.bareMatch(own_jid):
+            self.stanza_id = self.msg_.getTag('origin-id', 
+                                              namespace=nbxmpp.NS_SID)
+            if not self.stanza_id:
+                self.stanza_id = self.msg_.getID()
+
+            self.with_ = str(to)
+            self.direction = 'to'
+            self.resource = to.getResource()
+        else:
+            if self.result.getNamespace() == nbxmpp.NS_MAM_2:
+                self.stanza_id = self.result.getID()
+            else:
+                self.stanza_id = self.msg_.getID()
+
+            self.with_ = str(frm)
+            self.direction = 'from'
+            self.resource = frm.getResource()
+
+        if not self.stanza_id:
+            log.error('Could not retrieve stanza-id')
+            return False
 
         # Use timestamp provided by archive,
         # Fallback: Use timestamp provided by user and issue a warning
@@ -1085,23 +1109,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.timestamp = helpers.parse_delay(delay)
 
-        frm = self.msg_.getFrom()
-        to = self.msg_.getTo()
-
-        if not to or to.bareMatch(own_jid):
-            self.with_ = str(frm)
-            self.direction = 'from'
-            self.resource = frm.getResource()
-        else:
-            self.with_ = str(to)
-            self.direction = 'to'
-            self.resource = to.getResource()
-
-        log_message = \
-            'received: mam-message: ' \
-            'stanza id: {:15} - mam id: {:15} - query id: {}'.format(
-                self.stanza_id, self.mam_id, self.query_id)
-        log.debug(log_message)
+        log.debug('Received mam-message: stanza id: %s', self.stanza_id)
         return True
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
