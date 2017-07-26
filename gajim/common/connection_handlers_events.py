@@ -1078,7 +1078,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.stanza_id = self.msg_.getTag('origin-id', 
                                               namespace=nbxmpp.NS_SID)
             if self.stanza_id:
-                self.stanza_id.getID()
+                self.stanza_id = self.stanza_id.getID()
             else:
                 self.stanza_id = self.msg_.getID()
 
@@ -1096,8 +1096,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.resource = frm.getResource()
 
         if not self.stanza_id:
-            log.error('Could not retrieve stanza-id')
-            return False
+            log.debug('Could not retrieve stanza-id')
 
         # Use timestamp provided by archive,
         # Fallback: Use timestamp provided by user and issue a warning
