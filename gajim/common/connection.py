@@ -510,24 +510,6 @@ class CommonConnection:
     def account_changed(self, new_name):
         self.name = new_name
 
-    def request_last_status_time(self, jid, resource, groupchat_jid=None):
-        """
-        groupchat_jid is used when we want to send a request to a real jid and
-        act as if the answer comes from the groupchat_jid
-        """
-        if not gajim.account_is_connected(self.name):
-            return
-        to_whom_jid = jid
-        if resource:
-            to_whom_jid += '/' + resource
-        iq = nbxmpp.Iq(to=to_whom_jid, typ='get', queryNS=nbxmpp.NS_LAST)
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        if groupchat_jid:
-            self.groupchat_jids[id_] = groupchat_jid
-        self.last_ids.append(id_)
-        self.connection.send(iq)
-
     def request_os_info(self, jid, resource):
         """
         To be implemented by derivated classes
@@ -649,11 +631,18 @@ class CommonConnection:
                 return -1
             was_invisible = self.connected == gajim.SHOW_LIST.index('invisible')
             self.connected = gajim.SHOW_LIST.index(show)
+            idle_time = None
+            if auto:
+                global HAS_IDLE
+                if HAS_IDLE and gajim.config.get('autoaway'):
+                    idle_sec = int(self.sleeper.getIdleSec())
+                    idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                        time.gmtime(time.time() - idle_sec))
             gajim.nec.push_incoming_event(BeforeChangeShowEvent(None,
                 conn=self, show=show, message=msg))
             if was_invisible:
                 self._change_from_invisible()
-            self._update_status(show, msg)
+            self._update_status(show, msg, idle_time=idle_time)
 
 class Connection(CommonConnection, ConnectionHandlers):
     def __init__(self, name):
@@ -2027,7 +2016,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.privacy_rules_supported:
             self.set_active_list('')
 
-    def _update_status(self, show, msg):
+    def _update_status(self, show, msg, idle_time=None):
         xmpp_show = helpers.get_xmpp_show(show)
         priority = gajim.get_priority(self.name, xmpp_show)
         p = nbxmpp.Presence(typ=None, priority=priority, show=xmpp_show)
@@ -2037,6 +2026,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         signed = self.get_signed_presence(msg)
         if signed:
             p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
+        if idle_time:
+            idle = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
+            idle.setAttr('since', idle_time)
         if self.connection:
             self.connection.send(p)
             self.priority = priority
@@ -2705,7 +2697,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             destroy.setAttr('jid', jid)
         self.connection.send(iq)
 
-    def send_gc_status(self, nick, jid, show, status):
+    def send_gc_status(self, nick, jid, show, status, auto=False):
         if not gajim.account_is_connected(self.name):
             return
         if show == 'invisible':
@@ -2724,6 +2716,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         if gajim.config.get('send_sha_in_gc_presence') and show != 'offline':
             p = self.add_sha(p, ptype != 'unavailable')
         self.add_lang(p)
+        if auto:
+            global HAS_IDLE
+            if HAS_IDLE and gajim.config.get('autoaway'):
+                idle_sec = int(self.sleeper.getIdleSec())
+                idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                    time.gmtime(time.time() - idle_sec))
+                idle = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
+                idle.setAttr('since', idle_time)
         # send instantly so when we go offline, status is sent to gc before we
         # disconnect from jabber server
         self.connection.send(p)

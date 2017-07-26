@@ -70,7 +70,6 @@ class BaseTooltip:
         self.win = None
         self.id = None
         self.cur_data = None
-        self.check_last_time = None
         self.shown = False
         self.position_computed = False
 
@@ -142,7 +141,7 @@ class BaseTooltip:
             self.screen.get_width() + half_width:
                 self.preferred_position[0] = self.screen.get_width() - \
                     rect.width
-            elif not self.check_last_time:
+            else:
                 self.preferred_position[0] -= half_width
             self.position_computed = True
         self.win.move(self.preferred_position[0], self.preferred_position[1])
@@ -184,7 +183,6 @@ class BaseTooltip:
             self.win = None
         self.id = None
         self.cur_data = None
-        self.check_last_time = None
         self.shown = False
 
 class StatusTable:
@@ -230,8 +228,8 @@ class StatusTable:
                 str_status += ' - <i>' + status + '</i>'
         return str_status
 
-    def add_status_row(self, file_path, show, str_status, status_time=None,
-    show_lock=False, indent=True):
+    def add_status_row(self, file_path, show, str_status, show_lock=False,
+    indent=True):
         """
         Append a new row with status icon to the table
         """
@@ -420,7 +418,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
         StatusTable.__init__(self)
         self.create_table()
         self.row = None
-        self.check_last_time = {}
         self.contact_jid = None
         self.last_widget = None
         self.num_resources = 0
@@ -433,11 +430,10 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self.xml = gtkgui_helpers.get_gtk_builder('tooltip_roster_contact.ui')
         for name in ('name', 'status', 'jid', 'user_show', 'fillelement',
             'resource', 'avatar', 'resource_label', 'pgp', 'pgp_label',
-                'jid_label', 'tooltip_grid', 'idle_since', 'idle_for',
-                'idle_since_label', 'idle_for_label', 'mood', 'tune',
-                'activity', 'location', 'tune_label', 'location_label',
-                'activity_label', 'mood_label', 'sub_label', 'sub',
-                'status_label'):
+                'jid_label', 'tooltip_grid', 'idle_since', 'idle_since_label',
+                'mood', 'tune', 'activity', 'location', 'tune_label',
+                'location_label', 'activity_label', 'mood_label', 'sub_label',
+                'sub', 'status_label'):
             setattr(self, name, self.xml.get_object(name))
 
         self.add(self.tooltip_grid)
@@ -612,8 +608,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
 
                     status_line = self.get_status_info(acontact.resource,
                     acontact.priority, acontact.show, status)
-                    self.add_status_row(file_path, icon_name, status_line,
-                        acontact.last_status_time)
+                    self.add_status_row(file_path, icon_name, status_line)
                     if add_text:
                         self.add_text_row(acontact.status, 2)
 
@@ -621,31 +616,12 @@ class RosterTooltip(Gtk.Window, StatusTable):
             self.table.show_all()
 
         else:  # only one resource
-            if contact.show:
-                request_time = False
-                try:
-                    last_time = self.check_last_time[contact]
-                    if isinstance(last_time, float) and last_time < time.time() - 60:
-                        request_time = True
-                except KeyError:
-                    request_time = True
-
-                if request_time:
-                    if contact.show == 'offline':
-                        gajim.connections[account].\
-                            request_last_status_time(contact.jid, '')
-                    elif contact.resource:
-                        gajim.connections[account].\
-                            request_last_status_time(
-                            contact.jid, contact.resource)
-                    self.check_last_time[contact] = time.time()
-
-                if contact.status:
-                    status = contact.status.strip()
-                    if status:
-                        self.status.set_text(status)
-                        self.status.show()
-                        self.status_label.show()
+            if contact.show and contact.status:
+                status = contact.status.strip()
+                if status:
+                    self.status.set_text(status)
+                    self.status.show()
+                    self.status_label.show()
 
         # PEP Info
         self._append_pep_info(contact)
@@ -736,51 +712,24 @@ class RosterTooltip(Gtk.Window, StatusTable):
             self.location_label.show()
 
     def _set_idle_time(self, contact):
-        if contact.last_activity_time:
-            last_active = datetime(*contact.last_activity_time[:6])
+        if contact.idle_time:
+            idle_color = gajim.config.get('tooltip_idle_color')
+            idle_time = contact.idle_time
+            idle_time = time.localtime(contact.idle_time)
+            idle_time = datetime(*(idle_time[:6]))
             current = datetime.now()
-
-            diff = current - last_active
-            diff = timedelta(diff.days, diff.seconds)
-
-            if last_active.date() == current.date():
-                formatted = last_active.strftime("%X")
+            if idle_time.date() == current.date():
+                formatted = idle_time.strftime("%X")
             else:
-                formatted = last_active.strftime("%c")
-
-            # Do not show the "Idle since" and "Idle for" items if there
-            # is no meaningful difference between last activity time and
-            # current time.
-            if diff.days > 0 or diff.seconds > 0:
-                idle_color = gajim.config.get('tooltip_idle_color')
-                idle_markup = "<span foreground='{}'>{}</span>".format(idle_color, formatted)
-                self.idle_since.set_markup(idle_markup)
-                self.idle_since.show()
-                self.idle_since_label.show()
-                idle_markup = "<span foreground='{}'>{}</span>".format(idle_color, str(diff))
-                self.idle_for.set_markup(idle_markup)
-                self.idle_for_label.show()
-                self.idle_for.show()
+                formatted = idle_time.strftime("%c")
+            idle_markup = "<span foreground='{}'>{}</span>".format(idle_color,
+                formatted)
+            self.idle_since.set_markup(idle_markup)
+            self.idle_since.show()
+            self.idle_since_label.show()
 
         if contact.show and self.num_resources < 2:
             show = helpers.get_uf_show(contact.show)
-            if contact.last_status_time:
-                if contact.show == 'offline':
-                    text = ' - ' + _('Last status: %s')
-                else:
-                    text = _(' since %s')
-
-                if time.strftime('%j', time.localtime()) == \
-                        time.strftime('%j', contact.last_status_time):
-                    # it's today, show only the locale hour representation
-                    local_time = time.strftime('%X', contact.last_status_time)
-                else:
-                    # time.strftime returns locale encoded string
-                    local_time = time.strftime('%c', contact.last_status_time)
-
-                text = text % local_time
-                show += text
-
             # Contact is Groupchat
             if (self.account and
                     self.prim_contact.jid in gajim.gc_connected[self.account]):
@@ -804,15 +753,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
         elif contact.sub in ('both', 'to', ''):
             return contact.show
         return 'not in roster'
-
-    def update_last_time(self, contact, error=False):
-        if not contact:
-            return
-        if error:
-            self.check_last_time[contact] = 'error'
-            return
-        if contact.jid == self.contact_jid:
-            self._set_idle_time(contact)
 
 
 class FileTransfersTooltip(BaseTooltip):

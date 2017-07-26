@@ -568,30 +568,6 @@ class Interface:
             if obj.conn.name in self.show_vcard_when_connect:
                 self.show_vcard_when_connect.remove(obj.conn.name)
 
-    def handle_event_last_status_time(self, obj):
-        # ('LAST_STATUS_TIME', account, (jid, resource, seconds, status))
-        account = obj.conn.name
-        c = gajim.contacts.get_contact(account, obj.jid, obj.resource)
-        tooltip_window = self.roster.tree.get_tooltip_window()
-        if obj.seconds < 0:
-            if tooltip_window:
-                tooltip_window.update_last_time(c, True)
-            return
-
-        if c: # c can be none if it's a gc contact
-            if obj.status:
-                c.status = obj.status
-                self.roster.draw_contact(c.jid, account) # draw offline status
-            last_time = time.localtime(time.time() - obj.seconds)
-            if c.show == 'offline':
-                c.last_status_time = last_time
-            else:
-                c.last_activity_time = last_time
-
-            # Set last time on roster tooltip
-            if tooltip_window:
-                tooltip_window.update_last_time(c)
-
     def handle_event_gc_config(self, obj):
         #('GC_CONFIG', account, (jid, form_node))  config is a dict
         account = obj.conn.name
@@ -1148,12 +1124,6 @@ class Interface:
             notify.popup(event_type, jid, account, msg_type, path_to_image=path,
                     title=event_type, text=txt)
 
-    @staticmethod
-    def ask_offline_status(account):
-        for contact in gajim.contacts.iter_contacts(account):
-            gajim.connections[account].request_last_status_time(contact.jid,
-                contact.resource)
-
     def handle_event_signed_in(self, obj):
         """
         SIGNED_IN event is emitted when we sign in, so handle it
@@ -1164,10 +1134,6 @@ class Interface:
         gajim.block_signed_in_notifications[account] = True
         state = self.sleeper.getState()
         connected = obj.conn.connected
-        if gajim.config.get('ask_offline_status_on_connection'):
-            # Ask offline status in 1 minute so w'are sure we got all online
-            # presences
-            GLib.timeout_add_seconds(60, self.ask_offline_status, account)
         if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             gajim.sleeper_state[account] = 'online'
@@ -1608,7 +1574,6 @@ class Interface:
             'jingle-error-received': [self.handle_event_jingle_error],
             'jingle-request-received': [self.handle_event_jingle_incoming],
             'jingleFT-cancelled-received': [self.handle_event_jingleft_cancel],
-            'last-result-received': [self.handle_event_last_status_time],
             'message-error': [self.handle_event_msgerror],
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
@@ -2282,33 +2247,47 @@ class Interface:
             if account not in gajim.sleeper_state or \
             not gajim.sleeper_state[account]:
                 continue
-            if state == sleepy.STATE_AWAKE and \
-            gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
-                # we go online
-                self.roster.send_status(account, 'online',
+            if state == sleepy.STATE_AWAKE:
+                if gajim.sleeper_state[account] in ('autoaway', 'autoxa'):
+                    # we go online
+                    self.roster.send_status(account, 'online',
                         gajim.status_before_autoaway[account])
-                gajim.status_before_autoaway[account] = ''
-                gajim.sleeper_state[account] = 'online'
-            elif state == sleepy.STATE_AWAY and \
-            gajim.sleeper_state[account] == 'online' and \
-            gajim.config.get('autoaway'):
-                # we save out online status
-                gajim.status_before_autoaway[account] = \
+                    gajim.status_before_autoaway[account] = ''
+                    gajim.sleeper_state[account] = 'online'
+                if gajim.sleeper_state[account] == 'idle':
+                    # we go to the previous state
+                    connected = gajim.connections[account].connected
+                    self.roster.send_status(account, gajim.SHOW_LIST[connected],
+                        gajim.status_before_autoaway[account])
+                    gajim.status_before_autoaway[account] = ''
+                    gajim.sleeper_state[account] = 'off'
+            elif state == sleepy.STATE_AWAY and gajim.config.get('autoaway'):
+                if gajim.sleeper_state[account] == 'online':
+                    # we save out online status
+                    gajim.status_before_autoaway[account] = \
                         gajim.connections[account].status
-                # we go away (no auto status) [we pass True to auto param]
-                auto_message = gajim.config.get('autoaway_message')
-                if not auto_message:
-                    auto_message = gajim.connections[account].status
-                else:
-                    auto_message = auto_message.replace('$S', '%(status)s')
-                    auto_message = auto_message.replace('$T', '%(time)s')
-                    auto_message = auto_message % {
+                    # we go away (no auto status) [we pass True to auto param]
+                    auto_message = gajim.config.get('autoaway_message')
+                    if not auto_message:
+                        auto_message = gajim.connections[account].status
+                    else:
+                        auto_message = auto_message.replace('$S', '%(status)s')
+                        auto_message = auto_message.replace('$T', '%(time)s')
+                        auto_message = auto_message % {
                             'status': gajim.status_before_autoaway[account],
                             'time': gajim.config.get('autoawaytime')
-                            }
-                self.roster.send_status(account, 'away', auto_message,
-                    auto=True)
-                gajim.sleeper_state[account] = 'autoaway'
+                        }
+                    self.roster.send_status(account, 'away', auto_message,
+                        auto=True)
+                    gajim.sleeper_state[account] = 'autoaway'
+                elif gajim.sleeper_state[account] == 'off':
+                    # we save out online status
+                    gajim.status_before_autoaway[account] = \
+                        gajim.connections[account].status
+                    connected = gajim.connections[account].connected
+                    self.roster.send_status(account, gajim.SHOW_LIST[connected],
+                        gajim.status_before_autoaway[account], auto=True)
+                    gajim.sleeper_state[account] = 'idle'
             elif state == sleepy.STATE_XA and \
             gajim.sleeper_state[account] in ('online', 'autoaway',
             'autoaway-forced') and gajim.config.get('autoxa'):
