@@ -1178,13 +1178,6 @@ class Interface:
             # Else disable autoaway
             gajim.sleeper_state[account] = 'off'
 
-        if obj.conn.archiving_136_supported and gajim.config.get_per('accounts',
-        account, 'sync_logs_with_server'):
-            # Start merging logs from server
-            obj.conn.request_modifications_page(gajim.config.get_per('accounts',
-                account, 'last_archiving_time'))
-            gajim.config.set_per('accounts', account, 'last_archiving_time',
-                time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
         if obj.conn.archiving_313_supported and gajim.config.get_per('accounts',
         account, 'sync_logs_with_server'):
             obj.conn.request_archive_on_signin()

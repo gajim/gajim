@@ -145,12 +145,8 @@ class AppActions():
             gajim.interface.instances[account]['archiving_preferences'].window.\
                 present()
         else:
-            if gajim.connections[account].archiving_313_supported:
-                gajim.interface.instances[account]['archiving_preferences'] = \
-                    dialogs.Archiving313PreferencesWindow(account)
-            else:
-                gajim.interface.instances[account]['archiving_preferences'] = \
-                    dialogs.ArchivingPreferencesWindow(account)
+            gajim.interface.instances[account]['archiving_preferences'] = \
+                dialogs.Archiving313PreferencesWindow(account)
 
     def on_history_sync(self, action, param):
         account = param.get_string()

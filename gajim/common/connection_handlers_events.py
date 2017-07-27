@@ -1736,59 +1736,6 @@ class ArchivingErrorReceivedEvent(nec.NetworkIncomingEvent):
             self.error_msg = self.stanza.getErrorMsg()
             return True
 
-class ArchivingPreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-preferences-changed-received'
-    base_network_events = ['archiving-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.type_
-
-        if self.type_ not in ('result', 'set'):
-            return
-
-        self.conf = {}
-        self.new_items = {}
-        self.removed_items = []
-        pref = self.stanza.getTag('pref', namespace=nbxmpp.NS_ARCHIVE)
-        if pref:
-            if pref.getTag('auto'):
-                self.conf['auto'] = pref.getTagAttr('auto', 'save')
-
-            method_auto = pref.getTag('method', attrs={'type': 'auto'})
-            if method_auto:
-                self.conf['method_auto'] = method_auto.getAttr('use')
-
-            method_local = pref.getTag('method', attrs={'type': 'local'})
-            if method_local:
-                self.conf['method_local'] = method_local.getAttr('use')
-
-            method_manual = pref.getTag('method', attrs={'type': 'manual'})
-            if method_manual:
-                self.conf['method_manual'] = method_manual.getAttr('use')
-
-            default = pref.getTag('default')
-            if default:
-                self.conf['default'] = {
-                    'expire': default.getAttr('expire'),
-                    'otr': default.getAttr('otr'),
-                    'save': default.getAttr('save'),
-                    'unset': default.getAttr('unset')}
-
-            for item in pref.getTags('item'):
-                self.new_items[item.getAttr('jid')] = {
-                    'expire': item.getAttr('expire'),
-                    'otr': item.getAttr('otr'),
-                    'save': item.getAttr('save')}
-
-        elif self.stanza.getTag('itemremove'):
-            for item in pref.getTags('item'):
-                self.removed_items.append(item.getAttr('jid'))
-        else:
-            return
-        return True
-
 class Archiving313PreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
     name = 'archiving-313-preferences-changed-received'
     base_network_events = ['archiving-received']

@@ -1399,9 +1399,6 @@ class ChatControl(ChatControlBase):
         if textbuffer.get_char_count() and self.encryption:
             gajim.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
-            if (not self.session or not self.session.status) and \
-            gajim.connections[self.account].archiving_136_supported:
-                self.begin_archiving_negotiation()
 
     def restore_conversation(self):
         jid = self.contact.jid
@@ -1621,10 +1618,6 @@ class ChatControl(ChatControlBase):
         self.begin_negotiation()
         self.session.resource = self.contact.resource
         self.session.negotiate_e2e(False)
-
-    def begin_archiving_negotiation(self):
-        self.begin_negotiation()
-        self.session.negotiate_archiving()
 
     def _nec_failed_decrypt(self, obj):
         if obj.session != self.session:

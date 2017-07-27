@@ -52,7 +52,6 @@ from common.pubsub import ConnectionPubSub
 from common.protocol.caps import ConnectionCaps
 from common.protocol.bytestream import ConnectionSocks5Bytestream
 from common.protocol.bytestream import ConnectionIBBytestream
-from common.message_archiving import ConnectionArchive136
 from common.message_archiving import ConnectionArchive313
 from common.connection_handlers_events import *
 
@@ -1324,13 +1323,12 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionArchive136, ConnectionArchive313,
+class ConnectionHandlers(ConnectionArchive313,
 ConnectionVcard, ConnectionSocks5Bytestream, ConnectionDisco,
 ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps,
 ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         global HAS_IDLE
-        ConnectionArchive136.__init__(self)
         ConnectionArchive313.__init__(self)
         ConnectionVcard.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
@@ -1386,8 +1384,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         gajim.nec.register_incoming_event(MessageReceivedEvent)
         gajim.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         gajim.nec.register_incoming_event(
-            ArchivingPreferencesChangedReceivedEvent)
-        gajim.nec.register_incoming_event(
             Archiving313PreferencesChangedReceivedEvent)
         gajim.nec.register_incoming_event(
             ArchivingFinishedLegacyReceivedEvent)
@@ -1439,7 +1435,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
         ConnectionCaps.cleanup(self)
-        ConnectionArchive136.cleanup(self)
         ConnectionArchive313.cleanup(self)
         ConnectionPubSub.cleanup(self)
         gajim.ged.remove_event_handler('http-auth-received', ged.CORE,
@@ -2272,7 +2267,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._IqPingCB, 'get', nbxmpp.NS_PING)
         con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
-        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_ARCHIVE)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)

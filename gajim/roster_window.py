@@ -5544,8 +5544,7 @@ class RosterWindow:
                     self.on_privacy_lists_menuitem_activate, account)
             else:
                 privacy_lists_menuitem.set_sensitive(False)
-            if gajim.connections[account].archive_pref_supported or \
-                    gajim.connections[account].archiving_313_supported:
+            if gajim.connections[account].archiving_313_supported:
                 archiving_preferences_menuitem.connect(
                     'activate',
                     self.on_archiving_preferences_menuitem_activate, account)

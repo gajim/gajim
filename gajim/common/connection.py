@@ -166,8 +166,6 @@ class CommonConnection:
         self.archiving_namespace = None
         self.archiving_supported = False
         self.archiving_313_supported = False
-        self.archiving_136_supported = False
-        self.archive_pref_supported = False
         self.roster_supported = True
         self.blocking_supported = False
         self.addressing_supported = False
@@ -1947,18 +1945,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                         # Remove stored bookmarks accessible to everyone.
                         self.send_pb_purge(our_jid, 'storage:bookmarks')
                         self.send_pb_delete(our_jid, 'storage:bookmarks')
-                if nbxmpp.NS_ARCHIVE in obj.features:
-                    self.archiving_supported = True
-                    self.archiving_136_supported = True
-                    self.request_message_archiving_preferences()
-                    if nbxmpp.NS_ARCHIVE_AUTO in obj.features:
-                        self.archive_auto_supported = True
-                    if nbxmpp.NS_ARCHIVE_MANAGE in obj.features:
-                        self.archive_manage_supported = True
-                    if nbxmpp.NS_ARCHIVE_MANUAL in obj.features:
-                        self.archive_manual_supported = True
-                    if nbxmpp.NS_ARCHIVE_PREF in obj.features:
-                        self.archive_pref_supported = True
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
