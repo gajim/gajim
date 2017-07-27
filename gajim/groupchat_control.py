@@ -2042,7 +2042,7 @@ class GroupchatControl(ChatControlBase):
             def _cb(obj):
                 # we'll save sent message text when we'll receive it in
                 # _nec_gc_message_received
-                self.last_sent_msg = obj.msg_id
+                self.last_sent_msg = obj.stanza_id
                 if self.correcting:
                     self.correcting = False
                     gtkgui_helpers.remove_css_class(

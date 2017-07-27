@@ -317,8 +317,11 @@ class CommonConnection:
             msg_iq.setTag('replace', attrs={'id': obj.correct_id},
                           namespace=nbxmpp.NS_CORRECT)
 
-        if obj.msg_id:
-            msg_iq.setID(obj.msg_id)
+        # XEP-0359
+        obj.stanza_id = self.connection.getAnID()
+        msg_iq.setID(obj.stanza_id)
+        if obj.message:
+            msg_iq.setOriginID(obj.stanza_id)
 
         if obj.form_node:
             msg_iq.addChild(node=obj.form_node)
@@ -2056,12 +2059,12 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.send_message(obj)
 
     def send_message(self, obj):
-        obj.msg_id = self.connection.send(obj.msg_iq, now=obj.now)
+        obj.stanza_id = self.connection.send(obj.msg_iq, now=obj.now)
 
         gajim.nec.push_incoming_event(MessageSentEvent(
             None, conn=self, jid=obj.jid, message=obj.message, keyID=obj.keyID,
             chatstate=obj.chatstate, automatic_message=obj.automatic_message,
-            msg_id=obj.msg_id, additional_data=obj.additional_data))
+            stanza_id=obj.stanza_id, additional_data=obj.additional_data))
         if obj.callback:
             obj.callback(obj, obj.msg_iq, *obj.callback_args)
 
@@ -2628,6 +2631,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
                                 xhtml=obj.xhtml)
 
+        obj.stanza_id = self.connection.getAnID()
+        msg_iq.setID(obj.stanza_id)
+        if obj.message:
+            msg_iq.setOriginID(obj.stanza_id)
+
         if obj.correct_id:
             msg_iq.setTag('replace', attrs={'id': obj.correct_id},
                           namespace=nbxmpp.NS_CORRECT)
@@ -2654,11 +2662,11 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.send_gc_message(obj)
 
     def send_gc_message(self, obj):
-        obj.msg_id = self.connection.send(obj.msg_iq)
+        obj.stanza_id = self.connection.send(obj.msg_iq)
         gajim.nec.push_incoming_event(MessageSentEvent(
             None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
             chatstate=None, automatic_message=obj.automatic_message,
-            msg_id=obj.msg_id, additional_data=obj.additional_data))
+            stanza_id=obj.stanza_id, additional_data=obj.additional_data))
         if obj.callback:
             obj.callback(obj)
 

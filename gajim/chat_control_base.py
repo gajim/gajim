@@ -732,7 +732,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,
-    msg_id=None, resource=None, xhtml=None, callback=None, callback_args=None,
+    resource=None, xhtml=None, callback=None, callback_args=None,
     process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
@@ -757,7 +757,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         label = self.get_seclabel()
 
         def _cb(obj, msg, cb, *cb_args):
-            self.last_sent_msg = obj.msg_id
+            self.last_sent_msg = obj.stanza_id
             if cb:
                 cb(obj, msg, *cb_args)
 
@@ -768,7 +768,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
-            keyID=keyID, type_=type_, chatstate=chatstate, msg_id=msg_id,
+            keyID=keyID, type_=type_, chatstate=chatstate,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, callback=_cb, callback_args=[callback] + callback_args,
             control=self, attention=attention, correct_id=correct_id,

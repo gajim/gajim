@@ -1187,7 +1187,7 @@ class ChatControl(ChatControlBase):
 
         gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
-            msg_id=contact.msg_log_id, control=self))
+            control=self))
 
         contact.our_chatstate = state
         if state == 'active':

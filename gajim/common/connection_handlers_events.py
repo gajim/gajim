@@ -1637,7 +1637,7 @@ class MessageSentEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         if not self.automatic_message:
-            self.conn.sent_message_ids.append(self.msg_id)
+            self.conn.sent_message_ids.append(self.stanza_id)
             # only record the last 20000 message ids (should be about 1MB [36 byte per uuid]
             # and about 24 hours if you send out a message every 5 seconds)
             self.conn.sent_message_ids = self.conn.sent_message_ids[-20000:]
@@ -2709,7 +2709,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.type_ = 'chat'
         self.subject = ''
         self.chatstate = None
-        self.msg_id = None
+        self.stanza_id = None
         self.resource = None
         self.user_nick = None
         self.xhtml = None
@@ -2762,6 +2762,7 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.message = ''
         self.chatstate = None
         self.xhtml = None
+        self.stanza_id = None
         self.label = None
         self.callback = None
         self.callback_args = []

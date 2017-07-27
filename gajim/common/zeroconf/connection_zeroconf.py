@@ -334,11 +334,11 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _nec_stanza_message_outgoing(self, obj):
 
-        def on_send_ok(msg_id):
+        def on_send_ok(stanza_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
                 jid=obj.jid, message=obj.message, keyID=obj.keyID,
                 automatic_message=obj.automatic_message, chatstate=None,
-                msg_id=msg_id))
+                stanza_id=stanza_id))
             if obj.callback:
                 obj.callback(obj.msg_iq, *obj.callback_args)
 
