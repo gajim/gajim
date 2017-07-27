@@ -1146,7 +1146,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.encrypted = False
         account = self.conn.name
 
-        if self.stanza.getFrom() == self.conn.get_own_jid(full=True):
+        if self.stanza.getFrom() == self.conn.get_own_jid():
             # Drop messages sent from our own full jid
             # It can happen that when we sent message to our own bare jid
             # that the server routes that message back to us

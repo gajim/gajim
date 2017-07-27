@@ -671,6 +671,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.try_connecting_for_foo_secs = 45
         # holds the actual hostname to which we are connected
         self.connected_hostname = None
+        # Holds the full jid we received on the bind event
+        self.registered_name = None
         self.redirected = None
         self.last_time_to_reconnect = None
         self.new_account_info = None
@@ -754,19 +756,16 @@ class Connection(CommonConnection, ConnectionHandlers):
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
 
-    def get_own_jid(self, full=False):
+    def get_own_jid(self):
         """
-        Return our own jid as JID
-        If full = True, this raises an exception if we cant provide
-        the full JID
+        Return the last full JID we received on a bind event.
+        In case we were never connected it returns the bare JID from config.
         """
-        if self.connection:
-            full_jid = self.connection._registered_name
-            return nbxmpp.JID(full_jid)
+        if self.registered_name:
+            # This returns the full jid we received on the bind event
+            return self.registered_name
         else:
-            if full:
-                raise exceptions.GajimGeneralException(
-                    'We are not connected, full JID unknown.')
+            # This returns the bare jid 
             return nbxmpp.JID(gajim.get_jid_from_account(self.name))
 
     def reconnect(self):
@@ -1465,6 +1464,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
         if hasattr(con, 'Resource'):
             self.server_resource = con.Resource
+        self.registered_name = con._registered_name
         if gajim.config.get_per('accounts', self.name, 'anonymous_auth'):
             # Get jid given by server
             old_jid = gajim.get_jid_from_account(self.name)
