@@ -1411,14 +1411,14 @@ class ChatControl(ChatControlBase):
 
         # number of messages that are in queue and are already logged, we want
         # to avoid duplication
-        pending_how_many = len(gajim.events.get_events(self.account, jid,
+        pending = len(gajim.events.get_events(self.account, jid,
                 ['chat', 'pm']))
         if self.resource:
-            pending_how_many += len(gajim.events.get_events(self.account,
+            pending += len(gajim.events.get_events(self.account,
                     self.contact.get_full_jid(), ['chat', 'pm']))
 
         rows = gajim.logger.get_last_conversation_lines(
-            jid, pending_how_many, self.account)
+            self.account, jid, pending)
 
         local_old_kind = None
         self.conv_textview.just_cleared = True

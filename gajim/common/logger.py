@@ -32,6 +32,7 @@ import os
 import sys
 import time
 import datetime
+import calendar
 import json
 from collections import namedtuple
 from gzip import GzipFile
@@ -67,6 +68,9 @@ class KindConstant(IntEnum):
     SINGLE_MSG_SENT = 5
     CHAT_MSG_SENT = 6
     ERROR = 7
+
+    def __str__(self):
+        return str(self.value)
 
 @unique
 class ShowConstant(IntEnum):
@@ -160,6 +164,11 @@ class Logger:
                 isolation_level='IMMEDIATE')
         os.chdir(back)
         self.con.row_factory = self.namedtuple_factory
+
+        # DB functions
+        self.con.create_function("like", 1, self._like)
+        self.con.create_function("get_timeout", 0, self._get_timeout)
+
         self.cur = self.con.cursor()
         self.set_synchronous(False)
 
@@ -182,6 +191,22 @@ class Logger:
     def init_vars(self):
         self.open_db()
         self.get_jids_already_in_db()
+
+    @staticmethod
+    def _get_timeout():
+        """
+        returns the timeout in epoch
+        """
+        timeout = gajim.config.get('restore_timeout')
+
+        now = int(time.time())
+        if timeout > 0:
+            timeout = now - (timeout * 60)
+        return timeout
+
+    @staticmethod
+    def _like(search_str):
+        return '%{}%'.format(search_str)
 
     def commit(self):
         try:
@@ -248,6 +273,22 @@ class Logger:
             if row.type == JIDConstant.ROOM_TYPE:
                 return True
             return False
+
+    @staticmethod
+    def _get_family_jids(account, jid):
+        """
+        Get all jids of the metacontacts family
+
+        :param account: The account
+
+        :param jid:     The JID
+
+        returns a list of JIDs'
+        """
+        family = gajim.contacts.get_metacontacts_family(account, jid)
+        if family:
+            return [user['jid'] for user in family]
+        return [jid]
 
     def get_jid_id(self, jid, typestr=None):
         """
@@ -593,44 +634,49 @@ class Logger:
                 exceptions.PysqliteOperationalError) as error:
             self.dispatch('DB_ERROR', error)
 
-    def get_last_conversation_lines(self, jid, pending_how_many, account):
+    def get_last_conversation_lines(self, account, jid, pending):
         """
-        Accept how many rows to restore and when to time them out (in minutes)
-        (mark them as too old) and number of messages that are in queue and are
-        already logged but pending to be viewed, returns a list of tuples
-        containg time, kind, message, subject list with empty tuple if nothing
-        found to meet our demands
+        Get recent messages
+
+        Pending messages are already in queue to be printed when the
+        ChatControl is opened, so we dont want to request those messages.
+        How many messages are requested depends on the 'restore_lines'
+        config value. How far back in time messages are requested depends on
+        _get_timeout().
+
+        :param account: The account
+
+        :param jid:     The jid from which we request the conversation lines
+
+        :param pending: How many messages are currently pending so we dont
+                        request those messages
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
+
+        restore = gajim.config.get('restore_lines')
+        if restore <= 0:
             return []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
-        # How many lines to restore and when to time them out
-        restore_how_many = gajim.config.get('restore_lines')
-        if restore_how_many <= 0:
-            return []
-        timeout = gajim.config.get('restore_timeout')  # in minutes
+        kinds = map(str, [KindConstant.SINGLE_MSG_RECV,
+                          KindConstant.SINGLE_MSG_SENT,
+                          KindConstant.CHAT_MSG_RECV,
+                          KindConstant.CHAT_MSG_SENT,
+                          KindConstant.ERROR])
 
-        now = int(float(time.time()))
-        if timeout > 0:
-            timeout = now - (timeout * 60) # before that they are too old
+        jids = self._get_family_jids(account, jid)
 
-        # so if we ask last 5 lines and we have 2 pending we get
-        # 3 - 8 (we avoid the last 2 lines but we still return 5 asked)
+        sql = '''
+            SELECT time, kind, message, subject, additional_data
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids}) AND
+            kind IN ({kinds}) AND time > get_timeout()
+            ORDER BY time DESC, log_line_id DESC LIMIT ? OFFSET ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
+
         try:
-            self.cur.execute('''
-                SELECT time, kind, message, subject, additional_data FROM logs
-                WHERE (%s) AND kind IN (%d, %d, %d, %d, %d) AND time > %d
-                ORDER BY time DESC LIMIT %d OFFSET %d
-                ''' % (where_sql, KindConstant.SINGLE_MSG_RECV,
-                KindConstant.CHAT_MSG_RECV, KindConstant.SINGLE_MSG_SENT,
-                KindConstant.CHAT_MSG_SENT, KindConstant.ERROR, timeout,
-                restore_how_many, pending_how_many), jid_tuple)
-
-            messages = self.cur.fetchall()
+            messages = self.con.execute(
+                sql, (*jids, restore, pending)).fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
                           exceptions.DatabaseMalformed(LOG_DB_PATH))
@@ -649,174 +695,163 @@ class Logger:
         start_of_day = int(time.mktime(local_time))
         return start_of_day
 
-    def get_conversation_for_date(self, jid, year, month, day, account):
+    def get_conversation_for_date(self, account, jid, date):
         """
         Load the complete conversation with a given jid on a specific date
 
-        The conversation contains all messages that were exchanged between
-        `account` and `jid` on the day specified by `year`, `month` and `day`,
-        where `month` and `day` are 1-based.
+        :param account: The account
 
-        The conversation will be returned as a list of single messages of type
-        `Logger.Message`. Messages in the list are sorted chronologically. An
-        empty list will be returned if there are no messages in the log database
-        for the requested combination of `jid` and `account` on the given date.
+        :param jid:     The jid for which we request the conversation
+
+        :param date:    datetime.datetime instance
+                        example: datetime.datetime(year, month, day)
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
 
-        start_of_day = self.get_unix_time_from_date(year, month, day)
-        seconds_in_a_day = 86400 # 60 * 60 * 24
-        last_second_of_day = start_of_day + seconds_in_a_day - 1
+        jids = self._get_family_jids(account, jid)
 
-        self.cur.execute('''
+        delta = datetime.timedelta(
+            hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        sql = '''
             SELECT contact_name, time, kind, show, message, subject,
                    additional_data, log_line_id
-            FROM logs
-            WHERE (%s)
-            AND time BETWEEN %d AND %d
-            ORDER BY time
-            ''' % (where_sql, start_of_day, last_second_of_day), jid_tuple)
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND time BETWEEN ? AND ?
+            ORDER BY time, log_line_id
+            '''.format(jids=', '.join('?' * len(jids)))
 
-        return self.cur.fetchall()
+        return self.con.execute(sql, (*jids, 
+                                      date.timestamp(),
+                                      (date + delta).timestamp())).fetchall()
 
-    def search_log(self, jid, query, account, year=None, month=None, day=None):
+    def search_log(self, account, jid, query, date=None):
         """
         Search the conversation log for messages containing the `query` string.
 
-        The search can either span the complete log for the given `account` and
-        `jid` or be restriced to a single day by specifying `year`, `month` and
-        `day`, where `month` and `day` are 1-based.
+        The search can either span the complete log for the given
+        `account` and `jid` or be restriced to a single day by
+        specifying `date`.
 
-        All messages matching the specified criteria will be returned in a list
-        containing tuples of type `Logger.Message`. If no messages match the
-        criteria, an empty list will be returned.
+        :param account: The account
+
+        :param jid:     The jid for which we request the conversation
+
+        :param query:   A search string
+
+        :param date:    datetime.datetime instance
+                        example: datetime.datetime(year, month, day)
+
+        returns a list of namedtuples
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
+        jids = self._get_family_jids(account, jid)
 
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
-        like_sql = '%' + query.replace("'", "''") + '%'
-        if year and month and day:
-            start_of_day = self.get_unix_time_from_date(year, month, day)
-            seconds_in_a_day = 86400 # 60 * 60 * 24
-            last_second_of_day = start_of_day + seconds_in_a_day - 1
-            self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
-            FROM logs
-            WHERE (%s) AND message LIKE '%s'
-            AND time BETWEEN %d AND %d
+        if date:
+            delta = datetime.timedelta(
+                hours=23, minutes=59, seconds=59, microseconds=999999)
+
+            between = '''
+                AND time BETWEEN {start} AND {end}
+                '''.format(start=date.timestamp(),
+                           end=(date + delta).timestamp())
+
+        sql = '''
+        SELECT contact_name, time, kind, show, message, subject,
+               additional_data, log_line_id
+        FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+        AND message LIKE like(?) {date_search}
+        ORDER BY time, log_line_id
+        '''.format(jids=', '.join('?' * len(jids)),
+                   date_search=between if date else '')
+
+        return self.con.execute(sql, (*jids, query)).fetchall()
+
+    def get_days_with_logs(self, account, jid, year, month):
+        """
+        Request the days in a month where we received messages
+        for a given `jid`.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the days
+
+        :param year:    The year
+
+        :param month:   The month
+
+        returns a list of namedtuples
+        """
+        jids = self._get_family_jids(account, jid)
+
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+
+        # Calculate the start and end datetime of the month
+        date = datetime.datetime(year, month, 1)
+        days = calendar.monthrange(year, month)[1] - 1
+        delta = datetime.timedelta(
+            days=days, hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        sql = """
+            SELECT DISTINCT 
+            CAST(strftime('%d', time, 'unixepoch', 'localtime') AS INTEGER)
+            AS day FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND time BETWEEN ? AND ?
+            AND kind NOT IN ({kinds})
             ORDER BY time
-            ''' % (where_sql, like_sql, start_of_day, last_second_of_day),
-                jid_tuple)
-        else:
-            self.cur.execute('''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
-            FROM logs
-            WHERE (%s) AND message LIKE '%s'
-            ORDER BY time
-            ''' % (where_sql, like_sql), jid_tuple)
+            """.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
 
-        return self.cur.fetchall()
+        return self.con.execute(sql, (*jids,
+                                      date.timestamp(),
+                                      (date + delta).timestamp())).fetchall()
 
-    def get_days_with_logs(self, jid, year, month, max_day, account):
+    def get_last_date_that_has_logs(self, account, jid):
         """
-        Return the list of days that have logs (not status messages)
+        Get the timestamp of the last message we received for the jid.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the last timestamp
+
+        returns a timestamp or None
         """
-        try:
-            self.get_jid_id(jid)
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return []
-        days_with_logs = []
-        where_sql, jid_tuple = self._build_contact_where(account, jid)
+        jids = self._get_family_jids(account, jid)
 
-        # First select all date of month whith logs we want
-        start_of_month = self.get_unix_time_from_date(year, month, 1)
-        seconds_in_a_day = 86400 # 60 * 60 * 24
-        last_second_of_month = start_of_month + (seconds_in_a_day * max_day) - 1
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
 
-        # Select times and 'floor' them to time 0:00
-        # (by dividing, they are integers)
-        # and take only one of the same values (distinct)
-        # Now we have timestamps of time 0:00 of every day with logs
-        self.cur.execute('''
-            SELECT DISTINCT time/(86400)*86400 as time FROM logs
-            WHERE (%s)
-            AND time BETWEEN %d AND %d
-            AND kind NOT IN (%d, %d)
-            ORDER BY time
-            ''' % (where_sql, start_of_month, last_second_of_month,
-            KindConstant.STATUS, KindConstant.GCSTATUS), jid_tuple)
-        result = self.cur.fetchall()
-
-        # convert timestamps to day of month
-        for line in result:
-            days_with_logs[0:0]=[time.gmtime(line.time)[2]]
-
-        return days_with_logs
-
-    def get_last_date_that_has_logs(self, jid, account=None, is_room=False):
-        """
-        Return last time (in seconds since EPOCH) for which we had logs
-        (excluding statuses)
-        """
-        where_sql = ''
-        if not is_room:
-            where_sql, jid_tuple = self._build_contact_where(account, jid)
-        else:
-            try:
-                jid_id = self.get_jid_id(jid, 'ROOM')
-            except exceptions.PysqliteOperationalError:
-                # Error trying to create a new jid_id. This means there is no log
-                return None
-            where_sql = 'jid_id = ?'
-            jid_tuple = (jid_id,)
-        self.cur.execute('''
+        sql = '''
             SELECT MAX(time) as time FROM logs
-            WHERE (%s)
-            AND kind NOT IN (%d, %d)
-            ''' % (where_sql, KindConstant.STATUS, KindConstant.GCSTATUS),
-            jid_tuple)
+            NATURAL JOIN jids WHERE jid IN ({jids})
+            AND kind NOT IN ({kinds})
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
 
-        results = self.cur.fetchone()
-        if results is not None:
-            result = results.time
-        else:
-            result = None
-        return result
+        # fetchone() returns always at least one Row with all
+        # attributes set to None because of the MAX() function
+        return self.con.execute(sql, (*jids,)).fetchone().time
 
-    def get_room_last_message_time(self, jid):
+    def get_room_last_message_time(self, account, jid):
         """
-        Return FASTLY last time (in seconds since EPOCH) for which we had logs
-        for that room from rooms_last_message_time table
-        """
-        try:
-            jid_id = self.get_jid_id(jid, 'ROOM')
-        except exceptions.PysqliteOperationalError:
-            # Error trying to create a new jid_id. This means there is no log
-            return None
-        where_sql = 'jid_id = %s' % jid_id
-        self.cur.execute('''
-                SELECT time FROM rooms_last_message_time
-                WHERE (%s)
-                ''' % (where_sql))
+        Get the timestamp of the last message we received in a room.
 
-        results = self.cur.fetchone()
-        if results is not None:
-            result = results.time
-        else:
-            result = None
-        return result
+        :param account: The account
+
+        :param jid:     The jid for which we request the last timestamp
+
+        returns a timestamp or None
+        """
+        sql = '''
+            SELECT time FROM rooms_last_message_time
+            NATURAL JOIN jids WHERE jid = ?
+            '''
+
+        row = self.con.execute(sql, (jid,)).fetchone()
+        if not row:
+            return self.get_last_date_that_has_logs(account, jid)
+        return row.time
 
     def set_room_last_message_time(self, jid, time):
         """
@@ -828,31 +863,6 @@ class Logger:
         sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
                 (jid_id, time)
         self.simple_commit(sql)
-
-    def _build_contact_where(self, account, jid):
-        """
-        Build the where clause for a jid, including metacontacts jid(s) if any
-        """
-        where_sql = ''
-        jid_tuple = ()
-        # will return empty list if jid is not associated with
-        # any metacontacts
-        family = gajim.contacts.get_metacontacts_family(account, jid)
-        if family:
-            for user in family:
-                try:
-                    jid_id = self.get_jid_id(user['jid'])
-                except exceptions.PysqliteOperationalError:
-                    continue
-                where_sql += 'jid_id = ?'
-                jid_tuple += (jid_id,)
-                if user != family[-1]:
-                    where_sql += ' OR '
-        else: # if jid was not associated with metacontacts
-            jid_id = self.get_jid_id(jid)
-            where_sql = 'jid_id = ?'
-            jid_tuple += (jid_id,)
-        return where_sql, jid_tuple
 
     def save_transport_type(self, jid, type_):
         """

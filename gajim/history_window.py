@@ -30,6 +30,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 import time
 import calendar
+import datetime
 
 from enum import IntEnum, unique
 
@@ -304,7 +305,7 @@ class HistoryWindow:
             # select logs for last date we have logs with contact
             self.calendar.set_sensitive(True)
             last_log = \
-                    gajim.logger.get_last_date_that_has_logs(self.jid, self.account)
+                    gajim.logger.get_last_date_that_has_logs(self.account, self.jid)
 
             date = time.localtime(last_log)
 
@@ -356,20 +357,18 @@ class HistoryWindow:
             widget.select_day(1)
             return
 
-        # in gtk January is 1, in python January is 0,
-        # I want the second
-        # first day of month is 1 not 0
         widget.clear_marks()
         month = gtkgui_helpers.make_gtk_month_python_month(month)
-        days_in_this_month = calendar.monthrange(year, month)[1]
+
         try:
-            log_days = gajim.logger.get_days_with_logs(self.jid, year, month,
-                days_in_this_month, self.account)
+            log_days = gajim.logger.get_days_with_logs(
+                self.account, self.jid, year, month)
         except exceptions.PysqliteOperationalError as e:
             dialogs.ErrorDialog(_('Disk Error'), str(e))
             return
-        for day in log_days:
-            widget.mark_day(day)
+
+        for date in log_days:
+            widget.mark_day(date.day)
 
     def _get_string_show_from_constant_int(self, show):
         if show == ShowConstant.ONLINE:
@@ -397,8 +396,11 @@ class HistoryWindow:
         self.last_time_printout = 0
         show_status = self.show_status_checkbutton.get_active()
 
+        date = datetime.datetime(year, month, day)
+
         conversation = gajim.logger.get_conversation_for_date(
-                self.jid, year, month, day, self.account)
+            self.account, self.jid, date)
+
         for message in conversation:
             if not show_status and message.kind in (KindConstant.GCSTATUS,
                                                     KindConstant.STATUS):
@@ -537,13 +539,15 @@ class HistoryWindow:
                 # This may leed to wrong self nick in the displayed history (Uggh!)
                 account = list(gajim.contacts.get_accounts())[0]
 
-            year, month, day = False, False, False
+            date = None
             if self.search_in_date.get_active():
                 year, month, day = self.calendar.get_date() # integers
                 month = gtkgui_helpers.make_gtk_month_python_month(month)
+                date = datetime.datetime(year, month, day)
 
             show_status = self.show_status_checkbutton.get_active()
-            results = gajim.logger.search_log(jid, text, account, year, month, day)
+
+            results = gajim.logger.search_log(account, jid, text, date)
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
