@@ -1139,53 +1139,36 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg='', nick=None, additional_data=None):
+    def save_if_not_exists(self, with_, direction, tim, msg='', is_pm=False, additional_data=None):
         if additional_data is None:
             additional_data = {}
-        if tim:
-            time_col = float(tim)
-        else:
-            time_col = float(time.time())
+
         if not msg:
             return
-        if self.jid_is_from_pm(with_) or nick:
-            # It's a groupchat message
-            if nick:
-                # It's a message from a groupchat occupent
-                type_ = 'gc_msg'
-                with_ = with_ + '/' + nick
-            else:
-                # It's a server message message, we don't log them
-                return
+        if is_pm:
+            type_ = 'gc_msg'
         else:
             if direction == 'from':
                 type_ = 'chat_msg_recv'
             elif direction == 'to':
                 type_ = 'chat_msg_sent'
-        jid_id = self.get_jid_id(with_)
-        where_sql = 'jid_id = %s AND message=?' % jid_id
-        if type_ == 'gc_msg':
-            # We cannot differentiate gc message and pm messages, so look in
-            # both logs
-            with_2 = gajim.get_jid_without_resource(with_)
-            if with_ != with_2:
-                jid_id2 = self.get_jid_id(with_2)
-                where_sql = 'jid_id in (%s, %s) AND message=?' % (jid_id,
-                    jid_id2)
-        start_time = time_col - 300 # 5 minutes arrount given time
-        end_time = time_col + 300 # 5 minutes arrount given time
-        self.cur.execute('''
-            SELECT log_line_id FROM logs
-            WHERE (%s)
-            AND time BETWEEN %d AND %d
-            ORDER BY time
-            ''' % (where_sql, start_time, end_time), (msg,))
-        results = self.cur.fetchall()
-        if results:
+
+        start_time = tim - 300 # 5 minutes arrount given time
+        end_time = tim + 300 # 5 minutes arrount given time
+
+        sql = '''
+            SELECT * FROM logs
+            NATURAL JOIN jids WHERE jid = ? AND message = ?
+            AND time BETWEEN ? AND ?
+            '''
+
+        result = self.con.execute(sql, (str(with_), msg, start_time, end_time)).fetchone()
+
+        if result:
             log.debug('Log already in DB, ignoring it')
             return
         log.debug('New log received from server archives, storing it')
-        self.write(type_, with_, message=msg, tim=tim,
+        self.write(type_, str(with_), message=msg, tim=tim,
                    additional_data=additional_data, mam_query=True)
 
     def _nec_gc_message_received(self, obj):

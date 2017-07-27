@@ -1082,18 +1082,16 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             else:
                 self.stanza_id = self.msg_.getID()
 
-            self.with_ = str(to)
+            self.with_ = to
             self.direction = 'to'
-            self.resource = to.getResource()
         else:
             if self.result.getNamespace() == nbxmpp.NS_MAM_2:
                 self.stanza_id = self.result.getID()
             else:
                 self.stanza_id = self.msg_.getID()
 
-            self.with_ = str(frm)
+            self.with_ = frm
             self.direction = 'from'
-            self.resource = frm.getResource()
 
         if not self.stanza_id:
             log.debug('Could not retrieve stanza-id')
@@ -1118,38 +1116,18 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
 
     def generate(self):
-        self.nick = None
-        msg_ = self.msg_obj.msg_
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = self.msg_obj.additional_data
-        self.with_ = self.msg_obj.with_
-        self.direction = self.msg_obj.direction
-        self.timestamp = self.msg_obj.timestamp
-        res = self.msg_obj.resource
-        self.msgtxt = self.msg_obj.msgtxt
-        is_pm = gajim.logger.jid_is_room_jid(self.with_)
-        if msg_.getAttr('type') == 'groupchat':
-            if is_pm == False:
-                log.warn('JID %s is marked as normal contact in database '
-                         'but we got a groupchat message from it.', self.with_)
-                return
-            if is_pm == None:
-                gajim.logger.get_jid_id(self.with_, 'ROOM')
-            self.nick = res
-        else:
-            if is_pm == None:
-                # we don't know this JID, we need to disco it.
-                server = gajim.get_server_from_jid(self.with_)
-                if server not in self.conn.mam_awaiting_disco_result:
-                    self.conn.mam_awaiting_disco_result[server] = [
-                        [self.with_, self.direction, self.timestamp, self.msgtxt,
-                        res]]
-                    self.conn.discoverInfo(server)
-                else:
-                    self.conn.mam_awaiting_disco_result[server].append(
-                        [self.with_, self.direction, self.timestamp, self.msgtxt,
-                        res])
-                return
+        is_pm = gajim.logger.jid_is_room_jid(self.with_.getStripped())
+        if is_pm is None:
+            # we don't know this JID, we need to disco it.
+            server = self.with_.getDomain()
+            if server not in self.conn.mam_awaiting_disco_result:
+                self.conn.mam_awaiting_disco_result[server] = [
+                    [self.with_, self.direction, self.timestamp, self.msgtxt]]
+                self.conn.discoverInfo(server)
+            else:
+                self.conn.mam_awaiting_disco_result[server].append(
+                    [self.with_, self.direction, self.timestamp, self.msgtxt])
+            return
         return True
 
 class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):

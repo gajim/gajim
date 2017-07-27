@@ -92,15 +92,15 @@ class ConnectionArchive313(ConnectionArchive):
             for identity in obj.identities:
                 if identity['category'] == 'conference':
                     # it's a groupchat
-                    for with_, direction, tim, msg_txt, res in \
+                    for with_, direction, tim, msg_txt in \
                     self.mam_awaiting_disco_result[obj.jid]:
                         gajim.logger.get_jid_id(with_, 'ROOM')
                         gajim.logger.save_if_not_exists(with_, direction, tim,
-                            msg=msg_txt, nick=res)
+                            msg=msg_txt, is_pm=True)
                     del self.mam_awaiting_disco_result[obj.jid]
                     return
             # it's not a groupchat
-            for with_, direction, tim, msg_txt, res in \
+            for with_, direction, tim, msg_txt in \
             self.mam_awaiting_disco_result[obj.jid]:
                 gajim.logger.get_jid_id(with_)
                 gajim.logger.save_if_not_exists(with_, direction, tim,
@@ -134,7 +134,7 @@ class ConnectionArchive313(ConnectionArchive):
         if obj.conn.name != self.name:
             return
         gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.timestamp,
-            msg=obj.msgtxt, nick=obj.nick, additional_data=obj.additional_data)
+            msg=obj.msgtxt, additional_data=obj.additional_data)
 
     def get_query_id(self):
         self.mam_query_id = self.connection.getAnID()

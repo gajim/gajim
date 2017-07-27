@@ -1095,7 +1095,7 @@ class ConnectionHandlersBase:
                 DecryptedMessageReceivedEvent(None, conn=self, msg_obj=obj))
         else:
             gajim.nec.push_incoming_event(
-                MamDecryptedMessageReceivedEvent(None, conn=self, msg_obj=obj))
+                MamDecryptedMessageReceivedEvent(None, **vars(obj)))
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
