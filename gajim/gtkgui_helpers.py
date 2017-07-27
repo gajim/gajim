@@ -856,7 +856,7 @@ def create_list_multi(value_list, selected_values=None):
     col = Gtk.TreeViewColumn()
     treeview.append_column(col)
     cell = Gtk.CellRendererText()
-    col.pack_start(cell, True, True, 0)
+    col.pack_start(cell, True)
     col.set_attributes(cell, text=0)
     for value in value_list:
         iter = liststore.append(value)
