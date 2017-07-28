@@ -83,7 +83,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         gajim.ged.register_event_handler('archiving-finished',
                                          ged.PRECORE,
                                          self._nec_archiving_finished)
-        gajim.ged.register_event_handler('mam-decrypted-message-received',
+        gajim.ged.register_event_handler('raw-mam-message-received',
                                          ged.PRECORE,
                                          self._nec_mam_message_received)
 
@@ -167,7 +167,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         gajim.ged.remove_event_handler('archiving-finished',
                                        ged.PRECORE,
                                        self._nec_archiving_finished)
-        gajim.ged.remove_event_handler('mam-decrypted-message-received',
+        gajim.ged.remove_event_handler('raw-mam-message-received',
                                        ged.PRECORE,
                                        self._nec_mam_message_received)
         del gajim.interface.instances[self.account]['history_sync']
@@ -179,7 +179,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         if obj.conn.name != self.account:
             return
 
-        if obj.msg_obj.query_id != self.query_id:
+        if obj.result.getAttr('queryid') != self.query_id:
             return
 
         log.debug('received message')
