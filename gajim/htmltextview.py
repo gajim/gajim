@@ -838,7 +838,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 class HtmlTextView(Gtk.TextView):
 
     def __init__(self):
-        GObject.GObject.__init__(self)
+        Gtk.TextView.__init__(self)
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
         self._changed_cursor = False
@@ -1045,7 +1045,7 @@ class HtmlTextView(Gtk.TextView):
         clipboard = self.get_clipboard(Gdk.SELECTION_CLIPBOARD)
         selected = self.get_selected_text()
         clipboard.set_text(selected, -1)
-        self.emit_stop_by_name('copy-clipboard')
+        GObject.signal_stop_emission_by_name(self, 'copy-clipboard')
 
     def on_html_text_view_realized(self, unused_data):
         self.get_buffer().remove_selection_clipboard(self.get_clipboard(
