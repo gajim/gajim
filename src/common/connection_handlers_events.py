@@ -1062,20 +1062,21 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.tim = localtime(timegm(tim))
         to_ = self.msg_.getAttr('to')
         if to_:
+            to_ = str(to_)
             to_ = gajim.get_jid_without_resource(to_)
         else:
             to_ = gajim.get_jid_from_account(account)
-        frm_ = gajim.get_jid_without_resource(self.msg_.getAttr('from'))
+        frm_ = gajim.get_jid_without_resource(str(self.msg_.getAttr('from')))
         self.msgtxt = self.msg_.getTagData('body')
         if to_ == gajim.get_jid_from_account(account):
             self.with_ = frm_
             self.direction = 'from'
             self.resource = gajim.get_resource_from_jid(
-                self.msg_.getAttr('from'))
+                str(self.msg_.getAttr('from')))
         else:
             self.with_ = to_
             self.direction = 'to'
-            self.resource = gajim.get_resource_from_jid(self.msg_.getAttr('to'))
+            self.resource = gajim.get_resource_from_jid(to_)
         self.enc_tag = self.msg_.getTag('x', namespace=nbxmpp.NS_ENCRYPTED)
         return True
 

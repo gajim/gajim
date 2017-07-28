@@ -112,7 +112,7 @@ def parse_jid(jidstring):
     """
     # This function comes from http://svn.twistedmatrix.com/cvs/trunk/twisted/words/protocols/jabber/jid.py
 
-    return prep(*decompose_jid(jidstring))
+    return prep(*decompose_jid(str(jidstring)))
 
 def idn_to_ascii(host):
     """
