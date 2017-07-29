@@ -1062,7 +1062,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             log.info('MAM message not from our user archive')
             return False
 
-        self.msg_ = self.forwarded.getTag('message')
+        self.msg_ = self.forwarded.getTag('message', protocol=True)
 
         if self.msg_.getType() == 'groupchat':
             log.info('Received groupchat message from user archive')
@@ -1075,11 +1075,8 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         to = self.msg_.getTo()
 
         if frm.bareMatch(own_jid):
-            self.stanza_id = self.msg_.getTag('origin-id', 
-                                              namespace=nbxmpp.NS_SID)
-            if self.stanza_id:
-                self.stanza_id = self.stanza_id.getID()
-            else:
+            self.stanza_id = self.msg_.getOriginID()
+            if not self.stanza_id:
                 self.stanza_id = self.msg_.getID()
 
             self.with_ = to
@@ -1228,11 +1225,13 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.forwarded = True
 
-        result = self.stanza.getTag('result')
+        result = self.stanza.getTag('result', protocol=True)
         if result and result.getNamespace() in (nbxmpp.NS_MAM,
                                                 nbxmpp.NS_MAM_1,
                                                 nbxmpp.NS_MAM_2):
-            forwarded = result.getTag('forwarded', namespace=nbxmpp.NS_FORWARD)
+            forwarded = result.getTag('forwarded',
+                                      namespace=nbxmpp.NS_FORWARD,
+                                      protocol=True)
             if not forwarded:
                 log.warning('Invalid MAM Message: no forwarded child')
                 return
