@@ -83,17 +83,16 @@ class ConnectionArchive313:
                     # it's a groupchat
                     for with_, direction, tim, msg_txt in \
                     self.mam_awaiting_disco_result[obj.jid]:
-                        gajim.logger.get_jid_id(with_, 'ROOM')
+                        gajim.logger.get_jid_id(with_.getStripped(), 'ROOM')
                         gajim.logger.save_if_not_exists(with_, direction, tim,
-                            msg=msg_txt, is_pm=True)
+                            msg_txt, is_pm=True)
                     del self.mam_awaiting_disco_result[obj.jid]
                     return
             # it's not a groupchat
             for with_, direction, tim, msg_txt in \
             self.mam_awaiting_disco_result[obj.jid]:
-                gajim.logger.get_jid_id(with_)
-                gajim.logger.save_if_not_exists(with_, direction, tim,
-                    msg=msg_txt)
+                gajim.logger.get_jid_id(with_.getStripped())
+                gajim.logger.save_if_not_exists(with_, direction, tim, msg_txt)
             del self.mam_awaiting_disco_result[obj.jid]
 
     def _nec_result_finished(self, obj):
@@ -123,7 +122,7 @@ class ConnectionArchive313:
         if obj.conn.name != self.name:
             return
         gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.timestamp,
-            msg=obj.msgtxt, additional_data=obj.additional_data)
+            obj.msgtxt, is_pm=obj.is_pm, additional_data=obj.additional_data)
 
     def get_query_id(self):
         self.mam_query_id = self.connection.getAnID()

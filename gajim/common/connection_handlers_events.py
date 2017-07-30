@@ -1113,8 +1113,12 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
 
     def generate(self):
-        is_pm = gajim.logger.jid_is_room_jid(self.with_.getStripped())
-        if is_pm is None:
+        if not self.msgtxt:
+            # For example Chatstates, Receipts, Chatmarkers
+            log.debug('Received MAM message without text')
+            return False
+        self.is_pm = gajim.logger.jid_is_room_jid(self.with_.getStripped())
+        if self.is_pm is None:
             # we don't know this JID, we need to disco it.
             server = self.with_.getDomain()
             if server not in self.conn.mam_awaiting_disco_result:

@@ -1139,15 +1139,15 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg='', is_pm=False, additional_data=None):
+    def save_if_not_exists(self, with_, direction, tim, msg, is_pm=False, additional_data=None):
         if additional_data is None:
             additional_data = {}
 
-        if not msg:
-            return
         if is_pm:
+            with_ = str(with_)
             type_ = 'gc_msg'
         else:
+            with_ = with_.getStripped()
             if direction == 'from':
                 type_ = 'chat_msg_recv'
             elif direction == 'to':
@@ -1156,19 +1156,22 @@ class Logger:
         start_time = tim - 300 # 5 minutes arrount given time
         end_time = tim + 300 # 5 minutes arrount given time
 
+        log.debug('start: %s, end: %s, jid: %s, message: %s',
+                  start_time, end_time, with_, msg)
+
         sql = '''
             SELECT * FROM logs
             NATURAL JOIN jids WHERE jid = ? AND message = ?
             AND time BETWEEN ? AND ?
             '''
 
-        result = self.con.execute(sql, (str(with_), msg, start_time, end_time)).fetchone()
+        result = self.con.execute(sql, (with_, msg, start_time, end_time)).fetchone()
 
         if result:
             log.debug('Log already in DB, ignoring it')
             return
         log.debug('New log received from server archives, storing it')
-        self.write(type_, str(with_), message=msg, tim=tim,
+        self.write(type_, with_, message=msg, tim=tim,
                    additional_data=additional_data, mam_query=True)
 
     def _nec_gc_message_received(self, obj):
