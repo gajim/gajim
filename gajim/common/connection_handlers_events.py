@@ -1059,7 +1059,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         if frm.bareMatch(own_jid):
             self.stanza_id = self.msg_.getOriginID()
-            if not self.stanza_id:
+            if self.stanza_id is None:
                 self.stanza_id = self.msg_.getID()
 
             self.with_ = to
@@ -1073,20 +1073,30 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.with_ = frm
             self.kind = KindConstant.CHAT_MSG_RECV
 
-        if not self.stanza_id:
+        if self.stanza_id is None:
             log.debug('Could not retrieve stanza-id')
 
-        # Use timestamp provided by archive,
-        # Fallback: Use timestamp provided by user and issue a warning
-        delay = self.forwarded.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if not delay:
-            log.warning('No timestamp on archive Message, try fallback')
-            delay = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if not delay:
+        delay = self.forwarded.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if delay is None:
             log.error('Received MAM message without timestamp')
             return
 
-        self.timestamp = helpers.parse_delay(delay)
+        self.timestamp = helpers.parse_datetime(
+            delay, check_utc=True, epoch=True)
+        if self.timestamp is None:
+            log.error('Received MAM message with invalid timestamp: %s', delay)
+            return
+
+        # Save timestamp added by the user
+        user_delay = self.msg_.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if user_delay is not None:
+            self.user_timestamp = helpers.parse_datetime(
+                user_delay, check_utc=True, epoch=True)
+            if self.user_timestamp is None:
+                log.warning('Received MAM message with '
+                            'invalid user timestamp: %s', user_delay)
 
         log.debug('Received mam-message: stanza id: %s', self.stanza_id)
         return True
