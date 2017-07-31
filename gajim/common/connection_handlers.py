@@ -966,7 +966,7 @@ class ConnectionHandlersBase:
 
             if obj.old_show == obj.new_show and obj.contact.status == \
             obj.status and obj.contact.priority == obj.prio and \
-            obj.contact.idle_time = obj.idle_time: # no change
+            obj.contact.idle_time == obj.idle_time: # no change
                 return True
         else:
             obj.contact = gajim.contacts.get_first_contact_from_jid(account,
