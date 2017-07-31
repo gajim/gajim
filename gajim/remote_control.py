@@ -107,8 +107,6 @@ class Remote:
         bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
         self.signal_object = SignalObject(bus_name)
 
-        gajim.ged.register_event_handler('last-result-received', ged.POSTGUI,
-            self.on_last_status_time)
         gajim.ged.register_event_handler('version-result-received', ged.POSTGUI,
             self.on_os_info)
         gajim.ged.register_event_handler('time-result-received', ged.POSTGUI,
@@ -149,10 +147,6 @@ class Remote:
             chatstate = ""
         self.raise_signal('MessageSent', (obj.conn.name, [
             obj.jid, obj.message, obj.keyID, chatstate]))
-
-    def on_last_status_time(self, obj):
-        self.raise_signal('LastStatusTime', (obj.conn.name, [
-            obj.jid, obj.resource, obj.seconds, obj.status]))
 
     def on_os_info(self, obj):
         self.raise_signal('OsInfo', (obj.conn.name, [obj.jid, obj.resource,
@@ -276,10 +270,6 @@ class SignalObject(dbus.service.Object):
 
     @dbus.service.signal(INTERFACE, signature='av')
     def VcardInfo(self, account_and_vcard):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def LastStatusTime(self, account_and_array):
         pass
 
     @dbus.service.signal(INTERFACE, signature='av')

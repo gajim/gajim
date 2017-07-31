@@ -2117,9 +2117,6 @@ class RosterWindow:
     def send_status(self, account, status, txt, auto=False, to=None):
         if status != 'offline':
             if to is None:
-                if status == gajim.connections[account].get_status() and \
-                txt == gajim.connections[account].status:
-                    return
                 gajim.config.set_per('accounts', account, 'last_status', status)
                 gajim.config.set_per('accounts', account, 'last_status_msg',
                         helpers.to_one_line(txt))
@@ -2194,7 +2191,8 @@ class RosterWindow:
                 if gc_control.account == account:
                     if gajim.gc_connected[account][gc_control.room_jid]:
                         gajim.connections[account].send_gc_status(
-                            gc_control.nick, gc_control.room_jid, status, txt)
+                            gc_control.nick, gc_control.room_jid, status, txt,
+                            auto=auto)
             if was_invisible and status != 'offline':
                 # We come back from invisible, join bookmarks
                 gajim.interface.auto_join_bookmarks(account)

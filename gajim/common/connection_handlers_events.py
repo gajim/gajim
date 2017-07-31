@@ -138,34 +138,6 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
         self.msg = self.stanza.getTagData('body')
         return True
 
-class LastResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'last-result-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_id()
-        self.get_jid_resource(check_fake_jid=True)
-        if self.id_ in self.conn.last_ids:
-            self.conn.last_ids.remove(self.id_)
-
-        self.status = ''
-        self.seconds = -1
-
-        if self.stanza.getType() == 'error':
-            return True
-
-        qp = self.stanza.getTag('query')
-        if not qp:
-            return
-        sec = qp.getAttr('seconds')
-        self.status = qp.getData()
-        try:
-            self.seconds = int(sec)
-        except Exception:
-            return
-
-        return True
-
 class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'version-result-received'
     base_network_events = []
@@ -825,6 +797,13 @@ PresenceHelperEvent):
         delay_tag = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
         if delay_tag:
             self._generate_timestamp(self.stanza.getTimestamp2())
+        # XEP-0319
+        self.idle_time = None
+        idle_tag = self.stanza.getTag('idle', namespace=nbxmpp.NS_IDLE)
+        if idle_tag:
+            time_str = idle_tag.getAttr('since')
+            tim = helpers.datetime_tuple(time_str)
+            self.idle_time = timegm(tim)
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()

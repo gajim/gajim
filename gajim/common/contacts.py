@@ -94,8 +94,7 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    our_chatstate=None, chatstate=None, last_status_time=None, msg_log_id=None,
-    last_activity_time=None):
+    our_chatstate=None, chatstate=None, idle_time=None, msg_log_id=None):
         if not isinstance(jid, str):
             print('no str')
         if groups is None:
@@ -113,8 +112,7 @@ class Contact(CommonContact):
         self.priority = priority
         self.keyID = keyID
         self.msg_log_id = msg_log_id
-        self.last_status_time = last_status_time
-        self.last_activity_time = last_activity_time
+        self.idle_time = idle_time
 
         self.pep = {}
 
@@ -248,8 +246,7 @@ class LegacyContactsAPI:
 
     def create_contact(self, jid, account, name='', groups=None, show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
-    client_caps=None, our_chatstate=None, chatstate=None, last_status_time=None,
-    last_activity_time=None):
+    client_caps=None, our_chatstate=None, chatstate=None, idle_time=None):
         if groups is None:
             groups = []
         # Use Account object if available
@@ -258,8 +255,7 @@ class LegacyContactsAPI:
             show=show, status=status, sub=sub, ask=ask, resource=resource,
             priority=priority, keyID=keyID, client_caps=client_caps,
             our_chatstate=our_chatstate, chatstate=chatstate,
-            last_status_time=last_status_time,
-            last_activity_time=last_activity_time)
+            idle_time=idle_time)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
@@ -288,8 +284,7 @@ class LegacyContactsAPI:
             resource=contact.resource, priority=contact.priority,
             keyID=contact.keyID, client_caps=contact.client_caps,
             our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
-            last_status_time=contact.last_status_time,
-            last_activity_time=contact.last_activity_time)
+            idle_time=contact.idle_time)
 
     def add_contact(self, account, contact):
         if account not in self._accounts:

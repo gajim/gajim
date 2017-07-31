@@ -873,8 +873,6 @@ class ConnectionHandlersBase:
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to gui
         self.automatically_added = []
-        # IDs of jabber:iq:last requests
-        self.last_ids = []
 
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
@@ -917,10 +915,6 @@ class ConnectionHandlersBase:
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
-        if obj.id_ in self.last_ids:
-            gajim.nec.push_incoming_event(LastResultReceivedEvent(None,
-                conn=self, stanza=obj.stanza))
-            return True
 
     def _nec_presence_received(self, obj):
         account = obj.conn.name
@@ -971,7 +965,8 @@ class ConnectionHandlersBase:
                 obj.need_redraw = True
 
             if obj.old_show == obj.new_show and obj.contact.status == \
-            obj.status and obj.contact.priority == obj.prio: # no change
+            obj.status and obj.contact.priority == obj.prio and \
+            obj.contact.idle_time = obj.idle_time: # no change
                 return True
         else:
             obj.contact = gajim.contacts.get_first_contact_from_jid(account,
@@ -1028,12 +1023,8 @@ class ConnectionHandlersBase:
         else:
             # Do not override assigned key
             obj.contact.keyID = obj.keyID
-        if obj.timestamp:
-            obj.contact.last_status_time = localtime(obj.timestamp)
-        elif not gajim.block_signed_in_notifications[account]:
-            # We're connected since more that 30 seconds
-            obj.contact.last_status_time = localtime()
         obj.contact.contact_nickname = obj.contact_nickname
+        obj.contact.idle_time = obj.idle_time
 
         if gajim.jid_is_transport(jid):
             return
@@ -1176,11 +1167,6 @@ class ConnectionHandlersBase:
         gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
             fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
             msg=msgtxt, time_=tim, session=session, stanza=msg))
-
-    def _LastResultCB(self, con, iq_obj):
-        log.debug('LastResultCB')
-        gajim.nec.push_incoming_event(LastResultReceivedEvent(None, conn=self,
-            stanza=iq_obj))
 
     def get_sessions(self, jid):
         """
@@ -2241,7 +2227,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._TimeRevisedCB, 'get',
             nbxmpp.NS_TIME_REVISED)
         con.RegisterHandler('iq', self._LastCB, 'get', nbxmpp.NS_LAST)
-        con.RegisterHandler('iq', self._LastResultCB, 'result', nbxmpp.NS_LAST)
         con.RegisterHandler('iq', self._VersionResultCB, 'result',
             nbxmpp.NS_VERSION)
         con.RegisterHandler('iq', self._TimeRevisedResultCB, 'result',

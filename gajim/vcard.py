@@ -134,8 +134,6 @@ class VcardWindow:
 
         gajim.ged.register_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
-        gajim.ged.register_event_handler('last-result-received', ged.GUI2,
-            self.set_last_status_time)
         gajim.ged.register_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
         gajim.ged.register_event_handler('vcard-received', ged.GUI1,
@@ -181,8 +179,6 @@ class VcardWindow:
             connection.store_annotations()
         gajim.ged.remove_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
-        gajim.ged.remove_event_handler('last-result-received', ged.GUI2,
-            self.set_last_status_time)
         gajim.ged.remove_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
         gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
@@ -294,13 +290,6 @@ class VcardWindow:
         self.clear_values()
         self.set_values(obj.vcard_dict)
 
-    def set_last_status_time(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.fjid != self.real_jid:
-            return
-        self.fill_status_label()
-
     def set_os_info(self, obj):
         if obj.conn.name != self.account:
             return
@@ -387,18 +376,12 @@ class VcardWindow:
             stats = helpers.get_uf_show(self.contact.show)
             if self.contact.status:
                 stats += ': ' + self.contact.status
-            if self.contact.last_status_time:
-                stats += '\n' + _('since %s') % time.strftime('%c',
-                        self.contact.last_status_time)
             for c in connected_contact_list:
                 if c.resource != self.contact.resource:
                     stats += '\n'
                     stats += helpers.get_uf_show(c.show)
                     if c.status:
                         stats += ': ' + c.status
-                    if c.last_status_time:
-                        stats += '\n' + _('since %s') % time.strftime('%c',
-                                c.last_status_time)
         else: # Maybe gc_vcard ?
             stats = helpers.get_uf_show(self.contact.show)
             if self.contact.status:
@@ -451,16 +434,6 @@ class VcardWindow:
                 + str(self.contact.priority)
         if not self.contact.status:
             self.contact.status = ''
-
-        # Request list time status only if contact is offline
-        if self.contact.show == 'offline':
-            if self.gc_contact:
-                j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                gajim.connections[self.account].request_last_status_time(j, r,
-                        self.contact.jid)
-            else:
-                gajim.connections[self.account].request_last_status_time(
-                        self.contact.jid, '')
 
         # do not wait for os_info if contact is not connected or has error
         # additional check for observer is needed, as show is offline for him
@@ -599,9 +572,6 @@ class ZeroconfVcardWindow:
                 stats += helpers.get_uf_show(c.show)
                 if c.status:
                     stats += ': ' + c.status
-                if c.last_status_time:
-                    stats += '\n' + _('since %s') % time.strftime('%c',
-                            c.last_status_time).decode(locale.getpreferredencoding())
                 one = False
         else: # Maybe gc_vcard ?
             stats = helpers.get_uf_show(self.contact.show)
