@@ -2086,8 +2086,12 @@ class GroupchatControl(ChatControlBase):
         control = win.notebook.get_nth_page(ctrl_page)
 
         win.notebook.remove_page(ctrl_page)
-        GLib.source_remove(self.possible_paused_timeout_id)
-        GLib.source_remove(self.possible_inactive_timeout_id)
+        if self.possible_paused_timeout_id:
+            GLib.source_remove(self.possible_paused_timeout_id)
+            self.possible_paused_timeout_id = None
+        if self.possible_inactive_timeout_id:
+            GLib.source_remove(self.possible_inactive_timeout_id)
+            self.possible_inactive_timeout_id = None
         control.unparent()
         ctrl.parent_win = None
         self.send_chatstate('inactive', self.contact)

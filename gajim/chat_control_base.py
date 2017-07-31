@@ -520,8 +520,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def shutdown(self):
         super(ChatControlBase, self).shutdown()
         # Disconnect timer callbacks
-        GLib.source_remove(self.possible_paused_timeout_id)
-        GLib.source_remove(self.possible_inactive_timeout_id)
+        if self.possible_paused_timeout_id:
+            GLib.source_remove(self.possible_paused_timeout_id)
+        if self.possible_inactive_timeout_id:
+            GLib.source_remove(self.possible_inactive_timeout_id)
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
         gajim.plugin_manager.remove_gui_extension_point('chat_control_base',
@@ -803,6 +805,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         jid = contact.jid
         current_state = contact.our_chatstate
         if current_state is False:  # jid doesn't support chatstates
+            self.possible_paused_timeout_id = None
             return False  # stop looping
 
         message_buffer = self.msg_textview.get_buffer()
@@ -832,6 +835,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         current_state = contact.our_chatstate
         if current_state is False: # jid doesn't support chatstates
+            self.possible_inactive_timeout_id = None
             return False # stop looping
 
         if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
