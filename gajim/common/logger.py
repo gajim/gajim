@@ -1139,41 +1139,6 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg, is_pm=False, additional_data=None):
-        if additional_data is None:
-            additional_data = {}
-
-        if is_pm:
-            with_ = str(with_)
-            type_ = 'gc_msg'
-        else:
-            with_ = with_.getStripped()
-            if direction == 'from':
-                type_ = 'chat_msg_recv'
-            elif direction == 'to':
-                type_ = 'chat_msg_sent'
-
-        start_time = tim - 300 # 5 minutes arrount given time
-        end_time = tim + 300 # 5 minutes arrount given time
-
-        log.debug('start: %s, end: %s, jid: %s, message: %s',
-                  start_time, end_time, with_, msg)
-
-        sql = '''
-            SELECT * FROM logs
-            NATURAL JOIN jids WHERE jid = ? AND message = ?
-            AND time BETWEEN ? AND ?
-            '''
-
-        result = self.con.execute(sql, (with_, msg, start_time, end_time)).fetchone()
-
-        if result:
-            log.debug('Log already in DB, ignoring it')
-            return
-        log.debug('New log received from server archives, storing it')
-        self.write(type_, with_, message=msg, tim=tim,
-                   additional_data=additional_data, mam_query=True)
-
     def search_for_duplicate(self, jid, timestamp, msg):
         """
         Check if a message is already in the `logs` table

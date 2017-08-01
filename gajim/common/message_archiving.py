@@ -25,6 +25,7 @@ import nbxmpp
 
 from common import gajim
 from common import ged
+from common.logger import KindConstant, JIDConstant
 import common.connection_handlers_events as ev
 
 log = logging.getLogger('gajim.c.message_archiving')
@@ -77,23 +78,28 @@ class ConnectionArchive313:
             del self.mam_awaiting_disco_result[obj.jid]
 
     def _nec_agent_info(self, obj):
-        if obj.jid in self.mam_awaiting_disco_result:
-            for identity in obj.identities:
-                if identity['category'] == 'conference':
-                    # it's a groupchat
-                    for with_, direction, tim, msg_txt in \
-                    self.mam_awaiting_disco_result[obj.jid]:
-                        gajim.logger.get_jid_id(with_.getStripped(), 'ROOM')
-                        gajim.logger.save_if_not_exists(with_, direction, tim,
-                            msg_txt, is_pm=True)
-                    del self.mam_awaiting_disco_result[obj.jid]
-                    return
-            # it's not a groupchat
-            for with_, direction, tim, msg_txt in \
-            self.mam_awaiting_disco_result[obj.jid]:
-                gajim.logger.get_jid_id(with_.getStripped())
-                gajim.logger.save_if_not_exists(with_, direction, tim, msg_txt)
+        if obj.jid not in self.mam_awaiting_disco_result:
+            return
+
+        for identity in obj.identities:
+            if identity['category'] != 'conference':
+                continue
+            # it's a groupchat
+            for msg_obj in self.mam_awaiting_disco_result[obj.jid]:
+                gajim.logger.insert_jid(msg_obj.with_.getStripped(),
+                                        type_=JIDConstant.ROOM_TYPE)
+                gajim.nec.push_incoming_event(
+                    ev.MamDecryptedMessageReceivedEvent(
+                        None, disco=True, **vars(msg_obj)))
             del self.mam_awaiting_disco_result[obj.jid]
+            return
+        # it's not a groupchat
+        for msg_obj in self.mam_awaiting_disco_result[obj.jid]:
+            gajim.logger.insert_jid(msg_obj.with_.getStripped())
+            gajim.nec.push_incoming_event(
+                ev.MamDecryptedMessageReceivedEvent(
+                    None, disco=True, **vars(msg_obj)))
+        del self.mam_awaiting_disco_result[obj.jid]
 
     def _nec_result_finished(self, obj):
         if obj.conn.name != self.name:
@@ -121,8 +127,13 @@ class ConnectionArchive313:
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        gajim.logger.save_if_not_exists(obj.with_, obj.direction, obj.timestamp,
-            obj.msgtxt, is_pm=obj.is_pm, additional_data=obj.additional_data)
+        duplicate = gajim.logger.search_for_duplicate(
+            obj.with_, obj.timestamp, obj.msgtxt)
+        if not duplicate:
+            gajim.logger.insert_into_logs(
+                obj.with_, obj.timestamp, obj.kind,
+                unread=False,
+                message=obj.msgtxt)
 
     def get_query_id(self):
         self.mam_query_id = self.connection.getAnID()
