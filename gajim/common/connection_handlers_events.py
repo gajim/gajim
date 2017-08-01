@@ -40,7 +40,7 @@ from common import i18n
 from common import dataforms
 from common import exceptions
 from common.zeroconf.zeroconf import Constant
-from common.logger import LOG_DB_PATH
+from common.logger import LOG_DB_PATH, KindConstant
 from common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from common.jingle_transport import JingleTransportSocks5
 from common.file_props import FilesProp
@@ -1051,15 +1051,19 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.query_id = self.result.getAttr('queryid')
 
         frm = self.msg_.getFrom()
+        # Some servers dont set the 'to' attribute when
+        # we send a message to ourself
         to = self.msg_.getTo()
+        if to is None:
+            to = own_jid
 
         if frm.bareMatch(own_jid):
             self.stanza_id = self.msg_.getOriginID()
-            if not self.stanza_id:
+            if self.stanza_id is None:
                 self.stanza_id = self.msg_.getID()
 
             self.with_ = to
-            self.direction = 'to'
+            self.kind = KindConstant.CHAT_MSG_SENT
         else:
             if self.result.getNamespace() == nbxmpp.NS_MAM_2:
                 self.stanza_id = self.result.getID()
@@ -1067,22 +1071,32 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 self.stanza_id = self.msg_.getID()
 
             self.with_ = frm
-            self.direction = 'from'
+            self.kind = KindConstant.CHAT_MSG_RECV
 
-        if not self.stanza_id:
+        if self.stanza_id is None:
             log.debug('Could not retrieve stanza-id')
 
-        # Use timestamp provided by archive,
-        # Fallback: Use timestamp provided by user and issue a warning
-        delay = self.forwarded.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if not delay:
-            log.warning('No timestamp on archive Message, try fallback')
-            delay = self.msg_.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if not delay:
+        delay = self.forwarded.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if delay is None:
             log.error('Received MAM message without timestamp')
             return
 
-        self.timestamp = helpers.parse_delay(delay)
+        self.timestamp = helpers.parse_datetime(
+            delay, check_utc=True, epoch=True)
+        if self.timestamp is None:
+            log.error('Received MAM message with invalid timestamp: %s', delay)
+            return
+
+        # Save timestamp added by the user
+        user_delay = self.msg_.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if user_delay is not None:
+            self.user_timestamp = helpers.parse_datetime(
+                user_delay, check_utc=True, epoch=True)
+            if self.user_timestamp is None:
+                log.warning('Received MAM message with '
+                            'invalid user timestamp: %s', user_delay)
 
         log.debug('Received mam-message: stanza id: %s', self.stanza_id)
         return True
@@ -1095,19 +1109,27 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if not self.msgtxt:
             # For example Chatstates, Receipts, Chatmarkers
             log.debug('Received MAM message without text')
-            return False
+            return
         self.is_pm = gajim.logger.jid_is_room_jid(self.with_.getStripped())
         if self.is_pm is None:
+            # Check if this event is triggered after a disco, so we dont
+            # run into an endless loop
+            if hasattr(self, 'disco'):
+                log.error('JID not known even after sucessful disco')
+                return
             # we don't know this JID, we need to disco it.
             server = self.with_.getDomain()
             if server not in self.conn.mam_awaiting_disco_result:
-                self.conn.mam_awaiting_disco_result[server] = [
-                    [self.with_, self.direction, self.timestamp, self.msgtxt]]
+                self.conn.mam_awaiting_disco_result[server] = [self]
                 self.conn.discoverInfo(server)
             else:
-                self.conn.mam_awaiting_disco_result[server].append(
-                    [self.with_, self.direction, self.timestamp, self.msgtxt])
+                self.conn.mam_awaiting_disco_result[server].append(self)
             return
+
+        if self.is_pm:
+            self.with_ = str(self.with_)
+        else:
+            self.with_ = self.with_.getStripped()
         return True
 
 class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):

@@ -1139,25 +1139,23 @@ class Logger:
                 (account_jid_id,))
         self._timeout_commit()
 
-    def save_if_not_exists(self, with_, direction, tim, msg, is_pm=False, additional_data=None):
-        if additional_data is None:
-            additional_data = {}
+    def search_for_duplicate(self, jid, timestamp, msg):
+        """
+        Check if a message is already in the `logs` table
 
-        if is_pm:
-            with_ = str(with_)
-            type_ = 'gc_msg'
-        else:
-            with_ = with_.getStripped()
-            if direction == 'from':
-                type_ = 'chat_msg_recv'
-            elif direction == 'to':
-                type_ = 'chat_msg_sent'
+        :param jid:         The jid as string
 
-        start_time = tim - 300 # 5 minutes arrount given time
-        end_time = tim + 300 # 5 minutes arrount given time
+        :param timestamp:   The timestamp in UTC epoch
+
+        :param msg:         The message text
+        """
+
+        # Add 5 minutes around the timestamp
+        start_time = timestamp - 300
+        end_time = timestamp + 300
 
         log.debug('start: %s, end: %s, jid: %s, message: %s',
-                  start_time, end_time, with_, msg)
+                  start_time, end_time, jid, msg)
 
         sql = '''
             SELECT * FROM logs
@@ -1165,14 +1163,63 @@ class Logger:
             AND time BETWEEN ? AND ?
             '''
 
-        result = self.con.execute(sql, (with_, msg, start_time, end_time)).fetchone()
+        result = self.con.execute(sql, (jid, msg, start_time, end_time)).fetchone()
 
-        if result:
-            log.debug('Log already in DB, ignoring it')
-            return
-        log.debug('New log received from server archives, storing it')
-        self.write(type_, with_, message=msg, tim=tim,
-                   additional_data=additional_data, mam_query=True)
+        if result is not None:
+            log.debug('Message already in DB')
+            return True
+        return False
+
+    def insert_jid(self, jid, kind=None, type_=JIDConstant.NORMAL_TYPE):
+        """
+        Insert a new jid into the `jids` table.
+
+        :param jid:     The jid as string
+
+        :param kind:    A KindConstant
+
+        :param type_:   A JIDConstant
+        """
+        if kind == KindConstant.GC_MSG:
+            type_ = JIDConstant.ROOM_TYPE
+        sql = 'INSERT OR IGNORE INTO jids (jid, type) VALUES (?, ?)'
+        self.con.execute(sql, (jid, type_))
+        self._timeout_commit()
+
+    def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
+        """
+        Insert a new message into the `logs` table
+
+        :param jid:     The jid as string
+
+        :param time_:   The timestamp in UTC epoch
+
+        :param kind:    A KindConstant
+
+        :param unread:  If True the message is added to the`unread_messages`
+                        table. Only if kind == CHAT_MSG_RECV
+
+        :param kwargs:  Every additional named argument must correspond to
+                        a field in the `logs` table
+        """
+        self.insert_jid(jid, kind=kind)
+
+        sql = '''
+              INSERT INTO logs (jid_id, time, kind, {columns})
+              VALUES ((SELECT jid_id FROM jids WHERE jid = ?), ?, ?, {values})
+              '''.format(columns=', '.join(kwargs.keys()),
+                         values=', '.join('?' * len(kwargs)))
+
+        lastrowid = self.con.execute(sql, (jid, time_, kind, *kwargs.values())).lastrowid
+
+        if unread and kind == KindConstant.CHAT_MSG_RECV:
+            sql = '''INSERT INTO unread_messages (message_id, jid_id)
+                     VALUES (?, (SELECT jid_id FROM jids WHERE jid = ?))'''
+            self.con.execute(sql, (lastrowid, jid))
+
+        self._timeout_commit()
+
+        return lastrowid
 
     def _nec_gc_message_received(self, obj):
         tim_f = float(obj.timestamp)
