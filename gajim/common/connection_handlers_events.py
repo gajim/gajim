@@ -2707,10 +2707,12 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     base_network_events = []
 
     def init(self):
-        self.additional_data = {}
+        self.additional_data = None
         self.message = ''
         self.keyID = None
         self.type_ = 'chat'
+        self.kind = None
+        self.timestamp = None
         self.subject = ''
         self.chatstate = None
         self.stanza_id = None
@@ -2741,6 +2743,10 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         return self.jid
 
     def generate(self):
+        if self.type_ == 'chat':
+            self.kind = KindConstant.CHAT_MSG_SENT
+        else:
+            self.kind = KindConstant.SINGLE_MSG_SENT
         return True
 
 class StanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):

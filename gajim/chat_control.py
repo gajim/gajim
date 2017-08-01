@@ -927,7 +927,7 @@ class ChatControl(ChatControlBase):
                 gtkgui_helpers.remove_css_class(
                     self.msg_textview, 'msgcorrectingcolor')
 
-            self.print_conversation(message, self.contact.jid,
+            self.print_conversation(message, self.contact.jid, tim=obj.timestamp,
                 encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
                 displaymarking=displaymarking, msg_stanza_id=id_,
                 correct_id=obj.correct_id,

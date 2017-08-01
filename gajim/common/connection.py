@@ -433,14 +433,11 @@ class CommonConnection:
         if not message:
             return
 
-        if obj.type_ == 'chat':
-            kind = 'chat_msg_sent'
-        else:
-            kind = 'single_msg_sent'
-
-        gajim.logger.write(
-            kind, jid, message, subject=obj.subject,
-            additional_data=obj.additional_data)
+        gajim.logger.insert_into_logs(jid, obj.timestamp, obj.kind,
+                                      message=message,
+                                      subject=obj.subject,
+                                      additional_data=obj.additional_data,
+                                      stanza_id=obj.stanza_id)
 
     def ack_subscribed(self, jid):
         """
@@ -2051,6 +2048,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.send_message(obj)
 
     def send_message(self, obj):
+        obj.timestamp = time.time()
         obj.stanza_id = self.connection.send(obj.msg_iq, now=obj.now)
 
         gajim.nec.push_incoming_event(MessageSentEvent(
