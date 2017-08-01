@@ -1051,7 +1051,11 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.query_id = self.result.getAttr('queryid')
 
         frm = self.msg_.getFrom()
+        # Some servers dont set the 'to' attribute when
+        # we send a message to ourself
         to = self.msg_.getTo()
+        if to is None:
+            to = own_jid
 
         if frm.bareMatch(own_jid):
             self.stanza_id = self.msg_.getOriginID()
