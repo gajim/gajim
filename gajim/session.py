@@ -129,8 +129,6 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 # Brand new message, incoming.
                 contact.our_chatstate = obj.chatstate
                 contact.chatstate = obj.chatstate
-                if obj.msg_log_id: # Do not overwrite an existing msg_log_id with None
-                    contact.msg_log_id = obj.msg_log_id
 
         # THIS MUST BE AFTER chatstates handling
         # AND BEFORE playsound (else we hear sounding on chatstates!)
