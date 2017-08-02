@@ -135,8 +135,9 @@ class Logger:
         Row = namedtuple("Row", fields)
         named_row = Row(*row)
         if 'additional_data' in fields:
-            named_row = named_row._replace(
-                additional_data=json.loads(named_row.additional_data))
+            if named_row.additional_data is not None:
+                named_row = named_row._replace(
+                    additional_data=json.loads(named_row.additional_data))
         return named_row
 
     def dispatch(self, event, error):
