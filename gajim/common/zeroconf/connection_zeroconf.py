@@ -333,6 +333,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 msg=_('Please check if avahi-daemon is running.')))
 
     def _nec_stanza_message_outgoing(self, obj):
+        if obj.conn.name != self.name:
+            return
 
         def on_send_ok(stanza_id):
             gajim.nec.push_incoming_event(MessageSentEvent(None, conn=self,
