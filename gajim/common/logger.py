@@ -676,7 +676,7 @@ class Logger:
 
         try:
             messages = self.con.execute(
-                sql, (*jids, restore, pending)).fetchall()
+                sql, tuple(jids) + (restore, pending)).fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
                           exceptions.DatabaseMalformed(LOG_DB_PATH))
@@ -722,8 +722,8 @@ class Logger:
             ORDER BY time, log_line_id
             '''.format(jids=', '.join('?' * len(jids)))
 
-        return self.con.execute(sql, (*jids, 
-                                      date.timestamp(),
+        return self.con.execute(sql, tuple(jids) +
+                                      (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
     def search_log(self, account, jid, query, date=None):
@@ -765,7 +765,7 @@ class Logger:
         '''.format(jids=', '.join('?' * len(jids)),
                    date_search=between if date else '')
 
-        return self.con.execute(sql, (*jids, query)).fetchall()
+        return self.con.execute(sql, tuple(jids) + (query,)).fetchall()
 
     def get_days_with_logs(self, account, jid, year, month):
         """
@@ -803,8 +803,8 @@ class Logger:
             """.format(jids=', '.join('?' * len(jids)),
                        kinds=', '.join(kinds))
 
-        return self.con.execute(sql, (*jids,
-                                      date.timestamp(),
+        return self.con.execute(sql, tuple(jids) +
+                                      (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
     def get_last_date_that_has_logs(self, account, jid):
@@ -831,7 +831,7 @@ class Logger:
 
         # fetchone() returns always at least one Row with all
         # attributes set to None because of the MAX() function
-        return self.con.execute(sql, (*jids,)).fetchone().time
+        return self.con.execute(sql, tuple(jids)).fetchone().time
 
     def get_room_last_message_time(self, account, jid):
         """
@@ -1210,7 +1210,7 @@ class Logger:
               '''.format(columns=', '.join(kwargs.keys()),
                          values=', '.join('?' * len(kwargs)))
 
-        lastrowid = self.con.execute(sql, (jid, time_, kind, *kwargs.values())).lastrowid
+        lastrowid = self.con.execute(sql, (jid, time_, kind) + tuple(kwargs.values())).lastrowid
 
         if unread and kind == KindConstant.CHAT_MSG_RECV:
             sql = '''INSERT INTO unread_messages (message_id, jid_id)

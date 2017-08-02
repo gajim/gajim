@@ -20,6 +20,7 @@ import sys
 import logging
 import importlib.util as imp
 from collections import OrderedDict
+from importlib.machinery import SourceFileLoader
 
 from gi.repository import GdkPixbuf, Gtk, GLib
 
@@ -65,10 +66,9 @@ def load(path):
         module_name = 'emoticons_theme.pyc'
         theme_path = os.path.join(path, module_name)
 
-    spec = imp.spec_from_file_location(module_name, theme_path)
+    loader = SourceFileLoader(module_name, theme_path)
     try:
-        theme = imp.module_from_spec(spec)
-        spec.loader.exec_module(theme)
+        theme = loader.load_module()
     except FileNotFoundError:
         log.exception('Emoticons theme not found')
         return
