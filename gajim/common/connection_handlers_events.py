@@ -2708,7 +2708,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
 
     def init(self):
         self.additional_data = None
-        self.message = ''
+        self.message = None
         self.keyID = None
         self.type_ = 'chat'
         self.kind = None
@@ -2723,7 +2723,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.session = None
         self.forward_from = None
         self.form_node = None
-        self.original_message = None
         self.delayed = None
         self.callback = None
         self.callback_args = []

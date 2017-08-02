@@ -230,7 +230,6 @@ class MessageControl(object):
             return
 
         obj.message = helpers.remove_invalid_xml_chars(obj.message)
-        obj.original_message = obj.message
 
         conn = gajim.connections[self.account]
 

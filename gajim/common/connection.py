@@ -426,15 +426,13 @@ class CommonConnection:
             return
 
         if obj.xhtml and gajim.config.get('log_xhtml_messages'):
-            message = '<body xmlns="%s">%s</body>' % (nbxmpp.NS_XHTML,
-                                                      obj.xhtml)
-        else:
-            message = obj.original_message or obj.message
-        if not message:
+            obj.message = '<body xmlns="%s">%s</body>' % (nbxmpp.NS_XHTML,
+                                                          obj.xhtml)
+        if obj.message is None:
             return
 
         gajim.logger.insert_into_logs(jid, obj.timestamp, obj.kind,
-                                      message=message,
+                                      message=obj.message,
                                       subject=obj.subject,
                                       additional_data=obj.additional_data,
                                       stanza_id=obj.stanza_id)
