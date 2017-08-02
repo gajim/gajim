@@ -112,6 +112,9 @@ pillow
     "${MINGW_ROOT}"/bin/gtk-update-icon-cache-3.0.exe --force \
         "${MINGW_ROOT}/share/icons/Adwaita"
 
+    # Compile GLib schemas
+    "${MINGW_ROOT}"/bin/glib-compile-schemas.exe "${MINGW_ROOT}"/share/glib-2.0/schemas
+
 }
 
 function install_gajim {
