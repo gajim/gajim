@@ -1297,7 +1297,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_transient_for(gajim.interface.roster.window)
         self.set_name('Gajim')
         self.set_version(gajim.version)
-        s = 'Copyright © 2003-2014 Gajim Team'
+        s = 'Copyright © 2003-2017 Gajim Team'
         self.set_copyright(s)
         copying_file_path = self.get_path('COPYING')
         if copying_file_path:
