@@ -531,6 +531,11 @@ class PluginManager(metaclass=Singleton):
 
             try:
                 if module_name in sys.modules:
+                    if path == gajim.PLUGINS_DIRS[0]:
+                        # Only reload plugins from Gajim base dir when they
+                        # dont exist. This means plugins in the user path are
+                        # always preferred.
+                        continue
                     from imp import reload
                     log.info('Reloading %s', module_name)
                     module = reload(sys.modules[module_name])
