@@ -589,6 +589,7 @@ class PluginManager(metaclass=Singleton):
                     log.debug('%s : %s' % (module_attr_name,
                         'wrong manifest file. section are required!'))
 
+        sys.path.remove(path)
         return plugins_found
 
     def install_from_zip(self, zip_filename, owerwrite=None):
