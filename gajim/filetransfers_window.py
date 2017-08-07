@@ -30,6 +30,7 @@ import os
 import time
 
 from enum import IntEnum, unique
+from datetime import datetime
 
 import gtkgui_helpers
 import tooltips
@@ -682,11 +683,8 @@ class FileTransfersWindow:
 
     def __convert_date(self, epoch):
         # Converts date-time from seconds from epoch to iso 8601
-        import time, datetime
-        ts = time.gmtime(epoch)
-        dt = datetime.datetime(ts.tm_year, ts.tm_mon, ts.tm_mday, ts.tm_hour,
-                               ts.tm_min,  ts.tm_sec)
-        return dt.isoformat()
+        dt = datetime.utcfromtimestamp(epoch)
+        return dt.isoformat() + 'Z'
 
     def get_send_file_props(self, account, contact, file_path, file_name,
     file_desc=''):
