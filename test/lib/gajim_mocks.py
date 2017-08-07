@@ -25,6 +25,7 @@ class MockConnection(Mock, ConnectionHandlers):
         self.sessions = {}
         self.nested_group_delimiter = '::'
         self.received_message_hashes = []
+        self.server_resource = 'Gajim'
 
         gajim.interface.instances[account] = {'infos': {}, 'disco': {},
                 'gc_config': {}, 'search': {}, 'sub_request': {}}
