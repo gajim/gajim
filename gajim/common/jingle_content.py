@@ -42,7 +42,7 @@ class JingleContent:
     An abstraction of content in Jingle sessions
     """
 
-    def __init__(self, session, transport):
+    def __init__(self, session, transport, senders):
         self.session = session
         self.transport = transport
         # will be filled by JingleSession.add_content()
@@ -56,7 +56,10 @@ class JingleContent:
 
         self.media = None
 
-        self.senders = 'both' #FIXME
+        self.senders = senders
+        if self.senders is None:
+            self.senders = 'both'
+
         self.allow_sending = True # Used for stream direction, attribute 'senders'
 
         # These were found by the Politie
@@ -138,7 +141,9 @@ class JingleContent:
         if payload is None:
             payload = []
         return nbxmpp.Node('content',
-                           attrs={'name': self.name, 'creator': self.creator},
+                           attrs={'name': self.name,
+                                  'creator': self.creator,
+                                  'senders': self.senders},
                            payload=payload)
 
     def send_candidate(self, candidate):

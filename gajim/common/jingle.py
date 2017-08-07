@@ -163,9 +163,14 @@ class ConnectionJingle(object):
             transport = JingleTransportSocks5()
         elif contact.supports(nbxmpp.NS_JINGLE_IBB):
             transport = JingleTransportIBB()
+
+        senders = 'initiator'
+        if request:
+            senders = 'responder'
         c = JingleFileTransfer(jingle, transport=transport,
                                file_props=file_props,
-                               use_security=use_security)
+                               use_security=use_security,
+                               senders=senders)
         file_props.algo = self.__hash_support(contact)
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()

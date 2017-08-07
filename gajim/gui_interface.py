@@ -1225,7 +1225,7 @@ class Interface:
         # TODO: conditional blocking if peer is not in roster
 
         account = obj.conn.name
-        content_types = set(c[0] for c in obj.contents)
+        content_types = obj.contents.media
 
         # check type of jingle session
         if 'audio' in content_types or 'video' in content_types:

@@ -526,7 +526,7 @@ class JingleSession:
         contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
         # If we are not receivin a file
         # Check if there's already a session with this user:
-        if contents[0][0] != 'file':
+        if contents[0].media != 'file':
             for session in self.connection.iter_jingle_sessions(self.peerjid):
                 if session is not self:
                     reason = nbxmpp.Node('reason')
@@ -538,8 +538,7 @@ class JingleSession:
         else:
             # Stop if we don't have the requested file or the peer is not
             # allowed to request the file
-            request = \
-                 jingle.getTag('content').getTag('description').getTag('request')
+            request = contents[0].senders == 'responder'
             if request:
                 self.request = True
                 hash_tag = request.getTag('file').getTag('hash')
@@ -568,7 +567,7 @@ class JingleSession:
         gajim.nec.push_incoming_event(JingleRequestReceivedEvent(None,
                                                                  conn=self.connection,
                                                                  jingle_session=self,
-                                                                 contents=contents))
+                                                                 contents=contents[0]))
 
     def __broadcast(self, stanza, jingle, error, action):
         """
@@ -624,6 +623,7 @@ class JingleSession:
         contents_rejected = []
         reasons = set()
         for element in jingle.iterTags('content'):
+            senders = element.getAttr('senders')
             transport = get_jingle_transport(element.getTag('transport'))
             if transport:
                 transport.ourjid = self.ourjid
@@ -631,10 +631,11 @@ class JingleSession:
             if content_type:
                 try:
                     if transport:
-                        content = content_type(self, transport)
+                        content = content_type(
+                            self, transport=transport, senders=senders)
                         self.add_content(element['name'],
                                          content, 'peer')
-                        contents.append((content.media,))
+                        contents.append(content)
                     else:
                         reasons.add('unsupported-transports')
                         contents_rejected.append((element['name'], 'peer'))
@@ -711,12 +712,12 @@ class JingleSession:
     @staticmethod
     def __append_content(jingle, content):
         """
-        Append <content/> element to <jingle/> element, with (full=True) or
-        without (full=False) <content/> children
+        Append <content/> element to <jingle/> element
         """
         jingle.addChild('content',
                         attrs={'name': content.name,
-                               'creator': content.creator})
+                               'creator': content.creator,
+                               'senders': content.senders})
 
     def __append_contents(self, jingle):
         """

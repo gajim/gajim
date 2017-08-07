@@ -58,8 +58,8 @@ class State(IntEnum):
 class JingleFileTransfer(JingleContent):
 
     def __init__(self, session, transport=None, file_props=None,
-                 use_security=False):
-        JingleContent.__init__(self, session, transport)
+                 use_security=False, senders=None):
+        JingleContent.__init__(self, session, transport, senders)
         log.info("transport value: %s", transport)
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
