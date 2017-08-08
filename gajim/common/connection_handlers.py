@@ -897,6 +897,8 @@ class ConnectionHandlersBase:
             self._nec_message_received)
         gajim.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
+        gajim.ged.register_event_handler('gc-message-received', ged.CORE,
+            self._nec_gc_message_received)
 
     def cleanup(self):
         gajim.ged.remove_event_handler('iq-error-received', ged.CORE,
@@ -911,6 +913,8 @@ class ConnectionHandlersBase:
             self._nec_message_received)
         gajim.ged.remove_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
+        gajim.ged.remove_event_handler('gc-message-received', ged.CORE,
+            self._nec_gc_message_received)
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -1156,6 +1160,24 @@ class ConnectionHandlersBase:
             gajim.nec.push_incoming_event(GcMessageReceivedEvent(None,
                 conn=self, msg_obj=obj))
             return True
+
+    def _nec_gc_message_received(self, obj):
+        if gajim.config.should_log(obj.conn.name, obj.jid) and not \
+        obj.timestamp < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
+        obj.nick:
+            # if not obj.nick, it means message comes from room itself
+            # usually it hold description and can be send at each connection
+            # so don't store it in logs
+            gajim.logger.insert_into_logs(obj.jid,
+                                          obj.timestamp,
+                                          KindConstant.GC_MSG,
+                                          message=obj.msgtxt,
+                                          contact_name=obj.nick,
+                                          additional_data=obj.additional_data)
+            # store in memory time of last message logged.
+            # this will also be saved in rooms_last_message_time table
+            # when we quit this muc
+            obj.conn.last_history_time[obj.jid] = obj.timestamp
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):

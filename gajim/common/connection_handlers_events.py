@@ -1145,7 +1145,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = ['raw-message-received']
 
     def init(self):
-        self.additional_data = {}
+        self.additional_data = None
 
     def generate(self):
         self.conn = self.base_event.conn

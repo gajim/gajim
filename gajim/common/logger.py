@@ -122,8 +122,6 @@ class Logger:
             # db will be created in src/common/checks_paths.py
             return
         self.attach_cache_database()
-        gajim.ged.register_event_handler('gc-message-received',
-            ged.POSTCORE, self._nec_gc_message_received)
 
     @staticmethod
     def namedtuple_factory(cursor, row):
@@ -592,25 +590,11 @@ class Logger:
 
         write_unread = False
         try:
-            if kind == 'gc_msg':
-                if jid.find('/') != -1: # if it has a /
-                    jid, nick = jid.split('/', 1)
-                else:
-                    # it's server message f.e. error message
-                    # when user tries to ban someone but he's not allowed to
-                    nick = None
-
-                # re-get jid_id for the new jid
-                jid_id = self.get_jid_id(jid, 'ROOM')
-
-                contact_name_col = nick
-            else:
-                jid_id = self.get_jid_id(jid)
-                if kind == 'chat_msg_recv':
-                    if not self.jid_is_from_pm(jid) and not mam_query:
-                        # Save in unread table only if it's not a pm
-                        write_unread = True
-
+            jid_id = self.get_jid_id(jid)
+            if kind == 'chat_msg_recv':
+                if not self.jid_is_from_pm(jid) and not mam_query:
+                    # Save in unread table only if it's not a pm
+                    write_unread = True
 
             values = (jid_id, contact_name_col, time_col, kind_col, None,
                     message_col, subject_col, additional_data_col)
@@ -1206,18 +1190,3 @@ class Logger:
         self._timeout_commit()
 
         return lastrowid
-
-    def _nec_gc_message_received(self, obj):
-        tim_f = float(obj.timestamp)
-        tim_int = int(tim_f)
-        if gajim.config.should_log(obj.conn.name, obj.jid) and not \
-        tim_int < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
-        obj.nick:
-            # if not obj.nick, it means message comes from room itself
-            # usually it hold description and can be send at each connection
-            # so don't store it in logs
-            self.write('gc_msg', obj.fjid, obj.msgtxt, tim=obj.timestamp, additional_data=obj.additional_data)
-            # store in memory time of last message logged.
-            # this will also be saved in rooms_last_message_time table
-            # when we quit this muc
-            obj.conn.last_history_time[obj.jid] = tim_f
