@@ -21,6 +21,8 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import nbxmpp
+
 from common import helpers
 
 from common import events
@@ -31,6 +33,7 @@ from common import contacts
 from common import ged
 from common.connection_handlers_events import ChatstateReceivedEvent, \
     InformationEvent
+from common.logger import KindConstant
 
 import message_control
 
@@ -86,21 +89,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if not obj.msgtxt and obj.chatstate is None:
                 return
 
-            log_type = 'chat_msg'
+            log_type = KindConstant.CHAT_MSG_RECV
+            if obj.forwarded and obj.sent:
+                log_type = KindConstant.CHAT_MSG_SENT
         else:
-            log_type = 'single_msg'
-        end = '_recv'
-        if obj.forwarded and obj.sent:
-            end = '_sent'
-        log_type += end
-
-        if self.is_loggable() and obj.msgtxt:
-            if obj.xhtml and gajim.config.get('log_xhtml_messages'):
-                msg_to_log = obj.xhtml
-            else:
-                msg_to_log = obj.msgtxt
-            obj.msg_log_id = gajim.logger.write(log_type, obj.fjid,
-                msg_to_log, tim=obj.timestamp, subject=obj.subject, additional_data=obj.additional_data)
+            log_type = KindConstant.SINGLE_MSG_RECV
+            if obj.forwarded and obj.sent:
+                log_type = KindConstant.SINGLE_MSG_SENT
 
         treat_as = gajim.config.get('treat_incoming_messages')
         if treat_as:
@@ -110,6 +105,22 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             # It's a Private message
             pm = True
             obj.mtype = 'pm'
+
+        if self.is_loggable() and obj.msgtxt:
+            if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+                msg_to_log = obj.xhtml
+            else:
+                msg_to_log = obj.msgtxt
+
+            jid = obj.fjid
+            if not pm:
+                jid = obj.jid
+
+            obj.msg_log_id = gajim.logger.insert_into_logs(
+                jid, obj.timestamp, log_type,
+                message=msg_to_log,
+                subject=obj.subject,
+                additional_data=obj.additional_data)
 
         # Handle chat states
         if contact and (not obj.forwarded or not obj.sent):
