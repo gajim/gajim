@@ -1033,14 +1033,19 @@ class Logger:
 
     def remove_roster(self, account_jid):
         """
-        Remove all entry from account_jid roster
-        """
-        account_jid_id = self.get_jid_id(account_jid)
+        Remove the roster of an account
 
-        self.cur.execute('DELETE FROM roster_entry WHERE account_jid_id=?',
-                (account_jid_id,))
-        self.cur.execute('DELETE FROM roster_group WHERE account_jid_id=?',
-                (account_jid_id,))
+        :param account_jid:     The jid of the account
+        """
+
+        jid_id = self.get_jid_id(account_jid)
+
+        sql = '''
+            DELETE FROM roster_entry WHERE account_jid_id = {jid_id};
+            DELETE FROM roster_group WHERE account_jid_id = {jid_id};
+            '''.format(jid_id=jid_id)
+
+        self.con.executescript(sql)
         self._timeout_commit()
 
     def search_for_duplicate(self, jid, timestamp, msg):
