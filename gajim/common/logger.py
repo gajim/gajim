@@ -1079,10 +1079,13 @@ class Logger:
 
         :param type_:   A JIDConstant
         """
+        if jid in self.jids_already_in:
+            return
         if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
             type_ = JIDConstant.ROOM_TYPE
         sql = 'INSERT OR IGNORE INTO jids (jid, type) VALUES (?, ?)'
         self.con.execute(sql, (jid, type_))
+        self.jids_already_in.append(jid)
         self._timeout_commit()
 
     def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
