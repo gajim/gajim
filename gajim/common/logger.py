@@ -328,7 +328,7 @@ class Logger:
         self.jids_already_in.append(jid)
         return jid_id
 
-    def convert_human_values_to_db_api_values(self, kind, show):
+    def convert_kind_values_to_db_api_values(self, kind):
         """
         Convert from string style to constant ints for db
         """
@@ -349,25 +349,30 @@ class Logger:
         elif kind == 'error':
             kind_col = KindConstant.ERROR
 
+        return kind_col
+
+    def convert_show_values_to_db_api_values(self, show):
+        """
+        Convert from string style to constant ints for db
+        """
+
         if show == 'online':
-            show_col = ShowConstant.ONLINE
+            return ShowConstant.ONLINE
         elif show == 'chat':
-            show_col = ShowConstant.CHAT
+            return ShowConstant.CHAT
         elif show == 'away':
-            show_col = ShowConstant.AWAY
+            return ShowConstant.AWAY
         elif show == 'xa':
-            show_col = ShowConstant.XA
+            return ShowConstant.XA
         elif show == 'dnd':
-            show_col = ShowConstant.DND
+            return ShowConstant.DND
         elif show == 'offline':
-            show_col = ShowConstant.OFFLINE
+            return ShowConstant.OFFLINE
         elif show is None:
-            show_col = None
+            return ShowConstant.ONLINE
         else: # invisible in GC when someone goes invisible
             # it's a RFC violation .... but we should not crash
-            show_col = 'UNKNOWN'
-
-        return kind_col, show_col
+            return None
 
     def convert_human_transport_type_to_db_api_values(self, type_):
         """
@@ -552,7 +557,7 @@ class Logger:
             all_messages.append((results, shown))
         return all_messages
 
-    def write(self, kind, jid, message=None, show=None, tim=None, subject=None,
+    def write(self, kind, jid, message=None, tim=None, subject=None,
               additional_data=None, mam_query=False):
         """
         Write a row (status, gcstatus, message etc) to logs database
@@ -583,29 +588,11 @@ class Logger:
         else:
             time_col = float(time.time())
 
-        kind_col, show_col = self.convert_human_values_to_db_api_values(kind,
-                show)
+        kind_col = self.convert_kind_values_to_db_api_values(kind)
 
         write_unread = False
         try:
-            # now we may have need to do extra care for some values in columns
-            if kind == 'status': # we store (not None) time, jid, show, msg
-                # status for roster items
-                jid_id = self.get_jid_id(jid)
-                if show is None: # show is None (xmpp), but we say that 'online'
-                    show_col = ShowConstant.ONLINE
-
-            elif kind == 'gcstatus':
-                # status in ROOM (for pm status see status)
-                if show is None: # show is None (xmpp), but we say that 'online'
-                    show_col = ShowConstant.ONLINE
-                jid, nick = jid.split('/', 1)
-
-                # re-get jid_id for the new jid
-                jid_id = self.get_jid_id(jid, 'ROOM')
-                contact_name_col = nick
-
-            elif kind == 'gc_msg':
+            if kind == 'gc_msg':
                 if jid.find('/') != -1: # if it has a /
                     jid, nick = jid.split('/', 1)
                 else:
@@ -624,10 +611,8 @@ class Logger:
                         # Save in unread table only if it's not a pm
                         write_unread = True
 
-            if show_col == 'UNKNOWN': # unknown show, do not log
-                return
 
-            values = (jid_id, contact_name_col, time_col, kind_col, show_col,
+            values = (jid_id, contact_name_col, time_col, kind_col, None,
                     message_col, subject_col, additional_data_col)
             return self.commit_to_db(values, write_unread)
 
@@ -1181,7 +1166,7 @@ class Logger:
 
         :param type_:   A JIDConstant
         """
-        if kind == KindConstant.GC_MSG:
+        if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
             type_ = JIDConstant.ROOM_TYPE
         sql = 'INSERT OR IGNORE INTO jids (jid, type) VALUES (?, ?)'
         self.con.execute(sql, (jid, type_))

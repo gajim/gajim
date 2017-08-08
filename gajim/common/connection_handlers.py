@@ -1059,7 +1059,13 @@ class ConnectionHandlersBase:
 
         if gajim.config.get('log_contact_status_changes') and \
         gajim.config.should_log(self.name, obj.jid):
-            gajim.logger.write('status', obj.jid, obj.status, obj.show)
+            show = gajim.logger.convert_show_values_to_db_api_values(obj.show)
+            if show is not None:
+                gajim.logger.insert_into_logs(nbxmpp.JID(obj.jid).getStripped(),
+                                              time_time(),
+                                              KindConstant.STATUS,
+                                              message=obj.status,
+                                              show=show)
 
     def _nec_gc_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -1162,8 +1168,12 @@ class ConnectionHandlersBase:
         subject = msg.getSubject()
 
         if session.is_loggable():
-            gajim.logger.write('error', frm, error_msg, tim=tim,
-                subject=subject)
+            gajim.logger.insert_into_logs(nbxmpp.JID(frm).getStripped(),
+                                          tim,
+                                          KindConstant.ERROR,
+                                          message=error_msg,
+                                          subject=subject)
+
         gajim.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
             fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
             msg=msgtxt, time_=tim, session=session, stanza=msg))

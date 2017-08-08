@@ -932,7 +932,15 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if jid:
                 # we know real jid, save it in db
                 st += ' (%s)' % jid
-            gajim.logger.write('gcstatus', self.fjid, st, self.show)
+            show = gajim.logger.convert_show_values_to_db_api_values(self.show)
+            if show is not None:
+                fjid = nbxmpp.JID(self.fjid)
+                gajim.logger.insert_into_logs(fjid.getStripped(),
+                                              time_time(),
+                                              KindConstant.GCSTATUS,
+                                              contact_name=fjid.getResource(),
+                                              message=st,
+                                              show=show)
         if self.avatar_sha == '':
             # contact has no avatar
             puny_nick = helpers.sanitize_filename(self.nick)
