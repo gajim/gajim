@@ -752,16 +752,21 @@ class Logger:
             return self.get_last_date_that_has_logs(account, jid)
         return row.time
 
-    def set_room_last_message_time(self, jid, time):
+    def set_room_last_message_time(self, jid, timestamp):
         """
-        Set last time (in seconds since EPOCH) for which we had logs for that
-        room in rooms_last_message_time table
+        Set the timestamp of the last message we received in a room.
+
+        :param jid:         The jid
+
+        :param timestamp:   The timestamp in epoch
         """
-        jid_id = self.get_jid_id(jid, 'ROOM')
-        # jid_id is unique in this table, create or update :
-        sql = 'REPLACE INTO rooms_last_message_time VALUES (%d, %d)' % \
-                (jid_id, time)
-        self.simple_commit(sql)
+        self.insert_jid(jid, type_=JIDConstant.ROOM_TYPE)
+
+        sql = '''REPLACE INTO rooms_last_message_time
+                 VALUES ((SELECT jid_id FROM jids WHERE jid = ?), ?)'''
+
+        self.con.execute(sql, (jid, timestamp))
+        self._timeout_commit()
 
     def save_transport_type(self, jid, type_):
         """
