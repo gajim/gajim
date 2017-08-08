@@ -836,8 +836,7 @@ class ConnectionPEP(object):
     def retract_nickname(self):
         if not self.pep_supported:
             return
-        self.send_nickname(None)
-        # not all client support new XEP, so we still retract
+
         self._pubsub_connection.send_pb_retract('', nbxmpp.NS_NICK, '0')
 
     def send_location(self, info):

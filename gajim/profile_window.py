@@ -382,6 +382,7 @@ class ProfileWindow:
             nick = vcard_['NICKNAME']
             gajim.connections[self.account].send_nickname(nick)
         if nick == '':
+            gajim.connections[self.account].retract_nickname()
             nick = gajim.config.get_per('accounts', self.account, 'name')
         gajim.nicks[self.account] = nick
         gajim.connections[self.account].send_vcard(vcard_)
