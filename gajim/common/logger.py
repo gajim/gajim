@@ -469,28 +469,6 @@ class Logger:
         if sub == SubscriptionConstant.BOTH:
             return 'both'
 
-    def commit_to_db(self, values, write_unread=False):
-        sql = '''INSERT INTO logs (jid_id, contact_name, time, kind, show,
-                message, subject, additional_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
-        try:
-            self.cur.execute(sql, values)
-        except sqlite.OperationalError as e:
-            raise exceptions.PysqliteOperationalError(str(e))
-        except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed(LOG_DB_PATH)
-        message_id = None
-        if write_unread:
-            try:
-                self.con.commit()
-                message_id = self.cur.lastrowid
-            except sqlite.OperationalError as e:
-                print(str(e), file=sys.stderr)
-        else:
-            self._timeout_commit()
-        if message_id:
-            self.insert_unread_events(message_id, values[0])
-        return message_id
-
     def insert_unread_events(self, message_id, jid_id):
         """
         Add unread message with id: message_id
@@ -554,55 +532,6 @@ class Logger:
 
             all_messages.append((results, shown))
         return all_messages
-
-    def write(self, kind, jid, message=None, tim=None, subject=None,
-              additional_data=None, mam_query=False):
-        """
-        Write a row (status, gcstatus, message etc) to logs database
-
-        kind can be status, gcstatus, gc_msg, (we only recv for those 3),
-        single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent we cannot
-        know if it is pm or normal chat message, we try to guess see
-        jid_is_from_pm()
-
-        We analyze jid and store it as follows:
-                jids.jid text column will hold JID if TC-related, room_jid if GC-related,
-                ROOM_JID/nick if pm-related.
-        """
-
-        if additional_data is None:
-            additional_data = {}
-        if self.jids_already_in == []: # only happens if we just created the db
-            self.open_db()
-
-        contact_name_col = None # holds nickname for kinds gcstatus, gc_msg
-        # message holds the message unless kind is status or gcstatus,
-        # then it holds status message
-        message_col = message
-        subject_col = subject
-        additional_data_col = json.dumps(additional_data)
-        if tim:
-            time_col = float(tim)
-        else:
-            time_col = float(time.time())
-
-        kind_col = self.convert_kind_values_to_db_api_values(kind)
-
-        write_unread = False
-        try:
-            jid_id = self.get_jid_id(jid)
-            if kind == 'chat_msg_recv':
-                if not self.jid_is_from_pm(jid) and not mam_query:
-                    # Save in unread table only if it's not a pm
-                    write_unread = True
-
-            values = (jid_id, contact_name_col, time_col, kind_col, None,
-                    message_col, subject_col, additional_data_col)
-            return self.commit_to_db(values, write_unread)
-
-        except (exceptions.DatabaseMalformed,
-                exceptions.PysqliteOperationalError) as error:
-            self.dispatch('DB_ERROR', error)
 
     def get_last_conversation_lines(self, account, jid, pending):
         """
