@@ -153,7 +153,7 @@ class TestChatControlSession(unittest.TestCase):
         sess = self.conn.sessions[jid]['123']
 
         # message was logged
-        calls = gajim.logger.mockGetNamedCalls('write')
+        calls = gajim.logger.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(1, len(calls))
 
         # no ChatControl was open and autopopup was off
@@ -171,7 +171,7 @@ class TestChatControlSession(unittest.TestCase):
         jid = 'bct@necronomicorp.com'
         fjid = 'bct@necronomicorp.com/Gajim'
         msgtxt = 'testing two'
-        roster = RosterWindow()
+        roster = RosterWindow(gajim.app)
 
         sess = self.conn.sessions[jid]['123']
         sess.control = MockChatControl(fjid, account_name)
@@ -179,7 +179,7 @@ class TestChatControlSession(unittest.TestCase):
         self.receive_chat_msg(fjid, msgtxt)
 
         # message was logged
-        calls = gajim.logger.mockGetNamedCalls('write')
+        calls = gajim.logger.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(2, len(calls))
 
         # the message does not go into the event queue
@@ -207,7 +207,7 @@ class TestChatControlSession(unittest.TestCase):
         #self.receive_chat_msg(fjid, msgtxt)
 
         ## message was logged
-        #calls = gajim.logger.mockGetNamedCalls('write')
+        #calls = gajim.logger.mockGetNamedCalls('insert_into_logs')
         #self.assertEqual(1, len(calls))
 
         ## the message does not go into the event queue

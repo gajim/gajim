@@ -52,6 +52,10 @@ test:
 	${PYTHON} test/runtests.py
 .PHONY: test
 
+test_nogui:
+	${PYTHON} test/runtests.py -n
+.PHONY: test_nogui
+
 doc:
 	epydoc --config=doc/epydoc.conf
 .PHONY: doc

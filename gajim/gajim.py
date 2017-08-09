@@ -105,7 +105,8 @@ class GajimApplication(Gtk.Application):
         self.rng_seed = None
 
         GLib.set_prgname('gajim')
-        GLib.set_application_name('Gajim')
+        if GLib.get_application_name() != 'Gajim':
+            GLib.set_application_name('Gajim')
 
     def do_startup(self):
         Gtk.Application.do_startup(self)
@@ -400,5 +401,6 @@ class GajimApplication(Gtk.Application):
                 self.lookup_action(account + action_name).set_enabled(True)
 
 
-app = GajimApplication()
-app.run(sys.argv)
+if __name__ == '__main__':
+    app = GajimApplication()
+    app.run(sys.argv)

@@ -5,6 +5,8 @@ import time
 import lib
 lib.setup_env()
 
+from gi.repository import GLib
+
 from common import resolver
 
 from mock import Mock, expectParams
@@ -28,41 +30,38 @@ class TestResolver(unittest.TestCase):
     def setUp(self):
         self.idlequeue_thread = IdleQueueThread()
         self.idlequeue_thread.start()
+        self.main_context = GLib.MainContext()
+        self.main_context.push_thread_default()
+        self.main_loop = GLib.MainLoop(self.main_context)
 
         self.iq = self.idlequeue_thread.iq
         self._reset()
         self.resolver = None
 
     def tearDown(self):
+        self.main_context.pop_thread_default()
         self.idlequeue_thread.stop_thread()
         self.idlequeue_thread.join()
 
     def _reset(self):
-        self.flag = False
         self.expect_results = False
-        self.nslookup = False
         self.resolver = None
 
-    def testLibAsyncNSResolver(self):
+    def testGioResolver(self):
         self._reset()
-        if not resolver.USE_LIBASYNCNS:
-            print('testLibAsyncResolver: libasyncns-python not installed')
-            return
-        self.resolver = resolver.LibAsyncNSResolver()
+        self.resolver = resolver.GioResolver()
 
-        for name, type, expect_results in TEST_LIST:
+        for name, type_, expect_results in TEST_LIST:
             self.expect_results = expect_results
-            self._runLANSR(name, type)
-            self.flag = False
+            self._runGR(name, type_)
 
-    def _runLANSR(self, name, type):
+    def _runGR(self, name, type_):
         self.resolver.resolve(
                 host = name,
-                type = type,
+                type_ = type_,
                 on_ready = self._myonready)
-        while not self.flag:
-            time.sleep(1)
-            self.resolver.process()
+
+        self.main_loop.run()
 
     def _myonready(self, name, result_set):
         if __name__ == '__main__':
@@ -73,28 +72,11 @@ class TestResolver(unittest.TestCase):
             pprint('res.resolved_hosts: %s' % self.resolver.resolved_hosts)
             pprint('')
         if self.expect_results:
-            self.assert_(len(result_set) > 0)
+            self.assertTrue(len(result_set) > 0)
         else:
-            self.assert_(result_set == [])
-        self.flag = True
-        if self.nslookup:
-            self._testNSLR()
+            self.assertTrue(result_set == [])
+        self.main_loop.quit()
 
-    def testNSLookupResolver(self):
-        self._reset()
-        self.nslookup = True
-        self.resolver = resolver.NSLookupResolver(self.iq)
-        self.test_list = TEST_LIST
-        self._testNSLR()
-
-    def _testNSLR(self):
-        if self.test_list == []:
-            return
-        name, type, self.expect_results = self.test_list.pop()
-        self.resolver.resolve(
-                host = name,
-                type = type,
-                on_ready = self._myonready)
 
 if __name__ == '__main__':
     unittest.main()

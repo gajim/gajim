@@ -20,16 +20,16 @@ class TestRosterWindow(unittest.TestCase):
     def setUp(self):
         gajim.interface = MockInterface()
 
-        self.C_NAME = roster_window.C_NAME
-        self.C_TYPE = roster_window.C_TYPE
-        self.C_JID = roster_window.C_JID
-        self.C_ACCOUNT = roster_window.C_ACCOUNT
+        self.C_NAME = roster_window.Column.NAME
+        self.C_TYPE = roster_window.Column.TYPE
+        self.C_JID = roster_window.Column.JID
+        self.C_ACCOUNT = roster_window.Column.ACCOUNT
 
         # Add after creating RosterWindow
         # We want to test the filling explicitly
         gajim.contacts = contacts_module.LegacyContactsAPI()
         gajim.connections = {}
-        self.roster = roster_window.RosterWindow()
+        self.roster = roster_window.RosterWindow(gajim.app)
 
         for acc in contacts:
             gajim.connections[acc] = MockConnection(acc)

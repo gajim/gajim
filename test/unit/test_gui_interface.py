@@ -20,8 +20,7 @@ class TestInterface(unittest.TestCase):
 
     def test_instantiation(self):
         ''' Test that we can proper initialize and do not fail on globals '''
-        interface = Interface()
-        interface.run()
+        gajim.app.run()
 
     def test_links_regexp_entire(self):
         sut = Interface()
