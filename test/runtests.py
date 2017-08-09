@@ -39,7 +39,6 @@ modules = ( 'unit.test_protocol_caps',
             'unit.test_caps_cache',
             'unit.test_contacts',
             'unit.test_account',
-            'unit.test_gui_interface',
           )
 
 if use_x:
@@ -47,6 +46,7 @@ if use_x:
                  #'integration.test_gui_event_integration',
                  'integration.test_roster',
                  'integration.test_resolver',
+                 'unit.test_gui_interface',
                )
 
 nb_errors = 0
