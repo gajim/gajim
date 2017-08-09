@@ -107,6 +107,8 @@ class MockInterface(Mock):
         self.msg_win_mgr = Mock()
         self.roster = Mock()
         gajim.ged = ged.GlobalEventsDispatcher()
+        import plugins
+        gajim.plugin_manager = plugins.PluginManager()
 
         self.remote_ctrl = None
         self.instances = {}
@@ -126,7 +128,8 @@ class MockInterface(Mock):
 
 class MockLogger(Mock):
     def __init__(self):
-        Mock.__init__(self, {'write': None, 'get_transports_type': {}})
+        Mock.__init__(self, {'insert_into_logs': None,
+            'get_transports_type': {}})
         self.cur = Mock()
 
 
