@@ -33,7 +33,7 @@ run-build:
     - tar czf ../$FN.gz gajim-*
     - cd ..
     - rm -rf tmp_add_plugins
-    - scp $FN.gz panoramix:/var/www/gajim/downloads/snap/gajim-$CI_COMMIT_SHA.tar.gz
+    - scp $FN.gz panoramix:/var/www/gajim/downloads/snap/ci/gajim-$CI_COMMIT_SHA.tar.gz
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
