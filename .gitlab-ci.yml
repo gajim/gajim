@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config libglib2.0-dev $(apt-cache depends gajim-nightly | grep Depends | sed "s/.*ends:\ //" | tr '\n' ' ')
+  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config libglib2.0-dev python-openssl $(apt-cache depends gajim-nightly | grep Depends | sed "s/.*ends:\ //" | tr '\n' ' ')
   - sudo apt-get build-dep -y -qq gajim-nightly
 
 stages:
