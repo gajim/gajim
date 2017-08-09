@@ -1,0 +1,42 @@
+before_script:
+  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config $(apt-cache depends gajim-default-nightly | grep Depends | sed "s/.*ends:\ //" | tr '\n' ' ')
+  - sudo apt-get build-dep -y -qq gajim-default-nightly
+
+stages:
+  - test
+  - build
+
+run-test:
+  stage: test
+  script:
+    - ./autogen.sh
+    - make test
+
+run-build:
+  stage: build
+  script:
+    - ./autogen.sh
+    - make dist
+    - export FN="gajim-default-"$(date +%F)".tar"
+    - mv gajim-*.tar.gz $FN.gz
+    - mkdir tmp_add_plugins
+    - mv $FN.gz tmp_add_plugins/
+    - cd tmp_add_plugins/
+    - tar xzf $FN.gz
+    - rm $FN.gz
+    - export GF=$(find . -maxdepth 1 -type d -name 'gajim-*')
+    - cd $GF/plugins/
+    - curl -O https://ftp.gajim.org/plugins_1/plugin_installer.zip
+    - unzip plugin_installer.zip
+    - rm plugin_installer.zip
+    - cd ../..
+    - tar czf ../$FN.gz gajim-*
+    - cd ..
+    - rm -rf tmp_add_plugins
+    - scp $FN.gz panoramix:/var/www/gajim/downloads/snap/gajim-default-$CI_COMMIT_SHA.tar.gz
+
+  artifacts:
+    name: "gajim-default-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    expire_in: 1 week
+    paths:
+      - gajim-default-2???-??-??.tar.gz
