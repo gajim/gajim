@@ -155,8 +155,16 @@ class Notification:
 
     def _nec_notification(self, obj):
         if obj.do_popup:
+            if obj.popup_image:
+                icon_path = gtkgui_helpers.get_icon_path(obj.popup_image, 48)
+                if icon_path:
+                    image_path = icon_path
+            elif obj.popup_image_path:
+                image_path = obj.popup_image_path
+            else:
+                image_path = ''
             popup(obj.popup_event_type, obj.jid, obj.conn.name,
-                obj.popup_msg_type, path_to_image=obj.popup_image,
+                obj.popup_msg_type, path_to_image=image_path,
                 title=obj.popup_title, text=obj.popup_text,
                 timeout=obj.popup_timeout)
 

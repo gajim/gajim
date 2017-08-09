@@ -642,28 +642,6 @@ def make_pixbuf_grayscale(pixbuf):
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
     return pixbuf2
 
-def get_path_to_generic_or_avatar(generic, jid = None, suffix = None):
-    """
-    Choose between avatar image and default image
-
-    Returns full path to the avatar image if it exists, otherwise returns full
-    path to the image.  generic must be with extension and suffix without
-    """
-    if jid:
-        # we want an avatar
-        puny_jid = helpers.sanitize_filename(jid)
-        path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
-        path_to_local_file = path_to_file + '_local'
-        for extension in ('.png', '.jpeg'):
-            path_to_local_file_full = path_to_local_file + extension
-            if os.path.exists(path_to_local_file_full):
-                return path_to_local_file_full
-        for extension in ('.png', '.jpeg'):
-            path_to_file_full = path_to_file + extension
-            if os.path.exists(path_to_file_full):
-                return path_to_file_full
-    return os.path.abspath(generic)
-
 def decode_filechooser_file_paths(file_paths):
     """
     Decode as UTF-8 under Windows and ask sys.getfilesystemencoding() in POSIX

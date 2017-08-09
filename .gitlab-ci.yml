@@ -9,7 +9,8 @@ stages:
 run-test:
   stage: test
   script:
-    - make test
+    - ./autogen.sh
+    - make test_nogui
 
 run-build:
   stage: build

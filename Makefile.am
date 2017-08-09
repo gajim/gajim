@@ -53,6 +53,10 @@ test:
 	python test/runtests.py
 .PHONY: test
 
+test_nogui:
+	python test/runtests.py -n
+.PHONY: test_nogui
+
 doc:
 	epydoc --config=doc/epydoc.conf
 .PHONY: doc
