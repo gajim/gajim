@@ -3348,6 +3348,348 @@ class SingleMessageWindow:
             self.window.destroy()
 
 
+class XMLConsoleWindow(Gtk.Window):
+    def __init__(self, account):
+        Gtk.Window.__init__(self)
+        self.account = account
+        self.set_default_size(600, 600)
+        self.connect("destroy", self.on_destroy)
+
+        headerbar = Gtk.HeaderBar()
+        headerbar.set_title(_('XML Console'))
+        headerbar.set_show_close_button(True)
+        self.set_titlebar(headerbar)
+
+        switch = Gtk.Switch()
+        switch.set_active(True)
+        switch.connect("notify::active", self.on_enable)
+        headerbar.pack_start(switch)
+
+        headerbar.set_decoration_layout(':minimize,close')
+
+        self.enabled = True
+        self.presence = True
+        self.message = True
+        self.iq = True
+        self.stream = True
+        self.incoming = True
+        self.outgoing = True
+
+        self.textview = Gtk.TextView()
+        self.textview.set_size_request(-1, 400)
+        self.textview.set_editable(False)
+        self.textview.set_cursor_visible(False)
+        self.textview.set_hexpand(True)
+
+        self.scrolled = Gtk.ScrolledWindow()
+        self.scrolled.add(self.textview)
+
+        self.input = Gtk.TextView()
+        self.input.show()
+        self.input.set_vexpand(True)
+
+        self.scrolled_input = Gtk.ScrolledWindow()
+        self.scrolled_input.set_size_request(-1, 150)
+        self.scrolled_input.add(self.input)
+        self.scrolled_input.set_no_show_all(True)
+
+        self.paned = Gtk.VPaned()
+        self.paned.set_vexpand(True)
+        self.paned.pack1(self.scrolled, True, False)
+        self.paned.pack2(self.scrolled_input, False, False)
+        self.paned.set_position(self.paned.get_property('max-position'))
+
+        self.actionbar = Gtk.ActionBar()
+
+        icon = gtkgui_helpers.get_icon_pixmap('edit-clear-all-symbolic')
+        image = Gtk.Image()
+        image.set_from_pixbuf(icon)
+        button = Gtk.Button()
+        button.set_tooltip_text(_('Clear'))
+        button.connect('clicked', self.on_clear)
+        button.set_image(image)
+        self.actionbar.pack_start(button)
+
+        icon = gtkgui_helpers.get_icon_pixmap('applications-system-symbolic')
+        image = Gtk.Image()
+        image.set_from_pixbuf(icon)
+        button = Gtk.Button()
+        button.set_tooltip_text(_('Filter'))
+        button.connect('clicked', self.on_filter_options)
+        button.set_image(image)
+        self.actionbar.pack_start(button)
+
+        icon = gtkgui_helpers.get_icon_pixmap('document-edit-symbolic')
+        image = Gtk.Image()
+        image.set_from_pixbuf(icon)
+        button = Gtk.ToggleButton()
+        button.set_tooltip_text(_('XML Input'))
+        button.set_active(False)
+        button.connect('toggled', self.on_input)
+        button.set_image(image)
+        self.actionbar.pack_start(button)
+
+        icon = gtkgui_helpers.get_icon_pixmap('emblem-ok-symbolic')
+        image = Gtk.Image()
+        image.set_from_pixbuf(icon)
+        button = Gtk.Button()
+        button.set_tooltip_text(_('Send'))
+        button.connect('clicked', self.on_send)
+        button.set_image(image)
+        self.actionbar.pack_end(button)
+
+        listbox = Gtk.ListBox()
+        context = listbox.get_style_context()
+        context.add_class('PopoverButtonListbox')
+
+        label = Gtk.Label(label='Message')
+        listbox.add(label)
+
+        label = Gtk.Label(label='Presence')
+        listbox.add(label)
+
+        label = Gtk.Label(label='Iq')
+        listbox.add(label)
+        listbox.show_all()
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        listbox.connect('row-activated', self.on_row_activated)
+
+        popover = Gtk.Popover()
+        popover.add(listbox)
+
+        self.menubutton = Gtk.MenuButton()
+        self.menubutton.set_direction(Gtk.ArrowType.UP)
+        self.menubutton.set_popover(popover)
+        self.menubutton.set_tooltip_text(_('Presets'))
+        self.menubutton.set_no_show_all(True)
+
+        self.actionbar.pack_start(self.menubutton)
+
+        box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+        box.add(self.paned)
+        box.add(self.actionbar)
+
+        self.add(box)
+
+        self.connect('key_press_event', self.on_key_press_event)
+
+        self.create_tags()
+        self.show_all()
+
+        gajim.ged.register_event_handler('stanza-received', ged.GUI1,
+            self._nec_stanza_received)
+        gajim.ged.register_event_handler('stanza-sent', ged.GUI1,
+            self._nec_stanza_sent)
+
+    def create_tags(self):
+        buffer_ = self.textview.get_buffer()
+        in_color = gajim.config.get('inmsgcolor')
+        out_color = gajim.config.get('outmsgcolor')
+
+        tags = ['presence', 'message', 'stream', 'iq']
+
+        tag = buffer_.create_tag('incoming')
+        tag.set_property('foreground', in_color)
+        tag = buffer_.create_tag('outgoing')
+        tag.set_property('foreground', out_color)
+
+        for tag_name in tags:
+            buffer_.create_tag(tag_name)
+
+    def on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+    def on_row_activated(self, listbox, row):
+        text = row.get_child().get_text()
+        input_text = None
+        if text == 'Presence':
+            input_text = (
+                '<presence>\n'
+                '<show></show>\n'
+                '<status></status>\n'
+                '<priority></priority>\n'
+                '</presence>')
+        elif text == 'Message':
+            input_text = (
+                '<message to="" type="">\n'
+                '<body></body>\n'
+                '</message>')
+        elif text == 'Iq':
+            input_text = (
+                '<iq to="" type="">\n'
+                '<query xmlns=""></query>\n'
+                '</iq>')
+
+        if input_text is not None:
+            buffer_ = self.input.get_buffer()
+            buffer_.set_text(input_text)
+            self.input.grab_focus()
+
+    def on_send(self, *args):
+        if gajim.connections[self.account].connected <= 1:
+            # if offline or connecting
+            ErrorDialog(_('Connection not available'),
+                _('Please make sure you are connected with "%s".') % \
+                self.account)
+            return
+        buffer_ = self.input.get_buffer()
+        begin_iter, end_iter = buffer_.get_bounds()
+        stanza = buffer_.get_text(begin_iter, end_iter, True)
+        if stanza:
+            gajim.connections[self.account].send_stanza(stanza)
+            buffer_.set_text('')
+
+    def on_input(self, button, *args):
+        if button.get_active():
+            self.paned.get_child2().show()
+            self.menubutton.show()
+            self.input.grab_focus()
+        else:
+            self.paned.get_child2().hide()
+            self.menubutton.hide()
+
+    def on_filter_options(self, *args):
+        options = [
+            SwitchOption('Presence', self.presence,
+                         self.on_option,
+                         'presence'),
+            SwitchOption('Message', self.message,
+                         self.on_option,
+                         'message'),
+            SwitchOption('Iq', self.iq,
+                         self.on_option,
+                         'iq'),
+            SwitchOption('Stream\nManagement', self.stream,
+                         self.on_option,
+                         'stream'),
+            SwitchOption('In', self.incoming,
+                         self.on_option,
+                         'incoming'),
+            SwitchOption('Out', self.outgoing,
+                         self.on_option,
+                         'outgoing')]
+
+        OptionsDialog(self, 'Filter', options)
+
+    def on_clear(self, *args):
+        buffer_ = self.textview.get_buffer().set_text('')
+
+    def on_destroy(self, *args):
+        del gajim.interface.instances[self.account]['xml_console']
+        gajim.ged.remove_event_handler('stanza-received', ged.GUI1,
+            self._nec_stanza_received)
+        gajim.ged.remove_event_handler('stanza-sent', ged.GUI1,
+            self._nec_stanza_sent)
+
+    def on_enable(self, switch, param):
+        self.enabled = switch.get_active()
+
+    def on_option(self, switch, param, *user_data):
+        kind = user_data[0]
+        setattr(self, kind, switch.get_active())
+        value = not switch.get_active()
+        table = self.textview.get_buffer().get_tag_table()
+        tag = table.lookup(kind)
+        if kind in ('incoming', 'outgoing'):
+            if value:
+                tag.set_priority(table.get_size() - 1)
+            else:
+                tag.set_priority(0)
+        tag.set_property('invisible', value)
+
+    def _nec_stanza_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.print_stanza(obj.stanza_str, 'incoming')
+
+    def _nec_stanza_sent(self, obj):
+        if obj.conn.name != self.account:
+            return
+        self.print_stanza(obj.stanza_str, 'outgoing')
+
+    def print_stanza(self, stanza, kind):
+        # kind must be 'incoming' or 'outgoing'
+        if not self.enabled:
+            return
+        if not stanza:
+            return
+
+        at_the_end = gtkgui_helpers.at_the_end(self.scrolled)
+
+        buffer_ = self.textview.get_buffer()
+        end_iter = buffer_.get_end_iter()
+
+        type_ = kind
+        if stanza.startswith('<presence'):
+            type_ = 'presence'
+        elif stanza.startswith('<message'):
+            type_ = 'message'
+        elif stanza.startswith('<iq'):
+            type_ = 'iq'
+        elif stanza.startswith('<r') or stanza.startswith('<a'):
+            type_ = 'stream'
+
+        stanza = '<!-- {kind} {time} -->\n{stanza}\n\n'.format(
+            kind=kind.capitalize(),
+            time=time.strftime('%c'),
+            stanza=stanza.replace('><', '>\n<'))
+        buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
+
+        if at_the_end:
+            GLib.idle_add(gtkgui_helpers.scroll_to_end, self.scrolled)
+
+
+class OptionsDialog(Gtk.Dialog):
+    def __init__(self, parent, title, options):
+        Gtk.Dialog.__init__(self, title, parent,
+                            Gtk.DialogFlags.DESTROY_WITH_PARENT)
+        self.set_name('OptionsDialog')
+        self.set_resizable(False)
+        self.set_default_size(250, -1)
+
+        self.remove(self.get_content_area())
+
+        listbox = Gtk.ListBox()
+        listbox.set_hexpand(True)
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+
+        for option in options:
+            listbox.add(option)
+
+        self.add(listbox)
+
+        self.show_all()
+        listbox.connect('row-activated', self.on_row_activated)
+
+    def on_row_activated(self, listbox, row):
+        row.get_child().set_switch_state()
+
+
+class SwitchOption(Gtk.Grid):
+    def __init__(self, label, state, callback, *user_data):
+        Gtk.Grid.__init__(self)
+        self.set_column_spacing(6)
+
+        label = Gtk.Label(label=label)
+        label.set_hexpand(True)
+        label.set_halign(Gtk.Align.START)
+
+        self.switch = Gtk.Switch()
+        self.switch.set_active(state)
+        self.switch.connect("notify::active", callback, *user_data)
+        self.switch.set_hexpand(True)
+        self.switch.set_halign(Gtk.Align.END)
+
+        self.add(label)
+        self.add(self.switch)
+        self.show_all()
+
+    def set_switch_state(self):
+        state = self.switch.get_active()
+        self.switch.set_active(not state)
+      
+
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
     'remove': _('remove')}

@@ -175,7 +175,7 @@ class AppActions():
     def on_xml_console(self, action, param):
         account = param.get_string()
         if 'xml_console' in gajim.interface.instances[account]:
-            gajim.interface.instances[account]['xml_console'].window.present()
+            gajim.interface.instances[account]['xml_console'].present()
         else:
             gajim.interface.instances[account]['xml_console'] = \
                 dialogs.XMLConsoleWindow(account)
