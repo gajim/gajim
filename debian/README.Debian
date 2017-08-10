@@ -1,7 +1,0 @@
-gajim for Debian
-----------------
-
-For video chat support, you have to install python-farstream.
-
- -- Yann Le Boulanger <asterix@lagaule.org>, Mon, 20 Jun 2005 12:02:31 +0200
- -- Julien Valroff <julien@debian.org>  Sat, 07 May 2011 13:50:27 +0200
