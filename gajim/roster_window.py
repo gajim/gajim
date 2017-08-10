@@ -2395,7 +2395,10 @@ class RosterWindow:
             if isinstance(w, dict):
                 self.close_all_from_dict(w)
             else:
-                w.window.destroy()
+                try:
+                    w.window.destroy()
+                except AttributeError:
+                    w.destroy()
 
     def close_all(self, account, force=False):
         """
