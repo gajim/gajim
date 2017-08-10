@@ -334,6 +334,10 @@ def scroll_to_end(widget):
         bool: The return value is False so it can be used with GLib.idle_add.
     """
     adj_v = widget.get_vadjustment()
+    if adj_v is None:
+        # This can happen when the Widget is already destroyed when called
+        # from GLib.idle_add
+        return False
     max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
     adj_v.set_value(max_scroll_pos)
 
