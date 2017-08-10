@@ -2537,6 +2537,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         self.do_popup = False
 
+    @staticmethod
     def get_path_to_generic_or_avatar(generic, jid=None, suffix=None):
         """
         Choose between avatar image and default image
