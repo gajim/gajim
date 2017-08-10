@@ -37,6 +37,7 @@
 <li>gir1.2-farstream-0.2, gir1.2-gstreamer-1.0 and gir1.2-gst-plugins-base-1.0 for audio and video calls</li>
 <li>gir1.2-gupnpigd-1.0 for better NAT traversing</li>
 <li>gir1.2-networkmanager-1.0 for network lose detection</li>
+<li>python3-idna and python3-precis-i18n for correctly parsing JIDs</li>
 </ul>
 
 <p>Some distributions also split too much python standard library. I know SUSE does. In such distros you also need python-xml the xml lib that *comes* with python and not pyxml or whatever.</p>
