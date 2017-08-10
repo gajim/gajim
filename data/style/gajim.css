@@ -29,3 +29,14 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 #ServerInfoGrid > list > row { padding: 10px 20px 10px 10px; }
 #ServerInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
 #ServerInfoGrid > list > row.activatable:active { box-shadow: none; }
+
+/* Generic Options Dialog */
+#OptionsDialog list > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+#OptionsDialog list > row:last-child { border-bottom: 0px}
+#OptionsDialog list > row { padding: 10px; }
+#OptionsDialog list > row.activatable:active { box-shadow: none; }
+
+/* Generic Popover Menu with Buttons */
+.PopoverButtonListbox { margin-top: 10px; margin-bottom: 10px; }
+.PopoverButtonListbox > row { padding: 10px 20px 10px 20px; }
+.PopoverButtonListbox row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
