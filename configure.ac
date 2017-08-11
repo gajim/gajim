@@ -41,6 +41,7 @@ AM_PATH_PYTHON([3.5])
 AC_SUBST([gajim_srcdir], [\${pkgpythondir}])
 AC_SUBST([gajim_pluginsdir], [\${datadir}/\${PACKAGE}/plugins])
 
+AS_AC_EXPAND(PY_SITEDIR, "${pythondir}")
 AS_AC_EXPAND(GAJIM_SRCDIR, "${gajim_srcdir}")
 AS_AC_EXPAND(PKGDATADIR, "${datadir}/${PACKAGE}")
 AS_AC_EXPAND(DOCDIR, "${docdir}")
@@ -65,6 +66,9 @@ AC_CONFIG_FILES([
 	data/gajim-remote.desktop.in
 	data/defs.py
 	gajim/Makefile
+	scripts/gajim
+	scripts/gajim-history-manager
+	scripts/gajim-remote
 	po/Makefile.in
 	plugins/Makefile
 ])

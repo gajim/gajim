@@ -23,10 +23,11 @@
 import os
 import sys
 
-if sys.platform != 'win32':
-    if os.geteuid() == 0:
-        sys.exit("You must not launch gajim as root, it is insecure.")
+if os.geteuid() == 0:
+    sys.exit("You must not launch gajim as root, it is insecure.")
 
-import gajim.gajim as g
+sys.path.append("@PY_SITEDIR@")
 
-g.GajimApplication().run(sys.argv)
+import gajim.gajim_remote as g
+
+g.GajimRemote()

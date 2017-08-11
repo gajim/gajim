@@ -23,9 +23,16 @@
 import os
 import sys
 
-if os.geteuid() == 0:
-    sys.exit("You must not launch gajim as root, it is insecure.")
+if sys.platform != 'win32':
+    if os.geteuid() == 0:
+        sys.exit("You must not launch gajim as root, it is insecure.")
 
-import gajim.gajim_remote as g
+sys.path.append("@PY_SITEDIR@")
 
-g.GajimRemote()
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import gajim.history_manager as g
+
+g.HistoryManager()
+Gtk.main()
