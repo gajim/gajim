@@ -313,7 +313,7 @@ function cleanup_install {
     find "${MINGW_ROOT}"/bin -name "*.pyo" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
     build_compileall -q "${MINGW_ROOT}"
-    find "${MINGW_ROOT}" -name "*.py" ! -name "gajim.py" ! -name "history_manager.py" -exec rm -f {} \;
+    find "${MINGW_ROOT}" -name "*.py" ! -name "gajim.py" ! -name "history_manager.py" ! -name "*theme.py" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
     find "${MINGW_ROOT}" -type d -name "__pycache__" -prune -exec rm -rf {} \;
 
