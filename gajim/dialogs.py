@@ -3678,6 +3678,7 @@ class SwitchOption(Gtk.Grid):
         self.switch.connect("notify::active", callback, *user_data)
         self.switch.set_hexpand(True)
         self.switch.set_halign(Gtk.Align.END)
+        self.switch.set_valign(Gtk.Align.CENTER)
 
         self.add(label)
         self.add(self.switch)
