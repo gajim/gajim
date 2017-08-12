@@ -3365,8 +3365,6 @@ class XMLConsoleWindow(Gtk.Window):
         switch.connect("notify::active", self.on_enable)
         headerbar.pack_start(switch)
 
-        headerbar.set_decoration_layout(':minimize,close')
-
         self.enabled = True
         self.presence = True
         self.message = True
