@@ -156,7 +156,7 @@ class JingleTransportSocks5(JingleTransport):
                 'target': self.ourjid,
                 'host': candidate['host'],
                 'port': int(candidate['port']),
-                'cid': candidate['cid'],
+                'candidate_id': candidate['cid'],
                 'type': typ,
                 'priority': candidate['priority']
             }

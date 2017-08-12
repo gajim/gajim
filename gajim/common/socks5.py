@@ -133,13 +133,23 @@ class SocksQueue:
             else:
                 fp = fingerprint
             if receiving:
-                log.debug('Trying to connect as receiver to cid ' + streamhost['cid'])
+                if 'candidate_id' in streamhost:
+                    log.debug('Trying to connect as receiver to cid ' + \
+                        streamhost['candidate_id'])
+                else:
+                    log.debug('Trying to connect as receiver to jid ' + \
+                        streamhost['jid'])
                 file_props.type_ = 'r'
                 socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost,
                     sid, file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
-                log.debug('Trying to connect as sender to cid' + streamhost['cid'])
+                if 'candidate_id' in streamhost:
+                    log.debug('Trying to connect as sender to cid' + \
+                        streamhost['candidate_id'])
+                else:
+                    log.debug('Trying to connect as sender to jid' + \
+                        streamhost['jid'])
                 if file_props.sha_str:
                     idx = file_props.sha_str
                 else:
@@ -166,7 +176,10 @@ class SocksQueue:
         Called when there is a host connected to one of the senders's
         streamhosts. Stop other attempts for connections
         """
-        log.debug('Connected to cid ' + streamhost['cid'])
+        if 'candidate_id' in streamhost:
+            log.debug('Connected to cid ' + streamhost['candidate_id'])
+        else:
+            log.debug('Connected to jid ' + streamhost['jid'])
         for host in file_props.streamhosts:
             if host != streamhost and 'idx' in host:
                 if host['state'] == 1:
@@ -228,7 +241,10 @@ class SocksQueue:
         """
         Called when we loose connection during transfer
         """
-        log.debug('Connection refused to cid ' + streamhost['cid'])
+        if 'candidate_id' in streamhost:
+            log.debug('Connection refused to cid ' + streamhost['candidate_id'])
+        else:
+            log.debug('Connection refused to jid ' + streamhost['jid'])
         if file_props is None:
             return
         streamhost['state'] = -1

@@ -79,7 +79,7 @@ class StateCandSent(JingleFileTransferStates):
         transport.setNamespace(nbxmpp.NS_JINGLE_BYTESTREAM)
         transport.setAttr('sid', self.jft.transport.sid)
         candidateused = nbxmpp.Node('candidate-used')
-        candidateused.setAttr('cid', streamhost['cid'])
+        candidateused.setAttr('cid', streamhost['candidate_id'])
         transport.addChild(node=candidateused)
         content.addChild(node=transport)
         self.jft.session.send_transport_info(content)
