@@ -585,7 +585,7 @@ class Socks5(object):
                     pass
             self.file = None
         # Close file we're receiving into
-        if self.file_props.fd:
+        if self.file_props.fd and self.state >= 7:
             try:
                 self.file_props.fd.close()
             except Exception:
