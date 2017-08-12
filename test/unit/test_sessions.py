@@ -8,17 +8,17 @@ lib.setup_env()
 
 import notify
 
-from common import gajim
-from common import nec
-from common import ged
-from common.nec import NetworkEvent
-from common.connection_handlers_events import MessageReceivedEvent
-from common.connection_handlers_events import DecryptedMessageReceivedEvent
+from gajim.common import gajim
+from gajim.common import nec
+from gajim.common import ged
+from gajim.common.nec import NetworkEvent
+from gajim.common.connection_handlers_events import MessageReceivedEvent
+from gajim.common.connection_handlers_events import DecryptedMessageReceivedEvent
 import nbxmpp
 
-from common.stanza_session import StanzaSession
-from session import ChatControlSession
-from roster_window import RosterWindow
+from gajim.common.stanza_session import StanzaSession
+from gajim.session import ChatControlSession
+from gajim.roster_window import RosterWindow
 
 from mock import Mock, expectParams
 from gajim_mocks import *

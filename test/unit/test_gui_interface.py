@@ -6,15 +6,15 @@ import unittest
 import lib
 lib.setup_env()
 
-from common import logging_helpers
+from gajim.common import logging_helpers
 logging_helpers.set_quiet()
 
-from common import gajim
+from gajim.common import gajim
 
 from gajim_mocks import MockLogger
 gajim.logger = MockLogger()
 
-from gui_interface import Interface
+from gajim.gui_interface import Interface
 
 class TestInterface(unittest.TestCase):
 

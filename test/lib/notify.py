@@ -1,7 +1,7 @@
 # mock notify module
 
-from common import gajim
-from common import ged
+from gajim.common import gajim
+from gajim.common import ged
 
 notifications = []
 

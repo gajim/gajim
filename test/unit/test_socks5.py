@@ -10,8 +10,8 @@ from mock import Mock
 import sys
 import socket
 
-from common.socks5 import *
-from common import jingle_xtls
+from gajim.common.socks5 import *
+from gajim.common import jingle_xtls
 
 class fake_sock(Mock):
     def __init__(self, sockobj):

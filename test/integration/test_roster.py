@@ -8,9 +8,9 @@ from data import *
 from mock import Mock, expectParams
 from gajim_mocks import *
 
-from common import gajim
-from common import contacts as contacts_module
-import roster_window
+from gajim.common import gajim
+from gajim.common import contacts as contacts_module
+from gajim import roster_window
 
 gajim.get_jid_from_account = lambda acc: 'myjid@' + acc
 

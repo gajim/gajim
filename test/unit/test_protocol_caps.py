@@ -6,14 +6,14 @@ import unittest
 import lib
 lib.setup_env()
 
-from common import gajim
-from common import nec
-from common import ged
-from common import caps_cache
-from common.connection_handlers import ConnectionHandlers
-from common.protocol import caps
-from common.contacts import Contact
-from common.connection_handlers_events import CapsPresenceReceivedEvent
+from gajim.common import gajim
+from gajim.common import nec
+from gajim.common import ged
+from gajim.common import caps_cache
+from gajim.common.connection_handlers import ConnectionHandlers
+from gajim.common.protocol import caps
+from gajim.common.contacts import Contact
+from gajim.common.connection_handlers_events import CapsPresenceReceivedEvent
 
 from mock import Mock
 

@@ -14,7 +14,7 @@ gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
 # look for modules in the CWD, then gajim/test/lib, then gajim/gajim,
 # then everywhere else
-sys.path.insert(1, gajim_root + '/gajim')
+sys.path.insert(1, gajim_root)
 sys.path.insert(1, gajim_root + '/test/lib')
 
 # a temporary version of ~/.gajim for testing
@@ -48,7 +48,7 @@ def setup_env():
     gajim.use_x = use_x
 
     if use_x:
-        import gtkgui_helpers
+        from gajim import gtkgui_helpers
         gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'
         from gajim.gajim import GajimApplication
         gajim.app = GajimApplication()

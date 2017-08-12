@@ -6,10 +6,10 @@ import unittest
 import lib
 lib.setup_env()
 
-from common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
+from gajim.common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
 from nbxmpp import NS_MUC
 
-from common import caps_cache
+from gajim.common import caps_cache
 
 class TestCommonContact(unittest.TestCase):
 

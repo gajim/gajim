@@ -3,10 +3,10 @@ Module with dummy classes for Gajim specific unit testing
 '''
 
 from mock import Mock
-from common import gajim
-from common import ged
+from gajim.common import gajim
+from gajim.common import ged
 
-from common.connection_handlers import ConnectionHandlers
+from gajim.common.connection_handlers import ConnectionHandlers
 
 class MockConnection(Mock, ConnectionHandlers):
     def __init__(self, account, *args):
