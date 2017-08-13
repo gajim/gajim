@@ -28,7 +28,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Pango
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim import gtkgui_helpers
 
 class MessageTextView(Gtk.TextView):
@@ -97,7 +97,7 @@ class MessageTextView(Gtk.TextView):
         index = 0
 
         new_text = ''
-        iterator = gajim.interface.link_pattern_re.finditer(text)
+        iterator = app.interface.link_pattern_re.finditer(text)
         for match in iterator:
             start, end = match.span()
             url = text[start:end]

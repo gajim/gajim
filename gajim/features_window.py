@@ -28,7 +28,7 @@ import gi
 from gi.repository import Gtk, Gdk
 from gajim import gtkgui_helpers
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common.i18n import Q_
 
 class FeaturesWindow:
@@ -39,7 +39,7 @@ class FeaturesWindow:
     def __init__(self):
         self.xml = gtkgui_helpers.get_gtk_builder('features_window.ui')
         self.window = self.xml.get_object('features_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(app.interface.roster.window)
         treeview = self.xml.get_object('features_treeview')
         self.desc_label = self.xml.get_object('feature_desc_label')
 
@@ -169,14 +169,14 @@ class FeaturesWindow:
         return True
 
     def zeroconf_available(self):
-        return gajim.HAVE_ZEROCONF
+        return app.HAVE_ZEROCONF
 
     def dbus_available(self):
         from gajim.common import dbus_support
         return dbus_support.supported
 
     def gpg_available(self):
-        return gajim.HAVE_GPG
+        return app.HAVE_GPG
 
     def network_watcher_available(self):
         from gajim import network_watcher
@@ -216,7 +216,7 @@ class FeaturesWindow:
         return sleepy.SUPPORTED
 
     def pycrypto_available(self):
-        return gajim.HAVE_PYCRYPTO
+        return app.HAVE_PYCRYPTO
 
     def docutils_available(self):
         try:
@@ -226,10 +226,10 @@ class FeaturesWindow:
         return True
 
     def farstream_available(self):
-        return gajim.HAVE_FARSTREAM
+        return app.HAVE_FARSTREAM
 
     def gupnp_igd_available(self):
-        return gajim.HAVE_UPNP_IGD
+        return app.HAVE_UPNP_IGD
 
     def upower_available(self):
         if os.name == 'nt':

@@ -71,7 +71,7 @@ del parseOpts
 import gajim.common.configpaths
 gajim.common.configpaths.gajimpaths.init(config_path)
 del config_path
-from gajim.common import gajim
+from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.common.logger import LOG_DB_PATH, JIDConstant, KindConstant
 from gajim.common import helpers
@@ -381,20 +381,20 @@ class HistoryManager:
                 if kind in (KindConstant.SINGLE_MSG_RECV,
                 KindConstant.CHAT_MSG_RECV, KindConstant.GC_MSG):
                     # it is the other side
-                    color = gajim.config.get('inmsgcolor')  # so incoming color
+                    color = app.config.get('inmsgcolor')  # so incoming color
                 elif kind in (KindConstant.SINGLE_MSG_SENT,
                 KindConstant.CHAT_MSG_SENT):  # it is us
-                    color = gajim.config.get('outmsgcolor')  # so outgoing color
+                    color = app.config.get('outmsgcolor')  # so outgoing color
                 elif kind in (KindConstant.STATUS,
                 KindConstant.GCSTATUS):  # is is statuses
                     # so status color
-                    color = gajim.config.get('statusmsgcolor')
+                    color = app.config.get('statusmsgcolor')
                     # include status into (status) message
                     if message is None:
                         message = ''
                     else:
                         message = ' : ' + message
-                    message = helpers.get_uf_show(gajim.SHOW_LIST[show]) + \
+                    message = helpers.get_uf_show(app.SHOW_LIST[show]) + \
                         message
 
                 message_ = '<span'
@@ -461,7 +461,7 @@ class HistoryManager:
 
         dlg = xml.get_object('filechooserdialog')
         dlg.set_title(_('Exporting History Logs…'))
-        dlg.set_current_folder(gajim.HOME_DIR)
+        dlg.set_current_folder(app.HOME_DIR)
         dlg.props.do_overwrite_confirmation = True
         response = dlg.run()
 

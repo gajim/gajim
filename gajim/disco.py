@@ -59,7 +59,7 @@ from gajim import adhoc_commands
 from gajim import search_window
 from gajim import gui_menu_builder
 
-from gajim.common import gajim
+from gajim.common import app
 import nbxmpp
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import helpers
@@ -264,23 +264,23 @@ class ServicesCache:
         self._info = CacheDictionary(0, getrefresh = False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
-        gajim.ged.register_event_handler('agent-items-received', ged.GUI1,
+        app.ged.register_event_handler('agent-items-received', ged.GUI1,
             self._nec_agent_items_received)
-        gajim.ged.register_event_handler('agent-items-error-received', ged.GUI1,
+        app.ged.register_event_handler('agent-items-error-received', ged.GUI1,
             self._nec_agent_items_error_received)
-        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+        app.ged.register_event_handler('agent-info-received', ged.GUI1,
                 self._nec_agent_info_received)
-        gajim.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+        app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
                 self._nec_agent_info_error_received)
 
     def __del__(self):
-        gajim.ged.remove_event_handler('agent-items-received', ged.GUI1,
+        app.ged.remove_event_handler('agent-items-received', ged.GUI1,
             self._nec_agent_items_received)
-        gajim.ged.remove_event_handler('agent-items-error-received', ged.GUI1,
+        app.ged.remove_event_handler('agent-items-error-received', ged.GUI1,
             self._nec_agent_items_error_received)
-        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+        app.ged.remove_event_handler('agent-info-received', ged.GUI1,
                 self._nec_agent_info_received)
-        gajim.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
+        app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
                 self._nec_agent_info_error_received)
 
     def cleanup(self):
@@ -397,7 +397,7 @@ class ServicesCache:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            gajim.connections[self.account].discoverInfo(jid, node)
+            app.connections[self.account].discoverInfo(jid, node)
 
     def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
@@ -421,7 +421,7 @@ class ServicesCache:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            gajim.connections[self.account].discoverItems(jid, node)
+            app.connections[self.account].discoverItems(jid, node)
 
     def _nec_agent_info_received(self, obj):
         """
@@ -521,7 +521,7 @@ class ServiceDiscoveryWindow(object):
         self._account = account
         self.parent = parent
         if not jid:
-            jid = gajim.config.get_per('accounts', account, 'hostname')
+            jid = app.config.get_per('accounts', account, 'hostname')
             node = ''
 
         self.jid = None
@@ -532,17 +532,17 @@ class ServiceDiscoveryWindow(object):
         self.reloading = False
 
         # Check connection
-        if gajim.connections[account].connected < 2:
+        if app.connections[account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services'))
             raise RuntimeError('You must be connected to browse services')
 
         # Get a ServicesCache object.
         try:
-            self.cache = gajim.connections[account].services_cache
+            self.cache = app.connections[account].services_cache
         except AttributeError:
             self.cache = ServicesCache(account)
-            gajim.connections[account].services_cache = self.cache
+            app.connections[account].services_cache = self.cache
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
@@ -572,7 +572,7 @@ _('Without a connection, you can not browse available services'))
             self.address_comboboxtext_entry = self.xml.get_object(
                 'address_entry')
 
-            self.latest_addresses = gajim.config.get(
+            self.latest_addresses = app.config.get(
                 'latest_disco_addresses').split()
             if jid in self.latest_addresses:
                 self.latest_addresses.remove(jid)
@@ -630,9 +630,9 @@ _('Without a connection, you can not browse available services'))
         self.banner_icon.hide() # Just clearing it doesn't work
 
     def _set_window_banner_text(self, text, text_after = None):
-        theme = gajim.config.get('roster_theme')
-        bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
-        bannerfontattrs = gajim.config.get_per('themes', theme,
+        theme = app.config.get('roster_theme')
+        bannerfont = app.config.get_per('themes', theme, 'bannerfont')
+        bannerfontattrs = app.config.get_per('themes', theme,
                 'bannerfontattrs')
 
         if bannerfont:
@@ -671,8 +671,8 @@ _('Without a connection, you can not browse available services'))
 
         # self.browser._get_agent_address() would break when no browser.
         addr = get_agent_address(self.jid, self.node)
-        if addr in gajim.interface.instances[self.account]['disco']:
-            del gajim.interface.instances[self.account]['disco'][addr]
+        if addr in app.interface.instances[self.account]['disco']:
+            del app.interface.instances[self.account]['disco'][addr]
 
         if self.browser:
             self.window.hide()
@@ -710,10 +710,10 @@ _('Without a connection, you can not browse available services'))
         # Update the window list
         if self.jid:
             old_addr = get_agent_address(self.jid, self.node)
-            if old_addr in gajim.interface.instances[self.account]['disco']:
-                del gajim.interface.instances[self.account]['disco'][old_addr]
+            if old_addr in app.interface.instances[self.account]['disco']:
+                del app.interface.instances[self.account]['disco'][old_addr]
         addr = get_agent_address(jid, node)
-        gajim.interface.instances[self.account]['disco'][addr] = self
+        app.interface.instances[self.account]['disco'][addr] = self
         # We need to store these, self.browser is not always available.
         self.jid = jid
         self.node = node
@@ -752,7 +752,7 @@ _('Without a connection, you can not browse available services'))
         Open an agent. By default, this happens in a new window
         """
         try:
-            win = gajim.interface.instances[self.account]['disco']\
+            win = app.interface.instances[self.account]['disco']\
                     [get_agent_address(jid, node)]
             win.window.present()
             return
@@ -802,7 +802,7 @@ _('Without a connection, you can not browse available services'))
         self.address_comboboxtext.get_model().clear()
         for j in self.latest_addresses:
             self.address_comboboxtext.append_text(j)
-        gajim.config.set('latest_disco_addresses',
+        app.config.set('latest_disco_addresses',
                 ' '.join(self.latest_addresses))
         self.travel(jid, '')
 
@@ -1187,7 +1187,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         descr = "<b>%s</b>" % addr
         # Guess which kind of service this is
         identities = []
-        type_ = gajim.get_transport_name_from_jid(self.jid,
+        type_ = app.get_transport_name_from_jid(self.jid,
             use_config_setting=False)
         if type_:
             identity = {'category': '_jid', 'type': type_}
@@ -1227,8 +1227,8 @@ class ToplevelAgentBrowser(AgentBrowser):
                 # Normal/succes
                 cell.set_property('foreground_set', False)
         else:
-            theme = gajim.config.get('roster_theme')
-            bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+            theme = app.config.get('roster_theme')
+            bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
             if bgcolor:
                 cell.set_property('cell_background_set', True)
             cell.set_property('foreground_set', False)
@@ -1352,19 +1352,19 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if service in gajim.interface.instances[self.account]['search']:
-            gajim.interface.instances[self.account]['search'][service].window.\
+        if service in app.interface.instances[self.account]['search']:
+            app.interface.instances[self.account]['search'][service].window.\
                     present()
         else:
-            gajim.interface.instances[self.account]['search'][service] = \
+            app.interface.instances[self.account]['search'][service] = \
                     search_window.SearchWindow(self.account, service)
 
     def cleanup(self):
         AgentBrowser.cleanup(self)
 
     def update_theme(self):
-        theme = gajim.config.get('roster_theme')
-        bgcolor = gajim.config.get_per('themes', theme, 'groupbgcolor')
+        theme = app.config.get('roster_theme')
+        bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
         if bgcolor:
             self._renderer.set_property('cell-background', bgcolor)
         self.window.services_treeview.queue_draw()
@@ -1390,7 +1390,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             return
         jid = model[iter_][0]
         if jid:
-            gajim.connections[self.account].request_register_agent_info(jid)
+            app.connections[self.account].request_register_agent_info(jid)
             self.window.destroy(chain = True)
 
     def on_join_button_clicked(self, widget):
@@ -1402,13 +1402,13 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if 'join_gc' not in gajim.interface.instances[self.account]:
+        if 'join_gc' not in app.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
             except GajimGeneralException:
                 pass
         else:
-            gajim.interface.instances[self.account]['join_gc'].window.present()
+            app.interface.instances[self.account]['join_gc'].window.present()
 
     def update_actions(self):
         if self.execute_button:
@@ -1435,7 +1435,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             # Guess what kind of service we're dealing with
             if self.browse_button:
                 jid = model[iter_][0]
-                type_ = gajim.get_transport_name_from_jid(jid,
+                type_ = app.get_transport_name_from_jid(jid,
                                         use_config_setting = False)
                 if type_:
                     identity = {'category': '_jid', 'type': type_}
@@ -1460,9 +1460,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         jid != self.jid:
             # We can register this agent
             registered_transports = []
-            jid_list = gajim.contacts.get_jid_list(self.account)
+            jid_list = app.contacts.get_jid_list(self.account)
             for jid_ in jid_list:
-                contact = gajim.contacts.get_first_contact_from_jid(
+                contact = app.contacts.get_first_contact_from_jid(
                         self.account, jid_)
                 if _('Transports') in contact.groups:
                     registered_transports.append(jid_)
@@ -1602,7 +1602,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             descr = "<b>%s</b>" % addr
         # Guess which kind of service this is
         identities = []
-        type_ = gajim.get_transport_name_from_jid(jid,
+        type_ = app.get_transport_name_from_jid(jid,
                                 use_config_setting = False)
         if type_:
             identity = {'category': '_jid', 'type': type_}
@@ -1774,7 +1774,7 @@ class MucBrowser(AgentBrowser):
         model, iter = self.window.services_treeview.get_selection().get_selected()
         if not iter:
             return
-        name = gajim.config.get_per('accounts', self.account, 'name')
+        name = app.config.get_per('accounts', self.account, 'name')
         room_jid = model[iter][0]
         bm = {
                 'name': room_jid.split('@')[0],
@@ -1785,15 +1785,15 @@ class MucBrowser(AgentBrowser):
                 'nick': name
         }
 
-        for bookmark in gajim.connections[self.account].bookmarks:
+        for bookmark in app.connections[self.account].bookmarks:
             if bookmark['jid'] == bm['jid']:
                 dialogs.ErrorDialog( _('Bookmark already set'),
                 _('Group Chat "%s" is already in your bookmarks.') % bm['jid'],
                 transient_for=self.window.window)
                 return
 
-        gajim.connections[self.account].bookmarks.append(bm)
-        gajim.connections[self.account].store_bookmarks()
+        app.connections[self.account].bookmarks.append(bm)
+        app.connections[self.account].store_bookmarks()
 
         gui_menu_builder.build_bookmark_menu(self.account)
 
@@ -1811,15 +1811,15 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if 'join_gc' not in gajim.interface.instances[self.account]:
+        if 'join_gc' not in app.interface.instances[self.account]:
             try:
                 dialogs.JoinGroupchatWindow(self.account, service)
             except GajimGeneralException:
                 pass
         else:
-            gajim.interface.instances[self.account]['join_gc']._set_room_jid(
+            app.interface.instances[self.account]['join_gc']._set_room_jid(
                 service)
-            gajim.interface.instances[self.account]['join_gc'].window.present()
+            app.interface.instances[self.account]['join_gc'].window.present()
 
     def update_actions(self):
         sens = self.window.services_treeview.get_selection().count_selected_rows()
@@ -1968,7 +1968,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button = None
         self.unsubscribe_button = None
 
-        gajim.connections[account].send_pb_subscription_query(jid,
+        app.connections[account].send_pb_subscription_query(jid,
             self._on_pep_subscriptions)
 
     def _create_treemodel(self):
@@ -2141,7 +2141,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_subscribe(self.jid, groupnode,
+        app.connections[self.account].send_pb_subscribe(self.jid, groupnode,
             self._on_pep_subscribe, groupnode)
 
     def on_unsubscribe_button_clicked(self, widget):
@@ -2153,7 +2153,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1) # 1 = groupnode
 
-        gajim.connections[self.account].send_pb_unsubscribe(self.jid, groupnode,
+        app.connections[self.account].send_pb_unsubscribe(self.jid, groupnode,
             self._on_pep_unsubscribe, groupnode)
 
     def _on_pep_subscriptions(self, conn, request):

@@ -8,17 +8,17 @@ from data import *
 from mock import Mock, expectParams
 from gajim_mocks import *
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import contacts as contacts_module
 from gajim import roster_window
 
-gajim.get_jid_from_account = lambda acc: 'myjid@' + acc
+app.get_jid_from_account = lambda acc: 'myjid@' + acc
 
 
 class TestRosterWindow(unittest.TestCase):
 
     def setUp(self):
-        gajim.interface = MockInterface()
+        app.interface = MockInterface()
 
         self.C_NAME = roster_window.Column.NAME
         self.C_TYPE = roster_window.Column.TYPE
@@ -27,13 +27,13 @@ class TestRosterWindow(unittest.TestCase):
 
         # Add after creating RosterWindow
         # We want to test the filling explicitly
-        gajim.contacts = contacts_module.LegacyContactsAPI()
-        gajim.connections = {}
-        self.roster = roster_window.RosterWindow(gajim.app)
+        app.contacts = contacts_module.LegacyContactsAPI()
+        app.connections = {}
+        self.roster = roster_window.RosterWindow(app.app)
 
         for acc in contacts:
-            gajim.connections[acc] = MockConnection(acc)
-            gajim.contacts.add_account(acc)
+            app.connections[acc] = MockConnection(acc)
+            app.contacts.add_account(acc)
 
     ### Custom assertions
     def assert_all_contacts_are_in_roster(self, acc):
@@ -41,13 +41,13 @@ class TestRosterWindow(unittest.TestCase):
             self.assert_contact_is_in_roster(jid, acc)
 
     def assert_contact_is_in_roster(self, jid, account):
-        contacts = gajim.contacts.get_contacts(account, jid)
+        contacts = app.contacts.get_contacts(account, jid)
         # check for all resources
         for contact in contacts:
             iters = self.roster._get_contact_iter(jid, account,
                     model=self.roster.model)
 
-            if jid != gajim.get_jid_from_account(account):
+            if jid != app.get_jid_from_account(account):
                 # We don't care for groups of SelfContact
                 self.assertTrue(len(iters) == len(contact.get_shown_groups()),
                         msg='Contact is not in all his groups')
@@ -55,7 +55,7 @@ class TestRosterWindow(unittest.TestCase):
             # Are we big brother?
             bb_jid = None
             bb_account = None
-            family = gajim.contacts.get_metacontacts_family(account, jid)
+            family = app.contacts.get_metacontacts_family(account, jid)
             if family:
                 nearby_family, bb_jid, bb_account = \
                         self.roster._get_nearby_family_and_big_brother(family, account)
@@ -94,7 +94,7 @@ class TestRosterWindow(unittest.TestCase):
                         self.assertTrue(p_model[self.C_TYPE] == 'contact',
                                 msg='Little Brother brother has no BigB')
                 else:
-                    if jid == gajim.get_jid_from_account(account):
+                    if jid == app.get_jid_from_account(account):
                         self.assertTrue(p_model[self.C_TYPE] == 'account',
                                 msg='SelfContact is not on top')
                     else:
@@ -118,7 +118,7 @@ class TestRosterWindow(unittest.TestCase):
             self.assertEquals(acc_model[self.C_ACCOUNT], acc,
                     msg='Account not found')
 
-            self_jid = gajim.get_jid_from_account(acc)
+            self_jid = app.get_jid_from_account(acc)
             self.assertEquals(acc_model[self.C_JID], self_jid,
                     msg='Account JID not found in account row')
 
@@ -132,7 +132,7 @@ class TestRosterWindow(unittest.TestCase):
             self.roster.fill_contacts_and_groups_dicts(contacts[acc], acc)
 
             for jid in contacts[acc]:
-                instances = gajim.contacts.get_contacts(acc, jid)
+                instances = app.contacts.get_contacts(acc, jid)
 
                 # Created a contact for each single jid?
                 self.assertTrue(len(instances) == 1)
@@ -160,7 +160,7 @@ class TestRosterWindow(unittest.TestCase):
 class TestRosterWindowRegrouped(TestRosterWindow):
 
     def setUp(self):
-        gajim.config.set('mergeaccounts', True)
+        app.config.set('mergeaccounts', True)
         TestRosterWindow.setUp(self)
 
     def test_toggle_regroup(self):
@@ -180,19 +180,19 @@ class TestRosterWindowMetaContacts(TestRosterWindowRegrouped):
             for brother in data:
                 acc = brother['account']
                 jid = brother['jid']
-                gajim.contacts.add_metacontact(t_acc, t_jid, acc, jid)
+                app.contacts.add_metacontact(t_acc, t_jid, acc, jid)
         self.roster.setup_and_draw_roster()
 
     def test_connect_new_metacontact(self):
         self.test_fill_roster_model()
 
         jid = 'coolstuff@gajim.org'
-        contact = gajim.contacts.create_contact(jid, account1)
-        gajim.contacts.add_contact(account1, contact)
+        contact = app.contacts.create_contact(jid, account1)
+        app.contacts.add_contact(account1, contact)
         self.roster.add_contact(jid, account1)
         self.roster.chg_contact_status(contact, 'offline', '', account1)
 
-        gajim.contacts.add_metacontact(account1, 'samejid@gajim.org',
+        app.contacts.add_metacontact(account1, 'samejid@gajim.org',
                 account1, jid)
         self.roster.chg_contact_status(contact, 'online', '', account1)
 

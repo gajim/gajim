@@ -35,7 +35,7 @@ from errno import EINPROGRESS
 from errno import EAFNOSUPPORT
 from nbxmpp.idlequeue import IdleObject
 from gajim.common.file_props import FilesProp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import jingle_xtls
 if jingle_xtls.PYOPENSSL_PRESENT:
     import OpenSSL
@@ -501,10 +501,10 @@ class Socks5(object):
                 self._sock = socket.socket(*ai[:3])
                 if self.fingerprint is not None:
                     if self.file_props.type_ == 's':
-                        remote_jid = gajim.get_jid_without_resource(
+                        remote_jid = app.get_jid_without_resource(
                             self.file_props.receiver)
                     else:
-                        remote_jid = gajim.get_jid_without_resource(
+                        remote_jid = app.get_jid_without_resource(
                             self.file_props.sender)
                     self._sock = OpenSSL.SSL.Connection(
                         jingle_xtls.get_context('client',

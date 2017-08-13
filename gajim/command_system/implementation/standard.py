@@ -21,7 +21,7 @@ from time import localtime, strftime
 from datetime import date
 
 from gajim import dialogs
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.logger import KindConstant
@@ -87,7 +87,7 @@ class StandardCommonCommands(CommandContainer):
     @command('lastlog', overlap=True)
     @doc(_("Show logged messages which mention given text"))
     def grep(self, text, limit=None):
-        results = gajim.logger.search_log(self.account, self.contact.jid, text)
+        results = app.logger.search_log(self.account, self.contact.jid, text)
 
         if not results:
             raise CommandError(_("%s: Nothing found") % text)
@@ -102,7 +102,7 @@ class StandardCommonCommands(CommandContainer):
             contact = row.contact_name
             if not contact:
                 if row.kind == KindConstant.CHAT_MSG_SENT:
-                    contact = gajim.nicks[self.account]
+                    contact = app.nicks[self.account]
                 else:
                     contact = self.contact.name
 
@@ -129,8 +129,8 @@ class StandardCommonCommands(CommandContainer):
     def status(self, status, message):
         if status not in ('online', 'away', 'chat', 'xa', 'dnd'):
             raise CommandError("Invalid status given")
-        for connection in gajim.connections.values():
-            if not gajim.config.get_per('accounts', connection.name,
+        for connection in app.connections.values():
+            if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
             if connection.connected < 2:
@@ -143,8 +143,8 @@ class StandardCommonCommands(CommandContainer):
         if not message:
             message = _("Away")
 
-        for connection in gajim.connections.values():
-            if not gajim.config.get_per('accounts', connection.name,
+        for connection in app.connections.values():
+            if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
             if connection.connected < 2:
@@ -157,8 +157,8 @@ class StandardCommonCommands(CommandContainer):
         if not message:
             message = _("Available")
 
-        for connection in gajim.connections.values():
-            if not gajim.config.get_per('accounts', connection.name,
+        for connection in app.connections.values():
+            if not app.config.get_per('accounts', connection.name,
             'sync_with_global_status'):
                 continue
             if connection.connected < 2:
@@ -182,9 +182,9 @@ class StandardCommonChatCommands(CommandContainer):
     @command
     @doc(_("Send a ping to the contact"))
     def ping(self):
-        if self.account == gajim.ZEROCONF_ACC_NAME:
+        if self.account == app.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
-        gajim.connections[self.account].sendPing(self.contact)
+        app.connections[self.account].sendPing(self.contact)
 
     @command
     @doc(_("Send DTMF sequence through an open audio session"))
@@ -271,7 +271,7 @@ class StandardGroupChatCommands(CommandContainer):
     @command('query', raw=True)
     @doc(_("Open a private chat window with a specified occupant"))
     def chat(self, nick):
-        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick)
         else:
@@ -280,7 +280,7 @@ class StandardGroupChatCommands(CommandContainer):
     @command('msg', raw=True)
     @doc(_("Open a private chat window with a specified occupant and send him a message"))
     def message(self, nick, a_message):
-        nicks = gajim.contacts.get_nick_list(self.account, self.room_jid)
+        nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
             self.on_send_pm(nick=nick, msg=a_message)
         else:
@@ -307,10 +307,10 @@ class StandardGroupChatCommands(CommandContainer):
             nick = self.nick
 
         if '@' not in jid:
-            jid = jid + '@' + gajim.get_server_from_jid(self.room_jid)
+            jid = jid + '@' + app.get_server_from_jid(self.room_jid)
 
         try:
-            gajim.interface.instances[self.account]['join_gc'].window.present()
+            app.interface.instances[self.account]['join_gc'].window.present()
         except KeyError:
             try:
                 dialogs.JoinGroupchatWindow(account=self.account, room_jid=jid, nick=nick)
@@ -329,15 +329,15 @@ class StandardGroupChatCommands(CommandContainer):
     If given nickname is not found it will be treated as a jid.
     """))
     def ban(self, who, reason):
-        if who in gajim.contacts.get_nick_list(self.account, self.room_jid):
-            contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
+        if who in app.contacts.get_nick_list(self.account, self.room_jid):
+            contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
             who = contact.jid
         self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
 
     @command(raw=True, empty=True)
     @doc(_("Kick user by a nick from a groupchat"))
     def kick(self, who, reason):
-        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
 
@@ -349,7 +349,7 @@ class StandardGroupChatCommands(CommandContainer):
     def role(self, who, role):
         if role not in ('moderator', 'participant', 'visitor', 'none'):
             raise CommandError(_("Invalid role given"))
-        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         self.connection.gc_set_role(self.room_jid, who, role)
 
@@ -361,17 +361,17 @@ class StandardGroupChatCommands(CommandContainer):
     def affiliate(self, who, affiliation):
         if affiliation not in ('owner', 'admin', 'member', 'outcast', 'none'):
             raise CommandError(_("Invalid affiliation given"))
-        if not who in gajim.contacts.get_nick_list(self.account, self.room_jid):
+        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
-        contact = gajim.contacts.get_gc_contact(self.account, self.room_jid, who)
+        contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
         self.connection.gc_set_affiliation(self.room_jid, contact.jid,
             affiliation)
 
     @command
     @doc(_("Display names of all group chat occupants"))
     def names(self, verbose=False):
-        ggc = gajim.contacts.get_gc_contact
-        gnl = gajim.contacts.get_nick_list
+        ggc = app.contacts.get_gc_contact
+        gnl = app.contacts.get_nick_list
 
         get_contact = lambda nick: ggc(self.account, self.room_jid, nick)
         get_role = lambda nick: get_contact(nick).role
@@ -402,8 +402,8 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Send a ping to the contact"))
     def ping(self, nick):
-        if self.account == gajim.ZEROCONF_ACC_NAME:
+        if self.account == app.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
-        gc_c = gajim.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        gajim.connections[self.account].sendPing(gc_c, self)
+        gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
+        app.connections[self.account].sendPing(gc_c, self)
 

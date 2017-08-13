@@ -50,8 +50,8 @@ import urllib
 if __name__ == '__main__':
     from gajim.common import i18n
     import gajim.common.configpaths
-    gajim.common.configpaths.gajimpaths.init(None)
-from gajim.common import gajim
+    app.common.configpaths.gajimpaths.init(None)
+from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.gtkgui_helpers import get_icon_pixmap
 from gajim.common import helpers
@@ -515,7 +515,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.href = href
             tag.type_ = type_ # to be used by the URL handler
             tag.connect('event', self.textview.hyperlink_handler, 'url')
-            tag.set_property('foreground', gajim.config.get('urlmsgcolor'))
+            tag.set_property('foreground', app.config.get('urlmsgcolor'))
             tag.set_property('underline', Pango.Underline.SINGLE)
             tag.is_anchor = True
         if title:
@@ -550,7 +550,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             else:
                 if self.conv_textview:
                     img_mark = self.textbuf.create_mark(None, self.iter, True)
-                    gajim.thread_interface(helpers.download_image, [
+                    app.thread_interface(helpers.download_image, [
                         self.conv_textview.account, attrs], self._update_img,
                         [attrs, img_mark, self._get_style_tags()])
                     alt = attrs.get('alt', '')
@@ -849,8 +849,8 @@ class HtmlTextView(Gtk.TextView):
         self.id_ = self.connect('button-release-event',
             self.on_left_mouse_button_release)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
-        self.config = gajim.config
-        self.interface = gajim.interface
+        self.config = app.config
+        self.interface = app.interface
         # end big hack
 
     def connect_tooltip(self, func=None):
@@ -860,7 +860,7 @@ class HtmlTextView(Gtk.TextView):
         buffer_ = self.get_buffer()
 
         self.tagURL = buffer_.create_tag('url')
-        color = gajim.config.get('urlmsgcolor')
+        color = app.config.get('urlmsgcolor')
         self.tagURL.set_property('foreground', color)
         self.tagURL.set_property('underline', Pango.Underline.SINGLE)
         self.tagURL.connect('event', self.hyperlink_handler, 'url')
@@ -912,7 +912,7 @@ class HtmlTextView(Gtk.TextView):
         clip.set_text(text, -1)
 
 #    def on_start_chat_activate(self, widget, jid):
-#        gajim.interface.new_chat_from_jid(self.account, jid)
+#        app.interface.new_chat_from_jid(self.account, jid)
 
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
         try:
@@ -952,7 +952,7 @@ class HtmlTextView(Gtk.TextView):
             childs[6].connect('activate',
                 self.on_join_group_chat_menuitem_activate, text)
 
-#            if self.account and gajim.connections[self.account].\
+#            if self.account and app.connections[self.account].\
 #            roster_supported:
 #                childs[7].connect('activate',
 #                    self.on_add_to_roster_activate, text)
@@ -995,7 +995,7 @@ class HtmlTextView(Gtk.TextView):
                     kind = 'xmpp'
                 elif word.startswith('mailto:'):
                     kind = 'mail'
-                elif gajim.interface.sth_at_sth_dot_sth_re.match(word):
+                elif app.interface.sth_at_sth_dot_sth_re.match(word):
                     # it's a JID or mail
                     kind = 'sth_at_sth'
             else:
@@ -1097,11 +1097,11 @@ if __name__ == '__main__':
     log = logging.getLogger()
     gaj.Interface()
 
-    # create fake gajim.plugin_manager.gui_extension_point method for tests
+    # create fake app.plugin_manager.gui_extension_point method for tests
     def gui_extension_point(*args):
         pass
-    gajim.plugin_manager = gaj.Interface()
-    gajim.plugin_manager.gui_extension_point = gui_extension_point
+    app.plugin_manager = gaj.Interface()
+    app.plugin_manager.gui_extension_point = gui_extension_point
 
     htmlview = ConversationTextview(None)
 

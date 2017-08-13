@@ -27,7 +27,7 @@ import logging
 log = logging.getLogger('gajim.c.proxy65_manager')
 
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common.socks5 import Socks5
 from nbxmpp.idlequeue import IdleObject
@@ -260,7 +260,7 @@ class HostTester(Socks5, IdleObject):
         self.file_props.is_a_proxy = True
         self.file_props.proxy_sender = sender_jid
         self.file_props.proxy_receiver = 'test@gajim.org/test2'
-        Socks5.__init__(self, gajim.idlequeue, host, port, None, None, None)
+        Socks5.__init__(self, app.idlequeue, host, port, None, None, None)
         self.sid = sid
 
     def connect(self):
@@ -274,7 +274,7 @@ class HostTester(Socks5, IdleObject):
         self._sock.setblocking(False)
         self.fd = self._sock.fileno()
         self.state = 0 # about to be connected
-        gajim.idlequeue.plug_idle(self, True, False)
+        app.idlequeue.plug_idle(self, True, False)
         self.do_connect()
         self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
         return None
@@ -299,8 +299,8 @@ class HostTester(Socks5, IdleObject):
             return
         self.state += 1
         # unplug and plug for reading
-        gajim.idlequeue.plug_idle(self, False, True)
-        gajim.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
+        app.idlequeue.plug_idle(self, False, True)
+        app.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
 
     def pollin(self):
         self.idlequeue.remove_timeout(self.fd)
@@ -380,7 +380,7 @@ class ReceiverTester(Socks5, IdleObject):
         self.file_props.is_a_proxy = True
         self.file_props.proxy_sender = sender_jid
         self.file_props.proxy_receiver = 'test@gajim.org/test2'
-        Socks5.__init__(self, gajim.idlequeue, host, port, None, None, None)
+        Socks5.__init__(self, app.idlequeue, host, port, None, None, None)
         self.sid = sid
 
     def connect(self):
@@ -394,7 +394,7 @@ class ReceiverTester(Socks5, IdleObject):
         self._sock.setblocking(False)
         self.fd = self._sock.fileno()
         self.state = 0 # about to be connected
-        gajim.idlequeue.plug_idle(self, True, False)
+        app.idlequeue.plug_idle(self, True, False)
         self.do_connect()
         self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
         return None
@@ -419,8 +419,8 @@ class ReceiverTester(Socks5, IdleObject):
             return
         self.state += 1
         # unplug and plug for reading
-        gajim.idlequeue.plug_idle(self, False, True)
-        gajim.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
+        app.idlequeue.plug_idle(self, False, True)
+        app.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
 
     def pollin(self):
         self.idlequeue.remove_timeout(self.fd)

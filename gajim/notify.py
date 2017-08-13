@@ -34,7 +34,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gajim import gtkgui_helpers
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 
@@ -67,11 +67,11 @@ def get_show_in_systray(event, account, contact, type_=None):
     """
     Return True if this event must be shown in systray, else False
     """
-    if type_ == 'printed_gc_msg' and not gajim.config.get(
+    if type_ == 'printed_gc_msg' and not app.config.get(
     'notify_on_all_muc_messages'):
         # it's not an highlighted message, don't show in systray
         return False
-    return gajim.config.get('trayicon_notification_on_events')
+    return app.config.get('trayicon_notification_on_events')
 
 def popup(event_type, jid, account, msg_type='', path_to_image=None, title=None,
 text=None, timeout=-1):
@@ -85,27 +85,27 @@ text=None, timeout=-1):
         path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
     if timeout < 0:
-        timeout = gajim.config.get('notification_timeout')
+        timeout = app.config.get('notification_timeout')
 
     # Try to show our popup via D-Bus and notification daemon
-    if gajim.config.get('use_notif_daemon') and dbus_support.supported:
+    if app.config.get('use_notif_daemon') and dbus_support.supported:
         try:
             DesktopNotification(event_type, jid, account, msg_type,
                 path_to_image, title, GLib.markup_escape_text(text), timeout)
             return  # sucessfully did D-Bus Notification procedure!
         except dbus.DBusException as e:
             # Connection to D-Bus failed
-            gajim.log.debug(str(e))
+            app.log.debug(str(e))
         except TypeError as e:
             # This means that we sent the message incorrectly
-            gajim.log.debug(str(e))
+            app.log.debug(str(e))
 
     # Ok, that failed. Let's try pynotify, which also uses notification daemon
-    if gajim.config.get('use_notif_daemon') and USER_HAS_PYNOTIFY:
+    if app.config.get('use_notif_daemon') and USER_HAS_PYNOTIFY:
         if not text and event_type == 'new_message':
             # empty text for new_message means do_preview = False
             # -> default value for text
-            _text = GLib.markup_escape_text(gajim.get_name_from_jid(account,
+            _text = GLib.markup_escape_text(app.get_name_from_jid(account,
                 jid))
         else:
             _text = GLib.markup_escape_text(text)
@@ -134,12 +134,12 @@ text=None, timeout=-1):
             return
         except GObject.GError as e:
             # Connection to notification-daemon failed, see #2893
-            gajim.log.debug(str(e))
+            app.log.debug(str(e))
 
     # Either nothing succeeded or the user wants old-style notifications
     instance = PopupNotificationWindow(event_type, jid, account, msg_type,
         path_to_image, title, text, timeout)
-    gajim.interface.roster.popup_notification_windows.append(instance)
+    app.interface.roster.popup_notification_windows.append(instance)
 
 def on_pynotify_notification_clicked(notification, action):
     jid = notification._data.jid
@@ -147,14 +147,14 @@ def on_pynotify_notification_clicked(notification, action):
     msg_type = notification._data.msg_type
 
     notification.close()
-    gajim.interface.handle_event(account, jid, msg_type)
+    app.interface.handle_event(account, jid, msg_type)
 
 class Notification:
     """
     Handle notifications
     """
     def __init__(self):
-        gajim.ged.register_event_handler('notification', ged.GUI2,
+        app.ged.register_event_handler('notification', ged.GUI2,
             self._nec_notification)
 
     def _nec_notification(self, obj):
@@ -237,7 +237,7 @@ class NotificationResponseManager:
             self.pending[id_] = object_
         else:
             # We've triggered an event that has a duplicate ID!
-            gajim.log.debug('Duplicate ID of notification. Can\'t handle this.')
+            app.log.debug('Duplicate ID of notification. Can\'t handle this.')
 
 notification_response_manager = NotificationResponseManager()
 
@@ -265,7 +265,7 @@ class DesktopNotification:
         # default value of text
         if not text and event_type == 'new_message':
             # empty text for new_message means do_preview = False
-            self.text = gajim.get_name_from_jid(account, jid)
+            self.text = app.get_name_from_jid(account, jid)
 
         if not title:
             self.title = event_type # default value
@@ -365,9 +365,9 @@ class DesktopNotification:
                 # we're actually dealing with the newer version
                 version = [0, 3, 1]
         if version > [0, 3]:
-            if gajim.interface.systray_enabled and \
-            gajim.config.get('attach_notifications_to_systray'):
-                status_icon = gajim.interface.systray.status_icon
+            if app.interface.systray_enabled and \
+            app.config.get('attach_notifications_to_systray'):
+                status_icon = app.interface.systray.status_icon
                 rect = status_icon.get_geometry()[2]
                 x, y, width, height = rect.x, rect.y, rect.width, rect.height
                 pos_x = x + (width / 2)
@@ -432,12 +432,12 @@ class DesktopNotification:
         notification_response_manager.add_pending(id_, self)
 
     def notify_another_way(self, e):
-        gajim.log.debug('Error when trying to use notification daemon: %s' % \
+        app.log.debug('Error when trying to use notification daemon: %s' % \
             str(e))
         instance = PopupNotificationWindow(self.event_type, self.jid,
             self.account, self.msg_type, self.path_to_image, self.title,
             self.text, self.timeout)
-        gajim.interface.roster.popup_notification_windows.append(instance)
+        app.interface.roster.popup_notification_windows.append(instance)
 
     def on_action_invoked(self, id_, reason):
         if self.notif is None:
@@ -448,7 +448,7 @@ class DesktopNotification:
         if reason == 'ignore':
             return
 
-        gajim.interface.handle_event(self.account, self.jid, self.msg_type)
+        app.interface.handle_event(self.account, self.jid, self.msg_type)
 
     def version_reply_handler(self, name, vendor, version, spec_version=None):
         if spec_version:

@@ -22,7 +22,7 @@ from collections import namedtuple
 import nbxmpp
 from gi.repository import Gtk
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 from gajim.gtkgui_helpers import get_icon_pixmap, Color
 
@@ -32,7 +32,7 @@ class ServerInfoDialog(Gtk.Dialog):
         super().__init__(_('Server Info'), None, flags)
 
         self.account = account
-        self.set_transient_for(gajim.interface.roster.window)
+        self.set_transient_for(app.interface.roster.window)
         self.set_resizable(False)
 
         grid = Gtk.Grid()
@@ -58,17 +58,17 @@ class ServerInfoDialog(Gtk.Dialog):
         self.connect('response', self.on_response)
         self.connect('destroy', self.on_destroy)
 
-        gajim.ged.register_event_handler('version-result-received',
+        app.ged.register_event_handler('version-result-received',
                                          ged.CORE,
                                          self._nec_version_result_received)
 
-        gajim.ged.register_event_handler('agent-info-received',
+        app.ged.register_event_handler('agent-info-received',
                                          ged.GUI1,
                                          self._nec_agent_info_received)
 
         self.version = ''
-        self.hostname = gajim.get_hostname_from_account(account)
-        gajim.connections[account].request_os_info(self.hostname, None)
+        self.hostname = app.get_hostname_from_account(account)
+        app.connections[account].request_os_info(self.hostname, None)
 
         for feature in self.get_features():
             self.add_feature(feature)
@@ -111,7 +111,7 @@ class ServerInfoDialog(Gtk.Dialog):
         item.get_parent().set_tooltip_text(feature.tooltip)
 
     def get_features(self):
-        con = gajim.connections[self.account]
+        con = app.connections[self.account]
         Feature = namedtuple('Feature', ['name', 'enabled', 'tooltip'])
 
         return [
@@ -139,12 +139,12 @@ class ServerInfoDialog(Gtk.Dialog):
             self.destroy()
 
     def on_destroy(self, *args):
-        del gajim.interface.instances[self.account]['server_info']
-        gajim.ged.remove_event_handler('version-result-received',
+        del app.interface.instances[self.account]['server_info']
+        app.ged.remove_event_handler('version-result-received',
                                        ged.CORE,
                                        self._nec_version_result_received)
 
-        gajim.ged.remove_event_handler('agent-info-received',
+        app.ged.remove_event_handler('agent-info-received',
                                        ged.GUI1,
                                        self._nec_agent_info_received)
 

@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 
 import nbxmpp
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 from gajim.common.logger import KindConstant, JIDConstant
 import gajim.common.connection_handlers_events as ev
@@ -38,33 +38,33 @@ class ConnectionArchive313:
         self.iq_answer = []
         self.mam_query_date = None
         self.mam_query_id = None
-        gajim.nec.register_incoming_event(ev.MamMessageReceivedEvent)
-        gajim.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
+        app.nec.register_incoming_event(ev.MamMessageReceivedEvent)
+        app.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
             self._nec_result_finished)
-        gajim.ged.register_event_handler('archiving-finished', ged.CORE,
+        app.ged.register_event_handler('archiving-finished', ged.CORE,
             self._nec_result_finished)
-        gajim.ged.register_event_handler('agent-info-error-received', ged.CORE,
+        app.ged.register_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
-        gajim.ged.register_event_handler('agent-info-received', ged.CORE,
+        app.ged.register_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info)
-        gajim.ged.register_event_handler('mam-decrypted-message-received',
+        app.ged.register_event_handler('mam-decrypted-message-received',
             ged.CORE, self._nec_mam_decrypted_message_received)
-        gajim.ged.register_event_handler(
+        app.ged.register_event_handler(
             'archiving-313-preferences-changed-received', ged.CORE,
             self._nec_archiving_313_preferences_changed_received)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('archiving-finished-legacy', ged.CORE,
+        app.ged.remove_event_handler('archiving-finished-legacy', ged.CORE,
             self._nec_result_finished)
-        gajim.ged.remove_event_handler('archiving-finished', ged.CORE,
+        app.ged.remove_event_handler('archiving-finished', ged.CORE,
             self._nec_result_finished)
-        gajim.ged.remove_event_handler('agent-info-error-received', ged.CORE,
+        app.ged.remove_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
-        gajim.ged.remove_event_handler('agent-info-received', ged.CORE,
+        app.ged.remove_event_handler('agent-info-received', ged.CORE,
             self._nec_agent_info)
-        gajim.ged.remove_event_handler('mam-decrypted-message-received',
+        app.ged.remove_event_handler('mam-decrypted-message-received',
             ged.CORE, self._nec_mam_decrypted_message_received)
-        gajim.ged.remove_event_handler(
+        app.ged.remove_event_handler(
             'archiving-313-preferences-changed-received', ged.CORE,
             self._nec_archiving_313_preferences_changed_received)
 
@@ -86,17 +86,17 @@ class ConnectionArchive313:
                 continue
             # it's a groupchat
             for msg_obj in self.mam_awaiting_disco_result[obj.jid]:
-                gajim.logger.insert_jid(msg_obj.with_.getStripped(),
+                app.logger.insert_jid(msg_obj.with_.getStripped(),
                                         type_=JIDConstant.ROOM_TYPE)
-                gajim.nec.push_incoming_event(
+                app.nec.push_incoming_event(
                     ev.MamDecryptedMessageReceivedEvent(
                         None, disco=True, **vars(msg_obj)))
             del self.mam_awaiting_disco_result[obj.jid]
             return
         # it's not a groupchat
         for msg_obj in self.mam_awaiting_disco_result[obj.jid]:
-            gajim.logger.insert_jid(msg_obj.with_.getStripped())
-            gajim.nec.push_incoming_event(
+            app.logger.insert_jid(msg_obj.with_.getStripped())
+            app.nec.push_incoming_event(
                 ev.MamDecryptedMessageReceivedEvent(
                     None, disco=True, **vars(msg_obj)))
         del self.mam_awaiting_disco_result[obj.jid]
@@ -113,13 +113,13 @@ class ConnectionArchive313:
             last = set_.getTagData('last')
             complete = obj.fin.getAttr('complete')
             if last:
-                gajim.config.set_per('accounts', self.name, 'last_mam_id', last)
+                app.config.set_per('accounts', self.name, 'last_mam_id', last)
                 if complete != 'true':
                     self.request_archive(self.get_query_id(), after=last)
             if complete == 'true':
                 self.mam_query_id = None
                 if self.mam_query_date:
-                    gajim.config.set_per(
+                    app.config.set_per(
                         'accounts', self.name,
                         'mam_start_date', self.mam_query_date.timestamp())
                     self.mam_query_date = None
@@ -127,10 +127,10 @@ class ConnectionArchive313:
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        duplicate = gajim.logger.search_for_duplicate(
+        duplicate = app.logger.search_for_duplicate(
             obj.with_, obj.timestamp, obj.msgtxt)
         if not duplicate:
-            gajim.logger.insert_into_logs(
+            app.logger.insert_into_logs(
                 obj.with_, obj.timestamp, obj.kind,
                 unread=False,
                 message=obj.msgtxt)
@@ -140,7 +140,7 @@ class ConnectionArchive313:
         return self.mam_query_id
 
     def request_archive_on_signin(self):
-        mam_id = gajim.config.get_per('accounts', self.name, 'last_mam_id')
+        mam_id = app.config.get_per('accounts', self.name, 'last_mam_id')
         query_id = self.get_query_id()
         if mam_id:
             self.request_archive(query_id, after=mam_id)
@@ -184,7 +184,7 @@ class ConnectionArchive313:
         self.connection.send(iq)
 
     def request_archive_preferences(self):
-        if not gajim.account_is_connected(self.name):
+        if not app.account_is_connected(self.name):
             return
         iq = nbxmpp.Iq(typ='get')
         id_ = self.connection.getAnID()
@@ -193,7 +193,7 @@ class ConnectionArchive313:
         self.connection.send(iq)
 
     def set_archive_preferences(self, items, default):
-        if not gajim.account_is_connected(self.name):
+        if not app.account_is_connected(self.name):
             return
         iq = nbxmpp.Iq(typ='set')
         id_ = self.connection.getAnID()
@@ -211,6 +211,6 @@ class ConnectionArchive313:
         self.connection.send(iq)
 
     def _ArchiveCB(self, con, iq_obj):
-        gajim.nec.push_incoming_event(ev.ArchivingReceivedEvent(None, conn=self,
+        app.nec.push_incoming_event(ev.ArchivingReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed

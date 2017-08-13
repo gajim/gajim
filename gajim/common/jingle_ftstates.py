@@ -14,7 +14,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common.jingle_transport import TransportType
 from gajim.common.socks5 import Socks5ReceiverClient, Socks5SenderClient
 
@@ -52,7 +52,7 @@ class StateInitialized(JingleFileTransferStates):
             if self.jft.use_security:
                 fingerprint = 'client'
             # Connect to the candidate host, on success call on_connect method
-            gajim.socks5queue.connect_to_hosts(self.jft.session.connection.name,
+            app.socks5queue.connect_to_hosts(self.jft.session.connection.name,
                 self.jft.file_props.transport_sid, self.jft.on_connect,
                 self.jft._on_connect_error, fingerprint=fingerprint)
 
@@ -154,12 +154,12 @@ class StateTransfering(JingleFileTransferStates):
         if self.jft.is_our_candidate_used():
             mode = 'client'
             streamhost_used = self.jft.nominated_cand['our-cand']
-            gajim.socks5queue.remove_server(self.jft.file_props.transport_sid)
+            app.socks5queue.remove_server(self.jft.file_props.transport_sid)
         else:
             mode = 'server'
             streamhost_used = self.jft.nominated_cand['peer-cand']
-            gajim.socks5queue.remove_client(self.jft.file_props.transport_sid)
-            gajim.socks5queue.remove_other_servers(streamhost_used['host'])
+            app.socks5queue.remove_client(self.jft.file_props.transport_sid)
+            app.socks5queue.remove_other_servers(streamhost_used['host'])
         if streamhost_used['type'] == 'proxy':
             self.jft.file_props.is_a_proxy = True
             if self.jft.file_props.type_ == 's' and self.jft.weinitiate:
@@ -170,13 +170,13 @@ class StateTransfering(JingleFileTransferStates):
                 self.jft.file_props.proxy_receiver = streamhost_used[
                     'initiator']
             if self.jft.file_props.type_ == 's':
-                s = gajim.socks5queue.senders
+                s = app.socks5queue.senders
                 for sender in s:
                     if s[sender].host == streamhost_used['host'] and \
                     s[sender].connected:
                         return
             elif self.jft.file_props.type_ == 'r':
-                r = gajim.socks5queue.readers
+                r = app.socks5queue.readers
                 for reader in r:
                     if r[reader].host == streamhost_used['host'] and \
                     r[reader].connected:
@@ -190,32 +190,32 @@ class StateTransfering(JingleFileTransferStates):
             self.jft.file_props.proxyhosts = []
             self.jft.file_props.proxyhosts.append(streamhost_used)
             if self.jft.file_props.type_ == 's':
-                gajim.socks5queue.idx += 1
-                idx = gajim.socks5queue.idx
-                sockobj = Socks5SenderClient(gajim.idlequeue, idx,
-                                             gajim.socks5queue, _sock=None,
+                app.socks5queue.idx += 1
+                idx = app.socks5queue.idx
+                sockobj = Socks5SenderClient(app.idlequeue, idx,
+                                             app.socks5queue, _sock=None,
                                              host=str(streamhost_used['host']),
                                              port=int(streamhost_used['port']),
                                              fingerprint=None, connected=False,
                                              file_props=self.jft.file_props)
             else:
-                sockobj = Socks5ReceiverClient(gajim.idlequeue, streamhost_used,
+                sockobj = Socks5ReceiverClient(app.idlequeue, streamhost_used,
                     transport_sid=self.jft.file_props.transport_sid,
                     file_props=self.jft.file_props, fingerprint=None)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used
-            gajim.socks5queue.add_sockobj(self.jft.session.connection.name,
+            app.socks5queue.add_sockobj(self.jft.session.connection.name,
                                           sockobj)
             streamhost_used['idx'] = sockobj.queue_idx
             # If we offered the nominated candidate used, we activate
             # the proxy
             if not self.jft.is_our_candidate_used():
-                gajim.socks5queue.on_success[self.jft.file_props.transport_sid]\
+                app.socks5queue.on_success[self.jft.file_props.transport_sid]\
                     = self.jft.transport._on_proxy_auth_ok
             # TODO: add on failure
         else:
-            jid = gajim.get_jid_without_resource(self.jft.session.ourjid)
-            gajim.socks5queue.send_file(self.jft.file_props,
+            jid = app.get_jid_without_resource(self.jft.session.ourjid)
+            app.socks5queue.send_file(self.jft.file_props,
                                         self.jft.session.connection.name, mode)
 
     def action(self, args=None):

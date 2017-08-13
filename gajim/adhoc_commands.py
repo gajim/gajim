@@ -29,7 +29,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import dataforms
 
 from gajim import gtkgui_helpers
@@ -55,7 +55,7 @@ class CommandWindow:
         """
 
         # an account object
-        self.account = gajim.connections[account]
+        self.account = app.connections[account]
         self.jid = jid
         self.commandnode = commandnode
         self.data_form_widget = None

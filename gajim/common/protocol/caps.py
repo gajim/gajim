@@ -25,7 +25,7 @@ Module containing the network portion of XEP-115 (Entity Capabilities)
 import logging
 log = logging.getLogger('gajim.c.p.caps')
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 from gajim.common.connection_handlers_events import CapsPresenceReceivedEvent, \
     CapsDiscoReceivedEvent, CapsReceivedEvent
@@ -37,17 +37,17 @@ class ConnectionCaps(object):
         self._account = account
         self._capscache = capscache
         self._create_suitable_client_caps = client_caps_factory
-        gajim.nec.register_incoming_event(CapsPresenceReceivedEvent)
-        gajim.nec.register_incoming_event(CapsReceivedEvent)
-        gajim.ged.register_event_handler('caps-presence-received', ged.GUI1,
+        app.nec.register_incoming_event(CapsPresenceReceivedEvent)
+        app.nec.register_incoming_event(CapsReceivedEvent)
+        app.ged.register_event_handler('caps-presence-received', ged.GUI1,
             self._nec_caps_presence_received)
-        gajim.ged.register_event_handler('agent-info-received', ged.GUI1,
+        app.ged.register_event_handler('agent-info-received', ged.GUI1,
             self._nec_agent_info_received_caps)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('caps-presence-received', ged.GUI1,
+        app.ged.remove_event_handler('caps-presence-received', ged.GUI1,
             self._nec_caps_presence_received)
-        gajim.ged.remove_event_handler('agent-info-received', ged.GUI1,
+        app.ged.remove_event_handler('agent-info-received', ged.GUI1,
             self._nec_agent_info_received_caps)
 
     def caps_change_account_name(self, new_name):
@@ -75,10 +75,10 @@ class ConnectionCaps(object):
             log.info('Received Caps from unknown contact %s' % obj.fjid)
 
     def _get_contact_or_gc_contact_for_jid(self, jid):
-        contact = gajim.contacts.get_contact_from_full_jid(self._account, jid)
+        contact = app.contacts.get_contact_from_full_jid(self._account, jid)
         if contact is None:
-            room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-            contact = gajim.contacts.get_gc_contact(self._account, room_jid, nick)
+            room_jid, nick = app.get_room_and_nick_from_fjid(jid)
+            contact = app.contacts.get_gc_contact(self._account, room_jid, nick)
         return contact
 
     def _nec_agent_info_received_caps(self, obj):
@@ -113,6 +113,6 @@ class ConnectionCaps(object):
                 log.info('Computed and retrieved caps hash differ.' +
                     'Ignoring caps of contact %s' % contact.get_full_jid())
 
-            gajim.nec.push_incoming_event(CapsDiscoReceivedEvent(None,
+            app.nec.push_incoming_event(CapsDiscoReceivedEvent(None,
                 conn=self, fjid=obj.fjid, jid=obj.jid, resource=obj.resource,
                 client_caps=contact.client_caps))

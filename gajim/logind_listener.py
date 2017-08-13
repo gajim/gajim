@@ -26,7 +26,7 @@ import os
 import logging
 
 from gajim.common import dbus_support
-from gajim.common import gajim
+from gajim.common import app
 
 log = logging.getLogger('gajim.logind_listener')
 supported = False
@@ -46,9 +46,9 @@ def on_suspend(active):
 
     # we're going for suspend, let's disconnect
     log.debug('System suspend detected, disconnecting from network…')
-    for name, conn in gajim.connections.items():
-        if gajim.account_is_connected(name):
-            conn.old_show = gajim.SHOW_LIST[conn.connected]
+    for name, conn in app.connections.items():
+        if app.account_is_connected(name):
+            conn.old_show = app.SHOW_LIST[conn.connected]
             st = conn.status
             conn.change_status('offline', _('Machine going to sleep'))
             conn.status = st

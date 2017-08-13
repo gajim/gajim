@@ -24,7 +24,7 @@ import logging
 
 from gi.repository import Gio, GLib
 
-from gajim.common import gajim
+from gajim.common import app
 
 log = logging.getLogger('gajim.network_watcher')
 
@@ -87,11 +87,11 @@ def appeared(connection, name, name_owner, *user_data):
 
 def update_connection_state(connected):
     if connected:
-        for connection in gajim.connections.values():
+        for connection in app.connections.values():
             log.info('Connect %s', connection.name)
             connection.reconnect()
     else:
-        for connection in gajim.connections.values():
+        for connection in app.connections.values():
             if connection.connected > 1:
                 log.info('Disconnect %s', connection.name)
                 connection.disconnectedReconnCB()

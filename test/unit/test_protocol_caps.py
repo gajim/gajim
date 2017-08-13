@@ -6,7 +6,7 @@ import unittest
 import lib
 lib.setup_env()
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import nec
 from gajim.common import ged
 from gajim.common import caps_cache
@@ -45,8 +45,8 @@ class TestableConnectionCaps(ConnectionHandlers, caps.ConnectionCaps):
 class TestConnectionCaps(unittest.TestCase):
 
     def setUp(self):
-        gajim.nec = nec.NetworkEventsController()
-        gajim.ged.register_event_handler('caps-presence-received', ged.GUI2,
+        app.nec = nec.NetworkEventsController()
+        app.ged.register_event_handler('caps-presence-received', ged.GUI2,
             self._nec_caps_presence_received)
 
     def _nec_caps_presence_received(self, obj):

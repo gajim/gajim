@@ -36,7 +36,7 @@ from gajim import gtkgui_helpers
 from gajim import dialogs
 from gajim import vcard
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 
 
@@ -54,7 +54,7 @@ class ProfileWindow:
         self.context_id = self.statusbar.get_context_id('profile')
 
         self.account = account
-        self.jid = gajim.get_jid_from_account(account)
+        self.jid = app.get_jid_from_account(account)
 
         self.dialog = None
         self.avatar_mime_type = None
@@ -69,11 +69,11 @@ class ProfileWindow:
         image = Gtk.Image()
         self.xml.get_object('PHOTO_button').set_image(image)
         self.xml.connect_signals(self)
-        gajim.ged.register_event_handler('vcard-published', ged.GUI1,
+        app.ged.register_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
-        gajim.ged.register_event_handler('vcard-not-published', ged.GUI1,
+        app.ged.register_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
-        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+        app.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
         self.window.show_all()
         self.xml.get_object('ok_button').grab_focus()
@@ -94,13 +94,13 @@ class ProfileWindow:
             GLib.source_remove(self.update_progressbar_timeout_id)
         if self.remove_statusbar_timeout_id is not None:
             GLib.source_remove(self.remove_statusbar_timeout_id)
-        gajim.ged.remove_event_handler('vcard-published', ged.GUI1,
+        app.ged.remove_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
-        gajim.ged.remove_event_handler('vcard-not-published', ged.GUI1,
+        app.ged.remove_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
-        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+        app.ged.remove_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
-        del gajim.interface.instances[self.account]['profile']
+        del app.interface.instances[self.account]['profile']
         if self.dialog: # Image chooser dialog
             self.dialog.destroy()
 
@@ -151,7 +151,7 @@ class ProfileWindow:
                     return
             if filesize > 16384:
                 if scaled_pixbuf:
-                    path_to_file = os.path.join(gajim.TMP,
+                    path_to_file = os.path.join(app.TMP,
                             'avatar_scaled.png')
                     scaled_pixbuf.savev(path_to_file, 'png', [], [])
                     must_delete = True
@@ -181,7 +181,7 @@ class ProfileWindow:
                 try:
                     os.remove(path_to_file)
                 except OSError:
-                    gajim.log.debug('Cannot remove %s' % path_to_file)
+                    app.log.debug('Cannot remove %s' % path_to_file)
 
         def on_clear(widget):
             self.dialog.destroy()
@@ -210,7 +210,7 @@ class ProfileWindow:
                     use_local=False)
 
             if pixbuf not in (None, 'ask'):
-                nick = gajim.config.get_per('accounts', self.account, 'name')
+                nick = app.config.get_per('accounts', self.account, 'name')
                 menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
                 menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
@@ -371,7 +371,7 @@ class ProfileWindow:
         if self.update_progressbar_timeout_id:
             # Operation in progress
             return
-        if gajim.connections[self.account].connected < 2:
+        if app.connections[self.account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
                     _('Without a connection, you can not publish your contact '
                     'information.'), transient_for=self.window)
@@ -380,12 +380,12 @@ class ProfileWindow:
         nick = ''
         if 'NICKNAME' in vcard_:
             nick = vcard_['NICKNAME']
-            gajim.connections[self.account].send_nickname(nick)
+            app.connections[self.account].send_nickname(nick)
         if nick == '':
-            gajim.connections[self.account].retract_nickname()
-            nick = gajim.config.get_per('accounts', self.account, 'name')
-        gajim.nicks[self.account] = nick
-        gajim.connections[self.account].send_vcard(vcard_)
+            app.connections[self.account].retract_nickname()
+            nick = app.config.get_per('accounts', self.account, 'name')
+        app.nicks[self.account] = nick
+        app.connections[self.account].send_vcard(vcard_)
         self.message_id = self.statusbar.push(self.context_id,
                 _('Sending profile…'))
         self.progressbar.show()

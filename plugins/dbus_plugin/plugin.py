@@ -675,7 +675,7 @@ if dbus_support.supported:
                 else:
                     gajim.interface.join_gc_room(account, room_jid, nick, password)
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from time import time
 from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow

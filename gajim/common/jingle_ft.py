@@ -25,7 +25,7 @@ import os
 import threading
 from enum import IntEnum, unique
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import jingle_xtls
 from gajim.common.jingle_content import contents, JingleContent
@@ -102,7 +102,7 @@ class JingleFileTransfer(JingleContent):
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
-        if gajim.contacts.is_gc_contact(session.connection.name,
+        if app.contacts.is_gc_contact(session.connection.name,
                                         session.peerjid):
             roomjid = session.peerjid.split('/')[0]
             dstaddr = hashlib.sha1(('%s%s%s' % (self.file_props.sid,
@@ -137,7 +137,7 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_initiate(self, stanza, content, error, action):
         log.debug("Jingle FT request received")
-        gajim.nec.push_incoming_event(FileRequestReceivedEvent(None,
+        app.nec.push_incoming_event(FileRequestReceivedEvent(None,
                                                                conn=self.session.connection,
                                                                stanza=stanza,
                                                                jingle_content=content,
@@ -157,7 +157,7 @@ class JingleFileTransfer(JingleContent):
                                                     payload=[self._compute_hash()])])
         checksum.setNamespace(nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
         self.session.__session_info(checksum)
-        pjid = gajim.get_jid_without_resource(self.session.peerjid)
+        pjid = app.get_jid_without_resource(self.session.peerjid)
         file_info = {'name' : self.file_props.name,
                      'file-name' : self.file_props.file_name,
                      'hash' : self.file_props.hash_,
@@ -203,7 +203,7 @@ class JingleFileTransfer(JingleContent):
             if fingerprint:
                 fingerprint = fingerprint.getData()
                 self.x509_fingerprint = fingerprint
-                if not jingle_xtls.check_cert(gajim.get_jid_without_resource(
+                if not jingle_xtls.check_cert(app.get_jid_without_resource(
                         self.session.responder), fingerprint):
                     id_ = jingle_xtls.send_cert_request(con,
                                                         self.session.responder)
@@ -238,7 +238,7 @@ class JingleFileTransfer(JingleContent):
             fingerprint = 'client'
         if self.transport.type_ == TransportType.SOCKS5:
             sid = self.file_props.transport_sid
-            gajim.socks5queue.connect_to_hosts(self.session.connection.name,
+            app.socks5queue.connect_to_hosts(self.session.connection.name,
                                                sid,
                                                self.on_connect,
                                                self._on_connect_error,
@@ -271,8 +271,8 @@ class JingleFileTransfer(JingleContent):
                 self.state >= State.CAND_SENT_AND_RECEIVED:
             raise nbxmpp.NodeProcessed
         if cand_error:
-            if not gajim.socks5queue.listener.connections:
-                gajim.socks5queue.listener.disconnect()
+            if not app.socks5queue.listener.connections:
+                app.socks5queue.listener.disconnect()
             self.nominated_cand['peer-cand'] = False
             if self.state == State.CAND_SENT:
                 if not self.nominated_cand['our-cand'] and \
@@ -298,13 +298,13 @@ class JingleFileTransfer(JingleContent):
                     streamhost_used = cand
                     break
             if streamhost_used is None or streamhost_used['type'] == 'proxy':
-                if gajim.socks5queue.listener and \
-                not gajim.socks5queue.listener.connections:
-                    gajim.socks5queue.listener.disconnect()
+                if app.socks5queue.listener and \
+                not app.socks5queue.listener.connections:
+                    app.socks5queue.listener.disconnect()
         if content.getTag('transport').getTag('activated'):
             self.state = State.TRANSFERING
-            jid = gajim.get_jid_without_resource(self.session.ourjid)
-            gajim.socks5queue.send_file(self.file_props,
+            jid = app.get_jid_without_resource(self.session.ourjid)
+            app.socks5queue.send_file(self.file_props,
                                         self.session.connection.name, 'client')
             return
         args = {'content': content,
@@ -374,11 +374,11 @@ class JingleFileTransfer(JingleContent):
         sha_str = helpers.get_auth_sha(self.file_props.sid, sender,
                                        receiver)
         self.file_props.sha_str = sha_str
-        port = gajim.config.get('file_transfers_port')
+        port = app.config.get('file_transfers_port')
         fingerprint = None
         if self.use_security:
             fingerprint = 'server'
-        listener = gajim.socks5queue.start_listener(port, sha_str,
+        listener = app.socks5queue.start_listener(port, sha_str,
                                                     self._store_socks5_sid,
                                                     self.file_props,
                                                     fingerprint=fingerprint,

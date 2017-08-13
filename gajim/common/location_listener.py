@@ -20,7 +20,7 @@
 
 from datetime import datetime
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
@@ -121,11 +121,11 @@ class LocationListener:
         self._send_location()
 
     def _send_location(self):
-        accounts = gajim.connections.keys()
+        accounts = app.connections.keys()
         for acct in accounts:
-            if not gajim.account_is_connected(acct):
+            if not app.account_is_connected(acct):
                 continue
-            if not gajim.config.get_per('accounts', acct, 'publish_location'):
+            if not app.config.get_per('accounts', acct, 'publish_location'):
                 continue
             if self.location_info == self._data:
                 continue
@@ -136,7 +136,7 @@ class LocationListener:
                 del new_data['timestamp']
                 if last_data == new_data:
                     continue
-            gajim.connections[acct].send_location(self._data)
+            app.connections[acct].send_location(self._data)
             self.location_info = self._data.copy()
 
     def _timestamp_to_utc(self, timestamp):

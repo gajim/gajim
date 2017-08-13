@@ -27,7 +27,7 @@ import os
 import shutil
 import sys
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import logger
 
 # DO NOT MOVE ABOVE OF import gajim
@@ -173,12 +173,12 @@ def check_and_possibly_move_config():
     LOG_DB_PATH = logger.LOG_DB_PATH
     CACHE_DB_PATH = logger.CACHE_DB_PATH
     vars = {}
-    vars['VCARD_PATH'] = gajim.VCARD_PATH
-    vars['AVATAR_PATH'] = gajim.AVATAR_PATH
-    vars['MY_EMOTS_PATH'] = gajim.MY_EMOTS_PATH
-    vars['MY_ICONSETS_PATH'] = gajim.MY_ICONSETS_PATH
-    vars['MY_MOOD_ICONSETS_PATH'] = gajim.MY_MOOD_ICONSETS_PATH
-    vars['MY_ACTIVITY_ICONSETS_PATH'] = gajim.MY_ACTIVITY_ICONSETS_PATH
+    vars['VCARD_PATH'] = app.VCARD_PATH
+    vars['AVATAR_PATH'] = app.AVATAR_PATH
+    vars['MY_EMOTS_PATH'] = app.MY_EMOTS_PATH
+    vars['MY_ICONSETS_PATH'] = app.MY_ICONSETS_PATH
+    vars['MY_MOOD_ICONSETS_PATH'] = app.MY_MOOD_ICONSETS_PATH
+    vars['MY_ACTIVITY_ICONSETS_PATH'] = app.MY_ACTIVITY_ICONSETS_PATH
     from gajim.common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
@@ -252,8 +252,8 @@ def check_and_possibly_move_config():
             continue
         print(_('moving %s to %s') % (src, dst))
         shutil.move(src, dst)
-    gajim.logger.init_vars()
-    gajim.logger.attach_cache_database()
+    app.logger.init_vars()
+    app.logger.attach_cache_database()
 
 def check_and_possibly_create_paths():
     LOG_DB_PATH = logger.LOG_DB_PATH
@@ -262,8 +262,8 @@ def check_and_possibly_create_paths():
     CACHE_DB_PATH = logger.CACHE_DB_PATH
     CACHE_DB_FOLDER, CACHE_DB_FILE = os.path.split(CACHE_DB_PATH)
 
-    VCARD_PATH = gajim.VCARD_PATH
-    AVATAR_PATH = gajim.AVATAR_PATH
+    VCARD_PATH = app.VCARD_PATH
+    AVATAR_PATH = app.AVATAR_PATH
     from gajim.common import configpaths
     MY_DATA = configpaths.gajimpaths['MY_DATA']
     MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
@@ -271,7 +271,7 @@ def check_and_possibly_create_paths():
     XTLS_CERTS = configpaths.gajimpaths['MY_PEER_CERTS']
     LOCAL_XTLS_CERTS = configpaths.gajimpaths['MY_CERT']
 
-    PLUGINS_CONFIG_PATH = gajim.PLUGINS_CONFIG_DIR
+    PLUGINS_CONFIG_PATH = app.PLUGINS_CONFIG_DIR
 
     if not os.path.exists(MY_DATA):
         create_path(MY_DATA)
@@ -335,7 +335,7 @@ def check_and_possibly_create_paths():
         if os.path.exists(CACHE_DB_PATH):
             os.remove(CACHE_DB_PATH)
         create_log_db()
-        gajim.logger.init_vars()
+        app.logger.init_vars()
     elif os.path.isdir(LOG_DB_PATH):
         print(_('%s is a directory but should be a file') % LOG_DB_PATH)
         print(_('Gajim will now exit'))
@@ -343,7 +343,7 @@ def check_and_possibly_create_paths():
 
     if not os.path.exists(CACHE_DB_PATH):
         create_cache_db()
-        gajim.logger.attach_cache_database()
+        app.logger.attach_cache_database()
     elif os.path.isdir(CACHE_DB_PATH):
         print(_('%s is a directory but should be a file') % CACHE_DB_PATH)
         print(_('Gajim will now exit'))

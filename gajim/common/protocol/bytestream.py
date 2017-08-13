@@ -34,7 +34,7 @@ from gi.repository import GLib
 import time
 
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import jingle_xtls
@@ -79,15 +79,15 @@ def is_transfer_stopped(file_props):
 class ConnectionBytestream:
 
     def __init__(self):
-        gajim.ged.register_event_handler('file-request-received', ged.GUI1,
+        app.ged.register_event_handler('file-request-received', ged.GUI1,
             self._nec_file_request_received)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('file-request-received', ged.GUI1,
+        app.ged.remove_event_handler('file-request-received', ged.GUI1,
             self._nec_file_request_received)
 
     def _ft_get_our_jid(self):
-        our_jid = gajim.get_jid_from_account(self.name)
+        our_jid = app.get_jid_from_account(self.name)
         resource = self.server_resource
         return our_jid + '/' + resource
 
@@ -156,7 +156,7 @@ class ConnectionBytestream:
                 if content.use_security:
                     fingerprint = content.x509_fingerprint
                     if not jingle_xtls.check_cert(
-                    gajim.get_jid_without_resource(file_props.sender),
+                    app.get_jid_without_resource(file_props.sender),
                     fingerprint):
                         id_ = jingle_xtls.send_cert_request(self,
                             file_props.sender)
@@ -257,7 +257,7 @@ class ConnectionBytestream:
 
     def _siSetCB(self, con, iq_obj):
         from gajim.common.connection_handlers_events import FileRequestReceivedEvent
-        gajim.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
+        app.nec.push_incoming_event(FileRequestReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed
 
@@ -275,7 +275,7 @@ class ConnectionBytestream:
         jid = self._ft_get_from(iq_obj)
         file_props.error = -3
         from gajim.common.connection_handlers_events import FileRequestErrorEvent
-        gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+        app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise nbxmpp.NodeProcessed
 
@@ -310,7 +310,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 self.remove_transfer(file_props)
                 from gajim.common.connection_handlers_events import \
                     FileRequestErrorEvent
-                gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+                app.nec.push_incoming_event(FileRequestErrorEvent(None,
                     conn=self, jid=contact.jid, file_props=file_props,
                     error_msg=''))
             sender_jid = file_props.sender
@@ -335,13 +335,13 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if file_props is None:
             return
         if file_props.hash_:
-            gajim.socks5queue.remove_sender(file_props.hash_)
+            app.socks5queue.remove_sender(file_props.hash_)
 
         if file_props.streamhosts:
             for host in file_props.streamhosts:
                 if 'idx' in host and host['idx'] > 0:
-                    gajim.socks5queue.remove_receiver(host['idx'])
-                    gajim.socks5queue.remove_sender(host['idx'])
+                    app.socks5queue.remove_receiver(host['idx'])
+                    app.socks5queue.remove_sender(host['idx'])
 
     def _send_socks5_info(self, file_props):
         """
@@ -355,13 +355,13 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         sha_str = helpers.get_auth_sha(file_props.sid, sender, receiver)
         file_props.sha_str = sha_str
 
-        port = gajim.config.get('file_transfers_port')
-        listener = gajim.socks5queue.start_listener(port, sha_str,
+        port = app.config.get('file_transfers_port')
+        listener = app.socks5queue.start_listener(port, sha_str,
                 self._result_socks5_sid, file_props)
         if not listener:
             file_props.error = -5
             from gajim.common.connection_handlers_events import FileRequestErrorEvent
-            gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+            app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
                 jid=receiver, file_props=file_props, error_msg=''))
             self._connect_error(file_props.sid, error='not-acceptable',
                 error_type='modify')
@@ -387,7 +387,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             streamhost.setAttr('jid', sender)
 
     def _add_local_ips_as_streamhosts_to_query(self, query, file_props):
-        if not gajim.config.get_per('accounts', self.name, 'ft_send_local_ips'):
+        if not app.config.get_per('accounts', self.name, 'ft_send_local_ips'):
             return
         try:
             my_ips = [self.peerhost[0]] # The ip we're connected to server with
@@ -397,18 +397,18 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     my_ips.append(addr[4][0])
 
             sender = file_props.sender
-            port = gajim.config.get('file_transfers_port')
+            port = app.config.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
             from gajim.common.connection_handlers_events import InformationEvent
-            gajim.nec.push_incoming_event(InformationEvent(None, conn=self,
+            app.nec.push_incoming_event(InformationEvent(None, conn=self,
                 level='error', pri_txt=_('Wrong host'),
                 sec_txt=_('Invalid local address? :-O')))
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
         sender = file_props.sender
-        port = gajim.config.get('file_transfers_port')
-        ft_add_hosts_to_send = gajim.config.get('ft_add_hosts_to_send')
+        port = app.config.get('file_transfers_port')
+        ft_add_hosts_to_send = app.config.get('ft_add_hosts_to_send')
         additional_hosts = []
         if ft_add_hosts_to_send:
             additional_hosts = [e.strip() for e in ft_add_hosts_to_send.split(',')]
@@ -417,7 +417,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         self._add_streamhosts_to_query(query, sender, port, additional_hosts)
 
     def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
-        if not gajim.HAVE_UPNP_IGD:
+        if not app.HAVE_UPNP_IGD:
             self.connection.send(iq)
             return
 
@@ -458,18 +458,18 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if self.no_gupnp_reply_id:
                 GLib.source_remove(self.no_gupnp_reply_id)
                 self.no_gupnp_reply_id = 0
-            gajim.gupnp_igd.disconnect(self.ok_id)
-            gajim.gupnp_igd.disconnect(self.fail_id)
+            app.gupnp_igd.disconnect(self.ok_id)
+            app.gupnp_igd.disconnect(self.fail_id)
 
         def ok(s, proto, ext_ip, re, ext_port, local_ip, local_port, desc):
             log.debug('Got GUPnP-IGD answer: external: %s:%s, internal: %s:%s',
                 ext_ip, ext_port, local_ip, local_port)
-            if local_port != gajim.config.get('file_transfers_port'):
+            if local_port != app.config.get('file_transfers_port'):
                 sender = file_props.sender
                 receiver = file_props.receiver
                 sha_str = helpers.get_auth_sha(file_props.sid, sender,
                     receiver)
-                listener = gajim.socks5queue.start_listener(local_port, sha_str,
+                listener = app.socks5queue.start_listener(local_port, sha_str,
                     self._result_socks5_sid, file_props.sid)
                 if listener:
                     self._add_streamhosts_to_query(query, sender, ext_port,
@@ -488,19 +488,19 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         def no_upnp_reply():
             log.debug('Got not GUPnP-IGD answer')
             # stop trying to use it
-            gajim.HAVE_UPNP_IGD = False
+            app.HAVE_UPNP_IGD = False
             self.no_gupnp_reply_id = 0
             self.connection.send(iq)
             cleanup_gupnp()
             return False
 
 
-        self.ok_id = gajim.gupnp_igd.connect('mapped-external-port', ok)
-        self.fail_id = gajim.gupnp_igd.connect('error-mapping-port', fail)
+        self.ok_id = app.gupnp_igd.connect('mapped-external-port', ok)
+        self.fail_id = app.gupnp_igd.connect('error-mapping-port', fail)
 
-        port = gajim.config.get('file_transfers_port')
+        port = app.config.get('file_transfers_port')
         self.no_gupnp_reply_id = GLib.timeout_add_seconds(10, no_upnp_reply)
-        gajim.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
+        app.gupnp_igd.add_port('TCP', 0, my_ip, port, 3600,
             'Gajim file transfer')
 
     def _add_proxy_streamhosts_to_query(self, query, file_props):
@@ -515,16 +515,16 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 proxyhost['port'], [proxyhost['host']])
 
     def _get_file_transfer_proxies_from_config(self, file_props):
-        configured_proxies = gajim.config.get_per('accounts', self.name,
+        configured_proxies = app.config.get_per('accounts', self.name,
                 'file_transfer_proxies')
-        shall_use_proxies = gajim.config.get_per('accounts', self.name,
+        shall_use_proxies = app.config.get_per('accounts', self.name,
                 'use_ft_proxies')
         if shall_use_proxies:
             proxyhost_dicts = []
             proxies = []
             if configured_proxies:
                 proxies = [item.strip() for item in configured_proxies.split(',')]
-            default_proxy = gajim.proxy65_manager.get_default_for_name(self.name)
+            default_proxy = app.proxy65_manager.get_default_for_name(self.name)
             if default_proxy:
                 # add/move default proxy at top of the others
                 if default_proxy in proxies:
@@ -532,7 +532,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 proxies.insert(0, default_proxy)
 
             for proxy in proxies:
-                (host, _port, jid) = gajim.proxy65_manager.get_proxy(proxy, self.name)
+                (host, _port, jid) = app.proxy65_manager.get_proxy(proxy, self.name)
                 if not host:
                     continue
                 host_dict = {
@@ -584,7 +584,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props.error = -3
             from gajim.common.connection_handlers_events import \
                 FileRequestErrorEvent
-            gajim.nec.push_incoming_event(FileRequestErrorEvent(None,
+            app.nec.push_incoming_event(FileRequestErrorEvent(None,
                 conn=self, jid=to, file_props=file_props, error_msg=msg))
 
     def _proxy_auth_ok(self, proxy):
@@ -609,7 +609,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         id_ = iq_obj.getAttr('id')
         frm = helpers.get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
-        gajim.proxy65_manager.error_cb(frm, query)
+        app.proxy65_manager.error_cb(frm, query)
         jid = helpers.get_jid_from_iq(iq_obj)
         id_ = id_[3:]
         file_props = FilesProp.getFilePropBySid(id_)
@@ -617,7 +617,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         file_props.error = -4
         from gajim.common.connection_handlers_events import FileRequestErrorEvent
-        gajim.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
+        app.nec.push_incoming_event(FileRequestErrorEvent(None, conn=self,
             jid=jid, file_props=file_props, error_msg=''))
         raise nbxmpp.NodeProcessed
 
@@ -654,7 +654,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                     file_props.streamhosts.extend(streamhosts)
                 else:
                     file_props.streamhosts = streamhosts
-                gajim.socks5queue.connect_to_hosts(self.name, sid,
+                app.socks5queue.connect_to_hosts(self.name, sid,
                         self.send_success_connect_reply, None)
                 raise nbxmpp.NodeProcessed
         else:
@@ -666,7 +666,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._connect_error(sid, 'item-not-found', 'cancel',
                 msg='Could not connect to given hosts')
         if file_props.type_ == 'r':
-            gajim.socks5queue.connect_to_hosts(self.name, sid,
+            app.socks5queue.connect_to_hosts(self.name, sid,
                     self.send_success_connect_reply, _connection_error)
         raise nbxmpp.NodeProcessed
 
@@ -682,14 +682,14 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if file_props.streamhost_used:
             for host in file_props.proxyhosts:
                 if host['initiator'] == frm and 'idx' in host:
-                    gajim.socks5queue.activate_proxy(host['idx'])
+                    app.socks5queue.activate_proxy(host['idx'])
                     raise nbxmpp.NodeProcessed
 
     def _bytestreamResultCB(self, con, iq_obj):
         frm = self._ft_get_from(iq_obj)
         real_id = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
-        gajim.proxy65_manager.resolve_result(frm, query)
+        app.proxy65_manager.resolve_result(frm, query)
 
         try:
             streamhost = query.getTag('streamhost-used')
@@ -709,7 +709,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 for host in file_props.proxyhosts:
                     if host['initiator'] == frm and \
                     query.getAttr('sid') == file_props.sid:
-                        gajim.socks5queue.activate_proxy(host['idx'])
+                        app.socks5queue.activate_proxy(host['idx'])
                         break
             raise nbxmpp.NodeProcessed
         jid = self._ft_get_streamhost_jid_attr(streamhost)
@@ -720,7 +720,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
-                gajim.socks5queue.send_file(file_props, self.name)
+                app.socks5queue.send_file(file_props, self.name)
             raise nbxmpp.NodeProcessed
 
         proxy = None
@@ -736,22 +736,22 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             file_props.streamhost_used = True
             file_props.streamhosts.append(proxy)
             file_props.is_a_proxy = True
-            idx = gajim.socks5queue.idx
-            sender = Socks5SenderClient(gajim.idlequeue, idx,
-                gajim.socks5queue, _sock=None, host=str(proxy['host']),
+            idx = app.socks5queue.idx
+            sender = Socks5SenderClient(app.idlequeue, idx,
+                app.socks5queue, _sock=None, host=str(proxy['host']),
                 port=int(proxy['port']), fingerprint=None,
                 connected=False, file_props=file_props)
             sender.streamhost = proxy
-            gajim.socks5queue.add_sockobj(self.name, sender)
+            app.socks5queue.add_sockobj(self.name, sender)
             proxy['idx'] = sender.queue_idx
-            gajim.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
+            app.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
             raise nbxmpp.NodeProcessed
 
         else:
             if file_props.stopped:
                 self.remove_transfer(file_props)
             else:
-                gajim.socks5queue.send_file(file_props, self.name, 'server')
+                app.socks5queue.send_file(file_props, self.name, 'server')
 
         raise nbxmpp.NodeProcessed
 
@@ -785,7 +785,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             elif not file_props.connected:
                 log.debug('Received IQ for closed filetransfer, IQ dropped')
         elif typ == 'error':
-            gajim.socks5queue.error_cb()
+            app.socks5queue.error_cb()
         else:
             conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_BAD_REQUEST))
         raise nbxmpp.NodeProcessed
@@ -841,7 +841,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close',
             {'sid':file_props.transport_sid})]))
         if file_props.completed:
-            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+            app.socks5queue.complete_transfer_cb(self.name, file_props)
         elif file_props.session_type == 'jingle':
             peerjid = \
              file_props.receiver if file_props.type_ == 's' else file_props.sender
@@ -910,7 +910,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.received_len += len(chunk)
             if file_props.size == file_props.received_len:
                 file_props.completed = True
-            gajim.socks5queue.progress_transfer_cb(self.name,
+            app.socks5queue.progress_transfer_cb(self.name,
                 file_props)
         else:
             log.debug('Nothing to read, but file not completed')
@@ -949,7 +949,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 file_props.elapsed_time += current_time - file_props.last_time
                 file_props.last_time = current_time
                 file_props.received_len += len(data)
-                gajim.socks5queue.progress_transfer_cb(self.name, file_props)
+                app.socks5queue.progress_transfer_cb(self.name, file_props)
                 if file_props.received_len >= file_props.size:
                     file_props.completed = True
         if err:
@@ -978,7 +978,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             file_props.completed = file_props.received_len >= file_props.size
             if not file_props.completed:
                 file_props.error = -1
-            gajim.socks5queue.complete_transfer_cb(self.name, file_props)
+            app.socks5queue.complete_transfer_cb(self.name, file_props)
         else:
             conn.send(nbxmpp.Error(stanza, nbxmpp.ERR_ITEM_NOT_FOUND))
 
@@ -1014,7 +1014,7 @@ class ConnectionSocks5BytestreamZeroconf(ConnectionSocks5Bytestream):
         return iq_obj.getFrom()
 
     def _ft_get_our_jid(self):
-        return gajim.get_jid_from_account(self.name)
+        return app.get_jid_from_account(self.name)
 
     def _ft_get_receiver_jid(self, file_props):
         return file_props.receiver.jid

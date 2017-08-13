@@ -165,8 +165,8 @@ class Contact(CommonContact):
         return is_observer
 
     def is_groupchat(self):
-        for account in common.gajim.gc_connected:
-            if self.jid in common.gajim.gc_connected[account]:
+        for account in common.app.gc_connected:
+            if self.jid in common.app.gc_connected[account]:
                 return True
         return False
 
@@ -258,8 +258,8 @@ class LegacyContactsAPI:
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
-        conn = common.gajim.connections[account]
-        nick = name or common.gajim.nicks[account]
+        conn = common.app.connections[account]
+        nick = name or common.app.nicks[account]
         account = self._accounts.get(account, account) # Use Account object if available
         self_contact = self.create_contact(jid=jid, account=account,
                 name=nick, groups=['self_contact'], show=show, status=status,
@@ -357,11 +357,11 @@ class LegacyContactsAPI:
         nbr_online = 0
         nbr_total = 0
         for account in accounts:
-            our_jid = common.gajim.get_jid_from_account(account)
+            our_jid = common.app.get_jid_from_account(account)
             for jid in self.get_jid_list(account):
                 if jid == our_jid:
                     continue
-                if common.gajim.jid_is_transport(jid) and not \
+                if common.app.jid_is_transport(jid) and not \
                 _('Transports') in groups:
                     # do not count transports
                     continue
@@ -506,7 +506,7 @@ class Contacts():
         """
         Get Contact object for specific resource of given jid
         """
-        barejid, resource = common.gajim.get_room_and_nick_from_fjid(fjid)
+        barejid, resource = common.app.get_room_and_nick_from_fjid(fjid)
         return self.get_contact(barejid, resource)
 
     def get_first_contact_from_jid(self, jid):
@@ -655,7 +655,7 @@ class MetacontactManager():
             self._metacontacts_tags[brother_account][tag] = [{'jid': brother_jid,
                     'tag': tag}]
             if brother_account != account:
-                common.gajim.connections[brother_account].store_metacontacts(
+                common.app.connections[brother_account].store_metacontacts(
                         self._metacontacts_tags[brother_account])
         # be sure jid has no other tag
         old_tag = self._get_metacontacts_tag(account, jid)
@@ -671,7 +671,7 @@ class MetacontactManager():
             else:
                 self._metacontacts_tags[account][tag].append({'jid': jid,
                         'tag': tag})
-        common.gajim.connections[account].store_metacontacts(
+        common.app.connections[account].store_metacontacts(
                 self._metacontacts_tags[account])
 
     def remove_metacontact(self, account, jid):
@@ -686,7 +686,7 @@ class MetacontactManager():
                     break
             if found:
                 self._metacontacts_tags[account][tag].remove(found)
-                common.gajim.connections[account].store_metacontacts(
+                common.app.connections[account].store_metacontacts(
                         self._metacontacts_tags[account])
                 break
 
@@ -789,8 +789,8 @@ class MetacontactManager():
             return 1
         if 'order' in data2:
             return -1
-        transport1 = common.gajim.get_transport_name_from_jid(jid1)
-        transport2 = common.gajim.get_transport_name_from_jid(jid2)
+        transport1 = common.app.get_transport_name_from_jid(jid1)
+        transport2 = common.app.get_transport_name_from_jid(jid2)
         if transport2 and not transport1:
             return 1
         if transport1 and not transport2:
@@ -803,10 +803,10 @@ class MetacontactManager():
             return 1
         if priority2 > priority1:
             return -1
-        server1 = common.gajim.get_server_from_jid(jid1)
-        server2 = common.gajim.get_server_from_jid(jid2)
-        myserver1 = common.gajim.config.get_per('accounts', account1, 'hostname')
-        myserver2 = common.gajim.config.get_per('accounts', account2, 'hostname')
+        server1 = common.app.get_server_from_jid(jid1)
+        server2 = common.app.get_server_from_jid(jid2)
+        myserver1 = common.app.config.get_per('accounts', account1, 'hostname')
+        myserver2 = common.app.config.get_per('accounts', account2, 'hostname')
         if server1 == myserver1:
             if server2 != myserver2:
                 return 1
@@ -833,7 +833,7 @@ class MetacontactManager():
 
         (nearby_family, big_brother_jid, big_brother_account)
         """
-        if common.gajim.config.get('mergeaccounts'):
+        if common.app.config.get('mergeaccounts'):
             # group all together
             nearby_family = family
         else:

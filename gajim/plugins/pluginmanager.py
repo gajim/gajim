@@ -34,7 +34,7 @@ from shutil import rmtree
 import configparser
 from pkg_resources import parse_version
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import nec
 from gajim.common.exceptions import PluginsystemError
 
@@ -107,24 +107,24 @@ class PluginManager(metaclass=Singleton):
         Registered names with instances of encryption Plugins.
         '''
 
-        for path in [gajim.PLUGINS_DIRS[1], gajim.PLUGINS_DIRS[0]]:
+        for path in [app.PLUGINS_DIRS[1], app.PLUGINS_DIRS[0]]:
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
         self._activate_all_plugins_from_global_config()
 
     @log_calls('PluginManager')
     def _plugin_has_entry_in_global_config(self, plugin):
-        if gajim.config.get_per('plugins', plugin.short_name) is None:
+        if app.config.get_per('plugins', plugin.short_name) is None:
             return False
         else:
             return True
 
     @log_calls('PluginManager')
     def _create_plugin_entry_in_global_config(self, plugin):
-        gajim.config.add_per('plugins', plugin.short_name)
+        app.config.add_per('plugins', plugin.short_name)
 
     def _remove_plugin_entry_in_global_config(self, plugin):
-        gajim.config.del_per('plugins', plugin.short_name)
+        app.config.del_per('plugins', plugin.short_name)
 
     @log_calls('PluginManager')
     def add_plugin(self, plugin_class):
@@ -292,30 +292,30 @@ class PluginManager(metaclass=Singleton):
         for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
-            gajim.ged.register_event_handler(event_name, priority,
+            app.ged.register_event_handler(event_name, priority,
                 handler_function)
 
     def _remove_events_handler_from_ged(self, plugin):
         for event_name, handler in plugin.events_handlers.items():
             priority = handler[0]
             handler_function = handler[1]
-            gajim.ged.remove_event_handler(event_name, priority,
+            app.ged.remove_event_handler(event_name, priority,
                 handler_function)
 
     def _register_network_events_in_nec(self, plugin):
         for event_class in plugin.events:
             setattr(event_class, 'plugin', plugin)
             if issubclass(event_class, nec.NetworkIncomingEvent):
-                gajim.nec.register_incoming_event(event_class)
+                app.nec.register_incoming_event(event_class)
             elif issubclass(event_class, nec.NetworkOutgoingEvent):
-                gajim.nec.register_outgoing_event(event_class)
+                app.nec.register_outgoing_event(event_class)
 
     def _remove_network_events_from_nec(self, plugin):
         for event_class in plugin.events:
             if issubclass(event_class, nec.NetworkIncomingEvent):
-                gajim.nec.unregister_incoming_event(event_class)
+                app.nec.unregister_incoming_event(event_class)
             elif issubclass(event_class, nec.NetworkOutgoingEvent):
-                gajim.nec.unregister_outgoing_event(event_class)
+                app.nec.unregister_outgoing_event(event_class)
 
     def _remove_name_from_encryption_plugins(self, plugin):
         if plugin.encryption_name:
@@ -432,10 +432,10 @@ class PluginManager(metaclass=Singleton):
                     pass
 
     def _plugin_is_active_in_global_config(self, plugin):
-        return gajim.config.get_per('plugins', plugin.short_name, 'active')
+        return app.config.get_per('plugins', plugin.short_name, 'active')
 
     def _set_plugin_active_in_global_config(self, plugin, active=True):
-        gajim.config.set_per('plugins', plugin.short_name, 'active', active)
+        app.config.set_per('plugins', plugin.short_name, 'active', active)
 
     @staticmethod
     @log_calls('PluginManager')
@@ -506,7 +506,7 @@ class PluginManager(metaclass=Singleton):
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
 
-            gajim_v = gajim.config.get('version').split('-', 1)[0]
+            gajim_v = app.config.get('version').split('-', 1)[0]
             gajim_v_cmp = parse_version(gajim_v)
 
             if min_v and gajim_v_cmp < parse_version(min_v):
@@ -531,7 +531,7 @@ class PluginManager(metaclass=Singleton):
 
             try:
                 if module_name in sys.modules:
-                    if path == gajim.PLUGINS_DIRS[0]:
+                    if path == app.PLUGINS_DIRS[0]:
                         # Only reload plugins from Gajim base dir when they
                         # dont exist. This means plugins in the user path are
                         # always preferred.
@@ -629,7 +629,7 @@ class PluginManager(metaclass=Singleton):
         if len(dirs) > 1:
             raise PluginsystemError(_('Archive is malformed'))
 
-        base_dir, user_dir = gajim.PLUGINS_DIRS
+        base_dir, user_dir = app.PLUGINS_DIRS
         plugin_dir = os.path.join(user_dir, dirs[0])
 
         if os.path.isdir(plugin_dir):

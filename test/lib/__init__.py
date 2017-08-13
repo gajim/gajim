@@ -38,17 +38,17 @@ def setup_env():
     import gajim.common.configpaths
     gajim.common.configpaths.gajimpaths.init(configdir)
 
-    # for some reason gajim.common.gajim needs to be imported before xmpppy?
-    from gajim.common import gajim
+    # for some reason gajim.common.app needs to be imported before xmpppy?
+    from gajim.common import app
 
     import logging
     logging.basicConfig()
 
-    gajim.DATA_DIR = gajim_root + '/data'
-    gajim.use_x = use_x
+    app.DATA_DIR = gajim_root + '/data'
+    app.use_x = use_x
 
     if use_x:
         from gajim import gtkgui_helpers
         gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'
         from gajim.gajim import GajimApplication
-        gajim.app = GajimApplication()
+        app.app = GajimApplication()

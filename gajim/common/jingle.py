@@ -32,12 +32,12 @@ import logging
 
 import nbxmpp
 from gajim.common import helpers
-from gajim.common import gajim
+from gajim.common import app
 
 from gajim.common.jingle_session import JingleSession, JingleStates
 from gajim.common.jingle_ft import JingleFileTransfer
 from gajim.common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
-if gajim.HAVE_FARSTREAM:
+if app.HAVE_FARSTREAM:
     from gajim.common.jingle_rtp import JingleAudio, JingleVideo
 
 logger = logging.getLogger('gajim.c.jingle')
@@ -145,12 +145,12 @@ class ConnectionJingle(object):
 
     def start_file_transfer(self, jid, file_props, request=False):
         logger.info("start file transfer with file: %s", file_props)
-        contact = gajim.contacts.get_contact_with_highest_priority(self.name,
-                                                                   gajim.get_jid_without_resource(jid))
-        if gajim.contacts.is_gc_contact(self.name, jid):
+        contact = app.contacts.get_contact_with_highest_priority(self.name,
+                                                                   app.get_jid_without_resource(jid))
+        if app.contacts.is_gc_contact(self.name, jid):
             gcc = jid.split('/')
             if len(gcc) == 2:
-                contact = gajim.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
+                contact = app.contacts.get_gc_contact(self.name, gcc[0], gcc[1])
         if contact is None:
             return
         use_security = contact.supports(nbxmpp.NS_JINGLE_XTLS)

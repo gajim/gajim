@@ -27,7 +27,7 @@ from gajim.common import helpers
 
 from gajim.common import events
 from gajim.common import exceptions
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import stanza_session
 from gajim.common import contacts
 from gajim.common import ged
@@ -46,7 +46,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def __init__(self, conn, jid, thread_id, type_='chat'):
         stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
                 type_='chat')
-        gajim.ged.register_event_handler('decrypted-message-received', ged.GUI1,
+        app.ged.register_event_handler('decrypted-message-received', ged.GUI1,
             self._nec_decrypted_message_received)
 
         self.control = None
@@ -69,10 +69,10 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         """
         if obj.session != self:
             return
-        contact = gajim.contacts.get_contact(self.conn.name, obj.jid,
+        contact = app.contacts.get_contact(self.conn.name, obj.jid,
             obj.resource)
         if not contact:
-            contact = gajim.contacts.get_gc_contact(self.conn.name, obj.jid,
+            contact = app.contacts.get_gc_contact(self.conn.name, obj.jid,
                 obj.resource)
         if self.resource != obj.resource:
             self.resource = obj.resource
@@ -97,7 +97,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if obj.forwarded and obj.sent:
                 log_type = KindConstant.SINGLE_MSG_SENT
 
-        treat_as = gajim.config.get('treat_incoming_messages')
+        treat_as = app.config.get('treat_incoming_messages')
         if treat_as:
             obj.mtype = treat_as
         pm = False
@@ -107,7 +107,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             obj.mtype = 'pm'
 
         if self.is_loggable() and obj.msgtxt:
-            if obj.xhtml and gajim.config.get('log_xhtml_messages'):
+            if obj.xhtml and app.config.get('log_xhtml_messages'):
                 msg_to_log = obj.xhtml
             else:
                 msg_to_log = obj.msgtxt
@@ -116,7 +116,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             if not pm:
                 jid = obj.jid
 
-            obj.msg_log_id = gajim.logger.insert_into_logs(
+            obj.msg_log_id = app.logger.insert_into_logs(
                 jid, obj.timestamp, log_type,
                 message=msg_to_log,
                 subject=obj.subject,
@@ -131,7 +131,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     contact.chatstate = obj.chatstate
                     if contact.our_chatstate == 'ask': # we were jep85 disco?
                         contact.our_chatstate = 'active' # no more
-                    gajim.nec.push_incoming_event(ChatstateReceivedEvent(None,
+                    app.nec.push_incoming_event(ChatstateReceivedEvent(None,
                         conn=obj.conn, msg_obj=obj))
                 elif contact.chatstate != 'active':
                     # got no valid jep85 answer, peer does not support it
@@ -146,12 +146,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if not obj.msgtxt: # empty message text
             return True
 
-        if gajim.config.get_per('accounts', self.conn.name,
-        'ignore_unknown_contacts') and not gajim.contacts.get_contacts(
+        if app.config.get_per('accounts', self.conn.name,
+        'ignore_unknown_contacts') and not app.contacts.get_contacts(
         self.conn.name, obj.jid) and not pm:
             return True
 
-        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+        highest_contact = app.contacts.get_contact_with_highest_priority(
             self.conn.name, obj.jid)
 
         # does this resource have the highest priority of any available?
@@ -160,7 +160,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             'offline'
 
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+            ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
                 obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
@@ -174,8 +174,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if not pm:
             self.roster_message2(obj)
 
-        if gajim.interface.remote_ctrl:
-            gajim.interface.remote_ctrl.raise_signal('NewMessage', (
+        if app.interface.remote_ctrl:
+            app.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
                 obj.encrypted, obj.mtype, obj.subject, obj.chatstate,
                 obj.msg_log_id, obj.user_nick, obj.xhtml, obj.form_node]))
@@ -193,22 +193,22 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Try to catch the contact with correct resource
         if resource:
             fjid = jid + '/' + resource
-            contact = gajim.contacts.get_contact(obj.conn.name, jid, resource)
+            contact = app.contacts.get_contact(obj.conn.name, jid, resource)
 
-        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+        highest_contact = app.contacts.get_contact_with_highest_priority(
             obj.conn.name, jid)
         if not contact:
             # If there is another resource, it may be a message from an
             # invisible resource
-            lcontact = gajim.contacts.get_contacts(obj.conn.name, jid)
+            lcontact = app.contacts.get_contacts(obj.conn.name, jid)
             if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
             lcontact[0].show != 'offline')) and jid.find('@') > 0:
-                contact = gajim.contacts.copy_contact(highest_contact)
+                contact = app.contacts.copy_contact(highest_contact)
                 contact.resource = resource
                 contact.priority = 0
                 contact.show = 'offline'
                 contact.status = ''
-                gajim.contacts.add_contact(obj.conn.name, contact)
+                app.contacts.add_contact(obj.conn.name, contact)
 
             else:
                 # Default to highest prio
@@ -217,11 +217,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         if not contact:
             # contact is not in roster
-            contact = gajim.interface.roster.add_to_not_in_the_roster(
+            contact = app.interface.roster.add_to_not_in_the_roster(
                 obj.conn.name, jid, obj.user_nick)
 
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.search_control(obj.jid,
+            ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
                 obj.conn.name, obj.resource)
             if ctrl:
                 self.control = ctrl
@@ -247,7 +247,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
-            gajim.events.remove_events(self.conn.name, fjid, types=['chat'])
+            app.events.remove_events(self.conn.name, fjid, types=['chat'])
             do_event = False
         else:
             # Everything else
@@ -269,7 +269,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 show_in_roster=obj.show_in_roster,
                 show_in_systray=obj.show_in_systray)
 
-            gajim.events.add_event(self.conn.name, fjid, event)
+            app.events.add_event(self.conn.name, fjid, event)
 
     def roster_message(self, jid, msg, tim, encrypted=False, msg_type='',
     subject=None, resource='', msg_log_id=None, user_nick='', xhtml=None,
@@ -286,24 +286,24 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # Try to catch the contact with correct resource
         if resource:
             fjid = jid + '/' + resource
-            contact = gajim.contacts.get_contact(self.conn.name, jid, resource)
+            contact = app.contacts.get_contact(self.conn.name, jid, resource)
 
-        highest_contact = gajim.contacts.get_contact_with_highest_priority(
+        highest_contact = app.contacts.get_contact_with_highest_priority(
                 self.conn.name, jid)
         if not contact:
             # If there is another resource, it may be a message from an invisible
             # resource
-            lcontact = gajim.contacts.get_contacts(self.conn.name, jid)
+            lcontact = app.contacts.get_contacts(self.conn.name, jid)
             if (len(lcontact) > 1 or (lcontact and lcontact[0].resource and \
             lcontact[0].show != 'offline')) and jid.find('@') > 0:
-                contact = gajim.contacts.copy_contact(highest_contact)
+                contact = app.contacts.copy_contact(highest_contact)
                 contact.resource = resource
                 if resource:
                     fjid = jid + '/' + resource
                 contact.priority = 0
                 contact.show = 'offline'
                 contact.status = ''
-                gajim.contacts.add_contact(self.conn.name, contact)
+                app.contacts.add_contact(self.conn.name, contact)
 
             else:
                 # Default to highest prio
@@ -312,11 +312,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
 
         if not contact:
             # contact is not in roster
-            contact = gajim.interface.roster.add_to_not_in_the_roster(
+            contact = app.interface.roster.add_to_not_in_the_roster(
                     self.conn.name, jid, user_nick)
 
         if not self.control:
-            ctrl = gajim.interface.msg_win_mgr.get_control(fjid, self.conn.name)
+            ctrl = app.interface.msg_win_mgr.get_control(fjid, self.conn.name)
             if ctrl:
                 self.control = ctrl
                 self.control.set_session(self)
@@ -324,7 +324,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 fjid = jid
 
         # Do we have a queue?
-        no_queue = len(gajim.events.get_events(self.conn.name, fjid)) == 0
+        no_queue = len(app.events.get_events(self.conn.name, fjid)) == 0
 
         popup = helpers.allow_popup_window(self.conn.name)
 
@@ -346,7 +346,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                     additional_data=additional_data)
 
             if msg_log_id:
-                gajim.logger.set_read_messages([msg_log_id])
+                app.logger.set_read_messages([msg_log_id])
 
             return
 
@@ -369,30 +369,30 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             show_in_roster=show_in_roster, show_in_systray=show_in_systray,
             additional_data=additional_data)
 
-        gajim.events.add_event(self.conn.name, fjid, event)
+        app.events.add_event(self.conn.name, fjid, event)
 
         if popup:
             if not self.control:
-                self.control = gajim.interface.new_chat(contact,
+                self.control = app.interface.new_chat(contact,
                     self.conn.name, session=self)
 
-                if len(gajim.events.get_events(self.conn.name, fjid)):
+                if len(app.events.get_events(self.conn.name, fjid)):
                     self.control.read_queue()
         else:
             if no_queue: # We didn't have a queue: we change icons
-                gajim.interface.roster.draw_contact(jid, self.conn.name)
+                app.interface.roster.draw_contact(jid, self.conn.name)
 
-            gajim.interface.roster.show_title() # we show the * or [n]
+            app.interface.roster.show_title() # we show the * or [n]
         # Select the big brother contact in roster, it's visible because it has
         # events.
-        family = gajim.contacts.get_metacontacts_family(self.conn.name, jid)
+        family = app.contacts.get_metacontacts_family(self.conn.name, jid)
         if family:
             nearby_family, bb_jid, bb_account = \
-                    gajim.contacts.get_nearby_family_and_big_brother(family,
+                    app.contacts.get_nearby_family_and_big_brother(family,
                     self.conn.name)
         else:
             bb_jid, bb_account = jid, self.conn.name
-        gajim.interface.roster.select_contact(bb_jid, bb_account)
+        app.interface.roster.select_contact(bb_jid, bb_account)
 
     # ---- ESessions stuff ---
 
@@ -469,13 +469,13 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                             dialog.destroy()
 
                         if is_checked:
-                            allow_no_log_for = gajim.config.get_per(
+                            allow_no_log_for = app.config.get_per(
                                 'accounts', self.conn.name,
                                 'allow_no_log_for').split()
                             jid = str(self.jid)
                             if jid not in allow_no_log_for:
                                 allow_no_log_for.append(jid)
-                                gajim.config.set_per('accounts', self.conn.name,
+                                app.config.set_per('accounts', self.conn.name,
                                 'allow_no_log_for', ' '.join(allow_no_log_for))
 
                         negotiated.update(ask_user)
@@ -489,7 +489,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                         self.reject_negotiation()
                         dialog.destroy()
 
-                    allow_no_log_for = gajim.config.get_per('accounts',
+                    allow_no_log_for = app.config.get_per('accounts',
                         self.conn.name, 'allow_no_log_for').split()
                     if str(self.jid) in allow_no_log_for:
                         dialog = None
@@ -552,17 +552,17 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         # around to test my test suite.
         if form.getType() == 'form':
             if not self.control:
-                jid, resource = gajim.get_room_and_nick_from_fjid(str(self.jid))
+                jid, resource = app.get_room_and_nick_from_fjid(str(self.jid))
 
                 account = self.conn.name
-                contact = gajim.contacts.get_contact(account, str(self.jid),
+                contact = app.contacts.get_contact(account, str(self.jid),
                     resource)
 
                 if not contact:
-                    contact = gajim.contacts.create_contact(jid=jid, account=account,
+                    contact = app.contacts.create_contact(jid=jid, account=account,
                             resource=resource, show=self.conn.get_status())
 
-                gajim.interface.new_chat(contact, account, resource=resource,
+                app.interface.new_chat(contact, account, resource=resource,
                         session=self)
 
             negotiation.FeatureNegotiationWindow(account, str(self.jid), self,

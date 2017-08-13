@@ -18,9 +18,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gajim.common import gajim as c_gajim
+from gajim.common import app
 from gajim.common import helpers
-from gajim.common.gajim import interface
+from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gi.repository import Gtk
 import sys
@@ -38,8 +38,8 @@ from gajim.server_info import ServerInfoDialog
 
 class AppActions():
     ''' Action Callbacks '''
-    def __init__(self, app: Gtk.Application):
-        self.application = app
+    def __init__(self, application: Gtk.Application):
+        self.application = application
 
     # Application Menu Actions
 
@@ -89,13 +89,13 @@ class AppActions():
 
     def on_send_server_message(self, action, param):
         account = param.get_string()
-        server = c_gajim.config.get_per('accounts', account, 'hostname')
+        server = app.config.get_per('accounts', account, 'hostname')
         server += '/announce/online'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_service_disco(self, action, param):
         account = param.get_string()
-        server_jid = c_gajim.config.get_per('accounts', account, 'hostname')
+        server_jid = app.config.get_per('accounts', account, 'hostname')
         if server_jid in interface.instances[account]['disco']:
             interface.instances[account]['disco'][server_jid].\
                 window.present()
@@ -108,8 +108,8 @@ class AppActions():
 
     def on_join_gc(self, action, param):
         account = param.get_string()
-        invisible_show = c_gajim.SHOW_LIST.index('invisible')
-        if c_gajim.connections[account].connected == invisible_show:
+        invisible_show = app.SHOW_LIST.index('invisible')
+        if app.connections[account].connected == invisible_show:
             dialogs.ErrorDialog(_(
                 'You cannot join a group chat while you are invisible'))
             return
@@ -178,21 +178,21 @@ class AppActions():
 
     def on_set_motd(self, action, param):
         account = param.get_string()
-        server = c_gajim.config.get_per('accounts', account, 'hostname')
+        server = app.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_update_motd(self, action, param):
         account = param.get_string()
-        server = c_gajim.config.get_per('accounts', account, 'hostname')
+        server = app.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd/update'
         dialogs.SingleMessageWindow(account, server, 'send')
 
     def on_delete_motd(self, action, param):
         account = param.get_string()
-        server = c_gajim.config.get_per('accounts', account, 'hostname')
+        server = app.config.get_per('accounts', account, 'hostname')
         server += '/announce/motd/delete'
-        c_gajim.connections[account].send_motd(server)
+        app.connections[account].send_motd(server)
 
     # Help Actions
 

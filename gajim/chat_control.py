@@ -40,7 +40,7 @@ from gajim import message_control
 from gajim import dialogs
 
 from gajim.common import logger
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common import exceptions
 from gajim.common import ged
@@ -146,10 +146,10 @@ class ChatControl(ChatControlBase):
             self._on_contact_information_menuitem_activate)
         self.handlers[id_] = self._contact_information_button
 
-        compact_view = gajim.config.get('compact_view')
+        compact_view = app.config.get('compact_view')
         self.chat_buttons_set_visible(compact_view)
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
-            gajim.config.get('hide_chat_banner'))
+            app.config.get('hide_chat_banner'))
 
         self.authentication_button = self.xml.get_object(
             'authentication_button')
@@ -197,7 +197,7 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = message_tv_buffer
 
         widget = self.xml.get_object('avatar_eventbox')
-        widget.set_property('height-request', gajim.config.get(
+        widget.set_property('height-request', app.config.get(
             'chat_avatar_height'))
         id_ = widget.connect('enter-notify-event',
             self.on_avatar_eventbox_enter_notify_event)
@@ -269,7 +269,7 @@ class ChatControl(ChatControlBase):
             # and it's not the same
             if not resource:
                 resource = contact.resource
-            session = gajim.connections[self.account].find_controlless_session(
+            session = app.connections[self.account].find_controlless_session(
                 self.contact.jid, resource)
 
         self.setup_seclabel(self.xml.get_object('label_selector'))
@@ -294,37 +294,37 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        gajim.ged.register_event_handler('pep-received', ged.GUI1,
+        app.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
-        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+        app.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
-        gajim.ged.register_event_handler('failed-decrypt', ged.GUI1,
+        app.ged.register_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
-        gajim.ged.register_event_handler('chatstate-received', ged.GUI1,
+        app.ged.register_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
-        gajim.ged.register_event_handler('caps-received', ged.GUI1,
+        app.ged.register_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
-        gajim.plugin_manager.gui_extension_point('chat_control', self)
+        app.plugin_manager.gui_extension_point('chat_control', self)
 
     def subscribe_events(self):
         """
         Register listeners to the events class
         """
-        gajim.events.event_added_subscribe(self.on_event_added)
-        gajim.events.event_removed_subscribe(self.on_event_removed)
+        app.events.event_added_subscribe(self.on_event_added)
+        app.events.event_removed_subscribe(self.on_event_removed)
 
     def unsubscribe_events(self):
         """
         Unregister listeners to the events class
         """
-        gajim.events.event_added_unsubscribe(self.on_event_added)
-        gajim.events.event_removed_unsubscribe(self.on_event_removed)
+        app.events.event_added_unsubscribe(self.on_event_added)
+        app.events.event_removed_unsubscribe(self.on_event_removed)
 
     def _update_toolbar(self):
-        if (gajim.connections[self.account].connected > 1 and not \
+        if (app.connections[self.account].connected > 1 and not \
         self.TYPE_ID == 'pm') or (self.contact.show != 'offline' and \
         self.TYPE_ID == 'pm'):
             send_button = self.xml.get_object('send_button')
@@ -347,14 +347,14 @@ class ChatControl(ChatControlBase):
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
         and _('Not in Roster') in self.contact.groups and \
-        gajim.connections[self.account].roster_supported:
+        app.connections[self.account].roster_supported:
             self._add_to_roster_button.show()
         else:
             self._add_to_roster_button.hide()
 
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
-        gajim.HAVE_FARSTREAM and self.contact.resource:
+        app.HAVE_FARSTREAM and self.contact.resource:
             self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
             self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:
@@ -373,7 +373,7 @@ class ChatControl(ChatControlBase):
         # not installed
         audio_tooltip_text = _('Toggle audio session') + '\n'
         video_tooltip_text = _('Toggle video session') + '\n'
-        if not gajim.HAVE_FARSTREAM:
+        if not app.HAVE_FARSTREAM:
             ext_text = _('Feature not available, see Help->Features')
             self._audio_button.set_tooltip_text(audio_tooltip_text + ext_text)
             self._video_button.set_tooltip_text(video_tooltip_text + ext_text)
@@ -404,7 +404,7 @@ class ChatControl(ChatControlBase):
                     "them a file."))
 
         # Convert to GC
-        if gajim.config.get_per('accounts', self.account, 'is_zeroconf'):
+        if app.config.get_per('accounts', self.account, 'is_zeroconf'):
             self._convert_to_gc_button.set_no_show_all(True)
             self._convert_to_gc_button.hide()
         else:
@@ -414,7 +414,7 @@ class ChatControl(ChatControlBase):
                 self._convert_to_gc_button.set_sensitive(False)
 
         # Information
-        if gajim.account_is_disconnected(self.account):
+        if app.account_is_disconnected(self.account):
             self._contact_information_button.set_sensitive(False)
         else:
             self._contact_information_button.set_sensitive(True)
@@ -479,8 +479,8 @@ class ChatControl(ChatControlBase):
         hbox = self.xml.get_object('audio_buttons_hbox')
         if self.audio_state == self.JINGLE_STATE_CONNECTED:
             # Set volume from config
-            input_vol = gajim.config.get('audio_input_volume')
-            output_vol = gajim.config.get('audio_output_volume')
+            input_vol = app.config.get('audio_input_volume')
+            output_vol = app.config.get('audio_output_volume')
             input_vol = max(min(input_vol, 100), 0)
             output_vol = max(min(output_vol, 100), 0)
             self.xml.get_object('mic_hscale').set_value(input_vol)
@@ -499,12 +499,12 @@ class ChatControl(ChatControlBase):
         old_full_jid = self.get_full_jid()
         self.resource = resource
         new_full_jid = self.get_full_jid()
-        # update gajim.last_message_time
-        if old_full_jid in gajim.last_message_time[self.account]:
-            gajim.last_message_time[self.account][new_full_jid] = \
-                    gajim.last_message_time[self.account][old_full_jid]
+        # update app.last_message_time
+        if old_full_jid in app.last_message_time[self.account]:
+            app.last_message_time[self.account][new_full_jid] = \
+                    app.last_message_time[self.account][old_full_jid]
         # update events
-        gajim.events.change_jid(self.account, old_full_jid, new_full_jid)
+        app.events.change_jid(self.account, old_full_jid, new_full_jid)
         # update MessageWindow._controls
         self.parent_win.change_jid(self.account, old_full_jid, new_full_jid)
 
@@ -553,7 +553,7 @@ class ChatControl(ChatControlBase):
         self._set_jingle_state('video', state, sid=sid, reason=reason)
 
     def _get_audio_content(self):
-        session = gajim.connections[self.account].get_jingle_session(
+        session = app.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), self.audio_sid)
         return session.get_content('audio')
 
@@ -572,12 +572,12 @@ class ChatControl(ChatControlBase):
     def on_mic_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_mic_volume(value / 100)
         # Save volume to config
-        gajim.config.set('audio_input_volume', value)
+        app.config.set('audio_input_volume', value)
 
     def on_sound_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
-        gajim.config.set('audio_output_volume', value)
+        app.config.set('audio_output_volume', value)
 
     def on_avatar_eventbox_enter_notify_event(self, widget, event):
         """
@@ -658,7 +658,7 @@ class ChatControl(ChatControlBase):
         self.update_toolbar()
 
     def _update_banner_state_image(self):
-        contact = gajim.contacts.get_contact_with_highest_priority(self.account,
+        contact = app.contacts.get_contact_with_highest_priority(self.account,
                 self.contact.jid)
         if not contact or self.resource:
             # For transient contacts
@@ -667,9 +667,9 @@ class ChatControl(ChatControlBase):
         jid = contact.jid
 
         # Set banner image
-        img_32 = gajim.interface.roster.get_appropriate_state_images(jid,
+        img_32 = app.interface.roster.get_appropriate_state_images(jid,
                 size='32', icon_name=show)
-        img_16 = gajim.interface.roster.get_appropriate_state_images(jid,
+        img_16 = app.interface.roster.get_appropriate_state_images(jid,
                 icon_name=show)
         if show in img_32 and img_32[show].get_pixbuf():
             # we have 32x32! use it!
@@ -715,14 +715,14 @@ class ChatControl(ChatControlBase):
         # in another account we need to also display the account.
         # except if we are talking to two different resources of the same contact
         acct_info = ''
-        for account in gajim.contacts.get_accounts():
+        for account in app.contacts.get_accounts():
             if account == self.account:
                 continue
             if acct_info: # We already found a contact with same nick
                 break
-            for jid in gajim.contacts.get_jid_list(account):
+            for jid in app.contacts.get_jid_list(account):
                 other_contact_ = \
-                    gajim.contacts.get_first_contact_from_jid(account, jid)
+                    app.contacts.get_first_contact_from_jid(account, jid)
                 if other_contact_.get_shown_name() == \
                 self.contact.get_shown_name():
                     acct_info = i18n.direction_mark + ' (%s)' % \
@@ -739,7 +739,7 @@ class ChatControl(ChatControlBase):
         status_escaped = GLib.markup_escape_text(status_reduced)
 
         font_attrs, font_attrs_small = self.get_font_attrs()
-        st = gajim.config.get('displayed_chat_state_notifications')
+        st = app.config.get('displayed_chat_state_notifications')
         cs = contact.chatstate
         if cs and st in ('composing_only', 'all'):
             if contact.show == 'offline':
@@ -784,7 +784,7 @@ class ChatControl(ChatControlBase):
             return
         setattr(self, jingle_type + '_sid', None)
         setattr(self, jingle_type + '_state', self.JINGLE_STATE_NULL)
-        session = gajim.connections[self.account].get_jingle_session(
+        session = app.connections[self.account].get_jingle_session(
                 self.contact.get_full_jid(), sid)
         if session:
             content = session.get_content(jingle_type)
@@ -804,7 +804,7 @@ class ChatControl(ChatControlBase):
                 if jingle_type == 'video':
                     video_hbox = self.xml.get_object('video_hbox')
                     video_hbox.set_no_show_all(False)
-                    if gajim.config.get('video_see_self'):
+                    if app.config.get('video_see_self'):
                         fixed = self.xml.get_object('outgoing_fixed')
                         fixed.set_no_show_all(False)
                         video_hbox.show_all()
@@ -820,10 +820,10 @@ class ChatControl(ChatControlBase):
                     in_da = self.xml.get_object('incoming_drawingarea')
                     in_da.realize()
                     in_xid = in_da.get_window().get_xid()
-                    sid = gajim.connections[self.account].start_video(
+                    sid = app.connections[self.account].start_video(
                         self.contact.get_full_jid(), in_xid, out_xid)
                 else:
-                    sid = getattr(gajim.connections[self.account],
+                    sid = getattr(app.connections[self.account],
                         'start_' + jingle_type)(self.contact.get_full_jid())
                 getattr(self, 'set_' + jingle_type + '_state')('connecting', sid)
         else:
@@ -851,7 +851,7 @@ class ChatControl(ChatControlBase):
                             'authenticated': False}
 
         if self.encryption:
-            gajim.plugin_manager.extension_point(
+            app.plugin_manager.extension_point(
                 'encryption_state' + self.encryption, self, encryption_state)
 
         self._show_lock_image(**encryption_state)
@@ -877,7 +877,7 @@ class ChatControl(ChatControlBase):
 
     def _on_authentication_button_clicked(self, widget):
         if self.encryption:
-            gajim.plugin_manager.extension_point(
+            app.plugin_manager.extension_point(
                 'encryption_dialog' + self.encryption, self)
 
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
@@ -888,7 +888,7 @@ class ChatControl(ChatControlBase):
 
         if self.encryption:
             self.sendmessage = True
-            gajim.plugin_manager.extension_point(
+            app.plugin_manager.extension_point(
                     'send_message' + self.encryption, self)
             if not self.sendmessage:
                 return
@@ -900,7 +900,7 @@ class ChatControl(ChatControlBase):
         contact = self.contact
         keyID = contact.keyID
 
-        chatstates_on = gajim.config.get('outgoing_chat_state_notifications') != \
+        chatstates_on = app.config.get('outgoing_chat_state_notifications') != \
                 'disabled'
 
         chatstate_to_send = None
@@ -915,8 +915,8 @@ class ChatControl(ChatControlBase):
         def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label):
             id_ = msg_stanza.getID()
             xep0184_id = None
-            if self.contact.jid != gajim.get_jid_from_account(self.account):
-                if gajim.config.get_per('accounts', self.account, 'request_receipt'):
+            if self.contact.jid != app.get_jid_from_account(self.account):
+                if app.config.get_per('accounts', self.account, 'request_receipt'):
                     xep0184_id = id_
             if label:
                 displaymarking = label.getTag('displaymarking')
@@ -987,7 +987,7 @@ class ChatControl(ChatControlBase):
             self.print_archiving_session_details()
 
     def get_our_nick(self):
-        return gajim.nicks[self.account]
+        return app.nicks[self.account]
 
     def print_conversation(self, text, frm='', tim=None, encrypted=None,
     subject=None, xhtml=None, simple=False, xep0184_id=None,
@@ -1011,7 +1011,7 @@ class ChatControl(ChatControlBase):
             additional_data = {}
 
         if frm == 'status':
-            if not gajim.config.get('print_status_in_chats'):
+            if not app.config.get('print_status_in_chats'):
                 return
             kind = 'status'
             name = ''
@@ -1032,7 +1032,7 @@ class ChatControl(ChatControlBase):
                 kind = 'outgoing'
                 name = self.get_our_nick()
                 if not xhtml and not encrypted and \
-                gajim.config.get('rst_formatting_outgoing_messages'):
+                app.config.get('rst_formatting_outgoing_messages'):
                     from gajim.common.rst_xhtml_generator import create_xhtml
                     xhtml = create_xhtml(text)
                     if xhtml:
@@ -1054,9 +1054,9 @@ class ChatControl(ChatControlBase):
             jid = self.contact.get_full_jid()
         else:
             jid = self.contact.jid
-        num_unread = len(gajim.events.get_events(self.account, jid,
+        num_unread = len(app.events.get_events(self.account, jid,
                 ['printed_' + self.type_id, self.type_id]))
-        if num_unread == 1 and not gajim.config.get('show_unread_tab_icon'):
+        if num_unread == 1 and not app.config.get('show_unread_tab_icon'):
             unread = '*'
         elif num_unread > 1:
             unread = '[' + str(num_unread) + ']'
@@ -1075,7 +1075,7 @@ class ChatControl(ChatControlBase):
         else:
             jid = self.contact.jid
 
-        if gajim.config.get('show_avatar_in_tabs'):
+        if app.config.get('show_avatar_in_tabs'):
             avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
             if avatar_pixbuf not in ('ask', None):
                 avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf_by_size(
@@ -1083,24 +1083,24 @@ class ChatControl(ChatControlBase):
                 return avatar_pixbuf
 
         if count_unread:
-            num_unread = len(gajim.events.get_events(self.account, jid,
+            num_unread = len(app.events.get_events(self.account, jid,
                     ['printed_' + self.type_id, self.type_id]))
         else:
             num_unread = 0
         # Set tab image (always 16x16); unread messages show the 'event' image
         tab_img = None
 
-        if num_unread and gajim.config.get('show_unread_tab_icon'):
-            img_16 = gajim.interface.roster.get_appropriate_state_images(
+        if num_unread and app.config.get('show_unread_tab_icon'):
+            img_16 = app.interface.roster.get_appropriate_state_images(
                     self.contact.jid, icon_name='event')
             tab_img = img_16['event']
         else:
-            contact = gajim.contacts.get_contact_with_highest_priority(
+            contact = app.contacts.get_contact_with_highest_priority(
                     self.account, self.contact.jid)
             if not contact or self.resource:
                 # For transient contacts
                 contact = self.contact
-            img_16 = gajim.interface.roster.get_appropriate_state_images(
+            img_16 = app.interface.roster.get_appropriate_state_images(
                     self.contact.jid, icon_name=contact.show)
             tab_img = img_16[contact.show]
 
@@ -1112,7 +1112,7 @@ class ChatControl(ChatControlBase):
         for history_menuitem (False for tranasports) and file_transfer_menuitem 
         and hide()/show() for add_to_roster_menuitem
         """
-        if gajim.jid_is_transport(self.contact.jid):
+        if app.jid_is_transport(self.contact.jid):
             menu = gui_menu_builder.get_transport_menu(self.contact,
                 self.account)
         else:
@@ -1139,7 +1139,7 @@ class ChatControl(ChatControlBase):
         # do not send if we have chat state notifications disabled
         # that means we won't reply to the <active/> from other peer
         # so we do not broadcast jep85 capabalities
-        chatstate_setting = gajim.config.get('outgoing_chat_state_notifications')
+        chatstate_setting = app.config.get('outgoing_chat_state_notifications')
         if chatstate_setting == 'disabled':
             return
 
@@ -1148,7 +1148,7 @@ class ChatControl(ChatControlBase):
         if contact and contact.sub in ('to', 'none'):
             return
 
-        if self.contact.jid == gajim.get_jid_from_account(self.account):
+        if self.contact.jid == app.get_jid_from_account(self.account):
             return
 
         elif chatstate_setting == 'composing_only' and state != 'active' and\
@@ -1179,13 +1179,13 @@ class ChatControl(ChatControlBase):
         # if wel're inactive prevent composing (XEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
-            gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+            app.nec.push_outgoing_event(MessageOutgoingEvent(None,
                 account=self.account, jid=self.contact.jid, chatstate='active',
                 control=self))
             contact.our_chatstate = 'active'
             self.reset_kbd_mouse_timeout_vars()
 
-        gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+        app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
             control=self))
 
@@ -1196,17 +1196,17 @@ class ChatControl(ChatControlBase):
     def shutdown(self):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
-        gajim.plugin_manager.remove_gui_extension_point('chat_control', self)
+        app.plugin_manager.remove_gui_extension_point('chat_control', self)
 
-        gajim.ged.remove_event_handler('pep-received', ged.GUI1,
+        app.ged.remove_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
-        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+        app.ged.remove_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
-        gajim.ged.remove_event_handler('failed-decrypt', ged.GUI1,
+        app.ged.remove_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
-        gajim.ged.remove_event_handler('chatstate-received', ged.GUI1,
+        app.ged.remove_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
-        gajim.ged.remove_event_handler('caps-received', ged.GUI1,
+        app.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
 
         self.unsubscribe_events()
@@ -1227,11 +1227,11 @@ class ChatControl(ChatControlBase):
         if self.bigger_avatar_window:
             self.bigger_avatar_window.destroy()
         # Clean events
-        gajim.events.remove_events(self.account, self.get_full_jid(),
+        app.events.remove_events(self.account, self.get_full_jid(),
                 types=['printed_' + self.type_id, self.type_id])
         # Remove contact instance if contact has been removed
         key = (self.contact.jid, self.account)
-        roster = gajim.interface.roster
+        roster = app.interface.roster
         if key in roster.contacts_to_be_removed.keys() and \
         not roster.contact_has_pending_roster_events(self.contact,
         self.account):
@@ -1246,7 +1246,7 @@ class ChatControl(ChatControlBase):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
         self.conv_textview.del_handlers()
-        if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+        if app.config.get('use_speller') and HAS_GTK_SPELL:
             spell_obj = gtkspell.get_from_text_view(self.msg_textview)
             if spell_obj:
                 spell_obj.detach()
@@ -1262,7 +1262,7 @@ class ChatControl(ChatControlBase):
         return False
 
     def allow_shutdown(self, method, on_yes, on_no, on_minimize):
-        if time.time() - gajim.last_message_time[self.account]\
+        if time.time() - app.last_message_time[self.account]\
         [self.get_full_jid()] < 2:
             # 2 seconds
 
@@ -1319,7 +1319,7 @@ class ChatControl(ChatControlBase):
             self.show_avatar()
 
     def show_avatar(self):
-        if not gajim.config.get('show_avatar_in_chat'):
+        if not app.config.get('show_avatar_in_chat'):
             return
 
         jid_with_resource = self.contact.get_full_jid()
@@ -1334,10 +1334,10 @@ class ChatControl(ChatControlBase):
                         real_jid += '/' + self.gc_contact.resource
                 else:
                     real_jid = jid_with_resource
-                gajim.connections[self.account].request_vcard(real_jid,
+                app.connections[self.account].request_vcard(real_jid,
                         jid_with_resource)
             else:
-                gajim.connections[self.account].request_vcard(jid_with_resource)
+                app.connections[self.account].request_vcard(jid_with_resource)
             return
         elif pixbuf:
             scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')
@@ -1351,7 +1351,7 @@ class ChatControl(ChatControlBase):
     def _nec_vcard_received(self, obj):
         if obj.conn.name != self.account:
             return
-        j = gajim.get_jid_without_resource(self.contact.jid)
+        j = app.get_jid_without_resource(self.contact.jid)
         if obj.jid != j:
             return
         self.show_avatar()
@@ -1372,12 +1372,12 @@ class ChatControl(ChatControlBase):
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
                 if os.path.isfile(path): # is it file?
-                    ft = gajim.interface.instances['file_transfers']
+                    ft = app.interface.instances['file_transfers']
                     ft.send_file(self.account, c, path)
             return
 
         # chat2muc
-        treeview = gajim.interface.roster.tree
+        treeview = app.interface.roster.tree
         model = treeview.get_model()
         data = selection.get_data()
         path = treeview.get_selection().get_selected_rows()[1][0]
@@ -1387,8 +1387,8 @@ class ChatControl(ChatControlBase):
             return
         dropped_jid = data
 
-        dropped_transport = gajim.get_transport_name_from_jid(dropped_jid)
-        c_transport = gajim.get_transport_name_from_jid(c.jid)
+        dropped_transport = app.get_transport_name_from_jid(dropped_jid)
+        c_transport = app.get_transport_name_from_jid(c.jid)
         if dropped_transport or c_transport:
             return # transport contacts cannot be invited
 
@@ -1397,24 +1397,24 @@ class ChatControl(ChatControlBase):
     def _on_message_tv_buffer_changed(self, textbuffer):
         super()._on_message_tv_buffer_changed(textbuffer)
         if textbuffer.get_char_count() and self.encryption:
-            gajim.plugin_manager.extension_point(
+            app.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
 
     def restore_conversation(self):
         jid = self.contact.jid
         # don't restore lines if it's a transport
-        if gajim.jid_is_transport(jid):
+        if app.jid_is_transport(jid):
             return
 
         # number of messages that are in queue and are already logged, we want
         # to avoid duplication
-        pending = len(gajim.events.get_events(self.account, jid,
+        pending = len(app.events.get_events(self.account, jid,
                 ['chat', 'pm']))
         if self.resource:
-            pending += len(gajim.events.get_events(self.account,
+            pending += len(app.events.get_events(self.account,
                     self.contact.get_full_jid(), ['chat', 'pm']))
 
-        rows = gajim.logger.get_last_conversation_lines(
+        rows = app.logger.get_last_conversation_lines(
             self.account, jid, pending)
 
         local_old_kind = None
@@ -1438,7 +1438,7 @@ class ChatControl(ChatControlBase):
 
             tim = float(row.time)
 
-            if gajim.config.get('restored_messages_small'):
+            if app.config.get('restored_messages_small'):
                 small_attr = ['small']
             else:
                 small_attr = []
@@ -1467,7 +1467,7 @@ class ChatControl(ChatControlBase):
         jid_with_resource = jid
         if self.resource:
             jid_with_resource += '/' + self.resource
-        events = gajim.events.get_events(self.account, jid_with_resource)
+        events = app.events.get_events(self.account, jid_with_resource)
 
         # list of message ids which should be marked as read
         message_ids = []
@@ -1490,16 +1490,16 @@ class ChatControl(ChatControlBase):
             if event.session and not self.session:
                 self.set_session(event.session)
         if message_ids:
-            gajim.logger.set_read_messages(message_ids)
-        gajim.events.remove_events(self.account, jid_with_resource,
+            app.logger.set_read_messages(message_ids)
+        app.events.remove_events(self.account, jid_with_resource,
                 types=[self.type_id])
 
         typ = 'chat' # Is it a normal chat or a pm ?
 
         # reset to status image in gc if it is a pm
         # Is it a pm ?
-        room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-        control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+        room_jid, nick = app.get_room_and_nick_from_fjid(jid)
+        control = app.interface.msg_win_mgr.get_gc_control(room_jid,
                 self.account)
         if control and control.type_id == message_control.TYPE_GC:
             control.update_ui()
@@ -1508,12 +1508,12 @@ class ChatControl(ChatControlBase):
 
         self.redraw_after_event_removed(jid)
         if (self.contact.show in ('offline', 'error')):
-            show_offline = gajim.config.get('showoffline')
-            show_transports = gajim.config.get('show_transports_group')
-            if (not show_transports and gajim.jid_is_transport(jid)) or \
+            show_offline = app.config.get('showoffline')
+            show_transports = app.config.get('show_transports_group')
+            if (not show_transports and app.jid_is_transport(jid)) or \
             (not show_offline and typ == 'chat' and \
-            len(gajim.contacts.get_contacts(self.account, jid)) < 2):
-                gajim.interface.roster.remove_to_be_removed(self.contact.jid,
+            len(app.contacts.get_contacts(self.account, jid)) < 2):
+                app.interface.roster.remove_to_be_removed(self.contact.jid,
                         self.account)
             elif typ == 'pm':
                 control.remove_contact(nick)
@@ -1559,7 +1559,7 @@ class ChatControl(ChatControlBase):
         # make the bigger avatar window show up centered
         small_avatar_x, small_avatar_y = alloc.x, alloc.y
         translated_coordinates = small_avatar.translate_coordinates(
-            gajim.interface.roster.window, 0, 0)
+            app.interface.roster.window, 0, 0)
         if translated_coordinates:
             small_avatar_x, small_avatar_y = translated_coordinates
         roster_x, roster_y  = self.parent_win.window.get_window().get_origin()[1:]
@@ -1579,7 +1579,7 @@ class ChatControl(ChatControlBase):
         dialogs.AddNewContactWindow(self.account, self.contact.jid)
 
     def _on_contact_information_menuitem_activate(self, widget):
-        gajim.interface.roster.on_info(widget, self.contact, self.account)
+        app.interface.roster.on_info(widget, self.contact, self.account)
 
     def _on_convert_to_gc_menuitem_activate(self, widget):
         """
@@ -1600,7 +1600,7 @@ class ChatControl(ChatControlBase):
 
         self.session.terminate_e2e()
 
-        gajim.connections[self.account].delete_session(jid, thread_id)
+        app.connections[self.account].delete_session(jid, thread_id)
 
         # presumably the user had a good reason to shut it off, so
         # disable autonegotiation too
@@ -1611,7 +1611,7 @@ class ChatControl(ChatControlBase):
 
         if not self.session:
             fjid = self.contact.get_full_jid()
-            new_sess = gajim.connections[self.account].make_new_session(fjid, type_=self.type_id)
+            new_sess = app.connections[self.account].make_new_session(fjid, type_=self.type_id)
             self.set_session(new_sess)
 
     def begin_e2e_negotiation(self):
@@ -1641,7 +1641,7 @@ class ChatControl(ChatControlBase):
     def got_connected(self):
         ChatControlBase.got_connected(self)
         # Refreshing contact
-        contact = gajim.contacts.get_contact_with_highest_priority(
+        contact = app.contacts.get_contact_with_highest_priority(
                 self.account, self.contact.jid)
         if isinstance(contact, GC_Contact):
             contact = contact.as_contact()
@@ -1712,24 +1712,24 @@ class ChatControl(ChatControlBase):
         self._info_bar_show_message()
 
     def _get_file_props_event(self, file_props, type_):
-        evs = gajim.events.get_events(self.account, self.contact.jid, [type_])
+        evs = app.events.get_events(self.account, self.contact.jid, [type_])
         for ev in evs:
             if ev.file_props == file_props:
                 return ev
         return None
 
     def _on_accept_file_request(self, widget, file_props):
-        gajim.interface.instances['file_transfers'].on_file_request_accepted(
+        app.interface.instances['file_transfers'].on_file_request_accepted(
             self.account, self.contact, file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
-            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+            app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _on_cancel_file_request(self, widget, file_props):
-        gajim.connections[self.account].send_file_rejection(file_props)
+        app.connections[self.account].send_file_rejection(file_props)
         ev = self._get_file_props_event(file_props, 'file-request')
         if ev:
-            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+            app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _got_file_request(self, file_props):
         """
@@ -1753,12 +1753,12 @@ class ChatControl(ChatControlBase):
             helpers.launch_file_manager(path)
         ev = self._get_file_props_event(file_props, 'file-completed')
         if ev:
-            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+            app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _on_ok(self, widget, file_props, type_):
         ev = self._get_file_props_event(file_props, type_)
         if ev:
-            gajim.events.remove_events(self.account, self.contact.jid, event=ev)
+            app.events.remove_events(self.account, self.contact.jid, event=ev)
 
     def _got_file_completed(self, file_props):
         markup = '<b>%s:</b> %s' % (_('File transfer completed'),
@@ -1780,17 +1780,17 @@ class ChatControl(ChatControlBase):
     def _on_accept_gc_invitation(self, widget, event):
         try:
             if event.is_continued:
-                gajim.interface.join_gc_room(self.account, event.room_jid,
-                    gajim.nicks[self.account], event.password,
+                app.interface.join_gc_room(self.account, event.room_jid,
+                    app.nicks[self.account], event.password,
                     is_continued=True)
             else:
                 dialogs.JoinGroupchatWindow(self.account, event.room_jid)
         except GajimGeneralException:
             pass
-        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+        app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _on_cancel_gc_invitation(self, widget, event):
-        gajim.events.remove_events(self.account, self.contact.jid, event=event)
+        app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
         markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.room_jid)

@@ -34,7 +34,7 @@ don't need to dig up the code itself to write basic commands.
 from traceback import print_exc
 
 from gi.repository import Pango
-from gajim.common import gajim
+from gajim.common import app
 
 from gajim.command_system.framework import CommandProcessor
 from gajim.command_system.errors import CommandError, NoCommandError
@@ -179,7 +179,7 @@ class CommandTools:
         """
         Get the current connection object.
         """
-        return gajim.connections[self.account]
+        return app.connections[self.account]
 
     @property
     def full_jid(self):

@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-## src/common/gajim.py
+## gajim/common/app.py
 ##
 ## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -144,7 +144,7 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
 
-# These will be set in gajim.gui_interface.
+# These will be set in app.gui_interface.
 idlequeue = None
 socks5queue = None
 

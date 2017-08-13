@@ -31,7 +31,7 @@ Handles Jingle sessions (XEP 0166)
 import logging
 from enum import Enum, unique
 import nbxmpp
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common.jingle_transport import get_jingle_transport, JingleTransportIBB
 from gajim.common.jingle_content import get_jingle_content, JingleContentSetupException, JingleContent
 from gajim.common.jingle_ft import State
@@ -40,7 +40,7 @@ from gajim.common.connection_handlers_events import (
     JingleTransferCancelledEvent, JingleConnectedReceivedEvent,
     JingleErrorReceivedEvent)
 
-log = logging.getLogger("gajim.c.jingle_session")
+log = logging.getLogger("app.c.jingle_session")
 
 # FIXME: Move it to JingleSession.States?
 @unique
@@ -86,7 +86,7 @@ class JingleSession:
         self.contents = {} # negotiated contents
         self.connection = con # connection to use
         # our full jid
-        self.ourjid = gajim.get_jid_from_account(self.connection.name)
+        self.ourjid = app.get_jid_from_account(self.connection.name)
         if con.server_resource:
             self.ourjid = self.ourjid + '/' + con.server_resource
         self.peerjid = jid # jid we connect to
@@ -462,7 +462,7 @@ class JingleSession:
             if (creator, name) in self.contents:
                 content = self.contents[(creator, name)]
                 # TODO: this will fail if content is not an RTP content
-                gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(
+                app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(
                     None, conn=self.connection, jingle_session=self,
                     media=content.media, reason='removed'))
                 content.destroy()
@@ -501,7 +501,7 @@ class JingleSession:
             self.add_content(name, content, creator)
             self.__content_reject(content)
             self.contents[(content.creator, content.name)].destroy()
-        gajim.nec.push_incoming_event(JingleRequestReceivedEvent(None,
+        app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
                                                                  conn=self.connection,
                                                                  jingle_session=self,
                                                                  contents=contents))
@@ -544,7 +544,7 @@ class JingleSession:
                 hash_data = hash_tag.getData() if hash_tag else None
                 n = request.getTag('file').getTag('name')
                 n = n.getData() if n else None
-                pjid = gajim.get_jid_without_resource(self.peerjid)
+                pjid = app.get_jid_without_resource(self.peerjid)
                 file_info = self.connection.get_file_info(pjid, hash_data, n,
                                                           self.connection.name)
                 if not file_info:
@@ -563,7 +563,7 @@ class JingleSession:
             raise nbxmpp.NodeProcessed
         self.state = JingleStates.PENDING
         # Send event about starting a session
-        gajim.nec.push_incoming_event(JingleRequestReceivedEvent(None,
+        app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
                                                                  conn=self.connection,
                                                                  jingle_session=self,
                                                                  contents=contents[0]))
@@ -603,7 +603,7 @@ class JingleSession:
             # TODO
             text = reason
         if reason == 'cancel' and self.session_type_ft:
-            gajim.nec.push_incoming_event(JingleTransferCancelledEvent(None,
+            app.nec.push_incoming_event(JingleTransferCancelledEvent(None,
                                                                        conn=self.connection,
                                                                        jingle_session=self,
                                                                        media=None,
@@ -656,7 +656,7 @@ class JingleSession:
         if text:
             text = '%s (%s)' % (error, text)
         if type_ != 'modify':
-            gajim.nec.push_incoming_event(JingleErrorReceivedEvent(None,
+            app.nec.push_incoming_event(JingleErrorReceivedEvent(None,
                                                                    conn=self.connection,
                                                                    jingle_session=self,
                                                                    reason=text or error))
@@ -774,7 +774,7 @@ class JingleSession:
         else:
             text = reason
         self.connection.delete_jingle_session(self.sid)
-        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
                                                                       conn=self.connection,
                                                                       jingle_session=self,
                                                                       media=None,
@@ -804,7 +804,7 @@ class JingleSession:
         self.__append_content(jingle, content)
         self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
                                                                       conn=self.connection,
                                                                       jingle_session=self,
                                                                       media=content.media,
@@ -820,14 +820,14 @@ class JingleSession:
             self.__append_content(jingle, content)
             self.connection.connection.send(stanza)
         # TODO: this will fail if content is not an RTP content
-        gajim.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
+        app.nec.push_incoming_event(JingleDisconnectedReceivedEvent(None,
                                                                       conn=self.connection,
                                                                       jingle_session=self,
                                                                       media=content.media,
                                                                       reason='removed'))
 
     def content_negotiated(self, media):
-        gajim.nec.push_incoming_event(JingleConnectedReceivedEvent(None,
+        app.nec.push_incoming_event(JingleConnectedReceivedEvent(None,
                                                                    conn=self.connection,
                                                                    jingle_session=self,
                                                                    media=media))

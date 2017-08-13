@@ -35,7 +35,7 @@ from nbxmpp.protocol import NS_CHATSTATES
 from gajim.common import atom
 from gajim.common import nec
 from gajim.common import helpers
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import i18n
 from gajim.common import dataforms
 from gajim.common import exceptions
@@ -46,7 +46,7 @@ from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 from gajim.common.nec import NetworkEvent
 
-if gajim.HAVE_PYOPENSSL:
+if app.HAVE_PYOPENSSL:
     import OpenSSL.crypto
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -81,20 +81,20 @@ class HelperEvent:
             del self.conn.groupchat_jids[self.id_]
         else:
             self.fjid = helpers.get_full_jid_from_iq(self.stanza)
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
 
     def get_id(self):
         self.id_ = self.stanza.getID()
 
     def get_gc_control(self):
-        self.gc_control = gajim.interface.msg_win_mgr.get_gc_control(self.jid,
+        self.gc_control = app.interface.msg_win_mgr.get_gc_control(self.jid,
                                                                      self.conn.name)
 
         # If gc_control is missing - it may be minimized. Try to get it
         # from there. If it's not there - then it's missing anyway and
         # will remain set to None.
         if not self.gc_control:
-            minimized = gajim.interface.minimized_controls[self.conn.name]
+            minimized = app.interface.minimized_controls[self.conn.name]
             self.gc_control = minimized.get(self.jid)
 
     def _generate_timestamp(self, tag):
@@ -130,7 +130,7 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.opt = gajim.config.get_per('accounts', self.conn.name, 'http_auth')
+        self.opt = app.config.get_per('accounts', self.conn.name, 'http_auth')
         self.iq_id = self.stanza.getTagAttr('confirm', 'id')
         self.method = self.stanza.getTagAttr('confirm', 'method')
         self.url = self.stanza.getTagAttr('confirm', 'url')
@@ -283,7 +283,7 @@ class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
                     'date': gmessage.getAttr('date')})
             self.conn.gmail_last_time = int(mb.getAttr('result-time'))
 
-        self.jid = gajim.get_jid_from_account(self.name)
+        self.jid = app.get_jid_from_account(self.name)
         log.debug('You have %s new gmail e-mails on %s.', self.newmsgs, self.jid)
         return True
 
@@ -309,7 +309,7 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
                 log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
-            contact = gajim.contacts.get_contact(self.conn.name, jid)
+            contact = app.contacts.get_contact(self.conn.name, jid)
             groups = []
             same_groups = True
             for group in item.getTags('group'):
@@ -358,7 +358,7 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
             self.received_from_server = self.xmpp_roster.received_from_server
             self.roster = {}
             raw_roster = self.xmpp_roster.getRaw()
-            our_jid = gajim.get_jid_from_account(self.conn.name)
+            our_jid = app.get_jid_from_account(self.conn.name)
 
             for jid in raw_roster:
                 try:
@@ -382,12 +382,12 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
         else:
             # Roster comes from DB
             self.received_from_server = False
-            self.version = gajim.config.get_per('accounts', self.conn.name,
+            self.version = app.config.get_per('accounts', self.conn.name,
                 'roster_version')
-            self.roster = gajim.logger.get_roster(gajim.get_jid_from_account(
+            self.roster = app.logger.get_roster(app.get_jid_from_account(
                 self.conn.name))
             if not self.roster:
-                gajim.config.set_per(
+                app.config.set_per(
                     'accounts', self.conn.name, 'roster_version', '')
         return True
 
@@ -397,8 +397,8 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         frm = helpers.get_jid_from_iq(self.stanza)
-        our_jid = gajim.get_jid_from_account(self.conn.name)
-        if frm and frm != our_jid and frm != gajim.get_server_from_jid(our_jid):
+        our_jid = app.get_jid_from_account(self.conn.name)
+        if frm and frm != our_jid and frm != app.get_server_from_jid(our_jid):
             return
         self.version = self.stanza.getTagAttr('query', 'ver')
         self.items = {}
@@ -783,7 +783,7 @@ PresenceHelperEvent):
         except Exception:
             log.warning('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
             return
-        jid_list = gajim.contacts.get_jid_list(self.conn.name)
+        jid_list = app.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
         self.get_id()
         self.is_gc = False # is it a GC presence ?
@@ -819,7 +819,7 @@ PresenceHelperEvent):
                 self._generate_timestamp(self.stanza.getTimestamp())
             elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
                 # see http://trac.gajim.org/ticket/326
-                agent = gajim.get_server_from_jid(self.jid)
+                agent = app.get_server_from_jid(self.jid)
                 if self.conn.connection.getRoster().getItem(agent):
                     # to be sure it's a transport contact
                     self.transport_auto_auth = True
@@ -841,32 +841,32 @@ PresenceHelperEvent):
         self.errmsg = self.stanza.getErrorMsg()
 
         if self.is_gc:
-            gajim.nec.push_incoming_event(
+            app.nec.push_incoming_event(
                 GcPresenceReceivedEvent(
                     None, conn=self.conn, stanza=self.stanza,
                     presence_obj=self))
             return
 
         if self.ptype == 'subscribe':
-            gajim.nec.push_incoming_event(SubscribePresenceReceivedEvent(None,
+            app.nec.push_incoming_event(SubscribePresenceReceivedEvent(None,
                 conn=self.conn, stanza=self.stanza, presence_obj=self))
         elif self.ptype == 'subscribed':
             # BE CAREFUL: no con.updateRosterItem() in a callback
-            gajim.nec.push_incoming_event(SubscribedPresenceReceivedEvent(None,
+            app.nec.push_incoming_event(SubscribedPresenceReceivedEvent(None,
                 conn=self.conn, stanza=self.stanza, presence_obj=self))
         elif self.ptype == 'unsubscribe':
             log.debug(_('unsubscribe request from %s') % self.jid)
         elif self.ptype == 'unsubscribed':
-            gajim.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
+            app.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
                 None, conn=self.conn, stanza=self.stanza, presence_obj=self))
         elif self.ptype == 'error':
             return
 
         if not self.ptype or self.ptype == 'unavailable':
-            our_jid = gajim.get_jid_from_account(self.conn.name)
+            our_jid = app.get_jid_from_account(self.conn.name)
             if self.jid == our_jid and self.resource == self.conn.server_resource:
                 # We got our own presence
-                gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+                app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
                                                            show=self.show))
             elif self.jid in jid_list or self.jid == our_jid:
                 return True
@@ -876,7 +876,7 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.resource = 'local'
         self.prio = 0
         self.keyID = None
@@ -914,7 +914,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.errmsg = self.presence_obj.errmsg
         self.errcon = self.stanza.getError()
         self.get_gc_control()
-        self.gc_contact = gajim.contacts.get_gc_contact(self.conn.name,
+        self.gc_contact = app.contacts.get_gc_contact(self.conn.name,
             self.room_jid, self.nick)
 
         if self.ptype == 'error':
@@ -922,8 +922,8 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         if self.ptype and self.ptype != 'unavailable':
             return
-        if gajim.config.get('log_contact_status_changes') and \
-        gajim.config.should_log(self.conn.name, self.room_jid):
+        if app.config.get('log_contact_status_changes') and \
+        app.config.should_log(self.conn.name, self.room_jid):
             if self.gc_contact:
                 jid = self.gc_contact.jid
             else:
@@ -932,10 +932,10 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if jid:
                 # we know real jid, save it in db
                 st += ' (%s)' % jid
-            show = gajim.logger.convert_show_values_to_db_api_values(self.show)
+            show = app.logger.convert_show_values_to_db_api_values(self.show)
             if show is not None:
                 fjid = nbxmpp.JID(self.fjid)
-                gajim.logger.insert_into_logs(fjid.getStripped(),
+                app.logger.insert_into_logs(fjid.getStripped(),
                                               time_time(),
                                               KindConstant.GCSTATUS,
                                               contact_name=fjid.getResource(),
@@ -944,7 +944,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.avatar_sha == '':
             # contact has no avatar
             puny_nick = helpers.sanitize_filename(self.nick)
-            gajim.interface.remove_avatar_files(self.room_jid, puny_nick)
+            app.interface.remove_avatar_files(self.room_jid, puny_nick)
         # NOTE: if it's a gc presence, don't ask vcard here.
         # We may ask it to real jid in gui part.
         self.status_code = []
@@ -1118,7 +1118,7 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             # For example Chatstates, Receipts, Chatmarkers
             log.debug('Received MAM message without text')
             return
-        self.is_pm = gajim.logger.jid_is_room_jid(self.with_.getStripped())
+        self.is_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
         if self.is_pm is None:
             # Check if this event is triggered after a disco, so we dont
             # run into an endless loop
@@ -1166,13 +1166,13 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # check if the message is a roster item exchange (XEP-0144)
         if self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX):
-            gajim.nec.push_incoming_event(RosterItemExchangeEvent(None,
+            app.nec.push_incoming_event(RosterItemExchangeEvent(None,
                 conn=self.conn, stanza=self.stanza))
             return
 
         # check if the message is a XEP-0070 confirmation request
         if self.stanza.getTag('confirm', namespace=nbxmpp.NS_HTTP_AUTH):
-            gajim.nec.push_incoming_event(HttpAuthReceivedEvent(None,
+            app.nec.push_incoming_event(HttpAuthReceivedEvent(None,
                 conn=self.conn, stanza=self.stanza))
             return
 
@@ -1186,7 +1186,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         address_tag = self.stanza.getTag('addresses',
             namespace=nbxmpp.NS_ADDRESS)
         # Be sure it comes from one of our resource, else ignore address element
-        if address_tag and self.jid == gajim.get_jid_from_account(account):
+        if address_tag and self.jid == app.get_jid_from_account(account):
             address = address_tag.getTag('address', attrs={'type': 'ofrom'})
             if address:
                 try:
@@ -1195,14 +1195,14 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     log.warning('Invalid JID: %s, ignoring it',
                                 address.getAttr('jid'))
                     return
-                self.jid = gajim.get_jid_without_resource(self.fjid)
+                self.jid = app.get_jid_without_resource(self.fjid)
 
         carbon_marker = self.stanza.getTag('sent', namespace=nbxmpp.NS_CARBONS)
         if not carbon_marker:
             carbon_marker = self.stanza.getTag('received',
                 namespace=nbxmpp.NS_CARBONS)
         # Be sure it comes from one of our resource, else ignore forward element
-        if carbon_marker and self.jid == gajim.get_jid_from_account(account):
+        if carbon_marker and self.jid == app.get_jid_from_account(account):
             forward_tag = carbon_marker.getTag('forwarded',
                 namespace=nbxmpp.NS_FORWARD)
             if forward_tag:
@@ -1213,16 +1213,16 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     to = self.stanza.getTo()
                     frm = self.stanza.getFrom()
                     if not frm:
-                        frm = gajim.get_jid_from_account(account)
+                        frm = app.get_jid_from_account(account)
                     self.stanza.setTo(frm)
                     if not to:
-                        to = gajim.get_jid_from_account(account)
+                        to = app.get_jid_from_account(account)
                     self.stanza.setFrom(to)
                     self.sent = True
                 elif carbon_marker.getName() == 'received':
                     full_frm = str(self.stanza.getFrom())
-                    frm = gajim.get_jid_without_resource(full_frm)
-                    if frm == gajim.get_jid_from_account(account):
+                    frm = app.get_jid_without_resource(full_frm)
+                    if frm == app.get_jid_from_account(account):
                         # Drop 'received' Carbons from ourself, we already
                         # got the message with the 'sent' Carbon or via the
                         # message itself
@@ -1249,7 +1249,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 log.warning('Invalid MAM Message: no forwarded child')
                 return
 
-            gajim.nec.push_incoming_event(
+            app.nec.push_incoming_event(
                 NetworkEvent('raw-mam-message-received',
                              conn=self.conn,
                              stanza=self.stanza,
@@ -1261,13 +1261,13 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
         if muc_user:
             if muc_user.getTag('decline'):
-                gajim.nec.push_incoming_event(
+                app.nec.push_incoming_event(
                     GcDeclineReceivedEvent(
                         None, conn=self.conn,
                         room_jid=self.fjid, stanza=muc_user))
                 return
             if muc_user.getTag('invite'):
-                gajim.nec.push_incoming_event(
+                app.nec.push_incoming_event(
                     GcInvitationReceivedEvent(
                         None, conn=self.conn, jid_from=self.fjid,
                         mediated=True, stanza=muc_user))
@@ -1277,7 +1277,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             direct = self.stanza.getTag(
                 'x', namespace=nbxmpp.NS_CONFERENCE)
             if direct:
-                gajim.nec.push_incoming_event(
+                app.nec.push_incoming_event(
                     GcInvitationReceivedEvent(
                         None, conn=self.conn, jid_from=self.fjid,
                         mediated=False, stanza=direct))
@@ -1304,7 +1304,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.session = None
         if self.mtype != 'groupchat':
-            if gajim.interface.is_pm_contact(self.fjid, account) and \
+            if app.interface.is_pm_contact(self.fjid, account) and \
             self.mtype == 'error':
                 self.session = self.conn.find_session(self.fjid, self.thread_id)
                 if not self.session:
@@ -1340,7 +1340,7 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
                     self.fjid = key
                     break
 
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
 
     def generate(self):
         self.base_event = nec.NetworkIncomingEvent(None, conn=self.conn,
@@ -1379,15 +1379,15 @@ class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
             self.password = self.stanza.getTagData('password')
             self.is_continued = self.stanza.getTag('continue') is not None
 
-        if self.room_jid in gajim.gc_connected[account] and \
-                gajim.gc_connected[account][self.room_jid]:
+        if self.room_jid in app.gc_connected[account] and \
+                app.gc_connected[account][self.room_jid]:
             # We are already in groupchat. Ignore invitation
             return
-        jid = gajim.get_jid_without_resource(self.jid_from)
+        jid = app.get_jid_without_resource(self.jid_from)
 
-        ignore = gajim.config.get_per(
+        ignore = app.config.get_per(
             'accounts', account, 'ignore_unknown_contacts')
-        if ignore and not gajim.contacts.get_contacts(account, jid):
+        if ignore and not app.contacts.get_contacts(account, jid):
             return
 
         return True
@@ -1405,10 +1405,10 @@ class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
             log.warning('Invalid JID: %s, ignoring it',
                         decline.getAttr('from'))
             return
-        jid = gajim.get_jid_without_resource(self.jid_from)
-        ignore = gajim.config.get_per(
+        jid = app.get_jid_without_resource(self.jid_from)
+        ignore = app.config.get_per(
             'accounts', account, 'ignore_unknown_contacts')
-        if ignore and not gajim.contacts.get_contacts(account, jid):
+        if ignore and not app.contacts.get_contacts(account, jid):
             return
         self.reason = decline.getTagData('reason')
 
@@ -1463,7 +1463,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.form_node = self.stanza.getTag('x', namespace=nbxmpp.NS_DATA)
 
-        if gajim.config.get('ignore_incoming_xhtml'):
+        if app.config.get('ignore_incoming_xhtml'):
             self.xhtml = None
         else:
             self.xhtml = self.stanza.getXHTML()
@@ -1540,7 +1540,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.encrypted = self.msg_obj.encrypted
         self.correct_id = None # XEP-0308
 
-        if gajim.config.get('ignore_incoming_xhtml'):
+        if app.config.get('ignore_incoming_xhtml'):
             self.xhtml_msgtxt = None
 
         if self.msg_obj.resource:
@@ -1555,7 +1555,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.subject = self.stanza.getSubject()
 
         if self.subject is not None:
-            gajim.nec.push_incoming_event(GcSubjectReceivedEvent(None,
+            app.nec.push_incoming_event(GcSubjectReceivedEvent(None,
                 conn=self.conn, msg_event=self))
             return
 
@@ -1573,7 +1573,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
             if self.stanza.getTag('x'):
                 if self.status_code != []:
-                    gajim.nec.push_incoming_event(GcConfigChangedReceivedEvent(
+                    app.nec.push_incoming_event(GcConfigChangedReceivedEvent(
                         None, conn=self.conn, msg_event=self))
             if self.msg_obj.form_node:
                 return True
@@ -1681,7 +1681,7 @@ class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
 
@@ -1691,7 +1691,7 @@ class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
 
@@ -1701,7 +1701,7 @@ class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
 
@@ -1711,7 +1711,7 @@ class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
 
@@ -1721,7 +1721,7 @@ class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
-        self.jid, self.resource = gajim.get_room_and_nick_from_fjid(self.fjid)
+        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
         return True
 
@@ -1884,7 +1884,7 @@ class AgentRemovedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.jid_list = []
-        for jid in gajim.contacts.get_jid_list(self.conn.name):
+        for jid in app.contacts.get_jid_list(self.conn.name):
             if jid.endswith('@' + self.agent):
                 self.jid_list.append(jid)
         return True
@@ -1895,8 +1895,8 @@ class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.account = self.conn.name
-        self.use_gpg_agent = gajim.config.get('use_gpg_agent')
-        self.keyID = gajim.config.get_per('accounts', self.conn.name, 'keyid')
+        self.use_gpg_agent = app.config.get('use_gpg_agent')
+        self.keyID = app.config.get_per('accounts', self.conn.name, 'keyid')
         return True
 
 class ConnectionLostEvent(nec.NetworkIncomingEvent):
@@ -1904,7 +1904,7 @@ class ConnectionLostEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        gajim.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
+        app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
             show='offline'))
         return True
 
@@ -1971,7 +1971,7 @@ class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.keyid = gajim.config.get_per('accounts', self.conn.name, 'keyid')
+        self.keyid = app.config.get_per('accounts', self.conn.name, 'keyid')
         return True
 
 class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -2006,7 +2006,7 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             for item in items.getTags('item'):
                 entry = item.getTag('entry', namespace=nbxmpp.NS_ATOM)
                 if entry:
-                    gajim.nec.push_incoming_event(AtomEntryReceived(None,
+                    app.nec.push_incoming_event(AtomEntryReceived(None,
                         conn=self.conn, node=entry))
         raise nbxmpp.NodeProcessed
 
@@ -2178,7 +2178,7 @@ class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 continue
             self.items.append(attr)
         self.get_jid_resource()
-        hostname = gajim.config.get_per('accounts', self.conn.name, 'hostname')
+        hostname = app.config.get_per('accounts', self.conn.name, 'hostname')
         self.get_id()
         if self.id_ in self.conn.disco_items_ids:
             self.conn.disco_items_ids.remove(self.id_)
@@ -2266,7 +2266,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.get_id()
         self.fjid = self.conn._ft_get_from(self.stanza)
-        self.jid = gajim.get_jid_without_resource(self.fjid)
+        self.jid = app.get_jid_without_resource(self.fjid)
         if self.jingle_content:
             secu = self.jingle_content.getTag('security')
             self.FT_content.use_security = bool(secu)
@@ -2303,7 +2303,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 h = h.getData() if h else None
                 n = file_tag.getTag('name')
                 n = n.getData() if n else None
-                pjid = gajim.get_jid_without_resource(self.fjid)
+                pjid = app.get_jid_without_resource(self.fjid)
                 file_info = self.conn.get_file_info(pjid, hash_=h,
                                                 name=n,account=self.conn.name)
                 self.file_props.file_name = file_info['file-name']
@@ -2377,7 +2377,7 @@ class FileRequestErrorEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.jid = gajim.get_jid_without_resource(self.jid)
+        self.jid = app.get_jid_without_resource(self.jid)
         return True
 
 class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
@@ -2386,7 +2386,7 @@ class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         jid = str(self.file_props.receiver)
-        self.jid = gajim.get_jid_without_resource(jid)
+        self.jid = app.get_jid_without_resource(jid)
         return True
 
 class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -2440,14 +2440,14 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.control = None
         self.get_focused()
         # This event has already been added to event list
-        if not self.control and len(gajim.events.get_events(self.conn.name, \
+        if not self.control and len(app.events.get_events(self.conn.name, \
         self.jid, [msg_obj.mtype])) <= 1:
             self.first_unread = True
 
         if msg_obj.mtype == 'pm':
             nick = msg_obj.resource
         else:
-            nick = gajim.get_name_from_jid(self.conn.name, self.jid)
+            nick = app.get_name_from_jid(self.conn.name, self.jid)
 
         if self.first_unread:
             self.sound_event = 'first_message_received'
@@ -2456,7 +2456,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else:
             self.sound_event = 'next_message_received_unfocused'
 
-        if gajim.config.get('notification_preview_message'):
+        if app.config.get('notification_preview_message'):
             self.popup_text = msg_obj.msgtxt
             if self.popup_text and (self.popup_text.startswith('/me ') or \
             self.popup_text.startswith('/me\n')):
@@ -2490,25 +2490,25 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 {'nickname': nick}
 
 
-        if gajim.config.get('notify_on_new_message'):
-            if self.first_unread or (gajim.config.get('autopopup_chat_opened') \
+        if app.config.get('notify_on_new_message'):
+            if self.first_unread or (app.config.get('autopopup_chat_opened') \
             and not self.control_focused):
-                if gajim.config.get('autopopupaway'):
+                if app.config.get('autopopupaway'):
                     # always show notification
                     self.do_popup = True
-                if gajim.connections[self.conn.name].connected in (2, 3):
+                if app.connections[self.conn.name].connected in (2, 3):
                     # we're online or chat
                     self.do_popup = True
 
-        if msg_obj.attention and not gajim.config.get(
+        if msg_obj.attention and not app.config.get(
         'ignore_incoming_attention'):
             self.popup_timeout = 0
             self.do_popup = True
         else:
-            self.popup_timeout = gajim.config.get('notification_timeout')
+            self.popup_timeout = app.config.get('notification_timeout')
 
-        if msg_obj.attention and not gajim.config.get(
-        'ignore_incoming_attention') and gajim.config.get_per('soundevents',
+        if msg_obj.attention and not app.config.get(
+        'ignore_incoming_attention') and app.config.get_per('soundevents',
         'attention_received', 'enabled'):
             self.sound_event = 'attention_received'
             self.do_sound = True
@@ -2555,7 +2555,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if jid:
             # we want an avatar
             puny_jid = helpers.sanitize_filename(jid)
-            path_to_file = os.path.join(gajim.AVATAR_PATH, puny_jid) + suffix
+            path_to_file = os.path.join(app.AVATAR_PATH, puny_jid) + suffix
             path_to_local_file = path_to_file + '_local'
             for extension in ('.png', '.jpeg'):
                 path_to_local_file_full = path_to_local_file + extension
@@ -2568,7 +2568,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         return os.path.abspath(generic)
 
     def handle_incoming_pres_event(self, pres_obj):
-        if gajim.jid_is_transport(pres_obj.jid):
+        if app.jid_is_transport(pres_obj.jid):
             return True
         account = pres_obj.conn.name
         self.jid = pres_obj.jid
@@ -2583,11 +2583,11 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
 
         # no other resource is connected, let's look in metacontacts
-        family = gajim.contacts.get_metacontacts_family(account, self.jid)
+        family = app.contacts.get_metacontacts_family(account, self.jid)
         for info in family:
             acct_ = info['account']
             jid_ = info['jid']
-            c_ = gajim.contacts.get_contact_with_highest_priority(acct_, jid_)
+            c_ = app.contacts.get_contact_with_highest_priority(acct_, jid_)
             if not c_:
                 continue
             if c_.jid == self.jid:
@@ -2599,18 +2599,18 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             event = 'contact_connected'
             show_image = 'online.png'
             suffix = '_notif_size_colored'
-            server = gajim.get_server_from_jid(self.jid)
+            server = app.get_server_from_jid(self.jid)
             account_server = account + '/' + server
             block_transport = False
-            if account_server in gajim.block_signed_in_notifications and \
-            gajim.block_signed_in_notifications[account_server]:
+            if account_server in app.block_signed_in_notifications and \
+            app.block_signed_in_notifications[account_server]:
                 block_transport = True
             if helpers.allow_showing_notification(account, 'notify_on_signin') \
-            and not gajim.block_signed_in_notifications[account] and \
+            and not app.block_signed_in_notifications[account] and \
             not block_transport:
                 self.do_popup = True
-            if gajim.config.get_per('soundevents', 'contact_connected',
-            'enabled') and not gajim.block_signed_in_notifications[account] and\
+            if app.config.get_per('soundevents', 'contact_connected',
+            'enabled') and not app.block_signed_in_notifications[account] and\
             not block_transport and helpers.allow_sound_notification(account,
             'contact_connected'):
                 self.sound_event = event
@@ -2622,7 +2622,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             suffix = '_notif_size_bw'
             if helpers.allow_showing_notification(account, 'notify_on_signout'):
                 self.do_popup = True
-            if gajim.config.get_per('soundevents', 'contact_disconnected',
+            if app.config.get_per('soundevents', 'contact_disconnected',
             'enabled') and helpers.allow_sound_notification(account, event):
                 self.sound_event = event
                 self.do_sound = True
@@ -2636,21 +2636,21 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else:
             return True
 
-        transport_name = gajim.get_transport_name_from_jid(self.jid)
+        transport_name = app.get_transport_name_from_jid(self.jid)
         img_path = None
         if transport_name:
             img_path = os.path.join(helpers.get_transport_path(
                 transport_name), '48x48', show_image)
         if not img_path or not os.path.isfile(img_path):
-            iconset = gajim.config.get('iconset')
+            iconset = app.config.get('iconset')
             img_path = os.path.join(helpers.get_iconset_path(iconset),
                 '48x48', show_image)
         self.popup_image_path = self.get_path_to_generic_or_avatar(img_path,
             jid=self.jid, suffix=suffix)
 
-        self.popup_timeout = gajim.config.get('notification_timeout')
+        self.popup_timeout = app.config.get('notification_timeout')
 
-        nick = i18n.direction_mark + gajim.get_name_from_jid(account, self.jid)
+        nick = i18n.direction_mark + app.get_name_from_jid(account, self.jid)
         if event == 'status_change':
             self.popup_title = _('%(nick)s Changed Status') % \
                 {'nick': nick}

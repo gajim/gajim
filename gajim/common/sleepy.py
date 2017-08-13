@@ -21,7 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gajim.common import gajim
+from gajim.common import app
 import os
 
 
@@ -52,7 +52,7 @@ try:
         from gajim.common import idle
         idle.xss_available
 except Exception:
-    gajim.log.debug('Unable to load idle module')
+    app.log.debug('Unable to load idle module')
     SUPPORTED = False
 
 class SleepyWindows:

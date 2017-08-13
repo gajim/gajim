@@ -36,7 +36,7 @@ from gajim import gtkgui_helpers
 from gajim import tooltips
 from gajim import dialogs
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common.file_props import FilesProp
 from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
@@ -70,7 +70,7 @@ class FileTransfersWindow:
         self.notify_ft_checkbox = self.xml.get_object(
                 'notify_ft_complete_checkbox')
 
-        shall_notify = gajim.config.get('notify_on_file_complete')
+        shall_notify = app.config.get('notify_on_file_complete')
         self.notify_ft_checkbox.set_active(shall_notify)
         self.model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, int,
             int, str)
@@ -193,7 +193,7 @@ class FileTransfersWindow:
         helpers.convert_bytes(file_props.size)
         if file_props.type_ == 'r':
             jid = file_props.sender.split('/')[0]
-            sender_name = gajim.contacts.get_first_contact_from_jid(
+            sender_name = app.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             sender = sender_name
         else:
@@ -203,7 +203,7 @@ class FileTransfersWindow:
         sectext += '\n\t' + _('Recipient: ')
         if file_props.type_ == 's':
             jid = file_props.receiver.split('/')[0]
-            receiver_name = gajim.contacts.get_first_contact_from_jid(
+            receiver_name = app.contacts.get_first_contact_from_jid(
                     file_props.tt_account, jid).get_shown_name()
             recipient = receiver_name
         else:
@@ -212,7 +212,7 @@ class FileTransfersWindow:
         sectext += recipient
         if file_props.type_ == 'r':
             sectext += '\n\t' + _('Saved in: %s') % file_path
-        dialog = dialogs.HigDialog(gajim.interface.roster.window, Gtk.MessageType.INFO,
+        dialog = dialogs.HigDialog(app.interface.roster.window, Gtk.MessageType.INFO,
             Gtk.ButtonsType.NONE, _('File transfer completed'), sectext)
         if file_props.type_ == 'r':
             button = Gtk.Button.new_with_mnemonic(_('Open _Containing Folder'))
@@ -256,11 +256,11 @@ class FileTransfersWindow:
         def on_yes(dummy, fjid, file_props, account):
             # Delete old file
             os.remove(file_props.file_name)
-            jid, resource = gajim.get_room_and_nick_from_fjid(fjid)
+            jid, resource = app.get_room_and_nick_from_fjid(fjid)
             if resource:
-                contact = gajim.contacts.get_contact(account, jid, resource)
+                contact = app.contacts.get_contact(account, jid, resource)
             else:
-                contact = gajim.contacts.get_contact_with_highest_priority(
+                contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
                 fjid = contact.get_full_jid()
             # Request the file to the sender
@@ -273,7 +273,7 @@ class FileTransfersWindow:
             new_file_props.date = file_props.date
             new_file_props.hash_ = file_props.hash_
             new_file_props.type_ = 'r'
-            tsid = gajim.connections[account].start_file_transfer(fjid,
+            tsid = app.connections[account].start_file_transfer(fjid,
                                                             new_file_props,
                                                                 True)
             new_file_props.transport_sid = tsid
@@ -309,17 +309,17 @@ class FileTransfersWindow:
                 and file_dir is None:
                     file_dir = os.path.dirname(file_path)
             if file_dir:
-                gajim.config.set('last_send_dir', file_dir)
+                app.config.set('last_send_dir', file_dir)
                 dialog.destroy()
 
         dialog = dialogs.FileChooserDialog(_('Choose File to Send…'),
                 Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL),
                 Gtk.ResponseType.OK,
                 True, # select multiple true as we can select many files to send
-                gajim.config.get('last_send_dir'),
+                app.config.get('last_send_dir'),
                 on_response_ok=on_ok,
                 on_response_cancel=lambda e:dialog.destroy(),
-                transient_for=gajim.interface.roster.window
+                transient_for=app.interface.roster.window
                 )
 
         btn = Gtk.Button.new_with_mnemonic(_('_Send'))
@@ -351,7 +351,7 @@ class FileTransfersWindow:
             if contact.find('/') == -1:
                 return
             (jid, resource) = contact.split('/', 1)
-            contact = gajim.contacts.create_contact(jid=jid, account=account,
+            contact = app.contacts.create_contact(jid=jid, account=account,
                 resource=resource)
         file_name = os.path.split(file_path)[1]
         file_props = self.get_send_file_props(account, contact,
@@ -360,24 +360,24 @@ class FileTransfersWindow:
             return False
         if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
-            gajim.connections[account].start_file_transfer(contact.get_full_jid(),
+            app.connections[account].start_file_transfer(contact.get_full_jid(),
                                                            file_props)
             self.add_transfer(account, contact, file_props)
         else:
             log.info("contact does not support jingle file transfer")
             file_props.transport_sid = file_props.sid
-            gajim.connections[account].send_file_request(file_props)
+            app.connections[account].send_file_request(file_props)
             self.add_transfer(account, contact, file_props)
         return True
 
     def _start_receive(self, file_path, account, contact, file_props):
         file_dir = os.path.dirname(file_path)
         if file_dir:
-            gajim.config.set('last_save_dir', file_dir)
+            app.config.set('last_save_dir', file_dir)
         file_props.file_name = file_path
         file_props.type_ = 'r'
         self.add_transfer(account, contact, file_props)
-        gajim.connections[account].send_file_approval(file_props)
+        app.connections[account].send_file_approval(file_props)
 
     def on_file_request_accepted(self, account, contact, file_props):
         def on_ok(widget, account, contact, file_props):
@@ -426,7 +426,7 @@ class FileTransfersWindow:
 
         def on_cancel(widget, account, contact, file_props):
             dialog2.destroy()
-            gajim.connections[account].send_file_rejection(file_props)
+            app.connections[account].send_file_rejection(file_props)
 
         dialog2 = dialogs.FileChooserDialog(
             title_text=_('Save File as…'),
@@ -434,7 +434,7 @@ class FileTransfersWindow:
             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
             Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
             default_response=Gtk.ResponseType.OK,
-            current_folder=gajim.config.get('last_save_dir'),
+            current_folder=app.config.get('last_save_dir'),
             on_response_ok=(on_ok, account, contact, file_props),
             on_response_cancel=(on_cancel, account, contact, file_props))
 
@@ -465,7 +465,7 @@ class FileTransfersWindow:
             self.on_file_request_accepted(account, contact, file_props)
 
         def on_response_cancel(account, file_props):
-            gajim.connections[account].send_file_rejection(file_props)
+            app.connections[account].send_file_rejection(file_props)
 
         dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
                 on_response_ok=(on_response_ok, account, contact, file_props),
@@ -579,24 +579,24 @@ class FileTransfersWindow:
         if file_props.tt_account:
             # file transfer is set
             account = file_props.tt_account
-            if account in gajim.connections:
+            if account in app.connections:
                 # there is a connection to the account
-                gajim.connections[account].remove_transfer(file_props)
+                app.connections[account].remove_transfer(file_props)
             if file_props.type_ == 'r': # we receive a file
                 other = file_props.sender
             else: # we send a file
                 other = file_props.receiver
             if isinstance(other, str):
-                jid = gajim.get_jid_without_resource(other)
+                jid = app.get_jid_without_resource(other)
             else: # It's a Contact instance
                 jid = other.jid
             for ev_type in ('file-error', 'file-completed', 'file-request-error',
             'file-send-error', 'file-stopped'):
-                for event in gajim.events.get_events(account, jid, [ev_type]):
+                for event in app.events.get_events(account, jid, [ev_type]):
                     if event.file_props.sid == file_props.sid:
-                        gajim.events.remove_events(account, jid, event)
-                        gajim.interface.roster.draw_contact(jid, account)
-                        gajim.interface.roster.show_title()
+                        app.events.remove_events(account, jid, event)
+                        app.interface.roster.draw_contact(jid, account)
+                        app.interface.roster.show_title()
         FilesProp.deleteFileProp(file_props)
         del(file_props)
 
@@ -945,9 +945,9 @@ class FileTransfersWindow:
         sid = self.model[s_iter][Column.SID]
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         account = file_props.tt_account
-        if account not in gajim.connections:
+        if account not in app.connections:
             return
-        con = gajim.connections[account]
+        con = app.connections[account]
         # Check if we are in a IBB transfer
         if file_props.direction:
             con.CloseIBBStream(file_props)
@@ -980,7 +980,7 @@ class FileTransfersWindow:
             self.tooltip.hide_tooltip()
 
     def on_notify_ft_complete_checkbox_toggled(self, widget):
-        gajim.config.set('notify_on_file_complete',
+        app.config.set('notify_on_file_complete',
                 widget.get_active())
 
     def on_file_transfers_dialog_delete_event(self, widget, event):

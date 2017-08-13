@@ -25,7 +25,7 @@
 
 import nbxmpp
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common.commands import ConnectionCommands
 from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from gajim.common.connection_handlers_events import ZeroconfMessageReceivedEvent
@@ -84,7 +84,7 @@ connection_handlers.ConnectionJingle):
         Called when we receive a message
         """
         log.debug('Zeroconf MessageCB')
-        gajim.nec.push_incoming_event(ZeroconfMessageReceivedEvent(None,
+        app.nec.push_incoming_event(ZeroconfMessageReceivedEvent(None,
             conn=self, stanza=msg, ip=ip))
         return
 

@@ -134,14 +134,14 @@ class GajimApplication(Gtk.Application):
         configpaths.gajimpaths.init(
             self.config_path, self.profile, self.profile_separation)
 
-        from gajim.common import gajim
+        from gajim.common import app
         from gajim.common import check_paths
         from gajim.common import exceptions
         from gajim.common import logger
         from gajim.common import caps_cache
         try:
-            gajim.logger = logger.Logger()
-            caps_cache.initialize(gajim.logger)
+            app.logger = logger.Logger()
+            caps_cache.initialize(app.logger)
             check_paths.check_and_possibly_create_paths()
         except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
@@ -209,7 +209,7 @@ class GajimApplication(Gtk.Application):
 
         # Seed the OpenSSL pseudo random number generator from file and initialize
         if PYOPENSSL_PRNG_PRESENT:
-            self.rng_seed = gajim.gajimpaths['RNG_SEED']
+            self.rng_seed = app.gajimpaths['RNG_SEED']
             # Seed from file
             try:
                 OpenSSL.rand.load_file(self.rng_seed)
@@ -232,7 +232,7 @@ class GajimApplication(Gtk.Application):
               sys.getfilesystemencoding(), locale.getpreferredencoding()))
 
         # Set Application Menu
-        gajim.app = self
+        app.app = self
         path = os.path.join(configpaths.get('GUI'), 'application_menu.ui')
         builder = Gtk.Builder()
         builder.set_translation_domain(i18n.APP)
@@ -264,8 +264,8 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.prepare_quit()
 
         # Commit any outstanding SQL transactions
-        from gajim.common import gajim
-        gajim.logger.commit()
+        from gajim.common import app
+        app.logger.commit()
 
     def do_handle_local_options(self, options: GLib.VariantDict) -> int:
 
@@ -368,8 +368,8 @@ class GajimApplication(Gtk.Application):
             act.connect("activate", func)
             self.add_action(act)
 
-        from gajim.common import gajim
-        accounts_list = sorted(gajim.contacts.get_accounts())
+        from gajim.common import app
+        accounts_list = sorted(app.contacts.get_accounts())
         if not accounts_list:
             return
         if len(accounts_list) > 1:

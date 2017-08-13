@@ -46,7 +46,7 @@ import re
 from gajim import emoticons
 from gajim.scrolled_window import ScrolledWindow
 from gajim.common import events
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.message_control import MessageControl
@@ -91,7 +91,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         keycode_ins = None
 
     def make_href(self, match):
-        url_color = gajim.config.get('urlmsgcolor')
+        url_color = app.config.get('urlmsgcolor')
         url = match.group()
         if not '://' in url:
             url = 'http://' + url
@@ -102,9 +102,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Get pango font attributes for banner from theme settings
         """
-        theme = gajim.config.get('roster_theme')
-        bannerfont = gajim.config.get_per('themes', theme, 'bannerfont')
-        bannerfontattrs = gajim.config.get_per('themes', theme, 'bannerfontattrs')
+        theme = app.config.get('roster_theme')
+        bannerfont = app.config.get_per('themes', theme, 'bannerfont')
+        bannerfontattrs = app.config.get_per('themes', theme, 'bannerfontattrs')
 
         if bannerfont:
             font = Pango.FontDescription(bannerfont)
@@ -131,7 +131,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.resource:
             jid += '/' + self.resource
         type_ = self.type_id
-        return len(gajim.events.get_events(self.account, jid, ['printed_' + type_,
+        return len(app.events.get_events(self.account, jid, ['printed_' + type_,
                 type_]))
 
     def draw_banner(self):
@@ -142,7 +142,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         self.draw_banner_text()
         self._update_banner_state_image()
-        gajim.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
+        app.plugin_manager.gui_extension_point('chat_control_base_draw_banner',
             self)
 
     def update_toolbar(self):
@@ -150,7 +150,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         update state of buttons in toolbar
         """
         self._update_toolbar()
-        gajim.plugin_manager.gui_extension_point(
+        app.plugin_manager.gui_extension_point(
             'chat_control_base_update_toolbar', self)
 
     def draw_banner_text(self):
@@ -220,15 +220,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.seclabel_combo.pack_start(cell, True)
         # text to show is in in first column of liststore
         self.seclabel_combo.add_attribute(cell, 'text', 0)
-        if gajim.connections[self.account].seclabel_supported:
-            gajim.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
+        if app.connections[self.account].seclabel_supported:
+            app.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
 
     def on_seclabels_ready(self):
         lb = self.seclabel_combo.get_model()
         lb.clear()
         i = 0
         sel = 0
-        catalogue = gajim.connections[self.account].seclabel_catalogues[
+        catalogue = app.connections[self.account].seclabel_catalogues[
             self.contact.jid]
         for label in catalogue[2]:
             lb.append([label])
@@ -248,7 +248,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if resource is None:
             # We very likely got a contact with a random resource.
             # This is bad, we need the highest for caps etc.
-            c = gajim.contacts.get_contact_with_highest_priority(acct,
+            c = app.contacts.get_contact_with_highest_priority(acct,
                 contact.jid)
             if c and not isinstance(c, GC_Contact):
                 contact = c
@@ -369,7 +369,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.set_emoticon_popover()
 
         # Attach speller
-        if gajim.config.get('use_speller') and HAS_GTK_SPELL:
+        if app.config.get('use_speller') and HAS_GTK_SPELL:
             self.set_speller()
         self.conv_textview.tv.show()
 
@@ -399,15 +399,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
-        gajim.plugin_manager.gui_extension_point('chat_control_base', self)
+        app.plugin_manager.gui_extension_point('chat_control_base', self)
 
-        gajim.ged.register_event_handler('our-show', ged.GUI1,
+        app.ged.register_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
-        gajim.ged.register_event_handler('ping-sent', ged.GUI1,
+        app.ged.register_event_handler('ping-sent', ged.GUI1,
             self._nec_ping_sent)
-        gajim.ged.register_event_handler('ping-reply', ged.GUI1,
+        app.ged.register_event_handler('ping-reply', ged.GUI1,
             self._nec_ping_reply)
-        gajim.ged.register_event_handler('ping-error', ged.GUI1,
+        app.ged.register_event_handler('ping-error', ged.GUI1,
             self._nec_ping_error)
 
         # This is bascially a very nasty hack to surpass the inability
@@ -431,7 +431,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         if encryption:
-            plugin = gajim.plugin_manager.encryption_plugins[encryption]
+            plugin = app.plugin_manager.encryption_plugins[encryption]
             if not plugin.activate_encryption(self):
                 return
         else:
@@ -445,15 +445,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def set_encryption_state(self, encryption):
         config_key = '%s-%s' % (self.account, self.contact.jid)
         self.encryption = encryption
-        gajim.config.set_per('encryption', config_key,
+        app.config.set_per('encryption', config_key,
                              'encryption', self.encryption or '')
 
     def get_encryption_state(self):
         config_key = '%s-%s' % (self.account, self.contact.jid)
-        state = gajim.config.get_per('encryption', config_key, 'encryption')
+        state = app.config.get_per('encryption', config_key, 'encryption')
         if not state:
             return None
-        if state not in gajim.plugin_manager.encryption_plugins:
+        if state not in app.plugin_manager.encryption_plugins:
             self.set_encryption_state(None)
             return None
         return state
@@ -476,13 +476,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         per_type = 'contacts'
         if self.type_id == message_control.TYPE_GC:
             per_type = 'rooms'
-        lang = gajim.config.get_per(per_type, self.contact.jid,
+        lang = app.config.get_per(per_type, self.contact.jid,
                 'speller_language')
         if not lang:
             # use the default one
-            lang = gajim.config.get('speller_language')
+            lang = app.config.get('speller_language')
             if not lang:
-                lang = gajim.LANG
+                lang = app.LANG
         if lang:
             try:
                 self.spell = gtkspell.Spell(self.msg_textview, lang)
@@ -495,9 +495,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         per_type = 'contacts'
         if self.type_id == message_control.TYPE_GC:
             per_type = 'rooms'
-        if not gajim.config.get_per(per_type, self.contact.jid):
-            gajim.config.add_per(per_type, self.contact.jid)
-        gajim.config.set_per(per_type, self.contact.jid, 'speller_language',
+        if not app.config.get_per(per_type, self.contact.jid):
+            app.config.add_per(per_type, self.contact.jid)
+        app.config.set_per(per_type, self.contact.jid, 'speller_language',
             lang)
         self.msg_textview.lang = lang
 
@@ -526,11 +526,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             GLib.source_remove(self.possible_inactive_timeout_id)
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
-        gajim.plugin_manager.remove_gui_extension_point('chat_control_base',
+        app.plugin_manager.remove_gui_extension_point('chat_control_base',
             self)
-        gajim.plugin_manager.remove_gui_extension_point(
+        app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_draw_banner', self)
-        gajim.ged.remove_event_handler('our-show', ged.GUI1,
+        app.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
 
     def on_msg_textview_populate_popup(self, textview, menu):
@@ -690,9 +690,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 send_message = False
             else:
                 is_ctrl_enter = bool(event_state & Gdk.ModifierType.CONTROL_MASK)
-                send_message = is_ctrl_enter == gajim.config.get('send_on_ctrl_enter')
+                send_message = is_ctrl_enter == app.config.get('send_on_ctrl_enter')
 
-            if send_message and gajim.connections[self.account].connected < 2:
+            if send_message and app.connections[self.account].connected < 2:
                 # we are not connected
                 dialogs.ErrorDialog(_('A connection is not available'),
                     _('Your message can not be sent until you are connected.'))
@@ -737,7 +737,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.seclabel_combo is not None:
             idx = self.seclabel_combo.get_active()
             if idx != -1:
-                cat = gajim.connections[self.account].seclabel_catalogues[self.contact.jid]
+                cat = app.connections[self.account].seclabel_catalogues[self.contact.jid]
                 lname = cat[2][idx]
                 label = cat[1][lname]
         return label
@@ -760,8 +760,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # refresh timers
         self.reset_kbd_mouse_timeout_vars()
 
-        notifications = gajim.config.get('outgoing_chat_state_notifications')
-        if (self.contact.jid == gajim.get_jid_from_account(self.account) or
+        notifications = app.config.get('outgoing_chat_state_notifications')
+        if (self.contact.jid == app.get_jid_from_account(self.account) or
                 notifications == 'disabled'):
             chatstate = None
 
@@ -777,7 +777,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             correct_id = None
 
-        gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+        app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
             keyID=keyID, type_=type_, chatstate=chatstate,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
@@ -897,7 +897,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         size = len(history)
         scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinately
-        max_size = gajim.config.get('key_up_lines')
+        max_size = app.config.get('key_up_lines')
         for i in range(size - max_size + 1):
             if pos == 0:
                 break
@@ -956,12 +956,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.last_received_id[name] = correct_id[0]
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
-            gajim.config.get('notify_on_all_muc_messages') or \
+            app.config.get('notify_on_all_muc_messages') or \
             'marked' in other_tags_for_text:
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after
                 # other_tags_for_text == ['marked'] --> highlighted gc message
-                gajim.last_message_time[self.account][full_jid] = time.time()
+                app.last_message_time[self.account][full_jid] = time.time()
 
         if kind in ('incoming', 'incoming_queue'):
             # Record the history of received messages
@@ -976,7 +976,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self != self.parent_win.get_active_control() or \
             not self.parent_win.is_active() or not end)) or \
             (gc_message and \
-            jid in gajim.interface.minimized_controls[self.account])) and \
+            jid in app.interface.minimized_controls[self.account])) and \
             kind in ('incoming', 'incoming_queue', 'error'):
                 # we want to have save this message in events list
                 # other_tags_for_text == ['marked'] --> highlighted gc message
@@ -1000,10 +1000,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 event = event_type(text, subject, self, msg_log_id,
                     show_in_roster=show_in_roster,
                     show_in_systray=show_in_systray)
-                gajim.events.add_event(self.account, full_jid, event)
+                app.events.add_event(self.account, full_jid, event)
                 # We need to redraw contact if we show in roster
                 if show_in_roster:
-                    gajim.interface.roster.draw_contact(self.contact.jid,
+                    app.interface.roster.draw_contact(self.contact.jid,
                         self.account)
 
         if not self.parent_win:
@@ -1023,7 +1023,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Hide show emoticons_button
         """
-        if gajim.config.get('emoticons_theme'):
+        if app.config.get('emoticons_theme'):
             self.emoticons_button.set_no_show_all(False)
             self.emoticons_button.show()
         else:
@@ -1031,7 +1031,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.emoticons_button.hide()
 
     def set_emoticon_popover(self):
-        if not gajim.config.get('emoticons_theme'):
+        if not app.config.get('emoticons_theme'):
             return
 
         if not self.parent_win:
@@ -1086,11 +1086,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if not jid:
             jid = self.contact.jid
 
-        if 'logs' in gajim.interface.instances:
-            gajim.interface.instances['logs'].window.present()
-            gajim.interface.instances['logs'].open_history(jid, self.account)
+        if 'logs' in app.interface.instances:
+            app.interface.instances['logs'].window.present()
+            app.interface.instances['logs'].open_history(jid, self.account)
         else:
-            gajim.interface.instances['logs'] = \
+            app.interface.instances['logs'] = \
                     history_window.HistoryWindow(jid, self.account)
 
     def _on_send_file(self, gc_contact=None):
@@ -1098,19 +1098,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         gc_contact can be set when we are in a groupchat control
         """
         def _on_ok(c):
-            gajim.interface.instances['file_transfers'].show_file_send_request(
+            app.interface.instances['file_transfers'].show_file_send_request(
                     self.account, c)
         if self.TYPE_ID == message_control.TYPE_PM:
             gc_contact = self.gc_contact
         if gc_contact:
             # gc or pm
-            gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+            gc_control = app.interface.msg_win_mgr.get_gc_control(
                     gc_contact.room_jid, self.account)
-            self_contact = gajim.contacts.get_gc_contact(self.account,
+            self_contact = app.contacts.get_gc_contact(self.account,
                     gc_control.room_jid, gc_control.nick)
             if gc_control.is_anonymous and gc_contact.affiliation not in ['admin',
             'owner'] and self_contact.affiliation in ['admin', 'owner']:
-                contact = gajim.contacts.get_contact(self.account, gc_contact.jid)
+                contact = app.contacts.get_contact(self.account, gc_contact.jid)
                 if not contact or contact.sub not in ('both', 'to'):
                     prim_text = _('Really send file?')
                     sec_text = _('If you send a file to %s, he/she will know your '
@@ -1128,7 +1128,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         When a grouchat is minimized, unparent the tab, put it in roster etc
         """
         old_value = True
-        non_minimized_gc = gajim.config.get_per('accounts', self.account,
+        non_minimized_gc = app.config.get_per('accounts', self.account,
                 'non_minimized_gc').split()
         if self.contact.jid in non_minimized_gc:
             old_value = False
@@ -1138,7 +1138,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if minimize and self.contact.jid in non_minimized_gc:
             non_minimized_gc.remove(self.contact.jid)
         if old_value != minimize:
-            gajim.config.set_per('accounts', self.account, 'non_minimized_gc',
+            app.config.set_per('accounts', self.account, 'non_minimized_gc',
                     ' '.join(non_minimized_gc))
 
     def set_control_active(self, state):
@@ -1150,7 +1150,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 type_ = ['printed_' + self.type_id]
                 if self.type_id == message_control.TYPE_GC:
                     type_ = ['printed_gc_msg', 'printed_marked_gc_msg']
-                if not gajim.events.remove_events(self.account, self.get_full_jid(),
+                if not app.events.remove_events(self.account, self.get_full_jid(),
                 types=type_):
                     # There were events to remove
                     self.redraw_after_event_removed(jid)
@@ -1193,7 +1193,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else: # Not a GC
             types_list = ['printed_' + type_, type_]
 
-        if not len(gajim.events.get_events(self.account, jid, types_list)):
+        if not len(app.events.get_events(self.account, jid, types_list)):
             return
         if not self.parent_win:
             return
@@ -1202,7 +1202,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.parent_win.window.is_active():
             # we are at the end
             if self.type_id == message_control.TYPE_GC:
-                if not gajim.events.remove_events(self.account, jid,
+                if not app.events.remove_events(self.account, jid,
                 types=types_list):
                     self.redraw_after_event_removed(jid)
             elif self.session and self.session.remove_events(types_list):
@@ -1218,23 +1218,23 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.parent_win.show_title()
         # TODO : get the contact and check notify.get_show_in_roster()
         if self.type_id == message_control.TYPE_PM:
-            room_jid, nick = gajim.get_room_and_nick_from_fjid(jid)
-            groupchat_control = gajim.interface.msg_win_mgr.get_gc_control(
+            room_jid, nick = app.get_room_and_nick_from_fjid(jid)
+            groupchat_control = app.interface.msg_win_mgr.get_gc_control(
                     room_jid, self.account)
-            if room_jid in gajim.interface.minimized_controls[self.account]:
+            if room_jid in app.interface.minimized_controls[self.account]:
                 groupchat_control = \
-                        gajim.interface.minimized_controls[self.account][room_jid]
-            contact = gajim.contacts.get_contact_with_highest_priority(
+                        app.interface.minimized_controls[self.account][room_jid]
+            contact = app.contacts.get_contact_with_highest_priority(
                 self.account, room_jid)
             if contact:
-                gajim.interface.roster.draw_contact(room_jid, self.account)
+                app.interface.roster.draw_contact(room_jid, self.account)
             if groupchat_control:
                 groupchat_control.draw_contact(nick)
                 if groupchat_control.parent_win:
                     groupchat_control.parent_win.redraw_tab(groupchat_control)
         else:
-            gajim.interface.roster.draw_contact(jid, self.account)
-            gajim.interface.roster.show_title()
+            app.interface.roster.draw_contact(jid, self.account)
+            app.interface.roster.show_title()
 
     def scroll_messages(self, direction, msg_buf, msg_type):
         if msg_type == 'sent':

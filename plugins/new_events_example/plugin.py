@@ -30,7 +30,7 @@ based on existing one.
 from pprint import pformat
 
 from gajim.common import helpers
-from gajim.common import gajim
+from gajim.common import app
 
 from gajim.plugins import GajimPlugin
 from gajim.plugins.helpers import log_calls, log
@@ -128,10 +128,10 @@ class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
             self.stanza = self.base_event.stanza
             self.conn = self.base_event.conn
             self.from_jid = helpers.get_full_jid_from_iq(self.stanza)
-            self.from_jid_without_resource = gajim.get_jid_without_resource(
+            self.from_jid_without_resource = app.get_jid_without_resource(
                 self.from_jid)
             self.account = self.conn.name
-            self.from_nickname = gajim.get_contact_name_from_jid( self.account,
+            self.from_nickname = app.get_contact_name_from_jid( self.account,
                 self.from_jid_without_resource)
             self.msg_text = ''.join(self.stanza.kids[0].data)
 

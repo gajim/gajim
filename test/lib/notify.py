@@ -1,6 +1,6 @@
 # mock notify module
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 
 notifications = []
@@ -13,11 +13,11 @@ class Notification:
     def clean(self):
         global notifications
         notifications = []
-        gajim.ged.remove_event_handler('notification', ged.GUI2,
+        app.ged.remove_event_handler('notification', ged.GUI2,
             self._nec_notification)
 
     def __init__(self):
-        gajim.ged.register_event_handler('notification', ged.GUI2,
+        app.ged.register_event_handler('notification', ged.GUI2,
             self._nec_notification)
 
 

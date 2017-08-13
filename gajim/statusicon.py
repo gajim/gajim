@@ -32,7 +32,7 @@ from gajim import config
 from gajim import tooltips
 from gajim import gtkgui_helpers
 
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import helpers
 
 class StatusIcon:
@@ -58,15 +58,15 @@ class StatusIcon:
         """
         Register listeners to the events class
         """
-        gajim.events.event_added_subscribe(self.on_event_added)
-        gajim.events.event_removed_subscribe(self.on_event_removed)
+        app.events.event_added_subscribe(self.on_event_added)
+        app.events.event_removed_subscribe(self.on_event_removed)
 
     def unsubscribe_events(self):
         """
         Unregister listeners to the events class
         """
-        gajim.events.event_added_unsubscribe(self.on_event_added)
-        gajim.events.event_removed_unsubscribe(self.on_event_removed)
+        app.events.event_added_unsubscribe(self.on_event_added)
+        app.events.event_removed_unsubscribe(self.on_event_removed)
 
     def on_event_added(self, event):
         """
@@ -141,24 +141,24 @@ class StatusIcon:
                         image.get_animation().get_static_image())
             #       self.status_icon.set_from_animation(image.get_animation())
 
-        if not gajim.interface.systray_enabled:
+        if not app.interface.systray_enabled:
             return
-        if gajim.config.get('trayicon') == 'always':
+        if app.config.get('trayicon') == 'always':
             self.status_icon.set_visible(True)
-        if gajim.events.get_nb_systray_events():
+        if app.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
-#            if gajim.config.get('trayicon_blink'):
+#            if app.config.get('trayicon_blink'):
 #                self.status_icon.set_blinking(True)
 #            else:
             image = gtkgui_helpers.load_icon('event')
             really_set_img()
             return
         else:
-            if gajim.config.get('trayicon') == 'on_event':
+            if app.config.get('trayicon') == 'on_event':
                 self.status_icon.set_visible(False)
 #            self.status_icon.set_blinking(False)
 
-        image = gajim.interface.jabber_state_images[self.statusicon_size][
+        image = app.interface.jabber_state_images[self.statusicon_size][
                                                                 self.status]
         really_set_img()
 
@@ -172,13 +172,13 @@ class StatusIcon:
         self.set_img()
 
     def start_chat(self, widget, account, jid):
-        contact = gajim.contacts.get_first_contact_from_jid(account, jid)
-        if gajim.interface.msg_win_mgr.has_window(jid, account):
-            gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
+        contact = app.contacts.get_first_contact_from_jid(account, jid)
+        if app.interface.msg_win_mgr.has_window(jid, account):
+            app.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
                     jid, account)
         elif contact:
-            gajim.interface.new_chat(contact, account)
-            gajim.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
+            app.interface.new_chat(contact, account)
+            app.interface.msg_win_mgr.get_window(jid, account).set_active_tab(
                     jid, account)
 
     def on_single_message_menuitem_activate(self, widget, account):
@@ -218,7 +218,7 @@ class StatusIcon:
         join_gc_menuitem.set_submenu(gc_sub_menu)
 
         # We need our own set of status icons, let's make 'em!
-        iconset = gajim.config.get('iconset')
+        iconset = app.config.get('iconset')
         path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
 
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
@@ -234,7 +234,7 @@ class StatusIcon:
         sub_menu.append(item)
         item.connect('activate', self.on_change_status_message_activate)
 
-        connected_accounts = gajim.get_number_of_connected_accounts()
+        connected_accounts = app.get_number_of_connected_accounts()
         if connected_accounts < 1:
             item.set_sensitive(False)
 
@@ -249,12 +249,12 @@ class StatusIcon:
         item.connect('activate', self.on_show_menuitem_activate, 'offline')
 
         iskey = connected_accounts > 0 and not (connected_accounts == 1 and
-            gajim.zeroconf_is_connected())
+            app.zeroconf_is_connected())
         chat_with_menuitem.set_sensitive(iskey)
         single_message_menuitem.set_sensitive(iskey)
         join_gc_menuitem.set_sensitive(iskey)
 
-        accounts_list = sorted(gajim.contacts.get_accounts())
+        accounts_list = sorted(app.contacts.get_accounts())
         # items that get shown whether an account is zeroconf or not
         if connected_accounts > 1: # 2 or more connections? make submenus
             account_menu_for_chat_with = Gtk.Menu()
@@ -262,7 +262,7 @@ class StatusIcon:
             self.popup_menus.append(account_menu_for_chat_with)
 
             for account in accounts_list:
-                if gajim.account_is_connected(account):
+                if app.account_is_connected(account):
                     # for chat_with
                     item = Gtk.MenuItem.new_with_label(
                         _('using account %s') % account)
@@ -271,8 +271,8 @@ class StatusIcon:
 
         elif connected_accounts == 1: # one account
             # one account connected, no need to show 'as jid'
-            for account in gajim.connections:
-                if gajim.connections[account].connected > 1:
+            for account in app.connections:
+                if app.connections[account].connected > 1:
                     # for start chat
                     self.new_chat_handler_id = chat_with_menuitem.connect(
                             'activate', self.on_new_chat, account)
@@ -280,13 +280,13 @@ class StatusIcon:
 
         # menu items that don't apply to zeroconf connections
         if connected_accounts == 1 or (connected_accounts == 2 and \
-        gajim.zeroconf_is_connected()):
+        app.zeroconf_is_connected()):
             # only one 'real' (non-zeroconf) account is connected, don't need
             # submenus
-            for account in gajim.connections:
-                if gajim.account_is_connected(account) and \
-                not gajim.config.get_per('accounts', account, 'is_zeroconf'):
-                    if gajim.connections[account].private_storage_supported:
+            for account in app.connections:
+                if app.account_is_connected(account) and \
+                not app.config.get_per('accounts', account, 'is_zeroconf'):
+                    if app.connections[account].private_storage_supported:
                         connected_accounts_with_private_storage += 1
 
                     # for single message
@@ -295,7 +295,7 @@ class StatusIcon:
                             connect('activate',
                             self.on_single_message_menuitem_activate, account)
                     # join gc
-                    gajim.interface.roster.add_bookmarks_list(gc_sub_menu,
+                    app.interface.roster.add_bookmarks_list(gc_sub_menu,
                             account)
                     break # No other account connected
         else:
@@ -306,10 +306,10 @@ class StatusIcon:
             self.popup_menus.append(account_menu_for_single_message)
 
             for account in accounts_list:
-                if gajim.connections[account].is_zeroconf or \
-                not gajim.account_is_connected(account):
+                if app.connections[account].is_zeroconf or \
+                not app.account_is_connected(account):
                     continue
-                if gajim.connections[account].private_storage_supported:
+                if app.connections[account].private_storage_supported:
                     connected_accounts_with_private_storage += 1
                 # for single message
                 item = Gtk.MenuItem.new_with_label(
@@ -323,7 +323,7 @@ class StatusIcon:
                     _('using account %s') % account)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
-                gajim.interface.roster.add_bookmarks_list(gc_menuitem_menu,
+                app.interface.roster.add_bookmarks_list(gc_menuitem_menu,
                         account)
                 gc_item.set_submenu(gc_menuitem_menu)
                 gc_sub_menu.show_all()
@@ -332,14 +332,14 @@ class StatusIcon:
         gc_sub_menu.append(newitem)
         newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks…'))
         newitem.connect('activate',
-            gajim.interface.roster.on_manage_bookmarks_menuitem_activate)
+            app.interface.roster.on_manage_bookmarks_menuitem_activate)
         gc_sub_menu.append(newitem)
         if connected_accounts_with_private_storage == 0:
             newitem.set_sensitive(False)
 
-        sounds_mute_menuitem.set_active(not gajim.config.get('sounds_on'))
+        sounds_mute_menuitem.set_active(not app.config.get('sounds_on'))
 
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         if self.show_roster_handler_id:
             show_roster_menuitem.handler_disconnect(self.show_roster_handler_id)
         if win.get_property('has-toplevel-focus'):
@@ -363,35 +363,35 @@ class StatusIcon:
         self.systray_context_menu.popup(None, None, None, None, 0, event_time)
 
     def on_show_all_events_menuitem_activate(self, widget):
-        events = gajim.events.get_systray_events()
+        events = app.events.get_systray_events()
         for account in events:
             for jid in events[account]:
                 for event in events[account][jid]:
-                    gajim.interface.handle_event(account, jid, event.type_)
+                    app.interface.handle_event(account, jid, event.type_)
 
     def on_sounds_mute_menuitem_activate(self, widget):
-        gajim.config.set('sounds_on', not widget.get_active())
+        app.config.set('sounds_on', not widget.get_active())
 
     def on_show_roster_menuitem_activate(self, widget):
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         win.present()
 
     def on_hide_roster_menuitem_activate(self, widget):
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         win.hide()
 
     def on_preferences_menuitem_activate(self, widget):
-        if 'preferences' in gajim.interface.instances:
-            gajim.interface.instances['preferences'].window.present()
+        if 'preferences' in app.interface.instances:
+            app.interface.instances['preferences'].window.present()
         else:
-            gajim.interface.instances['preferences'] = config.PreferencesWindow()
+            app.interface.instances['preferences'] = config.PreferencesWindow()
 
     def on_quit_menuitem_activate(self, widget):
-        gajim.interface.roster.on_quit_request()
+        app.interface.roster.on_quit_request()
 
     def on_left_click(self):
-        win = gajim.interface.roster.window
-        if len(gajim.events.get_systray_events()) == 0:
+        win = app.interface.roster.window
+        if len(app.events.get_systray_events()) == 0:
             # No pending events, so toggle visible/hidden for roster window
             if win.get_property('visible') and (win.get_property(
             'has-toplevel-focus') or os.name == 'nt'):
@@ -400,42 +400,42 @@ class StatusIcon:
                 # we could be in another VD right now. eg vd2
                 # and we want to show it in vd2
                 if not gtkgui_helpers.possibly_move_window_in_current_desktop(
-                win) and gajim.config.get('save-roster-position'):
+                win) and app.config.get('save-roster-position'):
                     x, y = win.get_position()
-                    gajim.config.set('roster_x-position', x)
-                    gajim.config.set('roster_y-position', y)
+                    app.config.set('roster_x-position', x)
+                    app.config.set('roster_y-position', y)
                 win.hide() # else we hide it from VD that was visible in
             else:
                 if not win.get_property('visible'):
                     win.show_all()
-                    if gajim.config.get('save-roster-position'):
+                    if app.config.get('save-roster-position'):
                         gtkgui_helpers.move_window(win,
-                            gajim.config.get('roster_x-position'),
-                            gajim.config.get('roster_y-position'))
-                if not gajim.config.get('roster_window_skip_taskbar'):
+                            app.config.get('roster_x-position'),
+                            app.config.get('roster_y-position'))
+                if not app.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
         else:
             self.handle_first_event()
 
     def handle_first_event(self):
-        account, jid, event = gajim.events.get_first_systray_event()
+        account, jid, event = app.events.get_first_systray_event()
         if not event:
             return
-        win = gajim.interface.roster.window
-        if not win.get_property('visible') and gajim.config.get(
+        win = app.interface.roster.window
+        if not win.get_property('visible') and app.config.get(
         'save-roster-position'):
             gtkgui_helpers.move_window(win,
-                gajim.config.get('roster_x-position'),
-                gajim.config.get('roster_y-position'))
-        gajim.interface.handle_event(account, jid, event.type_)
+                app.config.get('roster_x-position'),
+                app.config.get('roster_y-position'))
+        app.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):
         """
         Middle click raises window to have complete focus (fe. get kbd events)
         but if already raised, it hides it
         """
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         if win.is_active(): # is it fully raised? (eg does it receive kbd events?)
             win.hide()
         else:
@@ -459,26 +459,26 @@ class StatusIcon:
                 'CHANGE_STATUS_MSG_MENUITEM', 'SEPARATOR', 'offline']
         index = l.index(show)
         if not helpers.statuses_unified():
-            gajim.interface.roster.status_combobox.set_active(index + 2)
+            app.interface.roster.status_combobox.set_active(index + 2)
             return
-        current = gajim.interface.roster.status_combobox.get_active()
+        current = app.interface.roster.status_combobox.get_active()
         if index != current:
-            gajim.interface.roster.status_combobox.set_active(index)
+            app.interface.roster.status_combobox.set_active(index)
 
     def on_change_status_message_activate(self, widget):
-        model = gajim.interface.roster.status_combobox.get_model()
-        active = gajim.interface.roster.status_combobox.get_active()
+        model = app.interface.roster.status_combobox.get_model()
+        active = app.interface.roster.status_combobox.get_active()
         status = model[active][2]
         def on_response(message, pep_dict):
             if message is None: # None if user press Cancel
                 return
-            accounts = gajim.connections.keys()
+            accounts = app.connections.keys()
             for acct in accounts:
-                if not gajim.config.get_per('accounts', acct,
+                if not app.config.get_per('accounts', acct,
                         'sync_with_global_status'):
                     continue
-                show = gajim.SHOW_LIST[gajim.connections[acct].connected]
-                gajim.interface.roster.send_status(acct, show, message)
-                gajim.interface.roster.send_pep(acct, pep_dict)
+                show = app.SHOW_LIST[app.connections[acct].connected]
+                app.interface.roster.send_status(acct, show, message)
+                app.interface.roster.send_pep(acct, pep_dict)
         dlg = dialogs.ChangeStatusMessageDialog(on_response, status)
         dlg.dialog.present()

@@ -3,7 +3,7 @@ Module with dummy classes for Gajim specific unit testing
 '''
 
 from mock import Mock
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common import ged
 
 from gajim.common.connection_handlers import ConnectionHandlers
@@ -26,26 +26,26 @@ class MockConnection(Mock, ConnectionHandlers):
         self.nested_group_delimiter = '::'
         self.server_resource = 'Gajim'
 
-        gajim.interface.instances[account] = {'infos': {}, 'disco': {},
+        app.interface.instances[account] = {'infos': {}, 'disco': {},
                 'gc_config': {}, 'search': {}, 'sub_request': {}}
-        gajim.interface.minimized_controls[account] = {}
-        gajim.contacts.add_account(account)
-        gajim.groups[account] = {}
-        gajim.gc_connected[account] = {}
-        gajim.automatic_rooms[account] = {}
-        gajim.newly_added[account] = []
-        gajim.to_be_removed[account] = []
-        gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
-        gajim.block_signed_in_notifications[account] = True
-        gajim.sleeper_state[account] = 0
-        gajim.encrypted_chats[account] = []
-        gajim.last_message_time[account] = {}
-        gajim.status_before_autoaway[account] = ''
-        gajim.transport_avatar[account] = {}
-        gajim.gajim_optional_features[account] = []
-        gajim.caps_hash[account] = ''
+        app.interface.minimized_controls[account] = {}
+        app.contacts.add_account(account)
+        app.groups[account] = {}
+        app.gc_connected[account] = {}
+        app.automatic_rooms[account] = {}
+        app.newly_added[account] = []
+        app.to_be_removed[account] = []
+        app.nicks[account] = app.config.get_per('accounts', account, 'name')
+        app.block_signed_in_notifications[account] = True
+        app.sleeper_state[account] = 0
+        app.encrypted_chats[account] = []
+        app.last_message_time[account] = {}
+        app.status_before_autoaway[account] = ''
+        app.transport_avatar[account] = {}
+        app.gajim_optional_features[account] = []
+        app.caps_hash[account] = ''
 
-        gajim.connections[account] = self
+        app.connections[account] = self
 
     def request_vcard(self, jid):
         pass
@@ -103,19 +103,19 @@ class MockChatControl(Mock):
 class MockInterface(Mock):
     def __init__(self, *args):
         Mock.__init__(self, *args)
-        gajim.interface = self
+        app.interface = self
         self.msg_win_mgr = Mock()
         self.roster = Mock()
-        gajim.ged = ged.GlobalEventsDispatcher()
+        app.ged = ged.GlobalEventsDispatcher()
         import plugins
-        gajim.plugin_manager = plugins.PluginManager()
+        app.plugin_manager = plugins.PluginManager()
 
         self.remote_ctrl = None
         self.instances = {}
         self.minimized_controls = {}
         self.status_sent_to_users = Mock()
 
-        if gajim.use_x:
+        if app.use_x:
             self.jabber_state_images = {'16': {}, '24': {}, '32': {},
                 'opened': {}, 'closed': {}}
 
