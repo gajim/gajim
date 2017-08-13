@@ -247,18 +247,24 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             # We have a ChatControl open
             obj.show_in_roster = False
             obj.show_in_systray = False
+            do_event = False
         elif obj.forwarded and obj.sent:
             # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
             gajim.events.remove_events(self.conn.name, fjid, types=['chat'])
+            do_event = False
         else:
             # Everything else
             obj.show_in_roster = notify.get_show_in_roster(event_type,
                 self.conn.name, contact, self)
             obj.show_in_systray = notify.get_show_in_systray(event_type,
                 self.conn.name, contact)
-
+            if obj.mtype == 'normal' and not obj.popup:
+                do_event = False
+            else:
+                do_event = True
+        if do_event:
             event = event_t(obj.msgtxt, obj.subject, obj.mtype, obj.timestamp,
                 obj.encrypted, obj.resource, obj.msg_log_id,
                 correct_id=(obj.id_, obj.correct_id), xhtml=obj.xhtml,
