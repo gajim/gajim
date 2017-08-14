@@ -33,6 +33,7 @@ __all__ = ['get_password', 'save_password']
 
 log = logging.getLogger('gajim.password')
 
+keyring = None
 if os.name == 'nt':
     try:
         import keyring
@@ -40,77 +41,52 @@ if os.name == 'nt':
         log.debug('python-keyring missing, falling back to plaintext storage')
 
 
-Secret = None
-
 class PasswordStorage(object):
+    """Interface for password stores"""
     def get_password(self, account_name):
+        """Return the password for account_name, or None if not found."""
         raise NotImplementedError
     def save_password(self, account_name, password):
+        """Save password for account_name. Return a bool indicating success."""
         raise NotImplementedError
 
 
-class SimplePasswordStorage(PasswordStorage):
-    def get_password(self, account_name):
-        passwd = gajim.config.get_per('accounts', account_name, 'password')
-        if passwd and (passwd.startswith('libsecret:') or passwd.startswith('winvault:')):
-            # this is not a real password, it’s stored through libsecret.
-            return None
-        else:
-            return passwd
-
-    def save_password(self, account_name, password):
-        gajim.config.set_per('accounts', account_name, 'password', password)
-        if account_name in gajim.connections:
-            gajim.connections[account_name].password = password
-
-
-class SecretPasswordStorage(PasswordStorage):
+class LibSecretPasswordStorage(PasswordStorage):
+    """Store password using libsecret"""
+    identifier = 'libsecret:'
     def __init__(self):
-        self.GAJIM_SCHEMA = Secret.Schema.new("org.gnome.keyring.NetworkPassword",
-            Secret.SchemaFlags.NONE,
+        gi.require_version('Secret', '1')
+        gir = __import__('gi.repository', globals(), locals(), ['Secret'], 0)
+        self.Secret = gir.Secret
+        self.GAJIM_SCHEMA = self.Secret.Schema.new(
+            "org.gnome.keyring.NetworkPassword",
+            self.Secret.SchemaFlags.NONE,
             {
-                'user': Secret.SchemaAttributeType.STRING,
-                'server':  Secret.SchemaAttributeType.STRING,
-                'protocol': Secret.SchemaAttributeType.STRING,
+                'user': self.Secret.SchemaAttributeType.STRING,
+                'server':  self.Secret.SchemaAttributeType.STRING,
+                'protocol': self.Secret.SchemaAttributeType.STRING,
             }
         )
 
     def get_password(self, account_name):
-        conf = gajim.config.get_per('accounts', account_name, 'password')
-        if conf is None:
-            return None
-        if not conf.startswith('libsecret:'):
-            password = conf
-            ## migrate the password over to keyring
-            try:
-                self.save_password(account_name, password, update=False)
-            except Exception:
-                ## no keyring daemon: in the future, stop using it
-                set_storage(SimplePasswordStorage())
-            return password
         server = gajim.config.get_per('accounts', account_name, 'hostname')
         user = gajim.config.get_per('accounts', account_name, 'name')
-        password = Secret.password_lookup_sync(self.GAJIM_SCHEMA, {'user': user,
-            'server': server, 'protocol': 'xmpp'}, None)
+        password = self.Secret.password_lookup_sync(self.GAJIM_SCHEMA,
+            {'user': user, 'server': server, 'protocol': 'xmpp'}, None)
         return password
 
     def save_password(self, account_name, password, update=True):
         server = gajim.config.get_per('accounts', account_name, 'hostname')
         user = gajim.config.get_per('accounts', account_name, 'name')
         display_name = _('XMPP account %s@%s') % (user, server)
-        if password is None:
-            password = str()
         attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
-        Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
-            Secret.COLLECTION_DEFAULT, display_name, password, None)
-        gajim.config.set_per('accounts', account_name, 'password',
-            'libsecret:')
-        if account_name in gajim.connections:
-            gajim.connections[account_name].password = password
+        return self.Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
+            self.Secret.COLLECTION_DEFAULT, display_name, password or '', None)
 
 
 class SecretWindowsPasswordStorage(PasswordStorage):
     """ Windows Keyring """
+    identifier = 'winvault:'
 
     def __init__(self):
         self.win_keyring = keyring.get_keyring()
@@ -118,53 +94,99 @@ class SecretWindowsPasswordStorage(PasswordStorage):
     def save_password(self, account_name, password):
         try:
             self.win_keyring.set_password('gajim', account_name, password)
-            gajim.config.set_per(
-                'accounts', account_name, 'password', 'winvault:')
+            return True
         except:
             log.exception('error:')
-            set_storage(SimplePasswordStorage())
-            storage.save_password(account_name, password)
+            return False
 
     def get_password(self, account_name):
         log.debug('getting password')
-        conf = gajim.config.get_per('accounts', account_name, 'password')
-        if conf is None:
-            return None
-        if not conf.startswith('winvault:'):
-            password = conf
-            # migrate the password over to keyring
-            self.save_password(account_name, password)
-            return password
         return self.win_keyring.get_password('gajim', account_name)
 
+class PasswordStorageManager(PasswordStorage):
+    """Access all the implemented password storage backends, knowing which ones
+    are available and which we prefer to use.
+    Also implements storing directly in gajim config (former
+    SimplePasswordStorage class)."""
 
-storage = None
-def get_storage():
-    global storage
-    if storage is None: # None is only in first time get_storage is called
-        global Secret
+    def __init__(self):
+        self.preferred_backend = None
+
+        self.libsecret = None
+        self.winsecret = None
+
+        self.connect_backends()
+        self.set_preferred_backend()
+
+    def connect_backends(self):
+        """Initialize backend connections, determining which ones are available.
+        """
+        # TODO: handle disappearing backends
+
         if gajim.config.get('use_keyring'):
-            try:
-                gi.require_version('Secret', '1')
-                gir = __import__('gi.repository', globals(), locals(),
-                    ['Secret'], 0)
-                Secret = gir.Secret
-            except (ValueError, AttributeError):
-                pass
-            try:
-                if os.name != 'nt':
-                    storage = SecretPasswordStorage()
-                else:
-                    storage = SecretWindowsPasswordStorage()
-            except Exception:
-                storage = SimplePasswordStorage()
-        else:
-            storage = SimplePasswordStorage()
-    return storage
+            if os.name == 'nt' and keyring:
+                self.winsecret = SecretWindowsPasswordStorage()
+            else:
+                try:
+                    self.libsecret = LibSecretPasswordStorage()
+                except (ValueError, AttributeError) as e:
+                    log.debug("Could not connect to libsecret: %s" % e)
 
-def set_storage(storage_):
-    global storage
-    storage = storage_
+    def get_password(self, account_name):
+        pw = gajim.config.get_per('accounts', account_name, 'password')
+        if not pw:
+            return pw
+        if pw.startswith(LibSecretPasswordStorage.identifier) and \
+        self.libsecret:
+            backend = self.libsecret
+        elif pw.startswith(SecretWindowsPasswordStorage.identifier) and \
+        self.winsecret:
+            backend = self.winsecret
+        else:
+            backend = None
+
+        if backend:
+            pw = backend.get_password(account_name)
+        if backend != self.preferred_backend:
+            # migrate password to preferred_backend
+            self.preferred_backend.save_password(account_name, pw)
+            # TODO: remove from old backend
+        return pw
+
+    def save_password(self, account_name, password):
+        if self.preferred_backend:
+            if self.preferred_backend.save_password(account_name, password):
+                gajim.config.set_per('accounts', account_name, 'password',
+                    self.preferred_backend.identifier)
+                if account_name in gajim.connections:
+                    gajim.connections[account_name].password = password
+                return True
+
+        gajim.config.set_per('accounts', account_name, 'password', password)
+        if account_name in gajim.connections:
+            gajim.connections[account_name].password = password
+        return True
+
+    def set_preferred_backend(self):
+        if self.libsecret:
+            self.preferred_backend = self.libsecret
+        elif self.winsecret:
+            self.preferred_backend = self.winsecret
+        else:
+            self.preferred_backend = None
+
+    def has_keyring(self):
+        """Is there a real password storage backend? Else, passwords are stored
+        plain in gajim config"""
+        return bool(self.preferred_backend)
+
+passwordStorageManager = None
+
+def get_storage():
+    global passwordStorageManager
+    if not passwordStorageManager:
+        passwordStorageManager = PasswordStorageManager()
+    return passwordStorageManager
 
 def get_password(account_name):
     return get_storage().get_password(account_name)
