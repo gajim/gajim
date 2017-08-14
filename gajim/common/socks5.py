@@ -205,8 +205,6 @@ class SocksQueue:
         connection failure cb. If there are some which are still not connected
         try to establish connection to one of them
         """
-        print(client)
-        print(streamhost)
         self.idlequeue.remove_timeout(client.fd)
         self.idlequeue.unplug_idle(client.fd)
         file_props = client.file_props
@@ -225,7 +223,7 @@ class SocksQueue:
                     host['state'] = 0
                     # FIXME: make the sender reconnect also
                     client = Socks5ReceiverClient(self.idlequeue, host,
-                        client.sid, file_props)
+                        host['sid'], file_props)
                     self.add_sockobj(client.account, client)
                     host['idx'] = client.queue_idx
             # we still have chances to connect
@@ -1033,7 +1031,6 @@ class Socks5Receiver(IdleObject):
         self.connect_timeout = 0
         self.connected = False
         self.pauses = 0
-        self.sid = sid
         self.file_props = file_props
         self.file_props.disconnect_cb = self.disconnect
         self.file_props.error = 0
