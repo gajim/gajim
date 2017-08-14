@@ -2156,6 +2156,9 @@ class AccountsWindow:
             gajim.interface.roster.setup_and_draw_roster()
             self.init_accounts()
             self.select_account(new_name)
+            gajim.app.remove_account_actions(old_name)
+            gajim.app.add_account_actions(new_name)
+            gui_menu_builder.build_accounts_menu()
 
         title = _('Rename Account')
         message = _('Enter a new name for account %s') % self.current_account
