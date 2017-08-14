@@ -145,10 +145,10 @@ class SocksQueue:
                 self.add_sockobj(account, socks5obj)
             else:
                 if 'candidate_id' in streamhost:
-                    log.debug('Trying to connect as sender to cid' + \
+                    log.debug('Trying to connect as sender to cid ' + \
                         streamhost['candidate_id'])
                 else:
-                    log.debug('Trying to connect as sender to jid' + \
+                    log.debug('Trying to connect as sender to jid ' + \
                         streamhost['jid'])
                 if file_props.sha_str:
                     idx = file_props.sha_str
@@ -1208,7 +1208,7 @@ class Socks5Client(Socks5):
         """
         result = 1
         buff = self.receive()
-        if buff == '':
+        if buff == b'':
             # end connection
             self.pollend()
             return
