@@ -181,7 +181,7 @@ class JingleTransportSocks5(JingleTransport):
 
     def _add_local_ips_as_candidates(self):
         if not gajim.config.get_per('accounts', self.connection.name,
-                                    'ft_send_local_ips'):
+        'ft_send_local_ips'):
             return
         if not self.connection:
             return
@@ -223,6 +223,49 @@ class JingleTransportSocks5(JingleTransport):
                     local_ip_cand.append(candidate)
         except socket.gaierror:
             pass # ignore address-related errors for getaddrinfo
+
+        try:
+            from netifaces import interfaces, ifaddresses, AF_INET, AF_INET6
+            for ifaceName in interfaces():
+                addresses = ifaddresses(ifaceName)
+                if AF_INET in addresses:
+                    for address in addresses[AF_INET]:
+                        addr = address['addr']
+                        if addr in hosts or addr.startswith('127.'):
+                            continue
+                        candidate = {
+                            'host': addr,
+                            'candidate_id': self.connection.connection.getAnID(),
+                            'port': port,
+                            'type': 'direct',
+                            'jid': self.ourjid,
+                            'priority': priority,
+                            'initiator': self.file_props.sender,
+                            'target': self.file_props.receiver
+                        }
+                        hosts.add(addr)
+                        local_ip_cand.append(candidate)
+                if AF_INET6 in addresses:
+                    for address in addresses[AF_INET6]:
+                        addr = address['addr']
+                        if addr in hosts or addr.startswith('::1') or \
+                        addr.count(':') != 7:
+                            continue
+                        candidate = {
+                            'host': addr,
+                            'candidate_id': self.connection.connection.getAnID(),
+                            'port': port,
+                            'type': 'direct',
+                            'jid': self.ourjid,
+                            'priority': priority,
+                            'initiator': self.file_props.sender,
+                            'target': self.file_props.receiver
+                        }
+                        hosts.add(addr)
+                        local_ip_cand.append(candidate)
+
+        except ImportError:
+            pass
 
         self._add_candidates(local_ip_cand)
 
