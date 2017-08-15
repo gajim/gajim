@@ -106,6 +106,18 @@ def add_image_to_button(button, icon_name):
     img.set_from_file(path_img)
     button.set_image(img)
 
+def get_image_button(icon_name, tooltip, toggle=False):
+    icon = get_icon_pixmap(icon_name)
+    image = Gtk.Image()
+    image.set_from_pixbuf(icon)
+    if toggle:
+        button = Gtk.ToggleButton()
+    else:
+        button = Gtk.Button()
+    button.set_tooltip_text(_(tooltip))
+    button.set_image(image)
+    return button
+
 GUI_DIR = os.path.join(gajim.DATA_DIR, 'gui')
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(GUI_DIR, file_name)

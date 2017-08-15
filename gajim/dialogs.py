@@ -3399,41 +3399,23 @@ class XMLConsoleWindow(Gtk.Window):
 
         self.actionbar = Gtk.ActionBar()
 
-        icon = gtkgui_helpers.get_icon_pixmap('edit-clear-all-symbolic')
-        image = Gtk.Image()
-        image.set_from_pixbuf(icon)
-        button = Gtk.Button()
-        button.set_tooltip_text(_('Clear'))
+        button = gtkgui_helpers.get_image_button(
+            'edit-clear-all-symbolic', 'Clear')
         button.connect('clicked', self.on_clear)
-        button.set_image(image)
         self.actionbar.pack_start(button)
 
-        icon = gtkgui_helpers.get_icon_pixmap('applications-system-symbolic')
-        image = Gtk.Image()
-        image.set_from_pixbuf(icon)
-        button = Gtk.Button()
-        button.set_tooltip_text(_('Filter'))
+        button = gtkgui_helpers.get_image_button(
+            'applications-system-symbolic', 'Filter')
         button.connect('clicked', self.on_filter_options)
-        button.set_image(image)
         self.actionbar.pack_start(button)
 
-        icon = gtkgui_helpers.get_icon_pixmap('document-edit-symbolic')
-        image = Gtk.Image()
-        image.set_from_pixbuf(icon)
-        button = Gtk.ToggleButton()
-        button.set_tooltip_text(_('XML Input'))
-        button.set_active(False)
+        button = gtkgui_helpers.get_image_button(
+            'document-edit-symbolic', 'XML Input', toggle=True)
         button.connect('toggled', self.on_input)
-        button.set_image(image)
         self.actionbar.pack_start(button)
 
-        icon = gtkgui_helpers.get_icon_pixmap('emblem-ok-symbolic')
-        image = Gtk.Image()
-        image.set_from_pixbuf(icon)
-        button = Gtk.Button()
-        button.set_tooltip_text(_('Send'))
+        button = gtkgui_helpers.get_image_button('emblem-ok-symbolic', 'Send')
         button.connect('clicked', self.on_send)
-        button.set_image(image)
         self.actionbar.pack_end(button)
 
         listbox = Gtk.ListBox()
