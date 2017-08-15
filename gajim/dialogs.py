@@ -3389,7 +3389,6 @@ class XMLConsoleWindow(Gtk.Window):
         self.scrolled_input = Gtk.ScrolledWindow()
         self.scrolled_input.set_size_request(-1, 150)
         self.scrolled_input.add(self.input)
-        self.scrolled_input.set_no_show_all(True)
 
         self.paned = Gtk.VPaned()
         self.paned.set_vexpand(True)
@@ -3455,6 +3454,8 @@ class XMLConsoleWindow(Gtk.Window):
 
         self.create_tags()
         self.show_all()
+
+        self.scrolled_input.hide()
 
         gajim.ged.register_event_handler('stanza-received', ged.GUI1,
             self._nec_stanza_received)
