@@ -3158,9 +3158,9 @@ class RemoveAccountWindow:
         app.app.remove_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
         if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].init_accounts()
-            app.interface.instances['accounts'].init_account()
+            app.interface.instances['accounts'].remove_account(self.account)
         self.window.destroy()
+
 
 #---------- ManageBookmarksWindow class -------------#
 class ManageBookmarksWindow:
@@ -3733,7 +3733,7 @@ class AccountCreationWizardWindow:
 
             self.account = server
             i = 1
-            while self.account in app.connections:
+            while self.account in app.config.get_per('accounts'):
                 self.account = server + str(i)
                 i += 1
 
@@ -3754,7 +3754,7 @@ class AccountCreationWizardWindow:
                 return
             self.account = server
             i = 1
-            while self.account in app.connections:
+            while self.account in app.config.get_per('accounts'):
                 self.account = server + str(i)
                 i += 1
 
@@ -3982,7 +3982,7 @@ class AccountCreationWizardWindow:
 
     def on_advanced_button_clicked(self, widget):
         if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].window.present()
+            app.interface.instances['accounts'].present()
         else:
             app.interface.instances['accounts'] = AccountsWindow()
         app.interface.instances['accounts'].select_account(self.account)
@@ -4083,9 +4083,11 @@ class AccountCreationWizardWindow:
         app.gajim_optional_features[self.account] = []
         app.caps_hash[self.account] = ''
         helpers.update_optional_features(self.account)
+        # action must be added before account window is updated
+        app.app.add_account_actions(self.account)
         # refresh accounts window
         if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].init_accounts()
+            app.interface.instances['accounts'].add_account(self.account)
         # refresh roster
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists
@@ -4093,7 +4095,6 @@ class AccountCreationWizardWindow:
         else:
             app.interface.roster.regroup = False
         app.interface.roster.setup_and_draw_roster()
-        app.app.add_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
 
 class ManagePEPServicesWindow:

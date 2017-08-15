@@ -1,3 +1,34 @@
+from enum import IntEnum, unique
+from collections import namedtuple
+
+Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
+Option.__new__.__defaults__ = (None,) * len(Option._fields)
+
+@unique
+class OptionKind(IntEnum):
+    ENTRY = 0
+    SWITCH = 1
+    SPIN = 2
+    ACTION = 3
+    LOGIN = 4
+    DIALOG = 5
+    CALLBACK = 6
+    PROXY = 7
+    HOSTNAME = 8
+    PRIORITY = 9
+    FILECHOOSER = 10
+    CHANGEPASSWORD = 11
+    GPG = 12
+
+@unique
+class OptionType(IntEnum):
+    ACCOUNT_CONFIG = 0
+    CONFIG = 1
+    BOOL = 2
+    ACTION = 3
+    DIALOG = 4
+
+
 THANKS = u"""\
 Alexander Futász
 Alexander V. Butenko
