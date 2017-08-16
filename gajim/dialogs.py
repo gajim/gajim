@@ -3352,19 +3352,6 @@ class XMLConsoleWindow(Gtk.Window):
     def __init__(self, account):
         Gtk.Window.__init__(self)
         self.account = account
-        self.set_default_size(600, 600)
-        self.connect("destroy", self.on_destroy)
-
-        headerbar = Gtk.HeaderBar()
-        headerbar.set_title(_('XML Console'))
-        headerbar.set_show_close_button(True)
-        self.set_titlebar(headerbar)
-
-        switch = Gtk.Switch()
-        switch.set_active(True)
-        switch.connect("notify::active", self.on_enable)
-        headerbar.pack_start(switch)
-
         self.enabled = True
         self.presence = True
         self.message = True
@@ -3373,30 +3360,17 @@ class XMLConsoleWindow(Gtk.Window):
         self.incoming = True
         self.outgoing = True
 
-        self.textview = Gtk.TextView()
-        self.textview.set_size_request(-1, 400)
-        self.textview.set_editable(False)
-        self.textview.set_cursor_visible(False)
-        self.textview.set_hexpand(True)
+        glade_objects = ['textview', 'input', 'scrolled_input', 'headerbar',
+                         'scrolled', 'actionbar', 'paned', 'box', 'menubutton']
+        self.builder = gtkgui_helpers.get_gtk_builder('xml_console_window.ui')
+        for obj in glade_objects:
+            setattr(self, obj, self.builder.get_object(obj))
 
-        self.scrolled = Gtk.ScrolledWindow()
-        self.scrolled.add(self.textview)
+        self.set_titlebar(self.headerbar)
+        self.set_default_size(600, 600)
+        self.add(self.box)
 
-        self.input = Gtk.TextView()
-        self.input.show()
-        self.input.set_vexpand(True)
-
-        self.scrolled_input = Gtk.ScrolledWindow()
-        self.scrolled_input.set_size_request(-1, 150)
-        self.scrolled_input.add(self.input)
-
-        self.paned = Gtk.VPaned()
-        self.paned.set_vexpand(True)
-        self.paned.pack1(self.scrolled, True, False)
-        self.paned.pack2(self.scrolled_input, False, False)
         self.paned.set_position(self.paned.get_property('max-position'))
-
-        self.actionbar = Gtk.ActionBar()
 
         button = gtkgui_helpers.get_image_button(
             'edit-clear-all-symbolic', 'Clear')
@@ -3417,45 +3391,17 @@ class XMLConsoleWindow(Gtk.Window):
         button.connect('clicked', self.on_send)
         self.actionbar.pack_end(button)
 
-        listbox = Gtk.ListBox()
-        context = listbox.get_style_context()
-        context.add_class('PopoverButtonListbox')
-
-        label = Gtk.Label(label='Message')
-        listbox.add(label)
-
-        label = Gtk.Label(label='Presence')
-        listbox.add(label)
-
-        label = Gtk.Label(label='Iq')
-        listbox.add(label)
-        listbox.show_all()
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        listbox.connect('row-activated', self.on_row_activated)
-
-        popover = Gtk.Popover()
-        popover.add(listbox)
-
-        self.menubutton = Gtk.MenuButton()
-        self.menubutton.set_direction(Gtk.ArrowType.UP)
-        self.menubutton.set_popover(popover)
-        self.menubutton.set_tooltip_text(_('Presets'))
-        self.menubutton.set_no_show_all(True)
-
         self.actionbar.pack_start(self.menubutton)
-
-        box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
-        box.add(self.paned)
-        box.add(self.actionbar)
-
-        self.add(box)
-
-        self.connect('key_press_event', self.on_key_press_event)
 
         self.create_tags()
         self.show_all()
 
         self.scrolled_input.hide()
+        self.menubutton.hide()
+
+        self.connect("destroy", self.on_destroy)
+        self.connect('key_press_event', self.on_key_press_event)
+        self.builder.connect_signals(self)
 
         gajim.ged.register_event_handler('stanza-received', ged.GUI1,
             self._nec_stanza_received)

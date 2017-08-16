@@ -37,6 +37,7 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 #OptionsDialog list > row.activatable:active { box-shadow: none; }
 
 /* Generic Popover Menu with Buttons */
-.PopoverButtonListbox { margin-top: 10px; margin-bottom: 10px; }
-.PopoverButtonListbox > row { padding: 10px 20px 10px 20px; }
-.PopoverButtonListbox row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
+.PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }
+.PopoverButtonListbox > list { margin-top: 10px; margin-bottom: 10px; }
+.PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
+.PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
