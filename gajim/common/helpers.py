@@ -555,7 +555,7 @@ def build_command(executable, parameter):
     return command
 
 def get_file_path_from_dnd_dropped_uri(uri):
-    path = urllib.parse.unquote(uri.decode('utf-8')) # escape special chars
+    path = urllib.parse.unquote(uri) # escape special chars
     path = path.strip('\r\n\x00') # remove \r\n and NULL
     # get the path to file
     if re.match('^file:///[a-zA-Z]:/', path): # windows
