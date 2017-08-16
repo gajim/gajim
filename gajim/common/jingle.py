@@ -171,6 +171,7 @@ class ConnectionJingle(object):
                                file_props=file_props,
                                use_security=use_security,
                                senders=senders)
+        file_props.transport_sid = transport.sid
         file_props.algo = self.__hash_support(contact)
         jingle.add_content('file' + helpers.get_random_string_16(), c)
         jingle.start_session()

@@ -102,21 +102,21 @@ class SocksQueue:
         if file_props.streamhost_used == True:
             for proxy in file_props.proxyhosts:
                 if proxy['host'] == streamhost['host']:
-                    self.on_success[file_props.sid](proxy)
+                    self.on_success[file_props.transport_sid](proxy)
                     return 1
             return 0
         for host in file_props.streamhosts:
             if streamhost['state'] == 1:
                 return 0
         streamhost['state'] = 1
-        self.on_success[file_props.sid](streamhost)
+        self.on_success[file_props.transport_sid](streamhost)
         return 1
 
-    def connect_to_hosts(self, account, sid, on_success=None, on_failure=None,
-    fingerprint=None, receiving=True):
-        self.on_success[sid] = on_success
-        self.on_failure[sid] = on_failure
-        file_props = FilesProp.getFileProp(account, sid)
+    def connect_to_hosts(self, account, transport_sid, on_success=None,
+    on_failure=None, fingerprint=None, receiving=True):
+        self.on_success[transport_sid] = on_success
+        self.on_failure[transport_sid] = on_failure
+        file_props = FilesProp.getFilePropByTransportSid(account, transport_sid)
         file_props.failure_cb = on_failure
         streamhosts_to_test = []
         # Remove local IPs to not connect to ourself
@@ -125,7 +125,7 @@ class SocksQueue:
                 continue
             streamhosts_to_test.append(streamhost)
         if not streamhosts_to_test:
-            on_failure(file_props.sid)
+            on_failure(file_props.transport_sid)
         # add streamhosts to the queue
         for streamhost in streamhosts_to_test:
             if 'type' in streamhost and streamhost['type'] == 'proxy':
@@ -141,7 +141,7 @@ class SocksQueue:
                         streamhost['jid'])
                 file_props.type_ = 'r'
                 socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost,
-                    sid, file_props, fingerprint=fp)
+                    transport_sid, file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
                 if 'candidate_id' in streamhost:
@@ -223,7 +223,7 @@ class SocksQueue:
                     host['state'] = 0
                     # FIXME: make the sender reconnect also
                     client = Socks5ReceiverClient(self.idlequeue, host,
-                        host['sid'], file_props)
+                        client.sid, file_props)
                     self.add_sockobj(client.account, client)
                     host['idx'] = client.queue_idx
             # we still have chances to connect
@@ -256,7 +256,7 @@ class SocksQueue:
         self.readers = {}
         # failure_cb exists - this means that it has never been called
         if file_props.failure_cb:
-            file_props.failure_cb(file_props.sid)
+            file_props.failure_cb(file_props.transport_sid)
             file_props.failure_cb = None
 
     def add_sockobj(self, account, sockobj):
@@ -284,7 +284,7 @@ class SocksQueue:
         '''
         Adds the sockobj to the current list of sockobjects
         '''
-        keys = (file_props.sid, file_props.name, hash_)
+        keys = (file_props.transport_sid, file_props.name, hash_)
         sockobjects[keys] = sockobj
 
     def result_sha(self, sha_str, idx):
@@ -320,13 +320,7 @@ class SocksQueue:
 
     def send_file(self, file_props, account, mode):
         for key in self.senders.keys():
-            if self.senders == {}:
-                # Python acts very weird with this. When there is no keys
-                # in the dictionary It says that it has a key.
-                # Maybe it is my machine. Without this there is a KeyError
-                # traceback.
-                return
-            if file_props.name in key and file_props.sid in key \
+            if file_props.name in key and file_props.transport_sid in key \
             and self.senders[key].mode == mode:
                 log.info('socks5: sending file')
                 sender = self.senders[key]
@@ -364,8 +358,8 @@ class SocksQueue:
             sh['initiator'] = None
             sh['target'] = None
             sockobj =  Socks5ReceiverServer(idlequeue=self.idlequeue,
-                streamhost=sh,sid=None, file_props=listener.file_props,
-                fingerprint=None)
+                streamhost=sh,transport_sid=None,
+                file_props=listener.file_props, fingerprint=None)
 
             self._add(sockobj, self.readers, listener.file_props, sock_hash)
             sockobj.set_sock(sock[0])
@@ -440,19 +434,19 @@ class SocksQueue:
                 self.listener = None
                 self.connected -= 1
 
-    def remove_by_mode(self, sid, mode, do_disconnect=True):
+    def remove_by_mode(self, transport_sid, mode, do_disconnect=True):
         for (key, sock) in self.senders.copy().items():
-            if key[0] == sid and sock.mode == mode:
+            if key[0] == transport_sid and sock.mode == mode:
                 self.remove_sender_by_key(key)
         for (key, sock) in self.readers.copy().items():
-            if key[0] == sid and sock.mode == mode:
+            if key[0] == transport_sid and sock.mode == mode:
                 self.remove_receiver_by_key(key)
 
-    def remove_server(self, sid, do_disconnect=True):
-        self.remove_by_mode(sid, 'server')
+    def remove_server(self, transport_sid, do_disconnect=True):
+        self.remove_by_mode(transport_sid, 'server')
 
-    def remove_client(self, sid, do_disconnect=True):
-        self.remove_by_mode(sid, 'client')
+    def remove_client(self, transport_sid, do_disconnect=True):
+        self.remove_by_mode(transport_sid, 'client')
 
 class Socks5(object):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
@@ -838,15 +832,10 @@ class Socks5(object):
         """
         Parse the initial message and create a list of auth mechanisms
         """
-        auth_mechanisms = []
-        try:
-            num_auth = struct.unpack('!xB', buff[:2])[0]
-            for i in range(num_auth):
-                mechanism, = struct.unpack('!B', buff[1 + i])
-                auth_mechanisms.append(mechanism)
-        except Exception:
+        if buff[0] != 5:
             return None
-        return auth_mechanisms
+        num_auth = buff[1]
+        return list(buff[2:2+num_auth])
 
     def _get_auth_response(self):
         """
@@ -882,7 +871,7 @@ class Socks5(object):
                 host, = '.'.join(str(s) for s in host_arr)
                 host_len = len(host)
             elif host_type == 0x03:
-                host_len,  = struct.unpack('!B', buff[4])
+                host_len = buff[4]
                 host, = struct.unpack('!%ds' % host_len, buff[5:5 + host_len])
             portlen = len(buff[host_len + 5:])
             if portlen == 1:
@@ -1031,6 +1020,7 @@ class Socks5Receiver(IdleObject):
         self.connect_timeout = 0
         self.connected = False
         self.pauses = 0
+        self.sid = sid
         self.file_props = file_props
         self.file_props.disconnect_cb = self.disconnect
         self.file_props.error = 0
@@ -1349,7 +1339,7 @@ class Socks5SenderClient(Socks5Client, Socks5Sender):
     port=None, fingerprint = None, connected=True, file_props=None,
     initiator=None, target=None):
         Socks5Client.__init__(self, idlequeue, host, port, initiator, target,
-            file_props.sid)
+            file_props.transport_sid)
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent,_sock,
             host, port, fingerprint , connected, file_props)
 
@@ -1359,30 +1349,30 @@ class Socks5SenderServer(Socks5Server, Socks5Sender):
     def __init__(self, idlequeue, sock_hash, parent,_sock, host=None,
     port=None, fingerprint = None, connected=True, file_props=None):
         Socks5Server.__init__(self, idlequeue, host, port, None, None,
-            file_props.sid)
+            file_props.transport_sid)
         Socks5Sender.__init__(self,idlequeue, sock_hash, parent, _sock,
             host, port, fingerprint , connected, file_props)
 
 
 class Socks5ReceiverClient(Socks5Client, Socks5Receiver):
-    def __init__(self, idlequeue, streamhost, sid, file_props=None,
+    def __init__(self, idlequeue, streamhost, transport_sid, file_props=None,
     fingerprint=None):
         Socks5Client.__init__(self, idlequeue, streamhost['host'],
             int(streamhost['port']), streamhost['initiator'],
-            streamhost['target'], sid)
-        Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
-            fingerprint)
+            streamhost['target'], transport_sid)
+        Socks5Receiver.__init__(self, idlequeue, streamhost, transport_sid,
+            file_props, fingerprint)
 
 
 class Socks5ReceiverServer(Socks5Server, Socks5Receiver):
 
-    def __init__(self, idlequeue, streamhost, sid, file_props=None,
+    def __init__(self, idlequeue, streamhost, transport_sid, file_props=None,
     fingerprint=None):
         Socks5Server.__init__(self, idlequeue, streamhost['host'],
             int(streamhost['port']), streamhost['initiator'],
-            streamhost['target'], sid)
-        Socks5Receiver.__init__(self, idlequeue, streamhost, sid, file_props,
-            fingerprint)
+            streamhost['target'], transport_sid)
+        Socks5Receiver.__init__(self, idlequeue, streamhost, transport_sid,
+            file_props, fingerprint)
 
 
 class Socks5Listener(IdleObject):

@@ -415,7 +415,6 @@ class JingleSession:
                     self.contents[(creator, name)].state = State.TRANSPORT_REPLACE
                     self.__ack(stanza, jingle, error, action)
                     self.__session_accept()
-                    self.contents[(creator, name)].start_IBB_transfer()
                 else:
                     stanza, jingle = self.__make_jingle('transport-reject')
                     content = jingle.setTag('content', attrs={'creator': creator,

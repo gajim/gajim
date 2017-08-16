@@ -365,6 +365,7 @@ class FileTransfersWindow:
             self.add_transfer(account, contact, file_props)
         else:
             log.info("contact does not support jingle file transfer")
+            file_props.transport_sid = file_props.sid
             gajim.connections[account].send_file_request(file_props)
             self.add_transfer(account, contact, file_props)
         return True
@@ -661,7 +662,7 @@ class FileTransfersWindow:
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
                 if file_props.type_ == 'r' and  \
-                      file_props.session_type == 'jingle' and file_props.hash_:
+                file_props.session_type == 'jingle' and file_props.hash_:
                     # Show that we are computing the hash
                     self.set_status(file_props, 'computing')
                 else:

@@ -53,10 +53,8 @@ class StateInitialized(JingleFileTransferStates):
                 fingerprint = 'client'
             # Connect to the candidate host, on success call on_connect method
             gajim.socks5queue.connect_to_hosts(self.jft.session.connection.name,
-                                               self.jft.file_props.sid,
-                                               self.jft.on_connect,
-                                               self.jft._on_connect_error,
-                                               fingerprint=fingerprint)
+                self.jft.file_props.transport_sid, self.jft.on_connect,
+                self.jft._on_connect_error, fingerprint=fingerprint)
 
 
 class StateCandSent(JingleFileTransferStates):
@@ -156,11 +154,11 @@ class StateTransfering(JingleFileTransferStates):
         if self.jft.is_our_candidate_used():
             mode = 'client'
             streamhost_used = self.jft.nominated_cand['our-cand']
-            gajim.socks5queue.remove_server(self.jft.file_props.sid)
+            gajim.socks5queue.remove_server(self.jft.file_props.transport_sid)
         else:
             mode = 'server'
             streamhost_used = self.jft.nominated_cand['peer-cand']
-            gajim.socks5queue.remove_client(self.jft.file_props.sid)
+            gajim.socks5queue.remove_client(self.jft.file_props.transport_sid)
 #            our_cand = self.jft.nominated_cand['our-cand']
 #            gajim.socks5queue.remove_receiver(our_cand['idx'])
         if streamhost_used['type'] == 'proxy':
@@ -187,7 +185,7 @@ class StateTransfering(JingleFileTransferStates):
             else:
                 raise TypeError
             self.jft.file_props.streamhost_used = True
-            streamhost_used['sid'] = self.jft.file_props.sid
+            streamhost_used['sid'] = self.jft.file_props.transport_sid
             self.jft.file_props.streamhosts = []
             self.jft.file_props.streamhosts.append(streamhost_used)
             self.jft.file_props.proxyhosts = []
@@ -203,9 +201,8 @@ class StateTransfering(JingleFileTransferStates):
                                              file_props=self.jft.file_props)
             else:
                 sockobj = Socks5ReceiverClient(gajim.idlequeue, streamhost_used,
-                                               sid=self.jft.file_props.sid,
-                                               file_props=self.jft.file_props,
-                                               fingerprint=None)
+                    transport_sid=self.jft.file_props.transport_sid,
+                    file_props=self.jft.file_props, fingerprint=None)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used
             gajim.socks5queue.add_sockobj(self.jft.session.connection.name,
@@ -214,8 +211,8 @@ class StateTransfering(JingleFileTransferStates):
             # If we offered the nominated candidate used, we activate
             # the proxy
             if not self.jft.is_our_candidate_used():
-                gajim.socks5queue.on_success[self.jft.file_props.sid] = \
-                self.jft.transport._on_proxy_auth_ok
+                gajim.socks5queue.on_success[self.jft.file_props.transport_sid]\
+                    = self.jft.transport._on_proxy_auth_ok
             # TODO: add on failure
         else:
             jid = gajim.get_jid_without_resource(self.jft.session.ourjid)

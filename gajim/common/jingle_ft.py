@@ -237,8 +237,9 @@ class JingleFileTransfer(JingleContent):
         if self.use_security:
             fingerprint = 'client'
         if self.transport.type_ == TransportType.SOCKS5:
+            sid = self.file_props.transport_sid
             gajim.socks5queue.connect_to_hosts(self.session.connection.name,
-                                               self.file_props.sid,
+                                               sid,
                                                self.on_connect,
                                                self._on_connect_error,
                                                fingerprint=fingerprint,
@@ -286,7 +287,7 @@ class JingleFileTransfer(JingleContent):
                     self.__state_changed(State.TRANSFERING)
                     raise nbxmpp.NodeProcessed
             else:
-                args = {'cand_error' : True}
+                args = {'candError' : True}
                 self.__state_changed(State.CAND_RECEIVED, args)
             return
         if cand_used:

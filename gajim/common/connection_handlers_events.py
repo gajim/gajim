@@ -2328,6 +2328,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             si = self.stanza.getTag('si')
             self.file_props = FilesProp.getNewFileProp(self.conn.name,
                 si.getAttr('id'))
+            self.file_props.transport_sid = self.file_props.sid
             profile = si.getAttr('profile')
             if profile != nbxmpp.NS_FILE:
                 self.conn.send_file_rejection(self.file_props, code='400',

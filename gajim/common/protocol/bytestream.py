@@ -678,7 +678,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             return
         frm = self._ft_get_from(iq_obj)
         id_ = real_id[3:]
-        file_props = FilesProp.getFilePropBySid(id_)
+        file_props = FilesProp.getFilePropByTransportSid(self.name, id_)
         if file_props.streamhost_used:
             for host in file_props.proxyhosts:
                 if host['initiator'] == frm and 'idx' in host:
