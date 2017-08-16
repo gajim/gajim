@@ -159,8 +159,7 @@ class StateTransfering(JingleFileTransferStates):
             mode = 'server'
             streamhost_used = self.jft.nominated_cand['peer-cand']
             gajim.socks5queue.remove_client(self.jft.file_props.transport_sid)
-#            our_cand = self.jft.nominated_cand['our-cand']
-#            gajim.socks5queue.remove_receiver(our_cand['idx'])
+            gajim.socks5queue.remove_other_servers(streamhost_used['host'])
         if streamhost_used['type'] == 'proxy':
             self.jft.file_props.is_a_proxy = True
             if self.jft.file_props.type_ == 's' and self.jft.weinitiate:

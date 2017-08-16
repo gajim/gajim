@@ -212,8 +212,8 @@ class FileTransfersWindow:
         sectext += recipient
         if file_props.type_ == 'r':
             sectext += '\n\t' + _('Saved in: %s') % file_path
-        dialog = dialogs.HigDialog(None, Gtk.MessageType.INFO, Gtk.ButtonsType.NONE,
-                        _('File transfer completed'), sectext)
+        dialog = dialogs.HigDialog(gajim.interface.roster.window, Gtk.MessageType.INFO,
+            Gtk.ButtonsType.NONE, _('File transfer completed'), sectext)
         if file_props.type_ == 'r':
             button = Gtk.Button.new_with_mnemonic(_('Open _Containing Folder'))
             button.connect('clicked', on_open, file_props)

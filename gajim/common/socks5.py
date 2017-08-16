@@ -398,12 +398,11 @@ class SocksQueue:
         sender = self.senders[key]
         if do_disconnect:
             sender.disconnect()
-        else:
-            self.idlequeue.unplug_idle(sender.fd)
-            self.idlequeue.remove_timeout(sender.fd)
-            del(self.senders[key])
-            if self.connected > 0:
-                self.connected -= 1
+        self.idlequeue.unplug_idle(sender.fd)
+        self.idlequeue.remove_timeout(sender.fd)
+        del(self.senders[key])
+        if self.connected > 0:
+            self.connected -= 1
 
     def remove_receiver(self, idx, do_disconnect=True, remove_all=False):
         """
@@ -447,6 +446,11 @@ class SocksQueue:
 
     def remove_client(self, transport_sid, do_disconnect=True):
         self.remove_by_mode(transport_sid, 'client')
+
+    def remove_other_servers(self, host_to_keep):
+        for (key, sock) in self.senders.copy().items():
+            if sock.host != host_to_keep and sock.mode == 'server':
+                self.remove_sender_by_key(key)
 
 class Socks5(object):
     def __init__(self, idlequeue, host, port, initiator, target, sid):
