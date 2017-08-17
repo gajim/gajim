@@ -1722,10 +1722,10 @@ class GroupchatControl(ChatControlBase):
                         s = _('%(nick)s is now known as %(new_nick)s') % {
                             'nick': nick, 'new_nick': obj.new_nick}
                     tv = self.conv_textview
-                    if obj.nick in tv.last_received_message_marks:
-                        tv.last_received_message_marks[obj.new_nick] = \
-                            tv.last_received_message_marks[obj.nick]
-                        del tv.last_received_message_marks[obj.nick]
+                    if obj.nick in tv.last_received_message_id:
+                        tv.last_received_message_id[obj.new_nick] = \
+                            tv.last_received_message_id[obj.nick]
+                        del tv.last_received_message_id[obj.nick]
                     if obj.nick in self.last_received_txt:
                         self.last_received_txt[obj.new_nick] = \
                             self.last_received_txt[obj.nick]
