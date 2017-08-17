@@ -153,6 +153,10 @@ class Config:
             'gc-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
             'gc-msgwin-width': [opt_int, 600],
             'gc-msgwin-height': [opt_int, 440],
+            'pm-msgwin-x-position': [opt_int, -1], # Default is to let the window manager decide
+            'pm-msgwin-y-position': [opt_int, -1], # Default is to let the window manager decide
+            'pm-msgwin-width': [opt_int, 480],
+            'pm-msgwin-height': [opt_int, 440],
             'single-msg-x-position': [opt_int, 0],
             'single-msg-y-position': [opt_int, 0],
             'single-msg-width': [opt_int, 400],

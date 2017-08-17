@@ -1019,8 +1019,6 @@ class MessageWindowMgr(GObject.GObject):
             size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
                     gajim.config.get_per('accounts', acct, 'msgwin-height'))
         elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
-            if type_ == message_control.TYPE_PM:
-                type_ = message_control.TYPE_CHAT
             opt_width = type_ + '-msgwin-width'
             opt_height = type_ + '-msgwin-height'
             size = (gajim.config.get(opt_width), gajim.config.get(opt_height))
