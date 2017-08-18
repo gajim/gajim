@@ -416,7 +416,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def add_window_actions(self):
         action = Gio.SimpleAction.new_stateful(
-            "%s-encryptiongroup" % self.contact.jid,
+            "set-encryption-%s" % self.control_id,
             GLib.VariantType.new("s"),
             GLib.Variant("s", self.encryption or 'disabled'))
         action.connect("change-state", self.change_encryption)

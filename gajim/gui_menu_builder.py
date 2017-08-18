@@ -752,11 +752,10 @@ def build_bookmark_menu(account):
     menu.insert_submenu(1, label, bookmark_menu)
 
 
-def get_encryption_menu(contact, type_id):
+def get_encryption_menu(control_id, type_id):
     menu = Gio.Menu()
     menu.append(
-        'Disabled', 'win.{}-encryptiongroup::{}'.format(contact.jid,
-                                                        'disabled'))
+        'Disabled', 'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
     for name, plugin in gajim.plugin_manager.encryption_plugins.items():
         if type_id == 'gc':
             if not hasattr(plugin, 'allow_groupchat'):
@@ -764,8 +763,8 @@ def get_encryption_menu(contact, type_id):
         if type_id == 'pm':
             if not hasattr(plugin, 'allow_privatchat'):
                 continue
-        menu_action = 'win.{}-encryptiongroup::{}'.format(
-            contact.jid, name)
+        menu_action = 'win.set-encryption-{}::{}'.format(
+            control_id, name)
         menu.append(name, menu_action)
     if menu.get_n_items() == 1:
         return None

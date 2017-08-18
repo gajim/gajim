@@ -27,6 +27,7 @@
 ##
 
 import gtkgui_helpers
+import uuid
 
 from common import gajim
 from common import helpers
@@ -58,7 +59,9 @@ class MessageControl(object):
         self.account = account
         self.hide_chat_buttons = False
         self.resource = resource
-
+        # control_id is a unique id for the control,
+        # its used as action name for actions that belong to a control
+        self.control_id = str(uuid.uuid4())
         self.session = None
 
         gajim.last_message_time[self.account][self.get_full_jid()] = 0
