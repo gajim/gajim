@@ -221,7 +221,7 @@ import logging
 log = logging.getLogger('gajim.c.pep')
 
 import nbxmpp
-from common import gajim
+from gajim.common import app
 
 
 class AbstractPEP(object):
@@ -242,7 +242,7 @@ class AbstractPEP(object):
         self._pep_specific_data, self._retracted = self._extract_info(items)
 
         self._update_contacts(jid, account)
-        if jid == gajim.get_jid_from_account(account):
+        if jid == app.get_jid_from_account(account):
             self._update_account(account)
 
     def _extract_info(self, items):
@@ -250,7 +250,7 @@ class AbstractPEP(object):
         raise NotImplementedError
 
     def _update_contacts(self, jid, account):
-        for contact in gajim.contacts.get_contacts(account, jid):
+        for contact in app.contacts.get_contacts(account, jid):
             if self._retracted:
                 if self.type_ in contact.pep:
                     del contact.pep[self.type_]
@@ -258,7 +258,7 @@ class AbstractPEP(object):
                 contact.pep[self.type_] = self
 
     def _update_account(self, account):
-        acc = gajim.connections[account]
+        acc = app.connections[account]
         if self._retracted:
             if self.type_ in acc.pep:
                 del acc.pep[self.type_]
@@ -417,14 +417,14 @@ class UserNicknamePEP(AbstractPEP):
 
     def _update_contacts(self, jid, account):
         nick = '' if self._retracted else self._pep_specific_data
-        for contact in gajim.contacts.get_contacts(account, jid):
+        for contact in app.contacts.get_contacts(account, jid):
             contact.contact_name = nick
 
     def _update_account(self, account):
         if self._retracted:
-            gajim.nicks[account] = gajim.config.get_per('accounts', account, 'name')
+            app.nicks[account] = app.config.get_per('accounts', account, 'name')
         else:
-            gajim.nicks[account] = self._pep_specific_data
+            app.nicks[account] = self._pep_specific_data
 
 
 class UserLocationPEP(AbstractPEP):
@@ -450,7 +450,7 @@ class UserLocationPEP(AbstractPEP):
 
     def _update_account(self, account):
         AbstractPEP._update_account(self, account)
-        con = gajim.connections[account].location_info = \
+        con = app.connections[account].location_info = \
                 self._pep_specific_data
 
     def asMarkupText(self):

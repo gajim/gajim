@@ -25,9 +25,9 @@
 from gi.repository import Gdk
 from gi.repository import GLib
 
-import gtkgui_helpers
-from common import helpers
-from common import i18n
+from gajim import gtkgui_helpers
+from gajim.common import helpers
+from gajim.common import i18n
 
 class AtomWindow:
     window = None

@@ -40,7 +40,7 @@ import types
 import gobject
 
 
-from common import dbus_support
+from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
     if dbus_support:
@@ -675,14 +675,14 @@ if dbus_support.supported:
                 else:
                     gajim.interface.join_gc_room(account, room_jid, nick, password)
 
-from common import gajim
-from common import helpers
+from gajim.common import app
+from gajim.common import helpers
 from time import time
-from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
 
-from plugins import GajimPlugin
-from plugins.helpers import log_calls, log
-from common import ged
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log_calls, log
+from gajim.common import ged
 
 class DBusPlugin(GajimPlugin):
 

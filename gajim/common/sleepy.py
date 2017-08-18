@@ -21,7 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim
+from gajim.common import app
 import os
 
 
@@ -49,10 +49,10 @@ try:
         CloseDesktop = ctypes.windll.user32.CloseDesktop
         SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
     else: # unix
-        from common import idle
+        from gajim.common import idle
         idle.xss_available
 except Exception:
-    gajim.log.debug('Unable to load idle module')
+    app.log.debug('Unable to load idle module')
     SUPPORTED = False
 
 class SleepyWindows:

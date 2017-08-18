@@ -20,15 +20,15 @@
 
 from gi.repository import Gtk, Gio, GLib
 import os
-import gtkgui_helpers
-import message_control
+from gajim import gtkgui_helpers
+from gajim import message_control
 
-from common import gajim
-from common import helpers
-from common import i18n
+from gajim.common import app
+from gajim.common import helpers
+from gajim.common import i18n
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
-from gtkgui_helpers import get_action
+from gajim.gtkgui_helpers import get_action
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):
@@ -36,12 +36,12 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     Build a submenu with contact's resources. room_jid and room_account are for
     action self.on_invite_to_room
     """
-    roster = gajim.interface.roster
+    roster = app.interface.roster
     sub_menu = Gtk.Menu()
 
-    iconset = gajim.config.get('iconset')
+    iconset = app.config.get('iconset')
     if not iconset:
-        iconset = gajim.config.DEFAULT_ICONSET
+        iconset = app.config.DEFAULT_ICONSET
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for c in contacts:
         item = Gtk.MenuItem.new_with_label(
@@ -70,19 +70,19 @@ show_bookmarked=False, force_resource=False):
     """
     if ignore_rooms is None:
         ignore_rooms = []
-    roster = gajim.interface.roster
+    roster = app.interface.roster
     # used if we invite only one contact with several resources
     contact_list = []
     if len(list_) == 1:
         contact, account = list_[0]
-        contact_list = gajim.contacts.get_contacts(account, contact.jid)
+        contact_list = app.contacts.get_contacts(account, contact.jid)
     contacts_transport = -1
     connected_accounts = []
     # -1 is at start, False when not from the same, None when jabber
     for (contact, account) in list_:
         if not account in connected_accounts:
             connected_accounts.append(account)
-        transport = gajim.get_transport_name_from_jid(contact.jid)
+        transport = app.get_transport_name_from_jid(contact.jid)
         if transport == 'jabber':
             transport = None
         if contacts_transport == -1:
@@ -104,7 +104,7 @@ show_bookmarked=False, force_resource=False):
     elif len(list_) == 1 and contact.supports(NS_MUC):
         invite_menuitem.set_sensitive(True)
         # use resource if it's self contact
-        if contact.jid == gajim.get_jid_from_account(account) or force_resource:
+        if contact.jid == app.get_jid_from_account(account) or force_resource:
             resource = contact.resource
         else:
             resource = None
@@ -126,8 +126,8 @@ show_bookmarked=False, force_resource=False):
     c_t = contacts_transport or 'jabber'
     muc_jid = {}
     for account in connected_accounts:
-        for t in gajim.connections[account].muc_jid:
-            muc_jid[t] = gajim.connections[account].muc_jid[t]
+        for t in app.connections[account].muc_jid:
+            muc_jid[t] = app.connections[account].muc_jid[t]
     if c_t not in muc_jid:
         invite_to_new_room_menuitem.set_sensitive(False)
     rooms = [] # a list of (room_jid, account) tuple
@@ -135,8 +135,8 @@ show_bookmarked=False, force_resource=False):
     minimized_controls = []
     for account in connected_accounts:
         minimized_controls += \
-            list(gajim.interface.minimized_controls[account].values())
-    for gc_control in gajim.interface.msg_win_mgr.get_controls(
+            list(app.interface.minimized_controls[account].values())
+    for gc_control in app.interface.msg_win_mgr.get_controls(
     message_control.TYPE_GC) + minimized_controls:
         acct = gc_control.account
         if acct not in connected_accounts:
@@ -144,8 +144,8 @@ show_bookmarked=False, force_resource=False):
         room_jid = gc_control.room_jid
         if room_jid in ignore_rooms:
             continue
-        if room_jid in gajim.gc_connected[acct] and \
-        gajim.gc_connected[acct][room_jid] and \
+        if room_jid in app.gc_connected[acct] and \
+        app.gc_connected[acct][room_jid] and \
         contacts_transport in ['jabber', None]:
             rooms.append((room_jid, acct))
     if len(rooms):
@@ -159,7 +159,7 @@ show_bookmarked=False, force_resource=False):
                     account))
             else:
                 # use resource if it's self contact
-                if contact.jid == gajim.get_jid_from_account(account):
+                if contact.jid == app.get_jid_from_account(account):
                     resource = contact.resource
                 else:
                     resource = None
@@ -172,12 +172,12 @@ show_bookmarked=False, force_resource=False):
     rooms2 = [] # a list of (room_jid, account) tuple
     r_jids = [] # list of room jids
     for account in connected_accounts:
-        for room in gajim.connections[account].bookmarks:
+        for room in app.connections[account].bookmarks:
             r_jid = room['jid']
             if r_jid in r_jids:
                 continue
-            if r_jid not in gajim.gc_connected[account] or not \
-            gajim.gc_connected[account][r_jid]:
+            if r_jid not in app.gc_connected[account] or not \
+            app.gc_connected[account][r_jid]:
                 rooms2.append((r_jid, account))
                 r_jids.append(r_jid)
 
@@ -193,7 +193,7 @@ show_bookmarked=False, force_resource=False):
                 account))
         else:
             # use resource if it's self contact
-            if contact.jid == gajim.get_jid_from_account(account):
+            if contact.jid == app.get_jid_from_account(account):
                 resource = contact.resource
             else:
                 resource = None
@@ -212,8 +212,8 @@ control=None, gc_contact=None, is_anonymous=True):
         return
 
     jid = contact.jid
-    our_jid = jid == gajim.get_jid_from_account(account)
-    roster = gajim.interface.roster
+    our_jid = jid == app.get_jid_from_account(account)
+    roster = app.interface.roster
 
     xml = gtkgui_helpers.get_gtk_builder('contact_context_menu.ui')
     contact_context_menu = xml.get_object('contact_context_menu')
@@ -249,17 +249,17 @@ control=None, gc_contact=None, is_anonymous=True):
 
     items_to_hide = []
 
-    contacts = gajim.contacts.get_contacts(account, jid)
+    contacts = app.contacts.get_contacts(account, jid)
     if len(contacts) > 1 and use_multiple_contacts: # several resources
         start_chat_menuitem.set_submenu(build_resources_submenu(contacts,
-                account, gajim.interface.on_open_chat_window))
+                account, app.interface.on_open_chat_window))
         send_file_menuitem.set_submenu(build_resources_submenu(contacts,
                 account, roster.on_send_file_menuitem_activate, cap=NS_FILE))
         execute_command_menuitem.set_submenu(build_resources_submenu(
                 contacts, account, roster.on_execute_command, cap=NS_COMMANDS))
     else:
         start_chat_menuitem.connect('activate',
-                gajim.interface.on_open_chat_window, contact, account)
+                app.interface.on_open_chat_window, contact, account)
         if contact.supports(NS_FILE) or contact.supports(NS_JINGLE_FILE_TRANSFER_5):
             send_file_menuitem.set_sensitive(True)
             send_file_menuitem.connect('activate',
@@ -295,7 +295,7 @@ control=None, gc_contact=None, is_anonymous=True):
         edit_groups_menuitem.connect('activate', roster.on_edit_groups, [(contact,
                 account)])
 
-        if gajim.connections[account].gpg:
+        if app.connections[account].gpg:
             assign_openpgp_key_menuitem.connect('activate',
                     roster.on_assign_pgp_key, contact, account)
         else:
@@ -310,7 +310,7 @@ control=None, gc_contact=None, is_anonymous=True):
         items_to_hide += [rename_menuitem, edit_groups_menuitem]
 
     # Unsensitive many items when account is offline
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         for widget in (start_chat_menuitem, rename_menuitem,
         edit_groups_menuitem, send_file_menuitem, convert_to_gc_menuitem,
         information_menuitem):
@@ -336,7 +336,7 @@ control=None, gc_contact=None, is_anonymous=True):
         item.hide()
 
     # Zeroconf Account
-    if gajim.config.get_per('accounts', account, 'is_zeroconf'):
+    if app.config.get_per('accounts', account, 'is_zeroconf'):
         for item in (send_custom_status_menuitem, send_single_message_menuitem,
         invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
         unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
@@ -367,7 +367,7 @@ control=None, gc_contact=None, is_anonymous=True):
             if helpers.group_is_blocked(account, group):
                 blocked = True
                 break
-    transport = gajim.get_transport_name_from_jid(jid, use_config_setting=False)
+    transport = app.get_transport_name_from_jid(jid, use_config_setting=False)
     if transport and transport != 'jabber':
         # Transport contact, send custom status unavailable
         send_custom_status_menuitem.set_sensitive(False)
@@ -380,7 +380,7 @@ control=None, gc_contact=None, is_anonymous=True):
             invite_menuitem.set_sensitive(False)
         else:
             bookmarked = False
-            c_ = gajim.contacts.get_contact(account, gc_contact.jid,
+            c_ = app.contacts.get_contact(account, gc_contact.jid,
                 gc_contact.resource)
             if c_ and c_.supports(NS_CONFERENCE):
                 bookmarked=True
@@ -394,7 +394,7 @@ control=None, gc_contact=None, is_anonymous=True):
             show_bookmarked=contact.supports(NS_CONFERENCE),
             force_resource=force_resource)
 
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         invite_menuitem.set_sensitive(False)
 
     # One or several resource, we do the same for send_custom_status
@@ -431,7 +431,7 @@ control=None, gc_contact=None, is_anonymous=True):
             ask_auth_menuitem.connect('activate', roster.req_sub, jid,
                     _('I would like to add you to my roster'), account,
                     contact.groups, contact.name)
-        transport = gajim.get_transport_name_from_jid(jid,
+        transport = app.get_transport_name_from_jid(jid,
             use_config_setting=False)
         if contact.sub in ('to', 'none') or transport not in ['jabber', None]:
             revoke_auth_menuitem.set_sensitive(False)
@@ -439,7 +439,7 @@ control=None, gc_contact=None, is_anonymous=True):
             revoke_auth_menuitem.connect('activate', roster.revoke_auth, jid,
                     account)
 
-    elif gajim.connections[account].roster_supported:
+    elif app.connections[account].roster_supported:
         # contact is in group 'Not in Roster'
         add_to_roster_menuitem.set_no_show_all(False)
         subscription_menuitem.set_sensitive(False)
@@ -459,18 +459,18 @@ control=None, gc_contact=None, is_anonymous=True):
         manage_contact_menuitem.set_sensitive(False)
 
     # Unsensitive items when account is offline
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         for widget in (send_single_message_menuitem, subscription_menuitem,
         add_to_roster_menuitem, remove_from_roster_menuitem,
         execute_command_menuitem, send_custom_status_menuitem):
             widget.set_sensitive(False)
 
-    if gajim.connections[account] and (gajim.connections[account].\
-    privacy_rules_supported or gajim.connections[account].blocking_supported):
+    if app.connections[account] and (app.connections[account].\
+    privacy_rules_supported or app.connections[account].blocking_supported):
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
             block_menuitem.hide()
-            if gajim.get_transport_name_from_jid(jid, use_config_setting=False)\
+            if app.get_transport_name_from_jid(jid, use_config_setting=False)\
             and transport != 'jabber':
                 unblock_menuitem.set_no_show_all(True)
                 unblock_menuitem.hide()
@@ -483,7 +483,7 @@ control=None, gc_contact=None, is_anonymous=True):
         else:
             unblock_menuitem.set_no_show_all(True)
             unblock_menuitem.hide()
-            if gajim.get_transport_name_from_jid(jid, use_config_setting=False)\
+            if app.get_transport_name_from_jid(jid, use_config_setting=False)\
             and transport != 'jabber':
                 block_menuitem.set_no_show_all(True)
                 block_menuitem.hide()
@@ -503,7 +503,7 @@ control=None, gc_contact=None, is_anonymous=True):
     return contact_context_menu
 
 def get_transport_menu(contact, account):
-    roster = gajim.interface.roster
+    roster = app.interface.roster
     jid = contact.jid
 
     menu = Gtk.Menu()
@@ -513,7 +513,7 @@ def get_transport_menu(contact, account):
     item.connect('activate', roster.on_send_single_message_menuitem_activate,
         account, contact)
     menu.append(item)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     blocked = False
@@ -535,7 +535,7 @@ def get_transport_menu(contact, account):
                 [(contact, account)], s)
             status_menuitems.append(status_menuitem)
     menu.append(send_custom_status_menuitem)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         send_custom_status_menuitem.set_sensitive(False)
 
     item = Gtk.SeparatorMenuItem.new() # separator
@@ -546,7 +546,7 @@ def get_transport_menu(contact, account):
     menu.append(item)
     item.connect('activate', roster.on_execute_command, contact, account,
         contact.resource)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     # Manage Transport submenu
@@ -559,14 +559,14 @@ def get_transport_menu(contact, account):
     item = Gtk.MenuItem.new_with_mnemonic(_('_Modify Transport'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_edit_agent, contact, account)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     # Rename
     item = Gtk.MenuItem.new_with_mnemonic(_('_Rename…'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_rename, 'agent', jid, account)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     item = Gtk.SeparatorMenuItem.new() # separator
@@ -581,14 +581,14 @@ def get_transport_menu(contact, account):
         item.connect('activate', roster.on_block, [(contact, account)])
 
     manage_transport_submenu.append(item)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     # Remove
     item = Gtk.MenuItem.new_with_mnemonic(_('Remo_ve'))
     manage_transport_submenu.append(item)
     item.connect('activate', roster.on_remove_agent, [(contact, account)])
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         item.set_sensitive(False)
 
     item = Gtk.SeparatorMenuItem.new() # separator
@@ -598,7 +598,7 @@ def get_transport_menu(contact, account):
     information_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Information'))
     menu.append(information_menuitem)
     information_menuitem.connect('activate', roster.on_info, contact, account)
-    if gajim.account_is_disconnected(account):
+    if app.account_is_disconnected(account):
         information_menuitem.set_sensitive(False)
 
     menu.connect('selection-done', gtkgui_helpers.destroy_widget)
@@ -611,7 +611,7 @@ Build dynamic Application Menus
 
 
 def get_bookmarks_menu(account, rebuild=False):
-    if not gajim.connections[account].bookmarks:
+    if not app.connections[account].bookmarks:
         return None
     menu = Gio.Menu()
 
@@ -624,7 +624,7 @@ def get_bookmarks_menu(account, rebuild=False):
 
     # Build Bookmarks
     section = Gio.Menu()
-    for bookmark in gajim.connections[account].bookmarks:
+    for bookmark in app.connections[account].bookmarks:
         name = bookmark['name']
         if not name:
             # No name was given for this bookmark.
@@ -710,11 +710,11 @@ def get_account_menu(account):
 
 
 def build_accounts_menu():
-    menubar = gajim.app.get_menubar()
+    menubar = app.app.get_menubar()
     # Accounts Submenu
     acc_menu = menubar.get_item_link(0, 'submenu')
     acc_menu.remove_all()
-    accounts_list = sorted(gajim.contacts.get_accounts())
+    accounts_list = sorted(app.contacts.get_accounts())
     if not accounts_list:
         no_accounts = _('No Accounts available')
         acc_menu.append_item(Gio.MenuItem.new(no_accounts, None))
@@ -730,7 +730,7 @@ def build_accounts_menu():
 
 
 def build_bookmark_menu(account):
-    menubar = gajim.app.get_menubar()
+    menubar = app.app.get_menubar()
     bookmark_menu = get_bookmarks_menu(account)
     if not bookmark_menu:
         return
@@ -756,7 +756,7 @@ def get_encryption_menu(control_id, type_id):
     menu = Gio.Menu()
     menu.append(
         'Disabled', 'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
-    for name, plugin in gajim.plugin_manager.encryption_plugins.items():
+    for name, plugin in app.plugin_manager.encryption_plugins.items():
         if type_id == 'gc':
             if not hasattr(plugin, 'allow_groupchat'):
                 continue

@@ -34,14 +34,14 @@ import os
 
 from enum import IntEnum, unique
 
-import gtkgui_helpers
-from dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
-from htmltextview import HtmlTextView
-from common import gajim
-from plugins.helpers import log_calls
-from plugins.helpers import GajimPluginActivateException
-from plugins.plugins_i18n import _
-from common.exceptions import PluginsystemError
+from gajim import gtkgui_helpers
+from gajim.dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
+from gajim.htmltextview import HtmlTextView
+from gajim.common import app
+from gajim.plugins.helpers import log_calls
+from gajim.plugins.helpers import GajimPluginActivateException
+from gajim.plugins.plugins_i18n import _
+from gajim.common.exceptions import PluginsystemError
 
 @unique
 class Column(IntEnum):
@@ -60,7 +60,7 @@ class PluginsWindow(object):
         '''Initialize Plugins window'''
         builder = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
         self.window = builder.get_object('plugins_window')
-        self.window.set_transient_for(gajim.interface.roster.window)
+        self.window.set_transient_for(app.interface.roster.window)
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
@@ -118,7 +118,7 @@ class PluginsWindow(object):
         self.close_button.grab_focus()
 
         # Adding GUI extension point for Plugins that want to hook the Plugin Window
-        gajim.plugin_manager.gui_extension_point('plugin_window', self)
+        app.plugin_manager.gui_extension_point('plugin_window', self)
 
         self.window.show_all()
         gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
@@ -166,7 +166,7 @@ class PluginsWindow(object):
 
         self.plugin_description_textview.set_property('sensitive', True)
         self.uninstall_plugin_button.set_property('sensitive',
-            gajim.PLUGINS_DIRS[1] in plugin.__path__)
+            app.PLUGINS_DIRS[1] in plugin.__path__)
         self.configure_plugin_button.set_property(
             'sensitive', plugin.config_dialog is not None)
 
@@ -186,7 +186,7 @@ class PluginsWindow(object):
 
     @log_calls('PluginsWindow')
     def fill_installed_plugins_model(self):
-        pm = gajim.plugin_manager
+        pm = app.plugin_manager
         self.installed_plugins_model.clear()
         self.installed_plugins_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
@@ -209,10 +209,10 @@ class PluginsWindow(object):
         plugin = self.installed_plugins_model[path][Column.PLUGIN]
 
         if is_active:
-            gajim.plugin_manager.deactivate_plugin(plugin)
+            app.plugin_manager.deactivate_plugin(plugin)
         else:
             try:
-                gajim.plugin_manager.activate_plugin(plugin)
+                app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
                 WarningDialog(_('Plugin failed'), str(e),
                     transient_for=self.window)
@@ -223,8 +223,8 @@ class PluginsWindow(object):
     @log_calls('PluginsWindow')
     def on_plugins_window_destroy(self, widget):
         '''Close window'''
-        gajim.plugin_manager.remove_gui_extension_point('plugin_window', self)
-        del gajim.interface.instances['plugins']
+        app.plugin_manager.remove_gui_extension_point('plugin_window', self)
+        del app.interface.instances['plugins']
 
     @log_calls('PluginsWindow')
     def on_close_button_clicked(self, widget):
@@ -257,7 +257,7 @@ class PluginsWindow(object):
             plugin_name = model.get_value(iter, Column.NAME)
             is_active = model.get_value(iter, Column.ACTIVE)
             try:
-                gajim.plugin_manager.remove_plugin(plugin)
+                app.plugin_manager.remove_plugin(plugin)
             except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
                     str(e), self.window)
@@ -274,7 +274,7 @@ class PluginsWindow(object):
 
         def _on_plugin_exists(zip_filename):
             def on_yes(is_checked):
-                plugin = gajim.plugin_manager.install_from_zip(zip_filename,
+                plugin = app.plugin_manager.install_from_zip(zip_filename,
                     True)
                 if not plugin:
                     show_warn_dialog()
@@ -296,7 +296,7 @@ class PluginsWindow(object):
 
         def _try_install(zip_filename):
             try:
-                plugin = gajim.plugin_manager.install_from_zip(zip_filename)
+                plugin = app.plugin_manager.install_from_zip(zip_filename)
             except PluginsystemError as er_type:
                 error_text = str(er_type)
                 if error_text == _('Plugin already exists'):

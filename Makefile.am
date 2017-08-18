@@ -11,15 +11,17 @@ EXTRA_DIST = \
 	intltool-merge.in 	\
 	intltool-update.in	\
 	win \
-	scripts/gajim.in
-	
+	scripts/gajim.in \
+	scripts/gajim-history-manager.in \
+	scripts/gajim-remote.in
+
 DISTCLEANFILES = 		\
 	intltool-extract 	\
 	intltool-merge 		\
 	intltool-update		\
 	scripts/gajim		\
 	scripts/gajim-remote	\
-	scripts/gajim-histrory-manager
+	scripts/gajim-history-manager
 
 MAINTAINERCLEANFILES = \
 	configure \

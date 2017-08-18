@@ -26,11 +26,11 @@
 from enum import IntEnum, unique
 
 from gi.repository import Gtk
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 from gi.repository import GLib
 from gi.repository import Pango
 
-from common import gajim
+from gajim.common import app
 
 @unique
 class Column(IntEnum):
@@ -73,7 +73,7 @@ class AdvancedConfigurationWindow(object):
         self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')
         self.window.set_transient_for(
-                gajim.interface.instances['preferences'].window)
+                app.interface.instances['preferences'].window)
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
         self.restart_box = self.xml.get_object('restart_box')
@@ -130,7 +130,7 @@ class AdvancedConfigurationWindow(object):
         self.xml.connect_signals(self)
         self.restart_box.set_no_show_all(True)
         self.window.show_all()
-        gajim.interface.instances['advanced_config'] = self
+        app.interface.instances['advanced_config'] = self
 
     def cb_value_column_data(self, col, cell, model, iter_, data):
         """
@@ -166,9 +166,9 @@ class AdvancedConfigurationWindow(object):
             # Get text from first column in this row
             desc = None
             if len(opt_path) == 3:
-                desc = gajim.config.get_desc_per(opt_path[2], opt_path[0])
+                desc = app.config.get_desc_per(opt_path[2], opt_path[0])
             elif len(opt_path) == 1:
-                desc = gajim.config.get_desc(opt_path[0])
+                desc = app.config.get_desc(opt_path[0])
             if desc:
                 self.desc_label.set_text(desc)
             else:
@@ -205,10 +205,10 @@ class AdvancedConfigurationWindow(object):
                 key = keyrow[0]
                 self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[1], newval)
-                gajim.config.set_per(optname, key, option, newval)
+                app.config.set_per(optname, key, option, newval)
             else:
                 self.remember_option(option, modelrow[1], newval)
-                gajim.config.set(option, newval)
+                app.config.set(option, newval)
             modelrow[1] = self.right_true_dict[newval]
             self.check_for_restart()
 
@@ -217,10 +217,10 @@ class AdvancedConfigurationWindow(object):
         for opt in self.changed_opts:
             opt_path = opt.split('\n')
             if len(opt_path)==3:
-                restart = gajim.config.get_restart_per(opt_path[2], opt_path[1],
+                restart = app.config.get_restart_per(opt_path[2], opt_path[1],
                         opt_path[0])
             else:
-                restart = gajim.config.get_restart(opt_path[0])
+                restart = app.config.get_restart(opt_path[0])
             if restart:
                 if self.changed_opts[opt][0] != self.changed_opts[opt][1]:
                     self.restart_box.set_no_show_all(False)
@@ -242,16 +242,16 @@ class AdvancedConfigurationWindow(object):
             optname = optnamerow[0]
             self.remember_option(option + '\n' + key + '\n' + optname, modelrow[1],
                     text)
-            gajim.config.set_per(optname, key, option, text)
+            app.config.set_per(optname, key, option, text)
         else:
             self.remember_option(option, modelrow[1], text)
-            gajim.config.set(option, text)
+            app.config.set(option, text)
         modelrow[1] = text
         self.check_for_restart()
 
     @staticmethod
     def on_advanced_configuration_window_destroy(widget):
-        del gajim.interface.instances['advanced_config']
+        del app.interface.instances['advanced_config']
 
     def on_reset_button_clicked(self, widget):
         model, iter_ = self.treeview.get_selection().get_selected()
@@ -260,9 +260,9 @@ class AdvancedConfigurationWindow(object):
             path = model.get_path(iter_)
             opt_path =  self.get_option_path(model, iter_)
             if len(opt_path) == 1:
-                default = gajim.config.get_default(opt_path[0])
+                default = app.config.get_default(opt_path[0])
             elif len(opt_path) == 3:
-                default = gajim.config.get_default_per(opt_path[2], opt_path[0])
+                default = app.config.get_default_per(opt_path[2], opt_path[0])
 
             if model[iter_][Column.TYPE] == self.types['boolean']:
                 if self.right_true_dict[default] == model[iter_][Column.VALUE]:
@@ -277,10 +277,10 @@ class AdvancedConfigurationWindow(object):
                     key = keyrow[0]
                     self.remember_option(option + '\n' + key + '\n' + optname,
                         modelrow[Column.VALUE], default)
-                    gajim.config.set_per(optname, key, option, default)
+                    app.config.set_per(optname, key, option, default)
                 else:
                     self.remember_option(option, modelrow[Column.VALUE], default)
-                    gajim.config.set(option, default)
+                    app.config.set(option, default)
                 modelrow[Column.VALUE] = self.right_true_dict[default]
                 self.check_for_restart()
             else:
@@ -292,16 +292,16 @@ class AdvancedConfigurationWindow(object):
         self.window.destroy()
 
     def fill_model(self, node=None, parent=None):
-        for item, option in gajim.config.get_children(node):
+        for item, option in app.config.get_children(node):
             name = item[-1]
             if option is None: # Node
                 newparent = self.model.append(parent, [name, '', ''])
                 self.fill_model(item, newparent)
             else: # Leaf
                 if len(item) == 1:
-                    type_ = self.types[gajim.config.get_type(name)]
+                    type_ = self.types[app.config.get_type(name)]
                 elif len(item) == 3:
-                    type_ = self.types[gajim.config.get_type_per(item[0],
+                    type_ = self.types[app.config.get_type_per(item[0],
                         item[2])]
                 if name == 'password':
                     value = _('Hidden')
@@ -321,9 +321,9 @@ class AdvancedConfigurationWindow(object):
             if model[it][Column.TYPE] != '':
                 opt_path = self.get_option_path(model, it)
                 if len(opt_path) == 3:
-                    desc = gajim.config.get_desc_per(opt_path[2], opt_path[0])
+                    desc = app.config.get_desc_per(opt_path[2], opt_path[0])
                 elif len(opt_path) == 1:
-                    desc = gajim.config.get_desc(opt_path[0])
+                    desc = app.config.get_desc(opt_path[0])
                 if search_string in model[it][Column.PREFERENCE_NAME] or (desc and \
                 search_string in desc.lower()):
                     return True

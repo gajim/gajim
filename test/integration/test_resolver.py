@@ -7,7 +7,7 @@ lib.setup_env()
 
 from gi.repository import GLib
 
-from common import resolver
+from gajim.common import resolver
 
 from mock import Mock, expectParams
 from gajim_mocks import *

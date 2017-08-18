@@ -40,15 +40,15 @@ from io import BytesIO
 from gi.repository import GLib
 from enum import IntEnum, unique
 
-from common import exceptions
-from common import gajim
-from common import ged
+from gajim.common import exceptions
+from gajim.common import app
+from gajim.common import ged
 
 import sqlite3 as sqlite
 
-LOG_DB_PATH = gajim.gajimpaths['LOG_DB']
+LOG_DB_PATH = app.gajimpaths['LOG_DB']
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
-CACHE_DB_PATH = gajim.gajimpaths['CACHE_DB']
+CACHE_DB_PATH = app.gajimpaths['CACHE_DB']
 
 import logging
 log = logging.getLogger('gajim.c.logger')
@@ -139,7 +139,7 @@ class Logger:
         return named_row
 
     def dispatch(self, event, error):
-        gajim.ged.raise_event(event, None, str(error))
+        app.ged.raise_event(event, None, str(error))
 
     def close_db(self):
         if self.con:
@@ -196,7 +196,7 @@ class Logger:
         """
         returns the timeout in epoch
         """
-        timeout = gajim.config.get('restore_timeout')
+        timeout = app.config.get('restore_timeout')
 
         now = int(time.time())
         if timeout > 0:
@@ -284,7 +284,7 @@ class Logger:
 
         returns a list of JIDs'
         """
-        family = gajim.contacts.get_metacontacts_family(account, jid)
+        family = app.contacts.get_metacontacts_family(account, jid)
         if family:
             return [user['jid'] for user in family]
         return [jid]
@@ -553,7 +553,7 @@ class Logger:
         returns a list of namedtuples
         """
 
-        restore = gajim.config.get('restore_lines')
+        restore = app.config.get('restore_lines')
         if restore <= 0:
             return []
 
@@ -914,9 +914,9 @@ class Logger:
         # First we must reset roster_version value to ensure that the server
         # sends back all the roster at the next connexion if the replacement
         # didn't work properly.
-        gajim.config.set_per('accounts', account_name, 'roster_version', '')
+        app.config.set_per('accounts', account_name, 'roster_version', '')
 
-        account_jid = gajim.get_jid_from_account(account_name)
+        account_jid = app.get_jid_from_account(account_name)
         account_jid_id = self.get_jid_id(account_jid)
 
         # Delete old roster
@@ -931,7 +931,7 @@ class Logger:
 
         # At this point, we are sure the replacement works properly so we can
         # set the new roster_version value.
-        gajim.config.set_per('accounts', account_name, 'roster_version',
+        app.config.set_per('accounts', account_name, 'roster_version',
             roster_version)
 
     def del_contact(self, account_jid, jid):

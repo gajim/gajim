@@ -20,13 +20,13 @@
 
 supported = False
 
-from common import dbus_support
-from common import gajim
+from gajim.common import dbus_support
+from gajim.common import app
 
 def on_suspend(*args, **kwargs):
-    for name, conn in gajim.connections.items():
-        if gajim.account_is_connected(name):
-            conn.old_show = gajim.SHOW_LIST[conn.connected]
+    for name, conn in app.connections.items():
+        if app.account_is_connected(name):
+            conn.old_show = app.SHOW_LIST[conn.connected]
             st = conn.status
             conn.change_status('offline', _('Machine going to sleep'))
             conn.status = st
@@ -34,7 +34,7 @@ def on_suspend(*args, **kwargs):
 
 if dbus_support.supported:
     try:
-        from common.dbus_support import system_bus
+        from gajim.common.dbus_support import system_bus
         bus = system_bus.bus()
         if 'org.freedesktop.UPower' in bus.list_names():
             up_object = bus.get_object('org.freedesktop.UPower',

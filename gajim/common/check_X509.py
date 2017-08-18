@@ -9,7 +9,7 @@ try:
         raise ImportError
     from pyasn1.type import univ, constraint, char, namedtype, tag
     from pyasn1.codec.der.decoder import decode
-    from common.helpers import prep, InvalidFormat
+    from gajim.common.helpers import prep, InvalidFormat
 
     MAX = 64
     oid_xmppaddr = '1.3.6.1.5.5.7.8.5'

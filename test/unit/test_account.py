@@ -6,7 +6,7 @@ import unittest
 import lib
 lib.setup_env()
 
-from common.account import Account
+from gajim.common.account import Account
 
 class Test(unittest.TestCase):
 

@@ -49,14 +49,14 @@ if os.path.isdir(configdir):
 
 os.mkdir(configdir)
 
-import common.configpaths
-common.configpaths.gajimpaths.init(configdir)
+import gajim.common.configpaths
+gajim.common.configpaths.gajimpaths.init(configdir)
 
-# for some reason common.gajim needs to be imported before xmpppy?
-from common import gajim
-from common import xmpp
+# for some reason common.app needs to be imported before xmpppy?
+from gajim.common import app
+from gajim.common import xmpp
 
-gajim.DATA_DIR = gajim_root + '/data'
+app.DATA_DIR = gajim_root + '/data'
 
 from common.stanza_session import StanzaSession
 

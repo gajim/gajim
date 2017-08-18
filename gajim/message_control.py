@@ -26,13 +26,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 import uuid
 
-from common import gajim
-from common import helpers
-from common import ged
-from common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
+from gajim.common import app
+from gajim.common import helpers
+from gajim.common import ged
+from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -64,13 +64,13 @@ class MessageControl(object):
         self.control_id = str(uuid.uuid4())
         self.session = None
 
-        gajim.last_message_time[self.account][self.get_full_jid()] = 0
+        app.last_message_time[self.account][self.get_full_jid()] = 0
 
         self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % widget_name)
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
-        gajim.ged.register_event_handler('message-outgoing', ged.OUT_GUI1,
+        app.ged.register_event_handler('message-outgoing', ged.OUT_GUI1,
             self._nec_message_outgoing)
 
     def get_full_jid(self):
@@ -119,7 +119,7 @@ class MessageControl(object):
         """
         Derived classes MUST implement this
         """
-        gajim.ged.remove_event_handler('message-outgoing', ged.OUT_GUI1,
+        app.ged.remove_event_handler('message-outgoing', ged.OUT_GUI1,
             self._nec_message_outgoing)
 
     def repaint_themed_widgets(self):
@@ -188,7 +188,7 @@ class MessageControl(object):
         pass
 
     def get_specific_unread(self):
-        return len(gajim.events.get_events(self.account,
+        return len(app.events.get_events(self.account,
                 self.contact.jid))
 
     def set_session(self, session):
@@ -234,11 +234,11 @@ class MessageControl(object):
 
         obj.message = helpers.remove_invalid_xml_chars(obj.message)
 
-        conn = gajim.connections[self.account]
+        conn = app.connections[self.account]
 
         if not self.session:
             if (not obj.resource and
-                    obj.jid != gajim.get_jid_from_account(self.account)):
+                    obj.jid != app.get_jid_from_account(self.account)):
                 if self.resource:
                     obj.resource = self.resource
                 else:

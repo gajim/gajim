@@ -18,10 +18,10 @@ Handles Jingle contents (XEP 0166)
 """
 
 import os
-from common import gajim
+from gajim.common import app
 import nbxmpp
-from .jingle_xtls import SELF_SIGNED_CERTIFICATE
-from .jingle_xtls import load_cert_file
+from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
+from gajim.common.jingle_xtls import load_cert_file
 
 contents = {}
 
@@ -206,7 +206,7 @@ class JingleContent:
                 hash_data = self._compute_hash()
                 if hash_data:
                     file_tag.addChild(node=hash_data)
-                pjid = gajim.get_jid_without_resource(self.session.peerjid)
+                pjid = app.get_jid_without_resource(self.session.peerjid)
                 file_info = {'name' : self.file_props.name,
                              'file-name' : self.file_props.file_name,
                              'hash' : self.file_props.hash_,
@@ -221,7 +221,7 @@ class JingleContent:
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=nbxmpp.NS_JINGLE_XTLS + ' security')
-            certpath = os.path.join(gajim.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)\
+            certpath = os.path.join(app.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)\
                 + '.cert'
             cert = load_cert_file(certpath)
             if cert:

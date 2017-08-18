@@ -40,7 +40,7 @@ import select
 import base64
 import hashlib
 import shlex
-from common import caps_cache
+from gajim.common import caps_cache
 import socket
 import time
 from datetime import datetime, timedelta, timezone, tzinfo
@@ -50,8 +50,8 @@ from string import Template
 
 import nbxmpp
 
-from common.i18n import Q_
-from common.i18n import ngettext
+from gajim.common.i18n import Q_
+from gajim.common.i18n import ngettext
 
 try:
     import precis_i18n.codec
@@ -545,7 +545,7 @@ def exec_command(command, use_shell=False, posix=True):
     else:
         args = shlex.split(command, posix=posix)
         p = subprocess.Popen(args)
-        gajim.thread_interface(p.wait)
+        app.thread_interface(p.wait)
 
 def build_command(executable, parameter):
     # we add to the parameter (can hold path with spaces)
@@ -750,8 +750,8 @@ def parse_datetime(timestring, check_utc=False, convert='utc', epoch=False):
             return date_time
     return None
 
-from common import gajim
-if gajim.HAVE_PYCURL:
+from gajim.common import app
+if app.HAVE_PYCURL:
     import pycurl
     from io import StringIO
 
@@ -759,7 +759,7 @@ def convert_bytes(string):
     suffix = ''
     # IEC standard says KiB = 1024 bytes KB = 1000 bytes
     # but do we use the standard?
-    use_kib_mib = gajim.config.get('use_kib_mib')
+    use_kib_mib = app.config.get('use_kib_mib')
     align = 1024.
     bytes_ = float(string)
     if bytes_ >= align:
@@ -800,8 +800,8 @@ def get_contact_dict_for_account(account):
     Can be used for completion lists
     """
     contacts_dict = {}
-    for jid in gajim.contacts.get_jid_list(account):
-        contact = gajim.contacts.get_contact_with_highest_priority(account,
+    for jid in app.contacts.get_jid_list(account):
+        contact = app.contacts.get_contact_with_highest_priority(account,
                         jid)
         contacts_dict[jid] = contact
         name = contact.name
@@ -811,7 +811,7 @@ def get_contact_dict_for_account(account):
             contacts_dict['%s (%s)' % (name, contact1.jid)] = contact1
             contacts_dict['%s (%s)' % (name, jid)] = contact
         elif contact.name:
-            if contact.name == gajim.get_nick_from_jid(jid):
+            if contact.name == app.get_nick_from_jid(jid):
                 del contacts_dict[jid]
             contacts_dict[name] = contact
     return contacts_dict
@@ -827,11 +827,11 @@ def launch_browser_mailer(kind, uri):
     if kind == 'url' and uri.startswith('www.'):
         uri = 'http://' + uri
 
-    if not gajim.config.get('autodetect_browser_mailer'):
+    if not app.config.get('autodetect_browser_mailer'):
         if kind == 'url':
-            command = gajim.config.get('custombrowser')
+            command = app.config.get('custombrowser')
         elif kind in ('mail', 'sth_at_sth'):
-            command = gajim.config.get('custommailapp')
+            command = app.config.get('custommailapp')
         if command == '': # if no app is configured
             return
 
@@ -854,8 +854,8 @@ def launch_file_manager(path_to_open):
         except Exception:
             pass
     else:
-        if not gajim.config.get('autodetect_browser_mailer'):
-            command = gajim.config.get('custom_file_manager')
+        if not app.config.get('autodetect_browser_mailer'):
+            command = app.config.get('custom_file_manager')
             if command == '': # if no app is configured
                 return
         else:
@@ -867,13 +867,13 @@ def launch_file_manager(path_to_open):
             pass
 
 def play_sound(event):
-    if not gajim.config.get('sounds_on'):
+    if not app.config.get('sounds_on'):
         return
-    path_to_soundfile = gajim.config.get_per('soundevents', event, 'path')
+    path_to_soundfile = app.config.get_per('soundevents', event, 'path')
     play_sound_file(path_to_soundfile)
 
-def check_soundfile_path(file_, dirs=(gajim.gajimpaths.data_root,
-gajim.DATA_DIR)):
+def check_soundfile_path(file_, dirs=(app.gajimpaths.data_root,
+app.DATA_DIR)):
     """
     Check if the sound file exists
 
@@ -893,8 +893,8 @@ gajim.DATA_DIR)):
             return d
     return None
 
-def strip_soundfile_path(file_, dirs=(gajim.gajimpaths.data_root,
-gajim.DATA_DIR), abs=True):
+def strip_soundfile_path(file_, dirs=(app.gajimpaths.data_root,
+app.DATA_DIR), abs=True):
     """
     Remove knowns paths from a sound file
 
@@ -930,7 +930,7 @@ def play_sound_file(path_to_soundfile):
         except Exception:
             log.exception('Sound Playback Error')
     elif sys.platform == 'linux':
-        if gajim.config.get('soundplayer') == '':
+        if app.config.get('soundplayer') == '':
             def _oss_play():
                 sndfile = wave.open(path_to_soundfile, 'rb')
                 (nc, sw, fr, nf, comptype, compname) = sndfile.getparams()
@@ -939,9 +939,9 @@ def play_sound_file(path_to_soundfile):
                 dev.write(sndfile.readframes(nf))
                 sndfile.close()
                 dev.close()
-            gajim.thread_interface(_oss_play)
+            app.thread_interface(_oss_play)
             return
-        player = gajim.config.get('soundplayer')
+        player = app.config.get('soundplayer')
         command = build_command(player, path_to_soundfile)
         exec_command(command)
     elif sys.platform == 'darwin' and HAS_SOUND:
@@ -951,25 +951,25 @@ def play_sound_file(path_to_soundfile):
 
 def get_global_show():
     maxi = 0
-    for account in gajim.connections:
-        if not gajim.config.get_per('accounts', account,
+    for account in app.connections:
+        if not app.config.get_per('accounts', account,
         'sync_with_global_status'):
             continue
-        connected = gajim.connections[account].connected
+        connected = app.connections[account].connected
         if connected > maxi:
             maxi = connected
-    return gajim.SHOW_LIST[maxi]
+    return app.SHOW_LIST[maxi]
 
 def get_global_status():
     maxi = 0
-    for account in gajim.connections:
-        if not gajim.config.get_per('accounts', account,
+    for account in app.connections:
+        if not app.config.get_per('accounts', account,
         'sync_with_global_status'):
             continue
-        connected = gajim.connections[account].connected
+        connected = app.connections[account].connected
         if connected > maxi:
             maxi = connected
-            status = gajim.connections[account].status
+            status = app.connections[account].status
     return status
 
 
@@ -978,13 +978,13 @@ def statuses_unified():
     Test if all statuses are the same
     """
     reference = None
-    for account in gajim.connections:
-        if not gajim.config.get_per('accounts', account,
+    for account in app.connections:
+        if not app.config.get_per('accounts', account,
         'sync_with_global_status'):
             continue
         if reference is None:
-            reference = gajim.connections[account].connected
-        elif reference != gajim.connections[account].connected:
+            reference = app.connections[account].connected
+        elif reference != app.connections[account].connected:
             return False
     return True
 
@@ -992,17 +992,17 @@ def get_icon_name_to_show(contact, account = None):
     """
     Get the icon name to show in online, away, requested, etc
     """
-    if account and gajim.events.get_nb_roster_events(account, contact.jid):
+    if account and app.events.get_nb_roster_events(account, contact.jid):
         return 'event'
-    if account and gajim.events.get_nb_roster_events(account,
+    if account and app.events.get_nb_roster_events(account,
     contact.get_full_jid()):
         return 'event'
-    if account and account in gajim.interface.minimized_controls and \
-    contact.jid in gajim.interface.minimized_controls[account] and gajim.interface.\
+    if account and account in app.interface.minimized_controls and \
+    contact.jid in app.interface.minimized_controls[account] and app.interface.\
             minimized_controls[account][contact.jid].get_nb_unread_pm() > 0:
         return 'event'
-    if account and contact.jid in gajim.gc_connected[account]:
-        if gajim.gc_connected[account][contact.jid]:
+    if account and contact.jid in app.gc_connected[account]:
+        if app.gc_connected[account][contact.jid]:
             return 'muc_active'
         else:
             return 'muc_inactive'
@@ -1012,10 +1012,10 @@ def get_icon_name_to_show(contact, account = None):
         return contact.show
     if contact.ask == 'subscribe':
         return 'requested'
-    transport = gajim.get_transport_name_from_jid(contact.jid)
+    transport = app.get_transport_name_from_jid(contact.jid)
     if transport:
         return contact.show
-    if contact.show in gajim.SHOW_LIST:
+    if contact.show in app.SHOW_LIST:
         return contact.show
     return 'not in roster'
 
@@ -1030,7 +1030,7 @@ def get_jid_from_iq(iq_obj):
     Return the jid (without resource) from an iq
     """
     jid = get_full_jid_from_iq(iq_obj)
-    return gajim.get_jid_without_resource(jid)
+    return app.get_jid_without_resource(jid)
 
 def get_auth_sha(sid, initiator, target):
     """
@@ -1041,7 +1041,7 @@ def get_auth_sha(sid, initiator, target):
 
 def remove_invalid_xml_chars(string):
     if string:
-        string = re.sub(gajim.interface.invalid_XML_chars_re, '', string)
+        string = re.sub(app.interface.invalid_XML_chars_re, '', string)
     return string
 
 distro_info = {
@@ -1078,8 +1078,8 @@ def get_random_string_16():
     return ''.join(sample(char_sequence, 16))
 
 def get_os_info():
-    if gajim.os_info:
-        return gajim.os_info
+    if app.os_info:
+        return app.os_info
     if os.name == 'nt':
         # platform.release() seems to return the name of the windows
         ver = sys.getwindowsversion()
@@ -1099,7 +1099,7 @@ def get_os_info():
             os_info = 'Windows' + ' ' + win_version[ver_format]
         else:
             os_info = 'Windows'
-        gajim.os_info = os_info
+        app.os_info = os_info
         return os_info
     elif os.name == 'posix':
         executable = 'lsb_release'
@@ -1113,7 +1113,7 @@ def get_os_info():
             output = temp_failure_retry(p.stdout.readline).strip()
             # some distros put n/a in places, so remove those
             output = output.decode('utf-8').replace('n/a', '').replace('N/A', '')
-            gajim.os_info = output
+            app.os_info = output
             p.stdout.close()
             p.stdin.close()
             return output
@@ -1145,17 +1145,17 @@ def get_os_info():
                         # file just has version
                         text = distro_name + ' ' + text
                 os_info = text.replace('\n', '')
-                gajim.os_info = os_info
+                app.os_info = os_info
                 return os_info
 
         # our last chance, ask uname and strip it
         uname_output = get_output_of_command('uname -sr')
         if uname_output is not None:
             os_info = uname_output[0] # only first line
-            gajim.os_info = os_info
+            app.os_info = os_info
             return os_info
     os_info = 'N/A'
-    gajim.os_info = os_info
+    app.os_info = os_info
     return os_info
 
 
@@ -1168,11 +1168,11 @@ is_first_message=True):
     option that need to be True e.g.: notify_on_signing is_first_message: set it
     to false when it's not the first message
     """
-    if type_ and (not gajim.config.get(type_) or not is_first_message):
+    if type_ and (not app.config.get(type_) or not is_first_message):
         return False
-    if gajim.config.get('autopopupaway'): # always show notification
+    if app.config.get('autopopupaway'): # always show notification
         return True
-    if gajim.connections[account].connected in (2, 3): # we're online or chat
+    if app.connections[account].connected in (2, 3): # we're online or chat
         return True
     return False
 
@@ -1180,16 +1180,16 @@ def allow_popup_window(account):
     """
     Is it allowed to popup windows?
     """
-    autopopup = gajim.config.get('autopopup')
-    autopopupaway = gajim.config.get('autopopupaway')
+    autopopup = app.config.get('autopopup')
+    autopopupaway = app.config.get('autopopupaway')
     if autopopup and (autopopupaway or \
-    gajim.connections[account].connected in (2, 3)): # we're online or chat
+    app.connections[account].connected in (2, 3)): # we're online or chat
         return True
     return False
 
 def allow_sound_notification(account, sound_event):
-    if gajim.config.get('sounddnd') or gajim.connections[account].connected != \
-    gajim.SHOW_LIST.index('dnd') and gajim.config.get_per('soundevents',
+    if app.config.get('sounddnd') or app.connections[account].connected != \
+    app.SHOW_LIST.index('dnd') and app.config.get_per('soundevents',
     sound_event, 'enabled'):
         return True
     return False
@@ -1198,12 +1198,12 @@ def get_chat_control(account, contact):
     full_jid_with_resource = contact.jid
     if contact.resource:
         full_jid_with_resource += '/' + contact.resource
-    highest_contact = gajim.contacts.get_contact_with_highest_priority(
+    highest_contact = app.contacts.get_contact_with_highest_priority(
             account, contact.jid)
 
     # Look for a chat control that has the given resource, or default to
     # one without resource
-    ctrl = gajim.interface.msg_win_mgr.get_control(full_jid_with_resource,
+    ctrl = app.interface.msg_win_mgr.get_control(full_jid_with_resource,
             account)
 
     if ctrl:
@@ -1213,7 +1213,7 @@ def get_chat_control(account, contact):
         return None
     else:
         # unknown contact or offline message
-        return gajim.interface.msg_win_mgr.get_control(contact.jid, account)
+        return app.interface.msg_win_mgr.get_control(contact.jid, account)
 
 def get_notification_icon_tooltip_dict():
     """
@@ -1230,7 +1230,7 @@ def get_notification_icon_tooltip_dict():
         account_name = account['name']
         account['event_lines'] = []
         # Gather events per-account
-        pending_events = gajim.events.get_events(account = account_name)
+        pending_events = app.events.get_events(account = account_name)
         messages, non_messages, total_messages, total_non_messages = {}, {}, 0, 0
         for jid in pending_events:
             for event in pending_events[jid]:
@@ -1256,10 +1256,10 @@ def get_notification_icon_tooltip_dict():
                             '%d message pending',
                             '%d messages pending',
                             messages[jid], messages[jid], messages[jid])
-                    contact = gajim.contacts.get_first_contact_from_jid(
+                    contact = app.contacts.get_first_contact_from_jid(
                             account['name'], jid)
                     text += ' '
-                    if jid in gajim.gc_connected[account['name']]:
+                    if jid in app.gc_connected[account['name']]:
                         text += _('from room %s') % (jid)
                     elif contact:
                         name = contact.get_shown_name()
@@ -1334,13 +1334,13 @@ def get_accounts_info():
     Helper for notification icon tooltip
     """
     accounts = []
-    accounts_list = sorted(gajim.contacts.get_accounts())
+    accounts_list = sorted(app.contacts.get_accounts())
     for account in accounts_list:
-        status_idx = gajim.connections[account].connected
+        status_idx = app.connections[account].connected
         # uncomment the following to hide offline accounts
         # if status_idx == 0: continue
-        status = gajim.SHOW_LIST[status_idx]
-        message = gajim.connections[account].status
+        status = app.SHOW_LIST[status_idx]
+        message = app.connections[account].status
         single_line = get_uf_show(status)
         if message is None:
             message = ''
@@ -1354,33 +1354,33 @@ def get_accounts_info():
 
 
 def get_iconset_path(iconset):
-    if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', iconset)):
-        return os.path.join(gajim.DATA_DIR, 'iconsets', iconset)
-    elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, iconset)):
-        return os.path.join(gajim.MY_ICONSETS_PATH, iconset)
+    if os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', iconset)):
+        return os.path.join(app.DATA_DIR, 'iconsets', iconset)
+    elif os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, iconset)):
+        return os.path.join(app.MY_ICONSETS_PATH, iconset)
 
 def get_mood_iconset_path(iconset):
-    if os.path.isdir(os.path.join(gajim.DATA_DIR, 'moods', iconset)):
-        return os.path.join(gajim.DATA_DIR, 'moods', iconset)
-    elif os.path.isdir(os.path.join(gajim.MY_MOOD_ICONSETS_PATH, iconset)):
-        return os.path.join(gajim.MY_MOOD_ICONSETS_PATH, iconset)
+    if os.path.isdir(os.path.join(app.DATA_DIR, 'moods', iconset)):
+        return os.path.join(app.DATA_DIR, 'moods', iconset)
+    elif os.path.isdir(os.path.join(app.MY_MOOD_ICONSETS_PATH, iconset)):
+        return os.path.join(app.MY_MOOD_ICONSETS_PATH, iconset)
 
 def get_activity_iconset_path(iconset):
-    if os.path.isdir(os.path.join(gajim.DATA_DIR, 'activities', iconset)):
-        return os.path.join(gajim.DATA_DIR, 'activities', iconset)
-    elif os.path.isdir(os.path.join(gajim.MY_ACTIVITY_ICONSETS_PATH,
+    if os.path.isdir(os.path.join(app.DATA_DIR, 'activities', iconset)):
+        return os.path.join(app.DATA_DIR, 'activities', iconset)
+    elif os.path.isdir(os.path.join(app.MY_ACTIVITY_ICONSETS_PATH,
     iconset)):
-        return os.path.join(gajim.MY_ACTIVITY_ICONSETS_PATH, iconset)
+        return os.path.join(app.MY_ACTIVITY_ICONSETS_PATH, iconset)
 
 def get_transport_path(transport):
-    if os.path.isdir(os.path.join(gajim.DATA_DIR, 'iconsets', 'transports',
+    if os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', 'transports',
     transport)):
-        return os.path.join(gajim.DATA_DIR, 'iconsets', 'transports', transport)
-    elif os.path.isdir(os.path.join(gajim.MY_ICONSETS_PATH, 'transports',
+        return os.path.join(app.DATA_DIR, 'iconsets', 'transports', transport)
+    elif os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, 'transports',
     transport)):
-        return os.path.join(gajim.MY_ICONSETS_PATH, 'transports', transport)
+        return os.path.join(app.MY_ICONSETS_PATH, 'transports', transport)
     # No transport folder found, use default jabber one
-    return get_iconset_path(gajim.config.get('iconset'))
+    return get_iconset_path(app.config.get('iconset'))
 
 def prepare_and_validate_gpg_keyID(account, jid, keyID):
     """
@@ -1391,11 +1391,11 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
     assigned key XXXXXXXXMISMATCH is returned. If the key is trusted and not yet
     assigned, assign it.
     """
-    if gajim.connections[account].USE_GPG:
+    if app.connections[account].USE_GPG:
         if keyID and len(keyID) == 16:
             keyID = keyID[8:]
 
-        attached_keys = gajim.config.get_per('accounts', account,
+        attached_keys = app.config.get_per('accounts', account,
                 'attached_gpg_keys').split()
 
         if jid in attached_keys and keyID:
@@ -1403,7 +1403,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
             if attachedkeyID != keyID:
                 # Get signing subkeys for the attached key
                 subkeys = []
-                for key in gajim.connections[account].gpg.list_keys():
+                for key in app.connections[account].gpg.list_keys():
                     if key['keyid'][8:] == attachedkeyID:
                         subkeys = [subkey[0][8:] for subkey in key['subkeys'] \
                             if subkey[1] == 's']
@@ -1416,15 +1416,15 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
             # An unsigned presence, just use the assigned key
             keyID = attached_keys[attached_keys.index(jid) + 1]
         elif keyID:
-            full_key = gajim.connections[account].ask_gpg_keys(keyID=keyID)
+            full_key = app.connections[account].ask_gpg_keys(keyID=keyID)
             # Assign the corresponding key, if we have it in our keyring
             if full_key:
-                for u in gajim.contacts.get_contacts(account, jid):
+                for u in app.contacts.get_contacts(account, jid):
                     u.keyID = keyID
-                keys_str = gajim.config.get_per('accounts', account,
+                keys_str = app.config.get_per('accounts', account,
                     'attached_gpg_keys')
                 keys_str += jid + ' ' + keyID + ' '
-                gajim.config.set_per('accounts', account, 'attached_gpg_keys',
+                app.config.set_per('accounts', account, 'attached_gpg_keys',
                     keys_str)
         elif keyID is None:
             keyID = 'UNKNOWN'
@@ -1434,70 +1434,70 @@ def update_optional_features(account = None):
     if account:
         accounts = [account]
     else:
-        accounts = [a for a in gajim.connections]
+        accounts = [a for a in app.connections]
     for a in accounts:
-        gajim.gajim_optional_features[a] = []
-        if gajim.config.get_per('accounts', a, 'subscribe_mood'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_MOOD + '+notify')
-        if gajim.config.get_per('accounts', a, 'subscribe_activity'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_ACTIVITY + \
+        app.gajim_optional_features[a] = []
+        if app.config.get_per('accounts', a, 'subscribe_mood'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_MOOD + '+notify')
+        if app.config.get_per('accounts', a, 'subscribe_activity'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_ACTIVITY + \
                 '+notify')
-        if gajim.config.get_per('accounts', a, 'publish_tune'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_TUNE)
-        if gajim.config.get_per('accounts', a, 'publish_location'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_LOCATION)
-        if gajim.config.get_per('accounts', a, 'subscribe_tune'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_TUNE + '+notify')
-        if gajim.config.get_per('accounts', a, 'subscribe_nick'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_NICK + '+notify')
-        if gajim.config.get_per('accounts', a, 'subscribe_location'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_LOCATION + \
+        if app.config.get_per('accounts', a, 'publish_tune'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_TUNE)
+        if app.config.get_per('accounts', a, 'publish_location'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_LOCATION)
+        if app.config.get_per('accounts', a, 'subscribe_tune'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_TUNE + '+notify')
+        if app.config.get_per('accounts', a, 'subscribe_nick'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_NICK + '+notify')
+        if app.config.get_per('accounts', a, 'subscribe_location'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_LOCATION + \
                 '+notify')
-        if gajim.config.get('outgoing_chat_state_notifactions') != 'disabled':
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
-        if not gajim.config.get('ignore_incoming_xhtml'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
-        if gajim.HAVE_PYCRYPTO \
-        and gajim.config.get_per('accounts', a, 'enable_esessions'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
-        if gajim.config.get_per('accounts', a, 'answer_receipts'):
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
-        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
-        if gajim.HAVE_FARSTREAM:
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
-            gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
-        gajim.gajim_optional_features[a].append(
+        if app.config.get('outgoing_chat_state_notifactions') != 'disabled':
+            app.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
+        if not app.config.get('ignore_incoming_xhtml'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
+        if app.HAVE_PYCRYPTO \
+        and app.config.get_per('accounts', a, 'enable_esessions'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
+        if app.config.get_per('accounts', a, 'answer_receipts'):
+            app.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
+        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
+        if app.HAVE_FARSTREAM:
+            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
+            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
+            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
+            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
+        app.gajim_optional_features[a].append(
             nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
-        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
-        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
-        gajim.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
-        gajim.caps_hash[a] = caps_cache.compute_caps_hash([gajim.gajim_identity],
-                gajim.gajim_common_features + gajim.gajim_optional_features[a])
+        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
+        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
+        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
+        app.caps_hash[a] = caps_cache.compute_caps_hash([app.gajim_identity],
+                app.gajim_common_features + app.gajim_optional_features[a])
         # re-send presence with new hash
-        connected = gajim.connections[a].connected
-        if connected > 1 and gajim.SHOW_LIST[connected] != 'invisible':
-            gajim.connections[a].change_status(gajim.SHOW_LIST[connected],
-                    gajim.connections[a].status)
+        connected = app.connections[a].connected
+        if connected > 1 and app.SHOW_LIST[connected] != 'invisible':
+            app.connections[a].change_status(app.SHOW_LIST[connected],
+                    app.connections[a].status)
 
 def jid_is_blocked(account, jid):
-    return ((jid in gajim.connections[account].blocked_contacts) or \
-            gajim.connections[account].blocked_all)
+    return ((jid in app.connections[account].blocked_contacts) or \
+            app.connections[account].blocked_all)
 
 def group_is_blocked(account, group):
-    return ((group in gajim.connections[account].blocked_groups) or \
-            gajim.connections[account].blocked_all)
+    return ((group in app.connections[account].blocked_groups) or \
+            app.connections[account].blocked_all)
 
 def get_subscription_request_msg(account=None):
-    s = gajim.config.get_per('accounts', account, 'subscription_request_msg')
+    s = app.config.get_per('accounts', account, 'subscription_request_msg')
     if s:
         return s
     s = _('I would like to add you to my contact list.')
     if account:
         s = _('Hello, I am $name.') + ' ' + s
-        our_jid = gajim.get_jid_from_account(account)
-        vcard = gajim.connections[account].get_cached_vcard(our_jid)
+        our_jid = app.get_jid_from_account(account)
+        vcard = app.connections[account].get_cached_vcard(our_jid)
         name = ''
         if vcard:
             if 'N' in vcard:
@@ -1505,7 +1505,7 @@ def get_subscription_request_msg(account=None):
                     name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
             if not name and 'FN' in vcard:
                 name = vcard['FN']
-        nick = gajim.nicks[account]
+        nick = app.nicks[account]
         if name and nick:
             name += ' (%s)' % nick
         elif nick:
@@ -1529,9 +1529,9 @@ def replace_dataform_media(form, stanza):
     return found
 
 def get_proxy_info(account):
-    p = gajim.config.get_per('accounts', account, 'proxy')
+    p = app.config.get_per('accounts', account, 'proxy')
     if not p:
-        if gajim.config.get_per('accounts', account, 'use_env_http_proxy'):
+        if app.config.get_per('accounts', account, 'use_env_http_proxy'):
             try:
                 try:
                     env_http_proxy = os.environ['HTTP_PROXY']
@@ -1565,10 +1565,10 @@ def get_proxy_info(account):
 
             except Exception:
                 proxy = None
-        p = gajim.config.get('global_proxy')
-    if p and p in gajim.config.get_per('proxies'):
+        p = app.config.get('global_proxy')
+    if p and p in app.config.get_per('proxies'):
         proxy = {}
-        proxyptr = gajim.config.get_per('proxies', p)
+        proxyptr = app.config.get_per('proxies', p)
         if not proxyptr:
             return proxy
         for key in proxyptr.keys():
@@ -1588,7 +1588,7 @@ def _get_img_direct(attrs):
     socket.setdefaulttimeout(10)
     try:
         req = urllib.request.Request(attrs['src'])
-        req.add_header('User-Agent', 'Gajim ' + gajim.version)
+        req.add_header('User-Agent', 'Gajim ' + app.version)
         f = urllib.request.urlopen(req)
     except Exception as ex:
         log.debug('Error loading image %s ' % attrs['src']  + str(ex))
@@ -1638,7 +1638,7 @@ def _get_img_proxy(attrs, proxy):
     Download an image through a proxy. This function should be launched in a
     separated thread.
     """
-    if not gajim.HAVE_PYCURL:
+    if not app.HAVE_PYCURL:
         return '', _('PyCURL is not installed')
     mem, alt, max_size = '', '', 2*1024*1024
     if 'max_size' in attrs:
@@ -1654,7 +1654,7 @@ def _get_img_proxy(attrs, proxy):
         c.setopt(pycurl.TIMEOUT, 10 * (max_size / 1048576))
         c.setopt(pycurl.MAXFILESIZE, max_size)
         c.setopt(pycurl.WRITEFUNCTION, b.write)
-        c.setopt(pycurl.USERAGENT, 'Gajim ' + gajim.version)
+        c.setopt(pycurl.USERAGENT, 'Gajim ' + app.version)
         # set proxy
         c.setopt(pycurl.PROXY, proxy['host'].encode('utf-8'))
         c.setopt(pycurl.PROXYPORT, proxy['port'])

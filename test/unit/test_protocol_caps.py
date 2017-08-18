@@ -6,14 +6,14 @@ import unittest
 import lib
 lib.setup_env()
 
-from common import gajim
-from common import nec
-from common import ged
-from common import caps_cache
-from common.connection_handlers import ConnectionHandlers
-from common.protocol import caps
-from common.contacts import Contact
-from common.connection_handlers_events import CapsPresenceReceivedEvent
+from gajim.common import app
+from gajim.common import nec
+from gajim.common import ged
+from gajim.common import caps_cache
+from gajim.common.connection_handlers import ConnectionHandlers
+from gajim.common.protocol import caps
+from gajim.common.contacts import Contact
+from gajim.common.connection_handlers_events import CapsPresenceReceivedEvent
 
 from mock import Mock
 
@@ -45,8 +45,8 @@ class TestableConnectionCaps(ConnectionHandlers, caps.ConnectionCaps):
 class TestConnectionCaps(unittest.TestCase):
 
     def setUp(self):
-        gajim.nec = nec.NetworkEventsController()
-        gajim.ged.register_event_handler('caps-presence-received', ged.GUI2,
+        app.nec = nec.NetworkEventsController()
+        app.ged.register_event_handler('caps-presence-received', ged.GUI2,
             self._nec_caps_presence_received)
 
     def _nec_caps_presence_received(self, obj):

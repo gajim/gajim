@@ -22,25 +22,25 @@
 ##
 
 import nbxmpp
-from common import gajim
+from gajim.common import app
 #TODO: Doesn't work
 #from common.connection_handlers import PEP_CONFIG
 PEP_CONFIG = 'pep_config'
-from common import ged
-from common.connection_handlers_events import PubsubReceivedEvent
-from common.connection_handlers_events import PubsubBookmarksReceivedEvent
+from gajim.common import ged
+from gajim.common.connection_handlers_events import PubsubReceivedEvent
+from gajim.common.connection_handlers_events import PubsubBookmarksReceivedEvent
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
 class ConnectionPubSub:
     def __init__(self):
         self.__callbacks = {}
-        gajim.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
-        gajim.ged.register_event_handler('pubsub-bookmarks-received',
+        app.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
+        app.ged.register_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
 
     def cleanup(self):
-        gajim.ged.remove_event_handler('pubsub-bookmarks-received',
+        app.ged.remove_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
 
     def send_pb_subscription_query(self, jid, cb, *args, **kwargs):
@@ -57,7 +57,7 @@ class ConnectionPubSub:
     def send_pb_subscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
             return
-        our_jid = gajim.get_jid_from_account(self.name)
+        our_jid = app.get_jid_from_account(self.name)
         query = nbxmpp.Iq('set', to=jid)
         pb = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
         pb.addChild('subscribe', {'node': node, 'jid': our_jid})
@@ -69,7 +69,7 @@ class ConnectionPubSub:
     def send_pb_unsubscribe(self, jid, node, cb, *args, **kwargs):
         if not self.connection or self.connected < 2:
             return
-        our_jid = gajim.get_jid_from_account(self.name)
+        our_jid = app.get_jid_from_account(self.name)
         query = nbxmpp.Iq('set', to=jid)
         pb = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
         pb.addChild('unsubscribe', {'node': node, 'jid': our_jid})
@@ -189,7 +189,7 @@ class ConnectionPubSub:
             cb(conn, stanza, *args, **kwargs)
         except Exception:
             pass
-        gajim.nec.push_incoming_event(PubsubReceivedEvent(None,
+        app.nec.push_incoming_event(PubsubReceivedEvent(None,
             conn=self, stanza=stanza))
 
     def _nec_pubsub_bookmarks_received(self, obj):

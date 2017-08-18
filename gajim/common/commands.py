@@ -23,10 +23,10 @@
 ##
 
 import nbxmpp
-from common import helpers
-from common import dataforms
-from common import gajim
-from common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common import helpers
+from gajim.common import dataforms
+from gajim.common import app
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.c.commands')
@@ -157,7 +157,7 @@ class ChangeStatusCommand(AdHocCommand):
         self.connection.connection.send(response, now = presencetype == 'offline')
 
         # send new status
-        gajim.interface.roster.send_status(self.connection.name, presencetype,
+        app.interface.roster.send_status(self.connection.name, presencetype,
                 presencedesc)
 
         return False    # finish the session
@@ -165,8 +165,8 @@ class ChangeStatusCommand(AdHocCommand):
 def find_current_groupchats(account):
     import message_control
     rooms = []
-    for gc_control in gajim.interface.msg_win_mgr.get_controls(
-    message_control.TYPE_GC) + gajim.interface.minimized_controls[account].\
+    for gc_control in app.interface.msg_win_mgr.get_controls(
+    message_control.TYPE_GC) + app.interface.minimized_controls[account].\
     values():
         acct = gc_control.account
         # check if account is the good one
@@ -174,8 +174,8 @@ def find_current_groupchats(account):
             continue
         room_jid = gc_control.room_jid
         nick = gc_control.nick
-        if room_jid in gajim.gc_connected[acct] and \
-        gajim.gc_connected[acct][room_jid]:
+        if room_jid in app.gc_connected[acct] and \
+        app.gc_connected[acct][room_jid]:
             rooms.append((room_jid, nick,))
     return rooms
 
@@ -241,13 +241,13 @@ class LeaveGroupchatsCommand(AdHocCommand):
         account = self.connection.name
         try:
             for room_jid in gc:
-                gc_control = gajim.interface.msg_win_mgr.get_gc_control(room_jid,
+                gc_control = app.interface.msg_win_mgr.get_gc_control(room_jid,
                         account)
                 if not gc_control:
-                    gc_control = gajim.interface.minimized_controls[account]\
+                    gc_control = app.interface.minimized_controls[account]\
                             [room_jid]
                     gc_control.shutdown()
-                    gajim.interface.roster.remove_groupchat(room_jid, account)
+                    app.interface.roster.remove_groupchat(room_jid, account)
                     continue
                 gc_control.parent_win.remove_tab(gc_control, None, force = True)
         except Exception:       # KeyError if there's no such room opened
@@ -278,15 +278,15 @@ class ForwardMessagesCommand(AdHocCommand):
     def execute(self, request):
         account = self.connection.name
         # Forward messages
-        events = gajim.events.get_events(account, types=['chat', 'normal',
+        events = app.events.get_events(account, types=['chat', 'normal',
             'printed_chat'])
-        j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+        j, resource = app.get_room_and_nick_from_fjid(self.jid)
         for jid in events:
             for event in events[jid]:
                 ev_typ = event.type_
                 if ev_typ == 'printed_chat':
                     ev_typ = 'chat'
-                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                app.nec.push_outgoing_event(MessageOutgoingEvent(None,
                     account=account, jid=j, message=event.message, type_=ev_typ,
                     subject=event.subject, resource=resource, forward_from=jid,
                     delayed=event.time_))
@@ -313,14 +313,14 @@ class FwdMsgThenDisconnectCommand(AdHocCommand):
     def execute(self, request):
         account = self.connection.name
         # Forward messages
-        events = gajim.events.get_events(account, types=['chat', 'normal'])
-        j, resource = gajim.get_room_and_nick_from_fjid(self.jid)
+        events = app.events.get_events(account, types=['chat', 'normal'])
+        j, resource = app.get_room_and_nick_from_fjid(self.jid)
         for jid in events:
             for event in events[jid]:
                 ev_typ = event.type_
                 if ev_typ == 'printed_chat':
                     ev_typ = 'chat'
-                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None,
+                app.nec.push_outgoing_event(MessageOutgoingEvent(None,
                     account=account, jid=j, message=event.message, type_=ev_typ,
                     subject=event.subject, resource=resource, forward_from=jid,
                     delayed=event.time_, now=True))
@@ -333,7 +333,7 @@ class FwdMsgThenDisconnectCommand(AdHocCommand):
         self.connection.connection.send(response, now = True)
 
         # send new status
-        gajim.interface.roster.send_status(self.connection.name, 'offline', '')
+        app.interface.roster.send_status(self.connection.name, 'offline', '')
         # finish the session
         return False
 
@@ -345,7 +345,7 @@ class ConnectionCommands:
     def __init__(self):
         # a list of all commands exposed: node -> command class
         self.__commands = {}
-        if gajim.config.get('remote_commands'):
+        if app.config.get('remote_commands'):
             for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
             LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
                 self.__commands[cmdobj.commandnode] = cmdobj
@@ -354,7 +354,7 @@ class ConnectionCommands:
         self.__sessions = {}
 
     def getOurBareJID(self):
-        return gajim.get_jid_from_account(self.name)
+        return app.get_jid_from_account(self.name)
 
     def isSameJID(self, jid):
         """

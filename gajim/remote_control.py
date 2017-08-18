@@ -32,16 +32,16 @@ import os
 import base64
 import mimetypes
 
-from common import gajim
-from common import helpers
+from gajim.common import app
+from gajim.common import helpers
 from time import time
-from dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
-from common import ged
-from common.connection_handlers_events import MessageOutgoingEvent
-from common.connection_handlers_events import GcMessageOutgoingEvent
+from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from gajim.common import ged
+from gajim.common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 
-from common import dbus_support
+from gajim.common import dbus_support
 if dbus_support.supported:
     import dbus
     if dbus_support:
@@ -107,33 +107,33 @@ class Remote:
         bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
         self.signal_object = SignalObject(bus_name)
 
-        gajim.ged.register_event_handler('version-result-received', ged.POSTGUI,
+        app.ged.register_event_handler('version-result-received', ged.POSTGUI,
             self.on_os_info)
-        gajim.ged.register_event_handler('time-result-received', ged.POSTGUI,
+        app.ged.register_event_handler('time-result-received', ged.POSTGUI,
             self.on_time)
-        gajim.ged.register_event_handler('gmail-nofify', ged.POSTGUI,
+        app.ged.register_event_handler('gmail-nofify', ged.POSTGUI,
             self.on_gmail_notify)
-        gajim.ged.register_event_handler('roster-info', ged.POSTGUI,
+        app.ged.register_event_handler('roster-info', ged.POSTGUI,
             self.on_roster_info)
-        gajim.ged.register_event_handler('presence-received', ged.POSTGUI,
+        app.ged.register_event_handler('presence-received', ged.POSTGUI,
             self.on_presence_received)
-        gajim.ged.register_event_handler('subscribe-presence-received',
+        app.ged.register_event_handler('subscribe-presence-received',
             ged.POSTGUI, self.on_subscribe_presence_received)
-        gajim.ged.register_event_handler('subscribed-presence-received',
+        app.ged.register_event_handler('subscribed-presence-received',
             ged.POSTGUI, self.on_subscribed_presence_received)
-        gajim.ged.register_event_handler('unsubscribed-presence-received',
+        app.ged.register_event_handler('unsubscribed-presence-received',
             ged.POSTGUI, self.on_unsubscribed_presence_received)
-        gajim.ged.register_event_handler('gc-message-received',
+        app.ged.register_event_handler('gc-message-received',
             ged.POSTGUI, self.on_gc_message_received)
-        gajim.ged.register_event_handler('our-show', ged.POSTGUI,
+        app.ged.register_event_handler('our-show', ged.POSTGUI,
             self.on_our_status)
-        gajim.ged.register_event_handler('account-created', ged.POSTGUI,
+        app.ged.register_event_handler('account-created', ged.POSTGUI,
             self.on_account_created)
-        gajim.ged.register_event_handler('vcard-received', ged.POSTGUI,
+        app.ged.register_event_handler('vcard-received', ged.POSTGUI,
             self.on_vcard_received)
-        gajim.ged.register_event_handler('chatstate-received', ged.POSTGUI,
+        app.ged.register_event_handler('chatstate-received', ged.POSTGUI,
             self.on_chatstate_received)
-        gajim.ged.register_event_handler('message-sent', ged.POSTGUI,
+        app.ged.register_event_handler('message-sent', ged.POSTGUI,
             self.on_message_sent)
 
     def on_chatstate_received(self, obj):
@@ -321,8 +321,8 @@ class SignalObject(dbus.service.Object):
             # If user did not ask for account, returns the global status
             return DBUS_STRING(helpers.get_global_show())
         # return show for the given account
-        index = gajim.connections[account].connected
-        return DBUS_STRING(gajim.SHOW_LIST[index])
+        index = app.connections[account].connected
+        return DBUS_STRING(app.SHOW_LIST[index])
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='s')
     def get_status_message(self, account):
@@ -333,7 +333,7 @@ class SignalObject(dbus.service.Object):
             # If user did not ask for account, returns the global status
             return DBUS_STRING(str(helpers.get_global_status()))
         # return show for the given account
-        status = gajim.connections[account].status
+        status = app.connections[account].status
         return DBUS_STRING(status)
 
     def _get_account_and_contact(self, account, jid):
@@ -342,21 +342,21 @@ class SignalObject(dbus.service.Object):
         """
         connected_account = None
         contact = None
-        accounts = gajim.contacts.get_accounts()
+        accounts = app.contacts.get_accounts()
         # if there is only one account in roster, take it as default
         # if user did not ask for account
         if not account and len(accounts) == 1:
             account = accounts[0]
         if account:
-            if gajim.connections[account].connected > 1: # account is connected
+            if app.connections[account].connected > 1: # account is connected
                 connected_account = account
-                contact = gajim.contacts.get_contact_with_highest_priority(account,
+                contact = app.contacts.get_contact_with_highest_priority(account,
                         jid)
         else:
             for account in accounts:
-                contact = gajim.contacts.get_contact_with_highest_priority(account,
+                contact = app.contacts.get_contact_with_highest_priority(account,
                         jid)
-                if contact and gajim.connections[account].connected > 1:
+                if contact and app.connections[account].connected > 1:
                     # account is connected
                     connected_account = account
                     break
@@ -371,22 +371,22 @@ class SignalObject(dbus.service.Object):
         or check if the given account is connected to the groupchat
         """
         connected_account = None
-        accounts = gajim.contacts.get_accounts()
+        accounts = app.contacts.get_accounts()
         # if there is only one account in roster, take it as default
         # if user did not ask for account
         if not account and len(accounts) == 1:
             account = accounts[0]
         if account:
-            if gajim.connections[account].connected > 1 and \
-            room_jid in gajim.gc_connected[account] and \
-            gajim.gc_connected[account][room_jid]:
+            if app.connections[account].connected > 1 and \
+            room_jid in app.gc_connected[account] and \
+            app.gc_connected[account][room_jid]:
                 # account and groupchat are connected
                 connected_account = account
         else:
             for account in accounts:
-                if gajim.connections[account].connected > 1 and \
-                room_jid in gajim.gc_connected[account] and \
-                gajim.gc_connected[account][room_jid]:
+                if app.connections[account].connected > 1 and \
+                room_jid in app.gc_connected[account] and \
+                app.gc_connected[account][room_jid]:
                     # account and groupchat are connected
                     connected_account = account
                     break
@@ -405,7 +405,7 @@ class SignalObject(dbus.service.Object):
             if file_path.startswith('file://'):
                 file_path=file_path[7:]
             if os.path.isfile(file_path): # is it file?
-                gajim.interface.instances['file_transfers'].send_file(
+                app.interface.instances['file_transfers'].send_file(
                         connected_account, contact, file_path)
                 return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
@@ -423,18 +423,18 @@ class SignalObject(dbus.service.Object):
 
         connected_account, contact = self._get_account_and_contact(account, jid)
         if connected_account:
-            connection = gajim.connections[connected_account]
+            connection = app.connections[connected_account]
             sessions = connection.get_sessions(jid)
             if sessions:
                 session = sessions[0]
             else:
                 session = connection.make_new_session(jid)
-            ctrl = gajim.interface.msg_win_mgr.search_control(jid,
+            ctrl = app.interface.msg_win_mgr.search_control(jid,
                 connected_account)
             if ctrl:
                 ctrl.send_message(message)
             else:
-                gajim.nec.push_outgoing_event(MessageOutgoingEvent(None, account=connected_account, jid=jid, message=message, keyID=keyID, type_=type_, control=ctrl))
+                app.nec.push_outgoing_event(MessageOutgoingEvent(None, account=connected_account, jid=jid, message=message, keyID=keyID, type_=type_, control=ctrl))
 
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
@@ -466,8 +466,8 @@ class SignalObject(dbus.service.Object):
             return DBUS_BOOLEAN(False)
         connected_account = self._get_account_for_groupchat(account, room_jid)
         if connected_account:
-            connection = gajim.connections[connected_account]
-            gajim.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
+            connection = app.connections[connected_account]
+            app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
                 account=connected_account, jid=room_jid, message=message))
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
@@ -491,21 +491,21 @@ class SignalObject(dbus.service.Object):
         if account:
             accounts = [account]
         else:
-            accounts = gajim.connections.keys()
+            accounts = app.connections.keys()
             if len(accounts) == 1:
                 account = accounts[0]
         connected_account = None
         first_connected_acct = None
         for acct in accounts:
-            if gajim.connections[acct].connected > 1: # account is  online
-                contact = gajim.contacts.get_first_contact_from_jid(acct, jid)
-                if gajim.interface.msg_win_mgr.has_window(jid, acct):
+            if app.connections[acct].connected > 1: # account is  online
+                contact = app.contacts.get_first_contact_from_jid(acct, jid)
+                if app.interface.msg_win_mgr.has_window(jid, acct):
                     connected_account = acct
                     break
                 # jid is in roster
                 elif contact:
                     minimized_control = \
-                        jid in gajim.interface.minimized_controls[acct]
+                        jid in app.interface.minimized_controls[acct]
                     connected_account = acct
                     break
                 # we send the message to jid not in roster, because account is
@@ -520,13 +520,13 @@ class SignalObject(dbus.service.Object):
             connected_account = first_connected_acct
 
         if minimized_control:
-            gajim.interface.roster.on_groupchat_maximized(None, jid,
+            app.interface.roster.on_groupchat_maximized(None, jid,
                 connected_account)
 
         if connected_account:
-            gajim.interface.new_chat_from_jid(connected_account, jid, message)
+            app.interface.new_chat_from_jid(connected_account, jid, message)
             # preserve the 'steal focus preservation'
-            win = gajim.interface.msg_win_mgr.get_window(jid,
+            win = app.interface.msg_win_mgr.get_window(jid,
                     connected_account).window
             if win.get_property('visible'):
                 win.window.focus(Gtk.get_current_event_time())
@@ -544,24 +544,24 @@ class SignalObject(dbus.service.Object):
             status = ''
         if account:
             if not status:
-                if account not in gajim.connections:
+                if account not in app.connections:
                     return DBUS_BOOLEAN(False)
-                status = gajim.SHOW_LIST[gajim.connections[account].connected]
-            GLib.idle_add(gajim.interface.roster.send_status, account, status,
+                status = app.SHOW_LIST[app.connections[account].connected]
+            GLib.idle_add(app.interface.roster.send_status, account, status,
                 message)
         else:
             # account not specified, so change the status of all accounts
-            for acc in gajim.contacts.get_accounts():
-                if not gajim.config.get_per('accounts', acc,
+            for acc in app.contacts.get_accounts():
+                if not app.config.get_per('accounts', acc,
                 'sync_with_global_status'):
                     continue
                 if status:
                     status_ = status
                 else:
-                    if acc not in gajim.connections:
+                    if acc not in app.connections:
                         continue
-                    status_ = gajim.SHOW_LIST[gajim.connections[acc].connected]
-                GLib.idle_add(gajim.interface.roster.send_status, acc, status_,
+                    status_ = app.SHOW_LIST[app.connections[acc].connected]
+                GLib.idle_add(app.interface.roster.send_status, acc, status_,
                     message)
         return DBUS_BOOLEAN(False)
 
@@ -572,23 +572,23 @@ class SignalObject(dbus.service.Object):
         priority is changed for all accounts. That are synced with global status
         """
         if account:
-            gajim.config.set_per('accounts', account, 'priority', prio)
-            show = gajim.SHOW_LIST[gajim.connections[account].connected]
-            status = gajim.connections[account].status
-            GLib.idle_add(gajim.connections[account].change_status, show,
+            app.config.set_per('accounts', account, 'priority', prio)
+            show = app.SHOW_LIST[app.connections[account].connected]
+            status = app.connections[account].status
+            GLib.idle_add(app.connections[account].change_status, show,
                 status)
         else:
             # account not specified, so change prio of all accounts
-            for acc in gajim.contacts.get_accounts():
-                if not gajim.account_is_connected(acc):
+            for acc in app.contacts.get_accounts():
+                if not app.account_is_connected(acc):
                     continue
-                if not gajim.config.get_per('accounts', acc,
+                if not app.config.get_per('accounts', acc,
                 'sync_with_global_status'):
                     continue
-                gajim.config.set_per('accounts', acc, 'priority', prio)
-                show = gajim.SHOW_LIST[gajim.connections[acc].connected]
-                status = gajim.connections[acc].status
-                GLib.idle_add(gajim.connections[acc].change_status, show,
+                app.config.set_per('accounts', acc, 'priority', prio)
+                show = app.SHOW_LIST[app.connections[acc].connected]
+                status = app.connections[acc].status
+                GLib.idle_add(app.connections[acc].change_status, show,
                     status)
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
@@ -596,11 +596,11 @@ class SignalObject(dbus.service.Object):
         """
         Show the window(s) with next pending event in tabbed/group chats
         """
-        if gajim.events.get_nb_events():
-            account, jid, event = gajim.events.get_first_systray_event()
+        if app.events.get_nb_events():
+            account, jid, event = app.events.get_first_systray_event()
             if not event:
                 return
-            gajim.interface.handle_event(account, jid, event.type_)
+            app.interface.handle_event(account, jid, event.type_)
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='a{sv}')
     def contact_info(self, jid):
@@ -613,7 +613,7 @@ class SignalObject(dbus.service.Object):
             raise dbus_support.MissingArgument()
         jid = self._get_real_jid(jid)
 
-        cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
+        cached_vcard = list(app.connections.values())[0].get_cached_vcard(jid)
         if cached_vcard:
             return get_dbus_struct(cached_vcard)
 
@@ -625,7 +625,7 @@ class SignalObject(dbus.service.Object):
         """
         List register accounts
         """
-        result = gajim.contacts.get_accounts()
+        result = app.contacts.get_accounts()
         result_array = dbus.Array([], signature='s')
         if result and len(result) > 0:
             for account in result:
@@ -638,16 +638,16 @@ class SignalObject(dbus.service.Object):
         Show info on account: resource, jid, nick, prio, message
         """
         result = DBUS_DICT_SS()
-        if account in gajim.connections:
+        if account in app.connections:
             # account is valid
-            con = gajim.connections[account]
+            con = app.connections[account]
             index = con.connected
-            result['status'] = DBUS_STRING(gajim.SHOW_LIST[index])
+            result['status'] = DBUS_STRING(app.SHOW_LIST[index])
             result['name'] = DBUS_STRING(con.name)
-            result['jid'] = DBUS_STRING(gajim.get_jid_from_account(con.name))
+            result['jid'] = DBUS_STRING(app.get_jid_from_account(con.name))
             result['message'] = DBUS_STRING(con.status)
             result['priority'] = DBUS_STRING(str(con.priority))
-            result['resource'] = DBUS_STRING(gajim.config.get_per('accounts',
+            result['resource'] = DBUS_STRING(app.config.get_per('accounts',
                 con.name, 'resource'))
         return result
 
@@ -658,7 +658,7 @@ class SignalObject(dbus.service.Object):
         return the contacts for the specified account
         """
         result = dbus.Array([], signature='aa{sv}')
-        accounts = gajim.contacts.get_accounts()
+        accounts = app.contacts.get_accounts()
         if len(accounts) == 0:
             return result
         if account:
@@ -667,9 +667,9 @@ class SignalObject(dbus.service.Object):
             accounts_to_search = accounts
         for acct in accounts_to_search:
             if acct in accounts:
-                for jid in gajim.contacts.get_jid_list(acct):
+                for jid in app.contacts.get_jid_list(acct):
                     item = self._contacts_as_dbus_structure(
-                            gajim.contacts.get_contacts(acct, jid))
+                            app.contacts.get_contacts(acct, jid))
                     if item:
                         result.append(item)
         return result
@@ -679,7 +679,7 @@ class SignalObject(dbus.service.Object):
         """
         Show/hide the roster window
         """
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         if win.get_property('visible'):
             GLib.idle_add(win.hide)
         else:
@@ -695,7 +695,7 @@ class SignalObject(dbus.service.Object):
         """
         Show the roster window
         """
-        win = gajim.interface.roster.window
+        win = app.interface.roster.window
         win.present()
         # preserve the 'steal focus preservation'
         if self._is_first():
@@ -708,7 +708,7 @@ class SignalObject(dbus.service.Object):
         """
         Show/hide the ipython window
         """
-        win = gajim.ipython_window
+        win = app.ipython_window
         if win:
             if win.window.is_visible():
                 GLib.idle_add(win.hide)
@@ -716,7 +716,7 @@ class SignalObject(dbus.service.Object):
                 win.show_all()
                 win.present()
         else:
-            gajim.interface.create_ipython_window()
+            app.interface.create_ipython_window()
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='a{ss}')
     def prefs_list(self):
@@ -730,13 +730,13 @@ class SignalObject(dbus.service.Object):
                     key += node + '#'
             key += name
             prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value)
-        gajim.config.foreach(get_prefs)
+        app.config.foreach(get_prefs)
         return prefs_dict
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='b')
     def prefs_store(self):
         try:
-            gajim.interface.save_config()
+            app.interface.save_config()
         except Exception:
             return DBUS_BOOLEAN(False)
         return DBUS_BOOLEAN(True)
@@ -749,9 +749,9 @@ class SignalObject(dbus.service.Object):
         if len(key_path) != 3:
             return DBUS_BOOLEAN(False)
         if key_path[2] == '*':
-            gajim.config.del_per(key_path[0], key_path[1])
+            app.config.del_per(key_path[0], key_path[1])
         else:
-            gajim.config.del_per(key_path[0], key_path[1], key_path[2])
+            app.config.del_per(key_path[0], key_path[1], key_path[2])
         return DBUS_BOOLEAN(True)
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='b')
@@ -761,17 +761,17 @@ class SignalObject(dbus.service.Object):
         key_path = key.split('#', 2)
         if len(key_path) < 3:
             subname, value = key.split('=', 1)
-            gajim.config.set(subname, value)
+            app.config.set(subname, value)
             return DBUS_BOOLEAN(True)
         subname, value = key_path[2].split('=', 1)
-        gajim.config.set_per(key_path[0], key_path[1], subname, value)
+        app.config.set_per(key_path[0], key_path[1], subname, value)
         return DBUS_BOOLEAN(True)
 
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
     def add_contact(self, jid, account):
         if account:
-            if account in gajim.connections and \
-                    gajim.connections[account].connected > 1:
+            if account in app.connections and \
+                    app.connections[account].connected > 1:
                 # if given account is active, use it
                 AddNewContactWindow(account = account, jid = jid)
             else:
@@ -785,19 +785,19 @@ class SignalObject(dbus.service.Object):
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
     def remove_contact(self, jid, account):
         jid = self._get_real_jid(jid, account)
-        accounts = gajim.contacts.get_accounts()
+        accounts = app.contacts.get_accounts()
 
         # if there is only one account in roster, take it as default
         if account:
             accounts = [account]
         contact_exists = False
         for account in accounts:
-            contacts = gajim.contacts.get_contacts(account, jid)
+            contacts = app.contacts.get_contacts(account, jid)
             if contacts:
-                gajim.connections[account].unsubscribe(jid)
+                app.connections[account].unsubscribe(jid)
                 for contact in contacts:
-                    gajim.interface.roster.remove_contact(contact, account)
-                gajim.contacts.remove_jid(account, jid)
+                    app.interface.roster.remove_contact(contact, account)
+                app.contacts.remove_jid(account, jid)
                 contact_exists = True
         return DBUS_BOOLEAN(contact_exists)
 
@@ -815,18 +815,18 @@ class SignalObject(dbus.service.Object):
         if account:
             accounts = [account]
         else:
-            accounts = gajim.connections.keys()
+            accounts = app.connections.keys()
         if jid.startswith('xmpp:'):
             return jid[5:] # len('xmpp:') = 5
         nick_in_roster = None # Is jid a nick ?
         for account in accounts:
             # Does jid exists in roster of one account ?
-            if gajim.contacts.get_contacts(account, jid):
+            if app.contacts.get_contacts(account, jid):
                 return jid
             if not nick_in_roster:
                 # look in all contact if one has jid as nick
-                for jid_ in gajim.contacts.get_jid_list(account):
-                    c = gajim.contacts.get_contacts(account, jid_)
+                for jid_ in app.contacts.get_jid_list(account):
+                    c = app.contacts.get_contacts(account, jid_)
                     if c[0].name == jid:
                         nick_in_roster = jid_
                         break
@@ -870,7 +870,7 @@ class SignalObject(dbus.service.Object):
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='s')
     def get_unread_msgs_number(self):
-        return DBUS_STRING(str(gajim.events.get_nb_events()))
+        return DBUS_STRING(str(app.events.get_nb_events()))
 
     @dbus.service.method(INTERFACE, in_signature='s', out_signature='b')
     def start_chat(self, account):
@@ -883,10 +883,10 @@ class SignalObject(dbus.service.Object):
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
     def send_xml(self, xml, account):
         if account:
-            gajim.connections[account].send_stanza(str(xml))
+            app.connections[account].send_stanza(str(xml))
         else:
-            for acc in gajim.contacts.get_accounts():
-                gajim.connections[acc].send_stanza(str(xml))
+            for acc in app.contacts.get_accounts():
+                app.connections[acc].send_stanza(str(xml))
 
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
     def change_avatar(self, picture, account):
@@ -908,31 +908,31 @@ class SignalObject(dbus.service.Object):
             if avatar_mime_type:
                 vcard['PHOTO']['TYPE'] = avatar_mime_type
             if account:
-                gajim.connections[account].send_vcard(vcard)
+                app.connections[account].send_vcard(vcard)
             else:
-                for acc in gajim.connections:
-                    gajim.connections[acc].send_vcard(vcard)
+                for acc in app.connections:
+                    app.connections[acc].send_vcard(vcard)
 
     @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
     def join_room(self, room_jid, nick, password, account):
         if not account:
             # get the first connected account
-            accounts = gajim.connections.keys()
+            accounts = app.connections.keys()
             for acct in accounts:
-                if gajim.account_is_connected(acct):
-                    if not gajim.connections[acct].is_zeroconf:
+                if app.account_is_connected(acct):
+                    if not app.connections[acct].is_zeroconf:
                         account = acct
                         break
             if not account:
                 return
 
-        if gajim.connections[account].is_zeroconf:
+        if app.connections[account].is_zeroconf:
             # zeroconf not support groupchats
             return
 
         if not nick:
             nick = ''
-            gajim.interface.instances[account]['join_gc'] = \
+            app.interface.instances[account]['join_gc'] = \
                             JoinGroupchatWindow(account, room_jid, nick)
         else:
-            gajim.interface.join_gc_room(account, room_jid, nick, password)
+            app.interface.join_gc_room(account, room_jid, nick, password)

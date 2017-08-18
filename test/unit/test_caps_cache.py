@@ -7,8 +7,8 @@ import lib
 lib.setup_env()
 
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM
-from common import caps_cache as caps
-from common.contacts import Contact
+from gajim.common import caps_cache as caps
+from gajim.common.contacts import Contact
 
 from mock import Mock
 

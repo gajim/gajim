@@ -29,6 +29,10 @@ if sys.platform != 'win32':
 
 sys.path.append("@PY_SITEDIR@")
 
-import gajim.gajim as g
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import gajim.history_manager as g
 
-g.GajimApplication().run(sys.argv)
+g.HistoryManager()
+Gtk.main()

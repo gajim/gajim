@@ -25,8 +25,8 @@ Documentation: http://www.freedesktop.org/wiki/Software/systemd/inhibit
 import os
 import logging
 
-from common import dbus_support
-from common import gajim
+from gajim.common import dbus_support
+from gajim.common import app
 
 log = logging.getLogger('gajim.logind_listener')
 supported = False
@@ -46,9 +46,9 @@ def on_suspend(active):
 
     # we're going for suspend, let's disconnect
     log.debug('System suspend detected, disconnecting from network…')
-    for name, conn in gajim.connections.items():
-        if gajim.account_is_connected(name):
-            conn.old_show = gajim.SHOW_LIST[conn.connected]
+    for name, conn in app.connections.items():
+        if app.account_is_connected(name):
+            conn.old_show = app.SHOW_LIST[conn.connected]
             st = conn.status
             conn.change_status('offline', _('Machine going to sleep'))
             conn.status = st
@@ -67,7 +67,7 @@ def on_suspend(active):
 def get_inhibitor():
     '''Ask for a suspend delay inhibitor'''
 
-    from common.dbus_support import system_bus, dbus
+    from gajim.common.dbus_support import system_bus, dbus
     bus = system_bus.bus()
     global fd
 
@@ -91,7 +91,7 @@ def set_listener():
 
     @return bool whether it succeeded
     '''
-    from common.dbus_support import system_bus
+    from gajim.common.dbus_support import system_bus
     bus = system_bus.bus()
 
     if not 'org.freedesktop.login1' in bus.list_names():

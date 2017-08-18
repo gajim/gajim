@@ -40,12 +40,12 @@ import locale
 import os
 # import logging
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
-from common import helpers
-from common import gajim
-from common import ged
-from common.i18n import Q_
+from gajim.common import helpers
+from gajim.common import app
+from gajim.common import ged
+from gajim.common.i18n import Q_
 
 # log = logging.getLogger('gajim.vcard')
 
@@ -96,7 +96,7 @@ class VcardWindow:
         # Get real jid
         if gc_contact:
             # Don't use real jid if room is (semi-)anonymous
-            gc_control = gajim.interface.msg_win_mgr.get_gc_control(
+            gc_control = app.interface.msg_win_mgr.get_gc_control(
             gc_contact.room_jid, account)
             if gc_contact.jid and not gc_control.is_anonymous:
                 self.real_jid = gc_contact.jid
@@ -112,7 +112,7 @@ class VcardWindow:
             self.real_resource = contact.resource
 
         puny_jid = helpers.sanitize_filename(contact.jid)
-        local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
+        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid) + \
                 '_local'
         for extension in ('.png', '.jpeg'):
             local_avatar_path = local_avatar_basepath + extension
@@ -132,15 +132,15 @@ class VcardWindow:
         self.update_progressbar_timeout_id = GLib.timeout_add(self.update_intervall,
             self.update_progressbar)
 
-        gajim.ged.register_event_handler('version-result-received', ged.GUI1,
+        app.ged.register_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
-        gajim.ged.register_event_handler('time-result-received', ged.GUI1,
+        app.ged.register_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
-        gajim.ged.register_event_handler('vcard-received', ged.GUI1,
+        app.ged.register_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
 
         self.fill_jabber_page()
-        annotations = gajim.connections[self.account].annotations
+        annotations = app.connections[self.account].annotations
         if self.contact.jid in annotations:
             buffer_ = self.xml.get_object('textview_annotation').get_buffer()
             buffer_.set_text(annotations[self.contact.jid])
@@ -169,19 +169,19 @@ class VcardWindow:
     def on_vcard_information_window_destroy(self, widget):
         if self.update_progressbar_timeout_id is not None:
             GLib.source_remove(self.update_progressbar_timeout_id)
-        del gajim.interface.instances[self.account]['infos'][self.contact.jid]
+        del app.interface.instances[self.account]['infos'][self.contact.jid]
         buffer_ = self.xml.get_object('textview_annotation').get_buffer()
         annotation = buffer_.get_text(buffer_.get_start_iter(),
                 buffer_.get_end_iter(), True)
-        connection = gajim.connections[self.account]
+        connection = app.connections[self.account]
         if annotation != connection.annotations.get(self.contact.jid, ''):
             connection.annotations[self.contact.jid] = annotation
             connection.store_annotations()
-        gajim.ged.remove_event_handler('version-result-received', ged.GUI1,
+        app.ged.remove_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
-        gajim.ged.remove_event_handler('time-result-received', ged.GUI1,
+        app.ged.remove_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
-        gajim.ged.remove_event_handler('vcard-received', ged.GUI1,
+        app.ged.remove_event_handler('vcard-received', ged.GUI1,
             self._nec_vcard_received)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
@@ -298,7 +298,7 @@ class VcardWindow:
         if self.gc_contact:
             if obj.fjid != self.contact.jid:
                 return
-        elif gajim.get_jid_without_resource(obj.fjid) != self.contact.jid:
+        elif app.get_jid_without_resource(obj.fjid) != self.contact.jid:
             return
         i = 0
         client = ''
@@ -337,7 +337,7 @@ class VcardWindow:
         if self.gc_contact:
             if obj.fjid != self.contact.jid:
                 return
-        elif gajim.get_jid_without_resource(obj.fjid) != self.contact.jid:
+        elif app.get_jid_without_resource(obj.fjid) != self.contact.jid:
             return
         i = 0
         time_s = ''
@@ -361,7 +361,7 @@ class VcardWindow:
     def fill_status_label(self):
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
-        contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
+        contact_list = app.contacts.get_contacts(self.account, self.contact.jid)
         connected_contact_list = []
         for c in contact_list:
             if c.show not in ('offline', 'error'):
@@ -442,11 +442,11 @@ class VcardWindow:
             self.os_info_arrived = True
         else: # Request os info if contact is connected
             if self.gc_contact:
-                j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                GLib.idle_add(gajim.connections[self.account].request_os_info,
+                j, r = app.get_room_and_nick_from_fjid(self.real_jid)
+                GLib.idle_add(app.connections[self.account].request_os_info,
                     j, r, self.contact.jid)
             else:
-                GLib.idle_add(gajim.connections[self.account].request_os_info,
+                GLib.idle_add(app.connections[self.account].request_os_info,
                     self.contact.jid, self.contact.resource)
 
         # do not wait for entity_time if contact is not connected or has error
@@ -456,18 +456,18 @@ class VcardWindow:
             self.entity_time_arrived = True
         else: # Request entity time if contact is connected
             if self.gc_contact:
-                j, r = gajim.get_room_and_nick_from_fjid(self.real_jid)
-                GLib.idle_add(gajim.connections[self.account].\
+                j, r = app.get_room_and_nick_from_fjid(self.real_jid)
+                GLib.idle_add(app.connections[self.account].\
                     request_entity_time, j, r, self.contact.jid)
             else:
-                GLib.idle_add(gajim.connections[self.account].\
+                GLib.idle_add(app.connections[self.account].\
                     request_entity_time, self.contact.jid, self.contact.resource)
 
         self.os_info = {0: {'resource': self.real_resource, 'client': '',
                 'os': ''}}
         self.time_info = {0: {'resource': self.real_resource, 'time': ''}}
         i = 1
-        contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
+        contact_list = app.contacts.get_contacts(self.account, self.contact.jid)
         if contact_list:
             for c in contact_list:
                 if c.resource != self.contact.resource:
@@ -476,9 +476,9 @@ class VcardWindow:
                     uf_resources += '\n' + c.resource + \
                             _(' resource with priority ') + str(c.priority)
                     if c.show not in ('offline', 'error'):
-                        GLib.idle_add(gajim.connections[self.account].\
+                        GLib.idle_add(app.connections[self.account].\
                             request_os_info, c.jid, c.resource)
-                        GLib.idle_add(gajim.connections[self.account].\
+                        GLib.idle_add(app.connections[self.account].\
                             request_entity_time, c.jid, c.resource)
                     self.os_info[i] = {'resource': c.resource, 'client': '',
                             'os': ''}
@@ -494,10 +494,10 @@ class VcardWindow:
 
         if self.gc_contact:
             # If we know the real jid, remove the resource from vcard request
-            gajim.connections[self.account].request_vcard(self.real_jid_for_vcard,
+            app.connections[self.account].request_vcard(self.real_jid_for_vcard,
                     self.gc_contact.get_full_jid())
         else:
-            gajim.connections[self.account].request_vcard(self.contact.jid)
+            app.connections[self.account].request_vcard(self.contact.jid)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -523,7 +523,7 @@ class ZeroconfVcardWindow:
         self.window.show_all()
 
     def on_zeroconf_information_window_destroy(self, widget):
-        del gajim.interface.instances[self.account]['infos'][self.contact.jid]
+        del app.interface.instances[self.account]['infos'][self.contact.jid]
 
     def on_zeroconf_information_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -561,7 +561,7 @@ class ZeroconfVcardWindow:
     def fill_status_label(self):
         if self.xml.get_object('information_notebook').get_n_pages() < 2:
             return
-        contact_list = gajim.contacts.get_contacts(self.account, self.contact.jid)
+        contact_list = app.contacts.get_contacts(self.account, self.contact.jid)
         # stats holds show and status message
         stats = ''
         one = True # Are we adding the first line ?
@@ -603,7 +603,7 @@ class ZeroconfVcardWindow:
         self.fill_status_label()
 
     def fill_personal_page(self):
-        contact = gajim.connections[gajim.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
+        contact = app.connections[app.ZEROCONF_ACC_NAME].roster.getItem(self.contact.jid)
         for key in ('1st', 'last', 'jid', 'email'):
             if key not in contact['txt_dict']:
                 contact['txt_dict'][key] = ''

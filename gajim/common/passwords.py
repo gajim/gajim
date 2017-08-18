@@ -27,7 +27,7 @@
 import os
 import logging
 import gi
-from common import gajim
+from gajim.common import app
 
 __all__ = ['get_password', 'save_password']
 
@@ -69,15 +69,15 @@ class LibSecretPasswordStorage(PasswordStorage):
         )
 
     def get_password(self, account_name):
-        server = gajim.config.get_per('accounts', account_name, 'hostname')
-        user = gajim.config.get_per('accounts', account_name, 'name')
+        server = app.config.get_per('accounts', account_name, 'hostname')
+        user = app.config.get_per('accounts', account_name, 'name')
         password = self.Secret.password_lookup_sync(self.GAJIM_SCHEMA,
             {'user': user, 'server': server, 'protocol': 'xmpp'}, None)
         return password
 
     def save_password(self, account_name, password, update=True):
-        server = gajim.config.get_per('accounts', account_name, 'hostname')
-        user = gajim.config.get_per('accounts', account_name, 'name')
+        server = app.config.get_per('accounts', account_name, 'hostname')
+        user = app.config.get_per('accounts', account_name, 'name')
         display_name = _('XMPP account %s@%s') % (user, server)
         attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
         return self.Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
@@ -123,7 +123,7 @@ class PasswordStorageManager(PasswordStorage):
         """
         # TODO: handle disappearing backends
 
-        if gajim.config.get('use_keyring'):
+        if app.config.get('use_keyring'):
             if os.name == 'nt' and keyring:
                 self.winsecret = SecretWindowsPasswordStorage()
             else:
@@ -133,7 +133,7 @@ class PasswordStorageManager(PasswordStorage):
                     log.debug("Could not connect to libsecret: %s" % e)
 
     def get_password(self, account_name):
-        pw = gajim.config.get_per('accounts', account_name, 'password')
+        pw = app.config.get_per('accounts', account_name, 'password')
         if not pw:
             return pw
         if pw.startswith(LibSecretPasswordStorage.identifier) and \
@@ -156,15 +156,15 @@ class PasswordStorageManager(PasswordStorage):
     def save_password(self, account_name, password):
         if self.preferred_backend:
             if self.preferred_backend.save_password(account_name, password):
-                gajim.config.set_per('accounts', account_name, 'password',
+                app.config.set_per('accounts', account_name, 'password',
                     self.preferred_backend.identifier)
-                if account_name in gajim.connections:
-                    gajim.connections[account_name].password = password
+                if account_name in app.connections:
+                    app.connections[account_name].password = password
                 return True
 
-        gajim.config.set_per('accounts', account_name, 'password', password)
-        if account_name in gajim.connections:
-            gajim.connections[account_name].password = password
+        app.config.set_per('accounts', account_name, 'password', password)
+        if account_name in app.connections:
+            app.connections[account_name].password = password
         return True
 
     def set_preferred_backend(self):
@@ -192,6 +192,6 @@ def get_password(account_name):
     return get_storage().get_password(account_name)
 
 def save_password(account_name, password):
-    if account_name in gajim.connections:
-        gajim.connections[account_name].set_password(password)
+    if account_name in app.connections:
+        app.connections[account_name].set_password(password)
     return get_storage().save_password(account_name, password)

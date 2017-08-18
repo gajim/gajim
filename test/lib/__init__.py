@@ -14,7 +14,7 @@ gajim_root = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../..')
 
 # look for modules in the CWD, then gajim/test/lib, then gajim/gajim,
 # then everywhere else
-sys.path.insert(1, gajim_root + '/gajim')
+sys.path.insert(1, gajim_root)
 sys.path.insert(1, gajim_root + '/test/lib')
 
 # a temporary version of ~/.gajim for testing
@@ -35,20 +35,20 @@ def setup_env():
     os.mkdir(configdir)
     os.mkdir(pluginsconfigdir)
 
-    import common.configpaths
-    common.configpaths.gajimpaths.init(configdir)
+    import gajim.common.configpaths
+    gajim.common.configpaths.gajimpaths.init(configdir)
 
-    # for some reason common.gajim needs to be imported before xmpppy?
-    from common import gajim
+    # for some reason gajim.common.app needs to be imported before xmpppy?
+    from gajim.common import app
 
     import logging
     logging.basicConfig()
 
-    gajim.DATA_DIR = gajim_root + '/data'
-    gajim.use_x = use_x
+    app.DATA_DIR = gajim_root + '/data'
+    app.use_x = use_x
 
     if use_x:
-        import gtkgui_helpers
+        from gajim import gtkgui_helpers
         gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'
-        from gajim import GajimApplication
-        gajim.app = GajimApplication()
+        from gajim.gajim import GajimApplication
+        app.app = GajimApplication()

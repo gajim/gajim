@@ -31,7 +31,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from io import StringIO
-from common import configpaths
+from gajim.common import configpaths
 
 glade_file = os.path.join(configpaths.get('GUI'), 'exception_dialog.ui')
 

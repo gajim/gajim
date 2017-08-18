@@ -6,21 +6,21 @@ import unittest
 import lib
 lib.setup_env()
 
-from common import logging_helpers
+from gajim.common import logging_helpers
 logging_helpers.set_quiet()
 
-from common import gajim
+from gajim.common import app
 
 from gajim_mocks import MockLogger
-gajim.logger = MockLogger()
+app.logger = MockLogger()
 
-from gui_interface import Interface
+from gajim.gui_interface import Interface
 
 class TestInterface(unittest.TestCase):
 
     def test_instantiation(self):
         ''' Test that we can proper initialize and do not fail on globals '''
-        gajim.app.run()
+        app.app.run()
 
     def test_links_regexp_entire(self):
         sut = Interface()

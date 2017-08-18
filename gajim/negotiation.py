@@ -19,11 +19,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import gtkgui_helpers
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import dataforms_widget
 
-from common import dataforms
-from common import gajim
+from gajim.common import dataforms
+from gajim.common import app
 import nbxmpp
 
 def describe_features(features):
@@ -65,7 +65,7 @@ class FeatureNegotiationWindow:
 
         feature.addChild(node=form)
 
-        gajim.connections[self.account].send_stanza(acceptance)
+        app.connections[self.account].send_stanza(acceptance)
 
         self.window.destroy()
 
@@ -81,6 +81,6 @@ class FeatureNegotiationWindow:
 
         feature.addChild(node=x)
 
-        gajim.connections[self.account].send_stanza(rejection)
+        app.connections[self.account].send_stanza(rejection)
 
         self.window.destroy()

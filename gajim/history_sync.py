@@ -24,9 +24,9 @@ from datetime import datetime, timedelta, timezone
 import nbxmpp
 from gi.repository import Gtk, GLib
 
-from common import gajim
-from common import ged
-from gtkgui_helpers import get_icon_pixmap
+from gajim.common import app
+from gajim.common import ged
+from gajim.gtkgui_helpers import get_icon_pixmap
 
 log = logging.getLogger('gajim.c.message_archiving')
 
@@ -48,7 +48,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_name('HistorySyncAssistant')
         self.set_transient_for(parent)
         self.account = account
-        self.con = gajim.connections[self.account]
+        self.con = app.connections[self.account]
         self.timedelta = None
         self.now = datetime.utcnow()
         self.query_id = None
@@ -58,7 +58,7 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.next = None
         self.hide_buttons()
 
-        mam_start = gajim.config.get_per('accounts', account, 'mam_start_date')
+        mam_start = app.config.get_per('accounts', account, 'mam_start_date')
         if not mam_start or mam_start == ArchiveState.NEVER:
             self.current_start = self.now
         elif mam_start == ArchiveState.ALL:
@@ -80,10 +80,10 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_page_type(self.summary, Gtk.AssistantPageType.SUMMARY)
         self.set_page_complete(self.summary, True)
 
-        gajim.ged.register_event_handler('archiving-finished',
+        app.ged.register_event_handler('archiving-finished',
                                          ged.PRECORE,
                                          self._nec_archiving_finished)
-        gajim.ged.register_event_handler('raw-mam-message-received',
+        app.ged.register_event_handler('raw-mam-message-received',
                                          ged.PRECORE,
                                          self._nec_mam_message_received)
 
@@ -164,13 +164,13 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.prepare_query()
 
     def on_destroy(self, *args):
-        gajim.ged.remove_event_handler('archiving-finished',
+        app.ged.remove_event_handler('archiving-finished',
                                        ged.PRECORE,
                                        self._nec_archiving_finished)
-        gajim.ged.remove_event_handler('raw-mam-message-received',
+        app.ged.remove_event_handler('raw-mam-message-received',
                                        ged.PRECORE,
                                        self._nec_mam_message_received)
-        del gajim.interface.instances[self.account]['history_sync']
+        del app.interface.instances[self.account]['history_sync']
 
     def on_close_clicked(self, *args):
         self.destroy()
@@ -223,7 +223,7 @@ class HistorySyncAssistant(Gtk.Assistant):
                     timestamp = self.start.timestamp()
                 else:
                     timestamp = ArchiveState.ALL
-                gajim.config.set_per('accounts', self.account,
+                app.config.set_per('accounts', self.account,
                                      'mam_start_date', timestamp)
                 log.debug('config: set mam_start_date: %s', timestamp)
                 self.set_current_page(Pages.SUMMARY)

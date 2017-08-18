@@ -23,15 +23,15 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 
-from common import gajim
-from common import dataforms
-from common import ged
+from gajim.common import app
+from gajim.common import dataforms
+from gajim.common import ged
 
-import gtkgui_helpers
-import dialogs
-import vcard
-import config
-import dataforms_widget
+from gajim import gtkgui_helpers
+from gajim import dialogs
+from gajim import vcard
+from gajim import config
+from gajim import dataforms_widget
 
 class SearchWindow:
     def __init__(self, account, jid):
@@ -62,13 +62,13 @@ class SearchWindow:
         # Is there a jid column in results ? if -1: no, else column number
         self.jid_column = -1
 
-        gajim.ged.register_event_handler('search-form-received', ged.GUI1,
+        app.ged.register_event_handler('search-form-received', ged.GUI1,
             self._nec_search_form_received)
-        gajim.ged.register_event_handler('search-result-received', ged.GUI1,
+        app.ged.register_event_handler('search-result-received', ged.GUI1,
             self._nec_search_result_received)
 
     def request_form(self):
-        gajim.connections[self.account].request_search_fields(self.jid)
+        app.connections[self.account].request_search_fields(self.jid)
 
     def pulse_callback(self):
         self.progressbar.pulse()
@@ -81,10 +81,10 @@ class SearchWindow:
     def on_search_window_destroy(self, widget):
         if self.pulse_id:
             GLib.source_remove(self.pulse_id)
-        del gajim.interface.instances[self.account]['search'][self.jid]
-        gajim.ged.remove_event_handler('search-form-received', ged.GUI1,
+        del app.interface.instances[self.account]['search'][self.jid]
+        app.ged.remove_event_handler('search-form-received', ged.GUI1,
             self._nec_search_form_received)
-        gajim.ged.remove_event_handler('search-result-received', ged.GUI1,
+        app.ged.remove_event_handler('search-result-received', ged.GUI1,
             self._nec_search_result_received)
 
     def on_close_button_clicked(self, button):
@@ -93,13 +93,13 @@ class SearchWindow:
     def on_search_button_clicked(self, button):
         if self.is_form:
             self.data_form_widget.data_form.type_ = 'submit'
-            gajim.connections[self.account].send_search_form(self.jid,
+            app.connections[self.account].send_search_form(self.jid,
                     self.data_form_widget.data_form.get_purged(), True)
         else:
             infos = self.data_form_widget.get_infos()
             if 'instructions' in infos:
                 del infos['instructions']
-            gajim.connections[self.account].send_search_form(self.jid, infos,
+            app.connections[self.account].send_search_form(self.jid, infos,
                     False)
 
         self.search_vbox.remove(self.data_form_widget)
@@ -122,11 +122,11 @@ class SearchWindow:
         if not iter_:
             return
         jid = model[iter_][self.jid_column]
-        if jid in gajim.interface.instances[self.account]['infos']:
-            gajim.interface.instances[self.account]['infos'][jid].window.present()
+        if jid in app.interface.instances[self.account]['infos']:
+            app.interface.instances[self.account]['infos'][jid].window.present()
         else:
-            contact = gajim.contacts.create_contact(jid=jid, account=self.account)
-            gajim.interface.instances[self.account]['infos'][jid] = \
+            contact = app.contacts.create_contact(jid=jid, account=self.account)
+            app.interface.instances[self.account]['infos'][jid] = \
                     vcard.VcardWindow(contact, self.account)
 
     def _nec_search_form_received(self, obj):

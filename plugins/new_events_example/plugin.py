@@ -29,13 +29,13 @@ based on existing one.
 #import new # Depricated in python3 for types module
 from pprint import pformat
 
-from common import helpers
-from common import gajim
+from gajim.common import helpers
+from gajim.common import app
 
-from plugins import GajimPlugin
-from plugins.helpers import log_calls, log
-from common import ged
-from common import nec
+from gajim.plugins import GajimPlugin
+from gajim.plugins.helpers import log_calls, log
+from gajim.common import ged
+from gajim.common import nec
 
 class NewEventsExamplePlugin(GajimPlugin):
 
@@ -128,10 +128,10 @@ class EnrichedChatMessageReceivedEvent(nec.NetworkIncomingEvent):
             self.stanza = self.base_event.stanza
             self.conn = self.base_event.conn
             self.from_jid = helpers.get_full_jid_from_iq(self.stanza)
-            self.from_jid_without_resource = gajim.get_jid_without_resource(
+            self.from_jid_without_resource = app.get_jid_without_resource(
                 self.from_jid)
             self.account = self.conn.name
-            self.from_nickname = gajim.get_contact_name_from_jid( self.account,
+            self.from_nickname = app.get_contact_name_from_jid( self.account,
                 self.from_jid_without_resource)
             self.msg_text = ''.join(self.stanza.kids[0].data)
 

@@ -25,10 +25,10 @@
 
 import nbxmpp
 
-from common import gajim
-from common.commands import ConnectionCommands
-from common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
-from common.connection_handlers_events import ZeroconfMessageReceivedEvent
+from gajim.common import app
+from gajim.common.commands import ConnectionCommands
+from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
+from gajim.common.connection_handlers_events import ZeroconfMessageReceivedEvent
 
 import logging
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -46,7 +46,7 @@ except Exception:
     log.debug(_('Unable to load idle module'))
     HAS_IDLE = False
 
-from common import connection_handlers
+from gajim.common import connection_handlers
 
 class ConnectionVcard(connection_handlers.ConnectionVcard):
     def add_sha(self, p, send_caps = True):
@@ -84,7 +84,7 @@ connection_handlers.ConnectionJingle):
         Called when we receive a message
         """
         log.debug('Zeroconf MessageCB')
-        gajim.nec.push_incoming_event(ZeroconfMessageReceivedEvent(None,
+        app.nec.push_incoming_event(ZeroconfMessageReceivedEvent(None,
             conn=self, stanza=msg, ip=ip))
         return
 

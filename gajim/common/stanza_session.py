@@ -22,9 +22,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common import gajim
+from gajim.common import app
 import nbxmpp
-from common.exceptions import DecryptionError, NegotiationError
+from gajim.common.exceptions import DecryptionError, NegotiationError
 import nbxmpp.c14n
 
 import itertools
@@ -35,17 +35,17 @@ import base64
 import os
 from hashlib import sha256
 from hmac import HMAC
-from common import crypto
+from gajim.common import crypto
 
 import logging
 log = logging.getLogger('gajim.c.stanza_session')
 
-if gajim.HAVE_PYCRYPTO:
+if app.HAVE_PYCRYPTO:
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
 
-    from common import dh
-    import secrets
+    from gajim.common import dh
+    from gajim import secrets
 
 XmlDsig = 'http://www.w3.org/2000/09/xmldsig#'
 
@@ -78,12 +78,12 @@ class StanzaSession(object):
         self.negotiated = {}
 
     def is_loggable(self):
-        return self.loggable and gajim.config.should_log(self.conn.name,
+        return self.loggable and app.config.should_log(self.conn.name,
             self.jid.getStripped())
 
     def get_to(self):
         to = str(self.jid)
-        return gajim.get_jid_without_resource(to) +  '/' + self.resource
+        return app.get_jid_without_resource(to) +  '/' + self.resource
 
     def remove_events(self, types):
         """
@@ -94,7 +94,7 @@ class StanzaSession(object):
         any_removed = False
 
         for j in (self.jid, self.jid.getStripped()):
-            for event in gajim.events.get_events(self.conn.name, j, types=types):
+            for event in app.events.get_events(self.conn.name, j, types=types):
                 # the event wasn't in this session
                 if (event.type_ == 'chat' and event.session != self) or \
                 (event.type_ == 'printed_chat' and event.control.session != \
@@ -103,7 +103,7 @@ class StanzaSession(object):
 
                 # events.remove_events returns True when there were no events
                 # for some reason
-                r = gajim.events.remove_events(self.conn.name, j, event)
+                r = app.events.remove_events(self.conn.name, j, event)
 
                 if not r:
                     any_removed = True
@@ -315,7 +315,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
                             of any of the types listed in 'encryptable_stanzas' should be
                             encrypted before they're sent.
 
-    The transition between these states is handled in gajim.py's
+    The transition between these states is handled in app.py's
     handle_session_negotiation method.
     """
 
@@ -337,9 +337,9 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         self.verified_identity = False
 
     def _get_contact(self):
-        c = gajim.contacts.get_contact(self.conn.name, self.jid, self.resource)
+        c = app.contacts.get_contact(self.conn.name, self.jid, self.resource)
         if not c:
-            c = gajim.contacts.get_contact(self.conn.name, self.jid)
+            c = app.contacts.get_contact(self.conn.name, self.jid)
         return c
 
     def _is_buggy_gajim(self):
@@ -384,7 +384,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
     def sign(self, string):
         if self.negotiated['sign_algs'] == (XmlDsig + 'rsa-sha256'):
             hash_ = crypto.sha256(string)
-            return crypto.encode_mpi(gajim.pubkey.sign(hash_, '')[0])
+            return crypto.encode_mpi(app.pubkey.sign(hash_, '')[0])
 
     def encrypt_stanza(self, stanza):
         encryptable = [x for x in stanza.getChildren() if x.getName() not in
@@ -503,7 +503,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         return self.decrypter.decrypt(ciphertext)
 
     def logging_preference(self):
-        if gajim.config.get_per('accounts', self.conn.name,
+        if app.config.get_per('accounts', self.conn.name,
         'log_encrypted_sessions'):
             return ['may', 'mustnot']
         else:
@@ -697,7 +697,7 @@ class EncryptedStanzaSession(ArchivingStanzaSession):
         x.addChild(node=nbxmpp.DataField(name='my_nonce',
             value=base64.b64encode(self.n_s).decode('utf-8'), typ='hidden'))
 
-        modp_options = [ int(g) for g in gajim.config.get('esession_modp').split(
+        modp_options = [ int(g) for g in app.config.get('esession_modp').split(
             ',') ]
 
         x.addChild(node=nbxmpp.DataField(name='modp', typ='list-single',

@@ -45,13 +45,13 @@ from io import BytesIO
 import logging
 log = logging.getLogger('gajim.gtkgui_helpers')
 
-from common import i18n
-from common import gajim
-from common import pep
-from common import configpaths
+from gajim.common import i18n
+from gajim.common import app
+from gajim.common import pep
+from gajim.common import configpaths
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
-gtk_icon_theme.append_search_path(gajim.ICONS_DIR)
+gtk_icon_theme.append_search_path(app.ICONS_DIR)
 
 class Color:
     BLACK = Gdk.RGBA(red=0, green=0, blue=0, alpha=1)
@@ -82,8 +82,8 @@ def get_icon_path(icon_name, size=16):
     except GLib.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
-import vcard
-import dialogs
+from gajim import vcard
+from gajim import dialogs
 
 
 HAS_PYWIN32 = True
@@ -95,7 +95,7 @@ if os.name == 'nt':
     except ImportError:
         HAS_PYWIN32 = False
 
-from common import helpers
+from gajim.common import helpers
 
 screen_w = Gdk.Screen.width()
 screen_h = Gdk.Screen.height()
@@ -118,7 +118,7 @@ def get_image_button(icon_name, tooltip, toggle=False):
     button.set_image(image)
     return button
 
-GUI_DIR = os.path.join(gajim.DATA_DIR, 'gui')
+GUI_DIR = os.path.join(app.DATA_DIR, 'gui')
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(GUI_DIR, file_name)
     builder = Gtk.Builder()
@@ -161,7 +161,7 @@ def popup_emoticons_under_button(menu, button, parent_win):
         alloc = button.get_allocation()
         button_x, button_y = alloc.x, alloc.y
         translated_coordinates = button.translate_coordinates(
-            gajim.interface.roster.window, 0, 0)
+            app.interface.roster.window, 0, 0)
         if translated_coordinates:
             button_x, button_y = translated_coordinates
 
@@ -190,9 +190,9 @@ def get_theme_font_for_option(theme, option):
     """
     Return string description of the font, stored in theme preferences
     """
-    font_name = gajim.config.get_per('themes', theme, option)
+    font_name = app.config.get_per('themes', theme, option)
     font_desc = Pango.FontDescription()
-    font_prop_str =  gajim.config.get_per('themes', theme, option + 'attrs')
+    font_prop_str =  app.config.get_per('themes', theme, option + 'attrs')
     if font_prop_str:
         if font_prop_str.find('B') != -1:
             font_desc.set_weight(Pango.Weight.BOLD)
@@ -427,7 +427,7 @@ def set_unset_urgency_hint(window, unread_messages_no):
     Sets/unset urgency hint in window argument depending if we have unread
     messages or not
     """
-    if gajim.config.get('use_urgency_hint'):
+    if app.config.get('use_urgency_hint'):
         if unread_messages_no > 0:
             window.props.urgency_hint = True
         else:
@@ -645,8 +645,8 @@ def get_scaled_pixbuf(pixbuf, kind):
     """
     # resize to a width / height for the avatar not to have distortion
     # (keep aspect ratio)
-    width = gajim.config.get(kind + '_avatar_width')
-    height = gajim.config.get(kind + '_avatar_height')
+    width = app.config.get(kind + '_avatar_width')
+    height = app.config.get(kind + '_avatar_height')
     if width < 1 or height < 1:
         return None
 
@@ -661,14 +661,14 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     Returns 'ask' if cached vcard should not be used (user changed his vcard, so
     we have new sha) or if we don't have the vcard
     """
-    jid, nick = gajim.get_room_and_nick_from_fjid(fjid)
-    if gajim.config.get('hide_avatar_of_transport') and\
-            gajim.jid_is_transport(jid):
+    jid, nick = app.get_room_and_nick_from_fjid(fjid)
+    if app.config.get('hide_avatar_of_transport') and\
+            app.jid_is_transport(jid):
         # don't show avatar for the transport itself
         return None
 
-    if any(jid in gajim.contacts.get_gc_list(acc) for acc in \
-    gajim.contacts.get_accounts()):
+    if any(jid in app.contacts.get_gc_list(acc) for acc in \
+    app.contacts.get_accounts()):
         is_groupchat_contact = True
     else:
         is_groupchat_contact = False
@@ -676,12 +676,12 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     puny_jid = helpers.sanitize_filename(jid)
     if is_groupchat_contact:
         puny_nick = helpers.sanitize_filename(nick)
-        path = os.path.join(gajim.VCARD_PATH, puny_jid, puny_nick)
-        local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid,
+        path = os.path.join(app.VCARD_PATH, puny_jid, puny_nick)
+        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid,
                 puny_nick) + '_local'
     else:
-        path = os.path.join(gajim.VCARD_PATH, puny_jid)
-        local_avatar_basepath = os.path.join(gajim.AVATAR_PATH, puny_jid) + \
+        path = os.path.join(app.VCARD_PATH, puny_jid)
+        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid) + \
                 '_local'
     if use_local:
         for extension in ('.png', '.jpeg'):
@@ -695,7 +695,7 @@ def get_avatar_pixbuf_from_cache(fjid, use_local=True):
     if not os.path.isfile(path):
         return 'ask'
 
-    vcard_dict = list(gajim.connections.values())[0].get_cached_vcard(fjid,
+    vcard_dict = list(app.connections.values())[0].get_cached_vcard(fjid,
             is_groupchat_contact)
     if not vcard_dict: # This can happen if cached vcard is too old
         return 'ask'
@@ -832,7 +832,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         action=Gtk.FileChooserAction.SAVE, buttons=(Gtk.STOCK_CANCEL,
         Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
         default_response=Gtk.ResponseType.OK,
-        current_folder=gajim.config.get('last_save_dir'), on_response_ok=on_ok,
+        current_folder=app.config.get('last_save_dir'), on_response_ok=on_ok,
         on_response_cancel=on_cancel)
 
     dialog.set_current_name(default_name + '.jpeg')
@@ -903,7 +903,7 @@ def load_icon(icon_name):
     """
     Load an icon from the iconset in 16x16
     """
-    iconset = gajim.config.get('iconset')
+    iconset = app.config.get('iconset')
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16', '')
     icon_list = _load_icon_list([icon_name], path)
     return icon_list[icon_name]
@@ -912,7 +912,7 @@ def load_mood_icon(icon_name):
     """
     Load an icon from the mood iconset in 16x16
     """
-    iconset = gajim.config.get('mood_iconset')
+    iconset = app.config.get('mood_iconset')
     path = os.path.join(helpers.get_mood_iconset_path(iconset), '')
     icon_list = _load_icon_list([icon_name], path)
     return icon_list[icon_name]
@@ -921,7 +921,7 @@ def load_activity_icon(category, activity = None):
     """
     Load an icon from the activity iconset in 16x16
     """
-    iconset = gajim.config.get('activity_iconset')
+    iconset = app.config.get('activity_iconset')
     path = os.path.join(helpers.get_activity_iconset_path(iconset),
             category, '')
     if activity is None:
@@ -939,7 +939,7 @@ def get_pep_as_pixbuf(pep_class):
     elif isinstance(pep_class, pep.UserTunePEP):
         icon = get_icon_pixmap('audio-x-generic', quiet=True)
         if not icon:
-            path = os.path.join(gajim.DATA_DIR, 'emoticons', 'static',
+            path = os.path.join(app.DATA_DIR, 'emoticons', 'static',
                 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         return icon
@@ -972,7 +972,7 @@ def load_icons_meta():
     Load and return  - AND + small icons to put on top left of an icon for meta
     contacts
     """
-    iconset = gajim.config.get('iconset')
+    iconset = app.config.get('iconset')
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     # try to find opened_meta.png file, else opened.png else nopixbuf merge
     path_opened = os.path.join(path, 'opened_meta.png')
@@ -1025,44 +1025,44 @@ def make_jabber_state_images():
     """
     Initialize jabber_state_images dictionary
     """
-    iconset = gajim.config.get('iconset')
+    iconset = app.config.get('iconset')
     if iconset:
         if helpers.get_iconset_path(iconset):
             path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
             if not os.path.exists(path):
-                iconset = gajim.config.DEFAULT_ICONSET
-                gajim.config.set('iconset', iconset)
+                iconset = app.config.DEFAULT_ICONSET
+                app.config.set('iconset', iconset)
         else:
-            iconset = gajim.config.DEFAULT_ICONSET
-            gajim.config.set('iconset', iconset)
+            iconset = app.config.DEFAULT_ICONSET
+            app.config.set('iconset', iconset)
     else:
-        iconset = gajim.config.DEFAULT_ICONSET
-        gajim.config.set('iconset', iconset)
+        iconset = app.config.DEFAULT_ICONSET
+        app.config.set('iconset', iconset)
 
     path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    gajim.interface.jabber_state_images['16'] = load_iconset(path)
+    app.interface.jabber_state_images['16'] = load_iconset(path)
 
     pixo, pixc = load_icons_meta()
-    gajim.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
-    gajim.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
+    app.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
+    app.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
 
     path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-    gajim.interface.jabber_state_images['32'] = load_iconset(path)
+    app.interface.jabber_state_images['32'] = load_iconset(path)
 
     path = os.path.join(helpers.get_iconset_path(iconset), '24x24')
     if (os.path.exists(path)):
-        gajim.interface.jabber_state_images['24'] = load_iconset(path)
+        app.interface.jabber_state_images['24'] = load_iconset(path)
     else:
         # Resize 32x32 icons to 24x24
-        for each in gajim.interface.jabber_state_images['32']:
+        for each in app.interface.jabber_state_images['32']:
             img = Gtk.Image()
-            pix = gajim.interface.jabber_state_images['32'][each]
+            pix = app.interface.jabber_state_images['32'][each]
             pix_type = pix.get_storage_type()
             if pix_type == Gtk.ImageType.ANIMATION:
                 animation = pix.get_animation()
                 pixbuf = animation.get_static_image()
             elif pix_type == Gtk.ImageType.EMPTY:
-                pix = gajim.interface.jabber_state_images['16'][each]
+                pix = app.interface.jabber_state_images['16'][each]
                 pix_16_type = pix.get_storage_type()
                 if pix_16_type == Gtk.ImageType.ANIMATION:
                     animation = pix.get_animation()
@@ -1073,11 +1073,11 @@ def make_jabber_state_images():
                 pixbuf = pix.get_pixbuf()
             scaled_pix = pixbuf.scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
             img.set_from_pixbuf(scaled_pix)
-            gajim.interface.jabber_state_images['24'][each] = img
+            app.interface.jabber_state_images['24'][each] = img
 
 def reload_jabber_state_images():
     make_jabber_state_images()
-    gajim.interface.roster.update_jabber_state_images()
+    app.interface.roster.update_jabber_state_images()
 
 def label_set_autowrap(widget):
     """
@@ -1112,7 +1112,7 @@ def __label_size_allocate(widget, allocation):
         widget.set_size_request (-1, lh / Pango.SCALE)
 
 def get_action(action):
-    return gajim.app.lookup_action(action)
+    return app.app.lookup_action(action)
 
 def load_css():
     path = os.path.join(configpaths.get('DATA'), 'style', 'gajim.css')
@@ -1152,18 +1152,18 @@ def convert_config_to_css():
                'state_muc_msg_color': ('', 'color')}
 
 
-    theme = gajim.config.get('roster_theme')
+    theme = app.config.get('roster_theme')
     for key, values in themed_widgets.items():
         config, attr = values
         css += '#{} {{'.format(key)
-        value = gajim.config.get_per('themes', theme, config)
+        value = app.config.get_per('themes', theme, config)
         if value:
             css += '{attr}: {color};\n'.format(attr=attr, color=value)
         css += '}\n'
 
     for key, values in classes.items():
         node, attr = values
-        value = gajim.config.get_per('themes', theme, key)
+        value = app.config.get_per('themes', theme, key)
         if value:
             css += '.theme_{cls} {node} {{ {attr}: {color}; }}\n'.format(
                 cls=key, node=node, attr=attr, color=value)
@@ -1185,7 +1185,7 @@ def remove_css_class(widget, class_name):
     style.remove_class('theme_' + class_name)
 
 def add_css_font():
-    conversation_font = gajim.config.get('conversation_font')
+    conversation_font = app.config.get('conversation_font')
     if not conversation_font:
         return ''
     font = Pango.FontDescription(conversation_font)

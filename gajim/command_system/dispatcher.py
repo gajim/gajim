@@ -31,7 +31,7 @@ to automatic discovery and dispatching, also features manual control
 over the process.
 """
 
-from .tools import remove
+from gajim.command_system.tools import remove
 
 COMMANDS = {}
 CONTAINERS = {}
@@ -66,7 +66,7 @@ def traverse_commands(container):
             yield attribute
 
 def is_command(attribute):
-    from .framework import Command
+    from gajim.command_system.framework import Command
     return isinstance(attribute, Command)
 
 def is_root(namespace):

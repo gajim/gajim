@@ -19,11 +19,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from common.configpaths import gajimpaths
+from gajim.common.configpaths import gajimpaths
 
 import Crypto
-from common import crypto
-from common import exceptions
+from gajim.common import crypto
+from gajim.common import exceptions
 
 import os
 import pickle

@@ -8,10 +8,10 @@ lib.setup_env()
 
 import nbxmpp
 
-from common import gajim
-from common import contacts as contacts_module
-from common import caps_cache
-from gajim import Interface
+from gajim.common import gajim
+from gajim.common import contacts as contacts_module
+from gajim.common import caps_cache
+from gajim.gajim import Interface
 
 from gajim_mocks import *
 gajim.logger = MockLogger()
@@ -21,9 +21,9 @@ Interface()
 import time
 from data import *
 
-import roster_window
-import plugins
-import notify
+from gajim import roster_window
+from gajim import plugins
+from gajim import notify
 
 class TestStatusChange(unittest.TestCase):
     '''tests gajim.py's incredibly complex presence handling'''

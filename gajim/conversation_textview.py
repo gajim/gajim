@@ -37,21 +37,21 @@ from gi.repository import GObject
 from gi.repository import GLib
 import time
 import os
-import tooltips
-import dialogs
+from gajim import tooltips
+from gajim import dialogs
 import queue
 import urllib
 
-import gtkgui_helpers
-from common import gajim
-from common import helpers
-from common import i18n
+from gajim import gtkgui_helpers
+from gajim.common import app
+from gajim.common import helpers
+from gajim.common import i18n
 from calendar import timegm
-from common.fuzzyclock import FuzzyClock
-import emoticons
+from gajim.common.fuzzyclock import FuzzyClock
+from gajim import emoticons
 
-from htmltextview import HtmlTextView
-from common.exceptions import GajimGeneralException
+from gajim.htmltextview import HtmlTextView
+from gajim.common.exceptions import GajimGeneralException
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
@@ -234,38 +234,38 @@ class ConversationTextview(GObject.GObject):
         buffer_.create_mark('end', end_iter, False)
 
         self.tagIn = buffer_.create_tag('incoming')
-        color = gajim.config.get('inmsgcolor')
-        font = Pango.FontDescription(gajim.config.get('inmsgfont'))
+        color = app.config.get('inmsgcolor')
+        font = Pango.FontDescription(app.config.get('inmsgfont'))
         self.tagIn.set_property('foreground', color)
         self.tagIn.set_property('font-desc', font)
 
         self.tagOut = buffer_.create_tag('outgoing')
-        color = gajim.config.get('outmsgcolor')
-        font = Pango.FontDescription(gajim.config.get('outmsgfont'))
+        color = app.config.get('outmsgcolor')
+        font = Pango.FontDescription(app.config.get('outmsgfont'))
         self.tagOut.set_property('foreground', color)
         self.tagOut.set_property('font-desc', font)
 
         self.tagStatus = buffer_.create_tag('status')
-        color = gajim.config.get('statusmsgcolor')
-        font = Pango.FontDescription(gajim.config.get('satusmsgfont'))
+        color = app.config.get('statusmsgcolor')
+        font = Pango.FontDescription(app.config.get('satusmsgfont'))
         self.tagStatus.set_property('foreground', color)
         self.tagStatus.set_property('font-desc', font)
 
         self.tagInText = buffer_.create_tag('incomingtxt')
-        color = gajim.config.get('inmsgtxtcolor')
-        font = Pango.FontDescription(gajim.config.get('inmsgtxtfont'))
+        color = app.config.get('inmsgtxtcolor')
+        font = Pango.FontDescription(app.config.get('inmsgtxtfont'))
         if color:
             self.tagInText.set_property('foreground', color)
         self.tagInText.set_property('font-desc', font)
 
         self.tagOutText = buffer_.create_tag('outgoingtxt')
-        color = gajim.config.get('outmsgtxtcolor')
+        color = app.config.get('outmsgtxtcolor')
         if color:
-            font = Pango.FontDescription(gajim.config.get('outmsgtxtfont'))
+            font = Pango.FontDescription(app.config.get('outmsgtxtfont'))
         self.tagOutText.set_property('foreground', color)
         self.tagOutText.set_property('font-desc', font)
 
-        colors = gajim.config.get('gc_nicknames_colors')
+        colors = app.config.get('gc_nicknames_colors')
         colors = colors.split(':')
         for i, color in enumerate(colors):
             tagname = 'gc_nickname_color_' + str(i)
@@ -273,7 +273,7 @@ class ConversationTextview(GObject.GObject):
             tag.set_property('foreground', color)
 
         self.tagMarked = buffer_.create_tag('marked')
-        color = gajim.config.get('markedmsgcolor')
+        color = app.config.get('markedmsgcolor')
         self.tagMarked.set_property('foreground', color)
         self.tagMarked.set_property('weight', Pango.Weight.BOLD)
 
@@ -288,7 +288,7 @@ class ConversationTextview(GObject.GObject):
         tag.set_property('scale', 0.8333333333333)
 
         tag = buffer_.create_tag('restored_message')
-        color = gajim.config.get('restored_messages_color')
+        color = app.config.get('restored_messages_color')
         tag.set_property('foreground', color)
 
         self.tv.create_tags()
@@ -309,7 +309,7 @@ class ConversationTextview(GObject.GObject):
         tag.set_property('foreground', '#73d216')
 
         # One mark at the begining then 2 marks between each lines
-        size = gajim.config.get('max_conversation_lines')
+        size = app.config.get('max_conversation_lines')
         size = 2 * size - 1
         self.marks_queue = queue.Queue(size)
 
@@ -367,13 +367,13 @@ class ConversationTextview(GObject.GObject):
         self.tv.destroy()
 
     def update_tags(self):
-        self.tagIn.set_property('foreground', gajim.config.get('inmsgcolor'))
-        self.tagOut.set_property('foreground', gajim.config.get('outmsgcolor'))
+        self.tagIn.set_property('foreground', app.config.get('inmsgcolor'))
+        self.tagOut.set_property('foreground', app.config.get('outmsgcolor'))
         self.tagStatus.set_property('foreground',
-            gajim.config.get('statusmsgcolor'))
+            app.config.get('statusmsgcolor'))
         self.tagMarked.set_property('foreground',
-            gajim.config.get('markedmsgcolor'))
-        color = gajim.config.get('urlmsgcolor')
+            app.config.get('markedmsgcolor'))
+        color = app.config.get('urlmsgcolor')
         self.tv.tagURL.set_property('foreground', color)
         self.tv.tagMail.set_property('foreground', color)
         self.tv.tagXMPP.set_property('foreground', color)
@@ -450,7 +450,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
 
-        if gajim.config.get('positive_184_ack'):
+        if app.config.get('positive_184_ack'):
             begin_iter = buffer_.get_iter_at_mark(self.xep0184_marks[id_])
             buffer_.insert_with_tags_by_name(begin_iter, ' ✓',
                 'xep0184-received')
@@ -555,7 +555,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
-        size = gajim.config.get('max_conversation_lines')
+        size = app.config.get('max_conversation_lines')
         size = 2 * size - 1
         self.marks_queue = queue.Queue(size)
         self.focus_out_end_mark = None
@@ -606,29 +606,29 @@ class ConversationTextview(GObject.GObject):
             phrase_for_url = urllib.parse.quote(self.selected_phrase.encode(
                 'utf-8'))
 
-            always_use_en = gajim.config.get('always_english_wikipedia')
+            always_use_en = app.config.get('always_english_wikipedia')
             if always_use_en:
                 link = 'http://en.wikipedia.org/wiki/Special:Search?search=%s'\
                         % phrase_for_url
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
-                        % (gajim.LANG, phrase_for_url)
+                        % (app.LANG, phrase_for_url)
             item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
             submenu.append(item)
 
             item = Gtk.MenuItem.new_with_mnemonic(_('Look it up in _Dictionary'))
-            dict_link = gajim.config.get('dictionary_url')
+            dict_link = app.config.get('dictionary_url')
             if dict_link == 'WIKTIONARY':
                 # special link (yeah undocumented but default)
-                always_use_en = gajim.config.get('always_english_wiktionary')
+                always_use_en = app.config.get('always_english_wiktionary')
                 if always_use_en:
                     link = 'http://en.wiktionary.org/wiki/Special:Search?search=%s'\
                             % phrase_for_url
                 else:
                     link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
-                            % (gajim.LANG, phrase_for_url)
+                            % (app.LANG, phrase_for_url)
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             else:
@@ -645,7 +645,7 @@ class ConversationTextview(GObject.GObject):
             submenu.append(item)
 
 
-            search_link = gajim.config.get('search_engine')
+            search_link = app.config.get('search_engine')
             if search_link.find('%s') == -1:
                 # we must have %s in the url
                 item = Gtk.MenuItem.new_with_label(
@@ -716,13 +716,13 @@ class ConversationTextview(GObject.GObject):
         clip.set_text(text, -1)
 
     def on_start_chat_activate(self, widget, jid):
-        gajim.interface.new_chat_from_jid(self.account, jid)
+        app.interface.new_chat_from_jid(self.account, jid)
 
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-        if 'join_gc' in gajim.interface.instances[self.account]:
-            instance = gajim.interface.instances[self.account]['join_gc']
+        if 'join_gc' in app.interface.instances[self.account]:
+            instance = app.interface.instances[self.account]['join_gc']
             instance.xml.get_object('room_jid_entry').set_text(room_jid)
-            gajim.interface.instances[self.account]['join_gc'].window.present()
+            app.interface.instances[self.account]['join_gc'].window.present()
         else:
             try:
                 dialogs.JoinGroupchatWindow(account=self.account, room_jid=room_jid)
@@ -766,7 +766,7 @@ class ConversationTextview(GObject.GObject):
                     self.on_join_group_chat_menuitem_activate, text)
             self.handlers[id_] = childs[6]
 
-            if self.account and gajim.connections[self.account].\
+            if self.account and app.connections[self.account].\
             roster_supported:
                 id_ = childs[7].connect('activate',
                     self.on_add_to_roster_activate, text)
@@ -813,7 +813,7 @@ class ConversationTextview(GObject.GObject):
                     kind = 'xmpp'
                 elif word.startswith('mailto:'):
                     kind = 'mail'
-                elif gajim.interface.sth_at_sth_dot_sth_re.match(word):
+                elif app.interface.sth_at_sth_dot_sth_re.match(word):
                     # it's a JID or mail
                     kind = 'sth_at_sth'
             else:
@@ -823,7 +823,7 @@ class ConversationTextview(GObject.GObject):
                 return True
             else:
                 self.plugin_modified = False
-                gajim.plugin_manager.extension_point(
+                app.plugin_manager.extension_point(
                     'hyperlink_handler', word, kind, self,
                     self.tv.get_toplevel())
                 if self.plugin_modified:
@@ -875,11 +875,11 @@ class ConversationTextview(GObject.GObject):
         specials_limit = 100
 
         # basic: links + mail + formatting is always checked (we like that)
-        if gajim.config.get('emoticons_theme') and graphics:
+        if app.config.get('emoticons_theme') and graphics:
             # search for emoticons & urls
-            iterator = gajim.interface.emot_and_basic_re.finditer(otext)
+            iterator = app.interface.emot_and_basic_re.finditer(otext)
         else: # search for just urls + mail + formatting
-            iterator = gajim.interface.basic_pattern_re.finditer(otext)
+            iterator = app.interface.basic_pattern_re.finditer(otext)
         if iter_:
             end_iter = iter_
         else:
@@ -921,7 +921,7 @@ class ConversationTextview(GObject.GObject):
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
-        gajim.plugin_manager.extension_point('print_special_text', self,
+        app.plugin_manager.extension_point('print_special_text', self,
             special_text, other_tags, graphics, additional_data)
         if self.plugin_modified:
             return
@@ -931,7 +931,7 @@ class ConversationTextview(GObject.GObject):
         text_is_valid_uri = False
         is_xhtml_link = None
         show_ascii_formatting_chars = \
-            gajim.config.get('show_ascii_formatting_chars')
+            app.config.get('show_ascii_formatting_chars')
         buffer_ = self.tv.get_buffer()
 
         # Detect XHTML-IM link
@@ -943,7 +943,7 @@ class ConversationTextview(GObject.GObject):
                 break
 
         # Check if we accept this as an uri
-        schemes = gajim.config.get('uri_schemes').split()
+        schemes = app.config.get('uri_schemes').split()
         for scheme in schemes:
             if special_text.startswith(scheme):
                 text_is_valid_uri = True
@@ -955,7 +955,7 @@ class ConversationTextview(GObject.GObject):
             end_iter = buffer_.get_end_iter()
 
         pixbuf = emoticons.get_pixbuf(possible_emot_ascii_caps)
-        if gajim.config.get('emoticons_theme') and pixbuf and graphics:
+        if app.config.get('emoticons_theme') and pixbuf and graphics:
             # it's an emoticon
             anchor = buffer_.create_child_anchor(end_iter)
             img = TextViewImage(anchor,
@@ -972,7 +972,7 @@ class ConversationTextview(GObject.GObject):
             tags.append('mail')
         elif special_text.startswith('xmpp:') and not is_xhtml_link:
             tags.append('xmpp')
-        elif gajim.interface.sth_at_sth_dot_sth_re.match(special_text) and\
+        elif app.interface.sth_at_sth_dot_sth_re.match(special_text) and\
         not is_xhtml_link:
             # it's a JID or mail
             tags.append('sth_at_sth')
@@ -1191,12 +1191,12 @@ class ConversationTextview(GObject.GObject):
             text_tags.append(other_text_tag)
 
         else:  # not status nor /me
-            if gajim.config.get('chat_merge_consecutive_nickname'):
+            if app.config.get('chat_merge_consecutive_nickname'):
                 if kind != old_kind or self.just_cleared:
                     self.print_name(name, kind, other_tags_for_name,
                         direction_mark=direction_mark, iter_=iter_)
                 else:
-                    self.print_real_text(gajim.config.get(
+                    self.print_real_text(app.config.get(
                         'chat_merge_consecutive_nickname_indent'),
                         mark=insert_mark, additional_data=additional_data)
             else:
@@ -1283,7 +1283,7 @@ class ConversationTextview(GObject.GObject):
                 format_ += i18n.direction_mark + day_str + direction_mark + ' '
             else:
                 format_ += day_str + ' '
-        timestamp_str = gajim.config.get('time_stamp')
+        timestamp_str = app.config.get('time_stamp')
         timestamp_str = helpers.from_one_line(timestamp_str)
         format_ += timestamp_str
         tim_format = time.strftime(format_, tim)
@@ -1298,7 +1298,7 @@ class ConversationTextview(GObject.GObject):
     def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
         local_tim = time.localtime(tim)
         buffer_ = self.tv.get_buffer()
-        current_print_time = gajim.config.get('print_time')
+        current_print_time = app.config.get('print_time')
 
         if current_print_time == 'always' and kind != 'info' and not simple:
             timestamp_str = self.get_time_to_show(local_tim, direction_mark)
@@ -1310,14 +1310,14 @@ class ConversationTextview(GObject.GObject):
             else:
                 buffer_.insert(iter_, timestamp)
         elif current_print_time == 'sometimes' and kind != 'info' and not simple:
-            every_foo_seconds = 60 * gajim.config.get(
+            every_foo_seconds = 60 * app.config.get(
                 'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = tim
-                if gajim.config.get('print_time_fuzzy') > 0:
+                if app.config.get('print_time_fuzzy') > 0:
                     tim_format = self.fc.fuzzy_time(
-                        gajim.config.get('print_time_fuzzy'), tim)
+                        app.config.get('print_time_fuzzy'), tim)
                 else:
                     tim_format = self.get_time_to_show(local_tim, direction_mark)
                 buffer_.insert_with_tags_by_name(iter_, tim_format + '\n',
@@ -1352,9 +1352,9 @@ class ConversationTextview(GObject.GObject):
             if other_tags_for_name:
                 name_tags = other_tags_for_name[:]  # create a new list
             name_tags.append(kind)
-            before_str = gajim.config.get('before_nickname')
+            before_str = app.config.get('before_nickname')
             before_str = helpers.from_one_line(before_str)
-            after_str = gajim.config.get('after_nickname')
+            after_str = app.config.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
             format_ = before_str + name + direction_mark + after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
@@ -1389,8 +1389,8 @@ class ConversationTextview(GObject.GObject):
                 self.tv.display_html(xhtml, self.tv, self, iter_=iter_)
                 return
             except Exception as e:
-                gajim.log.debug('Error processing xhtml: ' + str(e))
-                gajim.log.debug('with |' + xhtml + '|')
+                app.log.debug('Error processing xhtml: ' + str(e))
+                app.log.debug('with |' + xhtml + '|')
 
         # /me is replaced by name if name is given
         if name and (text.startswith('/me ') or text.startswith('/me\n')):
@@ -1399,7 +1399,7 @@ class ConversationTextview(GObject.GObject):
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
-        gajim.plugin_manager.extension_point('print_real_text', self,
+        app.plugin_manager.extension_point('print_real_text', self,
             text, text_tags, graphics, iter_, additional_data)
 
         if self.plugin_modified:

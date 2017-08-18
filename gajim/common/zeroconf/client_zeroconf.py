@@ -17,13 +17,13 @@
 ## You should have received a copy of the GNU General Public License
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
-from common import gajim
+from gajim.common import app
 import nbxmpp
 from nbxmpp.idlequeue import IdleObject
 from nbxmpp import dispatcher_nb, simplexml
 from nbxmpp.plugin import *
 from nbxmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
-from common.zeroconf import zeroconf
+from gajim.common.zeroconf import zeroconf
 
 from nbxmpp.protocol import *
 import socket
@@ -37,7 +37,7 @@ from random import Random
 import logging
 log = logging.getLogger('gajim.c.z.client_zeroconf')
 
-from common.zeroconf import roster_zeroconf
+from gajim.common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
 TYPE_SERVER, TYPE_CLIENT = range(2)
@@ -87,7 +87,7 @@ class ZeroconfListener(IdleObject):
         self._serv.listen(socket.SOMAXCONN)
         self._serv.setblocking(False)
         self.fd = self._serv.fileno()
-        gajim.idlequeue.plug_idle(self, False, True)
+        app.idlequeue.plug_idle(self, False, True)
         self.started = True
 
     def pollend(self):
@@ -117,8 +117,8 @@ class ZeroconfListener(IdleObject):
         Free all resources, we are not listening anymore
         """
         log.info('Disconnecting ZeroconfListener: %s' % message)
-        gajim.idlequeue.remove_timeout(self.fd)
-        gajim.idlequeue.unplug_idle(self.fd)
+        app.idlequeue.remove_timeout(self.fd)
+        app.idlequeue.unplug_idle(self.fd)
         self.fd = -1
         self.started = False
         try:
@@ -400,14 +400,14 @@ class P2PConnection(IdleObject, PlugIn):
                 self.connect_to_next_ip()
                 return
         self.fd = self._sock.fileno()
-        gajim.idlequeue.plug_idle(self, True, False)
+        app.idlequeue.plug_idle(self, True, False)
         self.set_timeout(CONNECT_TIMEOUT_SECONDS)
         self.do_connect()
 
     def set_timeout(self, timeout):
-        gajim.idlequeue.remove_timeout(self.fd)
+        app.idlequeue.remove_timeout(self.fd)
         if self.state >= 0:
-            gajim.idlequeue.set_read_timeout(self.fd, timeout)
+            app.idlequeue.set_read_timeout(self.fd, timeout)
 
     def plugin(self, owner):
         self.onreceive(owner._on_receive_document_attrs)
@@ -492,7 +492,7 @@ class P2PConnection(IdleObject, PlugIn):
         if self.state == 0:
             self.do_connect()
             return
-        gajim.idlequeue.remove_timeout(self.fd)
+        app.idlequeue.remove_timeout(self.fd)
         self._do_send()
 
     def pollend(self):
@@ -550,8 +550,8 @@ class P2PConnection(IdleObject, PlugIn):
         """
         Close the socket
         """
-        gajim.idlequeue.remove_timeout(self.fd)
-        gajim.idlequeue.unplug_idle(self.fd)
+        app.idlequeue.remove_timeout(self.fd)
+        app.idlequeue.unplug_idle(self.fd)
         try:
             self._sock.shutdown(socket.SHUT_RDWR)
             self._sock.close()
@@ -575,7 +575,7 @@ class P2PConnection(IdleObject, PlugIn):
                 self.sendbuff = self.sendbuff[send_count:]
                 if not self.sendbuff and not self.sendqueue:
                     if self.state < 0:
-                        gajim.idlequeue.unplug_idle(self.fd)
+                        app.idlequeue.unplug_idle(self.fd)
                         self._on_send()
                         self.disconnect()
                         return
@@ -602,7 +602,7 @@ class P2PConnection(IdleObject, PlugIn):
         else:
             writable = False
         if self.writable != writable or self.readable != readable:
-            gajim.idlequeue.plug_idle(self, writable, readable)
+            app.idlequeue.plug_idle(self, writable, readable)
 
 
     def _on_send(self):
@@ -830,7 +830,7 @@ class ClientZeroconf:
 #            if timeout:
 #                self._owner.set_timeout(timeout)
             to = stanza.getTo()
-            to = gajim.get_jid_without_resource(to)
+            to = app.get_jid_without_resource(to)
 
             try:
                 item = self.roster[to]

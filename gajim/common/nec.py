@@ -26,7 +26,7 @@ Network Events Controller.
 '''
 
 #from plugins.helpers import log
-from common import gajim
+from gajim.common import app
 
 class NetworkEventsController(object):
 
@@ -72,12 +72,12 @@ class NetworkEventsController(object):
 
     def push_incoming_event(self, event_object):
         if event_object.generate():
-            if not gajim.ged.raise_event(event_object.name, event_object):
+            if not app.ged.raise_event(event_object.name, event_object):
                 self._generate_events_based_on_incoming_event(event_object)
 
     def push_outgoing_event(self, event_object):
         if event_object.generate():
-            if not gajim.ged.raise_event(event_object.name, event_object):
+            if not app.ged.raise_event(event_object.name, event_object):
                 self._generate_events_based_on_outgoing_event(event_object)
 
     def _generate_events_based_on_incoming_event(self, event_object):
@@ -96,7 +96,7 @@ class NetworkEventsController(object):
                 new_event_object = new_event_class(None,
                     base_event=event_object)
                 if new_event_object.generate():
-                    if not gajim.ged.raise_event(new_event_object.name,
+                    if not app.ged.raise_event(new_event_object.name,
                     new_event_object):
                         self._generate_events_based_on_incoming_event(
                             new_event_object)
@@ -117,7 +117,7 @@ class NetworkEventsController(object):
                 new_event_object = new_event_class(None,
                     base_event=event_object)
                 if new_event_object.generate():
-                    if not gajim.ged.raise_event(new_event_object.name,
+                    if not app.ged.raise_event(new_event_object.name,
                     new_event_object):
                         self._generate_events_based_on_outgoing_event(
                             new_event_object)

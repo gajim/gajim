@@ -24,18 +24,17 @@
 
 import os
 import logging
-from common import gajim
-from common.gajim import HAVE_GPG, GPG_BINARY
+from gajim.common import app
 
-if HAVE_GPG:
+if app.HAVE_GPG:
     import gnupg
     gnupg.logger = logging.getLogger('gajim.c.gnupg')
 
     class GnuPG(gnupg.GPG):
         def __init__(self):
-            use_agent = gajim.config.get('use_gpg_agent')
-            gnupg.GPG.__init__(self, gpgbinary=GPG_BINARY, use_agent=use_agent)
-            encoding = gajim.config.get('pgp_encoding')
+            use_agent = app.config.get('use_gpg_agent')
+            gnupg.GPG.__init__(self, gpgbinary=app.GPG_BINARY, use_agent=use_agent)
+            encoding = app.config.get('pgp_encoding')
             if encoding:
                 self.encoding = encoding
             self.decode_errors = 'replace'

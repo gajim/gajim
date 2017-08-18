@@ -33,7 +33,7 @@
 
 
 import re
-from common import defs
+from gajim.common import defs
 from gi.repository import GLib
 from enum import IntEnum, unique
 
@@ -795,9 +795,9 @@ class Config:
             self.__options[1][opt] = self.__options[0][opt][Option.VAL]
 
     def _really_save(self):
-        from common import gajim
-        if gajim.interface:
-            gajim.interface.save_config()
+        from gajim.common import app
+        if app.interface:
+            app.interface.save_config()
         self.save_timeout_id = None
         return False
 

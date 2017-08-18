@@ -37,11 +37,11 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
-import gtkgui_helpers
+from gajim import gtkgui_helpers
 
-from common import gajim
-from common import helpers
-from common.i18n import Q_
+from gajim.common import app
+from gajim.common import helpers
+from gajim.common.i18n import Q_
 
 class BaseTooltip:
     """
@@ -273,7 +273,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
         StatusTable.__init__(self)
 
     def fill_table_with_accounts(self, accounts):
-        iconset = gajim.config.get('iconset')
+        iconset = app.config.get('iconset')
         if not iconset:
             iconset = 'dcraven'
         file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
@@ -281,8 +281,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GLib.markup_escape_text(message)
-            if acct['name'] in gajim.con_types and \
-                    gajim.con_types[acct['name']] in ('tls', 'ssl'):
+            if acct['name'] in app.con_types and \
+                    app.con_types[acct['name']] in ('tls', 'ssl'):
                 show_lock = True
             else:
                 show_lock = False
@@ -381,7 +381,7 @@ class GCTooltip(Gtk.Window):
         # Avatar
         puny_name = helpers.sanitize_filename(contact.name)
         puny_room = helpers.sanitize_filename(contact.room_jid)
-        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
+        file_ = helpers.get_avatar_path(os.path.join(app.AVATAR_PATH,
             puny_room, puny_name))
         if file_:
             with open(file_, 'rb') as file_data:
@@ -400,13 +400,13 @@ class GCTooltip(Gtk.Window):
         formatted = "<span foreground='%s'>%s</span>"
         color = None
         if affiliation.startswith(Q_("?Group Chat Contact Affiliation:None")):
-            color = gajim.config.get('tooltip_affiliation_none_color')
+            color = app.config.get('tooltip_affiliation_none_color')
         elif affiliation.startswith(_("Member")):
-            color = gajim.config.get('tooltip_affiliation_member_color')
+            color = app.config.get('tooltip_affiliation_member_color')
         elif affiliation.startswith(_("Administrator")):
-            color = gajim.config.get('tooltip_affiliation_administrator_color')
+            color = app.config.get('tooltip_affiliation_administrator_color')
         elif affiliation.startswith(_("Owner")):
-            color = gajim.config.get('tooltip_affiliation_owner_color')
+            color = app.config.get('tooltip_affiliation_owner_color')
         if color:
             affiliation = formatted % (color, affiliation)
         return affiliation
@@ -451,7 +451,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             self.create_table()
 
     def fill_table_with_accounts(self, accounts):
-        iconset = gajim.config.get('iconset')
+        iconset = app.config.get('iconset')
         if not iconset:
             iconset = 'dcraven'
         file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
@@ -459,8 +459,8 @@ class RosterTooltip(Gtk.Window, StatusTable):
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GLib.markup_escape_text(message)
-            if acct['name'] in gajim.con_types and \
-                    gajim.con_types[acct['name']] in ('tls', 'ssl'):
+            if acct['name'] in app.con_types and \
+                    app.con_types[acct['name']] in ('tls', 'ssl'):
                 show_lock = True
             else:
                 show_lock = False
@@ -496,25 +496,25 @@ class RosterTooltip(Gtk.Window, StatusTable):
             return
 
         if typ == 'account':
-            jid = gajim.get_jid_from_account(account)
+            jid = app.get_jid_from_account(account)
             contacts = []
-            connection = gajim.connections[account]
+            connection = app.connections[account]
             # get our current contact info
 
-            nbr_on, nbr_total = gajim.\
+            nbr_on, nbr_total = app.\
                 contacts.get_nb_online_total_contacts(
                 accounts=[account])
             account_name = account
-            if gajim.account_is_connected(account):
+            if app.account_is_connected(account):
                 account_name += ' (%s/%s)' % (repr(nbr_on),
                     repr(nbr_total))
-            contact = gajim.contacts.create_self_contact(jid=jid,
+            contact = app.contacts.create_self_contact(jid=jid,
                 account=account, name=account_name,
                 show=connection.get_status(), status=connection.status,
                 resource=connection.server_resource,
                 priority=connection.priority)
-            if gajim.connections[account].gpg:
-                contact.keyID = gajim.config.get_per('accounts',
+            if app.connections[account].gpg:
+                contact.keyID = app.config.get_per('accounts',
                     connection.name, 'keyid')
             contacts.append(contact)
             # if we're online ...
@@ -538,7 +538,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
                         show = roster.getShow(jid + '/' + resource)
                         if not show:
                             show = 'online'
-                        contact = gajim.contacts.create_self_contact(
+                        contact = app.contacts.create_self_contact(
                             jid=jid, account=account, show=show,
                             status=roster.getStatus(
                             jid + '/' + resource),
@@ -547,13 +547,13 @@ class RosterTooltip(Gtk.Window, StatusTable):
                         contacts.append(contact)
 
         # Username/Account/Groupchat
-        self.prim_contact = gajim.contacts.get_highest_prio_contact_from_contacts(
+        self.prim_contact = app.contacts.get_highest_prio_contact_from_contacts(
             contacts)
         self.contact_jid = self.prim_contact.jid
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
         name_markup = '<b>{}</b>'.format(name)
-        if gajim.config.get('mergeaccounts'):
-            color = gajim.config.get('tooltip_account_name_color')
+        if app.config.get('mergeaccounts'):
+            color = app.config.get('tooltip_account_name_color')
             account_name = GLib.markup_escape_text(self.prim_contact.account.name)
             name_markup += " <span foreground='{}'>({})</span>".format(
                 color, account_name)
@@ -562,7 +562,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             name_markup += _(' [blocked]')
 
         try:
-            if self.prim_contact.jid in gajim.interface.minimized_controls[account]:
+            if self.prim_contact.jid in app.interface.minimized_controls[account]:
                 name_markup += _(' [minimized]')
         except KeyError:
             pass
@@ -583,12 +583,12 @@ class RosterTooltip(Gtk.Window, StatusTable):
                     contacts_dict[priority] = [contact]
         if self.num_resources > 1:
             self.status_label.show()
-            transport = gajim.get_transport_name_from_jid(self.prim_contact.jid)
+            transport = app.get_transport_name_from_jid(self.prim_contact.jid)
             if transport:
                 file_path = os.path.join(helpers.get_transport_path(transport),
                     '16x16')
             else:
-                iconset = gajim.config.get('iconset')
+                iconset = app.config.get('iconset')
                 if not iconset:
                     iconset = 'dcraven'
                 file_path = os.path.join(helpers.get_iconset_path(iconset),
@@ -639,7 +639,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             self.resource.show()
             self.resource_label.show()
 
-        if self.prim_contact.jid not in gajim.gc_connected[account]:
+        if self.prim_contact.jid not in app.gc_connected[account]:
             if (account and
                 self.prim_contact.sub and
                     self.prim_contact.sub != 'both'):
@@ -663,7 +663,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
 
         # Avatar
         puny_jid = helpers.sanitize_filename(self.prim_contact.jid)
-        file_ = helpers.get_avatar_path(os.path.join(gajim.AVATAR_PATH,
+        file_ = helpers.get_avatar_path(os.path.join(app.AVATAR_PATH,
             puny_jid))
         if file_:
             with open(file_, 'rb') as file_data:
@@ -713,7 +713,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
 
     def _set_idle_time(self, contact):
         if contact.idle_time:
-            idle_color = gajim.config.get('tooltip_idle_color')
+            idle_color = app.config.get('tooltip_idle_color')
             idle_time = contact.idle_time
             idle_time = time.localtime(contact.idle_time)
             idle_time = datetime(*(idle_time[:6]))
@@ -732,8 +732,8 @@ class RosterTooltip(Gtk.Window, StatusTable):
             show = helpers.get_uf_show(contact.show)
             # Contact is Groupchat
             if (self.account and
-                    self.prim_contact.jid in gajim.gc_connected[self.account]):
-                if gajim.gc_connected[self.account][self.prim_contact.jid]:
+                    self.prim_contact.jid in app.gc_connected[self.account]):
+                if app.gc_connected[self.account][self.prim_contact.jid]:
                     show = _('Connected')
                 else:
                     show = _('Disconnected')
@@ -779,7 +779,7 @@ class FileTransfersTooltip(BaseTooltip):
             type_ = _('?Noun:Download')
             actor = _('Sender: ')
             sender = file_props.sender.split('/')[0]
-            name = gajim.contacts.get_first_contact_from_jid(
+            name = app.contacts.get_first_contact_from_jid(
                     file_props.tt_account, sender).get_shown_name()
         else:
             type_ = _('?Noun:Upload')
@@ -848,17 +848,17 @@ def colorize_status(status):
     formatted = "<span foreground='%s'>%s</span>"
     color = None
     if status.startswith(Q_("?user status:Available")):
-        color = gajim.config.get('tooltip_status_online_color')
+        color = app.config.get('tooltip_status_online_color')
     elif status.startswith(_("Free for Chat")):
-        color = gajim.config.get('tooltip_status_free_for_chat_color')
+        color = app.config.get('tooltip_status_free_for_chat_color')
     elif status.startswith(_("Away")):
-        color = gajim.config.get('tooltip_status_away_color')
+        color = app.config.get('tooltip_status_away_color')
     elif status.startswith(_("Busy")):
-        color = gajim.config.get('tooltip_status_busy_color')
+        color = app.config.get('tooltip_status_busy_color')
     elif status.startswith(_("Not Available")):
-        color = gajim.config.get('tooltip_status_na_color')
+        color = app.config.get('tooltip_status_na_color')
     elif status.startswith(_("Offline")):
-        color = gajim.config.get('tooltip_status_offline_color')
+        color = app.config.get('tooltip_status_offline_color')
     if color:
         status = formatted % (color, status)
     return status

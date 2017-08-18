@@ -34,15 +34,15 @@ from gi.repository import GObject
 from gi.repository import GLib
 import time
 
-import common
-import gtkgui_helpers
-import message_control
-import dialogs
-from chat_control_base import ChatControlBase
-from chat_control import ChatControl
+from gajim import common
+from gajim import gtkgui_helpers
+from gajim import message_control
+from gajim import dialogs
+from gajim.chat_control_base import ChatControlBase
+from gajim.chat_control import ChatControl
 
-from common import gajim
-from gtkgui_helpers import get_action
+from gajim.common import app
+from gajim.gtkgui_helpers import get_action
 
 ####################
 
@@ -89,7 +89,7 @@ class MessageWindow(object):
             self.parent_paned = parent_paned
             old_parent = self.notebook.get_parent()
             old_parent.remove(self.notebook)
-            if gajim.config.get('roster_on_the_right'):
+            if app.config.get('roster_on_the_right'):
                 child1 = self.parent_paned.get_child1()
                 self.parent_paned.remove(child1)
                 self.parent_paned.add(self.notebook)
@@ -141,7 +141,7 @@ class MessageWindow(object):
         self.handlers[id_] = self.notebook
 
         # Tab customizations
-        pref_pos = gajim.config.get('tabs_position')
+        pref_pos = app.config.get('tabs_position')
         if pref_pos == 'bottom':
             nb_pos = Gtk.PositionType.BOTTOM
         elif pref_pos == 'left':
@@ -151,13 +151,13 @@ class MessageWindow(object):
         else:
             nb_pos = Gtk.PositionType.TOP
         self.notebook.set_tab_pos(nb_pos)
-        window_mode = gajim.interface.msg_win_mgr.mode
-        if gajim.config.get('tabs_always_visible') or \
+        window_mode = app.interface.msg_win_mgr.mode
+        if app.config.get('tabs_always_visible') or \
         window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             self.notebook.set_show_tabs(True)
         else:
             self.notebook.set_show_tabs(False)
-        self.notebook.set_show_border(gajim.config.get('tabs_border'))
+        self.notebook.set_show_border(app.config.get('tabs_border'))
         self.show_icon()
 
     def change_account_name(self, old_name, new_name):
@@ -222,14 +222,14 @@ class MessageWindow(object):
         if number_of_closed_control > 1:
             def on_yes1(checked):
                 if checked:
-                    gajim.config.set('confirm_close_multiple_tabs', False)
+                    app.config.set('confirm_close_multiple_tabs', False)
                 self.dont_warn_on_delete = True
                 for ctrl in self.controls():
                     if ctrl.minimizable():
                         ctrl.minimize()
                 win.destroy()
 
-            if not gajim.config.get('confirm_close_multiple_tabs'):
+            if not app.config.get('confirm_close_multiple_tabs'):
                 for ctrl in self.controls():
                     if ctrl.minimizable():
                         ctrl.minimize()
@@ -360,9 +360,9 @@ class MessageWindow(object):
                 # theme
                 if not Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
-                    if gajim.interface.msg_win_mgr.mode == \
-                    gajim.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-                        gajim.interface.roster.tree.grab_focus()
+                    if app.interface.msg_win_mgr.mode == \
+                    app.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+                        app.interface.roster.tree.grab_focus()
                         return False
                     control._on_send_file_menuitem_activate(None)
                     return True
@@ -451,7 +451,7 @@ class MessageWindow(object):
                 return True
         # Close tab bindings
         elif keyval == Gdk.KEY_Escape and \
-        gajim.config.get('escape_key_closes'): # Escape
+        app.config.get('escape_key_closes'): # Escape
             self.remove_tab(control, self.CLOSE_ESC)
             return True
 
@@ -462,7 +462,7 @@ class MessageWindow(object):
         self.remove_tab(control, self.CLOSE_CLOSE_BUTTON)
 
     def show_icon(self):
-        window_mode = gajim.interface.msg_win_mgr.mode
+        window_mode = app.interface.msg_win_mgr.mode
         icon = None
         if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
             ctrl = self.get_active_control()
@@ -499,7 +499,7 @@ class MessageWindow(object):
         unread = 0
         for ctrl in self.controls():
             if ctrl.type_id == message_control.TYPE_GC and not \
-            gajim.config.get('notify_on_all_muc_messages') and not \
+            app.config.get('notify_on_all_muc_messages') and not \
             ctrl.attention_flag:
                 # count only pm messages
                 unread += ctrl.get_nb_unread_pm()
@@ -517,13 +517,13 @@ class MessageWindow(object):
         if control.type_id == message_control.TYPE_GC:
             name = control.room_jid.split('@')[0]
             urgent = control.attention_flag or \
-                gajim.config.get('notify_on_all_muc_messages')
+                app.config.get('notify_on_all_muc_messages')
         else:
             name = control.contact.get_shown_name()
             if control.resource:
                 name += '/' + control.resource
 
-        window_mode = gajim.interface.msg_win_mgr.mode
+        window_mode = app.interface.msg_win_mgr.mode
         if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
             # Show the plural form since number of tabs > 1
             if self.type_ == 'chat':
@@ -570,19 +570,19 @@ class MessageWindow(object):
             else: # We are leaving gc without status message or it's a chat
                 ctrl.shutdown()
             # Update external state
-            gajim.events.remove_events(ctrl.account, ctrl.get_full_jid,
+            app.events.remove_events(ctrl.account, ctrl.get_full_jid,
                     types = ['printed_msg', 'chat', 'gc_msg'])
 
             fjid = ctrl.get_full_jid()
-            jid = gajim.get_jid_without_resource(fjid)
+            jid = app.get_jid_without_resource(fjid)
 
             fctrl = self.get_control(fjid, ctrl.account)
             bctrl = self.get_control(jid, ctrl.account)
             # keep last_message_time around unless this was our last control with
             # that jid
             if not fctrl and not bctrl and \
-            fjid in gajim.last_message_time[ctrl.account]:
-                del gajim.last_message_time[ctrl.account][fjid]
+            fjid in app.last_message_time[ctrl.account]:
+                del app.last_message_time[ctrl.account][fjid]
 
             self.notebook.remove_page(self.notebook.page_num(ctrl.widget))
 
@@ -619,8 +619,8 @@ class MessageWindow(object):
             pass
         elif self.get_num_controls() == 0:
             # These are not called when the window is destroyed like this, fake it
-            gajim.interface.msg_win_mgr._on_window_delete(self.window, None)
-            gajim.interface.msg_win_mgr._on_window_destroy(self.window)
+            app.interface.msg_win_mgr._on_window_delete(self.window, None)
+            app.interface.msg_win_mgr._on_window_destroy(self.window)
             # dnd clean up
             self.notebook.drag_dest_unset()
             if self.parent_paned:
@@ -632,8 +632,8 @@ class MessageWindow(object):
                 self.window.destroy()
             return # don't show_title, we are dead
         elif self.get_num_controls() == 1: # we are going from two tabs to one
-            window_mode = gajim.interface.msg_win_mgr.mode
-            show_tabs_if_one_tab = gajim.config.get('tabs_always_visible') or \
+            window_mode = app.interface.msg_win_mgr.mode
+            show_tabs_if_one_tab = app.config.get('tabs_always_visible') or \
                 window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER
             self.notebook.set_show_tabs(show_tabs_if_one_tab)
 
@@ -647,7 +647,7 @@ class MessageWindow(object):
 
         # Optionally hide close button
         close_button = hbox.get_children()[2]
-        if gajim.config.get('tabs_close_button'):
+        if app.config.get('tabs_close_button'):
             close_button.show()
         else:
             close_button.hide()
@@ -757,10 +757,10 @@ class MessageWindow(object):
         self._controls[acct][new_jid] = ctrl
         del self._controls[acct][old_jid]
 
-        if old_jid in gajim.last_message_time[acct]:
-            gajim.last_message_time[acct][new_jid] = \
-                    gajim.last_message_time[acct][old_jid]
-            del gajim.last_message_time[acct][old_jid]
+        if old_jid in app.last_message_time[acct]:
+            app.last_message_time[acct][new_jid] = \
+                    app.last_message_time[acct][old_jid]
+            del app.last_message_time[acct][old_jid]
 
     def controls(self):
         for jid_dict in list(self._controls.values()):
@@ -790,7 +790,7 @@ class MessageWindow(object):
             if ctrl.get_nb_unread() > 0:
                 found = True
                 break # found
-            elif gajim.config.get('ctrl_tab_go_to_next_composing') :
+            elif app.config.get('ctrl_tab_go_to_next_composing') :
                 # Search for a composing contact
                 contact = ctrl.contact
                 if first_composing_ind == -1 and contact.chatstate == 'composing':
@@ -818,7 +818,7 @@ class MessageWindow(object):
     def popup_menu(self, event):
         menu = self.get_active_control().prepare_context_menu()
         # show the menu
-        menu.attach_to_widget(gajim.interface.roster.window, None)
+        menu.attach_to_widget(app.interface.roster.window, None)
         menu.show_all()
         menu.popup(None, None, None, None, event.button, event.time)
 
@@ -956,7 +956,7 @@ class MessageWindowMgr(GObject.GObject):
         self._windows = {}
 
         # Map the mode to a int constant for frequent compares
-        mode = gajim.config.get('one_message_window')
+        mode = app.config.get('one_message_window')
         self.mode = common.config.opt_one_window_types.index(mode)
 
         self.parent_win = parent_window
@@ -1005,23 +1005,23 @@ class MessageWindowMgr(GObject.GObject):
         """
         Resizes window according to config settings
         """
-        hpaned = gajim.config.get('roster_hpaned_position')
+        hpaned = app.config.get('roster_hpaned_position')
         if self.mode in (self.ONE_MSG_WINDOW_ALWAYS,
                          self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER):
-            size = (gajim.config.get('msgwin-width'),
-                    gajim.config.get('msgwin-height'))
+            size = (app.config.get('msgwin-width'),
+                    app.config.get('msgwin-height'))
             if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
                 # Need to add the size of the now visible paned handle, otherwise
                 # the saved width of the message window decreases by this amount
                 handle_size = win.parent_paned.style_get_property('handle-size')
                 size = (hpaned + size[0] + handle_size, size[1])
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
-            size = (gajim.config.get_per('accounts', acct, 'msgwin-width'),
-                    gajim.config.get_per('accounts', acct, 'msgwin-height'))
+            size = (app.config.get_per('accounts', acct, 'msgwin-width'),
+                    app.config.get_per('accounts', acct, 'msgwin-height'))
         elif self.mode in (self.ONE_MSG_WINDOW_NEVER, self.ONE_MSG_WINDOW_PERTYPE):
             opt_width = type_ + '-msgwin-width'
             opt_height = type_ + '-msgwin-height'
-            size = (gajim.config.get(opt_width), gajim.config.get(opt_height))
+            size = (app.config.get(opt_width), app.config.get(opt_height))
         else:
             return
         win.resize(size[0], size[1])
@@ -1037,14 +1037,14 @@ class MessageWindowMgr(GObject.GObject):
             return
 
         if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
-            pos = (gajim.config.get('msgwin-x-position'),
-                    gajim.config.get('msgwin-y-position'))
+            pos = (app.config.get('msgwin-x-position'),
+                    app.config.get('msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
-            pos = (gajim.config.get_per('accounts', acct, 'msgwin-x-position'),
-                    gajim.config.get_per('accounts', acct, 'msgwin-y-position'))
+            pos = (app.config.get_per('accounts', acct, 'msgwin-x-position'),
+                    app.config.get_per('accounts', acct, 'msgwin-y-position'))
         elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
-            pos = (gajim.config.get(type_ + '-msgwin-x-position'),
-                    gajim.config.get(type_ + '-msgwin-y-position'))
+            pos = (app.config.get(type_ + '-msgwin-x-position'),
+                    app.config.get(type_ + '-msgwin-y-position'))
         else:
             return
 
@@ -1094,7 +1094,7 @@ class MessageWindowMgr(GObject.GObject):
 
         # Position and size window based on saved state and window mode
         if not self.one_window_opened(contact, acct, type_):
-            if gajim.config.get('msgwin-max-state'):
+            if app.config.get('msgwin-max-state'):
                 win.window.maximize()
             else:
                 self._resize_window(win, acct, type_)
@@ -1116,7 +1116,7 @@ class MessageWindowMgr(GObject.GObject):
 
     def _on_window_delete(self, win, event):
         self.save_state(self._gtk_win_to_msg_win(win))
-        gajim.interface.save_config()
+        app.interface.save_config()
         return False
 
     def _on_window_destroy(self, win):
@@ -1190,7 +1190,7 @@ class MessageWindowMgr(GObject.GObject):
                 w.window.hide()
                 w.window.destroy()
 
-        gajim.interface.save_config()
+        app.interface.save_config()
 
     def save_state(self, msg_win, width_adjust=0):
         # Save window size and position
@@ -1225,29 +1225,29 @@ class MessageWindowMgr(GObject.GObject):
             width = msg_win.notebook.get_allocation().width
 
         if acct:
-            gajim.config.set_per('accounts', acct, size_width_key, width)
-            gajim.config.set_per('accounts', acct, size_height_key, height)
+            app.config.set_per('accounts', acct, size_width_key, width)
+            app.config.set_per('accounts', acct, size_height_key, height)
 
             if self.mode != self.ONE_MSG_WINDOW_NEVER:
-                gajim.config.set_per('accounts', acct, pos_x_key, x)
-                gajim.config.set_per('accounts', acct, pos_y_key, y)
+                app.config.set_per('accounts', acct, pos_x_key, x)
+                app.config.set_per('accounts', acct, pos_y_key, y)
 
         else:
             win_maximized = msg_win.window.get_window().get_state() == \
                     Gdk.WindowState.MAXIMIZED
-            gajim.config.set(max_win_key, win_maximized)
+            app.config.set(max_win_key, win_maximized)
             width += width_adjust
-            gajim.config.set(size_width_key, width)
-            gajim.config.set(size_height_key, height)
+            app.config.set(size_width_key, width)
+            app.config.set(size_height_key, height)
 
             if self.mode != self.ONE_MSG_WINDOW_NEVER:
-                gajim.config.set(pos_x_key, x)
-                gajim.config.set(pos_y_key, y)
+                app.config.set(pos_x_key, x)
+                app.config.set(pos_y_key, y)
 
     def reconfig(self):
         for w in self.windows():
             self.save_state(w)
-        mode = gajim.config.get('one_message_window')
+        mode = app.config.get('one_message_window')
         if self.mode == common.config.opt_one_window_types.index(mode):
             # No change
             return
@@ -1263,7 +1263,7 @@ class MessageWindowMgr(GObject.GObject):
                 # Stash current size so it can be restored if the MessageWindow
                 # is not longer embedded
                 roster_width = w.parent_paned.get_position()
-                gajim.config.set('roster_width', roster_width)
+                app.config.set('roster_width', roster_width)
 
             while w.notebook.get_n_pages():
                 page = w.notebook.get_nth_page(0)
@@ -1282,8 +1282,8 @@ class MessageWindowMgr(GObject.GObject):
                 w.parent_paned.remove(child)
                 self.parent_win.lookup_action('show-roster').set_enabled(False)
                 gtkgui_helpers.resize_window(w.window,
-                        gajim.config.get('roster_width'),
-                        gajim.config.get('roster_height'))
+                        app.config.get('roster_width'),
+                        app.config.get('roster_height'))
 
         self._windows = {}
 
@@ -1296,15 +1296,15 @@ class MessageWindowMgr(GObject.GObject):
             mw.new_tab(ctrl)
 
     def save_opened_controls(self):
-        if not gajim.config.get('remember_opened_chat_controls'):
+        if not app.config.get('remember_opened_chat_controls'):
             return
         chat_controls = {}
-        for acct in gajim.connections:
+        for acct in app.connections:
             chat_controls[acct] = []
         for ctrl in self.get_controls(type_=message_control.TYPE_CHAT):
             acct = ctrl.account
             if ctrl.contact.jid not in chat_controls[acct]:
                 chat_controls[acct].append(ctrl.contact.jid)
-        for acct in gajim.connections:
-            gajim.config.set_per('accounts', acct, 'opened_chat_controls',
+        for acct in app.connections:
+            app.config.set_per('accounts', acct, 'opened_chat_controls',
                 ','.join(chat_controls[acct]))

@@ -27,12 +27,12 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 from gi.repository import GLib
 
-from common import gajim
+from gajim.common import app
 
-from common.jingle_transport import JingleTransportICEUDP
-from common.jingle_content import contents, JingleContent, JingleContentSetupException
-from common.connection_handlers_events import InformationEvent
-from common.jingle_session import FailedApplication
+from gajim.common.jingle_transport import JingleTransportICEUDP
+from gajim.common.jingle_content import contents, JingleContent, JingleContentSetupException
+from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.jingle_session import FailedApplication
 
 from collections import deque
 
@@ -90,8 +90,8 @@ class JingleRTPContent(JingleContent):
         # due to bad controlling-mode
 
         params = {'controlling-mode': self.session.weinitiate, 'debug': False}
-        if gajim.config.get('use_stun_server'):
-            stun_server = gajim.config.get('stun_server')
+        if app.config.get('use_stun_server'):
+            stun_server = app.config.get('stun_server')
             if not stun_server and self.session.connection._stun_servers:
                 stun_server = self.session.connection._stun_servers[0]['host']
             if stun_server:
@@ -112,12 +112,12 @@ class JingleRTPContent(JingleContent):
         return JingleContent.is_ready(self) and self.candidates_ready
 
     def make_bin_from_config(self, config_key, pipeline, text):
-        pipeline = pipeline % gajim.config.get(config_key)
+        pipeline = pipeline % app.config.get(config_key)
         try:
             gst_bin = Gst.parse_bin_from_description(pipeline, True)
             return gst_bin
         except GLib.GError as e:
-            gajim.nec.push_incoming_event(
+            app.nec.push_incoming_event(
                 InformationEvent(
                     None, conn=self.session.connection, level='error',
                     pri_txt=_('%s configuration error') % text.capitalize(),
@@ -224,7 +224,7 @@ class JingleRTPContent(JingleContent):
             # or raise an error, Jingle way
             # or maybe one-sided stream?
             if not self.stream_failed_once:
-                gajim.nec.push_incoming_event(
+                app.nec.push_incoming_event(
                     InformationEvent(
                         None, conn=self.session.connection, level='error',
                         pri_txt=_('GStreamer error'),
@@ -406,23 +406,23 @@ class JingleVideo(JingleRTPContent):
         bus.connect('sync-message::element', self._on_sync_message)
 
         # the local parts
-        if gajim.config.get('video_framerate'):
+        if app.config.get('video_framerate'):
             framerate = 'videorate ! video/x-raw,framerate=%s ! ' % \
-                gajim.config.get('video_framerate')
+                app.config.get('video_framerate')
         else:
             framerate = ''
         try:
-            w, h = gajim.config.get('video_size').split('x')
+            w, h = app.config.get('video_size').split('x')
         except:
             w = h = None
         if w and h:
             video_size = 'video/x-raw,width=%s,height=%s ! ' % (w, h)
         else:
             video_size = ''
-        if gajim.config.get('video_see_self'):
+        if app.config.get('video_see_self'):
             tee = '! tee name=t ! queue ! videoscale ! ' + \
                 'video/x-raw,width=160,height=120 ! videoconvert ! ' + \
-                '%s t. ! queue ' % gajim.config.get(
+                '%s t. ! queue ' % app.config.get(
                     'video_output_device')
         else:
             tee = ''
@@ -453,7 +453,7 @@ class JingleVideo(JingleRTPContent):
         if message.get_structure().get_name() == 'prepare-window-handle':
             message.src.set_property('force-aspect-ratio', True)
             imagesink = message.src
-            if gajim.config.get('video_see_self') and not self.out_xid_set:
+            if app.config.get('video_see_self') and not self.out_xid_set:
                 imagesink.set_window_handle(self.out_xid)
                 self.out_xid_set = True
             else:

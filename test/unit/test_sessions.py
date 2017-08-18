@@ -8,22 +8,22 @@ lib.setup_env()
 
 import notify
 
-from common import gajim
-from common import nec
-from common import ged
-from common.nec import NetworkEvent
-from common.connection_handlers_events import MessageReceivedEvent
-from common.connection_handlers_events import DecryptedMessageReceivedEvent
+from gajim.common import app
+from gajim.common import nec
+from gajim.common import ged
+from gajim.common.nec import NetworkEvent
+from gajim.common.connection_handlers_events import MessageReceivedEvent
+from gajim.common.connection_handlers_events import DecryptedMessageReceivedEvent
 import nbxmpp
 
-from common.stanza_session import StanzaSession
-from session import ChatControlSession
-from roster_window import RosterWindow
+from gajim.common.stanza_session import StanzaSession
+from gajim.session import ChatControlSession
+from gajim.roster_window import RosterWindow
 
 from mock import Mock, expectParams
 from gajim_mocks import *
 
-gajim.interface = MockInterface()
+app.interface = MockInterface()
 
 
 # name to use for the test account
@@ -88,19 +88,19 @@ class TestChatControlSession(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        gajim.nec = nec.NetworkEventsController()
+        app.nec = nec.NetworkEventsController()
         cls.conn = MockConnection(account_name, {'send_stanza': None})
-        gajim.logger = MockLogger()
-        gajim.default_session_type = ChatControlSession
+        app.logger = MockLogger()
+        app.default_session_type = ChatControlSession
 
     def setUp(self):
-        gajim.notification = notify.Notification()
+        app.notification = notify.Notification()
 
         # no notifications have been sent
         self.assertEqual(0, len(notify.notifications))
 
     def tearDown(self):
-        gajim.notification.clean()
+        app.notification.clean()
 
     def receive_chat_msg(self, jid, msgtxt):
         '''simulate receiving a chat message from jid'''
@@ -153,12 +153,12 @@ class TestChatControlSession(unittest.TestCase):
         sess = self.conn.sessions[jid]['123']
 
         # message was logged
-        calls = gajim.logger.mockGetNamedCalls('insert_into_logs')
+        calls = app.logger.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(1, len(calls))
 
         # no ChatControl was open and autopopup was off
         # so the message goes into the event queue
-        self.assertEqual(1, len(gajim.events.get_events(account_name)))
+        self.assertEqual(1, len(app.events.get_events(account_name)))
 
         self.assert_first_message_notification()
 
@@ -171,7 +171,7 @@ class TestChatControlSession(unittest.TestCase):
         jid = 'bct@necronomicorp.com'
         fjid = 'bct@necronomicorp.com/Gajim'
         msgtxt = 'testing two'
-        roster = RosterWindow(gajim.app)
+        roster = RosterWindow(app.app)
 
         sess = self.conn.sessions[jid]['123']
         sess.control = MockChatControl(fjid, account_name)
@@ -179,11 +179,11 @@ class TestChatControlSession(unittest.TestCase):
         self.receive_chat_msg(fjid, msgtxt)
 
         # message was logged
-        calls = gajim.logger.mockGetNamedCalls('insert_into_logs')
+        calls = app.logger.mockGetNamedCalls('insert_into_logs')
         self.assertEqual(2, len(calls))
 
         # the message does not go into the event queue
-        self.assertEqual(1, len(gajim.events.get_events(account_name)))
+        self.assertEqual(1, len(app.events.get_events(account_name)))
 
         self.assert_not_first_message_notification()
 
