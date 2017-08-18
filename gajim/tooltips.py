@@ -776,13 +776,13 @@ class FileTransfersTooltip(BaseTooltip):
             file_name = file_props.name
         properties.append((_('Name: '), GLib.markup_escape_text(file_name)))
         if file_props.type_ == 'r':
-            type_ = _('?Noun:Download')
+            type_ = Q_('?Noun:Download')
             actor = _('Sender: ')
             sender = file_props.sender.split('/')[0]
             name = app.contacts.get_first_contact_from_jid(
                     file_props.tt_account, sender).get_shown_name()
         else:
-            type_ = _('?Noun:Upload')
+            type_ = Q_('?Noun:Upload')
             actor = _('Recipient: ')
             receiver = file_props.receiver
             if hasattr(receiver, 'name'):
@@ -808,7 +808,7 @@ class FileTransfersTooltip(BaseTooltip):
                 status = _('Completed')
             else:
                 if file_props.paused == True:
-                    status = _('?transfer status:Paused')
+                    status = Q_('?transfer status:Paused')
                 elif file_props.stalled == True:
                     #stalled is not paused. it is like 'frozen' it stopped alone
                     status = _('Stalled')

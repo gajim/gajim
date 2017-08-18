@@ -43,6 +43,7 @@ from gajim.chat_control import ChatControl
 
 from gajim.common import app
 from gajim.gtkgui_helpers import get_action
+from gajim.common.i18n import Q_
 
 ####################
 
@@ -527,7 +528,7 @@ class MessageWindow(object):
         if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
             # Show the plural form since number of tabs > 1
             if self.type_ == 'chat':
-                label = _('?Noun:Chats')
+                label = Q_('?Noun:Chats')
             elif self.type_ == 'gc':
                 label = _('Groupchats')
             else:
