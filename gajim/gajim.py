@@ -97,6 +97,9 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show all warnings'))
+        self.add_main_option(GLib.OPTION_REMAINING, 0, GLib.OptionFlags.HIDDEN,
+                             GLib.OptionArg.STRING_ARRAY,
+                             "")
 
         self.profile = ''
         self.config_path = None
@@ -292,6 +295,10 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
         if options.contains('warnings'):
             self.show_warnings()
+        if options.contains(GLib.OPTION_REMAINING):
+            unhandled = options.lookup_value(GLib.OPTION_REMAINING).get_strv()
+            print('Error: Unhandled arguments: %s' % unhandled)
+            return 0
         return -1
 
     def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
