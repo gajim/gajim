@@ -116,7 +116,7 @@ class HistoryWindow:
         col.set_resizable(True)
 
         self.jid = None # The history we are currently viewing
-        self.account = None
+        self.account = account
         self.completion_dict = {}
         self.accounts_seen_online = [] # Update dict when new accounts connect
         self.jids_to_search = []
@@ -259,8 +259,7 @@ class HistoryWindow:
 
     def on_jid_entry_activate(self, widget):
         jid = self.jid_entry.get_text()
-        account = None # we don't know the account, could be any. Search for it!
-        self._load_history(jid, account)
+        self._load_history(jid, self.account)
         self.results_window.set_property('visible', False)
 
     def on_jid_entry_focus(self, widget, event):
