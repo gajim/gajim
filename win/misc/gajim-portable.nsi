@@ -105,9 +105,9 @@ Section "Gajim" SecGajim
 
 	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
-  	"-c ..\..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable"
+  	"-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable"
   	CreateShortCut "$INSTDIR\Gajim-Portable-Debug.lnk" "$INSTDIR\bin\Gajim-Debug.exe" \
-  	"-c ..\..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
+  	"-c ..\UserData" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
 
 SectionEnd
 

@@ -29,6 +29,7 @@ function set_build_root {
     BUILD_ROOT="$1"
     REPO_CLONE="${BUILD_ROOT}/${MINGW}"/gajim
     MINGW_ROOT="${BUILD_ROOT}/${MINGW}"
+    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python3.6/site-packages"
 }
 
 set_build_root "${DIR}/_build_root"
@@ -120,8 +121,10 @@ pillow
 function install_gajim {
     [ -z "$1" ] && (echo "Missing arg"; exit 1)
 
+    rm -Rf "${PACKAGE_DIR}/gajim"
     rm -Rf "${REPO_CLONE}"
     git clone "${DIR}"/.. "${REPO_CLONE}"
+    mv "${REPO_CLONE}/gajim" "${PACKAGE_DIR}"
 
     (cd "${REPO_CLONE}" && git checkout "$1") || exit 1
 
@@ -186,6 +189,7 @@ function cleanup_install {
         -exec rm -f {} \;
 
     rm -Rf "${REPO_CLONE}"/.git
+    rm -Rf "${REPO_CLONE}"/.gitlab-ci.yml
     rm -Rf "${REPO_CLONE}"/debian
     rm -Rf "${REPO_CLONE}"/doc
     rm -Rf "${REPO_CLONE}"/m4
@@ -313,7 +317,7 @@ function cleanup_install {
     find "${MINGW_ROOT}"/bin -name "*.pyo" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
     build_compileall -q "${MINGW_ROOT}"
-    find "${MINGW_ROOT}" -name "*.py" ! -name "gajim.py" ! -name "history_manager.py" ! -name "*theme.py" -exec rm -f {} \;
+    find "${MINGW_ROOT}" -name "*.py" ! -name "*theme.py" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
     find "${MINGW_ROOT}" -type d -name "__pycache__" -prune -exec rm -rf {} \;
 
