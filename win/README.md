@@ -16,7 +16,7 @@ Download [msys2](http://www.msys2.org/) (msys2-x86_64-xxx.exe) and follow the in
 * Run ``cd gajim/win`` to end up where this README exists.
 * Execute ``./dev_env.sh`` to install all the needed dependencies.
 * Now go to the git root dir ``cd ..``
-* Launch Gajim ``./launch.sh``
+* Launch Gajim ``./launch.py``
 
 
 ### Build Gajim / Creating an Installer
