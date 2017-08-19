@@ -58,7 +58,7 @@ def build_exe(source_path, resource_path, is_gui, out_path):
     subprocess.check_call(args)
 
 
-def get_launcher_code(entry_point):
+def get_launcher_code():
     template = """\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
@@ -87,19 +87,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_FrozenFlag = 1;
     Py_Initialize();
     PySys_SetArgvEx(__argc, szArglist, 0);
-    FILE* file = fopen("../gajim/gajim/%(filename)s", "r");
-    PyRun_SimpleString("import sys; import os;"
-                       "os.chdir('../gajim/gajim');"
-                       "sys.path.append(os.getcwd());"
-                       "sys.frozen=True;"
-                        );
-    result = PyRun_SimpleFile(file, "../gajim/gajim/%(filename)s");
+    result = PyRun_SimpleString("import sys; import os;"
+                                "sys.frozen=True;"
+                                "os.chdir('../gajim');"
+                                "import gajim.gajim as g;"
+                                "g.GajimApplication().run(sys.argv);");
     Py_Finalize();
     return result;
 }
     """
 
-    return template % {"filename": entry_point}
+    return template
 
 
 def get_resouce_code(filename, file_version, file_desc, icon_path,
@@ -150,7 +148,7 @@ END
 
 
 def build_launcher(out_path, icon_path, file_desc, product_name, product_version,
-                   company_name, entry_point, is_gui):
+                   company_name, is_gui):
 
     src_ico = os.path.abspath(icon_path)
     target = os.path.abspath(out_path)
@@ -162,7 +160,7 @@ def build_launcher(out_path, icon_path, file_desc, product_name, product_version
     try:
         os.chdir(temp)
         with open("launcher.c", "w") as h:
-            h.write(get_launcher_code(entry_point))
+            h.write(get_launcher_code())
         shutil.copyfile(src_ico, "launcher.ico")
         with open("launcher.rc", "w") as h:
             h.write(get_resouce_code(
@@ -188,17 +186,17 @@ def main():
     build_launcher(
         os.path.join(target, "Gajim.exe"),
         os.path.join(misc, "gajim.ico"), "Gajim", "Gajim",
-        version, company_name, 'gajim.py', True)
+        version, company_name, True)
 
     build_launcher(
         os.path.join(target, "Gajim-Debug.exe"),
         os.path.join(misc, "gajim.ico"), "Gajim", "Gajim",
-        version, company_name, 'gajim.py', False)
+        version, company_name, False)
 
-    build_launcher(
-        os.path.join(target, "history_manager.exe"),
-        os.path.join(misc, "gajim.ico"), "History Manager", "History Manager",
-        version, company_name, 'history_manager.py', True)
+    # build_launcher(
+    #     os.path.join(target, "history_manager.exe"),
+    #     os.path.join(misc, "gajim.ico"), "History Manager", "History Manager",
+    #     version, company_name, 'history_manager.py', True)
 
 if __name__ == "__main__":
     main()
