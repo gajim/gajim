@@ -1383,9 +1383,10 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.privacy_default_list = None
 
         try:
-            self.sleeper = common.sleepy.Sleepy()
+            self.sleeper = sleepy.Sleepy()
             HAS_IDLE = True
         except Exception:
+            log.warning('Error while calling Sleepy()', exc_info=True)
             HAS_IDLE = False
 
         self.gmail_last_tid = None
