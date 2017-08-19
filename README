@@ -30,7 +30,7 @@
 <li>For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi</li>
 <li>dnsutils (or whatever package provides the nslookup binary) for SRV support</li>
 <li>gir1.2-gtkspell3-3.0 and aspell-LANG where lang is your locale eg. en, fr etc</li>
-<li>gir1.2-secret-1 for GNOME Keyring or KDE support as password storage</li>
+<li>gir1.2-secret-1 for GNOME Keyring or KDE support as password storage</li>
 <li>gir1.2-notify-0.7 to get cooler popups</li>
 <li>D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.</li>
 <li>python3-dbus bindings (>=1.2.0)</li>
@@ -67,10 +67,10 @@
 
 <h2>Running Gajim</h2>
 <p>Just do <em>gajim</em> or you can run Gajim from your GNOME/Xfce/KDE/whatever menus.<br/><br/>
-or if you use hg version and you didn't 'make install' you can also run from gajim folder with<em>./launch.sh</em></p>
+or if you use Git version and you didn't 'make install' you can also run from gajim folder with<em>./launch.py</em></p>
 <hr />
-<h3>Note for hg users</h3>
-<p>You will need GNU autotools in order to install Gajim from svn. This includes:</p>
+<h3>Note for Git users</h3>
+<p>You will need GNU autotools in order to install Gajim from Git. This includes:</p>
 <ul>
 <li>automake &gt;= 1.8 </li>
 <li>autoconf &gt;= 2.59 </li>
@@ -109,8 +109,8 @@ If you don't want to make this permanent, execute gajim with --verbose
 everytime you want to have verbose output.</p>
 
 <h3>FAQ/Wiki</h3>
-<p>FAQ can be found at <a href="http://trac.gajim.org/wiki/GajimFaq">http://trac.gajim.org/wiki/GajimFaq</a><br/>
-Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/wiki</a></p>
+<p>FAQ can be found at <a href="https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq">https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq</a><br/>
+Wiki can be found at <a href="https://dev.gajim.org/gajim/gajim/wikis/home">https://dev.gajim.org/gajim/gajim/wikis/home</a></p>
 
 
 <p>That is all, <strong>enjoy!</strong></p>
@@ -119,7 +119,7 @@ Wiki can be found at <a href="http://trac.gajim.org/wiki">http://trac.gajim.org/
 <br/>
 <br/>
 <br/>
-(C) 2003-2015<br/>
+(C) 2003-2017<br/>
 The Gajim Team<br/>
 https://gajim.org<br/>
 <br/>
