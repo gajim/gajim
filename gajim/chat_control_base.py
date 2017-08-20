@@ -957,6 +957,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
             app.config.get('notify_on_all_muc_messages') or \
+            app.config.get_per('rooms', jid, 'notify_on_all_messages') or \
             'marked' in other_tags_for_text:
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after
@@ -1140,6 +1141,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if old_value != minimize:
             app.config.set_per('accounts', self.account, 'non_minimized_gc',
                     ' '.join(non_minimized_gc))
+
+    def on_notify_menuitem_toggled(self, widget):
+        app.config.set_per('rooms', self.contact.jid, 'notify_on_all_messages',
+            widget.get_active())
 
     def set_control_active(self, state):
         if state:

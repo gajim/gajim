@@ -905,6 +905,7 @@ class GroupchatControl(ChatControlBase):
         history_menuitem = xml.get_object('history_menuitem')
         disconnect_menuitem = xml.get_object('disconnect_menuitem')
         minimize_menuitem = xml.get_object('minimize_menuitem')
+        notify_menuitem = xml.get_object('notify_menuitem')
         request_voice_menuitem = xml.get_object('request_voice_menuitem')
         bookmark_separator = xml.get_object('bookmark_separator')
         separatormenuitem2 = xml.get_object('separatormenuitem2')
@@ -943,6 +944,8 @@ class GroupchatControl(ChatControlBase):
         if self.contact.jid not in app.config.get_per('accounts', self.account,
         'non_minimized_gc').split(' '):
             minimize_menuitem.set_active(True)
+        notify_menuitem.set_active(app.config.get_per('rooms', self.contact.jid,
+            'notify_on_all_messages'))
         conn = app.connections[self.account]
         if not conn.private_storage_supported and (not conn.pubsub_supported or \
         not conn.pubsub_publish_options_supported):
@@ -1008,6 +1011,10 @@ class GroupchatControl(ChatControlBase):
         id_ = minimize_menuitem.connect('toggled',
             self.on_minimize_menuitem_toggled)
         self.handlers[id_] = minimize_menuitem
+
+        id_ = notify_menuitem.connect('toggled',
+            self.on_notify_menuitem_toggled)
+        self.handlers[id_] = notify_menuitem
 
         menu.connect('selection-done', self.destroy_menu,
             change_nick_menuitem, change_subject_menuitem,
@@ -1245,7 +1252,8 @@ class GroupchatControl(ChatControlBase):
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
-        if app.config.get('notify_on_all_muc_messages'):
+        if app.config.get('notify_on_all_muc_messages') or \
+        app.config.get_per('rooms', self.room_jid, 'notify_on_all_messages'):
             type_events.append('printed_gc_msg')
         nb = len(app.events.get_events(self.account, self.room_jid,
             type_events))

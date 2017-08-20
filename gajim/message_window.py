@@ -501,7 +501,8 @@ class MessageWindow(object):
         for ctrl in self.controls():
             if ctrl.type_id == message_control.TYPE_GC and not \
             app.config.get('notify_on_all_muc_messages') and not \
-            ctrl.attention_flag:
+            app.config.get_per('rooms', ctrl.room_jid,
+            'notify_on_all_messages') and not ctrl.attention_flag:
                 # count only pm messages
                 unread += ctrl.get_nb_unread_pm()
                 continue
@@ -518,7 +519,9 @@ class MessageWindow(object):
         if control.type_id == message_control.TYPE_GC:
             name = control.room_jid.split('@')[0]
             urgent = control.attention_flag or \
-                app.config.get('notify_on_all_muc_messages')
+                app.config.get('notify_on_all_muc_messages') or \
+                app.config.get_per('rooms', control.room_jid,
+                'notify_on_all_messages')
         else:
             name = control.contact.get_shown_name()
             if control.resource:

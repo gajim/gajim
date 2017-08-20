@@ -492,6 +492,7 @@ class Config:
                     'speller_language': [ opt_str, '', _('Language for which we want to check misspelled words')],
                     'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a groupchat. -1 means no limit, -2 means global value')],
                     'muc_restore_timeout': [opt_int, -2, _('Minutes of backlog to request when entering a groupchat. -1 means no limit, -2 means global value')],
+                    'notify_on_all_messages': [opt_bool, False, _('State whether we want a notification for every message in this room')],
             }, {}),
             'plugins': ({
                 'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
