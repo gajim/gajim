@@ -66,7 +66,7 @@ class HistoryWindow:
     Class for browsing logs of conversations with contacts
     """
 
-    def __init__(self, jid = None, account = None):
+    def __init__(self, jid=None, account=None):
         xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
         self.window = xml.get_object('history_window')
         self.calendar = xml.get_object('calendar')
@@ -75,7 +75,7 @@ class HistoryWindow:
             account, used_in_history_window = True)
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
-        self.history_buffer.create_tag('highlight', background = 'yellow')
+        self.history_buffer.create_tag('highlight', background='yellow')
         self.history_buffer.create_tag('invisible', invisible=True)
         self.checkbutton = xml.get_object('log_history_checkbutton')
         self.checkbutton.connect('toggled',
@@ -224,7 +224,7 @@ class HistoryWindow:
                 self.completion_dict[completed2] = (info_jid, info_acc,
                     info_name, info_completion2)
             if key == actual_jid:
-                self._load_history(info_jid, info_acc)
+                self._load_history(info_jid, self.account or info_acc)
             yield True
         keys.sort()
         yield False
