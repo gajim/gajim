@@ -59,7 +59,7 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.command_system.implementation.hosts import ChatCommands
 
 try:
-    import gtkspell
+    from gajim import gtkspell
     HAS_GTK_SPELL = True
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False

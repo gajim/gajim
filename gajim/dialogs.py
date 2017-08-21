@@ -49,7 +49,7 @@ from gajim.common import pep
 from gajim.common import ged
 
 try:
-    import gtkspell
+    from gajim import gtkspell
     HAS_GTK_SPELL = True
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False
