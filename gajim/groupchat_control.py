@@ -1142,7 +1142,7 @@ class GroupchatControl(ChatControlBase):
         else:
             self._start_private_message(nick)
         # Scroll to line
-        path_ = path
+        path_ = path.copy()
         path_.up()
         self.list_treeview.expand_row(path_, False)
         self.list_treeview.scroll_to_cell(path)
