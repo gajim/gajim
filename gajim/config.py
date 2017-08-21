@@ -51,7 +51,7 @@ from gajim import profile_window
 from gajim import gui_menu_builder
 
 try:
-    import gtkspell
+    from gajim import gtkspell
     HAS_GTK_SPELL = True
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False
