@@ -39,12 +39,6 @@ STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 VCARD_PUBLISHED = 'vcard_published'
 VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
-HAS_IDLE = True
-try:
-    import idle
-except Exception:
-    log.debug(_('Unable to load idle module'))
-    HAS_IDLE = False
 
 from gajim.common import connection_handlers
 
@@ -72,12 +66,6 @@ connection_handlers.ConnectionJingle):
         ConnectionCommands.__init__(self)
         connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
-
-        try:
-            idle.init()
-        except Exception:
-            global HAS_IDLE
-            HAS_IDLE = False
 
     def _messageCB(self, ip, con, msg):
         """

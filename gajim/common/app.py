@@ -244,6 +244,14 @@ try:
 except ImportError:
     HAVE_PYCURL = False
 
+try:
+    from gajim.common import sleepy
+    if sleepy.SUPPORTED:
+        HAVE_IDLE = True
+except Exception:
+    log.debug(_('Unable to load idle module'))
+    HAVE_IDLE = False
+
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,

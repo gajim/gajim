@@ -630,9 +630,8 @@ class CommonConnection:
             self.connected = app.SHOW_LIST.index(show)
             idle_time = None
             if auto:
-                global HAS_IDLE
-                if HAS_IDLE and app.config.get('autoaway'):
-                    idle_sec = int(self.sleeper.getIdleSec())
+                if app.HAVE_IDLE and app.config.get('autoaway'):
+                    idle_sec = int(app.interface.sleeper.getIdleSec())
                     idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                         time.gmtime(time.time() - idle_sec))
             app.nec.push_incoming_event(BeforeChangeShowEvent(None,
@@ -2705,9 +2704,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             p = self.add_sha(p, ptype != 'unavailable')
         self.add_lang(p)
         if auto:
-            global HAS_IDLE
-            if HAS_IDLE and app.config.get('autoaway'):
-                idle_sec = int(self.sleeper.getIdleSec())
+            if app.HAVE_IDLE and app.config.get('autoaway'):
+                idle_sec = int(app.interface.sleeper.getIdleSec())
                 idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                     time.gmtime(time.time() - idle_sec))
                 idle = p.setTag('idle', namespace=nbxmpp.NS_IDLE)

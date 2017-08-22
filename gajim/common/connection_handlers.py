@@ -47,6 +47,7 @@ from gajim.common import app
 from gajim.common import exceptions
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
+from gajim.common import sleepy
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
 from gajim.common.protocol.caps import ConnectionCaps
@@ -74,13 +75,6 @@ DELIMITER_ARRIVED = 'delimiter_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
 BLOCKING_ARRIVED = 'blocking_arrived'
 PEP_CONFIG = 'pep_config'
-HAS_IDLE = True
-try:
-#       import idle
-    from gajim.common import sleepy
-except Exception:
-    log.debug(_('Unable to load idle module'))
-    HAS_IDLE = False
 
 
 class ConnectionDisco:
@@ -1345,7 +1339,6 @@ ConnectionVcard, ConnectionSocks5Bytestream, ConnectionDisco,
 ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps,
 ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
-        global HAS_IDLE
         ConnectionArchive313.__init__(self)
         ConnectionVcard.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
@@ -1381,13 +1374,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.continue_connect_info = None
 
         self.privacy_default_list = None
-
-        try:
-            self.sleeper = sleepy.Sleepy()
-            HAS_IDLE = True
-        except Exception:
-            log.warning('Error while calling Sleepy()', exc_info=True)
-            HAS_IDLE = False
 
         self.gmail_last_tid = None
         self.gmail_last_time = None
@@ -1659,14 +1645,13 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         raise nbxmpp.NodeProcessed
 
     def _nec_last_request_received(self, obj):
-        global HAS_IDLE
         if obj.conn.name != self.name:
             return
-        if HAS_IDLE and app.config.get_per('accounts', self.name,
+        if app.HAVE_IDLE and app.config.get_per('accounts', self.name,
         'send_idle_time'):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()
-            qp.attrs['seconds'] = int(self.sleeper.getIdleSec())
+            qp.attrs['seconds'] = int(app.interface.sleeper.getIdleSec())
         else:
             iq_obj = obj.stanza.buildReply('error')
             err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
