@@ -2582,7 +2582,7 @@ class AccountsWindow:
             if app.connections[account].gpg:
                 self.xml.get_object('gpg_choose_button2').set_sensitive(True)
         else:
-            app.connections[account] = common.connection.Connection(account)
+            app.connections[account] = connection.Connection(account)
             if app.connections[account].gpg:
                 self.xml.get_object('gpg_choose_button1').set_sensitive(True)
         self.init_account_gpg()
