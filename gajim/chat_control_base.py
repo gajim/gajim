@@ -66,7 +66,7 @@ from gajim.command_system.implementation import standard
 from gajim.command_system.implementation import execute
 
 try:
-    import gtkspell
+    from gajim import gtkspell
     HAS_GTK_SPELL = True
 except (ImportError, ValueError):
     HAS_GTK_SPELL = False
