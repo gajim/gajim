@@ -551,7 +551,7 @@ class DataRecord(ExtendedNode):
             fdel(self)
             for field in fields:
                 if not isinstance(field, DataField):
-                    ExtendField(extend=field)
+                    ExtendField(field)
                 self.addChild(node=field)
 
         def fdel(self):
