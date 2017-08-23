@@ -1049,12 +1049,6 @@ class PreferencesWindow:
                 model[iter_][3])
         app.config.set_per('defaultstatusmsg', status, 'message', message)
 
-    def on_default_status_expander_activate(self, expander):
-        eventbox = self.xml.get_object('default_status_eventbox')
-        vbox = self.xml.get_object('status_vbox')
-        vbox.set_child_packing(eventbox, not expander.get_expanded(), True, 0,
-                Gtk.PACK_START)
-
     def save_status_messages(self, model):
         for msg in app.config.get_per('statusmsg'):
             app.config.del_per('statusmsg', msg)
