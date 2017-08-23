@@ -96,7 +96,7 @@ class GioResolver(CommonResolver):
         if type_ == 'txt':
             # TXT record resolution isn't used anywhere at the moment so
             # implementing it here isn't urgent
-            raise NotImplemented("Gio resolver does not currently implement TXT records")
+            raise NotImplementedError("Gio resolver does not currently implement TXT records")
         else:
             callback = functools.partial(self._on_ready_srv, host)
             type_ = Gio.ResolverRecordType.SRV
