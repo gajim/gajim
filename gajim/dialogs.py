@@ -565,18 +565,17 @@ class TimeoutDialog:
     Class designed to be derivated to create timeout'd dialogs (dialogs that
     closes automatically after a timeout)
     """
-    def __init__(self, timeout, on_timeout):
+    def __init__(self, timeout):
         self.countdown_left = timeout
         self.countdown_enabled = True
         self.title_text = ''
-        self.on_timeout = on_timeout
 
     def run_timeout(self):
         if self.countdown_left > 0:
             self.countdown()
             GLib.timeout_add_seconds(1, self.countdown)
 
-    def on_timeout():
+    def on_timeout(self):
         """
         To be implemented in derivated classes
         """
@@ -598,7 +597,7 @@ class TimeoutDialog:
 class ChangeStatusMessageDialog(TimeoutDialog):
     def __init__(self, on_response, show=None, show_pep=True):
         countdown_time = app.config.get('change_status_window_timeout')
-        TimeoutDialog.__init__(self, countdown_time, self.on_timeout)
+        TimeoutDialog.__init__(self, countdown_time)
         self.show = show
         self.pep_dict = {}
         self.show_pep = show_pep
@@ -5051,7 +5050,7 @@ class DataFormWindow(Dialog):
 
 class ResourceConflictDialog(TimeoutDialog, InputDialog):
     def __init__(self, title, text, resource, ok_handler):
-        TimeoutDialog.__init__(self, 15, self.on_timeout)
+        TimeoutDialog.__init__(self, 15)
         InputDialog.__init__(self, title, text, input_str=resource,
                 is_modal=False, ok_handler=ok_handler)
         self.title_text = title
