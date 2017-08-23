@@ -93,7 +93,7 @@ class Zeroconf:
 
     def new_domain_callback(self, interface, protocol, domain, flags):
         if domain != "local":
-            self.browse_domain(interface, protocol, domain)
+            self.browse_domain(domain)
 
     # takes a TXTRecord instance
     def txt_array_to_dict(self, txt):
