@@ -52,7 +52,7 @@ import re
 import sys
 import os
 from gi.repository import Pango
-from StringIO import StringIO
+from io import StringIO
 
 try:
     import IPython

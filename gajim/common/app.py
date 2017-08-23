@@ -30,13 +30,16 @@
 import os
 import logging
 import locale
-import gi
 import uuid
 from distutils.version import LooseVersion as V
+import gi
+import nbxmpp
 
 from gajim.common import config
-import nbxmpp
+from gajim.common import configpaths
 from gajim.common import ged as ged_module
+from gajim.common.contacts import LegacyContactsAPI
+from gajim.common.events import Events
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = None # Interface to run a thread and then a callback
@@ -54,7 +57,6 @@ log = logging.getLogger('gajim')
 
 logger = None
 
-from gajim.common import configpaths
 gajimpaths = configpaths.gajimpaths
 
 VCARD_PATH = gajimpaths['VCARD']
@@ -85,9 +87,6 @@ else:
     LANG = LANG[:2] # en, fr, el etc..
 
 os_info = None # used to cache os information
-
-from gajim.common.contacts import LegacyContactsAPI
-from gajim.common.events import Events
 
 gmail_domains = ['gmail.com', 'googlemail.com']
 
@@ -182,7 +181,6 @@ try:
 except ImportError:
     HAVE_GPG = False
 else:
-    import os
     import subprocess
     def test_gpg(binary='gpg'):
         if os.name == 'nt':
