@@ -3698,7 +3698,7 @@ class RosterWindow:
                     _('You are participating in one or more group chats'),
                     _('Changing your status to invisible will result in '
                     'disconnection from those group chats. Are you sure you '
-                    'want to go invisible?'), on_reponse_ok=on_ok,
+                    'want to go invisible?'), on_response_ok=on_ok,
                     on_response_cancel=on_cancel)
                 return
 
