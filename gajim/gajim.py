@@ -39,7 +39,6 @@
 
 import sys
 import os
-import logging
 import signal
 import locale
 import gi
@@ -161,7 +160,7 @@ class GajimApplication(Gtk.Application):
             sys.path.append('.')
             APP = 'gajim'
             DIR = '../po'
-            lang, enc = locale.getdefaultlocale()
+            lang = locale.getdefaultlocale()[0]
             os.environ['LANG'] = lang
             gettext.bindtextdomain(APP, DIR)
             gettext.textdomain(APP)
@@ -227,9 +226,6 @@ class GajimApplication(Gtk.Application):
         # ^C exits the application normally
         signal.signal(signal.SIGINT, sigint_cb)
         signal.signal(signal.SIGTERM, sigint_cb)
-
-        print("Encodings: d:{}, fs:{}, p:{}".format(sys.getdefaultencoding(),
-              sys.getfilesystemencoding(), locale.getpreferredencoding()))
 
         # Set Application Menu
         app.app = self
@@ -409,5 +405,5 @@ class GajimApplication(Gtk.Application):
 
 
 if __name__ == '__main__':
-    app = GajimApplication()
-    app.run(sys.argv)
+    appli = GajimApplication()
+    appli.run(sys.argv)
