@@ -220,8 +220,6 @@ class ConversationTextview(GObject.GObject):
         id_ = self.tv.connect('button_press_event',
                 self.on_textview_button_press_event)
         self.handlers[id_] = self.tv
-        id_ = self.tv.connect('draw', self.on_textview_draw)
-        self.handlers[id_] = self.tv
 
         self.account = account
         self.cursor_changed = False
@@ -519,34 +517,6 @@ class ConversationTextview(GObject.GObject):
                 # scroll to the end (via idle in case the scrollbar has
                 # appeared)
                 GLib.idle_add(self.scroll_to_end_iter)
-
-    def on_textview_draw(self, widget, ctx):
-        return
-        #TODO
-        expalloc = event.area
-        exp_x0 = expalloc.x
-        exp_y0 = expalloc.y
-        exp_x1 = exp_x0 + expalloc.width
-        exp_y1 = exp_y0 + expalloc.height
-
-        try:
-            tryfirst = [self.image_cache[(exp_x0, exp_y0)]]
-        except KeyError:
-            tryfirst = []
-
-        for image in tryfirst + self.images:
-            imgalloc = image.allocation
-            img_x0 = imgalloc.x
-            img_y0 = imgalloc.y
-            img_x1 = img_x0 + imgalloc.width
-            img_y1 = img_y0 + imgalloc.height
-
-            if img_x0 <= exp_x0 and img_y0 <= exp_y0 and \
-            exp_x1 <= img_x1 and exp_y1 <= img_y1:
-                self.image_cache[(img_x0, img_y0)] = image
-                widget.propagate_expose(image, event)
-                return True
-        return False
 
     def clear(self, tv = None):
         """
