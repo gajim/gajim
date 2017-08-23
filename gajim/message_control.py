@@ -169,7 +169,7 @@ class MessageControl(object):
         # None clears any current label.
         return None
 
-    def prepare_context_menu(self):
+    def prepare_context_menu(self, hide_buttonbar_items=False):
         """
         Derived classes SHOULD implement this
         """
