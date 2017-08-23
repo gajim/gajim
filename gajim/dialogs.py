@@ -1389,7 +1389,7 @@ class Dialog(Gtk.Dialog):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
         self.set_border_width(6)
-        self.vbox.set_spacing(12)
+        self.get_content_area().set_spacing(12)
         self.set_resizable(False)
 
         for stock, response in buttons:
@@ -1422,7 +1422,7 @@ class Dialog(Gtk.Dialog):
         self.destroy()
 
     def get_button(self, index):
-        buttons = self.action_area.get_children()
+        buttons = self.get_action_area().get_children()
         return index < len(buttons) and buttons[index] or None
 
 
@@ -1673,20 +1673,21 @@ class YesNoDialog(HigDialog):
             sectext, on_response_yes=self.on_response_yes,
             on_response_no=self.on_response_no)
 
+        vbox = self.get_content_area()
         if checktext:
             self.checkbutton = Gtk.CheckButton.new_with_mnemonic(checktext)
-            self.vbox.pack_start(self.checkbutton, False, True, 0)
+            vbox.pack_start(self.checkbutton, False, True, 0)
         else:
             self.checkbutton = None
         if text_label:
             label = Gtk.Label(label=text_label)
-            self.vbox.pack_start(label, False, True, 0)
+            vbox.pack_start(label, False, True, 0)
             buff = Gtk.TextBuffer()
             self.textview = Gtk.TextView.new_with_buffer(buff)
             frame = Gtk.Frame()
             frame.set_shadow_type(Gtk.ShadowType.IN)
             frame.add(self.textview)
-            self.vbox.pack_start(frame, False, True, 0)
+            vbox.pack_start(frame, False, True, 0)
         else:
             self.textview = None
         self.set_modal(False)
@@ -1764,11 +1765,11 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.action_area.get_children()[0] # right to left
+        ok_button = self.get_action_area().get_children()[0] # right to left
         ok_button.grab_focus()
 
         self.checkbutton = Gtk.CheckButton.new_with_mnemonic(checktext)
-        self.vbox.pack_start(self.checkbutton, False, True, 0)
+        self.get_content_area().pack_start(self.checkbutton, False, True, 0)
         self.set_modal(is_modal)
         self.popup()
 
@@ -1819,21 +1820,22 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.action_area.get_children()[0] # right to left
+        ok_button = self.get_action_area().get_children()[0] # right to left
         ok_button.grab_focus()
 
+        vbox = self.get_content_area()
         if checktext1:
             self.checkbutton1 = Gtk.CheckButton.new_with_mnemonic(checktext1)
             if tooltip1:
                 self.checkbutton1.set_tooltip_text(tooltip1)
-            self.vbox.pack_start(self.checkbutton1, False, True, 0)
+            vbox.pack_start(self.checkbutton1, False, True, 0)
         else:
             self.checkbutton1 = None
         if checktext2:
             self.checkbutton2 = Gtk.CheckButton.new_with_mnemonic(checktext2)
             if tooltip2:
                 self.checkbutton2.set_tooltip_text(tooltip2)
-            self.vbox.pack_start(self.checkbutton2, False, True, 0)
+            vbox.pack_start(self.checkbutton2, False, True, 0)
         else:
             self.checkbutton2 = None
 
@@ -1888,7 +1890,7 @@ class PlainConnectionDialog(ConfirmationDialogDoubleCheck):
         ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
             checktext1, checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
             on_response_cancel=on_cancel, is_modal=False)
-        self.ok_button = self.action_area.get_children()[0] # right to left
+        self.ok_button = self.get_action_area().get_children()[0] # right to left
         self.ok_button.set_sensitive(False)
         self.checkbutton1.connect('clicked', self.on_checkbutton_clicked)
         self.set_title(_('Insecure connection'))
@@ -1916,15 +1918,16 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.action_area.get_children()[0] # right to left
+        ok_button = self.get_action_area().get_children()[0] # right to left
         ok_button.grab_focus()
 
+        vbox = self.get_content_area()
         self.radiobutton1 = Gtk.RadioButton(label=radiotext1)
-        self.vbox.pack_start(self.radiobutton1, False, True, 0)
+        vbox.pack_start(self.radiobutton1, False, True, 0)
 
         self.radiobutton2 = Gtk.RadioButton(group=self.radiobutton1,
                 label=radiotext2)
-        self.vbox.pack_start(self.radiobutton2, False, True, 0)
+        vbox.pack_start(self.radiobutton2, False, True, 0)
 
         self.set_modal(is_modal)
         self.popup()
@@ -4769,8 +4772,9 @@ class AvatarChooserDialog(ImageChooserDialog):
         if on_response_clear:
             button.connect('clicked', self.on_clear)
         button.show_all()
-        self.action_area.pack_start(button, True, True, 0)
-        self.action_area.reorder_child(button, 0)
+        action_area = self.get_action_area()
+        action_area.pack_start(button, True, True, 0)
+        action_area.reorder_child(button, 0)
 
     def on_clear(self, widget):
         if isinstance(self.response_clear, tuple):
@@ -5037,7 +5041,7 @@ class DataFormWindow(Dialog):
         self.dataform_widget.set_sensitive(True)
         self.dataform_widget.data_form = self.dataform
         self.dataform_widget.show_all()
-        self.vbox.pack_start(self.dataform_widget, True, True, 0)
+        self.get_content_area().pack_start(self.dataform_widget, True, True, 0)
 
     def on_ok(self):
         form = self.dataform_widget.data_form
