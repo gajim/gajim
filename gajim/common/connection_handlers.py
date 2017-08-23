@@ -1788,7 +1788,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             return
 
         if result.getType() == 'result':
-            data = msg.getTags('data', namespace=nbxmpp.NS_BOB)
+            data = result.getTags('data', namespace=nbxmpp.NS_BOB)
             if data.getAttr('cid') == cid:
                 for func in self.awaiting_cids[cid]:
                     cb = func[0]
