@@ -2582,7 +2582,7 @@ class Interface:
             win.hide()
             return True
         window.connect('delete_event', on_delete)
-        view.updateNamespace({'gajim': gajim})
+        view.updateNamespace({'gajim': app})
         app.ipython_window = window
 
     def run(self, application):

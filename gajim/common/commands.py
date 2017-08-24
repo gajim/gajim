@@ -85,6 +85,10 @@ class ChangeStatusCommand(AdHocCommand):
     commandnode = 'change-status'
     commandname = _('Change status information')
 
+    def __init__(self, conn, jid, sessionid):
+        AdHocCommand.__init__(self, conn, jid, sessionid)
+        self.cb = self.first_step
+
     @staticmethod
     def isVisibleFor(samejid):
         """
@@ -93,6 +97,9 @@ class ChangeStatusCommand(AdHocCommand):
         return samejid
 
     def execute(self, request):
+        return self.cb(request)
+
+    def first_step(self, request):
         # first query...
         response, cmd = self.buildResponse(request, defaultaction = 'execute',
                 actions = ['execute'])
@@ -120,11 +127,11 @@ class ChangeStatusCommand(AdHocCommand):
         self.connection.connection.send(response)
 
         # for next invocation
-        self.execute = self.changestatus
+        self.cb = self.second_step
 
         return True     # keep the session
 
-    def changestatus(self, request):
+    def second_step(self, request):
         # check if the data is correct
         try:
             form = dataforms.SimpleDataForm(extend = request.getTag('command').\
@@ -184,6 +191,10 @@ class LeaveGroupchatsCommand(AdHocCommand):
     commandnode = 'leave-groupchats'
     commandname = _('Leave Groupchats')
 
+    def __init__(self, conn, jid, sessionid):
+        AdHocCommand.__init__(self, conn, jid, sessionid)
+        self.cb = self.first_step
+
     @staticmethod
     def isVisibleFor(samejid):
         """
@@ -192,6 +203,9 @@ class LeaveGroupchatsCommand(AdHocCommand):
         return samejid
 
     def execute(self, request):
+        return self.cb(request)
+
+    def first_step(self, request):
         # first query...
         response, cmd = self.buildResponse(request, defaultaction = 'execute',
                 actions=['execute'])
@@ -220,11 +234,11 @@ class LeaveGroupchatsCommand(AdHocCommand):
         self.connection.connection.send(response)
 
         # for next invocation
-        self.execute = self.leavegroupchats
+        self.cb = self.second_step
 
         return True     # keep the session
 
-    def leavegroupchats(self, request):
+    def second_step(self, request):
         # check if the data is correct
         try:
             form = dataforms.SimpleDataForm(extend = request.getTag('command').\

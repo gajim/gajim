@@ -375,7 +375,7 @@ class P2PConnection(IdleObject, PlugIn):
             self.ais = socket.getaddrinfo(address['host'], address['port'], socket.AF_UNSPEC,
                     socket.SOCK_STREAM)
         except socket.gaierror as e:
-            log.info('Lookup failure for %s: %s[%s]', host, e[1],
+            log.info('Lookup failure for %s: %s[%s]', self.host, e[1],
                 repr(e[0]), exc_info=True)
             if len(self.addresses_) > 0: return self.get_next_addrinfo()
         else:

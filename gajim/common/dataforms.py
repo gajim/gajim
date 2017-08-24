@@ -305,7 +305,7 @@ class Media(nbxmpp.Node):
             for uri in value:
                 self.addChild(node=uri)
 
-        def fdel(self, value):
+        def fdel(self):
             for element in self.getTags('uri'):
                 self.delChild(element)
 

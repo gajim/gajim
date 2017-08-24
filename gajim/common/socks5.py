@@ -730,7 +730,7 @@ class Socks5(object):
             try:
                 fd = self.get_fd()
             except IOError:
-                self.disconnect(False)
+                self.disconnect()
                 self.file_props.error = -6 # file system error
                 return 0
             fd.write(self.remaining_buff)
@@ -751,7 +751,7 @@ class Socks5(object):
             try:
                 fd = self.get_fd()
             except IOError:
-                self.disconnect(False)
+                self.disconnect()
                 self.file_props.error = -6 # file system error
                 return 0
             try:
