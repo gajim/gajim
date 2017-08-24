@@ -163,11 +163,11 @@ class ChangeStatusCommand(AdHocCommand):
         return False    # finish the session
 
 def find_current_groupchats(account):
-    import message_control
+    from gajim import message_control
     rooms = []
     for gc_control in app.interface.msg_win_mgr.get_controls(
-    message_control.TYPE_GC) + app.interface.minimized_controls[account].\
-    values():
+            message_control.TYPE_GC) + \
+            app.interface.minimized_controls[account].values():
         acct = gc_control.account
         # check if account is the good one
         if acct != account:
