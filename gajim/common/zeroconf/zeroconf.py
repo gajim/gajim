@@ -48,7 +48,7 @@ def test_bonjour():
         import pybonjour
     except ImportError:
         return False
-    except WindowsError:
+    except WindowsError: # pylint: disable=undefined-variable
         return False
     return True
 

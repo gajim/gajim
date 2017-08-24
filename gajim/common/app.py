@@ -42,7 +42,7 @@ from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 
 interface = None # The actual interface (the gtk one for the moment)
-thread_interface = None # Interface to run a thread and then a callback
+thread_interface = lambda *args: None # Interface to run a thread and then a callback
 config = config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'

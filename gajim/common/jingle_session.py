@@ -495,12 +495,12 @@ class JingleSession:
         parse_result = self.__parse_contents(jingle)
         contents = parse_result[0]
         rejected_contents = parse_result[1]
-        for name, creator in rejected_contents:
+#        for name, creator in rejected_contents:
             # TODO
-            content = JingleContent()
-            self.add_content(name, content, creator)
-            self.__content_reject(content)
-            self.contents[(content.creator, content.name)].destroy()
+#            content = JingleContent()
+#            self.add_content(name, content, creator)
+#            self.__content_reject(content)
+#            self.contents[(content.creator, content.name)].destroy()
         app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
                                                                  conn=self.connection,
                                                                  jingle_session=self,
