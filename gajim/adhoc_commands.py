@@ -59,6 +59,13 @@ class CommandWindow:
         self.jid = jid
         self.commandnode = commandnode
         self.data_form_widget = None
+        self.stage_finish_cb = None
+        self.stage_back_button_cb = None
+        self.stage_forward_button_cb = None
+        self.stage_execute_button_cb = None
+        self.stage_close_button_cb = None
+        self.stage_restart_button_cb = None
+        self.stage_window_delete_cb = None
 
         # retrieving widgets from xml
         self.xml = gtkgui_helpers.get_gtk_builder('adhoc_commands_window.ui')
@@ -109,54 +116,48 @@ class CommandWindow:
 
     # These functions are set up by appropriate stageX methods.
     def stage_finish(self, *anything):
-        pass
-
-    def stage_back_button_clicked(self, *anything):
-        assert False
-
-    def stage_forward_button_clicked(self, *anything):
-        assert False
-
-    def stage_execute_button_clicked(self, *anything):
-        assert False
-
-    def stage_close_button_clicked(self, *anything):
-        assert False
-
-    def stage_restart_button_clicked(self, *anything):
-        assert False
-
-    def stage_adhoc_commands_window_delete_event(self, *anything):
-        assert False
-
-    def do_nothing(self, *anything):
-        return False
+        if self.stage_finish_cb:
+            self.stage_finish_cb(*anything)
 
     # Widget callbacks...
     def on_back_button_clicked(self, *anything):
-        return self.stage_back_button_clicked(*anything)
+        if self.stage_back_button_cb:
+            return self.stage_back_button_cb(*anything)
+        return False
 
     def on_forward_button_clicked(self, *anything):
-        return self.stage_forward_button_clicked(*anything)
+        if self.stage_forward_button_cb:
+            return self.stage_forward_button_cb(*anything)
+        return False
 
     def on_execute_button_clicked(self, *anything):
-        return self.stage_execute_button_clicked(*anything)
+        if self.stage_execute_button_cb:
+            return self.stage_execute_button_cb(*anything)
+        return False
 
     def on_finish_button_clicked(self, *anything):
-        return self.stage_finish_button_clicked(*anything)
+        if self.stage_finish_button_cb:
+            return self.stage_finish_button_cb(*anything)
+        return False
 
     def on_close_button_clicked(self, *anything):
-        return self.stage_close_button_clicked(*anything)
+        if self.stage_close_button_cb:
+            return self.stage_close_button_cb(*anything)
+        return False
 
     def on_restart_button_clicked(self, *anything):
-        return self.stage_restart_button_clicked(*anything)
+        if self.stage_restart_button_cb:
+            return self.stage_restart_button_cb(*anything)
+        return False
 
     def on_adhoc_commands_window_destroy(self, *anything):
         # TODO: do all actions that are needed to remove this object from memory
         self.remove_pulsing()
 
     def on_adhoc_commands_window_delete_event(self, *anything):
-        return self.stage_adhoc_commands_window_delete_event(self.window)
+        if self.stage_window_delete_cb:
+            return self.stage_window_delete_cb(self.window)
+        return False
 
     def __del__(self):
         print('Object has been deleted.')
@@ -188,10 +189,10 @@ class CommandWindow:
             self.xml.get_object('retrieving_commands_progressbar'))
 
         # setup the callbacks
-        self.stage_finish = self.stage1_finish
-        self.stage_close_button_clicked = self.stage1_close_button_clicked
-        self.stage_restart_button_clicked = self.stage1_restart_button_clicked
-        self.stage_adhoc_commands_window_delete_event = \
+        self.stage_finish_cb = self.stage1_finish
+        self.stage_close_button_cb = self.stage1_close_button_clicked
+        self.stage_restart_button_cb = self.stage1_restart_button_clicked
+        self.stage_window_delete_cb = \
             self.stage1_adhoc_commands_window_delete_event
 
     def stage1_finish(self):
@@ -245,11 +246,11 @@ class CommandWindow:
             self.command_list_vbox.pack_start(radio, False, True, 0)
         self.command_list_vbox.show_all()
 
-        self.stage_finish = self.stage2_finish
-        self.stage_close_button_clicked = self.stage2_close_button_clicked
-        self.stage_restart_button_clicked = self.stage2_restart_button_clicked
-        self.stage_forward_button_clicked = self.stage2_forward_button_clicked
-        self.stage_adhoc_commands_window_delete_event = self.do_nothing
+        self.stage_finish_cb = self.stage2_finish
+        self.stage_close_button_cb = self.stage2_close_button_clicked
+        self.stage_restart_button_cb = self.stage2_restart_button_clicked
+        self.stage_forward_button_cb = self.stage2_forward_button_clicked
+        self.stage_window_delete_cb = None
 
     def stage2_finish(self):
         """
@@ -296,18 +297,14 @@ class CommandWindow:
 
         self.stage3_submit_form()
 
-        self.stage_finish = self.stage3_finish
-        self.stage_back_button_clicked = self.stage3_back_button_clicked
-        self.stage_forward_button_clicked = self.stage3_forward_button_clicked
-        self.stage_execute_button_clicked = self.stage3_execute_button_clicked
-        self.stage_finish_button_clicked = self.stage3_finish_button_clicked
-        self.stage_close_button_clicked = self.stage3_close_button_clicked
-        self.stage_restart_button_clicked = self.stage3_restart_button_clicked
-        self.stage_adhoc_commands_window_delete_event = \
-            self.stage3_close_button_clicked
-
-    def stage3_finish(self):
-        pass
+        self.stage_finish_cb = None
+        self.stage_back_button_cb = self.stage3_back_button_clicked
+        self.stage_forward_button_cb = self.stage3_forward_button_clicked
+        self.stage_execute_button_cb = self.stage3_execute_button_clicked
+        self.stage_finish_button_cb = self.stage3_finish_button_clicked
+        self.stage_close_button_cb = self.stage3_close_button_clicked
+        self.stage_restart_button_cb = self.stage3_restart_button_clicked
+        self.stage_window_delete_cb = self.stage3_close_button_clicked
 
     def stage3_can_close(self, cb):
         if self.form_status == 'completed':
@@ -447,8 +444,7 @@ class CommandWindow:
             self.execute_button.hide()
             self.finish_button.hide()
             self.close_button.show()
-            self.stage_adhoc_commands_window_delete_event = \
-                self.stage3_close_button_clicked
+            self.stage_window_delete_cb = self.stage3_close_button_clicked
 
         note = command.getTag('note')
         if note:
@@ -480,10 +476,10 @@ class CommandWindow:
         self.execute_button.set_sensitive(False)
         self.finish_button.set_sensitive(False)
 
-        self.stage_finish = self.do_nothing
-        self.stage_close_button_clicked = self.stage4_close_button_clicked
-        self.stage_restart_button_clicked = self.stage4_restart_button_clicked
-        self.stage_adhoc_commands_window_delete_event = self.do_nothing
+        self.stage_finish_cb = None
+        self.stage_close_button_cb = self.stage4_close_button_clicked
+        self.stage_restart_button_cb = self.stage4_restart_button_clicked
+        self.stage_window_delete_cb = None
 
     def stage4_close_button_clicked(self, widget):
         self.window.destroy()
@@ -532,10 +528,10 @@ class CommandWindow:
 
         self.error_description_label.set_text(error)
 
-        self.stage_finish = self.do_nothing
-        self.stage_close_button_clicked = self.stage5_close_button_clicked
-        self.stage_restart_button_clicked = self.stage5_restart_button_clicked
-        self.stage_adhoc_commands_window_delete_event = self.do_nothing
+        self.stage_finish_cb = None
+        self.stage_close_button_cb = self.stage5_close_button_clicked
+        self.stage_restart_button_cb = self.stage5_restart_button_clicked
+        self.stage_window_delete_cb = None
 
     def stage5_close_button_clicked(self, widget):
         self.window.destroy()

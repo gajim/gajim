@@ -56,6 +56,7 @@ class DataFormWidget(Gtk.Alignment, object):
 
         self._data_form = None
         self.selectable = False
+        self.clean_cb = None
 
         self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
                 'data_form_vbox')
@@ -143,7 +144,8 @@ class DataFormWidget(Gtk.Alignment, object):
         rewritten by build_*_data_form, according to type of form which is
         actually displayed
         """
-        pass
+        if self.clean_cb:
+            self.clean_cb()
 
     def build_single_data_form(self):
         '''Invoked when new single form is to be created.'''
@@ -162,7 +164,7 @@ class DataFormWidget(Gtk.Alignment, object):
                 self.data_form_types_notebook.page_num(
                         self.single_form_scrolledwindow))
 
-        self.clean_data_form = self.clean_single_data_form
+        self.clean_cb = self.clean_single_data_form
 
     def clean_single_data_form(self):
         """
@@ -170,7 +172,7 @@ class DataFormWidget(Gtk.Alignment, object):
         form from widget
         """
         self.singleform.destroy()
-        self.clean_data_form = self.empty_method        # we won't call it twice
+        self.clean_cb = None # we won't call it twice
         del self.singleform
 
     def build_multiple_data_form(self):
@@ -216,7 +218,7 @@ class DataFormWidget(Gtk.Alignment, object):
                 self.data_form_types_notebook.page_num(
                         self.multiple_form_hbox))
 
-        self.clean_data_form = self.clean_multiple_data_form
+        self.clean_cb = self.clean_multiple_data_form
 
         readwrite = self._data_form.type_ != 'result'
         if not readwrite:
@@ -232,7 +234,7 @@ class DataFormWidget(Gtk.Alignment, object):
         Called as clean_data_form, read the docs of clean_data_form(). Remove
         form from widget
         """
-        self.clean_data_form = self.empty_method        # we won't call it twice
+        self.clean_cb = None # we won't call it twice
         del self.multiplemodel
 
     def refresh_multiple_buttons(self):
