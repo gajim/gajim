@@ -202,99 +202,6 @@ def get_theme_font_for_option(theme, option):
     fd.merge(font_desc, True)
     return fd.to_string()
 
-def get_default_font():
-    """
-    Get the desktop setting for application font first check for GNOME, then
-    Xfce and last KDE it returns None on failure or else a string 'Font Size'
-    """
-    try:
-        gi.require_version('GConf', '2.0')
-        from gi.repository import GConf
-        client = GConf.Client.get_default()
-        value = client.get_string("/desktop/gnome/interface/font_name")
-        return value.decode("utf8")
-    except ValueError:
-        pass
-
-    # try to get Xfce default font
-    # Xfce 4.2 and higher follow freedesktop.org's Base Directory Specification
-    # see http://www.xfce.org/~benny/xfce/file-locations.html
-    # and http://freedesktop.org/Standards/basedir-spec
-    xdg_config_home = os.environ.get('XDG_CONFIG_HOME', '')
-    if xdg_config_home == '':
-        xdg_config_home = os.path.expanduser('~/.config') # default
-    xfce_config_file = os.path.join(xdg_config_home,
-        'xfce4/mcs_settings/Gtk.xml')
-
-    kde_config_file = os.path.expanduser('~/.kde/share/config/kdeglobals')
-
-    if os.path.exists(xfce_config_file):
-        try:
-            for line in open(xfce_config_file):
-                if line.find('name="Gtk/FontName"') != -1:
-                    start = line.find('value="') + 7
-                    return line[start:line.find('"', start)]
-        except Exception:
-            #we talk about file
-            print(_('Error: cannot open %s for reading') % xfce_config_file,
-                file=sys.stderr)
-
-    elif os.path.exists(kde_config_file):
-        try:
-            for line in open(kde_config_file):
-                if line.find('font=') == 0: # font=Verdana,9,other_numbers
-                    start = 5 # 5 is len('font=')
-                    line = line[start:]
-                    values = line.split(',')
-                    font_name = values[0]
-                    font_size = values[1]
-                    font_string = '%s %s' % (font_name, font_size) # Verdana 9
-                    return font_string
-        except Exception:
-            #we talk about file
-            print(_('Error: cannot open %s for reading') % kde_config_file,
-                file=sys.stderr)
-
-    return None
-
-def get_running_processes():
-    """
-    Return running processes or None (if /proc does not exist)
-    """
-    if os.path.isdir('/proc'):
-        # under Linux: checking if 'gnome-session' or
-        # 'startkde' programs were run before gajim, by
-        # checking /proc (if it exists)
-        #
-        # if something is unclear, read `man proc`;
-        # if /proc exists, directories that have only numbers
-        # in their names contain data about processes.
-        # /proc/[xxx]/exe is a symlink to executable started
-        # as process number [xxx].
-        # filter out everything that we are not interested in:
-        files = os.listdir('/proc')
-
-        # files that doesn't have only digits in names...
-        files = [f for f in files if f.isdigit()]
-
-        # files that aren't directories...
-        files = [f for f in files if os.path.isdir('/proc/' + f)]
-
-        # processes owned by somebody not running gajim...
-        # (we check if we have access to that file)
-        files = [f for f in files if os.access('/proc/' + f +'/exe', os.F_OK)]
-
-        # be sure that /proc/[number]/exe is really a symlink
-        # to avoid TBs in incorrectly configured systems
-        files = [f for f in files if os.path.islink('/proc/' + f + '/exe')]
-
-        # list of processes
-        processes = [os.path.basename(os.readlink('/proc/' + f +'/exe')) for f \
-            in files]
-
-        return processes
-    return []
-
 def move_window(window, x, y):
     """
     Move the window, but also check if out of screen
@@ -358,45 +265,6 @@ def scroll_to_end(widget):
     return False
 
 
-class HashDigest:
-    def __init__(self, algo, digest):
-        self.algo = self.cleanID(algo)
-        self.digest = self.cleanID(digest)
-
-    def cleanID(self, id_):
-        id_ = id_.strip().lower()
-        for strip in (' :.-_'):
-            id_ = id_.replace(strip, '')
-        return id_
-
-    def __eq__(self, other):
-        sa, sd = self.algo, self.digest
-        if isinstance(other, self.__class__):
-            oa, od = other.algo, other.digest
-        elif isinstance(other, str):
-            sa, oa, od = None, None, self.cleanID(other)
-        elif isinstance(other, tuple) and len(other) == 2:
-            oa, od = self.cleanID(other[0]), self.cleanID(other[1])
-        else:
-            return False
-
-        return sa == oa and sd == od
-
-    def __ne__(self, other):
-        return not self == other
-
-    def __hash__(self):
-        return self.algo ^ self.digest
-
-    def __str__(self):
-        prettydigest = ''
-        for i in range(0, len(self.digest), 2):
-            prettydigest += self.digest[i:i + 2] + ':'
-        return prettydigest[:-1]
-
-    def __repr__(self):
-        return "%s(%s, %s)" % (self.__class__, repr(self.algo), repr(str(self)))
-
 class ServersXMLHandler(xml.sax.ContentHandler):
     def __init__(self):
         xml.sax.ContentHandler.__init__(self)
@@ -432,49 +300,6 @@ def set_unset_urgency_hint(window, unread_messages_no):
             window.props.urgency_hint = True
         else:
             window.props.urgency_hint = False
-
-def get_abspath_for_script(scriptname, want_type = False):
-    """
-    Check if we are svn or normal user and return abspath to asked script if
-    want_type is True we return 'svn' or 'install'
-    """
-    if os.path.isdir('.svn'): # we are svn user
-        type_ = 'svn'
-        cwd = os.getcwd() # it's always ending with src
-
-        if scriptname == 'gajim-remote':
-            path_to_script = cwd + '/gajim-remote.py'
-
-        elif scriptname == 'gajim':
-            script = '#!/bin/sh\n' # the script we may create
-            script += 'cd %s' % cwd
-            path_to_script = cwd + '/../scripts/gajim_sm_script'
-
-            try:
-                if os.path.exists(path_to_script):
-                    os.remove(path_to_script)
-
-                f = open(path_to_script, 'w')
-                script += '\nexec python -OOt gajim.py $0 $@\n'
-                f.write(script)
-                f.close()
-                os.chmod(path_to_script, 0o700)
-            except OSError: # do not traceback (could be a permission problem)
-                #we talk about a file here
-                s = _('Could not write to %s. Session Management support will '
-                    'not work') % path_to_script
-                print(s, file=sys.stderr)
-
-    else: # normal user (not svn user)
-        type_ = 'install'
-        # always make it like '/usr/local/bin/gajim'
-        path_to_script = helpers.is_in_path(scriptname, True)
-
-
-    if want_type:
-        return path_to_script, type_
-    else:
-        return path_to_script
 
 # feeding the image directly into the pixbuf seems possible, but is error prone and causes image distortions and segfaults.
 # see http://stackoverflow.com/a/8892894/3528174
@@ -734,27 +559,6 @@ def make_pixbuf_grayscale(pixbuf):
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
     return pixbuf2
 
-def escape_underscore(s):
-    """
-    Escape underlines to prevent them from being interpreted as keyboard
-    accelerators
-    """
-    return s.replace('_', '__')
-
-def get_state_image_from_file_path_show(file_path, show):
-    state_file = show.replace(' ', '_')
-    files = []
-    files.append(os.path.join(file_path, state_file + '.png'))
-    files.append(os.path.join(file_path, state_file + '.gif'))
-    image = Gtk.Image()
-    image.set_from_pixbuf(None)
-    for file_ in files:
-        if os.path.exists(file_):
-            image.set_from_file(file_)
-            break
-
-    return image
-
 def get_possible_button_event(event):
     """
     Mouse or keyboard caused the event?
@@ -838,9 +642,6 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
     dialog.set_current_name(default_name + '.jpeg')
     dialog.connect('delete-event', lambda widget, event:
         on_cancel(widget))
-
-def on_bm_header_changed_state(widget, event):
-    widget.set_state(Gtk.StateType.NORMAL) #do not allow selected_state
 
 def create_combobox(value_list, selected_value = None):
     """
