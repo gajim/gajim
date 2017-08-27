@@ -74,7 +74,6 @@ class Config:
             'autopopupaway': [ opt_bool, False ],
             'autopopup_chat_opened': [ opt_bool, False, _('Show desktop notification even when a chat window is opened for this contact and does not have focus') ],
             'sounddnd': [ opt_bool, False, _('Play sound when user is busy')],
-            'use_notif_daemon': [ opt_bool, True, _('Use D-Bus and Notification-Daemon to show notifications') ],
             'showoffline': [ opt_bool, False ],
             'show_only_chat_and_online': [ opt_bool, False, _('Show only online and free for chat contacts in roster.')],
             'show_transports_group': [ opt_bool, True ],
@@ -99,15 +98,6 @@ class Config:
             'statusmsgcolor': [ opt_color, '#4e9a06', _('Status message text color.'), True ],
             'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
             'urlmsgcolor': [ opt_color, '#204a87', '', True ],
-            'notif_signin_color': [ opt_color, '#32CD32', _('Contact signed in notification color.') ], # limegreen
-            'notif_signout_color': [ opt_color, '#FF0000', _('Contact signout notification color') ], # red
-            'notif_message_color': [ opt_color, '#1E90FF', _('New message/email notification color.') ], # dodgerblue
-            'notif_ftrequest_color': [ opt_color, '#F0E68C', _('File transfer request notification color.') ], # khaki
-            'notif_fterror_color': [ opt_color, '#B22222', _('File transfer error notification color.') ], # firebrick
-            'notif_ftcomplete_color': [ opt_color, '#9ACD32', _('File transfer complete or stopped notification color.') ], # yellowgreen
-            'notif_invite_color': [ opt_color, '#D2B48C', _('Groupchat invitation notification color') ], # tan1
-            'notif_status_color': [ opt_color, '#D8BFD8', _('Background color of status changed notification') ], # thistle2
-            'notif_other_color': [ opt_color, '#FFFFFF', _('Other dialogs color.') ], # white
             'inmsgfont': [ opt_str, '', _('Incoming nickname font.'), True ],
             'outmsgfont': [ opt_str, '', _('Outgoing nickname font.'), True ],
             'inmsgtxtfont': [ opt_str, '', _('Incoming text font.'), True ],
@@ -243,10 +233,6 @@ class Config:
             'vcard_avatar_width': [opt_int, 200],
             'vcard_avatar_height': [opt_int, 200],
             'notification_preview_message': [opt_bool, True, _('Preview new messages in notification popup?')],
-            'notification_position_x': [opt_int, -1],
-            'notification_position_y': [opt_int, -1],
-            'notification_avatar_width': [opt_int, 48],
-            'notification_avatar_height': [opt_int, 48],
             'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
             'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if notification icon is used.')],
             'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
@@ -269,7 +255,6 @@ class Config:
             'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
             'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
             'use_urgency_hint': [opt_bool, True, _('If True and installed GTK+ and PyGTK versions are at least 2.8, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
-            'notification_timeout': [opt_int, 5],
             'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences.')],
             'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
