@@ -49,14 +49,6 @@ class ExtendedNode(nbxmpp.Node, object):
         extend.__class__ = cls
         return extend
 
-# helper decorator to create properties in cleaner way
-def nested_property(f):
-    ret = f()
-    p = {'doc': f.__doc__}
-    for v in ('fget', 'fset', 'fdel', 'doc'):
-        if v in ret.keys(): p[v]=ret[v]
-    return property(**p)
-
 # helper to create fields from scratch
 def Field(typ, **attrs):
     ''' Helper function to create a field of given type. '''
@@ -131,123 +123,115 @@ class DataField(ExtendedNode):
             self.required = required
             self.options = options
 
-    @nested_property
-    def type_(): # pylint: disable=E0202
+    @property
+    def type_(self):
         """
         Type of field. Recognized values are: 'boolean', 'fixed', 'hidden',
         'jid-multi', 'jid-single', 'list-multi', 'list-single', 'text-multi',
         'text-private', 'text-single'. If you set this to something different,
         DataField will store given name, but treat all data as text-single
         """
-        def fget(self):
-            t = self.getAttr('type')
-            if t is None:
-                return 'text-single'
-            return t
+        t = self.getAttr('type')
+        if t is None:
+            return 'text-single'
+        return t
 
-        def fset(self, value):
-            assert isinstance(value, str)
-            self.setAttr('type', value)
+    @type_.setter
+    def type_(self, value):
+        assert isinstance(value, str)
+        self.setAttr('type', value)
 
-        return locals()
-
-    @nested_property
-    def var(): # pylint: disable=E0202
+    @property
+    def var(self):
         """
         Field identifier
         """
-        def fget(self):
-            return self.getAttr('var')
+        return self.getAttr('var')
 
-        def fset(self, value):
-            assert isinstance(value, str)
-            self.setAttr('var', value)
+    @var.setter
+    def var(self, value):
+        assert isinstance(value, str)
+        self.setAttr('var', value)
 
-        def fdel(self):
-            self.delAttr('var')
+    @var.deleter
+    def var(self):
+        self.delAttr('var')
 
-        return locals()
-
-    @nested_property
-    def label(): # pylint: disable=E0202
+    @property
+    def label(self):
         """
         Human-readable field name
         """
-        def fget(self):
-            l = self.getAttr('label')
-            if not l:
-                l = self.var
-            return l
+        l = self.getAttr('label')
+        if not l:
+            l = self.var
+        return l
 
-        def fset(self, value):
-            assert isinstance(value, str)
-            self.setAttr('label', value)
+    @label.setter
+    def label(self, value):
+        assert isinstance(value, str)
+        self.setAttr('label', value)
 
-        def fdel(self):
-            if self.getAttr('label'):
-                self.delAttr('label')
+    @label.deleter
+    def label(self):
+        if self.getAttr('label'):
+            self.delAttr('label')
 
-        return locals()
-
-    @nested_property
-    def description():
+    @property
+    def description(self):
         """
         Human-readable description of field meaning
         """
-        def fget(self):
-            return self.getTagData('desc') or ''
+        return self.getTagData('desc') or ''
 
-        def fset(self, value):
-            assert isinstance(value, str)
-            if value == '':
-                fdel(self)
-            else:
-                self.setTagData('desc', value)
+    @description.setter
+    def description(self, value):
+        assert isinstance(value, str)
+        if value == '':
+            del self.description
+        else:
+            self.setTagData('desc', value)
 
-        def fdel(self):
-            t = self.getTag('desc')
-            if t is not None:
-                self.delChild(t)
+    @description.deleter
+    def description(self):
+        t = self.getTag('desc')
+        if t is not None:
+            self.delChild(t)
 
-        return locals()
-
-    @nested_property
-    def required(): # pylint: disable=E0202
+    @property
+    def required(self):
         """
         Controls whether this field required to fill. Boolean
         """
-        def fget(self):
-            return bool(self.getTag('required'))
+        return bool(self.getTag('required'))
 
-        def fset(self, value):
-            t = self.getTag('required')
-            if t and not value:
-                self.delChild(t)
-            elif not t and value:
-                self.addChild('required')
+    @required.setter
+    def required(self, value):
+        t = self.getTag('required')
+        if t and not value:
+            self.delChild(t)
+        elif not t and value:
+            self.addChild('required')
 
-        return locals()
-
-    @nested_property
-    def media():
+    @property
+    def media(self):
         """
         Media data
         """
-        def fget(self):
-            media = self.getTag('media', namespace=nbxmpp.NS_DATA_MEDIA)
-            if media:
-                return Media(media)
+        media = self.getTag('media', namespace=nbxmpp.NS_DATA_MEDIA)
+        if media:
+            return Media(media)
 
-        def fset(self, value):
-            fdel(self)
-            self.addChild(node=value)
+    @media.setter
+    def media(self, value):
+        del self.media
+        self.addChild(node=value)
 
-        def fdel(self):
-            t = self.getTag('media')
-            if t is not None:
-                self.delChild(t)
-
-        return locals()
+    @media.deleter
+    def media(self):
+        t = self.getTag('media')
+        if t is not None:
+            self.delChild(t)
 
     def is_valid(self):
         return True
@@ -256,146 +240,141 @@ class Uri(nbxmpp.Node):
     def __init__(self, uri_tag):
         nbxmpp.Node.__init__(self, node=uri_tag)
 
-    @nested_property
-    def type_():
+    @property
+    def type_(self):
         """
         uri type
         """
-        def fget(self):
-            return self.getAttr('type')
+        return self.getAttr('type')
 
-        def fset(self, value):
-            self.setAttr('type', value)
+    @type_.setter
+    def type_(self, value):
+        self.setAttr('type', value)
 
-        def fdel(self):
-            self.delAttr('type')
+    @type_.deleter
+    def type_(self):
+        self.delAttr('type')
 
-        return locals()
-
-    @nested_property
-    def uri_data():
+    @property
+    def uri_data(self):
         """
         uri data
         """
-        def fget(self):
-            return self.getData()
+        return self.getData()
 
-        def fset(self, value):
-            self.setData(value)
+    @uri_data.setter
+    def uri_data(self, value):
+        self.setData(value)
 
-        def fdel(self):
-            self.setData(None)
-
-        return locals()
+    @uri_data.deleter
+    def uri_data(self):
+        self.setData(None)
 
 class Media(nbxmpp.Node):
     def __init__(self, media_tag):
         nbxmpp.Node.__init__(self, node=media_tag)
 
-    @nested_property
-    def uris():
+    @property
+    def uris(self):
         """
         URIs of the media element.
         """
-        def fget(self):
-            return map(Uri, self.getTags('uri'))
+        return map(Uri, self.getTags('uri'))
 
-        def fset(self, value):
-            fdel(self)
-            for uri in value:
-                self.addChild(node=uri)
+    @uris.setter
+    def uris(self, value):
+        del self.uris
+        for uri in value:
+            self.addChild(node=uri)
 
-        def fdel(self):
-            for element in self.getTags('uri'):
-                self.delChild(element)
-
-        return locals()
+    @uris.deleter
+    def uris(self):
+        for element in self.getTags('uri'):
+            self.delChild(element)
 
 class BooleanField(DataField):
-    @nested_property
-    def value(): # pylint: disable=E0202
+    @property
+    def value(self):
         """
         Value of field. May contain True, False or None
         """
-        def fget(self):
-            v = self.getTagData('value')
-            if v in ('0', 'false'):
-                return False
-            if v in ('1', 'true'):
-                return True
-            if v is None:
-                return False # default value is False
-            raise WrongFieldValue
+        v = self.getTagData('value')
+        if v in ('0', 'false'):
+            return False
+        if v in ('1', 'true'):
+            return True
+        if v is None:
+            return False # default value is False
+        raise WrongFieldValue
 
-        def fset(self, value):
-            self.setTagData('value', value and '1' or '0')
+    @value.setter
+    def value(self, value):
+        self.setTagData('value', value and '1' or '0')
 
-        def fdel(self, value):
-            t = self.getTag('value')
-            if t is not None:
-                self.delChild(t)
-
-        return locals()
+    @value.deleter
+    def value(self):
+        t = self.getTag('value')
+        if t is not None:
+            self.delChild(t)
 
 class StringField(DataField):
     """
     Covers fields of types: fixed, hidden, text-private, text-single
     """
 
-    @nested_property
-    def value(): # pylint: disable=E0202
+    @property
+    def value(self):
         """
         Value of field. May be any string
         """
-        def fget(self):
-            return self.getTagData('value') or ''
+        return self.getTagData('value') or ''
 
-        def fset(self, value):
-            assert isinstance(value, str)
-            if value == '' and not self.required:
-                return fdel(self)
-            self.setTagData('value', value)
+    @value.setter
+    def value(self, value):
+        assert isinstance(value, str)
+        if value == '' and not self.required:
+            del self.value
+            return
+        self.setTagData('value', value)
 
-        def fdel(self):
-            try:
-                self.delChild(self.getTag('value'))
-            except ValueError: # if there already were no value tag
-                pass
-
-        return locals()
+    @value.deleter
+    def value(self):
+        try:
+            self.delChild(self.getTag('value'))
+        except ValueError: # if there already were no value tag
+            pass
 
 class ListField(DataField):
     """
     Covers fields of types: jid-multi, jid-single, list-multi, list-single
     """
 
-    @nested_property
-    def options(): # pylint: disable=E0202
+    @property
+    def options(self):
         """
         Options
         """
-        def fget(self):
-            options = []
-            for element in self.getTags('option'):
-                v = element.getTagData('value')
-                if v is None:
-                    raise WrongFieldValue
-                l = element.getAttr('label')
-                if not l:
-                    l = v
-                options.append((l, v))
-            return options
+        options = []
+        for element in self.getTags('option'):
+            v = element.getTagData('value')
+            if v is None:
+                raise WrongFieldValue
+            l = element.getAttr('label')
+            if not l:
+                l = v
+            options.append((l, v))
+        return options
 
-        def fset(self, values):
-            fdel(self)
-            for value, label in values:
-                self.addChild('option', {'label': label}).setTagData('value', value)
+    @options.setter
+    def options(self, values):
+        del self.options
+        for value, label in values:
+            self.addChild('option', {'label': label}).setTagData('value', value)
 
-        def fdel(self):
-            for element in self.getTags('option'):
-                self.delChild(element)
-
-        return locals()
+    @options.deleter
+    def options(self):
+        for element in self.getTags('option'):
+            self.delChild(element)
 
     def iter_options(self):
         for element in self.iterTags('option'):
@@ -438,27 +417,26 @@ class ListMultiField(ListField):
     Covers list-multi fields
     """
 
-    @nested_property
-    def values():
+    @property
+    def values(self):
         """
         Values held in field
         """
-        def fget(self):
-            values = []
-            for element in self.getTags('value'):
-                values.append(element.getData())
-            return values
+        values = []
+        for element in self.getTags('value'):
+            values.append(element.getData())
+        return values
 
-        def fset(self, values):
-            fdel(self)
-            for value in values:
-                self.addChild('value').setData(value)
+    @values.setter
+    def values(self, values):
+        del self.values
+        for value in values:
+            self.addChild('value').setData(value)
 
-        def fdel(self):
-            for element in self.getTags('value'):
-                self.delChild(element)
-
-        return locals()
+    @values.deleter
+    def values(self):
+        for element in self.getTags('value'):
+            self.delChild(element)
 
     def iter_values(self):
         for element in self.getTags('value'):
@@ -488,29 +466,28 @@ class JidMultiField(ListMultiField):
         return True
 
 class TextMultiField(DataField):
-    @nested_property
-    def value(): # pylint: disable=E0202
+    @property
+    def value(self):
         """
         Value held in field
         """
-        def fget(self):
-            value = ''
-            for element in self.iterTags('value'):
-                value += '\n' + element.getData()
-            return value[1:]
+        value = ''
+        for element in self.iterTags('value'):
+            value += '\n' + element.getData()
+        return value[1:]
 
-        def fset(self, value):
-            fdel(self)
-            if value == '':
-                return
-            for line in value.split('\n'):
-                self.addChild('value').setData(line)
+    @value.setter
+    def value(self, value):
+        del self.value
+        if value == '':
+            return
+        for line in value.split('\n'):
+            self.addChild('value').setData(line)
 
-        def fdel(self):
-            for element in self.getTags('value'):
-                self.delChild(element)
-
-        return locals()
+    @value.deleter
+    def value(self):
+        for element in self.getTags('value'):
+            self.delChild(element)
 
 class DataRecord(ExtendedNode):
     """
@@ -539,26 +516,25 @@ class DataRecord(ExtendedNode):
                     self.delChild(field)
                 self.fields = fields
 
-    @nested_property
-    def fields(): # pylint: disable=E0202
+    @property
+    def fields(self):
         """
         List of fields in this record
         """
-        def fget(self):
-            return self.getTags('field')
+        return self.getTags('field')
 
-        def fset(self, fields):
-            fdel(self)
-            for field in fields:
-                if not isinstance(field, DataField):
-                    ExtendField(field)
-                self.addChild(node=field)
+    @fields.setter
+    def fields(self, fields):
+        del self.fields
+        for field in fields:
+            if not isinstance(field, DataField):
+                ExtendField(field)
+            self.addChild(node=field)
 
-        def fdel(self):
-            for element in self.getTags('field'):
-                self.delChild(element)
-
-        return locals()
+    @fields.deleter
+    def fields(self):
+        for element in self.getTags('field'):
+            self.delChild(element)
 
     def iter_fields(self):
         """
@@ -597,68 +573,64 @@ class DataForm(ExtendedNode):
         if instructions is not None:
             self.instructions=instructions
 
-    @nested_property
-    def type_(): # pylint: disable=E0202
+    @property
+    def type_(self):
         """
         Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
         'form' - this form is to be filled in; you will be able soon to do:
         filledform = DataForm(replyto=thisform)
         """
-        def fget(self):
-            return self.getAttr('type')
+        return self.getAttr('type')
 
-        def fset(self, type_):
-            assert type_ in ('form', 'submit', 'cancel', 'result')
-            self.setAttr('type', type_)
+    @type_.setter
+    def type_(self, type_):
+        assert type_ in ('form', 'submit', 'cancel', 'result')
+        self.setAttr('type', type_)
 
-        return locals()
-
-    @nested_property
-    def title(): # pylint: disable=E0202
+    @property
+    def title(self):
         """
         Title of the form
 
         Human-readable, should not contain any \\r\\n.
         """
-        def fget(self):
-            return self.getTagData('title')
+        return self.getTagData('title')
 
-        def fset(self, title):
-            self.setTagData('title', title)
+    @title.setter
+    def title(self, title):
+        self.setTagData('title', title)
 
-        def fdel(self):
-            try:
-                self.delChild('title')
-            except ValueError:
-                pass
+    @title.deleter
+    def title(self):
+        try:
+            self.delChild('title')
+        except ValueError:
+            pass
 
-        return locals()
-
-    @nested_property
-    def instructions(): # pylint: disable=E0202
+    @property
+    def instructions(self):
         """
         Instructions for this form
 
         Human-readable, may contain \\r\\n.
         """
         # TODO: the same code is in TextMultiField. join them
-        def fget(self):
-            value = ''
-            for valuenode in self.getTags('instructions'):
-                value += '\n' + valuenode.getData()
-            return value[1:]
+        value = ''
+        for valuenode in self.getTags('instructions'):
+            value += '\n' + valuenode.getData()
+        return value[1:]
 
-        def fset(self, value):
-            fdel(self)
-            if value == '': return
-            for line in value.split('\n'):
-                self.addChild('instructions').setData(line)
+    @instructions.setter
+    def instructions(self, value):
+        del self.instructions
+        if value == '': return
+        for line in value.split('\n'):
+            self.addChild('instructions').setData(line)
 
-        def fdel(self):
-            for value in self.getTags('instructions'):
-                self.delChild(value)
-
-        return locals()
+    @instructions.deleter
+    def instructions(self):
+        for value in self.getTags('instructions'):
+            self.delChild(value)
 
 class SimpleDataForm(DataForm, DataRecord):
     def __init__(self, type_=None, title=None, instructions=None, fields=None, \
@@ -711,44 +683,43 @@ class MultipleDataForm(DataForm):
         reported_tag = self.getTag('reported')
         self.reported = DataRecord(extend=reported_tag)
 
-    @nested_property
-    def items(): # pylint: disable=E0202
+    @property
+    def items(self):
         """
         A list of all records
         """
-        def fget(self):
-            return list(self.iter_records())
+        return list(self.iter_records())
 
-        def fset(self, records):
-            fdel(self)
-            for record in records:
-                if not isinstance(record, DataRecord):
-                    DataRecord(extend=record)
-                self.addChild(node=record)
+    @items.setter
+    def items(self, records):
+        del self.items
+        for record in records:
+            if not isinstance(record, DataRecord):
+                DataRecord(extend=record)
+            self.addChild(node=record)
 
-        def fdel(self):
-            for record in self.getTags('item'):
-                self.delChild(record)
-
-        return locals()
+    @items.deleter
+    def items(self):
+        for record in self.getTags('item'):
+            self.delChild(record)
 
     def iter_records(self):
         for record in self.getTags('item'):
             yield record
 
-#       @nested_property
-#       def reported():
-#               """
-#               DataRecord that contains descriptions of fields in records
-#               """
-#               def fget(self):
-#                       return self.getTag('reported')
-#               def fset(self, record):
-#                       try:
-#                               self.delChild('reported')
-#                       except:
-#                               pass
+#    @property
+#    def reported(self):
+#        """
+#        DataRecord that contains descriptions of fields in records
+#        """
+#        return self.getTag('reported')
 #
-#                       record.setName('reported')
-#                       self.addChild(node=record)
-#               return locals()
+#    @reported.setter
+#    def reported(self, record):
+#        try:
+#            self.delChild('reported')
+#        except:
+#            pass
+#
+#        record.setName('reported')
+#        self.addChild(node=record)
