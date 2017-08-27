@@ -80,7 +80,7 @@ class SessionBusNotPresent(Exception):
 
     def __str__(self):
         return _('Session bus is not available.\nTry reading %(url)s') % \
-                {'url': 'http://trac.gajim.org/wiki/GajimDBus'}
+                {'url': 'https://dev.gajim.org/gajim/gajim/wikis/help/GajimDBus'}
 
 class SystemBusNotPresent(Exception):
     """
@@ -92,7 +92,7 @@ class SystemBusNotPresent(Exception):
 
     def __str__(self):
         return _('System bus is not available.\nTry reading %(url)s') % \
-                {'url': 'http://trac.gajim.org/wiki/GajimDBus'}
+                {'url': 'https://dev.gajim.org/gajim/gajim/wikis/help/GajimDBus'}
 
 class NegotiationError(Exception):
     """

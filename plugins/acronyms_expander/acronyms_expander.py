@@ -51,9 +51,8 @@ class AcronymsExpanderPlugin(GajimPlugin):
             'ACRONYMS': ({'/slap': '/me slaps',
                           'PS-': 'plug-in system',
                           'G-': 'Gajim',
-                          'GNT-': 'http://trac.gajim.org/newticket',
-                          'GW-': 'http://trac.gajim.org/',
-                          'GTS-': 'http://trac.gajim.org/report',
+                          'GNT-': 'https://dev.gajim.org/gajim/gajim/issues',
+                          'GW-': 'https://dev.gajim.org/gajim/gajim/wikis/home',
                          },
                          ''),
         }

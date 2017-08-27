@@ -94,7 +94,7 @@ else:
                             'XEP #', 'http://www.xmpp.org/extensions/', 'xep-%04d.html',
                             pos_int_validator)
     generate_uri_role('gajim-ticket-reference', ('ticket', 'gtrack'),
-                            'Gajim Ticket #', 'http://trac.gajim.org/ticket/', '%d',
+                            'Gajim Ticket #', 'https://dev.gajim.org/gajim/gajim/issues', '%d',
                             pos_int_validator)
 
     class HTMLGenerator:
