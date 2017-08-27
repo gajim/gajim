@@ -59,6 +59,24 @@ try:
 except ImportError:
     IPython = None
 
+HAS_IPYTHON5 = True
+try:
+    from pygments.token import Token
+    from IPython.core.displayhook import DisplayHook
+    from IPython.core.display_trap import DisplayTrap
+
+    class MyPromptDisplayHook(DisplayHook):
+        def __init__(self, shell, view):
+            DisplayHook.__init__(self, shell=shell)
+            self.view = view
+
+        def write_output_prompt(self):
+            tokens = self.shell.prompts.out_prompt_tokens()
+            self.view.write('\n')
+            self.view.write(tokens)
+except Exception:
+    HAS_IPYTHON5 = False
+
 class IterableIPShell:
     """
     Create an IPython instance. Does not start a blocking event loop,
@@ -114,7 +132,11 @@ class IterableIPShell:
         os.environ['TERM'] = 'dumb'
         excepthook = sys.excepthook
 
-        from IPython.config.loader import Config
+        if IPython.version_info[0] >= 5:
+            from traitlets.config.loader import Config
+        else:
+            from IPython.config.loader import Config
+
         cfg = Config()
         cfg.InteractiveShell.colors = "Linux"
 
@@ -125,7 +147,7 @@ class IterableIPShell:
 
         # InteractiveShell inherits from SingletonConfigurable so use instance()
         if IPython.version_info[0] >= 1:
-            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns)
+            self.IP = IPython.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns, user_module=user_global_ns)
         else:
             self.IP = IPython.frontend.terminal.embed.InteractiveShellEmbed.instance(config=cfg, user_ns=user_ns)
 
@@ -144,7 +166,7 @@ class IterableIPShell:
         self.complete_sep =  re.compile('[\s\{\}\[\]\(\)]')
         self.updateNamespace({'exit':lambda:None})
         self.updateNamespace({'quit':lambda:None})
-        self.IP.readline_startup_hook(self.IP.pre_readline)
+        #self.IP.readline_startup_hook(self.IP.pre_readline)
         # Workaround for updating namespace with sys.modules
         #
         self.__update_namespace()
@@ -206,6 +228,7 @@ class IterableIPShell:
 
         sys.stdout = orig_stdout
         sys.stdin = orig_stdin
+
     def generatePrompt(self, is_continuation):
         '''
         Generate prompt depending on is_continuation value
@@ -217,17 +240,24 @@ class IterableIPShell:
         @rtype: string
 
         '''
-
         # Backwards compatibility with ipyton-0.11
         #
         ver = IPython.__version__
         if '0.11' in ver:
             prompt = self.IP.hooks.generate_prompt(is_continuation)
         else:
-            if is_continuation:
-                prompt = self.IP.prompt_manager.render('in2')
-            else:
-                prompt = self.IP.prompt_manager.render('in')
+            # Prompt for IPython >=5.0:
+            if hasattr(self.IP, 'prompts'):
+                if is_continuation:
+                    prompt = self.IP.prompts.continuation_prompt_tokens(self.IP.prompts)
+                else:
+                    prompt = self.IP.prompts.in_prompt_tokens(self.IP.prompts)
+            # Prompt for IPython < 5.0
+            elif hasattr(self.IP, 'prompt_manager'):
+                if is_continuation:
+                    prompt = self.IP.prompt_manager.render('in2')
+                else:
+                    prompt = self.IP.prompt_manager.render('in')
 
         return prompt
 
@@ -319,27 +349,6 @@ class IterableIPShell:
         return completed, possibilities[1]
 
 
-    def shell(self, cmd,verbose=0,debug=0,header=''):
-        """
-        Replacement method to allow shell commands without them blocking
-
-        @param cmd: Shell command to execute.
-        @type cmd: string
-        @param verbose: Verbosity
-        @type verbose: integer
-        @param debug: Debug level
-        @type debug: integer
-        @param header: Header to be printed before output
-        @type header: string
-        """
-        if verbose or debug: print(header+cmd)
-        # flush stdout so we don't mangle python's buffering
-        if not debug:
-            input_, output = os.popen4(cmd)
-            print(output.read())
-            output.close()
-            input_.close()
-
 class ConsoleView(Gtk.TextView):
     """
     Specialized text view for console-like workflow
@@ -384,13 +393,47 @@ class ConsoleView(Gtk.TextView):
         self.text_buffer.create_tag('0')
         self.text_buffer.create_tag('notouch', editable=False)
         self.color_pat = re.compile('\x01?\x1b\[(.*?)m\x02?')
+        if HAS_IPYTHON5:
+            self.style_dict = {
+                Token.Prompt:        '0;32',
+                Token.PromptNum:     '1;32',
+                Token.OutPrompt:     '0;31',
+                Token.OutPromptNum:  '1;31',
+            }
         self.line_start = \
             self.text_buffer.create_mark('line_start',
                                          self.text_buffer.get_end_iter(), True)
         self.connect('key-press-event', self.onKeyPress)
 
     def write(self, text, editable=False):
-        GLib.idle_add(self._write, text, editable)
+        if type(text) == str:
+            GLib.idle_add(self._write, text, editable)
+        elif IPython.version_info[0] >= 5:
+            GLib.idle_add(self._write5, text, editable)
+
+    def _write5(self, text, editable=False):
+        """
+        Write given text to buffer
+
+        @param text: Text to append.
+        @type text: list of (token: string)
+        @param editable: If true, added text is editable.
+        @type editable: boolean
+        """
+        start_mark = self.text_buffer.create_mark(None,
+                                                  self.text_buffer.get_end_iter(),
+                                                  True)
+
+        for token, segment in text:
+            tag = self.style_dict[token]
+            self.text_buffer.insert_with_tags_by_name(self.text_buffer.get_end_iter(),
+                                                          segment, tag)
+        if not editable:
+            self.text_buffer.apply_tag_by_name('notouch',
+                                               self.text_buffer.get_iter_at_mark(start_mark),
+                                               self.text_buffer.get_end_iter())
+        self.text_buffer.delete_mark(start_mark)
+        self.scroll_mark_onscreen(self.mark)
 
     def _write(self, text, editable=False):
         """
@@ -401,6 +444,9 @@ class ConsoleView(Gtk.TextView):
         @param editable: If true, added text is editable.
         @type editable: boolean
         """
+        if type(text) == list and IPython.version_info[0] >= 5:
+            self._write5(text, editable)
+            return
         segments = self.color_pat.split(text)
         segment = segments.pop(0)
         start_mark = self.text_buffer.create_mark(None,
@@ -555,12 +601,20 @@ class IPythonView(ConsoleView, IterableIPShell):
         self.cout = StringIO()
         IterableIPShell.__init__(self, cout=self.cout, cerr=self.cout,
                                  input_func=self.raw_input)
+        if HAS_IPYTHON5:
+            displayhook = MyPromptDisplayHook(shell=self.IP, view=self)
+            self.IP.displayhook = displayhook
+            self.IP.display_trap = DisplayTrap(hook=displayhook)
 #    self.connect('key_press_event', self.keyPress)
         self.interrupt = False
         self.execute()
         self.prompt = self.generatePrompt(False)
         self.cout.truncate(0)
         self.showPrompt(self.prompt)
+
+    def prompt_for_code(self):
+        # IPython 5.0 calls prompt_for_code instead of raw_input
+        return self.raw_input(self)
 
     def raw_input(self, prompt=''):
         """
