@@ -581,18 +581,6 @@ def get_xmpp_show(show):
         return None
     return show
 
-def get_output_of_command(command):
-    try:
-        child_stdin, child_stdout = os.popen2(command)
-    except ValueError:
-        return None
-
-    output = child_stdout.readlines()
-    child_stdout.close()
-    child_stdin.close()
-
-    return output
-
 def sanitize_filename(filename):
     """
     Make sure the filename we will write does contain only acceptable and latin
@@ -1044,29 +1032,6 @@ def remove_invalid_xml_chars(string):
         string = re.sub(app.interface.invalid_XML_chars_re, '', string)
     return string
 
-distro_info = {
-        'Arch Linux': '/etc/arch-release',
-        'Aurox Linux': '/etc/aurox-release',
-        'Conectiva Linux': '/etc/conectiva-release',
-        'CRUX': '/usr/bin/crux',
-        'Debian GNU/Linux': '/etc/debian_version',
-        'Fedora Linux': '/etc/fedora-release',
-        'Gentoo Linux': '/etc/gentoo-release',
-        'Linux from Scratch': '/etc/lfs-release',
-        'Mandrake Linux': '/etc/mandrake-release',
-        'Slackware Linux': '/etc/slackware-version',
-        'Solaris/Sparc': '/etc/release',
-        'Source Mage': '/etc/sourcemage_version',
-        'SUSE Linux': '/etc/SuSE-release',
-        'Sun JDS': '/etc/sun-release',
-        'PLD Linux': '/etc/pld-release',
-        'Yellow Dog Linux': '/etc/yellowdog-release',
-        'AgiliaLinux': '/etc/agilialinux-version',
-        # many distros use the /etc/redhat-release for compatibility
-        # so Redhat is the last
-        'Redhat Linux': '/etc/redhat-release'
-}
-
 def get_random_string_16():
     """
     Create random string of length 16
@@ -1080,84 +1045,18 @@ def get_random_string_16():
 def get_os_info():
     if app.os_info:
         return app.os_info
-    if os.name == 'nt':
-        # platform.release() seems to return the name of the windows
-        ver = sys.getwindowsversion()
-        ver_format = ver[3], ver[0], ver[1]
-        win_version = {
-                (1, 4, 0): '95',
-                (1, 4, 10): '98',
-                (1, 4, 90): 'ME',
-                (2, 4, 0): 'NT',
-                (2, 5, 0): '2000',
-                (2, 5, 1): 'XP',
-                (2, 5, 2): '2003',
-                (2, 6, 0): 'Vista',
-                (2, 6, 1): '7',
-        }
-        if ver_format in win_version:
-            os_info = 'Windows' + ' ' + win_version[ver_format]
-        else:
-            os_info = 'Windows'
-        app.os_info = os_info
-        return os_info
+    app.os_info = 'N/A'
+    if os.name == 'nt' or sys.platform == 'darwin':
+        import platform
+        app.os_info = platform.system() + " " + platform.release()
     elif os.name == 'posix':
-        executable = 'lsb_release'
-        params = ' --description --codename --release --short'
-        full_path_to_executable = is_in_path(executable, return_abs_path = True)
-        if full_path_to_executable:
-            command = executable + params
-            p = subprocess.Popen([command], shell=True, stdin=subprocess.PIPE,
-                    stdout=subprocess.PIPE, close_fds=True)
-            p.wait()
-            output = temp_failure_retry(p.stdout.readline).strip()
-            # some distros put n/a in places, so remove those
-            output = output.decode('utf-8').replace('n/a', '').replace('N/A', '')
-            app.os_info = output
-            p.stdout.close()
-            p.stdin.close()
-            return output
-
-        # lsb_release executable not available, so parse files
-        for distro_name in distro_info:
-            path_to_file = distro_info[distro_name]
-            if os.path.exists(path_to_file):
-                if os.access(path_to_file, os.X_OK):
-                    # the file is executable (f.e. CRUX)
-                    # yes, then run it and get the first line of output.
-                    text = get_output_of_command(path_to_file)[0]
-                else:
-                    fd = open(path_to_file)
-                    text = fd.readline().strip() # get only first line
-                    fd.close()
-                    if path_to_file.endswith('version'):
-                        # sourcemage_version and slackware-version files
-                        # have all the info we need (name and version of distro)
-                        if not os.path.basename(path_to_file).startswith(
-                        'sourcemage') or not\
-                        os.path.basename(path_to_file).startswith('slackware'):
-                            text = distro_name + ' ' + text
-                    elif path_to_file.endswith('aurox-release') or \
-                    path_to_file.endswith('arch-release'):
-                        # file doesn't have version
-                        text = distro_name
-                    elif path_to_file.endswith('lfs-release'):
-                        # file just has version
-                        text = distro_name + ' ' + text
-                os_info = text.replace('\n', '')
-                app.os_info = os_info
-                return os_info
-
-        # our last chance, ask uname and strip it
-        uname_output = get_output_of_command('uname -sr')
-        if uname_output is not None:
-            os_info = uname_output[0] # only first line
-            app.os_info = os_info
-            return os_info
-    os_info = 'N/A'
-    app.os_info = os_info
-    return os_info
-
+        try:
+            import distro
+            app.os_info = distro.name(pretty=True)
+        except ImportError:
+            import platform
+            app.os_info = platform.system()
+    return app.os_info
 
 def allow_showing_notification(account, type_='notify_on_new_message',
 is_first_message=True):
