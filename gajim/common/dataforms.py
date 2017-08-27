@@ -132,7 +132,7 @@ class DataField(ExtendedNode):
             self.options = options
 
     @nested_property
-    def type_():
+    def type_(): # pylint: disable=E0202
         """
         Type of field. Recognized values are: 'boolean', 'fixed', 'hidden',
         'jid-multi', 'jid-single', 'list-multi', 'list-single', 'text-multi',
@@ -152,7 +152,7 @@ class DataField(ExtendedNode):
         return locals()
 
     @nested_property
-    def var():
+    def var(): # pylint: disable=E0202
         """
         Field identifier
         """
@@ -169,7 +169,7 @@ class DataField(ExtendedNode):
         return locals()
 
     @nested_property
-    def label():
+    def label(): # pylint: disable=E0202
         """
         Human-readable field name
         """
@@ -212,7 +212,7 @@ class DataField(ExtendedNode):
         return locals()
 
     @nested_property
-    def required():
+    def required(): # pylint: disable=E0202
         """
         Controls whether this field required to fill. Boolean
         """
@@ -313,7 +313,7 @@ class Media(nbxmpp.Node):
 
 class BooleanField(DataField):
     @nested_property
-    def value():
+    def value(): # pylint: disable=E0202
         """
         Value of field. May contain True, False or None
         """
@@ -343,7 +343,7 @@ class StringField(DataField):
     """
 
     @nested_property
-    def value():
+    def value(): # pylint: disable=E0202
         """
         Value of field. May be any string
         """
@@ -370,7 +370,7 @@ class ListField(DataField):
     """
 
     @nested_property
-    def options():
+    def options(): # pylint: disable=E0202
         """
         Options
         """
@@ -489,7 +489,7 @@ class JidMultiField(ListMultiField):
 
 class TextMultiField(DataField):
     @nested_property
-    def value():
+    def value(): # pylint: disable=E0202
         """
         Value held in field
         """
@@ -540,7 +540,7 @@ class DataRecord(ExtendedNode):
                 self.fields = fields
 
     @nested_property
-    def fields():
+    def fields(): # pylint: disable=E0202
         """
         List of fields in this record
         """
@@ -598,7 +598,7 @@ class DataForm(ExtendedNode):
             self.instructions=instructions
 
     @nested_property
-    def type_():
+    def type_(): # pylint: disable=E0202
         """
         Type of the form. Must be one of: 'form', 'submit', 'cancel', 'result'.
         'form' - this form is to be filled in; you will be able soon to do:
@@ -614,7 +614,7 @@ class DataForm(ExtendedNode):
         return locals()
 
     @nested_property
-    def title():
+    def title(): # pylint: disable=E0202
         """
         Title of the form
 
@@ -635,7 +635,7 @@ class DataForm(ExtendedNode):
         return locals()
 
     @nested_property
-    def instructions():
+    def instructions(): # pylint: disable=E0202
         """
         Instructions for this form
 
@@ -712,7 +712,7 @@ class MultipleDataForm(DataForm):
         self.reported = DataRecord(extend=reported_tag)
 
     @nested_property
-    def items():
+    def items(): # pylint: disable=E0202
         """
         A list of all records
         """
