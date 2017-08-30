@@ -228,3 +228,9 @@ class AppActions():
         else:
             interface.instances['logs'] = history_window.\
                 HistoryWindow()
+
+    def on_open_event(self, action, param):
+        dict_ = param.unpack()
+        app.interface.handle_event(dict_['account'], dict_['jid'],
+            dict_['type_'])
+

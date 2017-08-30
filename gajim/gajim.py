@@ -339,7 +339,8 @@ class GajimApplication(Gtk.Application):
             ('-update-motd', action.on_update_motd, 'online', 's'),
             ('-delete-motd', action.on_delete_motd, 'online', 's'),
             ('-activate-bookmark',
-                action.on_activate_bookmark, 'online', 'a{sv}')
+                action.on_activate_bookmark, 'online', 'a{sv}'),
+            ('-open-event', action.on_open_event, 'always', 'a{sv}'),
         ]
 
         self.general_actions = [
@@ -355,7 +356,7 @@ class GajimApplication(Gtk.Application):
             ('features', action.on_features),
             ('content', action.on_contents),
             ('about', action.on_about),
-            ('faq', action.on_faq)
+            ('faq', action.on_faq),
         ]
 
         for action in self.general_actions:
