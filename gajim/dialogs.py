@@ -47,6 +47,7 @@ from gajim.common import defs
 from random import randrange
 from gajim.common import pep
 from gajim.common import ged
+from gajim.common import const
 
 try:
     from gajim import gtkspell
@@ -1287,98 +1288,49 @@ class AddNewContactWindow:
                 self.gateway_prompt[obj.jid]['prompt'] = obj.prompt
 
 class AboutDialog(Gtk.AboutDialog):
-    """
-    Class for about dialog
-    """
-
     def __init__(self):
         Gtk.AboutDialog.__init__(self)
         self.set_transient_for(app.interface.roster.window)
         self.set_name('Gajim')
         self.set_version(app.version)
-        s = 'Copyright © 2003-2017 Gajim Team'
-        self.set_copyright(s)
-        copying_file_path = self.get_path('COPYING')
-        if copying_file_path:
-            with open(copying_file_path) as a_file:
-                text = a_file.read()
-            self.set_license(text)
-
-        gtk_ver = '%i.%i.%i' % (Gtk.get_major_version(),
-            Gtk.get_minor_version(), Gtk.get_micro_version())
-        gobject_ver = self.tuple2str(GObject.pygobject_version)
-        nbxmpp_ver = nbxmpp.__version__
-        self.set_comments('%s\n%s %s\n%s %s\n%s %s' % (_('A GTK+ XMPP client'),
-            _('GTK+ Version:'), gtk_ver, _('PyGobject Version:'), gobject_ver,
-            _('python-nbxmpp Version:'), nbxmpp_ver))
+        self.set_copyright('Copyright © 2003-2017 Gajim Team')
+        self.set_license_type(Gtk.License.GPL_3_0)
         self.set_website('https://gajim.org/')
 
-        authors_file_path = self.get_path('AUTHORS')
-        if authors_file_path:
-            authors = []
-            with open(authors_file_path) as a_file:
-                authors_file = a_file.read()
-            authors_file = authors_file.split('\n')
-            for author in authors_file:
-                if author == 'CURRENT DEVELOPERS:':
-                    authors.append(_('Current Developers:'))
-                elif author == 'PAST DEVELOPERS:':
-                    authors.append('\n' + _('Past Developers:'))
-                elif author != '': # Real author line
-                    authors.append(author)
+        gtk_ver = '%i.%i.%i' % (
+            Gtk.get_major_version(),
+            Gtk.get_minor_version(),
+            Gtk.get_micro_version())
+        gobject_ver = '.'.join(map(str, GObject.pygobject_version))
 
-            thanks_file_path = self.get_path('THANKS')
-            if thanks_file_path:
-                authors.append('\n' + _('THANKS:'))
-                with open(thanks_file_path) as a_file:
-                    text = a_file.read()
-                text_splitted = text.split('\n')
-                text = '\n'.join(text_splitted[:-2]) # remove one english sentence
-                # and add it manually as translatable
-                text += '\n%s\n' % _('Last but not least, we would like to '
-                    'thank all the package maintainers.')
-                authors.append(text)
+        comments = []
+        comments.append(_('A GTK+ XMPP client'))
+        comments.append(_('GTK+ Version: %s' % gtk_ver))
+        comments.append(_('PyGObject Version: %s') % gobject_ver)
+        comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
+        self.set_comments("\n".join(comments))
 
-            self.set_authors(authors)
+        self.add_credit_section(_('Current Developers'), const.DEVS_CURRENT)
+        self.add_credit_section(_('Past Developers'), const.DEVS_PAST)
+        self.add_credit_section(_('Artists'), const.ARTISTS)
 
-        self.props.wrap_license = True
+        thanks = const.THANKS
+        thanks.append('')
+        thanks.append(_('Last but not least'))
+        thanks.append(_('we would like to thank all the package maintainers.'))
+        self.add_credit_section('Thanks', thanks)
 
-        pixbuf = gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', 128)
-
-        self.set_logo(pixbuf)
-        #here you write your name in the form Name FamilyName <someone@somewhere>
         self.set_translator_credits(_('translator-credits'))
+        self.set_logo(gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', 128))
 
-        thanks_artists_file_path = self.get_path('THANKS.artists')
-        if thanks_artists_file_path:
-            with open(thanks_artists_file_path) as a_file:
-                artists_text = a_file.read()
-            artists = artists_text.split('\n')
-            self.set_artists(artists)
+        self.connect(
+            'response', lambda dialog, *args: Gtk.AboutDialog.do_close(dialog))
 
-        self.connect('response', self.on_response)
         self.show_all()
 
-    def on_response(self, dialog, response_id):
-        if response_id == Gtk.ResponseType.DELETE_EVENT:
-            dialog.destroy()
+        # GTK Bug, We have to manually hide the License Button
+        self.get_action_area().get_children()[1].hide()
 
-    def tuple2str(self, tuple_):
-        str_ = ''
-        for num in tuple_:
-            str_ += str(num) + '.'
-        return str_[0:-1] # remove latest .
-
-    def get_path(self, filename):
-        """
-        Where can we find this Credits file?
-        """
-        if os.path.isfile(os.path.join(defs.docdir, filename)):
-            return os.path.join(defs.docdir, filename)
-        elif os.path.isfile('../' + filename):
-            return ('../' + filename)
-        else:
-            return None
 
 class Dialog(Gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
