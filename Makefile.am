@@ -5,7 +5,6 @@ ACLOCAL_AMFLAGS = -I m4
 bin_SCRIPTS = scripts/gajim scripts/gajim-history-manager scripts/gajim-remote
 
 EXTRA_DIST = \
-	THANKS.artists \
 	autogen.sh			\
 	intltool-extract.in \
 	intltool-merge.in 	\
