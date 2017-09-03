@@ -741,7 +741,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def check_jid(self, jid):
         return helpers.parse_jid(jid)
 
-    def get_own_jid(self):
+    def get_own_jid(self, warn=False):
         """
         Return the last full JID we received on a bind event.
         In case we were never connected it returns the bare JID from config.
@@ -750,6 +750,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             # This returns the full jid we received on the bind event
             return self.registered_name
         else:
+            if warn:
+                log.warning('only bare JID available')
             # This returns the bare jid 
             return nbxmpp.JID(app.get_jid_from_account(self.name))
 
