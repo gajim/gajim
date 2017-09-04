@@ -1,0 +1,3 @@
+include COPYING
+recursive-include po *.po
+recursive-include data *.1 *.in

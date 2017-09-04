@@ -24,3 +24,5 @@ syntax: regexp
 ^config\.*
 ^config\/
 ^scripts\/gajim.*
+
+!MANIFEST.in
