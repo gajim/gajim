@@ -9,8 +9,7 @@ stages:
 run-test:
   stage: test
   script:
-    - ./autogen.sh
-    - make test_nogui
+    - test/runtests.py -n
 
 run-pylint:
   stage: test
