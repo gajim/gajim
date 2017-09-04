@@ -179,7 +179,13 @@ setup(
     name = "gajim",
     description = 'TODO',
     version=gajim.__version__,
+    author = "Philipp Hörist, Yann Leboulanger",
+    author_email = "gajim-devel@gajim.org",
     url = 'https://gajim.org',
+    license = 'GPL v3 or greater',
+    classifiers = [
+        'Programming Language :: Python :: 3',
+    ],
     cmdclass = {
         'build_py': build,
     },
