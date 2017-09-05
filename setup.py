@@ -157,12 +157,14 @@ package_data_gui = ['data/gui/*.ui']
 package_data_icons = ['data/icons/hicolor/*/*/*.png']
 package_data_iconsets = ['data/iconsets/*/*/*.png']
 package_data_other = ['data/other/servers.xml']
+package_data_plugin = ['plugins/*/*']
 package_data_style = ['data/style/gajim.css']
 package_data = (package_data_emoticons
                 + package_data_gui
                 + package_data_icons
                 + package_data_iconsets
                 + package_data_other
+                + package_data_plugin
                 + package_data_style)
 
 

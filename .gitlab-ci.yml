@@ -29,12 +29,11 @@ run-build:
     - tar xzf $FN.gz
     - rm $FN.gz
     - export GF=$(find . -maxdepth 1 -type d -name 'gajim-*')
-    - mkdir -p $GF/plugins/
-    - cd $GF/plugins/
+    - cd $GF/gajim/plugins/
     - curl -O https://ftp.gajim.org/plugins_1/plugin_installer.zip
     - unzip plugin_installer.zip
     - rm plugin_installer.zip
-    - cd ../..
+    - cd ../../..
     - tar czf ../$FN.gz gajim-*
     - cd ..
     - rm -rf tmp_add_plugins
