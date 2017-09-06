@@ -1451,7 +1451,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
         if hasattr(con, 'Resource'):
             self.server_resource = con.Resource
-        self.registered_name = con._registered_name
+        if con._registered_name is not None:
+            log.info('Bound JID: %s', con._registered_name)
+            self.registered_name = con._registered_name
         if app.config.get_per('accounts', self.name, 'anonymous_auth'):
             # Get jid given by server
             old_jid = app.get_jid_from_account(self.name)
