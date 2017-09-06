@@ -103,7 +103,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Page_Down</property>
-                <property name="title" translatable="yes">Sroll down</property>
+                <property name="title" translatable="yes">Scroll down</property>
               </object>
             </child>
             <child>
