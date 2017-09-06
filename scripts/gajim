@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -OO
+#!/usr/bin/env python3
 ##
 ## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
