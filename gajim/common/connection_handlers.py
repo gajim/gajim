@@ -1155,6 +1155,8 @@ class ConnectionHandlersBase:
             return True
 
     def _nec_gc_message_received(self, obj):
+        if obj.conn.name != self.name:
+            return
         if app.config.should_log(obj.conn.name, obj.jid) and not \
         obj.timestamp < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
         obj.nick:
