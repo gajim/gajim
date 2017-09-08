@@ -83,9 +83,9 @@ def build_intl(build_cmd):
     data_files = build_cmd.distribution.data_files
     base = cwd
 
-    merge_files = (('data/org.gajim.Gajim.desktop', 'share/applications', '-d'),
-                   ('data/gajim-remote.desktop', 'share/applications', '-d'),
-                   ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '-x'))
+    merge_files = (('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
+                   ('data/gajim-remote.desktop', 'share/applications', '--desktop'),
+                   ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml'))
 
     for filename, target, option in merge_files:
         filenamelocal = convert_path(filename)
@@ -110,30 +110,17 @@ def substitute_variables(filename_in, filename_out, subst_vars):
     f_out.close()
 
 
-def merge(in_file, out_file, option, po_dir='po', cache=True):
+def merge(in_file, out_file, option, po_dir='po'):
     '''
-    Run the intltool-merge command.
+    Run the msgfmt command.
     '''
-    option += ' -u'
-    if cache:
-        cache_file = os.path.join('po', '.intltool-merge-cache')
-        option += ' -c ' + cache_file
-
     if (not os.path.exists(out_file) and os.path.exists(in_file)):
-        if sys.platform == 'win32':
-            cmd = (('set LC_ALL=C && perl -S intltool-merge %(opt)s %(po_dir)s %(in_file)s '
-                '%(out_file)s') %
-              {'opt' : option,
-               'po_dir' : po_dir,
-               'in_file' : in_file,
-               'out_file' : out_file})
-        else:
-            cmd = (('LC_ALL=C intltool-merge %(opt)s %(po_dir)s %(in_file)s '
-                '%(out_file)s') %
-              {'opt' : option,
-               'po_dir' : po_dir,
-               'in_file' : in_file,
-               'out_file' : out_file})
+        cmd = (('msgfmt %(opt)s -d %(po_dir)s --template %(in_file)s '
+            '-o %(out_file)s') %
+          {'opt' : option,
+           'po_dir' : po_dir,
+           'in_file' : in_file,
+           'out_file' : out_file})
         if os.system(cmd) != 0:
             msg = ('ERROR: %s was not merged into the translation files!\n' %
                     out_file)
