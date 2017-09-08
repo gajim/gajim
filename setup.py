@@ -166,7 +166,7 @@ data_files = data_files_app_icon
 
 setup(
     name = "gajim",
-    description = 'TODO',
+    description = 'A GTK+ Jabber client',
     version=gajim.__version__,
     author = "Philipp Hörist, Yann Leboulanger",
     author_email = "gajim-devel@gajim.org",
