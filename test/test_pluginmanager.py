@@ -77,10 +77,10 @@ class PluginManagerTestCase(unittest.TestCase):
         self.pluginmanager.test_arg = 1
         secondPluginManager = PluginManager()
 
-        self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
-                                                 'Different IDs in references to PluginManager objects (not a singleton)')
-        self.failUnlessEqual(secondPluginManager.test_arg, 1,
-                                                 'References point to different PluginManager objects (not a singleton')
+        self.assertEqual(id(secondPluginManager), id(self.pluginmanager),
+                         'Different IDs in references to PluginManager objects (not a singleton)')
+        self.assertEqual(secondPluginManager.test_arg, 1,
+                         'References point to different PluginManager objects (not a singleton')
 
 def suite():
     suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)

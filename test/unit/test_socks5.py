@@ -114,10 +114,10 @@ class TestSocks5(unittest.TestCase):
         s.connect(server)
 
         s.send(mocksock.outgoing.pop(0))
-        self.assertEquals(s.recv(64), mocksock.incoming.pop(0))
+        self.assertEqual(s.recv(64), mocksock.incoming.pop(0))
 
         s.send(mocksock.outgoing.pop(0))
-        self.assertEquals(s.recv(64), mocksock.incoming.pop(0))
+        self.assertEqual(s.recv(64), mocksock.incoming.pop(0))
 
     def test_connection_client(self):
 
@@ -138,12 +138,12 @@ class TestSocks5(unittest.TestCase):
         (s, address) = s.accept()
 
 
-        self.assertEquals(s.recv(64), mocksock.incoming.pop(0))
+        self.assertEqual(s.recv(64), mocksock.incoming.pop(0))
         s.send(mocksock.outgoing.pop(0))
 
         buff = s.recv(64)
         inco = mocksock.incoming.pop(0)
-        #self.assertEquals(s.recv(64), mocksock.incoming.pop(0))
+        #self.assertEqual(s.recv(64), mocksock.incoming.pop(0))
         s.send(mocksock.outgoing.pop(0))
 
     def test_client_negoc(self):

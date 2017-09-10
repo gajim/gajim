@@ -44,8 +44,8 @@ class TestCapsCache(CommonCapsTest):
         self.cc[self.client_caps].identities = self.identities
         self.cc[self.client_caps].features = self.features
 
-        self.assert_(NS_MUC in self.cc[self.client_caps].features)
-        self.assert_(NS_PING not in self.cc[self.client_caps].features)
+        self.assertTrue(NS_MUC in self.cc[self.client_caps].features)
+        self.assertTrue(NS_PING not in self.cc[self.client_caps].features)
 
         identities = self.cc[self.client_caps].identities
 
