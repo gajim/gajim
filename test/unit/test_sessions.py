@@ -39,15 +39,15 @@ class TestStanzaSession(unittest.TestCase):
 
     def test_generate_thread_id(self):
         # thread_id is a string
-        self.assert_(isinstance(self.sess.thread_id, str))
+        self.assertTrue(isinstance(self.sess.thread_id, str))
 
         # it should be somewhat long, to avoid clashes
-        self.assert_(len(self.sess.thread_id) >= 32)
+        self.assertTrue(len(self.sess.thread_id) >= 32)
 
     def test_is_loggable(self):
         # by default a session should be loggable
         # (unless the no_log_for setting says otherwise)
-        self.assert_(self.sess.is_loggable())
+        self.assertTrue(self.sess.is_loggable())
 
     def test_terminate(self):
         # termination is sent by default
@@ -127,7 +127,7 @@ class TestChatControlSession(unittest.TestCase):
         self.assert_new_message_notification()
         notif = notify.notifications[-1]
         first = notif.first_unread
-        self.assert_(first,
+        self.assertTrue(first,
             'message should have been treated as a first message')
 
     def assert_not_first_message_notification(self):
@@ -135,7 +135,7 @@ class TestChatControlSession(unittest.TestCase):
         self.assert_new_message_notification()
         notif = notify.notifications[-1]
         first = notif.first_unread
-        self.assert_(not first,
+        self.assertTrue(not first,
             'message was unexpectedly treated as a first message')
 
     # ----- tests -----
@@ -148,7 +148,7 @@ class TestChatControlSession(unittest.TestCase):
         self.receive_chat_msg(fjid, msgtxt)
 
         # session is created
-        self.assert_((jid in self.conn.sessions) and (
+        self.assertTrue((jid in self.conn.sessions) and (
             '123' in self.conn.sessions[jid]), 'session is not created')
         sess = self.conn.sessions[jid]['123']
 

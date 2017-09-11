@@ -74,13 +74,13 @@ class TestRosterWindow(unittest.TestCase):
 
                 c_model = self.roster.model[titerC]
                 # name can be stricked if contact or group is blocked
-#                self.assertEquals(contact.get_shown_name(), c_model[self.C_NAME],
+#                self.assertEqual(contact.get_shown_name(), c_model[self.C_NAME],
 #                        msg='Contact name missmatch')
-                self.assertEquals(contact.jid, c_model[self.C_JID],
+                self.assertEqual(contact.jid, c_model[self.C_JID],
                         msg='Jid missmatch')
 
                 if not self.roster.regroup:
-                    self.assertEquals(account, c_model[self.C_ACCOUNT],
+                    self.assertEqual(account, c_model[self.C_ACCOUNT],
                             msg='Account missmatch')
 
                 # Check for correct nesting
@@ -111,15 +111,15 @@ class TestRosterWindow(unittest.TestCase):
                 msg='Account iter is invalid')
 
         acc_model = self.roster.model[titerA]
-        self.assertEquals(acc_model[self.C_TYPE], 'account',
+        self.assertEqual(acc_model[self.C_TYPE], 'account',
                 msg='No account found')
 
         if not self.roster.regroup:
-            self.assertEquals(acc_model[self.C_ACCOUNT], acc,
+            self.assertEqual(acc_model[self.C_ACCOUNT], acc,
                     msg='Account not found')
 
             self_jid = app.get_jid_from_account(acc)
-            self.assertEquals(acc_model[self.C_JID], self_jid,
+            self.assertEqual(acc_model[self.C_JID], self_jid,
                     msg='Account JID not found in account row')
 
     def assert_model_is_in_sync(self):
@@ -139,7 +139,7 @@ class TestRosterWindow(unittest.TestCase):
 
                 # Contacts kept their info
                 contact = instances[0]
-                self.assertEquals(sorted(contact.groups), sorted(contacts[acc][jid]['groups']),
+                self.assertEqual(sorted(contact.groups), sorted(contacts[acc][jid]['groups']),
                         msg='Group Missmatch')
 
                 groups = contacts[acc][jid]['groups'] or ['General',]
