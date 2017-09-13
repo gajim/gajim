@@ -1294,7 +1294,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_name('Gajim')
         self.set_version(app.version)
         self.set_copyright('Copyright © 2003-2017 Gajim Team')
-        self.set_license_type(Gtk.License.GPL_3_0)
+        self.set_license_type(Gtk.License.GPL_3_0_ONLY)
         self.set_website('https://gajim.org/')
 
         gtk_ver = '%i.%i.%i' % (
