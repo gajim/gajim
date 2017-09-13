@@ -10,7 +10,7 @@ emoticons = OrderedDict([
         ('u263a.png', None),  # Category image
 
         # subgroup: face-positive
-        ('u1f600.png', [u'\U0001f600']),
+        ('u1f600.png', [u'\U0001f600', ':>']),
         ('u1f601.png', [u'\U0001f601']),
         ('u1f602.png', [u'\U0001f602', ':\'-)', ':\')']),
         ('u1f923.png', [u'\U0001f923']),
@@ -40,9 +40,9 @@ emoticons = OrderedDict([
         ('u1f60f.png', [u'\U0001f60f']),
         ('u1f623.png', [u'\U0001f623']),
         ('u1f625.png', [u'\U0001f625']),
-        ('u1f62e.png', [u'\U0001f62e']),
+        ('u1f62e.png', [u'\U0001f62e', '=-O', ':-O', ':O']),
         ('u1f910.png', [u'\U0001f910']),
-        ('u1f62f.png', [u'\U0001f62f']),
+        ('u1f62f.png', [u'\U0001f62f', ':o']),
         ('u1f62a.png', [u'\U0001f62a']),
         ('u1f62b.png', [u'\U0001f62b']),
         ('u1f634.png', [u'\U0001f634']),
@@ -57,7 +57,7 @@ emoticons = OrderedDict([
         ('u1f615.png', [u'\U0001f615']),
         ('u1f643.png', [u'\U0001f643']),
         ('u1f911.png', [u'\U0001f911']),
-        ('u1f632.png', [u'\U0001f632', '=-O', ':-O', ':O']),
+        ('u1f632.png', [u'\U0001f632']),
 
         # subgroup: face-negative
         ('u2639.png', [u'\u2639', ':-/', ':/', ':-\\', ':\\', ':-S', ':S', ':-[', ':[']),
