@@ -87,9 +87,9 @@ def load(path):
     def add_emoticon(codepoint_, sub, mod_list=None):
         pix = sub.get_pixbuf()
         for alternate in codepoint_:
-            codepoints[alternate.upper()] = pix
+            codepoints[alternate] = pix
             if pix not in pixbufs:
-                pixbufs[pix] = alternate.upper()
+                pixbufs[pix] = alternate
         if mod_list is not None:
             mod_list.append(pix)
         else:
