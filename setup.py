@@ -182,7 +182,7 @@ setup(
         'scripts/gajim',
         'scripts/gajim-history-manager',
         'scripts/gajim-remote' ],
-    packages = find_packages(),
+    packages = find_packages(exclude=["gajim.dev"]),
     package_data = {'gajim': package_data},
     data_files = data_files,
     install_requires=[
