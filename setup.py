@@ -171,7 +171,7 @@ setup(
     author = "Philipp Hörist, Yann Leboulanger",
     author_email = "gajim-devel@gajim.org",
     url = 'https://gajim.org',
-    license = 'GPL v3 or greater',
+    license = 'GPL v3',
     classifiers = [
         'Programming Language :: Python :: 3',
     ],
