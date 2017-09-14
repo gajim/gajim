@@ -137,22 +137,28 @@ class build(_build):
         _build.run(self)
 
 
+package_data_activities = ['data/activities/*/*/*.png']
 package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
                           'data/emoticons/*/*.png',
                           'data/emoticons/*/LICENSE']
 package_data_gui = ['data/gui/*.ui']
 package_data_icons = ['data/icons/hicolor/*/*/*.png']
 package_data_iconsets = ['data/iconsets/*/*/*.png']
+package_data_moods = ['data/moods/*/*.png']
 package_data_other = ['data/other/servers.xml']
-package_data_plugin = ['plugins/*/*']
+package_data_sounds = ['data/sounds/*.wav']
 package_data_style = ['data/style/gajim.css']
-package_data = (package_data_emoticons
+package_plugins_data = ['plugins/*/*']
+package_data = (package_data_activities
+                + package_data_emoticons
                 + package_data_gui
                 + package_data_icons
                 + package_data_iconsets
+                + package_data_moods
                 + package_data_other
-                + package_data_plugin
-                + package_data_style)
+                + package_data_sounds
+                + package_data_style
+                + package_plugins_data)
 
 
 # only install subdirectories of data
