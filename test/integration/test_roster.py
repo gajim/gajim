@@ -35,6 +35,14 @@ class TestRosterWindow(unittest.TestCase):
             app.connections[acc] = MockConnection(acc)
             app.contacts.add_account(acc)
 
+    def tearDown(self):
+        self.roster.window.destroy()
+        # Clean main loop
+        from gi.repository import GLib
+        mc = GLib.main_context_default()
+        while mc.pending():
+            mc.iteration()
+
     ### Custom assertions
     def assert_all_contacts_are_in_roster(self, acc):
         for jid in contacts[acc]:

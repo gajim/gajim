@@ -53,8 +53,18 @@ nb_errors = 0
 nb_failures = 0
 
 for mod in modules:
+    print("Now running: %s" % mod)
     suite = unittest.defaultTestLoader.loadTestsFromName(mod)
     result = unittest.TextTestRunner(verbosity=verbose).run(suite)
+    if use_x:
+        # Wait 1s to be sure all timeout_add will be called before we cleanup main loop
+        import time
+        time.sleep(0.5)
+        # Clean main loop
+        from gi.repository import GLib
+        mc = GLib.main_context_default()
+        while mc.pending():
+            mc.iteration()
     nb_errors += len(result.errors)
     nb_failures += len(result.failures)
 

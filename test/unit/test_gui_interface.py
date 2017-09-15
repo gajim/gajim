@@ -16,10 +16,15 @@ app.logger = MockLogger()
 
 from gajim.gui_interface import Interface
 
+from gi.repository import GLib
+
 class TestInterface(unittest.TestCase):
 
     def test_instantiation(self):
         ''' Test that we can proper initialize and do not fail on globals '''
+        def close_app():
+            app.app.quit()
+        GLib.idle_add(close_app)
         app.app.run()
 
     def test_links_regexp_entire(self):

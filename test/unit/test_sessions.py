@@ -22,12 +22,13 @@ from gajim.roster_window import RosterWindow
 
 from mock import Mock, expectParams
 from gajim_mocks import *
+from data import account1
 
 app.interface = MockInterface()
 
 
 # name to use for the test account
-account_name = 'test'
+account_name = account1
 
 class TestStanzaSession(unittest.TestCase):
     ''' Testclass for common/stanzasession.py '''
@@ -171,7 +172,7 @@ class TestChatControlSession(unittest.TestCase):
         jid = 'bct@necronomicorp.com'
         fjid = 'bct@necronomicorp.com/Gajim'
         msgtxt = 'testing two'
-        roster = RosterWindow(app.app)
+        app.interface.roster = RosterWindow(app.app)
 
         sess = self.conn.sessions[jid]['123']
         sess.control = MockChatControl(fjid, account_name)
@@ -190,6 +191,7 @@ class TestChatControlSession(unittest.TestCase):
         # message was printed to the control
         calls = sess.control.mockGetNamedCalls('print_conversation')
         self.assertEqual(1, len(calls))
+        app.interface.roster.window.destroy()
 
     #def test_received_3orphaned_control(self):
         #'''test receiving a message when a control that doesn't have a session

@@ -26,6 +26,8 @@ pluginsconfigdir = configdir + '/pluginsconfig'
 import builtins
 builtins._ = lambda x: x
 
+from gajim.common.contacts import LegacyContactsAPI
+
 def setup_env():
     # wipe config directory
     if os.path.isdir(configdir):
@@ -46,6 +48,8 @@ def setup_env():
 
     app.DATA_DIR = gajim_root + '/data'
     app.use_x = use_x
+    app.contacts = LegacyContactsAPI()
+    app.connections = {}
 
     if use_x:
         from gajim import gtkgui_helpers
