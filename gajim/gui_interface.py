@@ -1925,6 +1925,7 @@ class Interface:
 
     def init_emoticons(self):
         emot_theme = app.config.get('emoticons_theme')
+        ascii_emoticons = app.config.get('ascii_emoticons')
         if not emot_theme:
             return
 
@@ -1944,7 +1945,7 @@ class Interface:
                     transient_for=transient_for)
                 app.config.set('emoticons_theme', '')
                 return
-        if not emoticons.load(path):
+        if not emoticons.load(path, ascii_emoticons):
             dialogs.WarningDialog(
                     _('Emoticons disabled'),
                     _('Your configured emoticons theme could not be loaded.'
