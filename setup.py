@@ -173,7 +173,7 @@ data_files = data_files_app_icon
 setup(
     name = "gajim",
     description = 'A GTK+ Jabber client',
-    version=gajim.__version__,
+    version = gajim.__version__,
     author = "Philipp Hörist, Yann Leboulanger",
     author_email = "gajim-devel@gajim.org",
     url = 'https://gajim.org',
@@ -188,12 +188,13 @@ setup(
         'scripts/gajim',
         'scripts/gajim-history-manager',
         'scripts/gajim-remote' ],
-    packages = find_packages(exclude=["gajim.dev"]),
+    packages = find_packages(exclude=["gajim.dev", "test*"]),
     package_data = {'gajim': package_data},
     data_files = data_files,
-    install_requires=[
+    install_requires = [
           'dbus-python',
           'nbxmpp',
           'pyOpenSSL'
       ],
+      test_suite = 'test'
 )
