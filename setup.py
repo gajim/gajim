@@ -9,6 +9,7 @@ if sys.version_info[0] < 3:
 import codecs
 
 from setuptools import setup, find_packages
+from setuptools import Command
 from setuptools.command.build_py import build_py as _build
 from distutils import log
 from distutils.util import convert_path, newer
@@ -137,6 +138,26 @@ class build(_build):
         _build.run(self)
 
 
+class test(Command):
+    description = "Run all tests"
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        os.system("./test/runtests.py")
+
+class test_nogui(test):
+    description = "Run tests without GUI"
+
+    def run(self):
+        os.system("./test/runtests.py -n")
+
+
 package_data_activities = ['data/activities/*/*/*.png']
 package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
                           'data/emoticons/*/*.png',
@@ -183,6 +204,8 @@ setup(
     ],
     cmdclass = {
         'build_py': build,
+        'test': test,
+        'test_nogui': test_nogui,
     },
     scripts = [
         'scripts/gajim',
@@ -196,5 +219,4 @@ setup(
           'nbxmpp',
           'pyOpenSSL'
       ],
-      test_suite = 'test'
 )

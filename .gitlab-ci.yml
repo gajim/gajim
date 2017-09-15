@@ -9,7 +9,7 @@ stages:
 run-test:
   stage: test
   script:
-    - test/runtests.py -n
+    - python3 setup.py test_nogui
 
 run-pylint:
   stage: test
