@@ -240,6 +240,8 @@ class OptionsParser:
             self.update_config_to_016104()
         if old < [0, 16, 10, 5] and new >= [0, 16, 10, 5]:
             self.update_config_to_016105()
+        if old < [0, 16, 11, 0] and new >= [0, 16, 11, 1]:
+            self.update_config_to_016111()
 
         app.logger.init_vars()
         app.logger.attach_cache_database()
@@ -1012,3 +1014,18 @@ class OptionsParser:
         app.config.set('muc_restore_timeout', -1)
         app.config.set('restore_timeout', -1)
         app.config.set('version', '0.16.10.5')
+
+    def update_config_to_016111(self):
+        con = sqlite.connect(logger.CACHE_DB_PATH)
+        cur = con.cursor()
+        try:
+            cur.executescript(
+                    '''
+                    ALTER TABLE roster_entry ADD COLUMN 'avatar_sha' TEXT;
+                    '''
+            )
+            con.commit()
+        except sqlite.OperationalError:
+            log.exception('Error')
+        con.close()
+        app.config.set('version', '0.16.11.1')

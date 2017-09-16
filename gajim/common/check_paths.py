@@ -116,6 +116,7 @@ def create_cache_db():
                     name TEXT,
                     subscription INTEGER,
                     ask BOOLEAN,
+                    avatar_sha TEXT,
                     PRIMARY KEY (account_jid_id, jid_id)
             );
 

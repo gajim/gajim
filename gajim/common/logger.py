@@ -979,8 +979,11 @@ class Logger:
         if name is None:
             name = ''
 
-        self.cur.execute('REPLACE INTO roster_entry VALUES(?, ?, ?, ?, ?)',
-                (account_jid_id, jid_id, name,
+        self.cur.execute('''
+            REPLACE INTO roster_entry
+            (account_jid_id, jid_id, name, subscription, ask)
+            VALUES(?, ?, ?, ?, ?)''', (
+                account_jid_id, jid_id, name,
                 self.convert_human_subscription_values_to_db_api_values(sub),
                 bool(ask)))
         if commit:
