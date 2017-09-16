@@ -1,4 +1,4 @@
-iconsetdir = $(pkgdatadir)/data/iconsets
+iconsetdir = $(gajim_srcdir)/data/iconsets
 nobase_dist_iconset_DATA = \
 	$(srcdir)/*/16x16/* \
 	$(srcdir)/*/32x32/* \

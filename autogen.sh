@@ -3,7 +3,7 @@
   CONF_ARGS=""
 
   echo "[encoding: UTF-8]" > po/POTFILES.in \
-  && for p in `ls data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
+  && for p in `ls gajim/data/gui/*.ui`; do echo "[type: gettext/glade]$p" >> \
   po/POTFILES.in; done \
   && ls -1 data/org.gajim.Gajim.appdata.xml.in data/org.gajim.Gajim.desktop.in.in data/gajim-remote.desktop.in.in \
   gajim/*.py gajim/common/*.py gajim/command_system/*.py gajim/command_system/implementation/*.py gajim/common/zeroconf/*.py gajim/plugins/*.py | grep -v ipython_view.py >> \

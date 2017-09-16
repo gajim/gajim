@@ -46,13 +46,13 @@ def setup_env():
     import logging
     logging.basicConfig()
 
-    app.DATA_DIR = gajim_root + '/data'
+    app.DATA_DIR = gajim_root + '/gajim/data'
     app.use_x = use_x
     app.contacts = LegacyContactsAPI()
     app.connections = {}
 
     if use_x:
         from gajim import gtkgui_helpers
-        gtkgui_helpers.GUI_DIR = gajim_root + '/data/gui'
+        gtkgui_helpers.GUI_DIR = gajim_root + '/gajim/data/gui'
         from gajim.gajim import GajimApplication
         app.app = GajimApplication()
