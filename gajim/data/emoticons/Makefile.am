@@ -1,4 +1,4 @@
-emoticonsdir = $(pkgdatadir)/data/emoticons
+emoticonsdir = $(gajim_srcdir)/data/emoticons
 nobase_dist_emoticons_DATA = \
 	$(srcdir)/*/*.png \
 	$(srcdir)/*/LICENSE \

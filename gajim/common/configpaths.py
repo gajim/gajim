@@ -98,9 +98,11 @@ class ConfigPaths:
                 base = expand('~/.local/share')
             self.data_root = os.path.join(base, 'gajim')
 
-        basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
+        import pkg_resources
+        basedir = pkg_resources.resource_filename("gajim", ".")
         self.add('DATA', None, os.path.join(basedir, 'data'))
         self.add('GUI', None, os.path.join(basedir, 'data', 'gui'))
+        basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
         self.add('ICONS', None, os.path.join(basedir, 'icons'))
         self.add('HOME', None, os.path.expanduser('~'))
         self.add('PLUGINS_BASE', None, os.path.join(basedir, 'plugins'))
