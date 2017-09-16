@@ -235,7 +235,6 @@ control=None, gc_contact=None, is_anonymous=True):
     unblock_menuitem = xml.get_object('unblock_menuitem')
     ignore_menuitem = xml.get_object('ignore_menuitem')
     unignore_menuitem = xml.get_object('unignore_menuitem')
-    set_custom_avatar_menuitem = xml.get_object('set_custom_avatar_menuitem')
     # Subscription submenu
     subscription_menuitem = xml.get_object('subscription_menuitem')
     send_auth_menuitem, ask_auth_menuitem, revoke_auth_menuitem = \
@@ -339,7 +338,7 @@ control=None, gc_contact=None, is_anonymous=True):
     if app.config.get_per('accounts', account, 'is_zeroconf'):
         for item in (send_custom_status_menuitem, send_single_message_menuitem,
         invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
-        unignore_menuitem, set_custom_avatar_menuitem, subscription_menuitem,
+        unignore_menuitem, subscription_menuitem,
         manage_contact_menuitem, convert_to_gc_menuitem):
             item.set_no_show_all(True)
             item.hide()
@@ -450,9 +449,6 @@ control=None, gc_contact=None, is_anonymous=True):
         add_to_roster_menuitem.hide()
         add_to_roster_menuitem.set_no_show_all(True)
         subscription_menuitem.set_sensitive(False)
-
-    set_custom_avatar_menuitem.connect('activate',
-            roster.on_set_custom_avatar_activate, contact, account)
 
     # Hide items when it's self contact row
     if our_jid:

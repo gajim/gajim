@@ -779,6 +779,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 0
         self.time_to_reconnect = None
         self.privacy_rules_supported = False
+        self.avatar_presence_sent = False
         if on_purpose:
             self.sm = Smacks(self)
         if self.connection:
@@ -1778,7 +1779,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             show='invisible'))
         if initial:
             # ask our VCard
-            self.request_vcard(None)
+            self.request_vcard(self._on_own_avatar_received)
 
             # Get bookmarks from private namespace
             self.get_bookmarks()

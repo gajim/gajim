@@ -28,6 +28,14 @@ class OptionType(IntEnum):
     ACTION = 3
     DIALOG = 4
 
+class AvatarSize(IntEnum):
+    ROSTER = 32
+    NOTIFICATION = 48
+    CHAT = 52
+    PROFILE = 64
+    TOOLTIP = 125
+    VCARD = 200
+
 
 THANKS = u"""\
 Alexander Futász

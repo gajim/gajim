@@ -27,8 +27,11 @@ from gajim.common import app
 #from common.connection_handlers import PEP_CONFIG
 PEP_CONFIG = 'pep_config'
 from gajim.common import ged
+from gajim.common.nec import NetworkEvent
 from gajim.common.connection_handlers_events import PubsubReceivedEvent
 from gajim.common.connection_handlers_events import PubsubBookmarksReceivedEvent
+from gajim.common.connection_handlers_events import PubsubAvatarReceivedEvent
+
 import logging
 log = logging.getLogger('gajim.c.pubsub')
 
@@ -36,8 +39,11 @@ class ConnectionPubSub:
     def __init__(self):
         self.__callbacks = {}
         app.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
+        app.nec.register_incoming_event(PubsubAvatarReceivedEvent)
         app.ged.register_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
+        app.ged.register_event_handler('pubsub-avatar-received',
+            ged.CORE, self._nec_pubsub_avatar_received)
 
     def cleanup(self):
         app.ged.remove_event_handler('pubsub-bookmarks-received',
@@ -97,7 +103,7 @@ class ConnectionPubSub:
 
         self.connection.send(query)
 
-    def send_pb_retrieve(self, jid, node, cb=None, *args, **kwargs):
+    def send_pb_retrieve(self, jid, node, item_id=None, cb=None, *args, **kwargs):
         """
         Get items from a node
         """
@@ -106,6 +112,8 @@ class ConnectionPubSub:
         query = nbxmpp.Iq('get', to=jid)
         r = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
         r = r.addChild('items', {'node': node})
+        if item_id is not None:
+            r.addChild('item', {'id': item_id})
         id_ = self.connection.send(query)
 
         if cb:
@@ -201,6 +209,28 @@ class ConnectionPubSub:
                 self.bookmarks.append(bm)
         # We got bookmarks from pubsub, now get those from xml to merge them
         self.get_bookmarks(storage_type='xml')
+
+    def _nec_pubsub_avatar_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
+        if obj.jid is None:
+            jid = self.get_own_jid().getStripped()
+        else:
+            jid = obj.jid.getStripped()
+
+        app.log('avatar').info(
+            'Received Avatar (Pubsub): %s %s', jid, obj.sha)
+        app.interface.save_avatar(obj.data)
+
+        if self.get_own_jid().bareMatch(jid):
+            app.config.set_per('accounts', self.name, 'avatar_sha', obj.sha)
+        else:
+            own_jid = self.get_own_jid().getStripped()
+            app.logger.set_avatar_sha(own_jid, jid, obj.sha)
+            app.contacts.set_avatar(self.name, jid, obj.sha)
+
+        app.interface.update_avatar(self.name, jid)
 
     def _PubSubErrorCB(self, conn, stanza):
         log.debug('_PubsubErrorCB')

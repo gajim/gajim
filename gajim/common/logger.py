@@ -42,7 +42,6 @@ from enum import IntEnum, unique
 
 from gajim.common import exceptions
 from gajim.common import app
-from gajim.common import ged
 
 import sqlite3 as sqlite
 
@@ -998,7 +997,7 @@ class Logger:
 
         # First we fill data with roster_entry informations
         self.cur.execute('''
-                SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask
+                SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask, re.avatar_sha
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
         for row in self.cur:
@@ -1006,6 +1005,7 @@ class Logger:
             jid = row.jid
             name = row.name
             data[jid] = {}
+            data[jid]['avatar_sha'] = row.avatar_sha
             if name:
                 data[jid]['name'] = name
             else:
@@ -1135,3 +1135,25 @@ class Logger:
         self._timeout_commit()
 
         return lastrowid
+
+    def set_avatar_sha(self, account_jid, jid, sha=None):
+        """
+        Set the avatar sha of a jid on an account
+
+        :param account_jid: The jid of the account
+
+        :param jid:         The jid that belongs to the avatar
+
+        :param sha:         The sha of the avatar
+
+        """
+
+        account_jid_id = self.get_jid_id(account_jid)
+        jid_id = self.get_jid_id(jid)
+
+        sql = '''
+            UPDATE roster_entry SET avatar_sha = ?
+            WHERE account_jid_id = ? AND jid_id = ?
+            '''
+        self.con.execute(sql, (sha, account_jid_id, jid_id))
+        self._timeout_commit()

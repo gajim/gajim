@@ -34,6 +34,7 @@
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 import base64
 import time
 import locale
@@ -46,37 +47,9 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import Q_
+from gajim.common.const import AvatarSize
 
 # log = logging.getLogger('gajim.vcard')
-
-def get_avatar_pixbuf_encoded_mime(photo):
-    """
-    Return the pixbuf of the image
-
-    Photo is a dictionary containing PHOTO information.
-    """
-    if not isinstance(photo, dict):
-        return None, None, None
-    img_decoded = None
-    avatar_encoded = None
-    avatar_mime_type = None
-    if 'BINVAL' in photo:
-        img_encoded = photo['BINVAL']
-        avatar_encoded = img_encoded
-        try:
-            img_decoded = base64.b64decode(img_encoded.encode('utf-8'))
-        except Exception:
-            pass
-    if img_decoded:
-        if 'TYPE' in photo:
-            avatar_mime_type = photo['TYPE']
-            pixbuf = gtkgui_helpers.get_pixbuf_from_data(img_decoded)
-        else:
-            pixbuf, avatar_mime_type = gtkgui_helpers.get_pixbuf_from_data(
-                                            img_decoded, want_type=True)
-    else:
-        pixbuf = None
-    return pixbuf, avatar_encoded, avatar_mime_type
 
 class VcardWindow:
     """
@@ -92,6 +65,7 @@ class VcardWindow:
         self.contact = contact
         self.account = account
         self.gc_contact = gc_contact
+        self.avatar = None
 
         # Get real jid
         if gc_contact:
@@ -122,8 +96,6 @@ class VcardWindow:
                 image.show()
                 self.xml.get_object('custom_avatar_label').show()
                 break
-        self.avatar_mime_type = None
-        self.avatar_encoded = None
         self.vcard_arrived = False
         self.os_info_arrived = False
         self.entity_time_arrived = False
@@ -136,8 +108,6 @@ class VcardWindow:
             self.set_os_info)
         app.ged.register_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
-        app.ged.register_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
 
         self.fill_jabber_page()
         annotations = app.connections[self.account].annotations
@@ -181,8 +151,6 @@ class VcardWindow:
             self.set_os_info)
         app.ged.remove_event_handler('time-result-received', ged.GUI1,
             self.set_entity_time)
-        app.ged.remove_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
 
     def on_vcard_information_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -198,9 +166,17 @@ class VcardWindow:
         if event.button == 3: # right click
             menu = Gtk.Menu()
             menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
+            if self.gc_contact:
+                sha = self.gc_contact.avatar_sha
+                name = self.gc_contact.get_shown_name()
+            else:
+                sha = app.contacts.get_avatar_sha(
+                    self.account, self.contact.jid)
+                name = self.contact.get_shown_name()
+            if sha is None:
+                sha = self.avatar
             menuitem.connect('activate',
-                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.contact.get_shown_name())
+                gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
@@ -229,17 +205,23 @@ class VcardWindow:
         for i in vcard.keys():
             if i == 'PHOTO' and self.xml.get_object('information_notebook').\
             get_n_pages() > 4:
-                pixbuf, self.avatar_encoded, self.avatar_mime_type = \
-                        get_avatar_pixbuf_encoded_mime(vcard[i])
-                image = self.xml.get_object('PHOTO_image')
-                image.show()
-                self.xml.get_object('user_avatar_label').show()
-                if not pixbuf:
-                    image.set_from_icon_name('stock_person',
-                            Gtk.IconSize.DIALOG)
+                if 'BINVAL' not in vcard[i]:
                     continue
-                pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+                photo_encoded = vcard[i]['BINVAL']
+                if photo_encoded == '':
+                    continue
+                photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
+                pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
+                if pixbuf is None:
+                    continue
+                pixbuf = pixbuf.scale_simple(
+                    AvatarSize.PROFILE, AvatarSize.PROFILE,
+                    GdkPixbuf.InterpType.BILINEAR)
+                image = self.xml.get_object('PHOTO_image')
                 image.set_from_pixbuf(pixbuf)
+                image.show()
+                self.avatar = pixbuf
+                self.xml.get_object('user_avatar_label').show()
                 continue
             if i in ('ADR', 'TEL', 'EMAIL'):
                 for entry in vcard[i]:
@@ -276,19 +258,9 @@ class VcardWindow:
                 widget.set_text('')
         self.xml.get_object('DESC_textview').get_buffer().set_text('')
 
-
-    def _nec_vcard_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.resource:
-            # It's a muc occupant vcard
-            if obj.fjid != self.contact.jid:
-                return
-        else:
-            if obj.jid != self.contact.jid:
-                return
+    def _nec_vcard_received(self, jid, resource, room, vcard):
         self.clear_values()
-        self.set_values(obj.vcard_dict)
+        self.set_values(vcard)
 
     def set_os_info(self, obj):
         if obj.conn.name != self.account:
@@ -492,12 +464,12 @@ class VcardWindow:
 
         self.fill_status_label()
 
+        con = app.connections[self.account]
         if self.gc_contact:
-            # If we know the real jid, remove the resource from vcard request
-            app.connections[self.account].request_vcard(self.real_jid_for_vcard,
-                    self.gc_contact.get_full_jid())
+            con.request_vcard(self._nec_vcard_received,
+                              self.gc_contact.get_full_jid(), room=True)
         else:
-            app.connections[self.account].request_vcard(self.contact.jid)
+            con.request_vcard(self._nec_vcard_received, self.contact.jid)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -512,9 +484,6 @@ class ZeroconfVcardWindow:
         self.contact = contact
         self.account = account
         self.is_fake = is_fake
-
-    #       self.avatar_mime_type = None
-    #       self.avatar_encoded = None
 
         self.fill_contact_page()
         self.fill_personal_page()
@@ -538,7 +507,7 @@ class ZeroconfVcardWindow:
             menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             menuitem.connect('activate',
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.jid, self.contact.get_shown_name())
+                    self.contact.avatar_sha, self.contact.get_shown_name())
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu

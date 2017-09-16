@@ -47,7 +47,7 @@ class MockConnection(Mock, ConnectionHandlers):
 
         app.connections[account] = self
 
-    def request_vcard(self, jid):
+    def request_vcard(self, *args):
         pass
 
 class MockWindow(Mock):

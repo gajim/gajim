@@ -94,7 +94,7 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    our_chatstate=None, chatstate=None, idle_time=None):
+    our_chatstate=None, chatstate=None, idle_time=None, avatar_sha=None):
         if not isinstance(jid, str):
             print('no str')
         if groups is None:
@@ -105,6 +105,7 @@ class Contact(CommonContact):
 
         self.contact_name = '' # nick choosen by contact
         self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
+        self.avatar_sha = avatar_sha
 
         self.sub = sub
         self.ask = ask
@@ -182,7 +183,7 @@ class GC_Contact(CommonContact):
 
     def __init__(self, room_jid, account, name='', show='', status='', role='',
     affiliation='', jid='', resource='', our_chatstate=None,
-    chatstate=None):
+    chatstate=None, avatar_sha=None):
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
             our_chatstate, chatstate)
@@ -190,6 +191,7 @@ class GC_Contact(CommonContact):
         self.room_jid = room_jid
         self.role = role
         self.affiliation = affiliation
+        self.avatar_sha = avatar_sha
 
     def get_full_jid(self):
         return self.room_jid + '/' + self.name
@@ -197,13 +199,16 @@ class GC_Contact(CommonContact):
     def get_shown_name(self):
         return self.name
 
+    def get_avatar(self, size=None):
+        return common.app.interface.get_avatar(self.avatar_sha, size)
+
     def as_contact(self):
         """
         Create a Contact instance from this GC_Contact instance
         """
         return Contact(jid=self.get_full_jid(), account=self.account,
             name=self.name, groups=[], show=self.show, status=self.status,
-            sub='none', client_caps=self.client_caps)
+            sub='none', client_caps=self.client_caps, avatar_sha=self.avatar_sha)
 
 
 class LegacyContactsAPI:
@@ -245,7 +250,8 @@ class LegacyContactsAPI:
 
     def create_contact(self, jid, account, name='', groups=None, show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
-    client_caps=None, our_chatstate=None, chatstate=None, idle_time=None):
+    client_caps=None, our_chatstate=None, chatstate=None, idle_time=None,
+    avatar_sha=None):
         if groups is None:
             groups = []
         # Use Account object if available
@@ -254,7 +260,7 @@ class LegacyContactsAPI:
             show=show, status=status, sub=sub, ask=ask, resource=resource,
             priority=priority, keyID=keyID, client_caps=client_caps,
             our_chatstate=our_chatstate, chatstate=chatstate,
-            idle_time=idle_time)
+            idle_time=idle_time, avatar_sha=avatar_sha)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
@@ -283,7 +289,7 @@ class LegacyContactsAPI:
             resource=contact.resource, priority=contact.priority,
             keyID=contact.keyID, client_caps=contact.client_caps,
             our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
-            idle_time=contact.idle_time)
+            idle_time=contact.idle_time, avatar_sha=contact.avatar_sha)
 
     def add_contact(self, account, contact):
         if account not in self._accounts:
@@ -305,6 +311,15 @@ class LegacyContactsAPI:
 
     def get_contact(self, account, jid, resource=None):
         return self._accounts[account].contacts.get_contact(jid, resource=resource)
+
+    def get_avatar(self, account, jid, size=None):
+        return self._accounts[account].contacts.get_avatar(jid, size)
+
+    def get_avatar_sha(self, account, jid):
+        return self._accounts[account].contacts.get_avatar_sha(jid)
+
+    def set_avatar(self, account, jid, sha):
+        self._accounts[account].contacts.set_avatar(jid, sha)
 
     def iter_contacts(self, account):
         for contact in self._accounts[account].contacts.iter_contacts():
@@ -395,10 +410,10 @@ class LegacyContactsAPI:
             raise AttributeError(attr_name)
 
     def create_gc_contact(self, room_jid, account, name='', show='', status='',
-            role='', affiliation='', jid='', resource=''):
+            role='', affiliation='', jid='', resource='', avatar_sha=None):
         account = self._accounts.get(account, account) # Use Account object if available
         return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
-                resource)
+                resource, avatar_sha=avatar_sha)
 
     def add_gc_contact(self, account, gc_contact):
         return self._accounts[account].gc_contacts.add_gc_contact(gc_contact)
@@ -423,6 +438,12 @@ class LegacyContactsAPI:
 
     def get_nb_role_total_gc_contacts(self, account, room_jid, role):
         return self._accounts[account].gc_contacts.get_nb_role_total_gc_contacts(room_jid, role)
+
+    def set_gc_avatar(self, account, room_jid, nick, sha):
+        contact = self.get_gc_contact(account, room_jid, nick)
+        if contact is None:
+            return
+        contact.avatar_sha = sha
 
 
 class Contacts():
@@ -489,6 +510,33 @@ class Contacts():
                 if c.resource == resource:
                     return c
             return self._contacts[jid][0]
+
+    def get_avatar(self, jid, size=None):
+        if jid not in self._contacts:
+            return None
+
+        for resource in self._contacts[jid]:
+            if resource.avatar_sha is None:
+                continue
+            avatar = common.app.interface.get_avatar(resource.avatar_sha, size)
+            if avatar is None:
+                self.set_avatar(jid, None)
+            return avatar
+
+    def get_avatar_sha(self, jid):
+        if jid not in self._contacts:
+            return None
+
+        for resource in self._contacts[jid]:
+            if resource.avatar_sha is not None:
+                return resource.avatar_sha
+        return None
+
+    def set_avatar(self, jid, sha):
+        if jid not in self._contacts:
+            return
+        for resource in self._contacts[jid]:
+            resource.avatar_sha = sha
 
     def iter_contacts(self):
         for jid in list(self._contacts.keys()):

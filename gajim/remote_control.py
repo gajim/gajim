@@ -592,24 +592,6 @@ class SignalObject(dbus.service.Object):
                 return
             app.interface.handle_event(account, jid, event.type_)
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='a{sv}')
-    def contact_info(self, jid):
-        """
-        Get vcard info for a contact. Return cached value of the vcard
-        """
-        if not isinstance(jid, str):
-            jid = str(jid)
-        if not jid:
-            raise dbus_support.MissingArgument()
-        jid = self._get_real_jid(jid)
-
-        cached_vcard = list(app.connections.values())[0].get_cached_vcard(jid)
-        if cached_vcard:
-            return get_dbus_struct(cached_vcard)
-
-        # return empty dict
-        return DBUS_DICT_SV()
-
     @dbus.service.method(INTERFACE, in_signature='', out_signature='as')
     def list_accounts(self):
         """
@@ -891,17 +873,22 @@ class SignalObject(dbus.service.Object):
         if not invalid_file and filesize < 16384:
             with open(picture, 'rb') as fd:
                 data = fd.read()
+            sha = app.interface.save_avatar(data, publish=True)
+            if sha is None:
+                return
+            app.config.set_per('accounts', self.name, 'avatar_sha', sha)
+            data = app.interface.get_avatar(sha, publish=True)
             avatar = base64.b64encode(data).decode('utf-8')
             avatar_mime_type = mimetypes.guess_type(picture)[0]
-            vcard={}
+            vcard = {}
             vcard['PHOTO'] = {'BINVAL': avatar}
             if avatar_mime_type:
                 vcard['PHOTO']['TYPE'] = avatar_mime_type
             if account:
-                app.connections[account].send_vcard(vcard)
+                app.connections[account].send_vcard(vcard, sha)
             else:
                 for acc in app.connections:
-                    app.connections[acc].send_vcard(vcard)
+                    app.connections[acc].send_vcard(vcard, sha)
 
     @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
     def join_room(self, room_jid, nick, password, account):

@@ -38,7 +38,7 @@ from datetime import datetime
 from datetime import timedelta
 
 from gajim import gtkgui_helpers
-
+from gajim.common.const import AvatarSize
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import Q_
@@ -311,8 +311,9 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
 class GCTooltip(Gtk.Window):
     # pylint: disable=E1101
-    def __init__(self, parent):
+    def __init__(self, account, parent):
         Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
+        self.account = account
         self.row = None
         self.set_title('tooltip')
         self.set_border_width(3)
@@ -379,17 +380,14 @@ class GCTooltip(Gtk.Window):
             self.affiliation.show()
 
         # Avatar
-        puny_name = helpers.sanitize_filename(contact.name)
-        puny_room = helpers.sanitize_filename(contact.room_jid)
-        file_ = helpers.get_avatar_path(os.path.join(app.AVATAR_PATH,
-            puny_room, puny_name))
-        if file_:
-            with open(file_, 'rb') as file_data:
-                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
-            pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-            self.avatar.set_from_pixbuf(pix)
-            self.avatar.show()
-            self.fillelement.show()
+        if contact.avatar_sha is not None:
+            app.log('avatar').debug(
+                'Load GCTooltip: %s %s', contact.name, contact.avatar_sha)
+            pixbuf = app.interface.get_avatar(contact.avatar_sha, AvatarSize.TOOLTIP)
+            if pixbuf is not None:
+                self.avatar.set_from_pixbuf(pixbuf)
+                self.avatar.show()
+                self.fillelement.show()
 
     @staticmethod
     def colorize_affiliation(affiliation):
@@ -662,25 +660,22 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self._set_idle_time(contact)
 
         # Avatar
-        puny_jid = helpers.sanitize_filename(self.prim_contact.jid)
-        file_ = helpers.get_avatar_path(os.path.join(app.AVATAR_PATH,
-            puny_jid))
-        if file_:
-            with open(file_, 'rb') as file_data:
-                pix = gtkgui_helpers.get_pixbuf_from_data(file_data.read())
-            pix = gtkgui_helpers.get_scaled_pixbuf(pix, 'tooltip')
-            self.avatar.set_from_pixbuf(pix)
-            self.avatar.show()
+        pixbuf = app.contacts.get_avatar(
+            account, self.prim_contact.jid, AvatarSize.TOOLTIP)
+        if pixbuf is None:
+            return
+        self.avatar.set_from_pixbuf(pixbuf)
+        self.avatar.show()
 
-            # Sets the Widget that is at the bottom to expand.
-            # This is needed in case the Picture takes more Space then the Labels
-            i = 1
-            while i < 15:
-                if self.tooltip_grid.get_child_at(0, i):
-                    if self.tooltip_grid.get_child_at(0, i).get_visible():
-                        self.last_widget = self.tooltip_grid.get_child_at(0, i)
-                i += 1
-            self.last_widget.set_vexpand(True)
+        # Sets the Widget that is at the bottom to expand.
+        # This is needed in case the Picture takes more Space then the Labels
+        i = 1
+        while i < 15:
+            if self.tooltip_grid.get_child_at(0, i):
+                if self.tooltip_grid.get_child_at(0, i).get_visible():
+                    self.last_widget = self.tooltip_grid.get_child_at(0, i)
+            i += 1
+        self.last_widget.set_vexpand(True)
 
     def _append_pep_info(self, contact):
         """
