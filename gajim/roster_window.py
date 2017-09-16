@@ -1052,7 +1052,8 @@ class RosterWindow:
             account_name = _('Merged accounts')
             accounts = []
         else:
-            account_name = account
+            acclabel = app.config.get_per('accounts', account, 'account_label')
+            account_name = acclabel or account
             accounts = [account]
 
         if account in self.collapsed_rows and \
@@ -3229,7 +3230,7 @@ class RosterWindow:
 
     def on_edit_account(self, widget, account):
         if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].window.present()
+            app.interface.instances['accounts'].present()
         else:
             app.interface.instances['accounts'] = config.AccountsWindow()
         app.interface.instances['accounts'].select_account(account)

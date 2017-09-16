@@ -319,6 +319,7 @@ class GajimApplication(Gtk.Application):
     def add_actions(self):
         ''' Build Application Actions '''
         from gajim.app_actions import AppActions
+        from gajim.common import app
         action = AppActions(self)
 
         self.account_actions = [
@@ -339,12 +340,30 @@ class GajimApplication(Gtk.Application):
             ('-update-motd', action.on_update_motd, 'online', 's'),
             ('-delete-motd', action.on_delete_motd, 'online', 's'),
             ('-activate-bookmark',
-                action.on_activate_bookmark, 'online', 'a{sv}')
+                action.on_activate_bookmark, 'online', 'a{sv}'),
+            ('-import-contacts', action.on_import_contacts, 'online', 's')
         ]
+
+        # General Stateful Actions
+
+        act = Gio.SimpleAction.new_stateful(
+            'merge', None,
+            GLib.Variant.new_boolean(app.config.get('mergeaccounts')))
+        act.connect('change-state', action.on_merge_accounts)
+        self.add_action(act)
+
+        act = Gio.SimpleAction.new_stateful(
+            'agent', None,
+            GLib.Variant.new_boolean(app.config.get('use_gpg_agent')))
+        self.add_action(act)
+
+        # General Actions
 
         self.general_actions = [
             ('quit', action.on_quit),
             ('accounts', action.on_accounts),
+            ('add-account', action.on_add_account),
+            ('manage-proxies', action.on_manage_proxies),
             ('bookmarks', action.on_manage_bookmarks),
             ('history-manager', action.on_history_manager),
             ('preferences', action.on_preferences),
@@ -364,8 +383,7 @@ class GajimApplication(Gtk.Application):
             act.connect("activate", func)
             self.add_action(act)
 
-        from gajim.common import app
-        accounts_list = sorted(app.contacts.get_accounts())
+        accounts_list = sorted(app.config.get_per('accounts'))
         if not accounts_list:
             return
         if len(accounts_list) > 1:

@@ -48,6 +48,8 @@ from random import randrange
 from gajim.common import pep
 from gajim.common import ged
 from gajim.common import const
+from gajim.options_dialog import OptionsDialog
+from gajim.common.const import Option, OptionKind, OptionType
 
 try:
     from gajim import gtkspell
@@ -2675,7 +2677,7 @@ class SynchroniseSelectAccountDialog:
         self.account = account
         self.xml = gtkgui_helpers.get_gtk_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
-        self.dialog.set_transient_for(app.interface.instances['accounts'].window)
+        self.dialog.set_transient_for(app.interface.instances['accounts'])
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
         model = Gtk.ListStore(str, str, bool)
         self.accounts_treeview.set_model(model)
@@ -2730,6 +2732,10 @@ class SynchroniseSelectAccountDialog:
                 # if we showed ErrorDialog, there will not be dialog instance
                 return
         self.dialog.destroy()
+
+    @staticmethod
+    def on_destroy(widget):
+        del app.interface.instances['import_contacts']
 
 class SynchroniseSelectContactsDialog:
     def __init__(self, account, remote_account):
@@ -3323,6 +3329,8 @@ class XMLConsoleWindow(Gtk.Window):
             setattr(self, obj, self.builder.get_object(obj))
 
         self.set_titlebar(self.headerbar)
+        jid = app.get_jid_from_account(account)
+        self.headerbar.set_subtitle(jid)
         self.set_default_size(600, 600)
         self.add(self.box)
 
@@ -3434,26 +3442,30 @@ class XMLConsoleWindow(Gtk.Window):
 
     def on_filter_options(self, *args):
         options = [
-            SwitchOption('Presence', self.presence,
-                         self.on_option,
-                         'presence'),
-            SwitchOption('Message', self.message,
-                         self.on_option,
-                         'message'),
-            SwitchOption('Iq', self.iq,
-                         self.on_option,
-                         'iq'),
-            SwitchOption('Stream\nManagement', self.stream,
-                         self.on_option,
-                         'stream'),
-            SwitchOption('In', self.incoming,
-                         self.on_option,
-                         'incoming'),
-            SwitchOption('Out', self.outgoing,
-                         self.on_option,
-                         'outgoing')]
+            Option(OptionKind.SWITCH, 'Presence',
+                    OptionType.BOOL, self.presence,
+                    callback=self.on_option, data='presence'),
 
-        OptionsDialog(self, 'Filter', options)
+            Option(OptionKind.SWITCH, 'Message',
+                    OptionType.BOOL, self.message,
+                    callback=self.on_option, data='message'),
+
+            Option(OptionKind.SWITCH, 'Iq', OptionType.BOOL, self.iq,
+                    callback=self.on_option, data='iq'),
+
+            Option(OptionKind.SWITCH, 'Stream\nManagement',
+                    OptionType.BOOL, self.stream,
+                    callback=self.on_option, data='stream'),
+
+            Option(OptionKind.SWITCH, 'In', OptionType.BOOL, self.incoming,
+                    callback=self.on_option, data='incoming'),
+
+            Option(OptionKind.SWITCH, 'Out', OptionType.BOOL, self.outgoing,
+                    callback=self.on_option, data='outgoing'),
+            ]
+
+        OptionsDialog(self, 'Filter', Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                      options, self.account)
 
     def on_clear(self, *args):
         buffer_ = self.textview.get_buffer().set_text('')
@@ -3468,13 +3480,12 @@ class XMLConsoleWindow(Gtk.Window):
     def on_enable(self, switch, param):
         self.enabled = switch.get_active()
 
-    def on_option(self, switch, param, *user_data):
-        kind = user_data[0]
-        setattr(self, kind, switch.get_active())
-        value = not switch.get_active()
+    def on_option(self, value, data):
+        setattr(self, data, value)
+        value = not value
         table = self.textview.get_buffer().get_tag_table()
-        tag = table.lookup(kind)
-        if kind in ('incoming', 'outgoing'):
+        tag = table.lookup(data)
+        if data in ('incoming', 'outgoing'):
             if value:
                 tag.set_priority(table.get_size() - 1)
             else:
@@ -3521,58 +3532,6 @@ class XMLConsoleWindow(Gtk.Window):
 
         if at_the_end:
             GLib.idle_add(gtkgui_helpers.scroll_to_end, self.scrolled)
-
-
-class OptionsDialog(Gtk.Dialog):
-    def __init__(self, parent, title, options):
-        Gtk.Dialog.__init__(self, title, parent,
-                            Gtk.DialogFlags.DESTROY_WITH_PARENT)
-        self.set_name('OptionsDialog')
-        self.set_resizable(False)
-        self.set_default_size(250, -1)
-
-        self.remove(self.get_content_area())
-
-        listbox = Gtk.ListBox()
-        listbox.set_hexpand(True)
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-
-        for option in options:
-            listbox.add(option)
-
-        self.add(listbox)
-
-        self.show_all()
-        listbox.connect('row-activated', self.on_row_activated)
-
-    def on_row_activated(self, listbox, row):
-        row.get_child().set_switch_state()
-
-
-class SwitchOption(Gtk.Grid):
-    def __init__(self, label, state, callback, *user_data):
-        Gtk.Grid.__init__(self)
-        self.set_column_spacing(6)
-
-        label = Gtk.Label(label=label)
-        label.set_hexpand(True)
-        label.set_halign(Gtk.Align.START)
-
-        self.switch = Gtk.Switch()
-        self.switch.set_active(state)
-        self.switch.connect("notify::active", callback, *user_data)
-        self.switch.set_hexpand(True)
-        self.switch.set_halign(Gtk.Align.END)
-        self.switch.set_valign(Gtk.Align.CENTER)
-
-        self.add(label)
-        self.add(self.switch)
-        self.show_all()
-
-    def set_switch_state(self):
-        state = self.switch.get_active()
-        self.switch.set_active(not state)
-      
 
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
@@ -4580,7 +4539,7 @@ class ClientCertChooserDialog(FileChooserDialog):
 
         FileChooserDialog.__init__(self,
             title_text=_('Choose Client Cert #PCKS12'),
-            transient_for=app.interface.instances['accounts'].window,
+            transient_for=app.interface.instances['accounts'],
             action=Gtk.FileChooserAction.OPEN,
             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
             Gtk.STOCK_OPEN, Gtk.ResponseType.OK),

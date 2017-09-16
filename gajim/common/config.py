@@ -325,6 +325,7 @@ class Config:
     __options_per_key = {
             'accounts': ({
                     'name': [ opt_str, '', '', True ],
+                    'account_label': [ opt_str, '', '', False ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
                     'client_cert': [ opt_str, '', '', True ],

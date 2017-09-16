@@ -107,15 +107,16 @@ def add_image_to_button(button, icon_name):
     button.set_image(img)
 
 def get_image_button(icon_name, tooltip, toggle=False):
-    icon = get_icon_pixmap(icon_name)
-    image = Gtk.Image()
-    image.set_from_pixbuf(icon)
     if toggle:
         button = Gtk.ToggleButton()
+        icon = get_icon_pixmap(icon_name)
+        image = Gtk.Image()
+        image.set_from_pixbuf(icon)
+        button.set_image(image)
     else:
-        button = Gtk.Button()
+        button = Gtk.Button.new_from_icon_name(
+            icon_name, Gtk.IconSize.MENU)
     button.set_tooltip_text(_(tooltip))
-    button.set_image(image)
     return button
 
 GUI_DIR = os.path.join(app.DATA_DIR, 'gui')

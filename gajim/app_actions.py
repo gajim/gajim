@@ -25,10 +25,12 @@ from gajim.common.exceptions import GajimGeneralException
 from gi.repository import Gtk
 import sys
 import os
+
 from gajim import config
 from gajim import dialogs
 from gajim import features_window
 from gajim import shortcuts_window
+from gajim import accounts_window
 import gajim.plugins.gui
 from gajim import history_window
 from gajim import disco
@@ -57,10 +59,10 @@ class AppActions():
             interface.instances['plugins'] = gajim.plugins.gui.PluginsWindow()
 
     def on_accounts(self, action, param):
-        if 'accounts' in interface.instances:
-            interface.instances['accounts'].window.present()
+        if 'accounts' in app.interface.instances:
+            app.interface.instances['accounts'].present()
         else:
-            interface.instances['accounts'] = config.AccountsWindow()
+            app.interface.instances['accounts'] = accounts_window.AccountsWindow()
 
     def on_history_manager(self, action, param):
         from gajim.history_manager import HistoryManager
@@ -131,6 +133,35 @@ class AppActions():
     def on_single_message(self, action, param):
         dialogs.SingleMessageWindow(param.get_string(), action='send')
 
+    def on_merge_accounts(self, action, param):
+        action.set_state(param)
+        value = param.get_boolean()
+        app.config.set('mergeaccounts', value)
+        if len(app.connections) >= 2: # Do not merge accounts if only one active
+            app.interface.roster.regroup = value
+        else:
+            app.interface.roster.regroup = False
+        app.interface.roster.setup_and_draw_roster()
+
+    def on_use_pgp_agent(self, action, param):
+        action.set_state(param)
+        app.config.set('use_gpg_agent', param.get_boolean())
+
+    def on_add_account(self, action, param):
+        if 'account_creation_wizard' in app.interface.instances:
+            app.interface.instances['account_creation_wizard'].window.present()
+        else:
+            app.interface.instances['account_creation_wizard'] = \
+               config.AccountCreationWizardWindow()
+
+    def on_import_contacts(self, action, param):
+        account = param.get_string()
+        if 'import_contacts' in app.interface.instances:
+            app.interface.instances['import_contacts'].dialog.present()
+        else:
+            app.interface.instances['import_contacts'] = \
+                dialogs.SynchroniseSelectAccountDialog(account)
+
     # Advanced Actions
 
     def on_archiving_preferences(self, action, param):
@@ -173,6 +204,13 @@ class AppActions():
         else:
             interface.instances[account]['xml_console'] = \
                 dialogs.XMLConsoleWindow(account)
+
+    def on_manage_proxies(self, action, param):
+        if 'manage_proxies' in app.interface.instances:
+            app.interface.instances['manage_proxies'].window.present()
+        else:
+            app.interface.instances['manage_proxies'] = \
+                config.ManageProxiesWindow(interface.roster.window)
 
     # Admin Actions
 
