@@ -1083,7 +1083,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,
                 'weight': 10} ]
         self._hostname = hostname
-        if use_srv:
+
+        if use_srv and self._proxy is None:
             # add request for srv query to the resolve, on result '_on_resolve'
             # will be called
             app.resolver.resolve('_xmpp-client._tcp.' + helpers.idn_to_ascii(
@@ -1823,9 +1824,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
-        app.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
-                self._on_stun_resolved)
+        if self._proxy is None:
+            hostname = app.config.get_per('accounts', self.name, 'hostname')
+            app.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
+                    self._on_stun_resolved)
 
     def _on_stun_resolved(self, host, result_array):
         if len(result_array) != 0:
