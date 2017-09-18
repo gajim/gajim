@@ -163,10 +163,13 @@ package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
                           'data/emoticons/*/*.png',
                           'data/emoticons/*/LICENSE']
 package_data_gui = ['data/gui/*.ui']
-package_data_icons = ['data/icons/hicolor/*/*/*.png']
-package_data_iconsets = ['data/iconsets/*/*/*.png']
+package_data_icons = ['data/icons/hicolor/*/*/*.png',
+                      'data/icons/hicolor/*/*/*.svg']
+package_data_iconsets = ['data/iconsets/*/*/*.gif',
+                         'data/iconsets/*/*/*.png',
+                         'data/iconsets/transports/*/*/*.png']
 package_data_moods = ['data/moods/*/*.png']
-package_data_other = ['data/other/servers.xml']
+package_data_other = ['data/other/*']
 package_data_sounds = ['data/sounds/*.wav']
 package_data_style = ['data/style/gajim.css']
 package_plugins_data = ['plugins/*/*']
@@ -184,9 +187,9 @@ package_data = (package_data_activities
 
 # only install subdirectories of data
 data_files_app_icon = [
-        ("share/icons/hicolor/64x64/apps", ["icons/hicolor/64x64/apps/org.gajim.Gajim.png"]),
-        ("share/icons/hicolor/128x128/apps", ["icons/hicolor/128x128/apps/org.gajim.Gajim.png"]),
-        ("share/icons/hicolor/scalable/apps", ["icons/hicolor/scalable/apps/org.gajim.Gajim.svg"])
+        ("share/icons/hicolor/64x64/apps", ["gajim/data/icons/hicolor/64x64/apps/org.gajim.Gajim.png"]),
+        ("share/icons/hicolor/128x128/apps", ["gajim/data/icons/hicolor/128x128/apps/org.gajim.Gajim.png"]),
+        ("share/icons/hicolor/scalable/apps", ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"])
     ]
 
 data_files = data_files_app_icon
