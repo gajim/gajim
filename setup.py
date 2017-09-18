@@ -72,9 +72,10 @@ def build_trans(build_cmd):
                     raise SystemExit(msg)
             log.info('Compiling %s >> %s', po_file, mo_file)
 
-        #linux specific piece:
+        # linux specific piece:
         target = 'share/locale/' + lang + '/LC_MESSAGES'
         data_files.append((target, [mo_file]))
+
 
 def build_man(build_cmd):
     '''
@@ -96,15 +97,16 @@ def build_man(build_cmd):
                 filename = False
 
         if filename:
-            #Binary io, so open is OK
+            # Binary io, so open is OK
             with open(filename, 'rb') as f_in,\
                     gzip.open(man_file_gz, 'wb') as f_out:
                 f_out.writelines(f_in)
                 log.info('Compiling %s >> %s', filename, man_file_gz)
 
-        src = cwd  + '/man' + '/' + man + '.gz'
+        src = cwd + '/man' + '/' + man + '.gz'
         target = 'share/man/man1'
         data_files.append((target, [src]))
+
 
 def build_intl(build_cmd):
     '''
@@ -126,6 +128,7 @@ def build_intl(build_cmd):
         merge(filenamelocal + '.in', newfile, option)
         data_files.append((target, [base + '/' + filename]))
 
+
 def substitute_variables(filename_in, filename_out, subst_vars):
     '''
     Substitute variables in a file.
@@ -146,14 +149,14 @@ def merge(in_file, out_file, option, po_dir='po'):
     '''
     if os.path.exists(in_file):
         cmd = (('msgfmt %(opt)s -d %(po_dir)s --template %(in_file)s '
-            '-o %(out_file)s') %
-          {'opt' : option,
-           'po_dir' : po_dir,
-           'in_file' : in_file,
-           'out_file' : out_file})
+                '-o %(out_file)s') %
+               {'opt': option,
+                'po_dir': po_dir,
+                'in_file': in_file,
+                'out_file': out_file})
         if os.system(cmd) != 0:
             msg = ('ERROR: %s was not merged into the translation files!\n' %
-                    out_file)
+                   out_file)
             raise SystemExit(msg)
         log.info('Compiling %s >> %s', in_file, out_file)
 
@@ -180,11 +183,13 @@ class test(Command):
     def run(self):
         os.system("./test/runtests.py")
 
+
 class test_nogui(test):
     description = "Run tests without GUI"
 
     def run(self):
         os.system("./test/runtests.py -n")
+
 
 class update_po(Command):
     description = "Update po files"
@@ -229,40 +234,43 @@ package_data = (package_data_activities
 
 # only install subdirectories of data
 data_files_app_icon = [
-        ("share/icons/hicolor/64x64/apps", ["gajim/data/icons/hicolor/64x64/apps/org.gajim.Gajim.png"]),
-        ("share/icons/hicolor/128x128/apps", ["gajim/data/icons/hicolor/128x128/apps/org.gajim.Gajim.png"]),
-        ("share/icons/hicolor/scalable/apps", ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"])
-    ]
+    ("share/icons/hicolor/64x64/apps",
+     ["gajim/data/icons/hicolor/64x64/apps/org.gajim.Gajim.png"]),
+    ("share/icons/hicolor/128x128/apps",
+     ["gajim/data/icons/hicolor/128x128/apps/org.gajim.Gajim.png"]),
+    ("share/icons/hicolor/scalable/apps",
+     ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"])
+]
 
 data_files = data_files_app_icon
 
 setup(
-    name = "gajim",
-    description = 'A GTK+ Jabber client',
-    version = gajim.__version__,
-    author = "Philipp Hörist, Yann Leboulanger",
-    author_email = "gajim-devel@gajim.org",
-    url = 'https://gajim.org',
-    license = 'GPL v3',
-    classifiers = [
+    name="gajim",
+    description='A GTK+ Jabber client',
+    version=gajim.__version__,
+    author="Philipp Hörist, Yann Leboulanger",
+    author_email="gajim-devel@gajim.org",
+    url='https://gajim.org',
+    license='GPL v3',
+    classifiers=[
         'Programming Language :: Python :: 3',
     ],
-    cmdclass = {
+    cmdclass={
         'build_py': build,
         'test': test,
         'test_nogui': test_nogui,
         'update_po': update_po,
     },
-    scripts = [
+    scripts=[
         'scripts/gajim',
         'scripts/gajim-history-manager',
-        'scripts/gajim-remote' ],
-    packages = find_packages(exclude=["gajim.dev", "test*"]),
-    package_data = {'gajim': package_data},
-    data_files = data_files,
-    install_requires = [
-          'dbus-python',
-          'nbxmpp',
-          'pyOpenSSL'
-      ],
+        'scripts/gajim-remote'],
+    packages=find_packages(exclude=["gajim.dev", "test*"]),
+    package_data={'gajim': package_data},
+    data_files=data_files,
+    install_requires=[
+        'dbus-python',
+        'nbxmpp',
+        'pyOpenSSL'
+    ],
 )
