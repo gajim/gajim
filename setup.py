@@ -144,7 +144,7 @@ def merge(in_file, out_file, option, po_dir='po'):
     '''
     Run the msgfmt command.
     '''
-    if (not os.path.exists(out_file) and os.path.exists(in_file)):
+    if os.path.exists(in_file):
         cmd = (('msgfmt %(opt)s -d %(po_dir)s --template %(in_file)s '
             '-o %(out_file)s') %
           {'opt' : option,
