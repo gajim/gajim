@@ -20,6 +20,35 @@ pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
 ALL_LINGUAS = sorted([os.path.split(x)[-1][:-3] for x in pos])
 cwd = os.path.dirname(os.path.realpath(__file__))
 
+
+def update_trans():
+    '''
+    Update translation files
+    '''
+    template = os.path.join('po', 'gajim.pot')
+    files = [os.path.join(root, f) for root, d, files in os.walk('gajim') for f in files if os.path.isfile(
+        os.path.join(root, f)) and (f.endswith('.py') or f.endswith('.ui'))]
+    files.append(os.path.join("data", "gajim-remote.desktop.in"))
+    files.append(os.path.join("data", "org.gajim.Gajim.desktop.in"))
+    files.append(os.path.join("data", "org.gajim.Gajim.appdata.xml.in"))
+    cmd = 'xgettext --from-code=utf-8 -o %s %s' % (
+        template, " ".join(files))
+    if os.system(cmd) != 0:
+        msg = "ERROR: %s could not be created!\n" % template
+        raise SystemExit(msg)
+
+    for lang in ALL_LINGUAS:
+        po_file = os.path.join('po', lang + '.po')
+        cmd = 'msgmerge -U %s %s' % (po_file, template)
+        if os.system(cmd) != 0:
+            msg = 'ERROR: Updating language translation file failed.'
+            ask = msg + '\n Continue updating y/n [n] '
+            reply = input(ask)
+            if reply in ['n', 'N']:
+                raise SystemExit(msg)
+        log.info('Updating %s', po_file)
+
+
 def build_trans(build_cmd):
     '''
     Translate the language files into gajim.mo
@@ -157,6 +186,19 @@ class test_nogui(test):
     def run(self):
         os.system("./test/runtests.py -n")
 
+class update_po(Command):
+    description = "Update po files"
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        update_trans()
+
 
 package_data_activities = ['data/activities/*/*/*.png']
 package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
@@ -209,6 +251,7 @@ setup(
         'build_py': build,
         'test': test,
         'test_nogui': test_nogui,
+        'update_po': update_po,
     },
     scripts = [
         'scripts/gajim',
