@@ -1358,7 +1358,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             client_caps_factory=capscache.create_suitable_client_caps)
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
-        self.gmail_url = None
 
         # keep the latest subscribed event for each jid to prevent loop when we
         # acknowledge presences
@@ -1376,9 +1375,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.continue_connect_info = None
 
         self.privacy_default_list = None
-
-        self.gmail_last_tid = None
-        self.gmail_last_time = None
 
         app.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
         app.nec.register_incoming_event(BookmarksReceivedEvent)
@@ -1417,8 +1413,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             self._nec_roster_received)
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
-        app.ged.register_event_handler('gmail-new-mail-received', ged.CORE,
-            self._nec_gmail_new_mail_received)
         app.ged.register_event_handler('ping-received', ged.CORE,
             self._nec_ping_received)
         app.ged.register_event_handler('subscribe-presence-received',
@@ -1463,8 +1457,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             self._nec_roster_received)
         app.ged.remove_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
-        app.ged.remove_event_handler('gmail-new-mail-received', ged.CORE,
-            self._nec_gmail_new_mail_received)
         app.ged.remove_event_handler('ping-received', ged.CORE,
             self._nec_ping_received)
         app.ged.remove_event_handler('subscribe-presence-received',
@@ -1720,44 +1712,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         log.debug('TimeRevisedResultCB')
         app.nec.push_incoming_event(TimeResultReceivedEvent(None, conn=self,
             stanza=iq_obj))
-
-    def _gMailNewMailCB(self, con, iq_obj):
-        """
-        Called when we get notified of new mail messages in gmail account
-        """
-        log.debug('gMailNewMailCB')
-        app.nec.push_incoming_event(GmailNewMailReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_gmail_new_mail_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if not self.connection or self.connected < 2:
-            return
-        # we'll now ask the server for the exact number of new messages
-        jid = app.get_jid_from_account(self.name)
-        log.debug('Got notification of new gmail e-mail on %s. Asking the '
-            'server for more info.' % jid)
-        iq = nbxmpp.Iq(typ='get')
-        query = iq.setTag('query')
-        query.setNamespace(nbxmpp.NS_GMAILNOTIFY)
-        # we want only be notified about newer mails
-        if self.gmail_last_tid:
-            query.setAttr('newer-than-tid', self.gmail_last_tid)
-        if self.gmail_last_time:
-            query.setAttr('newer-than-time', self.gmail_last_time)
-        self.connection.send(iq)
-
-    def _gMailQueryCB(self, con, iq_obj):
-        """
-        Called when we receive results from Querying the server for mail messages
-        in gmail account
-        """
-        log.debug('gMailQueryCB')
-        app.nec.push_incoming_event(GMailQueryReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
 
     def _rosterItemExchangeCB(self, con, msg):
         """
@@ -2122,28 +2076,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.continue_connect_info = None
         # hashes of already received messages
         self.received_message_hashes = []
-
-    def request_gmail_notifications(self):
-        if not self.connection or self.connected < 2:
-            return
-        # It's a gmail account,
-        # inform the server that we want e-mail notifications
-        our_jid = helpers.parse_jid(app.get_jid_from_account(self.name))
-        log.debug(('%s is a gmail account. Setting option '
-            'to get e-mail notifications on the server.') % (our_jid))
-        iq = nbxmpp.Iq(typ='set', to=our_jid)
-        iq.setAttr('id', 'MailNotify')
-        query = iq.setTag('usersetting')
-        query.setNamespace(nbxmpp.NS_GTALKSETTING)
-        query = query.setTag('mailnotifications')
-        query.setAttr('value', 'true')
-        self.connection.send(iq)
-        # Ask how many messages there are now
-        iq = nbxmpp.Iq(typ='get')
-        iq.setID(self.connection.getAnID())
-        query = iq.setTag('query')
-        query.setNamespace(nbxmpp.NS_GMAILNOTIFY)
-        self.connection.send(iq)
 
     def _SearchCB(self, con, iq_obj):
         log.debug('SearchCB')

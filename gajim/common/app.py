@@ -88,8 +88,6 @@ else:
 
 os_info = None # used to cache os information
 
-gmail_domains = ['gmail.com', 'googlemail.com']
-
 transport_type = {} # list the type of transport
 
 last_message_time = {} # list of time of the latest incomming message

@@ -847,44 +847,6 @@ class Interface:
             notify.popup(event_type, jid, account, 'file-send-error', path,
                 event_type, file_props.name)
 
-    @staticmethod
-    def handle_event_gmail_notify(obj):
-        jid = obj.jid
-        gmail_new_messages = int(obj.newmsgs)
-        gmail_messages_list = obj.gmail_messages_list
-        if not app.config.get('notify_on_new_gmail_email'):
-            return
-        path = gtkgui_helpers.get_icon_path('gajim-new_email_recv', 48)
-        title = _('New e-mail on %(gmail_mail_address)s') % \
-            {'gmail_mail_address': jid}
-        text = i18n.ngettext('You have %d new e-mail conversation',
-            'You have %d new e-mail conversations', gmail_new_messages,
-            gmail_new_messages, gmail_new_messages)
-
-        if app.config.get('notify_on_new_gmail_email_extra'):
-            cnt = 0
-            for gmessage in gmail_messages_list:
-                # FIXME: emulate Gtalk client popups. find out what they
-                # parse and how they decide what to show each message has a
-                # 'From', 'Subject' and 'Snippet' field
-                if cnt >= 5:
-                    break
-                senders = ',\n     '.join(reversed(gmessage['From']))
-                text += _('\n\nFrom: %(from_address)s\nSubject: '
-                    '%(subject)s\n%(snippet)s') % {'from_address': senders,
-                    'subject': gmessage['Subject'],
-                    'snippet': gmessage['Snippet']}
-                cnt += 1
-
-        command = app.config.get('notify_on_new_gmail_email_command')
-        if command:
-            Popen(command, shell=True)
-
-        if app.config.get_per('soundevents', 'gmail_received', 'enabled'):
-            helpers.play_sound('gmail_received')
-        notify.popup(_('New E-mail'), jid, obj.conn.name, 'gmail',
-            path_to_image=path, title=title, text=text)
-
     def handle_event_file_request_error(self, obj):
         # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
         ft = self.instances['file_transfers']
@@ -1553,7 +1515,6 @@ class Interface:
             'gc-decline-received': [self.handle_event_gc_decline],
             'gc-presence-received': [self.handle_event_gc_presence],
             'gc-message-received': [self.handle_event_gc_message],
-            'gmail-notify': [self.handle_event_gmail_notify],
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
@@ -1762,10 +1723,6 @@ class Interface:
             else:
                 # Open the window
                 self.roster.open_event(account, fjid, event)
-        elif type_ == 'gmail':
-            url = app.connections[account].gmail_url
-            if url:
-                helpers.launch_browser_mailer('url', url)
         elif type_ == 'gc-invitation':
             event = app.events.get_first_event(account, jid, type_)
             dialogs.InvitationReceivedDialog(account, event.room_jid, jid,

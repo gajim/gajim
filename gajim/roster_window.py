@@ -3235,11 +3235,6 @@ class RosterWindow:
             app.interface.instances['accounts'] = config.AccountsWindow()
         app.interface.instances['accounts'].select_account(account)
 
-    def on_open_gmail_inbox(self, widget, account):
-        url = app.connections[account].gmail_url
-        if url:
-            helpers.launch_browser_mailer('url', url)
-
     def on_change_status_message_activate(self, widget, account):
         show = app.SHOW_LIST[app.connections[account].connected]
         def on_response(message, pep_dict):
@@ -5036,8 +5031,6 @@ class RosterWindow:
             start_chat_menuitem = xml.get_object('start_chat_menuitem')
             join_group_chat_menuitem = xml.get_object(
                 'join_group_chat_menuitem')
-            open_gmail_inbox_menuitem = xml.get_object(
-                'open_gmail_inbox_menuitem')
             add_contact_menuitem = xml.get_object('add_contact_menuitem')
             service_discovery_menuitem = xml.get_object(
                 'service_discovery_menuitem')
@@ -5107,13 +5100,6 @@ class RosterWindow:
 
             else:
                 pep_menuitem.set_sensitive(False)
-
-            if not app.connections[account].gmail_url:
-                open_gmail_inbox_menuitem.set_no_show_all(True)
-                open_gmail_inbox_menuitem.hide()
-            else:
-                open_gmail_inbox_menuitem.connect('activate',
-                    self.on_open_gmail_inbox, account)
 
             edit_account_menuitem.connect('activate', self.on_edit_account,
                 account)

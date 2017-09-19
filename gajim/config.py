@@ -339,23 +339,6 @@ class PreferencesWindow:
         else:
             self.xml.get_object('manage_sounds_button').set_sensitive(False)
 
-        # Notify user of new gmail e-mail messages,
-        # make checkbox sensitive if user has a gtalk account
-        frame_gmail = self.xml.get_object('frame_gmail')
-        notify_gmail_checkbutton = self.xml.get_object('notify_gmail_checkbutton')
-        notify_gmail_extra_checkbutton = self.xml.get_object(
-                'notify_gmail_extra_checkbutton')
-
-        for account in app.config.get_per('accounts'):
-            jid = app.get_jid_from_account(account)
-            if app.get_server_from_jid(jid) in app.gmail_domains:
-                frame_gmail.set_sensitive(True)
-                st = app.config.get('notify_on_new_gmail_email')
-                notify_gmail_checkbutton.set_active(st)
-                st = app.config.get('notify_on_new_gmail_email_extra')
-                notify_gmail_extra_checkbutton.set_active(st)
-                break
-
         #### Status tab ###
         # Autoaway
         st = app.config.get('autoaway')
@@ -1143,12 +1126,6 @@ class PreferencesWindow:
     def on_send_idle_time_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_idle_time')
-
-    def on_notify_gmail_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email')
-
-    def on_notify_gmail_extra_checkbutton_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'notify_on_new_gmail_email_extra')
 
     def fill_msg_treeview(self):
         self.xml.get_object('delete_msg_button').set_sensitive(False)
@@ -3054,7 +3031,6 @@ class ManageSoundsWindow:
                 'message_sent': _('Message Sent'),
                 'muc_message_highlight': _('Group Chat Message Highlight'),
                 'muc_message_received': _('Group Chat Message Received'),
-                'gmail_received': _('GMail Email Received')
         }
 
         for sound_event_config_name, sound_ui_name in sounds_dict.items():

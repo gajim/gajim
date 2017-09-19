@@ -1915,9 +1915,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     get_action(self.name + '-archive').set_enabled(True)
 
             if obj.fjid == hostname:
-                if nbxmpp.NS_GMAILNOTIFY in obj.features:
-                    app.gmail_domains.append(obj.fjid)
-                    self.request_gmail_notifications()
                 if nbxmpp.NS_SECLABEL in obj.features:
                     self.seclabel_supported = True
                 for identity in obj.identities:

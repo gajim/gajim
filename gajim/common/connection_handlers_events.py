@@ -232,61 +232,6 @@ class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.time_info = t.astimezone(contact_tz()).strftime('%c')
         return True
 
-class GMailQueryReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gmail-notify'
-    base_network_events = []
-
-    def generate(self):
-        if not self.stanza.getTag('mailbox'):
-            return
-        mb = self.stanza.getTag('mailbox')
-        if not mb.getAttr('url'):
-            return
-        self.conn.gmail_url = mb.getAttr('url')
-        if mb.getNamespace() != nbxmpp.NS_GMAILNOTIFY:
-            return
-        self.newmsgs = mb.getAttr('total-matched')
-        if not self.newmsgs:
-            return
-        if self.newmsgs == '0':
-            return
-        # there are new messages
-        self.gmail_messages_list = []
-        if mb.getTag('mail-thread-info'):
-            gmail_messages = mb.getTags('mail-thread-info')
-            for gmessage in gmail_messages:
-                unread_senders = []
-                for sender in gmessage.getTag('senders').getTags('sender'):
-                    if sender.getAttr('unread') != '1':
-                        continue
-                    if sender.getAttr('name'):
-                        unread_senders.append(sender.getAttr('name') + \
-                            '< ' + sender.getAttr('address') + '>')
-                    else:
-                        unread_senders.append(sender.getAttr('address'))
-
-                if not unread_senders:
-                    continue
-                gmail_subject = gmessage.getTag('subject').getData()
-                gmail_snippet = gmessage.getTag('snippet').getData()
-                tid = int(gmessage.getAttr('tid'))
-                if not self.conn.gmail_last_tid or \
-                tid > self.conn.gmail_last_tid:
-                    self.conn.gmail_last_tid = tid
-                self.gmail_messages_list.append({
-                    'From': unread_senders,
-                    'Subject': gmail_subject,
-                    'Snippet': gmail_snippet,
-                    'url': gmessage.getAttr('url'),
-                    'participation': gmessage.getAttr('participation'),
-                    'messages': gmessage.getAttr('messages'),
-                    'date': gmessage.getAttr('date')})
-            self.conn.gmail_last_time = int(mb.getAttr('result-time'))
-
-        self.jid = app.get_jid_from_account(self.name)
-        log.debug('You have %s new gmail e-mails on %s.', self.newmsgs, self.jid)
-        return True
-
 class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'roster-item-exchange-received'
     base_network_events = []
@@ -669,18 +614,6 @@ class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_jid_resource(check_fake_jid=True)
         self.errmsg = self.stanza.getErrorMsg()
         self.errcode = self.stanza.getErrorCode()
-        return True
-
-class GmailNewMailReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gmail-new-mail-received'
-    base_network_events = []
-
-    def generate(self):
-        if not self.stanza.getTag('new-mail'):
-            return
-        if self.stanza.getTag('new-mail').getNamespace() != \
-        nbxmpp.NS_GMAILNOTIFY:
-            return
         return True
 
 class PingReceivedEvent(nec.NetworkIncomingEvent):

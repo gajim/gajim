@@ -178,9 +178,6 @@ class Config:
             'time_stamp': [ opt_str, '[%X] ', _('This option let you customize timestamp that is printed in conversation. For exemple "[%H:%M] " will show "[hour:minute] ". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html') ],
             'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
             'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
-            'notify_on_new_gmail_email': [ opt_bool, True ],
-            'notify_on_new_gmail_email_extra': [ opt_bool, False ],
-            'notify_on_new_gmail_email_command': [ opt_str, '', _('Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q') ],
             'use_gpg_agent': [ opt_bool, False ],
             'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
             'restore_lines': [opt_int, 10, _('How many history messages should be restored when a chat tab/window is reopened?')],
@@ -538,7 +535,6 @@ class Config:
             'message_sent': [ False, 'sent.wav' ],
             'muc_message_highlight': [ True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
             'muc_message_received': [ False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
-            'gmail_received': [ False, 'message1.wav' ],
     }
 
     themes_default = {
