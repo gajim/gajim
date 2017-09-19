@@ -894,7 +894,7 @@ class AddNewContactWindow:
         'group_comboboxentry', 'auto_authorize_checkbutton'):
             self.__dict__[w] = self.xml.get_object(w)
         if account and len(app.connections) >= 2:
-            self.default_desc = _('Please fill in the data of the contact you want\n'
+            self.default_desc = _('Please fill in the data of the contact you want '
                                   'to add to your account <b>%s</b>') % account
         else:
             self.default_desc = _('Please fill in the data of the contact you '
@@ -1276,7 +1276,8 @@ class AddNewContactWindow:
             if obj.stanza.getError():
                 ErrorDialog(_('Error while adding transport contact'),
                     _('This error occured while adding a contact for transport '
-                    '%s:\n\n%s') % (transport, obj.stanza.getErrorMsg()))
+                    '%(transport)s:\n\n%(error)s') % {'transport': transport,
+                    'error': obj.stanza.getErrorMsg()})
                 return
             if obj.prompt_jid:
                 self._add_jid(obj.prompt_jid, type_)
@@ -2636,9 +2637,10 @@ class JoinGroupchatWindow:
         if app.contacts.get_contact(self.account, room_jid) and \
         not app.contacts.get_contact(self.account, room_jid).is_groupchat():
             ErrorDialog(_('This is not a group chat'),
-                _('%s is already in your roster. Please check if %s is a '
-                'correct group chat name. If it is, delete it from your roster '
-                'and try joining the group chat again.') % (room_jid, room_jid))
+                _('%(room_jid)s is already in your roster. Please check if '
+                '%(room_jid)s is a correct group chat name. If it is, delete '
+                'it from your roster and try joining the group chat again.') % \
+                {'room_jid': room_jid, 'room_jid': room_jid})
             return
 
         full_jid = room_jid + '/' + nickname

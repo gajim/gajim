@@ -2078,8 +2078,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if type_ == 'message':
             if len(contacts) == 1:
-                msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
-                    contacts[0].get_shown_name())
+                msg = _('Sent contact: "%(jid)s" (%(name)s)') % {
+                    'jid': contacts[0].get_full_jid(),
+                    'name': contacts[0].get_shown_name()}
             else:
                 msg = _('Sent contacts:')
                 for contact in contacts:

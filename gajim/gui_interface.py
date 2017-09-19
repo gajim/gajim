@@ -1360,9 +1360,9 @@ class Interface:
             'server?') % {'error': obj.error_text}
         if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
-            'certificates.\nSHA-1 fingerprint of the certificate:\n%s'
-            '\nSHA256 fingerprint of the certificate:\n%s') % \
-            (obj.fingerprint_sha1, obj.fingerprint_sha256)
+            'certificates.\nSHA-1 fingerprint of the certificate:\n%(sha1)s'
+            '\nSHA256 fingerprint of the certificate:\n%(sha256)s') % \
+            {'sha1': obj.fingerprint_sha1, 'sha256': obj.fingerprint_sha256}
         else:
             checktext1 = ''
         checktext2 = _('Ignore this error for this certificate.')
@@ -1967,9 +1967,10 @@ class Interface:
         if app.contacts.get_contact(account, room_jid) and \
         not app.contacts.get_contact(account, room_jid).is_groupchat():
             dialogs.ErrorDialog(_('This is not a group chat'),
-                _('%s is already in your roster. Please check if %s is a '
-                'correct group chat name. If it is, delete it from your roster '
-                'and try joining the group chat again.') % (room_jid, room_jid))
+                _('%(room_jid)s is already in your roster. Please check '
+                'if %(room_jid)s is a correct group chat name. If it is, '
+                'delete it from your roster and try joining the group chat '
+                'again.') % {'room_jid': room_jid, 'room_jid': room_jid})
             return
 
         if not nick:

@@ -57,7 +57,7 @@ for mod in modules:
     suite = unittest.defaultTestLoader.loadTestsFromName(mod)
     result = unittest.TextTestRunner(verbosity=verbose).run(suite)
     if use_x:
-        # Wait 1s to be sure all timeout_add will be called before we cleanup main loop
+        # Wait 500ms to be sure all timeout_add will be called before we cleanup main loop
         import time
         time.sleep(0.5)
         # Clean main loop

@@ -4642,8 +4642,8 @@ class RosterWindow:
                 # c_dest is None if jid_dest doesn't belong to account
                 return
             menu = Gtk.Menu()
-            item = Gtk.MenuItem.new_with_label(_('Send %s to %s') % (
-                c_source.get_shown_name(), c_dest.get_shown_name()))
+            item = Gtk.MenuItem.new_with_label(_('Send %(from)s to %(to)s') % {
+                'from': c_source.get_shown_name(), 'to': c_dest.get_shown_name()})
             item.set_use_underline(False)
             item.connect('activate', self.on_drop_rosterx, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
@@ -4660,8 +4660,8 @@ class RosterWindow:
                 item.set_use_underline(False)
             else:
                 item = Gtk.MenuItem.new_with_label(
-                    _('Make %s and %s metacontacts') % (
-                    c_source.get_shown_name(), c_dest.get_shown_name()))
+                    _('Make %(contact1)s and %(contact2)s metacontacts') % {
+                    'contact1': c_source.get_shown_name(), 'contact2': c_dest.get_shown_name()})
                 item.set_use_underline(False)
 
             item.connect('activate', self.on_drop_in_contact, account_source,

@@ -2693,9 +2693,10 @@ class AccountCreationWizardWindow:
                 'hostname': hostname, 'error': obj.ssl_msg})
             if obj.errnum in (18, 27):
                 text = _('Add this certificate to the list of trusted '
-                    'certificates.\nSHA-1 fingerprint of the certificate:\n%s'
-                    '\nSHA-256 fingerprint of the certificate:\n%s') \
-                    % (obj.ssl_fingerprint_sha1, obj.ssl_fingerprint_sha256)
+                    'certificates.\nSHA-1 fingerprint of the certificate:\n'
+                    '%(sha1)s\nSHA-256 fingerprint of the certificate:\n'
+                    '%(sha256)s') % {'sha1': obj.ssl_fingerprint_sha1,
+                    'sha256': obj.ssl_fingerprint_sha256}
                 self.xml.get_object('ssl_checkbutton').set_label(text)
             else:
                 self.xml.get_object('ssl_checkbutton').set_no_show_all(True)
