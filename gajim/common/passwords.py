@@ -27,6 +27,9 @@
 import os
 import logging
 import gi
+
+from gi.repository import GLib
+
 from gajim.common import app
 
 __all__ = ['get_password', 'save_password']
