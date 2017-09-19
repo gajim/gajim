@@ -80,8 +80,13 @@ class LibSecretPasswordStorage(PasswordStorage):
         user = app.config.get_per('accounts', account_name, 'name')
         display_name = _('XMPP account %s') % user + '@' + server
         attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
-        return self.Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
-            self.Secret.COLLECTION_DEFAULT, display_name, password or '', None)
+        try:
+            return self.Secret.password_store_sync(
+                self.GAJIM_SCHEMA, attributes, self.Secret.COLLECTION_DEFAULT,
+                display_name, password or '', None)
+        except GLib.Error as error:
+            log.error(error)
+            return False
 
 
 class SecretWindowsPasswordStorage(PasswordStorage):
