@@ -13,13 +13,11 @@ from mock import Mock, expectParams
 from gajim_mocks import *
 from xmpp_mocks import IdleQueueThread
 
-GMAIL_SRV_NAME = '_xmpp-client._tcp.gmail.com'
 NONSENSE_NAME = 'sfsdfsdfsdf.sdfs.fsd'
 JABBERCZ_TXT_NAME = '_xmppconnect.jabber.cz'
 JABBERCZ_SRV_NAME = '_xmpp-client._tcp.jabber.cz'
 
-TEST_LIST = [(GMAIL_SRV_NAME, 'srv', True),
-        (NONSENSE_NAME, 'srv', False),
+TEST_LIST = [(NONSENSE_NAME, 'srv', False),
         (JABBERCZ_SRV_NAME, 'srv', True)]
 
 class TestResolver(unittest.TestCase):

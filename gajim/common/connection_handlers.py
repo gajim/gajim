@@ -2192,10 +2192,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._HttpAuthCB, 'get', nbxmpp.NS_HTTP_AUTH)
         con.RegisterHandler('iq', self._CommandExecuteCB, 'set',
             nbxmpp.NS_COMMANDS)
-        con.RegisterHandler('iq', self._gMailNewMailCB, 'set',
-            nbxmpp.NS_GMAILNOTIFY)
-        con.RegisterHandler('iq', self._gMailQueryCB, 'result',
-            nbxmpp.NS_GMAILNOTIFY)
         con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
