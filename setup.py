@@ -269,7 +269,7 @@ setup(
     package_data={'gajim': package_data},
     data_files=data_files,
     install_requires=[
-        'dbus-python',
+        'dbus-python;sys_platform=="linux"',
         'nbxmpp',
         'pyOpenSSL'
     ],

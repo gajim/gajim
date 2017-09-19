@@ -19,15 +19,15 @@ Var StartMenuFolder
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\orange-install.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\orange-uninstall.ico"
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "mingw32\gajim\data\pixmaps\nsis_header.bmp"
-!define MUI_WELCOMEFINISHPAGE_BITMAP "mingw32\gajim\data\pixmaps\nsis_wizard.bmp"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "mingw32\gajim\data\pixmaps\nsis_wizard.bmp"
+!define MUI_HEADERIMAGE_BITMAP "..\misc\nsis_header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\misc\nsis_wizard.bmp"
 ;!define MUI_COMPONENTSPAGE_CHECKBITMAP "${NSISDIR}\Contrib\Graphics\Checks\colorful.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "mingw32\gajim\COPYING"
+!insertmacro MUI_PAGE_LICENSE "..\..\COPYING"
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
