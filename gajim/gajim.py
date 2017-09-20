@@ -52,12 +52,6 @@ from gi.repository import GLib, Gio, Gtk
 from gajim.common import i18n
 from gajim.common import logging_helpers
 from gajim.common import crypto
-try:
-    PYOPENSSL_PRNG_PRESENT = True
-    import OpenSSL.rand
-except ImportError:
-    print('PyOpenSSL not available, impossible to generate entropy', file=sys.stderr)
-    PYOPENSSL_PRNG_PRESENT = False
 
 MIN_NBXMPP_VER = "0.5.6"
 
@@ -104,7 +98,6 @@ class GajimApplication(Gtk.Application):
         self.config_path = None
         self.profile_separation = False
         self.interface = None
-        self.rng_seed = None
 
         GLib.set_prgname('gajim')
         if GLib.get_application_name() != 'Gajim':
@@ -206,20 +199,6 @@ class GajimApplication(Gtk.Application):
             elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
                 libc.setproctitle('gajim')
 
-        # Seed the OpenSSL pseudo random number generator from file and initialize
-        if PYOPENSSL_PRNG_PRESENT:
-            self.rng_seed = app.gajimpaths['RNG_SEED']
-            # Seed from file
-            try:
-                OpenSSL.rand.load_file(self.rng_seed)
-            except TypeError:
-                OpenSSL.rand.load_file(self.rng_seed.encode('utf-8'))
-            crypto.add_entropy_sources_OpenSSL()
-            try:
-                OpenSSL.rand.write_file(self.rng_seed)
-            except TypeError:
-                OpenSSL.rand.write_file(self.rng_seed.encode('utf-8'))
-
         def sigint_cb(num, stack):
             print('SIGINT/SIGTERM received')
             self.quit()
@@ -249,12 +228,6 @@ class GajimApplication(Gtk.Application):
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
-        # Save the entropy from OpenSSL PRNG
-        if PYOPENSSL_PRNG_PRESENT and self.rng_seed:
-            try:
-                OpenSSL.rand.write_file(self.rng_seed)
-            except TypeError:
-                OpenSSL.rand.write_file(self.rng_seed.encode('utf-8'))
         # Shutdown GUI and save config
         if hasattr(self.interface, 'roster') and self.interface.roster:
             self.interface.roster.prepare_quit()
