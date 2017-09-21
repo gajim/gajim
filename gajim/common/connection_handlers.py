@@ -1080,6 +1080,27 @@ class ConnectionHandlersBase:
         app.plugin_manager.extension_point(
             'decrypt', self, obj, self._on_message_received)
         if not obj.encrypted:
+            # XEP-0380
+            enc_tag = obj.stanza.getTag('encryption', namespace=nbxmpp.NS_EME)
+            if enc_tag:
+                ns = enc_tag.getAttr('namespace')
+                if ns:
+                    if ns == 'urn:xmpp:otr:0':
+                        obj.msgtxt = _('This message was encrypted with OTR '
+                        'and could not be decrypted.')
+                    elif ns == 'jabber:x:encrypted':
+                        obj.msgtxt = _('This message was encrypted with Legacy '
+                        'OpenPGP and could not be decrypted. You can install '
+                        'the PGP plugin to handle those messages.')
+                    elif ns == 'urn:xmpp:openpgp:0':
+                        obj.msgtxt = _('This message was encrypted with '
+                        'OpenPGP for XMPP and could not be decrypted.')
+                    else:
+                        enc_name = enc_tag.getAttr('name')
+                        if not enc_name:
+                            enc_name = ns
+                        obj.msgtxt = _('This message was encrypted with %s '
+                        'and could not be decrypted.') % enc_name
             self._on_message_received(obj)
 
     def _on_message_received(self, obj):
