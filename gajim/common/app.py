@@ -53,7 +53,7 @@ ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 
-log = logging.getLogger('gajim')
+glog = logging.getLogger('gajim')
 
 logger = None
 
@@ -174,7 +174,7 @@ try:
     '''
     v_gnupg = gnupg.__version__
     if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
-        log.info('Gajim needs python-gnupg >= 0.3.8')
+        glog.info('Gajim needs python-gnupg >= 0.3.8')
         HAVE_GPG = False
 except ImportError:
     HAVE_GPG = False
@@ -245,7 +245,7 @@ try:
     if sleepy.SUPPORTED:
         HAVE_IDLE = True
 except Exception:
-    log.debug(_('Unable to load idle module'))
+    glog.info(_('Unable to load idle module'))
     HAVE_IDLE = False
 
 
@@ -491,3 +491,7 @@ def get_priority(account, show):
     elif prio > 127:
         prio = 127
     return prio
+
+def log(domain):
+    root = 'gajim.'
+    return logging.getLogger(root + domain)
