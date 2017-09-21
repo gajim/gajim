@@ -73,10 +73,6 @@ class FeaturesWindow:
                 _('Spellchecking of composed messages.'),
                 _('Requires libgtkspell.'),
                 _('Requires libgtkspell and libenchant.')),
-            _('Notification'): (self.notification_available,
-                _('Passive popups notifying for new events.'),
-                _('Requires python-notify or instead python-dbus in conjunction with notification-daemon.'),
-                _('Feature not available under Windows.')),
             _('Automatic status'): (self.idle_available,
                 _('Ability to measure idle time, in order to set auto status.'),
                 _('Requires libxss library.'),
@@ -196,18 +192,6 @@ class FeaturesWindow:
         try:
             __import__('gajim.gtkspell')
         except ValueError:
-            return False
-        return True
-
-    def notification_available(self):
-        if os.name == 'nt':
-            return False
-        from gajim.common import dbus_support
-        if self.dbus_available() and dbus_support.get_notifications_interface():
-            return True
-        try:
-            __import__('pynotify')
-        except Exception:
             return False
         return True
 

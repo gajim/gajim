@@ -314,7 +314,8 @@ class GajimApplication(Gtk.Application):
             ('-delete-motd', action.on_delete_motd, 'online', 's'),
             ('-activate-bookmark',
                 action.on_activate_bookmark, 'online', 'a{sv}'),
-            ('-import-contacts', action.on_import_contacts, 'online', 's')
+            ('-open-event', action.on_open_event, 'always', 'a{sv}'),
+            ('-import-contacts', action.on_import_contacts, 'online', 's'),
         ]
 
         # General Stateful Actions
@@ -347,7 +348,7 @@ class GajimApplication(Gtk.Application):
             ('features', action.on_features),
             ('content', action.on_contents),
             ('about', action.on_about),
-            ('faq', action.on_faq)
+            ('faq', action.on_faq),
         ]
 
         for action in self.general_actions:

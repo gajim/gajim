@@ -159,27 +159,6 @@ def get_interface(interface, path, start_service=True):
         return None
 
 
-def get_notifications_interface(notif=None):
-    """
-    Get the notifications interface
-
-    :param notif: DesktopNotification instance
-    """
-    # try to see if KDE notifications are available
-    iface = get_interface('org.kde.VisualNotifications', '/VisualNotifications',
-            start_service=False)
-    if iface != None:
-        if notif != None:
-            notif.kde_notifications = True
-        return iface
-    # KDE notifications don't seem to be available, falling back to
-    # notification-daemon
-    else:
-        if notif != None:
-            notif.kde_notifications = False
-        return get_interface('org.freedesktop.Notifications',
-                '/org/freedesktop/Notifications')
-
 if supported:
     class MissingArgument(dbus.DBusException):
         _dbus_error_name = _GAJIM_ERROR_IFACE + '.MissingArgument'
