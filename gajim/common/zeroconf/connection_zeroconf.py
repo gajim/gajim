@@ -73,7 +73,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         values
         """
         if not app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):
-            app.log.debug('Creating zeroconf account')
+            app.glog.debug('Creating zeroconf account')
             app.config.add_per('accounts', app.ZEROCONF_ACC_NAME)
             app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
                     'autoconnect', True)
@@ -123,7 +123,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def reconnect(self):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
-        app.log.debug('reconnect')
+        app.glog.debug('reconnect')
 
         self.disconnect()
         self.change_status(self.old_show, self.status)
