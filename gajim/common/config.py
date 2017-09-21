@@ -123,6 +123,7 @@ class Config:
             'print_time': [ opt_str, 'always',  _('\'always\' - print time for every message.\n\'sometimes\' - print time every print_ichat_every_foo_minutes minute.\n\'never\' - never print time.')],
             'print_time_fuzzy': [ opt_int, 0, _('Print time in chats using Fuzzy Clock. Value of fuzziness from 1 to 4, or 0 to disable fuzzyclock. 1 is the most precise clock, 4 the least precise one. This is used only if print_time is \'sometimes\'.') ],
             'emoticons_theme': [opt_str, 'noto-emoticons', '', True ],
+            'ascii_emoticons': [opt_bool, True, _('Enable ASCII emoticons'), True],
             'ascii_formatting': [ opt_bool, True,
                     _('Treat * / _ pairs as possible formatting characters.'), True],
             'show_ascii_formatting_chars': [ opt_bool, True, _('If True, do not '
@@ -176,9 +177,6 @@ class Config:
             'time_stamp': [ opt_str, '[%X] ', _('This option let you customize timestamp that is printed in conversation. For exemple "[%H:%M] " will show "[hour:minute] ". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html') ],
             'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
             'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
-            'notify_on_new_gmail_email': [ opt_bool, True ],
-            'notify_on_new_gmail_email_extra': [ opt_bool, False ],
-            'notify_on_new_gmail_email_command': [ opt_str, '', _('Specify the command to run when new mail arrives, e.g.: /usr/bin/getmail -q') ],
             'use_gpg_agent': [ opt_bool, False ],
             'change_roster_title': [ opt_bool, True, _('Add * and [n] in roster title?')],
             'restore_lines': [opt_int, 10, _('How many history messages should be restored when a chat tab/window is reopened?')],
@@ -192,7 +190,7 @@ class Config:
             'key_up_lines': [opt_int, 25, _('How many lines to store for Ctrl+KeyUP.')],
             'version': [ opt_str, defs.version ], # which version created the config
             'search_engine': [opt_str, 'https://www.google.com/search?&q=%s&sourceid=gajim'],
-            'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
+            'dictionary_url': [opt_str, 'WIKTIONARY', _("Either custom url with %%s in it where %%s is the word/phrase or 'WIKTIONARY' which means use wiktionary.")],
             'always_english_wikipedia': [opt_bool, False],
             'always_english_wiktionary': [opt_bool, True],
             'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
@@ -323,6 +321,7 @@ class Config:
     __options_per_key = {
             'accounts': ({
                     'name': [ opt_str, '', '', True ],
+                    'account_label': [ opt_str, '', '', False ],
                     'hostname': [ opt_str, '', '', True ],
                     'anonymous_auth': [ opt_bool, False ],
                     'client_cert': [ opt_str, '', '', True ],
@@ -535,7 +534,6 @@ class Config:
             'message_sent': [ False, 'sent.wav' ],
             'muc_message_highlight': [ True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
             'muc_message_received': [ False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
-            'gmail_received': [ False, 'message1.wav' ],
     }
 
     themes_default = {

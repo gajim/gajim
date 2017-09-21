@@ -23,7 +23,7 @@ import functools
 log = logging.getLogger('gajim.c.resolver')
 
 if __name__ == '__main__':
-    sys.path.append('..')
+    sys.path.append('../..')
     from gajim.common import i18n
     from gajim.common import configpaths
     configpaths.gajimpaths.init(None)

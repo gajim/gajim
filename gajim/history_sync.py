@@ -283,7 +283,8 @@ class DownloadHistoryPage(Gtk.Box):
         self.received += 1
         if self.count:
             self.progress.set_fraction(self.received / self.count)
-            self.progress.set_text(_('%s of %s' % (self.received, self.count)))
+            self.progress.set_text(_('%(received)s of %(max)s' % {
+                'received': self.received, 'max': self.count}))
         else:
             self.progress.pulse()
             self.progress.set_text(_('Downloaded %s Messages' % self.received))

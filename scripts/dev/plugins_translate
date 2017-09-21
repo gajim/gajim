@@ -58,7 +58,7 @@ make_mo()
 install_mo()
 {
     if [ -L community_plugins ]; then
-        cp $1.mo community_plugins/plugins_translate/
+        cp $1.mo community_plugins/plugins_translations/
     fi
     mkdir -p ~/.local/share/gajim/plugins/locale/$1/LC_MESSAGES/
     cp $1.mo ~/.local/share/gajim/plugins/locale/$1/LC_MESSAGES/gajim_plugins.mo
@@ -77,7 +77,7 @@ case "$1" in
         make_mo $2
         ;;
     install_mo)
-        install_mo
+        install_mo $2
         ;;
     all)
         check_args $@

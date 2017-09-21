@@ -1083,7 +1083,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,
                 'weight': 10} ]
         self._hostname = hostname
-        if use_srv:
+
+        if use_srv and self._proxy is None:
             # add request for srv query to the resolve, on result '_on_resolve'
             # will be called
             app.resolver.resolve('_xmpp-client._tcp.' + helpers.idn_to_ascii(
@@ -1451,7 +1452,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 return
         if hasattr(con, 'Resource'):
             self.server_resource = con.Resource
-        self.registered_name = con._registered_name
+        if con._registered_name is not None:
+            log.info('Bound JID: %s', con._registered_name)
+            self.registered_name = con._registered_name
         if app.config.get_per('accounts', self.name, 'anonymous_auth'):
             # Get jid given by server
             old_jid = app.get_jid_from_account(self.name)
@@ -1821,9 +1824,10 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
-        app.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
-                self._on_stun_resolved)
+        if self._proxy is None:
+            hostname = app.config.get_per('accounts', self.name, 'hostname')
+            app.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
+                    self._on_stun_resolved)
 
     def _on_stun_resolved(self, host, result_array):
         if len(result_array) != 0:
@@ -1911,9 +1915,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     get_action(self.name + '-archive').set_enabled(True)
 
             if obj.fjid == hostname:
-                if nbxmpp.NS_GMAILNOTIFY in obj.features:
-                    app.gmail_domains.append(obj.fjid)
-                    self.request_gmail_notifications()
                 if nbxmpp.NS_SECLABEL in obj.features:
                     self.seclabel_supported = True
                 for identity in obj.identities:
@@ -2074,8 +2075,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         if type_ == 'message':
             if len(contacts) == 1:
-                msg = _('Sent contact: "%s" (%s)') % (contacts[0].get_full_jid(),
-                    contacts[0].get_shown_name())
+                msg = _('Sent contact: "%(jid)s" (%(name)s)') % {
+                    'jid': contacts[0].get_full_jid(),
+                    'name': contacts[0].get_shown_name()}
             else:
                 msg = _('Sent contacts:')
                 for contact in contacts:

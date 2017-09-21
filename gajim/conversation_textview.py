@@ -918,13 +918,12 @@ class ConversationTextview(GObject.GObject):
             if special_text.startswith(scheme):
                 text_is_valid_uri = True
 
-        possible_emot_ascii_caps = special_text.upper() # emoticons keys are CAPS
         if iter_:
             end_iter = iter_
         else:
             end_iter = buffer_.get_end_iter()
 
-        pixbuf = emoticons.get_pixbuf(possible_emot_ascii_caps)
+        pixbuf = emoticons.get_pixbuf(special_text)
         if app.config.get('emoticons_theme') and pixbuf and graphics:
             # it's an emoticon
             anchor = buffer_.create_child_anchor(end_iter)

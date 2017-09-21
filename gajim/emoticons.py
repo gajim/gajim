@@ -59,7 +59,7 @@ class SubPixbuf:
 
         return subpixbuf
 
-def load(path):
+def load(path, ascii_emoticons):
     module_name = 'emoticons_theme.py'
     theme_path = os.path.join(path, module_name)
     if sys.platform == 'win32' and not os.path.exists(theme_path):
@@ -87,9 +87,15 @@ def load(path):
     def add_emoticon(codepoint_, sub, mod_list=None):
         pix = sub.get_pixbuf()
         for alternate in codepoint_:
-            codepoints[alternate.upper()] = pix
+            if not ascii_emoticons:
+                try:
+                    alternate.encode('ascii')
+                    continue
+                except UnicodeEncodeError:
+                    pass
+            codepoints[alternate] = pix
             if pix not in pixbufs:
-                pixbufs[pix] = alternate.upper()
+                pixbufs[pix] = alternate
         if mod_list is not None:
             mod_list.append(pix)
         else:

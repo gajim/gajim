@@ -30,14 +30,34 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 #ServerInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
 #ServerInfoGrid > list > row.activatable:active { box-shadow: none; }
 
-/* Generic Options Dialog */
-#OptionsDialog list > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-#OptionsDialog list > row:last-child { border-bottom: 0px}
-#OptionsDialog list > row { padding: 10px; }
-#OptionsDialog list > row.activatable:active { box-shadow: none; }
+/* OptionsBox */
+#OptionsBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+#OptionsBox > row:last-child { border-bottom: 0px}
+#OptionsBox > row.activatable:active { box-shadow: none; }
+#OptionsBox > row { padding: 10px 20px 10px 10px; }
+#OptionsBox > row:not(.activatable) label { color: @insensitive_fg_color }
+
+/* GenericOption */
+#SubDescription { color: @insensitive_fg_color;}
+#GenericOptionBox { margin-left: 30px; }
+#GenericOptionBox > label { padding-right: 3px; }
 
 /* Generic Popover Menu with Buttons */
 .PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }
 .PopoverButtonListbox > list { margin-top: 10px; margin-bottom: 10px; }
 .PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
+
+/* Accounts Window */
+#AccountsWindow > box { padding:30px 30px 30px 30px;}
+#AccountsWindow scrolledwindow {border: none;}
+#AccountsWindow list {border: 1px solid; border-color: @borders;}
+#AccountsWindow > box actionbar box {border: none;}
+
+#AccountNameEntry:disabled { font-size: 16px;
+                             font-weight: bold;
+                             border: none;
+                             background-color: @theme_unfocused_bg_color;
+                             color: @theme_text_color; }
+
+

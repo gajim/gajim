@@ -54,12 +54,13 @@ AC_SUBST(PACKAGE)
 AC_CONFIG_FILES([ 
 	Makefile
 	data/Makefile
-	data/gui/Makefile
-	data/emoticons/Makefile
+	gajim/data/Makefile
+	gajim/data/gui/Makefile
+	gajim/data/emoticons/Makefile
 	data/pixmaps/Makefile
-	data/iconsets/Makefile
-	data/moods/Makefile
-	data/activities/Makefile
+	gajim/data/iconsets/Makefile
+	gajim/data/moods/Makefile
+	gajim/data/activities/Makefile
 	icons/Makefile
 	data/org.gajim.Gajim.appdata.xml
 	data/org.gajim.Gajim.desktop.in

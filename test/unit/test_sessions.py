@@ -22,12 +22,13 @@ from gajim.roster_window import RosterWindow
 
 from mock import Mock, expectParams
 from gajim_mocks import *
+from data import account1
 
 app.interface = MockInterface()
 
 
 # name to use for the test account
-account_name = 'test'
+account_name = account1
 
 class TestStanzaSession(unittest.TestCase):
     ''' Testclass for common/stanzasession.py '''
@@ -39,15 +40,15 @@ class TestStanzaSession(unittest.TestCase):
 
     def test_generate_thread_id(self):
         # thread_id is a string
-        self.assert_(isinstance(self.sess.thread_id, str))
+        self.assertTrue(isinstance(self.sess.thread_id, str))
 
         # it should be somewhat long, to avoid clashes
-        self.assert_(len(self.sess.thread_id) >= 32)
+        self.assertTrue(len(self.sess.thread_id) >= 32)
 
     def test_is_loggable(self):
         # by default a session should be loggable
         # (unless the no_log_for setting says otherwise)
-        self.assert_(self.sess.is_loggable())
+        self.assertTrue(self.sess.is_loggable())
 
     def test_terminate(self):
         # termination is sent by default
@@ -127,7 +128,7 @@ class TestChatControlSession(unittest.TestCase):
         self.assert_new_message_notification()
         notif = notify.notifications[-1]
         first = notif.first_unread
-        self.assert_(first,
+        self.assertTrue(first,
             'message should have been treated as a first message')
 
     def assert_not_first_message_notification(self):
@@ -135,7 +136,7 @@ class TestChatControlSession(unittest.TestCase):
         self.assert_new_message_notification()
         notif = notify.notifications[-1]
         first = notif.first_unread
-        self.assert_(not first,
+        self.assertTrue(not first,
             'message was unexpectedly treated as a first message')
 
     # ----- tests -----
@@ -148,7 +149,7 @@ class TestChatControlSession(unittest.TestCase):
         self.receive_chat_msg(fjid, msgtxt)
 
         # session is created
-        self.assert_((jid in self.conn.sessions) and (
+        self.assertTrue((jid in self.conn.sessions) and (
             '123' in self.conn.sessions[jid]), 'session is not created')
         sess = self.conn.sessions[jid]['123']
 
@@ -171,7 +172,7 @@ class TestChatControlSession(unittest.TestCase):
         jid = 'bct@necronomicorp.com'
         fjid = 'bct@necronomicorp.com/Gajim'
         msgtxt = 'testing two'
-        roster = RosterWindow(app.app)
+        app.interface.roster = RosterWindow(app.app)
 
         sess = self.conn.sessions[jid]['123']
         sess.control = MockChatControl(fjid, account_name)
@@ -190,6 +191,7 @@ class TestChatControlSession(unittest.TestCase):
         # message was printed to the control
         calls = sess.control.mockGetNamedCalls('print_conversation')
         self.assertEqual(1, len(calls))
+        app.interface.roster.window.destroy()
 
     #def test_received_3orphaned_control(self):
         #'''test receiving a message when a control that doesn't have a session

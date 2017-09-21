@@ -250,7 +250,7 @@ def check_and_possibly_move_config():
             continue
         if not os.path.exists(src):
             continue
-        print(_('moving %s to %s') % (src, dst))
+        print(_('moving %(src)s to %(dst)s') % {'src': src, 'dst': dst})
         shutil.move(src, dst)
     app.logger.init_vars()
     app.logger.attach_cache_database()

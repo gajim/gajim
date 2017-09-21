@@ -101,7 +101,7 @@ class TestStatusChange(unittest.TestCase):
                 break
 
         if not still_exists:
-            self.assert_(contact is None)
+            self.assertTrue(contact is None)
             return
 
         self.assertEqual('offline', contact.show)

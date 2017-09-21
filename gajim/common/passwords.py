@@ -27,6 +27,9 @@
 import os
 import logging
 import gi
+
+from gi.repository import GLib
+
 from gajim.common import app
 
 __all__ = ['get_password', 'save_password']
@@ -78,10 +81,15 @@ class LibSecretPasswordStorage(PasswordStorage):
     def save_password(self, account_name, password, update=True):
         server = app.config.get_per('accounts', account_name, 'hostname')
         user = app.config.get_per('accounts', account_name, 'name')
-        display_name = _('XMPP account %s@%s') % (user, server)
+        display_name = _('XMPP account %s') % user + '@' + server
         attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
-        return self.Secret.password_store_sync(self.GAJIM_SCHEMA, attributes,
-            self.Secret.COLLECTION_DEFAULT, display_name, password or '', None)
+        try:
+            return self.Secret.password_store_sync(
+                self.GAJIM_SCHEMA, attributes, self.Secret.COLLECTION_DEFAULT,
+                display_name, password or '', None)
+        except GLib.Error as error:
+            log.error(error)
+            return False
 
 
 class SecretWindowsPasswordStorage(PasswordStorage):

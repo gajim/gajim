@@ -121,8 +121,10 @@ class JingleRTPContent(JingleContent):
                 InformationEvent(
                     None, conn=self.session.connection, level='error',
                     pri_txt=_('%s configuration error') % text.capitalize(),
-                    sec_txt=_('Couldn’t setup %s. Check your configuration.\n\n'
-                              'Pipeline was:\n%s\n\nError was:\n%s') % (text, pipeline, str(e))))
+                    sec_txt=_('Couldn’t setup %(text)s. Check your '
+                    'configuration.\n\nPipeline was:\n%(pipeline)s\n\n'
+                    'Error was:\n%(error)s') % {'text': text,
+                    'pipeline': pipeline, 'error': str(e)}))
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):
@@ -228,9 +230,9 @@ class JingleRTPContent(JingleContent):
                     InformationEvent(
                         None, conn=self.session.connection, level='error',
                         pri_txt=_('GStreamer error'),
-                        sec_txt=_('Error: %s\nDebug: %s' %
-                                  (message.get_structure().get_value('gerror'),
-                                   message.get_structure().get_value('debug')))))
+                        sec_txt=_('Error: %(error)s\nDebug: %(debug)s' % {
+                            'error': message.get_structure().get_value('gerror'),
+                            'debug': message.get_structure().get_value('debug')})))
 
             sink_pad = self.p2psession.get_property('sink-pad')
 

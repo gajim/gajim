@@ -53,7 +53,7 @@ ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
 
-log = logging.getLogger('gajim')
+glog = logging.getLogger('gajim')
 
 logger = None
 
@@ -87,8 +87,6 @@ else:
     LANG = LANG[:2] # en, fr, el etc..
 
 os_info = None # used to cache os information
-
-gmail_domains = ['gmail.com', 'googlemail.com']
 
 transport_type = {} # list the type of transport
 
@@ -176,7 +174,7 @@ try:
     '''
     v_gnupg = gnupg.__version__
     if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
-        log.info('Gajim needs python-gnupg >= 0.3.8')
+        glog.info('Gajim needs python-gnupg >= 0.3.8')
         HAVE_GPG = False
 except ImportError:
     HAVE_GPG = False
@@ -247,7 +245,7 @@ try:
     if sleepy.SUPPORTED:
         HAVE_IDLE = True
 except Exception:
-    log.debug(_('Unable to load idle module'))
+    glog.info(_('Unable to load idle module'))
     HAVE_IDLE = False
 
 
@@ -261,7 +259,8 @@ gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_SSN, nbxmpp.NS_MOOD, nbxmpp.NS_ACTIVITY, nbxmpp.NS_NICK,
     nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES_2,
     nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
-    nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CONFERENCE, nbxmpp.NS_CORRECT]
+    nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CONFERENCE, nbxmpp.NS_CORRECT,
+    nbxmpp.NS_EME]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}
@@ -493,3 +492,7 @@ def get_priority(account, show):
     elif prio > 127:
         prio = 127
     return prio
+
+def log(domain):
+    root = 'gajim.'
+    return logging.getLogger(root + domain)

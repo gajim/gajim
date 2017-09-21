@@ -1052,7 +1052,8 @@ class RosterWindow:
             account_name = _('Merged accounts')
             accounts = []
         else:
-            account_name = account
+            acclabel = app.config.get_per('accounts', account, 'account_label')
+            account_name = acclabel or account
             accounts = [account]
 
         if account in self.collapsed_rows and \
@@ -3229,15 +3230,10 @@ class RosterWindow:
 
     def on_edit_account(self, widget, account):
         if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].window.present()
+            app.interface.instances['accounts'].present()
         else:
             app.interface.instances['accounts'] = config.AccountsWindow()
         app.interface.instances['accounts'].select_account(account)
-
-    def on_open_gmail_inbox(self, widget, account):
-        url = app.connections[account].gmail_url
-        if url:
-            helpers.launch_browser_mailer('url', url)
 
     def on_change_status_message_activate(self, widget, account):
         show = app.SHOW_LIST[app.connections[account].connected]
@@ -4641,8 +4637,8 @@ class RosterWindow:
                 # c_dest is None if jid_dest doesn't belong to account
                 return
             menu = Gtk.Menu()
-            item = Gtk.MenuItem.new_with_label(_('Send %s to %s') % (
-                c_source.get_shown_name(), c_dest.get_shown_name()))
+            item = Gtk.MenuItem.new_with_label(_('Send %(from)s to %(to)s') % {
+                'from': c_source.get_shown_name(), 'to': c_dest.get_shown_name()})
             item.set_use_underline(False)
             item.connect('activate', self.on_drop_rosterx, account_source,
             c_source, account_dest, c_dest, is_big_brother, context, etime)
@@ -4659,8 +4655,8 @@ class RosterWindow:
                 item.set_use_underline(False)
             else:
                 item = Gtk.MenuItem.new_with_label(
-                    _('Make %s and %s metacontacts') % (
-                    c_source.get_shown_name(), c_dest.get_shown_name()))
+                    _('Make %(contact1)s and %(contact2)s metacontacts') % {
+                    'contact1': c_source.get_shown_name(), 'contact2': c_dest.get_shown_name()})
                 item.set_use_underline(False)
 
             item.connect('activate', self.on_drop_in_contact, account_source,
@@ -5035,8 +5031,6 @@ class RosterWindow:
             start_chat_menuitem = xml.get_object('start_chat_menuitem')
             join_group_chat_menuitem = xml.get_object(
                 'join_group_chat_menuitem')
-            open_gmail_inbox_menuitem = xml.get_object(
-                'open_gmail_inbox_menuitem')
             add_contact_menuitem = xml.get_object('add_contact_menuitem')
             service_discovery_menuitem = xml.get_object(
                 'service_discovery_menuitem')
@@ -5106,13 +5100,6 @@ class RosterWindow:
 
             else:
                 pep_menuitem.set_sensitive(False)
-
-            if not app.connections[account].gmail_url:
-                open_gmail_inbox_menuitem.set_no_show_all(True)
-                open_gmail_inbox_menuitem.hide()
-            else:
-                open_gmail_inbox_menuitem.connect('activate',
-                    self.on_open_gmail_inbox, account)
 
             edit_account_menuitem.connect('activate', self.on_edit_account,
                 account)

@@ -38,8 +38,8 @@ configdir = gajim_root + '/test/tmp'
 import time
 
 # define _ for i18n
-import __builtin__
-__builtin__._ = lambda x: x
+import builtins
+builtins._ = lambda x: x
 
 # wipe config directory
 import os
@@ -54,9 +54,8 @@ gajim.common.configpaths.gajimpaths.init(configdir)
 
 # for some reason common.app needs to be imported before xmpppy?
 from gajim.common import app
-from gajim.common import xmpp
 
-app.DATA_DIR = gajim_root + '/data'
+app.DATA_DIR = gajim_root + '/gajim/data'
 
 from common.stanza_session import StanzaSession
 
@@ -77,10 +76,10 @@ class PluginManagerTestCase(unittest.TestCase):
         self.pluginmanager.test_arg = 1
         secondPluginManager = PluginManager()
 
-        self.failUnlessEqual(id(secondPluginManager), id(self.pluginmanager),
-                                                 'Different IDs in references to PluginManager objects (not a singleton)')
-        self.failUnlessEqual(secondPluginManager.test_arg, 1,
-                                                 'References point to different PluginManager objects (not a singleton')
+        self.assertEqual(id(secondPluginManager), id(self.pluginmanager),
+                         'Different IDs in references to PluginManager objects (not a singleton)')
+        self.assertEqual(secondPluginManager.test_arg, 1,
+                         'References point to different PluginManager objects (not a singleton')
 
 def suite():
     suite = unittest.TestLoader().loadTestsFromTestCase(PluginManagerTestCase)

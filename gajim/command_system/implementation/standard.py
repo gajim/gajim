@@ -298,7 +298,8 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Invite a user to a room for a reason"))
     def invite(self, jid, reason):
         self.connection.send_invite(self.room_jid, jid, reason)
-        return _("Invited %s to %s") % (jid, self.room_jid)
+        return _("Invited %(jid)s to %(room_jid)s") % {'jid': jid,
+            'room_jid': self.room_jid}
 
     @command(raw=True, empty=True)
     @doc(_("Join a group chat given by a jid, optionally using given nickname"))

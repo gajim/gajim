@@ -107,7 +107,7 @@ class MockInterface(Mock):
         self.msg_win_mgr = Mock()
         self.roster = Mock()
         app.ged = ged.GlobalEventsDispatcher()
-        import plugins
+        from gajim import plugins
         app.plugin_manager = plugins.PluginManager()
 
         self.remote_ctrl = None
@@ -119,7 +119,7 @@ class MockInterface(Mock):
             self.jabber_state_images = {'16': {}, '24': {}, '32': {},
                 'opened': {}, 'closed': {}}
 
-            import gtkgui_helpers
+            from gajim import gtkgui_helpers
             gtkgui_helpers.make_jabber_state_images()
         else:
             self.jabber_state_images = {'16': Mock(), '24': Mock(),

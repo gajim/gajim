@@ -106,7 +106,7 @@ def load_secrets(filename):
                     if type(secret) is str:
                         secrets.srs[acct][jid].remove((secret, verified))
                         secrets.srs[acct][jid].append((secret.encode('latin1'), verified))
-    except (KeyError, EOFError):
+    except (KeyError, EOFError, ImportError):
         f.close()
         secrets = Secrets(filename)
 
