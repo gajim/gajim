@@ -219,7 +219,7 @@ package_data_moods = ['data/moods/*/*.png']
 package_data_other = ['data/other/*']
 package_data_sounds = ['data/sounds/*.wav']
 package_data_style = ['data/style/gajim.css']
-package_plugins_data = ['plugins/*/*']
+package_plugins_data = ['data/plugins/*/*']
 package_data = (package_data_activities
                 + package_data_emoticons
                 + package_data_gui

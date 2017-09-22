@@ -103,7 +103,7 @@ class ConfigPaths:
         self.add('GUI', None, os.path.join(basedir, 'data', 'gui'))
         self.add('ICONS', None, os.path.join(basedir, 'data', 'icons'))
         self.add('HOME', None, os.path.expanduser('~'))
-        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'plugins'))
+        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'data', 'plugins'))
 
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)
