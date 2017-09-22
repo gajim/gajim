@@ -856,18 +856,18 @@ class ChatControl(ChatControlBase):
 
         self._show_lock_image(**encryption_state)
 
-    def _show_lock_image(self, visible, enc_type='',
-                         authenticated=False):
+    def _show_lock_image(self, visible, enc_type='', authenticated=False):
         """
         Set lock icon visibility and create tooltip
         """
         if authenticated:
             authenticated_string = _('and authenticated')
-            img_path = gtkgui_helpers.get_icon_path('security-high')
+            self.lock_image.set_from_icon_name(
+                'security-high', Gtk.IconSize.MENU)
         else:
             authenticated_string = _('and NOT authenticated')
-            img_path = gtkgui_helpers.get_icon_path('security-low')
-        self.lock_image.set_from_file(img_path)
+            self.lock_image.set_from_icon_name(
+                'security-low', Gtk.IconSize.MENU)
 
         tooltip = _('%(type)s encryption is active %(authenticated)s.') % {'type': enc_type, 'authenticated': authenticated_string}
 
