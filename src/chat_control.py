@@ -2314,12 +2314,13 @@ class ChatControl(ChatControlBase):
         if authenticated:
             #About encrypted chat session
             authenticated_string = _('and authenticated')
-            img_path = gtkgui_helpers.get_icon_path('security-high')
+            pixbuf = gtkgui_helpers.get_icon_pixmap('security-high')
         else:
             #About encrypted chat session
             authenticated_string = _('and NOT authenticated')
-            img_path = gtkgui_helpers.get_icon_path('security-low')
-        self.lock_image.set_from_file(img_path)
+            pixbuf = gtkgui_helpers.get_icon_pixmap('security-low')
+
+        self.lock_image.set_from_pixbuf(pixbuf)
 
         #status will become 'is' or 'is not', authentificaed will become
         #'and authentificated' or 'and not authentificated', logged will become
