@@ -2309,7 +2309,12 @@ class Interface:
             app.idlequeue.process()
         except Exception:
             # Otherwise, an exception will stop our loop
-            timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+
+            if sys.platform == 'win32':
+                timeout, in_seconds = 20, None
+            else:
+                timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+
             if in_seconds:
                 GLib.timeout_add_seconds(timeout, self.process_connections)
             else:
@@ -2566,7 +2571,11 @@ class Interface:
         self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
         GLib.timeout_add(100, self.autoconnect)
-        timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+        if sys.platform == 'win32':
+            timeout, in_seconds = 20, None
+        else:
+            timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+
         if in_seconds:
             GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
