@@ -184,11 +184,6 @@ class ChatControl(ChatControlBase):
         self._pep_images['location'] = self.xml.get_object('location_image')
         self.update_all_pep_types()
 
-        # keep timeout id and window obj for possible big avatar
-        # it is on enter-notify and leave-notify so no need to be
-        # per jid
-        self.show_bigger_avatar_timeout_id = None
-        self.bigger_avatar_window = None
         self.show_avatar()
 
         # Hook up signals
@@ -199,13 +194,6 @@ class ChatControl(ChatControlBase):
 
         widget = self.xml.get_object('avatar_eventbox')
         widget.set_property('height-request', AvatarSize.CHAT)
-        id_ = widget.connect('enter-notify-event',
-            self.on_avatar_eventbox_enter_notify_event)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('leave-notify-event',
-            self.on_avatar_eventbox_leave_notify_event)
-        self.handlers[id_] = widget
 
         id_ = widget.connect('button-press-event',
             self.on_avatar_eventbox_button_press_event)
@@ -575,38 +563,6 @@ class ChatControl(ChatControlBase):
         self._get_audio_content().set_out_volume(value / 100)
         # Save volume to config
         app.config.set('audio_output_volume', value)
-
-    def on_avatar_eventbox_enter_notify_event(self, widget, event):
-        """
-        Enter the eventbox area so we under conditions add a timeout to show a
-        bigger avatar after 0.5 sec
-        """
-        avatar_pixbuf = app.interface.get_avatar(self.account, self.contact.jid)
-        if avatar_pixbuf is None:
-            return
-        avatar_w = avatar_pixbuf.get_width()
-        avatar_h = avatar_pixbuf.get_height()
-
-        scaled_buf = self.xml.get_object('avatar_image').get_pixbuf()
-        scaled_buf_w = scaled_buf.get_width()
-        scaled_buf_h = scaled_buf.get_height()
-
-        # do we have something bigger to show?
-        if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
-            # wait for 0.5 sec in case we leave earlier
-            if self.show_bigger_avatar_timeout_id is not None:
-                GLib.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = GLib.timeout_add(500,
-                    self.show_bigger_avatar, widget, avatar_pixbuf)
-
-    def on_avatar_eventbox_leave_notify_event(self, widget, event):
-        """
-        Left the eventbox area that holds the avatar img
-        """
-        # did we add a timeout? if yes remove it
-        if self.show_bigger_avatar_timeout_id is not None:
-            GLib.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = None
 
     def on_avatar_eventbox_button_press_event(self, widget, event):
         """
@@ -1229,9 +1185,6 @@ class ChatControl(ChatControlBase):
         if self.session:
             self.session.control = None
 
-        # Remove bigger avatar window
-        if self.bigger_avatar_window:
-            self.bigger_avatar_window.destroy()
         # Clean events
         app.events.remove_events(self.account, self.get_full_jid(),
                 types=['printed_' + self.type_id, self.type_id])
@@ -1314,15 +1267,6 @@ class ChatControl(ChatControlBase):
             if self.contact != obj.contact:
                 return
         self.print_conversation(_('Pong! (%s s.)') % obj.seconds, 'status')
-
-    def set_control_active(self, state):
-        ChatControlBase.set_control_active(self, state)
-        # Hide bigger avatar window
-        if self.bigger_avatar_window:
-            self.bigger_avatar_window.destroy()
-            self.bigger_avatar_window = None
-            # Re-show the small avatar
-            self.show_avatar()
 
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):
@@ -1501,46 +1445,6 @@ class ChatControl(ChatControlBase):
                         self.account)
             elif typ == 'pm':
                 control.remove_contact(nick)
-
-    def show_bigger_avatar(self, small_avatar, avatar_pixbuf):
-        """
-        Resize the avatar, if needed, so it has at max half the screen size and
-        shows it
-        """
-        # Hide the small avatar
-        image = self.xml.get_object('avatar_image')
-        image.hide()
-
-        screen_w = Gdk.Screen.width()
-        screen_h = Gdk.Screen.height()
-        avatar_w = avatar_pixbuf.get_width()
-        avatar_h = avatar_pixbuf.get_height()
-        half_scr_w = screen_w / 2
-        half_scr_h = screen_h / 2
-        if avatar_w > half_scr_w:
-            avatar_w = half_scr_w
-        if avatar_h > half_scr_h:
-            avatar_h = half_scr_h
-        # we should make the cursor visible
-        # gtk+ doesn't make use of the motion notify on gtkwindow by default
-        # so this line adds that
-
-        alloc = small_avatar.get_allocation()
-        # make the bigger avatar window show up centered
-        small_avatar_x, small_avatar_y = alloc.x, alloc.y
-        translated_coordinates = small_avatar.translate_coordinates(
-            app.interface.roster.window, 0, 0)
-        if translated_coordinates:
-            small_avatar_x, small_avatar_y = translated_coordinates
-        roster_x, roster_y  = self.parent_win.window.get_window().get_origin()[1:]
-        center_x = roster_x + small_avatar_x + (alloc.width / 2)
-        center_y = roster_y + small_avatar_y + (alloc.height / 2)
-        pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2)
-
-        dialogs.BigAvatarWindow(avatar_pixbuf, pos_x, pos_y, avatar_w,
-            avatar_h, self.show_avatar)
-
-        self.show_bigger_avatar_timeout_id = None
 
     def _on_send_file_menuitem_activate(self, widget):
         self._on_send_file()
