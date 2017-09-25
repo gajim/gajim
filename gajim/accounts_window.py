@@ -556,8 +556,8 @@ class ZeroConfPage(GenericOptionPage):
     def __init__(self, account, parent=None):
 
         options = [
-            Option(OptionKind.DIALOG, _('Credentials'),
-                   OptionType.DIALOG, props={'dialog': CredentialsDialog}),
+            Option(OptionKind.DIALOG, _('Profile'),
+                   OptionType.DIALOG, props={'dialog': ZeroconfProfileDialog}),
 
             Option(OptionKind.SWITCH, _('Connect on startup'),
                    OptionType.ACCOUNT_CONFIG, 'autoconnect',
@@ -578,7 +578,7 @@ class ZeroConfPage(GenericOptionPage):
         GenericOptionPage.__init__(self, account, parent, options)
 
 
-class CredentialsDialog(OptionsDialog):
+class ZeroconfProfileDialog(OptionsDialog):
     def __init__(self, account, parent):
 
         options = [
@@ -595,7 +595,7 @@ class CredentialsDialog(OptionsDialog):
                    OptionType.ACCOUNT_CONFIG, 'zeroconf_email'),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Credential Options'),
+        OptionsDialog.__init__(self, parent, _('Profile'),
                                Gtk.DialogFlags.MODAL, options, account)
 
 
