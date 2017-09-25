@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -OO
+#!/usr/bin/env python3
 ##
 ## Copyright (C) 2005 Yann Le Boulanger <asterix AT lagaule.org>
 ## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
@@ -23,11 +23,14 @@
 import os
 import sys
 
-if os.geteuid() == 0:
-    sys.exit("You must not launch gajim as root, it is insecure.")
+if sys.platform != 'win32':
+    if os.geteuid() == 0:
+        sys.exit("You must not launch gajim as root, it is insecure.")
 
-sys.path.append("@PY_SITEDIR@")
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import gajim.history_manager as g
 
-import gajim.gajim_remote as g
-
-g.GajimRemote()
+g.HistoryManager()
+Gtk.main()

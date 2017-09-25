@@ -252,8 +252,8 @@ class GajimApplication(Gtk.Application):
         if options.contains('config-path'):
             self.config_path = options.lookup_value('config-path').get_string()
         if options.contains('version'):
-            from gajim.common.defs import version
-            print(version)
+            from gajim import __version__
+            print(__version__)
             return 0
         if options.contains('quiet'):
             logging_helpers.set_quiet()

@@ -9,8 +9,7 @@ stages:
 run-test:
   stage: test
   script:
-    - ./autogen.sh
-    - make test_nogui
+    - python3 setup.py test_nogui
 
 run-pylint:
   stage: test
@@ -20,8 +19,8 @@ run-pylint:
 run-build:
   stage: build
   script:
-    - ./autogen.sh
-    - make dist
+    - python3 setup.py sdist
+    - cd dist
     - export FN="gajim-default-"$(date +%F)".tar"
     - mv gajim-*.tar.gz $FN.gz
     - mkdir tmp_add_plugins
@@ -30,11 +29,12 @@ run-build:
     - tar xzf $FN.gz
     - rm $FN.gz
     - export GF=$(find . -maxdepth 1 -type d -name 'gajim-*')
-    - cd $GF/plugins/
+    - mkdir -p $GF/gajim/data/plugins/
+    - cd $GF/gajim/data/plugins/
     - curl -O https://ftp.gajim.org/plugins_1/plugin_installer.zip
     - unzip plugin_installer.zip
     - rm plugin_installer.zip
-    - cd ../..
+    - cd ../../../..
     - tar czf ../$FN.gz gajim-*
     - cd ..
     - rm -rf tmp_add_plugins

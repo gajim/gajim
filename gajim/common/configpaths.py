@@ -25,7 +25,6 @@
 import os
 import sys
 import tempfile
-from gajim.common import defs
 from enum import Enum, unique
 
 @unique
@@ -102,10 +101,9 @@ class ConfigPaths:
         basedir = pkg_resources.resource_filename("gajim", ".")
         self.add('DATA', None, os.path.join(basedir, 'data'))
         self.add('GUI', None, os.path.join(basedir, 'data', 'gui'))
-        basedir = os.environ.get('GAJIM_BASEDIR', defs.basedir)
-        self.add('ICONS', None, os.path.join(basedir, 'icons'))
+        self.add('ICONS', None, os.path.join(basedir, 'data', 'icons'))
         self.add('HOME', None, os.path.expanduser('~'))
-        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'plugins'))
+        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'data', 'plugins'))
 
     def add(self, name, type_, path):
         self.paths[name] = (type_, path)

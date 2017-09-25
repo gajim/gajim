@@ -2520,7 +2520,7 @@ class Interface:
     @staticmethod
     def create_ipython_window():
         try:
-            from gajim.ipython_view import IPythonView
+            from gajim.dev.ipython_view import IPythonView
         except ImportError:
             print('ipython_view not found')
             return

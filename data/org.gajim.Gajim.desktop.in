@@ -1,9 +1,9 @@
 [Desktop Entry]
 Categories=Network;InstantMessaging;GTK;GNOME;
-_Name=Gajim
-_GenericName=Jabber IM Client
-_Comment=A GTK+ Jabber client
-_Keywords=chat;messaging;im;xmpp;bonjour;voip;
+Name=Gajim
+GenericName=Jabber IM Client
+Comment=A GTK+ Jabber client
+Keywords=chat;messaging;im;xmpp;bonjour;voip;
 Version=1.0
 Exec=gajim
 Icon=org.gajim.Gajim
