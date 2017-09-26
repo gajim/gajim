@@ -22,8 +22,8 @@ install:
       }
 
       bash 'pacman -Sy --noconfirm git'
-      bash 'git clone https://dev.gajim.org/gajim/gajim.git'
-
+      bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
+  
   - cmd: '%MSYS% C:/msys64/home/appveyor/gajim/win/build.sh'
   # Ugly workaround, because i found no way to tell when mingw32.exe returns
   - cmd: timeout 900

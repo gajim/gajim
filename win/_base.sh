@@ -96,14 +96,6 @@ pillow
         --force-reinstall $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
     build_pip install python-axolotl
 
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-shared-mime-info \
-        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip mingw-w64-"${ARCH}"-ncurses || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tk || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tcl || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gnome-common || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gsl || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-libvpx || true
-
     # remove the large png icons, they should be used rarely and svg works fine
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/512x512"
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/256x256"
@@ -121,62 +113,53 @@ pillow
 function install_gajim {
     [ -z "$1" ] && (echo "Missing arg"; exit 1)
 
-    rm -Rf "${PACKAGE_DIR}/gajim"
-    rm -Rf "${REPO_CLONE}"
-    git clone "${DIR}"/.. "${REPO_CLONE}"
-    mv "${REPO_CLONE}/gajim" "${PACKAGE_DIR}"
+    rm -Rf "${PACKAGE_DIR}"/gajim*
 
-    (cd "${REPO_CLONE}" && git checkout "$1") || exit 1
+    cd ..
 
-    if [ "$1" = "master" ]
-    then
-        local GIT_REV=$(git rev-list --count HEAD)
-        local GIT_HASH=$(git rev-parse --short HEAD)
-        QL_VERSION_DESC="QL_VERSION-rev$GIT_REV-$GIT_HASH"
-    else
-        QL_VERSION_DESC=$1
-        QL_VERSION=$1
-    fi
+    build_pip install .
+
+    QL_VERSION=$(MSYSTEM= build_python -c \
+        "import gajim; import sys; sys.stdout.write(gajim.__version__.split('-')[0])")
+
+    QL_VERSION_DESC=$(MSYSTEM= build_python -c \
+        "import gajim; import sys; sys.stdout.write(gajim.__version__)")
 
     # Create launchers
     build_python "${MISC}"/create-launcher.py \
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
     # Install plugin installer
-    wget -P "${REPO_CLONE}/plugins" -c https://ftp.gajim.org/plugins_1/plugin_installer.zip
-    7z x -o"${REPO_CLONE}"/plugins "${REPO_CLONE}"/plugins/plugin_installer.zip
-    rm -f "${REPO_CLONE}"/plugins/plugin_installer.zip
+    wget -P "${BUILD_ROOT}" -c https://ftp.gajim.org/plugins_1/plugin_installer.zip
+    mkdir "${PACKAGE_DIR}"/gajim/data/plugins
+    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
     # Install themes
     rm -Rf "${MINGW_ROOT}"/etc
     rm -Rf "${MINGW_ROOT}"/share/themes
-    mv "${REPO_CLONE}"/win/etc "${MINGW_ROOT}"
-    mv "${REPO_CLONE}"/win/themes "${MINGW_ROOT}"/share
+    cp -r win/etc "${MINGW_ROOT}"
+    cp -r win/themes "${MINGW_ROOT}"/share
 
     # Install our own icons
     rm -Rf "${MINGW_ROOT}/share/icons/hicolor"
-    mv "${REPO_CLONE}"/icons/hicolor "${MINGW_ROOT}"/share/icons
+    cp -r gajim/data/icons/hicolor "${MINGW_ROOT}"/share/icons
 
-    # we installed our app icons into hicolor
+    # Update icon cache
     "${MINGW_ROOT}"/bin/gtk-update-icon-cache-3.0.exe --force \
         "${MINGW_ROOT}/share/icons/hicolor"
-
-    # Create translation files
-    for f in "${REPO_CLONE}"/po/*.po; do
-        fullfilename=$(basename "$f")
-        filename="${fullfilename%.*}"
-        directory="${MINGW_ROOT}"/share/locale/"$filename"
-        if [ ! -d "$directory" ]; then
-            printf "create dir\n"
-            mkdir -p "${directory}"/LC_MESSAGES
-        fi
-        printf "compile $filename\n"
-        msgfmt -o "${directory}"/LC_MESSAGES/gajim.mo "$f"
-    done
 
 }
 
 function cleanup_install {
+
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-shared-mime-info \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip mingw-w64-"${ARCH}"-ncurses || true
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tk || true
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tcl || true
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gnome-common || true
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gsl || true
+    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-libvpx || true
+
     #delete translations we don't support
     for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do
         if [ ! -f "${d}"/gajim.mo ]; then
@@ -187,28 +170,6 @@ function cleanup_install {
     find "${MINGW_ROOT}" -regextype "posix-extended" -name "*.exe" -a ! \
         -iregex ".*/(gajim|python|history_manager)[^/]*\\.exe" \
         -exec rm -f {} \;
-
-    rm -Rf "${REPO_CLONE}"/.git
-    rm -Rf "${REPO_CLONE}"/.gitlab-ci.yml
-    rm -Rf "${REPO_CLONE}"/debian
-    rm -Rf "${REPO_CLONE}"/doc
-    rm -Rf "${REPO_CLONE}"/m4
-    rm -Rf "${REPO_CLONE}"/scripts
-    rm -Rf "${REPO_CLONE}"/test
-    rm -Rf "${REPO_CLONE}"/win
-    rm -Rf "${REPO_CLONE}"/icons
-    rm -Rf "${REPO_CLONE}"/po
-    rm -Rf "${REPO_CLONE}"/plugins/acronyms_expander
-    rm -Rf "${REPO_CLONE}"/plugins/dbus_plugin
-    rm -Rf "${REPO_CLONE}"/plugins/events_dump
-    rm -Rf "${REPO_CLONE}"/plugins/new_events_example
-    rm -Rf "${REPO_CLONE}"/plugins/roster_buttons
-
-    rm -Rf "${REPO_CLONE}"/data/emoticons/noto-emoticons/png
-    rm -Rf "${REPO_CLONE}"/data/emoticons/noto-emoticons/README.md
-
-    find "${REPO_CLONE}"/* -maxdepth 0 -type f ! -regex ".*/\(AUTHORS\|COPYING\|THANKS\|THANKS.artists\)" -exec rm -f {} \;
-    find "${REPO_CLONE}"/data/* -maxdepth 0 -type f -exec rm -f {} \;
 
     rm -Rf "${MINGW_ROOT}"/libexec
     rm -Rf "${MINGW_ROOT}"/share/gtk-doc
@@ -257,7 +218,6 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/lib/ruby
     rm -Rf "${MINGW_ROOT}"/lib/tcl8
     rm -Rf "${MINGW_ROOT}"/lib/tcl8.6
-
 
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstvpx.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstdaala.dll
@@ -316,6 +276,8 @@ function cleanup_install {
 
     find "${MINGW_ROOT}"/bin -name "*.pyo" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
+    # This file is not able to compile because of syntax errors
+    find "${MINGW_ROOT}"/bin -name "glib-gettextize-script.py" -exec rm -f {} \;
     build_compileall -q "${MINGW_ROOT}"
     find "${MINGW_ROOT}" -name "*.py" ! -name "*theme.py" -exec rm -f {} \;
     find "${MINGW_ROOT}"/bin -name "*.pyc" -exec rm -f {} \;
