@@ -1358,8 +1358,8 @@ class ConversationTextview(GObject.GObject):
                 self.tv.display_html(xhtml, self.tv, self, iter_=iter_)
                 return
             except Exception as e:
-                app.log.debug('Error processing xhtml: ' + str(e))
-                app.log.debug('with |' + xhtml + '|')
+                log.debug('Error processing xhtml: ' + str(e))
+                log.debug('with |' + xhtml + '|')
 
         # /me is replaced by name if name is given
         if name and (text.startswith('/me ') or text.startswith('/me\n')):

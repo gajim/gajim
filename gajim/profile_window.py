@@ -31,6 +31,7 @@ import base64
 import mimetypes
 import os
 import time
+import logging
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
@@ -39,6 +40,7 @@ from gajim import vcard
 from gajim.common import app
 from gajim.common import ged
 
+log = logging.getLogger('gajim.profile')
 
 class ProfileWindow:
     """
@@ -181,7 +183,7 @@ class ProfileWindow:
                 try:
                     os.remove(path_to_file)
                 except OSError:
-                    app.log.debug('Cannot remove %s' % path_to_file)
+                    log.debug('Cannot remove %s' % path_to_file)
 
         def on_clear(widget):
             self.dialog.destroy()

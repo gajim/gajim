@@ -23,6 +23,9 @@
 
 from gajim.common import app
 import os
+import logging
+
+log = logging.getLogger('gajim.c.sleepy')
 
 
 STATE_UNKNOWN  = 'OS probably not supported'
@@ -52,7 +55,7 @@ try:
         from gajim.common import idle
         idle.xss_available
 except Exception:
-    app.log.debug('Unable to load idle module')
+    log.debug('Unable to load idle module')
     SUPPORTED = False
 
 class SleepyWindows:

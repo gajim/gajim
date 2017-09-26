@@ -1473,7 +1473,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not app.config.get_per('accounts', self.name, 'savepass'):
                 # Forget password, it's wrong
                 self.password = None
-            app.log.debug("Couldn't authenticate to %s" % self._hostname)
+            log.debug("Couldn't authenticate to %s" % self._hostname)
             self.disconnect(on_purpose = True)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))

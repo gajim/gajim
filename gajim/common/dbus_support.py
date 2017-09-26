@@ -25,11 +25,14 @@
 ##
 
 import os
+import logging
 
 from gajim.common import app
 from gajim.common import exceptions
 
 _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
+
+log = logging.getLogger('gajim.c.dbus')
 
 try:
     import dbus
@@ -155,7 +158,7 @@ def get_interface(interface, path, start_service=True):
         obj = bus.get_object(interface, path)
         return dbus.Interface(obj, interface)
     except Exception as e:
-        app.log.debug(str(e))
+        log.debug(str(e))
         return None
 
 

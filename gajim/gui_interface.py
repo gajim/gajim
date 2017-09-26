@@ -2362,7 +2362,7 @@ class Interface:
             if pixbuf is None:
                 return
             if typ not in ('jpeg', 'png'):
-                app.log.info('gtkpixbuf cannot save other than jpeg and '\
+                log.info('gtkpixbuf cannot save other than jpeg and '\
                     'png formats. saving \'%s\' avatar as png file (originaly: %s)'\
                     % (jid, typ))
                 typ = 'png'
