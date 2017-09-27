@@ -461,17 +461,17 @@ class ChatControl(ChatControlBase):
         else:
             banner_image.show()
         if state == self.JINGLE_STATE_CONNECTING:
-            banner_image.set_from_stock(
-                    Gtk.STOCK_CONVERT, 1)
+            banner_image.set_from_icon_name(
+                    Gtk.STOCK_CONVERT, Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
-            banner_image.set_from_stock(
-                    Gtk.STOCK_NETWORK, 1)
+            banner_image.set_from_icon_name(
+                    "network-workgroup", Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTED:
-            banner_image.set_from_stock(
-                    Gtk.STOCK_CONNECT, 1)
+            banner_image.set_from_icon_name(
+                    Gtk.STOCK_CONNECT, Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_ERROR:
-            banner_image.set_from_stock(
-                    Gtk.STOCK_DIALOG_WARNING, 1)
+            banner_image.set_from_icon_name(
+                    "dialog-warning", Gtk.IconSize.MENU)
         self.update_toolbar()
 
     def update_audio(self):
