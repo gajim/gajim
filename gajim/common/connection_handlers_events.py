@@ -869,11 +869,11 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if show is not None:
                 fjid = nbxmpp.JID(self.fjid)
                 app.logger.insert_into_logs(fjid.getStripped(),
-                                              time_time(),
-                                              KindConstant.GCSTATUS,
-                                              contact_name=fjid.getResource(),
-                                              message=st,
-                                              show=show)
+                                            time_time(),
+                                            KindConstant.GCSTATUS,
+                                            contact_name=fjid.getResource(),
+                                            message=st,
+                                            show=show)
         if self.avatar_sha == '':
             # contact has no avatar
             puny_nick = helpers.sanitize_filename(self.nick)

@@ -1059,10 +1059,10 @@ class ConnectionHandlersBase:
             show = app.logger.convert_show_values_to_db_api_values(obj.show)
             if show is not None:
                 app.logger.insert_into_logs(nbxmpp.JID(obj.jid).getStripped(),
-                                              time_time(),
-                                              KindConstant.STATUS,
-                                              message=obj.status,
-                                              show=show)
+                                            time_time(),
+                                            KindConstant.STATUS,
+                                            message=obj.status,
+                                            show=show)
 
     def _nec_gc_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -1185,11 +1185,11 @@ class ConnectionHandlersBase:
             # usually it hold description and can be send at each connection
             # so don't store it in logs
             app.logger.insert_into_logs(obj.jid,
-                                          obj.timestamp,
-                                          KindConstant.GC_MSG,
-                                          message=obj.msgtxt,
-                                          contact_name=obj.nick,
-                                          additional_data=obj.additional_data)
+                                        obj.timestamp,
+                                        KindConstant.GC_MSG,
+                                        message=obj.msgtxt,
+                                        contact_name=obj.nick,
+                                        additional_data=obj.additional_data)
             # store in memory time of last message logged.
             # this will also be saved in rooms_last_message_time table
             # when we quit this muc
@@ -1207,10 +1207,10 @@ class ConnectionHandlersBase:
 
         if session.is_loggable():
             app.logger.insert_into_logs(nbxmpp.JID(frm).getStripped(),
-                                          tim,
-                                          KindConstant.ERROR,
-                                          message=error_msg,
-                                          subject=subject)
+                                        tim,
+                                        KindConstant.ERROR,
+                                        message=error_msg,
+                                        subject=subject)
 
         app.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
             fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,

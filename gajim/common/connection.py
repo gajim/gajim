@@ -433,10 +433,10 @@ class CommonConnection:
             return
 
         app.logger.insert_into_logs(jid, obj.timestamp, obj.kind,
-                                      message=obj.message,
-                                      subject=obj.subject,
-                                      additional_data=obj.additional_data,
-                                      stanza_id=obj.stanza_id)
+                                    message=obj.message,
+                                    subject=obj.subject,
+                                    additional_data=obj.additional_data,
+                                    stanza_id=obj.stanza_id)
 
     def ack_subscribed(self, jid):
         """
