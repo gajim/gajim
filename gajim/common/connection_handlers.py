@@ -450,117 +450,6 @@ class ConnectionVcard:
             app.nec.push_incoming_event(
                 VcardNotPublishedEvent(None, conn=self))
 
-    def _IqCB(self, con, iq_obj):
-        id_ = iq_obj.getID()
-
-        app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
-            conn=self, stanza=iq_obj))
-
-        # Check if we were waiting a timeout for this id
-        found_tim = None
-        for tim in self.awaiting_timeouts:
-            if id_ == self.awaiting_timeouts[tim][0]:
-                found_tim = tim
-                break
-        if found_tim:
-            del self.awaiting_timeouts[found_tim]
-
-        if id_ not in self.awaiting_answers:
-            return
-
-        if self.awaiting_answers[id_][0] == AGENT_REMOVED:
-            jid = self.awaiting_answers[id_][1]
-            app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
-                agent=jid))
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                app.nec.push_incoming_event(MetacontactsReceivedEvent(None,
-                    conn=self, stanza=iq_obj))
-            else:
-                if iq_obj.getErrorCode() not in ('403', '406', '404'):
-                    self.private_storage_supported = False
-            self.get_roster_delimiter()
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
-            del self.awaiting_answers[id_]
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                query = iq_obj.getTag('query')
-                if not query:
-                    return
-                delimiter = query.getTagData('roster')
-                if delimiter:
-                    self.nested_group_delimiter = delimiter
-                else:
-                    self.set_roster_delimiter('::')
-            else:
-                self.private_storage_supported = False
-
-            # We can now continue connection by requesting the roster
-            self.request_roster()
-        elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
-            if iq_obj.getType() == 'result':
-                if not iq_obj.getTag('query'):
-                    account_jid = app.get_jid_from_account(self.name)
-                    roster_data = app.logger.get_roster(account_jid)
-                    roster = self.connection.getRoster(force=True)
-                    roster.setRaw(roster_data)
-                self._getRoster()
-            elif iq_obj.getType() == 'error':
-                self.roster_supported = False
-                self.discoverItems(app.config.get_per('accounts', self.name,
-                    'hostname'), id_prefix='Gajim_')
-                if app.config.get_per('accounts', self.name,
-                'use_ft_proxies'):
-                    self.discover_ft_proxies()
-                app.nec.push_incoming_event(RosterReceivedEvent(None,
-                    conn=self))
-            GLib.timeout_add_seconds(10, self.discover_servers)
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() != 'error':
-                for list_ in iq_obj.getQueryPayload():
-                    if list_.getName() == 'default':
-                        self.privacy_default_list = list_.getAttr('name')
-                        self.get_privacy_list(self.privacy_default_list)
-                        break
-                # Ask metacontacts before roster
-                self.get_metacontacts()
-            else:
-                # That should never happen, but as it's blocking in the
-                # connection process, we don't take the risk
-                self.privacy_rules_supported = False
-                self._continue_connection_request_privacy()
-        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'result':
-                list_node = iq_obj.getTag('blocklist')
-                if not list_node:
-                    return
-                self.blocked_contacts = []
-                for i in list_node.iterTags('item'):
-                    self.blocked_contacts.append(i.getAttr('jid'))
-        elif self.awaiting_answers[id_][0] == PEP_CONFIG:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'error':
-                return
-            if not iq_obj.getTag('pubsub'):
-                return
-            conf = iq_obj.getTag('pubsub').getTag('configure')
-            if not conf:
-                return
-            node = conf.getAttr('node')
-            form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
-            if form_tag:
-                form = dataforms.ExtendForm(node=form_tag)
-                app.nec.push_incoming_event(PEPConfigReceivedEvent(None,
-                    conn=self, node=node, form=form))
-
     def get_vcard_photo(self, vcard):
         try:
             photo = vcard['PHOTO']['BINVAL']
@@ -1484,6 +1373,117 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         log.debug('ErrorCB')
         app.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
             stanza=iq_obj))
+
+    def _IqCB(self, con, iq_obj):
+        id_ = iq_obj.getID()
+
+        app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
+            conn=self, stanza=iq_obj))
+
+        # Check if we were waiting a timeout for this id
+        found_tim = None
+        for tim in self.awaiting_timeouts:
+            if id_ == self.awaiting_timeouts[tim][0]:
+                found_tim = tim
+                break
+        if found_tim:
+            del self.awaiting_timeouts[found_tim]
+
+        if id_ not in self.awaiting_answers:
+            return
+
+        if self.awaiting_answers[id_][0] == AGENT_REMOVED:
+            jid = self.awaiting_answers[id_][1]
+            app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
+                agent=jid))
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
+            if not self.connection:
+                return
+            if iq_obj.getType() == 'result':
+                app.nec.push_incoming_event(MetacontactsReceivedEvent(None,
+                    conn=self, stanza=iq_obj))
+            else:
+                if iq_obj.getErrorCode() not in ('403', '406', '404'):
+                    self.private_storage_supported = False
+            self.get_roster_delimiter()
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
+            del self.awaiting_answers[id_]
+            if not self.connection:
+                return
+            if iq_obj.getType() == 'result':
+                query = iq_obj.getTag('query')
+                if not query:
+                    return
+                delimiter = query.getTagData('roster')
+                if delimiter:
+                    self.nested_group_delimiter = delimiter
+                else:
+                    self.set_roster_delimiter('::')
+            else:
+                self.private_storage_supported = False
+
+            # We can now continue connection by requesting the roster
+            self.request_roster()
+        elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
+            if iq_obj.getType() == 'result':
+                if not iq_obj.getTag('query'):
+                    account_jid = app.get_jid_from_account(self.name)
+                    roster_data = app.logger.get_roster(account_jid)
+                    roster = self.connection.getRoster(force=True)
+                    roster.setRaw(roster_data)
+                self._getRoster()
+            elif iq_obj.getType() == 'error':
+                self.roster_supported = False
+                self.discoverItems(app.config.get_per('accounts', self.name,
+                    'hostname'), id_prefix='Gajim_')
+                if app.config.get_per('accounts', self.name,
+                'use_ft_proxies'):
+                    self.discover_ft_proxies()
+                app.nec.push_incoming_event(RosterReceivedEvent(None,
+                    conn=self))
+            GLib.timeout_add_seconds(10, self.discover_servers)
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() != 'error':
+                for list_ in iq_obj.getQueryPayload():
+                    if list_.getName() == 'default':
+                        self.privacy_default_list = list_.getAttr('name')
+                        self.get_privacy_list(self.privacy_default_list)
+                        break
+                # Ask metacontacts before roster
+                self.get_metacontacts()
+            else:
+                # That should never happen, but as it's blocking in the
+                # connection process, we don't take the risk
+                self.privacy_rules_supported = False
+                self._continue_connection_request_privacy()
+        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() == 'result':
+                list_node = iq_obj.getTag('blocklist')
+                if not list_node:
+                    return
+                self.blocked_contacts = []
+                for i in list_node.iterTags('item'):
+                    self.blocked_contacts.append(i.getAttr('jid'))
+        elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() == 'error':
+                return
+            if not iq_obj.getTag('pubsub'):
+                return
+            conf = iq_obj.getTag('pubsub').getTag('configure')
+            if not conf:
+                return
+            node = conf.getAttr('node')
+            form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
+            if form_tag:
+                form = dataforms.ExtendForm(node=form_tag)
+                app.nec.push_incoming_event(PEPConfigReceivedEvent(None,
+                    conn=self, node=node, form=form))
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
