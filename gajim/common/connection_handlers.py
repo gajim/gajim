@@ -342,24 +342,6 @@ class ConnectionVcard:
                 gc_contact.avatar_sha = obj.avatar_sha
                 app.interface.update_avatar(contact=gc_contact)
 
-    def add_sha(self, p, send_caps=True):
-        c = p.setTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
-        sha = app.config.get_per('accounts', self.name, 'avatar_sha')
-        app.log('avatar').info(
-            '%s: Send avatar presence: %s', self.name, sha or 'empty')
-        c.setTagData('photo', sha)
-        if send_caps:
-            return self._add_caps(p)
-        return p
-
-    def _add_caps(self, p):
-        ''' advertise our capabilities in presence stanza (xep-0115)'''
-        c = p.setTag('c', namespace=nbxmpp.NS_CAPS)
-        c.setAttr('hash', 'sha-1')
-        c.setAttr('node', 'http://gajim.org')
-        c.setAttr('ver', app.caps_hash[self.name])
-        return p
-
     def send_avatar_presence(self):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
         p = nbxmpp.Presence(typ=None, priority=self.priority,
@@ -1342,6 +1324,24 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.ged.remove_event_handler('stream-other-host-received', ged.CORE,
             self._nec_stream_other_host_received)
         app.ged.remove_event_handler('blocking', ged.CORE, self._nec_blocking)
+
+    def add_sha(self, p, send_caps=True):
+        c = p.setTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
+        sha = app.config.get_per('accounts', self.name, 'avatar_sha')
+        app.log('avatar').info(
+            '%s: Send avatar presence: %s', self.name, sha or 'empty')
+        c.setTagData('photo', sha)
+        if send_caps:
+            return self._add_caps(p)
+        return p
+
+    def _add_caps(self, p):
+        ''' advertise our capabilities in presence stanza (xep-0115)'''
+        c = p.setTag('c', namespace=nbxmpp.NS_CAPS)
+        c.setAttr('hash', 'sha-1')
+        c.setAttr('node', 'http://gajim.org')
+        c.setAttr('ver', app.caps_hash[self.name])
+        return p
 
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
