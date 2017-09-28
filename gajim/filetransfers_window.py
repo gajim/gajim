@@ -897,8 +897,8 @@ class FileTransfersWindow:
         if status:
             label = _('Pause')
             self.pause_button.set_label(label)
-            self.pause_button.set_image(Gtk.Image.new_from_stock(
-                    Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.MENU))
+            self.pause_button.set_image(Gtk.Image.new_from_icon_name(
+                    "media-playback-pause", Gtk.IconSize.MENU))
 
             self.pause_menuitem.set_sensitive(True)
             self.pause_menuitem.set_no_show_all(False)
@@ -908,8 +908,8 @@ class FileTransfersWindow:
         else:
             label = _('_Continue')
             self.pause_button.set_label(label)
-            self.pause_button.set_image(Gtk.Image.new_from_stock(
-                    Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.MENU))
+            self.pause_button.set_image(Gtk.Image.new_from_icon_name(
+                    "media-playback-start", Gtk.IconSize.MENU))
             self.pause_menuitem.hide()
             self.pause_menuitem.set_no_show_all(True)
             self.continue_menuitem.set_sensitive(True)

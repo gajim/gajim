@@ -258,7 +258,7 @@ class StatusTable:
         self.table.attach(status_label, 3, self.current_row, 1, 1)
         if show_lock:
             lock_image = Gtk.Image()
-            lock_image.set_from_stock(Gtk.STOCK_DIALOG_AUTHENTICATION,
+            lock_image.set_from_icon_name("dialog-password",
                 Gtk.IconSize.MENU)
             self.table.attach(lock_image, 4, self.current_row, 1, 1)
         self.current_row += 1

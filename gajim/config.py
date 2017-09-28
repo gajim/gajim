@@ -2443,7 +2443,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.show()
         img = self.xml.get_object('finish_image')
         if self.modify:
-            img.set_from_stock(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
+            img.set_from_icon_name(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
         else:
             path_to_file = gtkgui_helpers.get_icon_path('org.gajim.Gajim', 48)
             img.set_from_file(path_to_file)
@@ -2701,7 +2701,7 @@ class AccountCreationWizardWindow:
         self.go_online_checkbutton.hide()
         self.show_vcard_checkbutton.hide()
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
+        img.set_from_icon_name("dialog-error", Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (
             _('An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
@@ -2735,7 +2735,7 @@ class AccountCreationWizardWindow:
         if self.account in app.config.get_per('accounts'):
             app.config.del_per('accounts', self.account)
         img = self.xml.get_object('finish_image')
-        img.set_from_stock(Gtk.STOCK_DIALOG_ERROR, Gtk.IconSize.DIALOG)
+        img.set_from_icon_name("dialog-error", Gtk.IconSize.DIALOG)
         finish_text = '<big><b>%s</b></big>\n\n%s' % (_(
             'An error occurred during account creation'), obj.reason)
         self.finish_label.set_markup(finish_text)
