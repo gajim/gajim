@@ -135,9 +135,6 @@ class PluginsWindow(object):
         model, iter = treeview_selection.get_selected()
         if iter:
             plugin = model.get_value(iter, Column.PLUGIN)
-            plugin_name = model.get_value(iter, Column.NAME)
-            is_active = model.get_value(iter, Column.ACTIVE)
-
             self._display_installed_plugin_info(plugin)
         else:
             self._clear_installed_plugin_info()
@@ -236,8 +233,6 @@ class PluginsWindow(object):
         model, iter = selection.get_selected()
         if iter:
             plugin = model.get_value(iter, Column.PLUGIN)
-            plugin_name = model.get_value(iter, Column.NAME)
-            is_active = model.get_value(iter, Column.ACTIVE)
 
             if isinstance(plugin.config_dialog, GajimPluginConfigDialog):
                 plugin.config_dialog.run(self.window)
@@ -256,8 +251,6 @@ class PluginsWindow(object):
         model, iter = selection.get_selected()
         if iter:
             plugin = model.get_value(iter, Column.PLUGIN)
-            plugin_name = model.get_value(iter, Column.NAME)
-            is_active = model.get_value(iter, Column.ACTIVE)
             try:
                 app.plugin_manager.remove_plugin(plugin)
             except PluginsystemError as e:
