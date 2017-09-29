@@ -247,6 +247,12 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
             # Its a Carbon Copied Message we sent
             obj.show_in_roster = False
             obj.show_in_systray = False
+            unread_events = app.events.get_events(
+                self.conn.name, fjid, types=['chat'])
+            read_ids = []
+            for msg in unread_events:
+                read_ids.append(msg.msg_log_id)
+            app.logger.set_read_messages(read_ids)
             app.events.remove_events(self.conn.name, fjid, types=['chat'])
             do_event = False
         else:
