@@ -239,8 +239,10 @@ class PluginsWindow(object):
             plugin_name = model.get_value(iter, Column.NAME)
             is_active = model.get_value(iter, Column.ACTIVE)
 
-
-            result = plugin.config_dialog.run(self.window)
+            if isinstance(plugin.config_dialog, GajimPluginConfigDialog):
+                plugin.config_dialog.run(self.window)
+            else:
+                plugin.config_dialog(self.window)
 
         else:
             # No plugin selected. this should never be reached. As configure
