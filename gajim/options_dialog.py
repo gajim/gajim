@@ -35,6 +35,11 @@ class OptionsDialog(Gtk.ApplicationWindow):
 
         self.show_all()
         self.listbox.connect('row-activated', self.on_row_activated)
+        self.connect('key-press-event', self.on_key_press)
+
+    def on_key_press(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     @staticmethod
     def on_row_activated(listbox, row):
