@@ -135,10 +135,10 @@ function install_gajim {
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
     # Install themes
-    rm -Rf "${MINGW_ROOT}"/etc
-    rm -Rf "${MINGW_ROOT}"/share/themes
-    cp -r win/etc "${MINGW_ROOT}"
-    cp -r win/themes "${MINGW_ROOT}"/share
+    # rm -Rf "${MINGW_ROOT}"/etc
+    # rm -Rf "${MINGW_ROOT}"/share/themes
+    # cp -r win/etc "${MINGW_ROOT}"
+    # cp -r win/themes "${MINGW_ROOT}"/share
 
     # Install our own icons
     rm -Rf "${MINGW_ROOT}/share/icons/hicolor"
