@@ -1,24 +1,75 @@
-# Welcome to the Gajim project Wiki
-The goal of Gajim is to provide a full featured and easy to use Jabber/XMPP client. Gajim works nicely with GNOME, but does not require it to run. It is released under the GNU General Public License. If you find bugs or have ideas how Gajim can be better, please send tickets here.
+# Welcome to Gajim
 
-## Links
 
-- [Help and Documentation](https://dev.gajim.org/gajim/gajim/wikis/help/home)
-    * FAQ, Did you know that...
-    * Quickstart guides
-    * Advanced configuration
-- [Community](https://dev.gajim.org/gajim/gajim/wikis/community/home)
-    * Advanced use of gajim
-    * User groups
-    * Reviews
-- [Development](https://dev.gajim.org/gajim/gajim/wikis/development/home)
-    * Guidelines and documentation
-    * How to contribute
-    * The Gajim team
-- Latest release:
-    * [Gajim 0.16.8 (.tar.gz)](https://gajim.org/downloads/0.16/gajim-0.16.8.tar.gz)
-    * [Gajim 0.16.8-2 (.exe)](https://gajim.org/downloads/0.16/gajim-0.16.8-2.exe)
-    * [Gajim 0.16.8-2 portable (.exe)](https://gajim.org/downloads/0.16/gajim-portable-0.16.8-2.exe)
-    * [Daily snapshot](https://www.gajim.org/downloads/snap/?M=D)
+### Runtime Requirements
 
-- [Bug reports and Feature requests](https://dev.gajim.org/gajim/gajim/issues)
+- python3.4 or higher
+- python3-gi
+- python3-gi-cairo
+- gir1.2-gtk-3.0
+- python3-nbxmpp
+- python3-openssl (>=0.14)
+- python3-pyasn1
+
+
+### Optional Runtime Requirements
+
+- python3-crypto to enable End to end encryption
+- python3-gnupg to enable GPG encryption
+- For zeroconf (bonjour), the "enable link-local messaging" checkbox, you need dbus-glib, python-avahi
+- dnsutils (or whatever package provides the nslookup binary) for SRV support
+- gir1.2-gtkspell3-3.0 and aspell-LANG where lang is your locale eg. en, fr etc
+- gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
+- D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.
+- python3-dbus bindings (>=1.2.0)
+- gir1.2-farstream-0.2, gir1.2-gstreamer-1.0 and gir1.2-gst-plugins-base-1.0 for audio and video calls
+- gir1.2-gupnpigd-1.0 for better NAT traversing
+- gir1.2-networkmanager-1.0 for network lose detection
+- python3-idna and python3-precis-i18n for correctly parsing JIDs
+
+### Compile-time Requirements
+
+- python-setuptools
+
+
+### Installation Procedure
+
+##### Linux / Mac
+
+``./setup.py install --root=/``
+
+or
+
+``pip install .`` (python-pip is required)
+
+##### Windows
+
+see [README](./win/README.md)
+
+### Miscellaneous
+
+##### Snapshots
+
+- [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
+- [Daily Windows](https://gajim.org/downloads/snap/win)
+
+
+##### Debugging
+
+Execute gajim with --verbose
+
+##### Links
+
+- [FAQ](https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq)
+- [Wiki](https://dev.gajim.org/gajim/gajim/wikis/home)
+
+
+
+That is all, **enjoy**!
+
+(C) 2003-2017
+The Gajim Team
+[https://gajim.org](https://gajim.org)
+
+
+We use original art and parts of sounds and other art from Psi, Gossip, Gnomebaker, Gaim and some icons from various gnome-icons (mostly Dropline Etiquette) we found at art.gnome.org If you think we're violating a license please inform us. Thank you.
