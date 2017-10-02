@@ -324,11 +324,6 @@ class ChatControl(ChatControlBase):
         app.events.event_removed_unsubscribe(self.on_event_removed)
 
     def _update_toolbar(self):
-        if (app.connections[self.account].connected > 1 and not \
-        self.TYPE_ID == 'pm') or (self.contact.show != 'offline' and \
-        self.TYPE_ID == 'pm'):
-            send_button = self.xml.get_object('send_button')
-            send_button.set_sensitive(True)
         # Formatting
         # TODO: find out what encryption allows for xhtml and which not
         if self.contact.supports(NS_XHTML_IM):
@@ -1648,13 +1643,8 @@ class ChatControl(ChatControlBase):
         if contact:
             self.contact = contact
         self.draw_banner()
-        send_button = self.xml.get_object('send_button')
-        send_button.set_sensitive(True)
 
     def got_disconnected(self):
-        # Emoticons button
-        send_button = self.xml.get_object('send_button')
-        send_button.set_sensitive(False)
         # Add to roster
         self._add_to_roster_button.hide()
         # Audio button

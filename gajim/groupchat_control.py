@@ -296,8 +296,6 @@ class GroupchatControl(ChatControlBase):
 
         # Keep error dialog instance to be sure to have only once at a time
         self.error_dialog = None
-        send_button = self.xml.get_object('send_button')
-        send_button.set_sensitive(False)
 
         self.actions_button = self.xml.get_object('muc_window_actions_button')
         id_ = self.actions_button.connect('clicked',
@@ -1439,8 +1437,6 @@ class GroupchatControl(ChatControlBase):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
-        send_button = self.xml.get_object('send_button')
-        send_button.set_sensitive(True)
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(True)
         change_nick_button = self.xml.get_object('change_nick_button')
@@ -1449,8 +1445,6 @@ class GroupchatControl(ChatControlBase):
         change_subject_button.set_sensitive(True)
 
     def got_disconnected(self):
-        send_button = self.xml.get_object('send_button')
-        send_button.set_sensitive(False)
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
         change_nick_button = self.xml.get_object('change_nick_button')

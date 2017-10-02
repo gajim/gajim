@@ -353,12 +353,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_textview.drag_dest_set(Gtk.DestDefaults.MOTION |
             Gtk.DestDefaults.HIGHLIGHT, self.dnd_list, Gdk.DragAction.COPY)
 
-        # Hook up send button
-        widget = self.xml.get_object('send_button')
-        id_ = widget.connect('clicked', self._on_send_button_clicked)
-        widget.set_sensitive(False)
-        self.handlers[id_] = widget
-
         # the following vars are used to keep history of user's messages
         self.sent_history = []
         self.sent_history_pos = 0
@@ -565,20 +559,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         if event.button == 3:  # right click
             self.parent_win.popup_menu(event)
-
-    def _on_send_button_clicked(self, widget):
-        """
-        When send button is pressed: send the current message
-        """
-        message_buffer = self.msg_textview.get_buffer()
-        emoticons.replace_with_codepoint(message_buffer)
-        start_iter = message_buffer.get_start_iter()
-        end_iter = message_buffer.get_end_iter()
-        message = message_buffer.get_text(start_iter, end_iter, False)
-        xhtml = self.msg_textview.get_xhtml()
-
-        # send the message
-        self.send_message(message, xhtml=xhtml)
 
     def _conv_textview_key_press_event(self, widget, event):
         # translate any layout to latin_layout
