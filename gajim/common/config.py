@@ -101,7 +101,7 @@ class Config:
             'urlmsgcolor': [ opt_color, '#204a87', '', True ],
             'notif_signin_color': [ opt_color, '#32CD32', _('Contact signed in notification color.') ], # limegreen
             'notif_signout_color': [ opt_color, '#FF0000', _('Contact signout notification color') ], # red
-            'notif_message_color': [ opt_color, '#1E90FF', _('New message/email notification color.') ], # dodgerblue
+            'notif_message_color': [ opt_color, '#1E90FF', _('New message notification color.') ], # dodgerblue
             'notif_ftrequest_color': [ opt_color, '#F0E68C', _('File transfer request notification color.') ], # khaki
             'notif_fterror_color': [ opt_color, '#B22222', _('File transfer error notification color.') ], # firebrick
             'notif_ftcomplete_color': [ opt_color, '#9ACD32', _('File transfer complete or stopped notification color.') ], # yellowgreen
