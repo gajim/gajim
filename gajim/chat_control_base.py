@@ -333,12 +333,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.set_max_content_height(100)
         self.msg_scrolledwindow.set_min_content_height(23)
+        self.msg_scrolledwindow.get_style_context().add_class('scrolledtextview')
 
         self.msg_scrolledwindow.set_property('shadow_type', Gtk.ShadowType.IN)
         self.msg_scrolledwindow.add(self.msg_textview)
 
         hbox = self.xml.get_object('hbox')
-        hbox.pack_end(self.msg_scrolledwindow, True, True, 0)
+        hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
 
         id_ = self.msg_textview.connect('key_press_event',
             self._on_message_textview_key_press_event)

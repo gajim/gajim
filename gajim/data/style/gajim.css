@@ -1,7 +1,28 @@
 /* Gajim Application CSS File */
 
-/* ChatControl */
-#ChatControl-AuthenticationButton { padding-top: 0px; padding-bottom: 0px}
+.msgtextview-button { 
+	padding: 0px 5px 0px 5px;
+	background-color: @theme_base_color; 
+	border: 1px solid;
+	border-radius: 0px; 
+	border-color: @borders;
+	}
+
+.msgtextview-button:hover, .msgtextview-button:checked { 
+	color: @theme_base_color;
+	border-color: @borders;
+	text-shadow: none;
+	-gtk-icon-shadow: none;
+	box-shadow: none;
+	background-image: none;
+	}
+
+
+.msgtextview-button.left { border-right: none; }
+.msgtextview-button.right { border-left: none; }
+
+.scrolledtextview { border-left:none; }
+.scrolledtextview.authentication { border-right:none; }
 
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }

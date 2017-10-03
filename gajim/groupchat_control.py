@@ -801,6 +801,11 @@ class GroupchatControl(ChatControlBase):
 
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
+        context = self.msg_scrolledwindow.get_style_context()
+        if visible:
+            context.add_class('authentication')
+        else:
+            context.remove_class('authentication')
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):

@@ -42,7 +42,7 @@ class MessageTextView(Gtk.TextView):
         Gtk.TextView.__init__(self)
 
         # set properties
-        self.set_border_width(1)
+        self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
         self.set_cursor_visible(True)
