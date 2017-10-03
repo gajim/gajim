@@ -23,6 +23,7 @@ import gi
 gi.require_version('GtkSpell', '3.0')
 from gi.repository import GtkSpell
 
+
 def ensure_attached(func):
     def f(self, *args, **kwargs):
         if self.spell:

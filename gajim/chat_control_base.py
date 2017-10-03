@@ -44,7 +44,6 @@ from gajim import notify
 import re
 
 from gajim import emoticons
-from gajim.scrolled_window import ScrolledWindow
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
@@ -256,28 +255,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         MessageControl.__init__(self, type_id, parent_win, widget_name,
             contact, acct, resource=resource)
 
-        widget = self.xml.get_object('history_button')
-        # set document-open-recent icon for history button
-        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = self.xml.get_object('history_image')
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
-        id_ = widget.connect('clicked', self._on_history_menuitem_activate)
-        self.handlers[id_] = widget
-
-        # Create banner and connect signals
-        widget = self.xml.get_object('banner_eventbox')
-        id_ = widget.connect('button-press-event',
-            self._on_banner_eventbox_button_press_event)
-        self.handlers[id_] = widget
+        if self.TYPE_ID != message_control.TYPE_GC:
+            # Create banner and connect signals
+            widget = self.xml.get_object('banner_eventbox')
+            id_ = widget.connect('button-press-event',
+                self._on_banner_eventbox_button_press_event)
+            self.handlers[id_] = widget
 
         self.urlfinder = re.compile(
             r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
         self.banner_status_label = self.xml.get_object('banner_label')
-        id_ = self.banner_status_label.connect('populate_popup',
-            self.on_banner_label_populate_popup)
-        self.handlers[id_] = self.banner_status_label
+        if self.banner_status_label is not None:
+            id_ = self.banner_status_label.connect('populate_popup',
+                self.on_banner_label_populate_popup)
+            self.handlers[id_] = self.banner_status_label
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
@@ -332,9 +324,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.set_max_content_height(100)
-        self.msg_scrolledwindow.set_min_content_height(23)
+        self.msg_scrolledwindow.set_propagate_natural_height(True)
         self.msg_scrolledwindow.get_style_context().add_class('scrolledtextview')
-
         self.msg_scrolledwindow.set_property('shadow_type', Gtk.ShadowType.IN)
         self.msg_scrolledwindow.add(self.msg_textview)
 
@@ -416,6 +407,28 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             GLib.Variant("s", self.encryption or 'disabled'))
         action.connect("change-state", self.change_encryption)
         self.parent_win.window.add_action(action)
+
+        action = Gio.SimpleAction.new(
+            'browse-history-%s' % self.control_id, GLib.VariantType.new('s'))
+        action.connect('activate', self._on_history)
+        self.parent_win.window.add_action(action)
+
+    # Actions
+
+    def _on_history(self, action, param):
+        """
+        When history menuitem is pressed: call history window
+        """
+        jid = param.get_string()
+        if jid == 'none':
+            jid = self.contact.jid
+
+        if 'logs' in app.interface.instances:
+            app.interface.instances['logs'].window.present()
+            app.interface.instances['logs'].open_history(jid, self.account)
+        else:
+            app.interface.instances['logs'] = \
+                    history_window.HistoryWindow(jid, self.account)
 
     def change_encryption(self, action, param):
         encryption = param.get_string()
@@ -549,6 +562,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.show_all()
 
     def on_quote(self, widget, text):
+        self.msg_textview.remove_placeholder()
         text = '>' + text.replace('\n', '\n>') + '\n'
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
@@ -1283,13 +1297,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             widget.show_all()
 
-    def chat_buttons_set_visible(self, state):
-        """
-        Toggle chat buttons
-        """
-        MessageControl.chat_buttons_set_visible(self, state)
-        self.widget_set_visible(self.xml.get_object('actions_hbox'), state)
-
     def got_connected(self):
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
@@ -1302,3 +1309,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.no_autonegotiation = False
         self.update_toolbar()
+
+
+class ScrolledWindow(Gtk.ScrolledWindow):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def do_get_preferred_height(self):
+        min_height, natural_height = Gtk.ScrolledWindow.do_get_preferred_height(self)
+        child = self.get_child()
+        if natural_height and self.get_max_content_height() > -1 and child:
+            _, child_nat_height = child.get_preferred_height()
+            if natural_height > child_nat_height:
+                if child_nat_height < 26:
+                    return 26, 26
+
+        return min_height, natural_height

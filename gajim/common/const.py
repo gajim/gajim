@@ -30,8 +30,8 @@ class OptionType(IntEnum):
 
 class AvatarSize(IntEnum):
     ROSTER = 32
+    CHAT = 48
     NOTIFICATION = 48
-    CHAT = 52
     PROFILE = 64
     TOOLTIP = 125
     VCARD = 200

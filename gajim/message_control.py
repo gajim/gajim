@@ -57,7 +57,6 @@ class MessageControl(object):
         self.widget_name = widget_name
         self.contact = contact
         self.account = account
-        self.hide_chat_buttons = False
         self.resource = resource
         # control_id is a unique id for the control,
         # its used as action name for actions that belong to a control
@@ -174,12 +173,6 @@ class MessageControl(object):
         Derived classes SHOULD implement this
         """
         return None
-
-    def chat_buttons_set_visible(self, state):
-        """
-        Derived classes MAY implement this
-        """
-        self.hide_chat_buttons = state
 
     def got_connected(self):
         pass

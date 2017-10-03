@@ -289,6 +289,7 @@ class EmoticonPopover(Gtk.Popover):
             self.append_emoticon(child.get_child().get_text())
 
     def append_emoticon(self, pix):
+        self.text_widget.remove_placeholder()
         buffer_ = self.text_widget.get_buffer()
         if buffer_.get_char_count():
             buffer_.insert_at_cursor(' ')

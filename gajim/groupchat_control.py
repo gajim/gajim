@@ -36,6 +36,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
+from gi.repository import Gio
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
@@ -251,15 +252,6 @@ class PrivateChatControl(ChatControl):
             return
         self.show_avatar()
 
-    def show_avatar(self):
-        if not app.config.get('show_avatar_in_chat'):
-            return
-
-        pixbuf = app.interface.get_avatar(
-            self.gc_contact.avatar_sha, AvatarSize.CHAT)
-        image = self.xml.get_object('avatar_image')
-        image.set_from_pixbuf(pixbuf)
-
     def update_contact(self):
         self.contact = self.gc_contact.as_contact()
 
@@ -273,20 +265,6 @@ class PrivateChatControl(ChatControl):
             self.set_session(new_sess)
 
         self.session.negotiate_e2e(False)
-
-    def prepare_context_menu(self, hide_buttonbar_items=False):
-        """
-        Set compact view menuitem active state sets active and sensitivity state
-        for history_menuitem (False for tranasports) and file_transfer_menuitem 
-        and hide()/show() for add_to_roster_menuitem
-        """
-        menu = gui_menu_builder.get_contact_menu(self.contact, self.account,
-            use_multiple_contacts=False, show_start_chat=False,
-            show_encryption=True, control=self,
-            show_buttonbar_items=not hide_buttonbar_items,
-            gc_contact=self.gc_contact,
-            is_anonymous=self.room_ctrl.is_anonymous)
-        return menu
 
     def got_disconnected(self):
         ChatControl.got_disconnected(self)
@@ -317,56 +295,18 @@ class GroupchatControl(ChatControlBase):
         # Keep error dialog instance to be sure to have only once at a time
         self.error_dialog = None
 
-        self.actions_button = self.xml.get_object('muc_window_actions_button')
-        id_ = self.actions_button.connect('clicked',
-            self.on_actions_button_clicked)
-        self.handlers[id_] = self.actions_button
-
         self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
-
-        widget = self.xml.get_object('change_nick_button')
-        widget.set_sensitive(False)
-        id_ = widget.connect('clicked', self._on_change_nick_menuitem_activate)
-        self.handlers[id_] = widget
-
-        widget = self.xml.get_object('change_subject_button')
-        widget.set_sensitive(False)
-        id_ = widget.connect('clicked',
-            self._on_change_subject_menuitem_activate)
-        self.handlers[id_] = widget
 
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
-        widget = self.xml.get_object('bookmark_button')
-        for bm in app.connections[self.account].bookmarks:
-            if bm['jid'] == self.contact.jid:
-                widget.hide()
-                break
-        else:
-            id_ = widget.connect('clicked',
-                self._on_bookmark_room_menuitem_activate)
-            self.handlers[id_] = widget
-
-            if gtkgui_helpers.gtk_icon_theme.has_icon('bookmark-new'):
-                img = self.xml.get_object('image7')
-                img.set_from_icon_name('bookmark-new', Gtk.IconSize.MENU)
-            widget.set_sensitive(
-                app.connections[self.account].private_storage_supported or \
-                (app.connections[self.account].pep_supported and \
-                app.connections[self.account].pubsub_publish_options_supported))
-            widget.show()
-
-        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = self.xml.get_object('history_image')
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
         self.current_tooltip = None
         if parent_win is not None:
             # On AutoJoin with minimize Groupchats are created without parent
-            # Tooltip Window has to be created with parent
+            # Tooltip Window and Actions have to be created with parent
             self.set_tooltip()
+            self.add_actions()
 
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
@@ -399,8 +339,6 @@ class GroupchatControl(ChatControlBase):
         if not self.name:
             self.name = self.room_jid.split('@')[0]
 
-        compact_view = app.config.get('compact_view')
-        self.chat_buttons_set_visible(compact_view)
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
         self.widget_set_visible(self.xml.get_object('list_scrolledwindow'),
@@ -443,6 +381,10 @@ class GroupchatControl(ChatControlBase):
         self.hpaned = self.xml.get_object('hpaned')
         id_ = self.hpaned.connect('notify', self.on_hpaned_notify)
         self.handlers[id_] = self.hpaned
+
+        # Hide the Roster per default
+        self.hpaned.get_child2().set_no_show_all(True)
+        self.hpaned.get_child2().hide()
 
         # set the position of the current hpaned
         hpaned_position = app.config.get('gc-hpaned-position')
@@ -516,6 +458,22 @@ class GroupchatControl(ChatControlBase):
             gui_menu_builder.get_encryption_menu(self.control_id, self.type_id))
         self.set_encryption_menu_icon()
 
+        # Banner
+        self.banner_actionbar = self.xml.get_object('banner_actionbar')
+        self.hide_roster_button = Gtk.Button.new_from_icon_name(
+            'go-previous-symbolic', Gtk.IconSize.MENU)
+        self.hide_roster_button.connect('clicked',
+                                        lambda *args: self.show_roster())
+        self.subject_button = Gtk.MenuButton()
+        self.subject_button.set_image(Gtk.Image.new_from_icon_name(
+            'go-down-symbolic', Gtk.IconSize.MENU))
+        self.subject_button.set_popover(SubjectPopover())
+        self.subject_button.set_no_show_all(True)
+        self.banner_actionbar.pack_end(self.hide_roster_button)
+        self.banner_actionbar.pack_start(self.subject_button)
+
+        self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id)
+
         app.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
         app.ged.register_event_handler('gc-message-received', ged.GUI1,
@@ -538,14 +496,199 @@ class GroupchatControl(ChatControlBase):
 
         self.update_ui()
         self.widget.show_all()
-
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
 
+    def add_actions(self):
+        actions = [
+            ('change-subject-', self._on_change_subject),
+            ('change-nick-', self._on_change_nick),
+            ('disconnect-', self._on_disconnect),
+            ('destroy-', self._on_destroy_room),
+            ('configure-', self._on_configure_room),
+            ('bookmark-', self._on_bookmark_room),
+            ('request-voice-', self._on_request_voice),
+            ]
+
+        for action in actions:
+            action_name, func = action
+            act = Gio.SimpleAction.new(action_name + self.control_id, None)
+            act.connect("activate", func)
+            self.parent_win.window.add_action(act)
+
+        non_minimized_gc = app.config.get_per(
+            'accounts', self.account, 'non_minimized_gc').split()
+        value = self.contact.jid not in non_minimized_gc
+
+        act = Gio.SimpleAction.new_stateful(
+            'minimize-' + self.control_id, None,
+            GLib.Variant.new_boolean(value))
+        act.connect('change-state', self._on_minimize)
+        self.parent_win.window.add_action(act)
+
+        value = app.config.get_per(
+            'rooms', self.contact.jid, 'notify_on_all_messages')
+
+        act = Gio.SimpleAction.new_stateful(
+            'notify-on-message-' + self.control_id,
+            None, GLib.Variant.new_boolean(value))
+        act.connect('change-state', self._on_notify_on_all_messages)
+        self.parent_win.window.add_action(act)
+
+    def update_actions(self):
+        if self.parent_win is None:
+            return
+        win = self.parent_win.window
+        contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, self.nick)
+        online = app.gc_connected[self.account][self.room_jid]
+
+        # Destroy Room
+        win.lookup_action('destroy-' + self.control_id).set_enabled(
+            online and contact.affiliation == 'owner')
+
+        # Configure Room
+        win.lookup_action('configure-' + self.control_id).set_enabled(
+            online and contact.affiliation in ('admin', 'owner'))
+
+        # Bookmarks
+        con = app.connections[self.account]
+        bookmark_support = con.bookmarks_available()
+        not_bookmarked = True
+        for bm in con.bookmarks:
+            if bm['jid'] == self.room_jid:
+                not_bookmarked = False
+                break
+        win.lookup_action('bookmark-' + self.control_id).set_enabled(
+            online and bookmark_support and not_bookmarked)
+
+        # Request Voice
+        role = self.get_role(self.nick)
+        win.lookup_action('request-voice-' + self.control_id).set_enabled(
+            online and role == 'visitor')
+
+        # Change Subject
+        # Get this from Room Disco
+        win.lookup_action('change-subject-' + self.control_id).set_enabled(
+            online)
+
+        # Change Nick
+        win.lookup_action('change-nick-' + self.control_id).set_enabled(
+            online)
+
+    # Actions
+
+    def _on_change_subject(self, action, param):
+        def on_ok(subject):
+            # Note, we don't update self.subject since we don't know whether it
+            # will work yet
+            app.connections[self.account].send_gc_subject(
+                self.room_jid, subject)
+
+        dialogs.InputTextDialog(_('Changing Subject'),
+            _('Please specify the new subject:'), input_str=self.subject,
+            ok_handler=on_ok, transient_for=self.parent_win.window)
+
+    def _on_change_nick(self, action, param):
+        if 'change_nick_dialog' in app.interface.instances:
+            app.interface.instances['change_nick_dialog'].dialog.present()
+        else:
+            title = _('Changing Nickname')
+            prompt = _('Please specify the new nickname you want to use:')
+            app.interface.instances['change_nick_dialog'] = \
+                dialogs.ChangeNickDialog(self.account, self.room_jid, title,
+                prompt, change_nick=True, transient_for=self.parent_win.window)
+
+    def _on_disconnect(self, action, param):
+        self.force_non_minimizable = True
+        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+        self.force_non_minimizable = False
+
+    def _on_destroy_room(self, action, param):
+        def on_ok(reason, jid):
+            if jid:
+                # Test jid
+                try:
+                    jid = helpers.parse_jid(jid)
+                except Exception:
+                    dialogs.ErrorDialog(_('Invalid group chat JID'),
+                    _('The group chat JID has not allowed characters.'))
+                    return
+            app.connections[self.account].destroy_gc_room(
+                self.room_jid, reason, jid)
+
+        # Ask for a reason
+        dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
+            self.room_jid, _('You are going to remove this room permanently.'
+            '\nYou may specify a reason below:'),
+            _('You may also enter an alternate venue:'), ok_handler=on_ok,
+            transient_for=self.parent_win.window)
+
+    def _on_configure_room(self, action, param):
+        c = app.contacts.get_gc_contact(
+            self.account, self.room_jid, self.nick)
+        if c.affiliation == 'owner':
+            app.connections[self.account].request_gc_config(self.room_jid)
+        elif c.affiliation == 'admin':
+            if self.room_jid not in app.interface.instances[self.account][
+            'gc_config']:
+                app.interface.instances[self.account]['gc_config'][
+                    self.room_jid] = config.GroupchatConfigWindow(self.account,
+                    self.room_jid)
+
+    def _on_bookmark_room(self, action, param):
+        """
+        Bookmark the room, without autojoin and not minimized
+        """
+        password = app.gc_passwords.get(self.room_jid, '')
+        app.interface.add_gc_bookmark(
+            self.account, self.name, self.room_jid,
+            '0', '0', password, self.nick)
+
+    def _on_request_voice(self, action, param):
+        """
+        Request voice in the current room
+        """
+        app.connections[self.account].request_voice(self.room_jid)
+
+    def _on_minimize(self, action, param):
+        """
+        When a grouchat is minimized, unparent the tab, put it in roster etc
+        """
+        action.set_state(param)
+        non_minimized_gc = app.config.get_per(
+            'accounts', self.account, 'non_minimized_gc').split()
+
+        minimize = param.get_boolean()
+        if minimize:
+            non_minimized_gc.remove(self.contact.jid)
+        else:
+            non_minimized_gc.append(self.contact.jid)
+
+        app.config.set_per('accounts', self.account,
+                           'non_minimized_gc', ' '.join(non_minimized_gc))
+
+    def _on_notify_on_all_messages(self, action, param):
+        action.set_state(param)
+        app.config.set_per('rooms', self.contact.jid,
+                           'notify_on_all_messages', param.get_boolean())
+
+    def show_roster(self):
+        new_state = not self.hpaned.get_child2().is_visible()
+        image = self.hide_roster_button.get_image()
+        if new_state:
+            self.hpaned.get_child2().show()
+            image.set_from_icon_name('go-next-symbolic', Gtk.IconSize.MENU)
+        else:
+            self.hpaned.get_child2().hide()
+            image.set_from_icon_name('go-previous-symbolic', Gtk.IconSize.MENU)
+
     def on_groupchat_maximize(self):
         self.set_tooltip()
         self.add_window_actions()
+        self.add_actions()
+        self.update_actions()
         self.set_lock_image()
         self._schedule_activity_timers()
 
@@ -823,10 +966,6 @@ class GroupchatControl(ChatControlBase):
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
         context = self.msg_scrolledwindow.get_style_context()
-        if visible:
-            context.add_class('authentication')
-        else:
-            context.remove_class('authentication')
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
@@ -886,7 +1025,6 @@ class GroupchatControl(ChatControlBase):
         room jid, subject
         """
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        self.banner_status_label.set_ellipsize(Pango.EllipsizeMode.END)
         font_attrs, font_attrs_small = self.get_font_attrs()
         if self.is_continued:
             name = self.get_continued_conversation_name()
@@ -896,169 +1034,10 @@ class GroupchatControl(ChatControlBase):
         self.name_label.set_markup(text)
 
         if self.subject:
-            subject = helpers.reduce_chars_newlines(self.subject, max_lines=2)
-            subject = GLib.markup_escape_text(subject)
+            subject = GLib.markup_escape_text(self.subject)
             subject_text = self.urlfinder.sub(self.make_href, subject)
-            subject_text = '<span %s>%s</span>' % (font_attrs_small,
-                subject_text)
-
-            # tooltip must always hold ALL the subject
-            self.event_box.set_tooltip_text(self.subject)
-            self.banner_status_label.set_no_show_all(False)
-            self.banner_status_label.show()
-        else:
-            subject_text = ''
-            self.event_box.set_has_tooltip(False)
-            self.banner_status_label.hide()
-            self.banner_status_label.set_no_show_all(True)
-
-        self.banner_status_label.set_markup(subject_text)
-
-    def prepare_context_menu(self, hide_buttonbar_items=False):
-        """
-        Set sensitivity state for configure_room
-        """
-        xml = gtkgui_helpers.get_gtk_builder('gc_control_popup_menu.ui')
-        menu = xml.get_object('gc_control_popup_menu')
-
-        bookmark_room_menuitem = xml.get_object('bookmark_room_menuitem')
-        change_nick_menuitem = xml.get_object('change_nick_menuitem')
-        configure_room_menuitem = xml.get_object('configure_room_menuitem')
-        destroy_room_menuitem = xml.get_object('destroy_room_menuitem')
-        change_subject_menuitem = xml.get_object('change_subject_menuitem')
-        history_menuitem = xml.get_object('history_menuitem')
-        disconnect_menuitem = xml.get_object('disconnect_menuitem')
-        minimize_menuitem = xml.get_object('minimize_menuitem')
-        notify_menuitem = xml.get_object('notify_menuitem')
-        request_voice_menuitem = xml.get_object('request_voice_menuitem')
-        bookmark_separator = xml.get_object('bookmark_separator')
-        separatormenuitem2 = xml.get_object('separatormenuitem2')
-        request_voice_separator = xml.get_object('request_voice_separator')
-
-        if hide_buttonbar_items:
-            change_nick_menuitem.hide()
-            change_subject_menuitem.hide()
-            bookmark_room_menuitem.hide()
-            history_menuitem.hide()
-            bookmark_separator.hide()
-            separatormenuitem2.hide()
-        else:
-            change_nick_menuitem.show()
-            change_subject_menuitem.show()
-            bookmark_room_menuitem.show()
-            history_menuitem.show()
-            bookmark_separator.show()
-            separatormenuitem2.show()
-            for bm in app.connections[self.account].bookmarks:
-                if bm['jid'] == self.room_jid:
-                    bookmark_room_menuitem.hide()
-                    bookmark_separator.hide()
-                    break
-
-        ag = Gtk.accel_groups_from_object(self.parent_win.window)[0]
-        change_nick_menuitem.add_accelerator('activate', ag, Gdk.KEY_n,
-            Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK, Gtk.AccelFlags.VISIBLE)
-        change_subject_menuitem.add_accelerator('activate', ag,
-            Gdk.KEY_t, Gdk.ModifierType.MOD1_MASK, Gtk.AccelFlags.VISIBLE)
-        bookmark_room_menuitem.add_accelerator('activate', ag, Gdk.KEY_b,
-            Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
-        history_menuitem.add_accelerator('activate', ag, Gdk.KEY_h,
-            Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE)
-
-        if self.contact.jid not in app.config.get_per('accounts', self.account,
-        'non_minimized_gc').split(' '):
-            minimize_menuitem.set_active(True)
-        notify_menuitem.set_active(app.config.get_per('rooms', self.contact.jid,
-            'notify_on_all_messages'))
-        conn = app.connections[self.account]
-        if not conn.private_storage_supported and (not conn.pep_supported or \
-        not conn.pubsub_publish_options_supported):
-            bookmark_room_menuitem.set_sensitive(False)
-        if app.gc_connected[self.account][self.room_jid]:
-            c = app.contacts.get_gc_contact(self.account, self.room_jid,
-                self.nick)
-            if c.affiliation not in ('owner', 'admin'):
-                configure_room_menuitem.set_sensitive(False)
-            else:
-                configure_room_menuitem.set_sensitive(True)
-            if c.affiliation != 'owner':
-                destroy_room_menuitem.set_sensitive(False)
-            else:
-                destroy_room_menuitem.set_sensitive(True)
-            change_subject_menuitem.set_sensitive(True)
-            change_nick_menuitem.set_sensitive(True)
-            if c.role == 'visitor':
-                request_voice_menuitem.set_sensitive(True)
-            else:
-                request_voice_menuitem.set_sensitive(False)
-        else:
-            # We are not connected to this groupchat, disable unusable menuitems
-            configure_room_menuitem.set_sensitive(False)
-            destroy_room_menuitem.set_sensitive(False)
-            change_subject_menuitem.set_sensitive(False)
-            change_nick_menuitem.set_sensitive(False)
-            request_voice_menuitem.set_sensitive(False)
-
-        # connect the menuitems to their respective functions
-        id_ = bookmark_room_menuitem.connect('activate',
-            self._on_bookmark_room_menuitem_activate)
-        self.handlers[id_] = bookmark_room_menuitem
-
-        id_ = change_nick_menuitem.connect('activate',
-            self._on_change_nick_menuitem_activate)
-        self.handlers[id_] = change_nick_menuitem
-
-        id_ = configure_room_menuitem.connect('activate',
-            self._on_configure_room_menuitem_activate)
-        self.handlers[id_] = configure_room_menuitem
-
-        id_ = destroy_room_menuitem.connect('activate',
-            self._on_destroy_room_menuitem_activate)
-        self.handlers[id_] = destroy_room_menuitem
-
-        id_ = change_subject_menuitem.connect('activate',
-            self._on_change_subject_menuitem_activate)
-        self.handlers[id_] = change_subject_menuitem
-
-        id_ = history_menuitem.connect('activate',
-            self._on_history_menuitem_activate)
-        self.handlers[id_] = history_menuitem
-        
-        id_ = disconnect_menuitem.connect('activate',
-            self._on_disconnect_menuitem_activate)
-        self.handlers[id_] = disconnect_menuitem
-
-        id_ = request_voice_menuitem.connect('activate',
-            self._on_request_voice_menuitem_activate)
-        self.handlers[id_] = request_voice_menuitem
-
-        id_ = minimize_menuitem.connect('toggled',
-            self.on_minimize_menuitem_toggled)
-        self.handlers[id_] = minimize_menuitem
-
-        id_ = notify_menuitem.connect('toggled',
-            self.on_notify_menuitem_toggled)
-        self.handlers[id_] = notify_menuitem
-
-        menu.connect('selection-done', self.destroy_menu,
-            change_nick_menuitem, change_subject_menuitem,
-            bookmark_room_menuitem, history_menuitem)
-        return menu
-
-    def destroy_menu(self, menu, change_nick_menuitem, change_subject_menuitem,
-    bookmark_room_menuitem, history_menuitem):
-        # destroy accelerators
-        ag = Gtk.accel_groups_from_object(self.parent_win.window)[0]
-        change_nick_menuitem.remove_accelerator(ag, Gdk.KEY_n,
-            Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK)
-        change_subject_menuitem.remove_accelerator(ag, Gdk.KEY_t,
-            Gdk.ModifierType.MOD1_MASK)
-        bookmark_room_menuitem.remove_accelerator(ag, Gdk.KEY_b,
-            Gdk.ModifierType.CONTROL_MASK)
-        history_menuitem.remove_accelerator(ag, Gdk.KEY_h,
-            Gdk.ModifierType.CONTROL_MASK)
-        # destroy menu
-        menu.destroy()
+            subject_text = '<span>%s</span>' % subject_text
+            self.subject_button.get_popover().set_text(subject_text)
 
     def _nec_vcard_published(self, obj):
         if obj.conn.name != self.account:
@@ -1379,6 +1358,11 @@ class GroupchatControl(ChatControlBase):
         else:
             self.print_conversation(text)
 
+        if obj.subject == '':
+            self.subject_button.hide()
+        else:
+            self.subject_button.show()
+
     def _nec_gc_config_changed_received(self, obj):
         # statuscode is a list
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
@@ -1467,18 +1451,12 @@ class GroupchatControl(ChatControlBase):
 
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(True)
-        change_nick_button = self.xml.get_object('change_nick_button')
-        change_nick_button.set_sensitive(True)
-        change_subject_button = self.xml.get_object('change_subject_button')
-        change_subject_button.set_sensitive(True)
+
+        self.update_actions()
 
     def got_disconnected(self):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
-        change_nick_button = self.xml.get_object('change_nick_button')
-        change_nick_button.set_sensitive(False)
-        change_subject_button = self.xml.get_object('change_subject_button')
-        change_subject_button.set_sensitive(False)
         self.list_treeview.set_model(None)
         self.model.clear()
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
@@ -1511,6 +1489,8 @@ class GroupchatControl(ChatControlBase):
             ar_to = app.config.get('muc_autorejoin_timeout')
             if ar_to:
                 self.autorejoin = GLib.timeout_add_seconds(ar_to, self.rejoin)
+
+        self.update_actions()
 
     def rejoin(self):
         if not self.autorejoin:
@@ -1904,6 +1884,11 @@ class GroupchatControl(ChatControlBase):
                     st += ' (' + obj.status + ')'
                 self.print_conversation(st, graphics=False)
 
+        # Update Actions
+        if obj.status_code:
+            if '110' in obj.status_code:
+                self.update_actions()
+
     def add_contact_to_roster(self, nick, show, role, affiliation, status,
     jid='', avatar_sha=None):
         role_name = helpers.get_uf_role(role, plural=True)
@@ -2261,67 +2246,6 @@ class GroupchatControl(ChatControlBase):
         dialogs.InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
             ok_handler=on_ok, transient_for=self.parent_win.window)
-
-    def _on_disconnect_menuitem_activate(self, widget):
-        self.force_non_minimizable = True
-        self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-        self.force_non_minimizable = False
-    
-    def _on_change_nick_menuitem_activate(self, widget):
-        if 'change_nick_dialog' in app.interface.instances:
-            app.interface.instances['change_nick_dialog'].dialog.present()
-        else:
-            title = _('Changing Nickname')
-            prompt = _('Please specify the new nickname you want to use:')
-            app.interface.instances['change_nick_dialog'] = \
-                dialogs.ChangeNickDialog(self.account, self.room_jid, title,
-                prompt, change_nick=True, transient_for=self.parent_win.window)
-
-    def _on_configure_room_menuitem_activate(self, widget):
-        c = app.contacts.get_gc_contact(self.account, self.room_jid,
-            self.nick)
-        if c.affiliation == 'owner':
-            app.connections[self.account].request_gc_config(self.room_jid)
-        elif c.affiliation == 'admin':
-            if self.room_jid not in app.interface.instances[self.account][
-            'gc_config']:
-                app.interface.instances[self.account]['gc_config'][
-                    self.room_jid] = config.GroupchatConfigWindow(self.account,
-                    self.room_jid)
-
-    def _on_destroy_room_menuitem_activate(self, widget):
-        def on_ok(reason, jid):
-            if jid:
-                # Test jid
-                try:
-                    jid = helpers.parse_jid(jid)
-                except Exception:
-                    dialogs.ErrorDialog(_('Invalid group chat JID'),
-                    _('The group chat JID has not allowed characters.'))
-                    return
-            app.connections[self.account].destroy_gc_room(self.room_jid,
-                reason, jid)
-
-        # Ask for a reason
-        dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
-            self.room_jid, _('You are going to remove this room permanently.'
-            '\nYou may specify a reason below:'),
-            _('You may also enter an alternate venue:'), ok_handler=on_ok,
-            transient_for=self.parent_win.window)
-
-    def _on_bookmark_room_menuitem_activate(self, widget):
-        """
-        Bookmark the room, without autojoin and not minimized
-        """
-        password = app.gc_passwords.get(self.room_jid, '')
-        app.interface.add_gc_bookmark(self.account, self.name, self.room_jid,\
-            '0', '0', password, self.nick)
-
-    def _on_request_voice_menuitem_activate(self, widget):
-        """
-        Request voice in the current room
-        """
-        app.connections[self.account].request_voice(self.room_jid)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
     target_type, timestamp):
@@ -2913,3 +2837,40 @@ class GroupchatControl(ChatControlBase):
             self.grant_owner(widget, jid)
         else:
             self.revoke_owner(widget, jid)
+
+
+class SubjectPopover(Gtk.Popover):
+    def __init__(self):
+        Gtk.Popover.__init__(self)
+        self.set_name('SubjectPopover')
+
+        scrolledwindow = Gtk.ScrolledWindow()
+        scrolledwindow.set_max_content_height(250)
+        scrolledwindow.set_propagate_natural_height(True)
+        scrolledwindow.set_propagate_natural_width(True)
+        scrolledwindow.set_policy(Gtk.PolicyType.NEVER,
+                                  Gtk.PolicyType.AUTOMATIC)
+
+        self.label = Gtk.Label()
+        self.label.set_line_wrap(True)
+        self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        self.label.set_max_width_chars(80)
+
+        scrolledwindow.add(self.label)
+
+        box = Gtk.Box()
+        box.add(scrolledwindow)
+        box.show_all()
+        self.add(box)
+
+        self.connect_after('show', self._after_show)
+
+    def set_text(self, text):
+        self.label.set_markup(text)
+
+    def _after_show(self, *args):
+        # Gtk Bug: If we set selectable True, on show
+        # everything inside the Label is selected.
+        # So we switch after show to False and again to True
+        self.label.set_selectable(False)
+        self.label.set_selectable(True)

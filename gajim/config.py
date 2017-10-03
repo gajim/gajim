@@ -187,10 +187,6 @@ class PreferencesWindow:
         else:
             show_roster_combobox.set_active(0)
 
-        # Compact View
-        st = app.config.get('compact_view')
-        self.xml.get_object('compact_view_checkbutton').set_active(st)
-
         # Ignore XHTML
         st = app.config.get('ignore_incoming_xhtml')
         self.xml.get_object('xhtml_checkbutton').set_active(st)
@@ -656,12 +652,6 @@ class PreferencesWindow:
         active = widget.get_active()
         config_type = c_config.opt_show_roster_on_startup[active]
         app.config.set('show_roster_on_startup', config_type)
-
-    def on_compact_view_checkbutton_toggled(self, widget):
-        active = widget.get_active()
-        for ctrl in self._get_all_controls():
-            ctrl.chat_buttons_set_visible(active)
-        app.config.set('compact_view', active)
 
     def on_xhtml_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'ignore_incoming_xhtml')

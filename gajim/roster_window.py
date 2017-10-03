@@ -5696,9 +5696,18 @@ class RosterWindow:
         application.add_window(self.window)
         self.add_actions()
         self.hpaned = self.xml.get_object('roster_hpaned')
+
         app.interface.msg_win_mgr = MessageWindowMgr(self.window, self.hpaned)
         app.interface.msg_win_mgr.connect('window-delete',
             self.on_message_window_delete)
+
+        # Set headermenu but hide it.
+        # MessageWindow will show it if we are in single-window mode
+        headerbar = self.xml.get_object('headerbar')
+        self.window.set_titlebar(headerbar)
+        self.header_menu = self.xml.get_object('header_menu')
+        self.header_menu.hide()
+
         self.advanced_menus = [] # We keep them to destroy them
         if app.config.get('roster_window_skip_taskbar'):
             self.window.set_property('skip-taskbar-hint', True)

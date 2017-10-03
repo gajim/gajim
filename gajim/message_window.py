@@ -81,7 +81,6 @@ class MessageWindow(object):
         self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % self.widget_name)
         self.window = self.xml.get_object(self.widget_name)
         self.window.set_application(app.app)
-        self.window.set_show_menubar(False)
         self.notebook = self.xml.get_object('notebook')
         self.parent_paned = None
 
@@ -94,16 +93,25 @@ class MessageWindow(object):
             if app.config.get('roster_on_the_right'):
                 child1 = self.parent_paned.get_child1()
                 self.parent_paned.remove(child1)
-                self.parent_paned.add(self.notebook)
-                self.parent_paned.pack1(self.notebook, resize=False,
-                    shrink=True)
-                self.parent_paned.pack2(child1, resize=True, shrink=True)
+                self.parent_paned.pack1(self.notebook, resize=False)
+                self.parent_paned.pack2(child1)
             else:
-                self.parent_paned.add(self.notebook)
-                self.parent_paned.pack2(self.notebook, resize=True, shrink=True)
+                self.parent_paned.pack2(self.notebook)
             self.window.lookup_action('show-roster').set_enabled(True)
             orig_window.destroy()
             del orig_window
+
+        # Set headermenu
+        # single-window mode: show the header menu on the roster window
+        # all other modes: add the headerbar to the new window
+        # A headerbar has to be set before the window calls show()
+        if parent_window:
+            self.header_menu = app.interface.roster.header_menu
+            self.header_menu.show()
+        else:
+            self.header_menu = self.xml.get_object('header_menu')
+            headerbar = self.xml.get_object('headerbar')
+            self.window.set_titlebar(headerbar)
 
         # NOTE: we use 'connect_after' here because in
         # MessageWindowMgr._new_window we register handler that saves window
@@ -161,6 +169,9 @@ class MessageWindow(object):
             self.notebook.set_show_tabs(False)
         self.notebook.set_show_border(app.config.get('tabs_border'))
         self.show_icon()
+
+    def set_header_menu(self, menu):
+        self.header_menu.set_menu_model(menu)
 
     def change_account_name(self, old_name, new_name):
         if old_name in self._controls:
@@ -324,6 +335,7 @@ class MessageWindow(object):
             self.notebook.show_all()
         else:
             self.window.show_all()
+
         # NOTE: we do not call set_control_active(True) since we don't know
         # whether the tab is the active one.
         self.show_title()
@@ -435,9 +447,6 @@ class MessageWindow(object):
                 return True
             elif chr(keyval) in st: # ALT + 1,2,3..
                 self.notebook.set_current_page(st.index(chr(keyval)))
-                return True
-            elif keyval == Gdk.KEY_c: # ALT + C toggles chat buttons
-                control.chat_buttons_set_visible(not control.hide_chat_buttons)
                 return True
             elif keyval == Gdk.KEY_m: # ALT + M show emoticons menu
                 control.emoticons_button.get_popover().show()
@@ -570,6 +579,7 @@ class MessageWindow(object):
         ask any confirmation
         """
         def close(ctrl):
+            self.remove_headermenu(self.notebook, ctrl)
             if reason is not None: # We are leaving gc with a status message
                 ctrl.shutdown(reason)
             else: # We are leaving gc without status message or it's a chat
@@ -607,6 +617,7 @@ class MessageWindow(object):
 
         def on_minimize(ctrl):
             if method != self.CLOSE_COMMAND:
+                self.remove_headermenu(self.notebook, ctrl)
                 ctrl.minimize()
                 self.check_tabs()
                 return
@@ -617,6 +628,13 @@ class MessageWindow(object):
             close(ctrl)
         else:
             ctrl.allow_shutdown(method, on_yes, on_no, on_minimize)
+
+    def remove_headermenu(self, notebook, ctrl):
+        page_num = notebook.page_num(ctrl.widget)
+        if page_num == notebook.get_current_page():
+            self.set_header_menu(None)
+        elif notebook.get_n_pages() == 1:
+            self.set_header_menu(None)
 
     def check_tabs(self):
         if self.parent_paned:
@@ -822,6 +840,8 @@ class MessageWindow(object):
 
     def popup_menu(self, event):
         menu = self.get_active_control().prepare_context_menu()
+        if menu is None:
+            return
         # show the menu
         menu.attach_to_widget(app.interface.roster.window, None)
         menu.show_all()
@@ -836,6 +856,7 @@ class MessageWindow(object):
         new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
         new_ctrl.set_control_active(True)
         self.show_title(control = new_ctrl)
+        self.set_header_menu(new_ctrl.control_menu)
 
         control = self.get_active_control()
         if isinstance(control, ChatControlBase):
@@ -879,6 +900,7 @@ class MessageWindow(object):
 
         if isinstance(control, ChatControlBase):
             # we forwarded it to message textview
+            control.msg_textview.remove_placeholder()
             control.msg_textview.event(event)
             control.msg_textview.grab_focus()
 
@@ -1289,6 +1311,7 @@ class MessageWindowMgr(GObject.GObject):
                 gtkgui_helpers.resize_window(w.window,
                         app.config.get('roster_width'),
                         app.config.get('roster_height'))
+                self.hide_header_bar(self.parent_win)
 
         self._windows = {}
 
@@ -1298,7 +1321,15 @@ class MessageWindowMgr(GObject.GObject):
                 mw = self.create_window(ctrl.contact, ctrl.account,
                                         ctrl.type_id)
             ctrl.parent_win = mw
+            ctrl.add_actions()
+            ctrl.update_actions()
             mw.new_tab(ctrl)
+
+    @staticmethod
+    def hide_header_bar(parent_win):
+        header_bar = parent_win.get_titlebar()
+        for child in header_bar.get_children():
+            child.hide()
 
     def save_opened_controls(self):
         if not app.config.get('remember_opened_chat_controls'):

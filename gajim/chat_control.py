@@ -30,7 +30,7 @@
 import os
 import time
 from gi.repository import Gtk
-from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
@@ -95,60 +95,10 @@ class ChatControl(ChatControlBase):
         self.last_recv_message_marks = None
         self.last_message_timestamp = None
 
-        # for muc use:
-        # widget = self.xml.get_object('muc_window_actions_button')
-        self.actions_button = self.xml.get_object('message_window_actions_button')
-        id_ = self.actions_button.connect('clicked',
-            self.on_actions_button_clicked)
-        self.handlers[id_] = self.actions_button
-
         self._formattings_button = self.xml.get_object('formattings_button')
         self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
 
-        self._add_to_roster_button = self.xml.get_object(
-            'add_to_roster_button')
-        id_ = self._add_to_roster_button.connect('clicked',
-            self._on_add_to_roster_menuitem_activate)
-        self.handlers[id_] = self._add_to_roster_button
-
-        self._audio_button = self.xml.get_object('audio_togglebutton')
-        id_ = self._audio_button.connect('toggled', self.on_audio_button_toggled)
-        self.handlers[id_] = self._audio_button
-        # add a special img
-        gtkgui_helpers.add_image_to_button(self._audio_button,
-            'gajim-mic_inactive')
-
-        self._video_button = self.xml.get_object('video_togglebutton')
-        id_ = self._video_button.connect('toggled', self.on_video_button_toggled)
-        self.handlers[id_] = self._video_button
-        # add a special img
-        gtkgui_helpers.add_image_to_button(self._video_button,
-            'gajim-cam_inactive')
-
-        self._send_file_button = self.xml.get_object('send_file_button')
-        # add a special img for send file button
-        pixbuf = gtkgui_helpers.get_icon_pixmap('document-send', quiet=True)
-        img = Gtk.Image.new_from_pixbuf(pixbuf)
-        self._send_file_button.set_image(img)
-        id_ = self._send_file_button.connect('clicked',
-            self._on_send_file_menuitem_activate)
-        self.handlers[id_] = self._send_file_button
-
-        self._convert_to_gc_button = self.xml.get_object(
-            'convert_to_gc_button')
-        id_ = self._convert_to_gc_button.connect('clicked',
-            self._on_convert_to_gc_menuitem_activate)
-        self.handlers[id_] = self._convert_to_gc_button
-
-        self._contact_information_button = self.xml.get_object(
-            'contact_information_button')
-        id_ = self._contact_information_button.connect('clicked',
-            self._on_contact_information_menuitem_activate)
-        self.handlers[id_] = self._contact_information_button
-
-        compact_view = app.config.get('compact_view')
-        self.chat_buttons_set_visible(compact_view)
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_chat_banner'))
 
@@ -161,10 +111,9 @@ class ChatControl(ChatControlBase):
         # Add lock image to show chat encryption
         self.lock_image = self.xml.get_object('lock_image')
 
-        # Convert to GC icon
-        img = self.xml.get_object('convert_to_gc_button_image')
-        img.set_from_pixbuf(gtkgui_helpers.load_icon(
-                'muc_active').get_pixbuf())
+        # Menu for the HeaderBar
+        self.control_menu = gui_menu_builder.get_singlechat_menu(
+            self.control_id)
 
         self._audio_banner_image = self.xml.get_object('audio_banner_image')
         self._video_banner_image = self.xml.get_object('video_banner_image')
@@ -270,7 +219,7 @@ class ChatControl(ChatControlBase):
 
         # Enable encryption if needed
         self.no_autonegotiation = False
-
+        self.add_actions()
         self.update_ui()
         self.set_lock_image()
 
@@ -298,6 +247,107 @@ class ChatControl(ChatControlBase):
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         app.plugin_manager.gui_extension_point('chat_control', self)
+        self.update_actions()
+
+    def add_actions(self):
+        actions = [
+            ('send-file-', self._on_send_file),
+            ('invite-contacts-', self._on_invite_contacts),
+            ('add-to-roster-', self._on_add_to_roster),
+            ('information-', self._on_information),
+            ]
+
+        for action in actions:
+            action_name, func = action
+            act = Gio.SimpleAction.new(action_name + self.control_id, None)
+            act.connect("activate", func)
+            self.parent_win.window.add_action(act)
+
+        act = Gio.SimpleAction.new_stateful(
+            'toggle-audio-' + self.control_id, None,
+            GLib.Variant.new_boolean(False))
+        act.connect('change-state', self._on_audio)
+        self.parent_win.window.add_action(act)
+
+        act = Gio.SimpleAction.new_stateful(
+            'toggle-video-' + self.control_id,
+            None, GLib.Variant.new_boolean(False))
+        act.connect('change-state', self._on_video)
+        self.parent_win.window.add_action(act)
+
+    def update_actions(self):
+        win = self.parent_win.window
+        online = app.account_is_connected(self.account)
+
+        # Add to roster
+        if not isinstance(self.contact, GC_Contact) \
+        and _('Not in Roster') in self.contact.groups and \
+        app.connections[self.account].roster_supported and online:
+            win.lookup_action(
+                'add-to-roster-' + self.control_id).set_enabled(True)
+        else:
+            win.lookup_action(
+                'add-to-roster-' + self.control_id).set_enabled(False)
+
+        # Audio
+        win.lookup_action('toggle-audio-' + self.control_id).set_enabled(
+            online and self.audio_available)
+
+        # Video
+        win.lookup_action('toggle-video-' + self.control_id).set_enabled(
+            online and self.video_available)
+
+        # Send file
+        if ((self.contact.supports(NS_FILE) or \
+        self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and \
+        (self.type_id == 'chat' or self.gc_contact.resource)) and \
+        self.contact.show != 'offline' and online:
+            win.lookup_action('send-file-' + self.control_id).set_enabled(
+                True)
+        else:
+            win.lookup_action('send-file-' + self.control_id).set_enabled(
+                False)
+
+        # Convert to GC
+        if app.config.get_per('accounts', self.account, 'is_zeroconf'):
+            win.lookup_action(
+                'invite-contacts-' + self.control_id).set_enabled(False)
+        else:
+            if self.contact.supports(NS_MUC) and online:
+                win.lookup_action(
+                    'invite-contacts-' + self.control_id).set_enabled(True)
+            else:
+                win.lookup_action(
+                    'invite-contacts-' + self.control_id).set_enabled(False)
+
+        # Information
+        win.lookup_action(
+            'information-' + self.control_id).set_enabled(online)
+
+    def _on_send_file(self, action, param):
+        super()._on_send_file()
+
+    def _on_add_to_roster(self, action, param):
+        dialogs.AddNewContactWindow(self.account, self.contact.jid)
+
+    def _on_information(self, action, param):
+        app.interface.roster.on_info(None, self.contact, self.account)
+
+    def _on_invite_contacts(self, action, param):
+        """
+        User wants to invite some friends to chat
+        """
+        dialogs.TransformChatToMUC(self.account, [self.contact.jid])
+
+    def _on_audio(self, action, param):
+        action.set_state(param)
+        state = param.get_boolean()
+        self.on_jingle_button_toggled(state, 'audio')
+
+    def _on_video(self, action, param):
+        action.set_state(param)
+        state = param.get_boolean()
+        self.on_jingle_button_toggled(state, 'video')
 
     def subscribe_events(self):
         """
@@ -329,14 +379,6 @@ class ChatControl(ChatControlBase):
                 self._formattings_button.set_tooltip_text(_('This contact does '
                     'not support HTML'))
 
-        # Add to roster
-        if not isinstance(self.contact, GC_Contact) \
-        and _('Not in Roster') in self.contact.groups and \
-        app.connections[self.account].roster_supported:
-            self._add_to_roster_button.show()
-        else:
-            self._add_to_roster_button.hide()
-
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
         app.HAVE_FARSTREAM and self.contact.resource:
@@ -347,63 +389,6 @@ class ChatControl(ChatControlBase):
                 self.stop_jingle()
             self.video_available = False
             self.audio_available = False
-
-        # Audio buttons
-        self._audio_button.set_sensitive(self.audio_available)
-
-        # Video buttons
-        self._video_button.set_sensitive(self.video_available)
-
-        # change tooltip text for audio and video buttons if farstream is
-        # not installed
-        audio_tooltip_text = _('Toggle audio session') + '\n'
-        video_tooltip_text = _('Toggle video session') + '\n'
-        if not app.HAVE_FARSTREAM:
-            ext_text = _('Feature not available, see Help->Features')
-            self._audio_button.set_tooltip_text(audio_tooltip_text + ext_text)
-            self._video_button.set_tooltip_text(video_tooltip_text + ext_text)
-        elif not self.audio_available :
-            ext_text =_('Feature not supported by remote client')
-            self._audio_button.set_tooltip_text(audio_tooltip_text + ext_text)
-            self._video_button.set_tooltip_text(video_tooltip_text + ext_text)
-        else:
-            self._audio_button.set_tooltip_text(audio_tooltip_text[:-1])
-            self._video_button.set_tooltip_text(video_tooltip_text[:-1])
-
-        # Send file
-        if ((self.contact.supports(NS_FILE) or \
-        self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and \
-        (self.type_id == 'chat' or self.gc_contact.resource)) and \
-        self.contact.show != 'offline':
-            self._send_file_button.set_sensitive(True)
-            self._send_file_button.set_tooltip_text(_('Send files'))
-        else:
-            self._send_file_button.set_sensitive(False)
-            if not (self.contact.supports(NS_FILE) or self.contact.supports(
-            NS_JINGLE_FILE_TRANSFER_5)):
-                self._send_file_button.set_tooltip_text(_(
-                    "This contact does not support file transfer."))
-            else:
-                self._send_file_button.set_tooltip_text(
-                    _("You need to know the real JID of the contact to send "
-                    "them a file."))
-
-        # Convert to GC
-        if app.config.get_per('accounts', self.account, 'is_zeroconf'):
-            self._convert_to_gc_button.set_no_show_all(True)
-            self._convert_to_gc_button.hide()
-        else:
-            if self.contact.supports(NS_MUC):
-                self._convert_to_gc_button.set_sensitive(True)
-            else:
-                self._convert_to_gc_button.set_sensitive(False)
-
-        # Information
-        if app.account_is_disconnected(self.account):
-            self._contact_information_button.set_sensitive(False)
-        else:
-            self._contact_information_button.set_sensitive(True)
-
 
     def update_all_pep_types(self):
         for pep_type in self._pep_images:
@@ -751,12 +736,12 @@ class ChatControl(ChatControlBase):
         getattr(self, '_' + jingle_type + '_button').set_active(False)
         getattr(self, 'update_' + jingle_type)()
 
-    def on_jingle_button_toggled(self, widget, jingle_type):
+    def on_jingle_button_toggled(self, state, jingle_type):
         img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
-                        {True: 'active', False: 'inactive'}[widget.get_active()])
+                        {True: 'active', False: 'inactive'}[state])
         path_to_img = gtkgui_helpers.get_icon_path(img_name)
 
-        if widget.get_active():
+        if state:
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
                 if jingle_type == 'video':
@@ -795,12 +780,6 @@ class ChatControl(ChatControlBase):
         img = getattr(self, '_' + jingle_type + '_button').get_property('image')
         img.set_from_file(path_to_img)
 
-    def on_audio_button_toggled(self, widget):
-        self.on_jingle_button_toggled(widget, 'audio')
-
-    def on_video_button_toggled(self, widget):
-        self.on_jingle_button_toggled(widget, 'video')
-
     def set_lock_image(self):
         loggable = self.session and self.session.is_loggable()
 
@@ -832,10 +811,6 @@ class ChatControl(ChatControlBase):
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
         context = self.msg_scrolledwindow.get_style_context()
-        if visible:
-            context.add_class('authentication')
-        else:
-            context.remove_class('authentication')
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
@@ -1272,10 +1247,18 @@ class ChatControl(ChatControlBase):
         if not app.config.get('show_avatar_in_chat'):
             return
 
-        pixbuf = app.contacts.get_avatar(
-            self.account, self.contact.jid, AvatarSize.CHAT)
+        if self.TYPE_ID == message_control.TYPE_CHAT:
+            pixbuf = app.contacts.get_avatar(
+                self.account, self.contact.jid, AvatarSize.CHAT)
+        else:
+            pixbuf = app.interface.get_avatar(
+                self.gc_contact.avatar_sha, AvatarSize.CHAT)
+
         image = self.xml.get_object('avatar_image')
-        image.set_from_pixbuf(pixbuf)
+        if pixbuf is None:
+            image.set_from_icon_name('avatar-default', Gtk.IconSize.DIALOG)
+        else:
+            image.set_from_pixbuf(pixbuf)
 
     def _nec_update_avatar(self, obj):
         if obj.account != self.account:
@@ -1446,15 +1429,6 @@ class ChatControl(ChatControlBase):
             elif typ == 'pm':
                 control.remove_contact(nick)
 
-    def _on_send_file_menuitem_activate(self, widget):
-        self._on_send_file()
-
-    def _on_add_to_roster_menuitem_activate(self, widget):
-        dialogs.AddNewContactWindow(self.account, self.contact.jid)
-
-    def _on_contact_information_menuitem_activate(self, widget):
-        app.interface.roster.on_info(widget, self.contact, self.account)
-
     def _on_convert_to_gc_menuitem_activate(self, widget):
         """
         User wants to invite some friends to chat
@@ -1522,21 +1496,11 @@ class ChatControl(ChatControlBase):
         if contact:
             self.contact = contact
         self.draw_banner()
+        self.update_actions()
 
     def got_disconnected(self):
-        # Add to roster
-        self._add_to_roster_button.hide()
-        # Audio button
-        self._audio_button.set_sensitive(False)
-        # Video button
-        self._video_button.set_sensitive(False)
-        # Send file button
-        self._send_file_button.set_tooltip_text('')
-        self._send_file_button.set_sensitive(False)
-        # Convert to GC button
-        self._convert_to_gc_button.set_sensitive(False)
-
         ChatControlBase.got_disconnected(self)
+        self.update_actions()
 
     def update_status_display(self, name, uf_show, status):
         """
