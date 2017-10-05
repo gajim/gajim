@@ -45,10 +45,6 @@ class FeaturesWindow:
 
         # {name: (available_function, unix_text, windows_text)}
         self.features = {
-            _('SSL certificate validation'): (self.pyopenssl_available,
-                _('A library used to validate server certificates to ensure a secure connection.'),
-                _('Requires python-pyopenssl > 0.12 and pyasn1.'),
-                _('Requires python-pyopenssl > 0.12 and pyasn1.')),
             _('Bonjour / Zeroconf'): (self.zeroconf_available,
                 _('Serverless chatting with autodetected clients in a local network.'),
                 _('Requires python-avahi.'),
@@ -150,19 +146,6 @@ class FeaturesWindow:
         else:
             text = text + self.features[feature][2]
         self.desc_label.set_text(text)
-
-    def pyopenssl_available(self):
-        try:
-            import OpenSSL.SSL
-            import OpenSSL.crypto
-            ver = OpenSSL.__version__
-            ver_l = [int(i) for i in ver.split('.')]
-            if ver_l < [0, 12]:
-                raise ImportError
-            import pyasn1
-        except Exception:
-            return False
-        return True
 
     def zeroconf_available(self):
         return app.HAVE_ZEROCONF

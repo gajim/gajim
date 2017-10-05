@@ -271,7 +271,7 @@ setup(
     install_requires=[
         'dbus-python;sys_platform=="linux"',
         'nbxmpp',
-        'pyOpenSSL',
+        'pyOpenSSL>=0.12',
         'pyasn1',
     ],
 )
