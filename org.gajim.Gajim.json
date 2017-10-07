@@ -1,0 +1,302 @@
+{
+    "app-id": "org.gajim.Gajim",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "3.24",
+    "sdk": "org.gnome.Sdk",
+    "command": "gajim",
+    "tags": ["nightly"],
+    "desktop-file-name-prefix": "(Nightly) ",
+    "finish-args": [
+        /* X11 + XShm access */
+        "--share=ipc",
+        "--socket=x11",
+        /* Wayland access */
+        "--socket=wayland",
+        /* Needs to talk to the network: */
+        "--share=network",
+        "--filesystem=home",
+        "--socket=system-bus"
+    ],
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "PYTHON": "python3"
+        }
+    },
+    "cleanup": [
+        "/include",
+        "/lib/debug",
+        "/lib/pkgconfig",
+        "/share/aclocal",
+        "/share/doc",
+        "/share/man",
+        "*.a",
+        "*.la"
+    ],
+    "modules": [
+        {
+            "name": "python3-pycparser",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/8c/2d/aad7f16146f4197a11f8e91fb81df177adcc2073d36a17b1491fd09df6ed/pycparser-2.18.tar.gz",
+                    "sha256": "99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"
+                }
+            ]
+        },
+        {
+            "name": "python3-cffi",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/4e/32/4070bdf32812c89eb635c80880a5caa2e0189aa7999994c265577e5154f3/cffi-1.11.0.tar.gz",
+                    "sha256": "5f4ff33371c6969b39b293d9771ee91e81d26f9129be093ca1b7be357fcefd15"
+                }
+            ]
+        },
+        {
+            "name": "python3-six",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app six-1.11.0-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl",
+                    "sha256": "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyparsing",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app pyparsing-2.2.0-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/6a/8a/718fd7d3458f9fab8e67186b00abdd345b639976bc7fb3ae722e1b026a50/pyparsing-2.2.0-py2.py3-none-any.whl",
+                    "sha256": "fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010"
+                }
+            ]
+        },
+        {
+            "name": "python3-packaging",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app packaging-16.8-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/87/1b/c39b7c65b5612812b83d6cab7ef2885eac9f6beb0b7b8a7071a186aea3b1/packaging-16.8-py2.py3-none-any.whl",
+                    "sha256": "99276dc6e3a7851f32027a68f1095cd3f77c148091b092ea867a351811cfe388"
+                }
+            ]
+        },
+        {
+            "name": "python3-appdirs",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app appdirs-1.4.3-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/56/eb/810e700ed1349edde4cbdc1b2a21e28cdf115f9faf263f6bbf8447c1abf3/appdirs-1.4.3-py2.py3-none-any.whl",
+                    "sha256": "d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"
+                }
+            ]
+        },
+        {
+            "name": "python3-setuptools",
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/a4/c8/9a7a47f683d54d83f648d37c3e180317f80dc126a304c45dc6663246233a/setuptools-36.5.0.zip",
+                    "sha256": "ce2007c1cea3359870b80657d634253a0765b0c7dc5a988d77ba803fc86f2c64"
+                }
+            ]
+        },
+        {
+            "name": "python3-asn1crypto",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app asn1crypto-0.23.0-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/5e/85/d9b46c307ff2b5504432425cd99e2d9f13ab7a9835ba45c93da299cb1ec8/asn1crypto-0.23.0-py2.py3-none-any.whl",
+                    "sha256": "654b7db3b120e23474e9a1e5e38d268c77e58a9e17d2cb595456c37309846494"
+                }
+            ]
+        },
+        {
+            "name": "python3-idna",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app idna-2.6-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/27/cc/6dd9a3869f15c2edfab863b992838277279ce92663d334df9ecf5106f5c6/idna-2.6-py2.py3-none-any.whl",
+                    "sha256": "8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4"
+                }
+            ]
+        },
+        {
+            "name": "python3-cryptography",
+            "ensure-writable": [
+                "easy-install.pth"
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/9c/1a/0fc8cffb04582f9ffca61b15b0681cf2e8588438e55f61403eb9880bd8e0/cryptography-2.0.3.tar.gz",
+                    "sha256": "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyopenssl",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app pyOpenSSL-17.3.0-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/24/37/89bf12e53f1d27e8b2c8e5f8f9c7a958a3905f6916a9294a57a9d83fa165/pyOpenSSL-17.3.0-py2.py3-none-any.whl",
+                    "sha256": "aade9985b93eaec51b0c0a2a60d14bb8dcff1ff8e36fe542e3c22812ec07315e"
+                }
+            ]
+        },
+        {
+            "name": "python3-pyasn1",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app pyasn1-0.3.6-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/bf/56/47712763865a8639e6634e80405f6c758d4415620725896f412c464705f0/pyasn1-0.3.6-py2.py3-none-any.whl",
+                    "sha256": "06afc633971ab80943f06b96d3d6314f461001c92418fc0cd682a8357a1db47f"
+                }
+            ]
+        },
+        {
+            "name": "python3-dbus-python",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/ad/1b/76adc363212c642cabbf9329457a918308c0b9b5d38ce04d541a67255174/dbus-python-1.2.4.tar.gz",
+                    "sha256": "e2f1d6871f74fba23652e51d10873e54f71adab0525833c19bad9e99b1b2f9cc"
+                }
+            ]
+        },
+        /* ESession support */
+        {
+            "name": "python3-pycrypto",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/60/db/645aa9af249f059cc3a368b118de33889219e0362141e75d4eaf6f80f163/pycrypto-2.6.1.tar.gz",
+                    "sha256": "f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c"
+                },
+                {
+                    "type": "patch",
+                    "path": "flatpak/CVE-2013-7459.patch"
+                }
+            ]
+        },
+        /* gnupg support */
+        {
+            "name": "python3-python-gnupg",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app python_gnupg-0.4.1-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://pypi.python.org/packages/7a/f2/f655f52ff21457138d4a002aa0f67f1923cf682560b354cacecde1b2c767/python_gnupg-0.4.1-py2.py3-none-any.whl",
+                    "sha256": "1e4aa381bad3edbbdfcfb0ed0de73b26d6115f5090cdae9b5b6f6ff177a66aa7"
+                }
+            ]
+        },
+        /* Zeroconf support */
+        {
+            "name": "avahi",
+            "cleanup": [ "/bin", "/lib/avahi", "/share" ],
+            "config-opts": [
+                "--with-distro=none", "--disable-qt3", "--disable-qt4",
+                "--disable-libdaemon", "--disable-pygtk", "--disable-gdbm",
+                "--disable-mono", "--disable-monodoc", "--disable-manpages"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/lathiat/avahi.git",
+                    "branch": "v0.7"
+                }
+            ]
+        },
+        {
+            "name": "python3-nbxmpp",
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://dev.gajim.org/gajim/python-nbxmpp.git",
+                    "branch": "nbxmpp-0.6.0"
+                }
+            ]
+        },
+        {
+            "name": "gajim",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app --no-deps ."
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://dev.gajim.org/gajim/gajim.git"
+                }
+            ]
+        }
+    ]
+}
