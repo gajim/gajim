@@ -34,7 +34,17 @@
 
 ### Installation Procedure
 
-##### Linux / Mac
+#### Packages
+
+- [Arch](https://aur.archlinux.org/packages/gajim-git/)
+- [Debian](https://packages.debian.org/source/experimental/gajim) (tested with Debian ``testing`` and ``unstable``)
+
+#### Snapshots
+
+- [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
+- [Daily Windows](https://gajim.org/downloads/snap/win)
+
+#### Linux / Mac
 
 ``./setup.py install --root=/``
 
@@ -42,23 +52,29 @@ or
 
 ``pip install .`` (python-pip is required)
 
-##### Windows
+#### Developing
+
+For developing you dont have to install Gajim.
+
+After installing all dependencys execute
+
+``./launch.py``
+
+#### Flatpak
+
+see [README](./flatpak/README.md)
+
+#### Windows
 
 see [README](./win/README.md)
 
 ### Miscellaneous
 
-##### Snapshots
-
-- [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
-- [Daily Windows](https://gajim.org/downloads/snap/win)
-
-
-##### Debugging
+#### Debugging
 
 Execute gajim with --verbose
 
-##### Links
+#### Links
 
 - [FAQ](https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq)
 - [Wiki](https://dev.gajim.org/gajim/gajim/wikis/home)
