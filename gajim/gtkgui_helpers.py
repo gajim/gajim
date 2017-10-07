@@ -541,19 +541,6 @@ def make_gtk_month_python_month(month):
 def make_python_month_gtk_month(month):
     return month - 1
 
-def make_color_string(color):
-    """
-    Create #aabbcc color string from gtk color
-    """
-    col = '#'
-    for i in ('red', 'green', 'blue'):
-        h = hex(int(getattr(color, i) / (16*16)))
-        h = h.split('x')[1]
-        if len(h) == 1:
-            h = '0' + h
-        col += h
-    return col
-
 def make_pixbuf_grayscale(pixbuf):
     pixbuf2 = pixbuf.copy()
     pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
