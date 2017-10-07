@@ -849,7 +849,7 @@ class PreferencesWindow:
 
     def on_preference_widget_color_set(self, widget, text):
         color = widget.get_color()
-        color_string = gtkgui_helpers.make_color_string(color)
+        color_string = color.to_string()
         app.config.set(text, color_string)
         self.update_text_tags()
 
@@ -946,8 +946,8 @@ class PreferencesWindow:
         Set color value in prefs and update the UI
         """
         if state:
-            color = self.xml.get_object(widget_name).get_color()
-            color_string = gtkgui_helpers.make_color_string(color)
+            color = self.xml.get_object(widget_name).get_rgba()
+            color_string = color.to_string()
         else:
             color_string = ''
         app.config.set(option, color_string)
