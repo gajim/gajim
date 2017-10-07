@@ -212,7 +212,7 @@ class EmoticonPopover(Gtk.Popover):
                         widget = Gtk.Image()
                         widget.set_from_pixbuf(pix)
                     else:
-                        widget = Gtk.Label(pix)
+                        widget = Gtk.Label(label=pix)
                 flowbox.add(widget)
 
         notebook.show_all()
@@ -226,7 +226,7 @@ class EmoticonPopover(Gtk.Popover):
             button.get_child().set_from_pixbuf(pixbuf_list[0])
         else:
             button.remove(button.get_child())
-            label = Gtk.Label(pixbuf_list[0])
+            label = Gtk.Label(label=pixbuf_list[0])
             button.add(label)
 
         button.connect('button-press-event', self.on_modifier_press)
@@ -247,7 +247,7 @@ class EmoticonPopover(Gtk.Popover):
                 widget = Gtk.Image()
                 widget.set_from_pixbuf(pix)
             else:
-                widget = Gtk.Label(pix)
+                widget = Gtk.Label(label=pix)
             flowbox.add(widget)
 
         flowbox.show_all()

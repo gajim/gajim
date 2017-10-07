@@ -422,7 +422,7 @@ class ChangeActivityDialog:
                 hbox = Gtk.HBox(homogeneous=False, spacing=5)
                 hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                         activity), False, False, 0)
-                hbox.pack_start(Gtk.Label(pep.ACTIVITIES[category][activity]),
+                hbox.pack_start(Gtk.Label(label=pep.ACTIVITIES[category][activity]),
                         False, False, 0)
                 rbtns[act].connect('toggled', self.on_rbtn_toggled,
                         [category, activity])
