@@ -12,7 +12,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
-    <property name="title" translatable="yes">window1</property>
+    <property name="title">window1</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_privacy_lists_first_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
