@@ -1290,7 +1290,7 @@ class GroupchatControl(ChatControlBase):
             sound = 'received'
 
         # Is it a history message? Don't want sound-floods when we join.
-        if tim != time.localtime():
+        if tim != time.mktime(time.localtime()):
             sound = None
 
         return (highlight, sound)
