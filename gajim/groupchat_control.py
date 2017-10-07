@@ -1320,6 +1320,8 @@ class GroupchatControl(ChatControlBase):
         """
         special_words = app.config.get('muc_highlight_words').split(';')
         special_words.append(self.nick)
+        con = app.connections[self.account]
+        special_words.append(con.get_own_jid().getStripped())
         # Strip empties: ''.split(';') == [''] and would highlight everything.
         # Also lowercase everything for case insensitive compare.
         special_words = [word.lower() for word in special_words if word]
