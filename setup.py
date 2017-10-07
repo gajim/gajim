@@ -56,7 +56,7 @@ def build_trans(build_cmd):
     data_files = build_cmd.distribution.data_files
     for lang in ALL_LINGUAS:
         po_file = os.path.join('po', lang + '.po')
-        mo_file = os.path.join(cwd, 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
+        mo_file = os.path.join(cwd, 'build', 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
         mo_dir = os.path.dirname(mo_file)
         if not (os.path.isdir(mo_dir) or os.path.islink(mo_dir)):
             os.makedirs(mo_dir)
@@ -84,7 +84,7 @@ def build_man(build_cmd):
     data_files = build_cmd.distribution.data_files
     for man in ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']:
         filename = os.path.join('data', man)
-        newdir = os.path.join(cwd, 'man')
+        newdir = os.path.join(cwd, 'build', 'man')
         if not (os.path.isdir(newdir) or os.path.islink(newdir)):
             os.makedirs(newdir)
 
@@ -103,9 +103,8 @@ def build_man(build_cmd):
                 f_out.writelines(f_in)
                 log.info('Compiling %s >> %s', filename, man_file_gz)
 
-        src = cwd + '/man' + '/' + man + '.gz'
         target = 'share/man/man1'
-        data_files.append((target, [src]))
+        data_files.append((target, [man_file_gz]))
 
 
 def build_intl(build_cmd):
