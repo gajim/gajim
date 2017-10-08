@@ -81,6 +81,8 @@ class MessageWindow(object):
         self.widget_name = 'message_window'
         self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % self.widget_name)
         self.window = self.xml.get_object(self.widget_name)
+        self.window.set_application(app.app)
+        self.window.set_show_menubar(False)
         self.notebook = self.xml.get_object('notebook')
         self.parent_paned = None
 
