@@ -469,7 +469,7 @@ class ConnectionVcard:
                 app.nicks[self.name] = vcard['FN']
 
         app.nec.push_incoming_event(
-            VcardReceivedEvent(None, vcard_dict=vcard))
+            VcardReceivedEvent(None, conn=self, vcard_dict=vcard))
 
         callback(jid, resource, room, vcard)
 
