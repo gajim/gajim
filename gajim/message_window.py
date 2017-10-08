@@ -27,12 +27,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import time
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
-import time
 
 from gajim import common
 from gajim import gtkgui_helpers
@@ -40,9 +41,7 @@ from gajim import message_control
 from gajim import dialogs
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
-
 from gajim.common import app
-from gajim.gtkgui_helpers import get_action
 from gajim.common.i18n import Q_
 
 ####################
