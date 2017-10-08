@@ -24,6 +24,7 @@
 from calendar import timegm
 import datetime
 import hashlib
+import base64
 import hmac
 import logging
 import sys
@@ -324,6 +325,7 @@ class RosterReceivedEvent(nec.NetworkIncomingEvent):
                         self.conn.connection.getRoster().delItem(jid)
                     elif jid != our_jid: # don't add our jid
                         self.roster[j] = raw_roster[jid]
+                        self.roster[j]['avatar_sha'] = None
         else:
             # Roster comes from DB
             self.received_from_server = False
@@ -375,6 +377,9 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
 class RosterInfoEvent(nec.NetworkIncomingEvent):
     name = 'roster-info'
     base_network_events = []
+
+    def init(self):
+        self.avatar_sha = None
 
 class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'muc-owner-received'
@@ -532,19 +537,13 @@ class PubsubReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
+        self.jid = self.stanza.getFrom()
         self.pubsub_node = self.stanza.getTag('pubsub')
         if not self.pubsub_node:
             return
         self.items_node = self.pubsub_node.getTag('items')
         if not self.items_node:
             return
-        self.item_node = self.items_node.getTag('item')
-        if not self.item_node:
-            return
-        children = self.item_node.getChildren()
-        if not children:
-            return
-        self.node = children[0]
         return True
 
 class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
@@ -553,11 +552,49 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
 
     def generate(self):
         self.conn = self.base_event.conn
-        self.storage_node = self.base_event.node
+        self.item_node = self.base_event.items_node.getTag('item')
+        if not self.item_node:
+            return
+        children = self.item_node.getChildren()
+        if not children:
+            return
+        self.storage_node = children[0]
         ns = self.storage_node.getNamespace()
         if ns != nbxmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
+        return True
+
+class PubsubAvatarReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'pubsub-avatar-received'
+    base_network_events = ['pubsub-received']
+
+    def __init__(self, name, base_event):
+        '''
+        Pre-Generated attributes on self:
+
+        :conn:          Connection instance
+        :jid:           The from jid
+        :pubsub_node:   The 'pubsub' node
+        :items_node:    The 'items' node
+        '''
+        self._set_base_event_vars_as_attributes(base_event)
+
+    def generate(self):
+        if self.items_node.getAttr('node') != 'urn:xmpp:avatar:data':
+            return
+        item = self.items_node.getTag('item')
+        self.sha = item.getAttr('id')
+        data_tag = item.getTag('data', namespace='urn:xmpp:avatar:data')
+        if self.sha is None or data_tag is None:
+            log.warning('Received malformed avatar data via pubsub')
+            return
+        self.data = data_tag.getData()
+        if self.data is None:
+            log.warning('Received malformed avatar data via pubsub')
+            return
+        self.data = base64.b64decode(self.data.encode('utf-8'))
+
         return True
 
 class SearchFormReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
@@ -874,10 +911,8 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                             contact_name=fjid.getResource(),
                                             message=st,
                                             show=show)
-        if self.avatar_sha == '':
-            # contact has no avatar
-            puny_nick = helpers.sanitize_filename(self.nick)
-            app.interface.remove_avatar_files(self.room_jid, puny_nick)
+
+
         # NOTE: if it's a gc presence, don't ask vcard here.
         # We may ask it to real jid in gui part.
         self.status_code = []
@@ -2004,16 +2039,20 @@ class VcardReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        self.nickname = None
-        if 'NICKNAME' in self.vcard_dict:
-            self.nickname = self.vcard_dict['NICKNAME']
-        elif 'FN' in self.vcard_dict:
-            self.nickname = self.vcard_dict['FN']
-        self.jid = self.vcard_dict['jid']
-        self.resource = self.vcard_dict['resource']
-        self.fjid = self.jid
-        if self.resource:
-            self.fjid += '/' + self.resource
+        return True
+
+class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
+    name = 'update-gc-avatar'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
+class UpdateRosterAvatarEvent(nec.NetworkIncomingEvent):
+    name = 'update-roster-avatar'
+    base_network_events = []
+
+    def generate(self):
         return True
 
 class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):

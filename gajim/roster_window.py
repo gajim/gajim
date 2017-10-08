@@ -42,6 +42,7 @@ from gi.repository import Gio
 import os
 import time
 import locale
+import hashlib
 
 from enum import IntEnum, unique
 
@@ -57,6 +58,7 @@ from gajim import cell_renderer_image
 from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
+from gajim.common.const import AvatarSize
 
 from gajim.common import app
 from gajim.common import helpers
@@ -1361,13 +1363,12 @@ class RosterWindow:
         if not iters or not app.config.get('show_avatars_in_roster'):
             return
         jid = self.model[iters[0]][Column.JID]
-        pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
-        if pixbuf in (None, 'ask'):
-            scaled_pixbuf = empty_pixbuf
-        else:
-            scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
+
+        pixbuf = app.contacts.get_avatar(account, jid, size=AvatarSize.ROSTER)
+        if pixbuf is None:
+            pixbuf = empty_pixbuf
         for child_iter in iters:
-            self.model[child_iter][Column.AVATAR_PIXBUF] = scaled_pixbuf
+            self.model[child_iter][Column.AVATAR_PIXBUF] = pixbuf
         return False
 
     def draw_completely(self, jid, account):
@@ -1885,6 +1886,7 @@ class RosterWindow:
             array[self_jid] = {'name': app.nicks[account],
                 'groups': ['self_contact'], 'subscription': 'both',
                 'ask': 'none'}
+
         # .keys() is needed
         for jid in list(array.keys()):
             # Remove the contact in roster. It might has changed
@@ -1917,25 +1919,6 @@ class RosterWindow:
                 status=status, sub=array[jid]['subscription'],
                 ask=array[jid]['ask'], resource=resource, keyID=keyID)
             app.contacts.add_contact(account, contact1)
-
-            if app.config.get('ask_avatars_on_startup'):
-                pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(ji)
-                if pixbuf == 'ask':
-                    transport = app.get_transport_name_from_jid(contact1.jid)
-                    if not transport or app.jid_is_transport(contact1.jid):
-                        jid_with_resource = contact1.jid
-                        if contact1.resource:
-                            jid_with_resource += '/' + contact1.resource
-                        app.connections[account].request_vcard(
-                            jid_with_resource)
-                    else:
-                        host = app.get_server_from_jid(contact1.jid)
-                        if host not in app.transport_avatar[account]:
-                            app.transport_avatar[account][host] = \
-                                [contact1.jid]
-                        else:
-                            app.transport_avatar[account][host].append(
-                                contact1.jid)
 
             # If we already have chat windows opened, update them with new
             # contact instance
@@ -2591,11 +2574,6 @@ class RosterWindow:
             # Update existing iter and group counting
             self.draw_contact(jid, account)
             self.draw_group(_('Transports'), account)
-            if obj.new_show > 1 and jid in app.transport_avatar[account]:
-                # transport just signed in.
-                # request avatars
-                for jid_ in app.transport_avatar[account][jid]:
-                    obj.conn.request_vcard(jid_)
 
         if obj.contact:
             self.chg_contact_status(obj.contact, obj.show, obj.status, account)
@@ -2638,10 +2616,11 @@ class RosterWindow:
                     resource = ''
                     if app.connections[account].server_resource:
                         resource = app.connections[account].server_resource
+                    sha = app.config.get_per('accounts', account, 'avatar_sha')
                     contact = app.contacts.create_contact(jid=self_jid,
                         account=account, name=app.nicks[account],
                         groups=['self_contact'], show='offline', sub='both',
-                        ask='none', resource=resource)
+                        ask='none', resource=resource, avatar_sha=sha)
                     app.contacts.add_contact(account, contact)
                     self.add_contact(self_jid, account)
             if app.config.get('remember_opened_chat_controls'):
@@ -2697,11 +2676,9 @@ class RosterWindow:
         else:
             self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
 
-    def _nec_vcard_received(self, obj):
-        if obj.resource:
-            # it's a muc occupant vcard
-            return
-        self.draw_avatar(obj.jid, obj.conn.name)
+    def _nec_update_avatar(self, obj):
+        app.log('avatar').debug('Draw roster avatar: %s', obj.jid)
+        self.draw_avatar(obj.jid, obj.account)
 
     def _nec_gc_subject_received(self, obj):
         contact = app.contacts.get_contact_with_highest_priority(
@@ -3053,46 +3030,6 @@ class RosterWindow:
             _('Select a key to apply to the contact'), public_keys,
             on_key_selected, selected=keyID, transient_for=self.window)
 
-    def on_set_custom_avatar_activate(self, widget, contact, account):
-        def on_ok(widget, path_to_file):
-            filesize = os.path.getsize(path_to_file) # in bytes
-            invalid_file = False
-            msg = ''
-            if os.path.isfile(path_to_file):
-                stat = os.stat(path_to_file)
-                if stat[6] == 0:
-                    invalid_file = True
-                    msg = _('File is empty')
-            else:
-                invalid_file = True
-                msg = _('File does not exist')
-            if invalid_file:
-                dialogs.ErrorDialog(_('Could not load image'), msg)
-                return
-            try:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file(path_to_file)
-                if filesize > 16384: # 16 kb
-                    # get the image at 'tooltip size'
-                    # and hope that user did not specify in ACE crazy size
-                    pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'tooltip')
-            except GObject.GError as msg: # unknown format
-                # msg should be string, not object instance
-                msg = str(msg)
-                dialogs.ErrorDialog(_('Could not load image'), msg)
-                return
-            app.interface.save_avatar_files(contact.jid, pixbuf, local=True)
-            dlg.destroy()
-            self.update_avatar_in_gui(contact.jid, account)
-
-        def on_clear(widget):
-            dlg.destroy()
-            # Delete file:
-            app.interface.remove_avatar_files(contact.jid, local=True)
-            self.update_avatar_in_gui(contact.jid, account)
-
-        dlg = dialogs.AvatarChooserDialog(on_response_ok=on_ok,
-            on_response_clear=on_clear)
-
     def on_edit_groups(self, widget, list_):
         dialogs.EditGroupsDialog(list_)
 
@@ -3429,7 +3366,7 @@ class RosterWindow:
             type_ = model[path][Column.TYPE]
             # x_min is the x start position of status icon column
             if app.config.get('avatar_position_in_roster') == 'left':
-                x_min = app.config.get('roster_avatar_width')
+                x_min = AvatarSize.ROSTER
             else:
                 x_min = 0
             if app.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
@@ -4805,15 +4742,6 @@ class RosterWindow:
             for ctrl in list(app.interface.minimized_controls[account].values()):
                 ctrl.repaint_themed_widgets()
 
-    def update_avatar_in_gui(self, jid, account):
-        # Update roster
-        self.draw_avatar(jid, account)
-        # Update chat window
-
-        ctrl = app.interface.msg_win_mgr.get_control(jid, account)
-        if ctrl:
-            ctrl.show_avatar()
-
     def _iconCellDataFunc(self, column, renderer, model, titer, data=None):
         """
         When a row is added, set properties for icon renderer
@@ -4966,8 +4894,7 @@ class RosterWindow:
             renderer.set_property('visible', False)
 
         if app.config.get('avatar_position_in_roster') == 'left':
-            renderer.set_property('width', app.config.get(
-                'roster_avatar_width'))
+            renderer.set_property('width', AvatarSize.ROSTER)
             renderer.set_property('xalign', 0.5)
         else:
             renderer.set_property('xalign', 1) # align pixbuf to the right
@@ -6063,8 +5990,8 @@ class RosterWindow:
             self._nec_agent_removed)
         app.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
-        app.ged.register_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
+        app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
+            self._nec_update_avatar)
         app.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
         app.ged.register_event_handler('metacontacts-received', ged.GUI2,

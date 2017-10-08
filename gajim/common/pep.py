@@ -244,6 +244,7 @@ class AbstractPEP(object):
         self._update_contacts(jid, account)
         if jid == app.get_jid_from_account(account):
             self._update_account(account)
+        self._on_receive(jid, account)
 
     def _extract_info(self, items):
         '''To be implemented by subclasses'''
@@ -268,6 +269,10 @@ class AbstractPEP(object):
     def asMarkupText(self):
         '''SHOULD be implemented by subclasses'''
         return ''
+
+    def _on_receive(self, jid, account):
+        '''SHOULD be implemented by subclasses'''
+        pass
 
 
 class UserMoodPEP(AbstractPEP):
@@ -469,5 +474,32 @@ class UserLocationPEP(AbstractPEP):
         return location_string.strip()
 
 
-SUPPORTED_PERSONAL_USER_EVENTS = [UserMoodPEP, UserTunePEP, UserActivityPEP,
-    UserNicknamePEP, UserLocationPEP]
+class AvatarNotificationPEP(AbstractPEP):
+    '''XEP-0084: Avatars'''
+
+    type_ = 'avatar-notification'
+    namespace = 'urn:xmpp:avatar:metadata'
+
+    def _extract_info(self, items):
+        avatar = None
+        for item in items.getTags('item'):
+            info = item.getTag('metadata').getTag('info')
+            self.avatar = info.getAttrs()
+            break
+
+        return (avatar, False)
+
+    def _on_receive(self, jid, account):
+        sha = app.contacts.get_avatar_sha(account, jid)
+        app.log('avatar').info(
+            'Update (Pubsub): %s %s', jid, self.avatar['id'])
+        if sha == self.avatar['id']:
+            return
+        con = app.connections[account]
+        app.log('avatar').info('Request (Pubsub): %s', jid)
+        con.send_pb_retrieve(jid, 'urn:xmpp:avatar:data', self.avatar['id'])
+
+
+SUPPORTED_PERSONAL_USER_EVENTS = [
+    UserMoodPEP, UserTunePEP, UserActivityPEP,
+    UserNicknamePEP, UserLocationPEP, AvatarNotificationPEP]

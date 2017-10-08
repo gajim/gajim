@@ -39,13 +39,17 @@ import sys
 import re
 import time
 import math
-from subprocess import Popen
+import hashlib
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 
-from gajim.common import i18n
+try:
+    from PIL import Image
+except:
+    pass
+
 from gajim.common import app
 from gajim.common import events
 
@@ -82,12 +86,14 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
-from gajim.common.connection_handlers_events import OurShowEvent, \
-    FileRequestErrorEvent, FileTransferCompletedEvent
+from gajim.common.connection_handlers_events import (
+    OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
+    UpdateRosterAvatarEvent, UpdateGCAvatarEvent)
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
 from gajim import emoticons
+from gajim.common.const import AvatarSize
 
 from gajim import roster_window
 from gajim import profile_window
@@ -242,13 +248,13 @@ class Interface:
         if account in self.show_vcard_when_connect and obj.show not in (
         'offline', 'error'):
             self.edit_own_details(account)
+            self.show_vcard_when_connect.remove(self.name)
 
     def edit_own_details(self, account):
         jid = app.get_jid_from_account(account)
         if 'profile' not in self.instances[account]:
             self.instances[account]['profile'] = \
             profile_window.ProfileWindow(account, app.interface.roster.window)
-            app.connections[account].request_vcard(jid)
 
     @staticmethod
     def handle_gc_error(gc_control, pritext, sectext):
@@ -359,7 +365,6 @@ class Interface:
         # priority, # keyID, timestamp, contact_nickname))
         #
         # Contact changed show
-
         account = obj.conn.name
         jid = obj.jid
         show = obj.show
@@ -557,16 +562,6 @@ class Interface:
         else:
             dialogs.ErrorDialog(_('Contact with "%s" cannot be established') % \
                 obj.agent, _('Check your connection or try again later.'))
-
-    def handle_event_vcard(self, obj):
-        # ('VCARD', account, data)
-        '''vcard holds the vcard data'''
-        our_jid = app.get_jid_from_account(obj.conn.name)
-        if obj.jid == our_jid:
-            if obj.nickname:
-                app.nicks[obj.conn.name] = obj.nickname
-            if obj.conn.name in self.show_vcard_when_connect:
-                self.show_vcard_when_connect.remove(obj.conn.name)
 
     def handle_event_gc_config(self, obj):
         #('GC_CONFIG', account, (jid, form_node))  config is a dict
@@ -780,7 +775,8 @@ class Interface:
                 keyID = attached_keys[attached_keys.index(obj.jid) + 1]
             contact = app.contacts.create_contact(jid=obj.jid,
                 account=account, name=obj.nickname, groups=obj.groups,
-                show='offline', sub=obj.sub, ask=obj.ask, keyID=keyID)
+                show='offline', sub=obj.sub, ask=obj.ask, keyID=keyID,
+                avatar_sha=obj.avatar_sha)
             app.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
         else:
@@ -1554,7 +1550,6 @@ class Interface:
                 self.handle_event_subscribed_presence],
             'unsubscribed-presence-received': [
                 self.handle_event_unsubscribed_presence],
-            'vcard-received': [self.handle_event_vcard],
             'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
         }
 
@@ -2334,85 +2329,94 @@ class Interface:
             sys.exit()
 
     @staticmethod
-    def save_avatar_files(jid, photo, puny_nick = None, local = False):
-        """
-        Save an avatar to a separate file, and generate files for dbus
-        notifications. An avatar can be given as a pixmap directly or as an
-        decoded image
-        """
-        puny_jid = helpers.sanitize_filename(jid)
-        path_to_file = os.path.join(app.AVATAR_PATH, puny_jid)
-        if puny_nick:
-            path_to_file = os.path.join(path_to_file, puny_nick)
-        # remove old avatars
-        for typ in ('jpeg', 'png'):
-            if local:
-                path_to_original_file = path_to_file + '_local'+  '.' + typ
-            else:
-                path_to_original_file = path_to_file + '.' + typ
-            if os.path.isfile(path_to_original_file):
-                os.remove(path_to_original_file)
-        if local and photo:
-            pixbuf = photo
-            typ = 'png'
-            extension = '_local.png' # save local avatars as png file
+    def update_avatar(account=None, jid=None, contact=None):
+        if contact is None:
+            app.nec.push_incoming_event(
+                UpdateRosterAvatarEvent(None, account=account, jid=jid))
         else:
-            pixbuf, typ = gtkgui_helpers.get_pixbuf_from_data(photo,
-                want_type=True)
+            app.nec.push_incoming_event(
+                UpdateGCAvatarEvent(None, contact=contact))
+
+    def save_avatar(self, data, publish=False):
+        if data is None:
+            return
+
+        if publish:
+            pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
             if pixbuf is None:
                 return
-            if typ not in ('jpeg', 'png'):
-                log.info('gtkpixbuf cannot save other than jpeg and '\
-                    'png formats. saving \'%s\' avatar as png file (originaly: %s)'\
-                    % (jid, typ))
-                typ = 'png'
-            extension = '.' + typ
-        path_to_original_file = path_to_file + extension
+            pixbuf = pixbuf.scale_simple(AvatarSize.PROFILE,
+                                         AvatarSize.PROFILE,
+                                         GdkPixbuf.InterpType.BILINEAR)
+            publish_path = os.path.join(app.AVATAR_PATH, 'temp_publish')
+            pixbuf.savev(publish_path, 'png', [], [])
+            with open(publish_path, 'rb') as file:
+                data = file.read()
+            return self.save_avatar(data)
+
+        sha = hashlib.sha1(data).hexdigest()
+        path = os.path.join(app.AVATAR_PATH, sha)
         try:
-            pixbuf.savev(path_to_original_file, typ, [], [])
-        except Exception as e:
-            log.error('Error writing avatar file %s: %s' % (
-                path_to_original_file, str(e)))
-        # Generate and save the resized, color avatar
-        pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'notification')
-        if pixbuf:
-            path_to_normal_file = path_to_file + '_notif_size_colored' + \
-                extension
-            try:
-                pixbuf.savev(path_to_normal_file, 'png', [], [])
-            except Exception as e:
-                log.error('Error writing avatar file %s: %s' % \
-                    (path_to_original_file, str(e)))
-            # Generate and save the resized, black and white avatar
-            bwbuf = gtkgui_helpers.get_scaled_pixbuf(
-                gtkgui_helpers.make_pixbuf_grayscale(pixbuf), 'notification')
-            if bwbuf:
-                path_to_bw_file = path_to_file + '_notif_size_bw' + extension
-                try:
-                    bwbuf.savev(path_to_bw_file, 'png', [], [])
-                except Exception as e:
-                    log.error('Error writing avatar file %s: %s' % \
-                        (path_to_original_file, str(e)))
+            with open(path, "wb") as output_file:
+                output_file.write(data)
+        except Exception:
+            app.log('avatar').error('Saving avatar failed', exc_info=True)
+            return
+
+        return sha
 
     @staticmethod
-    def remove_avatar_files(jid, puny_nick = None, local = False):
-        """
-        Remove avatar files of a jid
-        """
-        puny_jid = helpers.sanitize_filename(jid)
-        path_to_file = os.path.join(app.AVATAR_PATH, puny_jid)
-        if puny_nick:
-            path_to_file = os.path.join(path_to_file, puny_nick)
-        for ext in ('.jpeg', '.png'):
-            if local:
-                ext = '_local' + ext
-            path_to_original_file = path_to_file + ext
-            if os.path.isfile(path_to_file + ext):
-                os.remove(path_to_file + ext)
-            if os.path.isfile(path_to_file + '_notif_size_colored' + ext):
-                os.remove(path_to_file + '_notif_size_colored' + ext)
-            if os.path.isfile(path_to_file + '_notif_size_bw' + ext):
-                os.remove(path_to_file + '_notif_size_bw' + ext)
+    def get_avatar(filename, size=None, publish=False):
+        if filename is None or '':
+            return
+
+        if publish:
+            path = os.path.join(app.AVATAR_PATH, filename)
+            with open(path, 'rb') as file:
+                data = file.read()
+            return data
+
+        try:
+            sha = app.avatar_cache[filename][size]
+            return sha
+        except KeyError:
+            pass
+
+        path = os.path.join(app.AVATAR_PATH, filename)
+        if not os.path.isfile(path):
+            return
+
+        pixbuf = None
+        try:
+            if size is not None:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+                    path, size, size)
+            else:
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
+        except GLib.GError as error:
+            app.log('avatar').info(
+                'loading avatar %s failed. Try to convert '
+                'avatar image using pillow', filename)
+            try:
+                avatar = Image.open(path).convert("RGBA")
+            except NameError:
+                app.log('avatar').warning('Pillow convert failed: %s', filename)
+                app.log('avatar').debug('Error', exc_info=True)
+                return
+            array = GLib.Bytes.new(avatar.tobytes())
+            width, height = avatar.size
+            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
+                array, GdkPixbuf.Colorspace.RGB, True,
+                8, width, height, width * 4)
+            if size:
+                pixbuf = pixbuf.scale_simple(
+                    size, size, GdkPixbuf.InterpType.BILINEAR)
+
+        if filename not in app.avatar_cache:
+            app.avatar_cache[filename] = {}
+        app.avatar_cache[filename][size] = pixbuf
+
+        return pixbuf
 
     def auto_join_bookmarks(self, account):
         """

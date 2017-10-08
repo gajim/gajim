@@ -44,10 +44,8 @@ from gajim.common import caps_cache as capscache
 from gajim.common.pep import LOCATION_DATA
 from gajim.common import helpers
 from gajim.common import app
-from gajim.common import exceptions
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
-from gajim.common import sleepy
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
 from gajim.common.protocol.caps import ConnectionCaps
@@ -66,8 +64,6 @@ import logging
 log = logging.getLogger('gajim.c.connection_handlers')
 
 # kind of events we can wait for an answer
-VCARD_PUBLISHED = 'vcard_published'
-VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 METACONTACTS_ARRIVED = 'metacontacts_arrived'
 ROSTER_ARRIVED = 'roster_arrived'
@@ -262,26 +258,97 @@ class ConnectionDisco:
 
 class ConnectionVcard:
     def __init__(self):
-        self.vcard_sha = None
-        self.vcard_shas = {} # sha of contacts
-        # list of gc jids so that vcard are saved in a folder
+        self.own_vcard = None
         self.room_jids = []
+        self.avatar_presence_sent = False
 
-    def add_sha(self, p, send_caps=True):
-        c = p.setTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
-        if self.vcard_sha is not None:
-            c.setTagData('photo', self.vcard_sha)
-        if send_caps:
-            return self._add_caps(p)
-        return p
+        app.ged.register_event_handler('presence-received', ged.GUI2,
+            self._vcard_presence_received)
+        app.ged.register_event_handler('gc-presence-received', ged.GUI2,
+            self._vcard_gc_presence_received)
 
-    def _add_caps(self, p):
-        ''' advertise our capabilities in presence stanza (xep-0115)'''
-        c = p.setTag('c', namespace=nbxmpp.NS_CAPS)
-        c.setAttr('hash', 'sha-1')
-        c.setAttr('node', 'http://gajim.org')
-        c.setAttr('ver', app.caps_hash[self.name])
-        return p
+    def _vcard_presence_received(self, obj):
+        if obj.avatar_sha is None:
+            # No Avatar is advertised
+            return
+
+        if self.get_own_jid().bareMatch(obj.jid):
+            app.log('avatar').info('Update (vCard): %s %s',
+                                    obj.jid, obj.avatar_sha)
+            current_sha = app.config.get_per(
+                'accounts', self.name, 'avatar_sha')
+            if obj.avatar_sha != current_sha:
+                app.log('avatar').info(
+                    'Request (vCard): %s', obj.jid)
+                self.request_vcard(self._on_own_avatar_received)
+            return
+
+        if obj.avatar_sha == '':
+            # Empty <photo/> tag, means no avatar is advertised
+            app.log('avatar').info(
+                '%s has no avatar published (vCard)', obj.jid)
+
+            # Remove avatar
+            app.log('avatar').info('Remove: %s', obj.jid)
+            app.contacts.set_avatar(self.name, obj.jid, None)
+            app.logger.set_avatar_sha(self.name, obj.jid, None)
+            app.interface.update_avatar(self.name, obj.jid)
+        else:
+            app.log('avatar').info(
+                'Update (vCard): %s %s', obj.jid, obj.avatar_sha)
+            current_sha = app.contacts.get_avatar_sha(self.name, obj.jid)
+            if obj.avatar_sha != current_sha:
+                app.log('avatar').info(
+                    'Request (vCard): %s', obj.jid)
+                self.request_vcard(self._on_avatar_received, obj.jid)
+
+    def _vcard_gc_presence_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
+        server = app.get_server_from_jid(obj.room_jid)
+        if server.startswith('irc') or obj.avatar_sha is None:
+            return
+
+        gc_contact = app.contacts.get_gc_contact(
+            self.name, obj.room_jid, obj.nick)
+
+        if gc_contact is None:
+            app.log('avatar').error('no gc contact found: %s', obj.nick)
+            return
+
+        if obj.avatar_sha == '':
+            # Empty <photo/> tag, means no avatar is advertised, remove avatar
+            app.log('avatar').info(
+                '%s has no avatar published (vCard)', obj.nick)
+            app.log('avatar').info('Remove: %s', obj.nick)
+            gc_contact.avatar_sha = None
+            app.interface.update_avatar(contact=gc_contact)
+        else:
+            app.log('avatar').info(
+                'Update (vCard): %s %s', obj.nick, obj.avatar_sha)
+            path = os.path.join(app.AVATAR_PATH, obj.avatar_sha)
+            if not os.path.isfile(path):
+                app.log('avatar').info(
+                    'Request (vCard): %s', obj.nick)
+                obj.conn.request_vcard(
+                    self._on_avatar_received, obj.fjid, room=True)
+                return
+
+            if gc_contact.avatar_sha != obj.avatar_sha:
+                app.log('avatar').info(
+                    '%s changed his Avatar (vCard): %s',
+                    obj.nick, obj.avatar_sha)
+                gc_contact.avatar_sha = obj.avatar_sha
+                app.interface.update_avatar(contact=gc_contact)
+
+    def send_avatar_presence(self):
+        show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
+        p = nbxmpp.Presence(typ=None, priority=self.priority,
+                            show=show, status=self.status)
+        p = self.add_sha(p)
+        self.connection.send(p)
+        app.interface.update_avatar(self.name, self.get_own_jid().getStripped())
 
     def _node_to_dict(self, node):
         dict_ = {}
@@ -301,99 +368,27 @@ class ConnectionVcard:
                     dict_[name][c.getName()] = c.getData()
         return dict_
 
-    def _save_vcard_to_hd(self, full_jid, card):
-        jid, nick = app.get_room_and_nick_from_fjid(full_jid)
-        puny_jid = helpers.sanitize_filename(jid)
-        path = os.path.join(app.VCARD_PATH, puny_jid)
-        if jid in self.room_jids or os.path.isdir(path):
-            if not nick:
-                return
-            # remove room_jid file if needed
-            if os.path.isfile(path):
-                os.remove(path)
-            # create folder if needed
-            if not os.path.isdir(path):
-                os.mkdir(path, 0o700)
-            puny_nick = helpers.sanitize_filename(nick)
-            path_to_file = os.path.join(app.VCARD_PATH, puny_jid, puny_nick)
-        else:
-            path_to_file = path
-        try:
-            fil = open(path_to_file, 'w', encoding='utf-8')
-            fil.write(str(card))
-            fil.close()
-        except IOError as e:
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Disk Write Error'), sec_txt=str(e)))
-
-    def get_cached_vcard(self, fjid, is_fake_jid=False):
-        """
-        Return the vcard as a dict.
-        Return {} if vcard was too old.
-        Return None if we don't have cached vcard.
-        """
-        jid, nick = app.get_room_and_nick_from_fjid(fjid)
-        puny_jid = helpers.sanitize_filename(jid)
-        if is_fake_jid:
-            puny_nick = helpers.sanitize_filename(nick)
-            path_to_file = os.path.join(app.VCARD_PATH, puny_jid, puny_nick)
-        else:
-            path_to_file = os.path.join(app.VCARD_PATH, puny_jid)
-        if not os.path.isfile(path_to_file):
-            return None
-        # We have the vcard cached
-        f = open(path_to_file, encoding='utf-8')
-        c = f.read()
-        f.close()
-        try:
-            card = nbxmpp.Node(node=c)
-        except Exception:
-            # We are unable to parse it. Remove it
-            os.remove(path_to_file)
-            return None
-        vcard = self._node_to_dict(card)
-        if 'PHOTO' in vcard:
-            if not isinstance(vcard['PHOTO'], dict):
-                del vcard['PHOTO']
-            elif 'SHA' in vcard['PHOTO']:
-                cached_sha = vcard['PHOTO']['SHA']
-                if jid in self.vcard_shas and self.vcard_shas[jid] != \
-                cached_sha:
-                    # user change his vcard so don't use the cached one
-                    return {}
-        vcard['jid'] = jid
-        vcard['resource'] = app.get_resource_from_jid(fjid)
-        return vcard
-
-    def request_vcard(self, jid=None, groupchat_jid=None):
+    def request_vcard(self, callback, jid=None, room=False):
         """
         Request the VCARD
-
-        If groupchat_jid is not null, it means we request a vcard to a fake jid,
-        like in private messages in groupchat. jid can be the real jid of the
-        contact, but we want to consider it comes from a fake jid
         """
         if not self.connection or self.connected < 2:
             return
+
+        if room:
+            room_jid = app.get_room_from_fjid(jid)
+            if room_jid not in self.room_jids:
+                self.room_jids.append(room_jid)
+
         iq = nbxmpp.Iq(typ='get')
         if jid:
             iq.setTo(jid)
         iq.setQuery('vCard').setNamespace(nbxmpp.NS_VCARD)
 
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        j = jid
-        if not j:
-            j = app.get_jid_from_account(self.name)
-        self.awaiting_answers[id_] = (VCARD_ARRIVED, j, groupchat_jid)
-        if groupchat_jid:
-            room_jid = app.get_room_and_nick_from_fjid(groupchat_jid)[0]
-            if not room_jid in self.room_jids:
-                self.room_jids.append(room_jid)
-            self.groupchat_jids[id_] = groupchat_jid
-        self.connection.send(iq)
+        self.connection.SendAndCallForResponse(
+            iq, self._parse_vcard, {'callback': callback})
 
-    def send_vcard(self, vcard):
+    def send_vcard(self, vcard, sha):
         if not self.connection or self.connected < 2:
             return
         iq = nbxmpp.Iq(typ='set')
@@ -413,282 +408,128 @@ class ConnectionVcard:
             else:
                 iq2.addChild(i).setData(vcard[i])
 
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        self.connection.send(iq)
+        self.connection.SendAndCallForResponse(
+            iq, self._avatar_publish_result, {'sha': sha})
 
-        our_jid = app.get_jid_from_account(self.name)
-        # Add the sha of the avatar
-        if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
-        'BINVAL' in vcard['PHOTO']:
-            photo = vcard['PHOTO']['BINVAL']
-            photo_decoded = base64.b64decode(photo.encode('utf-8'))
-            app.interface.save_avatar_files(our_jid, photo_decoded)
-            avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
-            iq2.getTag('PHOTO').setTagData('SHA', avatar_sha)
-        else:
-            app.interface.remove_avatar_files(our_jid)
-
-        self.awaiting_answers[id_] = (VCARD_PUBLISHED, iq2)
-
-    def _IqCB(self, con, iq_obj):
-        id_ = iq_obj.getID()
-
-        app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
-            conn=self, stanza=iq_obj))
-
-        # Check if we were waiting a timeout for this id
-        found_tim = None
-        for tim in self.awaiting_timeouts:
-            if id_ == self.awaiting_timeouts[tim][0]:
-                found_tim = tim
-                break
-        if found_tim:
-            del self.awaiting_timeouts[found_tim]
-
-        if id_ not in self.awaiting_answers:
-            return
-
-        if self.awaiting_answers[id_][0] == VCARD_PUBLISHED:
-            if iq_obj.getType() == 'result':
-                vcard_iq = self.awaiting_answers[id_][1]
-                # Save vcard to HD
-                if vcard_iq.getTag('PHOTO') and vcard_iq.getTag('PHOTO').getTag(
-                'SHA'):
-                    new_sha = vcard_iq.getTag('PHOTO').getTagData('SHA')
-                else:
-                    new_sha = ''
-
-                # Save it to file
-                our_jid = app.get_jid_from_account(self.name)
-                self._save_vcard_to_hd(our_jid, vcard_iq)
-
-                # Send new presence if sha changed and we are not invisible
-                if self.vcard_sha != new_sha and app.SHOW_LIST[
-                self.connected] != 'invisible':
-                    if not self.connection or self.connected < 2:
-                        del self.awaiting_answers[id_]
-                        return
-                    self.vcard_sha = new_sha
-                    sshow = helpers.get_xmpp_show(app.SHOW_LIST[
-                        self.connected])
-                    p = nbxmpp.Presence(typ=None, priority=self.priority,
-                        show=sshow, status=self.status)
-                    p = self.add_sha(p)
-                    self.connection.send(p)
-                app.nec.push_incoming_event(VcardPublishedEvent(None,
-                    conn=self))
-            elif iq_obj.getType() == 'error':
-                app.nec.push_incoming_event(VcardNotPublishedEvent(None,
-                    conn=self))
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == VCARD_ARRIVED:
-            # If vcard is empty, we send to the interface an empty vcard so that
-            # it knows it arrived
-            jid = self.awaiting_answers[id_][1]
-            groupchat_jid = self.awaiting_answers[id_][2]
-            frm = jid
-            if groupchat_jid:
-                # We do as if it comes from the fake_jid
-                frm = groupchat_jid
-            our_jid = app.get_jid_from_account(self.name)
-            if (not iq_obj.getTag('vCard') and iq_obj.getType() == 'result') or\
-            iq_obj.getType() == 'error':
-                if id_ in self.groupchat_jids:
-                    frm = self.groupchat_jids[id_]
-                    del self.groupchat_jids[id_]
-                if frm:
-                    # Write an empty file
-                    self._save_vcard_to_hd(frm, '')
-                jid, resource = app.get_room_and_nick_from_fjid(frm)
-                vcard = {'jid': jid, 'resource': resource}
-                app.nec.push_incoming_event(VcardReceivedEvent(None,
-                    conn=self, vcard_dict=vcard))
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == AGENT_REMOVED:
-            jid = self.awaiting_answers[id_][1]
-            app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
-                agent=jid))
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                app.nec.push_incoming_event(MetacontactsReceivedEvent(None,
-                    conn=self, stanza=iq_obj))
-            else:
-                if iq_obj.getErrorCode() not in ('403', '406', '404'):
-                    self.private_storage_supported = False
-            self.get_roster_delimiter()
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
-            del self.awaiting_answers[id_]
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                query = iq_obj.getTag('query')
-                if not query:
+    def _avatar_publish_result(self, con, stanza, sha):
+        if stanza.getType() == 'result':
+            current_sha = app.config.get_per(
+                'accounts', self.name, 'avatar_sha')
+            if (current_sha != sha and
+                    app.SHOW_LIST[self.connected] != 'invisible'):
+                if not self.connection or self.connected < 2:
                     return
-                delimiter = query.getTagData('roster')
-                if delimiter:
-                    self.nested_group_delimiter = delimiter
-                else:
-                    self.set_roster_delimiter('::')
-            else:
-                self.private_storage_supported = False
+                app.config.set_per(
+                    'accounts', self.name, 'avatar_sha', sha or '')
+                own_jid = self.get_own_jid().getStripped()
+                app.contacts.set_avatar(self.name, own_jid, sha)
+                self.send_avatar_presence()
+            app.log('avatar').info('%s: Published: %s', self.name, sha)
+            app.nec.push_incoming_event(
+                VcardPublishedEvent(None, conn=self))
 
-            # We can now continue connection by requesting the roster
-            self.request_roster()
-        elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
-            if iq_obj.getType() == 'result':
-                if not iq_obj.getTag('query'):
-                    account_jid = app.get_jid_from_account(self.name)
-                    roster_data = app.logger.get_roster(account_jid)
-                    roster = self.connection.getRoster(force=True)
-                    roster.setRaw(roster_data)
-                self._getRoster()
-            elif iq_obj.getType() == 'error':
-                self.roster_supported = False
-                self.discoverItems(app.config.get_per('accounts', self.name,
-                    'hostname'), id_prefix='Gajim_')
-                if app.config.get_per('accounts', self.name,
-                'use_ft_proxies'):
-                    self.discover_ft_proxies()
-                app.nec.push_incoming_event(RosterReceivedEvent(None,
-                    conn=self))
-            GLib.timeout_add_seconds(10, self.discover_servers)
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() != 'error':
-                for list_ in iq_obj.getQueryPayload():
-                    if list_.getName() == 'default':
-                        self.privacy_default_list = list_.getAttr('name')
-                        self.get_privacy_list(self.privacy_default_list)
-                        break
-                # Ask metacontacts before roster
-                self.get_metacontacts()
-            else:
-                # That should never happen, but as it's blocking in the
-                # connection process, we don't take the risk
-                self.privacy_rules_supported = False
-                self._continue_connection_request_privacy()
-        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'result':
-                list_node = iq_obj.getTag('blocklist')
-                if not list_node:
-                    return
-                self.blocked_contacts = []
-                for i in list_node.iterTags('item'):
-                    self.blocked_contacts.append(i.getAttr('jid'))
-        elif self.awaiting_answers[id_][0] == PEP_CONFIG:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'error':
-                return
-            if not iq_obj.getTag('pubsub'):
-                return
-            conf = iq_obj.getTag('pubsub').getTag('configure')
-            if not conf:
-                return
-            node = conf.getAttr('node')
-            form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
-            if form_tag:
-                form = dataforms.ExtendForm(node=form_tag)
-                app.nec.push_incoming_event(PEPConfigReceivedEvent(None,
-                    conn=self, node=node, form=form))
+        elif stanza.getType() == 'error':
+            app.nec.push_incoming_event(
+                VcardNotPublishedEvent(None, conn=self))
 
-    def _vCardCB(self, con, vc):
-        """
-        Called when we receive a vCard Parse the vCard and send it to plugins
-        """
-        if not vc.getTag('vCard'):
-            return
-        if not vc.getTag('vCard').getNamespace() == nbxmpp.NS_VCARD:
-            return
-        id_ = vc.getID()
-        frm_iq = vc.getFrom()
-        our_jid = app.get_jid_from_account(self.name)
-        resource = ''
-        if id_ in self.groupchat_jids:
-            who = self.groupchat_jids[id_]
-            frm, resource = app.get_room_and_nick_from_fjid(who)
-            del self.groupchat_jids[id_]
-        elif frm_iq:
-            who = helpers.get_full_jid_from_iq(vc)
-            frm, resource = app.get_room_and_nick_from_fjid(who)
-        else:
-            who = frm = our_jid
-        card = vc.getChildren()[0]
-        vcard = self._node_to_dict(card)
-        photo_decoded = None
-        if 'PHOTO' in vcard and isinstance(vcard['PHOTO'], dict) and \
-        'BINVAL' in vcard['PHOTO']:
+    def get_vcard_photo(self, vcard):
+        try:
             photo = vcard['PHOTO']['BINVAL']
-            try:
+        except (KeyError, AttributeError):
+            avatar_sha = None
+            photo_decoded = None
+        else:
+            if photo == '':
+                avatar_sha = None
+                photo_decoded = None
+            else:
                 photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
-            except Exception:
-                avatar_sha = ''
+
+        return avatar_sha, photo_decoded
+
+    def _parse_vcard(self, con, stanza, callback):
+        frm_jid = stanza.getFrom()
+        room = False
+        if frm_jid is None:
+            frm_jid = self.get_own_jid()
+        elif frm_jid.getStripped() in self.room_jids:
+            room = True
+
+        resource = frm_jid.getResource()
+        jid = frm_jid.getStripped()
+
+        vcard = self._node_to_dict(stanza.getChildren()[0])
+        # handle no vcard set
+
+        if self.get_own_jid().bareMatch(jid):
+            if 'NICKNAME' in vcard:
+                app.nicks[self.name] = vcard['NICKNAME']
+            elif 'FN' in vcard:
+                app.nicks[self.name] = vcard['FN']
+
+        app.nec.push_incoming_event(
+            VcardReceivedEvent(None, vcard_dict=vcard))
+
+        callback(jid, resource, room, vcard)
+
+    def _on_own_avatar_received(self, jid, resource, room, vcard):
+
+        avatar_sha, photo_decoded = self.get_vcard_photo(vcard)
+
+        app.log('avatar').info(
+            'Received own (vCard): %s', avatar_sha)
+
+        self.own_vcard = vcard
+        if avatar_sha is None:
+            app.log('avatar').info('No avatar found (vCard)')
+            app.config.set_per('accounts', self.name, 'avatar_sha', '')
+            self.send_avatar_presence()
+            return
+
+        current_sha = app.config.get_per('accounts', self.name, 'avatar_sha')
+        if current_sha == avatar_sha:
+            path = os.path.join(app.AVATAR_PATH, current_sha)
+            if not os.path.isfile(path):
+                app.log('avatar').info(
+                    'Caching (vCard): %s', current_sha)
+                app.interface.save_avatar(photo_decoded)
+            if self.avatar_presence_sent:
+                app.log('avatar').debug('Avatar already advertised')
+                return
         else:
-            avatar_sha = ''
+            app.interface.save_avatar(photo_decoded)
 
-        if avatar_sha:
-            card.getTag('PHOTO').setTagData('SHA', avatar_sha)
+        app.config.set_per('accounts', self.name, 'avatar_sha', avatar_sha)
+        if app.SHOW_LIST[self.connected] == 'invisible':
+            app.log('avatar').info(
+                'We are invisible, not publishing avatar')
+            return
 
-        # Save it to file
-        self._save_vcard_to_hd(who, card)
-        # Save the decoded avatar to a separate file too, and generate files
-        # for dbus notifications
-        puny_jid = helpers.sanitize_filename(frm)
-        puny_nick = None
-        begin_path = os.path.join(app.AVATAR_PATH, puny_jid)
-        frm_jid = frm
-        if frm in self.room_jids:
-            puny_nick = helpers.sanitize_filename(resource)
-            # create folder if needed
-            if not os.path.isdir(begin_path):
-                os.mkdir(begin_path, 0o700)
-            begin_path = os.path.join(begin_path, puny_nick)
-            frm_jid += '/' + resource
-        if photo_decoded:
-            avatar_file = begin_path + '_notif_size_colored.png'
-            if frm_jid == our_jid and avatar_sha != self.vcard_sha:
-                app.interface.save_avatar_files(frm, photo_decoded, puny_nick)
-            elif frm_jid != our_jid and (not os.path.exists(avatar_file) or \
-            frm_jid not in self.vcard_shas or \
-            avatar_sha != self.vcard_shas[frm_jid]):
-                app.interface.save_avatar_files(frm, photo_decoded, puny_nick)
-                if avatar_sha:
-                    self.vcard_shas[frm_jid] = avatar_sha
-            elif frm in self.vcard_shas:
-                del self.vcard_shas[frm]
+        self.send_avatar_presence()
+        self.avatar_presence_sent = True
+
+    def _on_avatar_received(self, jid, resource, room, vcard):
+        """
+        Called when we receive a vCard Parse the vCard and trigger Events
+        """
+        avatar_sha, photo_decoded = self.get_vcard_photo(vcard)
+        app.interface.save_avatar(photo_decoded)
+
+        # Received vCard from a contact
+        if room:
+            app.log('avatar').info(
+                'Received (vCard): %s %s', resource, avatar_sha)
+            contact = app.contacts.get_gc_contact(self.name, jid, resource)
+            if contact is not None:
+                contact.avatar_sha = avatar_sha
+                app.interface.update_avatar(contact=contact)
         else:
-            for ext in ('.jpeg', '.png', '_notif_size_bw.png',
-            '_notif_size_colored.png'):
-                path = begin_path + ext
-                if os.path.isfile(path):
-                    os.remove(path)
-
-        vcard['jid'] = frm
-        vcard['resource'] = resource
-        app.nec.push_incoming_event(VcardReceivedEvent(None, conn=self,
-            vcard_dict=vcard))
-        if frm_jid == our_jid:
-            # we re-send our presence with sha if has changed and if we are
-            # not invisible
-            if self.vcard_sha == avatar_sha:
-                return
-            self.vcard_sha = avatar_sha
-            if app.SHOW_LIST[self.connected] == 'invisible':
-                return
-            if not self.connection:
-                return
-            sshow = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
-            p = nbxmpp.Presence(typ=None, priority=self.priority,
-                show=sshow, status=self.status)
-            p = self.add_sha(p)
-            self.connection.send(p)
+            app.log('avatar').info('Received (vCard): %s %s', jid, avatar_sha)
+            own_jid = self.get_own_jid().getStripped()
+            app.logger.set_avatar_sha(own_jid, jid, avatar_sha)
+            app.contacts.set_avatar(self.name, jid, avatar_sha)
+            app.interface.update_avatar(self.name, jid)
 
 
 class ConnectionPEP(object):
@@ -939,18 +780,6 @@ class ConnectionHandlersBase:
             if c.resource == resource:
                 obj.contact = c
                 break
-
-        if obj.avatar_sha is not None and obj.ptype != 'error':
-            if obj.jid not in self.vcard_shas:
-                cached_vcard = self.get_cached_vcard(obj.jid)
-                if cached_vcard and 'PHOTO' in cached_vcard and \
-                'SHA' in cached_vcard['PHOTO']:
-                    self.vcard_shas[obj.jid] = cached_vcard['PHOTO']['SHA']
-                else:
-                    self.vcard_shas[obj.jid] = ''
-            if obj.avatar_sha != self.vcard_shas[obj.jid]:
-                # avatar has been updated
-                self.request_vcard(obj.jid)
 
         if obj.contact:
             if obj.contact.show in statuss:
@@ -1496,6 +1325,24 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             self._nec_stream_other_host_received)
         app.ged.remove_event_handler('blocking', ged.CORE, self._nec_blocking)
 
+    def add_sha(self, p, send_caps=True):
+        c = p.setTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
+        sha = app.config.get_per('accounts', self.name, 'avatar_sha')
+        app.log('avatar').info(
+            '%s: Send avatar presence: %s', self.name, sha or 'empty')
+        c.setTagData('photo', sha)
+        if send_caps:
+            return self._add_caps(p)
+        return p
+
+    def _add_caps(self, p):
+        ''' advertise our capabilities in presence stanza (xep-0115)'''
+        c = p.setTag('c', namespace=nbxmpp.NS_CAPS)
+        c.setAttr('hash', 'sha-1')
+        c.setAttr('node', 'http://gajim.org')
+        c.setAttr('ver', app.caps_hash[self.name])
+        return p
+
     def build_http_auth_answer(self, iq_obj, answer):
         if not self.connection or self.connected < 2:
             return
@@ -1526,6 +1373,117 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         log.debug('ErrorCB')
         app.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
             stanza=iq_obj))
+
+    def _IqCB(self, con, iq_obj):
+        id_ = iq_obj.getID()
+
+        app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
+            conn=self, stanza=iq_obj))
+
+        # Check if we were waiting a timeout for this id
+        found_tim = None
+        for tim in self.awaiting_timeouts:
+            if id_ == self.awaiting_timeouts[tim][0]:
+                found_tim = tim
+                break
+        if found_tim:
+            del self.awaiting_timeouts[found_tim]
+
+        if id_ not in self.awaiting_answers:
+            return
+
+        if self.awaiting_answers[id_][0] == AGENT_REMOVED:
+            jid = self.awaiting_answers[id_][1]
+            app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
+                agent=jid))
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
+            if not self.connection:
+                return
+            if iq_obj.getType() == 'result':
+                app.nec.push_incoming_event(MetacontactsReceivedEvent(None,
+                    conn=self, stanza=iq_obj))
+            else:
+                if iq_obj.getErrorCode() not in ('403', '406', '404'):
+                    self.private_storage_supported = False
+            self.get_roster_delimiter()
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
+            del self.awaiting_answers[id_]
+            if not self.connection:
+                return
+            if iq_obj.getType() == 'result':
+                query = iq_obj.getTag('query')
+                if not query:
+                    return
+                delimiter = query.getTagData('roster')
+                if delimiter:
+                    self.nested_group_delimiter = delimiter
+                else:
+                    self.set_roster_delimiter('::')
+            else:
+                self.private_storage_supported = False
+
+            # We can now continue connection by requesting the roster
+            self.request_roster()
+        elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
+            if iq_obj.getType() == 'result':
+                if not iq_obj.getTag('query'):
+                    account_jid = app.get_jid_from_account(self.name)
+                    roster_data = app.logger.get_roster(account_jid)
+                    roster = self.connection.getRoster(force=True)
+                    roster.setRaw(roster_data)
+                self._getRoster()
+            elif iq_obj.getType() == 'error':
+                self.roster_supported = False
+                self.discoverItems(app.config.get_per('accounts', self.name,
+                    'hostname'), id_prefix='Gajim_')
+                if app.config.get_per('accounts', self.name,
+                'use_ft_proxies'):
+                    self.discover_ft_proxies()
+                app.nec.push_incoming_event(RosterReceivedEvent(None,
+                    conn=self))
+            GLib.timeout_add_seconds(10, self.discover_servers)
+            del self.awaiting_answers[id_]
+        elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() != 'error':
+                for list_ in iq_obj.getQueryPayload():
+                    if list_.getName() == 'default':
+                        self.privacy_default_list = list_.getAttr('name')
+                        self.get_privacy_list(self.privacy_default_list)
+                        break
+                # Ask metacontacts before roster
+                self.get_metacontacts()
+            else:
+                # That should never happen, but as it's blocking in the
+                # connection process, we don't take the risk
+                self.privacy_rules_supported = False
+                self._continue_connection_request_privacy()
+        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() == 'result':
+                list_node = iq_obj.getTag('blocklist')
+                if not list_node:
+                    return
+                self.blocked_contacts = []
+                for i in list_node.iterTags('item'):
+                    self.blocked_contacts.append(i.getAttr('jid'))
+        elif self.awaiting_answers[id_][0] == PEP_CONFIG:
+            del self.awaiting_answers[id_]
+            if iq_obj.getType() == 'error':
+                return
+            if not iq_obj.getTag('pubsub'):
+                return
+            conf = iq_obj.getTag('pubsub').getTag('configure')
+            if not conf:
+                return
+            node = conf.getAttr('node')
+            form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
+            if form_tag:
+                form = dataforms.ExtendForm(node=form_tag)
+                app.nec.push_incoming_event(PEPConfigReceivedEvent(None,
+                    conn=self, node=node, form=form))
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -2007,6 +1965,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         if obj.conn.name != self.name:
             return
         our_jid = app.get_jid_from_account(self.name)
+
         if self.connected > 1 and self.continue_connect_info:
             msg = self.continue_connect_info[1]
             sign_msg = self.continue_connect_info[2]
@@ -2043,7 +2002,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             app.nec.push_incoming_event(RosterInfoEvent(None,
                 conn=self, jid=jid, nickname=info['name'],
                 sub=info['subscription'], ask=info['ask'],
-                groups=info['groups']))
+                groups=info['groups'], avatar_sha=info['avatar_sha']))
 
     def _send_first_presence(self, signed=''):
         show = self.continue_connect_info[0]
@@ -2065,12 +2024,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
             return
         priority = app.get_priority(self.name, sshow)
-        our_jid = helpers.parse_jid(app.get_jid_from_account(self.name))
-        vcard = self.get_cached_vcard(our_jid)
-        if vcard and 'PHOTO' in vcard and 'SHA' in vcard['PHOTO']:
-            self.vcard_sha = vcard['PHOTO']['SHA']
         p = nbxmpp.Presence(typ=None, priority=priority, show=sshow)
-        p = self.add_sha(p)
         if msg:
             p.setStatus(msg)
         if signed:
@@ -2083,7 +2037,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             show=show))
         if self.vcard_supported:
             # ask our VCard
-            self.request_vcard(None)
+            self.request_vcard(self._on_own_avatar_received)
 
         # Get bookmarks from private namespace
         self.get_bookmarks()
@@ -2169,7 +2123,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         # We also don't check for namespace, else it cannot stop _messageCB to
         # be called
         con.RegisterHandler('message', self._pubsubEventCB, makefirst=True)
-        con.RegisterHandler('iq', self._vCardCB, 'result', nbxmpp.NS_VCARD)
         con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._rosterItemExchangeCB, 'set',

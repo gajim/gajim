@@ -397,24 +397,6 @@ if dbus_support.supported:
                 if gajim.events.get_nb_events():
                     gajim.interface.systray.handle_first_event()
 
-            @dbus.service.method(INTERFACE, in_signature='s', out_signature='a{sv}')
-            def contact_info(self, jid):
-                '''get vcard info for a contact. Return cached value of the vcard.
-                '''
-                if not isinstance(jid, unicode):
-                    jid = unicode(jid)
-                if not jid:
-                    raise MissingArgument
-                    return DBUS_DICT_SV()
-                jid = self._get_real_jid(jid)
-
-                cached_vcard = list(gajim.connections.values())[0].get_cached_vcard(jid)
-                if cached_vcard:
-                    return get_dbus_struct(cached_vcard)
-
-                # return empty dict
-                return DBUS_DICT_SV()
-
             @dbus.service.method(INTERFACE, in_signature='', out_signature='as')
             def list_accounts(self):
                 '''list register accounts'''

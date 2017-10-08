@@ -36,23 +36,21 @@ log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
         'invisible']
 # kind of events we can wait for an answer
-VCARD_PUBLISHED = 'vcard_published'
-VCARD_ARRIVED = 'vcard_arrived'
 AGENT_REMOVED = 'agent_removed'
 
 from gajim.common import connection_handlers
 
 class ConnectionVcard(connection_handlers.ConnectionVcard):
-    def add_sha(self, p, send_caps = True):
+    def add_sha(self, p, *args):
         return p
 
     def add_caps(self, p):
         return p
 
-    def request_vcard(self, jid = None, is_fake_jid = False):
+    def request_vcard(self, *args):
         pass
 
-    def send_vcard(self, vcard):
+    def send_vcard(self, *args):
         pass
 
 

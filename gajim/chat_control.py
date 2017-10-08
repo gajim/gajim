@@ -55,6 +55,7 @@ from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.protocol import NS_CHATSTATES
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.exceptions import GajimGeneralException
+from gajim.common.const import AvatarSize
 
 from gajim.command_system.implementation.hosts import ChatCommands
 
@@ -183,11 +184,6 @@ class ChatControl(ChatControlBase):
         self._pep_images['location'] = self.xml.get_object('location_image')
         self.update_all_pep_types()
 
-        # keep timeout id and window obj for possible big avatar
-        # it is on enter-notify and leave-notify so no need to be
-        # per jid
-        self.show_bigger_avatar_timeout_id = None
-        self.bigger_avatar_window = None
         self.show_avatar()
 
         # Hook up signals
@@ -197,15 +193,7 @@ class ChatControl(ChatControlBase):
         self.handlers[id_] = message_tv_buffer
 
         widget = self.xml.get_object('avatar_eventbox')
-        widget.set_property('height-request', app.config.get(
-            'chat_avatar_height'))
-        id_ = widget.connect('enter-notify-event',
-            self.on_avatar_eventbox_enter_notify_event)
-        self.handlers[id_] = widget
-
-        id_ = widget.connect('leave-notify-event',
-            self.on_avatar_eventbox_leave_notify_event)
-        self.handlers[id_] = widget
+        widget.set_property('height-request', AvatarSize.CHAT)
 
         id_ = widget.connect('button-press-event',
             self.on_avatar_eventbox_button_press_event)
@@ -296,8 +284,10 @@ class ChatControl(ChatControlBase):
 
         app.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
-        app.ged.register_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
+        if self.TYPE_ID == message_control.TYPE_CHAT:
+            # Dont connect this when PrivateChatControl is used
+            app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
+                self._nec_update_avatar)
         app.ged.register_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
         app.ged.register_event_handler('chatstate-received', ged.GUI1,
@@ -574,39 +564,6 @@ class ChatControl(ChatControlBase):
         # Save volume to config
         app.config.set('audio_output_volume', value)
 
-    def on_avatar_eventbox_enter_notify_event(self, widget, event):
-        """
-        Enter the eventbox area so we under conditions add a timeout to show a
-        bigger avatar after 0.5 sec
-        """
-        jid = self.contact.jid
-        avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
-        if avatar_pixbuf in ('ask', None):
-            return
-        avatar_w = avatar_pixbuf.get_width()
-        avatar_h = avatar_pixbuf.get_height()
-
-        scaled_buf = self.xml.get_object('avatar_image').get_pixbuf()
-        scaled_buf_w = scaled_buf.get_width()
-        scaled_buf_h = scaled_buf.get_height()
-
-        # do we have something bigger to show?
-        if avatar_w > scaled_buf_w or avatar_h > scaled_buf_h:
-            # wait for 0.5 sec in case we leave earlier
-            if self.show_bigger_avatar_timeout_id is not None:
-                GLib.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = GLib.timeout_add(500,
-                    self.show_bigger_avatar, widget)
-
-    def on_avatar_eventbox_leave_notify_event(self, widget, event):
-        """
-        Left the eventbox area that holds the avatar img
-        """
-        # did we add a timeout? if yes remove it
-        if self.show_bigger_avatar_timeout_id is not None:
-            GLib.source_remove(self.show_bigger_avatar_timeout_id)
-            self.show_bigger_avatar_timeout_id = None
-
     def on_avatar_eventbox_button_press_event(self, widget, event):
         """
         If right-clicked, show popup
@@ -614,9 +571,15 @@ class ChatControl(ChatControlBase):
         if event.button == 3: # right click
             menu = Gtk.Menu()
             menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
+            if self.TYPE_ID == message_control.TYPE_CHAT:
+                sha = app.contacts.get_avatar_sha(
+                    self.account, self.contact.jid)
+                name = self.contact.get_shown_name()
+            else:
+                sha = self.gc_contact.avatar_sha
+                name = self.gc_contact.get_shown_name()
             id_ = menuitem.connect('activate',
-                gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                self.contact.jid, self.contact.get_shown_name())
+                gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
             self.handlers[id_] = menuitem
             menu.append(menuitem)
             menu.show_all()
@@ -1076,10 +1039,8 @@ class ChatControl(ChatControlBase):
             jid = self.contact.jid
 
         if app.config.get('show_avatar_in_tabs'):
-            avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid)
-            if avatar_pixbuf not in ('ask', None):
-                avatar_pixbuf = gtkgui_helpers.get_scaled_pixbuf_by_size(
-                    avatar_pixbuf, 16, 16)
+            avatar_pixbuf = app.contacts.get_avatar(self.account, jid, size=16)
+            if avatar_pixbuf is not None:
                 return avatar_pixbuf
 
         if count_unread:
@@ -1200,8 +1161,9 @@ class ChatControl(ChatControlBase):
 
         app.ged.remove_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
-        app.ged.remove_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
+        if self.TYPE_ID == message_control.TYPE_CHAT:
+            app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
+                self._nec_update_avatar)
         app.ged.remove_event_handler('failed-decrypt', ged.GUI1,
             self._nec_failed_decrypt)
         app.ged.remove_event_handler('chatstate-received', ged.GUI1,
@@ -1223,9 +1185,6 @@ class ChatControl(ChatControlBase):
         if self.session:
             self.session.control = None
 
-        # Remove bigger avatar window
-        if self.bigger_avatar_window:
-            self.bigger_avatar_window.destroy()
         # Clean events
         app.events.remove_events(self.account, self.get_full_jid(),
                 types=['printed_' + self.type_id, self.type_id])
@@ -1309,50 +1268,19 @@ class ChatControl(ChatControlBase):
                 return
         self.print_conversation(_('Pong! (%s s.)') % obj.seconds, 'status')
 
-    def set_control_active(self, state):
-        ChatControlBase.set_control_active(self, state)
-        # Hide bigger avatar window
-        if self.bigger_avatar_window:
-            self.bigger_avatar_window.destroy()
-            self.bigger_avatar_window = None
-            # Re-show the small avatar
-            self.show_avatar()
-
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):
             return
 
-        jid_with_resource = self.contact.get_full_jid()
-        pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(jid_with_resource)
-        if pixbuf == 'ask':
-            # we don't have the vcard
-            if self.TYPE_ID == message_control.TYPE_PM:
-                if self.gc_contact.jid:
-                    # We know the real jid of this contact
-                    real_jid = self.gc_contact.jid
-                    if self.gc_contact.resource:
-                        real_jid += '/' + self.gc_contact.resource
-                else:
-                    real_jid = jid_with_resource
-                app.connections[self.account].request_vcard(real_jid,
-                        jid_with_resource)
-            else:
-                app.connections[self.account].request_vcard(jid_with_resource)
-            return
-        elif pixbuf:
-            scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'chat')
-        else:
-            scaled_pixbuf = None
-
+        pixbuf = app.contacts.get_avatar(
+            self.account, self.contact.jid, AvatarSize.CHAT)
         image = self.xml.get_object('avatar_image')
-        image.set_from_pixbuf(scaled_pixbuf)
-        image.show_all()
+        image.set_from_pixbuf(pixbuf)
 
-    def _nec_vcard_received(self, obj):
-        if obj.conn.name != self.account:
+    def _nec_update_avatar(self, obj):
+        if obj.account != self.account:
             return
-        j = app.get_jid_without_resource(self.contact.jid)
-        if obj.jid != j:
+        if obj.jid != self.contact.jid:
             return
         self.show_avatar()
 
@@ -1517,60 +1445,6 @@ class ChatControl(ChatControlBase):
                         self.account)
             elif typ == 'pm':
                 control.remove_contact(nick)
-
-    def show_bigger_avatar(self, small_avatar):
-        """
-        Resize the avatar, if needed, so it has at max half the screen size and
-        shows it
-        """
-        #if not small_avatar.window:
-            ### Tab has been closed since we hovered the avatar
-            #return
-        avatar_pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(
-                self.contact.jid)
-        if avatar_pixbuf in ('ask', None):
-            return
-        # Hide the small avatar
-        # this code hides the small avatar when we show a bigger one in case
-        # the avatar has a transparency hole in the middle
-        # so when we show the big one we avoid seeing the small one behind.
-        # It's why I set it transparent.
-        image = self.xml.get_object('avatar_image')
-        pixbuf = image.get_pixbuf()
-        pixbuf.fill(0xffffff00) # RGBA
-        image.set_from_pixbuf(pixbuf)
-        #image.queue_draw()
-
-        screen_w = Gdk.Screen.width()
-        screen_h = Gdk.Screen.height()
-        avatar_w = avatar_pixbuf.get_width()
-        avatar_h = avatar_pixbuf.get_height()
-        half_scr_w = screen_w / 2
-        half_scr_h = screen_h / 2
-        if avatar_w > half_scr_w:
-            avatar_w = half_scr_w
-        if avatar_h > half_scr_h:
-            avatar_h = half_scr_h
-        # we should make the cursor visible
-        # gtk+ doesn't make use of the motion notify on gtkwindow by default
-        # so this line adds that
-
-        alloc = small_avatar.get_allocation()
-        # make the bigger avatar window show up centered
-        small_avatar_x, small_avatar_y = alloc.x, alloc.y
-        translated_coordinates = small_avatar.translate_coordinates(
-            app.interface.roster.window, 0, 0)
-        if translated_coordinates:
-            small_avatar_x, small_avatar_y = translated_coordinates
-        roster_x, roster_y  = self.parent_win.window.get_window().get_origin()[1:]
-        center_x = roster_x + small_avatar_x + (alloc.width / 2)
-        center_y = roster_y + small_avatar_y + (alloc.height / 2)
-        pos_x, pos_y = center_x - (avatar_w / 2), center_y - (avatar_h / 2)
-
-        dialogs.BigAvatarWindow(avatar_pixbuf, pos_x, pos_y, avatar_w,
-            avatar_h, self.show_avatar)
-
-        self.show_bigger_avatar_timeout_id = None
 
     def _on_send_file_menuitem_activate(self, widget):
         self._on_send_file()

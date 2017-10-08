@@ -30,6 +30,7 @@
 import os
 import time
 import locale
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -44,6 +45,7 @@ from gajim import config
 from gajim import vcard
 from gajim import cell_renderer_image
 from gajim import dataforms_widget
+from gajim.common.const import AvatarSize
 import nbxmpp
 
 from enum import IntEnum, unique
@@ -61,6 +63,7 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 from gajim.command_system.implementation.hosts import GroupChatCommands
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
+
 
 import logging
 log = logging.getLogger('gajim.groupchat_control')
@@ -91,8 +94,7 @@ def tree_cell_data_func(column, renderer, model, iter_, tv=None):
         if parent_iter and (model[iter_][Column.AVATAR] or avatar_position == \
         'left'):
             renderer.set_property('visible', True)
-            renderer.set_property('width', app.config.get(
-                'roster_avatar_width'))
+            renderer.set_property('width', AvatarSize.ROSTER)
         else:
             renderer.set_property('visible', False)
     if parent_iter:
@@ -141,6 +143,8 @@ class PrivateChatControl(ChatControl):
         self.gc_contact = gc_contact
         ChatControl.__init__(self, parent_win, contact, account, session)
         self.TYPE_ID = 'pm'
+        app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
+            self._nec_update_avatar)
         app.ged.register_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received_pm)
         app.ged.register_event_handler('gc-presence-received', ged.GUI1,
@@ -151,6 +155,8 @@ class PrivateChatControl(ChatControl):
 
     def shutdown(self):
         super(PrivateChatControl, self).shutdown()
+        app.ged.remove_event_handler('update-gc-avatar', ged.GUI1,
+            self._nec_update_avatar)
         app.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received_pm)
         app.ged.remove_event_handler('gc-presence-received', ged.GUI1,
@@ -239,6 +245,20 @@ class PrivateChatControl(ChatControl):
         else:
             self.got_connected()
         ChatControl.update_ui(self)
+
+    def _nec_update_avatar(self, obj):
+        if obj.contact != self.gc_contact:
+            return
+        self.show_avatar()
+
+    def show_avatar(self):
+        if not app.config.get('show_avatar_in_chat'):
+            return
+
+        pixbuf = app.interface.get_avatar(
+            self.gc_contact.avatar_sha, AvatarSize.CHAT)
+        image = self.xml.get_object('avatar_image')
+        image.set_from_pixbuf(pixbuf)
 
     def update_contact(self):
         self.contact = self.gc_contact.as_contact()
@@ -502,8 +522,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_message_received)
         app.ged.register_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
-        app.ged.register_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
+        app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
+            self._nec_update_avatar)
         app.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
         app.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
@@ -534,7 +554,8 @@ class GroupchatControl(ChatControlBase):
         if widget.get_tooltip_window():
             return
         widget.set_has_tooltip(True)
-        widget.set_tooltip_window(tooltips.GCTooltip(self.parent_win.window))
+        widget.set_tooltip_window(tooltips.GCTooltip(
+            self.account, self.parent_win.window))
         id_ = widget.connect('query-tooltip', self.query_tooltip)
         self.handlers[id_] = widget
 
@@ -1046,12 +1067,12 @@ class GroupchatControl(ChatControlBase):
         status = obj.conn.status
         obj.conn.send_gc_status(self.nick, self.room_jid, show, status)
 
-    def _nec_vcard_received(self, obj):
-        if obj.conn.name != self.account:
+    def _nec_update_avatar(self, obj):
+        if obj.contact.room_jid != self.room_jid:
             return
-        if obj.jid != self.room_jid:
-            return
-        self.draw_avatar(obj.resource)
+        app.log('avatar').debug('Draw Groupchat Avatar: %s %s',
+                                obj.contact.name, obj.contact.avatar_sha)
+        self.draw_avatar(obj.contact)
 
     def _nec_gc_message_received(self, obj):
         if obj.room_jid != self.room_jid or obj.conn.name != self.account:
@@ -1584,21 +1605,15 @@ class GroupchatControl(ChatControlBase):
         self.model[iter_][Column.IMG] = image
         self.model[iter_][Column.TEXT] = name
 
-    def draw_avatar(self, nick):
+    def draw_avatar(self, gc_contact):
         if not app.config.get('show_avatars_in_roster'):
             return
-        iter_ = self.get_contact_iter(nick)
+        iter_ = self.get_contact_iter(gc_contact.name)
         if not iter_:
             return
-        fake_jid = self.room_jid + '/' + nick
-        pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
-        if pixbuf in ('ask', None):
-            scaled_pixbuf = empty_pixbuf
-        else:
-            scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'roster')
-            if not scaled_pixbuf:
-                scaled_pixbuf = empty_pixbuf
-        self.model[iter_][Column.AVATAR] = scaled_pixbuf
+
+        pixbuf = app.interface.get_avatar(gc_contact.avatar_sha, AvatarSize.ROSTER)
+        self.model[iter_][Column.AVATAR] = pixbuf or empty_pixbuf
 
     def draw_role(self, role):
         role_iter = self.get_role_iter(role)
@@ -1755,31 +1770,6 @@ class GroupchatControl(ChatControlBase):
                     if obj.nick in self.gc_custom_colors:
                         self.gc_custom_colors[obj.new_nick] = \
                             self.gc_custom_colors[obj.nick]
-                    # rename vcard / avatar
-                    puny_jid = helpers.sanitize_filename(self.room_jid)
-                    puny_nick = helpers.sanitize_filename(obj.nick)
-                    puny_new_nick = helpers.sanitize_filename(obj.new_nick)
-                    old_path = os.path.join(app.VCARD_PATH, puny_jid,
-                        puny_nick)
-                    new_path = os.path.join(app.VCARD_PATH, puny_jid,
-                        puny_new_nick)
-                    files = {old_path: new_path}
-                    path = os.path.join(app.AVATAR_PATH, puny_jid)
-                    # possible extensions
-                    for ext in ('.png', '.jpeg', '_notif_size_bw.png',
-                    '_notif_size_colored.png'):
-                        files[os.path.join(path, puny_nick + ext)] = \
-                            os.path.join(path, puny_new_nick + ext)
-                    for old_file in files:
-                        if os.path.exists(old_file) and old_file != \
-                        files[old_file]:
-                            if os.path.exists(files[old_file]) and \
-                            helpers.windowsify(old_file) != helpers.windowsify(
-                            files[old_file]):
-                                # Windows require this, but os.remove('test')
-                                # will also remove 'TEST'
-                                os.remove(files[old_file])
-                            os.rename(old_file, files[old_file])
                     self.print_conversation(s, 'info', graphics=False)
                 elif '321' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
@@ -1831,7 +1821,7 @@ class GroupchatControl(ChatControlBase):
                     s = _('You are now known as %s') % nick
                     self.print_conversation(s, 'info', graphics=False)
                 iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
-                    affiliation, obj.status, obj.real_jid)
+                    affiliation, obj.status, obj.real_jid, obj.avatar_sha)
                 newly_created = True
                 self.draw_all_roles()
                 if obj.status_code and '201' in obj.status_code:
@@ -1845,35 +1835,6 @@ class GroupchatControl(ChatControlBase):
                     log.error('%s has an iter, but no gc_contact instance' % \
                         obj.nick)
                     return
-                # Re-get vcard if avatar has changed
-                # We do that here because we may request it to the real JID if
-                # we knows it. connections.py doesn't know it.
-                con = app.connections[self.account]
-                if gc_c and gc_c.jid:
-                    real_jid = gc_c.jid
-                else:
-                    real_jid = obj.fjid
-                if obj.fjid in obj.conn.vcard_shas:
-                    if obj.avatar_sha != obj.conn.vcard_shas[obj.fjid]:
-                        server = app.get_server_from_jid(self.room_jid)
-                        if not server.startswith('irc'):
-                            obj.conn.request_vcard(real_jid, obj.fjid)
-                else:
-                    cached_vcard = obj.conn.get_cached_vcard(obj.fjid, True)
-                    if cached_vcard and 'PHOTO' in cached_vcard and \
-                    'SHA' in cached_vcard['PHOTO']:
-                        cached_sha = cached_vcard['PHOTO']['SHA']
-                    else:
-                        cached_sha = ''
-                    if cached_sha != obj.avatar_sha:
-                        # avatar has been updated
-                        # sha in mem will be updated later
-                        server = app.get_server_from_jid(self.room_jid)
-                        if not server.startswith('irc'):
-                            obj.conn.request_vcard(real_jid, obj.fjid)
-                    else:
-                        # save sha in mem NOW
-                        obj.conn.vcard_shas[obj.fjid] = obj.avatar_sha
 
                 actual_affiliation = gc_c.affiliation
                 if affiliation != actual_affiliation:
@@ -1946,7 +1907,7 @@ class GroupchatControl(ChatControlBase):
                 self.print_conversation(st, graphics=False)
 
     def add_contact_to_roster(self, nick, show, role, affiliation, status,
-    jid=''):
+    jid='', avatar_sha=None):
         role_name = helpers.get_uf_role(role, plural=True)
 
         resource = ''
@@ -1973,22 +1934,14 @@ class GroupchatControl(ChatControlBase):
             gc_contact = app.contacts.create_gc_contact(
                 room_jid=self.room_jid, account=self.account,
                 name=nick, show=show, status=status, role=role,
-                affiliation=affiliation, jid=j, resource=resource)
+                affiliation=affiliation, jid=j, resource=resource,
+                avatar_sha=avatar_sha)
             app.contacts.add_gc_contact(self.account, gc_contact)
+        else:
+            gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         self.draw_contact(nick)
-        self.draw_avatar(nick)
-        # Do not ask avatar to irc rooms as irc transports reply with messages
-        server = app.get_server_from_jid(self.room_jid)
-        if app.config.get('ask_avatars_on_startup') and \
-        not server.startswith('irc'):
-            fake_jid = self.room_jid + '/' + nick
-            pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(fake_jid)
-            if pixbuf == 'ask':
-                if j and not self.is_anonymous:
-                    app.connections[self.account].request_vcard(j, fake_jid)
-                else:
-                    app.connections[self.account].request_vcard(fake_jid,
-                        fake_jid)
+        self.draw_avatar(gc_contact)
+
         if nick == self.nick: # we became online
             self.got_connected()
         if self.list_treeview.get_model():
@@ -2175,8 +2128,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_message_received)
         app.ged.remove_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
-        app.ged.remove_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
+        app.ged.remove_event_handler('update-gc-avatar', ged.GUI1,
+            self._nec_update_avatar)
         app.ged.remove_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
         app.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,

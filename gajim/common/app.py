@@ -34,8 +34,11 @@ import uuid
 from distutils.version import LooseVersion as V
 import gi
 import nbxmpp
+import hashlib
 
-from gajim.common import config
+from gi.repository import GLib
+
+from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common.contacts import LegacyContactsAPI
@@ -43,9 +46,10 @@ from gajim.common.events import Events
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
-config = config.Config()
+config = c_config.Config()
 version = config.get('version')
 connections = {} # 'account name': 'account (connection.Connection) instance'
+avatar_cache = {}
 ipython_window = None
 app = None  # Gtk.Application
 
@@ -260,7 +264,7 @@ gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES_2,
     nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
     nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CONFERENCE, nbxmpp.NS_CORRECT,
-    nbxmpp.NS_EME]
+    nbxmpp.NS_EME, 'urn:xmpp:avatar:metadata+notify']
 
 # Optional features gajim supports per account
 gajim_optional_features = {}

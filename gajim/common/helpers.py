@@ -633,24 +633,6 @@ def get_account_status(account):
     status = reduce_chars_newlines(account['status_line'], 100, 1)
     return status
 
-def get_avatar_path(prefix):
-    """
-    Return the filename of the avatar, distinguishes between user- and contact-
-    provided one. Return None if no avatar was found at all.  prefix is the path
-    to the requested avatar just before the ".png" or ".jpeg"
-    """
-    # First, scan for a local, user-set avatar
-    for type_ in ('jpeg', 'png'):
-        file_ = prefix + '_local.' + type_
-        if os.path.exists(file_):
-            return file_
-    # If none available, scan for a contact-provided avatar
-    for type_ in ('jpeg', 'png'):
-        file_ = prefix + '.' + type_
-        if os.path.exists(file_):
-            return file_
-    return None
-
 def datetime_tuple(timestamp):
     """
     Convert timestamp using strptime and the format: %Y%m%dT%H:%M:%S
@@ -1396,7 +1378,7 @@ def get_subscription_request_msg(account=None):
     if account:
         s = _('Hello, I am $name.') + ' ' + s
         our_jid = app.get_jid_from_account(account)
-        vcard = app.connections[account].get_cached_vcard(our_jid)
+        vcard = app.connections[account].own_vcard
         name = ''
         if vcard:
             if 'N' in vcard:

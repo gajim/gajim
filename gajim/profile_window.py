@@ -24,18 +24,18 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
-from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import GdkPixbuf
 import base64
-import mimetypes
 import os
 import time
 import logging
+import hashlib
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
 from gajim import vcard
+from gajim.common.const import AvatarSize
 
 from gajim.common import app
 from gajim.common import ged
@@ -61,6 +61,7 @@ class ProfileWindow:
         self.dialog = None
         self.avatar_mime_type = None
         self.avatar_encoded = None
+        self.avatar_sha = None
         self.message_id = self.statusbar.push(self.context_id,
             _('Retrieving profile…'))
         self.update_progressbar_timeout_id = GLib.timeout_add(100,
@@ -75,10 +76,10 @@ class ProfileWindow:
             self._nec_vcard_published)
         app.ged.register_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
-        app.ged.register_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
         self.window.show_all()
         self.xml.get_object('ok_button').grab_focus()
+        app.connections[account].request_vcard(
+            self._nec_vcard_received, self.jid)
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
         GLib.idle_add(self.xml.get_object('ok_button').grab_focus)
@@ -100,8 +101,6 @@ class ProfileWindow:
             self._nec_vcard_published)
         app.ged.remove_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
-        app.ged.remove_event_handler('vcard-received', ged.GUI1,
-            self._nec_vcard_received)
         del app.interface.instances[self.account]['profile']
         if self.dialog: # Image chooser dialog
             self.dialog.destroy()
@@ -119,71 +118,35 @@ class ProfileWindow:
         text_button = self.xml.get_object('NOPHOTO_button')
         text_button.show()
         self.avatar_encoded = None
+        self.avatar_sha = None
         self.avatar_mime_type = None
 
     def on_set_avatar_button_clicked(self, widget):
         def on_ok(widget, path_to_file):
-            must_delete = False
-            filesize = os.path.getsize(path_to_file) # in bytes
-            invalid_file = False
-            msg = ''
-            if os.path.isfile(path_to_file):
-                stat = os.stat(path_to_file)
-                if stat[6] == 0:
-                    invalid_file = True
-                    msg = _('File is empty')
-            else:
-                invalid_file = True
-                msg = _('File does not exist')
-            if not invalid_file and filesize > 16384: # 16 kb
-                try:
-                    pixbuf = GdkPixbuf.Pixbuf.new_from_file(path_to_file)
-                    # get the image at 'notification size'
-                    # and hope that user did not specify in ACE crazy size
-                    scaled_pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf,
-                            'tooltip')
-                except GObject.GError as msg: # unknown format
-                    # msg should be string, not object instance
-                    msg = str(msg)
-                    invalid_file = True
-            if invalid_file:
-                if True: # keep identation
-                    dialogs.ErrorDialog(_('Could not load image'), msg,
-                        transient_for=self.window)
-                    return
-            if filesize > 16384:
-                if scaled_pixbuf:
-                    path_to_file = os.path.join(app.TMP,
-                            'avatar_scaled.png')
-                    scaled_pixbuf.savev(path_to_file, 'png', [], [])
-                    must_delete = True
-
-            with open(path_to_file, 'rb') as fd:
-                data = fd.read()
-            pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
-            try:
-                # rescale it
-                pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
-            except AttributeError: # unknown format
-                dialogs.ErrorDialog(_('Could not load image'),
-                    transient_for=self.window)
+            with open(path_to_file, 'rb') as file:
+                data = file.read()
+            sha = app.interface.save_avatar(data, publish=True)
+            if sha is None:
+                dialogs.ErrorDialog(
+                    _('Could not load image'), transient_for=self.window)
                 return
+
             self.dialog.destroy()
             self.dialog = None
+
+            pixbuf = app.interface.get_avatar(sha, AvatarSize.VCARD)
+
             button = self.xml.get_object('PHOTO_button')
             image = button.get_image()
             image.set_from_pixbuf(pixbuf)
             button.show()
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
-            self.avatar_encoded = base64.b64encode(data).decode('utf-8')
-            # returns None if unknown type
-            self.avatar_mime_type = mimetypes.guess_type(path_to_file)[0]
-            if must_delete:
-                try:
-                    os.remove(path_to_file)
-                except OSError:
-                    log.debug('Cannot remove %s' % path_to_file)
+
+            self.avatar_sha = sha
+            publish = app.interface.get_avatar(sha, publish=True)
+            self.avatar_encoded = base64.b64encode(publish).decode('utf-8')
+            self.avatar_mime_type = 'image/jpeg'
 
         def on_clear(widget):
             self.dialog.destroy()
@@ -197,27 +160,25 @@ class ProfileWindow:
         if self.dialog:
             self.dialog.present()
         else:
-            self.dialog = dialogs.AvatarChooserDialog(on_response_ok = on_ok,
-                    on_response_cancel = on_cancel, on_response_clear = on_clear)
+            self.dialog = dialogs.AvatarChooserDialog(
+                on_response_ok=on_ok, on_response_cancel=on_cancel,
+                on_response_clear=on_clear)
 
     def on_PHOTO_button_press_event(self, widget, event):
         """
         If right-clicked, show popup
         """
-        if event.button == 3 and self.avatar_encoded: # right click
+        pixbuf = self.xml.get_object('PHOTO_button').get_image().get_pixbuf()
+        if event.button == 3 and pixbuf: # right click
             menu = Gtk.Menu()
 
-            # Try to get pixbuf
-            pixbuf = gtkgui_helpers.get_avatar_pixbuf_from_cache(self.jid,
-                    use_local=False)
-
-            if pixbuf not in (None, 'ask'):
-                nick = app.config.get_per('accounts', self.account, 'name')
-                menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
-                menuitem.connect('activate',
-                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.jid, nick)
-                menu.append(menuitem)
+            nick = app.config.get_per('accounts', self.account, 'name')
+            sha = app.contacts.get_avatar_sha(self.account, self.jid)
+            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
+            menuitem.connect('activate',
+                gtkgui_helpers.on_avatar_save_as_menuitem_activate,
+                sha, nick)
+            menu.append(menuitem)
             # show clear
             menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
             menuitem.connect('activate', self.on_clear_button_clicked)
@@ -265,14 +226,16 @@ class ProfileWindow:
             text_button.show()
         for i in vcard_.keys():
             if i == 'PHOTO':
-                pixbuf, self.avatar_encoded, self.avatar_mime_type = \
-                        vcard.get_avatar_pixbuf_encoded_mime(vcard_[i])
-                if not pixbuf:
-                    image.set_from_pixbuf(None)
-                    button.hide()
-                    text_button.show()
+                photo_encoded = vcard_[i]['BINVAL']
+                if photo_encoded == '':
                     continue
-                pixbuf = gtkgui_helpers.get_scaled_pixbuf(pixbuf, 'vcard')
+                photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
+                pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
+                if pixbuf is None:
+                    continue
+                pixbuf = pixbuf.scale_simple(
+                    AvatarSize.PROFILE, AvatarSize.PROFILE,
+                    GdkPixbuf.InterpType.BILINEAR)
                 image.set_from_pixbuf(pixbuf)
                 button.show()
                 text_button.hide()
@@ -305,12 +268,8 @@ class ProfileWindow:
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
 
-    def _nec_vcard_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.jid != self.jid:
-            return
-        self.set_values(obj.vcard_dict)
+    def _nec_vcard_received(self, jid, resource, room, vcard_):
+        self.set_values(vcard_)
 
     def add_to_vcard(self, vcard_, entry, txt):
         """
@@ -367,7 +326,7 @@ class ProfileWindow:
             vcard_['PHOTO'] = {'BINVAL': self.avatar_encoded}
             if self.avatar_mime_type:
                 vcard_['PHOTO']['TYPE'] = self.avatar_mime_type
-        return vcard_
+        return vcard_, self.avatar_sha
 
     def on_ok_button_clicked(self, widget):
         if self.update_progressbar_timeout_id:
@@ -378,7 +337,7 @@ class ProfileWindow:
                     _('Without a connection, you can not publish your contact '
                     'information.'), transient_for=self.window)
             return
-        vcard_ = self.make_vcard()
+        vcard_, sha = self.make_vcard()
         nick = ''
         if 'NICKNAME' in vcard_:
             nick = vcard_['NICKNAME']
@@ -387,7 +346,7 @@ class ProfileWindow:
             app.connections[self.account].retract_nickname()
             nick = app.config.get_per('accounts', self.account, 'name')
         app.nicks[self.account] = nick
-        app.connections[self.account].send_vcard(vcard_)
+        app.connections[self.account].send_vcard(vcard_, sha)
         self.message_id = self.statusbar.push(self.context_id,
                 _('Sending profile…'))
         self.progressbar.show()

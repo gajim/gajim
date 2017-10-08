@@ -301,42 +301,33 @@ def set_unset_urgency_hint(window, unread_messages_no):
         else:
             window.props.urgency_hint = False
 
-# feeding the image directly into the pixbuf seems possible, but is error prone and causes image distortions and segfaults.
-# see http://stackoverflow.com/a/8892894/3528174
-# and https://developer.gnome.org/gdk-pixbuf/unstable/gdk-pixbuf-Image-Data-in-Memory.html#gdk-pixbuf-new-from-bytes
-# to learn how this could be done (or look into the mercurial history)
-def get_pixbuf_from_data(file_data, want_type = False):
+def get_pixbuf_from_data(file_data):
     """
-    Get image data and returns GdkPixbuf.Pixbuf if want_type is True it also
-    returns 'jpeg', 'png' etc
+    Get image data and returns GdkPixbuf.Pixbuf
     """
     pixbufloader = GdkPixbuf.PixbufLoader()
     try:
         pixbufloader.write(file_data)
         pixbufloader.close()
         pixbuf = pixbufloader.get_pixbuf()
-    except GLib.GError: # 'unknown image format'
+    except GLib.GError:
         pixbufloader.close()
 
-        # try to open and convert this image to png using pillow (if available)
-        log.debug("loading avatar using pixbufloader failed, trying to convert avatar image using pillow (if available)")
+        log.warning('loading avatar using pixbufloader failed, trying to '
+                    'convert avatar image using pillow')
         try:
             avatar = Image.open(BytesIO(file_data)).convert("RGBA")
-            arr = GLib.Bytes.new(avatar.tobytes())
+            array = GLib.Bytes.new(avatar.tobytes())
             width, height = avatar.size
-            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(arr, GdkPixbuf.Colorspace.RGB, True, 8, width, height, width * 4)
-        except:
-            log.info("Could not use pillow to convert avatar image, image cannot be displayed")
-            if want_type:
-                return None, None
-            else:
-                return None
+            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
+                array, GdkPixbuf.Colorspace.RGB,
+                True, 8, width, height, width * 4)
+        except Exception:
+            log.warning('Could not use pillow to convert avatar image, '
+                        'image cannot be displayed', exc_info=True)
+            return
 
-    if want_type:
-        typ = pixbufloader.get_format() and pixbufloader.get_format().get_name() or None
-        return pixbuf, typ
-    else:
-        return pixbuf
+    return pixbuf
 
 def get_cursor(attr):
     display = Gdk.Display.get_default()
@@ -445,90 +436,6 @@ def get_fade_color(treeview, selected, focused):
     return Gdk.RGBA(bg.red*p + fg.red*q, bg.green*p + fg.green*q,
         bg.blue*p + fg.blue*q)
 
-def get_scaled_pixbuf_by_size(pixbuf, width, height):
-    # Pixbuf size
-    pix_width = pixbuf.get_width()
-    pix_height = pixbuf.get_height()
-    # don't make avatars bigger than they are
-    if pix_width < width and pix_height < height:
-        return pixbuf # we don't want to make avatar bigger
-
-    ratio = float(pix_width) / float(pix_height)
-    if ratio > 1:
-        w = width
-        h = int(w / ratio)
-    else:
-        h = height
-        w = int(h * ratio)
-    scaled_buf = pixbuf.scale_simple(w, h, GdkPixbuf.InterpType.HYPER)
-    return scaled_buf
-
-def get_scaled_pixbuf(pixbuf, kind):
-    """
-    Return scaled pixbuf, keeping ratio etc or None kind is either "chat",
-    "roster", "notification", "tooltip", "vcard"
-    """
-    # resize to a width / height for the avatar not to have distortion
-    # (keep aspect ratio)
-    width = app.config.get(kind + '_avatar_width')
-    height = app.config.get(kind + '_avatar_height')
-    if width < 1 or height < 1:
-        return None
-
-    return get_scaled_pixbuf_by_size(pixbuf, width, height)
-
-def get_avatar_pixbuf_from_cache(fjid, use_local=True):
-    """
-    Check if jid has cached avatar and if that avatar is valid image (can be
-    shown)
-
-    Returns None if there is no image in vcard/
-    Returns 'ask' if cached vcard should not be used (user changed his vcard, so
-    we have new sha) or if we don't have the vcard
-    """
-    jid, nick = app.get_room_and_nick_from_fjid(fjid)
-    if app.config.get('hide_avatar_of_transport') and\
-            app.jid_is_transport(jid):
-        # don't show avatar for the transport itself
-        return None
-
-    if any(jid in app.contacts.get_gc_list(acc) for acc in \
-    app.contacts.get_accounts()):
-        is_groupchat_contact = True
-    else:
-        is_groupchat_contact = False
-
-    puny_jid = helpers.sanitize_filename(jid)
-    if is_groupchat_contact:
-        puny_nick = helpers.sanitize_filename(nick)
-        path = os.path.join(app.VCARD_PATH, puny_jid, puny_nick)
-        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid,
-                puny_nick) + '_local'
-    else:
-        path = os.path.join(app.VCARD_PATH, puny_jid)
-        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid) + \
-                '_local'
-    if use_local:
-        for extension in ('.png', '.jpeg'):
-            local_avatar_path = local_avatar_basepath + extension
-            if os.path.isfile(local_avatar_path):
-                avatar_file = open(local_avatar_path, 'rb')
-                avatar_data = avatar_file.read()
-                avatar_file.close()
-                return get_pixbuf_from_data(avatar_data)
-
-    if not os.path.isfile(path):
-        return 'ask'
-
-    vcard_dict = list(app.connections.values())[0].get_cached_vcard(fjid,
-            is_groupchat_contact)
-    if not vcard_dict: # This can happen if cached vcard is too old
-        return 'ask'
-    if 'PHOTO' not in vcard_dict:
-        return None
-    pixbuf = vcard.get_avatar_pixbuf_encoded_mime(vcard_dict['PHOTO'])[0]
-    return pixbuf
-
 def make_gtk_month_python_month(month):
     """
     GTK starts counting months from 0, so January is 0 but Python's time start
@@ -558,11 +465,17 @@ def get_possible_button_event(event):
 def destroy_widget(widget):
     widget.destroy()
 
-def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
+def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
     def on_continue(response, file_path):
         if response < 0:
             return
-        pixbuf = get_avatar_pixbuf_from_cache(jid)
+
+        if isinstance(avatar, str):
+            # We got a SHA
+            pixbuf = app.interface.get_avatar(avatar)
+        else:
+            # We got a pixbuf
+            pixbuf = avatar
         extension = os.path.splitext(file_path)[1]
         if not extension:
             # Silently save as Jpeg image
@@ -577,7 +490,7 @@ def on_avatar_save_as_menuitem_activate(widget, jid, default_name=''):
         try:
             pixbuf.savev(file_path, image_format, [], [])
         except Exception as e:
-            log.debug('Error saving avatar: %s' % str(e))
+            log.error('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)
             new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
