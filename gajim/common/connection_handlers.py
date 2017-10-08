@@ -268,6 +268,9 @@ class ConnectionVcard:
             self._vcard_gc_presence_received)
 
     def _vcard_presence_received(self, obj):
+        if obj.conn.name != self.name:
+            return
+
         if obj.avatar_sha is None:
             # No Avatar is advertised
             return
