@@ -584,14 +584,20 @@ class PubsubAvatarReceivedEvent(nec.NetworkIncomingEvent):
         if self.items_node.getAttr('node') != 'urn:xmpp:avatar:data':
             return
         item = self.items_node.getTag('item')
+        if not item:
+            log.warning('Received malformed avatar data via pubsub')
+            log.warning(self.stanza)
+            return
         self.sha = item.getAttr('id')
         data_tag = item.getTag('data', namespace='urn:xmpp:avatar:data')
         if self.sha is None or data_tag is None:
             log.warning('Received malformed avatar data via pubsub')
+            log.warning(self.stanza)
             return
         self.data = data_tag.getData()
         if self.data is None:
             log.warning('Received malformed avatar data via pubsub')
+            log.warning(self.stanza)
             return
         self.data = base64.b64decode(self.data.encode('utf-8'))
 
