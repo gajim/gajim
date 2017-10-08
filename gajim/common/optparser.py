@@ -240,7 +240,7 @@ class OptionsParser:
             self.update_config_to_016104()
         if old < [0, 16, 10, 5] and new >= [0, 16, 10, 5]:
             self.update_config_to_016105()
-        if old < [0, 16, 11, 0] and new >= [0, 16, 11, 1]:
+        if old < [0, 16, 11, 1] and new >= [0, 16, 11, 1]:
             self.update_config_to_016111()
 
         app.logger.init_vars()
