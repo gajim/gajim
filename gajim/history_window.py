@@ -69,6 +69,7 @@ class HistoryWindow:
     def __init__(self, jid=None, account=None):
         xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
         self.window = xml.get_object('history_window')
+        self.window.set_application(app.app)
         self.calendar = xml.get_object('calendar')
         scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
