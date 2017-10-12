@@ -73,7 +73,8 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip \
         mingw-w64-"${ARCH}"-gstreamer \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
-        mingw-w64-"${ARCH}"-sqlite3
+        mingw-w64-"${ARCH}"-sqlite3 \
+        mingw-w64-"${ARCH}"-goocanvas
 
     build_pip install setuptools_scm
 
