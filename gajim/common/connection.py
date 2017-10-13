@@ -2362,15 +2362,18 @@ class Connection(CommonConnection, ConnectionHandlers):
         """
         if not app.account_is_connected(self.name):
             return
-        if self.pubsub_supported and self.pubsub_publish_options_supported \
-                and storage_type != 'xml':
-            self.send_pb_retrieve('', 'storage:bookmarks')
-            app.log('bookmarks').info('Request Bookmarks (PubSub)')
-            # some server (ejabberd) are so slow to answer that we request via XML
-            # if we don't get answer in the next 30 seconds
-            app.idlequeue.set_alarm(self._check_bookmarks_received, 30)
-        else:
-            self._request_bookmarks_xml()
+
+        if storage_type != 'xml':
+            pubsub = self.pubsub_supported or self.pep_supported
+            if pubsub and self.pubsub_publish_options_supported:
+                self.send_pb_retrieve('', 'storage:bookmarks')
+                app.log('bookmarks').info('Request Bookmarks (PubSub)')
+                # some server (ejabberd) are so slow to answer that we
+                # request via XML if we don't get answer in the next 30 seconds
+                app.idlequeue.set_alarm(self._check_bookmarks_received, 30)
+                return
+
+        self._request_bookmarks_xml()
 
     def get_bookmarks_storage_node(self):
         NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
@@ -2423,7 +2426,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         storage_node = self.get_bookmarks_storage_node()
 
         if storage_type != 'xml':
-            if self.pubsub_supported and self.pubsub_publish_options_supported:
+            pubsub = self.pubsub_supported or self.pep_supported
+            if pubsub and self.pubsub_publish_options_supported:
                 self.send_pb_publish(
                     '', 'storage:bookmarks', storage_node, 'current',
                     options=self.get_bookmark_publish_options())
