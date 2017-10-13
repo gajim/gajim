@@ -2406,9 +2406,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         f = options.addChild('field',
                              attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
         f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-        f = options.addChild('field',
-                             attrs={'var': 'pubsub#persist_items'})
-        f.setTagData('value', 'true')
         f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
         f.setTagData('value', 'whitelist')
         return options
