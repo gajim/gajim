@@ -1930,12 +1930,12 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.register_supported = True
                 if nbxmpp.NS_PUBSUB in obj.features:
                     self.pubsub_supported = True
-                    if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
-                        self.pubsub_publish_options_supported = True
-                    else:
-                        # Remove stored bookmarks accessible to everyone.
-                        self.send_pb_purge(our_jid, 'storage:bookmarks')
-                        self.send_pb_delete(our_jid, 'storage:bookmarks')
+                if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
+                    self.pubsub_publish_options_supported = True
+                else:
+                    # Remove stored bookmarks accessible to everyone.
+                    self.send_pb_purge(our_jid, 'storage:bookmarks')
+                    self.send_pb_delete(our_jid, 'storage:bookmarks')
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
