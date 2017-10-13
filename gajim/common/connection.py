@@ -2347,6 +2347,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq2.addChild(name='storage', namespace='storage:bookmarks')
         self.connection.send(iq)
+        app.log('bookmarks').info('Request Bookmarks (PrivateStorage)')
 
     def _check_bookmarks_received(self):
         if not self.bookmarks:
@@ -2364,11 +2365,50 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.pubsub_supported and self.pubsub_publish_options_supported \
                 and storage_type != 'xml':
             self.send_pb_retrieve('', 'storage:bookmarks')
+            app.log('bookmarks').info('Request Bookmarks (PubSub)')
             # some server (ejabberd) are so slow to answer that we request via XML
             # if we don't get answer in the next 30 seconds
             app.idlequeue.set_alarm(self._check_bookmarks_received, 30)
         else:
             self._request_bookmarks_xml()
+
+    def get_bookmarks_storage_node(self):
+        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
+        storage_node = nbxmpp.Node(
+            tag='storage', attrs={'xmlns': 'storage:bookmarks'})
+        for bm in self.bookmarks:
+            conf_node = storage_node.addChild(name="conference")
+            conf_node.setAttr('jid', bm['jid'])
+            conf_node.setAttr('autojoin', bm['autojoin'])
+            conf_node.setAttr('name', bm['name'])
+            conf_node.setTag(
+                'minimize', namespace=NS_GAJIM_BM).setData(bm['minimize'])
+            # Only add optional elements if not empty
+            # Note: need to handle both None and '' as empty
+            #   thus shouldn't use "is not None"
+            if bm.get('nick', None):
+                conf_node.setTagData('nick', bm['nick'])
+            if bm.get('password', None):
+                conf_node.setTagData('password', bm['password'])
+            if bm.get('print_status', None):
+                conf_node.setTag(
+                    'print_status',
+                    namespace=NS_GAJIM_BM).setData(bm['print_status'])
+        return storage_node
+
+    @staticmethod
+    def get_bookmark_publish_options():
+        options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
+                              attrs={'type': 'submit'})
+        f = options.addChild('field',
+                             attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
+        f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+        f = options.addChild('field',
+                             attrs={'var': 'pubsub#persist_items'})
+        f.setTagData('value', 'true')
+        f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
+        f.setTagData('value', 'whitelist')
+        return options
 
     def store_bookmarks(self, storage_type=None):
         """
@@ -2377,47 +2417,22 @@ class Connection(CommonConnection, ConnectionHandlers):
         storage_type can be set to 'pubsub' or 'xml' so store in only one method
         else it will be stored on both
         """
-        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
         if not app.account_is_connected(self.name):
             return
-        iq = nbxmpp.Node(tag='storage', attrs={'xmlns': 'storage:bookmarks'})
-        for bm in self.bookmarks:
-            iq2 = iq.addChild(name="conference")
-            iq2.setAttr('jid', bm['jid'])
-            iq2.setAttr('autojoin', bm['autojoin'])
-            iq2.setAttr('name', bm['name'])
-            iq2.setTag('minimize', namespace=NS_GAJIM_BM). \
-                setData(bm['minimize'])
-            # Only add optional elements if not empty
-            # Note: need to handle both None and '' as empty
-            #   thus shouldn't use "is not None"
-            if bm.get('nick', None):
-                iq2.setTagData('nick', bm['nick'])
-            if bm.get('password', None):
-                iq2.setTagData('password', bm['password'])
-            if bm.get('print_status', None):
-                iq2.setTag('print_status', namespace=NS_GAJIM_BM). \
-                    setData(bm['print_status'])
 
-        if self.pubsub_supported and self.pubsub_publish_options_supported and\
-                storage_type != 'xml':
-            options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
-                                  attrs={'type': 'submit'})
-            f = options.addChild('field',
-                                 attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
-            f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-            f = options.addChild('field',
-                                 attrs={'var': 'pubsub#persist_items'})
-            f.setTagData('value', 'true')
-            f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-            f.setTagData('value', 'whitelist')
-            self.send_pb_publish('', 'storage:bookmarks', iq, 'current',
-                                 options=options)
+        storage_node = self.get_bookmarks_storage_node()
+
+        if storage_type != 'xml':
+            if self.pubsub_supported and self.pubsub_publish_options_supported:
+                self.send_pb_publish(
+                    '', 'storage:bookmarks', storage_node, 'current',
+                    options=self.get_bookmark_publish_options())
+                app.log('bookmarks').info('Bookmarks published (PubSub)')
+
         if storage_type != 'pubsub':
-            iqA = nbxmpp.Iq(typ='set')
-            iqB = iqA.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-            iqB.addChild(node=iq)
-            self.connection.send(iqA)
+            iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE, payload=storage_node)
+            self.connection.send(iq)
+            app.log('bookmarks').info('Bookmarks published (PrivateStorage)')
 
     def get_annotations(self):
         """

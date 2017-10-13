@@ -1511,6 +1511,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def _nec_private_storate_bookmarks_received(self, obj):
         if obj.conn.name != self.name:
             return
+        app.log('bookmarks').info('Received Bookmarks (PrivateStorage)')
         resend_to_pubsub = False
         bm_jids = [b['jid'] for b in self.bookmarks]
         for bm in obj.bookmarks:
@@ -1518,7 +1519,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                 self.bookmarks.append(bm)
                 # We got a bookmark that was not in pubsub
                 resend_to_pubsub = True
-        if self.pubsub_supported and resend_to_pubsub:
+        if resend_to_pubsub:
             self.store_bookmarks('pubsub')
 
     def _nec_private_storate_rosternotes_received(self, obj):
