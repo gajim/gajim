@@ -1914,15 +1914,20 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archiving_supported = True
                     self.archiving_313_supported = True
                     get_action(self.name + '-archive').set_enabled(True)
+                for identity in obj.identities:
+                    if identity['category'] == 'pubsub':
+                        self.pep_supported = identity.get('type') == 'pep'
+                        break
+                if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
+                    self.pubsub_publish_options_supported = True
+                else:
+                    # Remove stored bookmarks accessible to everyone.
+                    self.send_pb_purge(our_jid, 'storage:bookmarks')
+                    self.send_pb_delete(our_jid, 'storage:bookmarks')
 
             if obj.fjid == hostname:
                 if nbxmpp.NS_SECLABEL in obj.features:
                     self.seclabel_supported = True
-                for identity in obj.identities:
-                    if identity['category'] == 'pubsub' and identity.get(
-                    'type') == 'pep':
-                        self.pep_supported = True
-                        break
                 if nbxmpp.NS_VCARD in obj.features:
                     self.vcard_supported = True
                     get_action(self.name + '-profile').set_enabled(True)
@@ -1930,12 +1935,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.register_supported = True
                 if nbxmpp.NS_PUBSUB in obj.features:
                     self.pubsub_supported = True
-                if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
-                    self.pubsub_publish_options_supported = True
-                else:
-                    # Remove stored bookmarks accessible to everyone.
-                    self.send_pb_purge(our_jid, 'storage:bookmarks')
-                    self.send_pb_delete(our_jid, 'storage:bookmarks')
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
