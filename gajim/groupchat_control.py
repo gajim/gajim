@@ -354,7 +354,7 @@ class GroupchatControl(ChatControlBase):
                 img.set_from_icon_name('bookmark-new', Gtk.IconSize.MENU)
             widget.set_sensitive(
                 app.connections[self.account].private_storage_supported or \
-                (app.connections[self.account].pubsub_supported and \
+                (app.connections[self.account].pep_supported and \
                 app.connections[self.account].pubsub_publish_options_supported))
             widget.show()
 
@@ -971,7 +971,7 @@ class GroupchatControl(ChatControlBase):
         notify_menuitem.set_active(app.config.get_per('rooms', self.contact.jid,
             'notify_on_all_messages'))
         conn = app.connections[self.account]
-        if not conn.private_storage_supported and (not conn.pubsub_supported or \
+        if not conn.private_storage_supported and (not conn.pep_supported or \
         not conn.pubsub_publish_options_supported):
             bookmark_room_menuitem.set_sensitive(False)
         if app.gc_connected[self.account][self.room_jid]:

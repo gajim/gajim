@@ -670,7 +670,6 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.music_track_info = 0
         self.location_info = {}
-        self.pubsub_supported = False
         self.register_supported = False
         self.pubsub_publish_options_supported = False
         # Do we auto accept insecure connection
@@ -1933,8 +1932,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     get_action(self.name + '-profile').set_enabled(True)
                 if nbxmpp.NS_REGISTER in obj.features:
                     self.register_supported = True
-                if nbxmpp.NS_PUBSUB in obj.features:
-                    self.pubsub_supported = True
                 if nbxmpp.NS_BLOCKING in obj.features:
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
@@ -2363,8 +2360,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         if storage_type != 'xml':
-            pubsub = self.pubsub_supported or self.pep_supported
-            if pubsub and self.pubsub_publish_options_supported:
+            if self.pep_supported and self.pubsub_publish_options_supported:
                 self.send_pb_retrieve('', 'storage:bookmarks')
                 app.log('bookmarks').info('Request Bookmarks (PubSub)')
                 # some server (ejabberd) are so slow to answer that we
@@ -2422,8 +2418,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         storage_node = self.get_bookmarks_storage_node()
 
         if storage_type != 'xml':
-            pubsub = self.pubsub_supported or self.pep_supported
-            if pubsub and self.pubsub_publish_options_supported:
+            if self.pep_supported and self.pubsub_publish_options_supported:
                 self.send_pb_publish(
                     '', 'storage:bookmarks', storage_node, 'current',
                     options=self.get_bookmark_publish_options())
