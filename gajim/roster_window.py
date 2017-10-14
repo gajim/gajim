@@ -2381,7 +2381,7 @@ class RosterWindow:
             else:
                 try:
                     w.window.destroy()
-                except AttributeError:
+                except AttributeError, RuntimeError:
                     w.destroy()
 
     def close_all(self, account, force=False):
