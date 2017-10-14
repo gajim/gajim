@@ -1,1 +1,0 @@
-from .acronyms_expander import AcronymsExpanderPlugin
