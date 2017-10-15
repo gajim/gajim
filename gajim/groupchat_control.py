@@ -2613,7 +2613,12 @@ class GroupchatControl(ChatControlBase):
 
         item = xml.get_object('block_menuitem')
         item2 = xml.get_object('unblock_menuitem')
-        if helpers.jid_is_blocked(self.account, fjid):
+        if not app.connections[self.account].privacy_rules_supported:
+            item2.set_no_show_all(True)
+            item.set_no_show_all(True)
+            item.hide()
+            item2.hide()
+        elif helpers.jid_is_blocked(self.account, fjid):
             item.set_no_show_all(True)
             item.hide()
             id_ = item2.connect('activate', self.on_unblock, nick)
