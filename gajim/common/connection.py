@@ -1687,6 +1687,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         for contact in contact_list:
             self.send_custom_status(show, self.status, contact.jid)
+            # Send a presence Probe to get the current Status
+            probe = nbxmpp.Presence(contact.jid, 'probe', frm=self.get_own_jid())
+            self.connection.send(probe)
 
     def block_group(self, group, contact_list, message):
         if not self.privacy_rules_supported:

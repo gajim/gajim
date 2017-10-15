@@ -2107,6 +2107,9 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             for jid in obj.unblocked_jids:
                 if jid in self.blocked_contacts:
                     self.blocked_contacts.remove(jid)
+                # Send a presence Probe to get the current Status
+                probe = nbxmpp.Presence(jid, 'probe', frm=self.get_own_jid())
+                self.connection.send(probe)
 
     def _nec_stream_other_host_received(self, obj):
         if obj.conn.name != self.name:
