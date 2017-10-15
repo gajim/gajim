@@ -2090,8 +2090,11 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
 
     def _BlockingSetCB(self, con, iq_obj):
         log.debug('_BlockingSetCB')
-        app.nec.push_incoming_event(BlockingEvent(None, conn=self,
-            stanza=iq_obj))
+        app.nec.push_incoming_event(
+            BlockingEvent(None, conn=self, stanza=iq_obj))
+        reply = nbxmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
+                          to=iq_obj.getFrom(), frm=iq_obj.getTo(), xmlns=None)
+        self.connection.send(reply)
         raise nbxmpp.NodeProcessed
 
     def _nec_blocking(self, obj):
