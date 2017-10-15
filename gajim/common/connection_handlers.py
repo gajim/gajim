@@ -2104,6 +2104,9 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             for jid in obj.blocked_jids:
                 if jid not in self.blocked_contacts:
                     self.blocked_contacts.append(jid)
+                contact_list = app.contacts.get_contacts(self.name, jid)
+                for contact in contact_list:
+                    contact.show = 'offline'
             for jid in obj.unblocked_jids:
                 if jid in self.blocked_contacts:
                     self.blocked_contacts.remove(jid)

@@ -1639,6 +1639,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.connection.send(iq)
             return
         for contact in contact_list:
+            contact.show = 'offline'
             self.send_custom_status('offline', message, contact.jid)
             max_order = self.get_max_blocked_list_order()
             new_rule = {'order': str(max_order + 1),
