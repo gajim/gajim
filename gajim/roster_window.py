@@ -2844,7 +2844,7 @@ class RosterWindow:
             on_response_ok = (remove, list_))
 
     def _nec_blocking(self, obj):
-        if obj.unblock_all:
+        if obj.unblock_all or obj.blocklist:
             jids = app.contacts.get_jid_list(obj.conn.name)
             self._idle_draw_jids_of_account(jids, obj.conn.name)
         else:

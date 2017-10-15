@@ -69,7 +69,6 @@ METACONTACTS_ARRIVED = 'metacontacts_arrived'
 ROSTER_ARRIVED = 'roster_arrived'
 DELIMITER_ARRIVED = 'delimiter_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
-BLOCKING_ARRIVED = 'blocking_arrived'
 PEP_CONFIG = 'pep_config'
 
 
@@ -1463,15 +1462,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                 # connection process, we don't take the risk
                 self.privacy_rules_supported = False
                 self._continue_connection_request_privacy()
-        elif self.awaiting_answers[id_][0] == BLOCKING_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'result':
-                list_node = iq_obj.getTag('blocklist')
-                if not list_node:
-                    return
-                self.blocked_contacts = []
-                for i in list_node.iterTags('item'):
-                    self.blocked_contacts.append(i.getAttr('jid'))
         elif self.awaiting_answers[id_][0] == PEP_CONFIG:
             del self.awaiting_answers[id_]
             if iq_obj.getType() == 'error':
@@ -2097,11 +2087,19 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.connection.send(reply)
         raise nbxmpp.NodeProcessed
 
+    def _BlockingResultCB(self, con, iq_obj):
+        log.debug('_BlockingResultCB')
+        app.nec.push_incoming_event(
+            BlockingEvent(None, conn=self, stanza=iq_obj))
+        raise nbxmpp.NodeProcessed
+
     def _nec_blocking(self, obj):
         if obj.conn.name != self.name:
             return
         if obj.unblock_all:
             self.blocked_contacts = []
+        elif obj.blocklist:
+            self.blocked_contacts = obj.blocklist
         else:
             for jid in obj.blocked_jids:
                 if jid not in self.blocked_contacts:
@@ -2201,4 +2199,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
             nbxmpp.NS_PUBKEY_PUBKEY)
         con.RegisterHandler('iq', self._BlockingSetCB, 'set',
+            nbxmpp.NS_BLOCKING)
+        con.RegisterHandler('iq', self._BlockingResultCB, 'result',
             nbxmpp.NS_BLOCKING)

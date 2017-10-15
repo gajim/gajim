@@ -1842,6 +1842,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
         self.connection.send(iq)
 
+    def _request_blocking(self):
+        if not app.account_is_connected(self.name) or not self.connection:
+            return
+        iq = nbxmpp.Iq('get', xmlns=None)
+        iq.setQuery('blocklist').setNamespace(nbxmpp.NS_BLOCKING)
+        self.connection.send(iq)
+
     def _continue_connection_request_privacy(self):
         if self.privacy_rules_supported:
             if not self.privacy_rules_requested:
@@ -1861,13 +1868,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     'invisibility.') % self.name))
                 return
             if self.blocking_supported:
-                iq = nbxmpp.Iq('get', xmlns='')
-                query = iq.setQuery(name='blocklist')
-                query.setNamespace(nbxmpp.NS_BLOCKING)
-                id2_ = self.connection.getAnID()
-                iq.setID(id2_)
-                self.awaiting_answers[id2_] = (BLOCKING_ARRIVED, )
-                self.connection.send(iq)
+                self._request_blocking()
             # Ask metacontacts before roster
             self.get_metacontacts()
 
