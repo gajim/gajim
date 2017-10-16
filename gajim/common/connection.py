@@ -1408,6 +1408,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 log.warning("Unknown authentication mechanisms %s" % mech)
         if len(auth_mechs) == 0:
             auth_mechs = None
+        else:
+            auth_mechs = set(auth_mechs)
         con.auth(user=name, password=self.password,
             resource=self.server_resource, sasl=True, on_auth=self.__on_auth, auth_mechs=auth_mechs)
 
