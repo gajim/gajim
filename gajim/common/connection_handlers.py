@@ -30,6 +30,7 @@
 
 import os
 import base64
+import binascii
 import operator
 import hashlib
 
@@ -445,7 +446,11 @@ class ConnectionVcard:
                 avatar_sha = None
                 photo_decoded = None
             else:
-                photo_decoded = base64.b64decode(photo.encode('utf-8'))
+                try:
+                    photo_decoded = base64.b64decode(photo.encode('utf-8'))
+                except binascii.Error as error:
+                    app.log('avatar').warning('Invalid Avatar: %s', error)
+                    return None, None
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 
         return avatar_sha, photo_decoded

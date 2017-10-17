@@ -24,6 +24,7 @@
 from calendar import timegm
 import datetime
 import hashlib
+import binascii
 import base64
 import hmac
 import logging
@@ -599,7 +600,11 @@ class PubsubAvatarReceivedEvent(nec.NetworkIncomingEvent):
             log.warning('Received malformed avatar data via pubsub')
             log.warning(self.stanza)
             return
-        self.data = base64.b64decode(self.data.encode('utf-8'))
+        try:
+            self.data = base64.b64decode(self.data.encode('utf-8'))
+        except binascii.Error as err:
+            log.warning('Received malformed avatar data via pubsub: %s' % err)
+            return
 
         return True
 

@@ -36,6 +36,7 @@ from gi.repository import GLib
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import base64
+import binascii
 import time
 import locale
 import os
@@ -210,7 +211,12 @@ class VcardWindow:
                 photo_encoded = vcard[i]['BINVAL']
                 if photo_encoded == '':
                     continue
-                photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
+                try:
+                    photo_decoded = base64.b64decode(
+                        photo_encoded.encode('utf-8'))
+                except binascii.Error as error:
+                    app.log('avatar').warning('Invalid Avatar: %s', error)
+                    continue
                 pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
                 if pixbuf is None:
                     continue
