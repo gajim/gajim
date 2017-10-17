@@ -26,6 +26,7 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 import os
+import sys
 
 from gajim import dialogs
 from gajim import config
@@ -85,6 +86,8 @@ class StatusIcon:
         if not self.status_icon:
             self.status_icon = Gtk.StatusIcon()
             self.statusicon_size = '16'
+            if sys.platform == 'darwin':
+                self.statusicon_size = '24'
             self.status_icon.set_property('has-tooltip', True)
             self.status_icon.connect('activate', self.on_status_icon_left_clicked)
             self.status_icon.connect('popup-menu',
