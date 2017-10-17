@@ -76,7 +76,10 @@ else:
         if base is None or base[0] != '/':
             base = os.path.expanduser('~/.local/share')
         localedir = os.path.join(base, "locale")
-    locale.bindtextdomain(APP, localedir)
+
+    if hasattr(locale, 'bindtextdomain'):
+        locale.bindtextdomain(APP, localedir)
+
 gettext.install(APP, localedir)
 
 if gettext._translations:
