@@ -313,6 +313,9 @@ class ConnectionVcard:
         if server.startswith('irc') or obj.avatar_sha is None:
             return
 
+        if obj.show == 'offline':
+            return
+
         gc_contact = app.contacts.get_gc_contact(
             self.name, obj.room_jid, obj.nick)
 
