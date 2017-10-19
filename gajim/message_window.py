@@ -680,12 +680,13 @@ class MessageWindow(object):
 
         tab_img = ctrl.get_tab_image()
         if tab_img:
-            if isinstance(tab_img, GdkPixbuf.Pixbuf):
-                status_img.set_from_pixbuf(tab_img)
-            elif tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
-                status_img.set_from_animation(tab_img.get_animation())
+            if isinstance(tab_img, Gtk.Image):
+                if tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
+                    status_img.set_from_animation(tab_img.get_animation())
+                else:
+                    status_img.set_from_pixbuf(tab_img.get_pixbuf())
             else:
-                status_img.set_from_pixbuf(tab_img.get_pixbuf())
+                status_img.set_from_surface(tab_img)
 
         self.show_icon()
 

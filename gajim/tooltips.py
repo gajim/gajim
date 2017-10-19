@@ -244,9 +244,11 @@ class GCTooltip():
         if contact.avatar_sha is not None:
             app.log('avatar').debug(
                 'Load GCTooltip: %s %s', contact.name, contact.avatar_sha)
-            pixbuf = app.interface.get_avatar(contact.avatar_sha, AvatarSize.TOOLTIP)
-            if pixbuf is not None:
-                self.avatar.set_from_pixbuf(pixbuf)
+            scale = self.tooltip_grid.get_scale_factor()
+            surface = app.interface.get_avatar(
+                contact.avatar_sha, AvatarSize.TOOLTIP, scale)
+            if surface is not None:
+                self.avatar.set_from_surface(surface)
                 self.avatar.show()
                 self.fillelement.show()
 
@@ -521,11 +523,12 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self._set_idle_time(contact)
 
         # Avatar
-        pixbuf = app.contacts.get_avatar(
-            account, self.prim_contact.jid, AvatarSize.TOOLTIP)
-        if pixbuf is None:
+        scale = self.get_scale_factor()
+        surface = app.contacts.get_avatar(
+            account, self.prim_contact.jid, AvatarSize.TOOLTIP, scale)
+        if surface is None:
             return
-        self.avatar.set_from_pixbuf(pixbuf)
+        self.avatar.set_from_surface(surface)
         self.avatar.show()
 
         # Sets the Widget that is at the bottom to expand.

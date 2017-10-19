@@ -82,7 +82,7 @@ class Column(IntEnum):
     ACTIVITY_PIXBUF = 6
     TUNE_PIXBUF = 7
     LOCATION_PIXBUF = 8
-    AVATAR_PIXBUF = 9  # avatar_pixbuf
+    AVATAR_IMG = 9  # avatar_sha
     PADLOCK_PIXBUF = 10  # use for account row only
     VISIBLE = 11
 
@@ -1397,11 +1397,12 @@ class RosterWindow:
             return
         jid = self.model[iters[0]][Column.JID]
 
-        pixbuf = app.contacts.get_avatar(account, jid, size=AvatarSize.ROSTER)
-        if pixbuf is None:
-            pixbuf = empty_pixbuf
+        scale = self.window.get_scale_factor()
+        surface = app.contacts.get_avatar(
+            account, jid, AvatarSize.ROSTER, scale)
+        image = Gtk.Image.new_from_surface(surface)
         for child_iter in iters:
-            self.model[child_iter][Column.AVATAR_PIXBUF] = pixbuf
+            self.model[child_iter][Column.AVATAR_IMG] = image
         return False
 
     def draw_completely(self, jid, account):
@@ -2251,7 +2252,7 @@ class RosterWindow:
             else:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
-                    self.model[child_iterA][Column.AVATAR_PIXBUF] = empty_pixbuf
+                    self.model[child_iterA][Column.AVATAR_IMG] = None
                 if account in app.con_types:
                     app.con_types[account] = None
                 for jid in list(app.contacts.get_jid_list(account)):
@@ -4836,8 +4837,11 @@ class RosterWindow:
             renderer.set_property('visible', False)
             return
 
+        image = model[titer][Column.AVATAR_IMG]
+        surface = image.get_property('surface')
+        renderer.set_property('surface', surface)
         # allocate space for the icon only if needed
-        if model[titer][Column.AVATAR_PIXBUF] or \
+        if model[titer][Column.AVATAR_IMG] or \
         app.config.get('avatar_position_in_roster') == 'left':
             renderer.set_property('visible', True)
             if type_:
@@ -4850,7 +4854,7 @@ class RosterWindow:
                 self._set_contact_row_background_color(renderer, jid, account)
         else:
             renderer.set_property('visible', False)
-        if model[titer][Column.AVATAR_PIXBUF] == empty_pixbuf and \
+        if model[titer][Column.AVATAR_IMG] is None and \
         app.config.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
@@ -5561,7 +5565,8 @@ class RosterWindow:
     def fill_column(self, col):
         for rend in self.renderers_list:
             col.pack_start(rend[1], rend[2])
-            col.add_attribute(rend[1], rend[3], rend[4])
+            if rend[0] != 'avatar':
+                col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
         for renderer in self.renderers_propertys.keys():
@@ -5659,12 +5664,14 @@ class RosterWindow:
         self.nb_ext_renderers = 0
         # When we quit, rememver if we already saved config once
         self.save_done = False
-        # [icon, name, type, jid, account, mood_pixbuf,
-        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
+
+        # [icon, name, type, jid, account, editable, mood_pixbuf,
+        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_img,
         # padlock_pixbuf, visible]
         self.columns = [Gtk.Image, str, str, str, str,
             GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf,
-            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, bool]
+            Gtk.Image, str, bool]
+
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         application.add_window(self.window)
@@ -5819,7 +5826,7 @@ class RosterWindow:
 
         def add_avatar_renderer():
             self.renderers_list.append(('avatar', Gtk.CellRendererPixbuf(),
-                False, 'pixbuf', Column.AVATAR_PIXBUF,
+                False, None, Column.AVATAR_IMG,
                 self._fill_avatar_pixbuf_renderer, None))
 
         if app.config.get('avatar_position_in_roster') == 'left':
@@ -5907,6 +5914,8 @@ class RosterWindow:
             if app.config.get('last_roster_visible') or \
             app.config.get('trayicon') != 'always':
                 self.window.show_all()
+
+        self.scale_factor = self.window.get_scale_factor()
 
         if not app.config.get_per('accounts') or \
         app.config.get_per('accounts') == ['Local'] and not \
