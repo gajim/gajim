@@ -50,12 +50,7 @@ from gajim import message_control
 from gajim.chat_control_base import ChatControlBase
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
-
-try:
-    from gajim import gtkspell
-    HAS_GTK_SPELL = True
-except (ImportError, ValueError):
-    HAS_GTK_SPELL = False
+from gajim import gtkspell
 
 from gajim.common import helpers
 from gajim.common import app
@@ -192,7 +187,7 @@ class PreferencesWindow:
         self.xml.get_object('xhtml_checkbutton').set_active(st)
 
         # use speller
-        if HAS_GTK_SPELL:
+        if gtkspell.HAS_GTK_SPELL:
             st = app.config.get('use_speller')
             self.xml.get_object('speller_checkbutton').set_active(st)
         else:
@@ -660,23 +655,13 @@ class PreferencesWindow:
     def apply_speller(self):
         for ctrl in self._get_all_controls():
             if isinstance(ctrl, ChatControlBase):
-                try:
-                    spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-                except (TypeError, RuntimeError, OSError):
-                    spell_obj = None
-
-                if not spell_obj:
-                    ctrl.set_speller()
+                ctrl.set_speller()
 
     def remove_speller(self):
         for ctrl in self._get_all_controls():
             if isinstance(ctrl, ChatControlBase):
-                try:
-                    spell_obj = gtkspell.get_from_text_view(ctrl.msg_textview)
-                except (TypeError, RuntimeError):
-                    spell_obj = None
-                if spell_obj:
-                    spell_obj.detach()
+                if ctrl.spell is not None:
+                    ctrl.remove_speller()
 
     def on_speller_checkbutton_toggled(self, widget):
         active = widget.get_active()
@@ -685,15 +670,10 @@ class PreferencesWindow:
             lang = app.config.get('speller_language')
             if not lang:
                 lang = app.LANG
-            tv = Gtk.TextView()
-            try:
-                gtkspell.Spell(tv, lang)
-            except (TypeError, RuntimeError, OSError):
-                dialogs.ErrorDialog(
-                        _('Dictionary for lang %s not available') % lang,
-                        _('You have to install %s dictionary to use spellchecking, or '
-                        'choose another language by setting the speller_language option.'
-                        ) % lang)
+
+            available = gtkspell.test_language(lang)
+            if not available:
+                dialogs.AspellDictError(lang)
                 app.config.set('use_speller', False)
                 widget.set_active(False)
             else:

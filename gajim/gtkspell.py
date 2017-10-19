@@ -19,9 +19,16 @@
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import GLib
 import gi
 gi.require_version('GtkSpell', '3.0')
-from gi.repository import GtkSpell
+try:
+    from gi.repository import GtkSpell
+    HAS_GTK_SPELL = True
+except ImportError:
+    HAS_GTK_SPELL = False
+
+from gajim.common import app
 
 
 def ensure_attached(func):
@@ -48,12 +55,13 @@ class Spell(GObject.GObject):
             if spell:
                 raise RuntimeError("Textview has already a Spell obj attached")
             self.spell = GtkSpell.Checker.new()
-            if not self.spell:
-                raise OSError("Unable to create spell object.")
-            if not self.spell.attach(textview):
-                raise OSError("Unable to attach spell object.")
-            if not self.spell.set_language(language):
-                raise OSError("Unable to set language: '%s'" % language)
+
+            try:
+                self.spell.set_language(language)
+            except GLib.GError as error:
+                if error.domain == 'gtkspell-error-quark':
+                    raise OSError("Unable to set language: '%s'" % language)
+
             self.spell.connect('language-changed', self.on_language_changed)
 
         else:
@@ -74,12 +82,25 @@ class Spell(GObject.GObject):
     def recheck_all(self):
         self.spell.recheck_all()
 
-    @ensure_attached
     def detach(self):
-        self.spell.detach()
-        self.spell = None
+        if self.spell is not None:
+            self.spell.detach()
+
+    def attach(self, textview):
+        spell = GtkSpell.Checker.get_from_text_view(textview)
+        if spell is None:
+            print('attached')
+            self.spell.attach(textview)
+
 
 GObject.type_register(Spell)
 
-def get_from_text_view(textview):
-    return Spell(textview, create=False)
+
+def test_language(lang):
+    spell = GtkSpell.Checker.new()
+    try:
+        spell.set_language(lang)
+    except GLib.GError as error:
+        if error.domain == 'gtkspell-error-quark':
+            return False
+    return True

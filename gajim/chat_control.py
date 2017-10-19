@@ -58,13 +58,6 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.common.const import AvatarSize
 
 from gajim.command_system.implementation.hosts import ChatCommands
-
-try:
-    from gajim import gtkspell
-    HAS_GTK_SPELL = True
-except (ImportError, ValueError):
-    HAS_GTK_SPELL = False
-
 from gajim.chat_control_base import ChatControlBase
 
 ################################################################################
@@ -1180,10 +1173,7 @@ class ChatControl(ChatControlBase):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
         self.conv_textview.del_handlers()
-        if app.config.get('use_speller') and HAS_GTK_SPELL:
-            spell_obj = gtkspell.get_from_text_view(self.msg_textview)
-            if spell_obj:
-                spell_obj.detach()
+        self.remove_speller()
         self.msg_textview.destroy()
         # PluginSystem: calling shutdown of super class (ChatControlBase) to let
         # it remove it's GUI extension points

@@ -2858,18 +2858,6 @@ class Interface:
         # get transports type from DB
         app.transport_type = app.logger.get_transports_type()
 
-        # test is dictionnary is present for speller
-        if app.config.get('use_speller'):
-            lang = app.config.get('speller_language')
-            if not lang:
-                lang = app.LANG
-            tv = Gtk.TextView()
-            try:
-                from gajim import gtkspell
-                spell = gtkspell.Spell(tv, lang)
-            except (ImportError, TypeError, RuntimeError, OSError, ValueError):
-                dialogs.AspellDictError(lang)
-
         if app.config.get('soundplayer') == '':
             # only on first time Gajim starts
             commands = ('paplay', 'aplay', 'play', 'ossplay')

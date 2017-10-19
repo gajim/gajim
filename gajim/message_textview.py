@@ -57,7 +57,7 @@ class MessageTextView(Gtk.TextView):
         self.undo_list = []
         # needed to know if we undid something
         self.undo_pressed = False
-        self.lang = None # Lang used for spell checking
+
         _buffer = self.get_buffer()
         self.begin_tags = {}
         self.end_tags = {}
@@ -92,12 +92,15 @@ class MessageTextView(Gtk.TextView):
         _buffer.insert_with_tags(
             start, self.PLACEHOLDER, self.placeholder_tag)
 
-    def _on_focus_in(self, *args):
+    def has_text(self):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = buf.get_text(start, end, True)
-        if text == self.PLACEHOLDER:
-            buf.set_text('')
+        return text != self.PLACEHOLDER
+
+    def _on_focus_in(self, *args):
+        if not self.has_text():
+            self.get_buffer().set_text('')
 
     def _on_focus_out(self, *args):
         buf = self.get_buffer()
