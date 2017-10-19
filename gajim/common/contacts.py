@@ -199,8 +199,8 @@ class GC_Contact(CommonContact):
     def get_shown_name(self):
         return self.name
 
-    def get_avatar(self, size=None):
-        return common.app.interface.get_avatar(self.avatar_sha, size)
+    def get_avatar(self, *args, **kwargs):
+        return common.app.interface.get_avatar(self.avatar_sha, *args, **kwargs)
 
     def as_contact(self):
         """
@@ -312,8 +312,8 @@ class LegacyContactsAPI:
     def get_contact(self, account, jid, resource=None):
         return self._accounts[account].contacts.get_contact(jid, resource=resource)
 
-    def get_avatar(self, account, jid, size=None):
-        return self._accounts[account].contacts.get_avatar(jid, size)
+    def get_avatar(self, account, *args, **kwargs):
+        return self._accounts[account].contacts.get_avatar(*args, **kwargs)
 
     def get_avatar_sha(self, account, jid):
         return self._accounts[account].contacts.get_avatar_sha(jid)
@@ -511,14 +511,15 @@ class Contacts():
                     return c
             return self._contacts[jid][0]
 
-    def get_avatar(self, jid, size=None):
+    def get_avatar(self, jid, size=None, scale=None):
         if jid not in self._contacts:
             return None
 
         for resource in self._contacts[jid]:
             if resource.avatar_sha is None:
                 continue
-            avatar = common.app.interface.get_avatar(resource.avatar_sha, size)
+            avatar = common.app.interface.get_avatar(
+                resource.avatar_sha, size, scale)
             if avatar is None:
                 self.set_avatar(jid, None)
             return avatar

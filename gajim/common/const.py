@@ -29,6 +29,7 @@ class OptionType(IntEnum):
     DIALOG = 4
 
 class AvatarSize(IntEnum):
+    TAB = 16
     ROSTER = 32
     CHAT = 48
     NOTIFICATION = 48

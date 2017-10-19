@@ -1015,9 +1015,11 @@ class ChatControl(ChatControlBase):
             jid = self.contact.jid
 
         if app.config.get('show_avatar_in_tabs'):
-            avatar_pixbuf = app.contacts.get_avatar(self.account, jid, size=16)
-            if avatar_pixbuf is not None:
-                return avatar_pixbuf
+            scale = self.parent_win.window.get_scale_factor()
+            surface = app.contacts.get_avatar(
+                self.account, jid, AvatarSize.TAB, scale)
+            if surface is not None:
+                return surface
 
         if count_unread:
             num_unread = len(app.events.get_events(self.account, jid,
@@ -1248,18 +1250,19 @@ class ChatControl(ChatControlBase):
         if not app.config.get('show_avatar_in_chat'):
             return
 
+        scale = self.parent_win.window.get_scale_factor()
         if self.TYPE_ID == message_control.TYPE_CHAT:
-            pixbuf = app.contacts.get_avatar(
-                self.account, self.contact.jid, AvatarSize.CHAT)
+            surface = app.contacts.get_avatar(
+                self.account, self.contact.jid, AvatarSize.CHAT, scale)
         else:
-            pixbuf = app.interface.get_avatar(
-                self.gc_contact.avatar_sha, AvatarSize.CHAT)
+            surface = app.interface.get_avatar(
+                self.gc_contact.avatar_sha, AvatarSize.CHAT, scale)
 
         image = self.xml.get_object('avatar_image')
-        if pixbuf is None:
+        if surface is None:
             image.set_from_icon_name('avatar-default', Gtk.IconSize.DIALOG)
         else:
-            image.set_from_pixbuf(pixbuf)
+            image.set_from_surface(surface)
 
     def _nec_update_avatar(self, obj):
         if obj.account != self.account:

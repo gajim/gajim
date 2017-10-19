@@ -77,25 +77,36 @@ class Column(IntEnum):
     NICK = 1 # contact nickame or ROLE name
     TYPE = 2 # type of the row ('contact' or 'role')
     TEXT = 3 # text shown in the cellrenderer
-    AVATAR = 4 # avatar of the contact
+    AVATAR_IMG = 4 # avatar of the contact
 
 empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
 
-def tree_cell_data_func(column, renderer, model, iter_, tv=None):
+
+def status_cell_data_func(column, renderer, model, iter_, user_data):
+    renderer.set_property('width', 26)
+    image = model[iter_][Column.IMG]
+    surface = image.get_property('surface')
+    renderer.set_property('surface', surface)
+
+
+def tree_cell_data_func(column, renderer, model, iter_, user_data):
     # cell data func is global, because we don't want it to keep
     # reference to GroupchatControl instance (self)
     theme = app.config.get('roster_theme')
     # allocate space for avatar only if needed
     parent_iter = model.iter_parent(iter_)
     if isinstance(renderer, Gtk.CellRendererPixbuf):
+        image = model[iter_][Column.AVATAR_IMG]
+        surface = image.get_property('surface')
+        renderer.set_property('surface', surface)
+
         avatar_position = app.config.get('avatar_position_in_roster')
         if avatar_position == 'right':
             renderer.set_property('xalign', 1) # align pixbuf to the right
         else:
             renderer.set_property('xalign', 0.5)
-        if parent_iter and (model[iter_][Column.AVATAR] or avatar_position == \
-        'left'):
+        if parent_iter:
             renderer.set_property('visible', True)
             renderer.set_property('width', AvatarSize.ROSTER)
         else:
@@ -254,6 +265,16 @@ class PrivateChatControl(ChatControl):
             return
         self.show_avatar()
 
+    def show_avatar(self):
+        if not app.config.get('show_avatar_in_chat'):
+            return
+
+        scale = self.parent_win.window.get_scale_factor()
+        surface = app.interface.get_avatar(
+            self.gc_contact.avatar_sha, AvatarSize.CHAT, scale)
+        image = self.xml.get_object('avatar_image')
+        image.set_from_surface(surface)
+
     def update_contact(self):
         self.contact = self.gc_contact.as_contact()
 
@@ -308,6 +329,9 @@ class GroupchatControl(ChatControlBase):
             # Tooltip Window and Actions have to be created with parent
             self.set_tooltip()
             self.add_actions()
+            self.scale_factor = parent_win.window.get_scale_factor()
+        else:
+            self.scale_factor = app.interface.roster.scale_factor
 
         widget = self.xml.get_object('list_treeview')
         id_ = widget.connect('row_expanded', self.on_list_treeview_row_expanded)
@@ -392,7 +416,7 @@ class GroupchatControl(ChatControlBase):
         self.hpaned.set_position(hpaned_position)
 
         #status_image, shown_nick, type, nickname, avatar
-        self.columns = [Gtk.Image, str, str, str, GdkPixbuf.Pixbuf]
+        self.columns = [Gtk.Image, str, str, str, Gtk.Image]
         self.model = Gtk.TreeStore(*self.columns)
         self.model.set_sort_func(Column.NICK, self.tree_compare_iters)
         self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
@@ -415,20 +439,20 @@ class GroupchatControl(ChatControlBase):
         self.renderers_list += (
             # status img
             ('icon', renderer_image, False,
-            'image', Column.IMG, tree_cell_data_func, self.list_treeview),
+            'image', Column.IMG, tree_cell_data_func, None),
             # contact name
             ('name', renderer_text, True,
-            'markup', Column.TEXT, tree_cell_data_func, self.list_treeview))
+            'markup', Column.TEXT, tree_cell_data_func, None))
 
         # avatar img
-        avater_renderer = ('avatar', Gtk.CellRendererPixbuf(),
-            False, 'pixbuf', Column.AVATAR,
-            tree_cell_data_func, self.list_treeview)
+        avatar_renderer = ('avatar', Gtk.CellRendererPixbuf(),
+            False, None, Column.AVATAR_IMG,
+            tree_cell_data_func, None)
 
         if app.config.get('avatar_position_in_roster') == 'right':
-            self.renderers_list.append(avater_renderer)
+            self.renderers_list.append(avatar_renderer)
         else:
-            self.renderers_list.insert(0, avater_renderer)
+            self.renderers_list.insert(0, avatar_renderer)
 
         self.fill_column(column)
         self.list_treeview.append_column(column)
@@ -756,7 +780,8 @@ class GroupchatControl(ChatControlBase):
     def fill_column(self, col):
         for rend in self.renderers_list:
             col.pack_start(rend[1], rend[2])
-            col.add_attribute(rend[1], rend[3], rend[4])
+            if rend[0] != 'avatar':
+                col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
         for renderer in self.renderers_propertys.keys():
@@ -1632,8 +1657,10 @@ class GroupchatControl(ChatControlBase):
         if not iter_:
             return
 
-        pixbuf = app.interface.get_avatar(gc_contact.avatar_sha, AvatarSize.ROSTER)
-        self.model[iter_][Column.AVATAR] = pixbuf or empty_pixbuf
+        surface = app.interface.get_avatar(
+            gc_contact.avatar_sha, AvatarSize.ROSTER, self.scale_factor)
+        image = Gtk.Image.new_from_surface(surface)
+        self.model[iter_][Column.AVATAR_IMG] = image
 
     def draw_role(self, role):
         role_iter = self.get_role_iter(role)

@@ -45,6 +45,7 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import Gdk
 
 try:
     from PIL import Image
@@ -2410,9 +2411,15 @@ class Interface:
         return sha
 
     @staticmethod
-    def get_avatar(filename, size=None, publish=False):
+    def get_avatar(filename, size=None, scale=None, publish=False):
         if filename is None or '':
             return
+
+        if size is None and scale is not None:
+            raise ValueError
+
+        if scale is not None:
+            size = size * scale
 
         if publish:
             path = os.path.join(app.AVATAR_PATH, filename)
@@ -2421,8 +2428,10 @@ class Interface:
             return data
 
         try:
-            sha = app.avatar_cache[filename][size]
-            return sha
+            pixbuf = app.avatar_cache[filename][size]
+            if scale is None:
+                return pixbuf
+            return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         except KeyError:
             pass
 
@@ -2462,7 +2471,9 @@ class Interface:
             app.avatar_cache[filename] = {}
         app.avatar_cache[filename][size] = pixbuf
 
-        return pixbuf
+        if scale is None:
+            return pixbuf
+        return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
 
     def auto_join_bookmarks(self, account):
         """
