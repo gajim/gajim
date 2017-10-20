@@ -2399,7 +2399,7 @@ class Interface:
                 'avatar image using pillow', filename)
             try:
                 avatar = Image.open(path).convert("RGBA")
-            except NameError:
+            except (NameError, OSError):
                 app.log('avatar').warning('Pillow convert failed: %s', filename)
                 app.log('avatar').debug('Error', exc_info=True)
                 return
