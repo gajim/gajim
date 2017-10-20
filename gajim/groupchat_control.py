@@ -1048,23 +1048,12 @@ class GroupchatControl(ChatControlBase):
 
     def _update_banner_state_image(self):
         banner_status_img = self.xml.get_object('gc_banner_status_image')
-        images = app.interface.jabber_state_images
         if self.room_jid in app.gc_connected[self.account] and \
         app.gc_connected[self.account][self.room_jid]:
-            image = 'muc_active'
+            icon = gtkgui_helpers.get_iconset_name_for('muc-active')
         else:
-            image = 'muc_inactive'
-        if '32' in images and image in images['32']:
-            muc_icon = images['32'][image]
-            if muc_icon.get_storage_type() != Gtk.ImageType.EMPTY:
-                pix = muc_icon.get_pixbuf()
-                banner_status_img.set_from_pixbuf(pix)
-                return
-        # we need to scale 16x16 to 32x32
-        muc_icon = images['16'][image]
-        pix = muc_icon.get_pixbuf()
-        scaled_pix = pix.scale_simple(32, 32, GdkPixbuf.InterpType.BILINEAR)
-        banner_status_img.set_from_pixbuf(scaled_pix)
+            icon = gtkgui_helpers.get_iconset_name_for('muc-inactive')
+        banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
 
     def get_continued_conversation_name(self):
         """

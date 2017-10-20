@@ -630,30 +630,9 @@ class ChatControl(ChatControlBase):
         jid = contact.jid
 
         # Set banner image
-        img_32 = app.interface.roster.get_appropriate_state_images(jid,
-                size='32', icon_name=show)
-        img_16 = app.interface.roster.get_appropriate_state_images(jid,
-                icon_name=show)
-        if show in img_32 and img_32[show].get_pixbuf():
-            # we have 32x32! use it!
-            banner_image = img_32[show]
-            use_size_32 = True
-        else:
-            banner_image = img_16[show]
-            use_size_32 = False
-
+        icon = gtkgui_helpers.get_iconset_name_for(show)
         banner_status_img = self.xml.get_object('banner_status_image')
-        if banner_image.get_storage_type() == Gtk.ImageType.ANIMATION:
-            banner_status_img.set_from_animation(banner_image.get_animation())
-        else:
-            pix = banner_image.get_pixbuf()
-            if pix is not None:
-                if use_size_32:
-                    banner_status_img.set_from_pixbuf(pix)
-                else: # we need to scale 16x16 to 32x32
-                    scaled_pix = pix.scale_simple(32, 32,
-                                                    GdkPixbuf.InterpType.BILINEAR)
-                    banner_status_img.set_from_pixbuf(scaled_pix)
+        banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
 
     def draw_banner_text(self):
         """
