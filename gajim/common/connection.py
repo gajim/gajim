@@ -665,7 +665,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.annotations = {}
         self.last_io = app.idlequeue.current_time()
         self.last_sent = []
-        self.last_history_time = {}
         self.password = passwords.get_password(name)
 
         self.music_track_info = 0
@@ -2576,20 +2575,11 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Never join a room when invisible
             return
 
-        # last date/time in history to avoid duplicate
-        if room_jid not in self.last_history_time:
-            # Not in memory, get it from DB
-            last_log = 0
-            if app.config.should_log(self.name, room_jid):
-                # Check time first in the FAST table
-                last_log = app.logger.get_room_last_message_time(
-                    self.name, room_jid)
-                if not last_log:
-                    last_log = 0
-
-            # Create self.last_history_time[room_jid] even if not logging,
-            # could be used in connection_handlers
-            self.last_history_time[room_jid] = last_log
+        # Check time first in the FAST table
+        last_date = app.logger.get_room_last_message_time(
+            self.name, room_jid)
+        if not last_date:
+            last_date = 0
 
         p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),
                 show=show, status=self.status)
@@ -2608,7 +2598,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 'muc_restore_timeout')
             if timeout is None or timeout == -2:
                 timeout = app.config.get('muc_restore_timeout')
-            last_date = self.last_history_time[room_jid]
             if last_date == 0 and timeout >= 0:
                 last_date = time.time() - timeout * 60
             elif not rejoin and timeout >= 0:
@@ -2735,16 +2724,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # send instantly so when we go offline, status is sent to gc before we
         # disconnect from jabber server
         self.connection.send(p)
-
-    def gc_got_disconnected(self, room_jid):
-        """
-        A groupchat got disconnected. This can be or purpose or not
-
-        Save the time we had last message to avoid duplicate logs AND be faster
-        than get that date from DB. Save time that we have in mem in a small
-        table (with fast access)
-        """
-        app.logger.set_room_last_message_time(room_jid, self.last_history_time[room_jid])
 
     def gc_set_role(self, room_jid, nick, role, reason=''):
         """

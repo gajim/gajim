@@ -1499,8 +1499,6 @@ class GroupchatControl(ChatControlBase):
             app.contacts.remove_gc_contact(self.account, gc_contact)
         app.gc_connected[self.account][self.room_jid] = False
         ChatControlBase.got_disconnected(self)
-        # Tell connection to note the date we disconnect to avoid duplicate logs
-        app.connections[self.account].gc_got_disconnected(self.room_jid)
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
         if self.parent_win:
@@ -2141,10 +2139,6 @@ class GroupchatControl(ChatControlBase):
 
         if self.room_jid in app.gc_connected[self.account] and \
         app.gc_connected[self.account][self.room_jid]:
-            # Tell connection to note the date we disconnect to avoid duplicate
-            # logs. We do it only when connected because if connection was lost
-            # there may be new messages since disconnection.
-            app.connections[self.account].gc_got_disconnected(self.room_jid)
             app.connections[self.account].send_gc_status(self.nick,
                 self.room_jid, show='offline', status=status)
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)

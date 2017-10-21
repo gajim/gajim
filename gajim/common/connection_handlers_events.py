@@ -1564,9 +1564,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # Ignore message from room in which we are not
             self.displaymarking = seclabel.getTag('displaymarking')
 
-        if self.jid not in self.conn.last_history_time:
-            return
-
         self.captcha_form = None
         captcha_tag = self.stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
         if captcha_tag:

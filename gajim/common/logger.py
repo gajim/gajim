@@ -765,13 +765,16 @@ class Logger:
         :param jid:         The jid
 
         :param timestamp:   The timestamp in epoch
+
         """
-        self.insert_jid(jid, type_=JIDConstant.ROOM_TYPE)
 
+        jid_id = self.get_jid_id(jid, type_=JIDConstant.ROOM_TYPE)
         sql = '''REPLACE INTO rooms_last_message_time
-                 VALUES ((SELECT jid_id FROM jids WHERE jid = ?), ?)'''
+                 VALUES (:jid_id, COALESCE(
+                 (SELECT time FROM rooms_last_message_time
+                  WHERE jid_id = :jid_id AND time >= :time), :time))'''
 
-        self.con.execute(sql, (jid, timestamp))
+        self.con.execute(sql, {"jid_id": jid_id, "time": timestamp})
         self._timeout_commit()
 
     def save_transport_type(self, jid, type_):

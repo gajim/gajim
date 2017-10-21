@@ -1017,9 +1017,8 @@ class ConnectionHandlersBase:
     def _nec_gc_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        if app.config.should_log(obj.conn.name, obj.jid) and not \
-        obj.timestamp < obj.conn.last_history_time[obj.jid] and obj.msgtxt and \
-        obj.nick:
+        if (app.config.should_log(obj.conn.name, obj.jid) and
+            obj.msgtxt and obj.nick):
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
@@ -1029,10 +1028,7 @@ class ConnectionHandlersBase:
                                         message=obj.msgtxt,
                                         contact_name=obj.nick,
                                         additional_data=obj.additional_data)
-            # store in memory time of last message logged.
-            # this will also be saved in rooms_last_message_time table
-            # when we quit this muc
-            obj.conn.last_history_time[obj.jid] = obj.timestamp
+            app.logger.set_room_last_message_time(obj.room_jid, obj.timestamp)
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
