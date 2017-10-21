@@ -108,6 +108,7 @@ class SubscriptionConstant(IntEnum):
 class Logger:
     def __init__(self):
         self.jids_already_in = [] # holds jids that we already have in DB
+        self._jid_ids = {}
         self.con = None
         self.commit_timout_id = None
 
@@ -189,6 +190,7 @@ class Logger:
     def init_vars(self):
         self.open_db()
         self.get_jids_already_in_db()
+        self.get_jid_ids_from_db()
 
     @staticmethod
     def _get_timeout():
@@ -225,6 +227,15 @@ class Logger:
         """
         self.cur.execute(sql_to_commit)
         self._timeout_commit()
+
+    def get_jid_ids_from_db(self):
+        """
+        Load all jid/jid_id tuples into a dict for faster access
+        """
+        rows = self.con.execute(
+            'SELECT jid_id, jid, type FROM jids').fetchall()
+        for row in rows:
+            self._jid_ids[row.jid] = row
 
     def get_jids_already_in_db(self):
         try:
@@ -288,42 +299,38 @@ class Logger:
             return [user['jid'] for user in family]
         return [jid]
 
-    def get_jid_id(self, jid, typestr=None):
+    def get_jid_id(self, jid, type_=None):
         """
-        jids table has jid and jid_id logs table has log_id, jid_id,
-        contact_name, time, kind, show, message so to ask logs we need jid_id
-        that matches our jid in jids table this method wants jid and returns the
-        jid_id for later sql-ing on logs typestr can be 'ROOM' or anything else
-        depending on the type of JID and is only needed to be specified when the
-        JID is new in DB
+        Get the jid id from a jid.
+        In case the jid id is not found create a new one.
+
+        :param jid:     The JID
+
+        :param type_:   The JIDConstant type
+
+        return the jid id
         """
-        if jid.find('/') != -1: # if it has a /
-            jid_is_from_pm = self.jid_is_from_pm(jid)
-            if not jid_is_from_pm: # it's normal jid with resource
-                jid = jid.split('/', 1)[0] # remove the resource
-        if jid in self.jids_already_in: # we already have jids in DB
-            self.cur.execute('SELECT jid_id FROM jids WHERE jid=?', [jid])
-            row = self.cur.fetchone()
-            if row:
-                return row.jid_id
-        # oh! a new jid :), we add it now
-        if typestr == 'ROOM':
-            typ = JIDConstant.ROOM_TYPE
-        else:
-            typ = JIDConstant.NORMAL_TYPE
-        try:
-            self.cur.execute('INSERT INTO jids (jid, type) VALUES (?, ?)', (jid,
-                    typ))
-            self.con.commit()
-        except sqlite.IntegrityError:
-            # Jid already in DB, maybe added by another instance. re-read DB
-            self.get_jids_already_in_db()
-            return self.get_jid_id(jid, typestr)
-        except sqlite.OperationalError as e:
-            raise exceptions.PysqliteOperationalError(str(e))
-        jid_id = self.cur.lastrowid
-        self.jids_already_in.append(jid)
-        return jid_id
+
+        result = self._jid_ids.get(jid, None)
+        if result is not None:
+            return result.jid_id
+
+        sql = 'SELECT jid_id, jid, type FROM jids WHERE jid = ?'
+        row = self.con.execute(sql, [jid]).fetchone()
+        if row is not None:
+            self._jid_ids[jid] = row
+            return row.jid_id
+
+        if type_ is None:
+            raise ValueError(
+                'Unable to insert new JID because type is missing')
+
+        sql = 'INSERT INTO jids (jid, type) VALUES (?, ?)'
+        lastrowid = self.con.execute(sql, (jid, type_)).lastrowid
+        Row = namedtuple('Row', 'jid_id jid type')
+        self._jid_ids[jid] = Row(lastrowid, jid, type_)
+        self._timeout_commit()
+        return lastrowid
 
     def convert_kind_values_to_db_api_values(self, kind):
         """
@@ -961,7 +968,7 @@ class Logger:
 
         try:
             account_jid_id = self.get_jid_id(account_jid)
-            jid_id = self.get_jid_id(jid)
+            jid_id = self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
         except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
 
@@ -993,7 +1000,7 @@ class Logger:
         Return the accound_jid roster in NonBlockingRoster format
         """
         data = {}
-        account_jid_id = self.get_jid_id(account_jid)
+        account_jid_id = self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
 
         # First we fill data with roster_entry informations
         self.cur.execute('''
@@ -1149,7 +1156,7 @@ class Logger:
         """
 
         account_jid_id = self.get_jid_id(account_jid)
-        jid_id = self.get_jid_id(jid)
+        jid_id = self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
 
         sql = '''
             UPDATE roster_entry SET avatar_sha = ?
