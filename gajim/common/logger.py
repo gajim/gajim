@@ -283,7 +283,7 @@ class Logger:
             return [user['jid'] for user in family]
         return [jid]
 
-    def get_jid_id(self, jid, type_=None):
+    def get_jid_id(self, jid, kind=None, type_=None):
         """
         Get the jid id from a jid.
         In case the jid id is not found create a new one.
@@ -294,6 +294,9 @@ class Logger:
 
         return the jid id
         """
+
+        if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
+            type_ = JIDConstant.ROOM_TYPE
 
         result = self._jid_ids.get(jid, None)
         if result is not None:
@@ -1079,6 +1082,7 @@ class Logger:
     def insert_jid(self, jid, kind=None, type_=JIDConstant.NORMAL_TYPE):
         """
         Insert a new jid into the `jids` table.
+        This is an alias of get_jid_id() for better readablility.
 
         :param jid:     The jid as string
 
@@ -1086,13 +1090,7 @@ class Logger:
 
         :param type_:   A JIDConstant
         """
-        if jid in self._jid_ids:
-            return
-        if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
-            type_ = JIDConstant.ROOM_TYPE
-        sql = 'INSERT OR IGNORE INTO jids (jid, type) VALUES (?, ?)'
-        self.con.execute(sql, (jid, type_))
-        self._timeout_commit()
+        return self.get_jid_id(jid, kind, type_)
 
     def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
         """
@@ -1110,15 +1108,15 @@ class Logger:
         :param kwargs:  Every additional named argument must correspond to
                         a field in the `logs` table
         """
-        self.insert_jid(jid, kind=kind)
+        jid_id = self.get_jid_id(jid, kind=kind)
 
         sql = '''
               INSERT INTO logs (jid_id, time, kind, {columns})
-              VALUES ((SELECT jid_id FROM jids WHERE jid = ?), ?, ?, {values})
+              VALUES (?, ?, ?, {values})
               '''.format(columns=', '.join(kwargs.keys()),
                          values=', '.join('?' * len(kwargs)))
 
-        lastrowid = self.con.execute(sql, (jid, time_, kind) + tuple(kwargs.values())).lastrowid
+        lastrowid = self.con.execute(sql, (jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
 
         if unread and kind == KindConstant.CHAT_MSG_RECV:
             sql = '''INSERT INTO unread_messages (message_id, jid_id)
