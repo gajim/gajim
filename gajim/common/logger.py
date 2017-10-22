@@ -107,7 +107,6 @@ class SubscriptionConstant(IntEnum):
 
 class Logger:
     def __init__(self):
-        self.jids_already_in = [] # holds jids that we already have in DB
         self._jid_ids = {}
         self.con = None
         self.commit_timout_id = None
@@ -189,7 +188,6 @@ class Logger:
 
     def init_vars(self):
         self.open_db()
-        self.get_jids_already_in_db()
         self.get_jid_ids_from_db()
 
     @staticmethod
@@ -237,22 +235,8 @@ class Logger:
         for row in rows:
             self._jid_ids[row.jid] = row
 
-    def get_jids_already_in_db(self):
-        try:
-            self.cur.execute('SELECT jid FROM jids')
-            rows = self.cur.fetchall()
-        except sqlite.DatabaseError:
-            raise exceptions.DatabaseMalformed(LOG_DB_PATH)
-        self.jids_already_in = []
-        for row in rows:
-            if not row.jid:
-                # malformed jid, ignore line
-                pass
-            else:
-                self.jids_already_in.append(row.jid)
-
     def get_jids_in_db(self):
-        return self.jids_already_in
+        return self._jid_ids.keys()
 
     def jid_is_from_pm(self, jid):
         """
@@ -1102,13 +1086,12 @@ class Logger:
 
         :param type_:   A JIDConstant
         """
-        if jid in self.jids_already_in:
+        if jid in self._jid_ids:
             return
         if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
             type_ = JIDConstant.ROOM_TYPE
         sql = 'INSERT OR IGNORE INTO jids (jid, type) VALUES (?, ?)'
         self.con.execute(sql, (jid, type_))
-        self.jids_already_in.append(jid)
         self._timeout_commit()
 
     def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
