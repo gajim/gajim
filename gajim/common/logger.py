@@ -1084,6 +1084,33 @@ class Logger:
             return True
         return False
 
+    def find_stanza_id(self, stanza_id, origin_id=None):
+        """
+        Checks if a stanza-id is already in the `logs` table
+
+        :param stanza_id:   The stanza-id
+
+        return True if the stanza-id was found
+        """
+        ids = []
+        if stanza_id is not None:
+            ids.append(stanza_id)
+        if origin_id is not None:
+            ids.append(origin_id)
+
+        sql = '''
+              SELECT stanza_id FROM logs
+              WHERE stanza_id IN ({values}) LIMIT 1
+              '''.format(values=', '.join('?' * len(ids)))
+
+        result = self.con.execute(sql, tuple(ids)).fetchone()
+
+        if result is not None:
+            log.info('Found duplicated message, stanza-id: %s, origin-id: %s',
+                     stanza_id, origin_id)
+            return True
+        return False
+
     def insert_jid(self, jid, kind=None, type_=JIDConstant.NORMAL_TYPE):
         """
         Insert a new jid into the `jids` table.
@@ -1128,6 +1155,9 @@ class Logger:
                          values=', '.join('?' * len(kwargs)))
 
         lastrowid = self.con.execute(sql, (jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
+
+        log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
+                 jid, time_, kind, kwargs.get('stanza_id', None))
 
         if unread and kind == KindConstant.CHAT_MSG_RECV:
             sql = '''INSERT INTO unread_messages (message_id, jid_id)

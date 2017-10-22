@@ -120,7 +120,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 jid, obj.timestamp, log_type,
                 message=msg_to_log,
                 subject=obj.subject,
-                additional_data=obj.additional_data)
+                additional_data=obj.additional_data,
+                stanza_id=obj.unique_id)
 
         # Handle chat states
         if contact and (not obj.forwarded or not obj.sent):
