@@ -725,8 +725,6 @@ class ConnectionHandlersBase:
         # IDs of sent messages (https://trac.gajim.org/ticket/8222)
         self.sent_message_ids = []
 
-        self.received_message_hashes = []
-
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
@@ -2048,8 +2046,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))
         self.send_awaiting_pep()
         self.continue_connect_info = None
-        # hashes of already received messages
-        self.received_message_hashes = []
 
     def _SearchCB(self, con, iq_obj):
         log.debug('SearchCB')

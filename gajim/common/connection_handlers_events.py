@@ -1472,22 +1472,6 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if replace:
             self.correct_id = replace.getAttr('id')
 
-        # ignore message duplicates
-        if self.msgtxt and self.id_ and self.jid:
-            self.msghash = hashlib.sha256(("%s|%s|%s" % (
-                hashlib.sha256(self.msgtxt.encode('utf-8')).hexdigest(),
-                hashlib.sha256(self.id_.encode('utf-8')).hexdigest(),
-                hashlib.sha256(self.jid.encode('utf-8')).hexdigest())).encode(
-                'utf-8')).digest()
-            if self.msghash in self.conn.received_message_hashes:
-                log.info("Ignoring duplicated message from '%s' with id '%s'" % (self.jid, self.id_))
-                return False
-            else:
-                log.debug("subhashes: msgtxt, id_, jid = ('%s', '%s', '%s')" % (hashlib.sha256(self.msgtxt.encode('utf-8')).hexdigest(), hashlib.sha256(self.id_.encode('utf-8')).hexdigest(), hashlib.sha256(self.jid.encode('utf-8')).hexdigest()))
-                self.conn.received_message_hashes.append(self.msghash)
-                # only record the last 20000 hashes (should be about 1MB [32 bytes per hash]
-                # and about 24 hours if you receive a message every 5 seconds)
-                self.conn.received_message_hashes = self.conn.received_message_hashes[-20000:]
         return True
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
