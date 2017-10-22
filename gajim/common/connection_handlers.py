@@ -294,7 +294,8 @@ class ConnectionVcard:
             # Remove avatar
             app.log('avatar').info('Remove: %s', obj.jid)
             app.contacts.set_avatar(self.name, obj.jid, None)
-            app.logger.set_avatar_sha(self.name, obj.jid, None)
+            own_jid = self.get_own_jid().getStripped()
+            app.logger.set_avatar_sha(own_jid, obj.jid, None)
             app.interface.update_avatar(self.name, obj.jid)
         else:
             app.log('avatar').info(
