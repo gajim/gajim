@@ -427,23 +427,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="compact_view_checkbutton">
-                            <property name="label" translatable="yes">Ma_ke message windows compact</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Hide all buttons in chat windows</property>
-                            <property name="use_underline">True</property>
-                            <property name="xalign">0</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="on_compact_view_checkbutton_toggled" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
-                            <property name="width">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkCheckButton" id="xhtml_checkbutton">
                             <property name="label" translatable="yes">_Ignore rich content in incoming messages</property>
                             <property name="visible">True</property>
@@ -457,7 +440,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">3</property>
                             <property name="width">2</property>
                           </packing>
                         </child>
@@ -474,7 +457,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">5</property>
+                            <property name="top_attach">4</property>
                             <property name="width">2</property>
                           </packing>
                         </child>
@@ -490,7 +473,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">6</property>
+                            <property name="top_attach">5</property>
                             <property name="width">2</property>
                           </packing>
                         </child>
@@ -555,7 +538,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">7</property>
+                            <property name="top_attach">6</property>
                             <property name="width">2</property>
                           </packing>
                         </child>

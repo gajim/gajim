@@ -264,7 +264,6 @@ class Config:
             'show_roster_on_startup':[opt_str, 'always', _('Show roster on startup.\n\'always\' - Always show roster.\n\'never\' - Never show roster.\n\'last_state\' - Restore the last state roster.')],
             'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
             'escape_key_closes': [opt_bool, True, _('If True, pressing the escape key closes a tab/window.')],
-            'compact_view': [opt_bool, False, _('Hides the buttons in chat windows.')],
             'hide_groupchat_banner': [opt_bool, False, _('Hides the banner in a group chat window')],
             'hide_chat_banner': [opt_bool, False, _('Hides the banner in two persons chat window')],
             'hide_groupchat_occupants_list': [opt_bool, False, _('Hides the group chat occupants list in group chat window.')],

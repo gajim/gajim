@@ -1,28 +1,31 @@
 /* Gajim Application CSS File */
 
-.msgtextview-button { 
+
+.chatcontrol-actionbar-button { 
 	padding: 0px 5px 0px 5px;
 	background-color: @theme_base_color; 
-	border: 1px solid;
-	border-radius: 0px; 
-	border-color: @borders;
+	border: none;
 	}
 
-.msgtextview-button:hover, .msgtextview-button:checked { 
-	color: @theme_base_color;
-	border-color: @borders;
-	text-shadow: none;
-	-gtk-icon-shadow: none;
-	box-shadow: none;
+.scrolled-no-border {border: none}
+.scrolled-no-border undershoot.top, undershoot.bottom { background-image: none; }
+
+.actionbar-no-border box {border: none}
+
+.actionbar-no-border button { 
+	padding: 0px;
+	background-color: @theme_base_color; 
+	border: none;
 	background-image: none;
 	}
 
+#MessageWindow, #RosterWindow paned { background-color:  @theme_base_color; }
 
-.msgtextview-button.left { border-right: none; }
-.msgtextview-button.right { border-left: none; }
+.scrolledtextview { border:none; }
 
-.scrolledtextview { border-left:none; }
-.scrolledtextview.authentication { border-right:none; }
+.chatcontrol-separator {margin-bottom: 6px;}
+
+#SubjectPopover box { padding: 10px; }
 
 /* VCardWindow */
 .VCard-GtkLinkButton { padding-left: 5px; border-left: none; }

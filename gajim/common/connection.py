@@ -2342,6 +2342,13 @@ class Connection(CommonConnection, ConnectionHandlers):
                 if rule['type'] == 'group':
                     roster.draw_group(rule['value'], self.name)
 
+    def bookmarks_available(self):
+        if self.private_storage_supported:
+            return True
+        if self.pubsub_publish_options_supported:
+            return True
+        return False
+
     def _request_bookmarks_xml(self):
         if not app.account_is_connected(self.name):
             return

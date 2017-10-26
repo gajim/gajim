@@ -41,12 +41,6 @@ class StandardCommonCommands(CommandContainer):
     AUTOMATIC = True
     HOSTS = ChatCommands, PrivateChatCommands, GroupChatCommands
 
-    @command
-    @doc(_("Hide the chat buttons"))
-    def compact(self):
-        new_status = not self.hide_chat_buttons
-        self.chat_buttons_set_visible(new_status)
-
     @command(overlap=True)
     @doc(_("Show help on a given command or a list of available commands if -a is given"))
     def help(self, command=None, all=False):

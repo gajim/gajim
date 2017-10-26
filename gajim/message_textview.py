@@ -24,7 +24,6 @@
 import gc
 
 from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Pango
 
@@ -37,6 +36,7 @@ class MessageTextView(Gtk.TextView):
     chat/groupchat windows
     """
     UNDO_LIMIT = 20
+    PLACEHOLDER = _('Write a message..')
 
     def __init__(self):
         Gtk.TextView.__init__(self)
@@ -57,13 +57,16 @@ class MessageTextView(Gtk.TextView):
         self.undo_list = []
         # needed to know if we undid something
         self.undo_pressed = False
-        self.lang = None # Lang used for spell checking
+
         _buffer = self.get_buffer()
         self.begin_tags = {}
         self.end_tags = {}
         self.color_tags = []
         self.fonts_tags = []
         self.other_tags = {}
+        self.placeholder_tag = _buffer.create_tag('placeholder')
+        self.placeholder_tag.set_property('foreground_rgba',
+                                      gtkgui_helpers.Color.GREY)
         self.other_tags['bold'] = _buffer.create_tag('bold')
         self.other_tags['bold'].set_property('weight', Pango.Weight.BOLD)
         self.begin_tags['bold'] = '<strong>'
@@ -82,6 +85,33 @@ class MessageTextView(Gtk.TextView):
         self.end_tags['strike'] = '</span>'
 
         self.connect_after('paste-clipboard', self.after_paste_clipboard)
+        self.connect('focus-in-event', self._on_focus_in)
+        self.connect('focus-out-event', self._on_focus_out)
+
+        start, end = _buffer.get_bounds()
+        _buffer.insert_with_tags(
+            start, self.PLACEHOLDER, self.placeholder_tag)
+
+    def has_text(self):
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        text = buf.get_text(start, end, True)
+        return text != self.PLACEHOLDER
+
+    def _on_focus_in(self, *args):
+        if not self.has_text():
+            self.get_buffer().set_text('')
+
+    def _on_focus_out(self, *args):
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        text = buf.get_text(start, end, True)
+        if text == '':
+            buf.insert_with_tags(
+                start, self.PLACEHOLDER, self.placeholder_tag)
+
+    def remove_placeholder(self):
+        self._on_focus_in()
 
     def after_paste_clipboard(self, textview):
         buffer_ = textview.get_buffer()

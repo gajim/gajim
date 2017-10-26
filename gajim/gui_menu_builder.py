@@ -606,6 +606,65 @@ Build dynamic Application Menus
 '''
 
 
+def get_singlechat_menu(control_id):
+    singlechat_menu = [
+        ('win.send-file-', _('Send File...')),
+        ('win.invite-contacts-', _('Invite Contacts')),
+        ('win.add-to-roster-', _('Add to Roster')),
+        ('win.toggle-audio-', _('Audio Session')),
+        ('win.toggle-video-', _('Video Session')),
+        ('win.information-', _('Information')),
+        ('win.browse-history-', _('History')),
+        ]
+
+    def build_menu(preset):
+        menu = Gio.Menu()
+        for item in preset:
+            action_name, label = item
+            if action_name == 'win.browse-history-':
+                menu.append(label, action_name + control_id + '::none')
+            else:
+                menu.append(label, action_name + control_id)
+        return menu
+
+    return build_menu(singlechat_menu)
+
+
+def get_groupchat_menu(control_id):
+    groupchat_menu = [
+        (_('Manage Room'), [
+            ('win.change-subject-', _('Change Subject')),
+            ('win.configure-', _('Configure Room')),
+            ('win.destroy-', _('Destroy Room')),
+            ]),
+        ('win.change-nick-', _('Change Nick')),
+        ('win.bookmark-', _('Bookmark Room')),
+        ('win.request-voice-', _('Request Voice')),
+        ('win.notify-on-message-', _('Notify on all messages')),
+        ('win.minimize-', _('Minimize on close')),
+        ('win.browse-history-', _('History')),
+        ('win.disconnect-', _('Disconnect')),
+        ]
+
+    def build_menu(preset):
+        menu = Gio.Menu()
+        for item in preset:
+            if isinstance(item[1], str):
+                action_name, label = item
+                if action_name == 'win.browse-history-':
+                    menu.append(label, action_name + control_id + '::none')
+                else:
+                    menu.append(label, action_name + control_id)
+            else:
+                label, sub_menu = item
+                # This is a submenu
+                submenu = build_menu(sub_menu)
+                menu.append_submenu(label, submenu)
+        return menu
+
+    return build_menu(groupchat_menu)
+
+
 def get_bookmarks_menu(account, rebuild=False):
     if not app.connections[account].bookmarks:
         return None
@@ -708,7 +767,11 @@ def get_account_menu(account):
 def build_accounts_menu():
     menubar = app.app.get_menubar()
     # Accounts Submenu
-    acc_menu = menubar.get_item_link(0, 'submenu')
+    menu_position = 0
+    if os.name == 'nt':
+        menu_position = 1
+
+    acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
     accounts_list = sorted(app.contacts.get_accounts())
     if not accounts_list:
@@ -721,8 +784,8 @@ def build_accounts_menu():
                 acc, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
-        menubar.remove(0)
-        menubar.insert_submenu(0, 'Accounts', acc_menu)
+        menubar.remove(menu_position)
+        menubar.insert_submenu(menu_position, 'Accounts', acc_menu)
 
 
 def build_bookmark_menu(account):
@@ -731,8 +794,12 @@ def build_bookmark_menu(account):
     if not bookmark_menu:
         return
 
+    menu_position = 0
+    if os.name == 'nt':
+        menu_position = 1
+
     # Accounts Submenu
-    acc_menu = menubar.get_item_link(0, 'submenu')
+    acc_menu = menubar.get_item_link(menu_position, 'submenu')
 
     # We have more than one Account active
     if acc_menu.get_item_link(0, 'submenu'):

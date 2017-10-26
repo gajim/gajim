@@ -35,16 +35,17 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
+
 from gajim import gtkgui_helpers
 from gajim.gtkgui_helpers import Color
 from gajim import message_control
 from gajim import dialogs
 from gajim import history_window
 from gajim import notify
+from gajim import gtkspell
 import re
 
 from gajim import emoticons
-from gajim.scrolled_window import ScrolledWindow
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
@@ -65,11 +66,6 @@ from gajim.command_system.implementation.middleware import CommandTools
 from gajim.command_system.implementation import standard
 from gajim.command_system.implementation import execute
 
-try:
-    from gajim import gtkspell
-    HAS_GTK_SPELL = True
-except (ImportError, ValueError):
-    HAS_GTK_SPELL = False
 
 ################################################################################
 class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
@@ -256,28 +252,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         MessageControl.__init__(self, type_id, parent_win, widget_name,
             contact, acct, resource=resource)
 
-        widget = self.xml.get_object('history_button')
-        # set document-open-recent icon for history button
-        if gtkgui_helpers.gtk_icon_theme.has_icon('document-open-recent'):
-            img = self.xml.get_object('history_image')
-            img.set_from_icon_name('document-open-recent', Gtk.IconSize.MENU)
-
-        id_ = widget.connect('clicked', self._on_history_menuitem_activate)
-        self.handlers[id_] = widget
-
-        # Create banner and connect signals
-        widget = self.xml.get_object('banner_eventbox')
-        id_ = widget.connect('button-press-event',
-            self._on_banner_eventbox_button_press_event)
-        self.handlers[id_] = widget
+        if self.TYPE_ID != message_control.TYPE_GC:
+            # Create banner and connect signals
+            widget = self.xml.get_object('banner_eventbox')
+            id_ = widget.connect('button-press-event',
+                self._on_banner_eventbox_button_press_event)
+            self.handlers[id_] = widget
 
         self.urlfinder = re.compile(
             r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
         self.banner_status_label = self.xml.get_object('banner_label')
-        id_ = self.banner_status_label.connect('populate_popup',
-            self.on_banner_label_populate_popup)
-        self.handlers[id_] = self.banner_status_label
+        if self.banner_status_label is not None:
+            id_ = self.banner_status_label.connect('populate_popup',
+                self.on_banner_label_populate_popup)
+            self.handlers[id_] = self.banner_status_label
 
         # Init DND
         self.TARGET_TYPE_URI_LIST = 80
@@ -332,9 +321,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.msg_scrolledwindow = ScrolledWindow()
         self.msg_scrolledwindow.set_max_content_height(100)
-        self.msg_scrolledwindow.set_min_content_height(23)
+        self.msg_scrolledwindow.set_propagate_natural_height(True)
         self.msg_scrolledwindow.get_style_context().add_class('scrolledtextview')
-
         self.msg_scrolledwindow.set_property('shadow_type', Gtk.ShadowType.IN)
         self.msg_scrolledwindow.add(self.msg_textview)
 
@@ -364,8 +352,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.set_emoticon_popover()
 
         # Attach speller
-        if app.config.get('use_speller') and HAS_GTK_SPELL:
-            self.set_speller()
+        self.spell = None
+        self.spell_handlers = []
+        self.set_speller()
         self.conv_textview.tv.show()
 
         # For XEP-0172
@@ -417,6 +406,28 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         action.connect("change-state", self.change_encryption)
         self.parent_win.window.add_action(action)
 
+        action = Gio.SimpleAction.new(
+            'browse-history-%s' % self.control_id, GLib.VariantType.new('s'))
+        action.connect('activate', self._on_history)
+        self.parent_win.window.add_action(action)
+
+    # Actions
+
+    def _on_history(self, action, param):
+        """
+        When history menuitem is pressed: call history window
+        """
+        jid = param.get_string()
+        if jid == 'none':
+            jid = self.contact.jid
+
+        if 'logs' in app.interface.instances:
+            app.interface.instances['logs'].window.present()
+            app.interface.instances['logs'].open_history(jid, self.account)
+        else:
+            app.interface.instances['logs'] = \
+                    history_window.HistoryWindow(jid, self.account)
+
     def change_encryption(self, action, param):
         encryption = param.get_string()
         if encryption == 'disabled':
@@ -467,24 +478,57 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         image.set_from_pixbuf(icon)
 
     def set_speller(self):
-        # now set the one the user selected
+        if not gtkspell.HAS_GTK_SPELL or not app.config.get('use_speller'):
+            return
+
+        def _on_focus_in(*args):
+            if self.spell is None:
+                return
+            self.spell.attach(self.msg_textview)
+
+        def _on_focus_out(*args):
+            if self.spell is None:
+                return
+            if not self.msg_textview.has_text():
+                self.spell.detach()
+
+        lang = self.get_speller_language()
+        if not lang:
+            return
+        try:
+            self.spell = gtkspell.Spell(self.msg_textview, lang)
+            self.spell.connect('language_changed', self.on_language_changed)
+            handler_id = self.msg_textview.connect('focus-in-event',
+                                                   _on_focus_in)
+            self.spell_handlers.append(handler_id)
+            handler_id = self.msg_textview.connect('focus-out-event',
+                                                   _on_focus_out)
+            self.spell_handlers.append(handler_id)
+        except OSError:
+            dialogs.AspellDictError(lang)
+            app.config.set('use_speller', False)
+
+    def remove_speller(self):
+        if self.spell is None:
+            return
+        self.spell.detach()
+        for id_ in self.spell_handlers:
+            self.msg_textview.disconnect(id_)
+            self.spell_handlers.remove(id_)
+        self.spell = None
+
+    def get_speller_language(self):
         per_type = 'contacts'
-        if self.type_id == message_control.TYPE_GC:
+        if self.type_id == 'gc':
             per_type = 'rooms'
-        lang = app.config.get_per(per_type, self.contact.jid,
-                'speller_language')
+        lang = app.config.get_per(
+            per_type, self.contact.jid, 'speller_language')
         if not lang:
             # use the default one
             lang = app.config.get('speller_language')
             if not lang:
                 lang = app.LANG
-        if lang:
-            try:
-                self.spell = gtkspell.Spell(self.msg_textview, lang)
-                self.msg_textview.lang = lang
-                self.spell.connect('language_changed', self.on_language_changed)
-            except (GObject.GError, RuntimeError, TypeError, OSError):
-                dialogs.AspellDictError(lang)
+        return lang or None
 
     def on_language_changed(self, spell, lang):
         per_type = 'contacts'
@@ -492,9 +536,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             per_type = 'rooms'
         if not app.config.get_per(per_type, self.contact.jid):
             app.config.add_per(per_type, self.contact.jid)
-        app.config.set_per(per_type, self.contact.jid, 'speller_language',
-            lang)
-        self.msg_textview.lang = lang
+        app.config.set_per(
+            per_type, self.contact.jid, 'speller_language', lang)
 
     def on_banner_label_populate_popup(self, label, menu):
         """
@@ -549,6 +592,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         menu.show_all()
 
     def on_quote(self, widget, text):
+        self.msg_textview.remove_placeholder()
         text = '>' + text.replace('\n', '\n>') + '\n'
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
@@ -1283,13 +1327,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             widget.show_all()
 
-    def chat_buttons_set_visible(self, state):
-        """
-        Toggle chat buttons
-        """
-        MessageControl.chat_buttons_set_visible(self, state)
-        self.widget_set_visible(self.xml.get_object('actions_hbox'), state)
-
     def got_connected(self):
         self.msg_textview.set_sensitive(True)
         self.msg_textview.set_editable(True)
@@ -1302,3 +1339,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         self.no_autonegotiation = False
         self.update_toolbar()
+
+
+class ScrolledWindow(Gtk.ScrolledWindow):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def do_get_preferred_height(self):
+        min_height, natural_height = Gtk.ScrolledWindow.do_get_preferred_height(self)
+        child = self.get_child()
+        if natural_height and self.get_max_content_height() > -1 and child:
+            _, child_nat_height = child.get_preferred_height()
+            if natural_height > child_nat_height:
+                if child_nat_height < 26:
+                    return 26, 26
+
+        return min_height, natural_height

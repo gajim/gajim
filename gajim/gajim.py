@@ -212,8 +212,15 @@ class GajimApplication(Gtk.Application):
         builder = Gtk.Builder()
         builder.set_translation_domain(i18n.APP)
         builder.add_from_file(path)
-        self.set_menubar(builder.get_object("menubar"))
-        self.set_app_menu(builder.get_object("appmenu"))
+        menubar = builder.get_object("menubar")
+        appmenu = builder.get_object("appmenu")
+        if os.name != 'nt':
+            self.set_app_menu(appmenu)
+        else:
+            # Dont set Application Menu for Windows
+            # Add it to the menubar instead
+            menubar.prepend_submenu('Gajim', appmenu)
+        self.set_menubar(menubar)
 
     def do_activate(self):
         Gtk.Application.do_activate(self)

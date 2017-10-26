@@ -42,6 +42,7 @@ from gajim import gtkgui_helpers
 from gajim import vcard
 from gajim import conversation_textview
 from gajim import dataforms_widget
+from gajim import gtkspell
 
 from random import randrange
 from gajim.common import pep
@@ -49,12 +50,6 @@ from gajim.common import ged
 from gajim.common import const
 from gajim.options_dialog import OptionsDialog
 from gajim.common.const import Option, OptionKind, OptionType
-
-try:
-    from gajim import gtkspell
-    HAS_GTK_SPELL = True
-except (ImportError, ValueError):
-    HAS_GTK_SPELL = False
 
 # those imports are not used in this file, but in files that 'import dialogs'
 # so they can do dialog.GajimThemesWindow() for example
@@ -1486,11 +1481,11 @@ class FileChooserDialog(Gtk.FileChooserDialog):
 class AspellDictError:
     def __init__(self, lang):
         ErrorDialog(
-            _('Dictionary for lang %s not available') % lang,
-            _('You have to install %s dictionary to use spellchecking, or '
-            'choose another language by setting the speller_language option.'
-            '\n\nHighlighting misspelled words feature will not be used') % lang)
-        app.config.set('use_speller', False)
+            _('Dictionary for lang "%s" not available') % lang,
+            _('You have to install the dictionary "%s" to use spellchecking, '
+              'or choose another language by setting the speller_language '
+              'option.\n\n'
+              'Highlighting misspelled words feature will not be used') % lang)
 
 class ConfirmationDialog(HigDialog):
     """
@@ -3082,14 +3077,14 @@ class SingleMessageWindow:
         else:
             self.to_entry.set_text(to)
 
-        if app.config.get('use_speller') and HAS_GTK_SPELL and action == 'send':
+        if app.config.get('use_speller') and gtkspell.HAS_GTK_SPELL and action == 'send':
             try:
                 lang = app.config.get('speller_language')
                 if not lang:
                     lang = app.LANG
-                gtkspell.Spell(self.conversation_textview.tv, lang)
-                gtkspell.Spell(self.message_textview, lang)
-            except (GObject.GError, TypeError, RuntimeError, OSError):
+                self.spell = gtkspell.Spell(self.message_textview, lang)
+                self.spell.attach(self.message_textview)
+            except OSError:
                 AspellDictError(lang)
 
         self.prepare_widgets_for(self.action)
