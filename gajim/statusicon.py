@@ -85,17 +85,14 @@ class StatusIcon:
     def show_icon(self):
         if not self.status_icon:
             self.status_icon = Gtk.StatusIcon()
-            self.statusicon_size = '16'
-            if sys.platform == 'darwin':
-                self.statusicon_size = '24'
             self.status_icon.set_property('has-tooltip', True)
-            self.status_icon.connect('activate', self.on_status_icon_left_clicked)
+            self.status_icon.connect('activate',
+                self.on_status_icon_left_clicked)
             self.status_icon.connect('popup-menu',
-                    self.on_status_icon_right_clicked)
+                self.on_status_icon_right_clicked)
             self.status_icon.connect('query-tooltip',
-                    self.on_status_icon_query_tooltip)
-            self.status_icon.connect('size-changed',
-                    self.on_status_icon_size_changed)
+                self.on_status_icon_query_tooltip)
+            self.status_icon.connect('size-changed', self.set_img)
 
         self.set_img()
         self.subscribe_events()
@@ -126,40 +123,26 @@ class StatusIcon:
             self.statusicon_size = '32'
         self.set_img()
 
-    def set_img(self):
+    def set_img(self, *args):
         """
         Apart from image, we also update tooltip text here
         """
-        def really_set_img():
-            if image.get_storage_type() == Gtk.ImageType.PIXBUF:
-                self.status_icon.set_from_pixbuf(image.get_pixbuf())
-            # FIXME: oops they forgot to support GIF animation?
-            # or they were lazy to get it to work under Windows! WTF!
-            elif image.get_storage_type() == Gtk.ImageType.ANIMATION:
-                self.status_icon.set_from_pixbuf(
-                        image.get_animation().get_static_image())
-            #       self.status_icon.set_from_animation(image.get_animation())
-
         if not app.interface.systray_enabled:
             return
         if app.config.get('trayicon') == 'always':
             self.status_icon.set_visible(True)
         if app.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
-#            if app.config.get('trayicon_blink'):
-#                self.status_icon.set_blinking(True)
-#            else:
-            image = gtkgui_helpers.load_icon('event')
-            really_set_img()
+
+            icon_name = gtkgui_helpers.get_iconset_name_for('event')
+            self.status_icon.set_from_icon_name(icon_name)
             return
         else:
             if app.config.get('trayicon') == 'on_event':
                 self.status_icon.set_visible(False)
-#            self.status_icon.set_blinking(False)
 
-        image = app.interface.jabber_state_images[self.statusicon_size][
-                                                                self.status]
-        really_set_img()
+        icon_name = gtkgui_helpers.get_iconset_name_for(self.status)
+        self.status_icon.set_from_icon_name(icon_name)
 
     def change_status(self, global_status):
         """
