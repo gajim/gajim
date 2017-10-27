@@ -25,7 +25,7 @@ try:
     gi.require_version('GtkSpell', '3.0')
     from gi.repository import GtkSpell
     HAS_GTK_SPELL = True
-except ImportError:
+except (ImportError, ValueError):
     HAS_GTK_SPELL = False
 
 
