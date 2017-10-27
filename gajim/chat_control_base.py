@@ -1343,15 +1343,23 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
 class ScrolledWindow(Gtk.ScrolledWindow):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
 
     def do_get_preferred_height(self):
         min_height, natural_height = Gtk.ScrolledWindow.do_get_preferred_height(self)
         child = self.get_child()
-        if natural_height and self.get_max_content_height() > -1 and child:
-            _, child_nat_height = child.get_preferred_height()
-            if natural_height > child_nat_height:
-                if child_nat_height < 26:
-                    return 26, 26
+        # Gtk Bug: If policy is set to Automatic, the ScrolledWindow
+        # has a min size of around 46 depending on the System. Because
+        # we want it smaller, we set policy NEVER if the height is < 50
+        # so the ScrolledWindow will shrink to around 26 (1 line heigh).
+        # Once it gets over 50 its no problem to restore the policy.
+        if natural_height < 50:
+            GLib.idle_add(self.set_policy,
+                          Gtk.PolicyType.AUTOMATIC,
+                          Gtk.PolicyType.NEVER)
+        else:
+            GLib.idle_add(self.set_policy,
+                          Gtk.PolicyType.AUTOMATIC,
+                          Gtk.PolicyType.AUTOMATIC)
 
         return min_height, natural_height
