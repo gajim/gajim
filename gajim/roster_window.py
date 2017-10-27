@@ -260,10 +260,7 @@ class RosterWindow:
 
             tls_pixbuf = None
             if app.account_is_securely_connected(account):
-                tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
-                # the only way to create a pixbuf from stock
-#                tls_pixbuf = self.window.render_icon_pixbuf(
-#                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+                tls_pixbuf = 'changes-prevent'
 
             it = self.model.append(None, [
                 app.interface.jabber_state_images['16'][show],
@@ -1048,15 +1045,11 @@ class RosterWindow:
         num_of_accounts = app.get_number_of_connected_accounts()
         num_of_secured = app.get_number_of_securely_connected_accounts()
 
+        tls_pixbuf = None
         if app.account_is_securely_connected(account) and not self.regroup or\
         self.regroup and num_of_secured and num_of_secured == num_of_accounts:
-            tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
-            # the only way to create a pixbuf from stock
-#            tls_pixbuf = self.window.render_icon_pixbuf(
-#                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+            tls_pixbuf = 'changes-prevent'
             self.model[child_iter][Column.PADLOCK_PIXBUF] = tls_pixbuf
-        else:
-            self.model[child_iter][Column.PADLOCK_PIXBUF] = empty_pixbuf
 
         if self.regroup:
             account_name = _('Merged accounts')
@@ -5859,7 +5852,7 @@ class RosterWindow:
             add_avatar_renderer()
 
         self.renderers_list.append(('padlock', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', Column.PADLOCK_PIXBUF,
+                'icon_name', Column.PADLOCK_PIXBUF,
                 self._fill_padlock_pixbuf_renderer, None))
 
         # fill and append column
