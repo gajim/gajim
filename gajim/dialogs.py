@@ -928,10 +928,10 @@ class AddNewContactWindow:
                             'prompt': None}
                 self.available_types.append(type_)
         # Combobox with transport/jabber icons
-        liststore = Gtk.ListStore(str, GdkPixbuf.Pixbuf, str)
+        liststore = Gtk.ListStore(str, str, str)
         cell = Gtk.CellRendererPixbuf()
         self.protocol_combobox.pack_start(cell, False)
-        self.protocol_combobox.add_attribute(cell, 'pixbuf', 1)
+        self.protocol_combobox.add_attribute(cell, 'icon_name', 1)
         cell = Gtk.CellRendererText()
         cell.set_property('xpad', 5)
         self.protocol_combobox.pack_start(cell, True)
@@ -940,21 +940,16 @@ class AddNewContactWindow:
         uf_type = {'jabber': 'XMPP', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
             'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
-        img = app.interface.jabber_state_images['16']['online']
-        liststore.append(['XMPP', img.get_pixbuf(), 'jabber'])
+        online_icon = gtkgui_helpers.get_iconset_name_for('online')
+        liststore.append(['XMPP', online_icon, 'jabber'])
         for type_ in self.agents:
             if type_ == 'jabber':
                 continue
-            imgs = app.interface.roster.transports_state_images
-            img = None
-            if type_ in imgs['16'] and 'online' in imgs['16'][type_]:
-                img = imgs['16'][type_]['online']
-                if type_ in uf_type:
-                    liststore.append([uf_type[type_], img.get_pixbuf(), type_])
-                else:
-                    liststore.append([type_, img.get_pixbuf(), type_])
+            if type_ in uf_type:
+                liststore.append([uf_type[type_], type_ + '-online', type_])
             else:
-                liststore.append([type_, img, type_])
+                liststore.append([type_, type_ + '-online', type_])
+
             if account:
                 for service in self.agents[type_]:
                     app.connections[account].request_gateway_prompt(service)
@@ -3328,8 +3323,8 @@ class SingleMessageWindow:
             keys = sorted(self.completion_dict.keys())
             for jid in keys:
                 contact = self.completion_dict[jid]
-                img = app.interface.jabber_state_images['16'][contact.show]
-                liststore.append((img.get_pixbuf(), jid))
+                status_icon = gtkgui_helpers.get_iconset_name_for(contact.show)
+                liststore.append((status_icon, jid))
         else:
             self.completion_dict = {}
         self.xml.connect_signals(self)
