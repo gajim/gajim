@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
+import cairo
 import os
 import sys
 try:
@@ -889,3 +890,23 @@ def add_css_font():
     css = css.replace("font-weight: 0;", "")
     css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
     return css
+
+def draw_affiliation(surface, affiliation):
+    icon_size = 16
+    size = 4 * 1
+    if affiliation not in ('owner', 'admin', 'member'):
+        return
+    ctx = cairo.Context(surface)
+    ctx.rectangle(icon_size-size, icon_size-size, size, size)
+    if affiliation == 'owner':
+        ctx.set_source_rgb(204/255, 0, 0)
+    elif affiliation == 'admin':
+        ctx.set_source_rgb(255/255, 140/255, 0)
+    elif affiliation == 'member':
+        ctx.set_source_rgb(0, 255/255, 0)
+    ctx.fill()
+
+def get_image_from_icon_name(icon_name, scale):
+    icon = get_iconset_name_for(icon_name)
+    surface = gtk_icon_theme.load_surface(icon, 16, scale, None, 0)
+    return Gtk.Image.new_from_surface(surface)
