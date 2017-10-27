@@ -21,14 +21,12 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GLib
 import gi
-gi.require_version('GtkSpell', '3.0')
 try:
+    gi.require_version('GtkSpell', '3.0')
     from gi.repository import GtkSpell
     HAS_GTK_SPELL = True
 except ImportError:
     HAS_GTK_SPELL = False
-
-from gajim.common import app
 
 
 def ensure_attached(func):
