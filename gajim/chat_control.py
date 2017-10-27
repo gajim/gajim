@@ -993,8 +993,8 @@ class ChatControl(ChatControlBase):
         else:
             jid = self.contact.jid
 
+        scale = self.parent_win.window.get_scale_factor()
         if app.config.get('show_avatar_in_tabs'):
-            scale = self.parent_win.window.get_scale_factor()
             surface = app.contacts.get_avatar(
                 self.account, jid, AvatarSize.TAB, scale)
             if surface is not None:
@@ -1005,24 +1005,16 @@ class ChatControl(ChatControlBase):
                     ['printed_' + self.type_id, self.type_id]))
         else:
             num_unread = 0
-        # Set tab image (always 16x16); unread messages show the 'event' image
-        tab_img = None
 
         if num_unread and app.config.get('show_unread_tab_icon'):
-            img_16 = app.interface.roster.get_appropriate_state_images(
-                    self.contact.jid, icon_name='event')
-            tab_img = img_16['event']
-        else:
-            contact = app.contacts.get_contact_with_highest_priority(
-                    self.account, self.contact.jid)
-            if not contact or self.resource:
-                # For transient contacts
-                contact = self.contact
-            img_16 = app.interface.roster.get_appropriate_state_images(
-                    self.contact.jid, icon_name=contact.show)
-            tab_img = img_16[contact.show]
+            return gtkgui_helpers.get_icon_surface('event', scale)
 
-        return tab_img
+        contact = app.contacts.get_contact_with_highest_priority(
+                self.account, self.contact.jid)
+        if not contact or self.resource:
+            # For transient contacts
+            contact = self.contact
+        return gtkgui_helpers.get_icon_surface(contact.show, scale)
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """

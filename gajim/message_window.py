@@ -491,15 +491,16 @@ class MessageWindow(object):
             pass # keep default icon
         elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
             if self.type_ == 'gc':
-                icon = gtkgui_helpers.load_icon('muc_active')
+                icon = gtkgui_helpers.get_iconset_name_for('muc-active')
             else:
                 # chat, pm
-                icon = gtkgui_helpers.load_icon('online')
+                icon = gtkgui_helpers.get_iconset_name_for('online')
         if icon:
-            if isinstance(icon, GdkPixbuf.Pixbuf):
-                self.window.set_icon(icon)
+            if isinstance(icon, str):
+                self.window.set_icon_name(icon)
             else:
-                self.window.set_icon(icon.get_pixbuf())
+                pixbuf = Gdk.pixbuf_get_from_surface(icon, 0, 0, 16, 16)
+                self.window.set_icon(pixbuf)
 
     def show_title(self, urgent=True, control=None):
         """
@@ -696,14 +697,7 @@ class MessageWindow(object):
         nick_label.set_markup(tab_label_str)
 
         tab_img = ctrl.get_tab_image()
-        if tab_img:
-            if isinstance(tab_img, Gtk.Image):
-                if tab_img.get_storage_type() == Gtk.ImageType.ANIMATION:
-                    status_img.set_from_animation(tab_img.get_animation())
-                else:
-                    status_img.set_from_pixbuf(tab_img.get_pixbuf())
-            else:
-                status_img.set_from_surface(tab_img)
+        status_img.set_from_surface(tab_img)
 
         self.show_icon()
 

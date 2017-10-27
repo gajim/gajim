@@ -956,13 +956,11 @@ class GroupchatControl(ChatControlBase):
         return (label_str, color)
 
     def get_tab_image(self, count_unread=True):
-        # Set tab image (always 16x16)
-        tab_image = None
         if app.gc_connected[self.account][self.room_jid]:
-            tab_image = gtkgui_helpers.load_icon('muc_active')
-        else:
-            tab_image = gtkgui_helpers.load_icon('muc_inactive')
-        return tab_image
+            return gtkgui_helpers.get_icon_surface(
+                'muc-active', self.scale_factor)
+        return gtkgui_helpers.get_icon_surface(
+            'muc-inactive', self.scale_factor)
 
     def update_ui(self):
         ChatControlBase.update_ui(self)
@@ -1173,10 +1171,8 @@ class GroupchatControl(ChatControlBase):
         if not autopopup or (not autopopupaway and \
         app.connections[self.account].connected > 2):
             if no_queue: # We didn't have a queue: we change icons
-                state_images = \
-                    app.interface.roster.get_appropriate_state_images(
-                    self.room_jid, icon_name='event')
-                image = state_images['event']
+                image = gtkgui_helpers.get_image_from_icon_name(
+                    'event', self.scale_factor)
                 self.model[iter_][Column.IMG] = image
             if self.parent_win:
                 self.parent_win.show_title()

@@ -85,6 +85,11 @@ def get_icon_path(icon_name, size=16):
     except GLib.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
+def get_icon_surface(icon_name, scale, size=16, iconset=True):
+    if iconset:
+        icon_name = get_iconset_name_for(icon_name)
+    return gtk_icon_theme.load_surface(icon_name, 16, scale, None, 0)
+
 from gajim import vcard
 from gajim import dialogs
 
@@ -571,15 +576,6 @@ def load_iconset(path, pixbuf2=None, transport=False):
             list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
                     'offline', 'error', 'requested', 'event', 'not in roster')
     return _load_icon_list(list_, path, pixbuf2)
-
-def load_icon(icon_name):
-    """
-    Load an icon from the iconset in 16x16
-    """
-    iconset = app.config.get('iconset')
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16', '')
-    icon_list = _load_icon_list([icon_name], path)
-    return icon_list[icon_name]
 
 def load_mood_icon(icon_name):
     """
