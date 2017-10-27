@@ -5025,7 +5025,7 @@ class TransformChatToMUC:
         self.window = self.xml.get_object('chat_to_muc_window')
 
         for widget_to_add in ('invite_button', 'cancel_button',
-            'server_list_comboboxentry', 'guests_treeview',
+            'server_list_comboboxentry', 'guests_treeview', 'guests_store',
             'server_and_guests_hseparator', 'server_select_label'):
             self.__dict__[widget_to_add] = self.xml.get_object(widget_to_add)
 
@@ -5056,17 +5056,8 @@ class TransformChatToMUC:
 
         # set treeview
         # name, jid
-        self.store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
-        self.store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        self.guests_treeview.set_model(self.store)
 
-        renderer1 = Gtk.CellRendererText()
-        renderer2 = Gtk.CellRendererPixbuf()
-        column = Gtk.TreeViewColumn('Status', renderer2, pixbuf=0)
-        self.guests_treeview.append_column(column)
-        column = Gtk.TreeViewColumn('Name', renderer1, text=1)
-        self.guests_treeview.append_column(column)
-
+        self.guests_store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         self.guests_treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         # All contacts beside the following can be invited:
@@ -5089,14 +5080,14 @@ class TransformChatToMUC:
                 # Add contact if it can be invited
                 if invitable(contact, contact_transport) and \
                 contact.show not in ('offline', 'error'):
-                    img = app.interface.jabber_state_images['16'][contact.show]
+                    icon_name = gtkgui_helpers.get_iconset_name_for(contact.show)
                     name = contact.name
                     if name == '':
                         name = jid.split('@')[0]
-                    iter_ = self.store.append([img.get_pixbuf(), name, jid])
+                    iter_ = self.guests_store.append([icon_name, name, jid])
                     # preselect treeview rows
                     if self.preselected_jids and jid in self.preselected_jids:
-                        path = self.store.get_path(iter_)
+                        path = self.guests_store.get_path(iter_)
                         self.guests_treeview.get_selection().select_path(path)
 
         app.ged.register_event_handler('unique-room-id-supported', ged.GUI1,
@@ -5134,8 +5125,8 @@ class TransformChatToMUC:
         guest_list = []
         guests = self.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
-            iter_ = self.store.get_iter(guest)
-            guest_list.append(self.store[iter_][2])
+            iter_ = self.guests_store.get_iter(guest)
+            guest_list.append(self.guests_store[iter_][2])
         for guest in self.auto_jids:
             guest_list.append(guest)
         room_jid = obj.room_id + '@' + obj.server
