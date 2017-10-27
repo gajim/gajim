@@ -891,6 +891,25 @@ def add_css_font():
     css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
     return css
 
+def draw_metacontact(icon_name, expanded, scale):
+    icon_size = 16
+    icon_name = get_iconset_name_for(icon_name)
+    state_surface = gtk_icon_theme.load_surface(
+        icon_name, icon_size, scale, None, 0)
+    if expanded:
+        icon = get_iconset_name_for('opened')
+        expanded_surface = gtk_icon_theme.load_surface(
+            icon, icon_size, scale, None, 0)
+    else:
+        icon = get_iconset_name_for('closed')
+        expanded_surface = gtk_icon_theme.load_surface(
+            icon, icon_size, scale, None, 0)
+    ctx = cairo.Context(state_surface)
+    ctx.rectangle(0, 0, icon_size, icon_size)
+    ctx.set_source_surface(expanded_surface)
+    ctx.fill()
+    return Gtk.Image.new_from_surface(state_surface)
+
 def draw_affiliation(surface, affiliation):
     icon_size = 16
     size = 4 * 1

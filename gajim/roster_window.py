@@ -269,8 +269,10 @@ class RosterWindow:
         if self.regroup:
             # Merged accounts view
             show = helpers.get_global_show()
+            image = gtkgui_helpers.get_image_from_icon_name(
+                show, self.scale_factor)
             it = self.model.append(None, [
-                app.interface.jabber_state_images['16'][show],
+                image,
                 _('Merged accounts'), 'account', '', 'all', None, None, None,
                 None, None, None, True] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
@@ -282,8 +284,10 @@ class RosterWindow:
             if app.account_is_securely_connected(account):
                 tls_pixbuf = 'changes-prevent'
 
+            image = gtkgui_helpers.get_image_from_icon_name(
+                show, self.scale_factor)
             it = self.model.append(None, [
-                app.interface.jabber_state_images['16'][show],
+                image,
                 GLib.markup_escape_text(account), 'account', our_jid,
                 account, None, None, None, None, None, tls_pixbuf, True] +
                 [None] * self.nb_ext_renderers)
@@ -342,8 +346,11 @@ class RosterWindow:
                 app.groups[account][parent_group] = {'expand': is_expanded}
         else:
             iter_parent = self._get_account_iter(account, self.model)
+
+        image = gtkgui_helpers.get_image_from_icon_name(
+            'closed', self.scale_factor)
         iter_group = self.model.append(iter_parent,
-            [app.interface.jabber_state_images['16']['closed'],
+            [image,
             GLib.markup_escape_text(group), 'group', group, account, None,
             None, None, None, None, None, False] + [None] * self.nb_ext_renderers)
         self.draw_group(group, account)
@@ -1278,7 +1285,7 @@ class RosterWindow:
         # look if another resource has awaiting events
         for c in contact_instances:
             c_icon_name = helpers.get_icon_name_to_show(c, account)
-            if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
+            if c_icon_name in ('event', 'muc-active', 'muc-inactive'):
                 icon_name = c_icon_name
                 break
 
@@ -1314,33 +1321,26 @@ class RosterWindow:
                             break
                         iterC = self.model.iter_next(iterC)
 
-                if self.tree.row_expanded(path):
-                    state_images = self.get_appropriate_state_images(
-                            jid, size = 'opened',
-                            icon_name = icon_name)
-                else:
-                    state_images = self.get_appropriate_state_images(
-                            jid, size = 'closed',
-                            icon_name = icon_name)
+                expanded = self.tree.row_expanded(path)
+                image = gtkgui_helpers.draw_metacontact(
+                    icon_name, expanded, self.scale_factor)
 
                 # Expand/collapse icon might differ per iter
                 # (group)
-                img = state_images[icon_name]
-                self.model[child_iter][Column.IMG] = img
+                self.model[child_iter][Column.IMG] = image
                 self.model[child_iter][Column.NAME] = name
                 #TODO: compute visible
                 visible = True
                 self.model[child_iter][Column.VISIBLE] = visible
         else:
             # A normal contact or little brother
-            state_images = self.get_appropriate_state_images(jid,
-                    icon_name = icon_name)
+            image = gtkgui_helpers.get_image_from_icon_name(
+                icon_name, self.scale_factor)
 
             visible = self.contact_is_visible(contact, account)
-            # All iters have the same icon (no expand/collapse)
-            img = state_images[icon_name]
+
             for child_iter in child_iters:
-                self.model[child_iter][Column.IMG] = img
+                self.model[child_iter][Column.IMG] = image
                 self.model[child_iter][Column.NAME] = name
                 self.model[child_iter][Column.VISIBLE] = visible
                 if visible:
@@ -2088,8 +2088,9 @@ class RosterWindow:
     def set_state(self, account, state):
         child_iterA = self._get_account_iter(account, self.model)
         if child_iterA:
-            self.model[child_iterA][0] = \
-                    app.interface.jabber_state_images['16'][state]
+            image = gtkgui_helpers.get_image_from_icon_name(
+                state, self.scale_factor)
+            self.model[child_iterA][Column.IMG] = image
         if app.interface.systray_enabled:
             app.interface.systray.change_status(state)
 
@@ -3866,8 +3867,9 @@ class RosterWindow:
         type_ = model[titer][Column.TYPE]
         if type_ == 'group':
             group = model[titer][Column.JID]
-            child_model[child_iter][Column.IMG] = \
-                app.interface.jabber_state_images['16']['opened']
+            image = gtkgui_helpers.get_image_from_icon_name(
+                'opened', self.scale_factor)
+            child_model[child_iter][Column.IMG] = image
             if self.rfilter_enabled:
                 return
             for account in accounts:
@@ -3929,8 +3931,9 @@ class RosterWindow:
 
         type_ = model[titer][Column.TYPE]
         if type_ == 'group':
-            child_model[child_iter][Column.IMG] = app.interface.\
-                jabber_state_images['16']['closed']
+            image = gtkgui_helpers.get_image_from_icon_name(
+                'closed', self.scale_factor)
+            child_model[child_iter][Column.IMG] = image
             if self.rfilter_enabled:
                 return
             group = model[titer][Column.JID]
@@ -4649,8 +4652,9 @@ class RosterWindow:
             show = app.SHOW_LIST[status]
         else: # accounts merged
             show = helpers.get_global_show()
-        self.model[child_iterA][Column.IMG] = app.interface.jabber_state_images[
-            '16'][show]
+        image = gtkgui_helpers.get_image_from_icon_name(
+            show, self.scale_factor)
+        self.model[child_iterA][Column.IMG] = image
 
 ################################################################################
 ### Style and theme related methods
@@ -4717,6 +4721,7 @@ class RosterWindow:
             type_ = model[titer][Column.TYPE]
         except TypeError:
             return
+
         if type_ == 'account':
             self._set_account_row_background_color(renderer)
             renderer.set_property('xalign', 0)
@@ -4726,7 +4731,7 @@ class RosterWindow:
             if model[parent_iter][Column.TYPE] == 'group':
                 renderer.set_property('xalign', 0.4)
             else:
-                renderer.set_property('xalign', 0.2)
+                renderer.set_property('xalign', 0.6)
         elif type_:
             # prevent type_ = None, see http://trac.gajim.org/ticket/2534
             if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
@@ -4741,6 +4746,10 @@ class RosterWindow:
             else:
                 renderer.set_property('xalign', 0.6)
         renderer.set_property('width', 26)
+
+        image = model[titer][Column.IMG]
+        surface = image.get_property('surface')
+        renderer.set_property('surface', surface)
 
     def _nameCellDataFunc(self, column, renderer, model, titer, data=None):
         """
@@ -5570,7 +5579,7 @@ class RosterWindow:
     def fill_column(self, col):
         for rend in self.renderers_list:
             col.pack_start(rend[1], rend[2])
-            if rend[0] != 'avatar':
+            if rend[0] not in ('avatar', 'icon'):
                 col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
@@ -5801,8 +5810,8 @@ class RosterWindow:
             add_avatar_renderer()
 
         self.renderers_list += (
-                ('icon', cell_renderer_image.CellRendererImage(0, 0), False,
-                'image', Column.IMG, self._iconCellDataFunc, None),
+                ('icon', Gtk.CellRendererPixbuf(), False,
+                None, Column.IMG, self._iconCellDataFunc, None),
 
                 ('name', renderer_text, True,
                 'markup', Column.NAME, self._nameCellDataFunc, None),
@@ -5869,7 +5878,6 @@ class RosterWindow:
         self.tree.connect('query-tooltip', self.query_tooltip)
         # Workaroung: For strange reasons signal is behaving like row-changed
         self._toggeling_row = False
-        self.setup_and_draw_roster()
 
         if app.config.get('show_roster_on_startup') == 'always':
             self.window.show_all()
@@ -5884,6 +5892,7 @@ class RosterWindow:
                 self.window.show_all()
 
         self.scale_factor = self.window.get_scale_factor()
+        self.setup_and_draw_roster()
 
         if not app.config.get_per('accounts') or \
         app.config.get_per('accounts') == ['Local'] and not \
