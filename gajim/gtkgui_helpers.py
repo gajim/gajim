@@ -140,11 +140,11 @@ def get_completion_liststore(entry):
     (Pixbuf, Text) rows
     """
     completion = Gtk.EntryCompletion()
-    liststore = Gtk.ListStore(GdkPixbuf.Pixbuf, str)
+    liststore = Gtk.ListStore(str, str)
 
     render_pixbuf = Gtk.CellRendererPixbuf()
     completion.pack_start(render_pixbuf, False)
-    completion.add_attribute(render_pixbuf, 'pixbuf', 0)
+    completion.add_attribute(render_pixbuf, 'icon_name', 0)
 
     render_text = Gtk.CellRendererText()
     completion.pack_start(render_text, True)
