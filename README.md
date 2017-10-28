@@ -44,13 +44,17 @@
 - [Daily Linux](https://www.gajim.org/downloads/snap/?M=D)
 - [Daily Windows](https://gajim.org/downloads/snap/win)
 
-#### Linux / Mac
+#### Linux
 
 ``./setup.py install --root=/``
 
 or
 
 ``pip install .`` (python-pip is required)
+
+#### Mac
+
+see [Wiki](https://dev.gajim.org/gajim/gajim/wikis/help/gajimmacosx#python3brew)
 
 #### Developing
 
