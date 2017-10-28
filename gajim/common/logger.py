@@ -290,13 +290,17 @@ class Logger:
 
         :param jid:     The JID
 
-        :param type_:   The JIDConstant type
+        :param kind:    The KindConstant
+
+        :param type_:   The JIDConstant
 
         return the jid id
         """
 
         if kind in (KindConstant.GC_MSG, KindConstant.GCSTATUS):
             type_ = JIDConstant.ROOM_TYPE
+        elif kind is not None:
+            type_ = JIDConstant.NORMAL_TYPE
 
         result = self._jid_ids.get(jid, None)
         if result is not None:
