@@ -4589,7 +4589,7 @@ class RosterWindow:
 ### Cleanup assigned to Jim++ :-)
 ################################################################################
 
-    def update_jabber_state_images(self):
+    def update_icons(self):
         # Update the roster
         self.setup_and_draw_roster()
         # Update the status combobox

@@ -718,11 +718,11 @@ class PreferencesWindow:
         active = widget.get_active()
         icon_string = model[active][1]
         app.config.set('iconset', icon_string)
-        gtkgui_helpers.reload_jabber_state_images()
+        app.interface.roster.update_icons()
 
     def on_transports_iconsets_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
-        gtkgui_helpers.reload_jabber_state_images()
+        app.interface.roster.update_icons()
 
     def on_outgoing_chat_states_combobox_changed(self, widget):
         active = widget.get_active()

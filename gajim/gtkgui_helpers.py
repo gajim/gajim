@@ -696,64 +696,6 @@ def _load_icon_list(icons_list, path, pixbuf2 = None):
                 break
     return imgs
 
-def make_jabber_state_images():
-    """
-    Initialize jabber_state_images dictionary
-    """
-    iconset = app.config.get('iconset')
-    if iconset:
-        if helpers.get_iconset_path(iconset):
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-            if not os.path.exists(path):
-                iconset = app.config.DEFAULT_ICONSET
-                app.config.set('iconset', iconset)
-        else:
-            iconset = app.config.DEFAULT_ICONSET
-            app.config.set('iconset', iconset)
-    else:
-        iconset = app.config.DEFAULT_ICONSET
-        app.config.set('iconset', iconset)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    app.interface.jabber_state_images['16'] = load_iconset(path)
-
-    pixo, pixc = load_icons_meta()
-    app.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
-    app.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-    app.interface.jabber_state_images['32'] = load_iconset(path)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '24x24')
-    if (os.path.exists(path)):
-        app.interface.jabber_state_images['24'] = load_iconset(path)
-    else:
-        # Resize 32x32 icons to 24x24
-        for each in app.interface.jabber_state_images['32']:
-            img = Gtk.Image()
-            pix = app.interface.jabber_state_images['32'][each]
-            pix_type = pix.get_storage_type()
-            if pix_type == Gtk.ImageType.ANIMATION:
-                animation = pix.get_animation()
-                pixbuf = animation.get_static_image()
-            elif pix_type == Gtk.ImageType.EMPTY:
-                pix = app.interface.jabber_state_images['16'][each]
-                pix_16_type = pix.get_storage_type()
-                if pix_16_type == Gtk.ImageType.ANIMATION:
-                    animation = pix.get_animation()
-                    pixbuf = animation.get_static_image()
-                else:
-                    pixbuf = pix.get_pixbuf()
-            else:
-                pixbuf = pix.get_pixbuf()
-            scaled_pix = pixbuf.scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
-            img.set_from_pixbuf(scaled_pix)
-            app.interface.jabber_state_images['24'][each] = img
-
-def reload_jabber_state_images():
-    make_jabber_state_images()
-    app.interface.roster.update_jabber_state_images()
-
 def label_set_autowrap(widget):
     """
     Make labels automatically re-wrap if their containers are resized.
