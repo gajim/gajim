@@ -245,10 +245,6 @@ class DownloadHistoryPage(Gtk.Box):
         self.count = 0
         self.received = 0
 
-        pix = get_icon_pixmap('folder-download-symbolic', size=64)
-        image = Gtk.Image()
-        image.set_from_pixbuf(pix)
-
         self.progress = Gtk.ProgressBar()
         self.progress.set_show_text(True)
         self.progress.set_text(_('Connecting...'))
@@ -256,6 +252,8 @@ class DownloadHistoryPage(Gtk.Box):
         self.progress.set_vexpand(True)
         self.progress.set_valign(Gtk.Align.CENTER)
 
+        image = Gtk.Image.new_from_icon_name(
+            'folder-download-symbolic', Gtk.IconSize.DIALOG)
         self.pack_start(image, False, False, 0)
         self.pack_start(self.progress, False, False, 0)
 
