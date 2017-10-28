@@ -642,31 +642,6 @@ def get_iconset_name_for(name):
         return '-'.join([app.config.DEFAULT_ICONSET, name])
     return '-'.join([iconset, name])
 
-def load_icons_meta():
-    """
-    Load and return  - AND + small icons to put on top left of an icon for meta
-    contacts
-    """
-    iconset = app.config.get('iconset')
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    # try to find opened_meta.png file, else opened.png else nopixbuf merge
-    path_opened = os.path.join(path, 'opened_meta.png')
-    if not os.path.isfile(path_opened):
-        path_opened = os.path.join(path, 'opened.png')
-    if os.path.isfile(path_opened):
-        pixo = GdkPixbuf.Pixbuf.new_from_file(path_opened)
-    else:
-        pixo = None
-    # Same thing for closed
-    path_closed = os.path.join(path, 'opened_meta.png')
-    if not os.path.isfile(path_closed):
-        path_closed = os.path.join(path, 'closed.png')
-    if os.path.isfile(path_closed):
-        pixc = GdkPixbuf.Pixbuf.new_from_file(path_closed)
-    else:
-        pixc = None
-    return pixo, pixc
-
 def _load_icon_list(icons_list, path, pixbuf2 = None):
     """
     Load icons in icons_list from the given path, and add pixbuf2 on top left of

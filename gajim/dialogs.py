@@ -3105,7 +3105,7 @@ class ChangePasswordDialog:
 
 class PopupNotificationWindow:
     def __init__(self, event_type, jid, account, msg_type='',
-    path_to_image=None, title=None, text=None, timeout=-1):
+    icon_name=None, title=None, text=None, timeout=-1):
         self.account = account
         self.jid = jid
         self.msg_type = msg_type
@@ -3131,10 +3131,6 @@ class PopupNotificationWindow:
 
         css = '#NotificationPopup {background-color: black }'
         gtkgui_helpers.add_css_to_widget(self.window, css)
-
-        # default image
-        if not path_to_image:
-            path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
 
         if event_type == _('Contact Signed In'):
             bg_color = app.config.get('notif_signin_color')
@@ -3173,7 +3169,7 @@ class PopupNotificationWindow:
             GLib.markup_escape_text(text))
 
         # set the image
-        image.set_from_file(path_to_image)
+        image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
 
         # position the window to bottom-right of screen
         window_width, self.window_height = self.window.get_size()

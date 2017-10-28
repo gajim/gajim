@@ -4886,11 +4886,6 @@ class RosterWindow:
 ################################################################################
 
     def build_account_menu(self, account):
-        # we have to create our own set of icons for the menu
-        # using self.jabber_status_images is poopoo
-        iconset = app.config.get('iconset')
-        path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-
         if not app.config.get_per('accounts', account, 'is_zeroconf'):
             xml = gtkgui_helpers.get_gtk_builder('account_context_menu.ui')
             account_context_menu = xml.get_object('account_context_menu')
@@ -5047,8 +5042,6 @@ class RosterWindow:
             menu = self.build_account_menu(account)
         else:
             menu = Gtk.Menu()
-            iconset = app.config.get('iconset')
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
             accounts = [] # Put accounts in a list to sort them
             for account in app.connections:
                 accounts.append(account)
@@ -5140,8 +5133,6 @@ class RosterWindow:
                 send_custom_status_menuitem.set_sensitive(False)
             status_menuitems = Gtk.Menu()
             send_custom_status_menuitem.set_submenu(status_menuitems)
-            iconset = app.config.get('iconset')
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
             for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
                 status_menuitem = Gtk.MenuItem.new_with_label(
                     helpers.get_uf_show(s))

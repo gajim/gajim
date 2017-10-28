@@ -39,10 +39,6 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     roster = app.interface.roster
     sub_menu = Gtk.Menu()
 
-    iconset = app.config.get('iconset')
-    if not iconset:
-        iconset = app.config.DEFAULT_ICONSET
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for c in contacts:
         item = Gtk.MenuItem.new_with_label(
             '%s (%s)' % (c.resource, str(c.priority)))

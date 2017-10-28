@@ -184,7 +184,6 @@ def check_and_possibly_move_config():
     vars['VCARD_PATH'] = app.VCARD_PATH
     vars['AVATAR_PATH'] = app.AVATAR_PATH
     vars['MY_EMOTS_PATH'] = app.MY_EMOTS_PATH
-    vars['MY_ICONSETS_PATH'] = app.MY_ICONSETS_PATH
     vars['MY_MOOD_ICONSETS_PATH'] = app.MY_MOOD_ICONSETS_PATH
     vars['MY_ACTIVITY_ICONSETS_PATH'] = app.MY_ACTIVITY_ICONSETS_PATH
     from gajim.common import configpaths
@@ -210,7 +209,6 @@ def check_and_possibly_move_config():
     vars['OLD_VCARD_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'vcards')
     vars['OLD_AVATAR_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'avatars')
     vars['OLD_MY_EMOTS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'emoticons')
-    vars['OLD_MY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'iconsets')
     vars['OLD_MY_MOOD_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'moods')
     vars['OLD_MY_ACTIVITY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER,
             'activities')
@@ -236,7 +234,7 @@ def check_and_possibly_move_config():
     to_move[OLD_CACHE_DB_PATH] = CACHE_DB_PATH
 
     for folder in ('VCARD_PATH', 'AVATAR_PATH', 'MY_EMOTS_PATH',
-    'MY_ICONSETS_PATH', 'MY_MOOD_ICONSETS_PATH', 'MY_ACTIVITY_ICONSETS_PATH'):
+                   'MY_MOOD_ICONSETS_PATH', 'MY_ACTIVITY_ICONSETS_PATH'):
         src = vars['OLD_' + folder]
         dst = vars[folder]
         to_move[src] = dst

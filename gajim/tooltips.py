@@ -87,22 +87,13 @@ class StatusTable:
                 str_status += ' - <i>' + status + '</i>'
         return str_status
 
-    def add_status_row(self, file_path, show, str_status, show_lock=False,
+    def add_status_row(self, icon_name, str_status, show_lock=False,
     indent=True):
         """
         Append a new row with status icon to the table
         """
         self.table.insert_row(self.current_row)
-        state_file = show.replace(' ', '_')
-        files = []
-        files.append(os.path.join(file_path, state_file + '.png'))
-        files.append(os.path.join(file_path, state_file + '.gif'))
-        image = Gtk.Image()
-        image.set_from_pixbuf(None)
-        for f in files:
-            if os.path.exists(f):
-                image.set_from_file(f)
-                break
+        image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
         spacer = Gtk.Label(label=self.spacer_label)
         image.set_halign(Gtk.Align.START)
         image.set_valign(Gtk.Align.CENTER)
@@ -135,7 +126,7 @@ class NotificationAreaTooltip(StatusTable):
         iconset = app.config.get('iconset')
         if not iconset:
             iconset = 'dcraven'
-        file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+
         for acct in accounts:
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
@@ -145,12 +136,14 @@ class NotificationAreaTooltip(StatusTable):
                 show_lock = True
             else:
                 show_lock = False
+
+            icon_name = gtkgui_helpers.get_iconset_name_for(acct['show'])
             if message:
-                self.add_status_row(file_path, acct['show'],
+                self.add_status_row(icon_name,
                     GLib.markup_escape_text(acct['name']) + ' - ' + message,
                     show_lock=show_lock, indent=False)
             else:
-                self.add_status_row(file_path, acct['show'],
+                self.add_status_row(icon_name,
                     GLib.markup_escape_text(acct['name']), show_lock=show_lock,
                     indent=False)
             for line in acct['event_lines']:
@@ -315,7 +308,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
         iconset = app.config.get('iconset')
         if not iconset:
             iconset = 'dcraven'
-        file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
+
         for acct in accounts:
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
@@ -325,12 +318,13 @@ class RosterTooltip(Gtk.Window, StatusTable):
                 show_lock = True
             else:
                 show_lock = False
+            icon_name = gtkgui_helpers.get_iconset_name_for(acct['show'])
             if message:
-                self.add_status_row(file_path, acct['show'],
+                self.add_status_row(icon_name,
                     GLib.markup_escape_text(acct['name']) + ' - ' + message,
                     show_lock=show_lock, indent=False)
             else:
-                self.add_status_row(file_path, acct['show'],
+                self.add_status_row(icon_name,
                     GLib.markup_escape_text(acct['name']), show_lock=show_lock,
                     indent=False)
             for line in acct['event_lines']:
@@ -445,21 +439,11 @@ class RosterTooltip(Gtk.Window, StatusTable):
         if self.num_resources > 1:
             self.status_label.show()
             transport = app.get_transport_name_from_jid(self.prim_contact.jid)
-            if transport:
-                file_path = os.path.join(helpers.get_transport_path(transport),
-                    '16x16')
-            else:
-                iconset = app.config.get('iconset')
-                if not iconset:
-                    iconset = 'dcraven'
-                file_path = os.path.join(helpers.get_iconset_path(iconset),
-                    '16x16')
-
             contact_keys = sorted(contacts_dict.keys())
             contact_keys.reverse()
             for priority in contact_keys:
                 for acontact in contacts_dict[priority]:
-                    icon_name = self._get_icon_name_for_tooltip(acontact)
+                    show = self._get_icon_name_for_tooltip(acontact)
                     if acontact.status and len(acontact.status) > 25:
                         status = ''
                         add_text = True
@@ -469,7 +453,11 @@ class RosterTooltip(Gtk.Window, StatusTable):
 
                     status_line = self.get_status_info(acontact.resource,
                     acontact.priority, acontact.show, status)
-                    self.add_status_row(file_path, icon_name, status_line)
+                    if transport and transport != 'jabber':
+                        icon_name = transport + '-' + show
+                    else:
+                        icon_name = gtkgui_helpers.get_iconset_name_for(show)
+                    self.add_status_row(icon_name, status_line)
                     if add_text:
                         self.add_text_row(acontact.status, 2)
 
@@ -611,7 +599,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             return 'requested'
         elif contact.sub in ('both', 'to', ''):
             return contact.show
-        return 'not in roster'
+        return 'notinroster'
 
 
 class FileTransfersTooltip():

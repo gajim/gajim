@@ -47,6 +47,7 @@ from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 from gajim.common.nec import NetworkEvent
+from gajim import gtkgui_helpers
 
 if app.HAVE_PYOPENSSL:
     import OpenSSL.crypto
@@ -2571,13 +2572,13 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if msg_obj.mtype == 'normal': # single message
             self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
-            self.popup_image = 'gajim-single_msg_recv'
+            self.icon_name = 'gajim-single_msg_recv'
             self.popup_title = _('New Single Message from %(nickname)s') % \
                 {'nickname': nick}
         elif msg_obj.mtype == 'pm':
             self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
-            self.popup_image = 'gajim-priv_msg_recv'
+            self.icon_name = 'gajim-priv_msg_recv'
             self.popup_title = _('New Private Message from group chat %s') % \
                 msg_obj.jid
             if self.popup_text:
@@ -2589,7 +2590,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else: # chat message
             self.popup_msg_type = 'chat'
             self.popup_event_type = _('New Message')
-            self.popup_image = 'gajim-chat_msg_recv'
+            self.icon_name = 'gajim-chat_msg_recv'
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
 
@@ -2649,28 +2650,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         self.do_popup = False
 
-    def get_path_to_generic_or_avatar(self, generic, jid=None, suffix=None):
-        """
-        Choose between avatar image and default image
-
-        Returns full path to the avatar image if it exists, otherwise returns full
-        path to the image.  generic must be with extension and suffix without
-        """
-        if jid:
-            # we want an avatar
-            puny_jid = helpers.sanitize_filename(jid)
-            path_to_file = os.path.join(app.AVATAR_PATH, puny_jid) + suffix
-            path_to_local_file = path_to_file + '_local'
-            for extension in ('.png', '.jpeg'):
-                path_to_local_file_full = path_to_local_file + extension
-                if os.path.exists(path_to_local_file_full):
-                    return path_to_local_file_full
-            for extension in ('.png', '.jpeg'):
-                path_to_file_full = path_to_file + extension
-                if os.path.exists(path_to_file_full):
-                    return path_to_file_full
-        return os.path.abspath(generic)
-
     def handle_incoming_pres_event(self, pres_obj):
         if app.jid_is_transport(pres_obj.jid):
             return True
@@ -2684,7 +2663,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 continue
             if c.show not in ('offline', 'error'):
                 return True
-
 
         # no other resource is connected, let's look in metacontacts
         family = app.contacts.get_metacontacts_family(account, self.jid)
@@ -2701,8 +2679,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         if pres_obj.old_show < 2 and pres_obj.new_show > 1:
             event = 'contact_connected'
-            show_image = 'online.png'
-            suffix = '_notif_size_colored'
+            show_image = 'online'
             server = app.get_server_from_jid(self.jid)
             account_server = account + '/' + server
             block_transport = False
@@ -2722,8 +2699,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
             event = 'contact_disconnected'
-            show_image = 'offline.png'
-            suffix = '_notif_size_bw'
+            show_image = 'offline'
             if helpers.allow_showing_notification(account, 'notify_on_signout'):
                 self.do_popup = True
             if app.config.get_per('soundevents', 'contact_disconnected',
@@ -2733,24 +2709,15 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         # Status change (not connected/disconnected or error (<1))
         elif pres_obj.new_show > 1:
             event = 'status_change'
-            # FIXME: we don't always 'online.png', but we first need 48x48 for
-            # all status
-            show_image = 'online.png'
-            suffix = '_notif_size_colored'
+            show_image = 'online'
         else:
             return True
 
         transport_name = app.get_transport_name_from_jid(self.jid)
-        img_path = None
-        if transport_name:
-            img_path = os.path.join(helpers.get_transport_path(
-                transport_name), '48x48', show_image)
-        if not img_path or not os.path.isfile(img_path):
-            iconset = app.config.get('iconset')
-            img_path = os.path.join(helpers.get_iconset_path(iconset),
-                '48x48', show_image)
-        self.popup_image_path = self.get_path_to_generic_or_avatar(img_path,
-            jid=self.jid, suffix=suffix)
+        if transport_name and transport_name != 'jabber':
+            self.icon_name = '{}-{}'.format(transport_name, show_image)
+        else:
+            self.icon_name = gtkgui_helpers.get_iconset_name_for(show_image)
 
         self.popup_timeout = app.config.get('notification_timeout')
 
@@ -2795,9 +2762,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_text = ''
         self.popup_event_type = ''
         self.popup_msg_type = ''
-        self.popup_image = ''
-        self.popup_image_path = ''
         self.popup_timeout = -1
+        self.icon_name = ''
 
         self.do_command = False
         self.command = ''

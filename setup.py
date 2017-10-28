@@ -210,9 +210,6 @@ package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
 package_data_gui = ['data/gui/*.ui']
 package_data_icons = ['data/icons/hicolor/*/*/*.png',
                       'data/icons/hicolor/*/*/*.svg']
-package_data_iconsets = ['data/iconsets/*/*/*.gif',
-                         'data/iconsets/*/*/*.png',
-                         'data/iconsets/transports/*/*/*.png']
 package_data_moods = ['data/moods/*/*.png']
 package_data_other = ['data/other/*']
 package_data_sounds = ['data/sounds/*.wav']
@@ -222,7 +219,6 @@ package_data = (package_data_activities
                 + package_data_emoticons
                 + package_data_gui
                 + package_data_icons
-                + package_data_iconsets
                 + package_data_moods
                 + package_data_other
                 + package_data_sounds

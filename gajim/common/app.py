@@ -68,7 +68,6 @@ gajimpaths = configpaths.gajimpaths
 VCARD_PATH = gajimpaths['VCARD']
 AVATAR_PATH = gajimpaths['AVATAR']
 MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
-MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
 MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
 MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
 MY_CACERTS = gajimpaths['MY_CACERTS']

@@ -59,34 +59,27 @@ def get_show_in_systray(event, account, contact, type_=None):
         return False
     return app.config.get('trayicon_notification_on_events')
 
-def popup(event_type, jid, account, type_='', path_to_image=None, title=None,
+def popup(event_type, jid, account, type_='', icon_name=None, title=None,
 text=None, timeout=-1):
     """
     Notify a user of an event using GNotification and GApplication under linux,
     the older style PopupNotificationWindow method under windows
     """
-    # default image
-    if not path_to_image:
-        path_to_image = gtkgui_helpers.get_icon_path('gajim-chat_msg_recv', 48)
-
     if timeout < 0:
         timeout = app.config.get('notification_timeout')
 
     if sys.platform == 'win32':
         instance = PopupNotificationWindow(event_type, jid, account, type_,
-            path_to_image, title, text, timeout)
+                                           icon_name, title, text, timeout)
         app.interface.roster.popup_notification_windows.append(instance)
         return
 
-    # use GNotification
-    # TODO: Move to standard GTK+ icons here.
-    icon = Gio.FileIcon.new(Gio.File.new_for_path(path_to_image))
     notification = Gio.Notification()
     if title is not None:
         notification.set_title(title)
     if text is not None:
         notification.set_body(text)
-    notification.set_icon(icon)
+    notification.set_icon(Gio.ThemedIcon(icon_name))
     notif_id = None
     if event_type in (_('Contact Signed In'), _('Contact Signed Out'),
     _('New Message'), _('New Single Message'), _('New Private Message'),
@@ -121,16 +114,8 @@ class Notification:
 
     def _nec_notification(self, obj):
         if obj.do_popup:
-            if obj.popup_image:
-                icon_path = gtkgui_helpers.get_icon_path(obj.popup_image, 48)
-                if icon_path:
-                    image_path = icon_path
-            elif obj.popup_image_path:
-                image_path = obj.popup_image_path
-            else:
-                image_path = ''
             popup(obj.popup_event_type, obj.jid, obj.conn.name,
-                obj.popup_msg_type, path_to_image=image_path,
+                obj.popup_msg_type, icon_name=obj.icon_name,
                 title=obj.popup_title, text=obj.popup_text,
                 timeout=obj.popup_timeout)
 
