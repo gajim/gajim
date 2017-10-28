@@ -88,6 +88,7 @@ class Config:
             'ask_offline_status': [ opt_bool, False ],
             'trayicon': [opt_str, 'always', _("When to show notification area icon. Can be 'never', 'on_event', 'always'."), False],
             'allow_hide_roster': [opt_bool, False, _("Allow to hide the roster window even if the tray icon is not shown."), False],
+            'iconsets': [opt_str, 'dcraven,gnome,goojim,gota,jabberbulb,sun,wroop', 'Available iconsets', False],
             'iconset': [ opt_str, DEFAULT_ICONSET, '', True ],
             'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
             'activity_iconset': [ opt_str, DEFAULT_ACTIVITY_ICONSET, '', True ],

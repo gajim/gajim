@@ -32,6 +32,7 @@
 ##
 
 import os
+import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -67,6 +68,8 @@ except (ImportError, ValueError):
 
 if app.HAVE_SPELL:
     from gi.repository import Gspell
+
+log = logging.getLogger('gajim.config')
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -212,41 +215,29 @@ class PreferencesWindow:
         self.update_theme_list()
 
         # iconset
-        iconsets_list = os.listdir(os.path.join(app.DATA_DIR, 'iconsets'))
-        if os.path.isdir(app.MY_ICONSETS_PATH):
-            iconsets_list += os.listdir(app.MY_ICONSETS_PATH)
-        # new model, image in 0, string in 1
-        model = Gtk.ListStore(Gtk.Image, str)
-        renderer_image = cell_renderer_image.CellRendererImage(0, 0)
+        model = Gtk.ListStore(str, str)
+        renderer_image = Gtk.CellRendererPixbuf()
         renderer_text = Gtk.CellRendererText()
         renderer_text.set_property('xpad', 5)
         self.iconset_combobox.pack_start(renderer_image, False)
         self.iconset_combobox.pack_start(renderer_text, True)
         self.iconset_combobox.add_attribute(renderer_text, 'text', 1)
-        self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
+        self.iconset_combobox.add_attribute(renderer_image, 'icon_name', 0)
         self.iconset_combobox.set_model(model)
-        l = []
-        for dir in iconsets_list:
-            if not os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', dir)) \
-            and not os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, dir)):
+        self.iconset_combobox.set_id_column(1)
+        
+        iconsets = app.config.get('iconsets')
+        gtk_icon_theme = Gtk.IconTheme.get_default()
+        for index, iconset in enumerate(iconsets.split(',')):
+            icon_name = iconset + '-online'
+            icon = gtk_icon_theme.lookup_icon(icon_name, 16, 0)
+            if icon is None:
+                log.error('Invalid Iconset: %s', iconset)
                 continue
-            if dir != '.svn' and dir != 'transports':
-                l.append(dir)
-        if l.count == 0:
-            l.append(' ')
-        for i in range(len(l)):
-            preview = Gtk.Image()
-            files = []
-            files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
-                    'online.png'))
-            files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
-                    'online.gif'))
-            for file_ in files:
-                if os.path.exists(file_):
-                    preview.set_from_file(file_)
-            model.append([preview, l[i]])
-            if app.config.get('iconset') == l[i]:
-                self.iconset_combobox.set_active(i)
+
+            model.append([icon_name, iconset])
+            if app.config.get('iconset') == iconset:
+                self.iconset_combobox.set_active_id(iconset)
 
         # Use transports iconsets
         st = app.config.get('use_transports_iconsets')
