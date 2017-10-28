@@ -711,10 +711,6 @@ class ChatControl(ChatControlBase):
         getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, state, jingle_type):
-        img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
-                        {True: 'active', False: 'inactive'}[state])
-        path_to_img = gtkgui_helpers.get_icon_path(img_name)
-
         if state:
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
@@ -750,9 +746,6 @@ class ChatControl(ChatControlBase):
             fixed = self.xml.get_object('outgoing_fixed')
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
-
-        img = getattr(self, '_' + jingle_type + '_button').get_property('image')
-        img.set_from_file(path_to_img)
 
     def set_lock_image(self):
         loggable = self.session and self.session.is_loggable()

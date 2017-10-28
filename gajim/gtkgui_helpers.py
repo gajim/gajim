@@ -111,12 +111,6 @@ def get_display_geometry():
     geometry = monitor.get_geometry()
     return geometry.width, geometry.height
 
-def add_image_to_button(button, icon_name):
-    img = Gtk.Image()
-    path_img = get_icon_path(icon_name)
-    img.set_from_file(path_img)
-    button.set_image(img)
-
 def get_image_button(icon_name, tooltip, toggle=False):
     if toggle:
         button = Gtk.ToggleButton()
