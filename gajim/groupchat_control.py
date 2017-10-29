@@ -1116,7 +1116,7 @@ class GroupchatControl(ChatControlBase):
                     correct_id=obj.correct_id, msg_stanza_id=obj.id_)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
-    def on_private_message(self, nick, msg, tim, xhtml, session, msg_log_id=None,
+    def on_private_message(self, nick, sent, msg, tim, xhtml, session, msg_log_id=None,
     encrypted=False, displaymarking=None):
         # Do we have a queue?
         fjid = self.room_jid + '/' + nick
@@ -1124,7 +1124,7 @@ class GroupchatControl(ChatControlBase):
 
         event = events.PmEvent(msg, '', 'incoming', tim, encrypted, '',
             msg_log_id, xhtml=xhtml, session=session, form_node=None,
-            displaymarking=displaymarking, sent_forwarded=False)
+            displaymarking=displaymarking, sent_forwarded=sent)
         app.events.add_event(self.account, fjid, event)
 
         autopopup = app.config.get('autopopup')
@@ -1415,13 +1415,16 @@ class GroupchatControl(ChatControlBase):
             nick = obj.resource
             if obj.session.control:
                 # print if a control is open
-                obj.session.control.print_conversation(obj.msgtxt,
+                frm = ''
+                if obj.sent:
+                    frm = 'out'
+                obj.session.control.print_conversation(obj.msgtxt, frm,
                     tim=obj.timestamp, xhtml=obj.xhtml, encrypted=obj.encrypted,
                     displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
                     correct_id=obj.correct_id)
             else:
                 # otherwise pass it off to the control to be queued
-                self.on_private_message(nick, obj.msgtxt, obj.timestamp,
+                self.on_private_message(nick, obj.sent, obj.msgtxt, obj.timestamp,
                     obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
