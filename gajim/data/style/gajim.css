@@ -23,7 +23,9 @@
 
 .scrolledtextview { border:none; }
 
-.chatcontrol-separator {margin-bottom: 6px;}
+.chatcontrol-separator-top {margin-top: 5px;}
+
+.chatcontrol-separator {margin-bottom: 5px;}
 
 #SubjectPopover box { padding: 10px; }
 
