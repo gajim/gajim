@@ -591,11 +591,14 @@
                 <property name="height_request">60</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
+                <property name="overlay_scrolling">False</property>
                 <child>
                   <placeholder/>
                 </child>
                 <style>
                   <class name="scrolled-no-border"/>
+                  <class name="no-scroll-indicator"/>
+                  <class name="scrollbar-style"/>
                 </style>
               </object>
               <packing>

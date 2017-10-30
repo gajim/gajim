@@ -8,7 +8,9 @@
 	}
 
 .scrolled-no-border {border: none}
-.scrolled-no-border undershoot.top, undershoot.bottom { background-image: none; }
+.no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
+.scrollbar-style scrollbar trough {background-color:@theme_base_color; }
+.scrollbar-style scrollbar {border:none; }
 
 .actionbar-no-border box {border: none}
 
@@ -20,8 +22,6 @@
 	}
 
 #MessageWindow, #RosterWindow paned { background-color:  @theme_base_color; }
-
-.scrolledtextview { border:none; }
 
 .chatcontrol-separator-top {margin-top: 5px;}
 

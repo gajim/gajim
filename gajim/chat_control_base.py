@@ -318,12 +318,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         # add MessageTextView to UI and connect signals
         self.msg_textview = MessageTextView()
-
         self.msg_scrolledwindow = ScrolledWindow()
-        self.msg_scrolledwindow.set_max_content_height(100)
-        self.msg_scrolledwindow.set_propagate_natural_height(True)
-        self.msg_scrolledwindow.get_style_context().add_class('scrolledtextview')
-        self.msg_scrolledwindow.set_property('shadow_type', Gtk.ShadowType.IN)
         self.msg_scrolledwindow.add(self.msg_textview)
 
         hbox = self.xml.get_object('hbox')
@@ -1344,6 +1339,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 class ScrolledWindow(Gtk.ScrolledWindow):
     def __init__(self, *args, **kwargs):
         Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
+
+        self.set_overlay_scrolling(False)
+        self.set_max_content_height(100)
+        self.set_propagate_natural_height(True)
+        self.get_style_context().add_class('scrolled-no-border')
+        self.get_style_context().add_class('no-scroll-indicator')
+        self.get_style_context().add_class('scrollbar-style')
+        self.set_shadow_type(Gtk.ShadowType.IN)
 
     def do_get_preferred_height(self):
         min_height, natural_height = Gtk.ScrolledWindow.do_get_preferred_height(self)
