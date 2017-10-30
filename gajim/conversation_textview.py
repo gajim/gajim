@@ -892,7 +892,7 @@ class ConversationTextview(GObject.GObject):
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
         app.plugin_manager.extension_point('print_special_text', self,
-            special_text, other_tags, graphics, additional_data)
+            special_text, other_tags, graphics, additional_data, iter_)
         if self.plugin_modified:
             return
 
