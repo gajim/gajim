@@ -269,7 +269,7 @@ setup(
     data_files=data_files,
     install_requires=[
         'dbus-python;sys_platform=="linux"',
-        'nbxmpp',
+        'nbxmpp>=0.6.0',
         'pyOpenSSL>=0.12',
         'pyasn1',
     ],
