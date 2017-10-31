@@ -1268,8 +1268,9 @@ class ChatControl(ChatControlBase):
         if target_type == self.TARGET_TYPE_URI_LIST:
             if not c.resource: # If no resource is known, we can't send a file
                 return
-            uri = selection.get_data().strip()
-            uri_splitted = uri.split() # we may have more than one file dropped
+
+            # we may have more than one file dropped
+            uri_splitted = selection.get_uris()
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
                 if os.path.isfile(path): # is it file?
