@@ -2406,7 +2406,10 @@ class RosterWindow:
                 x, y = self.window.get_position()
                 app.config.set('roster_x-position', x)
                 app.config.set('roster_y-position', y)
-            self.window.iconify()
+            if app.config.get('hide_on_roster_x_button'):
+                self.window.hide()
+            else:
+                self.window.iconify()
         elif app.config.get('quit_on_roster_x_button'):
             self.on_quit_request()
         else:
@@ -3755,7 +3758,10 @@ class RosterWindow:
             'quit_on_roster_x_button') and ((app.interface.systray_enabled and\
             app.config.get('trayicon') == 'always') or app.config.get(
             'allow_hide_roster')):
-                self.window.iconify()
+                if app.config.get('hide_on_roster_x_button'):
+                    self.window.hide()
+                else:
+                    self.window.iconify()
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == \
         Gdk.KEY_i:
             treeselection = self.tree.get_selection()

@@ -237,6 +237,7 @@ class Config:
             'notification_position_y': [opt_int, -1],
             'muc_highlight_words': [opt_str, '', _('A semicolon-separated list of words that will be highlighted in group chats.')],
             'quit_on_roster_x_button': [opt_bool, False, _('If True, quits Gajim when X button of Window Manager is clicked. This setting is taken into account only if notification icon is used.')],
+            'hide_on_roster_x_button': [opt_bool, False, _('If True, Gajim hides the Roster window on pressing the X button instead of minimizing into the Dock.')],
             'show_unread_tab_icon': [opt_bool, False, _('If True, Gajim will display an icon on each tab containing unread messages. Depending on the theme, this icon may be animated.')],
             'show_status_msgs_in_roster': [opt_bool, True, _('If True, Gajim will display the status message, if not empty, for every contact under the contact name in roster window.'), True],
             'show_avatars_in_roster': [opt_bool, True, '', True],

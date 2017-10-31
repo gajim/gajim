@@ -224,6 +224,9 @@ class GajimApplication(Gtk.Application):
         self.set_menubar(menubar)
 
     def _activate(self, application):
+        if self.interface is not None:
+            self.interface.roster.window.present()
+            return
         from gajim.gui_interface import Interface
         from gajim import gtkgui_helpers
         self.interface = Interface()
