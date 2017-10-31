@@ -60,8 +60,7 @@ class GajimApplication(Gtk.Application):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
-        Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
-                                 flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        Gtk.Application.__init__(self, application_id='org.gajim.Gajim')
 
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
@@ -93,6 +92,8 @@ class GajimApplication(Gtk.Application):
         self.add_main_option(GLib.OPTION_REMAINING, 0, GLib.OptionFlags.HIDDEN,
                              GLib.OptionArg.STRING_ARRAY,
                              "")
+
+        self.connect('handle-local-options', self._handle_local_options)
 
         self.profile = ''
         self.config_path = None
@@ -243,7 +244,8 @@ class GajimApplication(Gtk.Application):
         from gajim.common import app
         app.logger.commit()
 
-    def do_handle_local_options(self, options: GLib.VariantDict) -> int:
+    def _handle_local_options(self, application,
+                              options: GLib.VariantDict) -> int:
 
         logging_helpers.init()
 
@@ -276,12 +278,6 @@ class GajimApplication(Gtk.Application):
             print('Error: Unhandled arguments: %s' % unhandled)
             return 0
         return -1
-
-    def do_command_line(self, command_line: Gio.ApplicationCommandLine) -> int:
-        Gtk.Application.do_command_line(self, command_line)
-        if not command_line.get_is_remote():
-            self.activate()
-        return 0
 
     def show_warnings(self):
         import traceback
