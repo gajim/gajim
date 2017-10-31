@@ -94,6 +94,8 @@ class GajimApplication(Gtk.Application):
                              "")
 
         self.connect('handle-local-options', self._handle_local_options)
+        self.connect('startup', self._startup)
+        self.connect('activate', self._activate)
 
         self.profile = ''
         self.config_path = None
@@ -104,9 +106,7 @@ class GajimApplication(Gtk.Application):
         if GLib.get_application_name() != 'Gajim':
             GLib.set_application_name('Gajim')
 
-    def do_startup(self):
-        Gtk.Application.do_startup(self)
-
+    def _startup(self, application):
         from gajim import gtkexcepthook
         gtkexcepthook.init()
 
@@ -223,8 +223,7 @@ class GajimApplication(Gtk.Application):
             menubar.prepend_submenu('Gajim', appmenu)
         self.set_menubar(menubar)
 
-    def do_activate(self):
-        Gtk.Application.do_activate(self)
+    def _activate(self, application):
         from gajim.gui_interface import Interface
         from gajim import gtkgui_helpers
         self.interface = Interface()
