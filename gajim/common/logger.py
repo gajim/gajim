@@ -1064,9 +1064,9 @@ class Logger:
         :param msg:         The message text
         """
 
-        # Add 5 minutes around the timestamp
-        start_time = timestamp - 300
-        end_time = timestamp + 300
+        # Add 10 seconds around the timestamp
+        start_time = timestamp - 10
+        end_time = timestamp + 10
 
         log.debug('start: %s, end: %s, jid: %s, message: %s',
                   start_time, end_time, jid, msg)
