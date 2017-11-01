@@ -8,7 +8,8 @@ from gajim import dialogs
 
 
 class OptionsDialog(Gtk.ApplicationWindow):
-    def __init__(self, parent, title, flags, options, account):
+    def __init__(self, parent, title, flags, options, account,
+                 extend=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_show_menubar(False)
@@ -23,7 +24,7 @@ class OptionsDialog(Gtk.ApplicationWindow):
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
             self.set_destroy_with_parent(True)
 
-        self.listbox = OptionsBox(account)
+        self.listbox = OptionsBox(account, extend)
         self.listbox.set_hexpand(True)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -50,7 +51,7 @@ class OptionsDialog(Gtk.ApplicationWindow):
 
 
 class OptionsBox(Gtk.ListBox):
-    def __init__(self, account):
+    def __init__(self, account, extend=None):
         Gtk.ListBox.__init__(self)
         self.set_name('OptionsBox')
         self.account = account
@@ -71,6 +72,10 @@ class OptionsBox(Gtk.ListBox):
             OptionKind.CHANGEPASSWORD: ChangePasswordOption,
             OptionKind.GPG: GPGOption,
             }
+
+        if extend is not None:
+            for option, callback in extend:
+                self.map[option] = callback
 
     def add_option(self, option):
         if option.props is not None:
