@@ -3439,24 +3439,24 @@ class XMLConsoleWindow(Gtk.Window):
     def on_filter_options(self, *args):
         options = [
             Option(OptionKind.SWITCH, 'Presence',
-                    OptionType.BOOL, self.presence,
+                    OptionType.VALUE, self.presence,
                     callback=self.on_option, data='presence'),
 
             Option(OptionKind.SWITCH, 'Message',
-                    OptionType.BOOL, self.message,
+                    OptionType.VALUE, self.message,
                     callback=self.on_option, data='message'),
 
-            Option(OptionKind.SWITCH, 'Iq', OptionType.BOOL, self.iq,
+            Option(OptionKind.SWITCH, 'Iq', OptionType.VALUE, self.iq,
                     callback=self.on_option, data='iq'),
 
             Option(OptionKind.SWITCH, 'Stream\nManagement',
-                    OptionType.BOOL, self.stream,
+                    OptionType.VALUE, self.stream,
                     callback=self.on_option, data='stream'),
 
-            Option(OptionKind.SWITCH, 'In', OptionType.BOOL, self.incoming,
+            Option(OptionKind.SWITCH, 'In', OptionType.VALUE, self.incoming,
                     callback=self.on_option, data='incoming'),
 
-            Option(OptionKind.SWITCH, 'Out', OptionType.BOOL, self.outgoing,
+            Option(OptionKind.SWITCH, 'Out', OptionType.VALUE, self.outgoing,
                     callback=self.on_option, data='outgoing'),
             ]
 

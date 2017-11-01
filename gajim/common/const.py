@@ -24,7 +24,7 @@ class OptionKind(IntEnum):
 class OptionType(IntEnum):
     ACCOUNT_CONFIG = 0
     CONFIG = 1
-    BOOL = 2
+    VALUE = 2
     ACTION = 3
     DIALOG = 4
 

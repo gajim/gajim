@@ -173,7 +173,7 @@ class GenericOption(Gtk.Grid):
     def __get_value(type_, value, account):
         if value is None:
             return
-        if type_ == OptionType.BOOL:
+        if type_ == OptionType.VALUE:
             return value
         elif type_ == OptionType.CONFIG:
             return app.config.get(value)
