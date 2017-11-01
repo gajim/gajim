@@ -273,7 +273,8 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 displaymarking=obj.displaymarking,
                 sent_forwarded=obj.forwarded and obj.sent,
                 show_in_roster=obj.show_in_roster,
-                show_in_systray=obj.show_in_systray)
+                show_in_systray=obj.show_in_systray,
+                additional_data=obj.additional_data)
 
             app.events.add_event(self.conn.name, fjid, event)
 

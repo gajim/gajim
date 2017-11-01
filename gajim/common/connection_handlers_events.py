@@ -1124,7 +1124,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = ['raw-message-received']
 
     def init(self):
-        self.additional_data = None
+        self.additional_data = {}
 
     def generate(self):
         self.conn = self.base_event.conn
@@ -2696,7 +2696,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     base_network_events = []
 
     def init(self):
-        self.additional_data = None
+        self.additional_data = {}
         self.message = None
         self.keyID = None
         self.type_ = 'chat'

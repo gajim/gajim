@@ -83,6 +83,8 @@ class ChatEvent(Event):
         self.form_node = form_node
         self.displaymarking = displaymarking
         self.sent_forwarded = sent_forwarded
+        if additional_data is None:
+            additional_data = {}
         self.additional_data = additional_data
 
 class NormalEvent(ChatEvent):
