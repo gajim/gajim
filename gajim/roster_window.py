@@ -2723,7 +2723,7 @@ class RosterWindow:
                 tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
                 xhtml=obj.xhtml, displaymarking=obj.displaymarking,
                 msg_log_id=obj.msg_log_id, msg_stanza_id=obj.id_, correct_id=obj.correct_id,
-                xep0184_id=xep0184_id)
+                xep0184_id=xep0184_id, additional_data=obj.additional_data)
             if obj.msg_log_id:
                 pw = obj.session.control.parent_win
                 end = obj.session.control.was_at_the_end

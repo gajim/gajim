@@ -132,9 +132,8 @@ class Logger:
         Row = namedtuple("Row", fields)
         named_row = Row(*row)
         if 'additional_data' in fields:
-            if named_row.additional_data is not None:
-                named_row = named_row._replace(
-                    additional_data=json.loads(named_row.additional_data))
+            named_row = named_row._replace(
+                additional_data=json.loads(named_row.additional_data or '{}'))
         return named_row
 
     def dispatch(self, event, error):
@@ -1113,7 +1112,13 @@ class Logger:
                         a field in the `logs` table
         """
         jid_id = self.get_jid_id(jid, kind=kind)
-
+ 
+        if 'additional_data' in kwargs:
+            if not kwargs['additional_data']:
+                del kwargs['additional_data']
+            else:
+                kwargs['additional_data'] = json.dumps(kwargs["additional_data"])
+ 
         sql = '''
               INSERT INTO logs (jid_id, time, kind, {columns})
               VALUES (?, ?, ?, {values})
