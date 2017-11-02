@@ -916,7 +916,9 @@ class Logger:
         app.config.set_per('accounts', account_name, 'roster_version', '')
 
         account_jid = app.get_jid_from_account(account_name)
-        account_jid_id = self.get_jid_id(account_jid)
+        # Execute get_jid_id() because this ensures on new accounts that the
+        # jid_id will be created
+        self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
 
         # Delete old roster
         self.remove_roster(account_jid)
