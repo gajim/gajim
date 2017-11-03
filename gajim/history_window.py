@@ -141,6 +141,11 @@ class HistoryWindow:
         xml.connect_signals(self)
         self.window.show_all()
 
+        # PluginSystem: adding GUI extension point for
+        # HistoryWindow instance object
+        app.plugin_manager.gui_extension_point(
+            'history_window', self)
+
     def _fill_completion_dict(self):
         """
         Fill completion_dict for key auto completion. Then load history for
@@ -246,6 +251,10 @@ class HistoryWindow:
         return account
 
     def on_history_window_destroy(self, widget):
+        # PluginSystem: removing GUI extension points connected with
+        # HistoryWindow instance object
+        app.plugin_manager.remove_gui_extension_point(
+            'history_window', self)
         self.history_textview.del_handlers()
         del app.interface.instances['logs']
 
