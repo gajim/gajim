@@ -844,6 +844,19 @@ class ConversationTextview(GObject.GObject):
         # We impose an arbitrary limit of 100 specials per message.
         specials_limit = 100
 
+        # add oob text to the end
+        try:
+            gajim_data = additional_data['gajim']
+            oob_url = gajim_data['oob_url']
+            print(oob_url)
+        except KeyError:
+            pass
+        else:
+            oob_desc = additional_data['gajim'].get('oob_desc', None)
+            if oob_desc is None:
+                oob_desc = _('URL:')
+            otext += '\n{} {}'.format(oob_desc, oob_url)
+
         # basic: links + mail + formatting is always checked (we like that)
         if app.config.get('emoticons_theme') and graphics:
             # search for emoticons & urls

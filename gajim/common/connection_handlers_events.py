@@ -1399,8 +1399,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = self.msg_obj.additional_data
+        self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.id_
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
@@ -1453,18 +1452,13 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.get_chatstate()
 
         oob_node = self.stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
-        self.oob_url = None
-        self.oob_desc = None
-        if oob_node:
+        if oob_node is not None:
             self.oob_url = oob_node.getTagData('url')
+            if self.oob_url is not None:
+                self.additional_data['gajim'] = {'oob_url': self.oob_url}
             self.oob_desc = oob_node.getTagData('desc')
-            if self.oob_url:
-                self.msgtxt += '\n'
-                if self.oob_desc:
-                    self.msgtxt += self.oob_desc
-                else:
-                    self.msgtxt += _('URL:')
-                self.msgtxt += ' ' + self.oob_url
+            if self.oob_desc is not None:
+                self.additional_data['gajim'] = {'oob_desc': self.oob_desc}
 
         replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
         if replace:
@@ -1506,7 +1500,10 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
-        self.additional_data = self.msg_obj.additional_data
+        if not hasattr(self.msg_obj, 'additional_data'):
+            self.additional_data = {}
+        else:
+            self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.stanza.getID()
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
