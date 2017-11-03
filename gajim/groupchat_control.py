@@ -1097,23 +1097,29 @@ class GroupchatControl(ChatControlBase):
             self.is_anonymous = False
         if not obj.nick:
             # message from server
-            self.print_conversation(obj.msgtxt, tim=obj.timestamp,
-                xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking)
+            self.print_conversation(
+                obj.msgtxt, tim=obj.timestamp,
+                xhtml=obj.xhtml_msgtxt, displaymarking=obj.displaymarking,
+                additional_data=obj.additional_data)
         else:
             # message from someone
             if obj.has_timestamp:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
-                self.print_old_conversation(obj.msgtxt, contact=obj.nick,
+                self.print_old_conversation(
+                    obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=None, encrypted=obj.encrypted,
-                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_)
+                    displaymarking=obj.displaymarking, msg_stanza_id=obj.id_,
+                    additional_data=obj.additional_data)
             else:
                 if obj.nick == self.nick:
                     self.last_sent_txt = obj.msgtxt
-                self.print_conversation(obj.msgtxt, contact=obj.nick,
+                self.print_conversation(
+                    obj.msgtxt, contact=obj.nick,
                     tim=obj.timestamp, xhtml=obj.xhtml_msgtxt,
                     displaymarking=obj.displaymarking, encrypted=obj.encrypted,
-                    correct_id=obj.correct_id, msg_stanza_id=obj.id_)
+                    correct_id=obj.correct_id, msg_stanza_id=obj.id_,
+                    additional_data=obj.additional_data)
         obj.needs_highlight = self.needs_visual_notification(obj.msgtxt)
 
     def on_private_message(self, nick, sent, msg, tim, xhtml, session, msg_log_id=None,
@@ -1168,7 +1174,10 @@ class GroupchatControl(ChatControlBase):
         return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
-    displaymarking=None, msg_stanza_id=None, encrypted=None):
+    displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
+        if additional_data is None:
+            additional_data = {}
+
         if contact:
             if contact == self.nick: # it's us
                 kind = 'outgoing'
@@ -1185,11 +1194,11 @@ class GroupchatControl(ChatControlBase):
             small_attr, small_attr + ['restored_message'],
             small_attr + ['restored_message'], count_as_new=False, xhtml=xhtml,
             displaymarking=displaymarking, msg_stanza_id=msg_stanza_id,
-            encrypted=encrypted)
+            encrypted=encrypted, additional_data=additional_data)
 
     def print_conversation(self, text, contact='', tim=None, xhtml=None,
     graphics=True, displaymarking=None, correct_id=None, msg_stanza_id=None,
-    encrypted=None):
+    encrypted=None, additional_data=None):
         """
         Print a line in the conversation
 
@@ -1197,6 +1206,8 @@ class GroupchatControl(ChatControlBase):
         (contact = 'info' in such a case).
         If contact is not set: it's a message from the server or help.
         """
+        if additional_data is None:
+            additional_data = {}
         other_tags_for_name = []
         other_tags_for_text = []
         if contact:
@@ -1251,7 +1262,8 @@ class GroupchatControl(ChatControlBase):
         ChatControlBase.print_conversation_line(self, text, kind, contact, tim,
             other_tags_for_name, [], other_tags_for_text, xhtml=xhtml,
             graphics=graphics, displaymarking=displaymarking,
-            correct_id=correct_id, msg_stanza_id=msg_stanza_id, encrypted=encrypted)
+            correct_id=correct_id, msg_stanza_id=msg_stanza_id, encrypted=encrypted,
+            additional_data=additional_data)
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']

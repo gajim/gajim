@@ -1072,6 +1072,8 @@ class ConversationTextview(GObject.GObject):
         """
         Print 'chat' type messages
         """
+        if additional_data is None:
+            additional_data = {}
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
         insert_mark = None

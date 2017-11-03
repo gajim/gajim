@@ -1506,8 +1506,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
-        if not hasattr(self, 'additional_data'):
-            self.additional_data = self.msg_obj.additional_data
+        self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.stanza.getID()
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
