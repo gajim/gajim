@@ -133,7 +133,8 @@ class ConnectionArchive313:
             app.logger.insert_into_logs(
                 obj.with_, obj.timestamp, obj.kind,
                 unread=False,
-                message=obj.msgtxt)
+                message=obj.msgtxt,
+                additional_data=obj.additional_data)
 
     def get_query_id(self):
         self.mam_query_id = self.connection.getAnID()

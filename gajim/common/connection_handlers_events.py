@@ -127,6 +127,18 @@ class HelperEvent:
                     self.chatstate = child.getName()
                     break
 
+    def get_oob_data(self, stanza):
+        oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
+        if oob_node is not None:
+            if 'gajim' not in self.additional_data:
+                self.additional_data['gajim'] = {}
+            oob_url = oob_node.getTagData('url')
+            if oob_url is not None:
+                self.additional_data['gajim']['oob_url'] = oob_url
+            oob_desc = oob_node.getTagData('desc')
+            if oob_desc is not None:
+                self.additional_data['gajim']['oob_desc'] = oob_desc
+
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
     base_network_events = []
@@ -1097,6 +1109,9 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             # For example Chatstates, Receipts, Chatmarkers
             log.debug('Received MAM message without text')
             return
+
+        self.get_oob_data(self.msg_)
+
         self.is_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
         if self.is_pm is None:
             # Check if this event is triggered after a disco, so we dont
@@ -1451,14 +1466,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.get_chatstate()
 
-        oob_node = self.stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
-        if oob_node is not None:
-            self.oob_url = oob_node.getTagData('url')
-            if self.oob_url is not None:
-                self.additional_data['gajim'] = {'oob_url': self.oob_url}
-            self.oob_desc = oob_node.getTagData('desc')
-            if self.oob_desc is not None:
-                self.additional_data['gajim'] = {'oob_desc': self.oob_desc}
+        self.get_oob_data(self.stanza)
 
         replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
         if replace:

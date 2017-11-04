@@ -848,7 +848,6 @@ class ConversationTextview(GObject.GObject):
         try:
             gajim_data = additional_data['gajim']
             oob_url = gajim_data['oob_url']
-            print(oob_url)
         except KeyError:
             pass
         else:
