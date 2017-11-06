@@ -18,13 +18,18 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from collections import namedtuple
-
+from datetime import timedelta
 import nbxmpp
+import logging
+
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.gtkgui_helpers import get_icon_pixmap, Color
+
+log = logging.getLogger('gajim.serverinfo')
+
 
 class ServerInfoDialog(Gtk.Dialog):
     def __init__(self, account):
@@ -67,8 +72,10 @@ class ServerInfoDialog(Gtk.Dialog):
                                          self._nec_agent_info_received)
 
         self.version = ''
+        self.uptime = ''
         self.hostname = app.get_hostname_from_account(account)
         app.connections[account].request_os_info(self.hostname, None)
+        self.request_last_activity()
 
         for feature in self.get_features():
             self.add_feature(feature)
@@ -93,6 +100,35 @@ class ServerInfoDialog(Gtk.Dialog):
             row = listbox.get_row_at_index(index)
             row.get_child().update(item)
             row.set_tooltip_text(item.tooltip)
+
+    def request_last_activity(self):
+        if not app.account_is_connected(self.account):
+            return
+        con = app.connections[self.account]
+        iq = nbxmpp.Iq(to=self.hostname, typ='get', queryNS=nbxmpp.NS_LAST)
+        con.connection.SendAndCallForResponse(iq, self._on_last_activity)
+
+    def _on_last_activity(self, stanza):
+        if 'server_info' not in app.interface.instances[self.account]:
+            # Window got closed in the meantime
+            return
+        if not nbxmpp.isResultNode(stanza):
+            log.warning('Received malformed result: %s', stanza)
+            return
+        if stanza.getQueryNS() != nbxmpp.NS_LAST:
+            log.warning('Wrong namespace on result: %s', stanza)
+            return
+        try:
+            seconds = int(stanza.getQuery().getAttr('seconds'))
+        except (ValueError, TypeError, AttributeError):
+            log.exception('Received malformed last activity result')
+        else:
+            delta = timedelta(seconds=seconds)
+            hours = 0
+            if seconds >= 3600:
+                hours = delta.seconds // 3600
+            self.uptime = _('%s days, %s hours') % (delta.days, hours)
+            self.update(self.get_infos, self.info_listbox)
 
     def _nec_version_result_received(self, obj):
         if obj.jid != self.hostname:
@@ -133,7 +169,8 @@ class ServerInfoDialog(Gtk.Dialog):
         Info = namedtuple('Info', ['name', 'value', 'tooltip'])
         return [
             Info(_('Hostname'), self.hostname, None),
-            Info(_('Server Software'), self.version, None)]
+            Info(_('Server Software'), self.version, None),
+            Info(_('Server Uptime'), self.uptime, None)]
 
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
