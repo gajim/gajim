@@ -780,8 +780,9 @@ def build_accounts_menu():
         return
     if len(accounts_list) > 1:
         for acc in accounts_list:
+            label = app.config.get_per('accounts', acc, 'account_label')
             acc_menu.append_submenu(
-                acc, get_account_menu(acc))
+                label or acc, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
         menubar.remove(menu_position)
@@ -805,7 +806,9 @@ def build_bookmark_menu(account):
     if acc_menu.get_item_link(0, 'submenu'):
         for i in range(acc_menu.get_n_items()):
             label = acc_menu.get_item_attribute_value(i, 'label')
-            if label.get_string() == account:
+            account_label = app.config.get_per('accounts', account,
+                                               'account_label')
+            if label.get_string() in (account_label, account):
                 menu = acc_menu.get_item_link(i, 'submenu')
     else:
         # We have only one Account active

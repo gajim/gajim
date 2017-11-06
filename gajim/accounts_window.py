@@ -440,6 +440,7 @@ class GenericOptionPage(Gtk.Box):
                                'account_label', value or self.account)
             if app.config.get_per('accounts', self.account, 'active'):
                 app.interface.roster.draw_account(self.account)
+                gui_menu_builder.build_accounts_menu()
 
     def update(self):
         self.set_entry_text(self.toggle, update=True)

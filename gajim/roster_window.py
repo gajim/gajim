@@ -5116,7 +5116,9 @@ class RosterWindow:
                 accounts.append(account)
             accounts.sort()
             for account in accounts:
-                item = Gtk.MenuItem.new_with_label(account)
+                label = app.config.get_per('accounts', account,
+                                           'account_label')
+                item = Gtk.MenuItem.new_with_label(label or account)
                 account_menu = self.build_account_menu(account)
                 item.set_submenu(account_menu)
                 menu.append(item)
