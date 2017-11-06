@@ -247,6 +247,7 @@ class ServerInfoItem(Gtk.Grid):
         self.value = Gtk.Label(label=info.value)
         self.value.set_halign(Gtk.Align.START)
         self.value.set_hexpand(True)
+        self.value.set_selectable(True)
 
         self.add(self.info)
         self.add(self.value)
