@@ -19,10 +19,10 @@
 
 from collections import namedtuple
 from datetime import timedelta
-import nbxmpp
 import logging
 
 from gi.repository import Gtk
+import nbxmpp
 
 from gajim.common import app
 from gajim.common import ged
@@ -64,12 +64,12 @@ class ServerInfoDialog(Gtk.Dialog):
         self.connect('destroy', self.on_destroy)
 
         app.ged.register_event_handler('version-result-received',
-                                         ged.CORE,
-                                         self._nec_version_result_received)
+                                       ged.CORE,
+                                       self._nec_version_result_received)
 
         app.ged.register_event_handler('agent-info-received',
-                                         ged.GUI1,
-                                         self._nec_agent_info_received)
+                                       ged.GUI1,
+                                       self._nec_agent_info_received)
 
         self.version = ''
         self.uptime = ''
@@ -137,7 +137,7 @@ class ServerInfoDialog(Gtk.Dialog):
         self.update(self.get_infos, self.info_listbox)
 
     def _nec_agent_info_received(self, obj):
-        if not 'Gajim_' in obj.id_:
+        if 'Gajim_' not in obj.id_:
             return
         self.update(self.get_features, self.feature_listbox)
 
@@ -151,16 +151,24 @@ class ServerInfoDialog(Gtk.Dialog):
         Feature = namedtuple('Feature', ['name', 'enabled', 'tooltip'])
 
         return [
-            Feature('XEP-0016: Privacy Lists', con.privacy_rules_supported, None),
+            Feature('XEP-0016: Privacy Lists',
+                    con.privacy_rules_supported, None),
             Feature('XEP-0045: Multi-User Chat', con.muc_jid, None),
             Feature('XEP-0054: vcard-temp', con.vcard_supported, None),
-            Feature('XEP-0163: Personal Eventing Protocol', con.pep_supported, None),
-            Feature('XEP-0163: #publish-options', con.pubsub_publish_options_supported, None),
-            Feature('XEP-0191: Blocking Command', con.blocking_supported, nbxmpp.NS_BLOCKING),
-            Feature('XEP-0198: Stream Management', con.sm.enabled, nbxmpp.NS_STREAM_MGMT),
-            Feature('XEP-0280: Message Carbons', con.carbons_enabled, nbxmpp.NS_CARBONS),
-            Feature('XEP-0313: Message Archive Management', con.archiving_namespace, con.archiving_namespace),
-            Feature('XEP-0363: HTTP File Upload', con.httpupload, nbxmpp.NS_HTTPUPLOAD)]
+            Feature('XEP-0163: Personal Eventing Protocol',
+                    con.pep_supported, None),
+            Feature('XEP-0163: #publish-options',
+                    con.pubsub_publish_options_supported, None),
+            Feature('XEP-0191: Blocking Command',
+                    con.blocking_supported, nbxmpp.NS_BLOCKING),
+            Feature('XEP-0198: Stream Management',
+                    con.sm.enabled, nbxmpp.NS_STREAM_MGMT),
+            Feature('XEP-0280: Message Carbons',
+                    con.carbons_enabled, nbxmpp.NS_CARBONS),
+            Feature('XEP-0313: Message Archive Management',
+                    con.archiving_namespace, con.archiving_namespace),
+            Feature('XEP-0363: HTTP File Upload',
+                    con.httpupload, nbxmpp.NS_HTTPUPLOAD)]
 
     def add_info(self, info):
         self.info_listbox.add(ServerInfoItem(info))
@@ -179,12 +187,13 @@ class ServerInfoDialog(Gtk.Dialog):
     def on_destroy(self, *args):
         del app.interface.instances[self.account]['server_info']
         app.ged.remove_event_handler('version-result-received',
-                                       ged.CORE,
-                                       self._nec_version_result_received)
+                                     ged.CORE,
+                                     self._nec_version_result_received)
 
         app.ged.remove_event_handler('agent-info-received',
-                                       ged.GUI1,
-                                       self._nec_agent_info_received)
+                                     ged.GUI1,
+                                     self._nec_agent_info_received)
+
 
 class FeatureItem(Gtk.Grid):
     def __init__(self, feature):
@@ -209,6 +218,7 @@ class FeatureItem(Gtk.Grid):
 
     def update(self, feature):
         self.set_feature_enabled(bool(feature.enabled))
+
 
 class ServerInfoItem(Gtk.Grid):
     def __init__(self, info):
