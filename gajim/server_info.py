@@ -99,7 +99,7 @@ class ServerInfoDialog(Gtk.Dialog):
         for index, item in enumerate(func()):
             row = listbox.get_row_at_index(index)
             row.get_child().update(item)
-            row.set_tooltip_text(item.tooltip)
+            row.set_tooltip_text(row.get_child().tooltip)
 
     def request_last_activity(self):
         if not app.account_is_connected(self.account):
@@ -144,31 +144,38 @@ class ServerInfoDialog(Gtk.Dialog):
     def add_feature(self, feature):
         item = FeatureItem(feature)
         self.feature_listbox.add(item)
-        item.get_parent().set_tooltip_text(feature.tooltip)
+        item.get_parent().set_tooltip_text(item.tooltip)
 
     def get_features(self):
         con = app.connections[self.account]
-        Feature = namedtuple('Feature', ['name', 'enabled', 'tooltip'])
+        Feature = namedtuple('Feature',
+                             ['name', 'available', 'tooltip', 'enabled'])
+
+        carbons_enabled = app.config.get_per('accounts', self.account,
+                                             'enable_message_carbons')
+        mam_enabled = app.config.get_per('accounts', self.account,
+                                         'sync_logs_with_server')
 
         return [
             Feature('XEP-0016: Privacy Lists',
-                    con.privacy_rules_supported, None),
-            Feature('XEP-0045: Multi-User Chat', con.muc_jid, None),
-            Feature('XEP-0054: vcard-temp', con.vcard_supported, None),
+                    con.privacy_rules_supported, '', None),
+            Feature('XEP-0045: Multi-User Chat', con.muc_jid, '', None),
+            Feature('XEP-0054: vcard-temp', con.vcard_supported, '', None),
             Feature('XEP-0163: Personal Eventing Protocol',
-                    con.pep_supported, None),
+                    con.pep_supported, '', None),
             Feature('XEP-0163: #publish-options',
-                    con.pubsub_publish_options_supported, None),
+                    con.pubsub_publish_options_supported, '', None),
             Feature('XEP-0191: Blocking Command',
-                    con.blocking_supported, nbxmpp.NS_BLOCKING),
+                    con.blocking_supported, nbxmpp.NS_BLOCKING, None),
             Feature('XEP-0198: Stream Management',
-                    con.sm.enabled, nbxmpp.NS_STREAM_MGMT),
+                    con.sm.enabled, nbxmpp.NS_STREAM_MGMT, None),
             Feature('XEP-0280: Message Carbons',
-                    con.carbons_enabled, nbxmpp.NS_CARBONS),
+                    con.carbons_available, nbxmpp.NS_CARBONS, carbons_enabled),
             Feature('XEP-0313: Message Archive Management',
-                    con.archiving_namespace, con.archiving_namespace),
+                    con.archiving_namespace, con.archiving_namespace,
+                    mam_enabled),
             Feature('XEP-0363: HTTP File Upload',
-                    con.httpupload, nbxmpp.NS_HTTPUPLOAD)]
+                    con.httpupload, nbxmpp.NS_HTTPUPLOAD, None)]
 
     def add_info(self, info):
         self.info_listbox.add(ServerInfoItem(info))
@@ -198,32 +205,38 @@ class ServerInfoDialog(Gtk.Dialog):
 class FeatureItem(Gtk.Grid):
     def __init__(self, feature):
         super().__init__()
-
+        self.tooltip = feature.tooltip
         self.set_column_spacing(6)
 
         self.icon = Gtk.Image()
         self.feature_label = Gtk.Label(label=feature.name)
-        self.set_feature_enabled(bool(feature.enabled))
+        self.set_feature(feature.available, feature.enabled)
 
         self.add(self.icon)
         self.add(self.feature_label)
 
-    def set_feature_enabled(self, enabled):
-        if enabled:
-            self.icon.set_from_pixbuf(
-                get_icon_pixmap('emblem-ok-symbolic', color=[Color.GREEN]))
-        else:
+    def set_feature(self, available, enabled):
+        if not available:
             self.icon.set_from_pixbuf(
                 get_icon_pixmap('window-close-symbolic', color=[Color.RED]))
+        elif enabled is False:
+            self.icon.set_from_pixbuf(
+                get_icon_pixmap('dialog-warning-symbolic',
+                                color=[Color.ORANGE]))
+            self.tooltip += _('\nDisabled in config')
+        else:
+            self.icon.set_from_pixbuf(
+                get_icon_pixmap('emblem-ok-symbolic', color=[Color.GREEN]))
 
     def update(self, feature):
-        self.set_feature_enabled(bool(feature.enabled))
+        self.tooltip = feature.tooltip
+        self.set_feature(feature.available, feature.enabled)
 
 
 class ServerInfoItem(Gtk.Grid):
     def __init__(self, info):
         super().__init__()
-
+        self.tooltip = info.tooltip
         self.set_hexpand(True)
         self.insert_column(0)
         self.set_column_homogeneous(True)

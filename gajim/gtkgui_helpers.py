@@ -58,6 +58,7 @@ class Color:
     GREEN = Gdk.RGBA(red=115/255, green=210/255, blue=22/255, alpha=1)
     RED = Gdk.RGBA(red=204/255, green=0, blue=0, alpha=1)
     GREY = Gdk.RGBA(red=195/255, green=195/255, blue=192/255, alpha=1)
+    ORANGE = Gdk.RGBA(red=245/255, green=121/255, blue=0/255, alpha=1)
 
 def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
     try:

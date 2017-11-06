@@ -170,7 +170,7 @@ class CommonConnection:
         self.roster_supported = True
         self.blocking_supported = False
         self.addressing_supported = False
-        self.carbons_enabled = False
+        self.carbons_available = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -1942,13 +1942,14 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.blocking_supported = True
                 if nbxmpp.NS_ADDRESS in obj.features:
                     self.addressing_supported = True
-                if nbxmpp.NS_CARBONS in obj.features and app.config.get_per(
-                'accounts', self.name, 'enable_message_carbons'):
-                    self.carbons_enabled = True
-                    # Server supports carbons, activate it
-                    iq = nbxmpp.Iq('set')
-                    iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
-                    self.connection.send(iq)
+                if nbxmpp.NS_CARBONS in obj.features:
+                    self.carbons_available = True
+                    if app.config.get_per('accounts', self.name,
+                                          'enable_message_carbons'):
+                        # Server supports carbons, activate it
+                        iq = nbxmpp.Iq('set')
+                        iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
+                        self.connection.send(iq)
                 if nbxmpp.NS_PRIVACY in obj.features:
                     self.privacy_rules_supported = True
                     get_action(self.name + '-privacylists').set_enabled(True)
