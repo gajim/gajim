@@ -95,8 +95,8 @@ class GlobalEventsDispatcher(object):
                 except NodeProcessed:
                     node_processed = True
                 except Exception:
-                    log.error('Error while running an even handler: %s' % \
-                        handler)
+                    log.error('Error while running an event handler: %s',
+                              handler)
                     traceback.print_exc()
             if node_processed:
                 raise NodeProcessed
