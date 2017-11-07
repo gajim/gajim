@@ -139,6 +139,28 @@ class HelperEvent:
             if oob_desc is not None:
                 self.additional_data['gajim']['oob_desc'] = oob_desc
 
+    def get_stanza_id(self, stanza, query=False):
+        if query:
+            # On a MAM query the stanza-id is maybe not set, so
+            # get the id of the stanza
+            return stanza.getAttr('id')
+        stanza_id, by = stanza.getStanzaIDAttrs()
+        if by is None:
+            # We can not verify who set this stanza-id, ignore it.
+            return
+        elif not self.conn.get_own_jid().bareMatch(by):
+            # by attribute does not match the server, ignore it.
+            return
+        return stanza_id
+
+    @staticmethod
+    def get_forwarded_message(stanza):
+        forwarded = stanza.getTag('forwarded',
+                                  namespace=nbxmpp.NS_FORWARD,
+                                  protocol=True)
+        if forwarded is not None:
+            return forwarded.getTag('message', protocol=True)
+
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
     base_network_events = []
@@ -1026,6 +1048,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         :stanza:        Complete stanza Node
         :forwarded:     Forwarded Node
         :result:        Result Node
+        :unique_id:     The unique stable id
         '''
         self._set_base_event_vars_as_attributes(base_event)
         self.additional_data = {}
@@ -1046,6 +1069,13 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             log.info('Received groupchat message from user archive')
             return False
 
+        # use stanza-id as unique-id
+        self.unique_id, origin_id = self.get_unique_id()
+
+        # Check for duplicates
+        if app.logger.find_stanza_id(self.unique_id, origin_id):
+            return
+
         self.msgtxt = self.msg_.getTagData('body')
         self.query_id = self.result.getAttr('queryid')
 
@@ -1057,23 +1087,11 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             to = own_jid
 
         if frm.bareMatch(own_jid):
-            self.stanza_id = self.msg_.getOriginID()
-            if self.stanza_id is None:
-                self.stanza_id = self.msg_.getID()
-
             self.with_ = to
             self.kind = KindConstant.CHAT_MSG_SENT
         else:
-            if self.result.getNamespace() == nbxmpp.NS_MAM_2:
-                self.stanza_id = self.result.getID()
-            else:
-                self.stanza_id = self.msg_.getID()
-
             self.with_ = frm
             self.kind = KindConstant.CHAT_MSG_RECV
-
-        if self.stanza_id is None:
-            log.debug('Could not retrieve stanza-id')
 
         delay = self.forwarded.getTagAttr(
             'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
@@ -1097,8 +1115,30 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 log.warning('Received MAM message with '
                             'invalid user timestamp: %s', user_delay)
 
-        log.debug('Received mam-message: stanza id: %s', self.stanza_id)
+        log.debug('Received mam-message: unique id: %s', self.unique_id)
         return True
+
+    def get_unique_id(self):
+        if self.conn.get_own_jid().bareMatch(self.msg_.getFrom()):
+            # On our own Messages we have to check for both
+            # stanza-id and origin-id, because other resources
+            # maybe not support origin-id
+            stanza_id = None
+            if self.result.getNamespace() == nbxmpp.NS_MAM_2:
+                # Only mam:2 ensures valid stanza-id
+                stanza_id = self.get_stanza_id(self.result, query=True)
+
+            # try always to get origin-id because its a message
+            # we sent.
+            origin_id = self.msg_.getOriginID()
+
+            return stanza_id, origin_id
+
+        # A message we received
+        elif self.result.getNamespace() == nbxmpp.NS_MAM_2:
+            # Only mam:2 ensures valid stanza-id
+            return self.get_stanza_id(self.result, query=True), None
+        return None, None
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'mam-decrypted-message-received'
@@ -1177,6 +1217,14 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                         self.stanza.getFrom())
             return
 
+        # Check for duplicates
+        self.unique_id = self.get_unique_id()
+        # Check groupchat messages for duplicates,
+        # We do this because of MUC History messages
+        if self.stanza.getType() == 'groupchat':
+            if app.logger.find_stanza_id(self.unique_id):
+                return
+
         address_tag = self.stanza.getTag('addresses',
             namespace=nbxmpp.NS_ADDRESS)
         # Be sure it comes from one of our resource, else ignore address element
@@ -1248,7 +1296,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                              conn=self.conn,
                              stanza=self.stanza,
                              forwarded=forwarded,
-                             result=result))
+                             result=result,
+                             stanza_id=self.unique_id))
             return
 
         # Mediated invitation?
@@ -1319,6 +1368,38 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self._generate_timestamp(self.stanza.getTimestamp())
 
         return True
+
+    def get_unique_id(self):
+        if self.stanza.getType() == 'groupchat':
+            # TODO: Disco the MUC check if 'urn:xmpp:mam:2' is announced
+            return self.get_stanza_id(self.stanza)
+
+        elif self.stanza.getType() != 'chat':
+            return
+
+        # Messages we receive live
+        if self.conn.archiving_namespace != nbxmpp.NS_MAM_2:
+            # Only mam:2 ensures valid stanza-id
+            return
+
+        # Sent Carbon
+        sent_carbon = self.stanza.getTag('sent',
+                                         namespace=nbxmpp.NS_CARBONS,
+                                         protocol=True)
+        if sent_carbon is not None:
+            message = self.get_forwarded_message(sent_carbon)
+            return self.get_stanza_id(message)
+
+        # Received Carbon
+        received_carbon = self.stanza.getTag('received',
+                                             namespace=nbxmpp.NS_CARBONS,
+                                             protocol=True)
+        if received_carbon is not None:
+            message = self.get_forwarded_message(received_carbon)
+            return self.get_stanza_id(message)
+
+        # Normal Message
+        return self.get_stanza_id(self.stanza)
 
 class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
     name = 'message-received'
@@ -1416,6 +1497,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.stanza = self.msg_obj.stanza
         self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.id_
+        self.unique_id = self.msg_obj.unique_id
         self.jid = self.msg_obj.jid
         self.fjid = self.msg_obj.fjid
         self.resource = self.msg_obj.resource
@@ -1472,22 +1554,6 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if replace:
             self.correct_id = replace.getAttr('id')
 
-        # ignore message duplicates
-        if self.msgtxt and self.id_ and self.jid:
-            self.msghash = hashlib.sha256(("%s|%s|%s" % (
-                hashlib.sha256(self.msgtxt.encode('utf-8')).hexdigest(),
-                hashlib.sha256(self.id_.encode('utf-8')).hexdigest(),
-                hashlib.sha256(self.jid.encode('utf-8')).hexdigest())).encode(
-                'utf-8')).digest()
-            if self.msghash in self.conn.received_message_hashes:
-                log.info("Ignoring duplicated message from '%s' with id '%s'" % (self.jid, self.id_))
-                return False
-            else:
-                log.debug("subhashes: msgtxt, id_, jid = ('%s', '%s', '%s')" % (hashlib.sha256(self.msgtxt.encode('utf-8')).hexdigest(), hashlib.sha256(self.id_.encode('utf-8')).hexdigest(), hashlib.sha256(self.jid.encode('utf-8')).hexdigest()))
-                self.conn.received_message_hashes.append(self.msghash)
-                # only record the last 20000 hashes (should be about 1MB [32 bytes per hash]
-                # and about 24 hours if you receive a message every 5 seconds)
-                self.conn.received_message_hashes = self.conn.received_message_hashes[-20000:]
         return True
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
@@ -1513,6 +1579,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         else:
             self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.stanza.getID()
+        self.unique_id = self.msg_obj.unique_id
         self.fjid = self.msg_obj.fjid
         self.msgtxt = self.msg_obj.msgtxt
         self.jid = self.msg_obj.jid

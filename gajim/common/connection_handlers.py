@@ -725,8 +725,6 @@ class ConnectionHandlersBase:
         # IDs of sent messages (https://trac.gajim.org/ticket/8222)
         self.sent_message_ids = []
 
-        self.received_message_hashes = []
-
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
@@ -946,7 +944,8 @@ class ConnectionHandlersBase:
     def _on_message_received(self, obj):
         if isinstance(obj, MessageReceivedEvent):
             app.nec.push_incoming_event(
-                DecryptedMessageReceivedEvent(None, conn=self, msg_obj=obj))
+                DecryptedMessageReceivedEvent(
+                    None, conn=self, msg_obj=obj, stanza_id=obj.unique_id))
         else:
             app.nec.push_incoming_event(
                 MamDecryptedMessageReceivedEvent(None, **vars(obj)))
@@ -1012,14 +1011,14 @@ class ConnectionHandlersBase:
             return True
         elif obj.mtype == 'groupchat':
             app.nec.push_incoming_event(GcMessageReceivedEvent(None,
-                conn=self, msg_obj=obj))
+                conn=self, msg_obj=obj, stanza_id=obj.unique_id))
             return True
 
     def _nec_gc_message_received(self, obj):
         if obj.conn.name != self.name:
             return
         if (app.config.should_log(obj.conn.name, obj.jid) and
-            obj.msgtxt and obj.nick):
+                obj.msgtxt and obj.nick):
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
@@ -1028,7 +1027,8 @@ class ConnectionHandlersBase:
                                         KindConstant.GC_MSG,
                                         message=obj.msgtxt,
                                         contact_name=obj.nick,
-                                        additional_data=obj.additional_data)
+                                        additional_data=obj.additional_data,
+                                        stanza_id=obj.unique_id)
             app.logger.set_room_last_message_time(obj.room_jid, obj.timestamp)
 
     # process and dispatch an error message
@@ -2048,8 +2048,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))
         self.send_awaiting_pep()
         self.continue_connect_info = None
-        # hashes of already received messages
-        self.received_message_hashes = []
 
     def _SearchCB(self, con, iq_obj):
         log.debug('SearchCB')

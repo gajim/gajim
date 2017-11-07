@@ -127,14 +127,18 @@ class ConnectionArchive313:
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
+        # if self.archiving_namespace != nbxmpp.NS_MAM_2:
+        # Fallback duplicate search without stanza-id
         duplicate = app.logger.search_for_duplicate(
             obj.with_, obj.timestamp, obj.msgtxt)
-        if not duplicate:
-            app.logger.insert_into_logs(
-                obj.with_, obj.timestamp, obj.kind,
-                unread=False,
-                message=obj.msgtxt,
-                additional_data=obj.additional_data)
+        if duplicate:
+            return
+        app.logger.insert_into_logs(
+            obj.with_, obj.timestamp, obj.kind,
+            unread=False,
+            message=obj.msgtxt,
+            additional_data=obj.additional_data,
+            stanza_id=obj.unique_id)
 
     def get_query_id(self):
         self.mam_query_id = self.connection.getAnID()
