@@ -1098,6 +1098,9 @@ class Logger:
         if origin_id is not None:
             ids.append(origin_id)
 
+        if not ids:
+            return False
+
         sql = '''
               SELECT stanza_id FROM logs
               WHERE stanza_id IN ({values}) LIMIT 1
