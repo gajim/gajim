@@ -292,7 +292,7 @@ class ConnectionVcard:
                 '%s has no avatar published (vCard)', obj.jid)
 
             # Remove avatar
-            app.log('avatar').info('Remove: %s', obj.jid)
+            app.log('avatar').debug('Remove: %s', obj.jid)
             app.contacts.set_avatar(self.name, obj.jid, None)
             own_jid = self.get_own_jid().getStripped()
             app.logger.set_avatar_sha(own_jid, obj.jid, None)
@@ -328,7 +328,7 @@ class ConnectionVcard:
             # Empty <photo/> tag, means no avatar is advertised, remove avatar
             app.log('avatar').info(
                 '%s has no avatar published (vCard)', obj.nick)
-            app.log('avatar').info('Remove: %s', obj.nick)
+            app.log('avatar').debug('Remove: %s', obj.nick)
             gc_contact.avatar_sha = None
             app.interface.update_avatar(contact=gc_contact)
         else:
@@ -470,8 +470,14 @@ class ConnectionVcard:
         resource = frm_jid.getResource()
         jid = frm_jid.getStripped()
 
-        vcard = self._node_to_dict(stanza.getChildren()[0])
-        # handle no vcard set
+        stanza_error = stanza.getError()
+        if stanza_error in ('service-unavailable', 'item-not-found'):
+            app.log('avatar').info('vCard not available: %s %s',
+                                   jid, stanza_error)
+            return
+
+        vcard = self._node_to_dict(
+            stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD))
 
         if self.get_own_jid().bareMatch(jid):
             if 'NICKNAME' in vcard:
