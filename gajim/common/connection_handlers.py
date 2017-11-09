@@ -471,13 +471,18 @@ class ConnectionVcard:
         jid = frm_jid.getStripped()
 
         stanza_error = stanza.getError()
-        if stanza_error in ('service-unavailable', 'item-not-found'):
+        if stanza_error in ('service-unavailable', 'item-not-found',
+                            'not-allowed'):
             app.log('avatar').info('vCard not available: %s %s',
-                                   jid, stanza_error)
+                                   frm_jid, stanza_error)
             return
 
-        vcard = self._node_to_dict(
-            stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD))
+        vcard_node = stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD)
+        if vcard_node is None:
+            app.log('avatar').info('vCard not available: %s', frm_jid)
+            app.log('avatar').debug(stanza)
+            return
+        vcard = self._node_to_dict(vcard_node)
 
         if self.get_own_jid().bareMatch(jid):
             if 'NICKNAME' in vcard:
