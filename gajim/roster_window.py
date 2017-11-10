@@ -4675,6 +4675,24 @@ class RosterWindow:
             for ctrl in list(app.interface.minimized_controls[account].values()):
                 ctrl.repaint_themed_widgets()
 
+    def _icon_animation_timeout(self, jid, account):
+        titer = self._get_contact_iter(jid, account, model=self.model)[0]
+        # titer = self.modelfilter.convert_iter_to_child_iter(titer)
+        path = self.model.get_path(titer)
+        if path is None:
+            self.animation_timeout = None
+            return
+        if self.model[titer][Column.IMG].icon_name != 'event':
+            self.animation_timeout = None
+            return
+        column = self.tree.get_column(Column.IMG)
+        cell_area = self.tree.get_cell_area(path, column)
+        self.show_icon = not self.show_icon
+        self.tree.queue_draw_area(
+            cell_area.x, cell_area.y,
+            cell_area.width, cell_area.height)
+        return True
+
     def _iconCellDataFunc(self, column, renderer, model, titer, data=None):
         """
         When a row is added, set properties for icon renderer
@@ -4711,7 +4729,23 @@ class RosterWindow:
 
         image = model[titer][Column.IMG]
         surface = image.get_property('surface')
-        renderer.set_property('surface', surface)
+        # Start timeout for blinking event icon
+        if image.icon_name != 'event':
+            renderer.set_property('surface', surface)
+        else:
+            if self.show_icon:
+                print('show icon')
+                renderer.set_property('surface', surface)
+            else:
+                print('hide icon')
+                renderer.set_property('surface', None)
+
+            if self.animation_timeout is None:
+                print('Create Timeout')
+                jid = model[titer][Column.JID]
+                account = model[titer][Column.ACCOUNT]
+                self.animation_timeout = GLib.timeout_add(
+                    500, self._icon_animation_timeout, jid, account)
 
     def _nameCellDataFunc(self, column, renderer, model, titer, data=None):
         """
@@ -5668,6 +5702,11 @@ class RosterWindow:
         self._iters = {}
         # for merged mode
         self._iters['MERGED'] = {'account': None, 'groups': {}}
+        # Used for blinking event icons, holds if the icon is currently
+        # shown or not
+        self.show_icon = True
+        # animation timeout id
+        self.animation_timeout = None
         # holds a list of (jid, account) tuples
         self._last_selected_contact = []
         self.transports_state_images = {'16': {}, '32': {}, 'opened': {},

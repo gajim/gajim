@@ -26,6 +26,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
+from gajim.roster_window import Column
+
+
 class CellRendererImage(Gtk.CellRendererPixbuf):
 
     __gproperties__ = {
@@ -59,7 +62,10 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
         if model.get_value(iter_, self.tv_index) != image:
             return
         self.redraw = 1
-        col = tree.get_column(self.col_index)
+        if model[iter_][Column.IMG] != 'event':
+            return
+
+        col = tree.get_column(Column.IMG)
         cell_area = tree.get_cell_area(path, col)
 
         tree.queue_draw_area(cell_area.x, cell_area.y, cell_area.width,

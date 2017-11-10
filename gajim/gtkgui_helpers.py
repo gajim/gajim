@@ -835,4 +835,7 @@ def draw_affiliation(surface, affiliation):
 def get_image_from_icon_name(icon_name, scale):
     icon = get_iconset_name_for(icon_name)
     surface = gtk_icon_theme.load_surface(icon, 16, scale, None, 0)
-    return Gtk.Image.new_from_surface(surface)
+    image = Gtk.Image.new_from_surface(surface)
+    # Set icon name as attr so we have it available in renderers
+    image.icon_name = icon_name
+    return image
