@@ -262,7 +262,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 self.conn.name, contact, self)
             obj.show_in_systray = notify.get_show_in_systray(event_type,
                 self.conn.name, contact)
-            if obj.mtype == 'normal' and not obj.popup:
+            if obj.mtype == 'normal' and obj.popup:
                 do_event = False
             else:
                 do_event = True
