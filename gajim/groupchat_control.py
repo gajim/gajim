@@ -47,6 +47,7 @@ from gajim import vcard
 from gajim import cell_renderer_image
 from gajim import dataforms_widget
 from gajim.common.const import AvatarSize
+from gajim.common.caps_cache import muc_caps_cache
 import nbxmpp
 
 from enum import IntEnum, unique
@@ -478,6 +479,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_gc_presence_received)
         app.ged.register_event_handler('gc-message-received', ged.GUI1,
             self._nec_gc_message_received)
+        app.ged.register_event_handler('mam-decrypted-message-received',
+            ged.GUI1, self._nec_mam_decrypted_message_received)
         app.ged.register_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
         app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
@@ -1053,6 +1056,17 @@ class GroupchatControl(ChatControlBase):
                                 obj.contact.name, obj.contact.avatar_sha)
         self.draw_avatar(obj.contact)
 
+    def _nec_mam_decrypted_message_received(self, obj):
+        if not obj.groupchat:
+            return
+        if obj.room_jid != self.room_jid:
+            return
+        self.print_conversation(
+            obj.msgtxt, contact=obj.nick,
+            tim=obj.timestamp, encrypted=obj.encrypted,
+            msg_stanza_id=obj.unique_id,
+            additional_data=obj.additional_data)
+
     def _nec_gc_message_received(self, obj):
         if obj.room_jid != self.room_jid or obj.conn.name != self.account:
             return
@@ -1454,6 +1468,11 @@ class GroupchatControl(ChatControlBase):
         if self.autorejoin:
             GLib.source_remove(self.autorejoin)
         self.autorejoin = None
+
+        if muc_caps_cache.has_mam(self.room_jid):
+            # Request MAM
+            app.connections[self.account].request_archive_on_muc_join(
+                self.room_jid)
 
         app.gc_connected[self.account][self.room_jid] = True
         ChatControlBase.got_connected(self)

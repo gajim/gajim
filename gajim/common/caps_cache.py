@@ -33,10 +33,12 @@ through ClientCaps objects which are hold by contact instances.
 
 import base64
 import hashlib
+from collections import namedtuple
 
 import logging
 log = logging.getLogger('gajim.c.caps_cache')
 
+import nbxmpp
 from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
     NS_JINGLE_FILE_TRANSFER_5)
@@ -44,7 +46,7 @@ from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_ESESSION,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
     NS_JINGLE_FILE_TRANSFER_5]
-
+from gajim.common import app
 # Query entry status codes
 NEW = 0
 QUERIED = 1
@@ -56,12 +58,15 @@ FAKED = 3 # allow NullClientCaps to behave as it has a cached item
 ################################################################################
 
 capscache = None
+muc_caps_cache = None
 def initialize(logger):
     """
     Initialize this module
     """
     global capscache
+    global muc_caps_cache
     capscache = CapsCache(logger)
+    muc_caps_cache = MucCapsCache()
 
 def client_supports(client_caps, requested_feature):
     lookup_item = client_caps.get_cache_lookup_strategy()
@@ -438,3 +443,51 @@ class CapsCache(object):
         key = (hash_method, hash)
         if key in self.__cache:
             del self.__cache[key]
+
+
+class MucCapsCache:
+
+    DiscoInfo = namedtuple('DiscoInfo', ['identities', 'features', 'data'])
+
+    def __init__(self):
+        self.cache = {}
+
+    def append(self, stanza):
+        jid = stanza.getFrom()
+        identities, features, data = [], [], []
+        query_childs = stanza.getQueryChildren()
+        if not query_childs:
+            app.log('gajim.muc').warning('%s returned empty disco info', jid)
+            return
+
+        for child in query_childs:
+            if child.getName() == 'identity':
+                attr = {}
+                for key in child.getAttrs().keys():
+                    attr[key] = child.getAttr(key)
+                identities.append(attr)
+            elif child.getName() == 'feature':
+                features.append(child.getAttr('var'))
+            elif child.getName() == 'x':
+                if child.getNamespace() == nbxmpp.NS_DATA:
+                    data.append(nbxmpp.DataForm(node=child))
+
+        self.cache[jid] = self.DiscoInfo(identities, features, data)
+
+    def is_cached(self, jid):
+        return jid in self.cache
+
+    def supports(self, jid, feature):
+        if jid in self.cache:
+            if feature in self.cache[jid].features:
+                return True
+        return False
+
+    def has_mam(self, jid):
+        try:
+            if nbxmpp.NS_MAM_2 in self.cache[jid].features:
+                return True
+            if nbxmpp.NS_MAM_1 in self.cache[jid].features:
+                return True
+        except (KeyError, AttributeError):
+            return False

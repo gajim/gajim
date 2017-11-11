@@ -1052,12 +1052,12 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         :stanza:        Complete stanza Node
         :forwarded:     Forwarded Node
         :result:        Result Node
-        :unique_id:     The unique stable id
         '''
         self._set_base_event_vars_as_attributes(base_event)
         self.additional_data = {}
         self.encrypted = False
         self.groupchat = False
+        self.nick = None
 
     def generate(self):
         archive_jid = self.stanza.getFrom()
@@ -1070,7 +1070,6 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.msg_ = self.forwarded.getTag('message', protocol=True)
 
         if self.msg_.getType() == 'groupchat':
-            log.info('Received groupchat message from user archive')
             return False
 
         # use stanza-id as unique-id
@@ -1081,7 +1080,6 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         self.msgtxt = self.msg_.getTagData('body')
-        self.query_id = self.result.getAttr('queryid')
 
         frm = self.msg_.getFrom()
         # Some servers dont set the 'to' attribute when
@@ -1123,26 +1121,81 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         return True
 
     def get_unique_id(self):
+        stanza_id = self.get_stanza_id(self.result, query=True)
         if self.conn.get_own_jid().bareMatch(self.msg_.getFrom()):
-            # On our own Messages we have to check for both
-            # stanza-id and origin-id, because other resources
-            # maybe not support origin-id
-            stanza_id = None
-            if self.result.getNamespace() == nbxmpp.NS_MAM_2:
-                # Only mam:2 ensures valid stanza-id
-                stanza_id = self.get_stanza_id(self.result, query=True)
-
-            # try always to get origin-id because its a message
-            # we sent.
+            # message we sent
             origin_id = self.msg_.getOriginID()
-
             return stanza_id, origin_id
 
         # A message we received
-        elif self.result.getNamespace() == nbxmpp.NS_MAM_2:
-            # Only mam:2 ensures valid stanza-id
-            return self.get_stanza_id(self.result, query=True), None
-        return None, None
+        return stanza_id, None
+
+class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+    name = 'mam-gc-message-received'
+    base_network_events = ['raw-mam-message-received']
+
+    def __init__(self, name, base_event):
+        '''
+        Pre-Generated attributes on self:
+
+        :conn:          Connection instance
+        :stanza:        Complete stanza Node
+        :forwarded:     Forwarded Node
+        :result:        Result Node
+        '''
+        self._set_base_event_vars_as_attributes(base_event)
+        self.additional_data = {}
+        self.encrypted = False
+        self.groupchat = True
+        self.kind = KindConstant.GC_MSG
+
+    def generate(self):
+        self.room_jid = self.stanza.getFrom()
+        self.msg_ = self.forwarded.getTag('message', protocol=True)
+
+        if self.msg_.getType() != 'groupchat':
+            return False
+
+        self.unique_id = self.get_stanza_id(self.result, query=True)
+
+        # Check for duplicates
+        if app.logger.find_stanza_id(self.unique_id):
+            return
+
+        self.msgtxt = self.msg_.getTagData('body')
+        self.with_ = self.msg_.getFrom().getStripped()
+        self.nick = self.msg_.getFrom().getResource()
+
+        # Get the real jid if we have it
+        self.real_jid = None
+        muc_user = self.msg_.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user is not None:
+            self.real_jid = muc_user.getTagAttr('item', 'jid')
+
+        delay = self.forwarded.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if delay is None:
+            log.error('Received MAM message without timestamp')
+            return
+
+        self.timestamp = helpers.parse_datetime(
+            delay, check_utc=True, epoch=True)
+        if self.timestamp is None:
+            log.error('Received MAM message with invalid timestamp: %s', delay)
+            return
+
+        # Save timestamp added by the user
+        user_delay = self.msg_.getTagAttr(
+            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
+        if user_delay is not None:
+            self.user_timestamp = helpers.parse_datetime(
+                user_delay, check_utc=True, epoch=True)
+            if self.user_timestamp is None:
+                log.warning('Received MAM message with '
+                            'invalid user timestamp: %s', user_delay)
+
+        log.debug('Received mam-gc-message: unique id: %s', self.unique_id)
+        return True
 
 class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'mam-decrypted-message-received'
@@ -1155,6 +1208,9 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         self.get_oob_data(self.msg_)
+
+        if self.groupchat:
+            return True
 
         self.is_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
         if self.is_pm is None:
@@ -1288,6 +1344,12 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if result and result.getNamespace() in (nbxmpp.NS_MAM,
                                                 nbxmpp.NS_MAM_1,
                                                 nbxmpp.NS_MAM_2):
+
+            if result.getAttr('queryid') not in self.conn.mam_query_ids:
+                log.warning('Invalid MAM Message: unknown query id')
+                log.debug(self.stanza)
+                return
+
             forwarded = result.getTag('forwarded',
                                       namespace=nbxmpp.NS_FORWARD,
                                       protocol=True)
@@ -1300,8 +1362,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                              conn=self.conn,
                              stanza=self.stanza,
                              forwarded=forwarded,
-                             result=result,
-                             stanza_id=self.unique_id))
+                             result=result))
             return
 
         # Mediated invitation?

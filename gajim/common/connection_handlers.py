@@ -47,6 +47,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
+from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
 from gajim.common.protocol.caps import ConnectionCaps
@@ -95,6 +96,29 @@ class ConnectionDisco:
         """
         id_ = self._discover(nbxmpp.NS_DISCO_INFO, jid, node, id_prefix)
         self.disco_info_ids.append(id_)
+
+    def discoverMUC(self, jid, callback):
+        disco_info = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_INFO)
+        self.connection.SendAndCallForResponse(
+            disco_info, self.received_muc_info, {'callback': callback})
+
+    def received_muc_info(self, conn, stanza, callback):
+        if nbxmpp.isResultNode(stanza):
+            app.log('gajim.muc').info(
+                'Received MUC DiscoInfo for %s', stanza.getFrom())
+            muc_caps_cache.append(stanza)
+            callback()
+        else:
+            error = stanza.getError()
+            if error == 'item-not-found':
+                # Groupchat does not exist
+                callback()
+                return
+            app.nec.push_incoming_event(
+                InformationEvent(None, conn=self,
+                                 level='error',
+                                 pri_txt=_('Unable to join Groupchat'),
+                                 sec_txt=error))
 
     def request_register_agent_info(self, agent):
         if not self.connection or self.connected < 2:
@@ -760,6 +784,8 @@ class ConnectionHandlersBase:
             self._nec_message_received)
         app.ged.register_event_handler('mam-message-received', ged.CORE,
             self._nec_message_received)
+        app.ged.register_event_handler('mam-gc-message-received', ged.CORE,
+            self._nec_message_received)
         app.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
         app.ged.register_event_handler('gc-message-received', ged.CORE,
@@ -775,6 +801,8 @@ class ConnectionHandlersBase:
         app.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('mam-message-received', ged.CORE,
+            self._nec_message_received)
+        app.ged.remove_event_handler('mam-gc-message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
