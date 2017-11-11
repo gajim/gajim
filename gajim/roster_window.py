@@ -1069,7 +1069,7 @@ class RosterWindow:
                     accounts = accounts)
             account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
-        self.model[child_iter][Column.NAME] = account_name
+        self.model[child_iter][Column.NAME] = GLib.markup_escape_text(account_name)
 
         pep_dict = app.connections[account].pep
         if app.config.get('show_mood_in_roster') and 'mood' in pep_dict:

@@ -780,7 +780,8 @@ def build_accounts_menu():
         return
     if len(accounts_list) > 1:
         for acc in accounts_list:
-            label = app.config.get_per('accounts', acc, 'account_label')
+            label = escape_mnemonic(
+                app.config.get_per('accounts', acc, 'account_label'))
             acc_menu.append_submenu(
                 label or acc, get_account_menu(acc))
     else:
@@ -806,8 +807,8 @@ def build_bookmark_menu(account):
     if acc_menu.get_item_link(0, 'submenu'):
         for i in range(acc_menu.get_n_items()):
             label = acc_menu.get_item_attribute_value(i, 'label')
-            account_label = app.config.get_per('accounts', account,
-                                               'account_label')
+            account_label = escape_mnemonic(
+                app.config.get_per('accounts', account, 'account_label'))
             if label.get_string() in (account_label, account):
                 menu = acc_menu.get_item_link(i, 'submenu')
     else:
@@ -835,3 +836,11 @@ def get_encryption_menu(control_id, type_id):
     if menu.get_n_items() == 1:
         return None
     return menu
+
+
+def escape_mnemonic(label):
+    if label is None:
+        return
+    # Underscore inside a label means the next letter is a keyboard
+    # shortcut. To show an underscore we have to use double underscore
+    return label.replace('_', '__')
