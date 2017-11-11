@@ -1914,8 +1914,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archiving_namespace = nbxmpp.NS_MAM_2
                 elif nbxmpp.NS_MAM_1 in obj.features:
                     self.archiving_namespace = nbxmpp.NS_MAM_1
-                elif nbxmpp.NS_MAM in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM
                 if self.archiving_namespace:
                     self.archiving_supported = True
                     self.archiving_313_supported = True

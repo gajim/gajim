@@ -1294,10 +1294,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         app.nec.register_incoming_event(
             Archiving313PreferencesChangedReceivedEvent)
-        app.nec.register_incoming_event(
-            ArchivingFinishedLegacyReceivedEvent)
-        app.nec.register_incoming_event(
-            ArchivingFinishedReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
         app.ged.register_event_handler('http-auth-received', ged.CORE,
@@ -2238,7 +2234,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._IqPingCB, 'get', nbxmpp.NS_PING)
         con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
-        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
         con.RegisterHandler('iq', self._PubSubCB, 'result')

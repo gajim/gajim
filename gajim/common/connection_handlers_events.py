@@ -1341,8 +1341,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 self.forwarded = True
 
         result = self.stanza.getTag('result', protocol=True)
-        if result and result.getNamespace() in (nbxmpp.NS_MAM,
-                                                nbxmpp.NS_MAM_1,
+        if result and result.getNamespace() in (nbxmpp.NS_MAM_1,
                                                 nbxmpp.NS_MAM_2):
 
             if result.getAttr('queryid') not in self.conn.mam_query_ids:
@@ -1884,43 +1883,6 @@ class Archiving313PreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
 
         for item in prefs.getTag('never').getTags('jid'):
             self.items.append((item.getData(), 'Never'))
-
-        return True
-
-class ArchivingFinishedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-finished'
-    base_network_events = ['archiving-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.type_
-        self.fin = self.stanza.getTag('fin')
-
-        if self.type_ != 'result' or not self.fin:
-            return
-
-        self.query_id = self.fin.getAttr('queryid')
-        if not self.query_id:
-            return
-
-        return True
-
-class ArchivingFinishedLegacyReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-finished-legacy'
-    base_network_events = ['raw-message-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-        self.fin = self.stanza.getTag('fin', namespace=nbxmpp.NS_MAM)
-
-        if not self.fin:
-            return
-
-        self.query_id = self.fin.getAttr('queryid')
-        if not self.query_id:
-            return
 
         return True
 

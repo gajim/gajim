@@ -38,10 +38,6 @@ class ConnectionArchive313:
         self.iq_answer = []
         self.mam_query_ids = []
         app.nec.register_incoming_event(ev.MamMessageReceivedEvent)
-        app.ged.register_event_handler('archiving-finished-legacy', ged.CORE,
-            self._nec_result_finished)
-        app.ged.register_event_handler('archiving-finished', ged.CORE,
-            self._nec_result_finished)
         app.nec.register_incoming_event(ev.MamGcMessageReceivedEvent)
         app.ged.register_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
@@ -54,10 +50,6 @@ class ConnectionArchive313:
             self._nec_archiving_313_preferences_changed_received)
 
     def cleanup(self):
-        app.ged.remove_event_handler('archiving-finished-legacy', ged.CORE,
-            self._nec_result_finished)
-        app.ged.remove_event_handler('archiving-finished', ged.CORE,
-            self._nec_result_finished)
         app.ged.remove_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error)
         app.ged.remove_event_handler('agent-info-received', ged.CORE,
