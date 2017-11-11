@@ -148,10 +148,14 @@ class HelperEvent:
         if by is None:
             # We can not verify who set this stanza-id, ignore it.
             return
-        elif not self.conn.get_own_jid().bareMatch(by):
-            # by attribute does not match the server, ignore it.
-            return
-        return stanza_id
+        if stanza.getType() == 'groupchat':
+            if stanza.getFrom().bareMatch(by):
+                # by attribute must match the server
+                return stanza_id
+        elif self.conn.get_own_jid().bareMatch(by):
+            # by attribute must match the server
+            return stanza_id
+        return
 
     @staticmethod
     def get_forwarded_message(stanza):
