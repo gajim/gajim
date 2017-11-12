@@ -57,10 +57,6 @@ class FeaturesWindow:
                 _('Ability to encrypting chat messages with OpenPGP.'),
                 _('Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/).'),
                 _('Requires gpg.exe in PATH.')),
-            _('Network-Watcher'): (self.network_watcher_available,
-                _('Autodetection of network status.'),
-                _('Requires gnome-network-manager'),
-                _('Feature not available under Windows.')),
             _('Password encryption'): (self.some_keyring_available,
                 _('Passwords can be stored securely and not just in plaintext.'),
                 _('Requires libsecret and a provider (such as GNOME Keyring and KSecretService).'),
@@ -156,10 +152,6 @@ class FeaturesWindow:
 
     def gpg_available(self):
         return app.HAVE_GPG
-
-    def network_watcher_available(self):
-        from gajim import network_watcher
-        return network_watcher.supported
 
     def some_keyring_available(self):
         if os.name == 'nt':
