@@ -1192,3 +1192,45 @@ class Logger:
             '''
         self.con.execute(sql, (sha, account_jid_id, jid_id))
         self._timeout_commit()
+
+    def get_archive_timestamp(self, jid, type_=None):
+        """
+        Get the last archive id/timestamp for a jid
+
+        :param jid:     The jid that belongs to the avatar
+
+        """
+        jid_id = self.get_jid_id(jid, type_=type_)
+        sql = '''SELECT * FROM last_archive_message WHERE jid_id = ?'''
+        return self.con.execute(sql, (jid_id,)).fetchone()
+
+    def set_archive_timestamp(self, jid, **kwargs):
+        """
+        Set the last archive id/timestamp
+
+        :param jid:                     The jid that belongs to the avatar
+
+        :param last_mam_id:             The last MAM result id
+
+        :param oldest_mam_timestamp:    The oldest date we requested MAM
+                                        history for
+
+        :param last_muc_timestamp:      The timestamp of the last message we
+                                        received in a MUC
+
+        """
+        jid_id = self.get_jid_id(jid)
+        exists = self.get_archive_timestamp(jid)
+        if not exists:
+            sql = '''INSERT INTO last_archive_message VALUES (?, ?, ?, ?)'''
+            self.con.execute(sql, (jid_id,
+                                   kwargs.get('last_mam_id', None),
+                                   kwargs.get('oldest_mam_timestamp', None),
+                                   kwargs.get('last_muc_timestamp', None)))
+        else:
+            args = ' = ?, '.join(kwargs.keys()) + ' = ?'
+            sql = '''UPDATE last_archive_message SET {}
+                     WHERE jid_id = ?'''.format(args)
+            self.con.execute(sql, tuple(kwargs.values()) + (jid_id,))
+        log.info('Save archive timestamps: %s', kwargs)
+        self._timeout_commit()
