@@ -409,8 +409,6 @@ class Config:
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for OAuth 2.0 authentication.')],
                     'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for OAuth 2.0 authentication.')],
                     'opened_chat_controls': [opt_str, '', _('Space separated list of JIDs for which we want to re-open a chat window on next startup.')],
-                    'last_mam_id': [opt_str, '', _('Last MAM id we are syncronized with')],
-                    'mam_start_date': [opt_int, 0, _('The earliest date we requested MAM history for')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],

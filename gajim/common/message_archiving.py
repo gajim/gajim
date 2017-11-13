@@ -115,21 +115,25 @@ class ConnectionArchive313:
             return
 
         last = set_.getTagData('last')
-        complete = fin.getAttr('complete')
-        if last is not None:
-            if not groupchat:
-                app.config.set_per('accounts', self.name, 'last_mam_id', last)
-            if complete != 'true':
-                query_id = self.get_query_id()
-                query = self.get_archive_query(query_id, after=last)
-                self.send_archive_query(query, query_id, groupchat=groupchat)
+        if last is None:
+            log.info('End of MAM query, no items retrieved')
+            return
 
-        if complete == 'true':
+        jid = str(stanza.getFrom())
+        complete = fin.getAttr('complete')
+        app.logger.set_archive_timestamp(jid, last_mam_id=last)
+        if complete != 'true':
+            query_id = self.get_query_id()
+            query = self.get_archive_query(query_id, after=last)
+            self.send_archive_query(query, query_id, groupchat=groupchat)
+        else:
             self.mam_query_ids.remove(query_id)
-            if not groupchat and start_date is not None:
-                app.config.set_per(
-                    'accounts', self.name,
-                    'mam_start_date', start_date.timestamp())
+            if start_date is not None:
+                app.logger.set_archive_timestamp(
+                    jid,
+                    last_mam_id=last,
+                    oldest_mam_timestamp=start_date.timestamp())
+            log.info('End of MAM query, last mam id: %s', last)
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -157,7 +161,15 @@ class ConnectionArchive313:
         return query_id
 
     def request_archive_on_signin(self):
-        mam_id = app.config.get_per('accounts', self.name, 'last_mam_id')
+        own_jid = self.get_own_jid().getStripped()
+        archive = app.logger.get_archive_timestamp(own_jid)
+
+        # Migration of last_mam_id from config to DB
+        if archive is not None:
+            mam_id = archive.last_mam_id
+        else:
+            mam_id = app.config.get_per('accounts', self.name, 'last_mam_id')
+
         start_date = None
         query_id = self.get_query_id()
         if mam_id:
@@ -171,11 +183,19 @@ class ConnectionArchive313:
         self.send_archive_query(query, query_id, start_date)
 
     def request_archive_on_muc_join(self, jid):
-        # First Start, we request one month
-        start_date = datetime.utcnow() - timedelta(days=30)
+        archive = app.logger.get_archive_timestamp(jid)
         query_id = self.get_query_id()
-        log.info('First join: query archive start: %s', start_date)
-        query = self.get_archive_query(query_id, jid=jid, start=start_date)
+        start_date = None
+        if archive is not None:
+            log.info('Query Groupchat MAM Archive %s after %s:',
+                     jid, archive.last_mam_id)
+            query = self.get_archive_query(
+                query_id, jid=jid, after=archive.last_mam_id)
+        else:
+            # First Start, we request one month
+            start_date = datetime.utcnow() - timedelta(days=30)
+            log.info('First join: query archive %s from: %s', jid, start_date)
+            query = self.get_archive_query(query_id, jid=jid, start=start_date)
         self.send_archive_query(query, query_id, start_date, groupchat=True)
 
     def send_archive_query(self, query, query_id, start_date=None,
