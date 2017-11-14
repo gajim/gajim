@@ -26,6 +26,7 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.logger import KindConstant, JIDConstant
+from gajim.common.const import ArchiveState
 import gajim.common.connection_handlers_events as ev
 
 log = logging.getLogger('gajim.c.message_archiving')
@@ -93,25 +94,33 @@ class ConnectionArchive313:
                     None, disco=True, **vars(msg_obj)))
         del self.mam_awaiting_disco_result[obj.jid]
 
-    def _result_finished(self, conn, stanza, query_id, start_date, groupchat):
+    @staticmethod
+    def parse_iq(stanza, query_id):
         if not nbxmpp.isResultNode(stanza):
             log.error('Error on MAM query: %s', stanza.getError())
-            return
+            raise InvalidMamIQ
 
         fin = stanza.getTag('fin')
         if fin is None:
             log.error('Malformed MAM query result received: %s', stanza)
-            return
+            raise InvalidMamIQ
 
         if fin.getAttr('queryid') != query_id:
             log.error('Result with unknown query id received')
-            return
+            raise InvalidMamIQ
 
         set_ = fin.getTag('set', namespace=nbxmpp.NS_RSM)
         if set_ is None:
             log.error(
                 'Malformed MAM query result received (no "set" Node): %s',
                 stanza)
+            raise InvalidMamIQ
+        return fin, set_
+
+    def _result_finished(self, conn, stanza, query_id, start_date, groupchat):
+        try:
+            fin, set_ = self.parse_iq(stanza, query_id)
+        except InvalidMamIQ:
             return
 
         last = set_.getTagData('last')
@@ -123,9 +132,10 @@ class ConnectionArchive313:
         complete = fin.getAttr('complete')
         app.logger.set_archive_timestamp(jid, last_mam_id=last)
         if complete != 'true':
+            self.mam_query_ids.remove(query_id)
             query_id = self.get_query_id()
             query = self.get_archive_query(query_id, after=last)
-            self.send_archive_query(query, query_id, groupchat=groupchat)
+            self._send_archive_query(query, query_id, groupchat=groupchat)
         else:
             self.mam_query_ids.remove(query_id)
             if start_date is not None:
@@ -134,6 +144,52 @@ class ConnectionArchive313:
                     last_mam_id=last,
                     oldest_mam_timestamp=start_date.timestamp())
             log.info('End of MAM query, last mam id: %s', last)
+
+    def _intervall_result_finished(self, conn, stanza, query_id,
+                                   start_date, end_date, event_id):
+        try:
+            fin, set_ = self.parse_iq(stanza, query_id)
+        except InvalidMamIQ:
+            return
+
+        self.mam_query_ids.remove(query_id)
+        jid = str(stanza.getFrom())
+        if start_date:
+            timestamp = start_date.timestamp()
+        else:
+            timestamp = ArchiveState.ALL
+
+        last = set_.getTagData('last')
+        if last is None:
+            app.nec.push_incoming_event(ev.ArchivingIntervalFinished(
+                None, event_id=event_id))
+            app.logger.set_archive_timestamp(
+                jid, oldest_mam_timestamp=timestamp)
+            log.info('End of MAM query, no items retrieved')
+            return
+
+        complete = fin.getAttr('complete')
+        if complete != 'true':
+            self.request_archive_interval(event_id, start_date, end_date, last)
+        else:
+            log.info('query finished')
+            app.logger.set_archive_timestamp(
+                jid, oldest_mam_timestamp=timestamp)
+            app.nec.push_incoming_event(ev.ArchivingIntervalFinished(
+                None, event_id=event_id, stanza=stanza))
+
+    def _received_count(self, conn, stanza, query_id, event_id):
+        try:
+            _, set_ = self.parse_iq(stanza, query_id)
+        except InvalidMamIQ:
+            return
+
+        self.mam_query_ids.remove(query_id)
+
+        count = set_.getTagData('count')
+        log.info('message count received: %s', count)
+        app.nec.push_incoming_event(ev.ArchivingCountReceived(
+            None, event_id=event_id, count=count))
 
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -173,17 +229,18 @@ class ConnectionArchive313:
         start_date = None
         query_id = self.get_query_id()
         if mam_id:
-            log.info('MAM query after %s:', mam_id)
+            log.info('MAM query after: %s', mam_id)
             query = self.get_archive_query(query_id, after=mam_id)
         else:
             # First Start, we request the last week
             start_date = datetime.utcnow() - timedelta(days=7)
             log.info('First start: query archive start: %s', start_date)
             query = self.get_archive_query(query_id, start=start_date)
-        self.send_archive_query(query, query_id, start_date)
+        self._send_archive_query(query, query_id, start_date)
 
     def request_archive_on_muc_join(self, jid):
-        archive = app.logger.get_archive_timestamp(jid)
+        archive = app.logger.get_archive_timestamp(
+            jid, type_=JIDConstant.ROOM_TYPE)
         query_id = self.get_query_id()
         start_date = None
         if archive is not None:
@@ -196,10 +253,31 @@ class ConnectionArchive313:
             start_date = datetime.utcnow() - timedelta(days=30)
             log.info('First join: query archive %s from: %s', jid, start_date)
             query = self.get_archive_query(query_id, jid=jid, start=start_date)
-        self.send_archive_query(query, query_id, start_date, groupchat=True)
+        self._send_archive_query(query, query_id, start_date, groupchat=True)
 
-    def send_archive_query(self, query, query_id, start_date=None,
-                           groupchat=False):
+    def request_archive_count(self, event_id, start_date, end_date):
+        query_id = self.get_query_id()
+        query = self.get_archive_query(
+            query_id, start=start_date, end=end_date, max_=0)
+        self.connection.SendAndCallForResponse(
+            query, self._received_count, {'query_id': query_id,
+                                          'event_id': event_id})
+
+    def request_archive_interval(self, event_id, start_date,
+                                 end_date, after=None):
+        query_id = self.get_query_id()
+        query = self.get_archive_query(query_id, start=start_date,
+                                       end=end_date, after=after, max_=30)
+        app.nec.push_incoming_event(ev.ArchivingQueryID(
+            None, event_id=event_id, query_id=query_id))
+        self.connection.SendAndCallForResponse(
+            query, self._intervall_result_finished, {'query_id': query_id,
+                                                     'start_date': start_date,
+                                                     'end_date': end_date,
+                                                     'event_id': event_id})
+
+    def _send_archive_query(self, query, query_id, start_date=None,
+                            groupchat=False):
         self.connection.SendAndCallForResponse(
             query, self._result_finished, {'query_id': query_id,
                                            'start_date': start_date,
@@ -267,3 +345,7 @@ class ConnectionArchive313:
         app.nec.push_incoming_event(ev.ArchivingReceivedEvent(None, conn=self,
             stanza=iq_obj))
         raise nbxmpp.NodeProcessed
+
+
+class InvalidMamIQ(Exception):
+    pass

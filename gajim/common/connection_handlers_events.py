@@ -1860,6 +1860,27 @@ class ArchivingErrorReceivedEvent(nec.NetworkIncomingEvent):
             self.error_msg = self.stanza.getErrorMsg()
             return True
 
+class ArchivingCountReceived(nec.NetworkIncomingEvent):
+    name = 'archiving-count-received'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
+class ArchivingIntervalFinished(nec.NetworkIncomingEvent):
+    name = 'archiving-interval-finished'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
+class ArchivingQueryID(nec.NetworkIncomingEvent):
+    name = 'archiving-query-id'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
 class Archiving313PreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
     name = 'archiving-313-preferences-changed-received'
     base_network_events = ['archiving-received']
