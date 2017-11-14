@@ -84,6 +84,7 @@ class Column(IntEnum):
     LOCATION_PIXBUF = 8
     AVATAR_PIXBUF = 9  # avatar_pixbuf
     PADLOCK_PIXBUF = 10  # use for account row only
+    VISIBLE = 11
 
 empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
@@ -251,7 +252,7 @@ class RosterWindow:
             it = self.model.append(None, [
                 app.interface.jabber_state_images['16'][show],
                 _('Merged accounts'), 'account', '', 'all', None, None, None,
-                None, None, None] + [None] * self.nb_ext_renderers)
+                None, None, None, True] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
         else:
             show = app.SHOW_LIST[app.connections[account].connected]
@@ -267,7 +268,7 @@ class RosterWindow:
             it = self.model.append(None, [
                 app.interface.jabber_state_images['16'][show],
                 GLib.markup_escape_text(account), 'account', our_jid,
-                account, None, None, None, None, None, tls_pixbuf] +
+                account, None, None, None, None, None, tls_pixbuf, True] +
                 [None] * self.nb_ext_renderers)
             self._iters[account]['account'] = it
 
@@ -327,7 +328,7 @@ class RosterWindow:
         iter_group = self.model.append(iter_parent,
             [app.interface.jabber_state_images['16']['closed'],
             GLib.markup_escape_text(group), 'group', group, account, None,
-            None, None, None, None, None] + [None] * self.nb_ext_renderers)
+            None, None, None, None, None, False] + [None] * self.nb_ext_renderers)
         self.draw_group(group, account)
         self._iters[account_group]['groups'][group] = iter_group
         return iter_group
@@ -350,6 +351,7 @@ class RosterWindow:
                   big_brother_contact. (default None)
         """
         added_iters = []
+        visible = self.contact_is_visible(contact, account)
         if big_brother_contact:
             # Add contact under big brother
 
@@ -364,7 +366,7 @@ class RosterWindow:
             for child_iter in parent_iters:
                 it = self.model.append(child_iter, [None,
                     contact.get_shown_name(), 'contact', contact.jid, account,
-                    None, None, None, None, None, None] + \
+                    None, None, None, None, None, None, visible] + \
                     [None] * self.nb_ext_renderers)
                 added_iters.append(it)
                 if contact.jid in self._iters[account]['contacts']:
@@ -393,7 +395,7 @@ class RosterWindow:
                 # for more
                 i_ = self.model.append(child_iterG, [None,
                     contact.get_shown_name(), typestr, contact.jid, account,
-                    None, None, None, None, None, None] + \
+                    None, None, None, None, None, None, visible] + \
                     [None] * self.nb_ext_renderers)
                 added_iters.append(i_)
                 if contact.jid in self._iters[account]['contacts']:
@@ -653,7 +655,7 @@ class RosterWindow:
         child_iterA = self._get_account_iter(account, self.model)
         self._iters[account]['contacts'][jid] = [self.model.append(child_iterA,
             [None, app.nicks[account], 'self_contact', jid, account, None,
-            None, None, None, None, None] + [None] * self.nb_ext_renderers)]
+            None, None, None, None, None, True] + [None] * self.nb_ext_renderers)]
 
         self.draw_completely(jid, account)
         self.draw_account(account)
@@ -1012,6 +1014,10 @@ class RosterWindow:
                 # Peform delayed recalibration
                 self._recalibrate_metacontact_family(family, account)
             self.draw_contact(jid, account)
+            # Hide Group if all childs are hidden
+            contact = app.contacts.get_contact(account, jid)
+            for group in contact.get_shown_groups():
+                self.draw_group(group, account)
 
     # FIXME: integrate into add_contact()
     def add_to_not_in_the_roster(self, account, jid, nick='', resource=''):
@@ -1130,6 +1136,24 @@ class RosterWindow:
             text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
         self.model[child_iter][Column.NAME] = text
+
+        # Hide group if no more contacts
+        iterG = self._get_group_iter(group, account, model=self.modelfilter)
+        to_hide = []
+        while(iterG):
+            parent = self.modelfilter.iter_parent(iterG)
+            if (not self.modelfilter.iter_has_child(iterG)) or (len(to_hide) > \
+            0 and self.modelfilter.iter_n_children(iterG) == 1):
+                to_hide.append(iterG)
+                if not parent or self.modelfilter[parent][Column.TYPE] != \
+                'group':
+                    iterG = None
+                else:
+                    iterG = parent
+            else:
+                iterG = None
+        for iter_ in to_hide:
+            self.modelfilter[iter_][Column.VISIBLE] = False
 
     def _really_draw_groups(self):
         for ag in self.groups_to_draw.values():
@@ -1289,34 +1313,41 @@ class RosterWindow:
                 img = state_images[icon_name]
                 self.model[child_iter][Column.IMG] = img
                 self.model[child_iter][Column.NAME] = name
+                #TODO: compute visible
+                visible = True
+                self.model[child_iter][Column.VISIBLE] = visible
         else:
             # A normal contact or little brother
             state_images = self.get_appropriate_state_images(jid,
                     icon_name = icon_name)
 
+            visible = self.contact_is_visible(contact, account)
             # All iters have the same icon (no expand/collapse)
             img = state_images[icon_name]
             for child_iter in child_iters:
                 self.model[child_iter][Column.IMG] = img
                 self.model[child_iter][Column.NAME] = name
+                self.model[child_iter][Column.VISIBLE] = visible
+                if visible:
+                    parent_iter = self.model.iter_parent(child_iter)
+                    self.model[parent_iter][Column.VISIBLE] = True
 
             # We are a little brother
             if family and not is_big_brother and not self.starting:
                 self.draw_parent_contact(jid, account)
 
-        delimiter = app.connections[account].nested_group_delimiter
-        for group in contact.get_shown_groups():
-            # We need to make sure that _visible_func is called for
-            # our groups otherwise we might not be shown
-            group_splited = group.split(delimiter)
-            i = 1
-            while i < len(group_splited) + 1:
-                g = delimiter.join(group_splited[:i])
-                iterG = self._get_group_iter(g, account, model=self.model)
-                if iterG:
-                    # it's not self contact
-                    self.model[iterG][Column.JID] = self.model[iterG][Column.JID]
-                i += 1
+        if visible:
+            delimiter = app.connections[account].nested_group_delimiter
+            for group in contact.get_shown_groups():
+                group_splited = group.split(delimiter)
+                i = 1
+                while i < len(group_splited) + 1:
+                    g = delimiter.join(group_splited[:i])
+                    iterG = self._get_group_iter(g, account, model=self.model)
+                    if iterG:
+                        # it's not self contact
+                        self.model[iterG][Column.VISIBLE] = True
+                    i += 1
 
         app.plugin_manager.gui_extension_point('roster_draw_contact', self,
             jid, account, contact)
@@ -1582,7 +1613,9 @@ class RosterWindow:
         if self.filtering:
             return
         self.filtering = True
-        self.modelfilter.refilter()
+        for account in app.connections:
+            for jid in app.contacts.get_jid_list(account):
+                self.adjust_and_draw_contact_context(jid, account)
         self.filtering = False
 
     def contact_has_pending_roster_events(self, contact, account):
@@ -1604,6 +1637,8 @@ class RosterWindow:
             return self.rfilter_string in contact.get_shown_name().lower()
         if self.contact_has_pending_roster_events(contact, account):
             return True
+        if app.config.get('showoffline'):
+            return True
 
         if contact.show in ('offline', 'error'):
             if contact.jid in app.to_be_removed[account]:
@@ -1620,6 +1655,9 @@ class RosterWindow:
         """
         if self.starting_filtering:
             return False
+
+        visible = model[titer][Column.VISIBLE]
+
         type_ = model[titer][Column.TYPE]
         if not type_:
             return False
@@ -1635,6 +1673,9 @@ class RosterWindow:
         if not jid:
             return False
 
+        if not self.rfilter_enabled:
+            return visible
+
         if type_ == 'group':
             group = jid
             if group == _('Transports'):
@@ -1645,84 +1686,31 @@ class RosterWindow:
                 for _acc in accounts:
                     for contact in app.contacts.iter_contacts(_acc):
                         if group in contact.get_shown_groups():
-                            if self.rfilter_enabled:
-                                if self.rfilter_string in \
-                                contact.get_shown_name().lower():
-                                    return True
-                            elif self.contact_has_pending_roster_events(contact,
-                            _acc):
+                            if self.rfilter_string in \
+                            contact.get_shown_name().lower():
                                 return True
-                    if self.rfilter_enabled:
-                        # No transport has been found
-                        return False
-                return app.config.get('show_transports_group') and \
-                    (app.account_is_connected(account) or \
-                    app.config.get('showoffline'))
-            if app.config.get('showoffline'):
-                return True
-
-            if self.regroup:
-                # Column.ACCOUNT for groups depends on the order
-                # accounts were connected
-                # Check all accounts for online group contacts
-                accounts = app.contacts.get_accounts()
-            else:
-                accounts = [account]
-            for _acc in accounts:
-                delimiter = app.connections[_acc].nested_group_delimiter
-                for contact in app.contacts.iter_contacts(_acc):
-                    if not self.contact_is_visible(contact, _acc):
-                        continue
-                    # Is this contact in this group?
-                    for grp in contact.get_shown_groups():
-                        while grp:
-                            if group == grp:
-                                return True
-                            grp = delimiter.join(grp.split(delimiter)[:-1])
-            return False
-        if type_ == 'contact':
-            if self.rfilter_enabled:
-                if model.iter_has_child(titer):
-                    iter_c = model.iter_children(titer)
-                    while iter_c:
-                        if self.rfilter_string in model[iter_c][Column.NAME].lower():
+                        elif self.contact_has_pending_roster_events(contact,
+                        _acc):
                             return True
-                        iter_c = model.iter_next(iter_c)
-                return self.rfilter_string in model[titer][Column.NAME].lower()
-            if app.config.get('showoffline'):
-                return True
-            bb_jid = None
-            bb_account = None
-            family = app.contacts.get_metacontacts_family(account, jid)
-            if family:
-                nearby_family, bb_jid, bb_account = \
-                        self._get_nearby_family_and_big_brother(family, account)
-            if (bb_jid, bb_account) == (jid, account):
-                # Show the big brother if a child has pending events
-                for data in nearby_family:
-                    jid = data['jid']
-                    account = data['account']
-                    contact = app.contacts.get_contact_with_highest_priority(
-                        account, jid)
-                    if contact and self.contact_is_visible(contact, account):
+                    # No transport has been found
+                    return False
+
+        if type_ == 'contact':
+            if model.iter_has_child(titer):
+                iter_c = model.iter_children(titer)
+                while iter_c:
+                    if self.rfilter_string in model[iter_c][Column.NAME].lower():
                         return True
-                return False
-            else:
-                contact = app.contacts.get_contact_with_highest_priority(
-                    account, jid)
-                return self.contact_is_visible(contact, account)
-        if type_ == 'agent':
-            if self.rfilter_enabled:
-                return self.rfilter_string in model[titer][Column.NAME].lower()
-            contact = app.contacts.get_contact_with_highest_priority(account,
-                jid)
-            return self.contact_has_pending_roster_events(contact, account) or \
-                (app.config.get('show_transports_group') and \
-                (app.account_is_connected(account) or \
-                app.config.get('showoffline')))
-        if type_ == 'groupchat' and self.rfilter_enabled:
+                    iter_c = model.iter_next(iter_c)
             return self.rfilter_string in model[titer][Column.NAME].lower()
-        return True
+
+        if type_ == 'agent':
+            return self.rfilter_string in model[titer][Column.NAME].lower()
+
+        if type_ == 'groupchat':
+            return self.rfilter_string in model[titer][Column.NAME].lower()
+
+        return visible
 
     def _compareIters(self, model, iter1, iter2, data=None):
         """
@@ -1732,8 +1720,6 @@ class RosterWindow:
         name2 = model[iter2][Column.NAME]
         if not name1 or not name2:
             return 0
-        name1 = name1
-        name2 = name2
         type1 = model[iter1][Column.TYPE]
         type2 = model[iter2][Column.TYPE]
         if type1 == 'self_contact':
@@ -1742,11 +1728,7 @@ class RosterWindow:
             return 1
         if type1 == 'group':
             name1 = model[iter1][Column.JID]
-            if name1:
-                name1 = name1
             name2 = model[iter2][Column.JID]
-            if name2:
-                name2 = name2
             if name1 == _('Transports'):
                 return 1
             if name2 == _('Transports'):
@@ -1763,8 +1745,6 @@ class RosterWindow:
         account2 = model[iter2][Column.ACCOUNT]
         if not account1 or not account2:
             return 0
-        account1 = account1
-        account2 = account2
         if type1 == 'account':
             return locale.strcoll(account1, account2)
         jid1 = model[iter1][Column.JID]
@@ -4064,13 +4044,8 @@ class RosterWindow:
         action.set_state(param)
         app.config.set('showoffline', param.get_boolean())
         self.refilter_shown_roster_items()
-        if param.get_boolean():
-            # We need to filter twice to show groups with no contacts inside
-            # in the correct expand state
-            self.refilter_shown_roster_items()
-            self.window.lookup_action('show-active').set_enabled(False)
-        else:
-            self.window.lookup_action('show-active').set_enabled(True)
+        self.window.lookup_action('show-active').set_enabled(
+            not param.get_boolean())
 
     def on_show_active_contacts_action(self, action, param):
         """
@@ -4079,14 +4054,8 @@ class RosterWindow:
         action.set_state(param)
         app.config.set('show_only_chat_and_online', param.get_boolean())
         self.refilter_shown_roster_items()
-
-        if param.get_boolean():
-            # We need to filter twice to show groups with no contacts inside
-            # in the correct expand state
-            self.refilter_shown_roster_items()
-            self.window.lookup_action('show-offline').set_enabled(False)
-        else:
-            self.window.lookup_action('show-offline').set_enabled(True)
+        self.window.lookup_action('show-offline').set_enabled(
+            not param.get_boolean())
 
     def on_show_roster_action(self, action, param):
         # when num controls is 0 this menuitem is hidden, but still need to
@@ -5693,12 +5662,12 @@ class RosterWindow:
         self.nb_ext_renderers = 0
         # When we quit, rememver if we already saved config once
         self.save_done = False
-        # [icon, name, type, jid, account, editable, mood_pixbuf,
+        # [icon, name, type, jid, account, mood_pixbuf,
         # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
-        # padlock_pixbuf]
+        # padlock_pixbuf, visible]
         self.columns = [Gtk.Image, str, str, str, str,
             GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf,
-            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf]
+            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, bool]
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         application.add_window(self.window)
