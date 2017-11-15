@@ -1647,6 +1647,8 @@ class RosterWindow:
         if app.config.get('show_only_chat_and_online') and contact.show in (
         'away', 'xa', 'busy'):
             return False
+        if _('Transports') in contact.get_shown_groups():
+            return app.config.get('show_transports_group')
         return True
 
     def _visible_func(self, model, titer, dummy):
