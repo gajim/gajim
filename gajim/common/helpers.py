@@ -1354,6 +1354,10 @@ def update_optional_features(account = None):
         app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
         app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
         app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
+
+        # Give plugins the possibility to add their features
+        app.plugin_manager.extension_point('update_caps', a)
+
         app.caps_hash[a] = caps_cache.compute_caps_hash([app.gajim_identity],
                 app.gajim_common_features + app.gajim_optional_features[a])
         # re-send presence with new hash
