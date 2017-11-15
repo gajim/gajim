@@ -2039,6 +2039,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             p.setStatus(msg)
         if signed:
             p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
+        p = self.add_sha(p)
 
         if self.connection:
             self.connection.send(p)
