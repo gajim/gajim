@@ -2761,6 +2761,7 @@ class Interface:
         # Creating plugin manager
         from gajim import plugins
         app.plugin_manager = plugins.PluginManager()
+        app.plugin_manager.init_plugins()
 
         helpers.update_optional_features()
         # prepopulate data which we are sure of; note: we do not log these info

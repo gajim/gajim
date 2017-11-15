@@ -110,7 +110,6 @@ class PluginManager(metaclass=Singleton):
         for path in [app.PLUGINS_DIRS[1], app.PLUGINS_DIRS[0]]:
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
-        self._activate_all_plugins_from_global_config()
 
     @log_calls('PluginManager')
     def _plugin_has_entry_in_global_config(self, plugin):
@@ -125,6 +124,10 @@ class PluginManager(metaclass=Singleton):
 
     def _remove_plugin_entry_in_global_config(self, plugin):
         app.config.del_per('plugins', plugin.short_name)
+
+    @log_calls('PluginManager')
+    def init_plugins(self):
+        self._activate_all_plugins_from_global_config()
 
     @log_calls('PluginManager')
     def add_plugin(self, plugin_class):
