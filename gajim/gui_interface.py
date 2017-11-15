@@ -2562,10 +2562,6 @@ class Interface:
         MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             self.msg_win_mgr.create_window(None, None, None)
 
-        # Creating plugin manager
-        from gajim import plugins
-        app.plugin_manager = plugins.PluginManager()
-
         self.roster._before_fill()
         for account in app.connections:
             app.connections[account].load_roster_from_db()
@@ -2761,6 +2757,10 @@ class Interface:
             app.transport_avatar[a] = {}
             app.gajim_optional_features[a] = []
             app.caps_hash[a] = ''
+
+        # Creating plugin manager
+        from gajim import plugins
+        app.plugin_manager = plugins.PluginManager()
 
         helpers.update_optional_features()
         # prepopulate data which we are sure of; note: we do not log these info
