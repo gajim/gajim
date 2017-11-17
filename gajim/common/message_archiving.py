@@ -117,6 +117,15 @@ class ConnectionArchive313:
             raise InvalidMamIQ
         return fin, set_
 
+    def parse_from_jid(self, stanza):
+        jid = stanza.getFrom()
+        if jid is None:
+            # No from means, iq from our own archive
+            jid = self.get_own_jid().getStripped()
+        else:
+            jid = jid.getStripped()
+        return jid
+
     def _result_finished(self, conn, stanza, query_id, start_date, groupchat):
         try:
             fin, set_ = self.parse_iq(stanza, query_id)
@@ -128,13 +137,13 @@ class ConnectionArchive313:
             log.info('End of MAM query, no items retrieved')
             return
 
-        jid = str(stanza.getFrom())
+        jid = self.parse_from_jid(stanza)
         complete = fin.getAttr('complete')
         app.logger.set_archive_timestamp(jid, last_mam_id=last)
         if complete != 'true':
             self.mam_query_ids.remove(query_id)
             query_id = self.get_query_id()
-            query = self.get_archive_query(query_id, after=last)
+            query = self.get_archive_query(query_id, jid=jid, after=last)
             self._send_archive_query(query, query_id, groupchat=groupchat)
         else:
             self.mam_query_ids.remove(query_id)
@@ -153,7 +162,7 @@ class ConnectionArchive313:
             return
 
         self.mam_query_ids.remove(query_id)
-        jid = str(stanza.getFrom())
+        jid = self.parse_from_jid(stanza)
         if start_date:
             timestamp = start_date.timestamp()
         else:
