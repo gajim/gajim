@@ -481,23 +481,36 @@ class AvatarNotificationPEP(AbstractPEP):
     namespace = 'urn:xmpp:avatar:metadata'
 
     def _extract_info(self, items):
-        avatar = None
+        self.avatar = None
         for item in items.getTags('item'):
             info = item.getTag('metadata').getTag('info')
-            self.avatar = info.getAttrs()
+            if info is not None:
+                self.avatar = info.getAttrs()
             break
 
-        return (avatar, False)
+        return (None, False)
 
     def _on_receive(self, jid, account):
-        sha = app.contacts.get_avatar_sha(account, jid)
-        app.log('avatar').info(
-            'Update (Pubsub): %s %s', jid, self.avatar['id'])
-        if sha == self.avatar['id']:
-            return
         con = app.connections[account]
-        app.log('avatar').info('Request (Pubsub): %s', jid)
-        con.send_pb_retrieve(jid, 'urn:xmpp:avatar:data', self.avatar['id'])
+        if self.avatar is None:
+            # Remove avatar
+            app.log('avatar').debug('Remove (Pubsub): %s', jid)
+            app.contacts.set_avatar(account, jid, None)
+            own_jid = con.get_own_jid().getStripped()
+            app.logger.set_avatar_sha(own_jid, jid, None)
+            app.interface.update_avatar(account, jid)
+        else:
+            sha = app.contacts.get_avatar_sha(account, jid)
+            app.log('avatar').info(
+                'Update (Pubsub): %s %s', jid, self.avatar['id'])
+            if sha == self.avatar['id']:
+                app.log('avatar').info(
+                    'Avatar already known (Pubsub): %s %s',
+                    jid, self.avatar['id'])
+                return
+            app.log('avatar').info('Request (Pubsub): %s', jid)
+            con.send_pb_retrieve(jid, 'urn:xmpp:avatar:data',
+                                 self.avatar['id'])
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [

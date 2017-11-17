@@ -277,13 +277,17 @@ class ConnectionVcard:
 
         if self.get_own_jid().bareMatch(obj.jid):
             app.log('avatar').info('Update (vCard): %s %s',
-                                    obj.jid, obj.avatar_sha)
+                                   obj.jid, obj.avatar_sha)
             current_sha = app.config.get_per(
                 'accounts', self.name, 'avatar_sha')
             if obj.avatar_sha != current_sha:
                 app.log('avatar').info(
                     'Request (vCard): %s', obj.jid)
                 self.request_vcard(self._on_own_avatar_received)
+            else:
+                app.log('avatar').info(
+                    'Avatar already known (vCard): %s %s',
+                    obj.jid, obj.avatar_sha)
             return
 
         if obj.avatar_sha == '':
@@ -305,6 +309,10 @@ class ConnectionVcard:
                 app.log('avatar').info(
                     'Request (vCard): %s', obj.jid)
                 self.request_vcard(self._on_avatar_received, obj.jid)
+            else:
+                app.log('avatar').info(
+                    'Avatar already known (vCard): %s %s',
+                    obj.jid, obj.avatar_sha)
 
     def _vcard_gc_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -348,6 +356,9 @@ class ConnectionVcard:
                     obj.nick, obj.avatar_sha)
                 gc_contact.avatar_sha = obj.avatar_sha
                 app.interface.update_avatar(contact=gc_contact)
+            else:
+                app.log('avatar').info(
+                    'Avatar already known (vCard): %s', obj.nick)
 
     def send_avatar_presence(self):
         show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
