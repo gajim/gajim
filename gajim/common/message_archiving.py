@@ -258,8 +258,10 @@ class ConnectionArchive313:
             query = self.get_archive_query(
                 query_id, jid=jid, after=archive.last_mam_id)
         else:
-            # First Start, we request one month
-            start_date = datetime.utcnow() - timedelta(days=30)
+            # First Start, we dont request history
+            # Depending on what a MUC saves, there could be thousands
+            # of Messages even in just one day.
+            start_date = datetime.utcnow() - timedelta(days=1)
             log.info('First join: query archive %s from: %s', jid, start_date)
             query = self.get_archive_query(query_id, jid=jid, start=start_date)
         self._send_archive_query(query, query_id, start_date, groupchat=True)
