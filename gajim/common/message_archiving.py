@@ -141,7 +141,8 @@ class ConnectionArchive313:
         if duplicate:
             # dont propagate the event further
             return True
-        app.logger.insert_into_logs(obj.with_,
+        app.logger.insert_into_logs(self.name,
+                                    obj.with_,
                                     obj.timestamp,
                                     obj.kind,
                                     unread=False,

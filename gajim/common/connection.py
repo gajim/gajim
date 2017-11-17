@@ -433,7 +433,7 @@ class CommonConnection:
         if obj.message is None:
             return
 
-        app.logger.insert_into_logs(jid, obj.timestamp, obj.kind,
+        app.logger.insert_into_logs(self.name, jid, obj.timestamp, obj.kind,
                                     message=obj.message,
                                     subject=obj.subject,
                                     additional_data=obj.additional_data,

@@ -946,7 +946,8 @@ class ConnectionHandlersBase:
         app.config.should_log(self.name, obj.jid):
             show = app.logger.convert_show_values_to_db_api_values(obj.show)
             if show is not None:
-                app.logger.insert_into_logs(nbxmpp.JID(obj.jid).getStripped(),
+                app.logger.insert_into_logs(self.name,
+                                            nbxmpp.JID(obj.jid).getStripped(),
                                             time_time(),
                                             KindConstant.STATUS,
                                             message=obj.status,
@@ -1072,7 +1073,8 @@ class ConnectionHandlersBase:
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
-            app.logger.insert_into_logs(obj.jid,
+            app.logger.insert_into_logs(self.name,
+                                        obj.jid,
                                         obj.timestamp,
                                         KindConstant.GC_MSG,
                                         message=obj.msgtxt,
@@ -1092,7 +1094,8 @@ class ConnectionHandlersBase:
         subject = msg.getSubject()
 
         if session.is_loggable():
-            app.logger.insert_into_logs(nbxmpp.JID(frm).getStripped(),
+            app.logger.insert_into_logs(self.name,
+                                        nbxmpp.JID(frm).getStripped(),
                                         tim,
                                         KindConstant.ERROR,
                                         message=error_msg,

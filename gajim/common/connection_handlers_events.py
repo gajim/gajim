@@ -954,7 +954,8 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             show = app.logger.convert_show_values_to_db_api_values(self.show)
             if show is not None:
                 fjid = nbxmpp.JID(self.fjid)
-                app.logger.insert_into_logs(fjid.getStripped(),
+                app.logger.insert_into_logs(self.conn.name,
+                                            fjid.getStripped(),
                                             time_time(),
                                             KindConstant.GCSTATUS,
                                             contact_name=fjid.getResource(),

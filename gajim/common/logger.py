@@ -282,6 +282,10 @@ class Logger:
             return [user['jid'] for user in family]
         return [jid]
 
+    def get_account_id(self, account):
+        jid = app.get_jid_from_account(account)
+        return self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
+
     def get_jid_id(self, jid, kind=None, type_=None):
         """
         Get the jid id from a jid.
@@ -1127,7 +1131,8 @@ class Logger:
         """
         return self.get_jid_id(jid, kind, type_)
 
-    def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
+    def insert_into_logs(self, account, jid, time_, kind,
+                         unread=True, **kwargs):
         """
         Insert a new message into the `logs` table
 
@@ -1144,20 +1149,22 @@ class Logger:
                         a field in the `logs` table
         """
         jid_id = self.get_jid_id(jid, kind=kind)
- 
+        account_id = self.get_account_id(account)
+
         if 'additional_data' in kwargs:
             if not kwargs['additional_data']:
                 del kwargs['additional_data']
             else:
                 kwargs['additional_data'] = json.dumps(kwargs["additional_data"])
- 
+
         sql = '''
-              INSERT INTO logs (jid_id, time, kind, {columns})
-              VALUES (?, ?, ?, {values})
+              INSERT INTO logs (account_id, jid_id, time, kind, {columns})
+              VALUES (?, ?, ?, ?, {values})
               '''.format(columns=', '.join(kwargs.keys()),
                          values=', '.join('?' * len(kwargs)))
 
-        lastrowid = self.con.execute(sql, (jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
+        lastrowid = self.con.execute(
+            sql, (account_id, jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
                  jid, time_, kind, kwargs.get('stanza_id', None))
