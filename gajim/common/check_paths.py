@@ -65,6 +65,7 @@ def create_log_db():
 
             CREATE TABLE logs(
                     log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    account_id INTEGER,
                     jid_id INTEGER,
                     contact_name TEXT,
                     time INTEGER,

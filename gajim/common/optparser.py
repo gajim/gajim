@@ -1044,6 +1044,7 @@ class OptionsParser:
                         oldest_mam_timestamp TEXT,
                         last_muc_timestamp TEXT
                         );
+                    ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
                     '''
             )
             con.commit()
