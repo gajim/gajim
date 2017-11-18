@@ -44,6 +44,7 @@ import hashlib
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
+from gi.repository import Gio
 
 try:
     from PIL import Image
@@ -2558,6 +2559,23 @@ class Interface:
         view.updateNamespace({'gajim': app})
         app.ipython_window = window
 
+    def network_status_changed(self, monitor, connected):
+        if connected == self.network_state:
+            # This callback gets called a lot from GTK with the
+            # same state, not only on change.
+            return
+        self.network_state = connected
+        if connected:
+            for connection in app.connections.values():
+                if connection.connected <= 0:
+                    log.info('Connect %s', connection.name)
+                    connection.reconnect()
+        else:
+            for connection in app.connections.values():
+                if connection.connected > 1:
+                    log.info('Disconnect %s', connection.name)
+                    connection.disconnectedReconnCB()
+
     def run(self, application):
         if app.config.get('trayicon') != 'never':
             self.show_systray()
@@ -2779,8 +2797,6 @@ class Interface:
 
         self.remote_ctrl = None
 
-        from gajim import network_watcher
-
         if dbus_support.supported:
             from gajim import upower_listener
             from gajim import logind_listener
@@ -2881,6 +2897,11 @@ class Interface:
         self.last_ftwindow_update = 0
 
         self.music_track_changed_signal = None
+
+        self.network_monitor = Gio.NetworkMonitor.get_default()
+        self.network_monitor.connect('network-changed',
+                                     self.network_status_changed)
+        self.network_state = self.network_monitor.get_network_available()
 
 
 class PassphraseRequest:
