@@ -1065,7 +1065,6 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         own_jid = self.conn.get_own_jid()
         if archive_jid and not archive_jid.bareMatch(own_jid):
             # MAM Message not from our Archive
-            log.info('MAM message not from our user archive')
             return False
 
         self.msg_ = self.forwarded.getTag('message', protocol=True)
