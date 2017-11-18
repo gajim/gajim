@@ -238,7 +238,9 @@ data_files_app_icon = [
     ("share/icons/hicolor/128x128/apps",
      ["gajim/data/icons/hicolor/128x128/apps/org.gajim.Gajim.png"]),
     ("share/icons/hicolor/scalable/apps",
-     ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"])
+     ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"]),
+    ("share/icons/hicolor/symbolic/apps",
+     ["gajim/data/icons/hicolor/symbolic/apps/org.gajim.Gajim-symbolic.svg"])
 ]
 
 data_files = data_files_app_icon
