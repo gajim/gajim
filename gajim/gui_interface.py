@@ -326,8 +326,13 @@ class Interface:
                     obj.room_jid)
             elif (obj.errcode == '404') or (obj.errcon in ('item-not-found',
             'remote-server-not-found')):
+                # remote server does not exist
+                if (obj.errcon == 'remote-server-not-found'):
+                    self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                    _('Remote server <b>%s</b> does not exist.') % obj.room_jid)
                 # group chat does not exist
-                self.handle_gc_error(gc_control, _('Unable to join group chat'),
+                else:
+                    self.handle_gc_error(gc_control, _('Unable to join group chat'),
                     _('Group chat <b>%s</b> does not exist.') % obj.room_jid)
             elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
                 self.handle_gc_error(gc_control, _('Unable to join group chat'),
