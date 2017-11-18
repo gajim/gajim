@@ -1088,11 +1088,18 @@ class Logger:
             return True
         return False
 
-    def find_stanza_id(self, stanza_id, origin_id=None):
+    def find_stanza_id(self, archive_jid, stanza_id, origin_id=None,
+                       groupchat=False):
         """
         Checks if a stanza-id is already in the `logs` table
 
+        :param archive_jid: The jid of the archive the stanza-id belongs to
+
         :param stanza_id:   The stanza-id
+
+        :param origin_id:   The origin-id
+
+        :param groupchat:   stanza-id is from a groupchat
 
         return True if the stanza-id was found
         """
@@ -1105,12 +1112,19 @@ class Logger:
         if not ids:
             return False
 
+        archive_id = self.get_jid_id(archive_jid)
+        if groupchat:
+            column = 'jid_id'
+        else:
+            column = 'account_id'
+
         sql = '''
               SELECT stanza_id FROM logs
-              WHERE stanza_id IN ({values}) LIMIT 1
-              '''.format(values=', '.join('?' * len(ids)))
+              WHERE stanza_id IN ({values}) AND {archive} = ? LIMIT 1
+              '''.format(values=', '.join('?' * len(ids)),
+                         archive=column)
 
-        result = self.con.execute(sql, tuple(ids)).fetchone()
+        result = self.con.execute(sql, tuple(ids) + (archive_id,)).fetchone()
 
         if result is not None:
             log.info('Found duplicated message, stanza-id: %s, origin-id: %s',

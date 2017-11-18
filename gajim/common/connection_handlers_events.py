@@ -1062,7 +1062,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         archive_jid = self.stanza.getFrom()
-        own_jid = self.conn.get_own_jid()
+        own_jid = self.conn.get_own_jid().getStripped()
         if archive_jid and not archive_jid.bareMatch(own_jid):
             # MAM Message not from our Archive
             return False
@@ -1076,7 +1076,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.unique_id, origin_id = self.get_unique_id()
 
         # Check for duplicates
-        if app.logger.find_stanza_id(self.unique_id, origin_id):
+        if app.logger.find_stanza_id(own_jid, self.unique_id, origin_id):
             return
 
         self.msgtxt = self.msg_.getTagData('body')
@@ -1150,16 +1150,18 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.kind = KindConstant.GC_MSG
 
     def generate(self):
-        self.room_jid = self.stanza.getFrom()
         self.msg_ = self.forwarded.getTag('message', protocol=True)
 
         if self.msg_.getType() != 'groupchat':
             return False
 
+        self.room_jid = self.stanza.getFrom().getStripped()
+
         self.unique_id = self.get_stanza_id(self.result, query=True)
 
         # Check for duplicates
-        if app.logger.find_stanza_id(self.unique_id):
+        if app.logger.find_stanza_id(self.room_jid, self.unique_id,
+                                     groupchat=True):
             return
 
         self.msgtxt = self.msg_.getTagData('body')
@@ -1282,7 +1284,9 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
         if self.stanza.getType() == 'groupchat':
-            if app.logger.find_stanza_id(self.unique_id):
+            if app.logger.find_stanza_id(self.stanza.getFrom().getStripped(),
+                                         self.unique_id,
+                                         groupchat=True):
                 return
 
         address_tag = self.stanza.getTag('addresses',
