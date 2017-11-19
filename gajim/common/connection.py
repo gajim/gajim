@@ -181,6 +181,11 @@ class CommonConnection:
 
         self.get_config_values_or_default()
 
+        h = app.config.get_per('accounts', self.name, 'hostname')
+        if h:
+            app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(h),
+                self._on_resolve_txt, type_='txt')
+
     def _compute_resource(self):
         resource = app.config.get_per('accounts', self.name, 'resource')
         # All valid resource substitution strings should be added to this hash.
@@ -1103,6 +1108,28 @@ class Connection(CommonConnection, ConnectionHandlers):
             for i in self._hosts:
                 i['ssl_port'] = ssl_p
         self._connect_to_next_host()
+
+    def _on_resolve_txt(self, host, result_array):
+        for res in result_array:
+            if res.startswith('_xmpp-client-xbosh='):
+                url = res[19:]
+                found = False
+                proxies = app.config.get_per('proxies')
+                for p in proxies:
+                    if app.config.get_per('proxies', p, 'type') == 'bosh' \
+                    and app.config.get_per('proxies', p, 'bosh_uri') == url:
+                        found = True
+                        break
+                if not found:
+                    h = app.config.get_per('accounts', self.name, 'hostname')
+                    p = 'bosh_' + h
+                    i = 0
+                    while p in proxies:
+                        i += 1
+                        p = 'bosh_' + h + str(i)
+                    app.config.add_per('proxies', p)
+                    app.config.set_per('proxies', p, 'type', 'bosh')
+                    app.config.set_per('proxies', p, 'bosh_uri', url)
 
 
     def _connect_to_next_host(self, retry=False):
@@ -2212,6 +2239,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_success = self._on_new_account
         self.on_connect_failure = self._on_new_account
         self.connect(config)
+        app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(
+            self._hostname), self._on_resolve_txt, type_='txt')
 
     def _on_new_account(self, con=None, con_type=None):
         if not con_type:
