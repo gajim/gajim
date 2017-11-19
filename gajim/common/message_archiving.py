@@ -27,6 +27,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.logger import KindConstant, JIDConstant
 from gajim.common.const import ArchiveState
+from gajim.common.caps_cache import muc_caps_cache
 import gajim.common.connection_handlers_events as ev
 
 log = logging.getLogger('gajim.c.message_archiving')
@@ -296,7 +297,12 @@ class ConnectionArchive313:
 
     def get_archive_query(self, query_id, jid=None, start=None, end=None, with_=None,
                           after=None, max_=30):
-        namespace = self.archiving_namespace
+        # Muc archive query?
+        namespace = muc_caps_cache.get_mam_namespace(jid)
+        if namespace is None:
+            # Query to our own archive
+            namespace = self.archiving_namespace
+
         iq = nbxmpp.Iq('set', to=jid)
         query = iq.addChild('query', namespace=namespace)
         form = query.addChild(node=nbxmpp.DataForm(typ='submit'))

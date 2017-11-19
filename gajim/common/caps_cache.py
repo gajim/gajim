@@ -491,3 +491,12 @@ class MucCapsCache:
                 return True
         except (KeyError, AttributeError):
             return False
+
+    def get_mam_namespace(self, jid):
+        try:
+            if nbxmpp.NS_MAM_2 in self.cache[jid].features:
+                return nbxmpp.NS_MAM_2
+            elif nbxmpp.NS_MAM_1 in self.cache[jid].features:
+                return nbxmpp.NS_MAM_1
+        except (KeyError, AttributeError):
+            return
