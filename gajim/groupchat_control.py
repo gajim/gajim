@@ -1743,13 +1743,6 @@ class GroupchatControl(ChatControlBase):
                         tv.last_received_message_id[obj.new_nick] = \
                             tv.last_received_message_id[obj.nick]
                         del tv.last_received_message_id[obj.nick]
-                    if obj.nick in self.last_received_txt:
-                        self.last_received_txt[obj.new_nick] = \
-                            self.last_received_txt[obj.nick]
-                        del self.last_received_txt[obj.nick]
-                        self.last_received_id[obj.new_nick] = \
-                            self.last_received_id[obj.nick]
-                        del self.last_received_id[obj.nick]
                     # We add new nick to muc roster here, so we don't see
                     # that "new_nick has joined the room" when he just changed
                     # nick.

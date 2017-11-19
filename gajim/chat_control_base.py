@@ -313,8 +313,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.was_at_the_end = True
         self.correcting = False
         self.last_sent_msg = None
-        self.last_received_txt = {} # one per name
-        self.last_received_id = {} # one per name
 
         # add MessageTextView to UI and connect signals
         self.msg_textview = MessageTextView()
@@ -970,10 +968,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         if not count_as_new:
             return
-        if kind in ('incoming', 'incoming_queue', 'outgoing'):
-            self.last_received_txt[name] = text
-            if correct_id:
-                self.last_received_id[name] = correct_id[0]
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
             app.config.get('notify_on_all_muc_messages') or \
