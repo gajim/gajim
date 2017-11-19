@@ -65,6 +65,7 @@ def create_log_db():
 
             CREATE TABLE logs(
                     log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                    account_id INTEGER,
                     jid_id INTEGER,
                     contact_name TEXT,
                     time INTEGER,
@@ -78,6 +79,13 @@ def create_log_db():
                     encryption TEXT,
                     encryption_state TEXT,
                     marker INTEGER
+            );
+
+            CREATE TABLE last_archive_message(
+                    jid_id INTEGER PRIMARY KEY UNIQUE,
+                    last_mam_id TEXT,
+                    oldest_mam_timestamp TEXT,
+                    last_muc_timestamp TEXT
             );
 
             CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);

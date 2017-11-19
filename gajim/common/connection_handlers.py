@@ -47,6 +47,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
+from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
 from gajim.common.protocol.caps import ConnectionCaps
@@ -95,6 +96,29 @@ class ConnectionDisco:
         """
         id_ = self._discover(nbxmpp.NS_DISCO_INFO, jid, node, id_prefix)
         self.disco_info_ids.append(id_)
+
+    def discoverMUC(self, jid, callback):
+        disco_info = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_INFO)
+        self.connection.SendAndCallForResponse(
+            disco_info, self.received_muc_info, {'callback': callback})
+
+    def received_muc_info(self, conn, stanza, callback):
+        if nbxmpp.isResultNode(stanza):
+            app.log('gajim.muc').info(
+                'Received MUC DiscoInfo for %s', stanza.getFrom())
+            muc_caps_cache.append(stanza)
+            callback()
+        else:
+            error = stanza.getError()
+            if error == 'item-not-found':
+                # Groupchat does not exist
+                callback()
+                return
+            app.nec.push_incoming_event(
+                InformationEvent(None, conn=self,
+                                 level='error',
+                                 pri_txt=_('Unable to join Groupchat'),
+                                 sec_txt=error))
 
     def request_register_agent_info(self, agent):
         if not self.connection or self.connected < 2:
@@ -760,6 +784,8 @@ class ConnectionHandlersBase:
             self._nec_message_received)
         app.ged.register_event_handler('mam-message-received', ged.CORE,
             self._nec_message_received)
+        app.ged.register_event_handler('mam-gc-message-received', ged.CORE,
+            self._nec_message_received)
         app.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
         app.ged.register_event_handler('gc-message-received', ged.CORE,
@@ -775,6 +801,8 @@ class ConnectionHandlersBase:
         app.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('mam-message-received', ged.CORE,
+            self._nec_message_received)
+        app.ged.remove_event_handler('mam-gc-message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
@@ -918,7 +946,8 @@ class ConnectionHandlersBase:
         app.config.should_log(self.name, obj.jid):
             show = app.logger.convert_show_values_to_db_api_values(obj.show)
             if show is not None:
-                app.logger.insert_into_logs(nbxmpp.JID(obj.jid).getStripped(),
+                app.logger.insert_into_logs(self.name,
+                                            nbxmpp.JID(obj.jid).getStripped(),
                                             time_time(),
                                             KindConstant.STATUS,
                                             message=obj.status,
@@ -1044,7 +1073,8 @@ class ConnectionHandlersBase:
             # if not obj.nick, it means message comes from room itself
             # usually it hold description and can be send at each connection
             # so don't store it in logs
-            app.logger.insert_into_logs(obj.jid,
+            app.logger.insert_into_logs(self.name,
+                                        obj.jid,
                                         obj.timestamp,
                                         KindConstant.GC_MSG,
                                         message=obj.msgtxt,
@@ -1064,7 +1094,8 @@ class ConnectionHandlersBase:
         subject = msg.getSubject()
 
         if session.is_loggable():
-            app.logger.insert_into_logs(nbxmpp.JID(frm).getStripped(),
+            app.logger.insert_into_logs(self.name,
+                                        nbxmpp.JID(frm).getStripped(),
                                         tim,
                                         KindConstant.ERROR,
                                         message=error_msg,
@@ -1266,10 +1297,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         app.nec.register_incoming_event(
             Archiving313PreferencesChangedReceivedEvent)
-        app.nec.register_incoming_event(
-            ArchivingFinishedLegacyReceivedEvent)
-        app.nec.register_incoming_event(
-            ArchivingFinishedReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
         app.ged.register_event_handler('http-auth-received', ged.CORE,
@@ -2210,7 +2237,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._IqPingCB, 'get', nbxmpp.NS_PING)
         con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
-        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
         con.RegisterHandler('iq', self._PubSubCB, 'result')

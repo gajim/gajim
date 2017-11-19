@@ -117,7 +117,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 jid = obj.jid
 
             obj.msg_log_id = app.logger.insert_into_logs(
-                jid, obj.timestamp, log_type,
+                self.conn.name, jid, obj.timestamp, log_type,
                 message=msg_to_log,
                 subject=obj.subject,
                 additional_data=obj.additional_data,

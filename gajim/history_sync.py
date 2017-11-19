@@ -19,7 +19,7 @@
 
 import logging
 from enum import IntEnum
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import nbxmpp
 from gi.repository import Gtk, GLib
@@ -27,17 +27,16 @@ from gi.repository import Gtk, GLib
 from gajim.common import app
 from gajim.common import ged
 from gajim.gtkgui_helpers import get_icon_pixmap
+from gajim.common.const import ArchiveState
 
 log = logging.getLogger('gajim.c.message_archiving')
+
 
 class Pages(IntEnum):
     TIME = 0
     SYNC = 1
     SUMMARY = 2
 
-class ArchiveState(IntEnum):
-    NEVER = 0
-    ALL = 1
 
 class HistorySyncAssistant(Gtk.Assistant):
     def __init__(self, account, parent):
@@ -52,13 +51,22 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.timedelta = None
         self.now = datetime.utcnow()
         self.query_id = None
-        self.count_query_id = None
         self.start = None
         self.end = None
         self.next = None
         self.hide_buttons()
+        self.event_id = id(self)
 
-        mam_start = app.config.get_per('accounts', account, 'mam_start_date')
+        own_jid = self.con.get_own_jid().getStripped()
+        archive = app.logger.get_archive_timestamp(own_jid)
+
+        if archive is not None:
+            mam_start = float(archive.oldest_mam_timestamp)
+        else:
+            # Migration from old config value
+            mam_start = app.config.get_per(
+                'accounts', account, 'mam_start_date')
+
         if not mam_start or mam_start == ArchiveState.NEVER:
             self.current_start = self.now
         elif mam_start == ArchiveState.ALL:
@@ -72,7 +80,8 @@ class HistorySyncAssistant(Gtk.Assistant):
 
         self.download_history = DownloadHistoryPage(self)
         self.append_page(self.download_history)
-        self.set_page_type(self.download_history, Gtk.AssistantPageType.PROGRESS)
+        self.set_page_type(self.download_history,
+                           Gtk.AssistantPageType.PROGRESS)
         self.set_page_complete(self.download_history, True)
 
         self.summary = SummaryPage(self)
@@ -80,12 +89,18 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_page_type(self.summary, Gtk.AssistantPageType.SUMMARY)
         self.set_page_complete(self.summary, True)
 
-        app.ged.register_event_handler('archiving-finished',
-                                         ged.PRECORE,
-                                         self._nec_archiving_finished)
+        app.ged.register_event_handler('archiving-count-received',
+                                       ged.GUI1,
+                                       self._received_count)
+        app.ged.register_event_handler('archiving-query-id',
+                                       ged.GUI1,
+                                       self._new_query_id)
+        app.ged.register_event_handler('archiving-interval-finished',
+                                       ged.GUI1,
+                                       self._received_finished)
         app.ged.register_event_handler('raw-mam-message-received',
-                                         ged.PRECORE,
-                                         self._nec_mam_message_received)
+                                       ged.PRECORE,
+                                       self._nec_mam_message_received)
 
         self.connect('prepare', self.on_page_change)
         self.connect('destroy', self.on_destroy)
@@ -96,9 +111,9 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.set_current_page(Pages.SUMMARY)
             self.summary.nothing_to_do()
 
-        if self.con.mam_query_id:
-            self.set_current_page(Pages.SUMMARY)
-            self.summary.query_already_running()
+        # if self.con.mam_query_ids:
+        #     self.set_current_page(Pages.SUMMARY)
+        #     self.summary.query_already_running()
 
         self.show_all()
 
@@ -129,27 +144,42 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.start = self.now - self.timedelta
         self.end = self.current_start
 
-        log.info('config: get mam_start_date: %s', self.current_start)
+        log.info('get mam_start_date: %s', self.current_start)
         log.info('now: %s', self.now)
         log.info('start: %s', self.start)
         log.info('end: %s', self.end)
 
-        self.query_count()
+        self.con.request_archive_count(self.event_id, self.start, self.end)
 
-    def query_count(self):
-        self.count_query_id = self.con.connection.getAnID()
-        self.con.request_archive(self.count_query_id,
-                                 start=self.start,
-                                 end=self.end,
-                                 max_=0)
+    def _received_count(self, event):
+        if event.event_id != self.event_id:
+            return
+        if event.count is not None:
+            self.download_history.count = int(event.count)
+        self.con.request_archive_interval(self.event_id, self.start, self.end)
 
-    def query_messages(self, last=None):
-        self.query_id = self.con.connection.getAnID()
-        self.con.request_archive(self.query_id,
-                                 start=self.start,
-                                 end=self.end,
-                                 after=last,
-                                 max_=30)
+    def _received_finished(self, event):
+        if event.event_id != self.event_id:
+            return
+        log.info('query finished')
+        GLib.idle_add(self.download_history.finished)
+        self.set_current_page(Pages.SUMMARY)
+        self.summary.finished()
+
+    def _new_query_id(self, event):
+        if event.event_id != self.event_id:
+            return
+        self.query_id = event.query_id
+
+    def _nec_mam_message_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+
+        if obj.result.getAttr('queryid') != self.query_id:
+            return
+
+        log.debug('received message')
+        GLib.idle_add(self.download_history.set_fraction)
 
     def on_row_selected(self, listbox, row):
         self.timedelta = row.get_child().get_delta()
@@ -164,70 +194,22 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.prepare_query()
 
     def on_destroy(self, *args):
-        app.ged.remove_event_handler('archiving-finished',
-                                       ged.PRECORE,
-                                       self._nec_archiving_finished)
+        app.ged.remove_event_handler('archiving-count-received',
+                                     ged.GUI1,
+                                     self._received_count)
+        app.ged.remove_event_handler('archiving-query-id',
+                                     ged.GUI1,
+                                     self._new_query_id)
+        app.ged.remove_event_handler('archiving-interval-finished',
+                                     ged.GUI1,
+                                     self._received_finished)
         app.ged.remove_event_handler('raw-mam-message-received',
-                                       ged.PRECORE,
-                                       self._nec_mam_message_received)
+                                     ged.PRECORE,
+                                     self._nec_mam_message_received)
         del app.interface.instances[self.account]['history_sync']
 
     def on_close_clicked(self, *args):
         self.destroy()
-
-    def _nec_mam_message_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-
-        if obj.result.getAttr('queryid') != self.query_id:
-            return
-
-        log.debug('received message')
-        GLib.idle_add(self.download_history.set_fraction)
-
-    def _nec_archiving_finished(self, obj):
-        if obj.conn.name != self.account:
-            return
-
-        if obj.query_id not in (self.query_id, self.count_query_id):
-            return
-
-        set_ = obj.fin.getTag('set', namespace=nbxmpp.NS_RSM)
-        if not set_:
-            log.error('invalid result')
-            log.error(obj.fin)
-            return
-
-        if obj.query_id == self.count_query_id:
-            count = set_.getTagData('count')
-            log.info('message count received: %s', count)
-            if count:
-                self.download_history.count = int(count)
-            self.query_messages()
-            return
-
-        if obj.query_id == self.query_id:
-            last = set_.getTagData('last')
-            complete = obj.fin.getAttr('complete')
-            if not last and complete != 'true':
-                log.error('invalid result')
-                log.error(obj.fin)
-                return
-
-            if complete != 'true':
-                self.query_messages(last)
-            else:
-                log.info('query finished')
-                GLib.idle_add(self.download_history.finished)
-                if self.start:
-                    timestamp = self.start.timestamp()
-                else:
-                    timestamp = ArchiveState.ALL
-                app.config.set_per('accounts', self.account,
-                                     'mam_start_date', timestamp)
-                log.debug('config: set mam_start_date: %s', timestamp)
-                self.set_current_page(Pages.SUMMARY)
-                self.summary.finished()
 
 
 class SelectTimePage(Gtk.Box):
@@ -256,6 +238,7 @@ class SelectTimePage(Gtk.Box):
 
         self.pack_start(label, True, True, 0)
         self.pack_start(listbox, False, False, 0)
+
 
 class DownloadHistoryPage(Gtk.Box):
     def __init__(self, assistant):
@@ -292,6 +275,7 @@ class DownloadHistoryPage(Gtk.Box):
     def finished(self):
         self.progress.set_fraction(1)
 
+
 class SummaryPage(Gtk.Box):
     def __init__(self, assistant):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
@@ -307,24 +291,25 @@ class SummaryPage(Gtk.Box):
     def finished(self):
         received = self.assistant.download_history.received
         finished = _('''
-        Finshed synchronising your History. 
+        Finshed synchronising your History.
         {received} Messages downloaded.
         '''.format(received=received))
         self.label.set_text(finished)
 
     def nothing_to_do(self):
         nothing_to_do = _('''
-        Gajim is fully synchronised 
+        Gajim is fully synchronised
         with the Archive.
         ''')
         self.label.set_text(nothing_to_do)
 
     def query_already_running(self):
         already_running = _('''
-        There is already a synchronisation in 
+        There is already a synchronisation in
         progress. Please try later.
         ''')
         self.label.set_text(already_running)
+
 
 class TimeOption(Gtk.Label):
     def __init__(self, label, months=None):

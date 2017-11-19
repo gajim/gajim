@@ -282,6 +282,10 @@ class Logger:
             return [user['jid'] for user in family]
         return [jid]
 
+    def get_account_id(self, account):
+        jid = app.get_jid_from_account(account)
+        return self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
+
     def get_jid_id(self, jid, kind=None, type_=None):
         """
         Get the jid id from a jid.
@@ -1084,11 +1088,18 @@ class Logger:
             return True
         return False
 
-    def find_stanza_id(self, stanza_id, origin_id=None):
+    def find_stanza_id(self, archive_jid, stanza_id, origin_id=None,
+                       groupchat=False):
         """
         Checks if a stanza-id is already in the `logs` table
 
+        :param archive_jid: The jid of the archive the stanza-id belongs to
+
         :param stanza_id:   The stanza-id
+
+        :param origin_id:   The origin-id
+
+        :param groupchat:   stanza-id is from a groupchat
 
         return True if the stanza-id was found
         """
@@ -1101,12 +1112,19 @@ class Logger:
         if not ids:
             return False
 
+        archive_id = self.get_jid_id(archive_jid)
+        if groupchat:
+            column = 'jid_id'
+        else:
+            column = 'account_id'
+
         sql = '''
               SELECT stanza_id FROM logs
-              WHERE stanza_id IN ({values}) LIMIT 1
-              '''.format(values=', '.join('?' * len(ids)))
+              WHERE stanza_id IN ({values}) AND {archive} = ? LIMIT 1
+              '''.format(values=', '.join('?' * len(ids)),
+                         archive=column)
 
-        result = self.con.execute(sql, tuple(ids)).fetchone()
+        result = self.con.execute(sql, tuple(ids) + (archive_id,)).fetchone()
 
         if result is not None:
             log.info('Found duplicated message, stanza-id: %s, origin-id: %s',
@@ -1127,7 +1145,8 @@ class Logger:
         """
         return self.get_jid_id(jid, kind, type_)
 
-    def insert_into_logs(self, jid, time_, kind, unread=True, **kwargs):
+    def insert_into_logs(self, account, jid, time_, kind,
+                         unread=True, **kwargs):
         """
         Insert a new message into the `logs` table
 
@@ -1144,20 +1163,22 @@ class Logger:
                         a field in the `logs` table
         """
         jid_id = self.get_jid_id(jid, kind=kind)
- 
+        account_id = self.get_account_id(account)
+
         if 'additional_data' in kwargs:
             if not kwargs['additional_data']:
                 del kwargs['additional_data']
             else:
                 kwargs['additional_data'] = json.dumps(kwargs["additional_data"])
- 
+
         sql = '''
-              INSERT INTO logs (jid_id, time, kind, {columns})
-              VALUES (?, ?, ?, {values})
+              INSERT INTO logs (account_id, jid_id, time, kind, {columns})
+              VALUES (?, ?, ?, ?, {values})
               '''.format(columns=', '.join(kwargs.keys()),
                          values=', '.join('?' * len(kwargs)))
 
-        lastrowid = self.con.execute(sql, (jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
+        lastrowid = self.con.execute(
+            sql, (account_id, jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
                  jid, time_, kind, kwargs.get('stanza_id', None))
@@ -1191,4 +1212,46 @@ class Logger:
             WHERE account_jid_id = ? AND jid_id = ?
             '''
         self.con.execute(sql, (sha, account_jid_id, jid_id))
+        self._timeout_commit()
+
+    def get_archive_timestamp(self, jid, type_=None):
+        """
+        Get the last archive id/timestamp for a jid
+
+        :param jid:     The jid that belongs to the avatar
+
+        """
+        jid_id = self.get_jid_id(jid, type_=type_)
+        sql = '''SELECT * FROM last_archive_message WHERE jid_id = ?'''
+        return self.con.execute(sql, (jid_id,)).fetchone()
+
+    def set_archive_timestamp(self, jid, **kwargs):
+        """
+        Set the last archive id/timestamp
+
+        :param jid:                     The jid that belongs to the avatar
+
+        :param last_mam_id:             The last MAM result id
+
+        :param oldest_mam_timestamp:    The oldest date we requested MAM
+                                        history for
+
+        :param last_muc_timestamp:      The timestamp of the last message we
+                                        received in a MUC
+
+        """
+        jid_id = self.get_jid_id(jid)
+        exists = self.get_archive_timestamp(jid)
+        if not exists:
+            sql = '''INSERT INTO last_archive_message VALUES (?, ?, ?, ?)'''
+            self.con.execute(sql, (jid_id,
+                                   kwargs.get('last_mam_id', None),
+                                   kwargs.get('oldest_mam_timestamp', None),
+                                   kwargs.get('last_muc_timestamp', None)))
+        else:
+            args = ' = ?, '.join(kwargs.keys()) + ' = ?'
+            sql = '''UPDATE last_archive_message SET {}
+                     WHERE jid_id = ?'''.format(args)
+            self.con.execute(sql, tuple(kwargs.values()) + (jid_id,))
+        log.info('Save archive timestamps: %s', kwargs)
         self._timeout_commit()

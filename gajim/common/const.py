@@ -36,6 +36,10 @@ class AvatarSize(IntEnum):
     TOOLTIP = 125
     VCARD = 200
 
+class ArchiveState(IntEnum):
+    NEVER = 0
+    ALL = 1
+
 
 THANKS = u"""\
 Alexander Futász

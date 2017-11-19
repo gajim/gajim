@@ -42,6 +42,7 @@ import locale
 import hmac
 import hashlib
 import json
+from functools import partial
 
 try:
     randomsource = random.SystemRandom()
@@ -432,7 +433,7 @@ class CommonConnection:
         if obj.message is None:
             return
 
-        app.logger.insert_into_logs(jid, obj.timestamp, obj.kind,
+        app.logger.insert_into_logs(self.name, jid, obj.timestamp, obj.kind,
                                     message=obj.message,
                                     subject=obj.subject,
                                     additional_data=obj.additional_data,
@@ -1913,8 +1914,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.archiving_namespace = nbxmpp.NS_MAM_2
                 elif nbxmpp.NS_MAM_1 in obj.features:
                     self.archiving_namespace = nbxmpp.NS_MAM_1
-                elif nbxmpp.NS_MAM in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM
                 if self.archiving_namespace:
                     self.archiving_supported = True
                     self.archiving_313_supported = True
@@ -2583,6 +2582,11 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Never join a room when invisible
             return
 
+        self.discoverMUC(
+            room_jid, partial(self._join_gc, nick, show, room_jid,
+                              password, change_nick, rejoin))
+
+    def _join_gc(self, nick, show, room_jid, password, change_nick, rejoin):
         # Check time first in the FAST table
         last_date = app.logger.get_room_last_message_time(
             self.name, room_jid)
@@ -2599,11 +2603,19 @@ class Connection(CommonConnection, ConnectionHandlers):
         if app.config.get('send_sha_in_gc_presence'):
             p = self.add_sha(p)
         self.add_lang(p)
-        if not change_nick:
-            t = p.setTag(nbxmpp.NS_MUC + ' x')
+        if change_nick:
+            self.connection.send(p)
+            return
+
+        t = p.setTag(nbxmpp.NS_MUC + ' x')
+        if muc_caps_cache.has_mam(room_jid):
+            # The room is MAM capable dont get MUC History
+            t.setTag('history', {'maxchars': '0'})
+        else:
+            # Request MUC History (not MAM)
             tags = {}
             timeout = app.config.get_per('rooms', room_jid,
-                'muc_restore_timeout')
+                                         'muc_restore_timeout')
             if timeout is None or timeout == -2:
                 timeout = app.config.get('muc_restore_timeout')
             if last_date == 0 and timeout >= 0:
@@ -2621,8 +2633,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 tags['maxstanzas'] = nb
             if tags:
                 t.setTag('history', tags)
-            if password:
-                t.setTagData('password', password)
+
+        if password:
+            t.setTagData('password', password)
         self.connection.send(p)
 
     def _nec_gc_message_outgoing(self, obj):

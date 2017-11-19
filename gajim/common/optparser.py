@@ -242,6 +242,8 @@ class OptionsParser:
             self.update_config_to_016105()
         if old < [0, 16, 11, 1] and new >= [0, 16, 11, 1]:
             self.update_config_to_016111()
+        if old < [0, 16, 11, 2] and new >= [0, 16, 11, 2]:
+            self.update_config_to_016112()
 
         app.logger.init_vars()
         app.logger.attach_cache_database()
@@ -1029,3 +1031,24 @@ class OptionsParser:
             log.exception('Error')
         con.close()
         app.config.set('version', '0.16.11.1')
+
+    def update_config_to_016112(self):
+        con = sqlite.connect(logger.LOG_DB_PATH)
+        cur = con.cursor()
+        try:
+            cur.executescript(
+                    '''
+                    CREATE TABLE IF NOT EXISTS last_archive_message(
+                        jid_id INTEGER PRIMARY KEY UNIQUE,
+                        last_mam_id TEXT,
+                        oldest_mam_timestamp TEXT,
+                        last_muc_timestamp TEXT
+                        );
+                    ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
+                    '''
+            )
+            con.commit()
+        except sqlite.OperationalError:
+            log.exception('Error')
+        con.close()
+        app.config.set('version', '0.16.11.2')
