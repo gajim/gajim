@@ -1016,6 +1016,8 @@ class RosterWindow:
             self.draw_contact(jid, account)
             # Hide Group if all childs are hidden
             contact = app.contacts.get_contact(account, jid)
+            if not contact:
+                return
             for group in contact.get_shown_groups():
                 self.draw_group(group, account)
 
