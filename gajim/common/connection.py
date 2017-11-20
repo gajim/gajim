@@ -191,6 +191,7 @@ class CommonConnection:
                     'hostname': socket.gethostname(),
                     'rand': rand
             })
+            app.config.set_per('accounts', self.name, 'resource', resource)
         return resource
 
     def dispatch(self, event, data):

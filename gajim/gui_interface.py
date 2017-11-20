@@ -1162,10 +1162,18 @@ class Interface:
         account = obj.conn.name
         conn = obj.conn
         self.roster.send_status(account, 'offline', conn.status)
+
         def on_ok(new_resource):
             app.config.set_per('accounts', account, 'resource', new_resource)
             self.roster.send_status(account, conn.old_show, conn.status)
+
         proposed_resource = conn.server_resource
+        if proposed_resource.startswith('gajim.'):
+            # Dont notify the user about resource change if he didnt set
+            # a custom resource
+            on_ok('gajim.$rand')
+            return
+
         proposed_resource += app.config.get('gc_proposed_nick_char')
         dlg = dialogs.ResourceConflictDialog(_('Resource Conflict'),
             _('You are already connected to this account with the same '
