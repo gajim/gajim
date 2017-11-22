@@ -109,7 +109,7 @@ class GioResolver(CommonResolver):
         except GLib.Error as e:
             if e.domain == 'g-resolver-error-quark':
                 result_list = []
-                log.warning("Could not resolve host: %s", e.message)
+                log.info("Could not resolve host: %s", e.message)
             else:
                 raise
         else:
