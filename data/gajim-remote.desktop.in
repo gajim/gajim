@@ -1,6 +1,7 @@
 [Desktop Entry]
 Categories=Network;InstantMessaging;RemoteAccess;ConsoleOnly;
 Name=Open URI using Gajim
+# Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 Keywords=chat;messaging;im;jabber;xmpp;bonjour;voip;
 Version=1.0
 Exec=gajim-remote handle_uri %u

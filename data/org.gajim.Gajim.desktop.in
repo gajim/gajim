@@ -3,9 +3,11 @@ Categories=Network;InstantMessaging;GTK;GNOME;
 Name=Gajim
 GenericName=Jabber IM Client
 Comment=A GTK+ Jabber client
+# Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 Keywords=chat;messaging;im;xmpp;bonjour;voip;
 Version=1.0
 Exec=gajim
+# Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 Icon=org.gajim.Gajim
 StartupNotify=true
 StartupWMClass=Gajim
