@@ -625,23 +625,23 @@ class PubsubAvatarReceivedEvent(nec.NetworkIncomingEvent):
         item = self.items_node.getTag('item')
         if not item:
             log.warning('Received malformed avatar data via pubsub')
-            log.warning(self.stanza)
+            log.debug(self.stanza)
             return
         self.sha = item.getAttr('id')
         data_tag = item.getTag('data', namespace='urn:xmpp:avatar:data')
         if self.sha is None or data_tag is None:
             log.warning('Received malformed avatar data via pubsub')
-            log.warning(self.stanza)
+            log.debug(self.stanza)
             return
         self.data = data_tag.getData()
         if self.data is None:
             log.warning('Received malformed avatar data via pubsub')
-            log.warning(self.stanza)
+            log.debug(self.stanza)
             return
         try:
             self.data = base64.b64decode(self.data.encode('utf-8'))
         except binascii.Error as err:
-            log.warning('Received malformed avatar data via pubsub: %s' % err)
+            log.debug('Received malformed avatar data via pubsub: %s' % err)
             return
 
         return True
