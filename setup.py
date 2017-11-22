@@ -19,6 +19,7 @@ import gajim
 pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
 ALL_LINGUAS = sorted([os.path.split(x)[-1][:-3] for x in pos])
 cwd = os.path.dirname(os.path.realpath(__file__))
+build_dir = os.path.join(cwd, "build")
 
 
 def update_trans():
@@ -56,7 +57,7 @@ def build_trans(build_cmd):
     data_files = build_cmd.distribution.data_files
     for lang in ALL_LINGUAS:
         po_file = os.path.join('po', lang + '.po')
-        mo_file = os.path.join(cwd, 'build', 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
+        mo_file = os.path.join(build_dir, 'mo', lang, 'LC_MESSAGES', 'gajim.mo')
         mo_dir = os.path.dirname(mo_file)
         if not (os.path.isdir(mo_dir) or os.path.islink(mo_dir)):
             os.makedirs(mo_dir)
@@ -84,7 +85,7 @@ def build_man(build_cmd):
     data_files = build_cmd.distribution.data_files
     for man in ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']:
         filename = os.path.join('data', man)
-        newdir = os.path.join(cwd, 'build', 'man')
+        newdir = os.path.join(build_dir, 'man')
         if not (os.path.isdir(newdir) or os.path.islink(newdir)):
             os.makedirs(newdir)
 
@@ -112,7 +113,7 @@ def build_intl(build_cmd):
     Merge translation files into desktop and mime files
     '''
     data_files = build_cmd.distribution.data_files
-    base = cwd
+    base = build_dir
 
     merge_files = (('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
                    ('data/gajim-remote.desktop', 'share/applications', '--desktop'),
