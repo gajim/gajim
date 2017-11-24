@@ -24,7 +24,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
+import sys
 import logging
 
 from gajim.common import app
@@ -40,7 +40,7 @@ try:
     DBusGMainLoop(set_as_default=True)
 except ImportError:
     supported = False
-    if not os.name == 'nt': # only say that to non Windows users
+    if sys.platform == 'linux':  # windows and mac have no dbus
         print(_('D-Bus python bindings are missing in this computer'))
         print(_('D-Bus capabilities of Gajim cannot be used'))
 else:
@@ -51,7 +51,7 @@ else:
         supported = True # does user have D-Bus bindings?
     except dbus.DBusException:
         supported = False
-        if not os.name == 'nt': # only say that to non Windows users
+        if sys.platform == 'linux':  # windows and mac have no dbus
             print(_('D-Bus does not run correctly on this machine'))
             print(_('D-Bus capabilities of Gajim cannot be used'))
     except exceptions.SystemBusNotPresent:
