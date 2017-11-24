@@ -509,7 +509,7 @@ class PluginManager(metaclass=Singleton):
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
 
-            gajim_v = app.config.get('version').split('-', 1)[0]
+            gajim_v = app.config.get('version').split('+', 1)[0]
             gajim_v_cmp = parse_version(gajim_v)
 
             if min_v and gajim_v_cmp < parse_version(min_v):

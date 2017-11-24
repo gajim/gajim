@@ -57,7 +57,7 @@ class OptionsParser:
             return False
 
         new_version = app.config.get('version')
-        new_version = new_version.split('-', 1)[0]
+        new_version = new_version.split('+', 1)[0]
         seen = set()
         regex = re.compile(r"(?P<optname>[^.=]+)(?:(?:\.(?P<key>.+))?\.(?P<subname>[^.=]+))?\s=\s(?P<value>.*)")
 
@@ -82,7 +82,7 @@ class OptionsParser:
                 app.config.set_per(optname, key, subname, value)
 
         old_version = app.config.get('version')
-        old_version = old_version.split('-', 1)[0]
+        old_version = old_version.split('+', 1)[0]
 
         self.update_config(old_version, new_version)
         self.old_values = {} # clean mem
