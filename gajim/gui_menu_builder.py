@@ -767,9 +767,9 @@ def get_account_menu(account):
 def build_accounts_menu():
     menubar = app.app.get_menubar()
     # Accounts Submenu
-    menu_position = 0
-    if os.name == 'nt':
-        menu_position = 1
+    menu_position = 1
+    if app.prefers_app_menu():
+        menu_position = 0
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
@@ -796,9 +796,9 @@ def build_bookmark_menu(account):
     if not bookmark_menu:
         return
 
-    menu_position = 0
-    if os.name == 'nt':
-        menu_position = 1
+    menu_position = 1
+    if app.prefers_app_menu():
+        menu_position = 0
 
     # Accounts Submenu
     acc_menu = menubar.get_item_link(menu_position, 'submenu')

@@ -28,6 +28,7 @@
 ##
 
 import os
+import sys
 import logging
 import locale
 import uuid
@@ -500,3 +501,10 @@ def get_priority(account, show):
 def log(domain):
     root = 'gajim.'
     return logging.getLogger(root + domain)
+
+def prefers_app_menu():
+    if sys.platform == 'darwin':
+        return True
+    if sys.platform == 'win32':
+        return False
+    return app.prefers_app_menu()

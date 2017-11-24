@@ -215,10 +215,9 @@ class GajimApplication(Gtk.Application):
         builder.add_from_file(path)
         menubar = builder.get_object("menubar")
         appmenu = builder.get_object("appmenu")
-        if os.name != 'nt':
+        if app.prefers_app_menu():
             self.set_app_menu(appmenu)
         else:
-            # Dont set Application Menu for Windows
             # Add it to the menubar instead
             menubar.prepend_submenu('Gajim', appmenu)
         self.set_menubar(menubar)
