@@ -122,7 +122,7 @@ function install_gajim {
     build_pip install .
 
     QL_VERSION=$(MSYSTEM= build_python -c \
-        "import gajim; import sys; sys.stdout.write(gajim.__version__.split('-')[0])")
+        "import gajim; import sys; sys.stdout.write(gajim.__version__.split('+')[0])")
 
     QL_VERSION_DESC=$(MSYSTEM= build_python -c \
         "import gajim; import sys; sys.stdout.write(gajim.__version__)")
