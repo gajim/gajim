@@ -202,7 +202,7 @@ class VcardWindow:
         except AttributeError:
             pass
 
-    def set_values(self, vcard):
+    def _set_values(self, vcard, jid):
         for i in vcard.keys():
             if i == 'PHOTO' and self.xml.get_object('information_notebook').\
             get_n_pages() > 4:
@@ -215,7 +215,7 @@ class VcardWindow:
                     photo_decoded = base64.b64decode(
                         photo_encoded.encode('utf-8'))
                 except binascii.Error as error:
-                    app.log('avatar').warning('Invalid Avatar: %s', error)
+                    app.log('avatar').warning('Invalid avatar for %s: %s', jid, error)
                     continue
                 pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
                 if pixbuf is None:
@@ -266,7 +266,7 @@ class VcardWindow:
 
     def _nec_vcard_received(self, jid, resource, room, vcard):
         self.clear_values()
-        self.set_values(vcard)
+        self._set_values(vcard, jid)
 
     def set_os_info(self, obj):
         if obj.conn.name != self.account:
