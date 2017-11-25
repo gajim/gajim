@@ -474,7 +474,7 @@ class ConnectionVcard:
             app.nec.push_incoming_event(
                 VcardNotPublishedEvent(None, conn=self))
 
-    def get_vcard_photo(self, vcard):
+    def _get_vcard_photo(self, vcard, jid):
         try:
             photo = vcard['PHOTO']['BINVAL']
         except (KeyError, AttributeError):
@@ -488,7 +488,7 @@ class ConnectionVcard:
                 try:
                     photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 except binascii.Error as error:
-                    app.log('avatar').warning('Invalid Avatar: %s', error)
+                    app.log('avatar').warning('Invalid avatar for %s: %s', jid, error)
                     return None, None
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 
@@ -532,7 +532,7 @@ class ConnectionVcard:
 
     def _on_own_avatar_received(self, jid, resource, room, vcard):
 
-        avatar_sha, photo_decoded = self.get_vcard_photo(vcard)
+        avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
 
         app.log('avatar').info(
             'Received own (vCard): %s', avatar_sha)
@@ -570,7 +570,7 @@ class ConnectionVcard:
         """
         Called when we receive a vCard Parse the vCard and trigger Events
         """
-        avatar_sha, photo_decoded = self.get_vcard_photo(vcard)
+        avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
         app.interface.save_avatar(photo_decoded)
 
         # Received vCard from a contact
