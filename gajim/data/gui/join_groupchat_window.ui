@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.1 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkGrid" id="grid">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">18</property>
+    <property name="margin_right">18</property>
+    <property name="margin_top">18</property>
+    <property name="margin_bottom">18</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <child>
+      <object class="GtkLabel" id="jid_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">center</property>
+        <property name="margin_bottom">12</property>
+        <style>
+          <class name="bold16"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="bookmark_switch">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="tooltip_text" translatable="yes">Bookmark this Groupchat</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="margin_top">6</property>
+        <property name="active">True</property>
+        <signal name="notify::active" handler="_on_bookmark_activate" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">7</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSwitch" id="autojoin_switch">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="tooltip_text" translatable="yes">Join this Groupchat everytime Gajim is started</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="active">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">8</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="margin_top">6</property>
+        <property name="label" translatable="yes">Bookmark</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <property name="label" translatable="yes">Autojoin</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">8</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="account_combo">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="valign">center</property>
+        <signal name="changed" handler="_on_account_combo_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="nick_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="valign">center</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">3</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="account_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Account</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Nickname</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="password_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Password</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="password_entry">
+        <property name="can_focus">True</property>
+        <property name="no_show_all">True</property>
+        <property name="input_purpose">password</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">6</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButtonBox" id="button_box">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="margin_top">18</property>
+        <property name="spacing">6</property>
+        <property name="layout_style">end</property>
+        <child>
+          <object class="GtkButton">
+            <property name="label">gtk-cancel</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="use_stock">True</property>
+            <signal name="clicked" handler="_on_cancel_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="join_button">
+            <property name="label" translatable="yes">Join</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">9</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="server_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Server</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="room_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Room</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="recent_label">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Recently</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="room_entry">
+        <property name="can_focus">True</property>
+        <property name="no_show_all">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="recent_combo">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <signal name="changed" handler="_on_recent_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="server_combo">
+        <property name="can_focus">False</property>
+        <property name="no_show_all">True</property>
+        <property name="has_entry">True</property>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="can_focus">True</property>
+            <property name="caps_lock_warning">False</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="search_button">
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="no_show_all">True</property>
+        <property name="tooltip_text" translatable="yes">Search the rooms on this server</property>
+        <signal name="clicked" handler="_on_search_clicked" swapped="no"/>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">system-search-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+  <object class="GtkHeaderBar" id="headerbar">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title">Join Groupchat</property>
+    <child>
+      <object class="GtkButton">
+        <property name="label">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_stock">True</property>
+        <signal name="clicked" handler="_on_cancel_clicked" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label" translatable="yes">Join</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

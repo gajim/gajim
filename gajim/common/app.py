@@ -33,6 +33,7 @@ import logging
 import locale
 import uuid
 from distutils.version import LooseVersion as V
+from collections import namedtuple
 import gi
 import nbxmpp
 import hashlib
@@ -80,6 +81,8 @@ PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
                 gajimpaths['PLUGINS_USER']]
 PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
 MY_CERT_DIR = gajimpaths['MY_CERT']
+
+RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
 
 try:
     LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
@@ -373,6 +376,16 @@ def get_number_of_connected_accounts(accounts_list = None):
             connected_accounts = connected_accounts + 1
     return connected_accounts
 
+def get_connected_accounts():
+    """
+    Returns a list of CONNECTED accounts
+    """
+    account_list = []
+    for account in connections:
+        if account_is_connected(account):
+            account_list.append(account)
+    return account_list
+
 def account_is_connected(account):
     if account not in connections:
         return False
@@ -387,6 +400,11 @@ def account_is_disconnected(account):
 def zeroconf_is_connected():
     return account_is_connected(ZEROCONF_ACC_NAME) and \
             config.get_per('accounts', ZEROCONF_ACC_NAME, 'is_zeroconf')
+
+def in_groupchat(account, room_jid):
+    if room_jid not in gc_connected[account]:
+        return False
+    return gc_connected[account][room_jid]
 
 def get_number_of_securely_connected_accounts():
     """
@@ -494,6 +512,34 @@ def get_name_from_jid(account, jid):
     else:
         actor = jid
     return actor
+
+def get_muc_domain(account):
+    return connections[account].muc_jid.get('jabber', None)
+
+def get_recent_groupchats(account):
+    recent_groupchats = config.get_per(
+        'accounts', account, 'recent_groupchats').split()
+
+    recent_list = []
+    for groupchat in recent_groupchats:
+        jid = nbxmpp.JID(groupchat)
+        recent = RecentGroupchat(
+            jid.getNode(), jid.getDomain(), jid.getResource())
+        recent_list.append(recent)
+    return recent_list
+
+def add_recent_groupchat(account, room_jid, nickname):
+    recent = config.get_per(
+        'accounts', account, 'recent_groupchats').split()
+    full_jid = room_jid + '/' + nickname
+    if full_jid in recent:
+        recent.remove(full_jid)
+    recent.insert(0, full_jid)
+    if len(recent) > 10:
+        recent = recent[0:9]
+    config_value = ' '.join(recent)
+    config.set_per(
+        'accounts', account, 'recent_groupchats', config_value)
 
 def get_priority(account, show):
     """

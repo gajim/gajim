@@ -98,6 +98,9 @@ class ConnectionDisco:
         self.disco_info_ids.append(id_)
 
     def discoverMUC(self, jid, callback):
+        if muc_caps_cache.is_cached(jid):
+            callback()
+            return
         disco_info = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_INFO)
         self.connection.SendAndCallForResponse(
             disco_info, self.received_muc_info, {'callback': callback})

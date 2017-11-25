@@ -60,7 +60,8 @@ class GajimApplication(Gtk.Application):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
-        Gtk.Application.__init__(self, application_id='org.gajim.Gajim')
+        Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
+                                 flags=Gio.ApplicationFlags.HANDLES_OPEN)
 
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
@@ -89,13 +90,11 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show all warnings'))
-        self.add_main_option(GLib.OPTION_REMAINING, 0, GLib.OptionFlags.HIDDEN,
-                             GLib.OptionArg.STRING_ARRAY,
-                             "")
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
+        self.connect('open', self._open)
 
         self.profile = ''
         self.config_path = None
@@ -235,6 +234,15 @@ class GajimApplication(Gtk.Application):
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
 
+    def _open(self, application, file, hint, *args):
+        for arg in file:
+            uri = arg.get_uri()
+            # remove xmpp:///
+            uri = uri[8:]
+            jid, cmd = uri.split('?')
+            if cmd == 'join':
+                self.interface.join_gc_minimal(None, jid)
+
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
         # Shutdown GUI and save config
@@ -274,10 +282,6 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
         if options.contains('warnings'):
             self.show_warnings()
-        if options.contains(GLib.OPTION_REMAINING):
-            unhandled = options.lookup_value(GLib.OPTION_REMAINING).get_strv()
-            print('Error: Unhandled arguments: %s' % unhandled)
-            return 0
         return -1
 
     def show_warnings(self):

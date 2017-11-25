@@ -651,9 +651,7 @@ if dbus_support.supported:
                     if not account:
                         return
                 if not nick:
-                    nick = ''
-                    gajim.interface.instances[account]['join_gc'] = \
-                                    JoinGroupchatWindow(account, room_jid, nick)
+                    gajim.interface.join_gc_minimal(account, room_jid)
                 else:
                     gajim.interface.join_gc_room(account, room_jid, nick, password)
 

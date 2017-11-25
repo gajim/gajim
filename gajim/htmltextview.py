@@ -915,10 +915,7 @@ class HtmlTextView(Gtk.TextView):
 #        app.interface.new_chat_from_jid(self.account, jid)
 
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-        try:
-            dialogs.JoinGroupchatWindow(room_jid=room_jid)
-        except GajimGeneralException:
-            pass
+        dialogs.JoinGroupchatWindow(None, room_jid)
 
     def on_add_to_roster_activate(self, widget, jid):
         dialogs.AddNewContactWindow(self.account, jid)

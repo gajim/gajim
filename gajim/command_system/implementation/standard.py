@@ -296,21 +296,12 @@ class StandardGroupChatCommands(CommandContainer):
             'room_jid': self.room_jid}
 
     @command(raw=True, empty=True)
-    @doc(_("Join a group chat given by a jid, optionally using given nickname"))
-    def join(self, jid, nick):
-        if not nick:
-            nick = self.nick
-
+    @doc(_("Join a group chat given by a jid"))
+    def join(self, jid):
         if '@' not in jid:
             jid = jid + '@' + app.get_server_from_jid(self.room_jid)
 
-        try:
-            app.interface.instances[self.account]['join_gc'].window.present()
-        except KeyError:
-            try:
-                dialogs.JoinGroupchatWindow(account=self.account, room_jid=jid, nick=nick)
-            except GajimGeneralException:
-                pass
+        app.interface.join_gc_minimal(self.account, room_jid=jid)
 
     @command('part', 'close', raw=True, empty=True)
     @doc(_("Leave the groupchat, optionally giving a reason, and close tab or window"))

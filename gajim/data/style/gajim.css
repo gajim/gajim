@@ -86,4 +86,6 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
                              background-color: @theme_unfocused_bg_color;
                              color: @theme_text_color; }
 
+/* Text style */
 
+.bold16 { font-size: 16px; font-weight: bold; }

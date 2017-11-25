@@ -3091,15 +3091,11 @@ class RosterWindow:
             if app.connections[account].muc_jid[type_]:
                 # create the room on this muc server
                 if 'join_gc' in app.interface.instances[account]:
-                    app.interface.instances[account]['join_gc'].window.\
-                        destroy()
-                try:
+                    app.interface.instances[account]['join_gc'].destroy()
+                else:
                     app.interface.instances[account]['join_gc'] = \
-                        dialogs.JoinGroupchatWindow(account,
-                            app.connections[account].muc_jid[type_],
-                            automatic = {'invities': jid_list})
-                except GajimGeneralException:
-                    continue
+                        dialogs.JoinGroupchatWindow(
+                            account, None, automatic={'invities': jid_list})
                 break
 
     def on_invite_to_room(self, widget, list_, room_jid, room_account,
@@ -3676,13 +3672,10 @@ class RosterWindow:
                 'invisible'))
             return
         if 'join_gc' in app.interface.instances[account]:
-            app.interface.instances[account]['join_gc'].window.present()
+            app.interface.instances[account]['join_gc'].present()
         else:
-            try:
-                app.interface.instances[account]['join_gc'] = \
-                    dialogs.JoinGroupchatWindow(account)
-            except GajimGeneralException:
-                pass
+            app.interface.instances[account]['join_gc'] = \
+                    dialogs.JoinGroupchatWindow(account, None)
 
     def on_new_chat_menuitem_activate(self, widget, account):
         dialogs.NewChatDialog(account)

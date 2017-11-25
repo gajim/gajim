@@ -689,15 +689,9 @@ class ConversationTextview(GObject.GObject):
         app.interface.new_chat_from_jid(self.account, jid)
 
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-        if 'join_gc' in app.interface.instances[self.account]:
-            instance = app.interface.instances[self.account]['join_gc']
-            instance.xml.get_object('room_jid_entry').set_text(room_jid)
-            app.interface.instances[self.account]['join_gc'].window.present()
-        else:
-            try:
-                dialogs.JoinGroupchatWindow(account=self.account, room_jid=room_jid)
-            except GajimGeneralException:
-                pass
+        # Remove ?join
+        room_jid = room_jid.split('?')[0]
+        app.interface.join_gc_minimal(self.account, room_jid)
 
     def on_add_to_roster_activate(self, widget, jid):
         dialogs.AddNewContactWindow(self.account, jid)
@@ -805,7 +799,7 @@ class ConversationTextview(GObject.GObject):
                     if '?' in word:
                         (jid, action) = word.split('?')
                         if action == 'join':
-                            self.on_join_group_chat_menuitem_activate(None, jid)
+                            app.interface.join_gc_minimal(None, jid)
                         else:
                             self.on_start_chat_activate(None, jid)
                     else:

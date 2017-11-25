@@ -1601,15 +1601,13 @@ class ChatControl(ChatControlBase):
         self._add_info_bar_message(markup, [b], file_props, Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
-        try:
-            if event.is_continued:
-                app.interface.join_gc_room(self.account, event.room_jid,
-                    app.nicks[self.account], event.password,
-                    is_continued=True)
-            else:
-                dialogs.JoinGroupchatWindow(self.account, event.room_jid)
-        except GajimGeneralException:
-            pass
+        if event.is_continued:
+            app.interface.join_gc_room(self.account, event.room_jid,
+                app.nicks[self.account], event.password,
+                is_continued=True)
+        else:
+            app.interface.join_gc_minimal(self.account, event.room_jid)
+
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _on_cancel_gc_invitation(self, widget, event):

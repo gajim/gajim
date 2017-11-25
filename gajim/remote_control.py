@@ -908,8 +908,6 @@ class SignalObject(dbus.service.Object):
             return
 
         if not nick:
-            nick = ''
-            app.interface.instances[account]['join_gc'] = \
-                            JoinGroupchatWindow(account, room_jid, nick)
+            app.interface.join_gc_minimal(account, room_jid)
         else:
             app.interface.join_gc_room(account, room_jid, nick, password)
