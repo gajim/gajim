@@ -50,7 +50,6 @@ from gajim import message_control
 from gajim.chat_control_base import ChatControlBase
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
-from gajim import gtkspell
 
 from gajim.common import helpers
 from gajim.common import app
@@ -65,6 +64,9 @@ try:
     HAS_GST = True
 except (ImportError, ValueError):
     HAS_GST = False
+
+if app.HAVE_SPELL:
+    from gi.repository import Gspell
 
 #---------- PreferencesWindow class -------------#
 class PreferencesWindow:
@@ -187,7 +189,7 @@ class PreferencesWindow:
         self.xml.get_object('xhtml_checkbutton').set_active(st)
 
         # use speller
-        if gtkspell.HAS_GTK_SPELL:
+        if app.HAVE_SPELL:
             st = app.config.get('use_speller')
             self.xml.get_object('speller_checkbutton').set_active(st)
         else:
@@ -657,30 +659,22 @@ class PreferencesWindow:
             if isinstance(ctrl, ChatControlBase):
                 ctrl.set_speller()
 
-    def remove_speller(self):
-        for ctrl in self._get_all_controls():
-            if isinstance(ctrl, ChatControlBase):
-                if ctrl.spell is not None:
-                    ctrl.remove_speller()
-
     def on_speller_checkbutton_toggled(self, widget):
         active = widget.get_active()
         app.config.set('use_speller', active)
-        if active:
-            lang = app.config.get('speller_language')
-            if not lang:
-                lang = app.LANG
-
-            available = gtkspell.test_language(lang)
-            if not available:
-                dialogs.AspellDictError(lang)
-                app.config.set('use_speller', False)
-                widget.set_active(False)
-            else:
-                app.config.set('speller_language', lang)
-                self.apply_speller()
+        if not active:
+            return
+        lang = app.config.get('speller_language')
+        gspell_lang = Gspell.language_lookup(lang)
+        if gspell_lang is None:
+            gspell_lang = Gspell.language_get_default()
+        if gspell_lang is None:
+            dialogs.AspellDictError(lang)
+            app.config.set('use_speller', False)
+            widget.set_active(False)
         else:
-            self.remove_speller()
+            app.config.set('speller_language', gspell_lang.get_code())
+            self.apply_speller()
 
     def on_positive_184_ack_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'positive_184_ack')

@@ -253,6 +253,21 @@ except Exception:
     glog.info(_('Unable to load idle module'))
     HAVE_IDLE = False
 
+HAVE_SPELL = False
+try:
+    spell_log = logging.getLogger('gajim.speller')
+    gi.require_version('Gspell', '1')
+    from gi.repository import Gspell
+    langs = Gspell.language_get_available()
+    for lang in langs:
+        spell_log.info('%s (%s) dict available',
+                       lang.get_name(), lang.get_code())
+    if langs:
+        HAVE_SPELL = True
+    else:
+        spell_log.info('No dicts available')
+except ImportError:
+    pass
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,

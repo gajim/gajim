@@ -32,7 +32,6 @@ import time
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 
@@ -42,7 +41,6 @@ from gajim import message_control
 from gajim import dialogs
 from gajim import history_window
 from gajim import notify
-from gajim import gtkspell
 import re
 
 from gajim import emoticons
@@ -65,6 +63,9 @@ from gajim.command_system.implementation.middleware import CommandTools
 # populating the list of available commands.
 from gajim.command_system.implementation import standard
 from gajim.command_system.implementation import execute
+
+if app.HAVE_SPELL:
+    from gi.repository import Gspell
 
 
 ################################################################################
@@ -345,8 +346,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.set_emoticon_popover()
 
         # Attach speller
-        self.spell = None
-        self.spell_handlers = []
+        self.spell_checker = None
         self.set_speller()
         self.conv_textview.tv.show()
 
@@ -471,44 +471,22 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         image.set_from_pixbuf(icon)
 
     def set_speller(self):
-        if not gtkspell.HAS_GTK_SPELL or not app.config.get('use_speller'):
+        if not app.HAVE_SPELL or not app.config.get('use_speller'):
             return
 
-        def _on_focus_in(*args):
-            if self.spell is None:
-                return
-            self.spell.attach(self.msg_textview)
-
-        def _on_focus_out(*args):
-            if self.spell is None:
-                return
-            if not self.msg_textview.has_text():
-                self.spell.detach()
-
-        lang = self.get_speller_language()
-        if not lang:
+        gspell_lang = self.get_speller_language()
+        if gspell_lang is None:
             return
-        try:
-            self.spell = gtkspell.Spell(self.msg_textview, lang)
-            self.spell.connect('language_changed', self.on_language_changed)
-            handler_id = self.msg_textview.connect('focus-in-event',
-                                                   _on_focus_in)
-            self.spell_handlers.append(handler_id)
-            handler_id = self.msg_textview.connect('focus-out-event',
-                                                   _on_focus_out)
-            self.spell_handlers.append(handler_id)
-        except OSError:
-            dialogs.AspellDictError(lang)
-            app.config.set('use_speller', False)
 
-    def remove_speller(self):
-        if self.spell is None:
-            return
-        self.spell.detach()
-        for id_ in self.spell_handlers:
-            self.msg_textview.disconnect(id_)
-            self.spell_handlers.remove(id_)
-        self.spell = None
+        self.spell_checker = Gspell.Checker.new(gspell_lang)
+        spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
+            self.msg_textview.get_buffer())
+        spell_buffer.set_spell_checker(self.spell_checker)
+        spell_view = Gspell.TextView.get_from_gtk_text_view(self.msg_textview)
+        spell_view.set_inline_spell_checking(False)
+        spell_view.set_enable_language_menu(True)
+
+        self.spell_checker.connect('notify::language', self.on_language_changed)
 
     def get_speller_language(self):
         per_type = 'contacts'
@@ -521,16 +499,20 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             lang = app.config.get('speller_language')
             if not lang:
                 lang = app.LANG
-        return lang or None
+        gspell_lang = Gspell.language_lookup(lang)
+        if gspell_lang is None:
+            gspell_lang = Gspell.language_get_default()
+        return gspell_lang
 
-    def on_language_changed(self, spell, lang):
+    def on_language_changed(self, checker, param):
+        gspell_lang = checker.get_language()
         per_type = 'contacts'
         if self.type_id == message_control.TYPE_GC:
             per_type = 'rooms'
         if not app.config.get_per(per_type, self.contact.jid):
             app.config.add_per(per_type, self.contact.jid)
-        app.config.set_per(
-            per_type, self.contact.jid, 'speller_language', lang)
+        app.config.set_per(per_type, self.contact.jid,
+                           'speller_language', gspell_lang.get_code())
 
     def on_banner_label_populate_popup(self, label, menu):
         """

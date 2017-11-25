@@ -30,6 +30,10 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim import gtkgui_helpers
 
+if app.HAVE_SPELL:
+    from gi.repository import Gspell
+
+
 class MessageTextView(Gtk.TextView):
     """
     Class for the message textview (where user writes new messages) for
@@ -101,6 +105,7 @@ class MessageTextView(Gtk.TextView):
     def _on_focus_in(self, *args):
         if not self.has_text():
             self.get_buffer().set_text('')
+        self.toggle_speller(True)
 
     def _on_focus_out(self, *args):
         buf = self.get_buffer()
@@ -109,6 +114,12 @@ class MessageTextView(Gtk.TextView):
         if text == '':
             buf.insert_with_tags(
                 start, self.PLACEHOLDER, self.placeholder_tag)
+            self.toggle_speller(False)
+
+    def toggle_speller(self, activate):
+        if app.HAVE_SPELL and app.config.get('use_speller'):
+            spell_view = Gspell.TextView.get_from_gtk_text_view(self)
+            spell_view.set_inline_spell_checking(activate)
 
     def remove_placeholder(self):
         self._on_focus_in()
