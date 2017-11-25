@@ -63,8 +63,8 @@ class FeaturesWindow:
                 _('On Windows the Windows Credential Vault is used.')),
             _('Spell Checker'): (self.speller_available,
                 _('Spellchecking of composed messages.'),
-                _('Requires libgtkspell.'),
-                _('Requires libgtkspell and libenchant.')),
+                _('Requires Gspell'),
+                _('Requires Gspell')),
             _('Automatic status'): (self.idle_available,
                 _('Ability to measure idle time, in order to set auto status.'),
                 _('Requires libxss library.'),
@@ -164,11 +164,7 @@ class FeaturesWindow:
         return True
 
     def speller_available(self):
-        try:
-            __import__('gajim.gtkspell')
-        except ValueError:
-            return False
-        return True
+        return app.HAVE_SPELL
 
     def idle_available(self):
         from gajim.common import sleepy

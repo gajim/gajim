@@ -1173,7 +1173,6 @@ class ChatControl(ChatControlBase):
                 self.handlers[i].disconnect(i)
             del self.handlers[i]
         self.conv_textview.del_handlers()
-        self.remove_speller()
         self.msg_textview.destroy()
         # PluginSystem: calling shutdown of super class (ChatControlBase) to let
         # it remove it's GUI extension points

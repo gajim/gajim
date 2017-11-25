@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
+
 import os
 import nbxmpp
 import time
@@ -42,7 +43,6 @@ from gajim import gtkgui_helpers
 from gajim import vcard
 from gajim import conversation_textview
 from gajim import dataforms_widget
-from gajim import gtkspell
 
 from random import randrange
 from gajim.common import pep
@@ -63,6 +63,9 @@ from gajim.common import i18n
 from gajim.common import dataforms
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
+
+if app.HAVE_SPELL:
+    from gi.repository import Gspell
 
 import logging
 log = logging.getLogger('gajim.dialogs')
@@ -3077,15 +3080,19 @@ class SingleMessageWindow:
         else:
             self.to_entry.set_text(to)
 
-        if app.config.get('use_speller') and gtkspell.HAS_GTK_SPELL and action == 'send':
-            try:
-                lang = app.config.get('speller_language')
-                if not lang:
-                    lang = app.LANG
-                self.spell = gtkspell.Spell(self.message_textview, lang)
-                self.spell.attach(self.message_textview)
-            except OSError:
+        if app.config.get('use_speller') and app.HAVE_SPELL and action == 'send':
+            lang = app.config.get('speller_language')
+            gspell_lang = Gspell.language_lookup(lang)
+            if gspell_lang is None:
                 AspellDictError(lang)
+            else:
+                spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
+                    self.message_textview.get_buffer())
+                spell_buffer.set_spell_checker(Gspell.Checker.new(gspell_lang))
+                spell_view = Gspell.TextView.get_from_gtk_text_view(
+                    self.message_textview)
+                spell_view.set_inline_spell_checking(True)
+                spell_view.set_enable_language_menu(True)
 
         self.prepare_widgets_for(self.action)
 

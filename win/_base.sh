@@ -75,7 +75,9 @@ function install_deps {
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
         mingw-w64-"${ARCH}"-libwebp \
         mingw-w64-"${ARCH}"-sqlite3 \
-        mingw-w64-"${ARCH}"-goocanvas
+        mingw-w64-"${ARCH}"-goocanvas \
+        mingw-w64-"${ARCH}"-gspell \
+        mingw-w64-"${ARCH}"-hunspell
 
     build_pip install setuptools_scm
 
@@ -136,6 +138,10 @@ function install_gajim {
     mkdir "${PACKAGE_DIR}"/gajim/data/plugins
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
 
+    # Install language dicts
+    curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip
+    7z x -o"${MINGW_ROOT}"/share "${BUILD_ROOT}"/speller_dicts.zip
+
     # Install themes
     # rm -Rf "${MINGW_ROOT}"/etc
     # rm -Rf "${MINGW_ROOT}"/share/themes
@@ -194,7 +200,6 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/ffmpeg
     rm -Rf "${MINGW_ROOT}"/share/vala
     rm -Rf "${MINGW_ROOT}"/share/readline
-    rm -Rf "${MINGW_ROOT}"/share/xml
     rm -Rf "${MINGW_ROOT}"/share/bash-completion
     rm -Rf "${MINGW_ROOT}"/share/common-lisp
     rm -Rf "${MINGW_ROOT}"/share/emacs
