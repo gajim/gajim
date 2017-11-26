@@ -266,7 +266,7 @@ try:
         HAVE_SPELL = True
     else:
         spell_log.info('No dicts available')
-except ImportError:
+except (ImportError, ValueError):
     pass
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
