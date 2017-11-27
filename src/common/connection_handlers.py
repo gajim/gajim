@@ -1943,18 +1943,11 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                 # We'll reply after roster push result
                 return True
         if gajim.config.get_per('accounts', self.name, 'autoauth') or \
-        gajim.jid_is_transport(obj.fjid) or obj.jid in self.jids_for_auto_auth \
-        or obj.transport_auto_auth:
+        obj.jid in self.jids_for_auto_auth or obj.transport_auto_auth:
             if self.connection:
                 p = nbxmpp.Presence(obj.fjid, 'subscribed')
                 p = self.add_sha(p)
                 self.connection.send(p)
-            if gajim.jid_is_transport(obj.fjid) or obj.transport_auto_auth:
-                #TODO!?!?
-                #self.show = 'offline'
-                #self.status = 'offline'
-                #emit NOTIFY
-                pass
             if obj.transport_auto_auth:
                 self.automatically_added.append(obj.jid)
                 self.request_subscription(obj.jid, name=obj.user_nick)
