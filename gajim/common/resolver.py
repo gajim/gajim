@@ -94,9 +94,8 @@ class GioResolver(CommonResolver):
 
     def start_resolve(self, host, type_):
         if type_ == 'txt':
-            # TXT record resolution isn't used anywhere at the moment so
-            # implementing it here isn't urgent
-            raise NotImplementedError("Gio resolver does not currently implement TXT records")
+            callback = functools.partial(self._on_ready_txt, host)
+            type_ = Gio.ResolverRecordType.TXT
         else:
             callback = functools.partial(self._on_ready_srv, host)
             type_ = Gio.ResolverRecordType.SRV
@@ -124,6 +123,19 @@ class GioResolver(CommonResolver):
                 in variant_results
             ]
         super()._on_ready(host, 'srv', result_list)
+
+    def _on_ready_txt(self, host, source_object, result):
+        try:
+            variant_results = source_object.lookup_records_finish(result)
+        except GLib.Error as e:
+            if e.domain == 'g-resolver-error-quark':
+                result_list = []
+                log.warning("Could not resolve host: %s", e.message)
+            else:
+                raise
+        else:
+            result_list = [res[0][0] for res in variant_results]
+        super()._on_ready(host, 'txt', result_list)
 
 
 # below lines is on how to use API and assist in testing
