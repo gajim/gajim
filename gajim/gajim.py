@@ -307,7 +307,6 @@ class GajimApplication(Gtk.Application):
 
         self.account_actions = [
             ('-start-single-chat', action.on_single_message, 'online', 's'),
-            ('-start-chat', action.on_new_chat, 'online', 's'),
             ('-join-groupchat', action.on_join_gc, 'online', 's'),
             ('-add-contact', action.on_add_contact, 'online', 's'),
             ('-services', action.on_service_disco, 'online', 's'),
@@ -348,6 +347,7 @@ class GajimApplication(Gtk.Application):
             ('accounts', action.on_accounts),
             ('add-account', action.on_add_account),
             ('manage-proxies', action.on_manage_proxies),
+            ('start-chat', action.on_new_chat),
             ('bookmarks', action.on_manage_bookmarks),
             ('history-manager', action.on_history_manager),
             ('preferences', action.on_preferences),

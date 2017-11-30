@@ -411,6 +411,16 @@ def get_uf_show(show, use_mnemonic = False):
         uf_show = Q_('?contact has status:Has errors')
     return uf_show
 
+def get_css_show_color(show):
+    if show in ('online', 'chat', 'invisible'):
+        return 'status-online'
+    elif show in ('offline', 'not in roster', 'requested'):
+        return None
+    elif show in ('xa', 'dnd'):
+        return 'status-dnd'
+    elif show in ('away'):
+        return 'status-away'
+
 def get_uf_sub(sub):
     if sub == 'none':
         uf_sub = Q_('?Subscription we already have:None')

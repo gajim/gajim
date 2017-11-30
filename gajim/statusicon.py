@@ -185,7 +185,7 @@ class StatusIcon:
         dialogs.SingleMessageWindow(account, action='send')
 
     def on_new_chat(self, widget, account):
-        dialogs.NewChatDialog(account)
+        app.app.activate_action('start-chat')
 
     def make_menu(self, event_button, event_time):
         """

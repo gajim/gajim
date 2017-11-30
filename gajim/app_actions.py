@@ -80,6 +80,12 @@ class AppActions():
     def on_quit(self, action, param):
         interface.roster.on_quit_request()
 
+    def on_new_chat(self, action, param):
+        if 'start_chat' in app.interface.instances:
+            app.interface.instances['start_chat'].present()
+        else:
+            app.interface.instances['start_chat'] = dialogs.StartChatDialog()
+
     # Accounts Actions
 
     def on_profile(self, action, param):
@@ -129,9 +135,6 @@ class AppActions():
 
     def on_add_contact(self, action, param):
         dialogs.AddNewContactWindow(param.get_string())
-
-    def on_new_chat(self, action, param):
-        dialogs.NewChatDialog(param.get_string())
 
     def on_single_message(self, action, param):
         dialogs.SingleMessageWindow(param.get_string(), action='send')

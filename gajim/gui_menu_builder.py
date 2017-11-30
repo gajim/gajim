@@ -722,7 +722,6 @@ def get_account_menu(account):
             ('-join-groupchat', _('Join Group Chat')),
             ('-profile', _('Profile')),
             ('-services', _('Discover Services')),
-            ('-start-chat', _('Start Chat...')),
             ('-start-single-chat', _('Send Single Message...')),
             ('Advanced', [
                 ('-archive', _('Archiving Preferences')),

@@ -628,7 +628,7 @@ if dbus_support.supported:
                 if not account:
                     # error is shown in gajim-remote check_arguments(..)
                     return DBUS_BOOLEAN(False)
-                NewChatDialog(account)
+                app.app.activate_action('start-chat')
                 return DBUS_BOOLEAN(True)
 
             @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
@@ -658,7 +658,7 @@ if dbus_support.supported:
 from gajim.common import app
 from gajim.common import helpers
 from time import time
-from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from gajim.dialogs import AddNewContactWindow, JoinGroupchatWindow
 
 from gajim.plugins import GajimPlugin
 from gajim.plugins.helpers import log_calls, log

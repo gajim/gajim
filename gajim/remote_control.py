@@ -35,7 +35,7 @@ import mimetypes
 from gajim.common import app
 from gajim.common import helpers
 from time import time
-from gajim.dialogs import AddNewContactWindow, NewChatDialog, JoinGroupchatWindow
+from gajim.dialogs import AddNewContactWindow, JoinGroupchatWindow
 from gajim.common import ged
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
@@ -849,7 +849,7 @@ class SignalObject(dbus.service.Object):
         if not account:
             # error is shown in gajim-remote check_arguments(..)
             return DBUS_BOOLEAN(False)
-        NewChatDialog(account)
+        app.app.activate_action('start-chat')
         return DBUS_BOOLEAN(True)
 
     @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
