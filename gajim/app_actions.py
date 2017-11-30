@@ -44,6 +44,11 @@ class AppActions():
     def __init__(self, application: Gtk.Application):
         self.application = application
 
+    # General Actions
+
+    def on_add_contact_jid(self, action, param):
+        dialogs.AddNewContactWindow(None, param.get_string())
+
     # Application Menu Actions
 
     def on_preferences(self, action, param):

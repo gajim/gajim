@@ -242,6 +242,8 @@ class GajimApplication(Gtk.Application):
             jid, cmd = uri.split('?')
             if cmd == 'join':
                 self.interface.join_gc_minimal(None, jid)
+            elif cmd == 'roster':
+                self.activate_action('add-contact', GLib.Variant('s', jid))
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
@@ -358,6 +360,10 @@ class GajimApplication(Gtk.Application):
             ('about', action.on_about),
             ('faq', action.on_faq),
         ]
+
+        act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
+        act.connect("activate", action.on_add_contact_jid)
+        self.add_action(act)
 
         for action in self.general_actions:
             action_name, func = action
