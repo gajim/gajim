@@ -82,7 +82,10 @@ class OptionsParser:
                 app.config.set_per(optname, key, subname, value)
 
         old_version = app.config.get('version')
-        old_version = old_version.split('+', 1)[0]
+        if '+' in old_version:
+            old_version = old_version.split('+', 1)[0]
+        elif '-' in old_version:
+            old_version = old_version.split('-', 1)[0]
 
         self.update_config(old_version, new_version)
         self.old_values = {} # clean mem
