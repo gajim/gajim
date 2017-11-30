@@ -267,7 +267,7 @@ class OptionsParser:
         try:
             cur.executescript(
                     '''
-                    CREATE TABLE unread_messages (
+                    CREATE TABLE IF NOT EXISTS unread_messages (
                             message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                             jid_id INTEGER
                     );
@@ -298,6 +298,20 @@ class OptionsParser:
             proxies_str = ', '.join(proxies)
             app.config.set_per('accounts', account, 'file_transfer_proxies',
                     proxies_str)
+
+    @staticmethod
+    def call_sql(db_path, sql):
+        con = sqlite.connect(db_path)
+        cur = con.cursor()
+        try:
+            cur.executescript(sql)
+            con.commit()
+        except sqlite.OperationalError as e:
+            if str(e).startswith('duplicate column name:'):
+                log.info(str(e))
+            else:
+                log.exception('Error')
+        con.close()
 
     def update_config_x_to_09(self):
         # Var name that changed:
@@ -384,25 +398,14 @@ class OptionsParser:
         """
         Create table transports_cache if there is no such table
         """
-        # FIXME see #2812
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE transports_cache (
-                            transport TEXT UNIQUE,
-                            type INTEGER
-                    );
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS transports_cache (
+                transport TEXT UNIQUE,
+                type INTEGER
+            );
+            '''
+        )
         app.config.set('version', '0.10.1.3')
 
     def update_config_to_01014(self):
@@ -410,36 +413,19 @@ class OptionsParser:
         Apply indeces to the logs database
         """
         print(_('migrating logs database to indices'))
-        # FIXME see #2812
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        # apply indeces
-        try:
-            cur.executescript(
-                    '''
-                    CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
-                    CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
-                    '''
-            )
-
-            con.commit()
-        except Exception:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE INDEX idx_logs_jid_id_kind ON logs (jid_id, kind);
+            CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+            '''
+        )
         app.config.set('version', '0.10.1.4')
 
     def update_config_to_01015(self):
         """
         Clean show values in logs database
         """
-        #FIXME see #2812
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
+        con = sqlite.connect(logger.LOG_DB_PATH)
         cur = con.cursor()
         status = dict((i[5:].lower(), logger.constants.__dict__[i]) for i in \
                 logger.constants.__dict__.keys() if i.startswith('SHOW_'))
@@ -520,27 +506,16 @@ class OptionsParser:
         app.config.set('version', '0.11.1.2')
 
     def update_config_to_01113(self):
-        # copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE caps_cache (
-                            node TEXT,
-                            ver TEXT,
-                            ext TEXT,
-                            data BLOB
-                    );
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS caps_cache (
+                node TEXT,
+                ver TEXT,
+                ext TEXT,
+                data BLOB
+            );
+            '''
+        )
         app.config.set('version', '0.11.1.3')
 
     def update_config_to_01114(self):
@@ -567,22 +542,7 @@ class OptionsParser:
         app.config.set('version', '0.11.1.4')
 
     def update_config_to_01115(self):
-        # copy&pasted from update_config_to_01013, possibly 'FIXME see #2812' applies too
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    DELETE FROM caps_cache;
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH, '''DELETE FROM caps_cache;''')
         app.config.set('version', '0.11.1.5')
 
     def update_config_to_01121(self):
@@ -599,26 +559,16 @@ class OptionsParser:
         app.config.set('version', '0.11.2.1')
 
     def update_config_to_01141(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE IF NOT EXISTS caps_cache (
-                            node TEXT,
-                            ver TEXT,
-                            ext TEXT,
-                            data BLOB
-                    );
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS caps_cache (
+                node TEXT,
+                ver TEXT,
+                ext TEXT,
+                data BLOB
+            );
+            '''
+        )
         app.config.set('version', '0.11.4.1')
 
     def update_config_to_01142(self):
@@ -640,24 +590,14 @@ class OptionsParser:
         app.config.set('version', '0.11.1.2')
 
     def update_config_to_01143(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE IF NOT EXISTS rooms_last_message_time(
-                            jid_id INTEGER PRIMARY KEY UNIQUE,
-                            time INTEGER
-                    );
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS rooms_last_message_time(
+                jid_id INTEGER PRIMARY KEY UNIQUE,
+                time INTEGER
+            );
+            '''
+        )
         app.config.set('version', '0.11.4.3')
 
     def update_config_to_01144(self):
@@ -674,7 +614,7 @@ class OptionsParser:
         try:
             cur.executescript(
                     '''
-                    CREATE TABLE caps_cache (
+                    CREATE TABLE IF NOT EXISTS caps_cache (
                             hash_method TEXT,
                             hash TEXT,
                             data BLOB
@@ -752,35 +692,25 @@ class OptionsParser:
         app.config.set('version', '0.12.1.5')
 
     def update_config_to_01231(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE IF NOT EXISTS roster_entry(
-                            account_jid_id INTEGER,
-                            jid_id INTEGER,
-                            name TEXT,
-                            subscription INTEGER,
-                            ask BOOLEAN,
-                            PRIMARY KEY (account_jid_id, jid_id)
-                    );
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS roster_entry(
+                account_jid_id INTEGER,
+                jid_id INTEGER,
+                name TEXT,
+                subscription INTEGER,
+                ask BOOLEAN,
+                PRIMARY KEY (account_jid_id, jid_id)
+            );
 
-                    CREATE TABLE IF NOT EXISTS roster_group(
-                            account_jid_id INTEGER,
-                            jid_id INTEGER,
-                            group_name TEXT,
-                            PRIMARY KEY (account_jid_id, jid_id, group_name)
-                    );
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+            CREATE TABLE IF NOT EXISTS roster_group(
+                account_jid_id INTEGER,
+                jid_id INTEGER,
+                group_name TEXT,
+                PRIMARY KEY (account_jid_id, jid_id, group_name)
+            );
+            '''
+        )
         app.config.set('version', '0.12.3.1')
 
     def update_config_from_0125(self):
@@ -792,22 +722,10 @@ class OptionsParser:
         self.update_config_to_01231()
 
     def update_config_to_01251(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    ALTER TABLE unread_messages
-                    ADD shown BOOLEAN default 0;
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''ALTER TABLE unread_messages
+            ADD COLUMN 'shown' BOOLEAN default 0;'''
+        )
         app.config.set('version', '0.12.5.1')
 
     def update_config_to_01252(self):
@@ -881,43 +799,21 @@ class OptionsParser:
         app.config.set('version', '0.12.5.8')
 
     def update_config_to_013100(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    ALTER TABLE caps_cache
-                    ADD last_seen INTEGER default %d;
-                    ''' % int(time())
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''ALTER TABLE caps_cache
+            ADD COLUMN 'last_seen' INTEGER default %d;''' % int(time())
+        )
         app.config.set('version', '0.13.10.0')
 
     def update_config_to_013101(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    DROP INDEX IF EXISTS idx_logs_jid_id_kind;
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            DROP INDEX IF EXISTS idx_logs_jid_id_kind;
 
-                    CREATE INDEX IF NOT EXISTS
-                    idx_logs_jid_id_time ON logs (jid_id, time DESC);
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+            CREATE INDEX IF NOT EXISTS
+            idx_logs_jid_id_time ON logs (jid_id, time DESC);
+            '''
+        )
         app.config.set('version', '0.13.10.1')
 
     def update_config_to_013901(self):
@@ -971,44 +867,21 @@ class OptionsParser:
         for account in self.old_values['accounts'].keys():
             app.config.del_per('accounts', account, 'minimized_gc')
 
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    ALTER TABLE logs ADD COLUMN 'additional_data' TEXT DEFAULT '{}';
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
-
+        self.call_sql(logger.LOG_DB_PATH,
+            '''ALTER TABLE logs
+            ADD COLUMN 'additinal_data' TEXT default '()';'''
+        )
         app.config.set('version', '0.16.10.2')
 
     def update_config_to_016103(self):
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    ALTER TABLE logs ADD COLUMN 'stanza_id' TEXT;
-                    ALTER TABLE logs ADD COLUMN 'mam_id' TEXT;
-                    ALTER TABLE logs ADD COLUMN 'encryption' TEXT;
-                    ALTER TABLE logs ADD COLUMN 'encryption_state' TEXT;
-                    ALTER TABLE logs ADD COLUMN 'marker' INTEGER;
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            pass
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''ALTER TABLE logs ADD COLUMN 'stanza_id' TEXT;
+            ALTER TABLE logs ADD COLUMN 'mam_id' TEXT;
+            ALTER TABLE logs ADD COLUMN 'encryption' TEXT;
+            ALTER TABLE logs ADD COLUMN 'encryption_state' TEXT;
+            ALTER TABLE logs ADD COLUMN 'marker' INTEGER;
+            '''
+        )
         app.config.set('version', '0.16.10.3')
 
     def update_config_to_016104(self):
@@ -1021,37 +894,22 @@ class OptionsParser:
         app.config.set('version', '0.16.10.5')
 
     def update_config_to_016111(self):
-        con = sqlite.connect(logger.CACHE_DB_PATH)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    ALTER TABLE roster_entry ADD COLUMN 'avatar_sha' TEXT;
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            log.exception('Error')
-        con.close()
+        self.call_sql(logger.CACHE_DB_PATH,
+            '''ALTER TABLE roster_entry ADD COLUMN 'avatar_sha' TEXT;
+            '''
+        )
         app.config.set('version', '0.16.11.1')
 
     def update_config_to_016112(self):
-        con = sqlite.connect(logger.LOG_DB_PATH)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE IF NOT EXISTS last_archive_message(
-                        jid_id INTEGER PRIMARY KEY UNIQUE,
-                        last_mam_id TEXT,
-                        oldest_mam_timestamp TEXT,
-                        last_muc_timestamp TEXT
-                        );
-                    ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
-                    '''
-            )
-            con.commit()
-        except sqlite.OperationalError:
-            log.exception('Error')
-        con.close()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE TABLE IF NOT EXISTS last_archive_message(
+                jid_id INTEGER PRIMARY KEY UNIQUE,
+                last_mam_id TEXT,
+                oldest_mam_timestamp TEXT,
+                last_muc_timestamp TEXT
+                );
+            ALTER TABLE logs ADD COLUMN 'account_jid' INTEGER;
+            '''
+        )
         app.config.set('version', '0.16.11.2')
