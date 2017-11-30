@@ -2350,7 +2350,6 @@ class SubscriptionRequestWindow:
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
             self.window.get_window())
 
-
 class JoinGroupchatWindow:
     def __init__(self, account=None, room_jid='', nick='', password='',
     automatic=False):
@@ -2579,92 +2578,6 @@ class JoinGroupchatWindow:
                     'type': 'text'}])
             except GajimGeneralException:
                 pass
-
-    def on_server_entry_changed(self, widget):
-        if not widget.get_text():
-            self.browse_button.set_sensitive(False)
-        else:
-            self.browse_button.set_sensitive(True)
-
-    def on_cancel_button_clicked(self, widget):
-        """
-        When Cancel button is clicked
-        """
-        self.window.destroy()
-
-    def on_bookmark_checkbutton_toggled(self, widget):
-        auto_join_checkbutton = self.xml.get_object('auto_join_checkbutton')
-        if widget.get_active():
-            auto_join_checkbutton.set_sensitive(True)
-        else:
-            auto_join_checkbutton.set_sensitive(False)
-
-    def on_join_button_clicked(self, widget):
-        """
-        When Join button is clicked
-        """
-        if not self.account:
-            ErrorDialog(_('Invalid Account'),
-                _('You have to choose an account from which you want to join the '
-                'groupchat.'))
-            return
-        nickname = self._nickname_entry.get_text()
-        server = self.server_comboboxtext.get_child().get_text()
-        room = self._room_jid_entry.get_text().strip()
-        room_jid = room + '@' + server
-        password = self._password_entry.get_text()
-        try:
-            nickname = helpers.parse_resource(nickname)
-        except Exception:
-            ErrorDialog(_('Invalid Nickname'),
-                    _('The nickname contains invalid characters.'))
-            return
-        user, server, resource = helpers.decompose_jid(room_jid)
-        if not user or not server or resource:
-            ErrorDialog(_('Invalid group chat JID'),
-                    _('Please enter the group chat JID as room@server.'))
-            return
-        try:
-            room_jid = helpers.parse_jid(room_jid)
-        except Exception:
-            ErrorDialog(_('Invalid group chat JID'),
-                    _('The group chat JID contains invalid characters.'))
-            return
-
-        if app.contacts.get_contact(self.account, room_jid) and \
-        not app.contacts.get_contact(self.account, room_jid).is_groupchat():
-            ErrorDialog(_('This is not a group chat'),
-                _('%(room_jid)s is already in your roster. Please check if '
-                '%(room_jid)s is a correct group chat name. If it is, delete '
-                'it from your roster and try joining the group chat again.') % \
-                {'room_jid': room_jid, 'room_jid': room_jid})
-            return
-
-        full_jid = room_jid + '/' + nickname
-        if full_jid in self.recently_groupchat:
-            self.recently_groupchat.remove(full_jid)
-        self.recently_groupchat.insert(0, full_jid)
-        if len(self.recently_groupchat) > 10:
-            self.recently_groupchat = self.recently_groupchat[0:10]
-        app.config.set('recently_groupchat',
-            ' '.join(self.recently_groupchat))
-
-        if self.xml.get_object('bookmark_checkbutton').get_active():
-            if self.xml.get_object('auto_join_checkbutton').get_active():
-                autojoin = '1'
-            else:
-                autojoin = '0'
-            # Add as bookmark, with autojoin and not minimized
-            name = app.get_nick_from_jid(room_jid)
-            app.interface.add_gc_bookmark(self.account, name, room_jid,
-                autojoin, autojoin, password, nickname)
-
-        if self.automatic:
-            app.automatic_rooms[self.account][room_jid] = self.automatic
-
-        app.interface.join_gc_room(self.account, room_jid, nickname, password)
-
-        self.window.destroy()
 
 class SynchroniseSelectAccountDialog:
     def __init__(self, account):
