@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 03:05+0000\n"
+"POT-Creation-Date: 2017-11-29 03:05+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -179,13 +179,13 @@ msgstr "完成(_F)"
 
 #: ../data/gui/account_creation_wizard_window.ui.h:30
 #: ../data/gui/accounts_window.ui.h:1 ../data/gui/change_mood_dialog.ui.h:1
-#: ../src/config.py:1251 ../src/config.py:1266 ../src/config.py:1271
-#: ../src/config.py:1319 ../src/config.py:1422 ../src/config.py:1743
-#: ../src/config.py:1748 ../src/config.py:2359 ../src/config.py:2441
-#: ../src/config.py:2456 ../src/config.py:3753 ../src/config.py:3828
+#: ../src/config.py:1264 ../src/config.py:1279 ../src/config.py:1284
+#: ../src/config.py:1332 ../src/config.py:1435 ../src/config.py:1756
+#: ../src/config.py:1761 ../src/config.py:2372 ../src/config.py:2454
+#: ../src/config.py:2469 ../src/config.py:3766 ../src/config.py:3841
 #: ../src/dialogs.py:316 ../src/dialogs.py:318 ../src/dialogs.py:524
-#: ../src/dialogs.py:537 ../src/roster_window.py:3212
-#: ../src/roster_window.py:3218 ../src/roster_window.py:3223
+#: ../src/dialogs.py:537 ../src/roster_window.py:3215
+#: ../src/roster_window.py:3221 ../src/roster_window.py:3226
 msgid "None"
 msgstr "無"
 
@@ -194,14 +194,14 @@ msgid "Accounts"
 msgstr "帳號"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:3 ../src/dialogs.py:3542
-#: ../src/dialogs.py:3588
+#: ../data/gui/accounts_window.ui.h:3 ../src/dialogs.py:3547
+#: ../src/dialogs.py:3593
 msgid "Add"
 msgstr "加入"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../data/gui/accounts_window.ui.h:4 ../src/dialogs.py:3546
-#: ../src/dialogs.py:3643
+#: ../data/gui/accounts_window.ui.h:4 ../src/dialogs.py:3551
+#: ../src/dialogs.py:3648
 msgid "Delete"
 msgstr "刪除"
 
@@ -209,7 +209,7 @@ msgstr "刪除"
 msgid "Re_name"
 msgstr "重新命名(_N)"
 
-#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4201
+#: ../data/gui/accounts_window.ui.h:6 ../src/config.py:4212
 #: ../src/plugins/gui.py:92
 msgid "Active"
 msgstr "活動"
@@ -233,8 +233,8 @@ msgstr ""
 #. No configured account
 #: ../data/gui/accounts_window.ui.h:9 ../data/gui/roster_window.ui.h:1
 #: ../data/gajim.desktop.in.in.h:1 ../src/common/helpers.py:1201
-#: ../src/common/helpers.py:1213 ../src/notify.py:315 ../src/notify.py:338
-#: ../src/notify.py:388 ../src/notify.py:404
+#: ../src/common/helpers.py:1213 ../src/notify.py:323 ../src/notify.py:346
+#: ../src/notify.py:396 ../src/notify.py:412
 msgid "Gajim"
 msgstr "Gajim"
 
@@ -362,8 +362,8 @@ msgstr ""
 #. General group cannot be changed
 #: ../data/gui/accounts_window.ui.h:39 ../data/gui/preferences_window.ui.h:41
 #: ../src/common/contacts.py:102 ../src/common/contacts.py:135
-#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3154
-#: ../src/roster_window.py:4289 ../src/roster_window.py:5942
+#: ../src/dialogs.py:116 ../src/dialogs.py:128 ../src/roster_window.py:3157
+#: ../src/roster_window.py:4292 ../src/roster_window.py:5945
 msgid "General"
 msgstr "一般"
 
@@ -419,8 +419,8 @@ msgstr "<b>雜項</b>"
 msgid "Connection"
 msgstr "連線"
 
-#: ../data/gui/accounts_window.ui.h:52 ../src/config.py:1841
-#: ../src/config.py:2457
+#: ../data/gui/accounts_window.ui.h:52 ../src/config.py:1854
+#: ../src/config.py:2470
 msgid "No key selected"
 msgstr "沒有選擇密鑰"
 
@@ -493,7 +493,7 @@ msgid "E-Mail:"
 msgstr "E-Mail:"
 
 #: ../data/gui/accounts_window.ui.h:69
-#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1868
+#: ../data/gui/zeroconf_information_window.ui.h:7 ../src/config.py:1881
 #: ../src/dialogs.py:842
 msgid "Jabber ID:"
 msgstr "Jabber ID"
@@ -741,7 +741,7 @@ msgstr "被阻斷的聯絡人"
 #: ../data/gui/blocked_contacts_window.ui.h:2
 #: ../data/gui/contact_context_menu.ui.h:20
 #: ../data/gui/gc_occupants_menu.ui.h:14 ../src/gui_menu_builder.py:674
-#: ../src/roster_window.py:5911 ../src/roster_window.py:6045
+#: ../src/roster_window.py:5914 ../src/roster_window.py:6048
 msgid "_Unblock"
 msgstr "解除阻斷(_U)"
 
@@ -854,7 +854,7 @@ msgid "#"
 msgstr "#"
 
 #: ../data/gui/chat_control.ui.h:8 ../data/gui/groupchat_control.ui.h:8
-#: ../data/gui/xml_console_window.ui.h:15 ../src/filetransfers_window.py:322
+#: ../data/gui/xml_console_window.ui.h:15 ../src/filetransfers_window.py:321
 msgid "_Send"
 msgstr "傳送(_S)"
 
@@ -947,8 +947,8 @@ msgstr "傳送檔案(_F)…"
 
 #. Invite to Groupchat
 #: ../data/gui/contact_context_menu.ui.h:4
-#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5841
-#: ../src/roster_window.py:6012
+#: ../data/gui/gc_occupants_menu.ui.h:11 ../src/roster_window.py:5844
+#: ../src/roster_window.py:6015
 msgid "In_vite to"
 msgstr "邀請到(_V)"
 
@@ -966,7 +966,7 @@ msgstr "切換E2E加密"
 
 #. Send Custom Status
 #: ../data/gui/contact_context_menu.ui.h:8 ../src/gui_menu_builder.py:598
-#: ../src/roster_window.py:5852
+#: ../src/roster_window.py:5855
 msgid "Send Cus_tom Status"
 msgstr "傳送個性化狀態(_T)"
 
@@ -982,12 +982,12 @@ msgstr "管理聯絡人"
 
 #. Rename
 #: ../data/gui/contact_context_menu.ui.h:11 ../src/gui_menu_builder.py:661
-#: ../src/roster_window.py:5892
+#: ../src/roster_window.py:5895
 msgid "_Rename..."
 msgstr "重新命名(_R)…"
 
 #. Edit Groups
-#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:6034
+#: ../data/gui/contact_context_menu.ui.h:12 ../src/roster_window.py:6037
 msgid "Edit _Groups..."
 msgstr "編輯群組(_G)…"
 
@@ -1024,7 +1024,7 @@ msgstr "禁止他/她檢視我的狀態(_F)"
 
 #: ../data/gui/contact_context_menu.ui.h:21
 #: ../data/gui/gc_occupants_menu.ui.h:13 ../src/gui_menu_builder.py:677
-#: ../src/roster_window.py:5919 ../src/roster_window.py:6051
+#: ../src/roster_window.py:5922 ../src/roster_window.py:6054
 msgid "_Block"
 msgstr "阻斷(_B)"
 
@@ -1039,14 +1039,14 @@ msgstr "忽略(_I)"
 #. Remove
 #. Remove group
 #: ../data/gui/contact_context_menu.ui.h:25 ../src/gui_menu_builder.py:687
-#: ../src/roster_window.py:5929
+#: ../src/roster_window.py:5932
 msgid "Remo_ve"
 msgstr "移除(_R)"
 
 #: ../data/gui/contact_context_menu.ui.h:26
 #: ../data/gui/gc_control_popup_menu.ui.h:9
 #: ../data/gui/gc_occupants_menu.ui.h:15 ../data/gui/roster_window.ui.h:19
-#: ../src/roster_window.py:6127
+#: ../src/roster_window.py:6130
 msgid "_History"
 msgstr "命令歷程(_H)"
 
@@ -1143,12 +1143,12 @@ msgstr "取消選取檔案的傳輸"
 msgid "Hides the window"
 msgstr "隱藏該視窗"
 
-#: ../data/gui/filetransfers.ui.h:16 ../src/filetransfers_window.py:905
+#: ../data/gui/filetransfers.ui.h:16 ../src/filetransfers_window.py:904
 msgid "_Continue"
 msgstr "繼續(_C)"
 
-#: ../data/gui/filetransfers.ui.h:17 ../src/chat_control.py:3384
-#: ../src/filetransfers_window.py:213
+#: ../data/gui/filetransfers.ui.h:17 ../src/chat_control.py:3391
+#: ../src/filetransfers_window.py:212
 msgid "_Open Containing Folder"
 msgstr "開啟資料夾(_O)"
 
@@ -1390,7 +1390,7 @@ msgstr "多人聊天命令歷程"
 msgid "All Chat Histories"
 msgstr "所有聊天命令歷程"
 
-#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:339
+#: ../data/gui/history_window.ui.h:4 ../src/history_window.py:341
 msgid "Conversation History"
 msgstr "對話命令歷程"
 
@@ -1442,7 +1442,7 @@ msgid "false"
 msgstr "false"
 
 #: ../data/gui/item_archiving_preferences_window.ui.h:7
-#: ../src/common/connection_handlers.py:1237
+#: ../src/common/connection_handlers.py:1243
 msgid "message"
 msgstr "message"
 
@@ -1474,7 +1474,7 @@ msgstr "prefer"
 msgid "require"
 msgstr "require"
 
-#: ../data/gui/join_groupchat_window.ui.h:1 ../src/dialogs.py:2422
+#: ../data/gui/join_groupchat_window.ui.h:1 ../src/dialogs.py:2427
 msgid "Join Group Chat"
 msgstr "加入多人聊天"
 
@@ -1502,7 +1502,7 @@ msgstr "當我連線後自動加入此聊天室(_A)"
 msgid "_Bookmark this room"
 msgstr "將本聊天室加入書籤(_B)"
 
-#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1858
+#: ../data/gui/join_groupchat_window.ui.h:9 ../src/config.py:1871
 msgid "Server:"
 msgstr "伺服器:"
 
@@ -1510,7 +1510,7 @@ msgstr "伺服器:"
 msgid "Bro_wse Rooms"
 msgstr "Bro_wse Rooms"
 
-#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3415
+#: ../data/gui/join_groupchat_window.ui.h:11 ../src/chat_control.py:3422
 #: ../src/disco.py:1412 ../src/disco.py:1854
 msgid "_Join"
 msgstr "加入(_J)"
@@ -1698,8 +1698,8 @@ msgstr "所有聊天狀態"
 msgid "Composing only"
 msgstr "僅正在編輯"
 
-#: ../data/gui/preferences_window.ui.h:5 ../src/config.py:158
-#: ../src/config.py:673
+#: ../data/gui/preferences_window.ui.h:5 ../src/config.py:171
+#: ../src/config.py:686
 msgid "Disabled"
 msgstr "停用"
 
@@ -2049,7 +2049,7 @@ msgstr "<b>狀態訊息</b>"
 msgid "<b>Preset Status Messages</b>"
 msgstr "<b>預設狀態訊息</b>"
 
-#: ../data/gui/preferences_window.ui.h:83 ../src/config.py:398
+#: ../data/gui/preferences_window.ui.h:83 ../src/config.py:411
 msgid "Status"
 msgstr "狀態"
 
@@ -2290,7 +2290,7 @@ msgstr "<b>進階配置編輯器</b>"
 msgid "Advanced"
 msgstr "進階"
 
-#: ../data/gui/privacy_list_window.ui.h:1 ../src/dialogs.py:4139
+#: ../data/gui/privacy_list_window.ui.h:1 ../src/dialogs.py:4144
 msgid "Privacy List"
 msgstr "隱私策略清單"
 
@@ -2544,7 +2544,7 @@ msgid "<b>What do you want to do?</b>"
 msgstr "<b>您想要做什麼?</b>"
 
 #. Remove
-#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6061
+#: ../data/gui/remove_account_window.ui.h:4 ../src/roster_window.py:6064
 msgid "_Remove"
 msgstr "移除(_R)"
 
@@ -2913,29 +2913,29 @@ msgid ""
 "You are in process of executing command. Do you really want to cancel it?"
 msgstr "您正在執行一個命令。確定要取消嗎?"
 
-#: ../src/adhoc_commands.py:372
+#: ../src/adhoc_commands.py:373
 msgid "Invalid Form"
 msgstr "不合法的格式"
 
-#: ../src/adhoc_commands.py:373
+#: ../src/adhoc_commands.py:374
 msgid "The form is not filled correctly."
 msgstr "表格沒有被正確地填寫。"
 
-#: ../src/adhoc_commands.py:392 ../src/adhoc_commands.py:416
+#: ../src/adhoc_commands.py:394 ../src/adhoc_commands.py:418
 msgid "Service sent malformed data"
 msgstr "服務傳送了異常的資料"
 
-#: ../src/adhoc_commands.py:401
+#: ../src/adhoc_commands.py:403
 msgid "Service changed the session identifier."
 msgstr "服務變更了作業階段識別碼"
 
-#: ../src/adhoc_commands.py:421
+#: ../src/adhoc_commands.py:423
 #, fuzzy, python-format
 msgid "%s - Ad-hoc Commands - Gajim"
 msgstr "Ad-hoc 命令 - Gajim"
 
 #. when stanza doesn't have error description
-#: ../src/adhoc_commands.py:516
+#: ../src/adhoc_commands.py:518
 msgid "Service returned an error."
 msgstr "服務回傳了一個錯誤。"
 
@@ -3050,12 +3050,12 @@ msgstr "這個聯絡人不支援檔案傳輸"
 #. Add to roster
 #: ../src/chat_control.py:1740 ../src/common/contacts.py:152
 #: ../src/common/contacts.py:273 ../src/common/helpers.py:69
-#: ../src/common/helpers.py:278 ../src/dialogs.py:1106 ../src/dialogs.py:2314
-#: ../src/dialogs.py:2343 ../src/dialogs.py:3569 ../src/gui_interface.py:486
+#: ../src/common/helpers.py:278 ../src/dialogs.py:1106 ../src/dialogs.py:2319
+#: ../src/dialogs.py:2348 ../src/dialogs.py:3574 ../src/gui_interface.py:486
 #: ../src/gui_menu_builder.py:318 ../src/gui_menu_builder.py:489
 #: ../src/roster_window.py:775 ../src/roster_window.py:1761
 #: ../src/roster_window.py:1763 ../src/roster_window.py:2113
-#: ../src/roster_window.py:3687 ../src/roster_window.py:3714
+#: ../src/roster_window.py:3690 ../src/roster_window.py:3717
 msgid "Not in Roster"
 msgstr "不在聯絡人清單中"
 
@@ -3104,7 +3104,7 @@ msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "聊天室 %(room_name)s 的 %(nickname)s"
 
 #. No key assigned nor a key is used by remote contact
-#: ../src/chat_control.py:2255 ../src/dialogs.py:5214
+#: ../src/chat_control.py:2255 ../src/dialogs.py:5219
 #, fuzzy
 msgid "No OpenPGP key assigned"
 msgstr "沒有指定 GPG 密鑰"
@@ -3160,7 +3160,7 @@ msgstr "且未被認證"
 #. status will become 'is' or 'is not', authentificaed will become
 #. 'and authentificated' or 'and not authentificated', logged will become
 #. 'will' or 'will not'
-#: ../src/chat_control.py:2327
+#: ../src/chat_control.py:2328
 #, python-format
 msgid ""
 "%(type)s encryption %(status)s active %(authenticated)s.\n"
@@ -3169,74 +3169,74 @@ msgstr ""
 "%(type)s 加密 %(status)s 活動 %(authenticated)s。\n"
 "您的聊天作業階段 %(logged)s 將被記錄。"
 
-#: ../src/chat_control.py:2465
+#: ../src/chat_control.py:2468
 msgid "Session negotiation cancelled"
 msgstr "作業階段協商已取消"
 
-#: ../src/chat_control.py:2475
+#: ../src/chat_control.py:2478
 msgid "This session WILL be archived on server"
 msgstr "本次作業階段將在伺服器上被存檔"
 
-#: ../src/chat_control.py:2477
+#: ../src/chat_control.py:2480
 msgid "This session WILL NOT be archived on server"
 msgstr "本次作業階段將不會在伺服器上被存檔"
 
-#: ../src/chat_control.py:2486
+#: ../src/chat_control.py:2489
 msgid "This session is encrypted"
 msgstr "本次作業階段已被加密"
 
-#: ../src/chat_control.py:2489
+#: ../src/chat_control.py:2492
 msgid " and WILL be logged"
 msgstr "且會被記錄"
 
-#: ../src/chat_control.py:2491
+#: ../src/chat_control.py:2494
 msgid " and WILL NOT be logged"
 msgstr "且不會被記錄"
 
-#: ../src/chat_control.py:2496
+#: ../src/chat_control.py:2499
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
 msgstr "遠端聯絡人的身分未確認。點擊盾型按鈕檢視詳情。"
 
-#: ../src/chat_control.py:2498
+#: ../src/chat_control.py:2501
 msgid "E2E encryption disabled"
 msgstr "E2E 加密被停用"
 
-#: ../src/chat_control.py:2546 ../src/chat_control.py:2560
+#: ../src/chat_control.py:2549 ../src/chat_control.py:2563
 msgid "The following message was NOT encrypted"
 msgstr "下面的訊息沒有被加密"
 
-#: ../src/chat_control.py:2552
+#: ../src/chat_control.py:2555
 msgid "The following message was encrypted"
 msgstr "下面的訊息是加密的"
 
 #. %s is being replaced in the code with JID
-#: ../src/chat_control.py:2825
+#: ../src/chat_control.py:2832
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "您剛剛收到一條來自 \"%s\" 的訊息"
 
-#: ../src/chat_control.py:2827
+#: ../src/chat_control.py:2834
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr "如果您關閉此標籤並且停用了命令歷程，此訊息會丟失。"
 
-#: ../src/chat_control.py:2858 ../src/groupchat_control.py:1387
+#: ../src/chat_control.py:2865 ../src/groupchat_control.py:1401
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: ../src/chat_control.py:3002 ../src/common/connection.py:556
-#: ../src/common/connection_handlers.py:1095
-#: ../src/common/connection_handlers.py:1271
-#: ../src/common/connection_handlers_events.py:955 ../src/common/logger.py:1172
-#: ../src/gajim.py:244 ../src/session.py:110
+#: ../src/chat_control.py:3009 ../src/common/connection.py:561
+#: ../src/common/connection_handlers.py:1099
+#: ../src/common/connection_handlers.py:1269
+#: ../src/common/connection_handlers_events.py:953 ../src/common/logger.py:1173
+#: ../src/gajim.py:232 ../src/session.py:110
 msgid "Database Error"
 msgstr "資料庫錯誤"
 
-#: ../src/chat_control.py:3003
+#: ../src/chat_control.py:3010
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it or remove it (all "
@@ -3244,7 +3244,7 @@ msgid ""
 msgstr ""
 "資料庫檔案 (%s) 不能被讀取。請嘗試修復它或是移除它(所有命令歷程記錄會丟失)。"
 
-#: ../src/chat_control.py:3033
+#: ../src/chat_control.py:3040
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -3253,7 +3253,7 @@ msgstr ""
 "主題: %(subject)s\n"
 "%(message)s"
 
-#: ../src/chat_control.py:3238 ../src/gui_interface.py:1201
+#: ../src/chat_control.py:3245 ../src/gui_interface.py:1202
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -3262,56 +3262,56 @@ msgstr ""
 "無法解密來自 %s 的訊息\n"
 "它可能被篡改了。"
 
-#: ../src/chat_control.py:3295
+#: ../src/chat_control.py:3302
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s 的狀態是 %(status)s"
 
-#: ../src/chat_control.py:3354
+#: ../src/chat_control.py:3361
 #, fuzzy
 msgid "File transfer"
 msgstr "檔案傳輸"
 
-#: ../src/chat_control.py:3357
+#: ../src/chat_control.py:3364
 #, fuzzy
 msgid "Size"
 msgstr "大小:  %s"
 
-#: ../src/chat_control.py:3359
+#: ../src/chat_control.py:3366
 #, fuzzy
 msgid "_Accept"
 msgstr "帳號(_A)"
 
-#: ../src/chat_control.py:3380 ../src/filetransfers_window.py:211
+#: ../src/chat_control.py:3387 ../src/filetransfers_window.py:210
 msgid "File transfer completed"
 msgstr "檔案傳輸已完成"
 
-#: ../src/chat_control.py:3412 ../src/dialogs.py:2943 ../src/dialogs.py:4633
-#: ../src/gui_interface.py:653 ../src/notify.py:277
+#: ../src/chat_control.py:3419 ../src/dialogs.py:2948 ../src/dialogs.py:4638
+#: ../src/gui_interface.py:653 ../src/notify.py:285
 msgid "Groupchat Invitation"
 msgstr "多人聊天邀請"
 
-#: ../src/chat_control.py:3434 ../src/gui_interface.py:1044
+#: ../src/chat_control.py:3441 ../src/gui_interface.py:1045
 #: ../src/roster_window.py:2019
 msgid "Remote contact stopped transfer"
 msgstr "遠端聯絡人停止了傳輸"
 
-#: ../src/chat_control.py:3436 ../src/gui_interface.py:1047
+#: ../src/chat_control.py:3443 ../src/gui_interface.py:1048
 #: ../src/roster_window.py:2021
 msgid "Error opening file"
 msgstr "開啟檔案錯誤"
 
-#: ../src/chat_control.py:3438 ../src/filetransfers_window.py:247
+#: ../src/chat_control.py:3445 ../src/filetransfers_window.py:246
 msgid "File transfer stopped"
 msgstr "檔案傳輸已停止"
 
-#: ../src/chat_control.py:3441 ../src/filetransfers_window.py:226
-#: ../src/filetransfers_window.py:233
+#: ../src/chat_control.py:3448 ../src/filetransfers_window.py:225
+#: ../src/filetransfers_window.py:232
 msgid "File transfer cancelled"
 msgstr "檔案傳輸已取消"
 
-#: ../src/chat_control.py:3442 ../src/filetransfers_window.py:226
-#: ../src/filetransfers_window.py:234
+#: ../src/chat_control.py:3449 ../src/filetransfers_window.py:225
+#: ../src/filetransfers_window.py:233
 msgid "Connection with peer cannot be established."
 msgstr "無法與對方建立連線。"
 
@@ -3447,8 +3447,8 @@ msgid "Change your nickname in a group chat"
 msgstr "變更您的暱稱(Ctrl+N)"
 
 #. invalid char
-#: ../src/command_system/implementation/standard.py:278 ../src/config.py:3431
-#: ../src/dialogs.py:2158
+#: ../src/command_system/implementation/standard.py:278 ../src/config.py:3444
+#: ../src/dialogs.py:2163
 msgid "Invalid nickname"
 msgstr "無效的暱稱"
 
@@ -3651,7 +3651,7 @@ msgstr "選擇您想要離開的聊天室"
 #: ../src/common/commands.py:216 ../src/common/contacts.py:131
 #: ../src/common/helpers.py:69 ../src/roster_window.py:828
 #: ../src/roster_window.py:1765 ../src/roster_window.py:1767
-#: ../src/roster_window.py:2649 ../src/roster_window.py:5807
+#: ../src/roster_window.py:2649 ../src/roster_window.py:5810
 msgid "Groupchats"
 msgstr "多人聊天"
 
@@ -3814,9 +3814,9 @@ msgid ""
 msgstr "折疊的列(帳號和組)的清單(空格分隔)。"
 
 #. sorted alphanum
-#: ../src/common/config.py:115 ../src/common/config.py:535
-#: ../src/common/optparser.py:310 ../src/common/optparser.py:506
-#: ../src/common/optparser.py:540 ../src/gui_interface.py:2877
+#: ../src/common/config.py:115 ../src/common/config.py:538
+#: ../src/common/optparser.py:312 ../src/common/optparser.py:508
+#: ../src/common/optparser.py:542 ../src/gui_interface.py:2873
 msgid "default"
 msgstr "預設"
 
@@ -4300,46 +4300,53 @@ msgstr ""
 "如果為真，Gajim 會使用 KDE Wallet (如果 kwalletcli 可用) 儲存帳號的密碼。"
 
 #: ../src/common/config.py:289
+#, fuzzy
+msgid ""
+"If True, Gajim will use the Windows Credential Vault to store account "
+"passwords."
+msgstr "如果為真，Gajim 會使用 Gnome Keyring (如果可用) 儲存帳號的密碼。"
+
+#: ../src/common/config.py:290
 msgid ""
 "If True, Gajim will show number of online and total contacts in account and "
 "group rows."
 msgstr "如果為真，Gajim 會在帳號和群組所在列顯示線上和總共聯絡人數目。"
 
-#: ../src/common/config.py:290
+#: ../src/common/config.py:291
 msgid ""
 "Can be empty, 'chat' or 'normal'. If not empty, treat all incoming messages "
 "as if they were of this type"
 msgstr ""
 "可以是空字串，'chat'或'normal'。如果不為空，將把所有收到的訊息當作這個類型。"
 
-#: ../src/common/config.py:291
+#: ../src/common/config.py:292
 msgid ""
 "If True, Gajim will scroll and select the contact who sent you the last "
 "message, if chat window is not already opened."
 msgstr ""
 "如果為真，在聊天視窗沒有開啟時，Gajim 會捲動並選出最後給您傳送訊息的聯絡人。"
 
-#: ../src/common/config.py:292
+#: ../src/common/config.py:293
 msgid "Time of inactivity needed before the change status window closes down."
 msgstr "時間，如果在此時間內沒有活動，將變更狀態視窗關閉。"
 
-#: ../src/common/config.py:293
+#: ../src/common/config.py:294
 msgid ""
 "Maximum number of lines that are printed in conversations. Oldest lines are "
 "cleared."
 msgstr "在對話中最多顯示的列數。最舊的那些列會被清除。"
 
-#: ../src/common/config.py:294
+#: ../src/common/config.py:295
 msgid ""
 "If True, notification windows from notification-daemon will be attached to "
 "notification icon."
 msgstr "如果為真，由 notification-daemon 建立的提示視窗會依附於通知區域圖示。"
 
-#: ../src/common/config.py:295
+#: ../src/common/config.py:296
 msgid "Choose interval between 2 checks of idleness."
 msgstr "兩次檢查閒置之間的時間間隔。"
 
-#: ../src/common/config.py:296
+#: ../src/common/config.py:297
 msgid ""
 "Valid uri schemes. Only schemes in this list will be accepted as \"real\" "
 "uri. (mailto and xmpp are handled separately)"
@@ -4347,7 +4354,7 @@ msgstr ""
 "合法的 URI Scheme。只有這個清單中的 Scheme 會被接受為\"真正的\" URI。(mailto "
 "和 xmpp 被分開處理)"
 
-#: ../src/common/config.py:297
+#: ../src/common/config.py:298
 #, fuzzy
 msgid ""
 "Ask offline status message to all offline contacts when connection to an "
@@ -4356,29 +4363,29 @@ msgstr ""
 "請求所有離線聯絡人的離線狀態訊息，當一個帳號建立連線時。警告: 這會傳送大量的"
 "請求!"
 
-#: ../src/common/config.py:298
+#: ../src/common/config.py:299
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr "如果為真，多人聊天中會像 shell 一樣自動補全"
 
-#: ../src/common/config.py:299
+#: ../src/common/config.py:300
 msgid ""
 "When is self contact row displayed. Can be \"always\", \"when_other_resource"
 "\" or \"never\""
 msgstr "何時顯示自己。可以是\"總是\"，\"當用其他資源連線時\"或\"永遠不\""
 
-#: ../src/common/config.py:304
+#: ../src/common/config.py:305
 msgid "Optionally fix jingle output video framerate. Example: 10/1 or 25/2"
 msgstr "可選地修正 jingle 視訊輸出的圖框速率。比如: 10/1 或 25/2"
 
-#: ../src/common/config.py:305
+#: ../src/common/config.py:306
 msgid "Optionally resize jingle output video. Example: 320x240"
 msgstr "可選地縮放 jingle 視訊輸出尺寸。比如: 320x240"
 
-#: ../src/common/config.py:306
+#: ../src/common/config.py:307
 msgid "If True, You will also see your webcam"
 msgstr ""
 
-#: ../src/common/config.py:309
+#: ../src/common/config.py:310
 msgid ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
@@ -4386,46 +4393,54 @@ msgstr ""
 "如果為真，Gajim 在使用 jingle 時會嘗試使用 STUN 伺服器。伺服器可以由"
 "\"stun_server\"選項給出，或由 jabber 伺服器給出。"
 
-#: ../src/common/config.py:310
+#: ../src/common/config.py:311
 msgid "STUN server to use when using jingle"
 msgstr "在使用 jingle 時使用的 STUN 伺服器"
 
-#: ../src/common/config.py:311
+#: ../src/common/config.py:312
 msgid ""
 "If True, Gajim will show affiliation of groupchat occupants by adding a "
 "colored square to the status icon"
 msgstr "如果為真，Gajim 會在聊天室室友的狀態圖示上加上一個彩色方框以示歸屬"
 
-#: ../src/common/config.py:312
+#: ../src/common/config.py:313
 msgid ""
 "Proxy used for all outgoing connections if the account does not have a "
 "specific proxy configured"
 msgstr ""
 
-#: ../src/common/config.py:313
+#: ../src/common/config.py:314
 msgid "If True, Gajim will ignore incoming attention requestd (\"wizz\")."
 msgstr ""
 
-#: ../src/common/config.py:314
+#: ../src/common/config.py:315
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
 msgstr ""
 
-#: ../src/common/config.py:315
+#: ../src/common/config.py:316
 #, fuzzy
 msgid ""
 "If enabled, Gajim will show an icon to show that sent message has been "
 "received by your contact"
 msgstr "如果選取，Gajim 不會詢問狀態訊息，而使用特定的預設訊息。"
 
-#: ../src/common/config.py:329
+#: ../src/common/config.py:317
+msgid "Sets the encoding used by python-gnupg"
+msgstr ""
+
+#: ../src/common/config.py:318
+msgid "If True, Gajim will execute XEP-0146 Commands."
+msgstr ""
+
+#: ../src/common/config.py:332
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr "優先等級將根據您的狀態自動變更。優先等級在 autopriority_* 選項中定義。"
 
-#: ../src/common/config.py:337
+#: ../src/common/config.py:340
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -4434,93 +4449,93 @@ msgstr ""
 "\"，\"請勿\n"
 "打擾\"，\"隱身\"。注意: 僅當 restore_last_status 被停用時這個選項其作用"
 
-#: ../src/common/config.py:338
+#: ../src/common/config.py:341
 msgid "If enabled, restore the last status that was used."
 msgstr "如果啟用，則恢復上次使用的狀態。"
 
-#: ../src/common/config.py:340
+#: ../src/common/config.py:343
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr "如果為真，聯絡人的認證請求將被自動接受。"
 
-#: ../src/common/config.py:341
+#: ../src/common/config.py:344
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr "如果為假，這個帳號將被停用且不會出現在聯絡人清單視窗中。"
 
-#: ../src/common/config.py:344
+#: ../src/common/config.py:347
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr "如果停用，即使 GPG 被配置，也不使用 GPG 密鑰簽名 presences。"
 
-#: ../src/common/config.py:346
+#: ../src/common/config.py:349
 msgid "Enable ESessions encryption for this account."
 msgstr "為這個帳號啟用 ESession 加密。"
 
-#: ../src/common/config.py:347
+#: ../src/common/config.py:350
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "Gajim 是否應該在可能時自動發起加密的作業階段?"
 
-#: ../src/common/config.py:348
+#: ../src/common/config.py:351
 msgid ""
 "Ordered list (space separated) of connection type to try. Can contain tls, "
 "ssl or plain"
 msgstr "應嘗試的連線類型的有序清單(用空格分隔)。可以包含 tls，ssl，或 plain"
 
-#: ../src/common/config.py:351
+#: ../src/common/config.py:354
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
 
-#: ../src/common/config.py:352
+#: ../src/common/config.py:355
 #, fuzzy
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
 msgstr "在使用明文連線傳送密碼前顯示一個警告對話方塊。"
 
-#: ../src/common/config.py:353
+#: ../src/common/config.py:356
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "在使用標準 SSL 函式庫前顯示一個警告對話方塊。"
 
-#: ../src/common/config.py:354
+#: ../src/common/config.py:357
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "在透過明文連線傳送明文密碼前顯示警告對話框。"
 
-#: ../src/common/config.py:356
+#: ../src/common/config.py:359
 msgid "Space separated list of ssl errors to ignore."
 msgstr "應忽略的 SSL 錯誤清單，以空格分隔"
 
-#: ../src/common/config.py:362
+#: ../src/common/config.py:365
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
 
-#: ../src/common/config.py:363
+#: ../src/common/config.py:366
 msgid ""
 "Download logs stored on server on Gajim startup if server supports XEP-0136 "
 "or XEP-0313"
 msgstr ""
 
-#: ../src/common/config.py:364
+#: ../src/common/config.py:367
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
 
-#: ../src/common/config.py:367
+#: ../src/common/config.py:370
 msgid "Whitespace sent after inactivity"
 msgstr "在不活動後傳送的空白"
 
-#: ../src/common/config.py:368
+#: ../src/common/config.py:371
 msgid "XMPP ping sent after inactivity"
 msgstr "在不活動後傳送的 XMPP ping"
 
-#: ../src/common/config.py:372
+#: ../src/common/config.py:375
 #, fuzzy
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
@@ -4528,11 +4543,11 @@ msgid ""
 msgstr "在重新連線前等待 ping alive packet 的回應多少秒"
 
 #. yes, no, ask
-#: ../src/common/config.py:376
+#: ../src/common/config.py:379
 msgid "Jabberd2 workaround"
 msgstr "為 Jabberd2 變通"
 
-#: ../src/common/config.py:379
+#: ../src/common/config.py:382
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -4540,109 +4555,109 @@ msgstr ""
 "如果選取，Gajim 會使用您在 file_transfer_proxies 選項中定義的 IP 和代理進行檔"
 "案傳輸。"
 
-#: ../src/common/config.py:380
+#: ../src/common/config.py:383
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
-#: ../src/common/config.py:394
+#: ../src/common/config.py:397
 msgid "Answer to receipt requests"
 msgstr "對回執請求的回應"
 
-#: ../src/common/config.py:395
+#: ../src/common/config.py:398
 msgid "Sent receipt requests"
 msgstr "傳送回執請求"
 
-#: ../src/common/config.py:404
+#: ../src/common/config.py:407
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr "允許 Gajim 發送您正在執行的作業系統相關資訊。"
 
-#: ../src/common/config.py:405
+#: ../src/common/config.py:408
 msgid "Allow Gajim to send your local time."
 msgstr "允許 Gajim 發送您的本地時間。"
 
-#: ../src/common/config.py:406
+#: ../src/common/config.py:409
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
 msgstr "在協商加密的作業階段時，Gajim 是否應該假設您想要您的訊息被記錄?"
 
-#: ../src/common/config.py:409
+#: ../src/common/config.py:412
 msgid "Message that is sent to contacts you want to add"
 msgstr "向您希望加入的聯絡人傳送的訊息"
 
-#: ../src/common/config.py:410
+#: ../src/common/config.py:413
 msgid "Last time we syncronized with logs from server."
 msgstr "上次從伺服器同步命令歷程記錄"
 
-#: ../src/common/config.py:411
+#: ../src/common/config.py:414
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
 msgstr ""
 
-#: ../src/common/config.py:412
+#: ../src/common/config.py:415
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
 msgstr ""
 
-#: ../src/common/config.py:413
+#: ../src/common/config.py:416
 #, fuzzy
 msgid "Latest token for Oauth2 authentication."
 msgstr "匿名認證"
 
-#: ../src/common/config.py:414
+#: ../src/common/config.py:417
 #, fuzzy
 msgid "client_id for Oauth2 authentication."
 msgstr "匿名認證(_Y)"
 
-#: ../src/common/config.py:415
+#: ../src/common/config.py:418
 msgid "redirect_url for Oauth2 authentication."
 msgstr ""
 
-#: ../src/common/config.py:416
+#: ../src/common/config.py:419
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
 msgstr ""
 
-#: ../src/common/config.py:417
+#: ../src/common/config.py:420
 #, fuzzy
 msgid "Last MAM id we are syncronized with"
 msgstr "上次從伺服器同步命令歷程記錄"
 
-#: ../src/common/config.py:479
+#: ../src/common/config.py:482
 msgid "Is OpenPGP enabled for this contact?"
 msgstr "是否為此聯絡人使用 OpenPGP?"
 
-#: ../src/common/config.py:480
+#: ../src/common/config.py:483
 msgid ""
 "Should Gajim automatically start an encrypted session with this contact when "
 "possible?"
 msgstr "對於此聯絡人，Gajim 是否應該自動發起加密作業階段，當可能時?"
 
-#: ../src/common/config.py:481 ../src/common/config.py:484
+#: ../src/common/config.py:484 ../src/common/config.py:487
 msgid "Language for which we want to check misspelled words"
 msgstr "想要進行拼寫檢查的語言"
 
-#: ../src/common/config.py:485
+#: ../src/common/config.py:488
 #, fuzzy
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
 msgstr "當加入多人聊天時，向伺服器請求聊天記錄的列數。-1 表示無限制"
 
-#: ../src/common/config.py:486
+#: ../src/common/config.py:489
 #, fuzzy
 msgid ""
 "How many minutes back to request logs when entering a groupchat. -1 means no "
 "limit, -2 means global value"
 msgstr "當加入多人聊天時，向伺服器請求多少分鐘以內的聊天記錄。-1 表示無限制"
 
-#: ../src/common/config.py:489
+#: ../src/common/config.py:492
 #, fuzzy
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
@@ -4652,110 +4667,110 @@ msgstr ""
 "表述在離開時是否啟用外掛程式(在 Gajim 離開時這會被儲存)。這個選項不應該用於啟"
 "用或停用外掛程式。使用圖形介面代替。"
 
-#: ../src/common/config.py:494 ../src/common/pep.py:157
+#: ../src/common/config.py:497 ../src/common/pep.py:157
 msgid "Sleeping"
 msgstr "正在睡覺"
 
-#: ../src/common/config.py:495
+#: ../src/common/config.py:498
 msgid "Back soon"
 msgstr "馬上回來"
 
-#: ../src/common/config.py:495
+#: ../src/common/config.py:498
 msgid "Back in some minutes."
 msgstr "幾分鐘就回來。"
 
-#: ../src/common/config.py:496 ../src/common/pep.py:127
+#: ../src/common/config.py:499 ../src/common/pep.py:127
 msgid "Eating"
 msgstr "吃東西"
 
-#: ../src/common/config.py:496
+#: ../src/common/config.py:499
 msgid "I'm eating, so leave me a message."
 msgstr "我在吃東西，請留言"
 
-#: ../src/common/config.py:497
+#: ../src/common/config.py:500
 msgid "Movie"
 msgstr "電影"
 
-#: ../src/common/config.py:497
+#: ../src/common/config.py:500
 msgid "I'm watching a movie."
 msgstr "我正在看電影。"
 
-#: ../src/common/config.py:498 ../src/common/pep.py:186
+#: ../src/common/config.py:501 ../src/common/pep.py:186
 msgid "Working"
 msgstr "工作"
 
-#: ../src/common/config.py:498
+#: ../src/common/config.py:501
 msgid "I'm working."
 msgstr "我正在工作。"
 
-#: ../src/common/config.py:499
+#: ../src/common/config.py:502
 msgid "Phone"
 msgstr "打電話"
 
-#: ../src/common/config.py:499
+#: ../src/common/config.py:502
 msgid "I'm on the phone."
 msgstr "我正在打電話"
 
-#: ../src/common/config.py:500
+#: ../src/common/config.py:503
 msgid "Out"
 msgstr "外出"
 
-#: ../src/common/config.py:500
+#: ../src/common/config.py:503
 msgid "I'm out enjoying life."
 msgstr "我正在享受戶外生活。"
 
-#: ../src/common/config.py:511
+#: ../src/common/config.py:514
 msgid "I'm available."
 msgstr "我現在線上。"
 
-#: ../src/common/config.py:512
+#: ../src/common/config.py:515
 msgid "I'm free for chat."
 msgstr "和我聊天吧"
 
-#: ../src/common/config.py:513 ../src/config.py:1647
+#: ../src/common/config.py:516 ../src/config.py:1660
 msgid "Be right back."
 msgstr "很快回來。"
 
-#: ../src/common/config.py:514
+#: ../src/common/config.py:517
 msgid "I'm not available."
 msgstr "我已經很久不在了。"
 
-#: ../src/common/config.py:515
+#: ../src/common/config.py:518
 msgid "Do not disturb."
 msgstr "請勿打擾。"
 
-#: ../src/common/config.py:516 ../src/common/config.py:517
+#: ../src/common/config.py:519 ../src/common/config.py:520
 msgid "Bye!"
 msgstr "再見!"
 
-#: ../src/common/config.py:528
+#: ../src/common/config.py:531
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
 "當收到的多人聊天訊息包含 \"muc_highlight_words\" 或您的暱稱時播放的聲音。"
 
-#: ../src/common/config.py:529
+#: ../src/common/config.py:532
 msgid "Sound to play when any MUC message arrives."
 msgstr "收到任意多人聊天訊息播放的聲音。"
 
-#: ../src/common/config.py:538 ../src/common/optparser.py:324
+#: ../src/common/config.py:541 ../src/common/optparser.py:326
 msgid "green"
 msgstr "綠色"
 
-#: ../src/common/config.py:542 ../src/common/optparser.py:310
+#: ../src/common/config.py:545 ../src/common/optparser.py:312
 msgid "grocery"
 msgstr "雜貨店"
 
-#: ../src/common/config.py:546
+#: ../src/common/config.py:549
 msgid "human"
 msgstr "人類別"
 
-#: ../src/common/config.py:550
+#: ../src/common/config.py:553
 msgid "marine"
 msgstr "海洋"
 
-#: ../src/common/config.py:557
+#: ../src/common/config.py:560
 #, fuzzy
 msgid "Tor"
 msgstr "To"
@@ -4888,46 +4903,44 @@ msgstr "密鑰用途中不包含證書籤名稱"
 msgid "Application verification failure"
 msgstr "應用程式驗證失敗"
 
-#: ../src/common/connection.py:294 ../src/common/connection.py:304
-#: ../src/common/connection_handlers_events.py:1148
-#: ../src/common/connection_handlers_events.py:1194 ../src/config.py:2164
-#: ../src/config.py:2173 ../src/config.py:2243 ../src/config.py:3717
-#: ../src/dataforms_widget.py:633 ../src/dialogs.py:3260
+#: ../src/common/connection.py:295 ../src/common/connection.py:307
+#: ../src/config.py:2177 ../src/config.py:2186 ../src/config.py:2256
+#: ../src/config.py:3730 ../src/dataforms_widget.py:633 ../src/dialogs.py:3265
 msgid "Invalid Jabber ID"
 msgstr "無效的 Jabber ID"
 
-#: ../src/common/connection.py:295 ../src/common/connection.py:305
-#: ../src/dialogs.py:3261
+#: ../src/common/connection.py:296 ../src/common/connection.py:308
+#: ../src/dialogs.py:3266
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "不能向 %s 傳送訊息，無效的 JID。"
 
-#: ../src/common/connection.py:328
+#: ../src/common/connection.py:331
 msgid "Neither the remote presence is signed, nor a key was assigned."
 msgstr "遠端 presence 未簽名，也未指定密鑰。"
 
-#: ../src/common/connection.py:331
+#: ../src/common/connection.py:334
 #, python-format
 msgid "The contact's key (%s) does not match the key assigned in Gajim."
 msgstr "聯絡人的密鑰(%s)與 Gajim 中指定的密鑰不匹配"
 
 #. we're not english: one in locale and one en
-#: ../src/common/connection.py:389
+#: ../src/common/connection.py:392
 msgid "[This message is *encrypted* (See :XEP:`27`]"
 msgstr "[本條訊息已 *加密* (見: XEP:`27`]"
 
-#: ../src/common/connection.py:553 ../src/common/connection_handlers.py:356
-#: ../src/common/connection_handlers.py:1093
-#: ../src/common/connection_handlers.py:1269
-#: ../src/common/connection_handlers_events.py:952 ../src/common/logger.py:1170
-#: ../src/gajim.py:464 ../src/session.py:107
+#: ../src/common/connection.py:558 ../src/common/connection_handlers.py:356
+#: ../src/common/connection_handlers.py:1097
+#: ../src/common/connection_handlers.py:1267
+#: ../src/common/connection_handlers_events.py:950 ../src/common/logger.py:1171
+#: ../src/gajim.py:438 ../src/session.py:107
 msgid "Disk Write Error"
 msgstr "磁碟寫入錯誤"
 
-#: ../src/common/connection.py:557 ../src/common/connection_handlers.py:1096
-#: ../src/common/connection_handlers.py:1272
-#: ../src/common/connection_handlers_events.py:956 ../src/common/logger.py:1173
-#: ../src/gajim.py:245 ../src/session.py:111
+#: ../src/common/connection.py:562 ../src/common/connection_handlers.py:1100
+#: ../src/common/connection_handlers.py:1270
+#: ../src/common/connection_handlers_events.py:954 ../src/common/logger.py:1174
+#: ../src/gajim.py:233 ../src/session.py:111
 #, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see http://trac."
@@ -4936,82 +4949,82 @@ msgstr ""
 "資料庫檔案 (%s) 不能被讀取。請嘗試修復它(參考 http://trac.gajim.org/wiki/"
 "DatabaseBackup)或移除它(所有命令歷程記錄將丟失)。"
 
-#: ../src/common/connection.py:984
+#: ../src/common/connection.py:988
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "帳號\"%s\"的連線丟失"
 
-#: ../src/common/connection.py:985
+#: ../src/common/connection.py:989
 msgid "Reconnect manually."
 msgstr "手動重連。"
 
 #. it's a new account
 #. wrong answer
-#: ../src/common/connection.py:996
+#: ../src/common/connection.py:1000
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "伺服器 %(name)s 對註冊請求的回應有誤: %(error)s"
 
 #. requested config has changed since first connection
-#: ../src/common/connection.py:1038
+#: ../src/common/connection.py:1041
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "伺服器 %s 提供了一個不同的註冊表單"
 
-#: ../src/common/connection.py:1055
+#: ../src/common/connection.py:1058
 msgid "Invalid answer"
 msgstr "答案錯誤"
 
-#: ../src/common/connection.py:1056
+#: ../src/common/connection.py:1059
 #, python-format
 msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 msgstr "服務代理 %(name)s 對註冊請求的回應有誤: %(error)s"
 
-#: ../src/common/connection.py:1183
+#: ../src/common/connection.py:1185
 #, fuzzy
 msgid "Wrong Custom Hostname"
 msgstr "使用自訂的主機名稱/連接埠"
 
-#: ../src/common/connection.py:1365
+#: ../src/common/connection.py:1367
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: ../src/common/connection.py:1368
+#: ../src/common/connection.py:1370
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: ../src/common/connection.py:1370 ../src/common/connection.py:1545
+#: ../src/common/connection.py:1372 ../src/common/connection.py:1549
 #: ../src/gui_interface.py:544
 msgid "Check your connection or try again later."
 msgstr "檢查連線或稍後重試。"
 
-#: ../src/common/connection.py:1375
+#: ../src/common/connection.py:1377
 #, python-format
 msgid "Server replied: %s"
 msgstr "伺服器回應: %s"
 
-#: ../src/common/connection.py:1390
+#: ../src/common/connection.py:1392
 msgid "Connection to proxy failed"
 msgstr "連線代理伺服器失敗"
 
-#: ../src/common/connection.py:1428 ../src/common/connection.py:1520
+#: ../src/common/connection.py:1430 ../src/common/connection.py:1524
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "沒有能夠連線到帳號 %s"
 
-#: ../src/common/connection.py:1429 ../src/common/connection.py:1521
+#: ../src/common/connection.py:1431 ../src/common/connection.py:1525
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "帳號 %s 的連線丟失。重新嘗試連線。"
 
-#: ../src/common/connection.py:1463
+#: ../src/common/connection.py:1465
 #, fuzzy, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "%s 證書的認證可能是無效的"
 
-#: ../src/common/connection.py:1466
+#: ../src/common/connection.py:1468
 #, python-format
 msgid ""
 "\n"
@@ -5020,7 +5033,7 @@ msgstr ""
 "\n"
 "SSL 錯誤: <b>%s</b>"
 
-#: ../src/common/connection.py:1468
+#: ../src/common/connection.py:1470
 #, python-format
 msgid ""
 "\n"
@@ -5029,33 +5042,33 @@ msgstr ""
 "\n"
 "不明 SSL 錯誤: %d"
 
-#: ../src/common/connection.py:1497
+#: ../src/common/connection.py:1499
 #, fuzzy, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr "%s 證書的認證可能是無效的"
 
-#: ../src/common/connection.py:1544 ../src/common/connection.py:2339
+#: ../src/common/connection.py:1548 ../src/common/connection.py:2327
 #: ../src/common/zeroconf/connection_zeroconf.py:210
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: ../src/common/connection.py:1580
+#: ../src/common/connection.py:1584
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\"登入驗證失敗"
 
-#: ../src/common/connection.py:1581
+#: ../src/common/connection.py:1585
 msgid "Please check your login and password for correctness."
 msgstr "請檢查登入資訊和密碼的正確性"
 
-#: ../src/common/connection.py:1657
+#: ../src/common/connection.py:1661
 msgid "Error while removing privacy list"
 msgstr "移除隱私策略清單時發生錯誤"
 
-#: ../src/common/connection.py:1658
+#: ../src/common/connection.py:1662
 #, python-format
 msgid ""
 "Privacy list %s has not been removed. It is maybe active in one of your "
@@ -5064,33 +5077,33 @@ msgstr ""
 "隱私策略清單 %s 還沒有被移除。它可能在您的某個連線的資源中是活動的。停用它然"
 "後重試。"
 
-#: ../src/common/connection.py:1851 ../src/common/connection.py:1965
+#: ../src/common/connection.py:1844 ../src/common/connection.py:1958
 msgid "Invisibility not supported"
 msgstr "不支援隱身"
 
-#: ../src/common/connection.py:1852 ../src/common/connection.py:1966
+#: ../src/common/connection.py:1845 ../src/common/connection.py:1959
 #, python-format
 msgid "Account %s doesn't support invisibility."
 msgstr "帳號 %s 不支援隱身"
 
-#: ../src/common/connection.py:2203
+#: ../src/common/connection.py:2191
 #, python-format
 msgid "Sent contact: \"%s\" (%s)"
 msgstr "已傳送聯絡人: \"%s\" (%s)"
 
-#: ../src/common/connection.py:2206
+#: ../src/common/connection.py:2194
 msgid "Sent contacts:"
 msgstr "已傳送聯絡人:"
 
-#: ../src/common/connection.py:2356 ../src/common/connection.py:2378
+#: ../src/common/connection.py:2344 ../src/common/connection.py:2366
 msgid "Not fetched because of invisible status"
 msgstr "由於隱身狀態，未獲取"
 
-#: ../src/common/connection.py:2986
+#: ../src/common/connection.py:2983
 msgid "Unregister failed"
 msgstr "移除註冊失敗"
 
-#: ../src/common/connection.py:2987
+#: ../src/common/connection.py:2984
 #, python-format
 msgid "Unregistration with server %(server)s failed: %(error)s"
 msgstr "在伺服器上 %(server)s 移除註冊失敗: %(error)s"
@@ -5128,7 +5141,7 @@ msgstr "註冊失敗，agent %(agent)s，錯誤 %(error)s: %(error_msg)s"
 msgid "I would like to add you to my roster."
 msgstr "我想將您加入到我的聯絡人清單。"
 
-#: ../src/common/connection_handlers_events.py:391
+#: ../src/common/connection_handlers_events.py:389
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5137,118 +5150,113 @@ msgstr ""
 "JID %s 不符合 RFC 標準。它沒有被加入聯絡人清單。請使用諸如 http://jru."
 "jabberstudio.org/ 的聯絡人清單管理工具移除它"
 
-#: ../src/common/connection_handlers_events.py:867
+#: ../src/common/connection_handlers_events.py:865
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "來自 %s 的解除認證請求"
 
 #. Room has been destroyed. see
 #. http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-#: ../src/common/connection_handlers_events.py:977
+#: ../src/common/connection_handlers_events.py:975
 msgid "Room has been destroyed"
 msgstr "聊天室已經被銷毀了"
 
-#: ../src/common/connection_handlers_events.py:985
+#: ../src/common/connection_handlers_events.py:983
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "做為替代，您可以加入這個聊天室: %s"
 
-#: ../src/common/connection_handlers_events.py:1149
-#: ../src/common/connection_handlers_events.py:1195
-msgid "A message from a non-valid JID arrived, it has been ignored."
-msgstr "收到了一個從一個無效的 JID 傳送的訊息，它已經被忽略了。"
-
 #. ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-#: ../src/common/connection_handlers_events.py:1238 ../src/gui_interface.py:434
+#: ../src/common/connection_handlers_events.py:1260 ../src/gui_interface.py:434
 #: ../src/gui_interface.py:448
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "傳送 %(message)s 時出現錯誤( %(error)s )"
 
-#: ../src/common/connection_handlers_events.py:1474
+#: ../src/common/connection_handlers_events.py:1494
 msgid "URL:"
 msgstr ""
 
-#: ../src/common/connection_handlers_events.py:1820
+#: ../src/common/connection_handlers_events.py:1840
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "不明的 SSL 錯誤: %d"
 
-#: ../src/common/connection_handlers_events.py:2442 ../src/dialogs.py:2933
-#: ../src/notify.py:265
+#: ../src/common/connection_handlers_events.py:2462 ../src/dialogs.py:2938
+#: ../src/notify.py:273
 msgid "New Single Message"
 msgstr "新單條訊息"
 
-#: ../src/common/connection_handlers_events.py:2444
+#: ../src/common/connection_handlers_events.py:2464
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr " %(nickname)s 發來的新訊息"
 
-#: ../src/common/connection_handlers_events.py:2448 ../src/dialogs.py:2934
-#: ../src/notify.py:266
+#: ../src/common/connection_handlers_events.py:2468 ../src/dialogs.py:2939
+#: ../src/notify.py:274
 msgid "New Private Message"
 msgstr "新個人訊息"
 
-#: ../src/common/connection_handlers_events.py:2450
+#: ../src/common/connection_handlers_events.py:2470
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "來自聊天室 %s 的私人訊息"
 
-#: ../src/common/connection_handlers_events.py:2453
+#: ../src/common/connection_handlers_events.py:2473
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s:  %(message)s"
 
-#: ../src/common/connection_handlers_events.py:2456
+#: ../src/common/connection_handlers_events.py:2476
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "來自 %(nickname)s 的訊息"
 
-#: ../src/common/connection_handlers_events.py:2460 ../src/dialogs.py:2933
-#: ../src/notify.py:265
+#: ../src/common/connection_handlers_events.py:2480 ../src/dialogs.py:2938
+#: ../src/notify.py:273
 msgid "New Message"
 msgstr "新訊息"
 
-#: ../src/common/connection_handlers_events.py:2462
+#: ../src/common/connection_handlers_events.py:2482
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "來自 %(nickname)s 的新訊息"
 
-#: ../src/common/connection_handlers_events.py:2607
+#: ../src/common/connection_handlers_events.py:2649
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s 變更了狀態"
 
-#: ../src/common/connection_handlers_events.py:2609
-#: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1905
-#: ../src/history_window.py:474
+#: ../src/common/connection_handlers_events.py:2651
+#: ../src/groupchat_control.py:208 ../src/groupchat_control.py:1919
+#: ../src/history_window.py:476
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的狀態是 %(status)s"
 
-#: ../src/common/connection_handlers_events.py:2613 ../src/dialogs.py:2945
-#: ../src/notify.py:279
+#: ../src/common/connection_handlers_events.py:2655 ../src/dialogs.py:2950
+#: ../src/notify.py:287
 msgid "Contact Changed Status"
 msgstr "聯絡人狀態變更"
 
-#: ../src/common/connection_handlers_events.py:2615
+#: ../src/common/connection_handlers_events.py:2657
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s 上線了"
 
 #. default value
-#: ../src/common/connection_handlers_events.py:2619 ../src/dialogs.py:2929
-#: ../src/notify.py:261
+#: ../src/common/connection_handlers_events.py:2661 ../src/dialogs.py:2934
+#: ../src/notify.py:269
 msgid "Contact Signed In"
 msgstr "聯絡人登入"
 
-#: ../src/common/connection_handlers_events.py:2621
+#: ../src/common/connection_handlers_events.py:2663
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s 離開了"
 
-#: ../src/common/connection_handlers_events.py:2625 ../src/dialogs.py:2931
-#: ../src/notify.py:263
+#: ../src/common/connection_handlers_events.py:2667 ../src/dialogs.py:2936
+#: ../src/notify.py:271
 msgid "Contact Signed Out"
 msgstr "聯絡人離開登入"
 
@@ -5263,7 +5271,7 @@ msgstr "旁觀者"
 #: ../src/disco.py:1561 ../src/roster_window.py:867
 #: ../src/roster_window.py:1643 ../src/roster_window.py:1757
 #: ../src/roster_window.py:1759 ../src/roster_window.py:1921
-#: ../src/roster_window.py:2617 ../src/roster_window.py:5840
+#: ../src/roster_window.py:2617 ../src/roster_window.py:5843
 msgid "Transports"
 msgstr "服務代理"
 
@@ -5817,7 +5825,7 @@ msgstr "視訊輸入"
 msgid "video output"
 msgstr "視訊輸出"
 
-#: ../src/common/logging_helpers.py:33
+#: ../src/common/logging_helpers.py:35
 #, python-format
 msgid "%s is not a valid loglevel"
 msgstr "%s 不是一個合法的日誌層級"
@@ -5904,15 +5912,15 @@ msgstr "X 視窗系統 (沒有Xv)"
 msgid "Error: cannot open %s for reading"
 msgstr "錯誤: 無法按讀開啟檔案 %s"
 
-#: ../src/common/optparser.py:319 ../src/common/optparser.py:320
+#: ../src/common/optparser.py:321 ../src/common/optparser.py:322
 msgid "cyan"
 msgstr "青色"
 
-#: ../src/common/optparser.py:399
+#: ../src/common/optparser.py:401
 msgid "migrating logs database to indices"
 msgstr "遷移記錄資料庫到索引"
 
-#: ../src/common/passwords.py:123
+#: ../src/common/passwords.py:133
 #, python-format
 msgid "XMPP account %s@%s"
 msgstr "XMPP 帳號 %s@%s"
@@ -6731,31 +6739,31 @@ msgid ""
 msgstr "無法建立到主機的連線: 傳送資料逾時。"
 
 #: ../src/common/zeroconf/zeroconf_avahi.py:221
-#: ../src/common/zeroconf/zeroconf_bonjour.py:211
-#: ../src/common/zeroconf/zeroconf_bonjour.py:234
-#: ../src/common/zeroconf/zeroconf_bonjour.py:281
+#: ../src/common/zeroconf/zeroconf_bonjour.py:220
+#: ../src/common/zeroconf/zeroconf_bonjour.py:244
+#: ../src/common/zeroconf/zeroconf_bonjour.py:290
 #, python-format
 msgid "Error while adding service. %s"
 msgstr "加入服務錯誤。 %s"
 
-#: ../src/config.py:404
+#: ../src/config.py:417
 msgid "Default Message"
 msgstr "預設訊息"
 
-#: ../src/config.py:413
+#: ../src/config.py:426
 msgid "Enabled"
 msgstr "啟用"
 
-#: ../src/config.py:468 ../src/config.py:472 ../src/config.py:3207
+#: ../src/config.py:481 ../src/config.py:485 ../src/config.py:3220
 msgid "Default"
 msgstr "預設"
 
-#: ../src/config.py:743 ../src/dialogs.py:1500
+#: ../src/config.py:756 ../src/dialogs.py:1505
 #, python-format
 msgid "Dictionary for lang %s not available"
 msgstr "語言 %s 的詞典無法使用"
 
-#: ../src/config.py:744
+#: ../src/config.py:757
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -6763,210 +6771,210 @@ msgid ""
 msgstr ""
 "您需安裝 %s 詞典以使用拼寫檢查，或是設定拼寫檢查選項以選擇另外一種語言。(_L)"
 
-#: ../src/config.py:1223
+#: ../src/config.py:1236
 msgid "status message title"
 msgstr "狀態訊息標題"
 
-#: ../src/config.py:1224
+#: ../src/config.py:1237
 msgid "status message text"
 msgstr "狀態訊息文字"
 
 #. Name column
-#: ../src/config.py:1552 ../src/dialogs.py:2688 ../src/dialogs.py:2755
-#: ../src/dialogs.py:3553 ../src/disco.py:897 ../src/disco.py:1794
-#: ../src/disco.py:2098 ../src/history_window.py:94
+#: ../src/config.py:1565 ../src/dialogs.py:2693 ../src/dialogs.py:2760
+#: ../src/dialogs.py:3558 ../src/disco.py:897 ../src/disco.py:1794
+#: ../src/disco.py:2098 ../src/history_window.py:96
 msgid "Name"
 msgstr "名稱"
 
-#: ../src/config.py:1657
+#: ../src/config.py:1670
 msgid "Relogin now?"
 msgstr "現在重新登入?"
 
-#: ../src/config.py:1658
+#: ../src/config.py:1671
 msgid "If you want all the changes to apply instantly, you must relogin."
 msgstr "如果想使所有調整立即生效，您必須重新登入。"
 
-#: ../src/config.py:1815 ../src/config.py:1950
+#: ../src/config.py:1828 ../src/config.py:1963
 msgid "OpenPGP is not usable on this computer"
 msgstr "OpenPGP 在這臺電腦上無法使用"
 
-#: ../src/config.py:1995 ../src/config.py:2045
+#: ../src/config.py:2008 ../src/config.py:2058
 msgid "Unread events"
 msgstr "未讀取的事件"
 
-#: ../src/config.py:1996
+#: ../src/config.py:2009
 msgid "Read all pending events before removing this account."
 msgstr "移除帳號前請檢視所有未處理事件。"
 
-#: ../src/config.py:2026
+#: ../src/config.py:2039
 #, python-format
 msgid "You have opened chat in account %s"
 msgstr "您已在帳號 %s 開啟聊天"
 
-#: ../src/config.py:2027
+#: ../src/config.py:2040
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr "所有的聊天和多人聊天視窗將會關閉。您想繼續嗎?"
 
-#: ../src/config.py:2040 ../src/config.py:2618 ../src/config.py:2656
+#: ../src/config.py:2053 ../src/config.py:2631 ../src/config.py:2669
 msgid "You are currently connected to the server"
 msgstr "正在連線到伺服器"
 
-#: ../src/config.py:2041
+#: ../src/config.py:2054
 msgid "To change the account name, you must be disconnected."
 msgstr "如要變更帳號名稱，需中斷連線。"
 
-#: ../src/config.py:2046
+#: ../src/config.py:2059
 msgid "To change the account name, you must read all pending events."
 msgstr "如要變更帳號名稱，需先處理所有未處理事件"
 
-#: ../src/config.py:2052
+#: ../src/config.py:2065
 msgid "Account Name Already Used"
 msgstr "帳號名稱已經被佔用"
 
-#: ../src/config.py:2053
+#: ../src/config.py:2066
 msgid ""
 "This name is already used by another of your accounts. Please choose another "
 "name."
 msgstr "該名稱已被您的另一個帳號使用。請選擇其他名稱"
 
-#: ../src/config.py:2057 ../src/config.py:2062
+#: ../src/config.py:2070 ../src/config.py:2075
 msgid "Invalid account name"
 msgstr "無效的帳號名稱"
 
-#: ../src/config.py:2058
+#: ../src/config.py:2071
 msgid "Account name cannot be empty."
 msgstr "帳號名稱不能為空。"
 
-#: ../src/config.py:2063
+#: ../src/config.py:2076
 msgid "Account name cannot contain spaces."
 msgstr "帳號名稱不能包含空格。"
 
-#: ../src/config.py:2144
+#: ../src/config.py:2157
 msgid "Rename Account"
 msgstr "重新命名帳號"
 
-#: ../src/config.py:2145
+#: ../src/config.py:2158
 #, python-format
 msgid "Enter a new name for account %s"
 msgstr "為帳號 %s 輸入新的名稱"
 
-#: ../src/config.py:2175
+#: ../src/config.py:2188
 msgid "A Jabber ID must be in the form \"user@servername\"."
 msgstr "Jabber ID 的格式為 \"使用者@伺服器名稱\"。"
 
-#: ../src/config.py:2415 ../src/config.py:3763
+#: ../src/config.py:2428 ../src/config.py:3776
 msgid "Invalid entry"
 msgstr "無效輸入"
 
-#: ../src/config.py:2416 ../src/config.py:3764
+#: ../src/config.py:2429 ../src/config.py:3777
 msgid "Custom port must be a port number."
 msgstr "自訂連接埠必須為連接埠號碼。"
 
-#: ../src/config.py:2438
+#: ../src/config.py:2451
 msgid "Failed to get secret keys"
 msgstr "獲取密鑰失敗"
 
-#: ../src/config.py:2439
+#: ../src/config.py:2452
 msgid "There is no OpenPGP secret key available."
 msgstr "沒有可用的 OpenPGP 私鑰"
 
-#: ../src/config.py:2477
+#: ../src/config.py:2490
 msgid "OpenPGP Key Selection"
 msgstr "OpenPGP 密鑰選擇"
 
-#: ../src/config.py:2478
+#: ../src/config.py:2491
 msgid "Choose your OpenPGP key"
 msgstr "選擇您的 OpenPGP 密鑰"
 
-#: ../src/config.py:2486
+#: ../src/config.py:2499
 msgid "No such account available"
 msgstr "不明的帳號可用"
 
-#: ../src/config.py:2487
+#: ../src/config.py:2500
 msgid "You must create your account before editing your personal information."
 msgstr "您必須在編輯個人資訊前建立帳號。"
 
-#: ../src/config.py:2494 ../src/dialogs.py:2374 ../src/dialogs.py:2676
-#: ../src/dialogs.py:2865 ../src/disco.py:523 ../src/profile_window.py:371
+#: ../src/config.py:2507 ../src/dialogs.py:2379 ../src/dialogs.py:2681
+#: ../src/dialogs.py:2870 ../src/disco.py:523 ../src/profile_window.py:371
 msgid "You are not connected to the server"
 msgstr "尚未連線到伺服器"
 
-#: ../src/config.py:2495
+#: ../src/config.py:2508
 msgid "Without a connection, you can not edit your personal information."
 msgstr "無法離線編輯個人資訊。"
 
-#: ../src/config.py:2500
+#: ../src/config.py:2513
 #, fuzzy
 msgid "Your server doesn't support vCard"
 msgstr "您的伺服器不支援 Vcard"
 
-#: ../src/config.py:2501
+#: ../src/config.py:2514
 msgid "Your server can't save your personal information."
 msgstr "您的伺服器無法儲存您的個人資訊。"
 
-#: ../src/config.py:2619 ../src/config.py:2657
+#: ../src/config.py:2632 ../src/config.py:2670
 msgid "To disable the account, you must be disconnected."
 msgstr "要停用帳號，您必須中斷連線。"
 
-#: ../src/config.py:2626
+#: ../src/config.py:2639
 msgid "Account Local already exists."
 msgstr "帳號本地已存在。"
 
-#: ../src/config.py:2627
+#: ../src/config.py:2640
 msgid "Please rename or remove it before enabling link-local messaging."
 msgstr "請在使用本地訊息前重新命名或移除它。"
 
-#: ../src/config.py:2788
+#: ../src/config.py:2801
 #, python-format
 msgid "Edit %s"
 msgstr "編輯 %s"
 
-#: ../src/config.py:2790
+#: ../src/config.py:2803
 #, python-format
 msgid "Register to %s"
 msgstr "註冊到 %s"
 
 #. list at the beginning
-#: ../src/config.py:2826
+#: ../src/config.py:2839
 msgid "Ban List"
 msgstr "封禁名單"
 
-#: ../src/config.py:2827
+#: ../src/config.py:2840
 msgid "Member List"
 msgstr "成員清單"
 
-#: ../src/config.py:2827
+#: ../src/config.py:2840
 msgid "Owner List"
 msgstr "室長清單"
 
-#: ../src/config.py:2828
+#: ../src/config.py:2841
 msgid "Administrator List"
 msgstr "管理員清單"
 
 #. Address column
 #. holds JID (who said this)
-#: ../src/config.py:2892 ../src/disco.py:904 ../src/history_manager.py:216
+#: ../src/config.py:2905 ../src/disco.py:904 ../src/history_manager.py:216
 msgid "JID"
 msgstr "JID"
 
-#: ../src/config.py:2902
+#: ../src/config.py:2915
 msgid "Reason"
 msgstr "原因"
 
-#: ../src/config.py:2909
+#: ../src/config.py:2922
 msgid "Nick"
 msgstr "暱稱"
 
-#: ../src/config.py:2915
+#: ../src/config.py:2928
 msgid "Role"
 msgstr "角色"
 
-#: ../src/config.py:2942
+#: ../src/config.py:2955
 msgid "Banning..."
 msgstr "封禁…"
 
 #. You can move '\n' before user@domain if that line is TOO BIG
-#: ../src/config.py:2944
+#: ../src/config.py:2957
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -6974,11 +6982,11 @@ msgstr ""
 "<b>想做封禁誰?</b>\n"
 "\n"
 
-#: ../src/config.py:2946
+#: ../src/config.py:2959
 msgid "Adding Member..."
 msgstr "正在加入成員…"
 
-#: ../src/config.py:2947
+#: ../src/config.py:2960
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -6986,11 +6994,11 @@ msgstr ""
 "<b>想要將誰加為成員?</b>\n"
 "\n"
 
-#: ../src/config.py:2949
+#: ../src/config.py:2962
 msgid "Adding Owner..."
 msgstr "加入室長…"
 
-#: ../src/config.py:2950
+#: ../src/config.py:2963
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -6998,11 +7006,11 @@ msgstr ""
 "<b>您想要讓誰成為室長?</b>\n"
 "\n"
 
-#: ../src/config.py:2952
+#: ../src/config.py:2965
 msgid "Adding Administrator..."
 msgstr "加入管理員…"
 
-#: ../src/config.py:2953
+#: ../src/config.py:2966
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -7010,7 +7018,7 @@ msgstr ""
 "<b>您想要讓誰成為管理員?</b>\n"
 "\n"
 
-#: ../src/config.py:2954
+#: ../src/config.py:2967
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -7026,102 +7034,102 @@ msgstr ""
 "4。domain (欄位名稱本身匹配，任何 user@domain，\n"
 "domain/resource，或是包含一個子欄位名稱的位址也匹配)。"
 
-#: ../src/config.py:3055
+#: ../src/config.py:3068
 #, python-format
 msgid "Removing %s account"
 msgstr "移除帳號 %s"
 
-#: ../src/config.py:3070
+#: ../src/config.py:3083
 msgid "Account is disabled"
 msgstr "帳號被停用"
 
-#: ../src/config.py:3071
+#: ../src/config.py:3084
 msgid "To unregister from a server, account must be enabled."
 msgstr "要從伺服器移除註冊，帳號必須被啟用。"
 
-#: ../src/config.py:3084 ../src/gui_interface.py:286
+#: ../src/config.py:3097 ../src/gui_interface.py:286
 #: ../src/gui_interface.py:741
 msgid "Password Required"
 msgstr "需要密碼"
 
-#: ../src/config.py:3085 ../src/gui_interface.py:721
+#: ../src/config.py:3098 ../src/gui_interface.py:721
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "輸入帳號 %s 的密碼"
 
-#: ../src/config.py:3086 ../src/gui_interface.py:741
+#: ../src/config.py:3099 ../src/gui_interface.py:741
 msgid "Save password"
 msgstr "儲存密碼"
 
-#: ../src/config.py:3096
+#: ../src/config.py:3109
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "帳號 \"%s\" 已連線到伺服器"
 
-#: ../src/config.py:3097
+#: ../src/config.py:3110
 msgid "If you remove it, the connection will be lost."
 msgstr "如果移除，將會丟失連線"
 
-#: ../src/config.py:3111
+#: ../src/config.py:3124
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "連線伺服器 %s 失敗"
 
-#: ../src/config.py:3112
+#: ../src/config.py:3125
 msgid "What would you like to do?"
 msgstr "您想做什麼?"
 
-#: ../src/config.py:3113
+#: ../src/config.py:3126
 msgid "Remove only from Gajim"
 msgstr "僅從 Gajim 移除帳號"
 
-#: ../src/config.py:3114
+#: ../src/config.py:3127
 msgid "Don't remove anything. I'll try again later"
 msgstr "不要移除任何東西。我過一會兒會重試一下"
 
-#: ../src/config.py:3207
+#: ../src/config.py:3220
 msgid "?print_status:All"
 msgstr "全部"
 
-#: ../src/config.py:3208
+#: ../src/config.py:3221
 msgid "Enter and leave only"
 msgstr "只是進入和離開"
 
-#: ../src/config.py:3209
+#: ../src/config.py:3222
 msgid "?print_status:None"
 msgstr "無"
 
-#: ../src/config.py:3269
+#: ../src/config.py:3282
 msgid "New Group Chat"
 msgstr "新聊天室"
 
-#: ../src/config.py:3302
+#: ../src/config.py:3315
 msgid "This bookmark has invalid data"
 msgstr "此書籤含無效資料"
 
-#: ../src/config.py:3303
+#: ../src/config.py:3316
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "請確認填寫伺服器與聊天室欄位或移除此書籤。"
 
-#: ../src/config.py:3432 ../src/config.py:3445 ../src/config.py:3457
-#: ../src/config.py:3483
+#: ../src/config.py:3445 ../src/config.py:3458 ../src/config.py:3470
+#: ../src/config.py:3496
 msgid "Character not allowed"
 msgstr "不允許的字元"
 
-#: ../src/config.py:3445 ../src/config.py:3456 ../src/config.py:3739
+#: ../src/config.py:3458 ../src/config.py:3469 ../src/config.py:3752
 msgid "Invalid server"
 msgstr "無效的伺服器"
 
-#: ../src/config.py:3482
+#: ../src/config.py:3495
 msgid "Invalid room"
 msgstr "無效聊天室"
 
-#: ../src/config.py:3651
+#: ../src/config.py:3664
 msgid "Account has been added successfully"
 msgstr "帳號已成功加入"
 
-#: ../src/config.py:3652 ../src/config.py:3658
+#: ../src/config.py:3665 ../src/config.py:3671
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -7130,32 +7138,32 @@ msgstr ""
 "您可以點擊\"進階\"按鈕以設定進階帳號選項，或稍後選擇主視窗\"編輯\"選單下\"帳"
 "號\"選單項。"
 
-#: ../src/config.py:3657
+#: ../src/config.py:3670
 msgid "Your new account has been created successfully"
 msgstr "註冊新帳號成功"
 
-#: ../src/config.py:3696
+#: ../src/config.py:3709
 msgid "Invalid username"
 msgstr "無效使用者名稱"
 
-#: ../src/config.py:3698
+#: ../src/config.py:3711
 msgid "You must provide a username to configure this account."
 msgstr "必須提供使用者名稱來配置此帳號。"
 
-#: ../src/config.py:3740
+#: ../src/config.py:3753
 msgid "Please provide a server on which you want to register."
 msgstr "請指定一個伺服器。您將註冊到這個伺服器。"
 
-#: ../src/config.py:3796 ../src/gui_interface.py:1355
+#: ../src/config.py:3809 ../src/gui_interface.py:1356
 msgid "Certificate Already in File"
 msgstr "證書已經在檔案中"
 
-#: ../src/config.py:3797 ../src/gui_interface.py:1356
+#: ../src/config.py:3810 ../src/gui_interface.py:1357
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "證書已經在檔案 %s 中，所以它沒有被再次加入。"
 
-#: ../src/config.py:3887
+#: ../src/config.py:3900
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -7170,7 +7178,7 @@ msgstr ""
 "SSL 錯誤: %(error)s\n"
 "您仍然想要連線到這個伺服器嗎?"
 
-#: ../src/config.py:3893 ../src/gui_interface.py:1384
+#: ../src/config.py:3906 ../src/gui_interface.py:1385
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -7181,149 +7189,140 @@ msgstr ""
 "這個證書的 SHA1 指紋資訊: \n"
 "%s"
 
-#: ../src/config.py:3925 ../src/config.py:3959
+#: ../src/config.py:3938 ../src/config.py:3972
 msgid "An error occurred during account creation"
 msgstr "建立帳號期間發生錯誤"
 
-#: ../src/config.py:4024
+#: ../src/config.py:4035
 msgid "Account name is in use"
 msgstr "帳號名稱已經被使用"
 
-#: ../src/config.py:4025
+#: ../src/config.py:4036
 msgid "You already have an account using this name."
 msgstr "您已經有帳號使用這個名稱了。"
 
-#: ../src/config.py:4155
+#: ../src/config.py:4166
 msgid "PEP node was not removed"
 msgstr "PEP節點沒有被移除"
 
-#: ../src/config.py:4156
+#: ../src/config.py:4167
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP 節點 %(node)s 沒有被移除: %(message)s"
 
-#: ../src/config.py:4184
+#: ../src/config.py:4195
 #, python-format
 msgid "Configure %s"
 msgstr "組配 %s"
 
-#: ../src/config.py:4209
+#: ../src/config.py:4220
 msgid "Event"
 msgstr "事件"
 
-#: ../src/config.py:4243
+#: ../src/config.py:4254
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "最初收到的訊息"
 
-#: ../src/config.py:4244
+#: ../src/config.py:4255
 msgid "First Message Received"
 msgstr "最初收到的訊息"
 
-#: ../src/config.py:4245
+#: ../src/config.py:4256
 msgid "Next Message Received Focused"
 msgstr "已聚焦收到的下一筆訊息"
 
-#: ../src/config.py:4247
+#: ../src/config.py:4258
 msgid "Next Message Received Unfocused"
 msgstr "解除聚焦收到的下一筆訊息"
 
-#: ../src/config.py:4248
+#: ../src/config.py:4259
 msgid "Contact Connected"
 msgstr "已連線的聯絡人"
 
-#: ../src/config.py:4249
+#: ../src/config.py:4260
 msgid "Contact Disconnected"
 msgstr "聯絡人已中斷連線"
 
-#: ../src/config.py:4250
+#: ../src/config.py:4261
 msgid "Message Sent"
 msgstr "訊息已傳送"
 
-#: ../src/config.py:4251
+#: ../src/config.py:4262
 msgid "Group Chat Message Highlight"
 msgstr "多人聊天訊息高亮度顯示"
 
-#: ../src/config.py:4252
+#: ../src/config.py:4263
 msgid "Group Chat Message Received"
 msgstr "收到的多人聊天訊息"
 
-#: ../src/config.py:4253
+#: ../src/config.py:4264
 msgid "GMail Email Received"
 msgstr "收到 GMail 郵件"
 
-#: ../src/conversation_textview.py:483 ../src/conversation_textview.py:503
+#: ../src/conversation_textview.py:478 ../src/conversation_textview.py:498
 #, python-format
 msgid ""
 "<b>Message was corrected. Last message was:</b>\n"
 "  %s"
 msgstr ""
 
-#: ../src/conversation_textview.py:640
-msgid ""
-"This icon indicates that this message has not yet\n"
-"been received by the remote end. If this icon stays\n"
-"for a long time, it's likely the message got lost."
-msgstr ""
-"這個圖示是說這條訊息還沒有被遠端收到。如果這個圖示已經存在很久了，很可能這條"
-"訊息丟失了。"
-
-#: ../src/conversation_textview.py:660
+#: ../src/conversation_textview.py:608
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
 msgstr "以下文字是您上次注意這個聊天室以來的聊天內容"
 
-#: ../src/conversation_textview.py:781
+#: ../src/conversation_textview.py:716
 msgid "_Quote"
 msgstr "參照(_Q)"
 
-#: ../src/conversation_textview.py:788
+#: ../src/conversation_textview.py:723
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "\"%s\"的動作(_A)"
 
-#: ../src/conversation_textview.py:801
+#: ../src/conversation_textview.py:736
 msgid "Read _Wikipedia Article"
 msgstr "檢視 Wikipedia 文章(_W)"
 
-#: ../src/conversation_textview.py:806
+#: ../src/conversation_textview.py:741
 msgid "Look it up in _Dictionary"
 msgstr "從字典中搜尋(_D)"
 
-#: ../src/conversation_textview.py:823
+#: ../src/conversation_textview.py:758
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "字典位址中缺少 \"%s\" 並且它不是 \"WIKTIONARY\""
 
 #. we must have %s in the url
-#: ../src/conversation_textview.py:836
+#: ../src/conversation_textview.py:771
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "網路搜尋位址缺少 \"%s\""
 
-#: ../src/conversation_textview.py:839
+#: ../src/conversation_textview.py:774
 msgid "Web _Search for it"
 msgstr "在網際網路上搜尋(_S)"
 
-#: ../src/conversation_textview.py:845
+#: ../src/conversation_textview.py:780
 msgid "Open as _Link"
 msgstr "做為連結開啟(_L)"
 
-#: ../src/conversation_textview.py:1224
+#: ../src/conversation_textview.py:1165
 #, fuzzy
 msgid "Invalid URL"
 msgstr "無效的 JID"
 
 #. %i is day in year (1-365)
-#: ../src/conversation_textview.py:1401
+#: ../src/conversation_textview.py:1344
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
 msgstr[0] "%(nb_days)i天前"
 
 #. if we have subject, show it too!
-#: ../src/conversation_textview.py:1453 ../src/history_window.py:507
+#: ../src/conversation_textview.py:1396 ../src/history_window.py:509
 #, python-format
 msgid "Subject: %s\n"
 msgstr "主題: %s\n"
@@ -7445,7 +7444,7 @@ msgid "Please fill in the data of the contact you want to add"
 msgstr "請填入您想加入的聯絡人的資訊"
 
 #: ../src/dialogs.py:1081 ../src/dialogs.py:1087 ../src/dialogs.py:1092
-#: ../src/dialogs.py:3788
+#: ../src/dialogs.py:3793
 msgid "Invalid User ID"
 msgstr "無效的使用者ID"
 
@@ -7469,39 +7468,52 @@ msgstr "此聯絡人已經在您的聯絡人清單中了"
 msgid "User ID:"
 msgstr "使用者 ID:"
 
-#: ../src/dialogs.py:1280
+#: ../src/dialogs.py:1253
+#, fuzzy
+msgid "Error while adding transport contact"
+msgstr "加入服務錯誤。 %s"
+
+#: ../src/dialogs.py:1254
+#, python-format
+msgid ""
+"This error occured while adding a contact for transport %s:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ../src/dialogs.py:1285
 #, fuzzy
 msgid "A GTK+ Jabber/XMPP client"
 msgstr "一個 GTK+ 的 Jabber 客戶端"
 
-#: ../src/dialogs.py:1281
+#: ../src/dialogs.py:1286
 msgid "GTK+ Version:"
 msgstr "GTK+ 版本:"
 
-#: ../src/dialogs.py:1282
+#: ../src/dialogs.py:1287
 msgid "PyGTK Version:"
 msgstr "PyGTK 版本:"
 
-#: ../src/dialogs.py:1292
+#: ../src/dialogs.py:1297
 msgid "Current Developers:"
 msgstr "目前的開發者:"
 
-#: ../src/dialogs.py:1294
+#: ../src/dialogs.py:1299
 msgid "Past Developers:"
 msgstr "既往開發者:"
 
-#: ../src/dialogs.py:1300
+#: ../src/dialogs.py:1305
 msgid "THANKS:"
 msgstr "感謝:"
 
 #. remove one english sentence
 #. and add it manually as translatable
-#: ../src/dialogs.py:1306
+#: ../src/dialogs.py:1311
 msgid "Last but not least, we would like to thank all the package maintainers."
 msgstr "最後但不是最不重要的，我們要感謝所有的套件維護者。"
 
 #. here you write your name in the form Name FamilyName <someone@somewhere>
-#: ../src/dialogs.py:1318
+#: ../src/dialogs.py:1323
 msgid "translator-credits"
 msgstr ""
 "wwld <wwld@radio.lzusiyu.org>\n"
@@ -7510,7 +7522,7 @@ msgstr ""
 "Guanhao Yin <yinguanhao@gmail.com>\n"
 "趙惟倫 <chaoweilun@gmail.com>"
 
-#: ../src/dialogs.py:1501
+#: ../src/dialogs.py:1506
 #, python-format
 msgid ""
 "You have to install %s dictionary to use spellchecking, or choose another "
@@ -7522,12 +7534,12 @@ msgstr ""
 "言。\n"
 "高亮度拼寫錯誤的特性不會被啟用。"
 
-#: ../src/dialogs.py:1846 ../src/dialogs.py:1862 ../src/gui_interface.py:1496
-#: ../src/gui_interface.py:1538
+#: ../src/dialogs.py:1851 ../src/dialogs.py:1867 ../src/gui_interface.py:1497
+#: ../src/gui_interface.py:1539
 msgid "Insecure connection"
 msgstr "不安全的連線"
 
-#: ../src/dialogs.py:1847
+#: ../src/dialogs.py:1852
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) with an "
@@ -7538,271 +7550,271 @@ msgstr ""
 "您即將透過不安全的連線與帳號 %(account)s (%(server)s) 連接。這意味著您的所有"
 "對話都會不經加密地被交換。您確定要這樣做嗎？"
 
-#: ../src/dialogs.py:1853 ../src/gui_interface.py:1500
-#: ../src/gui_interface.py:1541
+#: ../src/dialogs.py:1858 ../src/gui_interface.py:1501
+#: ../src/gui_interface.py:1542
 msgid "Yes, I really want to connect insecurely"
 msgstr "是的，我確實想要不安全地連線"
 
-#: ../src/dialogs.py:1854
+#: ../src/dialogs.py:1859
 msgid "Gajim will NOT connect unless you check this box"
 msgstr ""
 
-#: ../src/dialogs.py:1855 ../src/groupchat_control.py:2181
-#: ../src/gui_interface.py:713 ../src/gui_interface.py:1501
-#: ../src/gui_interface.py:1542 ../src/message_window.py:227
-#: ../src/roster_window.py:3112 ../src/roster_window.py:3797
-#: ../src/roster_window.py:4636
+#: ../src/dialogs.py:1860 ../src/groupchat_control.py:2195
+#: ../src/gui_interface.py:713 ../src/gui_interface.py:1502
+#: ../src/gui_interface.py:1543 ../src/message_window.py:227
+#: ../src/roster_window.py:3115 ../src/roster_window.py:3800
+#: ../src/roster_window.py:4639
 msgid "_Do not ask me again"
 msgstr "不要再問我了(_D)"
 
-#: ../src/dialogs.py:1954
+#: ../src/dialogs.py:1959
 msgid "_Resume"
 msgstr "再續(_R)"
 
-#: ../src/dialogs.py:1962
+#: ../src/dialogs.py:1967
 msgid "Re_place"
 msgstr "置換(_P)"
 
-#: ../src/dialogs.py:2159 ../src/dialogs.py:2626
+#: ../src/dialogs.py:2164 ../src/dialogs.py:2631
 #, fuzzy
 msgid "The nickname contains invalid characters."
 msgstr "暱稱包含不合法字元。"
 
-#: ../src/dialogs.py:2281
+#: ../src/dialogs.py:2286
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "%(jid)s 對帳號 %(account)s 的認證請求"
 
-#: ../src/dialogs.py:2284
+#: ../src/dialogs.py:2289
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s 的認證請求"
 
-#: ../src/dialogs.py:2369 ../src/gui_interface.py:2132
+#: ../src/dialogs.py:2374 ../src/gui_interface.py:2128
 #, python-format
 msgid "You are already in group chat %s"
 msgstr "您已經在聊天室 %s"
 
-#: ../src/dialogs.py:2375
+#: ../src/dialogs.py:2380
 msgid "You can not join a group chat unless you are connected."
 msgstr "您必須連線才能加入聊天室。"
 
-#: ../src/dialogs.py:2420
+#: ../src/dialogs.py:2425
 #, python-format
 msgid "Join Group Chat with account %s"
 msgstr "使用帳號 %s 加入聊天室"
 
-#: ../src/dialogs.py:2561 ../src/dialogs.py:2572
+#: ../src/dialogs.py:2566 ../src/dialogs.py:2577
 #, fuzzy
 msgid "Wrong server"
 msgstr "錯誤的 uri"
 
-#: ../src/dialogs.py:2561 ../src/dialogs.py:2572
+#: ../src/dialogs.py:2566 ../src/dialogs.py:2577
 #, fuzzy, python-format
 msgid "%s is not a groupchat server"
 msgstr "這不是一個聊天室"
 
-#: ../src/dialogs.py:2612
+#: ../src/dialogs.py:2617
 msgid "Invalid Account"
 msgstr "無效的帳號"
 
-#: ../src/dialogs.py:2613
+#: ../src/dialogs.py:2618
 msgid ""
 "You have to choose an account from which you want to join the groupchat."
 msgstr "您需要選擇一個帳號，用它來加入聊天室。"
 
-#: ../src/dialogs.py:2625
+#: ../src/dialogs.py:2630
 msgid "Invalid Nickname"
 msgstr "不合法的暱稱"
 
-#: ../src/dialogs.py:2630 ../src/dialogs.py:2636
-#: ../src/groupchat_control.py:2249
+#: ../src/dialogs.py:2635 ../src/dialogs.py:2641
+#: ../src/groupchat_control.py:2263
 msgid "Invalid group chat Jabber ID"
 msgstr "無效的聊天室 Jabber ID"
 
-#: ../src/dialogs.py:2631
+#: ../src/dialogs.py:2636
 msgid "Please enter the group chat Jabber ID as room@server."
 msgstr "請輸入聊天室的 Jabber ID，以 room@server 的形式。"
 
-#: ../src/dialogs.py:2637
+#: ../src/dialogs.py:2642
 #, fuzzy
 msgid "The group chat Jabber ID contains invalid characters."
 msgstr "聊天室 Jabber ID 包含不合法字元。"
 
-#: ../src/dialogs.py:2642 ../src/gui_interface.py:2114
+#: ../src/dialogs.py:2647 ../src/gui_interface.py:2110
 msgid "This is not a group chat"
 msgstr "這不是一個聊天室"
 
-#: ../src/dialogs.py:2643 ../src/gui_interface.py:2115
+#: ../src/dialogs.py:2648 ../src/gui_interface.py:2111
 #, python-format
 msgid "%s is not the name of a group chat."
 msgstr "%s 不是一個聊天室的名稱。"
 
-#: ../src/dialogs.py:2677
+#: ../src/dialogs.py:2682
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "未連線時，您不能同步您的聯絡人。"
 
-#: ../src/dialogs.py:2691
+#: ../src/dialogs.py:2696
 msgid "Server"
 msgstr "伺服器"
 
-#: ../src/dialogs.py:2727
+#: ../src/dialogs.py:2732
 msgid "This account is not connected to the server"
 msgstr "這個帳號已經連線到伺服器"
 
-#: ../src/dialogs.py:2728
+#: ../src/dialogs.py:2733
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "這個帳號連線後您才可以與之同步"
 
-#: ../src/dialogs.py:2753
+#: ../src/dialogs.py:2758
 msgid "Synchronise"
 msgstr "同步"
 
-#: ../src/dialogs.py:2814
+#: ../src/dialogs.py:2819
 #, python-format
 msgid "Start Chat with account %s"
 msgstr "使用帳號 %s 開始聊天"
 
-#: ../src/dialogs.py:2816
+#: ../src/dialogs.py:2821
 msgid "Start Chat"
 msgstr "開始聊天"
 
-#: ../src/dialogs.py:2817
+#: ../src/dialogs.py:2822
 msgid ""
 "Fill in the nickname or the Jabber ID of the contact you would like\n"
 "to send a chat message to:"
 msgstr "填寫一個暱稱或是 Jabber ID，您將要給其傳送聊天訊息:"
 
 #. if offline or connecting
-#: ../src/dialogs.py:2844 ../src/dialogs.py:3229 ../src/dialogs.py:3466
+#: ../src/dialogs.py:2849 ../src/dialogs.py:3234 ../src/dialogs.py:3471
 msgid "Connection not available"
 msgstr "連線無法使用"
 
-#: ../src/dialogs.py:2845 ../src/dialogs.py:3230 ../src/dialogs.py:3467
+#: ../src/dialogs.py:2850 ../src/dialogs.py:3235 ../src/dialogs.py:3472
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "請確認您已經連線到 \"%s\"。"
 
-#: ../src/dialogs.py:2854 ../src/dialogs.py:2857
+#: ../src/dialogs.py:2859 ../src/dialogs.py:2862
 msgid "Invalid JID"
 msgstr "無效的 JID"
 
-#: ../src/dialogs.py:2857
+#: ../src/dialogs.py:2862
 #, python-format
 msgid "Unable to parse \"%s\"."
 msgstr "無法解析 \"%s\"。"
 
-#: ../src/dialogs.py:2866
+#: ../src/dialogs.py:2871
 msgid "Without a connection, you can not change your password."
 msgstr "連線後才可變更密碼。"
 
-#: ../src/dialogs.py:2886
+#: ../src/dialogs.py:2891
 msgid "Invalid password"
 msgstr "無效密碼"
 
-#: ../src/dialogs.py:2886
+#: ../src/dialogs.py:2891
 msgid "You must enter a password."
 msgstr "您必須輸入密碼"
 
-#: ../src/dialogs.py:2890
+#: ../src/dialogs.py:2895
 msgid "Passwords do not match"
 msgstr "密碼不符"
 
-#: ../src/dialogs.py:2891
+#: ../src/dialogs.py:2896
 msgid "The passwords typed in both fields must be identical."
 msgstr "在兩個輸入框中輸入的密碼必須一致。"
 
-#: ../src/dialogs.py:2934 ../src/gui_interface.py:891 ../src/notify.py:275
+#: ../src/dialogs.py:2939 ../src/gui_interface.py:891 ../src/notify.py:283
 msgid "New E-mail"
 msgstr "新電子郵件"
 
-#: ../src/dialogs.py:2936 ../src/gui_interface.py:955 ../src/notify.py:268
+#: ../src/dialogs.py:2941 ../src/gui_interface.py:955 ../src/notify.py:276
 msgid "File Transfer Request"
 msgstr "檔案傳輸請求"
 
-#: ../src/dialogs.py:2938 ../src/gui_interface.py:853
-#: ../src/gui_interface.py:920 ../src/notify.py:270
+#: ../src/dialogs.py:2943 ../src/gui_interface.py:853
+#: ../src/gui_interface.py:920 ../src/notify.py:278
 msgid "File Transfer Error"
 msgstr "檔案傳輸錯誤"
 
-#: ../src/dialogs.py:2940 ../src/gui_interface.py:1061
-#: ../src/gui_interface.py:1090 ../src/gui_interface.py:1111
-#: ../src/notify.py:272
+#: ../src/dialogs.py:2945 ../src/gui_interface.py:1062
+#: ../src/gui_interface.py:1091 ../src/gui_interface.py:1112
+#: ../src/notify.py:280
 msgid "File Transfer Completed"
 msgstr "檔案傳輸完成"
 
-#: ../src/dialogs.py:2941 ../src/gui_interface.py:1065
-#: ../src/gui_interface.py:1094 ../src/gui_interface.py:1115
-#: ../src/notify.py:273
+#: ../src/dialogs.py:2946 ../src/gui_interface.py:1066
+#: ../src/gui_interface.py:1095 ../src/gui_interface.py:1116
+#: ../src/notify.py:281
 msgid "File Transfer Stopped"
 msgstr "檔案傳輸已停止"
 
-#: ../src/dialogs.py:3148
+#: ../src/dialogs.py:3153
 #, python-format
 msgid "Single Message using account %s"
 msgstr "單條訊息，使用帳號 %s"
 
-#: ../src/dialogs.py:3150
+#: ../src/dialogs.py:3155
 #, python-format
 msgid "Single Message in account %s"
 msgstr "單條訊息，在帳號 %s"
 
-#: ../src/dialogs.py:3152
+#: ../src/dialogs.py:3157
 msgid "Single Message"
 msgstr "單條訊息"
 
 #. prepare UI for Sending
-#: ../src/dialogs.py:3155
+#: ../src/dialogs.py:3160
 #, python-format
 msgid "Send %s"
 msgstr "傳送 %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3178
+#: ../src/dialogs.py:3183
 #, python-format
 msgid "Received %s"
 msgstr "已接收 %s"
 
 #. prepare UI for Receiving
-#: ../src/dialogs.py:3201
+#: ../src/dialogs.py:3206
 #, python-format
 msgid "Form %s"
 msgstr "來自 %s"
 
 #. we create a new blank window to send and we preset RE: and to jid
-#: ../src/dialogs.py:3284
+#: ../src/dialogs.py:3289
 #, python-format
 msgid "RE: %s"
 msgstr "回復: %s"
 
-#: ../src/dialogs.py:3285
+#: ../src/dialogs.py:3290
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s 寫道: \n"
 
-#: ../src/dialogs.py:3345
+#: ../src/dialogs.py:3350
 #, python-format
 msgid "XML Console for %s"
 msgstr "帳號 %s 的 XML 主控臺"
 
-#: ../src/dialogs.py:3347
+#: ../src/dialogs.py:3352
 msgid "XML Console"
 msgstr " XML 主控臺"
 
 #. Action that can be done with an incoming list of contacts
-#: ../src/dialogs.py:3496
+#: ../src/dialogs.py:3501
 msgid "add"
 msgstr "加入"
 
-#: ../src/dialogs.py:3496
+#: ../src/dialogs.py:3501
 msgid "modify"
 msgstr "修改"
 
-#: ../src/dialogs.py:3497
+#: ../src/dialogs.py:3502
 msgid "remove"
 msgstr "移除"
 
-#: ../src/dialogs.py:3526
+#: ../src/dialogs.py:3531
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -7810,178 +7822,178 @@ msgid ""
 msgstr "<b>%(jid)s</b> 希望您 <b>%(action)s</b> 您的一些聯絡人。"
 
 #. Change label for accept_button to action name instead of 'OK'.
-#: ../src/dialogs.py:3544 ../src/dialogs.py:3619
+#: ../src/dialogs.py:3549 ../src/dialogs.py:3624
 msgid "Modify"
 msgstr "修改"
 
 #. holds jid
-#: ../src/dialogs.py:3550 ../src/history_manager.py:165
+#: ../src/dialogs.py:3555 ../src/history_manager.py:165
 msgid "Jabber ID"
 msgstr "Jabber ID"
 
-#: ../src/dialogs.py:3556
+#: ../src/dialogs.py:3561
 msgid "Groups"
 msgstr "群組"
 
 #. it is selected
 #. remote_jid = model[iter_][1].decode('utf-8')
-#: ../src/dialogs.py:3664
+#: ../src/dialogs.py:3669
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s 建議我將您加入到我的聯絡人清單。"
 
-#: ../src/dialogs.py:3678
+#: ../src/dialogs.py:3683
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "加入了 %s 聯絡人"
 
-#: ../src/dialogs.py:3716
+#: ../src/dialogs.py:3721
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "移除了 %s 聯絡人"
 
-#: ../src/dialogs.py:3757 ../src/dialogs.py:3934
+#: ../src/dialogs.py:3762 ../src/dialogs.py:3939
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "%s 的存檔偏好設定"
 
-#: ../src/dialogs.py:3797
+#: ../src/dialogs.py:3802
 msgid "Invalid expire value"
 msgstr "無效的過期值"
 
-#: ../src/dialogs.py:3798
+#: ../src/dialogs.py:3803
 msgid "Expire must be a valid positive integer."
 msgstr "過期值必須是一個有效的正整數。"
 
-#: ../src/dialogs.py:3845
+#: ../src/dialogs.py:3850
 msgid "There is an error with the form"
 msgstr "在表格中有一處錯誤"
 
-#: ../src/dialogs.py:4065
+#: ../src/dialogs.py:4070
 msgid "There is an error"
 msgstr "有一處錯誤"
 
-#: ../src/dialogs.py:4133
+#: ../src/dialogs.py:4138
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "隱私策略清單 <b><i>%s</i></b>"
 
-#: ../src/dialogs.py:4137
+#: ../src/dialogs.py:4142
 #, python-format
 msgid "Privacy List for %s"
 msgstr "%s 的隱私策略清單"
 
-#: ../src/dialogs.py:4204
+#: ../src/dialogs.py:4209
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "順序: %(order)s，動作: %(action)s，類型: %(type)s，值: %(value)s"
 
-#: ../src/dialogs.py:4209
+#: ../src/dialogs.py:4214
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "順序: %(order)s，動作: %(action)s"
 
-#: ../src/dialogs.py:4260
+#: ../src/dialogs.py:4265
 msgid "<b>Edit a rule</b>"
 msgstr "<b>編輯規則</b>"
 
-#: ../src/dialogs.py:4371
+#: ../src/dialogs.py:4376
 msgid "<b>Add a rule</b>"
 msgstr "<b>加入規則</b>"
 
-#: ../src/dialogs.py:4470
+#: ../src/dialogs.py:4475
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "%s 的隱私策略清單"
 
-#: ../src/dialogs.py:4472
+#: ../src/dialogs.py:4477
 msgid "Privacy Lists"
 msgstr "隱私策略清單"
 
-#: ../src/dialogs.py:4561
+#: ../src/dialogs.py:4566
 msgid "Invalid List Name"
 msgstr "不合法的清單名稱"
 
-#: ../src/dialogs.py:4562
+#: ../src/dialogs.py:4567
 msgid "You must enter a name to create a privacy list."
 msgstr "您必須輸入一個名稱以建立一個隱私策略清單。"
 
-#: ../src/dialogs.py:4598
+#: ../src/dialogs.py:4603
 msgid "You are invited to a groupchat"
 msgstr "您被邀請到一個聊天室"
 
-#: ../src/dialogs.py:4601
+#: ../src/dialogs.py:4606
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact 邀請您加入一個聊天室"
 
-#: ../src/dialogs.py:4603
+#: ../src/dialogs.py:4608
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact 邀請您參加聊天室 %(room_jid)s"
 
-#: ../src/dialogs.py:4612
+#: ../src/dialogs.py:4617
 #, python-format
 msgid "Comment: %s"
 msgstr "註釋: %s"
 
-#: ../src/dialogs.py:4614
+#: ../src/dialogs.py:4619
 msgid "Do you want to accept the invitation?"
 msgstr "您是否接受邀請?"
 
-#: ../src/dialogs.py:4631
+#: ../src/dialogs.py:4636
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: ../src/dialogs.py:4683
+#: ../src/dialogs.py:4688
 msgid "Choose Client Cert #PCKS12"
 msgstr "選擇客戶端證書 #PCKS12"
 
-#: ../src/dialogs.py:4694 ../src/dialogs.py:4736 ../src/dialogs.py:4792
-#: ../src/dialogs.py:4880
+#: ../src/dialogs.py:4699 ../src/dialogs.py:4741 ../src/dialogs.py:4797
+#: ../src/dialogs.py:4885
 msgid "All files"
 msgstr "所有檔案"
 
-#: ../src/dialogs.py:4699
+#: ../src/dialogs.py:4704
 msgid "PKCS12 Files"
 msgstr "PKCS12 檔案"
 
-#: ../src/dialogs.py:4726
+#: ../src/dialogs.py:4731
 msgid "Choose Sound"
 msgstr "選擇聲音"
 
-#: ../src/dialogs.py:4741
+#: ../src/dialogs.py:4746
 msgid "Wav Sounds"
 msgstr "Wav聲音"
 
-#: ../src/dialogs.py:4779
+#: ../src/dialogs.py:4784
 msgid "Choose Image"
 msgstr "選擇圖像"
 
-#: ../src/dialogs.py:4797
+#: ../src/dialogs.py:4802
 msgid "Images"
 msgstr "圖像"
 
-#: ../src/dialogs.py:4867
+#: ../src/dialogs.py:4872
 msgid "Choose Archive"
 msgstr "選擇歸檔檔案"
 
-#: ../src/dialogs.py:4885
+#: ../src/dialogs.py:4890
 msgid "Zip files"
 msgstr "Zip 檔案"
 
-#: ../src/dialogs.py:4911
+#: ../src/dialogs.py:4916
 #, python-format
 msgid "When %s becomes:"
 msgstr "當 %s 變為:"
 
-#: ../src/dialogs.py:4913
+#: ../src/dialogs.py:4918
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "正在為 %s 加入特殊提示"
 
-#: ../src/dialogs.py:5133
+#: ../src/dialogs.py:5138
 #, python-format
 msgid ""
 "Your chat session with <b>%(jid)s</b> is encrypted.\n"
@@ -7992,19 +8004,19 @@ msgstr ""
 "\n"
 "作業階段的短認證字串是 <b>%(sas)s</b>。"
 
-#: ../src/dialogs.py:5136
+#: ../src/dialogs.py:5141
 msgid "You have already verified this contact's identity."
 msgstr "您已經確認了這個聯絡人的身分。"
 
-#: ../src/dialogs.py:5142 ../src/dialogs.py:5227
+#: ../src/dialogs.py:5147 ../src/dialogs.py:5232
 msgid "Contact's identity verified"
 msgstr "聯絡人身分已確認"
 
-#: ../src/dialogs.py:5148
+#: ../src/dialogs.py:5153
 msgid "Verify again..."
 msgstr "重新驗證…"
 
-#: ../src/dialogs.py:5153
+#: ../src/dialogs.py:5158
 msgid ""
 "To be certain that <b>only</b> the expected person can read your messages or "
 "send you messages, you need to verify their identity by clicking the button "
@@ -8013,19 +8025,19 @@ msgstr ""
 "為了確保<b>只有</b>您期望的人可以看到您傳送的訊息或給您傳送訊息，您需要驗證他"
 "們的身分資訊。請點擊下面的按鈕。"
 
-#: ../src/dialogs.py:5156 ../src/dialogs.py:5208 ../src/dialogs.py:5221
+#: ../src/dialogs.py:5161 ../src/dialogs.py:5213 ../src/dialogs.py:5226
 msgid "Contact's identity NOT verified"
 msgstr "聯絡人身分未確認"
 
-#: ../src/dialogs.py:5161
+#: ../src/dialogs.py:5166
 msgid "Verify..."
 msgstr "確認…"
 
-#: ../src/dialogs.py:5172
+#: ../src/dialogs.py:5177
 msgid "Have you verified the contact's identity?"
 msgstr "您確認了聯絡人的身分嗎?"
 
-#: ../src/dialogs.py:5173
+#: ../src/dialogs.py:5178
 #, python-format
 msgid ""
 "To prevent talking to an unknown person, you should speak to <b>%(jid)s</b> "
@@ -8039,22 +8051,22 @@ msgstr ""
 "\n"
 "這次作業階段的短認證字串是 <b>%(sas)s</b>"
 
-#: ../src/dialogs.py:5174
+#: ../src/dialogs.py:5179
 msgid "Did you talk to the remote contact and verify the SAS?"
 msgstr "您與遠端聯絡人通話並驗證了 SAS 嗎?"
 
-#: ../src/dialogs.py:5209
+#: ../src/dialogs.py:5214
 #, python-format
 msgid "The contact's key (%s) <b>does not match</b> the key assigned in Gajim."
 msgstr "聯絡人的密鑰(%s)與在 Gajim 中指定的密鑰<b>不匹配</b>。"
 
-#: ../src/dialogs.py:5215
+#: ../src/dialogs.py:5220
 #, fuzzy
 msgid ""
 "No OpenPGP key is assigned to this contact. So you cannot encrypt messages."
 msgstr "沒有為這個聯絡人指定密鑰。因此您無法加密訊息。"
 
-#: ../src/dialogs.py:5222
+#: ../src/dialogs.py:5227
 #, fuzzy
 msgid ""
 "OpenPGP key is assigned to this contact, but <b>you do not trust his key</"
@@ -8064,38 +8076,38 @@ msgstr ""
 "盡管為這個聯絡人指定了密鑰，但您<b>不信任</b>他的密鑰，因此訊息<b>無法</b>被"
 "加密。使用您的 GPG 客戶端以信任他的密鑰。"
 
-#: ../src/dialogs.py:5228
+#: ../src/dialogs.py:5233
 #, fuzzy
 msgid ""
 "OpenPGP Key is assigned to this contact, and you trust his key, so messages "
 "will be encrypted."
 msgstr "聯絡人被指定了 GPG 密鑰，且您信任他的密鑰，所以訊息會被加密。"
 
-#: ../src/dialogs.py:5294
+#: ../src/dialogs.py:5299
 msgid "an audio and video"
 msgstr "一個音訊和視訊"
 
-#: ../src/dialogs.py:5296
+#: ../src/dialogs.py:5301
 msgid "an audio"
 msgstr "一個音訊"
 
-#: ../src/dialogs.py:5298
+#: ../src/dialogs.py:5303
 msgid "a video"
 msgstr "一個視訊"
 
-#: ../src/dialogs.py:5302
+#: ../src/dialogs.py:5307
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr "%(contact)s 想要與您發起一個 %(type)s 作業階段。您要回應嗎?"
 
-#: ../src/dialogs.py:5405 ../src/dialogs.py:5436
+#: ../src/dialogs.py:5410 ../src/dialogs.py:5441
 #, python-format
 msgid "Certificate for account %s"
 msgstr "帳號憑證 %s"
 
-#: ../src/dialogs.py:5405
+#: ../src/dialogs.py:5410
 #, fuzzy, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -8134,12 +8146,12 @@ msgstr ""
 "<b>指紋</b>\n"
 "SHA1 指紋:%(sha1)s"
 
-#: ../src/dialogs.py:5447 ../src/gui_interface.py:1397
+#: ../src/dialogs.py:5452 ../src/gui_interface.py:1398
 #, fuzzy, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "SSL 憑證驗證"
 
-#: ../src/dialogs.py:5448 ../src/dialogs.py:5465
+#: ../src/dialogs.py:5453 ../src/dialogs.py:5470
 msgid "View cert..."
 msgstr "檢視憑證…"
 
@@ -8228,20 +8240,20 @@ msgstr "描述"
 msgid "Id"
 msgstr "Id"
 
-#: ../src/disco.py:1884 ../src/gui_interface.py:2650
+#: ../src/disco.py:1884 ../src/gui_interface.py:2646
 msgid "Bookmark already set"
 msgstr "書籤已設定"
 
-#: ../src/disco.py:1885 ../src/gui_interface.py:2651
+#: ../src/disco.py:1885 ../src/gui_interface.py:2647
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "聊天室\"%s\"已在您的書籤中。"
 
-#: ../src/disco.py:1895 ../src/gui_interface.py:2665
+#: ../src/disco.py:1895 ../src/gui_interface.py:2661
 msgid "Bookmark has been added successfully"
 msgstr "書籤加入成功"
 
-#: ../src/disco.py:1896 ../src/gui_interface.py:2666
+#: ../src/disco.py:1896 ../src/gui_interface.py:2662
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "您可以透過\"動作\"選單管理您的書籤。"
 
@@ -8310,9 +8322,9 @@ msgid "Requires python-dbus."
 msgstr "需要 python-dbus。"
 
 #: ../src/features_window.py:60 ../src/features_window.py:68
-#: ../src/features_window.py:72 ../src/features_window.py:76
-#: ../src/features_window.py:88 ../src/features_window.py:104
-#: ../src/features_window.py:108 ../src/features_window.py:112
+#: ../src/features_window.py:72 ../src/features_window.py:88
+#: ../src/features_window.py:104 ../src/features_window.py:108
+#: ../src/features_window.py:112
 msgid "Feature not available under Windows."
 msgstr "特性在 Windows 下無法使用。"
 
@@ -8367,8 +8379,13 @@ msgid "Passwords can be stored securely and not just in plaintext."
 msgstr "密碼可以被安全地儲存，而不只是以純文字方式。"
 
 #: ../src/features_window.py:75
-msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
+#, fuzzy
+msgid "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli"
 msgstr "需要 gnome-keyring 和 python-gnome2-desktop，或 kwalletcli。"
+
+#: ../src/features_window.py:76
+msgid "On Windows the Windows Credential Vault is used."
+msgstr ""
 
 #: ../src/features_window.py:77
 msgid "SRV"
@@ -8503,61 +8520,61 @@ msgstr "可用"
 msgid "Feature"
 msgstr "特性"
 
-#: ../src/filetransfers_window.py:83
+#: ../src/filetransfers_window.py:82
 msgid "File"
 msgstr "檔案"
 
-#: ../src/filetransfers_window.py:98
+#: ../src/filetransfers_window.py:97
 msgid "Time"
 msgstr "時間"
 
-#: ../src/filetransfers_window.py:110
+#: ../src/filetransfers_window.py:109
 msgid "Progress"
 msgstr "處理序"
 
-#: ../src/filetransfers_window.py:185 ../src/filetransfers_window.py:242
+#: ../src/filetransfers_window.py:184 ../src/filetransfers_window.py:241
 #, python-format
 msgid "Filename: %s"
 msgstr "檔案名稱:  %s"
 
-#: ../src/filetransfers_window.py:187 ../src/filetransfers_window.py:453
+#: ../src/filetransfers_window.py:186 ../src/filetransfers_window.py:452
 #, python-format
 msgid "Size: %s"
 msgstr "大小:  %s"
 
 #. You is a reply of who sent a file
 #. You is a reply of who received a file
-#: ../src/filetransfers_window.py:196 ../src/filetransfers_window.py:206
+#: ../src/filetransfers_window.py:195 ../src/filetransfers_window.py:205
 #: ../src/history_manager.py:550
 msgid "You"
 msgstr "您"
 
-#: ../src/filetransfers_window.py:197
+#: ../src/filetransfers_window.py:196
 #, python-format
 msgid "Sender: %s"
 msgstr "傳送者:  %s"
 
-#: ../src/filetransfers_window.py:198 ../src/filetransfers_window.py:734
+#: ../src/filetransfers_window.py:197 ../src/filetransfers_window.py:733
 #: ../src/tooltips.py:773
 msgid "Recipient: "
 msgstr "接收者: "
 
-#: ../src/filetransfers_window.py:209
+#: ../src/filetransfers_window.py:208
 #, python-format
 msgid "Saved in: %s"
 msgstr "儲存在: %s"
 
-#: ../src/filetransfers_window.py:244
+#: ../src/filetransfers_window.py:243
 #, python-format
 msgid "Recipient: %s"
 msgstr "接收者:  %s"
 
-#: ../src/filetransfers_window.py:246
+#: ../src/filetransfers_window.py:245
 #, python-format
 msgid "Error message: %s"
 msgstr "錯誤訊息: %s"
 
-#: ../src/filetransfers_window.py:283
+#: ../src/filetransfers_window.py:282
 #, python-format
 msgid ""
 "The file %(file)s has been fully received, but it seems to be wrongly "
@@ -8565,83 +8582,83 @@ msgid ""
 "Do you want to reload it?"
 msgstr ""
 
-#: ../src/filetransfers_window.py:313
+#: ../src/filetransfers_window.py:312
 msgid "Choose File to Send..."
 msgstr "選擇要傳送的檔案…"
 
-#: ../src/filetransfers_window.py:329 ../src/tooltips.py:808
+#: ../src/filetransfers_window.py:328 ../src/tooltips.py:808
 msgid "Description: "
 msgstr "描述: "
 
-#: ../src/filetransfers_window.py:342
+#: ../src/filetransfers_window.py:341
 msgid "Gajim cannot access this file"
 msgstr "Gajim 無法存取此檔案"
 
-#: ../src/filetransfers_window.py:343
+#: ../src/filetransfers_window.py:342
 msgid "This file is being used by another process."
 msgstr "此檔案正在被其他程式使用。"
 
-#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:764
+#: ../src/filetransfers_window.py:388 ../src/gtkgui_helpers.py:742
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "無法覆寫現有檔案\"%s\""
 
-#: ../src/filetransfers_window.py:390 ../src/gtkgui_helpers.py:765
+#: ../src/filetransfers_window.py:389 ../src/gtkgui_helpers.py:743
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr "檔案名稱已經存在且您沒有權限覆寫它。"
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
+#: ../src/filetransfers_window.py:406 ../src/gtkgui_helpers.py:747
 msgid "This file already exists"
 msgstr "檔案已經存在"
 
-#: ../src/filetransfers_window.py:407 ../src/gtkgui_helpers.py:769
+#: ../src/filetransfers_window.py:406 ../src/gtkgui_helpers.py:747
 msgid "What do you want to do?"
 msgstr "想做什麼?"
 
 #. read-only bit is used to mark special folder under
 #. windows, not to mark that a folder is read-only.
 #. See ticket #3587
-#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:776
+#: ../src/filetransfers_window.py:417 ../src/gtkgui_helpers.py:754
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "目錄 \"%s\" 不可寫"
 
-#: ../src/filetransfers_window.py:419 ../src/gtkgui_helpers.py:777
+#: ../src/filetransfers_window.py:418 ../src/gtkgui_helpers.py:755
 msgid "You do not have permission to create files in this directory."
 msgstr "您沒有權限在這個目錄裡建立檔案。"
 
-#: ../src/filetransfers_window.py:430
+#: ../src/filetransfers_window.py:429
 msgid "Save File as..."
 msgstr "另存為…"
 
-#: ../src/filetransfers_window.py:450
+#: ../src/filetransfers_window.py:449
 #, python-format
 msgid "File: %s"
 msgstr "檔案:  %s"
 
-#: ../src/filetransfers_window.py:456
+#: ../src/filetransfers_window.py:455
 #, python-format
 msgid "Type: %s"
 msgstr "類型: %s"
 
-#: ../src/filetransfers_window.py:458
+#: ../src/filetransfers_window.py:457
 #, python-format
 msgid "Description: %s"
 msgstr "描述:  %s"
 
-#: ../src/filetransfers_window.py:459
+#: ../src/filetransfers_window.py:458
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s 想傳送給您一個檔案:"
 
-#: ../src/filetransfers_window.py:500
+#: ../src/filetransfers_window.py:499
 #, fuzzy
 msgid "Checking file..."
 msgstr "傳送側寫…"
 
-#: ../src/filetransfers_window.py:514
+#: ../src/filetransfers_window.py:513
 #, fuzzy
 msgid "File error"
 msgstr "檔案傳輸錯誤"
@@ -8649,7 +8666,7 @@ msgstr "檔案傳輸錯誤"
 #. Print remaining time in format 00:00:00
 #. You can change the places of (hours), (minutes), (seconds) -
 #. they are not translatable.
-#: ../src/filetransfers_window.py:551
+#: ../src/filetransfers_window.py:550
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
@@ -8657,32 +8674,32 @@ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #. This should make the string Kb/s,
 #. where 'Kb' part is taken from %s.
 #. Only the 's' after / (which means second) should be translated.
-#: ../src/filetransfers_window.py:644
+#: ../src/filetransfers_window.py:643
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: ../src/filetransfers_window.py:700 ../src/filetransfers_window.py:703
+#: ../src/filetransfers_window.py:699 ../src/filetransfers_window.py:702
 msgid "Invalid File"
 msgstr "無效檔案"
 
-#: ../src/filetransfers_window.py:700
+#: ../src/filetransfers_window.py:699
 msgid "File: "
 msgstr "檔案: "
 
-#: ../src/filetransfers_window.py:704
+#: ../src/filetransfers_window.py:703
 msgid "It is not possible to send empty files"
 msgstr "無法傳送空檔案"
 
-#: ../src/filetransfers_window.py:730 ../src/tooltips.py:763
+#: ../src/filetransfers_window.py:729 ../src/tooltips.py:763
 msgid "Name: "
 msgstr "名稱: "
 
-#: ../src/filetransfers_window.py:732 ../src/tooltips.py:767
+#: ../src/filetransfers_window.py:731 ../src/tooltips.py:767
 msgid "Sender: "
 msgstr "傳送者: "
 
-#: ../src/filetransfers_window.py:894
+#: ../src/filetransfers_window.py:893
 msgid "Pause"
 msgstr "暫停"
 
@@ -9127,89 +9144,89 @@ msgstr "沒有給出 URI"
 msgid "Wrong uri"
 msgstr "錯誤的 uri"
 
-#: ../src/gajim.py:149 ../src/history_manager.py:73
+#: ../src/gajim.py:64 ../src/history_manager.py:73
 #, fuzzy
 msgid "Usage:"
 msgstr "message"
 
-#: ../src/gajim.py:151 ../src/history_manager.py:75
+#: ../src/gajim.py:66 ../src/history_manager.py:75
 #, fuzzy
 msgid "Options:"
 msgstr "表情(_E):"
 
-#: ../src/gajim.py:153 ../src/history_manager.py:77
+#: ../src/gajim.py:68 ../src/history_manager.py:77
 msgid "Show this help message and exit"
 msgstr ""
 
-#: ../src/gajim.py:155
+#: ../src/gajim.py:70
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "只顯示在聯絡人清單中"
 
-#: ../src/gajim.py:157
+#: ../src/gajim.py:72
 msgid "Print xml stanzas and other debug information"
 msgstr ""
 
-#: ../src/gajim.py:159
+#: ../src/gajim.py:74
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "進階設定編輯器"
 
-#: ../src/gajim.py:161
+#: ../src/gajim.py:76
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s 設定錯誤"
 
-#: ../src/gajim.py:163
+#: ../src/gajim.py:78
 #, fuzzy
 msgid "Configure logging system"
 msgstr "組配 %s"
 
-#: ../src/gajim.py:226
+#: ../src/gajim.py:214
 msgid "Gajim needs X server to run. Quiting..."
 msgstr "Gajim 需要 X 伺服器才能執行。離開…"
 
-#: ../src/gajim.py:228
+#: ../src/gajim.py:216
 #, python-format
 msgid "importing PyGTK failed: %s"
 msgstr "匯入 PyGTK 失敗: %s"
 
-#: ../src/gajim.py:271
+#: ../src/gajim.py:259
 #, fuzzy
 msgid "Gajim needs PyGTK 2.22 or above"
 msgstr "Gajim 需要 PyGTK 2.16 或更高版本"
 
-#: ../src/gajim.py:272
+#: ../src/gajim.py:260
 #, fuzzy
 msgid "Gajim needs PyGTK 2.22 or above to run. Quiting..."
 msgstr "Gajim 需要 PyGTK 2.16 或更高版本才能執行。離開…"
 
-#: ../src/gajim.py:274
+#: ../src/gajim.py:262
 #, fuzzy
 msgid "Gajim needs GTK 2.22 or above"
 msgstr "Gajim 需要 GTK 2.16 或更高版本"
 
-#: ../src/gajim.py:275
+#: ../src/gajim.py:263
 #, fuzzy
 msgid "Gajim needs GTK 2.22 or above to run. Quiting..."
 msgstr "Gajim 需要 GTK 2.16 或更高版本才能執行。離開…"
 
-#: ../src/gajim.py:284
+#: ../src/gajim.py:272
 msgid "Gajim needs pywin32 to run"
 msgstr "Gajim 需要 pywin32 才能執行"
 
-#: ../src/gajim.py:285
+#: ../src/gajim.py:273
 #, python-format
 msgid ""
 "Please make sure that Pywin32 is installed on your system. You can get it at "
 "%s"
 msgstr "請確認 Pywin32 已經安裝在您的系統中。您可以從 %s 獲得得它"
 
-#: ../src/gajim.py:439
+#: ../src/gajim.py:413
 msgid "Gajim is already running"
 msgstr "Gajim 已經在執行"
 
-#: ../src/gajim.py:440
+#: ../src/gajim.py:414
 msgid ""
 "Another instance of Gajim seems to be running\n"
 "Run anyway?"
@@ -9243,7 +9260,7 @@ msgstr "無法刪除目前主題"
 msgid "Please first choose another theme as your current theme."
 msgstr "請先選擇其他主題做為目前主題"
 
-#: ../src/groupchat_control.py:182 ../src/groupchat_control.py:1695
+#: ../src/groupchat_control.py:182 ../src/groupchat_control.py:1709
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s 現在成了 %(new_nick)s"
@@ -9270,183 +9287,183 @@ msgstr "對話，與"
 msgid "Continued conversation"
 msgstr "繼續對話"
 
-#: ../src/groupchat_control.py:1308
+#: ../src/groupchat_control.py:1320
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s 將主題設定為 %(subject)s"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1326 ../src/groupchat_control.py:1637
+#: ../src/groupchat_control.py:1338 ../src/groupchat_control.py:1651
 msgid "Any occupant is allowed to see your full JID"
 msgstr "所有室友可以看到您的全部 JID"
 
-#: ../src/groupchat_control.py:1329
+#: ../src/groupchat_control.py:1341
 #, fuzzy
 msgid "Room now shows unavailable members"
 msgstr "聊天室現在顯示了無法使用的成員"
 
-#: ../src/groupchat_control.py:1331
+#: ../src/groupchat_control.py:1343
 #, fuzzy
 msgid "Room now does not show unavailable members"
 msgstr "聊天室現在不顯示無法使用的成員"
 
-#: ../src/groupchat_control.py:1333
+#: ../src/groupchat_control.py:1345
 msgid "A non-privacy-related room configuration change has occurred"
 msgstr "一個無關隱私的聊天室設定發生了變化"
 
 #. Can be a presence (see chg_contact_status in groupchat_control.py)
-#: ../src/groupchat_control.py:1337
+#: ../src/groupchat_control.py:1349
 msgid "Room logging is now enabled"
 msgstr "聊天室訊息記錄已啟用"
 
-#: ../src/groupchat_control.py:1339
+#: ../src/groupchat_control.py:1351
 msgid "Room logging is now disabled"
 msgstr "聊天室訊息記錄已停用"
 
-#: ../src/groupchat_control.py:1341
+#: ../src/groupchat_control.py:1353
 msgid "Room is now non-anonymous"
 msgstr "聊天室現在是非匿名的"
 
-#: ../src/groupchat_control.py:1344
+#: ../src/groupchat_control.py:1356
 msgid "Room is now semi-anonymous"
 msgstr "聊天室現在是半匿名的"
 
-#: ../src/groupchat_control.py:1347
+#: ../src/groupchat_control.py:1359
 msgid "Room is now fully-anonymous"
 msgstr "聊天室現在是完全匿名的"
 
-#: ../src/groupchat_control.py:1630 ../src/groupchat_control.py:2292
-#: ../src/gui_interface.py:611 ../src/roster_window.py:3388
+#: ../src/groupchat_control.py:1644 ../src/groupchat_control.py:2306
+#: ../src/gui_interface.py:611 ../src/roster_window.py:3391
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
 #. Can be a message (see handle_event_gc_config_change in
 #. gajim.py)
-#: ../src/groupchat_control.py:1642
+#: ../src/groupchat_control.py:1656
 msgid "Room logging is enabled"
 msgstr "聊天室記錄被啟用"
 
-#: ../src/groupchat_control.py:1644
+#: ../src/groupchat_control.py:1658
 msgid "A new room has been created"
 msgstr "一個新的聊天室被建立"
 
-#: ../src/groupchat_control.py:1647
+#: ../src/groupchat_control.py:1661
 msgid "The server has assigned or modified your roomnick"
 msgstr "伺服器指定或修改了您的聊天室暱稱"
 
 #. do not print 'kicked by None'
-#: ../src/groupchat_control.py:1653
+#: ../src/groupchat_control.py:1667
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s 被踢出: %(reason)s"
 
-#: ../src/groupchat_control.py:1656
+#: ../src/groupchat_control.py:1670
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 踢出: %(reason)s"
 
 #. do not print 'banned by None'
-#: ../src/groupchat_control.py:1665
+#: ../src/groupchat_control.py:1679
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s 被封禁: %(reason)s"
 
-#: ../src/groupchat_control.py:1668
+#: ../src/groupchat_control.py:1682
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 封禁: %(reason)s"
 
-#: ../src/groupchat_control.py:1679 ../src/groupchat_control.py:1795
+#: ../src/groupchat_control.py:1693 ../src/groupchat_control.py:1809
 #, python-format
 msgid "You are now known as %s"
 msgstr "您現在成了 %s "
 
-#: ../src/groupchat_control.py:1749 ../src/groupchat_control.py:1754
-#: ../src/groupchat_control.py:1760
+#: ../src/groupchat_control.py:1763 ../src/groupchat_control.py:1768
+#: ../src/groupchat_control.py:1774
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
-#: ../src/groupchat_control.py:1751
+#: ../src/groupchat_control.py:1765
 msgid "affiliation changed"
 msgstr "歸屬變更"
 
-#: ../src/groupchat_control.py:1756
+#: ../src/groupchat_control.py:1770
 msgid "room configuration changed to members-only"
 msgstr "聊天室配置變為\"僅成員\""
 
-#: ../src/groupchat_control.py:1762
+#: ../src/groupchat_control.py:1776
 msgid "system shutdown"
 msgstr "系統關閉"
 
-#: ../src/groupchat_control.py:1845
+#: ../src/groupchat_control.py:1859
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** %(nick)s 的歸屬被 %(actor)s 設定為 %(affiliation)s"
 
-#: ../src/groupchat_control.py:1849
+#: ../src/groupchat_control.py:1863
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** %(nick)s 的歸屬被設定為 %(affiliation)s"
 
-#: ../src/groupchat_control.py:1864
+#: ../src/groupchat_control.py:1878
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** %(nick)s 的角色被 %(actor)s 設定為 %(role)s"
 
-#: ../src/groupchat_control.py:1868
+#: ../src/groupchat_control.py:1882
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** %(nick)s 的角色被設定為 %(role)s"
 
-#: ../src/groupchat_control.py:1898
+#: ../src/groupchat_control.py:1912
 #, python-format
 msgid "%s has left"
 msgstr "%s 離開了"
 
-#: ../src/groupchat_control.py:1903
+#: ../src/groupchat_control.py:1917
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s 加入聊天室"
 
-#: ../src/groupchat_control.py:2175
+#: ../src/groupchat_control.py:2189
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "您確定要離開聊天室\"%s\"嗎?"
 
-#: ../src/groupchat_control.py:2177
+#: ../src/groupchat_control.py:2191
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "如果關閉此視窗，您將中斷此聊天室的連線。"
 
-#: ../src/groupchat_control.py:2216
+#: ../src/groupchat_control.py:2230
 msgid "Changing Subject"
 msgstr "正在更換話題"
 
-#: ../src/groupchat_control.py:2217
+#: ../src/groupchat_control.py:2231
 msgid "Please specify the new subject:"
 msgstr "請指定新話題:"
 
-#: ../src/groupchat_control.py:2224
+#: ../src/groupchat_control.py:2238
 msgid "Changing Nickname"
 msgstr "正在更換暱稱"
 
-#: ../src/groupchat_control.py:2225
+#: ../src/groupchat_control.py:2239
 msgid "Please specify the new nickname you want to use:"
 msgstr "請指定您想使用的新暱稱:"
 
-#: ../src/groupchat_control.py:2250
+#: ../src/groupchat_control.py:2264
 msgid "The group chat Jabber ID has not allowed characters."
 msgstr "聊天室 Jabber ID 包含不合法字元。"
 
 #. Ask for a reason
-#: ../src/groupchat_control.py:2256
+#: ../src/groupchat_control.py:2270
 #, python-format
 msgid "Destroying %s"
 msgstr "正在銷毀 %s"
 
-#: ../src/groupchat_control.py:2257
+#: ../src/groupchat_control.py:2271
 msgid ""
 "You are going to definitively destroy this room.\n"
 "You may specify a reason below:"
@@ -9454,22 +9471,22 @@ msgstr ""
 "您正要徹底銷毀這個聊天室。\n"
 "您可以在下面指定一個原因:"
 
-#: ../src/groupchat_control.py:2259
+#: ../src/groupchat_control.py:2273
 msgid "You may also enter an alternate venue:"
 msgstr "您也可以輸入一個可選的替代地點:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2459
+#: ../src/groupchat_control.py:2473
 #, python-format
 msgid "Kicking %s"
 msgstr "將踢走 %s"
 
-#: ../src/groupchat_control.py:2460 ../src/groupchat_control.py:2797
+#: ../src/groupchat_control.py:2474 ../src/groupchat_control.py:2811
 msgid "You may specify a reason below:"
 msgstr "您可以指定一個原因:"
 
 #. ask for reason
-#: ../src/groupchat_control.py:2796
+#: ../src/groupchat_control.py:2810
 #, python-format
 msgid "Banning %s"
 msgstr "將封禁 %s"
@@ -9507,16 +9524,16 @@ msgstr "分析檔案錯誤:"
 msgid "Could not write to %s. Session Management support will not work"
 msgstr "不能寫入到 %s 。作業階段管理支援功能未啟用"
 
-#: ../src/gtkgui_helpers.py:749
+#: ../src/gtkgui_helpers.py:727
 msgid "Extension not supported"
 msgstr "不支援擴充"
 
-#: ../src/gtkgui_helpers.py:750
+#: ../src/gtkgui_helpers.py:728
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "圖片不能被另存為 %(type)s 格式。另存為 %(new_filename)s?"
 
-#: ../src/gtkgui_helpers.py:786
+#: ../src/gtkgui_helpers.py:764
 msgid "Save Image as..."
 msgstr "圖片另存為…"
 
@@ -9557,7 +9574,7 @@ msgstr "是否接受這個對帳號 %s 的請求?"
 msgid "HTTP (%(method)s) Authorization for %(url)s (id: %(id)s)"
 msgstr "%(url)s (id: %(id)s) 的 HTTP (%(method)s) 認證"
 
-#: ../src/gui_interface.py:203 ../src/notify.py:281
+#: ../src/gui_interface.py:203 ../src/notify.py:289
 msgid "Connection Failed"
 msgstr "連線失敗"
 
@@ -9600,7 +9617,7 @@ msgstr "您不在聊天室 %s 的成員清單中。"
 msgid "Error %(code)s: %(msg)s"
 msgstr "錯誤 %(code)s: %(msg)s"
 
-#: ../src/gui_interface.py:475 ../src/notify.py:283
+#: ../src/gui_interface.py:475 ../src/notify.py:291
 msgid "Subscription request"
 msgstr "認證請求"
 
@@ -9626,7 +9643,7 @@ msgstr ""
 "您將一直看到他/她處於離線狀態。\n"
 "要將他/她從您的聯絡人清單中移除嗎?"
 
-#: ../src/gui_interface.py:532 ../src/notify.py:285
+#: ../src/gui_interface.py:532 ../src/notify.py:293
 msgid "Unsubscribed"
 msgstr "已取消認證的"
 
@@ -9735,84 +9752,84 @@ msgstr ""
 msgid "%s wants to send you a file."
 msgstr "%s 想傳送給您一個檔案。"
 
-#: ../src/gui_interface.py:1052 ../src/gui_interface.py:1423
+#: ../src/gui_interface.py:1053 ../src/gui_interface.py:1424
 msgid "SSL certificate error"
 msgstr "SSL證書錯誤"
 
-#: ../src/gui_interface.py:1069
+#: ../src/gui_interface.py:1070
 #, fuzzy
 msgid "File Transfer Failed"
 msgstr "檔案傳輸完成"
 
-#: ../src/gui_interface.py:1091
+#: ../src/gui_interface.py:1092
 #, python-format
 msgid "You successfully received %(filename)s from %(name)s."
 msgstr "您成功的從 %(name)s 收到檔案  %(filename)s。"
 
-#: ../src/gui_interface.py:1095
+#: ../src/gui_interface.py:1096
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "從 %(name)s 傳輸的檔案 %(filename)s 被停止。"
 
 #. ft hash error
-#: ../src/gui_interface.py:1099
+#: ../src/gui_interface.py:1100
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "從 %(name)s 傳輸的檔案 %(filename)s 被停止。"
 
-#: ../src/gui_interface.py:1112
+#: ../src/gui_interface.py:1113
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "您成功的給 %(name)s 傳送了檔案 %(filename)s。"
 
-#: ../src/gui_interface.py:1116
+#: ../src/gui_interface.py:1117
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "到 %(name)s 的檔案傳輸 %(filename)s 被停止。"
 
 #. ft hash error
-#: ../src/gui_interface.py:1120
+#: ../src/gui_interface.py:1121
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "到 %(name)s 的檔案傳輸 %(filename)s 被停止。"
 
-#: ../src/gui_interface.py:1203
+#: ../src/gui_interface.py:1204
 msgid "Unable to decrypt message"
 msgstr "無法解密訊息"
 
-#: ../src/gui_interface.py:1215
+#: ../src/gui_interface.py:1216
 msgid "Username Conflict"
 msgstr "使用者名稱衝突"
 
-#: ../src/gui_interface.py:1216
+#: ../src/gui_interface.py:1217
 msgid "Please type a new username for your local account"
 msgstr "<b>請在您本地帳號填寫新的使用者名稱</b>"
 
-#: ../src/gui_interface.py:1231
+#: ../src/gui_interface.py:1232
 msgid "Resource Conflict"
 msgstr "資源衝突"
 
-#: ../src/gui_interface.py:1232
+#: ../src/gui_interface.py:1233
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "您已經用同一個資源連線到這個帳號了。請輸入一個新的資源"
 
 #. TODO: we should use another pixmap ;-)
-#: ../src/gui_interface.py:1289
+#: ../src/gui_interface.py:1290
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s 想要發起語音聊天。"
 
-#: ../src/gui_interface.py:1292
+#: ../src/gui_interface.py:1293
 msgid "Voice Chat Request"
 msgstr "語音聊天請求"
 
-#: ../src/gui_interface.py:1379
+#: ../src/gui_interface.py:1380
 msgid "Error verifying SSL certificate"
 msgstr "驗證 SSL 證書發生錯誤"
 
-#: ../src/gui_interface.py:1380
+#: ../src/gui_interface.py:1381
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your jabber server: "
@@ -9823,15 +9840,15 @@ msgstr ""
 "%(error)s\n"
 "您仍然想要連線這個伺服器嗎?"
 
-#: ../src/gui_interface.py:1389
+#: ../src/gui_interface.py:1390
 msgid "Ignore this error for this certificate."
 msgstr "忽略這個證書的這個錯誤。"
 
-#: ../src/gui_interface.py:1402
+#: ../src/gui_interface.py:1403
 msgid "Non Anonymous Server"
 msgstr ""
 
-#: ../src/gui_interface.py:1424
+#: ../src/gui_interface.py:1425
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed  and is not "
@@ -9847,7 +9864,7 @@ msgstr ""
 "\n"
 "您仍想連線並更新證書的指紋資訊嗎?"
 
-#: ../src/gui_interface.py:1497
+#: ../src/gui_interface.py:1498
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -9855,25 +9872,25 @@ msgstr ""
 "您將透過不安全的連線傳送密碼。您應該安裝 PyOpenSSL 以阻止這樣的事情。您確定要"
 "這樣做嗎?"
 
-#: ../src/gui_interface.py:1539
+#: ../src/gui_interface.py:1540
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
 msgstr "您將透過不安全的連線傳送未經加密的密碼。您確定要這樣做嗎?"
 
 #. theme doesn't exist, disable emoticons
-#: ../src/gui_interface.py:2061 ../src/gui_interface.py:2068
-#: ../src/gui_interface.py:2092
+#: ../src/gui_interface.py:2057 ../src/gui_interface.py:2064
+#: ../src/gui_interface.py:2088
 msgid "Emoticons disabled"
 msgstr "表情圖示被停用"
 
-#: ../src/gui_interface.py:2062
+#: ../src/gui_interface.py:2058
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
 msgstr "您配置的表情圖示主題找不到，所以表情圖示被停用。"
 
-#: ../src/gui_interface.py:2069 ../src/gui_interface.py:2093
+#: ../src/gui_interface.py:2065 ../src/gui_interface.py:2089
 msgid ""
 "Your configured emoticons theme cannot been loaded. You maybe need to update "
 "the format of emoticons.py file. See http://trac.gajim.org/wiki/Emoticons "
@@ -9882,42 +9899,42 @@ msgstr ""
 "您配置的表情圖示主題無法載入。您可能需要升級 emoticons.py 檔案的格式。請參考 "
 "http://trac.gajim.org/wiki/Emoticons"
 
-#: ../src/gui_interface.py:2139 ../src/roster_window.py:3964
+#: ../src/gui_interface.py:2135 ../src/roster_window.py:3967
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隱身時無法加入聊天室"
 
 #. it is good to notify the user
 #. in case he or she cannot see the output of the console
-#: ../src/gui_interface.py:2526
+#: ../src/gui_interface.py:2522
 msgid "Could not save your settings and preferences"
 msgstr "無法儲存您的設定。"
 
-#: ../src/gui_interface.py:3132
+#: ../src/gui_interface.py:3128
 msgid "Passphrase Required"
 msgstr "要求密文"
 
-#: ../src/gui_interface.py:3133
+#: ../src/gui_interface.py:3129
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "輸入 GPG 密鑰 %(keyid)s (帳號 %(account)s) 的密碼。"
 
-#: ../src/gui_interface.py:3147
+#: ../src/gui_interface.py:3143
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG 密鑰過期"
 
-#: ../src/gui_interface.py:3148
+#: ../src/gui_interface.py:3144
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "您的 GPG 密鑰已過期，您將在沒有 OpenPGP 情況下連線到 %s。"
 
 #. ask again
-#: ../src/gui_interface.py:3157
+#: ../src/gui_interface.py:3153
 msgid "Wrong Passphrase"
 msgstr "錯誤欄位"
 
-#: ../src/gui_interface.py:3158
+#: ../src/gui_interface.py:3154
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "請重新輸入您的 GPG 欄位或點\"取消\""
@@ -9951,7 +9968,7 @@ msgstr "無法找到命令歷程記錄資料庫"
 
 #. holds time
 #: ../src/history_manager.py:178 ../src/history_manager.py:222
-#: ../src/history_window.py:102
+#: ../src/history_window.py:104
 msgid "Date"
 msgstr "日期"
 
@@ -9962,7 +9979,7 @@ msgstr "暱稱"
 
 #. holds message
 #: ../src/history_manager.py:194 ../src/history_manager.py:229
-#: ../src/history_window.py:110
+#: ../src/history_window.py:112
 msgid "Message"
 msgstr "訊息"
 
@@ -10025,35 +10042,35 @@ msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "您確定要刪除所選取的訊息?"
 
-#: ../src/history_window.py:321
+#: ../src/history_window.py:323
 #, python-format
 msgid "Conversation History with %s"
 msgstr "與 %s 的聊天命令歷程"
 
-#: ../src/history_window.py:371
+#: ../src/history_window.py:373
 msgid "Disk Error"
 msgstr "磁碟錯誤"
 
-#: ../src/history_window.py:470
+#: ../src/history_window.py:472
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s 的狀態是 %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:481
+#: ../src/history_window.py:483
 #, python-format
 msgid "Error: %s"
 msgstr "錯誤: %s"
 
-#: ../src/history_window.py:483
+#: ../src/history_window.py:485
 msgid "Error"
 msgstr "錯誤"
 
-#: ../src/history_window.py:485
+#: ../src/history_window.py:487
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "現在狀態: %(status)s: %(status_msg)s"
 
-#: ../src/history_window.py:488
+#: ../src/history_window.py:490
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "現在狀態:  %(status)s "
@@ -10098,7 +10115,7 @@ msgstr "- 訊息將會被記錄"
 msgid "- messages will not be logged"
 msgstr "- 訊息將不會被記錄"
 
-#: ../src/notify.py:323
+#: ../src/notify.py:331
 msgid "Ignore"
 msgstr "忽略"
 
@@ -10152,18 +10169,18 @@ msgstr "存檔為空"
 msgid "Retrieving profile..."
 msgstr "正在獲取側寫…"
 
-#: ../src/profile_window.py:129 ../src/roster_window.py:3257
+#: ../src/profile_window.py:129 ../src/roster_window.py:3260
 msgid "File is empty"
 msgstr "檔案為空"
 
-#: ../src/profile_window.py:132 ../src/roster_window.py:3260
+#: ../src/profile_window.py:132 ../src/roster_window.py:3263
 msgid "File does not exist"
 msgstr "檔案不存在"
 
 #. keep identation
 #. unknown format
 #: ../src/profile_window.py:146 ../src/profile_window.py:163
-#: ../src/roster_window.py:3262 ../src/roster_window.py:3273
+#: ../src/roster_window.py:3265 ../src/roster_window.py:3276
 msgid "Could not load image"
 msgstr "無法讀取圖片"
 
@@ -10243,11 +10260,11 @@ msgstr "GPG 無法使用"
 msgid "You will be connected to %s without OpenPGP."
 msgstr "您將在無 OpenPGP 情況下連線到 %s。"
 
-#: ../src/roster_window.py:2365 ../src/roster_window.py:3894
+#: ../src/roster_window.py:2365 ../src/roster_window.py:3897
 msgid "You are participating in one or more group chats"
 msgstr "您正在參與一個或多個多人聊天"
 
-#: ../src/roster_window.py:2366 ../src/roster_window.py:3895
+#: ../src/roster_window.py:2366 ../src/roster_window.py:3898
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -10279,7 +10296,7 @@ msgid ""
 "want to quit?"
 msgstr "如果現在離開，傳送中的檔案會停止傳輸。您仍然要離開嗎?"
 
-#: ../src/roster_window.py:2579 ../src/roster_window.py:3043
+#: ../src/roster_window.py:2579 ../src/roster_window.py:3046
 msgid "You have unread messages"
 msgstr "您有未讀訊息"
 
@@ -10291,119 +10308,119 @@ msgstr ""
 "除非您啟用了命令歷程記錄而且向您傳送訊息的聯絡人在您的聯絡人清單中，您才能\n"
 "在以後讀到這些訊息。"
 
-#: ../src/roster_window.py:3044
+#: ../src/roster_window.py:3047
 msgid "You must read them before removing this transport."
 msgstr "在移除代理之前您必須檢視它們。"
 
-#: ../src/roster_window.py:3047
+#: ../src/roster_window.py:3050
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "代理\"%s\"將被移除"
 
-#: ../src/roster_window.py:3048
+#: ../src/roster_window.py:3051
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
 msgstr "您將無法再和使用這個代理的聯絡人收發訊息。"
 
-#: ../src/roster_window.py:3051
+#: ../src/roster_window.py:3054
 msgid "Transports will be removed"
 msgstr "代理將被移除"
 
-#: ../src/roster_window.py:3056
+#: ../src/roster_window.py:3059
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
 "these transports: %s"
 msgstr "您無法再和來自這些代理的聯絡人收發訊息: %s"
 
-#: ../src/roster_window.py:3107
+#: ../src/roster_window.py:3110
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "您將要阻斷一個聯絡人。您確定要繼續嗎?"
 
-#: ../src/roster_window.py:3109
+#: ../src/roster_window.py:3112
 msgid ""
 "This contact will see you offline and you will not receive messages he will "
 "send you."
 msgstr "這個聯絡人將看到您離線並且您不會在收到他傳送給您的訊息。"
 
 #. it's jid
-#: ../src/roster_window.py:3149
+#: ../src/roster_window.py:3152
 msgid "Rename Contact"
 msgstr "重新命名聯絡人"
 
-#: ../src/roster_window.py:3150
+#: ../src/roster_window.py:3153
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "為聯絡人 %s 輸入新的暱稱"
 
-#: ../src/roster_window.py:3157
+#: ../src/roster_window.py:3160
 msgid "Rename Group"
 msgstr "重新命名群組"
 
-#: ../src/roster_window.py:3158
+#: ../src/roster_window.py:3161
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "為群組 %s 輸入新的名稱"
 
-#: ../src/roster_window.py:3203
+#: ../src/roster_window.py:3206
 msgid "Remove Group"
 msgstr "移除群組"
 
-#: ../src/roster_window.py:3204
+#: ../src/roster_window.py:3207
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "您想從聯絡人清單中刪除組 %s ?"
 
-#: ../src/roster_window.py:3205
+#: ../src/roster_window.py:3208
 msgid "Also remove all contacts in this group from your roster"
 msgstr "同時從聯絡人清單移除這個群組的所有聯絡人"
 
-#: ../src/roster_window.py:3244
+#: ../src/roster_window.py:3247
 msgid "Assign OpenPGP Key"
 msgstr "指定 OpenPGP 密鑰"
 
-#: ../src/roster_window.py:3245
+#: ../src/roster_window.py:3248
 msgid "Select a key to apply to the contact"
 msgstr "選擇一個對應於該聯絡人的密鑰。"
 
-#: ../src/roster_window.py:3704
+#: ../src/roster_window.py:3707
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "聯絡人\"%s\"將從您的聯絡人清單中被移除"
 
-#: ../src/roster_window.py:3706
+#: ../src/roster_window.py:3709
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "您將從您的聯絡人清單中將 \"%(name)s\" (%(jid)s) 移除。\n"
 
-#: ../src/roster_window.py:3711
+#: ../src/roster_window.py:3714
 msgid ""
 "By removing this contact you also remove authorization resulting in him or "
 "her always seeing you as offline."
 msgstr "移除此聯絡人的同時將移除認證，導致他/她將一直看到您為離線。"
 
 #. Contact is not in roster
-#: ../src/roster_window.py:3717
+#: ../src/roster_window.py:3720
 msgid "Do you want to continue?"
 msgstr "您要繼續嗎?"
 
-#: ../src/roster_window.py:3721
+#: ../src/roster_window.py:3724
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in him or her always seeing you as offline."
 msgstr "移除此聯絡人的同時將預設移除認證，導致他/她將一直看到您為離線。"
 
-#: ../src/roster_window.py:3724
+#: ../src/roster_window.py:3727
 msgid "I want this contact to know my status after removal"
 msgstr "我想讓此聯絡人在被移除之後仍然知道我的狀態"
 
 #. several contact to remove at the same time
-#: ../src/roster_window.py:3728
+#: ../src/roster_window.py:3731
 msgid "Contacts will be removed from your roster"
 msgstr "聯絡人將從您的聯絡人清單中被移除"
 
-#: ../src/roster_window.py:3733
+#: ../src/roster_window.py:3736
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -10412,13 +10429,13 @@ msgstr ""
 "移除這些聯絡人: %s 的同時\n"
 "將移除認證導致他們將一直看到您為離線。"
 
-#: ../src/roster_window.py:3791
+#: ../src/roster_window.py:3794
 #, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr "您將傳送一個自訂的狀態。您確定要繼續嗎?"
 
-#: ../src/roster_window.py:3793
+#: ../src/roster_window.py:3796
 #, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -10427,19 +10444,19 @@ msgstr ""
 "這個聯絡人會暫時看到您的狀態為 %(status)s，直到您下次變更您的狀態。之後\n"
 "他/她會看到您的全域狀態。"
 
-#: ../src/roster_window.py:3812
+#: ../src/roster_window.py:3815
 msgid "No account available"
 msgstr "沒有有效帳號"
 
-#: ../src/roster_window.py:3813
+#: ../src/roster_window.py:3816
 msgid "You must create an account before you can chat with other contacts."
 msgstr "您必須在與他人聊天前新增帳號。"
 
-#: ../src/roster_window.py:4532
+#: ../src/roster_window.py:4535
 msgid "Metacontacts storage not supported by your server"
 msgstr "您的伺服器不支援儲存元聯絡人資訊"
 
-#: ../src/roster_window.py:4534
+#: ../src/roster_window.py:4537
 #, fuzzy
 msgid ""
 "Your server does not support storing metacontacts information. So this "
@@ -10447,12 +10464,12 @@ msgid ""
 msgstr ""
 "您的伺服器不支援儲存元聯絡人資訊。所以這些資訊在下次重新連線時不會被儲存。"
 
-#: ../src/roster_window.py:4630
+#: ../src/roster_window.py:4633
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "您在建立一個元聯絡人。確定繼續?"
 
-#: ../src/roster_window.py:4632
+#: ../src/roster_window.py:4635
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several Jabber accounts or transport "
@@ -10461,27 +10478,27 @@ msgstr ""
 "元聯絡人是將幾個聯絡人組合起來顯示在同一列。一般在某個人有幾個 Jabber\n"
 "帳號或代理帳號時用到。"
 
-#: ../src/roster_window.py:4753
+#: ../src/roster_window.py:4756
 msgid "Invalid file URI:"
 msgstr "無效的檔案位址:"
 
-#: ../src/roster_window.py:4765
+#: ../src/roster_window.py:4768
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "您想要將檔案傳送給 %s 嗎:"
 
-#: ../src/roster_window.py:4904
+#: ../src/roster_window.py:4907
 #, python-format
 msgid "Send %s to %s"
 msgstr "傳送 %s 給 %s"
 
-#: ../src/roster_window.py:4915
+#: ../src/roster_window.py:4918
 #, python-format
 msgid "Make %s first contact"
 msgstr "將 %s 設為第一聯絡人"
 
-#: ../src/roster_window.py:4918
+#: ../src/roster_window.py:4921
 #, python-format
 msgid "Make %s and %s metacontacts"
 msgstr "將 %s 與 %s 設為中繼聯絡人"
@@ -10491,99 +10508,99 @@ msgstr "將 %s 與 %s 設為中繼聯絡人"
 #. for chat_with
 #. for single message
 #. join gc
-#: ../src/roster_window.py:5383 ../src/roster_window.py:5437
-#: ../src/roster_window.py:5446 ../src/statusicon.py:273
+#: ../src/roster_window.py:5386 ../src/roster_window.py:5440
+#: ../src/roster_window.py:5449 ../src/statusicon.py:273
 #: ../src/statusicon.py:320 ../src/statusicon.py:326
 #, python-format
 msgid "using account %s"
 msgstr "使用帳號 %s"
 
 #. add
-#: ../src/roster_window.py:5453
+#: ../src/roster_window.py:5456
 #, python-format
 msgid "to %s account"
 msgstr "至帳號 %s"
 
 #. disco
-#: ../src/roster_window.py:5458
+#: ../src/roster_window.py:5461
 #, python-format
 msgid "using %s account"
 msgstr "使用 %s 帳號"
 
-#: ../src/roster_window.py:5497 ../src/statusicon.py:336
+#: ../src/roster_window.py:5500 ../src/statusicon.py:336
 msgid "_Manage Bookmarks..."
 msgstr "管理書籤(_M)…"
 
 #. profile, avatar
-#: ../src/roster_window.py:5517
+#: ../src/roster_window.py:5520
 #, python-format
 msgid "of account %s"
 msgstr "帳號 %s 的"
 
-#: ../src/roster_window.py:5558
+#: ../src/roster_window.py:5561
 #, python-format
 msgid "for account %s"
 msgstr "帳號 %s"
 
-#: ../src/roster_window.py:5618 ../src/roster_window.py:5726
+#: ../src/roster_window.py:5621 ../src/roster_window.py:5729
 msgid "_Change Status Message"
 msgstr "變更狀態訊息(_C)"
 
-#: ../src/roster_window.py:5651
+#: ../src/roster_window.py:5654
 msgid "Publish Tune"
 msgstr "發布音樂"
 
-#: ../src/roster_window.py:5653
+#: ../src/roster_window.py:5656
 msgid "Publish Location"
 msgstr "發布位置資訊"
 
-#: ../src/roster_window.py:5656
+#: ../src/roster_window.py:5659
 msgid "Configure Services..."
 msgstr "配置服務…"
 
-#: ../src/roster_window.py:5808
+#: ../src/roster_window.py:5811
 msgid "_Maximize All"
 msgstr "放到最大全部(_M)"
 
-#: ../src/roster_window.py:5818 ../src/roster_window.py:6004
+#: ../src/roster_window.py:5821 ../src/roster_window.py:6007
 msgid "Send Group M_essage"
 msgstr "傳送群組訊息(_E)"
 
-#: ../src/roster_window.py:5826
+#: ../src/roster_window.py:5829
 msgid "To all users"
 msgstr "向所有的使用者"
 
-#: ../src/roster_window.py:5830
+#: ../src/roster_window.py:5833
 msgid "To all online users"
 msgstr "向所有線上使用者"
 
 #. Manage Transport submenu
-#: ../src/roster_window.py:6025
+#: ../src/roster_window.py:6028
 msgid "_Manage Contacts"
 msgstr "管理聯絡人(_M)"
 
-#: ../src/roster_window.py:6100
+#: ../src/roster_window.py:6103
 msgid "_Maximize"
 msgstr "放到最大(_M)"
 
-#: ../src/roster_window.py:6109
+#: ../src/roster_window.py:6112
 msgid "_Reconnect"
 msgstr "重新連線(_R)"
 
-#: ../src/roster_window.py:6116
+#: ../src/roster_window.py:6119
 msgid "_Disconnect"
 msgstr "中斷連線(_D)"
 
 #. History manager
-#: ../src/roster_window.py:6210
+#: ../src/roster_window.py:6213
 msgid "History Manager"
 msgstr "命令歷程記錄管理器"
 
-#: ../src/roster_window.py:6225
+#: ../src/roster_window.py:6228
 msgid "_Join New Group Chat"
 msgstr "加入新的聊天室(_J)"
 
-#: ../src/roster_window.py:6467
+#: ../src/roster_window.py:6470
 msgid "Change Status Message..."
 msgstr "變更狀態訊息…"
 
@@ -10600,11 +10617,11 @@ msgstr "在收到的資料表中有錯誤"
 msgid "No result"
 msgstr "無結果"
 
-#: ../src/session.py:428 ../src/session.py:488
+#: ../src/session.py:439 ../src/session.py:499
 msgid "Confirm these session options"
 msgstr "確定這些作業階段屬性"
 
-#: ../src/session.py:430
+#: ../src/session.py:441
 #, fuzzy, python-format
 msgid ""
 "The remote client wants to negotiate a session with these features:\n"
@@ -10620,7 +10637,7 @@ msgstr ""
 "\n"
 "是否接受?"
 
-#: ../src/session.py:490
+#: ../src/session.py:501
 #, python-format
 msgid ""
 "The remote client selected these options:\n"
@@ -10635,7 +10652,7 @@ msgstr ""
 "\n"
 "繼續進行作業階段?"
 
-#: ../src/session.py:493
+#: ../src/session.py:504
 #, fuzzy
 msgid "Always accept for this contact"
 msgstr "是否為此聯絡人使用 OpenPGP?"
@@ -10846,6 +10863,17 @@ msgstr "沒有未處理的認證請求"
 #: ../src/vcard.py:428 ../src/vcard.py:482 ../src/vcard.py:604
 msgid " resource with priority "
 msgstr "帶有優先等級的資源"
+
+#~ msgid "A message from a non-valid JID arrived, it has been ignored."
+#~ msgstr "收到了一個從一個無效的 JID 傳送的訊息，它已經被忽略了。"
+
+#~ msgid ""
+#~ "This icon indicates that this message has not yet\n"
+#~ "been received by the remote end. If this icon stays\n"
+#~ "for a long time, it's likely the message got lost."
+#~ msgstr ""
+#~ "這個圖示是說這條訊息還沒有被遠端收到。如果這個圖示已經存在很久了，很可能這"
+#~ "條訊息丟失了。"
 
 #~ msgid "How many minutes should last lines from previous conversation last."
 #~ msgstr "上次談話的最後幾列保留多少分鐘。"
