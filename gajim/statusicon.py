@@ -125,9 +125,6 @@ class StatusIcon:
         if os.environ.get('KDE_FULL_SESSION') == 'true':
         # detect KDE session. see #5476
             self.statusicon_size = '32'
-        if os.environ.get('MATE_DESKTOP_SESSION_ID'):
-        # detect MATE session.
-            self.statusicon_size = '16'
         self.set_img()
 
     def set_img(self):
