@@ -1006,7 +1006,8 @@ class Interface:
                 file_props=file_props))
         else:
             ft.set_status(file_props, 'stop')
-        if file_props.stalled or file_props.paused:
+        if not file_props.completed and (file_props.stalled or \
+        file_props.paused):
             return
 
         if file_props.type_ == 'r': # we receive a file
