@@ -64,7 +64,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
-from gajim.common import location_listener
+if app.HAVE_GEOCLUE:
+    from gajim.common import location_listener
 from gajim.common import ged
 from gajim.common import dbus_support
 from gajim.message_window import MessageWindowMgr
@@ -3647,12 +3648,6 @@ class RosterWindow:
             location_listener.enable()
         else:
             app.connections[account].retract_location()
-            # disable music listener only if no other account uses it
-            for acc in app.connections:
-                if app.config.get_per('accounts', acc, 'publish_location'):
-                    break
-            else:
-                location_listener.disable()
 
         helpers.update_optional_features(account)
 
@@ -4979,21 +4974,28 @@ class RosterWindow:
             if app.connections[account].pep_supported:
                 pep_submenu = Gtk.Menu()
                 pep_menuitem.set_submenu(pep_submenu)
-                def add_item(label, opt_name, func):
-                    item = Gtk.CheckMenuItem.new_with_label(label)
-                    pep_submenu.append(item)
-                    if not dbus_support.supported:
-                        item.set_sensitive(False)
-                    else:
-                        activ = app.config.get_per('accounts', account,
-                            opt_name)
-                        item.set_active(activ)
-                        item.connect('toggled', func, account)
 
-                add_item(_('Publish Tune'), 'publish_tune',
-                    self.on_publish_tune_toggled)
-                add_item(_('Publish Location'), 'publish_location',
-                    self.on_publish_location_toggled)
+                item = Gtk.CheckMenuItem(_('Publish Tune'))
+                pep_submenu.append(item)
+                if not dbus_support.supported:
+                    item.set_sensitive(False)
+                else:
+                    activ = app.config.get_per('accounts', account,
+                                               'publish_tune')
+                    item.set_active(activ)
+                    item.connect('toggled', self.on_publish_tune_toggled,
+                                 account)
+
+                item = Gtk.CheckMenuItem(_('Publish Location'))
+                pep_submenu.append(item)
+                if not app.HAVE_GEOCLUE:
+                    item.set_sensitive(False)
+                else:
+                    activ = app.config.get_per('accounts', account,
+                                               'publish_location')
+                    item.set_active(activ)
+                    item.connect('toggled', self.on_publish_location_toggled,
+                                 account)
 
                 pep_config = Gtk.MenuItem.new_with_label(
                     _('Configure Services…'))
