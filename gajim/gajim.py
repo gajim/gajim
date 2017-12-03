@@ -244,6 +244,17 @@ class GajimApplication(Gtk.Application):
                 self.interface.join_gc_minimal(None, jid)
             elif cmd == 'roster':
                 self.activate_action('add-contact', GLib.Variant('s', jid))
+            elif cmd == 'message':
+                from gajim.common import app
+                accounts = list(app.connections.keys())
+                if not accounts:
+                    continue
+                if len(accounts) == 1:
+                    app.interface.new_chat_from_jid(accounts[0], jid)
+                else:
+                    self.activate_action('start-chat')
+                    start_chat_window = app.interface.instances['start_chat']
+                    start_chat_window.search_entry.set_text(jid)
 
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
