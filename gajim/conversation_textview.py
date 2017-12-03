@@ -1353,11 +1353,13 @@ class ConversationTextview(GObject.GObject):
             buffer_.insert(end_iter, subject)
             self.print_empty_line(end_iter)
 
-    def print_real_text(self, text, text_tags=[], name=None, xhtml=None,
+    def print_real_text(self, text, text_tags=None, name=None, xhtml=None,
     graphics=True, mark=None, additional_data=None):
         """
         Add normal and special text. call this to add text
         """
+        if text_tags is None:
+            text_tags = []
         if additional_data is None:
             additional_data = {}
         buffer_ = self.tv.get_buffer()

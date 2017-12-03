@@ -913,7 +913,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.received_history_pos = pos
 
     def print_conversation_line(self, text, kind, name, tim,
-    other_tags_for_name=[], other_tags_for_time=[], other_tags_for_text=[],
+    other_tags_for_name=None, other_tags_for_time=None, other_tags_for_text=None,
     count_as_new=True, subject=None, old_kind=None, xhtml=None, simple=False,
     xep0184_id=None, graphics=True, displaymarking=None, msg_log_id=None,
     msg_stanza_id=None, correct_id=None, additional_data=None,
