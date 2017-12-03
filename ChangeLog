@@ -1,3 +1,10 @@
+Gajim 0.16.9 (30 November 2017)
+
+  * Improve Zeroconf behavior
+  * Fix showing normal message event
+  * remove usage of OpenSSL.rand
+  * a few minor bugfixes
+
 Gajim 0.16.8 (04 June 2017)
 
   * Fix rejoining MUCs after connection loss
