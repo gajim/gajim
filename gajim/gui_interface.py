@@ -2403,8 +2403,8 @@ class Interface:
         pixbuf = None
         try:
             if size is not None:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                    path, size, size)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                    path, size, size, False)
             else:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
         except GLib.GError as error:
