@@ -19,8 +19,6 @@ by D-Bus.
 .El
 .Ss account_info Aq account
 Gets detailed info on a account
-.Ss add_contact Ao jid Ac Bq account
-Adds contact to roster
 .Ss change_avatar Ao picture Ac Bq account
 Change the avatar
 .Ss change_status Bo status Bc Bo message Bc Bq account
@@ -35,18 +33,12 @@ Returns current status (the global one unless account is specified)
 Returns current status message (the global one unless account is specified)
 .Ss get_unread_msgs_number
 Returns number of unread messages
-.Ss handle_uri Ao uri Ac Bo account Bc Bq message
-Handle a xmpp:/ uri
 .Ss help Bq command 
 Shows a help on specific command
-.Ss join_room Ao room Ac Bo nick Bc Bo password Bc Bq account
-Join a MUC room
 .Ss list_accounts
 Prints a list of registered accounts
 .Ss list_contacts Bq account
 Prints a list of all contacts in the roster. Each contact appears on a separate line
-.Ss open_chat Ao jid Ac Bo account Bc Bq message
-Shows the chat dialog so that you can send messages to a contact
 .Ss prefs_del Aq key
 Deletes a preference item
 .Ss prefs_list
@@ -71,8 +63,6 @@ Sends custom XML
 Changes the priority of account or accounts
 .Ss show_next_pending_event
 Pops up a window with the next pending event
-.Ss start_chat Aq account
-Opens 'Start Chat' dialog
 .Ss toggle_ipython
 Shows or hides the ipython window
 .Ss toggle_roster_appearance

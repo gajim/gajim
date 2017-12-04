@@ -125,18 +125,6 @@ class GajimRemote:
                                                 ' "sync with global status" option set'), False)
                                 ]
                         ],
-                'open_chat': [
-                                _('Shows the chat dialog so that you can send messages to a contact'),
-                                [
-                                        ('jid', _('JID of the contact that you want to chat with'),
-                                                True),
-                                        (Q_('?CLI:account'), _('if specified, contact is taken from the '
-                                                'contact list of this account'), False),
-                                        (Q_('?CLI:message'),
-                                                _('message content. The account must be specified or ""'),
-                                                False)
-                                ]
-                        ],
                 'send_chat_message': [
                                 _('Sends new chat message to a contact in the roster. Both OpenPGP key '
                                 'and account are optional. If you want to set only \'account\', '
@@ -225,13 +213,6 @@ class GajimRemote:
 
                                 ]
                         ],
-                'add_contact': [
-                                _('Adds contact to roster'),
-                                [
-                                        (_('jid'), _('JID of the contact'), True),
-                                        (Q_('?CLI:account'), _('Adds new contact to this account'), False)
-                                ]
-                        ],
 
                 'get_status': [
                         _('Returns current status (the global one unless account is specified)'),
@@ -251,12 +232,7 @@ class GajimRemote:
                         _('Returns number of unread messages'),
                                 [ ]
                         ],
-                'start_chat': [
-                        _('Opens \'Start Chat\' dialog'),
-                                [
-                                        (Q_('?CLI:account'), _('Starts chat, using this account'), True)
-                                ]
-                        ],
+
                 'send_xml': [
                                 _('Sends custom XML'),
                                 [
@@ -275,25 +251,7 @@ class GajimRemote:
                                                 False)
                                 ]
                         ],
-                'handle_uri': [
-                                _('Handle a xmpp:/ URI'),
-                                [
-                                        (Q_('?CLI:uri'), _('URI to handle'), True),
-                                        (Q_('?CLI:account'), _('Account in which you want to handle it'),
-                                                False),
-                                        (Q_('?CLI:message'), _('Message content'), False)
-                                ]
-                        ],
-                'join_room': [
-                                _('Join a MUC room'),
-                                [
-                                        (Q_('?CLI:room'), _('Room JID'), True),
-                                        (Q_('?CLI:nick'), _('Nickname to use'), False),
-                                        (Q_('?CLI:password'), _('Password to enter the room'), False),
-                                        (Q_('?CLI:account'), _('Account from which you want to enter the '
-                                                'room'), False)
-                                ]
-                        ],
+
                 'check_gajim_running': [
                                 _('Check if Gajim is running'),
                                 []
@@ -317,8 +275,6 @@ class GajimRemote:
             else:
                 print(self.compose_help().encode(PREFERRED_ENCODING))
             sys.exit(0)
-        if self.command == 'handle_uri':
-            self.handle_uri()
         if self.command == 'check_gajim_running':
             print(self.check_gajim_running())
             sys.exit(0)
@@ -342,10 +298,8 @@ class GajimRemote:
         Print retrieved result to the output
         """
         if res is not None:
-            if self.command in ('open_chat', 'send_chat_message',
-            'send_single_message', 'start_chat'):
-                if self.command in ('send_message', 'send_single_message'):
-                    self.argv_len -= 2
+            if self.command in ('send_chat_message', 'send_single_message'):
+                self.argv_len -= 2
 
                 if res is False:
                     if self.argv_len < 4:
@@ -532,66 +486,6 @@ class GajimRemote:
                 break
         # add empty string for missing args
         self.arguments += ['']*(len(args)-i)
-
-    def handle_uri(self):
-        if len(sys.argv) < 3:
-            send_error(_('No URI given'))
-        if not sys.argv[2].startswith('xmpp:'):
-            send_error(_('Wrong URI'))
-        sys.argv[2] = sys.argv[2][5:]
-        uri = sys.argv[2]
-        if not '?' in uri:
-            self.command = sys.argv[1] = 'open_chat'
-            return
-        jid, args = uri.split('?', 1)
-        try:
-            jid = urllib.parse.unquote(jid)
-        except UnicodeDecodeError:
-            pass
-        args = args.split(';')
-        action = None
-        options = {}
-        if args:
-            action = args[0]
-            for arg in args[1:]:
-                opt = arg.split('=', 1)
-                if len(opt) != 2:
-                    continue
-                options[opt[0]] = opt[1]
-
-        if action == 'message':
-            self.command = sys.argv[1] = 'open_chat'
-            sys.argv[2] = jid
-            if 'body' in options:
-                # Open chat window and paste the text in the input message
-                # dialog
-                message = options['body']
-                try:
-                    message = urllib.parse.unquote(message)
-                except UnicodeDecodeError:
-                    pass
-                if len(sys.argv) == 4:
-                    # jid in the sys.argv
-                    sys.argv.append(message)
-                else:
-                    sys.argv.append('')
-                    sys.argv.append(message)
-                    sys.argv[3] = ''
-                    sys.argv[4] = message
-            return
-        sys.argv[2] = jid
-        if action == 'join':
-            self.command = sys.argv[1] = 'join_room'
-            # Move account parameter from position 3 to 5
-            sys.argv.append('')
-            sys.argv.append(sys.argv[3])
-            sys.argv[3] = ''
-            return
-        if action == 'roster':
-            # Add contact to roster
-            self.command = sys.argv[1] = 'add_contact'
-            return
-        sys.exit(0)
 
     def call_remote_method(self):
         """
