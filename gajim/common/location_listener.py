@@ -19,14 +19,21 @@
 ##
 
 from datetime import datetime
+import logging
 
 from gajim.common import app
-from gajim.common import dbus_support
-if dbus_support.supported:
-    import dbus
+
+import gi
+gi.require_version('Geoclue', '2.0')
+from gi.repository import Geoclue
+from gi.repository import GLib
+
+log = logging.getLogger('gajim.c.location_listener')
+
 
 class LocationListener:
     _instance = None
+
     @classmethod
     def get(cls):
         if cls._instance is None:
@@ -36,89 +43,41 @@ class LocationListener:
     def __init__(self):
         self._data = {}
 
-    def get_data(self):
-        bus = dbus.SessionBus()
+    def _on_location_update(self, simple):
+        location = simple.get_location()
+        timestamp = location.get_property("timestamp")[0]
+        lat = location.get_property("latitude")
+        lon = location.get_property("longitude")
+        alt = location.get_property("altitude")
+        # in XEP-0080 it's horizontal accuracy
+        acc = location.get_property("accuracy")
+
+        # update data with info we just received
+        self._data = {'lat': lat, 'lon': lon, 'alt': alt, 'accuracy': acc}
+        self._data['timestamp'] = self._timestamp_to_utc(timestamp)
+        self._send_location()
+
+    def _on_simple_ready(self, obj, result):
         try:
-            # Initializes Geoclue.
-            obj = bus.get_object('org.freedesktop.Geoclue.Master',
-                    '/org/freedesktop/Geoclue/Master')
-            # get MasterClient path
-            path = obj.Create()
-            # get MasterClient
-            cli = bus.get_object('org.freedesktop.Geoclue.Master', path)
-            cli.SetRequirements(1, 0, True, 1023)
-    
-            self._get_address(cli)
-            self._get_position(cli)
-        except:
-            self._on_geoclue_position_changed()
-            return
-        
+            self.simple = Geoclue.Simple.new_finish(result)
+        except GLib.Error as e:
+            if e.domain == 'g-dbus-error-quark':
+                log.warning("Could not enable geolocation: %s", e.message)
+            else:
+                raise
+        else:
+            self.simple.connect('notify::location', self._on_location_update)
+            self._on_location_update(self.simple)
 
-    def _get_address(self, cli):
-        bus = dbus.SessionBus()
-        cli.AddressStart()
-        # Check that there is a provider
-        name, description, service, path = cli.GetAddressProvider()
-        if path:
-            provider = bus.get_object(service, path)
-            timestamp, address, accuracy = provider.GetAddress()
-            self._on_geoclue_address_changed(timestamp, address, accuracy)
-
-    def _get_position(self, cli):
-        bus = dbus.SessionBus()
-        cli.PositionStart()
-        # Check that there is a provider
-        name, description, service, path = cli.GetPositionProvider()
-        if path:
-            provider = bus.get_object(service, path)
-            fields, timestamp, lat, lon, alt, accuracy = provider.GetPosition()
-            self._on_geoclue_position_changed(fields, timestamp, lat, lon, alt,
-                    accuracy)
+    def get_data(self):
+        Geoclue.Simple.new("org.gajim.Gajim",
+                           Geoclue.AccuracyLevel.EXACT,
+                           None,
+                           self._on_simple_ready)
 
     def start(self):
         self.location_info = {}
         self.get_data()
-        bus = dbus.SessionBus()
-        # Geoclue
-        bus.add_signal_receiver(self._on_geoclue_address_changed,
-                'AddressChanged', 'org.freedesktop.Geoclue.Address')
-        bus.add_signal_receiver(self._on_geoclue_position_changed,
-                'PositionChanged', 'org.freedesktop.Geoclue.Position')
-
-    def shut_down(self):
-        pass
-
-    def _on_geoclue_address_changed(self, timestamp=None, address=None,
-    accuracy=None):
-        # update data with info we just received
-        if address is None:
-            address = {}
-        for field in ['country', 'countrycode', 'locality', 'postalcode',
-        'region', 'street']:
-            self._data[field] = address.get(field, None)
-        if timestamp:
-            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
-        if accuracy:
-            # in PEP it's horizontal accuracy
-            self._data['accuracy'] = accuracy[1]
-        self._send_location()
-
-    def _on_geoclue_position_changed(self, fields=None, timestamp=None, lat=None,
-    lon=None, alt=None, accuracy=None):
-        if fields is None:
-            fields = []
-        # update data with info we just received
-        _dict = {'lat': lat, 'lon': lon, 'alt': alt}
-        for field in _dict:
-            if _dict[field] is not None:
-                self._data[field] = _dict[field]
-        if timestamp:
-            self._data['timestamp'] = self._timestamp_to_utc(timestamp)
-        if accuracy:
-            # in PEP it's horizontal accuracy
-            self._data['accuracy'] = accuracy[1]
-        self._send_location()
 
     def _send_location(self):
         accounts = app.connections.keys()
@@ -143,10 +102,7 @@ class LocationListener:
         time = datetime.utcfromtimestamp(timestamp)
         return time.strftime('%Y-%m-%dT%H:%MZ')
 
+
 def enable():
     listener = LocationListener.get()
     listener.start()
-
-def disable():
-    listener = LocationListener.get()
-    listener.shut_down()

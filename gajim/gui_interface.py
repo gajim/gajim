@@ -57,8 +57,10 @@ from gajim.common import events
 from gajim.common import dbus_support
 if dbus_support.supported:
     from gajim.music_track_listener import MusicTrackListener
-    from gajim.common import location_listener
     import dbus
+
+if app.HAVE_GEOCLUE:
+    from gajim.common import location_listener
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
@@ -1119,14 +1121,13 @@ class Interface:
         if connected == invisible_show:
             return
         # send currently played music
-        if obj.conn.pep_supported and dbus_support.supported and \
-        app.config.get_per('accounts', account, 'publish_tune'):
+        if (obj.conn.pep_supported and dbus_support.supported and
+                app.config.get_per('accounts', account, 'publish_tune')):
             self.enable_music_listener()
         # enable location listener
-        if obj.conn.pep_supported and dbus_support.supported and \
-        app.config.get_per('accounts', account, 'publish_location'):
+        if (obj.conn.pep_supported and app.HAVE_GEOCLUE and
+                app.config.get_per('accounts', account, 'publish_location')):
             location_listener.enable()
-
 
     @staticmethod
     def handle_event_metacontacts(obj):

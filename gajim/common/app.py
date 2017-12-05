@@ -234,6 +234,13 @@ try:
 except (ImportError, ValueError):
     HAVE_FARSTREAM = False
 
+HAVE_GEOCLUE = True
+try:
+    gi.require_version('Geoclue', '2.0')
+    from gi.repository import Geoclue
+except (ImportError, ValueError):
+    HAVE_GEOCLUE = False
+
 HAVE_UPNP_IGD = True
 try:
     gi.require_version('GUPnPIgd', '1.0')
