@@ -472,6 +472,10 @@ class MucCapsCache:
                 if child.getNamespace() == nbxmpp.NS_DATA:
                     data.append(nbxmpp.DataForm(node=child))
 
+        if nbxmpp.NS_MUC not in features:
+            # Not a MUC, dont cache info
+            return
+
         self.cache[jid] = self.DiscoInfo(identities, features, data)
 
     def is_cached(self, jid):

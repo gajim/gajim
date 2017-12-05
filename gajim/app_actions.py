@@ -18,14 +18,15 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import sys
+import os
+
+from gi.repository import Gtk
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
-from gi.repository import Gtk
-import sys
-import os
-
 from gajim import config
 from gajim import dialogs
 from gajim import features_window
@@ -42,6 +43,11 @@ class AppActions():
     ''' Action Callbacks '''
     def __init__(self, application: Gtk.Application):
         self.application = application
+
+    # General Actions
+
+    def on_add_contact_jid(self, action, param):
+        dialogs.AddNewContactWindow(None, param.get_string())
 
     # Application Menu Actions
 
@@ -73,6 +79,12 @@ class AppActions():
 
     def on_quit(self, action, param):
         interface.roster.on_quit_request()
+
+    def on_new_chat(self, action, param):
+        if 'start_chat' in app.interface.instances:
+            app.interface.instances['start_chat'].present()
+        else:
+            app.interface.instances['start_chat'] = dialogs.StartChatDialog()
 
     # Accounts Actions
 
@@ -116,19 +128,13 @@ class AppActions():
                 'You cannot join a group chat while you are invisible'))
             return
         if 'join_gc' in interface.instances[account]:
-            interface.instances[account]['join_gc'].window.present()
+            interface.instances[account]['join_gc'].present()
         else:
-            try:
-                interface.instances[account]['join_gc'] = \
-                    dialogs.JoinGroupchatWindow(account)
-            except GajimGeneralException:
-                pass
+            interface.instances[account]['join_gc'] = \
+                dialogs.JoinGroupchatWindow(account, None)
 
     def on_add_contact(self, action, param):
         dialogs.AddNewContactWindow(param.get_string())
-
-    def on_new_chat(self, action, param):
-        dialogs.NewChatDialog(param.get_string())
 
     def on_single_message(self, action, param):
         dialogs.SingleMessageWindow(param.get_string(), action='send')

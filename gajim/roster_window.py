@@ -3091,15 +3091,11 @@ class RosterWindow:
             if app.connections[account].muc_jid[type_]:
                 # create the room on this muc server
                 if 'join_gc' in app.interface.instances[account]:
-                    app.interface.instances[account]['join_gc'].window.\
-                        destroy()
-                try:
+                    app.interface.instances[account]['join_gc'].destroy()
+                else:
                     app.interface.instances[account]['join_gc'] = \
-                        dialogs.JoinGroupchatWindow(account,
-                            app.connections[account].muc_jid[type_],
-                            automatic = {'invities': jid_list})
-                except GajimGeneralException:
-                    continue
+                        dialogs.JoinGroupchatWindow(
+                            account, None, automatic={'invities': jid_list})
                 break
 
     def on_invite_to_room(self, widget, list_, room_jid, room_account,
@@ -3676,16 +3672,10 @@ class RosterWindow:
                 'invisible'))
             return
         if 'join_gc' in app.interface.instances[account]:
-            app.interface.instances[account]['join_gc'].window.present()
+            app.interface.instances[account]['join_gc'].present()
         else:
-            try:
-                app.interface.instances[account]['join_gc'] = \
-                    dialogs.JoinGroupchatWindow(account)
-            except GajimGeneralException:
-                pass
-
-    def on_new_chat_menuitem_activate(self, widget, account):
-        dialogs.NewChatDialog(account)
+            app.interface.instances[account]['join_gc'] = \
+                    dialogs.JoinGroupchatWindow(account, None)
 
     def on_show_transports_action(self, action, param):
         app.config.set('show_transports_group', param.get_boolean())
@@ -4934,7 +4924,6 @@ class RosterWindow:
             account_context_menu = xml.get_object('account_context_menu')
 
             status_menuitem = xml.get_object('status_menuitem')
-            start_chat_menuitem = xml.get_object('start_chat_menuitem')
             join_group_chat_menuitem = xml.get_object(
                 'join_group_chat_menuitem')
             add_contact_menuitem = xml.get_object('add_contact_menuitem')
@@ -5022,9 +5011,6 @@ class RosterWindow:
             execute_command_menuitem.connect('activate',
                 self.on_execute_command, contact, account)
 
-            start_chat_menuitem.connect('activate',
-                self.on_new_chat_menuitem_activate, account)
-
             gc_sub_menu = Gtk.Menu() # gc is always a submenu
             join_group_chat_menuitem.set_submenu(gc_sub_menu)
             self.add_bookmarks_list(gc_sub_menu, account)
@@ -5033,7 +5019,7 @@ class RosterWindow:
             if app.connections[account].connected < 2:
                 for widget in (add_contact_menuitem, service_discovery_menuitem,
                 join_group_chat_menuitem, execute_command_menuitem,
-                pep_menuitem, start_chat_menuitem):
+                pep_menuitem):
                     widget.set_sensitive(False)
         else:
             xml = gtkgui_helpers.get_gtk_builder('zeroconf_context_menu.ui')

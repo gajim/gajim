@@ -174,7 +174,6 @@ class Config:
             'history_window_x-position': [ opt_int, 0 ],
             'history_window_y-position': [ opt_int, 0 ],
             'latest_disco_addresses': [ opt_str, '' ],
-            'recently_groupchat': [ opt_str, '' ],
             'time_stamp': [ opt_str, '[%X] ', _('This option let you customize timestamp that is printed in conversation. For exemple "[%H:%M] " will show "[hour:minute] ". See python doc on strftime for full documentation: http://docs.python.org/lib/module-time.html') ],
             'before_nickname': [ opt_str, '', _('Characters that are printed before the nickname in conversations') ],
             'after_nickname': [ opt_str, ':', _('Characters that are printed after the nickname in conversations') ],
@@ -409,6 +408,7 @@ class Config:
                     'oauth2_client_id': [ opt_str, '0000000044077801', _('client_id for OAuth 2.0 authentication.')],
                     'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for OAuth 2.0 authentication.')],
                     'opened_chat_controls': [opt_str, '', _('Space separated list of JIDs for which we want to re-open a chat window on next startup.')],
+                    'recent_groupchats': [ opt_str, '' ],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],

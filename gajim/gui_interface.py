@@ -101,6 +101,7 @@ from gajim import profile_window
 from gajim import config
 from threading import Thread
 from gajim.common import ged
+from gajim.common.caps_cache import muc_caps_cache
 
 from gajim.common.configpaths import gajimpaths
 config_filename = gajimpaths['CONFIG_FILE']
@@ -1757,6 +1758,49 @@ class Interface:
                 tv = ctrl.conv_textview
                 tv.scroll_to_end_iter()
 
+    def join_gc_minimal(self, account, room_jid, password=None):
+        if account is not None:
+            if app.in_groupchat(account, room_jid):
+                # If we already in the groupchat, join_gc_room will bring
+                # it to front
+                app.interface.join_gc_room(account, room_jid, '', '')
+                return
+
+            for bookmark in app.connections[account].bookmarks:
+                if bookmark['jid'] != room_jid:
+                    continue
+                app.interface.join_gc_room(
+                    account, room_jid, bookmark['nick'], bookmark['password'])
+                return
+
+        try:
+            room_jid = helpers.parse_jid(room_jid)
+        except helpers.InvalidFormat:
+            dialogs.ErrorDialog('Invalid JID',
+                                transient_for=app.app.get_active_window())
+            return
+
+        connected_accounts = app.get_connected_accounts()
+        if account is not None and account not in connected_accounts:
+            connected_accounts = None
+        if not connected_accounts:
+            dialogs.ErrorDialog(
+                _('You are not connected to the server'),
+                _('You can not join a group chat unless you are connected.'),
+                transient_for=app.app.get_active_window())
+            return
+
+        def _on_discover_result():
+            if not muc_caps_cache.is_cached(room_jid):
+                dialogs.ErrorDialog(_('JID is not a Groupchat'),
+                                    transient_for=app.app.get_active_window())
+                return
+            dialogs.JoinGroupchatWindow(account, room_jid, password=password)
+
+        disco_account = connected_accounts[0] if account is None else account
+        app.connections[disco_account].discoverMUC(
+            room_jid, _on_discover_result)
+
 ################################################################################
 ### Methods dealing with emoticons
 ################################################################################
@@ -1953,8 +1997,6 @@ class Interface:
                 win.set_active_tab(gc_ctrl)
             else:
                 self.roster.on_groupchat_maximized(None, room_jid, account)
-            dialogs.ErrorDialog(_('You are already in group chat %s') % \
-                room_jid)
             return
 
         invisible_show = app.SHOW_LIST.index('invisible')
@@ -2129,6 +2171,7 @@ class Interface:
 ################################################################################
 ### Other Methods
 ################################################################################
+
 
     @staticmethod
     def change_awn_icon_status(status):
@@ -2403,8 +2446,8 @@ class Interface:
         pixbuf = None
         try:
             if size is not None:
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                    path, size, size)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                    path, size, size, False)
             else:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
         except GLib.GError as error:
@@ -2454,7 +2497,7 @@ class Interface:
                     self.roster.add_groupchat(jid, account)
 
     def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
-                    nick):
+                        nick):
         """
         Add a bookmark for this account, sorted in bookmark list
         """
@@ -2471,10 +2514,6 @@ class Interface:
         # check for duplicate entry and respect alpha order
         for bookmark in app.connections[account].bookmarks:
             if bookmark['jid'] == bm['jid']:
-                dialogs.ErrorDialog(
-                    _('Bookmark already set'),
-                    _('Group Chat "%s" is already in your bookmarks.') % \
-                    bm['jid'])
                 return
             if bookmark['name'] > bm['name']:
                 place_found = True
@@ -2486,10 +2525,6 @@ class Interface:
             app.connections[account].bookmarks.append(bm)
         app.connections[account].store_bookmarks()
         gui_menu_builder.build_bookmark_menu(account)
-        dialogs.InformationDialog(
-            _('Bookmark has been added successfully'),
-            _('You can manage your bookmarks via Actions menu in your roster.'))
-
 
     # does JID exist only within a groupchat?
     def is_pm_contact(self, fjid, account):

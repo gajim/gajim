@@ -9,5 +9,4 @@ TryExec=gajim-remote
 StartupNotify=false
 Terminal=false
 Type=Application
-MimeType=x-scheme-handler/xmpp;
 NoDisplay=true

@@ -1400,13 +1400,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if 'join_gc' not in app.interface.instances[self.account]:
-            try:
-                dialogs.JoinGroupchatWindow(self.account, service)
-            except GajimGeneralException:
-                pass
-        else:
-            app.interface.instances[self.account]['join_gc'].window.present()
+        app.interface.join_gc_minimal(self.account, service)
 
     def update_actions(self):
         if self.execute_button:
@@ -1810,14 +1804,11 @@ class MucBrowser(AgentBrowser):
             return
         service = model[iter_][0]
         if 'join_gc' not in app.interface.instances[self.account]:
-            try:
-                dialogs.JoinGroupchatWindow(self.account, service)
-            except GajimGeneralException:
-                pass
+            app.interface.join_gc_minimal(self.account, service)
         else:
-            app.interface.instances[self.account]['join_gc']._set_room_jid(
-                service)
-            app.interface.instances[self.account]['join_gc'].window.present()
+            app.interface.instances[self.account]['join_gc'].set_room(service)
+            app.interface.instances[self.account]['join_gc'].present()
+            self.window.destroy()
 
     def update_actions(self):
         sens = self.window.services_treeview.get_selection().count_selected_rows()

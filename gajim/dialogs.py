@@ -38,6 +38,7 @@ from gi.repository import GLib
 import os
 import nbxmpp
 import time
+import locale
 
 from gajim import gtkgui_helpers
 from gajim import vcard
@@ -61,6 +62,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
 from gajim.common import dataforms
+from gajim.common.const import AvatarSize
+from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
@@ -2350,199 +2353,233 @@ class SubscriptionRequestWindow:
         gtkgui_helpers.popup_emoticons_under_button(menu, widget,
             self.window.get_window())
 
+class JoinGroupchatWindow(Gtk.ApplicationWindow):
+    def __init__(self, account, room_jid, password=None, automatic=None):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('JoinGroupchat')
+        self.set_application(app.app)
+        self.set_show_menubar(False)
+        self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_title(_('Join Groupchat'))
 
-class JoinGroupchatWindow:
-    def __init__(self, account=None, room_jid='', nick='', password='',
-    automatic=False):
-        """
-        Automatic is a dict like {'invities': []}. If automatic is not empty,
-        this means room must be automaticaly configured and when done, invities
-        must be automatically invited
-        """
-        self.window_account = None
-        if account:
-            if room_jid != '' and room_jid in app.gc_connected[account] and \
-            app.gc_connected[account][room_jid]:
-                ErrorDialog(_('You are already in group chat %s') % room_jid)
-                raise GajimGeneralException('You are already in this group chat')
-            if nick == '':
-                nick = app.nicks[account]
-            if app.connections[account].connected < 2:
-                ErrorDialog(_('You are not connected to the server'),
-                    _('You can not join a group chat unless you are connected.'))
-                raise GajimGeneralException('You must be connected to join a groupchat')
-            self.window_account = account
-
-        self.xml = gtkgui_helpers.get_gtk_builder('join_groupchat_window.ui')
-
-        account_label = self.xml.get_object('account_label')
-        account_combobox = self.xml.get_object('account_combobox')
-        account_label.set_no_show_all(False)
-        account_combobox.set_no_show_all(False)
-        liststore = Gtk.ListStore(str)
-        account_combobox.set_model(liststore)
-        cell = Gtk.CellRendererText()
-        account_combobox.pack_start(cell, True)
-        account_combobox.add_attribute(cell, 'text', 0)
-        account_combobox.set_active(-1)
-
-        # Add accounts, set current as active if it matches 'account'
-        for acct in [a for a in app.connections if \
-        app.account_is_connected(a)]:
-            if app.connections[acct].is_zeroconf:
-                continue
-            liststore.append([acct])
-            if account and account == acct:
-                account_combobox.set_active(liststore.iter_n_children(None)-1)
-
-        self.account = account
         self.automatic = automatic
-        self._empty_required_widgets = []
-
-        self.window = self.xml.get_object('join_groupchat_window')
-        self.window.set_transient_for(app.interface.roster.window)
-        self._room_jid_entry = self.xml.get_object('room_jid_entry')
-        self._nickname_entry = self.xml.get_object('nickname_entry')
-        self._password_entry = self.xml.get_object('password_entry')
-        self.server_comboboxtext = self.xml.get_object('server_comboboxtext')
-
-        self._nickname_entry.set_text(nick)
-        if password:
-            self._password_entry.set_text(password)
-        self.xml.connect_signals(self)
-        title = None
-        if account:
-            # now add us to open windows
-            app.interface.instances[account]['join_gc'] = self
-            if len(app.connections) > 1:
-                title = _('Join Group Chat with account %s') % account
-        if title is None:
-            title = _('Join Group Chat')
-        self.window.set_title(title)
-
-        self.browse_button = self.xml.get_object('browse_rooms_button')
-        self.browse_button.set_sensitive(False)
-
-        self.recently_combobox = self.xml.get_object('recently_combobox')
-        liststore = Gtk.ListStore(str, str)
-        self.recently_combobox.set_model(liststore)
-        cell = Gtk.CellRendererText()
-        self.recently_combobox.pack_start(cell, True)
-        self.recently_combobox.add_attribute(cell, 'text', 0)
-        self.recently_groupchat = app.config.get('recently_groupchat').split()
-
-        server_list = []
-        # get the muc server of our server
-        if 'jabber' in app.connections[account].muc_jid:
-            server_list.append(app.connections[account].muc_jid['jabber'])
-        for g in self.recently_groupchat:
-            r_jid = app.get_jid_without_resource(g)
-            nick = app.get_resource_from_jid(g)
-            if nick:
-                show = '%(nick)s on %(room_jid)s' % {'nick': nick,
-                    'room_jid': r_jid}
-            else:
-                show = r_jid
-            liststore.append([show, g])
-            server = app.get_server_from_jid(r_jid)
-            if server not in server_list and not server.startswith('irc'):
-                server_list.append(server)
-
-        for s in server_list:
-            self.server_comboboxtext.append_text(s)
-
-
-        self._set_room_jid(room_jid)
-
-        if len(self.recently_groupchat) == 0:
-            self.recently_combobox.set_sensitive(False)
-        elif room_jid == '':
-            self.recently_combobox.set_active(0)
-            self._room_jid_entry.select_region(0, -1)
-        elif room_jid != '':
-            self.xml.get_object('join_button').grab_focus()
-
-        if not self._room_jid_entry.get_text():
-            self._empty_required_widgets.append(self._room_jid_entry)
-        if not self._nickname_entry.get_text():
-            self._empty_required_widgets.append(self._nickname_entry)
-        if len(self._empty_required_widgets):
-            self.xml.get_object('join_button').set_sensitive(False)
-
-        if account and not app.connections[account].private_storage_supported:
-            self.xml.get_object('bookmark_checkbutton').set_sensitive(False)
-
+        self.password = password
         self.requested_jid = None
-        app.ged.register_event_handler('agent-info-received', ged.GUI1,
-            self._nec_agent_info_received)
-        app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
-            self._nec_agent_info_error_received)
+        self.room_jid = room_jid
+        self.account = account
+        self.minimal_mode = room_jid is not None
 
-        self.window.show_all()
+        glade_objects = ['grid', 'nick_entry', 'account_combo', 'jid_label',
+                         'bookmark_switch', 'autojoin_switch', 'headerbar',
+                         'account_label', 'password_entry', 'password_label',
+                         'join_button', 'button_box', 'server_label',
+                         'server_combo', 'recent_label', 'recent_combo',
+                         'room_label', 'room_entry', 'search_button']
 
-    def on_join_groupchat_window_destroy(self, widget):
-        """
-        Close window
-        """
-        app.ged.remove_event_handler('agent-info-received', ged.GUI1,
-            self._nec_agent_info_received)
-        app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
-            self._nec_agent_info_error_received)
-        if self.window_account and 'join_gc' in app.interface.instances[
-        self.window_account]:
-            # remove us from open windows
-            del app.interface.instances[self.window_account]['join_gc']
+        minimal_widgets = ['jid_label']
 
-    def on_join_groupchat_window_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape: # ESCAPE
-            widget.destroy()
+        extended_widgets = ['server_label', 'server_combo', 'recent_label',
+                            'recent_combo', 'room_label', 'room_entry',
+                            'search_button']
+        self.builder = gtkgui_helpers.get_gtk_builder(
+            'join_groupchat_window.ui')
+        for obj in glade_objects:
+            setattr(self, obj, self.builder.get_object(obj))
 
-    def on_required_entry_changed(self, widget):
-        if not widget.get_text():
-            self._empty_required_widgets.append(widget)
-            self.xml.get_object('join_button').set_sensitive(False)
+        self.add(self.grid)
+
+        if os.environ.get('GTK_CSD', '1') == '1':
+            self.set_titlebar(self.headerbar)
         else:
-            if widget in self._empty_required_widgets:
-                self._empty_required_widgets.remove(widget)
-            if not self._empty_required_widgets and self.account:
-                self.xml.get_object('join_button').set_sensitive(True)
-            text = self._room_jid_entry.get_text()
-            if widget == self._room_jid_entry and text.startswith('xmpp:'):
-                text = text[5:]
-                self._room_jid_entry.set_text(text)
-            if widget == self._room_jid_entry and '@' in text:
-                # Don't allow @ char in room entry
-                room_jid, server = text.split('@', 1)
-                self._room_jid_entry.set_text(room_jid)
-                if server:
-                    if '?' in server:
-                        server = server.split('?')[0]
-                    self.server_comboboxtext.get_child().set_text(server)
-                self.server_comboboxtext.grab_focus()
+            self.button_box.show()
 
-    def on_account_combobox_changed(self, widget):
-        model = widget.get_model()
-        iter_ = widget.get_active_iter()
-        self.account = model[iter_][0]
-        self.on_required_entry_changed(self._nickname_entry)
+        # Show widgets depending on the mode the window is in
+        if self.minimal_mode:
+            for widget in minimal_widgets:
+                getattr(self, widget).show()
+            self.jid_label.set_text(room_jid)
+        else:
+            for widget in extended_widgets:
+                getattr(self, widget).show()
+            self._fill_recent_and_servers(account)
 
-    def _set_room_jid(self, full_jid):
-        room_jid, nick = app.get_room_and_nick_from_fjid(full_jid)
+        if account is None:
+            connected_accounts = app.get_connected_accounts()
+            for acc in connected_accounts:
+                self.account_combo.append_text(acc)
+        else:
+            connected_accounts = [account]
+            self.account_combo.append_text(account)
+
+        self.builder.connect_signals(self)
+        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('destroy', self._on_destroy)
+
+        if not self.minimal_mode:
+            app.ged.register_event_handler('agent-info-received', ged.GUI1,
+                                           self._nec_agent_info_received)
+            app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
+                                           self._nec_agent_info_error_received)
+
+        # Show account combobox if there is more than one account
+        if len(connected_accounts) > 1:
+            self.account_combo.show()
+            self.account_label.show()
+
+        # Select first account
+        self.account_combo.set_active(0)
+        if not self.minimal_mode:
+            self.recent_combo.set_active(0)
+
+        if self.password is not None:
+            self.password_entry.set_text(self.password)
+
+        # Set bookmark switch sensitive if server supports bookmarks
+        acc = self.account_combo.get_active_text()
+        if not app.connections[acc].private_storage_supported:
+            self.bookmark_switch.set_sensitive(False)
+            self.autojoin_switch.set_sensitive(False)
+
+        # Show password field if we are in extended mode or
+        # The MUC is passwordprotected
+        if not self.minimal_mode or muc_caps_cache.supports(
+                room_jid, 'muc_passwordprotected'):
+            self.password_entry.show()
+            self.password_label.show()
+
+        self.show_all()
+
+    def set_room(self, room_jid):
         room, server = app.get_name_and_server_from_jid(room_jid)
-        self._room_jid_entry.set_text(room)
-        model = self.server_comboboxtext.get_model()
-        self.server_comboboxtext.get_child().set_text(server)
-        if nick:
-            self._nickname_entry.set_text(nick)
+        self.room_entry.set_text(room)
+        self.server_combo.get_child().set_text(server)
 
-    def on_recently_combobox_changed(self, widget):
-        model = widget.get_model()
-        iter_ = widget.get_active_iter()
-        full_jid = model[iter_][1]
-        self._set_room_jid(full_jid)
+    def _fill_recent_and_servers(self, account):
+        recent = app.get_recent_groupchats(account)
+        servers = []
+        for groupchat in recent:
+            text = '%s on %s@%s' % (groupchat.nickname,
+                                    groupchat.room,
+                                    groupchat.server)
+            self.recent_combo.append_text(text)
+            servers.append(groupchat.server)
 
-    def on_browse_rooms_button_clicked(self, widget):
-        server = self.server_comboboxtext.get_child().get_text()
+        for server in set(servers):
+            self.server_combo.append_text(server)
+
+        # Add own Server to ComboBox
+        muc_domain = app.get_muc_domain(account)
+        if muc_domain is not None:
+            self.server_combo.insert_text(0, muc_domain)
+
+    def _on_recent_changed(self, combo):
+        text = combo.get_active_text()
+        if text is None:
+            self.server_combo.set_active(0)
+            return
+        nickname, _, room_jid = text.split()
+        room, server = app.get_name_and_server_from_jid(room_jid)
+        self.room_entry.set_text(room)
+        self.nick_entry.set_text(nickname)
+        self.server_combo.get_child().set_text(server)
+
+    def _on_account_combo_changed(self, combo):
+        account = combo.get_active_text()
+        self.nick_entry.set_text(app.nicks[account])
+
+    def _on_key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+        if event.keyval == Gdk.KEY_Return:
+            self._on_join_clicked()
+            return True
+
+    def _on_join_clicked(self, *args):
+        account = self.account_combo.get_active_text()
+        nickname = self.nick_entry.get_text()
+
+        if not self.minimal_mode:
+            server = self.server_combo.get_active_text()
+            room = self.room_entry.get_text()
+            if room == '':
+                ErrorDialog(_('Invalid Room'),
+                            _('Please choose a room'), transient_for=self)
+                return
+            self.room_jid = '%s@%s' % (room, server)
+
+        if app.in_groupchat(account, self.room_jid):
+            # If we already in the groupchat, join_gc_room will bring
+            # it to front
+            app.interface.join_gc_room(account, self.room_jid, nickname, '')
+            self.destroy()
+            return
+
+        if nickname == '':
+            ErrorDialog(_('Invalid Nickname'),
+                        _('Please choose a nickname'), transient_for=self)
+            return
+
+        try:
+            helpers.parse_resource(nickname)
+        except helpers.InvalidFormat as error:
+            ErrorDialog(_('Invalid Nickname'), str(error), transient_for=self)
+            return
+
+        try:
+            helpers.parse_jid(self.room_jid)
+        except helpers.InvalidFormat as error:
+            ErrorDialog(_('Invalid JID'), str(error), transient_for=self)
+            return
+
+        if not app.account_is_connected(account):
+            ErrorDialog(
+                _('You are not connected to the server'),
+                _('You can not join a group chat unless you are connected.'),
+                transient_for=self)
+            return
+
+        password = self.password_entry.get_text()
+        self._add_bookmark(account, nickname, password)
+        app.add_recent_groupchat(account, self.room_jid, nickname)
+
+        if self.automatic:
+            app.automatic_rooms[self.account][self.room_jid] = self.automatic
+
+        app.interface.join_gc_room(account, self.room_jid, nickname, password)
+        self.destroy()
+
+    def _on_cancel_clicked(self, *args):
+        self.destroy()
+
+    def _on_bookmark_activate(self, switch, param):
+        self.autojoin_switch.set_sensitive(switch.get_active())
+
+    def _add_bookmark(self, account, nickname, password):
+        if not app.connections[account].private_storage_supported:
+            return
+
+        add_bookmark = self.bookmark_switch.get_active()
+        if not add_bookmark:
+            return
+
+        autojoin = int(self.autojoin_switch.get_active())
+
+        # Add as bookmark, with autojoin and not minimized
+        name = app.get_nick_from_jid(self.room_jid)
+        app.interface.add_gc_bookmark(
+            account, name, self.room_jid, autojoin, 0, password, nickname)
+
+    def _on_destroy(self, *args):
+        if not self.minimal_mode:
+            del app.interface.instances[self.account]['join_gc']
+            app.ged.remove_event_handler('agent-info-received', ged.GUI1,
+                                         self._nec_agent_info_received)
+            app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
+                                         self._nec_agent_info_error_received)
+
+    def _on_search_clicked(self, widget):
+        server = self.server_combo.get_active_text()
         self.requested_jid = server
         app.connections[self.account].discoverInfo(server)
 
@@ -2552,9 +2589,9 @@ class JoinGroupchatWindow:
         if obj.jid != self.requested_jid:
             return
         self.requested_jid = None
-        window = app.interface.instances[self.account]['join_gc'].window
-        ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
-            obj.jid, transient_for=window)
+        ErrorDialog(_('Wrong server'),
+                    _('%s is not a groupchat server') % obj.jid,
+                    transient_for=self)
 
     def _nec_agent_info_received(self, obj):
         if obj.conn.name != self.account:
@@ -2563,9 +2600,9 @@ class JoinGroupchatWindow:
             return
         self.requested_jid = None
         if nbxmpp.NS_MUC not in obj.features:
-            window = app.interface.instances[self.account]['join_gc'].window
-            ErrorDialog(_('Wrong server'), _('%s is not a groupchat server') % \
-                obj.jid, transient_for=window)
+            ErrorDialog(_('Wrong server'),
+                        _('%s is not a groupchat server') % obj.jid,
+                        transient_for=self)
             return
         if obj.jid in app.interface.instances[self.account]['disco']:
             app.interface.instances[self.account]['disco'][obj.jid].window.\
@@ -2573,98 +2610,13 @@ class JoinGroupchatWindow:
         else:
             try:
                 # Object will add itself to the window dict
-                import disco
-                disco.ServiceDiscoveryWindow(self.account, obj.jid,
+                from gajim.disco import ServiceDiscoveryWindow
+                ServiceDiscoveryWindow(
+                    self.account, obj.jid,
                     initial_identities=[{'category': 'conference',
-                    'type': 'text'}])
+                                         'type': 'text'}])
             except GajimGeneralException:
                 pass
-
-    def on_server_entry_changed(self, widget):
-        if not widget.get_text():
-            self.browse_button.set_sensitive(False)
-        else:
-            self.browse_button.set_sensitive(True)
-
-    def on_cancel_button_clicked(self, widget):
-        """
-        When Cancel button is clicked
-        """
-        self.window.destroy()
-
-    def on_bookmark_checkbutton_toggled(self, widget):
-        auto_join_checkbutton = self.xml.get_object('auto_join_checkbutton')
-        if widget.get_active():
-            auto_join_checkbutton.set_sensitive(True)
-        else:
-            auto_join_checkbutton.set_sensitive(False)
-
-    def on_join_button_clicked(self, widget):
-        """
-        When Join button is clicked
-        """
-        if not self.account:
-            ErrorDialog(_('Invalid Account'),
-                _('You have to choose an account from which you want to join the '
-                'groupchat.'))
-            return
-        nickname = self._nickname_entry.get_text()
-        server = self.server_comboboxtext.get_child().get_text()
-        room = self._room_jid_entry.get_text().strip()
-        room_jid = room + '@' + server
-        password = self._password_entry.get_text()
-        try:
-            nickname = helpers.parse_resource(nickname)
-        except Exception:
-            ErrorDialog(_('Invalid Nickname'),
-                    _('The nickname contains invalid characters.'))
-            return
-        user, server, resource = helpers.decompose_jid(room_jid)
-        if not user or not server or resource:
-            ErrorDialog(_('Invalid group chat JID'),
-                    _('Please enter the group chat JID as room@server.'))
-            return
-        try:
-            room_jid = helpers.parse_jid(room_jid)
-        except Exception:
-            ErrorDialog(_('Invalid group chat JID'),
-                    _('The group chat JID contains invalid characters.'))
-            return
-
-        if app.contacts.get_contact(self.account, room_jid) and \
-        not app.contacts.get_contact(self.account, room_jid).is_groupchat():
-            ErrorDialog(_('This is not a group chat'),
-                _('%(room_jid)s is already in your roster. Please check if '
-                '%(room_jid)s is a correct group chat name. If it is, delete '
-                'it from your roster and try joining the group chat again.') % \
-                {'room_jid': room_jid, 'room_jid': room_jid})
-            return
-
-        full_jid = room_jid + '/' + nickname
-        if full_jid in self.recently_groupchat:
-            self.recently_groupchat.remove(full_jid)
-        self.recently_groupchat.insert(0, full_jid)
-        if len(self.recently_groupchat) > 10:
-            self.recently_groupchat = self.recently_groupchat[0:10]
-        app.config.set('recently_groupchat',
-            ' '.join(self.recently_groupchat))
-
-        if self.xml.get_object('bookmark_checkbutton').get_active():
-            if self.xml.get_object('auto_join_checkbutton').get_active():
-                autojoin = '1'
-            else:
-                autojoin = '0'
-            # Add as bookmark, with autojoin and not minimized
-            name = app.get_nick_from_jid(room_jid)
-            app.interface.add_gc_bookmark(self.account, name, room_jid,
-                autojoin, autojoin, password, nickname)
-
-        if self.automatic:
-            app.automatic_rooms[self.account][room_jid] = self.automatic
-
-        app.interface.join_gc_room(self.account, room_jid, nickname, password)
-
-        self.window.destroy()
 
 class SynchroniseSelectAccountDialog:
     def __init__(self, account):
@@ -2807,59 +2759,323 @@ class SynchroniseSelectContactsDialog:
             iter_ = model.iter_next(iter_)
         self.dialog.destroy()
 
-class NewChatDialog(InputDialog):
-    def __init__(self, account):
-        self.account = account
+class StartChatDialog(Gtk.ApplicationWindow):
+    def __init__(self):
+        # Must be before ApplicationWindow.__init__
+        # or we get our own window
+        active_window = app.app.get_active_window()
 
-        if len(app.connections) > 1:
-            title = _('Start Chat with account %s') % account
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('StartChatDialog')
+        self.set_application(app.app)
+        mode = app.config.get('one_message_window') != 'always_with_roster'
+        if active_window == app.interface.roster.window and mode:
+            self.set_position(Gtk.WindowPosition.CENTER)
         else:
-            title = _('Start Chat')
-        prompt_text = _('Fill in the nickname or the JID of the contact you '
-        	'would like\nto send a chat message to:')
-        InputDialog.__init__(self, title, prompt_text, is_modal=False)
-        self.input_entry.set_placeholder_text(_('Nickname / JID'))
+            self.set_transient_for(active_window)
+            self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_show_menubar(False)
+        self.set_title(_('Start new Conversation'))
+        self.set_default_size(-1, 400)
 
-        self.completion_dict = {}
-        liststore = gtkgui_helpers.get_completion_liststore(self.input_entry)
-        self.completion_dict = helpers.get_contact_dict_for_account(account)
-        # add all contacts to the model
-        keys = sorted(self.completion_dict.keys())
-        for jid in keys:
-            contact = self.completion_dict[jid]
-            img = app.interface.jabber_state_images['16'][contact.show]
-            liststore.append((img.get_pixbuf(), jid))
+        self.builder = gtkgui_helpers.get_gtk_builder(
+            'start_chat_dialog.ui')
+        self.listbox = self.builder.get_object('listbox')
+        self.search_entry = self.builder.get_object('search_entry')
+        self.box = self.builder.get_object('box')
 
-        self.ok_handler = self.new_chat_response
-        okbutton = self.xml.get_object('okbutton')
-        okbutton.connect('clicked', self.on_okbutton_clicked)
-        cancelbutton = self.xml.get_object('cancelbutton')
-        cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
-        self.dialog.set_transient_for(app.interface.roster.window)
-        self.dialog.show_all()
+        self.add(self.box)
 
-    def new_chat_response(self, jid):
-        """
-        Called when ok button is clicked
-        """
-        if app.connections[self.account].connected <= 1:
-            #if offline or connecting
-            ErrorDialog(_('Connection not available'),
-                _('Please make sure you are connected with "%s".') % self.account)
-            return
+        self.new_contact_row_visible = False
+        self.new_contact_rows = {}
+        self.new_groupchat_rows = {}
+        self.accounts = app.connections.keys()
+        self.add_contacts()
+        self.add_groupchats()
 
-        if jid in self.completion_dict:
-            jid = self.completion_dict[jid].jid
+        self.search_entry.connect('search-changed',
+                                  self._on_search_changed)
+        self.search_entry.connect('next-match',
+                                  self._select_new_match, 'next')
+        self.search_entry.connect('previous-match',
+                                  self._select_new_match, 'prev')
+        self.search_entry.connect('stop-search',
+                                  lambda *args: self.search_entry.set_text(''))
+
+        self.listbox.set_filter_func(self._filter_func, None)
+        self.listbox.set_sort_func(self._sort_func, None)
+        self.listbox.connect('row-activated', self._on_row_activated)
+
+        self.connect('key-press-event', self._on_key_press)
+        self.connect('destroy', self._destroy)
+
+        self.select_first_row()
+        self.show_all()
+
+    def add_contacts(self):
+        show_account = len(self.accounts) > 1
+        for account in self.accounts:
+            self.new_contact_rows[account] = None
+            for jid in app.contacts.get_jid_list(account):
+                contact = app.contacts.get_contact_with_highest_priority(
+                    account, jid)
+                if contact.is_groupchat():
+                    continue
+                row = ContactRow(account, contact, jid,
+                                 contact.get_shown_name(), show_account)
+                self.listbox.add(row)
+
+    def add_groupchats(self):
+        show_account = len(self.accounts) > 1
+        for account in self.accounts:
+            self.new_groupchat_rows[account] = None
+            bookmarks = app.connections[account].bookmarks
+            groupchats = {}
+            for bookmark in bookmarks:
+                groupchats[bookmark['jid']] = bookmark['name']
+
+            for jid in app.contacts.get_gc_list(account):
+                if jid in groupchats:
+                    continue
+                groupchats[jid] = None
+
+            for jid in groupchats:
+                name = groupchats[jid]
+                if name is None:
+                    name = app.get_nick_from_jid(groupchats[jid])
+                row = ContactRow(account, None, jid, name,
+                                 show_account, True)
+                self.listbox.add(row)
+
+    def _on_row_activated(self, listbox, row):
+        row = row.get_child()
+        self._start_new_chat(row)
+
+    def _on_key_press(self, widget, event):
+        if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
+            self.search_entry.emit('next-match')
+            return True
+        elif (event.state == Gdk.ModifierType.SHIFT_MASK and
+              event.keyval == Gdk.KEY_ISO_Left_Tab):
+            self.search_entry.emit('previous-match')
+            return True
+        elif event.keyval == Gdk.KEY_Up:
+            self.search_entry.emit('previous-match')
+            return True
+        elif event.keyval == Gdk.KEY_Escape:
+            if self.search_entry.get_text() != '':
+                self.search_entry.emit('stop-search')
+            else:
+                self.destroy()
+            return True
+        elif event.keyval == Gdk.KEY_Return:
+            row = self.listbox.get_selected_row()
+            if row is not None:
+                row.emit('activate')
+            return True
         else:
+            self.search_entry.grab_focus_without_selecting()
+
+    def _start_new_chat(self, row):
+        if row.new:
+            if not app.account_is_connected(row.account):
+                ErrorDialog(
+                    _('You are not connected to the server'),
+                    _('You can not start a new conversation'
+                      ' unless you are connected.'),
+                    transient_for=self)
+                return
             try:
-                jid = helpers.parse_jid(jid)
+                helpers.parse_jid(row.jid)
             except helpers.InvalidFormat as e:
-                ErrorDialog(_('Invalid JID'), str(e))
+                ErrorDialog(_('Invalid JID'), str(e), transient_for=self)
                 return
-            except:
-                ErrorDialog(_('Invalid JID'), _('Unable to parse "%s".') % jid)
+
+        if row.groupchat:
+            app.interface.join_gc_minimal(row.account, row.jid)
+        else:
+            app.interface.new_chat_from_jid(row.account, row.jid)
+
+        self.destroy()
+
+    def _on_search_changed(self, entry):
+        search_text = entry.get_text()
+        if '@' in search_text:
+            self._add_new_jid_row()
+            self._update_new_jid_rows(search_text)
+        else:
+            self._remove_new_jid_row()
+        self.listbox.invalidate_filter()
+
+    def _add_new_jid_row(self):
+        if self.new_contact_row_visible:
+            return
+        for account in self.new_contact_rows:
+            show_account = len(self.accounts) > 1
+            row = ContactRow(account, None, '', None, show_account)
+            self.new_contact_rows[account] = row
+            group_row = ContactRow(account, None, '', None, show_account, True)
+            self.new_groupchat_rows[account] = group_row
+            self.listbox.add(row)
+            self.listbox.add(group_row)
+            row.get_parent().show_all()
+        self.new_contact_row_visible = True
+
+    def _remove_new_jid_row(self):
+        if not self.new_contact_row_visible:
+            return
+        for account in self.new_contact_rows:
+            self.listbox.remove(self.new_contact_rows[account].get_parent())
+            self.listbox.remove(self.new_groupchat_rows[account].get_parent())
+        self.new_contact_row_visible = False
+
+    def _update_new_jid_rows(self, search_text):
+        for account in self.new_contact_rows:
+            self.new_contact_rows[account].update_jid(search_text)
+            self.new_groupchat_rows[account].update_jid(search_text)
+
+    def _select_new_match(self, entry, direction):
+        selected_row = self.listbox.get_selected_row()
+        index = selected_row.get_index()
+
+        if direction == 'next':
+            index += 1
+        else:
+            index -= 1
+
+        while True:
+            new_selected_row = self.listbox.get_row_at_index(index)
+            if new_selected_row is None:
                 return
-        app.interface.new_chat_from_jid(self.account, jid)
+            if new_selected_row.get_child_visible():
+                self.listbox.select_row(new_selected_row)
+                new_selected_row.grab_focus()
+                return
+            if direction == 'next':
+                index += 1
+            else:
+                index -= 1
+
+    def select_first_row(self):
+        first_row = self.listbox.get_row_at_y(0)
+        self.listbox.select_row(first_row)
+
+    def _filter_func(self, row, user_data):
+        search_text = self.search_entry.get_text().lower()
+        search_text_list = search_text.split()
+        row_text = row.get_child().get_search_text().lower()
+        for text in search_text_list:
+            if text not in row_text:
+                GLib.timeout_add(50, self.select_first_row)
+                return
+        GLib.timeout_add(50, self.select_first_row)
+        return True
+
+    @staticmethod
+    def _sort_func(row1, row2, user_data):
+        name1 = row1.get_child().get_search_text()
+        name2 = row2.get_child().get_search_text()
+        account1 = row1.get_child().account
+        account2 = row2.get_child().account
+        is_groupchat1 = row1.get_child().groupchat
+        is_groupchat2 = row2.get_child().groupchat
+        new1 = row1.get_child().new
+        new2 = row2.get_child().new
+
+        result = locale.strcoll(account1.lower(), account2.lower())
+        if result != 0:
+            return result
+
+        if new1 != new2:
+            return 1 if new1 else -1
+
+        if is_groupchat1 != is_groupchat2:
+            return 1 if is_groupchat1 else -1
+
+        return locale.strcoll(name1.lower(), name2.lower())
+
+    @staticmethod
+    def _destroy(*args):
+        del app.interface.instances['start_chat']
+
+class ContactRow(Gtk.Grid):
+    def __init__(self, account, contact, jid, name, show_account,
+                 groupchat=False):
+        Gtk.Grid.__init__(self)
+        self.set_column_spacing(12)
+        self.set_size_request(260, -1)
+        self.account = account
+        self.account_label = app.config.get_per(
+            'accounts', account, 'account_label') or account
+        self.show_account = show_account
+        self.jid = jid
+        self.contact = contact
+        self.name = name
+        self.groupchat = groupchat
+        self.new = jid == ''
+
+        if self.groupchat:
+            if self.new:
+                muc_image = app.interface.jabber_state_images['32']['muc_inactive']
+            else:
+                muc_image = app.interface.jabber_state_images['32']['muc_active']
+            image = Gtk.Image.new_from_pixbuf(muc_image.get_pixbuf())
+        else:
+            avatar = app.contacts.get_avatar(account, jid, AvatarSize.ROSTER)
+            if avatar is None:
+                image = Gtk.Image.new_from_icon_name(
+                    'avatar-default', Gtk.IconSize.DND)
+            else:
+                image = Gtk.Image.new_from_pixbuf(avatar)
+        self.add(image)
+
+        middle_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        middle_box.set_hexpand(True)
+
+        if self.name is None:
+            if self.groupchat:
+                self.name = _('New Groupchat')
+            else:
+                self.name = _('New Contact')
+
+        self.name_label = Gtk.Label(self.name)
+        self.name_label.set_halign(Gtk.Align.START)
+        self.name_label.get_style_context().add_class('bold16')
+
+        status = contact.show if contact else 'offline'
+        css_class = helpers.get_css_show_color(status)
+        if css_class is not None:
+            self.name_label.get_style_context().add_class(css_class)
+        middle_box.add(self.name_label)
+
+        self.jid_label = Gtk.Label(jid)
+        self.jid_label.set_halign(Gtk.Align.START)
+        middle_box.add(self.jid_label)
+
+        self.add(middle_box)
+
+        if show_account:
+            account_label = Gtk.Label(self.account_label)
+            account_label.set_halign(Gtk.Align.START)
+            account_label.set_valign(Gtk.Align.START)
+
+            right_box = Gtk.Box()
+            right_box.set_vexpand(True)
+            right_box.add(account_label)
+            self.add(right_box)
+
+        self.show_all()
+
+    def update_jid(self, jid):
+        self.jid = jid
+        self.jid_label.set_text(jid)
+
+    def get_search_text(self):
+        if self.contact is None and not self.groupchat:
+            return self.jid
+        if self.show_account:
+            return '%s %s %s' % (self.name, self.jid, self.account_label)
+        return '%s %s' % (self.name, self.jid)
 
 class ChangePasswordDialog:
     def __init__(self, account, on_response, transient_for=None):
@@ -4476,16 +4692,13 @@ class InvitationReceivedDialog:
         sectext += '\n\n' + _('Do you want to accept the invitation?')
 
         def on_yes(checked, text):
-            try:
-                if self.is_continued:
-                    app.interface.join_gc_room(self.account, self.room_jid,
-                        app.nicks[self.account], self.password,
-                        is_continued=True)
-                else:
-                    JoinGroupchatWindow(self.account, self.room_jid,
-                        password=self.password)
-            except GajimGeneralException:
-                pass
+            if self.is_continued:
+                app.interface.join_gc_room(self.account, self.room_jid,
+                    app.nicks[self.account], self.password,
+                    is_continued=True)
+            else:
+                app.interface.join_gc_minimal(
+                    self.account, self.room_jid, password=self.password)
 
         def on_no(text):
             app.connections[account].decline_invitation(self.room_jid,
@@ -4828,7 +5041,7 @@ class TransformChatToMUC:
         if 'jabber' in app.connections[account].muc_jid:
             server_list.append(app.connections[account].muc_jid['jabber'])
         # add servers or recently joined groupchats
-        recently_groupchat = app.config.get('recently_groupchat').split()
+        recently_groupchat = app.config.get_per('accounts', account, 'recent_groupchats').split()
         for g in recently_groupchat:
             server = app.get_server_from_jid(g)
             if server not in server_list and not server.startswith('irc'):

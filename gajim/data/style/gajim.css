@@ -86,4 +86,16 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
                              background-color: @theme_unfocused_bg_color;
                              color: @theme_text_color; }
 
+/* StartChatListBox */
+#StartChatListBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+#StartChatListBox > row:last-child { border-bottom: 0px}
+#StartChatListBox > row.activatable:active { box-shadow: none; }
+#StartChatListBox > row { padding: 10px 20px 10px 10px; }
+#StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
+/* Text style */
+
+.bold16 { font-size: 16px; font-weight: bold; }
+.status-away { color: #ff8533;}
+.status-dnd { color: #e62e00;}
+.status-online { color: #66bf10;}

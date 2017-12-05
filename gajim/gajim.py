@@ -60,7 +60,8 @@ class GajimApplication(Gtk.Application):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
-        Gtk.Application.__init__(self, application_id='org.gajim.Gajim')
+        Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
+                                 flags=Gio.ApplicationFlags.HANDLES_OPEN)
 
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
@@ -89,13 +90,11 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show all warnings'))
-        self.add_main_option(GLib.OPTION_REMAINING, 0, GLib.OptionFlags.HIDDEN,
-                             GLib.OptionArg.STRING_ARRAY,
-                             "")
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
+        self.connect('open', self._open)
 
         self.profile = ''
         self.config_path = None
@@ -235,6 +234,28 @@ class GajimApplication(Gtk.Application):
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
 
+    def _open(self, application, file, hint, *args):
+        for arg in file:
+            uri = arg.get_uri()
+            # remove xmpp:///
+            uri = uri[8:]
+            jid, cmd = uri.split('?')
+            if cmd == 'join':
+                self.interface.join_gc_minimal(None, jid)
+            elif cmd == 'roster':
+                self.activate_action('add-contact', GLib.Variant('s', jid))
+            elif cmd == 'message':
+                from gajim.common import app
+                accounts = list(app.connections.keys())
+                if not accounts:
+                    continue
+                if len(accounts) == 1:
+                    app.interface.new_chat_from_jid(accounts[0], jid)
+                else:
+                    self.activate_action('start-chat')
+                    start_chat_window = app.interface.instances['start_chat']
+                    start_chat_window.search_entry.set_text(jid)
+
     def do_shutdown(self, *args):
         Gtk.Application.do_shutdown(self)
         # Shutdown GUI and save config
@@ -274,10 +295,6 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
         if options.contains('warnings'):
             self.show_warnings()
-        if options.contains(GLib.OPTION_REMAINING):
-            unhandled = options.lookup_value(GLib.OPTION_REMAINING).get_strv()
-            print('Error: Unhandled arguments: %s' % unhandled)
-            return 0
         return -1
 
     def show_warnings(self):
@@ -301,7 +318,6 @@ class GajimApplication(Gtk.Application):
 
         self.account_actions = [
             ('-start-single-chat', action.on_single_message, 'online', 's'),
-            ('-start-chat', action.on_new_chat, 'online', 's'),
             ('-join-groupchat', action.on_join_gc, 'online', 's'),
             ('-add-contact', action.on_add_contact, 'online', 's'),
             ('-services', action.on_service_disco, 'online', 's'),
@@ -342,6 +358,7 @@ class GajimApplication(Gtk.Application):
             ('accounts', action.on_accounts),
             ('add-account', action.on_add_account),
             ('manage-proxies', action.on_manage_proxies),
+            ('start-chat', action.on_new_chat),
             ('bookmarks', action.on_manage_bookmarks),
             ('history-manager', action.on_history_manager),
             ('preferences', action.on_preferences),
@@ -354,6 +371,10 @@ class GajimApplication(Gtk.Application):
             ('about', action.on_about),
             ('faq', action.on_faq),
         ]
+
+        act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
+        act.connect("activate", action.on_add_contact_jid)
+        self.add_action(act)
 
         for action in self.general_actions:
             action_name, func = action
