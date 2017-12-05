@@ -25,6 +25,7 @@
 - gir1.2-farstream-0.2, gir1.2-gstreamer-1.0 and gir1.2-gst-plugins-base-1.0 for audio and video calls
 - gir1.2-gupnpigd-1.0 for better NAT traversing
 - gir1.2-networkmanager-1.0 for network lose detection
+- gir1.2-geoclue-2.0 for sharing your location
 - python3-idna and python3-precis-i18n for correctly parsing JIDs
 
 ### Compile-time Requirements
