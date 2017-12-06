@@ -1294,7 +1294,7 @@ class ConversationTextview(GObject.GObject):
                 self.last_time_printout = tim
                 if app.config.get('print_time_fuzzy') > 0:
                     tim_format = self.fc.fuzzy_time(
-                        app.config.get('print_time_fuzzy'), tim)
+                        app.config.get('print_time_fuzzy'), local_tim)
                 else:
                     tim_format = self.get_time_to_show(local_tim, direction_mark)
                 buffer_.insert_with_tags_by_name(iter_, tim_format + '\n',
