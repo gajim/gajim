@@ -14,7 +14,7 @@
 
 ### Optional Runtime Requirements
 
-- python-pillow for support of webp avatars
+- python3-pil (pillow) for support of webp avatars
 - python3-crypto to enable End to end encryption
 - python3-gnupg to enable GPG encryption
 - For zeroconf (bonjour) you need dbus-glib, python-avahi
