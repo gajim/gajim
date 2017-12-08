@@ -124,8 +124,7 @@ class AppActions():
         account = param.get_string()
         invisible_show = app.SHOW_LIST.index('invisible')
         if app.connections[account].connected == invisible_show:
-            dialogs.ErrorDialog(_(
-                'You cannot join a group chat while you are invisible'))
+            app.interface.raise_dialog('join-while-invisible')
             return
         if 'join_gc' in interface.instances[account]:
             interface.instances[account]['join_gc'].present()

@@ -177,10 +177,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     def on_remove_account(self, button, account):
         if app.events.get_events(account):
-            dialogs.ErrorDialog(
-                _('Unread events'),
-                _('Read all pending events before removing this account.'),
-                transient_for=self)
+            app.interface.raise_dialog('unread-events-on-remove')
             return
 
         if app.config.get_per('accounts', account, 'is_zeroconf'):
@@ -361,10 +358,7 @@ class Account(Gtk.Box):
         if (account in app.connections and
                 app.connections[account].connected > 0):
             # connecting or connected
-            dialogs.ErrorDialog(
-                _('You are currently connected to the server'),
-                _('To disable the account, you must be disconnected.'),
-                transient_for=self.parent)
+            app.interface.raise_dialog('connected-on-disable-account')
             switch.set_active(not state)
             return
         if state:

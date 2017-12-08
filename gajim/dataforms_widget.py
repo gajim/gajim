@@ -37,6 +37,7 @@ from gajim import dialogs
 
 from gajim.common import dataforms
 from gajim.common import helpers
+from gajim.common import app
 
 import itertools
 
@@ -641,12 +642,10 @@ class SingleForm(Gtk.Table, object):
         try:
             newtext = helpers.parse_jid(newtext)
         except helpers.InvalidFormat as s:
-            dialogs.ErrorDialog(_('Invalid JID'), str(s))
+            app.interface.raise_dialog('invalid-jid-with-error', str(s))    
             return
         if newtext in field.values:
-            dialogs.ErrorDialog(
-                    _('JID already in list'),
-                    _('The JID you entered is already in the list. Choose another one.'))
+            app.interface.raise_dialog('jid-in-list')
             GLib.idle_add(treeview.set_cursor, path)
             return
         model[path][0]=newtext

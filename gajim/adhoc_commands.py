@@ -364,10 +364,8 @@ class CommandWindow:
         if self.data_form_widget.get_data_form():
             df = self.data_form_widget.get_data_form()
             if not df.is_valid():
-                dialogs.ErrorDialog(
-                    _('Invalid Form'),
-                    _('The form is not filled correctly.'),
-                    transient_for=self.window)
+                app.interface.raise_dialog(
+                    'invalid-form', transient_for=self.window)
                 self.data_form_widget.set_sensitive(True)
                 return
             self.data_form_widget.data_form.type_ = 'submit'

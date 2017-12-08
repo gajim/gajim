@@ -22,10 +22,52 @@ from collections import namedtuple
 from gi.repository import GLib
 
 from gajim.common.app import app
+from gajim.dialogs import ErrorDialog
 
 Message = namedtuple('Message', ['title', 'text', 'dialog'])
 
-messages = {}
+messages = {
+    'start-chat-not-connected': Message(
+        _('You are not connected to the server'),
+        _('You can not start a new conversation unless you are connected.'),
+        ErrorDialog),
+
+    'invalid-jid-with-error': Message(
+        _('Invalid JID'),
+        '%s',
+        ErrorDialog),
+
+    'unread-events-on-remove-account': Message(
+        _('Unread events'),
+        _('Read all pending events before removing this account.'),
+        ErrorDialog),
+
+    'connected-on-disable-account': Message(
+        _('You are currently connected to the server'),
+        _('To disable the account, you must be disconnected.'),
+        ErrorDialog),
+
+    'invalid-form': Message(
+        _('Invalid Form'),
+        _('The form is not filled correctly.'),
+        ErrorDialog),
+
+    'join-while-invisible': Message(
+        _('Invisible'),
+        _('You cannot join a group chat while you are invisible'),
+        ErrorDialog),
+
+    'not-connected-while-sending': Message(
+        _('A connection is not available'),
+        _('Your message can not be sent until you are connected.'),
+        ErrorDialog),
+
+    'jid-in-list': Message(
+        _('JID already in list'),
+        _('The JID you entered is already in the list. Choose another one.'),
+        ErrorDialog),
+
+    }
 
 
 def get_dialog(name, *args, **kwargs):
@@ -42,8 +84,10 @@ def get_dialog(name, *args, **kwargs):
 
     if args:
         message_text = message.text % args
-    else:
+    elif kwargs:
         message_text = message.text % kwargs
+    else:
+        message_text = message.text
     dialog = message.dialog(message.title,
                             GLib.markup_escape_text(message_text),
                             transient_for=transient_for)

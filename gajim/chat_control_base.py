@@ -694,8 +694,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
             if send_message and app.connections[self.account].connected < 2:
                 # we are not connected
-                dialogs.ErrorDialog(_('A connection is not available'),
-                    _('Your message can not be sent until you are connected.'))
+                app.interface.raise_dialog('not-connected-while-sending')
             elif send_message:
                 self.send_message(message, xhtml=xhtml)
             else:

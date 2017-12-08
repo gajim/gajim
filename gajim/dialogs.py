@@ -2879,16 +2879,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _start_new_chat(self, row):
         if row.new:
             if not app.account_is_connected(row.account):
-                ErrorDialog(
-                    _('You are not connected to the server'),
-                    _('You can not start a new conversation'
-                      ' unless you are connected.'),
-                    transient_for=self)
+                app.interface.raise_dialog('start-chat-not-connected')
                 return
             try:
                 helpers.parse_jid(row.jid)
             except helpers.InvalidFormat as e:
-                ErrorDialog(_('Invalid JID'), str(e), transient_for=self)
+                app.interface.raise_dialog('invalid-jid-with-error', str(e))
                 return
 
         if row.groupchat:
