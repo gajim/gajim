@@ -67,6 +67,7 @@ from gajim import gui_menu_builder
 from gajim import dialogs
 from gajim import notify
 from gajim import message_control
+from gajim.dialog_messages import get_dialog
 
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
@@ -142,6 +143,10 @@ class Interface:
                 return
 
             cls(obj.pri_txt, GLib.markup_escape_text(obj.sec_txt))
+
+    @staticmethod
+    def raise_dialog(name, *args, **kwargs):
+        get_dialog(name, *args, **kwargs)
 
     def handle_ask_new_nick(self, account, room_jid, parent_win):
         title = _('Unable to join group chat')
