@@ -2905,7 +2905,17 @@ class InformationEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def init(self):
+        self.args = None
+        self.kwargs = {}
+        self.dialog_name = None
         self.popup = True
+
+    def generate(self):
+        if self.args is None:
+            self.args = ()
+        else:
+            self.args = (self.args,)
+        return True
 
 class BlockingEvent(nec.NetworkIncomingEvent):
     name = 'blocking'

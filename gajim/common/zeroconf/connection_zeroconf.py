@@ -189,9 +189,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             alt_name=alt_name))
 
     def _on_error(self, message):
-        app.nec.push_incoming_event(InformationEvent(None, conn=self,
-            level='error', pri_txt=_('Avahi error'), sec_txt=_('%s\nLink-local '
-            'messaging might not work properly.') % message))
+        app.nec.push_incoming_event(InformationEvent(
+            None, dialog_name='avahi-error', args=message))
 
     def connect(self, show='online', msg=''):
         self.get_config_values_or_default()

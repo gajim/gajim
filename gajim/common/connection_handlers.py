@@ -118,10 +118,8 @@ class ConnectionDisco:
                 callback()
                 return
             app.nec.push_incoming_event(
-                InformationEvent(None, conn=self,
-                                 level='error',
-                                 pri_txt=_('Unable to join Groupchat'),
-                                 sec_txt=error))
+                InformationEvent(
+                    None, dialog_name='unable-join-groupchat', args=error))
 
     def request_register_agent_info(self, agent):
         if not self.connection or self.connected < 2:
@@ -138,9 +136,8 @@ class ConnectionDisco:
 
     def _agent_registered_cb(self, con, resp, agent):
         if resp.getType() == 'result':
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='info', pri_txt=_('Registration succeeded'), sec_txt=_(
-                'Registration with agent %s succeeded') % agent))
+            app.nec.push_incoming_event(InformationEvent(
+                None, dialog_name='agent-register-success', args=agent))
             self.request_subscription(agent, auto_auth=True)
             self.agent_registrations[agent]['roster_push'] = True
             if self.agent_registrations[agent]['sub_received']:
@@ -148,11 +145,11 @@ class ConnectionDisco:
                 p = self.add_sha(p)
                 self.connection.send(p)
         if resp.getType() == 'error':
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Registration failed'), sec_txt=_(
-                'Registration with agent %(agent)s failed with error %(error)s:'
-                ' %(error_msg)s') % {'agent': agent, 'error': resp.getError(),
-                'error_msg': resp.getErrorMsg()}))
+            app.nec.push_incoming_event(InformationEvent(
+                None, dialog_name='agent-register-error', 
+                kwargs={'agent': agent,
+                        'error': resp.getError(),
+                        'error_msg': resp.getErrorMsg()}))
 
     def register_agent(self, agent, info, is_form=False):
         if not self.connection or self.connected < 2:

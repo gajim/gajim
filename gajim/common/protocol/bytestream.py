@@ -401,9 +401,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
             from gajim.common.connection_handlers_events import InformationEvent
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Wrong host'),
-                sec_txt=_('Invalid local address? :-O')))
+            app.nec.push_incoming_event(
+                InformationEvent(None, dialog_name='wrong-host')),
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
         sender = file_props.sender

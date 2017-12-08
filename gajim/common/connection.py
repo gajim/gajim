@@ -275,19 +275,15 @@ class CommonConnection:
                 try:
                     self.check_jid(jid)
                 except helpers.InvalidFormat:
-                    app.nec.push_incoming_event(InformationEvent(None,
-                        conn=self, level='error', pri_txt=_('Invalid JID'),
-                        sec_txt=_('It is not possible to send a message '
-                        'to %s, this JID is not valid.') % jid))
+                    app.nec.push_incoming_event(InformationEvent(
+                        None, dialog_name='invalid-jid', args=jid))
                     return
         else:
             try:
                 self.check_jid(obj.jid)
             except helpers.InvalidFormat:
-                app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                    level='error', pri_txt=_('Invalid JID'), sec_txt=_(
-                    'It is not possible to send a message to %s, this JID is not '
-                    'valid.') % obj.jid))
+                app.nec.push_incoming_event(InformationEvent(
+                    None, dialog_name='invalid-jid', args=jid))
                 return
 
         if obj.message and not obj.xhtml and app.config.get(
@@ -937,11 +933,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.disconnect(on_purpose=True)
                     return
                 if not data[1]: # wrong answer
-                    app.nec.push_incoming_event(InformationEvent(None,
-                        conn=self, level='error', pri_txt=_('Invalid answer'),
-                        sec_txt=_('Transport %(name)s answered wrongly to '
-                        'register request: %(error)s') % {'name': data[0],
-                        'error': data[3]}))
+                    app.nec.push_incoming_event(InformationEvent(
+                        None, dialog_name='invalid-answer',
+                        kwargs={'name': data[0], 'error': data[3]}))
                     return
                 is_form = data[2]
                 conf = data[1]
@@ -1063,11 +1057,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     try:
                         helpers.idn_to_ascii(custom_h)
                     except Exception:
-                        app.nec.push_incoming_event(InformationEvent(None,
-                            conn=self, level='error',
-                            pri_txt=_('Wrong Custom Hostname'),
-                            sec_txt='Wrong custom hostname "%s". Ignoring it.' \
-                            % custom_h))
+                        app.nec.push_incoming_event(InformationEvent(
+                            None, dialog_name='invalid-custom-hostname',
+                            args=custom_h))
                         use_custom = False
 
         # create connection if it doesn't already exist
@@ -1584,11 +1576,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 app.nec.push_incoming_event(PrivacyListRemovedEvent(None,
                     conn=self, list_name=privacy_list))
             else:
-                app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                    level='error', pri_txt=_('Error while removing privacy '
-                    'list'), sec_txt=_('Privacy list %s has not been removed. '
-                    'It is maybe active in one of your connected resources. '
-                    'Deactivate it and try again.') % privacy_list))
+                app.nec.push_incoming_event(InformationEvent(
+                    None, dialog_name='privacy-list-error', args=privacy_list))
         nbxmpp.features_nb.delPrivacyList(self.connection, privacy_list,
             _on_del_privacy_list_result)
 
@@ -1771,10 +1760,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not self.privacy_rules_supported:
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=app.SHOW_LIST[self.connected]))
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Invisibility not supported'),
-                sec_txt=_('Account %s doesn\'t support invisibility.') % \
-                self.name))
+            app.nec.push_incoming_event(InformationEvent(
+                None, dialog_name='invisibility-not-supported', args=self.name))
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
@@ -1896,10 +1883,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.disconnect(on_purpose=True)
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
-                app.nec.push_incoming_event(InformationEvent(None,
-                    conn=self, level='error', pri_txt=_('Invisibility not '
-                    'supported'), sec_txt=_('Account %s doesn\'t support '
-                    'invisibility.') % self.name))
+                app.nec.push_incoming_event(InformationEvent(
+                    None, dialog_name='invisibility-not-supported', args=self.name))
                 return
             if self.blocking_supported:
                 self._request_blocking()
@@ -2917,12 +2902,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if result.getID() == id_:
                         on_remove_success(True)
                         return
-                    app.nec.push_incoming_event(InformationEvent(None,
-                        conn=self, level='error',
-                        pri_txt=_('Unregister failed'),
-                        sec_txt=_('Unregistration with server %(server)s '
-                        'failed: %(error)s') % {'server': hostname,
-                        'error': result.getErrorMsg()}))
+                    app.nec.push_incoming_event(InformationEvent(
+                        None, dialog_name='unregister-error',
+                        kwargs={'server': hostname, 'error': result.getErrorMsg()}))
                     on_remove_success(False)
                 con.RegisterHandler('iq', _on_answer, 'result', system=True)
                 con.SendAndWaitForResponse(iq)

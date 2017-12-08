@@ -23,6 +23,7 @@ from gi.repository import GLib
 
 from gajim.common.app import app
 from gajim.dialogs import ErrorDialog
+from gajim.dialogs import InformationDialog
 
 Message = namedtuple('Message', ['title', 'text', 'dialog'])
 
@@ -35,6 +36,12 @@ messages = {
     'invalid-jid-with-error': Message(
         _('Invalid JID'),
         '%s',
+        ErrorDialog),
+
+    'invalid-jid': Message(
+        _('Invalid JID'),
+        _('It is not possible to send a message '
+          'to %s, this JID is not valid.'),
         ErrorDialog),
 
     'unread-events-on-remove-account': Message(
@@ -65,6 +72,65 @@ messages = {
     'jid-in-list': Message(
         _('JID already in list'),
         _('The JID you entered is already in the list. Choose another one.'),
+        ErrorDialog),
+
+    'invalid-answer': Message(
+        _('Invalid answer'),
+        _('Transport %(name)s answered wrongly to '
+          'register request: %(error)s'),
+        ErrorDialog),
+
+    'invalid-custom-hostname': Message(
+        _('Wrong Custom Hostname'),
+        _('Wrong custom hostname "%s". Ignoring it.'),
+        ErrorDialog),
+
+    'privacy-list-error': Message(
+        _('Error while removing privacy list'),
+        _('Privacy list %s has not been removed. '
+          'It is maybe active in one of your connected resources. '
+          'Deactivate it and try again.'),
+        ErrorDialog),
+
+    'invisibility-not-supported': Message(
+        _('Invisibility not supported'),
+        _('Account %s doesn\'t support invisibility.'),
+        ErrorDialog),
+
+    'unregister-error': Message(
+        _('Unregister failed'),
+        _('Unregistration with server %(server)s failed: %(error)s'),
+        ErrorDialog),
+
+    'agent-register-success': Message(
+        _('Registration succeeded'),
+        _('Registration with agent %s succeeded'),
+        InformationDialog),
+
+    'agent-register-error': Message(
+        _('Registration failed'),
+        _('Registration with agent %(agent)s failed with error %(error)s: '
+          '%(error_msg)s'),
+        ErrorDialog),
+
+    'unable-join-groupchat': Message(
+        _('Unable to join Groupchat'),
+        '%s',
+        ErrorDialog),
+
+    'gstreamer-error': Message(
+        _('GStreamer error'),
+        _('Error: %(error)s\nDebug: %(debug)s'),
+        ErrorDialog),
+
+    'wrong-host': Message(
+        _('Wrong host'),
+        _('Invalid local address? :-O'),
+        ErrorDialog),
+
+    'avahi-error': Message(
+        _('Avahi error'),
+        _('%s\nLink-local messaging might not work properly.'),
         ErrorDialog),
 
     }

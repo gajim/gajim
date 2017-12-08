@@ -228,11 +228,9 @@ class JingleRTPContent(JingleContent):
             if not self.stream_failed_once:
                 app.nec.push_incoming_event(
                     InformationEvent(
-                        None, conn=self.session.connection, level='error',
-                        pri_txt=_('GStreamer error'),
-                        sec_txt=_('Error: %(error)s\nDebug: %(debug)s' % {
-                            'error': message.get_structure().get_value('gerror'),
-                            'debug': message.get_structure().get_value('debug')})))
+                        None, dialog_name='gstreamer-error',
+                        kwargs={'error': message.get_structure().get_value('gerror'),
+                                'debug': message.get_structure().get_value('debug')}))
 
             sink_pad = self.p2psession.get_property('sink-pad')
 

@@ -132,17 +132,23 @@ class Interface:
 
     @staticmethod
     def handle_event_information(obj):
-        if obj.popup:
-            if obj.level == 'error':
-                cls = dialogs.ErrorDialog
-            elif obj.level == 'warn':
-                cls = dialogs.WarningDialog
-            elif obj.level == 'info':
-                cls = dialogs.InformationDialog
-            else:
-                return
+        if not obj.popup:
+            return
 
-            cls(obj.pri_txt, GLib.markup_escape_text(obj.sec_txt))
+        if obj.dialog_name is not None:
+            get_dialog(obj.dialog_name, *obj.args, **obj.kwargs)
+            return
+
+        if obj.level == 'error':
+            cls = dialogs.ErrorDialog
+        elif obj.level == 'warn':
+            cls = dialogs.WarningDialog
+        elif obj.level == 'info':
+            cls = dialogs.InformationDialog
+        else:
+            return
+
+        cls(obj.pri_txt, GLib.markup_escape_text(obj.sec_txt))
 
     @staticmethod
     def raise_dialog(name, *args, **kwargs):
