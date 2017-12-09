@@ -2852,8 +2852,7 @@ class Interface:
 
         self.remote_ctrl = None
 
-        if dbus_support.supported:
-            from gajim import logind_listener
+        from gajim import logind_listener
 
         # Handle gnome screensaver
         if dbus_support.supported:
