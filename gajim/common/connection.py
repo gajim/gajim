@@ -2061,6 +2061,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         if encryption:
             app.plugin_manager.extension_point(
                 'encrypt' + encryption, self, obj, self.send_message)
+            if not obj.encrypted:
+                # Dont propagate event
+                return True
         else:
             self.send_message(obj)
 
@@ -2072,8 +2075,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             None, conn=self, jid=obj.jid, message=obj.message, keyID=obj.keyID,
             chatstate=obj.chatstate, automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
-        if obj.callback:
-            obj.callback(obj, obj.msg_iq, *obj.callback_args)
 
         if isinstance(obj.jid, list):
             for j in obj.jid:
@@ -2702,8 +2703,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
             chatstate=None, automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
-        if obj.callback:
-            obj.callback(obj)
 
     def send_gc_subject(self, jid, subject):
         if not app.account_is_connected(self.name):

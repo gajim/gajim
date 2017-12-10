@@ -493,6 +493,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_signed_in)
         app.ged.register_event_handler('decrypted-message-received', ged.GUI2,
             self._nec_decrypted_message_received)
+        app.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
+            self._message_sent)
         app.gc_connected[self.account][self.room_jid] = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1985,6 +1987,15 @@ class GroupchatControl(ChatControlBase):
         if self.model.iter_n_children(parent_iter) == 0:
             self.model.remove(parent_iter)
 
+    def _message_sent(self, obj):
+        # we'll save sent message text when we'll receive it in
+        # _nec_gc_message_received
+        self.last_sent_msg = obj.stanza_id
+        if self.correcting:
+            self.correcting = False
+            gtkgui_helpers.remove_css_class(
+                self.msg_textview, 'msgcorrectingcolor')
+
     def send_message(self, message, xhtml=None, process_commands=True):
         """
         Call this function to send our message
@@ -2011,15 +2022,6 @@ class GroupchatControl(ChatControlBase):
         if message != '' or message != '\n':
             self.save_message(message, 'sent')
 
-            def _cb(obj):
-                # we'll save sent message text when we'll receive it in
-                # _nec_gc_message_received
-                self.last_sent_msg = obj.stanza_id
-                if self.correcting:
-                    self.correcting = False
-                    gtkgui_helpers.remove_css_class(
-                        self.msg_textview, 'msgcorrectingcolor')
-
             if self.correcting and self.last_sent_msg:
                 correct_id = self.last_sent_msg
             else:
@@ -2027,7 +2029,7 @@ class GroupchatControl(ChatControlBase):
             # Send the message
             app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
                 account=self.account, jid=self.room_jid, message=message,
-                xhtml=xhtml, label=label, callback=_cb, correct_id=correct_id,
+                xhtml=xhtml, label=label, correct_id=correct_id,
                 automatic_message=False))
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
@@ -2148,6 +2150,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_signed_in)
         app.ged.remove_event_handler('decrypted-message-received', ged.GUI2,
             self._nec_decrypted_message_received)
+        app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
+            self._message_sent)
 
         if self.room_jid in app.gc_connected[self.account] and \
         app.gc_connected[self.account][self.room_jid]:

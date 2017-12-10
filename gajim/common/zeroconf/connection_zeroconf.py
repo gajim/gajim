@@ -342,8 +342,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 jid=obj.jid, message=obj.message, keyID=obj.keyID,
                 automatic_message=obj.automatic_message, chatstate=None,
                 stanza_id=stanza_id))
-            if obj.callback:
-                obj.callback(obj.msg_iq, *obj.callback_args)
 
             self.log_message(obj, obj.jid)
 
@@ -352,6 +350,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             app.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
                 fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
                 time_=None, session=obj.session))
+            # Dont propagate event
+            return True
 
         ret = self.connection.send(
             obj.msg_iq, obj.message is not None,
@@ -363,6 +363,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 fjid=obj.jid, error_code=-1, error_msg=_(
                 'Contact is offline. Your message could not be sent.'),
                 msg=None, time_=None, session=obj.session))
+            # Dont propagate event
+            return True
 
     def send_stanza(self, stanza):
         # send a stanza untouched

@@ -236,6 +236,8 @@ class ChatControl(ChatControlBase):
             self._nec_chatstate_received)
         app.ged.register_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
+        app.ged.register_event_handler('stanza-message-outgoing', ged.OUT_POSTCORE,
+            self._message_sent)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -811,6 +813,35 @@ class ChatControl(ChatControlBase):
             app.plugin_manager.extension_point(
                 'encryption_dialog' + self.encryption, self)
 
+    def _message_sent(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.jid != self.contact.jid:
+            return
+        if not obj.message:
+            return
+
+        self.last_sent_msg = obj.stanza_id
+        id_ = obj.msg_iq.getID()
+        xep0184_id = None
+        if self.contact.jid != app.get_jid_from_account(self.account):
+            if app.config.get_per('accounts', self.account, 'request_receipt'):
+                xep0184_id = id_
+        if obj.label:
+            displaymarking = obj.label.getTag('displaymarking')
+        else:
+            displaymarking = None
+        if self.correcting:
+            self.correcting = False
+            gtkgui_helpers.remove_css_class(
+                self.msg_textview, 'msgcorrectingcolor')
+
+        self.print_conversation(obj.message, self.contact.jid, tim=obj.timestamp,
+            encrypted=obj.encrypted, xep0184_id=xep0184_id, xhtml=obj.xhtml,
+            displaymarking=displaymarking, msg_stanza_id=id_,
+            correct_id=obj.correct_id,
+            additional_data=obj.additional_data)
+
     def send_message(self, message, keyID='', chatstate=None, xhtml=None,
     process_commands=True, attention=False):
         """
@@ -843,32 +874,9 @@ class ChatControl(ChatControlBase):
 
                 self._schedule_activity_timers()
 
-        def _on_sent(obj, msg_stanza, message, encrypted, xhtml, label):
-            id_ = msg_stanza.getID()
-            xep0184_id = None
-            if self.contact.jid != app.get_jid_from_account(self.account):
-                if app.config.get_per('accounts', self.account, 'request_receipt'):
-                    xep0184_id = id_
-            if label:
-                displaymarking = label.getTag('displaymarking')
-            else:
-                displaymarking = None
-            if self.correcting:
-                self.correcting = False
-                gtkgui_helpers.remove_css_class(
-                    self.msg_textview, 'msgcorrectingcolor')
-
-            self.print_conversation(message, self.contact.jid, tim=obj.timestamp,
-                encrypted=encrypted, xep0184_id=xep0184_id, xhtml=xhtml,
-                displaymarking=displaymarking, msg_stanza_id=id_,
-                correct_id=obj.correct_id,
-                additional_data=obj.additional_data)
-
         ChatControlBase.send_message(self, message, keyID, type_='chat',
-            chatstate=chatstate_to_send, xhtml=xhtml, callback=_on_sent,
-            callback_args=[message, self.encryption, xhtml, self.get_seclabel()],
-            process_commands=process_commands,
-            attention=attention)
+            chatstate=chatstate_to_send, xhtml=xhtml,
+            process_commands=process_commands, attention=attention)
 
     def on_cancel_session_negotiation(self):
         msg = _('Session negotiation cancelled')
@@ -1138,6 +1146,8 @@ class ChatControl(ChatControlBase):
             self._nec_chatstate_received)
         app.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
+        app.ged.remove_event_handler('stanza-message-outgoing', ged.OUT_POSTCORE,
+            self._message_sent)
 
         self.unsubscribe_events()
 
