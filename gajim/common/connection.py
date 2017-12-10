@@ -283,7 +283,7 @@ class CommonConnection:
                 self.check_jid(obj.jid)
             except helpers.InvalidFormat:
                 app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='invalid-jid', args=jid))
+                    None, dialog_name='invalid-jid', args=obj.jid))
                 return
 
         if obj.message and not obj.xhtml and app.config.get(
