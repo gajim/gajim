@@ -2622,7 +2622,7 @@ class Interface:
         self.network_state = connected
         if connected:
             for connection in app.connections.values():
-                if connection.connected <= 0:
+                if connection.connected <= 0 and connection.time_to_reconnect:
                     log.info('Connect %s', connection.name)
                     connection.reconnect()
         else:
