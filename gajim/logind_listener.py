@@ -25,23 +25,29 @@ Documentation: http://www.freedesktop.org/wiki/Software/systemd/inhibit
 import os
 import logging
 
-from gajim.common import dbus_support
+from gi.repository import Gio, GLib
+
 from gajim.common import app
 
 log = logging.getLogger('gajim.logind_listener')
-supported = False
-fd = -1  # file descriptor of the inhibitor; negative number means we don't
-         # hold any (yet)
+
+# file descriptor of the inhibitor; negative number means we don't
+# hold any (yet)
+fd = -1
 
 
-def on_suspend(active):
+def signal_received(connection, sender_name, object_path,
+                    interface_name, signal_name, parameters, *user_data):
     '''Signal handler for suspend event'''
 
     global fd
 
-    if not active:
-        # we just resumed, we should take another inhibitor
-        get_inhibitor()
+    connected = None
+    log.info('Signal received: %s - %s', interface_name, parameters)
+
+    # signal is sent right before (with the parameter True) and after
+    # (with the parameter False) the system goes down for suspend/hibernate
+    if not parameters[0]:
         return
 
     # we're going for suspend, let's disconnect
@@ -62,53 +68,54 @@ def on_suspend(active):
         # something is wrong, the system is suspending but we don't have
         # a lock file
         log.warning("System suspend detected, but we don't seem to be holding "
-            "a file descriptor for sleep inihibitor")
+                    "a file descriptor for sleep inihibitor")
 
-def get_inhibitor():
+
+def get_inhibitor(connection):
     '''Ask for a suspend delay inhibitor'''
 
-    from gajim.common.dbus_support import system_bus, dbus
-    bus = system_bus.bus()
     global fd
 
     if fd >= 0:
         # someting is wrong, we haven't closed the previous file descriptor
         # and we ask for yet another one
         log.warning('We are about to ask for a sleep inhibitor, but we seem '
-            'to be holding one already')
+                    'to be holding one already')
 
-    login_object = bus.get_object('org.freedesktop.login1',
-        '/org/freedesktop/login1')
-    login_manager = dbus.Interface(login_object,
-        'org.freedesktop.login1.Manager')
+    ret = connection.call_sync(
+        'org.freedesktop.login1',
+        '/org/freedesktop/login1',
+        'org.freedesktop.login1.Manager',
+        'Inhibit',
+        GLib.Variant('(ssss)', ('sleep', 'org.gajim.Gajim',
+                                'Disconnect from the network', 'delay')),
+        None,
+        Gio.DBusCallFlags.NONE, -1, None)
 
-    ret = login_manager.Inhibit('sleep', 'Gajim', 'Disconnect from the network',
-        'delay')
-    fd = ret.take()
+    fd = ret[0]
 
-def set_listener():
-    '''Set up a listener for suspend signals
 
-    @return bool whether it succeeded
-    '''
-    from gajim.common.dbus_support import system_bus
-    bus = system_bus.bus()
+def appeared(connection, name, name_owner, *user_data):
+    '''Set up a listener for suspend signals'''
+    global supported
+    supported = True
+    log.info('%s appeared', name)
+    if name == 'org.freedesktop.login1':
+        connection.signal_subscribe(
+            'org.freedesktop.login1',
+            'org.freedesktop.login1.Manager',
+            'PrepareForSleep',
+            '/org/freedesktop/login1',
+            None,
+            Gio.DBusSignalFlags.NONE,
+            signal_received,
+            None)
+        get_inhibitor(connection)
 
-    if not 'org.freedesktop.login1' in bus.list_names():
-        # logind is not present
-        log.debug("logind is not on D-Bus, not activating logind listener")
-        return False
 
-    bus.add_signal_receiver(on_suspend, signal_name='PrepareForSleep',
-        bus_name='org.freedesktop.login1',
-        path='/org/freedesktop/login1',
-        dbus_interface='org.freedesktop.login1.Manager')
-    return True
-
-if dbus_support.supported:
-    try:
-        if set_listener():
-            get_inhibitor()
-            supported = True
-    except Exception as ex:
-        log.error("A problem occured while activating logind listener")
+Gio.bus_watch_name(
+    Gio.BusType.SYSTEM,
+    'org.freedesktop.login1',
+    Gio.BusNameWatcherFlags.NONE,
+    appeared,
+    None)
