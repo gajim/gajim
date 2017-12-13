@@ -2335,7 +2335,6 @@ class RosterWindow:
             liststore.prepend([status_combobox_text,
                 app.interface.jabber_state_images['16'][show], show, False])
             self.status_combobox.set_active(0)
-        app.interface.change_awn_icon_status(show)
         self.combobox_callback_active = True
         if app.interface.systray_enabled:
             app.interface.systray.change_status(show)
