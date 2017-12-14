@@ -235,17 +235,22 @@ class GajimApplication(Gtk.Application):
         gui_menu_builder.build_accounts_menu()
 
     def _open(self, application, file, hint, *args):
+        from gajim.common import app
         for arg in file:
             uri = arg.get_uri()
+            app.log('uri_handler').info('open %s', uri)
             # remove xmpp:///
             uri = uri[8:]
-            jid, cmd = uri.split('?')
+            try:
+                jid, cmd = uri.split('?')
+            except ValueError:
+                # Invalid URI
+                return
             if cmd == 'join':
                 self.interface.join_gc_minimal(None, jid)
             elif cmd == 'roster':
                 self.activate_action('add-contact', GLib.Variant('s', jid))
             elif cmd == 'message':
-                from gajim.common import app
                 accounts = list(app.connections.keys())
                 if not accounts:
                     continue
