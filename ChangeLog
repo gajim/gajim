@@ -1,7 +1,59 @@
-Gajim 0.16.6 ( September 2016)
+Gajim 0.98.1 (15 December 2017)
+
+  * Ported to GTK3 / Python3
+  * Flatpak support
+  * Lots of refactoring
+  * New Emoji support
+  * New Chat Window design
+  * New StartChat Window (Ctrl+N)
+  * New ServerInfo Window
+  * AccountWindow Redesign
+  * Moved some encryption code out into Plugins (see PGP Plugin, Esessions Plugin)
+  * OTR Plugin was not ported, use OMEMO
+  * Added mam:1 and mam:2 support (mam:0 was removed)
+  * Added MAM for MUCs support
+  * Added support for showing XEP-0084 Avatars
+  * Added xmpp URI handling directly in Gajim
+  * Removed Gajim-Remote
+  * Removed XEP-0012 (Last Activity)
+  * Removed XEP-0136 (Message Archiving)
+  * Added XEP-0156 (Discovering Alternative XMPP Connection Methods)
+  * Added XEP-0319 (Last User Interaction in Presence)
+  * Added XEP-0380 (Explicit Message Encryption)
+  * Added Jingle FT:5 support
+
+Gajim 0.16.9 (30 November 2017)
+
+  * Improve Zeroconf behavior
+  * Fix showing normal message event
+  * remove usage of OpenSSL.rand
+  * a few minor bugfixes
+
+Gajim 0.16.8 (04 June 2017)
+
+  * Fix rejoining MUCs after connection loss
+  * Fix Groupchat invites
+  * Fix encoding problems with newer GnuPG versions
+  * Fix old messages randomly reappearing in the chat window
+  * Fix some problems with IBB filetransfer
+  * Make XEP-0146 Commands opt-in
+  * Improve sending messages to your own resources
+  * Improve reliability of delivery recipes
+  * Many minor bugfixes
+
+Gajim 0.16.7 (30 January 2017)
+
+  * Better compatibility with XEP-0191: Blocking Command
+  * Windows Credential Vault is used for password storage on Windows
+  * Gajim now depends on python-gnupg for PGP encryption
+  * Add portable installer for Windows
+  * Remove usage of demandimport
+  * Many minor bugfixes
+
+Gajim 0.16.6 (02 October 2016)
 
   * Fix using gpg2
-  * Improve message receips usage
+  * Improve message receipts usage
   * Improve roster filtering
   * several minor bugs
 
