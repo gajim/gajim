@@ -239,13 +239,15 @@ class GajimApplication(Gtk.Application):
         for arg in file:
             uri = arg.get_uri()
             app.log('uri_handler').info('open %s', uri)
-            # remove xmpp:///
-            uri = uri[8:]
+            if not uri.startswith('xmpp:'):
+                continue
+            # remove xmpp:
+            uri = uri[5:]
             try:
                 jid, cmd = uri.split('?')
             except ValueError:
-                # Invalid URI
-                return
+                # No query argument
+                jid, cmd = uri, 'message'
             if cmd == 'join':
                 self.interface.join_gc_minimal(None, jid)
             elif cmd == 'roster':
