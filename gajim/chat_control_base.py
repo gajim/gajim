@@ -797,18 +797,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self.possible_paused_timeout_id = None
             return False  # stop looping
 
-        message_buffer = self.msg_textview.get_buffer()
-        if (self.kbd_activity_in_last_5_secs and
-                message_buffer.get_char_count()):
-            # Only composing if the keyboard activity was in text entry
-            self.send_chatstate('composing', self.contact)
-        elif (self.mouse_over_in_last_5_secs and
-              current_state == 'inactive' and
-                jid == self.parent_win.get_active_jid()):
-            self.send_chatstate('active', self.contact)
-        else:
-            if current_state == 'composing':
-                self.send_chatstate('paused', self.contact)  # pause composing
+        if current_state == 'composing':
+            if not self.kbd_activity_in_last_5_secs:
+                if self.msg_textview.has_text():
+                    self.send_chatstate('paused', self.contact)
+                else:
+                    self.send_chatstate('active', self.contact)
+        elif current_state == 'inactive':
+            if (self.mouse_over_in_last_5_secs and
+                    jid == self.parent_win.get_active_jid()):
+                self.send_chatstate('active', self.contact)
 
         # assume no activity and let the motion-notify or 'insert-text' make them
         # True refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
@@ -870,10 +868,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def _on_message_tv_buffer_changed(self, textbuffer):
         self.kbd_activity_in_last_5_secs = True
         self.kbd_activity_in_last_30_secs = True
-        if textbuffer.get_char_count():
-            self.send_chatstate('composing', self.contact)
-        else:
-            self.send_chatstate('active', self.contact)
+        if not self.msg_textview.has_text():
+            return
+        self.send_chatstate('composing', self.contact)
 
     def save_message(self, message, msg_type):
         # save the message, so user can scroll though the list with key up/down
@@ -1146,8 +1143,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     self.redraw_after_event_removed(jid)
             # send chatstate inactive to the one we're leaving
             # and active to the one we visit
-            message_buffer = self.msg_textview.get_buffer()
-            if message_buffer.get_char_count():
+            if self.msg_textview.has_text():
                 self.send_chatstate('paused', self.contact)
             else:
                 self.send_chatstate('active', self.contact)

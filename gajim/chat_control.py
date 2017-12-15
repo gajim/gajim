@@ -1116,12 +1116,14 @@ class ChatControl(ChatControlBase):
         # if wel're inactive prevent composing (XEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
+            app.log('chatstates').info('%-10s - %s', 'active', self.contact.jid)
             app.nec.push_outgoing_event(MessageOutgoingEvent(None,
                 account=self.account, jid=self.contact.jid, chatstate='active',
                 control=self))
             contact.our_chatstate = 'active'
             self.reset_kbd_mouse_timeout_vars()
 
+        app.log('chatstates').info('%-10s - %s', state, self.contact.jid)
         app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, chatstate=state,
             control=self))

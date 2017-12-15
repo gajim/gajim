@@ -100,10 +100,16 @@ class MessageTextView(Gtk.TextView):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = buf.get_text(start, end, True)
-        return text != self.PLACEHOLDER
+        return text != self.PLACEHOLDER and text != ''
+
+    def is_placeholder(self):
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        text = buf.get_text(start, end, True)
+        return text == self.PLACEHOLDER
 
     def _on_focus_in(self, *args):
-        if not self.has_text():
+        if self.is_placeholder():
             self.get_buffer().set_text('')
         self.toggle_speller(True)
 
