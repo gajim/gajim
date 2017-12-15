@@ -29,7 +29,6 @@ def update_trans():
     template = os.path.join('po', 'gajim.pot')
     files = [os.path.join(root, f) for root, d, files in os.walk('gajim') for f in files if os.path.isfile(
         os.path.join(root, f)) and (f.endswith('.py') or f.endswith('.ui'))]
-    files.append(os.path.join("data", "gajim-remote.desktop.in"))
     files.append(os.path.join("data", "org.gajim.Gajim.desktop.in"))
     files.append(os.path.join("data", "org.gajim.Gajim.appdata.xml.in"))
     cmd = 'xgettext --from-code=utf-8 -o %s %s' % (
@@ -116,7 +115,6 @@ def build_intl(build_cmd):
     base = build_dir
 
     merge_files = (('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
-                   ('data/gajim-remote.desktop', 'share/applications', '--desktop'),
                    ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml'))
 
     for filename, target, option in merge_files:
