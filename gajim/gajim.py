@@ -54,6 +54,7 @@ from gajim.common import logging_helpers
 from gajim.common import crypto
 
 MIN_NBXMPP_VER = "0.6.1"
+MIN_GTK_VER = "3.20.0"
 
 
 class GajimApplication(Gtk.Application):
@@ -119,6 +120,14 @@ class GajimApplication(Gtk.Application):
         if V(nbxmpp.__version__) < V(MIN_NBXMPP_VER):
             print('Gajim needs python-nbxmpp >= %s to run. '
                   'Quitting...' % MIN_NBXMPP_VER)
+            sys.exit(1)
+
+        gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
+                                Gtk.get_minor_version(),
+                                Gtk.get_micro_version())
+        if V(gtk_ver) < V(MIN_GTK_VER):
+            print('Gajim needs GTK+ >= %s to run. '
+                  'Quitting...' % MIN_GTK_VER)
             sys.exit(1)
 
         # Create and initialize Application Paths & Databases
