@@ -110,6 +110,9 @@ ssl_error = {
     #100 is for internal usage: host not correct
 }
 
+SERVICE_START_TLS = 'xmpp-client'
+SERVICE_DIRECT_TLS = 'xmpps-client'
+
 class CommonConnection:
     """
     Common connection class, can be derivated for normal connection or zeroconf
@@ -643,10 +646,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         CommonConnection.__init__(self, name)
         ConnectionHandlers.__init__(self)
         # this property is used to prevent double connections
-        self.last_connection = None # last ClientCommon instance
         # If we succeed to connect, remember it so next time we try (after a
         # disconnection) we try only this type.
-        self.last_connection_type = None
         self.lang = None
         if locale.getdefaultlocale()[0]:
             self.lang = locale.getdefaultlocale()[0].split('_')[0]
@@ -789,7 +790,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.terminate_sessions()
             self.remove_all_transfers()
             self.connection.disconnect()
-            self.last_connection = None
             self.connection = None
 
     def set_oldst(self): # Set old state
@@ -1078,29 +1078,50 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.redirected = None
         # SRV resolver
         self._proxy = proxy
-        self._hosts = [ {'host': h, 'port': p, 'ssl_port': ssl_p, 'prio': 10,
-                'weight': 10} ]
+        self._hosts = [
+            {'host': h, 'port': p, 'type': 'tls', 'prio': 10, 'weight': 10},
+            {'host': h, 'port': ssl_p, 'type': 'ssl', 'prio': 10, 'weight': 10},
+            {'host': h, 'port': p, 'type': 'plain', 'prio': 10, 'weight': 10}
+        ]
         self._hostname = hostname
 
         if use_srv and self._proxy is None:
-            # add request for srv query to the resolve, on result '_on_resolve'
-            # will be called
-            app.resolver.resolve('_xmpp-client._tcp.' + helpers.idn_to_ascii(
-                h), self._on_resolve)
-        else:
-            self._on_resolve('', [])
+            self._srv_hosts = []
 
-    def _on_resolve(self, host, result_array):
-        # SRV query returned at least one valid result, we put it in hosts dict
-        if len(result_array) != 0:
-            self._hosts = [i for i in result_array]
-            # Add ssl port
-            ssl_p = 5223
-            if app.config.get_per('accounts', self.name, 'use_custom_host'):
-                ssl_p = app.config.get_per('accounts', self.name,
-                    'custom_port')
-            for i in self._hosts:
-                i['ssl_port'] = ssl_p
+            services = [SERVICE_START_TLS, SERVICE_DIRECT_TLS]
+            self._num_pending_srv_records = len(services)
+
+            for service in services:
+                record_name = '_' + service + '._tcp.' + helpers.idn_to_ascii(h)
+                app.resolver.resolve(record_name, self._on_resolve_srv)
+        else:
+            self._connect_to_next_host()
+
+    def _append_srv_record(self, record, con_type):
+        tmp = record.copy()
+        tmp['type'] = con_type
+
+        if tmp in self._srv_hosts:
+            return
+
+        self._srv_hosts.append(tmp)
+
+    def _on_resolve_srv(self, host, result):
+        for record in result:
+            service = host[1:]
+            if service.startswith(SERVICE_START_TLS):
+                self._append_srv_record(record, 'tls')
+                self._append_srv_record(record, 'plain')
+            elif service.startswith(SERVICE_DIRECT_TLS):
+                self._append_srv_record(record, 'ssl')
+
+        self._num_pending_srv_records -= 1
+        if self._num_pending_srv_records:
+            return
+
+        if self._srv_hosts:
+            self._hosts = self._srv_hosts.copy()
+
         self._connect_to_next_host()
 
     def _on_resolve_txt(self, host, result_array):
@@ -1128,34 +1149,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _connect_to_next_host(self, retry=False):
         log.debug('Connection to next host')
-        if len(self._hosts):
-            # No config option exist when creating a new account
-            if self.name in app.config.get_per('accounts'):
-                self._connection_types = app.config.get_per('accounts', self.name,
-                        'connection_types').split()
-            else:
-                self._connection_types = ['tls', 'ssl']
-            if self.last_connection_type:
-                if self.last_connection_type in self._connection_types:
-                    self._connection_types.remove(self.last_connection_type)
-                self._connection_types.insert(0, self.last_connection_type)
-
-
-            if self._proxy and self._proxy['type']=='bosh':
-                # with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
-                # connection and TLS with handshake right after TCP connecting ("ssl")
-                scheme = nbxmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
-                if scheme=='https':
-                    self._connection_types = ['ssl']
-                else:
-                    self._connection_types = ['plain']
-
-            host = self._select_next_host(self._hosts)
-            self._current_host = host
-            self._hosts.remove(host)
-            self.connect_to_next_type()
-
-        else:
+        if not self._hosts:
             if not retry and self.retrycount == 0:
                 log.debug("Out of hosts, giving up connecting to %s", self.name)
                 self.time_to_reconnect = None
@@ -1169,66 +1163,74 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # try reconnect if connection has failed before auth to server
                 self.disconnectedReconnCB()
 
-    def connect_to_next_type(self, retry=False):
+            return
+
+        connection_types = ['tls', 'ssl']
+        allow_plaintext_connection = app.config.get_per('accounts', self.name,
+            'allow_plaintext_connection')
+
+        if allow_plaintext_connection:
+            connection_types.append('plain')
+
+        if self._proxy and self._proxy['type'] == 'bosh':
+            # with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
+            # connection and TLS with handshake right after TCP connecting ("ssl")
+            scheme = nbxmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
+            if scheme == 'https':
+                connection_types = ['ssl']
+            else:
+                connection_types = ['plain']
+
+        host = self._select_next_host(self._hosts)
+        self._hosts.remove(host)
+
+        # Skip record if connection type is not supported.
+        if host['type'] not in connection_types:
+            log.debug("Skipping connection record with unsupported type: %s" %
+                host['type'])
+            self._connect_to_next_host(retry)
+            return
+
+        self._current_host = host
+
         if self.redirected:
             self.disconnect(on_purpose=True)
             self.connect()
             return
-        if len(self._connection_types):
-            self._current_type = self._connection_types.pop(0)
-            if self.last_connection:
-                self.last_connection.socket.disconnect()
-                self.last_connection = None
-                self.connection = None
 
-            if self._current_type == 'ssl':
-                # SSL (force TLS on different port than plain)
-                # If we do TLS over BOSH, port of XMPP server should be the standard one
-                # and TLS should be negotiated because TLS on 5223 is deprecated
-                if self._proxy and self._proxy['type']=='bosh':
-                    port = self._current_host['port']
-                else:
-                    port = self._current_host['ssl_port']
-            elif self._current_type == 'tls':
-                # TLS - negotiate tls after XMPP stream is estabilished
-                port = self._current_host['port']
-            elif self._current_type == 'plain':
-                # plain connection on defined port
-                port = self._current_host['port']
+        self._current_type = self._current_host['type']
 
-            cacerts = os.path.join(common.app.DATA_DIR, 'other', 'cacerts.pem')
-            if not os.path.exists(cacerts):
-                cacerts = ''
-            mycerts = common.app.MY_CACERTS
-            tls_version = app.config.get_per('accounts', self.name,
-                'tls_version')
-            cipher_list = app.config.get_per('accounts', self.name,
-                'cipher_list')
-            secure_tuple = (self._current_type, cacerts, mycerts, tls_version, cipher_list)
+        port = self._current_host['port']
+        cacerts = os.path.join(common.app.DATA_DIR, 'other', 'cacerts.pem')
+        if not os.path.exists(cacerts):
+            cacerts = ''
+        mycerts = common.app.MY_CACERTS
+        tls_version = app.config.get_per('accounts', self.name,
+            'tls_version')
+        cipher_list = app.config.get_per('accounts', self.name,
+            'cipher_list')
+        secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
+            cipher_list)
 
-            con = nbxmpp.NonBlockingClient(
-                domain=self._hostname,
-                caller=self,
-                idlequeue=app.idlequeue)
+        con = nbxmpp.NonBlockingClient(
+            domain=self._hostname,
+            caller=self,
+            idlequeue=app.idlequeue)
 
-            self.last_connection = con
-            # increase default timeout for server responses
-            nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
-                self.try_connecting_for_foo_secs
-            # FIXME: this is a hack; need a better way
-            if self.on_connect_success == self._on_new_account:
-                con.RegisterDisconnectHandler(self._on_new_account)
+        # increase default timeout for server responses
+        nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
+            self.try_connecting_for_foo_secs
+        # FIXME: this is a hack; need a better way
+        if self.on_connect_success == self._on_new_account:
+            con.RegisterDisconnectHandler(self._on_new_account)
 
-            if self.client_cert and app.config.get_per('accounts', self.name,
-            'client_cert_encrypted'):
-                app.nec.push_incoming_event(ClientCertPassphraseEvent(
-                    None, conn=self, con=con, port=port,
-                    secure_tuple=secure_tuple))
-                return
-            self.on_client_cert_passphrase('', con, port, secure_tuple)
-
-        else:
-            self._connect_to_next_host(retry)
+        if self.client_cert and app.config.get_per('accounts', self.name,
+        'client_cert_encrypted'):
+            app.nec.push_incoming_event(ClientCertPassphraseEvent(
+                None, conn=self, con=con, port=port,
+                secure_tuple=secure_tuple))
+            return
+        self.on_client_cert_passphrase('', con, port, secure_tuple)
 
     def on_client_cert_passphrase(self, passphrase, con, port, secure_tuple):
         self.client_cert_passphrase = passphrase
@@ -1239,7 +1241,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             port=port,
             on_connect=self.on_connect_success,
             on_proxy_failure=self.on_proxy_failure,
-            on_connect_failure=self.connect_to_next_type,
+            on_connect_failure=self._connect_to_next_host,
             on_stream_error_cb=self._StreamCB,
             proxy=self._proxy,
             secure_tuple = secure_tuple)
@@ -1295,9 +1297,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         _con_type = con_type
         if _con_type != self._current_type:
-            log.info('Connecting to next type beacuse desired is %s and returned is %s'
+            log.info('Connecting to next host beacuse desired type is %s and returned is %s'
                     % (self._current_type, _con_type))
-            self.connect_to_next_type()
+            self._connect_to_next_host()
             return
         con.RegisterDisconnectHandler(self._on_disconnected)
         if _con_type == 'plain' and app.config.get_per('accounts', self.name,
@@ -1329,7 +1331,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 msg=_('Connection with account %s has been lost. Retry '
                 'connecting.') % self.name))
             return
-        self.hosts = []
+        self._hosts = []
         self.connection_auto_accepted = False
         self.connected_hostname = self._current_host['host']
         self.on_connect_failure = None
@@ -1338,15 +1340,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.debug('Connected to server %s:%s with %s' % (
                 self._current_host['host'], self._current_host['port'], con_type))
 
-        self.last_connection_type = con_type
-        if con_type == 'tls' and 'ssl' in self._connection_types:
-            # we were about to try ssl after tls, but tls succeed, so
-            # definitively stop trying ssl
-            con_types = app.config.get_per('accounts', self.name,
-                'connection_types').split()
-            con_types.remove('ssl')
-            app.config.set_per('accounts', self.name, 'connection_types',
-                ' '.join(con_types))
         if app.config.get_per('accounts', self.name, 'anonymous_auth'):
             name = None
         else:
@@ -2228,7 +2221,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _on_new_account(self, con=None, con_type=None):
         if not con_type:
-            if len(self._connection_types) or len(self._hosts):
+            if self._hosts:
                 # There are still other way to try to connect
                 return
             reason = _('Could not connect to "%s"') % self._hostname
