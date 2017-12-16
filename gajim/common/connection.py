@@ -1523,8 +1523,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.send(' ')
 
     def _on_xmpp_ping_answer(self, iq_obj):
-        id_ = iq_obj.getAttr('id')
-        assert id_ == self.awaiting_xmpp_ping_id
         self.awaiting_xmpp_ping_id = None
 
     def sendPing(self, pingTo=None, control=None):
