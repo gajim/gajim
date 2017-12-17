@@ -3177,11 +3177,12 @@ class PopupNotificationWindow:
         window_width, self.window_height = self.window.get_size()
         app.interface.roster.popups_notification_height += self.window_height
         pos_x = app.config.get('notification_position_x')
+        screen_w, screen_h = gtkgui_helpers.get_display_geometry()
         if pos_x < 0:
-            pos_x = Gdk.Screen.width() - window_width + pos_x + 1
+            pos_x = screen_w - window_width + pos_x + 1
         pos_y = app.config.get('notification_position_y')
         if pos_y < 0:
-            pos_y = Gdk.Screen.height() - \
+            pos_y = screen_h - \
                 app.interface.roster.popups_notification_height + pos_y + 1
         self.window.move(pos_x, pos_y)
 
@@ -3213,8 +3214,9 @@ class PopupNotificationWindow:
             current_index += 1
             window_width, window_height = window_instance.window.get_size()
             app.interface.roster.popups_notification_height += window_height
-            window_instance.window.move(Gdk.Screen.width() - window_width,
-                Gdk.Screen.height() - \
+            screen_w, screen_h = gtkgui_helpers.get_display_geometry()
+            window_instance.window.move(screen_w - window_width,
+                screen_h - \
                 app.interface.roster.popups_notification_height)
 
     def on_popup_notification_window_button_press_event(self, widget, event):
