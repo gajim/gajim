@@ -263,7 +263,7 @@ class Interface:
         if account in self.show_vcard_when_connect and obj.show not in (
         'offline', 'error'):
             self.edit_own_details(account)
-            self.show_vcard_when_connect.remove(self.name)
+            self.show_vcard_when_connect.remove(account)
 
     def edit_own_details(self, account):
         jid = app.get_jid_from_account(account)
