@@ -2828,7 +2828,7 @@ class RosterWindow:
             sectext = _('You will no longer be able to send and receive '
                 'messages to contacts from these transports: %s') % jids
         dialogs.ConfirmationDialog(pritext, sectext,
-            on_response_ok = (remove, list_))
+            on_response_ok = (remove, list_), transient_for=self.window)
 
     def _nec_blocking(self, obj):
         if obj.unblock_all or obj.blocklist:
