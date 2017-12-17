@@ -40,6 +40,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 import os
+import sys
 import time
 import locale
 import hashlib
@@ -67,7 +68,6 @@ from gajim.common import i18n
 if app.HAVE_GEOCLUE:
     from gajim.common import location_listener
 from gajim.common import ged
-from gajim.common import dbus_support
 from gajim.message_window import MessageWindowMgr
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
@@ -4963,7 +4963,7 @@ class RosterWindow:
 
                 item = Gtk.CheckMenuItem(_('Publish Tune'))
                 pep_submenu.append(item)
-                if not dbus_support.supported:
+                if sys.platform != 'linux':
                     item.set_sensitive(False)
                 else:
                     activ = app.config.get_per('accounts', account,

@@ -56,8 +56,9 @@ from gajim.common import events
 
 from gajim.common import dbus_support
 if dbus_support.supported:
-    from gajim.music_track_listener import MusicTrackListener
     import dbus
+
+from gajim.music_track_listener import MusicTrackListener
 
 if app.HAVE_GEOCLUE:
     from gajim.common import location_listener
@@ -1135,7 +1136,7 @@ class Interface:
         if connected == invisible_show:
             return
         # send currently played music
-        if (obj.conn.pep_supported and dbus_support.supported and
+        if (obj.conn.pep_supported and sys.platform == 'linux' and
                 app.config.get_per('accounts', account, 'publish_tune')):
             self.enable_music_listener()
         # enable location listener
@@ -2192,8 +2193,6 @@ class Interface:
         if not self.music_track_changed_signal:
             self.music_track_changed_signal = listener.connect(
                 'music-track-changed', self.music_track_changed)
-        track = listener.get_playing_track()
-        self.music_track_changed(listener, track)
 
     def disable_music_listener(self):
         listener = MusicTrackListener.get()
@@ -2207,9 +2206,7 @@ class Interface:
         else:
             accounts = [account]
 
-        is_paused = hasattr(music_track_info, 'paused') and \
-            music_track_info.paused == 0
-        if not music_track_info or is_paused:
+        if music_track_info is None or music_track_info.paused:
             artist = title = source = ''
         else:
             artist = music_track_info.artist
