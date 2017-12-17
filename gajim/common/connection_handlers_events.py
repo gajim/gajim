@@ -1062,7 +1062,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def generate(self):
         archive_jid = self.stanza.getFrom()
-        own_jid = self.conn.get_own_jid().getStripped()
+        own_jid = self.conn.get_own_jid()
         if archive_jid and not archive_jid.bareMatch(own_jid):
             # MAM Message not from our Archive
             return False
@@ -1076,7 +1076,8 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.unique_id, origin_id = self.get_unique_id()
 
         # Check for duplicates
-        if app.logger.find_stanza_id(own_jid, self.unique_id, origin_id):
+        if app.logger.find_stanza_id(own_jid.getStripped(),
+                                     self.unique_id, origin_id):
             return
 
         self.msgtxt = self.msg_.getTagData('body')
