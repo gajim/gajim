@@ -398,7 +398,8 @@ def get_fade_color(treeview, selected, focused):
             state = Gtk.StateFlags.ACTIVE
     else:
         state = Gtk.StateFlags.NORMAL
-    bg = context.get_background_color(state)
+
+    bg = context.get_property('background-color', state)
     fg = context.get_color(state)
 
     p = 0.3 # background
