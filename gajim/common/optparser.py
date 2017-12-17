@@ -247,6 +247,8 @@ class OptionsParser:
             self.update_config_to_016111()
         if old < [0, 16, 11, 2] and new >= [0, 16, 11, 2]:
             self.update_config_to_016112()
+        if old < [0, 98, 2] and new >= [0, 98, 2]:
+            self.update_config_to_0982()
 
         app.logger.init_vars()
         app.logger.attach_cache_database()
@@ -913,3 +915,12 @@ class OptionsParser:
             '''
         )
         app.config.set('version', '0.16.11.2')
+
+    def update_config_to_0982(self):
+        # This fixes a typo in update_config_to_016112()
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
+            '''
+        )
+        app.config.set('version', '0.98.2')
