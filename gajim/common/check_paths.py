@@ -73,7 +73,7 @@ def create_log_db():
                     show INTEGER,
                     message TEXT,
                     subject TEXT,
-                    additional_data TEXT DEFAULT '{}',
+                    additional_data TEXT,
                     stanza_id TEXT,
                     encryption TEXT,
                     encryption_state TEXT,

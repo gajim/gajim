@@ -871,7 +871,7 @@ class OptionsParser:
 
         self.call_sql(logger.LOG_DB_PATH,
             '''ALTER TABLE logs
-            ADD COLUMN 'additinal_data' TEXT default '()';'''
+            ADD COLUMN 'additional_data' TEXT;'''
         )
         app.config.set('version', '0.16.10.2')
 
@@ -920,6 +920,7 @@ class OptionsParser:
         self.call_sql(logger.LOG_DB_PATH,
             '''
             ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
+            ALTER TABLE logs ADD COLUMN 'additional_data' TEXT;
             '''
         )
         app.config.set('version', '0.98.2')
