@@ -151,43 +151,6 @@ def get_completion_liststore(entry):
     entry.set_completion(completion)
     return liststore
 
-
-def popup_emoticons_under_button(menu, button, parent_win):
-    """
-    Popup the emoticons menu under button, which is in parent_win
-    """
-    window_x1, window_y1 = parent_win.get_origin()[1:]
-
-    def position_menu_under_button(menu, _x=None, _y=None, data=None):
-        # inline function, which will not keep refs, when used as CB
-        alloc = button.get_allocation()
-        button_x, button_y = alloc.x, alloc.y
-        translated_coordinates = button.translate_coordinates(
-            app.interface.roster.window, 0, 0)
-        if translated_coordinates:
-            button_x, button_y = translated_coordinates
-
-        # now convert them to X11-relative
-        window_x, window_y = window_x1, window_y1
-        x = window_x + button_x
-        y = window_y + button_y
-
-        menu_height = menu.get_preferred_size()[0].height
-
-        ## should we pop down or up?
-        if (y + alloc.height + menu_height < Gdk.Screen.height()):
-            # now move the menu below the button
-            y += alloc.height
-        else:
-            # now move the menu above the button
-            y -= menu_height
-
-        # push_in is True so all the menuitems are always inside screen
-        push_in = True
-        return (x, y, push_in)
-
-    menu.popup(None, None, position_menu_under_button, None, 1, 0)
-
 def get_theme_font_for_option(theme, option):
     """
     Return string description of the font, stored in theme preferences

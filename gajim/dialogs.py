@@ -2269,10 +2269,18 @@ class DoubleInputDialog:
         else:
             self.cancel_handler()
 
-class SubscriptionRequestWindow:
+class SubscriptionRequestWindow(Gtk.ApplicationWindow):
     def __init__(self, jid, text, account, user_nick=None):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('SubscriptionRequest')
+        self.set_application(app.app)
+        self.set_show_menubar(False)
+        self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_title(_('Subscription Request'))
+
         xml = gtkgui_helpers.get_gtk_builder('subscription_request_window.ui')
-        self.window = xml.get_object('subscription_request_window')
+        self.add(xml.get_object('subscription_box'))
         self.jid = jid
         self.account = account
         self.user_nick = user_nick
@@ -2282,10 +2290,16 @@ class SubscriptionRequestWindow:
                 % {'account': account, 'jid': self.jid}
         else:
             prompt_text = _('Subscription request from %s') % self.jid
-        xml.get_object('from_label').set_text(prompt_text)
-        xml.get_object('message_textview').get_buffer().set_text(text)
+
+        from_label = xml.get_object('from_label')
+        from_label.set_text(prompt_text)
+
+        textview = xml.get_object('message_textview')
+        textview.get_buffer().set_text(text)
+
+        self.set_default(xml.get_object('authorize_button'))
         xml.connect_signals(self)
-        self.window.show_all()
+        self.show_all()
 
     def on_subscription_request_window_destroy(self, widget):
         """
@@ -2295,21 +2309,15 @@ class SubscriptionRequestWindow:
             # remove us from open windows
             del app.interface.instances[self.account]['sub_request'][self.jid]
 
-    def prepare_popup_menu(self):
-        xml = gtkgui_helpers.get_gtk_builder('subscription_request_popup_menu.ui')
-        menu = xml.get_object('subscription_request_popup_menu')
-        xml.connect_signals(self)
-        return menu
-
     def on_close_button_clicked(self, widget):
-        self.window.destroy()
+        self.destroy()
 
     def on_authorize_button_clicked(self, widget):
         """
         Accept the request
         """
         app.connections[self.account].send_authorization(self.jid)
-        self.window.destroy()
+        self.destroy()
         contact = app.contacts.get_contact(self.account, self.jid)
         if not contact or _('Not in Roster') in contact.groups:
             AddNewContactWindow(self.account, self.jid, self.user_nick)
@@ -2342,16 +2350,7 @@ class SubscriptionRequestWindow:
         contact = app.contacts.get_contact(self.account, self.jid)
         if contact and _('Not in Roster') in contact.get_shown_groups():
             app.interface.roster.remove_contact(self.jid, self.account)
-        self.window.destroy()
-
-    def on_actions_button_clicked(self, widget):
-        """
-        Popup action menu
-        """
-        menu = self.prepare_popup_menu()
-        menu.show_all()
-        gtkgui_helpers.popup_emoticons_under_button(menu, widget,
-            self.window.get_window())
+        self.destroy()
 
 class JoinGroupchatWindow(Gtk.ApplicationWindow):
     def __init__(self, account, room_jid, password=None, automatic=None):

@@ -499,7 +499,7 @@ class Interface:
         account = obj.conn.name
         if helpers.allow_popup_window(account) or not self.systray_enabled:
             if obj.jid in self.instances[account]['sub_request']:
-                self.instances[account]['sub_request'][obj.jid].window.destroy()
+                self.instances[account]['sub_request'][obj.jid].destroy()
             self.instances[account]['sub_request'][obj.jid] = \
                 dialogs.SubscriptionRequestWindow(obj.jid, obj.status, account,
                 obj.user_nick)
@@ -829,7 +829,7 @@ class Interface:
                 self.roster.draw_contact(obj.jid, account)
         if obj.jid in self.instances[account]['sub_request'] and obj.sub in (
         'from', 'both'):
-            self.instances[account]['sub_request'][obj.jid].window.destroy()
+            self.instances[account]['sub_request'][obj.jid].destroy()
 
     def handle_event_bookmarks(self, obj):
         # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])

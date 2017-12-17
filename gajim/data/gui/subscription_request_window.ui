@@ -1,35 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <object class="GtkImage" id="image1">
+  <object class="GtkMenu" id="subscription_request_popup_menu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-add</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-cancel</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1"/>
-  <object class="GtkWindow" id="subscription_request_window">
-    <property name="can_focus">False</property>
-    <property name="border_width">12</property>
-    <property name="title" translatable="yes">Subscription Request</property>
-    <property name="resizable">False</property>
-    <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_subscription_request_window_destroy" swapped="no"/>
     <child>
-      <object class="GtkBox" id="vbox10">
+      <object class="GtkMenuItem" id="start_chat_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">5</property>
+        <property name="label" translatable="yes">_Start Chat</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_start_chat_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="information_menuitem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label">_Information</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_contact_info_activate" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="subscription_box">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">18</property>
+    <property name="margin_right">18</property>
+    <property name="margin_top">18</property>
+    <property name="margin_bottom">18</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">5</property>
+    <child>
+      <object class="GtkLabel" id="from_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow8">
+        <property name="height_request">100</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="border_width">5</property>
+        <property name="shadow_type">in</property>
         <child>
-          <object class="GtkLabel" id="from_label">
+          <object class="GtkTextView" id="message_textview">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
+            <property name="editable">False</property>
+            <property name="wrap_mode">word</property>
+            <property name="cursor_visible">False</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButtonBox" id="hbuttonbox3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="border_width">5</property>
+        <property name="spacing">12</property>
+        <property name="layout_style">end</property>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="label">_Close</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -38,154 +91,66 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow8">
-            <property name="height_request">100</property>
+          <object class="GtkButton" id="deny_button">
+            <property name="label" translatable="yes">_Deny</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">5</property>
-            <property name="shadow_type">in</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Deny authorization from contact so he or she cannot know when you're connected</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="on_deny_button_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="popup">subscription_request_popup_menu</property>
+            <property name="use_popover">False</property>
             <child>
-              <object class="GtkTextView" id="message_textview">
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="editable">False</property>
-                <property name="wrap_mode">word</property>
-                <property name="cursor_visible">False</property>
-                <property name="buffer">textbuffer1</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">applications-system-symbolic</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox" id="hbuttonbox3">
+          <object class="GtkButton" id="authorize_button">
+            <property name="label" translatable="yes">Au_thorize</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">5</property>
-            <property name="spacing">12</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="label">gtk-close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="deny_button">
-                <property name="label" translatable="yes">_Deny</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Deny authorization from contact so he or she cannot know when you're connected</property>
-                <property name="image">image2</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_deny_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="actions_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <signal name="clicked" handler="on_actions_button_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkBox" id="hbox3009">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="spacing">2</property>
-                    <child>
-                      <object class="GtkImage" id="image1338">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="stock">gtk-execute</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label372">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" comments="Make sure the character after &quot;_&quot; is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)">_Actions</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkArrow" id="arrow4">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="arrow_type">down</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="authorize_button">
-                <property name="label" translatable="yes">Au_thorize</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Authorize contact so he or she can know when you're connected</property>
-                <property name="image">image1</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_authorize_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="can_default">True</property>
+            <property name="receives_default">False</property>
+            <property name="tooltip_text" translatable="yes">Authorize contact so he or she can know when you're connected</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="on_authorize_button_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">2</property>
+      </packing>
     </child>
   </object>
 </interface>
