@@ -451,11 +451,6 @@ class MessageWindow(object):
             elif keyval == Gdk.KEY_m: # ALT + M show emoticons menu
                 control.emoticons_button.get_popover().show()
                 return True
-            elif keyval == Gdk.KEY_d: # ALT + D show actions menu
-                if Gtk.Settings.get_default().get_property(
-                'gtk-key-theme-name') != 'Emacs':
-                    control.on_actions_button_clicked(control.actions_button)
-                    return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == Gdk.KEY_t: # ALT + t
                 control._on_change_subject_menuitem_activate(None)

@@ -1044,16 +1044,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def on_clear_formatting_menuitem_activate(self, widget):
         self.msg_textview.clear_tags()
 
-    def on_actions_button_clicked(self, widget):
-        """
-        Popup action menu
-        """
-        menu = self.prepare_context_menu(hide_buttonbar_items=True)
-        menu.show_all()
-        menu.attach_to_widget(widget, None)
-        gtkgui_helpers.popup_emoticons_under_button(menu, widget,
-                self.parent_win)
-
     def update_tags(self):
         self.conv_textview.update_tags()
 
