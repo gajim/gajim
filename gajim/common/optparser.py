@@ -909,7 +909,7 @@ class OptionsParser:
                 oldest_mam_timestamp TEXT,
                 last_muc_timestamp TEXT
                 );
-            ALTER TABLE logs ADD COLUMN 'account_jid' INTEGER;
+            ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
             '''
         )
         app.config.set('version', '0.16.11.2')
