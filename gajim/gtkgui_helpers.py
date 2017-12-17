@@ -851,6 +851,13 @@ def add_css_class(widget, class_name):
     if class_name:
         style.add_class('theme_' + class_name)
 
+def add_css_to_widget(widget, css):
+    provider = Gtk.CssProvider()
+    provider.load_from_data(bytes(css.encode()))
+    context = widget.get_style_context()
+    context.add_provider(provider,
+                         Gtk.STYLE_PROVIDER_PRIORITY_USER)
+
 def remove_css_class(widget, class_name):
     style = widget.get_style_context()
     style.remove_class('theme_' + class_name)

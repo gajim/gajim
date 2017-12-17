@@ -3114,10 +3114,10 @@ class PopupNotificationWindow:
         self.jid = jid
         self.msg_type = msg_type
         self.index = len(app.interface.roster.popup_notification_windows)
-
         xml = gtkgui_helpers.get_gtk_builder('popup_notification_window.ui')
         self.window = xml.get_object('popup_notification_window')
         self.window.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
+        self.window.set_name('NotificationPopup')
         close_button = xml.get_object('close_button')
         event_type_label = xml.get_object('event_type_label')
         event_description_label = xml.get_object('event_description_label')
@@ -3133,10 +3133,8 @@ class PopupNotificationWindow:
             '<span foreground="black" weight="bold">%s</span>' %
             GLib.markup_escape_text(title))
 
-        # set colors [ http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html ]
-        color = Gdk.RGBA()
-        Gdk.RGBA.parse(color, 'black')
-        self.window.override_background_color(Gtk.StateType.NORMAL, color)
+        css = '#NotificationPopup {background-color: black }'
+        gtkgui_helpers.add_css_to_widget(self.window, css)
 
         # default image
         if not path_to_image:
@@ -3162,11 +3160,19 @@ class PopupNotificationWindow:
             bg_color = app.config.get('notif_status_color')
         else: # Unknown event! Shouldn't happen but deal with it
             bg_color = app.config.get('notif_other_color')
-        popup_bg_color = Gdk.RGBA()
-        Gdk.RGBA.parse(popup_bg_color, bg_color)
-        close_button.override_background_color(Gtk.StateType.NORMAL,
-            popup_bg_color)
-        eventbox.override_background_color(Gtk.StateType.NORMAL, popup_bg_color)
+
+        background_class = '''
+            .popup-style {
+                border-image: none;
+                background-image: none;
+                background-color: %s }''' % bg_color
+
+        gtkgui_helpers.add_css_to_widget(eventbox, background_class)
+        eventbox.get_style_context().add_class('popup-style')
+
+        gtkgui_helpers.add_css_to_widget(close_button, background_class)
+        eventbox.get_style_context().add_class('popup-style')
+
         event_description_label.set_markup('<span foreground="black">%s</span>' %
             GLib.markup_escape_text(text))
 
