@@ -1109,6 +1109,9 @@ class Interface:
         """
         # ('SIGNED_IN', account, ())
         # block signed in notifications for 30 seconds
+
+        # Add our own JID into the DB
+        app.logger.insert_jid(obj.conn.get_own_jid().getStripped())
         account = obj.conn.name
         app.block_signed_in_notifications[account] = True
         state = self.sleeper.getState()
