@@ -878,7 +878,6 @@ class OptionsParser:
     def update_config_to_016103(self):
         self.call_sql(logger.LOG_DB_PATH,
             '''ALTER TABLE logs ADD COLUMN 'stanza_id' TEXT;
-            ALTER TABLE logs ADD COLUMN 'mam_id' TEXT;
             ALTER TABLE logs ADD COLUMN 'encryption' TEXT;
             ALTER TABLE logs ADD COLUMN 'encryption_state' TEXT;
             ALTER TABLE logs ADD COLUMN 'marker' INTEGER;

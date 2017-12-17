@@ -75,7 +75,6 @@ def create_log_db():
                     subject TEXT,
                     additional_data TEXT DEFAULT '{}',
                     stanza_id TEXT,
-                    mam_id TEXT,
                     encryption TEXT,
                     encryption_state TEXT,
                     marker INTEGER
