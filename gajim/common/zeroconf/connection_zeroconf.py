@@ -325,7 +325,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def _change_from_invisible(self):
         self.connection.announce()
 
-    def _update_status(self, show, msg):
+    def _update_status(self, show, msg, idle_time=None):
         if self.connection.set_show_msg(show, msg):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
