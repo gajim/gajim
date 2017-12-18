@@ -125,7 +125,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         return jid
 
     def get_own_jid(self):
-        return nbxmpp.JID(self.username + '@' + self.hostname)
+        return nbxmpp.JID(self.username + '@' + self.host)
 
     def reconnect(self):
         # Do not try to reco while we are already trying
