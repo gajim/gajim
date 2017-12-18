@@ -36,6 +36,8 @@ import socket
 import random
 random.seed()
 
+import nbxmpp
+
 import signal
 if os.name != 'nt':
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
@@ -121,6 +123,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def check_jid(self, jid):
         return jid
+
+    def get_own_jid(self):
+        return nbxmpp.JID(self.username + '@' + self.hostname)
 
     def reconnect(self):
         # Do not try to reco while we are already trying
