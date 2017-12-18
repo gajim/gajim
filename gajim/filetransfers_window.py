@@ -754,7 +754,7 @@ class FileTransfersWindow:
 
     def on_transfers_list_motion_notify_event(self, widget, event):
         w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
+        device = w.get_display().get_default_seat().get_pointer()
         pointer = w.get_device_position(device)
         props = widget.get_path_at_pos(int(event.x), int(event.y))
         self.height_diff = pointer[2] - int(event.y)
@@ -783,7 +783,7 @@ class FileTransfersWindow:
         elif self.height_diff is 0:
             return
         w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
+        device = w.get_display().get_default_seat().get_pointer()
         pointer = w.get_device_position(device)
         props = self.tree.get_path_at_pos(pointer[1],
             pointer[2] - self.height_diff)
@@ -960,7 +960,7 @@ class FileTransfersWindow:
             self.tooltip.hide_tooltip()
             return
         w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
+        device = w.get_display().get_default_seat().get_pointer()
         pointer = w.get_device_position(device)
         props = self.tree.get_path_at_pos(pointer[1],
             pointer[2] - self.height_diff)

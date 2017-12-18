@@ -1110,7 +1110,7 @@ if __name__ == '__main__':
         """
         global change_cursor
         w = htmlview.tv.get_window(Gtk.TextWindowType.TEXT)
-        device = w.get_display().get_device_manager().get_client_pointer()
+        device = w.get_display().get_default_seat().get_pointer()
         pointer = w.get_device_position(device)
         x = pointer[1]
         y = pointer[2]

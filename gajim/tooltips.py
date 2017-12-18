@@ -162,8 +162,8 @@ class BaseTooltip:
         self.populate(data)
 
         # get the X position of mouse pointer on the screen
-        pointer_x = self.screen.get_display().get_device_manager().\
-            get_client_pointer().get_position()[1]
+        pointer_x = self.screen.get_display().get_default_seat().\
+            get_pointer().get_position()[1]
 
         # get the prefered X position of the tooltip on the screen in case this position is >
         # than the height of the screen, tooltip will be shown above the widget
