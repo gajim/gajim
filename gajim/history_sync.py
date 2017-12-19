@@ -58,16 +58,13 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.event_id = id(self)
 
         own_jid = self.con.get_own_jid().getStripped()
+
+        mam_start = ArchiveState.NEVER
         archive = app.logger.get_archive_timestamp(own_jid)
+        if archive is not None and archive.oldest_mam_timestamp is not None:
+            mam_start = int(float(archive.oldest_mam_timestamp))
 
-        if archive is not None:
-            mam_start = float(archive.oldest_mam_timestamp)
-        else:
-            # Migration from old config value
-            mam_start = app.config.get_per(
-                'accounts', account, 'mam_start_date')
-
-        if not mam_start or mam_start == ArchiveState.NEVER:
+        if mam_start == ArchiveState.NEVER:
             self.current_start = self.now
         elif mam_start == ArchiveState.ALL:
             self.current_start = datetime.utcfromtimestamp(0)
