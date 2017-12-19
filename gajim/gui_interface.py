@@ -2443,7 +2443,9 @@ class Interface:
                 'loading avatar %s failed. Try to convert '
                 'avatar image using pillow', filename)
             try:
-                avatar = Image.open(path).convert("RGBA")
+                with open(path, 'rb') as im_handle:
+                    img = Image.open(im_handle)
+                    avatar = img.convert("RGBA")
             except (NameError, OSError):
                 app.log('avatar').warning('Pillow convert failed: %s', filename)
                 app.log('avatar').debug('Error', exc_info=True)
