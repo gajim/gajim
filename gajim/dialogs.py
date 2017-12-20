@@ -1722,7 +1722,7 @@ class ConfirmationDialogCheck(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.get_action_area().get_children()[0] # right to left
+        ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
         ok_button.grab_focus()
 
         self.checkbutton = Gtk.CheckButton.new_with_mnemonic(checktext)
@@ -1777,7 +1777,7 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.get_action_area().get_children()[0] # right to left
+        ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
         ok_button.grab_focus()
 
         vbox = self.get_content_area()
@@ -1847,7 +1847,7 @@ class PlainConnectionDialog(ConfirmationDialogDoubleCheck):
         ConfirmationDialogDoubleCheck.__init__(self, pritext, sectext,
             checktext1, checktext2, tooltip1=tooltip1, on_response_ok=on_ok,
             on_response_cancel=on_cancel, is_modal=False)
-        self.ok_button = self.get_action_area().get_children()[0] # right to left
+        self.ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
         self.ok_button.set_sensitive(False)
         self.checkbutton1.connect('clicked', self.on_checkbutton_clicked)
         self.set_title(_('Insecure connection'))
@@ -1875,7 +1875,7 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
 
         self.set_default_response(Gtk.ResponseType.OK)
 
-        ok_button = self.get_action_area().get_children()[0] # right to left
+        ok_button = self.get_widget_for_response(Gtk.ResponseType.OK)
         ok_button.grab_focus()
 
         vbox = self.get_content_area()
