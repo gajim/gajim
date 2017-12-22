@@ -750,19 +750,28 @@ class RosterTooltip(Gtk.Window, StatusTable):
         return 'not in roster'
 
 
-class FileTransfersTooltip(BaseTooltip):
-    """
-    Tooltip that is shown in the notification area
-    """
-
+class FileTransfersTooltip():
     def __init__(self):
-        BaseTooltip.__init__(self)
+        self.sid = None
+        self.widget = None
 
-    def populate(self, file_props):
+    def clear_tooltip(self):
+        self.sid = None
+        self.widget = None
+
+    def get_tooltip(self, file_props, sid):
+        if self.sid == sid:
+            return True, self.widget
+
+        self.widget = self._create_tooltip(file_props, sid)
+        self.sid = sid
+        return False, self.widget
+
+    @staticmethod
+    def _create_tooltip(file_props, sid):
         ft_table = Gtk.Table(2, 1)
         ft_table.set_property('column-spacing', 2)
         current_row = 1
-        self.create_window()
         properties = []
         name = file_props.name
         if file_props.type_ == 'r':
@@ -794,18 +803,18 @@ class FileTransfersTooltip(BaseTooltip):
         status = ''
         if file_props.started:
             status = _('Not started')
-        if file_props.stopped == True:
+        if file_props.stopped:
             status = _('Stopped')
         elif file_props.completed:
             status = _('Completed')
-        elif file_props.connected == False:
+        elif not file_props.connected:
             if file_props.completed:
                 status = _('Completed')
             else:
-                if file_props.paused == True:
+                if file_props.paused:
                     status = Q_('?transfer status:Paused')
-                elif file_props.stalled == True:
-                    #stalled is not paused. it is like 'frozen' it stopped alone
+                elif file_props.stalled:
+                    # stalled is not paused. it is like 'frozen' it stopped alone
                     status = _('Stalled')
                 else:
                     status = _('Transferring')
@@ -832,7 +841,8 @@ class FileTransfersTooltip(BaseTooltip):
             ft_table.attach(label, 2, 3, current_row, current_row + 1,
                     Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
 
-        self.win.add(ft_table)
+        ft_table.show_all()
+        return ft_table
 
 
 def colorize_status(status):

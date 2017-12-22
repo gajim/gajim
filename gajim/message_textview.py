@@ -102,6 +102,15 @@ class MessageTextView(Gtk.TextView):
         text = buf.get_text(start, end, True)
         return text != self.PLACEHOLDER and text != ''
 
+    def get_text(self):
+        # gets the text if its not PLACEHOLDER
+        buf = self.get_buffer()
+        start, end = buf.get_bounds()
+        text = self.get_buffer().get_text(start, end, True)
+        if text == self.PLACEHOLDER:
+            return ''
+        return text
+
     def is_placeholder(self):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
