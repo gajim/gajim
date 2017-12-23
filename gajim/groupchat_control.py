@@ -302,7 +302,6 @@ class GroupchatControl(ChatControlBase):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
-        self.current_tooltip = None
         if parent_win is not None:
             # On AutoJoin with minimize Groupchats are created without parent
             # Tooltip Window and Actions have to be created with parent
@@ -472,6 +471,9 @@ class GroupchatControl(ChatControlBase):
         self.subject_button.set_no_show_all(True)
         self.banner_actionbar.pack_end(self.hide_roster_button)
         self.banner_actionbar.pack_start(self.subject_button)
+
+        # GC Roster tooltip
+        self.gc_tooltip = tooltips.GCTooltip()
 
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id)
 
@@ -702,8 +704,6 @@ class GroupchatControl(ChatControlBase):
         if widget.get_tooltip_window():
             return
         widget.set_has_tooltip(True)
-        widget.set_tooltip_window(tooltips.GCTooltip(
-            self.account, self.parent_win.window))
         id_ = widget.connect('query-tooltip', self.query_tooltip)
         self.handlers[id_] = widget
 
@@ -711,41 +711,35 @@ class GroupchatControl(ChatControlBase):
         try:
             row = self.list_treeview.get_path_at_pos(x_pos, y_pos)[0]
         except TypeError:
+            self.gc_tooltip.clear_tooltip()
             return False
         if not row:
+            self.gc_tooltip.clear_tooltip()
             return False
 
         iter_ = None
         try:
             iter_ = self.model.get_iter(row)
         except Exception:
+            self.gc_tooltip.clear_tooltip()
             return False
 
         typ = self.model[iter_][Column.TYPE]
         nick = self.model[iter_][Column.NICK]
 
         if typ != 'contact':
+            self.gc_tooltip.clear_tooltip()
             return False
-
-        if self.current_tooltip != row:
-            # If the row changes we hide the current tooltip
-            self.current_tooltip = row
-            return False
-
-        tooltip = widget.get_tooltip_window()
-
-        if tooltip.row == row:
-            # We already populated the window with the row data
-            return True
-        tooltip.row = row
 
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, nick)
         if not contact:
+            self.gc_tooltip.clear_tooltip()
             return False
 
-        tooltip.populate(contact)
-        return True
+        value, widget = self.gc_tooltip.get_tooltip(contact)
+        tooltip.set_custom(widget)
+        return value
 
     def fill_column(self, col):
         for rend in self.renderers_list:

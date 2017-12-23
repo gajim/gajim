@@ -169,39 +169,40 @@ class NotificationAreaTooltip(StatusTable):
         return self.hbox
 
 
-class GCTooltip(Gtk.Window):
+class GCTooltip():
     # pylint: disable=E1101
-    def __init__(self, account, parent):
-        Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
-        self.account = account
-        self.row = None
-        self.set_title('tooltip')
-        self.set_border_width(3)
-        self.set_resizable(False)
-        self.set_name('gtk-tooltips')
-        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
+    def __init__(self):
+        self.contact = None
 
         self.xml = gtkgui_helpers.get_gtk_builder('tooltip_gc_contact.ui')
         for name in ('nick', 'status', 'jid', 'user_show', 'fillelement',
-            'resource', 'affiliation', 'avatar', 'resource_label',
-                'jid_label', 'tooltip_grid'):
+                     'resource', 'affiliation', 'avatar', 'resource_label',
+                     'jid_label', 'tooltip_grid'):
             setattr(self, name, self.xml.get_object(name))
 
-        self.add(self.tooltip_grid)
-        self.tooltip_grid.show()
-
     def clear_tooltip(self):
+        self.contact = None
+
+    def get_tooltip(self, contact):
+        if self.contact == contact:
+            return True, self.tooltip_grid
+
+        self._populate_grid(contact)
+        self.contact = contact
+        return False, self.tooltip_grid
+
+    def _hide_grid_childs(self):
         """
         Hide all Elements of the Tooltip Grid
         """
         for child in self.tooltip_grid.get_children():
             child.hide()
 
-    def populate(self, contact):
+    def _populate_grid(self, contact):
         """
         Populate the Tooltip Grid with data of from the contact
         """
-        self.clear_tooltip()
+        self._hide_grid_childs()
 
         self.nick.set_text(contact.get_shown_name())
         self.nick.show()
