@@ -28,14 +28,14 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
+import time
+from datetime import datetime
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Pango
-import os
-import time
-from datetime import datetime
-from datetime import timedelta
 
 from gajim import gtkgui_helpers
 from gajim.common.const import AvatarSize
