@@ -1102,8 +1102,6 @@ if __name__ == '__main__':
 
     htmlview = ConversationTextview(None)
 
-    tooltip = tooltips.BaseTooltip()
-
     def on_textview_motion_notify_event(widget, event):
         """
         Change the cursor to a hand when we are over a mail or an url
@@ -1128,17 +1126,6 @@ if __name__ == '__main__':
                     over_line = True
             except Exception:
                 pass
-
-        #if line_tooltip.timeout != 0:
-            # Check if we should hide the line tooltip
-        #       if not over_line:
-        #               line_tooltip.hide_tooltip()
-        #if over_line and not line_tooltip.win:
-        #       line_tooltip.timeout = GLib.timeout_add(500,
-        #               show_line_tooltip)
-        #       htmlview.tv.get_window(Gtk.TextWindowType.TEXT).set_cursor(
-        #               gtkgui_helpers.get_cursor('LEFT_PTR'))
-        #       change_cursor = tag
 
     htmlview.tv.connect('motion_notify_event', on_textview_motion_notify_event)
 
