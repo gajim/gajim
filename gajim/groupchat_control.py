@@ -46,6 +46,7 @@ from gajim import config
 from gajim import vcard
 from gajim import cell_renderer_image
 from gajim import dataforms_widget
+from gajim import adhoc_commands
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
 import nbxmpp
@@ -514,6 +515,7 @@ class GroupchatControl(ChatControlBase):
             ('configure-', self._on_configure_room),
             ('bookmark-', self._on_bookmark_room),
             ('request-voice-', self._on_request_voice),
+            ('execute-command-', self._on_execute_command),
             ]
 
         for action in actions:
@@ -580,6 +582,10 @@ class GroupchatControl(ChatControlBase):
 
         # Change Nick
         win.lookup_action('change-nick-' + self.control_id).set_enabled(
+            online)
+
+        # Execute command
+        win.lookup_action('execute-command-' + self.control_id).set_enabled(
             online)
 
     # Actions
@@ -678,6 +684,12 @@ class GroupchatControl(ChatControlBase):
         action.set_state(param)
         app.config.set_per('rooms', self.contact.jid,
                            'notify_on_all_messages', param.get_boolean())
+
+    def _on_execute_command(self, action, param):
+        """
+        Execute AdHoc commands on the current room
+        """
+        adhoc_commands.CommandWindow(self.account, self.room_jid)
 
     def show_roster(self):
         new_state = not self.hpaned.get_child2().is_visible()
@@ -2560,6 +2572,10 @@ class GroupchatControl(ChatControlBase):
             id_ = item.connect('activate', self.on_add_to_roster, jid)
             self.handlers[id_] = item
 
+        item = xml.get_object('execute_command_menuitem')
+        id_ = item.connect('activate', self._on_execute_command_occupant, nick)
+        self.handlers[id_] = item
+
         item = xml.get_object('block_menuitem')
         item2 = xml.get_object('unblock_menuitem')
         if not app.connections[self.account].privacy_rules_supported:
@@ -2607,6 +2623,10 @@ class GroupchatControl(ChatControlBase):
             ctrl.parent_win.set_active_tab(ctrl)
 
         return ctrl
+
+    def _on_execute_command_occupant(self, widget, nick):
+        jid = self.room_jid + '/' + nick
+        adhoc_commands.CommandWindow(self.account, jid)
 
     def on_row_activated(self, widget, path):
         """

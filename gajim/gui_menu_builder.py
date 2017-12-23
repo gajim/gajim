@@ -642,6 +642,7 @@ def get_groupchat_menu(control_id):
         ('win.request-voice-', _('Request Voice')),
         ('win.notify-on-message-', _('Notify on all messages')),
         ('win.minimize-', _('Minimize on close')),
+        ('win.execute-command-', _('Execute command')),
         ('win.browse-history-', _('History')),
         ('win.disconnect-', _('Disconnect')),
         ]

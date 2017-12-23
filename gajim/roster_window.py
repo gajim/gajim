@@ -5389,8 +5389,16 @@ class RosterWindow:
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
 
+        adhoc_menuitem = Gtk.MenuItem.new_with_mnemonic(_('Execute command'))
+        adhoc_menuitem.connect('activate', self.on_execute_command, contact,
+            account)
+        menu.append(adhoc_menuitem)
+
+        item = Gtk.SeparatorMenuItem.new() # separator
+        menu.append(item)
+
         history_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_History'))
-        history_menuitem .connect('activate', self.on_history, contact, account)
+        history_menuitem.connect('activate', self.on_history, contact, account)
         menu.append(history_menuitem)
 
         event_button = gtkgui_helpers.get_possible_button_event(event)
