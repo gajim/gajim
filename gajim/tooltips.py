@@ -263,13 +263,13 @@ class StatusTable:
             self.table.attach(lock_image, 4, self.current_row, 1, 1)
         self.current_row += 1
 
-class NotificationAreaTooltip(BaseTooltip, StatusTable):
+
+class NotificationAreaTooltip(StatusTable):
     """
     Tooltip that is shown in the notification area
     """
 
     def __init__(self):
-        BaseTooltip.__init__(self)
         StatusTable.__init__(self)
 
     def fill_table_with_accounts(self, accounts):
@@ -297,8 +297,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
 
-    def populate(self, data=''):
-        self.create_window()
+    def get_tooltip(self):
         self.create_table()
 
         accounts = helpers.get_notification_icon_tooltip_dict()
@@ -308,6 +307,8 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
         self.hbox.add(self.table)
         self.hbox.show_all()
+        return self.hbox
+
 
 class GCTooltip(Gtk.Window):
     # pylint: disable=E1101
