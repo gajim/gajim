@@ -28,14 +28,14 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
+import time
+from datetime import datetime
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Pango
-import os
-import time
-from datetime import datetime
-from datetime import timedelta
 
 from gajim import gtkgui_helpers
 from gajim.common.const import AvatarSize
@@ -43,147 +43,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import Q_
 
-class BaseTooltip:
-    """
-    Base Tooltip class
-
-            Usage:
-                    tooltip = BaseTooltip()
-                    ....
-                    tooltip.show_tooltip(data, widget_height, widget_y_position)
-                    ....
-                    if tooltip.timeout != 0:
-                            tooltip.hide_tooltip()
-
-            * data - the text to be displayed  (extenders override this argument and
-                    display more complex contents)
-            * widget_height  - the height of the widget on which we want to show tooltip
-            * widget_y_position - the vertical position of the widget on the screen
-
-            Tooltip is displayed aligned centered to the mouse poiner and 4px below the widget.
-            In case tooltip goes below the visible area it is shown above the widget.
-    """
-
-    def __init__(self):
-        self.timeout = 0
-        self.preferred_position = [0, 0]
-        self.win = None
-        self.id = None
-        self.cur_data = None
-        self.shown = False
-        self.position_computed = False
-
-    def populate(self, data):
-        """
-        This method must be overriden by all extenders. This is the most simple
-        implementation: show data as value of a label
-        """
-        self.create_window()
-        self.win.add(Gtk.Label(label=data))
-
-    def create_window(self):
-        """
-        Create a popup window each time tooltip is requested
-        """
-        self.win = Gtk.Window.new(Gtk.WindowType.POPUP)
-        self.win.set_title('tooltip')
-        self.win.set_border_width(3)
-        self.win.set_resizable(False)
-        self.win.set_name('gtk-tooltips')
-        self.win.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
-
-        self.win.set_events(Gdk.EventMask.POINTER_MOTION_MASK)
-        self.win.connect('size-allocate', self.on_size_allocate)
-        self.win.connect('motion-notify-event', self.motion_notify_event)
-        self.screen = self.win.get_screen()
-
-    def _get_icon_name_for_tooltip(self, contact):
-        """
-        Helper function used for tooltip contacts/acounts
-
-        Tooltip on account has fake contact with sub == '', in this case we show
-        real status of the account
-        """
-        if contact.ask == 'subscribe':
-            return 'requested'
-        elif contact.sub in ('both', 'to', ''):
-            return contact.show
-        return 'not in roster'
-
-    def motion_notify_event(self, widget, event):
-        GLib.idle_add(self.hide_tooltip)
-
-    def on_size_allocate(self, widget, rect):
-        if not self.position_computed:
-            half_width = rect.width / 2 + 1
-            if self.preferred_position[1] + rect.height > \
-            self.screen.get_height():
-                 # flip tooltip up
-                self.preferred_position[1] -= rect.height + self.widget_height \
-                    + 8
-                if self.preferred_position[1] < 0:
-                    self.preferred_position[1] = self.screen.get_height() - \
-                        rect.height - 2
-
-                    if self.preferred_position[0] + rect.width + 7 < \
-                    self.screen.get_width():
-                        self.preferred_position[0] = self.preferred_position[0]\
-                            + 7
-                    else:
-                        self.preferred_position[0] = self.preferred_position[0]\
-                            - rect.width - 7
-                    self.win.move(self.preferred_position[0],
-                        self.preferred_position[1])
-                    return
-            if self.preferred_position[0] < half_width:
-                self.preferred_position[0] = 0
-            elif self.preferred_position[0] + rect.width > \
-            self.screen.get_width() + half_width:
-                self.preferred_position[0] = self.screen.get_width() - \
-                    rect.width
-            else:
-                self.preferred_position[0] -= half_width
-            self.position_computed = True
-        self.win.move(self.preferred_position[0], self.preferred_position[1])
-
-    def show_tooltip(self, data, widget_height, widget_y_position):
-        """
-        Show tooltip on widget
-
-        Data contains needed data for tooltip contents.
-        widget_height is the height of the widget on which we show the tooltip.
-        widget_y_position is vertical position of the widget on the screen.
-        """
-        if self.shown:
-            return
-        self.position_computed = False
-        self.cur_data = data
-        # set tooltip contents
-        self.populate(data)
-
-        # get the X position of mouse pointer on the screen
-        pointer_x = self.screen.get_display().get_device_manager().\
-            get_client_pointer().get_position()[1]
-
-        # get the prefered X position of the tooltip on the screen in case this position is >
-        # than the height of the screen, tooltip will be shown above the widget
-        preferred_y = widget_y_position + widget_height + 4
-
-        self.preferred_position = [pointer_x, preferred_y]
-        self.widget_height = widget_height
-        self.win.show_all()
-        self.shown = True
-
-    def hide_tooltip(self):
-        if self.timeout > 0:
-            GLib.source_remove(self.timeout)
-            self.timeout = 0
-        if self.win:
-            self.win.destroy()
-            self.win = None
-        self.id = None
-        self.cur_data = None
-        self.shown = False
 
 class StatusTable:
     """
@@ -263,13 +122,13 @@ class StatusTable:
             self.table.attach(lock_image, 4, self.current_row, 1, 1)
         self.current_row += 1
 
-class NotificationAreaTooltip(BaseTooltip, StatusTable):
+
+class NotificationAreaTooltip(StatusTable):
     """
     Tooltip that is shown in the notification area
     """
 
     def __init__(self):
-        BaseTooltip.__init__(self)
         StatusTable.__init__(self)
 
     def fill_table_with_accounts(self, accounts):
@@ -297,8 +156,7 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
 
-    def populate(self, data=''):
-        self.create_window()
+    def get_tooltip(self):
         self.create_table()
 
         accounts = helpers.get_notification_icon_tooltip_dict()
@@ -308,40 +166,43 @@ class NotificationAreaTooltip(BaseTooltip, StatusTable):
 
         self.hbox.add(self.table)
         self.hbox.show_all()
+        return self.hbox
 
-class GCTooltip(Gtk.Window):
+
+class GCTooltip():
     # pylint: disable=E1101
-    def __init__(self, account, parent):
-        Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
-        self.account = account
-        self.row = None
-        self.set_title('tooltip')
-        self.set_border_width(3)
-        self.set_resizable(False)
-        self.set_name('gtk-tooltips')
-        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
+    def __init__(self):
+        self.contact = None
 
         self.xml = gtkgui_helpers.get_gtk_builder('tooltip_gc_contact.ui')
         for name in ('nick', 'status', 'jid', 'user_show', 'fillelement',
-            'resource', 'affiliation', 'avatar', 'resource_label',
-                'jid_label', 'tooltip_grid'):
+                     'resource', 'affiliation', 'avatar', 'resource_label',
+                     'jid_label', 'tooltip_grid'):
             setattr(self, name, self.xml.get_object(name))
 
-        self.add(self.tooltip_grid)
-        self.tooltip_grid.show()
-
     def clear_tooltip(self):
+        self.contact = None
+
+    def get_tooltip(self, contact):
+        if self.contact == contact:
+            return True, self.tooltip_grid
+
+        self._populate_grid(contact)
+        self.contact = contact
+        return False, self.tooltip_grid
+
+    def _hide_grid_childs(self):
         """
         Hide all Elements of the Tooltip Grid
         """
         for child in self.tooltip_grid.get_children():
             child.hide()
 
-    def populate(self, contact):
+    def _populate_grid(self, contact):
         """
         Populate the Tooltip Grid with data of from the contact
         """
-        self.clear_tooltip()
+        self._hide_grid_childs()
 
         self.nick.set_text(contact.get_shown_name())
         self.nick.show()
@@ -750,19 +611,28 @@ class RosterTooltip(Gtk.Window, StatusTable):
         return 'not in roster'
 
 
-class FileTransfersTooltip(BaseTooltip):
-    """
-    Tooltip that is shown in the notification area
-    """
-
+class FileTransfersTooltip():
     def __init__(self):
-        BaseTooltip.__init__(self)
+        self.sid = None
+        self.widget = None
 
-    def populate(self, file_props):
+    def clear_tooltip(self):
+        self.sid = None
+        self.widget = None
+
+    def get_tooltip(self, file_props, sid):
+        if self.sid == sid:
+            return True, self.widget
+
+        self.widget = self._create_tooltip(file_props, sid)
+        self.sid = sid
+        return False, self.widget
+
+    @staticmethod
+    def _create_tooltip(file_props, sid):
         ft_table = Gtk.Table(2, 1)
         ft_table.set_property('column-spacing', 2)
         current_row = 1
-        self.create_window()
         properties = []
         name = file_props.name
         if file_props.type_ == 'r':
@@ -794,18 +664,18 @@ class FileTransfersTooltip(BaseTooltip):
         status = ''
         if file_props.started:
             status = _('Not started')
-        if file_props.stopped == True:
+        if file_props.stopped:
             status = _('Stopped')
         elif file_props.completed:
             status = _('Completed')
-        elif file_props.connected == False:
+        elif not file_props.connected:
             if file_props.completed:
                 status = _('Completed')
             else:
-                if file_props.paused == True:
+                if file_props.paused:
                     status = Q_('?transfer status:Paused')
-                elif file_props.stalled == True:
-                    #stalled is not paused. it is like 'frozen' it stopped alone
+                elif file_props.stalled:
+                    # stalled is not paused. it is like 'frozen' it stopped alone
                     status = _('Stalled')
                 else:
                     status = _('Transferring')
@@ -832,7 +702,8 @@ class FileTransfersTooltip(BaseTooltip):
             ft_table.attach(label, 2, 3, current_row, current_row + 1,
                     Gtk.AttachOptions.EXPAND | Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 0, 0)
 
-        self.win.add(ft_table)
+        ft_table.show_all()
+        return ft_table
 
 
 def colorize_status(status):

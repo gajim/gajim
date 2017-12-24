@@ -140,7 +140,12 @@ class FileTransfersWindow:
 
         self.tree.get_selection().set_mode(Gtk.SelectionMode.SINGLE)
         self.tree.get_selection().connect('changed', self.selection_changed)
+
+        # Tooltip
+        self.tree.connect('query-tooltip', self._query_tooltip)
+        self.tree.set_has_tooltip(True)
         self.tooltip = tooltips.FileTransfersTooltip()
+
         self.file_transfers_menu = self.xml.get_object('file_transfers_menu')
         self.open_folder_menuitem = self.xml.get_object('open_folder_menuitem')
         self.cancel_menuitem = self.xml.get_object('cancel_menuitem')
@@ -148,6 +153,33 @@ class FileTransfersWindow:
         self.continue_menuitem = self.xml.get_object('continue_menuitem')
         self.remove_menuitem = self.xml.get_object('remove_menuitem')
         self.xml.connect_signals(self)
+
+    def _query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+        try:
+            x_pos, y_pos = widget.convert_widget_to_bin_window_coords(
+                x_pos, y_pos)
+            row = widget.get_path_at_pos(x_pos, y_pos)[0]
+        except TypeError:
+            self.tooltip.clear_tooltip()
+            return False
+        if not row:
+            self.tooltip.clear_tooltip()
+            return False
+
+        iter_ = None
+        try:
+            model = widget.get_model()
+            iter_ = model.get_iter(row)
+        except Exception:
+            self.tooltip.clear_tooltip()
+            return False
+
+        sid = self.model[iter_][Column.SID]
+        file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
+
+        value, widget = self.tooltip.get_tooltip(file_props, sid)
+        tooltip.set_custom(widget)
+        return value
 
     def find_transfer_by_jid(self, account, jid):
         """
@@ -301,9 +333,7 @@ class FileTransfersWindow:
         def on_ok(widget):
             file_dir = None
             files_path_list = dialog.get_filenames()
-            text_buffer = desc_entry.get_buffer()
-            desc = text_buffer.get_text(text_buffer.get_start_iter(),
-                text_buffer.get_end_iter(), True)
+            desc = desc_entry.get_text()
             for file_path in files_path_list:
                 if self.send_file(account, contact, file_path, desc) \
                 and file_dir is None:
@@ -721,7 +751,6 @@ class FileTransfersWindow:
         """
         Add new transfer to FT window and show the FT window
         """
-        self.on_transfers_list_leave_notify_event(None)
         if file_props is None:
             return
         file_props.elapsed_time = 0
@@ -751,45 +780,6 @@ class FileTransfersWindow:
         self.set_status(file_props, status)
         self.set_cleanup_sensitivity()
         self.window.show_all()
-
-    def on_transfers_list_motion_notify_event(self, widget, event):
-        w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        props = widget.get_path_at_pos(int(event.x), int(event.y))
-        self.height_diff = pointer[2] - int(event.y)
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id != props[0]:
-                self.tooltip.hide_tooltip()
-        if props:
-            row = props[0]
-            iter_ = None
-            try:
-                iter_ = self.model.get_iter(row)
-            except Exception:
-                self.tooltip.hide_tooltip()
-                return
-            sid = self.model[iter_][Column.SID]
-            file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
-            if file_props is not None:
-                if self.tooltip.timeout == 0 or self.tooltip.id != props[0]:
-                    self.tooltip.id = row
-                    self.tooltip.timeout = GLib.timeout_add(500,
-                        self.show_tooltip, widget)
-
-    def on_transfers_list_leave_notify_event(self, widget=None, event=None):
-        if event is not None:
-            self.height_diff = int(event.y)
-        elif self.height_diff is 0:
-            return
-        w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        props = self.tree.get_path_at_pos(pointer[1],
-            pointer[2] - self.height_diff)
-        if self.tooltip.timeout > 0 or self.tooltip.shown:
-            if not props or self.tooltip.id == props[0]:
-                self.tooltip.hide_tooltip()
 
     def on_transfers_list_row_activated(self, widget, path, col):
         # try to open the containing folder
@@ -954,37 +944,11 @@ class FileTransfersWindow:
         con.disconnect_transfer(file_props)
         self.set_status(file_props, 'stop')
 
-    def show_tooltip(self, widget):
-        self.tooltip.timeout = 0
-        if self.height_diff == 0:
-            self.tooltip.hide_tooltip()
-            return
-        w = self.tree.get_window()
-        device = w.get_display().get_device_manager().get_client_pointer()
-        pointer = w.get_device_position(device)
-        props = self.tree.get_path_at_pos(pointer[1],
-            pointer[2] - self.height_diff)
-        # check if the current pointer is at the same path
-        # as it was before setting the timeout
-        if props and self.tooltip.id == props[0]:
-            iter_ = self.model.get_iter(props[0])
-            sid = self.model[iter_][Column.SID]
-            file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
-            # bounding rectangle of coordinates for the cell within the treeview
-            rect = self.tree.get_cell_area(props[0], props[1])
-            # position of the treeview on the screen
-            position = widget.get_window().get_origin()[1:]
-            self.tooltip.show_tooltip(file_props, rect.height,
-                position[1] + rect.y + self.height_diff)
-        else:
-            self.tooltip.hide_tooltip()
-
     def on_notify_ft_complete_checkbox_toggled(self, widget):
         app.config.set('notify_on_file_complete',
                 widget.get_active())
 
     def on_file_transfers_dialog_delete_event(self, widget, event):
-        self.on_transfers_list_leave_notify_event(widget, None)
         self.window.hide()
         return True # do NOT destory window
 
@@ -1006,7 +970,6 @@ class FileTransfersWindow:
         """
         When a key is pressed in the treeviews
         """
-        self.tooltip.hide_tooltip()
         iter_ = None
         try:
             iter_ = self.tree.get_selection().get_selected()[1]
@@ -1024,7 +987,6 @@ class FileTransfersWindow:
 
     def on_transfers_list_button_release_event(self, widget, event):
         # hide tooltip, no matter the button is pressed
-        self.tooltip.hide_tooltip()
         path = None
         try:
             path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]
@@ -1037,7 +999,6 @@ class FileTransfersWindow:
 
     def on_transfers_list_button_press_event(self, widget, event):
         # hide tooltip, no matter the button is pressed
-        self.tooltip.hide_tooltip()
         path, iter_ = None, None
         try:
             path = self.tree.get_path_at_pos(int(event.x), int(event.y))[0]

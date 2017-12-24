@@ -104,8 +104,7 @@ class StatusIcon:
         self.make_menu(event_button, event_time)
 
     def on_status_icon_query_tooltip(self, widget, x, y, keyboard_mode, tooltip):
-        self.tooltip.populate()
-        tooltip.set_custom(self.tooltip.hbox)
+        tooltip.set_custom(self.tooltip.get_tooltip())
         return True
 
     def hide_icon(self):
