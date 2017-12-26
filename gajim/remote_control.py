@@ -519,7 +519,7 @@ class SignalObject(dbus.service.Object):
             win = app.interface.msg_win_mgr.get_window(jid,
                     connected_account).window
             if win.get_property('visible'):
-                win.window.focus(Gtk.get_current_event_time())
+                win.window.present()
             return DBUS_BOOLEAN(True)
         return DBUS_BOOLEAN(False)
 
@@ -658,9 +658,9 @@ class SignalObject(dbus.service.Object):
             win.present()
             # preserve the 'steal focus preservation'
             if self._is_first():
-                win.window.focus(Gtk.get_current_event_time())
+                win.window.present()
             else:
-                win.window.focus(int(time()))
+                win.window.present_with_time(int(time()))
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_roster(self):
@@ -671,9 +671,9 @@ class SignalObject(dbus.service.Object):
         win.present()
         # preserve the 'steal focus preservation'
         if self._is_first():
-            win.window.focus(Gtk.get_current_event_time())
+            win.window.present()
         else:
-            win.window.focus(int(time()))
+            win.window.present_with_time(int(time()))
 
     @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def toggle_ipython(self):

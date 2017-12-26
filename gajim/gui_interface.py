@@ -1767,7 +1767,7 @@ class Interface:
             self.roster.draw_contact(jid, account)
         if w:
             w.set_active_tab(ctrl)
-            w.window.get_window().focus(Gtk.get_current_event_time())
+            w.window.present()
             # Using isinstance here because we want to catch all derived types
             if isinstance(ctrl, ChatControlBase):
                 tv = ctrl.conv_textview
@@ -2145,7 +2145,6 @@ class Interface:
         # For JEP-0172
         if added_to_roster:
             ctrl.user_nick = app.nicks[account]
-        GLib.idle_add(mw.window.grab_focus)
 
         return ctrl
 

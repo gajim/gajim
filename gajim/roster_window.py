@@ -3131,7 +3131,6 @@ class RosterWindow:
             if gc_control:
                 mw = app.interface.msg_win_mgr.get_window(jid, account)
                 mw.set_active_tab(gc_control)
-                mw.window.get_window().focus(Gtk.get_current_event_time())
             return
         ctrl = app.interface.minimized_controls[account][jid]
         mw = app.interface.msg_win_mgr.get_window(jid, account)
@@ -3145,7 +3144,6 @@ class RosterWindow:
         ctrl.on_groupchat_maximize()
         mw.new_tab(ctrl)
         mw.set_active_tab(ctrl)
-        mw.window.get_window().focus(Gtk.get_current_event_time())
         self.remove_groupchat(jid, account)
 
     def on_edit_account(self, widget, account):

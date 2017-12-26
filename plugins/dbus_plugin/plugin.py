@@ -367,7 +367,7 @@ if dbus_support.supported:
                     win = gajim.interface.msg_win_mgr.get_window(jid,
                             connected_account).window
                     if win.get_property('visible'):
-                        win.window.focus()
+                        win.window.present()
                     return DBUS_BOOLEAN(True)
                 return DBUS_BOOLEAN(False)
 
@@ -455,9 +455,9 @@ if dbus_support.supported:
                     win.present()
                     # preserve the 'steal focus preservation'
                     if self._is_first():
-                        win.window.focus()
+                        win.window.present()
                     else:
-                        win.window.focus(long(time()))
+                        win.window.present_with_time(long(time()))
 
             @dbus.service.method(INTERFACE, in_signature='', out_signature='')
             def toggle_ipython(self):
