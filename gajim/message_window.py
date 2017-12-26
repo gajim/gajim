@@ -204,6 +204,14 @@ class MessageWindow(object):
         gtkgui_helpers.resize_window(self.window, width, height)
 
     def _on_window_focus(self, widget, event):
+        # on destroy() the window that was last focused gets the focus
+        # again. if destroy() is called from the StartChat Dialog, this
+        # Window is not yet focused, because present() seems to be asynchron
+        # at least on KDE, and takes time.
+        if 'start_chat' in app.interface.instances:
+            if app.interface.instances['start_chat'].ready_to_destroy:
+                app.interface.instances['start_chat'].destroy()
+
         # window received focus, so if we had urgency REMOVE IT
         # NOTE: we do not have to read the message (it maybe in a bg tab)
         # to remove urgency hint so this functions does that

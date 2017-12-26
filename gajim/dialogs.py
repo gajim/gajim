@@ -2776,6 +2776,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_show_menubar(False)
         self.set_title(_('Start new Conversation'))
         self.set_default_size(-1, 400)
+        self.ready_to_destroy = False
 
         self.builder = gtkgui_helpers.get_gtk_builder(
             'start_chat_dialog.ui')
@@ -2891,7 +2892,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             app.interface.new_chat_from_jid(row.account, row.jid)
 
-        self.destroy()
+        self.ready_to_destroy = True
 
     def _on_search_changed(self, entry):
         search_text = entry.get_text()
