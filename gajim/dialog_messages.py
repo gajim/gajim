@@ -133,6 +133,46 @@ messages = {
         _('%s\nLink-local messaging might not work properly.'),
         ErrorDialog),
 
+    'request-upload-slot-error': Message(
+        _('Could not request upload slot'),
+        '%s',
+        ErrorDialog),
+
+    'request-upload-slot-error2': Message(
+        _('Could not request upload slot'),
+        _('Got unexpected response from server (see log)'),
+        ErrorDialog),
+
+    'open-file-error': Message(
+        _('Could not open file'),
+        _('Exception raised while opening file (see log)'),
+        ErrorDialog),
+
+    'open-file-error2': Message(
+        _('Could not open file'),
+        '%s',
+        ErrorDialog),
+
+    'unsecure-error': Message(
+        _('Unsecure'),
+        _('Server returned unsecure transport (http)'),
+        ErrorDialog),
+
+    'httpupload-response-error': Message(
+        _('Could not upload file'),
+        _('HTTP response code from server: %s'),
+        ErrorDialog),
+
+    'httpupload-error': Message(
+        _('Upload Error'),
+        '%s',
+        ErrorDialog),
+
+    'httpupload-encryption-not-available': Message(
+        _('Encryption Error'),
+        _('For the choosen encryption is no encryption method available'),
+        ErrorDialog),
+
     }
 
 

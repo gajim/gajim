@@ -64,6 +64,8 @@ from gajim import dialogs
 from gajim import notify
 from gajim import message_control
 from gajim.dialog_messages import get_dialog
+from gajim.dialogs import ProgressWindow
+from gajim.dialogs import FileChooserDialog
 
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
@@ -88,7 +90,7 @@ from gajim.common import passwords
 from gajim.common import logging_helpers
 from gajim.common.connection_handlers_events import (
     OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
-    UpdateRosterAvatarEvent, UpdateGCAvatarEvent)
+    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, HTTPUploadProgressEvent)
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
@@ -1138,6 +1140,45 @@ class Interface:
         if (obj.conn.pep_supported and app.HAVE_GEOCLUE and
                 app.config.get_per('accounts', account, 'publish_location')):
             location_listener.enable()
+
+    @staticmethod
+    def show_httpupload_progress(file):
+        ProgressWindow(file)
+
+    def send_httpupload(self, chat_control):
+        FileChooserDialog(
+            on_response_ok=lambda widget: self.on_file_dialog_ok(widget,
+                                                                 chat_control),
+            title_text=_('Choose file to send'),
+            action=Gtk.FileChooserAction.OPEN,
+            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
+            default_response=Gtk.ResponseType.OK,
+            transient_for=chat_control.parent_win.window)
+
+    @staticmethod
+    def on_file_dialog_ok(widget, chat_control):
+        path = widget.get_filename()
+        widget.destroy()
+        con = app.connections[chat_control.account]
+        groupchat = chat_control.type_id == message_control.TYPE_GC
+        con.check_file_before_transfer(path,
+                                       chat_control.encryption,
+                                       chat_control.contact,
+                                       chat_control.session,
+                                       groupchat)
+
+    def encrypt_file(self, file, callback):
+        app.nec.push_incoming_event(HTTPUploadProgressEvent(
+            None, status='encrypt', file=file))
+        encryption = file.encryption
+        plugin = app.plugin_manager.encryption_plugins[encryption]
+        if hasattr(plugin, 'encrypt_file'):
+            plugin.encrypt_file(file, None, callback)
+        else:
+            app.nec.push_incoming_event(HTTPUploadProgressEvent(
+                None, status='close', file=file))
+            self.raise_dialog('httpupload-encryption-not-available')
 
     @staticmethod
     def handle_event_metacontacts(obj):

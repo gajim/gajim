@@ -608,7 +608,10 @@ Build dynamic Application Menus
 
 def get_singlechat_menu(control_id):
     singlechat_menu = [
-        ('win.send-file-', _('Send File...')),
+        (_('Send File...'), [
+            ('win.send-file-httpupload-', 'HTTP Upload'),
+            ('win.send-file-jingle-', 'Jingle'),
+            ]),
         ('win.invite-contacts-', _('Invite Contacts')),
         ('win.add-to-roster-', _('Add to Roster')),
         ('win.toggle-audio-', _('Audio Session')),
@@ -620,11 +623,17 @@ def get_singlechat_menu(control_id):
     def build_menu(preset):
         menu = Gio.Menu()
         for item in preset:
-            action_name, label = item
-            if action_name == 'win.browse-history-':
-                menu.append(label, action_name + control_id + '::none')
+            if isinstance(item[1], str):
+                action_name, label = item
+                if action_name == 'win.browse-history-':
+                    menu.append(label, action_name + control_id + '::none')
+                else:
+                    menu.append(label, action_name + control_id)
             else:
-                menu.append(label, action_name + control_id)
+                label, sub_menu = item
+                # This is a submenu
+                submenu = build_menu(sub_menu)
+                menu.append_submenu(label, submenu)
         return menu
 
     return build_menu(singlechat_menu)

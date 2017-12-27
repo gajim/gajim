@@ -97,6 +97,10 @@ class ChatControl(ChatControlBase):
             self._on_authentication_button_clicked)
         self.handlers[id_] = self.authentication_button
 
+        self.sendfile_button = self.xml.get_object('sendfile_button')
+        self.sendfile_button.set_action_name('win.send-file-' + \
+                                             self.control_id)
+
         # Add lock image to show chat encryption
         self.lock_image = self.xml.get_object('lock_image')
 
@@ -242,7 +246,6 @@ class ChatControl(ChatControlBase):
 
     def add_actions(self):
         actions = [
-            ('send-file-', self._on_send_file),
             ('invite-contacts-', self._on_invite_contacts),
             ('add-to-roster-', self._on_add_to_roster),
             ('information-', self._on_information),
@@ -288,16 +291,42 @@ class ChatControl(ChatControlBase):
         win.lookup_action('toggle-video-' + self.control_id).set_enabled(
             online and self.video_available)
 
+        # Send file (HTTP File Upload)
+        httpupload = win.lookup_action(
+            'send-file-httpupload-' + self.control_id)
+        httpupload.set_enabled(
+            online and app.connections[self.account].httpupload)
+
+        # Send file (Jingle)
+        jingle_conditions = (
+            (self.contact.supports(NS_FILE) or
+             self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and
+             self.contact.show != 'offline')
+        jingle = win.lookup_action('send-file-jingle-' + self.control_id)
+        jingle.set_enabled(online and jingle_conditions)
+
         # Send file
-        if ((self.contact.supports(NS_FILE) or \
-        self.contact.supports(NS_JINGLE_FILE_TRANSFER_5)) and \
-        (self.type_id == 'chat' or self.gc_contact.resource)) and \
-        self.contact.show != 'offline' and online:
-            win.lookup_action('send-file-' + self.control_id).set_enabled(
-                True)
-        else:
-            win.lookup_action('send-file-' + self.control_id).set_enabled(
-                False)
+        win.lookup_action(
+            'send-file-' + self.control_id).set_enabled(
+            jingle.get_enabled() or httpupload.get_enabled())
+
+        # Set File Transfer Button tooltip
+        ft_pref = app.config.get_per('accounts', self.account,
+                                     'filetransfer_preference')
+
+        tooltip_text = None
+        if httpupload.get_enabled() and jingle.get_enabled():
+            if ft_pref == 'httpupload':
+                tooltip_text = _('HTTP File Upload')
+            else:
+                tooltip_text = _('Jingle File Transfer')
+        elif httpupload.get_enabled():
+            tooltip_text = _('HTTP File Upload')
+        elif jingle.get_enabled():
+            tooltip_text = _('Jingle File Transfer')
+        elif online:
+            tooltip_text = _('No File Transfer available')
+        self.sendfile_button.set_tooltip_text(tooltip_text)
 
         # Convert to GC
         if app.config.get_per('accounts', self.account, 'is_zeroconf'):
@@ -314,9 +343,6 @@ class ChatControl(ChatControlBase):
         # Information
         win.lookup_action(
             'information-' + self.control_id).set_enabled(online)
-
-    def _on_send_file(self, action, param):
-        super()._on_send_file()
 
     def _on_add_to_roster(self, action, param):
         dialogs.AddNewContactWindow(self.account, self.contact.jid)
@@ -1265,43 +1291,37 @@ class ChatControl(ChatControlBase):
         self.show_avatar()
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
-            target_type, timestamp):
+                               target_type, timestamp):
         if not selection.get_data():
             return
+
+        # get contact info (check for PM = private chat)
         if self.TYPE_ID == message_control.TYPE_PM:
-            c = self.gc_contact
+            c = self.gc_contact.as_contact()
         else:
             c = self.contact
+
         if target_type == self.TARGET_TYPE_URI_LIST:
-            if not c.resource: # If no resource is known, we can't send a file
+            # file drag and drop (handled in chat_control_base)
+            self.drag_data_file_transfer(c, selection, self)
+        else:
+            # chat2muc
+            treeview = app.interface.roster.tree
+            model = treeview.get_model()
+            data = selection.get_data()
+            path = treeview.get_selection().get_selected_rows()[1][0]
+            iter_ = model.get_iter(path)
+            type_ = model[iter_][2]
+            if type_ != 'contact': # source is not a contact
                 return
+            dropped_jid = data
 
-            # we may have more than one file dropped
-            uri_splitted = selection.get_uris()
-            for uri in uri_splitted:
-                path = helpers.get_file_path_from_dnd_dropped_uri(uri)
-                if os.path.isfile(path): # is it file?
-                    ft = app.interface.instances['file_transfers']
-                    ft.send_file(self.account, c, path)
-            return
+            dropped_transport = app.get_transport_name_from_jid(dropped_jid)
+            c_transport = app.get_transport_name_from_jid(c.jid)
+            if dropped_transport or c_transport:
+                return # transport contacts cannot be invited
 
-        # chat2muc
-        treeview = app.interface.roster.tree
-        model = treeview.get_model()
-        data = selection.get_data()
-        path = treeview.get_selection().get_selected_rows()[1][0]
-        iter_ = model.get_iter(path)
-        type_ = model[iter_][2]
-        if type_ != 'contact': # source is not a contact
-            return
-        dropped_jid = data
-
-        dropped_transport = app.get_transport_name_from_jid(dropped_jid)
-        c_transport = app.get_transport_name_from_jid(c.jid)
-        if dropped_transport or c_transport:
-            return # transport contacts cannot be invited
-
-        dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
+            dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
 
     def _on_message_tv_buffer_changed(self, textbuffer):
         super()._on_message_tv_buffer_changed(textbuffer)
