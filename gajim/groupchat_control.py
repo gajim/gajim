@@ -2032,11 +2032,19 @@ class GroupchatControl(ChatControlBase):
                 correct_id = self.last_sent_msg
             else:
                 correct_id = None
+
+            # Set chatstate
+            chatstate = None
+            if app.config.get('outgoing_chat_state_notifications') != 'disabled':
+                chatstate = 'active'
+                self.reset_kbd_mouse_timeout_vars()
+                self.contact.our_chatstate = chatstate
+
             # Send the message
-            app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
-                account=self.account, jid=self.room_jid, message=message,
-                xhtml=xhtml, label=label, correct_id=correct_id,
-                automatic_message=False))
+            app.nec.push_outgoing_event(GcMessageOutgoingEvent(
+                None, account=self.account, jid=self.room_jid, message=message,
+                xhtml=xhtml, label=label, chatstate=chatstate,
+                correct_id=correct_id, automatic_message=False))
             self.msg_textview.get_buffer().set_text('')
             self.msg_textview.grab_focus()
 
