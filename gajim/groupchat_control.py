@@ -1994,6 +1994,8 @@ class GroupchatControl(ChatControlBase):
             self.model.remove(parent_iter)
 
     def _message_sent(self, obj):
+        if not obj.message:
+            return
         # we'll save sent message text when we'll receive it in
         # _nec_gc_message_received
         self.last_sent_msg = obj.stanza_id
