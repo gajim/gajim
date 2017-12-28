@@ -97,6 +97,8 @@ def tree_cell_data_func(column, renderer, model, iter_, user_data):
     parent_iter = model.iter_parent(iter_)
     if isinstance(renderer, Gtk.CellRendererPixbuf):
         image = model[iter_][Column.AVATAR_IMG]
+        if image is None:
+            return
         surface = image.get_property('surface')
         renderer.set_property('surface', surface)
 
