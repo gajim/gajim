@@ -237,7 +237,7 @@ class GCTooltip():
         if contact.avatar_sha is not None:
             app.log('avatar').debug(
                 'Load GCTooltip: %s %s', contact.name, contact.avatar_sha)
-            scale = self.get_scale_factor()
+            scale = self.tooltip_grid.get_scale_factor()
             surface = app.interface.get_avatar(
                 contact.avatar_sha, AvatarSize.TOOLTIP, scale)
             if surface is not None:
