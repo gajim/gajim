@@ -477,7 +477,7 @@ class ConnectionVcard:
     def _get_vcard_photo(self, vcard, jid):
         try:
             photo = vcard['PHOTO']['BINVAL']
-        except (KeyError, AttributeError):
+        except (KeyError, AttributeError, TypeError):
             avatar_sha = None
             photo_decoded = None
         else:
