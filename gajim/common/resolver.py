@@ -20,18 +20,12 @@
 import sys
 import logging
 import functools
-log = logging.getLogger('gajim.c.resolver')
-
-if __name__ == '__main__':
-    sys.path.append('../..')
-    from gajim.common import i18n
-    from gajim.common import configpaths
-    configpaths.gajimpaths.init(None)
 
 from gi.repository import Gio, GLib
 
+log = logging.getLogger('gajim.c.resolver')
 
-def get_resolver(idlequeue):
+def get_resolver():
     return GioResolver()
 
 
@@ -141,10 +135,7 @@ class GioResolver(CommonResolver):
 # below lines is on how to use API and assist in testing
 if __name__ == '__main__':
     from gi.repository import Gtk
-    from nbxmpp import idlequeue
-
-    idlequeue = idlequeue.get_idlequeue()
-    resolver = get_resolver(idlequeue)
+    resolver = get_resolver()
 
     def clicked(widget):
         global resolver
@@ -165,5 +156,4 @@ if __name__ == '__main__':
     but.connect('clicked', clicked)
     win.add(hbox)
     win.show_all()
-    GLib.timeout_add(200, idlequeue.process)
     Gtk.main()

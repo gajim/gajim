@@ -2773,7 +2773,7 @@ class Interface:
 
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
-        app.resolver = resolver.get_resolver(app.idlequeue)
+        app.resolver = resolver.get_resolver()
         app.socks5queue = socks5.SocksQueue(app.idlequeue,
             self.handle_event_file_rcv_completed,
             self.handle_event_file_progress,
