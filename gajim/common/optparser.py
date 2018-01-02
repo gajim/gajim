@@ -112,7 +112,7 @@ class OptionsParser:
         self.__tempfile = os.path.join(base_dir, '.' + filename)
         try:
             f = os.fdopen(os.open(self.__tempfile,
-                os.O_CREAT|os.O_WRONLY|os.O_TRUNC, 0o600), 'w')
+                os.O_CREAT|os.O_WRONLY|os.O_TRUNC, 0o600), 'w', encoding='utf-8')
         except IOError as e:
             return str(e)
         try:
