@@ -67,10 +67,6 @@ __all__ = ['HtmlTextView']
 whitespace_rx = re.compile('\\s+')
 allwhitespace_rx = re.compile('^\\s*$')
 
-# pixels = points * display_resolution
-display_resolution = 0.3514598*(Gdk.Screen.height() /
-                                        float(Gdk.Screen.height_mm()))
-
 # embryo of CSS classes
 classes = {
         #'system-message':';display: none',
@@ -227,6 +223,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.list_counters = [] # stack (top at head) of list
                                 # counters, or None for unordered list
 
+    def _get_points_from_pixels(self, pixels):
+        resolution = self.textview.get_screen().get_resolution()
+        # points = pixels * 72 / resolution
+        return pixels * 72 / resolution
+
     def _parse_style_color(self, tag, value):
         color = _parse_css_color(value)
         tag.set_property('foreground-gdk', color)
@@ -235,7 +236,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         color = _parse_css_color(value)
         tag.set_property('background-gdk', color)
         tag.set_property('paragraph-background-gdk', color)
-
 
     def _get_current_attributes(self):
         attrs = self.textview.get_default_attributes()
@@ -266,10 +266,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             val = sign*max(1, min(abs(val), 500))
             frac = val/100
             if font_relative:
-                attrs = self._get_current_attributes()
-                if not attrs.font:
-                    font_size = self.get_font_size()
-                callback(frac*display_resolution*font_size, *args)
+                callback(frac, '%', *args)
             elif block_relative:
                 # CSS says 'Percentage values: refer to width of the closest
                 #           block-level ancestor'
@@ -285,8 +282,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 callback(frac, *args)
             return
 
-        def get_val():
-            val = float(value[:-2])
+        def get_val(min_val=minl, max_val=maxl):
+            try:
+                val = float(value[:-2])
+            except:
+                log.warning('Unable to parse length value "%s"' % value)
+                return None
             if val > 0:
                 sign = 1
             elif val < 0:
@@ -294,27 +295,24 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             else:
                 sign = 0
             # validate length
-            return sign*max(minl, min(abs(val*display_resolution), maxl))
-        if value.endswith('pt'): # points
-            callback(get_val()*display_resolution, *args)
+            return sign*max(min_val, min(abs(val), max_val))
+        if value.endswith('pt'):  # points
+            size = get_val(5, 50)
+            if size is None:
+                return
+            callback(size, 'pt', *args)
 
-        elif value.endswith('em'): # ems, the width of the element's font
-            attrs = self._get_current_attributes()
-            if not attrs.font:
-                font_size = self.get_font_size()
-            callback(get_val()*display_resolution*font_size, *args)
+        elif value.endswith('em'):
+            size = get_val(0.3, 4)
+            if size is None:
+                return
+            callback(size, 'em', *args)
 
-        elif value.endswith('ex'): # x-height, ~ the height of the letter 'x'
-            # FIXME: figure out how to calculate this correctly
-            #        for now 'em' size is used as approximation
-
-            attrs = self._get_current_attributes()
-            if not attrs.font:
-                font_size = self.get_font_size()
-            callback(get_val()*display_resolution*font_size, *args)
-
-        elif value.endswith('px'): # pixels
-            callback(get_val(), *args)
+        elif value.endswith('px'):  # pixels
+            size = get_val(5, 50)
+            if size is None:
+                return
+            callback(size, 'px', *args)
 
         else:
             try:
@@ -327,13 +325,18 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 else:
                     sign = 0
                 # validate length
-                val = sign*max(minl, min(abs(val), maxl))
-                callback(val, *args)
+                val = sign*max(5, min(abs(val), 70))
+                callback(val, 'px', *args)
             except Exception:
                 log.warning('Unable to parse length value "%s"' % value)
 
-    def __parse_font_size_cb(length, tag):
-        tag.set_property('size-points', length/display_resolution)
+    def __parse_font_size_cb(size, type_, tag):
+        if type_ in ('em', '%'):
+            tag.set_property('scale', size)
+        elif type_ == 'pt':
+            tag.set_property('size-points', size)
+        elif type_ == 'px':
+            tag.set_property('size-points', self._get_points_from_pixels(size))
     __parse_font_size_cb = staticmethod(__parse_font_size_cb)
 
     def _parse_style_display(self, tag, value):
@@ -830,10 +833,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             self._jump_line()
         self._end_span()
 
-    def get_font_size(self):
-        context = self.conv_textview.tv.get_style_context()
-        font = context.get_font(Gtk.StateType.NORMAL)
-        return font.get_size() / Pango.SCALE
 
 class HtmlTextView(Gtk.TextView):
 
