@@ -44,6 +44,7 @@ from gajim.common import caps_cache
 import socket
 import time
 from datetime import datetime, timedelta, timezone, tzinfo
+from distutils.version import LooseVersion as V
 
 from encodings.punycode import punycode_encode
 from string import Template
@@ -1586,3 +1587,8 @@ def download_image(account, attrs):
     if proxy and proxy['type'] in ('http', 'socks5'):
         return _get_img_proxy(attrs, proxy)
     return _get_img_direct(attrs)
+
+def version_condition(current_version, required_version):
+    if V(current_version) < V(required_version):
+        return False
+    return True

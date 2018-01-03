@@ -63,6 +63,7 @@ from gajim.common import passwords
 from gajim.common import exceptions
 from gajim.common import check_X509
 from gajim.common.connection_handlers import *
+from gajim.common.helpers import version_condition
 
 from gajim.gtkgui_helpers import get_action
 
@@ -1079,9 +1080,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         # SRV resolver
         self._proxy = proxy
         self._hosts = [
-            {'host': h, 'port': p, 'type': 'tls', 'prio': 10, 'weight': 10},
-            {'host': h, 'port': ssl_p, 'type': 'ssl', 'prio': 10, 'weight': 10},
-            {'host': h, 'port': p, 'type': 'plain', 'prio': 10, 'weight': 10}
+            {'host': h, 'port': p, 'type': 'tls', 'prio': 10, 'weight': 10, 'alpn': False},
+            {'host': h, 'port': ssl_p, 'type': 'ssl', 'prio': 10, 'weight': 10, 'alpn': False},
+            {'host': h, 'port': p, 'type': 'plain', 'prio': 10, 'weight': 10, 'alpn': False}
         ]
         self._hostname = hostname
 
@@ -1110,9 +1111,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         for record in result:
             service = host[1:]
             if service.startswith(SERVICE_START_TLS):
+                record['alpn'] = False
                 self._append_srv_record(record, 'tls')
                 self._append_srv_record(record, 'plain')
             elif service.startswith(SERVICE_DIRECT_TLS):
+                record['alpn'] = True
                 self._append_srv_record(record, 'ssl')
 
         self._num_pending_srv_records -= 1
@@ -1209,8 +1212,13 @@ class Connection(CommonConnection, ConnectionHandlers):
             'tls_version')
         cipher_list = app.config.get_per('accounts', self.name,
             'cipher_list')
-        secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
-            cipher_list)
+
+        if version_condition(nbxmpp.__version__, '0.6.3'):
+            secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
+                            cipher_list, self._current_host['alpn'])
+        else:
+            secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
+                            cipher_list)
 
         con = nbxmpp.NonBlockingClient(
             domain=self._hostname,
@@ -1244,7 +1252,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             on_connect_failure=self._connect_to_next_host,
             on_stream_error_cb=self._StreamCB,
             proxy=self._proxy,
-            secure_tuple = secure_tuple)
+            secure_tuple=secure_tuple)
 
     def log_hosttype_info(self, port):
         msg = '>>>>>> Connecting to %s [%s:%d], type = %s' % (self.name,
