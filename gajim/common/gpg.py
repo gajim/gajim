@@ -111,6 +111,7 @@ if app.HAVE_GPG:
         def get_keys(self, secret=False):
             keys = {}
             result = super(GnuPG, self).list_keys(secret=secret)
+
             for key in result:
                 # Take first not empty uid
                 keys[key['keyid'][8:]] = [uid for uid in key['uids'] if uid][0]

@@ -186,9 +186,9 @@ LIST_ELEMS = set( 'dl, ol, ul'.split(', '))
 
 for name in BLOCK_HEAD:
     num = eval(name[1])
-    size = (num-1) // 2
+    header_size = (num-1) // 2
     weigth = (num - 1) % 2
-    element_styles[name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[size],
+    element_styles[name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[header_size],
         ('font-weight: bold', 'font-style: oblique')[weigth],)
 
 def _parse_css_color(color):
@@ -286,7 +286,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             try:
                 val = float(value[:-2])
             except:
-                log.warning('Unable to parse length value "%s"' % value)
+                log.warning('Unable to parse length value "%s"', value)
                 return None
             if val > 0:
                 sign = 1
@@ -328,16 +328,15 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 val = sign*max(5, min(abs(val), 70))
                 callback(val, 'px', *args)
             except Exception:
-                log.warning('Unable to parse length value "%s"' % value)
+                log.warning('Unable to parse length value "%s"', value)
 
-    def __parse_font_size_cb(size, type_, tag):
+    def __parse_font_size_cb(self, size, type_, tag):
         if type_ in ('em', '%'):
             tag.set_property('scale', size)
         elif type_ == 'pt':
             tag.set_property('size-points', size)
         elif type_ == 'px':
             tag.set_property('size-points', self._get_points_from_pixels(size))
-    __parse_font_size_cb = staticmethod(__parse_font_size_cb)
 
     def _parse_style_display(self, tag, value):
         if value == 'none':
@@ -378,8 +377,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.set_property('scale', 1.2)
             return
         # font relative (5 ~ 4pt, 110 ~ 72pt)
-        self._parse_length(value, True, False, 5, 110,self.__parse_font_size_cb,
-            tag)
+        self._parse_length(
+            value, True, False, 5, 110, self.__parse_font_size_cb, tag)
 
     def _parse_style_font_style(self, tag, value):
         try:
@@ -389,7 +388,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'oblique': Pango.Style.OBLIQUE,
                     } [value]
         except KeyError:
-            log.warning('unknown font-style %s' % value)
+            log.warning('unknown font-style %s', value)
         else:
             tag.set_property('style', style)
 
@@ -398,7 +397,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if styles:
             length += styles[-1].get_property(propname)
         tag.set_property(propname, length)
-    #__frac_length_tag_cb = staticmethod(__frac_length_tag_cb)
 
     def _parse_style_margin_left(self, tag, value):
         # block relative
@@ -427,7 +425,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'bold': Pango.Weight.BOLD,
                     } [value]
         except KeyError:
-            log.warning('unknown font-style %s' % value)
+            log.warning('unknown font-style %s', value)
         else:
             tag.set_property('weight', weight)
 
@@ -443,7 +441,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'justify': Gtk.Justification.FILL,
                     } [value]
         except KeyError:
-            log.warning('Invalid text-align:%s requested' % value)
+            log.warning('Invalid text-align: %s requested', value)
         else:
             tag.set_property('justification', align)
 
@@ -477,8 +475,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         try:
             tag.set_property(propname, value)
         except Exception:
-            log.warning( "Error with prop: " + propname + " for tag: " + str(tag))
-
+            log.warning('Error with prop: %s for tag: %s', propname, str(tag))
 
     def _parse_style_width(self, tag, value):
         if value == 'auto':
@@ -497,11 +494,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     for style in ('background-color', 'color', 'font-family', 'font-size',
                   'font-style', 'font-weight', 'margin-left', 'margin-right',
                   'text-align', 'text-decoration', 'white-space', 'display',
-                  'width', 'height' ):
+                  'width', 'height'):
         try:
             method = locals()['_parse_style_%s' % style.replace('-', '_')]
         except KeyError:
-            log.warning('Style attribute "%s" not yet implemented' % style)
+            log.warning('Style attribute "%s" not yet implemented', style)
         else:
             __style_methods[style] = method
     del style
@@ -629,7 +626,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             else:
                 self._insert_text('[IMG: %s]' % alt, working_iter)
         except Exception as ex:
-            log.error('Error loading image ' + str(ex))
+            log.error('Error loading image %s', str(ex))
             pixbuf = None
             alt = attrs.get('alt', 'Broken image')
             try:
@@ -654,7 +651,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 method = self.__style_methods[attr]
             except KeyError:
                 log.warning('Style attribute "%s" requested '
-                    'but not yet implemented' % attr)
+                            'but not yet implemented', attr)
             else:
                 method(self, tag, val)
         self.styles.append(tag)
@@ -793,7 +790,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in INLINE:
             pass
         else:
-            log.warning('Unhandled element "%s"' % name)
+            log.warning('Unhandled element "%s"', name)
 
     def endElement(self, name):
         endPreserving = False
@@ -825,7 +822,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             elif name in BLOCK_STRUCT:
                 newLine = True
         else:
-            log.warning("Unhandled element '%s'" % name)
+            log.warning("Unhandled element '%s'", name)
         self._flush_text()
         if endPreserving:
             self.preserve = False
