@@ -33,7 +33,7 @@ log = logging.getLogger('gajim.logind_listener')
 
 # file descriptor of the inhibitor; negative number means we don't
 # hold any (yet)
-fd = -1
+fd = None
 
 
 def signal_received(connection, sender_name, object_path,
@@ -61,9 +61,9 @@ def signal_received(connection, sender_name, object_path,
             conn.time_to_reconnect = 5
 
     # close the file descriptor and let the computer suspend
-    if fd >= 0:
+    if fd is not None:
         os.close(fd)
-        fd = -1
+        fd = None
     else:
         # something is wrong, the system is suspending but we don't have
         # a lock file
@@ -76,23 +76,23 @@ def get_inhibitor(connection):
 
     global fd
 
-    if fd >= 0:
+    if fd is not None:
         # someting is wrong, we haven't closed the previous file descriptor
         # and we ask for yet another one
         log.warning('We are about to ask for a sleep inhibitor, but we seem '
                     'to be holding one already')
 
-    ret = connection.call_sync(
+    ret = connection.call_with_unix_fd_list_sync(
         'org.freedesktop.login1',
         '/org/freedesktop/login1',
         'org.freedesktop.login1.Manager',
         'Inhibit',
         GLib.Variant('(ssss)', ('sleep', 'org.gajim.Gajim',
                                 'Disconnect from the network', 'delay')),
-        None,
-        Gio.DBusCallFlags.NONE, -1, None)
+        GLib.VariantType.new('(h)'),
+        Gio.DBusCallFlags.NONE, -1, None, None)
 
-    fd = ret[0]
+    fd = ret.out_fd_list.get(ret[0])
 
 
 def appeared(connection, name, name_owner, *user_data):
