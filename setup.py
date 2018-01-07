@@ -31,7 +31,7 @@ def update_trans():
         os.path.join(root, f)) and (f.endswith('.py') or f.endswith('.ui'))]
     files.append(os.path.join("data", "org.gajim.Gajim.desktop.in"))
     files.append(os.path.join("data", "org.gajim.Gajim.appdata.xml.in"))
-    cmd = 'xgettext --from-code=utf-8 -o %s %s' % (
+    cmd = 'xgettext --from-code=utf-8 --keyword=Q_ -o %s %s' % (
         template, " ".join(files))
     if os.system(cmd) != 0:
         msg = "ERROR: %s could not be created!\n" % template
