@@ -127,7 +127,8 @@ class ServerInfoDialog(Gtk.Dialog):
             hours = 0
             if seconds >= 3600:
                 hours = delta.seconds // 3600
-            self.uptime = _('%s days, %s hours') % (delta.days, hours)
+            self.uptime = _('%(days)s days, %(hours)s hours') % {
+                'days': delta.days, 'hours': hours}
             self.update(self.get_infos, self.info_listbox)
 
     def _nec_version_result_received(self, obj):
