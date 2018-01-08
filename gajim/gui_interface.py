@@ -54,10 +54,6 @@ except:
 from gajim.common import app
 from gajim.common import events
 
-from gajim.common import dbus_support
-if dbus_support.supported:
-    import dbus
-
 from gajim.music_track_listener import MusicTrackListener
 
 if app.HAVE_GEOCLUE:
@@ -2828,56 +2824,9 @@ class Interface:
 
         from gajim import logind_listener
 
-        # Handle gnome screensaver
-        if dbus_support.supported:
-            def gnome_screensaver_ActiveChanged_cb(active):
-                if not active:
-                    for account in app.connections:
-                        if app.account_is_connected(account) and \
-                        app.sleeper_state[account] == 'autoaway-forced':
-                            # We came back online ofter gnome-screensaver
-                            # autoaway
-                            self.roster.send_status(account, 'online',
-                                app.status_before_autoaway[account])
-                            app.status_before_autoaway[account] = ''
-                            app.sleeper_state[account] = 'online'
-                    return
-                if not app.config.get('autoaway'):
-                    # Don't go auto away if user disabled the option
-                    return
-                for account in app.connections:
-                    if account not in app.sleeper_state or \
-                                    not app.sleeper_state[account]:
-                        continue
-                    if app.sleeper_state[account] == 'online':
-                        if not app.account_is_connected(account):
-                            continue
-                        # we save out online status
-                        app.status_before_autoaway[account] = \
-                                app.connections[account].status
-                        # we go away (no auto status) [we pass True to auto
-                        # param]
-                        auto_message = app.config.get('autoaway_message')
-                        if not auto_message:
-                            auto_message = app.connections[account].status
-                        else:
-                            auto_message = auto_message.replace('$S',
-                                '%(status)s')
-                            auto_message = auto_message.replace('$T',
-                                '%(time)s')
-                            auto_message = auto_message % {
-                                'status': app.status_before_autoaway[account],
-                                'time': app.config.get('autoxatime')}
-                        self.roster.send_status(account, 'away', auto_message,
-                            auto=True)
-                        app.sleeper_state[account] = 'autoaway-forced'
-
-            try:
-                bus = dbus.SessionBus()
-                bus.add_signal_receiver(gnome_screensaver_ActiveChanged_cb,
-                    'ActiveChanged', 'org.gnome.ScreenSaver')
-            except Exception:
-                pass
+        # Handle screensaver
+        if sys.platform == 'linux':
+            from gajim import screensaver_listener
 
         self.show_vcard_when_connect = []
 
