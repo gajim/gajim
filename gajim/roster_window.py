@@ -4535,6 +4535,7 @@ class RosterWindow:
                 # c_dest is None if jid_dest doesn't belong to account
                 return
             menu = Gtk.Menu()
+            #from and to are the names of contacts
             item = Gtk.MenuItem.new_with_label(_('Send %(from)s to %(to)s') % {
                 'from': c_source.get_shown_name(), 'to': c_dest.get_shown_name()})
             item.set_use_underline(False)

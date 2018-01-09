@@ -1487,7 +1487,7 @@ class FileChooserDialog(Gtk.FileChooserDialog):
 class AspellDictError:
     def __init__(self, lang):
         ErrorDialog(
-            _('Dictionary for lang "%s" not available') % lang,
+            _('Dictionary for language "%s" not available') % lang,
             _('You have to install the dictionary "%s" to use spellchecking, '
               'or choose another language by setting the speller_language '
               'option.\n\n'
