@@ -43,7 +43,6 @@ import os
 import sys
 import time
 import locale
-import hashlib
 
 from enum import IntEnum, unique
 

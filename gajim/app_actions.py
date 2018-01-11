@@ -18,9 +18,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import sys
-import os
-
 from gi.repository import Gtk
 
 from gajim.common import app

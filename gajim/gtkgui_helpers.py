@@ -84,7 +84,7 @@ def get_icon_path(icon_name, size=16):
     except GLib.GError as e:
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
-from gajim import vcard
+
 from gajim import dialogs
 
 
