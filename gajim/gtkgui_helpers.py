@@ -121,7 +121,7 @@ def get_image_button(icon_name, tooltip, toggle=False):
     else:
         button = Gtk.Button.new_from_icon_name(
             icon_name, Gtk.IconSize.MENU)
-    button.set_tooltip_text(_(tooltip))
+    button.set_tooltip_text(tooltip)
     return button
 
 def get_gtk_builder(file_name, widget=None):

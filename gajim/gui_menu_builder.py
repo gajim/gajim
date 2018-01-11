@@ -724,14 +724,14 @@ def get_account_menu(account):
             ('-profile', _('Profile')),
             ('-services', _('Discover Services')),
             ('-start-single-chat', _('Send Single Message...')),
-            ('Advanced', [
+            (_('Advanced'), [
                 ('-archive', _('Archiving Preferences')),
                 ('-sync-history', _('Synchronise History')),
                 ('-privacylists', _('Privacy Lists')),
                 ('-server-info', _('Server Info')),
                 ('-xml-console', _('XML Console'))
                 ]),
-            ('Admin', [
+            (_('Admin'), [
                 ('-send-server-message', _('Send Server Message...')),
                 ('-set-motd', _('Set MOTD...')),
                 ('-update-motd', _('Update MOTD...')),
@@ -787,7 +787,7 @@ def build_accounts_menu():
     else:
         acc_menu = get_account_menu(accounts_list[0])
         menubar.remove(menu_position)
-        menubar.insert_submenu(menu_position, 'Accounts', acc_menu)
+        menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
 
 def build_bookmark_menu(account):

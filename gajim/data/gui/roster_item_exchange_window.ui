@@ -18,7 +18,7 @@
           <object class="GtkLabel" id="type_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label">&lt;b&gt;someone@somewhere.com&lt;/b&gt; would like you to &lt;b&gt;add&lt;/b&gt; some contacts in your roster.</property>
+            <property name="label" translatable="yes">&lt;b&gt;someone@somewhere.com&lt;/b&gt; would like you to &lt;b&gt;add&lt;/b&gt; some contacts in your roster.</property>
             <property name="use_markup">True</property>
             <property name="justify">center</property>
             <property name="selectable">True</property>

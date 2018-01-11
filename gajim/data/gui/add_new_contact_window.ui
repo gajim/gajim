@@ -207,7 +207,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
-                <property name="placeholder_text">Type User ID</property>
+                <property name="placeholder_text" translatable="yes">Type User ID</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -220,7 +220,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
-                <property name="placeholder_text">Type Nickname</property>
+                <property name="placeholder_text" translatable="yes">Type Nickname</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
