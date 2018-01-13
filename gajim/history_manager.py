@@ -30,7 +30,6 @@
 
 import os
 import sys
-import signal
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -668,7 +667,15 @@ class HistoryManager:
         path = self.logs_liststore.get_path(iter_)
         self.logs_listview.scroll_to_cell(path)
 
-if __name__ == '__main__':
-    signal.signal(signal.SIGINT, signal.SIG_DFL)  # ^C exits the application
+
+def main():
+    if sys.platform != 'win32':
+        if os.geteuid() == 0:
+            sys.exit("You must not launch gajim as root, it is insecure.")
+
     HistoryManager()
     Gtk.main()
+
+
+if __name__ == '__main__':
+    main()

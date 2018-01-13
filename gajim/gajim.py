@@ -437,6 +437,14 @@ class GajimApplication(Gtk.Application):
                 self.lookup_action(account + action_name).set_enabled(True)
 
 
-if __name__ == '__main__':
+def main():
+    if sys.platform != 'win32':
+        if os.geteuid() == 0:
+            sys.exit("You must not launch gajim as root, it is insecure.")
+
     appli = GajimApplication()
     appli.run(sys.argv)
+
+
+if __name__ == '__main__':
+    main()

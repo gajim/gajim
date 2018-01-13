@@ -261,10 +261,15 @@ setup(
         'test_nogui': test_nogui,
         'update_po': update_po,
     },
-    scripts=[
-        'scripts/gajim',
-        'scripts/gajim-history-manager',
-        'scripts/gajim-remote'],
+    entry_points={
+        'console_scripts': [
+            'gajim-remote = gajim.gajim_remote:main',
+        ],
+        'gui_scripts': [
+            'gajim = gajim.gajim:main',
+            'gajim-history-manager = gajim.history_manager:main',
+        ]
+    },
     packages=find_packages(exclude=["gajim.dev", "test*"]),
     package_data={'gajim': package_data},
     data_files=data_files,
