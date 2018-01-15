@@ -3560,21 +3560,21 @@ class XMLConsoleWindow(Gtk.Window):
         self.paned.set_position(self.paned.get_property('max-position'))
 
         button = gtkgui_helpers.get_image_button(
-            'edit-clear-all-symbolic', 'Clear')
+            'edit-clear-all-symbolic', _('Clear'))
         button.connect('clicked', self.on_clear)
         self.actionbar.pack_start(button)
 
         button = gtkgui_helpers.get_image_button(
-            'applications-system-symbolic', 'Filter')
+            'applications-system-symbolic', _('Filter'))
         button.connect('clicked', self.on_filter_options)
         self.actionbar.pack_start(button)
 
         button = gtkgui_helpers.get_image_button(
-            'document-edit-symbolic', 'XML Input', toggle=True)
+            'document-edit-symbolic', _('XML Input'), toggle=True)
         button.connect('toggled', self.on_input)
         self.actionbar.pack_start(button)
 
-        button = gtkgui_helpers.get_image_button('emblem-ok-symbolic', 'Send')
+        button = gtkgui_helpers.get_image_button('emblem-ok-symbolic', _('Send'))
         button.connect('clicked', self.on_send)
         self.actionbar.pack_end(button)
 

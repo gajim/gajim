@@ -134,7 +134,7 @@
               <object class="GtkLabel" id="info_display">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">(&lt;b&gt;ESession&lt;/b&gt; info)</property>
+                <property name="label" translatable="yes">(&lt;b&gt;ESession&lt;/b&gt; info)</property>
                 <property name="use_markup">True</property>
                 <property name="wrap">True</property>
               </object>

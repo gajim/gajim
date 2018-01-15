@@ -389,7 +389,7 @@ class FileChooserOption(GenericOption):
         button.connect('selection-changed', self.on_select)
 
         clear_button = gtkgui_helpers.get_image_button(
-            'edit-clear-all-symbolic', 'Clear File')
+            'edit-clear-all-symbolic', _('Clear File'))
         clear_button.connect('clicked', lambda *args: button.unselect_all())
         self.option_box.pack_start(button, True, True, 0)
         self.option_box.pack_start(clear_button, False, False, 0)
@@ -471,7 +471,7 @@ class ProxyComboOption(GenericOption):
         self.combo.set_valign(Gtk.Align.CENTER)
 
         button = gtkgui_helpers.get_image_button(
-            'preferences-system-symbolic', 'Manage Proxies')
+            'preferences-system-symbolic', _('Manage Proxies'))
         button.set_action_name('app.manage-proxies')
         button.set_valign(Gtk.Align.CENTER)
 

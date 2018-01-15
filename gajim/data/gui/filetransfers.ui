@@ -8,7 +8,7 @@
     <child>
       <object class="GtkMenuItem" id="remove_menuitem">
         <property name="can_focus">False</property>
-        <property name="label">_Remove</property>
+        <property name="label" translatable="yes">_Remove</property>
         <property name="use_underline">True</property>
         <signal name="activate" handler="on_remove_menuitem_activate" swapped="no"/>
       </object>
@@ -171,7 +171,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">_Cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
@@ -196,7 +196,7 @@
             </child>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="label">_Close</property>
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_focus">True</property>

@@ -12,7 +12,7 @@
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
     <property name="buttons">yes-no</property>
-    <property name="text">&lt;b&gt;&lt;big&gt;Incoming call&lt;/big&gt;&lt;/b&gt;</property>
+    <property name="text" translatable="yes">&lt;b&gt;&lt;big&gt;Incoming call&lt;/big&gt;&lt;/b&gt;</property>
     <property name="use_markup">True</property>
     <signal name="close" handler="on_voip_call_received_messagedialog_close" swapped="no"/>
     <signal name="destroy" handler="on_voip_call_received_messagedialog_destroy" swapped="no"/>

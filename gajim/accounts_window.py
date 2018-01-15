@@ -37,11 +37,11 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.set_titlebar(self.headerbar)
 
         menu = Gio.Menu()
-        menu.append('Merge Accounts', 'app.merge')
-        menu.append('Use PGP Agent', 'app.agent')
+        menu.append(_('Merge Accounts'), 'app.merge')
+        menu.append(_('Use PGP Agent'), 'app.agent')
         self.menu_button.set_menu_model(menu)
 
-        button = get_image_button('list-add-symbolic', 'Add')
+        button = get_image_button('list-add-symbolic', _('Add'))
         button.set_action_name('app.add-account')
         self.actionbar.pack_start(button)
 
@@ -341,7 +341,7 @@ class Account(Gtk.Box):
         self.add(self.label)
 
         if account != app.ZEROCONF_ACC_NAME:
-            button = get_image_button('list-remove-symbolic', 'Remove')
+            button = get_image_button('list-remove-symbolic', _('Remove'))
             button.connect('clicked', parent.on_remove_account, account)
             self.add(button)
 
