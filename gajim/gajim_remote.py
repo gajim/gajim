@@ -27,6 +27,7 @@
 
 # gajim-remote help will show you the D-BUS API of Gajim
 
+import os
 import sys
 import locale
 import urllib
@@ -500,5 +501,13 @@ class GajimRemote:
             raise exceptions.ServiceNotAvailable
         return None
 
-if __name__ == '__main__':
+
+def main():
+    if os.geteuid() == 0:
+        sys.exit("You must not launch gajim as root, it is insecure.")
+
     GajimRemote()
+
+
+if __name__ == '__main__':
+    main()
