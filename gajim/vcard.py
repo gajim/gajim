@@ -37,10 +37,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 import base64
 import binascii
-import time
-import locale
 import os
-# import logging
 
 from gajim import gtkgui_helpers
 

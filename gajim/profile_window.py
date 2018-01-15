@@ -27,14 +27,11 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
 import base64
-import os
 import time
 import logging
-import hashlib
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
-from gajim import vcard
 from gajim.common.const import AvatarSize
 
 from gajim.common import app

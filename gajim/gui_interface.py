@@ -38,7 +38,6 @@ import os
 import sys
 import re
 import time
-import math
 import hashlib
 
 from gi.repository import Gtk

@@ -33,7 +33,6 @@ from gi.repository import GLib
 import base64
 
 from gajim import gtkgui_helpers
-from gajim import dialogs
 
 from gajim.common import dataforms
 from gajim.common import helpers

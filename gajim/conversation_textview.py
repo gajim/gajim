@@ -31,13 +31,11 @@ from threading import Timer # for smooth scrolling
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 import time
 import os
-from gajim import tooltips
 from gajim import dialogs
 import queue
 import urllib
@@ -51,7 +49,6 @@ from gajim.common.fuzzyclock import FuzzyClock
 from gajim import emoticons
 
 from gajim.htmltextview import HtmlTextView
-from gajim.common.exceptions import GajimGeneralException
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
