@@ -274,7 +274,6 @@ setup(
     package_data={'gajim': package_data},
     data_files=data_files,
     install_requires=[
-        'dbus-python;sys_platform=="linux"',
         'nbxmpp>=0.6.1',
         'pyOpenSSL>=0.12',
         'pyasn1',
