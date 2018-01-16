@@ -2054,7 +2054,7 @@ msgstr "Diese Sitzung ist verschlüsselt"
 
 # "WILL" (upercase) be logged for what? unclear comunication! 
 # suggestion EN: "and will be logged in you local history"
-# suggestion DE: "und wird in Ihren lokalen historie aufgezeichnet"
+# suggestion DE: "und wird in Ihrer Lokalen Historie aufgezeichnet"
 # If this matches the implementation i suggest using this :)
 #: gajim/chat_control.py:906
 msgid " and WILL be logged"
