@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
-## src/gtkexcepthook.py
+## gajim/gtkexcepthook.py
 ##
-## Copyright (C) 2016 Philipp Hörist <philipp AT hoerist.com>
+## Copyright (C) 2016-2018 Philipp Hörist <philipp AT hoerist.com>
 ## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 ## Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2008 Stephan Erb <steve-e AT h3c.de>
@@ -26,17 +26,36 @@ import os
 import traceback
 import threading
 import webbrowser
-import gi
-
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+import platform
 from io import StringIO
-from gajim.common import configpaths
+from urllib.parse import urlencode
 
-glade_file = os.path.join(configpaths.get('GUI'), 'exception_dialog.ui')
+import nbxmpp
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, GObject
+
+if __name__ == '__main__':
+    glade_file = os.path.join('data', 'gui', 'exception_dialog.ui')
+else:
+    from gajim.common import configpaths
+    glade_file = os.path.join(configpaths.get('GUI'), 'exception_dialog.ui')
+
 
 _exception_in_progress = threading.Lock()
 
+ISSUE_TEXT = '''## Versions
+- OS: {}
+- GTK+ Version: {}
+- PyGObject Version: {}
+- python-nbxmpp Version: {}
+
+## Traceback
+```
+{}
+```
+## Steps to reproduce the problem
+...'''
 
 def _hook(type_, value, tb):
     if not _exception_in_progress.acquire(False):
@@ -60,26 +79,53 @@ class ExceptionDialog():
         buffer_ = self.exception_view.get_buffer()
         trace = StringIO()
         traceback.print_exception(type_, value, tb, None, trace)
-        buffer_.set_text(trace.getvalue())
+        self.text = self.get_issue_text(trace.getvalue())
+        buffer_.set_text(self.text)
         self.exception_view.set_editable(False)
-        self.dialog.run()
+        self.dialog.show()
 
     def on_report_clicked(self, *args):
-        url = 'https://dev.gajim.org/gajim/gajim/issues'
+        issue_url = 'https://dev.gajim.org/gajim/gajim/issues/new'
+        params = {'issue[description]': self.text}
+        url = '{}?{}'.format(issue_url, urlencode(params))
         webbrowser.open(url, new=2)
 
     def on_close_clicked(self, *args):
         self.dialog.destroy()
 
+    def get_issue_text(self, traceback_text):
+        gtk_ver = '%i.%i.%i' % (
+            Gtk.get_major_version(),
+            Gtk.get_minor_version(),
+            Gtk.get_micro_version())
+        gobject_ver = '.'.join(map(str, GObject.pygobject_version))
+
+        return ISSUE_TEXT.format(get_os_info(),
+                                 gtk_ver,
+                                 gobject_ver,
+                                 nbxmpp.__version__,
+                                 traceback_text)
+
 
 def init():
-    # gdb/kdm etc if we use startx this is not True
     if os.name == 'nt' or not sys.stderr.isatty():
-        # FIXME: maybe always show dialog?
         sys.excepthook = _hook
 
-# this is just to assist testing (python gtkexcepthook.py)
+
+def get_os_info():
+    if os.name == 'nt' or sys.platform == 'darwin':
+        return platform.system() + " " + platform.release()
+    elif os.name == 'posix':
+        try:
+            import distro
+            return distro.name(pretty=True)
+        except ImportError:
+            return platform.system()
+    return ''
+
+# this is just to assist testing (python3 gtkexcepthook.py)
 if __name__ == '__main__':
     init()
     print(sys.version)
-    raise Exception()
+    ExceptionDialog(None, None, None)
+    Gtk.main()
