@@ -14,6 +14,8 @@ from setuptools.command.build_py import build_py as _build
 from distutils import log
 from distutils.util import convert_path, newer
 
+import subprocess
+
 import gajim
 
 pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
@@ -179,14 +181,14 @@ class test(Command):
         pass
 
     def run(self):
-        os.system("./test/runtests.py")
+        exit(subprocess.call("./test/runtests.py"))
 
 
 class test_nogui(test):
     description = "Run tests without GUI"
 
     def run(self):
-        os.system("./test/runtests.py -n")
+        exit(subprocess.call(["./test/runtests.py", "-n"]))
 
 
 class update_po(Command):
