@@ -96,7 +96,7 @@ class ConnectionArchive313:
         del self.mam_awaiting_disco_result[obj.jid]
 
     @staticmethod
-    def parse_iq(stanza, query_id):
+    def parse_iq(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.error('Error on MAM query: %s', stanza.getError())
             raise InvalidMamIQ
@@ -104,10 +104,6 @@ class ConnectionArchive313:
         fin = stanza.getTag('fin')
         if fin is None:
             log.error('Malformed MAM query result received: %s', stanza)
-            raise InvalidMamIQ
-
-        if fin.getAttr('queryid') != query_id:
-            log.error('Result with unknown query id received')
             raise InvalidMamIQ
 
         set_ = fin.getTag('set', namespace=nbxmpp.NS_RSM)
@@ -129,7 +125,7 @@ class ConnectionArchive313:
 
     def _result_finished(self, conn, stanza, query_id, start_date, groupchat):
         try:
-            fin, set_ = self.parse_iq(stanza, query_id)
+            fin, set_ = self.parse_iq(stanza)
         except InvalidMamIQ:
             return
 
@@ -158,7 +154,7 @@ class ConnectionArchive313:
     def _intervall_result_finished(self, conn, stanza, query_id,
                                    start_date, end_date, event_id):
         try:
-            fin, set_ = self.parse_iq(stanza, query_id)
+            fin, set_ = self.parse_iq(stanza)
         except InvalidMamIQ:
             return
 
@@ -190,7 +186,7 @@ class ConnectionArchive313:
 
     def _received_count(self, conn, stanza, query_id, event_id):
         try:
-            _, set_ = self.parse_iq(stanza, query_id)
+            _, set_ = self.parse_iq(stanza)
         except InvalidMamIQ:
             return
 
