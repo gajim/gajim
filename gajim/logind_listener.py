@@ -92,7 +92,7 @@ def get_inhibitor(connection):
         GLib.VariantType.new('(h)'),
         Gio.DBusCallFlags.NONE, -1, None, None)
 
-    fd = ret.out_fd_list.get(ret[0])
+    fd = ret.out_fd_list.get(0)
 
 
 def appeared(connection, name, name_owner, *user_data):
