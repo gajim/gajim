@@ -46,7 +46,7 @@ from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
 FEATURE_BLACKLIST = [NS_CHATSTATES, NS_XHTML_IM, NS_ESESSION,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
     NS_JINGLE_FILE_TRANSFER_5]
-from gajim.common import app
+
 # Query entry status codes
 NEW = 0
 QUERIED = 1
@@ -457,6 +457,7 @@ class MucCapsCache:
         identities, features, data = [], [], []
         query_childs = stanza.getQueryChildren()
         if not query_childs:
+            from gajim.common import app
             app.log('gajim.muc').warning('%s returned empty disco info', jid)
             return
 
