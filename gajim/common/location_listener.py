@@ -43,7 +43,9 @@ class LocationListener:
     def __init__(self):
         self._data = {}
 
-    def _on_location_update(self, simple):
+    # Note: do not remove third parameter `paramSpec`
+    #       because notify signal expects three parameters
+    def _on_location_update(self, simple, paramSpec=None):
         location = simple.get_location()
         timestamp = location.get_property("timestamp")[0]
         lat = location.get_property("latitude")
