@@ -1,5 +1,5 @@
 setuptools
-nbxmpp
+git+https://dev.gajim.org/gajim/python-nbxmpp.git
 https://gajim.org/downloads/snap/win/build/pybonjour-1.1.1.zip
 protobuf
 pycrypto
