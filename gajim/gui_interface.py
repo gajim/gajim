@@ -2342,10 +2342,14 @@ class Interface:
             # Otherwise, an exception will stop our loop
 
             if sys.platform == 'win32':
-                timeout, in_seconds = 20, None
-            else:
-                timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+                # On Windows process() calls select.select(), so we need this
+                # executed on each mainloop cycle
+                # On Linux only timeouts are checked in process(), so we use
+                # a timeout
+                GLib.idle_add(self.process_connections)
+                raise
 
+            timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
             if in_seconds:
                 GLib.timeout_add_seconds(timeout, self.process_connections)
             else:
@@ -2632,15 +2636,16 @@ class Interface:
         self.instances['file_transfers'] = dialogs.FileTransfersWindow()
 
         GLib.timeout_add(100, self.autoconnect)
+
         if sys.platform == 'win32':
-            timeout, in_seconds = 20, None
+            GLib.idle_add(self.process_connections)
         else:
             timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
+            if in_seconds:
+                GLib.timeout_add_seconds(timeout, self.process_connections)
+            else:
+                GLib.timeout_add(self.process_connections)
 
-        if in_seconds:
-            GLib.timeout_add_seconds(timeout, self.process_connections)
-        else:
-            GLib.timeout_add(timeout, self.process_connections)
         GLib.timeout_add_seconds(app.config.get(
                 'check_idle_every_foo_seconds'), self.read_sleepy)
 
