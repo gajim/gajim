@@ -2342,7 +2342,13 @@ class Interface:
             # Otherwise, an exception will stop our loop
 
             if sys.platform == 'win32':
-                timeout, in_seconds = 20, None
+                # On Windows process() calls select.select(), so we need this
+                # executed as often as possible.
+                # Adding it directly with GLib.idle_add() causes Gajim to use
+                # too much CPU time. Thats why its added with 1ms timeout.
+                # On Linux only alarms are checked in process(), so we use
+                # a bigger timeout
+                timeout, in_seconds = 1, None
             else:
                 timeout, in_seconds = app.idlequeue.PROCESS_TIMEOUT
 
