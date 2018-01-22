@@ -1103,7 +1103,7 @@ class ConversationTextview(GObject.GObject):
                     del self.corrected_text_list[correct_id]
                 else:
                     self.corrected_text_list[msg_stanza_id] = \
-                        '<b>Message corrected. Previous message:</b>\n{}' \
+                        _('<b>Message corrected. Original message:</b>\n{}') \
                         .format(GLib.markup_escape_text(old_txt))
                 corrected = True
             except TypeError:
