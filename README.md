@@ -88,9 +88,11 @@ Execute gajim with --verbose
 
 That is all, **enjoy**!
 
-(C) 2003-2017
+(C) 2003-2018
 The Gajim Team
 [https://gajim.org](https://gajim.org)
 
 
-We use original art and parts of sounds and other art from Psi, Gossip, Gnomebaker, Gaim and some icons from various gnome-icons (mostly Dropline Etiquette) we found at art.gnome.org If you think we're violating a license please inform us. Thank you.
+We use original art and parts of sounds and other art from Psi, Gossip, Gnomebaker, Gaim
+and some icons from various gnome-icons (mostly Dropline Etiquette) we found at art.gnome.org.
+If you think we're violating a license please inform us. Thank you.
