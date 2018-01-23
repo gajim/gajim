@@ -5417,3 +5417,65 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
 
     def on_cert_clicked(self, button):
         d = CertificatDialog(self, self.account, self.cert)
+
+class ProgressWindow(Gtk.ApplicationWindow):
+    def __init__(self, file):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('HTTPUploadProgressWindow')
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_title(_('File Transfer'))
+        self.set_default_size(250, -1)
+
+        self.event = file.event
+        self.file = file
+        self.xml = gtkgui_helpers.get_gtk_builder(
+            'httpupload_progress_dialog.ui')
+
+        self.label = self.xml.get_object('label')
+        self.progressbar = self.xml.get_object('progressbar')
+
+        self.add(self.xml.get_object('box'))
+
+        self.pulse = GLib.timeout_add(100, self._pulse_progressbar)
+        self.show_all()
+
+        self.connect('destroy', self._on_destroy)
+        app.ged.register_event_handler('httpupload-progress', ged.CORE,
+                                       self._on_httpupload_progress)
+
+    def _on_httpupload_progress(self, obj):
+        if self.file != obj.file:
+            return
+        if obj.status == 'request':
+            self.label.set_text(_('Requesting HTTP Upload Slot...'))
+        elif obj.status == 'close':
+            self.destroy()
+        elif obj.status == 'upload':
+            self.label.set_text(_('Uploading file via HTTP File Upload...'))
+        elif obj.status == 'update':
+            self.update_progress(obj.seen, obj.total)
+        elif obj.status == 'encrypt':
+            self.label.set_text(_('Encrypting file...'))
+
+    def _pulse_progressbar(self):
+        self.progressbar.pulse()
+        return True
+
+    def _on_destroy(self, *args):
+        self.event.set()
+        if self.pulse:
+            GLib.source_remove(self.pulse)
+        app.ged.remove_event_handler('httpupload-progress', ged.CORE,
+                                     self._on_httpupload_progress)
+
+    def update_progress(self, seen, total):
+        if self.event.isSet():
+            return
+        if self.pulse:
+            GLib.source_remove(self.pulse)
+            self.pulse = None
+        pct = (float(seen) / total) * 100.0
+        self.progressbar.set_fraction(float(seen) / total)
+        self.progressbar.set_text(str(int(pct)) + "%")

@@ -58,6 +58,7 @@ from gajim.common import helpers
 from gajim.common import dataforms
 from gajim.common import ged
 from gajim.common import i18n
+from gajim.common import contacts
 
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
@@ -444,6 +445,11 @@ class GroupchatControl(ChatControlBase):
 
         self.form_widget = None
 
+        # Send file
+        self.sendfile_button = self.xml.get_object('sendfile_button')
+        self.sendfile_button.set_action_name('win.send-file-' + \
+                                             self.control_id)
+
         # Encryption
         self.lock_image = self.xml.get_object('lock_image')
         self.authentication_button = self.xml.get_object(
@@ -588,6 +594,24 @@ class GroupchatControl(ChatControlBase):
         # Execute command
         win.lookup_action('execute-command-' + self.control_id).set_enabled(
             online)
+
+        # Send file (HTTP File Upload)
+        httpupload = win.lookup_action(
+            'send-file-httpupload-' + self.control_id)
+        httpupload.set_enabled(
+            online and app.connections[self.account].httpupload)
+
+        win.lookup_action('send-file-' + self.control_id).set_enabled(
+            httpupload.get_enabled())
+
+        tooltip_text = None
+        if online:
+            if httpupload.get_enabled():
+                tooltip_text = _('HTTP File Upload')
+            else:
+                tooltip_text = _('HTTP File Upload not supported '
+                                 'by your server')
+        self.sendfile_button.set_tooltip_text(tooltip_text)
 
     # Actions
 
@@ -1565,12 +1589,6 @@ class GroupchatControl(ChatControlBase):
         if ctrl and msg:
             ctrl.send_message(msg)
 
-    def on_send_file(self, widget, gc_contact):
-        """
-        Send a file to a contact in the room
-        """
-        self._on_send_file(gc_contact)
-
     def draw_contact(self, nick, selected=False, focus=False):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
@@ -2294,23 +2312,31 @@ class GroupchatControl(ChatControlBase):
             ok_handler=on_ok, transient_for=self.parent_win.window)
 
     def _on_drag_data_received(self, widget, context, x, y, selection,
-    target_type, timestamp):
-        # Invite contact to groupchat
-        treeview = app.interface.roster.tree
-        model = treeview.get_model()
-        if not selection.get_data() or target_type == 80:
-            #  target_type = 80 means a file is dropped
+                               target_type, timestamp):
+        if not selection.get_data():
             return
-        data = selection.get_data()
-        path = treeview.get_selection().get_selected_rows()[1][0]
-        iter_ = model.get_iter(path)
-        type_ = model[iter_][2]
-        if type_ != 'contact': # source is not a contact
-            return
-        contact_jid = data
-        app.connections[self.account].send_invite(self.room_jid, contact_jid)
-        self.print_conversation(_('%(jid)s has been invited in this room') % {
-            'jid': contact_jid}, graphics=False)
+
+        # get contact info
+        contact = contacts.Contact(jid=self.room_jid, account=self.account)
+
+        if target_type == self.TARGET_TYPE_URI_LIST:
+            # file drag and drop (handled in chat_control_base)
+            self.drag_data_file_transfer(contact, selection, self)
+        else:
+            # Invite contact to groupchat
+            treeview = app.interface.roster.tree
+            model = treeview.get_model()
+            data = selection.get_data()
+            path = treeview.get_selection().get_selected_rows()[1][0]
+            iter_ = model.get_iter(path)
+            type_ = model[iter_][2]
+            if type_ != 'contact': # source is not a contact
+                return
+            contact_jid = data
+
+            app.connections[self.account].send_invite(self.room_jid, contact_jid)
+            self.print_conversation(_('%(jid)s has been invited in this room') %
+                                    {'jid': contact_jid}, graphics=False)
 
     def _on_message_textview_key_press_event(self, widget, event):
         res = ChatControlBase._on_message_textview_key_press_event(self, widget,
@@ -2605,7 +2631,9 @@ class GroupchatControl(ChatControlBase):
         if not c.resource:
             item.set_sensitive(False)
         else:
-            id_ = item.connect('activate', self.on_send_file, c)
+            item.set_sensitive(False)
+            # ToDo: integrate HTTP File Upload
+            id_ = item.connect('activate', self._on_send_file_jingle, c)
             self.handlers[id_] = item
 
         # show the popup now!

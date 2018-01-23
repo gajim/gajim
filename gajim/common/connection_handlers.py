@@ -54,6 +54,7 @@ from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
 from gajim.common.message_archiving import ConnectionArchive313
+from gajim.common.httpupload import ConnectionHTTPUpload
 from gajim.common.connection_handlers_events import *
 
 from gajim.common import ged
@@ -1249,7 +1250,8 @@ class ConnectionHandlersBase:
 class ConnectionHandlers(ConnectionArchive313,
 ConnectionVcard, ConnectionSocks5Bytestream, ConnectionDisco,
 ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps,
-ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
+ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream,
+ConnectionHTTPUpload):
     def __init__(self):
         ConnectionArchive313.__init__(self)
         ConnectionVcard.__init__(self)
@@ -1259,6 +1261,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
             pubsub_connection=self)
+        ConnectionHTTPUpload.__init__(self, account=self.name)
 
         # Handle presences BEFORE caps
         app.nec.register_incoming_event(PresenceReceivedEvent)
@@ -1343,6 +1346,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         ConnectionCaps.cleanup(self)
         ConnectionArchive313.cleanup(self)
         ConnectionPubSub.cleanup(self)
+        ConnectionHTTPUpload.cleanup(self)
         app.ged.remove_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
         app.ged.remove_event_handler('version-request-received', ged.CORE,

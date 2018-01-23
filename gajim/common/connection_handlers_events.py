@@ -2958,3 +2958,17 @@ class BlockingEvent(nec.NetworkIncomingEvent):
             app.log('blocking').info(
                 'Blocking Push - unblocked JIDs: %s', self.unblocked_jids)
         return True
+
+class HTTPUploadStartEvent(nec.NetworkIncomingEvent):
+    name = 'httpupload-start'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
+class HTTPUploadProgressEvent(nec.NetworkIncomingEvent):
+    name = 'httpupload-progress'
+    base_network_events = []
+
+    def generate(self):
+        return True

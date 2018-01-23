@@ -408,6 +408,8 @@ class Config:
                     'oauth2_redirect_url': [ opt_str, 'https%3A%2F%2Fgajim.org%2Fmsnauth%2Findex.cgi', _('redirect_url for OAuth 2.0 authentication.')],
                     'opened_chat_controls': [opt_str, '', _('Space separated list of JIDs for which we want to re-open a chat window on next startup.')],
                     'recent_groupchats': [ opt_str, '' ],
+                    'httpupload_verify': [ opt_bool, True, _('HTTP Upload: Enable HTTPS Verification')],
+                    'filetransfer_preference' : [ opt_str, 'httpupload', _('Preferred file transfer mechanism for file drag&drop on chat window. Can be \'httpupload\' (default) or \'jingle\'')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],

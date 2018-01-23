@@ -422,7 +422,10 @@ class CommonConnection:
         if not obj.is_loggable:
             return
 
-        if obj.forward_from or not obj.session or not obj.session.is_loggable():
+        if obj.forward_from:
+            return
+
+        if obj.session and not obj.session.is_loggable():
             return
 
         if not app.config.should_log(self.name, jid):
@@ -2662,7 +2665,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not obj.xhtml and app.config.get('rst_formatting_outgoing_messages'):
             from gajim.common.rst_xhtml_generator import create_xhtml
             obj.xhtml = create_xhtml(obj.message)
-        
+
         msg_iq = nbxmpp.Message(obj.jid, obj.message, typ='groupchat',
                                 xhtml=obj.xhtml)
 
