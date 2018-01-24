@@ -46,8 +46,7 @@ class ConnectionHTTPUpload:
     Implement HTTP File Upload
     (XEP-0363, https://xmpp.org/extensions/xep-0363.html)
     """
-    def __init__(self, account):
-        self.name = account
+    def __init__(self):
         self.encrypted_upload = False
         self.component = None
         self.max_file_size = None  # maximum file size in bytes
@@ -84,6 +83,9 @@ class ConnectionHTTPUpload:
             return
 
         account = event.conn.name
+        if account != self.name:
+            return
+
         self.component = event.jid
 
         for form in event.data:
@@ -102,6 +104,8 @@ class ConnectionHTTPUpload:
                      account, self.max_file_size/(1024*1024))
 
     def handle_outgoing_stanza(self, event):
+        if event.conn.name != self.name:
+            return
         message = event.msg_iq.getTagData('body')
         if message and message in self.messages:
             self.messages.remove(message)

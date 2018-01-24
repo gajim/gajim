@@ -1261,7 +1261,7 @@ ConnectionHTTPUpload):
         ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
             pubsub_connection=self)
-        ConnectionHTTPUpload.__init__(self, account=self.name)
+        ConnectionHTTPUpload.__init__(self)
 
         # Handle presences BEFORE caps
         app.nec.register_incoming_event(PresenceReceivedEvent)
