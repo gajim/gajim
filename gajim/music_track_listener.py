@@ -35,6 +35,7 @@ def _get_music_players():
     players = [
         'org.mpris.MediaPlayer2.audacious',
         'org.mpris.MediaPlayer2.bmp',
+        'org.mpris.MediaPlayer2.clementine',
         'org.mpris.MediaPlayer2.GnomeMusic',
         'org.mpris.MediaPlayer2.quodlibet',
         'org.mpris.MediaPlayer2.rhythmbox',
@@ -65,7 +66,6 @@ class MusicTrackListener(GObject.GObject):
 
     def __init__(self):
         super(MusicTrackListener, self).__init__()
-        self._last_playing_music = None
         self.con = {}
 
         players = _get_music_players()
@@ -92,7 +92,6 @@ class MusicTrackListener(GObject.GObject):
 
         info = self.get_playing_track(name)
         if info is not None:
-            self._last_playing_music = info
             self.emit('music-track-changed', info)
 
     def _vanished(self, connection, name, *user_data):
@@ -114,7 +113,6 @@ class MusicTrackListener(GObject.GObject):
         log.info('Signal received: %s - %s', interface_name, parameters)
 
         info = self.get_playing_track(user_data[0])
-        self._last_playing_music = info
 
         self.emit('music-track-changed', info)
 
@@ -166,7 +164,6 @@ class MusicTrackListener(GObject.GObject):
                 raise
         else:
             info = self._properties_extract(result[0])
-            self._last_playing_music = info
             return info
 
 
