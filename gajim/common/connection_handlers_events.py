@@ -1061,6 +1061,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.nick = None
 
     def generate(self):
+        account = self.conn.name
         archive_jid = self.stanza.getFrom()
         own_jid = self.conn.get_own_jid()
         if archive_jid and not archive_jid.bareMatch(own_jid):
@@ -1076,7 +1077,8 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.unique_id, origin_id = self.get_unique_id()
 
         # Check for duplicates
-        if app.logger.find_stanza_id(own_jid.getStripped(),
+        if app.logger.find_stanza_id(account,
+                                     own_jid.getStripped(),
                                      self.unique_id, origin_id):
             return
 
@@ -1151,6 +1153,7 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.kind = KindConstant.GC_MSG
 
     def generate(self):
+        account = self.conn.name
         self.msg_ = self.forwarded.getTag('message', protocol=True)
 
         if self.msg_.getType() != 'groupchat':
@@ -1161,7 +1164,9 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.unique_id = self.get_stanza_id(self.result, query=True)
 
         # Check for duplicates
-        if app.logger.find_stanza_id(self.room_jid, self.unique_id,
+        if app.logger.find_stanza_id(account,
+                                     self.room_jid,
+                                     self.unique_id,
                                      groupchat=True):
             return
 
@@ -1285,7 +1290,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
         if self.stanza.getType() == 'groupchat':
-            if app.logger.find_stanza_id(self.stanza.getFrom().getStripped(),
+            if app.logger.find_stanza_id(account,
+                                         self.stanza.getFrom().getStripped(),
                                          self.unique_id,
                                          groupchat=True):
                 return

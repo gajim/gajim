@@ -203,7 +203,7 @@ class ConnectionArchive313:
         # if self.archiving_namespace != nbxmpp.NS_MAM_2:
         # Fallback duplicate search without stanza-id
         duplicate = app.logger.search_for_duplicate(
-            obj.with_, obj.timestamp, obj.msgtxt)
+            self.name, obj.with_, obj.timestamp, obj.msgtxt)
         if duplicate:
             # dont propagate the event further
             return True

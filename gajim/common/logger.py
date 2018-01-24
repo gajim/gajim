@@ -1057,9 +1057,11 @@ class Logger:
         self.con.executescript(sql)
         self._timeout_commit()
 
-    def search_for_duplicate(self, jid, timestamp, msg):
+    def search_for_duplicate(self, account, jid, timestamp, msg):
         """
         Check if a message is already in the `logs` table
+
+        :param account:     The account
 
         :param jid:         The jid as string
 
@@ -1072,26 +1074,30 @@ class Logger:
         start_time = timestamp - 10
         end_time = timestamp + 10
 
+        account_id = self.get_account_id(account)
         log.debug('start: %s, end: %s, jid: %s, message: %s',
                   start_time, end_time, jid, msg)
 
         sql = '''
             SELECT * FROM logs
-            NATURAL JOIN jids WHERE jid = ? AND message = ?
+            NATURAL JOIN jids WHERE jid = ? AND message = ? AND account_id = ?
             AND time BETWEEN ? AND ?
             '''
 
-        result = self.con.execute(sql, (jid, msg, start_time, end_time)).fetchone()
+        result = self.con.execute(
+            sql, (jid, msg, account_id, start_time, end_time)).fetchone()
 
         if result is not None:
             log.debug('Message already in DB')
             return True
         return False
 
-    def find_stanza_id(self, archive_jid, stanza_id, origin_id=None,
+    def find_stanza_id(self, account, archive_jid, stanza_id, origin_id=None,
                        groupchat=False):
         """
         Checks if a stanza-id is already in the `logs` table
+
+        :param account:     The account
 
         :param archive_jid: The jid of the archive the stanza-id belongs to
 
@@ -1113,22 +1119,30 @@ class Logger:
             return False
 
         archive_id = self.get_jid_id(archive_jid)
+        account_id = self.get_account_id(account)
+
         if groupchat:
-            column = 'jid_id'
+            # Stanza ID is only unique within a specific archive.
+            # So a Stanza ID could be repeated in different MUCs, so we
+            # filter also for the archive JID
+            sql = '''
+                SELECT stanza_id FROM logs
+                WHERE stanza_id IN ({values})
+                AND jid_id = ? AND account_id = ? LIMIT 1
+                '''.format(values=', '.join('?' * len(ids)))
+            result = self.con.execute(
+                sql, tuple(ids) + (archive_id, account_id)).fetchone()
         else:
-            column = 'account_id'
-
-        sql = '''
-              SELECT stanza_id FROM logs
-              WHERE stanza_id IN ({values}) AND {archive} = ? LIMIT 1
-              '''.format(values=', '.join('?' * len(ids)),
-                         archive=column)
-
-        result = self.con.execute(sql, tuple(ids) + (archive_id,)).fetchone()
+            sql = '''
+                SELECT stanza_id FROM logs
+                WHERE stanza_id IN ({values}) AND account_id = ? LIMIT 1
+                '''.format(values=', '.join('?' * len(ids)))
+            result = self.con.execute(
+                sql, tuple(ids) + (account_id,)).fetchone()
 
         if result is not None:
-            log.info('Found duplicated message, stanza-id: %s, origin-id: %s',
-                     stanza_id, origin_id)
+            log.info('Found duplicated message, stanza-id: %s, origin-id: %s, '
+                     'archive-jid: %s, account: %s', stanza_id, origin_id, archive_id, account_id)
             return True
         return False
 
