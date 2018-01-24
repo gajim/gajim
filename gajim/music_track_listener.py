@@ -35,6 +35,7 @@ def _get_music_players():
     players = [
         'org.mpris.MediaPlayer2.audacious',
         'org.mpris.MediaPlayer2.bmp',
+        'org.mpris.MediaPlayer2.clementine',
         'org.mpris.MediaPlayer2.GnomeMusic',
         'org.mpris.MediaPlayer2.quodlibet',
         'org.mpris.MediaPlayer2.rhythmbox',
