@@ -164,9 +164,7 @@ function cleanup_install {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip mingw-w64-"${ARCH}"-ncurses || true
     build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tk || true
     build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tcl || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gnome-common || true
     build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-gsl || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-libvpx || true
 
     #delete translations we don't support
     for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do

@@ -1,7 +1,6 @@
 environment:
-
   matrix:
-    - MSYS: "C:\\msys64\\mingw32.exe"
+    - MSYS: C:/msys64/mingw32
 
 branches:
   only:
@@ -15,24 +14,20 @@ clone_depth: 1
 install:
 
   - ps: |
-      function bash($command) {
-        Write-Host $command -NoNewline
-        cmd /c start /wait C:\msys64\usr\bin\sh.exe --login -c $command
-        Write-Host " - OK" -ForegroundColor Green
-      }
+        $env:MSYSTEM="MINGW32"
+        $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
+        $env:BUILDROOT="C:\msys64\home\appveyor\gajim\win\_build_root"
 
-      bash 'pacman -Sy --noconfirm git'
-      bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
-  
-  - cmd: '%MSYS% C:/msys64/home/appveyor/gajim/win/build.sh'
-  # Ugly workaround, because i found no way to tell when mingw32.exe returns
-  - cmd: timeout 1100
+        function bash($command) {
+          Write-Host $command -NoNewline
+          C:\msys64\usr\bin\sh.exe --login -c $command
+        }
 
-  # Push Installer Exe
-  - ps: $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
-  - ps: $env:BUILDROOT="C:\msys64\home\appveyor\gajim\win\_build_root"
-  - ps: Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:TIME_STRING).exe"
-  - ps: Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:TIME_STRING).exe"
+        bash 'pacman -Sy --noconfirm git'
+        bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
+        bash 'C:/msys64/home/appveyor/gajim/win/build.sh'
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:TIME_STRING).exe"
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:TIME_STRING).exe"
 
 build: off
 
