@@ -2318,33 +2318,13 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.id_ in self.conn.disco_info_ids:
             self.conn.disco_info_ids.remove(self.id_)
         if self.id_ is None:
-            log.warning('Invalid IQ received without an ID. Ignoring it: %s' % \
-                self.stanza)
+            log.warning('Invalid IQ received without an ID. '
+                        'Ignoring it: %s', self.stanza)
             return
         # According to XEP-0030:
         # For identity: category, type is mandatory, name is optional.
         # For feature: var is mandatory
-        self.identities, self.features, self.data = [], [], []
-        q = self.stanza.getTag('query')
-        self.node = q.getAttr('node')
-        if not self.node:
-            self.node = ''
-        qc = self.stanza.getQueryChildren()
-        if not qc:
-            qc = []
-
-        for i in qc:
-            if i.getName() == 'identity':
-                attr = {}
-                for key in i.getAttrs().keys():
-                    attr[key] = i.getAttr(key)
-                self.identities.append(attr)
-            elif i.getName() == 'feature':
-                var = i.getAttr('var')
-                if var:
-                    self.features.append(var)
-            elif i.getName() == 'x' and i.getNamespace() == nbxmpp.NS_DATA:
-                self.data.append(nbxmpp.DataForm(node=i))
+        self.identities, self.features, self.data, self.node = self.parse_stanza(self.stanza)
 
         if not self.identities:
             # ejabberd doesn't send identities when we browse online users
@@ -2353,6 +2333,33 @@ class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 'name': self.node}]
         self.get_jid_resource()
         return True
+
+    @classmethod
+    def parse_stanza(cls, stanza):
+        identities, features, data, node = [], [], [], None
+        q = stanza.getTag('query')
+        node = q.getAttr('node')
+        if not node:
+            node = ''
+
+        qc = stanza.getQueryChildren()
+        if not qc:
+            qc = []
+
+        for i in qc:
+            if i.getName() == 'identity':
+                attr = {}
+                for key in i.getAttrs().keys():
+                    attr[key] = i.getAttr(key)
+                identities.append(attr)
+            elif i.getName() == 'feature':
+                var = i.getAttr('var')
+                if var:
+                    features.append(var)
+            elif i.getName() == 'x' and i.getNamespace() == nbxmpp.NS_DATA:
+                data.append(nbxmpp.DataForm(node=i))
+
+        return identities, features, data, node
 
 class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'agent-info-error-received'
