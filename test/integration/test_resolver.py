@@ -26,20 +26,14 @@ class TestResolver(unittest.TestCase):
     network connection.
     '''
     def setUp(self):
-        self.idlequeue_thread = IdleQueueThread()
-        self.idlequeue_thread.start()
         self.main_context = GLib.MainContext()
         self.main_context.push_thread_default()
         self.main_loop = GLib.MainLoop(self.main_context)
-
-        self.iq = self.idlequeue_thread.iq
         self._reset()
         self.resolver = None
 
     def tearDown(self):
         self.main_context.pop_thread_default()
-        self.idlequeue_thread.stop_thread()
-        self.idlequeue_thread.join()
 
     def _reset(self):
         self.expect_results = False
