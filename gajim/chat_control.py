@@ -245,6 +245,7 @@ class ChatControl(ChatControlBase):
         self.update_actions()
 
     def add_actions(self):
+        super().add_actions()
         actions = [
             ('invite-contacts-', self._on_invite_contacts),
             ('add-to-roster-', self._on_add_to_roster),

@@ -514,6 +514,7 @@ class GroupchatControl(ChatControlBase):
         app.plugin_manager.gui_extension_point('groupchat_control', self)
 
     def add_actions(self):
+        super().add_actions()
         actions = [
             ('change-subject-', self._on_change_subject),
             ('change-nick-', self._on_change_nick),
@@ -729,7 +730,6 @@ class GroupchatControl(ChatControlBase):
 
     def on_groupchat_maximize(self):
         self.set_tooltip()
-        self.add_window_actions()
         self.add_actions()
         self.update_actions()
         self.set_lock_image()

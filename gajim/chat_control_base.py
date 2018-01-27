@@ -371,8 +371,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._schedule_activity_timers()
 
         self.encryption = self.get_encryption_state()
-        if self.parent_win:
-            self.add_window_actions()
 
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
@@ -391,7 +389,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
 
-    def add_window_actions(self):
+    def add_actions(self):
         action = Gio.SimpleAction.new_stateful(
             "set-encryption-%s" % self.control_id,
             GLib.VariantType.new("s"),
