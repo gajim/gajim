@@ -28,8 +28,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from functools import cmp_to_key
-
 try:
     from gajim.common import caps_cache
     from gajim.common.account import Account
@@ -788,88 +786,29 @@ class MetacontactManager():
                     answers.append(data)
         return answers
 
-    def _compare_metacontacts(self, data1, data2):
+    def _metacontact_key(self, data):
         """
-        Compare 2 metacontacts
-
         Data is {'jid': jid, 'account': account, 'order': order} order is
         optional
         """
-        jid1 = data1['jid']
-        jid2 = data2['jid']
-        account1 = data1['account']
-        account2 = data2['account']
-        contact1 = self._contacts.get_contact_with_highest_priority(account1, jid1)
-        contact2 = self._contacts.get_contact_with_highest_priority(account2, jid2)
         show_list = ['not in roster', 'error', 'offline', 'invisible', 'dnd',
-                'xa', 'away', 'chat', 'online', 'requested', 'message']
+                     'xa', 'away', 'chat', 'online', 'requested', 'message']
+
+        jid = data['jid']
+        account = data['account']
         # contact can be null when a jid listed in the metacontact data
         # is not in our roster
-        if not contact1:
-            if contact2:
-                return -1 # prefer the known contact
-            else:
-                show1 = 0
-                priority1 = 0
-        else:
-            show1 = show_list.index(contact1.show)
-            priority1 = contact1.priority
-        if not contact2:
-            if contact1:
-                return 1 # prefer the known contact
-            else:
-                show2 = 0
-                priority2 = 0
-        else:
-            show2 = show_list.index(contact2.show)
-            priority2 = contact2.priority
-        # If only one is offline, it's always second
-        if show1 > 2 and show2 < 3:
-            return 1
-        if show2 > 2 and show1 < 3:
-            return -1
-        if 'order' in data1 and 'order' in data2:
-            if data1['order'] > data2['order']:
-                return 1
-            if data1['order'] < data2['order']:
-                return -1
-        if 'order' in data1:
-            return 1
-        if 'order' in data2:
-            return -1
-        transport1 = common.app.get_transport_name_from_jid(jid1)
-        transport2 = common.app.get_transport_name_from_jid(jid2)
-        if transport2 and not transport1:
-            return 1
-        if transport1 and not transport2:
-            return -1
-        if show1 > show2:
-            return 1
-        if show2 > show1:
-            return -1
-        if priority1 > priority2:
-            return 1
-        if priority2 > priority1:
-            return -1
-        server1 = common.app.get_server_from_jid(jid1)
-        server2 = common.app.get_server_from_jid(jid2)
-        myserver1 = common.app.config.get_per('accounts', account1, 'hostname')
-        myserver2 = common.app.config.get_per('accounts', account2, 'hostname')
-        if server1 == myserver1:
-            if server2 != myserver2:
-                return 1
-        elif server2 == myserver2:
-            return -1
-        if jid1 > jid2:
-            return 1
-        if jid2 > jid1:
-            return -1
-        # If all is the same, compare accounts, they can't be the same
-        if account1 > account2:
-            return 1
-        if account2 > account1:
-            return -1
-        return 0
+        contact = self._contacts.get_contact_with_highest_priority(
+            account, jid)
+        show = show_list.index(contact.show) if contact else 0
+        priority = contact.priority if contact else 0
+        has_order = 'order' in data
+        order = data.get('order', 0)
+        transport = common.app.get_transport_name_from_jid(jid)
+        server = common.app.get_server_from_jid(jid)
+        myserver = common.app.config.get_per('accounts', account, 'hostname')
+        return (bool(contact), show > 2, has_order, order, bool(transport),
+                show, priority, server == myserver, jid, account)
 
     def get_nearby_family_and_big_brother(self, family, account):
         """
@@ -901,8 +840,7 @@ class MetacontactManager():
         Which of the family will be the big brother under wich all others will be
         ?
         """
-        family.sort(key=cmp_to_key(self._compare_metacontacts))
-        return family[-1]
+        return max(family, key=self._metacontact_key)
 
 
 if __name__ == "__main__":

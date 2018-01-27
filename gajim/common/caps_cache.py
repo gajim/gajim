@@ -108,37 +108,16 @@ def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1')
     """
     if dataforms is None:
         dataforms = []
-    def sort_identities_func(i1, i2):
-        cat1 = i1['category']
-        cat2 = i2['category']
-        if cat1 < cat2:
-            return -1
-        if cat1 > cat2:
-            return 1
-        type1 = i1.get('type', '')
-        type2 = i2.get('type', '')
-        if type1 < type2:
-            return -1
-        if type1 > type2:
-            return 1
-        lang1 = i1.get('xml:lang', '')
-        lang2 = i2.get('xml:lang', '')
-        if lang1 < lang2:
-            return -1
-        if lang1 > lang2:
-            return 1
-        return 0
 
-    def sort_dataforms_func(d1, d2):
-        f1 = d1.getField('FORM_TYPE')
-        f2 = d2.getField('FORM_TYPE')
-        if f1 and f2 and (f1.getValue() < f2.getValue()):
-            return -1
-        return 1
+    def sort_identities_key(i):
+        return (i['category'], i.get('type', ''), i.get('xml:lang', ''))
+
+    def sort_dataforms_key(dataform):
+        f = dataform.getField('FORM_TYPE')
+        return (bool(f), f.getValue())
 
     S = ''
-    from functools import cmp_to_key
-    identities.sort(key=cmp_to_key(sort_identities_func))
+    identities.sort(key=sort_identities_key)
     for i in identities:
         c = i['category']
         type_ = i.get('type', '')
@@ -148,7 +127,7 @@ def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1')
     features.sort()
     for f in features:
         S += '%s<' % f
-    dataforms.sort(key=cmp_to_key(sort_dataforms_func))
+    dataforms.sort(key=sort_dataforms_key)
     for dataform in dataforms:
         # fields indexed by var
         fields = {}
