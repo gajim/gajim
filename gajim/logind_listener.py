@@ -42,7 +42,6 @@ def signal_received(connection, sender_name, object_path,
 
     global fd
 
-    connected = None
     log.info('Signal received: %s - %s', interface_name, parameters)
 
     # signal is sent right before (with the parameter True) and after
@@ -88,7 +87,7 @@ def get_inhibitor(connection):
         'org.freedesktop.login1.Manager',
         'Inhibit',
         GLib.Variant('(ssss)', ('sleep', 'org.gajim.Gajim',
-                                'Disconnect from the network', 'delay')),
+                                _('Disconnect from the network'), 'delay')),
         GLib.VariantType.new('(h)'),
         Gio.DBusCallFlags.NONE, -1, None, None)
 
@@ -97,8 +96,6 @@ def get_inhibitor(connection):
 
 def appeared(connection, name, name_owner, *user_data):
     '''Set up a listener for suspend signals'''
-    global supported
-    supported = True
     log.info('%s appeared', name)
     if name == 'org.freedesktop.login1':
         connection.signal_subscribe(
