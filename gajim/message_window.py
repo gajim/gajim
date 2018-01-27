@@ -374,7 +374,9 @@ class MessageWindow(object):
             if keyval == Gdk.KEY_h: # CTRL + h
                 if Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') != 'Emacs':
-                    control._on_history_menuitem_activate()
+                    arg = GLib.Variant('s', 'none')
+                    self.window.lookup_action(
+                        'browse-history-%s' % control.control_id).activate(arg)
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == Gdk.KEY_f: # CTRL + f
@@ -386,7 +388,8 @@ class MessageWindow(object):
                     app.interface.msg_win_mgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
                         app.interface.roster.tree.grab_focus()
                         return False
-                    control._on_send_file_menuitem_activate(None)
+                    self.window.lookup_action(
+                        'send-file-%s' % control.control_id).activate()
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == Gdk.KEY_g: # CTRL + g
@@ -394,7 +397,8 @@ class MessageWindow(object):
                 return True
             elif control.type_id in (message_control.TYPE_CHAT,
             message_control.TYPE_PM) and keyval == Gdk.KEY_i: # CTRL + i
-                control._on_contact_information_menuitem_activate(None)
+                self.window.lookup_action(
+                    'information-%s' % control.control_id).activate()
                 return True
             elif keyval == Gdk.KEY_l or keyval == Gdk.KEY_L: # CTRL + l|L
                 control.conv_textview.clear()
@@ -408,7 +412,8 @@ class MessageWindow(object):
                 # theme
                 if not Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':
-                    control._on_bookmark_room_menuitem_activate(None)
+                    self.window.lookup_action(
+                        'bookmark-%s' % control.control_id).activate()
                     return True
             # Tab switch bindings
             elif keyval == Gdk.KEY_F4: # CTRL + F4
@@ -436,7 +441,8 @@ class MessageWindow(object):
                 # CTRL + SHIFT
                 if control.type_id == message_control.TYPE_GC and \
                 keyval == Gdk.KEY_n: # CTRL + SHIFT + n
-                    control._on_change_nick_menuitem_activate(None)
+                    self.window.lookup_action(
+                        'change-nick-%s' % control.control_id).activate()
                     return True
         # MOD1 (ALT) mask
         elif modifier & Gdk.ModifierType.MOD1_MASK:
@@ -461,7 +467,8 @@ class MessageWindow(object):
                 return True
             elif control.type_id == message_control.TYPE_GC and \
             keyval == Gdk.KEY_t: # ALT + t
-                control._on_change_subject_menuitem_activate(None)
+                self.window.lookup_action(
+                    'change-subject-%s' % control.control_id).activate()
                 return True
         # Close tab bindings
         elif keyval == Gdk.KEY_Escape and \

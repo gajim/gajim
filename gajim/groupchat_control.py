@@ -681,6 +681,7 @@ class GroupchatControl(ChatControlBase):
         app.interface.add_gc_bookmark(
             self.account, self.name, self.room_jid,
             '0', '0', password, self.nick)
+        self.update_actions()
 
     def _on_request_voice(self, action, param):
         """
