@@ -47,6 +47,7 @@ class ConnectionHTTPUpload:
     (XEP-0363, https://xmpp.org/extensions/xep-0363.html)
     """
     def __init__(self):
+        self.httpupload = False
         self.encrypted_upload = False
         self.component = None
         self.max_file_size = None  # maximum file size in bytes
@@ -102,6 +103,10 @@ class ConnectionHTTPUpload:
         else:
             log.info('%s has a maximum file size of: %s MiB',
                      account, self.max_file_size/(1024*1024))
+
+        self.httpupload = True
+        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self.name):
+            ctrl.update_actions()
 
     def handle_outgoing_stanza(self, event):
         if event.conn.name != self.name:

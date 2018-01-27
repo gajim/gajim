@@ -165,7 +165,6 @@ class CommonConnection:
         # the fake jid
         self.groupchat_jids = {} # {ID : groupchat_jid}
 
-        self.httpupload = False
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
@@ -1970,8 +1969,6 @@ class Connection(CommonConnection, ConnectionHandlers):
 
                 self._continue_connection_request_privacy()
 
-            if nbxmpp.NS_HTTPUPLOAD in obj.features:
-                self.httpupload = True
             if nbxmpp.NS_BYTESTREAM in obj.features and \
             app.config.get_per('accounts', self.name, 'use_ft_proxies'):
                 our_fjid = helpers.parse_jid(our_jid + '/' + \
