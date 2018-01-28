@@ -394,9 +394,8 @@ class GajimApplication(Gtk.Application):
             ('history', action.on_history),
             ('shortcuts', action.on_keyboard_shortcuts),
             ('features', action.on_features),
-            ('content', action.on_contents),
+            ('help', action.on_help),
             ('about', action.on_about),
-            ('faq', action.on_faq),
             ('ipython', action.toggle_ipython),
         ]
 

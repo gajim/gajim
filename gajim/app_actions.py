@@ -236,13 +236,9 @@ class AppActions():
 
     # Help Actions
 
-    def on_contents(self, action, param):
+    def on_help(self, action, param):
         helpers.launch_browser_mailer(
-            'url', 'https://dev.gajim.org/gajim/gajim/wikis')
-
-    def on_faq(self, action, param):
-        helpers.launch_browser_mailer(
-            'url', 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq')
+            'url', 'https://dev.gajim.org/gajim/gajim/wikis/help/home')
 
     def on_keyboard_shortcuts(self, action, param):
         shortcuts_window.show(self.application.get_active_window())
