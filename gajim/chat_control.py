@@ -107,6 +107,8 @@ class ChatControl(ChatControlBase):
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
             self.control_id)
+        settings_menu = self.xml.get_object('settings_menu')
+        settings_menu.set_menu_model(self.control_menu)
 
         self._audio_banner_image = self.xml.get_object('audio_banner_image')
         self._video_banner_image = self.xml.get_object('video_banner_image')

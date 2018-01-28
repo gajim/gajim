@@ -482,6 +482,8 @@ class GroupchatControl(ChatControlBase):
         self.gc_tooltip = tooltips.GCTooltip()
 
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id)
+        settings_menu = self.xml.get_object('settings_menu')
+        settings_menu.set_menu_model(self.control_menu)
 
         app.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)

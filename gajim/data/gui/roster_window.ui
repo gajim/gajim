@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -115,29 +115,8 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkHeaderBar" id="headerbar">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="title">Gajim</property>
-    <property name="show_close_button">True</property>
-    <child>
-      <object class="GtkMenuButton" id="header_menu">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="no_show_all">True</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">open-menu-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack_type">end</property>
-      </packing>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

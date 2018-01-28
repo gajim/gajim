@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.20.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -627,58 +627,6 @@
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
-                  <object class="GtkMenuButton" id="emoticons_button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
-                    <property name="relief">none</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">face-smile-symbolic</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="chatcontrol-actionbar-button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="formattings_button">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="focus_on_click">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="relief">none</property>
-                    <property name="popup">formattings_menu</property>
-                    <child>
-                      <object class="GtkImage" id="image10">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">format-text-bold-symbolic</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="chatcontrol-actionbar-button"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkComboBox" id="label_selector">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -687,7 +635,7 @@
                     <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="pack_type">end</property>
-                    <property name="position">2</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -791,7 +739,31 @@ audio-mic-volume-low</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="pack_type">end</property>
-                    <property name="position">3</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="settings_menu">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">open-menu-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="chatcontrol-actionbar-button"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -818,7 +790,7 @@ audio-mic-volume-low</property>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">4</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -843,7 +815,7 @@ audio-mic-volume-low</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="pack_type">end</property>
-                    <property name="position">5</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -870,7 +842,59 @@ audio-mic-volume-low</property>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="emoticons_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Show a list of emoticons (Alt+M)</property>
+                    <property name="relief">none</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">face-smile-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="chatcontrol-actionbar-button"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
                     <property name="position">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="formattings_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="receives_default">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="relief">none</property>
+                    <property name="popup">formattings_menu</property>
+                    <child>
+                      <object class="GtkImage" id="image10">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">format-text-bold-symbolic</property>
+                        <property name="icon_size">1</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="chatcontrol-actionbar-button"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
