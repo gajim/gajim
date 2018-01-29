@@ -2879,10 +2879,9 @@ class Interface:
 
         self.remote_ctrl = None
 
-        from gajim import logind_listener
-
         # Handle screensaver
         if sys.platform == 'linux':
+            from gajim import logind_listener
             from gajim import screensaver_listener
 
         self.show_vcard_when_connect = []
