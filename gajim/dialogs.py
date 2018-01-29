@@ -1319,7 +1319,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.add_credit_section('Thanks', thanks)
 
         self.set_translator_credits(_('translator-credits'))
-        self.set_logo(gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', 128))
+        self.set_logo_icon_name('org.gajim.Gajim')
 
         self.connect(
             'response', lambda dialog, *args: Gtk.AboutDialog.do_close(dialog))

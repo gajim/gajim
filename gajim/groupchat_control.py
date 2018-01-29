@@ -984,12 +984,11 @@ class GroupchatControl(ChatControlBase):
         return (label_str, color)
 
     def get_tab_image(self, count_unread=True):
-        # Set tab image (always 16x16)
         tab_image = None
         if app.gc_connected[self.account][self.room_jid]:
-            tab_image = gtkgui_helpers.load_icon('muc_active')
+            tab_image = gtkgui_helpers.get_iconset_name_for('muc-active')
         else:
-            tab_image = gtkgui_helpers.load_icon('muc_inactive')
+            tab_image = gtkgui_helpers.get_iconset_name_for('muc-inactive')
         return tab_image
 
     def update_ui(self):

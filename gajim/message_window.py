@@ -483,13 +483,15 @@ class MessageWindow(object):
             pass # keep default icon
         elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
             if self.type_ == 'gc':
-                icon = gtkgui_helpers.load_icon('muc_active')
+                icon = gtkgui_helpers.get_iconset_name_for('muc-active')
             else:
                 # chat, pm
-                icon = gtkgui_helpers.load_icon('online')
+                icon = 'org.gajim.Gajim'
         if icon:
             if isinstance(icon, GdkPixbuf.Pixbuf):
                 self.window.set_icon(icon)
+            elif isinstance(icon, str):
+                self.window.set_icon_name(icon)
             else:
                 self.window.set_icon(icon.get_pixbuf())
 
@@ -685,6 +687,8 @@ class MessageWindow(object):
                     status_img.set_from_animation(tab_img.get_animation())
                 else:
                     status_img.set_from_pixbuf(tab_img.get_pixbuf())
+            elif isinstance(tab_img, str):
+                status_img.set_from_icon_name(tab_img, Gtk.IconSize.MENU)
             else:
                 status_img.set_from_surface(tab_img)
 
