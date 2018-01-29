@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
+import cairo
 import os
 import sys
 try:
@@ -140,11 +141,11 @@ def get_completion_liststore(entry):
     (Pixbuf, Text) rows
     """
     completion = Gtk.EntryCompletion()
-    liststore = Gtk.ListStore(GdkPixbuf.Pixbuf, str)
+    liststore = Gtk.ListStore(str, str)
 
     render_pixbuf = Gtk.CellRendererPixbuf()
     completion.pack_start(render_pixbuf, False)
-    completion.add_attribute(render_pixbuf, 'pixbuf', 0)
+    completion.add_attribute(render_pixbuf, 'icon_name', 0)
 
     render_text = Gtk.CellRendererText()
     completion.pack_start(render_text, True)
@@ -639,6 +640,12 @@ def get_pep_as_pixbuf(pep_class):
         return icon
     return None
 
+def get_iconset_name_for(name):
+    iconset = app.config.get('iconset')
+    if not iconset:
+        return '-'.join([app.config.DEFAULT_ICONSET, name])
+    return '-'.join([iconset, name])
+
 def load_icons_meta():
     """
     Load and return  - AND + small icons to put on top left of an icon for meta
@@ -883,3 +890,23 @@ def add_css_font():
     css = css.replace("font-weight: 0;", "")
     css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
     return css
+
+def draw_affiliation(surface, affiliation):
+    icon_size = 16
+    size = 4 * 1
+    if affiliation not in ('owner', 'admin', 'member'):
+        return
+    ctx = cairo.Context(surface)
+    ctx.rectangle(icon_size-size, icon_size-size, size, size)
+    if affiliation == 'owner':
+        ctx.set_source_rgb(204/255, 0, 0)
+    elif affiliation == 'admin':
+        ctx.set_source_rgb(255/255, 140/255, 0)
+    elif affiliation == 'member':
+        ctx.set_source_rgb(0, 255/255, 0)
+    ctx.fill()
+
+def get_image_from_icon_name(icon_name, scale):
+    icon = get_iconset_name_for(icon_name)
+    surface = gtk_icon_theme.load_surface(icon, 16, scale, None, 0)
+    return Gtk.Image.new_from_surface(surface)

@@ -82,7 +82,7 @@ class Column(IntEnum):
     ACTIVITY_PIXBUF = 6
     TUNE_PIXBUF = 7
     LOCATION_PIXBUF = 8
-    AVATAR_PIXBUF = 9  # avatar_pixbuf
+    AVATAR_IMG = 9  # avatar_sha
     PADLOCK_PIXBUF = 10  # use for account row only
     VISIBLE = 11
 
@@ -220,8 +220,8 @@ class RosterWindow:
                 pass
         return its2
 
-
-    def _iter_is_separator(self, model, titer, dummy):
+    @staticmethod
+    def _iter_is_separator(model, titer):
         """
         Return True if the given iter is a separator
 
@@ -232,6 +232,25 @@ class RosterWindow:
         if model[titer][0] == 'SEPARATOR':
             return True
         return False
+
+    @staticmethod
+    def _status_cell_data_func(cell_layout, cell, tree_model, iter_):
+        if isinstance(cell, Gtk.CellRendererPixbuf):
+            icon_name = tree_model[iter_][1]
+            if icon_name is None:
+                return
+            if tree_model[iter_][2] == 'status':
+                cell.set_property('icon_name', icon_name)
+            else:
+                iconset_name = gtkgui_helpers.get_iconset_name_for(icon_name)
+                cell.set_property('icon_name', iconset_name)
+        else:
+            show = tree_model[iter_][0]
+            id_ = tree_model[iter_][2]
+            if id_ not in ('status', 'desync'):
+                show = helpers.get_uf_show(show)
+            cell.set_property('text', show)
+
 
 
 #############################################################################
@@ -260,10 +279,7 @@ class RosterWindow:
 
             tls_pixbuf = None
             if app.account_is_securely_connected(account):
-                tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
-                # the only way to create a pixbuf from stock
-#                tls_pixbuf = self.window.render_icon_pixbuf(
-#                    Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+                tls_pixbuf = 'changes-prevent'
 
             it = self.model.append(None, [
                 app.interface.jabber_state_images['16'][show],
@@ -1048,15 +1064,11 @@ class RosterWindow:
         num_of_accounts = app.get_number_of_connected_accounts()
         num_of_secured = app.get_number_of_securely_connected_accounts()
 
+        tls_pixbuf = None
         if app.account_is_securely_connected(account) and not self.regroup or\
         self.regroup and num_of_secured and num_of_secured == num_of_accounts:
-            tls_pixbuf = gtkgui_helpers.get_icon_pixmap('changes-prevent', 16)
-            # the only way to create a pixbuf from stock
-#            tls_pixbuf = self.window.render_icon_pixbuf(
-#                Gtk.STOCK_DIALOG_AUTHENTICATION, Gtk.IconSize.MENU)
+            tls_pixbuf = 'changes-prevent'
             self.model[child_iter][Column.PADLOCK_PIXBUF] = tls_pixbuf
-        else:
-            self.model[child_iter][Column.PADLOCK_PIXBUF] = empty_pixbuf
 
         if self.regroup:
             account_name = _('Merged accounts')
@@ -1397,11 +1409,12 @@ class RosterWindow:
             return
         jid = self.model[iters[0]][Column.JID]
 
-        pixbuf = app.contacts.get_avatar(account, jid, size=AvatarSize.ROSTER)
-        if pixbuf is None:
-            pixbuf = empty_pixbuf
+        scale = self.window.get_scale_factor()
+        surface = app.contacts.get_avatar(
+            account, jid, AvatarSize.ROSTER, scale)
+        image = Gtk.Image.new_from_surface(surface)
         for child_iter in iters:
-            self.model[child_iter][Column.AVATAR_PIXBUF] = pixbuf
+            self.model[child_iter][Column.AVATAR_IMG] = image
         return False
 
     def draw_completely(self, jid, account):
@@ -2251,7 +2264,7 @@ class RosterWindow:
             else:
                 # No need to redraw contacts if we're quitting
                 if child_iterA:
-                    self.model[child_iterA][Column.AVATAR_PIXBUF] = empty_pixbuf
+                    self.model[child_iterA][Column.AVATAR_IMG] = None
                 if account in app.con_types:
                     app.con_types[account] = None
                 for jid in list(app.contacts.get_jid_list(account)):
@@ -2330,9 +2343,9 @@ class RosterWindow:
         else:
             uf_show = helpers.get_uf_show(show)
             liststore.prepend(['SEPARATOR', None, '', True])
-            status_combobox_text = uf_show + ' (' + _("desync'ed") +')'
-            liststore.prepend([status_combobox_text,
-                app.interface.jabber_state_images['16'][show], show, False])
+            status_combobox_text = uf_show + ' (' + _("desync'ed") + ')'
+            liststore.prepend(
+                [status_combobox_text, show, 'desync', False])
             self.status_combobox.set_active(0)
         self.combobox_callback_active = True
         if app.interface.systray_enabled:
@@ -2636,14 +2649,15 @@ class RosterWindow:
 
     def _nec_our_show(self, obj):
         model = self.status_combobox.get_model()
+        iter_ = model.get_iter_from_string('7')
         if obj.show == 'offline':
             # sensitivity for this menuitem
             if app.get_number_of_connected_accounts() == 0:
-                model[self.status_message_menuitem_iter][3] = False
+                model[iter_][3] = False
             self.application.set_account_actions_state(obj.conn.name)
         else:
             # sensitivity for this menuitem
-            model[self.status_message_menuitem_iter][3] = True
+            model[iter_][3] = True
         self.on_status_changed(obj.conn.name, obj.show)
 
     def _nec_connection_type(self, obj):
@@ -4614,15 +4628,7 @@ class RosterWindow:
         # Update the roster
         self.setup_and_draw_roster()
         # Update the status combobox
-        model = self.status_combobox.get_model()
-        titer = model.get_iter_first()
-        while titer:
-            if model[titer][2] != '':
-                # If it's not change status message iter
-                # eg. if it has show parameter not ''
-                model[titer][1] = app.interface.jabber_state_images['16'][
-                    model[titer][2]]
-            titer = model.iter_next(titer)
+        self.status_combobox.queue_draw()
         # Update the systray
         if app.interface.systray_enabled:
             app.interface.systray.set_img()
@@ -4836,8 +4842,11 @@ class RosterWindow:
             renderer.set_property('visible', False)
             return
 
+        image = model[titer][Column.AVATAR_IMG]
+        surface = image.get_property('surface')
+        renderer.set_property('surface', surface)
         # allocate space for the icon only if needed
-        if model[titer][Column.AVATAR_PIXBUF] or \
+        if model[titer][Column.AVATAR_IMG] or \
         app.config.get('avatar_position_in_roster') == 'left':
             renderer.set_property('visible', True)
             if type_:
@@ -4850,7 +4859,7 @@ class RosterWindow:
                 self._set_contact_row_background_color(renderer, jid, account)
         else:
             renderer.set_property('visible', False)
-        if model[titer][Column.AVATAR_PIXBUF] == empty_pixbuf and \
+        if model[titer][Column.AVATAR_IMG] is None and \
         app.config.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
@@ -5561,7 +5570,8 @@ class RosterWindow:
     def fill_column(self, col):
         for rend in self.renderers_list:
             col.pack_start(rend[1], rend[2])
-            col.add_attribute(rend[1], rend[3], rend[4])
+            if rend[0] != 'avatar':
+                col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
         # set renderers propertys
         for renderer in self.renderers_propertys.keys():
@@ -5659,12 +5669,14 @@ class RosterWindow:
         self.nb_ext_renderers = 0
         # When we quit, rememver if we already saved config once
         self.save_done = False
-        # [icon, name, type, jid, account, mood_pixbuf,
-        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_pixbuf,
+
+        # [icon, name, type, jid, account, editable, mood_pixbuf,
+        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_img,
         # padlock_pixbuf, visible]
         self.columns = [Gtk.Image, str, str, str, str,
             GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf,
-            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, bool]
+            Gtk.Image, str, bool]
+
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         application.add_window(self.window)
@@ -5733,64 +5745,20 @@ class RosterWindow:
         # accounts to draw next time we draw accounts.
         self.accounts_to_draw = []
 
-        # uf_show, img, show, sensitive
-        liststore = Gtk.ListStore(str, Gtk.Image, str, bool)
+        # StatusComboBox
         self.status_combobox = self.xml.get_object('status_combobox')
+        pixbuf_renderer, text_renderer = self.status_combobox.get_cells()
+        self.status_combobox.set_cell_data_func(
+            pixbuf_renderer, self._status_cell_data_func)
+        self.status_combobox.set_cell_data_func(
+            text_renderer, self._status_cell_data_func)
+        self.status_combobox.set_row_separator_func(self._iter_is_separator)
 
-        cell = cell_renderer_image.CellRendererImage(0, 1)
-        self.status_combobox.pack_start(cell, False)
-
-        # img to show is in in 2nd column of liststore
-        self.status_combobox.add_attribute(cell, 'image', 1)
-        # if it will be sensitive or not it is in the fourth column
-        # all items in the 'row' must have sensitive to False
-        # if we want False (so we add it for img_cell too)
-        self.status_combobox.add_attribute(cell, 'sensitive', 3)
-
-        cell = Gtk.CellRendererText()
-        cell.set_property('ellipsize', Pango.EllipsizeMode.END)
-        cell.set_property('xpad', 5) # padding for status text
-        self.status_combobox.pack_start(cell, True)
-        # text to show is in in first column of liststore
-        self.status_combobox.add_attribute(cell, 'text', 0)
-        # if it will be sensitive or not it is in the fourth column
-        self.status_combobox.add_attribute(cell, 'sensitive', 3)
-
-        self.status_combobox.set_row_separator_func(self._iter_is_separator, None)
-
-        for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
-            uf_show = helpers.get_uf_show(show)
-            liststore.append([uf_show,
-                app.interface.jabber_state_images['16'][show], show, True])
-        # Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
-        liststore.append(['SEPARATOR', None, '', True])
-
-        path = gtkgui_helpers.get_icon_path('gajim-kbd_input')
-        img = Gtk.Image()
-        img.set_from_file(path)
-        # sensitivity to False because by default we're offline
-        self.status_message_menuitem_iter = liststore.append(
-            [_('Change Status Message…'), img, '', False])
-        # Add a Separator (self._iter_is_separator() checks on string SEPARATOR)
-        liststore.append(['SEPARATOR', None, '', True])
-
-        uf_show = helpers.get_uf_show('offline')
-        liststore.append([uf_show, app.interface.jabber_state_images['16'][
-            'offline'], 'offline', True])
-
-        status_combobox_items = ['online', 'chat', 'away', 'xa', 'dnd',
-            'invisible', 'separator1', 'change_status_msg', 'separator2',
-            'offline']
-        self.status_combobox.set_model(liststore)
-
-        # default to offline
-        number_of_menuitem = status_combobox_items.index('offline')
-        self.status_combobox.set_active(number_of_menuitem)
-
+        self.status_combobox.set_active(9)
         # holds index to previously selected item so if
         # "change status message..." is selected we can fallback to previously
         # selected item and not stay with that item selected
-        self.previous_status_combobox_active = number_of_menuitem
+        self.previous_status_combobox_active = 9
 
         # Enable/Disable checkboxes at start
         if app.config.get('showoffline'):
@@ -5819,7 +5787,7 @@ class RosterWindow:
 
         def add_avatar_renderer():
             self.renderers_list.append(('avatar', Gtk.CellRendererPixbuf(),
-                False, 'pixbuf', Column.AVATAR_PIXBUF,
+                False, None, Column.AVATAR_IMG,
                 self._fill_avatar_pixbuf_renderer, None))
 
         if app.config.get('avatar_position_in_roster') == 'left':
@@ -5852,7 +5820,7 @@ class RosterWindow:
             add_avatar_renderer()
 
         self.renderers_list.append(('padlock', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', Column.PADLOCK_PIXBUF,
+                'icon_name', Column.PADLOCK_PIXBUF,
                 self._fill_padlock_pixbuf_renderer, None))
 
         # fill and append column
@@ -5907,6 +5875,8 @@ class RosterWindow:
             if app.config.get('last_roster_visible') or \
             app.config.get('trayicon') != 'always':
                 self.window.show_all()
+
+        self.scale_factor = self.window.get_scale_factor()
 
         if not app.config.get_per('accounts') or \
         app.config.get_per('accounts') == ['Local'] and not \

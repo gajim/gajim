@@ -474,17 +474,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         return state
 
     def set_encryption_menu_icon(self):
-        for child in self.encryption_menu.get_children():
-            if isinstance(child, Gtk.Image):
-                image = child
-                break
-
+        image = self.encryption_menu.get_image()
+        if image is None:
+            image = Gtk.Image()
+            self.encryption_menu.set_image(image)
         if not self.encryption:
-            icon = gtkgui_helpers.get_icon_pixmap(
-                'channel-insecure-symbolic', color=[Color.BLACK])
+            image.set_from_icon_name('channel-insecure-symbolic',
+                                     Gtk.IconSize.MENU)
         else:
-            icon = gtkgui_helpers.get_icon_pixmap('channel-secure-symbolic')
-        image.set_from_pixbuf(icon)
+            image.set_from_icon_name('channel-secure-symbolic',
+                                     Gtk.IconSize.MENU)
 
     def set_speller(self):
         if not app.HAVE_SPELL or not app.config.get('use_speller'):

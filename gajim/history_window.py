@@ -169,10 +169,8 @@ class HistoryWindow:
         for account in self.accounts_seen_online:
             completion_dict.update(helpers.get_contact_dict_for_account(account))
 
-        muc_active_img = gtkgui_helpers.load_icon('muc_active')
-        contact_img = app.interface.jabber_state_images['16']['online']
-        muc_active_pix = muc_active_img.get_pixbuf()
-        contact_pix = contact_img.get_pixbuf()
+        muc_active_icon = gtkgui_helpers.get_iconset_name_for('muc-active')
+        online_icon = gtkgui_helpers.get_iconset_name_for('online')
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
@@ -204,7 +202,7 @@ class HistoryWindow:
 
             if app.logger.jid_is_room_jid(completed) or\
             app.logger.jid_is_from_pm(completed):
-                pix = muc_active_pix
+                icon = muc_active_icon
                 if app.logger.jid_is_from_pm(completed):
                     # It's PM. Make it easier to find
                     room, nick = app.get_room_and_nick_from_fjid(completed)
@@ -214,11 +212,11 @@ class HistoryWindow:
                     completed2 = info_completion2
                     info_name = nick
             else:
-                pix = contact_pix
+                icon = online_icon
 
             if len(completed) > 70:
                 completed = completed[:70] + '[\u2026]'
-            liststore.append((pix, completed))
+            liststore.append((icon, completed))
             self.completion_dict[key] = (info_jid, info_acc, info_name,
                 info_completion)
             self.completion_dict[completed] = (info_jid, info_acc,
@@ -226,7 +224,7 @@ class HistoryWindow:
             if completed2:
                 if len(completed2) > 70:
                     completed2 = completed2[:70] + '[\u2026]'
-                liststore.append((pix, completed2))
+                liststore.append((icon, completed2))
                 self.completion_dict[completed2] = (info_jid, info_acc,
                     info_name, info_completion2)
             if key == actual_jid:

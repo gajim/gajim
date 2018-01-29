@@ -928,10 +928,10 @@ class AddNewContactWindow:
                             'prompt': None}
                 self.available_types.append(type_)
         # Combobox with transport/jabber icons
-        liststore = Gtk.ListStore(str, GdkPixbuf.Pixbuf, str)
+        liststore = Gtk.ListStore(str, str, str)
         cell = Gtk.CellRendererPixbuf()
         self.protocol_combobox.pack_start(cell, False)
-        self.protocol_combobox.add_attribute(cell, 'pixbuf', 1)
+        self.protocol_combobox.add_attribute(cell, 'icon_name', 1)
         cell = Gtk.CellRendererText()
         cell.set_property('xpad', 5)
         self.protocol_combobox.pack_start(cell, True)
@@ -940,21 +940,16 @@ class AddNewContactWindow:
         uf_type = {'jabber': 'XMPP', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
             'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
-        img = app.interface.jabber_state_images['16']['online']
-        liststore.append(['XMPP', img.get_pixbuf(), 'jabber'])
+        online_icon = gtkgui_helpers.get_iconset_name_for('online')
+        liststore.append(['XMPP', online_icon, 'jabber'])
         for type_ in self.agents:
             if type_ == 'jabber':
                 continue
-            imgs = app.interface.roster.transports_state_images
-            img = None
-            if type_ in imgs['16'] and 'online' in imgs['16'][type_]:
-                img = imgs['16'][type_]['online']
-                if type_ in uf_type:
-                    liststore.append([uf_type[type_], img.get_pixbuf(), type_])
-                else:
-                    liststore.append([type_, img.get_pixbuf(), type_])
+            if type_ in uf_type:
+                liststore.append([uf_type[type_], type_ + '-online', type_])
             else:
-                liststore.append([type_, img, type_])
+                liststore.append([type_, type_ + '-online', type_])
+
             if account:
                 for service in self.agents[type_]:
                     app.connections[account].request_gateway_prompt(service)
@@ -3328,8 +3323,8 @@ class SingleMessageWindow:
             keys = sorted(self.completion_dict.keys())
             for jid in keys:
                 contact = self.completion_dict[jid]
-                img = app.interface.jabber_state_images['16'][contact.show]
-                liststore.append((img.get_pixbuf(), jid))
+                status_icon = gtkgui_helpers.get_iconset_name_for(contact.show)
+                liststore.append((status_icon, jid))
         else:
             self.completion_dict = {}
         self.xml.connect_signals(self)
@@ -5030,7 +5025,7 @@ class TransformChatToMUC:
         self.window = self.xml.get_object('chat_to_muc_window')
 
         for widget_to_add in ('invite_button', 'cancel_button',
-            'server_list_comboboxentry', 'guests_treeview',
+            'server_list_comboboxentry', 'guests_treeview', 'guests_store',
             'server_and_guests_hseparator', 'server_select_label'):
             self.__dict__[widget_to_add] = self.xml.get_object(widget_to_add)
 
@@ -5061,17 +5056,8 @@ class TransformChatToMUC:
 
         # set treeview
         # name, jid
-        self.store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
-        self.store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        self.guests_treeview.set_model(self.store)
 
-        renderer1 = Gtk.CellRendererText()
-        renderer2 = Gtk.CellRendererPixbuf()
-        column = Gtk.TreeViewColumn('Status', renderer2, pixbuf=0)
-        self.guests_treeview.append_column(column)
-        column = Gtk.TreeViewColumn('Name', renderer1, text=1)
-        self.guests_treeview.append_column(column)
-
+        self.guests_store.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         self.guests_treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         # All contacts beside the following can be invited:
@@ -5094,14 +5080,14 @@ class TransformChatToMUC:
                 # Add contact if it can be invited
                 if invitable(contact, contact_transport) and \
                 contact.show not in ('offline', 'error'):
-                    img = app.interface.jabber_state_images['16'][contact.show]
+                    icon_name = gtkgui_helpers.get_iconset_name_for(contact.show)
                     name = contact.name
                     if name == '':
                         name = jid.split('@')[0]
-                    iter_ = self.store.append([img.get_pixbuf(), name, jid])
+                    iter_ = self.guests_store.append([icon_name, name, jid])
                     # preselect treeview rows
                     if self.preselected_jids and jid in self.preselected_jids:
-                        path = self.store.get_path(iter_)
+                        path = self.guests_store.get_path(iter_)
                         self.guests_treeview.get_selection().select_path(path)
 
         app.ged.register_event_handler('unique-room-id-supported', ged.GUI1,
@@ -5139,8 +5125,8 @@ class TransformChatToMUC:
         guest_list = []
         guests = self.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
-            iter_ = self.store.get_iter(guest)
-            guest_list.append(self.store[iter_][2])
+            iter_ = self.guests_store.get_iter(guest)
+            guest_list.append(self.guests_store[iter_][2])
         for guest in self.auto_jids:
             guest_list.append(guest)
         room_jid = obj.room_id + '@' + obj.server

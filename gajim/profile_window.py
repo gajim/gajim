@@ -131,11 +131,12 @@ class ProfileWindow:
             self.dialog.destroy()
             self.dialog = None
 
-            pixbuf = app.interface.get_avatar(sha, AvatarSize.VCARD)
+            scale = self.window.get_scale_factor()
+            surface = app.interface.get_avatar(sha, AvatarSize.VCARD, scale)
 
             button = self.xml.get_object('PHOTO_button')
             image = button.get_image()
-            image.set_from_pixbuf(pixbuf)
+            image.set_from_surface(surface)
             button.show()
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()

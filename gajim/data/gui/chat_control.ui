@@ -801,11 +801,7 @@ audio-mic-volume-low</property>
                     <property name="tooltip_text" translatable="yes">Choose an encryption</property>
                     <property name="relief">none</property>
                     <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">channel-secure-symbolic</property>
-                      </object>
+                      <placeholder/>
                     </child>
                     <style>
                       <class name="chatcontrol-actionbar-button"/>
