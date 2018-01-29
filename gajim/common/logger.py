@@ -732,6 +732,64 @@ class Logger:
         # attributes set to None because of the MAX() function
         return self.con.execute(sql, tuple(jids)).fetchone().time
 
+    def get_first_date_that_has_logs(self, account, jid):
+        """
+        Get the timestamp of the first message we received for the jid.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the first timestamp
+
+        returns a timestamp or None
+        """
+        jids = self._get_family_jids(account, jid)
+
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+
+        sql = '''
+            SELECT MIN(time) as time FROM logs
+            NATURAL JOIN jids WHERE jid IN ({jids})
+            AND kind NOT IN ({kinds})
+            '''.format(jids=', '.join('?' * len(jids)),
+                       kinds=', '.join(kinds))
+
+        # fetchone() returns always at least one Row with all
+        # attributes set to None because of the MIN() function
+        return self.con.execute(sql, tuple(jids)).fetchone().time
+
+    def get_date_has_logs(self, account, jid, date):
+        """
+        Get single timestamp of a message we received for the jid
+        in the time range of one day.
+
+        :param account: The account
+
+        :param jid:     The jid for which we request the first timestamp
+
+        :param date:    datetime.datetime instance
+                        example: datetime.datetime(year, month, day)
+
+        returns a timestamp or None
+        """
+        jids = self._get_family_jids(account, jid)
+
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS])
+
+        delta = datetime.timedelta(
+            hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        sql = '''
+            SELECT time
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND time BETWEEN ? AND ?
+            '''.format(jids=', '.join('?' * len(jids)))
+
+        return self.con.execute(sql, tuple(jids) +
+                                      (date.timestamp(),
+                                      (date + delta).timestamp())).fetchone()
+
     def get_room_last_message_time(self, account, jid):
         """
         Get the timestamp of the last message we received in a room.
