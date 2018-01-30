@@ -4843,8 +4843,9 @@ class RosterWindow:
             return
 
         image = model[titer][Column.AVATAR_IMG]
-        surface = image.get_property('surface')
-        renderer.set_property('surface', surface)
+        if image is not None:
+            surface = image.get_property('surface')
+            renderer.set_property('surface', surface)
         # allocate space for the icon only if needed
         if model[titer][Column.AVATAR_IMG] or \
         app.config.get('avatar_position_in_roster') == 'left':
