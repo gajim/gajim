@@ -58,8 +58,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/4e/32/4070bdf32812c89eb635c80880a5caa2e0189aa7999994c265577e5154f3/cffi-1.11.0.tar.gz",
-                    "sha256": "5f4ff33371c6969b39b293d9771ee91e81d26f9129be093ca1b7be357fcefd15"
+                    "url": "https://pypi.python.org/packages/62/ea/f41d44e0a4222fe8317ffe1fe7a5c75ec71ca233b4067850567922f8b7be/cffi-1.11.3.tar.gz",
+                    "sha256": "8456abb0f892eb7d545f9ce94f4ba78d651365b1a59f9ce9ae7b5325a95dc698"
                 }
             ]
         },
@@ -132,8 +132,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/a4/c8/9a7a47f683d54d83f648d37c3e180317f80dc126a304c45dc6663246233a/setuptools-36.5.0.zip",
-                    "sha256": "ce2007c1cea3359870b80657d634253a0765b0c7dc5a988d77ba803fc86f2c64"
+                    "url": "https://pypi.python.org/packages/41/5f/6da80400340fd48ba4ae1c673be4dc3821ac06cd9821ea60f9c7d32a009f/setuptools-38.4.0.zip",
+                    "sha256": "6501fc32f505ec5b3ed36ec65ba48f1b975f52cf2ea101c7b73a08583fd12f75"
                 }
             ]
         },
@@ -141,13 +141,13 @@
             "name": "python3-asn1crypto",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app asn1crypto-0.23.0-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app asn1crypto-0.24.0-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/5e/85/d9b46c307ff2b5504432425cd99e2d9f13ab7a9835ba45c93da299cb1ec8/asn1crypto-0.23.0-py2.py3-none-any.whl",
-                    "sha256": "654b7db3b120e23474e9a1e5e38d268c77e58a9e17d2cb595456c37309846494"
+                    "url": "https://pypi.python.org/packages/ea/cd/35485615f45f30a510576f1a56d1e0a7ad7bd8ab5ed7cdc600ef7cd06222/asn1crypto-0.24.0-py2.py3-none-any.whl",
+                    "sha256": "2f1adbb7546ed199e3c90ef23ec95c5cf3585bac7d11fb7eb562a3fe89c64e87"
                 }
             ]
         },
@@ -177,8 +177,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/9c/1a/0fc8cffb04582f9ffca61b15b0681cf2e8588438e55f61403eb9880bd8e0/cryptography-2.0.3.tar.gz",
-                    "sha256": "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a"
+                    "url": "https://pypi.python.org/packages/78/c5/7188f15a92413096c93053d5304718e1f6ba88b818357d05d19250ebff85/cryptography-2.1.4.tar.gz",
+                    "sha256": "e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291"
                 }
             ]
         },
@@ -186,13 +186,13 @@
             "name": "python3-pyopenssl",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app pyOpenSSL-17.3.0-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app pyOpenSSL-17.5.0-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/24/37/89bf12e53f1d27e8b2c8e5f8f9c7a958a3905f6916a9294a57a9d83fa165/pyOpenSSL-17.3.0-py2.py3-none-any.whl",
-                    "sha256": "aade9985b93eaec51b0c0a2a60d14bb8dcff1ff8e36fe542e3c22812ec07315e"
+                    "url": "https://pypi.python.org/packages/79/db/7c0cfe4aa8341a5fab4638952520d8db6ab85ff84505e12c00ea311c3516/pyOpenSSL-17.5.0-py2.py3-none-any.whl",
+                    "sha256": "07a2de1a54de07448732a81e38a55df7da109b2f47f599f8bb35b0cbec69d4bd"
                 }
             ]
         },
@@ -200,13 +200,13 @@
             "name": "python3-pyasn1",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app pyasn1-0.3.6-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app pyasn1-0.4.2-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/bf/56/47712763865a8639e6634e80405f6c758d4415620725896f412c464705f0/pyasn1-0.3.6-py2.py3-none-any.whl",
-                    "sha256": "06afc633971ab80943f06b96d3d6314f461001c92418fc0cd682a8357a1db47f"
+                    "url": "https://pypi.python.org/packages/ba/fe/02e3e2ee243966b143657fb8bd6bc97595841163b6d8c26820944acaec4d/pyasn1-0.4.2-py2.py3-none-any.whl",
+                    "sha256": "d5cd6ed995dba16fad0c521cfe31cd2d68400b53fcc2bce93326829be73ab6d1"
                 }
             ]
         },
@@ -281,7 +281,7 @@
                 {
                     "type": "git",
                     "url": "https://dev.gajim.org/gajim/python-nbxmpp.git",
-                    "branch": "nbxmpp-0.6.0"
+                    "branch": "nbxmpp-0.6.2"
                 }
             ]
         },
