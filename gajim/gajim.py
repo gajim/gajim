@@ -91,6 +91,9 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Show all warnings'))
+        self.add_main_option('ipython', ord('i'), GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('open ipython shell'))
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('startup', self._startup)
@@ -294,6 +297,11 @@ class GajimApplication(Gtk.Application):
             app_id = '%s.%s' % (self.get_application_id(), profile)
             self.set_application_id(app_id)
             self.profile = profile
+
+        # Register the Application, so it knows if its primary or not
+        # This is needed so we can execute actions on the remote instance
+        self.register(None)
+
         if options.contains('separate'):
             self.profile_separation = True
         if options.contains('config-path'):
@@ -311,6 +319,9 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
         if options.contains('warnings'):
             self.show_warnings()
+        if options.contains('ipython'):
+            self.activate_action('ipython')
+            return 0
         return -1
 
     def show_warnings(self):
@@ -386,6 +397,7 @@ class GajimApplication(Gtk.Application):
             ('content', action.on_contents),
             ('about', action.on_about),
             ('faq', action.on_faq),
+            ('ipython', action.toggle_ipython),
         ]
 
         act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))

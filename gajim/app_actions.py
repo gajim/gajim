@@ -274,3 +274,15 @@ class AppActions():
         app.interface.handle_event(dict_['account'], dict_['jid'],
             dict_['type_'])
 
+
+    # Other Actions
+
+    def toggle_ipython(self, action, param):
+        """
+        Show/hide the ipython window
+        """
+        win = app.ipython_window
+        if win and win.window.is_visible():
+            win.present()
+        else:
+           app.interface.create_ipython_window()
