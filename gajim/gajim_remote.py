@@ -60,7 +60,7 @@ except Exception:
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
-SERVICE = 'org.gajim.dbus'
+SERVICE = 'org.gajim.Gajim'
 BASENAME = 'gajim-remote'
 
 class GajimRemote:

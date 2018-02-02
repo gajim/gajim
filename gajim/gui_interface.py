@@ -2583,7 +2583,7 @@ class Interface:
             if app.config.get('remote_control'):
                 try:
                     from gajim import remote_control
-                    self.remote_ctrl = remote_control.Remote()
+                    remote_control.GajimRemote()
                 except Exception:
                     pass
         GLib.timeout_add_seconds(5, remote_init)
