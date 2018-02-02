@@ -26,47 +26,21 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gi.repository import GLib
-from gi.repository import Gtk
 import os
 import base64
 import mimetypes
+from time import time
+
+from gi.repository import GLib
+from gi.repository import Gio
 
 from gajim.common import app
 from gajim.common import helpers
-from time import time
 from gajim.dialogs import AddNewContactWindow, JoinGroupchatWindow
 from gajim.common import ged
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
-
-from gajim.common import dbus_support
-if dbus_support.supported:
-    import dbus
-    if dbus_support:
-        import dbus.service
-
-INTERFACE = 'org.gajim.dbus.RemoteInterface'
-OBJ_PATH = '/org/gajim/dbus/RemoteObject'
-SERVICE = 'org.gajim.dbus'
-
-# type mapping
-
-# in most cases it is a utf-8 string
-DBUS_STRING = dbus.String
-
-# general type (for use in dicts, where all values should have the same type)
-DBUS_BOOLEAN = dbus.Boolean
-DBUS_DOUBLE = dbus.Double
-DBUS_INT32 = dbus.Int32
-# dictionary with string key and binary value
-DBUS_DICT_SV = lambda : dbus.Dictionary({}, signature="sv")
-# dictionary with string key and value
-DBUS_DICT_SS = lambda : dbus.Dictionary({}, signature="ss")
-# empty type (there is no equivalent of None on D-Bus, but historically gajim
-# used 0 instead)
-DBUS_NONE = lambda : dbus.Int32(0)
 
 def get_dbus_struct(obj):
     """
@@ -74,38 +48,257 @@ def get_dbus_struct(obj):
     equivalents
     """
     if obj is None:
-        return DBUS_NONE()
+        return None
     if isinstance(obj, str):
-        return DBUS_STRING(obj)
+        return GLib.Variant('s', obj)
     if isinstance(obj, int):
-        return DBUS_INT32(obj)
+        return GLib.Variant('i', obj)
     if isinstance(obj, float):
-        return DBUS_DOUBLE(obj)
+        return GLib.Variant('d', obj)
     if isinstance(obj, bool):
-        return DBUS_BOOLEAN(obj)
+        return GLib.Variant('b', obj)
     if isinstance(obj, (list, tuple)):
-        result = dbus.Array([get_dbus_struct(i) for i in obj],
-                signature='v')
-        if result == []:
-            return DBUS_NONE()
+        result = GLib.Variant('av', [get_dbus_struct(i) for i in obj])
         return result
     if isinstance(obj, dict):
-        result = DBUS_DICT_SV()
+        result = GLib.VariantDict()
         for key, value in obj.items():
-            result[DBUS_STRING(key)] = get_dbus_struct(value)
-        if result == {}:
-            return DBUS_NONE()
-        return result
+            result.insert_value(key, get_dbus_struct(value))
+        return result.end()
     # unknown type
-    return DBUS_NONE()
+    return None
 
-class Remote:
+
+class Server:
+    def __init__(self, con, path):
+        method_outargs = {}
+        method_inargs = {}
+        for interface in Gio.DBusNodeInfo.new_for_xml(self.__doc__).interfaces:
+
+            for method in interface.methods:
+                method_outargs[method.name] = '(' + ''.join(
+                    [arg.signature for arg in method.out_args]) + ')'
+                method_inargs[method.name] = tuple(
+                    arg.signature for arg in method.in_args)
+
+            con.register_object(
+                object_path=path,
+                interface_info=interface,
+                method_call_closure=self.on_method_call)
+
+        self.method_inargs = method_inargs
+        self.method_outargs = method_outargs
+
+    def on_method_call(self, connection, sender, object_path, interface_name,
+                       method_name, parameters, invocation):
+
+        args = list(parameters.unpack())
+        for i, sig in enumerate(self.method_inargs[method_name]):
+            if sig is 'h':
+                msg = invocation.get_message()
+                fd_list = msg.get_unix_fd_list()
+                args[i] = fd_list.get(args[i])
+
+        result = getattr(self, method_name)(*args)
+
+        # out_args is atleast (signature1). We therefore always wrap the result
+        # as a tuple. Refer to https://bugzilla.gnome.org/show_bug.cgi?id=765603
+        result = (result, )
+
+        out_args = self.method_outargs[method_name]
+        if out_args != '()':
+            variant = GLib.Variant(out_args, result)
+            invocation.return_value(variant)
+        else:
+            invocation.return_value(None)
+
+
+class GajimRemote(Server):
+    '''
+    <!DOCTYPE node PUBLIC '-//freedesktop//DTD D-BUS Object Introspection 1.0//EN'
+    'http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd'>
+    <node>
+        <interface name='org.freedesktop.DBus.Introspectable'>
+            <method name='Introspect'>
+                <arg name='data' direction='out' type='s'/>
+            </method>
+        </interface>
+        <interface name='org.gajim.dbus.RemoteInterface'>
+            <method name='account_info'>
+                <arg name='account' type='s' />
+                <arg direction='out' type='a{ss}' />
+            </method>
+            <method name='add_contact'>
+                <arg name='jid' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='change_avatar'>
+                <arg name='picture' type='s' />
+                <arg name='account' type='s' />
+            </method>
+            <method name='change_status'>
+                <arg name='status' type='s' />
+                <arg name='message' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='get_status'>
+                <arg name='account' type='s' />
+                <arg direction='out' type='s' />
+            </method>
+            <method name='get_status_message'>
+                <arg name='account' type='s' />
+                <arg direction='out' type='s' />
+            </method>
+            <method name='get_unread_msgs_number'>
+                <arg direction='out' type='s' />
+            </method>
+            <method name='join_room'>
+                <arg name='room_jid' type='s' />
+                <arg name='nick' type='s' />
+                <arg name='password' type='s' />
+                <arg name='account' type='s' />
+            </method>
+            <method name='list_accounts'>
+                <arg direction='out' type='as' />
+            </method>
+            <method name='list_contacts'>
+                <arg name='account' type='s' />
+                <arg direction='out' type='aa{sv}' />
+            </method>
+            <method name='open_chat'>
+                <arg name='jid' type='s' />
+                <arg name='account' type='s' />
+                <arg name='message' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='prefs_del'>
+                <arg name='key' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='prefs_list'>
+                <arg direction='out' type='a{ss}' />
+            </method>
+            <method name='prefs_put'>
+                <arg name='key' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='prefs_store'>
+                <arg direction='out' type='b' />
+            </method>
+            <method name='remove_contact'>
+                <arg name='jid' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='send_chat_message'>
+                <arg name='jid' type='s' />
+                <arg name='message' type='s' />
+                <arg name='keyID' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='send_file'>
+                <arg name='file_path' type='s' />
+                <arg name='jid' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='send_groupchat_message'>
+                <arg name='room_jid' type='s' />
+                <arg name='message' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='send_single_message'>
+                <arg name='jid' type='s' />
+                <arg name='subject' type='s' />
+                <arg name='message' type='s' />
+                <arg name='keyID' type='s' />
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='send_xml'>
+                <arg name='xml' type='s' />
+                <arg name='account' type='s' />
+            </method>
+            <method name='set_priority'>
+                <arg name='prio' type='s' />
+                <arg name='account' type='s' />
+            </method>
+            <method name='show_next_pending_event' />
+            <method name='show_roster' />
+            <method name='start_chat'>
+                <arg name='account' type='s' />
+                <arg direction='out' type='b' />
+            </method>
+            <method name='toggle_ipython' />
+            <method name='toggle_roster_appearance' />
+            <signal name='AccountPresence'>
+                <arg type='av' />
+            </signal>
+            <signal name='ChatState'>
+                <arg type='av' />
+            </signal>
+            <signal name='ContactAbsence'>
+                <arg type='av' />
+            </signal>
+            <signal name='ContactPresence'>
+                <arg type='av' />
+            </signal>
+            <signal name='ContactStatus'>
+                <arg type='av' />
+            </signal>
+            <signal name='EntityTime'>
+                <arg type='av' />
+            </signal>
+            <signal name='GCMessage'>
+                <arg type='av' />
+            </signal>
+            <signal name='GCPresence'>
+                <arg type='av' />
+            </signal>
+            <signal name='MessageSent'>
+                <arg type='av' />
+            </signal>
+            <signal name='NewAccount'>
+                <arg type='av' />
+            </signal>
+            <signal name='NewMessage'>
+                <arg type='av' />
+            </signal>
+            <signal name='OsInfo'>
+                <arg type='av' />
+            </signal>
+            <signal name='Roster'>
+                <arg type='av' />
+            </signal>
+            <signal name='RosterInfo'>
+                <arg type='av' />
+            </signal>
+            <signal name='Subscribe'>
+                <arg type='av' />
+            </signal>
+            <signal name='Subscribed'>
+                <arg type='av' />
+            </signal>
+            <signal name='Unsubscribed'>
+                <arg type='av' />
+            </signal>
+            <signal name='VcardInfo'>
+                <arg type='av' />
+            </signal>
+        </interface>
+    </node>
+    '''
+
     def __init__(self):
-        self.signal_object = None
-        session_bus = dbus_support.session_bus.SessionBus()
-
-        bus_name = dbus.service.BusName(SERVICE, bus=session_bus)
-        self.signal_object = SignalObject(bus_name)
+        self.con = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        Gio.bus_own_name_on_connection(self.con, 'org.gajim.Gajim',
+                                       Gio.BusNameOwnerFlags.NONE, None, None)
+        super().__init__(self.con, '/org/gajim/dbus/RemoteObject')
+        self.first_show = True
 
         app.ged.register_event_handler('version-result-received', ged.POSTGUI,
             self.on_os_info)
@@ -159,15 +352,15 @@ class Remote:
             obj.sub, obj.ask, obj.groups]))
 
     def on_presence_received(self, obj):
-        event = None
         if obj.old_show < 2 and obj.new_show > 1:
             event = 'ContactPresence'
         elif obj.old_show > 1 and obj.new_show < 2:
             event = 'ContactAbsence'
         elif obj.new_show > 1:
             event = 'ContactStatus'
-        if event:
-            self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
+        else:
+            return
+        self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
                 obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp,
                 obj.contact_nickname]))
 
@@ -199,132 +392,35 @@ class Remote:
     def on_vcard_received(self, obj):
         self.raise_signal('VcardInfo', (obj.conn.name, obj.vcard_dict))
 
-    def raise_signal(self, signal, arg):
-        if self.signal_object:
-            try:
-                getattr(self.signal_object, signal)(get_dbus_struct(arg))
-            except UnicodeDecodeError:
-                pass # ignore error when we fail to announce on dbus
+    def raise_signal(self, event_name, data):
+        self.con.emit_signal(None,
+                             '/org/gajim/dbus/RemoteObject',
+                             'org.gajim.dbus.RemoteInterface',
+                             event_name,
+                             GLib.Variant.new_tuple(get_dbus_struct(data)))
 
-
-class SignalObject(dbus.service.Object):
-    """
-    Local object definition for /org/gajim/dbus/RemoteObject
-
-    This docstring is not be visible, because the clients can access only the
-    remote object.
-    """
-
-    def __init__(self, bus_name):
-        self.first_show = True
-        self.vcard_account = None
-
-        # register our dbus API
-        dbus.service.Object.__init__(self, bus_name, OBJ_PATH)
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def Roster(self, account_and_data):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def AccountPresence(self, status_and_account):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def ContactPresence(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def ContactAbsence(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def ContactStatus(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def NewMessage(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def Subscribe(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def Subscribed(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def Unsubscribed(self, account_and_jid):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def NewAccount(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def VcardInfo(self, account_and_vcard):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def OsInfo(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def EntityTime(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def GCPresence(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def GCMessage(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def RosterInfo(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def ChatState(self, account_and_array):
-        pass
-
-    @dbus.service.signal(INTERFACE, signature='av')
-    def MessageSent(self, account_and_array):
-        pass
-
-    def raise_signal(self, signal, arg):
-        """
-        Raise a signal, with a single argument of unspecified type Instead of
-        obj.raise_signal("Foo", bar), use obj.Foo(bar)
-        """
-        getattr(self, signal)(arg)
-
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='s')
     def get_status(self, account):
         """
-        Return status (show to be exact) which is the global one unless account is
-        given
+        Return status (show to be exact) which is the global one unless
+        account is given
         """
         if not account:
             # If user did not ask for account, returns the global status
-            return DBUS_STRING(helpers.get_global_show())
+            return helpers.get_global_show()
         # return show for the given account
         index = app.connections[account].connected
-        return DBUS_STRING(app.SHOW_LIST[index])
+        return app.SHOW_LIST[index]
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='s')
     def get_status_message(self, account):
         """
         Return status which is the global one unless account is given
         """
         if not account:
             # If user did not ask for account, returns the global status
-            return DBUS_STRING(str(helpers.get_global_status()))
+            return str(helpers.get_global_status())
         # return show for the given account
         status = app.connections[account].status
-        return DBUS_STRING(status)
+        return status
 
     def _get_account_and_contact(self, account, jid):
         """
@@ -338,14 +434,14 @@ class SignalObject(dbus.service.Object):
         if not account and len(accounts) == 1:
             account = accounts[0]
         if account:
-            if app.connections[account].connected > 1: # account is connected
+            if app.connections[account].connected > 1:  # account is connected
                 connected_account = account
-                contact = app.contacts.get_contact_with_highest_priority(account,
-                        jid)
+                contact = app.contacts.get_contact_with_highest_priority(
+                    account, jid)
         else:
             for account in accounts:
-                contact = app.contacts.get_contact_with_highest_priority(account,
-                        jid)
+                contact = app.contacts.get_contact_with_highest_priority(
+                    account, jid)
                 if contact and app.connections[account].connected > 1:
                     # account is connected
                     connected_account = account
@@ -368,50 +464,56 @@ class SignalObject(dbus.service.Object):
             account = accounts[0]
         if account:
             if app.connections[account].connected > 1 and \
-            room_jid in app.gc_connected[account] and \
-            app.gc_connected[account][room_jid]:
+                    room_jid in app.gc_connected[account] and \
+                    app.gc_connected[account][room_jid]:
                 # account and groupchat are connected
                 connected_account = account
         else:
             for account in accounts:
                 if app.connections[account].connected > 1 and \
-                room_jid in app.gc_connected[account] and \
-                app.gc_connected[account][room_jid]:
+                        room_jid in app.gc_connected[account] and \
+                        app.gc_connected[account][room_jid]:
                     # account and groupchat are connected
                     connected_account = account
                     break
         return connected_account
 
-    @dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
     def send_file(self, file_path, jid, account):
         """
         Send file, located at 'file_path' to 'jid', using account (optional)
         'account'
         """
         jid = self._get_real_jid(jid, account)
-        connected_account, contact = self._get_account_and_contact(account, jid)
+        connected_account, contact = self._get_account_and_contact(
+            account, jid)
 
         if connected_account:
             if file_path.startswith('file://'):
-                file_path=file_path[7:]
-            if os.path.isfile(file_path): # is it file?
+                file_path = file_path[7:]
+            if os.path.isfile(file_path):  # is it file?
                 app.interface.instances['file_transfers'].send_file(
-                        connected_account, contact, file_path)
-                return DBUS_BOOLEAN(True)
-        return DBUS_BOOLEAN(False)
+                    connected_account, contact, file_path)
+                return True
+        return False
 
-    def _send_message(self, jid, message, keyID, account, type_ = 'chat',
-    subject = None):
+    def _send_message(self,
+                      jid,
+                      message,
+                      keyID,
+                      account,
+                      type_='chat',
+                      subject=None):
         """
         Can be called from send_chat_message (default when send_message) or
         send_single_message
         """
         if not jid or not message:
-            return DBUS_BOOLEAN(False)
+            return False
         if not keyID:
             keyID = ''
 
-        connected_account, contact = self._get_account_and_contact(account, jid)
+        connected_account, contact = self._get_account_and_contact(
+            account, jid)
         if connected_account:
             connection = app.connections[connected_account]
             sessions = connection.get_sessions(jid)
@@ -419,17 +521,24 @@ class SignalObject(dbus.service.Object):
                 session = sessions[0]
             else:
                 session = connection.make_new_session(jid)
-            ctrl = app.interface.msg_win_mgr.search_control(jid,
-                connected_account)
+            ctrl = app.interface.msg_win_mgr.search_control(
+                jid, connected_account)
             if ctrl:
                 ctrl.send_message(message)
             else:
-                app.nec.push_outgoing_event(MessageOutgoingEvent(None, account=connected_account, jid=jid, message=message, keyID=keyID, type_=type_, control=ctrl))
+                app.nec.push_outgoing_event(
+                    MessageOutgoingEvent(
+                        None,
+                        account=connected_account,
+                        jid=jid,
+                        message=message,
+                        keyID=keyID,
+                        type_=type_,
+                        control=ctrl))
 
-            return DBUS_BOOLEAN(True)
-        return DBUS_BOOLEAN(False)
+            return True
+        return False
 
-    @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='b')
     def send_chat_message(self, jid, message, keyID, account):
         """
         Send chat 'message' to 'jid', using account (optional) 'account'. If keyID
@@ -438,31 +547,33 @@ class SignalObject(dbus.service.Object):
         jid = self._get_real_jid(jid, account)
         return self._send_message(jid, message, keyID, account)
 
-    @dbus.service.method(INTERFACE, in_signature='sssss', out_signature='b')
     def send_single_message(self, jid, subject, message, keyID, account):
         """
         Send single 'message' to 'jid', using account (optional) 'account'. If
         keyID is specified, encrypt the message with the pgp key
         """
         jid = self._get_real_jid(jid, account)
-        return self._send_message(jid, message, keyID, account, 'normal', subject)
+        return self._send_message(jid, message, keyID, account, 'normal',
+                                  subject)
 
-    @dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
     def send_groupchat_message(self, room_jid, message, account):
         """
         Send 'message' to groupchat 'room_jid', using account (optional) 'account'
         """
         if not room_jid or not message:
-            return DBUS_BOOLEAN(False)
+            return False
         connected_account = self._get_account_for_groupchat(account, room_jid)
         if connected_account:
             connection = app.connections[connected_account]
-            app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
-                account=connected_account, jid=room_jid, message=message))
-            return DBUS_BOOLEAN(True)
-        return DBUS_BOOLEAN(False)
+            app.nec.push_outgoing_event(
+                GcMessageOutgoingEvent(
+                    None,
+                    account=connected_account,
+                    jid=room_jid,
+                    message=message))
+            return True
+        return False
 
-    @dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
     def open_chat(self, jid, account, message):
         """
         Shows the tabbed window for new message to 'jid', using account (optional)
@@ -475,7 +586,7 @@ class SignalObject(dbus.service.Object):
             jid = helpers.parse_jid(jid)
         except Exception:
             # Jid is not conform, ignore it
-            return DBUS_BOOLEAN(False)
+            return False
 
         minimized_control = None
         if account:
@@ -487,7 +598,7 @@ class SignalObject(dbus.service.Object):
         connected_account = None
         first_connected_acct = None
         for acct in accounts:
-            if app.connections[acct].connected > 1: # account is  online
+            if app.connections[acct].connected > 1:  # account is  online
                 contact = app.contacts.get_first_contact_from_jid(acct, jid)
                 if app.interface.msg_win_mgr.has_window(jid, acct):
                     connected_account = acct
@@ -510,40 +621,39 @@ class SignalObject(dbus.service.Object):
             connected_account = first_connected_acct
 
         if minimized_control:
-            app.interface.roster.on_groupchat_maximized(None, jid,
-                connected_account)
+            app.interface.roster.on_groupchat_maximized(
+                None, jid, connected_account)
 
         if connected_account:
             app.interface.new_chat_from_jid(connected_account, jid, message)
             # preserve the 'steal focus preservation'
-            win = app.interface.msg_win_mgr.get_window(jid,
-                    connected_account).window
+            win = app.interface.msg_win_mgr.get_window(
+                jid, connected_account).window
             if win.get_property('visible'):
                 win.window.present()
-            return DBUS_BOOLEAN(True)
-        return DBUS_BOOLEAN(False)
+            return True
+        return False
 
-    @dbus.service.method(INTERFACE, in_signature='sss', out_signature='b')
     def change_status(self, status, message, account):
         """
         change_status(status, message, account). Account is optional - if not
         specified status is changed for all accounts
         """
-        if status not in ('offline', 'online', 'chat',
-        'away', 'xa', 'dnd', 'invisible'):
+        if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd',
+                          'invisible'):
             status = ''
         if account:
             if not status:
                 if account not in app.connections:
-                    return DBUS_BOOLEAN(False)
+                    return False
                 status = app.SHOW_LIST[app.connections[account].connected]
             GLib.idle_add(app.interface.roster.send_status, account, status,
-                message)
+                          message)
         else:
             # account not specified, so change the status of all accounts
             for acc in app.contacts.get_accounts():
                 if not app.config.get_per('accounts', acc,
-                'sync_with_global_status'):
+                                          'sync_with_global_status'):
                     continue
                 if status:
                     status_ = status
@@ -552,10 +662,9 @@ class SignalObject(dbus.service.Object):
                         continue
                     status_ = app.SHOW_LIST[app.connections[acc].connected]
                 GLib.idle_add(app.interface.roster.send_status, acc, status_,
-                    message)
-        return DBUS_BOOLEAN(False)
+                              message)
+        return False
 
-    @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
     def set_priority(self, prio, account):
         """
         set_priority(prio, account). Account is optional - if not specified
@@ -565,23 +674,20 @@ class SignalObject(dbus.service.Object):
             app.config.set_per('accounts', account, 'priority', prio)
             show = app.SHOW_LIST[app.connections[account].connected]
             status = app.connections[account].status
-            GLib.idle_add(app.connections[account].change_status, show,
-                status)
+            GLib.idle_add(app.connections[account].change_status, show, status)
         else:
             # account not specified, so change prio of all accounts
             for acc in app.contacts.get_accounts():
                 if not app.account_is_connected(acc):
                     continue
                 if not app.config.get_per('accounts', acc,
-                'sync_with_global_status'):
+                                          'sync_with_global_status'):
                     continue
                 app.config.set_per('accounts', acc, 'priority', prio)
                 show = app.SHOW_LIST[app.connections[acc].connected]
                 status = app.connections[acc].status
-                GLib.idle_add(app.connections[acc].change_status, show,
-                    status)
+                GLib.idle_add(app.connections[acc].change_status, show, status)
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_next_pending_event(self):
         """
         Show the window(s) with next pending event in tabbed/group chats
@@ -592,46 +698,43 @@ class SignalObject(dbus.service.Object):
                 return
             app.interface.handle_event(account, jid, event.type_)
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='as')
     def list_accounts(self):
         """
         List register accounts
         """
         result = app.contacts.get_accounts()
-        result_array = dbus.Array([], signature='s')
-        if result and len(result) > 0:
+        result_array = []
+        if result:
             for account in result:
-                result_array.append(DBUS_STRING(account))
+                result_array.append(account)
         return result_array
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='a{ss}')
     def account_info(self, account):
         """
         Show info on account: resource, jid, nick, prio, message
         """
-        result = DBUS_DICT_SS()
+        result = {}
         if account in app.connections:
             # account is valid
             con = app.connections[account]
             index = con.connected
-            result['status'] = DBUS_STRING(app.SHOW_LIST[index])
-            result['name'] = DBUS_STRING(con.name)
-            result['jid'] = DBUS_STRING(app.get_jid_from_account(con.name))
-            result['message'] = DBUS_STRING(con.status)
-            result['priority'] = DBUS_STRING(str(con.priority))
-            result['resource'] = DBUS_STRING(app.config.get_per('accounts',
-                con.name, 'resource'))
+            result['status'] = app.SHOW_LIST[index]
+            result['name'] = con.name
+            result['jid'] = app.get_jid_from_account(con.name)
+            result['message'] = con.status
+            result['priority'] = str(con.priority)
+            result['resource'] = app.config.get_per('accounts', con.name,
+                                                    'resource')
         return result
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='aa{sv}')
     def list_contacts(self, account):
         """
-        List all contacts in the roster. If the first argument is specified, then
-        return the contacts for the specified account
+        List all contacts in the roster. If the first argument is specified,
+        then return the contacts for the specified account
         """
-        result = dbus.Array([], signature='aa{sv}')
+        result = []
         accounts = app.contacts.get_accounts()
-        if len(accounts) == 0:
+        if not accounts:
             return result
         if account:
             accounts_to_search = [account]
@@ -646,7 +749,6 @@ class SignalObject(dbus.service.Object):
                         result.append(item)
         return result
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def toggle_roster_appearance(self):
         """
         Show/hide the roster window
@@ -662,7 +764,6 @@ class SignalObject(dbus.service.Object):
             else:
                 win.window.present_with_time(int(time()))
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def show_roster(self):
         """
         Show the roster window
@@ -671,18 +772,17 @@ class SignalObject(dbus.service.Object):
         win.present()
         # preserve the 'steal focus preservation'
         if self._is_first():
-            win.window.present()
+            win.present()
         else:
-            win.window.present_with_time(int(time()))
+            win.present_with_time(int(time()))
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
     def toggle_ipython(self):
         """
         Show/hide the ipython window
         """
         win = app.ipython_window
         if win:
-            if win.window.is_visible():
+            if win.is_visible():
                 GLib.idle_add(win.hide)
             else:
                 win.show_all()
@@ -690,9 +790,9 @@ class SignalObject(dbus.service.Object):
         else:
             app.interface.create_ipython_window()
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='a{ss}')
     def prefs_list(self):
-        prefs_dict = DBUS_DICT_SS()
+        prefs_dict = {}
+
         def get_prefs(data, name, path, value):
             if value is None:
                 return
@@ -701,60 +801,56 @@ class SignalObject(dbus.service.Object):
                 for node in path:
                     key += node + '#'
             key += name
-            prefs_dict[DBUS_STRING(key)] = DBUS_STRING(value)
+            prefs_dict[key] = str(value)
+
         app.config.foreach(get_prefs)
         return prefs_dict
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='b')
     def prefs_store(self):
         try:
             app.interface.save_config()
         except Exception:
-            return DBUS_BOOLEAN(False)
-        return DBUS_BOOLEAN(True)
+            return False
+        return True
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='b')
     def prefs_del(self, key):
         if not key:
-            return DBUS_BOOLEAN(False)
+            return False
         key_path = key.split('#', 2)
         if len(key_path) != 3:
-            return DBUS_BOOLEAN(False)
+            return False
         if key_path[2] == '*':
             app.config.del_per(key_path[0], key_path[1])
         else:
             app.config.del_per(key_path[0], key_path[1], key_path[2])
-        return DBUS_BOOLEAN(True)
+        return True
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='b')
     def prefs_put(self, key):
         if not key:
-            return DBUS_BOOLEAN(False)
+            return False
         key_path = key.split('#', 2)
         if len(key_path) < 3:
             subname, value = key.split('=', 1)
             app.config.set(subname, value)
-            return DBUS_BOOLEAN(True)
+            return True
         subname, value = key_path[2].split('=', 1)
         app.config.set_per(key_path[0], key_path[1], subname, value)
-        return DBUS_BOOLEAN(True)
+        return True
 
-    @dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
     def add_contact(self, jid, account):
         if account:
             if account in app.connections and \
                     app.connections[account].connected > 1:
                 # if given account is active, use it
-                AddNewContactWindow(account = account, jid = jid)
+                AddNewContactWindow(account=account, jid=jid)
             else:
                 # wrong account
-                return DBUS_BOOLEAN(False)
+                return False
         else:
             # if account is not given, show account combobox
-            AddNewContactWindow(account = None, jid = jid)
-        return DBUS_BOOLEAN(True)
+            AddNewContactWindow(account=None, jid=jid)
+        return True
 
-    @dbus.service.method(INTERFACE, in_signature='ss', out_signature='b')
     def remove_contact(self, jid, account):
         jid = self._get_real_jid(jid, account)
         accounts = app.contacts.get_accounts()
@@ -771,7 +867,7 @@ class SignalObject(dbus.service.Object):
                     app.interface.roster.remove_contact(contact, account)
                 app.contacts.remove_jid(account, jid)
                 contact_exists = True
-        return DBUS_BOOLEAN(contact_exists)
+        return contact_exists
 
     def _is_first(self):
         if self.first_show:
@@ -779,7 +875,7 @@ class SignalObject(dbus.service.Object):
             return True
         return False
 
-    def _get_real_jid(self, jid, account = None):
+    def _get_real_jid(self, jid, account=None):
         """
         Get the real jid from the given one: removes xmpp: or get jid from nick if
         account is specified, search only in this account
@@ -789,8 +885,8 @@ class SignalObject(dbus.service.Object):
         else:
             accounts = app.connections.keys()
         if jid.startswith('xmpp:'):
-            return jid[5:] # len('xmpp:') = 5
-        nick_in_roster = None # Is jid a nick ?
+            return jid[5:]  # len('xmpp:') = 5
+        nick_in_roster = None  # Is jid a nick ?
         for account in accounts:
             # Does jid exists in roster of one account ?
             if app.contacts.get_contacts(account, jid):
@@ -814,14 +910,14 @@ class SignalObject(dbus.service.Object):
         """
         if not contacts:
             return None
-        prim_contact = None # primary contact
+        prim_contact = None  # primary contact
         for contact in contacts:
             if prim_contact is None or contact.priority > prim_contact.priority:
                 prim_contact = contact
-        contact_dict = DBUS_DICT_SV()
-        contact_dict['name'] = DBUS_STRING(prim_contact.name)
-        contact_dict['show'] = DBUS_STRING(prim_contact.show)
-        contact_dict['jid'] = DBUS_STRING(prim_contact.jid)
+        contact_dict = {}
+        contact_dict['name'] = GLib.Variant('s', prim_contact.name)
+        contact_dict['show'] = GLib.Variant('s', prim_contact.show)
+        contact_dict['jid'] = GLib.Variant('s', prim_contact.jid)
         if prim_contact.keyID:
             keyID = None
             if len(prim_contact.keyID) == 8:
@@ -829,30 +925,28 @@ class SignalObject(dbus.service.Object):
             elif len(prim_contact.keyID) == 16:
                 keyID = prim_contact.keyID[8:]
             if keyID:
-                contact_dict['openpgp'] = keyID
-        contact_dict['resources'] = dbus.Array([], signature='(sis)')
+                contact_dict['openpgp'] = GLib.Variant('s', keyID)
+        resources = GLib.VariantBuilder(GLib.VariantType('a(sis)'))
         for contact in contacts:
-            resource_props = dbus.Struct((DBUS_STRING(contact.resource),
-                    dbus.Int32(contact.priority), DBUS_STRING(contact.status)))
-            contact_dict['resources'].append(resource_props)
-        contact_dict['groups'] = dbus.Array([], signature='(s)')
-        for group in prim_contact.groups:
-            contact_dict['groups'].append((DBUS_STRING(group),))
+            resource_props = (contact.resource, int(contact.priority),
+                              contact.status)
+            resources.add_value(GLib.Variant("(sis)", resource_props))
+        contact_dict['resources'] = resources.end()
+        #contact_dict['groups'] = []  # TODO
+        #for group in prim_contact.groups:
+        #    contact_dict['groups'].append((group, ))
         return contact_dict
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='s')
     def get_unread_msgs_number(self):
-        return DBUS_STRING(str(app.events.get_nb_events()))
+        return str(app.events.get_nb_events())
 
-    @dbus.service.method(INTERFACE, in_signature='s', out_signature='b')
     def start_chat(self, account):
         if not account:
             # error is shown in gajim-remote check_arguments(..)
-            return DBUS_BOOLEAN(False)
+            return False
         app.app.activate_action('start-chat')
-        return DBUS_BOOLEAN(True)
+        return True
 
-    @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
     def send_xml(self, xml, account):
         if account:
             app.connections[account].send_stanza(str(xml))
@@ -860,7 +954,6 @@ class SignalObject(dbus.service.Object):
             for acc in app.contacts.get_accounts():
                 app.connections[acc].send_stanza(str(xml))
 
-    @dbus.service.method(INTERFACE, in_signature='ss', out_signature='')
     def change_avatar(self, picture, account):
         filesize = os.path.getsize(picture)
         invalid_file = False
@@ -890,7 +983,6 @@ class SignalObject(dbus.service.Object):
                 for acc in app.connections:
                     app.connections[acc].send_vcard(vcard, sha)
 
-    @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
     def join_room(self, room_jid, nick, password, account):
         if not account:
             # get the first connected account
@@ -911,3 +1003,6 @@ class SignalObject(dbus.service.Object):
             app.interface.join_gc_minimal(account, room_jid)
         else:
             app.interface.join_gc_room(account, room_jid, nick, password)
+
+    def Introspect(self):
+        return self.__doc__
