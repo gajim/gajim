@@ -24,11 +24,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
 import logging
-import gi
-
-from gi.repository import GLib
 
 from gajim.common import app
 
@@ -37,11 +33,10 @@ __all__ = ['get_password', 'save_password']
 log = logging.getLogger('gajim.password')
 
 keyring = None
-if os.name == 'nt':
-    try:
-        import keyring
-    except ImportError:
-        log.debug('python-keyring missing, falling back to plaintext storage')
+try:
+    import keyring
+except ImportError:
+    log.debug('python-keyring missing, falling back to plaintext storage')
 
 
 class PasswordStorage(object):
@@ -54,54 +49,16 @@ class PasswordStorage(object):
         raise NotImplementedError
 
 
-class LibSecretPasswordStorage(PasswordStorage):
-    """Store password using libsecret"""
-    identifier = 'libsecret:'
-    def __init__(self):
-        gi.require_version('Secret', '1')
-        gir = __import__('gi.repository', globals(), locals(), ['Secret'], 0)
-        self.Secret = gir.Secret
-        self.GAJIM_SCHEMA = self.Secret.Schema.new(
-            "org.gnome.keyring.NetworkPassword",
-            self.Secret.SchemaFlags.NONE,
-            {
-                'user': self.Secret.SchemaAttributeType.STRING,
-                'server':  self.Secret.SchemaAttributeType.STRING,
-                'protocol': self.Secret.SchemaAttributeType.STRING,
-            }
-        )
-
-    def get_password(self, account_name):
-        server = app.config.get_per('accounts', account_name, 'hostname')
-        user = app.config.get_per('accounts', account_name, 'name')
-        password = self.Secret.password_lookup_sync(self.GAJIM_SCHEMA,
-            {'user': user, 'server': server, 'protocol': 'xmpp'}, None)
-        return password
-
-    def save_password(self, account_name, password, update=True):
-        server = app.config.get_per('accounts', account_name, 'hostname')
-        user = app.config.get_per('accounts', account_name, 'name')
-        display_name = _('XMPP account %s') % user + '@' + server
-        attributes = {'user': user, 'server': server, 'protocol': 'xmpp'}
-        try:
-            return self.Secret.password_store_sync(
-                self.GAJIM_SCHEMA, attributes, self.Secret.COLLECTION_DEFAULT,
-                display_name, password or '', None)
-        except GLib.Error as error:
-            log.error(error)
-            return False
-
-
-class SecretWindowsPasswordStorage(PasswordStorage):
-    """ Windows Keyring """
-    identifier = 'winvault:'
+class SecretPasswordStorage(PasswordStorage):
+    """ Store password using Keyring """
+    identifier = 'keyring:'
 
     def __init__(self):
-        self.win_keyring = keyring.get_keyring()
+        self.keyring = keyring.get_keyring()
 
     def save_password(self, account_name, password):
         try:
-            self.win_keyring.set_password('gajim', account_name, password)
+            self.keyring.set_password('gajim', account_name, password)
             return True
         except:
             log.exception('error:')
@@ -109,19 +66,18 @@ class SecretWindowsPasswordStorage(PasswordStorage):
 
     def get_password(self, account_name):
         log.debug('getting password')
-        return self.win_keyring.get_password('gajim', account_name)
+        return self.keyring.get_password('gajim', account_name)
 
 class PasswordStorageManager(PasswordStorage):
     """Access all the implemented password storage backends, knowing which ones
     are available and which we prefer to use.
-    Also implements storing directly in gajim config (former
-    SimplePasswordStorage class)."""
+    Also implements storing directly in gajim config."""
 
     def __init__(self):
         self.preferred_backend = None
 
         self.libsecret = None
-        self.winsecret = None
+        self.secret = None
 
         self.connect_backends()
         self.set_preferred_backend()
@@ -131,25 +87,15 @@ class PasswordStorageManager(PasswordStorage):
         """
         # TODO: handle disappearing backends
 
-        if app.config.get('use_keyring'):
-            if os.name == 'nt' and keyring:
-                self.winsecret = SecretWindowsPasswordStorage()
-            else:
-                try:
-                    self.libsecret = LibSecretPasswordStorage()
-                except (ValueError, AttributeError) as e:
-                    log.debug("Could not connect to libsecret: %s" % e)
+        if app.config.get('use_keyring') and keyring:
+            self.secret = SecretPasswordStorage()
 
     def get_password(self, account_name):
         pw = app.config.get_per('accounts', account_name, 'password')
         if not pw:
             return pw
-        if pw.startswith(LibSecretPasswordStorage.identifier) and \
-        self.libsecret:
-            backend = self.libsecret
-        elif pw.startswith(SecretWindowsPasswordStorage.identifier) and \
-        self.winsecret:
-            backend = self.winsecret
+        if pw.startswith(SecretPasswordStorage.identifier) and self.secret:
+            backend = self.secret
         else:
             backend = None
 
@@ -157,7 +103,7 @@ class PasswordStorageManager(PasswordStorage):
             pw = backend.get_password(account_name)
         if backend != self.preferred_backend:
             # migrate password to preferred_backend
-            self.preferred_backend.save_password(account_name, pw)
+            self.save_password(account_name, pw)
             # TODO: remove from old backend
         return pw
 
@@ -176,17 +122,10 @@ class PasswordStorageManager(PasswordStorage):
         return True
 
     def set_preferred_backend(self):
-        if self.libsecret:
-            self.preferred_backend = self.libsecret
-        elif self.winsecret:
-            self.preferred_backend = self.winsecret
+        if self.secret:
+            self.preferred_backend = self.secret
         else:
             self.preferred_backend = None
-
-    def has_keyring(self):
-        """Is there a real password storage backend? Else, passwords are stored
-        plain in gajim config"""
-        return bool(self.preferred_backend)
 
 passwordStorageManager = None
 

@@ -280,4 +280,7 @@ setup(
         'pyOpenSSL>=0.12',
         'pyasn1',
     ],
+    extras_require={
+        'secret_password': ["keyring"]
+    }
 )
