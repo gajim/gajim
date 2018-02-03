@@ -62,7 +62,10 @@ class GajimApplication(Gtk.Application):
 
     def __init__(self):
         Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
-                                 flags=Gio.ApplicationFlags.HANDLES_OPEN)
+                                 flags=(
+                                    Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
+                                    Gio.ApplicationFlags.HANDLES_OPEN |
+                                    Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID))
 
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
@@ -96,6 +99,7 @@ class GajimApplication(Gtk.Application):
                              _('open ipython shell'))
 
         self.connect('handle-local-options', self._handle_local_options)
+        self.connect('command-line', self._handle_remote_options)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
         self.connect('open', self._open)
@@ -285,9 +289,34 @@ class GajimApplication(Gtk.Application):
         from gajim.common import app
         app.logger.commit()
 
+    def _handle_remote_options(self, application, command_line):
+        # Parse all options that should be executed on a remote instance
+        options = command_line.get_options_dict()
+
+        if options.contains('ipython'):
+            self.activate_action('ipython')
+            return 0
+
+        gfiles = self._parse_file_args(command_line)
+        if gfiles is not None:
+            self.open(gfiles, '')
+            return 0
+
+        self.activate()
+        return 0
+
+    @staticmethod
+    def _parse_file_args(command_line):
+        args = command_line.get_arguments()
+        if len(args) > 1:
+            gfiles = []
+            for arg in args[1:]:
+                gfiles.append(command_line.create_file_for_arg(arg))
+            return gfiles
+
     def _handle_local_options(self, application,
                               options: GLib.VariantDict) -> int:
-
+        # Parse all options that have to be executed before ::startup
         logging_helpers.init()
 
         if options.contains('profile'):
@@ -297,11 +326,6 @@ class GajimApplication(Gtk.Application):
             app_id = '%s.%s' % (self.get_application_id(), profile)
             self.set_application_id(app_id)
             self.profile = profile
-
-        # Register the Application, so it knows if its primary or not
-        # This is needed so we can execute actions on the remote instance
-        self.register(None)
-
         if options.contains('separate'):
             self.profile_separation = True
         if options.contains('config-path'):
@@ -319,9 +343,7 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
         if options.contains('warnings'):
             self.show_warnings()
-        if options.contains('ipython'):
-            self.activate_action('ipython')
-            return 0
+
         return -1
 
     def show_warnings(self):
