@@ -76,7 +76,6 @@ class PasswordStorageManager(PasswordStorage):
     def __init__(self):
         self.preferred_backend = None
 
-        self.libsecret = None
         self.secret = None
 
         self.connect_backends()
