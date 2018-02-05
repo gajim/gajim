@@ -31,6 +31,7 @@ from io import StringIO
 from urllib.parse import urlencode
 
 import nbxmpp
+import gajim
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject
@@ -49,6 +50,7 @@ ISSUE_TEXT = '''## Versions
 - GTK+ Version: {}
 - PyGObject Version: {}
 - python-nbxmpp Version: {}
+- Gajim Version: {}
 
 ## Traceback
 ```
@@ -104,6 +106,7 @@ class ExceptionDialog():
                                  gtk_ver,
                                  gobject_ver,
                                  nbxmpp.__version__,
+                                 gajim.__version__,
                                  traceback_text)
 
 
