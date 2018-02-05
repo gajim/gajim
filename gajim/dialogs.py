@@ -2836,8 +2836,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
             for jid in groupchats:
                 name = groupchats[jid]
-                if name is None:
-                    name = app.get_nick_from_jid(groupchats[jid])
+                if not name:
+                    name = app.get_nick_from_jid(jid)
                 row = ContactRow(account, None, jid, name,
                                  show_account, True)
                 self.listbox.add(row)
