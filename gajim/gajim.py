@@ -102,7 +102,6 @@ class GajimApplication(Gtk.Application):
         self.connect('command-line', self._handle_remote_options)
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
-        self.connect('open', self._open)
 
         self.profile = ''
         self.config_path = None
@@ -250,10 +249,9 @@ class GajimApplication(Gtk.Application):
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
 
-    def _open(self, application, file, hint, *args):
+    def _open_uris(self, uris):
         from gajim.common import app
-        for arg in file:
-            uri = arg.get_uri()
+        for uri in uris:
             app.log('uri_handler').info('open %s', uri)
             if not uri.startswith('xmpp:'):
                 continue
@@ -297,22 +295,19 @@ class GajimApplication(Gtk.Application):
             self.activate_action('ipython')
             return 0
 
-        gfiles = self._parse_file_args(command_line)
-        if gfiles is not None:
-            self.open(gfiles, '')
+        uri = self._parse_uris(command_line)
+        if uri is not None:
+            self._open_uris(uri)
             return 0
 
         self.activate()
         return 0
 
     @staticmethod
-    def _parse_file_args(command_line):
+    def _parse_uris(command_line):
         args = command_line.get_arguments()
         if len(args) > 1:
-            gfiles = []
-            for arg in args[1:]:
-                gfiles.append(command_line.create_file_for_arg(arg))
-            return gfiles
+            return args[1:]
 
     def _handle_local_options(self, application,
                               options: GLib.VariantDict) -> int:
