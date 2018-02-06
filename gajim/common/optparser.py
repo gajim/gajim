@@ -249,6 +249,8 @@ class OptionsParser:
             self.update_config_to_016112()
         if old < [0, 98, 2] and new >= [0, 98, 2]:
             self.update_config_to_0982()
+        if old < [0, 98, 3] and new >= [0, 98, 3]:
+            self.update_config_to_0983()
 
         app.logger.init_vars()
         app.logger.attach_cache_database()
@@ -924,3 +926,12 @@ class OptionsParser:
             '''
         )
         app.config.set('version', '0.98.2')
+
+    def update_config_to_0983(self):
+        for account in self.old_values['accounts'].keys():
+            password = self.old_values['accounts'][account]['password']
+            if password == "winvault:":
+                app.config.set_per('accounts', account, 'password', 'keyring:')
+            elif password == "libsecret:":
+                app.config.set_per('accounts', account, 'password', '')
+        app.config.set('version', '0.98.3')
