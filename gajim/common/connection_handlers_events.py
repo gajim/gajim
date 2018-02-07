@@ -1159,7 +1159,12 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.msg_.getType() != 'groupchat':
             return False
 
-        self.room_jid = self.stanza.getFrom().getStripped()
+        try:
+            self.room_jid = self.stanza.getFrom().getStripped()
+        except AttributeError:
+            log.warning('Received GC MAM message '
+                        'without from attribute\n%s', self.stanza)
+            return False
 
         self.unique_id = self.get_stanza_id(self.result, query=True)
 
