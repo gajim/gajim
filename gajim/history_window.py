@@ -71,6 +71,10 @@ class HistoryWindow:
         self.window = xml.get_object('history_window')
         self.window.set_application(app.app)
         self.calendar = xml.get_object('calendar')
+        self.button_first_day = xml.get_object('button_first_day')
+        self.button_previous_day = xml.get_object('button_previous_day')
+        self.button_next_day = xml.get_object('button_next_day')
+        self.button_last_day = xml.get_object('button_last_day')
         scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
             account, used_in_history_window = True)
@@ -309,17 +313,25 @@ class HistoryWindow:
 
             self.jids_to_search = [info_jid]
 
-            # select logs for last date we have logs with contact
+            # Get first/last date we have logs with contact (for log navigation)
+            self.first_log = app.logger.get_first_date_that_has_logs(
+                self.account, self.jid)
+            self.first_day = self._get_date_from_timestamp(self.first_log)
+            self.last_log = app.logger.get_last_date_that_has_logs(
+                self.account, self.jid)
+            self.last_day = self._get_date_from_timestamp(self.last_log)
+
+            # Select logs for last date we have logs with contact
             self.calendar.set_sensitive(True)
-            last_log = \
-                    app.logger.get_last_date_that_has_logs(self.account, self.jid)
+            gtk_month = gtkgui_helpers.make_python_month_gtk_month(
+                self.last_day.month)
+            self.calendar.select_month(gtk_month, self.last_day.year)
+            self.calendar.select_day(self.last_day.day)
 
-            date = time.localtime(last_log)
-
-            y, m, d = date[0], date[1], date[2]
-            gtk_month = gtkgui_helpers.make_python_month_gtk_month(m)
-            self.calendar.select_month(gtk_month, y)
-            self.calendar.select_day(d)
+            self.button_previous_day.set_sensitive(True)
+            self.button_next_day.set_sensitive(True)
+            self.button_first_day.set_sensitive(True)
+            self.button_last_day.set_sensitive(True)
 
             self.search_entry.set_sensitive(True)
             self.search_entry.grab_focus()
@@ -339,6 +351,10 @@ class HistoryWindow:
             self.checkbutton.set_sensitive(False)
             self.calendar.set_sensitive(False)
             self.calendar.clear_marks()
+            self.button_previous_day.set_sensitive(False)
+            self.button_next_day.set_sensitive(False)
+            self.button_first_day.set_sensitive(False)
+            self.button_last_day.set_sensitive(False)
 
             self.results_window.set_property('visible', False)
 
@@ -376,6 +392,60 @@ class HistoryWindow:
 
         for date in log_days:
             widget.mark_day(date.day)
+
+    def _get_date_from_timestamp(self, timestamp):
+        # Conversion from timestamp to date
+        log = time.localtime(timestamp)
+        y, m, d = log[0], log[1], log[2]
+        date = datetime.datetime(y, m, d)
+        return(date)
+
+    def _change_date(self, widget):
+        # Get day selected in calendar
+        y, m, d = self.calendar.get_date()
+        py_m = gtkgui_helpers.make_gtk_month_python_month(m)
+        _date = datetime.datetime(y, py_m, d)
+
+        if widget is self.button_first_day:
+            gtk_m = gtkgui_helpers.make_python_month_gtk_month(
+                self.first_day.month)
+            self.calendar.select_month(gtk_m, self.first_day.year)
+            self.calendar.select_day(self.first_day.day)
+            return
+        elif widget is self.button_last_day:
+            gtk_m = gtkgui_helpers.make_python_month_gtk_month(
+                self.last_day.month)
+            self.calendar.select_month(gtk_m, self.last_day.year)
+            self.calendar.select_day(self.last_day.day)
+            return
+        elif widget is self.button_previous_day:
+            end_date = self.first_day
+            timedelta = datetime.timedelta(days=-1)
+            if end_date >= _date:
+                return
+        elif widget is self.button_next_day:
+            end_date = self.last_day
+            timedelta = datetime.timedelta(days=1)
+            if end_date <= _date:
+                return
+
+        # Iterate through days until log entry found or
+        # supplied end_date (first_log / last_log) reached
+        logs = None
+        while logs is None:
+            _date = _date + timedelta
+            if _date == end_date:
+                break
+            try:
+                logs = app.logger.get_date_has_logs(
+                    self.account, self.jid, _date)
+            except exceptions.PysqliteOperationalError as e:
+                dialogs.ErrorDialog(_('Disk Error'), str(e))
+                return
+
+        gtk_month = gtkgui_helpers.make_python_month_gtk_month(_date.month)
+        self.calendar.select_month(gtk_month, _date.year)
+        self.calendar.select_day(_date.day)
 
     def _get_string_show_from_constant_int(self, show):
         if show == ShowConstant.ONLINE:
