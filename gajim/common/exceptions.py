@@ -147,3 +147,13 @@ class PluginsystemError(Exception):
 
     def __str__(self):
         return self.text
+
+class StanzaMalformed(Exception):
+    """
+    Malfromed Stanza
+    """
+    def __init__(self, message, stanza=''):
+        Exception.__init__(self, message, stanza)
+        self._msg = '{}\n{}'.format(message, stanza)
+    def __str__(self):
+        return self._msg

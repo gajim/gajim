@@ -24,8 +24,6 @@
 from calendar import timegm
 import datetime
 import hashlib
-import binascii
-import base64
 import hmac
 import logging
 import sys
@@ -602,48 +600,6 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
         if ns != nbxmpp.NS_BOOKMARKS:
             return
         self.parse_bookmarks()
-        return True
-
-class PubsubAvatarReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'pubsub-avatar-received'
-    base_network_events = ['pubsub-received']
-
-    def __init__(self, name, base_event):
-        '''
-        Pre-Generated attributes on self:
-
-        :conn:          Connection instance
-        :jid:           The from jid
-        :pubsub_node:   The 'pubsub' node
-        :items_node:    The 'items' node
-        '''
-        self._set_base_event_vars_as_attributes(base_event)
-
-    def generate(self):
-        if self.items_node.getAttr('node') != 'urn:xmpp:avatar:data':
-            return
-        item = self.items_node.getTag('item')
-        if not item:
-            log.warning('Received malformed avatar data via pubsub')
-            log.debug(self.stanza)
-            return
-        self.sha = item.getAttr('id')
-        data_tag = item.getTag('data', namespace='urn:xmpp:avatar:data')
-        if self.sha is None or data_tag is None:
-            log.warning('Received malformed avatar data via pubsub')
-            log.debug(self.stanza)
-            return
-        self.data = data_tag.getData()
-        if self.data is None:
-            log.warning('Received malformed avatar data via pubsub')
-            log.debug(self.stanza)
-            return
-        try:
-            self.data = base64.b64decode(self.data.encode('utf-8'))
-        except binascii.Error as err:
-            log.debug('Received malformed avatar data via pubsub: %s' % err)
-            return
-
         return True
 
 class SearchFormReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):

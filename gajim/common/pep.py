@@ -509,8 +509,8 @@ class AvatarNotificationPEP(AbstractPEP):
                     jid, self.avatar['id'])
                 return
             app.log('avatar').info('Request (Pubsub): %s', jid)
-            con.send_pb_retrieve(jid, 'urn:xmpp:avatar:data',
-                                 self.avatar['id'])
+            con.get_pubsub_avatar(jid, 'urn:xmpp:avatar:data',
+                                  self.avatar['id'])
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [

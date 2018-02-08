@@ -21,16 +21,18 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import base64
+import binascii
+
 import nbxmpp
 from gajim.common import app
 #TODO: Doesn't work
 #from common.connection_handlers import PEP_CONFIG
 PEP_CONFIG = 'pep_config'
 from gajim.common import ged
-from gajim.common.nec import NetworkEvent
 from gajim.common.connection_handlers_events import PubsubReceivedEvent
 from gajim.common.connection_handlers_events import PubsubBookmarksReceivedEvent
-from gajim.common.connection_handlers_events import PubsubAvatarReceivedEvent
+from gajim.common.exceptions import StanzaMalformed
 
 import logging
 log = logging.getLogger('gajim.c.pubsub')
@@ -39,11 +41,8 @@ class ConnectionPubSub:
     def __init__(self):
         self.__callbacks = {}
         app.nec.register_incoming_event(PubsubBookmarksReceivedEvent)
-        app.nec.register_incoming_event(PubsubAvatarReceivedEvent)
         app.ged.register_event_handler('pubsub-bookmarks-received',
             ged.CORE, self._nec_pubsub_bookmarks_received)
-        app.ged.register_event_handler('pubsub-avatar-received',
-            ged.CORE, self._nec_pubsub_avatar_received)
 
     def cleanup(self):
         app.ged.remove_event_handler('pubsub-bookmarks-received',
@@ -103,21 +102,34 @@ class ConnectionPubSub:
 
         self.connection.send(query)
 
+    @staticmethod
+    def get_pb_retrieve_iq(jid, node, item_id=None):
+        """
+        Get IQ to query items from a node
+        """
+        query = nbxmpp.Iq('get', to=jid)
+        r = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        r = r.addChild('items', {'node': node})
+        if item_id is not None:
+            r.addChild('item', {'id': item_id})
+        return query
+
     def send_pb_retrieve(self, jid, node, item_id=None, cb=None, *args, **kwargs):
         """
         Get items from a node
         """
         if not self.connection or self.connected < 2:
             return
-        query = nbxmpp.Iq('get', to=jid)
-        r = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        r = r.addChild('items', {'node': node})
-        if item_id is not None:
-            r.addChild('item', {'id': item_id})
+        query = self.get_pb_retrieve_iq(jid, node, item_id)
         id_ = self.connection.send(query)
 
         if cb:
             self.__callbacks[id_] = (cb, args, kwargs)
+
+    def get_pubsub_avatar(self, jid, node, item_id):
+        query = self.get_pb_retrieve_iq(jid, node, item_id)
+        self.connection.SendAndCallForResponse(
+            query, self._nec_pubsub_avatar_received, {'jid': jid})
 
     def send_pb_retract(self, jid, node, id_):
         """
@@ -211,25 +223,62 @@ class ConnectionPubSub:
         # We got bookmarks from pubsub, now get those from xml to merge them
         self.get_bookmarks(storage_type='xml')
 
-    def _nec_pubsub_avatar_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        if obj.jid is None:
+    def _validate_avatar_node(self, stanza):
+        jid = stanza.getFrom()
+        if jid is None:
             jid = self.get_own_jid().getStripped()
         else:
-            jid = obj.jid.getStripped()
+            jid = jid.getStripped()
+
+        if nbxmpp.isErrorNode(stanza):
+            raise StanzaMalformed(stanza.getErrorMsg())
+
+        pubsub_node = stanza.getTag('pubsub')
+        if pubsub_node is None:
+            raise StanzaMalformed('No pubsub node', stanza)
+
+        items_node = pubsub_node.getTag('items')
+        if items_node is None:
+            raise StanzaMalformed('No items node', stanza)
+
+        if items_node.getAttr('node') != 'urn:xmpp:avatar:data':
+            raise StanzaMalformed('Wrong namespace', stanza)
+
+        item = items_node.getTag('item')
+        if item is None:
+            raise StanzaMalformed('No item node', stanza)
+
+        sha = item.getAttr('id')
+        data_tag = item.getTag('data', namespace='urn:xmpp:avatar:data')
+        if sha is None or data_tag is None:
+            raise StanzaMalformed('No id attr or data node found', stanza)
+
+        data = data_tag.getData()
+        if data is None:
+            raise StanzaMalformed('Data node empty', stanza)
+
+        data = base64.b64decode(data.encode('utf-8'))
+
+        return jid, sha, data
+
+    def _nec_pubsub_avatar_received(self, conn, stanza, jid):
+        try:
+            jid, sha, data = self._validate_avatar_node(stanza)
+        except (StanzaMalformed, binascii.Error) as error:
+            app.log('avatar').warning(
+                'Error loading Avatar (Pubsub): %s %s', jid, error)
+            return
 
         app.log('avatar').info(
-            'Received Avatar (Pubsub): %s %s', jid, obj.sha)
-        app.interface.save_avatar(obj.data)
+            'Received Avatar (Pubsub): %s %s', jid, sha)
+        app.interface.save_avatar(data)
 
         if self.get_own_jid().bareMatch(jid):
-            app.config.set_per('accounts', self.name, 'avatar_sha', obj.sha)
+            app.config.set_per('accounts', self.name, 'avatar_sha', sha)
         else:
             own_jid = self.get_own_jid().getStripped()
-            app.logger.set_avatar_sha(own_jid, jid, obj.sha)
-            app.contacts.set_avatar(self.name, jid, obj.sha)
+            app.logger.set_avatar_sha(own_jid, jid, sha)
+            app.contacts.set_avatar(self.name, jid, sha)
 
         app.interface.update_avatar(self.name, jid)
 
