@@ -1,3 +1,13 @@
+Gajim 0.99.1 (08 February 2018)
+  
+  * Integrate HTTPUpload
+  * Add Navigation buttons in History Window
+  * Added XEP-0368 (SRV records for XMPP over TLS)
+  * Improvements for HiDPI Screens
+  * Move Chat Menu button so we are not forced to use CSD
+  * Depend on the python keyring package for password storage
+  * Bug fixes
+
 Gajim 0.98.2 (17 December 2017)
 
   * Fix DB migration
