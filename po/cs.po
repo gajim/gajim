@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-14 03:05+0000\n"
+"POT-Creation-Date: 2018-02-08 03:05+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -41,20 +41,20 @@ msgstr "Ping?"
 msgid "Error."
 msgstr "Chyba."
 
-#: gajim/chat_control_base.py:554
+#: gajim/chat_control_base.py:569
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:562 gajim/profile_window.py:183
-#: gajim/conversation_textview.py:553
+#: gajim/chat_control_base.py:577 gajim/profile_window.py:181
+#: gajim/conversation_textview.py:550
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:1101
+#: gajim/chat_control_base.py:1167
 msgid "Really send file?"
 msgstr "Opravdu odeslat soubor?"
 
-#: gajim/chat_control_base.py:1102
+#: gajim/chat_control_base.py:1168
 #, fuzzy, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr "Pokud odešlete soubor %s, tak bude znát vaše skutečné Jabber ID."
@@ -110,70 +110,70 @@ msgstr "Čas"
 msgid "Progress"
 msgstr "Průběh"
 
-#: gajim/filetransfers_window.py:191 gajim/filetransfers_window.py:247
+#: gajim/filetransfers_window.py:223 gajim/filetransfers_window.py:279
 #, python-format
 msgid "Filename: %s"
 msgstr "Soubor: %s"
 
-#: gajim/filetransfers_window.py:192 gajim/filetransfers_window.py:455
+#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:485
 #, python-format
 msgid "Size: %s"
 msgstr "Velikost: %s"
 
-#: gajim/filetransfers_window.py:201 gajim/filetransfers_window.py:211
-#: gajim/history_manager.py:527
+#: gajim/filetransfers_window.py:233 gajim/filetransfers_window.py:243
+#: gajim/history_manager.py:526
 msgid "You"
 msgstr "Vy"
 
-#: gajim/filetransfers_window.py:202
+#: gajim/filetransfers_window.py:234
 #, python-format
 msgid "Sender: %s"
 msgstr "Odesílatel: %s"
 
-#: gajim/filetransfers_window.py:203 gajim/filetransfers_window.py:733
-#: gajim/tooltips.py:781
+#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
+#: gajim/tooltips.py:654
 msgid "Recipient: "
 msgstr "Příjemce: "
 
-#: gajim/filetransfers_window.py:214
+#: gajim/filetransfers_window.py:246
 #, python-format
 msgid "Saved in: %s"
 msgstr "Uloženo do: %s"
 
-#: gajim/filetransfers_window.py:216 gajim/chat_control.py:1597
+#: gajim/filetransfers_window.py:248 gajim/chat_control.py:1600
 msgid "File transfer completed"
 msgstr "Přenos soubor dokončen"
 
-#: gajim/filetransfers_window.py:218 gajim/chat_control.py:1601
+#: gajim/filetransfers_window.py:250 gajim/chat_control.py:1604
 #, fuzzy
 msgid "Open _Containing Folder"
 msgstr "_Otevřít obsahující složku"
 
-#: gajim/filetransfers_window.py:231 gajim/filetransfers_window.py:238
-#: gajim/chat_control.py:1656
+#: gajim/filetransfers_window.py:263 gajim/filetransfers_window.py:270
+#: gajim/chat_control.py:1659
 msgid "File transfer cancelled"
 msgstr "Přenos souboru zrušen"
 
-#: gajim/filetransfers_window.py:231 gajim/filetransfers_window.py:239
-#: gajim/chat_control.py:1657
+#: gajim/filetransfers_window.py:263 gajim/filetransfers_window.py:271
+#: gajim/chat_control.py:1660
 msgid "Connection with peer cannot be established."
 msgstr "Spojení s protistranou se nepodařilo navázat."
 
-#: gajim/filetransfers_window.py:248
+#: gajim/filetransfers_window.py:280
 #, python-format
 msgid "Recipient: %s"
 msgstr "Příjemce: %s"
 
-#: gajim/filetransfers_window.py:250
+#: gajim/filetransfers_window.py:282
 #, python-format
 msgid "Error message: %s"
 msgstr "Chybová zpráva: %s"
 
-#: gajim/filetransfers_window.py:251 gajim/chat_control.py:1653
+#: gajim/filetransfers_window.py:283 gajim/chat_control.py:1656
 msgid "File transfer stopped"
 msgstr "Přenos souboru zastaven"
 
-#: gajim/filetransfers_window.py:287
+#: gajim/filetransfers_window.py:319
 #, python-format
 msgid ""
 "The file %(file)s has been received, but it seems to have been damaged along "
@@ -181,72 +181,72 @@ msgid ""
 "Do you want to download it again?"
 msgstr ""
 
-#: gajim/filetransfers_window.py:315
+#: gajim/filetransfers_window.py:345
 #, fuzzy
 msgid "Choose File to Send…"
 msgstr "Vyber soubor k odeslání..."
 
-#: gajim/filetransfers_window.py:325
+#: gajim/filetransfers_window.py:355
 msgid "_Send"
 msgstr "Ode_slat"
 
-#: gajim/filetransfers_window.py:332 gajim/tooltips.py:816
+#: gajim/filetransfers_window.py:362 gajim/tooltips.py:689
 msgid "Description: "
 msgstr "Popis:"
 
-#: gajim/filetransfers_window.py:345
+#: gajim/filetransfers_window.py:375
 #, fuzzy
 msgid "Gajim can not read this file"
 msgstr "Gajim nemůže otevřít tento soubor"
 
-#: gajim/filetransfers_window.py:346
+#: gajim/filetransfers_window.py:376
 msgid "Another process is using this file."
 msgstr ""
 
-#: gajim/filetransfers_window.py:391 gajim/gtkgui_helpers.py:515
+#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:485
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Nemohu přepsat existující soubor \"%s\""
 
-#: gajim/filetransfers_window.py:392 gajim/gtkgui_helpers.py:516
+#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:486
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr "Soubor tohoto jména již existuje a ty nemáš oprávnění k jeho přepsání."
 
-#: gajim/filetransfers_window.py:409 gajim/gtkgui_helpers.py:520
+#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:490
 msgid "This file already exists"
 msgstr "Tento soubor už existuje"
 
-#: gajim/filetransfers_window.py:409 gajim/gtkgui_helpers.py:520
+#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:490
 msgid "What do you want to do?"
 msgstr "Co by jste rád(a) dělal(a)?"
 
-#: gajim/filetransfers_window.py:420 gajim/gtkgui_helpers.py:527
+#: gajim/filetransfers_window.py:450 gajim/gtkgui_helpers.py:497
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Adresář \"%s\" není zapisovatelný"
 
-#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:528
+#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:498
 msgid "You do not have permission to create files in this directory."
 msgstr "Nemáš oprávnění k vytváření souborů v tomto adresáři."
 
-#: gajim/filetransfers_window.py:432
+#: gajim/filetransfers_window.py:462
 #, fuzzy
 msgid "Save File as…"
 msgstr "Uložit jako..."
 
-#: gajim/filetransfers_window.py:452
+#: gajim/filetransfers_window.py:482
 #, python-format
 msgid "File: %s"
 msgstr "Soubor: %s"
 
-#: gajim/filetransfers_window.py:458
+#: gajim/filetransfers_window.py:488
 #, python-format
 msgid "Type: %s"
 msgstr "Typ: %s"
 
-#: gajim/filetransfers_window.py:460
+#: gajim/filetransfers_window.py:490
 #, python-format
 msgid "Description: %s"
 msgstr "Popis: %s"
@@ -255,56 +255,56 @@ msgstr "Popis: %s"
 # #, python-format
 # msgid "Description: %s"
 # msgstr "Popis: %s"
-#: gajim/filetransfers_window.py:461
+#: gajim/filetransfers_window.py:491
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s Vám chce poslat soubor:"
 
-#: gajim/filetransfers_window.py:502
+#: gajim/filetransfers_window.py:532
 #, fuzzy
 msgid "Checking file…"
 msgstr "Odesílám profil..."
 
-#: gajim/filetransfers_window.py:516
+#: gajim/filetransfers_window.py:546
 #, fuzzy
 msgid "File error"
 msgstr "Chyba přenosu souboru"
 
-#: gajim/filetransfers_window.py:553
+#: gajim/filetransfers_window.py:583
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#: gajim/filetransfers_window.py:646
+#: gajim/filetransfers_window.py:676
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: gajim/filetransfers_window.py:699 gajim/filetransfers_window.py:702
+#: gajim/filetransfers_window.py:729 gajim/filetransfers_window.py:732
 msgid "Invalid File"
 msgstr "Neplatný soubor"
 
-#: gajim/filetransfers_window.py:699
+#: gajim/filetransfers_window.py:729
 msgid "File: "
 msgstr "Soubor: "
 
-#: gajim/filetransfers_window.py:703
+#: gajim/filetransfers_window.py:733
 msgid "It is not possible to send empty files"
 msgstr "Není možné posílat prázdné soubory"
 
-#: gajim/filetransfers_window.py:729 gajim/tooltips.py:772
+#: gajim/filetransfers_window.py:758 gajim/tooltips.py:645
 msgid "Name: "
 msgstr "Jméno: "
 
-#: gajim/filetransfers_window.py:731 gajim/tooltips.py:775
+#: gajim/filetransfers_window.py:760 gajim/tooltips.py:648
 msgid "Sender: "
 msgstr "Odesílatel: "
 
-#: gajim/filetransfers_window.py:898
+#: gajim/filetransfers_window.py:888
 msgid "Pause"
 msgstr "Pauza"
 
-#: gajim/filetransfers_window.py:909
+#: gajim/filetransfers_window.py:899
 msgid "_Continue"
 msgstr "_Pokračovat"
 
@@ -463,90 +463,121 @@ msgstr ""
 msgid "Requires gir1.2-gupnpigd-1.0."
 msgstr "Je potřeba python-gnome2."
 
+#: gajim/features_window.py:94
+#, fuzzy
+msgid "?features:Available"
+msgstr "Připojen"
+
 #: gajim/features_window.py:101
 msgid "Feature"
 msgstr "Vlastnost"
 
-#: gajim/gtkgui_helpers.py:290
+#: gajim/gtkgui_helpers.py:259
 msgid "Error reading file:"
 msgstr "Chyba při čtení souboru:"
 
-#: gajim/gtkgui_helpers.py:293
+#: gajim/gtkgui_helpers.py:262
 msgid "Error parsing file:"
 msgstr "Chyba parsování souboru:"
 
-#: gajim/gtkgui_helpers.py:501
+#: gajim/gtkgui_helpers.py:471
 msgid "Extension not supported"
 msgstr "Rozšíření není podporováno"
 
-#: gajim/gtkgui_helpers.py:502
+#: gajim/gtkgui_helpers.py:472
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "Obrázek nelze uložit ve formátu %(type)s. Uložit jako %(new_filename)s?"
 
-#: gajim/gtkgui_helpers.py:537
+#: gajim/gtkgui_helpers.py:507
 #, fuzzy
 msgid "Save Image as…"
 msgstr "Uložit obrázek jako..."
 
-#: gajim/vcard.py:169 gajim/vcard.py:513 gajim/profile_window.py:177
-#: gajim/chat_control.py:553
+#: gajim/vcard.py:166 gajim/vcard.py:510 gajim/profile_window.py:175
+#: gajim/chat_control.py:578
 #, fuzzy
 msgid "Save _As"
 msgstr "Má"
 
-#: gajim/vcard.py:385
+#: gajim/vcard.py:286 gajim/vcard.py:293
+msgid "?Client:Unknown"
+msgstr "?Client:Neznámý"
+
+#: gajim/vcard.py:290 gajim/vcard.py:295
+msgid "?OS:Unknown"
+msgstr "?OS:Neznámý"
+
+#: gajim/vcard.py:324 gajim/vcard.py:327
+msgid "?Time:Unknown"
+msgstr "?Time:Neznámý"
+
+#: gajim/vcard.py:378
+msgid "?Role in Group Chat:<b>Role:</b>"
+msgstr ""
+
+#: gajim/vcard.py:382
 msgid "<b>Affiliation:</b>"
 msgstr "<b>Vztah</b>"
 
-#: gajim/vcard.py:392
+#: gajim/vcard.py:389
 #, fuzzy
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in their presence"
 msgstr "Tento kontakt zajímá Váš stav, ale Vy se nezajímate o jeho stav"
 
-#: gajim/vcard.py:394
+#: gajim/vcard.py:391
 #, fuzzy
 msgid ""
 "You are interested in the contact's presence information, but it is not "
 "mutual"
 msgstr "Vy se zajímáte o stav kontaktu, ale on se nezajímá o Váš stav"
 
-#: gajim/vcard.py:396
+#: gajim/vcard.py:393
 #, fuzzy
 msgid "The contact and you want to exchange presence information"
 msgstr "Vy i kontakt se zajímáte o stav toho druhého"
 
-#: gajim/vcard.py:398
+#: gajim/vcard.py:395
 #, fuzzy
 msgid ""
 "You and the contact have a mutual disinterest in each-others presence "
 "information"
 msgstr "Vy i kontakt se zajímáte o stav toho druhého"
 
-#: gajim/vcard.py:404
+#: gajim/vcard.py:401
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "Čekáte na odpověď kontaktu na vaši žádost o autorizaci"
 
-#: gajim/vcard.py:406
+#: gajim/vcard.py:403
 msgid "There is no pending subscription request."
 msgstr "Není zde žádný nevyřízený požadavek."
 
-#: gajim/vcard.py:411 gajim/vcard.py:455 gajim/vcard.py:568
+#: gajim/vcard.py:408 gajim/vcard.py:452 gajim/vcard.py:565
 msgid " resource with priority "
 msgstr "zdroj s prioritou "
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4764 gajim/dialogs.py:4806
-#: gajim/dialogs.py:4854 gajim/dialogs.py:4944
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4767 gajim/dialogs.py:4809
+#: gajim/dialogs.py:4857 gajim/dialogs.py:4947
 msgid "All files"
 msgstr "Všechny soubory"
 
+#: gajim/options_dialog.py:392
+#, fuzzy
+msgid "Clear File"
+msgstr "Uklízím"
+
+#: gajim/options_dialog.py:474
+#, fuzzy
+msgid "Manage Proxies"
+msgstr "Spravovat profily Proxy"
+
 #: gajim/options_dialog.py:484 gajim/options_dialog.py:552
 #: gajim/options_dialog.py:573 gajim/dialogs.py:329 gajim/dialogs.py:331
-#: gajim/dialogs.py:539 gajim/dialogs.py:552 gajim/roster_window.py:2984
-#: gajim/roster_window.py:2990 gajim/roster_window.py:2995 gajim/config.py:1172
+#: gajim/dialogs.py:539 gajim/dialogs.py:552 gajim/roster_window.py:2997
+#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1172
 #: gajim/config.py:1187 gajim/config.py:1192 gajim/config.py:1240
 #: gajim/config.py:1350 gajim/config.py:2493 gajim/config.py:2570
 #: gajim/data/gui/account_creation_wizard_window.ui:22
@@ -589,13 +620,13 @@ msgid "_New Group Chat"
 msgstr "_Nová diskuze"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1122 gajim/dialogs.py:2314 gajim/dialogs.py:2343
-#: gajim/dialogs.py:3825 gajim/chat_control.py:279 gajim/roster_window.py:789
-#: gajim/roster_window.py:1741 gajim/roster_window.py:1743
-#: gajim/roster_window.py:2056 gajim/roster_window.py:3408
-#: gajim/roster_window.py:3435 gajim/gui_interface.py:525
-#: gajim/common/contacts.py:156 gajim/common/contacts.py:282
-#: gajim/common/helpers.py:94 gajim/common/helpers.py:407
+#: gajim/dialogs.py:1117 gajim/dialogs.py:2317 gajim/dialogs.py:2346
+#: gajim/dialogs.py:3828 gajim/chat_control.py:281 gajim/roster_window.py:804
+#: gajim/roster_window.py:1753 gajim/roster_window.py:1755
+#: gajim/roster_window.py:2068 gajim/roster_window.py:3419
+#: gajim/roster_window.py:3446 gajim/gui_interface.py:524
+#: gajim/common/contacts.py:154 gajim/common/contacts.py:280
+#: gajim/common/helpers.py:95 gajim/common/helpers.py:408
 msgid "Not in Roster"
 msgstr "Není v Rosteru"
 
@@ -608,7 +639,7 @@ msgstr "Rád bych si Vás přidal(a) do svého seznamu"
 msgid "Send Single _Message…"
 msgstr "Odeslat jednoduchou _zprávu"
 
-#: gajim/gui_menu_builder.py:521 gajim/roster_window.py:5160
+#: gajim/gui_menu_builder.py:521 gajim/roster_window.py:5168
 #: gajim/data/gui/contact_context_menu.ui:58
 msgid "Send Cus_tom Status"
 msgstr "Poslat vlastní stav"
@@ -626,25 +657,25 @@ msgstr "Transporty"
 msgid "_Modify Transport"
 msgstr "_Upravit transport"
 
-#: gajim/gui_menu_builder.py:562 gajim/roster_window.py:5190
+#: gajim/gui_menu_builder.py:562 gajim/roster_window.py:5198
 #, fuzzy
 msgid "_Rename…"
 msgstr "_Přejmenovat"
 
-#: gajim/gui_menu_builder.py:573 gajim/roster_window.py:5207
-#: gajim/roster_window.py:5322 gajim/data/gui/blocked_contacts_window.ui:52
-#: gajim/data/gui/gc_occupants_menu.ui:140
+#: gajim/gui_menu_builder.py:573 gajim/roster_window.py:5215
+#: gajim/roster_window.py:5330 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/data/gui/gc_occupants_menu.ui:148
 #: gajim/data/gui/contact_context_menu.ui:166
 msgid "_Unblock"
 msgstr "_Odblokovat"
 
-#: gajim/gui_menu_builder.py:576 gajim/roster_window.py:5212
-#: gajim/roster_window.py:5326 gajim/data/gui/gc_occupants_menu.ui:132
+#: gajim/gui_menu_builder.py:576 gajim/roster_window.py:5220
+#: gajim/roster_window.py:5334 gajim/data/gui/gc_occupants_menu.ui:140
 #: gajim/data/gui/contact_context_menu.ui:174
 msgid "_Block"
 msgstr "_Blokovat"
 
-#: gajim/gui_menu_builder.py:584 gajim/roster_window.py:5219
+#: gajim/gui_menu_builder.py:584 gajim/roster_window.py:5227
 #: gajim/data/gui/contact_context_menu.ui:204
 msgid "Remo_ve"
 msgstr "Odst_ranit"
@@ -658,212 +689,232 @@ msgstr "Informace o kontaktu"
 msgid "Send File..."
 msgstr "Odeslat _Soubor"
 
-#: gajim/gui_menu_builder.py:612
+#: gajim/gui_menu_builder.py:615
 #, fuzzy
 msgid "Invite Contacts"
 msgstr "Pozvat kontakt"
 
-#: gajim/gui_menu_builder.py:613
+#: gajim/gui_menu_builder.py:616
 #, fuzzy
 msgid "Add to Roster"
 msgstr "Přid_at do Seznamu"
 
-#: gajim/gui_menu_builder.py:614
+#: gajim/gui_menu_builder.py:617
 #, fuzzy
 msgid "Audio Session"
 msgstr "Audio / Video"
 
-#: gajim/gui_menu_builder.py:615
+#: gajim/gui_menu_builder.py:618
 #, fuzzy
 msgid "Video Session"
 msgstr "Velikost videa"
 
-#: gajim/gui_menu_builder.py:616
+#: gajim/gui_menu_builder.py:619
 #, fuzzy
 msgid "Information"
 msgstr "Informace o kontaktu"
 
-#: gajim/gui_menu_builder.py:617 gajim/gui_menu_builder.py:645
+#: gajim/gui_menu_builder.py:620 gajim/gui_menu_builder.py:655
 #: gajim/data/gui/application_menu.ui:37
 #, fuzzy
 msgid "History"
 msgstr "_Historie"
 
-#: gajim/gui_menu_builder.py:635
+#: gajim/gui_menu_builder.py:644
 #, fuzzy
 msgid "Manage Room"
 msgstr "Spravuj Místnost"
 
-#: gajim/gui_menu_builder.py:636
+#: gajim/gui_menu_builder.py:645
 #, fuzzy
 msgid "Change Subject"
 msgstr "Změnit _předmět"
 
-#: gajim/gui_menu_builder.py:637
+#: gajim/gui_menu_builder.py:646
 #, fuzzy
 msgid "Configure Room"
 msgstr "Nastavit _místnost"
 
-#: gajim/gui_menu_builder.py:638
+#: gajim/gui_menu_builder.py:647
 #, fuzzy
 msgid "Destroy Room"
 msgstr "_Zničit místnost"
 
-#: gajim/gui_menu_builder.py:640
+#: gajim/gui_menu_builder.py:649
 #, fuzzy
 msgid "Change Nick"
 msgstr "Změ_nit přezdívku"
 
-#: gajim/gui_menu_builder.py:641
+#: gajim/gui_menu_builder.py:650
 #, fuzzy
 msgid "Bookmark Room"
 msgstr "Přidat tuto místnost do záložek"
 
-#: gajim/gui_menu_builder.py:642
+#: gajim/gui_menu_builder.py:651
 #, fuzzy
 msgid "Request Voice"
 msgstr "_Hlas"
 
-#: gajim/gui_menu_builder.py:643 gajim/data/gui/gc_control_popup_menu.ui:72
+#: gajim/gui_menu_builder.py:652 gajim/data/gui/gc_control_popup_menu.ui:72
 #, fuzzy
 msgid "Notify on all messages"
 msgstr "Uložené stavy:"
 
-#: gajim/gui_menu_builder.py:644
+#: gajim/gui_menu_builder.py:653
 #, fuzzy
 msgid "Minimize on close"
 msgstr "_Minimalizovat při zavření"
 
-#: gajim/gui_menu_builder.py:646
+#: gajim/gui_menu_builder.py:654 gajim/roster_window.py:5400
+#, fuzzy
+msgid "Execute command"
+msgstr "Spustit _příkaz..."
+
+#: gajim/gui_menu_builder.py:656
 #, fuzzy
 msgid "Disconnect"
 msgstr "_Odpojit"
 
-#: gajim/gui_menu_builder.py:675 gajim/gui_menu_builder.py:722
+#: gajim/gui_menu_builder.py:685 gajim/gui_menu_builder.py:732
 msgid "Join Group Chat"
 msgstr "Připojit se do diskuze"
 
-#: gajim/gui_menu_builder.py:721
+#: gajim/gui_menu_builder.py:731
 #, fuzzy
 msgid "Add Contact..."
 msgstr "Přid_at kontakt..."
 
-#: gajim/gui_menu_builder.py:723 gajim/accounts_window.py:459
+#: gajim/gui_menu_builder.py:733 gajim/accounts_window.py:459
 #: gajim/accounts_window.py:554 gajim/accounts_window.py:593
 #, fuzzy
 msgid "Profile"
 msgstr "soubor"
 
 # FIXME: chtelo by to cesky vyraz pro service discovery
-#: gajim/gui_menu_builder.py:724
+#: gajim/gui_menu_builder.py:734
 #, fuzzy
 msgid "Discover Services"
 msgstr "_Prohlížet služby"
 
-#: gajim/gui_menu_builder.py:725
+#: gajim/gui_menu_builder.py:735
 #, fuzzy
 msgid "Send Single Message..."
 msgstr "Odeslat jednoduchou _zprávu..."
 
-#: gajim/gui_menu_builder.py:727
+#: gajim/gui_menu_builder.py:736 gajim/data/gui/preferences_window.ui:2846
+msgid "Advanced"
+msgstr "Rozšířené"
+
+#: gajim/gui_menu_builder.py:737
 #, fuzzy
 msgid "Archiving Preferences"
 msgstr "_Nastavení"
 
-#: gajim/gui_menu_builder.py:728 gajim/history_sync.py:44
+#: gajim/gui_menu_builder.py:738 gajim/history_sync.py:44
 #, fuzzy
 msgid "Synchronise History"
 msgstr "Synchronizovat"
 
-#: gajim/gui_menu_builder.py:729 gajim/dialogs.py:4541
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4544
 msgid "Privacy Lists"
 msgstr "Soukromý Seznam"
 
-#: gajim/gui_menu_builder.py:730 gajim/server_info.py:37
+#: gajim/gui_menu_builder.py:740 gajim/server_info.py:37
 #, fuzzy
 msgid "Server Info"
 msgstr "Server"
 
-#: gajim/gui_menu_builder.py:731
+#: gajim/gui_menu_builder.py:741 gajim/data/gui/xml_console_window.ui:77
 msgid "XML Console"
 msgstr "XML Konzole"
 
-#: gajim/gui_menu_builder.py:734
+#: gajim/gui_menu_builder.py:743
+#, fuzzy
+msgid "Admin"
+msgstr "_Správce"
+
+#: gajim/gui_menu_builder.py:744
 #, fuzzy
 msgid "Send Server Message..."
 msgstr "Ode_slat zprávu serveru"
 
-#: gajim/gui_menu_builder.py:735
+#: gajim/gui_menu_builder.py:745
 msgid "Set MOTD..."
 msgstr "Nastavit MOTD"
 
-#: gajim/gui_menu_builder.py:736
+#: gajim/gui_menu_builder.py:746
 msgid "Update MOTD..."
 msgstr "Upravit MOTD"
 
-#: gajim/gui_menu_builder.py:737
+#: gajim/gui_menu_builder.py:747
 #, fuzzy
 msgid "Delete MOTD..."
 msgstr "Smazat MOTD"
 
-#: gajim/gui_menu_builder.py:777
+#: gajim/gui_menu_builder.py:787
 #, fuzzy
 msgid "No Accounts available"
 msgstr "Žádný účet není dostupný"
 
-#: gajim/history_manager.py:57
+#: gajim/gui_menu_builder.py:799 gajim/data/gui/accounts_window.ui:78
+#: gajim/data/gui/application_menu.ui:5 gajim/data/gui/application_menu.ui:71
+#: gajim/data/gui/shortcuts_window.ui:181
+msgid "Accounts"
+msgstr "Účty"
+
+#: gajim/history_manager.py:56
 #, fuzzy
 msgid "Usage:"
 msgstr "zpráva"
 
-#: gajim/history_manager.py:59
+#: gajim/history_manager.py:58
 #, fuzzy
 msgid "Options:"
 msgstr "_Smajlíky:"
 
-#: gajim/history_manager.py:61
+#: gajim/history_manager.py:60
 msgid "Show this help message and exit"
 msgstr ""
 
-#: gajim/history_manager.py:62
+#: gajim/history_manager.py:61
 msgid "Choose folder for logfile"
 msgstr ""
 
-#: gajim/history_manager.py:105
+#: gajim/history_manager.py:104
 msgid "Cannot find history logs database"
 msgstr "Nemůžu nalézt databázi s historií"
 
-#: gajim/history_manager.py:145 gajim/history_manager.py:196
-#: gajim/dialogs.py:3806 gajim/config.py:1631 gajim/disco.py:872
+#: gajim/history_manager.py:144 gajim/history_manager.py:195
+#: gajim/dialogs.py:3809 gajim/config.py:1631 gajim/disco.py:872
 msgid "JID"
 msgstr "JID"
 
-#: gajim/history_manager.py:158 gajim/history_manager.py:202
+#: gajim/history_manager.py:157 gajim/history_manager.py:201
 #: gajim/history_window.py:104
 msgid "Date"
 msgstr "Datum"
 
-#: gajim/history_manager.py:165 gajim/history_manager.py:221
+#: gajim/history_manager.py:164 gajim/history_manager.py:220
 #: gajim/data/gui/join_groupchat_window.ui:131
 msgid "Nickname"
 msgstr "Přezdívka"
 
-#: gajim/history_manager.py:174 gajim/history_manager.py:209
+#: gajim/history_manager.py:173 gajim/history_manager.py:208
 #: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Zpráva"
 
-#: gajim/history_manager.py:182 gajim/history_manager.py:215
+#: gajim/history_manager.py:181 gajim/history_manager.py:214
 msgid "Subject"
 msgstr "Předmět"
 
-#: gajim/history_manager.py:241
+#: gajim/history_manager.py:240
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr "Chcete pročistit databázi? (VELICE NEDOPORUČUJEME POKUD GAJIM BĚŽÍ)"
 
-#: gajim/history_manager.py:243
+#: gajim/history_manager.py:242
 #, fuzzy
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
@@ -878,100 +929,100 @@ msgstr ""
 "\n"
 "V případě kliknutí na ANO prosím vyčkejte..."
 
-#: gajim/history_manager.py:248
+#: gajim/history_manager.py:247
 #, fuzzy
 msgid "Database Cleanup"
 msgstr "Chyba Databáze"
 
-#: gajim/history_manager.py:463
+#: gajim/history_manager.py:462
 #, fuzzy
 msgid "Exporting History Logs…"
 msgstr "Exportuji záznamy historie..."
 
-#: gajim/history_manager.py:539
+#: gajim/history_manager.py:538
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(who)s v %(time)s řekl(a): %(message)s\n"
 
-#: gajim/history_manager.py:577
+#: gajim/history_manager.py:576
 #, fuzzy, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
 msgstr "Vážně chcete smazat vybranou zprávu?"
 
-#: gajim/history_manager.py:581
+#: gajim/history_manager.py:580
 #, fuzzy
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr "Vážně chcete smazat všechny záznamy historie vybraného kontaktu?"
 
-#: gajim/history_manager.py:583
+#: gajim/history_manager.py:582
 #, fuzzy
 msgid "This can not be undone."
 msgstr "Tato služba nebyla nalezena"
 
-#: gajim/history_manager.py:585 gajim/history_manager.py:624
+#: gajim/history_manager.py:584 gajim/history_manager.py:623
 #, fuzzy
 msgid "Deletion Confirmation"
 msgstr "Zrušit ověření"
 
-#: gajim/history_manager.py:619
+#: gajim/history_manager.py:618
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Vážně chcete smazat vybranou zprávu?"
 msgstr[1] "Vážně chcete smazat vybrané zprávy?"
 msgstr[2] "Vážně chcete smazat vybrané zprávy?"
 
-#: gajim/history_manager.py:622
+#: gajim/history_manager.py:621
 msgid "This is an irreversible operation."
 msgstr "Tato operace je nevratná."
 
-#: gajim/profile_window.py:66
+#: gajim/profile_window.py:63
 #, fuzzy
 msgid "Retrieving profile…"
 msgstr "Stahuji profil..."
 
-#: gajim/profile_window.py:131
+#: gajim/profile_window.py:128
 msgid "Could not load image"
 msgstr "Nezdařilo se načtení obrázku"
 
-#: gajim/profile_window.py:202
+#: gajim/profile_window.py:200
 #, fuzzy
 msgid "Wrong date format"
 msgstr "Informace o kontaktu"
 
-#: gajim/profile_window.py:203
+#: gajim/profile_window.py:201
 #, fuzzy
 msgid "Format of the date must be YYYY-MM-DD"
 msgstr "Formát: RRRR-MM-DD"
 
-#: gajim/profile_window.py:263
+#: gajim/profile_window.py:261
 msgid "Information received"
 msgstr "Informace přijata"
 
-#: gajim/profile_window.py:336 gajim/dialogs.py:2537 gajim/dialogs.py:2625
-#: gajim/dialogs.py:3080 gajim/disco.py:536 gajim/gui_interface.py:1800
+#: gajim/profile_window.py:334 gajim/dialogs.py:2531 gajim/dialogs.py:2619
+#: gajim/dialogs.py:3075 gajim/disco.py:536 gajim/gui_interface.py:1841
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "Nejste připojen(a) k serveru"
 
-#: gajim/profile_window.py:337
+#: gajim/profile_window.py:335
 #, fuzzy
 msgid "Without a connection, you can not publish your contact information."
 msgstr "Bez opětovného připojení nemůžete zveřejnit Vaše osobní údaje."
 
-#: gajim/profile_window.py:351
+#: gajim/profile_window.py:349
 #, fuzzy
 msgid "Sending profile…"
 msgstr "Odesílám profil..."
 
-#: gajim/profile_window.py:370
+#: gajim/profile_window.py:368
 msgid "Information NOT published"
 msgstr "Informace NEBYLY zveřejněny"
 
-#: gajim/profile_window.py:377
+#: gajim/profile_window.py:375
 msgid "vCard publication failed"
 msgstr "publikování vizitky se nezdařilo"
 
-#: gajim/profile_window.py:378
+#: gajim/profile_window.py:376
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -988,10 +1039,10 @@ msgstr "Jméno kontaktu: <i>%s</i>"
 msgid "JID: <i>%s</i>"
 msgstr "Jabber ID: <i>%s</i>"
 
-#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2926
-#: gajim/roster_window.py:3942 gajim/roster_window.py:5229
-#: gajim/accounts_window.py:462 gajim/common/contacts.py:107
-#: gajim/common/contacts.py:139 gajim/data/gui/preferences_window.ui:569
+#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2939
+#: gajim/roster_window.py:3953 gajim/roster_window.py:5237
+#: gajim/accounts_window.py:462 gajim/common/contacts.py:105
+#: gajim/common/contacts.py:137 gajim/data/gui/preferences_window.ui:569
 #: gajim/data/gui/shortcuts_window.ui:176
 msgid "General"
 msgstr "Obecné"
@@ -1078,36 +1129,36 @@ msgstr "Prosím vyplňte údaje kontaktu, který chcete přidat do účtu %s"
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Prosím vyplňte údaje o kontaktu, který chcete přidat"
 
-#: gajim/dialogs.py:1097 gajim/dialogs.py:1103 gajim/dialogs.py:1108
+#: gajim/dialogs.py:1092 gajim/dialogs.py:1098 gajim/dialogs.py:1103
 msgid "Invalid User ID"
 msgstr "Neplatný identifikátor uživatele"
 
-#: gajim/dialogs.py:1104
+#: gajim/dialogs.py:1099
 msgid "The user ID must not contain a resource."
 msgstr "User ID nesmí obsahovat zdroj."
 
-#: gajim/dialogs.py:1109
+#: gajim/dialogs.py:1104
 msgid "You cannot add yourself to your roster."
 msgstr "Rád(a) bych si tě přidal(a) do seznamu."
 
-#: gajim/dialogs.py:1123
+#: gajim/dialogs.py:1118
 msgid "Contact already in roster"
 msgstr "Kontakt už je v Seznamu"
 
-#: gajim/dialogs.py:1124
+#: gajim/dialogs.py:1119
 msgid "This contact is already listed in your roster."
 msgstr "Tento kontakt už je obsažen ve Vašem seznamu."
 
-#: gajim/dialogs.py:1177 gajim/dialogs.py:1211
+#: gajim/dialogs.py:1172 gajim/dialogs.py:1206
 msgid "User ID:"
 msgstr "Uživatel:"
 
-#: gajim/dialogs.py:1277
+#: gajim/dialogs.py:1272
 #, fuzzy
 msgid "Error while adding transport contact"
 msgstr "Chyba při přidávání služby. %s"
 
-#: gajim/dialogs.py:1278
+#: gajim/dialogs.py:1273
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1115,63 +1166,63 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1305
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "GTK+ Jabber klient"
 
-#: gajim/dialogs.py:1311
+#: gajim/dialogs.py:1306
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ verze: "
 
-#: gajim/dialogs.py:1312
+#: gajim/dialogs.py:1307
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK verze: "
 
-#: gajim/dialogs.py:1313
+#: gajim/dialogs.py:1308
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1316
+#: gajim/dialogs.py:1311
 #, fuzzy
 msgid "Current Developers"
 msgstr "Aktivní vývojáři:"
 
-#: gajim/dialogs.py:1317
+#: gajim/dialogs.py:1312
 #, fuzzy
 msgid "Past Developers"
 msgstr "Vysloužilí vývojáři:"
 
-#: gajim/dialogs.py:1318
+#: gajim/dialogs.py:1313
 msgid "Artists"
 msgstr ""
 
-#: gajim/dialogs.py:1322
+#: gajim/dialogs.py:1317
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/dialogs.py:1323
+#: gajim/dialogs.py:1318
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr ""
 "Poslední, nikoliv nejmenší, poděkování patří všem správcům instalačních "
 "balíčků."
 
-#: gajim/dialogs.py:1326
+#: gajim/dialogs.py:1321
 msgid "translator-credits"
 msgstr ""
 "Petr Menšík <pihhan@seznam.cz>\n"
 "scippio <scippio@berounet.cz>"
 
-#: gajim/dialogs.py:1490
+#: gajim/dialogs.py:1485
 #, fuzzy, python-format
-msgid "Dictionary for lang \"%s\" not available"
+msgid "Dictionary for language \"%s\" not available"
 msgstr "Slovník pro jazyk %s není dostupný"
 
-#: gajim/dialogs.py:1491
+#: gajim/dialogs.py:1486
 #, fuzzy, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1182,12 +1233,12 @@ msgstr ""
 "Musíš nainstalovat %s slovník k použití kontroly pravopisu, nebo vybrat jiný "
 "jazyk nastavením volby speller_language."
 
-#: gajim/dialogs.py:1838 gajim/dialogs.py:1853 gajim/gui_interface.py:1467
-#: gajim/gui_interface.py:1509
+#: gajim/dialogs.py:1833 gajim/dialogs.py:1848 gajim/gui_interface.py:1508
+#: gajim/gui_interface.py:1550
 msgid "Insecure connection"
 msgstr "Nezabezpečené Spojení"
 
-#: gajim/dialogs.py:1839
+#: gajim/dialogs.py:1834
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1198,279 +1249,303 @@ msgstr ""
 "Abyste nemuseli posílat heslo nezabezpečeným připojením nainstalujte si "
 "PyOpenSSL. Jste si jisti, že to chcete udělat?"
 
-#: gajim/dialogs.py:1844 gajim/gui_interface.py:1471
-#: gajim/gui_interface.py:1512
+#: gajim/dialogs.py:1839 gajim/gui_interface.py:1512
+#: gajim/gui_interface.py:1553
 msgid "Yes, I really want to connect insecurely"
 msgstr "Ano, chci se připojit nezabezpečeně"
 
-#: gajim/dialogs.py:1845
+#: gajim/dialogs.py:1840
 msgid "Gajim will NOT connect unless you check this box"
 msgstr ""
 
-#: gajim/dialogs.py:1846 gajim/groupchat_control.py:2242
-#: gajim/roster_window.py:2884 gajim/roster_window.py:3518
-#: gajim/roster_window.py:4271 gajim/message_window.py:254
-#: gajim/gui_interface.py:726 gajim/gui_interface.py:1472
-#: gajim/gui_interface.py:1513
+#: gajim/dialogs.py:1841 gajim/groupchat_control.py:2284
+#: gajim/roster_window.py:2897 gajim/roster_window.py:3529
+#: gajim/roster_window.py:4282 gajim/message_window.py:247
+#: gajim/gui_interface.py:725 gajim/gui_interface.py:1513
+#: gajim/gui_interface.py:1554
 #, fuzzy
 msgid "_Do not ask me again"
 msgstr "Příště _nezobrazovat"
 
-#: gajim/dialogs.py:1946
+#: gajim/dialogs.py:1941
 msgid "_Resume"
 msgstr ""
 
-#: gajim/dialogs.py:1954
+#: gajim/dialogs.py:1949
 msgid "Re_place"
 msgstr ""
 
-#: gajim/dialogs.py:2157 gajim/config.py:2174
+#: gajim/dialogs.py:2152 gajim/config.py:2174
 #: gajim/command_system/implementation/standard.py:261
 msgid "Invalid nickname"
 msgstr "Neplatné uživatelské jméno"
 
-#: gajim/dialogs.py:2158
+#: gajim/dialogs.py:2153
 #, fuzzy
 msgid "The nickname contains invalid characters."
 msgstr "Jabber ID diskuze obsahuje nepřijatelné znaky."
 
-#: gajim/dialogs.py:2281
+#: gajim/dialogs.py:2275
+msgid "Subscription Request"
+msgstr "Žádost o autorizaci"
+
+#: gajim/dialogs.py:2284
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Žádost o autorizaci na účtu %(account)s od %(jid)s"
 
-#: gajim/dialogs.py:2284
+#: gajim/dialogs.py:2287
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Žádost o autorizaci od %s"
 
-#: gajim/dialogs.py:2364
+#: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "Připojit se do diskuze"
 
-#: gajim/dialogs.py:2506
+#: gajim/dialogs.py:2500
 #, fuzzy
 msgid "Invalid Room"
 msgstr "Neplatná místnost"
 
-#: gajim/dialogs.py:2507
+#: gajim/dialogs.py:2501
 msgid "Please choose a room"
 msgstr ""
 
-#: gajim/dialogs.py:2519 gajim/dialogs.py:2526
+#: gajim/dialogs.py:2513 gajim/dialogs.py:2520
 msgid "Invalid Nickname"
 msgstr "Neplatné uživatelské jméno"
 
-#: gajim/dialogs.py:2520
+#: gajim/dialogs.py:2514
 #, fuzzy
 msgid "Please choose a nickname"
 msgstr "Vytvořte vaše nové téma."
 
-#: gajim/dialogs.py:2532 gajim/dialogs.py:3483 gajim/config.py:2457
+#: gajim/dialogs.py:2526 gajim/dialogs.py:3486 gajim/config.py:2457
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 msgid "Invalid JID"
 msgstr "Neplatné JID"
 
-#: gajim/dialogs.py:2538 gajim/gui_interface.py:1801
+#: gajim/dialogs.py:2532 gajim/gui_interface.py:1842
 msgid "You can not join a group chat unless you are connected."
 msgstr "Nemůžete vstoupit do diskuze pokud nejste připojen(a)."
 
-#: gajim/dialogs.py:2592 gajim/dialogs.py:2603
+#: gajim/dialogs.py:2586 gajim/dialogs.py:2597
 #, fuzzy
 msgid "Wrong server"
 msgstr "Nesprávné uri"
 
-#: gajim/dialogs.py:2593 gajim/dialogs.py:2604
+#: gajim/dialogs.py:2587 gajim/dialogs.py:2598
 #, fuzzy, python-format
 msgid "%s is not a groupchat server"
 msgstr "Tohle není diskuze"
 
-#: gajim/dialogs.py:2626
+#: gajim/dialogs.py:2620
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Nemůžete měnit heslo, pokud nejste připojen(a)."
 
-#: gajim/dialogs.py:2637 gajim/dialogs.py:2708 gajim/dialogs.py:3809
+#: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
 #: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Jméno"
 
-#: gajim/dialogs.py:2640 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2634 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "Server"
 
-#: gajim/dialogs.py:2676
+#: gajim/dialogs.py:2670
 msgid "This account is not connected to the server"
 msgstr "Tento účet není připojen k serveru"
 
-#: gajim/dialogs.py:2677
+#: gajim/dialogs.py:2671
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Nemůžete synchronyzovat účet pokud nění připojen."
 
-#: gajim/dialogs.py:2706
+#: gajim/dialogs.py:2700
 msgid "Synchronise"
 msgstr "Synchronizovat"
 
-#: gajim/dialogs.py:2778
+#: gajim/dialogs.py:2772
 #, fuzzy
 msgid "Start new Conversation"
 msgstr "Pokračování v rozhovoru"
 
-#: gajim/dialogs.py:3033
+#: gajim/dialogs.py:3028
 #, fuzzy
 msgid "New Groupchat"
 msgstr "Nová diskuze"
 
-#: gajim/dialogs.py:3035
+#: gajim/dialogs.py:3030
 #, fuzzy
 msgid "New Contact"
 msgstr "Přidat nový kontakt"
 
-#: gajim/dialogs.py:3081
+#: gajim/dialogs.py:3076
 msgid "Without a connection, you can not change your password."
 msgstr "Nemůžete měnit heslo, pokud nejste připojen(a)."
 
-#: gajim/dialogs.py:3101
+#: gajim/dialogs.py:3096
 msgid "Invalid password"
 msgstr "Neplatné heslo"
 
-#: gajim/dialogs.py:3101
+#: gajim/dialogs.py:3096
 msgid "You must enter a password."
 msgstr "Musíte zadat heslo."
 
-#: gajim/dialogs.py:3105
+#: gajim/dialogs.py:3100
 msgid "Passwords do not match"
 msgstr "Hesla se neshodují"
 
-#: gajim/dialogs.py:3106
+#: gajim/dialogs.py:3101
 msgid "The passwords typed in both fields must be identical."
 msgstr "Hesla zadaná v obou políčkách musí být identická."
 
-#: gajim/dialogs.py:3146 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2770
+#: gajim/dialogs.py:3139 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2789
 msgid "Contact Signed In"
 msgstr "Kontakt se přihlásil"
 
-#: gajim/dialogs.py:3148 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2776
+#: gajim/dialogs.py:3141 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2795
 msgid "Contact Signed Out"
 msgstr "Kontakt se odhlásil"
 
-#: gajim/dialogs.py:3150 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2590
+#: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2609
 msgid "New Message"
 msgstr "Nová zpráva"
 
-#: gajim/dialogs.py:3150 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2572
+#: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2591
 msgid "New Single Message"
 msgstr "Nová jednoduché zpráva"
 
-#: gajim/dialogs.py:3151 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2578
+#: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/common/connection_handlers_events.py:2597
 msgid "New Private Message"
 msgstr "Nová soukromá zpráva"
 
-#: gajim/dialogs.py:3151
+#: gajim/dialogs.py:3144
 msgid "New E-mail"
 msgstr "Nový E-mail"
 
-#: gajim/dialogs.py:3153 gajim/gui_interface.py:927 gajim/notify.py:93
+#: gajim/dialogs.py:3146 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "Žádost o přenos souboru"
 
-#: gajim/dialogs.py:3155 gajim/gui_interface.py:862 gajim/gui_interface.py:892
+#: gajim/dialogs.py:3148 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "Chyba přenosu souboru"
 
-#: gajim/dialogs.py:3157 gajim/gui_interface.py:1031
-#: gajim/gui_interface.py:1060 gajim/gui_interface.py:1081 gajim/notify.py:94
+#: gajim/dialogs.py:3150 gajim/gui_interface.py:1030
+#: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "Přenos souboru dokončen"
 
-#: gajim/dialogs.py:3158 gajim/gui_interface.py:1035
-#: gajim/gui_interface.py:1064 gajim/gui_interface.py:1085 gajim/notify.py:95
+#: gajim/dialogs.py:3151 gajim/gui_interface.py:1034
+#: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "Přenos souboru zastaven"
 
-#: gajim/dialogs.py:3160 gajim/dialogs.py:4706 gajim/chat_control.py:1627
-#: gajim/gui_interface.py:664 gajim/notify.py:95
+#: gajim/dialogs.py:3153 gajim/dialogs.py:4709 gajim/chat_control.py:1630
+#: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "Skupinová pozvánka"
 
-#: gajim/dialogs.py:3162 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2764
+#: gajim/dialogs.py:3155 gajim/notify.py:93
+#: gajim/common/connection_handlers_events.py:2783
 msgid "Contact Changed Status"
 msgstr "Kontakt změnil stav"
 
-#: gajim/dialogs.py:3371
+#: gajim/dialogs.py:3374
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Jednoduchá zpráva z účtu %s"
 
-#: gajim/dialogs.py:3373
+#: gajim/dialogs.py:3376
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Jednoduchá zpráva z účtu %s"
 
-#: gajim/dialogs.py:3375
+#: gajim/dialogs.py:3378
 msgid "Single Message"
 msgstr "Jednoduchá zpráva"
 
-#: gajim/dialogs.py:3378
+#: gajim/dialogs.py:3381
 #, python-format
 msgid "Send %s"
 msgstr "Odeslat %s"
 
-#: gajim/dialogs.py:3401
+#: gajim/dialogs.py:3404
 #, python-format
 msgid "Received %s"
 msgstr "Přijaté %s"
 
-#: gajim/dialogs.py:3424
+#: gajim/dialogs.py:3427
 #, python-format
 msgid "Form %s"
 msgstr "Od %s"
 
-#: gajim/dialogs.py:3452 gajim/dialogs.py:3638
+#: gajim/dialogs.py:3455 gajim/dialogs.py:3641
 msgid "Connection not available"
 msgstr "Spojení není dostupné"
 
-#: gajim/dialogs.py:3453 gajim/dialogs.py:3639
+#: gajim/dialogs.py:3456 gajim/dialogs.py:3642
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Prosím ujistěte se že jste připojen s účtem \"%s\"."
 
-#: gajim/dialogs.py:3484 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3487 gajim/dialog_messages.py:43
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "Není možné poslat zprávu kontaktu %s, takové JID není platné."
 
-#: gajim/dialogs.py:3507
+#: gajim/dialogs.py:3510
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: gajim/dialogs.py:3508
+#: gajim/dialogs.py:3511
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s napsal(a):\n"
 
-#: gajim/dialogs.py:3752
+#: gajim/dialogs.py:3558 gajim/data/gui/shortcuts_window.ui:113
+#, fuzzy
+msgid "Clear"
+msgstr "Uklízím"
+
+#: gajim/dialogs.py:3563
+#, fuzzy
+msgid "Filter"
+msgstr "Filtr:"
+
+#: gajim/dialogs.py:3568
+#, fuzzy
+msgid "XML Input"
+msgstr "<b>Vstup XML</b>"
+
+#: gajim/dialogs.py:3572
+#, fuzzy
+msgid "Send"
+msgstr "Ode_slat"
+
+#: gajim/dialogs.py:3755
 msgid "add"
 msgstr "přidat"
 
-#: gajim/dialogs.py:3752
+#: gajim/dialogs.py:3755
 msgid "modify"
 msgstr "upravit"
 
-#: gajim/dialogs.py:3753
+#: gajim/dialogs.py:3756
 msgid "remove"
 msgstr "odebrat"
 
-#: gajim/dialogs.py:3782
+#: gajim/dialogs.py:3785
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -1479,28 +1554,28 @@ msgstr ""
 "<b>%(jid)s</b> by chtěl(a), aby jste </b>%(action)s</b> některé kontakty z "
 "vašeho rosteru."
 
-#: gajim/dialogs.py:3798 gajim/dialogs.py:3844
+#: gajim/dialogs.py:3801 gajim/dialogs.py:3847 gajim/accounts_window.py:44
 msgid "Add"
 msgstr "Přidat"
 
-#: gajim/dialogs.py:3800 gajim/dialogs.py:3875
+#: gajim/dialogs.py:3803 gajim/dialogs.py:3878
 msgid "Modify"
 msgstr "Upravit"
 
-#: gajim/dialogs.py:3802 gajim/dialogs.py:3899
+#: gajim/dialogs.py:3805 gajim/dialogs.py:3902
 msgid "Delete"
 msgstr "Smazat"
 
-#: gajim/dialogs.py:3812
+#: gajim/dialogs.py:3815
 msgid "Groups"
 msgstr "Skupiny"
 
-#: gajim/dialogs.py:3920
+#: gajim/dialogs.py:3923
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s mi doporučila přidat si Vás od mého rosteru."
 
-#: gajim/dialogs.py:3934
+#: gajim/dialogs.py:3937
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
@@ -1508,7 +1583,7 @@ msgstr[0] "Přidáno %s kontaktů"
 msgstr[1] "Přidáno %s kontaktů"
 msgstr[2] "Přidáno %s kontaktů"
 
-#: gajim/dialogs.py:3972
+#: gajim/dialogs.py:3975
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
@@ -1516,179 +1591,179 @@ msgstr[0] "Odstraněno %s kontaktů"
 msgstr[1] "Odstraněno %s kontaktů"
 msgstr[2] "Odstraněno %s kontaktů"
 
-#: gajim/dialogs.py:3998
+#: gajim/dialogs.py:4001
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#: gajim/dialogs.py:4036
+#: gajim/dialogs.py:4039
 msgid "Success!"
 msgstr ""
 
-#: gajim/dialogs.py:4036
+#: gajim/dialogs.py:4039
 #, fuzzy
 msgid "Your Archiving Preferences have been saved!"
 msgstr "_Nastavení"
 
-#: gajim/dialogs.py:4052
+#: gajim/dialogs.py:4055
 msgid "We got no response from the Server"
 msgstr ""
 
-#: gajim/dialogs.py:4054
+#: gajim/dialogs.py:4057
 #, fuzzy
 msgid "We received an error: {}"
 msgstr "Služba vrátila chybu."
 
-#: gajim/dialogs.py:4058
+#: gajim/dialogs.py:4061
 #, fuzzy
 msgid "Error!"
 msgstr "Chyba"
 
-#: gajim/dialogs.py:4117
+#: gajim/dialogs.py:4120
 #, fuzzy
 msgid "Add JID"
 msgstr "Jabber ID"
 
-#: gajim/dialogs.py:4190
+#: gajim/dialogs.py:4193
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Soukromý seznam <b><i>%s</i></b>"
 
-#: gajim/dialogs.py:4194
+#: gajim/dialogs.py:4197
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Soukromý seznam pro %s"
 
-#: gajim/dialogs.py:4196 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4199 gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "Nastavení Soukromí"
 
-#: gajim/dialogs.py:4267
+#: gajim/dialogs.py:4270
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "Pořadí: %(order)s, akce: %(action)s, typ: %(type)s, hodnota: %(value)s"
 
-#: gajim/dialogs.py:4272
+#: gajim/dialogs.py:4275
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Pořadí: %(order)s, akce: %(action)s"
 
-#: gajim/dialogs.py:4326
+#: gajim/dialogs.py:4329
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Upravit pravidlo</b>"
 
-#: gajim/dialogs.py:4438
+#: gajim/dialogs.py:4441
 msgid "<b>Add a rule</b>"
 msgstr "<b>Přidat pravidlo</b>"
 
-#: gajim/dialogs.py:4539
+#: gajim/dialogs.py:4542
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Soukromý seznam pro %s"
 
-#: gajim/dialogs.py:4635
+#: gajim/dialogs.py:4638
 msgid "Invalid List Name"
 msgstr "Neplatné jméno seznamu"
 
-#: gajim/dialogs.py:4636
+#: gajim/dialogs.py:4639
 msgid "You must enter a name to create a privacy list."
 msgstr "Musíte zadat jméno pro vytvoření privacy listu."
 
-#: gajim/dialogs.py:4672
+#: gajim/dialogs.py:4675
 msgid "You are invited to a groupchat"
 msgstr "Jste pozván do diskuze"
 
-#: gajim/dialogs.py:4675
+#: gajim/dialogs.py:4678
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact Vás pozval(a) do místnosti %(room_jid)s"
 
-#: gajim/dialogs.py:4677
+#: gajim/dialogs.py:4680
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact Vás pozval(a) do místnosti %(room_jid)s"
 
-#: gajim/dialogs.py:4686
+#: gajim/dialogs.py:4689
 #, python-format
 msgid "Comment: %s"
 msgstr "Komentář: %s"
 
-#: gajim/dialogs.py:4688
+#: gajim/dialogs.py:4691
 msgid "Do you want to accept the invitation?"
 msgstr "Chcete přijmout pozvání?"
 
-#: gajim/dialogs.py:4704
+#: gajim/dialogs.py:4707
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: gajim/dialogs.py:4753
+#: gajim/dialogs.py:4756
 msgid "Choose Client Cert #PCKS12"
 msgstr ""
 
-#: gajim/dialogs.py:4769 gajim/accounts_window.py:656
+#: gajim/dialogs.py:4772 gajim/accounts_window.py:656
 msgid "PKCS12 Files"
 msgstr ""
 
-#: gajim/dialogs.py:4795
+#: gajim/dialogs.py:4798
 msgid "Choose Sound"
 msgstr "Vyberte zvuk"
 
-#: gajim/dialogs.py:4811
+#: gajim/dialogs.py:4814
 msgid "Wav Sounds"
 msgstr "Waw soubory"
 
-#: gajim/dialogs.py:4841
+#: gajim/dialogs.py:4844
 msgid "Choose Image"
 msgstr "Vyberte obrázek"
 
-#: gajim/dialogs.py:4859
+#: gajim/dialogs.py:4862
 msgid "Images"
 msgstr "Obrázky"
 
-#: gajim/dialogs.py:4930
+#: gajim/dialogs.py:4933
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Vyberte obrázek"
 
-#: gajim/dialogs.py:4949
+#: gajim/dialogs.py:4952
 #, fuzzy
 msgid "Zip files"
 msgstr "Všechny soubory"
 
-#: gajim/dialogs.py:4975
+#: gajim/dialogs.py:4978
 #, python-format
 msgid "When %s becomes:"
 msgstr "Kdy %s může být:"
 
-#: gajim/dialogs.py:4977
+#: gajim/dialogs.py:4980
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Přidávám zvláštní notifikaci pro %s"
 
-#: gajim/dialogs.py:5226
+#: gajim/dialogs.py:5220
 msgid "an audio and video"
 msgstr "audio a video"
 
-#: gajim/dialogs.py:5228
+#: gajim/dialogs.py:5222
 msgid "an audio"
 msgstr "audio"
 
-#: gajim/dialogs.py:5230
+#: gajim/dialogs.py:5224
 msgid "a video"
 msgstr "video"
 
-#: gajim/dialogs.py:5234
+#: gajim/dialogs.py:5228
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr "%(contact)s chce zahájit %(type) sezení. Chcete na volání odpovědět?"
 
-#: gajim/dialogs.py:5339 gajim/dialogs.py:5375
+#: gajim/dialogs.py:5333 gajim/dialogs.py:5369
 #, fuzzy, python-format
 msgid "Certificate for account %s"
 msgstr "pro účet %s"
 
-#: gajim/dialogs.py:5339
+#: gajim/dialogs.py:5333
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1712,67 +1787,95 @@ msgid ""
 "SHA256 Fingerprint: %(sha256)s\n"
 msgstr ""
 
-#: gajim/dialogs.py:5386 gajim/gui_interface.py:1361
+#: gajim/dialogs.py:5380 gajim/gui_interface.py:1402
 #, fuzzy, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "Chyba SSL certifikátu"
 
-#: gajim/dialogs.py:5387 gajim/dialogs.py:5404
+#: gajim/dialogs.py:5381 gajim/dialogs.py:5398
 msgid "View cert…"
 msgstr ""
 
-#: gajim/groupchat_control.py:179 gajim/groupchat_control.py:1760
+#: gajim/dialogs.py:5414 gajim/data/gui/application_menu.ui:32
+#, fuzzy
+msgid "File Transfer"
+msgstr "Přenosy souborů"
+
+#: gajim/dialogs.py:5438
+msgid "Requesting HTTP Upload Slot..."
+msgstr ""
+
+#: gajim/dialogs.py:5442
+msgid "Uploading file via HTTP File Upload..."
+msgstr ""
+
+#: gajim/dialogs.py:5446
+#, fuzzy
+msgid "Encrypting file..."
+msgstr "E2E Šifrování vypnuto"
+
+#: gajim/groupchat_control.py:192 gajim/groupchat_control.py:1792
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s se přejmenoval na %(new_nick)s"
 
-#: gajim/groupchat_control.py:205 gajim/groupchat_control.py:1909
-#: gajim/history_window.py:482 gajim/common/connection_handlers_events.py:2760
+#: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
+#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s je nyní %(status)s"
 
-#: gajim/groupchat_control.py:234
+#: gajim/groupchat_control.py:247
 msgid "Sending private message failed"
 msgstr "Odesílání soukromé zprávy selhalo"
 
-#: gajim/groupchat_control.py:236
+#: gajim/groupchat_control.py:249
 #, python-format
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "Už nejsi v místnosti \"%(room)s\" nebo \"%(nick)s\" odešel(a)."
 
-#: gajim/groupchat_control.py:594 gajim/groupchat_control.py:2277
+#: gajim/groupchat_control.py:636 gajim/chat_control.py:323
+#: gajim/chat_control.py:327
+msgid "HTTP File Upload"
+msgstr ""
+
+#: gajim/groupchat_control.py:638
+#, fuzzy
+msgid "HTTP File Upload not supported by your server"
+msgstr "Uložení metakontaktů není podporováno serverem"
+
+#: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2319
 msgid "Changing Subject"
 msgstr "Měním Téma"
 
-#: gajim/groupchat_control.py:595 gajim/groupchat_control.py:2278
+#: gajim/groupchat_control.py:652 gajim/groupchat_control.py:2320
 msgid "Please specify the new subject:"
 msgstr "Prosím zadejte nové téma:"
 
-#: gajim/groupchat_control.py:602
+#: gajim/groupchat_control.py:659
 msgid "Changing Nickname"
 msgstr "Měním přezdívku"
 
-#: gajim/groupchat_control.py:603
+#: gajim/groupchat_control.py:660
 msgid "Please specify the new nickname you want to use:"
 msgstr "Prosím zadejte novou přezdívku, kterou chcete používat:"
 
-#: gajim/groupchat_control.py:620
+#: gajim/groupchat_control.py:677
 #, fuzzy
 msgid "Invalid group chat JID"
 msgstr "Neplatné Jabber ID diskuzní místnosti"
 
-#: gajim/groupchat_control.py:621
+#: gajim/groupchat_control.py:678
 #, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr "Jabber ID diskuze obsahuje nepřijatelné znaky."
 
-#: gajim/groupchat_control.py:627
+#: gajim/groupchat_control.py:684
 #, python-format
 msgid "Destroying %s"
 msgstr "Likviduji: %s"
 
-#: gajim/groupchat_control.py:628
+#: gajim/groupchat_control.py:685
 #, fuzzy
 msgid ""
 "You are going to remove this room permanently.\n"
@@ -1781,273 +1884,283 @@ msgstr ""
 "Místnost bude s konečnou platností zničena.\n"
 "Můžete specifikovat důvod zničení:"
 
-#: gajim/groupchat_control.py:630
+#: gajim/groupchat_control.py:687
 msgid "You may also enter an alternate venue:"
 msgstr "Také můžete specifikovat náhradní místo:"
 
-#: gajim/groupchat_control.py:808
+#: gajim/groupchat_control.py:864
 msgid "Insert Nickname"
 msgstr "Vložit přezdívku"
 
-#: gajim/groupchat_control.py:960 gajim/chat_control.py:796
+#: gajim/groupchat_control.py:1015 gajim/chat_control.py:800
 msgid "and authenticated"
 msgstr "a autentizovaný"
 
-#: gajim/groupchat_control.py:964 gajim/chat_control.py:800
+#: gajim/groupchat_control.py:1019 gajim/chat_control.py:804
 msgid "and NOT authenticated"
 msgstr "a NEautentizovaný"
 
-#: gajim/groupchat_control.py:968 gajim/chat_control.py:804
+#: gajim/groupchat_control.py:1023 gajim/chat_control.py:808
 #, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "Šifrování %(type)s %(status)s aktivní %(authenticated)s.\n"
 "Váš rozhovor %(logged)s zaznamenáván."
 
-#: gajim/groupchat_control.py:1022
+#: gajim/groupchat_control.py:1066
 msgid "Conversation with "
 msgstr "Rozhovor s"
 
-#: gajim/groupchat_control.py:1024
+#: gajim/groupchat_control.py:1068
 msgid "Continued conversation"
 msgstr "Pokračování v rozhovoru"
 
-#: gajim/groupchat_control.py:1382
+#: gajim/groupchat_control.py:1426
 #, fuzzy, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(jid)s nastavil předmět na %(subject)s"
 
-#: gajim/groupchat_control.py:1405 gajim/groupchat_control.py:1702
+#: gajim/groupchat_control.py:1449 gajim/groupchat_control.py:1734
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Každý návštěvník uvidí váš úplný JID"
 
-#: gajim/groupchat_control.py:1408
+#: gajim/groupchat_control.py:1452
 #, fuzzy
 msgid "Room now shows unavailable members"
 msgstr "Místnost nyní zobrazuje nedostupné členy"
 
-#: gajim/groupchat_control.py:1410
+#: gajim/groupchat_control.py:1454
 #, fuzzy
 msgid "Room now does not show unavailable members"
 msgstr "místnost nyní nezobrazuje nedostupné členy"
 
-#: gajim/groupchat_control.py:1412
+#: gajim/groupchat_control.py:1456
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1416
+#: gajim/groupchat_control.py:1460
 msgid "Room logging is now enabled"
 msgstr "Zaznamenávání historie je zapnuto"
 
-#: gajim/groupchat_control.py:1418
+#: gajim/groupchat_control.py:1462
 msgid "Room logging is now disabled"
 msgstr "Zaznamenávání historie je vypnuto"
 
-#: gajim/groupchat_control.py:1420
+#: gajim/groupchat_control.py:1464
 msgid "Room is now non-anonymous"
 msgstr "Místnost není anonymní"
 
-#: gajim/groupchat_control.py:1423
+#: gajim/groupchat_control.py:1467
 msgid "Room is now semi-anonymous"
 msgstr "Místnost je částečně anonymní"
 
-#: gajim/groupchat_control.py:1426
+#: gajim/groupchat_control.py:1470
 #, fuzzy
 msgid "Room is now fully anonymous"
 msgstr "Místnost je plně anonymní"
 
-#: gajim/groupchat_control.py:1466 gajim/chat_control.py:1243
+#: gajim/groupchat_control.py:1510 gajim/chat_control.py:1251
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1695 gajim/groupchat_control.py:2297
-#: gajim/roster_window.py:3116 gajim/gui_interface.py:622
+#: gajim/groupchat_control.py:1727 gajim/groupchat_control.py:2347
+#: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s byli vyhozeni z místnosti: %(reason)s"
 
-#: gajim/groupchat_control.py:1707
+#: gajim/groupchat_control.py:1739
 msgid "Room logging is enabled"
 msgstr "Zaznamenávání historie je povoleno"
 
-#: gajim/groupchat_control.py:1709
+#: gajim/groupchat_control.py:1741
 msgid "A new room has been created"
 msgstr "Nová místnost byla vytvořena"
 
-#: gajim/groupchat_control.py:1712
+#: gajim/groupchat_control.py:1744
 msgid "The server has assigned or modified your roomnick"
 msgstr "Server přidělil nebo změnil název vaší místnosti"
 
-#: gajim/groupchat_control.py:1718
+#: gajim/groupchat_control.py:1750
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s byli vyhozeni: %(reason)s"
 
-#: gajim/groupchat_control.py:1721
+#: gajim/groupchat_control.py:1753
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s byli vyhozeni od %(who)s: %(reason)s"
 
 # FIXME: preklad pro ban? zabanovani je hnusne
-#: gajim/groupchat_control.py:1730
+#: gajim/groupchat_control.py:1762
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s byli zakázáni: %(reason)s"
 
-#: gajim/groupchat_control.py:1733
+#: gajim/groupchat_control.py:1765
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s byl zakázán od %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1744 gajim/groupchat_control.py:1828
+#: gajim/groupchat_control.py:1776 gajim/groupchat_control.py:1860
 #, python-format
 msgid "You are now known as %s"
 msgstr "Jste nyní znám(a) jako %s"
 
-#: gajim/groupchat_control.py:1782 gajim/groupchat_control.py:1787
-#: gajim/groupchat_control.py:1793
+#: gajim/groupchat_control.py:1814 gajim/groupchat_control.py:1819
+#: gajim/groupchat_control.py:1825
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s byli vyhozeni z místnosti: %(reason)s"
 
-#: gajim/groupchat_control.py:1784
+#: gajim/groupchat_control.py:1816
 msgid "affiliation changed"
 msgstr "Příslušnost:"
 
-#: gajim/groupchat_control.py:1789
+#: gajim/groupchat_control.py:1821
 msgid "room configuration changed to members-only"
 msgstr "nastavení místnosti se změnilo na vstup pouze členům"
 
-#: gajim/groupchat_control.py:1795
+#: gajim/groupchat_control.py:1827
 msgid "system shutdown"
 msgstr "vypnout systém"
 
-#: gajim/groupchat_control.py:1849
+#: gajim/groupchat_control.py:1881
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** %(actor)s nastavil(a) vztah %(nick)s na %(affiliation)s"
 
-#: gajim/groupchat_control.py:1853
+#: gajim/groupchat_control.py:1885
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Vztah %(nick)s byl nastaven na %(affiliation)s"
 
-#: gajim/groupchat_control.py:1868
+#: gajim/groupchat_control.py:1900
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** %(actor)s nastavil(a) postavení %(nick)s na %(role)s"
 
-#: gajim/groupchat_control.py:1872
+#: gajim/groupchat_control.py:1904
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** Postavení %(nick)s bylo nastaveno na %(role)s"
 
-#: gajim/groupchat_control.py:1902
+#: gajim/groupchat_control.py:1934
 #, python-format
 msgid "%s has left"
 msgstr "%s odešel(a)"
 
-#: gajim/groupchat_control.py:1907
+#: gajim/groupchat_control.py:1939
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s vstoupil do místnosti"
 
-#: gajim/groupchat_control.py:2236
+#: gajim/groupchat_control.py:2278
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Jste si jistý(á), že chcete opustit místnost \"%s\"?"
 
-#: gajim/groupchat_control.py:2238
+#: gajim/groupchat_control.py:2280
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Pokud zavřete toto okno, budete odpojen(a) z této místnosti."
 
-#: gajim/groupchat_control.py:2446
+#: gajim/groupchat_control.py:2498
 #, python-format
 msgid "Kicking %s"
 msgstr "Vyhazuji %s"
 
-#: gajim/groupchat_control.py:2447 gajim/groupchat_control.py:2733
+#: gajim/groupchat_control.py:2499 gajim/groupchat_control.py:2795
 msgid "You may specify a reason below:"
 msgstr "Můžete uvést důvod níže:"
 
-#: gajim/groupchat_control.py:2732
+#: gajim/groupchat_control.py:2794
 #, python-format
 msgid "Banning %s"
 msgstr "Zakazuji %s"
 
-#: gajim/chat_control.py:367
+#: gajim/chat_control.py:325 gajim/chat_control.py:329
+#, fuzzy
+msgid "Jingle File Transfer"
+msgstr "Přenosy souborů"
+
+#: gajim/chat_control.py:331
+#, fuzzy
+msgid "No File Transfer available"
+msgstr "Přenos souboru dokončen"
+
+#: gajim/chat_control.py:392
 msgid "Show a list of formattings"
 msgstr "Zobrazit seznam formátování"
 
-#: gajim/chat_control.py:371
+#: gajim/chat_control.py:396
 msgid "Formatting is not available so long as GPG is active"
 msgstr ""
 
-#: gajim/chat_control.py:374
+#: gajim/chat_control.py:399
 #, fuzzy
 msgid "This contact does not support HTML"
 msgstr "Tento kontakt nepodporuje přenos souborů."
 
-#: gajim/chat_control.py:486
+#: gajim/chat_control.py:511
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s stav: %(state)s, důvod: %(reason)s"
 
-#: gajim/chat_control.py:648
+#: gajim/chat_control.py:652
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s z diskuze %(room_name)s"
 
-#: gajim/chat_control.py:882
+#: gajim/chat_control.py:886
 msgid "Session negotiation cancelled"
 msgstr "Sezení bylo zrušeno"
 
-#: gajim/chat_control.py:892
+#: gajim/chat_control.py:896
 msgid "This session WILL be archived on server"
 msgstr ""
 
-#: gajim/chat_control.py:894
+#: gajim/chat_control.py:898
 #, fuzzy
 msgid "This session WILL NOT be archived on server"
 msgstr "Sezení NEBUDE logováno"
 
-#: gajim/chat_control.py:903
+#: gajim/chat_control.py:907
 msgid "This session is encrypted"
 msgstr "Toto sezení je šifrované"
 
-#: gajim/chat_control.py:906
+#: gajim/chat_control.py:910
 msgid " and WILL be logged"
 msgstr "a BUDE zaznamenáváno"
 
-#: gajim/chat_control.py:908
+#: gajim/chat_control.py:912
 msgid " and WILL NOT be logged"
 msgstr "a NEBUDE zaznamenáváno"
 
-#: gajim/chat_control.py:913
+#: gajim/chat_control.py:917
 msgid ""
 "Remote contact's identity not verified. Click the shield button for more "
 "details."
 msgstr "Kontakt nebyl ověřen. Klikněte na tlačítko štítu pro více informací."
 
-#: gajim/chat_control.py:915
+#: gajim/chat_control.py:919
 msgid "E2E encryption disabled"
 msgstr "E2E Šifrování vypnuto"
 
-#: gajim/chat_control.py:1210
+#: gajim/chat_control.py:1218
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Právě jsi obdržela novou zprávu od \"%s\""
 
-#: gajim/chat_control.py:1212
+#: gajim/chat_control.py:1220
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
 msgstr ""
 "Pokud zavřete toto okno a historie je vypnutá, tato zpráva bude ztracena."
 
-#: gajim/chat_control.py:1360
+#: gajim/chat_control.py:1363
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -2056,7 +2169,7 @@ msgstr ""
 "Předmět: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1474 gajim/gui_interface.py:1153
+#: gajim/chat_control.py:1477 gajim/gui_interface.py:1194
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2065,96 +2178,96 @@ msgstr ""
 "Nepodařilo se dešifrovat zprávu od %s\n"
 "Možná je falešná."
 
-#: gajim/chat_control.py:1512
+#: gajim/chat_control.py:1515
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s je nyní %(status)s"
 
-#: gajim/chat_control.py:1571
+#: gajim/chat_control.py:1574
 #, fuzzy
 msgid "File transfer"
 msgstr "Přenosy souborů"
 
-#: gajim/chat_control.py:1574
+#: gajim/chat_control.py:1577
 #, fuzzy
 msgid "Size"
 msgstr "Velikost: %s"
 
-#: gajim/chat_control.py:1576
+#: gajim/chat_control.py:1579
 #, fuzzy
 msgid "_Accept"
 msgstr "Přijmi"
 
-#: gajim/chat_control.py:1630 gajim/disco.py:1752
+#: gajim/chat_control.py:1633 gajim/disco.py:1752
 msgid "_Join"
 msgstr "_Vstoupit"
 
-#: gajim/chat_control.py:1649 gajim/roster_window.py:1979
-#: gajim/gui_interface.py:1014
+#: gajim/chat_control.py:1652 gajim/roster_window.py:1991
+#: gajim/gui_interface.py:1013
 msgid "Remote contact stopped transfer"
 msgstr "Protějšek zastavil přenos"
 
-#: gajim/chat_control.py:1651 gajim/roster_window.py:1981
-#: gajim/gui_interface.py:1017
+#: gajim/chat_control.py:1654 gajim/roster_window.py:1993
+#: gajim/gui_interface.py:1016
 msgid "Error opening file"
 msgstr "Chyba při čtení souboru"
 
-#: gajim/roster_window.py:255 gajim/roster_window.py:1063
+#: gajim/roster_window.py:273 gajim/roster_window.py:1074
 msgid "Merged accounts"
 msgstr "Spojené účty"
 
-#: gajim/roster_window.py:842 gajim/roster_window.py:1745
-#: gajim/roster_window.py:1747 gajim/roster_window.py:2590
-#: gajim/roster_window.py:5120 gajim/message_window.py:546
-#: gajim/common/contacts.py:135 gajim/common/commands.py:230
-#: gajim/common/helpers.py:94
+#: gajim/roster_window.py:857 gajim/roster_window.py:1757
+#: gajim/roster_window.py:1759 gajim/roster_window.py:2602
+#: gajim/roster_window.py:5128 gajim/message_window.py:543
+#: gajim/common/contacts.py:133 gajim/common/commands.py:230
+#: gajim/common/helpers.py:95
 msgid "Groupchats"
 msgstr "Diskuze"
 
-#: gajim/roster_window.py:881 gajim/roster_window.py:1653
-#: gajim/roster_window.py:1686 gajim/roster_window.py:1737
-#: gajim/roster_window.py:1739 gajim/roster_window.py:1900
-#: gajim/roster_window.py:2563 gajim/roster_window.py:5150 gajim/disco.py:130
-#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:137
-#: gajim/common/contacts.py:380 gajim/common/helpers.py:94
+#: gajim/roster_window.py:896 gajim/roster_window.py:1665
+#: gajim/roster_window.py:1698 gajim/roster_window.py:1749
+#: gajim/roster_window.py:1751 gajim/roster_window.py:1912
+#: gajim/roster_window.py:2575 gajim/roster_window.py:5158 gajim/disco.py:130
+#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:135
+#: gajim/common/contacts.py:378 gajim/common/helpers.py:95
 msgid "Transports"
 msgstr "Transporty"
 
-#: gajim/roster_window.py:2033
+#: gajim/roster_window.py:2045
 #, fuzzy
 msgid "Authorization sent"
 msgstr "Autorizace byla odeslána"
 
-#: gajim/roster_window.py:2034
+#: gajim/roster_window.py:2046
 #, fuzzy, python-format
 msgid "\"%s\" will now see your status."
 msgstr "Nyní bude \"%s\" znát váš stav."
 
-#: gajim/roster_window.py:2057
+#: gajim/roster_window.py:2069
 msgid "Subscription request has been sent"
 msgstr "Žádost o autorizaci byla odeslána"
 
-#: gajim/roster_window.py:2058
+#: gajim/roster_window.py:2070
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Pokud \"%s\" povolí Vaši žádost o autorizaci, budete vidět jeho stav."
 
-#: gajim/roster_window.py:2072
+#: gajim/roster_window.py:2084
 #, fuzzy
 msgid "Authorization removed"
 msgstr "Autorizace byla zrušena"
 
-#: gajim/roster_window.py:2073
+#: gajim/roster_window.py:2085
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "Nyní Vás \"%s\" uvidí vždy jako odpojeného."
 
-#: gajim/roster_window.py:2097
+#: gajim/roster_window.py:2109
 #, fuzzy
 msgid "OpenPGP is not usable"
 msgstr "GPG je nepoužitelné"
 
-#: gajim/roster_window.py:2098
+#: gajim/roster_window.py:2110
 #, python-format
 msgid ""
 "Gajim needs python-gnupg >= 0.3.8\n"
@@ -2162,11 +2275,11 @@ msgid ""
 "You will be connected to %s without OpenPGP."
 msgstr ""
 
-#: gajim/roster_window.py:2306 gajim/roster_window.py:3614
+#: gajim/roster_window.py:2318 gajim/roster_window.py:3625
 msgid "You are participating in one or more group chats"
 msgstr "Účinkujete v jedné nebo více diskuzích"
 
-#: gajim/roster_window.py:2307 gajim/roster_window.py:3615
+#: gajim/roster_window.py:2319 gajim/roster_window.py:3626
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -2175,28 +2288,28 @@ msgstr ""
 "si jistý(á), že se chcete stát neviditelným(ou)?"
 
 # FIXME: mozna nejak lepe? :/
-#: gajim/roster_window.py:2334
+#: gajim/roster_window.py:2346
 msgid "desync'ed"
 msgstr "nesynchronizováno"
 
-#: gajim/roster_window.py:2404
+#: gajim/roster_window.py:2416
 msgid "Really quit Gajim?"
 msgstr "Opravdu ukončit Gajim?"
 
-#: gajim/roster_window.py:2405
+#: gajim/roster_window.py:2417
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Opravdu chcete ukončit Gajim?"
 
-#: gajim/roster_window.py:2406
+#: gajim/roster_window.py:2418
 msgid "Always close Gajim"
 msgstr "Vždy zavřít Gajim"
 
-#: gajim/roster_window.py:2493
+#: gajim/roster_window.py:2505
 #, fuzzy
 msgid "You have running file transfers"
 msgstr "Zrušit přenos souboru"
 
-#: gajim/roster_window.py:2494
+#: gajim/roster_window.py:2506
 #, fuzzy
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
@@ -2205,11 +2318,11 @@ msgstr ""
 "Pokud chcete teď odejít, veškeré právě probíhající přenosy budou zastaveny. "
 "Opravdu chcete odejít?"
 
-#: gajim/roster_window.py:2525 gajim/roster_window.py:2815
+#: gajim/roster_window.py:2537 gajim/roster_window.py:2828
 msgid "You have unread messages"
 msgstr "Máte nepřečtené zprávy"
 
-#: gajim/roster_window.py:2526
+#: gajim/roster_window.py:2538
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -2217,16 +2330,16 @@ msgstr ""
 "Zprávy bude možné číst později, pokud máte povolený záznam historie a "
 "kontakt je v rosteru."
 
-#: gajim/roster_window.py:2816
+#: gajim/roster_window.py:2829
 msgid "You must read them before removing this transport."
 msgstr "Musíš si je přečíst před smazáním transportu."
 
-#: gajim/roster_window.py:2819
+#: gajim/roster_window.py:2832
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" bude smazán"
 
-#: gajim/roster_window.py:2820
+#: gajim/roster_window.py:2833
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -2234,11 +2347,11 @@ msgstr ""
 "Už více nebudete moci posílat i přijímat zprávy od kontaktů z tohoto "
 "transportu."
 
-#: gajim/roster_window.py:2823
+#: gajim/roster_window.py:2836
 msgid "Transports will be removed"
 msgstr "Transport bude smazán"
 
-#: gajim/roster_window.py:2828
+#: gajim/roster_window.py:2841
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -2247,11 +2360,11 @@ msgstr ""
 "Už více nebudete moci posílat ani přijímat zprávy od kontaktů z těchto "
 "transportů:%s"
 
-#: gajim/roster_window.py:2879
+#: gajim/roster_window.py:2892
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "Chystáte se zablokovat kontakt. Určitě chcete pokračovat?"
 
-#: gajim/roster_window.py:2881
+#: gajim/roster_window.py:2894
 #, fuzzy
 msgid ""
 "This contact will see you offline and you will not receive messages it sends "
@@ -2260,56 +2373,56 @@ msgstr ""
 "Tento kontakt vás uvidí jako odpojeného a nebudete dostávat zprávy, které "
 "vám pošle."
 
-#: gajim/roster_window.py:2921
+#: gajim/roster_window.py:2934
 msgid "Rename Contact"
 msgstr "Přejmenovat kontakt"
 
-#: gajim/roster_window.py:2922
+#: gajim/roster_window.py:2935
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "Zadej novou přezdívku pro kontakt %s."
 
-#: gajim/roster_window.py:2929
+#: gajim/roster_window.py:2942
 msgid "Rename Group"
 msgstr "Přejmenovat skupinu"
 
-#: gajim/roster_window.py:2930
+#: gajim/roster_window.py:2943
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "Zadej nové jméno pro skupinu %s."
 
-#: gajim/roster_window.py:2975
+#: gajim/roster_window.py:2988
 msgid "Remove Group"
 msgstr "Odstranit skupinu"
 
-#: gajim/roster_window.py:2976
+#: gajim/roster_window.py:2989
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Chceš smazat skupinu %s z rosteru?"
 
-#: gajim/roster_window.py:2977
+#: gajim/roster_window.py:2990
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Odstranit také všechny kontakty v této skupině z Vašeho rosteru"
 
-#: gajim/roster_window.py:3016
+#: gajim/roster_window.py:3029
 msgid "Assign OpenPGP Key"
 msgstr "Přiřadit OpenPGP klíč"
 
-#: gajim/roster_window.py:3017
+#: gajim/roster_window.py:3030
 msgid "Select a key to apply to the contact"
 msgstr "Vybrat klíč k použítí s kontaktem"
 
-#: gajim/roster_window.py:3425
+#: gajim/roster_window.py:3436
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "Kontakt \"%s\" bude smazán z Vašeho rosteru"
 
-#: gajim/roster_window.py:3427
+#: gajim/roster_window.py:3438
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "Chystáte se smazat \"%(name)s\" (%(jid)s) z vašeho rosteru.\n"
 
-#: gajim/roster_window.py:3432
+#: gajim/roster_window.py:3443
 #, fuzzy
 msgid ""
 "By removing this contact you also remove authorization resulting in them "
@@ -2318,11 +2431,11 @@ msgstr ""
 "Smazáním těchto kontaktů:%s\n"
 "také zrušíte autorizaci. Kontakty Vás tak vždy uvidí jako odpojeného."
 
-#: gajim/roster_window.py:3438
+#: gajim/roster_window.py:3449
 msgid "Do you want to continue?"
 msgstr "Chcete pokračovat?"
 
-#: gajim/roster_window.py:3442
+#: gajim/roster_window.py:3453
 #, fuzzy
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
@@ -2331,15 +2444,15 @@ msgstr ""
 "Smazáním kontaktu také zrušíte autorizaci. Kontakt Vás tak vždy uvidí jako "
 "odpojeného."
 
-#: gajim/roster_window.py:3445
+#: gajim/roster_window.py:3456
 msgid "I want this contact to know my status after removal"
 msgstr "Chci aby tento kontakt věděl o mém stavu i po odstranění"
 
-#: gajim/roster_window.py:3449
+#: gajim/roster_window.py:3460
 msgid "Contacts will be removed from your roster"
 msgstr "Kontakty budou smazány z Vašeho rosteru"
 
-#: gajim/roster_window.py:3454
+#: gajim/roster_window.py:3465
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -2348,13 +2461,13 @@ msgstr ""
 "Smazáním těchto kontaktů:%s\n"
 "také zrušíte autorizaci. Kontakty Vás tak vždy uvidí jako odpojeného."
 
-#: gajim/roster_window.py:3512
+#: gajim/roster_window.py:3523
 #, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr "Chystáte se poslat vlastní stav. Určitě chcete pokračovat?"
 
-#: gajim/roster_window.py:3514
+#: gajim/roster_window.py:3525
 #, fuzzy, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -2363,25 +2476,25 @@ msgstr ""
 "Tento kontakt váš dočasně uvidí jako %(status)s, ale pouze do první změny "
 "vašeho stavu. Poté uvidí váš globální stav."
 
-#: gajim/roster_window.py:3533
+#: gajim/roster_window.py:3544
 msgid "No account available"
 msgstr "Žádný účet není dostupný"
 
-#: gajim/roster_window.py:3534
+#: gajim/roster_window.py:3545
 msgid "You must create an account before you can chat with other contacts."
 msgstr ""
 "Musíte vytvořit účet před tím, než budete moci hovořit s jinými uživateli."
 
-#: gajim/roster_window.py:3665 gajim/gui_interface.py:2017
+#: gajim/roster_window.py:3676 gajim/gui_interface.py:2058
 #: gajim/dialog_messages.py:64
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Nemůžete vstoupit do diskuze, pokud jste neviditelný(á)"
 
-#: gajim/roster_window.py:4167
+#: gajim/roster_window.py:4178
 msgid "Metacontacts storage not supported by your server"
 msgstr "Uložení metakontaktů není podporováno serverem"
 
-#: gajim/roster_window.py:4169
+#: gajim/roster_window.py:4180
 #, fuzzy
 msgid ""
 "Your server does not support storing metacontacts information. So this "
@@ -2390,12 +2503,12 @@ msgstr ""
 "Tvůj server nepodporuje ukládání metakontaktů. Tyto informace nebudou při "
 "přístím připojení uloženy."
 
-#: gajim/roster_window.py:4265
+#: gajim/roster_window.py:4276
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Chystáte se vytvořit metacontact. Určitě chcete pokračovat?"
 
-#: gajim/roster_window.py:4267
+#: gajim/roster_window.py:4278
 #, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
@@ -2405,11 +2518,11 @@ msgstr ""
 "jsou užitečné, když jeden člověk má víc účtů v síti Jabber nebo účty v "
 "transportech."
 
-#: gajim/roster_window.py:4389
+#: gajim/roster_window.py:4400
 msgid "Invalid file URI:"
 msgstr "Neplatná cesta k souboru:"
 
-#: gajim/roster_window.py:4401
+#: gajim/roster_window.py:4412
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
@@ -2417,183 +2530,183 @@ msgstr[0] "Chcete poslat %s tento soubor:"
 msgstr[1] "Chcete poslat %s tyto soubory:"
 msgstr[2] "Chcete poslat %s tyto soubory:"
 
-#: gajim/roster_window.py:4540
+#: gajim/roster_window.py:4552
 #, fuzzy, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "Odeslat %s %s"
 
-#: gajim/roster_window.py:4553
+#: gajim/roster_window.py:4565
 #, fuzzy, python-format
 msgid "Make %s first contact"
 msgstr "Udělej %s a %s metakontaktem"
 
-#: gajim/roster_window.py:4558
+#: gajim/roster_window.py:4570
 #, fuzzy, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "Udělej %s a %s metakontaktem"
 
-#: gajim/roster_window.py:4946 gajim/roster_window.py:5044
+#: gajim/roster_window.py:4954 gajim/roster_window.py:5052
 msgid "_Change Status Message"
 msgstr "Z_měnit popis stavu"
 
-#: gajim/roster_window.py:4966
+#: gajim/roster_window.py:4974
 msgid "Publish Tune"
 msgstr "_Zveřejnit hudbu"
 
-#: gajim/roster_window.py:4977
+#: gajim/roster_window.py:4985
 #, fuzzy
 msgid "Publish Location"
 msgstr "_Zveřejnit hudbu"
 
-#: gajim/roster_window.py:4989
+#: gajim/roster_window.py:4997
 #, fuzzy
 msgid "Configure Services…"
 msgstr "_Nastavit služby..."
 
-#: gajim/roster_window.py:5122
+#: gajim/roster_window.py:5130
 msgid "_Maximize All"
 msgstr "_Maximalizovat Vše"
 
-#: gajim/roster_window.py:5129 gajim/roster_window.py:5291
+#: gajim/roster_window.py:5137 gajim/roster_window.py:5299
 msgid "Send Group M_essage"
 msgstr "Ode_slat skupinovou zprávu"
 
-#: gajim/roster_window.py:5136
+#: gajim/roster_window.py:5144
 msgid "To all users"
 msgstr "Všem uživatelům"
 
-#: gajim/roster_window.py:5140
+#: gajim/roster_window.py:5148
 msgid "To all online users"
 msgstr "Všem dostupným uživatelům"
 
-#: gajim/roster_window.py:5152 gajim/roster_window.py:5297
+#: gajim/roster_window.py:5160 gajim/roster_window.py:5305
 #: gajim/data/gui/gc_occupants_menu.ui:110
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "_Pozvat do"
 
-#: gajim/roster_window.py:5307
+#: gajim/roster_window.py:5315
 msgid "_Manage Contacts"
 msgstr "_Spravovat kontakty"
 
-#: gajim/roster_window.py:5313
+#: gajim/roster_window.py:5321
 #, fuzzy
 msgid "Edit _Groups…"
 msgstr "Upravit _skupiny"
 
-#: gajim/roster_window.py:5334 gajim/data/gui/remove_account_window.ui:137
+#: gajim/roster_window.py:5342 gajim/data/gui/filetransfers.ui:11
+#: gajim/data/gui/remove_account_window.ui:137
 msgid "_Remove"
 msgstr "Odst_ranit"
 
-#: gajim/roster_window.py:5372
+#: gajim/roster_window.py:5380
 msgid "_Maximize"
 msgstr "_Maximalizovat"
 
-#: gajim/roster_window.py:5379
+#: gajim/roster_window.py:5387
 msgid "_Reconnect"
 msgstr "_Znovu připojit"
 
-#: gajim/roster_window.py:5384 gajim/data/gui/gc_control_popup_menu.ui:120
+#: gajim/roster_window.py:5392 gajim/data/gui/gc_control_popup_menu.ui:120
 msgid "_Disconnect"
 msgstr "_Odpojit"
 
-#: gajim/roster_window.py:5392 gajim/data/gui/gc_occupants_menu.ui:162
+#: gajim/roster_window.py:5408 gajim/data/gui/gc_occupants_menu.ui:170
 #: gajim/data/gui/gc_control_popup_menu.ui:113
 #: gajim/data/gui/contact_context_menu.ui:228
 msgid "_History"
 msgstr "_Historie"
 
-#: gajim/roster_window.py:5468 gajim/data/gui/application_menu.ui:86
+#: gajim/roster_window.py:5484 gajim/data/gui/application_menu.ui:86
 msgid "History Manager"
 msgstr "Správce historie"
 
-#: gajim/roster_window.py:5476
+#: gajim/roster_window.py:5492
 msgid "_Join New Group Chat"
 msgstr "_Připojit se do diskuze"
 
-#: gajim/roster_window.py:5774
-#, fuzzy
-msgid "Change Status Message…"
-msgstr "Z_měnit popis stavu"
-
-#: gajim/gajim.py:68
+#: gajim/gajim.py:72
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
 
-#: gajim/gajim.py:71
+#: gajim/gajim.py:75
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "_Zobrazit událost v rosteru"
 
-#: gajim/gajim.py:74
+#: gajim/gajim.py:78
 msgid "Separate profile files completely (even history db and plugins)"
 msgstr ""
 
-#: gajim/gajim.py:78
+#: gajim/gajim.py:82
 msgid "Print XML stanzas and other debug information"
 msgstr ""
 
-#: gajim/gajim.py:82
+#: gajim/gajim.py:86
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "Editor rozšířeného nastavení"
 
-#: gajim/gajim.py:86
+#: gajim/gajim.py:90
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Nastavení místnosti"
 
-#: gajim/gajim.py:89
+#: gajim/gajim.py:93
 msgid "Configure logging system"
 msgstr ""
 
-#: gajim/gajim.py:92
+#: gajim/gajim.py:96
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Zobrazit všechny čekající _události"
 
-#: gajim/gajim.py:144 gajim/gui_interface.py:128
+#: gajim/gajim.py:99
+msgid "open ipython shell"
+msgstr ""
+
+#: gajim/gajim.py:159 gajim/gui_interface.py:127
 msgid "Database Error"
 msgstr "Chyba Databáze"
 
-#: gajim/history_sync.py:220
+#: gajim/history_sync.py:217
 #, fuzzy
 msgid "How far back do you want to go?"
 msgstr "Co by jste rád(a) dělal(a)?"
 
-#: gajim/history_sync.py:225
+#: gajim/history_sync.py:222
 msgid "One Month"
 msgstr ""
 
-#: gajim/history_sync.py:226
+#: gajim/history_sync.py:223
 msgid "Three Months"
 msgstr ""
 
-#: gajim/history_sync.py:227
+#: gajim/history_sync.py:224
 msgid "One Year"
 msgstr ""
 
-#: gajim/history_sync.py:228
+#: gajim/history_sync.py:225
 msgid "Everything"
 msgstr ""
 
-#: gajim/history_sync.py:257
+#: gajim/history_sync.py:254
 #, fuzzy
 msgid "Connecting..."
 msgstr "Připojuji se"
 
-#: gajim/history_sync.py:269
+#: gajim/history_sync.py:266
 #, fuzzy, python-format
 msgid "%(received)s of %(max)s"
 msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#: gajim/history_sync.py:273
+#: gajim/history_sync.py:270
 #, fuzzy, python-format
 msgid "Downloaded %s Messages"
 msgstr "Přeposlat nepřečtené zprávy"
 
-#: gajim/history_sync.py:293
+#: gajim/history_sync.py:290
 #, python-brace-format
 msgid ""
 "\n"
@@ -2602,7 +2715,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/history_sync.py:300
+#: gajim/history_sync.py:297
 msgid ""
 "\n"
 "        Gajim is fully synchronised\n"
@@ -2610,7 +2723,7 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/history_sync.py:307
+#: gajim/history_sync.py:304
 msgid ""
 "\n"
 "        There is already a synchronisation in\n"
@@ -2750,16 +2863,16 @@ msgstr "Smajlíci byly vypnuty"
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
 
-#: gajim/config.py:1821 gajim/gui_interface.py:315 gajim/gui_interface.py:749
+#: gajim/config.py:1821 gajim/gui_interface.py:314 gajim/gui_interface.py:748
 msgid "Password Required"
 msgstr "Vyžadováno heslo"
 
-#: gajim/config.py:1822 gajim/gui_interface.py:734
+#: gajim/config.py:1822 gajim/gui_interface.py:733
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Zadejte heslo pro účet %s"
 
-#: gajim/config.py:1823 gajim/gui_interface.py:749
+#: gajim/config.py:1823 gajim/gui_interface.py:748
 msgid "Save password"
 msgstr "Uložit heslo"
 
@@ -2791,9 +2904,17 @@ msgstr "Odstranit účet _pouze z Gajimu"
 msgid "Don't remove anything. I'll try again later"
 msgstr ""
 
+#: gajim/config.py:1947
+msgid "?print_status:All"
+msgstr "?print_status:Všechny"
+
 #: gajim/config.py:1948
 msgid "Enter and leave only"
 msgstr "Pouze při vstupu a výstupu"
+
+#: gajim/config.py:1949
+msgid "?print_status:None"
+msgstr "?print_status:Žádný"
 
 #: gajim/config.py:2015
 msgid "New Group Chat"
@@ -2861,11 +2982,11 @@ msgstr "Neplatný záznam"
 msgid "Custom port must be a port number."
 msgstr "Vlastní port musí být číslo portu."
 
-#: gajim/config.py:2536 gajim/gui_interface.py:1316
+#: gajim/config.py:2536 gajim/gui_interface.py:1357
 msgid "Certificate Already in File"
 msgstr "Certifikát je již v souboru"
 
-#: gajim/config.py:2537 gajim/gui_interface.py:1317
+#: gajim/config.py:2537 gajim/gui_interface.py:1358
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "Tento certifikát je již v souboru %s, takže nebude znova přidán."
@@ -2969,90 +3090,113 @@ msgstr "Zvýraznění zprávy v diskuzi"
 msgid "Group Chat Message Received"
 msgstr "Přijetí zprávy v diskuzi"
 
-#: gajim/tooltips.py:376
+#: gajim/tooltips.py:237
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s této diskuze"
 
-#: gajim/tooltips.py:402 gajim/common/helpers.py:478
+#: gajim/tooltips.py:263 gajim/common/helpers.py:473
+msgid "?Group Chat Contact Affiliation:None"
+msgstr "?Group Chat Contact Affiliation:Žádná"
+
+#: gajim/tooltips.py:265 gajim/common/helpers.py:479
 msgid "Member"
 msgstr "Člen"
 
-#: gajim/tooltips.py:404 gajim/common/helpers.py:476
+#: gajim/tooltips.py:267 gajim/common/helpers.py:477
 msgid "Administrator"
 msgstr "Správce"
 
-#: gajim/tooltips.py:406 gajim/common/helpers.py:474
+#: gajim/tooltips.py:269 gajim/common/helpers.py:475
 msgid "Owner"
 msgstr "Vlastník"
 
-#: gajim/tooltips.py:560
+#: gajim/tooltips.py:423
 msgid " [blocked]"
 msgstr "[blokováno]"
 
-#: gajim/tooltips.py:564
+#: gajim/tooltips.py:427
 msgid " [minimized]"
 msgstr "[minimalizováno]"
 
-#: gajim/tooltips.py:732
+#: gajim/tooltips.py:596
 msgid "Connected"
 msgstr "Spojeno"
 
-#: gajim/tooltips.py:734
+#: gajim/tooltips.py:598
 msgid "Disconnected"
 msgstr "Odpojenol"
 
-#: gajim/tooltips.py:787
+#: gajim/tooltips.py:647
+#, fuzzy
+msgid "?Noun:Download"
+msgstr "Stáhnout"
+
+#: gajim/tooltips.py:653
+#, fuzzy
+msgid "?Noun:Upload"
+msgstr "Nahrát"
+
+#: gajim/tooltips.py:660
 msgid "Type: "
 msgstr "Typ: "
 
-#: gajim/tooltips.py:793
+#: gajim/tooltips.py:666
 msgid "Transferred: "
 msgstr "Přeneseno: "
 
-#: gajim/tooltips.py:796 gajim/tooltips.py:813
+#: gajim/tooltips.py:669 gajim/tooltips.py:686
 msgid "Not started"
 msgstr "Nespuštěno"
 
-#: gajim/tooltips.py:798
+#: gajim/tooltips.py:671
 msgid "Stopped"
 msgstr "Zastaveno"
 
-#: gajim/tooltips.py:800 gajim/tooltips.py:803
+#: gajim/tooltips.py:673 gajim/tooltips.py:676
 msgid "Completed"
 msgstr "Dokončeno"
 
-#: gajim/tooltips.py:809
+#: gajim/tooltips.py:679
+msgid "?transfer status:Paused"
+msgstr "?transfer status:Pozastaveno"
+
+#: gajim/tooltips.py:682
 msgid "Stalled"
 msgstr "Stagnuje"
 
-#: gajim/tooltips.py:811
+#: gajim/tooltips.py:684
 msgid "Transferring"
 msgstr "Přenáším"
 
-#: gajim/tooltips.py:814
+#: gajim/tooltips.py:687
 msgid "Status: "
 msgstr "Stav: "
 
-#: gajim/tooltips.py:847 gajim/common/helpers.py:383
+#: gajim/tooltips.py:719 gajim/common/helpers.py:389
+#, fuzzy
+msgid "?user status:Available"
+msgstr "?transfer status:Pozastaveno"
+
+#: gajim/tooltips.py:721 gajim/common/helpers.py:384
 msgid "Free for Chat"
 msgstr "Ukecaný"
 
-#: gajim/tooltips.py:849 gajim/common/commands.py:117
-#: gajim/common/helpers.py:395
+#: gajim/tooltips.py:723 gajim/common/commands.py:117
+#: gajim/common/helpers.py:396
 #: gajim/command_system/implementation/standard.py:138
 msgid "Away"
 msgstr "Pryč"
 
-#: gajim/tooltips.py:851 gajim/common/helpers.py:373
+#: gajim/tooltips.py:725 gajim/common/helpers.py:374
 msgid "Busy"
 msgstr "Nerušit"
 
-#: gajim/tooltips.py:853 gajim/common/helpers.py:378
+#: gajim/tooltips.py:727 gajim/common/helpers.py:379
 msgid "Not Available"
 msgstr "Nedostupný"
 
-#: gajim/tooltips.py:855 gajim/common/helpers.py:400
+#: gajim/tooltips.py:729 gajim/common/helpers.py:401
 msgid "Offline"
 msgstr "Odpojen"
 
@@ -3101,125 +3245,129 @@ msgstr "(Žádný)"
 msgid "Hidden"
 msgstr "Skryté"
 
-#: gajim/logind_listener.py:59
+#: gajim/logind_listener.py:58
 msgid "Machine going to sleep"
 msgstr ""
 
-#: gajim/history_window.py:329
+#: gajim/logind_listener.py:90
+msgid "Disconnect from the network"
+msgstr ""
+
+#: gajim/history_window.py:327
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Historie rozhovorů s %s"
 
-#: gajim/history_window.py:347 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Historie konverzace"
 
-#: gajim/history_window.py:376
+#: gajim/history_window.py:374
 msgid "Disk Error"
 msgstr "Chyba disku"
 
-#: gajim/history_window.py:478
+#: gajim/history_window.py:476
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s je nyní %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:487
 #, python-format
 msgid "Error: %s"
 msgstr "Chyba: %s"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:489
 msgid "Error"
 msgstr "Chyba"
 
-#: gajim/history_window.py:493
+#: gajim/history_window.py:491
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Stav je nyní %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:496
+#: gajim/history_window.py:494
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Stav je nyní %(status)s"
 
-#: gajim/history_window.py:517 gajim/conversation_textview.py:1341
+#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Předmět: %s\n"
 
-#: gajim/statusicon.py:233
+#: gajim/statusicon.py:215
 #, fuzzy
 msgid "_Change Status Message…"
 msgstr "Z_měnit popis stavu"
 
-#: gajim/statusicon.py:268 gajim/statusicon.py:316 gajim/statusicon.py:323
+#: gajim/statusicon.py:250 gajim/statusicon.py:298 gajim/statusicon.py:305
 #, python-format
 msgid "using account %s"
 msgstr "pomocí účtu %s"
 
-#: gajim/statusicon.py:333
+#: gajim/statusicon.py:315
 #, fuzzy
 msgid "_Manage Bookmarks…"
 msgstr "Spravovat záložky"
 
-#: gajim/statusicon.py:346
+#: gajim/statusicon.py:328
 #, fuzzy
 msgid "Hide _Roster"
 msgstr "v _rosteru"
 
-#: gajim/statusicon.py:350
+#: gajim/statusicon.py:332
 msgid "Show _Roster"
 msgstr "Zobrazit _Seznam"
 
-#: gajim/statusicon.py:358
+#: gajim/statusicon.py:340
 msgid "Hide this menu"
 msgstr "Skryje toto menu"
 
-#: gajim/dataforms_widget.py:588
+#: gajim/dataforms_widget.py:587
 #, fuzzy
 msgid "Unable to load image"
 msgstr "Nelze nahrát idle modul"
 
-#: gajim/dataforms_widget.py:590
+#: gajim/dataforms_widget.py:589
 #, fuzzy, python-format
 msgid "Media type not supported: %s"
 msgstr "Neviditelnost není podporována"
 
-#: gajim/dataforms_widget.py:605
+#: gajim/dataforms_widget.py:604
 msgid "This field is required"
 msgstr "Toto pole je povinné"
 
-#: gajim/dataforms_widget.py:659
+#: gajim/dataforms_widget.py:658
 msgid "new@jabber.id"
 msgstr "new@jabber.id"
 
-#: gajim/dataforms_widget.py:662 gajim/dataforms_widget.py:664
+#: gajim/dataforms_widget.py:661 gajim/dataforms_widget.py:663
 #, python-format
 msgid "new%d@jabber.id"
 msgstr "new%d@jabber.id"
 
 #: gajim/server_info.py:130
 #, python-format
-msgid "%s days, %s hours"
+msgid "%(days)s days, %(hours)s hours"
 msgstr ""
 
-#: gajim/server_info.py:186 gajim/accounts_window.py:536
+#: gajim/server_info.py:187 gajim/accounts_window.py:536
 #: gajim/accounts_window.py:637
 #, fuzzy
 msgid "Hostname"
 msgstr "Počítač: "
 
-#: gajim/server_info.py:187
+#: gajim/server_info.py:188
 #, fuzzy
 msgid "Server Software"
 msgstr "Vlastnosti serveru"
 
-#: gajim/server_info.py:188
+#: gajim/server_info.py:189
 #, fuzzy
 msgid "Server Uptime"
 msgstr "Server odpověděl: %s"
 
-#: gajim/server_info.py:226
+#: gajim/server_info.py:227
 msgid ""
 "\n"
 "Disabled in config"
@@ -3377,7 +3525,7 @@ msgstr "_Žádat autorizaci"
 msgid "_Unsubscribe"
 msgstr "_Zrušit autorizaci"
 
-#: gajim/conversation_textview.py:332
+#: gajim/conversation_textview.py:329
 msgid ""
 "Text below this line is what has been said since the\n"
 "last time you paid attention to this group chat"
@@ -3385,52 +3533,58 @@ msgstr ""
 "Text pod touto čarou označuje to, co bylo řečeno \n"
 "po posledním čtení této diskuze"
 
-#: gajim/conversation_textview.py:564
+#: gajim/conversation_textview.py:561
 #, fuzzy
 msgid "_Quote"
 msgstr "_Konec"
 
-#: gajim/conversation_textview.py:572
+#: gajim/conversation_textview.py:569
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Akce pro \"%s\""
 
-#: gajim/conversation_textview.py:586
+#: gajim/conversation_textview.py:583
 msgid "Read _Wikipedia Article"
 msgstr "Číst článkek na _Wikipedia"
 
-#: gajim/conversation_textview.py:591
+#: gajim/conversation_textview.py:588
 msgid "Look it up in _Dictionary"
 msgstr "Vyhledat ve _slovníku"
 
-#: gajim/conversation_textview.py:608
+#: gajim/conversation_textview.py:605
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "URL slovníku chybí \"%s\" a není to WIKTIONARY"
 
-#: gajim/conversation_textview.py:622
+#: gajim/conversation_textview.py:619
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "URL pro hledání na webu chybí \"%s\""
 
-#: gajim/conversation_textview.py:625
+#: gajim/conversation_textview.py:622
 msgid "Web _Search for it"
 msgstr "_Hledat na Webu"
 
-#: gajim/conversation_textview.py:631
+#: gajim/conversation_textview.py:628
 msgid "Open as _Link"
 msgstr "Otevřít jako _Odkaz"
 
-#: gajim/conversation_textview.py:850
+#: gajim/conversation_textview.py:847
 msgid "URL:"
 msgstr ""
 
-#: gajim/conversation_textview.py:1024
+#: gajim/conversation_textview.py:1021
 #, fuzzy
 msgid "Invalid URL"
 msgstr "Neplatné JID"
 
-#: gajim/conversation_textview.py:1253
+#: gajim/conversation_textview.py:1106
+msgid ""
+"<b>Message corrected. Original message:</b>\n"
+"{}"
+msgstr ""
+
+#: gajim/conversation_textview.py:1250
 #, fuzzy, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -3443,30 +3597,35 @@ msgstr[2] "před %i dny"
 msgid "Write a message.."
 msgstr "Nová soukromá zpráva"
 
-#: gajim/message_window.py:252
+#: gajim/message_window.py:245
 msgid "You are going to close several tabs"
 msgstr "Chystáte se zavřít několik panelů"
 
-#: gajim/message_window.py:253
+#: gajim/message_window.py:246
 msgid "Do you really want to close them all?"
 msgstr "Opravdu je chcete všechny zavřít?"
 
-#: gajim/message_window.py:548
+#: gajim/message_window.py:541
+#, fuzzy
+msgid "?Noun:Chats"
+msgstr "Diskuze"
+
+#: gajim/message_window.py:545
 msgid "Private Chats"
 msgstr "Soukromé rozhovory"
 
-#: gajim/message_window.py:554
+#: gajim/message_window.py:551
 msgid "Messages"
 msgstr "Zprávy"
 
-#: gajim/gui_interface.py:158 gajim/gui_interface.py:330
-#: gajim/gui_interface.py:339 gajim/gui_interface.py:346
-#: gajim/gui_interface.py:350 gajim/gui_interface.py:353
-#: gajim/gui_interface.py:361
+#: gajim/gui_interface.py:157 gajim/gui_interface.py:329
+#: gajim/gui_interface.py:338 gajim/gui_interface.py:345
+#: gajim/gui_interface.py:349 gajim/gui_interface.py:352
+#: gajim/gui_interface.py:360
 msgid "Unable to join group chat"
 msgstr "Nelze se připojit se do diskuze"
 
-#: gajim/gui_interface.py:159
+#: gajim/gui_interface.py:158
 #, fuzzy, python-format
 msgid ""
 "Your desired nickname in group chat\n"
@@ -3478,108 +3637,108 @@ msgstr ""
 "zaregistrována někým jiným.\n"
 "Níže vyber jinou přezdívku:"
 
-#: gajim/gui_interface.py:163
+#: gajim/gui_interface.py:162
 msgid "Always use this nickname when there is a conflict"
 msgstr "Vždy při konfliktu použij tuto přezdívku."
 
-#: gajim/gui_interface.py:181
+#: gajim/gui_interface.py:180
 msgid "Do you accept this request?"
 msgstr "Chcete přijmout tuto žádost?"
 
-#: gajim/gui_interface.py:183
+#: gajim/gui_interface.py:182
 #, python-format
 msgid "Do you accept this request on account %s?"
 msgstr "Chcete přijmout tuto žádost na účtě %s?"
 
-#: gajim/gui_interface.py:186
+#: gajim/gui_interface.py:185
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) Autorizace pro %(url)s (id: %(id)s)"
 
-#: gajim/gui_interface.py:230 gajim/notify.py:96
+#: gajim/gui_interface.py:229 gajim/notify.py:96
 msgid "Connection Failed"
 msgstr "Spojení selhalo"
 
-#: gajim/gui_interface.py:316
+#: gajim/gui_interface.py:315
 #, python-format
 msgid "A Password is required to join the room %s. Please type it."
 msgstr "Pro připojení do místnosti %s je vyžadováno heslo. Zadejte, prosím."
 
-#: gajim/gui_interface.py:331
+#: gajim/gui_interface.py:330
 #, fuzzy, python-format
 msgid "<b>%s</b> is full"
 msgstr "<b>Písmo</b>"
 
-#: gajim/gui_interface.py:340
+#: gajim/gui_interface.py:339
 #, fuzzy, python-format
 msgid "You are banned from group chat <b>%s</b>."
 msgstr "Máš zakázán přístup do diskuze %s."
 
-#: gajim/gui_interface.py:347
+#: gajim/gui_interface.py:346
 #, fuzzy, python-format
 msgid "Remote server <b>%s</b> does not exist."
 msgstr "Diskuze %s neexistuje."
 
-#: gajim/gui_interface.py:351
+#: gajim/gui_interface.py:350
 #, fuzzy, python-format
 msgid "Group chat <b>%s</b> does not exist."
 msgstr "Diskuze %s neexistuje."
 
-#: gajim/gui_interface.py:354
+#: gajim/gui_interface.py:353
 #, fuzzy
 msgid "Group chat creation is not permitted."
 msgstr "Vytváření místností není povoleno."
 
-#: gajim/gui_interface.py:356
+#: gajim/gui_interface.py:355
 #, fuzzy
 msgid "Unable to join groupchat"
 msgstr "Nelze se připojit se do diskuze"
 
-#: gajim/gui_interface.py:357
+#: gajim/gui_interface.py:356
 #, fuzzy, python-format
 msgid "You must use your registered nickname in <b>%s</b>."
 msgstr "Musí být použita přezdívka, jež máte zaregistrovánu v diskuzi %s."
 
-#: gajim/gui_interface.py:362
+#: gajim/gui_interface.py:361
 #, python-format
 msgid "You are not in the members list in groupchat %s."
 msgstr "Nejsi v seznamu členů diskuze %s."
 
-#: gajim/gui_interface.py:456 gajim/gui_interface.py:460
+#: gajim/gui_interface.py:455 gajim/gui_interface.py:459
 #, python-format
 msgid "Error %(code)s: %(msg)s"
 msgstr "Chyba %(code)s: %(msg)s"
 
-#: gajim/gui_interface.py:471 gajim/gui_interface.py:487
-#: gajim/common/connection_handlers_events.py:1408
+#: gajim/gui_interface.py:470 gajim/gui_interface.py:486
+#: gajim/common/connection_handlers_events.py:1420
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "chyba při odesílání %s ( %s )"
 
-#: gajim/gui_interface.py:514 gajim/notify.py:96
+#: gajim/gui_interface.py:513 gajim/notify.py:96
 msgid "Subscription request"
 msgstr "Žádost o autorizaci"
 
-#: gajim/gui_interface.py:525 gajim/common/contacts.py:133
-#: gajim/common/helpers.py:94
+#: gajim/gui_interface.py:524 gajim/common/contacts.py:131
+#: gajim/common/helpers.py:95
 msgid "Observers"
 msgstr "Přihlížející"
 
-#: gajim/gui_interface.py:539
+#: gajim/gui_interface.py:538
 msgid "Authorization accepted"
 msgstr "Autorizace přijata"
 
-#: gajim/gui_interface.py:540
+#: gajim/gui_interface.py:539
 #, python-format
 msgid "The contact \"%s\" has authorized you to see his or her status."
 msgstr "Kontakt \"%s\" Vás autorizoval k zobrazení jeho stavu."
 
-#: gajim/gui_interface.py:548
+#: gajim/gui_interface.py:547
 #, python-format
 msgid "Contact \"%s\" removed subscription from you"
 msgstr "Kontakt \"%s\" Vám odebral autorizaci"
 
-#: gajim/gui_interface.py:549
+#: gajim/gui_interface.py:548
 #, fuzzy
 msgid ""
 "You will always see them as offline.\n"
@@ -3588,31 +3747,31 @@ msgstr ""
 "Vždy uvidíte jeho nebo ji odpojeného/odpojenou.\n"
 "Opravdu jeho/ji chcete odstrani ze seznamu kontaktů?"
 
-#: gajim/gui_interface.py:571 gajim/notify.py:96
+#: gajim/gui_interface.py:570 gajim/notify.py:96
 msgid "Unsubscribed"
 msgstr "Autorizace zrušena"
 
-#: gajim/gui_interface.py:583
+#: gajim/gui_interface.py:582
 #, python-format
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kontakt s \"%s\" nebyl navázán"
 
-#: gajim/gui_interface.py:584 gajim/common/connection.py:1270
-#: gajim/common/connection.py:1465
+#: gajim/gui_interface.py:583 gajim/common/connection.py:1282
+#: gajim/common/connection.py:1468
 msgid "Check your connection or try again later."
 msgstr "Ověřte spojení nebo zkuste později."
 
-#: gajim/gui_interface.py:642
+#: gajim/gui_interface.py:641
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
 msgstr ""
 
-#: gajim/gui_interface.py:646
+#: gajim/gui_interface.py:645
 #, python-format
 msgid "%(jid)s declined the invitation"
 msgstr ""
 
-#: gajim/gui_interface.py:676
+#: gajim/gui_interface.py:675
 #, fuzzy
 msgid ""
 "You configured Gajim to use OpenPGP agent, but there is no OpenPGP agent "
@@ -3621,36 +3780,36 @@ msgstr ""
 "Nastavily jste Gajim aby používal GPG agenta, ale žádný GPG agent není "
 "spuštěný nebo vrátil chybné heslo.\n"
 
-#: gajim/gui_interface.py:679 gajim/gui_interface.py:687
+#: gajim/gui_interface.py:678 gajim/gui_interface.py:686
 msgid "You are currently connected without your OpenPGP key."
 msgstr "Momentálně jste připojen(a) bez vašeho OpenPGP klíče."
 
-#: gajim/gui_interface.py:681
+#: gajim/gui_interface.py:680
 #, fuzzy
 msgid "Wrong passphrase"
 msgstr "Nesprávné heslo"
 
-#: gajim/gui_interface.py:686
+#: gajim/gui_interface.py:685
 #, fuzzy
 msgid "Wrong OpenPGP passphrase"
 msgstr "Nesprávné heslo"
 
-#: gajim/gui_interface.py:700
+#: gajim/gui_interface.py:699
 #, fuzzy
 msgid "Certificate Passphrase Required"
 msgstr "Platnost certifikátu vypršela"
 
-#: gajim/gui_interface.py:701
+#: gajim/gui_interface.py:700
 #, fuzzy, python-format
 msgid "Enter the certificate passphrase for account %s"
 msgstr "Zadej heslo GPG klíče pro účet %(keyid)s (účet %(account)s)."
 
-#: gajim/gui_interface.py:724
+#: gajim/gui_interface.py:723
 #, fuzzy
 msgid "Untrusted OpenPGP key"
 msgstr "Vyberte Váš OpenPGP klíč"
 
-#: gajim/gui_interface.py:724
+#: gajim/gui_interface.py:723
 #, fuzzy
 msgid ""
 "The OpenPGP key used to encrypt this chat is not trusted. Do you really want "
@@ -3659,96 +3818,101 @@ msgstr ""
 "GPG klíč použitý k šifrování rozhovoru není důvěryhodný. Opravdu chcete "
 "šifrovat tuto zprávu?"
 
-#: gajim/gui_interface.py:770
+#: gajim/gui_interface.py:769
 msgid ""
 "Please copy / paste the refresh token from the website that has just been "
 "opened."
 msgstr ""
 
-#: gajim/gui_interface.py:773
+#: gajim/gui_interface.py:772
 msgid "Oauth2 Credentials"
 msgstr ""
 
-#: gajim/gui_interface.py:925
+#: gajim/gui_interface.py:924
 #, python-format
 msgid "%s wants to send you a file."
 msgstr "%s Vám chce poslat soubor."
 
-#: gajim/gui_interface.py:1022 gajim/gui_interface.py:1389
+#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1430
 msgid "SSL certificate error"
 msgstr "Chyba SSL certifikátu"
 
-#: gajim/gui_interface.py:1039
+#: gajim/gui_interface.py:1038
 #, fuzzy
 msgid "File Transfer Failed"
 msgstr "Přenos souboru dokončen"
 
-#: gajim/gui_interface.py:1061
+#: gajim/gui_interface.py:1060
 #, fuzzy, python-format
 msgid "%(filename)s received from %(name)s."
 msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#: gajim/gui_interface.py:1065
+#: gajim/gui_interface.py:1064
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s stopped."
 msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#: gajim/gui_interface.py:1069
+#: gajim/gui_interface.py:1068
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
 msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#: gajim/gui_interface.py:1082
+#: gajim/gui_interface.py:1081
 #, python-format
 msgid "You successfully sent %(filename)s to %(name)s."
 msgstr "Soubor %(filename)s byl uspěšně odeslán %(name)s."
 
-#: gajim/gui_interface.py:1086
+#: gajim/gui_interface.py:1085
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
 msgstr "Přenos souboru %(filename)s pro %(name)s byl zastaven."
 
-#: gajim/gui_interface.py:1090
+#: gajim/gui_interface.py:1089
 #, fuzzy, python-format
 msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Přenos souboru %(filename)s pro %(name)s byl zastaven."
 
-#: gajim/gui_interface.py:1155
+#: gajim/gui_interface.py:1153
+#, fuzzy
+msgid "Choose file to send"
+msgstr "Vyber soubor k odeslání..."
+
+#: gajim/gui_interface.py:1196
 msgid "Unable to decrypt message"
 msgstr "Nepodařilo se dešifrovat zprávu"
 
-#: gajim/gui_interface.py:1167
+#: gajim/gui_interface.py:1208
 msgid "Username Conflict"
 msgstr "Konflikt uživatelských jmen"
 
-#: gajim/gui_interface.py:1168
+#: gajim/gui_interface.py:1209
 msgid "Please type a new username for your local account"
 msgstr "Prosím zadejte nové uživatelské jméno pro lokální účet"
 
-#: gajim/gui_interface.py:1191
+#: gajim/gui_interface.py:1232
 msgid "Resource Conflict"
 msgstr "Konflikt Zdrojů"
 
-#: gajim/gui_interface.py:1192
+#: gajim/gui_interface.py:1233
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "Už jsi připojen(a) k tomuto účtu se stejným zdrojem. Prosím zadej nový"
 
-#: gajim/gui_interface.py:1249
+#: gajim/gui_interface.py:1290
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s chce zahájit hlasový rozhovor. "
 
-#: gajim/gui_interface.py:1252
+#: gajim/gui_interface.py:1293
 msgid "Voice Chat Request"
 msgstr "Žádost o hlasový rozhovor"
 
-#: gajim/gui_interface.py:1342
+#: gajim/gui_interface.py:1383
 msgid "Error verifying SSL certificate"
 msgstr "Chyba ověřování SSL certifikátu"
 
-#: gajim/gui_interface.py:1343
+#: gajim/gui_interface.py:1384
 #, fuzzy, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
@@ -3758,7 +3922,7 @@ msgstr ""
 "Chyba při ověřování SSL vertifikátu na vašem jabber serveru: %(error)s\n"
 "Chcete se přesto připojit?"
 
-#: gajim/gui_interface.py:1347
+#: gajim/gui_interface.py:1388
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3771,15 +3935,15 @@ msgstr ""
 "SHA1 otisk certifikátu:\n"
 "%s"
 
-#: gajim/gui_interface.py:1353
+#: gajim/gui_interface.py:1394
 msgid "Ignore this error for this certificate."
 msgstr "Ignorovat tuto chybu certifikátu."
 
-#: gajim/gui_interface.py:1366
+#: gajim/gui_interface.py:1407
 msgid "Non Anonymous Server"
 msgstr ""
 
-#: gajim/gui_interface.py:1390
+#: gajim/gui_interface.py:1431
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
@@ -3800,7 +3964,7 @@ msgstr ""
 "\n"
 "Chcete se stále připojit a aktualizovat otisk certifikátu?"
 
-#: gajim/gui_interface.py:1468
+#: gajim/gui_interface.py:1509
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -3808,7 +3972,7 @@ msgstr ""
 "Abyste nemuseli posílat heslo nezabezpečeným připojením nainstalujte si "
 "PyOpenSSL. Jste si jisti, že to chcete udělat?"
 
-#: gajim/gui_interface.py:1510
+#: gajim/gui_interface.py:1551
 #, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
@@ -3817,16 +3981,16 @@ msgstr ""
 "Chystáte se poslat vaše heslo nezabezpečeným spojením. Jste si jistý(á), že "
 "to skutečně chcete udělat?"
 
-#: gajim/gui_interface.py:1807
+#: gajim/gui_interface.py:1848
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "Tohle není diskuze"
 
-#: gajim/gui_interface.py:1964 gajim/gui_interface.py:1972
+#: gajim/gui_interface.py:2005 gajim/gui_interface.py:2013
 msgid "Emoticons disabled"
 msgstr "Smajlíci byly vypnuty"
 
-#: gajim/gui_interface.py:1965
+#: gajim/gui_interface.py:2006
 msgid ""
 "Your configured emoticons theme has not been found, so emoticons have been "
 "disabled."
@@ -3834,7 +3998,7 @@ msgstr ""
 "Vámi nastavené téma pro smajlíky nebylo nalezeno, proto budou smajlíci "
 "vypnuty "
 
-#: gajim/gui_interface.py:1973
+#: gajim/gui_interface.py:2014
 #, fuzzy
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
@@ -3843,11 +4007,11 @@ msgstr ""
 "Vámi nastavené téma pro smajlíky nebylo nalezeno, proto budou smajlíci "
 "vypnuty "
 
-#: gajim/gui_interface.py:1991
+#: gajim/gui_interface.py:2032
 msgid "This is not a group chat"
 msgstr "Tohle není diskuze"
 
-#: gajim/gui_interface.py:1992
+#: gajim/gui_interface.py:2033
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -3856,41 +4020,41 @@ msgid ""
 msgstr ""
 
 # FIXME: jaky je rozdil mezi settings a preferences? - kdo vi :)
-#: gajim/gui_interface.py:2369
+#: gajim/gui_interface.py:2411
 msgid "Could not save your settings and preferences"
 msgstr "Nelze uložit Vaše nastavení"
 
-#: gajim/gui_interface.py:2742 gajim/common/config.py:117
-#: gajim/common/config.py:530 gajim/common/optparser.py:337
-#: gajim/common/optparser.py:505 gajim/common/optparser.py:528
+#: gajim/gui_interface.py:2796 gajim/common/config.py:117
+#: gajim/common/config.py:531 gajim/common/optparser.py:341
+#: gajim/common/optparser.py:509 gajim/common/optparser.py:532
 msgid "default"
 msgstr "výchozí"
 
-#: gajim/gui_interface.py:2975
+#: gajim/gui_interface.py:2981
 msgid "Passphrase Required"
 msgstr "Heslo Vyžadováno"
 
-#: gajim/gui_interface.py:2976
+#: gajim/gui_interface.py:2982
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Zadej heslo GPG klíče pro účet %(keyid)s (účet %(account)s)."
 
-#: gajim/gui_interface.py:2990
+#: gajim/gui_interface.py:2996
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG klíč vypršel"
 
-#: gajim/gui_interface.py:2991
+#: gajim/gui_interface.py:2997
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "Váš GPG klíč vypršel, k %s budete připojen(a) bez OpenPGP."
 
-#: gajim/gui_interface.py:3000
+#: gajim/gui_interface.py:3006
 msgid "Wrong Passphrase"
 msgstr "Nesprávné heslo"
 
-#: gajim/gui_interface.py:3001
+#: gajim/gui_interface.py:3007
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Prosím zopakujte Vaše heslo pro GPG klíč, nebo stiskněte Zrušit."
@@ -3963,6 +4127,11 @@ msgstr "- zprávy budou zaznamenány"
 msgid "- messages will not be logged"
 msgstr "- zprvý nebudou zaznamenány"
 
+#: gajim/notify.py:103
+#, fuzzy
+msgid "Open"
+msgstr "OpenGPG"
+
 #: gajim/dialog_messages.py:33
 #, fuzzy
 msgid "You can not start a new conversation unless you are connected."
@@ -3994,7 +4163,7 @@ msgstr "Neplatná místnost"
 msgid "The form is not filled correctly."
 msgstr "Jabber ID diskuze obsahuje nepřijatelné znaky."
 
-#: gajim/dialog_messages.py:63 gajim/common/helpers.py:405
+#: gajim/dialog_messages.py:63 gajim/common/helpers.py:406
 msgid "Invisible"
 msgstr "Neviditelný"
 
@@ -4123,6 +4292,57 @@ msgstr ""
 "%s\n"
 "Zasílání lokálních zpráv nemusí fungovat správně."
 
+#: gajim/dialog_messages.py:137 gajim/dialog_messages.py:142
+#, fuzzy
+msgid "Could not request upload slot"
+msgstr "Nepodařilo se spustit lokální službu"
+
+#: gajim/dialog_messages.py:143
+msgid "Got unexpected response from server (see log)"
+msgstr ""
+
+#: gajim/dialog_messages.py:147 gajim/dialog_messages.py:152
+#, fuzzy
+msgid "Could not open file"
+msgstr "Nezdařilo se načtení obrázku"
+
+#: gajim/dialog_messages.py:148
+msgid "Exception raised while opening file (see log)"
+msgstr ""
+
+#: gajim/dialog_messages.py:157
+msgid "Unsecure"
+msgstr ""
+
+#: gajim/dialog_messages.py:158
+#, fuzzy
+msgid "Server returned unsecure transport (http)"
+msgstr "Služba vrátila chybu."
+
+#: gajim/dialog_messages.py:162
+#, fuzzy
+msgid "Could not upload file"
+msgstr "Nezdařilo se načtení obrázku"
+
+#: gajim/dialog_messages.py:163
+#, python-format
+msgid "HTTP response code from server: %s"
+msgstr ""
+
+#: gajim/dialog_messages.py:167
+msgid "Upload Error"
+msgstr ""
+
+#: gajim/dialog_messages.py:172
+#, fuzzy
+msgid "Encryption Error"
+msgstr "E2E Šifrování vypnuto"
+
+#: gajim/dialog_messages.py:173
+#, fuzzy
+msgid "For the choosen encryption is no encryption method available"
+msgstr "Spojení není dostupné"
+
 #: gajim/gajim_themes_window.py:61
 msgid "Theme"
 msgstr "Téma"
@@ -4148,7 +4368,17 @@ msgstr "Nemůžete smazat právě používané téma"
 msgid "Pick another theme to use first."
 msgstr ""
 
-#: gajim/accounts_window.py:153 gajim/common/config.py:509
+#: gajim/accounts_window.py:40
+#, fuzzy
+msgid "Merge Accounts"
+msgstr "Spojené účty"
+
+#: gajim/accounts_window.py:41
+#, fuzzy
+msgid "Use PGP Agent"
+msgstr "Použít GPG _Agenta"
+
+#: gajim/accounts_window.py:153 gajim/common/config.py:510
 msgid "Be right back."
 msgstr "Hned jsem zpět."
 
@@ -4169,6 +4399,11 @@ msgstr "Otevřel(a) jsi rozhovor z účtu %s"
 msgid "All chat and groupchat windows will be closed. Do you want to continue?"
 msgstr ""
 "Všechna okna rozhovorů a diskuzí budou zavřena. Opravdu chceš pokračovat?"
+
+#: gajim/accounts_window.py:344
+#, fuzzy
+msgid "Remove"
+msgstr "Odst_ranit"
 
 #: gajim/accounts_window.py:387
 #, fuzzy
@@ -4363,51 +4598,65 @@ msgstr "Změnit heslo"
 msgid "Login Options"
 msgstr "_Smajlíky:"
 
-#: gajim/gajim_remote.py:58 gajim/common/exceptions.py:71
+#: gajim/gajim_remote.py:59 gajim/common/exceptions.py:71
 msgid "D-Bus is not present on this machine or python module is missing"
 msgstr "D-Bus není přítomna na tohto stroji nebo modul pythonu chybí"
 
-#: gajim/gajim_remote.py:80
+#: gajim/gajim_remote.py:81
 msgid "Shows a help on specific command"
 msgstr "Zobrazí nápovědu pro konkrétní příkaz"
 
-#: gajim/gajim_remote.py:83
+#: gajim/gajim_remote.py:84
 msgid "command"
 msgstr "příkaz"
 
-#: gajim/gajim_remote.py:84
+#: gajim/gajim_remote.py:85
 msgid "show help on command"
 msgstr "zobraz nápovědu k příkazu"
 
-#: gajim/gajim_remote.py:88
+#: gajim/gajim_remote.py:89
 msgid "Shows or hides the roster window"
 msgstr "Zobrazí nebo skryje okno Seznamu"
 
-#: gajim/gajim_remote.py:92
+#: gajim/gajim_remote.py:93
 msgid "Pops up a window with the next pending event"
 msgstr "Zobrazí okno s další nepřečtenou událostí"
 
-#: gajim/gajim_remote.py:96
+#: gajim/gajim_remote.py:97
 #, fuzzy
 msgid "Lists all contacts in roster, one for each line"
 msgstr ""
 "Vytiskne seznam všech kontaktů v rosteru. Každý kontakt se objeví na "
 "samostatném řádku"
 
-#: gajim/gajim_remote.py:98
+#: gajim/gajim_remote.py:99 gajim/gajim_remote.py:114 gajim/gajim_remote.py:124
+#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
+#: gajim/gajim_remote.py:161 gajim/gajim_remote.py:182
+#: gajim/gajim_remote.py:212 gajim/gajim_remote.py:221
+#: gajim/gajim_remote.py:228
+#, fuzzy
+msgid "?CLI:account"
+msgstr "účet"
+
+#: gajim/gajim_remote.py:99
 msgid "show only contacts of the given account"
 msgstr "zobraz pouze kontakty zadaného účtu"
 
-#: gajim/gajim_remote.py:104
+#: gajim/gajim_remote.py:105
 msgid "Prints a list of registered accounts"
 msgstr "Vypíše seznam registrovaných účtů"
 
-#: gajim/gajim_remote.py:108
+#: gajim/gajim_remote.py:109
 #, fuzzy
 msgid "Changes the status of account(s)"
 msgstr "Změní stav účtu nebo účtů"
 
-#: gajim/gajim_remote.py:111
+#: gajim/gajim_remote.py:112
+#, fuzzy
+msgid "?CLI:status"
+msgstr "stav"
+
+#: gajim/gajim_remote.py:112
 #, fuzzy
 msgid ""
 "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
@@ -4415,11 +4664,17 @@ msgid ""
 msgstr ""
 "jeden z: odpojen, připojen, ukecaný, pryč, nedostupný, nerušit, neviditelný "
 
-#: gajim/gajim_remote.py:112
+#: gajim/gajim_remote.py:113 gajim/gajim_remote.py:135
+#: gajim/gajim_remote.py:149 gajim/gajim_remote.py:160
+#, fuzzy
+msgid "?CLI:message"
+msgstr "zpráva"
+
+#: gajim/gajim_remote.py:113
 msgid "status message"
 msgstr "text stavu"
 
-#: gajim/gajim_remote.py:113
+#: gajim/gajim_remote.py:114
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
@@ -4427,16 +4682,21 @@ msgstr ""
 "změnit stav účtu \"account\". Pokud není uveden, zkuste změnit stav všech "
 "účtů které mají povolenu volbu \"sync with global status\" "
 
-#: gajim/gajim_remote.py:119
+#: gajim/gajim_remote.py:120
 #, fuzzy
 msgid "Changes the priority of account(s)"
 msgstr "Změní prioritu jednoho nebo více účtů"
 
-#: gajim/gajim_remote.py:121
+#: gajim/gajim_remote.py:122
+#, fuzzy
+msgid "?CLI:priority"
+msgstr "priorita"
+
+#: gajim/gajim_remote.py:122
 msgid "priority you want to give to the account"
 msgstr "priorita vámi přidělená účtu"
 
-#: gajim/gajim_remote.py:123
+#: gajim/gajim_remote.py:124
 #, fuzzy
 msgid ""
 "change the priority of the given account. If not specified, change status of "
@@ -4445,7 +4705,7 @@ msgstr ""
 "změnit stav účtu \"account\". Pokud není uveden, zkuste změnit stav všech "
 "účtů které mají povolenu volbu \"sync with global status\" "
 
-#: gajim/gajim_remote.py:129
+#: gajim/gajim_remote.py:130
 msgid ""
 "Sends new chat message to a contact in the roster. Both OpenPGP key and "
 "account are optional. If you want to set only 'account', without 'OpenPGP "
@@ -4455,29 +4715,29 @@ msgstr ""
 "volitelné. Pokud chcete nastavit pouze 'account' bez 'OpenPGP key', nastavte "
 "prostě 'OpenPGP key' na ''."
 
-#: gajim/gajim_remote.py:133 gajim/gajim_remote.py:146
+#: gajim/gajim_remote.py:134 gajim/gajim_remote.py:147
 msgid "JID of the contact that will receive the message"
 msgstr "JID kontaktu, který obdrží zprávu"
 
-#: gajim/gajim_remote.py:134 gajim/gajim_remote.py:148
-#: gajim/gajim_remote.py:159
+#: gajim/gajim_remote.py:135 gajim/gajim_remote.py:149
+#: gajim/gajim_remote.py:160
 msgid "message contents"
 msgstr "Tělo zprávy"
 
-#: gajim/gajim_remote.py:135 gajim/gajim_remote.py:149
+#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
 msgid "PGP key"
 msgstr ""
 
-#: gajim/gajim_remote.py:135 gajim/gajim_remote.py:149
+#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "pokud bude uvedeno, zpráva bude zašifrována tímto veřejným klíčem"
 
-#: gajim/gajim_remote.py:137 gajim/gajim_remote.py:151
-#: gajim/gajim_remote.py:160
+#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
+#: gajim/gajim_remote.py:161
 msgid "if specified, the message will be sent using this account"
 msgstr "pokud bude uvedeno, zpráva bude odeslána z tohoto účtu"
 
-#: gajim/gajim_remote.py:142
+#: gajim/gajim_remote.py:143
 #, fuzzy
 msgid ""
 "Sends a chat message to someone on your roster. Optionally with OpenPGP key "
@@ -4487,120 +4747,120 @@ msgstr ""
 "volitelné. Pokud chcete nastavit pouze 'account' bez 'OpenPGP key', nastavte "
 "prostě 'OpenPGP key' na ''."
 
-#: gajim/gajim_remote.py:147
+#: gajim/gajim_remote.py:148
 msgid "subject"
 msgstr "předmět"
 
-#: gajim/gajim_remote.py:147
+#: gajim/gajim_remote.py:148
 msgid "message subject"
 msgstr "předmět zprávy"
 
-#: gajim/gajim_remote.py:156
+#: gajim/gajim_remote.py:157
 msgid "Sends new message to a groupchat you've joined."
 msgstr "Poslat novou zprávu do diskuze ke které jste připojeni."
 
-#: gajim/gajim_remote.py:158
+#: gajim/gajim_remote.py:159
 msgid "JID of the room that will receive the message"
 msgstr "JID diskuze do které přijde zpráva"
 
-#: gajim/gajim_remote.py:165
+#: gajim/gajim_remote.py:166
 msgid "Gets detailed info on a contact"
 msgstr "Získej detailní informace o kontaktu"
 
-#: gajim/gajim_remote.py:167 gajim/gajim_remote.py:180
-#: gajim/gajim_remote.py:210
+#: gajim/gajim_remote.py:168 gajim/gajim_remote.py:181
+#: gajim/gajim_remote.py:211
 msgid "JID of the contact"
 msgstr "JID kontaktu"
 
-#: gajim/gajim_remote.py:171
+#: gajim/gajim_remote.py:172
 msgid "Gets detailed info on a account"
 msgstr "Získej detailní informace o účtu"
 
-#: gajim/gajim_remote.py:173
+#: gajim/gajim_remote.py:174
 msgid "Name of the account"
 msgstr "Jméno účtu"
 
-#: gajim/gajim_remote.py:177
+#: gajim/gajim_remote.py:178
 msgid "Sends file to a contact"
 msgstr "Pošle soubor kontaktu"
 
-#: gajim/gajim_remote.py:179
+#: gajim/gajim_remote.py:180
 msgid "file"
 msgstr "soubor"
 
-#: gajim/gajim_remote.py:179
+#: gajim/gajim_remote.py:180
 msgid "File path"
 msgstr "Cesta k souboru"
 
-#: gajim/gajim_remote.py:181
+#: gajim/gajim_remote.py:182
 msgid "if specified, file will be sent using this account"
 msgstr "pokud bude uvedeno, zpráva bude odeslána z tohoto účtu"
 
-#: gajim/gajim_remote.py:186
+#: gajim/gajim_remote.py:187
 msgid "Lists all preferences and their values"
 msgstr "Vypíše všechna nastavení a jejich hodnoty"
 
 # FIXME: opravit, pokud je mozne prekladat i key & value
-#: gajim/gajim_remote.py:190
+#: gajim/gajim_remote.py:191
 msgid "Sets value of 'key' to 'value'."
 msgstr "Nastaví hodnotu klíče 'key' na hodnotu 'value'"
 
-#: gajim/gajim_remote.py:192
+#: gajim/gajim_remote.py:193
 msgid "key=value"
 msgstr "klíč=hodnota"
 
 # FIXME: opet
-#: gajim/gajim_remote.py:192
+#: gajim/gajim_remote.py:193
 #, fuzzy
 msgid "'key' is the name of the preference, 'value' is what to set it to"
 msgstr "'klíč' je jméno volby, 'hodnota' je hodnota která se nastavuje"
 
-#: gajim/gajim_remote.py:197
+#: gajim/gajim_remote.py:198
 msgid "Deletes a preference item"
 msgstr "Smaže položku nastavení"
 
-#: gajim/gajim_remote.py:199
+#: gajim/gajim_remote.py:200
 msgid "key"
 msgstr "klíč"
 
-#: gajim/gajim_remote.py:199
+#: gajim/gajim_remote.py:200
 msgid "name of the preference to be deleted"
 msgstr "jméno volby, která bude smazána"
 
-#: gajim/gajim_remote.py:203
+#: gajim/gajim_remote.py:204
 msgid "Writes the current state of Gajim preferences to the .config file"
 msgstr "Zapíše aktuální nastavení do souboru .config"
 
-#: gajim/gajim_remote.py:208
+#: gajim/gajim_remote.py:209
 msgid "Removes contact from roster"
 msgstr "Odstraní kontakt ze Seznamu"
 
-#: gajim/gajim_remote.py:211
+#: gajim/gajim_remote.py:212
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "pokud uvedeno, kontakt bude vzít ze seznamu kontaktů pro tento účet"
 
-#: gajim/gajim_remote.py:218
+#: gajim/gajim_remote.py:219
 msgid "Returns current status (the global one unless account is specified)"
 msgstr "Vrátí aktuální stav (globální, pokud není uveden účet)"
 
-#: gajim/gajim_remote.py:225
+#: gajim/gajim_remote.py:226
 msgid ""
 "Returns current status message (the global one unless account is specified)"
 msgstr "Vrací aktuální popis stavu (globální, pokud není uveden účet)"
 
-#: gajim/gajim_remote.py:232
+#: gajim/gajim_remote.py:233
 msgid "Returns number of unread messages"
 msgstr "Vrací počet nepřečtených zpráv"
 
-#: gajim/gajim_remote.py:237
+#: gajim/gajim_remote.py:238
 msgid "Sends custom XML"
 msgstr "Poslat vlastní XML"
 
-#: gajim/gajim_remote.py:239
+#: gajim/gajim_remote.py:240
 msgid "XML to send"
 msgstr "XML k odeslání"
 
-#: gajim/gajim_remote.py:240
+#: gajim/gajim_remote.py:241
 #, fuzzy
 msgid ""
 "Account to which the XML will be sent; if not specified, XML will be sent to "
@@ -4609,17 +4869,17 @@ msgstr ""
 "Účet, ze kterého bude xml odesláno; pokud nebude uvedeno, xml bude odeslání "
 "ze všech účtů"
 
-#: gajim/gajim_remote.py:246
+#: gajim/gajim_remote.py:247
 #, fuzzy
 msgid "Change the avatar"
 msgstr "Změnit stav"
 
-#: gajim/gajim_remote.py:248
+#: gajim/gajim_remote.py:249
 #, fuzzy
 msgid "Picture to use"
 msgstr "Přezdívka kterou chete použít"
 
-#: gajim/gajim_remote.py:249
+#: gajim/gajim_remote.py:250
 #, fuzzy
 msgid ""
 "Account in which the avatar will be set; if not specified, the avatar will "
@@ -4628,19 +4888,19 @@ msgstr ""
 "Účet, ze kterého bude xml odesláno; pokud nebude uvedeno, xml bude odeslání "
 "ze všech účtů"
 
-#: gajim/gajim_remote.py:256
+#: gajim/gajim_remote.py:257
 msgid "Check if Gajim is running"
 msgstr "Zkontrolujte, zda Gajim již běží."
 
-#: gajim/gajim_remote.py:260
+#: gajim/gajim_remote.py:261
 msgid "Shows or hides the ipython window"
 msgstr "Zobrazí nebo skryje okno ipythonu"
 
-#: gajim/gajim_remote.py:286
+#: gajim/gajim_remote.py:287
 msgid "Missing argument \"contact_jid\""
 msgstr "Chybí parametry \"contact_jid\""
 
-#: gajim/gajim_remote.py:306
+#: gajim/gajim_remote.py:307
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -4649,15 +4909,15 @@ msgstr ""
 "'%s' není ve vašem Seznamu.\n"
 "Prosím uveďte účet, přes který bude odeslána zpráva."
 
-#: gajim/gajim_remote.py:309
+#: gajim/gajim_remote.py:310
 msgid "You have no active account"
 msgstr "Nemáte aktivní účet"
 
-#: gajim/gajim_remote.py:357
+#: gajim/gajim_remote.py:358
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
 msgstr "Vypadá to, že Gajim neběží. Proto nemůžete použít gajim-remote"
 
-#: gajim/gajim_remote.py:384
+#: gajim/gajim_remote.py:385
 #, python-format
 msgid ""
 "Usage: %(basename)s %(command)s %(arguments)s \n"
@@ -4666,16 +4926,16 @@ msgstr ""
 "Použití: %(basename)s %(command)s %(arguments)s \n"
 "\t %(help)s"
 
-#: gajim/gajim_remote.py:388
+#: gajim/gajim_remote.py:389
 msgid "Arguments:"
 msgstr "Parametry:"
 
-#: gajim/gajim_remote.py:392
+#: gajim/gajim_remote.py:393
 #, python-format
 msgid "%s not found"
 msgstr "%s nebyl nalezen"
 
-#: gajim/gajim_remote.py:398
+#: gajim/gajim_remote.py:399
 #, fuzzy, python-format
 msgid ""
 "Usage:\n"
@@ -4686,7 +4946,7 @@ msgstr ""
 "Použití: %s příkaz [parametry]\n"
 "Příkaz je jeden z:\n"
 
-#: gajim/gajim_remote.py:468
+#: gajim/gajim_remote.py:469
 #, python-format
 msgid ""
 "Too many arguments. \n"
@@ -4695,7 +4955,7 @@ msgstr ""
 "Příliš mnoho parametrů. \n"
 "Napište \"%(basename)s help %(command)s\" pro více informací"
 
-#: gajim/gajim_remote.py:473
+#: gajim/gajim_remote.py:474
 #, python-format
 msgid ""
 "Argument \"%(arg)s\" is not specified. \n"
@@ -4869,11 +5129,6 @@ msgstr "Konec týdne"
 msgid "Weekend!"
 msgstr "Víkend!"
 
-#: gajim/common/passwords.py:84
-#, fuzzy, python-format
-msgid "XMPP account %s"
-msgstr "XMPP účet %s@%s"
-
 #: gajim/common/connection_handlers_events.py:352
 #, python-format
 msgid ""
@@ -4897,52 +5152,52 @@ msgstr "Místnost byla zničena"
 msgid "You can join this room instead: %s"
 msgstr "Můžete se připojit do této místnosti: %s"
 
-#: gajim/common/connection_handlers_events.py:1935
+#: gajim/common/connection_handlers_events.py:1947
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Neznámá SSL chyba: %d"
 
-#: gajim/common/connection_handlers_events.py:2574
+#: gajim/common/connection_handlers_events.py:2593
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nová jednoduché zpráva od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2580
+#: gajim/common/connection_handlers_events.py:2599
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nová soukromá zpráva z místnosti %s"
 
-#: gajim/common/connection_handlers_events.py:2583
+#: gajim/common/connection_handlers_events.py:2602
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2586
+#: gajim/common/connection_handlers_events.py:2605
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Nová zpráva od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2592
+#: gajim/common/connection_handlers_events.py:2611
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Nová zpráva od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2758
+#: gajim/common/connection_handlers_events.py:2777
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s Změnil(a) stav"
 
-#: gajim/common/connection_handlers_events.py:2766
+#: gajim/common/connection_handlers_events.py:2785
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s se přihlásil"
 
-#: gajim/common/connection_handlers_events.py:2772
+#: gajim/common/connection_handlers_events.py:2791
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s se odhlásil"
 
-#: gajim/common/contacts.py:388
+#: gajim/common/contacts.py:386
 msgid "Not in roster"
 msgstr "Není v rosteru"
 
@@ -5761,69 +6016,65 @@ msgstr "Povolit ESessions šifrování pro tento účet."
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "Má se Gajim automaticky připojovat šifrovaným spojením je-li to možné?"
 
-#: gajim/common/config.py:343
-msgid ""
-"Ordered list (space separated) of connection type to try. Can contain tls, "
-"ssl or plain"
+#: gajim/common/config.py:342
+msgid "Allow plaintext connections"
 msgstr ""
-"Řazený seznam (oddělený mezerami) spojení, která má Gajim zkusit. Možnosti "
-"jsou: tls, ssl nebo plain"
 
-#: gajim/common/config.py:346
+#: gajim/common/config.py:345
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
 
-#: gajim/common/config.py:347
+#: gajim/common/config.py:346
 #, fuzzy
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
 msgstr "Zobrazit varování před odesláním hesla přes nezabezpečené spojení."
 
-#: gajim/common/config.py:348
+#: gajim/common/config.py:347
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "Zobrazit varování před použitím standartní SSL knihovny."
 
-#: gajim/common/config.py:349
+#: gajim/common/config.py:348
 #, fuzzy
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "Zobrazit varování před odesláním hesla přes nezabezpečené spojení."
 
-#: gajim/common/config.py:352
+#: gajim/common/config.py:351
 msgid "Space separated list of ssl errors to ignore."
 msgstr "Mezerami oddělovaný seznam ssl chyb, které se mají ignorovat."
 
-#: gajim/common/config.py:358
+#: gajim/common/config.py:357
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
 
-#: gajim/common/config.py:359
+#: gajim/common/config.py:358
 msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
 "supports XEP-0313"
 msgstr ""
 
-#: gajim/common/config.py:360
+#: gajim/common/config.py:359
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
 
-#: gajim/common/config.py:363
+#: gajim/common/config.py:362
 msgid "Whitespace sent after inactivity"
 msgstr "Při neaktivitě odeslán bílý znak"
 
-#: gajim/common/config.py:364
+#: gajim/common/config.py:363
 msgid "XMPP ping sent after inactivity"
 msgstr "XMPP ping zaslán při neaktivitě"
 
-#: gajim/common/config.py:368
+#: gajim/common/config.py:367
 #, fuzzy
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
@@ -5832,11 +6083,11 @@ msgstr ""
 "Kolik sekund se má čekat na odpověď pingu před tím, než se znovu pokusit o "
 "připojení."
 
-#: gajim/common/config.py:372
+#: gajim/common/config.py:371
 msgid "Jabberd2 workaround"
 msgstr "Jabberd2 workaround"
 
-#: gajim/common/config.py:375
+#: gajim/common/config.py:374
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -5844,32 +6095,32 @@ msgstr ""
 "Pokud je zaškrtnuto, Gajim použije Vaší IP a proxy servery definované ve "
 "volbě pro přenos souborů file_transfer_proxies."
 
-#: gajim/common/config.py:376
+#: gajim/common/config.py:375
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
-#: gajim/common/config.py:389
+#: gajim/common/config.py:388
 msgid "Answer to receipt requests"
 msgstr "Odpověď na doručení žádosti"
 
-#: gajim/common/config.py:390
+#: gajim/common/config.py:389
 msgid "Sent receipt requests"
 msgstr "Poslat žádost"
 
-#: gajim/common/config.py:399
+#: gajim/common/config.py:398
 #, fuzzy
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr "Pokud je zaškrtnuto, Gajim se připojí do této místnosti při spuštění"
 
-#: gajim/common/config.py:400
+#: gajim/common/config.py:399
 #, fuzzy
 msgid "Allow Gajim to send your local time."
 msgstr "%s Vám chce poslat soubor."
 
-#: gajim/common/config.py:401
+#: gajim/common/config.py:400
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
@@ -5877,150 +6128,160 @@ msgstr ""
 "Pokud sestavuji šifrované sezení, má Gajim přepokládat povolení "
 "zaznamenávání zpráv?"
 
-#: gajim/common/config.py:404
+#: gajim/common/config.py:403
 #, fuzzy
 msgid "Message that is sent to contacts you want to add"
 msgstr "Prosím vyplňte údaje o kontaktu, který chcete přidat"
 
-#: gajim/common/config.py:405
+#: gajim/common/config.py:404
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
 msgstr ""
 
-#: gajim/common/config.py:406
+#: gajim/common/config.py:405
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
 msgstr ""
 
-#: gajim/common/config.py:407
+#: gajim/common/config.py:406
 #, fuzzy
 msgid "Latest token for OAuth 2.0 authentication."
 msgstr "Anonymní autentizace"
 
-#: gajim/common/config.py:408
+#: gajim/common/config.py:407
 #, fuzzy
 msgid "client_id for OAuth 2.0 authentication."
 msgstr "Anon_ymní autentizace"
 
-#: gajim/common/config.py:409
+#: gajim/common/config.py:408
 #, fuzzy
 msgid "redirect_url for OAuth 2.0 authentication."
 msgstr "Anon_ymní autentizace"
 
-#: gajim/common/config.py:410
+#: gajim/common/config.py:409
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
 msgstr ""
 
-#: gajim/common/config.py:474 gajim/common/config.py:479
+#: gajim/common/config.py:411
+msgid "HTTP Upload: Enable HTTPS Verification"
+msgstr ""
+
+#: gajim/common/config.py:412
+msgid ""
+"Preferred file transfer mechanism for file drag&drop on chat window. Can be "
+"'httpupload' (default) or 'jingle'"
+msgstr ""
+
+#: gajim/common/config.py:475 gajim/common/config.py:480
 msgid "Language for which we want to check misspelled words"
 msgstr "Jazyk, pro který chcete kontrolovat překlepy ve slovech"
 
-#: gajim/common/config.py:476
+#: gajim/common/config.py:477
 msgid "The currently active encryption for that contact"
 msgstr ""
 
-#: gajim/common/config.py:480
+#: gajim/common/config.py:481
 #, fuzzy
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
 msgstr "Kolik řádek požadovat od serveru při připojení k diskuzi."
 
-#: gajim/common/config.py:481
+#: gajim/common/config.py:482
 #, fuzzy
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
 "-2 means global value"
 msgstr "Kolik minut zpátky do historie při připojení k diskuzi."
 
-#: gajim/common/config.py:482
+#: gajim/common/config.py:483
 msgid "State whether we want a notification for every message in this room"
 msgstr ""
 
-#: gajim/common/config.py:485
+#: gajim/common/config.py:486
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
 "instead."
 msgstr ""
 
-#: gajim/common/config.py:490 gajim/common/pep.py:157
+#: gajim/common/config.py:491 gajim/common/pep.py:157
 msgid "Sleeping"
 msgstr "Spím"
 
-#: gajim/common/config.py:491
+#: gajim/common/config.py:492
 msgid "Back soon"
 msgstr "Hned jsem zpět"
 
-#: gajim/common/config.py:491
+#: gajim/common/config.py:492
 msgid "Back in some minutes."
 msgstr "Jsem zpátky za pár minut."
 
-#: gajim/common/config.py:492 gajim/common/pep.py:127
+#: gajim/common/config.py:493 gajim/common/pep.py:127
 msgid "Eating"
 msgstr "Jím"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "I'm eating, so leave me a message."
 msgstr "Právě jím, prosím zanechte mi zprávu."
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "Movie"
 msgstr "Film"
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "I'm watching a movie."
 msgstr "Dívám se na film."
 
-#: gajim/common/config.py:494 gajim/common/pep.py:186
+#: gajim/common/config.py:495 gajim/common/pep.py:186
 msgid "Working"
 msgstr "Pracuji"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "I'm working."
 msgstr "Právě pracuji."
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "Phone"
 msgstr "Telefon"
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "I'm on the phone."
 msgstr "Zrovna telefonuji."
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "Out"
 msgstr "Venku"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "I'm out enjoying life."
 msgstr "Užívám si života venku."
 
-#: gajim/common/config.py:507
+#: gajim/common/config.py:508
 msgid "I'm available."
 msgstr "Jsem dostupný."
 
-#: gajim/common/config.py:508
+#: gajim/common/config.py:509
 msgid "I'm free for chat."
 msgstr "Hledám někoho na pokec."
 
-#: gajim/common/config.py:510
+#: gajim/common/config.py:511
 msgid "I'm not available."
 msgstr "Nejsem dostupný."
 
-#: gajim/common/config.py:511
+#: gajim/common/config.py:512
 msgid "Do not disturb."
 msgstr "Nerušit."
 
-#: gajim/common/config.py:512 gajim/common/config.py:513
+#: gajim/common/config.py:513 gajim/common/config.py:514
 msgid "Bye!"
 msgstr "Zdar!"
 
-#: gajim/common/config.py:524
+#: gajim/common/config.py:525
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
@@ -6028,27 +6289,27 @@ msgstr ""
 "Zvuk, který bude přehrán, pokud zpráva diskuze obsahuje jedno ze slov v "
 "muc_highlight_words, nebo když obsahuje Vaši přezdívku."
 
-#: gajim/common/config.py:525
+#: gajim/common/config.py:526
 msgid "Sound to play when any MUC message arrives."
 msgstr "Přehraný zvuk při příchodu jakékoliv MUC zprávy."
 
-#: gajim/common/config.py:533 gajim/common/optparser.py:351
+#: gajim/common/config.py:534 gajim/common/optparser.py:355
 msgid "green"
 msgstr "zelený"
 
-#: gajim/common/config.py:537 gajim/common/optparser.py:337
+#: gajim/common/config.py:538 gajim/common/optparser.py:341
 msgid "grocery"
 msgstr "potraviny"
 
-#: gajim/common/config.py:541
+#: gajim/common/config.py:542
 msgid "human"
 msgstr "člověk"
 
-#: gajim/common/config.py:545
+#: gajim/common/config.py:546
 msgid "marine"
 msgstr "mariňák"
 
-#: gajim/common/config.py:552
+#: gajim/common/config.py:553
 #, fuzzy
 msgid "Tor"
 msgstr "Příjemce"
@@ -6127,37 +6388,50 @@ msgstr "Všechny nepřečtené zprávy byly přeposlány."
 msgid "Forward unread message then disconnect"
 msgstr "Přeposlat nepřečtené zprávy"
 
+#: gajim/common/httpupload.py:137
+msgid "File is empty"
+msgstr "Soubor je prázdný"
+
+#: gajim/common/httpupload.py:140
+msgid "File does not exist"
+msgstr "Soubor neexistuje"
+
+#: gajim/common/httpupload.py:147 gajim/common/httpupload.py:204
+#, python-format
+msgid "File is too large, maximum allowed file size is: %s"
+msgstr ""
+
 #: gajim/common/check_paths.py:37
 msgid "creating logs database"
 msgstr "vytvářím databázi historie"
 
-#: gajim/common/check_paths.py:99
+#: gajim/common/check_paths.py:98
 #, fuzzy
 msgid "creating cache database"
 msgstr "vytvářím databázi historie"
 
-#: gajim/common/check_paths.py:262
+#: gajim/common/check_paths.py:261
 #, fuzzy, python-format
 msgid "moving %(src)s to %(dst)s"
 msgstr "Odeslat %s %s"
+
+#: gajim/common/check_paths.py:287 gajim/common/check_paths.py:294
+#: gajim/common/check_paths.py:301 gajim/common/check_paths.py:308
+#: gajim/common/check_paths.py:315 gajim/common/check_paths.py:322
+#: gajim/common/check_paths.py:329 gajim/common/check_paths.py:336
+#, python-format
+msgid "%s is a file but it should be a directory"
+msgstr "%s je soubor, ale měl by být adresář"
 
 #: gajim/common/check_paths.py:288 gajim/common/check_paths.py:295
 #: gajim/common/check_paths.py:302 gajim/common/check_paths.py:309
 #: gajim/common/check_paths.py:316 gajim/common/check_paths.py:323
 #: gajim/common/check_paths.py:330 gajim/common/check_paths.py:337
-#, python-format
-msgid "%s is a file but it should be a directory"
-msgstr "%s je soubor, ale měl by být adresář"
-
-#: gajim/common/check_paths.py:289 gajim/common/check_paths.py:296
-#: gajim/common/check_paths.py:303 gajim/common/check_paths.py:310
-#: gajim/common/check_paths.py:317 gajim/common/check_paths.py:324
-#: gajim/common/check_paths.py:331 gajim/common/check_paths.py:338
-#: gajim/common/check_paths.py:350 gajim/common/check_paths.py:358
+#: gajim/common/check_paths.py:349 gajim/common/check_paths.py:357
 msgid "Gajim will now exit"
 msgstr "Gajim se nyní ukončí"
 
-#: gajim/common/check_paths.py:349 gajim/common/check_paths.py:357
+#: gajim/common/check_paths.py:348 gajim/common/check_paths.py:356
 #, python-format
 msgid "%s is a directory but should be a file"
 msgstr "%s je adresář, ale měl by to být soubor"
@@ -6167,11 +6441,11 @@ msgstr "%s je adresář, ale měl by to být soubor"
 msgid "Error: cannot open %s for reading"
 msgstr "Chyba: nemůžu otevřít %s pro čtení"
 
-#: gajim/common/optparser.py:346 gajim/common/optparser.py:347
+#: gajim/common/optparser.py:350 gajim/common/optparser.py:351
 msgid "cyan"
 msgstr "azurová"
 
-#: gajim/common/optparser.py:415
+#: gajim/common/optparser.py:419
 msgid "migrating logs database to indices"
 msgstr "převádím záznamy historie k použítí indexů"
 
@@ -6180,188 +6454,188 @@ msgstr "převádím záznamy historie k použítí indexů"
 msgid "%s is not a valid loglevel"
 msgstr "%s není platný loglevel"
 
-#: gajim/common/connection.py:78
+#: gajim/common/connection.py:79
 msgid "Unable to get issuer certificate"
 msgstr "Nepodařilo se získat certifikát vydavatele"
 
-#: gajim/common/connection.py:79
+#: gajim/common/connection.py:80
 msgid "Unable to get certificate CRL"
 msgstr "Nepodařilo se získat certifikát CRL"
 
-#: gajim/common/connection.py:80
+#: gajim/common/connection.py:81
 msgid "Unable to decrypt certificate's signature"
 msgstr "Nepodařilo se dešifrovat podpis certifikátu"
 
-#: gajim/common/connection.py:81
+#: gajim/common/connection.py:82
 msgid "Unable to decrypt CRL's signature"
 msgstr "Nepodařilo se dešifrovat podpis CRL certifikátu"
 
-#: gajim/common/connection.py:82
+#: gajim/common/connection.py:83
 msgid "Unable to decode issuer public key"
 msgstr "Nepodařilo se dešifrovat veřejný klíč vydavatele"
 
-#: gajim/common/connection.py:83
+#: gajim/common/connection.py:84
 msgid "Certificate signature failure"
 msgstr "Chyba podpisu certifikátu"
 
-#: gajim/common/connection.py:84
+#: gajim/common/connection.py:85
 msgid "CRL signature failure"
 msgstr "Chyba podpisu CRL certifikátu"
 
-#: gajim/common/connection.py:85
+#: gajim/common/connection.py:86
 msgid "Certificate is not yet valid"
 msgstr "Certifikát není správný"
 
-#: gajim/common/connection.py:86
+#: gajim/common/connection.py:87
 msgid "Certificate has expired"
 msgstr "Platnost certifikátu vypršela"
 
-#: gajim/common/connection.py:87
+#: gajim/common/connection.py:88
 msgid "CRL is not yet valid"
 msgstr "CRL certifikát není správný"
 
-#: gajim/common/connection.py:88
+#: gajim/common/connection.py:89
 msgid "CRL has expired"
 msgstr "Platnost CRL certifikátu vypršela"
 
-#: gajim/common/connection.py:89
+#: gajim/common/connection.py:90
 msgid "Format error in certificate's notBefore field"
 msgstr "Chyba certifikátu v poli: platnost před"
 
-#: gajim/common/connection.py:90
+#: gajim/common/connection.py:91
 msgid "Format error in certificate's notAfter field"
 msgstr "Chyba certifikátu v poli: platnost po"
 
-#: gajim/common/connection.py:91
+#: gajim/common/connection.py:92
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Chyba CRL certifikátu v poli: poslední aktualizace"
 
-#: gajim/common/connection.py:92
+#: gajim/common/connection.py:93
 msgid "Format error in CRL's nextUpdate field"
 msgstr "Chyba CRL certifikátu v poli: příští aktualizace"
 
-#: gajim/common/connection.py:93
+#: gajim/common/connection.py:94
 msgid "Out of memory"
 msgstr "Nedostatek paměti"
 
-#: gajim/common/connection.py:94
+#: gajim/common/connection.py:95
 msgid "Self signed certificate"
 msgstr "Sám sebou podepsaný certifikát"
 
-#: gajim/common/connection.py:95
+#: gajim/common/connection.py:96
 msgid "Self signed certificate in certificate chain"
 msgstr "Sám sebou podepsaný certifikát v certifikačním řetězci "
 
-#: gajim/common/connection.py:96
+#: gajim/common/connection.py:97
 msgid "Unable to get local issuer certificate"
 msgstr "Nepodařilo se získat certifikát lokálního vydavatele"
 
-#: gajim/common/connection.py:97
+#: gajim/common/connection.py:98
 msgid "Unable to verify the first certificate"
 msgstr "Nepodařilo se ověřit první certifikát"
 
-#: gajim/common/connection.py:98
+#: gajim/common/connection.py:99
 msgid "Certificate chain too long"
 msgstr "Certifikační řetězec je přiliš dlouhý"
 
-#: gajim/common/connection.py:99
+#: gajim/common/connection.py:100
 msgid "Certificate revoked"
 msgstr "Certifikát je zrušený"
 
-#: gajim/common/connection.py:100
+#: gajim/common/connection.py:101
 msgid "Invalid CA certificate"
 msgstr "Neplatný CA certifikát"
 
-#: gajim/common/connection.py:101
+#: gajim/common/connection.py:102
 msgid "Path length constraint exceeded"
 msgstr "Překročena delká cesty"
 
-#: gajim/common/connection.py:102
+#: gajim/common/connection.py:103
 msgid "Unsupported certificate purpose"
 msgstr "Nepodporované osvědčení certifikátu"
 
-#: gajim/common/connection.py:103
+#: gajim/common/connection.py:104
 msgid "Certificate not trusted"
 msgstr "Certifikát je nedůvěryhodný"
 
-#: gajim/common/connection.py:104
+#: gajim/common/connection.py:105
 msgid "Certificate rejected"
 msgstr "Certifikát odmítnut"
 
-#: gajim/common/connection.py:105
+#: gajim/common/connection.py:106
 msgid "Subject issuer mismatch"
 msgstr "Neshoduje se název vydavatele"
 
-#: gajim/common/connection.py:106
+#: gajim/common/connection.py:107
 msgid "Authority and subject key identifier mismatch"
 msgstr "Název klíče se neshoduje s Autoritou"
 
-#: gajim/common/connection.py:107
+#: gajim/common/connection.py:108
 msgid "Authority and issuer serial number mismatch"
 msgstr "Vydavatelovo sériové číslo se neshoduje s Autoritou"
 
-#: gajim/common/connection.py:108
+#: gajim/common/connection.py:109
 msgid "Key usage does not include certificate signing"
 msgstr "Použítý klíč neobsahuje podpis certifikátu"
 
-#: gajim/common/connection.py:109
+#: gajim/common/connection.py:110
 msgid "Application verification failure"
 msgstr "Ověřování aplikace skončilo neúspěchem"
 
-#: gajim/common/connection.py:867
+#: gajim/common/connection.py:870
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Spojení s účtem \"%s\" bylo ztraceno"
 
-#: gajim/common/connection.py:868
+#: gajim/common/connection.py:871
 msgid "Reconnect manually."
 msgstr "Znovu připojit ručně."
 
-#: gajim/common/connection.py:879
+#: gajim/common/connection.py:882
 #, fuzzy, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "Server %s odpověděl chybně na požadavek regisrace: %s"
 
-#: gajim/common/connection.py:920
+#: gajim/common/connection.py:923
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Server %s poskytnul rozdílný registrační formulář"
 
-#: gajim/common/connection.py:1265
+#: gajim/common/connection.py:1277
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Nemůžu se připojit k \"%s\""
 
-#: gajim/common/connection.py:1268
+#: gajim/common/connection.py:1280
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Nemůžu se připojit k \"%s\""
 
-#: gajim/common/connection.py:1275
+#: gajim/common/connection.py:1287
 #, python-format
 msgid "Server replied: %s"
 msgstr "Server odpověděl: %s"
 
-#: gajim/common/connection.py:1290
+#: gajim/common/connection.py:1302
 msgid "Connection to proxy failed"
 msgstr "Spojení s proxy selhalo"
 
-#: gajim/common/connection.py:1328 gajim/common/connection.py:1440
+#: gajim/common/connection.py:1340 gajim/common/connection.py:1443
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Selhalo připojení k účti %s"
 
-#: gajim/common/connection.py:1329 gajim/common/connection.py:1441
+#: gajim/common/connection.py:1341 gajim/common/connection.py:1444
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Spojení s účtem %s bylo ztraceno. Opět se připojte."
 
-#: gajim/common/connection.py:1363
+#: gajim/common/connection.py:1366
 #, fuzzy, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "Autentizace certifikátu %s je neplatná."
 
-#: gajim/common/connection.py:1366
+#: gajim/common/connection.py:1369
 #, python-format
 msgid ""
 "\n"
@@ -6370,7 +6644,7 @@ msgstr ""
 "\n"
 "SSL Error: <b>%s</b>"
 
-#: gajim/common/connection.py:1368
+#: gajim/common/connection.py:1371
 #, python-format
 msgid ""
 "\n"
@@ -6379,38 +6653,38 @@ msgstr ""
 "\n"
 "Neznámá SSL chyba: %d"
 
-#: gajim/common/connection.py:1414
+#: gajim/common/connection.py:1417
 #, fuzzy, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr "Autentizace certifikátu %s je neplatná."
 
-#: gajim/common/connection.py:1464 gajim/common/connection.py:2236
-#: gajim/common/zeroconf/connection_zeroconf.py:204
+#: gajim/common/connection.py:1467 gajim/common/connection.py:2235
+#: gajim/common/zeroconf/connection_zeroconf.py:209
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Nemůžu se připojit k \"%s\""
 
-#: gajim/common/connection.py:1503
+#: gajim/common/connection.py:1506
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Autentizace selhala s \"%s\""
 
-#: gajim/common/connection.py:1504
+#: gajim/common/connection.py:1507
 msgid "Please check your login and password for correctness."
 msgstr "Prosím zkontrolujte správnost jména a hesla."
 
-#: gajim/common/connection.py:2095
+#: gajim/common/connection.py:2094
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Odeslán kontakt: \"%s\" (%s)"
 
-#: gajim/common/connection.py:2099
+#: gajim/common/connection.py:2098
 msgid "Sent contacts:"
 msgstr "Odeslány kontakty:"
 
-#: gajim/common/connection.py:2253 gajim/common/connection.py:2275
+#: gajim/common/connection.py:2252 gajim/common/connection.py:2274
 msgid "Not fetched because of invisible status"
 msgstr "Nestáhnuto z důvodu stavu neviditelnosti"
 
@@ -7301,159 +7575,184 @@ msgstr "video vstup"
 msgid "video output"
 msgstr "video výstup"
 
-#: gajim/common/helpers.py:295
+#: gajim/common/helpers.py:296
 msgid "Server must be between 1 and 1023 bytes"
 msgstr ""
 
-#: gajim/common/helpers.py:303
+#: gajim/common/helpers.py:304
 msgid "Invalid character in hostname."
 msgstr "Neplatný znak v hostname."
 
-#: gajim/common/helpers.py:305
+#: gajim/common/helpers.py:306
 msgid "Server address required."
 msgstr "Je potřeba adresa serveru."
 
-#: gajim/common/helpers.py:309
+#: gajim/common/helpers.py:310
 msgid "Username must be between 1 and 1023 bytes"
 msgstr ""
 
-#: gajim/common/helpers.py:317
+#: gajim/common/helpers.py:318
 msgid "Invalid character in username."
 msgstr "Neplatný znak v uživatelském jméně."
 
-#: gajim/common/helpers.py:323
+#: gajim/common/helpers.py:324
 msgid "Resource must be between 1 and 1023 bytes"
 msgstr ""
 
-#: gajim/common/helpers.py:331
+#: gajim/common/helpers.py:332
 msgid "Invalid character in resource."
 msgstr "Neplatný znak ve zdroji."
 
-#: gajim/common/helpers.py:371
+#: gajim/common/helpers.py:372
 msgid "_Busy"
 msgstr "_Nerušit"
 
-#: gajim/common/helpers.py:376
+#: gajim/common/helpers.py:377
 msgid "_Not Available"
 msgstr "Ne_dostupný"
 
-#: gajim/common/helpers.py:381
+#: gajim/common/helpers.py:382
 msgid "_Free for Chat"
 msgstr "_Ukecaný"
 
-#: gajim/common/helpers.py:390
+#: gajim/common/helpers.py:387
+#, fuzzy
+msgid "?user status:_Available"
+msgstr "?transfer status:Pozastaveno"
+
+#: gajim/common/helpers.py:391
 msgid "Connecting"
 msgstr "Připojuji se"
 
-#: gajim/common/helpers.py:393
+#: gajim/common/helpers.py:394
 msgid "A_way"
 msgstr "_Pryč"
 
-#: gajim/common/helpers.py:398
+#: gajim/common/helpers.py:399
 msgid "_Offline"
 msgstr "_Odpojen"
 
-#: gajim/common/helpers.py:403
+#: gajim/common/helpers.py:404
 msgid "_Invisible"
 msgstr "Ne_viditelný"
 
-#: gajim/common/helpers.py:428
+#: gajim/common/helpers.py:410
+msgid "?contact has status:Unknown"
+msgstr "?contact has status:Neznámý"
+
+#: gajim/common/helpers.py:412
+msgid "?contact has status:Has errors"
+msgstr "stav"
+
+#: gajim/common/helpers.py:427
+msgid "?Subscription we already have:None"
+msgstr "?Subscription we already have:Žádná"
+
+#: gajim/common/helpers.py:429
 msgid "To"
 msgstr "Příjemce"
 
-#: gajim/common/helpers.py:430
+#: gajim/common/helpers.py:431
 msgid "From"
 msgstr "Odesílatel"
 
-#: gajim/common/helpers.py:432
+#: gajim/common/helpers.py:433
 msgid "Both"
 msgstr "Oboustranná"
 
-#: gajim/common/helpers.py:442
+#: gajim/common/helpers.py:441
+msgid "?Ask (for Subscription):None"
+msgstr "?Ask (for Subscription):Není"
+
+#: gajim/common/helpers.py:443
 msgid "Subscribe"
 msgstr "Žádat autorizaci"
 
-#: gajim/common/helpers.py:454
+#: gajim/common/helpers.py:452
+msgid "?Group Chat Contact Role:None"
+msgstr "?Group Chat Contact Role:Žádná"
+
+#: gajim/common/helpers.py:455
 msgid "Moderators"
 msgstr "Moderátoři"
 
-#: gajim/common/helpers.py:456
+#: gajim/common/helpers.py:457
 msgid "Moderator"
 msgstr "Moderátor"
 
-#: gajim/common/helpers.py:459
+#: gajim/common/helpers.py:460
 msgid "Participants"
 msgstr "Účastníci"
 
-#: gajim/common/helpers.py:461
+#: gajim/common/helpers.py:462
 msgid "Participant"
 msgstr "Účastník"
 
-#: gajim/common/helpers.py:464
+#: gajim/common/helpers.py:465
 msgid "Visitors"
 msgstr "Návštěvníci"
 
-#: gajim/common/helpers.py:466
+#: gajim/common/helpers.py:467
 msgid "Visitor"
 msgstr "Návštěvník"
 
-#: gajim/common/helpers.py:517
+#: gajim/common/helpers.py:518
 msgid "is paying attention to the conversation"
 msgstr "věnuje pozornost rozhovoru"
 
-#: gajim/common/helpers.py:519
+#: gajim/common/helpers.py:520
 msgid "is doing something else"
 msgstr "dělá něco jiného"
 
-#: gajim/common/helpers.py:521
+#: gajim/common/helpers.py:522
 #, fuzzy
 msgid "is composing a message…"
 msgstr "píše zprávu..."
 
-#: gajim/common/helpers.py:524
+#: gajim/common/helpers.py:525
 msgid "paused composing a message"
 msgstr "pozastavil(a) psaní zprávy"
 
-#: gajim/common/helpers.py:526
+#: gajim/common/helpers.py:527
 msgid "has closed the chat window or tab"
 msgstr "zavřel(a) okno zprávy"
 
-#: gajim/common/helpers.py:753
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
-#: gajim/common/helpers.py:756
+#: gajim/common/helpers.py:757
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: gajim/common/helpers.py:760
+#: gajim/common/helpers.py:761
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
-#: gajim/common/helpers.py:763
+#: gajim/common/helpers.py:764
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: gajim/common/helpers.py:767
+#: gajim/common/helpers.py:768
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
-#: gajim/common/helpers.py:770
+#: gajim/common/helpers.py:771
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: gajim/common/helpers.py:773
+#: gajim/common/helpers.py:774
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
-#: gajim/common/helpers.py:1140 gajim/common/helpers.py:1147
+#: gajim/common/helpers.py:1141 gajim/common/helpers.py:1148
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
@@ -7461,22 +7760,22 @@ msgstr[0] "Čeká %d zpráva"
 msgstr[1] "Čekají %d zprávy"
 msgstr[2] "Čeká %d zpráv"
 
-#: gajim/common/helpers.py:1154
+#: gajim/common/helpers.py:1155
 #, fuzzy, python-format
 msgid "from room %s"
 msgstr "z místností %s"
 
-#: gajim/common/helpers.py:1157 gajim/common/helpers.py:1174
+#: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr "od uživatele %s"
 
-#: gajim/common/helpers.py:1159
+#: gajim/common/helpers.py:1160
 #, fuzzy, python-format
 msgid "from %s"
 msgstr "od %s"
 
-#: gajim/common/helpers.py:1166 gajim/common/helpers.py:1172
+#: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
@@ -7484,75 +7783,75 @@ msgstr[0] "Čeká %d událost"
 msgstr[1] "Čekají %d události"
 msgstr[2] "Čeká %d událostí"
 
-#: gajim/common/helpers.py:1190 gajim/common/helpers.py:1202
-#: gajim/data/gui/roster_window.ui:11 data/org.gajim.Gajim.desktop.in:4
+#: gajim/common/helpers.py:1191 gajim/common/helpers.py:1203
+#: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "Gajim"
 
-#: gajim/common/helpers.py:1204
+#: gajim/common/helpers.py:1205
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: gajim/common/helpers.py:1391 gajim/data/gui/add_new_contact_window.ui:24
+#: gajim/common/helpers.py:1392 gajim/data/gui/add_new_contact_window.ui:24
 msgid "I would like to add you to my contact list."
 msgstr "Chtěl(a) bych si Vás přidat do mého Seznamu."
 
-#: gajim/common/helpers.py:1393
+#: gajim/common/helpers.py:1394
 #, fuzzy
 msgid "Hello, I am $name."
 msgstr "Ahoj, já jsem $name"
 
-#: gajim/common/helpers.py:1507 gajim/common/helpers.py:1516
-#: gajim/common/helpers.py:1575
+#: gajim/common/helpers.py:1508 gajim/common/helpers.py:1517
+#: gajim/common/helpers.py:1576
 msgid "Timeout loading image"
 msgstr "Nezdařilo se načtení obrázku"
 
-#: gajim/common/helpers.py:1526 gajim/common/helpers.py:1573
+#: gajim/common/helpers.py:1527 gajim/common/helpers.py:1574
 msgid "Image is too big"
 msgstr "Obrázek je příliš veliký"
 
-#: gajim/common/helpers.py:1537
+#: gajim/common/helpers.py:1538
 #, fuzzy
 msgid "PyCURL is not installed"
 msgstr "CRL certifikát není správný"
 
-#: gajim/common/helpers.py:1577
+#: gajim/common/helpers.py:1578
 #, fuzzy
 msgid "Error loading image"
 msgstr "Nezdařilo se načtení obrázku"
 
-#: gajim/common/connection_handlers.py:132
+#: gajim/common/connection_handlers.py:133
 #, python-format
 msgid "Registration information for transport %s has not arrived in time"
 msgstr "Registrační informace pro transport %s nedorazily včas"
 
-#: gajim/common/connection_handlers.py:978
+#: gajim/common/connection_handlers.py:979
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
-#: gajim/common/connection_handlers.py:981
+#: gajim/common/connection_handlers.py:982
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
-#: gajim/common/connection_handlers.py:985
+#: gajim/common/connection_handlers.py:986
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
 
-#: gajim/common/connection_handlers.py:991
+#: gajim/common/connection_handlers.py:992
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
 
-#: gajim/common/connection_handlers.py:1059
+#: gajim/common/connection_handlers.py:1060
 msgid "message"
 msgstr "zpráva"
 
-#: gajim/common/connection_handlers.py:1851
+#: gajim/common/connection_handlers.py:1855
 msgid "I would like to add you to my roster."
 msgstr "Rád(a) bych si tě přidal(a) do seznamu."
 
@@ -7588,43 +7887,43 @@ msgstr ""
 "Session bus není k dispozici.\n"
 "Zkuste přečíst http://trac.gajim.org/wiki/GajimDBus"
 
-#: gajim/common/zeroconf/connection_zeroconf.py:205
+#: gajim/common/zeroconf/connection_zeroconf.py:210
 msgid "Please check if Avahi or Bonjour is installed."
 msgstr "Zkontrolujte zda je Avahi nebo Bonjour nainstalováno."
 
-#: gajim/common/zeroconf/connection_zeroconf.py:215
-#: gajim/common/zeroconf/connection_zeroconf.py:219
+#: gajim/common/zeroconf/connection_zeroconf.py:220
+#: gajim/common/zeroconf/connection_zeroconf.py:224
 msgid "Could not start local service"
 msgstr "Nepodařilo se spustit lokální službu"
 
-#: gajim/common/zeroconf/connection_zeroconf.py:216
+#: gajim/common/zeroconf/connection_zeroconf.py:221
 #, python-format
 msgid "Unable to bind to port %d."
 msgstr "Nemůžu naslouchat na portu %d."
 
-#: gajim/common/zeroconf/connection_zeroconf.py:220
-#: gajim/common/zeroconf/connection_zeroconf.py:305
-#: gajim/common/zeroconf/connection_zeroconf.py:318
-#: gajim/common/zeroconf/connection_zeroconf.py:334
+#: gajim/common/zeroconf/connection_zeroconf.py:225
+#: gajim/common/zeroconf/connection_zeroconf.py:310
+#: gajim/common/zeroconf/connection_zeroconf.py:323
+#: gajim/common/zeroconf/connection_zeroconf.py:339
 msgid "Please check if avahi-daemon is running."
 msgstr "Zkontrolujte, zda avahi-daemon běží."
 
-#: gajim/common/zeroconf/connection_zeroconf.py:304
-#: gajim/common/zeroconf/connection_zeroconf.py:317
-#: gajim/common/zeroconf/connection_zeroconf.py:333
+#: gajim/common/zeroconf/connection_zeroconf.py:309
+#: gajim/common/zeroconf/connection_zeroconf.py:322
+#: gajim/common/zeroconf/connection_zeroconf.py:338
 #, python-format
 msgid "Could not change status of account \"%s\""
 msgstr "Nemůžu změnit stav účtu \"%s\""
 
-#: gajim/common/zeroconf/connection_zeroconf.py:349
+#: gajim/common/zeroconf/connection_zeroconf.py:354
 msgid "Your message could not be sent."
 msgstr "Vaše zpráva nemohla být odeslána."
 
-#: gajim/common/zeroconf/connection_zeroconf.py:364
+#: gajim/common/zeroconf/connection_zeroconf.py:369
 msgid "Contact is offline. Your message could not be sent."
 msgstr "Kontakt je offline. Vaše zpráva nemohla být odeslána."
 
-#: gajim/common/zeroconf/connection_zeroconf.py:386
+#: gajim/common/zeroconf/connection_zeroconf.py:391
 msgid ""
 "Connection to host could not be established: Timeout while sending data."
 msgstr "Spojení k počítači nebylo navázáno:Vypršel čas při odesílání dat."
@@ -7868,6 +8167,11 @@ msgstr "_Zakázat"
 #: gajim/data/gui/gc_occupants_menu.ui:124
 msgid "_Add to Roster"
 msgstr "Přid_at do Seznamu"
+
+#: gajim/data/gui/gc_occupants_menu.ui:132
+#, fuzzy
+msgid "_Execute command"
+msgstr "Spustit _příkaz..."
 
 #: gajim/data/gui/archiving_313_preferences_item.ui:12
 #: gajim/data/gui/preferences_window.ui:102
@@ -8151,11 +8455,11 @@ msgstr "Komentář"
 msgid "Con_tinue"
 msgstr "_Pokračovat"
 
-#: gajim/data/gui/filetransfers.ui:28 gajim/data/gui/filetransfers.ui:158
+#: gajim/data/gui/filetransfers.ui:28 gajim/data/gui/filetransfers.ui:156
 msgid "_Pause"
 msgstr "_Pauza"
 
-#: gajim/data/gui/filetransfers.ui:36
+#: gajim/data/gui/filetransfers.ui:36 gajim/data/gui/filetransfers.ui:174
 #: gajim/data/gui/service_registration_window.ui:53
 msgid "_Cancel"
 msgstr "_Zrušit"
@@ -8164,31 +8468,31 @@ msgstr "_Zrušit"
 msgid "_Open Containing Folder"
 msgstr "_Otevřít obsahující složku"
 
-#: gajim/data/gui/filetransfers.ui:79 gajim/data/gui/filetransfers.ui:252
+#: gajim/data/gui/filetransfers.ui:79 gajim/data/gui/filetransfers.ui:253
 msgid "File Transfers"
 msgstr "Přenosy souborů"
 
-#: gajim/data/gui/filetransfers.ui:112
+#: gajim/data/gui/filetransfers.ui:110
 msgid "file transfers list"
 msgstr "výpis přenosů souborů"
 
-#: gajim/data/gui/filetransfers.ui:113
+#: gajim/data/gui/filetransfers.ui:111
 msgid "A list of active, completed and stopped file transfers"
 msgstr "Seznam aktivních, dokončených a zastavených přenosů souborů"
 
-#: gajim/data/gui/filetransfers.ui:133
+#: gajim/data/gui/filetransfers.ui:131
 msgid "Clean _up"
 msgstr "_Vymazat"
 
-#: gajim/data/gui/filetransfers.ui:139
+#: gajim/data/gui/filetransfers.ui:137
 msgid "Removes completed, cancelled and failed file transfers from the list"
 msgstr "Odstraní dokončené, zrušené nebo přenosy které selhaly, z výpisu"
 
-#: gajim/data/gui/filetransfers.ui:145
+#: gajim/data/gui/filetransfers.ui:143
 msgid "Remove file transfer from the list."
 msgstr "Odstranit přenos souboru ze výpisu."
 
-#: gajim/data/gui/filetransfers.ui:146
+#: gajim/data/gui/filetransfers.ui:144
 msgid ""
 "This action removes single file transfer from the list. If the transfer is "
 "active, it is first stopped and then removed"
@@ -8196,32 +8500,37 @@ msgstr ""
 "Tato akce smaže jeden přenos souboru z výpisu. Pokud je přenos aktivní, bude "
 "nejdříve zastaven a potom smazán"
 
-#: gajim/data/gui/filetransfers.ui:182
+#: gajim/data/gui/filetransfers.ui:180
 #, fuzzy
 msgid "Cancels the selected file transfer and removes incomplete files"
 msgstr "Zruší vybraný přenos souboru a smaže nedokončený soubor"
 
-#: gajim/data/gui/filetransfers.ui:188
+#: gajim/data/gui/filetransfers.ui:186
 msgid "Cancel file transfer"
 msgstr "Zrušit přenos souboru"
 
-#: gajim/data/gui/filetransfers.ui:189
+#: gajim/data/gui/filetransfers.ui:187
 msgid "Cancels the selected file transfer"
 msgstr "Zruší vybraný přenos souboru"
 
-#: gajim/data/gui/filetransfers.ui:207
+#: gajim/data/gui/filetransfers.ui:199
+#, fuzzy
+msgid "_Close"
+msgstr "Ode_slat a zavřít"
+
+#: gajim/data/gui/filetransfers.ui:205
 msgid "Hides the window"
 msgstr "Skryje okno"
 
-#: gajim/data/gui/filetransfers.ui:228
+#: gajim/data/gui/filetransfers.ui:226
 msgid "_Notify me when a file transfer is complete"
 msgstr "_Upozornit mě po dokončení přenosu souboru"
 
-#: gajim/data/gui/filetransfers.ui:238
+#: gajim/data/gui/filetransfers.ui:236
 msgid "When a file transfer is complete show a popup notification"
 msgstr "Zobraz upozornění, až bude přenos souboru dokončen"
 
-#: gajim/data/gui/filetransfers.ui:253
+#: gajim/data/gui/filetransfers.ui:254
 msgid "Shows a list of file transfers between you and others"
 msgstr "Zobrazí výpis přenosů souborů mezi Vámi a ostatními"
 
@@ -8230,7 +8539,7 @@ msgid "Register to"
 msgstr "Zaregistrovat"
 
 #: gajim/data/gui/service_registration_window.ui:70
-#: gajim/data/gui/roster_item_exchange_window.ui:125
+#: gajim/data/gui/roster_item_exchange_window.ui:126
 msgid "_OK"
 msgstr "_OK"
 
@@ -8261,21 +8570,21 @@ msgstr "Font"
 msgid "Clear formatting"
 msgstr "Smazat formátování"
 
-#: gajim/data/gui/groupchat_control.ui:229 gajim/data/gui/chat_control.ui:634
-msgid "Show a list of emoticons (Alt+M)"
-msgstr "Zobraz seznam smajlíků (Alt+M)"
-
-#: gajim/data/gui/groupchat_control.ui:323 gajim/data/gui/chat_control.ui:832
+#: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:801
 #, fuzzy
 msgid "Choose an encryption"
 msgstr "Vyber soubor k odeslání..."
 
-#: gajim/data/gui/popup_notification_window.ui:54
+#: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:849
+msgid "Show a list of emoticons (Alt+M)"
+msgstr "Zobraz seznam smajlíků (Alt+M)"
+
+#: gajim/data/gui/popup_notification_window.ui:55
 #, fuzzy
 msgid "Event Type"
 msgstr "Událost"
 
-#: gajim/data/gui/popup_notification_window.ui:99
+#: gajim/data/gui/popup_notification_window.ui:100
 #, fuzzy
 msgid "Event desc"
 msgstr "Událost"
@@ -8338,7 +8647,7 @@ msgstr "<b>Písmo</b>"
 msgid "<b>#</b>"
 msgstr "<b>Písmo</b>"
 
-#: gajim/data/gui/chat_control.ui:777
+#: gajim/data/gui/chat_control.ui:725
 msgid "#"
 msgstr "č."
 
@@ -9102,10 +9411,6 @@ msgstr "_Otevřít..."
 msgid "<b>Advanced Configuration Editor</b>"
 msgstr "<b>Editor rozšířeného nastavení</b>"
 
-#: gajim/data/gui/preferences_window.ui:2846
-msgid "Advanced"
-msgstr "Rozšířené"
-
 #: gajim/data/gui/contact_context_menu.ui:12
 msgid "Start _Chat"
 msgstr "Začít _rozhovor"
@@ -9345,7 +9650,7 @@ msgid "_Open Email Composer"
 msgstr "_Otevři Emailový editor"
 
 #: gajim/data/gui/chat_context_menu.ui:49
-#: gajim/data/gui/subscription_request_popup_menu.ui:12
+#: gajim/data/gui/subscription_request_window.ui:12
 msgid "_Start Chat"
 msgstr "_Začít rozhovor"
 
@@ -9391,6 +9696,10 @@ msgstr "Nastavení"
 msgid "Default:"
 msgstr "Výchozí"
 
+#: gajim/data/gui/voip_call_received_dialog.ui:15
+msgid "<b><big>Incoming call</big></b>"
+msgstr ""
+
 #: gajim/data/gui/add_new_contact_window.ui:29
 msgid "Add New Contact"
 msgstr "Přidat nový kontakt"
@@ -9415,6 +9724,16 @@ msgstr "_Přezdívka:"
 #: gajim/data/gui/add_new_contact_window.ui:195
 msgid "_Group:"
 msgstr "_Skupina:"
+
+#: gajim/data/gui/add_new_contact_window.ui:210
+#, fuzzy
+msgid "Type User ID"
+msgstr "Uživatel:"
+
+#: gajim/data/gui/add_new_contact_window.ui:223
+#, fuzzy
+msgid "Type Nickname"
+msgstr "Přezdívka"
 
 #: gajim/data/gui/add_new_contact_window.ui:239
 msgid "Choose a group of type a new group"
@@ -9452,6 +9771,11 @@ msgid ""
 msgstr ""
 "Musíš být připojen(á) k trasportu před přidáním\n"
 " kontaktu z tohoto protokolu."
+
+#: gajim/data/gui/roster_window.ui:61
+#, fuzzy
+msgid "Change Status Message…"
+msgstr "Z_měnit popis stavu"
 
 #: gajim/data/gui/change_mood_dialog.ui:73
 msgid "<b>Mood:</b>"
@@ -9678,10 +10002,9 @@ msgstr "Provést příkaz..."
 msgid "_Verify"
 msgstr "_Kontroluj"
 
-#: gajim/data/gui/application_menu.ui:5 gajim/data/gui/application_menu.ui:71
-#: gajim/data/gui/shortcuts_window.ui:181
-msgid "Accounts"
-msgstr "Účty"
+#: gajim/data/gui/esession_info_window.ui:137
+msgid "(<b>ESession</b> info)"
+msgstr "(<b>ESession</b> informace)"
 
 #: gajim/data/gui/application_menu.ui:8
 #, fuzzy
@@ -9707,11 +10030,6 @@ msgstr "Zobrazit pouze _aktivní kontakty"
 #, fuzzy
 msgid "Show Transports"
 msgstr "Zobrazuj trans_porty"
-
-#: gajim/data/gui/application_menu.ui:32
-#, fuzzy
-msgid "File Transfer"
-msgstr "Přenosy souborů"
 
 #: gajim/data/gui/application_menu.ui:43
 #, fuzzy
@@ -9786,48 +10104,33 @@ msgstr "Minimalizovat po připojení"
 msgid "Pr_int status:"
 msgstr "Vypiš stav:"
 
-#: gajim/data/gui/exception_dialog.ui:7
+#: gajim/data/gui/exception_dialog.ui:45
 #, fuzzy
-msgid "Exception"
-msgstr "Popis"
+msgid ""
+"A programming error has been detected. It probably is not fatal, but should "
+"be reported to the developers nonetheless."
+msgstr "Pravděpodobně není fatální, ale přesto by měla být ohlášena vývojářům."
 
-#: gajim/data/gui/exception_dialog.ui:44
+#: gajim/data/gui/exception_dialog.ui:115
 #, fuzzy
 msgid "Report Bug"
 msgstr "_Ohlásit chybu"
 
-#: gajim/data/gui/exception_dialog.ui:89
-#, fuzzy
-msgid ""
-"A programming error has been detected.\n"
-"It probably is not fatal, but should be reported\n"
-"to the developers nonetheless."
-msgstr "Pravděpodobně není fatální, ale přesto by měla být ohlášena vývojářům."
-
-#: gajim/data/gui/subscription_request_window.ui:19
-msgid "Subscription Request"
-msgstr "Žádost o autorizaci"
-
-#: gajim/data/gui/subscription_request_window.ui:89
+#: gajim/data/gui/subscription_request_window.ui:95
 msgid "_Deny"
 msgstr "O_dmítnout"
 
-#: gajim/data/gui/subscription_request_window.ui:94
+#: gajim/data/gui/subscription_request_window.ui:100
 msgid ""
 "Deny authorization from contact so he or she cannot know when you're "
 "connected"
 msgstr "Odmítne autorizaci od kontaktu, takže nezjistí kdy jste připojen(a)"
 
-#. Make sure the character after "_" is not M/m (conflicts with Alt+M that is supposed to show the Emoticon Selector)
-#: gajim/data/gui/subscription_request_window.ui:132
-msgid "_Actions"
-msgstr "_Akce"
-
-#: gajim/data/gui/subscription_request_window.ui:164
+#: gajim/data/gui/subscription_request_window.ui:133
 msgid "Au_thorize"
 msgstr "Au_torizuj"
 
-#: gajim/data/gui/subscription_request_window.ui:170
+#: gajim/data/gui/subscription_request_window.ui:138
 msgid "Authorize contact so he or she can know when you're connected"
 msgstr "Autorizovat kontakt, aby věděl kdy jsi připojený(á)"
 
@@ -9845,11 +10148,11 @@ msgstr ""
 msgid "Presets"
 msgstr "_Stav"
 
-#: gajim/data/gui/chat_to_muc_window.ui:14
+#: gajim/data/gui/chat_to_muc_window.ui:24
 msgid "Invite Friends!"
 msgstr "Pozvat přátele !"
 
-#: gajim/data/gui/chat_to_muc_window.ui:29
+#: gajim/data/gui/chat_to_muc_window.ui:39
 #, fuzzy
 msgid ""
 "You are now entering a groupchat.\n"
@@ -9858,15 +10161,20 @@ msgstr ""
 "Začátek Více-uživatelského rozhovoru.\n"
 "Vyberte kontakty, které chcete pozvat"
 
-#: gajim/data/gui/chat_to_muc_window.ui:79
+#: gajim/data/gui/chat_to_muc_window.ui:67
+#: gajim/data/gui/chat_to_muc_window.ui:78
+msgid "column"
+msgstr ""
+
+#: gajim/data/gui/chat_to_muc_window.ui:112
 msgid "Please select a MUC server."
 msgstr "Prosím, vyberte MUC server."
 
-#: gajim/data/gui/chat_to_muc_window.ui:108
+#: gajim/data/gui/chat_to_muc_window.ui:141
 msgid "MUC server"
 msgstr "MUC server"
 
-#: gajim/data/gui/chat_to_muc_window.ui:143
+#: gajim/data/gui/chat_to_muc_window.ui:176
 msgid "In_vite"
 msgstr "_Pozvat do"
 
@@ -9984,11 +10292,6 @@ msgstr ""
 #: gajim/data/gui/shortcuts_window.ui:106
 msgid "Scroll down"
 msgstr ""
-
-#: gajim/data/gui/shortcuts_window.ui:113
-#, fuzzy
-msgid "Clear"
-msgstr "Uklízím"
 
 #: gajim/data/gui/shortcuts_window.ui:121
 msgid "Tabs"
@@ -10151,6 +10454,16 @@ msgstr "Zobrazit všechny čekající _události"
 #: gajim/data/gui/systray_context_menu.ui:59
 msgid "Mute Sounds"
 msgstr "Vypnout zvuky"
+
+#: gajim/data/gui/systray_context_menu.ui:75
+#, fuzzy
+msgid "_Preferences"
+msgstr "Nastavení"
+
+#: gajim/data/gui/systray_context_menu.ui:90
+#, fuzzy
+msgid "_Quit"
+msgstr "_Konec"
 
 #: gajim/data/gui/single_message_window.ui:59
 msgid "To:"
@@ -10559,14 +10872,6 @@ msgstr ""
 msgid "Configuration"
 msgstr "Nastavení místnosti"
 
-#: data/gajim-remote.desktop.in:4
-msgid "Open URI using Gajim"
-msgstr ""
-
-#: data/gajim-remote.desktop.in:6
-msgid "chat;messaging;im;jabber;xmpp;bonjour;voip;"
-msgstr ""
-
 #: data/org.gajim.Gajim.desktop.in:5
 msgid "Jabber IM Client"
 msgstr "Jabber IM klient"
@@ -10690,6 +10995,32 @@ msgstr "Nedávno:"
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Registrace selhala"
+
+#, fuzzy
+#~ msgid "XMPP account %s"
+#~ msgstr "XMPP účet %s@%s"
+
+#, fuzzy
+#~ msgid "Exception"
+#~ msgstr "Popis"
+
+#, fuzzy
+#~ msgid ""
+#~ "<b>someone@somewhere.com</b> would like you to <b>add</b> some contacts "
+#~ "in your roster."
+#~ msgstr ""
+#~ "<b>%(jid)s</b> by chtěl(a), aby jste </b>%(action)s</b> některé kontakty "
+#~ "z vašeho rosteru."
+
+#~ msgid ""
+#~ "Ordered list (space separated) of connection type to try. Can contain "
+#~ "tls, ssl or plain"
+#~ msgstr ""
+#~ "Řazený seznam (oddělený mezerami) spojení, která má Gajim zkusit. "
+#~ "Možnosti jsou: tls, ssl nebo plain"
+
+#~ msgid "_Actions"
+#~ msgstr "_Akce"
 
 #, fuzzy
 #~ msgid "Requires upower and python-dbus."
@@ -10891,12 +11222,6 @@ msgstr "Registrace selhala"
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Použití: /%s, skryje tlačítka rozhovoru."
 
-#~ msgid "File is empty"
-#~ msgstr "Soubor je prázdný"
-
-#~ msgid "File does not exist"
-#~ msgstr "Soubor neexistuje"
-
 #~ msgid ""
 #~ "If True, Gajim will ask for avatar each contact that did not have an "
 #~ "avatar last time or has one cached that is too old."
@@ -10925,58 +11250,6 @@ msgstr "Registrace selhala"
 #~ msgstr "Je potřeba python-pyopenssl."
 
 #, fuzzy
-#~ msgid "?user status:_Available"
-#~ msgstr "?transfer status:Pozastaveno"
-
-#, fuzzy
-#~ msgid "?user status:Available"
-#~ msgstr "?transfer status:Pozastaveno"
-
-#~ msgid "?contact has status:Unknown"
-#~ msgstr "?contact has status:Neznámý"
-
-#~ msgid "?contact has status:Has errors"
-#~ msgstr "stav"
-
-#~ msgid "?Subscription we already have:None"
-#~ msgstr "?Subscription we already have:Žádná"
-
-#~ msgid "?Ask (for Subscription):None"
-#~ msgstr "?Ask (for Subscription):Není"
-
-#~ msgid "?Group Chat Contact Role:None"
-#~ msgstr "?Group Chat Contact Role:Žádná"
-
-#~ msgid "?Group Chat Contact Affiliation:None"
-#~ msgstr "?Group Chat Contact Affiliation:Žádná"
-
-#~ msgid "?print_status:All"
-#~ msgstr "?print_status:Všechny"
-
-#~ msgid "?print_status:None"
-#~ msgstr "?print_status:Žádný"
-
-#, fuzzy
-#~ msgid "?features:Available"
-#~ msgstr "Připojen"
-
-#, fuzzy
-#~ msgid "?CLI:account"
-#~ msgstr "účet"
-
-#, fuzzy
-#~ msgid "?CLI:status"
-#~ msgstr "stav"
-
-#, fuzzy
-#~ msgid "?CLI:message"
-#~ msgstr "zpráva"
-
-#, fuzzy
-#~ msgid "?CLI:priority"
-#~ msgstr "priorita"
-
-#, fuzzy
 #~ msgid "?CLI:room"
 #~ msgstr "místnost"
 
@@ -10987,30 +11260,6 @@ msgstr "Registrace selhala"
 #, fuzzy
 #~ msgid "?CLI:password"
 #~ msgstr "heslo"
-
-#, fuzzy
-#~ msgid "?Noun:Chats"
-#~ msgstr "Diskuze"
-
-#, fuzzy
-#~ msgid "?Noun:Download"
-#~ msgstr "Stáhnout"
-
-#, fuzzy
-#~ msgid "?Noun:Upload"
-#~ msgstr "Nahrát"
-
-#~ msgid "?transfer status:Paused"
-#~ msgstr "?transfer status:Pozastaveno"
-
-#~ msgid "?Client:Unknown"
-#~ msgstr "?Client:Neznámý"
-
-#~ msgid "?OS:Unknown"
-#~ msgstr "?OS:Neznámý"
-
-#~ msgid "?Time:Unknown"
-#~ msgstr "?Time:Neznámý"
 
 #~ msgid "Use D-Bus and Notification-Daemon to show notifications"
 #~ msgstr "Používej DBus a Notifikačního démona k zobrazování notifikací"
@@ -11221,9 +11470,6 @@ msgstr "Registrace selhala"
 #~ msgid "Choose _Key..."
 #~ msgstr "Vyberte _klíč..."
 
-#~ msgid "Use G_PG Agent"
-#~ msgstr "Použít GPG _Agenta"
-
 #~ msgid ""
 #~ "If checked, Gajim will get the password from a GPG agent like seahorse"
 #~ msgstr "Pokud bude zaškrtnuto, Gajim si bude pamatovat heslo pro tento účet"
@@ -11344,18 +11590,6 @@ msgstr "Registrace selhala"
 
 #~ msgid "<b>XML Input</b>"
 #~ msgstr "<b>Vstup XML</b>"
-
-#, fuzzy
-#~ msgid "Filter"
-#~ msgstr "Filtr:"
-
-#, fuzzy
-#~ msgid "XML Input"
-#~ msgstr "<b>Vstup XML</b>"
-
-#, fuzzy
-#~ msgid "Send"
-#~ msgstr "Ode_slat"
 
 #~ msgid "XML Console for %s"
 #~ msgstr "XML Konzole pro %s"
@@ -11786,9 +12020,6 @@ msgstr "Registrace selhala"
 
 #~ msgid "*"
 #~ msgstr "*"
-
-#~ msgid "(<b>ESession</b> info)"
-#~ msgstr "(<b>ESession</b> informace)"
 
 #, fuzzy
 #~ msgid "Enter JID or Contact name"
@@ -12892,9 +13123,6 @@ msgstr "Registrace selhala"
 #~ msgid "PyOpenSSL"
 #~ msgstr "PyOpenSSL"
 
-#~ msgid "OpenGPG"
-#~ msgstr "OpenGPG"
-
 #~ msgid "gnome-keyring"
 #~ msgstr "gnome-keyring"
 
@@ -13042,9 +13270,6 @@ msgstr "Registrace selhala"
 #~ msgid ""
 #~ "Connection to host could not be established: Incorrect answer from server."
 #~ msgstr "Spojení k počítači nebylo navázáno: Neplatná odpověd od serveru"
-
-#~ msgid "Encryption disabled"
-#~ msgstr "E2E Šifrování vypnuto"
 
 #~ msgid "Verify remote identity"
 #~ msgstr "Ověřit identitu"
