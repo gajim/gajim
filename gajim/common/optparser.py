@@ -48,7 +48,7 @@ class OptionsParser:
 
     def read(self):
         try:
-            fd = open(self.__filename)
+            fd = open(self.__filename, encoding='utf-8')
         except Exception:
             if os.path.exists(self.__filename):
                 #we talk about a file
