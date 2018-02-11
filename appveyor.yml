@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - MSYS: C:/msys64/mingw32
+    - MSYSTEM: MINGW32
 
 branches:
   only:
@@ -11,10 +11,9 @@ clone_depth: 1
 # init:
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
-install:
-
+build_script:
+  - C:\msys64\usr\bin\pacman -Syuu --needed --noconfirm --ask=127
   - ps: |
-        $env:MSYSTEM="MINGW32"
         $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
         $env:BUILDROOT="C:\msys64\home\appveyor\gajim\win\_build_root"
 
@@ -23,13 +22,10 @@ install:
           C:\msys64\usr\bin\sh.exe --login -c $command
         }
 
-        bash 'pacman -Sy --noconfirm git'
         bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
         bash 'C:/msys64/home/appveyor/gajim/win/build.sh'
         Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-1.0.0-$($env:TIME_STRING).exe"
         Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-1.0.0-$($env:TIME_STRING).exe"
-
-build: off
 
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
