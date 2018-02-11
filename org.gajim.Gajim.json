@@ -1,7 +1,7 @@
 {
     "app-id": "org.gajim.Gajim",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.24",
+    "runtime-version": "3.26",
     "sdk": "org.gnome.Sdk",
     "command": "gajim",
     "tags": ["nightly"],
@@ -17,12 +17,9 @@
         "--filesystem=home",
         "--socket=system-bus"
     ],
-    "build-options" : {
+    "build-options": {
         "cflags": "-O2 -g",
-        "cxxflags": "-O2 -g",
-        "env": {
-            "PYTHON": "python3"
-        }
+        "cxxflags": "-O2 -g"
     },
     "cleanup": [
         "/include",
@@ -58,8 +55,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/62/ea/f41d44e0a4222fe8317ffe1fe7a5c75ec71ca233b4067850567922f8b7be/cffi-1.11.3.tar.gz",
-                    "sha256": "8456abb0f892eb7d545f9ce94f4ba78d651365b1a59f9ce9ae7b5325a95dc698"
+                    "url": "https://files.pythonhosted.org/packages/10/f7/3b302ff34045f25065091d40e074479d6893882faef135c96f181a57ed06/cffi-1.11.4.tar.gz",
+                    "sha256": "df9083a992b17a28cd4251a3f5c879e0198bb26c9e808c4647e0a18739f1d11d"
                 }
             ]
         },
@@ -132,8 +129,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/41/5f/6da80400340fd48ba4ae1c673be4dc3821ac06cd9821ea60f9c7d32a009f/setuptools-38.4.0.zip",
-                    "sha256": "6501fc32f505ec5b3ed36ec65ba48f1b975f52cf2ea101c7b73a08583fd12f75"
+                    "url": "https://files.pythonhosted.org/packages/6c/54/f7e9cea6897636a04e74c3954f0d8335cc38f7d01e27eec98026b049a300/setuptools-38.5.1.zip",
+                    "sha256": "6425484c08e99a98a42209c25c3d325f749230b55284d66192784f941a7e6628"
                 }
             ]
         },
@@ -257,11 +254,21 @@
         /* Zeroconf support */
         {
             "name": "avahi",
-            "cleanup": [ "/bin", "/lib/avahi", "/share" ],
+            "cleanup": [
+                "/bin",
+                "/lib/avahi",
+                "/share"
+            ],
             "config-opts": [
-                "--with-distro=none", "--disable-qt3", "--disable-qt4",
-                "--disable-libdaemon", "--disable-pygtk", "--disable-gdbm",
-                "--disable-mono", "--disable-monodoc", "--disable-manpages"
+                "--with-distro=none",
+                "--disable-qt3",
+                "--disable-qt4",
+                "--disable-libdaemon",
+                "--disable-pygtk",
+                "--disable-gdbm",
+                "--disable-mono",
+                "--disable-monodoc",
+                "--disable-manpages"
             ],
             "sources": [
                 {
@@ -289,12 +296,18 @@
             "name": "gajim",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app --no-deps ."
+                "pip3 install --prefix=/app ."
             ],
             "sources": [
                 {
                     "type": "git",
                     "url": "https://dev.gajim.org/gajim/gajim.git"
+                },
+                {
+                    "type": "archive",
+                    "url": "https://ftp.gajim.org/plugins_1/plugin_installer.zip",
+                    "sha256": "7d5dcd9a5e05d214ca85651784bda732aac3b5c363a6e23529e6e777f9d24d42",
+                    "dest": "gajim/data/plugins/plugin_installer"
                 }
             ]
         }
