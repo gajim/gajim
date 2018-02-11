@@ -276,6 +276,60 @@
                 }
             ]
         },
+        /* OMEMO support */
+        {
+            "name": "protobuf",
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://files.pythonhosted.org/packages/14/03/ff5279abda7b46e9538bfb1411d42831b7e65c460d73831ed2445649bc02/protobuf-3.5.1.tar.gz",
+                    "sha256": "95b78959572de7d7fafa3acb718ed71f482932ddddddbd29ba8319c10639d863"
+                }
+            ]
+        },
+        {
+            "name": "python3-axolotl-curve25519",
+            "ensure-writable": [
+                "easy-install.pth"
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://files.pythonhosted.org/packages/69/e0/9605cac4c83c12d0bef5c2e9992f0bcbce4fae9a252899d545ccb7dc8717/python-axolotl-curve25519-0.1.tar.gz",
+                    "sha256": "c559f6a5bf51e869325b36bd83c14cccd7dec1c6e7599e797f9ba27a72d339c0"
+                }
+            ]
+        },
+        {
+            "name": "python3-axolotl",
+            "ensure-writable": [
+                "easy-install.pth",
+                "setuptools.pth"
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "python3 setup.py install --prefix=/app"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://files.pythonhosted.org/packages/7f/9d/410ce5c2322180cae7025e52e2f91f585d2be71f30ebbcfd605d2c9a1cd5/python-axolotl-0.1.39.tar.gz",
+                    "sha256": "9af9c937d0d05ebea414f1be79ecc7517cc3541a77101941e6a2a71bdd2b6e25"
+                }
+            ]
+        },
         {
             "name": "python3-nbxmpp",
             "buildsystem": "simple",
