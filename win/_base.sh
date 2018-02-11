@@ -51,9 +51,8 @@ function build_compileall {
 }
 
 function install_pre_deps {
-    pacman -S --needed --noconfirm p7zip git \
-        mingw-w64-"${ARCH}"-nsis wget intltool mingw-w64-"${ARCH}"-toolchain \
-        mingw-w64-i686-python3
+    pacman -S --needed --noconfirm p7zip \
+        mingw-w64-"${ARCH}"-nsis wget intltool mingw-w64-"${ARCH}"-toolchain
 }
 
 function create_root {
