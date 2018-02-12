@@ -34,7 +34,7 @@
               <object class="GtkScrolledWindow" id="single_form_scrolledwindow">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="vexpand">True</property>
+                <property name="expand">True</property>
                 <child>
                   <object class="GtkViewport" id="single_form_viewport">
                     <property name="visible">True</property>
