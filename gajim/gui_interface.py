@@ -2408,8 +2408,9 @@ class Interface:
             print(err_str, file=sys.stderr)
             # it is good to notify the user
             # in case he or she cannot see the output of the console
-            dialogs.ErrorDialog(_('Could not save your settings and '
+            error_dialog = dialogs.ErrorDialog(_('Could not save your settings and '
                 'preferences'), err_str)
+            error_dialog.run()
             sys.exit()
 
     @staticmethod

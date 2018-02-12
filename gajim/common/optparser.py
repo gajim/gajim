@@ -111,24 +111,18 @@ class OptionsParser:
         (base_dir, filename) = os.path.split(self.__filename)
         self.__tempfile = os.path.join(base_dir, '.' + filename)
         try:
-            f = os.fdopen(os.open(self.__tempfile,
-                os.O_CREAT|os.O_WRONLY|os.O_TRUNC, 0o600), 'w', encoding='utf-8')
+            with open(self.__tempfile, 'w', encoding='utf-8') as f:
+                app.config.foreach(self.write_line, f)
         except IOError as e:
             return str(e)
-        try:
-            app.config.foreach(self.write_line, f)
-        except IOError as e:
-            return str(e)
-        f.flush()
-        os.fsync(f.fileno())
-        f.close()
+
         if os.path.exists(self.__filename):
             if os.name == 'nt':
                 # win32 needs this
                 try:
                     os.remove(self.__filename)
-                except Exception:
-                    pass
+                except Exception as e:
+                    return str(e)
         try:
             os.rename(self.__tempfile, self.__filename)
         except IOError as e:
