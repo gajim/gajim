@@ -99,7 +99,7 @@ class HelperEvent:
 
     def _generate_timestamp(self, tag):
         # Make sure we use only int/float Epoch time
-        if not isinstance(tag, str):
+        if tag is None:
             self.timestamp = time_time()
             return
         try:
@@ -771,7 +771,7 @@ PresenceHelperEvent):
         # XEP-0203
         delay_tag = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
         if delay_tag:
-            self._generate_timestamp(self.stanza.getTimestamp2())
+            self._generate_timestamp(self.stanza.timestamp)
         # XEP-0319
         self.idle_time = None
         idle_tag = self.stanza.getTag('idle', namespace=nbxmpp.NS_IDLE)
@@ -791,7 +791,7 @@ PresenceHelperEvent):
                 self.contact_nickname = x.getTagData('nickname')
             elif namespace == nbxmpp.NS_DELAY and not self.timestamp:
                 # XEP-0091
-                self._generate_timestamp(self.stanza.getTimestamp())
+                self._generate_timestamp(self.stanza.timestamp)
             elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
                 # see http://trac.gajim.org/ticket/326
                 agent = app.get_server_from_jid(self.jid)
@@ -1401,7 +1401,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
             self.session.last_receive = time_time()
 
-        self._generate_timestamp(self.stanza.getTimestamp())
+        self._generate_timestamp(self.stanza.timestamp)
 
         return True
 
