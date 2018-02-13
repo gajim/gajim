@@ -322,9 +322,10 @@
     </child>
     <child>
       <object class="GtkButton">
-        <property name="label" translatable="yes">Join</property>
+        <property name="label" translatable="yes">_Join</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
+        <property name="use_underline">True</property>
         <property name="receives_default">True</property>
         <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
         <style>
