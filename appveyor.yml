@@ -4,7 +4,7 @@ environment:
 
 branches:
   only:
-    - master
+    - gajim_1.0
 
 clone_depth: 1
 
@@ -26,8 +26,8 @@ install:
         bash 'pacman -Sy --noconfirm git'
         bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
         bash 'C:/msys64/home/appveyor/gajim/win/build.sh'
-        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:TIME_STRING).exe"
-        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:TIME_STRING).exe"
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-1.0.0-$($env:TIME_STRING).exe"
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-1.0.0-$($env:TIME_STRING).exe"
 
 build: off
 
