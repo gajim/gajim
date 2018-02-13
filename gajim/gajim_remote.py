@@ -85,14 +85,6 @@ class GajimRemote:
                                         _('show help on command'), False)
                                 ]
                         ],
-                'toggle_roster_appearance': [
-                                _('Shows or hides the roster window'),
-                                []
-                        ],
-                'show_next_pending_event': [
-                                _('Pops up a window with the next pending event'),
-                                []
-                        ],
                 'list_contacts': [
                                 _('Lists all contacts in roster, one for each line'),
                                 [
@@ -255,10 +247,6 @@ class GajimRemote:
 
                 'check_gajim_running': [
                                 _('Check if Gajim is running'),
-                                []
-                        ],
-                'toggle_ipython': [
-                                _('Shows or hides the ipython window'),
                                 []
                         ],
 

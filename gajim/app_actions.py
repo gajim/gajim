@@ -286,3 +286,13 @@ class AppActions():
             win.present()
         else:
            app.interface.create_ipython_window()
+
+    def show_next_pending_event(self, action, param):
+        """
+        Show the window(s) with next pending event in tabbed/group chats
+        """
+        if app.events.get_nb_events():
+            account, jid, event = app.events.get_first_systray_event()
+            if not event:
+                return
+            app.interface.handle_event(account, jid, event.type_)

@@ -646,50 +646,6 @@ class SignalObject(dbus.service.Object):
                         result.append(item)
         return result
 
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
-    def toggle_roster_appearance(self):
-        """
-        Show/hide the roster window
-        """
-        win = app.interface.roster.window
-        if win.get_property('visible'):
-            GLib.idle_add(win.hide)
-        else:
-            win.present()
-            # preserve the 'steal focus preservation'
-            if self._is_first():
-                win.window.present()
-            else:
-                win.window.present_with_time(int(time()))
-
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
-    def show_roster(self):
-        """
-        Show the roster window
-        """
-        win = app.interface.roster.window
-        win.present()
-        # preserve the 'steal focus preservation'
-        if self._is_first():
-            win.window.present()
-        else:
-            win.window.present_with_time(int(time()))
-
-    @dbus.service.method(INTERFACE, in_signature='', out_signature='')
-    def toggle_ipython(self):
-        """
-        Show/hide the ipython window
-        """
-        win = app.ipython_window
-        if win:
-            if win.window.is_visible():
-                GLib.idle_add(win.hide)
-            else:
-                win.show_all()
-                win.present()
-        else:
-            app.interface.create_ipython_window()
-
     @dbus.service.method(INTERFACE, in_signature='', out_signature='a{ss}')
     def prefs_list(self):
         prefs_dict = DBUS_DICT_SS()

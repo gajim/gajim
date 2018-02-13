@@ -98,7 +98,10 @@ class GajimApplication(Gtk.Application):
                              _('Show all warnings'))
         self.add_main_option('ipython', ord('i'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
-                             _('open ipython shell'))
+                             _('Open IPython shell'))
+        self.add_main_option('show-next-pending-event', 0, GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('Pops up a window with the next pending event'))
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._handle_remote_options)
@@ -301,9 +304,14 @@ class GajimApplication(Gtk.Application):
         # Parse all options that should be executed on a remote instance
         options = command_line.get_options_dict()
 
-        if options.contains('ipython'):
-            self.activate_action('ipython')
-            return 0
+        remote_commands = ['ipython',
+                           'show-next-pending-event',
+                          ]
+
+        for cmd in remote_commands:
+            if options.contains(cmd):
+                self.activate_action(cmd)
+                return 0
 
         uri = self._parse_uris(command_line)
         if uri is not None:
@@ -425,6 +433,7 @@ class GajimApplication(Gtk.Application):
             ('about', action.on_about),
             ('faq', action.on_faq),
             ('ipython', action.toggle_ipython),
+            ('show-next-pending-event', action.show_next_pending_event),
         ]
 
         act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
