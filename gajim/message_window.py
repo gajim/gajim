@@ -469,31 +469,13 @@ class MessageWindow(object):
 
     def show_icon(self):
         window_mode = app.interface.msg_win_mgr.mode
-        icon = None
-        if window_mode == MessageWindowMgr.ONE_MSG_WINDOW_NEVER:
-            ctrl = self.get_active_control()
-            if not ctrl:
-                return
-            icon = ctrl.get_tab_image(count_unread=False)
-        elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS:
-            pass # keep default icon
-        elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
-            pass # keep default icon
-        elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERACCT:
-            pass # keep default icon
-        elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE:
+        icon = 'org.gajim.Gajim'
+        if window_mode in (MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE,
+                           MessageWindowMgr.ONE_MSG_WINDOW_NEVER):
             if self.type_ == 'gc':
                 icon = gtkgui_helpers.get_iconset_name_for('muc-active')
-            else:
-                # chat, pm
-                icon = 'org.gajim.Gajim'
-        if icon:
-            if isinstance(icon, GdkPixbuf.Pixbuf):
-                self.window.set_icon(icon)
-            elif isinstance(icon, str):
-                self.window.set_icon_name(icon)
-            else:
-                self.window.set_icon(icon.get_pixbuf())
+
+        self.window.set_icon_name(icon)
 
     def show_title(self, urgent=True, control=None):
         """
