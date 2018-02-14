@@ -41,6 +41,8 @@ import sys
 import os
 import signal
 import locale
+from urllib.parse import unquote
+
 import gi
 gi.require_version('GLib', '2.0')
 gi.require_version('Gio', '2.0')
@@ -49,6 +51,7 @@ gi.require_version('Gdk', '3.0')
 gi.require_version('GObject', '2.0')
 gi.require_version('Pango', '1.0')
 from gi.repository import GLib, Gio, Gtk
+
 from gajim.common import i18n
 from gajim.common import logging_helpers
 from gajim.common import crypto
@@ -269,12 +272,20 @@ class GajimApplication(Gtk.Application):
                 self.interface.join_gc_minimal(None, jid)
             elif cmd == 'roster':
                 self.activate_action('add-contact', GLib.Variant('s', jid))
-            elif cmd == 'message':
+            elif cmd.startswith('message'):
+                attributes = cmd.split(';')
+                message = None
+                for key in attributes:
+                    if key.startswith('body'):
+                        try:
+                            message = unquote(key.split('=')[1])
+                        except Exception:
+                            app.log('uri_handler').error('Invalid URI: %s', cmd)
                 accounts = list(app.connections.keys())
                 if not accounts:
                     continue
                 if len(accounts) == 1:
-                    app.interface.new_chat_from_jid(accounts[0], jid)
+                    app.interface.new_chat_from_jid(accounts[0], jid, message)
                 else:
                     self.activate_action('start-chat')
                     start_chat_window = app.interface.instances['start_chat']
