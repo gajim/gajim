@@ -1312,7 +1312,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.add_credit_section(_('Past Developers'), const.DEVS_PAST)
         self.add_credit_section(_('Artists'), const.ARTISTS)
 
-        thanks = const.THANKS
+        thanks = const.THANKS[:]
         thanks.append('')
         thanks.append(_('Last but not least'))
         thanks.append(_('we would like to thank all the package maintainers.'))
