@@ -188,7 +188,10 @@ class VcardWindow:
             if entry_name in ('URL_label',
                               'EMAIL_WORK_USERID_label',
                               'EMAIL_HOME_USERID_label'):
-                widget.set_uri('mailto:' + value)
+                if entry_name == 'URL_label':
+                    widget.set_uri(value)
+                else:
+                    widget.set_uri('mailto:' + value)
                 widget.set_label(value)
                 self.xml.get_object(entry_name).show()
             else:
