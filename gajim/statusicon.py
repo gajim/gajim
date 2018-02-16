@@ -244,10 +244,12 @@ class StatusIcon:
             self.popup_menus.append(account_menu_for_chat_with)
 
             for account in accounts_list:
+                account_label = app.config.get_per(
+                    'accounts', account, 'account_label')
                 if app.account_is_connected(account):
                     # for chat_with
                     item = Gtk.MenuItem.new_with_label(
-                        _('using account %s') % account)
+                        _('using account %s') % account_label)
                     account_menu_for_chat_with.append(item)
                     item.connect('activate', self.on_new_chat, account)
 
@@ -288,6 +290,8 @@ class StatusIcon:
             self.popup_menus.append(account_menu_for_single_message)
 
             for account in accounts_list:
+                account_label = app.config.get_per(
+                    'accounts', account, 'account_label')
                 if app.connections[account].is_zeroconf or \
                 not app.account_is_connected(account):
                     continue
@@ -295,14 +299,14 @@ class StatusIcon:
                     connected_accounts_with_private_storage += 1
                 # for single message
                 item = Gtk.MenuItem.new_with_label(
-                    _('using account %s') % account)
+                    _('using account %s') % account_label)
                 item.connect('activate',
                         self.on_single_message_menuitem_activate, account)
                 account_menu_for_single_message.append(item)
 
                 # join gc
                 gc_item = Gtk.MenuItem.new_with_label(
-                    _('using account %s') % account)
+                    _('using account %s') % account_label)
                 gc_sub_menu.append(gc_item)
                 gc_menuitem_menu = Gtk.Menu()
                 app.interface.roster.add_bookmarks_list(gc_menuitem_menu,
