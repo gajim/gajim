@@ -1316,7 +1316,7 @@ class AboutDialog(Gtk.AboutDialog):
         thanks.append('')
         thanks.append(_('Last but not least'))
         thanks.append(_('we would like to thank all the package maintainers.'))
-        self.add_credit_section('Thanks', thanks)
+        self.add_credit_section(_('Thanks'), thanks)
 
         self.set_translator_credits(_('translator-credits'))
         self.set_logo_icon_name('org.gajim.Gajim')
