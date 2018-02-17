@@ -251,6 +251,8 @@ class OptionsParser:
             self.update_config_to_0982()
         if old < [0, 98, 3] and new >= [0, 98, 3]:
             self.update_config_to_0983()
+        if old < [0, 99, 2] and new >= [0, 99, 2]:
+            self.update_config_to_0992()
 
         app.logger.init_vars()
         app.logger.attach_cache_database()
@@ -935,3 +937,12 @@ class OptionsParser:
             elif password == "libsecret:":
                 app.config.set_per('accounts', account, 'password', '')
         app.config.set('version', '0.98.3')
+
+    def update_config_to_0992(self):
+        self.call_sql(logger.LOG_DB_PATH,
+            '''
+            CREATE INDEX IF NOT EXISTS
+            idx_logs_stanza_id ON logs (stanza_id);
+            '''
+        )
+        app.config.set('version', '0.99.2')
