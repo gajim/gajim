@@ -1,3 +1,9 @@
+Gajim 0.99.2 (17 February 2018)
+  
+  * Speed up DB querys on MAM sync
+  * Fix config file encoding
+  * Bug fixes
+
 Gajim 0.99.1 (08 February 2018)
   
   * Integrate HTTPUpload
