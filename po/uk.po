@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.14.0.1-2fa5ddcd1adf\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-09 03:06+0000\n"
 "PO-Revision-Date: 2013-08-30 12:04+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -29,19 +29,19 @@ msgstr "Помилка."
 
 #: gajim/chat_control_base.py:569
 msgid "_Undo"
-msgstr ""
+msgstr "Скасувати"
 
 #: gajim/chat_control_base.py:577 gajim/profile_window.py:181
 #: gajim/conversation_textview.py:550
 msgid "_Clear"
-msgstr ""
+msgstr "Очистити"
 
 #: gajim/chat_control_base.py:1167
 msgid "Really send file?"
 msgstr "Справді надіслати файл?"
 
 #: gajim/chat_control_base.py:1168
-#, fuzzy, python-format
+#, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr ""
 "Якщо ви надішлете файл %s, він або вона дізнаються про ваш справжній "
@@ -120,7 +120,7 @@ msgstr "Відправник: %s"
 #: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
 #: gajim/tooltips.py:654
 msgid "Recipient: "
-msgstr "Отримувач:"
+msgstr "Отримувач: "
 
 #: gajim/filetransfers_window.py:246
 #, python-format
@@ -132,9 +132,8 @@ msgid "File transfer completed"
 msgstr "Передавання файла завершено"
 
 #: gajim/filetransfers_window.py:250 gajim/chat_control.py:1604
-#, fuzzy
 msgid "Open _Containing Folder"
-msgstr "В_ідкриту теку, яка містить цей файл"
+msgstr "Відкриту теку, яка містить цей файл"
 
 #: gajim/filetransfers_window.py:263 gajim/filetransfers_window.py:270
 #: gajim/chat_control.py:1659
@@ -161,7 +160,7 @@ msgid "File transfer stopped"
 msgstr "Зупинка передавання файла"
 
 #: gajim/filetransfers_window.py:319
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The file %(file)s has been received, but it seems to have been damaged along "
 "the way.\n"
@@ -171,9 +170,8 @@ msgstr ""
 "Бажаєте перезавантажити його?"
 
 #: gajim/filetransfers_window.py:345
-#, fuzzy
 msgid "Choose File to Send…"
-msgstr "Вибрати файл для надсилання..."
+msgstr "Вибрати файл для надсилання…"
 
 #: gajim/filetransfers_window.py:355
 msgid "_Send"
@@ -184,13 +182,12 @@ msgid "Description: "
 msgstr "Опис: "
 
 #: gajim/filetransfers_window.py:375
-#, fuzzy
 msgid "Gajim can not read this file"
-msgstr "Gajim не може отримати доступу до цього файла"
+msgstr "Gajim не може отримати доступу до цього файлу"
 
 #: gajim/filetransfers_window.py:376
 msgid "Another process is using this file."
-msgstr ""
+msgstr "Інший процес використовує цей файл."
 
 #: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:485
 #, python-format
@@ -206,7 +203,7 @@ msgstr ""
 
 #: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:490
 msgid "This file already exists"
-msgstr "Файл з такою назвою вже існує."
+msgstr "Файл з такою назвою вже існує"
 
 #: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:490
 msgid "What do you want to do?"
@@ -222,9 +219,8 @@ msgid "You do not have permission to create files in this directory."
 msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
 
 #: gajim/filetransfers_window.py:462
-#, fuzzy
 msgid "Save File as…"
-msgstr "Зберегти файл як..."
+msgstr "Зберегти файл як…"
 
 #: gajim/filetransfers_window.py:482
 #, python-format
@@ -247,9 +243,8 @@ msgid "%s wants to send you a file:"
 msgstr "%s бажає надіслати вам файл:"
 
 #: gajim/filetransfers_window.py:532
-#, fuzzy
 msgid "Checking file…"
-msgstr "Перевірка файлу..."
+msgstr "Перевірка файлу…"
 
 #: gajim/filetransfers_window.py:546
 msgid "File error"
@@ -283,7 +278,7 @@ msgstr "Назва: "
 
 #: gajim/filetransfers_window.py:760 gajim/tooltips.py:648
 msgid "Sender: "
-msgstr "Відправник:"
+msgstr "Відправник: "
 
 #: gajim/filetransfers_window.py:888
 msgid "Pause"
@@ -336,9 +331,8 @@ msgid "OpenPGP message encryption"
 msgstr "Шифрування повідомлення з OpenPGP"
 
 #: gajim/features_window.py:57
-#, fuzzy
 msgid "Ability to encrypting chat messages with OpenPGP."
-msgstr "Шифрування повідомлень балачки за допомогою ключів GPG."
+msgstr "Шифрування повідомлень балачки за допомогою OpenPGP."
 
 #: gajim/features_window.py:58
 msgid "Requires gpg and python-gnupg (http://code.google.com/p/python-gnupg/)."
@@ -346,7 +340,7 @@ msgstr "Вимагає gpg та python-gnupg (http://code.google.com/p/python-gn
 
 #: gajim/features_window.py:59
 msgid "Requires gpg.exe in PATH."
-msgstr "Вимагає gpg.exe у PATHзмфньфМ"
+msgstr "Вимагає gpg.exe у PATH."
 
 #: gajim/features_window.py:60
 msgid "Password encryption"
@@ -360,10 +354,11 @@ msgstr "Можна зберігати паролі безпечно, не лиш
 msgid ""
 "Requires libsecret and a provider (such as GNOME Keyring and KSecretService)."
 msgstr ""
+"Вимагає libsecret та постачальника (як то GNOME Keyring та KSecretService)."
 
 #: gajim/features_window.py:63
 msgid "On Windows the Windows Credential Vault is used."
-msgstr ""
+msgstr "Windows буде використовувати системне сховище паролів."
 
 #: gajim/features_window.py:64
 msgid "Spell Checker"
@@ -374,9 +369,8 @@ msgid "Spellchecking of composed messages."
 msgstr "Перевірка правопису повідомлень, які ви створюєте."
 
 #: gajim/features_window.py:66 gajim/features_window.py:67
-#, fuzzy
 msgid "Requires Gspell"
-msgstr "Потрібна бібліотека libgtkspell."
+msgstr "Вимагається Gspell"
 
 #: gajim/features_window.py:68
 msgid "Automatic status"
@@ -398,7 +392,7 @@ msgstr "Потрібен python2.5."
 
 #: gajim/features_window.py:72
 msgid "End to End message encryption"
-msgstr "Шифрування «Кінець до Кінця» (E2E)"
+msgstr "Шифрування «Кінець до Кінця»"
 
 #: gajim/features_window.py:73
 msgid "Encrypting chat messages."
@@ -426,7 +420,7 @@ msgstr "Потрібні python-docutils."
 
 #: gajim/features_window.py:80 gajim/data/gui/preferences_window.ui:2421
 msgid "Audio / Video"
-msgstr "Аудіо/Відео"
+msgstr "Аудіо / Відео"
 
 #: gajim/features_window.py:81
 msgid "Ability to start audio and video chat."
@@ -437,6 +431,8 @@ msgid ""
 "Requires gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav and "
 "gstreamer1.0-plugins-ugly."
 msgstr ""
+"Вимагає gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav та "
+"gstreamer1.0-plugins-ugly."
 
 #: gajim/features_window.py:84
 msgid "UPnP-IGD"
@@ -448,9 +444,8 @@ msgstr ""
 "Можливість запиту до маршрутизатора для надання порту для передавання файлів."
 
 #: gajim/features_window.py:86
-#, fuzzy
 msgid "Requires gir1.2-gupnpigd-1.0."
-msgstr "Потрібен python-gupnp-igd."
+msgstr "Потрібен gir1.2-gupnpigd-1.0."
 
 #: gajim/features_window.py:94
 msgid "?features:Available"
@@ -480,15 +475,13 @@ msgstr ""
 "%(new_filename)s?"
 
 #: gajim/gtkgui_helpers.py:507
-#, fuzzy
 msgid "Save Image as…"
-msgstr "Зберегти зображення як..."
+msgstr "Зберегти зображення як…"
 
 #: gajim/vcard.py:166 gajim/vcard.py:510 gajim/profile_window.py:175
 #: gajim/chat_control.py:578
-#, fuzzy
 msgid "Save _As"
-msgstr "Має "
+msgstr "Зберегти як"
 
 #: gajim/vcard.py:286 gajim/vcard.py:293
 msgid "?Client:Unknown"
@@ -511,7 +504,6 @@ msgid "<b>Affiliation:</b>"
 msgstr "<b>Належність:</b>"
 
 #: gajim/vcard.py:389
-#, fuzzy
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in their presence"
@@ -520,7 +512,6 @@ msgstr ""
 "цікавитеся відомостями щодо його або її присутності"
 
 #: gajim/vcard.py:391
-#, fuzzy
 msgid ""
 "You are interested in the contact's presence information, but it is not "
 "mutual"
@@ -529,14 +520,12 @@ msgstr ""
 "цікавляться вашими відомостями"
 
 #: gajim/vcard.py:393
-#, fuzzy
 msgid "The contact and you want to exchange presence information"
 msgstr ""
 "Ви і цей контакт взаємно зацікавлені у відомостях щодо присутності одне "
 "одного"
 
 #: gajim/vcard.py:395
-#, fuzzy
 msgid ""
 "You and the contact have a mutual disinterest in each-others presence "
 "information"
@@ -554,7 +543,7 @@ msgstr "У черзі немає запитів на підписку."
 
 #: gajim/vcard.py:408 gajim/vcard.py:452 gajim/vcard.py:565
 msgid " resource with priority "
-msgstr " пріоритетний ресурс"
+msgstr " пріоритетний ресурс "
 
 #: gajim/options_dialog.py:383 gajim/dialogs.py:4767 gajim/dialogs.py:4809
 #: gajim/dialogs.py:4857 gajim/dialogs.py:4947
@@ -562,12 +551,10 @@ msgid "All files"
 msgstr "Всі файли"
 
 #: gajim/options_dialog.py:392
-#, fuzzy
 msgid "Clear File"
-msgstr "Прибираю"
+msgstr "Очистити файл"
 
 #: gajim/options_dialog.py:474
-#, fuzzy
 msgid "Manage Proxies"
 msgstr "Керування профілями проксі"
 
@@ -583,18 +570,16 @@ msgid "None"
 msgstr "Немає"
 
 #: gajim/options_dialog.py:506
-#, fuzzy
 msgid "Adjust to Status"
-msgstr "_Узгодити зі станом"
+msgstr "Узгодити зі станом"
 
 #: gajim/options_dialog.py:518
 msgid "On"
-msgstr ""
+msgstr "Увімкнено"
 
 #: gajim/options_dialog.py:518
-#, fuzzy
 msgid "Off"
-msgstr "Поза мережею"
+msgstr "Вимкнено"
 
 #: gajim/options_dialog.py:556
 msgid "Failed to get secret keys"
@@ -632,9 +617,8 @@ msgid "I would like to add you to my roster"
 msgstr "Я хочу додати вас до свого реєстру"
 
 #: gajim/gui_menu_builder.py:508
-#, fuzzy
 msgid "Send Single _Message…"
-msgstr "Надіслати окреме _повідомлення"
+msgstr "Надіслати окреме _повідомлення…"
 
 #: gajim/gui_menu_builder.py:521 gajim/roster_window.py:5168
 #: gajim/data/gui/contact_context_menu.ui:58
@@ -642,9 +626,8 @@ msgid "Send Cus_tom Status"
 msgstr "Надіслати не_типовий стан"
 
 #: gajim/gui_menu_builder.py:541
-#, fuzzy
 msgid "E_xecute Command…"
-msgstr "Ви_конати команду"
+msgstr "Виконати команду…"
 
 #: gajim/gui_menu_builder.py:549
 msgid "_Manage Transport"
@@ -655,9 +638,8 @@ msgid "_Modify Transport"
 msgstr "_Змінити транспорт"
 
 #: gajim/gui_menu_builder.py:562 gajim/roster_window.py:5198
-#, fuzzy
 msgid "_Rename…"
-msgstr "Пере_йменувати"
+msgstr "Пере_йменувати…"
 
 #: gajim/gui_menu_builder.py:573 gajim/roster_window.py:5215
 #: gajim/roster_window.py:5330 gajim/data/gui/blocked_contacts_window.ui:52
@@ -682,157 +664,130 @@ msgid "_Information"
 msgstr "_Інформація"
 
 #: gajim/gui_menu_builder.py:611
-#, fuzzy
 msgid "Send File..."
 msgstr "Надіслати _файл..."
 
 #: gajim/gui_menu_builder.py:615
-#, fuzzy
 msgid "Invite Contacts"
 msgstr "Запросити _контакти"
 
 #: gajim/gui_menu_builder.py:616
-#, fuzzy
 msgid "Add to Roster"
 msgstr "_Додати до реєстру"
 
 #: gajim/gui_menu_builder.py:617
-#, fuzzy
 msgid "Audio Session"
-msgstr "Тест аудіо"
+msgstr "Аудіо сесія"
 
 #: gajim/gui_menu_builder.py:618
-#, fuzzy
 msgid "Video Session"
-msgstr "Тест відео"
+msgstr "Відео сесія"
 
 #: gajim/gui_menu_builder.py:619
-#, fuzzy
 msgid "Information"
 msgstr "_Інформація"
 
 #: gajim/gui_menu_builder.py:620 gajim/gui_menu_builder.py:655
 #: gajim/data/gui/application_menu.ui:37
-#, fuzzy
 msgid "History"
-msgstr "_Журнал"
+msgstr "_Історія"
 
 #: gajim/gui_menu_builder.py:644
-#, fuzzy
 msgid "Manage Room"
 msgstr "_Керування кімнатою"
 
 #: gajim/gui_menu_builder.py:645
-#, fuzzy
 msgid "Change Subject"
-msgstr "Змінити _тему..."
+msgstr "Змінити _тему"
 
 #: gajim/gui_menu_builder.py:646
-#, fuzzy
 msgid "Configure Room"
-msgstr "Налаштувати _кімнату..."
+msgstr "Налаштувати _кімнату"
 
 #: gajim/gui_menu_builder.py:647
-#, fuzzy
 msgid "Destroy Room"
-msgstr "_Знищити кімнату"
+msgstr "Знищити кімнату"
 
 #: gajim/gui_menu_builder.py:649
-#, fuzzy
 msgid "Change Nick"
-msgstr "Змінити _псевдонім..."
+msgstr "Змінити псевдонім"
 
 #: gajim/gui_menu_builder.py:650
-#, fuzzy
 msgid "Bookmark Room"
 msgstr "Зробити закладку на цій кімнаті"
 
 #: gajim/gui_menu_builder.py:651
-#, fuzzy
 msgid "Request Voice"
-msgstr "_Запит голосу"
+msgstr "Запит голосу"
 
 #: gajim/gui_menu_builder.py:652 gajim/data/gui/gc_control_popup_menu.ui:72
-#, fuzzy
 msgid "Notify on all messages"
-msgstr "Зразки повідомлень:"
+msgstr "Повідомляти про усі повідомлення"
 
 #: gajim/gui_menu_builder.py:653
-#, fuzzy
 msgid "Minimize on close"
-msgstr "_Мінімізувати після закриття"
+msgstr "Мінімізувати після закриття"
 
 #: gajim/gui_menu_builder.py:654 gajim/roster_window.py:5400
-#, fuzzy
 msgid "Execute command"
-msgstr "Ви_конати команду"
+msgstr "Виконати команду"
 
 #: gajim/gui_menu_builder.py:656
-#, fuzzy
 msgid "Disconnect"
-msgstr "_Роз'єднати"
+msgstr "Роз'єднати"
 
 #: gajim/gui_menu_builder.py:685 gajim/gui_menu_builder.py:732
 msgid "Join Group Chat"
 msgstr "Приєднатись до групової балачки"
 
 #: gajim/gui_menu_builder.py:731
-#, fuzzy
 msgid "Add Contact..."
-msgstr "_Додати контакт..."
+msgstr "Додати контакт..."
 
 #: gajim/gui_menu_builder.py:733 gajim/accounts_window.py:459
 #: gajim/accounts_window.py:554 gajim/accounts_window.py:593
-#, fuzzy
 msgid "Profile"
-msgstr "файл"
+msgstr "Профіль"
 
 #: gajim/gui_menu_builder.py:734
-#, fuzzy
 msgid "Discover Services"
-msgstr "Ви_явити служби"
+msgstr "Виявити служби"
 
 #: gajim/gui_menu_builder.py:735
-#, fuzzy
 msgid "Send Single Message..."
-msgstr "_Надіслати окреме повідомлення..."
+msgstr "Надіслати окреме повідомлення..."
 
 #: gajim/gui_menu_builder.py:736 gajim/data/gui/preferences_window.ui:2846
 msgid "Advanced"
 msgstr "Додатково"
 
 #: gajim/gui_menu_builder.py:737
-#, fuzzy
 msgid "Archiving Preferences"
-msgstr "Редагувати параметри _архівації"
+msgstr "Параметри архівації"
 
 #: gajim/gui_menu_builder.py:738 gajim/history_sync.py:44
-#, fuzzy
 msgid "Synchronise History"
-msgstr "Синхронізувати"
+msgstr "Синхронізувати історію"
 
 #: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4544
 msgid "Privacy Lists"
 msgstr "Списки конфіденційності"
 
 #: gajim/gui_menu_builder.py:740 gajim/server_info.py:37
-#, fuzzy
 msgid "Server Info"
-msgstr "Сервер"
+msgstr "Інформація про сервер"
 
 #: gajim/gui_menu_builder.py:741 gajim/data/gui/xml_console_window.ui:77
 msgid "XML Console"
 msgstr "Консоль XML"
 
 #: gajim/gui_menu_builder.py:743
-#, fuzzy
 msgid "Admin"
-msgstr "_Адміністратор"
+msgstr "Адміністратор"
 
 #: gajim/gui_menu_builder.py:744
-#, fuzzy
 msgid "Send Server Message..."
-msgstr "_Надіслати серверне повідомлення..."
+msgstr "Надіслати серверне повідомлення..."
 
 #: gajim/gui_menu_builder.py:745
 msgid "Set MOTD..."
@@ -843,14 +798,12 @@ msgid "Update MOTD..."
 msgstr "Оновити «Повідомлення дня»..."
 
 #: gajim/gui_menu_builder.py:747
-#, fuzzy
 msgid "Delete MOTD..."
-msgstr "Вилучити «Повідомлення дня»"
+msgstr "Вилучити «Повідомлення дня»…"
 
 #: gajim/gui_menu_builder.py:787
-#, fuzzy
 msgid "No Accounts available"
-msgstr "Немає жодного облікового запису"
+msgstr "Немає придатного облікового запису"
 
 #: gajim/gui_menu_builder.py:799 gajim/data/gui/accounts_window.ui:78
 #: gajim/data/gui/application_menu.ui:5 gajim/data/gui/application_menu.ui:71
@@ -872,7 +825,7 @@ msgstr "Показати цю довідку та вийти"
 
 #: gajim/history_manager.py:61
 msgid "Choose folder for logfile"
-msgstr ""
+msgstr "Обрати каталог для файлу журналу"
 
 #: gajim/history_manager.py:104
 msgid "Cannot find history logs database"
@@ -884,7 +837,7 @@ msgid "JID"
 msgstr "JID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "Дата"
 
@@ -894,7 +847,7 @@ msgid "Nickname"
 msgstr "Псевдонім"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Повідомлення"
 
@@ -911,7 +864,6 @@ msgstr ""
 "ЯКЩО ЗАПУЩЕНО GAJIM)"
 
 #: gajim/history_manager.py:242
-#, fuzzy
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
 "reusable. If you really want to reduce database filesize, click YES, else "
@@ -921,19 +873,18 @@ msgid ""
 msgstr ""
 "Зазвичай, пам’ять, виділену для бази даних не буде звільнено, її просто "
 "можна буде використати повторно. Якщо ви справді бажаєте зменшити розмір "
-"файла бази даних, натисніть кнопку «ТАК», у іншому випадку натисніть кнопку "
+"файлу бази даних, натисніть кнопку «ТАК», у іншому випадку натисніть кнопку "
 "«НІ».\n"
 "\n"
-"Якщо ви натиснете кнопку «ТАК», вам доведеться зачекати..."
+"Якщо ви натиснете кнопку «ТАК», вам доведеться зачекати…"
 
 #: gajim/history_manager.py:247
 msgid "Database Cleanup"
 msgstr "Очищення бази даних"
 
 #: gajim/history_manager.py:462
-#, fuzzy
 msgid "Exporting History Logs…"
-msgstr "Експорт журналів..."
+msgstr "Експорт журналів…"
 
 #: gajim/history_manager.py:538
 #, python-format
@@ -941,19 +892,17 @@ msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(who)s %(time)s повідомив: %(message)s\n"
 
 #: gajim/history_manager.py:576
-#, fuzzy, python-format
+#, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
-msgstr "Ви справді бажаєте вилучити журнальні записи %(jid)s?"
+msgstr "Ви справді бажаєте вилучити записи спілкування з %(jid)s?"
 
 #: gajim/history_manager.py:580
-#, fuzzy
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr "Ви справді бажаєте вилучити журнали для обраних контактів?"
 
 #: gajim/history_manager.py:582
-#, fuzzy
 msgid "This can not be undone."
-msgstr "Не вдалося знайти службу"
+msgstr "Це рішення незворотне."
 
 #: gajim/history_manager.py:584 gajim/history_manager.py:623
 msgid "Deletion Confirmation"
@@ -971,9 +920,8 @@ msgid "This is an irreversible operation."
 msgstr "Наслідки цієї дії є незворотними."
 
 #: gajim/profile_window.py:63
-#, fuzzy
 msgid "Retrieving profile…"
-msgstr "Отримання профілю..."
+msgstr "Отримання профілю…"
 
 #: gajim/profile_window.py:128
 msgid "Could not load image"
@@ -1004,9 +952,8 @@ msgstr ""
 "встановити з’єднання."
 
 #: gajim/profile_window.py:349
-#, fuzzy
 msgid "Sending profile…"
-msgstr "Надсилання профілю..."
+msgstr "Надсилання профілю…"
 
 #: gajim/profile_window.py:368
 msgid "Information NOT published"
@@ -1029,7 +976,7 @@ msgid "Contact name: <i>%s</i>"
 msgstr "Назва контакту: <i>%s</i>"
 
 #: gajim/dialogs.py:97
-#, fuzzy, python-format
+#, python-format
 msgid "JID: <i>%s</i>"
 msgstr "Jabber ID: <i>%s</i>"
 
@@ -1090,7 +1037,7 @@ msgstr "Будь ласка, введіть назву цього повідом
 
 #: gajim/dialogs.py:855
 msgid "JID:"
-msgstr ""
+msgstr "JID:"
 
 #: gajim/dialogs.py:856
 msgid "AIM Address:"
@@ -1110,16 +1057,16 @@ msgstr "Адреса MSN:"
 
 #: gajim/dialogs.py:860
 msgid "Yahoo! Address:"
-msgstr "Адреса Yahoo!:"
+msgstr "Yahoo! Адреса:"
 
 #: gajim/dialogs.py:897
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Please fill in the data of the contact you want to add to your account <b>"
 "%s</b>"
 msgstr ""
 "Будь ласка, вкажіть дані контакту, який ви бажаєте додати до облікового "
-"запису %s"
+"запису <b>%s</b>"
 
 #: gajim/dialogs.py:900
 msgid "Please fill in the data of the contact you want to add"
@@ -1150,9 +1097,8 @@ msgid "User ID:"
 msgstr "Ідентифікатор:"
 
 #: gajim/dialogs.py:1272
-#, fuzzy
 msgid "Error while adding transport contact"
-msgstr "Помилка під час додавання служби. %s"
+msgstr "Помилка під час додавання контакту з транспорту"
 
 #: gajim/dialogs.py:1273
 #, python-format
@@ -1161,63 +1107,60 @@ msgid ""
 "\n"
 "%(error)s"
 msgstr ""
+"Ця помилка сталася під час додавання контакту для транспорту %(transport)s:\n"
+"\n"
+"%(error)s"
 
 #: gajim/dialogs.py:1305
-#, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "Jabber/XMPP клієнт, що базується на GTK+"
 
 #: gajim/dialogs.py:1306
-#, fuzzy, python-format
+#, python-format
 msgid "GTK+ Version: %s"
-msgstr "Версія GTK+:"
+msgstr "Версія GTK+: %s"
 
 #: gajim/dialogs.py:1307
-#, fuzzy, python-format
+#, python-format
 msgid "PyGObject Version: %s"
-msgstr "Версія PyGTK:"
+msgstr "Версія PyGTK: %s"
 
 #: gajim/dialogs.py:1308
 #, python-format
 msgid "python-nbxmpp Version: %s"
-msgstr ""
+msgstr "python-nbxmpp версія: %s"
 
 #: gajim/dialogs.py:1311
-#, fuzzy
 msgid "Current Developers"
-msgstr "Поточні розробники:"
+msgstr "Поточні розробники"
 
 #: gajim/dialogs.py:1312
-#, fuzzy
 msgid "Past Developers"
-msgstr "Колишні розробники:"
+msgstr "Колишні розробники"
 
 #: gajim/dialogs.py:1313
 msgid "Artists"
-msgstr ""
+msgstr "Митці"
 
 #: gajim/dialogs.py:1317
 msgid "Last but not least"
-msgstr ""
+msgstr "На останок"
 
 #: gajim/dialogs.py:1318
-#, fuzzy
 msgid "we would like to thank all the package maintainers."
-msgstr ""
-"Нарешті, але ані трохи не менше, ми вдячні всім супровідникам пакунків з "
-"програмою."
+msgstr "ми вдячні всім супровідникам пакунків з програмою."
 
 #: gajim/dialogs.py:1321
 msgid "translator-credits"
-msgstr "Сергій Єгоров <prapor@unixzone.org.ua> Юрій Чорноіван (0.12)"
+msgstr "Сергій Єгоров Юрій Чорноіван (0.12)"
 
 #: gajim/dialogs.py:1485
-#, fuzzy, python-format
+#, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "Словники для мови %s не доступні"
 
 #: gajim/dialogs.py:1486
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
 "another language by setting the speller_language option.\n"
@@ -1235,7 +1178,7 @@ msgid "Insecure connection"
 msgstr "Небезпечне з’єднання"
 
 #: gajim/dialogs.py:1834
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
 "This means conversations will not be encrypted, and is strongly "
@@ -1244,8 +1187,8 @@ msgid ""
 msgstr ""
 "Ви маєте намір надіслати з’єднатись з обліковим записом %(account)s "
 "(%(server)s) через незахищене з’єднання. Весь ваш обмін повідомленнями буде "
-"незашифрованим. Цей тип з’єднання справді ненадійний. Ви справді бажаєте це "
-"зробити?"
+"незашифрованим. Цей тип з’єднання справді ненадійний.\n"
+"Ви справді бажаєте це зробити?"
 
 #: gajim/dialogs.py:1839 gajim/gui_interface.py:1512
 #: gajim/gui_interface.py:1553
@@ -1296,27 +1239,24 @@ msgid "Subscription request from %s"
 msgstr "Запит на підписку від %s"
 
 #: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
-#, fuzzy
 msgid "Join Groupchat"
 msgstr "Приєднатись до групової балачки"
 
 #: gajim/dialogs.py:2500
-#, fuzzy
 msgid "Invalid Room"
 msgstr "Некоректна кімната"
 
 #: gajim/dialogs.py:2501
 msgid "Please choose a room"
-msgstr ""
+msgstr "Будь ласка, оберіть кімнату"
 
 #: gajim/dialogs.py:2513 gajim/dialogs.py:2520
 msgid "Invalid Nickname"
 msgstr "Некоректний псевдонім"
 
 #: gajim/dialogs.py:2514
-#, fuzzy
 msgid "Please choose a nickname"
-msgstr "Будь ласка, спершу створіть нову порожню тему з бажаною назвою."
+msgstr "Оберіть псевдонім"
 
 #: gajim/dialogs.py:2526 gajim/dialogs.py:3486 gajim/config.py:2457
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
@@ -1344,7 +1284,7 @@ msgstr ""
 "запису з сервером."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Назва"
@@ -1368,17 +1308,14 @@ msgid "Synchronise"
 msgstr "Синхронізувати"
 
 #: gajim/dialogs.py:2772
-#, fuzzy
 msgid "Start new Conversation"
-msgstr "Спілкування з продовженням"
+msgstr "Почати нову балачку"
 
 #: gajim/dialogs.py:3028
-#, fuzzy
 msgid "New Groupchat"
-msgstr "Створити групову балачку"
+msgstr "Нова групова балачка"
 
 #: gajim/dialogs.py:3030
-#, fuzzy
 msgid "New Contact"
 msgstr "Додати новий контакт"
 
@@ -1403,27 +1340,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "Паролі, введені у обидва поля, мають бути тотожними."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "Контакт увійшов до мережі"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "Контакт вийшов з мережі"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "Нове повідомлення"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "Створити окреме повідомлення"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "Нове конфіденційне повідомлення"
 
@@ -1456,7 +1393,7 @@ msgid "Groupchat Invitation"
 msgstr "Запрошення до групової балачки"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "Зміна контактом стану"
 
@@ -1514,24 +1451,20 @@ msgid "%s wrote:\n"
 msgstr "%s написав(-ла):\n"
 
 #: gajim/dialogs.py:3558 gajim/data/gui/shortcuts_window.ui:113
-#, fuzzy
 msgid "Clear"
 msgstr "Прибираю"
 
 #: gajim/dialogs.py:3563
-#, fuzzy
 msgid "Filter"
-msgstr "Фільтр:"
+msgstr "Фільтр"
 
 #: gajim/dialogs.py:3568
-#, fuzzy
 msgid "XML Input"
-msgstr "<b>Ввід XML</b>"
+msgstr "Ввід XML"
 
 #: gajim/dialogs.py:3572
-#, fuzzy
 msgid "Send"
-msgstr "_Надіслати"
+msgstr "Надіслати"
 
 #: gajim/dialogs.py:3755
 msgid "add"
@@ -1578,7 +1511,7 @@ msgstr "%s підказав мені додати вас до мого реєс�
 #, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
-msgstr[0] "Додано %1 контакт"
+msgstr[0] "Додано %d контакт"
 msgstr[1] "Додано %d контакти"
 msgstr[2] "Додано %d контактів"
 
@@ -1597,31 +1530,27 @@ msgstr "Архівація налаштувань для %s"
 
 #: gajim/dialogs.py:4039
 msgid "Success!"
-msgstr ""
+msgstr "Вдало!"
 
 #: gajim/dialogs.py:4039
-#, fuzzy
 msgid "Your Archiving Preferences have been saved!"
-msgstr "Архівація налаштувань для %s"
+msgstr "Налаштування архіву записані!"
 
 #: gajim/dialogs.py:4055
 msgid "We got no response from the Server"
-msgstr ""
+msgstr "Ми не отримали відповіді від сервера"
 
 #: gajim/dialogs.py:4057
-#, fuzzy
 msgid "We received an error: {}"
-msgstr "Це помилка"
+msgstr "Ми отримали помилку: {}"
 
 #: gajim/dialogs.py:4061
-#, fuzzy
 msgid "Error!"
-msgstr "Помилка."
+msgstr "Помилка!"
 
 #: gajim/dialogs.py:4120
-#, fuzzy
 msgid "Add JID"
-msgstr "Jabber ID:"
+msgstr "Додати JID"
 
 #: gajim/dialogs.py:4193
 #, python-format
@@ -1764,7 +1693,7 @@ msgid "Certificate for account %s"
 msgstr "Сертифікат до облікового запису %s"
 
 #: gajim/dialogs.py:5333
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "<b>Issued to:</b>\n"
 "Common Name (CN): %(scn)s\n"
@@ -1801,8 +1730,10 @@ msgstr ""
 "Видано: %(io)s\n"
 "Діє до: %(eo)s\n"
 "\n"
-"<b>Відбито:</b>\n"
-"SHA1 Відбиток: %(sha1)s"
+"<b>Відбиток:</b>\n"
+"SHA1 Відбиток: %(sha1)s\n"
+"\n"
+"SHA256 Відбиток: %(sha256)s\n"
 
 #: gajim/dialogs.py:5380 gajim/gui_interface.py:1402
 #, python-format
@@ -1810,27 +1741,24 @@ msgid "SSL Certificate Verification for %s"
 msgstr "Перевірка сертифіката SSL для %s"
 
 #: gajim/dialogs.py:5381 gajim/dialogs.py:5398
-#, fuzzy
 msgid "View cert…"
-msgstr "Перегляд сертифікату..."
+msgstr "Перегляд сертифікату…"
 
 #: gajim/dialogs.py:5414 gajim/data/gui/application_menu.ui:32
-#, fuzzy
 msgid "File Transfer"
 msgstr "Перенесення файлів"
 
 #: gajim/dialogs.py:5438
 msgid "Requesting HTTP Upload Slot..."
-msgstr ""
+msgstr "Запит потоку відвантаження по HTTP…"
 
 #: gajim/dialogs.py:5442
 msgid "Uploading file via HTTP File Upload..."
-msgstr ""
+msgstr "Вивантажуємо файл через HTTP..."
 
 #: gajim/dialogs.py:5446
-#, fuzzy
 msgid "Encrypting file..."
-msgstr "Шифрування E2E вимкнено"
+msgstr "Шифрування файлу…"
 
 #: gajim/groupchat_control.py:192 gajim/groupchat_control.py:1792
 #, python-format
@@ -1838,7 +1766,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s тепер стає %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s тепер %(status)s"
@@ -1856,12 +1784,11 @@ msgstr ""
 #: gajim/groupchat_control.py:636 gajim/chat_control.py:323
 #: gajim/chat_control.py:327
 msgid "HTTP File Upload"
-msgstr ""
+msgstr "Вивантаження файлу через HTTP"
 
 #: gajim/groupchat_control.py:638
-#, fuzzy
 msgid "HTTP File Upload not supported by your server"
-msgstr "Збереження метаконтактів не підтримується вашим сервером"
+msgstr "Вивантаження файлів по HTTP не підтримується вашим сервером"
 
 #: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2319
 msgid "Changing Subject"
@@ -1880,12 +1807,10 @@ msgid "Please specify the new nickname you want to use:"
 msgstr "Будь ласка, вкажіть новий псевдонім, яким ви бажаєте скористатися:"
 
 #: gajim/groupchat_control.py:677
-#, fuzzy
 msgid "Invalid group chat JID"
 msgstr "Некоректний ідентифікатор Jabber групової балачки"
 
 #: gajim/groupchat_control.py:678
-#, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr ""
 "У ідентифікаторі Jabber групової балачки містяться недозволені символи."
@@ -1896,7 +1821,6 @@ msgid "Destroying %s"
 msgstr "Знищення %s"
 
 #: gajim/groupchat_control.py:685
-#, fuzzy
 msgid ""
 "You are going to remove this room permanently.\n"
 "You may specify a reason below:"
@@ -1921,15 +1845,13 @@ msgid "and NOT authenticated"
 msgstr "і НЕ уповноваженим"
 
 #: gajim/groupchat_control.py:1023 gajim/chat_control.py:808
-#, fuzzy, python-format
+#, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
-"Шифрування %(type)s %(status)s активним %(authenticated)s.\n"
-"Ваш сеанс балачки %(logged)s записано до журналу."
+msgstr "%(type)s шифрування є активним %(authenticated)s."
 
 #: gajim/groupchat_control.py:1066
 msgid "Conversation with "
-msgstr "Спілкування з"
+msgstr "Спілкування з "
 
 #: gajim/groupchat_control.py:1068
 msgid "Continued conversation"
@@ -1950,11 +1872,11 @@ msgstr "Тепер у кімнаті буде показано недоступ�
 
 #: gajim/groupchat_control.py:1454
 msgid "Room now does not show unavailable members"
-msgstr "тепер у кімнаті не можна буде бачити недоступних постійних учасників"
+msgstr "Тепер у кімнаті не можна буде бачити недоступних постійних учасників"
 
 #: gajim/groupchat_control.py:1456
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "Змінено налаштування що не стосуються приватності"
 
 #: gajim/groupchat_control.py:1460
 msgid "Room logging is now enabled"
@@ -1973,7 +1895,6 @@ msgid "Room is now semi-anonymous"
 msgstr "Тепер у кімнаті увімкнено напіванонімність"
 
 #: gajim/groupchat_control.py:1470
-#, fuzzy
 msgid "Room is now fully anonymous"
 msgstr "Тепер у кімнаті увімкнено анонімність"
 
@@ -2099,21 +2020,18 @@ msgid "Banning %s"
 msgstr "Блокування %s"
 
 #: gajim/chat_control.py:325 gajim/chat_control.py:329
-#, fuzzy
 msgid "Jingle File Transfer"
-msgstr "Перенесення файлів"
+msgstr "Перенесення файлів Jingle"
 
 #: gajim/chat_control.py:331
-#, fuzzy
 msgid "No File Transfer available"
-msgstr "Перенесення файлу не вдалося"
+msgstr "Перенесення файлу не доступне"
 
 #: gajim/chat_control.py:392
 msgid "Show a list of formattings"
 msgstr "Показати список інструментів форматування"
 
 #: gajim/chat_control.py:396
-#, fuzzy
 msgid "Formatting is not available so long as GPG is active"
 msgstr "Форматування не доступне коли активовано GPG"
 
@@ -2251,12 +2169,11 @@ msgid "Transports"
 msgstr "Транспорти"
 
 #: gajim/roster_window.py:2045
-#, fuzzy
 msgid "Authorization sent"
 msgstr "Було надіслано уповноваження"
 
 #: gajim/roster_window.py:2046
-#, fuzzy, python-format
+#, python-format
 msgid "\"%s\" will now see your status."
 msgstr "Тепер «%s» буде відомий ваш стан."
 
@@ -2270,7 +2187,6 @@ msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr "Якщо «%s» прийме цей запит, ви дізнаватиметеся про його або її стан."
 
 #: gajim/roster_window.py:2084
-#, fuzzy
 msgid "Authorization removed"
 msgstr "Уповноваження було вилучено"
 
@@ -2290,6 +2206,9 @@ msgid ""
 "Beware there is an incompatible python package called gnupg.\n"
 "You will be connected to %s without OpenPGP."
 msgstr ""
+"Gajim вимагає python-gnupg >= 0.3.8\n"
+"Остерігайтеся несумісного Python-пакунку названого gnupg.\n"
+"Ви будете з'єднані з %s без використання OpenPGP."
 
 #: gajim/roster_window.py:2318 gajim/roster_window.py:3625
 msgid "You are participating in one or more group chats"
@@ -2378,7 +2297,6 @@ msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "Ви маєте намір створити метаконтакт. Ви справді цього бажаєте?"
 
 #: gajim/roster_window.py:2894
-#, fuzzy
 msgid ""
 "This contact will see you offline and you will not receive messages it sends "
 "you."
@@ -2436,21 +2354,18 @@ msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "Ви збираєтесь вилучити \"%(name)s\" (%(jid)s) з вашого реєстру.\n"
 
 #: gajim/roster_window.py:3443
-#, fuzzy
 msgid ""
 "By removing this contact you also remove authorization resulting in them "
 "always seeing you as offline."
 msgstr ""
-"Вилучення цих контактів:%s\n"
-"призведе до вилучення уповноваження, отже для них ви завжди залишатиметеся "
-"поза мережею."
+"Видалення цих контактів також видалить авторизацію, вони завжди будуть "
+"бачити вас як поза мережею."
 
 #: gajim/roster_window.py:3449
 msgid "Do you want to continue?"
 msgstr "Бажаєте продовжити виконання операції?"
 
 #: gajim/roster_window.py:3453
-#, fuzzy
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
 "in them always seeing you as offline."
@@ -2482,7 +2397,7 @@ msgid ""
 msgstr "Ви маєте намір надіслати особливий статус. Ви справді цього бажаєте?"
 
 #: gajim/roster_window.py:3525
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
 "change your status. Then they will see your global status."
@@ -2523,7 +2438,6 @@ msgid ""
 msgstr "Ви маєте намір створити метаконтакт. Ви справді цього бажаєте?"
 
 #: gajim/roster_window.py:4278
-#, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
 "is used when the same person has several XMPP accounts or transport accounts."
@@ -2545,19 +2459,19 @@ msgstr[1] "Ви справді бажаєте надіслати ці файли
 msgstr[2] "Ви справді бажаєте надіслати ці файли до %s:"
 
 #: gajim/roster_window.py:4552
-#, fuzzy, python-format
+#, python-format
 msgid "Send %(from)s to %(to)s"
-msgstr "Надіслати %s до %s"
+msgstr "Надіслати %(from)s до %(to)s"
 
 #: gajim/roster_window.py:4565
 #, python-format
 msgid "Make %s first contact"
-msgstr "Зробити %s першим контактом."
+msgstr "Зробити %s першим контактом"
 
 #: gajim/roster_window.py:4570
-#, fuzzy, python-format
+#, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
-msgstr "Робить %s та %s метаконтактом."
+msgstr "Робить %(contact1)s та %(contact2)s метаконтактом"
 
 #: gajim/roster_window.py:4954 gajim/roster_window.py:5052
 msgid "_Change Status Message"
@@ -2572,9 +2486,8 @@ msgid "Publish Location"
 msgstr "Оприлюднити положення"
 
 #: gajim/roster_window.py:4997
-#, fuzzy
 msgid "Configure Services…"
-msgstr "Налаштувати служби..."
+msgstr "Налаштувати служб…"
 
 #: gajim/roster_window.py:5130
 msgid "_Maximize All"
@@ -2603,9 +2516,8 @@ msgid "_Manage Contacts"
 msgstr "_Керування контактами"
 
 #: gajim/roster_window.py:5321
-#, fuzzy
 msgid "Edit _Groups…"
-msgstr "Редагувати _групи"
+msgstr "Редагувати _групи…"
 
 #: gajim/roster_window.py:5342 gajim/data/gui/filetransfers.ui:11
 #: gajim/data/gui/remove_account_window.ui:137
@@ -2639,9 +2551,8 @@ msgid "_Join New Group Chat"
 msgstr "_Приєднатись до нової групової балачки"
 
 #: gajim/gajim.py:72
-#, fuzzy
 msgid "Show the application's version"
-msgstr "Показувати піктограму зони сповіщень"
+msgstr "Показувати версію програми"
 
 #: gajim/gajim.py:75
 msgid "Show only critical errors"
@@ -2649,10 +2560,9 @@ msgstr "_Показати лише критичні помилки"
 
 #: gajim/gajim.py:78
 msgid "Separate profile files completely (even history db and plugins)"
-msgstr ""
+msgstr "Повністю окремі файли профілю (включно з історією та модулями)"
 
 #: gajim/gajim.py:82
-#, fuzzy
 msgid "Print XML stanzas and other debug information"
 msgstr "Показувати повідомлення xml та іншу відлагоджувальну інформацію"
 
@@ -2669,53 +2579,50 @@ msgid "Configure logging system"
 msgstr "Налаштувати ведення журналів"
 
 #: gajim/gajim.py:96
-#, fuzzy
 msgid "Show all warnings"
-msgstr "Показати усі _події з черги"
+msgstr "Показати усі попередження"
 
 #: gajim/gajim.py:99
 msgid "open ipython shell"
-msgstr ""
+msgstr "відкрити консоль ipython"
 
 #: gajim/gajim.py:159 gajim/gui_interface.py:127
 msgid "Database Error"
 msgstr "Помилка бази даних"
 
 #: gajim/history_sync.py:217
-#, fuzzy
 msgid "How far back do you want to go?"
-msgstr "Що ви хочете зробити?"
+msgstr "Як далеко ви хочете повернутись?"
 
 #: gajim/history_sync.py:222
 msgid "One Month"
-msgstr ""
+msgstr "Один місяць"
 
 #: gajim/history_sync.py:223
 msgid "Three Months"
-msgstr ""
+msgstr "Три місяці"
 
 #: gajim/history_sync.py:224
 msgid "One Year"
-msgstr ""
+msgstr "Один рік"
 
 #: gajim/history_sync.py:225
 msgid "Everything"
-msgstr ""
+msgstr "Усе"
 
 #: gajim/history_sync.py:254
-#, fuzzy
 msgid "Connecting..."
-msgstr "Виконується з'єднання"
+msgstr "Виконується з'єднання…"
 
 #: gajim/history_sync.py:266
-#, fuzzy, python-format
+#, python-format
 msgid "%(received)s of %(max)s"
-msgstr "Передавання файлу·%(filename)s·від·%(name)s невдале"
+msgstr "%(received)s з%(max)s"
 
 #: gajim/history_sync.py:270
-#, fuzzy, python-format
+#, python-format
 msgid "Downloaded %s Messages"
-msgstr "Переспрямувати непрочитані повідомлення"
+msgstr "Завантажено %s повідомлень"
 
 #: gajim/history_sync.py:290
 #, python-brace-format
@@ -2725,6 +2632,10 @@ msgid ""
 "        {received} Messages downloaded.\n"
 "        "
 msgstr ""
+"\n"
+"        Завершено синхронізацію вашої історії.\n"
+"        {received} повідомлень завантажено.\n"
+"        "
 
 #: gajim/history_sync.py:297
 msgid ""
@@ -2733,6 +2644,10 @@ msgid ""
 "        with the Archive.\n"
 "        "
 msgstr ""
+"\n"
+"        Gajim повністю синхронізовано\n"
+"        з архівом.\n"
+"        "
 
 #: gajim/history_sync.py:304
 msgid ""
@@ -2741,6 +2656,10 @@ msgid ""
 "        progress. Please try later.\n"
 "        "
 msgstr ""
+"\n"
+"        Синхронізація вже відбувається.\n"
+"        Спробуйте пізніше.\n"
+"        "
 
 #: gajim/config.py:156 gajim/config.py:626
 #: gajim/data/gui/preferences_window.ui:68
@@ -2799,9 +2718,8 @@ msgid "Role"
 msgstr "Роль"
 
 #: gajim/config.py:1680
-#, fuzzy
 msgid "Banning…"
-msgstr "Блокування..."
+msgstr "Блокування…"
 
 #: gajim/config.py:1682
 msgid ""
@@ -2812,9 +2730,8 @@ msgstr ""
 "\n"
 
 #: gajim/config.py:1684
-#, fuzzy
 msgid "Adding Member…"
-msgstr "Додавання учасника..."
+msgstr "Додавання учасника…"
 
 #: gajim/config.py:1685
 msgid ""
@@ -2825,9 +2742,8 @@ msgstr ""
 "\n"
 
 #: gajim/config.py:1687
-#, fuzzy
 msgid "Adding Owner…"
-msgstr "Додавання власника..."
+msgstr "Додавання власника…"
 
 #: gajim/config.py:1688
 msgid ""
@@ -2838,9 +2754,8 @@ msgstr ""
 "\n"
 
 #: gajim/config.py:1690
-#, fuzzy
 msgid "Adding Administrator…"
-msgstr "Додавання адміністратора..."
+msgstr "Додавання адміністратора…"
 
 #: gajim/config.py:1691
 msgid ""
@@ -2916,11 +2831,11 @@ msgstr "Вилучити _лише з Gajim"
 
 #: gajim/config.py:1851
 msgid "Don't remove anything. I'll try again later"
-msgstr "Не видаляти нічого. Я спробую пізніше ще раз."
+msgstr "Не видаляти нічого. Я спробую пізніше ще раз"
 
 #: gajim/config.py:1947
 msgid "?print_status:All"
-msgstr "Всі"
+msgstr "?print_status:Всі"
 
 #: gajim/config.py:1948
 msgid "Enter and leave only"
@@ -2928,7 +2843,7 @@ msgstr "Лише вхід і вихід"
 
 #: gajim/config.py:1949
 msgid "?print_status:None"
-msgstr "Жодного"
+msgstr "?print_status:Жодного"
 
 #: gajim/config.py:2015
 msgid "New Group Chat"
@@ -3022,7 +2937,7 @@ msgstr ""
 "Ви все ще бажаєте з’єднатися з цим сервером?"
 
 #: gajim/config.py:2636
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
 "SHA-1 fingerprint of the certificate:\n"
@@ -3032,7 +2947,9 @@ msgid ""
 msgstr ""
 "Додати цей сертифікат до списку надійних сертифікатів.\n"
 "Відбиток SHA1 сертифіката:\n"
-"%s"
+"%(sha1)s\n"
+"SHA-256 відбиток:\n"
+"%(sha256)s"
 
 #: gajim/config.py:2670 gajim/config.py:2704
 msgid "An error occurred during account creation"
@@ -3142,14 +3059,12 @@ msgid "Disconnected"
 msgstr "Роз'єднано"
 
 #: gajim/tooltips.py:647
-#, fuzzy
 msgid "?Noun:Download"
 msgstr "Звантажити"
 
 #: gajim/tooltips.py:653
-#, fuzzy
 msgid "?Noun:Upload"
-msgstr "Вивантажити"
+msgstr "?Noun:Вивантажити"
 
 #: gajim/tooltips.py:660
 msgid "Type: "
@@ -3157,7 +3072,7 @@ msgstr "Тип: "
 
 #: gajim/tooltips.py:666
 msgid "Transferred: "
-msgstr "Передано:"
+msgstr "Передано: "
 
 #: gajim/tooltips.py:669 gajim/tooltips.py:686
 msgid "Not started"
@@ -3173,7 +3088,7 @@ msgstr "Завершено"
 
 #: gajim/tooltips.py:679
 msgid "?transfer status:Paused"
-msgstr "Призупинено"
+msgstr "?transfer status:Призупинено"
 
 #: gajim/tooltips.py:682
 msgid "Stalled"
@@ -3264,54 +3179,53 @@ msgstr "Комп’ютер присипляється"
 
 #: gajim/logind_listener.py:90
 msgid "Disconnect from the network"
-msgstr ""
+msgstr "Від'єднатись від мережі"
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Журнал спілкування з %s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Журнал спілкування"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "Помилка роботи з диском"
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s тепер %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "Помилка: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
-msgstr "Помилка."
+msgstr "Помилка"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Поточний стан: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Поточний стан: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Тема: %s\n"
 
 #: gajim/statusicon.py:215
-#, fuzzy
 msgid "_Change Status Message…"
-msgstr "_Змінити повідомлення про стан"
+msgstr "_Змінити повідомлення про стан…"
 
 #: gajim/statusicon.py:250 gajim/statusicon.py:298 gajim/statusicon.py:305
 #, python-format
@@ -3319,9 +3233,8 @@ msgid "using account %s"
 msgstr "з облікового запису %s"
 
 #: gajim/statusicon.py:315
-#, fuzzy
 msgid "_Manage Bookmarks…"
-msgstr "Керування закладками"
+msgstr "Керування закладками…"
 
 #: gajim/statusicon.py:328
 msgid "Hide _Roster"
@@ -3360,28 +3273,28 @@ msgstr "new%d@jabber.id"
 #: gajim/server_info.py:130
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s днів, %(hours)s годин"
 
 #: gajim/server_info.py:187 gajim/accounts_window.py:536
 #: gajim/accounts_window.py:637
-#, fuzzy
 msgid "Hostname"
-msgstr "Назва _вузла:"
+msgstr "Назва _вузла"
 
 #: gajim/server_info.py:188
 msgid "Server Software"
-msgstr ""
+msgstr "Програмне забезпечення серверу"
 
 #: gajim/server_info.py:189
-#, fuzzy
 msgid "Server Uptime"
-msgstr "Збережено за адресою: %s"
+msgstr "Час роботи сервера"
 
 #: gajim/server_info.py:227
 msgid ""
 "\n"
 "Disabled in config"
 msgstr ""
+"\n"
+"Вимкнено у налаштуваннях"
 
 #: gajim/disco.py:69
 msgid "This service has not yet responded with detailed information"
@@ -3447,7 +3360,6 @@ msgid "Browsing %(address)s using account %(account)s"
 msgstr "Перегляд %(address)s з використанням облікового запису %(account)s"
 
 #: gajim/disco.py:896
-#, fuzzy
 msgid "Browse"
 msgstr "_Перегляд"
 
@@ -3456,7 +3368,6 @@ msgid "This service does not contain any items to browse."
 msgstr "Ця служба не містить жодних елементів, які можна було б переглядати."
 
 #: gajim/disco.py:1304
-#, fuzzy
 msgid "Execute Command"
 msgstr "Ви_конати команду"
 
@@ -3466,7 +3377,6 @@ msgstr "За_реєструватися"
 
 #: gajim/disco.py:1317 gajim/data/gui/join_groupchat_window.ui:186
 #: gajim/data/gui/join_groupchat_window.ui:325
-#, fuzzy
 msgid "Join"
 msgstr "При_єднатися"
 
@@ -3585,31 +3495,28 @@ msgid "URL:"
 msgstr "URL:"
 
 #: gajim/conversation_textview.py:1021
-#, fuzzy
 msgid "Invalid URL"
-msgstr "Некоректний JID"
+msgstr "Некоректний URL"
 
 #: gajim/conversation_textview.py:1106
-#, fuzzy
 msgid ""
 "<b>Message corrected. Original message:</b>\n"
 "{}"
 msgstr ""
-"<b>Повідомлення було відредаговане. Останнє повідомлення було:</b>\n"
-"   %s"
+"<b>Повідомлення було відредаговане. Оригінальне повідомлення:</b>\n"
+"{}"
 
 #: gajim/conversation_textview.py:1250
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
-msgstr[0] "%(nb_days)i день тому"
+msgstr[0] "Учора"
 msgstr[1] "%(nb_days)i днi тому"
 msgstr[2] "%(nb_days)i днiв тому"
 
 #: gajim/message_textview.py:43
-#, fuzzy
 msgid "Write a message.."
-msgstr "Отримано повідомлення"
+msgstr "Написати повідомлення…"
 
 #: gajim/message_window.py:245
 msgid "You are going to close several tabs"
@@ -3620,9 +3527,8 @@ msgid "Do you really want to close them all?"
 msgstr "Ви справді бажаєте закритити їх усі?"
 
 #: gajim/message_window.py:541
-#, fuzzy
 msgid "?Noun:Chats"
-msgstr "Групові балачки"
+msgstr "?Noun:Групові балачки"
 
 #: gajim/message_window.py:545
 msgid "Private Chats"
@@ -3640,20 +3546,21 @@ msgid "Unable to join group chat"
 msgstr "Не вдалося приєднатися до групової балачки"
 
 #: gajim/gui_interface.py:158
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Your desired nickname in group chat\n"
 "<b>%s</b>\n"
 "is in use or registered by another occupant.\n"
 "Please specify another nickname below:"
 msgstr ""
-"Псевдонім у груповій балачці %s, який ви бажали використати, вже "
-"використовує інший учасник.\n"
+"Псевдонім у груповій балачці <b>%s</b>,\n"
+" який ви бажали використати,\n"
+" вже використовує інший учасник.\n"
 "Будь ласка, вкажіть нижче інший псевдонім:"
 
 #: gajim/gui_interface.py:162
 msgid "Always use this nickname when there is a conflict"
-msgstr "Завжди використовувати цей псевдонім при виникненні конфліктів."
+msgstr "Завжди використовувати цей псевдонім при виникненні конфліктів"
 
 #: gajim/gui_interface.py:180
 msgid "Do you accept this request?"
@@ -3665,7 +3572,7 @@ msgid "Do you accept this request on account %s?"
 msgstr "Чи приймаєте ви запит щодо облікового запису %s?"
 
 #: gajim/gui_interface.py:185
-#, fuzzy, python-format
+#, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) уповноваження для %(url)s (ідентифікатор: %(id)s)"
 
@@ -3680,9 +3587,9 @@ msgstr ""
 "Для приєднання до кімнати %s потрібен пароль. Будь ласка, введіть його."
 
 #: gajim/gui_interface.py:330
-#, fuzzy, python-format
+#, python-format
 msgid "<b>%s</b> is full"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>%s</b> заповнено"
 
 #: gajim/gui_interface.py:339
 #, python-format
@@ -3690,9 +3597,9 @@ msgid "You are banned from group chat <b>%s</b>."
 msgstr "Вас заблокували у груповій балачці <b>%s</b>."
 
 #: gajim/gui_interface.py:346
-#, fuzzy, python-format
+#, python-format
 msgid "Remote server <b>%s</b> does not exist."
-msgstr "Групової балачки <b>%s</b> не існує."
+msgstr "Віддалений сервер <b>%s</b> не існує."
 
 #: gajim/gui_interface.py:350
 #, python-format
@@ -3700,17 +3607,15 @@ msgid "Group chat <b>%s</b> does not exist."
 msgstr "Групової балачки <b>%s</b> не існує."
 
 #: gajim/gui_interface.py:353
-#, fuzzy
 msgid "Group chat creation is not permitted."
 msgstr "Можливість створення групових балачок обмежено."
 
 #: gajim/gui_interface.py:355
-#, fuzzy
 msgid "Unable to join groupchat"
 msgstr "Не вдалося приєднатися до групової балачки"
 
 #: gajim/gui_interface.py:356
-#, fuzzy, python-format
+#, python-format
 msgid "You must use your registered nickname in <b>%s</b>."
 msgstr ""
 "Для групової балачки <b>%s</b> слід використовувати псевдонім, під яким ви "
@@ -3727,7 +3632,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "Помилка %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "помилка під час надсилання %(message)s ( %(error)s )"
@@ -3756,7 +3661,6 @@ msgid "Contact \"%s\" removed subscription from you"
 msgstr "Контакт «%s» вилучив вашу підписку"
 
 #: gajim/gui_interface.py:548
-#, fuzzy
 msgid ""
 "You will always see them as offline.\n"
 "Do you want to remove them from your contact list?"
@@ -3801,28 +3705,25 @@ msgid "You are currently connected without your OpenPGP key."
 msgstr "Ви виконали з’єднання без вашого ключа OpenPGP."
 
 #: gajim/gui_interface.py:680
-#, fuzzy
 msgid "Wrong passphrase"
 msgstr "Вказано помилковий пароль"
 
 #: gajim/gui_interface.py:685
-#, fuzzy
 msgid "Wrong OpenPGP passphrase"
-msgstr "Вказано помилковий пароль"
+msgstr "Вказано помилковий пароль OpenPGP"
 
 #: gajim/gui_interface.py:699
 msgid "Certificate Passphrase Required"
 msgstr "Потрібна кодова фраза для сертифікату"
 
 #: gajim/gui_interface.py:700
-#, fuzzy, python-format
+#, python-format
 msgid "Enter the certificate passphrase for account %s"
-msgstr "Введіть пароль ключа GPG для сертифікату від облікового запису %s"
+msgstr "Введіть пароль для сертифікату від облікового запису %s"
 
 #: gajim/gui_interface.py:723
-#, fuzzy
 msgid "Untrusted OpenPGP key"
-msgstr "Оберіть свій ключ OpenPGP"
+msgstr "Ненадійний ключ OpenPGP"
 
 #: gajim/gui_interface.py:723
 msgid ""
@@ -3837,7 +3738,7 @@ msgid ""
 "Please copy / paste the refresh token from the website that has just been "
 "opened."
 msgstr ""
-"Будь ласка, скопіюйте/вставте оновлений запис з веб-сторінки яка щойно "
+"Будь ласка, скопіюйте / вставте оновлений запис з веб-сторінки яка щойно "
 "відкрилася."
 
 #: gajim/gui_interface.py:772
@@ -3858,9 +3759,9 @@ msgid "File Transfer Failed"
 msgstr "Перенесення файлу не вдалося"
 
 #: gajim/gui_interface.py:1060
-#, fuzzy, python-format
+#, python-format
 msgid "%(filename)s received from %(name)s."
-msgstr "Передавання файлу·%(filename)s·від·%(name)s невдале"
+msgstr "%(filename)s отримано від %(name)s."
 
 #: gajim/gui_interface.py:1064
 #, python-format
@@ -3870,7 +3771,7 @@ msgstr "Передавання файлу·%(filename)s·від·%(name)s·зу�
 #: gajim/gui_interface.py:1068
 #, python-format
 msgid "File transfer of %(filename)s from %(name)s failed."
-msgstr "Передавання файлу·%(filename)s·від·%(name)s невдале"
+msgstr "Передавання файлу %(filename)s від %(name)s невдале."
 
 #: gajim/gui_interface.py:1081
 #, python-format
@@ -3880,7 +3781,7 @@ msgstr "Ви успішно надіслали %(filename)s до %(name)s."
 #: gajim/gui_interface.py:1085
 #, python-format
 msgid "File transfer of %(filename)s to %(name)s stopped."
-msgstr "Надсилання файлу %(filename)s до %(name)s зупинено"
+msgstr "Надсилання файлу %(filename)s до %(name)s зупинено."
 
 #: gajim/gui_interface.py:1089
 #, python-format
@@ -3888,9 +3789,8 @@ msgid "File transfer of %(filename)s to %(name)s failed."
 msgstr "Надсилання файлу %(filename)s до %(name)s невдале."
 
 #: gajim/gui_interface.py:1153
-#, fuzzy
 msgid "Choose file to send"
-msgstr "Вибрати файл для надсилання..."
+msgstr "Вибрати файл для надсилання"
 
 #: gajim/gui_interface.py:1196
 msgid "Unable to decrypt message"
@@ -3932,7 +3832,7 @@ msgid "Error verifying SSL certificate"
 msgstr "Помилка під час перевірки сертифіката SSL"
 
 #: gajim/gui_interface.py:1384
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
 "%(error)s\n"
@@ -3943,7 +3843,7 @@ msgstr ""
 "Ви все ще маєте намір з’єднатися з сервером?"
 
 #: gajim/gui_interface.py:1388
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
 "SHA-1 fingerprint of the certificate:\n"
@@ -3953,7 +3853,9 @@ msgid ""
 msgstr ""
 "Додати цей сертифікат до списку надійних сертифікатів.\n"
 "Відбиток SHA1 сертифіката:\n"
-"%s"
+"%(sha1)s\n"
+"SHA-256 відбиток:\n"
+"%(sha256)s"
 
 #: gajim/gui_interface.py:1394
 msgid "Ignore this error for this certificate."
@@ -3961,10 +3863,10 @@ msgstr "Ігнорувати цю помилку для цього сертиф�
 
 #: gajim/gui_interface.py:1407
 msgid "Non Anonymous Server"
-msgstr ""
+msgstr "Не анонімний сервер"
 
 #: gajim/gui_interface.py:1431
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
 "valid or your connection is being compromised.\n"
@@ -3977,10 +3879,14 @@ msgid ""
 "\n"
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
-"Здається сертифікат SSL облікового запису  %(account)s було змінено або "
-"хтось втрутився у ваше з’єднання.\n"
-"Старий відбиток: %(old)s\n"
-"Новий відбиток: %(new)s\n"
+"Здається сертифікат SSL облікового запису %(account)s було змінено або хтось "
+"втрутився у ваше з’єднання.\n"
+"\n"
+"Старий відбиток SHA-1: %(old_sha1)s\n"
+"Старий відбиток SHA-256: %(old_sha256)s\n"
+"\n"
+"Новий відбиток SHA-1: %(new_sha1)s\n"
+"Новий відбиток SHA-256: %(new_sha256)s\n"
 "\n"
 "Ви все ще маєте намір з’єднатися і оновити відбиток сертифіката?"
 
@@ -4002,7 +3908,6 @@ msgstr ""
 "вигляді. Виконати надсилання пароля?"
 
 #: gajim/gui_interface.py:1848
-#, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "Це не групова балачка"
 
@@ -4017,11 +3922,11 @@ msgid ""
 msgstr "Вказаної вами теми емоційок не було знайдено, емоційки буде вимкнено."
 
 #: gajim/gui_interface.py:2014
-#, fuzzy
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
 "details."
-msgstr "Вказаної вами теми емоційок не було знайдено, емоційки буде вимкнено."
+msgstr ""
+"Вказаної вами теми емоційок не було знайдено, дивіться детальніше в журналі."
 
 #: gajim/gui_interface.py:2032
 msgid "This is not a group chat"
@@ -4034,6 +3939,9 @@ msgid ""
 "correct group chat name. If it is, delete it from your roster and try "
 "joining the group chat again."
 msgstr ""
+"%(room_jid)s вже у вашому реєстрі. Перевірте чи %(room_jid)s є коректною "
+"назвою групової балачки. Якщо так, то видаліть її зі свого реєструта "
+"спробуйте приєднатись знову."
 
 #: gajim/gui_interface.py:2411
 msgid "Could not save your settings and preferences"
@@ -4140,12 +4048,10 @@ msgid "- messages will not be logged"
 msgstr "- не вестиметься запис повідомлень"
 
 #: gajim/notify.py:103
-#, fuzzy
 msgid "Open"
-msgstr "OpenPGP: "
+msgstr "Відкрити"
 
 #: gajim/dialog_messages.py:33
-#, fuzzy
 msgid "You can not start a new conversation unless you are connected."
 msgstr ""
 "Вам слід з’єднати ваш обліковий запис, щоб взяти участь у груповій балачці."
@@ -4175,7 +4081,7 @@ msgstr "Некоректна форма"
 
 #: gajim/dialog_messages.py:59
 msgid "The form is not filled correctly."
-msgstr "Форму заповнено некоректно"
+msgstr "Форму заповнено некоректно."
 
 #: gajim/dialog_messages.py:63 gajim/common/helpers.py:406
 msgid "Invisible"
@@ -4190,12 +4096,10 @@ msgid "Your message can not be sent until you are connected."
 msgstr "Ваше повідомлення не може бути відправлене до встановлення з'єднання."
 
 #: gajim/dialog_messages.py:73
-#, fuzzy
 msgid "JID already in list"
 msgstr "Ідентифікатор Jabber вже є у списку"
 
 #: gajim/dialog_messages.py:74
-#, fuzzy
 msgid "The JID you entered is already in the list. Choose another one."
 msgstr ""
 "Введений вами ідентифікатор Jabber вже є у списку. Оберіть якийсь інший."
@@ -4212,14 +4116,13 @@ msgstr ""
 "%(error)s"
 
 #: gajim/dialog_messages.py:84
-#, fuzzy
 msgid "Wrong Custom Hostname"
-msgstr "Використовувати інші вузол/порт"
+msgstr "Неправильне ім'я вузла"
 
 #: gajim/dialog_messages.py:85
-#, fuzzy, python-format
+#, python-format
 msgid "Wrong custom hostname \"%s\". Ignoring it."
-msgstr "Використовувати інші вузол/порт"
+msgstr "Неправильне ім'я вузла \"%s\". Ігноруємо."
 
 #: gajim/dialog_messages.py:89
 msgid "Error while removing privacy list"
@@ -4256,7 +4159,7 @@ msgstr ""
 
 #: gajim/dialog_messages.py:106
 msgid "Registration succeeded"
-msgstr "Зареєструватися на %s"
+msgstr "Реєстрацію завершено"
 
 #: gajim/dialog_messages.py:107
 #, python-format
@@ -4275,7 +4178,6 @@ msgstr ""
 "Реєстрація з агентом %(agent)s невдала через помилку %(error)s: %(error_msg)s"
 
 #: gajim/dialog_messages.py:117
-#, fuzzy
 msgid "Unable to join Groupchat"
 msgstr "Не вдалося приєднатися до групової балачки"
 
@@ -4284,22 +4186,21 @@ msgid "GStreamer error"
 msgstr "Помилка GStreamer"
 
 #: gajim/dialog_messages.py:123
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Error: %(error)s\n"
 "Debug: %(debug)s"
 msgstr ""
-"Повідомлення про помилку: %s\n"
-"Відлагодження: %s"
+"Повідомлення про помилку: %(error)s\n"
+"Відлагодження: %(debug)s"
 
 #: gajim/dialog_messages.py:127
-#, fuzzy
 msgid "Wrong host"
 msgstr "Неправильний сервер"
 
 #: gajim/dialog_messages.py:128
 msgid "Invalid local address? :-O"
-msgstr ""
+msgstr "Хибна локальна адреса? :-O"
 
 #: gajim/dialog_messages.py:132
 msgid "Avahi error"
@@ -4315,54 +4216,49 @@ msgstr ""
 "Обмін локальними повідомленнями може працювати з помилками."
 
 #: gajim/dialog_messages.py:137 gajim/dialog_messages.py:142
-#, fuzzy
 msgid "Could not request upload slot"
-msgstr "Не вдалося запустити локальну службу"
+msgstr "Не можливо отримати канал відвантаження"
 
 #: gajim/dialog_messages.py:143
 msgid "Got unexpected response from server (see log)"
-msgstr ""
+msgstr "Отримано неочікувану відповідь від серверу (дивіться журнал)"
 
 #: gajim/dialog_messages.py:147 gajim/dialog_messages.py:152
-#, fuzzy
 msgid "Could not open file"
-msgstr "Не вдалося завантажити зображення"
+msgstr "Не можливо відкрити файл"
 
 #: gajim/dialog_messages.py:148
 msgid "Exception raised while opening file (see log)"
-msgstr ""
+msgstr "Помилка при відкритті файлу (дивіться журнал)"
 
 #: gajim/dialog_messages.py:157
 msgid "Unsecure"
-msgstr ""
+msgstr "Небезпечно"
 
 #: gajim/dialog_messages.py:158
-#, fuzzy
 msgid "Server returned unsecure transport (http)"
-msgstr "Служба повернула повідомлення про помилку."
+msgstr "Сервер повернув небезпечний транспорт (http)"
 
 #: gajim/dialog_messages.py:162
-#, fuzzy
 msgid "Could not upload file"
-msgstr "Не вдалося завантажити зображення"
+msgstr "Не можливо вивантажити файл"
 
 #: gajim/dialog_messages.py:163
 #, python-format
 msgid "HTTP response code from server: %s"
-msgstr ""
+msgstr "HTTP-код відповіді від серверу: %s"
 
 #: gajim/dialog_messages.py:167
 msgid "Upload Error"
-msgstr ""
+msgstr "Помилка відвантаження"
 
 #: gajim/dialog_messages.py:172
 msgid "Encryption Error"
-msgstr ""
+msgstr "Помилка шифрування"
 
 #: gajim/dialog_messages.py:173
-#, fuzzy
 msgid "For the choosen encryption is no encryption method available"
-msgstr "З'єднання недоступне"
+msgstr "Для обраного шифрування нема доступних методів"
 
 #: gajim/gajim_themes_window.py:61
 msgid "Theme"
@@ -4373,9 +4269,8 @@ msgid "You cannot make changes to the default theme"
 msgstr "Ви не можете вносити зміни до типової теми"
 
 #: gajim/gajim_themes_window.py:99
-#, fuzzy
 msgid "Please create a new clean theme."
-msgstr "Будь ласка, спершу створіть нову порожню тему з бажаною назвою."
+msgstr "Будь ласка, спершу створіть нову порожню тему."
 
 #: gajim/gajim_themes_window.py:170
 msgid "theme name"
@@ -4387,17 +4282,15 @@ msgstr "Ви не можете вилучати вашої поточної те
 
 #: gajim/gajim_themes_window.py:188
 msgid "Pick another theme to use first."
-msgstr ""
+msgstr "Оберіть іншу тему для використання."
 
 #: gajim/accounts_window.py:40
-#, fuzzy
 msgid "Merge Accounts"
-msgstr "Об’єднані облікові записи"
+msgstr "Об’єднати облікові записи"
 
 #: gajim/accounts_window.py:41
-#, fuzzy
 msgid "Use PGP Agent"
-msgstr "Використовувати _агент GnuPG"
+msgstr "Використовувати _агент PGP"
 
 #: gajim/accounts_window.py:153 gajim/common/config.py:510
 msgid "Be right back."
@@ -4425,61 +4318,52 @@ msgstr ""
 "процедуру виходу?"
 
 #: gajim/accounts_window.py:344
-#, fuzzy
 msgid "Remove"
 msgstr "В_илучити"
 
 #: gajim/accounts_window.py:387
-#, fuzzy
 msgid "Rename account label"
 msgstr "Перейменувати запис"
 
 #: gajim/accounts_window.py:456
 msgid "Login"
-msgstr ""
+msgstr "Обліковий запис"
 
 #: gajim/accounts_window.py:465
 msgid "Connection"
 msgstr "З'єднання"
 
 #: gajim/accounts_window.py:468
-#, fuzzy
 msgid "Import Contacts"
-msgstr "Запросити _контакти"
+msgstr "Імпортувати _контакти"
 
 #: gajim/accounts_window.py:471 gajim/accounts_window.py:654
-#, fuzzy
 msgid "Client Certificate"
 msgstr "Клієнтський сертифікат"
 
 #: gajim/accounts_window.py:474 gajim/accounts_window.py:569
-#, fuzzy
 msgid "OpenPGP Key"
-msgstr "Призначити ключ OpenPGP"
+msgstr "Ключ OpenPGP"
 
 #: gajim/accounts_window.py:485 gajim/accounts_window.py:557
-#, fuzzy
 msgid "Connect on startup"
-msgstr "_З'єднуватись після запуску Gajim"
+msgstr "_З'єднуватись після запуску"
 
 #: gajim/accounts_window.py:488
-#, fuzzy
 msgid "Reconnect when connection is lost"
 msgstr "Автоматично відновлювати втрачене з'єднання"
 
 #: gajim/accounts_window.py:491 gajim/accounts_window.py:561
-#, fuzzy
 msgid "Save conversations for all contacts"
 msgstr "Зберігати _журнал спілкування для усіх контактів"
 
 #: gajim/accounts_window.py:493 gajim/accounts_window.py:563
 msgid "Store conversations on the harddrive"
-msgstr ""
+msgstr "Зберігати балачки на диску"
 
 #: gajim/accounts_window.py:495
-#, fuzzy
 msgid "Server Message Archive"
-msgstr "_Надіслати серверне повідомлення..."
+msgstr "Серверний архів повідомлень"
 
 #: gajim/accounts_window.py:497
 msgid ""
@@ -4488,21 +4372,22 @@ msgid ""
 "between multiple devices.\n"
 "XEP-0313"
 msgstr ""
+"Повідомлення будуть збережені на сервері.\n"
+"Архів буде використано для синхронізації повідомлень\n"
+"між декількома пристроями.\n"
+"XEP-0313"
 
 #: gajim/accounts_window.py:502 gajim/accounts_window.py:565
-#, fuzzy
 msgid "Global Status"
-msgstr "Усі стани"
+msgstr "Глобальні стани"
 
 #: gajim/accounts_window.py:504
-#, fuzzy
 msgid "Synchronise the status of all accounts"
-msgstr "Змінює стан облікового запису або обліковий запис"
+msgstr "Синхронізація статусів усіх облікових записів"
 
 #: gajim/accounts_window.py:506
-#, fuzzy
 msgid "Message Carbons"
-msgstr "Повідомлення"
+msgstr "Копіювання повідомлень"
 
 #: gajim/accounts_window.py:508
 msgid ""
@@ -4510,108 +4395,93 @@ msgid ""
 "of sent and received messages.\n"
 "XEP-0280"
 msgstr ""
+"Дозволити іншим вашим активним пристроям отримувати копії\n"
+"відісланих та отриманих повідомлень.\n"
+"XEP-0280"
 
 #: gajim/accounts_window.py:512
 msgid "Use file transfer proxies"
 msgstr "Використовувати проксі передавання файлів"
 
 #: gajim/accounts_window.py:524 gajim/accounts_window.py:559
-#, fuzzy
 msgid "Use environment variable"
-msgstr "використовувати змінну середовища HTTP_PROXY"
+msgstr "Використовувати змінну середовища"
 
 #: gajim/accounts_window.py:526
-#, fuzzy
 msgid "Proxy"
-msgstr "Прокс_і:"
+msgstr "Проксі"
 
 #: gajim/accounts_window.py:529
-#, fuzzy
 msgid "Warn on insecure connection"
 msgstr "_Попереджати перед використанням незахищеного з’єднання"
 
 #: gajim/accounts_window.py:533
-#, fuzzy
 msgid "Send keep-alive packets"
 msgstr "Надсилати пакети підтвердження дієздатності"
 
 #: gajim/accounts_window.py:537
 msgid "Manually set the hostname for the server"
-msgstr ""
+msgstr "Вручну задати адресу сервера"
 
 #: gajim/accounts_window.py:540
-#, fuzzy
 msgid "Resource"
-msgstr "Ресурс:"
+msgstr "Ресурс"
 
 #: gajim/accounts_window.py:543 gajim/accounts_window.py:611
 #: gajim/accounts_window.py:616
-#, fuzzy
 msgid "Priority"
-msgstr "Пріорите_т:"
+msgstr "Пріоритет"
 
 #: gajim/accounts_window.py:567
-#, fuzzy
 msgid "Synchronize the status of all accounts"
-msgstr "Змінює стан облікового запису або обліковий запис"
+msgstr "Синхронізація статусів усіх облікових записів"
 
 #: gajim/accounts_window.py:580
-#, fuzzy
 msgid "First Name"
-msgstr "Ім'я:"
+msgstr "Ім'я"
 
 #: gajim/accounts_window.py:583
-#, fuzzy
 msgid "Last Name"
-msgstr "Прізвище:"
+msgstr "Прізвище"
 
 #: gajim/accounts_window.py:586
 #: gajim/data/gui/archiving_313_preferences_window.ui:71
 msgid "Jabber ID"
-msgstr "Jabber ID:"
+msgstr "Jabber ID"
 
 #: gajim/accounts_window.py:589
-#, fuzzy
 msgid "Email"
-msgstr "Нове повідомлення електронної пошти"
+msgstr "Електронна пошта"
 
 #: gajim/accounts_window.py:607
-#, fuzzy
 msgid "Adjust to status"
 msgstr "_Узгодити зі станом"
 
 #: gajim/accounts_window.py:634
-#, fuzzy
 msgid "Enable"
 msgstr "Увімкнено"
 
 #: gajim/accounts_window.py:641
-#, fuzzy
 msgid "Port"
-msgstr "_Порт:"
+msgstr "Порт"
 
 #: gajim/accounts_window.py:646
-#, fuzzy
 msgid "Connection Options"
-msgstr "З'єднання"
+msgstr "Параметри з'єднання"
 
 #: gajim/accounts_window.py:658
-#, fuzzy
 msgid "Encrypted Certificate"
-msgstr "Cертифікат"
+msgstr "Зашифрований сертифікат"
 
 #: gajim/accounts_window.py:662
-#, fuzzy
 msgid "Certificate Options"
-msgstr "Cертифікат"
+msgstr "Параметри сертифікату"
 
 #: gajim/accounts_window.py:670 gajim/data/gui/join_groupchat_window.ui:143
-#, fuzzy
 msgid "Password"
-msgstr "Пароль:"
+msgstr "Пароль"
 
 #: gajim/accounts_window.py:674
-#, fuzzy
 msgid "Save Password"
 msgstr "Зберегти пароль"
 
@@ -4620,9 +4490,8 @@ msgid "Change Password"
 msgstr "Змінити пароль"
 
 #: gajim/accounts_window.py:682
-#, fuzzy
 msgid "Login Options"
-msgstr "Опції:"
+msgstr "Опції входу"
 
 #: gajim/gajim_remote.py:59 gajim/common/exceptions.py:71
 msgid "D-Bus is not present on this machine or python module is missing"
@@ -4650,7 +4519,6 @@ msgstr ""
 "Відкриває контекстне вікно з повідомленням про наступну заплановану подію"
 
 #: gajim/gajim_remote.py:97
-#, fuzzy
 msgid "Lists all contacts in roster, one for each line"
 msgstr ""
 "Показує список всіх контактів з реєстру. Кожен з записів контактів буде "
@@ -4673,9 +4541,8 @@ msgid "Prints a list of registered accounts"
 msgstr "Показує список зареєстрованих облікових записів"
 
 #: gajim/gajim_remote.py:109
-#, fuzzy
 msgid "Changes the status of account(s)"
-msgstr "Змінює стан облікового запису або обліковий запис"
+msgstr "Змінює статус облікового запису(ів)"
 
 #: gajim/gajim_remote.py:112
 msgid "?CLI:status"
@@ -4709,7 +4576,6 @@ msgstr ""
 "позначено пункт «синхронізувати з загальним станом»"
 
 #: gajim/gajim_remote.py:120
-#, fuzzy
 msgid "Changes the priority of account(s)"
 msgstr "Змінює пріоритет одного або кількох облікових записів"
 
@@ -4752,7 +4618,7 @@ msgstr "вміст повідомлення"
 
 #: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
 msgid "PGP key"
-msgstr ""
+msgstr "Ключ PGP"
 
 #: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
 msgid "if specified, the message will be encrypted using this public key"
@@ -4764,7 +4630,6 @@ msgid "if specified, the message will be sent using this account"
 msgstr "якщо вказано, повідомлення буде надіслано з цього облікового запису"
 
 #: gajim/gajim_remote.py:143
-#, fuzzy
 msgid ""
 "Sends a chat message to someone on your roster. Optionally with OpenPGP key "
 "and account. If you want to only set the latter, set OpenPGP key to \"\"."
@@ -4830,14 +4695,13 @@ msgstr "Показує список всі параметрів та значе�
 
 #: gajim/gajim_remote.py:191
 msgid "Sets value of 'key' to 'value'."
-msgstr "Встановлює значення «ключ» у «значення»"
+msgstr "Встановлює значення 'ключ' у 'значення'."
 
 #: gajim/gajim_remote.py:193
 msgid "key=value"
 msgstr "ключ=значення"
 
 #: gajim/gajim_remote.py:193
-#, fuzzy
 msgid "'key' is the name of the preference, 'value' is what to set it to"
 msgstr "«ключ» — це назва параметра, «значення» — значення параметра"
 
@@ -4892,7 +4756,6 @@ msgid "XML to send"
 msgstr "XML для надсилання"
 
 #: gajim/gajim_remote.py:241
-#, fuzzy
 msgid ""
 "Account to which the XML will be sent; if not specified, XML will be sent to "
 "all accounts"
@@ -4972,7 +4835,9 @@ msgid ""
 "\n"
 "Command is one of:\n"
 msgstr ""
-"Використання: %s команда [аргументи]\n"
+"Використання:\n"
+"  %s команда [аргументи]\n"
+"\n"
 "Можливі команди:\n"
 
 #: gajim/gajim_remote.py:469
@@ -5088,7 +4953,7 @@ msgstr "за двадцять п'ять хвилин %(1)s"
 #: gajim/common/fuzzyclock.py:45
 #, python-format
 msgid "twenty to %(1)s"
-msgstr "за двадцять хвилин  %(1)s"
+msgstr "за двадцять хвилин %(1)s"
 
 #: gajim/common/fuzzyclock.py:46
 #, python-format
@@ -5158,7 +5023,7 @@ msgstr "Кінець тижня"
 msgid "Weekend!"
 msgstr "Вихідні!"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5168,61 +5033,61 @@ msgstr ""
 "Скористайтеся інструментами для керування реєстром, наприклад, http://jru."
 "jabberstudio.org/ для його вилучення"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "запит на скасування підписки від %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "Кімнату було знищено"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Ви можете приєднатися замість цієї кімнати до %s"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Невідома помилка SSL: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Нове окреме повідомлення від %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Нове конфіденційне повідомлення з групової балачки %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Повідомлення надіслано від імені %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Нове повідомлення від %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s змінив стан"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s в мережі"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s вийшов з мережі"
@@ -5236,6 +5101,8 @@ msgid ""
 "Show desktop notification even when a chat window is opened for this contact "
 "and does not have focus"
 msgstr ""
+"Показувати сповіщення стільниці навіть коли вікно балачки відкрите але не "
+"має фокусу"
 
 #: gajim/common/config.py:77
 msgid "Play sound when user is busy"
@@ -5243,7 +5110,7 @@ msgstr "Програвати звук, коли користувач зайня�
 
 #: gajim/common/config.py:79
 msgid "Show only online and free for chat contacts in roster."
-msgstr "Показувати лише користувачів в мережі або бажаючих спілкуватись"
+msgstr "Показувати лише користувачів в мережі або бажаючих спілкуватись."
 
 #: gajim/common/config.py:82
 msgid "Time in minutes, after which your status changes to away."
@@ -5285,23 +5152,24 @@ msgstr ""
 #: gajim/common/config.py:90
 msgid "Allow to hide the roster window even if the tray icon is not shown."
 msgstr ""
-"Дозволити ховати вікно реєстру навіть якщо піктограму сповіщення не задіяно"
+"Дозволити ховати вікно реєстру навіть якщо піктограму сповіщення не "
+"відображено."
 
 #: gajim/common/config.py:95
 msgid "Incoming nickname color."
-msgstr "Колір вхідного псевдоніму"
+msgstr "Колір вхідного псевдоніму."
 
 #: gajim/common/config.py:96
 msgid "Outgoing nickname color."
-msgstr "Колір вихідного псевдоніма"
+msgstr "Колір вихідного псевдоніма."
 
 #: gajim/common/config.py:97
 msgid "Incoming text color."
-msgstr "Колір вхідного тексту"
+msgstr "Колір вхідного тексту."
 
 #: gajim/common/config.py:98
 msgid "Outgoing text color."
-msgstr "Колір вихідного тексту"
+msgstr "Колір вихідного тексту."
 
 #: gajim/common/config.py:99
 msgid "Status message text color."
@@ -5309,45 +5177,43 @@ msgstr "Колір тексту повідомлення сповіщення п
 
 #: gajim/common/config.py:102
 msgid "Contact signed in notification color."
-msgstr "Колір сповіщення появи контакту"
+msgstr "Колір сповіщення появи контакту."
 
 #: gajim/common/config.py:103
 msgid "Contact signout notification color"
 msgstr "Колір сповіщення виходу контакту"
 
 #: gajim/common/config.py:104
-#, fuzzy
 msgid "New message notification color."
-msgstr "Колір сповіщення про новий лист або повідомлення"
+msgstr "Колір сповіщення про нове повідомлення."
 
 #: gajim/common/config.py:105
 msgid "File transfer request notification color."
-msgstr "Колір сповіщення передавання файлів"
+msgstr "Колір сповіщення передавання файлів."
 
 #: gajim/common/config.py:106
 msgid "File transfer error notification color."
-msgstr "Колір сповіщення про помилку передавання файлу"
+msgstr "Колір сповіщення про помилку передавання файлу."
 
 #: gajim/common/config.py:107
 msgid "File transfer complete or stopped notification color."
-msgstr "Колір сповіщення про закінчене або зупинене передавання файлів"
+msgstr "Колір сповіщення про закінчене або зупинене передавання файлів."
 
 #: gajim/common/config.py:108
 msgid "Groupchat invitation notification color"
 msgstr "Колір запрошення до групової балачки"
 
 #: gajim/common/config.py:109
-#, fuzzy
 msgid "Background color of status changed notification"
-msgstr "Колір контактів, які тільки-но увійшли до мережі."
+msgstr "Колір тла для повідомлень зміни стану"
 
 #: gajim/common/config.py:110
 msgid "Other dialogs color."
-msgstr "Інші кольори діалогів"
+msgstr "Інші кольори діалогів."
 
 #: gajim/common/config.py:111
 msgid "Incoming nickname font."
-msgstr "Шрифт вхідного псевдоніму"
+msgstr "Шрифт вхідного псевдоніму."
 
 #: gajim/common/config.py:112
 msgid "Outgoing nickname font."
@@ -5355,11 +5221,11 @@ msgstr "Шрифт вихідного псевдоніма."
 
 #: gajim/common/config.py:113
 msgid "Incoming text font."
-msgstr "Шрифт вхідного тексту"
+msgstr "Шрифт вхідного тексту."
 
 #: gajim/common/config.py:114
 msgid "Outgoing text font."
-msgstr "Шрифт вихідного тексту"
+msgstr "Шрифт вихідного тексту."
 
 #: gajim/common/config.py:115
 msgid "Status message text font."
@@ -5399,7 +5265,7 @@ msgstr ""
 
 #: gajim/common/config.py:127
 msgid "Enable ASCII emoticons"
-msgstr ""
+msgstr "Увімкнути ASCII-емоційки"
 
 #: gajim/common/config.py:129
 msgid "Treat * / _ pairs as possible formatting characters."
@@ -5449,7 +5315,7 @@ msgstr ""
 
 #: gajim/common/config.py:171
 msgid "Place the roster on the right in single window mode"
-msgstr ""
+msgstr "Розмістити реєстр праворуч у режимі єдиного вікна"
 
 #: gajim/common/config.py:177
 msgid ""
@@ -5475,17 +5341,17 @@ msgid "Add * and [n] in roster title?"
 msgstr "Додати * і [n] у заголовок реєстру?"
 
 #: gajim/common/config.py:182
-#, fuzzy
 msgid ""
 "How many history messages should be restored when a chat tab/window is "
 "reopened?"
 msgstr ""
-"Кількість рядків тесту, які слід запам’ятати з попереднього спілкування для "
-"показу під час повторного відкриття вкладки або вікна балачки."
+"Скільки рядків тесту слід відновити з попереднього спілкування для показу "
+"під час повторного відкриття вкладки або вікна балачки?"
 
 #: gajim/common/config.py:183
 msgid "How far back in time (minutes) history is restored. -1 means no limit."
 msgstr ""
+"Який період історії (у хвилинах) треба відновити. -1 означає без обмежень."
 
 #: gajim/common/config.py:184
 msgid ""
@@ -5496,7 +5362,6 @@ msgstr ""
 "означає без обмежень"
 
 #: gajim/common/config.py:185
-#, fuzzy
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit"
 msgstr ""
@@ -5532,7 +5397,7 @@ msgid "How many lines to store for Ctrl+KeyUP."
 msgstr "Кількість рядків, які слід зберігати для Ctrl+Стрілка_вгору."
 
 #: gajim/common/config.py:193
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Either custom url with %%s in it where %%s is the word/phrase or "
 "'WIKTIONARY' which means use wiktionary."
@@ -5574,7 +5439,6 @@ msgid "Ask before closing a group chat tab/window."
 msgstr "Запитувати перед закриттям вкладки або вікна групової балачки."
 
 #: gajim/common/config.py:202
-#, fuzzy
 msgid ""
 "Always ask for confirmation before closing groupchats with any of the JIDs "
 "on this space separated list."
@@ -5584,7 +5448,6 @@ msgstr ""
 "балачок."
 
 #: gajim/common/config.py:203
-#, fuzzy
 msgid ""
 "Never ask for confirmation before closing groupchats with any of the JIDs on "
 "this space separated list."
@@ -5600,7 +5463,7 @@ msgid ""
 msgstr ""
 "Запитувати перед закриттям вікна розмови з вкладками, якщо це може призвести "
 "до втрати даних (діалог, приватний діалог, групова розмова що не може бути "
-"мінімізована)."
+"мінімізована)"
 
 #: gajim/common/config.py:207
 msgid ""
@@ -5678,6 +5541,8 @@ msgid ""
 "If True, Gajim hides the Roster window on pressing the X button instead of "
 "minimizing into the Dock."
 msgstr ""
+"Якщо встановлено, Gajim буде ховати вікно реєстру після натискання кнопки "
+"закриття, замість мінімізації."
 
 #: gajim/common/config.py:240
 msgid ""
@@ -5718,7 +5583,7 @@ msgid ""
 "status messages. If \"in_and_out\", Gajim will only print FOO enters/leaves "
 "group chat."
 msgstr ""
-"може мати значення \"none\", \"all\" і \"in_and_out\". За значення \"none\", "
+"Може мати значення \"none\", \"all\" і \"in_and_out\". За значення \"none\", "
 "Gajim більше не виводитиме рядок стану у групових балачках після зміни "
 "постійним учасником стану або повідомлення про стан. За значення \"all\" "
 "Gajim виводитиме всі повідомлення про стан. Значення \"in_and_out\" призведе "
@@ -5803,7 +5668,7 @@ msgstr ""
 "Показувати реєстр при старті.\n"
 "'always' - Завжди показувати реєстр.\n"
 "'never' - Ніколи не показувати реєстр.\n"
-"'last_state' - Відновити останній стан реєстру.ртсик"
+"'last_state' - Відновити останній стан реєстру."
 
 #: gajim/common/config.py:265
 msgid "If False, you will no longer see the avatar in the chat window."
@@ -5958,7 +5823,7 @@ msgstr ""
 msgid "If True, completion in groupchats will be like a shell auto-completion"
 msgstr ""
 "Якщо Істино, доповнення у групових балачках будуть схожі на автодоповнення "
-"командної оболонки."
+"командної оболонки"
 
 #: gajim/common/config.py:287
 msgid ""
@@ -5980,10 +5845,9 @@ msgstr "Опціонально змінювати розмір вихідног�
 
 #: gajim/common/config.py:294
 msgid "If True, You will also see your webcam"
-msgstr "Якщо «Так», ви також бачитимете власну вебкамеру."
+msgstr "Якщо «Так», ви також бачитимете власну вебкамеру"
 
 #: gajim/common/config.py:297
-#, fuzzy
 msgid ""
 "If True, Gajim will try to use a STUN server when using Jingle. The one in "
 "\"stun_server\" option, or the one given by the XMPP server."
@@ -5993,7 +5857,6 @@ msgstr ""
 "Jabber."
 
 #: gajim/common/config.py:298
-#, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "Сервер STUN для використання з Jingle"
 
@@ -6003,7 +5866,7 @@ msgid ""
 "colored square to the status icon"
 msgstr ""
 "Якщо увімкнено, Gajim покаже членство учасників балачки додаванням "
-"кольорового квадрату до піктограми стану."
+"кольорового квадрату до піктограми стану"
 
 #: gajim/common/config.py:300
 msgid ""
@@ -6029,26 +5892,25 @@ msgid ""
 "received by your contact"
 msgstr ""
 "Якщо буде позначено цей пункт, Gajim буде показувати піктограму про "
-"отримання повідомлення вашим співрозмовником."
+"отримання повідомлення вашим співрозмовником"
 
 #: gajim/common/config.py:304
 msgid "Show a mini avatar in chat window tabs and in window icon"
-msgstr ""
+msgstr "Показувати міні-аватари на вкладках вікон та у піктограмі вікна"
 
 #: gajim/common/config.py:305
-#, fuzzy
 msgid "If True, Gajim will use the Systems Keyring to store account passwords."
 msgstr ""
-"Якщо цей параметр матиме значення «True», Gajim використовуватиме Gnome "
-"Keyring (за його наявності) для зберігання паролі облікових записів."
+"Якщо цей параметр матиме значення «True», Gajim використовуватиме системне "
+"сховище для зберігання паролів облікових записів."
 
 #: gajim/common/config.py:306
 msgid "Sets the encoding used by python-gnupg"
-msgstr ""
+msgstr "Встановити кодування для python-gnupg"
 
 #: gajim/common/config.py:307
 msgid "If True, Gajim will execute XEP-0146 Commands."
-msgstr ""
+msgstr "Якщо встановлено, Gajim буде виконувати команди XEP-0146."
 
 #: gajim/common/config.py:323
 msgid ""
@@ -6100,7 +5962,7 @@ msgstr "Чи має Gajim автоматично починати сеанс з 
 
 #: gajim/common/config.py:342
 msgid "Allow plaintext connections"
-msgstr ""
+msgstr "Дозволити з'єднання звичайним текстом"
 
 #: gajim/common/config.py:345
 msgid ""
@@ -6108,6 +5970,9 @@ msgid ""
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
+"Прелік розділених пробілом методів авторизації. Може містити ANONYMOUS, "
+"EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, PLAIN, X"
+"-MESSENGER-OAUTH2 або XEP-0078"
 
 #: gajim/common/config.py:346
 msgid ""
@@ -6148,6 +6013,8 @@ msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
 "supports XEP-0313"
 msgstr ""
+"При запуску Gajim буде завантажувати журнали збережені на сервері, якщо "
+"сервер підтримує XEP-0313"
 
 #: gajim/common/config.py:359
 msgid ""
@@ -6159,20 +6026,19 @@ msgstr ""
 
 #: gajim/common/config.py:362
 msgid "Whitespace sent after inactivity"
-msgstr "Надсилання порожнього повідомлення після неактивності."
+msgstr "Надсилання порожнього повідомлення після неактивності"
 
 #: gajim/common/config.py:363
 msgid "XMPP ping sent after inactivity"
-msgstr "Надсилання XMPP ехо після неактивності."
+msgstr "Надсилання XMPP ехо після неактивності"
 
 #: gajim/common/config.py:367
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
 msgstr ""
-"Проміжок часу у секундах, протягом якого слід очікувати на відповідь на "
-"пакет підтримування зв’язку, перш ніж розпочати процедуру повторного "
-"з’єднання."
+"Скільки секунд очікувати на відповідь на пакет підтримування зв’язку, перш "
+"ніж розпочати процедуру повторного з’єднання?"
 
 #: gajim/common/config.py:371
 msgid "Jabberd2 workaround"
@@ -6209,11 +6075,11 @@ msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr ""
 "Дозволити Gajim надсилати інформацію, яку операційну систему ви "
-"використовуєте"
+"використовуєте."
 
 #: gajim/common/config.py:399
 msgid "Allow Gajim to send your local time."
-msgstr "Дозволятии Gajim надсилати ваш локальний часд"
+msgstr "Дозволятии Gajim надсилати ваш локальний час."
 
 #: gajim/common/config.py:400
 msgid ""
@@ -6244,19 +6110,16 @@ msgstr ""
 "надіслати вам файли."
 
 #: gajim/common/config.py:406
-#, fuzzy
 msgid "Latest token for OAuth 2.0 authentication."
-msgstr "Останній запис аутентифікації Oauth2"
+msgstr "Останній запис аутентифікації OAuth 2.0."
 
 #: gajim/common/config.py:407
-#, fuzzy
 msgid "client_id for OAuth 2.0 authentication."
-msgstr "client_id для аутентифікації Oauth2"
+msgstr "client_id для аутентифікації OAuth 2.0."
 
 #: gajim/common/config.py:408
-#, fuzzy
 msgid "redirect_url for OAuth 2.0 authentication."
-msgstr "redirect_url для аутентифікації Oauth2."
+msgstr "redirect_url для аутентифікації OAuth 2.0."
 
 #: gajim/common/config.py:409
 msgid ""
@@ -6268,13 +6131,15 @@ msgstr ""
 
 #: gajim/common/config.py:411
 msgid "HTTP Upload: Enable HTTPS Verification"
-msgstr ""
+msgstr "Вивантаження по HTTP: увімкнути перевірку HTTPS"
 
 #: gajim/common/config.py:412
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on chat window. Can be "
 "'httpupload' (default) or 'jingle'"
 msgstr ""
+"Бажаний метод передавання файлів для перенеси-та-кидай у вікні балачки. Може "
+"бути 'httpupload' (стандартне) або 'jingle'"
 
 #: gajim/common/config.py:475 gajim/common/config.py:480
 msgid "Language for which we want to check misspelled words"
@@ -6282,7 +6147,7 @@ msgstr "Мова, згідно правил якої відбуватиметь�
 
 #: gajim/common/config.py:477
 msgid "The currently active encryption for that contact"
-msgstr ""
+msgstr "Поточний активний метод шифрування для контакту"
 
 #: gajim/common/config.py:481
 msgid ""
@@ -6293,17 +6158,16 @@ msgstr ""
 "означає без обмежень, -2 означає глобальні налаштування"
 
 #: gajim/common/config.py:482
-#, fuzzy
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
 "-2 means global value"
 msgstr ""
 "За скільки хвилин запитувати журнал, при вході у групову балачку. -1 означає "
-"без обмеження, -2 означає глобальні налаштування."
+"без обмеження, -2 означає глобальні налаштування"
 
 #: gajim/common/config.py:483
 msgid "State whether we want a notification for every message in this room"
-msgstr ""
+msgstr "Вкажіть, чи хочемо ми сповістити про кожне повідомлення в цій кімнаті"
 
 #: gajim/common/config.py:486
 msgid ""
@@ -6504,7 +6368,7 @@ msgstr "Файла не існує"
 #: gajim/common/httpupload.py:147 gajim/common/httpupload.py:204
 #, python-format
 msgid "File is too large, maximum allowed file size is: %s"
-msgstr ""
+msgstr "Файл завеликий, максимально дозволений розмір: %s"
 
 #: gajim/common/check_paths.py:37
 msgid "creating logs database"
@@ -6515,9 +6379,9 @@ msgid "creating cache database"
 msgstr "створення бази даних кешу"
 
 #: gajim/common/check_paths.py:261
-#, fuzzy, python-format
+#, python-format
 msgid "moving %(src)s to %(dst)s"
-msgstr "Надіслати %s до %s"
+msgstr "переміщення %(src)s до %(dst)s"
 
 #: gajim/common/check_paths.py:287 gajim/common/check_paths.py:294
 #: gajim/common/check_paths.py:301 gajim/common/check_paths.py:308
@@ -6592,7 +6456,7 @@ msgstr "Сертифікат ще не набув чинності"
 
 #: gajim/common/connection.py:87
 msgid "Certificate has expired"
-msgstr "Строк дії сертифікату завершився!"
+msgstr "Термін дії сертифікату завершився"
 
 #: gajim/common/connection.py:88
 msgid "CRL is not yet valid"
@@ -6740,7 +6604,7 @@ msgstr ""
 #: gajim/common/connection.py:1366
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
-msgstr "Достовірність сертифіката %s знаходиться під питанням."
+msgstr "Достовірність сертифіката %s знаходиться під питанням"
 
 #: gajim/common/connection.py:1369
 #, python-format
@@ -6766,8 +6630,8 @@ msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr ""
-"Достовірність сертифіката %s знаходиться під питанням. Сертифікат не "
-"відповідає поточному домену."
+"Достовірність сертифіката %s знаходиться під питанням.\n"
+"Сертифікат не відповідає поточному домену."
 
 #: gajim/common/connection.py:1467 gajim/common/connection.py:2235
 #: gajim/common/zeroconf/connection_zeroconf.py:209
@@ -6785,9 +6649,9 @@ msgid "Please check your login and password for correctness."
 msgstr "Будь ласка, перевірте, чи правильно вказано ім’я користувача і пароль."
 
 #: gajim/common/connection.py:2094
-#, fuzzy, python-format
+#, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
-msgstr "Відправлений контакт:  \"%s\" (%s)"
+msgstr "Відправлений контакт: \"%(jid)s\" (%(name)s)"
 
 #: gajim/common/connection.py:2098
 msgid "Sent contacts:"
@@ -6807,18 +6671,17 @@ msgstr "Можливості роботи з D-Bus у Gajim не може бут
 
 #: gajim/common/dbus_support.py:55
 msgid "D-Bus does not run correctly on this machine"
-msgstr "D-Bus не працює коректно на цій машині."
+msgstr "D-Bus не працює коректно на цій машині"
 
 #: gajim/common/dbus_support.py:58
 msgid "D-Bus does not run correctly on this machine: system bus not present"
-msgstr "D-Bus не працює коректно на цій машині: системна шина відсутня."
+msgstr "D-Bus не працює коректно на цій машині: системна шина відсутня"
 
 #: gajim/common/dbus_support.py:61
 msgid "D-Bus does not run correctly on this machine: session bus not present"
-msgstr "D-Bus не працює коректно на цій машині: шина сеансу відсутня."
+msgstr "D-Bus не працює коректно на цій машині: шина сеансу відсутня"
 
 #: gajim/common/multimedia_helpers.py:40
-#, fuzzy
 msgid "Default device"
 msgstr "Типовий пристрій"
 
@@ -7626,7 +7489,7 @@ msgid "%s configuration error"
 msgstr "%s помилка конфігурації"
 
 #: gajim/common/jingle_rtp.py:124
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Couldn’t setup %(text)s. Check your configuration.\n"
 "\n"
@@ -7636,13 +7499,13 @@ msgid ""
 "Error was:\n"
 "%(error)s"
 msgstr ""
-"Не можу налаштувати %s. Перевірте вашу конфігурацію.\n"
+"Не можу налаштувати %(text)s. Перевірте вашу конфігурацію.\n"
 "\n"
 "Команда:\n"
-"%s\n"
+"%(pipeline)s\n"
 "\n"
 "Помилка:\n"
-"%s"
+"%(error)s"
 
 #: gajim/common/jingle_rtp.py:371
 msgid "audio input"
@@ -7661,9 +7524,8 @@ msgid "video output"
 msgstr "відео вихід"
 
 #: gajim/common/helpers.py:296
-#, fuzzy
 msgid "Server must be between 1 and 1023 bytes"
-msgstr "Сервер має бути від 1 до 1023 символів"
+msgstr "Сервер має бути від 1 до 1023 байт"
 
 #: gajim/common/helpers.py:304
 msgid "Invalid character in hostname."
@@ -7674,18 +7536,16 @@ msgid "Server address required."
 msgstr "Слід вказати адресу сервера."
 
 #: gajim/common/helpers.py:310
-#, fuzzy
 msgid "Username must be between 1 and 1023 bytes"
-msgstr "Ім’я користувача повинно бути від 1 до 1023 символів"
+msgstr "Ім’я користувача повинно бути від 1 до 1023 байт"
 
 #: gajim/common/helpers.py:318
 msgid "Invalid character in username."
 msgstr "Некоректний символ у імені користувача."
 
 #: gajim/common/helpers.py:324
-#, fuzzy
 msgid "Resource must be between 1 and 1023 bytes"
-msgstr "Ресурс має бути від 1 до 1023 символів"
+msgstr "Ресурс має бути від 1 до 1023 байт"
 
 #: gajim/common/helpers.py:332
 msgid "Invalid character in resource."
@@ -7792,9 +7652,8 @@ msgid "is doing something else"
 msgstr "робить щось інше"
 
 #: gajim/common/helpers.py:522
-#, fuzzy
 msgid "is composing a message…"
-msgstr "пише повідомлення..."
+msgstr "пише повідомлення…"
 
 #: gajim/common/helpers.py:525
 msgid "paused composing a message"
@@ -7848,19 +7707,19 @@ msgstr[1] "у черзі %d повідомлення"
 msgstr[2] "у черзі %d повідомлень"
 
 #: gajim/common/helpers.py:1155
-#, fuzzy, python-format
+#, python-format
 msgid "from room %s"
-msgstr " з кімнати %s"
+msgstr "з кімнати %s"
 
 #: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
-#, fuzzy, python-format
+#, python-format
 msgid "from user %s"
-msgstr " від користувача %s"
+msgstr "від користувача %s"
 
 #: gajim/common/helpers.py:1160
-#, fuzzy, python-format
+#, python-format
 msgid "from %s"
-msgstr " від %s"
+msgstr "від %s"
 
 #: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
@@ -7916,22 +7775,30 @@ msgstr ""
 #: gajim/common/connection_handlers.py:979
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
+"Це повідомлення було зашифроване за допомогою OTR та на може бути "
+"дешифроване."
 
 #: gajim/common/connection_handlers.py:982
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
 msgstr ""
+"Це повідомлення було зашифроване застарілим OpenPGP та не може бути "
+"дешифроване. Ви можете встановити модуль PGP для роботи з такими "
+"повідомленнями."
 
 #: gajim/common/connection_handlers.py:986
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
+"Це повідомлення було зашифроване з OpenPGP для XMPP та не може бути "
+"дешифроване."
 
 #: gajim/common/connection_handlers.py:992
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
 msgstr ""
+"Це повідомлення зашифроване за допомогою %s та не може бути дешифроване."
 
 #: gajim/common/connection_handlers.py:1060
 msgid "message"
@@ -7942,15 +7809,15 @@ msgid "I would like to add you to my roster."
 msgstr "Я хочу додати вас до свого реєстру."
 
 #: gajim/common/exceptions.py:46
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The database file (%s) cannot be read. Try to repair it (see https://dev."
 "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all history "
 "will be lost)."
 msgstr ""
 "Файл бази даних (%s) непридатний для читання. Спробуйте виправити його (див. "
-"http://trac.gajim.org/wiki/DatabaseBackup) або вилучити його (всі журнали "
-"буде втрачено)."
+"https://dev.gajim.org/gajim/gajim/wikis/help/DatabaseBackup) або вилучити "
+"його (всі журнали буде втрачено)."
 
 #: gajim/common/exceptions.py:60
 msgid "Service not available: Gajim is not running, or remote_control is False"
@@ -8054,21 +7921,18 @@ msgid "_Reset to default"
 msgstr "_Скинути до типових"
 
 #: gajim/data/gui/join_groupchat_window.ui:34
-#, fuzzy
 msgid "Bookmark this Groupchat"
 msgstr "Зробити закладку на цій кімнаті"
 
 #: gajim/data/gui/join_groupchat_window.ui:51
 msgid "Join this Groupchat everytime Gajim is started"
-msgstr ""
+msgstr "Входити до групової балачки при запуску Gajim"
 
 #: gajim/data/gui/join_groupchat_window.ui:69
-#, fuzzy
 msgid "Bookmark"
 msgstr "_Закладка"
 
 #: gajim/data/gui/join_groupchat_window.ui:82
-#, fuzzy
 msgid "Autojoin"
 msgstr "Автоматичне приєднання"
 
@@ -8077,18 +7941,16 @@ msgid "Account"
 msgstr "Обліковий запис"
 
 #: gajim/data/gui/join_groupchat_window.ui:226
-#, fuzzy
 msgid "Room"
-msgstr "Кімната:"
+msgstr "Кімната"
 
 #: gajim/data/gui/join_groupchat_window.ui:238
-#, fuzzy
 msgid "Recently"
-msgstr "Нещодавно:"
+msgstr "Нещодавно"
 
 #: gajim/data/gui/join_groupchat_window.ui:290
 msgid "Search the rooms on this server"
-msgstr ""
+msgstr "Шукати кімнати на цьому сервері"
 
 #: gajim/data/gui/manage_proxies_window.ui:12
 msgid "HTTP Connect"
@@ -8179,7 +8041,7 @@ msgid "Status:"
 msgstr "Стан:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "_Зберігати журнал спілкування"
 
@@ -8256,7 +8118,6 @@ msgid "_Add to Roster"
 msgstr "_Додати до реєстру"
 
 #: gajim/data/gui/gc_occupants_menu.ui:132
-#, fuzzy
 msgid "_Execute command"
 msgstr "Ви_конати команду"
 
@@ -8275,14 +8136,12 @@ msgid "Never"
 msgstr "Ніколи"
 
 #: gajim/data/gui/archiving_313_preferences_item.ui:96
-#, fuzzy
 msgid "Preference:"
-msgstr "Параметри"
+msgstr "Параметри:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:125
-#, fuzzy
 msgid "Idle since:"
-msgstr "Відсутній з %s"
+msgstr "Відсутній з:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:151
 #: gajim/data/gui/change_status_message_dialog.ui:191
@@ -8295,22 +8154,18 @@ msgid "Activity:"
 msgstr "Заняття:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:178
-#, fuzzy
 msgid "Tune:"
 msgstr "Музика:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:191
-#, fuzzy
 msgid "Location:"
 msgstr "Положення:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:255
-#, fuzzy
 msgid "OpenPGP:"
-msgstr "OpenPGP: "
+msgstr "OpenPGP:"
 
 #: gajim/data/gui/tooltip_roster_contact.ui:281
-#, fuzzy
 msgid "Subscription:"
 msgstr "Підписка:"
 
@@ -8536,7 +8391,6 @@ msgid "About"
 msgstr "Відомості"
 
 #: gajim/data/gui/filetransfers.ui:20
-#, fuzzy
 msgid "Con_tinue"
 msgstr "_Продовжити"
 
@@ -8598,9 +8452,8 @@ msgid "Cancels the selected file transfer"
 msgstr "Скасовує обране передавання файла"
 
 #: gajim/data/gui/filetransfers.ui:199
-#, fuzzy
 msgid "_Close"
-msgstr "_Надіслати і закрити"
+msgstr "_Закрити"
 
 #: gajim/data/gui/filetransfers.ui:205
 msgid "Hides the window"
@@ -8650,14 +8503,12 @@ msgid "Font"
 msgstr "Шрифт"
 
 #: gajim/data/gui/groupchat_control.ui:76 gajim/data/gui/chat_control.ui:356
-#, fuzzy
 msgid "Clear formatting"
 msgstr "Зняти форматування"
 
 #: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:801
-#, fuzzy
 msgid "Choose an encryption"
-msgstr "Оберіть клієнтський сертифікат"
+msgstr "Оберіть шифрування"
 
 #: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:849
 msgid "Show a list of emoticons (Alt+M)"
@@ -8672,62 +8523,52 @@ msgid "Event desc"
 msgstr "Опис події"
 
 #: gajim/data/gui/chat_control.ui:41
-#, fuzzy
 msgid "<b>1</b>"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>1</b>"
 
 #: gajim/data/gui/chat_control.ui:63
-#, fuzzy
 msgid "<b>2</b> abc"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>2</b>abc"
 
 #: gajim/data/gui/chat_control.ui:84
-#, fuzzy
 msgid "<b>3</b> def"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>3</b> def"
 
 #: gajim/data/gui/chat_control.ui:105
-#, fuzzy
 msgid "<b>4</b> ghi"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>4</b> ghi"
 
 #: gajim/data/gui/chat_control.ui:126
-#, fuzzy
 msgid "<b>5</b> jkl"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>5</b> jkl"
 
 #: gajim/data/gui/chat_control.ui:147
-#, fuzzy
 msgid "<b>6</b> mno"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>6</b> mno"
 
 #: gajim/data/gui/chat_control.ui:167
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>7</b> pqrs"
 
 #: gajim/data/gui/chat_control.ui:188
-#, fuzzy
 msgid "<b>8</b> tuv"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>8</b> tuv"
 
 #: gajim/data/gui/chat_control.ui:209
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>9</b> wxyz"
 
 #: gajim/data/gui/chat_control.ui:229
-#, fuzzy
 msgid "<b>*</b>"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>*</b>"
 
 #: gajim/data/gui/chat_control.ui:249
-#, fuzzy
 msgid "<b>0</b>"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>0</b>"
 
 #: gajim/data/gui/chat_control.ui:269
-#, fuzzy
 msgid "<b>#</b>"
-msgstr "<b>Шрифт</b>"
+msgstr "<b>#</b>"
 
 #: gajim/data/gui/chat_control.ui:725
 msgid "#"
@@ -8931,10 +8772,9 @@ msgstr ""
 
 #: gajim/data/gui/preferences_window.ui:255
 msgid "Display status _messages of contacts in roster"
-msgstr "Показувати _повідомлення  про стан контактів з реєстру"
+msgstr "Показувати _повідомлення про стан контактів з реєстру"
 
 #: gajim/data/gui/preferences_window.ui:259
-#, fuzzy
 msgid ""
 "If checked, Gajim will display status messages of contacts under the contact "
 "name, in roster window and in group chats"
@@ -8989,7 +8829,7 @@ msgstr "Пов_едінка вікна:"
 
 #: gajim/data/gui/preferences_window.ui:420
 msgid "_Show roster on startup:"
-msgstr "_Показувати реєстр при старті:з"
+msgstr "_Показувати реєстр при старті:"
 
 #: gajim/data/gui/preferences_window.ui:431
 msgid "_Ignore rich content in incoming messages"
@@ -9020,13 +8860,12 @@ msgstr ""
 "мову для контакту або групової балачки."
 
 #: gajim/data/gui/preferences_window.ui:466
-#, fuzzy
 msgid "Notify by icon when your messages are received"
-msgstr "Показувати піктограму коли ваше повідомлення було отримано "
+msgstr "Показувати піктограму коли ваше повідомлення було отримано"
 
 #: gajim/data/gui/preferences_window.ui:531
 msgid "Show avatar in chat tabs"
-msgstr ""
+msgstr "Показувати аватар на вкладках балачки"
 
 #: gajim/data/gui/preferences_window.ui:552
 msgid "<b>Chat Appearance</b>"
@@ -9058,14 +8897,12 @@ msgstr ""
 "Дозволити сповіщення у разі встановленого стану в_ідійшов/зайнятий/тощо"
 
 #: gajim/data/gui/preferences_window.ui:698
-#, fuzzy
 msgid "Allow popup/notifications when a chat window is opened"
-msgstr ""
-"Дозволити сповіщення у разі встановленого стану в_ідійшов/зайнятий/тощо"
+msgstr "Дозволити сповіщення у відкритому вікні балачки"
 
 #: gajim/data/gui/preferences_window.ui:722
 msgid "Show notification area icon:"
-msgstr "Показувати піктограму зони сповіщень"
+msgstr "Показувати піктограму зони сповіщень:"
 
 #: gajim/data/gui/preferences_window.ui:762
 msgid "<b>Visual Notifications</b>"
@@ -9082,7 +8919,7 @@ msgstr "Ке_рування..."
 
 #: gajim/data/gui/preferences_window.ui:834
 msgid "Allow sound when I'm _busy"
-msgstr "Дозволити звуки у стані _зайнятий."
+msgstr "Дозволити звуки у стані _зайнятий"
 
 #: gajim/data/gui/preferences_window.ui:856
 msgid "<b>Sounds</b>"
@@ -9164,7 +9001,9 @@ msgid ""
 "$T will be replaced by auto-away timeout"
 msgstr ""
 "Автоматичне повідомлення про відсутність. Якщо ви не вкажете тексту "
-"повідомлення, Gajim не змінюватиме поточного повідомлення про стан."
+"повідомлення, Gajim не змінюватиме поточного повідомлення про стан.\n"
+"$S буде замінено на попереднє повідомлення.\n"
+"$T буде замінено автоматичним"
 
 #: gajim/data/gui/preferences_window.ui:1117
 msgid ""
@@ -9174,7 +9013,9 @@ msgid ""
 "$T will be replaced by auto-not-available timeout"
 msgstr ""
 "Автоматичне повідомлення про недоступність. Якщо ви не вкажете тексту "
-"повідомлення, Gajim не змінюватиме поточного повідомлення про стан."
+"повідомлення, Gajim не змінюватиме поточного повідомлення про стан.\n"
+"$S буде замінено на попереднє повідомлення.\n"
+"$T буде замінено автоматичним"
 
 #: gajim/data/gui/preferences_window.ui:1165
 msgid "<b>Auto Status</b>"
@@ -9246,7 +9087,6 @@ msgid "Use _transports icons"
 msgstr "Використовувати піктограми _транспортів"
 
 #: gajim/data/gui/preferences_window.ui:1618
-#, fuzzy
 msgid ""
 "If checked, Gajim will use protocol-specific status icons. (e.g. A contact "
 "from ICQ will have the equivalent ICQ icon for status online, away, busy, "
@@ -9353,9 +9193,8 @@ msgstr ""
 "Gajim спробує отримати значення з серверу."
 
 #: gajim/data/gui/preferences_window.ui:2386
-#, fuzzy
 msgid "<i>(example: stun.iptel.org)</i>"
-msgstr "<i>(приклад: stunserver.org)</i>"
+msgstr "<i>(приклад: stun.ipetel.org)</i>"
 
 #: gajim/data/gui/preferences_window.ui:2400
 msgid "<b>Connection</b>"
@@ -9395,11 +9234,11 @@ msgstr ""
 "Якщо буде позначено цей пункт, Gajim ігноруватиме вхідні повідомлення про "
 "події від неуповноважених контактів. Вам слід бути обережним з цією "
 "можливістю, оскільки її за її використання всі повідомлення від контактів, "
-"яких немає у реєстрі, буде заблоковано."
+"яких немає у реєстрі, буде заблоковано"
 
 #: gajim/data/gui/preferences_window.ui:2622
 msgid "Allow client / _OS information to be sent"
-msgstr "Дозволити надсилання інформації про _операційну систему"
+msgstr "Дозволити надсилання інформації про _операційну систему / клієнта"
 
 #: gajim/data/gui/preferences_window.ui:2626
 msgid ""
@@ -9424,7 +9263,6 @@ msgid "Log _encrypted chat session"
 msgstr "Записувати до журналу _шифровані сеанси балачки"
 
 #: gajim/data/gui/preferences_window.ui:2662
-#, fuzzy
 msgid ""
 "If checked, Gajim will keep logs for encrypted messages. Please note that "
 "when using End-to-End encryption the remote party has to agree on logging, "
@@ -9506,7 +9344,7 @@ msgstr "Призначити кл_юч OpenPGP..."
 
 #: gajim/data/gui/contact_context_menu.ui:115
 msgid "Add Special _Notification..."
-msgstr "Додати особливе _сповіщення"
+msgstr "Додати особливе _сповіщення…"
 
 #: gajim/data/gui/contact_context_menu.ui:129
 msgid "_Subscription"
@@ -9737,23 +9575,20 @@ msgid "Select the account with which you want to synchronise"
 msgstr "Оберіть обліковий запис, з яким слід виконати синхронізацію"
 
 #: gajim/data/gui/archiving_313_preferences_window.ui:28
-#, fuzzy
 msgid "Roster"
-msgstr "Показати _реєстр"
+msgstr "Реєстр"
 
 #: gajim/data/gui/archiving_313_preferences_window.ui:85
-#, fuzzy
 msgid "Preference"
 msgstr "Параметри"
 
 #: gajim/data/gui/archiving_313_preferences_window.ui:159
-#, fuzzy
 msgid "Default:"
-msgstr "Типовий"
+msgstr "Типовий:"
 
 #: gajim/data/gui/voip_call_received_dialog.ui:15
 msgid "<b><big>Incoming call</big></b>"
-msgstr ""
+msgstr "<b><big>Вхідний виклик</big></b>"
 
 #: gajim/data/gui/add_new_contact_window.ui:29
 msgid "Add New Contact"
@@ -9781,18 +9616,16 @@ msgid "_Group:"
 msgstr "_Група:"
 
 #: gajim/data/gui/add_new_contact_window.ui:210
-#, fuzzy
 msgid "Type User ID"
-msgstr "Ідентифікатор:"
+msgstr "Ідентифікатор"
 
 #: gajim/data/gui/add_new_contact_window.ui:223
-#, fuzzy
 msgid "Type Nickname"
 msgstr "Псевдонім"
 
 #: gajim/data/gui/add_new_contact_window.ui:239
 msgid "Choose a group of type a new group"
-msgstr ""
+msgstr "Оберіть групу або призначте нову"
 
 #: gajim/data/gui/add_new_contact_window.ui:257
 msgid "A_llow this contact to view my status"
@@ -9803,7 +9636,6 @@ msgid "_Save subscription message"
 msgstr "_Зберегти повідомлення підписки"
 
 #: gajim/data/gui/add_new_contact_window.ui:325
-#, fuzzy
 msgid ""
 "You have to register with this transport\n"
 "to be able to add a contact from this\n"
@@ -9828,9 +9660,8 @@ msgstr ""
 "додавати контакти з цього протоколу."
 
 #: gajim/data/gui/roster_window.ui:61
-#, fuzzy
 msgid "Change Status Message…"
-msgstr "_Змінити повідомлення про стан"
+msgstr "Змінити повідомлення про стан…"
 
 #: gajim/data/gui/change_mood_dialog.ui:73
 msgid "<b>Mood:</b>"
@@ -9870,7 +9701,7 @@ msgstr "Домашня сторінка:"
 #: gajim/data/gui/plugins_window.ui:253 gajim/data/plugins/config_dialog.ui:236
 #: gajim/data/plugins/plugin_installer/config_dialog.ui:236
 msgid "Description:"
-msgstr "Опис: "
+msgstr "Опис:"
 
 #: gajim/data/gui/plugins_window.ui:301
 msgid "Uninstall"
@@ -10048,45 +9879,37 @@ msgstr "Пере_вірити"
 
 #: gajim/data/gui/esession_info_window.ui:137
 msgid "(<b>ESession</b> info)"
-msgstr "(Відомості <b>ESession</b>)"
+msgstr "(відомості <b>ESession</b>)"
 
 #: gajim/data/gui/application_menu.ui:8
-#, fuzzy
 msgid "View"
 msgstr "П_ерегляд"
 
 #: gajim/data/gui/application_menu.ui:11
-#, fuzzy
 msgid "Show Roster"
 msgstr "Показати _реєстр"
 
 #: gajim/data/gui/application_menu.ui:16
-#, fuzzy
 msgid "Show Offline Contacts"
 msgstr "Показувати _від’єднані контакти"
 
 #: gajim/data/gui/application_menu.ui:21
-#, fuzzy
 msgid "Show Active Contacts"
 msgstr "Показувати лише _активні контакти"
 
 #: gajim/data/gui/application_menu.ui:26
-#, fuzzy
 msgid "Show Transports"
-msgstr "Показувати транс_порти"
+msgstr "Показувати транспорти"
 
 #: gajim/data/gui/application_menu.ui:43
-#, fuzzy
 msgid "Help"
 msgstr "_Довідка"
 
 #: gajim/data/gui/application_menu.ui:46
-#, fuzzy
 msgid "Contents"
 msgstr "_Вміст"
 
 #: gajim/data/gui/application_menu.ui:50
-#, fuzzy
 msgid "FAQ"
 msgstr "_ЧаП"
 
@@ -10103,13 +9926,12 @@ msgid "Start Chat"
 msgstr "Почати балачку"
 
 #: gajim/data/gui/application_menu.ui:81
-#, fuzzy
 msgid "Bookmarks"
-msgstr "_Закладка"
+msgstr "_Закладки"
 
 #: gajim/data/gui/application_menu.ui:99
 msgid "Quit"
-msgstr ""
+msgstr "Вийти"
 
 #: gajim/data/gui/features_window.ui:26
 msgid "<b>List of possible features in Gajim:</b>"
@@ -10146,15 +9968,14 @@ msgid "Pr_int status:"
 msgstr "Друкувати стан:"
 
 #: gajim/data/gui/exception_dialog.ui:45
-#, fuzzy
 msgid ""
 "A programming error has been detected. It probably is not fatal, but should "
 "be reported to the developers nonetheless."
 msgstr ""
-"Ця помилка не є критичною, але все ж варто повідомити про неї розробникам."
+"Виявлено програмну помилку. Ця помилка не є критичною, але все ж варто "
+"повідомити про неї розробникам."
 
 #: gajim/data/gui/exception_dialog.ui:115
-#, fuzzy
 msgid "Report Bug"
 msgstr "_Повідомити про помилку"
 
@@ -10168,7 +9989,7 @@ msgid ""
 "connected"
 msgstr ""
 "Заборонити уповноваження контакту, щоб він або вона не могли бачити, коли ви "
-"виходите на зв'язок."
+"виходите на зв'язок"
 
 #: gajim/data/gui/subscription_request_window.ui:133
 msgid "Au_thorize"
@@ -10178,28 +9999,25 @@ msgstr "_Уповноважити"
 msgid "Authorize contact so he or she can know when you're connected"
 msgstr ""
 "Уповноважити контакт, щоб він або вона могли бачити, коли ви виходите на "
-"зв'язок."
+"зв'язок"
 
 #: gajim/data/gui/xml_console_window.ui:121
-#, fuzzy
 msgid "Presence"
 msgstr "П_рисутність"
 
 #: gajim/data/gui/xml_console_window.ui:134
 msgid "Iq"
-msgstr ""
+msgstr "Iq"
 
 #: gajim/data/gui/xml_console_window.ui:149
-#, fuzzy
 msgid "Presets"
-msgstr "П_рисутність"
+msgstr "Попередні налаштування"
 
 #: gajim/data/gui/chat_to_muc_window.ui:24
 msgid "Invite Friends!"
 msgstr "Запросіть друзів!"
 
 #: gajim/data/gui/chat_to_muc_window.ui:39
-#, fuzzy
 msgid ""
 "You are now entering a groupchat.\n"
 "Select the contacts you want to invite"
@@ -10210,7 +10028,7 @@ msgstr ""
 #: gajim/data/gui/chat_to_muc_window.ui:67
 #: gajim/data/gui/chat_to_muc_window.ui:78
 msgid "column"
-msgstr ""
+msgstr "колонка"
 
 #: gajim/data/gui/chat_to_muc_window.ui:112
 msgid "Please select a MUC server."
@@ -10225,7 +10043,6 @@ msgid "In_vite"
 msgstr "_Запросити"
 
 #: gajim/data/gui/history_manager.ui:11
-#, fuzzy
 msgid "_Export"
 msgstr "Експортувати"
 
@@ -10269,174 +10086,156 @@ msgid "_Search Database"
 msgstr "_Шукати у базі даних"
 
 #: gajim/data/gui/shortcuts_window.ui:8
-#, fuzzy
 msgid "Chat Shortcuts"
-msgstr "Гарячі клавіші"
+msgstr "Гарячі клавіші балачки"
 
 #: gajim/data/gui/shortcuts_window.ui:12
-#, fuzzy
 msgid "Message composition"
-msgstr "Вміст повідомлення"
+msgstr "Написання повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:17
-#, fuzzy
 msgid "Send the message"
 msgstr "Надіслати повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:24
-#, fuzzy
 msgid "Create a new line"
-msgstr "Створити нове повідомлення"
+msgstr "Створити нову строку"
 
 #: gajim/data/gui/shortcuts_window.ui:31
 msgid "Select an emoticon"
-msgstr ""
+msgstr "Оберіть емоційку"
 
 #: gajim/data/gui/shortcuts_window.ui:38
 msgid "Complete a command or a nick"
-msgstr ""
+msgstr "Завершити команду або псевдонім"
 
 #: gajim/data/gui/shortcuts_window.ui:45
-#, fuzzy
 msgid "Previous sent message"
-msgstr "Зразки повідомлень:"
+msgstr "Попереднє надіслане повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:52
-#, fuzzy
 msgid "Next sent messages"
-msgstr "Зразки повідомлень:"
+msgstr "Наступне надіслане повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:59
-#, fuzzy
 msgid "Quote previous message"
-msgstr "повідомлення про стан"
+msgstr "Процитувати попереднє повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:66
-#, fuzzy
 msgid "Quote next message"
-msgstr "Надіслати повідомлення"
+msgstr "Цитувати наступне повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:73
-#, fuzzy
 msgid "Clear message entry"
-msgstr "Повідомлення надіслано"
+msgstr "Очистити повідомлення"
 
 #: gajim/data/gui/shortcuts_window.ui:81 gajim/data/gui/shortcuts_window.ui:231
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Вигляд вікна балачки</b>"
+msgstr "Вигляд"
 
 #: gajim/data/gui/shortcuts_window.ui:86
 msgid "Toggle full / compact view"
-msgstr ""
+msgstr "Перемкнути повний/компактний вигляд"
 
 #: gajim/data/gui/shortcuts_window.ui:94
-#, fuzzy
 msgid "Recent history"
-msgstr "Нещодавно:"
+msgstr "Нещодавня історія"
 
 #: gajim/data/gui/shortcuts_window.ui:99
 msgid "Scroll up"
-msgstr ""
+msgstr "Прокрутити вгору"
 
 #: gajim/data/gui/shortcuts_window.ui:106
 msgid "Scroll down"
-msgstr ""
+msgstr "Прокрутити донизу"
 
 #: gajim/data/gui/shortcuts_window.ui:121
 msgid "Tabs"
-msgstr ""
+msgstr "Вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:126
 msgid "Switch to the previous tab"
-msgstr ""
+msgstr "Перемкнути до попередньої вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:133
 msgid "Switch to the next tab"
-msgstr ""
+msgstr "Перемкнути до наступної вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:140
 msgid "Switch to the first - ninth tab"
-msgstr ""
+msgstr "Перемкнути до першої - дев'ятої вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:147
 msgid "Switch to the previous unread tab"
-msgstr ""
+msgstr "Перемкнутись до попередньої непрочитаної вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:154
 msgid "Switch to the next unread tab"
-msgstr ""
+msgstr "Перемкнути до наступної непрочитаної вкладки"
 
 #: gajim/data/gui/shortcuts_window.ui:161
 msgid "Close chat"
-msgstr ""
+msgstr "Закрити балачку"
 
 #: gajim/data/gui/shortcuts_window.ui:172
-#, fuzzy
 msgid "Roster Shortcuts"
-msgstr "Гарячі клавіші"
+msgstr "Гарячі клавіші реєстру"
 
 #: gajim/data/gui/shortcuts_window.ui:195
-#, fuzzy
 msgid "File transfers"
 msgstr "Перенесення файлів"
 
 #: gajim/data/gui/shortcuts_window.ui:202
-#, fuzzy
 msgid "Start a new chat"
-msgstr "Почати балачку"
+msgstr "Почати нову балачку"
 
 #: gajim/data/gui/shortcuts_window.ui:209
-#, fuzzy
 msgid "Join a group chat"
-msgstr "у _групових балачках"
+msgstr "Приєднатись до групової балачки"
 
 #: gajim/data/gui/shortcuts_window.ui:216
-#, fuzzy
 msgid "Set the status message"
-msgstr "повідомлення про стан"
+msgstr "Встановити повідомлення про стан"
 
 #: gajim/data/gui/shortcuts_window.ui:223
-#, fuzzy
 msgid "Quit Gajim"
-msgstr "Gajim"
+msgstr "Вийти з Gajim"
 
 #: gajim/data/gui/shortcuts_window.ui:236
-#, fuzzy
 msgid "Show offline contacts"
 msgstr "Показувати _від’єднані контакти"
 
 #: gajim/data/gui/shortcuts_window.ui:243
-#, fuzzy
 msgid "Show only active contacts"
 msgstr "Показувати лише _активні контакти"
 
 #: gajim/data/gui/shortcuts_window.ui:250
 msgid "Enable roster filtering"
-msgstr ""
+msgstr "Увімкнути фільтр реєстру"
 
 #: gajim/data/gui/shortcuts_window.ui:258
 msgid "Contacts"
 msgstr "Контакти"
 
 #: gajim/data/gui/shortcuts_window.ui:263
-#, fuzzy
 msgid "Contact information"
 msgstr "Контактна інформація"
 
 #: gajim/data/gui/shortcuts_window.ui:270
-#, fuzzy
 msgid "Rename contact"
 msgstr "Перейменувати контакт"
 
 #: gajim/data/gui/shortcuts_window.ui:277
-#, fuzzy
 msgid "Delete contact"
-msgstr "Надіслати контакти:"
+msgstr "Видалити контакти"
 
 #: gajim/data/gui/passphrase_dialog.ui:8
 msgid "Passphrase"
 msgstr "Пароль"
+
+#: gajim/data/gui/history_window.ui:38
+msgid "Enter name / JID of contact or groupchat"
+msgstr "Введіть JID або ім’я контакту або групової балачки"
 
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
@@ -10447,11 +10246,10 @@ msgid "_In date search"
 msgstr "_Пошук по даті"
 
 #: gajim/data/gui/history_window.ui:79
-#, fuzzy
 msgid "Only searching within selected day"
 msgstr "Шукати лише у зазначений день"
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 msgid "_Show status changes"
 msgstr "_Показати зміни стану"
 
@@ -10461,7 +10259,7 @@ msgstr "Налаштування служби повідомлення про с
 
 #: gajim/data/gui/manage_pep_services_window.ui:69
 msgid "_Configure"
-msgstr "_Налаштувати..."
+msgstr "_Налаштувати"
 
 #: gajim/data/gui/groups_post_window.ui:9
 msgid "Create new post"
@@ -10506,13 +10304,12 @@ msgid "Mute Sounds"
 msgstr "Вимкнути звук"
 
 #: gajim/data/gui/systray_context_menu.ui:75
-#, fuzzy
 msgid "_Preferences"
 msgstr "Параметри"
 
 #: gajim/data/gui/systray_context_menu.ui:90
 msgid "_Quit"
-msgstr ""
+msgstr "_Вийти"
 
 #: gajim/data/gui/single_message_window.ui:59
 msgid "To:"
@@ -10561,7 +10358,7 @@ msgstr "<b>Повідомлення:</b> "
 #: gajim/data/plugins/config_dialog.ui:17
 #: gajim/data/plugins/plugin_installer/config_dialog.ui:17
 msgid "Check update after start"
-msgstr ""
+msgstr "Перевірити оновлення після запуску"
 
 #: gajim/data/plugins/config_dialog.ui:103
 #: gajim/data/plugins/plugin_installer/config_dialog.ui:103
@@ -10581,28 +10378,27 @@ msgstr "Доступний"
 
 #: gajim/data/plugins/config_dialog.ui:143
 #: gajim/data/plugins/plugin_installer/config_dialog.ui:143
-#, fuzzy
 msgid ""
 "Install /\n"
 "Upgrade"
-msgstr "Встановлено"
+msgstr ""
+"Встановити/\n"
+"Оновити"
 
 #: gajim/data/plugins/config_dialog.ui:298
 #: gajim/data/plugins/plugin_installer/config_dialog.ui:298
-#, fuzzy
 msgid "Install/Upgrade"
-msgstr "Встановлено"
+msgstr "Встановлення/Оновлення"
 
 #: gajim/data/plugins/plugin_installer.py:114
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:114
 msgid "Install and Upgrade Plugins"
-msgstr ""
+msgstr "Встановити та оновити модулі"
 
 #: gajim/data/plugins/plugin_installer.py:138
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:138
-#, fuzzy
 msgid "Plugins updates"
-msgstr "Активація додатка невдалаДодаток"
+msgstr "Оновлення модулів"
 
 #: gajim/data/plugins/plugin_installer.py:139
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:139
@@ -10612,11 +10408,14 @@ msgid ""
 "those plugins:\n"
 "%s"
 msgstr ""
+"Де-які оновлення доступні для ваших встановлених модулів. Чи бажаєте оновити:"
+"\n"
+"%s"
 
 #: gajim/data/plugins/plugin_installer.py:251
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:251
 msgid "Security error during download"
-msgstr ""
+msgstr "Помилка безпеки під час завантаження"
 
 #: gajim/data/plugins/plugin_installer.py:252
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:252
@@ -10626,11 +10425,15 @@ msgid ""
 "\n"
 "You can continue at your risk. Do you want to do so? (not recommended)"
 msgstr ""
+"Помилка безпеки під час завантаження. Сертифікат архіву модулів не може бути "
+"перевірений. Це може бути атакою на безпеку.\n"
+"\n"
+"Ви можете продовжити на власний ризик. Чи бажаєте ви цього? (не радимо)"
 
 #: gajim/data/plugins/plugin_installer.py:268
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:268
 msgid "Error in download"
-msgstr ""
+msgstr "Помилка у завантаженні"
 
 #: gajim/data/plugins/plugin_installer.py:269
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:269
@@ -10640,11 +10443,14 @@ msgid ""
 "\n"
 "<tt>[%s]</tt>"
 msgstr ""
+"Помилка завантаження\n"
+"\n"
+"<tt>[%s]</tt>"
 
 #: gajim/data/plugins/plugin_installer.py:330
 #: gajim/data/plugins/plugin_installer/plugin_installer.py:330
 msgid "All selected plugins downloaded"
-msgstr ""
+msgstr "Усі обрані модулі завантажено"
 
 #: gajim/command_system/mapping.py:164 gajim/command_system/mapping.py:174
 #: gajim/command_system/mapping.py:194
@@ -10652,9 +10458,8 @@ msgid "Missing arguments"
 msgstr "Пропущено аргумент"
 
 #: gajim/command_system/mapping.py:261
-#, fuzzy
 msgid "Too many arguments"
-msgstr "Пропущено аргумент"
+msgstr "Забагато аргументів"
 
 #: gajim/command_system/implementation/execute.py:53
 msgid "Execute expression inside a shell, show output"
@@ -10794,14 +10599,13 @@ msgid "Invite a user to a room for a reason"
 msgstr "Запросити користувача в кімнату вказавши причину"
 
 #: gajim/command_system/implementation/standard.py:295
-#, fuzzy, python-format
+#, python-format
 msgid "Invited %(jid)s to %(room_jid)s"
-msgstr "Запрошено %s до %s"
+msgstr "Запрошено %(jid)s до %(room_jid)s"
 
 #: gajim/command_system/implementation/standard.py:299
-#, fuzzy
 msgid "Join a group chat given by a jid"
-msgstr "у _групових балачках"
+msgstr "Приєднатись до групової балачки по ідентифікатору"
 
 #: gajim/command_system/implementation/standard.py:307
 msgid ""
@@ -10835,7 +10639,6 @@ msgid ""
 "    moderator, participant, visitor, none"
 msgstr ""
 "Встановити роль учасника балачки\n"
-"\n"
 "    Роль може бути одним з наведених:\n"
 "    moderator, participant, visitor, none"
 
@@ -10871,7 +10674,7 @@ msgstr "Дозволити учаснику надсилати вам особи
 
 #: gajim/command_system/implementation/middleware.py:72
 msgid "Error during command execution!"
-msgstr "Помилка під час виконання команди"
+msgstr "Помилка під час виконання команди!"
 
 #: gajim/command_system/implementation/custom.py:106
 msgid "The same as using a doc-string, except it supports translation"
@@ -10885,7 +10688,7 @@ msgstr "Архів пошкоджено"
 
 #: gajim/plugins/pluginmanager.py:613
 msgid "Archive empty"
-msgstr "Архів порожній "
+msgstr "Архів порожній"
 
 #: gajim/plugins/pluginmanager.py:625 gajim/plugins/pluginmanager.py:633
 #: gajim/plugins/gui.py:264
@@ -10927,13 +10730,12 @@ msgid "A GTK+ Jabber client"
 msgstr "Jabber клієнт, що базується на GTK+"
 
 #: data/org.gajim.Gajim.desktop.in:8
-#, fuzzy
 msgid "chat;messaging;im;xmpp;bonjour;voip;"
 msgstr "chat;messaging;im;jabber;xmpp;bonjour;voip"
 
 #: data/org.gajim.Gajim.desktop.in:12
 msgid "org.gajim.Gajim"
-msgstr ""
+msgstr "org.gajim.Gajim"
 
 #: data/org.gajim.Gajim.appdata.xml.in:12
 msgid ""
@@ -10941,107 +10743,107 @@ msgid ""
 "Nimbuzz, Ovi, Talkonaut, and thousands of other services run by companies "
 "and ISPs, and volunteers around the world."
 msgstr ""
+"Gajim це клієнт обміну повідомленнями для Jabber.org, Nimbuzz, Ovi, "
+"Talkonaut, GTalk, та тисяч інших сервісів що підтримуються компаніями "
+"інтернет-провайдерами та ентузіастами у всьому світі."
 
 #: data/org.gajim.Gajim.appdata.xml.in:16
 msgid ""
 "If you have a few accounts on different servers, if you want to be in "
 "contact with your friends and family all the time, then Gajim is for you."
 msgstr ""
+"Якщо ви маєте кілька облікових записів на різних серверах, якщо ви бажаєте "
+"завжди бути на зв'язку з друзями та родиною, то Gajim для вас."
 
 #: data/org.gajim.Gajim.appdata.xml.in:19
-#, fuzzy
 msgid "Features:"
-msgstr "Можливості"
+msgstr "Можливості:"
 
 #: data/org.gajim.Gajim.appdata.xml.in:21
 msgid "Tabbed chat window and single window modes"
-msgstr ""
+msgstr "Режим вікна з вкладками та режим одного вікна"
 
 #: data/org.gajim.Gajim.appdata.xml.in:22
 msgid ""
 "Group chat support (with Multi-User Chat protocol), invitation, chat to "
 "group chat transformation"
 msgstr ""
+"Підтримка групових балачок (з протоколом MUC), запрошення, перетворення "
+"балачки у групову"
 
 #: data/org.gajim.Gajim.appdata.xml.in:23
 msgid "Emoticons, avatars, PEP (user activity, mood and tune)"
-msgstr ""
+msgstr "Емоційки, аватари, PEP (користувацька активність, настрій та музика)"
 
 #: data/org.gajim.Gajim.appdata.xml.in:24
-#, fuzzy
 msgid "Audio / video conferences"
-msgstr "Аудіо/Відео"
+msgstr "Аудіо/Відео конференції"
 
 #: data/org.gajim.Gajim.appdata.xml.in:25
-#, fuzzy
 msgid "File transfer, room bookmarks"
-msgstr "Помилка під час передавання файла"
+msgstr "Передавання файлів, закладки кімнат"
 
 #: data/org.gajim.Gajim.appdata.xml.in:26
 msgid "Metacontacts support"
-msgstr ""
+msgstr "Підтримка метаконтактів"
 
 #: data/org.gajim.Gajim.appdata.xml.in:27
 msgid "Trayicon, speller, extended chat history functionalities"
 msgstr ""
+"Піктограма сповіщення, перевірка правопису, розширені можливості історії "
+"спілкування"
 
 #: data/org.gajim.Gajim.appdata.xml.in:28
 msgid "TLS, GPG and End-To-End encryption support"
-msgstr ""
+msgstr "Підтримка шифрування TLS, GPG та «точка-точка»"
 
 #: data/org.gajim.Gajim.appdata.xml.in:29
 msgid "Transport registration support"
-msgstr ""
+msgstr "Підтримка реєстрації у транспортах"
 
 #: data/org.gajim.Gajim.appdata.xml.in:30
-#, fuzzy
 msgid "Service discovery including nodes, user search"
-msgstr "Пошук служб за допомогою облікового запису %s"
+msgstr "Пошук служб та вузлів, пошук користувачів"
 
 #: data/org.gajim.Gajim.appdata.xml.in:31
 msgid "Wikipedia, dictionary and search engine lookup"
-msgstr ""
+msgstr "Пошук у Вікіпедії, словнику та пошуковій системі"
 
 #: data/org.gajim.Gajim.appdata.xml.in:32
 msgid "Multiple accounts support"
-msgstr ""
+msgstr "Підтримка багатьох облікових записів"
 
 #: data/org.gajim.Gajim.appdata.xml.in:33
-#, fuzzy
 msgid "XML console interface"
 msgstr "Консоль XML"
 
 #: data/org.gajim.Gajim.appdata.xml.in:34
 msgid "Link local (bonjour / zeroconf), BOSH"
-msgstr ""
+msgstr "Локальне з'єднання (bonjour / zeroconf), BOSH"
 
 #: data/org.gajim.Gajim.appdata.xml.in:35
 msgid "Other features via plugins"
-msgstr ""
+msgstr "Інші можливості через модулі"
 
 #: data/org.gajim.Gajim.appdata.xml.in:47
-#, fuzzy
 msgid "Roster, list of contacts"
-msgstr "_Записувати зміни стану контактів"
+msgstr "Реєстр, список контактів"
 
 #: data/org.gajim.Gajim.appdata.xml.in:51
 msgid "Tabbed chat window"
-msgstr ""
+msgstr "Вікно балачки з вкладками"
 
 #: data/org.gajim.Gajim.appdata.xml.in:55
-#, fuzzy
 msgid "Group chat support"
-msgstr "Групові балачки"
+msgstr "Підтримка групових балачок"
 
 #: data/org.gajim.Gajim.appdata.xml.in:59
-#, fuzzy
 msgid "Chat history"
-msgstr "Нещодавно:"
+msgstr "Історія"
 
 #: data/org.gajim.Gajim.appdata.xml.in:63
-#, fuzzy
 msgid "Plugin manager"
-msgstr "Активація додатка невдалаДодаток"
+msgstr "Менеджер модулів"
 
 #, fuzzy
 #~ msgid "XMPP account %s"
@@ -12182,9 +11984,6 @@ msgstr "Активація додатка невдалаДодаток"
 
 #~ msgid "*"
 #~ msgstr "*"
-
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "Введіть JID або ім’я контакту"
 
 #~ msgid "Groupchat Histories"
 #~ msgstr "Історія групових балачок"

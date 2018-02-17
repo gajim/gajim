@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-09 03:06+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -909,7 +909,7 @@ msgid "JID"
 msgstr "‏JID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "תאריך"
 
@@ -919,7 +919,7 @@ msgid "Nickname"
 msgstr "שם כינוי"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "הודעה"
 
@@ -1378,7 +1378,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "ללא חיבור, אין באפשרותך לסנכרן את אנשי הקשר שלך."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "שם"
@@ -1442,27 +1442,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "הסיסמאות אשר מוקלדות בשני השדות מוכרחות להיות זהות."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "איש קשר התחבר"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "איש קשר התנתק"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "הודעה חדשה"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "הודעה בודדת חדשה"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "הודעה פרטית חדשה"
 
@@ -1495,7 +1495,7 @@ msgid "Groupchat Invitation"
 msgstr "הזמנת שיחת קבוצה"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "איש קשר שינה מצב"
 
@@ -1888,7 +1888,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s ידוע/ה כעת בתור %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
@@ -3352,47 +3352,47 @@ msgstr "מחשב על סף שינה‫"
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "היסטוריית שיחה עם ‫%s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "היסטוריית שיחה"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "שגיאת כונן"
 
 # Fix Psi status with brackets in Psi with LTR at its end - see realisation below
 # ‏Auto Status (idle)
 # ‏Auto Status (idle)‎
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s מצוי/ה כעת במצב %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "שגיאה: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr "שגיאה"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "מצב נוכחי: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "מצב נוכחי: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "נושא: %s\n"
@@ -3817,7 +3817,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "שגיאה %(code)s: ‏%(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
@@ -5254,7 +5254,7 @@ msgstr "סוף השבוע"
 msgid "Weekend!"
 msgstr "סופשבוע!"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5263,36 +5263,36 @@ msgstr ""
 "‏JID ‏%s אינה תואמת RFC. זו לא תוסף לרשימה שלך. השתמש בכלי ניהול רשימה (roster "
 "management tools) כגון http://jru.jabberstudio.org כדי להסירה"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "בקשת ביטול הרשמה מאת %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "החדר הוחרב"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "באפשרותך להצטרף לחדר זה במקום: %s"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "שגיאת SSL לא מוכרת: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "התקבלה הודעה בודדת חדשה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "הודעה פרטית חדשה מתוך שיחת קבוצה %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr ""
@@ -5301,27 +5301,27 @@ msgstr ""
 # [09:08:28 PM] Myself: אני חושב שזה: המסר נשלח על-ידי...
 # [09:08:39 PM] Rodensky: לא
 # [09:08:46 PM] Rodensky: זה "התקבלה הודעה מ"
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "התקבלה הודעה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "המצב של %(nick)s שונה"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s התחבר/ה"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s התנתק/ה"
@@ -8332,7 +8332,7 @@ msgid "Status:"
 msgstr "מצב:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "_רשום היסטוריית שיחה"
 
@@ -10619,6 +10619,11 @@ msgstr "אנשי קשר אשר נשלחו:"
 msgid "Passphrase"
 msgstr "מימרת סיסמה"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "כתובת JID או שם איש קשר"
+
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
 msgstr "חיפוש:"
@@ -10633,7 +10638,7 @@ msgstr "חפש בתוך _תאריך"
 msgid "Only searching within selected day"
 msgstr "חיפוש בתוך היום הנבחר בלבד"
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 msgid "_Show status changes"
 msgstr "הצג _הודעות מצב"
 
@@ -12324,9 +12329,6 @@ msgstr "כשל תוסף"
 
 #~ msgid "View contact information (Ctrl+I)"
 #~ msgstr "צפייה במידע איש קשר (Ctrl+I)"
-
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "כתובת JID או שם איש קשר"
 
 #~ msgid "Groupchat Histories"
 #~ msgstr "היסטוריות שיחת קבוצה"

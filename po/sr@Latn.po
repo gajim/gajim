@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-09 03:06+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -879,7 +879,7 @@ msgid "JID"
 msgstr "DŽID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "Datum"
 
@@ -889,7 +889,7 @@ msgid "Nickname"
 msgstr "Nadimak"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Poruka"
 
@@ -1337,7 +1337,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Bez veze, nije moguće sinhronizovati kontakte."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Ime"
@@ -1394,27 +1394,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "Lozinke upisane u oba polja moraju biti identične."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "Kontakt je na vezi"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "Kontakt je otišao sa veze"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "Nova Poruka"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "Nova Samostalna Poruka"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "Nova Privatna Poruka"
 
@@ -1447,7 +1447,7 @@ msgid "Groupchat Invitation"
 msgstr "Poziv na grupni razgovor"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "Kontakt promenio status"
 
@@ -1813,7 +1813,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s je od sada poznat kao %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s je trenutno %(status)s"
@@ -3258,44 +3258,44 @@ msgstr ""
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Istorijat razgovora sa %s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Istorijat razgovora"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "Greška pri upisu na disk"
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s je trenutno %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "Greška: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr "Greška"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Status je trenutno: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Status je trenutno: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Tema: %s\n"
@@ -3716,7 +3716,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "Greška %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "greška prilikom slanja %(message)s ( %(error)s )"
@@ -5135,7 +5135,7 @@ msgstr "Kraj nedelje"
 msgid "Weekend!"
 msgstr "Vikend!"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5145,61 +5145,61 @@ msgstr ""
 "kontakata. Upotrebite alate kao što je http://jru.jabberstudio.org/ da biste "
 "ga uklonili"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "zahtev za ukidanje pretplate od kontakta %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "Soba grupnog razgovora je uništena"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Možete se priključiti sobi %s umesto ove"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Nepoznata SSL greška: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nova samostalna poruka od kontakta %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nova privatna poruka sa grupnog razgovora %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Nova poruka od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Nova poruka od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s je promenio status"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s je na vezi"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s je otišao"
@@ -8099,7 +8099,7 @@ msgid "Status:"
 msgstr "Status:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "_Pamti u dnevniku istorijat razgovora"
 
@@ -10399,6 +10399,11 @@ msgstr "Poslati kontakti:"
 msgid "Passphrase"
 msgstr "Lozinka"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "Ime kontakta"
+
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
 msgstr "Pretraga:"
@@ -10411,7 +10416,7 @@ msgstr ""
 msgid "Only searching within selected day"
 msgstr ""
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 #, fuzzy
 msgid "_Show status changes"
 msgstr "_Zapisuj u dnevnik statusne promene kontakata"
@@ -12003,10 +12008,6 @@ msgstr "Registracija neuspela"
 #, fuzzy
 #~ msgid "View contact information (Ctrl+I)"
 #~ msgstr "Pozovi kontakte u konverzaciju (Ctrl+G)"
-
-#, fuzzy
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "Ime kontakta"
 
 #, fuzzy
 #~ msgid "Groupchat Histories"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.14.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-09 03:06+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -884,7 +884,7 @@ msgid "JID"
 msgstr "Jabber Azonosító"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "Dátum"
 
@@ -894,7 +894,7 @@ msgid "Nickname"
 msgstr "Becenév"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Üzenet"
 
@@ -1347,7 +1347,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Kapcsolat nélkül nem szinkronizálhatod a partnereid."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Név"
@@ -1404,27 +1404,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "A jelszavaknak egyezniük kell egymással mindkét mezőben."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "Partner bejelentkezett"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "Partner kijelentkezett"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "Új üzenet"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "Új levél"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "Új privát üzenet"
 
@@ -1457,7 +1457,7 @@ msgid "Groupchat Invitation"
 msgstr "Meghívó közös társalgásba"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "A partner megváltoztatta az állapotát"
 
@@ -1820,7 +1820,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s mostantól így szerepel: %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s mostantól %(status)s"
@@ -3287,44 +3287,44 @@ msgstr ""
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Beszélgetésnapló vele: %s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Beszélgetés Előzmények"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "Lemezhiba"
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, fuzzy, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s is now %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "Hiba: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr "Hiba"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Az állapot mostantól: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Az állapot mostantól: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Tárgy: %s\n"
@@ -3743,7 +3743,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "Error %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "hiba ennek a küldése során %(message)s ( %(error)s )"
@@ -5183,7 +5183,7 @@ msgstr "A hét vége"
 msgid "Weekend!"
 msgstr "Hétvége!"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, fuzzy, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5192,61 +5192,61 @@ msgstr ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
 "management tools such as http://jru.jabberstudio.org/ to remove it"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "liratkozási kérelem tőle: %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "Szoba törölve"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Helyette csatlakozhatsz ehhez a szobához: %s"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Ismeretlen SSL hiba: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Új levél tőle: %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Új privát üzenet ebből a közös beszélgetésből: %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, fuzzy, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Üzenetet írta: %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Új üzenet tőle: %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s megváltoztatta állapotát"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s bejelentkezett"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s kijelentkezett"
@@ -8230,7 +8230,7 @@ msgid "Status:"
 msgstr "Állapot:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "Beszélgetés _naplózása"
 
@@ -10541,6 +10541,11 @@ msgstr "Elküldött partnerek:"
 msgid "Passphrase"
 msgstr "Passphrase"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "Írja be a Jabber azonosítót, vagy a partner nevét"
+
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
 msgstr "Keresés:"
@@ -10553,7 +10558,7 @@ msgstr ""
 msgid "Only searching within selected day"
 msgstr ""
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 #, fuzzy
 msgid "_Show status changes"
 msgstr "_Log status changes of contacts"
@@ -12225,9 +12230,6 @@ msgstr "Regisztráció nem sikerült"
 
 #~ msgid "*"
 #~ msgstr "*"
-
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "Írja be a Jabber azonosítót, vagy a partner nevét"
 
 #, fuzzy
 #~ msgid "Groupchat Histories"

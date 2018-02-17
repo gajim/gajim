@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-09 03:06+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -881,7 +881,7 @@ msgid "JID"
 msgstr "JID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "Deiziad"
 
@@ -891,7 +891,7 @@ msgid "Nickname"
 msgstr "Lesanv"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Kemennadenn"
 
@@ -1341,7 +1341,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Rankout a rit bezañ luget evit cheñch ger-kuzh."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Anv"
@@ -1400,27 +1400,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "Rankout a ra an daou c'her-kuzh bezañ heñvel en daou dakad."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "Darempred luget"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "Darempred diluget"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "Kemennadenn nevez"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "Kemennadenn simpl nevez"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "Kemennadenn hiniennel nevez"
 
@@ -1453,7 +1453,7 @@ msgid "Groupchat Invitation"
 msgstr "Pedadenn evit ur sal-flapiñ"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 #, fuzzy
 msgid "Contact Changed Status"
 msgstr "Darempred diluget"
@@ -1824,7 +1824,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%s a zo bremañ %s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s a zo bremañ %(status)s"
@@ -3286,44 +3286,44 @@ msgstr ""
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Istoradur flapiñ gant %s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Istoradur ar gaoz"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr ""
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s a zo bremañ %(status)s : %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Fazi en ur lenn ar restr:"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr ""
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Ar stad a zo bremañ: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Ar stad a zo bremañ: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Sujed: %s\n"
@@ -3754,7 +3754,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "%(nickname)s : %(message)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fazi en ur gas %s ( %s )"
@@ -5155,7 +5155,7 @@ msgstr ""
 msgid "Weekend!"
 msgstr ""
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, fuzzy, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5165,62 +5165,62 @@ msgstr ""
 "de contact. Utiliser un outil de gestion de liste de contact tel que http://"
 "jru.jabberstudio.org/ pour le supprimer"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "Requête de désinscription de la part de %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 #, fuzzy
 msgid "Room has been destroyed"
 msgstr "Dilamet eo bet an aotre"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr ""
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, fuzzy, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Aozadur D-Bus dianav: %s"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Kemennadenn simpl nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, fuzzy, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Kemennadenn hiniennel nevez digant ar sal %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s : %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, fuzzy, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Kemennadenn nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Kemennadenn nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, fuzzy, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s a zo bremañ %(status)s"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "Emañ %(nickname)s o paouez lugañ"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "Emañ %(nickname)s o paouez dilugañ"
@@ -8080,7 +8080,7 @@ msgid "Status:"
 msgstr "Stad:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "_Istoradur flapiñ"
 
@@ -10462,6 +10462,11 @@ msgstr "Darempredoù"
 msgid "Passphrase"
 msgstr "Ger-kuzh"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "Anv an darempred"
+
 #: gajim/data/gui/history_window.ui:51
 #, fuzzy
 msgid "Search:"
@@ -10475,7 +10480,7 @@ msgstr ""
 msgid "Only searching within selected day"
 msgstr ""
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 #, fuzzy
 msgid "_Show status changes"
 msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
@@ -11724,10 +11729,6 @@ msgstr "échec lors de la publication de votre vCard"
 #, fuzzy
 #~ msgid "View contact information (Ctrl+I)"
 #~ msgstr "a zo aketus d'ar gaozeadenn"
-
-#, fuzzy
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "Anv an darempred"
 
 #, fuzzy
 #~ msgid "Groupchat Histories"
