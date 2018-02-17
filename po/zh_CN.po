@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-17 03:05+0000\n"
 "PO-Revision-Date: 2010-10-31 17:37+0800\n"
 "Last-Translator: Guanhao Yin <yinguanhao@gmail.com>\n"
 "Language-Team: \n"
@@ -476,67 +476,67 @@ msgstr "图片不能被保存为 %(type)s 格式。保存为 %(new_filename)s?"
 msgid "Save Image as…"
 msgstr "图片另存为..."
 
-#: gajim/vcard.py:166 gajim/vcard.py:510 gajim/profile_window.py:175
+#: gajim/vcard.py:166 gajim/vcard.py:513 gajim/profile_window.py:175
 #: gajim/chat_control.py:578
 #, fuzzy
 msgid "Save _As"
 msgstr "有"
 
-#: gajim/vcard.py:286 gajim/vcard.py:293
+#: gajim/vcard.py:289 gajim/vcard.py:296
 msgid "?Client:Unknown"
 msgstr "未知"
 
-#: gajim/vcard.py:290 gajim/vcard.py:295
+#: gajim/vcard.py:293 gajim/vcard.py:298
 msgid "?OS:Unknown"
 msgstr "未知"
 
-#: gajim/vcard.py:324 gajim/vcard.py:327
+#: gajim/vcard.py:327 gajim/vcard.py:330
 msgid "?Time:Unknown"
 msgstr "未知"
 
-#: gajim/vcard.py:378
+#: gajim/vcard.py:381
 msgid "?Role in Group Chat:<b>Role:</b>"
 msgstr "?Role in Group Chat:<b>角色</b>"
 
-#: gajim/vcard.py:382
+#: gajim/vcard.py:385
 msgid "<b>Affiliation:</b>"
 msgstr "<b>归属: </b>"
 
-#: gajim/vcard.py:389
+#: gajim/vcard.py:392
 #, fuzzy
 msgid ""
 "This contact is interested in your presence information, but you are not "
 "interested in their presence"
 msgstr "此联系人对您的状态信息感兴趣, 但您不关心他/她的状态"
 
-#: gajim/vcard.py:391
+#: gajim/vcard.py:394
 #, fuzzy
 msgid ""
 "You are interested in the contact's presence information, but it is not "
 "mutual"
 msgstr "您对此联系人的状态信息感兴趣, 但他/她不关心您的状态"
 
-#: gajim/vcard.py:393
+#: gajim/vcard.py:396
 #, fuzzy
 msgid "The contact and you want to exchange presence information"
 msgstr "您与此联系人同时对对方的状态信息感兴趣"
 
-#: gajim/vcard.py:395
+#: gajim/vcard.py:398
 #, fuzzy
 msgid ""
 "You and the contact have a mutual disinterest in each-others presence "
 "information"
 msgstr "您与此联系人同时对对方的状态信息感兴趣"
 
-#: gajim/vcard.py:401
+#: gajim/vcard.py:404
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "等待联系人回应您的认证请求"
 
-#: gajim/vcard.py:403
+#: gajim/vcard.py:406
 msgid "There is no pending subscription request."
 msgstr "没有未处理的认证请求"
 
-#: gajim/vcard.py:408 gajim/vcard.py:452 gajim/vcard.py:565
+#: gajim/vcard.py:411 gajim/vcard.py:455 gajim/vcard.py:568
 msgid " resource with priority "
 msgstr "带有优先级的资源"
 
@@ -870,7 +870,7 @@ msgid "JID"
 msgstr "JID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "日期"
 
@@ -880,7 +880,7 @@ msgid "Nickname"
 msgstr "昵称"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "消息"
 
@@ -1182,6 +1182,11 @@ msgstr ""
 msgid "we would like to thank all the package maintainers."
 msgstr "最后但不是最不重要的, 我们要感谢所有的软件包维护者。"
 
+#: gajim/dialogs.py:1319
+#, fuzzy
+msgid "Thanks"
+msgstr "感激"
+
 #: gajim/dialogs.py:1321
 msgid "translator-credits"
 msgstr ""
@@ -1319,7 +1324,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "未连接时, 您不能同步您的联系人。"
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "名称"
@@ -1376,27 +1381,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "在两个输入框中输入的密码必须一致。"
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "联系人登录"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "联系人退出登录"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "新消息"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "新单条消息"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "新个人消息"
 
@@ -1429,7 +1434,7 @@ msgid "Groupchat Invitation"
 msgstr "多人聊天邀请"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "联系人状态改变"
 
@@ -1785,7 +1790,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s 现在成了 %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的状态是 %(status)s"
@@ -2161,6 +2166,7 @@ msgid "_Accept"
 msgstr "帐户(_A)"
 
 #: gajim/chat_control.py:1633 gajim/disco.py:1752
+#: gajim/data/gui/join_groupchat_window.ui:325
 msgid "_Join"
 msgstr "加入(_J)"
 
@@ -2180,7 +2186,7 @@ msgstr "已合并的帐户"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5128 gajim/message_window.py:543
+#: gajim/roster_window.py:5128 gajim/message_window.py:525
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 msgid "Groupchats"
@@ -2566,48 +2572,52 @@ msgstr "历史记录管理器"
 msgid "_Join New Group Chat"
 msgstr "加入新的聊天室(_J)"
 
-#: gajim/gajim.py:72
+#: gajim/gajim.py:75
 #, fuzzy
 msgid "Show the application's version"
 msgstr "在通知区域显示图标: "
 
-#: gajim/gajim.py:75
+#: gajim/gajim.py:78
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "只显示在联系人列表中"
 
-#: gajim/gajim.py:78
+#: gajim/gajim.py:81
 msgid "Separate profile files completely (even history db and plugins)"
 msgstr ""
 
-#: gajim/gajim.py:82
+#: gajim/gajim.py:85
 msgid "Print XML stanzas and other debug information"
 msgstr ""
 
-#: gajim/gajim.py:86
+#: gajim/gajim.py:89
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "高级设置编辑器"
 
-#: gajim/gajim.py:90
+#: gajim/gajim.py:93
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s 设置错误"
 
-#: gajim/gajim.py:93
+#: gajim/gajim.py:96
 msgid "Configure logging system"
 msgstr ""
 
-#: gajim/gajim.py:96
+#: gajim/gajim.py:99
 #, fuzzy
 msgid "Show all warnings"
 msgstr "显示所有未处理事件(_E)"
 
-#: gajim/gajim.py:99
-msgid "open ipython shell"
+#: gajim/gajim.py:102
+msgid "Open IPython shell"
 msgstr ""
 
-#: gajim/gajim.py:159 gajim/gui_interface.py:127
+#: gajim/gajim.py:105
+msgid "Pops up a window with the next pending event"
+msgstr "为下一条未处理事件弹出窗口"
+
+#: gajim/gajim.py:165 gajim/gui_interface.py:127
 msgid "Database Error"
 msgstr "数据库错误"
 
@@ -3193,44 +3203,44 @@ msgstr ""
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "与 %s 的聊天历史"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "对话历史"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "磁盘错误"
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s 的状态是 %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "错误: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr "错误"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "现在状态: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "现在状态:  %(status)s "
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "主题: %s\n"
@@ -3240,25 +3250,25 @@ msgstr "主题: %s\n"
 msgid "_Change Status Message…"
 msgstr "更改状态消息(_C)"
 
-#: gajim/statusicon.py:250 gajim/statusicon.py:298 gajim/statusicon.py:305
+#: gajim/statusicon.py:252 gajim/statusicon.py:302 gajim/statusicon.py:309
 #, python-format
 msgid "using account %s"
 msgstr "使用账户 %s"
 
-#: gajim/statusicon.py:315
+#: gajim/statusicon.py:319
 #, fuzzy
 msgid "_Manage Bookmarks…"
 msgstr "书签管理"
 
-#: gajim/statusicon.py:328
+#: gajim/statusicon.py:332
 msgid "Hide _Roster"
 msgstr "隐藏联系人列表(_R)"
 
-#: gajim/statusicon.py:332
+#: gajim/statusicon.py:336
 msgid "Show _Roster"
 msgstr "显示联系人列表(_R)"
 
-#: gajim/statusicon.py:340
+#: gajim/statusicon.py:344
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
@@ -3389,7 +3399,6 @@ msgid "Re_gister"
 msgstr "注册(_G)"
 
 #: gajim/disco.py:1317 gajim/data/gui/join_groupchat_window.ui:186
-#: gajim/data/gui/join_groupchat_window.ui:325
 #, fuzzy
 msgid "Join"
 msgstr "加入(_J)"
@@ -3535,16 +3544,16 @@ msgstr "您将要关闭多个标签"
 msgid "Do you really want to close them all?"
 msgstr "您确定要关闭所有这些吗"
 
-#: gajim/message_window.py:541
+#: gajim/message_window.py:523
 #, fuzzy
 msgid "?Noun:Chats"
 msgstr "多人聊天"
 
-#: gajim/message_window.py:545
+#: gajim/message_window.py:527
 msgid "Private Chats"
 msgstr "私聊"
 
-#: gajim/message_window.py:551
+#: gajim/message_window.py:533
 msgid "Messages"
 msgstr "消息"
 
@@ -3639,7 +3648,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "错误 %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "发送 %(message)s 时出现错误( %(error)s )"
@@ -3943,37 +3952,37 @@ msgstr ""
 msgid "Could not save your settings and preferences"
 msgstr "无法保存您的设置。"
 
-#: gajim/gui_interface.py:2796 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:341
-#: gajim/common/optparser.py:509 gajim/common/optparser.py:532
+#: gajim/gui_interface.py:2797 gajim/common/config.py:117
+#: gajim/common/config.py:531 gajim/common/optparser.py:335
+#: gajim/common/optparser.py:503 gajim/common/optparser.py:526
 msgid "default"
 msgstr "默认"
 
-#: gajim/gui_interface.py:2981
+#: gajim/gui_interface.py:2982
 msgid "Passphrase Required"
 msgstr "要求密文"
 
-#: gajim/gui_interface.py:2982
+#: gajim/gui_interface.py:2983
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "输入 GPG密钥 %(keyid)s (账户 %(account)s) 的密码。"
 
-#: gajim/gui_interface.py:2996
+#: gajim/gui_interface.py:2997
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG密钥过期"
 
-#: gajim/gui_interface.py:2997
+#: gajim/gui_interface.py:2998
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "您的 GPG密钥已过期, 您将在没有 OpenPGP 情况下连接到 %s。"
 
-#: gajim/gui_interface.py:3006
+#: gajim/gui_interface.py:3007
 msgid "Wrong Passphrase"
 msgstr "错误字段"
 
-#: gajim/gui_interface.py:3007
+#: gajim/gui_interface.py:3008
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "请重新输入您的 GPG 字段或点\"取消\""
@@ -4531,46 +4540,38 @@ msgid "show help on command"
 msgstr "为命令显示帮助"
 
 #: gajim/gajim_remote.py:89
-msgid "Shows or hides the roster window"
-msgstr "显示/隐藏联系人列表窗口"
-
-#: gajim/gajim_remote.py:93
-msgid "Pops up a window with the next pending event"
-msgstr "为下一条未处理事件弹出窗口"
-
-#: gajim/gajim_remote.py:97
 #, fuzzy
 msgid "Lists all contacts in roster, one for each line"
 msgstr "打印联系人列表中所有联系人。每个联系人一行。"
 
-#: gajim/gajim_remote.py:99 gajim/gajim_remote.py:114 gajim/gajim_remote.py:124
-#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
-#: gajim/gajim_remote.py:161 gajim/gajim_remote.py:182
-#: gajim/gajim_remote.py:212 gajim/gajim_remote.py:221
-#: gajim/gajim_remote.py:228
+#: gajim/gajim_remote.py:91 gajim/gajim_remote.py:106 gajim/gajim_remote.py:116
+#: gajim/gajim_remote.py:130 gajim/gajim_remote.py:144
+#: gajim/gajim_remote.py:153 gajim/gajim_remote.py:174
+#: gajim/gajim_remote.py:204 gajim/gajim_remote.py:213
+#: gajim/gajim_remote.py:220
 #, fuzzy
 msgid "?CLI:account"
 msgstr "账户"
 
-#: gajim/gajim_remote.py:99
+#: gajim/gajim_remote.py:91
 msgid "show only contacts of the given account"
 msgstr "只显示指定帐户的联系人"
 
-#: gajim/gajim_remote.py:105
+#: gajim/gajim_remote.py:97
 msgid "Prints a list of registered accounts"
 msgstr "打印注册的账户"
 
-#: gajim/gajim_remote.py:109
+#: gajim/gajim_remote.py:101
 #, fuzzy
 msgid "Changes the status of account(s)"
 msgstr "改变一个或多个账户状态"
 
-#: gajim/gajim_remote.py:112
+#: gajim/gajim_remote.py:104
 #, fuzzy
 msgid "?CLI:status"
 msgstr "状态"
 
-#: gajim/gajim_remote.py:112
+#: gajim/gajim_remote.py:104
 msgid ""
 "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
 "account's previous status"
@@ -4578,37 +4579,37 @@ msgstr ""
 "下列之一: offline, online, chat, away, xa, dnd, invisible。如果没有设置, 使用"
 "账户先前的状态"
 
-#: gajim/gajim_remote.py:113 gajim/gajim_remote.py:135
-#: gajim/gajim_remote.py:149 gajim/gajim_remote.py:160
+#: gajim/gajim_remote.py:105 gajim/gajim_remote.py:127
+#: gajim/gajim_remote.py:141 gajim/gajim_remote.py:152
 #, fuzzy
 msgid "?CLI:message"
 msgstr "message"
 
-#: gajim/gajim_remote.py:113
+#: gajim/gajim_remote.py:105
 msgid "status message"
 msgstr "状态消息"
 
-#: gajim/gajim_remote.py:114
+#: gajim/gajim_remote.py:106
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
 msgstr "改变账户的状态。如果不指明, 将改变设置\"与全局同步\"选项的账户"
 
-#: gajim/gajim_remote.py:120
+#: gajim/gajim_remote.py:112
 #, fuzzy
 msgid "Changes the priority of account(s)"
 msgstr "改变一个或多个账户的优先级"
 
-#: gajim/gajim_remote.py:122
+#: gajim/gajim_remote.py:114
 #, fuzzy
 msgid "?CLI:priority"
 msgstr "优先级"
 
-#: gajim/gajim_remote.py:122
+#: gajim/gajim_remote.py:114
 msgid "priority you want to give to the account"
 msgstr "您想要给予这个账户的优先级"
 
-#: gajim/gajim_remote.py:124
+#: gajim/gajim_remote.py:116
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
@@ -4616,7 +4617,7 @@ msgstr ""
 "改变指定账户的优先级。如果不指明, 将改变所有设置了\"与全局状态同步\"选项的账"
 "户"
 
-#: gajim/gajim_remote.py:130
+#: gajim/gajim_remote.py:122
 msgid ""
 "Sends new chat message to a contact in the roster. Both OpenPGP key and "
 "account are optional. If you want to set only 'account', without 'OpenPGP "
@@ -4625,29 +4626,29 @@ msgstr ""
 "发送新聊天消息至联系人列表中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择"
 "\"帐户\"而不需要\" OpenPGP 密钥\", 只需将\" OpenPGP 密钥\"置为空。"
 
-#: gajim/gajim_remote.py:134 gajim/gajim_remote.py:147
+#: gajim/gajim_remote.py:126 gajim/gajim_remote.py:139
 msgid "JID of the contact that will receive the message"
 msgstr "联系人的JID将收到消息"
 
-#: gajim/gajim_remote.py:135 gajim/gajim_remote.py:149
-#: gajim/gajim_remote.py:160
+#: gajim/gajim_remote.py:127 gajim/gajim_remote.py:141
+#: gajim/gajim_remote.py:152
 msgid "message contents"
 msgstr "消息内容"
 
-#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
+#: gajim/gajim_remote.py:128 gajim/gajim_remote.py:142
 msgid "PGP key"
 msgstr ""
 
-#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
+#: gajim/gajim_remote.py:128 gajim/gajim_remote.py:142
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "如指定, 该消息将使用本公共密钥加密"
 
-#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
-#: gajim/gajim_remote.py:161
+#: gajim/gajim_remote.py:130 gajim/gajim_remote.py:144
+#: gajim/gajim_remote.py:153
 msgid "if specified, the message will be sent using this account"
 msgstr "如指定, 消息将被用此账户发送"
 
-#: gajim/gajim_remote.py:143
+#: gajim/gajim_remote.py:135
 #, fuzzy
 msgid ""
 "Sends a chat message to someone on your roster. Optionally with OpenPGP key "
@@ -4656,151 +4657,147 @@ msgstr ""
 "发送新聊天消息至联系人列表中的联系人。 OpenPGP 密钥与帐户均可选。如果只选择"
 "\"帐户\"而不需要\" OpenPGP 密钥\", 只需将\" OpenPGP 密钥\"置为空。"
 
-#: gajim/gajim_remote.py:148
+#: gajim/gajim_remote.py:140
 msgid "subject"
 msgstr "主题"
 
-#: gajim/gajim_remote.py:148
+#: gajim/gajim_remote.py:140
 msgid "message subject"
 msgstr "消息主题"
 
-#: gajim/gajim_remote.py:157
+#: gajim/gajim_remote.py:149
 msgid "Sends new message to a groupchat you've joined."
 msgstr "向一个您加入的聊天室发送新消息。"
 
-#: gajim/gajim_remote.py:159
+#: gajim/gajim_remote.py:151
 msgid "JID of the room that will receive the message"
 msgstr "要收到这条消息的聊天室的 JID"
 
-#: gajim/gajim_remote.py:166
+#: gajim/gajim_remote.py:158
 msgid "Gets detailed info on a contact"
 msgstr "获得联系人的详细信息"
 
-#: gajim/gajim_remote.py:168 gajim/gajim_remote.py:181
-#: gajim/gajim_remote.py:211
+#: gajim/gajim_remote.py:160 gajim/gajim_remote.py:173
+#: gajim/gajim_remote.py:203
 msgid "JID of the contact"
 msgstr "联系人的 JID "
 
-#: gajim/gajim_remote.py:172
+#: gajim/gajim_remote.py:164
 msgid "Gets detailed info on a account"
 msgstr "获得账户的详细信息"
 
-#: gajim/gajim_remote.py:174
+#: gajim/gajim_remote.py:166
 msgid "Name of the account"
 msgstr "账户名称"
 
-#: gajim/gajim_remote.py:178
+#: gajim/gajim_remote.py:170
 msgid "Sends file to a contact"
 msgstr "向联系人发送文件"
 
-#: gajim/gajim_remote.py:180
+#: gajim/gajim_remote.py:172
 msgid "file"
 msgstr "文件"
 
-#: gajim/gajim_remote.py:180
+#: gajim/gajim_remote.py:172
 msgid "File path"
 msgstr "文件路径"
 
-#: gajim/gajim_remote.py:182
+#: gajim/gajim_remote.py:174
 msgid "if specified, file will be sent using this account"
 msgstr "如指定, 文件将被用此账户发送"
 
-#: gajim/gajim_remote.py:187
+#: gajim/gajim_remote.py:179
 msgid "Lists all preferences and their values"
 msgstr "列出所有的参数及它们的值"
 
-#: gajim/gajim_remote.py:191
+#: gajim/gajim_remote.py:183
 msgid "Sets value of 'key' to 'value'."
 msgstr "将\"密钥\"的值设为\"值\""
 
-#: gajim/gajim_remote.py:193
+#: gajim/gajim_remote.py:185
 msgid "key=value"
 msgstr "键=值"
 
-#: gajim/gajim_remote.py:193
+#: gajim/gajim_remote.py:185
 #, fuzzy
 msgid "'key' is the name of the preference, 'value' is what to set it to"
 msgstr "\"密钥\"是参数名, 而\"值\"是赋予参数的数值"
 
-#: gajim/gajim_remote.py:198
+#: gajim/gajim_remote.py:190
 msgid "Deletes a preference item"
 msgstr "删除一个参数项"
 
-#: gajim/gajim_remote.py:200
+#: gajim/gajim_remote.py:192
 msgid "key"
 msgstr "键"
 
-#: gajim/gajim_remote.py:200
+#: gajim/gajim_remote.py:192
 msgid "name of the preference to be deleted"
 msgstr "需要删除的参数名"
 
-#: gajim/gajim_remote.py:204
+#: gajim/gajim_remote.py:196
 msgid "Writes the current state of Gajim preferences to the .config file"
 msgstr "将当前Gajim的国家设置写入 .config 文件"
 
-#: gajim/gajim_remote.py:209
+#: gajim/gajim_remote.py:201
 msgid "Removes contact from roster"
 msgstr "从联系人列表移除联系人"
 
-#: gajim/gajim_remote.py:212
+#: gajim/gajim_remote.py:204
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "如指定, 将从此帐户列表下移出联系人"
 
-#: gajim/gajim_remote.py:219
+#: gajim/gajim_remote.py:211
 msgid "Returns current status (the global one unless account is specified)"
 msgstr "返回当前状态(如不指定账户将返回全局设置)"
 
-#: gajim/gajim_remote.py:226
+#: gajim/gajim_remote.py:218
 msgid ""
 "Returns current status message (the global one unless account is specified)"
 msgstr "返回当前状态信息(如不指定账户将返回全局设置)"
 
-#: gajim/gajim_remote.py:233
+#: gajim/gajim_remote.py:225
 msgid "Returns number of unread messages"
 msgstr "返回未读消息数"
 
-#: gajim/gajim_remote.py:238
+#: gajim/gajim_remote.py:230
 msgid "Sends custom XML"
 msgstr "发送自定义 XML"
 
-#: gajim/gajim_remote.py:240
+#: gajim/gajim_remote.py:232
 msgid "XML to send"
 msgstr "发送 XML"
 
-#: gajim/gajim_remote.py:241
+#: gajim/gajim_remote.py:233
 #, fuzzy
 msgid ""
 "Account to which the XML will be sent; if not specified, XML will be sent to "
 "all accounts"
 msgstr "XML 将被发送的账户; 如果不指定, XML 将被发送至所有账户"
 
-#: gajim/gajim_remote.py:247
+#: gajim/gajim_remote.py:239
 msgid "Change the avatar"
 msgstr "改变头像"
 
-#: gajim/gajim_remote.py:249
+#: gajim/gajim_remote.py:241
 msgid "Picture to use"
 msgstr "要使用的图片"
 
-#: gajim/gajim_remote.py:250
+#: gajim/gajim_remote.py:242
 msgid ""
 "Account in which the avatar will be set; if not specified, the avatar will "
 "be set for all accounts"
 msgstr "要设置为这个头像的账户; 如果不指定, 所有账户都将被设置为这个头像。"
 
-#: gajim/gajim_remote.py:257
+#: gajim/gajim_remote.py:249
 msgid "Check if Gajim is running"
 msgstr "请检查 Gajim 是否正在运行"
 
-#: gajim/gajim_remote.py:261
-msgid "Shows or hides the ipython window"
-msgstr "显示/隐藏 ipython 窗口"
-
-#: gajim/gajim_remote.py:287
+#: gajim/gajim_remote.py:275
 msgid "Missing argument \"contact_jid\""
 msgstr "缺失的\"联系人 JID\"参数"
 
-#: gajim/gajim_remote.py:307
+#: gajim/gajim_remote.py:295
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -4809,15 +4806,15 @@ msgstr ""
 "\"%s\" 不在您的联系人列表中。\n"
 "请为发送此消息指定账户。"
 
-#: gajim/gajim_remote.py:310
+#: gajim/gajim_remote.py:298
 msgid "You have no active account"
 msgstr "没有活动的账户"
 
-#: gajim/gajim_remote.py:358
+#: gajim/gajim_remote.py:346
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
 msgstr "似乎 Gajim 不在运行。因此您无法使用 gajim-remote。"
 
-#: gajim/gajim_remote.py:385
+#: gajim/gajim_remote.py:373
 #, python-format
 msgid ""
 "Usage: %(basename)s %(command)s %(arguments)s \n"
@@ -4826,16 +4823,16 @@ msgstr ""
 "用法: %(basename)s %(command)s %(arguments)s \n"
 "\t %(help)s"
 
-#: gajim/gajim_remote.py:389
+#: gajim/gajim_remote.py:377
 msgid "Arguments:"
 msgstr "参数: "
 
-#: gajim/gajim_remote.py:393
+#: gajim/gajim_remote.py:381
 #, python-format
 msgid "%s not found"
 msgstr " %s 未找到"
 
-#: gajim/gajim_remote.py:399
+#: gajim/gajim_remote.py:387
 #, fuzzy, python-format
 msgid ""
 "Usage:\n"
@@ -4846,7 +4843,7 @@ msgstr ""
 "用法: %s 命令 [参数] \n"
 "命令是下列之一: \n"
 
-#: gajim/gajim_remote.py:469
+#: gajim/gajim_remote.py:457
 #, python-format
 msgid ""
 "Too many arguments. \n"
@@ -4855,7 +4852,7 @@ msgstr ""
 "参数太多。\n"
 "输入 \"%(basename)s help %(command)s\" 获取更多信息"
 
-#: gajim/gajim_remote.py:474
+#: gajim/gajim_remote.py:462
 #, python-format
 msgid ""
 "Argument \"%(arg)s\" is not specified. \n"
@@ -5029,7 +5026,7 @@ msgstr "一周末"
 msgid "Weekend!"
 msgstr "周末"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5038,61 +5035,61 @@ msgstr ""
 "JID %s 不符合 RFC 标准。它没有被加入联系人列表。请使用诸如 http://jru."
 "jabberstudio.org/ 的联系人列表管理工具移除它"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "来自 %s 的解除认证请求"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "聊天室已经被销毁了"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "作为替代, 您可以加入这个聊天室: %s"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "未知的 SSL 错误: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr " %(nickname)s 发来的新消息"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "来自聊天室 %s 的私人消息"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s:  %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "来自 %(nickname)s 的消息"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "来自 %(nickname)s 的新消息"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s 改变了状态"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s 上线了"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s 离开了"
@@ -6129,11 +6126,11 @@ msgstr ""
 msgid "Sound to play when any MUC message arrives."
 msgstr "收到任意多人聊天消息播放的声音。"
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:355
+#: gajim/common/config.py:534 gajim/common/optparser.py:349
 msgid "green"
 msgstr "绿色"
 
-#: gajim/common/config.py:538 gajim/common/optparser.py:341
+#: gajim/common/config.py:538 gajim/common/optparser.py:335
 msgid "grocery"
 msgstr "杂货店"
 
@@ -6275,11 +6272,11 @@ msgstr "%s 是一个目录但它应该是一个文件"
 msgid "Error: cannot open %s for reading"
 msgstr "错误: 无法按读打开文件 %s"
 
-#: gajim/common/optparser.py:350 gajim/common/optparser.py:351
+#: gajim/common/optparser.py:344 gajim/common/optparser.py:345
 msgid "cyan"
 msgstr "青色"
 
-#: gajim/common/optparser.py:419
+#: gajim/common/optparser.py:413
 msgid "migrating logs database to indices"
 msgstr "迁移记录数据库到索引"
 
@@ -7902,7 +7899,7 @@ msgid "Status:"
 msgstr "状态: "
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "记录聊天历史(_L)"
 
@@ -10133,6 +10130,11 @@ msgstr "已发送联系人: "
 msgid "Passphrase"
 msgstr "密文"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "输入 JID 或者联系人名"
+
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
 msgstr "查找: "
@@ -10145,7 +10147,7 @@ msgstr ""
 msgid "Only searching within selected day"
 msgstr ""
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 #, fuzzy
 msgid "_Show status changes"
 msgstr "记录联系人状态变化(_L)"
@@ -10732,6 +10734,12 @@ msgstr "最近: "
 #, fuzzy
 msgid "Plugin manager"
 msgstr "注册失败"
+
+#~ msgid "Shows or hides the roster window"
+#~ msgstr "显示/隐藏联系人列表窗口"
+
+#~ msgid "Shows or hides the ipython window"
+#~ msgstr "显示/隐藏 ipython 窗口"
 
 #, fuzzy
 #~ msgid "XMPP account %s"
@@ -11776,9 +11784,6 @@ msgstr "注册失败"
 
 #~ msgid "*"
 #~ msgstr "*"
-
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "输入 JID 或者联系人名"
 
 #~ msgid "Groupchat Histories"
 #~ msgstr "多人聊天历史"

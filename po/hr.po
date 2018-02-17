@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-08 03:05+0000\n"
+"POT-Creation-Date: 2018-02-17 03:05+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -481,33 +481,33 @@ msgstr ""
 msgid "Save Image as…"
 msgstr "Snimiti Sliku kao..."
 
-#: gajim/vcard.py:166 gajim/vcard.py:510 gajim/profile_window.py:175
+#: gajim/vcard.py:166 gajim/vcard.py:513 gajim/profile_window.py:175
 #: gajim/chat_control.py:578
 #, fuzzy
 msgid "Save _As"
 msgstr "Imam "
 
-#: gajim/vcard.py:286 gajim/vcard.py:293
+#: gajim/vcard.py:289 gajim/vcard.py:296
 msgid "?Client:Unknown"
 msgstr "?Klijent:Nepoznat"
 
-#: gajim/vcard.py:290 gajim/vcard.py:295
+#: gajim/vcard.py:293 gajim/vcard.py:298
 msgid "?OS:Unknown"
 msgstr "?OS:Nepoznat"
 
-#: gajim/vcard.py:324 gajim/vcard.py:327
+#: gajim/vcard.py:327 gajim/vcard.py:330
 msgid "?Time:Unknown"
 msgstr "?Vrijeme:Nepoznato"
 
-#: gajim/vcard.py:378
+#: gajim/vcard.py:381
 msgid "?Role in Group Chat:<b>Role:</b>"
 msgstr ""
 
-#: gajim/vcard.py:382
+#: gajim/vcard.py:385
 msgid "<b>Affiliation:</b>"
 msgstr "<b>Pripadnost:</b>"
 
-#: gajim/vcard.py:389
+#: gajim/vcard.py:392
 #, fuzzy
 msgid ""
 "This contact is interested in your presence information, but you are not "
@@ -516,7 +516,7 @@ msgstr ""
 "Ovaj kontakt je zainteresiran za informacije o vašem prisutstvu, ali vas ne "
 "zanimaju informacije o njegovom/njenom prisustvu"
 
-#: gajim/vcard.py:391
+#: gajim/vcard.py:394
 #, fuzzy
 msgid ""
 "You are interested in the contact's presence information, but it is not "
@@ -525,13 +525,13 @@ msgstr ""
 "Vi ste zainteresirani za informacije o prisustvu nekog kontakta, ali nju/"
 "njega ne interesira vaše prisutstvo"
 
-#: gajim/vcard.py:393
+#: gajim/vcard.py:396
 #, fuzzy
 msgid "The contact and you want to exchange presence information"
 msgstr ""
 "Vi i vaš kontakt ste zainteresirani za informacije o prisustvu jedno drugog"
 
-#: gajim/vcard.py:395
+#: gajim/vcard.py:398
 #, fuzzy
 msgid ""
 "You and the contact have a mutual disinterest in each-others presence "
@@ -539,15 +539,15 @@ msgid ""
 msgstr ""
 "Vi i vaš kontakt ste zainteresirani za informacije o prisustvu jedno drugog"
 
-#: gajim/vcard.py:401
+#: gajim/vcard.py:404
 msgid "You are waiting contact's answer about your subscription request"
 msgstr "Čekate odgovor kontakta o vašem zahtjevu za pretplatom"
 
-#: gajim/vcard.py:403
+#: gajim/vcard.py:406
 msgid "There is no pending subscription request."
 msgstr "Niti jedan zahtjev za pretplatu nije u toku."
 
-#: gajim/vcard.py:408 gajim/vcard.py:452 gajim/vcard.py:565
+#: gajim/vcard.py:411 gajim/vcard.py:455 gajim/vcard.py:568
 msgid " resource with priority "
 msgstr " resurs s prioritetom "
 
@@ -879,7 +879,7 @@ msgid "JID"
 msgstr "JID"
 
 #: gajim/history_manager.py:157 gajim/history_manager.py:201
-#: gajim/history_window.py:104
+#: gajim/history_window.py:108
 msgid "Date"
 msgstr "Datum"
 
@@ -889,7 +889,7 @@ msgid "Nickname"
 msgstr "Nadimak"
 
 #: gajim/history_manager.py:173 gajim/history_manager.py:208
-#: gajim/history_window.py:112 gajim/data/gui/xml_console_window.ui:108
+#: gajim/history_window.py:116 gajim/data/gui/xml_console_window.ui:108
 msgid "Message"
 msgstr "Poruka"
 
@@ -1203,6 +1203,11 @@ msgstr ""
 "Zadnje, ali ne najmanje, željeli bismo se zahvaliti svim održavateljima "
 "paketa"
 
+#: gajim/dialogs.py:1319
+#, fuzzy
+msgid "Thanks"
+msgstr "Zahvalan"
+
 #: gajim/dialogs.py:1321
 msgid "translator-credits"
 msgstr ""
@@ -1341,7 +1346,7 @@ msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Bez veze nije moguća sinkronizirati vaše kontakte."
 
 #: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3812
-#: gajim/history_window.py:96 gajim/disco.py:865 gajim/disco.py:1692
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
 #: gajim/disco.py:1977
 msgid "Name"
 msgstr "Ime"
@@ -1398,27 +1403,27 @@ msgid "The passwords typed in both fields must be identical."
 msgstr "Lozinke upisane u oba polja moraju biti identične."
 
 #: gajim/dialogs.py:3139 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2789
+#: gajim/common/connection_handlers_events.py:2745
 msgid "Contact Signed In"
 msgstr "Kontakt Se Prijavio"
 
 #: gajim/dialogs.py:3141 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2795
+#: gajim/common/connection_handlers_events.py:2751
 msgid "Contact Signed Out"
 msgstr "Kontakt Se Odjavio"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2609
+#: gajim/common/connection_handlers_events.py:2565
 msgid "New Message"
 msgstr "Nova Poruka"
 
 #: gajim/dialogs.py:3143 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2591
+#: gajim/common/connection_handlers_events.py:2547
 msgid "New Single Message"
 msgstr "Nova Jedna Poruka"
 
 #: gajim/dialogs.py:3144 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2597
+#: gajim/common/connection_handlers_events.py:2553
 msgid "New Private Message"
 msgstr "Nova Privatna Poruka"
 
@@ -1451,7 +1456,7 @@ msgid "Groupchat Invitation"
 msgstr "Poziv na Grupni Razgovor"
 
 #: gajim/dialogs.py:3155 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2783
+#: gajim/common/connection_handlers_events.py:2739
 msgid "Contact Changed Status"
 msgstr "Kontakt Promjenio Status"
 
@@ -1818,7 +1823,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s je od sada poznat kao %(new_nick)s"
 
 #: gajim/groupchat_control.py:218 gajim/groupchat_control.py:1941
-#: gajim/history_window.py:480 gajim/common/connection_handlers_events.py:2779
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2735
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s je trenutno %(status)s"
@@ -2201,6 +2206,7 @@ msgid "_Accept"
 msgstr "Prihvati"
 
 #: gajim/chat_control.py:1633 gajim/disco.py:1752
+#: gajim/data/gui/join_groupchat_window.ui:325
 msgid "_Join"
 msgstr "_Pridruživanje"
 
@@ -2220,7 +2226,7 @@ msgstr "Spojeni računi"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5128 gajim/message_window.py:543
+#: gajim/roster_window.py:5128 gajim/message_window.py:525
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 msgid "Groupchats"
@@ -2627,48 +2633,52 @@ msgstr "Upravitelj Zapisima"
 msgid "_Join New Group Chat"
 msgstr "_Pridruži se Novom Grupnom Razgovoru"
 
-#: gajim/gajim.py:72
+#: gajim/gajim.py:75
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Koristi t_ray ikonu"
 
-#: gajim/gajim.py:75
+#: gajim/gajim.py:78
 #, fuzzy
 msgid "Show only critical errors"
 msgstr "Prikaži samo u _listi kontakata"
 
-#: gajim/gajim.py:78
+#: gajim/gajim.py:81
 msgid "Separate profile files completely (even history db and plugins)"
 msgstr ""
 
-#: gajim/gajim.py:82
+#: gajim/gajim.py:85
 msgid "Print XML stanzas and other debug information"
 msgstr ""
 
-#: gajim/gajim.py:86
+#: gajim/gajim.py:89
 #, fuzzy
 msgid "Use defined profile in configuration directory"
 msgstr "Napredni Uređivač Postavki"
 
-#: gajim/gajim.py:90
+#: gajim/gajim.py:93
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Konfiguracija Sobe"
 
-#: gajim/gajim.py:93
+#: gajim/gajim.py:96
 msgid "Configure logging system"
 msgstr ""
 
-#: gajim/gajim.py:96
+#: gajim/gajim.py:99
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Prikaži Sve _Događaje na Čekanju"
 
-#: gajim/gajim.py:99
-msgid "open ipython shell"
+#: gajim/gajim.py:102
+msgid "Open IPython shell"
 msgstr ""
 
-#: gajim/gajim.py:159 gajim/gui_interface.py:127
+#: gajim/gajim.py:105
+msgid "Pops up a window with the next pending event"
+msgstr "Prikazuje prozor sa sljedećim događajem na čekanju"
+
+#: gajim/gajim.py:165 gajim/gui_interface.py:127
 msgid "Database Error"
 msgstr "Pogreška Baze Podataka"
 
@@ -3260,44 +3270,44 @@ msgstr ""
 msgid "Disconnect from the network"
 msgstr ""
 
-#: gajim/history_window.py:327
+#: gajim/history_window.py:339
 #, python-format
 msgid "Conversation History with %s"
 msgstr "Povijest Razgovora sa %s"
 
-#: gajim/history_window.py:345 gajim/data/gui/history_window.ui:7
+#: gajim/history_window.py:361 gajim/data/gui/history_window.ui:7
 msgid "Conversation History"
 msgstr "Povijest razgovora"
 
-#: gajim/history_window.py:374
+#: gajim/history_window.py:390 gajim/history_window.py:443
 msgid "Disk Error"
 msgstr "Disk Error"
 
-#: gajim/history_window.py:476
+#: gajim/history_window.py:546
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s je trenutno %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:487
+#: gajim/history_window.py:557
 #, python-format
 msgid "Error: %s"
 msgstr "Greška: %s"
 
-#: gajim/history_window.py:489
+#: gajim/history_window.py:559
 msgid "Error"
 msgstr "Greška"
 
-#: gajim/history_window.py:491
+#: gajim/history_window.py:561
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Stauts je trenutno: %(status)s: %(status_msg)s"
 
-#: gajim/history_window.py:494
+#: gajim/history_window.py:564
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Status je trenutno: %(status)s"
 
-#: gajim/history_window.py:515 gajim/conversation_textview.py:1338
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Tema: %s\n"
@@ -3307,26 +3317,26 @@ msgstr "Tema: %s\n"
 msgid "_Change Status Message…"
 msgstr "_Izmjena Statusne Poruke"
 
-#: gajim/statusicon.py:250 gajim/statusicon.py:298 gajim/statusicon.py:305
+#: gajim/statusicon.py:252 gajim/statusicon.py:302 gajim/statusicon.py:309
 #, python-format
 msgid "using account %s"
 msgstr "koristeći račun %s"
 
-#: gajim/statusicon.py:315
+#: gajim/statusicon.py:319
 #, fuzzy
 msgid "_Manage Bookmarks…"
 msgstr "Podešavanje Knjižnih Oznaka"
 
-#: gajim/statusicon.py:328
+#: gajim/statusicon.py:332
 #, fuzzy
 msgid "Hide _Roster"
 msgstr "na _listi"
 
-#: gajim/statusicon.py:332
+#: gajim/statusicon.py:336
 msgid "Show _Roster"
 msgstr "Prikaži _Listu Kontakata"
 
-#: gajim/statusicon.py:340
+#: gajim/statusicon.py:344
 msgid "Hide this menu"
 msgstr "Sakrij ovaj izbornik"
 
@@ -3461,7 +3471,6 @@ msgid "Re_gister"
 msgstr "Re_gistracija"
 
 #: gajim/disco.py:1317 gajim/data/gui/join_groupchat_window.ui:186
-#: gajim/data/gui/join_groupchat_window.ui:325
 #, fuzzy
 msgid "Join"
 msgstr "_Pridruživanje"
@@ -3613,16 +3622,16 @@ msgstr "Zatvorit će te nekoliko kartica"
 msgid "Do you really want to close them all?"
 msgstr "Da li ih zaista želite sve zatvoriti?"
 
-#: gajim/message_window.py:541
+#: gajim/message_window.py:523
 #, fuzzy
 msgid "?Noun:Chats"
 msgstr "Grupni Razgovori"
 
-#: gajim/message_window.py:545
+#: gajim/message_window.py:527
 msgid "Private Chats"
 msgstr "Privanti Razgovori"
 
-#: gajim/message_window.py:551
+#: gajim/message_window.py:533
 msgid "Messages"
 msgstr "Poruke"
 
@@ -3719,7 +3728,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "Greška %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1420
+#: gajim/common/connection_handlers_events.py:1376
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "greška prilikom slanja %(message)s ( %(error)s )"
@@ -4030,37 +4039,37 @@ msgstr ""
 msgid "Could not save your settings and preferences"
 msgstr "Nije moguće spremanje vaših postavki"
 
-#: gajim/gui_interface.py:2796 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:341
-#: gajim/common/optparser.py:509 gajim/common/optparser.py:532
+#: gajim/gui_interface.py:2797 gajim/common/config.py:117
+#: gajim/common/config.py:531 gajim/common/optparser.py:335
+#: gajim/common/optparser.py:503 gajim/common/optparser.py:526
 msgid "default"
 msgstr "predefinirano"
 
-#: gajim/gui_interface.py:2981
+#: gajim/gui_interface.py:2982
 msgid "Passphrase Required"
 msgstr "Potrebna Lozinka"
 
-#: gajim/gui_interface.py:2982
+#: gajim/gui_interface.py:2983
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Unesite GPG lozinku za ključ %(keyid)s (račun %(account)s)."
 
-#: gajim/gui_interface.py:2996
+#: gajim/gui_interface.py:2997
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG ključ istekao"
 
-#: gajim/gui_interface.py:2997
+#: gajim/gui_interface.py:2998
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "Vaš GPG ključ je istekao, biti će te spojeni na %s bez OpenPGP-a."
 
-#: gajim/gui_interface.py:3006
+#: gajim/gui_interface.py:3007
 msgid "Wrong Passphrase"
 msgstr "Kriva Lozinka"
 
-#: gajim/gui_interface.py:3007
+#: gajim/gui_interface.py:3008
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Molim ponovo utipkajte svoju GPG lozinku ili pritisnite Odustani"
@@ -4625,48 +4634,40 @@ msgid "show help on command"
 msgstr "prikaži pomoć za komandu"
 
 #: gajim/gajim_remote.py:89
-msgid "Shows or hides the roster window"
-msgstr "Prikazuje ili skriva prozor liste"
-
-#: gajim/gajim_remote.py:93
-msgid "Pops up a window with the next pending event"
-msgstr "Prikazuje prozor sa sljedećim događajem na čekanju"
-
-#: gajim/gajim_remote.py:97
 #, fuzzy
 msgid "Lists all contacts in roster, one for each line"
 msgstr ""
 "Ispisuje listu svih kontakata na listi. Svaki kontakt pojavljuje se u "
 "odvojenoj liniji"
 
-#: gajim/gajim_remote.py:99 gajim/gajim_remote.py:114 gajim/gajim_remote.py:124
-#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
-#: gajim/gajim_remote.py:161 gajim/gajim_remote.py:182
-#: gajim/gajim_remote.py:212 gajim/gajim_remote.py:221
-#: gajim/gajim_remote.py:228
+#: gajim/gajim_remote.py:91 gajim/gajim_remote.py:106 gajim/gajim_remote.py:116
+#: gajim/gajim_remote.py:130 gajim/gajim_remote.py:144
+#: gajim/gajim_remote.py:153 gajim/gajim_remote.py:174
+#: gajim/gajim_remote.py:204 gajim/gajim_remote.py:213
+#: gajim/gajim_remote.py:220
 #, fuzzy
 msgid "?CLI:account"
 msgstr "račun"
 
-#: gajim/gajim_remote.py:99
+#: gajim/gajim_remote.py:91
 msgid "show only contacts of the given account"
 msgstr "prikaži samo kontakte ovog računa"
 
-#: gajim/gajim_remote.py:105
+#: gajim/gajim_remote.py:97
 msgid "Prints a list of registered accounts"
 msgstr "Ispisuje listu registriranih računa"
 
-#: gajim/gajim_remote.py:109
+#: gajim/gajim_remote.py:101
 #, fuzzy
 msgid "Changes the status of account(s)"
 msgstr "Mjenja status jednog računa ili više njih"
 
-#: gajim/gajim_remote.py:112
+#: gajim/gajim_remote.py:104
 #, fuzzy
 msgid "?CLI:status"
 msgstr "status"
 
-#: gajim/gajim_remote.py:112
+#: gajim/gajim_remote.py:104
 #, fuzzy
 msgid ""
 "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
@@ -4675,17 +4676,17 @@ msgstr ""
 "jedno od: odspojen, povezan, razgovor, odsutan, produženo nedostupan, ne "
 "uznemiravaj, nevidljiv"
 
-#: gajim/gajim_remote.py:113 gajim/gajim_remote.py:135
-#: gajim/gajim_remote.py:149 gajim/gajim_remote.py:160
+#: gajim/gajim_remote.py:105 gajim/gajim_remote.py:127
+#: gajim/gajim_remote.py:141 gajim/gajim_remote.py:152
 #, fuzzy
 msgid "?CLI:message"
 msgstr "poruka"
 
-#: gajim/gajim_remote.py:113
+#: gajim/gajim_remote.py:105
 msgid "status message"
 msgstr "statusna poruka"
 
-#: gajim/gajim_remote.py:114
+#: gajim/gajim_remote.py:106
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
@@ -4694,21 +4695,21 @@ msgstr ""
 "statusa svih računa koji imaju podešenu opciju \"sinkronizacija sa globalnim "
 "statusom\""
 
-#: gajim/gajim_remote.py:120
+#: gajim/gajim_remote.py:112
 #, fuzzy
 msgid "Changes the priority of account(s)"
 msgstr "Mjenja status jednog ili više računa"
 
-#: gajim/gajim_remote.py:122
+#: gajim/gajim_remote.py:114
 #, fuzzy
 msgid "?CLI:priority"
 msgstr "prioritet"
 
-#: gajim/gajim_remote.py:122
+#: gajim/gajim_remote.py:114
 msgid "priority you want to give to the account"
 msgstr "prioritet koji želite dodjeliti računu"
 
-#: gajim/gajim_remote.py:124
+#: gajim/gajim_remote.py:116
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
@@ -4716,7 +4717,7 @@ msgstr ""
 "izmjena prioriteta danog računa. Ako nije određeno, promjena statusa svih "
 "računa koji imaju postavljenu opciju \"sinkronizacija sa globalnim statusom\""
 
-#: gajim/gajim_remote.py:130
+#: gajim/gajim_remote.py:122
 msgid ""
 "Sends new chat message to a contact in the roster. Both OpenPGP key and "
 "account are optional. If you want to set only 'account', without 'OpenPGP "
@@ -4726,29 +4727,29 @@ msgstr ""
 "Ako želite postaviti samo 'račun', bez 'OpenPGP ključa', samo postavite "
 "'OpenPGP ključ' kao ''."
 
-#: gajim/gajim_remote.py:134 gajim/gajim_remote.py:147
+#: gajim/gajim_remote.py:126 gajim/gajim_remote.py:139
 msgid "JID of the contact that will receive the message"
 msgstr "JID kontakta koji će primiti poruku"
 
-#: gajim/gajim_remote.py:135 gajim/gajim_remote.py:149
-#: gajim/gajim_remote.py:160
+#: gajim/gajim_remote.py:127 gajim/gajim_remote.py:141
+#: gajim/gajim_remote.py:152
 msgid "message contents"
 msgstr "sadržaj poruke"
 
-#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
+#: gajim/gajim_remote.py:128 gajim/gajim_remote.py:142
 msgid "PGP key"
 msgstr ""
 
-#: gajim/gajim_remote.py:136 gajim/gajim_remote.py:150
+#: gajim/gajim_remote.py:128 gajim/gajim_remote.py:142
 msgid "if specified, the message will be encrypted using this public key"
 msgstr "ako je označeno, poruka će biti kriptirana koristeći ovaj javni ključ"
 
-#: gajim/gajim_remote.py:138 gajim/gajim_remote.py:152
-#: gajim/gajim_remote.py:161
+#: gajim/gajim_remote.py:130 gajim/gajim_remote.py:144
+#: gajim/gajim_remote.py:153
 msgid "if specified, the message will be sent using this account"
 msgstr "ako je označeno, poruka će biti poslana koristeći ovaj račun"
 
-#: gajim/gajim_remote.py:143
+#: gajim/gajim_remote.py:135
 #, fuzzy
 msgid ""
 "Sends a chat message to someone on your roster. Optionally with OpenPGP key "
@@ -4758,119 +4759,119 @@ msgstr ""
 "Ako želite postaviti samo 'račun', bez 'OpenPGP ključa', samo postavite "
 "'OpenPGP ključ' kao ''."
 
-#: gajim/gajim_remote.py:148
+#: gajim/gajim_remote.py:140
 msgid "subject"
 msgstr "tema"
 
-#: gajim/gajim_remote.py:148
+#: gajim/gajim_remote.py:140
 msgid "message subject"
 msgstr "tema poruke"
 
-#: gajim/gajim_remote.py:157
+#: gajim/gajim_remote.py:149
 msgid "Sends new message to a groupchat you've joined."
 msgstr "Šalje novu poruku grupnom razgovoru kojem ste pristupili."
 
-#: gajim/gajim_remote.py:159
+#: gajim/gajim_remote.py:151
 msgid "JID of the room that will receive the message"
 msgstr "JID sobe koja će primiti poruku"
 
-#: gajim/gajim_remote.py:166
+#: gajim/gajim_remote.py:158
 msgid "Gets detailed info on a contact"
 msgstr "Daje detaljne informacije o kontaktu"
 
-#: gajim/gajim_remote.py:168 gajim/gajim_remote.py:181
-#: gajim/gajim_remote.py:211
+#: gajim/gajim_remote.py:160 gajim/gajim_remote.py:173
+#: gajim/gajim_remote.py:203
 msgid "JID of the contact"
 msgstr "JID kontakta"
 
-#: gajim/gajim_remote.py:172
+#: gajim/gajim_remote.py:164
 msgid "Gets detailed info on a account"
 msgstr "Daje detaljne informacije o računu"
 
-#: gajim/gajim_remote.py:174
+#: gajim/gajim_remote.py:166
 msgid "Name of the account"
 msgstr "Ime računa"
 
-#: gajim/gajim_remote.py:178
+#: gajim/gajim_remote.py:170
 msgid "Sends file to a contact"
 msgstr "Å alje datoteku kontaktu"
 
-#: gajim/gajim_remote.py:180
+#: gajim/gajim_remote.py:172
 msgid "file"
 msgstr "datoteka"
 
-#: gajim/gajim_remote.py:180
+#: gajim/gajim_remote.py:172
 msgid "File path"
 msgstr "Putanja datoteke"
 
-#: gajim/gajim_remote.py:182
+#: gajim/gajim_remote.py:174
 msgid "if specified, file will be sent using this account"
 msgstr "ako je označeno, datoteka će biti poslana koriteći ovaj račun"
 
-#: gajim/gajim_remote.py:187
+#: gajim/gajim_remote.py:179
 msgid "Lists all preferences and their values"
 msgstr "Prikatuje sve postavke i njihove vrijednosti"
 
-#: gajim/gajim_remote.py:191
+#: gajim/gajim_remote.py:183
 msgid "Sets value of 'key' to 'value'."
 msgstr "Postavlja vrijednost 'ključa' na 'vrijednost'."
 
-#: gajim/gajim_remote.py:193
+#: gajim/gajim_remote.py:185
 msgid "key=value"
 msgstr "ključ=vrijednost"
 
-#: gajim/gajim_remote.py:193
+#: gajim/gajim_remote.py:185
 #, fuzzy
 msgid "'key' is the name of the preference, 'value' is what to set it to"
 msgstr ""
 "'ključ' je ime postavke, 'vrijednost' je vrijednost na koju će se postaviti"
 
-#: gajim/gajim_remote.py:198
+#: gajim/gajim_remote.py:190
 msgid "Deletes a preference item"
 msgstr "Briše element postavke"
 
-#: gajim/gajim_remote.py:200
+#: gajim/gajim_remote.py:192
 msgid "key"
 msgstr "ključ"
 
-#: gajim/gajim_remote.py:200
+#: gajim/gajim_remote.py:192
 msgid "name of the preference to be deleted"
 msgstr "ime postavke koja će se brisati"
 
-#: gajim/gajim_remote.py:204
+#: gajim/gajim_remote.py:196
 msgid "Writes the current state of Gajim preferences to the .config file"
 msgstr "Zapisuje trenutno stanje Gajim postavku u .config datoteku"
 
-#: gajim/gajim_remote.py:209
+#: gajim/gajim_remote.py:201
 msgid "Removes contact from roster"
 msgstr "Uklanja kontakt sa liste"
 
-#: gajim/gajim_remote.py:212
+#: gajim/gajim_remote.py:204
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "ako je označeno, kontak se uzima sa kontakt liste ovog računa"
 
-#: gajim/gajim_remote.py:219
+#: gajim/gajim_remote.py:211
 msgid "Returns current status (the global one unless account is specified)"
 msgstr "Vraća trenutni status (globalni ukoliko nije određen račun)"
 
-#: gajim/gajim_remote.py:226
+#: gajim/gajim_remote.py:218
 msgid ""
 "Returns current status message (the global one unless account is specified)"
 msgstr "Vraća trenutnu statusnu poruku (globalnu ukoliko nije određen račun)"
 
-#: gajim/gajim_remote.py:233
+#: gajim/gajim_remote.py:225
 msgid "Returns number of unread messages"
 msgstr "Vraća broj nepročitanih poruka"
 
-#: gajim/gajim_remote.py:238
+#: gajim/gajim_remote.py:230
 msgid "Sends custom XML"
 msgstr "Šalje korisnički XML"
 
-#: gajim/gajim_remote.py:240
+#: gajim/gajim_remote.py:232
 msgid "XML to send"
 msgstr "XML za slanje"
 
-#: gajim/gajim_remote.py:241
+#: gajim/gajim_remote.py:233
 #, fuzzy
 msgid ""
 "Account to which the XML will be sent; if not specified, XML will be sent to "
@@ -4879,17 +4880,17 @@ msgstr ""
 "Račun u kojem će xml biti poslan; ako nije specificirano, xml će biti poslan "
 "na sve račune"
 
-#: gajim/gajim_remote.py:247
+#: gajim/gajim_remote.py:239
 #, fuzzy
 msgid "Change the avatar"
 msgstr "Promjeni status"
 
-#: gajim/gajim_remote.py:249
+#: gajim/gajim_remote.py:241
 #, fuzzy
 msgid "Picture to use"
 msgstr "Nadimak koji će se koristiti"
 
-#: gajim/gajim_remote.py:250
+#: gajim/gajim_remote.py:242
 #, fuzzy
 msgid ""
 "Account in which the avatar will be set; if not specified, the avatar will "
@@ -4898,19 +4899,15 @@ msgstr ""
 "Račun u kojem će xml biti poslan; ako nije specificirano, xml će biti poslan "
 "na sve račune"
 
-#: gajim/gajim_remote.py:257
+#: gajim/gajim_remote.py:249
 msgid "Check if Gajim is running"
 msgstr "Provjerite da li je Gajim pokrenut"
 
-#: gajim/gajim_remote.py:261
-msgid "Shows or hides the ipython window"
-msgstr "Prikazuje ili skriva ipython prozor"
-
-#: gajim/gajim_remote.py:287
+#: gajim/gajim_remote.py:275
 msgid "Missing argument \"contact_jid\""
 msgstr "Nedostaje argument \"contact_jid\""
 
-#: gajim/gajim_remote.py:307
+#: gajim/gajim_remote.py:295
 #, python-format
 msgid ""
 "'%s' is not in your roster.\n"
@@ -4919,15 +4916,15 @@ msgstr ""
 "'%s' nije na vašoj listi.\n"
 "Molim odredite račun za slanje poruke."
 
-#: gajim/gajim_remote.py:310
+#: gajim/gajim_remote.py:298
 msgid "You have no active account"
 msgstr "nemate aktivnih računa"
 
-#: gajim/gajim_remote.py:358
+#: gajim/gajim_remote.py:346
 msgid "It seems Gajim is not running. So you can't use gajim-remote."
 msgstr "Gajim nije pokrenut. Nije moguće koristiti gajim-remote."
 
-#: gajim/gajim_remote.py:385
+#: gajim/gajim_remote.py:373
 #, python-format
 msgid ""
 "Usage: %(basename)s %(command)s %(arguments)s \n"
@@ -4936,16 +4933,16 @@ msgstr ""
 "Uporaba: %(basename)s %(command)s %(arguments)s \n"
 "\t %(help)s"
 
-#: gajim/gajim_remote.py:389
+#: gajim/gajim_remote.py:377
 msgid "Arguments:"
 msgstr "Argumenti:"
 
-#: gajim/gajim_remote.py:393
+#: gajim/gajim_remote.py:381
 #, python-format
 msgid "%s not found"
 msgstr "%s nije pronađen"
 
-#: gajim/gajim_remote.py:399
+#: gajim/gajim_remote.py:387
 #, fuzzy, python-format
 msgid ""
 "Usage:\n"
@@ -4956,7 +4953,7 @@ msgstr ""
 "Uporaba: %s naredba [argumenti]\n"
 "Naredba je jedna od:\n"
 
-#: gajim/gajim_remote.py:469
+#: gajim/gajim_remote.py:457
 #, python-format
 msgid ""
 "Too many arguments. \n"
@@ -4965,7 +4962,7 @@ msgstr ""
 "Previše argumenata. \n"
 "Unesite \"%(basename)s help %(command)s\" za više informacija"
 
-#: gajim/gajim_remote.py:474
+#: gajim/gajim_remote.py:462
 #, python-format
 msgid ""
 "Argument \"%(arg)s\" is not specified. \n"
@@ -5139,7 +5136,7 @@ msgstr "Kraj tjedna"
 msgid "Weekend!"
 msgstr "Vikend!"
 
-#: gajim/common/connection_handlers_events.py:352
+#: gajim/common/connection_handlers_events.py:350
 #, python-format
 msgid ""
 "JID %s is not RFC compliant. It will not be added to your roster. Use roster "
@@ -5149,61 +5146,61 @@ msgstr ""
 "Upotrijebite alate za upravljanje listom kontakata kao što je http://jru."
 "jabberstudio.org/ za uklanjanje"
 
-#: gajim/common/connection_handlers_events.py:877
+#: gajim/common/connection_handlers_events.py:833
 #, python-format
 msgid "unsubscribe request from %s"
 msgstr "Zahtjev za ukidanjem pretplate od %s"
 
-#: gajim/common/connection_handlers_events.py:977
+#: gajim/common/connection_handlers_events.py:933
 msgid "Room has been destroyed"
 msgstr "Soba je uništena"
 
-#: gajim/common/connection_handlers_events.py:985
+#: gajim/common/connection_handlers_events.py:941
 #, python-format
 msgid "You can join this room instead: %s"
 msgstr "Možete se pridružiti ovoj sobi umjesto: %s"
 
-#: gajim/common/connection_handlers_events.py:1947
+#: gajim/common/connection_handlers_events.py:1903
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Nepoznata SSL greška: %d"
 
-#: gajim/common/connection_handlers_events.py:2593
+#: gajim/common/connection_handlers_events.py:2549
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nova Jedna Poruka od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2599
+#: gajim/common/connection_handlers_events.py:2555
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nova Privatna Poruka iz privatnog razgovora %s"
 
-#: gajim/common/connection_handlers_events.py:2602
+#: gajim/common/connection_handlers_events.py:2558
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2605
+#: gajim/common/connection_handlers_events.py:2561
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Nova poruka od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2611
+#: gajim/common/connection_handlers_events.py:2567
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Nova poruka od %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2777
+#: gajim/common/connection_handlers_events.py:2733
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s je Promjenio Status"
 
-#: gajim/common/connection_handlers_events.py:2785
+#: gajim/common/connection_handlers_events.py:2741
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s Se Prijavio"
 
-#: gajim/common/connection_handlers_events.py:2791
+#: gajim/common/connection_handlers_events.py:2747
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s Se Odjavio"
@@ -6331,11 +6328,11 @@ msgstr ""
 msgid "Sound to play when any MUC message arrives."
 msgstr "Zvuk koji će svirati kada stigne neka MUC poruka."
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:355
+#: gajim/common/config.py:534 gajim/common/optparser.py:349
 msgid "green"
 msgstr "zelena"
 
-#: gajim/common/config.py:538 gajim/common/optparser.py:341
+#: gajim/common/config.py:538 gajim/common/optparser.py:335
 msgid "grocery"
 msgstr "namirnice"
 
@@ -6479,11 +6476,11 @@ msgstr "%s je direktorij ali bi trebao biti datoteka"
 msgid "Error: cannot open %s for reading"
 msgstr "Greška: nije moguće otvoriti %s za čitanje"
 
-#: gajim/common/optparser.py:350 gajim/common/optparser.py:351
+#: gajim/common/optparser.py:344 gajim/common/optparser.py:345
 msgid "cyan"
 msgstr "cijan"
 
-#: gajim/common/optparser.py:419
+#: gajim/common/optparser.py:413
 msgid "migrating logs database to indices"
 msgstr "migriram bazu zabilješki u indekse"
 
@@ -8113,7 +8110,7 @@ msgid "Status:"
 msgstr "Status:"
 
 #: gajim/data/gui/zeroconf_information_window.ui:89
-#: gajim/data/gui/history_window.ui:197
+#: gajim/data/gui/history_window.ui:290
 msgid "_Log conversation history"
 msgstr "_Pamti povijest razgovora"
 
@@ -10411,6 +10408,11 @@ msgstr "Poslani kontakti:"
 msgid "Passphrase"
 msgstr "Lozinka"
 
+#: gajim/data/gui/history_window.ui:38
+#, fuzzy
+msgid "Enter name / JID of contact or groupchat"
+msgstr "Ime kontakta"
+
 #: gajim/data/gui/history_window.ui:51
 msgid "Search:"
 msgstr "Pretraga:"
@@ -10423,7 +10425,7 @@ msgstr ""
 msgid "Only searching within selected day"
 msgstr ""
 
-#: gajim/data/gui/history_window.ui:213
+#: gajim/data/gui/history_window.ui:306
 #, fuzzy
 msgid "_Show status changes"
 msgstr "_Pamti promjene statusa kontakata"
@@ -11016,6 +11018,12 @@ msgstr "Nedavno:"
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Registracija nije uspijela"
+
+#~ msgid "Shows or hides the roster window"
+#~ msgstr "Prikazuje ili skriva prozor liste"
+
+#~ msgid "Shows or hides the ipython window"
+#~ msgstr "Prikazuje ili skriva ipython prozor"
 
 #, fuzzy
 #~ msgid "XMPP account %s"
@@ -12010,10 +12018,6 @@ msgstr "Registracija nije uspijela"
 #, fuzzy
 #~ msgid "View contact information (Ctrl+I)"
 #~ msgstr "Pozovi kontakte na razgovor (Ctrl+G)"
-
-#, fuzzy
-#~ msgid "Enter JID or Contact name"
-#~ msgstr "Ime kontakta"
 
 #, fuzzy
 #~ msgid "Groupchat Histories"
