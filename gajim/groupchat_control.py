@@ -82,60 +82,65 @@ empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
 empty_pixbuf.fill(0xffffff00)
 
 
-def status_cell_data_func(column, renderer, model, iter_, user_data):
+def cell_data_func(column, renderer, model, iter_, user_data):
+    # Background color has to be rendered for all cells
+    theme = app.config.get('roster_theme')
+    has_parent = bool(model.iter_parent(iter_))
+    if has_parent:
+        bgcolor = app.config.get_per('themes', theme, 'contactbgcolor')
+        renderer.set_property('cell-background', bgcolor or None)
+    else:
+        bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
+        renderer.set_property('cell-background', bgcolor or None)
+
+    if user_data == 'status':
+        status_cell_data_func(column, renderer, model, iter_, has_parent)
+    elif user_data == 'name':
+        text_cell_data_func(column, renderer, model, iter_, has_parent, theme)
+    elif user_data == 'avatar':
+        avatar_cell_data_func(column, renderer, model, iter_, has_parent)
+
+def status_cell_data_func(column, renderer, model, iter_, has_parent):
     renderer.set_property('width', 26)
     image = model[iter_][Column.IMG]
     surface = image.get_property('surface')
     renderer.set_property('surface', surface)
 
-
-def tree_cell_data_func(column, renderer, model, iter_, user_data):
-    # cell data func is global, because we don't want it to keep
-    # reference to GroupchatControl instance (self)
-    theme = app.config.get('roster_theme')
-    # allocate space for avatar only if needed
-    parent_iter = model.iter_parent(iter_)
-    if isinstance(renderer, Gtk.CellRendererPixbuf):
-        image = model[iter_][Column.AVATAR_IMG]
-        if image is None:
-            return
+def avatar_cell_data_func(column, renderer, model, iter_, has_parent):
+    image = model[iter_][Column.AVATAR_IMG]
+    if image is None:
+        renderer.set_property('surface', None)
+    else:
         surface = image.get_property('surface')
         renderer.set_property('surface', surface)
 
-        avatar_position = app.config.get('avatar_position_in_roster')
-        if avatar_position == 'right':
-            renderer.set_property('xalign', 1) # align pixbuf to the right
+    avatar_position = app.config.get('avatar_position_in_roster')
+    if avatar_position == 'right':
+        renderer.set_property('xalign', 1)
+    else:
+        renderer.set_property('xalign', 0.5)
+    if has_parent:
+        renderer.set_property('visible', True)
+        renderer.set_property('width', AvatarSize.ROSTER)
+    else:
+        renderer.set_property('visible', False)
+
+def text_cell_data_func(column, renderer, model, iter_, has_parent, theme):
+    # cell data func is global, because we don't want it to keep
+    # reference to GroupchatControl instance (self)
+    if has_parent:
+        color = app.config.get_per('themes', theme, 'contacttextcolor')
+        if color:
+            renderer.set_property('foreground', color)
         else:
-            renderer.set_property('xalign', 0.5)
-        if parent_iter:
-            renderer.set_property('visible', True)
-            renderer.set_property('width', AvatarSize.ROSTER)
-        else:
-            renderer.set_property('visible', False)
-    if parent_iter:
-        bgcolor = app.config.get_per('themes', theme, 'contactbgcolor')
-        if bgcolor:
-            renderer.set_property('cell-background', bgcolor)
-        else:
-            renderer.set_property('cell-background', None)
-        if isinstance(renderer, Gtk.CellRendererText):
-            # foreground property is only with CellRendererText
-            color = app.config.get_per('themes', theme, 'contacttextcolor')
-            if color:
-                renderer.set_property('foreground', color)
-            else:
-                renderer.set_property('foreground', None)
-            renderer.set_property('font',
-                gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
-    else: # it is root (eg. group)
-        bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
-        renderer.set_property('cell-background', bgcolor or None)
-        if isinstance(renderer, Gtk.CellRendererText):
-            # foreground property is only with CellRendererText
-            color = app.config.get_per('themes', theme, 'grouptextcolor')
-            renderer.set_property('foreground', color or None)
-            renderer.set_property('font',
-                gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
+            renderer.set_property('foreground', None)
+        renderer.set_property('font',
+            gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
+    else:
+        color = app.config.get_per('themes', theme, 'grouptextcolor')
+        renderer.set_property('foreground', color or None)
+        renderer.set_property('font',
+            gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
 
 
 class PrivateChatControl(ChatControl):
@@ -438,15 +443,15 @@ class GroupchatControl(ChatControlBase):
         self.renderers_list += (
             # status img
             ('icon', Gtk.CellRendererPixbuf(), False,
-            None, Column.IMG, status_cell_data_func, None),
+            None, Column.IMG, cell_data_func, 'status'),
             # contact name
             ('name', renderer_text, True,
-            'markup', Column.TEXT, tree_cell_data_func, None))
+            'markup', Column.TEXT, cell_data_func, 'name'))
 
         # avatar img
         avatar_renderer = ('avatar', Gtk.CellRendererPixbuf(),
             False, None, Column.AVATAR_IMG,
-            tree_cell_data_func, None)
+            cell_data_func, 'avatar')
 
         if app.config.get('avatar_position_in_roster') == 'right':
             self.renderers_list.append(avatar_renderer)
