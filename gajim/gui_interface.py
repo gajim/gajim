@@ -2482,7 +2482,7 @@ class Interface:
         try:
             if size is not None:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                    path, size, size, False)
+                    path, size, size, True)
             else:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
         except GLib.GError as error:
@@ -2503,8 +2503,10 @@ class Interface:
                 array, GdkPixbuf.Colorspace.RGB, True,
                 8, width, height, width * 4)
             if size:
+                width, height = gtkgui_helpers.scale_with_ratio(
+                    size, width, height)
                 pixbuf = pixbuf.scale_simple(
-                    size, size, GdkPixbuf.InterpType.BILINEAR)
+                    width, height, GdkPixbuf.InterpType.BILINEAR)
 
         if filename not in app.avatar_cache:
             app.avatar_cache[filename] = {}

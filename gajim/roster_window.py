@@ -4864,11 +4864,8 @@ class RosterWindow:
         app.config.get('avatar_position_in_roster') != 'left':
             renderer.set_property('visible', False)
 
-        if app.config.get('avatar_position_in_roster') == 'left':
-            renderer.set_property('width', AvatarSize.ROSTER)
-            renderer.set_property('xalign', 0.5)
-        else:
-            renderer.set_property('xalign', 1) # align pixbuf to the right
+        renderer.set_property('width', AvatarSize.ROSTER)
+        renderer.set_property('xalign', 0.5)
 
     def _fill_padlock_pixbuf_renderer(self, column, renderer, model, titer,
     data=None):

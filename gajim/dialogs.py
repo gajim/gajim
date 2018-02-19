@@ -3018,6 +3018,7 @@ class ContactRow(Gtk.Grid):
                     'avatar-default', Gtk.IconSize.DND)
             else:
                 image = Gtk.Image.new_from_pixbuf(avatar)
+        image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
         self.add(image)
 
         middle_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)

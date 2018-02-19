@@ -114,11 +114,7 @@ def avatar_cell_data_func(column, renderer, model, iter_, has_parent):
         surface = image.get_property('surface')
         renderer.set_property('surface', surface)
 
-    avatar_position = app.config.get('avatar_position_in_roster')
-    if avatar_position == 'right':
-        renderer.set_property('xalign', 1)
-    else:
-        renderer.set_property('xalign', 0.5)
+    renderer.set_property('xalign', 0.5)
     if has_parent:
         renderer.set_property('visible', True)
         renderer.set_property('width', AvatarSize.ROSTER)
