@@ -103,6 +103,9 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('show-next-pending-event', 0, GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Pops up a window with the next pending event'))
+        self.add_main_option('start-chat', 0, GLib.OptionFlags.NONE,
+                             GLib.OptionArg.NONE,
+                             _('Start a new chat'))
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._handle_remote_options)
@@ -307,6 +310,7 @@ class GajimApplication(Gtk.Application):
 
         remote_commands = ['ipython',
                            'show-next-pending-event',
+                           'start-chat',
                           ]
 
         for cmd in remote_commands:

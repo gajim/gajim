@@ -2755,19 +2755,10 @@ class SynchroniseSelectContactsDialog:
 
 class StartChatDialog(Gtk.ApplicationWindow):
     def __init__(self):
-        # Must be before ApplicationWindow.__init__
-        # or we get our own window
-        active_window = app.app.get_active_window()
-
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('StartChatDialog')
         self.set_application(app.app)
-        mode = app.config.get('one_message_window') != 'always_with_roster'
-        if active_window == app.interface.roster.window and mode:
-            self.set_position(Gtk.WindowPosition.CENTER)
-        else:
-            self.set_transient_for(active_window)
-            self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Start new Conversation'))
         self.set_default_size(-1, 400)
