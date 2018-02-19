@@ -437,6 +437,16 @@ def get_possible_button_event(event):
 def destroy_widget(widget):
     widget.destroy()
 
+def scale_with_ratio(size, width, height):
+    if height == width:
+        return size, size
+    if height > width:
+        ratio = height / float(width)
+        return int(size / ratio), size 
+    else:
+        ratio = width / float(height)
+        return size, int(size / ratio)
+
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
     def on_continue(response, file_path):
         if response < 0:
