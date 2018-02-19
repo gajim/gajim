@@ -245,7 +245,7 @@ class StatusIcon:
 
             for account in accounts_list:
                 account_label = app.config.get_per(
-                    'accounts', account, 'account_label')
+                    'accounts', account, 'account_label') or account
                 if app.account_is_connected(account):
                     # for chat_with
                     item = Gtk.MenuItem.new_with_label(
@@ -291,7 +291,7 @@ class StatusIcon:
 
             for account in accounts_list:
                 account_label = app.config.get_per(
-                    'accounts', account, 'account_label')
+                    'accounts', account, 'account_label') or account
                 if app.connections[account].is_zeroconf or \
                 not app.account_is_connected(account):
                     continue
