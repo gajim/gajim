@@ -3006,18 +3006,19 @@ class ContactRow(Gtk.Grid):
         self.new = jid == ''
 
         if self.groupchat:
-            if self.new:
-                muc_image = app.interface.jabber_state_images['32']['muc_inactive']
-            else:
-                muc_image = app.interface.jabber_state_images['32']['muc_active']
-            image = Gtk.Image.new_from_pixbuf(muc_image.get_pixbuf())
+            muc_icon = gtkgui_helpers.get_iconset_name_for(
+                'muc-inactive' if self.new else 'muc-active')
+            image = Gtk.Image.new_from_icon_name(muc_icon, Gtk.IconSize.DND)
         else:
-            avatar = app.contacts.get_avatar(account, jid, AvatarSize.ROSTER)
+            scale = self.get_scale_factor()
+            avatar = app.contacts.get_avatar(
+                account, jid, AvatarSize.ROSTER, scale)
             if avatar is None:
                 image = Gtk.Image.new_from_icon_name(
                     'avatar-default', Gtk.IconSize.DND)
             else:
-                image = Gtk.Image.new_from_pixbuf(avatar)
+                image = Gtk.Image.new_from_surface(avatar)
+
         image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
         self.add(image)
 
