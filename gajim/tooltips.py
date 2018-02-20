@@ -252,6 +252,9 @@ class GCTooltip():
                 self.avatar.show()
                 self.fillelement.show()
 
+        app.plugin_manager.gui_extension_point(
+            'gc_tooltip_populate', self, contact, self.tooltip_grid)
+
     @staticmethod
     def colorize_affiliation(affiliation):
         """
