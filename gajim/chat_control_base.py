@@ -1380,13 +1380,12 @@ class ScrolledWindow(Gtk.ScrolledWindow):
 
     def do_get_preferred_height(self):
         min_height, natural_height = Gtk.ScrolledWindow.do_get_preferred_height(self)
-        child = self.get_child()
         # Gtk Bug: If policy is set to Automatic, the ScrolledWindow
-        # has a min size of around 46 depending on the System. Because
-        # we want it smaller, we set policy NEVER if the height is < 50
+        # has a min size of around 46-82 depending on the System. Because
+        # we want it smaller, we set policy NEVER if the height is < 90
         # so the ScrolledWindow will shrink to around 26 (1 line heigh).
-        # Once it gets over 50 its no problem to restore the policy.
-        if natural_height < 50:
+        # Once it gets over 90 its no problem to restore the policy.
+        if natural_height < 90:
             GLib.idle_add(self.set_policy,
                           Gtk.PolicyType.AUTOMATIC,
                           Gtk.PolicyType.NEVER)
