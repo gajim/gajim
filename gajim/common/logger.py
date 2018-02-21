@@ -1158,6 +1158,7 @@ class Logger:
         :param account:     The account
 
         :param archive_jid: The jid of the archive the stanza-id belongs to
+                            only used if groupchat=True
 
         :param stanza_id:   The stanza-id
 
@@ -1182,7 +1183,7 @@ class Logger:
         if groupchat:
             # Stanza ID is only unique within a specific archive.
             # So a Stanza ID could be repeated in different MUCs, so we
-            # filter also for the archive JID
+            # filter also for the archive JID which is the bare MUC jid.
             sql = '''
                 SELECT stanza_id FROM logs
                 WHERE stanza_id IN ({values})
@@ -1193,10 +1194,10 @@ class Logger:
         else:
             sql = '''
                 SELECT stanza_id FROM logs
-                WHERE stanza_id IN ({values}) AND account_id = ? LIMIT 1
+                WHERE stanza_id IN ({values}) AND account_id = ? AND kind != ? LIMIT 1
                 '''.format(values=', '.join('?' * len(ids)))
             result = self.con.execute(
-                sql, tuple(ids) + (account_id,)).fetchone()
+                sql, tuple(ids) + (account_id, KindConstant.GC_MSG)).fetchone()
 
         if result is not None:
             log.info('Found duplicated message, stanza-id: %s, origin-id: %s, '
