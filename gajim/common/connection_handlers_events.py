@@ -163,6 +163,23 @@ class HelperEvent:
         if forwarded is not None:
             return forwarded.getTag('message', protocol=True)
 
+    def _is_self_message(self, message):
+        if self.self_message is not None:
+            return self.self_message
+        own_jid = self.conn.get_own_jid()
+        frm = message.getFrom()
+        to = message.getTo()
+        # If 'to' is not set we assume own jid
+        self.self_message = frm.bareMatch(to or own_jid)
+        return self.self_message
+
+    def _is_muc_pm(self, message):
+        if self.muc_pm is not None:
+            return self.muc_pm
+        self.muc_pm = message.getTag(
+            'x', namespace=nbxmpp.NS_MUC_USER) is not None
+        return self.muc_pm
+
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
     name = 'http-auth-received'
     base_network_events = []
@@ -1015,6 +1032,8 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.encrypted = False
         self.groupchat = False
         self.nick = None
+        self.self_message = None
+        self.muc_pm = None
 
     def generate(self):
         account = self.conn.name
@@ -1081,6 +1100,11 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
     def get_unique_id(self):
         stanza_id = self.get_stanza_id(self.result, query=True)
+
+        if self._is_self_message(self.msg_) or self._is_muc_pm(self.msg_):
+            origin_id = self.msg_.getOriginID()
+            return stanza_id, origin_id
+
         if self.conn.get_own_jid().bareMatch(self.msg_.getFrom()):
             # message we sent
             origin_id = self.msg_.getOriginID()
@@ -1217,6 +1241,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.forwarded = False
         self.sent = False
         self.encrypted = False
+        self.self_message = None
+        self.muc_pm = None
         account = self.conn.name
 
         if self.stanza.getFrom() == self.conn.get_own_jid(warn=True):
@@ -1250,11 +1276,12 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.unique_id = self.get_unique_id()
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
-        if self.stanza.getType() == 'groupchat':
+        type_ = self.stanza.getType()
+        if type_ == 'groupchat' or self.self_message or self.muc_pm:
             if app.logger.find_stanza_id(account,
                                          self.stanza.getFrom().getStripped(),
                                          self.unique_id,
-                                         groupchat=True):
+                                         groupchat=type_ == 'groupchat'):
                 return
 
         address_tag = self.stanza.getTag('addresses',
@@ -1406,6 +1433,21 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         return True
 
     def get_unique_id(self):
+        '''
+        Messages to self:
+
+        Messages to self are stored multiple times in MAM so we cant use
+        stanza-id to deduplicate. We use origin-id instead. Its not perfect
+        but there is no better way for now.
+        We drop "received"-Carbons of Message to self, so we dont have to
+        parse origin-id in that case.
+
+        MUC PMs:
+
+        MUC PMs are also stored multiple times, we also depend on origin-id
+        for now.
+        '''
+
         if self.stanza.getType() == 'groupchat':
             # TODO: Disco the MUC check if 'urn:xmpp:mam:2' is announced
             return self.get_stanza_id(self.stanza)
@@ -1424,6 +1466,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                          protocol=True)
         if sent_carbon is not None:
             message = self.get_forwarded_message(sent_carbon)
+            if self._is_self_message(message) or self._is_muc_pm(message):
+                return message.getOriginID()
             return self.get_stanza_id(message)
 
         # Received Carbon
@@ -1432,9 +1476,13 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                              protocol=True)
         if received_carbon is not None:
             message = self.get_forwarded_message(received_carbon)
+            if self._is_muc_pm(message):
+                return message.getOriginID()
             return self.get_stanza_id(message)
 
         # Normal Message
+        if self._is_self_message(self.stanza) or self._is_muc_pm(self.stanza):
+            return self.stanza.getOriginID()
         return self.get_stanza_id(self.stanza)
 
 class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
