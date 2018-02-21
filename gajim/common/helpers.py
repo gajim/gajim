@@ -1596,15 +1596,31 @@ def version_condition(current_version, required_version):
 def get_available_emoticon_themes():
     emoticons_themes = []
     emoticons_data_path = os.path.join(app.DATA_DIR, 'emoticons')
+    font_theme_path = os.path.join(
+        app.DATA_DIR, 'emoticons', 'font-emoticons', 'emoticons_theme.py')
 
     folders = os.listdir(emoticons_data_path)
     if os.path.isdir(app.MY_EMOTS_PATH):
         folders += os.listdir(app.MY_EMOTS_PATH)
 
+    file = 'emoticons_theme.py'
+    if os.name == 'nt' and not os.path.exists(font_theme_path):
+        # When starting Gajim from source .py files are available
+        # We test this with font-emoticons and fallback to .pyc files otherwise
+        file = 'emoticons_theme.pyc'
+
     for theme in folders:
-        theme_path = os.path.join(
-            emoticons_data_path, theme, 'emoticons_theme.py')
+        theme_path = os.path.join(emoticons_data_path, theme, file)
         if os.path.exists(theme_path):
             emoticons_themes.append(theme)
     emoticons_themes.sort()
     return emoticons_themes
+
+def get_emoticon_theme_path(theme):
+    emoticons_data_path = os.path.join(app.DATA_DIR, 'emoticons', theme)
+    if os.path.exists(emoticons_data_path):
+        return emoticons_data_path
+
+    emoticons_user_path = os.path.join(app.MY_EMOTS_PATH, theme)
+    if os.path.exists(emoticons_user_path):
+        return emoticons_user_path

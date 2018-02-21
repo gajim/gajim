@@ -1996,18 +1996,16 @@ class Interface:
         if 'preferences' in app.interface.instances:
             transient_for = app.interface.instances['preferences'].window
 
-        path = os.path.join(app.DATA_DIR, 'emoticons', emot_theme)
-        if not os.path.exists(path):
-            # It's maybe a user theme
-            path = os.path.join(app.MY_EMOTS_PATH, emot_theme)
-            if not os.path.exists(path):
-                # theme doesn't exist, disable emoticons
-                dialogs.WarningDialog(_('Emoticons disabled'),
-                    _('Your configured emoticons theme has not been found, so '
-                    'emoticons have been disabled.'),
-                    transient_for=transient_for)
+        themes = helpers.get_available_emoticon_themes()
+        if emot_theme not in themes:
+            if 'font-emoticons' in themes:
+                emot_theme = 'font-emoticons'
+                app.config.set('emoticons_theme', 'font-emoticons')
+            else:
                 app.config.set('emoticons_theme', '')
                 return
+
+        path = helpers.get_emoticon_theme_path(emot_theme)
         if not emoticons.load(path, ascii_emoticons):
             dialogs.WarningDialog(
                     _('Emoticons disabled'),
