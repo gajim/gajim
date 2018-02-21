@@ -151,12 +151,9 @@ class PreferencesWindow:
 
         config_theme = app.config.get('emoticons_theme')
         if config_theme not in emoticon_themes:
-            # Fallback theme
-            config_theme = 'font-emoticons'
-            app.config.set('emoticons_theme', 'font-emoticons')
+            config_theme = _('Disabled')
         emoticons_combobox.set_id_column(0)
         emoticons_combobox.set_active_id(config_theme)
-
 
         # Set default for single window type
         choices = c_config.opt_one_window_types
