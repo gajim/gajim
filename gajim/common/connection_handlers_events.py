@@ -1281,7 +1281,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if type_ == 'groupchat':
                 archive_jid = self.stanza.getFrom().getStripped()
             else:
-                archive_jid = self.conn.get_own_jid()
+                archive_jid = self.conn.get_own_jid().getStripped()
             if app.logger.find_stanza_id(account,
                                          archive_jid,
                                          self.unique_id,
