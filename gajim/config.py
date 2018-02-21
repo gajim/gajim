@@ -143,29 +143,20 @@ class PreferencesWindow:
 
         # emoticons
         emoticons_combobox = self.xml.get_object('emoticons_combobox')
-        emoticons_list = os.listdir(os.path.join(app.DATA_DIR, 'emoticons'))
-        # user themes
-        if os.path.isdir(app.MY_EMOTS_PATH):
-            emoticons_list += os.listdir(app.MY_EMOTS_PATH)
-        emoticons_list.sort()
-        renderer_text = Gtk.CellRendererText()
-        emoticons_combobox.pack_start(renderer_text, True)
-        emoticons_combobox.add_attribute(renderer_text, 'text', 0)
-        model = Gtk.ListStore(str)
-        emoticons_combobox.set_model(model)
-        l = [_('Disabled')]
-        for dir_ in emoticons_list:
-            if not os.path.isdir(os.path.join(app.DATA_DIR, 'emoticons', dir_)) \
-            and not os.path.isdir(os.path.join(app.MY_EMOTS_PATH, dir_)) :
-                continue
-            if dir_ != '.svn':
-                l.append(dir_)
-        for i in range(len(l)):
-            model.append([l[i]])
-            if app.config.get('emoticons_theme') == l[i]:
-                emoticons_combobox.set_active(i)
-        if not app.config.get('emoticons_theme'):
-            emoticons_combobox.set_active(0)
+        emoticon_themes = helpers.get_available_emoticon_themes()
+
+        emoticons_combobox.append_text(_('Disabled'))
+        for theme in emoticon_themes:
+            emoticons_combobox.append_text(theme)
+
+        config_theme = app.config.get('emoticons_theme')
+        if config_theme not in emoticon_themes:
+            # Fallback theme
+            config_theme = 'font-emoticons'
+            app.config.set('emoticons_theme', 'font-emoticons')
+        emoticons_combobox.set_id_column(0)
+        emoticons_combobox.set_active_id(config_theme)
+
 
         # Set default for single window type
         choices = c_config.opt_one_window_types
