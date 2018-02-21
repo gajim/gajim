@@ -64,6 +64,7 @@ from gajim.common import exceptions
 from gajim.common import check_X509
 from gajim.common.connection_handlers import *
 from gajim.common.helpers import version_condition
+from gajim.common.contacts import GC_Contact
 
 from gajim.gtkgui_helpers import get_action
 
@@ -372,6 +373,10 @@ class CommonConnection:
             else:
                 contact = app.contacts.get_contact_with_highest_priority(
                     self.name, obj.jid)
+
+            # Mark Message as MUC PM
+            if isinstance(contact, GC_Contact):
+                msg_iq.setTag('x', namespace=nbxmpp.NS_MUC_USER)
 
             # chatstates - if peer supports xep85, send chatstates
             # please note that the only valid tag inside a message containing a
