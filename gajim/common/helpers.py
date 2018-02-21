@@ -1592,3 +1592,19 @@ def version_condition(current_version, required_version):
     if V(current_version) < V(required_version):
         return False
     return True
+
+def get_available_emoticon_themes():
+    emoticons_themes = []
+    emoticons_data_path = os.path.join(app.DATA_DIR, 'emoticons')
+
+    folders = os.listdir(emoticons_data_path)
+    if os.path.isdir(app.MY_EMOTS_PATH):
+        folders += os.listdir(app.MY_EMOTS_PATH)
+
+    for theme in folders:
+        theme_path = os.path.join(
+            emoticons_data_path, theme, 'emoticons_theme.py')
+        if os.path.exists(theme_path):
+            emoticons_themes.append(theme)
+    emoticons_themes.sort()
+    return emoticons_themes
