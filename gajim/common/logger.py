@@ -1201,7 +1201,7 @@ class Logger:
 
         if result is not None:
             log.info('Found duplicated message, stanza-id: %s, origin-id: %s, '
-                     'archive-jid: %s, account: %s', stanza_id, origin_id, archive_id, account_id)
+                     'archive-jid: %s, account: %s', stanza_id, origin_id, archive_jid, account_id)
             return True
         return False
 

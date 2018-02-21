@@ -1278,8 +1278,12 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         # We do this because of MUC History messages
         type_ = self.stanza.getType()
         if type_ == 'groupchat' or self.self_message or self.muc_pm:
+            if type_ == 'groupchat':
+                archive_jid = self.stanza.getFrom().getStripped()
+            else:
+                archive_jid = self.conn.get_own_jid()
             if app.logger.find_stanza_id(account,
-                                         self.stanza.getFrom().getStripped(),
+                                         archive_jid,
                                          self.unique_id,
                                          groupchat=type_ == 'groupchat'):
                 return
