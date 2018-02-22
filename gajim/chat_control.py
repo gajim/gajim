@@ -314,20 +314,9 @@ class ChatControl(ChatControlBase):
             jingle.get_enabled() or httpupload.get_enabled())
 
         # Set File Transfer Button tooltip
-        ft_pref = app.config.get_per('accounts', self.account,
-                                     'filetransfer_preference')
-
-        tooltip_text = None
-        if httpupload.get_enabled() and jingle.get_enabled():
-            if ft_pref == 'httpupload':
-                tooltip_text = _('HTTP File Upload')
-            else:
-                tooltip_text = _('Jingle File Transfer')
-        elif httpupload.get_enabled():
-            tooltip_text = _('HTTP File Upload')
-        elif jingle.get_enabled():
-            tooltip_text = _('Jingle File Transfer')
-        elif online:
+        if online and (httpupload.get_enabled() or jingle.get_enabled()):
+            tooltip_text = _('Send File…')
+        else:
             tooltip_text = _('No File Transfer available')
         self.sendfile_button.set_tooltip_text(tooltip_text)
 

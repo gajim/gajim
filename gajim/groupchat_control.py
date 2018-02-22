@@ -631,13 +631,10 @@ class GroupchatControl(ChatControlBase):
         win.lookup_action('send-file-' + self.control_id).set_enabled(
             httpupload.get_enabled())
 
-        tooltip_text = None
-        if online:
-            if httpupload.get_enabled():
-                tooltip_text = _('HTTP File Upload')
-            else:
-                tooltip_text = _('HTTP File Upload not supported '
-                                 'by your server')
+        if online and httpupload.get_enabled():
+            tooltip_text = _('Send File…')
+        else:
+            tooltip_text = _('No File Transfer available')
         self.sendfile_button.set_tooltip_text(tooltip_text)
 
     # Actions
