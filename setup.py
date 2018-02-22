@@ -6,8 +6,6 @@ import sys
 if sys.version_info[0] < 3:
     sys.exit('Tried to install with Python 2, gajim only supports Python 3.')
 
-import codecs
-
 from setuptools import setup, find_packages
 from setuptools import Command
 from setuptools.command.build_py import build_py as _build
@@ -127,20 +125,6 @@ def build_intl(build_cmd):
             os.makedirs(newdir)
         merge(filenamelocal + '.in', newfile, option)
         data_files.append((target, [base + '/' + filename]))
-
-
-def substitute_variables(filename_in, filename_out, subst_vars):
-    '''
-    Substitute variables in a file.
-    '''
-    f_in = codecs.open(filename_in, encoding='utf-8')
-    f_out = codecs.open(filename_out, encoding='utf-8', mode='w')
-    for line in f_in:
-        for variable, substitution in subst_vars:
-            line = line.replace(variable, substitution)
-        f_out.write(line)
-    f_in.close()
-    f_out.close()
 
 
 def merge(in_file, out_file, option, po_dir='po'):
@@ -276,7 +260,7 @@ setup(
     package_data={'gajim': package_data},
     data_files=data_files,
     install_requires=[
-        'nbxmpp>=0.6.1',
+        'nbxmpp>=0.6.3',
         'pyOpenSSL>=0.12',
         'pyasn1',
     ],
