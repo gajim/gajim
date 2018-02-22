@@ -176,8 +176,10 @@ class HelperEvent:
     def _is_muc_pm(self, message):
         if self.muc_pm is not None:
             return self.muc_pm
-        self.muc_pm = message.getTag(
-            'x', namespace=nbxmpp.NS_MUC_USER) is not None
+        self.muc_pm = False
+        muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user is not None:
+            self.muc_pm = muc_user.getChildren() == []
         return self.muc_pm
 
 class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
@@ -1599,6 +1601,7 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.forwarded = self.msg_obj.forwarded
         self.sent = self.msg_obj.sent
         self.conn = self.msg_obj.conn
+        self.muc_pm = self.msg_obj.muc_pm
         self.popup = False
         self.msg_log_id = None # id in log database
         self.attention = False # XEP-0224
