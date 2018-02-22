@@ -101,7 +101,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         if treat_as:
             obj.mtype = treat_as
         pm = False
-        if obj.gc_control and obj.resource:
+        if obj.muc_pm or (obj.gc_control and obj.resource):
             # It's a Private message
             pm = True
             obj.mtype = 'pm'
@@ -122,6 +122,11 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
                 subject=obj.subject,
                 additional_data=obj.additional_data,
                 stanza_id=obj.unique_id)
+
+        if obj.muc_pm and not obj.gc_control:
+            # This is a carbon of a PM from a MUC we are not currently
+            # joined. We log it silently without notification.
+            return True
 
         # Handle chat states
         if contact and (not obj.forwarded or not obj.sent):
