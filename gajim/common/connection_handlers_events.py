@@ -1127,6 +1127,8 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         :stanza:        Complete stanza Node
         :forwarded:     Forwarded Node
         :result:        Result Node
+        :muc_pm:        True, if this is a MUC PM
+                        propagated to MamDecryptedMessageReceivedEvent
         '''
         self._set_base_event_vars_as_attributes(base_event)
         self.additional_data = {}
@@ -1207,23 +1209,27 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         if self.groupchat:
             return True
 
-        self.is_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
-        if self.is_pm is None:
-            # Check if this event is triggered after a disco, so we dont
-            # run into an endless loop
-            if hasattr(self, 'disco'):
-                log.error('JID not known even after sucessful disco')
+        if not self.muc_pm:
+            # muc_pm = False, means only there was no muc#user namespace
+            # This could still be a muc pm, we check the database if we
+            # know this jid. If not we disco it.
+            self.muc_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
+            if self.muc_pm is None:
+                # Check if this event is triggered after a disco, so we dont
+                # run into an endless loop
+                if hasattr(self, 'disco'):
+                    log.error('JID not known even after sucessful disco')
+                    return
+                # we don't know this JID, we need to disco it.
+                server = self.with_.getDomain()
+                if server not in self.conn.mam_awaiting_disco_result:
+                    self.conn.mam_awaiting_disco_result[server] = [self]
+                    self.conn.discoverInfo(server)
+                else:
+                    self.conn.mam_awaiting_disco_result[server].append(self)
                 return
-            # we don't know this JID, we need to disco it.
-            server = self.with_.getDomain()
-            if server not in self.conn.mam_awaiting_disco_result:
-                self.conn.mam_awaiting_disco_result[server] = [self]
-                self.conn.discoverInfo(server)
-            else:
-                self.conn.mam_awaiting_disco_result[server].append(self)
-            return
 
-        if self.is_pm:
+        if self.muc_pm:
             self.with_ = str(self.with_)
         else:
             self.with_ = self.with_.getStripped()
