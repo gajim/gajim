@@ -240,6 +240,9 @@ class ChatControl(ChatControlBase):
             self._nec_caps_received)
         app.ged.register_event_handler('stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
+        app.ged.register_event_handler(
+            'mam-decrypted-message-received',
+            ged.GUI1, self._nec_mam_decrypted_message_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -805,6 +808,20 @@ class ChatControl(ChatControlBase):
         if self.encryption:
             app.plugin_manager.extension_point(
                 'encryption_dialog' + self.encryption, self)
+
+    def _nec_mam_decrypted_message_received(self, obj):
+        if obj.conn.name != self.account:
+            return
+        if obj.with_ != self.contact.jid:
+            return
+
+        kind = 'incoming'
+        if obj.kind == KindConstant.CHAT_MSG_SENT:
+            kind = 'outgoing'
+
+        self.print_conversation(obj.msgtxt, kind, tim=obj.timestamp,
+            encrypted=obj.encrypted, correct_id=obj.correct_id, 
+            msg_stanza_id=obj.message_id, additional_data=obj.additional_data)
 
     def _message_sent(self, obj):
         if obj.conn.name != self.account:
