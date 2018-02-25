@@ -200,13 +200,19 @@ class ConnectionArchive313:
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
             return
-        # if self.archiving_namespace != nbxmpp.NS_MAM_2:
-        # Fallback duplicate search without stanza-id
-        duplicate = app.logger.search_for_duplicate(
-            self.name, obj.with_, obj.timestamp, obj.msgtxt)
-        if duplicate:
-            # dont propagate the event further
-            return True
+
+        namespace = self.archiving_namespace
+        if obj.groupchat:
+            namespace = muc_caps_cache.get_mam_namespace(obj.room_jid)
+
+        if namespace != nbxmpp.NS_MAM_2:
+            # Fallback duplicate search without stanza-id
+            duplicate = app.logger.search_for_duplicate(
+                self.name, obj.with_, obj.timestamp, obj.msgtxt)
+            if duplicate:
+                # dont propagate the event further
+                return True
+
         app.logger.insert_into_logs(self.name,
                                     obj.with_,
                                     obj.timestamp,
