@@ -1052,6 +1052,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # use stanza-id as unique-id
         self.unique_id, origin_id = self.get_unique_id()
+        self.message_id = self.msg_.getID()
 
         # Check for duplicates
         if app.logger.find_stanza_id(account,
@@ -1199,10 +1200,16 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     base_network_events = []
 
     def generate(self):
+        self.correct_id = None
+
         if not self.msgtxt:
             # For example Chatstates, Receipts, Chatmarkers
             log.debug('Received MAM message without text')
             return
+
+        replace = self.msg_.getTag('replace', namespace=nbxmpp.NS_CORRECT)
+        if replace is not None:
+            self.correct_id = replace.getAttr('id')
 
         self.get_oob_data(self.msg_)
 
