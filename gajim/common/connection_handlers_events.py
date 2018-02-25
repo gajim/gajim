@@ -1152,6 +1152,7 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return False
 
         self.unique_id = self.get_stanza_id(self.result, query=True)
+        self.message_id = self.msg_.getID()
 
         # Check for duplicates
         if app.logger.find_stanza_id(account,

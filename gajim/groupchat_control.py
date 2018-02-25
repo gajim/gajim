@@ -1107,8 +1107,9 @@ class GroupchatControl(ChatControlBase):
             return
         self.print_conversation(
             obj.msgtxt, contact=obj.nick,
-            tim=obj.timestamp, encrypted=obj.encrypted,
-            msg_stanza_id=obj.unique_id,
+            tim=obj.timestamp, correct_id=obj.correct_id,
+            encrypted=obj.encrypted,
+            msg_stanza_id=obj.message_id,
             additional_data=obj.additional_data)
 
     def _nec_gc_message_received(self, obj):
