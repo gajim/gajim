@@ -2075,10 +2075,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         obj.timestamp = time.time()
         obj.stanza_id = self.connection.send(obj.msg_iq, now=obj.now)
 
-        app.nec.push_incoming_event(MessageSentEvent(
-            None, conn=self, jid=obj.jid, message=obj.message, keyID=obj.keyID,
-            chatstate=obj.chatstate, automatic_message=obj.automatic_message,
-            stanza_id=obj.stanza_id, additional_data=obj.additional_data))
+        app.nec.push_incoming_event(MessageSentEvent(None, **vars(obj)))
 
         if isinstance(obj.jid, list):
             for j in obj.jid:

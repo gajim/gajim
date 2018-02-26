@@ -238,7 +238,7 @@ class ChatControl(ChatControlBase):
             self._nec_chatstate_received)
         app.ged.register_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
-        app.ged.register_event_handler('stanza-message-outgoing', ged.OUT_POSTCORE,
+        app.ged.register_event_handler('message-sent', ged.OUT_POSTCORE,
             self._message_sent)
         app.ged.register_event_handler(
             'mam-decrypted-message-received',
@@ -1160,7 +1160,7 @@ class ChatControl(ChatControlBase):
             self._nec_chatstate_received)
         app.ged.remove_event_handler('caps-received', ged.GUI1,
             self._nec_caps_received)
-        app.ged.remove_event_handler('stanza-message-outgoing', ged.OUT_POSTCORE,
+        app.ged.remove_event_handler('message-sent', ged.OUT_POSTCORE,
             self._message_sent)
 
         self.unsubscribe_events()
