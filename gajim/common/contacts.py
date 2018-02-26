@@ -509,6 +509,15 @@ class Contacts():
                     return c
             return self._contacts[jid][0]
 
+    def get_contact_strict(self, jid, resource):
+        """
+        Return the contact instance for the given resource or None
+        """
+        if jid in self._contacts:
+            for c in self._contacts[jid]:
+                if c.resource == resource:
+                    return c
+
     def get_avatar(self, jid, size=None, scale=None):
         if jid not in self._contacts:
             return None
@@ -554,7 +563,7 @@ class Contacts():
         Get Contact object for specific resource of given jid
         """
         barejid, resource = common.app.get_room_and_nick_from_fjid(fjid)
-        return self.get_contact(barejid, resource)
+        return self.get_contact_strict(barejid, resource)
 
     def get_first_contact_from_jid(self, jid):
         if jid in self._contacts:
