@@ -703,7 +703,7 @@ class ConversationTextview(GObject.GObject):
             id_ = childs[1].connect('activate', self.on_open_link_activate, kind,
                     text)
             self.handlers[id_] = childs[1]
-            childs[2].hide() # copy mail address
+            childs[2].hide() # copy mail/jid address
             childs[3].hide() # open mail composer
             childs[4].hide() # jid section separator
             childs[5].hide() # start chat
@@ -740,10 +740,12 @@ class ConversationTextview(GObject.GObject):
                 id_ = childs[0].connect('activate', self.on_copy_link_activate,
                     'xmpp:' + text)
                 self.handlers[id_] = childs[0]
-                childs[2].hide() # copy mail address
+                childs[0].set_label(_('Copy JID'))
+                childs[2].hide() # copy mail/jid address
                 childs[3].hide() # open mail composer
                 childs[4].hide() # jid section separator
             elif kind == 'mail':
+                childs[2].set_label(_('Copy Email Address'))
                 childs[4].hide() # jid section separator
                 childs[5].hide() # start chat
                 childs[6].hide() # join group chat
