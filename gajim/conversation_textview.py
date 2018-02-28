@@ -801,6 +801,17 @@ class ConversationTextview(GObject.GObject):
                             self.on_start_chat_activate(None, jid)
                     else:
                         self.on_start_chat_activate(None, word)
+                # handle geo:-URIs
+                elif word[:4] == 'geo:':
+                    location = word[4:]
+                    lat, _, lon = location.partition(',')
+                    if lon == '':
+                        return
+                    uri = 'https://www.openstreetmap.org/?' \
+                          'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
+                          {'lat': lat, 'lon': lon}
+                    helpers.launch_browser_mailer(kind, uri)
+                # other URIs
                 else:
                     helpers.launch_browser_mailer(kind, word)
 
