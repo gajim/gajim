@@ -826,7 +826,7 @@ class ChatControl(ChatControlBase):
         if obj.with_ != self.contact.jid:
             return
 
-        kind = 'incoming'
+        kind = '' # incoming
         if obj.kind == KindConstant.CHAT_MSG_SENT:
             kind = 'outgoing'
 
