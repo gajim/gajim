@@ -25,7 +25,7 @@ from gajim.common import config as c_config
 from gajim.common import idle
 from gajim.gtk.util import get_builder
 from gajim.gtk import AspellDictError
-from gajim.gajim_themes_window import GajimThemesWindow
+from gajim.gtk.themes import Themes
 from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim.chat_control_base import ChatControlBase
 from gajim.config import ManageProxiesWindow, ManageSoundsWindow
@@ -160,9 +160,8 @@ class Preferences(Gtk.ApplicationWindow):
         ### Style tab ###
         # Themes
         theme_combobox = self.xml.get_object('theme_combobox')
-        cell = Gtk.CellRendererText()
-        theme_combobox.pack_start(cell, True)
-        theme_combobox.add_attribute(cell, 'text', 0)
+        self.changed_id = theme_combobox.connect(
+            'changed', self.on_theme_combobox_changed)
         self.update_theme_list()
 
         # iconset
@@ -206,19 +205,6 @@ class Preferences(Gtk.ApplicationWindow):
         # Use transports iconsets
         st = app.config.get('use_transports_iconsets')
         self.xml.get_object('transports_iconsets_checkbutton').set_active(st)
-
-        # Color widgets
-        self.draw_color_widgets()
-
-        # Font for messages
-        font = app.config.get('conversation_font')
-        # try to set default font for the current desktop env
-        fontbutton = self.xml.get_object('conversation_fontbutton')
-        if font == '':
-            fontbutton.set_sensitive(False)
-            self.xml.get_object('default_chat_font').set_active(True)
-        else:
-            fontbutton.set_font_name(font)
 
         ### Personal Events tab ###
         # outgoing send chat state notifications
@@ -473,8 +459,8 @@ class Preferences(Gtk.ApplicationWindow):
         self.default_msg_tree.get_model().connect('row-changed',
                                 self.on_default_msg_treemodel_row_changed)
 
-        self.theme_preferences = None
         self.sounds_preferences = None
+        self.theme_preferences = None
 
         self.notebook.set_current_page(0)
 
@@ -625,36 +611,32 @@ class Preferences(Gtk.ApplicationWindow):
     def on_show_avatar_in_tabs_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_avatar_in_tabs')
 
-    def on_theme_combobox_changed(self, widget):
-        model = widget.get_model()
-        active = widget.get_active()
-        config_theme = model[active][0].replace(' ', '_')
-
-        app.config.set('roster_theme', config_theme)
+    @staticmethod
+    def on_theme_combobox_changed(combobox):
+        theme = combobox.get_active_id()
+        app.config.set('roster_theme', theme)
+        app.css_config.change_theme(theme)
 
         # begin repainting themed widgets throughout
         app.interface.roster.repaint_themed_widgets()
         app.interface.roster.change_roster_style(None)
-        gtkgui_helpers.load_css()
 
     def update_theme_list(self):
         theme_combobox = self.xml.get_object('theme_combobox')
-        model = Gtk.ListStore(str)
-        theme_combobox.set_model(model)
-        i = 0
-        for config_theme in app.config.get_per('themes'):
-            theme = config_theme.replace('_', ' ')
-            model.append([theme])
-            if app.config.get('roster_theme') == config_theme:
-                theme_combobox.set_active(i)
-            i += 1
+        with theme_combobox.handler_block(self.changed_id):
+            theme_combobox.remove_all()
+            theme_combobox.append('default', 'default')
+            for config_theme in app.css_config.themes:
+                theme_combobox.append(config_theme, config_theme)
+
+        theme_combobox.set_active_id(app.config.get('roster_theme'))
 
     def on_manage_theme_button_clicked(self, widget):
-        if self.theme_preferences is None:
-            self.theme_preferences = GajimThemesWindow(self)
+        window = app.get_app_window(Themes)
+        if window is None:
+            Themes(self)
         else:
-            self.theme_preferences.window.present()
-            self.theme_preferences.select_active_theme()
+            window.present()
 
     def on_iconset_combobox_changed(self, widget):
         model = widget.get_model()
@@ -746,128 +728,6 @@ class Preferences(Gtk.ApplicationWindow):
             self.sounds_preferences = ManageSoundsWindow(self)
         else:
             self.sounds_preferences.window.present()
-
-    def update_text_tags(self):
-        """
-        Update color tags in opened chat windows
-        """
-        for ctrl in self._get_all_controls():
-            ctrl.update_tags()
-
-    def on_preference_widget_color_set(self, widget, text):
-        color = widget.get_color()
-        color_string = color.to_string()
-        app.config.set(text, color_string)
-        self.update_text_tags()
-
-    def on_preference_widget_font_set(self, widget, text):
-        if widget:
-            font = widget.get_font_name()
-        else:
-            font = ''
-        app.config.set(text, font)
-        gtkgui_helpers.load_css()
-
-    def on_incoming_nick_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'inmsgcolor')
-
-    def on_outgoing_nick_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'outmsgcolor')
-
-    def on_incoming_msg_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'inmsgtxtcolor')
-
-    def on_outgoing_msg_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'outmsgtxtcolor')
-
-    def on_url_msg_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'urlmsgcolor')
-
-    def on_status_msg_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'statusmsgcolor')
-
-    def on_muc_highlight_colorbutton_color_set(self, widget):
-        self.on_preference_widget_color_set(widget, 'markedmsgcolor')
-
-    def on_conversation_fontbutton_font_set(self, widget):
-        self.on_preference_widget_font_set(widget, 'conversation_font')
-
-    def on_default_chat_font_toggled(self, widget):
-        font_widget = self.xml.get_object('conversation_fontbutton')
-        if widget.get_active():
-            font_widget.set_sensitive(False)
-            font_widget = None
-        else:
-            font_widget.set_sensitive(True)
-        self.on_preference_widget_font_set(font_widget, 'conversation_font')
-
-    def draw_color_widgets(self):
-        col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
-                        'outmsgcolor': 'outgoing_nick_colorbutton',
-                        'inmsgtxtcolor': ['incoming_msg_colorbutton',
-                                'incoming_msg_checkbutton'],
-                        'outmsgtxtcolor': ['outgoing_msg_colorbutton',
-                                'outgoing_msg_checkbutton'],
-                        'statusmsgcolor': 'status_msg_colorbutton',
-                        'urlmsgcolor': 'url_msg_colorbutton',
-                        'markedmsgcolor': 'muc_highlight_colorbutton'}
-        for c in col_to_widget:
-            col = app.config.get(c)
-            if col:
-                if isinstance(col_to_widget[c], list):
-                    rgba = Gdk.RGBA()
-                    rgba.parse(col)
-                    self.xml.get_object(col_to_widget[c][0]).set_rgba(rgba)
-                    self.xml.get_object(col_to_widget[c][0]).set_sensitive(True)
-                    self.xml.get_object(col_to_widget[c][1]).set_active(True)
-                else:
-                    rgba = Gdk.RGBA()
-                    rgba.parse(col)
-                    self.xml.get_object(col_to_widget[c]).set_rgba(rgba)
-            else:
-                rgba = Gdk.RGBA()
-                rgba.parse('#000000')
-                if isinstance(col_to_widget[c], list):
-                    self.xml.get_object(col_to_widget[c][0]).set_rgba(rgba)
-                    self.xml.get_object(col_to_widget[c][0]).set_sensitive(False)
-                    self.xml.get_object(col_to_widget[c][1]).set_active(False)
-                else:
-                    self.xml.get_object(col_to_widget[c]).set_rgba(rgba)
-
-    def on_reset_colors_button_clicked(self, widget):
-        col_to_widget = {'inmsgcolor': 'incoming_nick_colorbutton',
-                        'outmsgcolor': 'outgoing_nick_colorbutton',
-                        'inmsgtxtcolor': 'incoming_msg_colorbutton',
-                        'outmsgtxtcolor': 'outgoing_msg_colorbutton',
-                        'statusmsgcolor': 'status_msg_colorbutton',
-                        'urlmsgcolor': 'url_msg_colorbutton',
-                        'markedmsgcolor': 'muc_highlight_colorbutton'}
-        for c in col_to_widget:
-            app.config.set(c, app.interface.default_colors[c])
-        self.draw_color_widgets()
-
-        self.update_text_tags()
-
-    def _set_color(self, state, widget_name, option):
-        """
-        Set color value in prefs and update the UI
-        """
-        if state:
-            color = self.xml.get_object(widget_name).get_rgba()
-            color_string = color.to_string()
-        else:
-            color_string = ''
-        app.config.set(option, color_string)
-
-    def on_incoming_msg_checkbutton_toggled(self, widget):
-        state = widget.get_active()
-        self.xml.get_object('incoming_msg_colorbutton').set_sensitive(state)
-        self._set_color(state, 'incoming_msg_colorbutton', 'inmsgtxtcolor')
-
-    def on_outgoing_msg_checkbutton_toggled(self, widget):
-        state = widget.get_active()
-        self.xml.get_object('outgoing_msg_colorbutton').set_sensitive(state)
-        self._set_color(state, 'outgoing_msg_colorbutton', 'outmsgtxtcolor')
 
     def on_auto_away_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'autoaway',

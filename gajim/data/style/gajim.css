@@ -1,5 +1,31 @@
 /* Gajim Application CSS File */
 
+.gajim-state-composing {
+    color: rgb(0, 139, 0)
+    }
+.gajim-state-inactive {
+    color: rgb(158, 158, 158)
+    }
+.gajim-state-gone {
+    color: rgb(128, 128, 128)
+    }
+.gajim-state-paused {
+    color: rgb(0, 0, 205)
+    }
+.gajim-msg-correcting text {
+    background: rgb(238, 232, 170)
+    }
+.gajim-state-tab-muc-directed-msg {
+    color: rgb(238, 0, 0)
+    }
+.gajim-state-tab-muc-msg {
+    color: rgb(0, 0, 205)
+    }
+.gajim-banner {
+    font-size: 13pt;
+    font-weight: 700
+    }
+
 
 .chatcontrol-actionbar-button { 
 	padding: 0px 5px 0px 5px;
@@ -135,6 +161,28 @@ list.settings > row > box {
     text-shadow: none;
     opacity: 0.95;
 }
+
+/* ThemesWindow */
+#ThemesWindow grid { padding: 12px; }
+
+.theme_listbox row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; padding: 5px 10px 5px 10px;}
+.theme_listbox row:last-child { border-bottom: 0px}
+.theme_listbox row.activatable:active { box-shadow: none; }
+.theme_listbox row:not(.activatable) label { color: @insensitive_fg_color }
+.theme_listbox row:focus { outline: none; }
+.theme_listbox row:hover { background-color: @theme_base_color }
+
+.theme_remove_button {
+    background-color: @theme_base_color; 
+    border: none;
+    background-image: none; }
+
+.theme_remove_button:focus {outline: none;}
+
+.theme_popover_listbox { padding: 10px; }
+.theme_popover_listbox row { padding: 5px; }
+.theme_popover_listbox row:focus { outline: none; }
+
 
 /* Text style */
 

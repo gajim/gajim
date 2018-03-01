@@ -38,6 +38,7 @@ import os
 import sys
 import math
 import xml.etree.ElementTree as ET
+
 try:
     from PIL import Image
 except:
@@ -171,22 +172,6 @@ def get_completion_liststore(entry):
     completion.set_model(liststore)
     entry.set_completion(completion)
     return liststore
-
-def get_theme_font_for_option(theme, option):
-    """
-    Return string description of the font, stored in theme preferences
-    """
-    font_name = app.config.get_per('themes', theme, option)
-    font_desc = Pango.FontDescription()
-    font_prop_str =  app.config.get_per('themes', theme, option + 'attrs')
-    if font_prop_str:
-        if font_prop_str.find('B') != -1:
-            font_desc.set_weight(Pango.Weight.BOLD)
-        if font_prop_str.find('I') != -1:
-            font_desc.set_style(Pango.Style.ITALIC)
-    fd = Pango.FontDescription(font_name)
-    fd.merge(font_desc, True)
-    return fd.to_string()
 
 def move_window(window, x, y):
     """
@@ -812,71 +797,19 @@ def __label_size_allocate(widget, allocation):
 def get_action(action):
     return app.app.lookup_action(action)
 
-def load_css():
-    path = os.path.join(configpaths.get('DATA'), 'style', 'gajim.css')
-    try:
-        with open(path, "r") as f:
-            css = f.read()
-    except Exception as exc:
-        print('Error loading css: %s', exc)
-        return
+def add_css_class(widget, class_name, prefix=None):
+    if class_name and prefix:
+        class_name = prefix + class_name
 
-    provider = Gtk.CssProvider()
-    css = "\n".join((css, convert_config_to_css()))
-    provider.load_from_data(bytes(css.encode()))
-    Gtk.StyleContext.add_provider_for_screen(
-        Gdk.Screen.get_default(),
-        provider,
-        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
-def convert_config_to_css():
-    css = ''
-    themed_widgets = {
-        'ChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
-        'ChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
-        'ChatControl-BannerLabel': ('bannertextcolor', 'color'),
-        'GroupChatControl-BannerEventBox': ('bannerbgcolor', 'background'),
-        'GroupChatControl-BannerNameLabel': ('bannertextcolor', 'color'),
-        'GroupChatControl-BannerLabel': ('bannertextcolor', 'color'),
-        'Discovery-BannerEventBox': ('bannerbgcolor', 'background'),
-        'Discovery-BannerLabel': ('bannertextcolor', 'color')}
-
-    classes = {'state_composing_color': ('', 'color'),
-               'state_inactive_color': ('', 'color'),
-               'state_gone_color': ('', 'color'),
-               'state_paused_color': ('', 'color'),
-               'msgcorrectingcolor': ('text', 'background'),
-               'state_muc_directed_msg_color': ('', 'color'),
-               'state_muc_msg_color': ('', 'color')}
-
-
-    theme = app.config.get('roster_theme')
-    for key, values in themed_widgets.items():
-        config, attr = values
-        css += '#{} {{'.format(key)
-        value = app.config.get_per('themes', theme, config)
-        if value:
-            css += '{attr}: {color};\n'.format(attr=attr, color=value)
-        css += '}\n'
-
-    for key, values in classes.items():
-        node, attr = values
-        value = app.config.get_per('themes', theme, key)
-        if value:
-            css += '.theme_{cls} {node} {{ {attr}: {color}; }}\n'.format(
-                cls=key, node=node, attr=attr, color=value)
-
-    css += add_css_font()
-
-    return css
-
-def add_css_class(widget, class_name):
     style = widget.get_style_context()
-    for css_cls in style.list_classes():
-        if css_cls.startswith('theme_'):
-            style.remove_class(css_cls)
-    if class_name:
-        style.add_class('theme_' + class_name)
+    if prefix is not None:
+        # Remove all css classes with prefix
+        for css_cls in style.list_classes():
+            if css_cls.startswith(prefix):
+                style.remove_class(css_cls)
+
+    if class_name is not None:
+        style.add_class(class_name)
 
 def add_css_to_widget(widget, css):
     provider = Gtk.CssProvider()
@@ -887,28 +820,7 @@ def add_css_to_widget(widget, css):
 
 def remove_css_class(widget, class_name):
     style = widget.get_style_context()
-    style.remove_class('theme_' + class_name)
-
-def add_css_font():
-    conversation_font = app.config.get('conversation_font')
-    if not conversation_font:
-        return ''
-    font = Pango.FontDescription(conversation_font)
-    unit = "pt" if Gtk.check_version(3, 22, 0) is None else "px"
-    css = """
-    .font_custom {{
-      font-family: "{family}";
-      font-size: {size}{unit};
-      font-weight: {weight};
-    }}""".format(
-        family=font.get_family(),
-        size=int(round(font.get_size() / Pango.SCALE)),
-        unit=unit,
-        weight=pango_to_css_weight(font.get_weight()))
-    css = css.replace("font-size: 0{unit};".format(unit=unit), "")
-    css = css.replace("font-weight: 0;", "")
-    css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
-    return css
+    style.remove_class(class_name)
 
 def draw_affiliation(surface, affiliation):
     icon_size = 16

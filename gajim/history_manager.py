@@ -48,7 +48,7 @@ from gi.repository import Gio
 
 from gajim.common import i18n
 from gajim.common import configpaths
-
+from gajim.common.const import StyleAttr
 
 def is_standalone():
     # Determine if we are in standalone mode
@@ -395,14 +395,14 @@ class HistoryManager:
                 if kind in (KindConstant.SINGLE_MSG_RECV,
                 KindConstant.CHAT_MSG_RECV, KindConstant.GC_MSG):
                     # it is the other side
-                    color = app.config.get('inmsgcolor')  # so incoming color
+                    color = app.css_config.get_value('.gajim-incoming-nickname', StyleAttr.COLOR)  # so incoming color
                 elif kind in (KindConstant.SINGLE_MSG_SENT,
                 KindConstant.CHAT_MSG_SENT):  # it is us
-                    color = app.config.get('outmsgcolor')  # so outgoing color
+                    color = app.css_config.get_value('.gajim-outgoing-nickname', StyleAttr.COLOR)  # so outgoing color
                 elif kind in (KindConstant.STATUS,
                 KindConstant.GCSTATUS):  # is is statuses
                     # so status color
-                    color = app.config.get('statusmsgcolor')
+                    color = app.css_config.get_value('.gajim-status-message', StyleAttr.COLOR)
                     # include status into (status) message
                     if message is None:
                         message = ''

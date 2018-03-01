@@ -57,6 +57,8 @@ from gajim.gtk.util import get_builder
 from gajim.common import helpers
 from gajim.gtk import JoinGroupchatWindow
 from gajim.gtk import AddNewContactWindow
+from gajim.common.const import StyleAttr
+
 
 import logging
 log = logging.getLogger('gajim.htmlview')
@@ -514,7 +516,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             tag.href = href
             tag.type_ = type_ # to be used by the URL handler
             tag.connect('event', self.textview.hyperlink_handler, 'url')
-            tag.set_property('foreground', app.config.get('urlmsgcolor'))
+            tag.set_property('foreground', app.css_config.get_value('.gajim-url', StyleAttr.COLOR))
             tag.set_property('underline', Pango.Underline.SINGLE)
             tag.is_anchor = True
         if title:
@@ -855,7 +857,7 @@ class HtmlTextView(Gtk.TextView):
         buffer_ = self.get_buffer()
 
         self.tagURL = buffer_.create_tag('url')
-        color = app.config.get('urlmsgcolor')
+        color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
         self.tagURL.set_property('foreground', color)
         self.tagURL.set_property('underline', Pango.Underline.SINGLE)
         self.tagURL.connect('event', self.hyperlink_handler, 'url')

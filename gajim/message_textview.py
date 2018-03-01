@@ -55,7 +55,7 @@ class MessageTextView(Gtk.TextView):
         self.set_right_margin(2)
         self.set_pixels_above_lines(2)
         self.set_pixels_below_lines(2)
-        self.get_style_context().add_class('font_custom')
+        self.get_style_context().add_class('gajim-conversation-font')
 
         # set undo list
         self.undo_list = []

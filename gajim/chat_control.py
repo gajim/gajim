@@ -674,7 +674,6 @@ class ChatControl(ChatControlBase):
             status_reduced = ''
         status_escaped = GLib.markup_escape_text(status_reduced)
 
-        font_attrs, font_attrs_small = self.get_font_attrs()
         st = app.config.get('displayed_chat_state_notifications')
         cs = contact.chatstate
         if cs and st in ('composing_only', 'all'):
@@ -685,22 +684,21 @@ class ChatControl(ChatControlBase):
             else:
                 chatstate = ''
 
-            label_text = '<span %s>%s</span><span %s>%s %s</span>' \
-                % (font_attrs,  name, font_attrs_small, acct_info, chatstate)
+            label_text = '<span>%s</span><span size="x-small" weight="light">%s %s</span>' \
+                % (name, acct_info, chatstate)
             if acct_info:
                 acct_info = i18n.direction_mark + ' ' + acct_info
             label_tooltip = '%s%s %s' % (name, acct_info, chatstate)
         else:
-            # weight="heavy" size="x-large"
-            label_text = '<span %s>%s</span><span %s>%s</span>' % \
-                    (font_attrs, name, font_attrs_small, acct_info)
+            label_text = '<span>%s</span><span size="x-small" weight="light">%s</span>' % \
+                    (name, acct_info)
             if acct_info:
                 acct_info = i18n.direction_mark + ' ' + acct_info
             label_tooltip = '%s%s' % (name, acct_info)
 
         if status_escaped:
             status_text = self.urlfinder.sub(self.make_href, status_escaped)
-            status_text = '<span %s>%s</span>' % (font_attrs_small, status_text)
+            status_text = '<span size="x-small" weight="light">%s</span>' % status_text
             self.banner_status_label.set_tooltip_text(status)
             self.banner_status_label.set_no_show_all(False)
             self.banner_status_label.show()
@@ -881,7 +879,7 @@ class ChatControl(ChatControlBase):
         if self.correcting:
             self.correcting = False
             gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'msgcorrectingcolor')
+                self.msg_textview, 'gajim-msg-correcting')
 
         self.print_conversation(obj.message, self.contact.jid, tim=obj.timestamp,
             encrypted=obj.encrypted, xep0184_id=xep0184_id, xhtml=obj.xhtml,

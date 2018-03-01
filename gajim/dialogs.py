@@ -1058,7 +1058,6 @@ class SynchroniseSelectContactsDialog:
             iter_ = model.iter_next(iter_)
         self.dialog.destroy()
 
-
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
     'remove': _('remove')}

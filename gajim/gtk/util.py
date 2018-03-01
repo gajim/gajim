@@ -207,3 +207,14 @@ def python_month(month):
 
 def gtk_month(month):
     return month - 1
+
+
+def convert_rgb_to_hex(rgb_string):
+    rgb = Gdk.RGBA()
+    rgb.parse(rgb_string)
+    rgb.to_color()
+
+    red = int(rgb.red * 255)
+    green = int(rgb.green * 255)
+    blue = int(rgb.blue * 255)
+    return '#%02x%02x%02x' % (red, green, blue)

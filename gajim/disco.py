@@ -65,6 +65,7 @@ from gajim.common import app
 import nbxmpp
 from gajim.common import helpers
 from gajim.common import ged
+from gajim.common.const import StyleAttr
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
@@ -597,34 +598,10 @@ _('Without a connection, you can not browse available services'))
         self.banner_icon.clear()
         self.banner_icon.hide() # Just clearing it doesn't work
 
-    def _set_window_banner_text(self, text, text_after = None):
-        theme = app.config.get('roster_theme')
-        bannerfont = app.config.get_per('themes', theme, 'bannerfont')
-        bannerfontattrs = app.config.get_per('themes', theme,
-                'bannerfontattrs')
-
-        if bannerfont:
-            font = Pango.FontDescription(bannerfont)
-        else:
-            font = Pango.FontDescription('Normal')
-        if bannerfontattrs:
-            # B is attribute set by default
-            if 'B' in bannerfontattrs:
-                font.set_weight(Pango.Weight.HEAVY)
-            if 'I' in bannerfontattrs:
-                font.set_style(Pango.Style.ITALIC)
-
-        font_attrs = 'font_desc="%s"' % font.to_string()
-        font_size = font.get_size()
-
-        # in case there is no font specified we use x-large font size
-        if font_size == 0:
-            font_attrs = '%s size="large"' % font_attrs
-        markup = '<span %s>%s</span>' % (font_attrs, text)
-        if text_after:
-            font.set_weight(Pango.Weight.NORMAL)
-            markup = '%s\n<span font_desc="%s" size="small">%s</span>' % \
-                (markup, font.to_string(), text_after)
+    def _set_window_banner_text(self, text, text_after=None):
+        markup = '<span>%s</span>' % (text)
+        if text_after is not None:
+            markup += '\n<span size="x-small">%s</span>' % text_after
         self.banner.set_markup(markup)
 
     def destroy(self, chain = False):
@@ -1195,8 +1172,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 # Normal/success
                 cell.set_property('foreground_set', False)
         else:
-            theme = app.config.get('roster_theme')
-            bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
+            bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
             if bgcolor:
                 cell.set_property('cell_background_set', True)
             cell.set_property('foreground_set', False)
@@ -1329,8 +1305,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         AgentBrowser.cleanup(self)
 
     def update_theme(self):
-        theme = app.config.get('roster_theme')
-        bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
+        bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
         if bgcolor:
             self._renderer.set_property('cell-background', bgcolor)
         self.window.services_treeview.queue_draw()

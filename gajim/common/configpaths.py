@@ -128,6 +128,7 @@ class ConfigPaths:
 
         source_paths = [
             ('DATA', os.path.join(basedir, 'data')),
+            ('STYLE', os.path.join(basedir, 'data', 'style')),
             ('GUI', os.path.join(basedir, 'data', 'gui')),
             ('ICONS', os.path.join(basedir, 'data', 'icons')),
             ('HOME', os.path.expanduser('~')),
@@ -214,6 +215,10 @@ class ConfigPaths:
             # Cache paths
             ('CACHE_DB', 'cache.db', PathLocation.CACHE, PathType.FILE),
             ('AVATAR', 'avatars', PathLocation.CACHE, PathType.FOLDER),
+
+            # Config paths
+            ('MY_THEME', 'theme', PathLocation.CONFIG, PathType.FOLDER),
+
         ]
 
         for path in paths:

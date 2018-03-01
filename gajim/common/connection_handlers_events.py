@@ -1378,3 +1378,11 @@ class InformationEvent(nec.NetworkIncomingEvent):
         else:
             self.args = (self.args,)
         return True
+
+
+class StyleChanged(nec.NetworkIncomingEvent):
+    name = 'style-changed'
+    base_network_events = []
+
+    def generate(self):
+        return True

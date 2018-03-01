@@ -92,13 +92,6 @@ class Config:
             'mood_iconset': [ opt_str, DEFAULT_MOOD_ICONSET, '', True ],
             'activity_iconset': [ opt_str, DEFAULT_ACTIVITY_ICONSET, '', True ],
             'use_transports_iconsets': [ opt_bool, True, '', True ],
-            'inmsgcolor': [ opt_color, '#a40000', _('Incoming nickname color.'), True ],
-            'outmsgcolor': [ opt_color, '#3465a4', _('Outgoing nickname color.'), True ],
-            'inmsgtxtcolor': [ opt_color, '', _('Incoming text color.'), True ],
-            'outmsgtxtcolor': [ opt_color, '#555753', _('Outgoing text color.'), True ],
-            'statusmsgcolor': [ opt_color, '#4e9a06', _('Status message text color.'), True ],
-            'markedmsgcolor': [ opt_color, '#ff8080', '', True ],
-            'urlmsgcolor': [ opt_color, '#204a87', '', True ],
             'notif_signin_color': [ opt_color, '#32CD32', _('Contact signed in notification color.') ], # limegreen
             'notif_signout_color': [ opt_color, '#FF0000', _('Contact signout notification color') ], # red
             'notif_message_color': [ opt_color, '#1E90FF', _('New message notification color.') ], # dodgerblue
@@ -108,11 +101,6 @@ class Config:
             'notif_invite_color': [ opt_color, '#D2B48C', _('Groupchat invitation notification color') ], # tan1
             'notif_status_color': [ opt_color, '#D8BFD8', _('Background color of status changed notification') ], # thistle2
             'notif_other_color': [ opt_color, '#FFFFFF', _('Other dialogs color.') ], # white
-            'inmsgfont': [ opt_str, '', _('Incoming nickname font.'), True ],
-            'outmsgfont': [ opt_str, '', _('Outgoing nickname font.'), True ],
-            'inmsgtxtfont': [ opt_str, '', _('Incoming text font.'), True ],
-            'outmsgtxtfont': [ opt_str, '', _('Outgoing text font.'), True ],
-            'statusmsgfont': [ opt_str, '', _('Status message text font.'), True ],
             'collapsed_rows': [ opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True ],
             'roster_theme': [ opt_str, _('default'), '', True ],
             'mergeaccounts': [ opt_bool, False, '', True ],
@@ -205,7 +193,6 @@ class Config:
             'notify_on_file_complete': [opt_bool, True],
             'file_transfers_port': [opt_int, 28011],
             'ft_add_hosts_to_send': [opt_str, '', _('Comma separated list of sent hosts, in addition of local interfaces, for File Transfer in case of address translation/port forwarding.')],
-            'conversation_font': [opt_str, ''],
             'use_kib_mib': [opt_bool, False, _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.')],
             'notify_on_all_muc_messages': [opt_bool, False],
             'trayicon_notification_on_events': [opt_bool, True, _('Notify of events in the notification area.')],
@@ -249,9 +236,6 @@ class Config:
             'print_status_in_muc': [opt_str, 'none', _('Can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes their status and/or their status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
             'log_contact_status_changes': [opt_bool, False],
             'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
-            'just_connected_bg_color': [opt_str, '#adc3c6', _('Background color of contacts when they just signed in.')],
-            'just_disconnected_bg_color': [opt_str, '#ab6161', _('Background color of contacts when they just signed out.')],
-            'restored_messages_color': [opt_color, '#555753'],
             'restored_messages_small': [opt_bool, True, _('If true, restored messages will use a smaller font than the default one.')],
             'hide_avatar_of_transport': [opt_bool, False, _('Don\'t show avatar for the transport itself.')],
             'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
@@ -438,35 +422,7 @@ class Config:
                     'bosh_http_pipelining': [ opt_bool, False ],
                     'bosh_wait_for_restart_response': [ opt_bool, False ],
             }, {}),
-            'themes': ({
-                    'accounttextcolor': [ opt_color, 'black', '', True ],
-                    'accountbgcolor': [ opt_color, 'white', '', True ],
-                    'accountfont': [ opt_str, '', '', True ],
-                    'accountfontattrs': [ opt_str, 'B', '', True ],
-                    'grouptextcolor': [ opt_color, 'black', '', True ],
-                    'groupbgcolor': [ opt_color, 'white', '', True ],
-                    'groupfont': [ opt_str, '', '', True ],
-                    'groupfontattrs': [ opt_str, 'I', '', True ],
-                    'contacttextcolor': [ opt_color, 'black', '', True ],
-                    'contactbgcolor': [ opt_color, 'white', '', True ],
-                    'contactfont': [ opt_str, '', '', True ],
-                    'contactfontattrs': [ opt_str, '', '', True ],
-                    'bannertextcolor': [ opt_color, 'black', '', True ],
-                    'bannerbgcolor': [ opt_color, '', '', True ],
-                    'bannerfont': [ opt_str, '', '', True ],
-                    'bannerfontattrs': [ opt_str, 'B', '', True ],
-                    'msgcorrectingcolor': [opt_color, '#eee8aa'],
 
-                    # http://www.pitt.edu/~nisg/cis/web/cgi/rgb.html
-                    'state_inactive_color': [ opt_color, 'grey62' ],
-                    'state_composing_color': [ opt_color, 'green4' ],
-                    'state_paused_color': [ opt_color, 'mediumblue' ],
-                    'state_gone_color': [ opt_color, 'grey' ],
-
-                    # MUC chat states
-                    'state_muc_msg_color': [ opt_color, 'mediumblue' ],
-                    'state_muc_directed_msg_color': [ opt_color, 'red2' ],
-            }, {}),
             'contacts': ({
                     'speller_language': [ opt_str, '', _('Language for which misspelled words will be checked')],
             }, {}),
@@ -520,29 +476,6 @@ class Config:
             'message_sent': [ False, 'sent.wav' ],
             'muc_message_highlight': [ True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
             'muc_message_received': [ False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.') ],
-    }
-
-    themes_default = {
-            # sorted alphanum
-            _('default'): [ '', '', '', 'B', '', '', '', 'I', '', '', '', '', '', '',
-                    '', 'B' ],
-
-            _('green'): [ '', '#94aa8c', '', 'B', '#0000ff', '#eff3e7',
-                                    '', 'I', '#000000', '', '', '', '',
-                                    '#94aa8c', '', 'B' ],
-
-            _('grocery'): [ '', '#6bbe18', '', 'B', '#12125a', '#ceefad',
-                                    '', 'I', '#000000', '#efb26b', '', '', '',
-                                    '#108abd', '', 'B' ],
-
-            _('human'): [ '', '#996442', '', 'B', '#ab5920', '#e3ca94',
-                                    '', 'I', '#000000', '', '', '', '',
-                                    '#996442', '', 'B' ],
-
-            _('marine'): [ '', '#918caa', '', 'B', '', '#e9e7f3',
-                                    '', 'I', '#000000', '', '', '', '',
-                                    '#918caa', '', 'B' ],
-
     }
 
     proxies_default = {

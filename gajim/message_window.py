@@ -643,15 +643,14 @@ class MessageWindow(object):
         if isinstance(ctrl, ChatControl):
             tab_label_str = ctrl.get_tab_label()
             # Set Label Color
-            class_name = 'state_{}_color'.format(chatstate)
-            gtkgui_helpers.add_css_class(nick_label, class_name)
+            gtkgui_helpers.add_css_class(nick_label, chatstate, 'gajim-state-')
         else:
             tab_label_str, color = ctrl.get_tab_label(chatstate)
             # Set Label Color
             if color == 'active':
-                gtkgui_helpers.add_css_class(nick_label, None)
+                gtkgui_helpers.add_css_class(nick_label, None, 'gajim-state-')
             elif color is not None:
-                gtkgui_helpers.add_css_class(nick_label, color)
+                gtkgui_helpers.add_css_class(nick_label, color, 'gajim-state-')
 
         nick_label.set_markup(tab_label_str)
 

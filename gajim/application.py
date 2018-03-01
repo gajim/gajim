@@ -160,9 +160,7 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.window.present()
             return
         from gajim.gui_interface import Interface
-        from gajim import gtkgui_helpers
         self.interface = Interface()
-        gtkgui_helpers.load_css()
         self.interface.run(self)
         self.add_actions()
         from gajim import gui_menu_builder

@@ -59,6 +59,7 @@ from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common import contacts
+from gajim.common.const import StyleAttr
 
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
@@ -95,11 +96,11 @@ def cell_data_func(column, renderer, model, iter_, user_data):
     theme = app.config.get('roster_theme')
     has_parent = bool(model.iter_parent(iter_))
     if has_parent:
-        bgcolor = app.config.get_per('themes', theme, 'contactbgcolor')
-        renderer.set_property('cell-background', bgcolor or None)
+        bgcolor = app.css_config.get_value('.gajim-contact-row', StyleAttr.BACKGROUND)
+        renderer.set_property('cell-background', bgcolor)
     else:
-        bgcolor = app.config.get_per('themes', theme, 'groupbgcolor')
-        renderer.set_property('cell-background', bgcolor or None)
+        bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
+        renderer.set_property('cell-background', bgcolor)
 
     if user_data == 'status':
         status_cell_data_func(column, renderer, model, iter_, has_parent)
@@ -133,18 +134,15 @@ def text_cell_data_func(column, renderer, model, iter_, has_parent, theme):
     # cell data func is global, because we don't want it to keep
     # reference to GroupchatControl instance (self)
     if has_parent:
-        color = app.config.get_per('themes', theme, 'contacttextcolor')
-        if color:
-            renderer.set_property('foreground', color)
-        else:
-            renderer.set_property('foreground', None)
-        renderer.set_property('font',
-            gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
+        color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
+        renderer.set_property('foreground', color)
+        desc = app.css_config.get_font('.gajim-contact-row')
+        renderer.set_property('font-desc', desc)
     else:
-        color = app.config.get_per('themes', theme, 'grouptextcolor')
-        renderer.set_property('foreground', color or None)
-        renderer.set_property('font',
-            gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
+        color = app.css_config.get_value('.gajim-group-row', StyleAttr.COLOR)
+        renderer.set_property('foreground', color)
+        desc = app.css_config.get_font('.gajim-group-row')
+        renderer.set_property('font-desc', desc)
 
 
 class PrivateChatControl(ChatControl):
@@ -1023,14 +1021,14 @@ class GroupchatControl(ChatControlBase):
         color = None
         if chatstate == 'attention' and (not has_focus or not current_tab):
             self.attention_flag = True
-            color = 'state_muc_directed_msg_color'
+            color = 'tab-muc-directed-msg'
         elif chatstate == 'active' or (current_tab and has_focus):
             self.attention_flag = False
             # get active color from gtk
             color = 'active'
         elif chatstate == 'newmsg' and (not has_focus or not current_tab) \
         and not self.attention_flag:
-            color = 'state_muc_msg_color'
+            color = 'tab-muc-msg'
 
         if self.is_continued:
             # if this is a continued conversation
@@ -1146,18 +1144,16 @@ class GroupchatControl(ChatControlBase):
         room jid, subject
         """
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        font_attrs, font_attrs_small = self.get_font_attrs()
         if self.is_continued:
             name = self.get_continued_conversation_name()
         else:
             name = self.room_jid
-        text = '<span %s>%s</span>' % (font_attrs, name)
-        self.name_label.set_markup(text)
+
+        self.name_label.set_text(name)
 
         if self.subject:
             subject = GLib.markup_escape_text(self.subject)
             subject_text = self.urlfinder.sub(self.make_href, subject)
-            subject_text = '<span>%s</span>' % subject_text
             self.subject_button.get_popover().set_text(subject_text)
 
     def _nec_vcard_published(self, obj):
@@ -1719,13 +1715,8 @@ class GroupchatControl(ChatControlBase):
             if status != '':
                 status = helpers.reduce_chars_newlines(status, max_lines=1)
                 # escape markup entities and make them small italic and fg color
-                color = gtkgui_helpers.get_fade_color(self.list_treeview,
-                        selected, focus)
-                colorstring = "#%04x%04x%04x" % (int(color.red * 65535),
-                    int(color.green * 65535), int(color.blue * 65535))
-                name += ('\n<span size="small" style="italic" foreground="%s">'
-                    '%s</span>') % (colorstring, GLib.markup_escape_text(
-                    status))
+                name += ('\n<span size="small" style="italic" alpha="70%">'
+                         '{}</span>'.format(GLib.markup_escape_text(status)))
 
         if (gc_contact.affiliation != 'none' and
                 app.config.get('show_affiliation_in_groupchat')):
@@ -2112,7 +2103,7 @@ class GroupchatControl(ChatControlBase):
         if self.correcting:
             self.correcting = False
             gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'msgcorrectingcolor')
+                self.msg_textview, 'gajim-msg-correcting')
 
     def send_message(self, message, xhtml=None, process_commands=True):
         """

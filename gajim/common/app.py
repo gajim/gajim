@@ -43,6 +43,7 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
+from gajim.common.css_config import CSSConfig
 
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
@@ -65,6 +66,8 @@ gajimpaths = configpaths.gajimpaths
 
 
 RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
+
+css_config = None
 
 os_info = None # used to cache os information
 
@@ -625,3 +628,7 @@ def get_app_window(cls, account=None):
                     continue
             return win
     return None
+
+def load_css_config():
+    global css_config
+    css_config = CSSConfig()

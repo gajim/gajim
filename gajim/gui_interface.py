@@ -2655,15 +2655,6 @@ class Interface:
         self.gpg_passphrase = {}
         self.pass_dialog = {}
         self.db_error_dialog = None
-        self.default_colors = {
-                'inmsgcolor': app.config.get('inmsgcolor'),
-                'outmsgcolor': app.config.get('outmsgcolor'),
-                'inmsgtxtcolor': app.config.get('inmsgtxtcolor'),
-                'outmsgtxtcolor': app.config.get('outmsgtxtcolor'),
-                'statusmsgcolor': app.config.get('statusmsgcolor'),
-                'urlmsgcolor': app.config.get('urlmsgcolor'),
-                'markedmsgcolor': app.config.get('markedmsgcolor'),
-        }
 
         self.handlers = {}
         self.roster = None
@@ -2683,6 +2674,9 @@ class Interface:
         if not cfg_was_read:
             # enable plugin_installer by default when creating config file
             app.config.set_per('plugins', 'plugin_installer', 'active', True)
+
+        # Load CSS files
+        app.load_css_config()
 
         app.logger.reset_shown_unread_messages()
         # override logging settings from config (don't take care of '-q' option)
@@ -2721,24 +2715,7 @@ class Interface:
                     default[msg][4])
                 app.config.set_per('statusmsg', msg, 'mood_text',
                     default[msg][5])
-        #add default themes if there is not in the config file
-        theme = app.config.get('roster_theme')
-        if not theme in app.config.get_per('themes'):
-            app.config.set('roster_theme', _('default'))
-        if len(app.config.get_per('themes')) == 0:
-            d = ['accounttextcolor', 'accountbgcolor', 'accountfont',
-                'accountfontattrs', 'grouptextcolor', 'groupbgcolor',
-                'groupfont', 'groupfontattrs', 'contacttextcolor',
-                'contactbgcolor', 'contactfont', 'contactfontattrs',
-                'bannertextcolor', 'bannerbgcolor']
 
-            default = app.config.themes_default
-            for theme_name in default:
-                app.config.add_per('themes', theme_name)
-                theme = default[theme_name]
-                for o in d:
-                    app.config.set_per('themes', theme_name, o,
-                        theme[d.index(o)])
         # Add Tor proxy if there is not in the config
         if len(app.config.get_per('proxies')) == 0:
             default = app.config.proxies_default

@@ -38,6 +38,7 @@ from gi.repository import Gio
 from gajim import gtkgui_helpers
 from gajim import message_control
 from gajim.gtk import NonModalConfirmationDialog
+from gajim.gtk.util import convert_rgb_to_hex
 from gajim import notify
 import re
 
@@ -52,6 +53,7 @@ from gajim.conversation_textview import ConversationTextview
 from gajim.message_textview import MessageTextView
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
+from gajim.common.const import StyleAttr
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
 from gajim.command_system.implementation.middleware import CommandTools
@@ -87,40 +89,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         keycode_ins = None
 
     def make_href(self, match):
-        url_color = app.config.get('urlmsgcolor')
+        url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
+        color = convert_rgb_to_hex(url_color)
         url = match.group()
-        if not '://' in url:
+        if '://' not in url:
             url = 'http://' + url
-        return '<a href="%s"><span color="%s">%s</span></a>' % (url,
-                url_color, match.group())
-
-    def get_font_attrs(self):
-        """
-        Get pango font attributes for banner from theme settings
-        """
-        theme = app.config.get('roster_theme')
-        bannerfont = app.config.get_per('themes', theme, 'bannerfont')
-        bannerfontattrs = app.config.get_per('themes', theme, 'bannerfontattrs')
-
-        if bannerfont:
-            font = Pango.FontDescription(bannerfont)
-        else:
-            font = Pango.FontDescription('Normal')
-        if bannerfontattrs:
-            # B attribute is set by default
-            if 'B' in bannerfontattrs:
-                font.set_weight(Pango.Weight.HEAVY)
-            if 'I' in bannerfontattrs:
-                font.set_style(Pango.Style.ITALIC)
-
-        font_attrs = 'font_desc="%s"' % font.to_string()
-
-        # in case there is no font specified we use x-large font size
-        if font.get_size() == 0:
-            font_attrs = '%s size="x-large"' % font_attrs
-        font.set_weight(Pango.Weight.NORMAL)
-        font_attrs_small = 'font_desc="%s" size="small"' % font.to_string()
-        return (font_attrs, font_attrs_small)
+        return '<a href="%s"><span foreground="%s">%s</span></a>' % (
+            url, color, match.group())
 
     def get_nb_unread(self):
         jid = self.contact.jid
@@ -381,6 +356,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._nec_ping)
         app.ged.register_event_handler('sec-label-received', ged.GUI1,
             self._sec_labels_received)
+        app.ged.register_event_handler('style-changed', ged.GUI1,
+            self._style_changed)
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
@@ -557,6 +534,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._nec_our_status)
         app.ged.remove_event_handler('sec-label-received', ged.GUI1,
             self._sec_labels_received)
+        app.ged.remove_event_handler('style-changed', ged.GUI1,
+            self._style_changed)
+
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -1099,6 +1079,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def on_clear_formatting_menuitem_activate(self, widget):
         self.msg_textview.clear_tags()
 
+    def _style_changed(self, *args):
+        self.update_tags()
+
     def update_tags(self):
         self.conv_textview.update_tags()
 
@@ -1365,14 +1348,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         history[pos - 1].startswith('/') or history[pos - 1].startswith('/me')):
             self.correcting = True
             gtkgui_helpers.add_css_class(
-                self.msg_textview, 'msgcorrectingcolor')
+                self.msg_textview, 'gajim-msg-correcting')
             message = history[pos - 1]
             msg_buf.set_text(message)
             return
         if self.correcting:
             # We were previously correcting
             gtkgui_helpers.remove_css_class(
-                self.msg_textview, 'msgcorrectingcolor')
+                self.msg_textview, 'gajim-msg-correcting')
         self.correcting = False
         pos += -1 if direction == 'up' else +1
         if pos == -1:

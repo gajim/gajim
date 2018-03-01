@@ -21,7 +21,7 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.const import Option, OptionKind, OptionType
+from gajim.common.const import Option, OptionKind, OptionType, StyleAttr
 from gajim.gtk import ErrorDialog
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
@@ -97,8 +97,10 @@ class XMLConsoleWindow(Gtk.Window):
 
     def create_tags(self):
         buffer_ = self.textview.get_buffer()
-        in_color = app.config.get('inmsgcolor')
-        out_color = app.config.get('outmsgcolor')
+        in_color = app.css_config.get_value(
+            '.gajim-incoming-nickname', StyleAttr.COLOR)
+        out_color = app.css_config.get_value(
+            '.gajim-outgoing-nickname', StyleAttr.COLOR)
 
         tags = ['presence', 'message', 'stream', 'iq']
 

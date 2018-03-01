@@ -1,8 +1,11 @@
-from enum import IntEnum, unique
+from enum import IntEnum, Enum, unique
 from collections import namedtuple
 
 Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
 Option.__new__.__defaults__ = (None,) * len(Option._fields)
+
+DialogButton = namedtuple('DialogButton', 'text callback action')
+DialogButton.__new__.__defaults__ = (None, None)
 
 
 @unique
@@ -117,6 +120,24 @@ class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
 
+@unique
+class StyleAttr(Enum):
+    COLOR = 'color'
+    BACKGROUND = 'background'
+    FONT = 'font'
+
+@unique
+class CSSPriority(IntEnum):
+    APPLICATION = 600
+    APPLICATION_DARK = 601
+    DEFAULT_THEME = 610
+    DEFAULT_THEME_DARK = 611
+    USER_THEME = 650
+
+@unique
+class ButtonAction(Enum):
+    DESTRUCTIVE = 'destructive-action'
+    SUGGESTED = 'suggested-action'
 
 @unique
 class IdleState(IntEnum):

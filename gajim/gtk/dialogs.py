@@ -986,3 +986,42 @@ class ChangePasswordDialog(Gtk.Dialog):
         self._error_label.set_text(error_text)
         self._password1_entry.set_sensitive(True)
         self._password2_entry.set_sensitive(True)
+
+
+class NewConfirmationDialog(Gtk.MessageDialog):
+    def __init__(self, text, sec_text, buttons, transient_for=None):
+        Gtk.MessageDialog.__init__(self,
+                                   transient_for=transient_for,
+                                   message_type=Gtk.MessageType.QUESTION,
+                                   text=text)
+
+        self._buttons = buttons
+
+        for response, button in buttons.items():
+            self.add_button(button.text, response)
+            if button.action is not None:
+                widget = self.get_widget_for_response(response)
+                widget.get_style_context().add_class(button.action.value)
+
+        self.format_secondary_markup(sec_text)
+
+        self.connect('response', self._on_response)
+
+        self.run()
+
+    def _on_response(self, dialog, response):
+        if response == Gtk.ResponseType.DELETE_EVENT:
+            # Look if DELETE_EVENT is mapped to another response
+            response = self._buttons.get(response, None)
+            if response is None:
+                # If DELETE_EVENT was not mapped we assume CANCEL
+                response = Gtk.ResponseType.CANCEL
+
+        button = self._buttons.get(response, None)
+        if button is None:
+            self.destroy()
+            return
+
+        if button.callback is not None:
+            button.callback()
+        self.destroy()

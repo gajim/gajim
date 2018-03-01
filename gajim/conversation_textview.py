@@ -49,6 +49,7 @@ from gajim.common import i18n
 from calendar import timegm
 from gajim.common.fuzzyclock import FuzzyClock
 from gajim import emoticons
+from gajim.common.const import StyleAttr
 
 from gajim.htmltextview import HtmlTextView
 
@@ -216,42 +217,47 @@ class ConversationTextview(GObject.GObject):
         self.last_time_printout = 0
 
         style = self.tv.get_style_context()
-        style.add_class('font_custom')
+        style.add_class('gajim-conversation-font')
         buffer_ = self.tv.get_buffer()
         end_iter = buffer_.get_end_iter()
         buffer_.create_mark('end', end_iter, False)
 
         self.tagIn = buffer_.create_tag('incoming')
-        color = app.config.get('inmsgcolor')
-        font = Pango.FontDescription(app.config.get('inmsgfont'))
+        color = app.css_config.get_value(
+            '.gajim-incoming-nickname', StyleAttr.COLOR)
         self.tagIn.set_property('foreground', color)
-        self.tagIn.set_property('font-desc', font)
+        desc = app.css_config.get_font('.gajim-incoming-nickname')
+        self.tagIn.set_property('font-desc', desc)
 
         self.tagOut = buffer_.create_tag('outgoing')
-        color = app.config.get('outmsgcolor')
-        font = Pango.FontDescription(app.config.get('outmsgfont'))
+        color = app.css_config.get_value(
+            '.gajim-outgoing-nickname', StyleAttr.COLOR)
         self.tagOut.set_property('foreground', color)
-        self.tagOut.set_property('font-desc', font)
+        desc = app.css_config.get_font('.gajim-outgoing-nickname')
+        self.tagOut.set_property('font-desc', desc)
 
         self.tagStatus = buffer_.create_tag('status')
-        color = app.config.get('statusmsgcolor')
-        font = Pango.FontDescription(app.config.get('satusmsgfont'))
+        color = app.css_config.get_value(
+            '.gajim-status-message', StyleAttr.COLOR)
         self.tagStatus.set_property('foreground', color)
-        self.tagStatus.set_property('font-desc', font)
+        desc = app.css_config.get_font('.gajim-status-message')
+        self.tagStatus.set_property('font-desc', desc)
 
         self.tagInText = buffer_.create_tag('incomingtxt')
-        color = app.config.get('inmsgtxtcolor')
-        font = Pango.FontDescription(app.config.get('inmsgtxtfont'))
+        color = app.css_config.get_value(
+            '.gajim-incoming-message-text', StyleAttr.COLOR)
         if color:
             self.tagInText.set_property('foreground', color)
-        self.tagInText.set_property('font-desc', font)
+        desc = app.css_config.get_font('.gajim-incoming-message-text')
+        self.tagInText.set_property('font-desc', desc)
 
         self.tagOutText = buffer_.create_tag('outgoingtxt')
-        color = app.config.get('outmsgtxtcolor')
+        color = app.css_config.get_value(
+            '.gajim-outgoing-message-text', StyleAttr.COLOR)
         if color:
-            font = Pango.FontDescription(app.config.get('outmsgtxtfont'))
-        self.tagOutText.set_property('foreground', color)
-        self.tagOutText.set_property('font-desc', font)
+            self.tagOutText.set_property('foreground', color)
+        desc = app.css_config.get_font('.gajim-outgoing-message-text')
+        self.tagOutText.set_property('font-desc', desc)
 
         colors = app.config.get('gc_nicknames_colors')
         colors = colors.split(':')
@@ -261,7 +267,8 @@ class ConversationTextview(GObject.GObject):
             tag.set_property('foreground', color)
 
         self.tagMarked = buffer_.create_tag('marked')
-        color = app.config.get('markedmsgcolor')
+        color = app.css_config.get_value(
+            '.gajim-highlight-message', StyleAttr.COLOR)
         self.tagMarked.set_property('foreground', color)
         self.tagMarked.set_property('weight', Pango.Weight.BOLD)
 
@@ -276,7 +283,7 @@ class ConversationTextview(GObject.GObject):
         tag.set_property('scale', 0.8333333333333)
 
         tag = buffer_.create_tag('restored_message')
-        color = app.config.get('restored_messages_color')
+        color = app.css_config.get_value('.gajim-restored-message', StyleAttr.COLOR)
         tag.set_property('foreground', color)
 
         self.tv.create_tags()
@@ -355,13 +362,13 @@ class ConversationTextview(GObject.GObject):
         self.tv.destroy()
 
     def update_tags(self):
-        self.tagIn.set_property('foreground', app.config.get('inmsgcolor'))
-        self.tagOut.set_property('foreground', app.config.get('outmsgcolor'))
+        self.tagIn.set_property('foreground', app.css_config.get_value('.gajim-incoming-nickname', StyleAttr.COLOR))
+        self.tagOut.set_property('foreground', app.css_config.get_value('.gajim-outgoing-nickname', StyleAttr.COLOR))
         self.tagStatus.set_property('foreground',
-            app.config.get('statusmsgcolor'))
+            app.css_config.get_value('.gajim-status-message', StyleAttr.COLOR))
         self.tagMarked.set_property('foreground',
-            app.config.get('markedmsgcolor'))
-        color = app.config.get('urlmsgcolor')
+            app.css_config.get_value('.gajim-highlight-message', StyleAttr.COLOR))
+        color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
         self.tv.tagURL.set_property('foreground', color)
         self.tv.tagMail.set_property('foreground', color)
         self.tv.tagXMPP.set_property('foreground', color)

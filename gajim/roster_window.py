@@ -57,6 +57,7 @@ from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
 from gajim.accounts_window import AccountsWindow
+
 from gajim.gtk import JoinGroupchatWindow
 from gajim.gtk import ConfirmationDialogCheck
 from gajim.gtk import ConfirmationDialog
@@ -73,14 +74,12 @@ from gajim.gtk import AccountCreationWizard
 from gajim.gtk import ServiceRegistration
 from gajim.gtk import HistoryWindow
 
-from gajim.common.const import AvatarSize
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
-from gajim.common.const import PEPEventType
+from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener
 from gajim.common import ged
@@ -1265,15 +1264,11 @@ class RosterWindow:
                 status = helpers.reduce_chars_newlines(status,
                     max_lines = 1)
                 # escape markup entities and make them small
-                # italic and fg color color is calculated to be
-                # always readable
-                color = gtkgui_helpers.get_fade_color(self.tree, selected,
-                    focus)
-                colorstring = '#%04x%04x%04x' % (int(color.red * 65535),
-                    int(color.green * 65535), int(color.blue * 65535))
-                name += '\n<span size="small" style="italic" ' \
-                    'foreground="%s">%s</span>' % (colorstring,
-                    GLib.markup_escape_text(status))
+
+                # italic
+                name += ('\n<span size="small" style="italic" '
+                         'alpha="70%">{}</span>'.format(
+                            GLib.markup_escape_text(status)))
 
         icon_name = helpers.get_icon_name_to_show(contact, account)
         # look if another resource has awaiting events
@@ -4688,6 +4683,9 @@ class RosterWindow:
 
         gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
 
+    def _style_changed(self, *args):
+        self.change_roster_style(None)
+
     def _change_style(self, model, path, titer, option):
         if option is None or model[titer][Column.TYPE] == option:
             # We changed style for this type of row
@@ -4751,18 +4749,18 @@ class RosterWindow:
             return
         theme = app.config.get('roster_theme')
         if type_ == 'account':
-            color = app.config.get_per('themes', theme, 'accounttextcolor')
-            renderer.set_property('foreground', color or None)
-            renderer.set_property('font',
-                gtkgui_helpers.get_theme_font_for_option(theme, 'accountfont'))
+            color = app.css_config.get_value('.gajim-account-row', StyleAttr.COLOR)
+            renderer.set_property('foreground', color)
+            desc = app.css_config.get_font('.gajim-account-row')
+            renderer.set_property('font-desc', desc)
             renderer.set_property('xpad', 0)
             renderer.set_property('width', 3)
             self._set_account_row_background_color(renderer)
         elif type_ == 'group':
-            color = app.config.get_per('themes', theme, 'grouptextcolor')
-            renderer.set_property('foreground', color or None)
-            renderer.set_property('font',
-                gtkgui_helpers.get_theme_font_for_option(theme, 'groupfont'))
+            color = app.css_config.get_value('.gajim-group-row', StyleAttr.COLOR)
+            renderer.set_property('foreground', color)
+            desc = app.css_config.get_font('.gajim-group-row')
+            renderer.set_property('font-desc', desc)
             parent_iter = model.iter_parent(titer)
             if model[parent_iter][Column.TYPE] == 'group':
                 renderer.set_property('xpad', 8)
@@ -4781,19 +4779,16 @@ class RosterWindow:
                 ctrl = app.interface.minimized_controls[account].get(jid,
                     None)
                 if ctrl and ctrl.attention_flag:
-                    color = app.config.get_per('themes', theme,
-                        'state_muc_directed_msg_color')
-                renderer.set_property('foreground', 'red')
+                    color = app.css_config.get_value(
+                        '.state_muc_directed_msg_color', StyleAttr.COLOR)
+                    renderer.set_property('foreground', color)
             if not color:
-                color = app.config.get_per('themes', theme,
-                    'contacttextcolor')
-            if color:
+                color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
                 renderer.set_property('foreground', color)
-            else:
-                renderer.set_property('foreground', None)
+
             self._set_contact_row_background_color(renderer, jid, account)
-            renderer.set_property('font',
-                gtkgui_helpers.get_theme_font_for_option(theme, 'contactfont'))
+            desc = app.css_config.get_font('.gajim-contact-row')
+            renderer.set_property('font-desc', desc)
             parent_iter = model.iter_parent(titer)
             if model[parent_iter][Column.TYPE] == 'contact':
                 renderer.set_property('xpad', 16)
@@ -4886,25 +4881,25 @@ class RosterWindow:
 
     def _set_account_row_background_color(self, renderer):
         theme = app.config.get('roster_theme')
-        color = app.config.get_per('themes', theme, 'accountbgcolor')
-        renderer.set_property('cell-background', color or None)
+        color = app.css_config.get_value('.gajim-account-row', StyleAttr.BACKGROUND)
+        renderer.set_property('cell-background', color)
 
     def _set_contact_row_background_color(self, renderer, jid, account):
         theme = app.config.get('roster_theme')
         if jid in app.newly_added[account]:
-            renderer.set_property('cell-background', app.config.get(
-                    'just_connected_bg_color'))
+            renderer.set_property('cell-background', app.css_config.get_value(
+                    '.gajim-roster-connected', StyleAttr.BACKGROUND))
         elif jid in app.to_be_removed[account]:
-            renderer.set_property('cell-background', app.config.get(
-                'just_disconnected_bg_color'))
+            renderer.set_property('cell-background', app.css_config.get_value(
+                '.gajim-roster-disconnected', StyleAttr.BACKGROUND))
         else:
-            color = app.config.get_per('themes', theme, 'contactbgcolor')
-            renderer.set_property('cell-background', color or None)
+            color = app.css_config.get_value('.gajim-contact-row', StyleAttr.BACKGROUND)
+            renderer.set_property('cell-background', color)
 
     def _set_group_row_background_color(self, renderer):
         theme = app.config.get('roster_theme')
-        color = app.config.get_per('themes', theme, 'groupbgcolor')
-        renderer.set_property('cell-background', color or None)
+        color = app.css_config.get_value('.gajim-group-row', 'background')
+        renderer.set_property('cell-background', color)
 
 ################################################################################
 ### Everything about building menus
@@ -5945,3 +5940,5 @@ class RosterWindow:
             self._nec_decrypted_message_received)
         app.ged.register_event_handler('blocking', ged.GUI1,
             self._nec_blocking)
+        app.ged.register_event_handler('style-changed', ged.GUI1,
+            self._style_changed)

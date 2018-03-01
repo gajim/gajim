@@ -567,6 +567,9 @@
                     </child>
                   </object>
                 </child>
+                <style>
+                  <class name="gajim-banner"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
