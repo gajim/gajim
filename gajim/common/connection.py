@@ -709,11 +709,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_gc_stanza_message_outgoing)
         app.ged.register_event_handler('stanza-message-outgoing',
             ged.OUT_CORE, self._nec_stanza_message_outgoing)
-
-        h = app.config.get_per('accounts', self.name, 'hostname')
-        if h:
-            app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(h),
-                self._on_resolve_txt, type_='txt')
     # END __init__
 
     def cleanup(self):
@@ -1092,6 +1087,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             {'host': h, 'port': p, 'type': 'plain', 'prio': 10, 'weight': 10, 'alpn': False}
         ]
         self._hostname = hostname
+
+        if h:
+            app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(h),
+                                 self._on_resolve_txt, type_='txt')
 
         if use_srv and self._proxy is None:
             self._srv_hosts = []
