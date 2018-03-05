@@ -1,3 +1,9 @@
+Gajim 1.0.0 (05 March 2018)
+  
+  * More improvements for HiDPI Screens
+  * Fixed various MAM related issues
+  * Various other small bugfixes
+
 Gajim 0.99.2 (17 February 2018)
   
   * Speed up DB querys on MAM sync
