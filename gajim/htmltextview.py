@@ -50,7 +50,7 @@ import urllib
 if __name__ == '__main__':
     from gajim.common import i18n
     import gajim.common.configpaths
-    app.common.configpaths.gajimpaths.init(None)
+    gajim.common.configpaths.gajimpaths.init(None)
 from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.gtkgui_helpers import get_icon_pixmap
@@ -1084,16 +1084,21 @@ class HtmlTextView(Gtk.TextView):
 change_cursor = None
 
 if __name__ == '__main__':
-    from conversation_textview import ConversationTextview
-    import gajim as gaj
+    from gajim.conversation_textview import ConversationTextview
+    from gajim.gui_interface import Interface
+    from gajim.common import app, logger, caps_cache
+    app.logger = logger.Logger()
+    caps_cache.initialize(app.logger)
 
-    log = logging.getLogger()
-    gaj.Interface()
+    Interface()
 
     # create fake app.plugin_manager.gui_extension_point method for tests
+    def extension_point(*args):
+        pass
     def gui_extension_point(*args):
         pass
-    app.plugin_manager = gaj.Interface()
+    app.plugin_manager = Interface()
+    app.plugin_manager.extension_point = extension_point
     app.plugin_manager.gui_extension_point = gui_extension_point
 
     htmlview = ConversationTextview(None)
@@ -1108,7 +1113,7 @@ if __name__ == '__main__':
         pointer = w.get_device_position(device)
         x = pointer[1]
         y = pointer[2]
-        tags = htmlview.tv.get_iter_at_location(x, y).get_tags()
+        tags = htmlview.tv.get_iter_at_location(x, y)[1].get_tags()
         if change_cursor:
             w.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
             change_cursor = None
