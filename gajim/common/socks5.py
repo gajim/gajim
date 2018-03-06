@@ -423,7 +423,7 @@ class SocksQueue:
         connections with 1
         """
         if idx != -1:
-            for key in self.senders.keys():
+            for key in list(self.senders.keys()):
                 if idx in key:
                     self.remove_sender_by_key(key, do_disconnect=do_disconnect)
                     if not remove_all:
