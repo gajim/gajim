@@ -368,8 +368,6 @@ class GroupchatControl(ChatControlBase):
 
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
-        self.widget_set_visible(self.xml.get_object('list_scrolledwindow'),
-            app.config.get('hide_groupchat_occupants_list'))
 
         self._last_selected_contact = None # None or holds jid, account tuple
 
@@ -409,9 +407,10 @@ class GroupchatControl(ChatControlBase):
         id_ = self.hpaned.connect('notify', self.on_hpaned_notify)
         self.handlers[id_] = self.hpaned
 
-        # Hide the Roster per default
-        self.hpaned.get_child2().set_no_show_all(True)
-        self.hpaned.get_child2().hide()
+        if app.config.get('hide_groupchat_occupants_list'):
+            # Hide the roster by default
+            self.hpaned.get_child2().set_no_show_all(True)
+            self.hpaned.get_child2().hide()
 
         # set the position of the current hpaned
         hpaned_position = app.config.get('gc-hpaned-position')
