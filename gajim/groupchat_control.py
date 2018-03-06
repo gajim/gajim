@@ -2398,7 +2398,8 @@ class GroupchatControl(ChatControlBase):
                             list_nick.remove(nick)
                         list_nick.insert(0, nick)
 
-                list_nick.remove(self.nick) # Skip self
+                if self.nick in list_nick:
+                    list_nick.remove(self.nick) # Skip self
                 for nick in list_nick:
                     fjid = self.room_jid + '/' + nick
                     if nick.lower().startswith(begin.lower()) and not \
