@@ -30,6 +30,7 @@
 
 import os
 import time
+import logging
 from datetime import datetime
 
 from gi.repository import Gtk
@@ -42,6 +43,8 @@ from gajim.common.const import AvatarSize
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import Q_
+
+log = logging.getLogger('gajim.tooltips')
 
 
 class StatusTable:
