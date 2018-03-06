@@ -591,7 +591,7 @@ class ChatControl(ChatControlBase):
         if 'location' in self.contact.pep:
             location = self.contact.pep['location']._pep_specific_data
             if ('lat' in location) and ('lon' in location):
-                uri = 'http://www.openstreetmap.org/?' + \
+                uri = 'https://www.openstreetmap.org/?' + \
                         'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],
                         'lon': location['lon']}
                 helpers.launch_browser_mailer('url', uri)
