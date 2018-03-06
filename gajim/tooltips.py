@@ -413,6 +413,10 @@ class RosterTooltip(Gtk.Window, StatusTable):
         # Username/Account/Groupchat
         self.prim_contact = app.contacts.get_highest_prio_contact_from_contacts(
             contacts)
+        if self.prim_contact is None:
+            log.error('No contact for Roster tooltip found')
+            log.error('contacts: %s, typ: %s, account: %s', contacts, typ, account)
+            return
         self.contact_jid = self.prim_contact.jid
         name = GLib.markup_escape_text(self.prim_contact.get_shown_name())
         name_markup = '<b>{}</b>'.format(name)
