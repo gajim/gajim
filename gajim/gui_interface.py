@@ -2658,6 +2658,29 @@ class Interface:
                     log.info('Disconnect %s', connection.name)
                     connection.disconnectedReconnCB()
 
+    def create_zeroconf_default_config(self):
+        if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):
+            return
+        log.info('Creating zeroconf account')
+        app.config.add_per('accounts', app.ZEROCONF_ACC_NAME)
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'autoconnect', True)
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'no_log_for',
+                '')
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'password',
+                'zeroconf')
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'sync_with_global_status', True)
+
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'custom_port', 5298)
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'is_zeroconf', True)
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'use_ft_proxies', False)
+        app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
+                'active', False)
+
     def run(self, application):
         if app.config.get('trayicon') != 'never':
             self.show_systray()
@@ -2839,6 +2862,7 @@ class Interface:
         self.create_core_handlers_list()
         self.register_core_handlers()
 
+        self.create_zeroconf_default_config()
         if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'active') \
         and app.HAVE_ZEROCONF:
             app.connections[app.ZEROCONF_ACC_NAME] = \
