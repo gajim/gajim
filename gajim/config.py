@@ -1774,7 +1774,8 @@ class RemoveAccountWindow:
         self.account = account
         xml = gtkgui_helpers.get_gtk_builder('remove_account_window.ui')
         self.window = xml.get_object('remove_account_window')
-        self.window.set_transient_for(app.interface.roster.window)
+        active_window = app.app.get_active_window()
+        self.window.set_transient_for(active_window)
         self.remove_and_unregister_radiobutton = xml.get_object(
                 'remove_and_unregister_radiobutton')
         self.window.set_title(_('Removing %s account') % self.account)
@@ -1794,7 +1795,8 @@ class RemoveAccountWindow:
                     dialogs.ErrorDialog(
                         _('Account is disabled'),
                         _('To unregister from a server, account must be '
-                        'enabled.'))
+                        'enabled.'),
+                        transient_for=self.window)
                     return
                 if not app.connections[self.account].password:
                     def on_ok(passphrase, checked):
@@ -1808,7 +1810,8 @@ class RemoveAccountWindow:
                     dialogs.PassphraseDialog(
                             _('Password Required'),
                             _('Enter your password for account %s') % self.account,
-                            _('Save password'), ok_handler=on_ok)
+                            _('Save password'), ok_handler=on_ok,
+                            transient_for=self.window)
                     return
                 app.connections[self.account].unregister_account(
                         self._on_remove_success)
@@ -1820,7 +1823,8 @@ class RemoveAccountWindow:
             dialogs.ConfirmationDialog(
                 _('Account "%s" is connected to the server') % self.account,
                 _('If you remove it, the connection will be lost.'),
-                on_response_ok=remove)
+                on_response_ok=remove,
+                transient_for=self.window)
         else:
             remove()
 
@@ -1837,7 +1841,8 @@ class RemoveAccountWindow:
                     _('What would you like to do?'),
                     _('Remove only from Gajim'),
                     _('Don\'t remove anything. I\'ll try again later'),
-                    on_response_ok=self.on_remove_responce_ok, is_modal=False)
+                    on_response_ok=self.on_remove_responce_ok, is_modal=False,
+                    transient_for=self.window)
             return
         # Close all opened windows
         app.interface.roster.close_all(self.account, force=True)
@@ -2265,7 +2270,8 @@ class AccountCreationWizardWindow:
         self.xml = gtkgui_helpers.get_gtk_builder(
                 'account_creation_wizard_window.ui')
         self.window = self.xml.get_object('account_creation_wizard_window')
-        self.window.set_transient_for(app.interface.roster.window)
+        active_window = app.app.get_active_window()
+        self.window.set_transient_for(active_window)
 
         # Connect events from comboboxtext_entry
         server_comboboxtext = self.xml.get_object('server_comboboxtext')

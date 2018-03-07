@@ -211,7 +211,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 _('You have opened chat in account %s') % account,
                 _('All chat and groupchat windows will be closed. '
                   'Do you want to continue?'),
-                on_response_ok=(remove, account))
+                on_response_ok=(remove, account),
+                transient_for=self)
         else:
             remove(account)
 
