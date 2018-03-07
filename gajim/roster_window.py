@@ -5886,10 +5886,6 @@ class RosterWindow:
             # Open wizard only after roster is created, so we can make it
             # transient for the roster window
             GLib.idle_add(_open_wizard)
-        if not app.ZEROCONF_ACC_NAME in app.config.get_per('accounts'):
-            # Create zeroconf in config file
-            from gajim.common.zeroconf import connection_zeroconf
-            connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
 
         # Setting CTRL+J to be the shortcut for bringing up the dialog to join a
         # conference.

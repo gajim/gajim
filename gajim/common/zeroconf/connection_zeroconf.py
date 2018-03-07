@@ -76,24 +76,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         Get name, host, port from config, or create zeroconf account with default
         values
         """
-        if not app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):
-            log.debug('Creating zeroconf account')
-            app.config.add_per('accounts', app.ZEROCONF_ACC_NAME)
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'autoconnect', True)
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'no_log_for',
-                    '')
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'password',
-                    'zeroconf')
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'sync_with_global_status', True)
-
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'custom_port', 5298)
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'is_zeroconf', True)
-            app.config.set_per('accounts', app.ZEROCONF_ACC_NAME,
-                    'use_ft_proxies', False)
         self.host = socket.gethostname()
         app.config.set_per('accounts', app.ZEROCONF_ACC_NAME, 'hostname',
                 self.host)
