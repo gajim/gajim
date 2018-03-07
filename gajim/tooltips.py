@@ -541,6 +541,9 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self.avatar.set_from_surface(surface)
         self.avatar.show()
 
+        app.plugin_manager.gui_extension_point(
+            'roster_tooltip_populate', self, contacts, self.tooltip_grid)
+
         # Sets the Widget that is at the bottom to expand.
         # This is needed in case the Picture takes more Space then the Labels
         i = 1
