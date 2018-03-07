@@ -230,7 +230,7 @@ class PassphraseDialog:
     Class for Passphrase dialog
     """
     def __init__(self, titletext, labeltext, checkbuttontext=None,
-    ok_handler=None, cancel_handler=None):
+    ok_handler=None, cancel_handler=None, transient_for=None):
         self.xml = gtkgui_helpers.get_gtk_builder('passphrase_dialog.ui')
         self.window = self.xml.get_object('passphrase_dialog')
         self.passphrase_entry = self.xml.get_object('passphrase_entry')
@@ -248,7 +248,9 @@ class PassphraseDialog:
         cancelbutton.connect('clicked', self.on_cancelbutton_clicked)
 
         self.xml.connect_signals(self)
-        self.window.set_transient_for(app.interface.roster.window)
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        self.window.set_transient_for(transient_for)
         self.window.show_all()
 
         self.check = bool(checkbuttontext)
@@ -1856,15 +1858,13 @@ class ConfirmationDialogDoubleRadio(ConfirmationDialog):
     """
 
     def __init__(self, pritext, sectext='', radiotext1='', radiotext2='',
-    on_response_ok=None, on_response_cancel=None, is_modal=True):
+    on_response_ok=None, on_response_cancel=None, is_modal=True, transient_for=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
 
-        if hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.QUESTION,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
                 Gtk.ButtonsType.OK_CANCEL, pritext, sectext, self.on_response_ok,
                 self.on_response_cancel)
 
