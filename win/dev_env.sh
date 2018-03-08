@@ -22,6 +22,7 @@ function main {
 pyasn1
 certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://dev.gajim.org/lovetox/pybonjour-python3.git 
 protobuf
 git+https://github.com/dlitz/pycrypto.git
 cryptography
