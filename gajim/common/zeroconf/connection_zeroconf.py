@@ -64,6 +64,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         # we don't need a password, but must be non-empty
         self.password = 'zeroconf'
         self.autoconnect = False
+        self.httpupload = False
 
         CommonConnection.__init__(self, name)
         self.is_zeroconf = True
