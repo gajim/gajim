@@ -2573,7 +2573,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
                                          self._nec_agent_info_error_received)
 
     def _on_search_clicked(self, widget):
-        server = self.server_combo.get_active_text()
+        server = self.server_combo.get_active_text().strip()
         self.requested_jid = server
         app.connections[self.account].discoverInfo(server)
 
