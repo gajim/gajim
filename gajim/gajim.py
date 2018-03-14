@@ -67,8 +67,7 @@ class GajimApplication(Gtk.Application):
         Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
                                  flags=(
                                     Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
-                                    Gio.ApplicationFlags.HANDLES_OPEN |
-                                    Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID))
+                                    Gio.ApplicationFlags.HANDLES_OPEN))
 
         self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
