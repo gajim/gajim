@@ -1,5 +1,6 @@
-Gajim 1.0.0 (05 March 2018)
+Gajim 1.0.0 (15 March 2018)
   
+  * Add support for geo: URIs
   * More improvements for HiDPI Screens
   * Fixed various MAM related issues
   * Various other small bugfixes
