@@ -227,7 +227,7 @@ class Interface:
         path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
         account = obj.conn.name
         notify.popup(_('Connection Failed'), account, account,
-            '', path, obj.title, obj.msg)
+            'connection-lost', path, obj.title, obj.msg)
 
     @staticmethod
     def unblock_signed_in_notifications(account):
@@ -1684,6 +1684,10 @@ class Interface:
 
         resource = app.get_resource_from_jid(fjid)
         jid = app.get_jid_without_resource(fjid)
+
+        if type_ == 'connection-lost':
+            app.interface.roster.window.present()
+            return
 
         if type_ in ('printed_gc_msg', 'printed_marked_gc_msg', 'gc_msg'):
             w = self.msg_win_mgr.get_window(jid, account)
