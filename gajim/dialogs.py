@@ -3179,7 +3179,7 @@ class PopupNotificationWindow:
         window_width, self.window_height = self.window.get_size()
         app.interface.roster.popups_notification_height += self.window_height
         pos_x = app.config.get('notification_position_x')
-        screen_w, screen_h = gtkgui_helpers.get_display_geometry()
+        screen_w, screen_h = gtkgui_helpers.get_total_screen_geometry()
         if pos_x < 0:
             pos_x = screen_w - window_width + pos_x + 1
         pos_y = app.config.get('notification_position_y')
@@ -3216,7 +3216,7 @@ class PopupNotificationWindow:
             current_index += 1
             window_width, window_height = window_instance.window.get_size()
             app.interface.roster.popups_notification_height += window_height
-            screen_w, screen_h = gtkgui_helpers.get_display_geometry()
+            screen_w, screen_h = gtkgui_helpers.get_total_screen_geometry()
             window_instance.window.move(screen_w - window_width,
                 screen_h - \
                 app.interface.roster.popups_notification_height)
