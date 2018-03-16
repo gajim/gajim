@@ -100,11 +100,10 @@ if os.name == 'nt':
 
 from gajim.common import helpers
 
-def get_display_geometry():
-    display = Gdk.Display.get_default()
-    monitor = display.get_monitor(0)
-    geometry = monitor.get_geometry()
-    return geometry.width, geometry.height
+def get_total_screen_geometry():
+    screen = Gdk.Screen.get_default()
+    window = Gdk.Screen.get_root_window(screen)
+    return window.get_width(), window.get_height()
 
 def add_image_to_button(button, icon_name):
     img = Gtk.Image()
@@ -175,7 +174,7 @@ def move_window(window, x, y):
     """
     Move the window, but also check if out of screen
     """
-    screen_w, screen_h = get_display_geometry()
+    screen_w, screen_h = get_total_screen_geometry()
     if x < 0:
         x = 0
     if y < 0:
@@ -191,7 +190,7 @@ def resize_window(window, w, h):
     """
     Resize window, but also checks if huge window or negative values
     """
-    screen_w, screen_h = get_display_geometry()
+    screen_w, screen_h = get_total_screen_geometry()
     if not w or not h:
         return
     if w > screen_w:
