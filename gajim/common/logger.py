@@ -1104,8 +1104,12 @@ class Logger:
 
         :param account_jid:     The jid of the account
         """
-
-        jid_id = self.get_jid_id(account_jid)
+        try:
+            jid_id = self.get_jid_id(account_jid)
+        except ValueError:
+            # This happens if the JID never made it to the Database
+            # because the account was never connected
+            return
 
         sql = '''
             DELETE FROM roster_entry WHERE account_jid_id = {jid_id};
