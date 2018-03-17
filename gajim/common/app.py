@@ -228,7 +228,8 @@ try:
         session = conference.new_session(Farstream.MediaType.AUDIO)
         del session
         del conference
-    except GLib.GError:
+    except Exception as e:
+        glog.info(e)
         HAVE_FARSTREAM = False
 
 except (ImportError, ValueError):
