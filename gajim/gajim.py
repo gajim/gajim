@@ -56,7 +56,7 @@ from gajim.common import i18n
 from gajim.common import logging_helpers
 from gajim.common import crypto
 
-MIN_NBXMPP_VER = "0.6.3"
+MIN_NBXMPP_VER = "0.6.4"
 MIN_GTK_VER = "3.20.0"
 
 
