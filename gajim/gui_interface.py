@@ -1154,20 +1154,22 @@ class Interface:
             action=Gtk.FileChooserAction.OPEN,
             buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                      Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
+            select_multiple=True,
             default_response=Gtk.ResponseType.OK,
             transient_for=chat_control.parent_win.window)
 
     @staticmethod
     def on_file_dialog_ok(widget, chat_control):
-        path = widget.get_filename()
+        paths = widget.get_filenames()
         widget.destroy()
         con = app.connections[chat_control.account]
         groupchat = chat_control.type_id == message_control.TYPE_GC
-        con.check_file_before_transfer(path,
-                                       chat_control.encryption,
-                                       chat_control.contact,
-                                       chat_control.session,
-                                       groupchat)
+        for path in paths:
+            con.check_file_before_transfer(path,
+                                           chat_control.encryption,
+                                           chat_control.contact,
+                                           chat_control.session,
+                                           groupchat)
 
     def encrypt_file(self, file, callback):
         app.nec.push_incoming_event(HTTPUploadProgressEvent(
