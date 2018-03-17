@@ -1,33 +1,10 @@
-Gajim 1.0.0 (15 March 2018)
-  
-  * Add support for geo: URIs
-  * More improvements for HiDPI Screens
-  * Fixed various MAM related issues
-  * Various other small bugfixes
-
-Gajim 0.99.2 (17 February 2018)
-  
-  * Speed up DB querys on MAM sync
-  * Fix config file encoding
-  * Bug fixes
-
-Gajim 0.99.1 (08 February 2018)
-  
-  * Integrate HTTPUpload
-  * Add Navigation buttons in History Window
-  * Added XEP-0368 (SRV records for XMPP over TLS)
-  * Improvements for HiDPI Screens
-  * Move Chat Menu button so we are not forced to use CSD
-  * Depend on the python keyring package for password storage
-  * Bug fixes
-
-Gajim 0.98.2 (17 December 2017)
-
-  * Fix DB migration
-
-Gajim 0.98.1 (15 December 2017)
+Gajim 1.0.0 (17 March 2018)
 
   * Ported to GTK3 / Python3
+  * Integrate HTTPUpload
+  * Add Navigation buttons in History Window
+  * Improvements for HiDPI Screens
+  * Depend on the python keyring package for password storage
   * Flatpak support
   * Lots of refactoring
   * New Emoji support
@@ -40,14 +17,22 @@ Gajim 0.98.1 (15 December 2017)
   * Added mam:1 and mam:2 support (mam:0 was removed)
   * Added MAM for MUCs support
   * Added support for showing XEP-0084 Avatars
+  * Add support for geo: URIs
   * Added xmpp URI handling directly in Gajim
   * Removed Gajim-Remote
   * Removed XEP-0012 (Last Activity)
   * Removed XEP-0136 (Message Archiving)
   * Added XEP-0156 (Discovering Alternative XMPP Connection Methods)
   * Added XEP-0319 (Last User Interaction in Presence)
+  * Added XEP-0368 (SRV records for XMPP over TLS)
   * Added XEP-0380 (Explicit Message Encryption)
   * Added Jingle FT:5 support
+  * Lots of other small bugfixes
+
+  KNOWN ISSUES: 
+
+    - Meta Contacts: Filtering the roster could lead to a crash in some circumstances. Use CTRL + N for starting new chats as a workaround
+    - Audio/Video support is currently not maintained and most likely not working
 
 Gajim 0.16.9 (30 November 2017)
 
