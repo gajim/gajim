@@ -106,6 +106,8 @@ class GajimApplication(Gtk.Application):
                              GLib.OptionArg.NONE,
                              _('Start a new chat'))
 
+        self.add_main_option_entries(self._get_remaining_entry())
+
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._handle_remote_options)
         self.connect('startup', self._startup)
@@ -119,6 +121,17 @@ class GajimApplication(Gtk.Application):
         GLib.set_prgname('gajim')
         if GLib.get_application_name() != 'Gajim':
             GLib.set_application_name('Gajim')
+
+    @staticmethod
+    def _get_remaining_entry():
+        option = GLib.OptionEntry()
+        option.arg = GLib.OptionArg.STRING_ARRAY
+        option.arg_data = None
+        option.arg_description = ('[URI …]')
+        option.flags = GLib.OptionFlags.NONE
+        option.long_name = GLib.OPTION_REMAINING
+        option.short_name = 0
+        return [option]
 
     def _startup(self, application):
         from gajim import gtkexcepthook
@@ -312,24 +325,20 @@ class GajimApplication(Gtk.Application):
                            'start-chat',
                           ]
 
+        remaining = options.lookup_value(GLib.OPTION_REMAINING,
+                                         GLib.VariantType.new('as'))
+
         for cmd in remote_commands:
             if options.contains(cmd):
                 self.activate_action(cmd)
                 return 0
 
-        uri = self._parse_uris(command_line)
-        if uri is not None:
-            self._open_uris(uri)
+        if remaining is not None:
+            self._open_uris(remaining.unpack())
             return 0
 
         self.activate()
         return 0
-
-    @staticmethod
-    def _parse_uris(command_line):
-        args = command_line.get_arguments()
-        if len(args) > 1:
-            return args[1:]
 
     def _handle_local_options(self, application,
                               options: GLib.VariantDict) -> int:
