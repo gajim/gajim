@@ -642,10 +642,12 @@ def get_pep_as_pixbuf(pep_class):
     return None
 
 def get_iconset_name_for(name):
+    if name == 'not in roster':
+        name = 'notinroster'
     iconset = app.config.get('iconset')
     if not iconset:
-        return '-'.join([app.config.DEFAULT_ICONSET, name])
-    return '-'.join([iconset, name])
+        iconset = app.config.DEFAULT_ICONSET
+    return '%s-%s' % (iconset, name)
 
 def load_icons_meta():
     """
