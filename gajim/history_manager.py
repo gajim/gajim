@@ -225,16 +225,19 @@ class HistoryManager:
 
     def on_history_manager_window_delete_event(self, widget, event):
         if not self.AT_LEAST_ONE_DELETION_DONE:
-            Gtk.main_quit()
+            if __name__ == '__main__':
+                Gtk.main_quit()
             return
 
         def on_yes(clicked):
             self.cur.execute('VACUUM')
             self.con.commit()
-            Gtk.main_quit()
+            if __name__ == '__main__':
+                Gtk.main_quit()
 
         def on_no():
-            Gtk.main_quit()
+            if __name__ == '__main__':
+                Gtk.main_quit()
 
         dialog = dialogs.YesNoDialog(
             _('Do you want to clean up the database? '
