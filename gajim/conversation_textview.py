@@ -171,10 +171,6 @@ class ConversationTextview(GObject.GObject):
     MESSAGE_ENCRYPTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
         'channel-secure-croped-symbolic')
 
-    # smooth scroll constants
-    MAX_SCROLL_TIME = 0.4 # seconds
-    SCROLL_DELAY = 33 # milliseconds
-
     def __init__(self, account, used_in_history_window = False):
         """
         If used_in_history_window is True, then we do not show Clear menuitem in
