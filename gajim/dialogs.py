@@ -34,6 +34,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import Pango
 
 import os
 import nbxmpp
@@ -3023,6 +3024,9 @@ class ContactRow(Gtk.Grid):
                 self.name = _('New Contact')
 
         self.name_label = Gtk.Label(self.name)
+        self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self.name_label.set_xalign(0)
+        self.name_label.set_width_chars(25)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold16')
 
@@ -3033,6 +3037,9 @@ class ContactRow(Gtk.Grid):
         middle_box.add(self.name_label)
 
         self.jid_label = Gtk.Label(jid)
+        self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self.jid_label.set_xalign(0)
+        self.jid_label.set_width_chars(25)
         self.jid_label.set_halign(Gtk.Align.START)
         middle_box.add(self.jid_label)
 
