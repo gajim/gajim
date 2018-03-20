@@ -292,16 +292,10 @@ class MessageWindow(object):
         self._controls[control.account][fjid] = control
 
         if self.get_num_controls() == 2:
-            # is first conversation_textview scrolled down ?
-            scrolled = False
             first_widget = self.notebook.get_nth_page(0)
             ctrl = self._widget_to_control(first_widget)
-            conv_textview = ctrl.conv_textview
-            if conv_textview.at_the_end():
-                scrolled = True
             self.notebook.set_show_tabs(True)
-            if scrolled:
-                GLib.idle_add(conv_textview.scroll_to_end_iter)
+            ctrl.scroll_to_end()
 
         # Add notebook page and connect up to the tab's close button
         xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')

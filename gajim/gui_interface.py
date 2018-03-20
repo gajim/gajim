@@ -1814,8 +1814,8 @@ class Interface:
             w.window.present()
             # Using isinstance here because we want to catch all derived types
             if isinstance(ctrl, ChatControlBase):
-                tv = ctrl.conv_textview
-                tv.scroll_to_end_iter()
+                ctrl.scroll_to_end()
+
 
     def join_gc_minimal(self, account, room_jid, password=None):
         if account is not None:

@@ -305,13 +305,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             'conversation_scrolledwindow')
         self.conv_scrolledwindow.add(self.conv_textview.tv)
         widget = self.conv_scrolledwindow.get_vadjustment()
-        id_ = widget.connect('value-changed',
-            self.on_conversation_vadjustment_value_changed)
-        self.handlers[id_] = widget
         id_ = widget.connect('changed',
             self.on_conversation_vadjustment_changed)
         self.handlers[id_] = widget
-        self.was_at_the_end = True
         self.correcting = False
         self.last_sent_msg = None
 
@@ -965,7 +961,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         full_jid = self.get_full_jid()
         textview = self.conv_textview
         end = False
-        if self.was_at_the_end or kind == 'outgoing':
+        if self.conv_textview.autoscroll or kind == 'outgoing':
             end = True
 
         if other_tags_for_name is None:
@@ -1201,7 +1197,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if state:
             self.set_emoticon_popover()
             jid = self.contact.jid
-            if self.was_at_the_end:
+            if self.conv_textview.autoscroll:
                 # we are at the end
                 type_ = ['printed_' + self.type_id]
                 if self.type_id == message_control.TYPE_GC:
@@ -1221,21 +1217,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else:
             self.send_chatstate('inactive', self.contact)
 
-    def scroll_to_end_iter(self):
-        self.conv_textview.scroll_to_end_iter()
-        return False
+    def scroll_to_end(self, force=False):
+        self.conv_textview.scroll_to_end(force)
 
-    def on_conversation_vadjustment_changed(self, adjustment):
-        # used to stay at the end of the textview when we shrink conversation
-        # textview.
-        if self.was_at_the_end:
-            self.scroll_to_end_iter()
-        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value()\
-            - adjustment.get_page_size()) < 18
-
-    def on_conversation_vadjustment_value_changed(self, adjustment):
-        self.was_at_the_end = (adjustment.get_upper() - adjustment.get_value() \
-            - adjustment.get_page_size()) < 18
+    def _on_edge_reached(self, scrolledwindow, pos):
+        if pos != Gtk.PositionType.BOTTOM:
+            return
+        # Remove all events and set autoscroll True
+        self.conv_textview.autoscroll = True
         if self.resource:
             jid = self.contact.get_full_jid()
         else:
@@ -1252,8 +1241,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         if not self.parent_win:
             return
-        if self.conv_textview.at_the_end() and \
-        self.parent_win.get_active_control() == self and \
+        if self.parent_win.get_active_control() == self and \
         self.parent_win.window.is_active():
             # we are at the end
             if self.type_id == message_control.TYPE_GC:
@@ -1263,6 +1251,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             elif self.session and self.session.remove_events(types_list):
                 # There were events to remove
                 self.redraw_after_event_removed(jid)
+
+    def _on_scroll(self, widget, event):
+        # On scrolliung UP disable autoscroll
+        has_direction, direction = event.get_scroll_direction()
+        if has_direction and direction == Gdk.ScrollDirection.UP:
+            # Check if we have a Scrollbar
+            adjustment = self.conv_scrolledwindow.get_vadjustment()
+            if adjustment.get_upper() != adjustment.get_page_size():
+                self.conv_textview.autoscroll = False
+
+    def on_conversation_vadjustment_changed(self, adjustment):
+        self.scroll_to_end()
 
     def redraw_after_event_removed(self, jid):
         """
@@ -1344,7 +1344,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         # make the last message visible, when changing to "full view"
         if not state:
-            GLib.idle_add(self.conv_textview.scroll_to_end_iter)
+            self.scroll_to_end()
 
         widget.set_no_show_all(state)
         if state:
