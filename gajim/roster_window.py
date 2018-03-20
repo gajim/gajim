@@ -2723,7 +2723,7 @@ class RosterWindow:
                 xep0184_id=xep0184_id, additional_data=obj.additional_data)
             if obj.msg_log_id:
                 pw = obj.session.control.parent_win
-                end = obj.session.control.was_at_the_end
+                end = obj.session.control.conv_textview.autoscroll
                 if not pw or (pw.get_active_control() and obj.session.control \
                 == pw.get_active_control() and pw.is_active() and end):
                     app.logger.set_read_messages([obj.msg_log_id])

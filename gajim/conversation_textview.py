@@ -206,7 +206,7 @@ class ConversationTextview(GObject.GObject):
         self.last_sent_message_id = None
         # last_received_message_id[name] = (msg_stanza_id, line_start_mark)
         self.last_received_message_id = {}
-
+        self.autoscroll = True
         # connect signals
         id_ = self.tv.connect('populate_popup', self.on_textview_populate_popup)
         self.handlers[id_] = self.tv
@@ -370,16 +370,9 @@ class ConversationTextview(GObject.GObject):
         self.tv.tagXMPP.set_property('foreground', color)
         self.tv.tagSthAtSth.set_property('foreground', color)
 
-    def at_the_end(self):
-        return gtkgui_helpers.at_the_end(self.tv.get_parent())
-
-    def scroll_to_end_iter(self):
-        buffer_ = self.tv.get_buffer()
-        end_iter = buffer_.get_end_iter()
-        if not end_iter:
-            return False
-        self.tv.scroll_to_iter(end_iter, 0, False, 1, 1)
-        return False # when called in an idle_add, just do it once
+    def scroll_to_end(self, force=False):
+        if self.autoscroll or force:
+            gtkgui_helpers.scroll_to_end(self.tv.get_parent())
 
     def correct_message(self, correct_id, kind, name):
         allowed = True
@@ -449,7 +442,7 @@ class ConversationTextview(GObject.GObject):
         buffer_.end_user_action()
         del self.xep0184_marks[id_]
 
-    def show_focus_out_line(self, scroll=True):
+    def show_focus_out_line(self):
         if not self.allow_focus_out_line:
             # if room did not receive focus-in from the last time we added
             # --- line then do not readd
@@ -505,11 +498,7 @@ class ConversationTextview(GObject.GObject):
                     buffer_.get_end_iter(), left_gravity=True)
 
             buffer_.end_user_action()
-
-            if scroll:
-                # scroll to the end (via idle in case the scrollbar has
-                # appeared)
-                GLib.idle_add(self.scroll_to_end_iter)
+            self.scroll_to_end()
 
     def clear(self, tv = None):
         """
@@ -1231,9 +1220,9 @@ class ConversationTextview(GObject.GObject):
             self.last_sent_message_id = (msg_stanza_id, new_mark)
 
         if not insert_mark:
-            if self.at_the_end() or kind == 'outgoing':
+            if self.autoscroll or kind == 'outgoing':
                 # we are at the end or we are sending something
-                GLib.idle_add(self.scroll_to_end_iter)
+                self.scroll_to_end(force=True)
 
         self.just_cleared = False
         buffer_.end_user_action()

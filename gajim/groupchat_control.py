@@ -1380,8 +1380,7 @@ class GroupchatControl(ChatControlBase):
             # we have full focus (we are reading it!)
             return
 
-        at_the_end = self.conv_textview.at_the_end()
-        self.conv_textview.show_focus_out_line(scroll=at_the_end)
+        self.conv_textview.show_focus_out_line()
 
     def needs_visual_notification(self, text):
         """
