@@ -293,6 +293,14 @@ function cleanup_install {
 
 }
 
+function move_ssl_libs {
+    # Pythons ssl module searches in that path for these dlls, if they are not there
+    # C:/Windows/system32 is searcherd and potentially wrong versioned dlls are found there
+    cp "${MINGW_ROOT}"/bin/libeay32.dll "${MINGW_ROOT}"/lib/python3.6/lib-dynload/libeay32.dll
+    cp "${MINGW_ROOT}"/bin/ssleay32.dll "${MINGW_ROOT}"/lib/python3.6/lib-dynload/ssleay32.dll
+
+}
+
 function build_installer {
     (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" "${MISC}"/gajim.nsi)
     (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" "${MISC}"/gajim-portable.nsi)

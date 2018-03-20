@@ -17,6 +17,7 @@ function main {
     install_deps
     install_gajim "$GIT_TAG"
     cleanup_install
+    move_ssl_libs
     build_installer
 }
 
