@@ -33,6 +33,7 @@ Gajim 1.0.0 (17 March 2018)
 
     - Meta Contacts: Filtering the roster could lead to a crash in some circumstances. Use CTRL + N for starting new chats as a workaround
     - Audio/Video support is currently not maintained and most likely not working
+    - Windows: Translation is not working currently
 
 Gajim 0.16.9 (30 November 2017)
 
