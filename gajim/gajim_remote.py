@@ -480,8 +480,7 @@ class GajimRemote:
         """
         Calls self.method with arguments from sys.argv[2:]
         """
-        args = [i.decode(PREFERRED_ENCODING) for i in self.arguments]
-        args = [dbus.String(i) for i in args]
+        args = [dbus.String(i) for i in self.arguments]
         try:
             res = self.method(*args)
             return res
