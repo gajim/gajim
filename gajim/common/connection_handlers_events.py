@@ -1080,12 +1080,14 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
         if delay is None:
             log.error('Received MAM message without timestamp')
+            log.error(self.stanza)
             return
 
         self.timestamp = helpers.parse_datetime(
             delay, check_utc=True, epoch=True)
         if self.timestamp is None:
             log.error('Received MAM message with invalid timestamp: %s', delay)
+            log.error(self.stanza)
             return
 
         # Save timestamp added by the user
@@ -1097,6 +1099,7 @@ class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if self.user_timestamp is None:
                 log.warning('Received MAM message with '
                             'invalid user timestamp: %s', user_delay)
+                log.warning(self.stanza)
 
         log.debug('Received mam-message: unique id: %s', self.unique_id)
         return True
@@ -1175,12 +1178,14 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
         if delay is None:
             log.error('Received MAM message without timestamp')
+            log.error(self.stanza)
             return
 
         self.timestamp = helpers.parse_datetime(
             delay, check_utc=True, epoch=True)
         if self.timestamp is None:
             log.error('Received MAM message with invalid timestamp: %s', delay)
+            log.error(self.stanza)
             return
 
         # Save timestamp added by the user
@@ -1192,6 +1197,7 @@ class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if self.user_timestamp is None:
                 log.warning('Received MAM message with '
                             'invalid user timestamp: %s', user_delay)
+                log.warning(self.stanza)
 
         log.debug('Received mam-gc-message: unique id: %s', self.unique_id)
         return True
@@ -1227,6 +1233,7 @@ class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 # run into an endless loop
                 if hasattr(self, 'disco'):
                     log.error('JID not known even after sucessful disco')
+                    log.error(self.with_.getStripped())
                     return
                 # we don't know this JID, we need to disco it.
                 server = self.with_.getDomain()
