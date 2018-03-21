@@ -349,6 +349,7 @@ class FileTransfersWindow:
                 app.config.get('last_send_dir'),
                 on_response_ok=on_ok,
                 on_response_cancel=lambda e:dialog.destroy(),
+                preview=True,
                 transient_for=app.interface.roster.window
                 )
 

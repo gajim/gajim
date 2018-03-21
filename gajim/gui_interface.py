@@ -1156,6 +1156,7 @@ class Interface:
                      Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
             select_multiple=True,
             default_response=Gtk.ResponseType.OK,
+            preview=True,
             transient_for=chat_control.parent_win.window)
 
     @staticmethod

@@ -1441,7 +1441,7 @@ class FileChooserDialog(Gtk.FileChooserDialog):
     """
     def __init__(self, title_text, action, buttons, default_response,
     select_multiple=False, current_folder=None, on_response_ok=None,
-    on_response_cancel=None, transient_for=None):
+    on_response_cancel=None, preview=False, transient_for=None):
 
         Gtk.FileChooserDialog.__init__(self, title=title_text,
             parent=transient_for, action=action)
@@ -1459,6 +1459,12 @@ class FileChooserDialog(Gtk.FileChooserDialog):
         # in gtk+-2.10 clicked signal on some of the buttons in a dialog
         # is emitted twice, so we cannot rely on 'clicked' signal
         self.connect('response', self.on_dialog_response)
+
+        if preview:
+            self.set_use_preview_label(False)
+            self.set_preview_widget(Gtk.Image())
+            self.connect('selection-changed', self.update_preview)
+
         self.show_all()
 
     def on_dialog_response(self, dialog, response):
@@ -1478,6 +1484,21 @@ class FileChooserDialog(Gtk.FileChooserDialog):
                     self.response_ok(dialog)
             else:
                 self.just_destroy(dialog)
+
+    def update_preview(self, widget):
+        path_to_file = widget.get_preview_filename()
+        preview = widget.get_preview_widget()
+        if path_to_file is None or os.path.isdir(path_to_file):
+            # nothing to preview or directory
+            # make sure you clean image do show nothing
+            preview.clear()
+            return
+        try:
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(path_to_file, 200, 200)
+        except GObject.GError:
+            preview.clear()
+            return
+        widget.get_preview_widget().set_from_pixbuf(pixbuf)
 
     def just_destroy(self, widget):
         self.destroy()
