@@ -320,18 +320,23 @@ class GroupchatControl(ChatControlBase):
         # Keep error dialog instance to be sure to have only once at a time
         self.error_dialog = None
 
+        # Source id for saving the handle position
+        self._handle_timeout_id = None
+
         self.emoticons_button = self.xml.get_object('emoticons_button')
         self.toggle_emoticons()
 
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
+        self._state_change_handler_id = None
         if parent_win is not None:
             # On AutoJoin with minimize Groupchats are created without parent
             # Tooltip Window and Actions have to be created with parent
             self.set_tooltip()
             self.add_actions()
             self.scale_factor = parent_win.window.get_scale_factor()
+            self._connect_window_state_change(parent_win)
         else:
             self.scale_factor = app.interface.roster.scale_factor
 
@@ -400,17 +405,12 @@ class GroupchatControl(ChatControlBase):
         id_ = self.list_treeview.connect('style-set',
             self.on_list_treeview_style_set)
         self.handlers[id_] = self.list_treeview
-        self.resize_from_another_muc = False
-        # we want to know when the the widget resizes, because that is
-        # an indication that the hpaned has moved...
-        self.hpaned = self.xml.get_object('hpaned')
-        id_ = self.hpaned.connect('notify', self.on_hpaned_notify)
-        self.handlers[id_] = self.hpaned
 
-        if app.config.get('hide_groupchat_occupants_list'):
-            # Hide the roster by default
-            self.hpaned.get_child2().set_no_show_all(True)
-            self.hpaned.get_child2().hide()
+        # flag that stops hpaned position event
+        # when the handle gets resized in another control
+        self._resize_from_another_muc = False
+
+        self.hpaned = self.xml.get_object('hpaned')
 
         # set the position of the current hpaned
         hpaned_position = app.config.get('gc-hpaned-position')
@@ -490,7 +490,7 @@ class GroupchatControl(ChatControlBase):
         # Banner
         self.banner_actionbar = self.xml.get_object('banner_actionbar')
         self.hide_roster_button = Gtk.Button.new_from_icon_name(
-            'go-previous-symbolic', Gtk.IconSize.MENU)
+            'go-next-symbolic', Gtk.IconSize.MENU)
         self.hide_roster_button.connect('clicked',
                                         lambda *args: self.show_roster())
         self.subject_button = Gtk.MenuButton()
@@ -534,6 +534,11 @@ class GroupchatControl(ChatControlBase):
 
         self.update_ui()
         self.widget.show_all()
+
+        if app.config.get('hide_groupchat_occupants_list'):
+            # Roster is shown by default, so toggle the roster button to hide it
+            self.show_roster()
+
         # PluginSystem: adding GUI extension point for this GroupchatControl
         # instance object
         app.plugin_manager.gui_extension_point('groupchat_control', self)
@@ -635,6 +640,13 @@ class GroupchatControl(ChatControlBase):
         else:
             tooltip_text = _('No File Transfer available')
         self.sendfile_button.set_tooltip_text(tooltip_text)
+
+
+    def _connect_window_state_change(self, parent_win):
+        if self._state_change_handler_id is None:
+            id_ = parent_win.window.connect('notify::is-maximized',
+                                            self._on_window_state_change)
+            self._state_change_handler_id = id_
 
     # Actions
 
@@ -756,6 +768,7 @@ class GroupchatControl(ChatControlBase):
         self.update_actions()
         self.set_lock_image()
         self._schedule_activity_timers()
+        self._connect_window_state_change(self.parent_win)
 
     def set_tooltip(self):
         widget = self.xml.get_object('list_treeview')
@@ -875,27 +888,37 @@ class GroupchatControl(ChatControlBase):
         menu.show_all()
 
     def resize_occupant_treeview(self, position):
-        self.resize_from_another_muc = True
+        if self.hpaned.get_position() == position:
+            return
+        self._resize_from_another_muc = True
         self.hpaned.set_position(position)
-        def reset_flag():
-            self.resize_from_another_muc = False
+        def _reset_flag():
+            self._resize_from_another_muc = False
         # Reset the flag when everything will be redrawn, and in particular when
         # on_treeview_size_allocate will have been called.
-        GLib.idle_add(reset_flag)
+        GLib.timeout_add(500, _reset_flag)
 
-    def on_hpaned_notify(self, pane, gparamspec):
-        """
-        The MUC treeview has resized. Move the hpaned in all tabs to match
-        """
-       # print pane, dir(pane)
-        #if gparamspec.name != 'position':
-            #return
-        if self.resize_from_another_muc:
-            # Don't send the event to other MUC
+    def _on_window_state_change(self, win, param):
+        # Add with timeout, because state change happens before
+        # the hpaned notifys us about a new handle position
+        GLib.timeout_add(100, self._check_for_resize)
+
+    def _on_hpaned_release_button(self, hpaned, event):
+        if event.get_button()[1] != 1:
+            # We want only to catch the left mouse button
+            return
+        self._check_for_resize()
+
+    def _check_for_resize(self):
+        # Check if we have a new position
+        pos = self.hpaned.get_position()
+        if pos == app.config.get('gc-hpaned-position'):
             return
 
-        hpaned_position = self.hpaned.get_position()
-        app.config.set('gc-hpaned-position', hpaned_position)
+        # Save new position
+        self._remove_handle_timeout()
+        app.config.set('gc-hpaned-position', pos)
+        # Resize other MUC rosters
         for account in app.gc_connected:
             for room_jid in [i for i in app.gc_connected[account] if \
             app.gc_connected[account][i] and i != self.room_jid]:
@@ -905,7 +928,28 @@ class GroupchatControl(ChatControlBase):
                 app.interface.minimized_controls[account]:
                     ctrl = app.interface.minimized_controls[account][room_jid]
                 if ctrl and app.config.get('one_message_window') != 'never':
-                    ctrl.resize_occupant_treeview(hpaned_position)
+                    ctrl.resize_occupant_treeview(pos)
+
+    def _on_hpaned_handle_change(self, hpaned, param):
+        if self._resize_from_another_muc:
+            return
+        # Window was resized, save new handle pos
+        pos = hpaned.get_position()
+        if pos != app.config.get('gc-hpaned-position'):
+            self._remove_handle_timeout(renew=True)
+
+    def _remove_handle_timeout(self, renew=False):
+        if self._handle_timeout_id is not None:
+            GLib.source_remove(self._handle_timeout_id)
+            self._handle_timeout_id = None
+        if renew:
+            pos = self.hpaned.get_position()
+            self._handle_timeout_id = GLib.timeout_add_seconds(
+                2, self._save_handle_position, pos)
+
+    def _save_handle_position(self, pos):
+        self._handle_timeout_id = None
+        app.config.set('gc-hpaned-position', pos)
 
     def iter_contact_rows(self):
         """
