@@ -95,7 +95,8 @@
             <property name="can_focus">True</property>
             <property name="position">495</property>
             <property name="position_set">True</property>
-            <signal name="notify" handler="on_hpaned_notify" swapped="no"/>
+            <signal name="button-release-event" handler="_on_hpaned_release_button" swapped="no"/>
+            <signal name="notify::position" handler="_on_hpaned_handle_change" swapped="no"/>
             <child>
               <object class="GtkBox" id="gc_textviews_vbox">
                 <property name="width_request">0</property>
@@ -396,7 +397,7 @@
                 </child>
               </object>
               <packing>
-                <property name="resize">False</property>
+                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
@@ -405,6 +406,7 @@
                 <property name="width_request">100</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="no_show_all">True</property>
                 <property name="margin_left">4</property>
                 <property name="margin_bottom">5</property>
                 <property name="hscrollbar_policy">never</property>
