@@ -71,6 +71,9 @@ from gajim.gtkgui_helpers import get_action
 if app.HAVE_PYOPENSSL:
     import OpenSSL.crypto
 
+if os.name == 'nt':
+    import certifi
+
 from nbxmpp import Smacks
 from string import Template
 import logging
@@ -1210,9 +1213,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._current_type = self._current_host['type']
 
         port = self._current_host['port']
-        cacerts = os.path.join(common.app.DATA_DIR, 'other', 'cacerts.pem')
-        if not os.path.exists(cacerts):
-            cacerts = ''
+
+        cacerts = ''
+        if os.name == 'nt':
+            cacerts = certifi.where()
         mycerts = common.app.MY_CACERTS
         tls_version = app.config.get_per('accounts', self.name,
             'tls_version')
