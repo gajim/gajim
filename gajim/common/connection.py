@@ -1218,17 +1218,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         if os.name == 'nt':
             cacerts = certifi.where()
         mycerts = common.app.MY_CACERTS
-        tls_version = app.config.get_per('accounts', self.name,
-            'tls_version')
-        cipher_list = app.config.get_per('accounts', self.name,
-            'cipher_list')
+        tls_version = app.config.get_per('accounts', self.name, 'tls_version')
+        cipher_list = app.config.get_per('accounts', self.name, 'cipher_list')
 
-        if version_condition(nbxmpp.__version__, '0.6.3'):
-            secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
-                            cipher_list, self._current_host['alpn'])
-        else:
-            secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
-                            cipher_list)
+        secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
+                        cipher_list, self._current_host['alpn'])
 
         con = nbxmpp.NonBlockingClient(
             domain=self._hostname,
