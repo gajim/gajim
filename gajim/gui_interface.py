@@ -265,7 +265,6 @@ class Interface:
             self.show_vcard_when_connect.remove(account)
 
     def edit_own_details(self, account):
-        jid = app.get_jid_from_account(account)
         if 'profile' not in self.instances[account]:
             self.instances[account]['profile'] = \
             profile_window.ProfileWindow(account, app.interface.roster.window)
