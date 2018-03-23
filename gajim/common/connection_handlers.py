@@ -511,6 +511,7 @@ class ConnectionVcard:
                             'not-allowed'):
             app.log('avatar').info('vCard not available: %s %s',
                                    frm_jid, stanza_error)
+            callback(jid, resource, room, {})
             return
 
         vcard_node = stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD)
