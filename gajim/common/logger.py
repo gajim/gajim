@@ -525,7 +525,7 @@ class Logger:
                     ''' % msg_log_id
                     )
             results = self.cur.fetchone()
-            if len(results) == 0:
+            if results is None:
                 # Log line is no more in logs table. remove it from unread_messages
                 self.set_read_messages([msg_log_id])
                 continue
