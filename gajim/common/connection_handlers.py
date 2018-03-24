@@ -1067,9 +1067,17 @@ class ConnectionHandlersBase:
                 conn=self, msg_obj=obj, stanza_id=obj.unique_id))
             return True
 
+    def _check_for_mam_compliance(self, room_jid, stanza_id):
+        namespace = muc_caps_cache.get_mam_namespace(room_jid)
+        if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
+            helpers.add_to_mam_blacklist(room_jid)
+
     def _nec_gc_message_received(self, obj):
         if obj.conn.name != self.name:
             return
+
+        self._check_for_mam_compliance(obj.jid, obj.unique_id)
+
         if (app.config.should_log(obj.conn.name, obj.jid) and
                 obj.msgtxt and obj.nick):
             # if not obj.nick, it means message comes from room itself

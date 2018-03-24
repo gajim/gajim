@@ -1626,3 +1626,21 @@ def get_emoticon_theme_path(theme):
     emoticons_user_path = os.path.join(app.MY_EMOTS_PATH, theme)
     if os.path.exists(emoticons_user_path):
         return emoticons_user_path
+
+def add_to_mam_blacklist(jid):
+    config_value = app.config.get('mam_blacklist')
+    if not config_value:
+        config_value = [jid]
+    else:
+        if jid in config_value:
+            return
+        config_value = config_value.split(',')
+        config_value.append(jid)
+    log.warning('Found not-compliant MUC. %s added to MAM Blacklist', jid)
+    app.config.set('mam_blacklist', ','.join(config_value))
+
+def get_mam_blacklist():
+    config_value = app.config.get('mam_blacklist')
+    if not config_value:
+        return []
+    return config_value.split(',')
