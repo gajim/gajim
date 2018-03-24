@@ -14,8 +14,11 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import gi
+import logging
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
+
+log = logging.getLogger('gajim.c.multimedia_helpers')
 
 
 class DeviceManager(object):
@@ -33,6 +36,8 @@ class DeviceManager(object):
     def detect_element(self, name, text, pipe='%s'):
         if Gst.ElementFactory.find(name):
             element = Gst.ElementFactory.make(name, '%spresencetest' % name)
+            if element is None:
+                log.warning('could not create %spresencetest', name)
             if hasattr(element.props, 'device'):
                 element.set_state(Gst.State.READY)
                 devices = element.get_properties('device')
@@ -49,7 +54,7 @@ class DeviceManager(object):
             else:
                 self.devices[text] = pipe % name
         else:
-            print('element \'%s\' not found' % name)
+            log.info('element %s not found', name)
 
 
 class AudioInputManager(DeviceManager):
@@ -108,4 +113,3 @@ class VideoOutputManager(DeviceManager):
         # ximagesink
         self.detect_element('ximagesink', _('X Window System (without Xv)'))
         self.detect_element('autovideosink', _('Autodetect'))
-
