@@ -596,9 +596,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
         keycode = entries[0].keycode
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
-        self.keycode_c, self.keycode_ins)) or (
-        event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
-        event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
+        self.keycode_c, self.keycode_ins)):
+            return False
+        
+        if event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
+        event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+            self._on_scroll(None, event.keyval)
             return False
         self.parent_win.notebook.event(event)
         return True
@@ -1224,6 +1227,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if pos != Gtk.PositionType.BOTTOM:
             return
         # Remove all events and set autoscroll True
+        app.log('autoscroll').info('Autoscroll enabled')
         self.conv_textview.autoscroll = True
         if self.resource:
             jid = self.contact.get_full_jid()
@@ -1253,13 +1257,27 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.redraw_after_event_removed(jid)
 
     def _on_scroll(self, widget, event):
-        # On scrolliung UP disable autoscroll
-        has_direction, direction = event.get_scroll_direction()
-        if has_direction and direction == Gdk.ScrollDirection.UP:
-            # Check if we have a Scrollbar
-            adjustment = self.conv_scrolledwindow.get_vadjustment()
-            if adjustment.get_upper() != adjustment.get_page_size():
-                self.conv_textview.autoscroll = False
+        if not self.conv_textview.autoscroll:
+            # autoscroll is already disabled
+            return
+
+        if widget is None:
+            # call from _conv_textview_key_press_event()
+            # SHIFT + Gdk.KEY_Page_Up
+            if event != Gdk.KEY_Page_Up:
+                return
+        else:
+            # On scrolliung UP disable autoscroll
+            # has_direction is on some systems always False
+            # so we cant use it
+            has_direction, direction = event.get_scroll_direction()
+            if direction != Gdk.ScrollDirection.UP:
+                return
+        # Check if we have a Scrollbar
+        adjustment = self.conv_scrolledwindow.get_vadjustment()
+        if adjustment.get_upper() != adjustment.get_page_size():
+            app.log('autoscroll').info('Autoscroll disabled')
+            self.conv_textview.autoscroll = False
 
     def on_conversation_vadjustment_changed(self, adjustment):
         self.scroll_to_end()
