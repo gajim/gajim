@@ -895,8 +895,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                     if self.new_account_form:
                         def _on_register_result(result):
                             if not nbxmpp.isResultNode(result):
+                                reason = result.getErrorMsg() or result.getError()
                                 app.nec.push_incoming_event(AccountNotCreatedEvent(
-                                    None, conn=self, reason=result.getError()))
+                                    None, conn=self, reason=reason))
                                 return
                             if app.HAVE_GPG:
                                 self.USE_GPG = True
