@@ -264,11 +264,10 @@ class HistoryManager:
     def on_jids_listview_selection_changed(self, widget, data=None):
         liststore, list_of_paths = self.jids_listview.get_selection()\
                 .get_selected_rows()
-        paths_len = len(list_of_paths)
-        if paths_len == 0:  # nothing is selected
-            return
 
-        self.logs_liststore.clear()  # clear the store
+        self.logs_liststore.clear()
+        if not list_of_paths:
+            return
 
         self.welcome_vbox.hide()
         self.search_results_scrolledwindow.hide()
