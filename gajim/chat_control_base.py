@@ -1268,9 +1268,26 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 return
         else:
             # On scrolliung UP disable autoscroll
-            # has_direction is on some systems always False
-            # so we cant use it
+            # get_scroll_direction() sets has_direction only TRUE
+            # if smooth scrolling is deactivated. If we have smooth
+            # smooth scrolling we have to use get_scroll_deltas()
             has_direction, direction = event.get_scroll_direction()
+            if not has_direction:
+                direction = None
+                smooth, delta_x, delta_y = event.get_scroll_deltas()
+                if smooth:
+                    if delta_y < 0:
+                        direction = Gdk.ScrollDirection.UP
+                    elif delta_y > 0:
+                        direction = Gdk.ScrollDirection.DOWN
+                    elif delta_x < 0:
+                        direction = Gdk.ScrollDirection.LEFT
+                    elif delta_x > 0:
+                        direction = Gdk.ScrollDirection.RIGHT
+                else:
+                    app.log('autoscroll').warning(
+                        'Scroll directions cant be determined')
+
             if direction != Gdk.ScrollDirection.UP:
                 return
         # Check if we have a Scrollbar
