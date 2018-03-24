@@ -25,6 +25,7 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import helpers
 from gajim.common.logger import KindConstant, JIDConstant
 from gajim.common.const import ArchiveState
 from gajim.common.caps_cache import muc_caps_cache
@@ -205,7 +206,8 @@ class ConnectionArchive313:
         if obj.groupchat:
             namespace = muc_caps_cache.get_mam_namespace(obj.room_jid)
 
-        if namespace != nbxmpp.NS_MAM_2:
+        blacklisted = obj.room_jid in helpers.get_mam_blacklist()
+        if namespace != nbxmpp.NS_MAM_2 or blacklisted:
             # Fallback duplicate search without stanza-id
             duplicate = app.logger.search_for_duplicate(
                 self.name, obj.with_, obj.timestamp, obj.msgtxt)

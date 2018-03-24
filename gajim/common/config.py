@@ -305,6 +305,7 @@ class Config:
             'use_keyring': [opt_bool, True, _('If True, Gajim will use the Systems Keyring to store account passwords.')],
             'pgp_encoding': [ opt_str, '', _('Sets the encoding used by python-gnupg'), True],
             'remote_commands': [opt_bool, False, _('If True, Gajim will execute XEP-0146 Commands.')],
+            'mam_blacklist': [opt_str, '', _('All non-compliant MAM Groupchats')],
     }, {})
 
     __options_per_key = {
