@@ -203,10 +203,11 @@ class ConnectionArchive313:
             return
 
         namespace = self.archiving_namespace
+        blacklisted = False
         if obj.groupchat:
             namespace = muc_caps_cache.get_mam_namespace(obj.room_jid)
+            blacklisted = obj.room_jid in helpers.get_mam_blacklist()
 
-        blacklisted = obj.room_jid in helpers.get_mam_blacklist()
         if namespace != nbxmpp.NS_MAM_2 or blacklisted:
             # Fallback duplicate search without stanza-id
             duplicate = app.logger.search_for_duplicate(
