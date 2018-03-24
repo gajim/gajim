@@ -44,6 +44,8 @@ class DeviceManager(object):
                 if devices:
                     self.devices[text % _('Default device')] = pipe % name
                     for device in devices:
+                        if device is None:
+                            continue
                         element.set_state(Gst.State.NULL)
                         element.set_property('device', device)
                         element.set_state(Gst.State.READY)
