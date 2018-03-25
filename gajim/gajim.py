@@ -78,7 +78,7 @@ class GajimApplication(Gtk.Application):
         self.add_main_option('separate', ord('s'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Separate profile files completely (even '
-                               'history db and plugins)'))
+                               'history DB and plugins)'))
         self.add_main_option('verbose', ord('v'), GLib.OptionFlags.NONE,
                              GLib.OptionArg.NONE,
                              _('Print XML stanzas and other debug '

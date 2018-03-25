@@ -1389,7 +1389,7 @@ class Interface:
         if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
             'certificates.\nSHA-1 fingerprint of the certificate:\n%(sha1)s'
-            '\nSHA256 fingerprint of the certificate:\n%(sha256)s') % \
+            '\nSHA-256 fingerprint of the certificate:\n%(sha256)s') % \
             {'sha1': obj.fingerprint_sha1, 'sha256': obj.fingerprint_sha256}
         else:
             checktext1 = ''

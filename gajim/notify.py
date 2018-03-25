@@ -100,6 +100,7 @@ text=None, timeout=-1):
                  'type_': GLib.Variant('s', type_)}
         variant_dict = GLib.Variant('a{sv}', dict_)
         action = 'app.{}-open-event'.format(account)
+        #Button in notification
         notification.add_button_with_target(_('Open'), action, variant_dict)
         notification.set_default_action_and_target(action, variant_dict)
         if event_type in (_('New Message'), _('New Single Message'),

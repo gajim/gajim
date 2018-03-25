@@ -4073,9 +4073,9 @@ class Archiving313PreferencesWindow:
         except Exception as e:
             log.debug(e)
         if not obj:
-            msg = _('We got no response from the Server')
+            msg = _('No response from the Server')
         else:
-            msg = _('We received an error: {}').format(self.error_msg)
+            msg = _('Error received: {}').format(self.error_msg)
 
         dialog = HigDialog(
             self.window, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
@@ -5369,7 +5369,7 @@ Expires on: %(eo)s
 <b>Fingerprint</b>
 SHA-1 Fingerprint: %(sha1)s
 
-SHA256 Fingerprint: %(sha256)s
+SHA-256 Fingerprint: %(sha256)s
 ''') % {
             'scn': subject.commonName, 'sorg': subject.organizationName,
             'sou': subject.organizationalUnitName,
@@ -5456,15 +5456,15 @@ class ProgressWindow(Gtk.ApplicationWindow):
         if self.file != obj.file:
             return
         if obj.status == 'request':
-            self.label.set_text(_('Requesting HTTP Upload Slot...'))
+            self.label.set_text(_('Requesting HTTP Upload Slot…'))
         elif obj.status == 'close':
             self.destroy()
         elif obj.status == 'upload':
-            self.label.set_text(_('Uploading file via HTTP File Upload...'))
+            self.label.set_text(_('Uploading file via HTTP File Upload…'))
         elif obj.status == 'update':
             self.update_progress(obj.seen, obj.total)
         elif obj.status == 'encrypt':
-            self.label.set_text(_('Encrypting file...'))
+            self.label.set_text(_('Encrypting file…'))
 
     def _pulse_progressbar(self):
         self.progressbar.pulse()

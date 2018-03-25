@@ -2659,7 +2659,7 @@ to discover one from server.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using End-to-End encryption the remote party has to agree on logging, else the messages will not be logged.</property>
+                            <property name="tooltip_text" translatable="yes">If checked, Gajim will keep logs for encrypted messages. Please note that when using end-to-end encryption the remote party has to agree on logging, else the messages will not be logged.</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>

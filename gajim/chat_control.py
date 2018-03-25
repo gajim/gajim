@@ -922,7 +922,7 @@ class ChatControl(ChatControlBase):
             if not self.session.verified_identity:
                 ChatControlBase.print_conversation_line(self, _("Remote contact's identity not verified. Click the shield button for more details."), 'status', '', None)
         else:
-            msg = _('E2E encryption disabled')
+            msg = _('end-to-end encryption disabled')
             ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
 
         self._show_lock_image(e2e_is_active, 'E2E',

@@ -296,7 +296,7 @@ class StandardGroupChatCommands(CommandContainer):
             'room_jid': self.room_jid}
 
     @command(raw=True, empty=True)
-    @doc(_("Join a group chat given by a jid"))
+    @doc(_("Join a group chat given by a JID"))
     def join(self, jid):
         if '@' not in jid:
             jid = jid + '@' + app.get_server_from_jid(self.room_jid)
@@ -310,9 +310,9 @@ class StandardGroupChatCommands(CommandContainer):
 
     @command(raw=True, empty=True)
     @doc(_("""
-    Ban user by a nick or a jid from a groupchat
+    Ban user by a nick or a JID from a groupchat
 
-    If given nickname is not found it will be treated as a jid.
+    If given nickname is not found it will be treated as a JID.
     """))
     def ban(self, who, reason):
         if who in app.contacts.get_nick_list(self.account, self.room_jid):

@@ -155,7 +155,7 @@ messages = {
 
     'unsecure-error': Message(
         _('Unsecure'),
-        _('Server returned unsecure transport (http)'),
+        _('Server returned unsecure transport (HTTP)'),
         ErrorDialog),
 
     'httpupload-response-error': Message(
@@ -170,7 +170,7 @@ messages = {
 
     'httpupload-encryption-not-available': Message(
         _('Encryption Error'),
-        _('For the choosen encryption is no encryption method available'),
+        _('For the choosen encryption there is no encryption method available'),
         ErrorDialog),
 
     }

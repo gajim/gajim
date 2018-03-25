@@ -2108,7 +2108,7 @@ class RosterWindow:
                 if keyid and not app.connections[account].gpg:
                     dialogs.WarningDialog(_('OpenPGP is not usable'),
                         _('Gajim needs python-gnupg >= 0.3.8\n'
-                          'Beware there is an incompatible python package called gnupg.\n'
+                          'Beware there is an incompatible Python package called gnupg.\n'
                           'You will be connected to %s without OpenPGP.') % account)
 
         self.send_status_continue(account, status, txt, auto, to)
@@ -4277,7 +4277,7 @@ class RosterWindow:
             'want to continue?')
         sectext = _('Metacontacts are a way to regroup several contacts in one '
             'line. Generally it is used when the same person has several '
-            'XMPP accounts or transport accounts.')
+            'XMPP- or transport -accounts.')
         dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=merge_contacts)
         if not confirm_metacontacts: # First time we see this window

@@ -48,7 +48,7 @@
       <object class="GtkSwitch" id="autojoin_switch">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="tooltip_text" translatable="yes">Join this Groupchat everytime Gajim is started</property>
+        <property name="tooltip_text" translatable="yes">Join this Groupchat every time Gajim is started</property>
         <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="active">True</property>

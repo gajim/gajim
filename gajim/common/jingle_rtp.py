@@ -121,7 +121,7 @@ class JingleRTPContent(JingleContent):
                 InformationEvent(
                     None, conn=self.session.connection, level='error',
                     pri_txt=_('%s configuration error') % text.capitalize(),
-                    sec_txt=_('Couldn’t setup %(text)s. Check your '
+                    sec_txt=_('Couldn’t set up %(text)s. Check your '
                     'configuration.\n\nPipeline was:\n%(pipeline)s\n\n'
                     'Error was:\n%(error)s') % {'text': text,
                     'pipeline': pipeline, 'error': str(e)}))

@@ -21,7 +21,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Return &lt;ctrl&gt;Return</property>
-                <property name="title" translatable="yes">Create a new line</property>
+                <property name="title" translatable="yes">Add new line</property>
               </object>
             </child>
             <child>
@@ -42,7 +42,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;Up</property>
-                <property name="title" translatable="yes">Previous sent message</property>
+                <property name="title" translatable="yes">Previously sent message</property>
               </object>
             </child>
             <child>

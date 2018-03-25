@@ -75,7 +75,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="install_plugin_button">
-                        <property name="label" translatable="yes">Install from zip</property>
+                        <property name="label" translatable="yes">Install from ZIP</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

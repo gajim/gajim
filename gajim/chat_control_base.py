@@ -1170,8 +1170,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 contact = app.contacts.get_contact(self.account, gc_contact.jid)
                 if not contact or contact.sub not in ('both', 'to'):
                     prim_text = _('Really send file?')
-                    sec_text = _('If you send a file to %s, he/she will know your '
-                            'real JID.') % gc_contact.name
+                    sec_text = _('If you send a file to %s, your real JID will '
+                        'be revealed.') % gc_contact.name
                     dialog = dialogs.NonModalConfirmationDialog(prim_text,
                         sec_text, on_response_ok=(_on_ok, gc_contact))
                     dialog.popup()

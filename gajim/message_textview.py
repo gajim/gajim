@@ -40,7 +40,7 @@ class MessageTextView(Gtk.TextView):
     chat/groupchat windows
     """
     UNDO_LIMIT = 20
-    PLACEHOLDER = _('Write a message..')
+    PLACEHOLDER = _('Write a message…')
 
     def __init__(self):
         Gtk.TextView.__init__(self)

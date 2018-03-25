@@ -213,7 +213,7 @@ LOCATION_DATA = {
         'street':       _('street'),
         'text':         _('text'),
         'timestamp':    _('timestamp'),
-        'uri':          _('uri')}
+        'uri':          _('URI')}
 
 from gi.repository import GLib
 
