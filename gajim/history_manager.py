@@ -44,8 +44,8 @@ def parseOpts():
     config_path = None
 
     try:
-        shortargs = 'hvc:l:p:'
-        longargs = 'help verbose config-path= loglevel= profile='
+        shortargs = 'hvsc:l:p:'
+        longargs = 'help verbose separate config-path= loglevel= profile='
         opts = getopt.getopt(sys.argv[1:], shortargs, longargs.split())[0]
     except getopt.error as msg:
         print(str(msg))
