@@ -48,6 +48,8 @@ from gajim import dialogs
 from gajim import cell_renderer_image
 from gajim import message_control
 from gajim.chat_control_base import ChatControlBase
+from gajim.gajim_themes_window import GajimThemesWindow
+from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
 
@@ -696,7 +698,7 @@ class PreferencesWindow:
 
     def on_manage_theme_button_clicked(self, widget):
         if self.theme_preferences is None:
-            self.theme_preferences = dialogs.GajimThemesWindow()
+            self.theme_preferences = GajimThemesWindow()
         else:
             self.theme_preferences.window.present()
             self.theme_preferences.select_active_theme()
@@ -1188,7 +1190,7 @@ class PreferencesWindow:
             app.interface.instances['advanced_config'].window.present()
         else:
             app.interface.instances['advanced_config'] = \
-                    dialogs.AdvancedConfigurationWindow()
+                    AdvancedConfigurationWindow()
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:

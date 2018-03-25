@@ -73,6 +73,7 @@ from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
 from gajim.groupchat_control import PrivateChatControl
 from gajim.message_window import MessageWindowMgr
+from gajim.filetransfers_window import FileTransfersWindow
 
 from gajim.atom_window import AtomWindow
 from gajim.session import ChatControlSession
@@ -2717,7 +2718,7 @@ class Interface:
         self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()
-        self.instances['file_transfers'] = dialogs.FileTransfersWindow()
+        self.instances['file_transfers'] = FileTransfersWindow()
 
         GLib.timeout_add(100, self.autoconnect)
         if sys.platform == 'win32':

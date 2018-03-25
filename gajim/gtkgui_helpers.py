@@ -86,9 +86,6 @@ def get_icon_path(icon_name, size=16):
         log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
 
 
-from gajim import dialogs
-
-
 HAS_PYWIN32 = True
 if os.name == 'nt':
     try:
@@ -447,6 +444,7 @@ def scale_with_ratio(size, width, height):
         return size, int(size / ratio)
 
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
+    from gajim import dialogs
     def on_continue(response, file_path):
         if response < 0:
             return
