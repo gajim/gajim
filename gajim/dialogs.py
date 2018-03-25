@@ -53,12 +53,6 @@ from gajim.common import const
 from gajim.options_dialog import OptionsDialog
 from gajim.common.const import Option, OptionKind, OptionType
 
-# those imports are not used in this file, but in files that 'import dialogs'
-# so they can do dialog.GajimThemesWindow() for example
-from gajim.filetransfers_window import FileTransfersWindow
-from gajim.gajim_themes_window import GajimThemesWindow
-from gajim.advanced_configuration_window import AdvancedConfigurationWindow
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
