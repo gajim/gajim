@@ -609,8 +609,8 @@ Build dynamic Application Menus
 def get_singlechat_menu(control_id):
     singlechat_menu = [
         (_('Send File…'), [
-            ('win.send-file-httpupload-', 'HTTP Upload'),
-            ('win.send-file-jingle-', 'Jingle'),
+            ('win.send-file-httpupload-', _('Upload File…')),
+            ('win.send-file-jingle-', _('Send File Dorectly…')),
             ]),
         ('win.invite-contacts-', _('Invite Contacts')),
         ('win.add-to-roster-', _('Add to Roster')),
