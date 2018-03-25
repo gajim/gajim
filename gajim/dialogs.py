@@ -2584,7 +2584,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         # Add as bookmark, with autojoin and not minimized
         name = app.get_nick_from_jid(self.room_jid)
         app.interface.add_gc_bookmark(
-            account, name, self.room_jid, autojoin, 0, password, nickname)
+            account, name, self.room_jid, autojoin, 1, password, nickname)
 
     def _on_destroy(self, *args):
         if not self.minimal_mode:
