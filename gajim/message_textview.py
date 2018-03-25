@@ -88,7 +88,8 @@ class MessageTextView(Gtk.TextView):
         self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
         self.end_tags['strike'] = '</span>'
 
-        self.connect_after('paste-clipboard', self.after_paste_clipboard)
+        self.connect('paste-clipboard', self._paste_clipboard)
+        self.connect_after('paste-clipboard', self._after_paste_clipboard)
         self.connect('focus-in-event', self._on_focus_in)
         self.connect('focus-out-event', self._on_focus_out)
 
@@ -139,7 +140,13 @@ class MessageTextView(Gtk.TextView):
     def remove_placeholder(self):
         self._on_focus_in()
 
-    def after_paste_clipboard(self, textview):
+    @staticmethod
+    def _paste_clipboard(textview):
+        if textview.is_placeholder():
+            textview.get_buffer().set_text('')
+
+    @staticmethod
+    def _after_paste_clipboard(textview):
         buffer_ = textview.get_buffer()
         mark = buffer_.get_insert()
         iter_ = buffer_.get_iter_at_mark(mark)
