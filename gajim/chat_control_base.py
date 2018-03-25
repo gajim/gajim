@@ -308,6 +308,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = widget.connect('changed',
             self.on_conversation_vadjustment_changed)
         self.handlers[id_] = widget
+
+        vscrollbar = self.conv_scrolledwindow.get_vscrollbar()
+        id_ = vscrollbar.connect('button-release-event',
+                                 self._on_scrollbar_button_release)
+        self.handlers[id_] = vscrollbar
+
         self.correcting = False
         self.last_sent_msg = None
 
@@ -1255,6 +1261,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             elif self.session and self.session.remove_events(types_list):
                 # There were events to remove
                 self.redraw_after_event_removed(jid)
+
+    def _on_scrollbar_button_release(self, scrollbar, event):
+        if event.get_button()[1] != 1:
+            # We want only to catch the left mouse button
+            return
+        if not gtkgui_helpers.at_the_end(scrollbar.get_parent()):
+            app.log('autoscroll').info('Autoscroll disabled')
+            self.conv_textview.autoscroll = False
 
     def _on_scroll(self, widget, event):
         if not self.conv_textview.autoscroll:
