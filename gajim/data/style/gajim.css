@@ -99,3 +99,6 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 .status-away { color: #ff8533;}
 .status-dnd { color: #e62e00;}
 .status-online { color: #66bf10;}
+
+/*MessageWindow Notebook*/
+.notebook-tab-label {min-width: 80px}
