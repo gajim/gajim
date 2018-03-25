@@ -18,7 +18,6 @@
 import os
 import sys
 import logging
-import importlib.util as imp
 from collections import OrderedDict
 from importlib.machinery import SourceFileLoader
 

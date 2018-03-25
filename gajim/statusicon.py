@@ -23,16 +23,15 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import os
+
 from gi.repository import Gtk
 from gi.repository import Gdk
-import os
-import sys
 
 from gajim import dialogs
 from gajim import config
 from gajim import tooltips
 from gajim import gtkgui_helpers
-
 from gajim.common import app
 from gajim.common import helpers
 

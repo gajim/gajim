@@ -30,7 +30,6 @@
 import os
 import sys
 import locale
-import urllib
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 

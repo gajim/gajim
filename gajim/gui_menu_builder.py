@@ -26,7 +26,7 @@ from gajim import message_control
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
-from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC, NS_ESESSION
+from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
 from gajim.gtkgui_helpers import get_action
 

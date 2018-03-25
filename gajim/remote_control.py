@@ -27,15 +27,13 @@
 ##
 
 from gi.repository import GLib
-from gi.repository import Gtk
 import os
 import base64
 import mimetypes
 
 from gajim.common import app
 from gajim.common import helpers
-from time import time
-from gajim.dialogs import AddNewContactWindow, JoinGroupchatWindow
+from gajim.dialogs import AddNewContactWindow
 from gajim.common import ged
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent

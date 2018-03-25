@@ -36,7 +36,6 @@ modular.
 """
 
 from gi.repository import GObject
-from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -55,10 +54,8 @@ from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.gtkgui_helpers import get_icon_pixmap
 from gajim.common import helpers
-from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 
-from gajim import tooltips
 import logging
 log = logging.getLogger('gajim.htmlview')
 

@@ -31,7 +31,6 @@ import os
 import time
 from gi.repository import Gtk
 from gi.repository import Gio
-from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
 from gajim import gtkgui_helpers

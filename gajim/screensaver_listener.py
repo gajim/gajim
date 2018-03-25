@@ -20,7 +20,7 @@
 
 import logging
 
-from gi.repository import Gio, GLib
+from gi.repository import Gio
 
 from gajim.common import app
 

@@ -29,7 +29,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 import time
-import calendar
 import datetime
 
 from enum import IntEnum, unique

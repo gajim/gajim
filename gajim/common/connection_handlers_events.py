@@ -38,9 +38,8 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common import dataforms
-from gajim.common import exceptions
 from gajim.common.zeroconf.zeroconf import Constant
-from gajim.common.logger import LOG_DB_PATH, KindConstant
+from gajim.common.logger import KindConstant
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp

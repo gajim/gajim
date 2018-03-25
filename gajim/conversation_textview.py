@@ -27,8 +27,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from threading import Timer # for smooth scrolling
-
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango

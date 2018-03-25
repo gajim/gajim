@@ -61,7 +61,6 @@ from gajim import gui_menu_builder
 
 from gajim.common import app
 import nbxmpp
-from gajim.common.exceptions import GajimGeneralException
 from gajim.common import helpers
 from gajim.common import ged
 

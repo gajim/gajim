@@ -21,7 +21,6 @@ import logging
 from enum import IntEnum
 from datetime import datetime, timedelta
 
-import nbxmpp
 from gi.repository import Gtk, GLib
 
 from gajim.common import app

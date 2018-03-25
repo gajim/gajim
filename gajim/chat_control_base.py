@@ -36,7 +36,6 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim import gtkgui_helpers
-from gajim.gtkgui_helpers import Color
 from gajim import message_control
 from gajim import dialogs
 from gajim import history_window

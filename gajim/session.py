@@ -21,10 +21,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import nbxmpp
-
 from gajim.common import helpers
-
 from gajim.common import events
 from gajim.common import exceptions
 from gajim.common import app
@@ -34,11 +31,8 @@ from gajim.common import ged
 from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
     InformationEvent
 from gajim.common.logger import KindConstant
-
 from gajim import message_control
-
 from gajim import notify
-
 from gajim import dialogs
 from gajim import negotiation
 
