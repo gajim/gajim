@@ -1419,8 +1419,6 @@ class ScrolledWindow(Gtk.ScrolledWindow):
         Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
 
         self.set_overlay_scrolling(False)
-        self.set_max_content_height(100)
-        self.set_propagate_natural_height(True)
         self.get_style_context().add_class('scrolled-no-border')
         self.get_style_context().add_class('no-scroll-indicator')
         self.get_style_context().add_class('scrollbar-style')

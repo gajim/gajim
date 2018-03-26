@@ -2984,9 +2984,6 @@ class SubjectPopover(Gtk.Popover):
         self.set_name('SubjectPopover')
 
         scrolledwindow = Gtk.ScrolledWindow()
-        scrolledwindow.set_max_content_height(250)
-        scrolledwindow.set_propagate_natural_height(True)
-        scrolledwindow.set_propagate_natural_width(True)
         scrolledwindow.set_policy(Gtk.PolicyType.NEVER,
                                   Gtk.PolicyType.AUTOMATIC)
 
