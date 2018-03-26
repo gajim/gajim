@@ -3,7 +3,7 @@
 import os
 import sys
 
-if sys.version_info[0] < (3, 5):
+if sys.version_info < (3, 5):
     sys.exit('Gajim needs Python 3.5+')
 
 from setuptools import setup, find_packages
