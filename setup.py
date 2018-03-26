@@ -3,8 +3,8 @@
 import os
 import sys
 
-if sys.version_info[0] < 3:
-    sys.exit('Tried to install with Python 2, gajim only supports Python 3.')
+if sys.version_info[0] < (3, 5):
+    sys.exit('Gajim needs Python 3.5+')
 
 from setuptools import setup, find_packages
 from setuptools import Command
