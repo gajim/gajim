@@ -2574,7 +2574,7 @@ class RosterWindow:
             self.draw_contact(jid, account)
             self.draw_group(_('Transports'), account)
 
-        if obj.contact:
+        if obj.contact and obj.need_redraw:
             self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
         if obj.popup:
