@@ -851,10 +851,9 @@ class ConnectionHandlersBase:
                 obj.contact.contact_name = obj.contact_nickname
                 obj.need_redraw = True
 
-            if obj.old_show == obj.new_show and obj.contact.status == \
-            obj.status and obj.contact.priority == obj.prio and \
-            obj.contact.idle_time == obj.idle_time: # no change
-                return True
+            elif obj.old_show != obj.new_show or obj.contact.status != \
+            obj.status:
+                obj.need_redraw = True
         else:
             obj.contact = app.contacts.get_first_contact_from_jid(account,
                 jid)
