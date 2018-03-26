@@ -1581,7 +1581,7 @@ class ChatControl(ChatControlBase):
             markup += ' (%s)' % file_props.desc
         markup += '\n%s: %s' % (_('Size'), helpers.convert_bytes(
             file_props.size))
-        b1 = Gtk.Button(_('_Accept'))
+        b1 = Gtk.Button(_('Accept'))
         b1.connect('clicked', self._on_accept_file_request, file_props)
         b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_file_request, file_props)
