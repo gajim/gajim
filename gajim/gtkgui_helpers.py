@@ -878,7 +878,7 @@ def add_css_font():
     unit = "pt" if Gtk.check_version(3, 22, 0) is None else "px"
     css = """
     .font_custom {{
-      font-family: {family};
+      font-family: "{family}";
       font-size: {size}{unit};
       font-weight: {weight};
     }}""".format(
