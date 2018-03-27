@@ -1517,13 +1517,11 @@ class ChatControl(ChatControlBase):
         self.update_ui()
         self.parent_win.redraw_tab(self)
 
-        self.print_conversation(_('%(name)s is now %(status)s') % {'name': name,
-                'status': uf_show}, 'status')
-
         if status:
-            self.print_conversation(' (', 'status', simple=True)
-            self.print_conversation('%s' % (status), 'status', simple=True)
-            self.print_conversation(')', 'status', simple=True)
+            status = '- %s' % status
+        status_line = _('%(name)s is now %(show)s %(status)s') % {
+            'name': name, 'show': uf_show, 'status': status or ''}
+        self.print_conversation(status_line, 'status')
 
     def _info_bar_show_message(self):
         if self.info_bar.get_visible():
