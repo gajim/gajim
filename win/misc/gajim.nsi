@@ -146,12 +146,18 @@ LangString STR_Running ${LANG_HEBREW} "נראה שהתוכנית Gajim מורצ�
 
 Section "Gajim" SecGajim
 	SectionIn RO
-
+	
+    Var /GLOBAL arch_name
+    StrCpy $arch_name "(64-Bit)"
+    StrCmp ${ARCH} "mingw64" cont
+    StrCpy $arch_name "(32-Bit)"
+    cont:
+	
 	SetOutPath "$INSTDIR"
-	File /r "mingw32\*.*"
+	File /r "${ARCH}\*.*"
 
 	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION} $arch_name"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString" "$INSTDIR\Uninstall.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\bin\Gajim.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "${VERSION}"

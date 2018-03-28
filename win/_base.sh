@@ -11,8 +11,6 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "${DIR}"
 
 # CONFIG START
-
-ARCH="i686"
 PYTHON_VERSION="3"
 BUILD_VERSION="0"
 
@@ -25,14 +23,19 @@ MINGW="mingw32"
 QL_VERSION="0.0.0"
 QL_VERSION_DESC="UNKNOWN"
 
+function set_arch {
+    ARCH="$1"
+    if [ "$1" == "x86_64" ]; then
+        MINGW="mingw64"
+    fi
+}
+
 function set_build_root {
-    BUILD_ROOT="$1"
+    BUILD_ROOT="${DIR}/_build_root"
     REPO_CLONE="${BUILD_ROOT}/${MINGW}"/gajim
     MINGW_ROOT="${BUILD_ROOT}/${MINGW}"
     PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python3.6/site-packages"
 }
-
-set_build_root "${DIR}/_build_root"
 
 function build_pacman {
     pacman --root "${BUILD_ROOT}" "$@"
@@ -114,8 +117,6 @@ pillow==4.3.0
 }
 
 function install_gajim {
-    [ -z "$1" ] && (echo "Missing arg"; exit 1)
-
     rm -Rf "${PACKAGE_DIR}"/gajim*
 
     cd ..
@@ -302,6 +303,6 @@ function move_ssl_libs {
 }
 
 function build_installer {
-    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" "${MISC}"/gajim.nsi)
-    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" "${MISC}"/gajim-portable.nsi)
+    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim.nsi)
+    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
 }

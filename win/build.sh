@@ -10,12 +10,12 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 source "$DIR"/_base.sh
 
 function main {
-    local GIT_TAG=${1:-"master"}
-
+    set_arch "$1"
+    set_build_root
     install_pre_deps
     create_root
     install_deps
-    install_gajim "$GIT_TAG"
+    install_gajim
     cleanup_install
     move_ssl_libs
     build_installer
