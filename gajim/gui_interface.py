@@ -1818,7 +1818,8 @@ class Interface:
                 ctrl.scroll_to_end()
 
 
-    def join_gc_minimal(self, account, room_jid, password=None):
+    def join_gc_minimal(self, account, room_jid, password=None,
+    transient_for=None):
         if account is not None:
             if app.in_groupchat(account, room_jid):
                 # If we already in the groupchat, join_gc_room will bring
@@ -1855,7 +1856,8 @@ class Interface:
                 dialogs.ErrorDialog(_('JID is not a Groupchat'),
                                     transient_for=app.app.get_active_window())
                 return
-            dialogs.JoinGroupchatWindow(account, room_jid, password=password)
+            dialogs.JoinGroupchatWindow(account, room_jid, password=password,
+                transient_for=transient_for)
 
         disco_account = connected_accounts[0] if account is None else account
         app.connections[disco_account].discoverMUC(
