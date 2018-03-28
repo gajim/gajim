@@ -2378,7 +2378,12 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.requested_jid = None
         self.room_jid = room_jid
         self.account = account
-        self.minimal_mode = room_jid is not None
+        self.minimal_mode = 0 # 2: very mini, 1: with room, 0: show all
+        if room_jid is not None:
+            if '@' in room_jid:
+                self.minimal_mode = 2
+            else:
+                self.minimal_mode = 1
 
         glade_objects = ['grid', 'nick_entry', 'account_combo', 'jid_label',
                          'bookmark_switch', 'autojoin_switch', 'headerbar',
@@ -2388,6 +2393,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
                          'room_label', 'room_entry', 'search_button']
 
         minimal_widgets = ['jid_label']
+        room_widgets = ['room_label', 'room_entry']
 
         extended_widgets = ['server_label', 'server_combo', 'recent_label',
                             'recent_combo', 'room_label', 'room_entry',
@@ -2405,9 +2411,12 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             self.button_box.show()
 
         # Show widgets depending on the mode the window is in
-        if self.minimal_mode:
+        if self.minimal_mode > 0:
             for widget in minimal_widgets:
                 getattr(self, widget).show()
+            if self.minimal_mode == 1:
+                for widget in room_widgets:
+                    getattr(self, widget).show()
             self.jid_label.set_text(room_jid)
         else:
             for widget in extended_widgets:
@@ -2426,7 +2435,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.connect('key-press-event', self._on_key_press_event)
         self.connect('destroy', self._on_destroy)
 
-        if not self.minimal_mode:
+        if self.minimal_mode == 0:
             app.ged.register_event_handler('agent-info-received', ged.GUI1,
                                            self._nec_agent_info_received)
             app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
@@ -2439,7 +2448,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Select first account
         self.account_combo.set_active(0)
-        if not self.minimal_mode:
+        if self.minimal_mode == 0:
             self.recent_combo.set_active(0)
 
         if self.password is not None:
@@ -2453,8 +2462,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Show password field if we are in extended mode or
         # The MUC is passwordprotected
-        if not self.minimal_mode or muc_caps_cache.supports(
-                room_jid, 'muc_passwordprotected'):
+        if self.minimal_mode == 0 or muc_caps_cache.supports(
+        room_jid, 'muc_passwordprotected'):
             self.password_entry.show()
             self.password_label.show()
 
@@ -2509,8 +2518,11 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         account = self.account_combo.get_active_text()
         nickname = self.nick_entry.get_text()
 
-        if not self.minimal_mode:
-            server = self.server_combo.get_active_text()
+        if self.minimal_mode < 2:
+            if self.minimal_mode == 0:
+                server = self.server_combo.get_active_text()
+            else: # mode 1
+                server = self.room_jid
             room = self.room_entry.get_text()
             if room == '':
                 ErrorDialog(_('Invalid Room'),
@@ -2581,7 +2593,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             account, name, self.room_jid, autojoin, 1, password, nickname)
 
     def _on_destroy(self, *args):
-        if not self.minimal_mode:
+        if self.minimal_mode == 0:
             del app.interface.instances[self.account]['join_gc']
             app.ged.remove_event_handler('agent-info-received', ged.GUI1,
                                          self._nec_agent_info_received)
