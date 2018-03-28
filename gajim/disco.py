@@ -1400,7 +1400,8 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        app.interface.join_gc_minimal(self.account, service)
+        app.interface.join_gc_minimal(self.account, service,
+            transient_for=self.window.window)
 
     def update_actions(self):
         if self.execute_button:

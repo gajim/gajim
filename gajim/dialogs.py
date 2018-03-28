@@ -2364,7 +2364,8 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         self.destroy()
 
 class JoinGroupchatWindow(Gtk.ApplicationWindow):
-    def __init__(self, account, room_jid, password=None, automatic=None):
+    def __init__(self, account, room_jid, password=None, automatic=None,
+    transient_for=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('JoinGroupchat')
         self.set_application(app.app)
@@ -2372,6 +2373,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('Join Groupchat'))
+        if transient_for:
+            self.set_transient_for(transient_for)
 
         self.automatic = automatic
         self.password = password
