@@ -1,6 +1,12 @@
 environment:
   matrix:
+    - MSYSTEM: MINGW64
+      MSYS_ARCH: "x86_64"
+      ARCH: "64bit"
+
     - MSYSTEM: MINGW32
+      MSYS_ARCH: "i686"
+      ARCH: "32bit"
 
 branches:
   only:
@@ -22,10 +28,10 @@ build_script:
           C:\msys64\usr\bin\sh.exe --login -c $command
         }
 
-        bash 'git clone C:/projects/gajim C:/msys64/home/appveyor/gajim'
-        bash 'C:/msys64/home/appveyor/gajim/win/build.sh'
-        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:TIME_STRING).exe"
-        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:TIME_STRING).exe"
+        bash "git clone C:/projects/gajim C:/msys64/home/appveyor/gajim"
+        bash "C:/msys64/home/appveyor/gajim/win/build.sh $($env:MSYS_ARCH)"
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim.exe" -FileName "Gajim-Master-$($env:ARCH)-$($env:TIME_STRING).exe"
+        Push-AppveyorArtifact "$($env:BUILDROOT)/Gajim-Portable.exe" -FileName "Gajim-Portable-Master-$($env:ARCH)-$($env:TIME_STRING).exe"
 
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

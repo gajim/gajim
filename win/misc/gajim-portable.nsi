@@ -101,7 +101,7 @@ Section "Gajim" SecGajim
 	SectionIn RO
 
 	SetOutPath "$INSTDIR"
-	File /r "mingw32\*.*"
+	File /r "${ARCH}\*.*"
 
 	SetOutPath "$INSTDIR\bin"
 	CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
