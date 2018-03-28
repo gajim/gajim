@@ -695,6 +695,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.privacy_rules_requested = False
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:].encode('utf-8')
+        self.removing_account = False
 
         self.sm = Smacks(self) # Stream Management
 
@@ -869,6 +870,8 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _connection_lost(self):
         log.debug('_connection_lost')
         self.disconnect(on_purpose = False)
+        if self.removing_account:
+            return
         app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
             title=_('Connection with account "%s" has been lost') % self.name,
             msg=_('Reconnect manually.')))
@@ -2890,6 +2893,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # on_remove_success as a class property as pass it as an argument
         def _on_unregister_account_connect(con):
             self.on_connect_auth = None
+            self.removing_account = True
             if app.account_is_connected(self.name):
                 hostname = app.config.get_per('accounts', self.name, 'hostname')
                 iq = nbxmpp.Iq(typ='set', to=hostname)
@@ -2908,6 +2912,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 con.SendAndWaitForResponse(iq)
                 return
             on_remove_success(False)
+            self.removing_account = False
         if self.connected == 0:
             self.on_connect_auth = _on_unregister_account_connect
             self.connect_and_auth()
