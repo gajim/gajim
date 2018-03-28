@@ -142,7 +142,7 @@ class CommandProcessor(object):
     def list_commands(self):
         commands = list_commands(self.COMMAND_HOST)
         commands = dict(commands)
-        return sorted(list(commands.values()), key=lambda k: k.__repr__())
+        return sorted(set(commands.values()), key=lambda k: k.__repr__())
 
 class Command(object):
 
