@@ -686,7 +686,7 @@ class LoginDialog(OptionsDialog):
         self.connect('destroy', self.on_destroy)
 
     def on_password_change(self, new_password, data):
-        self.get_option('password').entry.set_text(new_password)
+        passwords.save_password(self.account, new_password)
 
     def on_destroy(self, *args):
         savepass = app.config.get_per('accounts', self.account, 'savepass')
