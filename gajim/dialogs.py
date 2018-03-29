@@ -3569,6 +3569,7 @@ class XMLConsoleWindow(Gtk.Window):
         self.stream = True
         self.incoming = True
         self.outgoing = True
+        self.filter_dialog = None
 
         glade_objects = ['textview', 'input', 'scrolled_input', 'headerbar',
                          'scrolled', 'actionbar', 'paned', 'box', 'menubutton']
@@ -3689,6 +3690,9 @@ class XMLConsoleWindow(Gtk.Window):
             self.menubutton.hide()
 
     def on_filter_options(self, *args):
+        if self.filter_dialog:
+            self.filter_dialog.present()
+            return
         options = [
             Option(OptionKind.SWITCH, 'Presence',
                     OptionType.VALUE, self.presence,
@@ -3712,8 +3716,13 @@ class XMLConsoleWindow(Gtk.Window):
                     callback=self.on_option, data='outgoing'),
             ]
 
-        OptionsDialog(self, 'Filter', Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                      options, self.account)
+        self.filter_dialog = OptionsDialog(self, 'Filter',
+            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            options, self.account)
+        self.filter_dialog.connect('destroy', self.on_filter_destroyed)
+
+    def on_filter_destroyed(self, win):
+        self.filter_dialog = None
 
     def on_clear(self, *args):
         buffer_ = self.textview.get_buffer().set_text('')
