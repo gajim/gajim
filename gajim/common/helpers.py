@@ -431,10 +431,8 @@ def get_uf_sub(sub):
         uf_sub = _('From')
     elif sub == 'both':
         uf_sub = _('Both')
-    elif sub is None:
-        uf_sub = _('Unknown')
     else:
-        uf_sub = sub
+        uf_sub = _('Unknown')
 
     return uf_sub
 
