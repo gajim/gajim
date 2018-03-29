@@ -2731,6 +2731,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         if jid:
             destroy.setAttr('jid', jid)
         self.connection.send(iq)
+        i = 0
+        for bm in self.bookmarks:
+            if bm['jid'] == room_jid:
+                del self.bookmarks[i]
+                break
+            i += 1
+        self.store_bookmarks()
 
     def send_gc_status(self, nick, jid, show, status, auto=False):
         if not app.account_is_connected(self.name):

@@ -631,7 +631,6 @@ class GroupchatControl(ChatControlBase):
             'send-file-httpupload-' + self.control_id)
         httpupload.set_enabled(
             online and app.connections[self.account].httpupload)
-
         win.lookup_action('send-file-' + self.control_id).set_enabled(
             httpupload.get_enabled())
 
@@ -691,6 +690,10 @@ class GroupchatControl(ChatControlBase):
                     return
             app.connections[self.account].destroy_gc_room(
                 self.room_jid, reason, jid)
+            gui_menu_builder.build_bookmark_menu(self.account)
+            self.force_non_minimizable = True
+            self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+            self.force_non_minimizable = False
 
         # Ask for a reason
         dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
