@@ -360,7 +360,7 @@
                 {
                     "type": "archive",
                     "url": "https://ftp.gajim.org/plugins_1/plugin_installer.zip",
-                    "sha256": "a4ee63a4b7fd213236f30f23ff0535d63bad2fd276363d4ac8d320da63d4d09c",
+                    "sha256": "3b0c40b22596da54c0eea7f7571c83b61619996ebe6c00b304d7fa5278aaefbb",
                     "dest": "gajim/data/plugins/plugin_installer"
                 }
             ]
