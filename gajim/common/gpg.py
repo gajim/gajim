@@ -73,7 +73,7 @@ if app.HAVE_GPG:
             result = super(GnuPG, self).decrypt(data.encode('utf8'),
                 passphrase=self.passphrase)
 
-            return str(result)
+            return result.data.decode('utf8')
 
         def sign(self, str_, keyID):
             result = super(GnuPG, self).sign(str_.encode('utf8'), keyid=keyID, detach=True,
