@@ -1,3 +1,16 @@
+Gajim 1.0.1 (1 April 2018)
+
+  * Improve MAM support
+  * Image preview in file chooser dialog
+  * Groupchat: Set minimize on auto join default True
+  * Delete bookmark when we destroy a room
+  * Fix account deletion
+  * Fix custom font handling
+  * Fix OpenPGP message decryption
+  * Fix window position restore on multi-head setups
+  * Fix scrolling in message window
+  * Improve Windows build and build for 64 bits
+
 Gajim 1.0.0 (17 March 2018)
 
   * Ported to GTK3 / Python3

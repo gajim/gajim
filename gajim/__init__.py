@@ -1,6 +1,6 @@
 import subprocess
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 try:
     p = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,
