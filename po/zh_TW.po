@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-17 21:27+0000\n"
+"POT-Creation-Date: 2018-03-31 02:05+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -28,20 +28,20 @@ msgstr "Ping?"
 msgid "Error."
 msgstr "錯誤。"
 
-#: gajim/chat_control_base.py:569
+#: gajim/chat_control_base.py:571
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:577 gajim/profile_window.py:181
-#: gajim/conversation_textview.py:550
+#: gajim/chat_control_base.py:579 gajim/profile_window.py:181
+#: gajim/conversation_textview.py:539
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:1167
+#: gajim/chat_control_base.py:1172
 msgid "Really send file?"
 msgstr "確定要傳送檔案?"
 
-#: gajim/chat_control_base.py:1168
+#: gajim/chat_control_base.py:1173
 #, fuzzy, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr "如果您想 %s 傳送檔案，他/她會獲知您的真實 Jabber ID。"
@@ -103,13 +103,13 @@ msgstr "處理序"
 msgid "Filename: %s"
 msgstr "檔案名稱:  %s"
 
-#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:485
+#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:486
 #, python-format
 msgid "Size: %s"
 msgstr "大小:  %s"
 
 #: gajim/filetransfers_window.py:233 gajim/filetransfers_window.py:243
-#: gajim/history_manager.py:526
+#: gajim/history_manager.py:528
 msgid "You"
 msgstr "您"
 
@@ -118,7 +118,7 @@ msgstr "您"
 msgid "Sender: %s"
 msgstr "傳送者:  %s"
 
-#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
+#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:763
 #: gajim/tooltips.py:667
 msgid "Recipient: "
 msgstr "接收者: "
@@ -174,121 +174,121 @@ msgstr ""
 msgid "Choose File to Send…"
 msgstr "選擇要傳送的檔案…"
 
-#: gajim/filetransfers_window.py:355
+#: gajim/filetransfers_window.py:356
 msgid "_Send"
 msgstr "傳送(_S)"
 
-#: gajim/filetransfers_window.py:362 gajim/tooltips.py:702
+#: gajim/filetransfers_window.py:363 gajim/tooltips.py:702
 msgid "Description: "
 msgstr "描述: "
 
-#: gajim/filetransfers_window.py:375
+#: gajim/filetransfers_window.py:376
 #, fuzzy
 msgid "Gajim can not read this file"
 msgstr "Gajim 無法存取此檔案"
 
-#: gajim/filetransfers_window.py:376
+#: gajim/filetransfers_window.py:377
 msgid "Another process is using this file."
 msgstr ""
 
-#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:495
+#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:492
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "無法覆寫現有檔案\"%s\""
 
-#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:496
+#: gajim/filetransfers_window.py:423 gajim/gtkgui_helpers.py:493
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr "檔案名稱已經存在且您沒有權限覆寫它。"
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "This file already exists"
 msgstr "檔案已經存在"
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "What do you want to do?"
 msgstr "想做什麼?"
 
-#: gajim/filetransfers_window.py:450 gajim/gtkgui_helpers.py:507
+#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:504
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "目錄 \"%s\" 不可寫"
 
-#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:508
+#: gajim/filetransfers_window.py:452 gajim/gtkgui_helpers.py:505
 msgid "You do not have permission to create files in this directory."
 msgstr "您沒有權限在這個目錄裡建立檔案。"
 
-#: gajim/filetransfers_window.py:462
+#: gajim/filetransfers_window.py:463
 #, fuzzy
 msgid "Save File as…"
 msgstr "另存為…"
 
-#: gajim/filetransfers_window.py:482
+#: gajim/filetransfers_window.py:483
 #, python-format
 msgid "File: %s"
 msgstr "檔案:  %s"
 
-#: gajim/filetransfers_window.py:488
+#: gajim/filetransfers_window.py:489
 #, python-format
 msgid "Type: %s"
 msgstr "類型: %s"
 
-#: gajim/filetransfers_window.py:490
+#: gajim/filetransfers_window.py:491
 #, python-format
 msgid "Description: %s"
 msgstr "描述:  %s"
 
-#: gajim/filetransfers_window.py:491
+#: gajim/filetransfers_window.py:492
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s 想傳送給您一個檔案:"
 
-#: gajim/filetransfers_window.py:532
+#: gajim/filetransfers_window.py:533
 #, fuzzy
 msgid "Checking file…"
 msgstr "傳送側寫…"
 
-#: gajim/filetransfers_window.py:546
+#: gajim/filetransfers_window.py:547
 #, fuzzy
 msgid "File error"
 msgstr "檔案傳輸錯誤"
 
-#: gajim/filetransfers_window.py:583
+#: gajim/filetransfers_window.py:584
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#: gajim/filetransfers_window.py:676
+#: gajim/filetransfers_window.py:677
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: gajim/filetransfers_window.py:729 gajim/filetransfers_window.py:732
+#: gajim/filetransfers_window.py:730 gajim/filetransfers_window.py:733
 msgid "Invalid File"
 msgstr "無效檔案"
 
-#: gajim/filetransfers_window.py:729
+#: gajim/filetransfers_window.py:730
 msgid "File: "
 msgstr "檔案: "
 
-#: gajim/filetransfers_window.py:733
+#: gajim/filetransfers_window.py:734
 msgid "It is not possible to send empty files"
 msgstr "無法傳送空檔案"
 
-#: gajim/filetransfers_window.py:758 gajim/tooltips.py:658
+#: gajim/filetransfers_window.py:759 gajim/tooltips.py:658
 msgid "Name: "
 msgstr "名稱: "
 
-#: gajim/filetransfers_window.py:760 gajim/tooltips.py:661
+#: gajim/filetransfers_window.py:761 gajim/tooltips.py:661
 msgid "Sender: "
 msgstr "傳送者: "
 
-#: gajim/filetransfers_window.py:888
+#: gajim/filetransfers_window.py:889
 msgid "Pause"
 msgstr "暫停"
 
-#: gajim/filetransfers_window.py:899
+#: gajim/filetransfers_window.py:900
 msgid "_Continue"
 msgstr "繼續(_C)"
 
@@ -454,24 +454,24 @@ msgstr "可用"
 msgid "Feature"
 msgstr "特性"
 
-#: gajim/gtkgui_helpers.py:259
+#: gajim/gtkgui_helpers.py:255
 msgid "Error reading file:"
 msgstr "讀檔案錯誤:"
 
-#: gajim/gtkgui_helpers.py:262
+#: gajim/gtkgui_helpers.py:258
 msgid "Error parsing file:"
 msgstr "分析檔案錯誤:"
 
-#: gajim/gtkgui_helpers.py:481
+#: gajim/gtkgui_helpers.py:478
 msgid "Extension not supported"
 msgstr "不支援擴充"
 
-#: gajim/gtkgui_helpers.py:482
+#: gajim/gtkgui_helpers.py:479
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "圖片不能被另存為 %(type)s 格式。另存為 %(new_filename)s?"
 
-#: gajim/gtkgui_helpers.py:517
+#: gajim/gtkgui_helpers.py:514
 #, fuzzy
 msgid "Save Image as…"
 msgstr "圖片另存為…"
@@ -540,8 +540,8 @@ msgstr "沒有未處理的認證請求"
 msgid " resource with priority "
 msgstr "帶有優先等級的資源"
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4760 gajim/dialogs.py:4802
-#: gajim/dialogs.py:4850 gajim/dialogs.py:4940
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4806 gajim/dialogs.py:4848
+#: gajim/dialogs.py:4896 gajim/dialogs.py:4986
 msgid "All files"
 msgstr "所有檔案"
 
@@ -556,11 +556,11 @@ msgid "Manage Proxies"
 msgstr "管理代理伺服器設定"
 
 #: gajim/options_dialog.py:484 gajim/options_dialog.py:552
-#: gajim/options_dialog.py:573 gajim/dialogs.py:331 gajim/dialogs.py:333
-#: gajim/dialogs.py:541 gajim/dialogs.py:554 gajim/roster_window.py:2997
-#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1160
-#: gajim/config.py:1175 gajim/config.py:1180 gajim/config.py:1228
-#: gajim/config.py:1338 gajim/config.py:2487 gajim/config.py:2564
+#: gajim/options_dialog.py:573 gajim/dialogs.py:326 gajim/dialogs.py:328
+#: gajim/dialogs.py:536 gajim/dialogs.py:549 gajim/roster_window.py:2997
+#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1162
+#: gajim/config.py:1177 gajim/config.py:1182 gajim/config.py:1230
+#: gajim/config.py:1340 gajim/config.py:2489 gajim/config.py:2566
 #: gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
@@ -601,8 +601,8 @@ msgid "_New Group Chat"
 msgstr "新聊天室(_N)"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1119 gajim/dialogs.py:2317 gajim/dialogs.py:2346
-#: gajim/dialogs.py:3821 gajim/chat_control.py:284 gajim/roster_window.py:804
+#: gajim/dialogs.py:1114 gajim/dialogs.py:2333 gajim/dialogs.py:2362
+#: gajim/dialogs.py:3867 gajim/chat_control.py:284 gajim/roster_window.py:804
 #: gajim/roster_window.py:1753 gajim/roster_window.py:1755
 #: gajim/roster_window.py:2068 gajim/roster_window.py:3419
 #: gajim/roster_window.py:3446 gajim/gui_interface.py:524
@@ -795,7 +795,7 @@ msgstr "編輯存檔偏好設定(_V)"
 msgid "Synchronise History"
 msgstr "同步"
 
-#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4537
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4583
 msgid "Privacy Lists"
 msgstr "隱私策略清單"
 
@@ -865,7 +865,7 @@ msgid "Cannot find history logs database"
 msgstr "無法找到命令歷程記錄資料庫"
 
 #: gajim/history_manager.py:144 gajim/history_manager.py:195
-#: gajim/dialogs.py:3802 gajim/config.py:1619 gajim/disco.py:872
+#: gajim/dialogs.py:3848 gajim/config.py:1621 gajim/disco.py:872
 msgid "JID"
 msgstr "JID"
 
@@ -888,13 +888,13 @@ msgstr "訊息"
 msgid "Subject"
 msgstr "主題"
 
-#: gajim/history_manager.py:240
+#: gajim/history_manager.py:243
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr "您確定要清除資料庫?(強烈建議 GAJIM 執行時不要進行此作業)"
 
-#: gajim/history_manager.py:242
+#: gajim/history_manager.py:245
 #, fuzzy
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
@@ -908,45 +908,45 @@ msgstr ""
 "\n"
 "如果您點擊\"是\"，請等待…"
 
-#: gajim/history_manager.py:247
+#: gajim/history_manager.py:250
 msgid "Database Cleanup"
 msgstr "資料庫清理"
 
-#: gajim/history_manager.py:462
+#: gajim/history_manager.py:464
 #, fuzzy
 msgid "Exporting History Logs…"
 msgstr "輸出命令歷程記錄…"
 
-#: gajim/history_manager.py:538
+#: gajim/history_manager.py:540
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(who)s 在 %(time)s 時說:  %(message)s\n"
 
-#: gajim/history_manager.py:576
+#: gajim/history_manager.py:578
 #, fuzzy, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
 msgstr "您真的要刪除 %(jid)s 的記錄檔嗎？"
 
-#: gajim/history_manager.py:580
+#: gajim/history_manager.py:582
 #, fuzzy
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr "您真的要刪除已選聯絡人的記錄檔嗎？"
 
-#: gajim/history_manager.py:582
+#: gajim/history_manager.py:584
 #, fuzzy
 msgid "This can not be undone."
 msgstr "找不到該服務"
 
-#: gajim/history_manager.py:584 gajim/history_manager.py:623
+#: gajim/history_manager.py:586 gajim/history_manager.py:625
 msgid "Deletion Confirmation"
 msgstr "刪除確認"
 
-#: gajim/history_manager.py:618
+#: gajim/history_manager.py:620
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "您確定要刪除所選取的訊息?"
 
-#: gajim/history_manager.py:621
+#: gajim/history_manager.py:623
 msgid "This is an irreversible operation."
 msgstr "該作業是不可撤消的。"
 
@@ -971,8 +971,8 @@ msgstr "日期的格式必須是 YYYY-MM-DD"
 msgid "Information received"
 msgstr "資訊已收到"
 
-#: gajim/profile_window.py:334 gajim/dialogs.py:2531 gajim/dialogs.py:2619
-#: gajim/dialogs.py:3068 gajim/disco.py:536 gajim/gui_interface.py:1847
+#: gajim/profile_window.py:334 gajim/dialogs.py:2562 gajim/dialogs.py:2650
+#: gajim/dialogs.py:3105 gajim/disco.py:536 gajim/gui_interface.py:1849
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "尚未連線到伺服器"
@@ -1001,17 +1001,17 @@ msgid ""
 "later."
 msgstr "發布您的個人資訊時發生錯誤，請稍後重試。"
 
-#: gajim/dialogs.py:95
+#: gajim/dialogs.py:90
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "聯絡人名稱: <i>%s</i>"
 
-#: gajim/dialogs.py:97
+#: gajim/dialogs.py:92
 #, fuzzy, python-format
 msgid "JID: <i>%s</i>"
 msgstr "Jabber ID: <i>%s</i>"
 
-#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2939
+#: gajim/dialogs.py:121 gajim/dialogs.py:133 gajim/roster_window.py:2939
 #: gajim/roster_window.py:3953 gajim/roster_window.py:5234
 #: gajim/accounts_window.py:463 gajim/common/contacts.py:105
 #: gajim/common/contacts.py:137 gajim/data/gui/preferences_window.ui:569
@@ -1019,117 +1019,117 @@ msgstr "Jabber ID: <i>%s</i>"
 msgid "General"
 msgstr "一般"
 
-#: gajim/dialogs.py:211
+#: gajim/dialogs.py:206
 msgid "Group"
 msgstr "群組"
 
-#: gajim/dialogs.py:218
+#: gajim/dialogs.py:213
 msgid "In the group"
 msgstr "群組內"
 
-#: gajim/dialogs.py:313
+#: gajim/dialogs.py:308
 msgid "KeyID"
 msgstr "KeyID"
 
-#: gajim/dialogs.py:318
+#: gajim/dialogs.py:313
 msgid "Contact name"
 msgstr "聯絡人名稱"
 
-#: gajim/dialogs.py:496
+#: gajim/dialogs.py:491
 msgid "Set Mood"
 msgstr "設定 Mood"
 
-#: gajim/dialogs.py:616
+#: gajim/dialogs.py:611
 #, python-format
 msgid "%s Status Message"
 msgstr " %s 狀態訊息"
 
-#: gajim/dialogs.py:630
+#: gajim/dialogs.py:625
 msgid "Status Message"
 msgstr "狀態訊息"
 
-#: gajim/dialogs.py:820
+#: gajim/dialogs.py:815
 msgid "Overwrite Status Message?"
 msgstr "覆寫狀態訊息?"
 
-#: gajim/dialogs.py:821
+#: gajim/dialogs.py:816
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "這個名稱已被使用。您想要覆寫這個狀態訊息嗎?"
 
-#: gajim/dialogs.py:829
+#: gajim/dialogs.py:824
 msgid "Save as Preset Status Message"
 msgstr "另存為預設狀態訊息"
 
-#: gajim/dialogs.py:830
+#: gajim/dialogs.py:825
 msgid "Please type a name for this status message"
 msgstr "請為這個狀態訊息輸入一個名稱"
 
-#: gajim/dialogs.py:857
+#: gajim/dialogs.py:852
 msgid "JID:"
 msgstr ""
 
-#: gajim/dialogs.py:858
+#: gajim/dialogs.py:853
 msgid "AIM Address:"
 msgstr "AIM 位址:"
 
-#: gajim/dialogs.py:859
+#: gajim/dialogs.py:854
 msgid "GG Number:"
 msgstr "GG 號碼:"
 
-#: gajim/dialogs.py:860
+#: gajim/dialogs.py:855
 msgid "ICQ Number:"
 msgstr "ICQ 號碼:"
 
-#: gajim/dialogs.py:861
+#: gajim/dialogs.py:856
 msgid "MSN Address:"
 msgstr "MSN 位址:"
 
-#: gajim/dialogs.py:862
+#: gajim/dialogs.py:857
 msgid "Yahoo! Address:"
 msgstr "Yahoo! 位址:"
 
-#: gajim/dialogs.py:899
+#: gajim/dialogs.py:894
 #, fuzzy, python-format
 msgid ""
 "Please fill in the data of the contact you want to add to your account <b>"
 "%s</b>"
 msgstr "請填入您想加入到帳號 %s 的聯絡人的資訊"
 
-#: gajim/dialogs.py:902
+#: gajim/dialogs.py:897
 msgid "Please fill in the data of the contact you want to add"
 msgstr "請填入您想加入的聯絡人的資訊"
 
-#: gajim/dialogs.py:1094 gajim/dialogs.py:1100 gajim/dialogs.py:1105
+#: gajim/dialogs.py:1089 gajim/dialogs.py:1095 gajim/dialogs.py:1100
 msgid "Invalid User ID"
 msgstr "無效的使用者ID"
 
-#: gajim/dialogs.py:1101
+#: gajim/dialogs.py:1096
 msgid "The user ID must not contain a resource."
 msgstr "使用者ID不應包含資源。"
 
-#: gajim/dialogs.py:1106
+#: gajim/dialogs.py:1101
 msgid "You cannot add yourself to your roster."
 msgstr "您不能將您自己加入到您的聯絡人清單中。"
 
-#: gajim/dialogs.py:1120
+#: gajim/dialogs.py:1115
 msgid "Contact already in roster"
 msgstr "聯絡人已經在聯絡人清單中"
 
-#: gajim/dialogs.py:1121
+#: gajim/dialogs.py:1116
 msgid "This contact is already listed in your roster."
 msgstr "此聯絡人已經在您的聯絡人清單中了"
 
-#: gajim/dialogs.py:1174 gajim/dialogs.py:1208
+#: gajim/dialogs.py:1169 gajim/dialogs.py:1203
 msgid "User ID:"
 msgstr "使用者 ID:"
 
-#: gajim/dialogs.py:1274
+#: gajim/dialogs.py:1269
 #, fuzzy
 msgid "Error while adding transport contact"
 msgstr "加入服務錯誤。 %s"
 
-#: gajim/dialogs.py:1275
+#: gajim/dialogs.py:1270
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1137,55 +1137,55 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/dialogs.py:1307
+#: gajim/dialogs.py:1302
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "一個 GTK+ 的 Jabber 客戶端"
 
-#: gajim/dialogs.py:1308
+#: gajim/dialogs.py:1303
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ 版本:"
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1304
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK 版本:"
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1305
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1313
+#: gajim/dialogs.py:1308
 #, fuzzy
 msgid "Current Developers"
 msgstr "目前的開發者:"
 
-#: gajim/dialogs.py:1314
+#: gajim/dialogs.py:1309
 #, fuzzy
 msgid "Past Developers"
 msgstr "既往開發者:"
 
-#: gajim/dialogs.py:1315
+#: gajim/dialogs.py:1310
 msgid "Artists"
 msgstr ""
 
-#: gajim/dialogs.py:1319
+#: gajim/dialogs.py:1314
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/dialogs.py:1320
+#: gajim/dialogs.py:1315
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr "最後但不是最不重要的，我們要感謝所有的套件維護者。"
 
-#: gajim/dialogs.py:1321
+#: gajim/dialogs.py:1316
 #, fuzzy
 msgid "Thanks"
 msgstr "感激"
 
-#: gajim/dialogs.py:1323
+#: gajim/dialogs.py:1318
 msgid "translator-credits"
 msgstr ""
 "wwld <wwld@radio.lzusiyu.org>\n"
@@ -1194,12 +1194,12 @@ msgstr ""
 "Guanhao Yin <yinguanhao@gmail.com>\n"
 "趙惟倫 <chaoweilun@gmail.com>"
 
-#: gajim/dialogs.py:1487
+#: gajim/dialogs.py:1503
 #, fuzzy, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "語言 %s 的詞典無法使用"
 
-#: gajim/dialogs.py:1488
+#: gajim/dialogs.py:1504
 #, fuzzy, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1211,12 +1211,12 @@ msgstr ""
 "言。\n"
 "高亮度拼寫錯誤的特性不會被啟用。"
 
-#: gajim/dialogs.py:1835 gajim/dialogs.py:1850 gajim/gui_interface.py:1510
-#: gajim/gui_interface.py:1552
+#: gajim/dialogs.py:1851 gajim/dialogs.py:1866 gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1553
 msgid "Insecure connection"
 msgstr "不安全的連線"
 
-#: gajim/dialogs.py:1836
+#: gajim/dialogs.py:1852
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1227,512 +1227,512 @@ msgstr ""
 "您即將透過不安全的連線與帳號 %(account)s (%(server)s) 連接。這意味著您的所有"
 "對話都會不經加密地被交換。您確定要這樣做嗎？"
 
-#: gajim/dialogs.py:1841 gajim/gui_interface.py:1514
-#: gajim/gui_interface.py:1555
+#: gajim/dialogs.py:1857 gajim/gui_interface.py:1515
+#: gajim/gui_interface.py:1556
 msgid "Yes, I really want to connect insecurely"
 msgstr "是的，我確實想要不安全地連線"
 
-#: gajim/dialogs.py:1842
+#: gajim/dialogs.py:1858
 msgid "Gajim will NOT connect unless you check this box"
 msgstr ""
 
-#: gajim/dialogs.py:1843 gajim/groupchat_control.py:2285
+#: gajim/dialogs.py:1859 gajim/groupchat_control.py:2335
 #: gajim/roster_window.py:2897 gajim/roster_window.py:3529
 #: gajim/roster_window.py:4282 gajim/message_window.py:247
-#: gajim/gui_interface.py:725 gajim/gui_interface.py:1515
-#: gajim/gui_interface.py:1556
+#: gajim/gui_interface.py:725 gajim/gui_interface.py:1516
+#: gajim/gui_interface.py:1557
 msgid "_Do not ask me again"
 msgstr "不要再問我了(_D)"
 
-#: gajim/dialogs.py:1941
+#: gajim/dialogs.py:1957
 msgid "_Resume"
 msgstr "再續(_R)"
 
-#: gajim/dialogs.py:1949
+#: gajim/dialogs.py:1965
 msgid "Re_place"
 msgstr "置換(_P)"
 
-#: gajim/dialogs.py:2152 gajim/config.py:2167
+#: gajim/dialogs.py:2168 gajim/config.py:2169
 #: gajim/command_system/implementation/standard.py:261
 msgid "Invalid nickname"
 msgstr "無效的暱稱"
 
-#: gajim/dialogs.py:2153
+#: gajim/dialogs.py:2169
 #, fuzzy
 msgid "The nickname contains invalid characters."
 msgstr "暱稱包含不合法字元。"
 
-#: gajim/dialogs.py:2275
+#: gajim/dialogs.py:2291
 msgid "Subscription Request"
 msgstr "認證請求"
 
-#: gajim/dialogs.py:2284
+#: gajim/dialogs.py:2300
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "%(jid)s 對帳號 %(account)s 的認證請求"
 
-#: gajim/dialogs.py:2287
+#: gajim/dialogs.py:2303
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s 的認證請求"
 
-#: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
+#: gajim/dialogs.py:2375 gajim/data/gui/join_groupchat_window.ui:312
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "加入多人聊天"
 
-#: gajim/dialogs.py:2500
+#: gajim/dialogs.py:2531
 #, fuzzy
 msgid "Invalid Room"
 msgstr "無效聊天室"
 
-#: gajim/dialogs.py:2501
+#: gajim/dialogs.py:2532
 msgid "Please choose a room"
 msgstr ""
 
-#: gajim/dialogs.py:2513 gajim/dialogs.py:2520
+#: gajim/dialogs.py:2544 gajim/dialogs.py:2551
 msgid "Invalid Nickname"
 msgstr "不合法的暱稱"
 
-#: gajim/dialogs.py:2514
+#: gajim/dialogs.py:2545
 #, fuzzy
 msgid "Please choose a nickname"
 msgstr "請用您想要的名稱新增一個主題。"
 
-#: gajim/dialogs.py:2526 gajim/dialogs.py:3479 gajim/config.py:2451
+#: gajim/dialogs.py:2557 gajim/dialogs.py:3516 gajim/config.py:2453
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 msgid "Invalid JID"
 msgstr "無效的 JID"
 
-#: gajim/dialogs.py:2532 gajim/gui_interface.py:1848
+#: gajim/dialogs.py:2563 gajim/gui_interface.py:1850
 msgid "You can not join a group chat unless you are connected."
 msgstr "您必須連線才能加入聊天室。"
 
-#: gajim/dialogs.py:2586 gajim/dialogs.py:2597
+#: gajim/dialogs.py:2617 gajim/dialogs.py:2628
 #, fuzzy
 msgid "Wrong server"
 msgstr "錯誤的 uri"
 
-#: gajim/dialogs.py:2587 gajim/dialogs.py:2598
+#: gajim/dialogs.py:2618 gajim/dialogs.py:2629
 #, fuzzy, python-format
 msgid "%s is not a groupchat server"
 msgstr "這不是一個聊天室"
 
-#: gajim/dialogs.py:2620
+#: gajim/dialogs.py:2651
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "未連線時，您不能同步您的聯絡人。"
 
-#: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3805
-#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
-#: gajim/disco.py:1977
+#: gajim/dialogs.py:2662 gajim/dialogs.py:2733 gajim/dialogs.py:3851
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1693
+#: gajim/disco.py:1978
 msgid "Name"
 msgstr "名稱"
 
-#: gajim/dialogs.py:2634 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2665 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "伺服器"
 
-#: gajim/dialogs.py:2670
+#: gajim/dialogs.py:2701
 msgid "This account is not connected to the server"
 msgstr "這個帳號已經連線到伺服器"
 
-#: gajim/dialogs.py:2671
+#: gajim/dialogs.py:2702
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "這個帳號連線後您才可以與之同步"
 
-#: gajim/dialogs.py:2700
+#: gajim/dialogs.py:2731
 msgid "Synchronise"
 msgstr "同步"
 
-#: gajim/dialogs.py:2763
+#: gajim/dialogs.py:2794
 #, fuzzy
 msgid "Start new Conversation"
 msgstr "繼續對話"
 
-#: gajim/dialogs.py:3021
+#: gajim/dialogs.py:3052
 #, fuzzy
 msgid "New Groupchat"
 msgstr "新聊天室"
 
-#: gajim/dialogs.py:3023
+#: gajim/dialogs.py:3054
 #, fuzzy
 msgid "New Contact"
 msgstr "加入聯絡人"
 
-#: gajim/dialogs.py:3069
+#: gajim/dialogs.py:3106
 msgid "Without a connection, you can not change your password."
 msgstr "連線後才可變更密碼。"
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "Invalid password"
 msgstr "無效密碼"
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "You must enter a password."
 msgstr "您必須輸入密碼"
 
-#: gajim/dialogs.py:3093
+#: gajim/dialogs.py:3130
 msgid "Passwords do not match"
 msgstr "密碼不符"
 
-#: gajim/dialogs.py:3094
+#: gajim/dialogs.py:3131
 msgid "The passwords typed in both fields must be identical."
 msgstr "在兩個輸入框中輸入的密碼必須一致。"
 
-#: gajim/dialogs.py:3132 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2814
+#: gajim/dialogs.py:3169 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2821
 msgid "Contact Signed In"
 msgstr "聯絡人登入"
 
-#: gajim/dialogs.py:3134 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2820
+#: gajim/dialogs.py:3171 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2827
 msgid "Contact Signed Out"
 msgstr "聯絡人離開登入"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2634
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2641
 msgid "New Message"
 msgstr "新訊息"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2616
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2623
 msgid "New Single Message"
 msgstr "新單條訊息"
 
-#: gajim/dialogs.py:3137 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2622
+#: gajim/dialogs.py:3174 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/common/connection_handlers_events.py:2629
 msgid "New Private Message"
 msgstr "新個人訊息"
 
-#: gajim/dialogs.py:3137
+#: gajim/dialogs.py:3174
 msgid "New E-mail"
 msgstr "新電子郵件"
 
-#: gajim/dialogs.py:3139 gajim/gui_interface.py:926 gajim/notify.py:93
+#: gajim/dialogs.py:3176 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "檔案傳輸請求"
 
-#: gajim/dialogs.py:3141 gajim/gui_interface.py:861 gajim/gui_interface.py:891
+#: gajim/dialogs.py:3178 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "檔案傳輸錯誤"
 
-#: gajim/dialogs.py:3143 gajim/gui_interface.py:1030
+#: gajim/dialogs.py:3180 gajim/gui_interface.py:1030
 #: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "檔案傳輸完成"
 
-#: gajim/dialogs.py:3144 gajim/gui_interface.py:1034
+#: gajim/dialogs.py:3181 gajim/gui_interface.py:1034
 #: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "檔案傳輸已停止"
 
-#: gajim/dialogs.py:3146 gajim/dialogs.py:4702 gajim/chat_control.py:1647
+#: gajim/dialogs.py:3183 gajim/dialogs.py:4748 gajim/chat_control.py:1647
 #: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "多人聊天邀請"
 
-#: gajim/dialogs.py:3148 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2808
+#: gajim/dialogs.py:3185 gajim/notify.py:93
+#: gajim/common/connection_handlers_events.py:2815
 msgid "Contact Changed Status"
 msgstr "聯絡人狀態變更"
 
-#: gajim/dialogs.py:3367
+#: gajim/dialogs.py:3404
 #, python-format
 msgid "Single Message using account %s"
 msgstr "單條訊息，使用帳號 %s"
 
-#: gajim/dialogs.py:3369
+#: gajim/dialogs.py:3406
 #, python-format
 msgid "Single Message in account %s"
 msgstr "單條訊息，在帳號 %s"
 
-#: gajim/dialogs.py:3371
+#: gajim/dialogs.py:3408
 msgid "Single Message"
 msgstr "單條訊息"
 
-#: gajim/dialogs.py:3374
+#: gajim/dialogs.py:3411
 #, python-format
 msgid "Send %s"
 msgstr "傳送 %s"
 
-#: gajim/dialogs.py:3397
+#: gajim/dialogs.py:3434
 #, python-format
 msgid "Received %s"
 msgstr "已接收 %s"
 
-#: gajim/dialogs.py:3420
+#: gajim/dialogs.py:3457
 #, python-format
 msgid "Form %s"
 msgstr "來自 %s"
 
-#: gajim/dialogs.py:3448 gajim/dialogs.py:3634
+#: gajim/dialogs.py:3485 gajim/dialogs.py:3672
 msgid "Connection not available"
 msgstr "連線無法使用"
 
-#: gajim/dialogs.py:3449 gajim/dialogs.py:3635
+#: gajim/dialogs.py:3486 gajim/dialogs.py:3673
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "請確認您已經連線到 \"%s\"。"
 
-#: gajim/dialogs.py:3480 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3517 gajim/dialog_messages.py:43
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "不能向 %s 傳送訊息，無效的 JID。"
 
-#: gajim/dialogs.py:3503
+#: gajim/dialogs.py:3540
 #, python-format
 msgid "RE: %s"
 msgstr "回復: %s"
 
-#: gajim/dialogs.py:3504
+#: gajim/dialogs.py:3541
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s 寫道: \n"
 
-#: gajim/dialogs.py:3551 gajim/data/gui/shortcuts_window.ui:113
+#: gajim/dialogs.py:3589 gajim/data/gui/shortcuts_window.ui:113
 #, fuzzy
 msgid "Clear"
 msgstr "清潔"
 
-#: gajim/dialogs.py:3556
+#: gajim/dialogs.py:3594
 #, fuzzy
 msgid "Filter"
 msgstr "過濾器:"
 
-#: gajim/dialogs.py:3561
+#: gajim/dialogs.py:3599
 #, fuzzy
 msgid "XML Input"
 msgstr "<b>XML 輸入</b>"
 
-#: gajim/dialogs.py:3565
+#: gajim/dialogs.py:3603
 #, fuzzy
 msgid "Send"
 msgstr "傳送(_S)"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "add"
 msgstr "加入"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "modify"
 msgstr "修改"
 
-#: gajim/dialogs.py:3749
+#: gajim/dialogs.py:3795
 msgid "remove"
 msgstr "移除"
 
-#: gajim/dialogs.py:3778
+#: gajim/dialogs.py:3824
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
 "roster."
 msgstr "<b>%(jid)s</b> 希望您 <b>%(action)s</b> 您的一些聯絡人。"
 
-#: gajim/dialogs.py:3794 gajim/dialogs.py:3840 gajim/accounts_window.py:44
+#: gajim/dialogs.py:3840 gajim/dialogs.py:3886 gajim/accounts_window.py:44
 msgid "Add"
 msgstr "加入"
 
-#: gajim/dialogs.py:3796 gajim/dialogs.py:3871
+#: gajim/dialogs.py:3842 gajim/dialogs.py:3917
 msgid "Modify"
 msgstr "修改"
 
-#: gajim/dialogs.py:3798 gajim/dialogs.py:3895
+#: gajim/dialogs.py:3844 gajim/dialogs.py:3941
 msgid "Delete"
 msgstr "刪除"
 
-#: gajim/dialogs.py:3808
+#: gajim/dialogs.py:3854
 msgid "Groups"
 msgstr "群組"
 
-#: gajim/dialogs.py:3916
+#: gajim/dialogs.py:3962
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s 建議我將您加入到我的聯絡人清單。"
 
-#: gajim/dialogs.py:3930
+#: gajim/dialogs.py:3976
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "加入了 %s 聯絡人"
 
-#: gajim/dialogs.py:3968
+#: gajim/dialogs.py:4014
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "移除了 %s 聯絡人"
 
-#: gajim/dialogs.py:3994
+#: gajim/dialogs.py:4040
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "%s 的存檔偏好設定"
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 msgid "Success!"
 msgstr ""
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 #, fuzzy
 msgid "Your Archiving Preferences have been saved!"
 msgstr "%s 的存檔偏好設定"
 
-#: gajim/dialogs.py:4048
+#: gajim/dialogs.py:4094
 msgid "We got no response from the Server"
 msgstr ""
 
-#: gajim/dialogs.py:4050
+#: gajim/dialogs.py:4096
 #, fuzzy
 msgid "We received an error: {}"
 msgstr "有一處錯誤"
 
-#: gajim/dialogs.py:4054
+#: gajim/dialogs.py:4100
 #, fuzzy
 msgid "Error!"
 msgstr "錯誤"
 
-#: gajim/dialogs.py:4113
+#: gajim/dialogs.py:4159
 #, fuzzy
 msgid "Add JID"
 msgstr "Jabber ID"
 
-#: gajim/dialogs.py:4186
+#: gajim/dialogs.py:4232
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "隱私策略清單 <b><i>%s</i></b>"
 
-#: gajim/dialogs.py:4190
+#: gajim/dialogs.py:4236
 #, python-format
 msgid "Privacy List for %s"
 msgstr "%s 的隱私策略清單"
 
-#: gajim/dialogs.py:4192 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4238 gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "隱私策略清單"
 
-#: gajim/dialogs.py:4263
+#: gajim/dialogs.py:4309
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "順序: %(order)s，動作: %(action)s，類型: %(type)s，值: %(value)s"
 
-#: gajim/dialogs.py:4268
+#: gajim/dialogs.py:4314
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "順序: %(order)s，動作: %(action)s"
 
-#: gajim/dialogs.py:4322
+#: gajim/dialogs.py:4368
 msgid "<b>Edit a rule</b>"
 msgstr "<b>編輯規則</b>"
 
-#: gajim/dialogs.py:4434
+#: gajim/dialogs.py:4480
 msgid "<b>Add a rule</b>"
 msgstr "<b>加入規則</b>"
 
-#: gajim/dialogs.py:4535
+#: gajim/dialogs.py:4581
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "%s 的隱私策略清單"
 
-#: gajim/dialogs.py:4631
+#: gajim/dialogs.py:4677
 msgid "Invalid List Name"
 msgstr "不合法的清單名稱"
 
-#: gajim/dialogs.py:4632
+#: gajim/dialogs.py:4678
 msgid "You must enter a name to create a privacy list."
 msgstr "您必須輸入一個名稱以建立一個隱私策略清單。"
 
-#: gajim/dialogs.py:4668
+#: gajim/dialogs.py:4714
 msgid "You are invited to a groupchat"
 msgstr "您被邀請到一個聊天室"
 
-#: gajim/dialogs.py:4671
+#: gajim/dialogs.py:4717
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact 邀請您加入一個聊天室"
 
-#: gajim/dialogs.py:4673
+#: gajim/dialogs.py:4719
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact 邀請您參加聊天室 %(room_jid)s"
 
-#: gajim/dialogs.py:4682
+#: gajim/dialogs.py:4728
 #, python-format
 msgid "Comment: %s"
 msgstr "註釋: %s"
 
-#: gajim/dialogs.py:4684
+#: gajim/dialogs.py:4730
 msgid "Do you want to accept the invitation?"
 msgstr "您是否接受邀請?"
 
-#: gajim/dialogs.py:4700
+#: gajim/dialogs.py:4746
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: gajim/dialogs.py:4749
+#: gajim/dialogs.py:4795
 msgid "Choose Client Cert #PCKS12"
 msgstr "選擇客戶端證書 #PCKS12"
 
-#: gajim/dialogs.py:4765 gajim/accounts_window.py:657
+#: gajim/dialogs.py:4811 gajim/accounts_window.py:657
 msgid "PKCS12 Files"
 msgstr "PKCS12 檔案"
 
-#: gajim/dialogs.py:4791
+#: gajim/dialogs.py:4837
 msgid "Choose Sound"
 msgstr "選擇聲音"
 
-#: gajim/dialogs.py:4807
+#: gajim/dialogs.py:4853
 msgid "Wav Sounds"
 msgstr "Wav聲音"
 
-#: gajim/dialogs.py:4837
+#: gajim/dialogs.py:4883
 msgid "Choose Image"
 msgstr "選擇圖像"
 
-#: gajim/dialogs.py:4855
+#: gajim/dialogs.py:4901
 msgid "Images"
 msgstr "圖像"
 
-#: gajim/dialogs.py:4926
+#: gajim/dialogs.py:4972
 msgid "Choose Archive"
 msgstr "選擇歸檔檔案"
 
-#: gajim/dialogs.py:4945
+#: gajim/dialogs.py:4991
 msgid "Zip files"
 msgstr "Zip 檔案"
 
-#: gajim/dialogs.py:4971
+#: gajim/dialogs.py:5017
 #, python-format
 msgid "When %s becomes:"
 msgstr "當 %s 變為:"
 
-#: gajim/dialogs.py:4973
+#: gajim/dialogs.py:5019
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "正在為 %s 加入特殊提示"
 
-#: gajim/dialogs.py:5213
+#: gajim/dialogs.py:5259
 msgid "an audio and video"
 msgstr "一個音訊和視訊"
 
-#: gajim/dialogs.py:5215
+#: gajim/dialogs.py:5261
 msgid "an audio"
 msgstr "一個音訊"
 
-#: gajim/dialogs.py:5217
+#: gajim/dialogs.py:5263
 msgid "a video"
 msgstr "一個視訊"
 
-#: gajim/dialogs.py:5221
+#: gajim/dialogs.py:5267
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr "%(contact)s 想要與您發起一個 %(type)s 作業階段。您要回應嗎?"
 
-#: gajim/dialogs.py:5326 gajim/dialogs.py:5362
+#: gajim/dialogs.py:5372 gajim/dialogs.py:5408
 #, python-format
 msgid "Certificate for account %s"
 msgstr "帳號憑證 %s"
 
-#: gajim/dialogs.py:5326
+#: gajim/dialogs.py:5372
 #, fuzzy, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1773,41 +1773,41 @@ msgstr ""
 "<b>指紋</b>\n"
 "SHA1 指紋:%(sha1)s"
 
-#: gajim/dialogs.py:5373 gajim/gui_interface.py:1404
+#: gajim/dialogs.py:5419 gajim/gui_interface.py:1405
 #, fuzzy, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "SSL 憑證驗證"
 
-#: gajim/dialogs.py:5374 gajim/dialogs.py:5391
+#: gajim/dialogs.py:5420 gajim/dialogs.py:5437
 #, fuzzy
 msgid "View cert…"
 msgstr "檢視憑證…"
 
-#: gajim/dialogs.py:5407 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:5453 gajim/data/gui/application_menu.ui:32
 #, fuzzy
 msgid "File Transfer"
 msgstr "檔案傳輸"
 
-#: gajim/dialogs.py:5431
+#: gajim/dialogs.py:5477
 msgid "Requesting HTTP Upload Slot..."
 msgstr ""
 
-#: gajim/dialogs.py:5435
+#: gajim/dialogs.py:5481
 msgid "Uploading file via HTTP File Upload..."
 msgstr ""
 
-#: gajim/dialogs.py:5439
+#: gajim/dialogs.py:5485
 #, fuzzy
 msgid "Encrypting file..."
 msgstr "E2E 加密被停用"
 
-#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1793
+#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1839
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s 現在成了 %(new_nick)s"
 
-#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1942
-#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2804
+#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1988
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2811
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s 的狀態是 %(status)s"
@@ -1821,48 +1821,48 @@ msgstr "傳送私有訊息失敗"
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "您不再在聊天室\"%(room)s\"中或\"%(nick)s\"已離開。"
 
-#: gajim/groupchat_control.py:636 gajim/chat_control.py:326
+#: gajim/groupchat_control.py:640 gajim/chat_control.py:326
 #: gajim/chat_control.py:330
 msgid "HTTP File Upload"
 msgstr ""
 
-#: gajim/groupchat_control.py:638
+#: gajim/groupchat_control.py:642
 #, fuzzy
 msgid "HTTP File Upload not supported by your server"
 msgstr "您的伺服器不支援儲存元聯絡人資訊"
 
-#: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2320
+#: gajim/groupchat_control.py:662 gajim/groupchat_control.py:2370
 msgid "Changing Subject"
 msgstr "正在更換話題"
 
-#: gajim/groupchat_control.py:652 gajim/groupchat_control.py:2321
+#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
 msgid "Please specify the new subject:"
 msgstr "請指定新話題:"
 
-#: gajim/groupchat_control.py:659
+#: gajim/groupchat_control.py:670
 msgid "Changing Nickname"
 msgstr "正在更換暱稱"
 
-#: gajim/groupchat_control.py:660
+#: gajim/groupchat_control.py:671
 msgid "Please specify the new nickname you want to use:"
 msgstr "請指定您想使用的新暱稱:"
 
-#: gajim/groupchat_control.py:677
+#: gajim/groupchat_control.py:688
 #, fuzzy
 msgid "Invalid group chat JID"
 msgstr "無效的聊天室 Jabber ID"
 
-#: gajim/groupchat_control.py:678
+#: gajim/groupchat_control.py:689
 #, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr "聊天室 Jabber ID 包含不合法字元。"
 
-#: gajim/groupchat_control.py:684
+#: gajim/groupchat_control.py:699
 #, python-format
 msgid "Destroying %s"
 msgstr "正在銷毀 %s"
 
-#: gajim/groupchat_control.py:685
+#: gajim/groupchat_control.py:700
 #, fuzzy
 msgid ""
 "You are going to remove this room permanently.\n"
@@ -1871,197 +1871,197 @@ msgstr ""
 "您正要徹底銷毀這個聊天室。\n"
 "您可以在下面指定一個原因:"
 
-#: gajim/groupchat_control.py:687
+#: gajim/groupchat_control.py:702
 msgid "You may also enter an alternate venue:"
 msgstr "您也可以輸入一個可選的替代地點:"
 
-#: gajim/groupchat_control.py:864
+#: gajim/groupchat_control.py:880
 msgid "Insert Nickname"
 msgstr "插入暱稱"
 
-#: gajim/groupchat_control.py:1015 gajim/chat_control.py:803
+#: gajim/groupchat_control.py:1062 gajim/chat_control.py:803
 msgid "and authenticated"
 msgstr "且已被認證"
 
-#: gajim/groupchat_control.py:1019 gajim/chat_control.py:807
+#: gajim/groupchat_control.py:1066 gajim/chat_control.py:807
 msgid "and NOT authenticated"
 msgstr "且未被認證"
 
-#: gajim/groupchat_control.py:1023 gajim/chat_control.py:811
+#: gajim/groupchat_control.py:1070 gajim/chat_control.py:811
 #, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "%(type)s 加密 %(status)s 活動 %(authenticated)s。\n"
 "您的聊天作業階段 %(logged)s 將被記錄。"
 
-#: gajim/groupchat_control.py:1066
+#: gajim/groupchat_control.py:1113
 msgid "Conversation with "
 msgstr "對話，與"
 
-#: gajim/groupchat_control.py:1068
+#: gajim/groupchat_control.py:1115
 msgid "Continued conversation"
 msgstr "繼續對話"
 
-#: gajim/groupchat_control.py:1427
+#: gajim/groupchat_control.py:1473
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s 將主題設定為 %(subject)s"
 
-#: gajim/groupchat_control.py:1450 gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1496 gajim/groupchat_control.py:1781
 msgid "Any occupant is allowed to see your full JID"
 msgstr "所有室友可以看到您的全部 JID"
 
-#: gajim/groupchat_control.py:1453
+#: gajim/groupchat_control.py:1499
 #, fuzzy
 msgid "Room now shows unavailable members"
 msgstr "聊天室現在顯示了無法使用的成員"
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1501
 #, fuzzy
 msgid "Room now does not show unavailable members"
 msgstr "聊天室現在不顯示無法使用的成員"
 
-#: gajim/groupchat_control.py:1457
+#: gajim/groupchat_control.py:1503
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1507
 msgid "Room logging is now enabled"
 msgstr "聊天室訊息記錄已啟用"
 
-#: gajim/groupchat_control.py:1463
+#: gajim/groupchat_control.py:1509
 msgid "Room logging is now disabled"
 msgstr "聊天室訊息記錄已停用"
 
-#: gajim/groupchat_control.py:1465
+#: gajim/groupchat_control.py:1511
 msgid "Room is now non-anonymous"
 msgstr "聊天室現在是非匿名的"
 
-#: gajim/groupchat_control.py:1468
+#: gajim/groupchat_control.py:1514
 msgid "Room is now semi-anonymous"
 msgstr "聊天室現在是半匿名的"
 
-#: gajim/groupchat_control.py:1471
+#: gajim/groupchat_control.py:1517
 #, fuzzy
 msgid "Room is now fully anonymous"
 msgstr "聊天室現在是完全匿名的"
 
-#: gajim/groupchat_control.py:1511 gajim/chat_control.py:1268
+#: gajim/groupchat_control.py:1557 gajim/chat_control.py:1268
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1728 gajim/groupchat_control.py:2348
+#: gajim/groupchat_control.py:1774 gajim/groupchat_control.py:2398
 #: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
-#: gajim/groupchat_control.py:1740
+#: gajim/groupchat_control.py:1786
 msgid "Room logging is enabled"
 msgstr "聊天室記錄被啟用"
 
-#: gajim/groupchat_control.py:1742
+#: gajim/groupchat_control.py:1788
 msgid "A new room has been created"
 msgstr "一個新的聊天室被建立"
 
-#: gajim/groupchat_control.py:1745
+#: gajim/groupchat_control.py:1791
 msgid "The server has assigned or modified your roomnick"
 msgstr "伺服器指定或修改了您的聊天室暱稱"
 
-#: gajim/groupchat_control.py:1751
+#: gajim/groupchat_control.py:1797
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s 被踢出: %(reason)s"
 
-#: gajim/groupchat_control.py:1754
+#: gajim/groupchat_control.py:1800
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 踢出: %(reason)s"
 
-#: gajim/groupchat_control.py:1763
+#: gajim/groupchat_control.py:1809
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s 被封禁: %(reason)s"
 
-#: gajim/groupchat_control.py:1766
+#: gajim/groupchat_control.py:1812
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s 被 %(who)s 封禁: %(reason)s"
 
-#: gajim/groupchat_control.py:1777 gajim/groupchat_control.py:1861
+#: gajim/groupchat_control.py:1823 gajim/groupchat_control.py:1907
 #, python-format
 msgid "You are now known as %s"
 msgstr "您現在成了 %s "
 
-#: gajim/groupchat_control.py:1815 gajim/groupchat_control.py:1820
-#: gajim/groupchat_control.py:1826
+#: gajim/groupchat_control.py:1861 gajim/groupchat_control.py:1866
+#: gajim/groupchat_control.py:1872
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
-#: gajim/groupchat_control.py:1817
+#: gajim/groupchat_control.py:1863
 msgid "affiliation changed"
 msgstr "歸屬變更"
 
-#: gajim/groupchat_control.py:1822
+#: gajim/groupchat_control.py:1868
 msgid "room configuration changed to members-only"
 msgstr "聊天室配置變為\"僅成員\""
 
-#: gajim/groupchat_control.py:1828
+#: gajim/groupchat_control.py:1874
 msgid "system shutdown"
 msgstr "系統關閉"
 
-#: gajim/groupchat_control.py:1882
+#: gajim/groupchat_control.py:1928
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** %(nick)s 的歸屬被 %(actor)s 設定為 %(affiliation)s"
 
-#: gajim/groupchat_control.py:1886
+#: gajim/groupchat_control.py:1932
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** %(nick)s 的歸屬被設定為 %(affiliation)s"
 
-#: gajim/groupchat_control.py:1901
+#: gajim/groupchat_control.py:1947
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** %(nick)s 的角色被 %(actor)s 設定為 %(role)s"
 
-#: gajim/groupchat_control.py:1905
+#: gajim/groupchat_control.py:1951
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** %(nick)s 的角色被設定為 %(role)s"
 
-#: gajim/groupchat_control.py:1935
+#: gajim/groupchat_control.py:1981
 #, python-format
 msgid "%s has left"
 msgstr "%s 離開了"
 
-#: gajim/groupchat_control.py:1940
+#: gajim/groupchat_control.py:1986
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s 加入聊天室"
 
-#: gajim/groupchat_control.py:2279
+#: gajim/groupchat_control.py:2329
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "您確定要離開聊天室\"%s\"嗎?"
 
-#: gajim/groupchat_control.py:2281
+#: gajim/groupchat_control.py:2331
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "如果關閉此視窗，您將中斷此聊天室的連線。"
 
-#: gajim/groupchat_control.py:2500
+#: gajim/groupchat_control.py:2550
 #, python-format
 msgid "Kicking %s"
 msgstr "將踢走 %s"
 
-#: gajim/groupchat_control.py:2501 gajim/groupchat_control.py:2797
+#: gajim/groupchat_control.py:2551 gajim/groupchat_control.py:2847
 msgid "You may specify a reason below:"
 msgstr "您可以指定一個原因:"
 
-#: gajim/groupchat_control.py:2796
+#: gajim/groupchat_control.py:2846
 #, python-format
 msgid "Banning %s"
 msgstr "將封禁 %s"
@@ -2153,7 +2153,7 @@ msgstr ""
 "主題: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1494 gajim/gui_interface.py:1196
+#: gajim/chat_control.py:1494 gajim/gui_interface.py:1197
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2179,10 +2179,10 @@ msgstr "大小:  %s"
 
 #: gajim/chat_control.py:1596
 #, fuzzy
-msgid "_Accept"
+msgid "Accept"
 msgstr "帳號(_A)"
 
-#: gajim/chat_control.py:1650 gajim/disco.py:1752
+#: gajim/chat_control.py:1650 gajim/disco.py:1753
 msgid "_Join"
 msgstr "加入(_J)"
 
@@ -2202,7 +2202,7 @@ msgstr "已合併的帳號"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5125 gajim/message_window.py:525
+#: gajim/roster_window.py:5125 gajim/message_window.py:519
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 msgid "Groupchats"
@@ -2212,7 +2212,7 @@ msgstr "多人聊天"
 #: gajim/roster_window.py:1698 gajim/roster_window.py:1749
 #: gajim/roster_window.py:1751 gajim/roster_window.py:1912
 #: gajim/roster_window.py:2575 gajim/roster_window.py:5155 gajim/disco.py:130
-#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:135
+#: gajim/disco.py:131 gajim/disco.py:1460 gajim/common/contacts.py:135
 #: gajim/common/contacts.py:378 gajim/common/helpers.py:95
 msgid "Transports"
 msgstr "服務代理"
@@ -2453,7 +2453,7 @@ msgstr "沒有有效帳號"
 msgid "You must create an account before you can chat with other contacts."
 msgstr "您必須在與他人聊天前新增帳號。"
 
-#: gajim/roster_window.py:3676 gajim/gui_interface.py:2062
+#: gajim/roster_window.py:3676 gajim/gui_interface.py:2065
 #: gajim/dialog_messages.py:64
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隱身時無法加入聊天室"
@@ -2639,7 +2639,7 @@ msgstr "為下一筆未處理事件彈出視窗"
 msgid "Start a new chat"
 msgstr "開始聊天"
 
-#: gajim/gajim.py:180 gajim/gui_interface.py:127
+#: gajim/gajim.py:180 gajim/gui_interface.py:128
 msgid "Database Error"
 msgstr "資料庫錯誤"
 
@@ -2704,68 +2704,68 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/config.py:148 gajim/config.py:154 gajim/config.py:614
+#: gajim/config.py:150 gajim/config.py:156 gajim/config.py:616
 #: gajim/data/gui/preferences_window.ui:68
 #: gajim/data/gui/preferences_window.ui:85
 msgid "Disabled"
 msgstr "停用"
 
-#: gajim/config.py:409 gajim/config.py:413 gajim/config.py:1940
+#: gajim/config.py:411 gajim/config.py:415 gajim/config.py:1942
 msgid "Default"
 msgstr "預設"
 
-#: gajim/config.py:1126
+#: gajim/config.py:1128
 msgid "status message title"
 msgstr "狀態訊息標題"
 
-#: gajim/config.py:1127
+#: gajim/config.py:1129
 msgid "status message text"
 msgstr "狀態訊息文字"
 
-#: gajim/config.py:1515
+#: gajim/config.py:1517
 #, python-format
 msgid "Edit %s"
 msgstr "編輯 %s"
 
-#: gajim/config.py:1517
+#: gajim/config.py:1519
 #, python-format
 msgid "Register to %s"
 msgstr "註冊到 %s"
 
-#: gajim/config.py:1553
+#: gajim/config.py:1555
 msgid "Ban List"
 msgstr "封禁名單"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Member List"
 msgstr "成員清單"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Owner List"
 msgstr "室長清單"
 
-#: gajim/config.py:1555
+#: gajim/config.py:1557
 msgid "Administrator List"
 msgstr "管理員清單"
 
-#: gajim/config.py:1629
+#: gajim/config.py:1631
 msgid "Reason"
 msgstr "原因"
 
-#: gajim/config.py:1636
+#: gajim/config.py:1638
 msgid "Nick"
 msgstr "暱稱"
 
-#: gajim/config.py:1642
+#: gajim/config.py:1644
 msgid "Role"
 msgstr "角色"
 
-#: gajim/config.py:1668
+#: gajim/config.py:1670
 #, fuzzy
 msgid "Banning…"
 msgstr "封禁…"
 
-#: gajim/config.py:1670
+#: gajim/config.py:1672
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2773,12 +2773,12 @@ msgstr ""
 "<b>想做封禁誰?</b>\n"
 "\n"
 
-#: gajim/config.py:1672
+#: gajim/config.py:1674
 #, fuzzy
 msgid "Adding Member…"
 msgstr "正在加入成員…"
 
-#: gajim/config.py:1673
+#: gajim/config.py:1675
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2786,12 +2786,12 @@ msgstr ""
 "<b>想要將誰加為成員?</b>\n"
 "\n"
 
-#: gajim/config.py:1675
+#: gajim/config.py:1677
 #, fuzzy
 msgid "Adding Owner…"
 msgstr "加入室長…"
 
-#: gajim/config.py:1676
+#: gajim/config.py:1678
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -2799,12 +2799,12 @@ msgstr ""
 "<b>您想要讓誰成為室長?</b>\n"
 "\n"
 
-#: gajim/config.py:1678
+#: gajim/config.py:1680
 #, fuzzy
 msgid "Adding Administrator…"
 msgstr "加入管理員…"
 
-#: gajim/config.py:1679
+#: gajim/config.py:1681
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2812,7 +2812,7 @@ msgstr ""
 "<b>您想要讓誰成為管理員?</b>\n"
 "\n"
 
-#: gajim/config.py:1680
+#: gajim/config.py:1682
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2828,101 +2828,101 @@ msgstr ""
 "4。domain (欄位名稱本身匹配，任何 user@domain，\n"
 "domain/resource，或是包含一個子欄位名稱的位址也匹配)。"
 
-#: gajim/config.py:1781
+#: gajim/config.py:1783
 #, python-format
 msgid "Removing %s account"
 msgstr "移除帳號 %s"
 
-#: gajim/config.py:1796
+#: gajim/config.py:1798
 msgid "Account is disabled"
 msgstr "帳號被停用"
 
-#: gajim/config.py:1797
+#: gajim/config.py:1799
 msgid "To unregister from a server, account must be enabled."
 msgstr "要從伺服器移除註冊，帳號必須被啟用。"
 
-#: gajim/config.py:1811 gajim/gui_interface.py:314 gajim/gui_interface.py:748
+#: gajim/config.py:1813 gajim/gui_interface.py:314 gajim/gui_interface.py:748
 msgid "Password Required"
 msgstr "需要密碼"
 
-#: gajim/config.py:1812 gajim/gui_interface.py:733
+#: gajim/config.py:1814 gajim/gui_interface.py:733
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "輸入帳號 %s 的密碼"
 
-#: gajim/config.py:1813 gajim/gui_interface.py:748
+#: gajim/config.py:1815 gajim/gui_interface.py:748
 msgid "Save password"
 msgstr "儲存密碼"
 
-#: gajim/config.py:1824
+#: gajim/config.py:1826
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "帳號 \"%s\" 已連線到伺服器"
 
-#: gajim/config.py:1825
+#: gajim/config.py:1827
 msgid "If you remove it, the connection will be lost."
 msgstr "如果移除，將會丟失連線"
 
-#: gajim/config.py:1840
+#: gajim/config.py:1842
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "連線伺服器 %s 失敗"
 
-#: gajim/config.py:1841
+#: gajim/config.py:1843
 msgid "What would you like to do?"
 msgstr "您想做什麼?"
 
-#: gajim/config.py:1842
+#: gajim/config.py:1844
 msgid "Remove only from Gajim"
 msgstr "僅從 Gajim 移除帳號"
 
-#: gajim/config.py:1843
+#: gajim/config.py:1845
 msgid "Don't remove anything. I'll try again later"
 msgstr "不要移除任何東西。我過一會兒會重試一下"
 
-#: gajim/config.py:1940
+#: gajim/config.py:1942
 msgid "?print_status:All"
 msgstr "全部"
 
-#: gajim/config.py:1941
+#: gajim/config.py:1943
 msgid "Enter and leave only"
 msgstr "只是進入和離開"
 
-#: gajim/config.py:1942
+#: gajim/config.py:1944
 msgid "?print_status:None"
 msgstr "無"
 
-#: gajim/config.py:2008
+#: gajim/config.py:2010
 msgid "New Group Chat"
 msgstr "新聊天室"
 
-#: gajim/config.py:2044
+#: gajim/config.py:2046
 msgid "This bookmark has invalid data"
 msgstr "此書籤含無效資料"
 
-#: gajim/config.py:2045
+#: gajim/config.py:2047
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "請確認填寫伺服器與聊天室欄位或移除此書籤。"
 
-#: gajim/config.py:2168 gajim/config.py:2184 gajim/config.py:2195
-#: gajim/config.py:2223
+#: gajim/config.py:2170 gajim/config.py:2186 gajim/config.py:2197
+#: gajim/config.py:2225
 msgid "Character not allowed"
 msgstr "不允許的字元"
 
-#: gajim/config.py:2183 gajim/config.py:2194 gajim/config.py:2473
+#: gajim/config.py:2185 gajim/config.py:2196 gajim/config.py:2475
 msgid "Invalid server"
 msgstr "無效的伺服器"
 
-#: gajim/config.py:2222
+#: gajim/config.py:2224
 msgid "Invalid room"
 msgstr "無效聊天室"
 
-#: gajim/config.py:2387
+#: gajim/config.py:2389
 msgid "Account has been added successfully"
 msgstr "帳號已成功加入"
 
-#: gajim/config.py:2388 gajim/config.py:2394
+#: gajim/config.py:2390 gajim/config.py:2396
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -2931,40 +2931,40 @@ msgstr ""
 "您可以點擊\"進階\"按鈕以設定進階帳號選項，或稍後選擇主視窗\"編輯\"選單下\"帳"
 "號\"選單項。"
 
-#: gajim/config.py:2393
+#: gajim/config.py:2395
 msgid "Your new account has been created successfully"
 msgstr "註冊新帳號成功"
 
-#: gajim/config.py:2431
+#: gajim/config.py:2433
 msgid "Invalid username"
 msgstr "無效使用者名稱"
 
-#: gajim/config.py:2433
+#: gajim/config.py:2435
 msgid "You must provide a username to configure this account."
 msgstr "必須提供使用者名稱來配置此帳號。"
 
-#: gajim/config.py:2474
+#: gajim/config.py:2476
 msgid "Please provide a server on which you want to register."
 msgstr "請指定一個伺服器。您將註冊到這個伺服器。"
 
-#: gajim/config.py:2497
+#: gajim/config.py:2499
 msgid "Invalid entry"
 msgstr "無效輸入"
 
-#: gajim/config.py:2498
+#: gajim/config.py:2500
 msgid "Custom port must be a port number."
 msgstr "自訂連接埠必須為連接埠號碼。"
 
-#: gajim/config.py:2530 gajim/gui_interface.py:1359
+#: gajim/config.py:2532 gajim/gui_interface.py:1360
 msgid "Certificate Already in File"
 msgstr "證書已經在檔案中"
 
-#: gajim/config.py:2531 gajim/gui_interface.py:1360
+#: gajim/config.py:2533 gajim/gui_interface.py:1361
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "證書已經在檔案 %s 中，所以它沒有被再次加入。"
 
-#: gajim/config.py:2624
+#: gajim/config.py:2626
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -2979,7 +2979,7 @@ msgstr ""
 "SSL 錯誤: %(error)s\n"
 "您仍然想要連線到這個伺服器嗎?"
 
-#: gajim/config.py:2630
+#: gajim/config.py:2632
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -2992,74 +2992,74 @@ msgstr ""
 "這個證書的 SHA1 指紋資訊: \n"
 "%s"
 
-#: gajim/config.py:2664 gajim/config.py:2698
+#: gajim/config.py:2666 gajim/config.py:2700
 msgid "An error occurred during account creation"
 msgstr "建立帳號期間發生錯誤"
 
-#: gajim/config.py:2761
+#: gajim/config.py:2763
 msgid "Account name is in use"
 msgstr "帳號名稱已經被使用"
 
-#: gajim/config.py:2762
+#: gajim/config.py:2764
 msgid "You already have an account using this name."
 msgstr "您已經有帳號使用這個名稱了。"
 
-#: gajim/config.py:2894
+#: gajim/config.py:2896
 msgid "PEP node was not removed"
 msgstr "PEP節點沒有被移除"
 
-#: gajim/config.py:2895
+#: gajim/config.py:2897
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP 節點 %(node)s 沒有被移除: %(message)s"
 
-#: gajim/config.py:2923
+#: gajim/config.py:2925
 #, python-format
 msgid "Configure %s"
 msgstr "組配 %s"
 
-#: gajim/config.py:2940 gajim/plugins/gui.py:95
+#: gajim/config.py:2942 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "活動"
 
-#: gajim/config.py:2948
+#: gajim/config.py:2950
 msgid "Event"
 msgstr "事件"
 
-#: gajim/config.py:2982
+#: gajim/config.py:2984
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "最初收到的訊息"
 
-#: gajim/config.py:2983
+#: gajim/config.py:2985
 msgid "First Message Received"
 msgstr "最初收到的訊息"
 
-#: gajim/config.py:2984
+#: gajim/config.py:2986
 msgid "Next Message Received Focused"
 msgstr "已聚焦收到的下一筆訊息"
 
-#: gajim/config.py:2986
+#: gajim/config.py:2988
 msgid "Next Message Received Unfocused"
 msgstr "解除聚焦收到的下一筆訊息"
 
-#: gajim/config.py:2987
+#: gajim/config.py:2989
 msgid "Contact Connected"
 msgstr "已連線的聯絡人"
 
-#: gajim/config.py:2988
+#: gajim/config.py:2990
 msgid "Contact Disconnected"
 msgstr "聯絡人已中斷連線"
 
-#: gajim/config.py:2989
+#: gajim/config.py:2991
 msgid "Message Sent"
 msgstr "訊息已傳送"
 
-#: gajim/config.py:2990
+#: gajim/config.py:2992
 msgid "Group Chat Message Highlight"
 msgstr "多人聊天訊息高亮度顯示"
 
-#: gajim/config.py:2991
+#: gajim/config.py:2993
 msgid "Group Chat Message Received"
 msgstr "收到的多人聊天訊息"
 
@@ -3068,19 +3068,19 @@ msgstr "收到的多人聊天訊息"
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "此聊天室的 %(owner_or_admin_or_member)s"
 
-#: gajim/tooltips.py:269 gajim/common/helpers.py:475
+#: gajim/tooltips.py:269 gajim/common/helpers.py:473
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "無"
 
-#: gajim/tooltips.py:271 gajim/common/helpers.py:481
+#: gajim/tooltips.py:271 gajim/common/helpers.py:479
 msgid "Member"
 msgstr "成員"
 
-#: gajim/tooltips.py:273 gajim/common/helpers.py:479
+#: gajim/tooltips.py:273 gajim/common/helpers.py:477
 msgid "Administrator"
 msgstr "管理員"
 
-#: gajim/tooltips.py:275 gajim/common/helpers.py:477
+#: gajim/tooltips.py:275 gajim/common/helpers.py:475
 msgid "Owner"
 msgstr "所有者"
 
@@ -3262,7 +3262,7 @@ msgstr "現在狀態: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "現在狀態:  %(status)s "
 
-#: gajim/history_window.py:585 gajim/conversation_textview.py:1349
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "主題: %s\n"
@@ -3416,7 +3416,7 @@ msgstr "此服務不包含任何項目可瀏覽。"
 msgid "Execute Command"
 msgstr "執行命令(_E)…"
 
-#: gajim/disco.py:1308 gajim/disco.py:1465
+#: gajim/disco.py:1308 gajim/disco.py:1466
 msgid "Re_gister"
 msgstr "註冊(_G)"
 
@@ -3430,65 +3430,65 @@ msgstr "加入(_J)"
 msgid "Search"
 msgstr "搜尋"
 
-#: gajim/disco.py:1463
+#: gajim/disco.py:1464
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: gajim/disco.py:1506
+#: gajim/disco.py:1507
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr "已掃描 %(current)d / %(total)d.."
 
-#: gajim/disco.py:1702
+#: gajim/disco.py:1703
 msgid "Users"
 msgstr "使用者"
 
-#: gajim/disco.py:1710
+#: gajim/disco.py:1711
 msgid "Description"
 msgstr "描述"
 
-#: gajim/disco.py:1718
+#: gajim/disco.py:1719
 msgid "Id"
 msgstr "Id"
 
-#: gajim/disco.py:1748 gajim/data/gui/gc_control_popup_menu.ui:99
+#: gajim/disco.py:1749 gajim/data/gui/gc_control_popup_menu.ui:99
 msgid "_Bookmark"
 msgstr "將本聊天室加入書籤(_B)"
 
-#: gajim/disco.py:1782
+#: gajim/disco.py:1783
 msgid "Bookmark already set"
 msgstr "書籤已設定"
 
-#: gajim/disco.py:1783
+#: gajim/disco.py:1784
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "聊天室\"%s\"已在您的書籤中。"
 
-#: gajim/disco.py:1793
+#: gajim/disco.py:1794
 msgid "Bookmark has been added successfully"
 msgstr "書籤加入成功"
 
-#: gajim/disco.py:1794
+#: gajim/disco.py:1795
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "您可以透過\"動作\"選單管理您的書籤。"
 
-#: gajim/disco.py:1986
+#: gajim/disco.py:1987
 msgid "Subscribed"
 msgstr "訂閱"
 
-#: gajim/disco.py:1995
+#: gajim/disco.py:1996
 msgid "Node"
 msgstr "節點"
 
-#: gajim/disco.py:2062
+#: gajim/disco.py:2063
 msgid "New post"
 msgstr "新發表"
 
-#: gajim/disco.py:2068
+#: gajim/disco.py:2069
 msgid "_Subscribe"
 msgstr "訂閱(_S)"
 
-#: gajim/disco.py:2074
+#: gajim/disco.py:2075
 msgid "_Unsubscribe"
 msgstr "退訂(_S)"
 
@@ -3498,57 +3498,57 @@ msgid ""
 "last time you paid attention to this group chat"
 msgstr "以下文字是您上次注意這個聊天室以來的聊天內容"
 
-#: gajim/conversation_textview.py:561
+#: gajim/conversation_textview.py:550
 msgid "_Quote"
 msgstr "參照(_Q)"
 
-#: gajim/conversation_textview.py:569
+#: gajim/conversation_textview.py:558
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "\"%s\"的動作(_A)"
 
-#: gajim/conversation_textview.py:583
+#: gajim/conversation_textview.py:572
 msgid "Read _Wikipedia Article"
 msgstr "檢視 Wikipedia 文章(_W)"
 
-#: gajim/conversation_textview.py:588
+#: gajim/conversation_textview.py:577
 msgid "Look it up in _Dictionary"
 msgstr "從字典中搜尋(_D)"
 
-#: gajim/conversation_textview.py:605
+#: gajim/conversation_textview.py:594
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "字典位址中缺少 \"%s\" 並且它不是 \"WIKTIONARY\""
 
-#: gajim/conversation_textview.py:619
+#: gajim/conversation_textview.py:608
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "網路搜尋位址缺少 \"%s\""
 
-#: gajim/conversation_textview.py:622
+#: gajim/conversation_textview.py:611
 msgid "Web _Search for it"
 msgstr "在網際網路上搜尋(_S)"
 
-#: gajim/conversation_textview.py:628
+#: gajim/conversation_textview.py:617
 msgid "Open as _Link"
 msgstr "做為連結開啟(_L)"
 
-#: gajim/conversation_textview.py:858
+#: gajim/conversation_textview.py:847
 msgid "URL:"
 msgstr ""
 
-#: gajim/conversation_textview.py:1032
+#: gajim/conversation_textview.py:1021
 #, fuzzy
 msgid "Invalid URL"
 msgstr "無效的 JID"
 
-#: gajim/conversation_textview.py:1117
+#: gajim/conversation_textview.py:1106
 msgid ""
 "<b>Message corrected. Original message:</b>\n"
 "{}"
 msgstr ""
 
-#: gajim/conversation_textview.py:1261
+#: gajim/conversation_textview.py:1250
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -3567,27 +3567,27 @@ msgstr "您將要關閉多個標籤"
 msgid "Do you really want to close them all?"
 msgstr "您確定要關閉所有這些嗎"
 
-#: gajim/message_window.py:523
+#: gajim/message_window.py:517
 #, fuzzy
 msgid "?Noun:Chats"
 msgstr "多人聊天"
 
-#: gajim/message_window.py:527
+#: gajim/message_window.py:521
 msgid "Private Chats"
 msgstr "私人聊天"
 
-#: gajim/message_window.py:533
+#: gajim/message_window.py:527
 msgid "Messages"
 msgstr "訊息"
 
-#: gajim/gui_interface.py:157 gajim/gui_interface.py:329
+#: gajim/gui_interface.py:158 gajim/gui_interface.py:329
 #: gajim/gui_interface.py:338 gajim/gui_interface.py:345
 #: gajim/gui_interface.py:349 gajim/gui_interface.py:352
 #: gajim/gui_interface.py:360
 msgid "Unable to join group chat"
 msgstr "無法加入聊天室"
 
-#: gajim/gui_interface.py:158
+#: gajim/gui_interface.py:159
 #, fuzzy, python-format
 msgid ""
 "Your desired nickname in group chat\n"
@@ -3598,25 +3598,25 @@ msgstr ""
 "您在聊天室 %s 中希望使用的暱稱已經被使用或被其他人註冊了。\n"
 "在下面指定另一個暱稱:"
 
-#: gajim/gui_interface.py:162
+#: gajim/gui_interface.py:163
 msgid "Always use this nickname when there is a conflict"
 msgstr "在發生衝突時總是使用這個暱稱"
 
-#: gajim/gui_interface.py:180
+#: gajim/gui_interface.py:181
 msgid "Do you accept this request?"
 msgstr "是否接受這個請求?"
 
-#: gajim/gui_interface.py:182
+#: gajim/gui_interface.py:183
 #, python-format
 msgid "Do you accept this request on account %s?"
 msgstr "是否接受這個對帳號 %s 的請求?"
 
-#: gajim/gui_interface.py:185
+#: gajim/gui_interface.py:186
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "%(url)s (id: %(id)s) 的 HTTP (%(method)s) 認證"
 
-#: gajim/gui_interface.py:229 gajim/notify.py:96
+#: gajim/gui_interface.py:230 gajim/notify.py:96
 msgid "Connection Failed"
 msgstr "連線失敗"
 
@@ -3671,7 +3671,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "錯誤 %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1423
+#: gajim/common/connection_handlers_events.py:1430
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "傳送 %(message)s 時出現錯誤( %(error)s )"
@@ -3717,8 +3717,8 @@ msgstr "已取消認證的"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "無法與\"%s\"建立連線"
 
-#: gajim/gui_interface.py:583 gajim/common/connection.py:1286
-#: gajim/common/connection.py:1472
+#: gajim/gui_interface.py:583 gajim/common/connection.py:1288
+#: gajim/common/connection.py:1474
 msgid "Check your connection or try again later."
 msgstr "檢查連線或稍後重試。"
 
@@ -3791,7 +3791,7 @@ msgstr ""
 msgid "%s wants to send you a file."
 msgstr "%s 想傳送給您一個檔案。"
 
-#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1432
+#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1433
 msgid "SSL certificate error"
 msgstr "SSL證書錯誤"
 
@@ -3835,42 +3835,42 @@ msgstr "到 %(name)s 的檔案傳輸 %(filename)s 被停止。"
 msgid "Choose file to send"
 msgstr "選擇要傳送的檔案…"
 
-#: gajim/gui_interface.py:1198
+#: gajim/gui_interface.py:1199
 msgid "Unable to decrypt message"
 msgstr "無法解密訊息"
 
-#: gajim/gui_interface.py:1210
+#: gajim/gui_interface.py:1211
 msgid "Username Conflict"
 msgstr "使用者名稱衝突"
 
-#: gajim/gui_interface.py:1211
+#: gajim/gui_interface.py:1212
 msgid "Please type a new username for your local account"
 msgstr "<b>請在您本地帳號填寫新的使用者名稱</b>"
 
-#: gajim/gui_interface.py:1234
+#: gajim/gui_interface.py:1235
 msgid "Resource Conflict"
 msgstr "資源衝突"
 
-#: gajim/gui_interface.py:1235
+#: gajim/gui_interface.py:1236
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "您已經用同一個資源連線到這個帳號了。請輸入一個新的資源"
 
-#: gajim/gui_interface.py:1292
+#: gajim/gui_interface.py:1293
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s 想要發起語音聊天。"
 
-#: gajim/gui_interface.py:1295
+#: gajim/gui_interface.py:1296
 msgid "Voice Chat Request"
 msgstr "語音聊天請求"
 
-#: gajim/gui_interface.py:1385
+#: gajim/gui_interface.py:1386
 msgid "Error verifying SSL certificate"
 msgstr "驗證 SSL 證書發生錯誤"
 
-#: gajim/gui_interface.py:1386
+#: gajim/gui_interface.py:1387
 #, fuzzy, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
@@ -3881,7 +3881,7 @@ msgstr ""
 "%(error)s\n"
 "您仍然想要連線這個伺服器嗎?"
 
-#: gajim/gui_interface.py:1390
+#: gajim/gui_interface.py:1391
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3894,15 +3894,15 @@ msgstr ""
 "這個證書的 SHA1 指紋資訊: \n"
 "%s"
 
-#: gajim/gui_interface.py:1396
+#: gajim/gui_interface.py:1397
 msgid "Ignore this error for this certificate."
 msgstr "忽略這個證書的這個錯誤。"
 
-#: gajim/gui_interface.py:1409
+#: gajim/gui_interface.py:1410
 msgid "Non Anonymous Server"
 msgstr ""
 
-#: gajim/gui_interface.py:1433
+#: gajim/gui_interface.py:1434
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
@@ -3922,7 +3922,7 @@ msgstr ""
 "\n"
 "您仍想連線並更新證書的指紋資訊嗎?"
 
-#: gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1512
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -3930,33 +3930,33 @@ msgstr ""
 "您將透過不安全的連線傳送密碼。您應該安裝 PyOpenSSL 以阻止這樣的事情。您確定要"
 "這樣做嗎?"
 
-#: gajim/gui_interface.py:1553
+#: gajim/gui_interface.py:1554
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
 msgstr "您將透過不安全的連線傳送未經加密的密碼。您確定要這樣做嗎?"
 
-#: gajim/gui_interface.py:1854
+#: gajim/gui_interface.py:1856
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "這不是一個聊天室"
 
-#: gajim/gui_interface.py:2017
+#: gajim/gui_interface.py:2020
 msgid "Emoticons disabled"
 msgstr "表情圖示被停用"
 
-#: gajim/gui_interface.py:2018
+#: gajim/gui_interface.py:2021
 #, fuzzy
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
 "details."
 msgstr "您配置的表情圖示主題找不到，所以表情圖示被停用。"
 
-#: gajim/gui_interface.py:2036
+#: gajim/gui_interface.py:2039
 msgid "This is not a group chat"
 msgstr "這不是一個聊天室"
 
-#: gajim/gui_interface.py:2037
+#: gajim/gui_interface.py:2040
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -3964,41 +3964,41 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:2415
+#: gajim/gui_interface.py:2418
 msgid "Could not save your settings and preferences"
 msgstr "無法儲存您的設定。"
 
-#: gajim/gui_interface.py:2825 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:343
+#: gajim/gui_interface.py:2828 gajim/common/config.py:117
+#: gajim/common/config.py:532 gajim/common/optparser.py:343
 #: gajim/common/optparser.py:511 gajim/common/optparser.py:534
 msgid "default"
 msgstr "預設"
 
-#: gajim/gui_interface.py:3011
+#: gajim/gui_interface.py:3014
 msgid "Passphrase Required"
 msgstr "要求密文"
 
-#: gajim/gui_interface.py:3012
+#: gajim/gui_interface.py:3015
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "輸入 GPG 密鑰 %(keyid)s (帳號 %(account)s) 的密碼。"
 
-#: gajim/gui_interface.py:3026
+#: gajim/gui_interface.py:3029
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG 密鑰過期"
 
-#: gajim/gui_interface.py:3027
+#: gajim/gui_interface.py:3030
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "您的 GPG 密鑰已過期，您將在沒有 OpenPGP 情況下連線到 %s。"
 
-#: gajim/gui_interface.py:3036
+#: gajim/gui_interface.py:3039
 msgid "Wrong Passphrase"
 msgstr "錯誤欄位"
 
-#: gajim/gui_interface.py:3037
+#: gajim/gui_interface.py:3040
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "請重新輸入您的 GPG 欄位或點\"取消\""
@@ -4317,7 +4317,7 @@ msgstr "已合併的帳號"
 msgid "Use PGP Agent"
 msgstr "使用 G_PG Agent"
 
-#: gajim/accounts_window.py:153 gajim/common/config.py:510
+#: gajim/accounts_window.py:153 gajim/common/config.py:511
 msgid "Be right back."
 msgstr "很快回來。"
 
@@ -5064,47 +5064,47 @@ msgstr "聊天室已經被銷毀了"
 msgid "You can join this room instead: %s"
 msgstr "做為替代，您可以加入這個聊天室: %s"
 
-#: gajim/common/connection_handlers_events.py:1972
+#: gajim/common/connection_handlers_events.py:1979
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "不明的 SSL 錯誤: %d"
 
-#: gajim/common/connection_handlers_events.py:2618
+#: gajim/common/connection_handlers_events.py:2625
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr " %(nickname)s 發來的新訊息"
 
-#: gajim/common/connection_handlers_events.py:2624
+#: gajim/common/connection_handlers_events.py:2631
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "來自聊天室 %s 的私人訊息"
 
-#: gajim/common/connection_handlers_events.py:2627
+#: gajim/common/connection_handlers_events.py:2634
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s:  %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2630
+#: gajim/common/connection_handlers_events.py:2637
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "來自 %(nickname)s 的訊息"
 
-#: gajim/common/connection_handlers_events.py:2636
+#: gajim/common/connection_handlers_events.py:2643
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "來自 %(nickname)s 的新訊息"
 
-#: gajim/common/connection_handlers_events.py:2802
+#: gajim/common/connection_handlers_events.py:2809
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s 變更了狀態"
 
-#: gajim/common/connection_handlers_events.py:2810
+#: gajim/common/connection_handlers_events.py:2817
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s 上線了"
 
-#: gajim/common/connection_handlers_events.py:2816
+#: gajim/common/connection_handlers_events.py:2823
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s 離開了"
@@ -5825,13 +5825,17 @@ msgstr ""
 msgid "If True, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
-#: gajim/common/config.py:323
+#: gajim/common/config.py:308
+msgid "All non-compliant MAM Groupchats"
+msgstr ""
+
+#: gajim/common/config.py:324
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr "優先等級將根據您的狀態自動變更。優先等級在 autopriority_* 選項中定義。"
 
-#: gajim/common/config.py:331
+#: gajim/common/config.py:332
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -5840,102 +5844,102 @@ msgstr ""
 "\"，\"請勿\n"
 "打擾\"，\"隱身\"。注意: 僅當 restore_last_status 被停用時這個選項其作用"
 
-#: gajim/common/config.py:332
+#: gajim/common/config.py:333
 msgid "If enabled, restore the last status that was used."
 msgstr "如果啟用，則恢復上次使用的狀態。"
 
-#: gajim/common/config.py:334
+#: gajim/common/config.py:335
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr "如果為真，聯絡人的認證請求將被自動接受。"
 
-#: gajim/common/config.py:335
+#: gajim/common/config.py:336
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr "如果為假，這個帳號將被停用且不會出現在聯絡人清單視窗中。"
 
-#: gajim/common/config.py:338
+#: gajim/common/config.py:339
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr "如果停用，即使 GPG 被配置，也不使用 GPG 密鑰簽名 presences。"
 
-#: gajim/common/config.py:340
+#: gajim/common/config.py:341
 msgid "Enable ESessions encryption for this account."
 msgstr "為這個帳號啟用 ESession 加密。"
 
-#: gajim/common/config.py:341
+#: gajim/common/config.py:342
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "Gajim 是否應該在可能時自動發起加密的作業階段?"
 
-#: gajim/common/config.py:342
+#: gajim/common/config.py:343
 msgid "Allow plaintext connections"
 msgstr ""
 
-#: gajim/common/config.py:345
+#: gajim/common/config.py:346
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
 
-#: gajim/common/config.py:346
+#: gajim/common/config.py:347
 #, fuzzy
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
 msgstr "在使用明文連線傳送密碼前顯示一個警告對話方塊。"
 
-#: gajim/common/config.py:347
+#: gajim/common/config.py:348
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "在使用標準 SSL 函式庫前顯示一個警告對話方塊。"
 
-#: gajim/common/config.py:348
+#: gajim/common/config.py:349
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "在透過明文連線傳送明文密碼前顯示警告對話框。"
 
-#: gajim/common/config.py:351
+#: gajim/common/config.py:352
 msgid "Space separated list of ssl errors to ignore."
 msgstr "應忽略的 SSL 錯誤清單，以空格分隔"
 
-#: gajim/common/config.py:357
+#: gajim/common/config.py:358
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
 
-#: gajim/common/config.py:358
+#: gajim/common/config.py:359
 msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
 "supports XEP-0313"
 msgstr ""
 
-#: gajim/common/config.py:359
+#: gajim/common/config.py:360
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
 
-#: gajim/common/config.py:362
+#: gajim/common/config.py:363
 msgid "Whitespace sent after inactivity"
 msgstr "在不活動後傳送的空白"
 
-#: gajim/common/config.py:363
+#: gajim/common/config.py:364
 msgid "XMPP ping sent after inactivity"
 msgstr "在不活動後傳送的 XMPP ping"
 
-#: gajim/common/config.py:367
+#: gajim/common/config.py:368
 #, fuzzy
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
 msgstr "在重新連線前等待 ping alive packet 的回應多少秒"
 
-#: gajim/common/config.py:371
+#: gajim/common/config.py:372
 msgid "Jabberd2 workaround"
 msgstr "為 Jabberd2 變通"
 
-#: gajim/common/config.py:374
+#: gajim/common/config.py:375
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -5943,109 +5947,109 @@ msgstr ""
 "如果選取，Gajim 會使用您在 file_transfer_proxies 選項中定義的 IP 和代理進行檔"
 "案傳輸。"
 
-#: gajim/common/config.py:375
+#: gajim/common/config.py:376
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
-#: gajim/common/config.py:388
+#: gajim/common/config.py:389
 msgid "Answer to receipt requests"
 msgstr "對回執請求的回應"
 
-#: gajim/common/config.py:389
+#: gajim/common/config.py:390
 msgid "Sent receipt requests"
 msgstr "傳送回執請求"
 
-#: gajim/common/config.py:398
+#: gajim/common/config.py:399
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr "允許 Gajim 發送您正在執行的作業系統相關資訊。"
 
-#: gajim/common/config.py:399
+#: gajim/common/config.py:400
 msgid "Allow Gajim to send your local time."
 msgstr "允許 Gajim 發送您的本地時間。"
 
-#: gajim/common/config.py:400
+#: gajim/common/config.py:401
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
 msgstr "在協商加密的作業階段時，Gajim 是否應該假設您想要您的訊息被記錄?"
 
-#: gajim/common/config.py:403
+#: gajim/common/config.py:404
 msgid "Message that is sent to contacts you want to add"
 msgstr "向您希望加入的聯絡人傳送的訊息"
 
-#: gajim/common/config.py:404
+#: gajim/common/config.py:405
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
 msgstr ""
 
-#: gajim/common/config.py:405
+#: gajim/common/config.py:406
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
 msgstr ""
 
-#: gajim/common/config.py:406
+#: gajim/common/config.py:407
 #, fuzzy
 msgid "Latest token for OAuth 2.0 authentication."
 msgstr "匿名認證"
 
-#: gajim/common/config.py:407
+#: gajim/common/config.py:408
 #, fuzzy
 msgid "client_id for OAuth 2.0 authentication."
 msgstr "匿名認證(_Y)"
 
-#: gajim/common/config.py:408
+#: gajim/common/config.py:409
 #, fuzzy
 msgid "redirect_url for OAuth 2.0 authentication."
 msgstr "匿名認證(_Y)"
 
-#: gajim/common/config.py:409
+#: gajim/common/config.py:410
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
 msgstr ""
 
-#: gajim/common/config.py:411
+#: gajim/common/config.py:412
 msgid "HTTP Upload: Enable HTTPS Verification"
 msgstr ""
 
-#: gajim/common/config.py:412
+#: gajim/common/config.py:413
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on chat window. Can be "
 "'httpupload' (default) or 'jingle'"
 msgstr ""
 
-#: gajim/common/config.py:475 gajim/common/config.py:480
+#: gajim/common/config.py:476 gajim/common/config.py:481
 msgid "Language for which we want to check misspelled words"
 msgstr "想要進行拼寫檢查的語言"
 
-#: gajim/common/config.py:477
+#: gajim/common/config.py:478
 msgid "The currently active encryption for that contact"
 msgstr ""
 
-#: gajim/common/config.py:481
+#: gajim/common/config.py:482
 #, fuzzy
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
 msgstr "當加入多人聊天時，向伺服器請求聊天記錄的列數。-1 表示無限制"
 
-#: gajim/common/config.py:482
+#: gajim/common/config.py:483
 #, fuzzy
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
 "-2 means global value"
 msgstr "當加入多人聊天時，向伺服器請求多少分鐘以內的聊天記錄。-1 表示無限制"
 
-#: gajim/common/config.py:483
+#: gajim/common/config.py:484
 msgid "State whether we want a notification for every message in this room"
 msgstr ""
 
-#: gajim/common/config.py:486
+#: gajim/common/config.py:487
 #, fuzzy
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
@@ -6055,106 +6059,106 @@ msgstr ""
 "表述在離開時是否啟用外掛程式(在 Gajim 離開時這會被儲存)。這個選項不應該用於啟"
 "用或停用外掛程式。使用圖形介面代替。"
 
-#: gajim/common/config.py:491 gajim/common/pep.py:157
+#: gajim/common/config.py:492 gajim/common/pep.py:157
 msgid "Sleeping"
 msgstr "正在睡覺"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back soon"
 msgstr "馬上回來"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back in some minutes."
 msgstr "幾分鐘就回來。"
 
-#: gajim/common/config.py:493 gajim/common/pep.py:127
+#: gajim/common/config.py:494 gajim/common/pep.py:127
 msgid "Eating"
 msgstr "吃東西"
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "I'm eating, so leave me a message."
 msgstr "我在吃東西，請留言"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "Movie"
 msgstr "電影"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "I'm watching a movie."
 msgstr "我正在看電影。"
 
-#: gajim/common/config.py:495 gajim/common/pep.py:186
+#: gajim/common/config.py:496 gajim/common/pep.py:186
 msgid "Working"
 msgstr "工作"
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "I'm working."
 msgstr "我正在工作。"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "Phone"
 msgstr "打電話"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "I'm on the phone."
 msgstr "我正在打電話"
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "Out"
 msgstr "外出"
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "I'm out enjoying life."
 msgstr "我正在享受戶外生活。"
 
-#: gajim/common/config.py:508
+#: gajim/common/config.py:509
 msgid "I'm available."
 msgstr "我現在線上。"
 
-#: gajim/common/config.py:509
+#: gajim/common/config.py:510
 msgid "I'm free for chat."
 msgstr "和我聊天吧"
 
-#: gajim/common/config.py:511
+#: gajim/common/config.py:512
 msgid "I'm not available."
 msgstr "我已經很久不在了。"
 
-#: gajim/common/config.py:512
+#: gajim/common/config.py:513
 msgid "Do not disturb."
 msgstr "請勿打擾。"
 
-#: gajim/common/config.py:513 gajim/common/config.py:514
+#: gajim/common/config.py:514 gajim/common/config.py:515
 msgid "Bye!"
 msgstr "再見!"
 
-#: gajim/common/config.py:525
+#: gajim/common/config.py:526
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
 "當收到的多人聊天訊息包含 \"muc_highlight_words\" 或您的暱稱時播放的聲音。"
 
-#: gajim/common/config.py:526
+#: gajim/common/config.py:527
 msgid "Sound to play when any MUC message arrives."
 msgstr "收到任意多人聊天訊息播放的聲音。"
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:357
+#: gajim/common/config.py:535 gajim/common/optparser.py:357
 msgid "green"
 msgstr "綠色"
 
-#: gajim/common/config.py:538 gajim/common/optparser.py:343
+#: gajim/common/config.py:539 gajim/common/optparser.py:343
 msgid "grocery"
 msgstr "雜貨店"
 
-#: gajim/common/config.py:542
+#: gajim/common/config.py:543
 msgid "human"
 msgstr "人類別"
 
-#: gajim/common/config.py:546
+#: gajim/common/config.py:547
 msgid "marine"
 msgstr "海洋"
 
-#: gajim/common/config.py:553
+#: gajim/common/config.py:554
 #, fuzzy
 msgid "Tor"
 msgstr "To"
@@ -6297,188 +6301,188 @@ msgstr "遷移記錄資料庫到索引"
 msgid "%s is not a valid loglevel"
 msgstr "%s 不是一個合法的日誌層級"
 
-#: gajim/common/connection.py:80
+#: gajim/common/connection.py:83
 msgid "Unable to get issuer certificate"
 msgstr "無法獲得發行者的證書"
 
-#: gajim/common/connection.py:81
+#: gajim/common/connection.py:84
 msgid "Unable to get certificate CRL"
 msgstr "無法獲得證書吊銷清單"
 
-#: gajim/common/connection.py:82
+#: gajim/common/connection.py:85
 msgid "Unable to decrypt certificate's signature"
 msgstr "無法解密證書籤名稱"
 
-#: gajim/common/connection.py:83
+#: gajim/common/connection.py:86
 msgid "Unable to decrypt CRL's signature"
 msgstr "無法解密證書吊銷清單的簽名"
 
-#: gajim/common/connection.py:84
+#: gajim/common/connection.py:87
 msgid "Unable to decode issuer public key"
 msgstr "無法解碼發行者的公鑰"
 
-#: gajim/common/connection.py:85
+#: gajim/common/connection.py:88
 msgid "Certificate signature failure"
 msgstr "證書籤名稱失敗"
 
-#: gajim/common/connection.py:86
+#: gajim/common/connection.py:89
 msgid "CRL signature failure"
 msgstr "吊銷證書清單簽名失敗"
 
-#: gajim/common/connection.py:87
+#: gajim/common/connection.py:90
 msgid "Certificate is not yet valid"
 msgstr "證書還未生效"
 
-#: gajim/common/connection.py:88
+#: gajim/common/connection.py:91
 msgid "Certificate has expired"
 msgstr "證書已過期"
 
-#: gajim/common/connection.py:89
+#: gajim/common/connection.py:92
 msgid "CRL is not yet valid"
 msgstr "證書吊銷清單還未生效"
 
-#: gajim/common/connection.py:90
+#: gajim/common/connection.py:93
 msgid "CRL has expired"
 msgstr "證書吊銷清單已過期"
 
-#: gajim/common/connection.py:91
+#: gajim/common/connection.py:94
 msgid "Format error in certificate's notBefore field"
 msgstr "格式錯誤，在證書的'不早於'欄位"
 
-#: gajim/common/connection.py:92
+#: gajim/common/connection.py:95
 msgid "Format error in certificate's notAfter field"
 msgstr "格式錯誤，在證書的'不遲於'欄位"
 
-#: gajim/common/connection.py:93
+#: gajim/common/connection.py:96
 msgid "Format error in CRL's lastUpdate field"
 msgstr "格式錯誤，在證書吊銷清單的'最後更新'欄位"
 
-#: gajim/common/connection.py:94
+#: gajim/common/connection.py:97
 msgid "Format error in CRL's nextUpdate field"
 msgstr "格式錯誤，在證書吊銷清單的'下次更新'欄位"
 
-#: gajim/common/connection.py:95
+#: gajim/common/connection.py:98
 msgid "Out of memory"
 msgstr "記憶體耗盡"
 
-#: gajim/common/connection.py:96
+#: gajim/common/connection.py:99
 msgid "Self signed certificate"
 msgstr "自簽名的證書"
 
-#: gajim/common/connection.py:97
+#: gajim/common/connection.py:100
 msgid "Self signed certificate in certificate chain"
 msgstr "自簽名的證書，在證書鏈中"
 
-#: gajim/common/connection.py:98
+#: gajim/common/connection.py:101
 msgid "Unable to get local issuer certificate"
 msgstr "無法獲得本地發行者證書"
 
-#: gajim/common/connection.py:99
+#: gajim/common/connection.py:102
 msgid "Unable to verify the first certificate"
 msgstr "無法驗證第一個證書"
 
-#: gajim/common/connection.py:100
+#: gajim/common/connection.py:103
 msgid "Certificate chain too long"
 msgstr "證書鏈太長"
 
-#: gajim/common/connection.py:101
+#: gajim/common/connection.py:104
 msgid "Certificate revoked"
 msgstr "證書已被吊銷"
 
-#: gajim/common/connection.py:102
+#: gajim/common/connection.py:105
 msgid "Invalid CA certificate"
 msgstr "無效的 CA 證書"
 
-#: gajim/common/connection.py:103
+#: gajim/common/connection.py:106
 msgid "Path length constraint exceeded"
 msgstr "超過了路徑長度限制"
 
-#: gajim/common/connection.py:104
+#: gajim/common/connection.py:107
 msgid "Unsupported certificate purpose"
 msgstr "不支援的證書用途"
 
-#: gajim/common/connection.py:105
+#: gajim/common/connection.py:108
 msgid "Certificate not trusted"
 msgstr "不被信任的證書"
 
-#: gajim/common/connection.py:106
+#: gajim/common/connection.py:109
 msgid "Certificate rejected"
 msgstr "證書被拒絕"
 
-#: gajim/common/connection.py:107
+#: gajim/common/connection.py:110
 msgid "Subject issuer mismatch"
 msgstr "Subject 與 發行者 不匹配"
 
-#: gajim/common/connection.py:108
+#: gajim/common/connection.py:111
 msgid "Authority and subject key identifier mismatch"
 msgstr "Authority 與 subject key identifier 不匹配"
 
-#: gajim/common/connection.py:109
+#: gajim/common/connection.py:112
 msgid "Authority and issuer serial number mismatch"
 msgstr "Authority 與 發行者序號 不匹配"
 
-#: gajim/common/connection.py:110
+#: gajim/common/connection.py:113
 msgid "Key usage does not include certificate signing"
 msgstr "密鑰用途中不包含證書籤名稱"
 
-#: gajim/common/connection.py:111
+#: gajim/common/connection.py:114
 msgid "Application verification failure"
 msgstr "應用程式驗證失敗"
 
-#: gajim/common/connection.py:870
+#: gajim/common/connection.py:876
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "帳號\"%s\"的連線丟失"
 
-#: gajim/common/connection.py:871
+#: gajim/common/connection.py:877
 msgid "Reconnect manually."
 msgstr "手動重連。"
 
-#: gajim/common/connection.py:882
+#: gajim/common/connection.py:888
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "伺服器 %(name)s 對註冊請求的回應有誤: %(error)s"
 
-#: gajim/common/connection.py:923
+#: gajim/common/connection.py:930
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "伺服器 %s 提供了一個不同的註冊表單"
 
-#: gajim/common/connection.py:1281
+#: gajim/common/connection.py:1283
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1284
+#: gajim/common/connection.py:1286
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1291
+#: gajim/common/connection.py:1293
 #, python-format
 msgid "Server replied: %s"
 msgstr "伺服器回應: %s"
 
-#: gajim/common/connection.py:1306
+#: gajim/common/connection.py:1308
 msgid "Connection to proxy failed"
 msgstr "連線代理伺服器失敗"
 
-#: gajim/common/connection.py:1344 gajim/common/connection.py:1447
+#: gajim/common/connection.py:1346 gajim/common/connection.py:1449
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "沒有能夠連線到帳號 %s"
 
-#: gajim/common/connection.py:1345 gajim/common/connection.py:1448
+#: gajim/common/connection.py:1347 gajim/common/connection.py:1450
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "帳號 %s 的連線丟失。重新嘗試連線。"
 
-#: gajim/common/connection.py:1370
+#: gajim/common/connection.py:1372
 #, fuzzy, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "%s 證書的認證可能是無效的"
 
-#: gajim/common/connection.py:1373
+#: gajim/common/connection.py:1375
 #, python-format
 msgid ""
 "\n"
@@ -6487,7 +6491,7 @@ msgstr ""
 "\n"
 "SSL 錯誤: <b>%s</b>"
 
-#: gajim/common/connection.py:1375
+#: gajim/common/connection.py:1377
 #, python-format
 msgid ""
 "\n"
@@ -6496,38 +6500,38 @@ msgstr ""
 "\n"
 "不明 SSL 錯誤: %d"
 
-#: gajim/common/connection.py:1421
+#: gajim/common/connection.py:1423
 #, fuzzy, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr "%s 證書的認證可能是無效的"
 
-#: gajim/common/connection.py:1471 gajim/common/connection.py:2236
+#: gajim/common/connection.py:1473 gajim/common/connection.py:2238
 #: gajim/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1510
+#: gajim/common/connection.py:1512
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\"登入驗證失敗"
 
-#: gajim/common/connection.py:1511
+#: gajim/common/connection.py:1513
 msgid "Please check your login and password for correctness."
 msgstr "請檢查登入資訊和密碼的正確性"
 
-#: gajim/common/connection.py:2095
+#: gajim/common/connection.py:2097
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "已傳送聯絡人: \"%s\" (%s)"
 
-#: gajim/common/connection.py:2099
+#: gajim/common/connection.py:2101
 msgid "Sent contacts:"
 msgstr "已傳送聯絡人:"
 
-#: gajim/common/connection.py:2253 gajim/common/connection.py:2275
+#: gajim/common/connection.py:2255 gajim/common/connection.py:2277
 msgid "Not fetched because of invisible status"
 msgstr "由於隱身狀態，未獲取"
 
@@ -6551,59 +6555,59 @@ msgstr "D-Bus 在這臺電腦上沒有正常執行: 未發現系統匯流排"
 msgid "D-Bus does not run correctly on this machine: session bus not present"
 msgstr "D-Bus 在這臺電腦上沒有正常執行: 未發現作業階段匯流排"
 
-#: gajim/common/multimedia_helpers.py:40
+#: gajim/common/multimedia_helpers.py:45
 #, fuzzy
 msgid "Default device"
 msgstr "預設裝置"
 
-#: gajim/common/multimedia_helpers.py:59
+#: gajim/common/multimedia_helpers.py:66
 msgid "Audio test"
 msgstr "音訊測試"
 
-#: gajim/common/multimedia_helpers.py:62 gajim/common/multimedia_helpers.py:78
-#: gajim/common/multimedia_helpers.py:92 gajim/common/multimedia_helpers.py:110
+#: gajim/common/multimedia_helpers.py:69 gajim/common/multimedia_helpers.py:85
+#: gajim/common/multimedia_helpers.py:99 gajim/common/multimedia_helpers.py:117
 msgid "Autodetect"
 msgstr "自動偵測"
 
-#: gajim/common/multimedia_helpers.py:65 gajim/common/multimedia_helpers.py:80
+#: gajim/common/multimedia_helpers.py:72 gajim/common/multimedia_helpers.py:87
 #, python-format
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-#: gajim/common/multimedia_helpers.py:68 gajim/common/multimedia_helpers.py:82
+#: gajim/common/multimedia_helpers.py:75 gajim/common/multimedia_helpers.py:89
 #, python-format
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
 
-#: gajim/common/multimedia_helpers.py:76
+#: gajim/common/multimedia_helpers.py:83
 msgid "Fake audio output"
 msgstr "偽裝音訊輸出"
 
-#: gajim/common/multimedia_helpers.py:89
+#: gajim/common/multimedia_helpers.py:96
 msgid "Video test"
 msgstr "視訊測試"
 
-#: gajim/common/multimedia_helpers.py:94
+#: gajim/common/multimedia_helpers.py:101
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
 
-#: gajim/common/multimedia_helpers.py:97
+#: gajim/common/multimedia_helpers.py:104
 #, fuzzy
 msgid "Screen"
 msgstr "綠色"
 
-#: gajim/common/multimedia_helpers.py:104
+#: gajim/common/multimedia_helpers.py:111
 #, fuzzy
 msgid "Fake video output"
 msgstr "視訊輸出"
 
-#: gajim/common/multimedia_helpers.py:107
+#: gajim/common/multimedia_helpers.py:114
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr "X 視窗系統 (X11/XShm/Xv): %s"
 
-#: gajim/common/multimedia_helpers.py:109
+#: gajim/common/multimedia_helpers.py:116
 msgid "X Window System (without Xv)"
 msgstr "X 視窗系統 (沒有Xv)"
 
@@ -7497,159 +7501,159 @@ msgstr "Both"
 msgid "Unknown"
 msgstr "不明"
 
-#: gajim/common/helpers.py:443
+#: gajim/common/helpers.py:441
 msgid "?Ask (for Subscription):None"
 msgstr "無"
 
-#: gajim/common/helpers.py:445
+#: gajim/common/helpers.py:443
 msgid "Subscribe"
 msgstr "認證"
 
-#: gajim/common/helpers.py:454
+#: gajim/common/helpers.py:452
 msgid "?Group Chat Contact Role:None"
 msgstr "無"
 
-#: gajim/common/helpers.py:457
+#: gajim/common/helpers.py:455
 msgid "Moderators"
 msgstr "主持人"
 
-#: gajim/common/helpers.py:459
+#: gajim/common/helpers.py:457
 msgid "Moderator"
 msgstr "主持人"
 
-#: gajim/common/helpers.py:462
+#: gajim/common/helpers.py:460
 msgid "Participants"
 msgstr "參與者"
 
-#: gajim/common/helpers.py:464
+#: gajim/common/helpers.py:462
 msgid "Participant"
 msgstr "參與者"
 
-#: gajim/common/helpers.py:467
+#: gajim/common/helpers.py:465
 msgid "Visitors"
 msgstr "訪客"
 
-#: gajim/common/helpers.py:469
+#: gajim/common/helpers.py:467
 msgid "Visitor"
 msgstr "訪客"
 
-#: gajim/common/helpers.py:520
+#: gajim/common/helpers.py:518
 msgid "is paying attention to the conversation"
 msgstr "注意著與您的對話"
 
-#: gajim/common/helpers.py:522
+#: gajim/common/helpers.py:520
 msgid "is doing something else"
 msgstr "在做其他事情"
 
-#: gajim/common/helpers.py:524
+#: gajim/common/helpers.py:522
 #, fuzzy
 msgid "is composing a message…"
 msgstr "正在輸入訊息…"
 
-#: gajim/common/helpers.py:527
+#: gajim/common/helpers.py:525
 msgid "paused composing a message"
 msgstr "暫停輸入訊息"
 
-#: gajim/common/helpers.py:529
+#: gajim/common/helpers.py:527
 msgid "has closed the chat window or tab"
 msgstr "關閉了聊天視窗或標籤"
 
-#: gajim/common/helpers.py:756
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
-#: gajim/common/helpers.py:759
+#: gajim/common/helpers.py:757
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: gajim/common/helpers.py:763
+#: gajim/common/helpers.py:761
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
-#: gajim/common/helpers.py:766
+#: gajim/common/helpers.py:764
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: gajim/common/helpers.py:770
+#: gajim/common/helpers.py:768
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
-#: gajim/common/helpers.py:773
+#: gajim/common/helpers.py:771
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: gajim/common/helpers.py:776
+#: gajim/common/helpers.py:774
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
-#: gajim/common/helpers.py:1143 gajim/common/helpers.py:1150
+#: gajim/common/helpers.py:1141 gajim/common/helpers.py:1148
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "%d 條訊息未處理"
 
-#: gajim/common/helpers.py:1157
+#: gajim/common/helpers.py:1155
 #, fuzzy, python-format
 msgid "from room %s"
 msgstr " 來自聊天室 %s"
 
-#: gajim/common/helpers.py:1160 gajim/common/helpers.py:1177
+#: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr " 來自使用者 %s"
 
-#: gajim/common/helpers.py:1162
+#: gajim/common/helpers.py:1160
 #, fuzzy, python-format
 msgid "from %s"
 msgstr " 來自 %s"
 
-#: gajim/common/helpers.py:1169 gajim/common/helpers.py:1175
+#: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d 個未處理事件"
 
-#: gajim/common/helpers.py:1193 gajim/common/helpers.py:1205
+#: gajim/common/helpers.py:1191 gajim/common/helpers.py:1203
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "Gajim"
 
-#: gajim/common/helpers.py:1207
+#: gajim/common/helpers.py:1205
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: gajim/common/helpers.py:1394 gajim/data/gui/add_new_contact_window.ui:24
+#: gajim/common/helpers.py:1392 gajim/data/gui/add_new_contact_window.ui:24
 msgid "I would like to add you to my contact list."
 msgstr "我想加入您到我的聯絡人清單"
 
-#: gajim/common/helpers.py:1396
+#: gajim/common/helpers.py:1394
 msgid "Hello, I am $name."
 msgstr "您好，我是$name"
 
-#: gajim/common/helpers.py:1510 gajim/common/helpers.py:1519
-#: gajim/common/helpers.py:1578
+#: gajim/common/helpers.py:1508 gajim/common/helpers.py:1517
+#: gajim/common/helpers.py:1576
 msgid "Timeout loading image"
 msgstr "讀取檔案逾時"
 
-#: gajim/common/helpers.py:1529 gajim/common/helpers.py:1576
+#: gajim/common/helpers.py:1527 gajim/common/helpers.py:1574
 msgid "Image is too big"
 msgstr "圖片太大"
 
-#: gajim/common/helpers.py:1540
+#: gajim/common/helpers.py:1538
 #, fuzzy
 msgid "PyCURL is not installed"
 msgstr "證書吊銷清單還未生效"
 
-#: gajim/common/helpers.py:1580
+#: gajim/common/helpers.py:1578
 #, fuzzy
 msgid "Error loading image"
 msgstr "讀取檔案逾時"
@@ -7683,7 +7687,7 @@ msgstr ""
 msgid "message"
 msgstr "message"
 
-#: gajim/common/connection_handlers.py:1855
+#: gajim/common/connection_handlers.py:1863
 msgid "I would like to add you to my roster."
 msgstr "我想將您加入到我的聯絡人清單。"
 
@@ -8394,12 +8398,12 @@ msgstr "字型"
 msgid "Clear formatting"
 msgstr "清楚格式"
 
-#: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:803
+#: gajim/data/gui/groupchat_control.ui:283 gajim/data/gui/chat_control.ui:805
 #, fuzzy
 msgid "Choose an encryption"
 msgstr "密碼加密"
 
-#: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:851
+#: gajim/data/gui/groupchat_control.ui:329 gajim/data/gui/chat_control.ui:853
 msgid "Show a list of emoticons (Alt+M)"
 msgstr "顯示表情清單(Alt+M)"
 
@@ -8469,7 +8473,7 @@ msgstr "<b>字型</b>"
 msgid "<b>#</b>"
 msgstr "<b>字型</b>"
 
-#: gajim/data/gui/chat_control.ui:727
+#: gajim/data/gui/chat_control.ui:729
 msgid "#"
 msgstr "#"
 
@@ -10650,17 +10654,6 @@ msgstr "最近:"
 msgid "Plugin manager"
 msgstr "外掛程式失敗"
 
-#~ msgid ""
-#~ "Your configured emoticons theme has not been found, so emoticons have "
-#~ "been disabled."
-#~ msgstr "您配置的表情圖示主題找不到，所以表情圖示被停用。"
-
-#~ msgid "Shows or hides the roster window"
-#~ msgstr "顯示/隱藏聯絡人清單視窗"
-
-#~ msgid "Shows or hides the ipython window"
-#~ msgstr "顯示/隱藏 ipython 視窗"
-
 #, fuzzy
 #~ msgid ""
 #~ "Install /\n"
@@ -10672,8 +10665,23 @@ msgstr "外掛程式失敗"
 #~ msgstr "已安裝"
 
 #, fuzzy
+#~ msgid "Install and Upgrade Plugins"
+#~ msgstr "已安裝"
+
+#, fuzzy
 #~ msgid "Plugins updates"
 #~ msgstr "外掛程式失敗"
+
+#~ msgid ""
+#~ "Your configured emoticons theme has not been found, so emoticons have "
+#~ "been disabled."
+#~ msgstr "您配置的表情圖示主題找不到，所以表情圖示被停用。"
+
+#~ msgid "Shows or hides the roster window"
+#~ msgstr "顯示/隱藏聯絡人清單視窗"
+
+#~ msgid "Shows or hides the ipython window"
+#~ msgstr "顯示/隱藏 ipython 視窗"
 
 #, fuzzy
 #~ msgid "XMPP account %s"

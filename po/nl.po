@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-17 21:27+0000\n"
+"POT-Creation-Date: 2018-03-31 02:05+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -28,20 +28,20 @@ msgstr "Ping?"
 msgid "Error."
 msgstr "Fout."
 
-#: gajim/chat_control_base.py:569
+#: gajim/chat_control_base.py:571
 msgid "_Undo"
 msgstr "_Ongedaan maken"
 
-#: gajim/chat_control_base.py:577 gajim/profile_window.py:181
-#: gajim/conversation_textview.py:550
+#: gajim/chat_control_base.py:579 gajim/profile_window.py:181
+#: gajim/conversation_textview.py:539
 msgid "_Clear"
 msgstr "_Wissen"
 
-#: gajim/chat_control_base.py:1167
+#: gajim/chat_control_base.py:1172
 msgid "Really send file?"
 msgstr "Bestand versturen?"
 
-#: gajim/chat_control_base.py:1168
+#: gajim/chat_control_base.py:1173
 #, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr "Als je een bestand naar %s stuurt zal hij/zij je echte Jabber-ID zien."
@@ -101,13 +101,13 @@ msgstr "Voortgang"
 msgid "Filename: %s"
 msgstr "Bestandsnaam: %s"
 
-#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:485
+#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:486
 #, python-format
 msgid "Size: %s"
 msgstr "Grootte: %s"
 
 #: gajim/filetransfers_window.py:233 gajim/filetransfers_window.py:243
-#: gajim/history_manager.py:526
+#: gajim/history_manager.py:528
 msgid "You"
 msgstr "Jij"
 
@@ -116,7 +116,7 @@ msgstr "Jij"
 msgid "Sender: %s"
 msgstr "Afzender: %s"
 
-#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
+#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:763
 #: gajim/tooltips.py:667
 msgid "Recipient: "
 msgstr "Ontvanger: "
@@ -172,28 +172,28 @@ msgstr ""
 msgid "Choose File to Send…"
 msgstr "Kies het bestand om te verzenden…"
 
-#: gajim/filetransfers_window.py:355
+#: gajim/filetransfers_window.py:356
 msgid "_Send"
 msgstr "Ver_zenden"
 
-#: gajim/filetransfers_window.py:362 gajim/tooltips.py:702
+#: gajim/filetransfers_window.py:363 gajim/tooltips.py:702
 msgid "Description: "
 msgstr "Beschrijving: "
 
-#: gajim/filetransfers_window.py:375
+#: gajim/filetransfers_window.py:376
 msgid "Gajim can not read this file"
 msgstr "Gajim kan dit bestand niet lezen"
 
-#: gajim/filetransfers_window.py:376
+#: gajim/filetransfers_window.py:377
 msgid "Another process is using this file."
 msgstr "Dit bestand is in gebruik door een ander proces."
 
-#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:495
+#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:492
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan bestaand bestand ‘%s’ niet overschrijven"
 
-#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:496
+#: gajim/filetransfers_window.py:423 gajim/gtkgui_helpers.py:493
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
@@ -201,90 +201,90 @@ msgstr ""
 "Een bestand met deze naam bestaat al en je hebt geen toestemming om het te "
 "overschrijven."
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "This file already exists"
 msgstr "Dit bestands bestaat al"
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "What do you want to do?"
 msgstr "Wat wil je doen?"
 
-#: gajim/filetransfers_window.py:450 gajim/gtkgui_helpers.py:507
+#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:504
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "Map ‘%s’ is niet schrijfbaar"
 
-#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:508
+#: gajim/filetransfers_window.py:452 gajim/gtkgui_helpers.py:505
 msgid "You do not have permission to create files in this directory."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
-#: gajim/filetransfers_window.py:462
+#: gajim/filetransfers_window.py:463
 msgid "Save File as…"
 msgstr "Bestand opslaan als…"
 
-#: gajim/filetransfers_window.py:482
+#: gajim/filetransfers_window.py:483
 #, python-format
 msgid "File: %s"
 msgstr "Bestand: %s"
 
-#: gajim/filetransfers_window.py:488
+#: gajim/filetransfers_window.py:489
 #, python-format
 msgid "Type: %s"
 msgstr "Type: %s"
 
-#: gajim/filetransfers_window.py:490
+#: gajim/filetransfers_window.py:491
 #, python-format
 msgid "Description: %s"
 msgstr "Beschrijving: %s"
 
-#: gajim/filetransfers_window.py:491
+#: gajim/filetransfers_window.py:492
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "%s wil je een bestand sturen:"
 
-#: gajim/filetransfers_window.py:532
+#: gajim/filetransfers_window.py:533
 msgid "Checking file…"
 msgstr "Bestand wordt gecontroleerd…"
 
-#: gajim/filetransfers_window.py:546
+#: gajim/filetransfers_window.py:547
 msgid "File error"
 msgstr "Bestandsfout"
 
-#: gajim/filetransfers_window.py:583
+#: gajim/filetransfers_window.py:584
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#: gajim/filetransfers_window.py:676
+#: gajim/filetransfers_window.py:677
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: gajim/filetransfers_window.py:729 gajim/filetransfers_window.py:732
+#: gajim/filetransfers_window.py:730 gajim/filetransfers_window.py:733
 msgid "Invalid File"
 msgstr "Ongeldig bestand"
 
-#: gajim/filetransfers_window.py:729
+#: gajim/filetransfers_window.py:730
 msgid "File: "
 msgstr "Bestand: "
 
-#: gajim/filetransfers_window.py:733
+#: gajim/filetransfers_window.py:734
 msgid "It is not possible to send empty files"
 msgstr "Het is onmogelijk lege bestanden te sturen"
 
-#: gajim/filetransfers_window.py:758 gajim/tooltips.py:658
+#: gajim/filetransfers_window.py:759 gajim/tooltips.py:658
 msgid "Name: "
 msgstr "Naam: "
 
-#: gajim/filetransfers_window.py:760 gajim/tooltips.py:661
+#: gajim/filetransfers_window.py:761 gajim/tooltips.py:661
 msgid "Sender: "
 msgstr "Afzender: "
 
-#: gajim/filetransfers_window.py:888
+#: gajim/filetransfers_window.py:889
 msgid "Pause"
 msgstr "Pauze"
 
-#: gajim/filetransfers_window.py:899
+#: gajim/filetransfers_window.py:900
 msgid "_Continue"
 msgstr "_Doorgaan"
 
@@ -457,26 +457,26 @@ msgstr "?functies:Beschikbaar"
 msgid "Feature"
 msgstr "Functie"
 
-#: gajim/gtkgui_helpers.py:259
+#: gajim/gtkgui_helpers.py:255
 msgid "Error reading file:"
 msgstr "Fout bij lezen bestand:"
 
-#: gajim/gtkgui_helpers.py:262
+#: gajim/gtkgui_helpers.py:258
 msgid "Error parsing file:"
 msgstr "Fout bij verwerken bestand:"
 
-#: gajim/gtkgui_helpers.py:481
+#: gajim/gtkgui_helpers.py:478
 msgid "Extension not supported"
 msgstr "Extensie wordt niet ondersteund"
 
-#: gajim/gtkgui_helpers.py:482
+#: gajim/gtkgui_helpers.py:479
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 "Afbeelding kan niet worden opgeslagen in %(type)s-formaat. Opslaan als "
 "%(new_filename)s?"
 
-#: gajim/gtkgui_helpers.py:517
+#: gajim/gtkgui_helpers.py:514
 msgid "Save Image as…"
 msgstr "Afbeelding opslaan als…"
 
@@ -545,8 +545,8 @@ msgstr "Er is geen lopend abonneringsverzoek."
 msgid " resource with priority "
 msgstr " bron met prioriteit "
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4760 gajim/dialogs.py:4802
-#: gajim/dialogs.py:4850 gajim/dialogs.py:4940
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4806 gajim/dialogs.py:4848
+#: gajim/dialogs.py:4896 gajim/dialogs.py:4986
 msgid "All files"
 msgstr "Alle bestanden"
 
@@ -559,11 +559,11 @@ msgid "Manage Proxies"
 msgstr "Proxy’s beheren"
 
 #: gajim/options_dialog.py:484 gajim/options_dialog.py:552
-#: gajim/options_dialog.py:573 gajim/dialogs.py:331 gajim/dialogs.py:333
-#: gajim/dialogs.py:541 gajim/dialogs.py:554 gajim/roster_window.py:2997
-#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1160
-#: gajim/config.py:1175 gajim/config.py:1180 gajim/config.py:1228
-#: gajim/config.py:1338 gajim/config.py:2487 gajim/config.py:2564
+#: gajim/options_dialog.py:573 gajim/dialogs.py:326 gajim/dialogs.py:328
+#: gajim/dialogs.py:536 gajim/dialogs.py:549 gajim/roster_window.py:2997
+#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1162
+#: gajim/config.py:1177 gajim/config.py:1182 gajim/config.py:1230
+#: gajim/config.py:1340 gajim/config.py:2489 gajim/config.py:2566
 #: gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
@@ -602,8 +602,8 @@ msgid "_New Group Chat"
 msgstr "_Nieuw groepsgesprek"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1119 gajim/dialogs.py:2317 gajim/dialogs.py:2346
-#: gajim/dialogs.py:3821 gajim/chat_control.py:284 gajim/roster_window.py:804
+#: gajim/dialogs.py:1114 gajim/dialogs.py:2333 gajim/dialogs.py:2362
+#: gajim/dialogs.py:3867 gajim/chat_control.py:284 gajim/roster_window.py:804
 #: gajim/roster_window.py:1753 gajim/roster_window.py:1755
 #: gajim/roster_window.py:2068 gajim/roster_window.py:3419
 #: gajim/roster_window.py:3446 gajim/gui_interface.py:524
@@ -769,7 +769,7 @@ msgstr "Archiefvoorkeuren"
 msgid "Synchronise History"
 msgstr "Geschiedenis synchroniseren"
 
-#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4537
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4583
 msgid "Privacy Lists"
 msgstr "Privacylijsten"
 
@@ -832,7 +832,7 @@ msgid "Cannot find history logs database"
 msgstr "Kan logboekdatabase niet vinden"
 
 #: gajim/history_manager.py:144 gajim/history_manager.py:195
-#: gajim/dialogs.py:3802 gajim/config.py:1619 gajim/disco.py:872
+#: gajim/dialogs.py:3848 gajim/config.py:1621 gajim/disco.py:872
 msgid "JID"
 msgstr "JID"
 
@@ -855,13 +855,13 @@ msgstr "Bericht"
 msgid "Subject"
 msgstr "Onderwerp"
 
-#: gajim/history_manager.py:240
+#: gajim/history_manager.py:243
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr "Wil je de database opschonen? (STERK AFGERADEN ALS GAJIM DRAAIT)"
 
-#: gajim/history_manager.py:242
+#: gajim/history_manager.py:245
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
 "reusable. If you really want to reduce database filesize, click YES, else "
@@ -875,45 +875,45 @@ msgstr ""
 "\n"
 "Als je op JA klikt, even geduld…"
 
-#: gajim/history_manager.py:247
+#: gajim/history_manager.py:250
 msgid "Database Cleanup"
 msgstr "Database opschonen"
 
-#: gajim/history_manager.py:462
+#: gajim/history_manager.py:464
 msgid "Exporting History Logs…"
 msgstr "Geschiedenislogboeken worden geëxporteerd…"
 
-#: gajim/history_manager.py:538
+#: gajim/history_manager.py:540
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(who)s zei op %(time)s: %(message)s\n"
 
-#: gajim/history_manager.py:576
+#: gajim/history_manager.py:578
 #, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
 msgstr "Wil je echt de volledige gespreksgeschiedenis met %(jid)s verwijderen?"
 
-#: gajim/history_manager.py:580
+#: gajim/history_manager.py:582
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr ""
 "Wil je echt de volledige gespreksgeschiedenis met de geselecteerde contacten "
 "verwijderen?"
 
-#: gajim/history_manager.py:582
+#: gajim/history_manager.py:584
 msgid "This can not be undone."
 msgstr "Dit kan niet ongedaan gemaakt worden."
 
-#: gajim/history_manager.py:584 gajim/history_manager.py:623
+#: gajim/history_manager.py:586 gajim/history_manager.py:625
 msgid "Deletion Confirmation"
 msgstr "Verwijderbevestiging"
 
-#: gajim/history_manager.py:618
+#: gajim/history_manager.py:620
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Wil je het geselecteerde bericht echt verwijderen?"
 msgstr[1] "Wil je de geselecteerde berichten echt verwijderen?"
 
-#: gajim/history_manager.py:621
+#: gajim/history_manager.py:623
 msgid "This is an irreversible operation."
 msgstr "Dit is een bewerking die niet ongedaan gemaakt kan worden."
 
@@ -937,8 +937,8 @@ msgstr "Formaat: YYYY-MM-DD"
 msgid "Information received"
 msgstr "Informatie ontvangen"
 
-#: gajim/profile_window.py:334 gajim/dialogs.py:2531 gajim/dialogs.py:2619
-#: gajim/dialogs.py:3068 gajim/disco.py:536 gajim/gui_interface.py:1847
+#: gajim/profile_window.py:334 gajim/dialogs.py:2562 gajim/dialogs.py:2650
+#: gajim/dialogs.py:3105 gajim/disco.py:536 gajim/gui_interface.py:1849
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "Er is geen verbinding met de server"
@@ -968,17 +968,17 @@ msgstr ""
 "Er trad een fout up bij het publiceren van je persoonlijke informatie, "
 "probeer het later opnieuw."
 
-#: gajim/dialogs.py:95
+#: gajim/dialogs.py:90
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Contactnaam: <i>%s</i>"
 
-#: gajim/dialogs.py:97
+#: gajim/dialogs.py:92
 #, python-format
 msgid "JID: <i>%s</i>"
 msgstr "JID: <i>%s</i>"
 
-#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2939
+#: gajim/dialogs.py:121 gajim/dialogs.py:133 gajim/roster_window.py:2939
 #: gajim/roster_window.py:3953 gajim/roster_window.py:5234
 #: gajim/accounts_window.py:463 gajim/common/contacts.py:105
 #: gajim/common/contacts.py:137 gajim/data/gui/preferences_window.ui:569
@@ -986,77 +986,77 @@ msgstr "JID: <i>%s</i>"
 msgid "General"
 msgstr "Algemeen"
 
-#: gajim/dialogs.py:211
+#: gajim/dialogs.py:206
 msgid "Group"
 msgstr "Groep"
 
-#: gajim/dialogs.py:218
+#: gajim/dialogs.py:213
 msgid "In the group"
 msgstr "In de groep"
 
-#: gajim/dialogs.py:313
+#: gajim/dialogs.py:308
 msgid "KeyID"
 msgstr "SleutelID"
 
-#: gajim/dialogs.py:318
+#: gajim/dialogs.py:313
 msgid "Contact name"
 msgstr "Contactnaam"
 
-#: gajim/dialogs.py:496
+#: gajim/dialogs.py:491
 msgid "Set Mood"
 msgstr "Stemming instellen"
 
-#: gajim/dialogs.py:616
+#: gajim/dialogs.py:611
 #, python-format
 msgid "%s Status Message"
 msgstr "%s statusbericht"
 
-#: gajim/dialogs.py:630
+#: gajim/dialogs.py:625
 msgid "Status Message"
 msgstr "Statusbericht"
 
-#: gajim/dialogs.py:820
+#: gajim/dialogs.py:815
 msgid "Overwrite Status Message?"
 msgstr "Statusbericht overschrijven?"
 
-#: gajim/dialogs.py:821
+#: gajim/dialogs.py:816
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "Deze naam is al in gebruik. Wil je dit statusbericht overschrijven?"
 
-#: gajim/dialogs.py:829
+#: gajim/dialogs.py:824
 msgid "Save as Preset Status Message"
 msgstr "Opslaan als vooraf ingesteld statusbericht"
 
-#: gajim/dialogs.py:830
+#: gajim/dialogs.py:825
 msgid "Please type a name for this status message"
 msgstr "Geef een nieuwe naam in voor dit statusbericht"
 
-#: gajim/dialogs.py:857
+#: gajim/dialogs.py:852
 msgid "JID:"
 msgstr "JID:"
 
-#: gajim/dialogs.py:858
+#: gajim/dialogs.py:853
 msgid "AIM Address:"
 msgstr "AIM-adres:"
 
-#: gajim/dialogs.py:859
+#: gajim/dialogs.py:854
 msgid "GG Number:"
 msgstr "GG-nummer:"
 
-#: gajim/dialogs.py:860
+#: gajim/dialogs.py:855
 msgid "ICQ Number:"
 msgstr "ICQ-nummer:"
 
-#: gajim/dialogs.py:861
+#: gajim/dialogs.py:856
 msgid "MSN Address:"
 msgstr "MSN-adres:"
 
-#: gajim/dialogs.py:862
+#: gajim/dialogs.py:857
 msgid "Yahoo! Address:"
 msgstr "Yahoo!-adres:"
 
-#: gajim/dialogs.py:899
+#: gajim/dialogs.py:894
 #, python-format
 msgid ""
 "Please fill in the data of the contact you want to add to your account <b>"
@@ -1065,39 +1065,39 @@ msgstr ""
 "Vul de informatie van de contactpersoon in die je aan je account <b>%s</b> "
 "wil toevoegen"
 
-#: gajim/dialogs.py:902
+#: gajim/dialogs.py:897
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Vul de informatie van de contactpersoon in die je wil toevoegen"
 
-#: gajim/dialogs.py:1094 gajim/dialogs.py:1100 gajim/dialogs.py:1105
+#: gajim/dialogs.py:1089 gajim/dialogs.py:1095 gajim/dialogs.py:1100
 msgid "Invalid User ID"
 msgstr "Ongeldige gebruikers-ID"
 
-#: gajim/dialogs.py:1101
+#: gajim/dialogs.py:1096
 msgid "The user ID must not contain a resource."
 msgstr "De gebruikers-ID kan geen bron bevatten."
 
-#: gajim/dialogs.py:1106
+#: gajim/dialogs.py:1101
 msgid "You cannot add yourself to your roster."
 msgstr "Je kan jezelf niet aan je rooster toevoegen."
 
-#: gajim/dialogs.py:1120
+#: gajim/dialogs.py:1115
 msgid "Contact already in roster"
 msgstr "Contact staat al in het rooster"
 
-#: gajim/dialogs.py:1121
+#: gajim/dialogs.py:1116
 msgid "This contact is already listed in your roster."
 msgstr "Dit contact staat al in je rooster."
 
-#: gajim/dialogs.py:1174 gajim/dialogs.py:1208
+#: gajim/dialogs.py:1169 gajim/dialogs.py:1203
 msgid "User ID:"
 msgstr "Gebruikers-ID:"
 
-#: gajim/dialogs.py:1274
+#: gajim/dialogs.py:1269
 msgid "Error while adding transport contact"
 msgstr "Fout bij toevoegen van transportcontact"
 
-#: gajim/dialogs.py:1275
+#: gajim/dialogs.py:1270
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1111,61 +1111,61 @@ msgstr ""
 
 # TODO: Loop alles na, zet zinnen in de goede vorm, volg GNOME NL richtlijnen,
 #       ruim mnemonics op. Zie ook: http://nl.gnome.org/
-#: gajim/dialogs.py:1307
+#: gajim/dialogs.py:1302
 msgid "A GTK+ XMPP client"
 msgstr "Een GTK+ XMPP-cliënt"
 
-#: gajim/dialogs.py:1308
+#: gajim/dialogs.py:1303
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+-versie: %s"
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1304
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject-versie: %s"
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1305
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr "python-nbxmpp-versie: %s"
 
-#: gajim/dialogs.py:1313
+#: gajim/dialogs.py:1308
 msgid "Current Developers"
 msgstr "Huidige ontwikkelaars"
 
-#: gajim/dialogs.py:1314
+#: gajim/dialogs.py:1309
 msgid "Past Developers"
 msgstr "Vroegere ontwikkelaars"
 
-#: gajim/dialogs.py:1315
+#: gajim/dialogs.py:1310
 msgid "Artists"
 msgstr "Artiesten"
 
-#: gajim/dialogs.py:1319
+#: gajim/dialogs.py:1314
 msgid "Last but not least"
 msgstr "Tenslotte"
 
-#: gajim/dialogs.py:1320
+#: gajim/dialogs.py:1315
 msgid "we would like to thank all the package maintainers."
 msgstr "willen we alle pakketonderhouders bedanken."
 
-#: gajim/dialogs.py:1321
+#: gajim/dialogs.py:1316
 msgid "Thanks"
 msgstr "Met dank aan"
 
-#: gajim/dialogs.py:1323
+#: gajim/dialogs.py:1318
 msgid "translator-credits"
 msgstr ""
 "Nathan Follens <nthn@unseen.is>\n"
 "Stéphan Kochen <stephan@kochen.nl>"
 
-#: gajim/dialogs.py:1487
+#: gajim/dialogs.py:1503
 #, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "Woordenboek voor taal ‘%s’ niet beschikbaar"
 
-#: gajim/dialogs.py:1488
+#: gajim/dialogs.py:1504
 #, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1178,12 +1178,12 @@ msgstr ""
 "\n"
 "Functie voor markeren van verkeerd gespelde woorden zal niet gebruikt worden"
 
-#: gajim/dialogs.py:1835 gajim/dialogs.py:1850 gajim/gui_interface.py:1510
-#: gajim/gui_interface.py:1552
+#: gajim/dialogs.py:1851 gajim/dialogs.py:1866 gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1553
 msgid "Insecure connection"
 msgstr "Onveilige verbinding"
 
-#: gajim/dialogs.py:1836
+#: gajim/dialogs.py:1852
 #, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1196,492 +1196,492 @@ msgstr ""
 "onversleuteld worden verstuurd. Dit soort verbinding wordt sterk afgeraden.\n"
 "Ben je zeker dat je wil doorgaan?"
 
-#: gajim/dialogs.py:1841 gajim/gui_interface.py:1514
-#: gajim/gui_interface.py:1555
+#: gajim/dialogs.py:1857 gajim/gui_interface.py:1515
+#: gajim/gui_interface.py:1556
 msgid "Yes, I really want to connect insecurely"
 msgstr "Ja, ik wil echt onveilig verbinden"
 
-#: gajim/dialogs.py:1842
+#: gajim/dialogs.py:1858
 msgid "Gajim will NOT connect unless you check this box"
 msgstr "Gajim zal NIET verbinden tenzij je dit aanvinkt"
 
-#: gajim/dialogs.py:1843 gajim/groupchat_control.py:2285
+#: gajim/dialogs.py:1859 gajim/groupchat_control.py:2335
 #: gajim/roster_window.py:2897 gajim/roster_window.py:3529
 #: gajim/roster_window.py:4282 gajim/message_window.py:247
-#: gajim/gui_interface.py:725 gajim/gui_interface.py:1515
-#: gajim/gui_interface.py:1556
+#: gajim/gui_interface.py:725 gajim/gui_interface.py:1516
+#: gajim/gui_interface.py:1557
 msgid "_Do not ask me again"
 msgstr "Vraag mij _dit niet nogmaals"
 
-#: gajim/dialogs.py:1941
+#: gajim/dialogs.py:1957
 msgid "_Resume"
 msgstr "He_rvatten"
 
-#: gajim/dialogs.py:1949
+#: gajim/dialogs.py:1965
 msgid "Re_place"
 msgstr "Ver_vangen"
 
-#: gajim/dialogs.py:2152 gajim/config.py:2167
+#: gajim/dialogs.py:2168 gajim/config.py:2169
 #: gajim/command_system/implementation/standard.py:261
 msgid "Invalid nickname"
 msgstr "Ongeldige bijnaam"
 
-#: gajim/dialogs.py:2153
+#: gajim/dialogs.py:2169
 msgid "The nickname contains invalid characters."
 msgstr "De bijnaam bevat ongeldige tekens."
 
-#: gajim/dialogs.py:2275
+#: gajim/dialogs.py:2291
 msgid "Subscription Request"
 msgstr "Abonneringsverzoek"
 
-#: gajim/dialogs.py:2284
+#: gajim/dialogs.py:2300
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Abonneringsverzoek voor account %(account)s van %(jid)s"
 
-#: gajim/dialogs.py:2287
+#: gajim/dialogs.py:2303
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Abonneringsverzoek van %s"
 
-#: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
+#: gajim/dialogs.py:2375 gajim/data/gui/join_groupchat_window.ui:312
 msgid "Join Groupchat"
 msgstr "Deelnemen aan groepsgesprek"
 
-#: gajim/dialogs.py:2500
+#: gajim/dialogs.py:2531
 msgid "Invalid Room"
 msgstr "Ongeldig groepsgesprek"
 
-#: gajim/dialogs.py:2501
+#: gajim/dialogs.py:2532
 msgid "Please choose a room"
 msgstr "Kies een groepsgesprek"
 
-#: gajim/dialogs.py:2513 gajim/dialogs.py:2520
+#: gajim/dialogs.py:2544 gajim/dialogs.py:2551
 msgid "Invalid Nickname"
 msgstr "Ongeldige bijnaam"
 
-#: gajim/dialogs.py:2514
+#: gajim/dialogs.py:2545
 msgid "Please choose a nickname"
 msgstr "Kies een bijnaam"
 
-#: gajim/dialogs.py:2526 gajim/dialogs.py:3479 gajim/config.py:2451
+#: gajim/dialogs.py:2557 gajim/dialogs.py:3516 gajim/config.py:2453
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 msgid "Invalid JID"
 msgstr "Ongeldige JID"
 
-#: gajim/dialogs.py:2532 gajim/gui_interface.py:1848
+#: gajim/dialogs.py:2563 gajim/gui_interface.py:1850
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
 "zijn."
 
-#: gajim/dialogs.py:2586 gajim/dialogs.py:2597
+#: gajim/dialogs.py:2617 gajim/dialogs.py:2628
 msgid "Wrong server"
 msgstr "Verkeerde server"
 
-#: gajim/dialogs.py:2587 gajim/dialogs.py:2598
+#: gajim/dialogs.py:2618 gajim/dialogs.py:2629
 #, python-format
 msgid "%s is not a groupchat server"
 msgstr "%s is geen groepsgespreksserver"
 
-#: gajim/dialogs.py:2620
+#: gajim/dialogs.py:2651
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Zonder verbinding is het niet mogelijk je contacten te synchroniseren."
 
-#: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3805
-#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
-#: gajim/disco.py:1977
+#: gajim/dialogs.py:2662 gajim/dialogs.py:2733 gajim/dialogs.py:3851
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1693
+#: gajim/disco.py:1978
 msgid "Name"
 msgstr "Naam"
 
-#: gajim/dialogs.py:2634 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2665 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "Server"
 
-#: gajim/dialogs.py:2670
+#: gajim/dialogs.py:2701
 msgid "This account is not connected to the server"
 msgstr "Deze account is niet verbonden met de server"
 
-#: gajim/dialogs.py:2671
+#: gajim/dialogs.py:2702
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Het is niet mogelijk met een account te synchroniseren zonder dat deze "
 "verbonden is."
 
-#: gajim/dialogs.py:2700
+#: gajim/dialogs.py:2731
 msgid "Synchronise"
 msgstr "Synchroniseren"
 
-#: gajim/dialogs.py:2763
+#: gajim/dialogs.py:2794
 msgid "Start new Conversation"
 msgstr "Nieuw gesprek starten"
 
-#: gajim/dialogs.py:3021
+#: gajim/dialogs.py:3052
 msgid "New Groupchat"
 msgstr "Nieuw groepsgesprek"
 
-#: gajim/dialogs.py:3023
+#: gajim/dialogs.py:3054
 msgid "New Contact"
 msgstr "Nieuw contact"
 
-#: gajim/dialogs.py:3069
+#: gajim/dialogs.py:3106
 msgid "Without a connection, you can not change your password."
 msgstr "Zonder verbinding is het niet mogelijk je wachtwoord te veranderen."
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "Invalid password"
 msgstr "Ongeldig wachtwoord"
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "You must enter a password."
 msgstr "Je moet een wachtwoord opgeven."
 
-#: gajim/dialogs.py:3093
+#: gajim/dialogs.py:3130
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
 
-#: gajim/dialogs.py:3094
+#: gajim/dialogs.py:3131
 msgid "The passwords typed in both fields must be identical."
 msgstr "De wachtwoorden in beide velden moeten identiek zijn."
 
-#: gajim/dialogs.py:3132 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2814
+#: gajim/dialogs.py:3169 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2821
 msgid "Contact Signed In"
 msgstr "Contact is ingelogd"
 
-#: gajim/dialogs.py:3134 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2820
+#: gajim/dialogs.py:3171 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2827
 msgid "Contact Signed Out"
 msgstr "Contact is uitgelogd"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2634
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2641
 msgid "New Message"
 msgstr "Nieuw bericht"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2616
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2623
 msgid "New Single Message"
 msgstr "Nieuw enkel bericht"
 
-#: gajim/dialogs.py:3137 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2622
+#: gajim/dialogs.py:3174 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/common/connection_handlers_events.py:2629
 msgid "New Private Message"
 msgstr "Nieuw privébericht"
 
-#: gajim/dialogs.py:3137
+#: gajim/dialogs.py:3174
 msgid "New E-mail"
 msgstr "Nieuwe e-mail"
 
-#: gajim/dialogs.py:3139 gajim/gui_interface.py:926 gajim/notify.py:93
+#: gajim/dialogs.py:3176 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "Verzoek voor bestandsoverdracht"
 
-#: gajim/dialogs.py:3141 gajim/gui_interface.py:861 gajim/gui_interface.py:891
+#: gajim/dialogs.py:3178 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "Fout bij bestandsoverdracht"
 
-#: gajim/dialogs.py:3143 gajim/gui_interface.py:1030
+#: gajim/dialogs.py:3180 gajim/gui_interface.py:1030
 #: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "Bestandsoverdracht voltooid"
 
-#: gajim/dialogs.py:3144 gajim/gui_interface.py:1034
+#: gajim/dialogs.py:3181 gajim/gui_interface.py:1034
 #: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "Bestandsoverdracht gestopt"
 
-#: gajim/dialogs.py:3146 gajim/dialogs.py:4702 gajim/chat_control.py:1647
+#: gajim/dialogs.py:3183 gajim/dialogs.py:4748 gajim/chat_control.py:1647
 #: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "Uitnodiging voor groepsgesprek"
 
-#: gajim/dialogs.py:3148 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2808
+#: gajim/dialogs.py:3185 gajim/notify.py:93
+#: gajim/common/connection_handlers_events.py:2815
 msgid "Contact Changed Status"
 msgstr "Contact heeft zijn/haar status gewijzigd"
 
-#: gajim/dialogs.py:3367
+#: gajim/dialogs.py:3404
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Enkel bericht met account %s"
 
-#: gajim/dialogs.py:3369
+#: gajim/dialogs.py:3406
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Enkel bericht in account %s"
 
-#: gajim/dialogs.py:3371
+#: gajim/dialogs.py:3408
 msgid "Single Message"
 msgstr "Enkel bericht"
 
-#: gajim/dialogs.py:3374
+#: gajim/dialogs.py:3411
 #, python-format
 msgid "Send %s"
 msgstr "%s verzenden"
 
-#: gajim/dialogs.py:3397
+#: gajim/dialogs.py:3434
 #, python-format
 msgid "Received %s"
 msgstr "%s ontvangen"
 
-#: gajim/dialogs.py:3420
+#: gajim/dialogs.py:3457
 #, python-format
 msgid "Form %s"
 msgstr "Formulier %s"
 
-#: gajim/dialogs.py:3448 gajim/dialogs.py:3634
+#: gajim/dialogs.py:3485 gajim/dialogs.py:3672
 msgid "Connection not available"
 msgstr "Verbinding niet beschikbaar"
 
-#: gajim/dialogs.py:3449 gajim/dialogs.py:3635
+#: gajim/dialogs.py:3486 gajim/dialogs.py:3673
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
 
-#: gajim/dialogs.py:3480 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3517 gajim/dialog_messages.py:43
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr ""
 "Het is niet mogelijk een bericht te sturen naar %s, deze JID is ongeldig."
 
-#: gajim/dialogs.py:3503
+#: gajim/dialogs.py:3540
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: gajim/dialogs.py:3504
+#: gajim/dialogs.py:3541
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s schreef:\n"
 
-#: gajim/dialogs.py:3551 gajim/data/gui/shortcuts_window.ui:113
+#: gajim/dialogs.py:3589 gajim/data/gui/shortcuts_window.ui:113
 msgid "Clear"
 msgstr "Wissen"
 
-#: gajim/dialogs.py:3556
+#: gajim/dialogs.py:3594
 msgid "Filter"
 msgstr "Filteren"
 
-#: gajim/dialogs.py:3561
+#: gajim/dialogs.py:3599
 msgid "XML Input"
 msgstr "XML-invoer"
 
-#: gajim/dialogs.py:3565
+#: gajim/dialogs.py:3603
 msgid "Send"
 msgstr "Verzenden"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "add"
 msgstr "toevoegen"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "modify"
 msgstr "bewerken"
 
-#: gajim/dialogs.py:3749
+#: gajim/dialogs.py:3795
 msgid "remove"
 msgstr "verwijderen"
 
-#: gajim/dialogs.py:3778
+#: gajim/dialogs.py:3824
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
 "roster."
 msgstr "<b>%(jid)s</b> wil dat je enkele contacten zou <b>%(action)s</b>."
 
-#: gajim/dialogs.py:3794 gajim/dialogs.py:3840 gajim/accounts_window.py:44
+#: gajim/dialogs.py:3840 gajim/dialogs.py:3886 gajim/accounts_window.py:44
 msgid "Add"
 msgstr "Toevoegen"
 
-#: gajim/dialogs.py:3796 gajim/dialogs.py:3871
+#: gajim/dialogs.py:3842 gajim/dialogs.py:3917
 msgid "Modify"
 msgstr "Bewerken"
 
-#: gajim/dialogs.py:3798 gajim/dialogs.py:3895
+#: gajim/dialogs.py:3844 gajim/dialogs.py:3941
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: gajim/dialogs.py:3808
+#: gajim/dialogs.py:3854
 msgid "Groups"
 msgstr "Groepen"
 
-#: gajim/dialogs.py:3916
+#: gajim/dialogs.py:3962
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s heeft me aangeraden je aan mijn rooster toe te voegen."
 
-#: gajim/dialogs.py:3930
+#: gajim/dialogs.py:3976
 #, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "%d contact toegevoegd"
 msgstr[1] "%d contacten toegevoegd"
 
-#: gajim/dialogs.py:3968
+#: gajim/dialogs.py:4014
 #, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "%d contact verwijderd"
 msgstr[1] "%d contacten verwijderd"
 
-#: gajim/dialogs.py:3994
+#: gajim/dialogs.py:4040
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "Archiefvoorkeuren voor %s"
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 msgid "Success!"
 msgstr "Succes!"
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 msgid "Your Archiving Preferences have been saved!"
 msgstr "Je archiefvoorkeuren zijn opgeslagen!"
 
-#: gajim/dialogs.py:4048
+#: gajim/dialogs.py:4094
 msgid "We got no response from the Server"
 msgstr "We ontvingen geen antwoord van de server"
 
-#: gajim/dialogs.py:4050
+#: gajim/dialogs.py:4096
 msgid "We received an error: {}"
 msgstr "We hebben een fout ontvangen: {}"
 
-#: gajim/dialogs.py:4054
+#: gajim/dialogs.py:4100
 msgid "Error!"
 msgstr "Fout!"
 
-#: gajim/dialogs.py:4113
+#: gajim/dialogs.py:4159
 msgid "Add JID"
 msgstr "JID toevoegen"
 
-#: gajim/dialogs.py:4186
+#: gajim/dialogs.py:4232
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Privacylijst <b><i>%s</i></b>"
 
-#: gajim/dialogs.py:4190
+#: gajim/dialogs.py:4236
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Privacylijst voor %s"
 
-#: gajim/dialogs.py:4192 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4238 gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "Privacylijst"
 
-#: gajim/dialogs.py:4263
+#: gajim/dialogs.py:4309
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 "Volgorde: %(order)s, actie: %(action)s, type: %(type)s, waarde: %(value)s"
 
-#: gajim/dialogs.py:4268
+#: gajim/dialogs.py:4314
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Volgorde: %(order)s, actie: %(action)s"
 
-#: gajim/dialogs.py:4322
+#: gajim/dialogs.py:4368
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Regel wijzigen</b>"
 
-#: gajim/dialogs.py:4434
+#: gajim/dialogs.py:4480
 msgid "<b>Add a rule</b>"
 msgstr "<b>Regel toevoegen</b>"
 
-#: gajim/dialogs.py:4535
+#: gajim/dialogs.py:4581
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Privacylijsten voor %s"
 
-#: gajim/dialogs.py:4631
+#: gajim/dialogs.py:4677
 msgid "Invalid List Name"
 msgstr "Ongeldige lijstnaam"
 
-#: gajim/dialogs.py:4632
+#: gajim/dialogs.py:4678
 msgid "You must enter a name to create a privacy list."
 msgstr "Je moet een naam invullen om een privacylijst aan te maken."
 
-#: gajim/dialogs.py:4668
+#: gajim/dialogs.py:4714
 msgid "You are invited to a groupchat"
 msgstr "Je bent uitgenodigd in een groepsgesprek"
 
-#: gajim/dialogs.py:4671
+#: gajim/dialogs.py:4717
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact heeft je uitgenodigd voor een gesprek"
 
-#: gajim/dialogs.py:4673
+#: gajim/dialogs.py:4719
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact heeft je uitgenodigd in groepsgesprek %(room_jid)s"
 
-#: gajim/dialogs.py:4682
+#: gajim/dialogs.py:4728
 #, python-format
 msgid "Comment: %s"
 msgstr "Commentaar: %s"
 
-#: gajim/dialogs.py:4684
+#: gajim/dialogs.py:4730
 msgid "Do you want to accept the invitation?"
 msgstr "Wil je de uitnodiging aanvaarden?"
 
-#: gajim/dialogs.py:4700
+#: gajim/dialogs.py:4746
 msgid "Reason (if you decline):"
 msgstr "Reden (als je weigert):"
 
-#: gajim/dialogs.py:4749
+#: gajim/dialogs.py:4795
 msgid "Choose Client Cert #PCKS12"
 msgstr "Kies cliëntcertificaat #PCKS12"
 
-#: gajim/dialogs.py:4765 gajim/accounts_window.py:657
+#: gajim/dialogs.py:4811 gajim/accounts_window.py:657
 msgid "PKCS12 Files"
 msgstr "PKCS12-bestanden"
 
-#: gajim/dialogs.py:4791
+#: gajim/dialogs.py:4837
 msgid "Choose Sound"
 msgstr "Kies geluid"
 
-#: gajim/dialogs.py:4807
+#: gajim/dialogs.py:4853
 msgid "Wav Sounds"
 msgstr "WAV-geluiden"
 
-#: gajim/dialogs.py:4837
+#: gajim/dialogs.py:4883
 msgid "Choose Image"
 msgstr "Kies afbeelding"
 
-#: gajim/dialogs.py:4855
+#: gajim/dialogs.py:4901
 msgid "Images"
 msgstr "Afbeeldingen"
 
-#: gajim/dialogs.py:4926
+#: gajim/dialogs.py:4972
 msgid "Choose Archive"
 msgstr "Kies archief"
 
-#: gajim/dialogs.py:4945
+#: gajim/dialogs.py:4991
 msgid "Zip files"
 msgstr "Zip-bestanden"
 
-#: gajim/dialogs.py:4971
+#: gajim/dialogs.py:5017
 #, python-format
 msgid "When %s becomes:"
 msgstr "Wanneer %s wordt:"
 
-#: gajim/dialogs.py:4973
+#: gajim/dialogs.py:5019
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Speciale melding voor %s wordt toegevoegd"
 
-#: gajim/dialogs.py:5213
+#: gajim/dialogs.py:5259
 msgid "an audio and video"
 msgstr "een audio- en video-"
 
-#: gajim/dialogs.py:5215
+#: gajim/dialogs.py:5261
 msgid "an audio"
 msgstr "een audio-"
 
-#: gajim/dialogs.py:5217
+#: gajim/dialogs.py:5263
 msgid "a video"
 msgstr "een video-"
 
-#: gajim/dialogs.py:5221
+#: gajim/dialogs.py:5267
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
@@ -1690,12 +1690,12 @@ msgstr ""
 "%(contact)s wil een %(type)s sessie met je beginnen. Wil je de oproep "
 "beantwoorden?"
 
-#: gajim/dialogs.py:5326 gajim/dialogs.py:5362
+#: gajim/dialogs.py:5372 gajim/dialogs.py:5408
 #, python-format
 msgid "Certificate for account %s"
 msgstr "Certificaat voor account %s"
 
-#: gajim/dialogs.py:5326
+#: gajim/dialogs.py:5372
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1738,38 +1738,38 @@ msgstr ""
 "\n"
 "SHA-256-vingerafdruk: %(sha256)s\n"
 
-#: gajim/dialogs.py:5373 gajim/gui_interface.py:1404
+#: gajim/dialogs.py:5419 gajim/gui_interface.py:1405
 #, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "SSL-certificaatverificatie voor %s"
 
-#: gajim/dialogs.py:5374 gajim/dialogs.py:5391
+#: gajim/dialogs.py:5420 gajim/dialogs.py:5437
 msgid "View cert…"
 msgstr "Certificaat bekijken…"
 
-#: gajim/dialogs.py:5407 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:5453 gajim/data/gui/application_menu.ui:32
 msgid "File Transfer"
 msgstr "Bestandsoverdracht"
 
-#: gajim/dialogs.py:5431
+#: gajim/dialogs.py:5477
 msgid "Requesting HTTP Upload Slot..."
 msgstr "HTTP-uploadslot opvragen…"
 
-#: gajim/dialogs.py:5435
+#: gajim/dialogs.py:5481
 msgid "Uploading file via HTTP File Upload..."
 msgstr "Bestand uploaden met HTTP-bestandsupload…"
 
-#: gajim/dialogs.py:5439
+#: gajim/dialogs.py:5485
 msgid "Encrypting file..."
 msgstr "Bestand versleutelen…"
 
-#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1793
+#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1839
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s is nu bekend als %(new_nick)s"
 
-#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1942
-#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2804
+#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1988
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2811
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s is nu %(status)s"
@@ -1785,45 +1785,45 @@ msgstr ""
 "Je bent niet meer in groepsgesprek ‘%(room)s’ of ‘%(nick)s’ heeft het "
 "groepsgesprek verlaten."
 
-#: gajim/groupchat_control.py:636 gajim/chat_control.py:326
+#: gajim/groupchat_control.py:640 gajim/chat_control.py:326
 #: gajim/chat_control.py:330
 msgid "HTTP File Upload"
 msgstr "HTTP-bestandsupload"
 
-#: gajim/groupchat_control.py:638
+#: gajim/groupchat_control.py:642
 msgid "HTTP File Upload not supported by your server"
 msgstr "HTTP-bestandsupload wordt niet ondersteund door je server"
 
-#: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2320
+#: gajim/groupchat_control.py:662 gajim/groupchat_control.py:2370
 msgid "Changing Subject"
 msgstr "Onderwerp veranderen"
 
-#: gajim/groupchat_control.py:652 gajim/groupchat_control.py:2321
+#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
 msgid "Please specify the new subject:"
 msgstr "Geef het nieuwe onderwerp op:"
 
-#: gajim/groupchat_control.py:659
+#: gajim/groupchat_control.py:670
 msgid "Changing Nickname"
 msgstr "Bijnaam veranderen"
 
-#: gajim/groupchat_control.py:660
+#: gajim/groupchat_control.py:671
 msgid "Please specify the new nickname you want to use:"
 msgstr "Geef de nieuwe bijnaam op die je wilt gebruiken:"
 
-#: gajim/groupchat_control.py:677
+#: gajim/groupchat_control.py:688
 msgid "Invalid group chat JID"
 msgstr "Ongeldige JID voor groepsgesprek"
 
-#: gajim/groupchat_control.py:678
+#: gajim/groupchat_control.py:689
 msgid "The group chat JID has not allowed characters."
 msgstr "De JID van het groepsgesprek heeft niet toegelaten tekens."
 
-#: gajim/groupchat_control.py:684
+#: gajim/groupchat_control.py:699
 #, python-format
 msgid "Destroying %s"
 msgstr "%s vernietigen"
 
-#: gajim/groupchat_control.py:685
+#: gajim/groupchat_control.py:700
 msgid ""
 "You are going to remove this room permanently.\n"
 "You may specify a reason below:"
@@ -1831,195 +1831,195 @@ msgstr ""
 "Je staat op het punt dit groepsgesprek definitief te verwijderen.\n"
 "Je kan hieronder een reden opgeven:"
 
-#: gajim/groupchat_control.py:687
+#: gajim/groupchat_control.py:702
 msgid "You may also enter an alternate venue:"
 msgstr "Je kan ook een andere locatie opgeven:"
 
-#: gajim/groupchat_control.py:864
+#: gajim/groupchat_control.py:880
 msgid "Insert Nickname"
 msgstr "Bijnaam invoeren"
 
-#: gajim/groupchat_control.py:1015 gajim/chat_control.py:803
+#: gajim/groupchat_control.py:1062 gajim/chat_control.py:803
 msgid "and authenticated"
 msgstr "en geauthenticeerd"
 
-#: gajim/groupchat_control.py:1019 gajim/chat_control.py:807
+#: gajim/groupchat_control.py:1066 gajim/chat_control.py:807
 msgid "and NOT authenticated"
 msgstr "en NIET geauthenticeerd"
 
-#: gajim/groupchat_control.py:1023 gajim/chat_control.py:811
+#: gajim/groupchat_control.py:1070 gajim/chat_control.py:811
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s-versleuteling is actief %(authenticated)s."
 
-#: gajim/groupchat_control.py:1066
+#: gajim/groupchat_control.py:1113
 msgid "Conversation with "
 msgstr "Gesprek met "
 
-#: gajim/groupchat_control.py:1068
+#: gajim/groupchat_control.py:1115
 msgid "Continued conversation"
 msgstr "Verdergezet gesprek"
 
-#: gajim/groupchat_control.py:1427
+#: gajim/groupchat_control.py:1473
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s heeft het onderwerp ingesteld als %(subject)s"
 
-#: gajim/groupchat_control.py:1450 gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1496 gajim/groupchat_control.py:1781
 msgid "Any occupant is allowed to see your full JID"
 msgstr "Elke deelnemer kan je volledige JID te zien"
 
-#: gajim/groupchat_control.py:1453
+#: gajim/groupchat_control.py:1499
 msgid "Room now shows unavailable members"
 msgstr "Groepsgesprek toont nu niet beschikbare leden"
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1501
 msgid "Room now does not show unavailable members"
 msgstr "Groepsgesprek verbergt nu niet-beschikbare leden"
 
-#: gajim/groupchat_control.py:1457
+#: gajim/groupchat_control.py:1503
 msgid "A setting not related to privacy has been changed"
 msgstr "Een instelling is gewijzigd, niet gerelateerd aan privacy"
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1507
 msgid "Room logging is now enabled"
 msgstr "Opslaan van berichten in groepsgesprek is nu ingeschakeld"
 
-#: gajim/groupchat_control.py:1463
+#: gajim/groupchat_control.py:1509
 msgid "Room logging is now disabled"
 msgstr "Opslaan van berichten in groepsgesprek is nu uitgeschakeld"
 
-#: gajim/groupchat_control.py:1465
+#: gajim/groupchat_control.py:1511
 msgid "Room is now non-anonymous"
 msgstr "Groepsgesprek is nu niet-anoniem"
 
-#: gajim/groupchat_control.py:1468
+#: gajim/groupchat_control.py:1514
 msgid "Room is now semi-anonymous"
 msgstr "Groepsgesprek is nu semi-anoniem"
 
-#: gajim/groupchat_control.py:1471
+#: gajim/groupchat_control.py:1517
 msgid "Room is now fully anonymous"
 msgstr "Groepsgesprek is nu volledig anoniem"
 
-#: gajim/groupchat_control.py:1511 gajim/chat_control.py:1268
+#: gajim/groupchat_control.py:1557 gajim/chat_control.py:1268
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Pong! (%s s.)"
 
-#: gajim/groupchat_control.py:1728 gajim/groupchat_control.py:2348
+#: gajim/groupchat_control.py:1774 gajim/groupchat_control.py:2398
 #: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 
-#: gajim/groupchat_control.py:1740
+#: gajim/groupchat_control.py:1786
 msgid "Room logging is enabled"
 msgstr "Opslaan van berichten in groepsgesprek is ingeschakeld"
 
-#: gajim/groupchat_control.py:1742
+#: gajim/groupchat_control.py:1788
 msgid "A new room has been created"
 msgstr "Een nieuw groepsgesprek is aangemaakt"
 
-#: gajim/groupchat_control.py:1745
+#: gajim/groupchat_control.py:1791
 msgid "The server has assigned or modified your roomnick"
 msgstr "De server heeft je bijnaam toegewezen of aangepast"
 
-#: gajim/groupchat_control.py:1751
+#: gajim/groupchat_control.py:1797
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s is uit het groepsgesprek geschopt: %(reason)s"
 
-#: gajim/groupchat_control.py:1754
+#: gajim/groupchat_control.py:1800
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s is uit het groepsgesprek geschopt door %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1763
+#: gajim/groupchat_control.py:1809
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s is uit het groepsgesprek verbannen: %(reason)s"
 
-#: gajim/groupchat_control.py:1766
+#: gajim/groupchat_control.py:1812
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s is uit het groepsgesprek verbannen door %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1777 gajim/groupchat_control.py:1861
+#: gajim/groupchat_control.py:1823 gajim/groupchat_control.py:1907
 #, python-format
 msgid "You are now known as %s"
 msgstr "Je staat nu bekend als %s"
 
-#: gajim/groupchat_control.py:1815 gajim/groupchat_control.py:1820
-#: gajim/groupchat_control.py:1826
+#: gajim/groupchat_control.py:1861 gajim/groupchat_control.py:1866
+#: gajim/groupchat_control.py:1872
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s is uit het groepsgesprek verwijderd (%(reason)s)"
 
-#: gajim/groupchat_control.py:1817
+#: gajim/groupchat_control.py:1863
 msgid "affiliation changed"
 msgstr "aansluiting veranderd"
 
-#: gajim/groupchat_control.py:1822
+#: gajim/groupchat_control.py:1868
 msgid "room configuration changed to members-only"
 msgstr "gespreksconfiguratie veranderd naar alleen-leden"
 
-#: gajim/groupchat_control.py:1828
+#: gajim/groupchat_control.py:1874
 msgid "system shutdown"
 msgstr "uitschakelen van systeem"
 
-#: gajim/groupchat_control.py:1882
+#: gajim/groupchat_control.py:1928
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 "** Aansluiting van %(nick)s is ingesteld als %(affiliation)s door %(actor)s"
 
-#: gajim/groupchat_control.py:1886
+#: gajim/groupchat_control.py:1932
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Aansluiting van %(nick)s is ingesteld als %(affiliation)s"
 
-#: gajim/groupchat_control.py:1901
+#: gajim/groupchat_control.py:1947
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** Rol van %(nick)s is ingesteld als %(role)s door %(actor)s"
 
-#: gajim/groupchat_control.py:1905
+#: gajim/groupchat_control.py:1951
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** Rol van %(nick)s is ingesteld als %(role)s"
 
-#: gajim/groupchat_control.py:1935
+#: gajim/groupchat_control.py:1981
 #, python-format
 msgid "%s has left"
 msgstr "%s heeft het groepsgesprek verlaten"
 
-#: gajim/groupchat_control.py:1940
+#: gajim/groupchat_control.py:1986
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s neemt nu deel aan het groepsgesprek"
 
-#: gajim/groupchat_control.py:2279
+#: gajim/groupchat_control.py:2329
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
 
-#: gajim/groupchat_control.py:2281
+#: gajim/groupchat_control.py:2331
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr ""
 "Als je dit venster sluit zal de verbinding met dit groepsgesprek verbroken "
 "worden."
 
-#: gajim/groupchat_control.py:2500
+#: gajim/groupchat_control.py:2550
 #, python-format
 msgid "Kicking %s"
 msgstr "%s uit de ruimte schoppen"
 
-#: gajim/groupchat_control.py:2501 gajim/groupchat_control.py:2797
+#: gajim/groupchat_control.py:2551 gajim/groupchat_control.py:2847
 msgid "You may specify a reason below:"
 msgstr "Je kan hieronder een reden opgeven:"
 
-#: gajim/groupchat_control.py:2796
+#: gajim/groupchat_control.py:2846
 #, python-format
 msgid "Banning %s"
 msgstr "%s verbannen"
@@ -2113,7 +2113,7 @@ msgstr ""
 "Onderwerp: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1494 gajim/gui_interface.py:1196
+#: gajim/chat_control.py:1494 gajim/gui_interface.py:1197
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2136,10 +2136,10 @@ msgid "Size"
 msgstr "Grootte"
 
 #: gajim/chat_control.py:1596
-msgid "_Accept"
-msgstr "_Aanvaarden"
+msgid "Accept"
+msgstr "Aanvaarden"
 
-#: gajim/chat_control.py:1650 gajim/disco.py:1752
+#: gajim/chat_control.py:1650 gajim/disco.py:1753
 msgid "_Join"
 msgstr "_Binnengaan"
 
@@ -2159,7 +2159,7 @@ msgstr "Samengevoegde accounts"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5125 gajim/message_window.py:525
+#: gajim/roster_window.py:5125 gajim/message_window.py:519
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 msgid "Groupchats"
@@ -2169,7 +2169,7 @@ msgstr "Groepsgesprekken"
 #: gajim/roster_window.py:1698 gajim/roster_window.py:1749
 #: gajim/roster_window.py:1751 gajim/roster_window.py:1912
 #: gajim/roster_window.py:2575 gajim/roster_window.py:5155 gajim/disco.py:130
-#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:135
+#: gajim/disco.py:131 gajim/disco.py:1460 gajim/common/contacts.py:135
 #: gajim/common/contacts.py:378 gajim/common/helpers.py:95
 msgid "Transports"
 msgstr "Transporten"
@@ -2426,7 +2426,7 @@ msgstr ""
 "Je moet een account aanmaken voor je gesprekken kunt voeren met andere "
 "contacten."
 
-#: gajim/roster_window.py:3676 gajim/gui_interface.py:2062
+#: gajim/roster_window.py:3676 gajim/gui_interface.py:2065
 #: gajim/dialog_messages.py:64
 msgid "You cannot join a group chat while you are invisible"
 msgstr ""
@@ -2596,9 +2596,8 @@ msgid "Show all warnings"
 msgstr "Alle waarschuwingen weergeven"
 
 #: gajim/gajim.py:101
-#, fuzzy
 msgid "Open IPython shell"
-msgstr "ipython-shell openen"
+msgstr "IPython-shell openen"
 
 #: gajim/gajim.py:104
 msgid "Pops up a window with the next pending event"
@@ -2608,7 +2607,7 @@ msgstr "Toont een venster met de volgende lopende gebeurtenis"
 msgid "Start a new chat"
 msgstr "Nieuw gesprek beginnen"
 
-#: gajim/gajim.py:180 gajim/gui_interface.py:127
+#: gajim/gajim.py:180 gajim/gui_interface.py:128
 msgid "Database Error"
 msgstr "Databasefout"
 
@@ -2683,67 +2682,67 @@ msgstr ""
 "        in verwerking. Probeer het later opnieuw.\n"
 "        "
 
-#: gajim/config.py:148 gajim/config.py:154 gajim/config.py:614
+#: gajim/config.py:150 gajim/config.py:156 gajim/config.py:616
 #: gajim/data/gui/preferences_window.ui:68
 #: gajim/data/gui/preferences_window.ui:85
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: gajim/config.py:409 gajim/config.py:413 gajim/config.py:1940
+#: gajim/config.py:411 gajim/config.py:415 gajim/config.py:1942
 msgid "Default"
 msgstr "Standaard"
 
-#: gajim/config.py:1126
+#: gajim/config.py:1128
 msgid "status message title"
 msgstr "statusberichttitel"
 
-#: gajim/config.py:1127
+#: gajim/config.py:1129
 msgid "status message text"
 msgstr "statusberichttekst"
 
-#: gajim/config.py:1515
+#: gajim/config.py:1517
 #, python-format
 msgid "Edit %s"
 msgstr "%s wijzigen"
 
-#: gajim/config.py:1517
+#: gajim/config.py:1519
 #, python-format
 msgid "Register to %s"
 msgstr "Registreren bij %s"
 
-#: gajim/config.py:1553
+#: gajim/config.py:1555
 msgid "Ban List"
 msgstr "Banlijst"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Member List"
 msgstr "Ledenlijst"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Owner List"
 msgstr "Eigenaarlijst"
 
-#: gajim/config.py:1555
+#: gajim/config.py:1557
 msgid "Administrator List"
 msgstr "Administratorlijst"
 
-#: gajim/config.py:1629
+#: gajim/config.py:1631
 msgid "Reason"
 msgstr "Reden"
 
-#: gajim/config.py:1636
+#: gajim/config.py:1638
 msgid "Nick"
 msgstr "Bijnaam"
 
-#: gajim/config.py:1642
+#: gajim/config.py:1644
 msgid "Role"
 msgstr "Rol"
 
-#: gajim/config.py:1668
+#: gajim/config.py:1670
 msgid "Banning…"
 msgstr "Wordt verbannen…"
 
-#: gajim/config.py:1670
+#: gajim/config.py:1672
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2751,11 +2750,11 @@ msgstr ""
 "<b>Wie wil je verbannen?</b>\n"
 "\n"
 
-#: gajim/config.py:1672
+#: gajim/config.py:1674
 msgid "Adding Member…"
 msgstr "Lid wordt toegevoegd…"
 
-#: gajim/config.py:1673
+#: gajim/config.py:1675
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2763,11 +2762,11 @@ msgstr ""
 "<b>Wie wil je een lid maken?</b>\n"
 "\n"
 
-#: gajim/config.py:1675
+#: gajim/config.py:1677
 msgid "Adding Owner…"
 msgstr "Eigenaar wordt toegevoegd…"
 
-#: gajim/config.py:1676
+#: gajim/config.py:1678
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -2775,11 +2774,11 @@ msgstr ""
 "<b>Wie wil je een eigenaar maken?</b>\n"
 "\n"
 
-#: gajim/config.py:1678
+#: gajim/config.py:1680
 msgid "Adding Administrator…"
 msgstr "Administrator wordt toegevoegd…"
 
-#: gajim/config.py:1679
+#: gajim/config.py:1681
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2787,7 +2786,7 @@ msgstr ""
 "<b>Wie wil je een administrator maken?</b>\n"
 "\n"
 
-#: gajim/config.py:1680
+#: gajim/config.py:1682
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2803,105 +2802,105 @@ msgstr ""
 "4. domein (het domein zelf komt overeen, net als eender welke\n"
 "gebruiker@domein, domein/bron, of adres met een subdomein)."
 
-#: gajim/config.py:1781
+#: gajim/config.py:1783
 #, python-format
 msgid "Removing %s account"
 msgstr "Account %s wordt verwijderd"
 
-#: gajim/config.py:1796
+#: gajim/config.py:1798
 msgid "Account is disabled"
 msgstr "Account is uitgeschakeld"
 
-#: gajim/config.py:1797
+#: gajim/config.py:1799
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
 "Om de registratie van een account bij een server ongedaan te maken, moet "
 "deze eerst ingeschakeld zijn."
 
-#: gajim/config.py:1811 gajim/gui_interface.py:314 gajim/gui_interface.py:748
+#: gajim/config.py:1813 gajim/gui_interface.py:314 gajim/gui_interface.py:748
 msgid "Password Required"
 msgstr "Wachtwoord vereist"
 
-#: gajim/config.py:1812 gajim/gui_interface.py:733
+#: gajim/config.py:1814 gajim/gui_interface.py:733
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Voer je wachtwoord voor account %s in"
 
-#: gajim/config.py:1813 gajim/gui_interface.py:748
+#: gajim/config.py:1815 gajim/gui_interface.py:748
 msgid "Save password"
 msgstr "Wachtwoord opslaan"
 
-#: gajim/config.py:1824
+#: gajim/config.py:1826
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Account ‘%s’ is verbonden met de server"
 
-#: gajim/config.py:1825
+#: gajim/config.py:1827
 msgid "If you remove it, the connection will be lost."
 msgstr "Als je ze verwijdert, wordt de verbinding verbroken."
 
-#: gajim/config.py:1840
+#: gajim/config.py:1842
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "Verbinding met server %s mislukt"
 
-#: gajim/config.py:1841
+#: gajim/config.py:1843
 msgid "What would you like to do?"
 msgstr "Wat zou je willen doen?"
 
-#: gajim/config.py:1842
+#: gajim/config.py:1844
 msgid "Remove only from Gajim"
 msgstr "Alleen verwijderen van Gajim"
 
-#: gajim/config.py:1843
+#: gajim/config.py:1845
 msgid "Don't remove anything. I'll try again later"
 msgstr "Niets verwijderen. Ik probeer het later opnieuw"
 
-#: gajim/config.py:1940
+#: gajim/config.py:1942
 msgid "?print_status:All"
 msgstr "?print_status:Alles"
 
-#: gajim/config.py:1941
+#: gajim/config.py:1943
 msgid "Enter and leave only"
 msgstr "Alleen binnenkomen en verlaten"
 
-#: gajim/config.py:1942
+#: gajim/config.py:1944
 msgid "?print_status:None"
 msgstr "?print_status:Geen"
 
-#: gajim/config.py:2008
+#: gajim/config.py:2010
 msgid "New Group Chat"
 msgstr "Nieuw groepsgesprek"
 
-#: gajim/config.py:2044
+#: gajim/config.py:2046
 msgid "This bookmark has invalid data"
 msgstr "Deze bladwijzer bevat ongeldige informatie"
 
-#: gajim/config.py:2045
+#: gajim/config.py:2047
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Zorg ervoor dat de server- en groepsgespreksvelden ingevuld zijn, of "
 "verwijder deze bladwijzer."
 
-#: gajim/config.py:2168 gajim/config.py:2184 gajim/config.py:2195
-#: gajim/config.py:2223
+#: gajim/config.py:2170 gajim/config.py:2186 gajim/config.py:2197
+#: gajim/config.py:2225
 msgid "Character not allowed"
 msgstr "Teken niet toegestaan"
 
-#: gajim/config.py:2183 gajim/config.py:2194 gajim/config.py:2473
+#: gajim/config.py:2185 gajim/config.py:2196 gajim/config.py:2475
 msgid "Invalid server"
 msgstr "Ongeldige server"
 
-#: gajim/config.py:2222
+#: gajim/config.py:2224
 msgid "Invalid room"
 msgstr "Ongeldig groepsgesprek"
 
-#: gajim/config.py:2387
+#: gajim/config.py:2389
 msgid "Account has been added successfully"
 msgstr "Account is toegevoegd"
 
-#: gajim/config.py:2388 gajim/config.py:2394
+#: gajim/config.py:2390 gajim/config.py:2396
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -2910,42 +2909,42 @@ msgstr ""
 "Je kan geavanceerde accountopties instellen door op de knop ‘Geavanceerd’ te "
 "drukken, of later via Accounts in het menu ‘Bewerken’ van het hoofdvenster."
 
-#: gajim/config.py:2393
+#: gajim/config.py:2395
 msgid "Your new account has been created successfully"
 msgstr "Je nieuwe account is aangemaakt"
 
-#: gajim/config.py:2431
+#: gajim/config.py:2433
 msgid "Invalid username"
 msgstr "Ongeldige gebruikersnaam"
 
-#: gajim/config.py:2433
+#: gajim/config.py:2435
 msgid "You must provide a username to configure this account."
 msgstr "Je moet een gebruikersnaam invullen om deze account te configureren."
 
-#: gajim/config.py:2474
+#: gajim/config.py:2476
 msgid "Please provide a server on which you want to register."
 msgstr "Geef een server op waarbij je je wil registreren."
 
-#: gajim/config.py:2497
+#: gajim/config.py:2499
 msgid "Invalid entry"
 msgstr "Ongeldige invoer"
 
-#: gajim/config.py:2498
+#: gajim/config.py:2500
 msgid "Custom port must be a port number."
 msgstr "Aangepaste poort moet een geldig poortnummer zijn."
 
-#: gajim/config.py:2530 gajim/gui_interface.py:1359
+#: gajim/config.py:2532 gajim/gui_interface.py:1360
 msgid "Certificate Already in File"
 msgstr "Certificaat al in bestand"
 
-#: gajim/config.py:2531 gajim/gui_interface.py:1360
+#: gajim/config.py:2533 gajim/gui_interface.py:1361
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
 "Dit certificaat bevindt zich al in bestand %s en wordt niet opnieuw "
 "toegevoegd."
 
-#: gajim/config.py:2624
+#: gajim/config.py:2626
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -2960,7 +2959,7 @@ msgstr ""
 "SSL-fout: %(error)s\n"
 "Wil je nog steeds verbinden met deze server?"
 
-#: gajim/config.py:2630
+#: gajim/config.py:2632
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -2975,74 +2974,74 @@ msgstr ""
 "SHA-256-vingerafdruk van het certificaat:\n"
 "%(sha256)s"
 
-#: gajim/config.py:2664 gajim/config.py:2698
+#: gajim/config.py:2666 gajim/config.py:2700
 msgid "An error occurred during account creation"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
-#: gajim/config.py:2761
+#: gajim/config.py:2763
 msgid "Account name is in use"
 msgstr "Accountnaam is al in gebruik"
 
-#: gajim/config.py:2762
+#: gajim/config.py:2764
 msgid "You already have an account using this name."
 msgstr "Je hebt al een account met deze naam."
 
-#: gajim/config.py:2894
+#: gajim/config.py:2896
 msgid "PEP node was not removed"
 msgstr "PEP-knooppunt niet verwijderd"
 
-#: gajim/config.py:2895
+#: gajim/config.py:2897
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "PEP-knooppunt %(node)s niet verwijderd: %(message)s"
 
-#: gajim/config.py:2923
+#: gajim/config.py:2925
 #, python-format
 msgid "Configure %s"
 msgstr "%s configureren"
 
-#: gajim/config.py:2940 gajim/plugins/gui.py:95
+#: gajim/config.py:2942 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "Actief"
 
-#: gajim/config.py:2948
+#: gajim/config.py:2950
 msgid "Event"
 msgstr "Gebeurtenis"
 
-#: gajim/config.py:2982
+#: gajim/config.py:2984
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
 # Eerste bericht ontvangen?
-#: gajim/config.py:2983
+#: gajim/config.py:2985
 msgid "First Message Received"
 msgstr "Eerste ontvangen bericht"
 
-#: gajim/config.py:2984
+#: gajim/config.py:2986
 msgid "Next Message Received Focused"
 msgstr "Nieuw bericht met focus ontvangen"
 
-#: gajim/config.py:2986
+#: gajim/config.py:2988
 msgid "Next Message Received Unfocused"
 msgstr "Nieuw bericht zonder focus ontvangen"
 
-#: gajim/config.py:2987
+#: gajim/config.py:2989
 msgid "Contact Connected"
 msgstr "Contact verbonden"
 
-#: gajim/config.py:2988
+#: gajim/config.py:2990
 msgid "Contact Disconnected"
 msgstr "Contact heeft de verbinding verbroken"
 
-#: gajim/config.py:2989
+#: gajim/config.py:2991
 msgid "Message Sent"
 msgstr "Bericht verzonden"
 
-#: gajim/config.py:2990
+#: gajim/config.py:2992
 msgid "Group Chat Message Highlight"
 msgstr "Vermeld in groepsgesprek"
 
-#: gajim/config.py:2991
+#: gajim/config.py:2993
 msgid "Group Chat Message Received"
 msgstr "Bericht ontvangen in groepsgesprek"
 
@@ -3051,19 +3050,19 @@ msgstr "Bericht ontvangen in groepsgesprek"
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s van dit groepsgesprek"
 
-#: gajim/tooltips.py:269 gajim/common/helpers.py:475
+#: gajim/tooltips.py:269 gajim/common/helpers.py:473
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Aansluiting van contact in groepsgesprek:Geen"
 
-#: gajim/tooltips.py:271 gajim/common/helpers.py:481
+#: gajim/tooltips.py:271 gajim/common/helpers.py:479
 msgid "Member"
 msgstr "Lid"
 
-#: gajim/tooltips.py:273 gajim/common/helpers.py:479
+#: gajim/tooltips.py:273 gajim/common/helpers.py:477
 msgid "Administrator"
 msgstr "Administrator"
 
-#: gajim/tooltips.py:275 gajim/common/helpers.py:477
+#: gajim/tooltips.py:275 gajim/common/helpers.py:475
 msgid "Owner"
 msgstr "Eigenaar"
 
@@ -3243,7 +3242,7 @@ msgstr "Status is nu: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Status is nu: %(status)s"
 
-#: gajim/history_window.py:585 gajim/conversation_textview.py:1349
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Onderwerp: %s\n"
@@ -3396,7 +3395,7 @@ msgstr "Deze dienst heeft geen items om te doorbladeren."
 msgid "Execute Command"
 msgstr "Opdracht uitvoeren"
 
-#: gajim/disco.py:1308 gajim/disco.py:1465
+#: gajim/disco.py:1308 gajim/disco.py:1466
 msgid "Re_gister"
 msgstr "Re_gistreren"
 
@@ -3409,65 +3408,65 @@ msgstr "Lid worden"
 msgid "Search"
 msgstr "Zoeken"
 
-#: gajim/disco.py:1463
+#: gajim/disco.py:1464
 msgid "_Edit"
 msgstr "B_ewerken"
 
-#: gajim/disco.py:1506
+#: gajim/disco.py:1507
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr "Onderzoeken van %(current)d / %(total)d…"
 
-#: gajim/disco.py:1702
+#: gajim/disco.py:1703
 msgid "Users"
 msgstr "Gebruikers"
 
-#: gajim/disco.py:1710
+#: gajim/disco.py:1711
 msgid "Description"
 msgstr "Beschrijving"
 
-#: gajim/disco.py:1718
+#: gajim/disco.py:1719
 msgid "Id"
 msgstr "ID"
 
-#: gajim/disco.py:1748 gajim/data/gui/gc_control_popup_menu.ui:99
+#: gajim/disco.py:1749 gajim/data/gui/gc_control_popup_menu.ui:99
 msgid "_Bookmark"
 msgstr "Toevoegen aan _bladwijzers"
 
-#: gajim/disco.py:1782
+#: gajim/disco.py:1783
 msgid "Bookmark already set"
 msgstr "Bladwijzer bestaat al"
 
-#: gajim/disco.py:1783
+#: gajim/disco.py:1784
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Groepsgesprek ‘%s’ heeft al een bladwijzer."
 
-#: gajim/disco.py:1793
+#: gajim/disco.py:1794
 msgid "Bookmark has been added successfully"
 msgstr "Bladwijzer is met succes toegevoegd"
 
-#: gajim/disco.py:1794
+#: gajim/disco.py:1795
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr "Je kan bladwijzers beheren via het menu ‘Acties’ in je rooster."
 
-#: gajim/disco.py:1986
+#: gajim/disco.py:1987
 msgid "Subscribed"
 msgstr "Geabonneerd"
 
-#: gajim/disco.py:1995
+#: gajim/disco.py:1996
 msgid "Node"
 msgstr "Knooppunt"
 
-#: gajim/disco.py:2062
+#: gajim/disco.py:2063
 msgid "New post"
 msgstr "Nieuwe post"
 
-#: gajim/disco.py:2068
+#: gajim/disco.py:2069
 msgid "_Subscribe"
 msgstr "_Abonneer"
 
-#: gajim/disco.py:2074
+#: gajim/disco.py:2075
 msgid "_Unsubscribe"
 msgstr "Abonnement _opzeggen"
 
@@ -3479,50 +3478,50 @@ msgstr ""
 "Tekst onder deze streep is gezegd nadat\n"
 "je laatst op dit groepsgesprek gelet hebt"
 
-#: gajim/conversation_textview.py:561
+#: gajim/conversation_textview.py:550
 msgid "_Quote"
 msgstr "_Citeren"
 
-#: gajim/conversation_textview.py:569
+#: gajim/conversation_textview.py:558
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_Acties voor ‘%s’"
 
-#: gajim/conversation_textview.py:583
+#: gajim/conversation_textview.py:572
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia-artikel lezen"
 
-#: gajim/conversation_textview.py:588
+#: gajim/conversation_textview.py:577
 msgid "Look it up in _Dictionary"
 msgstr "Opzoeken in woor_denboek"
 
-#: gajim/conversation_textview.py:605
+#: gajim/conversation_textview.py:594
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "‘%s’ ontbreekt in de URL van het woordenboek en het is geen WIKTIONARY"
 
-#: gajim/conversation_textview.py:619
+#: gajim/conversation_textview.py:608
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "‘%s’ ontbreekt in de URL van de zoekmachine"
 
-#: gajim/conversation_textview.py:622
+#: gajim/conversation_textview.py:611
 msgid "Web _Search for it"
 msgstr "_Zoeken op het internet"
 
-#: gajim/conversation_textview.py:628
+#: gajim/conversation_textview.py:617
 msgid "Open as _Link"
 msgstr "Openen a_ls verwijzing"
 
-#: gajim/conversation_textview.py:858
+#: gajim/conversation_textview.py:847
 msgid "URL:"
 msgstr "URL:"
 
-#: gajim/conversation_textview.py:1032
+#: gajim/conversation_textview.py:1021
 msgid "Invalid URL"
 msgstr "Ongeldige URL"
 
-#: gajim/conversation_textview.py:1117
+#: gajim/conversation_textview.py:1106
 msgid ""
 "<b>Message corrected. Original message:</b>\n"
 "{}"
@@ -3530,7 +3529,7 @@ msgstr ""
 "<b>Bericht is gewijzigd. Oorspronkelijk bericht was:</b>\n"
 "{}"
 
-#: gajim/conversation_textview.py:1261
+#: gajim/conversation_textview.py:1250
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -3549,26 +3548,26 @@ msgstr "Je staat op het punt meerdere tabbladen te sluiten"
 msgid "Do you really want to close them all?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
-#: gajim/message_window.py:523
+#: gajim/message_window.py:517
 msgid "?Noun:Chats"
 msgstr "?Znw:Gesprekken"
 
-#: gajim/message_window.py:527
+#: gajim/message_window.py:521
 msgid "Private Chats"
 msgstr "Privégesprekken"
 
-#: gajim/message_window.py:533
+#: gajim/message_window.py:527
 msgid "Messages"
 msgstr "Berichten"
 
-#: gajim/gui_interface.py:157 gajim/gui_interface.py:329
+#: gajim/gui_interface.py:158 gajim/gui_interface.py:329
 #: gajim/gui_interface.py:338 gajim/gui_interface.py:345
 #: gajim/gui_interface.py:349 gajim/gui_interface.py:352
 #: gajim/gui_interface.py:360
 msgid "Unable to join group chat"
 msgstr "Kan niet deelnemen aan het groepsgesprek"
 
-#: gajim/gui_interface.py:158
+#: gajim/gui_interface.py:159
 #, python-format
 msgid ""
 "Your desired nickname in group chat\n"
@@ -3581,25 +3580,25 @@ msgstr ""
 "is al in gebruik of geregistreerd door een andere gebruiker.\n"
 "Geef een andere bijnaam op:"
 
-#: gajim/gui_interface.py:162
+#: gajim/gui_interface.py:163
 msgid "Always use this nickname when there is a conflict"
 msgstr "Gebruik altijd deze bijnaam bij een conflict"
 
-#: gajim/gui_interface.py:180
+#: gajim/gui_interface.py:181
 msgid "Do you accept this request?"
 msgstr "Aanvaard je dit verzoek?"
 
-#: gajim/gui_interface.py:182
+#: gajim/gui_interface.py:183
 #, python-format
 msgid "Do you accept this request on account %s?"
 msgstr "Aanvaard je dit verzoek op account %s?"
 
-#: gajim/gui_interface.py:185
+#: gajim/gui_interface.py:186
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s)-machtiging voor %(url)s (id: %(id)s)"
 
-#: gajim/gui_interface.py:229 gajim/notify.py:96
+#: gajim/gui_interface.py:230 gajim/notify.py:96
 msgid "Connection Failed"
 msgstr "Verbinding mislukt"
 
@@ -3653,7 +3652,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "Fout %(code)s: %(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1423
+#: gajim/common/connection_handlers_events.py:1430
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fout bij versturen van %(message)s ( %(error)s )"
@@ -3698,8 +3697,8 @@ msgstr "Abonnement opgezegd"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "Kan geen contact maken met ‘%s’"
 
-#: gajim/gui_interface.py:583 gajim/common/connection.py:1286
-#: gajim/common/connection.py:1472
+#: gajim/gui_interface.py:583 gajim/common/connection.py:1288
+#: gajim/common/connection.py:1474
 msgid "Check your connection or try again later."
 msgstr "Controleer de verbinding of probeer later nogmaals."
 
@@ -3769,7 +3768,7 @@ msgstr "OAuth2-gebruikersreferentie"
 msgid "%s wants to send you a file."
 msgstr "%s wil je een bestand sturen."
 
-#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1432
+#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1433
 msgid "SSL certificate error"
 msgstr "SSL-certificaatfout"
 
@@ -3811,43 +3810,43 @@ msgstr "Bestandsoverdracht van %(filename)s aan %(name)s mislukt."
 msgid "Choose file to send"
 msgstr "Kies bestand om te verzenden"
 
-#: gajim/gui_interface.py:1198
+#: gajim/gui_interface.py:1199
 msgid "Unable to decrypt message"
 msgstr "Kan bericht niet ontsleutelen"
 
-#: gajim/gui_interface.py:1210
+#: gajim/gui_interface.py:1211
 msgid "Username Conflict"
 msgstr "Gebruikersnaamconflict"
 
-#: gajim/gui_interface.py:1211
+#: gajim/gui_interface.py:1212
 msgid "Please type a new username for your local account"
 msgstr "Voer een nieuwe gebruikersnaam in voor je lokale account"
 
-#: gajim/gui_interface.py:1234
+#: gajim/gui_interface.py:1235
 msgid "Resource Conflict"
 msgstr "Bronconflict"
 
-#: gajim/gui_interface.py:1235
+#: gajim/gui_interface.py:1236
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr ""
 "Je bent al verbonden met deze account van dezelfde bron. Voer een andere in"
 
-#: gajim/gui_interface.py:1292
+#: gajim/gui_interface.py:1293
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "%s wil een audiogesprek starten."
 
-#: gajim/gui_interface.py:1295
+#: gajim/gui_interface.py:1296
 msgid "Voice Chat Request"
 msgstr "Audiogespreksverzoek"
 
-#: gajim/gui_interface.py:1385
+#: gajim/gui_interface.py:1386
 msgid "Error verifying SSL certificate"
 msgstr "Fout bij verifiëren van SSL-certificaat"
 
-#: gajim/gui_interface.py:1386
+#: gajim/gui_interface.py:1387
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
@@ -3858,7 +3857,7 @@ msgstr ""
 "server: %(error)s\n"
 "Wil je nog steeds met deze server verbinden?"
 
-#: gajim/gui_interface.py:1390
+#: gajim/gui_interface.py:1391
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3873,15 +3872,15 @@ msgstr ""
 "SHA-256-vingerafdruk van het certificaat:\n"
 "%(sha256)s"
 
-#: gajim/gui_interface.py:1396
+#: gajim/gui_interface.py:1397
 msgid "Ignore this error for this certificate."
 msgstr "Negeer deze fout voor dit certificaat."
 
-#: gajim/gui_interface.py:1409
+#: gajim/gui_interface.py:1410
 msgid "Non Anonymous Server"
 msgstr "Niet-anonieme server"
 
-#: gajim/gui_interface.py:1433
+#: gajim/gui_interface.py:1434
 #, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
@@ -3906,7 +3905,7 @@ msgstr ""
 "\n"
 "Wil je nog steeds verbinden en de vingerafdruk van het certificaat bijwerken?"
 
-#: gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1512
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -3915,7 +3914,7 @@ msgstr ""
 "verbinding. Je zou PyOpenSSL moeten installeren om dat te voorkomen. Ben je "
 "zeker dat je dat wil doen?"
 
-#: gajim/gui_interface.py:1553
+#: gajim/gui_interface.py:1554
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
@@ -3923,15 +3922,15 @@ msgstr ""
 "Je staat op het punt je wachtwoord onversleuteld via een onveilige "
 "verbinding te verzenden. Weet je het zeker?"
 
-#: gajim/gui_interface.py:1854
+#: gajim/gui_interface.py:1856
 msgid "JID is not a Groupchat"
 msgstr "Deze JID is geen groepsgesprek"
 
-#: gajim/gui_interface.py:2017
+#: gajim/gui_interface.py:2020
 msgid "Emoticons disabled"
 msgstr "Emoticons uitgeschakeld"
 
-#: gajim/gui_interface.py:2018
+#: gajim/gui_interface.py:2021
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
 "details."
@@ -3939,11 +3938,11 @@ msgstr ""
 "Je ingestelde emoticon-thema is niet gevonden dus zijn emoticons uitgezet. "
 "Bekijk het logboek voor details."
 
-#: gajim/gui_interface.py:2036
+#: gajim/gui_interface.py:2039
 msgid "This is not a group chat"
 msgstr "Dit is geen groepsgesprek"
 
-#: gajim/gui_interface.py:2037
+#: gajim/gui_interface.py:2040
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -3954,32 +3953,32 @@ msgstr ""
 "groepsgespreksnaam is. Zo ja, verwijder het van je rooster en probeer "
 "opnieuw deel te nemen aan het groepsgesprek."
 
-#: gajim/gui_interface.py:2415
+#: gajim/gui_interface.py:2418
 msgid "Could not save your settings and preferences"
 msgstr "Kan je instellingen en voorkeuren niet opslaan"
 
-#: gajim/gui_interface.py:2825 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:343
+#: gajim/gui_interface.py:2828 gajim/common/config.py:117
+#: gajim/common/config.py:532 gajim/common/optparser.py:343
 #: gajim/common/optparser.py:511 gajim/common/optparser.py:534
 msgid "default"
 msgstr "standaard"
 
-#: gajim/gui_interface.py:3011
+#: gajim/gui_interface.py:3014
 msgid "Passphrase Required"
 msgstr "Wachtwoord vereist"
 
-#: gajim/gui_interface.py:3012
+#: gajim/gui_interface.py:3015
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "Voer het wachtwoord in voor de OpenPGP-sleutel %(keyid)s (account "
 "%(account)s)."
 
-#: gajim/gui_interface.py:3026
+#: gajim/gui_interface.py:3029
 msgid "OpenPGP key expired"
 msgstr "OpenPGP-sleutel verlopen"
 
-#: gajim/gui_interface.py:3027
+#: gajim/gui_interface.py:3030
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
@@ -3987,11 +3986,11 @@ msgstr ""
 "Je OpenPGP-sleutel is verlopen, je zal verbonden worden met %s zonder "
 "OpenPGP."
 
-#: gajim/gui_interface.py:3036
+#: gajim/gui_interface.py:3039
 msgid "Wrong Passphrase"
 msgstr "Verkeerd wachtwoord"
 
-#: gajim/gui_interface.py:3037
+#: gajim/gui_interface.py:3040
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Voer je OpenPGP-wachtwoord opnieuw in of druk op Annuleren."
 
@@ -4298,7 +4297,7 @@ msgstr "Accounts samenvoegen"
 msgid "Use PGP Agent"
 msgstr "PGP-agent gebruiken"
 
-#: gajim/accounts_window.py:153 gajim/common/config.py:510
+#: gajim/accounts_window.py:153 gajim/common/config.py:511
 msgid "Be right back."
 msgstr "Zo terug."
 
@@ -5044,47 +5043,47 @@ msgstr "Groepsgesprek is verwijderd"
 msgid "You can join this room instead: %s"
 msgstr "Je kan in plaats daarvan deelnemen aan dit groepsgesprek: %s"
 
-#: gajim/common/connection_handlers_events.py:1972
+#: gajim/common/connection_handlers_events.py:1979
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Onbekende SSL-fout: %d"
 
-#: gajim/common/connection_handlers_events.py:2618
+#: gajim/common/connection_handlers_events.py:2625
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Nieuw enkel bericht van %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2624
+#: gajim/common/connection_handlers_events.py:2631
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Nieuw privébericht van groepsgesprek %s"
 
-#: gajim/common/connection_handlers_events.py:2627
+#: gajim/common/connection_handlers_events.py:2634
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s: %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2630
+#: gajim/common/connection_handlers_events.py:2637
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Bericht ontvangen van %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2636
+#: gajim/common/connection_handlers_events.py:2643
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Nieuw bericht van %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2802
+#: gajim/common/connection_handlers_events.py:2809
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s wijzigde zijn/haar status"
 
-#: gajim/common/connection_handlers_events.py:2810
+#: gajim/common/connection_handlers_events.py:2817
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s is ingelogd"
 
-#: gajim/common/connection_handlers_events.py:2816
+#: gajim/common/connection_handlers_events.py:2823
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s is uitgelogd"
@@ -5894,7 +5893,11 @@ msgstr "Stelt de codering in gebruikt door python-gnupg"
 msgid "If True, Gajim will execute XEP-0146 Commands."
 msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
 
-#: gajim/common/config.py:323
+#: gajim/common/config.py:308
+msgid "All non-compliant MAM Groupchats"
+msgstr "Alle groepsgesprekken met onvolledige MAM"
+
+#: gajim/common/config.py:324
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
@@ -5902,7 +5905,7 @@ msgstr ""
 "Prioriteit zal automatisch veranderen naargelang je status. Prioriteiten "
 "worden gedefinieerd in de autopriority_*-opties."
 
-#: gajim/common/config.py:331
+#: gajim/common/config.py:332
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -5911,46 +5914,46 @@ msgstr ""
 "‘away’, ‘xa’, ‘dnd’ of ‘invisible’ zijn. LET OP: deze optie wordt enkel "
 "gebruikt als restore_last_status is uitgeschakeld"
 
-#: gajim/common/config.py:332
+#: gajim/common/config.py:333
 msgid "If enabled, restore the last status that was used."
 msgstr "Indien ingeschakeld wordt de laatst gebruikte status hersteld."
 
-#: gajim/common/config.py:334
+#: gajim/common/config.py:335
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr ""
 "Indien ingeschakeld worden contacten die machtiging aanvragen automatisch "
 "aanvaard."
 
-#: gajim/common/config.py:335
+#: gajim/common/config.py:336
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr ""
 "Indien uitgeschakeld zal deze account uitgeschakeld worden en niet "
 "weergegeven worden in het roostervenster."
 
-#: gajim/common/config.py:338
+#: gajim/common/config.py:339
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
 "Indien uitgeschakeld worden aanwezigheden niet ondertekend met de GPG-"
 "sleutel, zelfs als GPG ingesteld is."
 
-#: gajim/common/config.py:340
+#: gajim/common/config.py:341
 msgid "Enable ESessions encryption for this account."
 msgstr "ESessions-versleuteling voor deze account inschakelen."
 
-#: gajim/common/config.py:341
+#: gajim/common/config.py:342
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr ""
 "Moet Gajim automatisch een versleutelde sessie proberen starten wanneer "
 "mogelijk?"
 
-#: gajim/common/config.py:342
+#: gajim/common/config.py:343
 msgid "Allow plaintext connections"
 msgstr "Onversleutelde verbindingen toestaan"
 
-#: gajim/common/config.py:345
+#: gajim/common/config.py:346
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
@@ -5960,7 +5963,7 @@ msgstr ""
 "bevatten: ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-"
 "MD5, PLAIN, X-MESSENGER-OAUTH2 of XEP-0078"
 
-#: gajim/common/config.py:346
+#: gajim/common/config.py:347
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
@@ -5969,24 +5972,24 @@ msgstr ""
 "over een niet-beveiligde verbinding. Kan ‘warn’ (waarschuwen), "
 "‘connect’ (verbinden) of ‘disconnect’ (verbinding verbreken) zijn"
 
-#: gajim/common/config.py:347
+#: gajim/common/config.py:348
 msgid "Show a warning dialog before using standard SSL library."
 msgstr ""
 "Geeft een waarschuwingsdialoog weer voor het gebruiken van een standaard SSL-"
 "bibliotheek."
 
-#: gajim/common/config.py:348
+#: gajim/common/config.py:349
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr ""
 "Geeft een waarschuwingsdialoog weer voor het versturen van een PLAIN (platte "
 "tekst) wachtwoord over een plain (niet beveiligde) verbinding."
 
-#: gajim/common/config.py:351
+#: gajim/common/config.py:352
 msgid "Space separated list of ssl errors to ignore."
 msgstr "Door spaties gescheiden lijst van te negeren SSL-fouten."
 
-#: gajim/common/config.py:357
+#: gajim/common/config.py:358
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
@@ -5995,7 +5998,7 @@ msgstr ""
 "opslaan. Je kan ook je eigen accountnaam toevoegen om niets van die account "
 "op te slaan."
 
-#: gajim/common/config.py:358
+#: gajim/common/config.py:359
 msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
 "supports XEP-0313"
@@ -6003,7 +6006,7 @@ msgstr ""
 "Bij opstarten zal Gajim de logboeken opgeslagen op de server downloaden, "
 "indien de server ondersteuning biedt voor XEP-0313"
 
-#: gajim/common/config.py:359
+#: gajim/common/config.py:360
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
@@ -6011,15 +6014,15 @@ msgstr ""
 "Door spaties gescheiden lijst van JID’s waarvoor je aanvaardt je gesprekken "
 "niet op te slaan als zij dat niet willen."
 
-#: gajim/common/config.py:362
+#: gajim/common/config.py:363
 msgid "Whitespace sent after inactivity"
 msgstr "Witruimte verzonden na inactiviteit"
 
-#: gajim/common/config.py:363
+#: gajim/common/config.py:364
 msgid "XMPP ping sent after inactivity"
 msgstr "XMPP-ping verzonden na inactiviteit"
 
-#: gajim/common/config.py:367
+#: gajim/common/config.py:368
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
@@ -6027,11 +6030,11 @@ msgstr ""
 "Aantal seconden te wachten op antwoord van ping-alive-pakket vooraleer "
 "poging tot opnieuw verbinden?"
 
-#: gajim/common/config.py:371
+#: gajim/common/config.py:372
 msgid "Jabberd2 workaround"
 msgstr "Tijdelijke oplossing voor jabberd2"
 
-#: gajim/common/config.py:374
+#: gajim/common/config.py:375
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -6039,7 +6042,7 @@ msgstr ""
 "Indien aangevinkt zal Gajim je IP-adres en proxy’s gedefinieerd in de optie "
 "file_transfer_proxies gebruiken voor bestandsoverdracht."
 
-#: gajim/common/config.py:375
+#: gajim/common/config.py:376
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
@@ -6048,26 +6051,26 @@ msgstr ""
 "opstarten. De proxy’s van Openfire slagen vaak niet in deze test, zelfs als "
 "ze wel werken."
 
-#: gajim/common/config.py:388
+#: gajim/common/config.py:389
 msgid "Answer to receipt requests"
 msgstr "Antwoorden op ontvangsbevestigingen"
 
-#: gajim/common/config.py:389
+#: gajim/common/config.py:390
 msgid "Sent receipt requests"
 msgstr "Verzonden ontvangstbevestigingen"
 
-#: gajim/common/config.py:398
+#: gajim/common/config.py:399
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr ""
 "Laat Gajim toe informatie te versturen over het besturingssysteem dat je "
 "gebruikt."
 
-#: gajim/common/config.py:399
+#: gajim/common/config.py:400
 msgid "Allow Gajim to send your local time."
 msgstr "Gajim toelaten je lokale tijd te sturen."
 
-#: gajim/common/config.py:400
+#: gajim/common/config.py:401
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
@@ -6075,11 +6078,11 @@ msgstr ""
 "Moet Gajim bij het onderhandelen van een versleutelde sessie ervan uitgaan "
 "dat je wil dat je berichten opgeslagen worden?"
 
-#: gajim/common/config.py:403
+#: gajim/common/config.py:404
 msgid "Message that is sent to contacts you want to add"
 msgstr "Bericht dat verzonden wordt naar contacten die je wil toevoegen"
 
-#: gajim/common/config.py:404
+#: gajim/common/config.py:405
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
@@ -6087,7 +6090,7 @@ msgstr ""
 "Indien ingeschakeld en je server deze functie ondersteunt zal Gajim "
 "berichten verzonden en ontvangen door andere bronnen ook ontvangen."
 
-#: gajim/common/config.py:405
+#: gajim/common/config.py:406
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
@@ -6095,19 +6098,19 @@ msgstr ""
 "Indien ingeschakeld zal Gajim je lokale IP-adressen verzenden, zodat je "
 "contact verbinding kan maken met je apparaat om bestanden te delen."
 
-#: gajim/common/config.py:406
+#: gajim/common/config.py:407
 msgid "Latest token for OAuth 2.0 authentication."
 msgstr "Laatste token voor OAuth 2.0-authenticatie."
 
-#: gajim/common/config.py:407
+#: gajim/common/config.py:408
 msgid "client_id for OAuth 2.0 authentication."
 msgstr "client_id voor OAuth 2.0-authenticatie."
 
-#: gajim/common/config.py:408
+#: gajim/common/config.py:409
 msgid "redirect_url for OAuth 2.0 authentication."
 msgstr "redirect_url voor OAuth 2.0-authenticatie."
 
-#: gajim/common/config.py:409
+#: gajim/common/config.py:410
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
@@ -6115,11 +6118,11 @@ msgstr ""
 "Door spaties gescheiden lijst van JID’s waarmee bij volgend opstarten "
 "automatisch een gespreksvenster geopend moet worden."
 
-#: gajim/common/config.py:411
+#: gajim/common/config.py:412
 msgid "HTTP Upload: Enable HTTPS Verification"
 msgstr "HTTP-upload: schakel HTTPS-verificatie in"
 
-#: gajim/common/config.py:412
+#: gajim/common/config.py:413
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on chat window. Can be "
 "'httpupload' (default) or 'jingle'"
@@ -6127,15 +6130,15 @@ msgstr ""
 "Voorkeursmechanisme voor bestandsoverdracht bij verslepen en neerzetten van "
 "bestand op gespreksvenster. Kan ‘httpupload’ (standaard) of ‘jingle’ zijn"
 
-#: gajim/common/config.py:475 gajim/common/config.py:480
+#: gajim/common/config.py:476 gajim/common/config.py:481
 msgid "Language for which we want to check misspelled words"
 msgstr "Taal waarvoor gecontroleerd moet worden op verkeerd gespelde woorden"
 
-#: gajim/common/config.py:477
+#: gajim/common/config.py:478
 msgid "The currently active encryption for that contact"
 msgstr "De momenteel actieve versleuteling voor dat contact"
 
-#: gajim/common/config.py:481
+#: gajim/common/config.py:482
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
@@ -6144,7 +6147,7 @@ msgstr ""
 "worden bij inloggen/deelnemen. -1 betekent geen limiet, -2 betekent globale "
 "instelling"
 
-#: gajim/common/config.py:482
+#: gajim/common/config.py:483
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
 "-2 means global value"
@@ -6153,13 +6156,13 @@ msgstr ""
 "worden bij inloggen/deelnemen. -1 betekent geen limiet, -2 betekent globale "
 "instelling"
 
-#: gajim/common/config.py:483
+#: gajim/common/config.py:484
 msgid "State whether we want a notification for every message in this room"
 msgstr ""
 "Stel in of er voor elk bericht in dit groepsgesprek een melding moet worden "
 "getoond"
 
-#: gajim/common/config.py:486
+#: gajim/common/config.py:487
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
@@ -6169,79 +6172,79 @@ msgstr ""
 "opgeslagen bij afsluiten van Gajim). Gebruik deze optie NIET om plug-ins in "
 "of uit te schakelen, daarvoor dient de gebruikersinterface."
 
-#: gajim/common/config.py:491 gajim/common/pep.py:157
+#: gajim/common/config.py:492 gajim/common/pep.py:157
 msgid "Sleeping"
 msgstr "Slapen"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back soon"
 msgstr "Zo terug"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back in some minutes."
 msgstr "In een paar minuten terug."
 
-#: gajim/common/config.py:493 gajim/common/pep.py:127
+#: gajim/common/config.py:494 gajim/common/pep.py:127
 msgid "Eating"
 msgstr "Eten"
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "I'm eating, so leave me a message."
 msgstr "Ik ben aan het eten, laat een bericht achter."
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "Movie"
 msgstr "Film"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "I'm watching a movie."
 msgstr "Ik been een film aan het kijken."
 
-#: gajim/common/config.py:495 gajim/common/pep.py:186
+#: gajim/common/config.py:496 gajim/common/pep.py:186
 msgid "Working"
 msgstr "Werken"
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "I'm working."
 msgstr "Ik ben aan het werk."
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "Phone"
 msgstr "Telefoon"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "I'm on the phone."
 msgstr "Ik ben aan het telefoneren."
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "Out"
 msgstr "Uit"
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "I'm out enjoying life."
 msgstr "Ik ben buiten van het leven aan het genieten."
 
-#: gajim/common/config.py:508
+#: gajim/common/config.py:509
 msgid "I'm available."
 msgstr "Ik ben aanwezig."
 
-#: gajim/common/config.py:509
+#: gajim/common/config.py:510
 msgid "I'm free for chat."
 msgstr "Ik sta open voor gesprekken."
 
-#: gajim/common/config.py:511
+#: gajim/common/config.py:512
 msgid "I'm not available."
 msgstr "Ik ben niet beschikbaar."
 
-#: gajim/common/config.py:512
+#: gajim/common/config.py:513
 msgid "Do not disturb."
 msgstr "Niet storen."
 
-#: gajim/common/config.py:513 gajim/common/config.py:514
+#: gajim/common/config.py:514 gajim/common/config.py:515
 msgid "Bye!"
 msgstr "Tot ziens!"
 
-#: gajim/common/config.py:525
+#: gajim/common/config.py:526
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
@@ -6249,28 +6252,28 @@ msgstr ""
 "Geluid om af te spelen wanneer een groepsgespreksbericht je bijnaam of een "
 "van de woorden in muc_highlight_words bevat."
 
-#: gajim/common/config.py:526
+#: gajim/common/config.py:527
 msgid "Sound to play when any MUC message arrives."
 msgstr ""
 "Geluid om af te spelen wanneer een bericht in een groepsgesprek toekomt."
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:357
+#: gajim/common/config.py:535 gajim/common/optparser.py:357
 msgid "green"
 msgstr "groen"
 
-#: gajim/common/config.py:538 gajim/common/optparser.py:343
+#: gajim/common/config.py:539 gajim/common/optparser.py:343
 msgid "grocery"
 msgstr "kruidenier"
 
-#: gajim/common/config.py:542
+#: gajim/common/config.py:543
 msgid "human"
 msgstr "menselijk"
 
-#: gajim/common/config.py:546
+#: gajim/common/config.py:547
 msgid "marine"
 msgstr "marine"
 
-#: gajim/common/config.py:553
+#: gajim/common/config.py:554
 msgid "Tor"
 msgstr "Tor"
 
@@ -6412,190 +6415,190 @@ msgstr "logboekdatabase migreren naar indices"
 msgid "%s is not a valid loglevel"
 msgstr "%s is geen geldig logniveau"
 
-#: gajim/common/connection.py:80
+#: gajim/common/connection.py:83
 msgid "Unable to get issuer certificate"
 msgstr "Kan uitgever van certificaat niet ophalen"
 
-#: gajim/common/connection.py:81
+#: gajim/common/connection.py:84
 msgid "Unable to get certificate CRL"
 msgstr "Kan CRL van certificaat niet ophalen"
 
-#: gajim/common/connection.py:82
+#: gajim/common/connection.py:85
 msgid "Unable to decrypt certificate's signature"
 msgstr "Kan certificaatsondertekening niet ontsleutelen"
 
-#: gajim/common/connection.py:83
+#: gajim/common/connection.py:86
 msgid "Unable to decrypt CRL's signature"
 msgstr "Kan CRL-ondertekening niet ontsleutelen"
 
-#: gajim/common/connection.py:84
+#: gajim/common/connection.py:87
 msgid "Unable to decode issuer public key"
 msgstr "Kan publieke sleutel van uitgever niet ontcijferen"
 
-#: gajim/common/connection.py:85
+#: gajim/common/connection.py:88
 msgid "Certificate signature failure"
 msgstr "Certificaatsondertekeningsfout"
 
-#: gajim/common/connection.py:86
+#: gajim/common/connection.py:89
 msgid "CRL signature failure"
 msgstr "CRL-handtekeningsfout"
 
-#: gajim/common/connection.py:87
+#: gajim/common/connection.py:90
 msgid "Certificate is not yet valid"
 msgstr "Certificaat is nog niet geldig"
 
-#: gajim/common/connection.py:88
+#: gajim/common/connection.py:91
 msgid "Certificate has expired"
 msgstr "Certificaat is verlopen"
 
-#: gajim/common/connection.py:89
+#: gajim/common/connection.py:92
 msgid "CRL is not yet valid"
 msgstr "CRL is nog niet geldig"
 
-#: gajim/common/connection.py:90
+#: gajim/common/connection.py:93
 msgid "CRL has expired"
 msgstr "CRL is verlopen"
 
-#: gajim/common/connection.py:91
+#: gajim/common/connection.py:94
 msgid "Format error in certificate's notBefore field"
 msgstr "Formatteringsfout in notBefore-veld van certificaat"
 
-#: gajim/common/connection.py:92
+#: gajim/common/connection.py:95
 msgid "Format error in certificate's notAfter field"
 msgstr "Formatteringsfout in notAfter-veld van certificaat"
 
-#: gajim/common/connection.py:93
+#: gajim/common/connection.py:96
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Formatteringsfout in lastUpdate-veld van CRL"
 
-#: gajim/common/connection.py:94
+#: gajim/common/connection.py:97
 msgid "Format error in CRL's nextUpdate field"
 msgstr "Formatteringsfout in nextUpdate-veld van CRL"
 
-#: gajim/common/connection.py:95
+#: gajim/common/connection.py:98
 msgid "Out of memory"
 msgstr "Geheugentekort"
 
-#: gajim/common/connection.py:96
+#: gajim/common/connection.py:99
 msgid "Self signed certificate"
 msgstr "Zelfgetekend certificaat"
 
-#: gajim/common/connection.py:97
+#: gajim/common/connection.py:100
 msgid "Self signed certificate in certificate chain"
 msgstr "Zelfgetekend certificaat in certificaatsketen"
 
-#: gajim/common/connection.py:98
+#: gajim/common/connection.py:101
 msgid "Unable to get local issuer certificate"
 msgstr "Kan lokale uitgever van certificaat niet ophalen"
 
-#: gajim/common/connection.py:99
+#: gajim/common/connection.py:102
 msgid "Unable to verify the first certificate"
 msgstr "Kan het eerste certificaat niet verifiëren"
 
-#: gajim/common/connection.py:100
+#: gajim/common/connection.py:103
 msgid "Certificate chain too long"
 msgstr "Certificaatketen te lang"
 
-#: gajim/common/connection.py:101
+#: gajim/common/connection.py:104
 msgid "Certificate revoked"
 msgstr "Certificaat ingetrokken"
 
-#: gajim/common/connection.py:102
+#: gajim/common/connection.py:105
 msgid "Invalid CA certificate"
 msgstr "Ongeldig CA-certificaat"
 
-#: gajim/common/connection.py:103
+#: gajim/common/connection.py:106
 msgid "Path length constraint exceeded"
 msgstr "Padlengtelimiet overschreden"
 
-#: gajim/common/connection.py:104
+#: gajim/common/connection.py:107
 msgid "Unsupported certificate purpose"
 msgstr "Niet-ondersteund certificaatsdoel"
 
-#: gajim/common/connection.py:105
+#: gajim/common/connection.py:108
 msgid "Certificate not trusted"
 msgstr "Certificaat niet vertrouwd"
 
-#: gajim/common/connection.py:106
+#: gajim/common/connection.py:109
 msgid "Certificate rejected"
 msgstr "Certificaat geweigerd"
 
-#: gajim/common/connection.py:107
+#: gajim/common/connection.py:110
 msgid "Subject issuer mismatch"
 msgstr "Subjectuitgever komt niet overeen"
 
-#: gajim/common/connection.py:108
+#: gajim/common/connection.py:111
 msgid "Authority and subject key identifier mismatch"
 msgstr "Autoriteit en subjectsleutelidentificatie komen niet overeen"
 
-#: gajim/common/connection.py:109
+#: gajim/common/connection.py:112
 msgid "Authority and issuer serial number mismatch"
 msgstr "Autoriteit en uitgeverserienummer komen niet overeen"
 
-#: gajim/common/connection.py:110
+#: gajim/common/connection.py:113
 msgid "Key usage does not include certificate signing"
 msgstr "Sleutelgebruik bevat geen certificaatondertekening"
 
-#: gajim/common/connection.py:111
+#: gajim/common/connection.py:114
 msgid "Application verification failure"
 msgstr "Toepassingsverificatie mislukt"
 
-#: gajim/common/connection.py:870
+#: gajim/common/connection.py:876
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Verbinding met account ‘%s’ verbroken"
 
-#: gajim/common/connection.py:871
+#: gajim/common/connection.py:877
 msgid "Reconnect manually."
 msgstr "Handmatig opnieuw verbinden."
 
-#: gajim/common/connection.py:882
+#: gajim/common/connection.py:888
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Server %(name)s gaf een verkeerd antwoord op het registratieverzoek: "
 "%(error)s"
 
-#: gajim/common/connection.py:923
+#: gajim/common/connection.py:930
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Server %s gaf een ander registratieformulier op"
 
-#: gajim/common/connection.py:1281
+#: gajim/common/connection.py:1283
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Kon geen verbinding maken met ‘%(host)s’ via proxy ‘%(proxy)s’"
 
-#: gajim/common/connection.py:1284
+#: gajim/common/connection.py:1286
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Kon geen verbinding maken met ‘%(host)s’"
 
-#: gajim/common/connection.py:1291
+#: gajim/common/connection.py:1293
 #, python-format
 msgid "Server replied: %s"
 msgstr "Server antwoordde: %s"
 
-#: gajim/common/connection.py:1306
+#: gajim/common/connection.py:1308
 msgid "Connection to proxy failed"
 msgstr "Verbinding met proxy mislukt"
 
-#: gajim/common/connection.py:1344 gajim/common/connection.py:1447
+#: gajim/common/connection.py:1346 gajim/common/connection.py:1449
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Kon geen verbinding maken met account %s"
 
-#: gajim/common/connection.py:1345 gajim/common/connection.py:1448
+#: gajim/common/connection.py:1347 gajim/common/connection.py:1450
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Verbinding met account %s verbroken. Probeer opnieuw te verbinden."
 
-#: gajim/common/connection.py:1370
+#: gajim/common/connection.py:1372
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "De authenticiteit van het %s certificaat zou ongeldig kunnen zijn"
 
-#: gajim/common/connection.py:1373
+#: gajim/common/connection.py:1375
 #, python-format
 msgid ""
 "\n"
@@ -6604,7 +6607,7 @@ msgstr ""
 "\n"
 "SSL-fout: <b>%s</b>"
 
-#: gajim/common/connection.py:1375
+#: gajim/common/connection.py:1377
 #, python-format
 msgid ""
 "\n"
@@ -6613,7 +6616,7 @@ msgstr ""
 "\n"
 "Onbekende SSL-fout: %d"
 
-#: gajim/common/connection.py:1421
+#: gajim/common/connection.py:1423
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
@@ -6622,32 +6625,32 @@ msgstr ""
 "De authenticiteit van het %s certificaat kan ongeldig zijn.\n"
 "Het certificaat is niet geldig voor dit domein."
 
-#: gajim/common/connection.py:1471 gajim/common/connection.py:2236
+#: gajim/common/connection.py:1473 gajim/common/connection.py:2238
 #: gajim/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kon geen verbinding maken met ‘%s’"
 
-#: gajim/common/connection.py:1510
+#: gajim/common/connection.py:1512
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Authenticatie met ‘%s’ mislukt"
 
-#: gajim/common/connection.py:1511
+#: gajim/common/connection.py:1513
 msgid "Please check your login and password for correctness."
 msgstr "Controleer gebruikersnaam en wachtwoord."
 
-#: gajim/common/connection.py:2095
+#: gajim/common/connection.py:2097
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contact verzonden: ‘%(jid)s’ (%(name)s)"
 
 # Verzonden aan contacten?
-#: gajim/common/connection.py:2099
+#: gajim/common/connection.py:2101
 msgid "Sent contacts:"
 msgstr "Verzonden contacten:"
 
-#: gajim/common/connection.py:2253 gajim/common/connection.py:2275
+#: gajim/common/connection.py:2255 gajim/common/connection.py:2277
 msgid "Not fetched because of invisible status"
 msgstr "Niet opgehaald door status ‘onzichtbaar’"
 
@@ -6672,56 +6675,56 @@ msgid "D-Bus does not run correctly on this machine: session bus not present"
 msgstr ""
 "D-Bus werkt niet zoals het hoort op deze machine: session bus ontbreekt"
 
-#: gajim/common/multimedia_helpers.py:40
+#: gajim/common/multimedia_helpers.py:45
 msgid "Default device"
 msgstr "Standaardapparaat"
 
-#: gajim/common/multimedia_helpers.py:59
+#: gajim/common/multimedia_helpers.py:66
 msgid "Audio test"
 msgstr "Audiotest"
 
-#: gajim/common/multimedia_helpers.py:62 gajim/common/multimedia_helpers.py:78
-#: gajim/common/multimedia_helpers.py:92 gajim/common/multimedia_helpers.py:110
+#: gajim/common/multimedia_helpers.py:69 gajim/common/multimedia_helpers.py:85
+#: gajim/common/multimedia_helpers.py:99 gajim/common/multimedia_helpers.py:117
 msgid "Autodetect"
 msgstr "Automatisch herkennen"
 
-#: gajim/common/multimedia_helpers.py:65 gajim/common/multimedia_helpers.py:80
+#: gajim/common/multimedia_helpers.py:72 gajim/common/multimedia_helpers.py:87
 #, python-format
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-#: gajim/common/multimedia_helpers.py:68 gajim/common/multimedia_helpers.py:82
+#: gajim/common/multimedia_helpers.py:75 gajim/common/multimedia_helpers.py:89
 #, python-format
 msgid "Pulse: %s"
 msgstr "Puls: %s"
 
-#: gajim/common/multimedia_helpers.py:76
+#: gajim/common/multimedia_helpers.py:83
 msgid "Fake audio output"
 msgstr "Valse audio-uitvoer"
 
-#: gajim/common/multimedia_helpers.py:89
+#: gajim/common/multimedia_helpers.py:96
 msgid "Video test"
 msgstr "Videotest"
 
-#: gajim/common/multimedia_helpers.py:94
+#: gajim/common/multimedia_helpers.py:101
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
 
-#: gajim/common/multimedia_helpers.py:97
+#: gajim/common/multimedia_helpers.py:104
 msgid "Screen"
 msgstr "Scherm"
 
-#: gajim/common/multimedia_helpers.py:104
+#: gajim/common/multimedia_helpers.py:111
 msgid "Fake video output"
 msgstr "Valse video-uitvoer"
 
-#: gajim/common/multimedia_helpers.py:107
+#: gajim/common/multimedia_helpers.py:114
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr "X Window System (X11/XShm/Xv): %s"
 
-#: gajim/common/multimedia_helpers.py:109
+#: gajim/common/multimedia_helpers.py:116
 msgid "X Window System (without Xv)"
 msgstr "X Window System (zonder Xv)"
 
@@ -7599,164 +7602,163 @@ msgid "Both"
 msgstr "Beide"
 
 #: gajim/common/helpers.py:435
-#, fuzzy
 msgid "Unknown"
-msgstr "?OS:Onbekend"
+msgstr "Onbekend"
 
-#: gajim/common/helpers.py:443
+#: gajim/common/helpers.py:441
 msgid "?Ask (for Subscription):None"
 msgstr "?Vragen (voor abonnering):Geen"
 
-#: gajim/common/helpers.py:445
+#: gajim/common/helpers.py:443
 msgid "Subscribe"
 msgstr "Abonneren"
 
-#: gajim/common/helpers.py:454
+#: gajim/common/helpers.py:452
 msgid "?Group Chat Contact Role:None"
 msgstr "?Contactrol voor groepsgesprek:Geen"
 
-#: gajim/common/helpers.py:457
+#: gajim/common/helpers.py:455
 msgid "Moderators"
 msgstr "Beheerders"
 
-#: gajim/common/helpers.py:459
+#: gajim/common/helpers.py:457
 msgid "Moderator"
 msgstr "Beheerder"
 
-#: gajim/common/helpers.py:462
+#: gajim/common/helpers.py:460
 msgid "Participants"
 msgstr "Deelnemers"
 
-#: gajim/common/helpers.py:464
+#: gajim/common/helpers.py:462
 msgid "Participant"
 msgstr "Deelnemer"
 
-#: gajim/common/helpers.py:467
+#: gajim/common/helpers.py:465
 msgid "Visitors"
 msgstr "Bezoekers"
 
-#: gajim/common/helpers.py:469
+#: gajim/common/helpers.py:467
 msgid "Visitor"
 msgstr "Bezoeker"
 
-#: gajim/common/helpers.py:520
+#: gajim/common/helpers.py:518
 msgid "is paying attention to the conversation"
 msgstr "let op deze conversatie"
 
-#: gajim/common/helpers.py:522
+#: gajim/common/helpers.py:520
 msgid "is doing something else"
 msgstr "is met iets anders bezig"
 
-#: gajim/common/helpers.py:524
+#: gajim/common/helpers.py:522
 msgid "is composing a message…"
 msgstr "is een bericht aan het typen…"
 
-#: gajim/common/helpers.py:527
+#: gajim/common/helpers.py:525
 msgid "paused composing a message"
 msgstr "pauzeert tijdens het typen van een bericht"
 
-#: gajim/common/helpers.py:529
+#: gajim/common/helpers.py:527
 msgid "has closed the chat window or tab"
 msgstr "heeft het gespreksvenster of -tabblad gesloten"
 
-#: gajim/common/helpers.py:756
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "%s GiB"
 msgstr "%s GiB"
 
-#: gajim/common/helpers.py:759
+#: gajim/common/helpers.py:757
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: gajim/common/helpers.py:763
+#: gajim/common/helpers.py:761
 #, python-format
 msgid "%s MiB"
 msgstr "%s MiB"
 
-#: gajim/common/helpers.py:766
+#: gajim/common/helpers.py:764
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: gajim/common/helpers.py:770
+#: gajim/common/helpers.py:768
 #, python-format
 msgid "%s KiB"
 msgstr "%s KiB"
 
-#: gajim/common/helpers.py:773
+#: gajim/common/helpers.py:771
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: gajim/common/helpers.py:776
+#: gajim/common/helpers.py:774
 #, python-format
 msgid "%s B"
 msgstr "%s B"
 
 # Kan beter.
-#: gajim/common/helpers.py:1143 gajim/common/helpers.py:1150
+#: gajim/common/helpers.py:1141 gajim/common/helpers.py:1148
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "%d bericht in afwachting"
 msgstr[1] "%d berichten in afwachting"
 
-#: gajim/common/helpers.py:1157
+#: gajim/common/helpers.py:1155
 #, python-format
 msgid "from room %s"
 msgstr "van groepsgesprek %s"
 
-#: gajim/common/helpers.py:1160 gajim/common/helpers.py:1177
+#: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
 #, python-format
 msgid "from user %s"
 msgstr "van gebruiker %s"
 
-#: gajim/common/helpers.py:1162
+#: gajim/common/helpers.py:1160
 #, python-format
 msgid "from %s"
 msgstr "van %s"
 
-#: gajim/common/helpers.py:1169 gajim/common/helpers.py:1175
+#: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d lopende gebeurtenis"
 msgstr[1] "%d lopende gebeurtenissen"
 
-#: gajim/common/helpers.py:1193 gajim/common/helpers.py:1205
+#: gajim/common/helpers.py:1191 gajim/common/helpers.py:1203
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "Gajim"
 
-#: gajim/common/helpers.py:1207
+#: gajim/common/helpers.py:1205
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: gajim/common/helpers.py:1394 gajim/data/gui/add_new_contact_window.ui:24
+#: gajim/common/helpers.py:1392 gajim/data/gui/add_new_contact_window.ui:24
 msgid "I would like to add you to my contact list."
 msgstr "Ik wil je graag toevoegen aan mijn contacten."
 
-#: gajim/common/helpers.py:1396
+#: gajim/common/helpers.py:1394
 msgid "Hello, I am $name."
 msgstr "Hallo, ik ben $name."
 
-#: gajim/common/helpers.py:1510 gajim/common/helpers.py:1519
-#: gajim/common/helpers.py:1578
+#: gajim/common/helpers.py:1508 gajim/common/helpers.py:1517
+#: gajim/common/helpers.py:1576
 msgid "Timeout loading image"
 msgstr "Time-out bij laden van afbeelding"
 
-#: gajim/common/helpers.py:1529 gajim/common/helpers.py:1576
+#: gajim/common/helpers.py:1527 gajim/common/helpers.py:1574
 msgid "Image is too big"
 msgstr "Afbeelding is te groot"
 
-#: gajim/common/helpers.py:1540
+#: gajim/common/helpers.py:1538
 msgid "PyCURL is not installed"
 msgstr "PyCURL is niet geïnstalleerd"
 
-#: gajim/common/helpers.py:1580
+#: gajim/common/helpers.py:1578
 msgid "Error loading image"
 msgstr "Fout bij laden van afbeelding"
 
@@ -7793,7 +7795,7 @@ msgstr "Dit bericht is versleuteld met %s en kon niet ontsleuteld worden."
 msgid "message"
 msgstr "bericht"
 
-#: gajim/common/connection_handlers.py:1855
+#: gajim/common/connection_handlers.py:1863
 msgid "I would like to add you to my roster."
 msgstr "Ik zou je graag aan mijn rooster willen toevoegen."
 
@@ -8497,11 +8499,11 @@ msgstr "Lettertype"
 msgid "Clear formatting"
 msgstr "Opmaak wissen"
 
-#: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:803
+#: gajim/data/gui/groupchat_control.ui:283 gajim/data/gui/chat_control.ui:805
 msgid "Choose an encryption"
 msgstr "Kies een versleutelingstype"
 
-#: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:851
+#: gajim/data/gui/groupchat_control.ui:329 gajim/data/gui/chat_control.ui:853
 msgid "Show a list of emoticons (Alt+M)"
 msgstr "Een lijst van emoticons weergeven (Alt+M)"
 
@@ -8561,7 +8563,7 @@ msgstr "<b>0</b>"
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#: gajim/data/gui/chat_control.ui:727
+#: gajim/data/gui/chat_control.ui:729
 msgid "#"
 msgstr "#"
 
@@ -10733,19 +10735,6 @@ msgstr "Gespreksgeschiedenis"
 msgid "Plugin manager"
 msgstr "Plug-inbeheer"
 
-#~ msgid ""
-#~ "Your configured emoticons theme has not been found, so emoticons have "
-#~ "been disabled."
-#~ msgstr ""
-#~ "Je ingestelde emoticon-thema is niet gevonden dus zijn emoticons "
-#~ "uitgeschakeld."
-
-#~ msgid "Shows or hides the roster window"
-#~ msgstr "Toont of verbergt roostervenster"
-
-#~ msgid "Shows or hides the ipython window"
-#~ msgstr "Toont of verbergt het ipython-venster"
-
 #~ msgid "Check update after start"
 #~ msgstr "Controleren op updates bij opstarten"
 
@@ -10803,6 +10792,19 @@ msgstr "Plug-inbeheer"
 
 #~ msgid "All selected plugins downloaded"
 #~ msgstr "Alle geselecteerde plug-ins gedownload"
+
+#~ msgid ""
+#~ "Your configured emoticons theme has not been found, so emoticons have "
+#~ "been disabled."
+#~ msgstr ""
+#~ "Je ingestelde emoticon-thema is niet gevonden dus zijn emoticons "
+#~ "uitgeschakeld."
+
+#~ msgid "Shows or hides the roster window"
+#~ msgstr "Toont of verbergt roostervenster"
+
+#~ msgid "Shows or hides the ipython window"
+#~ msgstr "Toont of verbergt het ipython-venster"
 
 #~ msgid "XMPP account %s"
 #~ msgstr "XMPP-account %s"

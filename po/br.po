@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-17 21:27+0000\n"
+"POT-Creation-Date: 2018-03-31 02:05+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -32,20 +32,20 @@ msgstr ""
 msgid "Error."
 msgstr "Fazi en ur lenn ar restr:"
 
-#: gajim/chat_control_base.py:569
+#: gajim/chat_control_base.py:571
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:577 gajim/profile_window.py:181
-#: gajim/conversation_textview.py:550
+#: gajim/chat_control_base.py:579 gajim/profile_window.py:181
+#: gajim/conversation_textview.py:539
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:1167
+#: gajim/chat_control_base.py:1172
 msgid "Really send file?"
 msgstr ""
 
-#: gajim/chat_control_base.py:1168
+#: gajim/chat_control_base.py:1173
 #, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr ""
@@ -96,13 +96,13 @@ msgstr "Araokadur"
 msgid "Filename: %s"
 msgstr "Anv ar restr: %s"
 
-#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:485
+#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:486
 #, python-format
 msgid "Size: %s"
 msgstr "Ment: %s"
 
 #: gajim/filetransfers_window.py:233 gajim/filetransfers_window.py:243
-#: gajim/history_manager.py:526
+#: gajim/history_manager.py:528
 msgid "You"
 msgstr "C'hwi"
 
@@ -111,7 +111,7 @@ msgstr "C'hwi"
 msgid "Sender: %s"
 msgstr "Kaser: %s"
 
-#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
+#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:763
 #: gajim/tooltips.py:667
 msgid "Recipient: "
 msgstr "Resever:"
@@ -169,122 +169,122 @@ msgstr ""
 msgid "Choose File to Send…"
 msgstr "Dibabit ur restr da gas..."
 
-#: gajim/filetransfers_window.py:355
+#: gajim/filetransfers_window.py:356
 msgid "_Send"
 msgstr "_Kas"
 
-#: gajim/filetransfers_window.py:362 gajim/tooltips.py:702
+#: gajim/filetransfers_window.py:363 gajim/tooltips.py:702
 #, fuzzy
 msgid "Description: "
 msgstr "Taolennadur: %s"
 
-#: gajim/filetransfers_window.py:375
+#: gajim/filetransfers_window.py:376
 #, fuzzy
 msgid "Gajim can not read this file"
 msgstr "N'hell ket Gajim tizhout ar restr-mañ"
 
-#: gajim/filetransfers_window.py:376
+#: gajim/filetransfers_window.py:377
 msgid "Another process is using this file."
 msgstr ""
 
-#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:495
+#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:492
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr ""
 
-#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:496
+#: gajim/filetransfers_window.py:423 gajim/gtkgui_helpers.py:493
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr ""
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "This file already exists"
 msgstr "Bez ez eus eus ar restr-mañ dija"
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "What do you want to do?"
 msgstr "Petra a fell deoc'h ober?"
 
-#: gajim/filetransfers_window.py:450 gajim/gtkgui_helpers.py:507
+#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:504
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr ""
 
-#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:508
+#: gajim/filetransfers_window.py:452 gajim/gtkgui_helpers.py:505
 msgid "You do not have permission to create files in this directory."
 msgstr ""
 
-#: gajim/filetransfers_window.py:462
+#: gajim/filetransfers_window.py:463
 #, fuzzy
 msgid "Save File as…"
 msgstr "Enrollañ ar restr dindan..."
 
-#: gajim/filetransfers_window.py:482
+#: gajim/filetransfers_window.py:483
 #, python-format
 msgid "File: %s"
 msgstr "Restr: %s"
 
-#: gajim/filetransfers_window.py:488
+#: gajim/filetransfers_window.py:489
 #, python-format
 msgid "Type: %s"
 msgstr "Doare: %s"
 
-#: gajim/filetransfers_window.py:490
+#: gajim/filetransfers_window.py:491
 #, python-format
 msgid "Description: %s"
 msgstr "Taolennadur: %s"
 
-#: gajim/filetransfers_window.py:491
+#: gajim/filetransfers_window.py:492
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "Fellout a ra da %s kas deoc'h ur restr:"
 
-#: gajim/filetransfers_window.py:532
+#: gajim/filetransfers_window.py:533
 #, fuzzy
 msgid "Checking file…"
 msgstr "Kas ur _restr"
 
-#: gajim/filetransfers_window.py:546
+#: gajim/filetransfers_window.py:547
 #, fuzzy
 msgid "File error"
 msgstr "Fazi treuzkas"
 
-#: gajim/filetransfers_window.py:583
+#: gajim/filetransfers_window.py:584
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#: gajim/filetransfers_window.py:676
+#: gajim/filetransfers_window.py:677
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
-#: gajim/filetransfers_window.py:729 gajim/filetransfers_window.py:732
+#: gajim/filetransfers_window.py:730 gajim/filetransfers_window.py:733
 msgid "Invalid File"
 msgstr "Restr direizh"
 
-#: gajim/filetransfers_window.py:729
+#: gajim/filetransfers_window.py:730
 msgid "File: "
 msgstr "Restr:"
 
-#: gajim/filetransfers_window.py:733
+#: gajim/filetransfers_window.py:734
 msgid "It is not possible to send empty files"
 msgstr "N'eus ket tu da gas restroù goullo"
 
-#: gajim/filetransfers_window.py:758 gajim/tooltips.py:658
+#: gajim/filetransfers_window.py:759 gajim/tooltips.py:658
 msgid "Name: "
 msgstr "Anv:"
 
-#: gajim/filetransfers_window.py:760 gajim/tooltips.py:661
+#: gajim/filetransfers_window.py:761 gajim/tooltips.py:661
 msgid "Sender: "
 msgstr "Kaser:"
 
-#: gajim/filetransfers_window.py:888
+#: gajim/filetransfers_window.py:889
 msgid "Pause"
 msgstr "Ehan"
 
-#: gajim/filetransfers_window.py:899
+#: gajim/filetransfers_window.py:900
 msgid "_Continue"
 msgstr "_Kenderc'hel"
 
@@ -454,24 +454,24 @@ msgstr "Hegerz"
 msgid "Feature"
 msgstr "Perzhioù ar servijerien"
 
-#: gajim/gtkgui_helpers.py:259
+#: gajim/gtkgui_helpers.py:255
 msgid "Error reading file:"
 msgstr "Fazi en ur lenn ar restr:"
 
-#: gajim/gtkgui_helpers.py:262
+#: gajim/gtkgui_helpers.py:258
 msgid "Error parsing file:"
 msgstr ""
 
-#: gajim/gtkgui_helpers.py:481
+#: gajim/gtkgui_helpers.py:478
 msgid "Extension not supported"
 msgstr ""
 
-#: gajim/gtkgui_helpers.py:482
+#: gajim/gtkgui_helpers.py:479
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr ""
 
-#: gajim/gtkgui_helpers.py:517
+#: gajim/gtkgui_helpers.py:514
 #, fuzzy
 msgid "Save Image as…"
 msgstr "Enrollañ ar restr dindan..."
@@ -545,8 +545,8 @@ msgstr ""
 msgid " resource with priority "
 msgstr ""
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4760 gajim/dialogs.py:4802
-#: gajim/dialogs.py:4850 gajim/dialogs.py:4940
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4806 gajim/dialogs.py:4848
+#: gajim/dialogs.py:4896 gajim/dialogs.py:4986
 msgid "All files"
 msgstr "An holl restroù"
 
@@ -561,11 +561,11 @@ msgid "Manage Proxies"
 msgstr "Merañ an aeladoù proksi"
 
 #: gajim/options_dialog.py:484 gajim/options_dialog.py:552
-#: gajim/options_dialog.py:573 gajim/dialogs.py:331 gajim/dialogs.py:333
-#: gajim/dialogs.py:541 gajim/dialogs.py:554 gajim/roster_window.py:2997
-#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1160
-#: gajim/config.py:1175 gajim/config.py:1180 gajim/config.py:1228
-#: gajim/config.py:1338 gajim/config.py:2487 gajim/config.py:2564
+#: gajim/options_dialog.py:573 gajim/dialogs.py:326 gajim/dialogs.py:328
+#: gajim/dialogs.py:536 gajim/dialogs.py:549 gajim/roster_window.py:2997
+#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1162
+#: gajim/config.py:1177 gajim/config.py:1182 gajim/config.py:1230
+#: gajim/config.py:1340 gajim/config.py:2489 gajim/config.py:2566
 #: gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
@@ -608,8 +608,8 @@ msgid "_New Group Chat"
 msgstr "Flap a-stroll"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1119 gajim/dialogs.py:2317 gajim/dialogs.py:2346
-#: gajim/dialogs.py:3821 gajim/chat_control.py:284 gajim/roster_window.py:804
+#: gajim/dialogs.py:1114 gajim/dialogs.py:2333 gajim/dialogs.py:2362
+#: gajim/dialogs.py:3867 gajim/chat_control.py:284 gajim/roster_window.py:804
 #: gajim/roster_window.py:1753 gajim/roster_window.py:1755
 #: gajim/roster_window.py:2068 gajim/roster_window.py:3419
 #: gajim/roster_window.py:3446 gajim/gui_interface.py:524
@@ -803,7 +803,7 @@ msgstr "_Penndibaboù"
 msgid "Synchronise History"
 msgstr "Diskouez an darempredoù _ezlinenn"
 
-#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4537
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4583
 #, fuzzy
 msgid "Privacy Lists"
 msgstr "Flapoù prevez"
@@ -876,7 +876,7 @@ msgid "Cannot find history logs database"
 msgstr "Dibosupl eo kavout titourva an istoradur"
 
 #: gajim/history_manager.py:144 gajim/history_manager.py:195
-#: gajim/dialogs.py:3802 gajim/config.py:1619 gajim/disco.py:872
+#: gajim/dialogs.py:3848 gajim/config.py:1621 gajim/disco.py:872
 msgid "JID"
 msgstr "JID"
 
@@ -899,7 +899,7 @@ msgstr "Kemennadenn"
 msgid "Subject"
 msgstr "Titl"
 
-#: gajim/history_manager.py:240
+#: gajim/history_manager.py:243
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
@@ -907,7 +907,7 @@ msgstr ""
 "Ha fellout a ra deoc'h naetaat an titourva? (DIALIET GROÑS M'EMAÑ GAJIM O "
 "VONT EN-DRO)"
 
-#: gajim/history_manager.py:242
+#: gajim/history_manager.py:245
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
 "reusable. If you really want to reduce database filesize, click YES, else "
@@ -916,47 +916,47 @@ msgid ""
 "In case you click YES, please wait…"
 msgstr ""
 
-#: gajim/history_manager.py:247
+#: gajim/history_manager.py:250
 msgid "Database Cleanup"
 msgstr ""
 
-#: gajim/history_manager.py:462
+#: gajim/history_manager.py:464
 #, fuzzy
 msgid "Exporting History Logs…"
 msgstr "Oc'h ezporzhiañ an istoradur..."
 
-#: gajim/history_manager.py:538
+#: gajim/history_manager.py:540
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "%(time)s e lâras %(who)s: %(message)s\n"
 
-#: gajim/history_manager.py:576
+#: gajim/history_manager.py:578
 #, fuzzy, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
 msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
-#: gajim/history_manager.py:580
+#: gajim/history_manager.py:582
 #, fuzzy
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr "Ha sur oc'h e fell deoc'h diverkañ istoradur an darempred-mañ?"
 
-#: gajim/history_manager.py:582
+#: gajim/history_manager.py:584
 #, fuzzy
 msgid "This can not be undone."
 msgstr "N'eo ket bet kavet ar servij"
 
-#: gajim/history_manager.py:584 gajim/history_manager.py:623
+#: gajim/history_manager.py:586 gajim/history_manager.py:625
 #, fuzzy
 msgid "Deletion Confirmation"
 msgstr "Titouroù"
 
-#: gajim/history_manager.py:618
+#: gajim/history_manager.py:620
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 msgstr[1] "Ha fellout a ra deoc'h da vat diverkañ ar c'hemennadennoù diuzet?"
 
-#: gajim/history_manager.py:621
+#: gajim/history_manager.py:623
 #, fuzzy
 msgid "This is an irreversible operation."
 msgstr "Setu un ober n'eus ket tu da vont war e giz."
@@ -984,8 +984,8 @@ msgstr "Stumm : BBBB-MM-DD"
 msgid "Information received"
 msgstr "Resevet ar bedadenn"
 
-#: gajim/profile_window.py:334 gajim/dialogs.py:2531 gajim/dialogs.py:2619
-#: gajim/dialogs.py:3068 gajim/disco.py:536 gajim/gui_interface.py:1847
+#: gajim/profile_window.py:334 gajim/dialogs.py:2562 gajim/dialogs.py:2650
+#: gajim/dialogs.py:3105 gajim/disco.py:536 gajim/gui_interface.py:1849
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "N'oc'h ket luget d'ar servijer"
@@ -1016,17 +1016,17 @@ msgstr ""
 "Bez ez eus bet ur fazi en ur embann ho titouroù hiniennel, klaskit en-dro "
 "diwezhatoc'h."
 
-#: gajim/dialogs.py:95
+#: gajim/dialogs.py:90
 #, fuzzy, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Anv an darempred: <i>%s</i>"
 
-#: gajim/dialogs.py:97
+#: gajim/dialogs.py:92
 #, fuzzy, python-format
 msgid "JID: <i>%s</i>"
 msgstr "JID: <i>%s</i>"
 
-#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2939
+#: gajim/dialogs.py:121 gajim/dialogs.py:133 gajim/roster_window.py:2939
 #: gajim/roster_window.py:3953 gajim/roster_window.py:5234
 #: gajim/accounts_window.py:463 gajim/common/contacts.py:105
 #: gajim/common/contacts.py:137 gajim/data/gui/preferences_window.ui:569
@@ -1034,42 +1034,42 @@ msgstr "JID: <i>%s</i>"
 msgid "General"
 msgstr "Hollek"
 
-#: gajim/dialogs.py:211
+#: gajim/dialogs.py:206
 msgid "Group"
 msgstr "Strollad"
 
-#: gajim/dialogs.py:218
+#: gajim/dialogs.py:213
 msgid "In the group"
 msgstr "Er strollad"
 
-#: gajim/dialogs.py:313
+#: gajim/dialogs.py:308
 msgid "KeyID"
 msgstr "KeyID"
 
-#: gajim/dialogs.py:318
+#: gajim/dialogs.py:313
 msgid "Contact name"
 msgstr "Anv an darempred"
 
-#: gajim/dialogs.py:496
+#: gajim/dialogs.py:491
 #, fuzzy
 msgid "Set Mood"
 msgstr "Lakaat MOTD"
 
-#: gajim/dialogs.py:616
+#: gajim/dialogs.py:611
 #, python-format
 msgid "%s Status Message"
 msgstr "Titour-stad %s"
 
-#: gajim/dialogs.py:630
+#: gajim/dialogs.py:625
 msgid "Status Message"
 msgstr "Titour-stad"
 
-#: gajim/dialogs.py:820
+#: gajim/dialogs.py:815
 #, fuzzy
 msgid "Overwrite Status Message?"
 msgstr "Titour-stad"
 
-#: gajim/dialogs.py:821
+#: gajim/dialogs.py:816
 #, fuzzy
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
@@ -1077,85 +1077,85 @@ msgstr ""
 "Implijet e vez an anv-mañ gant unan eus ho kontoù dija. Dibabit un anv all "
 "marplij."
 
-#: gajim/dialogs.py:829
+#: gajim/dialogs.py:824
 msgid "Save as Preset Status Message"
 msgstr "Enrollañ evel titour-stad rakenrollet"
 
-#: gajim/dialogs.py:830
+#: gajim/dialogs.py:825
 msgid "Please type a name for this status message"
 msgstr "Roit un anv d'an titour-stad-mañ"
 
-#: gajim/dialogs.py:857
+#: gajim/dialogs.py:852
 #, fuzzy
 msgid "JID:"
 msgstr "Ho JID:"
 
-#: gajim/dialogs.py:858
+#: gajim/dialogs.py:853
 #, fuzzy
 msgid "AIM Address:"
 msgstr "_Chomlec'h:"
 
-#: gajim/dialogs.py:859
+#: gajim/dialogs.py:854
 msgid "GG Number:"
 msgstr ""
 
-#: gajim/dialogs.py:860
+#: gajim/dialogs.py:855
 msgid "ICQ Number:"
 msgstr ""
 
-#: gajim/dialogs.py:861
+#: gajim/dialogs.py:856
 #, fuzzy
 msgid "MSN Address:"
 msgstr "_Chomlec'h:"
 
-#: gajim/dialogs.py:862
+#: gajim/dialogs.py:857
 #, fuzzy
 msgid "Yahoo! Address:"
 msgstr "Chomlec'h 2:"
 
-#: gajim/dialogs.py:899
+#: gajim/dialogs.py:894
 #, fuzzy, python-format
 msgid ""
 "Please fill in the data of the contact you want to add to your account <b>"
 "%s</b>"
 msgstr "Leuniit titouroù an darempred a zo da vezañ ouzhpennet er gont %s"
 
-#: gajim/dialogs.py:902
+#: gajim/dialogs.py:897
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
 
-#: gajim/dialogs.py:1094 gajim/dialogs.py:1100 gajim/dialogs.py:1105
+#: gajim/dialogs.py:1089 gajim/dialogs.py:1095 gajim/dialogs.py:1100
 msgid "Invalid User ID"
 msgstr "ID-arveriad-ez direizh"
 
-#: gajim/dialogs.py:1101
+#: gajim/dialogs.py:1096
 msgid "The user ID must not contain a resource."
 msgstr ""
 
-#: gajim/dialogs.py:1106
+#: gajim/dialogs.py:1101
 #, fuzzy
 msgid "You cannot add yourself to your roster."
 msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
 
-#: gajim/dialogs.py:1120
+#: gajim/dialogs.py:1115
 msgid "Contact already in roster"
 msgstr "Darempred er roll dija"
 
-#: gajim/dialogs.py:1121
+#: gajim/dialogs.py:1116
 msgid "This contact is already listed in your roster."
 msgstr "Emañ an darempred en ho roll-darempredoù dija."
 
-#: gajim/dialogs.py:1174 gajim/dialogs.py:1208
+#: gajim/dialogs.py:1169 gajim/dialogs.py:1203
 #, fuzzy
 msgid "User ID:"
 msgstr "ID arveriad-ez:"
 
-#: gajim/dialogs.py:1274
+#: gajim/dialogs.py:1269
 #, fuzzy
 msgid "Error while adding transport contact"
 msgstr "fazi en ur gas %s ( %s )"
 
-#: gajim/dialogs.py:1275
+#: gajim/dialogs.py:1270
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1163,65 +1163,65 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/dialogs.py:1307
+#: gajim/dialogs.py:1302
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "Ur flaperez Jabber e GTK+"
 
-#: gajim/dialogs.py:1308
+#: gajim/dialogs.py:1303
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1304
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1305
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1313
+#: gajim/dialogs.py:1308
 #, fuzzy
 msgid "Current Developers"
 msgstr "Diorroerien kent:"
 
-#: gajim/dialogs.py:1314
+#: gajim/dialogs.py:1309
 #, fuzzy
 msgid "Past Developers"
 msgstr "Diorroerien kent:"
 
-#: gajim/dialogs.py:1315
+#: gajim/dialogs.py:1310
 msgid "Artists"
 msgstr ""
 
-#: gajim/dialogs.py:1319
+#: gajim/dialogs.py:1314
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/dialogs.py:1320
+#: gajim/dialogs.py:1315
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr "Evit echuiñ, e fell deomp trugarekaat holl gempennerien ar pakad."
 
-#: gajim/dialogs.py:1321
+#: gajim/dialogs.py:1316
 msgid "Thanks"
 msgstr ""
 
-#: gajim/dialogs.py:1323
+#: gajim/dialogs.py:1318
 msgid "translator-credits"
 msgstr ""
 "Troet e brezhoneg gant\n"
 "Giulia Fraboulet <djoulia@gmail.com>"
 
-#: gajim/dialogs.py:1487
+#: gajim/dialogs.py:1503
 #, fuzzy, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "N'eus ket tu da gevreañ"
 
-#: gajim/dialogs.py:1488
+#: gajim/dialogs.py:1504
 #, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1230,13 +1230,13 @@ msgid ""
 "Highlighting misspelled words feature will not be used"
 msgstr ""
 
-#: gajim/dialogs.py:1835 gajim/dialogs.py:1850 gajim/gui_interface.py:1510
-#: gajim/gui_interface.py:1552
+#: gajim/dialogs.py:1851 gajim/dialogs.py:1866 gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1553
 #, fuzzy
 msgid "Insecure connection"
 msgstr "Kevreadenn"
 
-#: gajim/dialogs.py:1836
+#: gajim/dialogs.py:1852
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1245,533 +1245,533 @@ msgid ""
 "Are you sure you want to do that?"
 msgstr "Rankout a rit krouiñ ur gont a-raok gellout flapiñ gant tud all."
 
-#: gajim/dialogs.py:1841 gajim/gui_interface.py:1514
-#: gajim/gui_interface.py:1555
+#: gajim/dialogs.py:1857 gajim/gui_interface.py:1515
+#: gajim/gui_interface.py:1556
 msgid "Yes, I really want to connect insecurely"
 msgstr ""
 
-#: gajim/dialogs.py:1842
+#: gajim/dialogs.py:1858
 msgid "Gajim will NOT connect unless you check this box"
 msgstr ""
 
-#: gajim/dialogs.py:1843 gajim/groupchat_control.py:2285
+#: gajim/dialogs.py:1859 gajim/groupchat_control.py:2335
 #: gajim/roster_window.py:2897 gajim/roster_window.py:3529
 #: gajim/roster_window.py:4282 gajim/message_window.py:247
-#: gajim/gui_interface.py:725 gajim/gui_interface.py:1515
-#: gajim/gui_interface.py:1556
+#: gajim/gui_interface.py:725 gajim/gui_interface.py:1516
+#: gajim/gui_interface.py:1557
 #, fuzzy
 msgid "_Do not ask me again"
 msgstr "_Chom hep goulenn ket"
 
-#: gajim/dialogs.py:1941
+#: gajim/dialogs.py:1957
 msgid "_Resume"
 msgstr ""
 
-#: gajim/dialogs.py:1949
+#: gajim/dialogs.py:1965
 msgid "Re_place"
 msgstr ""
 
-#: gajim/dialogs.py:2152 gajim/config.py:2167
+#: gajim/dialogs.py:2168 gajim/config.py:2169
 #: gajim/command_system/implementation/standard.py:261
 #, fuzzy
 msgid "Invalid nickname"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/dialogs.py:2153
+#: gajim/dialogs.py:2169
 #, fuzzy
 msgid "The nickname contains invalid characters."
 msgstr "Bez ez eus arouezioù difennet en anv ar sal pe hini ar servijer."
 
-#: gajim/dialogs.py:2275
+#: gajim/dialogs.py:2291
 msgid "Subscription Request"
 msgstr "Goulenn koumanantiñ"
 
-#: gajim/dialogs.py:2284
+#: gajim/dialogs.py:2300
 #, fuzzy, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Goulenn enskrivañ evit ar gont %s digant %s"
 
-#: gajim/dialogs.py:2287
+#: gajim/dialogs.py:2303
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Goulenn enskrivañ digant %s"
 
-#: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
+#: gajim/dialogs.py:2375 gajim/data/gui/join_groupchat_window.ui:312
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
-#: gajim/dialogs.py:2500
+#: gajim/dialogs.py:2531
 #, fuzzy
 msgid "Invalid Room"
 msgstr "Road direizh"
 
-#: gajim/dialogs.py:2501
+#: gajim/dialogs.py:2532
 msgid "Please choose a room"
 msgstr ""
 
-#: gajim/dialogs.py:2513 gajim/dialogs.py:2520
+#: gajim/dialogs.py:2544 gajim/dialogs.py:2551
 #, fuzzy
 msgid "Invalid Nickname"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/dialogs.py:2514
+#: gajim/dialogs.py:2545
 msgid "Please choose a nickname"
 msgstr ""
 
-#: gajim/dialogs.py:2526 gajim/dialogs.py:3479 gajim/config.py:2451
+#: gajim/dialogs.py:2557 gajim/dialogs.py:3516 gajim/config.py:2453
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 #, fuzzy
 msgid "Invalid JID"
 msgstr "ID jabber direizh"
 
-#: gajim/dialogs.py:2532 gajim/gui_interface.py:1848
+#: gajim/dialogs.py:2563 gajim/gui_interface.py:1850
 msgid "You can not join a group chat unless you are connected."
 msgstr "N'hellit ket ebarzhiñ ur sal-flapiñ keit ha ma n'oc'h ket luget."
 
-#: gajim/dialogs.py:2586 gajim/dialogs.py:2597
+#: gajim/dialogs.py:2617 gajim/dialogs.py:2628
 #, fuzzy
 msgid "Wrong server"
 msgstr "Ger-kuzh faos"
 
-#: gajim/dialogs.py:2587 gajim/dialogs.py:2598
+#: gajim/dialogs.py:2618 gajim/dialogs.py:2629
 #, fuzzy, python-format
 msgid "%s is not a groupchat server"
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
 
-#: gajim/dialogs.py:2620
+#: gajim/dialogs.py:2651
 #, fuzzy
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Rankout a rit bezañ luget evit cheñch ger-kuzh."
 
-#: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3805
-#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
-#: gajim/disco.py:1977
+#: gajim/dialogs.py:2662 gajim/dialogs.py:2733 gajim/dialogs.py:3851
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1693
+#: gajim/disco.py:1978
 msgid "Name"
 msgstr "Anv"
 
-#: gajim/dialogs.py:2634 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2665 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "Servijer"
 
-#: gajim/dialogs.py:2670
+#: gajim/dialogs.py:2701
 #, fuzzy
 msgid "This account is not connected to the server"
 msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
-#: gajim/dialogs.py:2671
+#: gajim/dialogs.py:2702
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "N'hellit ket ebarzhiñ ur sal-flapiñ keit ha ma n'oc'h ket luget."
 
-#: gajim/dialogs.py:2700
+#: gajim/dialogs.py:2731
 msgid "Synchronise"
 msgstr ""
 
-#: gajim/dialogs.py:2763
+#: gajim/dialogs.py:2794
 #, fuzzy
 msgid "Start new Conversation"
 msgstr "Kevreadenn"
 
-#: gajim/dialogs.py:3021
+#: gajim/dialogs.py:3052
 #, fuzzy
 msgid "New Groupchat"
 msgstr "Flap a-stroll"
 
-#: gajim/dialogs.py:3023
+#: gajim/dialogs.py:3054
 #, fuzzy
 msgid "New Contact"
 msgstr "Ouzhpennañ un darempred nevez"
 
-#: gajim/dialogs.py:3069
+#: gajim/dialogs.py:3106
 msgid "Without a connection, you can not change your password."
 msgstr "Rankout a rit bezañ luget evit cheñch ger-kuzh."
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "Invalid password"
 msgstr "Ger-kuzh direizh"
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "You must enter a password."
 msgstr "Rankout a rit reiñ ur ger-kuzh."
 
-#: gajim/dialogs.py:3093
+#: gajim/dialogs.py:3130
 msgid "Passwords do not match"
 msgstr "Ne glot ket ar gerioù-kuzh"
 
-#: gajim/dialogs.py:3094
+#: gajim/dialogs.py:3131
 msgid "The passwords typed in both fields must be identical."
 msgstr "Rankout a ra an daou c'her-kuzh bezañ heñvel en daou dakad."
 
-#: gajim/dialogs.py:3132 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2814
+#: gajim/dialogs.py:3169 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2821
 msgid "Contact Signed In"
 msgstr "Darempred luget"
 
-#: gajim/dialogs.py:3134 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2820
+#: gajim/dialogs.py:3171 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2827
 msgid "Contact Signed Out"
 msgstr "Darempred diluget"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2634
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2641
 msgid "New Message"
 msgstr "Kemennadenn nevez"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2616
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2623
 msgid "New Single Message"
 msgstr "Kemennadenn simpl nevez"
 
-#: gajim/dialogs.py:3137 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2622
+#: gajim/dialogs.py:3174 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/common/connection_handlers_events.py:2629
 msgid "New Private Message"
 msgstr "Kemennadenn hiniennel nevez"
 
-#: gajim/dialogs.py:3137
+#: gajim/dialogs.py:3174
 msgid "New E-mail"
 msgstr "Postel nevez"
 
-#: gajim/dialogs.py:3139 gajim/gui_interface.py:926 gajim/notify.py:93
+#: gajim/dialogs.py:3176 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "Goulenn treuzkas"
 
-#: gajim/dialogs.py:3141 gajim/gui_interface.py:861 gajim/gui_interface.py:891
+#: gajim/dialogs.py:3178 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "Fazi treuzkas"
 
-#: gajim/dialogs.py:3143 gajim/gui_interface.py:1030
+#: gajim/dialogs.py:3180 gajim/gui_interface.py:1030
 #: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "Echu an treuzkasadenn"
 
-#: gajim/dialogs.py:3144 gajim/gui_interface.py:1034
+#: gajim/dialogs.py:3181 gajim/gui_interface.py:1034
 #: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "Sac'het an treuzkas"
 
-#: gajim/dialogs.py:3146 gajim/dialogs.py:4702 gajim/chat_control.py:1647
+#: gajim/dialogs.py:3183 gajim/dialogs.py:4748 gajim/chat_control.py:1647
 #: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "Pedadenn evit ur sal-flapiñ"
 
-#: gajim/dialogs.py:3148 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2808
+#: gajim/dialogs.py:3185 gajim/notify.py:93
+#: gajim/common/connection_handlers_events.py:2815
 #, fuzzy
 msgid "Contact Changed Status"
 msgstr "Darempred diluget"
 
-#: gajim/dialogs.py:3367
+#: gajim/dialogs.py:3404
 #, fuzzy, python-format
 msgid "Single Message using account %s"
 msgstr "Kemennadenn simpl gant ar gont %s"
 
-#: gajim/dialogs.py:3369
+#: gajim/dialogs.py:3406
 #, fuzzy, python-format
 msgid "Single Message in account %s"
 msgstr "Kemennadenn simpl gant ar gont %s"
 
-#: gajim/dialogs.py:3371
+#: gajim/dialogs.py:3408
 msgid "Single Message"
 msgstr "Kemennadenn simpl"
 
-#: gajim/dialogs.py:3374
+#: gajim/dialogs.py:3411
 #, python-format
 msgid "Send %s"
 msgstr "Kas %s"
 
-#: gajim/dialogs.py:3397
+#: gajim/dialogs.py:3434
 #, python-format
 msgid "Received %s"
 msgstr "%s resevet"
 
-#: gajim/dialogs.py:3420
+#: gajim/dialogs.py:3457
 #, fuzzy, python-format
 msgid "Form %s"
 msgstr "De %s"
 
-#: gajim/dialogs.py:3448 gajim/dialogs.py:3634
+#: gajim/dialogs.py:3485 gajim/dialogs.py:3672
 msgid "Connection not available"
 msgstr "N'eus ket tu en em lugañ"
 
-#: gajim/dialogs.py:3449 gajim/dialogs.py:3635
+#: gajim/dialogs.py:3486 gajim/dialogs.py:3673
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Gwiriekait oc'h luget gant \"%s\"."
 
-#: gajim/dialogs.py:3480 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3517 gajim/dialog_messages.py:43
 #, fuzzy, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "N'eus ket tu da gas restroù goullo"
 
-#: gajim/dialogs.py:3503
+#: gajim/dialogs.py:3540
 #, python-format
 msgid "RE: %s"
 msgstr "RE: %s"
 
-#: gajim/dialogs.py:3504
+#: gajim/dialogs.py:3541
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s a skrivas:\n"
 
-#: gajim/dialogs.py:3551 gajim/data/gui/shortcuts_window.ui:113
+#: gajim/dialogs.py:3589 gajim/data/gui/shortcuts_window.ui:113
 #, fuzzy
 msgid "Clear"
 msgstr "Darvoud"
 
-#: gajim/dialogs.py:3556
+#: gajim/dialogs.py:3594
 #, fuzzy
 msgid "Filter"
 msgstr "Sil:"
 
-#: gajim/dialogs.py:3561
+#: gajim/dialogs.py:3599
 msgid "XML Input"
 msgstr ""
 
-#: gajim/dialogs.py:3565
+#: gajim/dialogs.py:3603
 msgid "Send"
 msgstr "Envoyer"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 #, fuzzy
 msgid "add"
 msgstr "Chomlec'h"
 
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 #, fuzzy
 msgid "modify"
 msgstr "_Kemmañ"
 
-#: gajim/dialogs.py:3749
+#: gajim/dialogs.py:3795
 #, fuzzy
 msgid "remove"
 msgstr "_Dilemel"
 
-#: gajim/dialogs.py:3778
+#: gajim/dialogs.py:3824
 #, fuzzy, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
 "roster."
 msgstr "Me blijfe din ouzhpennañ ac'hanoc'h em roll-darempredoù."
 
-#: gajim/dialogs.py:3794 gajim/dialogs.py:3840 gajim/accounts_window.py:44
+#: gajim/dialogs.py:3840 gajim/dialogs.py:3886 gajim/accounts_window.py:44
 #, fuzzy
 msgid "Add"
 msgstr "Chomlec'h"
 
-#: gajim/dialogs.py:3796 gajim/dialogs.py:3871
+#: gajim/dialogs.py:3842 gajim/dialogs.py:3917
 #, fuzzy
 msgid "Modify"
 msgstr "_Kemmañ"
 
-#: gajim/dialogs.py:3798 gajim/dialogs.py:3895
+#: gajim/dialogs.py:3844 gajim/dialogs.py:3941
 msgid "Delete"
 msgstr "Dilemel"
 
-#: gajim/dialogs.py:3808
+#: gajim/dialogs.py:3854
 #, fuzzy
 msgid "Groups"
 msgstr "Strollad"
 
-#: gajim/dialogs.py:3916
+#: gajim/dialogs.py:3962
 #, fuzzy, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
 
-#: gajim/dialogs.py:3930
+#: gajim/dialogs.py:3976
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "Ouzhpennañ un _darempred"
 msgstr[1] "Ouzhpennañ un _darempred"
 
-#: gajim/dialogs.py:3968
+#: gajim/dialogs.py:4014
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "Dilemel an darempred diouzh ar roll"
 msgstr[1] "Dilemel an darempred diouzh ar roll"
 
-#: gajim/dialogs.py:3994
+#: gajim/dialogs.py:4040
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 msgid "Success!"
 msgstr ""
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 #, fuzzy
 msgid "Your Archiving Preferences have been saved!"
 msgstr "_Penndibaboù"
 
-#: gajim/dialogs.py:4048
+#: gajim/dialogs.py:4094
 msgid "We got no response from the Server"
 msgstr ""
 
-#: gajim/dialogs.py:4050
+#: gajim/dialogs.py:4096
 msgid "We received an error: {}"
 msgstr ""
 
-#: gajim/dialogs.py:4054
+#: gajim/dialogs.py:4100
 #, fuzzy
 msgid "Error!"
 msgstr "Fazi en ur lenn ar restr:"
 
-#: gajim/dialogs.py:4113
+#: gajim/dialogs.py:4159
 #, fuzzy
 msgid "Add JID"
 msgstr "ID Jabber:"
 
-#: gajim/dialogs.py:4186
+#: gajim/dialogs.py:4232
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr ""
 
-#: gajim/dialogs.py:4190
+#: gajim/dialogs.py:4236
 #, python-format
 msgid "Privacy List for %s"
 msgstr ""
 
-#: gajim/dialogs.py:4192 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4238 gajim/data/gui/privacy_list_window.ui:47
 #, fuzzy
 msgid "Privacy List"
 msgstr "Roll argas"
 
-#: gajim/dialogs.py:4263
+#: gajim/dialogs.py:4309
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 
-#: gajim/dialogs.py:4268
+#: gajim/dialogs.py:4314
 #, fuzzy, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Taolennadur: %s"
 
-#: gajim/dialogs.py:4322
+#: gajim/dialogs.py:4368
 #, fuzzy
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Furmad ul linenn</b>"
 
-#: gajim/dialogs.py:4434
+#: gajim/dialogs.py:4480
 #, fuzzy
 msgid "<b>Add a rule</b>"
 msgstr "<b>Furmad ul linenn</b>"
 
-#: gajim/dialogs.py:4535
+#: gajim/dialogs.py:4581
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr ""
 
-#: gajim/dialogs.py:4631
+#: gajim/dialogs.py:4677
 #, fuzzy
 msgid "Invalid List Name"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/dialogs.py:4632
+#: gajim/dialogs.py:4678
 #, fuzzy
 msgid "You must enter a name to create a privacy list."
 msgstr "Rankout a rit reiñ ur ger-kuzh evit enrollañ ar gont nevez."
 
-#: gajim/dialogs.py:4668
+#: gajim/dialogs.py:4714
 #, fuzzy
 msgid "You are invited to a groupchat"
 msgstr "Vous êtes banni de ce salon."
 
-#: gajim/dialogs.py:4671
+#: gajim/dialogs.py:4717
 #, fuzzy
 msgid "$Contact has invited you to join a discussion"
 msgstr "Pedet oc'h bet gant %(contact_jid)s er sal-flapiñ %(room_jid)s"
 
-#: gajim/dialogs.py:4673
+#: gajim/dialogs.py:4719
 #, fuzzy, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "Pedet oc'h bet gant %(contact_jid)s er sal-flapiñ %(room_jid)s"
 
-#: gajim/dialogs.py:4682
+#: gajim/dialogs.py:4728
 #, python-format
 msgid "Comment: %s"
 msgstr "Evezhiadenn: %s"
 
-#: gajim/dialogs.py:4684
+#: gajim/dialogs.py:4730
 msgid "Do you want to accept the invitation?"
 msgstr ""
 
-#: gajim/dialogs.py:4700
+#: gajim/dialogs.py:4746
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: gajim/dialogs.py:4749
+#: gajim/dialogs.py:4795
 msgid "Choose Client Cert #PCKS12"
 msgstr ""
 
-#: gajim/dialogs.py:4765 gajim/accounts_window.py:657
+#: gajim/dialogs.py:4811 gajim/accounts_window.py:657
 msgid "PKCS12 Files"
 msgstr ""
 
-#: gajim/dialogs.py:4791
+#: gajim/dialogs.py:4837
 msgid "Choose Sound"
 msgstr "Dibabit ur son"
 
-#: gajim/dialogs.py:4807
+#: gajim/dialogs.py:4853
 msgid "Wav Sounds"
 msgstr "Sonioù wav"
 
-#: gajim/dialogs.py:4837
+#: gajim/dialogs.py:4883
 msgid "Choose Image"
 msgstr "Dibabit ur skeudenn"
 
-#: gajim/dialogs.py:4855
+#: gajim/dialogs.py:4901
 msgid "Images"
 msgstr "Skeudennoù"
 
-#: gajim/dialogs.py:4926
+#: gajim/dialogs.py:4972
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Dibabit ur skeudenn"
 
-#: gajim/dialogs.py:4945
+#: gajim/dialogs.py:4991
 #, fuzzy
 msgid "Zip files"
 msgstr "An holl restroù"
 
-#: gajim/dialogs.py:4971
+#: gajim/dialogs.py:5017
 #, python-format
 msgid "When %s becomes:"
 msgstr "Pa teu %s da vezañ:"
 
-#: gajim/dialogs.py:4973
+#: gajim/dialogs.py:5019
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 
-#: gajim/dialogs.py:5213
+#: gajim/dialogs.py:5259
 msgid "an audio and video"
 msgstr ""
 
-#: gajim/dialogs.py:5215
+#: gajim/dialogs.py:5261
 msgid "an audio"
 msgstr ""
 
-#: gajim/dialogs.py:5217
+#: gajim/dialogs.py:5263
 msgid "a video"
 msgstr ""
 
-#: gajim/dialogs.py:5221
+#: gajim/dialogs.py:5267
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr ""
 
-#: gajim/dialogs.py:5326 gajim/dialogs.py:5362
+#: gajim/dialogs.py:5372 gajim/dialogs.py:5408
 #, fuzzy, python-format
 msgid "Certificate for account %s"
 msgstr "evit ar gont %s"
 
-#: gajim/dialogs.py:5326
+#: gajim/dialogs.py:5372
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1795,40 +1795,40 @@ msgid ""
 "SHA256 Fingerprint: %(sha256)s\n"
 msgstr ""
 
-#: gajim/dialogs.py:5373 gajim/gui_interface.py:1404
+#: gajim/dialogs.py:5419 gajim/gui_interface.py:1405
 #, fuzzy, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 
-#: gajim/dialogs.py:5374 gajim/dialogs.py:5391
+#: gajim/dialogs.py:5420 gajim/dialogs.py:5437
 msgid "View cert…"
 msgstr ""
 
-#: gajim/dialogs.py:5407 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:5453 gajim/data/gui/application_menu.ui:32
 #, fuzzy
 msgid "File Transfer"
 msgstr "Treuzkasoù"
 
-#: gajim/dialogs.py:5431
+#: gajim/dialogs.py:5477
 msgid "Requesting HTTP Upload Slot..."
 msgstr ""
 
-#: gajim/dialogs.py:5435
+#: gajim/dialogs.py:5481
 msgid "Uploading file via HTTP File Upload..."
 msgstr ""
 
-#: gajim/dialogs.py:5439
+#: gajim/dialogs.py:5485
 #, fuzzy
 msgid "Encrypting file..."
 msgstr "Lazhet eo ar sifrañ"
 
-#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1793
+#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1839
 #, fuzzy, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%s a zo bremañ %s"
 
-#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1942
-#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2804
+#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1988
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2811
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s a zo bremañ %(status)s"
@@ -1842,245 +1842,245 @@ msgstr "Kas ar gemennadenn brevez c'hwitet"
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "N'emaoc'h ket er webgaoz \"%s\" ken, pe neuze eo aet kuit \"%s\"."
 
-#: gajim/groupchat_control.py:636 gajim/chat_control.py:326
+#: gajim/groupchat_control.py:640 gajim/chat_control.py:326
 #: gajim/chat_control.py:330
 msgid "HTTP File Upload"
 msgstr ""
 
-#: gajim/groupchat_control.py:638
+#: gajim/groupchat_control.py:642
 msgid "HTTP File Upload not supported by your server"
 msgstr ""
 
-#: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2320
+#: gajim/groupchat_control.py:662 gajim/groupchat_control.py:2370
 msgid "Changing Subject"
 msgstr "Cheñch ar sujed"
 
-#: gajim/groupchat_control.py:652 gajim/groupchat_control.py:2321
+#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
 msgid "Please specify the new subject:"
 msgstr "Skrivit ar sujed nevez:"
 
-#: gajim/groupchat_control.py:659
+#: gajim/groupchat_control.py:670
 msgid "Changing Nickname"
 msgstr "Cheñch lesanv"
 
-#: gajim/groupchat_control.py:660
+#: gajim/groupchat_control.py:671
 msgid "Please specify the new nickname you want to use:"
 msgstr "Skrivit al lesanv nevez a fell deoc'h implij:"
 
-#: gajim/groupchat_control.py:677
+#: gajim/groupchat_control.py:688
 #, fuzzy
 msgid "Invalid group chat JID"
 msgstr "ID jabber direizh"
 
-#: gajim/groupchat_control.py:678
+#: gajim/groupchat_control.py:689
 #, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr "Bez ez eus arouezioù difennet en anv ar sal pe hini ar servijer."
 
-#: gajim/groupchat_control.py:684
+#: gajim/groupchat_control.py:699
 #, fuzzy, python-format
 msgid "Destroying %s"
 msgstr "Taolennadur: %s"
 
-#: gajim/groupchat_control.py:685
+#: gajim/groupchat_control.py:700
 msgid ""
 "You are going to remove this room permanently.\n"
 "You may specify a reason below:"
 msgstr ""
 
-#: gajim/groupchat_control.py:687
+#: gajim/groupchat_control.py:702
 msgid "You may also enter an alternate venue:"
 msgstr ""
 
-#: gajim/groupchat_control.py:864
+#: gajim/groupchat_control.py:880
 #, fuzzy
 msgid "Insert Nickname"
 msgstr "Cheñch _lesanv"
 
-#: gajim/groupchat_control.py:1015 gajim/chat_control.py:803
+#: gajim/groupchat_control.py:1062 gajim/chat_control.py:803
 #, fuzzy
 msgid "and authenticated"
 msgstr "Implij an diskleriañ"
 
-#: gajim/groupchat_control.py:1019 gajim/chat_control.py:807
+#: gajim/groupchat_control.py:1066 gajim/chat_control.py:807
 #, fuzzy
 msgid "and NOT authenticated"
 msgstr "Implij an diskleriañ"
 
-#: gajim/groupchat_control.py:1023 gajim/chat_control.py:811
+#: gajim/groupchat_control.py:1070 gajim/chat_control.py:811
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#: gajim/groupchat_control.py:1066
+#: gajim/groupchat_control.py:1113
 #, fuzzy
 msgid "Conversation with "
 msgstr "Istoradur ar gaoz"
 
-#: gajim/groupchat_control.py:1068
+#: gajim/groupchat_control.py:1115
 #, fuzzy
 msgid "Continued conversation"
 msgstr "Kevreadenn"
 
-#: gajim/groupchat_control.py:1427
+#: gajim/groupchat_control.py:1473
 #, fuzzy, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(nick)s a zo bet skarzhet : %(reason)s"
 
-#: gajim/groupchat_control.py:1450 gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1496 gajim/groupchat_control.py:1781
 msgid "Any occupant is allowed to see your full JID"
 msgstr ""
 
-#: gajim/groupchat_control.py:1453
+#: gajim/groupchat_control.py:1499
 msgid "Room now shows unavailable members"
 msgstr ""
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1501
 msgid "Room now does not show unavailable members"
 msgstr ""
 
-#: gajim/groupchat_control.py:1457
+#: gajim/groupchat_control.py:1503
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1507
 msgid "Room logging is now enabled"
 msgstr ""
 
-#: gajim/groupchat_control.py:1463
+#: gajim/groupchat_control.py:1509
 msgid "Room logging is now disabled"
 msgstr ""
 
-#: gajim/groupchat_control.py:1465
+#: gajim/groupchat_control.py:1511
 msgid "Room is now non-anonymous"
 msgstr ""
 
-#: gajim/groupchat_control.py:1468
+#: gajim/groupchat_control.py:1514
 msgid "Room is now semi-anonymous"
 msgstr ""
 
-#: gajim/groupchat_control.py:1471
+#: gajim/groupchat_control.py:1517
 msgid "Room is now fully anonymous"
 msgstr ""
 
-#: gajim/groupchat_control.py:1511 gajim/chat_control.py:1268
+#: gajim/groupchat_control.py:1557 gajim/chat_control.py:1268
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr ""
 
-#: gajim/groupchat_control.py:1728 gajim/groupchat_control.py:2348
+#: gajim/groupchat_control.py:1774 gajim/groupchat_control.py:2398
 #: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#: gajim/groupchat_control.py:1740
+#: gajim/groupchat_control.py:1786
 msgid "Room logging is enabled"
 msgstr ""
 
-#: gajim/groupchat_control.py:1742
+#: gajim/groupchat_control.py:1788
 #, fuzzy
 msgid "A new room has been created"
 msgstr "Gant berzh eo bet krouet ho kont nevez!"
 
-#: gajim/groupchat_control.py:1745
+#: gajim/groupchat_control.py:1791
 msgid "The server has assigned or modified your roomnick"
 msgstr ""
 
-#: gajim/groupchat_control.py:1751
+#: gajim/groupchat_control.py:1797
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s a zo bet skarzhet : %(reason)s"
 
-#: gajim/groupchat_control.py:1754
+#: gajim/groupchat_control.py:1800
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#: gajim/groupchat_control.py:1763
+#: gajim/groupchat_control.py:1809
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s a zo argaset : %(reason)s"
 
-#: gajim/groupchat_control.py:1766
+#: gajim/groupchat_control.py:1812
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s a zo argaset gant %(who)s : %(reason)s"
 
-#: gajim/groupchat_control.py:1777 gajim/groupchat_control.py:1861
+#: gajim/groupchat_control.py:1823 gajim/groupchat_control.py:1907
 #, python-format
 msgid "You are now known as %s"
 msgstr "Anavezet oc'h bremañ gant an anv %s"
 
-#: gajim/groupchat_control.py:1815 gajim/groupchat_control.py:1820
-#: gajim/groupchat_control.py:1826
+#: gajim/groupchat_control.py:1861 gajim/groupchat_control.py:1866
+#: gajim/groupchat_control.py:1872
 #, fuzzy, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#: gajim/groupchat_control.py:1817
+#: gajim/groupchat_control.py:1863
 msgid "affiliation changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1822
+#: gajim/groupchat_control.py:1868
 msgid "room configuration changed to members-only"
 msgstr ""
 
-#: gajim/groupchat_control.py:1828
+#: gajim/groupchat_control.py:1874
 msgid "system shutdown"
 msgstr ""
 
-#: gajim/groupchat_control.py:1882
+#: gajim/groupchat_control.py:1928
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr ""
 
-#: gajim/groupchat_control.py:1886
+#: gajim/groupchat_control.py:1932
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr ""
 
-#: gajim/groupchat_control.py:1901
+#: gajim/groupchat_control.py:1947
 #, fuzzy, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#: gajim/groupchat_control.py:1905
+#: gajim/groupchat_control.py:1951
 #, fuzzy, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "%(nick)s a zo bet skarzhet : %(reason)s"
 
-#: gajim/groupchat_control.py:1935
+#: gajim/groupchat_control.py:1981
 #, python-format
 msgid "%s has left"
 msgstr "Aet eo kuit %s"
 
-#: gajim/groupchat_control.py:1940
+#: gajim/groupchat_control.py:1986
 #, fuzzy, python-format
 msgid "%s has joined the group chat"
 msgstr "Er strollad"
 
-#: gajim/groupchat_control.py:2279
+#: gajim/groupchat_control.py:2329
 #, fuzzy, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Ha sur oc'h e fell deoc'h kuitaat ar flap \"%s\"?"
 
-#: gajim/groupchat_control.py:2281
+#: gajim/groupchat_control.py:2331
 #, fuzzy
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ma serrit ar prenestr-mañ, e tigevreoc'h diouzh ar flap-mañ."
 
-#: gajim/groupchat_control.py:2500
+#: gajim/groupchat_control.py:2550
 #, python-format
 msgid "Kicking %s"
 msgstr "Skarzhañ %s"
 
-#: gajim/groupchat_control.py:2501 gajim/groupchat_control.py:2797
+#: gajim/groupchat_control.py:2551 gajim/groupchat_control.py:2847
 msgid "You may specify a reason below:"
 msgstr "Bez e c'hellit reiñ un abeg amañ dindan:"
 
-#: gajim/groupchat_control.py:2796
+#: gajim/groupchat_control.py:2846
 #, python-format
 msgid "Banning %s"
 msgstr "Argas %s"
@@ -2177,7 +2177,7 @@ msgstr ""
 "Titl : %s\n"
 "%s"
 
-#: gajim/chat_control.py:1494 gajim/gui_interface.py:1196
+#: gajim/chat_control.py:1494 gajim/gui_interface.py:1197
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2201,10 +2201,10 @@ msgstr "Taille : "
 
 #: gajim/chat_control.py:1596
 #, fuzzy
-msgid "_Accept"
+msgid "Accept"
 msgstr "Asantiñ"
 
-#: gajim/chat_control.py:1650 gajim/disco.py:1752
+#: gajim/chat_control.py:1650 gajim/disco.py:1753
 msgid "_Join"
 msgstr "E_barzhiñ"
 
@@ -2226,7 +2226,7 @@ msgstr "Kontoù strollet"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5125 gajim/message_window.py:525
+#: gajim/roster_window.py:5125 gajim/message_window.py:519
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 #, fuzzy
@@ -2237,7 +2237,7 @@ msgstr "Flapoù a-stroll"
 #: gajim/roster_window.py:1698 gajim/roster_window.py:1749
 #: gajim/roster_window.py:1751 gajim/roster_window.py:1912
 #: gajim/roster_window.py:2575 gajim/roster_window.py:5155 gajim/disco.py:130
-#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:135
+#: gajim/disco.py:131 gajim/disco.py:1460 gajim/common/contacts.py:135
 #: gajim/common/contacts.py:378 gajim/common/helpers.py:95
 msgid "Transports"
 msgstr "Dorioù"
@@ -2496,7 +2496,7 @@ msgstr "Kont ebet hegerz"
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Rankout a rit krouiñ ur gont a-raok gellout flapiñ gant tud all."
 
-#: gajim/roster_window.py:3676 gajim/gui_interface.py:2062
+#: gajim/roster_window.py:3676 gajim/gui_interface.py:2065
 #: gajim/dialog_messages.py:64
 #, fuzzy
 msgid "You cannot join a group chat while you are invisible"
@@ -2689,7 +2689,7 @@ msgstr "A zifoup ur prenestr gant ar gemennadenn dilenn da-heul"
 msgid "Start a new chat"
 msgstr "Kregiñ da flapiñ"
 
-#: gajim/gajim.py:180 gajim/gui_interface.py:127
+#: gajim/gajim.py:180 gajim/gui_interface.py:128
 msgid "Database Error"
 msgstr ""
 
@@ -2754,69 +2754,69 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/config.py:148 gajim/config.py:154 gajim/config.py:614
+#: gajim/config.py:150 gajim/config.py:156 gajim/config.py:616
 #: gajim/data/gui/preferences_window.ui:68
 #: gajim/data/gui/preferences_window.ui:85
 msgid "Disabled"
 msgstr "Dizoberiant"
 
-#: gajim/config.py:409 gajim/config.py:413 gajim/config.py:1940
+#: gajim/config.py:411 gajim/config.py:415 gajim/config.py:1942
 #, fuzzy
 msgid "Default"
 msgstr "Dilemel"
 
-#: gajim/config.py:1126
+#: gajim/config.py:1128
 msgid "status message title"
 msgstr "titl ar gemennadenn stad"
 
-#: gajim/config.py:1127
+#: gajim/config.py:1129
 msgid "status message text"
 msgstr "korf ar gemennadenn stad"
 
-#: gajim/config.py:1515
+#: gajim/config.py:1517
 #, python-format
 msgid "Edit %s"
 msgstr "Kemmañ %s"
 
-#: gajim/config.py:1517
+#: gajim/config.py:1519
 #, python-format
 msgid "Register to %s"
 msgstr "Emezelañ war %s"
 
-#: gajim/config.py:1553
+#: gajim/config.py:1555
 msgid "Ban List"
 msgstr "Roll argas"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Member List"
 msgstr "Roll an izili"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Owner List"
 msgstr "Roll ar perc'hennerien"
 
-#: gajim/config.py:1555
+#: gajim/config.py:1557
 msgid "Administrator List"
 msgstr "Roll ar verourien"
 
-#: gajim/config.py:1629
+#: gajim/config.py:1631
 msgid "Reason"
 msgstr "Abeg"
 
-#: gajim/config.py:1636
+#: gajim/config.py:1638
 msgid "Nick"
 msgstr "Lesanv"
 
-#: gajim/config.py:1642
+#: gajim/config.py:1644
 msgid "Role"
 msgstr "Perzh"
 
-#: gajim/config.py:1668
+#: gajim/config.py:1670
 #, fuzzy
 msgid "Banning…"
 msgstr "Oc'h argas..."
 
-#: gajim/config.py:1670
+#: gajim/config.py:1672
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2824,12 +2824,12 @@ msgstr ""
 "<b>Piv a fell deoc'h argas ?</b>\n"
 "\n"
 
-#: gajim/config.py:1672
+#: gajim/config.py:1674
 #, fuzzy
 msgid "Adding Member…"
 msgstr "Oc'h ouzhpennañ un ezel..."
 
-#: gajim/config.py:1673
+#: gajim/config.py:1675
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2837,12 +2837,12 @@ msgstr ""
 "<b>Piv a fell deoc'h lakaat da ezel ?</b>\n"
 "\n"
 
-#: gajim/config.py:1675
+#: gajim/config.py:1677
 #, fuzzy
 msgid "Adding Owner…"
 msgstr "Oc'h ouzhpennañ ur perc'henn..."
 
-#: gajim/config.py:1676
+#: gajim/config.py:1678
 #, fuzzy
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
@@ -2851,12 +2851,12 @@ msgstr ""
 "<b>Piv a fell deoc'h lakaat da berc'henn ?</b>\n"
 "\n"
 
-#: gajim/config.py:1678
+#: gajim/config.py:1680
 #, fuzzy
 msgid "Adding Administrator…"
 msgstr "Oc'h ouzhpennañ ur v-merour-ez..."
 
-#: gajim/config.py:1679
+#: gajim/config.py:1681
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2864,7 +2864,7 @@ msgstr ""
 "<b>Piv a fell deoc'h lakaat da verour-ez ?</b>\n"
 "\n"
 
-#: gajim/config.py:1680
+#: gajim/config.py:1682
 #, fuzzy
 msgid ""
 "Can be one of the following:\n"
@@ -2882,112 +2882,112 @@ msgstr ""
 "pseudo@domaine,\n"
 "domaine/ressource, ou les adresses comprenant un sous-domaine)."
 
-#: gajim/config.py:1781
+#: gajim/config.py:1783
 #, python-format
 msgid "Removing %s account"
 msgstr "Lemel ar gont %s"
 
-#: gajim/config.py:1796
+#: gajim/config.py:1798
 #, fuzzy
 msgid "Account is disabled"
 msgstr "Lazhet eo ar sifrañ"
 
-#: gajim/config.py:1797
+#: gajim/config.py:1799
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
 
-#: gajim/config.py:1811 gajim/gui_interface.py:314 gajim/gui_interface.py:748
+#: gajim/config.py:1813 gajim/gui_interface.py:314 gajim/gui_interface.py:748
 msgid "Password Required"
 msgstr "Ger-kuzh ret"
 
-#: gajim/config.py:1812 gajim/gui_interface.py:733
+#: gajim/config.py:1814 gajim/gui_interface.py:733
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "Roit ho ker-kuzh evit ar gont %s"
 
-#: gajim/config.py:1813 gajim/gui_interface.py:748
+#: gajim/config.py:1815 gajim/gui_interface.py:748
 msgid "Save password"
 msgstr "Enrollañ ar ger-kuzh"
 
-#: gajim/config.py:1824
+#: gajim/config.py:1826
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
-#: gajim/config.py:1825
+#: gajim/config.py:1827
 msgid "If you remove it, the connection will be lost."
 msgstr "Ma tilamit anezhañ, e voc'h diluget."
 
-#: gajim/config.py:1840
+#: gajim/config.py:1842
 #, fuzzy, python-format
 msgid "Connection to server %s failed"
 msgstr "Kevreadenn"
 
-#: gajim/config.py:1841
+#: gajim/config.py:1843
 #, fuzzy
 msgid "What would you like to do?"
 msgstr "Petra a fell deoc'h ober?"
 
-#: gajim/config.py:1842
+#: gajim/config.py:1844
 #, fuzzy
 msgid "Remove only from Gajim"
 msgstr "Dilemel ar gont diwar Gajim _hepken"
 
-#: gajim/config.py:1843
+#: gajim/config.py:1845
 msgid "Don't remove anything. I'll try again later"
-msgstr ""
-
-#: gajim/config.py:1940
-#, fuzzy
-msgid "?print_status:All"
-msgstr "Diskouez an eur:"
-
-#: gajim/config.py:1941
-msgid "Enter and leave only"
 msgstr ""
 
 #: gajim/config.py:1942
 #, fuzzy
+msgid "?print_status:All"
+msgstr "Diskouez an eur:"
+
+#: gajim/config.py:1943
+msgid "Enter and leave only"
+msgstr ""
+
+#: gajim/config.py:1944
+#, fuzzy
 msgid "?print_status:None"
 msgstr "Diskouez an eur:"
 
-#: gajim/config.py:2008
+#: gajim/config.py:2010
 #, fuzzy
 msgid "New Group Chat"
 msgstr "Flap a-stroll"
 
-#: gajim/config.py:2044
+#: gajim/config.py:2046
 msgid "This bookmark has invalid data"
 msgstr "Bez ez eus titouroù direizh er sined-mañ"
 
-#: gajim/config.py:2045
+#: gajim/config.py:2047
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr ""
 "Gwiriekait ho peus leuniet an takadoù servijer ha sal-flapiñ pe lamit ar "
 "sined-mañ."
 
-#: gajim/config.py:2168 gajim/config.py:2184 gajim/config.py:2195
-#: gajim/config.py:2223
+#: gajim/config.py:2170 gajim/config.py:2186 gajim/config.py:2197
+#: gajim/config.py:2225
 #, fuzzy
 msgid "Character not allowed"
 msgstr "N'eus ket bet kavet al lesanv : %s"
 
-#: gajim/config.py:2183 gajim/config.py:2194 gajim/config.py:2473
+#: gajim/config.py:2185 gajim/config.py:2196 gajim/config.py:2475
 #, fuzzy
 msgid "Invalid server"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/config.py:2222
+#: gajim/config.py:2224
 #, fuzzy
 msgid "Invalid room"
 msgstr "Road direizh"
 
-#: gajim/config.py:2387
+#: gajim/config.py:2389
 msgid "Account has been added successfully"
 msgstr "Gant berzh eo bet ouzhpennet ar gont!"
 
-#: gajim/config.py:2388 gajim/config.py:2394
+#: gajim/config.py:2390 gajim/config.py:2396
 #, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
@@ -2998,42 +2998,42 @@ msgstr ""
 "Araoket, pe hen ober diwezhatoc'h en ur glikañ war Kontoù er meuziad Aozañ "
 "eus ar prenestr pennañ."
 
-#: gajim/config.py:2393
+#: gajim/config.py:2395
 msgid "Your new account has been created successfully"
 msgstr "Gant berzh eo bet krouet ho kont nevez!"
 
-#: gajim/config.py:2431
+#: gajim/config.py:2433
 msgid "Invalid username"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/config.py:2433
+#: gajim/config.py:2435
 msgid "You must provide a username to configure this account."
 msgstr "Rankout a rit reiñ un anv-arveriad-ez evit kefluniañ ar gont-mañ."
 
-#: gajim/config.py:2474
+#: gajim/config.py:2476
 #, fuzzy
 msgid "Please provide a server on which you want to register."
 msgstr "Skrivit al lesanv nevez a fell deoc'h implij:"
 
-#: gajim/config.py:2497
+#: gajim/config.py:2499
 msgid "Invalid entry"
 msgstr "Road direizh"
 
-#: gajim/config.py:2498
+#: gajim/config.py:2500
 msgid "Custom port must be a port number."
 msgstr "Ar porzh personelaet a rank bezañ un niverenn borzh"
 
-#: gajim/config.py:2530 gajim/gui_interface.py:1359
+#: gajim/config.py:2532 gajim/gui_interface.py:1360
 #, fuzzy
 msgid "Certificate Already in File"
 msgstr "Darempred er roll dija"
 
-#: gajim/config.py:2531 gajim/gui_interface.py:1360
+#: gajim/config.py:2533 gajim/gui_interface.py:1361
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
 
-#: gajim/config.py:2624
+#: gajim/config.py:2626
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -3043,7 +3043,7 @@ msgid ""
 "Do you still want to connect to this server?"
 msgstr ""
 
-#: gajim/config.py:2630
+#: gajim/config.py:2632
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3053,77 +3053,77 @@ msgid ""
 "%(sha256)s"
 msgstr ""
 
-#: gajim/config.py:2664 gajim/config.py:2698
+#: gajim/config.py:2666 gajim/config.py:2700
 #, fuzzy
 msgid "An error occurred during account creation"
 msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
 
-#: gajim/config.py:2761
+#: gajim/config.py:2763
 msgid "Account name is in use"
 msgstr "Implijet eo an anv-kont dija"
 
-#: gajim/config.py:2762
+#: gajim/config.py:2764
 msgid "You already have an account using this name."
 msgstr "Bez ho peus ur gont gant an anv-se dija."
 
-#: gajim/config.py:2894
+#: gajim/config.py:2896
 msgid "PEP node was not removed"
 msgstr ""
 
-#: gajim/config.py:2895
+#: gajim/config.py:2897
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr ""
 
-#: gajim/config.py:2923
+#: gajim/config.py:2925
 #, fuzzy, python-format
 msgid "Configure %s"
 msgstr "_Kenderc'hel"
 
-#: gajim/config.py:2940 gajim/plugins/gui.py:95
+#: gajim/config.py:2942 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "Oberiant"
 
-#: gajim/config.py:2948
+#: gajim/config.py:2950
 msgid "Event"
 msgstr "Darvoud"
 
-#: gajim/config.py:2982
+#: gajim/config.py:2984
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Kemennadenn gentañ"
 
-#: gajim/config.py:2983
+#: gajim/config.py:2985
 msgid "First Message Received"
 msgstr "Kemennadenn gentañ"
 
-#: gajim/config.py:2984
+#: gajim/config.py:2986
 #, fuzzy
 msgid "Next Message Received Focused"
 msgstr "Kemennadenn da-heul"
 
-#: gajim/config.py:2986
+#: gajim/config.py:2988
 #, fuzzy
 msgid "Next Message Received Unfocused"
 msgstr "Kemennadenn da-heul"
 
-#: gajim/config.py:2987
+#: gajim/config.py:2989
 msgid "Contact Connected"
 msgstr "Darempred luget"
 
-#: gajim/config.py:2988
+#: gajim/config.py:2990
 msgid "Contact Disconnected"
 msgstr "Darempred diluget"
 
-#: gajim/config.py:2989
+#: gajim/config.py:2991
 msgid "Message Sent"
 msgstr "Kemennadenn gaset"
 
-#: gajim/config.py:2990
+#: gajim/config.py:2992
 msgid "Group Chat Message Highlight"
 msgstr "Message d'un Salon mis en Sur-brillance"
 
-#: gajim/config.py:2991
+#: gajim/config.py:2993
 msgid "Group Chat Message Received"
 msgstr "Kemennadenn digant ur sal-flapiñ"
 
@@ -3132,22 +3132,22 @@ msgstr "Kemennadenn digant ur sal-flapiñ"
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr ""
 
-#: gajim/tooltips.py:269 gajim/common/helpers.py:475
+#: gajim/tooltips.py:269 gajim/common/helpers.py:473
 #, fuzzy
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "Hini ebet"
 
-#: gajim/tooltips.py:271 gajim/common/helpers.py:481
+#: gajim/tooltips.py:271 gajim/common/helpers.py:479
 #, fuzzy
 msgid "Member"
 msgstr "_Ezel"
 
-#: gajim/tooltips.py:273 gajim/common/helpers.py:479
+#: gajim/tooltips.py:273 gajim/common/helpers.py:477
 #, fuzzy
 msgid "Administrator"
 msgstr "_Merour-ez"
 
-#: gajim/tooltips.py:275 gajim/common/helpers.py:477
+#: gajim/tooltips.py:275 gajim/common/helpers.py:475
 #, fuzzy
 msgid "Owner"
 msgstr "_Perc'hener-ez"
@@ -3337,7 +3337,7 @@ msgstr "Ar stad a zo bremañ: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "Ar stad a zo bremañ: %(status)s"
 
-#: gajim/history_window.py:585 gajim/conversation_textview.py:1349
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Sujed: %s\n"
@@ -3497,7 +3497,7 @@ msgstr "N'eus elfenn ebet da furchal er servij-mañ."
 msgid "Execute Command"
 msgstr "urzhiad"
 
-#: gajim/disco.py:1308 gajim/disco.py:1465
+#: gajim/disco.py:1308 gajim/disco.py:1466
 msgid "Re_gister"
 msgstr "_Emezelañ"
 
@@ -3511,69 +3511,69 @@ msgstr "E_barzhiñ"
 msgid "Search"
 msgstr "Klask"
 
-#: gajim/disco.py:1463
+#: gajim/disco.py:1464
 msgid "_Edit"
 msgstr "_Aozañ"
 
-#: gajim/disco.py:1506
+#: gajim/disco.py:1507
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr ""
 
-#: gajim/disco.py:1702
+#: gajim/disco.py:1703
 msgid "Users"
 msgstr "Arveridi"
 
-#: gajim/disco.py:1710
+#: gajim/disco.py:1711
 msgid "Description"
 msgstr "Taolennadur"
 
-#: gajim/disco.py:1718
+#: gajim/disco.py:1719
 msgid "Id"
 msgstr ""
 
-#: gajim/disco.py:1748 gajim/data/gui/gc_control_popup_menu.ui:99
+#: gajim/disco.py:1749 gajim/data/gui/gc_control_popup_menu.ui:99
 #, fuzzy
 msgid "_Bookmark"
 msgstr "_Ouzhpennañ ar webgaoz d'ar sinedoù"
 
-#: gajim/disco.py:1782
+#: gajim/disco.py:1783
 msgid "Bookmark already set"
 msgstr "Sined lakaet dija"
 
-#: gajim/disco.py:1783
+#: gajim/disco.py:1784
 #, fuzzy, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "Emañ ar flap \"%s\" en ho sinedoù dija."
 
-#: gajim/disco.py:1793
+#: gajim/disco.py:1794
 msgid "Bookmark has been added successfully"
 msgstr "Gant berzh eo bet ouzhpennet ar sined"
 
-#: gajim/disco.py:1794
+#: gajim/disco.py:1795
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "Bez e c'hellit merañ ho sinedoù dre ar meuziad Oberoù er roll-darempredoù."
 
-#: gajim/disco.py:1986
+#: gajim/disco.py:1987
 #, fuzzy
 msgid "Subscribed"
 msgstr "Emezelañ"
 
-#: gajim/disco.py:1995
+#: gajim/disco.py:1996
 #, fuzzy
 msgid "Node"
 msgstr "Hini ebet"
 
-#: gajim/disco.py:2062
+#: gajim/disco.py:2063
 msgid "New post"
 msgstr ""
 
-#: gajim/disco.py:2068
+#: gajim/disco.py:2069
 msgid "_Subscribe"
 msgstr "_Koumanantiñ"
 
-#: gajim/disco.py:2074
+#: gajim/disco.py:2075
 #, fuzzy
 msgid "_Unsubscribe"
 msgstr "_Koumanantiñ"
@@ -3587,59 +3587,59 @@ msgstr ""
 "Dindan al linenn e welit ar pezh a zo bet lâret er sal-flapiñ dibaoe ar wech "
 "diwezhañ ho peus taolet ur sell ennañ."
 
-#: gajim/conversation_textview.py:561
+#: gajim/conversation_textview.py:550
 #, fuzzy
 msgid "_Quote"
 msgstr "_Kuitaat"
 
-#: gajim/conversation_textview.py:569
+#: gajim/conversation_textview.py:558
 #, fuzzy, python-format
 msgid "_Actions for \"%s\""
 msgstr "Oberoù evit \"%s\""
 
-#: gajim/conversation_textview.py:583
+#: gajim/conversation_textview.py:572
 msgid "Read _Wikipedia Article"
 msgstr "Lenn pennad _Wikipedia"
 
-#: gajim/conversation_textview.py:588
+#: gajim/conversation_textview.py:577
 msgid "Look it up in _Dictionary"
 msgstr "Klask er _geriadur"
 
-#: gajim/conversation_textview.py:605
+#: gajim/conversation_textview.py:594
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr ""
 "Mankout a ra un \"%s\" e-barzh URL ar geriaoueg, ha n'eo ket WIKTIONARY"
 
-#: gajim/conversation_textview.py:619
+#: gajim/conversation_textview.py:608
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "Mankout a ra un \"%s\" e-barzh URL ar webklask"
 
-#: gajim/conversation_textview.py:622
+#: gajim/conversation_textview.py:611
 msgid "Web _Search for it"
 msgstr "Web_klask"
 
-#: gajim/conversation_textview.py:628
+#: gajim/conversation_textview.py:617
 msgid "Open as _Link"
 msgstr ""
 
-#: gajim/conversation_textview.py:858
+#: gajim/conversation_textview.py:847
 msgid "URL:"
 msgstr ""
 
-#: gajim/conversation_textview.py:1032
+#: gajim/conversation_textview.py:1021
 #, fuzzy
 msgid "Invalid URL"
 msgstr "ID jabber direizh"
 
-#: gajim/conversation_textview.py:1117
+#: gajim/conversation_textview.py:1106
 msgid ""
 "<b>Message corrected. Original message:</b>\n"
 "{}"
 msgstr ""
 
-#: gajim/conversation_textview.py:1261
+#: gajim/conversation_textview.py:1250
 #, fuzzy, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -3661,20 +3661,20 @@ msgstr "N'oc'h ket luget d'ar servijer"
 msgid "Do you really want to close them all?"
 msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
-#: gajim/message_window.py:523
+#: gajim/message_window.py:517
 #, fuzzy
 msgid "?Noun:Chats"
 msgstr "Flapoù a-stroll"
 
-#: gajim/message_window.py:527
+#: gajim/message_window.py:521
 msgid "Private Chats"
 msgstr "Flapoù prevez"
 
-#: gajim/message_window.py:533
+#: gajim/message_window.py:527
 msgid "Messages"
 msgstr "Kemennadennoù"
 
-#: gajim/gui_interface.py:157 gajim/gui_interface.py:329
+#: gajim/gui_interface.py:158 gajim/gui_interface.py:329
 #: gajim/gui_interface.py:338 gajim/gui_interface.py:345
 #: gajim/gui_interface.py:349 gajim/gui_interface.py:352
 #: gajim/gui_interface.py:360
@@ -3682,7 +3682,7 @@ msgstr "Kemennadennoù"
 msgid "Unable to join group chat"
 msgstr "Impossible de rejoindre le salon"
 
-#: gajim/gui_interface.py:158
+#: gajim/gui_interface.py:159
 #, fuzzy, python-format
 msgid ""
 "Your desired nickname in group chat\n"
@@ -3694,25 +3694,25 @@ msgstr ""
 "par un autre occupant.\n"
 "Veuillez entrer un autre surnom ci-dessous :"
 
-#: gajim/gui_interface.py:162
+#: gajim/gui_interface.py:163
 msgid "Always use this nickname when there is a conflict"
 msgstr ""
 
-#: gajim/gui_interface.py:180
+#: gajim/gui_interface.py:181
 msgid "Do you accept this request?"
 msgstr "Degemer a rit ar goulenn-mañ?"
 
-#: gajim/gui_interface.py:182
+#: gajim/gui_interface.py:183
 #, fuzzy, python-format
 msgid "Do you accept this request on account %s?"
 msgstr "Degemer a rit ar goulenn-mañ?"
 
-#: gajim/gui_interface.py:185
+#: gajim/gui_interface.py:186
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "Aotre HTTP (%s) evit %s (id : %s)"
 
-#: gajim/gui_interface.py:229 gajim/notify.py:96
+#: gajim/gui_interface.py:230 gajim/notify.py:96
 #, fuzzy
 msgid "Connection Failed"
 msgstr "Kevreadenn"
@@ -3768,7 +3768,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "%(nickname)s : %(message)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1423
+#: gajim/common/connection_handlers_events.py:1430
 #, fuzzy, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "fazi en ur gas %s ( %s )"
@@ -3813,8 +3813,8 @@ msgstr "_Koumanantiñ"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "N'eus ket tu da dizhout \"%s\""
 
-#: gajim/gui_interface.py:583 gajim/common/connection.py:1286
-#: gajim/common/connection.py:1472
+#: gajim/gui_interface.py:583 gajim/common/connection.py:1288
+#: gajim/common/connection.py:1474
 msgid "Check your connection or try again later."
 msgstr "Gwiriekait ho lugadenn pe klaskit diwezhatoc'h."
 
@@ -3884,7 +3884,7 @@ msgstr ""
 msgid "%s wants to send you a file."
 msgstr "Fellout a ra da %s kas deoc'h ur restr."
 
-#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1432
+#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1433
 msgid "SSL certificate error"
 msgstr ""
 
@@ -3928,45 +3928,45 @@ msgstr "Arsavet eo an treuzkas eus %(filename)s da %(name)s."
 msgid "Choose file to send"
 msgstr "Dibabit ur restr da gas..."
 
-#: gajim/gui_interface.py:1198
+#: gajim/gui_interface.py:1199
 #, fuzzy
 msgid "Unable to decrypt message"
 msgstr "Da _bep kemennadenn:"
 
-#: gajim/gui_interface.py:1210
+#: gajim/gui_interface.py:1211
 msgid "Username Conflict"
 msgstr ""
 
-#: gajim/gui_interface.py:1211
+#: gajim/gui_interface.py:1212
 #, fuzzy
 msgid "Please type a new username for your local account"
 msgstr "<b>Leuniit an titouroù evit ho kont nevez</b>"
 
-#: gajim/gui_interface.py:1234
+#: gajim/gui_interface.py:1235
 msgid "Resource Conflict"
 msgstr ""
 
-#: gajim/gui_interface.py:1235
+#: gajim/gui_interface.py:1236
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr ""
 
-#: gajim/gui_interface.py:1292
+#: gajim/gui_interface.py:1293
 #, fuzzy, python-format
 msgid "%s wants to start a voice chat."
 msgstr "Fellout a ra da %s kas deoc'h ur restr."
 
-#: gajim/gui_interface.py:1295
+#: gajim/gui_interface.py:1296
 #, fuzzy
 msgid "Voice Chat Request"
 msgstr "Goulenn treuzkas"
 
-#: gajim/gui_interface.py:1385
+#: gajim/gui_interface.py:1386
 msgid "Error verifying SSL certificate"
 msgstr ""
 
-#: gajim/gui_interface.py:1386
+#: gajim/gui_interface.py:1387
 #, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
@@ -3974,7 +3974,7 @@ msgid ""
 "Do you still want to connect to this server?"
 msgstr ""
 
-#: gajim/gui_interface.py:1390
+#: gajim/gui_interface.py:1391
 #, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3984,15 +3984,15 @@ msgid ""
 "%(sha256)s"
 msgstr ""
 
-#: gajim/gui_interface.py:1396
+#: gajim/gui_interface.py:1397
 msgid "Ignore this error for this certificate."
 msgstr ""
 
-#: gajim/gui_interface.py:1409
+#: gajim/gui_interface.py:1410
 msgid "Non Anonymous Server"
 msgstr ""
 
-#: gajim/gui_interface.py:1433
+#: gajim/gui_interface.py:1434
 #, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
@@ -4007,40 +4007,40 @@ msgid ""
 "Do you still want to connect and update the fingerprint of the certificate?"
 msgstr ""
 
-#: gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1512
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 msgstr ""
 
-#: gajim/gui_interface.py:1553
+#: gajim/gui_interface.py:1554
 #, fuzzy
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
 msgstr "Rankout a rit krouiñ ur gont a-raok gellout flapiñ gant tud all."
 
-#: gajim/gui_interface.py:1854
+#: gajim/gui_interface.py:1856
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
 
-#: gajim/gui_interface.py:2017
+#: gajim/gui_interface.py:2020
 #, fuzzy
 msgid "Emoticons disabled"
 msgstr "Lazhet eo ar sifrañ"
 
-#: gajim/gui_interface.py:2018
+#: gajim/gui_interface.py:2021
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
 "details."
 msgstr ""
 
-#: gajim/gui_interface.py:2036
+#: gajim/gui_interface.py:2039
 msgid "This is not a group chat"
 msgstr ""
 
-#: gajim/gui_interface.py:2037
+#: gajim/gui_interface.py:2040
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -4048,42 +4048,42 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:2415
+#: gajim/gui_interface.py:2418
 msgid "Could not save your settings and preferences"
 msgstr "Dibosupl eo enrollañ ho tibarzhioù ha dibaboù"
 
-#: gajim/gui_interface.py:2825 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:343
+#: gajim/gui_interface.py:2828 gajim/common/config.py:117
+#: gajim/common/config.py:532 gajim/common/optparser.py:343
 #: gajim/common/optparser.py:511 gajim/common/optparser.py:534
 #, fuzzy
 msgid "default"
 msgstr "Dilemel"
 
-#: gajim/gui_interface.py:3011
+#: gajim/gui_interface.py:3014
 msgid "Passphrase Required"
 msgstr "Ger-kuzh ret"
 
-#: gajim/gui_interface.py:3012
+#: gajim/gui_interface.py:3015
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Roit ho ker-kuzh GPG evit ar gont %s."
 
-#: gajim/gui_interface.py:3026
+#: gajim/gui_interface.py:3029
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "Dibab un alc'hwezh OpenPGP"
 
-#: gajim/gui_interface.py:3027
+#: gajim/gui_interface.py:3030
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "Luget e voc'h da %s hep OpenPGP."
 
-#: gajim/gui_interface.py:3036
+#: gajim/gui_interface.py:3039
 msgid "Wrong Passphrase"
 msgstr "Ger-kuzh faos"
 
-#: gajim/gui_interface.py:3037
+#: gajim/gui_interface.py:3040
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Adroit ho ker-kuzh GPG pe pouezit war Nullañ."
@@ -4404,7 +4404,7 @@ msgstr "Kontoù strollet"
 msgid "Use PGP Agent"
 msgstr ""
 
-#: gajim/accounts_window.py:153 gajim/common/config.py:510
+#: gajim/accounts_window.py:153 gajim/common/config.py:511
 msgid "Be right back."
 msgstr "Distro a-benn nebeut."
 
@@ -5174,47 +5174,47 @@ msgstr "Dilamet eo bet an aotre"
 msgid "You can join this room instead: %s"
 msgstr ""
 
-#: gajim/common/connection_handlers_events.py:1972
+#: gajim/common/connection_handlers_events.py:1979
 #, fuzzy, python-format
 msgid "Unknown SSL error: %d"
 msgstr "Aozadur D-Bus dianav: %s"
 
-#: gajim/common/connection_handlers_events.py:2618
+#: gajim/common/connection_handlers_events.py:2625
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "Kemennadenn simpl nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2624
+#: gajim/common/connection_handlers_events.py:2631
 #, fuzzy, python-format
 msgid "New Private Message from group chat %s"
 msgstr "Kemennadenn hiniennel nevez digant ar sal %s"
 
-#: gajim/common/connection_handlers_events.py:2627
+#: gajim/common/connection_handlers_events.py:2634
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr "%(nickname)s : %(message)s"
 
-#: gajim/common/connection_handlers_events.py:2630
+#: gajim/common/connection_handlers_events.py:2637
 #, fuzzy, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "Kemennadenn nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2636
+#: gajim/common/connection_handlers_events.py:2643
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "Kemennadenn nevez digant %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2802
+#: gajim/common/connection_handlers_events.py:2809
 #, fuzzy, python-format
 msgid "%(nick)s Changed Status"
 msgstr "%(nick)s a zo bremañ %(status)s"
 
-#: gajim/common/connection_handlers_events.py:2810
+#: gajim/common/connection_handlers_events.py:2817
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "Emañ %(nickname)s o paouez lugañ"
 
-#: gajim/common/connection_handlers_events.py:2816
+#: gajim/common/connection_handlers_events.py:2823
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "Emañ %(nickname)s o paouez dilugañ"
@@ -5909,331 +5909,335 @@ msgstr ""
 msgid "If True, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
-#: gajim/common/config.py:323
+#: gajim/common/config.py:308
+msgid "All non-compliant MAM Groupchats"
+msgstr ""
+
+#: gajim/common/config.py:324
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
 msgstr ""
 
-#: gajim/common/config.py:331
+#: gajim/common/config.py:332
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
 msgstr ""
 
-#: gajim/common/config.py:332
+#: gajim/common/config.py:333
 msgid "If enabled, restore the last status that was used."
 msgstr ""
 
-#: gajim/common/config.py:334
+#: gajim/common/config.py:335
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr ""
 
-#: gajim/common/config.py:335
+#: gajim/common/config.py:336
 #, fuzzy
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr "M'eo faos, ne weloc'h ket an avatar er prenestr-flapiñ ken"
 
-#: gajim/common/config.py:338
+#: gajim/common/config.py:339
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr ""
 
-#: gajim/common/config.py:340
+#: gajim/common/config.py:341
 msgid "Enable ESessions encryption for this account."
 msgstr ""
 
-#: gajim/common/config.py:341
+#: gajim/common/config.py:342
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr ""
 
-#: gajim/common/config.py:342
+#: gajim/common/config.py:343
 msgid "Allow plaintext connections"
 msgstr ""
 
-#: gajim/common/config.py:345
+#: gajim/common/config.py:346
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
 "PLAIN, X-MESSENGER-OAUTH2 or XEP-0078"
 msgstr ""
 
-#: gajim/common/config.py:346
+#: gajim/common/config.py:347
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
 msgstr ""
 
-#: gajim/common/config.py:347
+#: gajim/common/config.py:348
 msgid "Show a warning dialog before using standard SSL library."
 msgstr ""
 
-#: gajim/common/config.py:348
+#: gajim/common/config.py:349
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr ""
 
-#: gajim/common/config.py:351
+#: gajim/common/config.py:352
 msgid "Space separated list of ssl errors to ignore."
 msgstr ""
 
-#: gajim/common/config.py:357
+#: gajim/common/config.py:358
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
 msgstr ""
 
-#: gajim/common/config.py:358
+#: gajim/common/config.py:359
 msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
 "supports XEP-0313"
 msgstr ""
 
-#: gajim/common/config.py:359
+#: gajim/common/config.py:360
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
 msgstr ""
 
-#: gajim/common/config.py:362
+#: gajim/common/config.py:363
 msgid "Whitespace sent after inactivity"
 msgstr ""
 
-#: gajim/common/config.py:363
+#: gajim/common/config.py:364
 msgid "XMPP ping sent after inactivity"
 msgstr ""
 
-#: gajim/common/config.py:367
+#: gajim/common/config.py:368
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
 msgstr ""
 
-#: gajim/common/config.py:371
+#: gajim/common/config.py:372
 msgid "Jabberd2 workaround"
 msgstr ""
 
-#: gajim/common/config.py:374
+#: gajim/common/config.py:375
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
 msgstr ""
 
-#: gajim/common/config.py:375
+#: gajim/common/config.py:376
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
-#: gajim/common/config.py:388
+#: gajim/common/config.py:389
 msgid "Answer to receipt requests"
 msgstr ""
 
-#: gajim/common/config.py:389
+#: gajim/common/config.py:390
 msgid "Sent receipt requests"
 msgstr ""
 
-#: gajim/common/config.py:398
+#: gajim/common/config.py:399
 #, fuzzy
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr "Si cette case est cochée, Gajim se connectera à ce salon au démarrage"
 
-#: gajim/common/config.py:399
+#: gajim/common/config.py:400
 #, fuzzy
 msgid "Allow Gajim to send your local time."
 msgstr "Fellout a ra da %s kas deoc'h ur restr."
 
-#: gajim/common/config.py:400
+#: gajim/common/config.py:401
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
 msgstr ""
 
-#: gajim/common/config.py:403
+#: gajim/common/config.py:404
 #, fuzzy
 msgid "Message that is sent to contacts you want to add"
 msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
 
-#: gajim/common/config.py:404
+#: gajim/common/config.py:405
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
 msgstr ""
 
-#: gajim/common/config.py:405
+#: gajim/common/config.py:406
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
 msgstr ""
 
-#: gajim/common/config.py:406
+#: gajim/common/config.py:407
 #, fuzzy
 msgid "Latest token for OAuth 2.0 authentication."
 msgstr "Implij an diskleriañ"
 
-#: gajim/common/config.py:407
+#: gajim/common/config.py:408
 #, fuzzy
 msgid "client_id for OAuth 2.0 authentication."
 msgstr "Implij an diskleriañ"
 
-#: gajim/common/config.py:408
+#: gajim/common/config.py:409
 #, fuzzy
 msgid "redirect_url for OAuth 2.0 authentication."
 msgstr "Implij an diskleriañ"
 
-#: gajim/common/config.py:409
+#: gajim/common/config.py:410
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
 msgstr ""
 
-#: gajim/common/config.py:411
+#: gajim/common/config.py:412
 msgid "HTTP Upload: Enable HTTPS Verification"
 msgstr ""
 
-#: gajim/common/config.py:412
+#: gajim/common/config.py:413
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on chat window. Can be "
 "'httpupload' (default) or 'jingle'"
 msgstr ""
 
-#: gajim/common/config.py:475 gajim/common/config.py:480
+#: gajim/common/config.py:476 gajim/common/config.py:481
 msgid "Language for which we want to check misspelled words"
 msgstr ""
 
-#: gajim/common/config.py:477
+#: gajim/common/config.py:478
 msgid "The currently active encryption for that contact"
 msgstr ""
 
-#: gajim/common/config.py:481
+#: gajim/common/config.py:482
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
 msgstr ""
 
-#: gajim/common/config.py:482
+#: gajim/common/config.py:483
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
 "-2 means global value"
 msgstr ""
 
-#: gajim/common/config.py:483
+#: gajim/common/config.py:484
 msgid "State whether we want a notification for every message in this room"
 msgstr ""
 
-#: gajim/common/config.py:486
+#: gajim/common/config.py:487
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
 "instead."
 msgstr ""
 
-#: gajim/common/config.py:491 gajim/common/pep.py:157
+#: gajim/common/config.py:492 gajim/common/pep.py:157
 msgid "Sleeping"
 msgstr "O kousket"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back soon"
 msgstr "Distro 'benn nebeut"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back in some minutes."
 msgstr "Distro 'vin a-benn un nebeut munutennoù.."
 
-#: gajim/common/config.py:493 gajim/common/pep.py:127
+#: gajim/common/config.py:494 gajim/common/pep.py:127
 msgid "Eating"
 msgstr "O tebriñ"
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "I'm eating, so leave me a message."
 msgstr "O tebriñ 'maon, neuze laoskit ur gemennadenn."
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "Movie"
 msgstr "Film"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "I'm watching a movie."
 msgstr "O sellout ouzh ur film 'maon."
 
-#: gajim/common/config.py:495 gajim/common/pep.py:186
+#: gajim/common/config.py:496 gajim/common/pep.py:186
 msgid "Working"
 msgstr "O labourat"
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "I'm working."
 msgstr "O labourat 'maon."
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "Phone"
 msgstr "Pellgomz"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "I'm on the phone."
 msgstr "Ouzh ar pellgomz emaon."
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "Out"
 msgstr "Er-maez"
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 #, fuzzy
 msgid "I'm out enjoying life."
 msgstr "Er-maez emaon o profitañ eus ar vuhez"
 
-#: gajim/common/config.py:508
+#: gajim/common/config.py:509
 #, fuzzy
 msgid "I'm available."
 msgstr "Hegerz"
 
-#: gajim/common/config.py:509
+#: gajim/common/config.py:510
 #, fuzzy
 msgid "I'm free for chat."
 msgstr "Prest da flapiñ"
 
-#: gajim/common/config.py:511
+#: gajim/common/config.py:512
 #, fuzzy
 msgid "I'm not available."
 msgstr "Dihegerz"
 
-#: gajim/common/config.py:512
+#: gajim/common/config.py:513
 msgid "Do not disturb."
 msgstr ""
 
-#: gajim/common/config.py:513 gajim/common/config.py:514
+#: gajim/common/config.py:514 gajim/common/config.py:515
 msgid "Bye!"
 msgstr ""
 
-#: gajim/common/config.py:525
+#: gajim/common/config.py:526
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
 msgstr ""
 
-#: gajim/common/config.py:526
+#: gajim/common/config.py:527
 msgid "Sound to play when any MUC message arrives."
 msgstr ""
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:357
+#: gajim/common/config.py:535 gajim/common/optparser.py:357
 msgid "green"
 msgstr "Glas"
 
-#: gajim/common/config.py:538 gajim/common/optparser.py:343
+#: gajim/common/config.py:539 gajim/common/optparser.py:343
 msgid "grocery"
 msgstr ""
 
-#: gajim/common/config.py:542
+#: gajim/common/config.py:543
 msgid "human"
 msgstr "Mab-den"
 
-#: gajim/common/config.py:546
+#: gajim/common/config.py:547
 msgid "marine"
 msgstr "Glas-mor"
 
-#: gajim/common/config.py:553
+#: gajim/common/config.py:554
 #, fuzzy
 msgid "Tor"
 msgstr "Da"
@@ -6390,237 +6394,237 @@ msgstr "o krouiñ titourva an istoradur"
 msgid "%s is not a valid loglevel"
 msgstr ""
 
-#: gajim/common/connection.py:80
+#: gajim/common/connection.py:83
 msgid "Unable to get issuer certificate"
 msgstr ""
 
-#: gajim/common/connection.py:81
+#: gajim/common/connection.py:84
 msgid "Unable to get certificate CRL"
 msgstr ""
 
-#: gajim/common/connection.py:82
+#: gajim/common/connection.py:85
 msgid "Unable to decrypt certificate's signature"
 msgstr ""
 
-#: gajim/common/connection.py:83
+#: gajim/common/connection.py:86
 msgid "Unable to decrypt CRL's signature"
 msgstr ""
 
-#: gajim/common/connection.py:84
+#: gajim/common/connection.py:87
 #, fuzzy
 msgid "Unable to decode issuer public key"
 msgstr "Impossible de rejoindre le salon"
 
-#: gajim/common/connection.py:85
+#: gajim/common/connection.py:88
 msgid "Certificate signature failure"
 msgstr ""
 
-#: gajim/common/connection.py:86
+#: gajim/common/connection.py:89
 msgid "CRL signature failure"
 msgstr ""
 
-#: gajim/common/connection.py:87
+#: gajim/common/connection.py:90
 msgid "Certificate is not yet valid"
 msgstr ""
 
-#: gajim/common/connection.py:88
+#: gajim/common/connection.py:91
 msgid "Certificate has expired"
 msgstr ""
 
-#: gajim/common/connection.py:89
+#: gajim/common/connection.py:92
 msgid "CRL is not yet valid"
 msgstr ""
 
-#: gajim/common/connection.py:90
+#: gajim/common/connection.py:93
 msgid "CRL has expired"
 msgstr ""
 
-#: gajim/common/connection.py:91
+#: gajim/common/connection.py:94
 msgid "Format error in certificate's notBefore field"
 msgstr ""
 
-#: gajim/common/connection.py:92
+#: gajim/common/connection.py:95
 msgid "Format error in certificate's notAfter field"
 msgstr ""
 
-#: gajim/common/connection.py:93
+#: gajim/common/connection.py:96
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
 
-#: gajim/common/connection.py:94
+#: gajim/common/connection.py:97
 msgid "Format error in CRL's nextUpdate field"
 msgstr ""
 
-#: gajim/common/connection.py:95
+#: gajim/common/connection.py:98
 msgid "Out of memory"
 msgstr ""
 
-#: gajim/common/connection.py:96
+#: gajim/common/connection.py:99
 msgid "Self signed certificate"
 msgstr ""
 
-#: gajim/common/connection.py:97
+#: gajim/common/connection.py:100
 msgid "Self signed certificate in certificate chain"
 msgstr ""
 
-#: gajim/common/connection.py:98
+#: gajim/common/connection.py:101
 msgid "Unable to get local issuer certificate"
 msgstr ""
 
-#: gajim/common/connection.py:99
+#: gajim/common/connection.py:102
 msgid "Unable to verify the first certificate"
 msgstr ""
 
-#: gajim/common/connection.py:100
+#: gajim/common/connection.py:103
 msgid "Certificate chain too long"
 msgstr ""
 
-#: gajim/common/connection.py:101
+#: gajim/common/connection.py:104
 msgid "Certificate revoked"
 msgstr ""
 
-#: gajim/common/connection.py:102
+#: gajim/common/connection.py:105
 #, fuzzy
 msgid "Invalid CA certificate"
 msgstr "Anv-arveriad-ez direizh"
 
-#: gajim/common/connection.py:103
+#: gajim/common/connection.py:106
 msgid "Path length constraint exceeded"
 msgstr ""
 
-#: gajim/common/connection.py:104
+#: gajim/common/connection.py:107
 msgid "Unsupported certificate purpose"
 msgstr ""
 
-#: gajim/common/connection.py:105
+#: gajim/common/connection.py:108
 msgid "Certificate not trusted"
 msgstr ""
 
-#: gajim/common/connection.py:106
+#: gajim/common/connection.py:109
 msgid "Certificate rejected"
 msgstr ""
 
-#: gajim/common/connection.py:107
+#: gajim/common/connection.py:110
 msgid "Subject issuer mismatch"
 msgstr ""
 
-#: gajim/common/connection.py:108
+#: gajim/common/connection.py:111
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 
-#: gajim/common/connection.py:109
+#: gajim/common/connection.py:112
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 
-#: gajim/common/connection.py:110
+#: gajim/common/connection.py:113
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
-#: gajim/common/connection.py:111
+#: gajim/common/connection.py:114
 msgid "Application verification failure"
 msgstr ""
 
-#: gajim/common/connection.py:870
+#: gajim/common/connection.py:876
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Kollet eo bet al lugadenn gant ar gont \"%s\""
 
-#: gajim/common/connection.py:871
+#: gajim/common/connection.py:877
 msgid "Reconnect manually."
 msgstr ""
 
-#: gajim/common/connection.py:882
+#: gajim/common/connection.py:888
 #, fuzzy, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "Respontet fall he deus an nor %s d'ar goulenn emezelañ."
 
-#: gajim/common/connection.py:923
+#: gajim/common/connection.py:930
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr ""
 
-#: gajim/common/connection.py:1281
+#: gajim/common/connection.py:1283
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Dibosupl eo en em lugañ da \"%s\""
 
-#: gajim/common/connection.py:1284
+#: gajim/common/connection.py:1286
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Dibosupl eo en em lugañ da \"%s\""
 
-#: gajim/common/connection.py:1291
+#: gajim/common/connection.py:1293
 #, fuzzy, python-format
 msgid "Server replied: %s"
 msgstr "Enrollet e-barzh: %s"
 
-#: gajim/common/connection.py:1306
+#: gajim/common/connection.py:1308
 #, fuzzy
 msgid "Connection to proxy failed"
 msgstr "Kevreadenn"
 
-#: gajim/common/connection.py:1344 gajim/common/connection.py:1447
+#: gajim/common/connection.py:1346 gajim/common/connection.py:1449
 #, fuzzy, python-format
 msgid "Could not connect to account %s"
 msgstr "Dibosupl eo en em lugañ da \"%s\""
 
-#: gajim/common/connection.py:1345 gajim/common/connection.py:1448
+#: gajim/common/connection.py:1347 gajim/common/connection.py:1450
 #, fuzzy, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Kollet eo bet al lugadenn gant ar gont \"%s\""
 
-#: gajim/common/connection.py:1370
+#: gajim/common/connection.py:1372
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr ""
 
-#: gajim/common/connection.py:1373
+#: gajim/common/connection.py:1375
 #, python-format
 msgid ""
 "\n"
 "SSL Error: <b>%s</b>"
 msgstr ""
 
-#: gajim/common/connection.py:1375
+#: gajim/common/connection.py:1377
 #, fuzzy, python-format
 msgid ""
 "\n"
 "Unknown SSL error: %d"
 msgstr "Aozadur D-Bus dianav: %s"
 
-#: gajim/common/connection.py:1421
+#: gajim/common/connection.py:1423
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
 "The certificate does not cover this domain."
 msgstr ""
 
-#: gajim/common/connection.py:1471 gajim/common/connection.py:2236
+#: gajim/common/connection.py:1473 gajim/common/connection.py:2238
 #: gajim/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Dibosupl eo en em lugañ da \"%s\""
 
-#: gajim/common/connection.py:1510
+#: gajim/common/connection.py:1512
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "C'hwitet an diskleriadenn gant \"%s\""
 
-#: gajim/common/connection.py:1511
+#: gajim/common/connection.py:1513
 msgid "Please check your login and password for correctness."
 msgstr "Gwiriekait ho ker-kuzh hag anv-lugañ."
 
-#: gajim/common/connection.py:2095
+#: gajim/common/connection.py:2097
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
 
-#: gajim/common/connection.py:2099
+#: gajim/common/connection.py:2101
 #, fuzzy
 msgid "Sent contacts:"
 msgstr "Darempredoù"
 
-#: gajim/common/connection.py:2253 gajim/common/connection.py:2275
+#: gajim/common/connection.py:2255 gajim/common/connection.py:2277
 msgid "Not fetched because of invisible status"
 msgstr ""
 
@@ -6649,58 +6653,58 @@ msgid "D-Bus does not run correctly on this machine: session bus not present"
 msgstr ""
 "N'eus ket eus D-Bus war an urzhiataer-mañ, pe mankout a ra ur mollad python"
 
-#: gajim/common/multimedia_helpers.py:40
+#: gajim/common/multimedia_helpers.py:45
 #, fuzzy
 msgid "Default device"
 msgstr "Titour-stad"
 
-#: gajim/common/multimedia_helpers.py:59
+#: gajim/common/multimedia_helpers.py:66
 msgid "Audio test"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:62 gajim/common/multimedia_helpers.py:78
-#: gajim/common/multimedia_helpers.py:92 gajim/common/multimedia_helpers.py:110
+#: gajim/common/multimedia_helpers.py:69 gajim/common/multimedia_helpers.py:85
+#: gajim/common/multimedia_helpers.py:99 gajim/common/multimedia_helpers.py:117
 msgid "Autodetect"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:65 gajim/common/multimedia_helpers.py:80
+#: gajim/common/multimedia_helpers.py:72 gajim/common/multimedia_helpers.py:87
 #, fuzzy, python-format
 msgid "ALSA: %s"
 msgstr "Ment: %s"
 
-#: gajim/common/multimedia_helpers.py:68 gajim/common/multimedia_helpers.py:82
+#: gajim/common/multimedia_helpers.py:75 gajim/common/multimedia_helpers.py:89
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "Restr: %s"
 
-#: gajim/common/multimedia_helpers.py:76
+#: gajim/common/multimedia_helpers.py:83
 msgid "Fake audio output"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:89
+#: gajim/common/multimedia_helpers.py:96
 msgid "Video test"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:94
+#: gajim/common/multimedia_helpers.py:101
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:97
+#: gajim/common/multimedia_helpers.py:104
 #, fuzzy
 msgid "Screen"
 msgstr "Glas"
 
-#: gajim/common/multimedia_helpers.py:104
+#: gajim/common/multimedia_helpers.py:111
 msgid "Fake video output"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:107
+#: gajim/common/multimedia_helpers.py:114
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:109
+#: gajim/common/multimedia_helpers.py:116
 msgid "X Window System (without Xv)"
 msgstr ""
 
@@ -7644,161 +7648,161 @@ msgstr "An daou"
 msgid "Unknown"
 msgstr "Dianav"
 
-#: gajim/common/helpers.py:443
+#: gajim/common/helpers.py:441
 msgid "?Ask (for Subscription):None"
 msgstr "Hini ebet"
 
-#: gajim/common/helpers.py:445
+#: gajim/common/helpers.py:443
 msgid "Subscribe"
 msgstr "Emezelañ"
 
-#: gajim/common/helpers.py:454
+#: gajim/common/helpers.py:452
 msgid "?Group Chat Contact Role:None"
 msgstr "Hini ebet"
 
-#: gajim/common/helpers.py:457
+#: gajim/common/helpers.py:455
 msgid "Moderators"
 msgstr "Kasourien"
 
-#: gajim/common/helpers.py:459
+#: gajim/common/helpers.py:457
 msgid "Moderator"
 msgstr "Kasour-ez"
 
-#: gajim/common/helpers.py:462
+#: gajim/common/helpers.py:460
 msgid "Participants"
 msgstr "Perzhidi"
 
-#: gajim/common/helpers.py:464
+#: gajim/common/helpers.py:462
 msgid "Participant"
 msgstr "Perzhiad-ez"
 
-#: gajim/common/helpers.py:467
+#: gajim/common/helpers.py:465
 msgid "Visitors"
 msgstr "Gweladennerien"
 
-#: gajim/common/helpers.py:469
+#: gajim/common/helpers.py:467
 msgid "Visitor"
 msgstr "Gweladenner-ez"
 
-#: gajim/common/helpers.py:520
+#: gajim/common/helpers.py:518
 msgid "is paying attention to the conversation"
 msgstr "a zo aketus d'ar gaozeadenn"
 
-#: gajim/common/helpers.py:522
+#: gajim/common/helpers.py:520
 msgid "is doing something else"
 msgstr "a ra un dra bennak all"
 
-#: gajim/common/helpers.py:524
+#: gajim/common/helpers.py:522
 #, fuzzy
 msgid "is composing a message…"
 msgstr "a skriv ur gemennadenn..."
 
-#: gajim/common/helpers.py:527
+#: gajim/common/helpers.py:525
 msgid "paused composing a message"
 msgstr "a zo paouezet da skrivañ ar gemennadenn"
 
-#: gajim/common/helpers.py:529
+#: gajim/common/helpers.py:527
 msgid "has closed the chat window or tab"
 msgstr "he/en deus serret ar prenestr-flapiñ pe an ivinell"
 
-#: gajim/common/helpers.py:756
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "%s GiB"
 msgstr "%s Go"
 
-#: gajim/common/helpers.py:759
+#: gajim/common/helpers.py:757
 #, python-format
 msgid "%s GB"
 msgstr "%s Go"
 
-#: gajim/common/helpers.py:763
+#: gajim/common/helpers.py:761
 #, python-format
 msgid "%s MiB"
 msgstr "%s Mo"
 
-#: gajim/common/helpers.py:766
+#: gajim/common/helpers.py:764
 #, python-format
 msgid "%s MB"
 msgstr "%s Mo"
 
-#: gajim/common/helpers.py:770
+#: gajim/common/helpers.py:768
 #, python-format
 msgid "%s KiB"
 msgstr "%s Ko"
 
-#: gajim/common/helpers.py:773
+#: gajim/common/helpers.py:771
 #, python-format
 msgid "%s KB"
 msgstr "%s Ko"
 
-#: gajim/common/helpers.py:776
+#: gajim/common/helpers.py:774
 #, python-format
 msgid "%s B"
 msgstr "%s o"
 
-#: gajim/common/helpers.py:1143 gajim/common/helpers.py:1150
+#: gajim/common/helpers.py:1141 gajim/common/helpers.py:1148
 #, fuzzy, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "Kas ur gemennadenn"
 msgstr[1] "Kas ur gemennadenn"
 
-#: gajim/common/helpers.py:1157
+#: gajim/common/helpers.py:1155
 #, fuzzy, python-format
 msgid "from room %s"
 msgstr "De %s"
 
-#: gajim/common/helpers.py:1160 gajim/common/helpers.py:1177
+#: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr "De %s"
 
-#: gajim/common/helpers.py:1162
+#: gajim/common/helpers.py:1160
 #, fuzzy, python-format
 msgid "from %s"
 msgstr "De %s"
 
-#: gajim/common/helpers.py:1169 gajim/common/helpers.py:1175
+#: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gajim/common/helpers.py:1193 gajim/common/helpers.py:1205
+#: gajim/common/helpers.py:1191 gajim/common/helpers.py:1203
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "Gajim"
 
-#: gajim/common/helpers.py:1207
+#: gajim/common/helpers.py:1205
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: gajim/common/helpers.py:1394 gajim/data/gui/add_new_contact_window.ui:24
+#: gajim/common/helpers.py:1392 gajim/data/gui/add_new_contact_window.ui:24
 msgid "I would like to add you to my contact list."
 msgstr "Me blijfe din ouzhpennañ ac'hanoc'h em roll-darempredoù."
 
-#: gajim/common/helpers.py:1396
+#: gajim/common/helpers.py:1394
 msgid "Hello, I am $name."
 msgstr ""
 
-#: gajim/common/helpers.py:1510 gajim/common/helpers.py:1519
-#: gajim/common/helpers.py:1578
+#: gajim/common/helpers.py:1508 gajim/common/helpers.py:1517
+#: gajim/common/helpers.py:1576
 #, fuzzy
 msgid "Timeout loading image"
 msgstr "Dibosupl eo kargañ ar skeudenn"
 
-#: gajim/common/helpers.py:1529 gajim/common/helpers.py:1576
+#: gajim/common/helpers.py:1527 gajim/common/helpers.py:1574
 msgid "Image is too big"
 msgstr "L'image est trop grande"
 
-#: gajim/common/helpers.py:1540
+#: gajim/common/helpers.py:1538
 msgid "PyCURL is not installed"
 msgstr ""
 
-#: gajim/common/helpers.py:1580
+#: gajim/common/helpers.py:1578
 #, fuzzy
 msgid "Error loading image"
 msgstr "Dibosupl eo kargañ ar skeudenn"
@@ -7834,7 +7838,7 @@ msgstr ""
 msgid "message"
 msgstr "kemennadenn"
 
-#: gajim/common/connection_handlers.py:1855
+#: gajim/common/connection_handlers.py:1863
 msgid "I would like to add you to my roster."
 msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
 
@@ -8602,12 +8606,12 @@ msgstr "_Nodrezh:"
 msgid "Clear formatting"
 msgstr "Titouroù"
 
-#: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:803
+#: gajim/data/gui/groupchat_control.ui:283 gajim/data/gui/chat_control.ui:805
 #, fuzzy
 msgid "Choose an encryption"
 msgstr "Dibabit ur restr da gas..."
 
-#: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:851
+#: gajim/data/gui/groupchat_control.ui:329 gajim/data/gui/chat_control.ui:853
 #, fuzzy
 msgid "Show a list of emoticons (Alt+M)"
 msgstr "Klikit evit enlakaat ur boulomell (Alt+M)"
@@ -8680,7 +8684,7 @@ msgstr "<b>Sonioù</b>"
 msgid "<b>#</b>"
 msgstr "<b>Sonioù</b>"
 
-#: gajim/data/gui/chat_control.ui:727
+#: gajim/data/gui/chat_control.ui:729
 msgid "#"
 msgstr ""
 
@@ -10987,16 +10991,16 @@ msgstr "Nevez 'zo:"
 msgid "Plugin manager"
 msgstr "échec lors de la publication de votre vCard"
 
+#, fuzzy
+#~ msgid "Plugins updates"
+#~ msgstr "échec lors de la publication de votre vCard"
+
 #~ msgid "Shows or hides the roster window"
 #~ msgstr "Diskouez pe kuzhat ar prenestr pennañ"
 
 #, fuzzy
 #~ msgid "Shows or hides the ipython window"
 #~ msgstr "Diskouez pe kuzhat ar prenestr pennañ"
-
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 #~ msgid "XMPP account %s"

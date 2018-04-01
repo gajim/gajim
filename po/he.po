@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-17 21:27+0000\n"
+"POT-Creation-Date: 2018-03-31 02:05+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -29,20 +29,20 @@ msgstr "פינג?"
 msgid "Error."
 msgstr "שגיאה."
 
-#: gajim/chat_control_base.py:569
+#: gajim/chat_control_base.py:571
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:577 gajim/profile_window.py:181
-#: gajim/conversation_textview.py:550
+#: gajim/chat_control_base.py:579 gajim/profile_window.py:181
+#: gajim/conversation_textview.py:539
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:1167
+#: gajim/chat_control_base.py:1172
 msgid "Really send file?"
 msgstr "האם באמת לשלוח קובץ?"
 
-#: gajim/chat_control_base.py:1168
+#: gajim/chat_control_base.py:1173
 #, fuzzy, python-format
 msgid "If you send a file to %s, he/she will know your real JID."
 msgstr "אם תשלח קובץ אל %s, הוא/היא ידעו את המזהה Jabber שלך במלואו."
@@ -104,7 +104,7 @@ msgstr "התקדמות"
 msgid "Filename: %s"
 msgstr "שם קובץ: %s"
 
-#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:485
+#: gajim/filetransfers_window.py:224 gajim/filetransfers_window.py:486
 #, python-format
 msgid "Size: %s"
 msgstr "גודל: %s"
@@ -112,7 +112,7 @@ msgstr "גודל: %s"
 # Can this be changed to: Me?
 # את/ה
 #: gajim/filetransfers_window.py:233 gajim/filetransfers_window.py:243
-#: gajim/history_manager.py:526
+#: gajim/history_manager.py:528
 msgid "You"
 msgstr "עצמך"
 
@@ -121,7 +121,7 @@ msgstr "עצמך"
 msgid "Sender: %s"
 msgstr "ממען: %s"
 
-#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:762
+#: gajim/filetransfers_window.py:235 gajim/filetransfers_window.py:763
 #: gajim/tooltips.py:667
 msgid "Recipient: "
 msgstr "נמען: "
@@ -180,126 +180,126 @@ msgstr ""
 msgid "Choose File to Send…"
 msgstr "בחירת קובץ לשליחה..."
 
-#: gajim/filetransfers_window.py:355
+#: gajim/filetransfers_window.py:356
 msgid "_Send"
 msgstr "_שלח"
 
-#: gajim/filetransfers_window.py:362 gajim/tooltips.py:702
+#: gajim/filetransfers_window.py:363 gajim/tooltips.py:702
 msgid "Description: "
 msgstr "תיאור: "
 
 # להשיג גישה
-#: gajim/filetransfers_window.py:375
+#: gajim/filetransfers_window.py:376
 #, fuzzy
 msgid "Gajim can not read this file"
 msgstr "‏Gajim לא מסוגל לגשת לקובץ זה"
 
-#: gajim/filetransfers_window.py:376
+#: gajim/filetransfers_window.py:377
 msgid "Another process is using this file."
 msgstr ""
 
 # להחליף
-#: gajim/filetransfers_window.py:421 gajim/gtkgui_helpers.py:495
+#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:492
 #, python-format
 msgid "Cannot overwrite existing file \"%s\""
 msgstr "אין אפשרות לכתוב על קובץ קיים \"%s\""
 
-#: gajim/filetransfers_window.py:422 gajim/gtkgui_helpers.py:496
+#: gajim/filetransfers_window.py:423 gajim/gtkgui_helpers.py:493
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
 msgstr "קובץ בשם זה כבר ישנו ואין לך הרשאה לכתוב עליו."
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "This file already exists"
 msgstr "קובץ זה כבר ישנו"
 
-#: gajim/filetransfers_window.py:439 gajim/gtkgui_helpers.py:500
+#: gajim/filetransfers_window.py:440 gajim/gtkgui_helpers.py:497
 msgid "What do you want to do?"
 msgstr "מה ברצונך לעשות?"
 
 # זמין לכתיבה
-#: gajim/filetransfers_window.py:450 gajim/gtkgui_helpers.py:507
+#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:504
 #, python-format
 msgid "Directory \"%s\" is not writable"
 msgstr "המדור \"%s\" אינו נתון לכתיבה"
 
-#: gajim/filetransfers_window.py:451 gajim/gtkgui_helpers.py:508
+#: gajim/filetransfers_window.py:452 gajim/gtkgui_helpers.py:505
 msgid "You do not have permission to create files in this directory."
 msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
-#: gajim/filetransfers_window.py:462
+#: gajim/filetransfers_window.py:463
 #, fuzzy
 msgid "Save File as…"
 msgstr "שמור קובץ בשם..."
 
-#: gajim/filetransfers_window.py:482
+#: gajim/filetransfers_window.py:483
 #, python-format
 msgid "File: %s"
 msgstr "קובץ: %s"
 
-#: gajim/filetransfers_window.py:488
+#: gajim/filetransfers_window.py:489
 #, python-format
 msgid "Type: %s"
 msgstr "טיפוס: %s"
 
-#: gajim/filetransfers_window.py:490
+#: gajim/filetransfers_window.py:491
 #, python-format
 msgid "Description: %s"
 msgstr "תיאור: %s"
 
 # direction_mark
-#: gajim/filetransfers_window.py:491
+#: gajim/filetransfers_window.py:492
 #, python-format
 msgid "%s wants to send you a file:"
 msgstr "‏%s רוצה לשלוח אליך קובץ:"
 
-#: gajim/filetransfers_window.py:532
+#: gajim/filetransfers_window.py:533
 #, fuzzy
 msgid "Checking file…"
 msgstr "כעת בודק קובץ..."
 
-#: gajim/filetransfers_window.py:546
+#: gajim/filetransfers_window.py:547
 msgid "File error"
 msgstr "שגיאת קובץ"
 
-#: gajim/filetransfers_window.py:583
+#: gajim/filetransfers_window.py:584
 #, python-format
 msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 msgstr ""
 
-#: gajim/filetransfers_window.py:676
+#: gajim/filetransfers_window.py:677
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/ש)"
 
-#: gajim/filetransfers_window.py:729 gajim/filetransfers_window.py:732
+#: gajim/filetransfers_window.py:730 gajim/filetransfers_window.py:733
 msgid "Invalid File"
 msgstr "קובץ שגוי"
 
-#: gajim/filetransfers_window.py:729
+#: gajim/filetransfers_window.py:730
 msgid "File: "
 msgstr "קובץ: "
 
 # לא קיימת אפשרות
 # אין אפשרות
-#: gajim/filetransfers_window.py:733
+#: gajim/filetransfers_window.py:734
 msgid "It is not possible to send empty files"
 msgstr "אין זה אפשרי לשלוח קבצים ריקים"
 
-#: gajim/filetransfers_window.py:758 gajim/tooltips.py:658
+#: gajim/filetransfers_window.py:759 gajim/tooltips.py:658
 msgid "Name: "
 msgstr "שם: "
 
-#: gajim/filetransfers_window.py:760 gajim/tooltips.py:661
+#: gajim/filetransfers_window.py:761 gajim/tooltips.py:661
 msgid "Sender: "
 msgstr "ממען: "
 
-#: gajim/filetransfers_window.py:888
+#: gajim/filetransfers_window.py:889
 msgid "Pause"
 msgstr "השהה"
 
-#: gajim/filetransfers_window.py:899
+#: gajim/filetransfers_window.py:900
 msgid "_Continue"
 msgstr "ה_משך"
 
@@ -479,25 +479,25 @@ msgstr "זמינות"
 msgid "Feature"
 msgstr "תכונה"
 
-#: gajim/gtkgui_helpers.py:259
+#: gajim/gtkgui_helpers.py:255
 msgid "Error reading file:"
 msgstr "שגיאה בקריאת קובץ:"
 
-#: gajim/gtkgui_helpers.py:262
+#: gajim/gtkgui_helpers.py:258
 msgid "Error parsing file:"
 msgstr "שגיאה בניתוח קובץ:"
 
-#: gajim/gtkgui_helpers.py:481
+#: gajim/gtkgui_helpers.py:478
 msgid "Extension not supported"
 msgstr "הרחבה לא נתמכת"
 
-#: gajim/gtkgui_helpers.py:482
+#: gajim/gtkgui_helpers.py:479
 #, python-format
 msgid "Image cannot be saved in %(type)s format. Save as %(new_filename)s?"
 msgstr "אין אפשרות לשמור תמונה בפורמט %(type)s. לשמור בתור %(new_filename)s?"
 
 # בתור
-#: gajim/gtkgui_helpers.py:517
+#: gajim/gtkgui_helpers.py:514
 #, fuzzy
 msgid "Save Image as…"
 msgstr "שמירת תמונה בשם..."
@@ -576,8 +576,8 @@ msgstr "לא קיימת שום בקשת הרשמה ממתינה."
 msgid " resource with priority "
 msgstr " משאב עם עדיפות "
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4760 gajim/dialogs.py:4802
-#: gajim/dialogs.py:4850 gajim/dialogs.py:4940
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4806 gajim/dialogs.py:4848
+#: gajim/dialogs.py:4896 gajim/dialogs.py:4986
 msgid "All files"
 msgstr "כל הקבצים"
 
@@ -592,11 +592,11 @@ msgid "Manage Proxies"
 msgstr "ניהול דיוקני Proxy"
 
 #: gajim/options_dialog.py:484 gajim/options_dialog.py:552
-#: gajim/options_dialog.py:573 gajim/dialogs.py:331 gajim/dialogs.py:333
-#: gajim/dialogs.py:541 gajim/dialogs.py:554 gajim/roster_window.py:2997
-#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1160
-#: gajim/config.py:1175 gajim/config.py:1180 gajim/config.py:1228
-#: gajim/config.py:1338 gajim/config.py:2487 gajim/config.py:2564
+#: gajim/options_dialog.py:573 gajim/dialogs.py:326 gajim/dialogs.py:328
+#: gajim/dialogs.py:536 gajim/dialogs.py:549 gajim/roster_window.py:2997
+#: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1162
+#: gajim/config.py:1177 gajim/config.py:1182 gajim/config.py:1230
+#: gajim/config.py:1340 gajim/config.py:2489 gajim/config.py:2566
 #: gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
@@ -637,8 +637,8 @@ msgid "_New Group Chat"
 msgstr "שיחת קבוצה _חדשה"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1119 gajim/dialogs.py:2317 gajim/dialogs.py:2346
-#: gajim/dialogs.py:3821 gajim/chat_control.py:284 gajim/roster_window.py:804
+#: gajim/dialogs.py:1114 gajim/dialogs.py:2333 gajim/dialogs.py:2362
+#: gajim/dialogs.py:3867 gajim/chat_control.py:284 gajim/roster_window.py:804
 #: gajim/roster_window.py:1753 gajim/roster_window.py:1755
 #: gajim/roster_window.py:2068 gajim/roster_window.py:3419
 #: gajim/roster_window.py:3446 gajim/gui_interface.py:524
@@ -832,7 +832,7 @@ msgstr "ערוך העדפות _ארכיונאות"
 msgid "Synchronise History"
 msgstr "סנכרון"
 
-#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4537
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4583
 msgid "Privacy Lists"
 msgstr "רשימות פרטיות"
 
@@ -904,7 +904,7 @@ msgid "Cannot find history logs database"
 msgstr "אין אפשרות למצוא מסד נתונים של רשומות היסטוריה"
 
 #: gajim/history_manager.py:144 gajim/history_manager.py:195
-#: gajim/dialogs.py:3802 gajim/config.py:1619 gajim/disco.py:872
+#: gajim/dialogs.py:3848 gajim/config.py:1621 gajim/disco.py:872
 msgid "JID"
 msgstr "‏JID"
 
@@ -927,14 +927,14 @@ msgstr "הודעה"
 msgid "Subject"
 msgstr "נושא"
 
-#: gajim/history_manager.py:240
+#: gajim/history_manager.py:243
 msgid ""
 "Do you want to clean up the database? (STRONGLY NOT RECOMMENDED IF GAJIM IS "
 "RUNNING)"
 msgstr ""
 "האם ברצונך לנקות את מסד הנתונים? (פעולה זו בהחלט לא מומלצת כאשר Gajim מורץ)"
 
-#: gajim/history_manager.py:242
+#: gajim/history_manager.py:245
 #, fuzzy
 msgid ""
 "Normally allocated database size will not be freed, it will just become "
@@ -949,49 +949,49 @@ msgstr ""
 "\n"
 "במידה ותבחר להקיש כן, אנא המתן..."
 
-#: gajim/history_manager.py:247
+#: gajim/history_manager.py:250
 msgid "Database Cleanup"
 msgstr "ניקוי מסד נתונים"
 
-#: gajim/history_manager.py:462
+#: gajim/history_manager.py:464
 #, fuzzy
 msgid "Exporting History Logs…"
 msgstr "יצוא רשומות היסטוריה..."
 
 # BUG: said > wrote?
 # Needs to be tested
-#: gajim/history_manager.py:538
+#: gajim/history_manager.py:540
 #, python-format
 msgid "%(who)s on %(time)s said: %(message)s\n"
 msgstr "‏%(who)s בשעה %(time)s אמר/ה: %(message)s\n"
 
-#: gajim/history_manager.py:576
+#: gajim/history_manager.py:578
 #, fuzzy, python-format
 msgid "Do you wish to delete all correspondence with %(jid)s?"
 msgstr "האם אתה בטוח כי ברצונך למחוק את הרשומות של %(jid)s?"
 
-#: gajim/history_manager.py:580
+#: gajim/history_manager.py:582
 #, fuzzy
 msgid "Do you wish to delete all correspondence with the selected contacts?"
 msgstr "האם אתה בטוח כי ברצונך למחוק את הרשומות של אנשי קשר נבחרים?"
 
 # BUG: general title without "the"
-#: gajim/history_manager.py:582
+#: gajim/history_manager.py:584
 #, fuzzy
 msgid "This can not be undone."
 msgstr "השירות לא היה יכול להימצא"
 
-#: gajim/history_manager.py:584 gajim/history_manager.py:623
+#: gajim/history_manager.py:586 gajim/history_manager.py:625
 msgid "Deletion Confirmation"
 msgstr "אימות מחיקה"
 
-#: gajim/history_manager.py:618
+#: gajim/history_manager.py:620
 msgid "Do you really want to delete the selected message?"
 msgid_plural "Do you really want to delete the selected messages?"
 msgstr[0] "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
 msgstr[1] "האם אתה בטוח כי ברצונך למחוק את ההודעות הנבחרות?"
 
-#: gajim/history_manager.py:621
+#: gajim/history_manager.py:623
 msgid "This is an irreversible operation."
 msgstr "פעולה זו הינה בלתי הפיכה."
 
@@ -1017,8 +1017,8 @@ msgstr "הפורמט של התאריך מוכרח להיות YYYY-MM-DD"
 msgid "Information received"
 msgstr "מידע התקבל"
 
-#: gajim/profile_window.py:334 gajim/dialogs.py:2531 gajim/dialogs.py:2619
-#: gajim/dialogs.py:3068 gajim/disco.py:536 gajim/gui_interface.py:1847
+#: gajim/profile_window.py:334 gajim/dialogs.py:2562 gajim/dialogs.py:2650
+#: gajim/dialogs.py:3105 gajim/disco.py:536 gajim/gui_interface.py:1849
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "אינך מחובר לשרת"
@@ -1046,18 +1046,18 @@ msgid ""
 "later."
 msgstr "אירעה שגיאה במהלך פרסום המידע האישי שלך, נסה שוב מאוחר יותר."
 
-#: gajim/dialogs.py:95
+#: gajim/dialogs.py:90
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "שם איש קשר: <i>%s</i>"
 
-#: gajim/dialogs.py:97
+#: gajim/dialogs.py:92
 #, fuzzy, python-format
 msgid "JID: <i>%s</i>"
 msgstr "מזהה Jabber: ‏<i>%s</i>"
 
 # (קבוצה כללית)
-#: gajim/dialogs.py:126 gajim/dialogs.py:138 gajim/roster_window.py:2939
+#: gajim/dialogs.py:121 gajim/dialogs.py:133 gajim/roster_window.py:2939
 #: gajim/roster_window.py:3953 gajim/roster_window.py:5234
 #: gajim/accounts_window.py:463 gajim/common/contacts.py:105
 #: gajim/common/contacts.py:137 gajim/data/gui/preferences_window.ui:569
@@ -1065,120 +1065,120 @@ msgstr "מזהה Jabber: ‏<i>%s</i>"
 msgid "General"
 msgstr "כללית"
 
-#: gajim/dialogs.py:211
+#: gajim/dialogs.py:206
 msgid "Group"
 msgstr "קבוצה"
 
-#: gajim/dialogs.py:218
+#: gajim/dialogs.py:213
 msgid "In the group"
 msgstr "בקבוצה"
 
-#: gajim/dialogs.py:313
+#: gajim/dialogs.py:308
 msgid "KeyID"
 msgstr "מזהה מפתח"
 
-#: gajim/dialogs.py:318
+#: gajim/dialogs.py:313
 msgid "Contact name"
 msgstr "שם איש קשר"
 
-#: gajim/dialogs.py:496
+#: gajim/dialogs.py:491
 msgid "Set Mood"
 msgstr "קביעת מצב רוח"
 
-#: gajim/dialogs.py:616
+#: gajim/dialogs.py:611
 #, python-format
 msgid "%s Status Message"
 msgstr "‫%s הודעת מצב"
 
-#: gajim/dialogs.py:630
+#: gajim/dialogs.py:625
 msgid "Status Message"
 msgstr "הודעת מצב"
 
-#: gajim/dialogs.py:820
+#: gajim/dialogs.py:815
 msgid "Overwrite Status Message?"
 msgstr "החלף הודעת מצב?"
 
-#: gajim/dialogs.py:821
+#: gajim/dialogs.py:816
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr "שם זה כבר מצוי בשימוש. האם ברצונך להחליף את הודעת המצב הקיימת?"
 
-#: gajim/dialogs.py:829
+#: gajim/dialogs.py:824
 msgid "Save as Preset Status Message"
 msgstr "שמירה בתור הודעת מצב מותאמת"
 
-#: gajim/dialogs.py:830
+#: gajim/dialogs.py:825
 msgid "Please type a name for this status message"
 msgstr "אנא הקלד שם עבור הודעת מצב זו"
 
-#: gajim/dialogs.py:857
+#: gajim/dialogs.py:852
 msgid "JID:"
 msgstr ""
 
-#: gajim/dialogs.py:858
+#: gajim/dialogs.py:853
 msgid "AIM Address:"
 msgstr "כתובת AIM:"
 
-#: gajim/dialogs.py:859
+#: gajim/dialogs.py:854
 msgid "GG Number:"
 msgstr "מספר GG:"
 
-#: gajim/dialogs.py:860
+#: gajim/dialogs.py:855
 msgid "ICQ Number:"
 msgstr "מספר ICQ:"
 
-#: gajim/dialogs.py:861
+#: gajim/dialogs.py:856
 msgid "MSN Address:"
 msgstr "כתובת MSN:"
 
-#: gajim/dialogs.py:862
+#: gajim/dialogs.py:857
 msgid "Yahoo! Address:"
 msgstr "כתובת !Yahoo:"
 
-#: gajim/dialogs.py:899
+#: gajim/dialogs.py:894
 #, fuzzy, python-format
 msgid ""
 "Please fill in the data of the contact you want to add to your account <b>"
 "%s</b>"
 msgstr "אנא מלא את המידע של איש הקשר אשר ברצונך להוסיף בחשבון %s"
 
-#: gajim/dialogs.py:902
+#: gajim/dialogs.py:897
 msgid "Please fill in the data of the contact you want to add"
 msgstr "אנא מלא את המידע של איש הקשר אשר ברצונך להוסיף"
 
-#: gajim/dialogs.py:1094 gajim/dialogs.py:1100 gajim/dialogs.py:1105
+#: gajim/dialogs.py:1089 gajim/dialogs.py:1095 gajim/dialogs.py:1100
 msgid "Invalid User ID"
 msgstr "מזהה משתמש שגוי"
 
 # אסור להכיל
 # אסור ש
 # מוכרחה שלא
-#: gajim/dialogs.py:1101
+#: gajim/dialogs.py:1096
 msgid "The user ID must not contain a resource."
 msgstr "מזהה משתמש לא יכול להכיל משאב."
 
-#: gajim/dialogs.py:1106
+#: gajim/dialogs.py:1101
 msgid "You cannot add yourself to your roster."
 msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
 
-#: gajim/dialogs.py:1120
+#: gajim/dialogs.py:1115
 msgid "Contact already in roster"
 msgstr "איש קשר כבר מצוי ברשימה"
 
-#: gajim/dialogs.py:1121
+#: gajim/dialogs.py:1116
 msgid "This contact is already listed in your roster."
 msgstr "איש קשר זה כבר מצוי ברשימה שלך."
 
-#: gajim/dialogs.py:1174 gajim/dialogs.py:1208
+#: gajim/dialogs.py:1169 gajim/dialogs.py:1203
 msgid "User ID:"
 msgstr "מזהה משתמש:"
 
-#: gajim/dialogs.py:1274
+#: gajim/dialogs.py:1269
 #, fuzzy
 msgid "Error while adding transport contact"
 msgstr "שגיאה בעת הוספת שירות. %s"
 
-#: gajim/dialogs.py:1275
+#: gajim/dialogs.py:1270
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1186,56 +1186,56 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/dialogs.py:1307
+#: gajim/dialogs.py:1302
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "לקוח Jabber/XMPP מבוסס GTK+‎"
 
-#: gajim/dialogs.py:1308
+#: gajim/dialogs.py:1303
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "גרסא:"
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1304
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "גרסא:"
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1305
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1313
+#: gajim/dialogs.py:1308
 #, fuzzy
 msgid "Current Developers"
 msgstr "‎מפתחים נוכחיים:"
 
-#: gajim/dialogs.py:1314
+#: gajim/dialogs.py:1309
 #, fuzzy
 msgid "Past Developers"
 msgstr "‎מפתחים מן העבר:"
 
-#: gajim/dialogs.py:1315
+#: gajim/dialogs.py:1310
 msgid "Artists"
 msgstr ""
 
-#: gajim/dialogs.py:1319
+#: gajim/dialogs.py:1314
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/dialogs.py:1320
+#: gajim/dialogs.py:1315
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr "‎.ואחרון אחרון חביב, ברצוננו להודות לכל מתחזקי החבילות"
 
 # מביע הערכה, מביע תודה
-#: gajim/dialogs.py:1321
+#: gajim/dialogs.py:1316
 #, fuzzy
 msgid "Thanks"
 msgstr "אסיר תודה"
 
-#: gajim/dialogs.py:1323
+#: gajim/dialogs.py:1318
 msgid "translator-credits"
 msgstr ""
 "Lead Translator:\n"
@@ -1248,12 +1248,12 @@ msgstr ""
 "Rahut Contributors:\n"
 "  Isratine Citizen (genghiskhan AT gmx.ca)"
 
-#: gajim/dialogs.py:1487
+#: gajim/dialogs.py:1503
 #, fuzzy, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "מילון עבור שפה %s לא זמין"
 
-#: gajim/dialogs.py:1488
+#: gajim/dialogs.py:1504
 #, fuzzy, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1266,8 +1266,8 @@ msgstr ""
 "\n"
 "הדגשת מילים אשר לא אויתו כראוי לא תנוצל"
 
-#: gajim/dialogs.py:1835 gajim/dialogs.py:1850 gajim/gui_interface.py:1510
-#: gajim/gui_interface.py:1552
+#: gajim/dialogs.py:1851 gajim/dialogs.py:1866 gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1553
 msgid "Insecure connection"
 msgstr "חיבור לא מאובטח"
 
@@ -1277,7 +1277,7 @@ msgstr "חיבור לא מאובטח"
 # discouraged:
 #  > deprived > לקוי בחסר
 #  > dissuade > dissuade from > להניא מ-
-#: gajim/dialogs.py:1836
+#: gajim/dialogs.py:1852
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1290,308 +1290,308 @@ msgstr ""
 "להימנע מחיבורים מטיפוס זה.\n"
 "האם אתה בטוח כי ברצונך להתחבר?"
 
-#: gajim/dialogs.py:1841 gajim/gui_interface.py:1514
-#: gajim/gui_interface.py:1555
+#: gajim/dialogs.py:1857 gajim/gui_interface.py:1515
+#: gajim/gui_interface.py:1556
 msgid "Yes, I really want to connect insecurely"
 msgstr "כן, אני באמת רוצה להתחבר בשיטה לא בטוחה"
 
-#: gajim/dialogs.py:1842
+#: gajim/dialogs.py:1858
 msgid "Gajim will NOT connect unless you check this box"
 msgstr "‏Gajim לא יתחבר אלא אם כן תיבה זו תסומן"
 
-#: gajim/dialogs.py:1843 gajim/groupchat_control.py:2285
+#: gajim/dialogs.py:1859 gajim/groupchat_control.py:2335
 #: gajim/roster_window.py:2897 gajim/roster_window.py:3529
 #: gajim/roster_window.py:4282 gajim/message_window.py:247
-#: gajim/gui_interface.py:725 gajim/gui_interface.py:1515
-#: gajim/gui_interface.py:1556
+#: gajim/gui_interface.py:725 gajim/gui_interface.py:1516
+#: gajim/gui_interface.py:1557
 msgid "_Do not ask me again"
 msgstr "אל ת_שאל אותי שוב"
 
-#: gajim/dialogs.py:1941
+#: gajim/dialogs.py:1957
 msgid "_Resume"
 msgstr "_חזור"
 
-#: gajim/dialogs.py:1949
+#: gajim/dialogs.py:1965
 msgid "Re_place"
 msgstr "ה_חלף"
 
-#: gajim/dialogs.py:2152 gajim/config.py:2167
+#: gajim/dialogs.py:2168 gajim/config.py:2169
 #: gajim/command_system/implementation/standard.py:261
 msgid "Invalid nickname"
 msgstr "שם כינוי שגוי"
 
-#: gajim/dialogs.py:2153
+#: gajim/dialogs.py:2169
 msgid "The nickname contains invalid characters."
 msgstr "שם הכינוי מכיל תווים אסורים."
 
-#: gajim/dialogs.py:2275
+#: gajim/dialogs.py:2291
 msgid "Subscription Request"
 msgstr "בקשת הרשמה"
 
-#: gajim/dialogs.py:2284
+#: gajim/dialogs.py:2300
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "בקשת הרשמה עבור חשבון %(account)s מאת %(jid)s"
 
-#: gajim/dialogs.py:2287
+#: gajim/dialogs.py:2303
 #, python-format
 msgid "Subscription request from %s"
 msgstr "בקשת הרשמה מאת %s"
 
-#: gajim/dialogs.py:2358 gajim/data/gui/join_groupchat_window.ui:312
+#: gajim/dialogs.py:2375 gajim/data/gui/join_groupchat_window.ui:312
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "הצטרף לשיחת קבוצה"
 
-#: gajim/dialogs.py:2500
+#: gajim/dialogs.py:2531
 #, fuzzy
 msgid "Invalid Room"
 msgstr "חדר שגוי"
 
-#: gajim/dialogs.py:2501
+#: gajim/dialogs.py:2532
 msgid "Please choose a room"
 msgstr ""
 
-#: gajim/dialogs.py:2513 gajim/dialogs.py:2520
+#: gajim/dialogs.py:2544 gajim/dialogs.py:2551
 msgid "Invalid Nickname"
 msgstr "שם כינוי שגוי"
 
-#: gajim/dialogs.py:2514
+#: gajim/dialogs.py:2545
 #, fuzzy
 msgid "Please choose a nickname"
 msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
-#: gajim/dialogs.py:2526 gajim/dialogs.py:3479 gajim/config.py:2451
+#: gajim/dialogs.py:2557 gajim/dialogs.py:3516 gajim/config.py:2453
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 msgid "Invalid JID"
 msgstr "כתובת JID שגויה"
 
-#: gajim/dialogs.py:2532 gajim/gui_interface.py:1848
+#: gajim/dialogs.py:2563 gajim/gui_interface.py:1850
 msgid "You can not join a group chat unless you are connected."
 msgstr "אין באפשרותך להצטרף לשיחת קבוצה אלא כאשר תחובר."
 
-#: gajim/dialogs.py:2586 gajim/dialogs.py:2597
+#: gajim/dialogs.py:2617 gajim/dialogs.py:2628
 msgid "Wrong server"
 msgstr "שרת שגוי"
 
-#: gajim/dialogs.py:2587 gajim/dialogs.py:2598
+#: gajim/dialogs.py:2618 gajim/dialogs.py:2629
 #, python-format
 msgid "%s is not a groupchat server"
 msgstr "‏%s אינו שרת שיחת קבוצה"
 
-#: gajim/dialogs.py:2620
+#: gajim/dialogs.py:2651
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "ללא חיבור, אין באפשרותך לסנכרן את אנשי הקשר שלך."
 
-#: gajim/dialogs.py:2631 gajim/dialogs.py:2702 gajim/dialogs.py:3805
-#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1692
-#: gajim/disco.py:1977
+#: gajim/dialogs.py:2662 gajim/dialogs.py:2733 gajim/dialogs.py:3851
+#: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1693
+#: gajim/disco.py:1978
 msgid "Name"
 msgstr "שם"
 
-#: gajim/dialogs.py:2634 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2665 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "שרת"
 
 # Sync account > Unlogged account > Error
 # Should this be "to its server" OR "to a server"?
-#: gajim/dialogs.py:2670
+#: gajim/dialogs.py:2701
 msgid "This account is not connected to the server"
 msgstr "חשבון זה אינו מחובר כעת לשרת"
 
 # BUG: synchronise with *another* account
 # עד אשר זה לא יחובר
-#: gajim/dialogs.py:2671
+#: gajim/dialogs.py:2702
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "אין באפשרותך להסתנכרן עם חשבון אלא אם כן החשבון הינו מחובר."
 
-#: gajim/dialogs.py:2700
+#: gajim/dialogs.py:2731
 msgid "Synchronise"
 msgstr "סנכרון"
 
 # שבר משולב continued fraction
 # שיחה נמשכת
-#: gajim/dialogs.py:2763
+#: gajim/dialogs.py:2794
 #, fuzzy
 msgid "Start new Conversation"
 msgstr "שיחה משולבת"
 
-#: gajim/dialogs.py:3021
+#: gajim/dialogs.py:3052
 #, fuzzy
 msgid "New Groupchat"
 msgstr "שיחת קבוצה חדשה"
 
-#: gajim/dialogs.py:3023
+#: gajim/dialogs.py:3054
 #, fuzzy
 msgid "New Contact"
 msgstr "הוספת איש קשר חדש"
 
-#: gajim/dialogs.py:3069
+#: gajim/dialogs.py:3106
 msgid "Without a connection, you can not change your password."
 msgstr "ללא חיבור, אין באפשרותך לשנות סיסמה."
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "Invalid password"
 msgstr "סיסמה שגויה"
 
-#: gajim/dialogs.py:3089
+#: gajim/dialogs.py:3126
 msgid "You must enter a password."
 msgstr "עליך להזין סיסמה."
 
-#: gajim/dialogs.py:3093
+#: gajim/dialogs.py:3130
 msgid "Passwords do not match"
 msgstr "סיסמאות לא תואמות"
 
 # על הסיסמאות
-#: gajim/dialogs.py:3094
+#: gajim/dialogs.py:3131
 msgid "The passwords typed in both fields must be identical."
 msgstr "הסיסמאות אשר מוקלדות בשני השדות מוכרחות להיות זהות."
 
-#: gajim/dialogs.py:3132 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2814
+#: gajim/dialogs.py:3169 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2821
 msgid "Contact Signed In"
 msgstr "איש קשר התחבר"
 
-#: gajim/dialogs.py:3134 gajim/notify.py:91
-#: gajim/common/connection_handlers_events.py:2820
+#: gajim/dialogs.py:3171 gajim/notify.py:91
+#: gajim/common/connection_handlers_events.py:2827
 msgid "Contact Signed Out"
 msgstr "איש קשר התנתק"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2634
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2641
 msgid "New Message"
 msgstr "הודעה חדשה"
 
-#: gajim/dialogs.py:3136 gajim/notify.py:92 gajim/notify.py:105
-#: gajim/common/connection_handlers_events.py:2616
+#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/common/connection_handlers_events.py:2623
 msgid "New Single Message"
 msgstr "הודעה בודדת חדשה"
 
-#: gajim/dialogs.py:3137 gajim/notify.py:92 gajim/notify.py:106
-#: gajim/common/connection_handlers_events.py:2622
+#: gajim/dialogs.py:3174 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/common/connection_handlers_events.py:2629
 msgid "New Private Message"
 msgstr "הודעה פרטית חדשה"
 
-#: gajim/dialogs.py:3137
+#: gajim/dialogs.py:3174
 msgid "New E-mail"
 msgstr "דוא״ל חדש"
 
-#: gajim/dialogs.py:3139 gajim/gui_interface.py:926 gajim/notify.py:93
+#: gajim/dialogs.py:3176 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "בקשת העברת קובץ"
 
-#: gajim/dialogs.py:3141 gajim/gui_interface.py:861 gajim/gui_interface.py:891
+#: gajim/dialogs.py:3178 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "שגיאת העברת קובץ"
 
-#: gajim/dialogs.py:3143 gajim/gui_interface.py:1030
+#: gajim/dialogs.py:3180 gajim/gui_interface.py:1030
 #: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "העברת קובץ הושלמה"
 
-#: gajim/dialogs.py:3144 gajim/gui_interface.py:1034
+#: gajim/dialogs.py:3181 gajim/gui_interface.py:1034
 #: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "העברת קובץ נעצרה"
 
-#: gajim/dialogs.py:3146 gajim/dialogs.py:4702 gajim/chat_control.py:1647
+#: gajim/dialogs.py:3183 gajim/dialogs.py:4748 gajim/chat_control.py:1647
 #: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "הזמנת שיחת קבוצה"
 
-#: gajim/dialogs.py:3148 gajim/notify.py:93
-#: gajim/common/connection_handlers_events.py:2808
+#: gajim/dialogs.py:3185 gajim/notify.py:93
+#: gajim/common/connection_handlers_events.py:2815
 msgid "Contact Changed Status"
 msgstr "איש קשר שינה מצב"
 
-#: gajim/dialogs.py:3367
+#: gajim/dialogs.py:3404
 #, python-format
 msgid "Single Message using account %s"
 msgstr "הודעה בודדת באמצעות חשבון ‫%s"
 
-#: gajim/dialogs.py:3369
+#: gajim/dialogs.py:3406
 #, python-format
 msgid "Single Message in account %s"
 msgstr "הודעה בודדת בתוך חשבון ‫%s"
 
-#: gajim/dialogs.py:3371
+#: gajim/dialogs.py:3408
 msgid "Single Message"
 msgstr "הודעה בודדת"
 
-#: gajim/dialogs.py:3374
+#: gajim/dialogs.py:3411
 #, python-format
 msgid "Send %s"
 msgstr "שליחת %s"
 
-#: gajim/dialogs.py:3397
+#: gajim/dialogs.py:3434
 #, python-format
 msgid "Received %s"
 msgstr "התקבלה %s"
 
-#: gajim/dialogs.py:3420
+#: gajim/dialogs.py:3457
 #, python-format
 msgid "Form %s"
 msgstr "טופס %s"
 
-#: gajim/dialogs.py:3448 gajim/dialogs.py:3634
+#: gajim/dialogs.py:3485 gajim/dialogs.py:3672
 msgid "Connection not available"
 msgstr "חיבור לא זמין"
 
-#: gajim/dialogs.py:3449 gajim/dialogs.py:3635
+#: gajim/dialogs.py:3486 gajim/dialogs.py:3673
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
 
-#: gajim/dialogs.py:3480 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3517 gajim/dialog_messages.py:43
 #, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "אין אפשרות לשלוח הודעה אל %s, כתובת JID זו אינה תקפה."
 
 # Is there RE for Hebrew?
-#: gajim/dialogs.py:3503
+#: gajim/dialogs.py:3540
 #, python-format
 msgid "RE: %s"
 msgstr ""
 
-#: gajim/dialogs.py:3504
+#: gajim/dialogs.py:3541
 #, python-format
 msgid "%s wrote:\n"
 msgstr "‏%s כתב/ה:\n"
 
-#: gajim/dialogs.py:3551 gajim/data/gui/shortcuts_window.ui:113
+#: gajim/dialogs.py:3589 gajim/data/gui/shortcuts_window.ui:113
 #, fuzzy
 msgid "Clear"
 msgstr "מנקה"
 
-#: gajim/dialogs.py:3556
+#: gajim/dialogs.py:3594
 #, fuzzy
 msgid "Filter"
 msgstr "סינון:"
 
-#: gajim/dialogs.py:3561
+#: gajim/dialogs.py:3599
 #, fuzzy
 msgid "XML Input"
 msgstr "<b>קלט XML</b>"
 
-#: gajim/dialogs.py:3565
+#: gajim/dialogs.py:3603
 #, fuzzy
 msgid "Send"
 msgstr "_שלח"
 
 # רוצה לה
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "add"
 msgstr "להוסיף"
 
 # Is this Change or Adjust?
 # לשנות
 # תתאים
-#: gajim/dialogs.py:3748
+#: gajim/dialogs.py:3794
 msgid "modify"
 msgstr "להתאים"
 
-#: gajim/dialogs.py:3749
+#: gajim/dialogs.py:3795
 msgid "remove"
 msgstr "להסיר"
 
@@ -1600,7 +1600,7 @@ msgstr "להסיר"
 # רוצה ש<b>תוסיף</b> מספר אנשי קשר ברשימה
 # כי <b>תוסיף</b>
 # ממך <b>להוסיף</b>
-#: gajim/dialogs.py:3778
+#: gajim/dialogs.py:3824
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -1608,36 +1608,36 @@ msgid ""
 msgstr ""
 "‏<b>%(jid)s</b> מעוניין <b>%(action)s</b> מספר אנשי קשר בתוך הרשימה שלך."
 
-#: gajim/dialogs.py:3794 gajim/dialogs.py:3840 gajim/accounts_window.py:44
+#: gajim/dialogs.py:3840 gajim/dialogs.py:3886 gajim/accounts_window.py:44
 msgid "Add"
 msgstr "הוסף"
 
-#: gajim/dialogs.py:3796 gajim/dialogs.py:3871
+#: gajim/dialogs.py:3842 gajim/dialogs.py:3917
 msgid "Modify"
 msgstr "התאמה"
 
-#: gajim/dialogs.py:3798 gajim/dialogs.py:3895
+#: gajim/dialogs.py:3844 gajim/dialogs.py:3941
 msgid "Delete"
 msgstr "מחק"
 
-#: gajim/dialogs.py:3808
+#: gajim/dialogs.py:3854
 msgid "Groups"
 msgstr "קבוצות"
 
-#: gajim/dialogs.py:3916
+#: gajim/dialogs.py:3962
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "‏%s הציע לי להוסיף אותך לרשימה שלי."
 
 # נוספו
-#: gajim/dialogs.py:3930
+#: gajim/dialogs.py:3976
 #, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "הוסף איש קשר %d"
 msgstr[1] "הוספו %d אנשי קשר"
 
-#: gajim/dialogs.py:3968
+#: gajim/dialogs.py:4014
 #, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
@@ -1645,180 +1645,180 @@ msgstr[0] "הוסר איש קשר %d"
 msgstr[1] "הוסרו %d אנשי קשר"
 
 # ארכיונאות
-#: gajim/dialogs.py:3994
+#: gajim/dialogs.py:4040
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr "העדפות גנזך עבור ‫%s"
 
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 msgid "Success!"
 msgstr ""
 
 # ארכיונאות
-#: gajim/dialogs.py:4032
+#: gajim/dialogs.py:4078
 #, fuzzy
 msgid "Your Archiving Preferences have been saved!"
 msgstr "העדפות גנזך עבור ‫%s"
 
-#: gajim/dialogs.py:4048
+#: gajim/dialogs.py:4094
 msgid "We got no response from the Server"
 msgstr ""
 
-#: gajim/dialogs.py:4050
+#: gajim/dialogs.py:4096
 #, fuzzy
 msgid "We received an error: {}"
 msgstr "ישנה שגיאה"
 
-#: gajim/dialogs.py:4054
+#: gajim/dialogs.py:4100
 #, fuzzy
 msgid "Error!"
 msgstr "שגיאה"
 
-#: gajim/dialogs.py:4113
+#: gajim/dialogs.py:4159
 #, fuzzy
 msgid "Add JID"
 msgstr "מזהה Jabber"
 
-#: gajim/dialogs.py:4186
+#: gajim/dialogs.py:4232
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "רשימת פרטיות ‫<b><i>%s</i></b>"
 
-#: gajim/dialogs.py:4190
+#: gajim/dialogs.py:4236
 #, python-format
 msgid "Privacy List for %s"
 msgstr "רשימת פרטיות עבור ‫%s"
 
-#: gajim/dialogs.py:4192 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4238 gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "רשימת פרטיות"
 
-#: gajim/dialogs.py:4263
+#: gajim/dialogs.py:4309
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr "סדר: %(order)s, פעולה: %(action)s, טיפוס: %(type)s, ערך: %(value)s"
 
-#: gajim/dialogs.py:4268
+#: gajim/dialogs.py:4314
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "סדר: %(order)s, פעולה: %(action)s"
 
-#: gajim/dialogs.py:4322
+#: gajim/dialogs.py:4368
 msgid "<b>Edit a rule</b>"
 msgstr "<b>עריכת כלל</b>"
 
-#: gajim/dialogs.py:4434
+#: gajim/dialogs.py:4480
 msgid "<b>Add a rule</b>"
 msgstr "<b>הוספת כלל</b>"
 
-#: gajim/dialogs.py:4535
+#: gajim/dialogs.py:4581
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "רשימות פרטיות עבור ‫%s"
 
-#: gajim/dialogs.py:4631
+#: gajim/dialogs.py:4677
 msgid "Invalid List Name"
 msgstr "שם רשימה שגוי"
 
-#: gajim/dialogs.py:4632
+#: gajim/dialogs.py:4678
 msgid "You must enter a name to create a privacy list."
 msgstr "עליך להזין שם כדי ליצור רשימת פרטיות."
 
 # Changed to: You have been invited to a groupchat
-#: gajim/dialogs.py:4668
+#: gajim/dialogs.py:4714
 msgid "You are invited to a groupchat"
 msgstr "הוזמנת לשיחת קבוצה"
 
-#: gajim/dialogs.py:4671
+#: gajim/dialogs.py:4717
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact הזמינך להצטרף לדיון"
 
-#: gajim/dialogs.py:4673
+#: gajim/dialogs.py:4719
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact הזמינך לשיחת קבוצה %(room_jid)s"
 
-#: gajim/dialogs.py:4682
+#: gajim/dialogs.py:4728
 #, python-format
 msgid "Comment: %s"
 msgstr "הערה: %s"
 
-#: gajim/dialogs.py:4684
+#: gajim/dialogs.py:4730
 msgid "Do you want to accept the invitation?"
 msgstr "האם ברצונך לקבל את ההזמנה?"
 
-#: gajim/dialogs.py:4700
+#: gajim/dialogs.py:4746
 msgid "Reason (if you decline):"
 msgstr "סיבה (באם רצונך בדחיית ההזמנה):"
 
-#: gajim/dialogs.py:4749
+#: gajim/dialogs.py:4795
 msgid "Choose Client Cert #PCKS12"
 msgstr "בחירת תעודת לקוח ‎#PCKS12"
 
-#: gajim/dialogs.py:4765 gajim/accounts_window.py:657
+#: gajim/dialogs.py:4811 gajim/accounts_window.py:657
 msgid "PKCS12 Files"
 msgstr "קבצי PKCS12"
 
-#: gajim/dialogs.py:4791
+#: gajim/dialogs.py:4837
 msgid "Choose Sound"
 msgstr "בחירת צליל"
 
-#: gajim/dialogs.py:4807
+#: gajim/dialogs.py:4853
 msgid "Wav Sounds"
 msgstr "צלילי Wav"
 
-#: gajim/dialogs.py:4837
+#: gajim/dialogs.py:4883
 msgid "Choose Image"
 msgstr "בחירת תמונה"
 
-#: gajim/dialogs.py:4855
+#: gajim/dialogs.py:4901
 msgid "Images"
 msgstr "תמונות"
 
-#: gajim/dialogs.py:4926
+#: gajim/dialogs.py:4972
 msgid "Choose Archive"
 msgstr "בחירת ארכיון"
 
-#: gajim/dialogs.py:4945
+#: gajim/dialogs.py:4991
 msgid "Zip files"
 msgstr "קבצי Zip"
 
 # הופך ל
-#: gajim/dialogs.py:4971
+#: gajim/dialogs.py:5017
 #, python-format
 msgid "When %s becomes:"
 msgstr "כאשר %s נהיה:"
 
-#: gajim/dialogs.py:4973
+#: gajim/dialogs.py:5019
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "הוספת התראה מיוחדת עבור ‫%s"
 
-#: gajim/dialogs.py:5213
+#: gajim/dialogs.py:5259
 msgid "an audio and video"
 msgstr "קול וגם וידאו"
 
-#: gajim/dialogs.py:5215
+#: gajim/dialogs.py:5261
 msgid "an audio"
 msgstr "קול"
 
-#: gajim/dialogs.py:5217
+#: gajim/dialogs.py:5263
 msgid "a video"
 msgstr "וידאו"
 
-#: gajim/dialogs.py:5221
+#: gajim/dialogs.py:5267
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr "‏%(contact)s רוצה להתחיל עמך בסשן %(type)s. האם יש ברצונך לענות לקריאה?"
 
-#: gajim/dialogs.py:5326 gajim/dialogs.py:5362
+#: gajim/dialogs.py:5372 gajim/dialogs.py:5408
 #, python-format
 msgid "Certificate for account %s"
 msgstr "תעודה עבור חשבון ‫%s"
 
-#: gajim/dialogs.py:5326
+#: gajim/dialogs.py:5372
 #, fuzzy, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1859,42 +1859,42 @@ msgstr ""
 "<b>טביעת אצבע</b>\n"
 "טביעת אצבע SHA1: ‏%(sha1)s"
 
-#: gajim/dialogs.py:5373 gajim/gui_interface.py:1404
+#: gajim/dialogs.py:5419 gajim/gui_interface.py:1405
 #, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "אימות תעודת SSL עבור %s"
 
-#: gajim/dialogs.py:5374 gajim/dialogs.py:5391
+#: gajim/dialogs.py:5420 gajim/dialogs.py:5437
 #, fuzzy
 msgid "View cert…"
 msgstr "הצג תעודה..."
 
-#: gajim/dialogs.py:5407 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:5453 gajim/data/gui/application_menu.ui:32
 #, fuzzy
 msgid "File Transfer"
 msgstr "העברות קבצים"
 
-#: gajim/dialogs.py:5431
+#: gajim/dialogs.py:5477
 msgid "Requesting HTTP Upload Slot..."
 msgstr ""
 
-#: gajim/dialogs.py:5435
+#: gajim/dialogs.py:5481
 msgid "Uploading file via HTTP File Upload..."
 msgstr ""
 
-#: gajim/dialogs.py:5439
+#: gajim/dialogs.py:5485
 #, fuzzy
 msgid "Encrypting file..."
 msgstr "הצפנת E2E מנוטרלת כעת"
 
 # בכינוי
-#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1793
+#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1839
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s ידוע/ה כעת בתור %(new_nick)s"
 
-#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1942
-#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2804
+#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1988
+#: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2811
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
@@ -1909,50 +1909,50 @@ msgstr "מסירת הודעה פרטית נכשלה"
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "אינך נוכח בשיחת קבוצה \"%(room)s\" או שהמשתמש \"%(nick)s\" עזב."
 
-#: gajim/groupchat_control.py:636 gajim/chat_control.py:326
+#: gajim/groupchat_control.py:640 gajim/chat_control.py:326
 #: gajim/chat_control.py:330
 msgid "HTTP File Upload"
 msgstr ""
 
-#: gajim/groupchat_control.py:638
+#: gajim/groupchat_control.py:642
 #, fuzzy
 msgid "HTTP File Upload not supported by your server"
 msgstr "אחסון אנשי קשר מוצמדים לא נתמך על ידי השרת שלך"
 
-#: gajim/groupchat_control.py:651 gajim/groupchat_control.py:2320
+#: gajim/groupchat_control.py:662 gajim/groupchat_control.py:2370
 msgid "Changing Subject"
 msgstr "שינוי נושא"
 
-#: gajim/groupchat_control.py:652 gajim/groupchat_control.py:2321
+#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
 msgid "Please specify the new subject:"
 msgstr "אנא ציין את נושא חדש:"
 
-#: gajim/groupchat_control.py:659
+#: gajim/groupchat_control.py:670
 msgid "Changing Nickname"
 msgstr "שינוי שם כינוי"
 
-#: gajim/groupchat_control.py:660
+#: gajim/groupchat_control.py:671
 msgid "Please specify the new nickname you want to use:"
 msgstr "אנא ציין שם כינוי חדש אשר ברצונך לעשות בו שימוש:"
 
-#: gajim/groupchat_control.py:677
+#: gajim/groupchat_control.py:688
 #, fuzzy
 msgid "Invalid group chat JID"
 msgstr "מזהה Jabber של שיחת קבוצה שגוי"
 
-#: gajim/groupchat_control.py:678
+#: gajim/groupchat_control.py:689
 #, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr "מזהה Jabber של שיחת קבוצה מכילה תווים אסורים."
 
 # Destroying is "at this moment".  It should be Destroy without ing
-#: gajim/groupchat_control.py:684
+#: gajim/groupchat_control.py:699
 #, python-format
 msgid "Destroying %s"
 msgstr "החרבת ‫%s"
 
 # בחרת להחריב באופן מוחלט את חדר זה
-#: gajim/groupchat_control.py:685
+#: gajim/groupchat_control.py:700
 #, fuzzy
 msgid ""
 "You are going to remove this room permanently.\n"
@@ -1962,24 +1962,24 @@ msgstr ""
 "באפשרותך לציין סיבה למטה:"
 
 # מקום מפגש חלופי
-#: gajim/groupchat_control.py:687
+#: gajim/groupchat_control.py:702
 msgid "You may also enter an alternate venue:"
 msgstr "באפשרותך להזין זירה אלטרנטיבית:"
 
 # להכניס/להזין
-#: gajim/groupchat_control.py:864
+#: gajim/groupchat_control.py:880
 msgid "Insert Nickname"
 msgstr "שבץ שם כינוי"
 
-#: gajim/groupchat_control.py:1015 gajim/chat_control.py:803
+#: gajim/groupchat_control.py:1062 gajim/chat_control.py:803
 msgid "and authenticated"
 msgstr "והינה מאומתת"
 
-#: gajim/groupchat_control.py:1019 gajim/chat_control.py:807
+#: gajim/groupchat_control.py:1066 gajim/chat_control.py:807
 msgid "and NOT authenticated"
 msgstr "ואינה מאומתת"
 
-#: gajim/groupchat_control.py:1023 gajim/chat_control.py:811
+#: gajim/groupchat_control.py:1070 gajim/chat_control.py:811
 #, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
@@ -1987,186 +1987,186 @@ msgstr ""
 "סשן שיחתך %(logged)s ברשומות ההיסטוריה."
 
 # direction_mark needed
-#: gajim/groupchat_control.py:1066
+#: gajim/groupchat_control.py:1113
 msgid "Conversation with "
 msgstr "שיחה עם "
 
 # שבר משולב continued fraction
 # שיחה נמשכת
-#: gajim/groupchat_control.py:1068
+#: gajim/groupchat_control.py:1115
 msgid "Continued conversation"
 msgstr "שיחה משולבת"
 
 # ‏%(jid)s הגדיר/ה את הנושא אל %(subject)s
-#: gajim/groupchat_control.py:1427
+#: gajim/groupchat_control.py:1473
 #, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "הנושא הוגדר על ידי %(nick)s אל %(subject)s"
 
-#: gajim/groupchat_control.py:1450 gajim/groupchat_control.py:1735
+#: gajim/groupchat_control.py:1496 gajim/groupchat_control.py:1781
 msgid "Any occupant is allowed to see your full JID"
 msgstr "כל נוכח רשאי לראות את המזהה Jabber שלך במלואו"
 
-#: gajim/groupchat_control.py:1453
+#: gajim/groupchat_control.py:1499
 msgid "Room now shows unavailable members"
 msgstr "כרגע החדר מציג חברים אשר אינם זמינים"
 
-#: gajim/groupchat_control.py:1455
+#: gajim/groupchat_control.py:1501
 msgid "Room now does not show unavailable members"
 msgstr "כרגע החדר לא מציג חברים אשר אינם זמינים"
 
-#: gajim/groupchat_control.py:1457
+#: gajim/groupchat_control.py:1503
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1461
+#: gajim/groupchat_control.py:1507
 msgid "Room logging is now enabled"
 msgstr "רישום פעילות חדר מאופשר כעת"
 
-#: gajim/groupchat_control.py:1463
+#: gajim/groupchat_control.py:1509
 msgid "Room logging is now disabled"
 msgstr "רישום פעילות חדר מנוטרל כעת"
 
 # This room is not anonymous
 # חדר לא אנונימי
-#: gajim/groupchat_control.py:1465
+#: gajim/groupchat_control.py:1511
 msgid "Room is now non-anonymous"
 msgstr "החדר אינו אנונימי"
 
-#: gajim/groupchat_control.py:1468
+#: gajim/groupchat_control.py:1514
 msgid "Room is now semi-anonymous"
 msgstr "החדר הינו אנונימי למחצה"
 
-#: gajim/groupchat_control.py:1471
+#: gajim/groupchat_control.py:1517
 #, fuzzy
 msgid "Room is now fully anonymous"
 msgstr "החדר הינו אנונימי לחלוטין"
 
-#: gajim/groupchat_control.py:1511 gajim/chat_control.py:1268
+#: gajim/groupchat_control.py:1557 gajim/chat_control.py:1268
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "פונג! (%s ש.)"
 
 # in or to?
-#: gajim/groupchat_control.py:1728 gajim/groupchat_control.py:2348
+#: gajim/groupchat_control.py:1774 gajim/groupchat_control.py:2398
 #: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(jid)s הוזמן/ה לחדר זה"
 
-#: gajim/groupchat_control.py:1740
+#: gajim/groupchat_control.py:1786
 msgid "Room logging is enabled"
 msgstr "רישום של פעילות חדר הינו מאופשר"
 
-#: gajim/groupchat_control.py:1742
+#: gajim/groupchat_control.py:1788
 msgid "A new room has been created"
 msgstr "חדר חדש נוצר"
 
 # BUG: room nick
 # הקצה
-#: gajim/groupchat_control.py:1745
+#: gajim/groupchat_control.py:1791
 msgid "The server has assigned or modified your roomnick"
 msgstr "השרת הסב או שינה את כינוי החדר שלך"
 
 # סולק
-#: gajim/groupchat_control.py:1751
+#: gajim/groupchat_control.py:1797
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s נבעט/ה: %(reason)s"
 
 # סולק
-#: gajim/groupchat_control.py:1754
+#: gajim/groupchat_control.py:1800
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s נבעט/ה על ידי %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1763
+#: gajim/groupchat_control.py:1809
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s נאסר/ה: %(reason)s"
 
-#: gajim/groupchat_control.py:1766
+#: gajim/groupchat_control.py:1812
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s נאסר/ה על ידי %(who)s: %(reason)s"
 
 # את/ה ידוע/ה כעת בתור
-#: gajim/groupchat_control.py:1777 gajim/groupchat_control.py:1861
+#: gajim/groupchat_control.py:1823 gajim/groupchat_control.py:1907
 #, python-format
 msgid "You are now known as %s"
 msgstr "הכינוי החדש שלך הוא %s"
 
-#: gajim/groupchat_control.py:1815 gajim/groupchat_control.py:1820
-#: gajim/groupchat_control.py:1826
+#: gajim/groupchat_control.py:1861 gajim/groupchat_control.py:1866
+#: gajim/groupchat_control.py:1872
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s הוסר/ה מתוך החדר (%(reason)s)"
 
-#: gajim/groupchat_control.py:1817
+#: gajim/groupchat_control.py:1863
 msgid "affiliation changed"
 msgstr "שיוך שונה"
 
-#: gajim/groupchat_control.py:1822
+#: gajim/groupchat_control.py:1868
 msgid "room configuration changed to members-only"
 msgstr "תצורת חדר שונתה אל חברים-בלבד"
 
 # הדממת, דימום
-#: gajim/groupchat_control.py:1828
+#: gajim/groupchat_control.py:1874
 msgid "system shutdown"
 msgstr "סגירת מערכת"
 
 # נקבע
-#: gajim/groupchat_control.py:1882
+#: gajim/groupchat_control.py:1928
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s על ידי %(actor)s"
 
-#: gajim/groupchat_control.py:1886
+#: gajim/groupchat_control.py:1932
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s"
 
-#: gajim/groupchat_control.py:1901
+#: gajim/groupchat_control.py:1947
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** התפקיד של %(nick)s הוגדר אל %(role)s על ידי %(actor)s"
 
-#: gajim/groupchat_control.py:1905
+#: gajim/groupchat_control.py:1951
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** התפקיד של %(nick)s הוגדר אל %(role)s"
 
-#: gajim/groupchat_control.py:1935
+#: gajim/groupchat_control.py:1981
 #, python-format
 msgid "%s has left"
 msgstr "%s עזב/ה"
 
 # הצטרף
-#: gajim/groupchat_control.py:1940
+#: gajim/groupchat_control.py:1986
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s נכנס/ה לשיחת קבוצה"
 
-#: gajim/groupchat_control.py:2279
+#: gajim/groupchat_control.py:2329
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "האם אתה בטוח כי ברצונך לעזוב את שיחת קבוצה \"%s\"?"
 
-#: gajim/groupchat_control.py:2281
+#: gajim/groupchat_control.py:2331
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "כאשר תסגור את חלון זה, אתה תנותק מתוך שיחת קבוצה זו."
 
-#: gajim/groupchat_control.py:2500
+#: gajim/groupchat_control.py:2550
 #, python-format
 msgid "Kicking %s"
 msgstr "בעיטת ‫%s"
 
-#: gajim/groupchat_control.py:2501 gajim/groupchat_control.py:2797
+#: gajim/groupchat_control.py:2551 gajim/groupchat_control.py:2847
 msgid "You may specify a reason below:"
 msgstr "באפשרותך לציין סיבה למטה:"
 
-#: gajim/groupchat_control.py:2796
+#: gajim/groupchat_control.py:2846
 #, python-format
 msgid "Banning %s"
 msgstr "אסירת ‫%s"
@@ -2262,7 +2262,7 @@ msgstr ""
 "%(message)s"
 
 # כי משהו שיבש אותה
-#: gajim/chat_control.py:1494 gajim/gui_interface.py:1196
+#: gajim/chat_control.py:1494 gajim/gui_interface.py:1197
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2285,10 +2285,11 @@ msgid "Size"
 msgstr "גודל"
 
 #: gajim/chat_control.py:1596
-msgid "_Accept"
+#, fuzzy
+msgid "Accept"
 msgstr "_קבל"
 
-#: gajim/chat_control.py:1650 gajim/disco.py:1752
+#: gajim/chat_control.py:1650 gajim/disco.py:1753
 msgid "_Join"
 msgstr "ה_צטרף"
 
@@ -2308,7 +2309,7 @@ msgstr "חשבונות ממוזגים"
 
 #: gajim/roster_window.py:857 gajim/roster_window.py:1757
 #: gajim/roster_window.py:1759 gajim/roster_window.py:2602
-#: gajim/roster_window.py:5125 gajim/message_window.py:525
+#: gajim/roster_window.py:5125 gajim/message_window.py:519
 #: gajim/common/contacts.py:133 gajim/common/commands.py:230
 #: gajim/common/helpers.py:95
 msgid "Groupchats"
@@ -2318,7 +2319,7 @@ msgstr "שיחות קבוצה"
 #: gajim/roster_window.py:1698 gajim/roster_window.py:1749
 #: gajim/roster_window.py:1751 gajim/roster_window.py:1912
 #: gajim/roster_window.py:2575 gajim/roster_window.py:5155 gajim/disco.py:130
-#: gajim/disco.py:131 gajim/disco.py:1459 gajim/common/contacts.py:135
+#: gajim/disco.py:131 gajim/disco.py:1460 gajim/common/contacts.py:135
 #: gajim/common/contacts.py:378 gajim/common/helpers.py:95
 msgid "Transports"
 msgstr "מובילים"
@@ -2576,7 +2577,7 @@ msgstr "אין חשבון זמין"
 msgid "You must create an account before you can chat with other contacts."
 msgstr "עליך ליצור חשבון בטרם תהיה באפשרותך לשוחח עם אנשי קשר אחרים."
 
-#: gajim/roster_window.py:3676 gajim/gui_interface.py:2062
+#: gajim/roster_window.py:3676 gajim/gui_interface.py:2065
 #: gajim/dialog_messages.py:64
 msgid "You cannot join a group chat while you are invisible"
 msgstr "אין באפשרותך להשתתף בשיחת קבוצה כאשר הינך במצב בלתי נראה"
@@ -2768,7 +2769,7 @@ msgstr "cli"
 msgid "Start a new chat"
 msgstr "התחלת שיחה"
 
-#: gajim/gajim.py:180 gajim/gui_interface.py:127
+#: gajim/gajim.py:180 gajim/gui_interface.py:128
 msgid "Database Error"
 msgstr "שגיאת מסד נתונים"
 
@@ -2833,69 +2834,69 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/config.py:148 gajim/config.py:154 gajim/config.py:614
+#: gajim/config.py:150 gajim/config.py:156 gajim/config.py:616
 #: gajim/data/gui/preferences_window.ui:68
 #: gajim/data/gui/preferences_window.ui:85
 msgid "Disabled"
 msgstr "מנוטרלת"
 
-#: gajim/config.py:409 gajim/config.py:413 gajim/config.py:1940
+#: gajim/config.py:411 gajim/config.py:415 gajim/config.py:1942
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: gajim/config.py:1126
+#: gajim/config.py:1128
 msgid "status message title"
 msgstr "כותרת הודעת מצב"
 
-#: gajim/config.py:1127
+#: gajim/config.py:1129
 msgid "status message text"
 msgstr "תמליל הודעת מצב"
 
-#: gajim/config.py:1515
+#: gajim/config.py:1517
 #, python-format
 msgid "Edit %s"
 msgstr "ערוך ‫%s"
 
 # רישום
-#: gajim/config.py:1517
+#: gajim/config.py:1519
 #, python-format
 msgid "Register to %s"
 msgstr "הירשם אל ‫%s"
 
-#: gajim/config.py:1553
+#: gajim/config.py:1555
 msgid "Ban List"
 msgstr "רשימת אסירה"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Member List"
 msgstr "רשימת חברים"
 
-#: gajim/config.py:1554
+#: gajim/config.py:1556
 msgid "Owner List"
 msgstr "רשימת בעלים"
 
-#: gajim/config.py:1555
+#: gajim/config.py:1557
 msgid "Administrator List"
 msgstr "רשימת מנהלים"
 
-#: gajim/config.py:1629
+#: gajim/config.py:1631
 msgid "Reason"
 msgstr "סיבה"
 
-#: gajim/config.py:1636
+#: gajim/config.py:1638
 msgid "Nick"
 msgstr "כינוי"
 
-#: gajim/config.py:1642
+#: gajim/config.py:1644
 msgid "Role"
 msgstr "תפקיד"
 
-#: gajim/config.py:1668
+#: gajim/config.py:1670
 #, fuzzy
 msgid "Banning…"
 msgstr "אסירה..."
 
-#: gajim/config.py:1670
+#: gajim/config.py:1672
 msgid ""
 "<b>Whom do you want to ban?</b>\n"
 "\n"
@@ -2903,12 +2904,12 @@ msgstr ""
 "<b>את מי ברצונך לאסור?</b>\n"
 "\n"
 
-#: gajim/config.py:1672
+#: gajim/config.py:1674
 #, fuzzy
 msgid "Adding Member…"
 msgstr "הוספת חבר..."
 
-#: gajim/config.py:1673
+#: gajim/config.py:1675
 msgid ""
 "<b>Whom do you want to make a member?</b>\n"
 "\n"
@@ -2916,12 +2917,12 @@ msgstr ""
 "<b>את מי ברצונך להפוך לחבר?</b>\n"
 "\n"
 
-#: gajim/config.py:1675
+#: gajim/config.py:1677
 #, fuzzy
 msgid "Adding Owner…"
 msgstr "הוספת בעלים..."
 
-#: gajim/config.py:1676
+#: gajim/config.py:1678
 msgid ""
 "<b>Whom do you want to make an owner?</b>\n"
 "\n"
@@ -2929,12 +2930,12 @@ msgstr ""
 "<b>את מי ברצונך להפוך לבעלים?</b>\n"
 "\n"
 
-#: gajim/config.py:1678
+#: gajim/config.py:1680
 #, fuzzy
 msgid "Adding Administrator…"
 msgstr "הוספת מנהל..."
 
-#: gajim/config.py:1679
+#: gajim/config.py:1681
 msgid ""
 "<b>Whom do you want to make an administrator?</b>\n"
 "\n"
@@ -2947,7 +2948,7 @@ msgstr ""
 #      ‏‏user = משתמש\n
 #      ‏‏resource = משאב\n
 #
-#: gajim/config.py:1680
+#: gajim/config.py:1682
 msgid ""
 "Can be one of the following:\n"
 "1. user@domain/resource (only that resource matches).\n"
@@ -2963,106 +2964,106 @@ msgstr ""
 "4. ‏domain (המתחם עצמו מתאים, עבור כל user@domain,\n"
 "‏domain/resource, או כתובת אשר מכילים מתחם משני)."
 
-#: gajim/config.py:1781
+#: gajim/config.py:1783
 #, python-format
 msgid "Removing %s account"
 msgstr "הסרת חשבון ‫%s"
 
-#: gajim/config.py:1796
+#: gajim/config.py:1798
 msgid "Account is disabled"
 msgstr "חשבון מנוטרל"
 
-#: gajim/config.py:1797
+#: gajim/config.py:1799
 msgid "To unregister from a server, account must be enabled."
 msgstr "כדי לבטל רישום מתוך שרת, על חשבון נתון להיות מאופשר."
 
-#: gajim/config.py:1811 gajim/gui_interface.py:314 gajim/gui_interface.py:748
+#: gajim/config.py:1813 gajim/gui_interface.py:314 gajim/gui_interface.py:748
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
 
-#: gajim/config.py:1812 gajim/gui_interface.py:733
+#: gajim/config.py:1814 gajim/gui_interface.py:733
 #, python-format
 msgid "Enter your password for account %s"
 msgstr "הזן סיסמה עבור חשבון %s"
 
-#: gajim/config.py:1813 gajim/gui_interface.py:748
+#: gajim/config.py:1815 gajim/gui_interface.py:748
 msgid "Save password"
 msgstr "שמור סיסמה"
 
-#: gajim/config.py:1824
+#: gajim/config.py:1826
 #, python-format
 msgid "Account \"%s\" is connected to the server"
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
 # it = account?
 # תסיר/י אותו
-#: gajim/config.py:1825
+#: gajim/config.py:1827
 msgid "If you remove it, the connection will be lost."
 msgstr "אם תסירו, החיבור יאבד."
 
-#: gajim/config.py:1840
+#: gajim/config.py:1842
 #, python-format
 msgid "Connection to server %s failed"
 msgstr "התחברות לשרת %s נכשלה"
 
-#: gajim/config.py:1841
+#: gajim/config.py:1843
 msgid "What would you like to do?"
 msgstr "מה ברצונך לעשות?"
 
 # BUG: USE: Remove account _only from Gajim
-#: gajim/config.py:1842
+#: gajim/config.py:1844
 msgid "Remove only from Gajim"
 msgstr "להסיר מתוך Gajim בלבד"
 
 # BUG: Underline
-#: gajim/config.py:1843
+#: gajim/config.py:1845
 msgid "Don't remove anything. I'll try again later"
 msgstr "לא להסיר דבר. אני אנסה שוב מאוחר יותר"
 
-#: gajim/config.py:1940
+#: gajim/config.py:1942
 msgid "?print_status:All"
 msgstr "הכל"
 
-#: gajim/config.py:1941
+#: gajim/config.py:1943
 msgid "Enter and leave only"
 msgstr "כניסה ועזיבה בלבד"
 
-#: gajim/config.py:1942
+#: gajim/config.py:1944
 msgid "?print_status:None"
 msgstr "אל תדפיס"
 
-#: gajim/config.py:2008
+#: gajim/config.py:2010
 msgid "New Group Chat"
 msgstr "שיחת קבוצה חדשה"
 
-#: gajim/config.py:2044
+#: gajim/config.py:2046
 msgid "This bookmark has invalid data"
 msgstr "סימנייה זו מכילה מידע שגוי"
 
-#: gajim/config.py:2045
+#: gajim/config.py:2047
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "אנא דאג למלא שדות חדר ושרת או הסר את סימנייה זו."
 
-#: gajim/config.py:2168 gajim/config.py:2184 gajim/config.py:2195
-#: gajim/config.py:2223
+#: gajim/config.py:2170 gajim/config.py:2186 gajim/config.py:2197
+#: gajim/config.py:2225
 msgid "Character not allowed"
 msgstr "תו לא מורשה"
 
-#: gajim/config.py:2183 gajim/config.py:2194 gajim/config.py:2473
+#: gajim/config.py:2185 gajim/config.py:2196 gajim/config.py:2475
 msgid "Invalid server"
 msgstr "שרת שגוי"
 
-#: gajim/config.py:2222
+#: gajim/config.py:2224
 msgid "Invalid room"
 msgstr "חדר שגוי"
 
-#: gajim/config.py:2387
+#: gajim/config.py:2389
 msgid "Account has been added successfully"
 msgstr "חשבון הוסף בהצלחה"
 
 # מאוחר יותר
-#: gajim/config.py:2388 gajim/config.py:2394
+#: gajim/config.py:2390 gajim/config.py:2396
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
 "later by choosing the Accounts menu item under the Edit menu from the main "
@@ -3071,42 +3072,42 @@ msgstr ""
 "באפשרותך להגדיר אפשרויות חשבון מתקדמות על ידי לחיצה על הלחצן מתקדם, או לאחר "
 "מכן בבוחרך בתפריט חשבונות תחת התפריט עריכה מתוך החלון הראשי."
 
-#: gajim/config.py:2393
+#: gajim/config.py:2395
 msgid "Your new account has been created successfully"
 msgstr "חשבונך החדש נוצר בהצלחה"
 
-#: gajim/config.py:2431
+#: gajim/config.py:2433
 msgid "Invalid username"
 msgstr "שם משתמש שגוי"
 
-#: gajim/config.py:2433
+#: gajim/config.py:2435
 msgid "You must provide a username to configure this account."
 msgstr "עליך לספק שם משתמש כדי להגדיר את חשבון זה."
 
-#: gajim/config.py:2474
+#: gajim/config.py:2476
 msgid "Please provide a server on which you want to register."
 msgstr "אנא ספק שרת אליו ברצונך להירשם."
 
-#: gajim/config.py:2497
+#: gajim/config.py:2499
 msgid "Invalid entry"
 msgstr "רשומה שגויה"
 
-#: gajim/config.py:2498
+#: gajim/config.py:2500
 msgid "Custom port must be a port number."
 msgstr "פורט מותאם מוכרח להיות מספר פורט."
 
 # BUG: גודל אותיות באנגלית?
-#: gajim/config.py:2530 gajim/gui_interface.py:1359
+#: gajim/config.py:2532 gajim/gui_interface.py:1360
 msgid "Certificate Already in File"
 msgstr "התעודה כבר מצויה בקובץ"
 
 # חריג לכלל: עשיתי שימוש במילה שנית במקום שוב מכיוון שתמיד יהיה 'ראשון' ולאחריו שני
-#: gajim/config.py:2531 gajim/gui_interface.py:1360
+#: gajim/config.py:2533 gajim/gui_interface.py:1361
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr "תעודה זו כבר מצויה בקובץ %s, ולכן היא לא תוסף בשנית."
 
-#: gajim/config.py:2624
+#: gajim/config.py:2626
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -3121,7 +3122,7 @@ msgstr ""
 "שגיאת SSL: ‏%(error)s\n"
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
-#: gajim/config.py:2630
+#: gajim/config.py:2632
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3134,73 +3135,73 @@ msgstr ""
 "טביעת אצבע SHA1 של התעודה:\n"
 "%s"
 
-#: gajim/config.py:2664 gajim/config.py:2698
+#: gajim/config.py:2666 gajim/config.py:2700
 msgid "An error occurred during account creation"
 msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
-#: gajim/config.py:2761
+#: gajim/config.py:2763
 msgid "Account name is in use"
 msgstr "שם חשבון הינו בשימוש"
 
-#: gajim/config.py:2762
+#: gajim/config.py:2764
 msgid "You already have an account using this name."
 msgstr "כבר יש ברשותך חשבון אשר עושה שימוש בשם זה."
 
-#: gajim/config.py:2894
+#: gajim/config.py:2896
 msgid "PEP node was not removed"
 msgstr "צומת PEP לא הוסר"
 
-#: gajim/config.py:2895
+#: gajim/config.py:2897
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "צומת PEP ‏%(node)s לא הוסר: %(message)s"
 
-#: gajim/config.py:2923
+#: gajim/config.py:2925
 #, python-format
 msgid "Configure %s"
 msgstr "תצורת ‫%s"
 
-#: gajim/config.py:2940 gajim/plugins/gui.py:95
+#: gajim/config.py:2942 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "פעיל"
 
-#: gajim/config.py:2948
+#: gajim/config.py:2950
 msgid "Event"
 msgstr "אירוע"
 
-#: gajim/config.py:2982
+#: gajim/config.py:2984
 msgid "Attention Message Received"
 msgstr "התקבלה הודעת הקשב"
 
-#: gajim/config.py:2983
+#: gajim/config.py:2985
 msgid "First Message Received"
 msgstr "הודעה ראשונה אשר התקבלה"
 
-#: gajim/config.py:2984
+#: gajim/config.py:2986
 msgid "Next Message Received Focused"
 msgstr "הודעה הבאה אשר התקבלה (ממוקד)"
 
-#: gajim/config.py:2986
+#: gajim/config.py:2988
 msgid "Next Message Received Unfocused"
 msgstr "הודעה הבאה אשר התקבלה (לא ממוקד)"
 
-#: gajim/config.py:2987
+#: gajim/config.py:2989
 msgid "Contact Connected"
 msgstr "איש קשר מחובר"
 
-#: gajim/config.py:2988
+#: gajim/config.py:2990
 msgid "Contact Disconnected"
 msgstr "איש קשר מנותק"
 
-#: gajim/config.py:2989
+#: gajim/config.py:2991
 msgid "Message Sent"
 msgstr "הודעה נשלחה"
 
-#: gajim/config.py:2990
+#: gajim/config.py:2992
 msgid "Group Chat Message Highlight"
 msgstr "הודעת שיחת קבוצה מודגשת"
 
-#: gajim/config.py:2991
+#: gajim/config.py:2993
 msgid "Group Chat Message Received"
 msgstr "הודעת שיחת קבוצה אשר התקבלה"
 
@@ -3209,19 +3210,19 @@ msgstr "הודעת שיחת קבוצה אשר התקבלה"
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "‏%(owner_or_admin_or_member)s בשיחת קבוצה זו"
 
-#: gajim/tooltips.py:269 gajim/common/helpers.py:475
+#: gajim/tooltips.py:269 gajim/common/helpers.py:473
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "ללא"
 
-#: gajim/tooltips.py:271 gajim/common/helpers.py:481
+#: gajim/tooltips.py:271 gajim/common/helpers.py:479
 msgid "Member"
 msgstr "חבר"
 
-#: gajim/tooltips.py:273 gajim/common/helpers.py:479
+#: gajim/tooltips.py:273 gajim/common/helpers.py:477
 msgid "Administrator"
 msgstr "מנהל"
 
-#: gajim/tooltips.py:275 gajim/common/helpers.py:477
+#: gajim/tooltips.py:275 gajim/common/helpers.py:475
 msgid "Owner"
 msgstr "בעלים"
 
@@ -3408,7 +3409,7 @@ msgstr "מצב נוכחי: %(status)s: %(status_msg)s"
 msgid "Status is now: %(status)s"
 msgstr "מצב נוכחי: %(status)s"
 
-#: gajim/history_window.py:585 gajim/conversation_textview.py:1349
+#: gajim/history_window.py:585 gajim/conversation_textview.py:1338
 #, python-format
 msgid "Subject: %s\n"
 msgstr "נושא: %s\n"
@@ -3566,7 +3567,7 @@ msgstr "שירות זה לא מכיל פריטים לעיון."
 msgid "Execute Command"
 msgstr "הרץ _פקודה"
 
-#: gajim/disco.py:1308 gajim/disco.py:1465
+#: gajim/disco.py:1308 gajim/disco.py:1466
 msgid "Re_gister"
 msgstr "ה_רשמה"
 
@@ -3580,69 +3581,69 @@ msgstr "ה_צטרף"
 msgid "Search"
 msgstr "חיפוש"
 
-#: gajim/disco.py:1463
+#: gajim/disco.py:1464
 msgid "_Edit"
 msgstr "ע_ריכה"
 
 # Scanned/Identified/Detected/Discovered/Found %(current)d out of %(total)d..
 # אותרו, זוהו, נמצאו
-#: gajim/disco.py:1506
+#: gajim/disco.py:1507
 #, python-format
 msgid "Scanning %(current)d / %(total)d.."
 msgstr "נסרקו %(current)d שירותים מתוך %(total)d.."
 
-#: gajim/disco.py:1702
+#: gajim/disco.py:1703
 msgid "Users"
 msgstr "משתמשים"
 
-#: gajim/disco.py:1710
+#: gajim/disco.py:1711
 msgid "Description"
 msgstr "תיאור"
 
-#: gajim/disco.py:1718
+#: gajim/disco.py:1719
 msgid "Id"
 msgstr "מזהה"
 
-#: gajim/disco.py:1748 gajim/data/gui/gc_control_popup_menu.ui:99
+#: gajim/disco.py:1749 gajim/data/gui/gc_control_popup_menu.ui:99
 msgid "_Bookmark"
 msgstr "_סמן"
 
-#: gajim/disco.py:1782
+#: gajim/disco.py:1783
 msgid "Bookmark already set"
 msgstr "סימנייה כבר הוגדרה"
 
-#: gajim/disco.py:1783
+#: gajim/disco.py:1784
 #, python-format
 msgid "Group Chat \"%s\" is already in your bookmarks."
 msgstr "שיחת קבוצה \"%s\" כבר קיימת בסימניות שלך."
 
-#: gajim/disco.py:1793
+#: gajim/disco.py:1794
 msgid "Bookmark has been added successfully"
 msgstr "סימנייה הוספה בהצלחה"
 
-#: gajim/disco.py:1794
+#: gajim/disco.py:1795
 msgid "You can manage your bookmarks via Actions menu in your roster."
 msgstr ""
 "באפשרותך לנהל את הסימניות שלך דרך תפריט 'פעולות' אשר מצוי בתוך הרשימה שלך."
 
-#: gajim/disco.py:1986
+#: gajim/disco.py:1987
 msgid "Subscribed"
 msgstr "רשום"
 
-#: gajim/disco.py:1995
+#: gajim/disco.py:1996
 msgid "Node"
 msgstr "צומת"
 
 # פרסום
-#: gajim/disco.py:2062
+#: gajim/disco.py:2063
 msgid "New post"
 msgstr "פוסט חדש"
 
-#: gajim/disco.py:2068
+#: gajim/disco.py:2069
 msgid "_Subscribe"
 msgstr "הי_רשם"
 
-#: gajim/disco.py:2074
+#: gajim/disco.py:2075
 msgid "_Unsubscribe"
 msgstr "_בטל הרשמה"
 
@@ -3654,51 +3655,51 @@ msgstr ""
 "תמליל תחת שורה זו הוא דברים אשר נרשמו מאז הפעם\n"
 "האחרונה בה הסבת את תשומת לבך לשיחת קבוצה זו"
 
-#: gajim/conversation_textview.py:561
+#: gajim/conversation_textview.py:550
 msgid "_Quote"
 msgstr "_צטט"
 
-#: gajim/conversation_textview.py:569
+#: gajim/conversation_textview.py:558
 #, python-format
 msgid "_Actions for \"%s\""
 msgstr "_פעולות עבור \"%s\""
 
-#: gajim/conversation_textview.py:583
+#: gajim/conversation_textview.py:572
 msgid "Read _Wikipedia Article"
 msgstr "עיין ערך _ויקיפדיה"
 
-#: gajim/conversation_textview.py:588
+#: gajim/conversation_textview.py:577
 msgid "Look it up in _Dictionary"
 msgstr "חפש בתוך _מילון"
 
-#: gajim/conversation_textview.py:605
+#: gajim/conversation_textview.py:594
 #, python-format
 msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 msgstr "לכתובת URL של המילון חסר \"%s\" וזו לא WIKTIONARY"
 
-#: gajim/conversation_textview.py:619
+#: gajim/conversation_textview.py:608
 #, python-format
 msgid "Web Search URL is missing an \"%s\""
 msgstr "לכתובת URL של חיפוש ברשת חסר \"%s\""
 
-#: gajim/conversation_textview.py:622
+#: gajim/conversation_textview.py:611
 msgid "Web _Search for it"
 msgstr "_חפש ברשת"
 
-#: gajim/conversation_textview.py:628
+#: gajim/conversation_textview.py:617
 msgid "Open as _Link"
 msgstr "פתח בתור _קישור"
 
-#: gajim/conversation_textview.py:858
+#: gajim/conversation_textview.py:847
 msgid "URL:"
 msgstr "‏URL:"
 
-#: gajim/conversation_textview.py:1032
+#: gajim/conversation_textview.py:1021
 #, fuzzy
 msgid "Invalid URL"
 msgstr "כתובת JID שגויה"
 
-#: gajim/conversation_textview.py:1117
+#: gajim/conversation_textview.py:1106
 #, fuzzy
 msgid ""
 "<b>Message corrected. Original message:</b>\n"
@@ -3707,7 +3708,7 @@ msgstr ""
 "<b>הודעה תוקנה. הודעה אחרונה היתה:</b>\n"
 "  %s"
 
-#: gajim/conversation_textview.py:1261
+#: gajim/conversation_textview.py:1250
 #, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
@@ -3727,27 +3728,27 @@ msgstr "בחרת לסגור מספר כרטיסיות"
 msgid "Do you really want to close them all?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
-#: gajim/message_window.py:523
+#: gajim/message_window.py:517
 #, fuzzy
 msgid "?Noun:Chats"
 msgstr "שיחות קבוצה"
 
-#: gajim/message_window.py:527
+#: gajim/message_window.py:521
 msgid "Private Chats"
 msgstr "שיחות פרטיות"
 
-#: gajim/message_window.py:533
+#: gajim/message_window.py:527
 msgid "Messages"
 msgstr "הודעות"
 
-#: gajim/gui_interface.py:157 gajim/gui_interface.py:329
+#: gajim/gui_interface.py:158 gajim/gui_interface.py:329
 #: gajim/gui_interface.py:338 gajim/gui_interface.py:345
 #: gajim/gui_interface.py:349 gajim/gui_interface.py:352
 #: gajim/gui_interface.py:360
 msgid "Unable to join group chat"
 msgstr "אין אפשרות להצטרף לשיחת קבוצה"
 
-#: gajim/gui_interface.py:158
+#: gajim/gui_interface.py:159
 #, fuzzy, python-format
 msgid ""
 "Your desired nickname in group chat\n"
@@ -3759,25 +3760,25 @@ msgstr ""
 "נוכח אחר.\n"
 "אנא ציין שם כינוי אחר למטה:"
 
-#: gajim/gui_interface.py:162
+#: gajim/gui_interface.py:163
 msgid "Always use this nickname when there is a conflict"
 msgstr "השתמש תמיד בשם כינוי זה כאשר ישנה התנגשות"
 
-#: gajim/gui_interface.py:180
+#: gajim/gui_interface.py:181
 msgid "Do you accept this request?"
 msgstr "האם לקבל את בקשה זו?"
 
-#: gajim/gui_interface.py:182
+#: gajim/gui_interface.py:183
 #, python-format
 msgid "Do you accept this request on account %s?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
 
-#: gajim/gui_interface.py:185
+#: gajim/gui_interface.py:186
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "הרשאת HTTP (%(method)s) עבור %(url)s (מזהה: %(id)s)"
 
-#: gajim/gui_interface.py:229 gajim/notify.py:96
+#: gajim/gui_interface.py:230 gajim/notify.py:96
 msgid "Connection Failed"
 msgstr "התחברות נכשלה"
 
@@ -3833,7 +3834,7 @@ msgid "Error %(code)s: %(msg)s"
 msgstr "שגיאה %(code)s: ‏%(msg)s"
 
 #: gajim/gui_interface.py:470 gajim/gui_interface.py:486
-#: gajim/common/connection_handlers_events.py:1423
+#: gajim/common/connection_handlers_events.py:1430
 #, python-format
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
@@ -3879,8 +3880,8 @@ msgstr "הרשמה בוטלה"
 msgid "Contact with \"%s\" cannot be established"
 msgstr "יצירת קשר עם \"%s\" לא היתה ניתנת לביסוס"
 
-#: gajim/gui_interface.py:583 gajim/common/connection.py:1286
-#: gajim/common/connection.py:1472
+#: gajim/gui_interface.py:583 gajim/common/connection.py:1288
+#: gajim/common/connection.py:1474
 msgid "Check your connection or try again later."
 msgstr "בדוק את החיבור שלך או נסה שוב מאוחר יותר."
 
@@ -3959,7 +3960,7 @@ msgstr "אישורי Oauth2"
 msgid "%s wants to send you a file."
 msgstr "‏%s רוצה לשלוח לך קובץ."
 
-#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1432
+#: gajim/gui_interface.py:1021 gajim/gui_interface.py:1433
 msgid "SSL certificate error"
 msgstr "שגיאת תעודת SSL"
 
@@ -4002,43 +4003,43 @@ msgstr "העברת הקובץ %(filename)s אל %(name)s נכשלה."
 msgid "Choose file to send"
 msgstr "בחירת קובץ לשליחה..."
 
-#: gajim/gui_interface.py:1198
+#: gajim/gui_interface.py:1199
 msgid "Unable to decrypt message"
 msgstr "אין אפשרות לפענח הודעה"
 
 # התנגשויות, ניגודים, קונפליקט
-#: gajim/gui_interface.py:1210
+#: gajim/gui_interface.py:1211
 msgid "Username Conflict"
 msgstr "התנגשות שם משתמש"
 
-#: gajim/gui_interface.py:1211
+#: gajim/gui_interface.py:1212
 msgid "Please type a new username for your local account"
 msgstr "אנא הקלד שם משתמש חדש עבור חשבונך המקומי"
 
-#: gajim/gui_interface.py:1234
+#: gajim/gui_interface.py:1235
 msgid "Resource Conflict"
 msgstr "התנגשות משאב"
 
-#: gajim/gui_interface.py:1235
+#: gajim/gui_interface.py:1236
 msgid ""
 "You are already connected to this account with the same resource. Please "
 "type a new one"
 msgstr "אתה כבר מחובר לחשבון זה באמצעות אותו משאב. אנא הקלד אחד חדש"
 
-#: gajim/gui_interface.py:1292
+#: gajim/gui_interface.py:1293
 #, python-format
 msgid "%s wants to start a voice chat."
 msgstr "‏%s רוצה להתחיל שיחה קולית."
 
-#: gajim/gui_interface.py:1295
+#: gajim/gui_interface.py:1296
 msgid "Voice Chat Request"
 msgstr "בקשה לשיחה קולית"
 
-#: gajim/gui_interface.py:1385
+#: gajim/gui_interface.py:1386
 msgid "Error verifying SSL certificate"
 msgstr "שגיאה באימות תעודת SSL"
 
-#: gajim/gui_interface.py:1386
+#: gajim/gui_interface.py:1387
 #, fuzzy, python-format
 msgid ""
 "There was an error verifying the SSL certificate of your XMPP server: "
@@ -4048,7 +4049,7 @@ msgstr ""
 "אירעה שגיאה תוך כדי אימות תעודת SSL של שרת Jabber זה: %(error)s\n"
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
-#: gajim/gui_interface.py:1390
+#: gajim/gui_interface.py:1391
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -4061,16 +4062,16 @@ msgstr ""
 "טביעת אצבע SHA1 של התעודה:\n"
 "%s"
 
-#: gajim/gui_interface.py:1396
+#: gajim/gui_interface.py:1397
 msgid "Ignore this error for this certificate."
 msgstr "התעלם משגיאה זו עבור תעודה זו."
 
-#: gajim/gui_interface.py:1409
+#: gajim/gui_interface.py:1410
 msgid "Non Anonymous Server"
 msgstr "שרת לא אנונימי"
 
 # ישנה
-#: gajim/gui_interface.py:1433
+#: gajim/gui_interface.py:1434
 #, fuzzy, python-format
 msgid ""
 "It seems the SSL certificate of account %(account)s has changed and is not "
@@ -4090,7 +4091,7 @@ msgstr ""
 "\n"
 "האם עדיין יש ברצונך להתחבר ולעדכן את טביעת האצבע של התעודה?"
 
-#: gajim/gui_interface.py:1511
+#: gajim/gui_interface.py:1512
 msgid ""
 "You are about to send your password on an insecure connection. You should "
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
@@ -4098,7 +4099,7 @@ msgstr ""
 "אתה על סף שליחת סיסמה על פני חיבור לא מאובטח. עליך להתקין PyOpenSSL בכדי "
 "למנוע זאת. האם אתה בטוח כי ברצונך להתחבר?"
 
-#: gajim/gui_interface.py:1553
+#: gajim/gui_interface.py:1554
 msgid ""
 "You are about to send your password unencrypted on an insecure connection. "
 "Are you sure you want to do that?"
@@ -4106,27 +4107,27 @@ msgstr ""
 "אתה על סף שליחת סיסמה באופן לא מוצפן על פני חיבור לא מאובטח. האם אתה בטוח כי "
 "ברצונך לעשות זאת?"
 
-#: gajim/gui_interface.py:1854
+#: gajim/gui_interface.py:1856
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "זוהי אינה שיחת קבוצה"
 
-#: gajim/gui_interface.py:2017
+#: gajim/gui_interface.py:2020
 msgid "Emoticons disabled"
 msgstr "רגשונים נוטרלו"
 
-#: gajim/gui_interface.py:2018
+#: gajim/gui_interface.py:2021
 #, fuzzy
 msgid ""
 "Your configured emoticons theme could not be loaded. See the log for more "
 "details."
 msgstr "מוטיב הרגשונים אשר הגדרת לא נמצא, ומשכך רגשונים נוטרלו."
 
-#: gajim/gui_interface.py:2036
+#: gajim/gui_interface.py:2039
 msgid "This is not a group chat"
 msgstr "זוהי אינה שיחת קבוצה"
 
-#: gajim/gui_interface.py:2037
+#: gajim/gui_interface.py:2040
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -4134,41 +4135,41 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:2415
+#: gajim/gui_interface.py:2418
 msgid "Could not save your settings and preferences"
 msgstr "לא היתה אפשרות לשמור את ההגדרות וההעדפות שלך"
 
-#: gajim/gui_interface.py:2825 gajim/common/config.py:117
-#: gajim/common/config.py:531 gajim/common/optparser.py:343
+#: gajim/gui_interface.py:2828 gajim/common/config.py:117
+#: gajim/common/config.py:532 gajim/common/optparser.py:343
 #: gajim/common/optparser.py:511 gajim/common/optparser.py:534
 msgid "default"
 msgstr "ברירת מחדל"
 
-#: gajim/gui_interface.py:3011
+#: gajim/gui_interface.py:3014
 msgid "Passphrase Required"
 msgstr "נדרשת מימרת סיסמה"
 
-#: gajim/gui_interface.py:3012
+#: gajim/gui_interface.py:3015
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "הזן מימרת סיסמה של מפתח OpenPGP עבור מפתח %(keyid)s (חשבון %(account)s)."
 
-#: gajim/gui_interface.py:3026
+#: gajim/gui_interface.py:3029
 msgid "OpenPGP key expired"
 msgstr "מפתח OpenPGP פקע"
 
-#: gajim/gui_interface.py:3027
+#: gajim/gui_interface.py:3030
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "מפתח OpenPGP פקע, התחברותך אל %s תתקיים בלי OpenPGP."
 
-#: gajim/gui_interface.py:3036
+#: gajim/gui_interface.py:3039
 msgid "Wrong Passphrase"
 msgstr "מימרת סיסמה שגויה"
 
-#: gajim/gui_interface.py:3037
+#: gajim/gui_interface.py:3040
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "אנא הקלד מחדש מימרת סיסמה OpenPGP או לחץ על ביטול."
 
@@ -4490,7 +4491,7 @@ msgstr "חשבונות ממוזגים"
 msgid "Use PGP Agent"
 msgstr "השתמש בסוכן G_PG"
 
-#: gajim/accounts_window.py:153 gajim/common/config.py:510
+#: gajim/accounts_window.py:153 gajim/common/config.py:511
 msgid "Be right back."
 msgstr "מיד אשוב."
 
@@ -5272,22 +5273,22 @@ msgstr "החדר הוחרב"
 msgid "You can join this room instead: %s"
 msgstr "באפשרותך להצטרף לחדר זה במקום: %s"
 
-#: gajim/common/connection_handlers_events.py:1972
+#: gajim/common/connection_handlers_events.py:1979
 #, python-format
 msgid "Unknown SSL error: %d"
 msgstr "שגיאת SSL לא מוכרת: %d"
 
-#: gajim/common/connection_handlers_events.py:2618
+#: gajim/common/connection_handlers_events.py:2625
 #, python-format
 msgid "New Single Message from %(nickname)s"
 msgstr "התקבלה הודעה בודדת חדשה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2624
+#: gajim/common/connection_handlers_events.py:2631
 #, python-format
 msgid "New Private Message from group chat %s"
 msgstr "הודעה פרטית חדשה מתוך שיחת קבוצה %s"
 
-#: gajim/common/connection_handlers_events.py:2627
+#: gajim/common/connection_handlers_events.py:2634
 #, python-format
 msgid "%(nickname)s: %(message)s"
 msgstr ""
@@ -5296,27 +5297,27 @@ msgstr ""
 # [09:08:28 PM] Myself: אני חושב שזה: המסר נשלח על-ידי...
 # [09:08:39 PM] Rodensky: לא
 # [09:08:46 PM] Rodensky: זה "התקבלה הודעה מ"
-#: gajim/common/connection_handlers_events.py:2630
+#: gajim/common/connection_handlers_events.py:2637
 #, python-format
 msgid "Messaged by %(nickname)s"
 msgstr "התקבלה הודעה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2636
+#: gajim/common/connection_handlers_events.py:2643
 #, python-format
 msgid "New Message from %(nickname)s"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
-#: gajim/common/connection_handlers_events.py:2802
+#: gajim/common/connection_handlers_events.py:2809
 #, python-format
 msgid "%(nick)s Changed Status"
 msgstr "המצב של %(nick)s שונה"
 
-#: gajim/common/connection_handlers_events.py:2810
+#: gajim/common/connection_handlers_events.py:2817
 #, python-format
 msgid "%(nickname)s Signed In"
 msgstr "%(nickname)s התחבר/ה"
 
-#: gajim/common/connection_handlers_events.py:2816
+#: gajim/common/connection_handlers_events.py:2823
 #, python-format
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s התנתק/ה"
@@ -6132,7 +6133,11 @@ msgstr ""
 msgid "If True, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
-#: gajim/common/config.py:323
+#: gajim/common/config.py:308
+msgid "All non-compliant MAM Groupchats"
+msgstr ""
+
+#: gajim/common/config.py:324
 msgid ""
 "Priority will change automatically according to your status. Priorities are "
 "defined in autopriority_* options."
@@ -6140,7 +6145,7 @@ msgstr ""
 "עדיפות תשונה אוטומטית בהתאם למצב שלך. עדיפויות מוגדרות בתוך האפשרות "
 "autopriority_*."
 
-#: gajim/common/config.py:331
+#: gajim/common/config.py:332
 msgid ""
 "Status used to autoconnect as. Can be online, chat, away, xa, dnd, "
 "invisible. NOTE: this option is used only if restore_last_status is disabled"
@@ -6149,41 +6154,41 @@ msgstr ""
 "לשיחה), away (נעדר), xa (לא זמין), dnd (עסוק), invisible (בלתי נראה). הערה: "
 "אפשרות זו נכנסת לשימוש רק אם ההעדפה restore_last_status מנוטרלת"
 
-#: gajim/common/config.py:332
+#: gajim/common/config.py:333
 msgid "If enabled, restore the last status that was used."
 msgstr "כאשר מופעלת, המצב האחרון אשר היה בשימוש ישוחזר."
 
 # BUG: typo: the authorization of the contacts will get accepted, not the contacts themselves
 # הרשאות שיתבקשו על ידי אנשי קשר יתקבלו אוטומטית
-#: gajim/common/config.py:334
+#: gajim/common/config.py:335
 msgid ""
 "If True, Contacts requesting authorization will be automatically accepted."
 msgstr "כאשר מופעלת, אנשי קשר אשר מבקשים הרשאה יתקבלו אוטומטית."
 
-#: gajim/common/config.py:335
+#: gajim/common/config.py:336
 msgid ""
 "If False, this account will be disabled and will not appear in roster window."
 msgstr "כאשר מנוטרלת, חשבון זה ינוטרל ולא יופיע בחלון רשימה."
 
-#: gajim/common/config.py:338
+#: gajim/common/config.py:339
 msgid ""
 "If disabled, don't sign presences with GPG key, even if GPG is configured."
 msgstr "כאשר מנוטרלת, אל תחתום נוכחות באמצעות מפתח GPG, אפילו אם GPG מוגדר."
 
-#: gajim/common/config.py:340
+#: gajim/common/config.py:341
 msgid "Enable ESessions encryption for this account."
 msgstr "אפשור הצפנת ESessions עבור חשבון זה."
 
 # באם/כאשר ניתן
-#: gajim/common/config.py:341
+#: gajim/common/config.py:342
 msgid "Should Gajim automatically start an encrypted session when possible?"
 msgstr "האם על Gajim להתחיל אוטומטית סשן מוצפן במידת האפשר?"
 
-#: gajim/common/config.py:342
+#: gajim/common/config.py:343
 msgid "Allow plaintext connections"
 msgstr ""
 
-#: gajim/common/config.py:345
+#: gajim/common/config.py:346
 msgid ""
 "List (space separated) of authentication mechanisms to try. Can contain "
 "ANONYMOUS, EXTERNAL, GSSAPI, SCRAM-SHA-1-PLUS, SCRAM-SHA-1, DIGEST-MD5, "
@@ -6193,7 +6198,7 @@ msgstr ""
 "EXTERNAL,‏ GSSAPI,‏ SCRAM-SHA-1-PLUS,‏ SCRAM-SHA-1,‏ DIGEST-MD5,‏ PLAIN, X-"
 "MESSENGER-OAUTH2 או XEP-0078"
 
-#: gajim/common/config.py:346
+#: gajim/common/config.py:347
 msgid ""
 "Show a warning dialog before sending password on an plaintext connection. "
 "Can be 'warn', 'connect', 'disconnect'"
@@ -6201,20 +6206,20 @@ msgstr ""
 "הצגת דו שיח אזהרה בטרם שליחת סיסמה על פני חיבור גלוי. יכול להיות "
 "'warn' (הזהר), 'connect' (התחבר), 'disconnect' (התנתק)"
 
-#: gajim/common/config.py:347
+#: gajim/common/config.py:348
 msgid "Show a warning dialog before using standard SSL library."
 msgstr "הצג דו שיח אזהרה בטרם שימוש בספריית SSL סטנדרטית."
 
-#: gajim/common/config.py:348
+#: gajim/common/config.py:349
 msgid ""
 "Show a warning dialog before sending PLAIN password over a plain connection."
 msgstr "הצגת דו שיח אזהרה בטרם שליחת סיסמה חשופה (PLAIN) על פני חיבור גלוי."
 
-#: gajim/common/config.py:351
+#: gajim/common/config.py:352
 msgid "Space separated list of ssl errors to ignore."
 msgstr "רשימה אשר מופרדת על ידי רווח, של שגיאות ssl שיש להתעלם מהן."
 
-#: gajim/common/config.py:357
+#: gajim/common/config.py:358
 msgid ""
 "Space separated list of JIDs for which you do not want to store logs. You "
 "can also add account name to log nothing for this account."
@@ -6222,7 +6227,7 @@ msgstr ""
 "רשימה אשר מופרדת על ידי רווח, של כתובות JID עבורן אין ברצונך לאחסן רשומות. "
 "באפשרותך גם להוסיף שם חשבון כדי לא לרשום דבר עבור חשבון זה."
 
-#: gajim/common/config.py:358
+#: gajim/common/config.py:359
 #, fuzzy
 msgid ""
 "On startup, Gajim will download logs stored on server, provided the server "
@@ -6231,7 +6236,7 @@ msgstr ""
 "הורד רשומות המאוחסנות על שרת בעת הפעלת Gajim אם שרת תומך XEP-0136 או XEP-0313"
 
 # BUG: he or she
-#: gajim/common/config.py:359
+#: gajim/common/config.py:360
 msgid ""
 "Space separated list of JIDs for which you accept to not log conversations "
 "if he does not want to."
@@ -6240,28 +6245,28 @@ msgstr ""
 "דיונים כאשר הקצה השני לא מעוניין בכך."
 
 # חלל לבן, עקב
-#: gajim/common/config.py:362
+#: gajim/common/config.py:363
 msgid "Whitespace sent after inactivity"
 msgstr "סימן לבן נשלח לאחר חוסר פעילות"
 
-#: gajim/common/config.py:363
+#: gajim/common/config.py:364
 msgid "XMPP ping sent after inactivity"
 msgstr "פינג XMPP נשלח לאחר חוסר פעילות"
 
-#: gajim/common/config.py:367
+#: gajim/common/config.py:368
 msgid ""
 "How many seconds to wait for the answer of ping alive packet before we try "
 "to reconnect?"
 msgstr ""
 "כמה שניות להמתין עבור תשובת חבילת פינג חי לפני שאנחנו מנסים להתחבר מחדש?"
 
-#: gajim/common/config.py:371
+#: gajim/common/config.py:372
 msgid "Jabberd2 workaround"
 msgstr "מעקף Jabberd2"
 
 # INTERESTING!
 # option (אפשרות), not entry (רשומה)
-#: gajim/common/config.py:374
+#: gajim/common/config.py:375
 msgid ""
 "If checked, Gajim will use your IP and proxies defined in "
 "file_transfer_proxies option for file transfer."
@@ -6269,7 +6274,7 @@ msgstr ""
 "כאשר מסומן, Gajim יעשה שימוש בכתובת IP ובצירים (proxy) שהוגדרו על ידך "
 "באפשרות file_transfer_proxies לשם העברת קובץ."
 
-#: gajim/common/config.py:375
+#: gajim/common/config.py:376
 msgid ""
 "If True, Gajim will test file transfer proxies on startup to be sure it "
 "works. Openfire's proxies are known to fail this test even if they work."
@@ -6277,20 +6282,20 @@ msgstr ""
 "כאשר מופעלת, Gajim יבחן צירי (proxy) העברת קובץ בעת הפעלה כדי לוודא כי זו "
 "אכן פועלת. ידוע כי מתווכי Openfire נכשלים בבחינה זו אפילו אם אלו עובדים."
 
-#: gajim/common/config.py:388
+#: gajim/common/config.py:389
 msgid "Answer to receipt requests"
 msgstr "מענה לבקשות קבלה"
 
-#: gajim/common/config.py:389
+#: gajim/common/config.py:390
 msgid "Sent receipt requests"
 msgstr "בקשות קבלה אשר נשלחו"
 
-#: gajim/common/config.py:398
+#: gajim/common/config.py:399
 msgid ""
 "Allow Gajim to send information about the operating system you are running."
 msgstr "התר ל־Gajim לשלוח מידע אודות מערכת ההפעלה אשר בשימושך."
 
-#: gajim/common/config.py:399
+#: gajim/common/config.py:400
 msgid "Allow Gajim to send your local time."
 msgstr "התר ל־Gajim לשלוח את הזמן המקומי שלך."
 
@@ -6298,7 +6303,7 @@ msgstr "התר ל־Gajim לשלוח את הזמן המקומי שלך."
 # מתקיימת הסדרה לסשן
 # מתקיימת הסדרת סשן
 # שרצונך הוא
-#: gajim/common/config.py:400
+#: gajim/common/config.py:401
 msgid ""
 "When negotiating an encrypted session, should Gajim assume you want your "
 "messages to be logged?"
@@ -6306,11 +6311,11 @@ msgstr ""
 "כאשר מתקיים משא ומתן עבור סשן מוצפן, האם על Gajim להניח כי ברצונך שההודעות "
 "שלך יירשמו?"
 
-#: gajim/common/config.py:403
+#: gajim/common/config.py:404
 msgid "Message that is sent to contacts you want to add"
 msgstr "הודעה אשר תישלח לאנשי קשר אותם ברצונך להוסיף"
 
-#: gajim/common/config.py:404
+#: gajim/common/config.py:405
 msgid ""
 "If enabled and if server supports this feature, Gajim will receive messages "
 "sent and received by other resources."
@@ -6319,7 +6324,7 @@ msgstr ""
 "על ידי משאבים אחרים."
 
 # BUG: can directly connect to
-#: gajim/common/config.py:405
+#: gajim/common/config.py:406
 msgid ""
 "If enabled, Gajim will send your local IPs so your contact can connect to "
 "your machine to transfer files."
@@ -6327,22 +6332,22 @@ msgstr ""
 "כאשר מופעלת, Gajim ישלח את כתובות IP מקומיות שלך, כך שהאיש קשר שלך יוכל "
 "להתחבר ישירות למחשב שלך כדי להעביר קבצים."
 
-#: gajim/common/config.py:406
+#: gajim/common/config.py:407
 #, fuzzy
 msgid "Latest token for OAuth 2.0 authentication."
 msgstr "האות האחרון עבור אימות Oauth2."
 
-#: gajim/common/config.py:407
+#: gajim/common/config.py:408
 #, fuzzy
 msgid "client_id for OAuth 2.0 authentication."
 msgstr "‏client_id עבור אימות Oauth2."
 
-#: gajim/common/config.py:408
+#: gajim/common/config.py:409
 #, fuzzy
 msgid "redirect_url for OAuth 2.0 authentication."
 msgstr "‏redirect_url עבור אימות Oauth2."
 
-#: gajim/common/config.py:409
+#: gajim/common/config.py:410
 msgid ""
 "Space separated list of JIDs for which we want to re-open a chat window on "
 "next startup."
@@ -6350,27 +6355,27 @@ msgstr ""
 "רשימה אשר מופרדת על ידי רווח, של כתובות JID עבורן אנו רוצים לפתוח מחדש חלון "
 "שיחה בהפעלה הבאה."
 
-#: gajim/common/config.py:411
+#: gajim/common/config.py:412
 msgid "HTTP Upload: Enable HTTPS Verification"
 msgstr ""
 
-#: gajim/common/config.py:412
+#: gajim/common/config.py:413
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on chat window. Can be "
 "'httpupload' (default) or 'jingle'"
 msgstr ""
 
 # אשר ברצוננו
-#: gajim/common/config.py:475 gajim/common/config.py:480
+#: gajim/common/config.py:476 gajim/common/config.py:481
 msgid "Language for which we want to check misspelled words"
 msgstr "שפה עבורה אנחנו רוצים לבדוק מילים אשר לא מאויתות כראוי"
 
-#: gajim/common/config.py:477
+#: gajim/common/config.py:478
 msgid "The currently active encryption for that contact"
 msgstr ""
 
 # ללא
-#: gajim/common/config.py:481
+#: gajim/common/config.py:482
 msgid ""
 "How many lines to request from server when entering a groupchat. -1 means no "
 "limit, -2 means global value"
@@ -6378,7 +6383,7 @@ msgstr ""
 "כמה שורות לבקש מתוך שרת בעת כניסה לשיחת קבוצה. 1- מסמל אי הגבלה, 2- מסמל ערך "
 "גלובלי"
 
-#: gajim/common/config.py:482
+#: gajim/common/config.py:483
 #, fuzzy
 msgid ""
 "Minutes of backlog to request when entering a groupchat. -1 means no limit, "
@@ -6387,11 +6392,11 @@ msgstr ""
 "כמה דקות לאחור לבקש רשומות בעת התחברות לשיחת קבוצה. 1- מסמל אי הגבלה, 2- "
 "מסמל ערך גלובלי"
 
-#: gajim/common/config.py:483
+#: gajim/common/config.py:484
 msgid "State whether we want a notification for every message in this room"
 msgstr ""
 
-#: gajim/common/config.py:486
+#: gajim/common/config.py:487
 msgid ""
 "State whether plugins should be activated on startup (this is saved on Gajim "
 "exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI "
@@ -6402,79 +6407,79 @@ msgstr ""
 "משתמש גרפי במקום."
 
 # יושן
-#: gajim/common/config.py:491 gajim/common/pep.py:157
+#: gajim/common/config.py:492 gajim/common/pep.py:157
 msgid "Sleeping"
 msgstr "ישן"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back soon"
 msgstr "אשוב בקרוב"
 
-#: gajim/common/config.py:492
+#: gajim/common/config.py:493
 msgid "Back in some minutes."
 msgstr "אני אחזור בעוד כמה דקות."
 
-#: gajim/common/config.py:493 gajim/common/pep.py:127
+#: gajim/common/config.py:494 gajim/common/pep.py:127
 msgid "Eating"
 msgstr "אוכל"
 
-#: gajim/common/config.py:493
+#: gajim/common/config.py:494
 msgid "I'm eating, so leave me a message."
 msgstr "אני בהפסקת אוכל, אז תשאירו לי הודעה."
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "Movie"
 msgstr "סרט"
 
-#: gajim/common/config.py:494
+#: gajim/common/config.py:495
 msgid "I'm watching a movie."
 msgstr "אני צופה בסרט."
 
-#: gajim/common/config.py:495 gajim/common/pep.py:186
+#: gajim/common/config.py:496 gajim/common/pep.py:186
 msgid "Working"
 msgstr "עובד"
 
-#: gajim/common/config.py:495
+#: gajim/common/config.py:496
 msgid "I'm working."
 msgstr "אני בעבודה."
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "Phone"
 msgstr "טלפון"
 
-#: gajim/common/config.py:496
+#: gajim/common/config.py:497
 msgid "I'm on the phone."
 msgstr "אני בטלפון."
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "Out"
 msgstr "בחוץ"
 
-#: gajim/common/config.py:497
+#: gajim/common/config.py:498
 msgid "I'm out enjoying life."
 msgstr "יצאתי החוצה ליהנות מן החיים."
 
-#: gajim/common/config.py:508
+#: gajim/common/config.py:509
 msgid "I'm available."
 msgstr "אני זמין/ה."
 
-#: gajim/common/config.py:509
+#: gajim/common/config.py:510
 msgid "I'm free for chat."
 msgstr "אני פנוי/ה לשיחה."
 
-#: gajim/common/config.py:511
+#: gajim/common/config.py:512
 msgid "I'm not available."
 msgstr "אני לא זמין/ה."
 
-#: gajim/common/config.py:512
+#: gajim/common/config.py:513
 msgid "Do not disturb."
 msgstr "נא לא להפריע."
 
-#: gajim/common/config.py:513 gajim/common/config.py:514
+#: gajim/common/config.py:514 gajim/common/config.py:515
 msgid "Bye!"
 msgstr "להתראות!"
 
-#: gajim/common/config.py:525
+#: gajim/common/config.py:526
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "muc_highlight_words, or when a group chat message contains your nickname."
@@ -6482,28 +6487,28 @@ msgstr ""
 "צליל לניגון כאשר הודעת שיחת קבוצה מכילה אחת מתוך המילים אשר מצוינות בתוך "
 "muc_highlight_words, או כאשר הודעת שיחת קבוצה מכילה את השם כינוי שלך."
 
-#: gajim/common/config.py:526
+#: gajim/common/config.py:527
 msgid "Sound to play when any MUC message arrives."
 msgstr "צליל לניגון כאשר הודעת שמ״מ מגיעה."
 
-#: gajim/common/config.py:534 gajim/common/optparser.py:357
+#: gajim/common/config.py:535 gajim/common/optparser.py:357
 msgid "green"
 msgstr "ירוק"
 
 # מכולת
-#: gajim/common/config.py:538 gajim/common/optparser.py:343
+#: gajim/common/config.py:539 gajim/common/optparser.py:343
 msgid "grocery"
 msgstr "מצרכים"
 
-#: gajim/common/config.py:542
+#: gajim/common/config.py:543
 msgid "human"
 msgstr "אנושי"
 
-#: gajim/common/config.py:546
+#: gajim/common/config.py:547
 msgid "marine"
 msgstr "ימי"
 
-#: gajim/common/config.py:553
+#: gajim/common/config.py:554
 msgid "Tor"
 msgstr ""
 
@@ -6654,196 +6659,196 @@ msgstr "cli"
 msgid "%s is not a valid loglevel"
 msgstr "cli"
 
-#: gajim/common/connection.py:80
+#: gajim/common/connection.py:83
 msgid "Unable to get issuer certificate"
 msgstr "אין אפשרות לקבל תעודת מנפיק"
 
-#: gajim/common/connection.py:81
+#: gajim/common/connection.py:84
 msgid "Unable to get certificate CRL"
 msgstr "אין אפשרות לקבל תעודת CRL"
 
-#: gajim/common/connection.py:82
+#: gajim/common/connection.py:85
 msgid "Unable to decrypt certificate's signature"
 msgstr "אין אפשרות לפענח חתימת תעודה"
 
-#: gajim/common/connection.py:83
+#: gajim/common/connection.py:86
 msgid "Unable to decrypt CRL's signature"
 msgstr "אין אפשרות לפענח חתימת CRL"
 
-#: gajim/common/connection.py:84
+#: gajim/common/connection.py:87
 msgid "Unable to decode issuer public key"
 msgstr "אין אפשרות לפענח מפתח ציבורי של מנפיק"
 
-#: gajim/common/connection.py:85
+#: gajim/common/connection.py:88
 msgid "Certificate signature failure"
 msgstr "כשל תעודת חתימה"
 
-#: gajim/common/connection.py:86
+#: gajim/common/connection.py:89
 msgid "CRL signature failure"
 msgstr "כשל חתימת CRL"
 
-#: gajim/common/connection.py:87
+#: gajim/common/connection.py:90
 msgid "Certificate is not yet valid"
 msgstr "התעודה אינה תקפה עדיין"
 
-#: gajim/common/connection.py:88
+#: gajim/common/connection.py:91
 msgid "Certificate has expired"
 msgstr "התעודה פקעה"
 
 # CRL what? (Certificate?)
-#: gajim/common/connection.py:89
+#: gajim/common/connection.py:92
 msgid "CRL is not yet valid"
 msgstr "‏CRL אינה תקפה עדיין"
 
 # CRL what? (Certificate?)
-#: gajim/common/connection.py:90
+#: gajim/common/connection.py:93
 msgid "CRL has expired"
 msgstr "‏CRL פקעה"
 
-#: gajim/common/connection.py:91
+#: gajim/common/connection.py:94
 msgid "Format error in certificate's notBefore field"
 msgstr "שגיאת תסדיר בשדה notBefore של התעודה"
 
-#: gajim/common/connection.py:92
+#: gajim/common/connection.py:95
 msgid "Format error in certificate's notAfter field"
 msgstr "שגיאת תסדיר בשדה notAfter של התעודה"
 
-#: gajim/common/connection.py:93
+#: gajim/common/connection.py:96
 msgid "Format error in CRL's lastUpdate field"
 msgstr "שגיאת תסדיר בשדה lastUpdate של CRL"
 
-#: gajim/common/connection.py:94
+#: gajim/common/connection.py:97
 msgid "Format error in CRL's nextUpdate field"
 msgstr "שגיאת תסדיר בשדה nextUpdate של CRL"
 
 # זיכרון אזל
-#: gajim/common/connection.py:95
+#: gajim/common/connection.py:98
 msgid "Out of memory"
 msgstr "לא נותר זיכרון"
 
-#: gajim/common/connection.py:96
+#: gajim/common/connection.py:99
 msgid "Self signed certificate"
 msgstr "תעודה חתומה באופן עצמי"
 
-#: gajim/common/connection.py:97
+#: gajim/common/connection.py:100
 msgid "Self signed certificate in certificate chain"
 msgstr "תעודה חתומה באופן עצמי בתוך שרשרת תעודה"
 
-#: gajim/common/connection.py:98
+#: gajim/common/connection.py:101
 msgid "Unable to get local issuer certificate"
 msgstr "אין אפשרות לקבל תעודת מנפיק מקומית"
 
-#: gajim/common/connection.py:99
+#: gajim/common/connection.py:102
 msgid "Unable to verify the first certificate"
 msgstr "אין אפשרות לאמת את התעודה הראשונה"
 
-#: gajim/common/connection.py:100
+#: gajim/common/connection.py:103
 msgid "Certificate chain too long"
 msgstr "שרשרת תעודה ארוכה מדי"
 
-#: gajim/common/connection.py:101
+#: gajim/common/connection.py:104
 msgid "Certificate revoked"
 msgstr "התעודה בוטלה"
 
-#: gajim/common/connection.py:102
+#: gajim/common/connection.py:105
 msgid "Invalid CA certificate"
 msgstr "תעודת CA חסרת תוקף"
 
-#: gajim/common/connection.py:103
+#: gajim/common/connection.py:106
 msgid "Path length constraint exceeded"
 msgstr "מגבלת אורך נתיב מוצתה"
 
-#: gajim/common/connection.py:104
+#: gajim/common/connection.py:107
 msgid "Unsupported certificate purpose"
 msgstr "תכלית תעודה לא נתמכת"
 
-#: gajim/common/connection.py:105
+#: gajim/common/connection.py:108
 msgid "Certificate not trusted"
 msgstr "התעודה אינה מהימנה"
 
-#: gajim/common/connection.py:106
+#: gajim/common/connection.py:109
 msgid "Certificate rejected"
 msgstr "התעודה נדחתה"
 
 # התניית המנפיק אינה תואמת
 # תוכן/נושא מנפיק אינו תואם
 # קיימת אי תיאום עם/ב
-#: gajim/common/connection.py:107
+#: gajim/common/connection.py:110
 msgid "Subject issuer mismatch"
 msgstr "נושא מנפיק לא תואם"
 
-#: gajim/common/connection.py:108
+#: gajim/common/connection.py:111
 msgid "Authority and subject key identifier mismatch"
 msgstr "רשות ונושא מזהה מפתח לא תואמים"
 
 # ומספר מנפיק סידורי
-#: gajim/common/connection.py:109
+#: gajim/common/connection.py:112
 msgid "Authority and issuer serial number mismatch"
 msgstr "רשות ומספר סידורי של מנפיק לא תואמים"
 
-#: gajim/common/connection.py:110
+#: gajim/common/connection.py:113
 msgid "Key usage does not include certificate signing"
 msgstr "שימוש מפתח לא כולל חתימת תעודה"
 
-#: gajim/common/connection.py:111
+#: gajim/common/connection.py:114
 msgid "Application verification failure"
 msgstr "כשל אימות פניה"
 
-#: gajim/common/connection.py:870
+#: gajim/common/connection.py:876
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "החיבור עם חשבון \"%s\" אבד"
 
-#: gajim/common/connection.py:871
+#: gajim/common/connection.py:877
 msgid "Reconnect manually."
 msgstr "התחבר ידנית."
 
-#: gajim/common/connection.py:882
+#: gajim/common/connection.py:888
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "שרת %(name)s ענה באופן שגוי לבקשת rhauo: %(error)s"
 
-#: gajim/common/connection.py:923
+#: gajim/common/connection.py:930
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "שרת %s סיפק טופס רישום שונה"
 
-#: gajim/common/connection.py:1281
+#: gajim/common/connection.py:1283
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "לא היתה אפשרות להתחבר למארח \"%(host)s\" דרך ציר \"%(proxy)s\""
 
-#: gajim/common/connection.py:1284
+#: gajim/common/connection.py:1286
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "לא היתה אפשרות להתחבר אל \"%(host)s\""
 
-#: gajim/common/connection.py:1291
+#: gajim/common/connection.py:1293
 #, python-format
 msgid "Server replied: %s"
 msgstr "תגובת שרת: %s"
 
-#: gajim/common/connection.py:1306
+#: gajim/common/connection.py:1308
 msgid "Connection to proxy failed"
 msgstr "התחברות אל proxy נכשלה"
 
-#: gajim/common/connection.py:1344 gajim/common/connection.py:1447
+#: gajim/common/connection.py:1346 gajim/common/connection.py:1449
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "לא היתה אפשרות להתחבר לחשבון %s"
 
-#: gajim/common/connection.py:1345 gajim/common/connection.py:1448
+#: gajim/common/connection.py:1347 gajim/common/connection.py:1450
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "החיבור עם חשבון %s אבד. כעת מנסה להתחבר מחדש."
 
 # חסרת תוקף
-#: gajim/common/connection.py:1370
+#: gajim/common/connection.py:1372
 #, python-format
 msgid "The authenticity of the %s certificate could be invalid"
 msgstr "אמינותה של התעודה %s עלולה להיות רעועה"
 
-#: gajim/common/connection.py:1373
+#: gajim/common/connection.py:1375
 #, python-format
 msgid ""
 "\n"
@@ -6852,7 +6857,7 @@ msgstr ""
 "\n"
 "שגיאת SSL: ‏<b>%s</b>"
 
-#: gajim/common/connection.py:1375
+#: gajim/common/connection.py:1377
 #, python-format
 msgid ""
 "\n"
@@ -6862,7 +6867,7 @@ msgstr ""
 "שגיאת SSL לא מוכרת: %d"
 
 # שם תחום
-#: gajim/common/connection.py:1421
+#: gajim/common/connection.py:1423
 #, python-format
 msgid ""
 "The authenticity of the %s certificate could be invalid.\n"
@@ -6871,33 +6876,33 @@ msgstr ""
 "אמינותה של התעודה %s עלולה להיות רעועה.\n"
 "תעודה זו לא מכסה את מתחם זה."
 
-#: gajim/common/connection.py:1471 gajim/common/connection.py:2236
+#: gajim/common/connection.py:1473 gajim/common/connection.py:2238
 #: gajim/common/zeroconf/connection_zeroconf.py:192
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "לא היתה אפשרות להתחבר אל \"%s\""
 
-#: gajim/common/connection.py:1510
+#: gajim/common/connection.py:1512
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "אימות עם \"%s\" נכשל"
 
 # נכונות
-#: gajim/common/connection.py:1511
+#: gajim/common/connection.py:1513
 msgid "Please check your login and password for correctness."
 msgstr "אנא בדוק תקינות התחברות וסיסמה."
 
-#: gajim/common/connection.py:2095
+#: gajim/common/connection.py:2097
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
 
-#: gajim/common/connection.py:2099
+#: gajim/common/connection.py:2101
 msgid "Sent contacts:"
 msgstr "אנשי קשר אשר נשלחו:"
 
 # נתון להשגה/לביצוע/בהישג יד
-#: gajim/common/connection.py:2253 gajim/common/connection.py:2275
+#: gajim/common/connection.py:2255 gajim/common/connection.py:2277
 msgid "Not fetched because of invisible status"
 msgstr "לא מובא בשל מצב בלתי נראה"
 
@@ -6921,58 +6926,58 @@ msgstr ""
 msgid "D-Bus does not run correctly on this machine: session bus not present"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:40
+#: gajim/common/multimedia_helpers.py:45
 #, fuzzy
 msgid "Default device"
 msgstr "התקן שגרתי"
 
-#: gajim/common/multimedia_helpers.py:59
+#: gajim/common/multimedia_helpers.py:66
 msgid "Audio test"
 msgstr "בדיקת קול"
 
-#: gajim/common/multimedia_helpers.py:62 gajim/common/multimedia_helpers.py:78
-#: gajim/common/multimedia_helpers.py:92 gajim/common/multimedia_helpers.py:110
+#: gajim/common/multimedia_helpers.py:69 gajim/common/multimedia_helpers.py:85
+#: gajim/common/multimedia_helpers.py:99 gajim/common/multimedia_helpers.py:117
 msgid "Autodetect"
 msgstr "איתור אוטומטי"
 
-#: gajim/common/multimedia_helpers.py:65 gajim/common/multimedia_helpers.py:80
+#: gajim/common/multimedia_helpers.py:72 gajim/common/multimedia_helpers.py:87
 #, python-format
 msgid "ALSA: %s"
 msgstr "‏ALSA: ‏%s"
 
-#: gajim/common/multimedia_helpers.py:68 gajim/common/multimedia_helpers.py:82
+#: gajim/common/multimedia_helpers.py:75 gajim/common/multimedia_helpers.py:89
 #, python-format
 msgid "Pulse: %s"
 msgstr "‏Pulse: ‏%s"
 
 # מעושה, מלאכותי
-#: gajim/common/multimedia_helpers.py:76
+#: gajim/common/multimedia_helpers.py:83
 msgid "Fake audio output"
 msgstr "פלט שמע מזויף"
 
-#: gajim/common/multimedia_helpers.py:89
+#: gajim/common/multimedia_helpers.py:96
 msgid "Video test"
 msgstr "בדיקת וידאו"
 
-#: gajim/common/multimedia_helpers.py:94
+#: gajim/common/multimedia_helpers.py:101
 #, python-format
 msgid "V4L2: %s"
 msgstr "‏V4L2: ‏%s"
 
-#: gajim/common/multimedia_helpers.py:97
+#: gajim/common/multimedia_helpers.py:104
 msgid "Screen"
 msgstr "מסך"
 
-#: gajim/common/multimedia_helpers.py:104
+#: gajim/common/multimedia_helpers.py:111
 msgid "Fake video output"
 msgstr "פלט וידאו מזויף"
 
-#: gajim/common/multimedia_helpers.py:107
+#: gajim/common/multimedia_helpers.py:114
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr "מערכת חלונות X ‏(X11/XShm/Xv): ‏%s"
 
-#: gajim/common/multimedia_helpers.py:109
+#: gajim/common/multimedia_helpers.py:116
 msgid "X Window System (without Xv)"
 msgstr "מערכת חלונות X (ללא Xv)"
 
@@ -7895,128 +7900,128 @@ msgstr "הדדית"
 msgid "Unknown"
 msgstr "לא ידועה"
 
-#: gajim/common/helpers.py:443
+#: gajim/common/helpers.py:441
 msgid "?Ask (for Subscription):None"
 msgstr "אין"
 
-#: gajim/common/helpers.py:445
+#: gajim/common/helpers.py:443
 msgid "Subscribe"
 msgstr "הרשמה"
 
-#: gajim/common/helpers.py:454
+#: gajim/common/helpers.py:452
 msgid "?Group Chat Contact Role:None"
 msgstr "אין"
 
-#: gajim/common/helpers.py:457
+#: gajim/common/helpers.py:455
 msgid "Moderators"
 msgstr "אחראים"
 
-#: gajim/common/helpers.py:459
+#: gajim/common/helpers.py:457
 msgid "Moderator"
 msgstr "אחראי"
 
-#: gajim/common/helpers.py:462
+#: gajim/common/helpers.py:460
 msgid "Participants"
 msgstr "משתתפים"
 
-#: gajim/common/helpers.py:464
+#: gajim/common/helpers.py:462
 msgid "Participant"
 msgstr "משתתף"
 
-#: gajim/common/helpers.py:467
+#: gajim/common/helpers.py:465
 msgid "Visitors"
 msgstr "מבקרים"
 
-#: gajim/common/helpers.py:469
+#: gajim/common/helpers.py:467
 msgid "Visitor"
 msgstr "מבקר"
 
-#: gajim/common/helpers.py:520
+#: gajim/common/helpers.py:518
 msgid "is paying attention to the conversation"
 msgstr "קשוב/ה כעת לשיחה"
 
-#: gajim/common/helpers.py:522
+#: gajim/common/helpers.py:520
 msgid "is doing something else"
 msgstr "עושה כעת משהו אחר"
 
-#: gajim/common/helpers.py:524
+#: gajim/common/helpers.py:522
 #, fuzzy
 msgid "is composing a message…"
 msgstr "כותב/ת כעת הודעה..."
 
-#: gajim/common/helpers.py:527
+#: gajim/common/helpers.py:525
 msgid "paused composing a message"
 msgstr "חדל/ה מלהלחין הודעה"
 
-#: gajim/common/helpers.py:529
+#: gajim/common/helpers.py:527
 msgid "has closed the chat window or tab"
 msgstr "סגר/ה את כרטיסיית או חלון השיחה"
 
 # גיבי בתים
-#: gajim/common/helpers.py:756
+#: gajim/common/helpers.py:754
 #, python-format
 msgid "%s GiB"
 msgstr "%s גי״ב"
 
 # גיגה בתים
-#: gajim/common/helpers.py:759
+#: gajim/common/helpers.py:757
 #, python-format
 msgid "%s GB"
 msgstr "%s ג״ב"
 
 # מיבי בתים
-#: gajim/common/helpers.py:763
+#: gajim/common/helpers.py:761
 #, python-format
 msgid "%s MiB"
 msgstr "%s מי״ב"
 
 # מגה בתים
-#: gajim/common/helpers.py:766
+#: gajim/common/helpers.py:764
 #, python-format
 msgid "%s MB"
 msgstr "%s מ״ב"
 
 # קיבי בתים
-#: gajim/common/helpers.py:770
+#: gajim/common/helpers.py:768
 #, python-format
 msgid "%s KiB"
 msgstr "%s קי״ב"
 
 # קילו בתים
-#: gajim/common/helpers.py:773
+#: gajim/common/helpers.py:771
 #, python-format
 msgid "%s KB"
 msgstr "%s ק״ב"
 
 # בתים
-#: gajim/common/helpers.py:776
+#: gajim/common/helpers.py:774
 #, python-format
 msgid "%s B"
 msgstr "%s ב"
 
-#: gajim/common/helpers.py:1143 gajim/common/helpers.py:1150
+#: gajim/common/helpers.py:1141 gajim/common/helpers.py:1148
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "ממתינה לך הודעה %d"
 msgstr[1] "ממתינות לך %d הודעות"
 
-#: gajim/common/helpers.py:1157
+#: gajim/common/helpers.py:1155
 #, fuzzy, python-format
 msgid "from room %s"
 msgstr " בחדר %s"
 
-#: gajim/common/helpers.py:1160 gajim/common/helpers.py:1177
+#: gajim/common/helpers.py:1158 gajim/common/helpers.py:1175
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr " מאת המשתמש %s"
 
-#: gajim/common/helpers.py:1162
+#: gajim/common/helpers.py:1160
 #, fuzzy, python-format
 msgid "from %s"
 msgstr " מאת %s"
 
-#: gajim/common/helpers.py:1169 gajim/common/helpers.py:1175
+#: gajim/common/helpers.py:1167 gajim/common/helpers.py:1173
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
@@ -8024,40 +8029,40 @@ msgstr[0] "אירוע %d תלוי ועומד"
 msgstr[1] "%d אירועים תלויים ועומדים"
 
 # In Hebrew: גאג'ים
-#: gajim/common/helpers.py:1193 gajim/common/helpers.py:1205
+#: gajim/common/helpers.py:1191 gajim/common/helpers.py:1203
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "‫Gajim"
 
-#: gajim/common/helpers.py:1207
+#: gajim/common/helpers.py:1205
 #, python-format
 msgid "Gajim - %s"
 msgstr "‫Gajim - ‫%s"
 
-#: gajim/common/helpers.py:1394 gajim/data/gui/add_new_contact_window.ui:24
+#: gajim/common/helpers.py:1392 gajim/data/gui/add_new_contact_window.ui:24
 msgid "I would like to add you to my contact list."
 msgstr "ברצוני להוסיף אותך לרשימת הקשר שלי."
 
-#: gajim/common/helpers.py:1396
+#: gajim/common/helpers.py:1394
 msgid "Hello, I am $name."
 msgstr "שלום, שמי $name."
 
-#: gajim/common/helpers.py:1510 gajim/common/helpers.py:1519
-#: gajim/common/helpers.py:1578
+#: gajim/common/helpers.py:1508 gajim/common/helpers.py:1517
+#: gajim/common/helpers.py:1576
 msgid "Timeout loading image"
 msgstr "תם הזמן אשר הוקצב לטעינת תמונה"
 
 # BUG: File too big
-#: gajim/common/helpers.py:1529 gajim/common/helpers.py:1576
+#: gajim/common/helpers.py:1527 gajim/common/helpers.py:1574
 msgid "Image is too big"
 msgstr "התמונה הינה גדולה מדי"
 
-#: gajim/common/helpers.py:1540
+#: gajim/common/helpers.py:1538
 msgid "PyCURL is not installed"
 msgstr "‏PyCURL אינה מותקנת"
 
-#: gajim/common/helpers.py:1580
+#: gajim/common/helpers.py:1578
 msgid "Error loading image"
 msgstr "שגיאה בטעינת תמונה"
 
@@ -8090,7 +8095,7 @@ msgstr ""
 msgid "message"
 msgstr "הודעה"
 
-#: gajim/common/connection_handlers.py:1855
+#: gajim/common/connection_handlers.py:1863
 msgid "I would like to add you to my roster."
 msgstr "ברצוני להוסיף אותך לרשימה שלי."
 
@@ -8812,12 +8817,12 @@ msgstr "גופן"
 msgid "Clear formatting"
 msgstr "איפוס עיצוב"
 
-#: gajim/data/gui/groupchat_control.ui:280 gajim/data/gui/chat_control.ui:803
+#: gajim/data/gui/groupchat_control.ui:283 gajim/data/gui/chat_control.ui:805
 #, fuzzy
 msgid "Choose an encryption"
 msgstr "הצפנת סיסמה"
 
-#: gajim/data/gui/groupchat_control.ui:326 gajim/data/gui/chat_control.ui:851
+#: gajim/data/gui/groupchat_control.ui:329 gajim/data/gui/chat_control.ui:853
 msgid "Show a list of emoticons (Alt+M)"
 msgstr "הצגת רשימת רגשונים (Alt+M)"
 
@@ -8887,7 +8892,7 @@ msgstr "<b>גופן</b>"
 msgid "<b>#</b>"
 msgstr "<b>גופן</b>"
 
-#: gajim/data/gui/chat_control.ui:727
+#: gajim/data/gui/chat_control.ui:729
 msgid "#"
 msgstr ""
 
@@ -11144,6 +11149,24 @@ msgstr "אחרונים:"
 msgid "Plugin manager"
 msgstr "כשל תוסף"
 
+#, fuzzy
+#~ msgid ""
+#~ "Install /\n"
+#~ "Upgrade"
+#~ msgstr "מותקנים"
+
+#, fuzzy
+#~ msgid "Install/Upgrade"
+#~ msgstr "מותקנים"
+
+#, fuzzy
+#~ msgid "Install and Upgrade Plugins"
+#~ msgstr "מותקנים"
+
+#, fuzzy
+#~ msgid "Plugins updates"
+#~ msgstr "כשל תוסף"
+
 #~ msgid ""
 #~ "Your configured emoticons theme has not been found, so emoticons have "
 #~ "been disabled."
@@ -11156,20 +11179,6 @@ msgstr "כשל תוסף"
 #, fuzzy
 #~ msgid "Shows or hides the ipython window"
 #~ msgstr "cli"
-
-#, fuzzy
-#~ msgid ""
-#~ "Install /\n"
-#~ "Upgrade"
-#~ msgstr "מותקנים"
-
-#, fuzzy
-#~ msgid "Install/Upgrade"
-#~ msgstr "מותקנים"
-
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "כשל תוסף"
 
 # Maybe an RTL issue would show up
 # Needs to be tested
