@@ -218,7 +218,7 @@ class GajimApplication(Gtk.Application):
         if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
             i18n.direction_mark = '\u200F'
 
-        from ctypes import CDLL
+        from ctypes import CDLL, byref, create_string_buffer
         from ctypes.util import find_library
         import platform
 
@@ -231,7 +231,10 @@ class GajimApplication(Gtk.Application):
             PR_SET_NAME = 15
 
             if sysname == 'Linux':
-                libc.prctl(PR_SET_NAME, 'gajim')
+                proc_name = b'gajim'
+                buff = create_string_buffer(len(proc_name)+1)
+                buff.value = proc_name
+                libc.prctl(PR_SET_NAME, byref(buff), 0, 0, 0)
             elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
                 libc.setproctitle('gajim')
 
