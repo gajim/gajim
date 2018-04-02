@@ -1321,12 +1321,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.connect(
             'response', lambda dialog, *args: Gtk.AboutDialog.do_close(dialog))
 
-        self.show_all()
-
-        # GTK Bug, We have to manually hide the License Button
-        # Bug exists only on Windows
-        if os.name == 'nt':
-            self.get_action_area().get_children()[1].hide()
+        self.show()
 
 
 class Dialog(Gtk.Dialog):
