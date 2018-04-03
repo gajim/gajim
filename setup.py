@@ -285,10 +285,8 @@ setup(
     package_data={'gajim': package_data},
     data_files=data_files,
     install_requires=[
+        'keyring',
         'nbxmpp>=0.6.6',
         'pyOpenSSL>=0.12',
-    ],
-    extras_require={
-        'secret_password': ["keyring"]
-    }
+    ]
 )
