@@ -40,7 +40,7 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
     def __init__(self, conn, jid, thread_id, type_='chat'):
         stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
                 type_='chat')
-        app.ged.register_event_handler('decrypted-message-received', ged.GUI1,
+        app.ged.register_event_handler('decrypted-message-received', ged.PREGUI,
             self._nec_decrypted_message_received)
 
         self.control = None

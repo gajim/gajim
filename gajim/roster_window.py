@@ -2695,8 +2695,6 @@ class RosterWindow:
         self.draw_account(obj.conn.name)
 
     def _nec_decrypted_message_received(self, obj):
-        if not obj.msgtxt: # empty message text
-            return True
         if obj.mtype not in ('normal', 'chat'):
             return
         if obj.mtype == 'normal' and obj.popup:
@@ -2706,28 +2704,8 @@ class RosterWindow:
                 message=obj.msgtxt, resource=obj.resource, session=obj.session,
                 form_node=obj.form_node)
             return
-        if obj.session.control and obj.mtype == 'chat':
-            typ = ''
-            xep0184_id = None
-            if obj.mtype == 'error':
-                typ = 'error'
-            if obj.forwarded and obj.sent:
-                typ = 'out'
-                if obj.jid != app.get_jid_from_account(obj.conn.name):
-                    xep0184_id = obj.id_
 
-            obj.session.control.print_conversation(obj.msgtxt, typ,
-                tim=obj.timestamp, encrypted=obj.encrypted, subject=obj.subject,
-                xhtml=obj.xhtml, displaymarking=obj.displaymarking,
-                msg_log_id=obj.msg_log_id, msg_stanza_id=obj.id_, correct_id=obj.correct_id,
-                xep0184_id=xep0184_id, additional_data=obj.additional_data)
-            if obj.msg_log_id:
-                pw = obj.session.control.parent_win
-                end = obj.session.control.conv_textview.autoscroll
-                if not pw or (pw.get_active_control() and obj.session.control \
-                == pw.get_active_control() and pw.is_active() and end):
-                    app.logger.set_read_messages([obj.msg_log_id])
-        elif obj.popup and obj.mtype == 'chat':
+        if obj.popup and obj.mtype == 'chat' and not obj.session.control:
             contact = app.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = app.interface.new_chat(contact,
                 obj.conn.name, session=obj.session)
