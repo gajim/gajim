@@ -1161,6 +1161,9 @@ class ChatControl(ChatControlBase):
             self._nec_caps_received)
         app.ged.remove_event_handler('message-sent', ged.OUT_POSTCORE,
             self._message_sent)
+        app.ged.remove_event_handler(
+            'mam-decrypted-message-received',
+            ged.GUI1, self._nec_mam_decrypted_message_received)
 
         self.unsubscribe_events()
 
