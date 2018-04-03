@@ -24,6 +24,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import keyring
 import logging
 
 from gajim.common import app
@@ -31,12 +32,6 @@ from gajim.common import app
 __all__ = ['get_password', 'save_password']
 
 log = logging.getLogger('gajim.password')
-
-keyring = None
-try:
-    import keyring
-except ImportError:
-    log.debug('python-keyring missing, falling back to plaintext storage')
 
 
 class PasswordStorage(object):
@@ -86,8 +81,7 @@ class PasswordStorageManager(PasswordStorage):
         """
         # TODO: handle disappearing backends
 
-        if app.config.get('use_keyring') and keyring:
-            self.secret = SecretPasswordStorage()
+        self.secret = SecretPasswordStorage()
 
     def get_password(self, account_name):
         pw = app.config.get_per('accounts', account_name, 'password')
