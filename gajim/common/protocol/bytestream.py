@@ -673,7 +673,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         # if we want to respect xep-0065 we have to check for proxy
         # activation result in any result iq
         real_id = iq_obj.getAttr('id')
-        if not real_id.startswith('au_'):
+        if real_id is None:
+            log.warning('Invalid IQ without id attribute:\n%s', iq_obj)
+            raise nbxmpp.NodeProcessed
+        if real_id is None or not real_id.startswith('au_'):
             return
         frm = self._ft_get_from(iq_obj)
         id_ = real_id[3:]
