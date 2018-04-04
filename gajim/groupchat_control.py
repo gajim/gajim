@@ -1752,7 +1752,7 @@ class GroupchatControl(ChatControlBase):
         # status_code
         # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-\
         # init
-        if obj.status_code:
+        if obj.status_code and obj.nick == self.nick:
             if '110' in obj.status_code:
                 # We just join the room
                 if self.room_jid in app.automatic_rooms[self.account] and \
