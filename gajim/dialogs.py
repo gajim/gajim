@@ -1017,6 +1017,9 @@ class AddNewContactWindow:
             self.account_combobox.set_model(liststore)
             self.account_combobox.set_active(0)
 
+        if len(self.agents) == 1:
+            self.protocol_hbox.hide()
+
         if self.account:
             message_buffer = self.message_textview.get_buffer()
             msg = helpers.from_one_line(helpers.get_subscription_request_msg(
