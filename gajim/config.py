@@ -1966,7 +1966,8 @@ class ManageBookmarksWindow:
         self.nick_entry = self.xml.get_object('nick_entry')
         self.nick_entry.connect('changed', self.on_nick_entry_changed)
         self.server_entry = self.xml.get_object('server_entry')
-        self.server_entry.connect('changed', self.on_server_entry_changed)
+        self.server_entry.connect('focus-out-event',
+            self.on_server_entry_focus_out)
         self.room_entry = self.xml.get_object('room_entry')
         self.room_entry_changed_id = self.room_entry.connect('changed',
             self.on_room_entry_changed)
@@ -2172,7 +2173,7 @@ class ManageBookmarksWindow:
                 return True
             model[iter_][6] = nick
 
-    def on_server_entry_changed(self, widget):
+    def on_server_entry_focus_out(self, widget, event):
         if self.ignore_events:
             return
         (model, iter_) = self.selection.get_selected()
