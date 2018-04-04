@@ -937,8 +937,7 @@ class AddNewContactWindow:
         uf_type = {'jabber': 'XMPP', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
             'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
-        online_icon = gtkgui_helpers.get_iconset_name_for('online')
-        liststore.append(['XMPP', online_icon, 'jabber'])
+        liststore.append(['XMPP', 'xmpp', 'jabber'])
         for type_ in self.agents:
             if type_ == 'jabber':
                 continue
