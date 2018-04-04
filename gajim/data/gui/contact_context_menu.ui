@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -218,7 +218,7 @@
     <child>
       <object class="GtkMenuItem" id="information_menuitem">
         <property name="can_focus">False</property>
-        <property name="label">_Information</property>
+        <property name="label" translatable="yes">_Information</property>
         <property name="use_underline">True</property>
       </object>
     </child>
