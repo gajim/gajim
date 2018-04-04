@@ -38,6 +38,7 @@ class DeviceManager(object):
             element = Gst.ElementFactory.make(name, '%spresencetest' % name)
             if element is None:
                 log.warning('could not create %spresencetest', name)
+                return
             if hasattr(element.props, 'device'):
                 element.set_state(Gst.State.READY)
                 devices = element.get_properties('device')
