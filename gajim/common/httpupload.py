@@ -19,7 +19,7 @@ import threading
 import ssl
 import urllib
 from urllib.request import Request, urlopen
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 import io
 import mimetypes
 import logging
@@ -187,7 +187,7 @@ class ConnectionHTTPUpload:
         id_ = app.get_an_id()
         iq.setID(id_)
         request = iq.setTag(name="request", namespace=NS_HTTPUPLOAD)
-        request.addChild('filename', payload=os.path.basename(file.path))
+        request.addChild('filename', payload=quote(os.path.basename(file.path)))
         request.addChild('size', payload=file.size)
         request.addChild('content-type', payload=file.mime)
 
