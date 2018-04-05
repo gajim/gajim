@@ -2695,6 +2695,8 @@ class RosterWindow:
         self.draw_account(obj.conn.name)
 
     def _nec_decrypted_message_received(self, obj):
+        if not obj.msgtxt:
+            return True
         if obj.mtype not in ('normal', 'chat'):
             return
         if obj.mtype == 'normal' and obj.popup:
