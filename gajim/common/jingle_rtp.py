@@ -43,7 +43,7 @@ class JingleRTPContent(JingleContent):
     def __init__(self, session, media, transport=None):
         if transport is None:
             transport = JingleTransportICEUDP(None)
-        JingleContent.__init__(self, session, transport)
+        JingleContent.__init__(self, session, transport, None)
         self.media = media
         self._dtmf_running = False
         self.farstream_media = {

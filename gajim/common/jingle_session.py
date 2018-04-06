@@ -633,8 +633,7 @@ class JingleSession:
             if content_type:
                 try:
                     if transport:
-                        content = content_type(
-                            self, transport=transport, senders=senders)
+                        content = content_type(self, transport=transport)
                         self.add_content(element['name'],
                                          content, 'peer')
                         contents.append(content)

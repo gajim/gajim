@@ -264,17 +264,17 @@ class ChatControl(ChatControlBase):
             act.connect("activate", func)
             self.parent_win.window.add_action(act)
 
-        act = Gio.SimpleAction.new_stateful(
+        self.audio_action = Gio.SimpleAction.new_stateful(
             'toggle-audio-' + self.control_id, None,
             GLib.Variant.new_boolean(False))
-        act.connect('change-state', self._on_audio)
-        self.parent_win.window.add_action(act)
+        self.audio_action.connect('change-state', self._on_audio)
+        self.parent_win.window.add_action(self.audio_action)
 
-        act = Gio.SimpleAction.new_stateful(
+        self.video_action = Gio.SimpleAction.new_stateful(
             'toggle-video-' + self.control_id,
             None, GLib.Variant.new_boolean(False))
-        act.connect('change-state', self._on_video)
-        self.parent_win.window.add_action(act)
+        self.video_action.connect('change-state', self._on_video)
+        self.parent_win.window.add_action(self.video_action)
 
     def update_actions(self):
         win = self.parent_win.window
@@ -526,7 +526,8 @@ class ChatControl(ChatControlBase):
         if state in ('connection_received', 'connecting'):
             setattr(self, jingle_type + '_sid', sid)
 
-        getattr(self, '_' + jingle_type + '_button').set_active(jingle_state != self.JINGLE_STATE_NULL)
+        v = GLib.Variant.new_boolean(jingle_state != self.JINGLE_STATE_NULL)
+        getattr(self, jingle_type + '_action').change_state(v)
 
         getattr(self, 'update_' + jingle_type)()
 
@@ -724,7 +725,8 @@ class ChatControl(ChatControlBase):
             content = session.get_content(jingle_type)
             if content:
                 session.remove_content(content.creator, content.name)
-        getattr(self, '_' + jingle_type + '_button').set_active(False)
+        v = GLib.Variant.new_boolean(False)
+        getattr(self, jingle_type + '_action').change_state(v)
         getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, state, jingle_type):
@@ -767,9 +769,6 @@ class ChatControl(ChatControlBase):
             fixed = self.xml.get_object('outgoing_fixed')
             fixed.set_no_show_all(True)
             self.close_jingle_content(jingle_type)
-
-        img = getattr(self, '_' + jingle_type + '_button').get_property('image')
-        img.set_from_file(path_to_img)
 
     def set_lock_image(self):
         loggable = self.session and self.session.is_loggable()
