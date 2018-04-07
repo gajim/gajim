@@ -335,6 +335,7 @@ class GroupchatControl(ChatControlBase):
             # Tooltip Window and Actions have to be created with parent
             self.set_tooltip()
             self.add_actions()
+            GLib.idle_add(self.update_actions)
             self.scale_factor = parent_win.window.get_scale_factor()
             self._connect_window_state_change(parent_win)
         else:
