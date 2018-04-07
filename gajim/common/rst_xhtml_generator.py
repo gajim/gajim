@@ -153,7 +153,7 @@ if __name__ == '__main__':
     print("test 1\n" + Generator.create_xhtml("""
 test::
 
->>> print 1
+>>> print(1)
 1
 
 *I* like it. It is for :JEP:`71`

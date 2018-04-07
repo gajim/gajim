@@ -3,13 +3,13 @@ This module is in charge of taking care of all the infomation related to
 individual files. Files are identified by the account name and its sid.
 
 
->>> print FilesProp.getFileProp('jabberid', '10')
+>>> print(FilesProp.getFileProp('jabberid', '10'))
 None
 >>> fp = FilesProp()
 Traceback (most recent call last):
     ...
 Exception: this class should not be instatiated
->>> print FilesProp.getAllFileProp()
+>>> print(FilesProp.getAllFileProp())
 []
 >>> fp = FilesProp.getNewFileProp('jabberid', '10')
 >>> fp2 = FilesProp.getFileProp('jabberid', '10')
