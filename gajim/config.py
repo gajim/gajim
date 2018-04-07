@@ -2119,7 +2119,12 @@ class ManageBookmarksWindow:
         # Fill in the data for childs
         self.title_entry.set_text(model[iter_][1])
         room_jid = model[iter_][2]
-        (room, server) = room_jid.split('@')
+        room_jid_s = room_jid.split('@')
+        if len(room_jid_s) == 1:
+            room = ''
+            server = room_jid
+        else:
+            (room, server) = room_jid_s
         self.room_entry.handler_block(self.room_entry_changed_id)
         self.room_entry.set_text(room)
         self.room_entry.handler_unblock(self.room_entry_changed_id)
