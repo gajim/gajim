@@ -319,7 +319,7 @@ class SocksQueue:
                     self.process_result(result, sender)
 
     def send_file(self, file_props, account, mode):
-        for key in self.senders.keys():
+        for key in list(self.senders.keys()):
             if file_props.name in key and file_props.transport_sid in key \
             and self.senders[key].mode == mode:
                 log.info('socks5: sending file')
