@@ -29,6 +29,7 @@ from gi.repository import GdkPixbuf
 import base64
 import time
 import logging
+import hashlib
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
@@ -229,6 +230,9 @@ class ProfileWindow:
                     continue
                 self.avatar_encoded = photo_encoded
                 photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
+                self.avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
+                if 'TYPE' in vcard_[i]:
+                    self.avatar_mime_type = vcard_[i]['TYPE']
                 pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
                 if pixbuf is None:
                     continue
