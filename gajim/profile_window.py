@@ -227,6 +227,7 @@ class ProfileWindow:
                 photo_encoded = vcard_[i]['BINVAL']
                 if photo_encoded == '':
                     continue
+                self.avatar_encoded = photo_encoded
                 photo_decoded = base64.b64decode(photo_encoded.encode('utf-8'))
                 pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
                 if pixbuf is None:
