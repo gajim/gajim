@@ -210,11 +210,11 @@ class GenericOption(Gtk.Grid):
         self.set_property('option-value', state)
 
     @staticmethod
-    def set_no_log_for(account, jid):
+    def set_no_log_for(account, state):
         no_log = app.config.get_per('accounts', account, 'no_log_for').split()
-        if jid and account in no_log:
+        if state and account in no_log:
             no_log.remove(account)
-        elif not jid and account not in no_log:
+        elif not state and account not in no_log:
             no_log.append(account)
         app.config.set_per('accounts', account, 'no_log_for', ' '.join(no_log))
 
