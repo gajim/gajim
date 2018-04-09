@@ -4,8 +4,8 @@ Install gajim flatpak repo
 --------------------------
 
 1. `flatpak --user remote-add --from gnome https://sdk.gnome.org/gnome.flatpakrepo`
-1. `flatpak --user install gnome org.gnome.Platform//3.26`
-1. `flatpak --user install gnome org.gnome.Sdk//3.26`
+1. `flatpak --user install gnome org.gnome.Platform//3.28`
+1. `flatpak --user install gnome org.gnome.Sdk//3.28`
 1. `flatpak-builder --repo=repo directory gajim/org.gajim.Gajim.json`
 1. `flatpak --user remote-add --no-gpg-verify repo repo`
 1. `flatpak --user install repo org.gajim.Gajim`
