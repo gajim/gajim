@@ -2370,6 +2370,8 @@ class AccountCreationWizardWindow:
         elif cur_page == 4:
             if self.account in app.connections:
                 del app.connections[self.account]
+                if self.account in app.config.get_per('accounts'):
+                    app.config.del_per('accounts', self.account)
             self.notebook.set_current_page(2)
             self.xml.get_object('form_vbox').remove(self.data_form_widget)
         elif cur_page == 6: # finish page
