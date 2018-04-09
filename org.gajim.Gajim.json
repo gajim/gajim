@@ -329,6 +329,62 @@
             ]
         },
         {
+            "name": "python3-jeepny",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app jeepney-0.3.1-py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/a9/21/c07060fac57d8d4932ccb19f96b244ff056f13192993d2d1253fb87d6784/jeepney-0.3.1-py3-none-any.whl",
+                    "sha256": "e7b961fe9dfa1ed4c576d3bb2d70a9276dace0e16ebed9da09e4d288fe1d3b2a"
+                }
+            ]
+        },
+        {
+            "name": "python3-secretstorage",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app SecretStorage-3.0.1-py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/f3/40/3cbd8b15c8f98b5c6d2480fb0087b06eb39b87992e61c966775156e1a693/SecretStorage-3.0.1-py3-none-any.whl",
+                    "sha256": "1bbf5b85a718854916d1c151fa33e6f667e3c005e033ea46d4123384d233b137"
+                }
+            ]
+        },
+        {
+            "name": "python3-entrypoints",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app entrypoints-0.2.3-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/cc/8b/4eefa9b47f1910b3d2081da67726b066e379b04ca897acfe9f92bac56147/entrypoints-0.2.3-py2.py3-none-any.whl",
+                    "sha256": "10ad569bb245e7e2ba425285b9fa3e8178a0dc92fc53b1e1c553805e15a8825b"
+                }
+            ]
+        },
+        {
+            "name": "python3-keyring",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app keyring-12.2.1-py2.py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/47/c0/4dfeeedaa233a12c3e5eb1e079b4dce96bbcbf0d030abc5e9a6b771e5812/keyring-12.2.1-py2.py3-none-any.whl",
+                    "sha256": "fd597e72df7240ec5a4215c50957e41c3d4bd321d97bf163f4a8e75ca287d77b"
+                }
+            ]
+        },
+        {
             "name": "python3-nbxmpp",
             "buildsystem": "simple",
             "build-commands": [
