@@ -502,9 +502,9 @@ class ChatControl(ChatControlBase):
         if jingle_type not in ('audio', 'video'):
             return
         if state in ('connecting', 'connected', 'stop', 'error') and reason:
-            str = _('%(type)s state : %(state)s, reason: %(reason)s') % {
+            info = _('%(type)s state : %(state)s, reason: %(reason)s') % {
                     'type': jingle_type.capitalize(), 'state': state, 'reason': reason}
-            self.print_conversation(str, 'info')
+            self.print_conversation(info, 'info')
 
         states = {'connecting': self.JINGLE_STATE_CONNECTING,
                 'connection_received': self.JINGLE_STATE_CONNECTION_RECEIVED,
