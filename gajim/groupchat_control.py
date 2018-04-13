@@ -2787,6 +2787,7 @@ class GroupchatControl(ChatControlBase):
                     return True
 
     def append_nick_in_msg_textview(self, widget, nick):
+        self.msg_textview.remove_placeholder()
         message_buffer = self.msg_textview.get_buffer()
         start_iter, end_iter = message_buffer.get_bounds()
         cursor_position = message_buffer.get_insert()
