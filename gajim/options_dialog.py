@@ -239,7 +239,12 @@ class SwitchOption(GenericOption):
         GenericOption.__init__(self, *args)
 
         self.switch = Gtk.Switch()
-        self.switch.set_active(self.option_value)
+        if self.type_ == OptionType.ACTION:
+            self.switch.set_action_name('app.%s' % self.option_value)
+            state = app.app.get_action_state(self.option_value)
+            self.switch.set_active(state.get_boolean())
+        else:
+            self.switch.set_active(self.option_value)
         self.switch.connect('notify::active', self.on_switch)
         self.switch.set_hexpand(True)
         self.switch.set_halign(Gtk.Align.END)
@@ -271,6 +276,7 @@ class EntryOption(GenericOption):
         self.entry.set_text(str(self.option_value))
         self.entry.connect('notify::text', self.on_text_change)
         self.entry.set_valign(Gtk.Align.CENTER)
+        self.entry.set_alignment(1)
 
         if self.value == 'password':
             self.entry.set_invisible_char('*')

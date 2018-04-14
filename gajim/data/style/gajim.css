@@ -75,16 +75,13 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
 
 /* Accounts Window */
-#AccountsWindow > box { padding:30px 30px 30px 30px;}
+#AccountsWindow > box > stack { padding:30px 30px 30px 30px;}
 #AccountsWindow scrolledwindow {border: none;}
-#AccountsWindow list {border: 1px solid; border-color: @borders;}
-#AccountsWindow > box actionbar box {border: none;}
+#AccountsWindow stack list {border: 1px solid; border-color: @borders;}
 
-#AccountNameEntry:disabled { font-size: 16px;
-                             font-weight: bold;
-                             border: none;
-                             background-color: @theme_unfocused_bg_color;
-                             color: @theme_text_color; }
+#AccountsWindow > box > box { border-right: 1px solid; border-color: @borders; }
+
+.account-list > row { padding: 20px 20px 20px 10px; }
 
 /* StartChatListBox */
 #StartChatListBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }

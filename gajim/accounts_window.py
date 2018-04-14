@@ -1,15 +1,15 @@
 from functools import partial
 
-from gi.repository import Gtk, Gio, GLib, Gdk
+from gi.repository import Gtk, GLib, Gdk
 
 from gajim.common import app
-from gajim.gtkgui_helpers import get_image_button
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim.common import passwords
 from gajim import dialogs
 from gajim import config
 from gajim.common import helpers
+from gajim.common import ged
 from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 from gajim.options_dialog import OptionsDialog, OptionsBox
@@ -23,27 +23,20 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('AccountsWindow')
-        self.set_size_request(500, -1)
+        self.set_default_size(700, 550)
         self.set_resizable(False)
+        self.set_title(_('Accounts'))
         self.need_relogin = {}
 
-        glade_objects = [
-            'stack', 'box', 'actionbar', 'headerbar', 'back_button',
-            'menu_button', 'account_page', 'account_list']
+        glade_objects = ['stack', 'box', 'account_list']
         self.builder = gtkgui_helpers.get_gtk_builder('accounts_window.ui')
         for obj in glade_objects:
             setattr(self, obj, self.builder.get_object(obj))
 
-        self.set_titlebar(self.headerbar)
-
-        menu = Gio.Menu()
-        menu.append(_('Merge Accounts'), 'app.merge')
-        menu.append(_('Use PGP Agent'), 'app.agent')
-        self.menu_button.set_menu_model(menu)
-
-        button = get_image_button('list-add-symbolic', _('Add'))
-        button.set_action_name('app.add-account')
-        self.actionbar.pack_start(button)
+        self.account_list.add(Preferences(self))
+        account_item = AddAccount()
+        self.account_list.add(account_item)
+        account_item.set_activatable()
 
         accounts = app.config.get_per('accounts')
         accounts.sort()
@@ -58,7 +51,20 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
         self.connect('destroy', self.on_destroy)
         self.connect('key-press-event', self.on_key_press)
+
+        self._activate_preferences_page()
         self.show_all()
+
+        app.ged.register_event_handler(
+            'our-show', ged.GUI2, self._nec_our_status)
+
+    def _nec_our_status(self, event):
+        self.update_accounts()
+
+    def _activate_preferences_page(self):
+        row = self.account_list.get_row_at_index(0)
+        self.account_list.select_row(row)
+        self.account_list.emit('row-activated', row)
 
     def on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -66,32 +72,16 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     def on_destroy(self, *args):
         self.check_relogin()
+        app.ged.remove_event_handler(
+            'our-show', ged.GUI2, self._nec_our_status)
         del app.interface.instances['accounts']
 
     def on_child_visible(self, stack, *args):
         page = stack.get_visible_child_name()
         if page is None:
             return
-        if page == 'main':
-            self.menu_button.show()
-            self.back_button.hide()
-            self.check_relogin()
-        else:
-            self.back_button.show()
-            self.menu_button.hide()
-
-    def on_back_button(self, *args):
-        page = self.stack.get_visible_child_name()
-        child = self.stack.get_visible_child()
-        self.remove_all_pages()
         if page == 'account':
-            child.toggle.set_active(False)
-            self.stack.add_named(self.account_page, 'main')
-            self.stack.set_visible_child_name('main')
-            self.update_accounts()
-        else:
-            self.stack.add_named(child.parent, 'account')
-            self.stack.set_visible_child_name('account')
+            self.check_relogin()
 
     def update_accounts(self):
         for row in self.account_list.get_children():
@@ -222,6 +212,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 self.account_list.remove(row)
                 del self.need_relogin[account]
                 break
+        self._activate_preferences_page()
 
     def add_account(self, account):
         account_item = Account(account, self)
@@ -312,61 +303,92 @@ class AccountsWindow(Gtk.ApplicationWindow):
         gui_menu_builder.build_accounts_menu()
 
 
+class AddAccount(Gtk.Box):
+    def __init__(self):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
+                         spacing=12)
+
+        self.account = None
+
+        self.label = Gtk.Label(_('Add Account…'))
+        self.label.set_halign(Gtk.Align.START)
+        self.label.set_hexpand(True)
+
+        self.image = Gtk.Image.new_from_icon_name(
+            'list-add-symbolic', Gtk.IconSize.MENU)
+
+        self.add(self.image)
+        self.add(self.label)
+
+    def set_activatable(self):
+        self.get_parent().set_selectable(False)
+
+    def on_row_activated(self):
+        app.app.activate_action('add-account')
+
+    def update(self):
+        pass
+
+
+class Preferences(Gtk.Box):
+    def __init__(self, parent):
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
+                         spacing=12)
+
+        self.options = PreferencesPage()
+        self.parent = parent
+        self.account = None
+
+        self.label = Gtk.Label(_('Preferences'))
+        self.label.set_halign(Gtk.Align.START)
+        self.label.set_hexpand(True)
+
+        self.image = Gtk.Image.new_from_icon_name(
+            'system-run-symbolic', Gtk.IconSize.MENU)
+
+        self.add(self.image)
+        self.add(self.label)
+
+    def set_activatable(self):
+        pass
+
+    def on_row_activated(self):
+        self.options.update_states()
+        self.parent.set_page(self.options, 'pref')
+
+    def update(self):
+        pass
+
+
 class Account(Gtk.Box):
     def __init__(self, account, parent):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=12)
         self.account = account
         if account == app.ZEROCONF_ACC_NAME:
-            self.options = ZeroConfPage(account)
+            self.options = ZeroConfPage(account, parent)
         else:
-            self.options = AccountPage(account)
+            self.options = AccountPage(account, parent)
         self.parent = parent
-
-        switch = Gtk.Switch()
-        switch.set_active(app.config.get_per('accounts', account, 'active'))
-        switch.set_vexpand(False)
-        switch.set_valign(Gtk.Align.CENTER)
-        switch.set_halign(Gtk.Align.START)
-        if account == app.ZEROCONF_ACC_NAME and not app.HAVE_ZEROCONF:
-            switch.set_sensitive(False)
-            switch.set_active(False)
-        switch.connect('notify::active', self.on_switch, self.account)
 
         account_label = app.config.get_per('accounts', account, 'account_label')
         self.label = Gtk.Label(label=account_label or account)
         self.label.set_halign(Gtk.Align.START)
         self.label.set_hexpand(True)
 
-        self.add(switch)
-        self.add(self.label)
+        self.image = Gtk.Image()
+        self._update_image()
 
-        if account != app.ZEROCONF_ACC_NAME:
-            button = get_image_button('list-remove-symbolic', _('Remove'))
-            button.connect('clicked', parent.on_remove_account, account)
-            self.add(button)
+        self.add(self.image)
+        self.add(self.label)
 
     def set_activatable(self):
         if self.account == app.ZEROCONF_ACC_NAME:
             self.get_parent().set_activatable(app.HAVE_ZEROCONF)
-
-    def on_switch(self, switch, param, account):
-        old_state = app.config.get_per('accounts', account, 'active')
-        state = switch.get_active()
-        if old_state == state:
-            return
-
-        if (account in app.connections and
-                app.connections[account].connected > 0):
-            # connecting or connected
-            app.interface.raise_dialog('connected-on-disable-account')
-            switch.set_active(not state)
-            return
-        if state:
-            self.parent.enable_account(account)
-        else:
-            self.parent.disable_account(account)
-        app.config.set_per('accounts', account, 'active', state)
+            self.get_parent().set_sensitive(app.HAVE_ZEROCONF)
+            if not app.HAVE_ZEROCONF:
+                self.get_parent().set_tooltip_text(
+                    _('Please check if Avahi or Bonjour is installed.'))
 
     def on_row_activated(self):
         self.options.update_states()
@@ -376,6 +398,12 @@ class Account(Gtk.Box):
         account_label = app.config.get_per(
             'accounts', self.account, 'account_label')
         self.label.set_text(account_label or self.account)
+        self._update_image()
+
+    def _update_image(self):
+        show = helpers.get_current_show(self.account)
+        icon = gtkgui_helpers.get_iconset_name_for(show)
+        self.image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
 
 class GenericOptionPage(Gtk.Box):
@@ -384,37 +412,37 @@ class GenericOptionPage(Gtk.Box):
         self.account = account
         self.parent = parent
 
-        self.toggle = get_image_button('document-edit-symbolic',
-                                       _('Rename account label'), toggle=True)
-        self.toggle.connect('toggled', self.set_entry_text)
-
-        self.entry = Gtk.Entry()
-        self.entry.set_sensitive(False)
-        self.entry.set_name('AccountNameEntry')
-        self.set_entry_text(self.toggle, update=True)
-
-        box = Gtk.Box()
-        if isinstance(self, AccountPage):
-            box.pack_start(self.toggle, False, True, 0)
-        box.pack_start(self.entry, True, True, 0)
+        button = Gtk.Button.new_from_icon_name(
+            'go-previous-symbolic', Gtk.IconSize.MENU)
+        button.set_halign(Gtk.Align.START)
+        button.connect('clicked', self._on_back_button)
+        if not isinstance(self, (AccountPage, PreferencesPage, ZeroConfPage)):
+            self.pack_start(button, False, True, 0)
 
         self.listbox = OptionsBox(account)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.listbox.set_vexpand(False)
+        self.listbox.set_valign(Gtk.Align.END)
 
         for option in options:
             self.listbox.add_option(option)
         self.listbox.update_states()
 
-        self.pack_start(box, False, False, 0)
-        self.pack_start(self.listbox, True, True, 0)
+        self.pack_end(self.listbox, True, True, 0)
 
         self.listbox.connect('row-activated', self.on_row_activated)
+
+    def _on_back_button(self, *args):
+        account_window = self.get_toplevel()
+        child = account_window.stack.get_visible_child()
+        account_window.remove_all_pages()
+        account_window.stack.add_named(child.parent, 'account')
+        account_window.stack.set_visible_child_name('account')
 
     def update_states(self):
         self.listbox.update_states()
 
     def on_row_activated(self, listbox, row):
-        self.toggle.set_active(False)
         row.get_child().on_row_activated()
 
     def set_entry_text(self, toggle, update=False):
@@ -438,11 +466,69 @@ class GenericOptionPage(Gtk.Box):
                 gui_menu_builder.build_accounts_menu()
 
     def update(self):
-        self.set_entry_text(self.toggle, update=True)
+        pass
 
     def set_page(self, options, name):
         options.update_states()
         self.get_toplevel().set_page(options, name)
+
+    def _add_top_buttons(self, parent):
+        # This adds the Account enable switch and the back button
+        box = Gtk.Box()
+        box.set_hexpand(True)
+        box.set_halign(Gtk.Align.FILL)
+        switch = Gtk.Switch()
+        switch.set_active(app.config.get_per('accounts', self.account, 'active'))
+        switch.set_vexpand(False)
+        switch.set_valign(Gtk.Align.CENTER)
+        switch.set_halign(Gtk.Align.END)
+        if self.account == app.ZEROCONF_ACC_NAME and not app.HAVE_ZEROCONF:
+            switch.set_sensitive(False)
+            switch.set_active(False)
+
+        switch.connect('notify::active', self._on_enable_switch, self.account)
+        box.pack_start(switch, False, False, 0)
+        if self.account != app.ZEROCONF_ACC_NAME:
+            button = Gtk.Button(label=_('Remove'))
+            button.connect(
+                'clicked', parent.on_remove_account, self.account)
+            button.get_style_context().add_class('destructive-action')
+            button.set_halign(Gtk.Align.END)
+            switch.set_vexpand(False)
+            box.pack_end(button, False, False, 0)
+        self.pack_start(box, True, True, 0)
+
+    def _on_enable_switch(self, switch, param, account):
+        old_state = app.config.get_per('accounts', account, 'active')
+        state = switch.get_active()
+        if old_state == state:
+            return
+
+        if (account in app.connections and
+                app.connections[account].connected > 0):
+            # connecting or connected
+            app.interface.raise_dialog('connected-on-disable-account')
+            switch.set_active(not state)
+            return
+        if state:
+            self.parent.enable_account(account)
+        else:
+            self.parent.disable_account(account)
+        app.config.set_per('accounts', account, 'active', state)
+
+
+class PreferencesPage(GenericOptionPage):
+    def __init__(self):
+
+        options = [
+            Option(OptionKind.SWITCH, _('Merge Accounts'),
+                   OptionType.ACTION, 'merge'),
+
+            Option(OptionKind.SWITCH, _('Use PGP Agent'),
+                   OptionType.ACTION, 'agent'),
+            ]
+
+        GenericOptionPage.__init__(self, None, None, options)
 
 
 class AccountPage(GenericOptionPage):
@@ -454,6 +540,10 @@ class AccountPage(GenericOptionPage):
             self.set_page, ConnectionPage(account, self), 'connection')
 
         options = [
+            Option(OptionKind.ENTRY, _('Label'),
+                   OptionType.ACCOUNT_CONFIG, 'account_label',
+                   callback=self._on_account_name_change),
+
             Option(OptionKind.LOGIN, _('Login'), OptionType.DIALOG,
                    props={'dialog': LoginDialog}),
 
@@ -477,6 +567,10 @@ class AccountPage(GenericOptionPage):
             ]
 
         GenericOptionPage.__init__(self, account, parent, options)
+        self._add_top_buttons(parent)
+
+    def _on_account_name_change(self, account_name, *args):
+        self.parent.update_accounts()
 
 
 class GeneralPage(GenericOptionPage):
@@ -572,6 +666,7 @@ class ZeroConfPage(GenericOptionPage):
             ]
 
         GenericOptionPage.__init__(self, account, parent, options)
+        self._add_top_buttons(None)
 
 
 class ZeroconfProfileDialog(OptionsDialog):

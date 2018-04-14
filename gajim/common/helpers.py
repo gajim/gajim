@@ -1244,6 +1244,11 @@ def get_accounts_info():
                         'show': status, 'message': message})
     return accounts
 
+def get_current_show(account):
+    if account not in app.connections:
+        return 'offline'
+    status = app.connections[account].connected
+    return app.SHOW_LIST[status]
 
 def get_iconset_path(iconset):
     if os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', iconset)):
