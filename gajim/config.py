@@ -2750,6 +2750,7 @@ class AccountCreationWizardWindow:
     def get_config(self, login, server, savepass, password, anonymous=False):
         config = {}
         config['name'] = login
+        config['account_label'] = '%s@%s' % (login, server)
         config['hostname'] = server
         config['savepass'] = savepass
         config['password'] = password
