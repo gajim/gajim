@@ -113,10 +113,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.stack.set_visible_child(page)
 
     def update_proxy_list(self):
-        page = self.stack.get_child_by_name('connetion')
+        page = self.stack.get_child_by_name('connection')
         if page is None:
             return
-        page.options['proxy'].update_values()
+        page.listbox.get_option('proxy').update_values()
 
     def check_relogin(self):
         for account in self.need_relogin:
