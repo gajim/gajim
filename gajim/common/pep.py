@@ -483,6 +483,10 @@ class AvatarNotificationPEP(AbstractPEP):
     def _extract_info(self, items):
         self.avatar = None
         for item in items.getTags('item'):
+            metadata = item.getTag('metadata')
+            if metadata is None:
+                app.log('avatar').warning('Invalid avatar stanza:\n%s', items)
+                break
             info = item.getTag('metadata').getTag('info')
             if info is not None:
                 self.avatar = info.getAttrs()
@@ -494,7 +498,7 @@ class AvatarNotificationPEP(AbstractPEP):
         con = app.connections[account]
         if self.avatar is None:
             # Remove avatar
-            app.log('avatar').debug('Remove (Pubsub): %s', jid)
+            app.log('avatar').info('Remove (Pubsub): %s', jid)
             app.contacts.set_avatar(account, jid, None)
             own_jid = con.get_own_jid().getStripped()
             app.logger.set_avatar_sha(own_jid, jid, None)
