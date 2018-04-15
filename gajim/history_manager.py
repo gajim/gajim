@@ -640,7 +640,7 @@ class HistoryManager:
 
     def on_search_results_listview_row_activated(self, widget, path, column):
         # get log_line_id, jid_id from row we double clicked
-        log_line_id = self.search_results_liststore[path][0]
+        log_line_id = str(self.search_results_liststore[path][0])
         jid = self.search_results_liststore[path][1]
         # make it string as in gtk liststores I have them all as strings
         # as this is what db returns so I don't have to fight with types
@@ -661,13 +661,14 @@ class HistoryManager:
 
         iter_ = self.logs_liststore.get_iter_first()
         while iter_:
-            # self.logs_liststore[iter_][0] holds lon_line_ids
+            # self.logs_liststore[iter_][0] holds log_line_ids
             if self.logs_liststore[iter_][0] == log_line_id:
                 break
             iter_ = self.logs_liststore.iter_next(iter_)
 
         path = self.logs_liststore.get_path(iter_)
         self.logs_listview.scroll_to_cell(path)
+        self.logs_listview.get_selection().select_path(path)
 
 
 def main():
