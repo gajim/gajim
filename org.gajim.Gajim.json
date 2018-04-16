@@ -15,6 +15,7 @@
         /* Needs to talk to the network: */
         "--share=network",
         "--filesystem=home",
+        "--socket=pulseaudio",
         "--socket=system-bus"
     ],
     "build-options": {
