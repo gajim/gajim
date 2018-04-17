@@ -515,7 +515,7 @@ class HistoryManager:
         # AT THIS TIME FIRST EXECUTE IS LOST! WTH!!!!!
         results = self.cur.fetchall()
         #print results[0]
-        file_ = open(path_to_file, 'w')
+        file_ = open(path_to_file, 'w', encoding='utf-8')
         for row in results:
             # in store: time, kind, message, contact_name FROM logs
             # in text: JID or You or nickname (if it's gc_msg), time, message
