@@ -92,7 +92,8 @@ from gajim.common import passwords
 from gajim.common import logging_helpers
 from gajim.common.connection_handlers_events import (
     OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
-    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, HTTPUploadProgressEvent)
+    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent,
+    HTTPUploadProgressEvent)
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
@@ -2071,8 +2072,10 @@ class Interface:
             if minimize:
                 # GCMIN
                 contact = app.contacts.create_contact(jid=room_jid,
-                    account=account, name=nick)
-                gc_control = GroupchatControl(None, contact, account)
+                    account=account, groups=[_('Groupchats')], sub='none',
+                    groupchat=True)
+                app.contacts.add_contact(account, contact)
+                gc_control = GroupchatControl(None, contact, nick, account)
                 app.interface.minimized_controls[account][room_jid] = \
                     gc_control
                 self.roster.add_groupchat(room_jid, account)
@@ -2094,12 +2097,13 @@ class Interface:
         # Get target window, create a control, and associate it with the window
         # GCMIN
         contact = app.contacts.create_contact(jid=room_jid, account=account,
-            name=nick)
+            groups=[_('Groupchats')], sub='none', groupchat=True)
+        app.contacts.add_contact(account, contact)
         mw = self.msg_win_mgr.get_window(contact.jid, account)
         if not mw:
             mw = self.msg_win_mgr.create_window(contact, account,
                 GroupchatControl.TYPE_ID)
-        gc_control = GroupchatControl(mw, contact, account,
+        gc_control = GroupchatControl(mw, contact, nick, account,
             is_continued=is_continued)
         mw.new_tab(gc_control)
         mw.set_active_tab(gc_control)
@@ -2421,8 +2425,11 @@ class Interface:
             sys.exit()
 
     @staticmethod
-    def update_avatar(account=None, jid=None, contact=None):
-        if contact is None:
+    def update_avatar(account=None, jid=None, contact=None, room_avatar=False):
+        if room_avatar:
+            app.nec.push_incoming_event(
+                UpdateRoomAvatarEvent(None, account=account, jid=jid))
+        elif contact is None:
             app.nec.push_incoming_event(
                 UpdateRosterAvatarEvent(None, account=account, jid=jid))
         else:
@@ -2524,6 +2531,13 @@ class Interface:
             return pixbuf
         return Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
 
+    @staticmethod
+    def avatar_exists(filename):
+        path = os.path.join(app.AVATAR_PATH, filename)
+        if not os.path.isfile(path):
+            return False
+        return True
+
     def auto_join_bookmarks(self, account):
         """
         Autojoin bookmarked GCs that have 'auto join' on for this account
@@ -2538,12 +2552,6 @@ class Interface:
                     minimize = bm['minimize'] in ('1', 'true')
                     self.join_gc_room(account, jid, bm['nick'],
                         bm['password'], minimize = minimize)
-                elif jid in self.minimized_controls[account]:
-                    # more or less a hack:
-                    # On disconnect the minimized gc contact instances
-                    # were set to offline. Reconnect them to show up in the
-                    # roster.
-                    self.roster.add_groupchat(jid, account)
 
     def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
                         nick):

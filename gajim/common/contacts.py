@@ -29,6 +29,7 @@
 ##
 
 try:
+    from gajim.common import app
     from gajim.common import caps_cache
     from gajim.common.account import Account
     from gajim import common
@@ -92,7 +93,7 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    our_chatstate=None, chatstate=None, idle_time=None, avatar_sha=None):
+    our_chatstate=None, chatstate=None, idle_time=None, avatar_sha=None, groupchat=False):
         if not isinstance(jid, str):
             print('no str')
         if groups is None:
@@ -104,6 +105,7 @@ class Contact(CommonContact):
         self.contact_name = '' # nick choosen by contact
         self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
         self.avatar_sha = avatar_sha
+        self._is_groupchat = groupchat
 
         self.sub = sub
         self.ask = ask
@@ -164,10 +166,7 @@ class Contact(CommonContact):
         return is_observer
 
     def is_groupchat(self):
-        for account in common.app.gc_connected:
-            if self.jid in common.app.gc_connected[account]:
-                return True
-        return False
+        return self._is_groupchat
 
     def is_transport(self):
         # if not '@' or '@' starts the jid then contact is transport
@@ -249,7 +248,7 @@ class LegacyContactsAPI:
     def create_contact(self, jid, account, name='', groups=None, show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
     client_caps=None, our_chatstate=None, chatstate=None, idle_time=None,
-    avatar_sha=None):
+    avatar_sha=None, groupchat=False):
         if groups is None:
             groups = []
         # Use Account object if available
@@ -258,7 +257,7 @@ class LegacyContactsAPI:
             show=show, status=status, sub=sub, ask=ask, resource=resource,
             priority=priority, keyID=keyID, client_caps=client_caps,
             our_chatstate=our_chatstate, chatstate=chatstate,
-            idle_time=idle_time, avatar_sha=avatar_sha)
+            idle_time=idle_time, avatar_sha=avatar_sha, groupchat=groupchat)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
@@ -303,6 +302,9 @@ class LegacyContactsAPI:
         self._accounts[account].contacts.remove_jid(jid)
         if remove_meta:
             self._metacontact_manager.remove_metacontact(account, jid)
+
+    def get_groupchat_contact(self, account, jid):
+        return self._accounts[account].contacts.get_groupchat_contact(jid)
 
     def get_contacts(self, account, jid):
         return self._accounts[account].contacts.get_contacts(jid)
@@ -517,6 +519,15 @@ class Contacts():
             for c in self._contacts[jid]:
                 if c.resource == resource:
                     return c
+
+    def get_groupchat_contact(self, jid):
+        if jid in self._contacts:
+            contacts = self._contacts[jid]
+            if len(contacts) > 1:
+                app.log('contacts').warning(
+                    'Groupchat Contact found more than once')
+            if contacts[0].is_groupchat():
+                return contacts[0]
 
     def get_avatar(self, jid, size=None, scale=None):
         if jid not in self._contacts:

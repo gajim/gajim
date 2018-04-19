@@ -797,6 +797,17 @@ PresenceHelperEvent):
             time_str = idle_tag.getAttr('since')
             tim = helpers.datetime_tuple(time_str)
             self.idle_time = timegm(tim)
+
+        # Check if presence is from the room itself, used when the room
+        # sends a avatar hash
+        contact = app.contacts.get_groupchat_contact(self.conn.name, self.fjid)
+        if contact:
+            app.nec.push_incoming_event(
+                RoomAvatarReceivedEvent(
+                    None, conn=self.conn, stanza=self.stanza,
+                    contact=contact, jid=self.jid))
+            return
+
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
@@ -2227,6 +2238,25 @@ class UpdateRosterAvatarEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
+        return True
+
+class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
+    name = 'update-room-avatar'
+    base_network_events = []
+
+    def generate(self):
+        return True
+
+class RoomAvatarReceivedEvent(nec.NetworkIncomingEvent):
+    name = 'room-avatar-received'
+    base_network_events = []
+
+    def generate(self):
+        vcard = self.stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
+        if vcard is None:
+            log.warning('Invalid room self presence:\n%s', self.stanza)
+            return
+        self.avatar_sha = vcard.getTagData('photo')
         return True
 
 class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):

@@ -291,6 +291,8 @@ class ConnectionVcard:
             self._vcard_presence_received)
         app.ged.register_event_handler('gc-presence-received', ged.GUI2,
             self._vcard_gc_presence_received)
+        app.ged.register_event_handler('room-avatar-received', ged.GUI2,
+            self._vcard_presence_received)
 
     def _vcard_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -299,6 +301,10 @@ class ConnectionVcard:
         if obj.avatar_sha is None:
             # No Avatar is advertised
             return
+
+        room_avatar = False
+        if isinstance(obj, RoomAvatarReceivedEvent):
+            room_avatar = True
 
         if self.get_own_jid().bareMatch(obj.jid):
             app.log('avatar').info('Update (vCard): %s %s',
@@ -324,16 +330,33 @@ class ConnectionVcard:
             app.log('avatar').debug('Remove: %s', obj.jid)
             app.contacts.set_avatar(self.name, obj.jid, None)
             own_jid = self.get_own_jid().getStripped()
-            app.logger.set_avatar_sha(own_jid, obj.jid, None)
-            app.interface.update_avatar(self.name, obj.jid)
+            if not room_avatar:
+                app.logger.set_avatar_sha(own_jid, obj.jid, None)
+            app.interface.update_avatar(
+                self.name, obj.jid, room_avatar=room_avatar)
         else:
             app.log('avatar').info(
                 'Update (vCard): %s %s', obj.jid, obj.avatar_sha)
             current_sha = app.contacts.get_avatar_sha(self.name, obj.jid)
+
             if obj.avatar_sha != current_sha:
-                app.log('avatar').info(
-                    'Request (vCard): %s', obj.jid)
-                self.request_vcard(self._on_avatar_received, obj.jid)
+                if room_avatar:
+                    # We dont save the room avatar hash in our DB, so check
+                    # if we previously downloaded it
+                    if app.interface.avatar_exists(obj.avatar_sha):
+                        app.contacts.set_avatar(self.name, obj.jid, obj.avatar_sha)
+                        app.interface.update_avatar(
+                            self.name, obj.jid, room_avatar=room_avatar)
+                    else:
+                        app.log('avatar').info(
+                            'Request (vCard): %s', obj.jid)
+                        self.request_vcard(self._on_room_avatar_received, obj.jid)
+
+                else:
+                    app.log('avatar').info(
+                        'Request (vCard): %s', obj.jid)
+                    self.request_vcard(self._on_avatar_received, obj.jid)
+
             else:
                 app.log('avatar').info(
                     'Avatar already known (vCard): %s %s',
@@ -567,6 +590,14 @@ class ConnectionVcard:
 
         self.send_avatar_presence()
         self.avatar_presence_sent = True
+
+    def _on_room_avatar_received(self, jid, resource, room, vcard):
+        avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
+        app.interface.save_avatar(photo_decoded)
+
+        app.log('avatar').info('Received (vCard): %s %s', jid, avatar_sha)
+        app.contacts.set_avatar(self.name, jid, avatar_sha)
+        app.interface.update_avatar(self.name, jid, room_avatar=True)
 
     def _on_avatar_received(self, jid, resource, room, vcard):
         """

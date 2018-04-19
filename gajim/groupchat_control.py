@@ -301,7 +301,7 @@ class GroupchatControl(ChatControlBase):
     # will be processed with this command host.
     COMMAND_HOST = GroupChatCommands
 
-    def __init__(self, parent_win, contact, acct, is_continued=False):
+    def __init__(self, parent_win, contact, nick, acct, is_continued=False):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,
             'groupchat_control', contact, acct)
 
@@ -362,7 +362,7 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = widget
 
         self.room_jid = self.contact.jid
-        self.nick = contact.name
+        self.nick = nick
         self.new_nick = ''
         self.name = ''
         for bm in app.connections[self.account].bookmarks:
@@ -371,6 +371,7 @@ class GroupchatControl(ChatControlBase):
                 break
         if not self.name:
             self.name = self.room_jid.split('@')[0]
+        self.contact.name = self.name
 
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
@@ -519,6 +520,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_vcard_published)
         app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
             self._nec_update_avatar)
+        app.ged.register_event_handler('update-room-avatar', ged.GUI1,
+            self._nec_update_room_avatar)
         app.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
         app.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
@@ -1091,6 +1094,12 @@ class GroupchatControl(ChatControlBase):
         banner_status_img = self.xml.get_object('gc_banner_status_image')
         if self.room_jid in app.gc_connected[self.account] and \
         app.gc_connected[self.account][self.room_jid]:
+            if self.contact.avatar_sha:
+                surface = app.interface.get_avatar(self.contact.avatar_sha,
+                                                   AvatarSize.ROSTER,
+                                                   self.scale_factor)
+                banner_status_img.set_from_surface(surface)
+                return
             icon = gtkgui_helpers.get_iconset_name_for('muc-active')
         else:
             icon = gtkgui_helpers.get_iconset_name_for('muc-inactive')
@@ -1146,6 +1155,11 @@ class GroupchatControl(ChatControlBase):
         app.log('avatar').debug('Draw Groupchat Avatar: %s %s',
                                 obj.contact.name, obj.contact.avatar_sha)
         self.draw_avatar(obj.contact)
+
+    def _nec_update_room_avatar(self, obj):
+        if obj.jid != self.room_jid:
+            return
+        self._update_banner_state_image()
 
     def _nec_mam_decrypted_message_received(self, obj):
         if not obj.groupchat:
@@ -2161,8 +2175,8 @@ class GroupchatControl(ChatControlBase):
         ctrl.parent_win = None
         self.send_chatstate('inactive', self.contact)
 
-        app.interface.roster.add_groupchat(self.contact.jid, self.account,
-            status = self.subject)
+        app.interface.roster.minimize_groupchat(
+            self.account, self.contact.jid, status=self.subject)
 
         del win._controls[self.account][self.contact.jid]
 
@@ -2233,6 +2247,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_vcard_published)
         app.ged.remove_event_handler('update-gc-avatar', ged.GUI1,
             self._nec_update_avatar)
+        app.ged.remove_event_handler('update-room-avatar', ged.GUI1,
+            self._nec_update_room_avatar)
         app.ged.remove_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
         app.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,

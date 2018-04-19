@@ -743,7 +743,7 @@ class RosterWindow:
 
         return contacts[0][0] # it's contact/big brother with highest priority
 
-    def remove_contact(self, jid, account, force=False, backend=False):
+    def remove_contact(self, jid, account, force=False, backend=False, maximize=False):
         """
         Remove contact from roster
 
@@ -785,7 +785,9 @@ class RosterWindow:
                 # If a window is still opened: don't remove contact instance
                 # Remove contact before redrawing, otherwise the old
                 # numbers will still be show
-                app.contacts.remove_jid(account, jid, remove_meta=True)
+                if not maximize:
+                    # Dont remove contact when we maximize a room
+                    app.contacts.remove_jid(account, jid, remove_meta=True)
                 if iters:
                     rest_of_family = [data for data in family
                         if account != data['account'] or jid != data['jid']]
@@ -829,49 +831,26 @@ class RosterWindow:
         self.model[self_iter][Column.JID] = new_jid
         self.draw_contact(new_jid, account)
 
-    def add_groupchat(self, jid, account, status=''):
+    def minimize_groupchat(self, account, jid, status=''):
+        gc_control = app.interface.msg_win_mgr.get_gc_control(jid, account)
+        app.interface.minimized_controls[account][jid] = gc_control
+        self.add_groupchat(jid, account)
+
+    def add_groupchat(self, jid, account):
         """
         Add groupchat to roster and draw it. Return the added contact instance
         """
-        contact = app.contacts.get_contact_with_highest_priority(account, jid)
-        # Do not show gc if we are disconnected and minimize it
+        contact = app.contacts.get_groupchat_contact(account, jid)
+        show = 'offline'
         if app.account_is_connected(account):
             show = 'online'
-        else:
-            show = 'offline'
-            status = ''
 
-        if contact is None:
-            gc_control = app.interface.msg_win_mgr.get_gc_control(jid,
-                account)
-            if gc_control:
-                # there is a window that we can minimize
-                app.interface.minimized_controls[account][jid] = gc_control
-                name = gc_control.name
-            elif jid in app.interface.minimized_controls[account]:
-                name = app.interface.minimized_controls[account][jid].name
-            else:
-                name = jid.split('@')[0]
-            # New groupchat
-            contact = app.contacts.create_contact(jid=jid, account=account,
-                name=name, groups=[_('Groupchats')], show=show, status=status,
-                sub='none')
-            app.contacts.add_contact(account, contact)
-            self.add_contact(jid, account)
-        else:
-            if jid not in app.interface.minimized_controls[account]:
-                # there is a window that we can minimize
-                gc_control = app.interface.msg_win_mgr.get_gc_control(jid,
-                        account)
-                app.interface.minimized_controls[account][jid] = gc_control
-            contact.show = show
-            contact.status = status
-            self.adjust_and_draw_contact_context(jid, account)
+        contact.show = show
+        self.add_contact(jid, account)
 
         return contact
 
-
-    def remove_groupchat(self, jid, account):
+    def remove_groupchat(self, jid, account, maximize=False):
         """
         Remove groupchat from roster and redraw account and group
         """
@@ -879,7 +858,7 @@ class RosterWindow:
         if contact.is_groupchat():
             if jid in app.interface.minimized_controls[account]:
                 del app.interface.minimized_controls[account][jid]
-            self.remove_contact(jid, account, force=True, backend=True)
+            self.remove_contact(jid, account, force=True, backend=True, maximize=maximize)
             return True
         else:
             return False
@@ -3137,7 +3116,7 @@ class RosterWindow:
         ctrl.on_groupchat_maximize()
         mw.new_tab(ctrl)
         mw.set_active_tab(ctrl)
-        self.remove_groupchat(jid, account)
+        self.remove_groupchat(jid, account, maximize=True)
 
     def on_edit_account(self, widget, account):
         if 'accounts' in app.interface.instances:
@@ -5911,6 +5890,8 @@ class RosterWindow:
         app.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
         app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
+            self._nec_update_avatar)
+        app.ged.register_event_handler('update-room-avatar', ged.GUI1,
             self._nec_update_avatar)
         app.ged.register_event_handler('gc-subject-received', ged.GUI1,
             self._nec_gc_subject_received)
