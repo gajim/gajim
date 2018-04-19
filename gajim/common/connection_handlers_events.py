@@ -801,7 +801,7 @@ PresenceHelperEvent):
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
-            if namespace.startswith(nbxmpp.NS_MUC):
+            if namespace == nbxmpp.NS_MUC_USER:
                 self.is_gc = True
             elif namespace == nbxmpp.NS_SIGNED:
                 sig_tag = x
