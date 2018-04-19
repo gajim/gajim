@@ -29,7 +29,6 @@
 ##
 
 try:
-    from gajim.common import app
     from gajim.common import caps_cache
     from gajim.common.account import Account
     from gajim import common
@@ -523,9 +522,6 @@ class Contacts():
     def get_groupchat_contact(self, jid):
         if jid in self._contacts:
             contacts = self._contacts[jid]
-            if len(contacts) > 1:
-                app.log('contacts').warning(
-                    'Groupchat Contact found more than once')
             if contacts[0].is_groupchat():
                 return contacts[0]
 
