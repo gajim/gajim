@@ -40,6 +40,7 @@ if os.name == 'nt':
 
 log = logging.getLogger('gajim.c.httpupload')
 
+NS_HTTPUPLOAD_0 = NS_HTTPUPLOAD + ':0'
 
 class ConnectionHTTPUpload:
     """
@@ -50,6 +51,8 @@ class ConnectionHTTPUpload:
         self.httpupload = False
         self.encrypted_upload = False
         self.component = None
+        self.httpupload_namespace = None
+        self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
         self.max_file_size = None  # maximum file size in bytes
 
         app.ged.register_event_handler('agent-info-received',
@@ -76,22 +79,28 @@ class ConnectionHTTPUpload:
                                      self.handle_outgoing_stanza)
 
     def handle_agent_info_received(self, event):
-        if (NS_HTTPUPLOAD not in event.features or not
-                app.jid_is_transport(event.jid)):
+        account = event.conn.name
+        if account != self.name:
+            return
+
+        if not app.jid_is_transport(event.jid):
             return
 
         if not event.id_.startswith('Gajim_'):
             return
 
-        account = event.conn.name
-        if account != self.name:
+        if NS_HTTPUPLOAD_0 in event.features:
+            self.httpupload_namespace = NS_HTTPUPLOAD_0
+        elif NS_HTTPUPLOAD in event.features:
+            self.httpupload_namespace = NS_HTTPUPLOAD
+        else:
             return
 
         self.component = event.jid
 
         for form in event.data:
             form_dict = form.asDict()
-            if form_dict.get('FORM_TYPE', None) != NS_HTTPUPLOAD:
+            if form_dict.get('FORM_TYPE', None) != self.httpupload_namespace:
                 continue
             size = form_dict.get('max-file-size', None)
             if size is not None:
@@ -183,17 +192,30 @@ class ConnectionHTTPUpload:
 
     def request_slot(self, file):
         GLib.idle_add(self.raise_progress_event, 'request', file)
-        iq = nbxmpp.Iq(typ='get', to=self.component)
-        id_ = app.get_an_id()
-        iq.setID(id_)
-        request = iq.setTag(name="request", namespace=NS_HTTPUPLOAD)
-        request.addChild('filename', payload=quote(os.path.basename(file.path)))
-        request.addChild('size', payload=file.size)
-        request.addChild('content-type', payload=file.mime)
-
+        iq = self._build_request(file)
         log.info("Sending request for slot")
         app.connections[self.name].connection.SendAndCallForResponse(
             iq, self.received_slot, {'file': file})
+        
+    def _build_request(self, file):
+        iq = nbxmpp.Iq(typ='get', to=self.component)
+        id_ = app.get_an_id()
+        iq.setID(id_)
+        if self.httpupload_namespace == NS_HTTPUPLOAD:
+            # experimental namespace
+            request = iq.setTag(name="request",
+                                namespace=self.httpupload_namespace)
+            request.addChild('filename', payload=os.path.basename(file.path))
+            request.addChild('size', payload=file.size)
+            request.addChild('content-type', payload=file.mime)
+        else:
+            attr = {'filename': os.path.basename(file.path),
+                    'size': file.size,
+                    'content-type': file.mime}
+            iq.setTag(name="request",
+                      namespace=self.httpupload_namespace,
+                      attrs=attr)
+        return iq
 
     @staticmethod
     def get_slot_error_message(stanza):
@@ -217,10 +239,23 @@ class ConnectionHTTPUpload:
             return
 
         try:
-            file.put = stanza.getTag("slot").getTag("put").getData()
-            file.get = stanza.getTag("slot").getTag("get").getData()
+            if self.httpupload_namespace == NS_HTTPUPLOAD:
+                file.put = stanza.getTag('slot').getTag('put').getData()
+                file.get = stanza.getTag('slot').getTag('get').getData()
+            else:
+                slot = stanza.getTag('slot')
+                file.put = slot.getTagAttr('put', 'url')
+                file.get = slot.getTagAttr('get', 'url')
+                for header in slot.getTag('put').getTags('header'):
+                    name = header.getAttr('name')
+                    if name not in self._allowed_headers:
+                        raise ValueError('Not allowed header')
+                    data = header.getData()
+                    if '\n' in data:
+                        raise ValueError('Newline in header data')
+                    file.headers[name] = data
         except Exception:
-            log.error("Got unexpected stanza: %s", stanza)
+            log.error("Got invalid stanza: %s", stanza)
             log.exception('Error')
             self.raise_progress_event('close', file)
             self.raise_information_event('request-upload-slot-error2')
@@ -250,12 +285,12 @@ class ConnectionHTTPUpload:
     def upload_file(self, file):
         GLib.idle_add(self.raise_progress_event, 'upload', file)
         try:
-            headers = {'User-Agent': 'Gajim %s' % app.version,
-                       'Content-Type': file.mime,
-                       'Content-Length': file.size}
+            file.headers['User-Agent'] = 'Gajim %s' % app.version
+            file.headers['Content-Type'] = file.mime
+            file.headers['Content-Length'] = file.size
 
             request = Request(
-                file.put, data=file.stream, headers=headers, method='PUT')
+                file.put, data=file.stream, headers=file.headers, method='PUT')
             log.info("Opening Urllib upload request...")
 
             if not app.config.get_per('accounts', self.name, 'httpupload_verify'):
@@ -345,6 +380,7 @@ class File:
         self.data = None
         self.user_data = None
         self.size = None
+        self.headers = {}
         self.event = threading.Event()
         self.load_data()
 

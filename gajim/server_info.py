@@ -176,7 +176,7 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.archiving_namespace, con.archiving_namespace,
                     mam_enabled),
             Feature('XEP-0363: HTTP File Upload',
-                    con.httpupload, nbxmpp.NS_HTTPUPLOAD, None)]
+                    con.httpupload, con.httpupload_namespace, None)]
 
     def add_info(self, info):
         self.info_listbox.add(ServerInfoItem(info))
