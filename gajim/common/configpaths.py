@@ -130,7 +130,8 @@ class ConfigPaths:
 
     def init(self):
         if self.custom_config_root:
-            self.cache_root = self.data_root = self.config_root = self.custom_config_root
+            self.config_root = self.custom_config_root
+            self.cache_root = self.data_root = self.custom_config_root
 
         user_dir_paths = [
             ('TMP', tempfile.gettempdir()),
@@ -150,7 +151,8 @@ class ConfigPaths:
 
             # Config paths
             ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),
-            ('PLUGINS_CONFIG_DIR', 'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
+            ('PLUGINS_CONFIG_DIR',
+             'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CERT', 'localcerts', PathLocation.CONFIG, PathType.FOLDER),
         ]
 
@@ -163,11 +165,15 @@ class ConfigPaths:
             # Data paths
             ('LOG_DB', 'logs.db', PathLocation.DATA, PathType.FILE),
             ('MY_CACERTS', 'cacerts.pem', PathLocation.DATA, PathType.FILE),
-            ('MY_EMOTS', 'emoticons', PathLocation.DATA, PathType.FOLDER),
-            ('MY_ICONSETS', 'iconsets', PathLocation.DATA, PathType.FOLDER),
-            ('MY_MOOD_ICONSETS', 'moods', PathLocation.DATA, PathType.FOLDER),
-            ('MY_ACTIVITY_ICONSETS', 'activities', PathLocation.DATA, PathType.FOLDER),
             ('PLUGINS_USER', 'plugins', PathLocation.DATA, PathType.FOLDER),
+            ('MY_EMOTS',
+             'emoticons', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
+            ('MY_ICONSETS',
+             'iconsets', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
+            ('MY_MOOD_ICONSETS',
+             'moods', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
+            ('MY_ACTIVITY_ICONSETS',
+             'activities', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
 
             # Cache paths
             ('CACHE_DB', 'cache.db', PathLocation.CACHE, PathType.FILE),

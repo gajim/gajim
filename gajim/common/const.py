@@ -51,6 +51,7 @@ class PathLocation(IntEnum):
 class PathType(IntEnum):
     FILE = 0
     FOLDER = 1
+    FOLDER_OPTIONAL = 2
 
 
 THANKS = u"""\
