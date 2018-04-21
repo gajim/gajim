@@ -7,6 +7,7 @@
 ## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -30,18 +31,37 @@
 
 import os
 import sys
+import time
+import getopt
+import sqlite3
+from enum import IntEnum, unique
+
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('GLib', '2.0')
+gi.require_version('Gdk', '3.0')
+gi.require_version('Gio', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
-import time
+from gi.repository import Gio
 
-import getopt
 from gajim.common import i18n
 
-def parseOpts():
-    config_path = None
+
+def is_standalone():
+    # Determine if we are in standalone mode
+    if Gio.Application.get_default() is None:
+        return True
+    if __name__ == '__main__':
+        return True
+    return False
+
+
+if is_standalone():
+    # Standalone Mode
+    # Must be done before importing app
+    from gajim.common import configpaths
 
     try:
         shortargs = 'hvsc:l:p:'
@@ -61,23 +81,16 @@ def parseOpts():
                 '\n  -c, --config-path  ' + _('Choose folder for logfile') + '\n')
             sys.exit()
         elif o in ('-c', '--config-path'):
-            config_path = a
-    return config_path
+            configpaths.set_config_root(a)
 
-config_path = parseOpts()
-del parseOpts
+    configpaths.init()
 
-from gajim.common import configpaths
-configpaths.set_config_root(config_path)
-configpaths.init()
-del config_path
 from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.common.logger import LOG_DB_PATH, JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim import dialogs
 
-from enum import IntEnum, unique
 
 @unique
 class Column(IntEnum):
@@ -85,9 +98,6 @@ class Column(IntEnum):
     MESSAGE = 3
     SUBJECT = 4
     NICKNAME = 5
-
-
-import sqlite3 as sqlite
 
 
 class HistoryManager:
@@ -120,7 +130,7 @@ class HistoryManager:
         self.jids_already_in = []  # holds jids that we already have in DB
         self.AT_LEAST_ONE_DELETION_DONE = False
 
-        self.con = sqlite.connect(LOG_DB_PATH, timeout=20.0,
+        self.con = sqlite3.connect(LOG_DB_PATH, timeout=20.0,
                 isolation_level='IMMEDIATE')
         self.cur = self.con.cursor()
 
@@ -226,18 +236,18 @@ class HistoryManager:
 
     def on_history_manager_window_delete_event(self, widget, event):
         if not self.AT_LEAST_ONE_DELETION_DONE:
-            if __name__ == '__main__':
+            if is_standalone():
                 Gtk.main_quit()
             return
 
         def on_yes(clicked):
             self.cur.execute('VACUUM')
             self.con.commit()
-            if __name__ == '__main__':
+            if is_standalone():
                 Gtk.main_quit()
 
         def on_no():
-            if __name__ == '__main__':
+            if is_standalone():
                 Gtk.main_quit()
 
         dialog = dialogs.YesNoDialog(
