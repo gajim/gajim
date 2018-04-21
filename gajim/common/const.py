@@ -41,6 +41,17 @@ class ArchiveState(IntEnum):
     NEVER = 0
     ALL = 1
 
+@unique
+class PathLocation(IntEnum):
+    CONFIG = 0
+    CACHE = 1
+    DATA = 2
+
+@unique
+class PathType(IntEnum):
+    FILE = 0
+    FOLDER = 1
+
 
 THANKS = u"""\
 Alexander Futász

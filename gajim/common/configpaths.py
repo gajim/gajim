@@ -6,6 +6,7 @@
 ## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2007 Brendan Taylor <whateley AT gmail.com>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -23,26 +24,21 @@
 ##
 
 import os
-import sys
 import tempfile
-from enum import Enum, unique
 
-
-@unique
-class Type(Enum):
-    CONFIG = 0
-    CACHE = 1
-    DATA = 2
-
-
-def windowsify(s):
-    if os.name == 'nt':
-        return s.capitalize()
-    return s
+from gajim.common.const import PathType, PathLocation
 
 
 def get(key):
     return _paths[key]
+
+
+def get_paths(type_):
+    for key, value in _paths.items():
+        location, path, path_type = value
+        if type_ != path_type:
+            continue
+        yield _paths[key]
 
 
 def set_separation(active: bool):
@@ -63,7 +59,7 @@ def init():
 
 class ConfigPaths:
     def __init__(self):
-        self.paths = {}
+        self._paths = {}
         self.profile = ''
         self.profile_separation = False
         self.custom_config_root = None
@@ -93,104 +89,93 @@ class ConfigPaths:
 
         import pkg_resources
         basedir = pkg_resources.resource_filename("gajim", ".")
-        self.add('DATA', None, os.path.join(basedir, 'data'))
-        self.add('GUI', None, os.path.join(basedir, 'data', 'gui'))
-        self.add('ICONS', None, os.path.join(basedir, 'data', 'icons'))
-        self.add('HOME', None, os.path.expanduser('~'))
-        self.add('PLUGINS_BASE', None, os.path.join(basedir, 'data', 'plugins'))
 
-    def add(self, name, type_, path):
-        self.paths[name] = (type_, path)
+        source_paths = [
+            ('DATA', os.path.join(basedir, 'data')),
+            ('GUI', os.path.join(basedir, 'data', 'gui')),
+            ('ICONS', os.path.join(basedir, 'data', 'icons')),
+            ('HOME', os.path.expanduser('~')),
+            ('PLUGINS_BASE', os.path.join(basedir, 'data', 'plugins')),
+        ]
+
+        for path in source_paths:
+            self._add(*path)
 
     def __getitem__(self, key):
-        type_, path = self.paths[key]
-        if type_ == Type.CONFIG:
+        location, path, _ = self._paths[key]
+        if location == PathLocation.CONFIG:
             return os.path.join(self.config_root, path)
-        elif type_ == Type.CACHE:
+        elif location == PathLocation.CACHE:
             return os.path.join(self.cache_root, path)
-        elif type_ == Type.DATA:
+        elif location == PathLocation.DATA:
             return os.path.join(self.data_root, path)
         return path
 
-    def get(self, key, default=None):
-        try:
-            return self[key]
-        except KeyError:
-            return default
-
     def items(self):
-        for key in self.paths.keys():
-            yield (key, self[key])
+        for key, value in self._paths.items():
+            yield (key, value)
+
+    def _prepare(self, path, unique):
+        if os.name == 'nt':
+            path = path.capitalize()
+        if self.profile:
+            if unique or self.profile_separation:
+                return '%s.%s' % (path, self.profile)
+        return path
+
+    def _add(self, name, path, location=None, path_type=None, unique=False):
+        if location is not None:
+            path = self._prepare(path, unique)
+        self._paths[name] = (location, path, path_type)
 
     def init(self):
         if self.custom_config_root:
             self.cache_root = self.data_root = self.config_root = self.custom_config_root
 
-        self.add('CONFIG_ROOT', None, self.config_root)
-        self.add('CACHE_ROOT', None, self.cache_root)
-        self.add('DATA_ROOT', None, self.data_root)
+        user_dir_paths = [
+            ('TMP', tempfile.gettempdir()),
+            ('CONFIG_ROOT', self.config_root),
+            ('CACHE_ROOT', self.cache_root),
+            ('DATA_ROOT', self.data_root),
+        ]
 
-        self.init_profile(self.profile)
+        for path in user_dir_paths:
+            self._add(*path)
 
-        if len(self.profile) > 0 and self.profile_separation:
-            self.profile = u'.' + self.profile
-        else:
-            self.profile = ''
+        # These paths are unique per profile
+        unique_profile_paths = [
+            # Data paths
+            ('SECRETS_FILE', 'secrets', PathLocation.DATA, PathType.FILE),
+            ('MY_PEER_CERTS', 'certs', PathLocation.DATA, PathType.FOLDER),
 
-        d = {'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
-             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
-             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
-             'PLUGINS_USER': 'plugins'}
-        for name in d:
-            d[name] += self.profile
-            self.add(name, Type.DATA, windowsify(d[name]))
-        if len(self.profile):
-            self.add('MY_DATA', Type.DATA, 'data.dir')
-        else:
-            self.add('MY_DATA', Type.DATA, '')
+            # Config paths
+            ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),
+            ('PLUGINS_CONFIG_DIR', 'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
+            ('MY_CERT', 'localcerts', PathLocation.CONFIG, PathType.FOLDER),
+        ]
 
-        d = {'CACHE_DB': 'cache.db',
-             'VCARD': 'vcards',
-             'AVATAR': 'avatars'}
-        for name in d:
-            d[name] += self.profile
-            self.add(name, Type.CACHE, windowsify(d[name]))
-        if len(self.profile):
-            self.add('MY_CACHE', Type.CACHE, 'cache.dir')
-        else:
-            self.add('MY_CACHE', Type.CACHE, '')
+        for path in unique_profile_paths:
+            self._add(*path, unique=True)
 
-        if len(self.profile):
-            self.add('MY_CONFIG', Type.CONFIG, 'config.dir')
-        else:
-            self.add('MY_CONFIG', Type.CONFIG, '')
+        # These paths are only unique per profile if the commandline arg
+        # `separate` is passed
+        paths = [
+            # Data paths
+            ('LOG_DB', 'logs.db', PathLocation.DATA, PathType.FILE),
+            ('MY_CACERTS', 'cacerts.pem', PathLocation.DATA, PathType.FILE),
+            ('MY_EMOTS', 'emoticons', PathLocation.DATA, PathType.FOLDER),
+            ('MY_ICONSETS', 'iconsets', PathLocation.DATA, PathType.FOLDER),
+            ('MY_MOOD_ICONSETS', 'moods', PathLocation.DATA, PathType.FOLDER),
+            ('MY_ACTIVITY_ICONSETS', 'activities', PathLocation.DATA, PathType.FOLDER),
+            ('PLUGINS_USER', 'plugins', PathLocation.DATA, PathType.FOLDER),
 
-        try:
-            self.add('TMP', None, tempfile.gettempdir())
-        except IOError as e:
-            print('Error opening tmp folder: %s\nUsing %s' % (
-                str(e), os.path.expanduser('~')), file=sys.stderr)
-            self.add('TMP', None, os.path.expanduser('~'))
+            # Cache paths
+            ('CACHE_DB', 'cache.db', PathLocation.CACHE, PathType.FILE),
+            ('AVATAR', 'avatars', PathLocation.CACHE, PathType.FOLDER),
+        ]
 
-    def init_profile(self, profile):
-        conffile = windowsify('config')
-        secretsfile = windowsify('secrets')
-        pluginsconfdir = windowsify('pluginsconfig')
-        certsdir = windowsify(u'certs')
-        localcertsdir = windowsify(u'localcerts')
-
-        if len(profile) > 0:
-            conffile += '.' + profile
-            secretsfile += '.' + profile
-            pluginsconfdir += '.' + profile
-            certsdir += u'.' + profile
-            localcertsdir += u'.' + profile
-
-        self.add('SECRETS_FILE', Type.DATA, secretsfile)
-        self.add('MY_PEER_CERTS', Type.DATA, certsdir)
-        self.add('CONFIG_FILE', Type.CONFIG, conffile)
-        self.add('PLUGINS_CONFIG_DIR', Type.CONFIG, pluginsconfdir)
-        self.add('MY_CERT', Type.CONFIG, localcertsdir)
+        for path in paths:
+            self._add(*path)
 
 
 _paths = ConfigPaths()

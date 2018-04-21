@@ -66,7 +66,6 @@ logger = None
 # some plugins use that
 gajimpaths = configpaths.gajimpaths
 
-VCARD_PATH = configpaths.get('VCARD')
 AVATAR_PATH = configpaths.get('AVATAR')
 MY_EMOTS_PATH = configpaths.get('MY_EMOTS')
 MY_ICONSETS_PATH = configpaths.get('MY_ICONSETS')
@@ -74,7 +73,6 @@ MY_MOOD_ICONSETS_PATH = configpaths.get('MY_MOOD_ICONSETS')
 MY_ACTIVITY_ICONSETS_PATH = configpaths.get('MY_ACTIVITY_ICONSETS')
 MY_CACERTS = configpaths.get('MY_CACERTS')
 MY_PEER_CERTS_PATH = configpaths.get('MY_PEER_CERTS')
-TMP = configpaths.get('TMP')
 DATA_DIR = configpaths.get('DATA')
 ICONS_DIR = configpaths.get('ICONS')
 HOME_DIR = configpaths.get('HOME')

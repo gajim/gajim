@@ -24,18 +24,18 @@
 ##
 
 import os
-import shutil
 import sys
+import sqlite3
 
 from gajim.common import app
 from gajim.common import logger
+from gajim.common import configpaths
+from gajim.common.const import PathType
 
-# DO NOT MOVE ABOVE OF import gajim
-import sqlite3 as sqlite
 
 def create_log_db():
     print(_('creating logs database'))
-    con = sqlite.connect(logger.LOG_DB_PATH)
+    con = sqlite3.connect(logger.LOG_DB_PATH)
     os.chmod(logger.LOG_DB_PATH, 0o600) # rw only for us
     cur = con.cursor()
     # create the tables
@@ -96,7 +96,7 @@ def create_log_db():
 
 def create_cache_db():
     print(_('creating cache database'))
-    con = sqlite.connect(logger.CACHE_DB_PATH)
+    con = sqlite3.connect(logger.CACHE_DB_PATH)
     os.chmod(logger.CACHE_DB_PATH, 0o600) # rw only for us
     cur = con.cursor()
     cur.executescript(
@@ -154,7 +154,7 @@ def split_db():
     create_cache_db()
     back = os.getcwd()
     os.chdir(OLD_LOG_DB_FOLDER)
-    con = sqlite.connect('logs.db')
+    con = sqlite3.connect('logs.db')
     os.chdir(back)
     cur = con.cursor()
     cur.execute('''SELECT name FROM sqlite_master WHERE type = 'table';''')
@@ -171,96 +171,11 @@ def split_db():
             con.commit()
             cur.executescript('DROP TABLE %s;' % table)
             con.commit()
-        except sqlite.OperationalError as e:
+        except sqlite3.OperationalError as e:
             print('error moving table %s to cache.db: %s' % (table, str(e)),
                 file=sys.stderr)
     con.close()
     logger.CACHE_DB_PATH = tmp
-
-def check_and_possibly_move_config():
-    LOG_DB_PATH = logger.LOG_DB_PATH
-    CACHE_DB_PATH = logger.CACHE_DB_PATH
-    vars = {}
-    vars['VCARD_PATH'] = app.VCARD_PATH
-    vars['AVATAR_PATH'] = app.AVATAR_PATH
-    vars['MY_EMOTS_PATH'] = app.MY_EMOTS_PATH
-    vars['MY_ICONSETS_PATH'] = app.MY_ICONSETS_PATH
-    vars['MY_MOOD_ICONSETS_PATH'] = app.MY_MOOD_ICONSETS_PATH
-    vars['MY_ACTIVITY_ICONSETS_PATH'] = app.MY_ACTIVITY_ICONSETS_PATH
-    from gajim.common import configpaths
-    MY_DATA = configpaths.get('MY_DATA')
-    MY_CONFIG = configpaths.get('MY_CONFIG')
-
-    if os.path.exists(LOG_DB_PATH):
-        # File already exists
-        return
-
-    if os.name == 'nt':
-        try:
-            OLD_LOG_DB_FOLDER = os.path.join(os.environ['appdata'], 'Gajim')
-        except KeyError:
-            OLD_LOG_DB_FOLDER = '.'
-    else:
-        OLD_LOG_DB_FOLDER = os.path.expanduser('~/.gajim')
-    if not os.path.exists(OLD_LOG_DB_FOLDER):
-        return
-    OLD_LOG_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'logs.db')
-    OLD_CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'cache.db')
-    vars['OLD_VCARD_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'vcards')
-    vars['OLD_AVATAR_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'avatars')
-    vars['OLD_MY_EMOTS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'emoticons')
-    vars['OLD_MY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'iconsets')
-    vars['OLD_MY_MOOD_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER, 'moods')
-    vars['OLD_MY_ACTIVITY_ICONSETS_PATH'] = os.path.join(OLD_LOG_DB_FOLDER,
-            'activities')
-    OLD_CONFIG_FILES = []
-    OLD_DATA_FILES = []
-    for f in os.listdir(OLD_LOG_DB_FOLDER):
-        if f == 'config' or f.startswith('config.'):
-            OLD_CONFIG_FILES.append(f)
-        if f == 'secrets' or f.startswith('secrets.'):
-            OLD_DATA_FILES.append(f)
-        if f == 'cacerts.pem':
-            OLD_DATA_FILES.append(f)
-
-    if not os.path.exists(OLD_LOG_DB_PATH):
-        return
-
-    if not os.path.exists(OLD_CACHE_DB_PATH):
-        # split database
-        split_db()
-
-    to_move = {}
-    to_move[OLD_LOG_DB_PATH] = LOG_DB_PATH
-    to_move[OLD_CACHE_DB_PATH] = CACHE_DB_PATH
-
-    for folder in ('VCARD_PATH', 'AVATAR_PATH', 'MY_EMOTS_PATH',
-    'MY_ICONSETS_PATH', 'MY_MOOD_ICONSETS_PATH', 'MY_ACTIVITY_ICONSETS_PATH'):
-        src = vars['OLD_' + folder]
-        dst = vars[folder]
-        to_move[src] = dst
-
-    # move config files
-    for f in OLD_CONFIG_FILES:
-        src = os.path.join(OLD_LOG_DB_FOLDER, f)
-        dst = os.path.join(MY_CONFIG, f)
-        to_move[src] = dst
-
-    # Move data files (secrets, cacert.pem)
-    for f in OLD_DATA_FILES:
-        src = os.path.join(OLD_LOG_DB_FOLDER, f)
-        dst = os.path.join(MY_DATA, f)
-        to_move[src] = dst
-
-    for src, dst in to_move.items():
-        if os.path.exists(dst):
-            continue
-        if not os.path.exists(src):
-            continue
-        print(_('moving %(src)s to %(dst)s') % {'src': src, 'dst': dst})
-        shutil.move(src, dst)
-    app.logger.init_vars()
-    app.logger.attach_cache_database()
 
 def check_and_possibly_create_paths():
     LOG_DB_PATH = logger.LOG_DB_PATH
@@ -269,63 +184,18 @@ def check_and_possibly_create_paths():
     CACHE_DB_PATH = logger.CACHE_DB_PATH
     CACHE_DB_FOLDER, CACHE_DB_FILE = os.path.split(CACHE_DB_PATH)
 
-    VCARD_PATH = app.VCARD_PATH
-    AVATAR_PATH = app.AVATAR_PATH
-    from gajim.common import configpaths
-    MY_DATA = configpaths.get('MY_DATA')
-    MY_CONFIG = configpaths.get('MY_CONFIG')
-    MY_CACHE = configpaths.get('MY_CACHE')
-    XTLS_CERTS = configpaths.get('MY_PEER_CERTS')
-    LOCAL_XTLS_CERTS = configpaths.get('MY_CERT')
-
-    PLUGINS_CONFIG_PATH = app.PLUGINS_CONFIG_DIR
-
-    if not os.path.exists(MY_DATA):
-        create_path(MY_DATA)
-    elif os.path.isfile(MY_DATA):
-        print(_('%s is a file but it should be a directory') % MY_DATA)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(MY_CONFIG):
-        create_path(MY_CONFIG)
-    elif os.path.isfile(MY_CONFIG):
-        print(_('%s is a file but it should be a directory') % MY_CONFIG)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(MY_CACHE):
-        create_path(MY_CACHE)
-    elif os.path.isfile(MY_CACHE):
-        print(_('%s is a file but it should be a directory') % MY_CACHE)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(VCARD_PATH):
-        create_path(VCARD_PATH)
-    elif os.path.isfile(VCARD_PATH):
-        print(_('%s is a file but it should be a directory') % VCARD_PATH)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(AVATAR_PATH):
-        create_path(AVATAR_PATH)
-    elif os.path.isfile(AVATAR_PATH):
-        print(_('%s is a file but it should be a directory') % AVATAR_PATH)
-        print(_('Gajim will now exit'))
-        sys.exit()
+    for path in configpaths.get_paths(PathType.FOLDER):
+        if not os.path.exists(path):
+            create_path(path)
+        elif os.path.isfile(path):
+            print(_('%s is a file but it should be a directory') % path)
+            print(_('Gajim will now exit'))
+            sys.exit()
 
     if not os.path.exists(LOG_DB_FOLDER):
         create_path(LOG_DB_FOLDER)
     elif os.path.isfile(LOG_DB_FOLDER):
         print(_('%s is a file but it should be a directory') % LOG_DB_FOLDER)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(PLUGINS_CONFIG_PATH):
-        create_path(PLUGINS_CONFIG_PATH)
-    elif os.path.isfile(PLUGINS_CONFIG_PATH):
-        print(_('%s is a file but it should be a directory') % PLUGINS_CONFIG_PATH)
         print(_('Gajim will now exit'))
         sys.exit()
 
@@ -335,8 +205,6 @@ def check_and_possibly_create_paths():
         print(_('%s is a file but it should be a directory') % CACHE_DB_FOLDER)
         print(_('Gajim will now exit'))
         sys.exit()
-
-    check_and_possibly_move_config()
 
     if not os.path.exists(LOG_DB_PATH):
         if os.path.exists(CACHE_DB_PATH):
@@ -355,11 +223,6 @@ def check_and_possibly_create_paths():
         print(_('%s is a directory but should be a file') % CACHE_DB_PATH)
         print(_('Gajim will now exit'))
         sys.exit()
-
-    if not os.path.exists(XTLS_CERTS):
-        create_path(XTLS_CERTS)
-    if not os.path.exists(LOCAL_XTLS_CERTS):
-        create_path(LOCAL_XTLS_CERTS)
 
 def create_path(directory):
     head, tail = os.path.split(directory)
