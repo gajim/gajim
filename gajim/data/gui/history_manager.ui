@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.21.0 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkMenu" id="context_menu">
@@ -94,7 +94,7 @@
   <object class="GtkWindow" id="history_manager_window">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Gajim History Logs Manager</property>
+    <property name="window_position">center</property>
     <property name="default_width">650</property>
     <property name="default_height">500</property>
     <signal name="delete-event" handler="on_history_manager_window_delete_event" swapped="no"/>
@@ -306,7 +306,7 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
         </child>
       </object>
     </child>
-    <child type="titlebar">
+    <child>
       <placeholder/>
     </child>
   </object>
