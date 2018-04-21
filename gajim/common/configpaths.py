@@ -54,7 +54,7 @@ def set_profile(profile: str):
 
 
 def set_config_root(config_root: str):
-    _paths.config_root = config_root
+    _paths.custom_config_root = config_root
 
 
 def init():
@@ -66,7 +66,7 @@ class ConfigPaths:
         self.paths = {}
         self.profile = ''
         self.profile_separation = False
-        self.config_root = None
+        self.custom_config_root = None
 
         if os.name == 'nt':
             try:
@@ -123,8 +123,8 @@ class ConfigPaths:
             yield (key, self[key])
 
     def init(self):
-        if self.config_root is not None:
-            self.cache_root = self.data_root = self.config_root
+        if self.custom_config_root:
+            self.cache_root = self.data_root = self.config_root = self.custom_config_root
 
         self.add('CONFIG_ROOT', None, self.config_root)
         self.add('CACHE_ROOT', None, self.cache_root)
