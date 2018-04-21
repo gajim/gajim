@@ -863,7 +863,7 @@ def check_soundfile_path(file_, dirs=None):
     :return      the path to file or None if it doesn't exists.
     """
     if dirs is None:
-        dirs = [app.configpaths.get('DATA_ROOT'),
+        dirs = [app.configpaths.get('MY_DATA'),
                 app.DATA_DIR]
 
     if not file_:
@@ -891,7 +891,7 @@ def strip_soundfile_path(file_, dirs=None, abs=True):
         return None
 
     if dirs is None:
-        dirs = [app.configpaths.get('DATA_ROOT'),
+        dirs = [app.configpaths.get('MY_DATA'),
                 app.DATA_DIR]
 
     name = os.path.basename(file_)

@@ -134,9 +134,9 @@ class ConfigPaths:
 
         user_dir_paths = [
             ('TMP', tempfile.gettempdir()),
-            ('CONFIG_ROOT', self.config_root),
-            ('CACHE_ROOT', self.cache_root),
-            ('DATA_ROOT', self.data_root),
+            ('MY_CONFIG', self.config_root),
+            ('MY_CACHE', self.cache_root),
+            ('MY_DATA', self.data_root),
         ]
 
         for path in user_dir_paths:
