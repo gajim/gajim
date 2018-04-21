@@ -48,8 +48,8 @@ import urllib
 
 if __name__ == '__main__':
     from gajim.common import i18n
-    import gajim.common.configpaths
-    gajim.common.configpaths.gajimpaths.init(None)
+    from gajim.common import configpaths
+    configpaths.init()
 from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim.gtkgui_helpers import get_icon_pixmap

@@ -188,9 +188,8 @@ def check_and_possibly_move_config():
     vars['MY_MOOD_ICONSETS_PATH'] = app.MY_MOOD_ICONSETS_PATH
     vars['MY_ACTIVITY_ICONSETS_PATH'] = app.MY_ACTIVITY_ICONSETS_PATH
     from gajim.common import configpaths
-    MY_DATA = configpaths.gajimpaths['MY_DATA']
-    MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
-    MY_CACHE = configpaths.gajimpaths['MY_CACHE']
+    MY_DATA = configpaths.get('MY_DATA')
+    MY_CONFIG = configpaths.get('MY_CONFIG')
 
     if os.path.exists(LOG_DB_PATH):
         # File already exists
@@ -273,11 +272,11 @@ def check_and_possibly_create_paths():
     VCARD_PATH = app.VCARD_PATH
     AVATAR_PATH = app.AVATAR_PATH
     from gajim.common import configpaths
-    MY_DATA = configpaths.gajimpaths['MY_DATA']
-    MY_CONFIG = configpaths.gajimpaths['MY_CONFIG']
-    MY_CACHE = configpaths.gajimpaths['MY_CACHE']
-    XTLS_CERTS = configpaths.gajimpaths['MY_PEER_CERTS']
-    LOCAL_XTLS_CERTS = configpaths.gajimpaths['MY_CERT']
+    MY_DATA = configpaths.get('MY_DATA')
+    MY_CONFIG = configpaths.get('MY_CONFIG')
+    MY_CACHE = configpaths.get('MY_CACHE')
+    XTLS_CERTS = configpaths.get('MY_PEER_CERTS')
+    LOCAL_XTLS_CERTS = configpaths.get('MY_CERT')
 
     PLUGINS_CONFIG_PATH = app.PLUGINS_CONFIG_DIR
 

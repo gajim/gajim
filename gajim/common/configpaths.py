@@ -27,30 +27,12 @@ import sys
 import tempfile
 from enum import Enum, unique
 
+
 @unique
 class Type(Enum):
     CONFIG = 0
     CACHE = 1
     DATA = 2
-
-# Note on path and filename encodings:
-#
-# In general it is very difficult to do this correctly.
-# We may pull information from environment variables, and what encoding that is
-# in is anyone's guess. Any information we request directly from the file
-# system will be in filesystemencoding, and (parts of) paths that we write in
-# this source code will be in whatever encoding the source is in. (I hereby
-# declare this file to be UTF-8 encoded.)
-#
-# To make things more complicated, modern Windows filesystems use UTF-16, but
-# the API tends to hide this from us.
-#
-# I tried to minimize problems by passing Unicode strings to OS functions as
-# much as possible. Hopefully this makes the function return an Unicode string
-# as well. If not, we get an 8-bit string in filesystemencoding, which we can
-# happily pass to functions that operate on files and directories, so we can
-# just leave it as is. Since these paths are meant to be internal to Gajim and
-# not displayed to the user, Unicode is not really necessary here.
 
 
 def windowsify(s):
@@ -60,29 +42,41 @@ def windowsify(s):
 
 
 def get(key):
-    return gajimpaths[key]
+    return _paths[key]
+
+
+def set_separation(active: bool):
+    _paths.profile_separation = active
+
+
+def set_profile(profile: str):
+    _paths.profile = profile
+
+
+def set_config_root(config_root: str):
+    _paths.config_root = config_root
+
+
+def init():
+    _paths.init()
 
 
 class ConfigPaths:
     def __init__(self):
-        # {'name': (type, path), } type can be Type.CONFIG, Type.CACHE, Type.DATA
-        # or None
         self.paths = {}
+        self.profile = ''
+        self.profile_separation = False
+        self.config_root = None
 
         if os.name == 'nt':
             try:
                 # Documents and Settings\[User Name]\Application Data\Gajim
-
-                # How are we supposed to know what encoding the environment
-                # variable 'appdata' is in? Assuming it to be in filesystem
-                # encoding.
                 self.config_root = self.cache_root = self.data_root = \
                         os.path.join(os.environ['appdata'], 'Gajim')
             except KeyError:
                 # win9x, in cwd
                 self.config_root = self.cache_root = self.data_root = '.'
-        else: # Unices
-            # Pass in an Unicode string, and hopefully get one back.
+        else:
             expand = os.path.expanduser
             base = os.getenv('XDG_CONFIG_HOME')
             if base is None or base[0] != '/':
@@ -128,40 +122,45 @@ class ConfigPaths:
         for key in self.paths.keys():
             yield (key, self[key])
 
-    def init(self, root=None, profile='', profile_separation=False):
-        if root is not None:
-            self.config_root = self.cache_root = self.data_root = root
+    def init(self):
+        if self.config_root is not None:
+            self.cache_root = self.data_root = self.config_root
 
-        self.init_profile(profile)
+        self.add('CONFIG_ROOT', None, self.config_root)
+        self.add('CACHE_ROOT', None, self.cache_root)
+        self.add('DATA_ROOT', None, self.data_root)
 
-        if len(profile) > 0 and profile_separation:
-            profile = u'.' + profile
+        self.init_profile(self.profile)
+
+        if len(self.profile) > 0 and self.profile_separation:
+            self.profile = u'.' + self.profile
         else:
-            profile = ''
+            self.profile = ''
 
         d = {'LOG_DB': 'logs.db', 'MY_CACERTS': 'cacerts.pem',
-            'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
-            'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
-            'PLUGINS_USER': 'plugins'}
+             'MY_EMOTS': 'emoticons', 'MY_ICONSETS': 'iconsets',
+             'MY_MOOD_ICONSETS': 'moods', 'MY_ACTIVITY_ICONSETS': 'activities',
+             'PLUGINS_USER': 'plugins'}
         for name in d:
-            d[name] += profile
+            d[name] += self.profile
             self.add(name, Type.DATA, windowsify(d[name]))
-        if len(profile):
+        if len(self.profile):
             self.add('MY_DATA', Type.DATA, 'data.dir')
         else:
             self.add('MY_DATA', Type.DATA, '')
 
-        d = {'CACHE_DB': 'cache.db', 'VCARD': 'vcards',
-                'AVATAR': 'avatars'}
+        d = {'CACHE_DB': 'cache.db',
+             'VCARD': 'vcards',
+             'AVATAR': 'avatars'}
         for name in d:
-            d[name] += profile
+            d[name] += self.profile
             self.add(name, Type.CACHE, windowsify(d[name]))
-        if len(profile):
+        if len(self.profile):
             self.add('MY_CACHE', Type.CACHE, 'cache.dir')
         else:
             self.add('MY_CACHE', Type.CACHE, '')
 
-        if len(profile):
+        if len(self.profile):
             self.add('MY_CONFIG', Type.CONFIG, 'config.dir')
         else:
             self.add('MY_CONFIG', Type.CONFIG, '')
@@ -169,8 +168,8 @@ class ConfigPaths:
         try:
             self.add('TMP', None, tempfile.gettempdir())
         except IOError as e:
-            print('Error opening tmp folder: %s\nUsing %s' % (str(e),
-                os.path.expanduser('~')), file=sys.stderr)
+            print('Error opening tmp folder: %s\nUsing %s' % (
+                str(e), os.path.expanduser('~')), file=sys.stderr)
             self.add('TMP', None, os.path.expanduser('~'))
 
     def init_profile(self, profile):
@@ -193,4 +192,9 @@ class ConfigPaths:
         self.add('PLUGINS_CONFIG_DIR', Type.CONFIG, pluginsconfdir)
         self.add('MY_CERT', Type.CONFIG, localcertsdir)
 
-gajimpaths = ConfigPaths()
+
+_paths = ConfigPaths()
+
+# For backwards compatibility needed
+# some plugins use that
+gajimpaths = _paths

@@ -36,7 +36,6 @@ from distutils.version import LooseVersion as V
 from collections import namedtuple
 import gi
 import nbxmpp
-import hashlib
 
 from gi.repository import GLib
 
@@ -63,24 +62,26 @@ glog = logging.getLogger('gajim')
 
 logger = None
 
+# For backwards compatibility needed
+# some plugins use that
 gajimpaths = configpaths.gajimpaths
 
-VCARD_PATH = gajimpaths['VCARD']
-AVATAR_PATH = gajimpaths['AVATAR']
-MY_EMOTS_PATH = gajimpaths['MY_EMOTS']
-MY_ICONSETS_PATH = gajimpaths['MY_ICONSETS']
-MY_MOOD_ICONSETS_PATH = gajimpaths['MY_MOOD_ICONSETS']
-MY_ACTIVITY_ICONSETS_PATH = gajimpaths['MY_ACTIVITY_ICONSETS']
-MY_CACERTS = gajimpaths['MY_CACERTS']
-MY_PEER_CERTS_PATH = gajimpaths['MY_PEER_CERTS']
-TMP = gajimpaths['TMP']
-DATA_DIR = gajimpaths['DATA']
-ICONS_DIR = gajimpaths['ICONS']
-HOME_DIR = gajimpaths['HOME']
-PLUGINS_DIRS = [gajimpaths['PLUGINS_BASE'],
-                gajimpaths['PLUGINS_USER']]
-PLUGINS_CONFIG_DIR = gajimpaths['PLUGINS_CONFIG_DIR']
-MY_CERT_DIR = gajimpaths['MY_CERT']
+VCARD_PATH = configpaths.get('VCARD')
+AVATAR_PATH = configpaths.get('AVATAR')
+MY_EMOTS_PATH = configpaths.get('MY_EMOTS')
+MY_ICONSETS_PATH = configpaths.get('MY_ICONSETS')
+MY_MOOD_ICONSETS_PATH = configpaths.get('MY_MOOD_ICONSETS')
+MY_ACTIVITY_ICONSETS_PATH = configpaths.get('MY_ACTIVITY_ICONSETS')
+MY_CACERTS = configpaths.get('MY_CACERTS')
+MY_PEER_CERTS_PATH = configpaths.get('MY_PEER_CERTS')
+TMP = configpaths.get('TMP')
+DATA_DIR = configpaths.get('DATA')
+ICONS_DIR = configpaths.get('ICONS')
+HOME_DIR = configpaths.get('HOME')
+PLUGINS_DIRS = [configpaths.get('PLUGINS_BASE'),
+                configpaths.get('PLUGINS_USER')]
+PLUGINS_CONFIG_DIR = configpaths.get('PLUGINS_CONFIG_DIR')
+MY_CERT_DIR = configpaths.get('MY_CERT')
 
 RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
 

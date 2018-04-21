@@ -120,7 +120,7 @@ class JingleFileTransfer(JingleContent):
         }
 
         if jingle_xtls.PYOPENSSL_PRESENT:
-            cert_name = os.path.join(configpaths.gajimpaths['MY_CERT'],
+            cert_name = os.path.join(configpaths.get('MY_CERT'),
                                      jingle_xtls.SELF_SIGNED_CERTIFICATE)
             if not (os.path.exists(cert_name + '.cert')
                     and os.path.exists(cert_name + '.pkey')):

@@ -53,6 +53,7 @@ gi.require_version('Pango', '1.0')
 from gi.repository import GLib, Gio, Gtk
 
 from gajim.common import i18n
+from gajim.common import configpaths
 from gajim.common import logging_helpers
 
 MIN_NBXMPP_VER = "0.6.4"
@@ -112,9 +113,6 @@ class GajimApplication(Gtk.Application):
         self.connect('startup', self._startup)
         self.connect('activate', self._activate)
 
-        self.profile = ''
-        self.config_path = None
-        self.profile_separation = False
         self.interface = None
 
         GLib.set_prgname('gajim')
@@ -157,10 +155,6 @@ class GajimApplication(Gtk.Application):
             sys.exit(1)
 
         # Create and initialize Application Paths & Databases
-        from gajim.common import configpaths
-        configpaths.gajimpaths.init(
-            self.config_path, self.profile, self.profile_separation)
-
         from gajim.common import app
         from gajim.common import check_paths
         from gajim.common import exceptions
@@ -209,7 +203,7 @@ class GajimApplication(Gtk.Application):
         #    libintl = ctypes.cdll.LoadLibrary(libintl_path)
         #    libintl.bindtextdomain(APP, DIR)
         #    libintl.bind_textdomain_codeset(APP, 'UTF-8')
-        #    plugins_locale_dir = os.path.join(common.configpaths.gajimpaths[
+        #    plugins_locale_dir = os.path.join(common.configpaths[
         #       'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
         #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
         #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
@@ -345,23 +339,22 @@ class GajimApplication(Gtk.Application):
     def _handle_local_options(self, application,
                               options: GLib.VariantDict) -> int:
         # Parse all options that have to be executed before ::startup
-        logging_helpers.init()
-
         if options.contains('profile'):
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
             profile = options.lookup_value('profile').get_string()
             app_id = '%s.%s' % (self.get_application_id(), profile)
             self.set_application_id(app_id)
-            self.profile = profile
+            configpaths.set_profile(profile)
         if options.contains('separate'):
-            self.profile_separation = True
+            configpaths.set_separation(True)
         if options.contains('config-path'):
-            self.config_path = options.lookup_value('config-path').get_string()
-        if options.contains('version'):
-            from gajim import __version__
-            print(__version__)
-            return 0
+            path = options.lookup_value('config-path').get_string()
+            configpaths.set_config_root(path)
+
+        configpaths.init()
+        logging_helpers.init()
+
         if options.contains('quiet'):
             logging_helpers.set_quiet()
         if options.contains('verbose'):

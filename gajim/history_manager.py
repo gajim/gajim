@@ -67,8 +67,9 @@ def parseOpts():
 config_path = parseOpts()
 del parseOpts
 
-import gajim.common.configpaths
-gajim.common.configpaths.gajimpaths.init(config_path)
+from gajim.common import configpaths
+configpaths.set_config_root(config_path)
+configpaths.init()
 del config_path
 from gajim.common import app
 from gajim import gtkgui_helpers

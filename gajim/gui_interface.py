@@ -107,11 +107,10 @@ from threading import Thread
 from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
 
-from gajim.common.configpaths import gajimpaths
-config_filename = gajimpaths['CONFIG_FILE']
+from gajim.common import configpaths
 
 from gajim.common import optparser
-parser = optparser.OptionsParser(config_filename)
+parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
 
 import logging
 log = logging.getLogger('gajim.interface')

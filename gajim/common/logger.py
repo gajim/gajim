@@ -42,12 +42,13 @@ from enum import IntEnum, unique
 
 from gajim.common import exceptions
 from gajim.common import app
+from gajim.common import configpaths
 
 import sqlite3 as sqlite
 
-LOG_DB_PATH = app.gajimpaths['LOG_DB']
+LOG_DB_PATH = configpaths.get('LOG_DB')
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
-CACHE_DB_PATH = app.gajimpaths['CACHE_DB']
+CACHE_DB_PATH = configpaths.get('CACHE_DB')
 
 import logging
 log = logging.getLogger('gajim.c.logger')

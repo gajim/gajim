@@ -49,8 +49,9 @@ if os.path.isdir(configdir):
 
 os.mkdir(configdir)
 
-import gajim.common.configpaths
-gajim.common.configpaths.gajimpaths.init(configdir)
+from gajim.common import configpaths
+configpaths.set_config_root(configdir)
+configpaths.init()
 
 # for some reason common.app needs to be imported before xmpppy?
 from gajim.common import app

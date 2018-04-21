@@ -19,7 +19,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from gajim.common.configpaths import gajimpaths
+from gajim.common import configpaths
 
 import Crypto
 from gajim.common import crypto
@@ -28,8 +28,9 @@ from gajim.common import exceptions
 import os
 import pickle
 
-secrets_filename = gajimpaths['SECRETS_FILE']
+secrets_filename = configpaths.get('SECRETS_FILE')
 secrets_cache = None
+
 
 class Secrets():
     def __init__(self, filename):
