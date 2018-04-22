@@ -139,44 +139,6 @@ def create_cache_db():
     con.commit()
     con.close()
 
-def split_db():
-    print('spliting database')
-    if os.name == 'nt':
-        try:
-            OLD_LOG_DB_FOLDER = os.path.join(os.environ['appdata'], 'Gajim')
-        except KeyError:
-            OLD_LOG_DB_FOLDER = '.'
-    else:
-        OLD_LOG_DB_FOLDER = os.path.expanduser('~/.gajim')
-
-    tmp = logger.CACHE_DB_PATH
-    logger.CACHE_DB_PATH = os.path.join(OLD_LOG_DB_FOLDER, 'cache.db')
-    create_cache_db()
-    back = os.getcwd()
-    os.chdir(OLD_LOG_DB_FOLDER)
-    con = sqlite3.connect('logs.db')
-    os.chdir(back)
-    cur = con.cursor()
-    cur.execute('''SELECT name FROM sqlite_master WHERE type = 'table';''')
-    tables = cur.fetchall() # we get [('jids',), ('unread_messages',), ...
-    tables = [t[0] for t in tables]
-    cur.execute("ATTACH DATABASE '%s' AS cache" % logger.CACHE_DB_PATH)
-    for table in ('caps_cache', 'rooms_last_message_time', 'roster_entry',
-    'roster_group', 'transports_cache'):
-        if table not in tables:
-            continue
-        try:
-            cur.executescript(
-                    'INSERT INTO cache.%s SELECT * FROM %s;' % (table, table))
-            con.commit()
-            cur.executescript('DROP TABLE %s;' % table)
-            con.commit()
-        except sqlite3.OperationalError as e:
-            print('error moving table %s to cache.db: %s' % (table, str(e)),
-                file=sys.stderr)
-    con.close()
-    logger.CACHE_DB_PATH = tmp
-
 def check_and_possibly_create_paths():
     LOG_DB_PATH = configpaths.get('LOG_DB')
     CACHE_DB_PATH = configpaths.get('CACHE_DB')
