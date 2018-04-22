@@ -31,10 +31,16 @@ from io import StringIO
 from urllib.parse import urlencode
 
 import nbxmpp
-import gajim
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, GObject
+
+try:
+    import gajim
+    gajim_version = gajim.__version__
+except ImportError:
+    # For standalone testing
+    gajim_version = 'Package not installed'
 
 if __name__ == '__main__':
     glade_file = os.path.join('data', 'gui', 'exception_dialog.ui')
@@ -58,6 +64,7 @@ ISSUE_TEXT = '''## Versions
 ```
 ## Steps to reproduce the problem
 ...'''
+
 
 def _hook(type_, value, tb):
     if not _exception_in_progress.acquire(False):
@@ -83,8 +90,11 @@ class ExceptionDialog():
         traceback.print_exception(type_, value, tb, None, trace)
         self.text = self.get_issue_text(trace.getvalue())
         buffer_.set_text(self.text)
+        print(self.text)
         self.exception_view.set_editable(False)
         self.dialog.show()
+        if __name__ == '__main__':
+            self.dialog.connect('delete-event', self._on_delete_event)
 
     def on_report_clicked(self, *args):
         issue_url = 'https://dev.gajim.org/gajim/gajim/issues/new'
@@ -94,6 +104,11 @@ class ExceptionDialog():
 
     def on_close_clicked(self, *args):
         self.dialog.destroy()
+        if __name__ == '__main__':
+            Gtk.main_quit()
+
+    def _on_delete_event(self, *args):
+        Gtk.main_quit()
 
     def get_issue_text(self, traceback_text):
         gtk_ver = '%i.%i.%i' % (
@@ -106,7 +121,7 @@ class ExceptionDialog():
                                  gtk_ver,
                                  gobject_ver,
                                  nbxmpp.__version__,
-                                 gajim.__version__,
+                                 gajim_version,
                                  traceback_text)
 
 
@@ -125,6 +140,7 @@ def get_os_info():
         except ImportError:
             return platform.system()
     return ''
+
 
 # this is just to assist testing (python3 gtkexcepthook.py)
 if __name__ == '__main__':
