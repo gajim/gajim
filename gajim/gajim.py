@@ -161,9 +161,9 @@ class GajimApplication(Gtk.Application):
         from gajim.common import logger
         from gajim.common import caps_cache
         try:
+            check_paths.check_and_possibly_create_paths()
             app.logger = logger.Logger()
             caps_cache.initialize(app.logger)
-            check_paths.check_and_possibly_create_paths()
         except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
                 None,

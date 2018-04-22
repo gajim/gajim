@@ -1084,8 +1084,10 @@ if __name__ == '__main__':
     from gajim.conversation_textview import ConversationTextview
     from gajim.gui_interface import Interface
     from gajim.common import app, logger, caps_cache
-    app.logger = logger.Logger()
-    caps_cache.initialize(app.logger)
+    # TODO: dont call Logger() it will create the DB
+    # maybe mock this object for tests
+    # app.logger = logger.Logger()
+    # caps_cache.initialize(app.logger)
 
     Interface()
 
