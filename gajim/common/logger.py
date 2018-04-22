@@ -187,6 +187,9 @@ class Logger:
                 );
 
                 CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
+
+                CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
+
                 '''
                 )
 
