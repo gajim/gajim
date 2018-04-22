@@ -178,11 +178,8 @@ def split_db():
     logger.CACHE_DB_PATH = tmp
 
 def check_and_possibly_create_paths():
-    LOG_DB_PATH = logger.LOG_DB_PATH
-    LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
-
-    CACHE_DB_PATH = logger.CACHE_DB_PATH
-    CACHE_DB_FOLDER, CACHE_DB_FILE = os.path.split(CACHE_DB_PATH)
+    LOG_DB_PATH = configpaths.get('LOG_DB')
+    CACHE_DB_PATH = configpaths.get('CACHE_DB')
 
     for path in configpaths.get_paths(PathType.FOLDER):
         if not os.path.exists(path):
@@ -191,20 +188,6 @@ def check_and_possibly_create_paths():
             print(_('%s is a file but it should be a directory') % path)
             print(_('Gajim will now exit'))
             sys.exit()
-
-    if not os.path.exists(LOG_DB_FOLDER):
-        create_path(LOG_DB_FOLDER)
-    elif os.path.isfile(LOG_DB_FOLDER):
-        print(_('%s is a file but it should be a directory') % LOG_DB_FOLDER)
-        print(_('Gajim will now exit'))
-        sys.exit()
-
-    if not os.path.exists(CACHE_DB_FOLDER):
-        create_path(CACHE_DB_FOLDER)
-    elif os.path.isfile(CACHE_DB_FOLDER):
-        print(_('%s is a file but it should be a directory') % CACHE_DB_FOLDER)
-        print(_('Gajim will now exit'))
-        sys.exit()
 
     if not os.path.exists(LOG_DB_PATH):
         if os.path.exists(CACHE_DB_PATH):

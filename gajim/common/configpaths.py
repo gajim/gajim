@@ -124,7 +124,7 @@ class ConfigPaths:
         return path
 
     def _add(self, name, path, location=None, path_type=None, unique=False):
-        if location is not None:
+        if path and location is not None:
             path = self._prepare(path, unique)
         self._paths[name] = (location, path, path_type)
 
@@ -135,9 +135,9 @@ class ConfigPaths:
 
         user_dir_paths = [
             ('TMP', tempfile.gettempdir()),
-            ('MY_CONFIG', self.config_root),
-            ('MY_CACHE', self.cache_root),
-            ('MY_DATA', self.data_root),
+            ('MY_CONFIG', '', PathLocation.CONFIG, PathType.FOLDER),
+            ('MY_CACHE', '', PathLocation.CACHE, PathType.FOLDER),
+            ('MY_DATA', '', PathLocation.DATA, PathType.FOLDER),
         ]
 
         for path in user_dir_paths:
