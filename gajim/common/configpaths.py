@@ -24,7 +24,9 @@
 ##
 
 import os
+import sys
 import tempfile
+from pathlib import Path
 
 from gajim.common.const import PathType, PathLocation
 
@@ -55,6 +57,28 @@ def set_config_root(config_root: str):
 
 def init():
     _paths.init()
+
+
+def create_paths():
+    for path in get_paths(PathType.FOLDER):
+        if not isinstance(path, Path):
+            path = Path(path)
+
+        if path.is_file():
+            print(_('%s is a file but it should be a directory') % path)
+            print(_('Gajim will now exit'))
+            sys.exit()
+
+        if not path.exists():
+            for parent_path in reversed(path.parents):
+                # Create all parent folders
+                # dont use mkdir(parent=True), as it ignores `mode`
+                # when creating the parents
+                if not parent_path.exists():
+                    print(('creating %s directory') % parent_path)
+                    parent_path.mkdir(mode=0o700)
+            print(('creating %s directory') % path)
+            path.mkdir(mode=0o700)
 
 
 class ConfigPaths:

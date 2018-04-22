@@ -156,12 +156,11 @@ class GajimApplication(Gtk.Application):
 
         # Create and initialize Application Paths & Databases
         from gajim.common import app
-        from gajim.common import check_paths
+        configpaths.create_paths()
         from gajim.common import exceptions
         from gajim.common import logger
         from gajim.common import caps_cache
         try:
-            check_paths.check_and_possibly_create_paths()
             app.logger = logger.Logger()
             caps_cache.initialize(app.logger)
         except exceptions.DatabaseMalformed as error:
