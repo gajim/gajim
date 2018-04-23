@@ -53,6 +53,59 @@ class PathType(IntEnum):
     FOLDER = 1
     FOLDER_OPTIONAL = 2
 
+@unique
+class KindConstant(IntEnum):
+    STATUS = 0
+    GCSTATUS = 1
+    GC_MSG = 2
+    SINGLE_MSG_RECV = 3
+    CHAT_MSG_RECV = 4
+    SINGLE_MSG_SENT = 5
+    CHAT_MSG_SENT = 6
+    ERROR = 7
+
+    def __str__(self):
+        return str(self.value)
+
+@unique
+class ShowConstant(IntEnum):
+    ONLINE = 0
+    CHAT = 1
+    AWAY = 2
+    XA = 3
+    DND = 4
+    OFFLINE = 5
+
+@unique
+class TypeConstant(IntEnum):
+    AIM = 0
+    GG = 1
+    HTTP_WS = 2
+    ICQ = 3
+    MSN = 4
+    QQ = 5
+    SMS = 6
+    SMTP = 7
+    TLEN = 8
+    YAHOO = 9
+    NEWMAIL = 10
+    RSS = 11
+    WEATHER = 12
+    MRIM = 13
+    NO_TRANSPORT = 14
+
+@unique
+class SubscriptionConstant(IntEnum):
+    NONE = 0
+    TO = 1
+    FROM = 2
+    BOTH = 3
+
+@unique
+class JIDConstant(IntEnum):
+    NORMAL_TYPE = 0
+    ROOM_TYPE = 1
+
 
 THANKS = u"""\
 Alexander Futász
