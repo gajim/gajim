@@ -60,6 +60,7 @@ from gajim.common.connection_handlers_events import *
 from gajim.common import ged
 from gajim.common import nec
 from gajim.common.nec import NetworkEvent
+from gajim.common.const import KindConstant
 
 from gajim.common.jingle import ConnectionJingle
 

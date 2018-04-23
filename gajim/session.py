@@ -30,7 +30,7 @@ from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
     InformationEvent
-from gajim.common.logger import KindConstant
+from gajim.common.const import KindConstant
 from gajim import message_control
 from gajim import notify
 from gajim import dialogs

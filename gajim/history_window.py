@@ -41,7 +41,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import exceptions
 
-from gajim.common.logger import ShowConstant, KindConstant
+from gajim.common.const import ShowConstant, KindConstant
 
 @unique
 class InfoColumn(IntEnum):

@@ -26,8 +26,7 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
-from gajim.common.logger import KindConstant, JIDConstant
-from gajim.common.const import ArchiveState
+from gajim.common.const import ArchiveState, JIDConstant
 from gajim.common.caps_cache import muc_caps_cache
 import gajim.common.connection_handlers_events as ev
 

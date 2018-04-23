@@ -44,13 +44,12 @@ from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from gajim.common.contacts import GC_Contact
-from gajim.common.logger import KindConstant
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 from nbxmpp.protocol import NS_CHATSTATES
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.const import AvatarSize
+from gajim.common.const import AvatarSize, KindConstant
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.chat_control_base import ChatControlBase

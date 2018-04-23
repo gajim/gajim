@@ -87,7 +87,8 @@ if is_standalone():
 
 from gajim.common import app
 from gajim import gtkgui_helpers
-from gajim.common.logger import LOG_DB_PATH, JIDConstant, KindConstant
+from gajim.common.logger import LOG_DB_PATH
+from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim import dialogs
 

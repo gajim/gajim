@@ -24,7 +24,7 @@ from gajim import dialogs
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
-from gajim.common.logger import KindConstant
+from gajim.common.const import KindConstant
 
 from gajim.command_system.errors import CommandError
 from gajim.command_system.framework import CommandContainer, command, doc
