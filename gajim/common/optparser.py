@@ -174,31 +174,6 @@ class OptionsParser:
         caps_cache.capscache.initialize_from_db()
 
     @staticmethod
-    def assert_unread_msgs_table_exists():
-        """
-        Create table unread_messages if there is no such table
-        """
-        back = os.getcwd()
-        os.chdir(logger.LOG_DB_FOLDER)
-        con = sqlite.connect(logger.LOG_DB_FILE)
-        os.chdir(back)
-        cur = con.cursor()
-        try:
-            cur.executescript(
-                    '''
-                    CREATE TABLE IF NOT EXISTS unread_messages (
-                            message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                            jid_id INTEGER
-                    );
-                    '''
-            )
-            con.commit()
-            app.logger.init_vars()
-        except sqlite.OperationalError:
-            pass
-        con.close()
-
-    @staticmethod
     def update_ft_proxies(to_remove=None, to_add=None):
         if to_remove is None:
             to_remove = []
