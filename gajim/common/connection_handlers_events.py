@@ -30,8 +30,10 @@ import sys
 import os
 from time import time as time_time
 
+import OpenSSL.crypto
 import nbxmpp
 from nbxmpp.protocol import NS_CHATSTATES
+
 from gajim.common import atom
 from gajim.common import nec
 from gajim.common import helpers
@@ -45,8 +47,6 @@ from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 from gajim.common.nec import NetworkEvent
 
-if app.HAVE_PYOPENSSL:
-    import OpenSSL.crypto
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
 

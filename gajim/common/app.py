@@ -200,17 +200,6 @@ else:
     if not test_gpg(binary='gpg'):
         HAVE_GPG = False
 
-HAVE_PYOPENSSL = True
-try:
-    import OpenSSL.SSL
-    import OpenSSL.crypto
-    ver = OpenSSL.__version__
-    ver_l = [int(i) for i in ver.split('.')]
-    if ver_l < [0, 12]:
-        raise ImportError
-except Exception:
-    HAVE_PYOPENSSL = False
-
 HAVE_FARSTREAM = True
 try:
     if os.name == 'nt':

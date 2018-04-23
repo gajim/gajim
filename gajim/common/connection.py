@@ -42,7 +42,9 @@ import locale
 import hmac
 import hashlib
 import json
+import logging
 from functools import partial
+from string import Template
 
 try:
     randomsource = random.SystemRandom()
@@ -54,29 +56,23 @@ import signal
 if os.name != 'nt':
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
+if os.name == 'nt':
+    import certifi
+import OpenSSL.crypto
 import nbxmpp
+from nbxmpp import Smacks
+
 from gajim import common
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
-from gajim.common import exceptions
 from gajim.common import check_X509
 from gajim.common.connection_handlers import *
-from gajim.common.helpers import version_condition
 from gajim.common.contacts import GC_Contact
-
 from gajim.gtkgui_helpers import get_action
 
-if app.HAVE_PYOPENSSL:
-    import OpenSSL.crypto
 
-if os.name == 'nt':
-    import certifi
-
-from nbxmpp import Smacks
-from string import Template
-import logging
 log = logging.getLogger('gajim.c.connection')
 
 ssl_error = {
