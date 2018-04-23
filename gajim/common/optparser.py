@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-## src/common/optparser.py
+## gajim/common/optparser.py
 ##
 ## Copyright (C) 2003-2005 Vincent Hanquez <tab AT snarc.org>
 ## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
@@ -10,6 +10,7 @@
 ##                    Brendan Taylor <whateley AT gmail.com>
 ##                    Tomasz Melcer <liori AT exroot.org>
 ##                    Stephan Erb <steve-e AT h3c.de>
+## Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -29,16 +30,14 @@
 import os
 import sys
 import re
-from time import time
+import logging
+
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import caps_cache
 
-import sqlite3 as sqlite
-from gajim.common import logger
 
-import logging
 log = logging.getLogger('gajim.c.optparser')
+
 
 class OptionsParser:
     def __init__(self, filename):
@@ -150,25 +149,13 @@ class OptionsParser:
             self.update_config_to_016101()
         if old < [0, 16, 10, 2] and new >= [0, 16, 10, 2]:
             self.update_config_to_016102()
-        if old < [0, 16, 10, 3] and new >= [0, 16, 10, 3]:
-            self.update_config_to_016103()
         if old < [0, 16, 10, 4] and new >= [0, 16, 10, 4]:
             self.update_config_to_016104()
         if old < [0, 16, 10, 5] and new >= [0, 16, 10, 5]:
             self.update_config_to_016105()
-        if old < [0, 16, 11, 1] and new >= [0, 16, 11, 1]:
-            self.update_config_to_016111()
-        if old < [0, 16, 11, 2] and new >= [0, 16, 11, 2]:
-            self.update_config_to_016112()
-        if old < [0, 98, 2] and new >= [0, 98, 2]:
-            self.update_config_to_0982()
         if old < [0, 98, 3] and new >= [0, 98, 3]:
             self.update_config_to_0983()
-        if old < [0, 99, 2] and new >= [0, 99, 2]:
-            self.update_config_to_0992()
 
-        app.logger.init_vars()
-        app.logger.attach_cache_database()
         app.config.set('version', new_version)
 
         caps_cache.capscache.initialize_from_db()
@@ -192,20 +179,6 @@ class OptionsParser:
             proxies_str = ', '.join(proxies)
             app.config.set_per('accounts', account, 'file_transfer_proxies',
                     proxies_str)
-
-    @staticmethod
-    def call_sql(db_path, sql):
-        con = sqlite.connect(db_path)
-        cur = con.cursor()
-        try:
-            cur.executescript(sql)
-            con.commit()
-        except sqlite.OperationalError as e:
-            if str(e).startswith('duplicate column name:'):
-                log.info(str(e))
-            else:
-                log.exception('Error')
-        con.close()
 
     def update_config_to_01401(self):
         if 'autodetect_browser_mailer' not in self.old_values or 'openwith' \
@@ -253,21 +226,7 @@ class OptionsParser:
         for account in self.old_values['accounts'].keys():
             app.config.del_per('accounts', account, 'minimized_gc')
 
-        self.call_sql(logger.LOG_DB_PATH,
-            '''ALTER TABLE logs
-            ADD COLUMN 'additional_data' TEXT;'''
-        )
         app.config.set('version', '0.16.10.2')
-
-    def update_config_to_016103(self):
-        self.call_sql(logger.LOG_DB_PATH,
-            '''ALTER TABLE logs ADD COLUMN 'stanza_id' TEXT;
-            ALTER TABLE logs ADD COLUMN 'encryption' TEXT;
-            ALTER TABLE logs ADD COLUMN 'encryption_state' TEXT;
-            ALTER TABLE logs ADD COLUMN 'marker' INTEGER;
-            '''
-        )
-        app.config.set('version', '0.16.10.3')
 
     def update_config_to_016104(self):
         app.config.set('emoticons_theme', 'noto-emoticons')
@@ -278,37 +237,6 @@ class OptionsParser:
         app.config.set('restore_timeout', -1)
         app.config.set('version', '0.16.10.5')
 
-    def update_config_to_016111(self):
-        self.call_sql(logger.CACHE_DB_PATH,
-            '''ALTER TABLE roster_entry ADD COLUMN 'avatar_sha' TEXT;
-            '''
-        )
-        app.config.set('version', '0.16.11.1')
-
-    def update_config_to_016112(self):
-        self.call_sql(logger.LOG_DB_PATH,
-            '''
-            CREATE TABLE IF NOT EXISTS last_archive_message(
-                jid_id INTEGER PRIMARY KEY UNIQUE,
-                last_mam_id TEXT,
-                oldest_mam_timestamp TEXT,
-                last_muc_timestamp TEXT
-                );
-            ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
-            '''
-        )
-        app.config.set('version', '0.16.11.2')
-
-    def update_config_to_0982(self):
-        # This fixes a typo in update_config_to_016112()
-        self.call_sql(logger.LOG_DB_PATH,
-            '''
-            ALTER TABLE logs ADD COLUMN 'account_id' INTEGER;
-            ALTER TABLE logs ADD COLUMN 'additional_data' TEXT;
-            '''
-        )
-        app.config.set('version', '0.98.2')
-
     def update_config_to_0983(self):
         for account in self.old_values['accounts'].keys():
             password = self.old_values['accounts'][account]['password']
@@ -317,12 +245,3 @@ class OptionsParser:
             elif password == "libsecret:":
                 app.config.set_per('accounts', account, 'password', '')
         app.config.set('version', '0.98.3')
-
-    def update_config_to_0992(self):
-        self.call_sql(logger.LOG_DB_PATH,
-            '''
-            CREATE INDEX IF NOT EXISTS
-            idx_logs_stanza_id ON logs (stanza_id);
-            '''
-        )
-        app.config.set('version', '0.99.2')

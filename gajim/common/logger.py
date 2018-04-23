@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-## src/common/logger.py
+## gajim/common/logger.py
 ##
 ## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
 ## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
@@ -8,6 +8,7 @@
 ## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
 ## Copyright (C) 2007 Tomasz Melcer <liori AT exroot.org>
 ##                    Julien Pivotto <roidelapluie AT gmail.com>
+## Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -34,11 +35,12 @@ import time
 import datetime
 import calendar
 import json
+import logging
+import sqlite3 as sqlite
 from collections import namedtuple
 from gzip import GzipFile
 from io import BytesIO
 from gi.repository import GLib
-from enum import IntEnum, unique
 
 from gajim.common import exceptions
 from gajim.common import app
@@ -47,150 +49,204 @@ from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
     SubscriptionConstant)
 
-import sqlite3 as sqlite
-
 LOG_DB_PATH = configpaths.get('LOG_DB')
 LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
 CACHE_DB_PATH = configpaths.get('CACHE_DB')
 
-import logging
+LOGS_SQL_STATEMENT = '''
+    CREATE TABLE jids(
+            jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            jid TEXT UNIQUE,
+            type INTEGER
+    );
+    CREATE TABLE unread_messages(
+            message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            jid_id INTEGER,
+            shown BOOLEAN default 0
+    );
+    CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
+    CREATE TABLE logs(
+            log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+            account_id INTEGER,
+            jid_id INTEGER,
+            contact_name TEXT,
+            time INTEGER,
+            kind INTEGER,
+            show INTEGER,
+            message TEXT,
+            subject TEXT,
+            additional_data TEXT,
+            stanza_id TEXT,
+            encryption TEXT,
+            encryption_state TEXT,
+            marker INTEGER
+    );
+    CREATE TABLE last_archive_message(
+            jid_id INTEGER PRIMARY KEY UNIQUE,
+            last_mam_id TEXT,
+            oldest_mam_timestamp TEXT,
+            last_muc_timestamp TEXT
+    );
+    CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
+    CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
+    PRAGMA user_version=1;
+    '''
+
+CACHE_SQL_STATEMENT = '''
+    CREATE TABLE transports_cache (
+            transport TEXT UNIQUE,
+            type INTEGER
+    );
+    CREATE TABLE caps_cache (
+            hash_method TEXT,
+            hash TEXT,
+            data BLOB,
+            last_seen INTEGER);
+    CREATE TABLE rooms_last_message_time(
+            jid_id INTEGER PRIMARY KEY UNIQUE,
+            time INTEGER
+    );
+    CREATE TABLE roster_entry(
+            account_jid_id INTEGER,
+            jid_id INTEGER,
+            name TEXT,
+            subscription INTEGER,
+            ask BOOLEAN,
+            avatar_sha TEXT,
+            PRIMARY KEY (account_jid_id, jid_id)
+    );
+    CREATE TABLE roster_group(
+            account_jid_id INTEGER,
+            jid_id INTEGER,
+            group_name TEXT,
+            PRIMARY KEY (account_jid_id, jid_id, group_name)
+    );
+    PRAGMA user_version=1;
+    '''
+
 log = logging.getLogger('gajim.c.logger')
 
 
 class Logger:
     def __init__(self):
         self._jid_ids = {}
-        self.con = None
-        self.commit_timout_id = None
+        self._con = None
+        self._commit_timout_id = None
 
+        self._create_databases()
+        self._migrate_databases()
+        self._connect_databases()
+        self._get_jid_ids_from_db()
+
+    def _create_databases(self):
         if os.path.isdir(LOG_DB_PATH):
-            print(_('%s is a directory but should be a file') % LOG_DB_PATH)
-            print(_('Gajim will now exit'))
+            log.error(_('%s is a directory but should be a file'),
+                      LOG_DB_PATH)
             sys.exit()
 
         if os.path.isdir(CACHE_DB_PATH):
-            print(_('%s or %s is a directory but should be a file') % CACHE_DB_PATH)
-            print(_('Gajim will now exit'))
+            log.error(_('%s is a directory but should be a file'),
+                      CACHE_DB_PATH)
             sys.exit()
 
         if not os.path.exists(LOG_DB_PATH):
             if os.path.exists(CACHE_DB_PATH):
                 os.remove(CACHE_DB_PATH)
-            self.create_log_db()
+            self._create(LOGS_SQL_STATEMENT, LOG_DB_PATH)
 
-        self.init_vars()
         if not os.path.exists(CACHE_DB_PATH):
-            self.create_cache_db()
-        self.attach_cache_database()
+            self._create(CACHE_SQL_STATEMENT, CACHE_DB_PATH)
 
-    def create_log_db(self):
-        print(_('creating logs database'))
-        con = sqlite.connect(LOG_DB_PATH)
-        os.chmod(LOG_DB_PATH, 0o600) # rw only for us
-        cur = con.cursor()
-        # create the tables
-        # kind can be
-        # status, gcstatus, gc_msg, (we only recv for those 3),
-        # single_msg_recv, chat_msg_recv, chat_msg_sent, single_msg_sent
-        # to meet all our needs
-        # logs.jid_id --> jids.jid_id but Sqlite doesn't do FK etc so it's done in python code
-        # jids.jid text column will be JID if TC-related, room_jid if GC-related,
-        # ROOM_JID/nick if pm-related.
-        # also check optparser.py, which updates databases on gajim updates
-        cur.executescript(
-                '''
-                CREATE TABLE jids(
-                        jid_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                        jid TEXT UNIQUE,
-                        type INTEGER
-                );
+    @staticmethod
+    def _create(statement, path):
+        log.info(_('Creating %s'), path)
+        con = sqlite.connect(path)
+        os.chmod(path, 0o600)
 
-                CREATE TABLE unread_messages(
-                        message_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                        jid_id INTEGER,
-                        shown BOOLEAN default 0
-                );
-
-                CREATE INDEX idx_unread_messages_jid_id ON unread_messages (jid_id);
-
-                CREATE TABLE logs(
-                        log_line_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-                        account_id INTEGER,
-                        jid_id INTEGER,
-                        contact_name TEXT,
-                        time INTEGER,
-                        kind INTEGER,
-                        show INTEGER,
-                        message TEXT,
-                        subject TEXT,
-                        additional_data TEXT,
-                        stanza_id TEXT,
-                        encryption TEXT,
-                        encryption_state TEXT,
-                        marker INTEGER
-                );
-
-                CREATE TABLE last_archive_message(
-                        jid_id INTEGER PRIMARY KEY UNIQUE,
-                        last_mam_id TEXT,
-                        oldest_mam_timestamp TEXT,
-                        last_muc_timestamp TEXT
-                );
-
-                CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
-
-                CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
-
-                '''
-                )
+        try:
+            con.executescript(statement)
+        except Exception as error:
+            log.exception('Error')
+            con.close()
+            os.remove(path)
+            sys.exit()
 
         con.commit()
         con.close()
 
-    def create_cache_db(self):
-        print(_('creating cache database'))
-        con = sqlite.connect(CACHE_DB_PATH)
-        os.chmod(CACHE_DB_PATH, 0o600) # rw only for us
-        cur = con.cursor()
-        cur.executescript(
-                '''
-                CREATE TABLE transports_cache (
-                        transport TEXT UNIQUE,
-                        type INTEGER
-                );
+    @staticmethod
+    def _get_user_version(con) -> int:
+        """ Return the value of PRAGMA user_version. """
+        return con.execute('PRAGMA user_version').fetchone()[0]
 
-                CREATE TABLE caps_cache (
-                        hash_method TEXT,
-                        hash TEXT,
-                        data BLOB,
-                        last_seen INTEGER);
+    def _migrate_databases(self):
+        try:
+            con = sqlite.connect(LOG_DB_PATH)
+            self._migrate_logs(con)
+            con.close()
 
-                CREATE TABLE rooms_last_message_time(
-                        jid_id INTEGER PRIMARY KEY UNIQUE,
-                        time INTEGER
-                );
+            con = sqlite.connect(CACHE_DB_PATH)
+            self._migrate_cache(con)
+            con.close()
+        except Exception:
+            log.exception('Error')
+            sys.exit()
 
-                CREATE TABLE IF NOT EXISTS roster_entry(
-                        account_jid_id INTEGER,
-                        jid_id INTEGER,
-                        name TEXT,
-                        subscription INTEGER,
-                        ask BOOLEAN,
-                        avatar_sha TEXT,
-                        PRIMARY KEY (account_jid_id, jid_id)
-                );
+    def _migrate_logs(self, con):
+        if self._get_user_version(con) == 0:
+            # All migrations from 0.16.9 until 1.0.0
+            statements = [
+                'ALTER TABLE logs ADD COLUMN "account_id" INTEGER',
+                'ALTER TABLE logs ADD COLUMN "stanza_id" TEXT',
+                'ALTER TABLE logs ADD COLUMN "encryption" TEXT',
+                'ALTER TABLE logs ADD COLUMN "encryption_state" TEXT',
+                'ALTER TABLE logs ADD COLUMN "marker" INTEGER',
+                'ALTER TABLE logs ADD COLUMN "additional_data" TEXT',
+                '''CREATE TABLE IF NOT EXISTS last_archive_message(
+                    jid_id INTEGER PRIMARY KEY UNIQUE,
+                    last_mam_id TEXT,
+                    oldest_mam_timestamp TEXT,
+                    last_muc_timestamp TEXT
+                    )''',
 
-                CREATE TABLE IF NOT EXISTS roster_group(
-                        account_jid_id INTEGER,
-                        jid_id INTEGER,
-                        group_name TEXT,
-                        PRIMARY KEY (account_jid_id, jid_id, group_name)
-                );
-                '''
-                )
+                '''CREATE INDEX IF NOT EXISTS idx_logs_stanza_id
+                    ON logs(stanza_id)''',
+                'PRAGMA user_version=1'
+                ]
 
-        con.commit()
-        con.close()
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 2:
+            pass
+
+    def _migrate_cache(self, con):
+        if self._get_user_version(con) == 0:
+            # All migrations from 0.16.9 until 1.0.0
+            statements = [
+                'ALTER TABLE roster_entry ADD COLUMN "avatar_sha" TEXT',
+                'PRAGMA user_version=1'
+                ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 2:
+            pass
+
+    @staticmethod
+    def _execute_multiple(con, statements):
+        """
+        Execute mutliple statements with the option to fail on duplicates
+        but still continue
+        """
+        for sql in statements:
+            try:
+                con.execute(sql)
+                con.commit()
+            except sqlite.OperationalError as error:
+                if str(error).startswith('duplicate column name:'):
+                    log.info(error)
+                else:
+                    log.exception('Error')
+                    sys.exit()
 
     @staticmethod
     def namedtuple_factory(cursor, row):
@@ -209,55 +265,33 @@ class Logger:
     def dispatch(self, event, error):
         app.ged.raise_event(event, None, str(error))
 
-    def close_db(self):
-        if self.con:
-            self.con.close()
-        self.con = None
-        self.cur = None
+    def _connect_databases(self):
+        self._con = sqlite.connect(
+            LOG_DB_PATH, timeout=20.0, isolation_level='IMMEDIATE')
 
-    def open_db(self):
-        self.close_db()
-
-        # FIXME: sqlite3_open wants UTF8 strings. So a path with
-        # non-ascii chars doesn't work. See #2812 and
-        # http://lists.initd.org/pipermail/pysqlite/2005-August/000134.html
-        back = os.getcwd()
-        os.chdir(LOG_DB_FOLDER)
-
-        # if locked, wait up to 20 sec to unlock
-        # before raise (hopefully should be enough)
-
-        self.con = sqlite.connect(LOG_DB_FILE, timeout=20.0,
-                isolation_level='IMMEDIATE')
-        os.chdir(back)
-        self.con.row_factory = self.namedtuple_factory
+        self._con.row_factory = self.namedtuple_factory
 
         # DB functions
-        self.con.create_function("like", 1, self._like)
-        self.con.create_function("get_timeout", 0, self._get_timeout)
+        self._con.create_function("like", 1, self._like)
+        self._con.create_function("get_timeout", 0, self._get_timeout)
 
-        self.cur = self.con.cursor()
-        self.set_synchronous(False)
-
-    def attach_cache_database(self):
+        self._set_synchronous(False)
         try:
-            self.cur.execute("ATTACH DATABASE '%s' AS cache" % \
-                CACHE_DB_PATH.replace("'", "''"))
-        except sqlite.Error as e:
-            log.debug("Failed to attach cache database: %s" % str(e))
+            self._con.execute("ATTACH DATABASE '%s' AS cache" %
+                              CACHE_DB_PATH.replace("'", "''"))
+        except Exception as error:
+            log.exception('Error')
+            self._con.close()
+            sys.exit()
 
-    def set_synchronous(self, sync):
+    def _set_synchronous(self, sync):
         try:
             if sync:
-                self.cur.execute("PRAGMA synchronous = NORMAL")
+                self._con.execute("PRAGMA synchronous = NORMAL")
             else:
-                self.cur.execute("PRAGMA synchronous = OFF")
+                self._con.execute("PRAGMA synchronous = OFF")
         except sqlite.Error as e:
-            log.debug("Failed to set_synchronous(%s): %s" % (sync, str(e)))
-
-    def init_vars(self):
-        self.open_db()
-        self.get_jid_ids_from_db()
+            log.exception('Error')
 
     @staticmethod
     def _get_timeout():
@@ -277,29 +311,29 @@ class Logger:
 
     def commit(self):
         try:
-            self.con.commit()
+            self._con.commit()
         except sqlite.OperationalError as e:
             print(str(e), file=sys.stderr)
-        self.commit_timout_id = None
+        self._commit_timout_id = None
         return False
 
     def _timeout_commit(self):
-        if self.commit_timout_id:
+        if self._commit_timout_id:
             return
-        self.commit_timout_id = GLib.timeout_add(500, self.commit)
+        self._commit_timout_id = GLib.timeout_add(500, self.commit)
 
     def simple_commit(self, sql_to_commit):
         """
         Helper to commit
         """
-        self.cur.execute(sql_to_commit)
+        self._con.execute(sql_to_commit)
         self._timeout_commit()
 
-    def get_jid_ids_from_db(self):
+    def _get_jid_ids_from_db(self):
         """
         Load all jid/jid_id tuples into a dict for faster access
         """
-        rows = self.con.execute(
+        rows = self._con.execute(
             'SELECT jid_id, jid, type FROM jids').fetchall()
         for row in rows:
             self._jid_ids[row.jid] = row
@@ -327,8 +361,8 @@ class Logger:
         """
         Return True if it's a room jid, False if it's not, None if we don't know
         """
-        self.cur.execute('SELECT type FROM jids WHERE jid=?', (jid,))
-        row = self.cur.fetchone()
+        row = self._con.execute(
+            'SELECT type FROM jids WHERE jid=?', (jid,)).fetchone()
         if row is None:
             return None
         else:
@@ -380,7 +414,7 @@ class Logger:
             return result.jid_id
 
         sql = 'SELECT jid_id, jid, type FROM jids WHERE jid = ?'
-        row = self.con.execute(sql, [jid]).fetchone()
+        row = self._con.execute(sql, [jid]).fetchone()
         if row is not None:
             self._jid_ids[jid] = row
             return row.jid_id
@@ -390,7 +424,7 @@ class Logger:
                 'Unable to insert new JID because type is missing')
 
         sql = 'INSERT INTO jids (jid, type) VALUES (?, ?)'
-        lastrowid = self.con.execute(sql, (jid, type_)).lastrowid
+        lastrowid = self._con.execute(sql, (jid, type_)).lastrowid
         Row = namedtuple('Row', 'jid_id jid type')
         self._jid_ids[jid] = Row(lastrowid, jid, type_)
         self._timeout_commit()
@@ -576,9 +610,8 @@ class Logger:
         """
         all_messages = []
         try:
-            self.cur.execute(
-                    'SELECT message_id, shown from unread_messages')
-            unread_results = self.cur.fetchall()
+            unread_results = self._con.execute(
+                'SELECT message_id, shown from unread_messages').fetchall()
         except Exception:
             unread_results = []
         for message in unread_results:
@@ -587,20 +620,19 @@ class Logger:
             # here we get infos for that message, and related jid from jids table
             # do NOT change order of SELECTed things, unless you change function(s)
             # that called this function
-            self.cur.execute('''
+            result = self._con.execute('''
                     SELECT logs.log_line_id, logs.message, logs.time, logs.subject,
                     jids.jid, logs.additional_data
                     FROM logs, jids
                     WHERE logs.log_line_id = %d AND logs.jid_id = jids.jid_id
                     ''' % msg_log_id
-                    )
-            results = self.cur.fetchone()
-            if results is None:
+                    ).fetchone()
+            if result is None:
                 # Log line is no more in logs table. remove it from unread_messages
                 self.set_read_messages([msg_log_id])
                 continue
 
-            all_messages.append((results, shown))
+            all_messages.append((result, shown))
         return all_messages
 
     def get_last_conversation_lines(self, account, jid, pending):
@@ -644,7 +676,7 @@ class Logger:
                        kinds=', '.join(kinds))
 
         try:
-            messages = self.con.execute(
+            messages = self._con.execute(
                 sql, tuple(jids) + (restore, pending)).fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
@@ -691,7 +723,7 @@ class Logger:
             ORDER BY time, log_line_id
             '''.format(jids=', '.join('?' * len(jids)))
 
-        return self.con.execute(sql, tuple(jids) +
+        return self._con.execute(sql, tuple(jids) +
                                       (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
@@ -734,7 +766,7 @@ class Logger:
         '''.format(jids=', '.join('?' * len(jids)),
                    date_search=between if date else '')
 
-        return self.con.execute(sql, tuple(jids) + (query,)).fetchall()
+        return self._con.execute(sql, tuple(jids) + (query,)).fetchall()
 
     def get_days_with_logs(self, account, jid, year, month):
         """
@@ -772,7 +804,7 @@ class Logger:
             """.format(jids=', '.join('?' * len(jids)),
                        kinds=', '.join(kinds))
 
-        return self.con.execute(sql, tuple(jids) +
+        return self._con.execute(sql, tuple(jids) +
                                       (date.timestamp(),
                                       (date + delta).timestamp())).fetchall()
 
@@ -800,7 +832,7 @@ class Logger:
 
         # fetchone() returns always at least one Row with all
         # attributes set to None because of the MAX() function
-        return self.con.execute(sql, tuple(jids)).fetchone().time
+        return self._con.execute(sql, tuple(jids)).fetchone().time
 
     def get_first_date_that_has_logs(self, account, jid):
         """
@@ -826,7 +858,7 @@ class Logger:
 
         # fetchone() returns always at least one Row with all
         # attributes set to None because of the MIN() function
-        return self.con.execute(sql, tuple(jids)).fetchone().time
+        return self._con.execute(sql, tuple(jids)).fetchone().time
 
     def get_date_has_logs(self, account, jid, date):
         """
@@ -856,7 +888,7 @@ class Logger:
             AND time BETWEEN ? AND ?
             '''.format(jids=', '.join('?' * len(jids)))
 
-        return self.con.execute(sql, tuple(jids) +
+        return self._con.execute(sql, tuple(jids) +
                                       (date.timestamp(),
                                       (date + delta).timestamp())).fetchone()
 
@@ -875,7 +907,7 @@ class Logger:
             NATURAL JOIN jids WHERE jid = ?
             '''
 
-        row = self.con.execute(sql, (jid,)).fetchone()
+        row = self._con.execute(sql, (jid,)).fetchone()
         if not row:
             return self.get_last_date_that_has_logs(account, jid)
         return row.time
@@ -896,7 +928,7 @@ class Logger:
                  (SELECT time FROM rooms_last_message_time
                   WHERE jid_id = :jid_id AND time >= :time), :time))'''
 
-        self.con.execute(sql, {"jid_id": jid_id, "time": timestamp})
+        self._con.execute(sql, {"jid_id": jid_id, "time": timestamp})
         self._timeout_commit()
 
     def save_transport_type(self, jid, type_):
@@ -907,11 +939,10 @@ class Logger:
         if not type_id:
             # unknown type
             return
-        self.cur.execute(
-                'SELECT type from transports_cache WHERE transport = "%s"' % jid)
-        results = self.cur.fetchone()
-        if results:
-            if results.type == type_id:
+        result = self._con.execute(
+            'SELECT type from transports_cache WHERE transport = "%s"' % jid).fetchone()
+        if result:
+            if result.type == type_id:
                 return
             sql = 'UPDATE transports_cache SET type = %d WHERE transport = "%s"' %\
                     (type_id, jid)
@@ -924,9 +955,7 @@ class Logger:
         """
         Return all the type of the transports in DB
         """
-        self.cur.execute(
-                'SELECT * from transports_cache')
-        results = self.cur.fetchall()
+        results = self._con.execute('SELECT * from transports_cache').fetchall()
         if not results:
             return {}
         answer = {}
@@ -954,7 +983,7 @@ class Logger:
         # the data field contains binary object (gzipped data), this is a hack
         # to get that data without trying to convert it to unicode
         try:
-            self.cur.execute('SELECT hash_method, hash, data FROM caps_cache;')
+            rows = self._con.execute('SELECT hash_method, hash, data FROM caps_cache;')
         except sqlite.OperationalError:
             # might happen when there's no caps_cache table yet
             # -- there's no data to read anyway then
@@ -962,7 +991,7 @@ class Logger:
 
         # list of corrupted entries that will be removed
         to_be_removed = []
-        for row in self.cur:
+        for row in rows:
             # for each row: unpack the data field
             # (format: (category, type, name, category, type, name, ...
             #   ..., 'FEAT', feature1, feature2, ...).join(' '))
@@ -1013,7 +1042,7 @@ class Logger:
         gzip.write(data.encode('utf-8'))
         gzip.close()
         data = string.getvalue()
-        self.cur.execute('''
+        self._con.execute('''
                 INSERT INTO caps_cache ( hash_method, hash, data, last_seen )
                 VALUES (?, ?, ?, ?);
                 ''', (hash_method, hash_, memoryview(data), int(time.time())))
@@ -1076,10 +1105,10 @@ class Logger:
             jid_id = self.get_jid_id(jid)
         except exceptions.PysqliteOperationalError as e:
             raise exceptions.PysqliteOperationalError(str(e))
-        self.cur.execute(
+        self._con.execute(
                 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
                 (account_jid_id, jid_id))
-        self.cur.execute(
+        self._con.execute(
                 'DELETE FROM roster_entry WHERE account_jid_id=? AND jid_id=?',
                 (account_jid_id, jid_id))
         self._timeout_commit()
@@ -1101,18 +1130,18 @@ class Logger:
 
         # Update groups information
         # First we delete all previous groups information
-        self.cur.execute(
+        self._con.execute(
                 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
                 (account_jid_id, jid_id))
         # Then we add all new groups information
         for group in groups:
-            self.cur.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
+            self._con.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
                     (account_jid_id, jid_id, group))
 
         if name is None:
             name = ''
 
-        self.cur.execute('''
+        self._con.execute('''
             REPLACE INTO roster_entry
             (account_jid_id, jid_id, name, subscription, ask)
             VALUES(?, ?, ?, ?, ?)''', (
@@ -1130,11 +1159,11 @@ class Logger:
         account_jid_id = self.get_jid_id(account_jid, type_=JIDConstant.NORMAL_TYPE)
 
         # First we fill data with roster_entry informations
-        self.cur.execute('''
+        rows = self._con.execute('''
                 SELECT j.jid, re.jid_id, re.name, re.subscription, re.ask, re.avatar_sha
                 FROM roster_entry re, jids j
                 WHERE re.account_jid_id=? AND j.jid_id=re.jid_id''', (account_jid_id,))
-        for row in self.cur:
+        for row in rows:
             #jid, jid_id, name, subscription, ask
             jid = row.jid
             name = row.name
@@ -1157,11 +1186,11 @@ class Logger:
 
         # Then we add group for roster entries
         for jid in data:
-            self.cur.execute('''
+            rows = self._con.execute('''
                     SELECT group_name FROM roster_group
                     WHERE account_jid_id=? AND jid_id=?''',
                     (account_jid_id, data[jid]['id']))
-            for row in self.cur:
+            for row in rows:
                 group_name = row.group_name
                 data[jid]['groups'].append(group_name)
             del data[jid]['id']
@@ -1186,7 +1215,7 @@ class Logger:
             DELETE FROM roster_group WHERE account_jid_id = {jid_id};
             '''.format(jid_id=jid_id)
 
-        self.con.executescript(sql)
+        self._con.executescript(sql)
         self._timeout_commit()
 
     def search_for_duplicate(self, account, jid, timestamp, msg):
@@ -1216,7 +1245,7 @@ class Logger:
             AND time BETWEEN ? AND ?
             '''
 
-        result = self.con.execute(
+        result = self._con.execute(
             sql, (jid, msg, account_id, start_time, end_time)).fetchone()
 
         if result is not None:
@@ -1263,14 +1292,14 @@ class Logger:
                 WHERE stanza_id IN ({values})
                 AND jid_id = ? AND account_id = ? LIMIT 1
                 '''.format(values=', '.join('?' * len(ids)))
-            result = self.con.execute(
+            result = self._con.execute(
                 sql, tuple(ids) + (archive_id, account_id)).fetchone()
         else:
             sql = '''
                 SELECT stanza_id FROM logs
                 WHERE stanza_id IN ({values}) AND account_id = ? AND kind != ? LIMIT 1
                 '''.format(values=', '.join('?' * len(ids)))
-            result = self.con.execute(
+            result = self._con.execute(
                 sql, tuple(ids) + (account_id, KindConstant.GC_MSG)).fetchone()
 
         if result is not None:
@@ -1324,7 +1353,7 @@ class Logger:
               '''.format(columns=', '.join(kwargs.keys()),
                          values=', '.join('?' * len(kwargs)))
 
-        lastrowid = self.con.execute(
+        lastrowid = self._con.execute(
             sql, (account_id, jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
@@ -1333,7 +1362,7 @@ class Logger:
         if unread and kind == KindConstant.CHAT_MSG_RECV:
             sql = '''INSERT INTO unread_messages (message_id, jid_id)
                      VALUES (?, (SELECT jid_id FROM jids WHERE jid = ?))'''
-            self.con.execute(sql, (lastrowid, jid))
+            self._con.execute(sql, (lastrowid, jid))
 
         self._timeout_commit()
 
@@ -1358,7 +1387,7 @@ class Logger:
             UPDATE roster_entry SET avatar_sha = ?
             WHERE account_jid_id = ? AND jid_id = ?
             '''
-        self.con.execute(sql, (sha, account_jid_id, jid_id))
+        self._con.execute(sql, (sha, account_jid_id, jid_id))
         self._timeout_commit()
 
     def get_archive_timestamp(self, jid, type_=None):
@@ -1370,7 +1399,7 @@ class Logger:
         """
         jid_id = self.get_jid_id(jid, type_=type_)
         sql = '''SELECT * FROM last_archive_message WHERE jid_id = ?'''
-        return self.con.execute(sql, (jid_id,)).fetchone()
+        return self._con.execute(sql, (jid_id,)).fetchone()
 
     def set_archive_timestamp(self, jid, **kwargs):
         """
@@ -1391,7 +1420,7 @@ class Logger:
         exists = self.get_archive_timestamp(jid)
         if not exists:
             sql = '''INSERT INTO last_archive_message VALUES (?, ?, ?, ?)'''
-            self.con.execute(sql, (jid_id,
+            self._con.execute(sql, (jid_id,
                                    kwargs.get('last_mam_id', None),
                                    kwargs.get('oldest_mam_timestamp', None),
                                    kwargs.get('last_muc_timestamp', None)))
@@ -1399,6 +1428,6 @@ class Logger:
             args = ' = ?, '.join(kwargs.keys()) + ' = ?'
             sql = '''UPDATE last_archive_message SET {}
                      WHERE jid_id = ?'''.format(args)
-            self.con.execute(sql, tuple(kwargs.values()) + (jid_id,))
+            self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
         log.info('Save archive timestamps: %s', kwargs)
         self._timeout_commit()
