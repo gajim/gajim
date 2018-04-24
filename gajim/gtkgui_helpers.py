@@ -124,7 +124,7 @@ def get_image_button(icon_name, tooltip, toggle=False):
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(configpaths.get('GUI'), file_name)
     builder = Gtk.Builder()
-    builder.set_translation_domain(i18n.APP)
+    builder.set_translation_domain(i18n.DOMAIN)
     if widget:
         builder.add_objects_from_file(file_path, [widget])
     else:

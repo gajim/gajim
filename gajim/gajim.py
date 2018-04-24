@@ -40,7 +40,6 @@
 import sys
 import os
 import signal
-import locale
 from urllib.parse import unquote
 
 import gi
@@ -156,6 +155,7 @@ class GajimApplication(Gtk.Application):
 
         # Create and initialize Application Paths & Databases
         from gajim.common import app
+        i18n.initialize_direction_mark()
         app.detect_dependencies()
         configpaths.create_paths()
         from gajim.common import exceptions
@@ -175,41 +175,6 @@ class GajimApplication(Gtk.Application):
             dlg.run()
             dlg.destroy()
             sys.exit()
-
-        if os.name == 'nt':
-            import gettext
-            # needed for docutils
-            sys.path.append('.')
-            APP = 'gajim'
-            DIR = '../po'
-            lang = locale.getdefaultlocale()[0]
-            os.environ['LANG'] = lang
-            gettext.bindtextdomain(APP, DIR)
-            gettext.textdomain(APP)
-            gettext.install(APP, DIR)
-
-        # This is for Windows translation which is currently not
-        # working on GTK 3.18.9
-        #    locale.setlocale(locale.LC_ALL, '')
-        #    import ctypes
-        #    import ctypes.util
-        #    libintl_path = ctypes.util.find_library('intl')
-        #    if libintl_path == None:
-        #        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
-        #        if os.path.exists(local_intl):
-        #            libintl_path = local_intl
-        #    if libintl_path == None:
-        #        raise ImportError('intl.dll library not found')
-        #    libintl = ctypes.cdll.LoadLibrary(libintl_path)
-        #    libintl.bindtextdomain(APP, DIR)
-        #    libintl.bind_textdomain_codeset(APP, 'UTF-8')
-        #    plugins_locale_dir = os.path.join(common.configpaths[
-        #       'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
-        #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
-        #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
-
-        if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
-            i18n.direction_mark = '\u200F'
 
         from ctypes import CDLL, byref, create_string_buffer
         from ctypes.util import find_library
@@ -242,7 +207,7 @@ class GajimApplication(Gtk.Application):
         app.app = self
         path = os.path.join(configpaths.get('GUI'), 'application_menu.ui')
         builder = Gtk.Builder()
-        builder.set_translation_domain(i18n.APP)
+        builder.set_translation_domain(i18n.DOMAIN)
         builder.add_from_file(path)
         menubar = builder.get_object("menubar")
         appmenu = builder.get_object("appmenu")
@@ -319,7 +284,7 @@ class GajimApplication(Gtk.Application):
         remote_commands = ['ipython',
                            'show-next-pending-event',
                            'start-chat',
-                          ]
+                           ]
 
         remaining = options.lookup_value(GLib.OPTION_REMAINING,
                                          GLib.VariantType.new('as'))

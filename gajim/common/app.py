@@ -80,16 +80,6 @@ MY_CERT_DIR = configpaths.get('MY_CERT')
 
 RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
 
-try:
-    LANG = locale.getdefaultlocale()[0] # en_US, fr_FR, el_GR etc..
-except (ValueError, locale.Error):
-    # unknown locale, use en is better than fail
-    LANG = None
-if LANG is None:
-    LANG = 'en'
-else:
-    LANG = LANG[:2] # en, fr, el etc..
-
 os_info = None # used to cache os information
 
 transport_type = {} # list the type of transport
