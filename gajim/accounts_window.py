@@ -384,9 +384,10 @@ class Account(Gtk.Box):
 
     def set_activatable(self):
         if self.account == app.ZEROCONF_ACC_NAME:
-            self.get_parent().set_activatable(app.HAVE_ZEROCONF)
-            self.get_parent().set_sensitive(app.HAVE_ZEROCONF)
-            if not app.HAVE_ZEROCONF:
+            zeroconf = app.is_installed('ZEROCONF')
+            self.get_parent().set_activatable(zeroconf)
+            self.get_parent().set_sensitive(zeroconf)
+            if not zeroconf:
                 self.get_parent().set_tooltip_text(
                     _('Please check if Avahi or Bonjour is installed.'))
 
@@ -482,7 +483,7 @@ class GenericOptionPage(Gtk.Box):
         switch.set_vexpand(False)
         switch.set_valign(Gtk.Align.CENTER)
         switch.set_halign(Gtk.Align.END)
-        if self.account == app.ZEROCONF_ACC_NAME and not app.HAVE_ZEROCONF:
+        if self.account == app.ZEROCONF_ACC_NAME and not app.is_installed('ZEROCONF'):
             switch.set_sensitive(False)
             switch.set_active(False)
 

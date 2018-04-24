@@ -37,7 +37,7 @@ from gajim.common import app
 from gajim.common.jingle_session import JingleSession, JingleStates
 from gajim.common.jingle_ft import JingleFileTransfer
 from gajim.common.jingle_transport import JingleTransportSocks5, JingleTransportIBB
-if app.HAVE_FARSTREAM:
+if app.is_installed('FARSTREAM'):
     from gajim.common.jingle_rtp import JingleAudio, JingleVideo
 
 logger = logging.getLogger('gajim.c.jingle')

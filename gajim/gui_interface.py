@@ -56,7 +56,7 @@ from gajim.common import events
 
 from gajim.music_track_listener import MusicTrackListener
 
-if app.HAVE_GEOCLUE:
+if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener
 
 from gajim import gtkgui_helpers
@@ -1138,7 +1138,7 @@ class Interface:
                 app.config.get_per('accounts', account, 'publish_tune')):
             self.enable_music_listener()
         # enable location listener
-        if (obj.conn.pep_supported and app.HAVE_GEOCLUE and
+        if (obj.conn.pep_supported and app.is_installed('GEOCLUE') and
                 app.config.get_per('accounts', account, 'publish_location')):
             location_listener.enable()
 
@@ -2881,7 +2881,7 @@ class Interface:
 
         self.create_zeroconf_default_config()
         if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'active') \
-        and app.HAVE_ZEROCONF:
+        and app.is_installed('ZEROCONF'):
             app.connections[app.ZEROCONF_ACC_NAME] = \
                 connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
         for account in app.config.get_per('accounts'):

@@ -64,7 +64,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
-if app.HAVE_GEOCLUE:
+if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
@@ -4940,7 +4940,7 @@ class RosterWindow:
 
                 item = Gtk.CheckMenuItem(_('Publish Location'))
                 pep_submenu.append(item)
-                if not app.HAVE_GEOCLUE:
+                if not app.is_installed('GEOCLUE'):
                     item.set_sensitive(False)
                 else:
                     activ = app.config.get_per('accounts', account,

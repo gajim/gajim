@@ -732,7 +732,7 @@ def parse_datetime(timestring, check_utc=False, convert='utc', epoch=False):
     return None
 
 from gajim.common import app
-if app.HAVE_PYCURL:
+if app.is_installed('PYCURL'):
     import pycurl
     from io import StringIO
 
@@ -1360,13 +1360,13 @@ def update_optional_features(account = None):
             app.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
         if not app.config.get('ignore_incoming_xhtml'):
             app.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
-        if app.HAVE_PYCRYPTO \
+        if app.is_installed('PYCRYPTO') \
         and app.config.get_per('accounts', a, 'enable_esessions'):
             app.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
         if app.config.get_per('accounts', a, 'answer_receipts'):
             app.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
         app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
-        if app.HAVE_FARSTREAM:
+        if app.is_installed('FARSTREAM'):
             app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
             app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
             app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
@@ -1545,7 +1545,7 @@ def _get_img_proxy(attrs, proxy):
     Download an image through a proxy. This function should be launched in a
     separated thread.
     """
-    if not app.HAVE_PYCURL:
+    if not app.is_installed('PYCURL'):
         return '', _('PyCURL is not installed')
     mem, alt, max_size = '', '', 2*1024*1024
     if 'max_size' in attrs:

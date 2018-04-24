@@ -598,4 +598,4 @@ class GPGOption(DialogOption):
 
     def set_activatable(self, name, value):
         active = self.account in app.connections
-        self.get_parent().set_activatable(app.HAVE_GPG and active)
+        self.get_parent().set_activatable(app.is_installed('GPG') and active)

@@ -62,7 +62,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
-if app.HAVE_SPELL:
+if app.is_installed('GSPELL'):
     from gi.repository import Gspell
 
 import logging
@@ -3322,7 +3322,7 @@ class SingleMessageWindow:
         else:
             self.to_entry.set_text(to)
 
-        if app.config.get('use_speller') and app.HAVE_SPELL and action == 'send':
+        if app.config.get('use_speller') and app.is_installed('GSPELL') and action == 'send':
             lang = app.config.get('speller_language')
             gspell_lang = Gspell.language_lookup(lang)
             if gspell_lang is None:

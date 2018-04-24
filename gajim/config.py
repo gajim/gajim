@@ -67,7 +67,7 @@ try:
 except (ImportError, ValueError):
     HAS_GST = False
 
-if app.HAVE_SPELL:
+if app.is_installed('GSPELL'):
     from gi.repository import Gspell
 
 #---------- PreferencesWindow class -------------#
@@ -179,7 +179,7 @@ class PreferencesWindow:
         self.xml.get_object('xhtml_checkbutton').set_active(st)
 
         # use speller
-        if app.HAVE_SPELL:
+        if app.is_installed('GSPELL'):
             st = app.config.get('use_speller')
             self.xml.get_object('speller_checkbutton').set_active(st)
         else:
@@ -400,7 +400,7 @@ class PreferencesWindow:
                 if config == value:
                     combobox.set_active(index)
 
-        if HAS_GST and app.HAVE_FARSTREAM:
+        if HAS_GST and app.is_installed('FARSTREAM'):
             create_av_combobox('audio_input', AudioInputManager().get_devices())
             create_av_combobox('audio_output', AudioOutputManager().get_devices(
                 ))

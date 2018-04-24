@@ -40,7 +40,7 @@ from gajim.common import crypto
 import logging
 log = logging.getLogger('gajim.c.stanza_session')
 
-if app.HAVE_PYCRYPTO:
+if app.is_installed('PYCRYPTO'):
     from Crypto.Cipher import AES
     from Crypto.PublicKey import RSA
 

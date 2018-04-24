@@ -11,6 +11,7 @@
 ## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
 ##                         Stephan Erb <steve-e AT h3c.de>
 ## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+## Copyright (C) 2018 Philipp Hörist <philipp @ hoerist.com>
 ##
 ## This file is part of Gajim.
 ##
@@ -34,10 +35,8 @@ import locale
 import uuid
 from distutils.version import LooseVersion as V
 from collections import namedtuple
-import gi
-import nbxmpp
 
-from gi.repository import GLib
+import nbxmpp
 
 from gajim.common import config as c_config
 from gajim.common import configpaths
@@ -57,8 +56,6 @@ app = None  # Gtk.Application
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 nec = None # Network Events Controller
 plugin_manager = None # Plugins Manager
-
-glog = logging.getLogger('gajim')
 
 logger = None
 
@@ -152,122 +149,6 @@ ZEROCONF_ACC_NAME = 'Local'
 idlequeue = None
 socks5queue = None
 
-HAVE_ZEROCONF = True
-try:
-    __import__('avahi')
-except ImportError:
-    try:
-        __import__('pybonjour')
-    except Exception: # Linux raises ImportError, Windows raises WindowsError
-        HAVE_ZEROCONF = False
-
-HAVE_PYCRYPTO = True
-try:
-    __import__('Crypto')
-except ImportError:
-    HAVE_PYCRYPTO = False
-
-HAVE_GPG = True
-GPG_BINARY = 'gpg'
-try:
-    import gnupg
-    '''
-    We need https://pypi.python.org/pypi/python-gnupg
-    but https://pypi.python.org/pypi/gnupg shares the same package name.
-    It cannot be used as a drop-in replacement.
-    We test with a version check if python-gnupg is installed as it is
-    on a much lower version number than gnupg
-    Also we need at least python-gnupg 0.3.8
-    '''
-    v_gnupg = gnupg.__version__
-    if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
-        glog.info('Gajim needs python-gnupg >= 0.3.8')
-        HAVE_GPG = False
-except ImportError:
-    HAVE_GPG = False
-else:
-    import subprocess
-    def test_gpg(binary='gpg'):
-        if os.name == 'nt':
-            gpg_cmd = binary + ' -h >nul 2>&1'
-        else:
-            gpg_cmd = binary + ' -h >/dev/null 2>&1'
-        if subprocess.call(gpg_cmd, shell=True):
-            return False
-        return True
-    if test_gpg(binary='gpg2'):
-        GPG_BINARY = 'gpg2'
-    if not test_gpg(binary='gpg'):
-        HAVE_GPG = False
-
-HAVE_FARSTREAM = True
-try:
-    if os.name == 'nt':
-        os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
-        os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
-    gi.require_version('Farstream', '0.2')
-    from gi.repository import Farstream
-    gi.require_version('Gst', '1.0')
-    from gi.repository import Gst
-    from gi.repository import GLib
-    try:
-        Gst.init(None)
-        conference = Gst.ElementFactory.make('fsrtpconference', None)
-        session = conference.new_session(Farstream.MediaType.AUDIO)
-        del session
-        del conference
-    except Exception as e:
-        glog.info(e)
-        HAVE_FARSTREAM = False
-
-except (ImportError, ValueError):
-    HAVE_FARSTREAM = False
-
-HAVE_GEOCLUE = True
-try:
-    gi.require_version('Geoclue', '2.0')
-    from gi.repository import Geoclue
-except (ImportError, ValueError):
-    HAVE_GEOCLUE = False
-
-HAVE_UPNP_IGD = True
-try:
-    gi.require_version('GUPnPIgd', '1.0')
-    from gi.repository import GUPnPIgd
-    gupnp_igd = GUPnPIgd.SimpleIgd()
-except ValueError:
-    HAVE_UPNP_IGD = False
-
-HAVE_PYCURL = True
-try:
-    __import__('pycurl')
-except ImportError:
-    HAVE_PYCURL = False
-
-try:
-    from gajim.common import sleepy
-    if sleepy.SUPPORTED:
-        HAVE_IDLE = True
-except Exception:
-    glog.info(_('Unable to load idle module'))
-    HAVE_IDLE = False
-
-HAVE_SPELL = False
-try:
-    spell_log = logging.getLogger('gajim.speller')
-    gi.require_version('Gspell', '1')
-    from gi.repository import Gspell
-    langs = Gspell.language_get_available()
-    for lang in langs:
-        spell_log.info('%s (%s) dict available',
-                       lang.get_name(), lang.get_code())
-    if langs:
-        HAVE_SPELL = True
-    else:
-        spell_log.info('No dicts available')
-except (ImportError, ValueError):
-    pass
-
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_MUC, nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC_ADMIN, nbxmpp.NS_MUC_OWNER,
@@ -286,6 +167,161 @@ gajim_optional_features = {}
 
 # Capabilities hash per account
 caps_hash = {}
+
+_dependencies = {
+    'AVAHI': False,
+    'PYBONJOUR': False,
+    'PYCRYPTO': False,
+    'PYGPG': False,
+    'GPG_BINARY': False,
+    'FARSTREAM': False,
+    'GEOCLUE': False,
+    'UPNP': False,
+    'PYCURL': False,
+    'GSPELL': False,
+    'IDLE': False,
+    }
+
+
+def is_installed(dependency):
+    if dependency == 'GPG':
+        # Alias for checking python-gnupg and the GPG binary
+        return _dependencies['PYGPG'] and _dependencies['GPG_BINARY']
+    if dependency == 'ZEROCONF':
+        # Alias for checking zeroconf libs
+        return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
+    return _dependencies[dependency]
+
+def disable_dependency(dependency):
+    _dependencies[dependency] = False
+
+def detect_dependencies():
+    import gi
+
+    # ZEROCONF
+    try:
+        if os.name == 'nt':
+            import pybonjour
+            _dependencies['PYBONJOUR'] = True
+        else:
+            import avahi
+            _dependencies['AVAHI'] = True
+    except Exception:
+        pass
+
+    # PYCRYPTO
+    try:
+        import Crypto
+        _dependencies['PYCRYPTO'] = True
+    except ImportError:
+        pass
+
+    # python-gnupg
+    try:
+        import gnupg
+        '''
+        We need https://pypi.python.org/pypi/python-gnupg
+        but https://pypi.python.org/pypi/gnupg shares the same package name.
+        It cannot be used as a drop-in replacement.
+        We test with a version check if python-gnupg is installed as it is
+        on a much lower version number than gnupg
+        Also we need at least python-gnupg 0.3.8
+        '''
+        v_gnupg = gnupg.__version__
+        if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
+            log('gajim').info('Gajim needs python-gnupg >= 0.3.8')
+            raise ImportError
+        _dependencies['PYGPG'] = True
+    except ImportError:
+        pass
+
+    # GPG BINARY
+    import subprocess
+
+    def test_gpg(binary='gpg'):
+        if os.name == 'nt':
+            gpg_cmd = binary + ' -h >nul 2>&1'
+        else:
+            gpg_cmd = binary + ' -h >/dev/null 2>&1'
+        if subprocess.call(gpg_cmd, shell=True):
+            return False
+        return True
+
+    if test_gpg(binary='gpg2'):
+        _dependencies['GPG_BINARY'] = 'gpg2'
+    elif test_gpg(binary='gpg'):
+        _dependencies['GPG_BINARY'] = 'gpg'
+
+    # FARSTREAM
+    try:
+        if os.name == 'nt':
+            os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
+            os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
+        gi.require_version('Farstream', '0.2')
+        from gi.repository import Farstream
+        gi.require_version('Gst', '1.0')
+        from gi.repository import Gst
+        try:
+            Gst.init(None)
+            conference = Gst.ElementFactory.make('fsrtpconference', None)
+            session = conference.new_session(Farstream.MediaType.AUDIO)
+        except Exception as error:
+            log('gajim').info(error)
+        _dependencies['FARSTREAM'] = True
+    except (ImportError, ValueError):
+        pass
+
+    # GEOCLUE
+    try:
+        gi.require_version('Geoclue', '2.0')
+        from gi.repository import Geoclue
+        _dependencies['GEOCLUE'] = True
+    except (ImportError, ValueError):
+        pass
+
+    # UPNP
+    try:
+        gi.require_version('GUPnPIgd', '1.0')
+        from gi.repository import GUPnPIgd
+        gupnp_igd = GUPnPIgd.SimpleIgd()
+        _dependencies['UPNP'] = True
+    except ValueError:
+        pass
+
+    # PYCURL
+    try:
+        import pycurl
+        _dependencies['PYCURL'] = True
+    except ImportError:
+        pass
+
+    # IDLE
+    try:
+        from gajim.common import sleepy
+        if sleepy.SUPPORTED:
+            _dependencies['IDLE'] = True
+    except Exception:
+        pass
+
+    # GSPELL
+    try:
+        gi.require_version('Gspell', '1')
+        from gi.repository import Gspell
+        langs = Gspell.language_get_available()
+        for lang in langs:
+            log('gajim').info('%s (%s) dict available',
+                              lang.get_name(), lang.get_code())
+        if langs:
+            _dependencies['GSPELL'] = True
+    except (ImportError, ValueError):
+        pass
+
+    # Print results
+    for dep, val in _dependencies.items():
+        log('gajim').info('%-13s %s', dep, val)
+
+def get_gpg_binary():
+    return _dependencies['GPG_BINARY']
 
 def get_an_id():
     return str(uuid.uuid4())
@@ -556,8 +592,9 @@ def get_priority(account, show):
     return prio
 
 def log(domain):
-    root = 'gajim.'
-    return logging.getLogger(root + domain)
+    if domain != 'gajim':
+        domain = 'gajim.%s' % domain
+    return logging.getLogger(domain)
 
 def prefers_app_menu():
     if sys.platform == 'darwin':

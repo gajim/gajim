@@ -1712,7 +1712,7 @@ ConnectionHTTPUpload):
     def _nec_last_request_received(self, obj):
         if obj.conn.name != self.name:
             return
-        if app.HAVE_IDLE and app.config.get_per('accounts', self.name,
+        if app.is_installed('IDLE') and app.config.get_per('accounts', self.name,
         'send_idle_time'):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()

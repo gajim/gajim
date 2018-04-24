@@ -136,7 +136,7 @@ class CommonConnection:
         self.server_resource = self._compute_resource()
         self.gpg = None
         self.USE_GPG = False
-        if app.HAVE_GPG:
+        if app.is_installed('GPG'):
             self.USE_GPG = True
             self.gpg = gpg.GnuPG()
         self.status = ''
@@ -598,7 +598,7 @@ class CommonConnection:
             self.old_show = show
             self.on_purpose = False
             self.server_resource = self._compute_resource()
-            if app.HAVE_GPG:
+            if app.is_installed('GPG'):
                 self.USE_GPG = True
                 self.gpg = gpg.GnuPG()
             app.nec.push_incoming_event(BeforeChangeShowEvent(None,
@@ -638,7 +638,7 @@ class CommonConnection:
             self.connected = app.SHOW_LIST.index(show)
             idle_time = None
             if auto:
-                if app.HAVE_IDLE and app.config.get('autoaway'):
+                if app.is_installed('IDLE') and app.config.get('autoaway'):
                     idle_sec = int(app.interface.sleeper.getIdleSec())
                     idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                         time.gmtime(time.time() - idle_sec))
@@ -898,7 +898,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 app.nec.push_incoming_event(AccountNotCreatedEvent(
                                     None, conn=self, reason=reason))
                                 return
-                            if app.HAVE_GPG:
+                            if app.is_installed('GPG'):
                                 self.USE_GPG = True
                                 self.gpg = gpg.GnuPG()
                             app.nec.push_incoming_event(
@@ -2755,7 +2755,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             p = self.add_sha(p, ptype != 'unavailable')
         self.add_lang(p)
         if auto:
-            if app.HAVE_IDLE and app.config.get('autoaway'):
+            if app.is_installed('IDLE') and app.config.get('autoaway'):
                 idle_sec = int(app.interface.sleeper.getIdleSec())
                 idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                     time.gmtime(time.time() - idle_sec))

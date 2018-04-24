@@ -63,7 +63,7 @@ from gajim.command_system.implementation.middleware import CommandTools
 from gajim.command_system.implementation import standard
 from gajim.command_system.implementation import execute
 
-if app.HAVE_SPELL:
+if app.is_installed('GSPELL'):
     from gi.repository import Gspell
 
 
@@ -487,7 +487,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                                      Gtk.IconSize.MENU)
 
     def set_speller(self):
-        if not app.HAVE_SPELL or not app.config.get('use_speller'):
+        if not app.is_installed('GSPELL') or not app.config.get('use_speller'):
             return
 
         gspell_lang = self.get_speller_language()

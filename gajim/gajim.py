@@ -156,6 +156,7 @@ class GajimApplication(Gtk.Application):
 
         # Create and initialize Application Paths & Databases
         from gajim.common import app
+        app.detect_dependencies()
         configpaths.create_paths()
         from gajim.common import exceptions
         from gajim.common import logger

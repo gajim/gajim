@@ -394,7 +394,7 @@ class ChatControl(ChatControlBase):
 
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
-        app.HAVE_FARSTREAM and self.contact.resource:
+        app.is_installed('FARSTREAM') and self.contact.resource:
             self.audio_available = self.contact.supports(NS_JINGLE_RTP_AUDIO)
             self.video_available = self.contact.supports(NS_JINGLE_RTP_VIDEO)
         else:

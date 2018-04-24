@@ -416,7 +416,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         self._add_streamhosts_to_query(query, sender, port, additional_hosts)
 
     def _add_upnp_igd_as_streamhost_to_query(self, query, file_props, iq):
-        if not app.HAVE_UPNP_IGD:
+        if not app.is_installed('UPNP'):
             self.connection.send(iq)
             return
 
@@ -487,7 +487,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         def no_upnp_reply():
             log.debug('Got not GUPnP-IGD answer')
             # stop trying to use it
-            app.HAVE_UPNP_IGD = False
+            app.disable_dependency('UPNP')
             self.no_gupnp_reply_id = 0
             self.connection.send(iq)
             cleanup_gupnp()

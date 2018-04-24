@@ -140,14 +140,14 @@ class FeaturesWindow:
         self.desc_label.set_text(text)
 
     def zeroconf_available(self):
-        return app.HAVE_ZEROCONF
+        return app.is_installed('ZEROCONF')
 
     def dbus_available(self):
         from gajim.common import dbus_support
         return dbus_support.supported
 
     def gpg_available(self):
-        return app.HAVE_GPG
+        return app.is_installed('GPG')
 
     def some_keyring_available(self):
         if os.name == 'nt':
@@ -160,14 +160,14 @@ class FeaturesWindow:
         return True
 
     def speller_available(self):
-        return app.HAVE_SPELL
+        return app.is_installed('GSPELL')
 
     def idle_available(self):
         from gajim.common import sleepy
         return sleepy.SUPPORTED
 
     def pycrypto_available(self):
-        return app.HAVE_PYCRYPTO
+        return app.is_installed('PYCRYPTO')
 
     def docutils_available(self):
         try:
@@ -177,8 +177,8 @@ class FeaturesWindow:
         return True
 
     def farstream_available(self):
-        return app.HAVE_FARSTREAM
+        return app.is_installed('FARSTREAM')
 
     def gupnp_igd_available(self):
-        return app.HAVE_UPNP_IGD
+        return app.is_installed('UPNP')
 
