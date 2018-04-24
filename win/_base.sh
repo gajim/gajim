@@ -79,7 +79,8 @@ function install_deps {
         mingw-w64-"${ARCH}"-sqlite3 \
         mingw-w64-"${ARCH}"-goocanvas \
         mingw-w64-"${ARCH}"-gspell \
-        mingw-w64-"${ARCH}"-hunspell
+        mingw-w64-"${ARCH}"-hunspell \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools
 
     build_pip install setuptools_scm
 
@@ -87,7 +88,6 @@ function install_deps {
 pyasn1
 certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
-protobuf
 git+https://github.com/dlitz/pycrypto.git
 cryptography
 pyopenssl
@@ -96,6 +96,7 @@ docutils
 qrcode
 keyring
 pillow==4.3.0
+six
 "
 
     build_pip install --no-binary ":all:" \
