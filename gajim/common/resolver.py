@@ -17,13 +17,13 @@
 ## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import sys
 import logging
 import functools
 
 from gi.repository import Gio, GLib
 
 log = logging.getLogger('gajim.c.resolver')
+
 
 def get_resolver():
     return GioResolver()
@@ -38,7 +38,7 @@ class CommonResolver():
 
     def resolve(self, host, on_ready, type_='srv'):
         host = host.lower()
-        log.debug('resolve %s type=%s' % (host, type_))
+        log.debug('resolve %s type=%s', host, type_)
         assert(type_ in ['srv', 'txt'])
         if not host:
             # empty host, return empty list of srv records
@@ -46,25 +46,25 @@ class CommonResolver():
             return
         if host + type_ in self.resolved_hosts:
             # host is already resolved, return cached values
-            log.debug('%s already resolved: %s' % (host,
-                self.resolved_hosts[host + type_]))
+            log.debug('%s already resolved: %s',
+                      host, self.resolved_hosts[host + type_])
             on_ready(host, self.resolved_hosts[host + type_])
             return
         if host + type_ in self.handlers:
             # host is about to be resolved by another connection,
             # attach our callback
-            log.debug('already resolving %s' % host)
+            log.debug('already resolving %s', host)
             self.handlers[host + type_].append(on_ready)
         else:
             # host has never been resolved, start now
-            log.debug('Starting to resolve %s using %s' % (host, self))
+            log.debug('Starting to resolve %s using %s', host, self)
             self.handlers[host + type_] = [on_ready]
             self.start_resolve(host, type_)
 
     def _on_ready(self, host, type_, result_list):
         # practically it is impossible to be the opposite, but who knows :)
         host = host.lower()
-        log.debug('Resolving result for %s: %s' % (host, result_list))
+        log.debug('Resolving result for %s: %s', host, result_list)
         if host + type_ not in self.resolved_hosts:
             self.resolved_hosts[host + type_] = result_list
         if host + type_ in self.handlers:
@@ -94,7 +94,7 @@ class GioResolver(CommonResolver):
             callback = functools.partial(self._on_ready_srv, host)
             type_ = Gio.ResolverRecordType.SRV
 
-        resq = self.gio_resolver.lookup_records_async(host, type_, None, callback)
+        self.gio_resolver.lookup_records_async(host, type_, None, callback)
 
     def _on_ready_srv(self, host, source_object, result):
         try:
