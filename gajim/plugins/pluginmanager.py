@@ -150,6 +150,32 @@ class PluginManager(metaclass=Singleton):
                 plugin.version, plugin.__module__, plugin.short_name))
 
     @log_calls('PluginManager')
+    def remove_plugin(self, plugin):
+        '''
+        removes the plugin from the plugin list and deletes all loaded modules 
+        from sys. This way we will have a fresh start when the plugin gets added
+        agin.
+        '''
+        if plugin.active:
+            self.deactivate_plugin(plugin)
+            
+        self.plugins.remove(plugin)
+        
+        # remove modules from cache
+        base_package = plugin.__module__.split('.')[0]        
+        # get the subpackages/-modules of the base_package. Add a dot to the
+        # name to avoid name problems (removing module_abc if base_package is
+        # module_ab)
+        modules_to_remove = [module for module in sys.modules
+                             if module.startswith('{}.'.format(base_package))]
+        # remove the base_package itself
+        if base_package in sys.modules:
+            modules_to_remove.append(base_package)
+            
+        for module_to_remove in modules_to_remove:
+            del sys.modules[module_to_remove] 
+        
+    @log_calls('PluginManager')
     def add_plugins(self, plugin_classes):
         for plugin_class in plugin_classes:
             self.add_plugin(plugin_class)
@@ -532,20 +558,9 @@ class PluginManager(metaclass=Singleton):
                 continue
 
             module = None
-
             try:
-                if module_name in sys.modules:
-                    if path == configpaths.get('PLUGINS_BASE'):
-                        # Only reload plugins from Gajim base dir when they
-                        # dont exist. This means plugins in the user path are
-                        # always preferred.
-                        continue
-                    from imp import reload
-                    log.info('Reloading %s', module_name)
-                    module = reload(sys.modules[module_name])
-                else:
-                    log.info('Loading %s', module_name)
-                    module = __import__(module_name)
+                log.info('Loading %s', module_name)
+                module = __import__(module_name)
             except Exception as error:
                 log.warning(
                     "While trying to load {plugin}, exception occurred".format(plugin=elem_name),
@@ -633,14 +648,14 @@ class PluginManager(metaclass=Singleton):
         if len(dirs) > 1:
             raise PluginsystemError(_('Archive is malformed'))
 
-        base_dir, user_dir = configpaths.get('PLUGINS_DIRS')
+        user_dir = configpaths.get('PLUGINS_USER')
         plugin_dir = os.path.join(user_dir, dirs[0])
 
         if os.path.isdir(plugin_dir):
         # Plugin dir already exists
             if not owerwrite:
                 raise PluginsystemError(_('Plugin already exists'))
-            self.remove_plugin(self.get_plugin_by_path(plugin_dir))
+            self.uninstall_plugin(self.get_plugin_by_path(plugin_dir))
 
         zip_file.extractall(user_dir)
         zip_file.close()
@@ -652,7 +667,7 @@ class PluginManager(metaclass=Singleton):
         plugin = self.plugins[-1]
         return plugin
 
-    def remove_plugin(self, plugin):
+    def uninstall_plugin(self, plugin):
         '''
         Deactivate and remove plugin from `plugins` list
         '''
@@ -665,15 +680,10 @@ class PluginManager(metaclass=Singleton):
             raise PluginsystemError(error[1][1])
 
         if plugin:
-            if plugin.active:
-                self.deactivate_plugin(plugin)
+            self.remove_plugin(plugin)
             rmtree(plugin.__path__, False, on_error)
-            self.plugins.remove(plugin)
             if self._plugin_has_entry_in_global_config(plugin):
                 self._remove_plugin_entry_in_global_config(plugin)
-            del sys.modules[plugin.__module__.split('.')[0]]
-            del plugin.__module__.split('.')[-1]
-            del plugin
 
     def get_plugin_by_path(self, plugin_dir):
         for plugin in self.plugins:
