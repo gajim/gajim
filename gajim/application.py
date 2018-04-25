@@ -47,6 +47,9 @@ from gajim.common import app
 from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common import logging_helpers
+from gajim.common import exceptions
+from gajim.common import caps_cache
+from gajim.common import logger
 
 
 class GajimApplication(Gtk.Application):
@@ -124,9 +127,6 @@ class GajimApplication(Gtk.Application):
         # Create and initialize Application Paths & Databases
         app.detect_dependencies()
         configpaths.create_paths()
-        from gajim.common import exceptions
-        from gajim.common import logger
-        from gajim.common import caps_cache
         try:
             app.logger = logger.Logger()
             caps_cache.initialize(app.logger)

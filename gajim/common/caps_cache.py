@@ -436,8 +436,7 @@ class MucCapsCache:
         identities, features, data = [], [], []
         query_childs = stanza.getQueryChildren()
         if not query_childs:
-            from gajim.common import app
-            app.log('gajim.muc').warning('%s returned empty disco info', jid)
+            log.warning('%s returned empty disco info', jid)
             return
 
         for child in query_childs:
