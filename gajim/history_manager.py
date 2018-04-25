@@ -84,7 +84,6 @@ if is_standalone():
 
 from gajim.common import app
 from gajim import gtkgui_helpers
-from gajim.common.logger import LOG_DB_PATH
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim import dialogs
@@ -109,9 +108,10 @@ class HistoryManager:
             # set the icon to all windows
             Gtk.Window.set_default_icon_list(pixs)
 
-        if not os.path.exists(LOG_DB_PATH):
+        log_db_path = configpaths.get('LOG_DB')
+        if not os.path.exists(log_db_path):
             dialogs.ErrorDialog(_('Cannot find history logs database'),
-                    '%s does not exist.' % LOG_DB_PATH)
+                                '%s does not exist.' % log_db_path)
             sys.exit()
 
         xml = gtkgui_helpers.get_gtk_builder('history_manager.ui')
@@ -128,8 +128,8 @@ class HistoryManager:
         self.jids_already_in = []  # holds jids that we already have in DB
         self.AT_LEAST_ONE_DELETION_DONE = False
 
-        self.con = sqlite3.connect(LOG_DB_PATH, timeout=20.0,
-                isolation_level='IMMEDIATE')
+        self.con = sqlite3.connect(
+            log_db_path, timeout=20.0, isolation_level='IMMEDIATE')
         self.cur = self.con.cursor()
 
         self._init_jids_listview()

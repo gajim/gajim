@@ -49,9 +49,6 @@ from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
     SubscriptionConstant)
 
-LOG_DB_PATH = configpaths.get('LOG_DB')
-LOG_DB_FOLDER, LOG_DB_FILE = os.path.split(LOG_DB_PATH)
-CACHE_DB_PATH = configpaths.get('CACHE_DB')
 
 LOGS_SQL_STATEMENT = '''
     CREATE TABLE jids(
@@ -132,6 +129,8 @@ class Logger:
         self._jid_ids = {}
         self._con = None
         self._commit_timout_id = None
+        self._log_db_path = configpaths.get('LOG_DB')
+        self._cache_db_path = configpaths.get('CACHE_DB')
 
         self._create_databases()
         self._migrate_databases()
@@ -139,23 +138,23 @@ class Logger:
         self._get_jid_ids_from_db()
 
     def _create_databases(self):
-        if os.path.isdir(LOG_DB_PATH):
+        if os.path.isdir(self._log_db_path):
             log.error(_('%s is a directory but should be a file'),
-                      LOG_DB_PATH)
+                      self._log_db_path)
             sys.exit()
 
-        if os.path.isdir(CACHE_DB_PATH):
+        if os.path.isdir(self._cache_db_path):
             log.error(_('%s is a directory but should be a file'),
-                      CACHE_DB_PATH)
+                      self._cache_db_path)
             sys.exit()
 
-        if not os.path.exists(LOG_DB_PATH):
-            if os.path.exists(CACHE_DB_PATH):
-                os.remove(CACHE_DB_PATH)
-            self._create(LOGS_SQL_STATEMENT, LOG_DB_PATH)
+        if not os.path.exists(self._log_db_path):
+            if os.path.exists(self._cache_db_path):
+                os.remove(self._cache_db_path)
+            self._create(LOGS_SQL_STATEMENT, self._log_db_path)
 
-        if not os.path.exists(CACHE_DB_PATH):
-            self._create(CACHE_SQL_STATEMENT, CACHE_DB_PATH)
+        if not os.path.exists(self._cache_db_path):
+            self._create(CACHE_SQL_STATEMENT, self._cache_db_path)
 
     @staticmethod
     def _create(statement, path):
@@ -181,11 +180,11 @@ class Logger:
 
     def _migrate_databases(self):
         try:
-            con = sqlite.connect(LOG_DB_PATH)
+            con = sqlite.connect(self._log_db_path)
             self._migrate_logs(con)
             con.close()
 
-            con = sqlite.connect(CACHE_DB_PATH)
+            con = sqlite.connect(self._cache_db_path)
             self._migrate_cache(con)
             con.close()
         except Exception:
@@ -267,7 +266,7 @@ class Logger:
 
     def _connect_databases(self):
         self._con = sqlite.connect(
-            LOG_DB_PATH, timeout=20.0, isolation_level='IMMEDIATE')
+            self._log_db_path, timeout=20.0, isolation_level='IMMEDIATE')
 
         self._con.row_factory = self.namedtuple_factory
 
@@ -278,7 +277,7 @@ class Logger:
         self._set_synchronous(False)
         try:
             self._con.execute("ATTACH DATABASE '%s' AS cache" %
-                              CACHE_DB_PATH.replace("'", "''"))
+                              self._cache_db_path.replace("'", "''"))
         except Exception as error:
             log.exception('Error')
             self._con.close()
@@ -680,7 +679,7 @@ class Logger:
                 sql, tuple(jids) + (restore, pending)).fetchall()
         except sqlite.DatabaseError:
             self.dispatch('DB_ERROR',
-                          exceptions.DatabaseMalformed(LOG_DB_PATH))
+                          exceptions.DatabaseMalformed(self._log_db_path))
             return []
 
         messages.reverse()
