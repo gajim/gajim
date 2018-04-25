@@ -43,6 +43,7 @@ from urllib.parse import unquote
 
 from gi.repository import GLib, Gio, Gtk
 
+from gajim.common import app
 from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common import logging_helpers
@@ -121,7 +122,6 @@ class GajimApplication(Gtk.Application):
     def _startup(self, application):
 
         # Create and initialize Application Paths & Databases
-        from gajim.common import app
         app.detect_dependencies()
         configpaths.create_paths()
         from gajim.common import exceptions
@@ -171,7 +171,6 @@ class GajimApplication(Gtk.Application):
         gui_menu_builder.build_accounts_menu()
 
     def _open_uris(self, uris):
-        from gajim.common import app
         for uri in uris:
             app.log('uri_handler').info('open %s', uri)
             if not uri.startswith('xmpp:'):
@@ -213,7 +212,6 @@ class GajimApplication(Gtk.Application):
             self.interface.roster.prepare_quit()
 
         # Commit any outstanding SQL transactions
-        from gajim.common import app
         app.logger.commit()
 
     def _handle_remote_options(self, application, command_line):
@@ -287,7 +285,6 @@ class GajimApplication(Gtk.Application):
     def add_actions(self):
         ''' Build Application Actions '''
         from gajim.app_actions import AppActions
-        from gajim.common import app
         action = AppActions(self)
 
         self.account_actions = [
