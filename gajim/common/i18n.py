@@ -133,7 +133,6 @@ def initialize_win_translation():
 
 
 def initialize_direction_mark():
-    import gi
     from gi.repository import Gtk
 
     global direction_mark
