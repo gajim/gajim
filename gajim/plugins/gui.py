@@ -251,7 +251,7 @@ class PluginsWindow(object):
         if iter:
             plugin = model.get_value(iter, Column.PLUGIN)
             try:
-                app.plugin_manager.remove_plugin(plugin)
+                app.plugin_manager.uninstall_plugin(plugin)
             except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
                     str(e), self.window)
