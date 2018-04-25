@@ -21,6 +21,7 @@ import os
 
 import nbxmpp
 from gajim.common import app
+from gajim.common import configpaths
 
 log = logging.getLogger('gajim.c.jingle_xtls')
 
@@ -111,18 +112,18 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
-    cert_name = os.path.join(app.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)
+    cert_name = os.path.join(configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE)
     ctx.use_privatekey_file((cert_name + '.pkey').encode('utf-8'))
     ctx.use_certificate_file((cert_name + '.cert').encode('utf-8'))
 
     # Try to load Diffie-Hellman parameters.
     # First try user DH parameters, if this fails load the default DH parameters
-    dh_params_name = os.path.join(app.MY_CERT_DIR, DH_PARAMS)
+    dh_params_name = os.path.join(configpaths.get('MY_CERT'), DH_PARAMS)
     try:
         with open(dh_params_name, "r") as dh_params_file:
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
-        default_dh_params_name = os.path.join(app.DATA_DIR,
+        default_dh_params_name = os.path.join(configpaths.get('DATA'),
                                               'other', DEFAULT_DH_PARAMS)
         try:
             with open(default_dh_params_name, "r") as default_dh_params_file:
@@ -134,7 +135,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
 
     if remote_jid:
         store = ctx.get_cert_store()
-        path = os.path.join(os.path.expanduser(app.MY_PEER_CERTS_PATH),
+        path = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')),
                             remote_jid) + '.cert'
         if os.path.exists(path):
             load_cert_file(path, cert_store=store)
@@ -151,7 +152,7 @@ def read_cert(certpath):
     return certificate
 
 def send_cert(con, jid_from, sid):
-    certpath = os.path.join(app.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE) + \
+    certpath = os.path.join(configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE) + \
         '.cert'
     certificate = read_cert(certpath)
     iq = nbxmpp.Iq('result', to=jid_from)
@@ -170,7 +171,7 @@ def send_cert(con, jid_from, sid):
 
 def handle_new_cert(con, obj, jid_from):
     jid = app.get_jid_without_resource(jid_from)
-    certpath = os.path.join(os.path.expanduser(app.MY_PEER_CERTS_PATH), jid)
+    certpath = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')), jid)
     certpath += '.cert'
 
     id_ = obj.getAttr('id')
@@ -188,7 +189,7 @@ def handle_new_cert(con, obj, jid_from):
     approve_pending_content(id_)
 
 def check_cert(jid, fingerprint):
-    certpath = os.path.join(os.path.expanduser(app.MY_PEER_CERTS_PATH), jid)
+    certpath = os.path.join(os.path.expanduser(configpaths.get('MY_PEER_CERTS')), jid)
     certpath += '.cert'
     if os.path.exists(certpath):
         cert = load_cert_file(certpath)

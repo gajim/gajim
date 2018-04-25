@@ -1217,7 +1217,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         cacerts = ''
         if os.name == 'nt':
             cacerts = certifi.where()
-        mycerts = common.app.MY_CACERTS
+        mycerts = common.configpaths.get('MY_CACERTS')
         tls_version = app.config.get_per('accounts', self.name, 'tls_version')
         cipher_list = app.config.get_per('accounts', self.name, 'cipher_list')
 

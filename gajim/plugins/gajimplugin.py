@@ -27,7 +27,7 @@ Base class for implementing plugin.
 import os
 import locale
 
-from gajim.common import app
+from gajim.common import configpaths
 
 from gajim.plugins.helpers import log_calls, log
 from gajim.plugins.gui import GajimPluginConfigDialog
@@ -213,7 +213,7 @@ class GajimPluginConfig():
     def __init__(self, plugin):
         self.plugin = plugin
         self.FILE_PATH = os.path.join(
-            app.PLUGINS_CONFIG_DIR, self.plugin.short_name)
+            configpaths.get('PLUGINS_CONFIG_DIR'), self.plugin.short_name)
         self.data = {}
 
     @log_calls('GajimPluginConfig')

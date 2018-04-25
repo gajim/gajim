@@ -47,6 +47,7 @@ from gi.repository import GLib
 from gi.repository import Gio
 
 from gajim.common import i18n
+from gajim.common import configpaths
 
 
 def is_standalone():
@@ -59,10 +60,6 @@ def is_standalone():
 
 
 if is_standalone():
-    # Standalone Mode
-    # Must be done before importing app
-    from gajim.common import configpaths
-
     try:
         shortargs = 'hvsc:l:p:'
         longargs = 'help verbose separate config-path= loglevel= profile='
@@ -474,7 +471,7 @@ class HistoryManager:
 
         dlg = xml.get_object('filechooserdialog')
         dlg.set_title(_('Exporting History Logs…'))
-        dlg.set_current_folder(app.HOME_DIR)
+        dlg.set_current_folder(configpaths.get('HOME'))
         dlg.props.do_overwrite_confirmation = True
         response = dlg.run()
 

@@ -53,6 +53,7 @@ import nbxmpp
 
 from gajim.common.i18n import Q_
 from gajim.common.i18n import ngettext
+from gajim.common import configpaths
 
 try:
     import precis_i18n.codec
@@ -863,8 +864,8 @@ def check_soundfile_path(file_, dirs=None):
     :return      the path to file or None if it doesn't exists.
     """
     if dirs is None:
-        dirs = [app.configpaths.get('MY_DATA'),
-                app.DATA_DIR]
+        dirs = [configpaths.get('MY_DATA'),
+                configpaths.get('DATA')]
 
     if not file_:
         return None
@@ -891,8 +892,8 @@ def strip_soundfile_path(file_, dirs=None, abs=True):
         return None
 
     if dirs is None:
-        dirs = [app.configpaths.get('MY_DATA'),
-                app.DATA_DIR]
+        dirs = [configpaths.get('MY_DATA'),
+                configpaths.get('DATA')]
 
     name = os.path.basename(file_)
     for d in dirs:
@@ -1257,31 +1258,32 @@ def get_current_show(account):
     return app.SHOW_LIST[status]
 
 def get_iconset_path(iconset):
-    if os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', iconset)):
-        return os.path.join(app.DATA_DIR, 'iconsets', iconset)
-    elif os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, iconset)):
-        return os.path.join(app.MY_ICONSETS_PATH, iconset)
+    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', iconset)):
+        return os.path.join(configpaths.get('DATA'), 'iconsets', iconset)
+    elif os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), iconset)):
+        return os.path.join(configpaths.get('MY_ICONSETS'), iconset)
 
 def get_mood_iconset_path(iconset):
-    if os.path.isdir(os.path.join(app.DATA_DIR, 'moods', iconset)):
-        return os.path.join(app.DATA_DIR, 'moods', iconset)
-    elif os.path.isdir(os.path.join(app.MY_MOOD_ICONSETS_PATH, iconset)):
-        return os.path.join(app.MY_MOOD_ICONSETS_PATH, iconset)
+    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'moods', iconset)):
+        return os.path.join(configpaths.get('DATA'), 'moods', iconset)
+    elif os.path.isdir(
+            os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)):
+        return os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)
 
 def get_activity_iconset_path(iconset):
-    if os.path.isdir(os.path.join(app.DATA_DIR, 'activities', iconset)):
-        return os.path.join(app.DATA_DIR, 'activities', iconset)
-    elif os.path.isdir(os.path.join(app.MY_ACTIVITY_ICONSETS_PATH,
+    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'activities', iconset)):
+        return os.path.join(configpaths.get('DATA'), 'activities', iconset)
+    elif os.path.isdir(os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'),
     iconset)):
-        return os.path.join(app.MY_ACTIVITY_ICONSETS_PATH, iconset)
+        return os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'), iconset)
 
 def get_transport_path(transport):
-    if os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', 'transports',
+    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', 'transports',
     transport)):
-        return os.path.join(app.DATA_DIR, 'iconsets', 'transports', transport)
-    elif os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, 'transports',
+        return os.path.join(configpaths.get('DATA'), 'iconsets', 'transports', transport)
+    elif os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), 'transports',
     transport)):
-        return os.path.join(app.MY_ICONSETS_PATH, 'transports', transport)
+        return os.path.join(configpaths.get('MY_ICONSETS'), 'transports', transport)
     # No transport folder found, use default jabber one
     return get_iconset_path(app.config.get('iconset'))
 
@@ -1606,13 +1608,13 @@ def version_condition(current_version, required_version):
 
 def get_available_emoticon_themes():
     emoticons_themes = []
-    emoticons_data_path = os.path.join(app.DATA_DIR, 'emoticons')
+    emoticons_data_path = os.path.join(configpaths.get('DATA'), 'emoticons')
     font_theme_path = os.path.join(
-        app.DATA_DIR, 'emoticons', 'font-emoticons', 'emoticons_theme.py')
+        configpaths.get('DATA'), 'emoticons', 'font-emoticons', 'emoticons_theme.py')
 
     folders = os.listdir(emoticons_data_path)
-    if os.path.isdir(app.MY_EMOTS_PATH):
-        folders += os.listdir(app.MY_EMOTS_PATH)
+    if os.path.isdir(configpaths.get('MY_EMOTS')):
+        folders += os.listdir(configpaths.get('MY_EMOTS'))
 
     file = 'emoticons_theme.py'
     if os.name == 'nt' and not os.path.exists(font_theme_path):
@@ -1628,11 +1630,11 @@ def get_available_emoticon_themes():
     return emoticons_themes
 
 def get_emoticon_theme_path(theme):
-    emoticons_data_path = os.path.join(app.DATA_DIR, 'emoticons', theme)
+    emoticons_data_path = os.path.join(configpaths.get('DATA'), 'emoticons', theme)
     if os.path.exists(emoticons_data_path):
         return emoticons_data_path
 
-    emoticons_user_path = os.path.join(app.MY_EMOTS_PATH, theme)
+    emoticons_user_path = os.path.join(configpaths.get('MY_EMOTS'), theme)
     if os.path.exists(emoticons_user_path):
         return emoticons_user_path
 

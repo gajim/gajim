@@ -23,9 +23,10 @@ import gettext
 from os import path as os_path
 import os
 from gajim.common import app
+from gajim.common import configpaths
 
 APP = 'gajim_plugins'
-plugins_locale_dir = os_path.join(app.PLUGINS_DIRS[1], 'locale')
+plugins_locale_dir = os_path.join(configpaths.get('PLUGINS_USER'), 'locale')
 
 if os.name != 'nt':
     locale.setlocale(locale.LC_ALL, '')

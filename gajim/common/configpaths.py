@@ -32,6 +32,9 @@ from gajim.common.const import PathType, PathLocation
 
 
 def get(key):
+    if key == 'PLUGINS_DIRS':
+        return [_paths['PLUGINS_BASE'],
+                _paths['PLUGINS_USER']]
     return _paths[key]
 
 
@@ -41,6 +44,10 @@ def get_paths(type_):
         if type_ != path_type:
             continue
         yield _paths[key]
+
+
+def override_path(*args, **kwargs):
+    _paths._add(*args, **kwargs)
 
 
 def set_separation(active: bool):

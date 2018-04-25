@@ -38,6 +38,7 @@ from gajim import gtkgui_helpers
 from gajim.dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
 from gajim.htmltextview import HtmlTextView
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
@@ -161,8 +162,8 @@ class PluginsWindow(object):
             self.plugin_description_textview, None)
 
         self.plugin_description_textview.set_property('sensitive', True)
-        self.uninstall_plugin_button.set_property('sensitive',
-            app.PLUGINS_DIRS[1] in plugin.__path__)
+        self.uninstall_plugin_button.set_property(
+            'sensitive', configpaths.get('PLUGINS_USER') in plugin.__path__)
         self.configure_plugin_button.set_property(
             'sensitive', plugin.config_dialog is not None)
 

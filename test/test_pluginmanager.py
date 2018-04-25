@@ -54,9 +54,8 @@ configpaths.set_config_root(configdir)
 configpaths.init()
 
 # for some reason common.app needs to be imported before xmpppy?
-from gajim.common import app
 
-app.DATA_DIR = gajim_root + '/gajim/data'
+configpaths.override_path('DATA', gajim_root + '/gajim/data')
 
 from common.stanza_session import StanzaSession
 

@@ -52,7 +52,7 @@ from gajim.common import pep
 from gajim.common import configpaths
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
-gtk_icon_theme.append_search_path(app.ICONS_DIR)
+gtk_icon_theme.append_search_path(configpaths.get('ICONS'))
 
 class Color:
     BLACK = Gdk.RGBA(red=0, green=0, blue=0, alpha=1)
@@ -610,7 +610,7 @@ def get_pep_as_pixbuf(pep_class):
     elif isinstance(pep_class, pep.UserTunePEP):
         icon = get_icon_pixmap('audio-x-generic', quiet=True)
         if not icon:
-            path = os.path.join(app.DATA_DIR, 'emoticons', 'static',
+            path = os.path.join(configpaths.get('DATA'), 'emoticons', 'static',
                 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         return icon

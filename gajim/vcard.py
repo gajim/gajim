@@ -44,6 +44,7 @@ from gajim import gtkgui_helpers
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.const import AvatarSize
 
@@ -84,7 +85,7 @@ class VcardWindow:
             self.real_resource = contact.resource
 
         puny_jid = helpers.sanitize_filename(contact.jid)
-        local_avatar_basepath = os.path.join(app.AVATAR_PATH, puny_jid) + \
+        local_avatar_basepath = os.path.join(configpaths.get('AVATAR'), puny_jid) + \
                 '_local'
         for extension in ('.png', '.jpeg'):
             local_avatar_path = local_avatar_basepath + extension

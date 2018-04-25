@@ -40,6 +40,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common import dataforms
+from gajim.common import configpaths
 from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common.const import KindConstant
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
@@ -2738,7 +2739,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if jid:
             # we want an avatar
             puny_jid = helpers.sanitize_filename(jid)
-            path_to_file = os.path.join(app.AVATAR_PATH, puny_jid) + suffix
+            path_to_file = os.path.join(
+                configpaths.get('AVATAR'), puny_jid) + suffix
             path_to_local_file = path_to_file + '_local'
             for extension in ('.png', '.jpeg'):
                 path_to_local_file_full = path_to_local_file + extension

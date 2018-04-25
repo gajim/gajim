@@ -47,6 +47,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
+from gajim.common import configpaths
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
@@ -391,7 +392,7 @@ class ConnectionVcard:
         else:
             app.log('avatar').info(
                 'Update (vCard): %s %s', obj.nick, obj.avatar_sha)
-            path = os.path.join(app.AVATAR_PATH, obj.avatar_sha)
+            path = os.path.join(configpaths.get('AVATAR'), obj.avatar_sha)
             if not os.path.isfile(path):
                 app.log('avatar').info(
                     'Request (vCard): %s', obj.nick)
@@ -572,7 +573,7 @@ class ConnectionVcard:
 
         current_sha = app.config.get_per('accounts', self.name, 'avatar_sha')
         if current_sha == avatar_sha:
-            path = os.path.join(app.AVATAR_PATH, current_sha)
+            path = os.path.join(configpaths.get('AVATAR'), current_sha)
             if not os.path.isfile(path):
                 app.log('avatar').info(
                     'Caching (vCard): %s', current_sha)

@@ -47,7 +47,7 @@ def setup_env():
     import logging
     logging.basicConfig()
 
-    app.DATA_DIR = gajim_root + '/gajim/data'
+    configpaths.override_path('DATA', gajim_root + '/gajim/data')
     app.use_x = use_x
     app.contacts = LegacyContactsAPI()
     app.connections = {}

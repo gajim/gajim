@@ -19,6 +19,7 @@ Handles Jingle contents (XEP 0166)
 
 import os
 from gajim.common import app
+from gajim.common import configpaths
 import nbxmpp
 from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
 from gajim.common.jingle_xtls import load_cert_file
@@ -221,8 +222,8 @@ class JingleContent:
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=nbxmpp.NS_JINGLE_XTLS + ' security')
-            certpath = os.path.join(app.MY_CERT_DIR, SELF_SIGNED_CERTIFICATE)\
-                + '.cert'
+            certpath = os.path.join(
+                configpaths.get('MY_CERT'), SELF_SIGNED_CERTIFICATE) + '.cert'
             cert = load_cert_file(certpath)
             if cert:
                 try:

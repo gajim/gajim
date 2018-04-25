@@ -31,7 +31,6 @@
 import os
 import sys
 import logging
-import locale
 import uuid
 from distutils.version import LooseVersion as V
 from collections import namedtuple
@@ -63,20 +62,6 @@ logger = None
 # some plugins use that
 gajimpaths = configpaths.gajimpaths
 
-AVATAR_PATH = configpaths.get('AVATAR')
-MY_EMOTS_PATH = configpaths.get('MY_EMOTS')
-MY_ICONSETS_PATH = configpaths.get('MY_ICONSETS')
-MY_MOOD_ICONSETS_PATH = configpaths.get('MY_MOOD_ICONSETS')
-MY_ACTIVITY_ICONSETS_PATH = configpaths.get('MY_ACTIVITY_ICONSETS')
-MY_CACERTS = configpaths.get('MY_CACERTS')
-MY_PEER_CERTS_PATH = configpaths.get('MY_PEER_CERTS')
-DATA_DIR = configpaths.get('DATA')
-ICONS_DIR = configpaths.get('ICONS')
-HOME_DIR = configpaths.get('HOME')
-PLUGINS_DIRS = [configpaths.get('PLUGINS_BASE'),
-                configpaths.get('PLUGINS_USER')]
-PLUGINS_CONFIG_DIR = configpaths.get('PLUGINS_CONFIG_DIR')
-MY_CERT_DIR = configpaths.get('MY_CERT')
 
 RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
 

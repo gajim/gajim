@@ -1352,16 +1352,17 @@ class Interface:
             if is_checked[0]:
                 # Check if cert is already in file
                 certs = ''
-                if os.path.isfile(app.MY_CACERTS):
-                    f = open(app.MY_CACERTS)
+                my_ca_certs = configpaths.get('MY_CACERTS')
+                if os.path.isfile(my_ca_certs):
+                    f = open(my_ca_certs)
                     certs = f.read()
                     f.close()
                 if obj.cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
-                        'not added again.') % app.MY_CACERTS)
+                        'not added again.') % my_ca_certs)
                 else:
-                    f = open(app.MY_CACERTS, 'a')
+                    f = open(my_ca_certs, 'a')
                     f.write(server + '\n')
                     f.write(obj.cert + '\n\n')
                     f.close()
@@ -2446,14 +2447,15 @@ class Interface:
             pixbuf = pixbuf.scale_simple(AvatarSize.PROFILE,
                                          AvatarSize.PROFILE,
                                          GdkPixbuf.InterpType.BILINEAR)
-            publish_path = os.path.join(app.AVATAR_PATH, 'temp_publish')
+            publish_path = os.path.join(
+                configpaths.get('AVATAR'), 'temp_publish')
             pixbuf.savev(publish_path, 'png', [], [])
             with open(publish_path, 'rb') as file:
                 data = file.read()
             return self.save_avatar(data)
 
         sha = hashlib.sha1(data).hexdigest()
-        path = os.path.join(app.AVATAR_PATH, sha)
+        path = os.path.join(configpaths.get('AVATAR'), sha)
         try:
             with open(path, "wb") as output_file:
                 output_file.write(data)
@@ -2475,7 +2477,7 @@ class Interface:
             size = size * scale
 
         if publish:
-            path = os.path.join(app.AVATAR_PATH, filename)
+            path = os.path.join(configpaths.get('AVATAR'), filename)
             with open(path, 'rb') as file:
                 data = file.read()
             return data
@@ -2488,7 +2490,7 @@ class Interface:
         except KeyError:
             pass
 
-        path = os.path.join(app.AVATAR_PATH, filename)
+        path = os.path.join(configpaths.get('AVATAR'), filename)
         if not os.path.isfile(path):
             return
 
@@ -2532,7 +2534,7 @@ class Interface:
 
     @staticmethod
     def avatar_exists(filename):
-        path = os.path.join(app.AVATAR_PATH, filename)
+        path = os.path.join(configpaths.get('AVATAR'), filename)
         if not os.path.isfile(path):
             return False
         return True
@@ -2601,7 +2603,8 @@ class Interface:
             mood = received_mood if received_mood in pep.MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
         elif isinstance(pep_obj, pep.UserTunePEP):
-            path = os.path.join(app.DATA_DIR, 'emoticons', 'static', 'music.png')
+            path = os.path.join(
+                configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         elif isinstance(pep_obj, pep.UserActivityPEP):
             pep_ = pep_obj._pep_specific_data

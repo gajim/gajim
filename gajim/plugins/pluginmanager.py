@@ -36,6 +36,7 @@ from pkg_resources import parse_version
 
 from gajim.common import app
 from gajim.common import nec
+from gajim.common import configpaths
 from gajim.common.exceptions import PluginsystemError
 
 from gajim.plugins.helpers import log, log_calls, Singleton
@@ -107,7 +108,7 @@ class PluginManager(metaclass=Singleton):
         Registered names with instances of encryption Plugins.
         '''
 
-        for path in [app.PLUGINS_DIRS[1], app.PLUGINS_DIRS[0]]:
+        for path in reversed(configpaths.get('PLUGINS_DIRS')):
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
 
@@ -534,7 +535,7 @@ class PluginManager(metaclass=Singleton):
 
             try:
                 if module_name in sys.modules:
-                    if path == app.PLUGINS_DIRS[0]:
+                    if path == configpaths.get('PLUGINS_BASE'):
                         # Only reload plugins from Gajim base dir when they
                         # dont exist. This means plugins in the user path are
                         # always preferred.
@@ -632,7 +633,7 @@ class PluginManager(metaclass=Singleton):
         if len(dirs) > 1:
             raise PluginsystemError(_('Archive is malformed'))
 
-        base_dir, user_dir = app.PLUGINS_DIRS
+        base_dir, user_dir = configpaths.get('PLUGINS_DIRS')
         plugin_dir = os.path.join(user_dir, dirs[0])
 
         if os.path.isdir(plugin_dir):

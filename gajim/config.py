@@ -58,6 +58,7 @@ from gajim.common import app
 from gajim.common import connection
 from gajim.common import dataforms
 from gajim.common import ged
+from gajim.common import configpaths
 from gajim.accounts_window import AccountsWindow
 
 try:
@@ -202,9 +203,10 @@ class PreferencesWindow:
         self.update_theme_list()
 
         # iconset
-        iconsets_list = os.listdir(os.path.join(app.DATA_DIR, 'iconsets'))
-        if os.path.isdir(app.MY_ICONSETS_PATH):
-            iconsets_list += os.listdir(app.MY_ICONSETS_PATH)
+        iconsets_list = os.listdir(
+            os.path.join(configpaths.get('DATA'), 'iconsets'))
+        if os.path.isdir(configpaths.get('MY_ICONSETS')):
+            iconsets_list += os.listdir(configpaths.get('MY_ICONSETS'))
         # new model, image in 0, string in 1
         model = Gtk.ListStore(Gtk.Image, str)
         renderer_image = cell_renderer_image.CellRendererImage(0, 0)
@@ -217,8 +219,8 @@ class PreferencesWindow:
         self.iconset_combobox.set_model(model)
         l = []
         for dir in iconsets_list:
-            if not os.path.isdir(os.path.join(app.DATA_DIR, 'iconsets', dir)) \
-            and not os.path.isdir(os.path.join(app.MY_ICONSETS_PATH, dir)):
+            if not os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', dir)) \
+            and not os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), dir)):
                 continue
             if dir != '.svn' and dir != 'transports':
                 l.append(dir)
@@ -2292,7 +2294,8 @@ class AccountCreationWizardWindow:
         self.update_proxy_list()
 
         # parse servers.xml
-        servers_xml = os.path.join(app.DATA_DIR, 'other', 'servers.xml')
+        servers_xml = os.path.join(
+            configpaths.get('DATA'), 'other', 'servers.xml')
         servers = gtkgui_helpers.parse_server_xml(servers_xml)
         servers_model = self.xml.get_object('server_liststore')
         for server in servers:
@@ -2532,16 +2535,17 @@ class AccountCreationWizardWindow:
                     'hostname']
                 # Check if cert is already in file
                 certs = ''
-                if os.path.isfile(app.MY_CACERTS):
-                    f = open(app.MY_CACERTS)
+                my_ca_certs = configpaths.get('MY_CACERTS')
+                if os.path.isfile(my_ca_certs):
+                    f = open(my_ca_certs)
                     certs = f.read()
                     f.close()
                 if self.ssl_cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
-                        'not added again.') % app.MY_CACERTS)
+                        'not added again.') % my_ca_certs)
                 else:
-                    f = open(app.MY_CACERTS, 'a')
+                    f = open(my_ca_certs, 'a')
                     f.write(hostname + '\n')
                     f.write(self.ssl_cert + '\n\n')
                     f.close()
