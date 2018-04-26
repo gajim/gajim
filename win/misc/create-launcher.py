@@ -89,8 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     PySys_SetArgvEx(__argc, szArglist, 0);
     result = PyRun_SimpleString("import sys; import os;"
                                 "sys.frozen=True;"
-                                "import gajim.gajim as g;"
-                                "g.GajimApplication().run(sys.argv);");
+                                "from gajim import gajim;"
+                                "gajim.main();");
     Py_Finalize();
     return result;
 }
