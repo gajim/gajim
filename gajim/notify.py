@@ -107,7 +107,6 @@ text=None, timeout=-1):
             # Only one notification per JID
             notif_id = jid
     notification.set_priority(Gio.NotificationPriority.NORMAL)
-    notification.set_urgent(False)
     app.app.send_notification(notif_id, notification)
 
 
