@@ -26,7 +26,7 @@ Replace install path `~/Gajim/gajim_flatpak` with an install path of your choice
 2. `flatpak --user install gnome org.gnome.Platform//3.28`
 3. `flatpak --user install gnome org.gnome.Sdk//3.28`
 4. `flatpak-builder --repo=gajim_flatpak_repo ~/Gajim/gajim_flatpak ~/Gajim/org.gajim.Gajim.json`
-5. `flatpak --user remote-add --no-gpg-verify gajim_flatpak_repo ~/Gajim/gajim_flatpak_repo`
+5. `flatpak --user remote-add --no-gpg-verify gajim_flatpak_repo gajim_flatpak_repo`
 6. `flatpak --user install gajim_flatpak_repo org.gajim.Gajim`
 7. `flatpak run org.gajim.Gajim`
 
