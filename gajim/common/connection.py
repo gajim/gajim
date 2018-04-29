@@ -1195,15 +1195,18 @@ class Connection(CommonConnection, ConnectionHandlers):
             if scheme == 'https':
                 connection_types = ['ssl']
             else:
-                connection_types = ['plain']
+                if allow_plaintext_connection:
+                    connection_types = ['plain']
+                else:
+                    connection_types = []
 
         host = self._select_next_host(self._hosts)
         self._hosts.remove(host)
 
         # Skip record if connection type is not supported.
         if host['type'] not in connection_types:
-            log.debug("Skipping connection record with unsupported type: %s" %
-                host['type'])
+            log.info("Skipping connection record with unsupported type: %s",
+                     host['type'])
             self._connect_to_next_host(retry)
             return
 
