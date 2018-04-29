@@ -2381,7 +2381,7 @@ class RosterWindow:
                 x, y = self.window.get_position()
                 app.config.set('roster_x-position', x)
                 app.config.set('roster_y-position', y)
-            if app.config.get('hide_on_roster_x_button'):
+            if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
                 self.window.hide()
             else:
                 self.window.iconify()
@@ -3696,7 +3696,7 @@ class RosterWindow:
             'quit_on_roster_x_button') and ((app.interface.systray_enabled and\
             app.config.get('trayicon') == 'always') or app.config.get(
             'allow_hide_roster')):
-                if app.config.get('hide_on_roster_x_button'):
+                if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
                     self.window.hide()
                 else:
                     self.window.iconify()
