@@ -523,6 +523,16 @@ class JingleSession:
         # error.
         # Lets check what kind of jingle session does the peer want
         contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
+
+        # If there's no content we understand...
+        if not contents:
+            # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
+            reason = nbxmpp.Node('reason')
+            reason.setTag(reason_txt)
+            self.__ack(stanza, jingle, error, action)
+            self._session_terminate(reason)
+            raise nbxmpp.NodeProcessed
+
         # If we are not receivin a file
         # Check if there's already a session with this user:
         if contents[0].media != 'file':
@@ -553,14 +563,7 @@ class JingleSession:
                                 'it is not allowed to request', pjid)
                     self.decline_session()
                     raise nbxmpp.NodeProcessed
-        # If there's no content we understand...
-        if not contents:
-            # TODO: http://xmpp.org/extensions/xep-0166.html#session-terminate
-            reason = nbxmpp.Node('reason')
-            reason.setTag(reason_txt)
-            self.__ack(stanza, jingle, error, action)
-            self._session_terminate(reason)
-            raise nbxmpp.NodeProcessed
+
         self.state = JingleStates.PENDING
         # Send event about starting a session
         app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
