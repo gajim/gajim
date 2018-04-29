@@ -150,11 +150,11 @@ class NotificationAreaTooltip(StatusTable):
                 show_lock = False
             if message:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['name']) + ' - ' + message,
+                    GLib.markup_escape_text(acct['account_label']) + ' - ' + message,
                     show_lock=show_lock, indent=False)
             else:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['name']), show_lock=show_lock,
+                    GLib.markup_escape_text(acct['account_label']), show_lock=show_lock,
                     indent=False)
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
