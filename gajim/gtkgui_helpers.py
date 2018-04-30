@@ -37,6 +37,7 @@ from gi.repository import Pango
 import cairo
 import os
 import sys
+import math
 try:
     from PIL import Image
 except:
@@ -885,7 +886,7 @@ def add_css_font():
         family=font.get_family(),
         size=int(round(font.get_size() / Pango.SCALE)),
         unit=unit,
-        weight=int(font.get_weight()))
+        weight=pango_to_css_weight(font.get_weight()))
     css = css.replace("font-size: 0{unit};".format(unit=unit), "")
     css = css.replace("font-weight: 0;", "")
     css = "\n".join(filter(lambda x: x.strip(), css.splitlines()))
@@ -910,3 +911,13 @@ def get_image_from_icon_name(icon_name, scale):
     icon = get_iconset_name_for(icon_name)
     surface = gtk_icon_theme.load_surface(icon, 16, scale, None, 0)
     return Gtk.Image.new_from_surface(surface)
+
+def pango_to_css_weight(number):
+    # Pango allows for weight values between 100 and 1000
+    # CSS allows only full hundred numbers like 100, 200 ..
+    number = int(number)
+    if number < 100:
+        return 100
+    if number > 900:
+        return 900
+    return int(math.ceil(number / 100.0)) * 100
