@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-31 02:05+0000\n"
+"POT-Creation-Date: 2018-04-29 02:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -30,7 +30,7 @@ msgstr "Грешка."
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:579 gajim/profile_window.py:181
+#: gajim/chat_control_base.py:579 gajim/profile_window.py:182
 #: gajim/conversation_textview.py:539
 msgid "_Clear"
 msgstr ""
@@ -125,22 +125,22 @@ msgstr "Получател: "
 msgid "Saved in: %s"
 msgstr "Запазен в: %s"
 
-#: gajim/filetransfers_window.py:248 gajim/chat_control.py:1617
+#: gajim/filetransfers_window.py:248 gajim/chat_control.py:1620
 msgid "File transfer completed"
 msgstr "Файловият трансфер завърши"
 
-#: gajim/filetransfers_window.py:250 gajim/chat_control.py:1621
+#: gajim/filetransfers_window.py:250 gajim/chat_control.py:1624
 #, fuzzy
 msgid "Open _Containing Folder"
 msgstr "_Отваряне на папката"
 
 #: gajim/filetransfers_window.py:263 gajim/filetransfers_window.py:270
-#: gajim/chat_control.py:1676
+#: gajim/chat_control.py:1679
 msgid "File transfer cancelled"
 msgstr "Файловият трансфер е прекъснат"
 
 #: gajim/filetransfers_window.py:263 gajim/filetransfers_window.py:271
-#: gajim/chat_control.py:1677
+#: gajim/chat_control.py:1680
 msgid "Connection with peer cannot be established."
 msgstr "Не може да бъде установен контакт с отсрещната машина."
 
@@ -154,7 +154,7 @@ msgstr "Получател: %s"
 msgid "Error message: %s"
 msgstr "Грешка: %s"
 
-#: gajim/filetransfers_window.py:283 gajim/chat_control.py:1673
+#: gajim/filetransfers_window.py:283 gajim/chat_control.py:1676
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Файловият трансфер е преустановен"
@@ -487,7 +487,7 @@ msgstr ""
 msgid "Save Image as…"
 msgstr "Запазване на изображението като…"
 
-#: gajim/vcard.py:166 gajim/vcard.py:513 gajim/profile_window.py:175
+#: gajim/vcard.py:166 gajim/vcard.py:513 gajim/profile_window.py:176
 #: gajim/chat_control.py:581
 #, fuzzy
 msgid "Save _As"
@@ -558,8 +558,8 @@ msgstr "Няма чакащо запитване за записване."
 msgid " resource with priority "
 msgstr " ресурс с приоритет "
 
-#: gajim/options_dialog.py:383 gajim/dialogs.py:4806 gajim/dialogs.py:4848
-#: gajim/dialogs.py:4896 gajim/dialogs.py:4986
+#: gajim/options_dialog.py:383 gajim/dialogs.py:4803 gajim/dialogs.py:4845
+#: gajim/dialogs.py:4893 gajim/dialogs.py:4983
 msgid "All files"
 msgstr "Всички файлове"
 
@@ -578,7 +578,7 @@ msgstr "Настройки на сървъра-посредник"
 #: gajim/dialogs.py:536 gajim/dialogs.py:549 gajim/roster_window.py:2997
 #: gajim/roster_window.py:3003 gajim/roster_window.py:3008 gajim/config.py:1162
 #: gajim/config.py:1177 gajim/config.py:1182 gajim/config.py:1230
-#: gajim/config.py:1340 gajim/config.py:2489 gajim/config.py:2566
+#: gajim/config.py:1340 gajim/config.py:2497 gajim/config.py:2574
 #: gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98
 msgid "None"
@@ -620,8 +620,8 @@ msgid "_New Group Chat"
 msgstr "_Нова стая"
 
 #: gajim/gui_menu_builder.py:292 gajim/gui_menu_builder.py:416
-#: gajim/dialogs.py:1114 gajim/dialogs.py:2333 gajim/dialogs.py:2362
-#: gajim/dialogs.py:3867 gajim/chat_control.py:284 gajim/roster_window.py:804
+#: gajim/dialogs.py:1116 gajim/dialogs.py:2330 gajim/dialogs.py:2359
+#: gajim/dialogs.py:3864 gajim/chat_control.py:284 gajim/roster_window.py:804
 #: gajim/roster_window.py:1753 gajim/roster_window.py:1755
 #: gajim/roster_window.py:2068 gajim/roster_window.py:3419
 #: gajim/roster_window.py:3446 gajim/gui_interface.py:524
@@ -682,7 +682,8 @@ msgstr "_Блокиране"
 msgid "Remo_ve"
 msgstr "П_ремахване"
 
-#: gajim/gui_menu_builder.py:594 gajim/data/gui/search_window.ui:98
+#: gajim/gui_menu_builder.py:594 gajim/data/gui/contact_context_menu.ui:221
+#: gajim/data/gui/search_window.ui:98
 msgid "_Information"
 msgstr "_Информация"
 
@@ -814,7 +815,7 @@ msgstr "_Настройки"
 msgid "Synchronise History"
 msgstr "Синхронизиране"
 
-#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4583
+#: gajim/gui_menu_builder.py:739 gajim/dialogs.py:4580
 msgid "Privacy Lists"
 msgstr "Филтри за уединение"
 
@@ -884,7 +885,7 @@ msgid "Cannot find history logs database"
 msgstr "Неуспех при откриването на базата от данни за разговорите"
 
 #: gajim/history_manager.py:144 gajim/history_manager.py:195
-#: gajim/dialogs.py:3848 gajim/config.py:1621 gajim/disco.py:872
+#: gajim/dialogs.py:3845 gajim/config.py:1621 gajim/disco.py:872
 msgid "JID"
 msgstr "JID"
 
@@ -975,54 +976,54 @@ msgstr[1] "Наистина ли искате да изтриете избран
 msgid "This is an irreversible operation."
 msgstr "Това е необратима операция."
 
-#: gajim/profile_window.py:63
+#: gajim/profile_window.py:64
 #, fuzzy
 msgid "Retrieving profile…"
 msgstr "Извличане на профила…"
 
-#: gajim/profile_window.py:128
+#: gajim/profile_window.py:129
 msgid "Could not load image"
 msgstr "Неуспех при зареждането на изображението"
 
-#: gajim/profile_window.py:200
+#: gajim/profile_window.py:201
 #, fuzzy
 msgid "Wrong date format"
 msgstr "Информация за контакта"
 
-#: gajim/profile_window.py:201
+#: gajim/profile_window.py:202
 #, fuzzy
 msgid "Format of the date must be YYYY-MM-DD"
 msgstr "Формат: гггг-мм-дд"
 
-#: gajim/profile_window.py:261
+#: gajim/profile_window.py:266
 msgid "Information received"
 msgstr "Получена информация"
 
-#: gajim/profile_window.py:334 gajim/dialogs.py:2562 gajim/dialogs.py:2650
-#: gajim/dialogs.py:3105 gajim/disco.py:536 gajim/gui_interface.py:1849
+#: gajim/profile_window.py:339 gajim/dialogs.py:2559 gajim/dialogs.py:2647
+#: gajim/dialogs.py:3102 gajim/disco.py:536 gajim/gui_interface.py:1849
 #: gajim/dialog_messages.py:32
 msgid "You are not connected to the server"
 msgstr "Не сте свързани към сървъра."
 
-#: gajim/profile_window.py:335
+#: gajim/profile_window.py:340
 #, fuzzy
 msgid "Without a connection, you can not publish your contact information."
 msgstr "Трябва да сте свързани, за да публикувате визитката."
 
-#: gajim/profile_window.py:349
+#: gajim/profile_window.py:354
 #, fuzzy
 msgid "Sending profile…"
 msgstr "Изпращане на профила…"
 
-#: gajim/profile_window.py:368
+#: gajim/profile_window.py:373
 msgid "Information NOT published"
 msgstr "Информацията НЕ Е публикувана"
 
-#: gajim/profile_window.py:375
+#: gajim/profile_window.py:380
 msgid "vCard publication failed"
 msgstr "Неуспех при публикуването на визитката"
 
-#: gajim/profile_window.py:376
+#: gajim/profile_window.py:381
 msgid ""
 "There was an error while publishing your personal information, try again "
 "later."
@@ -1132,36 +1133,36 @@ msgstr ""
 msgid "Please fill in the data of the contact you want to add"
 msgstr "Попълнете данните за контакта, който искате да добавите"
 
-#: gajim/dialogs.py:1089 gajim/dialogs.py:1095 gajim/dialogs.py:1100
+#: gajim/dialogs.py:1091 gajim/dialogs.py:1097 gajim/dialogs.py:1102
 msgid "Invalid User ID"
 msgstr "Невалиден идентификатор"
 
-#: gajim/dialogs.py:1096
+#: gajim/dialogs.py:1098
 msgid "The user ID must not contain a resource."
 msgstr "Потребителският идентификатор не трябва да съдържа ресурс."
 
-#: gajim/dialogs.py:1101
+#: gajim/dialogs.py:1103
 msgid "You cannot add yourself to your roster."
 msgstr "Не може да добавите себе си към списъка."
 
-#: gajim/dialogs.py:1115
+#: gajim/dialogs.py:1117
 msgid "Contact already in roster"
 msgstr "Контактът вече е в списъка"
 
-#: gajim/dialogs.py:1116
+#: gajim/dialogs.py:1118
 msgid "This contact is already listed in your roster."
 msgstr "Контактът вече съществува в списъка."
 
-#: gajim/dialogs.py:1169 gajim/dialogs.py:1203
+#: gajim/dialogs.py:1171 gajim/dialogs.py:1205
 msgid "User ID:"
 msgstr "Идентификатор на потребител:"
 
-#: gajim/dialogs.py:1269
+#: gajim/dialogs.py:1271
 #, fuzzy
 msgid "Error while adding transport contact"
 msgstr "Грешка при добавянето на услугата. %s"
 
-#: gajim/dialogs.py:1270
+#: gajim/dialogs.py:1272
 #, python-format
 msgid ""
 "This error occured while adding a contact for transport %(transport)s:\n"
@@ -1169,57 +1170,57 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/dialogs.py:1302
+#: gajim/dialogs.py:1304
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "Джабър клиент за GTK+"
 
-#: gajim/dialogs.py:1303
+#: gajim/dialogs.py:1305
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "Версия на GTK+:"
 
-#: gajim/dialogs.py:1304
+#: gajim/dialogs.py:1306
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "Версия на PyGTK:"
 
-#: gajim/dialogs.py:1305
+#: gajim/dialogs.py:1307
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/dialogs.py:1308
+#: gajim/dialogs.py:1310
 #, fuzzy
 msgid "Current Developers"
 msgstr "Текущи разработчици:"
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1311
 #, fuzzy
 msgid "Past Developers"
 msgstr "Бивши разработчици:"
 
-#: gajim/dialogs.py:1310
+#: gajim/dialogs.py:1312
 msgid "Artists"
 msgstr ""
 
-#: gajim/dialogs.py:1314
+#: gajim/dialogs.py:1316
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/dialogs.py:1315
+#: gajim/dialogs.py:1317
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr ""
 "И не на последно място, бихме искали да благодарим на всички, които "
 "поддържат пакетите."
 
-#: gajim/dialogs.py:1316
+#: gajim/dialogs.py:1318
 #, fuzzy
 msgid "Thanks"
 msgstr "Благодарен"
 
-#: gajim/dialogs.py:1318
+#: gajim/dialogs.py:1320
 msgid "translator-credits"
 msgstr ""
 "Явор Доганов <yavor@gnu.org>\n"
@@ -1228,12 +1229,12 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: gajim/dialogs.py:1503
+#: gajim/dialogs.py:1500
 #, fuzzy, python-format
 msgid "Dictionary for language \"%s\" not available"
 msgstr "Няма наличен речник за %s език"
 
-#: gajim/dialogs.py:1504
+#: gajim/dialogs.py:1501
 #, fuzzy, python-format
 msgid ""
 "You have to install the dictionary \"%s\" to use spellchecking, or choose "
@@ -1246,12 +1247,12 @@ msgstr ""
 "\n"
 "Функционалността за осветяване на сгрешени думи ще е изключена"
 
-#: gajim/dialogs.py:1851 gajim/dialogs.py:1866 gajim/gui_interface.py:1511
+#: gajim/dialogs.py:1848 gajim/dialogs.py:1863 gajim/gui_interface.py:1511
 #: gajim/gui_interface.py:1553
 msgid "Insecure connection"
 msgstr "Несигурна връзка"
 
-#: gajim/dialogs.py:1852
+#: gajim/dialogs.py:1849
 #, fuzzy, python-format
 msgid ""
 "You are about to connect to the account %(account)s (%(server)s) insecurely. "
@@ -1263,16 +1264,16 @@ msgstr ""
 "инсталирате PyOpenSSL, за да предотвратите това. Сигурни ли сте, че искате "
 "да го направите?"
 
-#: gajim/dialogs.py:1857 gajim/gui_interface.py:1515
+#: gajim/dialogs.py:1854 gajim/gui_interface.py:1515
 #: gajim/gui_interface.py:1556
 msgid "Yes, I really want to connect insecurely"
 msgstr "Да, наистина искам да се свържа по несигурен начин"
 
-#: gajim/dialogs.py:1858
+#: gajim/dialogs.py:1855
 msgid "Gajim will NOT connect unless you check this box"
 msgstr ""
 
-#: gajim/dialogs.py:1859 gajim/groupchat_control.py:2335
+#: gajim/dialogs.py:1856 gajim/groupchat_control.py:2336
 #: gajim/roster_window.py:2897 gajim/roster_window.py:3529
 #: gajim/roster_window.py:4282 gajim/message_window.py:247
 #: gajim/gui_interface.py:725 gajim/gui_interface.py:1516
@@ -1281,507 +1282,507 @@ msgstr ""
 msgid "_Do not ask me again"
 msgstr "Да _не се задава този въпрос отново"
 
-#: gajim/dialogs.py:1957
+#: gajim/dialogs.py:1954
 msgid "_Resume"
 msgstr ""
 
-#: gajim/dialogs.py:1965
+#: gajim/dialogs.py:1962
 msgid "Re_place"
 msgstr ""
 
-#: gajim/dialogs.py:2168 gajim/config.py:2169
+#: gajim/dialogs.py:2165 gajim/config.py:2175
 #: gajim/command_system/implementation/standard.py:261
 msgid "Invalid nickname"
 msgstr "Невалиден псевдоним"
 
-#: gajim/dialogs.py:2169
+#: gajim/dialogs.py:2166
 #, fuzzy
 msgid "The nickname contains invalid characters."
 msgstr "Псевдонимът съдържа непозволени знаци."
 
-#: gajim/dialogs.py:2291
+#: gajim/dialogs.py:2288
 msgid "Subscription Request"
 msgstr "Искане за записване"
 
-#: gajim/dialogs.py:2300
+#: gajim/dialogs.py:2297
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "Искане за записване за акаунт „%(account)s“ от %(jid)s"
 
-#: gajim/dialogs.py:2303
+#: gajim/dialogs.py:2300
 #, python-format
 msgid "Subscription request from %s"
 msgstr "Искане за записване от %s"
 
-#: gajim/dialogs.py:2375 gajim/data/gui/join_groupchat_window.ui:312
+#: gajim/dialogs.py:2372 gajim/data/gui/join_groupchat_window.ui:312
 #, fuzzy
 msgid "Join Groupchat"
 msgstr "Влизане в стая"
 
-#: gajim/dialogs.py:2531
+#: gajim/dialogs.py:2528
 #, fuzzy
 msgid "Invalid Room"
 msgstr "Невалиден формат"
 
-#: gajim/dialogs.py:2532
+#: gajim/dialogs.py:2529
 msgid "Please choose a room"
 msgstr ""
 
-#: gajim/dialogs.py:2544 gajim/dialogs.py:2551
+#: gajim/dialogs.py:2541 gajim/dialogs.py:2548
 msgid "Invalid Nickname"
 msgstr "Невалиден псевдоним"
 
-#: gajim/dialogs.py:2545
+#: gajim/dialogs.py:2542
 #, fuzzy
 msgid "Please choose a nickname"
 msgstr "Създайте нова тема с желаното име."
 
-#: gajim/dialogs.py:2557 gajim/dialogs.py:3516 gajim/config.py:2453
+#: gajim/dialogs.py:2554 gajim/dialogs.py:3513 gajim/config.py:2461
 #: gajim/dialog_messages.py:37 gajim/dialog_messages.py:42
 msgid "Invalid JID"
 msgstr "Невалиден JID"
 
-#: gajim/dialogs.py:2563 gajim/gui_interface.py:1850
+#: gajim/dialogs.py:2560 gajim/gui_interface.py:1850
 msgid "You can not join a group chat unless you are connected."
 msgstr "Трябва да сте свързани, за да влезете в стая."
 
-#: gajim/dialogs.py:2617 gajim/dialogs.py:2628
+#: gajim/dialogs.py:2614 gajim/dialogs.py:2625
 #, fuzzy
 msgid "Wrong server"
 msgstr "Грешен адрес"
 
-#: gajim/dialogs.py:2618 gajim/dialogs.py:2629
+#: gajim/dialogs.py:2615 gajim/dialogs.py:2626
 #, fuzzy, python-format
 msgid "%s is not a groupchat server"
 msgstr "Това не е стая"
 
-#: gajim/dialogs.py:2651
+#: gajim/dialogs.py:2648
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Трябва да сте свързани, за да синхронизирате контактите си."
 
-#: gajim/dialogs.py:2662 gajim/dialogs.py:2733 gajim/dialogs.py:3851
+#: gajim/dialogs.py:2659 gajim/dialogs.py:2730 gajim/dialogs.py:3848
 #: gajim/history_window.py:100 gajim/disco.py:865 gajim/disco.py:1693
 #: gajim/disco.py:1978
 msgid "Name"
 msgstr "Име"
 
-#: gajim/dialogs.py:2665 gajim/data/gui/join_groupchat_window.ui:214
+#: gajim/dialogs.py:2662 gajim/data/gui/join_groupchat_window.ui:214
 msgid "Server"
 msgstr "Сървър"
 
-#: gajim/dialogs.py:2701
+#: gajim/dialogs.py:2698
 msgid "This account is not connected to the server"
 msgstr "Този акаунт не е свързан към сървъра"
 
-#: gajim/dialogs.py:2702
+#: gajim/dialogs.py:2699
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Не може да се синхронизирате с акаунт, ако не е свързан."
 
-#: gajim/dialogs.py:2731
+#: gajim/dialogs.py:2728
 msgid "Synchronise"
 msgstr "Синхронизиране"
 
-#: gajim/dialogs.py:2794
+#: gajim/dialogs.py:2791
 #, fuzzy
 msgid "Start new Conversation"
 msgstr "Продължен разговор"
 
-#: gajim/dialogs.py:3052
+#: gajim/dialogs.py:3049
 #, fuzzy
 msgid "New Groupchat"
 msgstr "Нова стая"
 
-#: gajim/dialogs.py:3054
+#: gajim/dialogs.py:3051
 #, fuzzy
 msgid "New Contact"
 msgstr "Добавяне на нов контакт"
 
-#: gajim/dialogs.py:3106
+#: gajim/dialogs.py:3103
 msgid "Without a connection, you can not change your password."
 msgstr "Трябва да сте свързани, за да променяте паролата."
 
-#: gajim/dialogs.py:3126
+#: gajim/dialogs.py:3123
 msgid "Invalid password"
 msgstr "Невалидна парола"
 
-#: gajim/dialogs.py:3126
+#: gajim/dialogs.py:3123
 msgid "You must enter a password."
 msgstr "Трябва да въведете парола."
 
-#: gajim/dialogs.py:3130
+#: gajim/dialogs.py:3127
 msgid "Passwords do not match"
 msgstr "Паролите не съвпадат"
 
-#: gajim/dialogs.py:3131
+#: gajim/dialogs.py:3128
 msgid "The passwords typed in both fields must be identical."
 msgstr "Паролите, написани в двете полета, трябва да са едни и същи."
 
-#: gajim/dialogs.py:3169 gajim/notify.py:91
+#: gajim/dialogs.py:3166 gajim/notify.py:91
 #: gajim/common/connection_handlers_events.py:2821
 msgid "Contact Signed In"
 msgstr "Включи се контакт"
 
-#: gajim/dialogs.py:3171 gajim/notify.py:91
+#: gajim/dialogs.py:3168 gajim/notify.py:91
 #: gajim/common/connection_handlers_events.py:2827
 msgid "Contact Signed Out"
 msgstr "Изключи се контакт"
 
-#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/dialogs.py:3170 gajim/notify.py:92 gajim/notify.py:105
 #: gajim/common/connection_handlers_events.py:2641
 msgid "New Message"
 msgstr "Ново съобщение"
 
-#: gajim/dialogs.py:3173 gajim/notify.py:92 gajim/notify.py:105
+#: gajim/dialogs.py:3170 gajim/notify.py:92 gajim/notify.py:105
 #: gajim/common/connection_handlers_events.py:2623
 msgid "New Single Message"
 msgstr "Ново еднократно съобщение"
 
-#: gajim/dialogs.py:3174 gajim/notify.py:92 gajim/notify.py:106
+#: gajim/dialogs.py:3171 gajim/notify.py:92 gajim/notify.py:106
 #: gajim/common/connection_handlers_events.py:2629
 msgid "New Private Message"
 msgstr "Ново лично съобщение"
 
-#: gajim/dialogs.py:3174
+#: gajim/dialogs.py:3171
 msgid "New E-mail"
 msgstr "Нова е-поща"
 
-#: gajim/dialogs.py:3176 gajim/gui_interface.py:926 gajim/notify.py:93
+#: gajim/dialogs.py:3173 gajim/gui_interface.py:926 gajim/notify.py:93
 msgid "File Transfer Request"
 msgstr "Запитване за файлов трансфер"
 
-#: gajim/dialogs.py:3178 gajim/gui_interface.py:861 gajim/gui_interface.py:891
+#: gajim/dialogs.py:3175 gajim/gui_interface.py:861 gajim/gui_interface.py:891
 #: gajim/notify.py:94
 msgid "File Transfer Error"
 msgstr "Грешка при файловия трансфер"
 
-#: gajim/dialogs.py:3180 gajim/gui_interface.py:1030
+#: gajim/dialogs.py:3177 gajim/gui_interface.py:1030
 #: gajim/gui_interface.py:1059 gajim/gui_interface.py:1080 gajim/notify.py:94
 msgid "File Transfer Completed"
 msgstr "Файловият трансфер е приключен"
 
-#: gajim/dialogs.py:3181 gajim/gui_interface.py:1034
+#: gajim/dialogs.py:3178 gajim/gui_interface.py:1034
 #: gajim/gui_interface.py:1063 gajim/gui_interface.py:1084 gajim/notify.py:95
 msgid "File Transfer Stopped"
 msgstr "Файловият трансфер е преустановен"
 
-#: gajim/dialogs.py:3183 gajim/dialogs.py:4748 gajim/chat_control.py:1647
+#: gajim/dialogs.py:3180 gajim/dialogs.py:4745 gajim/chat_control.py:1650
 #: gajim/gui_interface.py:663 gajim/notify.py:95
 msgid "Groupchat Invitation"
 msgstr "Покана за разговор в стая"
 
-#: gajim/dialogs.py:3185 gajim/notify.py:93
+#: gajim/dialogs.py:3182 gajim/notify.py:93
 #: gajim/common/connection_handlers_events.py:2815
 msgid "Contact Changed Status"
 msgstr "Контактът промени състоянието си"
 
-#: gajim/dialogs.py:3404
+#: gajim/dialogs.py:3401
 #, python-format
 msgid "Single Message using account %s"
 msgstr "Еднократно съобщение с акаунт „%s“"
 
-#: gajim/dialogs.py:3406
+#: gajim/dialogs.py:3403
 #, python-format
 msgid "Single Message in account %s"
 msgstr "Еднократно съобщение за акаунт „%s“"
 
-#: gajim/dialogs.py:3408
+#: gajim/dialogs.py:3405
 msgid "Single Message"
 msgstr "Еднократно съобщение"
 
-#: gajim/dialogs.py:3411
+#: gajim/dialogs.py:3408
 #, python-format
 msgid "Send %s"
 msgstr "Изпращане на %s"
 
-#: gajim/dialogs.py:3434
+#: gajim/dialogs.py:3431
 #, python-format
 msgid "Received %s"
 msgstr "Получено %s"
 
-#: gajim/dialogs.py:3457
+#: gajim/dialogs.py:3454
 #, python-format
 msgid "Form %s"
 msgstr "От %s"
 
-#: gajim/dialogs.py:3485 gajim/dialogs.py:3672
+#: gajim/dialogs.py:3482 gajim/dialogs.py:3669
 msgid "Connection not available"
 msgstr "В момента няма връзка"
 
-#: gajim/dialogs.py:3486 gajim/dialogs.py:3673
+#: gajim/dialogs.py:3483 gajim/dialogs.py:3670
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Уверете се, че сте свързани към „%s“."
 
-#: gajim/dialogs.py:3517 gajim/dialog_messages.py:43
+#: gajim/dialogs.py:3514 gajim/dialog_messages.py:43
 #, fuzzy, python-format
 msgid "It is not possible to send a message to %s, this JID is not valid."
 msgstr "Не е възможно да бъдат изпращани празни файлове"
 
-#: gajim/dialogs.py:3540
+#: gajim/dialogs.py:3537
 #, python-format
 msgid "RE: %s"
 msgstr "Относно: %s"
 
-#: gajim/dialogs.py:3541
+#: gajim/dialogs.py:3538
 #, python-format
 msgid "%s wrote:\n"
 msgstr "%s написа:\n"
 
-#: gajim/dialogs.py:3589 gajim/data/gui/shortcuts_window.ui:113
+#: gajim/dialogs.py:3586 gajim/data/gui/shortcuts_window.ui:113
 #, fuzzy
 msgid "Clear"
 msgstr "Чистя"
 
-#: gajim/dialogs.py:3594
+#: gajim/dialogs.py:3591
 #, fuzzy
 msgid "Filter"
 msgstr "Филтър:"
 
-#: gajim/dialogs.py:3599
+#: gajim/dialogs.py:3596
 #, fuzzy
 msgid "XML Input"
 msgstr "<b>Вход в XML формат</b>"
 
-#: gajim/dialogs.py:3603
+#: gajim/dialogs.py:3600
 #, fuzzy
 msgid "Send"
 msgstr "_Изпращане"
 
-#: gajim/dialogs.py:3794
+#: gajim/dialogs.py:3791
 #, fuzzy
 msgid "add"
 msgstr "Тъжен"
 
-#: gajim/dialogs.py:3794
+#: gajim/dialogs.py:3791
 #, fuzzy
 msgid "modify"
 msgstr "Унил"
 
-#: gajim/dialogs.py:3795
+#: gajim/dialogs.py:3792
 #, fuzzy
 msgid "remove"
 msgstr "П_ремахване"
 
-#: gajim/dialogs.py:3824
+#: gajim/dialogs.py:3821
 #, fuzzy, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
 "roster."
 msgstr "Бих искал(а) да ви добавя към списъка си."
 
-#: gajim/dialogs.py:3840 gajim/dialogs.py:3886 gajim/accounts_window.py:44
+#: gajim/dialogs.py:3837 gajim/dialogs.py:3883 gajim/accounts_window.py:44
 msgid "Add"
 msgstr ""
 
-#: gajim/dialogs.py:3842 gajim/dialogs.py:3917
+#: gajim/dialogs.py:3839 gajim/dialogs.py:3914
 #, fuzzy
 msgid "Modify"
 msgstr "Унил"
 
-#: gajim/dialogs.py:3844 gajim/dialogs.py:3941
+#: gajim/dialogs.py:3841 gajim/dialogs.py:3938
 msgid "Delete"
 msgstr "Изтриване"
 
-#: gajim/dialogs.py:3854
+#: gajim/dialogs.py:3851
 #, fuzzy
 msgid "Groups"
 msgstr "Група"
 
-#: gajim/dialogs.py:3962
+#: gajim/dialogs.py:3959
 #, fuzzy, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr ""
 "Бих искал(а) да ви добавя към списъка си. I would like to add you to my "
 "roster."
 
-#: gajim/dialogs.py:3976
+#: gajim/dialogs.py:3973
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "Добавяне на _контакт"
 msgstr[1] "Добавяне на _контакт"
 
-#: gajim/dialogs.py:4014
+#: gajim/dialogs.py:4011
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "Премахване на контакт от списъка"
 msgstr[1] "Премахване на контакт от списъка"
 
-#: gajim/dialogs.py:4040
+#: gajim/dialogs.py:4037
 #, python-format
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#: gajim/dialogs.py:4078
+#: gajim/dialogs.py:4075
 msgid "Success!"
 msgstr ""
 
-#: gajim/dialogs.py:4078
+#: gajim/dialogs.py:4075
 #, fuzzy
 msgid "Your Archiving Preferences have been saved!"
 msgstr "_Настройки"
 
-#: gajim/dialogs.py:4094
+#: gajim/dialogs.py:4091
 msgid "We got no response from the Server"
 msgstr ""
 
-#: gajim/dialogs.py:4096
+#: gajim/dialogs.py:4093
 #, fuzzy
 msgid "We received an error: {}"
 msgstr "Услугата върна грешка."
 
-#: gajim/dialogs.py:4100
+#: gajim/dialogs.py:4097
 #, fuzzy
 msgid "Error!"
 msgstr "Грешка."
 
-#: gajim/dialogs.py:4159
+#: gajim/dialogs.py:4156
 #, fuzzy
 msgid "Add JID"
 msgstr "Jabber ID:"
 
-#: gajim/dialogs.py:4232
+#: gajim/dialogs.py:4229
 #, python-format
 msgid "Privacy List <b><i>%s</i></b>"
 msgstr "Филтър за уединение <b><i>%s</i></b>"
 
-#: gajim/dialogs.py:4236
+#: gajim/dialogs.py:4233
 #, python-format
 msgid "Privacy List for %s"
 msgstr "Филтър за уединение за %s"
 
-#: gajim/dialogs.py:4238 gajim/data/gui/privacy_list_window.ui:47
+#: gajim/dialogs.py:4235 gajim/data/gui/privacy_list_window.ui:47
 msgid "Privacy List"
 msgstr "Филтър за уединение"
 
-#: gajim/dialogs.py:4309
+#: gajim/dialogs.py:4306
 #, python-format
 msgid "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 msgstr ""
 "Ред: %(order)s, действие: %(action)s, вид: %(type)s, стойност: %(value)s"
 
-#: gajim/dialogs.py:4314
+#: gajim/dialogs.py:4311
 #, python-format
 msgid "Order: %(order)s, action: %(action)s"
 msgstr "Ред: %(order)s, действие: %(action)s"
 
-#: gajim/dialogs.py:4368
+#: gajim/dialogs.py:4365
 msgid "<b>Edit a rule</b>"
 msgstr "<b>Редактиране на правило</b>"
 
-#: gajim/dialogs.py:4480
+#: gajim/dialogs.py:4477
 msgid "<b>Add a rule</b>"
 msgstr "<b>Добавяне на правило</b>"
 
-#: gajim/dialogs.py:4581
+#: gajim/dialogs.py:4578
 #, python-format
 msgid "Privacy Lists for %s"
 msgstr "Филтри за уединение за %s"
 
-#: gajim/dialogs.py:4677
+#: gajim/dialogs.py:4674
 msgid "Invalid List Name"
 msgstr "Невалидно име на филтър"
 
-#: gajim/dialogs.py:4678
+#: gajim/dialogs.py:4675
 msgid "You must enter a name to create a privacy list."
 msgstr "Трябва да въведете име, за да се създаде филтър за уединение."
 
-#: gajim/dialogs.py:4714
+#: gajim/dialogs.py:4711
 msgid "You are invited to a groupchat"
 msgstr "Поканени сте в стая."
 
-#: gajim/dialogs.py:4717
+#: gajim/dialogs.py:4714
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact ви покани да се присъедините към дискусия"
 
-#: gajim/dialogs.py:4719
+#: gajim/dialogs.py:4716
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact ви покани в стая %(room_jid)s."
 
-#: gajim/dialogs.py:4728
+#: gajim/dialogs.py:4725
 #, python-format
 msgid "Comment: %s"
 msgstr "Коментар: %s"
 
-#: gajim/dialogs.py:4730
+#: gajim/dialogs.py:4727
 msgid "Do you want to accept the invitation?"
 msgstr "Искате ли да приемете поканата?"
 
-#: gajim/dialogs.py:4746
+#: gajim/dialogs.py:4743
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: gajim/dialogs.py:4795
+#: gajim/dialogs.py:4792
 msgid "Choose Client Cert #PCKS12"
 msgstr ""
 
-#: gajim/dialogs.py:4811 gajim/accounts_window.py:657
+#: gajim/dialogs.py:4808 gajim/accounts_window.py:657
 msgid "PKCS12 Files"
 msgstr ""
 
-#: gajim/dialogs.py:4837
+#: gajim/dialogs.py:4834
 msgid "Choose Sound"
 msgstr "Избор на звук"
 
-#: gajim/dialogs.py:4853
+#: gajim/dialogs.py:4850
 msgid "Wav Sounds"
 msgstr "Формат WAV"
 
-#: gajim/dialogs.py:4883
+#: gajim/dialogs.py:4880
 msgid "Choose Image"
 msgstr "Избор на изображение"
 
-#: gajim/dialogs.py:4901
+#: gajim/dialogs.py:4898
 msgid "Images"
 msgstr "Изображения"
 
-#: gajim/dialogs.py:4972
+#: gajim/dialogs.py:4969
 #, fuzzy
 msgid "Choose Archive"
 msgstr "Избор на изображение"
 
-#: gajim/dialogs.py:4991
+#: gajim/dialogs.py:4988
 #, fuzzy
 msgid "Zip files"
 msgstr "Всички файлове"
 
-#: gajim/dialogs.py:5017
+#: gajim/dialogs.py:5014
 #, python-format
 msgid "When %s becomes:"
 msgstr "Когато %s стане:"
 
-#: gajim/dialogs.py:5019
+#: gajim/dialogs.py:5016
 #, python-format
 msgid "Adding Special Notification for %s"
 msgstr "Добавяне на специално уведомление за %s"
 
-#: gajim/dialogs.py:5259
+#: gajim/dialogs.py:5256
 msgid "an audio and video"
 msgstr ""
 
-#: gajim/dialogs.py:5261
+#: gajim/dialogs.py:5258
 msgid "an audio"
 msgstr ""
 
-#: gajim/dialogs.py:5263
+#: gajim/dialogs.py:5260
 msgid "a video"
 msgstr ""
 
-#: gajim/dialogs.py:5267
+#: gajim/dialogs.py:5264
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
 "the call?"
 msgstr ""
 
-#: gajim/dialogs.py:5372 gajim/dialogs.py:5408
+#: gajim/dialogs.py:5369 gajim/dialogs.py:5405
 #, fuzzy, python-format
 msgid "Certificate for account %s"
 msgstr "за акаунт „%s“"
 
-#: gajim/dialogs.py:5372
+#: gajim/dialogs.py:5369
 #, python-format
 msgid ""
 "<b>Issued to:</b>\n"
@@ -1805,39 +1806,39 @@ msgid ""
 "SHA256 Fingerprint: %(sha256)s\n"
 msgstr ""
 
-#: gajim/dialogs.py:5419 gajim/gui_interface.py:1405
+#: gajim/dialogs.py:5416 gajim/gui_interface.py:1405
 #, fuzzy, python-format
 msgid "SSL Certificate Verification for %s"
 msgstr "Грешка в сертификата на SSL"
 
-#: gajim/dialogs.py:5420 gajim/dialogs.py:5437
+#: gajim/dialogs.py:5417 gajim/dialogs.py:5434
 msgid "View cert…"
 msgstr ""
 
-#: gajim/dialogs.py:5453 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:5450 gajim/data/gui/application_menu.ui:32
 #, fuzzy
 msgid "File Transfer"
 msgstr "Файлови трансфери"
 
-#: gajim/dialogs.py:5477
+#: gajim/dialogs.py:5474
 msgid "Requesting HTTP Upload Slot..."
 msgstr ""
 
-#: gajim/dialogs.py:5481
+#: gajim/dialogs.py:5478
 msgid "Uploading file via HTTP File Upload..."
 msgstr ""
 
-#: gajim/dialogs.py:5485
+#: gajim/dialogs.py:5482
 #, fuzzy
 msgid "Encrypting file..."
 msgstr "Шифрирането чрез E2E е изключено"
 
-#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1839
+#: gajim/groupchat_control.py:193 gajim/groupchat_control.py:1840
 #, python-format
 msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s вече е познат като %(new_nick)s"
 
-#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1988
+#: gajim/groupchat_control.py:219 gajim/groupchat_control.py:1989
 #: gajim/history_window.py:550 gajim/common/connection_handlers_events.py:2811
 #, python-format
 msgid "%(nick)s is now %(status)s"
@@ -1852,48 +1853,48 @@ msgstr "Неуспех при изпращането на лично съобщ�
 msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr "Вече не сте в стая „%(room)s“ или „%(nick)s“ е напуснал(а)."
 
-#: gajim/groupchat_control.py:640 gajim/chat_control.py:326
+#: gajim/groupchat_control.py:641 gajim/chat_control.py:326
 #: gajim/chat_control.py:330
 msgid "HTTP File Upload"
 msgstr ""
 
-#: gajim/groupchat_control.py:642
+#: gajim/groupchat_control.py:643
 #, fuzzy
 msgid "HTTP File Upload not supported by your server"
 msgstr "Сървърът ви няма поддръжка за мета-контакти"
 
-#: gajim/groupchat_control.py:662 gajim/groupchat_control.py:2370
+#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
 msgid "Changing Subject"
 msgstr "Промяна на темата"
 
-#: gajim/groupchat_control.py:663 gajim/groupchat_control.py:2371
+#: gajim/groupchat_control.py:664 gajim/groupchat_control.py:2372
 msgid "Please specify the new subject:"
 msgstr "Въведете новата тема:"
 
-#: gajim/groupchat_control.py:670
+#: gajim/groupchat_control.py:671
 msgid "Changing Nickname"
 msgstr "Промяна на псевдонима"
 
-#: gajim/groupchat_control.py:671
+#: gajim/groupchat_control.py:672
 msgid "Please specify the new nickname you want to use:"
 msgstr "Въведете новия псевдоним, който искате да използвате:"
 
-#: gajim/groupchat_control.py:688
+#: gajim/groupchat_control.py:689
 #, fuzzy
 msgid "Invalid group chat JID"
 msgstr "Невалиден Jabber ID на стая"
 
-#: gajim/groupchat_control.py:689
+#: gajim/groupchat_control.py:690
 #, fuzzy
 msgid "The group chat JID has not allowed characters."
 msgstr "Jabber ID на стаята съдържа непозволени знаци."
 
-#: gajim/groupchat_control.py:699
+#: gajim/groupchat_control.py:700
 #, python-format
 msgid "Destroying %s"
 msgstr "Унищожаване на %s"
 
-#: gajim/groupchat_control.py:700
+#: gajim/groupchat_control.py:701
 #, fuzzy
 msgid ""
 "You are going to remove this room permanently.\n"
@@ -1902,197 +1903,197 @@ msgstr ""
 "Определено сте на път да унищожите тази стая.\n"
 "Може да укажете причина по-долу:"
 
-#: gajim/groupchat_control.py:702
+#: gajim/groupchat_control.py:703
 msgid "You may also enter an alternate venue:"
 msgstr "Може да въведете и друго място за срещи:"
 
-#: gajim/groupchat_control.py:880
+#: gajim/groupchat_control.py:881
 msgid "Insert Nickname"
 msgstr "Въведете псевдоним"
 
-#: gajim/groupchat_control.py:1062 gajim/chat_control.py:803
+#: gajim/groupchat_control.py:1063 gajim/chat_control.py:803
 msgid "and authenticated"
 msgstr "и удостоверяването е успешно"
 
-#: gajim/groupchat_control.py:1066 gajim/chat_control.py:807
+#: gajim/groupchat_control.py:1067 gajim/chat_control.py:807
 msgid "and NOT authenticated"
 msgstr "и удостоверяването НЕ Е успешно"
 
-#: gajim/groupchat_control.py:1070 gajim/chat_control.py:811
+#: gajim/groupchat_control.py:1071 gajim/chat_control.py:811
 #, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "Шифрирането чрез %(type)s %(status)s включено %(authenticated)s.\n"
 "%(logged)s се запазва дневник за сесията."
 
-#: gajim/groupchat_control.py:1113
+#: gajim/groupchat_control.py:1114
 msgid "Conversation with "
 msgstr "Разговор с "
 
-#: gajim/groupchat_control.py:1115
+#: gajim/groupchat_control.py:1116
 msgid "Continued conversation"
 msgstr "Продължен разговор"
 
-#: gajim/groupchat_control.py:1473
+#: gajim/groupchat_control.py:1474
 #, fuzzy, python-format
 msgid "%(nick)s has set the subject to %(subject)s"
 msgstr "%(jid)s зададе темата на %(subject)s"
 
-#: gajim/groupchat_control.py:1496 gajim/groupchat_control.py:1781
+#: gajim/groupchat_control.py:1497 gajim/groupchat_control.py:1782
 msgid "Any occupant is allowed to see your full JID"
 msgstr "На всеки участник е позволено да вижда вашия JID"
 
-#: gajim/groupchat_control.py:1499
+#: gajim/groupchat_control.py:1500
 #, fuzzy
 msgid "Room now shows unavailable members"
 msgstr "Стаята показва отсъстващ член"
 
-#: gajim/groupchat_control.py:1501
+#: gajim/groupchat_control.py:1502
 #, fuzzy
 msgid "Room now does not show unavailable members"
 msgstr "Стаята не показва отсъстващи членове"
 
-#: gajim/groupchat_control.py:1503
+#: gajim/groupchat_control.py:1504
 msgid "A setting not related to privacy has been changed"
 msgstr ""
 
-#: gajim/groupchat_control.py:1507
+#: gajim/groupchat_control.py:1508
 msgid "Room logging is now enabled"
 msgstr "Воденето на дневник на стаята е включено"
 
-#: gajim/groupchat_control.py:1509
+#: gajim/groupchat_control.py:1510
 msgid "Room logging is now disabled"
 msgstr "Воденето на дневник на стаята е изключено"
 
-#: gajim/groupchat_control.py:1511
+#: gajim/groupchat_control.py:1512
 msgid "Room is now non-anonymous"
 msgstr "Стаята не е анонимна"
 
-#: gajim/groupchat_control.py:1514
+#: gajim/groupchat_control.py:1515
 msgid "Room is now semi-anonymous"
 msgstr "Стаята е полу-анонимна"
 
-#: gajim/groupchat_control.py:1517
+#: gajim/groupchat_control.py:1518
 #, fuzzy
 msgid "Room is now fully anonymous"
 msgstr "Стаята е напълно анонимна"
 
-#: gajim/groupchat_control.py:1557 gajim/chat_control.py:1268
+#: gajim/groupchat_control.py:1558 gajim/chat_control.py:1271
 #, python-format
 msgid "Pong! (%s s.)"
 msgstr "Понг! (%s сек)"
 
-#: gajim/groupchat_control.py:1774 gajim/groupchat_control.py:2398
+#: gajim/groupchat_control.py:1775 gajim/groupchat_control.py:2399
 #: gajim/roster_window.py:3129 gajim/gui_interface.py:621
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 
-#: gajim/groupchat_control.py:1786
+#: gajim/groupchat_control.py:1787
 msgid "Room logging is enabled"
 msgstr "Воденето на дневник на стаята е включено"
 
-#: gajim/groupchat_control.py:1788
+#: gajim/groupchat_control.py:1789
 msgid "A new room has been created"
 msgstr "Беше създадена нова стая"
 
-#: gajim/groupchat_control.py:1791
+#: gajim/groupchat_control.py:1792
 msgid "The server has assigned or modified your roomnick"
 msgstr "Сървърът назначи или промени псевдонима ви в стаята"
 
-#: gajim/groupchat_control.py:1797
+#: gajim/groupchat_control.py:1798
 #, python-format
 msgid "%(nick)s has been kicked: %(reason)s"
 msgstr "%(nick)s беше изритан: %(reason)s"
 
-#: gajim/groupchat_control.py:1800
+#: gajim/groupchat_control.py:1801
 #, python-format
 msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 msgstr "%(nick)s беше изритан от %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1809
+#: gajim/groupchat_control.py:1810
 #, python-format
 msgid "%(nick)s has been banned: %(reason)s"
 msgstr "%(nick)s беше отлъчен: %(reason)s"
 
-#: gajim/groupchat_control.py:1812
+#: gajim/groupchat_control.py:1813
 #, python-format
 msgid "%(nick)s has been banned by %(who)s: %(reason)s"
 msgstr "%(nick)s беше отлъчен от %(who)s: %(reason)s"
 
-#: gajim/groupchat_control.py:1823 gajim/groupchat_control.py:1907
+#: gajim/groupchat_control.py:1824 gajim/groupchat_control.py:1908
 #, python-format
 msgid "You are now known as %s"
 msgstr "Вече сте познати като %s"
 
-#: gajim/groupchat_control.py:1861 gajim/groupchat_control.py:1866
-#: gajim/groupchat_control.py:1872
+#: gajim/groupchat_control.py:1862 gajim/groupchat_control.py:1867
+#: gajim/groupchat_control.py:1873
 #, python-format
 msgid "%(nick)s has been removed from the room (%(reason)s)"
 msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 
-#: gajim/groupchat_control.py:1863
+#: gajim/groupchat_control.py:1864
 msgid "affiliation changed"
 msgstr "рангът е променен"
 
-#: gajim/groupchat_control.py:1868
+#: gajim/groupchat_control.py:1869
 msgid "room configuration changed to members-only"
 msgstr "Конфигурацията на стаята бе променена на „само за членове“"
 
-#: gajim/groupchat_control.py:1874
+#: gajim/groupchat_control.py:1875
 msgid "system shutdown"
 msgstr "Изключване на системата"
 
-#: gajim/groupchat_control.py:1928
+#: gajim/groupchat_control.py:1929
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s by %(actor)s"
 msgstr "** Рангът на %(nick)s бе зададен на %(affiliation)s от %(actor)s"
 
-#: gajim/groupchat_control.py:1932
+#: gajim/groupchat_control.py:1933
 #, python-format
 msgid "** Affiliation of %(nick)s has been set to %(affiliation)s"
 msgstr "** Рангът на %(nick)s бе зададен на %(affiliation)s"
 
-#: gajim/groupchat_control.py:1947
+#: gajim/groupchat_control.py:1948
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s by %(actor)s"
 msgstr "** Ролята на %(nick)s бе зададена на %(role)s от %(actor)s"
 
-#: gajim/groupchat_control.py:1951
+#: gajim/groupchat_control.py:1952
 #, python-format
 msgid "** Role of %(nick)s has been set to %(role)s"
 msgstr "** Ролята на %(nick)s бе зададена на %(role)s"
 
-#: gajim/groupchat_control.py:1981
+#: gajim/groupchat_control.py:1982
 #, python-format
 msgid "%s has left"
 msgstr "%s напусна"
 
-#: gajim/groupchat_control.py:1986
+#: gajim/groupchat_control.py:1987
 #, python-format
 msgid "%s has joined the group chat"
 msgstr "%s влезе в стаята"
 
-#: gajim/groupchat_control.py:2329
+#: gajim/groupchat_control.py:2330
 #, python-format
 msgid "Are you sure you want to leave group chat \"%s\"?"
 msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
 
-#: gajim/groupchat_control.py:2331
+#: gajim/groupchat_control.py:2332
 msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Ако затворите този прозорец, връзката със стаята ще бъде прекъсната."
 
-#: gajim/groupchat_control.py:2550
+#: gajim/groupchat_control.py:2551
 #, python-format
 msgid "Kicking %s"
 msgstr "Изритване на %s"
 
-#: gajim/groupchat_control.py:2551 gajim/groupchat_control.py:2847
+#: gajim/groupchat_control.py:2552 gajim/groupchat_control.py:2849
 msgid "You may specify a reason below:"
 msgstr "Може да уточните причина по-долу:"
 
-#: gajim/groupchat_control.py:2846
+#: gajim/groupchat_control.py:2848
 #, python-format
 msgid "Banning %s"
 msgstr "Отлъчване на %s"
@@ -2168,12 +2169,12 @@ msgstr ""
 msgid "E2E encryption disabled"
 msgstr "Шифрирането чрез E2E е изключено"
 
-#: gajim/chat_control.py:1235
+#: gajim/chat_control.py:1238
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Току-що получихте ново съобщение от „%s“"
 
-#: gajim/chat_control.py:1237
+#: gajim/chat_control.py:1240
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -2181,7 +2182,7 @@ msgstr ""
 "Ако затворите този прозорец и нямате включена опция за запазване на "
 "историята, съобщението ще бъде загубено."
 
-#: gajim/chat_control.py:1380
+#: gajim/chat_control.py:1383
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -2190,7 +2191,7 @@ msgstr ""
 "Тема: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1494 gajim/gui_interface.py:1197
+#: gajim/chat_control.py:1497 gajim/gui_interface.py:1197
 #, python-format
 msgid ""
 "Unable to decrypt message from %s\n"
@@ -2199,37 +2200,37 @@ msgstr ""
 "Неуспех при дешифрирането на съобщение от %s\n"
 "Възможно е да е било фалшифицирано."
 
-#: gajim/chat_control.py:1532
+#: gajim/chat_control.py:1535
 #, python-format
 msgid "%(name)s is now %(status)s"
 msgstr "%(name)s вече е %(status)s"
 
-#: gajim/chat_control.py:1591
+#: gajim/chat_control.py:1594
 #, fuzzy
 msgid "File transfer"
 msgstr "Файлови трансфери"
 
-#: gajim/chat_control.py:1594
+#: gajim/chat_control.py:1597
 #, fuzzy
 msgid "Size"
 msgstr "Размер: %s"
 
-#: gajim/chat_control.py:1596
+#: gajim/chat_control.py:1599
 #, fuzzy
 msgid "Accept"
 msgstr "_Акаунти"
 
-#: gajim/chat_control.py:1650 gajim/disco.py:1753
+#: gajim/chat_control.py:1653 gajim/disco.py:1753
 msgid "_Join"
 msgstr "_Влизане"
 
-#: gajim/chat_control.py:1669 gajim/roster_window.py:1991
+#: gajim/chat_control.py:1672 gajim/roster_window.py:1991
 #: gajim/gui_interface.py:1013
 #, fuzzy
 msgid "Remote contact stopped transfer"
 msgstr "Премахване на контакт от списъка"
 
-#: gajim/chat_control.py:1671 gajim/roster_window.py:1993
+#: gajim/chat_control.py:1674 gajim/roster_window.py:1993
 #: gajim/gui_interface.py:1016
 #, fuzzy
 msgid "Error opening file"
@@ -2954,39 +2955,39 @@ msgstr "Само влизащи и излизащи"
 msgid "?print_status:None"
 msgstr "Без"
 
-#: gajim/config.py:2010
+#: gajim/config.py:2011
 msgid "New Group Chat"
 msgstr "Нова стая"
 
-#: gajim/config.py:2046
+#: gajim/config.py:2047
 msgid "This bookmark has invalid data"
 msgstr "Тази отметка съдържа невалидни данни"
 
-#: gajim/config.py:2047
+#: gajim/config.py:2048
 msgid ""
 "Please be sure to fill out server and room fields or remove this bookmark."
 msgstr "Попълнете полетата за сървър и стая или изтрийте тази отметка."
 
-#: gajim/config.py:2170 gajim/config.py:2186 gajim/config.py:2197
-#: gajim/config.py:2225
+#: gajim/config.py:2176 gajim/config.py:2192 gajim/config.py:2203
+#: gajim/config.py:2231
 #, fuzzy
 msgid "Character not allowed"
 msgstr "Псевдонимът не е позволен: %s"
 
-#: gajim/config.py:2185 gajim/config.py:2196 gajim/config.py:2475
+#: gajim/config.py:2191 gajim/config.py:2202 gajim/config.py:2483
 msgid "Invalid server"
 msgstr "Невалиден сървър"
 
-#: gajim/config.py:2224
+#: gajim/config.py:2230
 #, fuzzy
 msgid "Invalid room"
 msgstr "Невалиден формат"
 
-#: gajim/config.py:2389
+#: gajim/config.py:2397
 msgid "Account has been added successfully"
 msgstr "Акаунтът беше добавен успешно"
 
-#: gajim/config.py:2390 gajim/config.py:2396
+#: gajim/config.py:2398 gajim/config.py:2404
 #, fuzzy
 msgid ""
 "You can set advanced account options by pressing the Advanced button, or "
@@ -2996,41 +2997,41 @@ msgstr ""
 "Може да настроите допълнителните опции, като натиснете бутона „Напреднали“ "
 "или по-късно от менюто „Редактиране“->„Акаунти“ в основния прозорец."
 
-#: gajim/config.py:2395
+#: gajim/config.py:2403
 msgid "Your new account has been created successfully"
 msgstr "Новият акаунт беше създаден успешно"
 
-#: gajim/config.py:2433
+#: gajim/config.py:2441
 msgid "Invalid username"
 msgstr "Невалидно потребителско име"
 
-#: gajim/config.py:2435
+#: gajim/config.py:2443
 msgid "You must provide a username to configure this account."
 msgstr "Трябва да въведете име на потребител за новия акаунт."
 
-#: gajim/config.py:2476
+#: gajim/config.py:2484
 msgid "Please provide a server on which you want to register."
 msgstr "Задайте сървър, където искате да се регистрирате."
 
-#: gajim/config.py:2499
+#: gajim/config.py:2507
 msgid "Invalid entry"
 msgstr "Невалиден формат"
 
-#: gajim/config.py:2500
+#: gajim/config.py:2508
 msgid "Custom port must be a port number."
 msgstr "Портът по избор трябва все пак да е номер на порт."
 
-#: gajim/config.py:2532 gajim/gui_interface.py:1360
+#: gajim/config.py:2540 gajim/gui_interface.py:1360
 msgid "Certificate Already in File"
 msgstr "Сертификатът вече е във файла"
 
-#: gajim/config.py:2533 gajim/gui_interface.py:1361
+#: gajim/config.py:2541 gajim/gui_interface.py:1361
 #, python-format
 msgid "This certificate is already in file %s, so it's not added again."
 msgstr ""
 "Този сертификат вече е във файла „%s“, така че няма да бъде добавен наново."
 
-#: gajim/config.py:2626
+#: gajim/config.py:2634
 #, python-format
 msgid ""
 "<b>Security Warning</b>\n"
@@ -3045,7 +3046,7 @@ msgstr ""
 "Грешка на SSL: %(error)s\n"
 "Все още ли искате да се свържете с този сървър?"
 
-#: gajim/config.py:2632
+#: gajim/config.py:2640
 #, fuzzy, python-format
 msgid ""
 "Add this certificate to the list of trusted certificates.\n"
@@ -3058,74 +3059,74 @@ msgstr ""
 "Отпечатък тип SHA1 на сертификата:\n"
 "%s"
 
-#: gajim/config.py:2666 gajim/config.py:2700
+#: gajim/config.py:2674 gajim/config.py:2708
 msgid "An error occurred during account creation"
 msgstr "Възникна грешка при създаването на акаунта"
 
-#: gajim/config.py:2763
+#: gajim/config.py:2771
 msgid "Account name is in use"
 msgstr "Името на акаунта се използва"
 
-#: gajim/config.py:2764
+#: gajim/config.py:2772
 msgid "You already have an account using this name."
 msgstr "Вече има регистриран акаунт с това име."
 
-#: gajim/config.py:2896
+#: gajim/config.py:2904
 msgid "PEP node was not removed"
 msgstr "Възелът на PEP не беше премахнат"
 
-#: gajim/config.py:2897
+#: gajim/config.py:2905
 #, python-format
 msgid "PEP node %(node)s was not removed: %(message)s"
 msgstr "Възелът на PEP %(node)s не беше премахнат: %(message)s"
 
-#: gajim/config.py:2925
+#: gajim/config.py:2933
 #, fuzzy, python-format
 msgid "Configure %s"
 msgstr "_Настройване"
 
-#: gajim/config.py:2942 gajim/plugins/gui.py:95
+#: gajim/config.py:2950 gajim/plugins/gui.py:95
 msgid "Active"
 msgstr "Активен"
 
-#: gajim/config.py:2950
+#: gajim/config.py:2958
 msgid "Event"
 msgstr "Събитие"
 
-#: gajim/config.py:2984
+#: gajim/config.py:2992
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Първо получено съобщение"
 
-#: gajim/config.py:2985
+#: gajim/config.py:2993
 msgid "First Message Received"
 msgstr "Първо получено съобщение"
 
-#: gajim/config.py:2986
+#: gajim/config.py:2994
 msgid "Next Message Received Focused"
 msgstr "Следващо получено съобщение в прозорец на фокус"
 
-#: gajim/config.py:2988
+#: gajim/config.py:2996
 msgid "Next Message Received Unfocused"
 msgstr "Следващо получено съобщение в прозорец без фокус"
 
-#: gajim/config.py:2989
+#: gajim/config.py:2997
 msgid "Contact Connected"
 msgstr "Включване на контакт"
 
-#: gajim/config.py:2990
+#: gajim/config.py:2998
 msgid "Contact Disconnected"
 msgstr "Изключване на контакт"
 
-#: gajim/config.py:2991
+#: gajim/config.py:2999
 msgid "Message Sent"
 msgstr "Изпратено съобщение"
 
-#: gajim/config.py:2992
+#: gajim/config.py:3000
 msgid "Group Chat Message Highlight"
 msgstr "Осветено съобщение в стая"
 
-#: gajim/config.py:2993
+#: gajim/config.py:3001
 msgid "Group Chat Message Received"
 msgstr "Получено съобщение в стая"
 
@@ -6782,58 +6783,59 @@ msgstr "На тази машина няма инсталиран D-Bus или л
 msgid "D-Bus does not run correctly on this machine: session bus not present"
 msgstr "На тази машина няма инсталиран D-Bus или липсва модула за Питон"
 
-#: gajim/common/multimedia_helpers.py:45
+#: gajim/common/multimedia_helpers.py:46
 #, fuzzy
 msgid "Default device"
 msgstr "Стандартно съобщение"
 
-#: gajim/common/multimedia_helpers.py:66
+#: gajim/common/multimedia_helpers.py:67
 msgid "Audio test"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:69 gajim/common/multimedia_helpers.py:85
-#: gajim/common/multimedia_helpers.py:99 gajim/common/multimedia_helpers.py:117
+#: gajim/common/multimedia_helpers.py:70 gajim/common/multimedia_helpers.py:86
+#: gajim/common/multimedia_helpers.py:100
+#: gajim/common/multimedia_helpers.py:118
 msgid "Autodetect"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:72 gajim/common/multimedia_helpers.py:87
+#: gajim/common/multimedia_helpers.py:73 gajim/common/multimedia_helpers.py:88
 #, fuzzy, python-format
 msgid "ALSA: %s"
 msgstr "Размер: %s"
 
-#: gajim/common/multimedia_helpers.py:75 gajim/common/multimedia_helpers.py:89
+#: gajim/common/multimedia_helpers.py:76 gajim/common/multimedia_helpers.py:90
 #, fuzzy, python-format
 msgid "Pulse: %s"
 msgstr "Файл: %s"
 
-#: gajim/common/multimedia_helpers.py:83
+#: gajim/common/multimedia_helpers.py:84
 msgid "Fake audio output"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:96
+#: gajim/common/multimedia_helpers.py:97
 msgid "Video test"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:101
+#: gajim/common/multimedia_helpers.py:102
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:104
+#: gajim/common/multimedia_helpers.py:105
 #, fuzzy
 msgid "Screen"
 msgstr "зелена"
 
-#: gajim/common/multimedia_helpers.py:111
+#: gajim/common/multimedia_helpers.py:112
 msgid "Fake video output"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:114
+#: gajim/common/multimedia_helpers.py:115
 #, python-format
 msgid "X Window System (X11/XShm/Xv): %s"
 msgstr ""
 
-#: gajim/common/multimedia_helpers.py:116
+#: gajim/common/multimedia_helpers.py:117
 msgid "X Window System (without Xv)"
 msgstr ""
 
@@ -10809,22 +10811,22 @@ msgstr ""
 msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
-#: gajim/plugins/pluginmanager.py:611 gajim/plugins/pluginmanager.py:617
+#: gajim/plugins/pluginmanager.py:627 gajim/plugins/pluginmanager.py:633
 msgid "Archive corrupted"
 msgstr ""
 
-#: gajim/plugins/pluginmanager.py:613
+#: gajim/plugins/pluginmanager.py:629
 #, fuzzy
 msgid "Archive empty"
 msgstr "Файлът не съдържа нищо"
 
-#: gajim/plugins/pluginmanager.py:625 gajim/plugins/pluginmanager.py:633
+#: gajim/plugins/pluginmanager.py:641 gajim/plugins/pluginmanager.py:649
 #: gajim/plugins/gui.py:264
 #, fuzzy
 msgid "Archive is malformed"
 msgstr "Услугата изпрати лошо форматирани данни"
 
-#: gajim/plugins/pluginmanager.py:641 gajim/plugins/gui.py:288
+#: gajim/plugins/pluginmanager.py:657 gajim/plugins/gui.py:288
 #: gajim/plugins/gui.py:296
 #, fuzzy
 msgid "Plugin already exists"
