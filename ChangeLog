@@ -1,3 +1,32 @@
+Gajim 1.0.2 (30 April 2018)
+
+  Bugs fixed:
+
+  * 7879 Server name is rejected for group chat bookmarks
+  * 8964 setup.py install misses some files if used with "--skip-build"
+  * 9017 Password was sometimes stored in plaintext
+  * 9022 Dont show error when receiving invalid avatars
+  * 9031 Windows: Always hide roster window on X
+  * 9038 No License in About dialog
+  * 9039 Encode filenames before sending
+  * 9044 Catch invalid IQ stanzas and log them
+  * 9049 XMPP logo in "Add New Contact" window instead Gajim logo
+  * 9050 Mark some strings as translatable
+  * 9054 Error on file send completion
+  * 9055 Removing a bookmark causes error
+  * 9057 Avatar is deleted when updating vCard
+  * 9065 Account label isn't change in tooltip of notification area icon
+  * 9066 Placeholder text does't disappear
+  * 9068 Missing pulseaudio in Flatpak image
+  * 9070 Fix History Manager search
+  * 9074 Proxy comobobox in accounts/connections doesn't get update after ManageProxies
+  * 9094 problem receiving file
+  * 9101 Notification never autohides in gnome
+
+  * Correctly reload Plugins
+  * Save history export with utf8 encoding
+  * Dont allow plain BOSH by default
+
 Gajim 1.0.1 (1 April 2018)
 
   * Improve MAM support
