@@ -409,6 +409,7 @@ class Config:
                     'recent_groupchats': [ opt_str, '' ],
                     'httpupload_verify': [ opt_bool, True, _('HTTP Upload: Enable HTTPS Verification')],
                     'filetransfer_preference' : [ opt_str, 'httpupload', _('Preferred file transfer mechanism for file drag&drop on chat window. Can be \'httpupload\' (default) or \'jingle\'')],
+                    'allow_posh': [ opt_bool, True, _('Allow cert verification with POSH')],
             }, {}),
             'statusmsg': ({
                     'message': [ opt_str, '' ],

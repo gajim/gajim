@@ -98,7 +98,7 @@ from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
 from gajim import emoticons
-from gajim.common.const import AvatarSize
+from gajim.common.const import AvatarSize, SSLError
 
 from gajim import roster_window
 from gajim import profile_window
@@ -1343,7 +1343,6 @@ class Interface:
             obj.exchange_items_list, obj.fjid)
 
     def handle_event_ssl_error(self, obj):
-        # ('SSL_ERROR', account, (text, errnum, cert, sha1_fingerprint, sha256_fingerprint))
         account = obj.conn.name
         server = app.config.get_per('accounts', account, 'hostname')
 
@@ -1379,22 +1378,32 @@ class Interface:
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
+        text = _('The authenticity of the %s '
+                 'certificate could be invalid') % server
+
+        default_text = _('\nUnknown SSL error: %d') % obj.error_num
+        ssl_error_text = SSLError.get(obj.error_num, default_text)
+        text += _('\nSSL Error: <b>%s</b>') % ssl_error_text
+
+        fingerprint_sha1 = obj.cert.digest('sha1').decode('utf-8')
+        fingerprint_sha256 = obj.cert.digest('sha256').decode('utf-8')
+
         pritext = _('Error verifying SSL certificate')
         sectext = _('There was an error verifying the SSL certificate of your '
             'XMPP server: %(error)s\nDo you still want to connect to this '
-            'server?') % {'error': obj.error_text}
+            'server?') % {'error': text}
         if obj.error_num in (18, 27):
             checktext1 = _('Add this certificate to the list of trusted '
             'certificates.\nSHA-1 fingerprint of the certificate:\n%(sha1)s'
             '\nSHA-256 fingerprint of the certificate:\n%(sha256)s') % \
-            {'sha1': obj.fingerprint_sha1, 'sha256': obj.fingerprint_sha256}
+            {'sha1': fingerprint_sha1, 'sha256': fingerprint_sha256}
         else:
             checktext1 = ''
         checktext2 = _('Ignore this error for this certificate.')
         if 'ssl_error' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['ssl_error'].destroy()
         self.instances[account]['online_dialog']['ssl_error'] = \
-            dialogs.SSLErrorDialog(obj.conn.name, obj.certificate, pritext,
+            dialogs.SSLErrorDialog(obj.conn.name, obj.cert, pritext,
             sectext, checktext1, checktext2, on_response_ok=on_ok,
             on_response_cancel=on_cancel)
         self.instances[account]['online_dialog']['ssl_error'].set_title(

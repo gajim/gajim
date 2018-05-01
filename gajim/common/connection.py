@@ -43,8 +43,11 @@ import hmac
 import hashlib
 import json
 import logging
+import base64
 from functools import partial
 from string import Template
+from urllib.request import urlopen
+from urllib.error import URLError
 
 try:
     randomsource = random.SystemRandom()
@@ -74,42 +77,6 @@ from gajim.gtkgui_helpers import get_action
 
 
 log = logging.getLogger('gajim.c.connection')
-
-ssl_error = {
-    2: _("Unable to get issuer certificate"),
-    3: _("Unable to get certificate CRL"),
-    4: _("Unable to decrypt certificate's signature"),
-    5: _("Unable to decrypt CRL's signature"),
-    6: _("Unable to decode issuer public key"),
-    7: _("Certificate signature failure"),
-    8: _("CRL signature failure"),
-    9: _("Certificate is not yet valid"),
-    10: _("Certificate has expired"),
-    11: _("CRL is not yet valid"),
-    12: _("CRL has expired"),
-    13: _("Format error in certificate's notBefore field"),
-    14: _("Format error in certificate's notAfter field"),
-    15: _("Format error in CRL's lastUpdate field"),
-    16: _("Format error in CRL's nextUpdate field"),
-    17: _("Out of memory"),
-    18: _("Self signed certificate"),
-    19: _("Self signed certificate in certificate chain"),
-    20: _("Unable to get local issuer certificate"),
-    21: _("Unable to verify the first certificate"),
-    22: _("Certificate chain too long"),
-    23: _("Certificate revoked"),
-    24: _("Invalid CA certificate"),
-    25: _("Path length constraint exceeded"),
-    26: _("Unsupported certificate purpose"),
-    27: _("Certificate not trusted"),
-    28: _("Certificate rejected"),
-    29: _("Subject issuer mismatch"),
-    30: _("Authority and subject key identifier mismatch"),
-    31: _("Authority and issuer serial number mismatch"),
-    32: _("Key usage does not include certificate signing"),
-    50: _("Application verification failure")
-    #100 is for internal usage: host not correct
-}
 
 SERVICE_START_TLS = 'xmpp-client'
 SERVICE_DIRECT_TLS = 'xmpps-client'
@@ -692,6 +659,13 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:].encode('utf-8')
         self.removing_account = False
+
+        # We only request POSH once
+        self._posh_requested = False
+        # Fingerprints received via POSH
+        self._posh_hashes = []
+        # The SSL Errors that we can override with POSH
+        self._posh_errors = [18, 19]
 
         self.sm = Smacks(self) # Stream Management
 
@@ -1374,25 +1348,85 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         cert = self.connection.Connection.ssl_certificate
         errnum = self._ssl_errors.pop()
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
-        text = _('The authenticity of the %s '
-                 'certificate could be invalid') % hostname
-        if errnum in ssl_error:
-            text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
-        else:
-            text += _('\nUnknown SSL error: %d') % errnum
-        fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
-        fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
-        pem = OpenSSL.crypto.dump_certificate(
-            OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
-        app.nec.push_incoming_event(
-            SSLErrorEvent(None, conn=self,
-                          error_text=text,
-                          error_num=errnum,
-                          cert=pem,
-                          fingerprint_sha1=fingerprint_sha1,
-                          fingerprint_sha256=fingerprint_sha256,
-                          certificate=cert))
+
+        # Check if we can verify the cert with POSH
+        if errnum in self._posh_errors:
+            # Request the POSH json file
+            self._get_posh_file(self._hostname)
+            self._posh_requested = True
+            cert_hash256 = self._calculate_cert_sha256(cert)
+            print(cert_hash256)
+            if cert_hash256 in self._posh_hashes:
+                # Ignore this error if this cert is
+                # verifyed with POSH
+                self.process_ssl_errors()
+                return
+
+        app.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
+                                                  error_num=errnum,
+                                                  cert=cert))
+
+    @staticmethod
+    def _calculate_cert_sha256(cert):
+        der_encoded = OpenSSL.crypto.dump_certificate(
+            OpenSSL.crypto.FILETYPE_ASN1, cert)
+        hash_obj = hashlib.sha256(der_encoded)
+        hash256 = base64.b64encode(hash_obj.digest()).decode('utf8')
+        return hash256
+
+    def _get_posh_file(self, hostname=None, redirect=None):
+        if self._posh_requested:
+            # We already have requested POSH
+            return
+
+        if not app.config.get_per('accounts', self.name, 'allow_posh'):
+            return
+
+        if hostname is None and redirect is None:
+            raise ValueError('There must be either a hostname or a url')
+
+        url = redirect
+        if hostname is not None:
+            url = 'https://%s/.well-known/posh/xmpp-client.json' % hostname
+
+        cafile = None
+        if os.name == 'nt':
+            cafile = certifi.where()
+
+        log.info('Request POSH from %s', url)
+        try:
+            file = urlopen(
+                url, cafile=cafile, timeout=2)
+        except URLError as exc:
+            log.info('Error while requesting POSH: %s' % exc)
+            return
+
+        if file.getcode() != 200:
+            log.info('No POSH file found at %s', url)
+            return
+
+        try:
+            posh = json.loads(file.read())
+        except json.decoder.JSONDecodeError as json_error:
+            log.warning(json_error)
+            return
+
+        # Redirect
+        if 'url' in posh and redirect is None:
+            # We dont allow redirects in redirects
+            log.info('POSH redirect found')
+            self._get_posh_file(redirect=posh['url'])
+            return
+
+        if 'fingerprints' in posh:
+            fingerprints = posh['fingerprints']
+            for fingerprint in fingerprints:
+                if 'sha-256' not in fingerprint:
+                    continue
+                self._posh_hashes.append(fingerprint['sha-256'])
+
+        log.info('POSH sha-256 fingerprints found: %s',
+                 self._posh_hashes)
 
     def ssl_certificate_accepted(self):
         if not self.connection:

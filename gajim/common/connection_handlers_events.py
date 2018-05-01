@@ -42,7 +42,7 @@ from gajim.common import i18n
 from gajim.common import dataforms
 from gajim.common import configpaths
 from gajim.common.zeroconf.zeroconf import Constant
-from gajim.common.const import KindConstant
+from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
@@ -1985,8 +1985,7 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
             self.errnum = 0 # we don't have an errnum
         self.ssl_msg = ''
         if self.errnum > 0:
-            from gajim.common.connection import ssl_error
-            self.ssl_msg = ssl_error.get(self.errnum,
+            self.ssl_msg = SSLError.get(self.errnum,
                 _('Unknown SSL error: %d') % self.errnum)
         self.ssl_cert = ''
         self.ssl_fingerprint_sha1 = ''
