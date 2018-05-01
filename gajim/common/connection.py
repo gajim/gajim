@@ -1355,82 +1355,64 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.debug('Connected to server %s:%s with %s' % (
                 self._current_host['host'], self._current_host['port'], con_type))
 
-        if app.config.get_per('accounts', self.name, 'anonymous_auth'):
-            name = None
-        else:
-            name = app.config.get_per('accounts', self.name, 'name')
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
         self.connection = con
-        try:
-            errnum = con.Connection.ssl_errnum
-        except AttributeError:
-            errnum = 0
-        cert = con.Connection.ssl_certificate
-        if errnum > 0 and str(errnum) not in app.config.get_per('accounts',
-        self.name, 'ignore_ssl_errors').split():
-            text = _('The authenticity of the %s certificate could be invalid'
-                ) % hostname
-            if errnum in ssl_error:
-                text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
-            else:
-                text += _('\nUnknown SSL error: %d') % errnum
-            fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
-            fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
-            pem = OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM,
-                cert).decode('utf-8')
-            app.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
-                error_text=text, error_num=errnum, cert=pem,
-                fingerprint_sha1=fingerprint_sha1,
-                fingerprint_sha256=fingerprint_sha256, certificate=cert))
-            return True
-        if cert:
-            fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
-            fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
-            saved_fingerprint_sha1 = app.config.get_per('accounts', self.name,
-                'ssl_fingerprint_sha1')
-            if saved_fingerprint_sha1:
-                # Check sha1 fingerprint
-                if fingerprint_sha1 != saved_fingerprint_sha1:
-                    if not check_X509.check_certificate(cert, hostname):
-                        app.nec.push_incoming_event(FingerprintErrorEvent(
-                            None, conn=self, certificate=cert,
-                            new_fingerprint_sha1=fingerprint_sha1,
-                            new_fingerprint_sha256=fingerprint_sha256))
-                        return True
-            app.config.set_per('accounts', self.name, 'ssl_fingerprint_sha1',
-                fingerprint_sha1)
 
-            saved_fingerprint_sha256 = app.config.get_per('accounts', self.name,
-                'ssl_fingerprint_sha256')
-            if saved_fingerprint_sha256:
-                # Check sha256 fingerprint
-                if fingerprint_sha256 != saved_fingerprint_sha256:
-                    if not check_X509.check_certificate(cert, hostname):
-                        app.nec.push_incoming_event(FingerprintErrorEvent(
-                            None, conn=self, certificate=cert,
-                            new_fingerprint_sha1=fingerprint_sha1,
-                            new_fingerprint_sha256=fingerprint_sha256))
-                        return True
-            app.config.set_per('accounts', self.name,
-                'ssl_fingerprint_sha256', fingerprint_sha256)
+        ssl_errors = con.Connection.ssl_errors
+        ignored_ssl_errors = self._get_ignored_ssl_errors()
+        self._ssl_errors = set(ssl_errors) - set(ignored_ssl_errors)
+        self.process_ssl_errors()
 
-            if not check_X509.check_certificate(cert, hostname) and \
-            '100' not in app.config.get_per('accounts', self.name,
-            'ignore_ssl_errors').split():
-                pem = OpenSSL.crypto.dump_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
-                txt = _('The authenticity of the %s certificate could be '
-                    'invalid.\nThe certificate does not cover this domain.') %\
-                    hostname
-                app.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
-                    error_text=txt, error_num=100, cert=pem,
-                    fingerprint_sha1=fingerprint_sha1,
-                    fingerprint_sha256=fingerprint_sha256, certificate=cert))
-                return True
+    def _get_ignored_ssl_errors(self):
+        ignore_ssl_errors = app.config.get_per(
+            'accounts', self.name, 'ignore_ssl_errors').split()
+        return [int(err) for err in ignore_ssl_errors]
 
-        self._register_handlers(con, con_type)
-        auth_mechs = app.config.get_per('accounts', self.name, 'authentication_mechanisms')
-        auth_mechs = auth_mechs.split()
+    def process_ssl_errors(self):
+        if not self._ssl_errors:
+            self.ssl_certificate_accepted()
+            return
+
+        cert = self.connection.Connection.ssl_certificate
+        errnum = self._ssl_errors.pop()
+        hostname = app.config.get_per('accounts', self.name, 'hostname')
+        text = _('The authenticity of the %s '
+                 'certificate could be invalid') % hostname
+        if errnum in ssl_error:
+            text += _('\nSSL Error: <b>%s</b>') % ssl_error[errnum]
+        else:
+            text += _('\nUnknown SSL error: %d') % errnum
+        fingerprint_sha1 = cert.digest('sha1').decode('utf-8')
+        fingerprint_sha256 = cert.digest('sha256').decode('utf-8')
+        pem = OpenSSL.crypto.dump_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, cert).decode('utf-8')
+        app.nec.push_incoming_event(
+            SSLErrorEvent(None, conn=self,
+                          error_text=text,
+                          error_num=errnum,
+                          cert=pem,
+                          fingerprint_sha1=fingerprint_sha1,
+                          fingerprint_sha256=fingerprint_sha256,
+                          certificate=cert))
+
+    def ssl_certificate_accepted(self):
+        if not self.connection:
+            self.disconnect(on_purpose=True)
+            app.nec.push_incoming_event(
+                ConnectionLostEvent(
+                    None, conn=self,
+                    title=_('Could not connect to account %s') % self.name,
+                    msg=_('Connection with account %s has been lost. '
+                          'Retry connecting.') % self.name))
+            return
+
+        name = None
+        if not app.config.get_per('accounts', self.name, 'anonymous_auth'):
+            name = app.config.get_per('accounts', self.name, 'name')
+
+        self._register_handlers(self.connection, self._current_type)
+
+        auth_mechs = app.config.get_per(
+            'accounts', self.name, 'authentication_mechanisms').split()
         for mech in auth_mechs:
             if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS | set(['XEP-0078']):
                 log.warning("Unknown authentication mechanisms %s" % mech)
@@ -1438,24 +1420,12 @@ class Connection(CommonConnection, ConnectionHandlers):
             auth_mechs = None
         else:
             auth_mechs = set(auth_mechs)
-        con.auth(user=name, password=self.password,
-            resource=self.server_resource, sasl=True, on_auth=self.__on_auth, auth_mechs=auth_mechs)
-
-    def ssl_certificate_accepted(self):
-        if not self.connection:
-            self.disconnect(on_purpose=True)
-            app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
-                title=_('Could not connect to account %s') % self.name,
-                msg=_('Connection with account %s has been lost. Retry '
-                'connecting.') % self.name))
-            return
-        if app.config.get_per('accounts', self.name, 'anonymous_auth'):
-            name = None
-        else:
-            name = app.config.get_per('accounts', self.name, 'name')
-        self._register_handlers(self.connection, 'ssl')
-        self.connection.auth(name, self.password, self.server_resource, 1,
-                self.__on_auth)
+        self.connection.auth(user=name,
+                             password=self.password,
+                             resource=self.server_resource,
+                             sasl=True,
+                             on_auth=self.__on_auth,
+                             auth_mechs=auth_mechs)
 
     def _register_handlers(self, con, con_type):
         self.peerhost = con.get_peerhost()

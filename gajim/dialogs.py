@@ -5404,25 +5404,6 @@ SHA-256 Fingerprint: %(sha256)s
         self.set_transient_for(parent)
         self.set_title(_('Certificate for account %s') % account)
 
-
-class CheckFingerprintDialog(YesNoDialog):
-    def __init__(self, pritext='', sectext='', checktext='',
-    on_response_yes=None, on_response_no=None, account=None, certificate=None):
-        self.account = account
-        self.cert = certificate
-        YesNoDialog.__init__(self, pritext, sectext=sectext,
-            checktext=checktext, on_response_yes=on_response_yes,
-            on_response_no=on_response_no)
-        self.set_title(_('SSL Certificate Verification for %s') % account)
-        b = Gtk.Button(label=_('View cert…'))
-        b.connect('clicked', self.on_cert_clicked)
-        b.show_all()
-        area = self.get_action_area()
-        area.pack_start(b, True, True, 0)
-
-    def on_cert_clicked(self, button):
-        CertificatDialog(self, self.account, self.cert)
-
 class SSLErrorDialog(ConfirmationDialogDoubleCheck):
     def __init__(self, account, certificate, pritext, sectext, checktext1,
     checktext2, on_response_ok=None, on_response_cancel=None):

@@ -1354,29 +1354,24 @@ class Interface:
                 certs = ''
                 my_ca_certs = configpaths.get('MY_CACERTS')
                 if os.path.isfile(my_ca_certs):
-                    f = open(my_ca_certs)
-                    certs = f.read()
-                    f.close()
+                    with open(my_ca_certs, encoding='utf-8') as f:
+                        certs = f.read()
                 if obj.cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % my_ca_certs)
                 else:
-                    f = open(my_ca_certs, 'a')
-                    f.write(server + '\n')
-                    f.write(obj.cert + '\n\n')
-                    f.close()
-            app.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-                obj.fingerprint_sha1)
-            app.config.set_per('accounts', account, 'ssl_fingerprint_sha256',
-                obj.fingerprint_sha256)
+                    with open(my_ca_certs, 'a', encoding='utf-8') as f:
+                        f.write(server + '\n')
+                        f.write(obj.cert + '\n\n')
+
             if is_checked[1]:
                 ignore_ssl_errors = app.config.get_per('accounts', account,
                     'ignore_ssl_errors').split()
                 ignore_ssl_errors.append(str(obj.error_num))
                 app.config.set_per('accounts', account, 'ignore_ssl_errors',
                     ' '.join(ignore_ssl_errors))
-            obj.conn.ssl_certificate_accepted()
+            obj.conn.process_ssl_errors()
 
         def on_cancel():
             del self.instances[account]['online_dialog']['ssl_error']
@@ -1411,46 +1406,6 @@ class Interface:
         dialogs.ErrorDialog(_('Non Anonymous Server'), sectext='Server "%s"'
             'does not support anonymous connection' % server,
             transient_for=self.roster.window)
-
-    def handle_event_fingerprint_error(self, obj):
-        # ('FINGERPRINT_ERROR', account, (new_fingerprint_sha1,new_fingerprint_sha256,))
-        account = obj.conn.name
-        def on_yes(is_checked):
-            del self.instances[account]['online_dialog']['fingerprint_error']
-            app.config.set_per('accounts', account, 'ssl_fingerprint_sha1',
-                obj.new_fingerprint_sha1)
-            app.config.set_per('accounts', account, 'ssl_fingerprint_sha256',
-                obj.new_fingerprint_sha256)
-            # Reset the ignored ssl errors
-            app.config.set_per('accounts', account, 'ignore_ssl_errors', '')
-            obj.conn.ssl_certificate_accepted()
-
-        def on_no():
-            del self.instances[account]['online_dialog']['fingerprint_error']
-            obj.conn.disconnect(on_purpose=True)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                show='offline'))
-
-        pritext = _('SSL certificate error')
-        sectext = _('It seems the SSL certificate of account %(account)s has '
-            'changed and is not valid or your connection is being compromised.\n\n'
-            'Old SHA-1 fingerprint: '
-            '%(old_sha1)s\nOld SHA-256 fingerprint: %(old_sha256)s\n\n'
-            'New SHA-1 fingerprint: %(new_sha1)s\nNew SHA-256 fingerprint: '
-            '%(new_sha256)s\n\nDo you still want to connect '
-            'and update the fingerprint of the certificate?') % \
-            {'account': account,
-            'old_sha1': app.config.get_per('accounts', account, 'ssl_fingerprint_sha1'),
-            'old_sha256': app.config.get_per('accounts', account, 'ssl_fingerprint_sha256'),
-            'new_sha1': obj.new_fingerprint_sha1,
-            'new_sha256': obj.new_fingerprint_sha256}
-        if 'fingerprint_error' in self.instances[account]['online_dialog']:
-            self.instances[account]['online_dialog']['fingerprint_error'].\
-                destroy()
-        self.instances[account]['online_dialog']['fingerprint_error'] = \
-            dialogs.CheckFingerprintDialog(pritext, sectext, on_response_yes=on_yes,
-            on_response_no=on_no, account=obj.conn.name,
-            certificate=obj.certificate)
 
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
@@ -1578,7 +1533,6 @@ class Interface:
             'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
             'file-request-error': [self.handle_event_file_request_error],
             'file-request-received': [self.handle_event_file_request],
-            'fingerprint-error': [self.handle_event_fingerprint_error],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-decline-received': [self.handle_event_gc_decline],
             'gc-presence-received': [self.handle_event_gc_presence],

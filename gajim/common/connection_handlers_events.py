@@ -2188,10 +2188,6 @@ class SSLErrorEvent(nec.NetworkIncomingEvent):
     name = 'ssl-error'
     base_network_events = []
 
-class FingerprintErrorEvent(nec.NetworkIncomingEvent):
-    name = 'fingerprint-error'
-    base_network_events = []
-
 class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-supported'
     base_network_events = []
