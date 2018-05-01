@@ -5,25 +5,34 @@
     "sdk": "org.gnome.Sdk",
     "command": "gajim",
     "finish-args": [
-        /* X11 + XShm access */
         "--share=ipc",
-        "--socket=x11",
-        /* Wayland access */
-        "--socket=wayland",
-        /* Needs to talk to the network: */
         "--share=network",
-        "--filesystem=home",
+        "--socket=x11",
+        "--socket=wayland",
         "--socket=pulseaudio",
-        "--socket=system-bus"
+        "--filesystem=home",
+        "--system-talk-name=org.freedesktop.GeoClue2",
+        "--system-talk-name=org.freedesktop.login1",
+        "--talk-name=org.gnome.ScreenSaver",
+        "--talk-name=org.mpris.MediaPlayer2.*",
+        /* Keyring */
+        "--talk-name=org.freedesktop.secrets",
+        /* dconf */
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
     ],
     "build-options": {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g"
     },
     "cleanup": [
+        "/bin/easy*",
         "/include",
         "/lib/debug",
         "/lib/pkgconfig",
+        "/lib/python2.7",
         "/share/aclocal",
         "/share/doc",
         "/share/man",
