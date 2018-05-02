@@ -4773,49 +4773,6 @@ class ProgressDialog:
     def on_progress_dialog_delete_event(self, widget, event):
         return True # WM's X button or Escape key should not destroy the window
 
-
-class ClientCertChooserDialog(FileChooserDialog):
-    def __init__(self, path_to_clientcert_file='', on_response_ok=None,
-    on_response_cancel=None):
-        '''
-        optionally accepts path_to_clientcert_file so it has that as selected
-        '''
-        def on_ok(widget, callback):
-            '''
-            check if file exists and call callback
-            '''
-            path_to_clientcert_file = self.get_filename()
-            if os.path.exists(path_to_clientcert_file):
-                callback(widget, path_to_clientcert_file)
-
-        FileChooserDialog.__init__(self,
-            title_text=_('Choose Client Cert #PCKS12'),
-            transient_for=app.interface.instances['accounts'],
-            action=Gtk.FileChooserAction.OPEN,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-            Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
-            current_folder='',
-            default_response=Gtk.ResponseType.OK,
-            on_response_ok=(on_ok, on_response_ok),
-            on_response_cancel=on_response_cancel)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('All files'))
-        filter_.add_pattern('*')
-        self.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('PKCS12 Files'))
-        filter_.add_pattern('*.p12')
-        self.add_filter(filter_)
-        self.set_filter(filter_)
-
-        if path_to_clientcert_file:
-            # set_filename accept only absolute path
-            path_to_clientcert_file = os.path.abspath(path_to_clientcert_file)
-            self.set_filename(path_to_clientcert_file)
-
-
 class SoundChooserDialog(FileChooserDialog):
     def __init__(self, path_to_snd_file='', on_response_ok=None,
                     on_response_cancel=None, transient_for=None):
