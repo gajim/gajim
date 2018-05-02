@@ -424,8 +424,6 @@ control=None, gc_contact=None, is_anonymous=True):
             send_auth_menuitem.connect('activate', roster.authorize, jid, account)
         if contact.sub in ('to', 'both'):
             ask_auth_menuitem.set_sensitive(False)
-            add_special_notification_menuitem.connect('activate',
-                    roster.on_add_special_notification_menuitem_activate, jid)
         else:
             ask_auth_menuitem.connect('activate', roster.req_sub, jid,
                     _('I would like to add you to my roster'), account,

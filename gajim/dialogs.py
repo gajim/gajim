@@ -4948,58 +4948,6 @@ class ArchiveChooserDialog(FileChooserDialog):
         self.add_filter(filter_)
         self.set_filter(filter_)
 
-
-class AddSpecialNotificationDialog:
-    def __init__(self, jid):
-        """
-        jid is the jid for which we want to add special notification (sound and
-        notification popups)
-        """
-        self.xml = gtkgui_helpers.get_gtk_builder(
-            'add_special_notification_window.ui')
-        self.window = self.xml.get_object('add_special_notification_window')
-        self.condition_combobox = self.xml.get_object('condition_combobox')
-        self.condition_combobox.set_active(0)
-        self.notification_popup_yes_no_combobox = self.xml.get_object(
-                'notification_popup_yes_no_combobox')
-        self.notification_popup_yes_no_combobox.set_active(0)
-        self.listen_sound_combobox = self.xml.get_object('listen_sound_combobox')
-        self.listen_sound_combobox.set_active(0)
-
-        self.jid = jid
-        self.xml.get_object('when_foo_becomes_label').set_text(
-                _('When %s becomes:') % self.jid)
-
-        self.window.set_title(_('Adding Special Notification for %s') % jid)
-        self.window.show_all()
-        self.xml.connect_signals(self)
-
-    def on_cancel_button_clicked(self, widget):
-        self.window.destroy()
-
-    def on_add_special_notification_window_delete_event(self, widget, event):
-        self.window.destroy()
-
-    def on_listen_sound_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == 1: # user selected 'choose sound'
-            def on_ok(widget, path_to_snd_file):
-                pass
-
-            def on_cancel(widget):
-                widget.set_active(0) # go back to No Sound
-
-            self.dialog = SoundChooserDialog(on_response_ok=on_ok,
-                on_response_cancel=on_cancel)
-
-    def on_ok_button_clicked(self, widget):
-        conditions = ('online', 'chat', 'online_and_chat',
-            'away', 'xa', 'away_and_xa', 'dnd', 'xa_and_dnd', 'offline')
-        active = self.condition_combobox.get_active()
-
-        active_iter = self.listen_sound_combobox.get_active_iter()
-        listen_sound_model = self.listen_sound_combobox.get_model()
-
 class TransformChatToMUC:
     # Keep a reference on windows so garbage collector don't restroy them
     instances = []

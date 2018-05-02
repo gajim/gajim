@@ -3039,9 +3039,6 @@ class RosterWindow:
         app.interface.instances['file_transfers'].show_file_send_request(
             account, contact)
 
-    def on_add_special_notification_menuitem_activate(self, widget, jid):
-        dialogs.AddSpecialNotificationDialog(jid)
-
     def on_invite_to_new_room(self, widget, list_, resource=None):
         """
         Resource parameter MUST NOT be used if more than one contact in list
