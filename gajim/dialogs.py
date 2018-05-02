@@ -4773,48 +4773,6 @@ class ProgressDialog:
     def on_progress_dialog_delete_event(self, widget, event):
         return True # WM's X button or Escape key should not destroy the window
 
-class SoundChooserDialog(FileChooserDialog):
-    def __init__(self, path_to_snd_file='', on_response_ok=None,
-                    on_response_cancel=None, transient_for=None):
-        """
-        Optionally accepts path_to_snd_file so it has that as selected
-        """
-        def on_ok(widget, callback):
-            """
-            Check if file exists and call callback
-            """
-            path_to_snd_file = self.get_filename()
-            if os.path.exists(path_to_snd_file):
-                callback(widget, path_to_snd_file)
-
-        FileChooserDialog.__init__(
-            self, title_text=_('Choose Sound'),
-            action=Gtk.FileChooserAction.OPEN,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
-            default_response=Gtk.ResponseType.OK,
-            current_folder=app.config.get('last_sounds_dir'),
-            on_response_ok=(on_ok, on_response_ok),
-            on_response_cancel=on_response_cancel,
-            transient_for=transient_for)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('All files'))
-        filter_.add_pattern('*')
-        self.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('Wav Sounds'))
-        filter_.add_pattern('*.wav')
-        self.add_filter(filter_)
-        self.set_filter(filter_)
-
-        path_to_snd_file = helpers.check_soundfile_path(path_to_snd_file)
-        if path_to_snd_file:
-            # set_filename accept only absolute path
-            path_to_snd_file = os.path.abspath(path_to_snd_file)
-            self.set_filename(path_to_snd_file)
-
 class ImageChooserDialog(FileChooserDialog):
     def __init__(self, path_to_file='', on_response_ok=None,
                     on_response_cancel=None):
