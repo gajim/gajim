@@ -562,7 +562,7 @@ class ConversationTextview(GObject.GObject):
                         % phrase_for_url
             else:
                 link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
-                        % (app.LANG, phrase_for_url)
+                        % (i18n.LANG, phrase_for_url)
             item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
             self.handlers[id_] = item
@@ -578,7 +578,7 @@ class ConversationTextview(GObject.GObject):
                             % phrase_for_url
                 else:
                     link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
-                            % (app.LANG, phrase_for_url)
+                            % (i18n.LANG, phrase_for_url)
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             else:

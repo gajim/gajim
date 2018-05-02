@@ -47,6 +47,7 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
+from gajim.common import i18n
 from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
 from gajim.message_textview import MessageTextView
@@ -514,7 +515,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # use the default one
             lang = app.config.get('speller_language')
             if not lang:
-                lang = app.LANG
+                lang = i18n.LANG
         gspell_lang = Gspell.language_lookup(lang)
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
