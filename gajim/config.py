@@ -2939,141 +2939,104 @@ class ManagePEPServicesWindow:
         window.set_title(title)
         window.show_all()
 
+
 class ManageSoundsWindow:
     def __init__(self):
-        self.xml = gtkgui_helpers.get_gtk_builder('manage_sounds_window.ui')
-        self.window = self.xml.get_object('manage_sounds_window')
+        self._builder = gtkgui_helpers.get_gtk_builder(
+            'manage_sounds_window.ui')
+        self.window = self._builder.get_object('manage_sounds_window')
         self.window.set_transient_for(
             app.interface.instances['preferences'].window)
-        # sounds treeview
-        self.sound_tree = self.xml.get_object('sounds_treeview')
 
-        # active, event ui name, path to sound file, event_config_name
-        model = Gtk.ListStore(bool, str, str, str)
-        self.sound_tree.set_model(model)
+        self.sound_button = self._builder.get_object('filechooser')
 
-        col = Gtk.TreeViewColumn(_('Active'))
-        self.sound_tree.append_column(col)
-        renderer = Gtk.CellRendererToggle()
-        renderer.set_property('activatable', True)
-        renderer.connect('toggled', self.sound_toggled_cb)
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'active', 0)
+        filter_ = Gtk.FileFilter()
+        filter_.set_name(_('All files'))
+        filter_.add_pattern('*')
+        self.sound_button.add_filter(filter_)
 
-        col = Gtk.TreeViewColumn(_('Event'))
-        self.sound_tree.append_column(col)
-        renderer = Gtk.CellRendererText()
-        col.pack_start(renderer, True)
-        col.add_attribute(renderer, 'text', 1)
+        filter_ = Gtk.FileFilter()
+        filter_.set_name(_('Wav Sounds'))
+        filter_.add_pattern('*.wav')
+        self.sound_button.add_filter(filter_)
+        self.sound_button.set_filter(filter_)
 
-        self.fill_sound_treeview()
+        self.sound_tree = self._builder.get_object('sounds_treeview')
 
-        self.xml.connect_signals(self)
+        self._fill_sound_treeview()
 
-        self.sound_tree.get_model().connect('row-changed',
-            self.on_sounds_treemodel_row_changed)
+        self._builder.connect_signals(self)
 
         self.window.show_all()
 
-    def on_sounds_treemodel_row_changed(self, model, path, iter_):
+    def _on_row_changed(self, model, path, iter_):
         sound_event = model[iter_][3]
-        app.config.set_per('soundevents', sound_event, 'enabled',
-            bool(model[path][0]))
-        app.config.set_per('soundevents', sound_event, 'path',
-            model[iter_][2])
+        app.config.set_per('soundevents', sound_event,
+                           'enabled', bool(model[path][0]))
+        app.config.set_per('soundevents', sound_event,
+                           'path', model[iter_][2])
 
-    def sound_toggled_cb(self, cell, path):
+    def _on_toggle(self, cell, path):
+        if self.sound_button.get_filename() is None:
+            return
         model = self.sound_tree.get_model()
         model[path][0] = not model[path][0]
 
-    def fill_sound_treeview(self):
+    def _fill_sound_treeview(self):
         model = self.sound_tree.get_model()
         model.clear()
-        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # NOTE: sounds_ui_names MUST have all items of
         # sounds = app.config.get_per('soundevents') as keys
         sounds_dict = {
-                'attention_received': _('Attention Message Received'),
-                'first_message_received': _('First Message Received'),
-                'next_message_received_focused': _('Next Message Received Focused'),
-                'next_message_received_unfocused':
-                        _('Next Message Received Unfocused'),
-                'contact_connected': _('Contact Connected'),
-                'contact_disconnected': _('Contact Disconnected'),
-                'message_sent': _('Message Sent'),
-                'muc_message_highlight': _('Group Chat Message Highlight'),
-                'muc_message_received': _('Group Chat Message Received'),
+            'attention_received': _('Attention Message Received'),
+            'first_message_received': _('First Message Received'),
+            'next_message_received_focused': _('Next Message Received Focused'),
+            'next_message_received_unfocused': _('Next Message Received Unfocused'),
+            'contact_connected': _('Contact Connected'),
+            'contact_disconnected': _('Contact Disconnected'),
+            'message_sent': _('Message Sent'),
+            'muc_message_highlight': _('Group Chat Message Highlight'),
+            'muc_message_received': _('Group Chat Message Received'),
         }
 
-        for sound_event_config_name, sound_ui_name in sounds_dict.items():
-            enabled = app.config.get_per('soundevents',
-                    sound_event_config_name, 'enabled')
-            path = app.config.get_per('soundevents',
-                    sound_event_config_name, 'path')
-            model.append((enabled, sound_ui_name, path, sound_event_config_name))
+        for config_name, sound_name in sounds_dict.items():
+            enabled = app.config.get_per('soundevents', config_name, 'enabled')
+            path = app.config.get_per('soundevents', config_name, 'path')
+            model.append((enabled, sound_name, path, config_name))
 
-    def on_treeview_sounds_cursor_changed(self, widget, data = None):
-        sounds_entry = self.xml.get_object('sounds_entry')
-        sel = self.sound_tree.get_selection()
-        if not sel:
-            sounds_entry.set_text('')
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            sounds_entry.set_text('')
-            return
-        path_to_snd_file = model[iter_][2]
-        sounds_entry.set_text(path_to_snd_file)
+    def _on_cursor_changed(self, treeview):
+        model, iter_ = treeview.get_selection().get_selected()
+        path_to_snd_file = helpers.check_soundfile_path(model[iter_][2])
+        if path_to_snd_file is None:
+            self.sound_button.unselect_all()
+        else:
+            self.sound_button.set_filename(path_to_snd_file)
 
-    def on_browse_for_sounds_button_clicked(self, widget, data = None):
-        sel = self.sound_tree.get_selection()
-        if not sel:
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            return
-        def on_ok(widget, path_to_snd_file):
-            self.dialog.destroy()
-            model, iter_ = self.sound_tree.get_selection().get_selected()
-            if not path_to_snd_file:
-                model[iter_][2] = ''
-                self.xml.get_object('sounds_entry').set_text('')
-                model[iter_][0] = False
-                return
-            directory = os.path.dirname(path_to_snd_file)
-            app.config.set('last_sounds_dir', directory)
-            path_to_snd_file = helpers.strip_soundfile_path(path_to_snd_file)
-            self.xml.get_object('sounds_entry').set_text(path_to_snd_file)
-
-            model[iter_][2] = path_to_snd_file # set new path to sounds_model
-            model[iter_][0] = True # set the sound to enabled
-
-        def on_cancel(widget):
-            self.dialog.destroy()
-
-        path_to_snd_file = model[iter_][2]
-        self.dialog = dialogs.SoundChooserDialog(path_to_snd_file, on_ok,
-                on_cancel, transient_for=self.window)
-
-    def on_sounds_entry_changed(self, widget):
-        path_to_snd_file = widget.get_text()
+    def _on_file_set(self, button):
         model, iter_ = self.sound_tree.get_selection().get_selected()
-        model[iter_][2] = path_to_snd_file # set new path to sounds_model
 
-    def on_play_button_clicked(self, widget):
-        sel = self.sound_tree.get_selection()
-        if not sel:
-            return
-        model, iter_ = sel.get_selected()
-        if not iter_:
-            return
+        filename = button.get_filename()
+        directory = os.path.dirname(filename)
+        app.config.set('last_sounds_dir', directory)
+        path_to_snd_file = helpers.strip_soundfile_path(filename)
+
+        # set new path to sounds_model
+        model[iter_][2] = path_to_snd_file
+        # set the sound to enabled
+        model[iter_][0] = True
+
+    def _on_clear(self, *args):
+        self.sound_button.unselect_all()
+        model, iter_ = self.sound_tree.get_selection().get_selected()
+        model[iter_][2] = ''
+        model[iter_][0] = False
+
+    def _on_play(self, *args):
+        model, iter_ = self.sound_tree.get_selection().get_selected()
         snd_event_config_name = model[iter_][3]
         helpers.play_sound(snd_event_config_name)
 
-    def on_close_button_clicked(self, widget):
-        self.window.hide()
-
-    def on_manage_sounds_window_delete_event(self, widget, event):
-        self.window.hide()
-        return True # do NOT destroy the window
+    def _on_destroy(self, *args):
+        self.window.destroy()
+        app.interface.instances['preferences'].sounds_preferences = None
