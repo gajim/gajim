@@ -28,6 +28,8 @@ from gi.repository import GLib
 from gi.repository import Pango
 import os
 import time
+from functools import partial
+from pathlib import Path
 
 from enum import IntEnum, unique
 from datetime import datetime
@@ -41,6 +43,7 @@ from gajim.common import helpers
 from gajim.common.file_props import FilesProp
 from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
+from gajim.filechoosers import FileSaveDialog, FileChooserDialog
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 import logging
 log = logging.getLogger('gajim.filetransfer_window')
@@ -322,51 +325,8 @@ class FileTransfersWindow:
             account), type_=Gtk.MessageType.ERROR)
 
     def show_file_send_request(self, account, contact):
-        win = Gtk.ScrolledWindow()
-        win.set_shadow_type(Gtk.ShadowType.IN)
-        win.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
-
-        from gajim.message_textview import MessageTextView
-        desc_entry = MessageTextView()
-        win.add(desc_entry)
-
-        def on_ok(widget):
-            file_dir = None
-            files_path_list = dialog.get_filenames()
-            desc = desc_entry.get_text()
-            for file_path in files_path_list:
-                if self.send_file(account, contact, file_path, desc) \
-                and file_dir is None:
-                    file_dir = os.path.dirname(file_path)
-            if file_dir:
-                app.config.set('last_send_dir', file_dir)
-                dialog.destroy()
-
-        dialog = dialogs.FileChooserDialog(_('Choose File to Send…'),
-                Gtk.FileChooserAction.OPEN, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL),
-                Gtk.ResponseType.OK,
-                True, # select multiple true as we can select many files to send
-                app.config.get('last_send_dir'),
-                on_response_ok=on_ok,
-                on_response_cancel=lambda e:dialog.destroy(),
-                preview=True,
-                transient_for=app.interface.roster.window
-                )
-
-        btn = Gtk.Button.new_with_mnemonic(_('_Send'))
-        btn.set_property('can-default', True)
-        # FIXME: add send icon to this button (JUMP_TO)
-        dialog.add_action_widget(btn, Gtk.ResponseType.OK)
-        dialog.set_default_response(Gtk.ResponseType.OK)
-
-        desc_hbox = Gtk.HBox(homogeneous=False, spacing=5)
-        desc_hbox.pack_start(Gtk.Label.new(_('Description: ')), False, False, 0)
-        desc_hbox.pack_start(win, True, True, 0)
-
-        dialog.vbox.pack_start(desc_hbox, False, False, 0)
-
-        btn.show()
-        desc_hbox.show_all()
+        send_callback = partial(self.send_file, account, contact)
+        SendFileDialog(send_callback, self.window)
 
     def send_file(self, account, contact, file_path, file_desc=''):
         """
@@ -411,9 +371,9 @@ class FileTransfersWindow:
         app.connections[account].send_file_approval(file_props)
 
     def on_file_request_accepted(self, account, contact, file_props):
-        def on_ok(widget, account, contact, file_props):
-            file_path = dialog2.get_filename()
+        def on_ok(account, contact, file_props, file_path):
             if os.path.exists(file_path):
+                app.config.set('last_save_dir', os.path.dirname(file_path))
                 # check if we have write permissions
                 if not os.access(file_path, os.W_OK):
                     file_name = GLib.markup_escape_text(os.path.basename(
@@ -433,13 +393,11 @@ class FileTransfersWindow:
                         return
                     elif response == 100:
                         file_props.offset = dl_size
-                    dialog2.destroy()
                     self._start_receive(file_path, account, contact, file_props)
 
                 dialog = dialogs.FTOverwriteConfirmationDialog(
                     _('This file already exists'), _('What do you want to do?'),
-                    propose_resume=not dl_finished, on_response=on_response,
-                    transient_for=dialog2)
+                    propose_resume=not dl_finished, on_response=on_response)
                 dialog.set_destroy_with_parent(True)
                 return
             else:
@@ -452,26 +410,15 @@ class FileTransfersWindow:
                         dirname, _('You do not have permission to create files '
                         'in this directory.'))
                     return
-            dialog2.destroy()
             self._start_receive(file_path, account, contact, file_props)
 
-        def on_cancel(widget, account, contact, file_props):
-            dialog2.destroy()
-            app.connections[account].send_file_rejection(file_props)
-
-        dialog2 = dialogs.FileChooserDialog(
-            title_text=_('Save File as…'),
-            action=Gtk.FileChooserAction.SAVE,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-            Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
-            default_response=Gtk.ResponseType.OK,
-            current_folder=app.config.get('last_save_dir'),
-            on_response_ok=(on_ok, account, contact, file_props),
-            on_response_cancel=(on_cancel, account, contact, file_props))
-
-        dialog2.set_current_name(file_props.name)
-        dialog2.connect('delete-event', lambda widget, event:
-            on_cancel(widget, account, contact, file_props))
+        con = app.connections[account]
+        accept_cb = partial(on_ok, account, contact, file_props)
+        cancel_cb = partial(con.send_file_rejection, file_props)
+        FileSaveDialog(accept_cb,
+                       cancel_cb,
+                       path=app.config.get('last_save_dir'),
+                       file_name=file_props.name)
 
     def show_file_request(self, account, contact, file_props):
         """
@@ -1048,3 +995,78 @@ class FileTransfersWindow:
     def on_file_transfers_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape: # ESCAPE
             self.window.hide()
+
+
+class SendFileDialog(Gtk.ApplicationWindow):
+    def __init__(self, send_callback, transient_for):
+        active_window = app.app.get_active_window()
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('SendFileDialog')
+        self.set_application(app.app)
+        self.set_show_menubar(False)
+        self.set_resizable(True)
+        self.set_default_size(400, 250)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
+        self.set_transient_for(active_window)
+        self.set_title(_('Choose a File to Send…'))
+        self.set_destroy_with_parent(True)
+
+        self._send_callback = send_callback
+
+        xml = gtkgui_helpers.get_gtk_builder('send_file_dialog.ui')
+        grid = xml.get_object('send_file_grid')
+
+        self._filebox = xml.get_object('listbox')
+        self._description = xml.get_object('description')
+
+        self.add(grid)
+        self.connect('key-press-event', self._key_press_event)
+
+        xml.connect_signals(self)
+        self.show_all()
+
+    def _send(self, button):
+        for file in self._filebox.get_children():
+            self._send_callback(str(file.path), self._get_description())
+        self.destroy()
+
+    def _select_files(self, button):
+        FileChooserDialog(self._set_files,
+                          select_multiple=True,
+                          transient_for=self,
+                          path=app.config.get('last_send_dir'))
+
+    def _set_files(self, filenames):
+        # Clear the ListBox
+        self._filebox.foreach(self._remove_widget, None)
+
+        for file in filenames:
+            row = FileRow(file)
+            if row.path.is_dir():
+                continue
+            last_dir = row.path.parent
+            self._filebox.add(row)
+        self._filebox.show_all()
+        app.config.set('last_send_dir', str(last_dir))
+
+    def _remove_widget(self, widget, data):
+        self._filebox.remove(widget)
+
+    def _get_description(self):
+        buffer_ = self._description.get_buffer()
+        start, end = buffer_.get_bounds()
+        return buffer_.get_text(start, end, False)
+
+    def _key_press_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+
+class FileRow(Gtk.ListBoxRow):
+    def __init__(self, path):
+        Gtk.ListBoxRow.__init__(self)
+        self.path = Path(path)
+        label = Gtk.Label(self.path.name)
+        label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_xalign(0)
+        self.add(label)

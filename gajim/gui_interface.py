@@ -39,6 +39,7 @@ import sys
 import re
 import time
 import hashlib
+from functools import partial
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
@@ -66,7 +67,7 @@ from gajim import notify
 from gajim import message_control
 from gajim.dialog_messages import get_dialog
 from gajim.dialogs import ProgressWindow
-from gajim.dialogs import FileChooserDialog
+from gajim.filechoosers import FileChooserDialog
 
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
@@ -1147,22 +1148,13 @@ class Interface:
         ProgressWindow(file)
 
     def send_httpupload(self, chat_control):
-        FileChooserDialog(
-            on_response_ok=lambda widget: self.on_file_dialog_ok(widget,
-                                                                 chat_control),
-            title_text=_('Choose file to send'),
-            action=Gtk.FileChooserAction.OPEN,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                     Gtk.STOCK_OPEN, Gtk.ResponseType.OK),
-            select_multiple=True,
-            default_response=Gtk.ResponseType.OK,
-            preview=True,
-            transient_for=chat_control.parent_win.window)
+        accept_cb = partial(self.on_file_dialog_ok, chat_control)
+        FileChooserDialog(accept_cb,
+                          select_multiple=True,
+                          transient_for=chat_control.parent_win.window)
 
     @staticmethod
-    def on_file_dialog_ok(widget, chat_control):
-        paths = widget.get_filenames()
-        widget.destroy()
+    def on_file_dialog_ok(chat_control, paths):
         con = app.connections[chat_control.account]
         groupchat = chat_control.type_id == message_control.TYPE_GC
         for path in paths:

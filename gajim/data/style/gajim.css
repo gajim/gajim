@@ -99,3 +99,7 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 
 /*MessageWindow Notebook*/
 .notebook-tab-label {min-width: 80px}
+
+/*SendFileDialog*/
+#SendFileDialog grid {padding: 12px}
+#SendFileDialog grid list { background-color: @theme_bg_color}

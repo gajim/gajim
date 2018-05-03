@@ -35,7 +35,8 @@ import os
 from enum import IntEnum, unique
 
 from gajim import gtkgui_helpers
-from gajim.dialogs import WarningDialog, YesNoDialog, ArchiveChooserDialog
+from gajim.dialogs import WarningDialog, YesNoDialog
+from gajim.filechoosers import ArchiveChooserDialog
 from gajim.htmltextview import HtmlTextView
 from gajim.common import app
 from gajim.common import configpaths
@@ -309,8 +310,7 @@ class PluginsWindow(object):
             sel = self.installed_plugins_treeview.get_selection()
             sel.select_iter(iter_)
 
-        self.dialog = ArchiveChooserDialog(
-            on_response_ok=_try_install, transient_for=self.window)
+        ArchiveChooserDialog(_try_install, transient_for=self.window)
 
 
 class GajimPluginConfigDialog(Gtk.Dialog):

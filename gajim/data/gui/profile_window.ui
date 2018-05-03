@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="profile_window">
@@ -8,6 +8,9 @@
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_profile_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_profile_window_key_press_event" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
@@ -30,10 +33,10 @@
                   <object class="GtkLabel" id="label24">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Name:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -54,10 +57,10 @@
                   <object class="GtkLabel" id="label20">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Nickname:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -89,10 +92,10 @@
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" comments="Family Name">&lt;b&gt;Family:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -113,10 +116,10 @@
                           <object class="GtkLabel" id="label17">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" comments="Given Name">&lt;b&gt;Given:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -137,10 +140,10 @@
                           <object class="GtkLabel" id="label16">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" comments="Middle Name">&lt;b&gt;Middle:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -151,10 +154,10 @@
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" comments="Prefix in Name">&lt;b&gt;Prefix:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -185,10 +188,10 @@
                           <object class="GtkLabel" id="label14">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes" comments="Suffix in Name">&lt;b&gt;Suffix:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -217,10 +220,10 @@
                       <object class="GtkLabel" id="label19">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Full Name&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
                       </object>
                     </child>
                   </object>
@@ -245,10 +248,10 @@
                           <object class="GtkLabel" id="label31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Street:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -269,10 +272,10 @@
                           <object class="GtkLabel" id="label29">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Extra Address:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -293,10 +296,10 @@
                           <object class="GtkLabel" id="label28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;City:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -317,10 +320,10 @@
                           <object class="GtkLabel" id="label26">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Postal Code:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -341,10 +344,10 @@
                           <object class="GtkLabel" id="label27">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;State:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -365,10 +368,10 @@
                           <object class="GtkLabel" id="label25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Country:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -391,10 +394,10 @@
                       <object class="GtkLabel" id="label30">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Address&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                        <property name="yalign">0</property>
                       </object>
                     </child>
                   </object>
@@ -408,10 +411,10 @@
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Homepage:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -433,9 +436,9 @@
                   <object class="GtkLabel" id="label57">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">&lt;b&gt;E-Mail:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -457,10 +460,10 @@
                   <object class="GtkLabel" id="label23">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Phone No.:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -492,10 +495,10 @@
                   <object class="GtkLabel" id="label58">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Avatar:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -506,12 +509,11 @@
                   <object class="GtkBox" id="hbox3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="PHOTO_button">
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
                         <signal name="button-press-event" handler="on_PHOTO_button_press_event" swapped="no"/>
                         <child>
                           <object class="GtkEventBox" id="PHOTO_eventbox3">
@@ -522,7 +524,6 @@
                               <object class="GtkImage" id="PHOTO_image">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="yalign">0</property>
                                 <property name="stock">gtk-missing-image</property>
                               </object>
                             </child>
@@ -543,8 +544,6 @@
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="yalign">0</property>
                         <signal name="button-press-event" handler="on_PHOTO_button_press_event" swapped="no"/>
                       </object>
                       <packing>
@@ -553,10 +552,31 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButton" id="remove_avatar">
+                        <property name="label" translatable="yes">Remove Avatar</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="tooltip_text" translatable="yes">Clear Avatar</property>
+                        <property name="halign">start</property>
+                        <property name="valign">end</property>
+                        <signal name="clicked" handler="_clear_photo" swapped="no"/>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">6</property>
+                    <property name="width">3</property>
                   </packing>
                 </child>
                 <child>
@@ -569,10 +589,10 @@
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Birthday:&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                        <property name="yalign">0</property>
                       </object>
                     </child>
                   </object>
@@ -581,21 +601,15 @@
                     <property name="top_attach">5</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Personal Info</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes">Personal Info</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -612,10 +626,10 @@
                   <object class="GtkLabel" id="label44">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Company:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -636,10 +650,10 @@
                   <object class="GtkLabel" id="label43">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Department:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -660,10 +674,10 @@
                   <object class="GtkLabel" id="label42">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Position:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -684,10 +698,10 @@
                   <object class="GtkLabel" id="label41">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Role:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -719,10 +733,10 @@
                           <object class="GtkLabel" id="label39">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Street:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -743,10 +757,10 @@
                           <object class="GtkLabel" id="label38">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Extra Address:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -767,10 +781,10 @@
                           <object class="GtkLabel" id="label37">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;City:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -791,10 +805,10 @@
                           <object class="GtkLabel" id="label35">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Postal Code:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -815,10 +829,10 @@
                           <object class="GtkLabel" id="label36">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;State:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -839,10 +853,10 @@
                           <object class="GtkLabel" id="label34">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
-                            <property name="yalign">0</property>
                             <property name="label" translatable="yes">&lt;b&gt;Country:&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="xalign">1</property>
+                            <property name="yalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -865,10 +879,10 @@
                       <object class="GtkLabel" id="label40">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="yalign">0</property>
                         <property name="label" translatable="yes">&lt;b&gt;Address&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">1</property>
+                        <property name="yalign">0</property>
                       </object>
                     </child>
                   </object>
@@ -882,10 +896,10 @@
                   <object class="GtkLabel" id="label32">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;E-Mail:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -907,10 +921,10 @@
                   <object class="GtkLabel" id="label33">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes">&lt;b&gt;Phone No.:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
+                    <property name="xalign">1</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -942,9 +956,9 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Work</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes">Work</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -974,9 +988,9 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="yes" comments="&quot;About&quot; is the text of a tab of vcard window">About</property>
                 <property name="xalign">0</property>
                 <property name="yalign">0</property>
-                <property name="label" translatable="yes" comments="&quot;About&quot; is the text of a tab of vcard window">About</property>
               </object>
               <packing>
                 <property name="position">2</property>

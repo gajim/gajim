@@ -83,10 +83,11 @@ if is_standalone():
     configpaths.init()
 
 from gajim.common import app
-from gajim import gtkgui_helpers
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim import dialogs
+from gajim.filechoosers import FileSaveDialog
+from gajim import gtkgui_helpers
 
 
 @unique
@@ -465,24 +466,14 @@ class HistoryManager:
             return True
 
     def on_export_menuitem_activate(self, widget):
-        xml = gtkgui_helpers.get_gtk_builder('history_manager.ui',
-            'filechooserdialog')
-        xml.connect_signals(self)
+        FileSaveDialog(self._on_export,
+                       transient_for=self.window,
+                       modal=True)
 
-        dlg = xml.get_object('filechooserdialog')
-        dlg.set_title(_('Exporting History Logs…'))
-        dlg.set_current_folder(configpaths.get('HOME'))
-        dlg.props.do_overwrite_confirmation = True
-        response = dlg.run()
-
-        if response == Gtk.ResponseType.OK:  # user want us to export ;)
-            liststore, list_of_paths = self.jids_listview.get_selection()\
-                    .get_selected_rows()
-            path_to_file = dlg.get_filename()
-            self._export_jids_logs_to_file(liststore, list_of_paths,
-                path_to_file)
-
-        dlg.destroy()
+    def _on_export(self, filename):
+        liststore, list_of_paths = self.jids_listview.get_selection()\
+                .get_selected_rows()
+        self._export_jids_logs_to_file(liststore, list_of_paths, filename)
 
     def on_delete_menuitem_activate(self, widget, listview):
         widget_name = Gtk.Buildable.get_name(listview)

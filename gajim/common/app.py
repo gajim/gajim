@@ -155,6 +155,7 @@ _dependencies = {
     'PYCURL': False,
     'GSPELL': False,
     'IDLE': False,
+    'RUN_AS_FLATPAK': False,
     }
 
 
@@ -166,6 +167,9 @@ def is_installed(dependency):
         # Alias for checking zeroconf libs
         return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
     return _dependencies[dependency]
+
+def is_flatpak():
+    return _dependencies['RUN_AS_FLATPAK']
 
 def disable_dependency(dependency):
     _dependencies[dependency] = False

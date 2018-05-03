@@ -33,6 +33,7 @@ import hashlib
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
+from gajim.filechoosers import AvatarChooserDialog
 from gajim.common.const import AvatarSize
 
 from gajim.common import app
@@ -107,7 +108,7 @@ class ProfileWindow:
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
 
-    def on_clear_button_clicked(self, widget):
+    def _clear_photo(self, widget):
         # empty the image
         button = self.xml.get_object('PHOTO_button')
         image = button.get_image()
@@ -115,12 +116,14 @@ class ProfileWindow:
         button.hide()
         text_button = self.xml.get_object('NOPHOTO_button')
         text_button.show()
+        remove_avatar = self.xml.get_object('remove_avatar')
+        remove_avatar.hide()
         self.avatar_encoded = None
         self.avatar_sha = None
         self.avatar_mime_type = None
 
     def on_set_avatar_button_clicked(self, widget):
-        def on_ok(widget, path_to_file):
+        def on_ok(path_to_file):
             with open(path_to_file, 'rb') as file:
                 data = file.read()
             sha = app.interface.save_avatar(data, publish=True)
@@ -128,9 +131,6 @@ class ProfileWindow:
                 dialogs.ErrorDialog(
                     _('Could not load image'), transient_for=self.window)
                 return
-
-            self.dialog.destroy()
-            self.dialog = None
 
             scale = self.window.get_scale_factor()
             surface = app.interface.get_avatar(sha, AvatarSize.VCARD, scale)
@@ -142,26 +142,15 @@ class ProfileWindow:
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
 
+            remove_avatar = self.xml.get_object('remove_avatar')
+            remove_avatar.show()
+
             self.avatar_sha = sha
             publish = app.interface.get_avatar(sha, publish=True)
             self.avatar_encoded = base64.b64encode(publish).decode('utf-8')
-            self.avatar_mime_type = 'image/jpeg'
+            self.avatar_mime_type = 'image/png'
 
-        def on_clear(widget):
-            self.dialog.destroy()
-            self.dialog = None
-            self.on_clear_button_clicked(widget)
-
-        def on_cancel(widget):
-            self.dialog.destroy()
-            self.dialog = None
-
-        if self.dialog:
-            self.dialog.present()
-        else:
-            self.dialog = dialogs.AvatarChooserDialog(
-                on_response_ok=on_ok, on_response_cancel=on_cancel,
-                on_response_clear=on_clear)
+        AvatarChooserDialog(on_ok, transient_for=self.window)
 
     def on_PHOTO_button_press_event(self, widget, event):
         """
@@ -218,11 +207,13 @@ class ProfileWindow:
         button = self.xml.get_object('PHOTO_button')
         image = button.get_image()
         text_button = self.xml.get_object('NOPHOTO_button')
+        remove_avatar = self.xml.get_object('remove_avatar')
         if not 'PHOTO' in vcard_:
             # set default image
             image.set_from_pixbuf(None)
             button.hide()
             text_button.show()
+            remove_avatar.hide()
         for i in vcard_.keys():
             if i == 'PHOTO':
                 photo_encoded = vcard_[i]['BINVAL']
@@ -241,6 +232,7 @@ class ProfileWindow:
                     GdkPixbuf.InterpType.BILINEAR)
                 image.set_from_pixbuf(pixbuf)
                 button.show()
+                remove_avatar.show()
                 text_button.hide()
                 continue
             if i == 'ADR' or i == 'TEL' or i == 'EMAIL':

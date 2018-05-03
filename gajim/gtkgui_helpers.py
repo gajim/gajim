@@ -51,6 +51,7 @@ from gajim.common import i18n
 from gajim.common import app
 from gajim.common import pep
 from gajim.common import configpaths
+from gajim.filechoosers import AvatarSaveDialog
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(configpaths.get('ICONS'))
@@ -450,6 +451,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
         if response < 0:
             return
 
+        app.config.set('last_save_dir', os.path.dirname(file_path))
         if isinstance(avatar, str):
             # We got a SHA
             pixbuf = app.interface.get_avatar(avatar)
@@ -459,10 +461,8 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
         extension = os.path.splitext(file_path)[1]
         if not extension:
             # Silently save as Jpeg image
-            image_format = 'jpeg'
-            file_path += '.jpeg'
-        elif extension == 'jpg':
-            image_format = 'jpeg'
+            image_format = 'png'
+            file_path += '.png'
         else:
             image_format = extension[1:] # remove leading dot
 
@@ -473,19 +473,16 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
             log.error('Error saving avatar: %s' % str(e))
             if os.path.exists(file_path):
                 os.remove(file_path)
-            new_file_path = '.'.join(file_path.split('.')[:-1]) + '.jpeg'
+            new_file_path = '.'.join(file_path.split('.')[:-1]) + '.png'
             def on_ok(file_path, pixbuf):
-                pixbuf.savev(file_path, 'jpeg', [], [])
+                pixbuf.savev(file_path, 'png', [], [])
             dialogs.ConfirmationDialog(_('Extension not supported'),
                 _('Image cannot be saved in %(type)s format. Save as '
                 '%(new_filename)s?') % {'type': image_format,
                 'new_filename': new_file_path},
                 on_response_ok = (on_ok, new_file_path, pixbuf))
-        else:
-            dialog.destroy()
 
-    def on_ok(widget):
-        file_path = dialog.get_filename()
+    def on_ok(file_path):
         if os.path.exists(file_path):
             # check if we have write permissions
             if not os.access(file_path, os.W_OK):
@@ -496,8 +493,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
                 return
             dialog2 = dialogs.FTOverwriteConfirmationDialog(
                 _('This file already exists'), _('What do you want to do?'),
-                propose_resume=False, on_response=(on_continue, file_path),
-                transient_for=dialog)
+                propose_resume=False, on_response=(on_continue, file_path))
             dialog2.set_destroy_with_parent(True)
         else:
             dirname = os.path.dirname(file_path)
@@ -509,19 +505,11 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
 
         on_continue(0, file_path)
 
-    def on_cancel(widget):
-        dialog.destroy()
-
-    dialog = dialogs.FileChooserDialog(title_text=_('Save Image as…'),
-        action=Gtk.FileChooserAction.SAVE, buttons=(Gtk.STOCK_CANCEL,
-        Gtk.ResponseType.CANCEL, Gtk.STOCK_SAVE, Gtk.ResponseType.OK),
-        default_response=Gtk.ResponseType.OK,
-        current_folder=app.config.get('last_save_dir'), on_response_ok=on_ok,
-        on_response_cancel=on_cancel)
-
-    dialog.set_current_name(default_name + '.jpeg')
-    dialog.connect('delete-event', lambda widget, event:
-        on_cancel(widget))
+    transient = app.app.get_active_window()
+    AvatarSaveDialog(on_ok,
+                     path=app.config.get('last_save_dir'),
+                     file_name='%s.png' % default_name,
+                     transient_for=transient)
 
 def create_combobox(value_list, selected_value = None):
     """
