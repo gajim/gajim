@@ -225,6 +225,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
     def select_account(self, account):
         for row in self.account_list.get_children():
             if row.get_child().account == account:
+                self.account_list.select_row(row)
                 self.account_list.emit('row-activated', row)
                 break
 
