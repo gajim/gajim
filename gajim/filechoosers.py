@@ -18,6 +18,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 from pathlib import Path
 from collections import namedtuple
 
@@ -138,7 +139,7 @@ class FileSaveDialog(NativeFileChooserDialog):
 
 class AvatarSaveDialog(FileSaveDialog):
 
-    if os.name == 'nt':
+    if sys.platform == 'win32':
         _filters = [Filter(_('Images'), '*.png;*.jpg;*.jpeg;*.svg', True)]
 
 
@@ -199,14 +200,22 @@ class GtkAvatarChooserDialog(BaseAvatarChooserDialog, GtkFileChooserDialog):
 
 
 def FileChooserDialog(*args, **kwargs):
-    if app.is_flatpak():
+    if _require_native():
         return NativeFileOpenDialog(*args, **kwargs)
     else:
         return GtkFileOpenDialog(*args, **kwargs)
 
 
 def AvatarChooserDialog(*args, **kwargs):
-    if app.is_flatpak():
+    if _require_native():
         return NativeAvatarChooserDialog(*args, **kwargs)
     else:
         return GtkAvatarChooserDialog(*args, **kwargs)
+
+
+def _require_native():
+    if app.is_flatpak():
+        return True
+    if sys.platform in ('win32', 'darwin'):
+        return True
+    return False
