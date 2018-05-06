@@ -1,3 +1,9 @@
+Gajim 1.1.0 (TBA)
+
+  * Support http:upload:0
+  * Support for displaying/uploading avatars for rooms
+  * Support for PKIX over Secure HTTP (POSH)
+
 Gajim 1.0.2 (30 April 2018)
 
   Bugs fixed:
