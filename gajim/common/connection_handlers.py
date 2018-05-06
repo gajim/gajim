@@ -479,6 +479,22 @@ class ConnectionVcard:
         self.connection.SendAndCallForResponse(
             iq, self._avatar_publish_result, {'sha': sha})
 
+    def upload_room_avatar(self, room_jid, data):
+        iq = nbxmpp.Iq(typ='set', to=room_jid)
+        vcard = iq.addChild('vCard', namespace=nbxmpp.NS_VCARD)
+        photo = vcard.addChild('PHOTO')
+        photo.addChild('TYPE', payload='image/png')
+        photo.addChild('BINVAL', payload=data)
+
+        self.connection.SendAndCallForResponse(
+            iq, self._upload_room_avatar_result)
+
+    def _upload_room_avatar_result(self, stanza):
+        if not nbxmpp.isResultNode(stanza):
+            reason = stanza.getErrorMsg() or stanza.getError()
+            app.nec.push_incoming_event(InformationEvent(
+                None, dialog_name='avatar-upload-error', args=reason))
+
     def _avatar_publish_result(self, con, stanza, sha):
         if stanza.getType() == 'result':
             current_sha = app.config.get_per(

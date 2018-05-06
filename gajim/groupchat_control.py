@@ -29,6 +29,7 @@
 
 import time
 import locale
+import base64
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -61,6 +62,7 @@ from gajim.common import contacts
 
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
+from gajim.filechoosers import AvatarChooserDialog
 
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 from gajim.command_system.implementation.hosts import GroupChatCommands
@@ -558,6 +560,7 @@ class GroupchatControl(ChatControlBase):
             ('bookmark-', self._on_bookmark_room),
             ('request-voice-', self._on_request_voice),
             ('execute-command-', self._on_execute_command),
+            ('upload-avatar-', self._on_upload_avatar),
             ]
 
         for action in actions:
@@ -644,6 +647,10 @@ class GroupchatControl(ChatControlBase):
             tooltip_text = _('No File Transfer available')
         self.sendfile_button.set_tooltip_text(tooltip_text)
 
+        # Upload Avatar
+        vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
+        win.lookup_action('upload-avatar-' + self.control_id).set_enabled(
+            online and vcard_support and contact.affiliation == 'owner')
 
     def _connect_window_state_change(self, parent_win):
         if self._state_change_handler_id is None:
@@ -758,6 +765,27 @@ class GroupchatControl(ChatControlBase):
         Execute AdHoc commands on the current room
         """
         adhoc_commands.CommandWindow(self.account, self.room_jid)
+
+    def _on_upload_avatar(self, action, param):
+        def _on_accept(filename):
+            with open(filename, 'rb') as file:
+                data = file.read()
+            sha = app.interface.save_avatar(data, publish=True)
+            if sha is None:
+                dialogs.ErrorDialog(
+                    _('Could not load image'),
+                    transient_for=self.parent_win.window)
+                return
+
+            publish = app.interface.get_avatar(sha, publish=True)
+            avatar = base64.b64encode(publish).decode('utf-8')
+
+            app.connections[self.account].upload_room_avatar(
+                self.room_jid, avatar)
+
+        AvatarChooserDialog(_on_accept,
+                            transient_for=self.parent_win.window,
+                            modal=True)
 
     def show_roster(self):
         new_state = not self.hpaned.get_child2().is_visible()

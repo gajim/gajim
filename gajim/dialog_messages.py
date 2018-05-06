@@ -173,6 +173,10 @@ messages = {
         _('For the choosen encryption there is no encryption method available'),
         ErrorDialog),
 
+    'avatar-upload-error': Message(
+        _('Avatar upload failed'),
+        '%s',
+        ErrorDialog),
     }
 
 

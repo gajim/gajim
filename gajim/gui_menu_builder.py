@@ -642,6 +642,7 @@ def get_groupchat_menu(control_id):
         (_('Manage Room'), [
             ('win.change-subject-', _('Change Subject')),
             ('win.configure-', _('Configure Room')),
+            ('win.upload-avatar-', _('Upload Avatar…')),
             ('win.destroy-', _('Destroy Room')),
             ]),
         ('win.change-nick-', _('Change Nick')),
