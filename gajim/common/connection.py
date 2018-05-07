@@ -2683,6 +2683,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         if obj.chatstate:
             msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
+            if not obj.message:
+                msg_iq.setTag('no-store', namespace=nbxmpp.NS_MSG_HINTS)
         if obj.label is not None:
             msg_iq.addChild(node=obj.label)
 
