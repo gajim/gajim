@@ -127,6 +127,7 @@ log = logging.getLogger('gajim.c.logger')
 class Logger:
     def __init__(self):
         self._jid_ids = {}
+        self._jid_ids_reversed = {}
         self._con = None
         self._commit_timout_id = None
         self._log_db_path = configpaths.get('LOG_DB')
@@ -247,8 +248,7 @@ class Logger:
                     log.exception('Error')
                     sys.exit()
 
-    @staticmethod
-    def namedtuple_factory(cursor, row):
+    def namedtuple_factory(self, cursor, row):
         """
         Usage:
         con.row_factory = namedtuple_factory
@@ -259,6 +259,13 @@ class Logger:
         if 'additional_data' in fields:
             named_row = named_row._replace(
                 additional_data=json.loads(named_row.additional_data or '{}'))
+
+        # if an alias `account` for the field `account_id` is used for the
+        # query, the account_id is converted to the account jid
+        if 'account' in fields:
+            if named_row.account:
+                jid = self._jid_ids_reversed[named_row.account].jid
+                named_row = named_row._replace(account=jid)
         return named_row
 
     def dispatch(self, event, error):
@@ -336,6 +343,7 @@ class Logger:
             'SELECT jid_id, jid, type FROM jids').fetchall()
         for row in rows:
             self._jid_ids[row.jid] = row
+            self._jid_ids_reversed[row.jid_id] = row
 
     def get_jids_in_db(self):
         return self._jid_ids.keys()
