@@ -842,10 +842,9 @@ class ConversationTextview(GObject.GObject):
         except KeyError:
             pass
         else:
-            oob_desc = additional_data['gajim'].get('oob_desc', None)
-            if oob_desc is None:
-                oob_desc = _('URL:')
-            otext += '\n{} {}'.format(oob_desc, oob_url)
+            oob_desc = additional_data['gajim'].get('oob_desc', 'URL:')
+            if oob_url != otext:
+                otext += '\n{} {}'.format(oob_desc, oob_url)
 
         # basic: links + mail + formatting is always checked (we like that)
         if app.config.get('emoticons_theme') and graphics:
