@@ -483,6 +483,11 @@ def get_jid_from_account(account_name):
     jid = name + '@' + hostname
     return jid
 
+def get_account_from_jid(jid):
+    for account in app.config.get_per('accounts'):
+        if jid == get_jid_from_account(account):
+            return jid
+
 def get_our_jids():
     """
     Returns a list of the jids we use in our accounts
