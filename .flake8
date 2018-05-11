@@ -1,0 +1,5 @@
+[flake8]
+ignore = 
+exclude = .git,__pycache__,.gitlab
+max-complexity = 15
+builtins=_
