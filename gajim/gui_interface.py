@@ -1708,7 +1708,15 @@ class Interface:
                 if not event:
                     event = app.events.get_first_event(account, jid, type_)
                 if not event:
-                    return
+                    # If autopopup_chat_opened = True, then we send out
+                    # notifications even if a control is open. This means the
+                    # event is already deleted (because its printed to the
+                    # control) when the notification is clicked. So try to
+                    # get a control from account/jid
+                    ctrl = self.msg_win_mgr.get_control(fjid, account)
+                    if ctrl is None:
+                        return
+                    w = ctrl.parent_win
 
             if type_ == 'printed_chat':
                 ctrl = event.control
