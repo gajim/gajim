@@ -1333,7 +1333,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         ssl_errors = con.Connection.ssl_errors
         ignored_ssl_errors = self._get_ignored_ssl_errors()
-        self._ssl_errors = set(ssl_errors) - set(ignored_ssl_errors)
+        self._ssl_errors = [n for n in ssl_errors if n not in ignored_ssl_errors]
+        self._ssl_errors.reverse()
         self.process_ssl_errors()
 
     def _get_ignored_ssl_errors(self):
