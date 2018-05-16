@@ -484,7 +484,7 @@ def get_jid_from_account(account_name):
     return jid
 
 def get_account_from_jid(jid):
-    for account in app.config.get_per('accounts'):
+    for account in config.get_per('accounts'):
         if jid == get_jid_from_account(account):
             return account
 
