@@ -71,6 +71,7 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import check_X509
+from gajim.common import i18n
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -620,9 +621,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         CommonConnection.__init__(self, name)
         ConnectionHandlers.__init__(self)
 
-        self.lang = None
-        if locale.getdefaultlocale()[0]:
-            self.lang = locale.getdefaultlocale()[0].split('_')[0]
         # increase/decrease default timeout for server responses
         self.try_connecting_for_foo_secs = 45
         # holds the actual hostname to which we are connected
@@ -1520,8 +1518,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     # END connect
 
     def add_lang(self, stanza):
-        if self.lang:
-            stanza.setAttr('xml:lang', self.lang)
+        stanza.setAttr('xml:lang', i18n.LANG)
 
     def get_privacy_lists(self):
         if not app.account_is_connected(self.name):
