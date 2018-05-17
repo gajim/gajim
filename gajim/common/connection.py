@@ -49,12 +49,6 @@ from string import Template
 from urllib.request import urlopen
 from urllib.error import URLError
 
-try:
-    randomsource = random.SystemRandom()
-except Exception:
-    randomsource = random.Random()
-    randomsource.seed()
-
 if os.name == 'nt':
     import certifi
 import OpenSSL.crypto
@@ -805,7 +799,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # do exponential backoff until less than 5 minutes
                 if self.retrycount < 2 or self.last_time_to_reconnect is None:
                     self.last_time_to_reconnect = 5
-                    self.last_time_to_reconnect += randomsource.randint(0, 5)
+                    self.last_time_to_reconnect += random.randint(0, 5)
                 if self.last_time_to_reconnect < 200:
                     self.last_time_to_reconnect *= 1.5
                 self.time_to_reconnect = int(self.last_time_to_reconnect)
