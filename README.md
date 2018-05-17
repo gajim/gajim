@@ -9,7 +9,6 @@
 - gir1.2-gtk-3.0 (>=3.22)
 - python3-nbxmpp
 - python3-openssl (>=0.14)
-- python3-pyasn1
 
 
 ### Optional Runtime Requirements

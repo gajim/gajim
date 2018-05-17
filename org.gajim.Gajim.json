@@ -204,20 +204,6 @@
             ]
         },
         {
-            "name": "python3-pyasn1",
-            "buildsystem": "simple",
-            "build-commands": [
-                "pip3 install --prefix=/app pyasn1-0.4.2-py2.py3-none-any.whl"
-            ],
-            "sources": [
-                {
-                    "type": "file",
-                    "url": "https://pypi.python.org/packages/ba/fe/02e3e2ee243966b143657fb8bd6bc97595841163b6d8c26820944acaec4d/pyasn1-0.4.2-py2.py3-none-any.whl",
-                    "sha256": "d5cd6ed995dba16fad0c521cfe31cd2d68400b53fcc2bce93326829be73ab6d1"
-                }
-            ]
-        },
-        {
             "name": "python3-dbus-python",
             "sources": [
                 {

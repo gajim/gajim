@@ -19,7 +19,6 @@ function main {
     pip3 install setuptools_scm
 
     PIP_REQUIREMENTS="\
-pyasn1
 certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git 

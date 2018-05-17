@@ -85,7 +85,6 @@ function install_deps {
     build_pip install setuptools_scm
 
     PIP_REQUIREMENTS="\
-pyasn1
 certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://github.com/dlitz/pycrypto.git

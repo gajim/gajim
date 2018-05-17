@@ -287,7 +287,6 @@ setup(
     install_requires=[
         'nbxmpp>=0.6.5',
         'pyOpenSSL>=0.12',
-        'pyasn1',
     ],
     extras_require={
         'secret_password': ["keyring"]
