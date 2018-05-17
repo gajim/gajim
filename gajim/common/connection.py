@@ -619,9 +619,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def __init__(self, name):
         CommonConnection.__init__(self, name)
         ConnectionHandlers.__init__(self)
-        # this property is used to prevent double connections
-        # If we succeed to connect, remember it so next time we try (after a
-        # disconnection) we try only this type.
+
         self.lang = None
         if locale.getdefaultlocale()[0]:
             self.lang = locale.getdefaultlocale()[0].split('_')[0]
