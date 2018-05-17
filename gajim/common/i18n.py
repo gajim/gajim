@@ -68,7 +68,10 @@ def initialize_lang():
     global LANG
     try:
         # en_US, fr_FR, el_GR etc..
-        LANG = locale.getdefaultlocale()[0]
+        default = locale.getdefaultlocale()[0]
+        if default is None:
+            # LC_ALL=C
+            return
         LANG = LANG[:2]
     except (ValueError, locale.Error):
         pass
