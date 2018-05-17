@@ -70,7 +70,6 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
-from gajim.common import check_X509
 from gajim.common import i18n
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
