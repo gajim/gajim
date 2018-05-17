@@ -78,7 +78,7 @@ def _init_gtk():
     from gajim.application import GajimApplication
 
     application = GajimApplication()
-    _install_terminate(application)
+    _install_sginal_handlers(application)
     application.run(sys.argv)
 
 
@@ -100,13 +100,15 @@ def _set_proc_title():
             libc.setproctitle('gajim')
 
 
-def _install_terminate(application):
+def _install_sginal_handlers(application):
     def sigint_cb(num, stack):
         print('SIGINT/SIGTERM received')
         application.quit()
     # ^C exits the application normally
     signal.signal(signal.SIGINT, sigint_cb)
     signal.signal(signal.SIGTERM, sigint_cb)
+    if os.name != 'nt':
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
 def main():

@@ -55,10 +55,6 @@ except Exception:
     randomsource = random.Random()
     randomsource.seed()
 
-import signal
-if os.name != 'nt':
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
 if os.name == 'nt':
     import certifi
 import OpenSSL.crypto
