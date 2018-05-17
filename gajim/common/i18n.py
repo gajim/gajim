@@ -54,14 +54,7 @@ def initialize():
 
 def set_i18n_env():
     if os.name == 'nt':
-        lang = os.getenv('LANG')
-        if lang is None:
-            default_lang = locale.getdefaultlocale()[0]
-            if default_lang:
-                lang = default_lang
-
-        if lang:
-            os.environ['LANG'] = lang
+        os.environ['LANG'] = LANG
 
 
 def initialize_lang():
