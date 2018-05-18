@@ -1837,6 +1837,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             our_server = app.config.get_per('accounts', self.name, 'hostname')
             self.discoverInfo(our_jid, id_prefix='Gajim_')
             self.discoverInfo(our_server, id_prefix='Gajim_')
+        else:
+            self.request_roster(resume=True)
 
         self.sm.resuming = False # back to previous state
         # Discover Stun server(s)
@@ -2535,16 +2537,25 @@ class Connection(CommonConnection, ConnectionHandlers):
                 iq3.addChild(name='meta', attrs=dict_)
         self.connection.send(iq)
 
-    def request_roster(self):
+    def request_roster(self, resume=False):
         version = None
         features = self.connection.Dispatcher.Stream.features
-        if features and features.getTag('ver',
-        namespace=nbxmpp.NS_ROSTER_VER):
-            version = app.config.get_per('accounts', self.name,
-                'roster_version')
+        if features and features.getTag('ver', namespace=nbxmpp.NS_ROSTER_VER):
+            version = app.config.get_per(
+                'accounts', self.name, 'roster_version')
 
-        iq_id = self.connection.initRoster(version=version)
-        self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
+        iq_id = self.connection.initRoster(version=version,
+                                           request=not resume)
+        if resume:
+            self._init_roster_from_db()
+        else:
+            self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
+
+    def _init_roster_from_db(self):
+        account_jid = app.get_jid_from_account(self.name)
+        roster_data = app.logger.get_roster(account_jid)
+        roster = self.connection.getRoster(force=True)
+        roster.setRaw(roster_data)
 
     def send_agent_status(self, agent, ptype):
         if not app.account_is_connected(self.name):
