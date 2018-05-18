@@ -1497,10 +1497,7 @@ ConnectionHTTPUpload):
         elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
             if iq_obj.getType() == 'result':
                 if not iq_obj.getTag('query'):
-                    account_jid = app.get_jid_from_account(self.name)
-                    roster_data = app.logger.get_roster(account_jid)
-                    roster = self.connection.getRoster(force=True)
-                    roster.setRaw(roster_data)
+                    self._init_roster_from_db()
                 self._getRoster()
             elif iq_obj.getType() == 'error':
                 self.roster_supported = False
