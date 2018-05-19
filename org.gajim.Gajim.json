@@ -338,7 +338,7 @@
                 {
                     "type": "git",
                     "url": "https://dev.gajim.org/gajim/python-nbxmpp.git",
-                    "branch": "nbxmpp-0.6.5"
+                    "branch": "nbxmpp-0.6.6"
                 }
             ]
         },
