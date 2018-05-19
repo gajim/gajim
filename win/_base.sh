@@ -88,6 +88,7 @@ function install_deps {
 certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://github.com/dlitz/pycrypto.git
+git+https://dev.gajim.org/lovetox/pybonjour-python3.git
 cryptography
 pyopenssl
 python-gnupg
