@@ -285,7 +285,7 @@ setup(
     package_data={'gajim': package_data},
     data_files=data_files,
     install_requires=[
-        'nbxmpp>=0.6.5',
+        'nbxmpp>=0.6.6',
         'pyOpenSSL>=0.12',
         'pyasn1',
     ],
