@@ -154,8 +154,9 @@ class ProfileWindow:
         """
         If right-clicked, show popup
         """
-        pixbuf = self.xml.get_object('PHOTO_button').get_image().get_pixbuf()
-        if event.button == 3 and pixbuf: # right click
+
+        if event.button == 3:
+            # right click
             menu = Gtk.Menu()
 
             nick = app.config.get_per('accounts', self.account, 'name')
@@ -164,10 +165,6 @@ class ProfileWindow:
             menuitem.connect('activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                 sha, nick)
-            menu.append(menuitem)
-            # show clear
-            menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
-            menuitem.connect('activate', self.on_clear_button_clicked)
             menu.append(menuitem)
             menu.connect('selection-done', lambda w:w.destroy())
             # show the menu
