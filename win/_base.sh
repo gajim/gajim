@@ -80,29 +80,27 @@ function install_deps {
         mingw-w64-"${ARCH}"-goocanvas \
         mingw-w64-"${ARCH}"-gspell \
         mingw-w64-"${ARCH}"-hunspell \
-        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools
-
-    build_pip install setuptools_scm
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pillow \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools-scm \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-cryptography \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pyopenssl \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-docutils \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-certifi \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six
 
     PIP_REQUIREMENTS="\
 pyasn1
-certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://github.com/dlitz/pycrypto.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
-cryptography
-pyopenssl
-python-gnupg
-docutils
-qrcode
 keyring
-pillow==4.3.0
-six
+python-gnupg
+python-axolotl
+qrcode
 "
 
-    build_pip install --no-binary ":all:" \
-        --force-reinstall $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
-    build_pip install python-axolotl
+    build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
     # remove the large png icons, they should be used rarely and svg works fine
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/512x512"
