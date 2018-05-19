@@ -2400,16 +2400,36 @@ class Interface:
                 UpdateGCAvatarEvent(None, contact=contact))
 
     def save_avatar(self, data, publish=False):
+        """
+        Save an avatar to the harddisk
+
+        :param data:    publish=False data must be bytes
+                        publish=True data must be a path to a file
+
+        :param publish: If publish is True, the method scales the file
+                        to AvatarSize.PUBLISH size before saving
+
+        returns SHA1 value of the avatar or None on error
+        """
         if data is None:
             return
 
         if publish:
+            with open(data, 'rb') as file:
+                data = file.read()
             pixbuf = gtkgui_helpers.get_pixbuf_from_data(data)
             if pixbuf is None:
                 return
-            pixbuf = pixbuf.scale_simple(AvatarSize.PROFILE,
-                                         AvatarSize.PROFILE,
-                                         GdkPixbuf.InterpType.BILINEAR)
+
+            width = pixbuf.get_width()
+            height = pixbuf.get_height()
+            if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
+                # Scale only down, never up
+                width, height = gtkgui_helpers.scale_with_ratio(
+                    AvatarSize.PUBLISH, width, height)
+                pixbuf = pixbuf.scale_simple(width,
+                                             height,
+                                             GdkPixbuf.InterpType.BILINEAR)
             publish_path = os.path.join(
                 configpaths.get('AVATAR'), 'temp_publish')
             pixbuf.savev(publish_path, 'png', [], [])

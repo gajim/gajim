@@ -218,16 +218,17 @@ class VcardWindow:
                 except binascii.Error as error:
                     app.log('avatar').warning('Invalid avatar for %s: %s', jid, error)
                     continue
+
                 pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
                 if pixbuf is None:
                     continue
-                pixbuf = pixbuf.scale_simple(
-                    AvatarSize.PROFILE, AvatarSize.PROFILE,
-                    GdkPixbuf.InterpType.BILINEAR)
-                image = self.xml.get_object('PHOTO_image')
-                image.set_from_pixbuf(pixbuf)
-                image.show()
                 self.avatar = pixbuf
+                pixbuf = gtkgui_helpers.scale_pixbuf(pixbuf, AvatarSize.VCARD)
+                surface = Gdk.cairo_surface_create_from_pixbuf(
+                    pixbuf, self.window.get_scale_factor())
+                image = self.xml.get_object('PHOTO_image')
+                image.set_from_surface(surface)
+                image.show()
                 self.xml.get_object('user_avatar_label').show()
                 continue
             if i in ('ADR', 'TEL', 'EMAIL'):

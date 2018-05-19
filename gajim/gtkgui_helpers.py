@@ -440,10 +440,21 @@ def scale_with_ratio(size, width, height):
         return size, size
     if height > width:
         ratio = height / float(width)
-        return int(size / ratio), size 
+        return int(size / ratio), size
     else:
         ratio = width / float(height)
         return size, int(size / ratio)
+
+def scale_pixbuf(pixbuf, size):
+    width, height = scale_with_ratio(size,
+                                     pixbuf.get_width(),
+                                     pixbuf.get_height())
+    return pixbuf.scale_simple(width, height,
+                               GdkPixbuf.InterpType.BILINEAR)
+
+def scale_pixbuf_from_data(data, size):
+    pixbuf = get_pixbuf_from_data(data)
+    return scale_pixbuf(pixbuf, size)
 
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
     from gajim import dialogs

@@ -825,9 +825,7 @@ class SignalObject(dbus.service.Object):
         else:
             invalid_file = True
         if not invalid_file and filesize < 16384:
-            with open(picture, 'rb') as fd:
-                data = fd.read()
-            sha = app.interface.save_avatar(data, publish=True)
+            sha = app.interface.save_avatar(picture, publish=True)
             if sha is None:
                 return
             app.config.set_per('accounts', self.name, 'avatar_sha', sha)

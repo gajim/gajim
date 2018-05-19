@@ -33,9 +33,9 @@ class AvatarSize(IntEnum):
     ROSTER = 32
     CHAT = 48
     NOTIFICATION = 48
-    PROFILE = 64
     TOOLTIP = 125
     VCARD = 200
+    PUBLISH = 200
 
 class ArchiveState(IntEnum):
     NEVER = 0

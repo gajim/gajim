@@ -124,9 +124,7 @@ class ProfileWindow:
 
     def on_set_avatar_button_clicked(self, widget):
         def on_ok(path_to_file):
-            with open(path_to_file, 'rb') as file:
-                data = file.read()
-            sha = app.interface.save_avatar(data, publish=True)
+            sha = app.interface.save_avatar(path_to_file, publish=True)
             if sha is None:
                 dialogs.ErrorDialog(
                     _('Could not load image'), transient_for=self.window)
@@ -224,13 +222,16 @@ class ProfileWindow:
                 self.avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
                 if 'TYPE' in vcard_[i]:
                     self.avatar_mime_type = vcard_[i]['TYPE']
-                pixbuf = gtkgui_helpers.get_pixbuf_from_data(photo_decoded)
-                if pixbuf is None:
-                    continue
-                pixbuf = pixbuf.scale_simple(
-                    AvatarSize.PROFILE, AvatarSize.PROFILE,
-                    GdkPixbuf.InterpType.BILINEAR)
-                image.set_from_pixbuf(pixbuf)
+
+                scale = self.window.get_scale_factor()
+                surface = app.interface.get_avatar(
+                    self.avatar_sha, AvatarSize.VCARD, scale)
+                if surface is None:
+                    pixbuf = gtkgui_helpers.scale_pixbuf_from_data(
+                        photo_decoded, AvatarSize.VCARD)
+                    surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf,
+                                                                   scale)
+                image.set_from_surface(surface)
                 button.show()
                 remove_avatar.show()
                 text_button.hide()

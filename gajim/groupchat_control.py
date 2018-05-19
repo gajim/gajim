@@ -768,9 +768,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_upload_avatar(self, action, param):
         def _on_accept(filename):
-            with open(filename, 'rb') as file:
-                data = file.read()
-            sha = app.interface.save_avatar(data, publish=True)
+            sha = app.interface.save_avatar(filename, publish=True)
             if sha is None:
                 dialogs.ErrorDialog(
                     _('Could not load image'),
