@@ -29,7 +29,7 @@ from distutils.version import LooseVersion as V
 # Install _() in namespace
 from gajim.common import i18n
 
-_MIN_NBXMPP_VER = "0.6.5"
+_MIN_NBXMPP_VER = "0.6.6"
 _MIN_GTK_VER = "3.22.0"
 
 
