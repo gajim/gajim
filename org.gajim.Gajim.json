@@ -268,9 +268,9 @@
             ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/lathiat/avahi.git",
-                    "branch": "v0.7"
+                    "type": "archive",
+                    "url": "https://github.com/lathiat/avahi/archive/v0.7.tar.gz",
+                    "sha256": "fd45480cef0559b3eab965ea3ad4fe2d7a8f27db32c851a032ee0b487c378329"
                 }
             ]
         },
@@ -338,7 +338,8 @@
                 {
                     "type": "git",
                     "url": "https://dev.gajim.org/gajim/python-nbxmpp.git",
-                    "branch": "nbxmpp-0.6.6"
+                    "tag": "nbxmpp-0.6.6",
+                    "commit": "7256d13ebcde065824da4715df0db399fe9aaf57"
                 }
             ]
         },
