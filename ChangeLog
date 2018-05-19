@@ -4,6 +4,22 @@ Gajim 1.1.0 (TBA)
   * Support for displaying/uploading avatars for rooms
   * Support for PKIX over Secure HTTP (POSH)
 
+Gajim 1.0.3 (20 May 2018)
+
+  Bugs fixed:
+
+  * 8296 Fix errors on roster updates after stream management resume
+  * 9106 Convert font weight from pango to css values
+  * 9124 Bring ChatControl to front when notification is clicked
+
+  * Set no-store hint on groupchat chatstates
+  * Dont show OOB uri if message body is the same
+  * Add missing bybonjour dependency for Windows zeroconf
+
+  Flatpak:
+
+  * Limit dbus access
+
 Gajim 1.0.2 (30 April 2018)
 
   Bugs fixed:
