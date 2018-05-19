@@ -31,6 +31,14 @@ from gajim.common import app
 Filter = namedtuple('Filter', 'name pattern default')
 
 
+def _require_native():
+    if app.is_flatpak():
+        return True
+    if sys.platform in ('win32', 'darwin'):
+        return True
+    return False
+
+
 # Notes: Adding mime types to Gtk.FileFilter forces non-native dialogs
 
 class BaseFileChooser:
@@ -86,7 +94,7 @@ class BaseAvatarChooserDialog:
     _title = _('Choose Avatar…')
     _preivew_size = (100, 100)
 
-    if app.is_flatpak():
+    if _require_native():
         _filters = [Filter(_('PNG files'), '*.png', True),
                     Filter(_('JPEG files'), '*.jp*g', False),
                     Filter(_('SVG files'), '*.svg', False)]
@@ -211,11 +219,3 @@ def AvatarChooserDialog(*args, **kwargs):
         return NativeAvatarChooserDialog(*args, **kwargs)
     else:
         return GtkAvatarChooserDialog(*args, **kwargs)
-
-
-def _require_native():
-    if app.is_flatpak():
-        return True
-    if sys.platform in ('win32', 'darwin'):
-        return True
-    return False
