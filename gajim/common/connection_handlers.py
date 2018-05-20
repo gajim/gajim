@@ -1069,7 +1069,10 @@ class ConnectionHandlersBase:
         if not jid_to:
             reply = True
         else:
-            fjid_to = helpers.parse_jid(str(jid_to))
+            fjid_to = str(jid_to)
+            if self.name != 'Local':
+                # Dont check precis for zeroconf
+                fjid_to = helpers.parse_jid(str(jid_to))
             jid_to = app.get_jid_without_resource(fjid_to)
             if jid_to == app.get_jid_from_account(self.name):
                 reply = True

@@ -885,6 +885,7 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.resource = 'local'
         self.prio = 0
         self.keyID = None
+        self.idle_time = None
         self.timestamp = 0
         self.contact_nickname = None
         self.avatar_sha = None
@@ -1528,7 +1529,7 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
     base_network_events = []
 
     def get_jid_resource(self):
-        self.fjid =self.stanza.getFrom()
+        self.fjid = str(self.stanza.getFrom())
 
         if self.fjid is None:
             for key in self.conn.connection.zeroconf.contacts:
@@ -1833,7 +1834,12 @@ class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-error'
     base_network_events = []
 
+    def init(self):
+        self.zeroconf = False
+
     def generate(self):
+        if self.zeroconf:
+            return True
         self.get_id()
         #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
         if self.id_ in self.conn.sent_message_ids:

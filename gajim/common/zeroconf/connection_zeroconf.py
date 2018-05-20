@@ -69,6 +69,8 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         CommonConnection.__init__(self, name)
         self.is_zeroconf = True
 
+        app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
+            self._nec_message_outgoing)
         app.ged.register_event_handler('stanza-message-outgoing', ged.OUT_CORE,
             self._nec_stanza_message_outgoing)
 
@@ -107,7 +109,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def check_jid(self, jid):
         return jid
 
-    def get_own_jid(self):
+    def get_own_jid(self, *args, **kwargs):
         return nbxmpp.JID(self.username + '@' + self.host)
 
     def reconnect(self):
@@ -123,7 +125,9 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
     def _on_resolve_timeout(self):
         if self.connected:
-            self.connection.resolve_all()
+            if not self.connection.resolve_all():
+                self._on_disconnected()
+                return False
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
@@ -205,7 +209,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 else: # result is None
                     app.nec.push_incoming_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
-                        msg=_('Please check if avahi-daemon is running.')))
+                        msg=_('Please check if avahi/bonjour-daemon is running.')))
                 self.disconnect()
                 return
         else:
@@ -321,23 +325,24 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
+    def _nec_message_outgoing(self, obj):
+        if obj.account != self.name:
+            return
+        self._prepare_message(obj)
+
     def _nec_stanza_message_outgoing(self, obj):
         if obj.conn.name != self.name:
             return
 
         def on_send_ok(stanza_id):
-            app.nec.push_incoming_event(MessageSentEvent(None, conn=self,
-                jid=obj.jid, message=obj.message, keyID=obj.keyID,
-                automatic_message=obj.automatic_message, chatstate=None,
-                stanza_id=stanza_id))
-
+            app.nec.push_incoming_event(MessageSentEvent(None, **vars(obj)))
             self.log_message(obj, obj.jid)
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
-            app.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                fjid=obj.jid, error_code=-1, error_msg=reason, msg=None,
-                time_=None, session=obj.session))
+            app.nec.push_incoming_event(MessageErrorEvent(
+                None, conn=self, fjid=obj.jid, error_code=-1, error_msg=reason,
+                msg=None, time_=None, session=obj.session, zeroconf=True))
             # Dont propagate event
             return True
 
@@ -347,10 +352,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         if ret == -1:
             # Contact Offline
-            app.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-                fjid=obj.jid, error_code=-1, error_msg=_(
-                'Contact is offline. Your message could not be sent.'),
-                msg=None, time_=None, session=obj.session))
+            error_message = _(
+                'Contact is offline. Your message could not be sent.')
+            app.nec.push_incoming_event(MessageErrorEvent(
+                None, conn=self, fjid=obj.jid, error_code=-1,
+                error_msg=error_message, msg=None, time_=None,
+                session=obj.session, zeroconf=True))
             # Dont propagate event
             return True
 
@@ -369,9 +376,12 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 thread_id = data[1]
                 frm = data[0]
                 session = self.get_or_create_session(frm, thread_id)
+                error_message = _(
+                    'Connection to host could not be established: '
+                    'Timeout while sending data.')
                 app.nec.push_incoming_event(MessageErrorEvent(
-                    None, conn=self, fjid=frm, error_code=-1, error_msg=_(
-                    'Connection to host could not be established: Timeout while '
-                    'sending data.'), msg=None, time_=None, session=session))
+                    None, conn=self, fjid=frm, error_code=-1,
+                    error_msg=error_message, msg=None, time_=None,
+                    session=session, zeroconf=True))
 
 # END ConnectionZeroconf

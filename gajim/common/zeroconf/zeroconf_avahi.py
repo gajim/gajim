@@ -160,7 +160,7 @@ class Zeroconf:
 
         # we don't want to see ourselves in the list
         if name != self.name:
-            resolved_info = [(interface, protocol, host, aprotocol, address, port)]
+            resolved_info = [(interface, protocol, host, aprotocol, address, int(port))]
             if name in self.contacts:
                 # Decide whether to try to merge with existing resolved info:
                 old_name, old_domain, old_resolved_info, old_bare_name, old_txt = self.contacts[name]
@@ -186,7 +186,7 @@ class Zeroconf:
             # gajim instance on the same machine,
             # it will be used when we get a new name.
             self.invalid_self_contact[name] = (name, domain,
-                    (interface, protocol, host, aprotocol, address, port),
+                    (interface, protocol, host, aprotocol, address, int(port)),
                     bare_name, txt)
 
 
@@ -445,7 +445,7 @@ class Zeroconf:
     # refresh txt data of all contacts manually (no callback available)
     def resolve_all(self):
         if not self.connected:
-            return
+            return False
         for val in self.contacts.values():
             # get txt data from last recorded resolved info
             # TODO: Better try to get it from last IPv6 mDNS, then last IPv4?
@@ -455,6 +455,8 @@ class Zeroconf:
                     self.avahi.PROTO_UNSPEC, dbus.UInt32(0),
                     reply_handler=self.service_resolved_all_callback,
                     error_handler=self.error_callback)
+
+        return True
 
     def get_contacts(self):
         return self.contacts

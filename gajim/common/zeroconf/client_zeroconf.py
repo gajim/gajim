@@ -442,7 +442,7 @@ class P2PConnection(IdleObject, PlugIn):
         if self.state <= 0:
             return
 
-        r = packet
+        r = str(packet).encode('utf-8')
 
         if now:
             self.sendqueue.insert(0, (r, is_message))
@@ -532,6 +532,9 @@ class P2PConnection(IdleObject, PlugIn):
 
         if self.state < 0:
             return
+
+        received = received.decode('utf-8')
+
         if self.on_receive:
             if self._owner.sock_type == TYPE_CLIENT:
                 self.set_timeout(ACTIVITY_TIMEOUT_SECONDS)
@@ -609,7 +612,8 @@ class P2PConnection(IdleObject, PlugIn):
         if self.sent_data and self.sent_data.strip():
             log.debug('sent: %s' % self.sent_data)
             if hasattr(self._owner, 'Dispatcher'):
-                self._owner.Dispatcher.Event('', DATA_SENT, self.sent_data)
+                self._owner.Dispatcher.Event(
+                    '', DATA_SENT, self.sent_data.decode('utf-8'))
         self.sent_data = None
         if self.buff_is_message:
             self._owner.on_message_sent(self.fd)
@@ -662,7 +666,7 @@ class ClientZeroconf:
 
     def resolve_all(self):
         if self.zeroconf:
-            self.zeroconf.resolve_all()
+            return self.zeroconf.resolve_all()
 
     def reannounce(self, txt):
         self.remove_announce()
@@ -711,7 +715,7 @@ class ClientZeroconf:
         self.disconnect()
 
     def kill_all_connections(self):
-        for connection in self.connections.values():
+        for connection in list(self.connections.values()):
             connection.force_disconnect()
 
     def add_connection(self, connection, ip, port, recipient):
