@@ -358,6 +358,8 @@ class GajimApplication(Gtk.Application):
         accounts_list = sorted(app.config.get_per('accounts'))
         if not accounts_list:
             return
+        if 'Local' in accounts_list:
+            accounts_list.remove('Local')
         if len(accounts_list) > 1:
             for acc in accounts_list:
                 self.add_account_actions(acc)
@@ -365,6 +367,8 @@ class GajimApplication(Gtk.Application):
             self.add_account_actions(accounts_list[0])
 
     def add_account_actions(self, account):
+        if account == 'Local':
+            return
         for action in self.account_actions:
             action_name, func, state, type_ = action
             action_name = account + action_name
@@ -384,6 +388,8 @@ class GajimApplication(Gtk.Application):
             self.remove_action(action_name)
 
     def set_account_actions_state(self, account, new_state=False):
+        if account == 'Local':
+            return
         for action in self.account_actions:
             action_name, _, state, _ = action
             if not new_state and state in ('online', 'feature'):

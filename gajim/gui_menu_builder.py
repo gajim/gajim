@@ -781,7 +781,7 @@ def build_accounts_menu():
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
-    accounts_list = sorted(app.contacts.get_accounts())
+    accounts_list = sorted(app.contacts.get_accounts(zeroconf=False))
     if not accounts_list:
         no_accounts = _('No Accounts available')
         acc_menu.append_item(Gio.MenuItem.new(no_accounts, None))

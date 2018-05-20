@@ -237,8 +237,12 @@ class LegacyContactsAPI:
                 GC_Contacts())
         self._metacontact_manager.add_account(account_name)
 
-    def get_accounts(self):
-        return list(self._accounts.keys())
+    def get_accounts(self, zeroconf=True):
+        accounts = list(self._accounts.keys())
+        if not zeroconf:
+            if 'Local' in accounts:
+                accounts.remove('Local')
+        return accounts
 
     def remove_account(self, account):
         del self._accounts[account]
