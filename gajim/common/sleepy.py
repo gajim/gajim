@@ -53,9 +53,8 @@ try:
         SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
     else: # unix
         from gajim.common import idle
-        idle.xss_available
 except Exception:
-    log.debug('Unable to load idle module')
+    log.warning('Unable to load idle module')
     SUPPORTED = False
 
 class SleepyWindows:

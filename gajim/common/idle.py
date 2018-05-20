@@ -18,6 +18,58 @@
 
 import ctypes
 import ctypes.util
+import logging
+from gi.repository import Gio
+from gi.repository import GLib
+
+log = logging.getLogger('gajim.c.idle')
+
+idle_monitor = None
+
+
+class DBusGnomeIdleMonitor:
+
+    def __init__(self):
+        self.last_idle_time = 0
+
+        log.debug('Connecting to D-Bus')
+        self.dbus_gnome_proxy = Gio.DBusProxy.new_for_bus_sync(
+            Gio.BusType.SESSION,
+            Gio.DBusProxyFlags.NONE,
+            None,
+            'org.gnome.Mutter.IdleMonitor',
+            '/org/gnome/Mutter/IdleMonitor/Core',
+            'org.gnome.Mutter.IdleMonitor',
+            None
+        )
+        log.debug('D-Bus connected')
+
+        # Only the following call will trigger exceptions if the D-Bus
+        # interface/method/... does not exist. Using the failing method
+        # for class init to allow other idle monitors to be used on failure.
+        self._get_idle_sec_fail()
+        log.debug('D-Bus call test successful')
+
+    def _get_idle_sec_fail(self):
+        (idle_time,) = self.dbus_gnome_proxy.call_sync(
+                    'GetIdletime',
+                    None,
+                    Gio.DBusCallFlags.NO_AUTO_START,
+                    -1,
+                    None
+                )
+        return int(idle_time / 1000)
+
+    def get_idle_sec(self):
+        try:
+            self.last_idle_time = self._get_idle_sec_fail()
+        except GLib.Error as e:
+            log.warning(
+                'org.gnome.Mutter.IdleMonitor.GetIdletime() failed: %s',
+                repr(e))
+
+        return self.last_idle_time
+
 
 class XScreenSaverInfo(ctypes.Structure):
     _fields_ = [
@@ -28,72 +80,80 @@ class XScreenSaverInfo(ctypes.Structure):
             ('idle', ctypes.c_ulong),
             ('eventMask', ctypes.c_ulong)
     ]
-XScreenSaverInfo_p = ctypes.POINTER(XScreenSaverInfo)
 
-display_p = ctypes.c_void_p
-xid = ctypes.c_ulong
-c_int_p = ctypes.POINTER(ctypes.c_int)
 
-try:
-    libX11path = ctypes.util.find_library('X11')
-    if libX11path == None:
-        raise OSError('libX11 could not be found.')
-    libX11 = ctypes.cdll.LoadLibrary(libX11path)
-    libX11.XOpenDisplay.restype = display_p
-    libX11.XOpenDisplay.argtypes = ctypes.c_char_p,
-    libX11.XDefaultRootWindow.restype = xid
-    libX11.XDefaultRootWindow.argtypes = display_p,
+class XssIdleMonitor:
+    def __init__(self):
+        XScreenSaverInfo_p = ctypes.POINTER(XScreenSaverInfo)
 
-    libXsspath = ctypes.util.find_library('Xss')
-    if libXsspath == None:
-        raise OSError('libXss could not be found.')
-    libXss = ctypes.cdll.LoadLibrary(libXsspath)
-    libXss.XScreenSaverQueryExtension.argtypes = display_p, c_int_p, c_int_p
-    libXss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
-    libXss.XScreenSaverQueryInfo.argtypes = (display_p, xid, XScreenSaverInfo_p)
+        display_p = ctypes.c_void_p
+        xid = ctypes.c_ulong
+        c_int_p = ctypes.POINTER(ctypes.c_int)
 
-    dpy_p = libX11.XOpenDisplay(None)
-    if dpy_p == None:
-        raise OSError('Could not open X Display.')
+        libX11path = ctypes.util.find_library('X11')
+        if libX11path == None:
+            raise OSError('libX11 could not be found.')
+        libX11 = ctypes.cdll.LoadLibrary(libX11path)
+        libX11.XOpenDisplay.restype = display_p
+        libX11.XOpenDisplay.argtypes = ctypes.c_char_p,
+        libX11.XDefaultRootWindow.restype = xid
+        libX11.XDefaultRootWindow.argtypes = display_p,
 
-    _event_basep = ctypes.c_int()
-    _error_basep = ctypes.c_int()
-    if libXss.XScreenSaverQueryExtension(dpy_p, ctypes.byref(_event_basep),
-                    ctypes.byref(_error_basep)) == 0:
-        raise OSError('XScreenSaver Extension not available on display.')
+        libXsspath = ctypes.util.find_library('Xss')
+        if libXsspath == None:
+            raise OSError('libXss could not be found.')
+        self.libXss = ctypes.cdll.LoadLibrary(libXsspath)
+        self.libXss.XScreenSaverQueryExtension.argtypes = display_p, c_int_p, c_int_p
+        self.libXss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
+        self.libXss.XScreenSaverQueryInfo.argtypes = (display_p, xid, XScreenSaverInfo_p)
 
-    xss_info_p = libXss.XScreenSaverAllocInfo()
-    if xss_info_p == None:
-        raise OSError('XScreenSaverAllocInfo: Out of Memory.')
+        self.dpy_p = libX11.XOpenDisplay(None)
+        if self.dpy_p == None:
+            raise OSError('Could not open X Display.')
 
-    rootwindow = libX11.XDefaultRootWindow(dpy_p)
-    xss_available = True
-except OSError:
-    # Logging?
-    xss_available = False
+        _event_basep = ctypes.c_int()
+        _error_basep = ctypes.c_int()
+        if self.libXss.XScreenSaverQueryExtension(self.dpy_p, ctypes.byref(_event_basep),
+                        ctypes.byref(_error_basep)) == 0:
+            raise OSError('XScreenSaver Extension not available on display.')
+
+        self.xss_info_p = self.libXss.XScreenSaverAllocInfo()
+        if self.xss_info_p == None:
+            raise OSError('XScreenSaverAllocInfo: Out of Memory.')
+
+        self.rootwindow = libX11.XDefaultRootWindow(self.dpy_p)
+
+    def get_idle_sec(self):
+        if self.libXss.XScreenSaverQueryInfo(
+                self.dpy_p,
+                self.rootwindow,
+                self.xss_info_p) == 0:
+            return 0
+        else:
+            return int(self.xss_info_p.contents.idle / 1000)
+
 
 def getIdleSec():
-    global xss_available
     """
     Return the idle time in seconds
     """
-    if not xss_available:
-        return 0
-    if libXss.XScreenSaverQueryInfo(dpy_p, rootwindow, xss_info_p) == 0:
+    if idle_monitor is None:
         return 0
     else:
-        return int(xss_info_p.contents.idle) / 1000
+        return idle_monitor.get_idle_sec()
 
-def close():
-    global xss_available
-    if xss_available:
-        libX11.XFree(xss_info_p)
-        libX11.XCloseDisplay(dpy_p)
-        xss_available = False
+try:
+    idle_monitor = DBusGnomeIdleMonitor()
+except GLib.Error as e:
+    log.info("Idle time via D-Bus not available: %s", repr(e))
+
+    try:
+        idle_monitor = XssIdleMonitor()
+    except OSError as e:
+        log.info("Idle time via XScreenSaverInfo not available: %s", repr(e))
+        raise Exception('No supported idle monitor found')
 
 if __name__ == '__main__':
     import time
     time.sleep(2.1)
-    print(getIdleSec())
-    close()
     print(getIdleSec())
