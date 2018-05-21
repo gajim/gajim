@@ -37,6 +37,7 @@ from collections import namedtuple
 
 import nbxmpp
 
+import gajim
 from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
@@ -46,7 +47,7 @@ from gajim.common.events import Events
 interface = None # The actual interface (the gtk one for the moment)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
 config = c_config.Config()
-version = config.get('version')
+version = gajim.__version__
 connections = {} # 'account name': 'account (connection.Connection) instance'
 avatar_cache = {}
 ipython_window = None
