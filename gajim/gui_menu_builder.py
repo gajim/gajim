@@ -827,7 +827,7 @@ def build_bookmark_menu(account):
     menu.insert_submenu(1, label, bookmark_menu)
 
 
-def get_encryption_menu(control_id, type_id):
+def get_encryption_menu(control_id, type_id, zeroconf=False):
     menu = Gio.Menu()
     menu.append(
         'Disabled', 'win.set-encryption-{}::{}'.format(control_id, 'disabled'))
@@ -837,6 +837,9 @@ def get_encryption_menu(control_id, type_id):
                 continue
         if type_id == 'pm':
             if not hasattr(plugin, 'allow_privatchat'):
+                continue
+        if zeroconf:
+            if not hasattr(plugin, 'allow_zeroconf'):
                 continue
         menu_action = 'win.set-encryption-{}::{}'.format(
             control_id, name)

@@ -218,7 +218,8 @@ class ChatControl(ChatControlBase):
 
         self.encryption_menu = self.xml.get_object('encryption_menu')
         self.encryption_menu.set_menu_model(
-            gui_menu_builder.get_encryption_menu(self.control_id, self.type_id))
+            gui_menu_builder.get_encryption_menu(
+                self.control_id, self.type_id, self.account == 'Local'))
         self.set_encryption_menu_icon()
         # restore previous conversation
         self.restore_conversation()
