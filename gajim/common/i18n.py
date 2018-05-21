@@ -65,7 +65,7 @@ def initialize_lang():
         if default is None:
             # LC_ALL=C
             return
-        LANG = LANG[:2]
+        LANG = default[:2]
     except (ValueError, locale.Error):
         pass
 
