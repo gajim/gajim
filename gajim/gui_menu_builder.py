@@ -727,25 +727,29 @@ def get_account_menu(account):
         sub menu: list
     '''
     account_menu = [
-            ('-add-contact', _('Add Contact…')),
-            ('-join-groupchat', _('Join Group Chat')),
-            ('-profile', _('Profile')),
-            ('-services', _('Discover Services')),
-            ('-start-single-chat', _('Send Single Message…')),
-            (_('Advanced'), [
-                ('-archive', _('Archiving Preferences')),
-                ('-sync-history', _('Synchronise History')),
-                ('-privacylists', _('Privacy Lists')),
-                ('-server-info', _('Server Info')),
-                ('-xml-console', _('XML Console'))
-                ]),
-            (_('Admin'), [
-                ('-send-server-message', _('Send Server Message…')),
-                ('-set-motd', _('Set MOTD…')),
-                ('-update-motd', _('Update MOTD…')),
-                ('-delete-motd', _('Delete MOTD…'))
-                ]),
-            ]
+        ('-add-contact', _('Add Contact…')),
+        ('-join-groupchat', _('Join Group Chat')),
+        ('-profile', _('Profile')),
+        ('-services', _('Discover Services')),
+        ('-start-single-chat', _('Send Single Message…')),
+        (_('Advanced'), [
+            ('-archive', _('Archiving Preferences')),
+            ('-sync-history', _('Synchronise History')),
+            ('-privacylists', _('Privacy Lists')),
+            ('-server-info', _('Server Info')),
+            ('-xml-console', _('XML Console'))
+        ]),
+        (_('Admin'), [
+            ('-send-server-message', _('Send Server Message…')),
+            ('-set-motd', _('Set MOTD…')),
+            ('-update-motd', _('Update MOTD…')),
+            ('-delete-motd', _('Delete MOTD…'))
+        ]),
+    ]
+
+    zeroconf_menu = [
+        ('-xml-console', _('XML Console')),
+    ]
 
     def build_menu(preset):
         menu = Gio.Menu()
@@ -769,6 +773,8 @@ def get_account_menu(account):
                 menu.append_submenu(label, submenu)
         return menu
 
+    if account == 'Local':
+        return build_menu(zeroconf_menu)
     return build_menu(account_menu)
 
 
@@ -781,7 +787,7 @@ def build_accounts_menu():
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
-    accounts_list = sorted(app.contacts.get_accounts(zeroconf=False))
+    accounts_list = sorted(app.contacts.get_accounts())
     if not accounts_list:
         no_accounts = _('No Accounts available')
         acc_menu.append_item(Gio.MenuItem.new(no_accounts, None))

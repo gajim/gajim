@@ -284,37 +284,14 @@ class GajimApplication(Gtk.Application):
 
     def add_actions(self):
         ''' Build Application Actions '''
-        from gajim.app_actions import AppActions
-        action = AppActions(self)
-
-        self.account_actions = [
-            ('-start-single-chat', action.on_single_message, 'online', 's'),
-            ('-join-groupchat', action.on_join_gc, 'online', 's'),
-            ('-add-contact', action.on_add_contact, 'online', 's'),
-            ('-services', action.on_service_disco, 'online', 's'),
-            ('-profile', action.on_profile, 'feature', 's'),
-            ('-xml-console', action.on_xml_console, 'always', 's'),
-            ('-server-info', action.on_server_info, 'online', 's'),
-            ('-archive', action.on_archiving_preferences, 'feature', 's'),
-            ('-sync-history', action.on_history_sync, 'online', 's'),
-            ('-privacylists', action.on_privacy_lists, 'feature', 's'),
-            ('-send-server-message',
-                action.on_send_server_message, 'online', 's'),
-            ('-set-motd', action.on_set_motd, 'online', 's'),
-            ('-update-motd', action.on_update_motd, 'online', 's'),
-            ('-delete-motd', action.on_delete_motd, 'online', 's'),
-            ('-activate-bookmark',
-                action.on_activate_bookmark, 'online', 'a{sv}'),
-            ('-open-event', action.on_open_event, 'always', 'a{sv}'),
-            ('-import-contacts', action.on_import_contacts, 'online', 's'),
-        ]
+        from gajim import app_actions
 
         # General Stateful Actions
 
         act = Gio.SimpleAction.new_stateful(
             'merge', None,
             GLib.Variant.new_boolean(app.config.get('mergeaccounts')))
-        act.connect('change-state', action.on_merge_accounts)
+        act.connect('change-state', app_actions.on_merge_accounts)
         self.add_action(act)
 
         act = Gio.SimpleAction.new_stateful(
@@ -324,40 +301,38 @@ class GajimApplication(Gtk.Application):
 
         # General Actions
 
-        self.general_actions = [
-            ('quit', action.on_quit),
-            ('accounts', action.on_accounts),
-            ('add-account', action.on_add_account),
-            ('manage-proxies', action.on_manage_proxies),
-            ('start-chat', action.on_new_chat),
-            ('bookmarks', action.on_manage_bookmarks),
-            ('history-manager', action.on_history_manager),
-            ('preferences', action.on_preferences),
-            ('plugins', action.on_plugins),
-            ('file-transfer', action.on_file_transfers),
-            ('history', action.on_history),
-            ('shortcuts', action.on_keyboard_shortcuts),
-            ('features', action.on_features),
-            ('content', action.on_contents),
-            ('about', action.on_about),
-            ('faq', action.on_faq),
-            ('ipython', action.toggle_ipython),
-            ('show-next-pending-event', action.show_next_pending_event),
+        general_actions = [
+            ('quit', app_actions.on_quit),
+            ('accounts', app_actions.on_accounts),
+            ('add-account', app_actions.on_add_account),
+            ('manage-proxies', app_actions.on_manage_proxies),
+            ('start-chat', app_actions.on_new_chat),
+            ('bookmarks', app_actions.on_manage_bookmarks),
+            ('history-manager', app_actions.on_history_manager),
+            ('preferences', app_actions.on_preferences),
+            ('plugins', app_actions.on_plugins),
+            ('file-transfer', app_actions.on_file_transfers),
+            ('history', app_actions.on_history),
+            ('shortcuts', app_actions.on_keyboard_shortcuts),
+            ('features', app_actions.on_features),
+            ('content', app_actions.on_contents),
+            ('about', app_actions.on_about),
+            ('faq', app_actions.on_faq),
+            ('ipython', app_actions.toggle_ipython),
+            ('show-next-pending-event', app_actions.show_next_pending_event),
         ]
 
         act = Gio.SimpleAction.new('add-contact', GLib.VariantType.new('s'))
-        act.connect("activate", action.on_add_contact_jid)
+        act.connect("activate", app_actions.on_add_contact_jid)
         self.add_action(act)
 
-        for action in self.general_actions:
+        for action in general_actions:
             action_name, func = action
             act = Gio.SimpleAction.new(action_name, None)
             act.connect("activate", func)
             self.add_action(act)
 
         accounts_list = sorted(app.config.get_per('accounts'))
-        if 'Local' in accounts_list:
-            accounts_list.remove('Local')
         if not accounts_list:
             return
         if len(accounts_list) > 1:
@@ -366,10 +341,38 @@ class GajimApplication(Gtk.Application):
         else:
             self.add_account_actions(accounts_list[0])
 
-    def add_account_actions(self, account):
+    def _get_account_actions(self, account):
+        from gajim import app_actions
+
         if account == 'Local':
-            return
-        for action in self.account_actions:
+            return [
+                ('-xml-console', app_actions.on_xml_console, 'always', 's')
+            ]
+
+        return [
+            ('-start-single-chat', app_actions.on_single_message, 'online', 's'),
+            ('-join-groupchat', app_actions.on_join_gc, 'online', 's'),
+            ('-add-contact', app_actions.on_add_contact, 'online', 's'),
+            ('-services', app_actions.on_service_disco, 'online', 's'),
+            ('-profile', app_actions.on_profile, 'feature', 's'),
+            ('-xml-console', app_actions.on_xml_console, 'always', 's'),
+            ('-server-info', app_actions.on_server_info, 'online', 's'),
+            ('-archive', app_actions.on_archiving_preferences, 'feature', 's'),
+            ('-sync-history', app_actions.on_history_sync, 'online', 's'),
+            ('-privacylists', app_actions.on_privacy_lists, 'feature', 's'),
+            ('-send-server-message',
+                app_actions.on_send_server_message, 'online', 's'),
+            ('-set-motd', app_actions.on_set_motd, 'online', 's'),
+            ('-update-motd', app_actions.on_update_motd, 'online', 's'),
+            ('-delete-motd', app_actions.on_delete_motd, 'online', 's'),
+            ('-activate-bookmark',
+                app_actions.on_activate_bookmark, 'online', 'a{sv}'),
+            ('-open-event', app_actions.on_open_event, 'always', 'a{sv}'),
+            ('-import-contacts', app_actions.on_import_contacts, 'online', 's'),
+        ]
+
+    def add_account_actions(self, account):
+        for action in self._get_account_actions(account):
             action_name, func, state, type_ = action
             action_name = account + action_name
             if self.lookup_action(action_name):
@@ -383,14 +386,12 @@ class GajimApplication(Gtk.Application):
             self.add_action(act)
 
     def remove_account_actions(self, account):
-        for action in self.account_actions:
+        for action in self._get_account_actions(account):
             action_name = account + action[0]
             self.remove_action(action_name)
 
     def set_account_actions_state(self, account, new_state=False):
-        if account == 'Local':
-            return
-        for action in self.account_actions:
+        for action in self._get_account_actions(account):
             action_name, _, state, _ = action
             if not new_state and state in ('online', 'feature'):
                 # We go offline
