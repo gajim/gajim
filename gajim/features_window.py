@@ -163,8 +163,8 @@ class FeaturesWindow:
         return app.is_installed('GSPELL')
 
     def idle_available(self):
-        from gajim.common import sleepy
-        return sleepy.SUPPORTED
+        from gajim.common import idle
+        return idle.Monitor.is_available()
 
     def pycrypto_available(self):
         return app.is_installed('PYCRYPTO')
@@ -181,4 +181,3 @@ class FeaturesWindow:
 
     def gupnp_igd_available(self):
         return app.is_installed('UPNP')
-

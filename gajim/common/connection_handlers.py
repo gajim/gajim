@@ -48,6 +48,7 @@ from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
 from gajim.common import configpaths
+from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
@@ -1730,7 +1731,7 @@ ConnectionHTTPUpload):
         'send_idle_time'):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()
-            qp.attrs['seconds'] = int(app.interface.sleeper.getIdleSec())
+            qp.attrs['seconds'] = idle.Monitor.get_idle_sec()
         else:
             iq_obj = obj.stanza.buildReply('error')
             err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \

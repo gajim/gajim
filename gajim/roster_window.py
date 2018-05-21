@@ -46,7 +46,6 @@ import locale
 
 from enum import IntEnum, unique
 
-from gajim.common import sleepy
 from gajim import history_window
 from gajim import dialogs
 from gajim import vcard
@@ -62,6 +61,7 @@ from gajim.common.const import AvatarSize
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
 if app.is_installed('GEOCLUE'):
@@ -2125,8 +2125,7 @@ class RosterWindow:
 
     def send_status_continue(self, account, status, txt, auto, to):
         if app.account_is_connected(account) and not to:
-            if status == 'online' and app.interface.sleeper.getState() != \
-            sleepy.STATE_UNKNOWN:
+            if status == 'online' and not idle.Monitor.is_unknown():
                 app.sleeper_state[account] = 'online'
             elif app.sleeper_state[account] not in ('autoaway', 'autoxa') or \
             status == 'offline':

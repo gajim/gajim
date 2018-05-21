@@ -40,7 +40,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from gajim.common import config as c_config
-from gajim.common import sleepy
+from gajim.common import idle
 from gajim.common.i18n import Q_
 
 from gajim import gtkgui_helpers
@@ -353,7 +353,7 @@ class PreferencesWindow:
         self.auto_xa_message_entry.set_text(st)
         self.auto_xa_message_entry.set_sensitive(app.config.get('autoxa'))
 
-        if not sleepy.SUPPORTED:
+        if not idle.Monitor.is_available():
             self.xml.get_object('autoaway_table').set_sensitive(False)
 
         # ask_status when online / offline
@@ -925,9 +925,8 @@ class PreferencesWindow:
     def on_auto_away_time_spinbutton_value_changed(self, widget):
         aat = widget.get_value_as_int()
         app.config.set('autoawaytime', aat)
-        app.interface.sleeper = sleepy.Sleepy(
-                                app.config.get('autoawaytime') * 60,
-                                app.config.get('autoxatime') * 60)
+        idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
+                                  app.config.get('autoxatime') * 60)
 
     def on_auto_away_message_entry_changed(self, widget):
         app.config.set('autoaway_message', widget.get_text())
@@ -939,9 +938,8 @@ class PreferencesWindow:
     def on_auto_xa_time_spinbutton_value_changed(self, widget):
         axt = widget.get_value_as_int()
         app.config.set('autoxatime', axt)
-        app.interface.sleeper = sleepy.Sleepy(
-                                app.config.get('autoawaytime') * 60,
-                                app.config.get('autoxatime') * 60)
+        idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
+                                  app.config.get('autoxatime') * 60)
 
     def on_auto_xa_message_entry_changed(self, widget):
         app.config.set('autoxa_message', widget.get_text())

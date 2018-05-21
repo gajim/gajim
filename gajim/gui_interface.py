@@ -79,7 +79,7 @@ from gajim.filetransfers_window import FileTransfersWindow
 from gajim.atom_window import AtomWindow
 from gajim.session import ChatControlSession
 
-from gajim.common import sleepy
+from gajim.common import idle
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
@@ -1114,13 +1114,13 @@ class Interface:
         app.logger.insert_jid(obj.conn.get_own_jid().getStripped())
         account = obj.conn.name
         app.block_signed_in_notifications[account] = True
-        state = self.sleeper.getState()
         connected = obj.conn.connected
-        if state != sleepy.STATE_UNKNOWN and connected in (2, 3):
+
+        if idle.Monitor.is_unknown() and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             app.sleeper_state[account] = 'online'
-        elif not ((state == sleepy.STATE_AWAY and connected == 4) or \
-        (state == sleepy.STATE_XA and connected == 5)):
+        elif not ((idle.Monitor.is_away() and connected == 4) or \
+        (idle.Monitor.is_xa() and connected == 5)):
             # If we are autoaway/xa and come back after a disconnection, do
             # nothing
             # Else disable autoaway
@@ -2239,15 +2239,15 @@ class Interface:
         """
         Check idle status and change that status if needed
         """
-        if not self.sleeper.poll():
+        if not idle.Monitor.poll():
             # idle detection is not supported in that OS
             return False # stop looping in vain
-        state = self.sleeper.getState()
+
         for account in app.connections:
             if account not in app.sleeper_state or \
             not app.sleeper_state[account]:
                 continue
-            if state == sleepy.STATE_AWAKE:
+            if idle.Monitor.is_awake():
                 if app.sleeper_state[account] in ('autoaway', 'autoxa'):
                     # we go online
                     self.roster.send_status(account, 'online',
@@ -2261,7 +2261,7 @@ class Interface:
                         app.status_before_autoaway[account])
                     app.status_before_autoaway[account] = ''
                     app.sleeper_state[account] = 'off'
-            elif state == sleepy.STATE_AWAY and app.config.get('autoaway'):
+            elif idle.Monitor.is_away() and app.config.get('autoaway'):
                 if app.sleeper_state[account] == 'online':
                     # we save out online status
                     app.status_before_autoaway[account] = \
@@ -2288,7 +2288,7 @@ class Interface:
                     self.roster.send_status(account, app.SHOW_LIST[connected],
                         app.status_before_autoaway[account], auto=True)
                     app.sleeper_state[account] = 'idle'
-            elif state == sleepy.STATE_XA and \
+            elif idle.Monitor.is_xa() and \
             app.sleeper_state[account] in ('online', 'autoaway',
             'autoaway-forced') and app.config.get('autoxa'):
                 # we go extended away [we pass True to auto param]
@@ -2913,9 +2913,8 @@ class Interface:
 
         self.show_vcard_when_connect = []
 
-        self.sleeper = sleepy.Sleepy(
-            app.config.get('autoawaytime') * 60, # make minutes to seconds
-            app.config.get('autoxatime') * 60)
+        idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
+                                  app.config.get('autoxatime') * 60)
 
         gtkgui_helpers.make_jabber_state_images()
 

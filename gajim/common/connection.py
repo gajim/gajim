@@ -61,6 +61,7 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import i18n
+from gajim.common import idle
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -596,7 +597,7 @@ class CommonConnection:
             idle_time = None
             if auto:
                 if app.is_installed('IDLE') and app.config.get('autoaway'):
-                    idle_sec = int(app.interface.sleeper.getIdleSec())
+                    idle_sec = idle.Monitor.get_idle_sec()
                     idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                         time.gmtime(time.time() - idle_sec))
             app.nec.push_incoming_event(BeforeChangeShowEvent(None,
@@ -2025,8 +2026,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if signed:
             p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
         if idle_time:
-            idle = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
-            idle.setAttr('since', idle_time)
+            idle_node = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
+            idle_node.setAttr('since', idle_time)
         if self.connection:
             self.connection.send(p)
             self.priority = priority
@@ -2761,11 +2762,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.add_lang(p)
         if auto:
             if app.is_installed('IDLE') and app.config.get('autoaway'):
-                idle_sec = int(app.interface.sleeper.getIdleSec())
+                idle_sec = idle.Monitor.get_idle_sec()
                 idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                     time.gmtime(time.time() - idle_sec))
-                idle = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
-                idle.setAttr('since', idle_time)
+                idle_node = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
+                idle_node.setAttr('since', idle_time)
         # send instantly so when we go offline, status is sent to gc before we
         # disconnect from jabber server
         self.connection.send(p)

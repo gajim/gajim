@@ -276,8 +276,8 @@ def detect_dependencies():
 
     # IDLE
     try:
-        from gajim.common import sleepy
-        if sleepy.SUPPORTED:
+        from gajim.common import idle
+        if idle.Monitor.is_available():
             _dependencies['IDLE'] = True
     except Exception:
         pass

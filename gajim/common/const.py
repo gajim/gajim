@@ -106,6 +106,12 @@ class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
 
+@unique
+class IdleState(IntEnum):
+    UNKNOWN = 0
+    XA = 1
+    AWAY = 2
+    AWAKE = 3
 
 SSLError = {
     2: _("Unable to get issuer certificate"),
