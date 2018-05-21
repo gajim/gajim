@@ -356,10 +356,10 @@ class GajimApplication(Gtk.Application):
             self.add_action(act)
 
         accounts_list = sorted(app.config.get_per('accounts'))
-        if not accounts_list:
-            return
         if 'Local' in accounts_list:
             accounts_list.remove('Local')
+        if not accounts_list:
+            return
         if len(accounts_list) > 1:
             for acc in accounts_list:
                 self.add_account_actions(acc)
