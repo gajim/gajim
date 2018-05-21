@@ -2250,7 +2250,8 @@ class RoomAvatarReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         vcard = self.stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
         if vcard is None:
-            log.warning('Invalid room self presence:\n%s', self.stanza)
+            app.log('avatar').info(
+                '%s has no avatar published (vCard)', self.jid)
             return
         self.avatar_sha = vcard.getTagData('photo')
         return True
