@@ -145,14 +145,13 @@ class XssIdleMonitor:
 
 
 class WindowsIdleMonitor:
-
-    OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
-    CloseDesktop = ctypes.windll.user32.CloseDesktop
-    SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
-    GetTickCount = ctypes.windll.kernel32.GetTickCount
-    GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
-
     def __init__(self):
+        self.OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
+        self.CloseDesktop = ctypes.windll.user32.CloseDesktop
+        self.SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
+        self.GetTickCount = ctypes.windll.kernel32.GetTickCount
+        self.GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
+
         class LASTINPUTINFO(ctypes.Structure):
             _fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
 
