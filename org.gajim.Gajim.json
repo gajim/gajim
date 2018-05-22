@@ -253,7 +253,8 @@
             "cleanup": [
                 "/bin",
                 "/lib/avahi",
-                "/share"
+                "/share/avahi",
+                "avahi.mo"
             ],
             "config-opts": [
                 "--with-distro=none",
