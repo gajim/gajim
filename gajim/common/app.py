@@ -145,7 +145,7 @@ gajim_optional_features = {}
 caps_hash = {}
 
 _dependencies = {
-    'AVAHI': False,
+    'PYTHON-DBUS': False,
     'PYBONJOUR': False,
     'PYCRYPTO': False,
     'PYGPG': False,
@@ -166,7 +166,7 @@ def is_installed(dependency):
         return _dependencies['PYGPG'] and _dependencies['GPG_BINARY']
     if dependency == 'ZEROCONF':
         # Alias for checking zeroconf libs
-        return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
+        return _dependencies['PYTHON-DBUS'] or _dependencies['PYBONJOUR']
     return _dependencies[dependency]
 
 def is_flatpak():
@@ -184,8 +184,8 @@ def detect_dependencies():
             import pybonjour
             _dependencies['PYBONJOUR'] = True
         else:
-            import avahi
-            _dependencies['AVAHI'] = True
+            import dbus
+            _dependencies['PYTHON-DBUS'] = True
     except Exception:
         pass
 

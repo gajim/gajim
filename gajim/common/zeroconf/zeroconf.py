@@ -38,7 +38,7 @@ class ConstantRI(IntEnum):
 
 def test_avahi():
     try:
-        import avahi
+        import dbus
     except ImportError:
         return False
     return True

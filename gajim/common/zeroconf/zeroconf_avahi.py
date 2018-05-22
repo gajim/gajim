@@ -26,11 +26,11 @@ except ImportError:
     pass
 
 from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
+from gajim.common.zeroconf.zeroconf_avahi_const import *
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,
             disconnected_CB, error_CB, name, host, port):
-        self.avahi = None
         self.domain = None   # specific domain to browse
         self.stype = '_presence._tcp'
         self.port = port  # listening port that gets announced
@@ -81,7 +81,7 @@ class Zeroconf:
 
         # synchronous resolving
         self.server.ResolveService( int(interface), int(protocol), name, stype,
-                domain, self.avahi.PROTO_UNSPEC, dbus.UInt32(0),
+                domain, Protocol.UNSPEC, dbus.UInt32(0),
                 reply_handler=self.service_resolved_callback,
                 error_handler=self.error_callback1)
 
@@ -116,8 +116,8 @@ class Zeroconf:
                         stype, domain, dbus.UInt32(0))
 
         self.service_browser = dbus.Interface(self.bus.get_object(
-                self.avahi.DBUS_NAME, object_path),
-                self.avahi.DBUS_INTERFACE_SERVICE_BROWSER)
+                DBUS_NAME, object_path),
+                DBUS_INTERFACE_SERVICE_BROWSER)
         self.service_browser.connect_to_signal('ItemNew',
                 self.new_service_callback)
         self.service_browser.connect_to_signal('ItemRemove',
@@ -145,6 +145,30 @@ class Zeroconf:
                 val = ''
             txt_dict[key] = val
         return txt_dict
+
+    @staticmethod
+    def string_to_byte_array(s):
+        s = s.encode('utf-8')
+        r = []
+
+        for c in s:
+            r.append(dbus.Byte(c))
+
+        return r
+
+    def dict_to_txt_array(self, txt_dict):
+        l = []
+
+        for k,v in txt_dict.items():
+            if isinstance(k, str):
+                k = k.encode('utf-8')
+
+            if isinstance(v, str):
+                v = v.encode('utf-8')
+
+            l.append(self.string_to_byte_array("%s=%s" % (k,v)))
+
+        return l
 
     def service_resolved_callback(self, interface, protocol, name, stype, domain,
     host, aprotocol, address, port, txt, flags):
@@ -222,22 +246,19 @@ class Zeroconf:
 
     def server_state_changed_callback(self, state, error):
         log.debug('server state changed to %s' % state)
-        if state == self.avahi.SERVER_RUNNING:
+        if state == ServerState.RUNNING:
             self.create_service()
-        elif state in (self.avahi.SERVER_COLLISION,
-        self.avahi.SERVER_REGISTERING):
+        elif state in (ServerState.COLLISION,
+                       ServerState.REGISTERING):
             self.disconnect()
             self.entrygroup.Reset()
-        elif state == self.avahi.CLIENT_FAILURE:
-            # does it ever go here?
-            log.debug('CLIENT FAILURE')
 
     def entrygroup_state_changed_callback(self, state, error):
         # the name is already present, so recreate
-        if state == self.avahi.ENTRY_GROUP_COLLISION:
+        if state == EntryGroup.COLLISION:
             log.debug('zeroconf.py: local name collision')
             self.service_add_fail_callback('Local name collision')
-        elif state == self.avahi.ENTRY_GROUP_FAILURE:
+        elif state == EntryGroup.FAILURE:
             self.disconnect()
             self.entrygroup.Reset()
             log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
@@ -252,15 +273,15 @@ class Zeroconf:
         return show
 
     def avahi_txt(self):
-        return self.avahi.dict_to_txt_array(self.txt)
+        return self.dict_to_txt_array(self.txt)
 
     def create_service(self):
         try:
             if not self.entrygroup:
                 # create an EntryGroup for publishing
                 self.entrygroup = dbus.Interface(self.bus.get_object(
-                        self.avahi.DBUS_NAME, self.server.EntryGroupNew()),
-                        self.avahi.DBUS_INTERFACE_ENTRY_GROUP)
+                        DBUS_NAME, self.server.EntryGroupNew()),
+                        DBUS_INTERFACE_ENTRY_GROUP)
                 self.entrygroup.connect_to_signal('StateChanged',
                         self.entrygroup_state_changed_callback)
 
@@ -284,8 +305,8 @@ class Zeroconf:
             self.txt = txt
             log.debug('Publishing service %s of type %s' % (self.name,
                     self.stype))
-            self.entrygroup.AddService(self.avahi.IF_UNSPEC,
-                    self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
+            self.entrygroup.AddService(Interface.UNSPEC,
+                    Protocol.UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
                     '', dbus.UInt16(self.port), self.avahi_txt(),
                     reply_handler=self.service_added_callback,
                     error_handler=self.service_add_fail_callback)
@@ -304,7 +325,7 @@ class Zeroconf:
             return False
 
         state = self.server.GetState()
-        if state == self.avahi.SERVER_RUNNING:
+        if state == ServerState.RUNNING:
             if self.create_service():
                 self.announced = True
                 return True
@@ -314,7 +335,7 @@ class Zeroconf:
         if self.announced == False:
             return False
         try:
-            if self.entrygroup.GetState() != self.avahi.ENTRY_GROUP_FAILURE:
+            if self.entrygroup.GetState() != EntryGroup.FAILURE:
                 self.entrygroup.Reset()
                 self.entrygroup.Free()
                 # .Free() has mem leaks
@@ -345,6 +366,9 @@ class Zeroconf:
     def connect_dbus(self):
         try:
             import dbus
+            from dbus.mainloop.glib import DBusGMainLoop
+            main_loop = DBusGMainLoop(set_as_default=True)
+            dbus.set_default_main_loop(main_loop)
         except ImportError:
             log.debug('Error: python-dbus needs to be installed. No '
                     'zeroconf support.')
@@ -368,19 +392,12 @@ class Zeroconf:
     def connect_avahi(self):
         if not self.connect_dbus():
             return False
-        try:
-            import avahi
-            self.avahi = avahi
-        except ImportError:
-            log.debug('Error: python-avahi needs to be installed. No '
-                    'zeroconf support.')
-            return False
 
         if self.server:
             return True
         try:
-            self.server = dbus.Interface(self.bus.get_object(self.avahi.DBUS_NAME,
-                    self.avahi.DBUS_PATH_SERVER), self.avahi.DBUS_INTERFACE_SERVER)
+            self.server = dbus.Interface(self.bus.get_object(DBUS_NAME,
+                    DBUS_PATH_SERVER), DBUS_INTERFACE_SERVER)
             self.server.connect_to_signal('StateChanged',
                     self.server_state_changed_callback)
         except Exception as e:
@@ -400,21 +417,21 @@ class Zeroconf:
         # start browsing
         if self.domain is None:
             # Explicitly browse .local
-            self.browse_domain(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC,
-                    'local')
+            self.browse_domain(
+                Interface.UNSPEC, Protocol.UNSPEC, 'local')
 
             # Browse for other browsable domains
             self.domain_browser = dbus.Interface(self.bus.get_object(
-                    self.avahi.DBUS_NAME, self.server.DomainBrowserNew(
-                    self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC, '',
-                    self.avahi.DOMAIN_BROWSER_BROWSE, dbus.UInt32(0))),
-                    self.avahi.DBUS_INTERFACE_DOMAIN_BROWSER)
+                    DBUS_NAME, self.server.DomainBrowserNew(
+                    Interface.UNSPEC, Protocol.UNSPEC, '',
+                    DomainBrowser.BROWSE, dbus.UInt32(0))),
+                    DBUS_INTERFACE_DOMAIN_BROWSER)
             self.domain_browser.connect_to_signal('ItemNew',
                     self.new_domain_callback)
             self.domain_browser.connect_to_signal('Failure', self.error_callback)
         else:
-            self.browse_domain(self.avahi.IF_UNSPEC, self.avahi.PROTO_UNSPEC,
-                    self.domain)
+            self.browse_domain(
+                Interface.UNSPEC, Protocol.UNSPEC, self.domain)
 
         return True
 
@@ -452,7 +469,7 @@ class Zeroconf:
             ri = val[Constant.RESOLVED_INFO][0]
             self.server.ResolveService(int(ri[ConstantRI.INTERFACE]), int(ri[ConstantRI.PROTOCOL]),
                     val[Constant.BARE_NAME], self.stype, val[Constant.DOMAIN],
-                    self.avahi.PROTO_UNSPEC, dbus.UInt32(0),
+                    Protocol.UNSPEC, dbus.UInt32(0),
                     reply_handler=self.service_resolved_all_callback,
                     error_handler=self.error_callback)
 
@@ -472,8 +489,8 @@ class Zeroconf:
 
         txt = self.avahi_txt()
         if self.connected and self.entrygroup:
-            self.entrygroup.UpdateServiceTxt(self.avahi.IF_UNSPEC,
-                    self.avahi.PROTO_UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
+            self.entrygroup.UpdateServiceTxt(Interface.UNSPEC,
+                    Protocol.UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
                     txt, reply_handler=self.service_updated_callback,
                     error_handler=self.error_callback)
             return True

@@ -47,7 +47,7 @@ class FeaturesWindow:
         self.features = {
             _('Bonjour / Zeroconf'): (self.zeroconf_available,
                 _('Serverless chatting with autodetected clients in a local network.'),
-                _('Requires python-avahi.'),
+                _('Requires python-dbus.'),
                 _('Requires pybonjour and bonjour SDK running (%(url)s)') % {'url': 'https://developer.apple.com/opensource/).'}),
             _('Command line'): (self.dbus_available,
                 _('A script to control Gajim via commandline.'),
