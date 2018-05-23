@@ -81,6 +81,9 @@ def get_locale_dir():
         path, tail = os.path.split(path)
         path, tail = os.path.split(path)
         localedir, tail = os.path.split(path)
+    elif os.path.exists('/app/share/run-as-flatpak'):
+        # Check if we run as flatpak
+        return '/app/share/locale'
     else:
         # fallback to user locale
         base = os.getenv('XDG_DATA_HOME')
