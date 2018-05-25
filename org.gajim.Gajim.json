@@ -247,34 +247,6 @@
                 }
             ]
         },
-        /* Zeroconf support */
-        {
-            "name": "avahi",
-            "cleanup": [
-                "/bin",
-                "/lib/avahi",
-                "/share/avahi",
-                "avahi.mo"
-            ],
-            "config-opts": [
-                "--with-distro=none",
-                "--disable-qt3",
-                "--disable-qt4",
-                "--disable-libdaemon",
-                "--disable-pygtk",
-                "--disable-gdbm",
-                "--disable-mono",
-                "--disable-monodoc",
-                "--disable-manpages"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://github.com/lathiat/avahi/archive/v0.7.tar.gz",
-                    "sha256": "fd45480cef0559b3eab965ea3ad4fe2d7a8f27db32c851a032ee0b487c378329"
-                }
-            ]
-        },
         /* OMEMO support */
         {
             "name": "protobuf",

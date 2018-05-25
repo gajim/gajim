@@ -17,7 +17,7 @@
 - python3-pil (pillow) for support of webp avatars
 - python3-crypto to enable End to end encryption
 - python3-gnupg to enable GPG encryption
-- For zeroconf (bonjour) you need dbus-glib, python-avahi
+- For zeroconf (bonjour) you need python3-dbus
 - gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc
 - gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
 - D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.
