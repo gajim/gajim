@@ -69,10 +69,6 @@ class FeaturesWindow:
                 _('Ability to measure idle time, in order to set auto status.'),
                 _('Requires libxss library.'),
                 _('Requires python2.5.')),
-            _('End to End message encryption'): (self.pycrypto_available,
-                _('Encrypting chat messages.'),
-                _('Requires python-crypto.'),
-                _('Requires python-crypto.')),
             _('RST Generator'): (self.docutils_available,
                 _('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
                 _('Requires python-docutils.'),
@@ -165,9 +161,6 @@ class FeaturesWindow:
     def idle_available(self):
         from gajim.common import idle
         return idle.Monitor.is_available()
-
-    def pycrypto_available(self):
-        return app.is_installed('PYCRYPTO')
 
     def docutils_available(self):
         try:

@@ -338,8 +338,6 @@ class Config:
                     'keyid': [ opt_str, '', '', True ],
                     'gpg_sign_presence': [ opt_bool, True, _('If disabled, don\'t sign presences with GPG key, even if GPG is configured.') ],
                     'keyname': [ opt_str, '', '', True ],
-                    'enable_esessions': [opt_bool, True, _('Enable ESessions encryption for this account.'), True],
-                    'autonegotiate_esessions': [opt_bool, False, _('Should Gajim automatically start an encrypted session when possible?')],
                     'allow_plaintext_connection': [ opt_bool, False, _('Allow plaintext connections')],
                     'tls_version': [ opt_str, '1.2', '' ],
                     'cipher_list': [ opt_str, 'HIGH:!aNULL:RC4-SHA', '' ],

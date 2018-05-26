@@ -15,7 +15,6 @@
 
 - python3-keyring for saving your password to your system keyring
 - python3-pil (pillow) for support of webp avatars
-- python3-crypto to enable End to end encryption
 - python3-gnupg to enable GPG encryption
 - For zeroconf (bonjour) you need python3-dbus
 - gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc

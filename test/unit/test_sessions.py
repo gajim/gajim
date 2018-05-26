@@ -16,7 +16,6 @@ from gajim.common.connection_handlers_events import MessageReceivedEvent
 from gajim.common.connection_handlers_events import DecryptedMessageReceivedEvent
 import nbxmpp
 
-from gajim.common.stanza_session import StanzaSession
 from gajim.session import ChatControlSession
 from gajim.roster_window import RosterWindow
 
@@ -29,59 +28,6 @@ app.interface = MockInterface()
 
 # name to use for the test account
 account_name = account1
-
-class TestStanzaSession(unittest.TestCase):
-    ''' Testclass for common/stanzasession.py '''
-
-    def setUp(self):
-        self.jid = nbxmpp.JID('test@example.org/Gajim')
-        self.conn = MockConnection(account_name, {'send_stanza': None})
-        self.sess = StanzaSession(self.conn, self.jid, None, 'chat')
-
-    def test_generate_thread_id(self):
-        # thread_id is a string
-        self.assertTrue(isinstance(self.sess.thread_id, str))
-
-        # it should be somewhat long, to avoid clashes
-        self.assertTrue(len(self.sess.thread_id) >= 32)
-
-    def test_is_loggable(self):
-        # by default a session should be loggable
-        # (unless the no_log_for setting says otherwise)
-        self.assertTrue(self.sess.is_loggable())
-
-    def test_terminate(self):
-        # termination is sent by default
-        self.sess.last_send = time.time()
-        self.sess.terminate()
-
-        self.assertEqual(None, self.sess.status)
-
-        calls = self.conn.mockGetNamedCalls('send_stanza')
-        msg = calls[0].getParam(0)
-
-        self.assertEqual(msg.getThread(), self.sess.thread_id)
-
-    def test_terminate_without_sending(self):
-        # no termination is sent if no messages have been sent in the session
-        self.sess.terminate()
-
-        self.assertEqual(None, self.sess.status)
-
-        calls = self.conn.mockGetNamedCalls('send_stanza')
-        self.assertEqual(0, len(calls))
-
-    def test_terminate_no_remote_xep_201(self):
-        # no termination is sent if only messages without thread ids have been
-        # received
-        self.sess.last_send = time.time()
-        self.sess.last_receive = time.time()
-        self.sess.terminate()
-
-        self.assertEqual(None, self.sess.status)
-
-        calls = self.conn.mockGetNamedCalls('send_stanza')
-        self.assertEqual(0, len(calls))
 
 
 class TestChatControlSession(unittest.TestCase):

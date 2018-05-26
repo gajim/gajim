@@ -1367,9 +1367,6 @@ def update_optional_features(account = None):
             app.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
         if not app.config.get('ignore_incoming_xhtml'):
             app.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
-        if app.is_installed('PYCRYPTO') \
-        and app.config.get_per('accounts', a, 'enable_esessions'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_ESESSION)
         if app.config.get_per('accounts', a, 'answer_receipts'):
             app.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
         app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)

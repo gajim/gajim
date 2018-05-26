@@ -2309,17 +2309,6 @@ class Oauth2CredentialsRequiredEvent(nec.NetworkIncomingEvent):
     name = 'oauth2-credentials-required'
     base_network_events = []
 
-class FailedDecryptEvent(nec.NetworkIncomingEvent):
-    name = 'failed-decrypt'
-    base_network_events = []
-
-    def generate(self):
-        self.conn = self.msg_obj.conn
-        self.fjid = self.msg_obj.fjid
-        self.timestamp = self.msg_obj.timestamp
-        self.session = self.msg_obj.session
-        return True
-
 class SignedInEvent(nec.NetworkIncomingEvent):
     name = 'signed-in'
     base_network_events = []

@@ -42,7 +42,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
-from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 from gajim.common.contacts import GC_Contact
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
@@ -207,9 +206,6 @@ class ChatControl(ChatControlBase):
             session.control = self
             self.session = session
 
-            if session.enable_encryption:
-                self.print_esession_details()
-
         # Enable encryption if needed
         self.no_autonegotiation = False
         self.add_actions()
@@ -231,8 +227,6 @@ class ChatControl(ChatControlBase):
             # Dont connect this when PrivateChatControl is used
             app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
                 self._nec_update_avatar)
-        app.ged.register_event_handler('failed-decrypt', ged.GUI1,
-            self._nec_failed_decrypt)
         app.ged.register_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
         app.ged.register_event_handler('caps-received', ged.GUI1,
@@ -920,53 +914,6 @@ class ChatControl(ChatControlBase):
             chatstate=chatstate_to_send, xhtml=xhtml,
             process_commands=process_commands, attention=attention)
 
-    def on_cancel_session_negotiation(self):
-        msg = _('Session negotiation cancelled')
-        ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
-
-    def print_archiving_session_details(self):
-        """
-        Print esession settings to textview
-        """
-        archiving = bool(self.session) and isinstance(self.session,
-                ArchivingStanzaSession) and self.session.archiving
-        if archiving:
-            msg = _('This session WILL be archived on server')
-        else:
-            msg = _('This session WILL NOT be archived on server')
-        ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
-
-    def print_esession_details(self):
-        """
-        Print esession settings to textview
-        """
-        e2e_is_active = bool(self.session) and self.session.enable_encryption
-        if e2e_is_active:
-            msg = _('This session is encrypted')
-
-            if self.session.is_loggable():
-                msg += _(' and WILL be logged')
-            else:
-                msg += _(' and WILL NOT be logged')
-
-            ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
-
-            if not self.session.verified_identity:
-                ChatControlBase.print_conversation_line(self, _("Remote contact's identity not verified. Click the shield button for more details."), 'status', '', None)
-        else:
-            msg = _('end-to-end encryption disabled')
-            ChatControlBase.print_conversation_line(self, msg, 'status', '', None)
-
-        self._show_lock_image(e2e_is_active, 'E2E',
-                              self.session and self.session.verified_identity)
-
-    def print_session_details(self, old_session=None):
-        if isinstance(self.session, EncryptedStanzaSession) or \
-        (old_session and isinstance(old_session, EncryptedStanzaSession)):
-            self.print_esession_details()
-        elif isinstance(self.session, ArchivingStanzaSession):
-            self.print_archiving_session_details()
-
     def get_our_nick(self):
         return app.nicks[self.account]
 
@@ -1186,8 +1133,6 @@ class ChatControl(ChatControlBase):
         if self.TYPE_ID == message_control.TYPE_CHAT:
             app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
                 self._nec_update_avatar)
-        app.ged.remove_event_handler('failed-decrypt', ged.GUI1,
-            self._nec_failed_decrypt)
         app.ged.remove_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
         app.ged.remove_event_handler('caps-received', ged.GUI1,
@@ -1481,57 +1426,6 @@ class ChatControl(ChatControlBase):
         User wants to invite some friends to chat
         """
         dialogs.TransformChatToMUC(self.account, [self.contact.jid])
-
-    def activate_esessions(self):
-        if not (self.session and self.session.enable_encryption):
-            self.begin_e2e_negotiation()
-
-    def terminate_esessions(self):
-        if not (self.session and self.session.enable_encryption):
-            return
-        # e2e was enabled, disable it
-        jid = str(self.session.jid)
-        thread_id = self.session.thread_id
-
-        self.session.terminate_e2e()
-
-        app.connections[self.account].delete_session(jid, thread_id)
-
-        # presumably the user had a good reason to shut it off, so
-        # disable autonegotiation too
-        self.no_autonegotiation = True
-
-    def begin_negotiation(self):
-        self.no_autonegotiation = True
-
-        if not self.session:
-            fjid = self.contact.get_full_jid()
-            new_sess = app.connections[self.account].make_new_session(fjid, type_=self.type_id)
-            self.set_session(new_sess)
-
-    def begin_e2e_negotiation(self):
-        self.begin_negotiation()
-        self.session.resource = self.contact.resource
-        self.session.negotiate_e2e(False)
-
-    def _nec_failed_decrypt(self, obj):
-        if obj.session != self.session:
-            return
-
-        details = _('Unable to decrypt message from %s\nIt may have been '
-            'tampered with.') % obj.fjid
-        self.print_conversation_line(details, 'status', '', obj.timestamp)
-
-        # terminate the session
-        thread_id = self.session.thread_id
-        self.session.terminate_e2e()
-        obj.conn.delete_session(obj.fjid, thread_id)
-
-        # restart the session
-        self.begin_e2e_negotiation()
-
-        # Stop emission so it doesn't go to gui_interface
-        return True
 
     def got_connected(self):
         ChatControlBase.got_connected(self)

@@ -21,11 +21,13 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
+import string
+import random
+import itertools
+
 from gajim.common import helpers
 from gajim.common import events
-from gajim.common import exceptions
 from gajim.common import app
-from gajim.common import stanza_session
 from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
@@ -34,28 +36,48 @@ from gajim.common.const import KindConstant
 from gajim import message_control
 from gajim import notify
 from gajim import dialogs
-from gajim import negotiation
 
-class ChatControlSession(stanza_session.EncryptedStanzaSession):
+
+class ChatControlSession(object):
     def __init__(self, conn, jid, thread_id, type_='chat'):
-        stanza_session.EncryptedStanzaSession.__init__(self, conn, jid, thread_id,
-                type_='chat')
-        app.ged.register_event_handler('decrypted-message-received', ged.PREGUI,
-            self._nec_decrypted_message_received)
-
+        self.conn = conn
+        self.jid = jid
+        self.type_ = type_
+        self.resource = jid.getResource()
         self.control = None
 
-    def detach_from_control(self):
-        if self.control:
-            self.control.set_session(None)
+        if thread_id:
+            self.received_thread_id = True
+            self.thread_id = thread_id
+        else:
+            self.received_thread_id = False
+            if type_ == 'normal':
+                self.thread_id = None
+            else:
+                self.thread_id = self.generate_thread_id()
 
-    def acknowledge_termination(self):
-        self.detach_from_control()
-        stanza_session.EncryptedStanzaSession.acknowledge_termination(self)
+        self.loggable = True
 
-    def terminate(self, send_termination = True):
-        stanza_session.EncryptedStanzaSession.terminate(self, send_termination)
-        self.detach_from_control()
+        self.last_send = 0
+        self.last_receive = 0
+
+        app.ged.register_event_handler('decrypted-message-received',
+                                       ged.PREGUI,
+                                       self._nec_decrypted_message_received)
+
+    def generate_thread_id(self):
+        return ''.join(
+            [f(string.ascii_letters) for f in itertools.repeat(
+                random.choice, 32)]
+        )
+
+    def is_loggable(self):
+        return app.config.should_log(self.conn.name,
+                                     self.jid.getStripped())
+
+    def get_to(self):
+        to = str(self.jid)
+        return app.get_jid_without_resource(to) + '/' + self.resource
 
     def _nec_decrypted_message_received(self, obj):
         """
@@ -400,177 +422,3 @@ class ChatControlSession(stanza_session.EncryptedStanzaSession):
         else:
             bb_jid, bb_account = jid, self.conn.name
         app.interface.roster.select_contact(bb_jid, bb_account)
-
-    # ---- ESessions stuff ---
-
-    def handle_negotiation(self, form):
-        if form.getField('accept') and not form['accept'] in ('1', 'true'):
-            self.cancelled_negotiation()
-            return
-
-        # encrypted session states. these are described in stanza_session.py
-
-        try:
-            if form.getType() == 'form' and 'security' in form.asDict():
-                security_options = [x[1] for x in form.getField('security').\
-                    getOptions()]
-                if security_options == ['none']:
-                    self.respond_archiving(form)
-                else:
-                    # bob responds
-
-                    # we don't support 3-message negotiation as the responder
-                    if 'dhkeys' in form.asDict():
-                        self.fail_bad_negotiation('3 message negotiation not '
-                            'supported when responding', ('dhkeys',))
-                        return
-
-                    negotiated, not_acceptable, ask_user = \
-                        self.verify_options_bob(form)
-
-                    if ask_user:
-                        def accept_nondefault_options(is_checked):
-                            self.dialog.destroy()
-                            negotiated.update(ask_user)
-                            self.respond_e2e_bob(form, negotiated,
-                                not_acceptable)
-
-                        def reject_nondefault_options():
-                            self.dialog.destroy()
-                            for key in ask_user.keys():
-                                not_acceptable.append(key)
-                            self.respond_e2e_bob(form, negotiated,
-                                not_acceptable)
-
-                        self.dialog = dialogs.YesNoDialog(_('Confirm these '
-                            'session options'),
-                            _('The remote client wants to negotiate a session '
-                            'with these features:\n\n%s\n\nAre these options '
-                            'acceptable?''') % (
-                            negotiation.describe_features(ask_user)),
-                            on_response_yes=accept_nondefault_options,
-                            on_response_no=reject_nondefault_options,
-                            transient_for=self.control.parent_win.window)
-                    else:
-                        self.respond_e2e_bob(form, negotiated, not_acceptable)
-
-                return
-
-            elif self.status == 'requested-archiving' and form.getType() == \
-            'submit':
-                try:
-                    self.archiving_accepted(form)
-                except exceptions.NegotiationError as details:
-                    self.fail_bad_negotiation(details)
-
-                return
-
-            # alice accepts
-            elif self.status == 'requested-e2e' and form.getType() == 'submit':
-                negotiated, not_acceptable, ask_user = self.verify_options_alice(
-                        form)
-
-                if ask_user:
-                    def accept_nondefault_options(is_checked):
-                        if dialog:
-                            dialog.destroy()
-
-                        if is_checked:
-                            allow_no_log_for = app.config.get_per(
-                                'accounts', self.conn.name,
-                                'allow_no_log_for').split()
-                            jid = str(self.jid)
-                            if jid not in allow_no_log_for:
-                                allow_no_log_for.append(jid)
-                                app.config.set_per('accounts', self.conn.name,
-                                'allow_no_log_for', ' '.join(allow_no_log_for))
-
-                        negotiated.update(ask_user)
-
-                        try:
-                            self.accept_e2e_alice(form, negotiated)
-                        except exceptions.NegotiationError as details:
-                            self.fail_bad_negotiation(details)
-
-                    def reject_nondefault_options():
-                        self.reject_negotiation()
-                        dialog.destroy()
-
-                    allow_no_log_for = app.config.get_per('accounts',
-                        self.conn.name, 'allow_no_log_for').split()
-                    if str(self.jid) in allow_no_log_for:
-                        dialog = None
-                        accept_nondefault_options(False)
-                    else:
-                        dialog = dialogs.YesNoDialog(_('Confirm these session '
-                            'options'),
-                            _('The remote client selected these options:\n\n%s'
-                            '\n\nContinue with the session?') % (
-                            negotiation.describe_features(ask_user)),
-                            _('Always accept for this contact'),
-                            on_response_yes = accept_nondefault_options,
-                            on_response_no = reject_nondefault_options,
-                            transient_for=self.control.parent_win.window)
-                else:
-                    try:
-                        self.accept_e2e_alice(form, negotiated)
-                    except exceptions.NegotiationError as details:
-                        self.fail_bad_negotiation(details)
-
-                return
-            elif self.status == 'responded-archiving' and form.getType() == \
-            'result':
-                try:
-                    self.we_accept_archiving(form)
-                except exceptions.NegotiationError as details:
-                    self.fail_bad_negotiation(details)
-
-                return
-            elif self.status == 'responded-e2e' and form.getType() == 'result':
-                try:
-                    self.accept_e2e_bob(form)
-                except exceptions.NegotiationError as details:
-                    self.fail_bad_negotiation(details)
-
-                return
-            elif self.status == 'identified-alice' and form.getType() == 'result':
-                try:
-                    self.final_steps_alice(form)
-                except exceptions.NegotiationError as details:
-                    self.fail_bad_negotiation(details)
-
-                return
-        except exceptions.Cancelled:
-            # user cancelled the negotiation
-
-            self.reject_negotiation()
-
-            return
-
-        if form.getField('terminate') and\
-        form.getField('terminate').getValue() in ('1', 'true'):
-            self.acknowledge_termination()
-
-            self.conn.delete_session(str(self.jid), self.thread_id)
-
-            return
-
-        # non-esession negotiation. this isn't very useful, but i'm keeping it
-        # around to test my test suite.
-        if form.getType() == 'form':
-            if not self.control:
-                jid, resource = app.get_room_and_nick_from_fjid(str(self.jid))
-
-                account = self.conn.name
-                contact = app.contacts.get_contact(account, str(self.jid),
-                    resource)
-
-                if not contact:
-                    contact = app.contacts.create_contact(jid=jid, account=account,
-                            resource=resource, show=self.conn.get_status())
-
-                app.interface.new_chat(contact, account, resource=resource,
-                        session=self)
-
-            negotiation.FeatureNegotiationWindow(account, str(self.jid), self,
-                form)

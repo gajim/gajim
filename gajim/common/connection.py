@@ -340,10 +340,7 @@ class CommonConnection:
             # <body> tag is the active event
             if obj.chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
                 msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
-                only_chatste = False
                 if not obj.message:
-                    only_chatste = True
-                if only_chatste and not obj.session.enable_encryption:
                     msg_iq.setTag('no-store',
                                   namespace=nbxmpp.NS_MSG_HINTS)
 

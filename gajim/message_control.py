@@ -32,7 +32,6 @@ import uuid
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
-from gajim.common.stanza_session import EncryptedStanzaSession, ArchivingStanzaSession
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -199,19 +198,6 @@ class MessageControl(object):
 
         if session and oldsession:
             oldsession.control = None
-
-        crypto_changed = bool(session and isinstance(session,
-            EncryptedStanzaSession) and session.enable_encryption) != \
-            bool(oldsession and isinstance(oldsession, EncryptedStanzaSession) \
-            and oldsession.enable_encryption)
-
-        archiving_changed = bool(session and isinstance(session,
-            ArchivingStanzaSession) and session.archiving) != \
-            bool(oldsession and isinstance(oldsession,
-            ArchivingStanzaSession) and oldsession.archiving)
-
-        if crypto_changed or archiving_changed:
-            self.print_session_details(oldsession)
 
     def remove_session(self, session):
         if session != self.session:

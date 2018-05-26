@@ -1184,12 +1184,6 @@ class Interface:
     def handle_atom_entry(obj):
         AtomWindow.newAtomEntry(obj.atom_entry)
 
-    @staticmethod
-    def handle_event_failed_decrypt(obj):
-        details = _('Unable to decrypt message from %s\nIt may have been '
-            'tampered with.') % obj.fjid
-        dialogs.WarningDialog(_('Unable to decrypt message'), details)
-
     def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
             app.config.set_per('accounts', obj.conn.name, 'name', new_name)
@@ -1531,7 +1525,6 @@ class Interface:
             'client-cert-passphrase': [
                 self.handle_event_client_cert_passphrase],
             'connection-lost': [self.handle_event_connection_lost],
-            'failed-decrypt': [(self.handle_event_failed_decrypt, ged.GUI2)],
             'file-request-error': [self.handle_event_file_request_error],
             'file-request-received': [self.handle_event_file_request],
             'gc-invitation-received': [self.handle_event_gc_invitation],

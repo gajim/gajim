@@ -57,8 +57,6 @@ configpaths.init()
 
 configpaths.override_path('DATA', gajim_root + '/gajim/data')
 
-from common.stanza_session import StanzaSession
-
 # name to use for the test account
 account_name = 'test'
 

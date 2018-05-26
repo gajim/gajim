@@ -451,9 +451,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             plugin = app.plugin_manager.encryption_plugins[encryption]
             if not plugin.activate_encryption(self):
                 return
-        else:
-            if not self.widget_name == 'groupchat_control':
-                self.terminate_esessions()
+
         action.set_state(param)
         self.set_encryption_state(encryption)
         self.set_encryption_menu_icon()

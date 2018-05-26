@@ -830,8 +830,6 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         app.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
-        app.ged.register_event_handler('gc-presence-received', ged.CORE,
-            self._nec_gc_presence_received)
         app.ged.register_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         app.ged.register_event_handler('mam-message-received', ged.CORE,
@@ -848,8 +846,6 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         app.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
-        app.ged.remove_event_handler('gc-presence-received', ged.CORE,
-            self._nec_gc_presence_received)
         app.ged.remove_event_handler('message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('mam-message-received', ged.CORE,
@@ -975,24 +971,6 @@ class ConnectionHandlersBase:
             # resource signs off!
             self.stop_all_active_file_transfers(obj.contact)
 
-            # disable encryption, since if any messages are
-            # lost they'll be not decryptable (note that
-            # this contradicts XEP-0201 - trying to get that
-            # in the XEP, though)
-
-            # there won't be any sessions here if the contact terminated
-            # their sessions before going offline (which we do)
-            for sess in self.get_sessions(jid):
-                sess_fjid = sess.jid.getStripped()
-                if sess.resource:
-                    sess_fjid += '/' + sess.resource
-                if obj.fjid != sess_fjid:
-                    continue
-                if sess.control:
-                    sess.control.no_autonegotiation = False
-                if sess.enable_encryption:
-                    sess.terminate_e2e()
-
         if app.config.get('log_contact_status_changes') and \
         app.config.should_log(self.name, obj.jid):
             show = app.logger.convert_show_values_to_db_api_values(obj.show)
@@ -1003,15 +981,6 @@ class ConnectionHandlersBase:
                                             KindConstant.STATUS,
                                             message=obj.status,
                                             show=show)
-
-    def _nec_gc_presence_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        for sess in self.get_sessions(obj.fjid):
-            if obj.fjid != sess.jid:
-                continue
-            if sess.enable_encryption:
-                sess.terminate_e2e()
 
     def _nec_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -1210,14 +1179,7 @@ class ConnectionHandlersBase:
         except KeyError:
             return None
 
-    def terminate_sessions(self, send_termination=False):
-        """
-        Send termination messages and delete all active sessions
-        """
-        for jid in self.sessions:
-            for thread_id in self.sessions[jid]:
-                self.sessions[jid][thread_id].terminate(send_termination)
-
+    def terminate_sessions(self):
         self.sessions = {}
 
     def delete_session(self, jid, thread_id):

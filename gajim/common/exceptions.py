@@ -100,12 +100,6 @@ class NegotiationError(Exception):
     """
     pass
 
-class DecryptionError(Exception):
-    """
-    A message couldn't be decrypted into usable XML
-    """
-    pass
-
 class Cancelled(Exception):
     """
     The user cancelled an operation

@@ -200,13 +200,6 @@ class PrivateChatControl(ChatControl):
             c = gc_c.as_contact()
             self.gc_contact = gc_c
             self.contact = c
-            if self.session:
-                # stop e2e
-                if self.session.enable_encryption:
-                    thread_id = self.session.thread_id
-                    self.session.terminate_e2e()
-                    obj.conn.delete_session(obj.fjid, thread_id)
-                    self.no_autonegotiation = False
             self.draw_banner()
             old_jid = obj.room_jid + '/' + obj.nick
             new_jid = obj.room_jid + '/' + obj.new_nick
@@ -281,17 +274,6 @@ class PrivateChatControl(ChatControl):
 
     def update_contact(self):
         self.contact = self.gc_contact.as_contact()
-
-    def begin_e2e_negotiation(self):
-        self.no_autonegotiation = True
-
-        if not self.session:
-            fjid = self.gc_contact.get_full_jid()
-            new_sess = app.connections[self.account].make_new_session(fjid,
-                type_=self.type_id)
-            self.set_session(new_sess)
-
-        self.session.negotiate_e2e(False)
 
     def got_disconnected(self):
         ChatControl.got_disconnected(self)
@@ -1859,20 +1841,6 @@ class GroupchatControl(ChatControlBase):
                         self.nick = obj.new_nick
                         self.new_nick = ''
                         s = _('You are now known as %s') % self.nick
-                        # Stop all E2E sessions
-                        nick_list = app.contacts.get_nick_list(self.account,
-                            self.room_jid)
-                        for nick_ in nick_list:
-                            fjid_ = self.room_jid + '/' + nick_
-                            ctrl = app.interface.msg_win_mgr.get_control(
-                                fjid_, self.account)
-                            if ctrl and ctrl.session and \
-                            ctrl.session.enable_encryption:
-                                thread_id = ctrl.session.thread_id
-                                ctrl.session.terminate_e2e()
-                                app.connections[self.account].delete_session(
-                                    fjid_, thread_id)
-                                ctrl.no_autonegotiation = False
                     else:
                         s = _('%(nick)s is now known as %(new_nick)s') % {
                             'nick': nick, 'new_nick': obj.new_nick}
@@ -2303,13 +2271,6 @@ class GroupchatControl(ChatControlBase):
                 contact.status = ''
                 ctrl.update_ui()
                 ctrl.parent_win.redraw_tab(ctrl)
-            for sess in app.connections[self.account].get_sessions(fjid):
-                if sess.control:
-                    sess.control.no_autonegotiation = False
-                if sess.enable_encryption:
-                    sess.terminate_e2e()
-                    app.connections[self.account].delete_session(fjid,
-                        sess.thread_id)
         # They can already be removed by the destroy function
         if self.room_jid in app.contacts.get_gc_list(self.account):
             app.contacts.remove_room(self.account, self.room_jid)

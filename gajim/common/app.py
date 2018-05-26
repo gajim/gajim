@@ -147,7 +147,6 @@ caps_hash = {}
 _dependencies = {
     'PYTHON-DBUS': False,
     'PYBONJOUR': False,
-    'PYCRYPTO': False,
     'PYGPG': False,
     'GPG_BINARY': False,
     'FARSTREAM': False,
@@ -186,13 +185,6 @@ def detect_dependencies():
             import dbus
             _dependencies['PYTHON-DBUS'] = True
     except Exception:
-        pass
-
-    # PYCRYPTO
-    try:
-        import Crypto
-        _dependencies['PYCRYPTO'] = True
-    except ImportError:
         pass
 
     # python-gnupg
