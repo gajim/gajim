@@ -28,13 +28,18 @@ import sys
 import tempfile
 from pathlib import Path
 
+import gajim
 from gajim.common.const import PathType, PathLocation
 
 
 def get(key):
     if key == 'PLUGINS_DIRS':
-        return [_paths['PLUGINS_BASE'],
-                _paths['PLUGINS_USER']]
+        if gajim.IS_FLATPAK:
+            return ['/app/plugins',
+                    _paths['PLUGINS_BASE']]
+        else:
+            return [_paths['PLUGINS_BASE'],
+                    _paths['PLUGINS_USER']]
     return _paths[key]
 
 

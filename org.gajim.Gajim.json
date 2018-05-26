@@ -22,8 +22,19 @@
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
-        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        /* extensions */
+        "--env=PYTHONPATH=/app/plugins/lib/python3.5/site-packages"
     ],
+    "add-extensions": {
+        "org.gajim.Gajim.Plugin": {
+            "directory": "plugins",
+            "merge-dirs": "lib/python3.5/site-packages",
+            "subdirectories": true,
+            "no-autodownload": true,
+            "autodelete": true
+        }
+    },
     "build-options": {
         "cflags": "-O2 -g",
         "cxxflags": "-O2 -g"
@@ -370,6 +381,9 @@
                     "sha256": "02f71f0921d67433ecdca7f0b682a63cadaa7a057fa68608f1ec7ce3fae44fb9",
                     "dest": "gajim/data/plugins/plugin_installer"
                 }
+            ],
+            "post-install": [
+                "install -d /app/plugins"
             ]
         }
     ]
