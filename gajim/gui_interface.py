@@ -1116,7 +1116,7 @@ class Interface:
         app.block_signed_in_notifications[account] = True
         connected = obj.conn.connected
 
-        if idle.Monitor.is_unknown() and connected in (2, 3):
+        if not idle.Monitor.is_unknown() and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             app.sleeper_state[account] = 'online'
         elif not ((idle.Monitor.is_away() and connected == 4) or \

@@ -194,6 +194,7 @@ class IdleMonitor:
     def is_available(self):
         return self._idle_monitor is not None
 
+    @property
     def state(self):
         if not self.is_available():
             return IdleState.UNKNOWN
