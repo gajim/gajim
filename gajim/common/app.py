@@ -156,7 +156,6 @@ _dependencies = {
     'PYCURL': False,
     'GSPELL': False,
     'IDLE': False,
-    'RUN_AS_FLATPAK': False,
 }
 
 
@@ -170,7 +169,7 @@ def is_installed(dependency):
     return _dependencies[dependency]
 
 def is_flatpak():
-    return _dependencies['RUN_AS_FLATPAK']
+    return gajim.IS_FLATPAK
 
 def disable_dependency(dependency):
     _dependencies[dependency] = False
@@ -295,10 +294,6 @@ def detect_dependencies():
             _dependencies['GSPELL'] = True
     except (ImportError, ValueError):
         pass
-
-    # RUN AS FLATPAK
-    if os.path.exists('/app/share/run-as-flatpak'):
-        _dependencies['RUN_AS_FLATPAK'] = True
 
     # Print results
     for dep, val in _dependencies.items():
