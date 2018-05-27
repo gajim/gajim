@@ -130,25 +130,21 @@ class Zeroconf:
 
     def txt_array_to_dict(self, txt_array):
         txt_dict = {}
-        for els in txt_array:
-            key, val = '', None
-            for c in els:
-                c = chr(c)
-                if val is None:
-                    if c == '=':
-                        val = ''
-                    else:
-                        key += c
+        for array in txt_array:
+            item = bytes(array)
+            item = item.decode('utf-8')
+            item = item.split('=', 1)
+
+            if item[0] and (item[0] not in txt_dict):
+                if len(item) == 1:
+                    txt_dict[item[0]] = None
                 else:
-                    val += c
-            if val is None: # missing '='
-                val = ''
-            txt_dict[key] = val
+                    txt_dict[item[0]] = item[1]
+
         return txt_dict
 
     @staticmethod
     def string_to_byte_array(s):
-        s = s.encode('utf-8')
         r = []
 
         for c in s:
@@ -157,18 +153,14 @@ class Zeroconf:
         return r
 
     def dict_to_txt_array(self, txt_dict):
-        l = []
+        array = []
 
-        for k,v in txt_dict.items():
-            if isinstance(k, str):
-                k = k.encode('utf-8')
+        for k, v in txt_dict.items():
+            item = '%s=%s' % (k, v)
+            item = item.encode('utf-8')
+            array.append(self.string_to_byte_array(item))
 
-            if isinstance(v, str):
-                v = v.encode('utf-8')
-
-            l.append(self.string_to_byte_array("%s=%s" % (k,v)))
-
-        return l
+        return array
 
     def service_resolved_callback(self, interface, protocol, name, stype, domain,
     host, aprotocol, address, port, txt, flags):

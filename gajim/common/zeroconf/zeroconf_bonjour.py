@@ -139,9 +139,6 @@ class Zeroconf:
 
     def query_txt_callback(self, sdRef, flags, interfaceIndex, errorCode,
                            hosttarget, rrtype, rrclass, rdata, ttl):
-        # Callback from DNSServiceQueryRecord, it does not call decode()
-        # on rdata
-        rdata = rdata.decode()
 
         if errorCode != pybonjour.kDNSServiceErr_NoError:
             log.error('Error in query_record_callback: %s', str(errorCode))
