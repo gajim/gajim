@@ -2535,18 +2535,16 @@ class AccountCreationWizardWindow:
                 certs = ''
                 my_ca_certs = configpaths.get('MY_CACERTS')
                 if os.path.isfile(my_ca_certs):
-                    f = open(my_ca_certs)
-                    certs = f.read()
-                    f.close()
+                    with open(my_ca_certs) as f:
+                        certs = f.read()
                 if self.ssl_cert in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % my_ca_certs)
                 else:
-                    f = open(my_ca_certs, 'a')
-                    f.write(hostname + '\n')
-                    f.write(self.ssl_cert + '\n\n')
-                    f.close()
+                    with open(my_ca_certs, 'a') as f:
+                        f.write(hostname + '\n')
+                        f.write(self.ssl_cert + '\n\n')
                     app.connections[self.account].new_account_info[
                         'ssl_fingerprint_sha1'] = self.ssl_fingerprint_sha1
                     app.connections[self.account].new_account_info[
