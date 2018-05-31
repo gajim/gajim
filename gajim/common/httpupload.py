@@ -15,6 +15,7 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import threading
 import ssl
 import urllib
@@ -35,7 +36,7 @@ from gajim.common.connection_handlers_events import HTTPUploadProgressEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
-if os.name == 'nt':
+if sys.platform in ('win32', 'darwin'):
     import certifi
 
 log = logging.getLogger('gajim.c.httpupload')
@@ -300,7 +301,7 @@ class ConnectionHTTPUpload:
                 log.warning('CERT Verification disabled')
                 transfer = urlopen(request, timeout=30, context=context)
             else:
-                if os.name == 'nt':
+                if sys.platform in ('win32', 'darwin'):
                     transfer = urlopen(
                         request, cafile=certifi.where(), timeout=30)
                 else:

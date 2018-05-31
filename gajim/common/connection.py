@@ -33,6 +33,7 @@
 ##
 
 import os
+import sys
 import random
 import socket
 import operator
@@ -49,7 +50,7 @@ from string import Template
 from urllib.request import urlopen
 from urllib.error import URLError
 
-if os.name == 'nt':
+if sys.platform in ('win32', 'darwin'):
     import certifi
 import OpenSSL.crypto
 import nbxmpp
@@ -1175,7 +1176,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         port = self._current_host['port']
 
         cacerts = ''
-        if os.name == 'nt':
+        if sys.platform in ('win32', 'darwin'):
             cacerts = certifi.where()
         mycerts = common.configpaths.get('MY_CACERTS')
         tls_version = app.config.get_per('accounts', self.name, 'tls_version')
@@ -1374,7 +1375,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             url = 'https://%s/.well-known/posh/xmpp-client.json' % hostname
 
         cafile = None
-        if os.name == 'nt':
+        if sys.platform in ('win32', 'darwin'):
             cafile = certifi.where()
 
         log.info('Request POSH from %s', url)
