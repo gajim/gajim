@@ -850,7 +850,6 @@ class AddNewContactWindow:
     """
 
     uid_labels = {'jabber': _('JID:'),
-        'aim': _('AIM Address:'),
         'gadu-gadu': _('GG Number:'),
         'icq': _('ICQ Number:'),
         'msn': _('MSN Address:'),
@@ -934,7 +933,7 @@ class AddNewContactWindow:
         self.protocol_combobox.pack_start(cell, True)
         self.protocol_combobox.add_attribute(cell, 'text', 0)
         self.protocol_combobox.set_model(liststore)
-        uf_type = {'jabber': 'XMPP', 'aim': 'AIM', 'gadu-gadu': 'Gadu Gadu',
+        uf_type = {'jabber': 'XMPP', 'gadu-gadu': 'Gadu Gadu',
             'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
         # Jabber as first
         liststore.append(['XMPP', 'xmpp', 'jabber'])

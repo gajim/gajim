@@ -101,8 +101,6 @@ def _gen_agent_type_info():
         ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
         ('_jid', 'irc'):                (False, 'irc'),
         ('gateway', 'irc'):             (False, 'irc'),
-        ('gateway', 'aim'):             (False, 'aim'),
-        ('_jid', 'aim'):                (False, 'aim'),
         ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
         ('_jid', 'gadugadu'):           (False, 'gadu-gadu'),
         ('gateway', 'http-ws'):         (False, 'http-ws'),
