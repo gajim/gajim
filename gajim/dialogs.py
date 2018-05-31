@@ -852,7 +852,6 @@ class AddNewContactWindow:
     uid_labels = {'jabber': _('JID:'),
         'gadu-gadu': _('GG Number:'),
         'icq': _('ICQ Number:'),
-        'msn': _('MSN Address:'),
         'yahoo': _('Yahoo! Address:')}
 
     def __init__(self, account=None, jid=None, user_nick=None, group=None):
@@ -934,7 +933,7 @@ class AddNewContactWindow:
         self.protocol_combobox.add_attribute(cell, 'text', 0)
         self.protocol_combobox.set_model(liststore)
         uf_type = {'jabber': 'XMPP', 'gadu-gadu': 'Gadu Gadu',
-            'icq': 'ICQ', 'msn': 'MSN', 'yahoo': 'Yahoo'}
+                   'icq': 'ICQ', 'yahoo': 'Yahoo'}
         # Jabber as first
         liststore.append(['XMPP', 'xmpp', 'jabber'])
         for type_ in self.agents:

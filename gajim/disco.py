@@ -106,8 +106,6 @@ def _gen_agent_type_info():
         ('gateway', 'http-ws'):         (False, 'http-ws'),
         ('gateway', 'icq'):             (False, 'icq'),
         ('_jid', 'icq'):                (False, 'icq'),
-        ('gateway', 'msn'):             (False, 'msn'),
-        ('_jid', 'msn'):                (False, 'msn'),
         ('gateway', 'sms'):             (False, 'sms'),
         ('_jid', 'sms'):                (False, 'sms'),
         ('gateway', 'smtp'):            (False, 'mail'),
