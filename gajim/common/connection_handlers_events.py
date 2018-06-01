@@ -1748,7 +1748,14 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                     app.nec.push_incoming_event(GcConfigChangedReceivedEvent(
                         None, conn=self.conn, msg_event=self))
             if self.msg_obj.form_node:
-                return True
+                # It could be a voice request. See
+                # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
+                from gajim.dialogs import SingleMessageWindow
+                SingleMessageWindow(
+                    self.conn.name, self.fjid,
+                    action='receive', from_whom=self.fjid,
+                    subject='', message='', resource='', session=None,
+                    form_node=self.msg_obj.form_node)
             return
 
         self.displaymarking = None

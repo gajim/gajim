@@ -3106,6 +3106,7 @@ class SingleMessageWindow:
                            get_parent()
         if form_node:
             dataform = dataforms.ExtendForm(node=form_node)
+            dataform.type_ = 'submit'
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
             self.form_widget.show_all()
             parent_box.add(self.form_widget)

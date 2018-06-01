@@ -369,17 +369,6 @@ class Interface:
             if gc_control and gc_control.autorejoin:
                 gc_control.autorejoin = False
 
-    @staticmethod
-    def handle_event_gc_message(obj):
-        if not obj.stanza.getTag('body'): # no <body>
-            # It could be a voice request. See
-            # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
-            if obj.msg_obj.form_node:
-                dialogs.SingleMessageWindow(obj.conn.name, obj.fjid,
-                    action='receive', from_whom=obj.fjid,
-                    subject='', message='', resource='', session=None,
-                    form_node=obj.msg_obj.form_node)
-
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, # keyID, timestamp, contact_nickname))
@@ -1532,7 +1521,6 @@ class Interface:
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-decline-received': [self.handle_event_gc_decline],
             'gc-presence-received': [self.handle_event_gc_presence],
-            'gc-message-received': [self.handle_event_gc_message],
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
