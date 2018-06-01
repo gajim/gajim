@@ -1287,7 +1287,11 @@ class Logger:
         if not ids:
             return False
 
-        archive_id = self.get_jid_id(archive_jid)
+        type_ = JIDConstant.NORMAL_TYPE
+        if groupchat:
+            type_ = JIDConstant.ROOM_TYPE
+
+        archive_id = self.get_jid_id(archive_jid, type_=type_)
         account_id = self.get_account_id(account)
 
         if groupchat:
