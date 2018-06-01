@@ -449,7 +449,8 @@ class MucCapsCache:
                 features.append(child.getAttr('var'))
             elif child.getName() == 'x':
                 if child.getNamespace() == nbxmpp.NS_DATA:
-                    data.append(nbxmpp.DataForm(node=child))
+                    from gajim.common import dataforms
+                    data.append(dataforms.ExtendForm(node=child))
 
         if nbxmpp.NS_MUC not in features:
             # Not a MUC, dont cache info
@@ -483,3 +484,16 @@ class MucCapsCache:
                 return nbxmpp.NS_MAM_1
         except (KeyError, AttributeError):
             return
+
+    def is_subject_change_allowed(self, jid, affiliation):
+        allowed = True
+        if affiliation in ('owner, admin'):
+            return allowed
+
+        if jid in self.cache:
+            for form in self.cache[jid].data:
+                try:
+                    allowed = form['muc#roominfo_changesubject'].value
+                except KeyError:
+                    pass
+        return allowed

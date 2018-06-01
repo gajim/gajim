@@ -603,9 +603,12 @@ class GroupchatControl(ChatControlBase):
             online and role == 'visitor')
 
         # Change Subject
-        # Get this from Room Disco
+        subject = False
+        if contact is not None:
+            subject = muc_caps_cache.is_subject_change_allowed(
+                self.room_jid, contact.affiliation)
         win.lookup_action('change-subject-' + self.control_id).set_enabled(
-            online)
+            online and subject)
 
         # Change Nick
         win.lookup_action('change-nick-' + self.control_id).set_enabled(
@@ -1521,7 +1524,9 @@ class GroupchatControl(ChatControlBase):
             changes.append(_('Room now does not show unavailable members'))
         if '104' in obj.status_code:
             changes.append(_('A setting not related to privacy has been '
-                'changed'))
+                             'changed'))
+            app.connections[self.account].discoverMUC(
+                self.room_jid, self.update_actions, update=True)
         if '170' in obj.status_code:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
