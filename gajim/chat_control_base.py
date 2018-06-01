@@ -1268,6 +1268,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.log('autoscroll').info('Autoscroll disabled')
             self.conv_textview.autoscroll = False
 
+    def has_focus(self):
+        if self.parent_win:
+            if self.parent_win.window.get_property('has-toplevel-focus'):
+                if self == self.parent_win.get_active_control():
+                    return True
+        return False
+
     def _on_scroll(self, widget, event):
         if not self.conv_textview.autoscroll:
             # autoscroll is already disabled

@@ -27,7 +27,6 @@ import hashlib
 import hmac
 import logging
 import sys
-import os
 from time import time as time_time
 
 import OpenSSL.crypto
@@ -40,7 +39,6 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common import dataforms
-from gajim.common import configpaths
 from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
@@ -2583,8 +2581,50 @@ class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class NotificationEvent(nec.NetworkIncomingEvent):
     name = 'notification'
-    base_network_events = ['decrypted-message-received', 'gc-message-received',
-        'presence-received']
+    base_network_events = ['decrypted-message-received',
+                           'gc-message-received',
+                           'presence-received']
+
+    def generate(self):
+        # what's needed to compute output
+        self.account = self.base_event.conn.name
+        self.conn = self.base_event.conn
+        self.jid = ''
+        self.control = None
+        self.control_focused = False
+        self.first_unread = False
+
+        # For output
+        self.do_sound = False
+        self.sound_file = ''
+        self.sound_event = '' # gajim sound played if not sound_file is set
+        self.show_popup = False
+
+        self.do_popup = False
+        self.popup_title = ''
+        self.popup_text = ''
+        self.popup_event_type = ''
+        self.popup_msg_type = ''
+        self.icon_name = None
+        self.transport_name = None
+        self.show = None
+        self.popup_timeout = -1
+
+        self.do_command = False
+        self.command = ''
+
+        self.show_in_notification_area = False
+        self.show_in_roster = False
+
+        self.detect_type()
+
+        if self.notif_type == 'msg':
+            self.handle_incoming_msg_event(self.base_event)
+        elif self.notif_type == 'gc-msg':
+            self.handle_incoming_gc_msg_event(self.base_event)
+        elif self.notif_type == 'pres':
+            self.handle_incoming_pres_event(self.base_event)
+        return True
 
     def detect_type(self):
         if self.base_event.name == 'decrypted-message-received':
@@ -2594,14 +2634,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if self.base_event.name == 'presence-received':
             self.notif_type = 'pres'
 
-    def get_focused(self):
-        self.control_focused = False
-        if self.control:
-            parent_win = self.control.parent_win
-            if parent_win and self.control == parent_win.get_active_control() \
-            and parent_win.window.get_property('has-toplevel-focus'):
-                self.control_focused = True
-
     def handle_incoming_msg_event(self, msg_obj):
         # don't alert for carbon copied messages from ourselves
         if msg_obj.sent:
@@ -2609,15 +2641,18 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if not msg_obj.msgtxt:
             return
         self.jid = msg_obj.jid
-        if msg_obj.session:
-            self.control = msg_obj.session.control
+        if msg_obj.mtype == 'pm':
+            self.jid = msg_obj.fjid
+
+        self.control = app.interface.msg_win_mgr.search_control(
+            msg_obj.jid, self.account, msg_obj.resource)
+
+        if self.control is None:
+            if len(app.events.get_events(
+                    self.account, msg_obj.jid, [msg_obj.mtype])) <= 1:
+                self.first_unread = True
         else:
-            self.control = None
-        self.get_focused()
-        # This event has already been added to event list
-        if not self.control and len(app.events.get_events(self.conn.name, \
-        self.jid, [msg_obj.mtype])) <= 1:
-            self.first_unread = True
+            self.control_focused = self.control.has_focus()
 
         if msg_obj.mtype == 'pm':
             nick = msg_obj.resource
@@ -2642,13 +2677,11 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         if msg_obj.mtype == 'normal': # single message
             self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
-            self.popup_image = 'gajim-single_msg_recv'
             self.popup_title = _('New Single Message from %(nickname)s') % \
                 {'nickname': nick}
         elif msg_obj.mtype == 'pm':
             self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
-            self.popup_image = 'gajim-priv_msg_recv'
             self.popup_title = _('New Private Message from group chat %s') % \
                 msg_obj.jid
             if self.popup_text:
@@ -2660,10 +2693,8 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else: # chat message
             self.popup_msg_type = 'chat'
             self.popup_event_type = _('New Message')
-            self.popup_image = 'gajim-chat_msg_recv'
             self.popup_title = _('New Message from %(nickname)s') % \
                 {'nickname': nick}
-
 
         if app.config.get('notify_on_new_message'):
             if self.first_unread or (app.config.get('autopopup_chat_opened') \
@@ -2720,29 +2751,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         self.do_popup = False
 
-    def get_path_to_generic_or_avatar(self, generic, jid=None, suffix=None):
-        """
-        Choose between avatar image and default image
-
-        Returns full path to the avatar image if it exists, otherwise returns full
-        path to the image.  generic must be with extension and suffix without
-        """
-        if jid:
-            # we want an avatar
-            puny_jid = helpers.sanitize_filename(jid)
-            path_to_file = os.path.join(
-                configpaths.get('AVATAR'), puny_jid) + suffix
-            path_to_local_file = path_to_file + '_local'
-            for extension in ('.png', '.jpeg'):
-                path_to_local_file_full = path_to_local_file + extension
-                if os.path.exists(path_to_local_file_full):
-                    return path_to_local_file_full
-            for extension in ('.png', '.jpeg'):
-                path_to_file_full = path_to_file + extension
-                if os.path.exists(path_to_file_full):
-                    return path_to_file_full
-        return os.path.abspath(generic)
-
     def handle_incoming_pres_event(self, pres_obj):
         if app.jid_is_transport(pres_obj.jid):
             return True
@@ -2756,7 +2764,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
                 continue
             if c.show not in ('offline', 'error'):
                 return True
-
 
         # no other resource is connected, let's look in metacontacts
         family = app.contacts.get_metacontacts_family(account, self.jid)
@@ -2773,8 +2780,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         if pres_obj.old_show < 2 and pres_obj.new_show > 1:
             event = 'contact_connected'
-            show_image = 'online.png'
-            suffix = '_notif_size_colored'
             server = app.get_server_from_jid(self.jid)
             account_server = account + '/' + server
             block_transport = False
@@ -2794,8 +2799,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
         elif pres_obj.old_show > 1 and pres_obj.new_show < 2:
             event = 'contact_disconnected'
-            show_image = 'offline.png'
-            suffix = '_notif_size_bw'
             if helpers.allow_showing_notification(account, 'notify_on_signout'):
                 self.do_popup = True
             if app.config.get_per('soundevents', 'contact_disconnected',
@@ -2805,24 +2808,13 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         # Status change (not connected/disconnected or error (<1))
         elif pres_obj.new_show > 1:
             event = 'status_change'
-            # FIXME: we don't always 'online.png', but we first need 48x48 for
-            # all status
-            show_image = 'online.png'
-            suffix = '_notif_size_colored'
         else:
             return True
 
-        transport_name = app.get_transport_name_from_jid(self.jid)
-        img_path = None
-        if transport_name:
-            img_path = os.path.join(helpers.get_transport_path(
-                transport_name), '48x48', show_image)
-        if not img_path or not os.path.isfile(img_path):
-            iconset = app.config.get('iconset')
-            img_path = os.path.join(helpers.get_iconset_path(iconset),
-                '48x48', show_image)
-        self.popup_image_path = self.get_path_to_generic_or_avatar(img_path,
-            jid=self.jid, suffix=suffix)
+        if app.jid_is_transport(self.jid):
+            self.transport_name = app.get_transport_name_from_jid(self.jid)
+
+        self.show = pres_obj.show
 
         self.popup_timeout = app.config.get('notification_timeout')
 
@@ -2847,45 +2839,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             if pres_obj.status:
                 self.popup_text = pres_obj.status
             self.popup_event_type = _('Contact Signed Out')
-
-    def generate(self):
-        # what's needed to compute output
-        self.conn = self.base_event.conn
-        self.jid = ''
-        self.control = None
-        self.control_focused = False
-        self.first_unread = False
-
-        # For output
-        self.do_sound = False
-        self.sound_file = ''
-        self.sound_event = '' # gajim sound played if not sound_file is set
-        self.show_popup = False
-
-        self.do_popup = False
-        self.popup_title = ''
-        self.popup_text = ''
-        self.popup_event_type = ''
-        self.popup_msg_type = ''
-        self.popup_image = ''
-        self.popup_image_path = ''
-        self.popup_timeout = -1
-
-        self.do_command = False
-        self.command = ''
-
-        self.show_in_notification_area = False
-        self.show_in_roster = False
-
-        self.detect_type()
-
-        if self.notif_type == 'msg':
-            self.handle_incoming_msg_event(self.base_event)
-        elif self.notif_type == 'gc-msg':
-            self.handle_incoming_gc_msg_event(self.base_event)
-        elif self.notif_type == 'pres':
-            self.handle_incoming_pres_event(self.base_event)
-        return True
 
 class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'message-outgoing'

@@ -920,3 +920,11 @@ def pango_to_css_weight(number):
     if number > 900:
         return 900
     return int(math.ceil(number / 100.0)) * 100
+
+def get_monitor_scale_factor():
+    display = Gdk.Display.get_default()
+    monitor = display.get_primary_monitor()
+    if monitor is None:
+        log.warning('Could not determine scale factor')
+        return 1
+    return monitor.get_scale_factor()

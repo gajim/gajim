@@ -226,10 +226,10 @@ class Interface:
     @staticmethod
     def handle_event_connection_lost(obj):
         # ('CONNECTION_LOST', account, [title, text])
-        path = gtkgui_helpers.get_icon_path('gajim-connection_lost', 48)
         account = obj.conn.name
-        notify.popup(_('Connection Failed'), account, account,
-            'connection-lost', path, obj.title, obj.msg)
+        app.notification.popup(
+            _('Connection Failed'), account, account,
+            'connection-lost', 'gajim-connection_lost', obj.title, obj.msg)
 
     @staticmethod
     def unblock_signed_in_notifications(account):
@@ -509,11 +509,10 @@ class Interface:
         self.add_event(account, obj.jid, event)
 
         if helpers.allow_showing_notification(account):
-            path = gtkgui_helpers.get_icon_path('gajim-subscription_request',
-                48)
             event_type = _('Subscription request')
-            notify.popup(event_type, obj.jid, account, 'subscription_request',
-                path, event_type, obj.jid)
+            app.notification.popup(
+                event_type, obj.jid, account, 'subscription_request',
+                'gajim-subscription_request', event_type, obj.jid)
 
     def handle_event_subscribed_presence(self, obj):
         #('SUBSCRIBED', account, (jid, resource))
@@ -567,9 +566,10 @@ class Interface:
         self.add_event(account, obj.jid, event)
 
         if helpers.allow_showing_notification(account):
-            path = gtkgui_helpers.get_icon_path('gajim-unsubscribed', 48)
             event_type = _('Unsubscribed')
-            notify.popup(event_type, obj.jid, account, 'unsubscribed', path,
+            app.notification.popup(
+                event_type, obj.jid, account,
+                'unsubscribed', 'gajim-unsubscribed',
                 event_type, obj.jid)
 
     @staticmethod
@@ -660,10 +660,10 @@ class Interface:
         self.add_event(account, obj.jid_from, event)
 
         if helpers.allow_showing_notification(account):
-            path = gtkgui_helpers.get_icon_path('gajim-gc_invitation', 48)
             event_type = _('Groupchat Invitation')
-            notify.popup(event_type, obj.jid_from, account, 'gc-invitation',
-                path, event_type, obj.room_jid)
+            app.notification.popup(
+                event_type, obj.jid_from, account, 'gc-invitation',
+                'gajim-gc_invitation', event_type, obj.room_jid)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:
@@ -680,9 +680,9 @@ class Interface:
                 'key.')
             dialogs.WarningDialog(_('Wrong passphrase'), sectext)
         else:
-            path = gtkgui_helpers.get_icon_path('gtk-dialog-warning', 48)
             account = obj.conn.name
-            notify.popup('warning', account, account, '', path,
+            app.notification.popup(
+                'warning', account, account, '', 'dialog-warning',
                 _('Wrong OpenPGP passphrase'),
                 _('You are currently connected without your OpenPGP key.'))
         self.forget_gpg_passphrase(obj.keyID)
@@ -858,9 +858,10 @@ class Interface:
         self.add_event(account, jid, event)
 
         if helpers.allow_showing_notification(account):
-            path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
             event_type = _('File Transfer Error')
-            notify.popup(event_type, jid, account, 'file-send-error', path,
+            app.notification.popup(
+                event_type, jid, account,
+                'file-send-error', 'gajim-ft_error',
                 event_type, file_props.name)
 
     def handle_event_file_request_error(self, obj):
@@ -888,9 +889,10 @@ class Interface:
 
         if helpers.allow_showing_notification(obj.conn.name):
             # check if we should be notified
-            path = gtkgui_helpers.get_icon_path('gajim-ft_error', 48)
             event_type = _('File Transfer Error')
-            notify.popup(event_type, obj.jid, obj.conn.name, msg_type, path,
+            app.notification.popup(
+                event_type, obj.jid, obj.conn.name,
+                msg_type, 'gajim-ft_error',
                 title=event_type, text=obj.file_props.name)
 
     def handle_event_file_request(self, obj):
@@ -921,12 +923,12 @@ class Interface:
         event = events.FileRequestEvent(obj.file_props)
         self.add_event(account, obj.jid, event)
         if helpers.allow_showing_notification(account):
-            path = gtkgui_helpers.get_icon_path('gajim-ft_request', 48)
             txt = _('%s wants to send you a file.') % app.get_name_from_jid(
                 account, obj.jid)
             event_type = _('File Transfer Request')
-            notify.popup(event_type, obj.jid, account, 'file-request',
-                path_to_image=path, title=event_type, text=txt)
+            app.notification.popup(
+                event_type, obj.jid, account, 'file-request',
+                icon_name='gajim-ft_request', title=event_type, text=txt)
 
     @staticmethod
     def handle_event_file_error(title, message):
@@ -1060,15 +1062,15 @@ class Interface:
                 if event_type == _('File Transfer Completed'):
                     txt = _('%(filename)s received from %(name)s.')\
                     	% {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_done'
+                    icon_name = 'gajim-ft_done'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s from %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_stopped'
+                    icon_name = 'gajim-ft_stopped'
                 else: # ft hash error
                     txt = _('File transfer of %(filename)s from %(name)s '
                         'failed.') % {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_stopped'
+                    icon_name = 'gajim-ft_stopped'
             else:
                 receiver = file_props.receiver
                 if hasattr(receiver, 'jid'):
@@ -1081,27 +1083,27 @@ class Interface:
                 if event_type == _('File Transfer Completed'):
                     txt = _('You successfully sent %(filename)s to %(name)s.')\
                         % {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_done'
+                    icon_name = 'gajim-ft_done'
                 elif event_type == _('File Transfer Stopped'):
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'stopped.') % {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_stopped'
+                    icon_name = 'gajim-ft_stopped'
                 else: # ft hash error
                     txt = _('File transfer of %(filename)s to %(name)s '
                         'failed.') % {'filename': filename, 'name': name}
-                    img_name = 'gajim-ft_stopped'
-            path = gtkgui_helpers.get_icon_path(img_name, 48)
+                    icon_name = 'gajim-ft_stopped'
         else:
             txt = ''
-            path = ''
+            icon_name = None
 
         if app.config.get('notify_on_file_complete') and \
         (app.config.get('autopopupaway') or \
         app.connections[account].connected in (2, 3)):
             # we want to be notified and we are online/chat or we don't mind
             # bugged when away/na/busy
-            notify.popup(event_type, jid, account, msg_type, path_to_image=path,
-                    title=event_type, text=txt)
+            app.notification.popup(
+                event_type, jid, account, msg_type,
+                icon_name=icon_name, title=event_type, text=txt)
 
     def handle_event_signed_in(self, obj):
         """
@@ -1278,10 +1280,10 @@ class Interface:
             # TODO: we should use another pixmap ;-)
             txt = _('%s wants to start a voice chat.') % \
                 app.get_name_from_jid(account, obj.fjid)
-            path = gtkgui_helpers.get_icon_path('gajim-mic_active', 48)
             event_type = _('Voice Chat Request')
-            notify.popup(event_type, obj.fjid, account, 'jingle-incoming',
-                    path_to_image=path, title=event_type, text=txt)
+            app.notification.popup(
+                event_type, obj.fjid, account, 'jingle-incoming',
+                icon_name='gajim-mic_active', title=event_type, text=txt)
 
     def handle_event_jingle_connected(self, obj):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
@@ -1652,28 +1654,7 @@ class Interface:
         elif type_ in ('printed_chat', 'chat', ''):
             # '' is for log in/out notifications
 
-            if type_ != '':
-                event = app.events.get_first_event(account, fjid, type_)
-                if not event:
-                    event = app.events.get_first_event(account, jid, type_)
-                if not event:
-                    # If autopopup_chat_opened = True, then we send out
-                    # notifications even if a control is open. This means the
-                    # event is already deleted (because its printed to the
-                    # control) when the notification is clicked. So try to
-                    # get a control from account/jid
-                    ctrl = self.msg_win_mgr.get_control(fjid, account)
-                    if ctrl is None:
-                        return
-                    w = ctrl.parent_win
-
-            if type_ == 'printed_chat':
-                ctrl = event.control
-            elif type_ == 'chat':
-                session = event.session
-                ctrl = session.control
-            elif type_ == '':
-                ctrl = self.msg_win_mgr.get_control(fjid, account)
+            ctrl = self.msg_win_mgr.search_control(jid, account, resource)
 
             if not ctrl:
                 highest_contact = app.contacts.\
@@ -1692,33 +1673,20 @@ class Interface:
                 if not contact:
                     contact = highest_contact
 
-                ctrl = self.new_chat(contact, account, resource=resource,
-                    session=session)
+                ctrl = self.new_chat(contact, account, resource=resource)
 
                 app.last_message_time[account][jid] = 0 # long time ago
 
             w = ctrl.parent_win
         elif type_ in ('printed_pm', 'pm'):
-            # assume that the most recently updated control we have for this
-            # party is the one that this event was in
-            event = app.events.get_first_event(account, fjid, type_)
-            if not event:
-                event = app.events.get_first_event(account, jid, type_)
-            if not event:
-                return
 
-            if type_ == 'printed_pm':
-                ctrl = event.control
-            elif type_ == 'pm':
-                session = event.session
+            ctrl = self.msg_win_mgr.get_control(fjid, account)
 
-            if session and session.control:
-                ctrl = session.control
-            elif not ctrl:
+            if not ctrl:
                 room_jid = jid
                 nick = resource
-                gc_contact = app.contacts.get_gc_contact(account, room_jid,
-                    nick)
+                gc_contact = app.contacts.get_gc_contact(
+                    account, room_jid, nick)
                 if gc_contact:
                     show = gc_contact.show
                 else:
@@ -1727,12 +1695,7 @@ class Interface:
                         room_jid=room_jid, account=account, name=nick,
                         show=show)
 
-                if not session:
-                    session = app.connections[account].make_new_session(
-                        fjid, None, type_='pm')
-
-                self.new_private_chat(gc_contact, account, session=session)
-                ctrl = session.control
+                ctrl = self.new_private_chat(gc_contact, account)
 
             w = ctrl.parent_win
         elif type_ in ('normal', 'file-request', 'file-request-error',
