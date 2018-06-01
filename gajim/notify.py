@@ -125,7 +125,7 @@ class Notification:
             app.interface.roster.popup_notification_windows.append(instance)
             return
 
-        scale = app.get_monitor_scale_factor()
+        scale = gtkgui_helpers.get_monitor_scale_factor()
         icon_pixbuf = gtkgui_helpers.gtk_icon_theme.load_icon_for_scale(
             icon_name, 48, scale, 0)
 
