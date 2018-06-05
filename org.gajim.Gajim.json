@@ -215,6 +215,11 @@
         },
         {
             "name": "python3-dbus-python",
+            "build-options": {
+                "env": {
+                    "PYTHON_VERSION": "3"
+                }
+            },
             "sources": [
                 {
                     "type": "archive",
