@@ -289,13 +289,14 @@ class ConnectionVcard:
         self.own_vcard = None
         self.room_jids = []
         self.avatar_presence_sent = False
+        self._requested_shas = {}
 
         app.ged.register_event_handler('presence-received', ged.GUI2,
-            self._vcard_presence_received)
+                                       self._vcard_presence_received)
         app.ged.register_event_handler('gc-presence-received', ged.GUI2,
-            self._vcard_gc_presence_received)
+                                       self._vcard_gc_presence_received)
         app.ged.register_event_handler('room-avatar-received', ged.GUI2,
-            self._vcard_presence_received)
+                                       self._vcard_presence_received)
 
     def _vcard_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -342,28 +343,32 @@ class ConnectionVcard:
                 'Update (vCard): %s %s', obj.jid, obj.avatar_sha)
             current_sha = app.contacts.get_avatar_sha(self.name, obj.jid)
 
-            if obj.avatar_sha != current_sha:
-                if room_avatar:
-                    # We dont save the room avatar hash in our DB, so check
-                    # if we previously downloaded it
-                    if app.interface.avatar_exists(obj.avatar_sha):
-                        app.contacts.set_avatar(self.name, obj.jid, obj.avatar_sha)
-                        app.interface.update_avatar(
-                            self.name, obj.jid, room_avatar=room_avatar)
-                    else:
-                        app.log('avatar').info(
-                            'Request (vCard): %s', obj.jid)
-                        self.request_vcard(self._on_room_avatar_received, obj.jid)
-
-                else:
-                    app.log('avatar').info(
-                        'Request (vCard): %s', obj.jid)
-                    self.request_vcard(self._on_avatar_received, obj.jid)
-
-            else:
+            if obj.avatar_sha == current_sha:
                 app.log('avatar').info(
                     'Avatar already known (vCard): %s %s',
                     obj.jid, obj.avatar_sha)
+                return
+
+            if room_avatar:
+                # We dont save the room avatar hash in our DB, so check
+                # if we previously downloaded it
+                if app.interface.avatar_exists(obj.avatar_sha):
+                    app.contacts.set_avatar(self.name, obj.jid, obj.avatar_sha)
+                    app.interface.update_avatar(
+                        self.name, obj.jid, room_avatar=room_avatar)
+                elif obj.jid not in self._requested_shas:
+                    app.log('avatar').info(
+                        'Request (vCard): %s', obj.jid)
+                    self._requested_shas[obj.jid] = obj.avatar_sha
+                    self.request_vcard(self._on_room_avatar_received, obj.jid)
+                return
+
+            if obj.jid not in self._requested_shas:
+                app.log('avatar').info(
+                    'Request (vCard): %s', obj.jid)
+                self._requested_shas[obj.jid] = obj.avatar_sha
+                self.request_vcard(self._on_avatar_received, obj.jid)
+
 
     def _vcard_gc_presence_received(self, obj):
         if obj.conn.name != self.name:
@@ -395,10 +400,12 @@ class ConnectionVcard:
                 'Update (vCard): %s %s', obj.nick, obj.avatar_sha)
             path = os.path.join(configpaths.get('AVATAR'), obj.avatar_sha)
             if not os.path.isfile(path):
-                app.log('avatar').info(
-                    'Request (vCard): %s', obj.nick)
-                obj.conn.request_vcard(
-                    self._on_avatar_received, obj.fjid, room=True)
+                if obj.fjid not in self._requested_shas:
+                    app.log('avatar').info(
+                        'Request (vCard): %s', obj.nick)
+                    self._requested_shas[obj.fjid] = obj.avatar_sha
+                    obj.conn.request_vcard(
+                        self._on_avatar_received, obj.fjid, room=True)
                 return
 
             if gc_contact.avatar_sha != obj.avatar_sha:
@@ -531,7 +538,8 @@ class ConnectionVcard:
                 try:
                     photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 except binascii.Error as error:
-                    app.log('avatar').warning('Invalid avatar for %s: %s', jid, error)
+                    app.log('avatar').warning('Invalid avatar for %s: %s',
+                                              jid, error)
                     return None, None
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 
@@ -612,7 +620,14 @@ class ConnectionVcard:
 
     def _on_room_avatar_received(self, jid, resource, room, vcard):
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
+        expected_avatar_sha = self._requested_shas[jid]
+        if expected_avatar_sha != avatar_sha:
+            app.log('avatar').warning(
+                'Avatar mismatch (vCard): %s %s', jid, avatar_sha)
+            return
+
         app.interface.save_avatar(photo_decoded)
+        self._requested_shas.pop(jid)
 
         app.log('avatar').info('Received (vCard): %s %s', jid, avatar_sha)
         app.contacts.set_avatar(self.name, jid, avatar_sha)
@@ -622,8 +637,19 @@ class ConnectionVcard:
         """
         Called when we receive a vCard Parse the vCard and trigger Events
         """
-        avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
+        request_jid = jid
+        if room:
+            request_jid = '%s/%s' % (jid, resource)
+
+        avatar_sha, photo_decoded = self._get_vcard_photo(vcard, request_jid)
+        expected_avatar_sha = self._requested_shas[request_jid]
+        if expected_avatar_sha != avatar_sha:
+            app.log('avatar').warning(
+                'Avatar mismatch (vCard): %s %s', request_jid, avatar_sha)
+            return
+
         app.interface.save_avatar(photo_decoded)
+        self._requested_shas.pop(request_jid)
 
         # Received vCard from a contact
         if room:
