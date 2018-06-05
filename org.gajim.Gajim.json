@@ -374,12 +374,6 @@
                 {
                     "type": "git",
                     "url": "https://dev.gajim.org/gajim/gajim.git"
-                },
-                {
-                    "type": "archive",
-                    "url": "https://ftp.gajim.org/plugins_releases/plugin_installer_0.20.4.zip",
-                    "sha256": "02f71f0921d67433ecdca7f0b682a63cadaa7a057fa68608f1ec7ce3fae44fb9",
-                    "dest": "gajim/data/plugins/plugin_installer"
                 }
             ],
             "post-install": [
