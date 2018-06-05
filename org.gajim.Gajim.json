@@ -75,8 +75,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/10/f7/3b302ff34045f25065091d40e074479d6893882faef135c96f181a57ed06/cffi-1.11.4.tar.gz",
-                    "sha256": "df9083a992b17a28cd4251a3f5c879e0198bb26c9e808c4647e0a18739f1d11d"
+                    "url": "https://files.pythonhosted.org/packages/e7/a7/4cd50e57cc6f436f1cc3a7e8fa700ff9b8b4d471620629074913e3735fb2/cffi-1.11.5.tar.gz",
+                    "sha256": "e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4"
                 }
             ]
         },
@@ -112,13 +112,13 @@
             "name": "python3-packaging",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app packaging-16.8-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app packaging-17.1-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/87/1b/c39b7c65b5612812b83d6cab7ef2885eac9f6beb0b7b8a7071a186aea3b1/packaging-16.8-py2.py3-none-any.whl",
-                    "sha256": "99276dc6e3a7851f32027a68f1095cd3f77c148091b092ea867a351811cfe388"
+                    "url": "https://files.pythonhosted.org/packages/ad/c2/b500ea05d5f9f361a562f089fc91f77ed3b4783e13a08a3daf82069b1224/packaging-17.1-py2.py3-none-any.whl",
+                    "sha256": "e9215d2d2535d3ae866c3d6efc77d5b24a0192cce0ff20e42896cc0664f889c0"
                 }
             ]
         },
@@ -149,8 +149,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/6c/54/f7e9cea6897636a04e74c3954f0d8335cc38f7d01e27eec98026b049a300/setuptools-38.5.1.zip",
-                    "sha256": "6425484c08e99a98a42209c25c3d325f749230b55284d66192784f941a7e6628"
+                    "url": "https://files.pythonhosted.org/packages/1a/04/d6f1159feaccdfc508517dba1929eb93a2854de729fa68da9d5c6b48fa00/setuptools-39.2.0.zip",
+                    "sha256": "f7cddbb5f5c640311eb00eab6e849f7701fa70bf6a183fc8a2c33dd1d1672fb2"
                 }
             ]
         },
@@ -194,8 +194,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/78/c5/7188f15a92413096c93053d5304718e1f6ba88b818357d05d19250ebff85/cryptography-2.1.4.tar.gz",
-                    "sha256": "e4d967371c5b6b2e67855066471d844c5d52d210c36c28d49a8507b96e2c5291"
+                    "url": "https://files.pythonhosted.org/packages/ec/b2/faa78c1ab928d2b2c634c8b41ff1181f0abdd9adf9193211bd606ffa57e2/cryptography-2.2.2.tar.gz",
+                    "sha256": "9fc295bf69130a342e7a19a39d7bbeb15c0bcaabc7382ec33ef3b2b7d18d2f63"
                 }
             ]
         },
@@ -203,13 +203,13 @@
             "name": "python3-pyopenssl",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app pyOpenSSL-17.5.0-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app pyOpenSSL-18.0.0-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/79/db/7c0cfe4aa8341a5fab4638952520d8db6ab85ff84505e12c00ea311c3516/pyOpenSSL-17.5.0-py2.py3-none-any.whl",
-                    "sha256": "07a2de1a54de07448732a81e38a55df7da109b2f47f599f8bb35b0cbec69d4bd"
+                    "url": "https://files.pythonhosted.org/packages/96/af/9d29e6bd40823061aea2e0574ccb2fcf72bfd6130ce53d32773ec375458c/pyOpenSSL-18.0.0-py2.py3-none-any.whl",
+                    "sha256": "26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854"
                 }
             ]
         },
@@ -218,8 +218,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://pypi.python.org/packages/ad/1b/76adc363212c642cabbf9329457a918308c0b9b5d38ce04d541a67255174/dbus-python-1.2.4.tar.gz",
-                    "sha256": "e2f1d6871f74fba23652e51d10873e54f71adab0525833c19bad9e99b1b2f9cc"
+                    "url": "https://files.pythonhosted.org/packages/3f/e7/4edb582d1ffd5ac3c84188deea32e960b5c8c0fe1da56ce70224f85ce542/dbus-python-1.2.8.tar.gz",
+                    "sha256": "abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f"
                 }
             ]
         },
@@ -228,13 +228,13 @@
             "name": "python3-python-gnupg",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app python_gnupg-0.4.1-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app python_gnupg-0.4.2-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/7a/f2/f655f52ff21457138d4a002aa0f67f1923cf682560b354cacecde1b2c767/python_gnupg-0.4.1-py2.py3-none-any.whl",
-                    "sha256": "1e4aa381bad3edbbdfcfb0ed0de73b26d6115f5090cdae9b5b6f6ff177a66aa7"
+                    "url": "https://files.pythonhosted.org/packages/ba/27/b87814299af38edc6905042c07a7f889d15914b0589b9cd197b9efb09cea/python_gnupg-0.4.2-py2.py3-none-any.whl",
+                    "sha256": "38f18712b7cfdd0d769bc88a21e90138154b9be2cbffb1e7d28bc37ee73a1c47"
                 }
             ]
         },
@@ -269,8 +269,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/69/e0/9605cac4c83c12d0bef5c2e9992f0bcbce4fae9a252899d545ccb7dc8717/python-axolotl-curve25519-0.1.tar.gz",
-                    "sha256": "c559f6a5bf51e869325b36bd83c14cccd7dec1c6e7599e797f9ba27a72d339c0"
+                    "url": "https://files.pythonhosted.org/packages/59/ca/c8111718bcc8da18e9b9868e784293232a58c57159a5ea18f00ee967258f/python-axolotl-curve25519-0.4.1.post2.tar.gz",
+                    "sha256": "0705a66297ebd2f508a60dc94e22881c754301eb81db93963322f6b3bdcb63a3"
                 }
             ]
         },
@@ -287,8 +287,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/7f/9d/410ce5c2322180cae7025e52e2f91f585d2be71f30ebbcfd605d2c9a1cd5/python-axolotl-0.1.39.tar.gz",
-                    "sha256": "9af9c937d0d05ebea414f1be79ecc7517cc3541a77101941e6a2a71bdd2b6e25"
+                    "url": "https://files.pythonhosted.org/packages/27/99/3b905f0061aba53526408d286e53cee3b00c9fd256eed7d21d5d41033690/python-axolotl-0.1.42.tar.gz",
+                    "sha256": "ef78c2efabcd4c33741669334bdda04710a3ef0e00b653f00127acff6460a7f0"
                 }
             ]
         },
