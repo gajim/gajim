@@ -35,8 +35,11 @@ _translations = None
 
 def initialize():
     global _translations
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except locale.Error as error:
+        print(error)
 
-    locale.setlocale(locale.LC_ALL, '')
     # initialize_win_translation() broken
     initialize_lang()
     set_i18n_env()
