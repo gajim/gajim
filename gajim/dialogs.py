@@ -861,6 +861,8 @@ class AddNewContactWindow:
             # fill accounts with active accounts
             accounts = []
             for account in app.connections.keys():
+                if account == 'Local':
+                    continue
                 if app.connections[account].connected > 1:
                     accounts.append(account)
             if not accounts:
