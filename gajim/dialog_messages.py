@@ -180,10 +180,10 @@ messages = {
     }
 
 
-def get_dialog(name, *args, **kwargs):
-    message = messages.get(name, None)
+def get_dialog(dialog_name, *args, **kwargs):
+    message = messages.get(dialog_name, None)
     if message is None:
-        raise ValueError('Dialog %s does not exist' % name)
+        raise ValueError('Dialog %s does not exist' % dialog_name)
 
     # Set transient window
     transient_for = kwargs.get('transient_for', None)
