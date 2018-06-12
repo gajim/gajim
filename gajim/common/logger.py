@@ -158,9 +158,15 @@ class Logger:
             self._create(CACHE_SQL_STATEMENT, self._cache_db_path)
 
     @staticmethod
-    def _create(statement, path):
+    def _connect(*args, **kwargs):
+        con = sqlite.connect(*args, **kwargs)
+        con.execute("PRAGMA secure_delete=1")
+        return con
+
+    @classmethod
+    def _create(cls, statement, path):
         log.info(_('Creating %s'), path)
-        con = sqlite.connect(path)
+        con = cls._connect(path)
         os.chmod(path, 0o600)
 
         try:
@@ -181,11 +187,11 @@ class Logger:
 
     def _migrate_databases(self):
         try:
-            con = sqlite.connect(self._log_db_path)
+            con = self._connect(self._log_db_path)
             self._migrate_logs(con)
             con.close()
 
-            con = sqlite.connect(self._cache_db_path)
+            con = self._connect(self._cache_db_path)
             self._migrate_cache(con)
             con.close()
         except Exception:
@@ -272,7 +278,7 @@ class Logger:
         app.ged.raise_event(event, None, str(error))
 
     def _connect_databases(self):
-        self._con = sqlite.connect(
+        self._con = self._connect(
             self._log_db_path, timeout=20.0, isolation_level='IMMEDIATE')
 
         self._con.row_factory = self.namedtuple_factory

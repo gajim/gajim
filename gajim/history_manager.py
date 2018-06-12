@@ -131,6 +131,7 @@ class HistoryManager:
 
         self.con = sqlite3.connect(
             log_db_path, timeout=20.0, isolation_level='IMMEDIATE')
+        self.con.execute("PRAGMA secure_delete=1")
         self.cur = self.con.cursor()
 
         self._init_jids_listview()
