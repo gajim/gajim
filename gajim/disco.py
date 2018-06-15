@@ -109,8 +109,6 @@ def _gen_agent_type_info():
         ('gateway', 'sms'):             (False, 'sms'),
         ('_jid', 'sms'):                (False, 'sms'),
         ('gateway', 'smtp'):            (False, 'mail'),
-        ('gateway', 'yahoo'):           (False, 'yahoo'),
-        ('_jid', 'yahoo'):              (False, 'yahoo'),
         ('gateway', 'mrim'):            (False, 'mrim'),
         ('_jid', 'mrim'):               (False, 'mrim'),
         ('gateway', 'facebook'):        (False, 'facebook'),

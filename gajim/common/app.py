@@ -448,8 +448,7 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
         # now we support both 'icq.' and 'icq' but not icqsucks.org
         host = host_splitted[0]
 
-    if host in ('irc', 'icq', 'sms', 'weather', 'yahoo',
-    'mrim', 'facebook'):
+    if host in ('irc', 'icq', 'sms', 'weather', 'mrim', 'facebook'):
         return host
     elif host == 'gg':
         return 'gadu-gadu'
@@ -504,7 +503,7 @@ def get_notification_image_prefix(jid):
     Returns the prefix for the notification images
     """
     transport_name = get_transport_name_from_jid(jid)
-    if transport_name in ('icq', 'yahoo', 'facebook'):
+    if transport_name in ('icq', 'facebook'):
         prefix = transport_name
     else:
         prefix = 'jabber'

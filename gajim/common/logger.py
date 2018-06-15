@@ -505,8 +505,6 @@ class Logger:
             return TypeConstant.SMTP
         if type_ in ('tlen', 'x-tlen'):
             return TypeConstant.TLEN
-        if type_ == 'yahoo':
-            return TypeConstant.YAHOO
         if type_ == 'newmail':
             return TypeConstant.NEWMAIL
         if type_ == 'rss':
@@ -541,8 +539,6 @@ class Logger:
             return 'smtp'
         if type_id == TypeConstant.TLEN:
             return 'tlen'
-        if type_id == TypeConstant.YAHOO:
-            return 'yahoo'
         if type_id == TypeConstant.NEWMAIL:
             return 'newmail'
         if type_id == TypeConstant.RSS:
