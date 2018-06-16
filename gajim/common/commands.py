@@ -198,7 +198,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
     @staticmethod
     def isVisibleFor(samejid):
         """
-        Change status is visible only if the entity has the same bare jid
+        Leave groupchats is visible only if the entity has the same bare jid
         """
         return samejid
 
@@ -285,7 +285,7 @@ class ForwardMessagesCommand(AdHocCommand):
     @staticmethod
     def isVisibleFor(samejid):
         """
-        Change status is visible only if the entity has the same bare jid
+        Forward messages is visible only if the entity has the same bare jid
         """
         return samejid
 
@@ -320,7 +320,7 @@ class FwdMsgThenDisconnectCommand(AdHocCommand):
     @staticmethod
     def isVisibleFor(samejid):
         """
-        Change status is visible only if the entity has the same bare jid
+        Forward unread messages then disconnect is visible only if the entity has the same bare jid
         """
         return samejid
 
