@@ -26,7 +26,6 @@ import nbxmpp
 from gajim.common import helpers
 from gajim.common import dataforms
 from gajim.common import app
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
 import logging
 log = logging.getLogger('gajim.c.commands')
@@ -277,80 +276,6 @@ class LeaveGroupchatsCommand(AdHocCommand):
         return False
 
 
-class ForwardMessagesCommand(AdHocCommand):
-    # http://www.xmpp.org/extensions/xep-0146.html#forward
-    commandnode = 'forward-messages'
-    commandname = _('Forward unread messages')
-
-    @staticmethod
-    def isVisibleFor(samejid):
-        """
-        Forward messages is visible only if the entity has the same bare jid
-        """
-        return samejid
-
-    def execute(self, request):
-        account = self.connection.name
-        # Forward messages
-        events = app.events.get_events(account, types=['chat', 'normal',
-            'printed_chat'])
-        j, resource = app.get_room_and_nick_from_fjid(self.jid)
-        for jid in events:
-            for event in events[jid]:
-                ev_typ = event.type_
-                if ev_typ == 'printed_chat':
-                    ev_typ = 'chat'
-                app.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                    account=account, jid=j, message=event.message, type_=ev_typ,
-                    subject=event.subject, resource=resource, forward_from=jid,
-                    delayed=event.time_))
-
-        # Inform other client of completion
-        response, cmd = self.buildResponse(request, status = 'completed')
-        cmd.addChild('note', {}, _('All unread messages have been forwarded.'))
-
-        self.connection.connection.send(response)
-
-        return False    # finish the session
-
-class FwdMsgThenDisconnectCommand(AdHocCommand):
-    commandnode = 'fwd-msd-disconnect'
-    commandname = _('Forward unread message then disconnect')
-
-    @staticmethod
-    def isVisibleFor(samejid):
-        """
-        Forward unread messages then disconnect is visible only if the entity has the same bare jid
-        """
-        return samejid
-
-    def execute(self, request):
-        account = self.connection.name
-        # Forward messages
-        events = app.events.get_events(account, types=['chat', 'normal'])
-        j, resource = app.get_room_and_nick_from_fjid(self.jid)
-        for jid in events:
-            for event in events[jid]:
-                ev_typ = event.type_
-                if ev_typ == 'printed_chat':
-                    ev_typ = 'chat'
-                app.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                    account=account, jid=j, message=event.message, type_=ev_typ,
-                    subject=event.subject, resource=resource, forward_from=jid,
-                    delayed=event.time_, now=True))
-
-        response, cmd = self.buildResponse(request, status = 'completed')
-        cmd.addChild('note', {}, _('The status has been changed.'))
-
-        # if going offline, we need to push response so it won't go into
-        # queue and disappear
-        self.connection.connection.send(response, now = True)
-
-        # send new status
-        app.interface.roster.send_status(self.connection.name, 'offline', '')
-        # finish the session
-        return False
-
 class ConnectionCommands:
     """
     This class depends on that it is a part of Connection() class
@@ -360,8 +285,7 @@ class ConnectionCommands:
         # a list of all commands exposed: node -> command class
         self.__commands = {}
         if app.config.get('remote_commands'):
-            for cmdobj in (ChangeStatusCommand, ForwardMessagesCommand,
-            LeaveGroupchatsCommand, FwdMsgThenDisconnectCommand):
+            for cmdobj in (ChangeStatusCommand, LeaveGroupchatsCommand):
                 self.__commands[cmdobj.commandnode] = cmdobj
 
         # a list of sessions; keys are tuples (jid, sessionid, node)
