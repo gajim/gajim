@@ -75,7 +75,7 @@ log = logging.getLogger('gajim.groupchat_control')
 @unique
 class Column(IntEnum):
     IMG = 0 # image to show state (online, new message etc)
-    NICK = 1 # contact nickame or ROLE name
+    NICK = 1 # contact nickname or ROLE name
     TYPE = 2 # type of the row ('contact' or 'role')
     TEXT = 3 # text shown in the cellrenderer
     AVATAR_IMG = 4 # avatar of the contact
@@ -725,7 +725,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_minimize(self, action, param):
         """
-        When a grouchat is minimized, unparent the tab, put it in roster etc
+        When a groupchat is minimized, unparent the tab, put it in roster etc
         """
         action.set_state(param)
         non_minimized_gc = app.config.get_per(
@@ -843,7 +843,7 @@ class GroupchatControl(ChatControlBase):
 
     def tree_compare_iters(self, model, iter1, iter2, data=None):
         """
-        Compare two iters to sort them
+        Compare two iterators to sort them
         """
         type1 = model[iter1][Column.TYPE]
         type2 = model[iter2][Column.TYPE]
@@ -2315,7 +2315,7 @@ class GroupchatControl(ChatControlBase):
                 return
         includes = app.config.get('confirm_close_muc_rooms').split(' ')
         excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
-        # whether to ask for comfirmation before closing muc
+        # whether to ask for confirmation before closing muc
         if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
         and app.gc_connected[self.account][self.room_jid] and self.room_jid \
         not in excludes:
@@ -2460,7 +2460,7 @@ class GroupchatControl(ChatControlBase):
                     fjid = self.room_jid + '/' + nick
                     if nick.lower().startswith(begin.lower()) and not \
                        helpers.jid_is_blocked(self.account, fjid):
-                        # the word is the begining of a nick
+                        # the word is the beginning of a nick
                         self.nick_hits.append(nick)
             if len(self.nick_hits):
                 if len(splitted_text) < 2 or with_refer_to_nick_char:
@@ -2472,13 +2472,13 @@ class GroupchatControl(ChatControlBase):
                 start_iter = end_iter.copy()
                 if self.last_key_tabs and with_refer_to_nick_char or (text and \
                                                                       text[-1] == ' '):
-                    # have to accomodate for the added space from last
+                    # have to accommodate for the added space from last
                     # completion
                     # gc_refer_to_nick_char may be more than one char!
                     start_iter.backward_chars(len(begin) + len(add))
                 elif self.last_key_tabs and not app.config.get(
                     'shell_like_completion'):
-                    # have to accomodate for the added space from last
+                    # have to accommodate for the added space from last
                     # completion
                     start_iter.backward_chars(len(begin) + \
                                               len(gc_refer_to_nick_char))
@@ -2730,8 +2730,8 @@ class GroupchatControl(ChatControlBase):
 
     def on_row_activated(self, widget, path):
         """
-        When an iter is activated (dubblick or single click if gnome is set this
-        way
+        When an iter is activated (double click or single click if gnome
+        is set this way)
         """
         if path.get_depth() == 1: # It's a group
             if (widget.row_expanded(path)):

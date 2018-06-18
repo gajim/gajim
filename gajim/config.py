@@ -1893,7 +1893,7 @@ class ManageBookmarksWindow:
 
         self.ignore_events = False
 
-        # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Passowrd, Nick,
+        # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Password, Nick,
         # Show_Status
         self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str)
         self.treestore.set_sort_column_id(1, Gtk.SortType.ASCENDING)

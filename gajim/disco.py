@@ -211,7 +211,7 @@ class Closure(object):
     """
     A weak reference to a callback with arguments as an object
 
-    Weak references to methods immediatly die, even if the object is still
+    Weak references to methods immediately die, even if the object is still
     alive. Besides a handy way to store a callback, this provides a workaround
     that keeps a reference to the object instead.
 
@@ -1248,7 +1248,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _create_treemodel(self):
         # JID, node, icon, description, state
-        # state is None on sucess or has a string
+        # state is None on success or has a string
         # from LABELS on error or while fetching
         view = self.window.services_treeview
         self.model = Gtk.TreeStore(str, str, GdkPixbuf.Pixbuf, str, str)
@@ -1441,7 +1441,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.execute_button.set_sensitive(True)
         if self.search_button and nbxmpp.NS_SEARCH in features:
             self.search_button.set_sensitive(True)
-        # Don't autorize to register with a server via disco
+        # Don't authorize to register with a server via disco
         if self.register_button and nbxmpp.NS_REGISTER in features and \
         jid != self.jid:
             # We can register this agent
@@ -1824,7 +1824,7 @@ class MucBrowser(AgentBrowser):
 
     def on_scroll(self, *args):
         """
-        Scrollwindow callback to trigger new queries on scolling
+        Scrollwindow callback to trigger new queries on scrolling
         """
         # This apparently happens when inactive sometimes
         self._query_visible()
@@ -1860,7 +1860,7 @@ class MucBrowser(AgentBrowser):
 
     def _channel_altinfo(self, jid, node, items, name = None):
         """
-        Callback for the alternate disco#items query. We try to atleast get the
+        Callback for the alternate disco#items query. We try to at least get the
         amount of users in the room if the service does not support MUC dataforms
         """
         if items == 0:
@@ -1958,7 +1958,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         """
         Create treemodel for the window
         """
-        # JID, node, name (with description) - pango markup, dont have info?, subscribed?
+        # JID, node, name (with description) - pango markup, don't have info?, subscribed?
         self.model = Gtk.TreeStore(str, str, str, bool, bool)
         # sort by name
         self.model.set_sort_column_id(2, Gtk.SortType.ASCENDING)

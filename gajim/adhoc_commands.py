@@ -550,7 +550,7 @@ class CommandWindow:
             progressbar.pulse()
             return True     # important to keep callback be called back!
 
-        # 12 times per second (80 miliseconds)
+        # 12 times per second (80 milliseconds)
         self.pulse_id = GLib.timeout_add(80, callback)
 
     def remove_pulsing(self):

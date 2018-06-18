@@ -311,7 +311,7 @@ class EmoticonPopover(Gtk.Popover):
     def do_destroy(self):
         # Remove the references we hold to other objects
         self.text_widget = None
-        # Even though we dont destroy the Popover, handlers are getting
+        # Even though we don't destroy the Popover, handlers are getting
         # still disconnected, which makes the handler_id invalid
         # FIXME: find out how we can prevent handlers getting disconnected
         self.handler_id = None
