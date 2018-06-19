@@ -1235,8 +1235,8 @@ class Logger:
         """
 
         # Add 10 seconds around the timestamp
-        start_time = timestamp - 10
-        end_time = timestamp + 10
+        start_time = timestamp - 30
+        end_time = timestamp + 30
 
         account_id = self.get_account_id(account)
         log.debug('start: %s, end: %s, jid: %s, message: %s',
