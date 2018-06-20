@@ -106,8 +106,9 @@ class SocksQueue:
                     return 1
             return 0
         for host in file_props.streamhosts:
-            if streamhost['state'] == 1:
-                return 0
+            if host['state'] == 1:
+                # on_success callback already called for another host
+                return 0 # return 0 to disconnect this one
         streamhost['state'] = 1
         self.on_success[file_props.transport_sid](streamhost)
         return 1
