@@ -75,7 +75,7 @@ SERVICE_DIRECT_TLS = 'xmpps-client'
 
 class CommonConnection:
     """
-    Common connection class, can be derivated for normal connection or zeroconf
+    Common connection class, can be derived for normal connection or zeroconf
     connection
     """
 
@@ -119,7 +119,7 @@ class CommonConnection:
 
         # Remember where we are in the register agent process
         self.agent_registrations = {}
-        # To know the groupchat jid associated with a sranza ID. Useful to
+        # To know the groupchat jid associated with a stanza ID. Useful to
         # request vcard or os info... to a real JID but act as if it comes from
         # the fake jid
         self.groupchat_jids = {} # {ID : groupchat_jid}
@@ -164,7 +164,7 @@ class CommonConnection:
 
     def reconnect(self):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
@@ -222,7 +222,7 @@ class CommonConnection:
 
     def check_jid(self, jid):
         """
-        This function must be implemented by derivated classes. It has to return
+        This function must be implemented by derived classes. It has to return
         the valid jid, or raise a helpers.InvalidFormat exception
         """
         raise NotImplementedError
@@ -404,44 +404,44 @@ class CommonConnection:
 
     def ack_subscribed(self, jid):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def ack_unsubscribed(self, jid):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def request_subscription(self, jid, msg='', name='', groups=None,
                     auto_auth=False):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def send_authorization(self, jid):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def refuse_authorization(self, jid):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def unsubscribe(self, jid, remove_auth = True):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def unsubscribe_agent(self, agent):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
@@ -458,13 +458,13 @@ class CommonConnection:
 
     def new_account(self, name, config, sync=False):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def _on_new_account(self, con=None, con_type=None):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
@@ -473,37 +473,37 @@ class CommonConnection:
 
     def request_os_info(self, jid, resource):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def get_settings(self):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def get_bookmarks(self):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def store_bookmarks(self):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def get_metacontacts(self):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 
     def send_agent_status(self, agent, ptype):
         """
-        To be implemented by derivated classes
+        To be implemented by derived classes
         """
         raise NotImplementedError
 

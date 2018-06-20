@@ -131,7 +131,7 @@ class CacheDictionary:
     """
     A dictionary that keeps items around for only a specific time.  Lifetime is
     in minutes. Getrefresh specifies whether to refresh when an item is merely
-    accessed instead of set aswell
+    accessed instead of set as well
     """
 
     def __init__(self, lifetime, getrefresh = True):
@@ -2087,7 +2087,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
     def update_actions(self):
         """
         Called when user selected a row. Make subscribe/unsubscribe buttons
-        sensitive appropriatelly
+        sensitive appropriately
         """
         # we have nothing to do if we don't have buttons...
         if self.subscribe_button is None: return

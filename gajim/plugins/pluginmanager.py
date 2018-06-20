@@ -60,7 +60,7 @@ class PluginManager(metaclass=Singleton):
     :todo: implement mechanism to dynamically load plugins where GUI extension
                points have been already called (i.e. when plugin is activated
                after GUI object creation). [DONE?]
-    :todo: implement mechanism to dynamically deactive plugins (call plugin's
+    :todo: implement mechanism to dynamically deactivate plugins (call plugin's
                deactivation handler) [DONE?]
     :todo: when plug-in is deactivated all GUI extension points are removed
                from `PluginManager.gui_extension_points_handlers`. But when
@@ -155,7 +155,7 @@ class PluginManager(metaclass=Singleton):
         '''
         removes the plugin from the plugin list and deletes all loaded modules 
         from sys. This way we will have a fresh start when the plugin gets added
-        agin.
+        again.
         '''
         if plugin.active:
             self.deactivate_plugin(plugin)
@@ -192,7 +192,7 @@ class PluginManager(metaclass=Singleton):
     def extension_point(self, gui_extpoint_name, *args):
         '''
         Invokes all handlers (from plugins) for a particular extension point, but
-        doesnt add it to collection for further processing.
+        doesn't add it to collection for further processing.
         For example if you pass a message for encryption via extension point to a
         plugin, its undesired that the call is stored and replayed on activating the
         plugin. For example after an update.
@@ -487,7 +487,7 @@ class PluginManager(metaclass=Singleton):
         :rtype: [] of class objects
 
         :note: currently it only searches for plugin classes in '\*.py' files
-                present in given direcotory `path` (no recursion here)
+                present in given directory `path` (no recursion here)
 
         :todo: add scanning zipped modules
         '''

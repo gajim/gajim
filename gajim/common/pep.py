@@ -466,7 +466,7 @@ class UserLocationPEP(AbstractPEP):
         for entry in location.keys():
             text = location[entry]
             text = GLib.markup_escape_text(text)
-            # Translate standart location tag
+            # Translate standard location tag
             tag = LOCATION_DATA.get(entry, entry)
             location_string += '\n<b>%(tag)s</b>: %(text)s' % \
                     {'tag': tag.capitalize(), 'text': text}

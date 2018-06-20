@@ -84,7 +84,7 @@ def create_paths():
         if not path.exists():
             for parent_path in reversed(path.parents):
                 # Create all parent folders
-                # dont use mkdir(parent=True), as it ignores `mode`
+                # don't use mkdir(parent=True), as it ignores `mode`
                 # when creating the parents
                 if not parent_path.exists():
                     print(('creating %s directory') % parent_path)

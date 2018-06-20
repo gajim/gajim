@@ -51,7 +51,7 @@ class log_calls(object):
                           'GajimPluginConfigDialog', 'PluginsWindow']
     '''
     List of classes from which no logs should be emited when methods are called,
-    eventhough `log_calls` decorator is used.
+    even though `log_calls` decorator is used.
     '''
 
     def __init__(self, classname='', log=log):
@@ -60,7 +60,7 @@ class log_calls(object):
           classname : str
             Name of class to prefix function name (if function is a method).
           log : logging.Logger
-            Logger to use when outputing debug information on when function has
+            Logger to use when outputting debug information on when function has
             been entered and when left. By default: `plugins.helpers.log`
             is used.
         '''

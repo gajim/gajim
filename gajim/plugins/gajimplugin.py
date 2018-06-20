@@ -52,7 +52,7 @@ class GajimPlugin(object):
     '''
     Short name of plugin.
 
-    Used for quick indentification of plugin.
+    Used for quick identification of plugin.
 
     :type: str
 
@@ -114,7 +114,7 @@ class GajimPlugin(object):
     Keys of this string should be strings with name of GUI extension point
     to handles. Values should be 2-element tuples with references to handling
     functions. First function will be used to connect plugin with extpoint,
-    the second one to successfuly disconnect from it. Connecting takes places
+    the second one to successfully disconnect from it. Connecting takes places
     when plugin is activated and extpoint already exists, or when plugin is
     already activated but extpoint is being created (eg. chat window opens).
     Disconnecting takes place when plugin is deactivated and extpoint exists

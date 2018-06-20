@@ -76,7 +76,7 @@ class ConnectionJingle(object):
         is a new session.
 
         TODO: Also check if the stanza isn't an error stanza, if so route it
-        adequatelly.
+        adequately.
         """
         # get data
         try:
@@ -209,7 +209,7 @@ class ConnectionJingle(object):
             return sessions
 
     def set_file_info(self, file_):
-        # Saves information about the files we have transfered in case they need
+        # Saves information about the files we have transferred in case they need
         # to be requested again.
         self.files.append(file_)
 

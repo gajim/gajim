@@ -80,7 +80,7 @@ class SocksQueue:
     def start_listener(self, port, sha_str, sha_handler, file_props,
     fingerprint=None, typ='sender'):
         """
-        Start waiting for incomming connections on (host, port) and do a socks5
+        Start waiting for incoming connections on (host, port) and do a socks5
         authentication using sid for generated SHA
         """
         log.debug('Start listening for socks5 connection')
@@ -190,7 +190,7 @@ class SocksQueue:
                         self.remove_receiver(streamhost['idx'])
                     return
                 # set state -2, meaning that this streamhost is stopped,
-                # but it may be connectected later
+                # but it may be connected later
                 if host['state'] >= 0:
                     if file_props.type_ == 's':
                         self.remove_sender(host['idx'], False)
@@ -406,7 +406,7 @@ class SocksQueue:
 
     def remove_receiver(self, idx, do_disconnect=True, remove_all=False):
         """
-        Remove reciver from the list and decrease the number of active
+        Remove receiver from the list and decrease the number of active
         connections with 1
         """
         if idx != -1:

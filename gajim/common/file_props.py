@@ -1,5 +1,5 @@
 """
-This module is in charge of taking care of all the infomation related to
+This module is in charge of taking care of all the information related to
 individual files. Files are identified by the account name and its sid.
 
 
@@ -21,7 +21,7 @@ class FilesProp:
     _files_props = {}
 
     def __init__(self):
-        raise Exception('this class should not be instatiated')
+        raise Exception('this class should not be instantiated')
 
     @classmethod
     def getNewFileProp(cls, account, sid):
@@ -93,7 +93,7 @@ class FilesProp:
 class FileProp(object):
 
     def __init__(self, account, sid):
-        # Do not instatiate this class directly. Call FilesProp.getNeFileProp
+        # Do not instantiate this class directly. Call FilesProp.getNeFileProp
         # instead
         self.streamhosts = []
         self.transfered_size = []
