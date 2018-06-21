@@ -172,13 +172,13 @@
             "name": "python3-idna",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app idna-2.6-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app idna-2.7-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://pypi.python.org/packages/27/cc/6dd9a3869f15c2edfab863b992838277279ce92663d334df9ecf5106f5c6/idna-2.6-py2.py3-none-any.whl",
-                    "sha256": "8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4"
+                    "url": "https://files.pythonhosted.org/packages/4b/2a/0276479a4b3caeb8a8c1af2f8e4355746a97fab05a372e4a2c6a6b876165/idna-2.7-py2.py3-none-any.whl",
+                    "sha256": "156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e"
                 }
             ]
         },
@@ -233,32 +233,28 @@
             "name": "python3-python-gnupg",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app python_gnupg-0.4.2-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app python_gnupg-0.4.3-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/ba/27/b87814299af38edc6905042c07a7f889d15914b0589b9cd197b9efb09cea/python_gnupg-0.4.2-py2.py3-none-any.whl",
-                    "sha256": "38f18712b7cfdd0d769bc88a21e90138154b9be2cbffb1e7d28bc37ee73a1c47"
+                    "url": "https://files.pythonhosted.org/packages/4a/87/76ead690afc4c7710012ede242537cd9807dde9de6299e65d075925c0b02/python_gnupg-0.4.3-py2.py3-none-any.whl",
+                    "sha256": "faa69bab58ed0936f0ccf96c99b92369b7a1819305d37dfe5c927d21a437a09d"
                 }
             ]
         },
         /* OMEMO support */
         {
             "name": "protobuf",
-            "ensure-writable": [
-                "easy-install.pth",
-                "setuptools.pth"
-            ],
             "buildsystem": "simple",
             "build-commands": [
-                "python3 setup.py install --prefix=/app"
+                "pip3 install --prefix=/app protobuf-3.6.0-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
-                    "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/14/03/ff5279abda7b46e9538bfb1411d42831b7e65c460d73831ed2445649bc02/protobuf-3.5.1.tar.gz",
-                    "sha256": "95b78959572de7d7fafa3acb718ed71f482932ddddddbd29ba8319c10639d863"
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/85/f8/d09e4bf21c4de65405ce053e90542e728c5b7cf296b9df36b0bf0488f534/protobuf-3.6.0-py2.py3-none-any.whl",
+                    "sha256": "9f1087abb67b34e55108bc610936b34363a7aac692023bcbb17e065c253a1f80"
                 }
             ]
         },
@@ -298,7 +294,7 @@
             ]
         },
         {
-            "name": "python3-jeepny",
+            "name": "python3-jeepney",
             "buildsystem": "simple",
             "build-commands": [
                 "pip3 install --prefix=/app jeepney-0.3.1-py3-none-any.whl"
@@ -343,13 +339,13 @@
             "name": "python3-keyring",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app keyring-12.2.1-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app keyring-13.0.0-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/47/c0/4dfeeedaa233a12c3e5eb1e079b4dce96bbcbf0d030abc5e9a6b771e5812/keyring-12.2.1-py2.py3-none-any.whl",
-                    "sha256": "fd597e72df7240ec5a4215c50957e41c3d4bd321d97bf163f4a8e75ca287d77b"
+                    "url": "https://files.pythonhosted.org/packages/a6/2a/f262337da5acd435e1013189e1cab16c40da2c79fc663477efb19156cdf9/keyring-13.0.0-py2.py3-none-any.whl",
+                    "sha256": "6849b41e69f77cdb122f026f78797675248252775a1db6ebc47610b769772b23"
                 }
             ]
         },
