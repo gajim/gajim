@@ -58,9 +58,9 @@ see [Wiki](https://dev.gajim.org/gajim/gajim/wikis/help/gajimmacosx#python3brew)
 
 #### Developing
 
-For developing you dont have to install Gajim.
+For developing you don't have to install Gajim.
 
-After installing all dependencys execute
+After installing all dependencies execute
 
 ``./launch.py``
 

@@ -42,7 +42,7 @@ class CommandHost(metaclass=Host):
 class CommandContainer(metaclass=Container):
     """
     Command container is an entity which holds defined commands,
-    allowing them to be dispatched and proccessed correctly. Each
+    allowing them to be dispatched and processed correctly. Each
     command container may be bound to a one or more command hosts.
 
     The AUTOMATIC class variable, which must be defined by a command
@@ -159,7 +159,7 @@ class Command(object):
         try:
             return self.handler(*args, **kwargs)
 
-        # This allows to use a shortcuted way of raising an exception
+        # This allows to use a shortcut way of raising an exception
         # inside a handler. That is to raise a CommandError without
         # command or name attributes set. They will be set to a
         # corresponding values right here in case if they was not set by
@@ -235,7 +235,7 @@ def command(*names, **properties):
     facilities for setting command's names and properties.
 
     Names should contain a set of names (aliases) by which the command
-    can be reached. If no names are given - the the native name (the one
+    can be reached. If no names are given - the native name (the one
     extracted from the command handler) will be used.
 
     If native=True is given (default) and names is non-empty - then the

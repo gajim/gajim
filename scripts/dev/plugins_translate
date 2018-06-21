@@ -48,7 +48,7 @@ make_po()
 make_mo()
 {
     if [ ! -f $1.po ]; then
-        echo "$1.po doesn't existe. Use plugins_translation make_po $1 to create it.";
+        echo "$1.po doesn't exist. Use plugins_translation make_po $1 to create it.";
         exit 3
     fi
     mkdir -p locale/$1/LC_MESSAGES

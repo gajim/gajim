@@ -1770,7 +1770,7 @@ class GroupchatControl(ChatControlBase):
         right_changed = False
 
         if obj.real_jid:
-            # delete ressource
+            # delete resource
             simple_jid = app.get_jid_without_resource(obj.real_jid)
             nick_jid += ' (%s)' % simple_jid
 
@@ -2209,7 +2209,7 @@ class GroupchatControl(ChatControlBase):
         if contact.our_chatstate == state:
             return
 
-        # if wel're inactive prevent composing (XEP violation)
+        # if we're inactive prevent composing (XEP violation)
         if contact.our_chatstate == 'inactive' and state == 'composing':
             # go active before
             app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
@@ -2296,7 +2296,7 @@ class GroupchatControl(ChatControlBase):
             return True
         includes = app.config.get('confirm_close_muc_rooms').split(' ')
         excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
-        # whether to ask for comfirmation before closing muc
+        # whether to ask for confirmation before closing muc
         if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
         and app.gc_connected[self.account][self.room_jid] and self.room_jid \
         not in excludes:

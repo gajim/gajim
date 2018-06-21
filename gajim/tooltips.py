@@ -502,7 +502,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self.jid.show()
         self.jid_label.show()
 
-        # contact has only one ressource
+        # contact has only one resource
         if self.num_resources == 1 and contact.resource:
             res = GLib.markup_escape_text(contact.resource)
             prio = str(contact.priority)
@@ -615,7 +615,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
 
     def _get_icon_name_for_tooltip(self, contact):
         """
-        Helper function used for tooltip contacts/acounts
+        Helper function used for tooltip contacts/accounts
 
         Tooltip on account has fake contact with sub == '', in this case we show
         real status of the account

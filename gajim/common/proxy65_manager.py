@@ -45,7 +45,7 @@ class Proxy65Manager:
     """
     Keep records for file transfer proxies. Each time account establishes a
     connection to its server call proxy65manger.resolve(proxy) for every proxy
-    that is convigured within the account. The class takes care to resolve and
+    that is configured within the account. The class takes care to resolve and
     test each proxy only once
     """
 
@@ -65,7 +65,7 @@ class Proxy65Manager:
         if proxy in self.proxies:
             resolver = self.proxies[proxy]
         else:
-            # proxy is being ressolved for the first time
+            # proxy is being resolved for the first time
             resolver = ProxyResolver(proxy, sender_jid, testit)
             self.proxies[proxy] = resolver
             resolver.add_connection(connection)

@@ -161,7 +161,7 @@ class StandardCommonCommands(CommandContainer):
 
 class StandardCommonChatCommands(CommandContainer):
     """
-    This command container contans standard commands, which are common
+    This command container contains standard commands, which are common
     to a chat and a private chat only.
     """
 

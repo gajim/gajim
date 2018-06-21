@@ -86,7 +86,7 @@ class ChatCommandProcessor(CommandProcessor):
 
     def command_preprocessor(self, command, name, arguments, args, kwargs):
         # If command argument contain h or help option - forward it to
-        # the /help command. Dont forget to pass self, as all commands
+        # the /help command. Don't forget to pass self, as all commands
         # are unbound. And also don't forget to print output.
         if 'h' in kwargs or 'help' in kwargs:
             help = self.get_command('help')

@@ -15,7 +15,7 @@
 
 """
 The module contains routines to parse command arguments and map them to
-the command handler's positonal and keyword arguments.
+the command handler's positional and keyword arguments.
 
 Mapping is done in two stages: 1) parse arguments into positional
 arguments and options; 2) adapt them to the specific command handler
@@ -33,7 +33,7 @@ ARG_PATTERN = re.compile(r'(\'|")?(?P<body>(?(1).+?|\S+))(?(1)\1)')
 OPT_PATTERN = re.compile(r'(?<!\w)--?(?P<key>[\w-]+)(?:(?:=|\s)(\'|")?(?P<value>(?(2)[^-]+?|[^-\s]+))(?(2)\2))?')
 
 # Option keys needs to be encoded to a specific encoding as Python does
-# not allow to expand dictionary with raw unicode strings as keys from a
+# not allow to expand dictionary with raw Unicode strings as keys from a
 # **kwargs.
 KEY_ENCODING = 'UTF-8'
 
@@ -140,7 +140,7 @@ def adapt_arguments(command, arguments, args, opts):
             arguments_end = len(arguments) - 1
 
             # If there are any optional arguments given they should be
-            # either an unquoted postional argument or part of the raw
+            # either an unquoted positional argument or part of the raw
             # argument. So we find all optional arguments that can
             # possibly be unquoted argument and append them as is to the
             # args.
@@ -164,7 +164,7 @@ def adapt_arguments(command, arguments, args, opts):
                     raise CommandError(_("Missing arguments"), command)
 
                 # The essential point of the whole play. After
-                # boundaries are being determined (supposingly correct)
+                # boundaries are being determined (supposedly correct)
                 # we separate raw part from the rest of arguments, which
                 # should be normally processed.
                 raw = arguments[end:]
@@ -181,7 +181,7 @@ def adapt_arguments(command, arguments, args, opts):
 
                 args.append((raw, (end, arguments_end)))
             else:
-                # Substitue all of the arguments with only one, which
+                # Substitute all of the arguments with only one, which
                 # contain raw and unprocessed arguments as a string. And
                 # discard all the options, as raw command does not
                 # support them.
@@ -201,9 +201,9 @@ def adapt_arguments(command, arguments, args, opts):
         if '-' in key:
             opts[index] = (key.replace('-', '_'), value, position)
 
-    # The second stage of transforming options to an associatable state.
+    # The second stage of transforming options to an associable state.
     # Expanding short, one-letter options to a verbose ones, if
-    # corresponding optin has been given.
+    # corresponding opt-in has been given.
     if command.expand:
         expanded = []
         for spec_key, spec_value in norm_kwargs.items():
@@ -248,7 +248,7 @@ def adapt_arguments(command, arguments, args, opts):
 
     # Detect if positional arguments overlap keyword arguments. If so
     # and this is allowed by command options - then map them directly to
-    # their options, so they can get propert further processings.
+    # their options, so they can get proper further processing.
     spec_fix = 1 if command.source else 0
     spec_len = len(spec_args) - spec_fix
     if len(args) > spec_len:
@@ -281,11 +281,11 @@ def generate_usage(command, complete=True):
     """
     Extract handler's arguments specification and wrap them in a
     human-readable format usage information. If complete is given - then
-    USAGE_PATTERN will be used to render the specification completly.
+    USAGE_PATTERN will be used to render the specification completely.
     """
     spec_args, spec_kwargs, var_args, var_kwargs = command.extract_specification()
 
-    # Remove some special positional arguments from the specifiaction,
+    # Remove some special positional arguments from the specification,
     # but store their names so they can be used for usage info
     # generation.
     sp_source = spec_args.pop(0) if command.source else None

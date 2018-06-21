@@ -70,7 +70,7 @@ os_info = None # used to cache os information
 
 transport_type = {} # list the type of transport
 
-last_message_time = {} # list of time of the latest incomming message
+last_message_time = {} # list of time of the latest incoming message
                        # {acct1: {jid1: time1, jid2: time2}, }
 encrypted_chats = {}   # list of encrypted chats {acct1: [jid1, jid2], ..}
 

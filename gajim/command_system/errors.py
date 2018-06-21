@@ -36,13 +36,13 @@ class BaseError(Exception):
 
 class DefinitionError(BaseError):
     """
-    Used to indicate errors occured on command definition.
+    Used to indicate errors occurred on command definition.
     """
     pass
 
 class CommandError(BaseError):
     """
-    Used to indicate errors occured during command execution.
+    Used to indicate errors occurred during command execution.
     """
     pass
 

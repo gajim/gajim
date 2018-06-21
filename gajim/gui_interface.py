@@ -1820,8 +1820,8 @@ class Interface:
         # [^\s*] anything but whitespaces and '*'
         # (?<!\S) is a one char lookbehind assertion and asks for any leading
         #         whitespace
-        # and mathces beginning of lines so we have correct formatting detection
-        # even if the the text is just '*foo*'
+        # and matches beginning of lines so we have correct formatting detection
+        # even if the text is just '*foo*'
         # (?!\S) is the same thing but it's a lookahead assertion
         # \S*[^\s\W] --> in the matching string don't match ? or ) etc.. if at
         #                the end
@@ -1869,7 +1869,7 @@ class Interface:
             emoticons_pattern_postmatch = ''
             emoticon_length = 0
             for emoticon in keys: # travel thru emoticons list
-                emoticon_escaped = re.escape(emoticon) # espace regexp metachars
+                emoticon_escaped = re.escape(emoticon) # escape regexp metachars
                 # | means or in regexp
                 emoticons_pattern += emoticon_escaped + '|'
                 if (emoticon_length != len(emoticon)):
@@ -2294,7 +2294,7 @@ class Interface:
 
     def process_connections(self):
         """
-        Called each foo (200) miliseconds. Check for idlequeue timeouts
+        Called each foo (200) milliseconds. Check for idlequeue timeouts
         """
         try:
             app.idlequeue.process()
@@ -2305,7 +2305,7 @@ class Interface:
                 # On Windows process() calls select.select(), so we need this
                 # executed as often as possible.
                 # Adding it directly with GLib.idle_add() causes Gajim to use
-                # too much CPU time. Thats why its added with 1ms timeout.
+                # too much CPU time. That's why its added with 1ms timeout.
                 # On Linux only alarms are checked in process(), so we use
                 # a bigger timeout
                 timeout, in_seconds = 1, None

@@ -387,7 +387,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         app.ged.register_event_handler('ping-error', ged.GUI1,
             self._nec_ping_error)
 
-        # This is bascially a very nasty hack to surpass the inability
+        # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
 
@@ -531,7 +531,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def on_banner_label_populate_popup(self, label, menu):
         """
-        Override the default context menu and add our own menutiems
+        Override the default context menu and add our own menuitems
         """
         item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
@@ -617,9 +617,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         elif (self.space_pressed or self.msg_textview.undo_pressed) and \
         event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and \
         not (event.keyval == Gdk.KEY_z and event.get_state() & Gdk.ModifierType.CONTROL_MASK):
-            # If the space key has been pressed and now it hasnt,
-            # we save the buffer into the undo list. But be carefull we're not
-            # pressiong Control again (as in ctrl+z)
+            # If the space key has been pressed and now it hasn't,
+            # we save the buffer into the undo list. But be careful we're not
+            # pressing Control again (as in ctrl+z)
             _buffer = widget.get_buffer()
             start_iter, end_iter = _buffer.get_bounds()
             self.msg_textview.save_undo(_buffer.get_text(start_iter, end_iter, True))
@@ -938,7 +938,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             pos = self.received_history_pos
         size = len(history)
         scroll = False if pos == size else True # are we scrolling?
-        # we don't want size of the buffer to grow indefinately
+        # we don't want size of the buffer to grow indefinitely
         max_size = app.config.get('key_up_lines')
         for i in range(size - max_size + 1):
             if pos == 0:
@@ -1180,7 +1180,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def on_minimize_menuitem_toggled(self, widget):
         """
-        When a grouchat is minimized, unparent the tab, put it in roster etc
+        When a groupchat is minimized, unparent the tab, put it in roster etc
         """
         old_value = True
         non_minimized_gc = app.config.get_per('accounts', self.account,
@@ -1286,7 +1286,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             if event != Gdk.KEY_Page_Up:
                 return
         else:
-            # On scrolliung UP disable autoscroll
+            # On scrolling UP disable autoscroll
             # get_scroll_direction() sets has_direction only TRUE
             # if smooth scrolling is deactivated. If we have smooth
             # smooth scrolling we have to use get_scroll_deltas()
@@ -1437,7 +1437,7 @@ class ScrolledWindow(Gtk.ScrolledWindow):
         # Gtk Bug: If policy is set to Automatic, the ScrolledWindow
         # has a min size of around 46-82 depending on the System. Because
         # we want it smaller, we set policy NEVER if the height is < 90
-        # so the ScrolledWindow will shrink to around 26 (1 line heigh).
+        # so the ScrolledWindow will shrink to around 26 (1 line height).
         # Once it gets over 90 its no problem to restore the policy.
         if natural_height < 90:
             GLib.idle_add(self.set_policy,

@@ -1113,7 +1113,7 @@ class RosterWindow:
     def _really_draw_group(self, group, account):
         child_iter = self._get_group_iter(group, account, model=self.model)
         if not child_iter:
-            # Eg. We redraw groups after we removed a entitiy
+            # Eg. We redraw groups after we removed a entity
             # and its empty groups
             return
         if self.regroup:

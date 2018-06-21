@@ -94,8 +94,8 @@ class TestJingle(unittest.TestCase):
         self.con.connection = Connection()
 
         '''
-        Fake file_props when we recieve a file. Gajim creates a file_props
-        out of a FileRequestRecieve event and from then on it changes in
+        Fake file_props when we receive a file. Gajim creates a file_props
+        out of a FileRequestReceive event and from then on it changes in
         a lot of places. It is easier to just copy it in here.
         If the session_initiate stanza changes, this also must change.
         '''

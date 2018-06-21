@@ -423,7 +423,7 @@ class JingleSession:
                     self.connection.connection.send(stanza)
                     raise nbxmpp.NodeProcessed
             else:
-                # FIXME: This ressource is unknown to us, what should we do?
+                # FIXME: This resource is unknown to us, what should we do?
                 # For now, reject the transport
                 stanza, jingle = self.__make_jingle('transport-reject')
                 content = jingle.setTag('content', attrs={'creator': creator,
@@ -533,7 +533,7 @@ class JingleSession:
             self._session_terminate(reason)
             raise nbxmpp.NodeProcessed
 
-        # If we are not receivin a file
+        # If we are not receiving a file
         # Check if there's already a session with this user:
         if contents[0].media != 'file':
             for session in self.connection.iter_jingle_sessions(self.peerjid):

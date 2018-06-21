@@ -191,10 +191,10 @@ class ConnectionBytestream:
         """
         Inform sender that we refuse to download the file
 
-        typ is used when code = '400', in this case typ can be 'strean' for
+        typ is used when code = '400', in this case typ can be 'stream' for
         invalid stream or 'profile' for invalid profile
         """
-        # user response to ConfirmationDialog may come after we've disconneted
+        # user response to ConfirmationDialog may come after we've disconnected
         if not self.connection or self.connected < 2:
             return
         if file_props.session_type == 'jingle':
@@ -376,7 +376,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             self._add_local_ips_as_streamhosts_to_query(query, file_props)
             self._add_proxy_streamhosts_to_query(query, file_props)
             self._add_upnp_igd_as_streamhost_to_query(query, file_props, iq)
-            # Upnp-igd is ascynchronous, so it will send the iq itself
+            # Upnp-igd is asynchronous, so it will send the iq itself
 
     def _add_streamhosts_to_query(self, query, sender, port, hosts):
         for host in hosts:
@@ -855,7 +855,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
 
     def OpenStream(self, sid, to, fp, blocksize=4096):
         """
-        Start new stream. You should provide stream id 'sid', the endpoind jid
+        Start new stream. You should provide stream id 'sid', the endpoint jid
         'to', the file object containing info for send 'fp'. Also the desired
         blocksize can be specified.
         Take into account that recommended stanza size is 4k and IBB uses
@@ -942,7 +942,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
             elif seq != file_props.seq:
                 err = nbxmpp.ERR_UNEXPECTED_REQUEST
             else:
-                log.debug('Successfull receive sid->%s %s+%s bytes' % (sid,
+                log.debug('Successfully received sid->%s %s+%s bytes' % (sid,
                     file_props.fp.tell(), len(data)))
                 file_props.seq += 1
                 file_props.started = True
@@ -965,7 +965,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
     def StreamCloseHandler(self, conn, stanza):
         """
         Handle stream closure due to all data transmitted.
-        Raise xmpppy event specifying successfull data receive.
+        Raise xmpppy event specifying successful data receive.
         """
         sid = stanza.getTagAttr('close', 'sid')
         log.debug('StreamCloseHandler called sid->%s' % sid)
@@ -989,7 +989,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         """
         Handle remote side reply about if it agree or not to receive our
         datastream.
-        Used internally. Raises xmpppy event specfiying if the data transfer
+        Used internally. Raises xmpppy event specifying if the data transfer
         is agreed upon.
         """
         syn_id = stanza.getID()
