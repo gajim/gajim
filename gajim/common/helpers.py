@@ -420,7 +420,7 @@ def get_css_show_color(show):
         return None
     elif show in ('xa', 'dnd'):
         return 'status-dnd'
-    elif show in ('away'):
+    elif show == 'away':
         return 'status-away'
 
 def get_uf_sub(sub):

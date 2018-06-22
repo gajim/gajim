@@ -65,6 +65,16 @@ class CommonContact(XMPPEntity):
         # this is contact's chatstate
         self.chatstate = chatstate
 
+    @property
+    def show(self):
+        return self._show
+
+    @show.setter
+    def show(self, value):
+        if not isinstance(value, str):
+            raise TypeError('show must be a string')
+        self._show = value
+
     def get_full_jid(self):
         raise NotImplementedError
 
