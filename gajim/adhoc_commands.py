@@ -75,10 +75,16 @@ class CommandWindow:
         for name in ('restart_button', 'back_button', 'forward_button',
         'execute_button', 'finish_button', 'close_button', 'stages_notebook',
         'retrieving_commands_stage_vbox', 'command_list_stage_vbox',
-        'command_list_vbox', 'sending_form_stage_vbox',
+        'command_treeview', 'sending_form_stage_vbox',
         'sending_form_progressbar', 'notes_label', 'no_commands_stage_vbox',
         'error_stage_vbox', 'error_description_label'):
             setattr(self, name, self.xml.get_object(name))
+
+        self.command_store = Gtk.ListStore(str, str)
+        self.command_treeview.set_model(self.command_store)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Command", renderer, text=0)
+        self.command_treeview.append_column(column)
 
         self.initiate()
 
@@ -215,10 +221,7 @@ class CommandWindow:
 # stage 2: choosing the command to execute
     def stage2(self):
         """
-        Populate the command list vbox with radiobuttons
-
-        FIXME: If there is more commands, maybe some kind of list, set widgets
-        state
+        Populate the command list
         """
         # close old stage
         self.stage_finish()
@@ -234,17 +237,11 @@ class CommandWindow:
         self.execute_button.set_sensitive(False)
         self.finish_button.set_sensitive(False)
 
-        # build the commands list radiobuttons
-        first_radio = None
+        # build the commands list
+        self.command_store.clear()
         for (commandnode, commandname) in self.commandlist:
-            radio = Gtk.RadioButton.new_with_label_from_widget(first_radio, commandname)
-            radio.connect("toggled", self.on_command_radiobutton_toggled,
-                commandnode)
-            if not first_radio:
-                first_radio = radio
-                self.commandnode = commandnode
-            self.command_list_vbox.pack_start(radio, False, True, 0)
-        self.command_list_vbox.show_all()
+            self.command_store.append([commandname, commandnode])
+        self.command_treeview.get_selection().select_iter(self.command_store.get_iter_first())
 
         self.stage_finish_cb = self.stage2_finish
         self.stage_close_button_cb = self.stage2_close_button_clicked
@@ -254,11 +251,10 @@ class CommandWindow:
 
     def stage2_finish(self):
         """
-        Remove widgets we created. Not needed when the window is destroyed
+        Save selected command to self.commandnode
         """
-        def remove_widget(widget, param):
-            self.command_list_vbox.remove(widget)
-        self.command_list_vbox.foreach(remove_widget, None)
+        model, treeiter = self.command_treeview.get_selection().get_selected()
+        self.commandnode = model[treeiter][1]
 
     def stage2_close_button_clicked(self, widget):
         self.stage_finish()
@@ -270,9 +266,6 @@ class CommandWindow:
 
     def stage2_forward_button_clicked(self, widget):
         self.stage3()
-
-    def on_command_radiobutton_toggled(self, widget, commandnode):
-        self.commandnode = commandnode
 
     def on_check_commands_1_button_clicked(self, widget):
         self.stage1()

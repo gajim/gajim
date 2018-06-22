@@ -52,32 +52,7 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label264">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label265">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="command_list_stage_vbox">
@@ -88,14 +63,13 @@
                   <object class="GtkLabel" id="label253">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0.20000000298023224</property>
-                    <property name="ypad">6</property>
                     <property name="label" translatable="yes">&lt;b&gt;Choose command to execute:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="padding">5</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -103,16 +77,17 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_left">1</property>
+                    <property name="margin_right">1</property>
+                    <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkViewport" id="viewport1">
+                      <object class="GtkTreeView" id="command_treeview">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <child>
-                          <object class="GtkBox" id="command_list_vbox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="border_width">12</property>
-                            <property name="orientation">vertical</property>
+                        <property name="can_focus">True</property>
+                        <property name="headers_visible">False</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection">
+                            <property name="mode">browse</property>
                           </object>
                         </child>
                       </object>
@@ -121,6 +96,7 @@
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
+                    <property name="padding">5</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -128,9 +104,6 @@
                   <object class="GtkBox" id="hbox2957">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <placeholder/>
-                    </child>
                     <child>
                       <object class="GtkButton" id="check_commands_1_button">
                         <property name="label" translatable="yes">Check once more</property>
@@ -144,42 +117,21 @@
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="pack_type">end</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="padding">2</property>
+                    <property name="pack_type">end</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label266">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label267">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -201,9 +153,6 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="GtkProgressBar" id="sending_form_progressbar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -214,35 +163,12 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label268">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">4</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label269">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">5</property>
-                <property name="tab_fill">False</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -263,15 +189,9 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="GtkBox" id="hbox2956">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <child>
-                      <placeholder/>
-                    </child>
                     <child>
                       <object class="GtkButton" id="check_commands_2_button">
                         <property name="label" translatable="yes">Check once more</property>
@@ -285,7 +205,7 @@
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="pack_type">end</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
@@ -293,35 +213,12 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label270">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">6</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label271">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">7</property>
-                <property name="tab_fill">False</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -357,30 +254,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">8</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label272">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">8</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label273">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-              </object>
-              <packing>
-                <property name="position">9</property>
-                <property name="tab_fill">False</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
