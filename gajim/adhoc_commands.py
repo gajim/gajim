@@ -74,9 +74,10 @@ class CommandWindow:
             self.on_adhoc_commands_window_delete_event)
         for name in ('restart_button', 'back_button', 'forward_button',
         'execute_button', 'finish_button', 'close_button', 'stages_notebook',
-        'retrieving_commands_stage_vbox', 'command_list_stage_vbox',
-        'command_treeview', 'sending_form_stage_vbox',
-        'sending_form_progressbar', 'notes_label', 'no_commands_stage_vbox',
+        'retrieving_commands_stage_vbox', 'retrieving_commands_spinner',
+        'command_list_stage_vbox', 'command_treeview',
+        'sending_form_stage_vbox', 'sending_form_spinner',
+        'notes_label', 'no_commands_stage_vbox',
         'error_stage_vbox', 'error_description_label'):
             setattr(self, name, self.xml.get_object(name))
 
@@ -90,7 +91,6 @@ class CommandWindow:
 
     def initiate(self):
 
-        self.pulse_id = None      # to satisfy self.setup_pulsing()
         self.commandlist = None   # a list of (commandname, commanddescription)
 
         # command's data
@@ -158,7 +158,7 @@ class CommandWindow:
 
     def on_adhoc_commands_window_destroy(self, *anything):
         # TODO: do all actions that are needed to remove this object from memory
-        self.remove_pulsing()
+        pass
 
     def on_adhoc_commands_window_delete_event(self, *anything):
         if self.stage_window_delete_cb:
@@ -191,8 +191,7 @@ class CommandWindow:
 
         # request command list
         self.request_command_list()
-        self.setup_pulsing(
-            self.xml.get_object('retrieving_commands_progressbar'))
+        self.retrieving_commands_spinner.start()
 
         # setup the callbacks
         self.stage_finish_cb = self.stage1_finish
@@ -202,7 +201,7 @@ class CommandWindow:
             self.stage1_adhoc_commands_window_delete_event
 
     def stage1_finish(self):
-        self.remove_pulsing()
+        self.retrieving_commands_spinner.stop()
 
     def stage1_close_button_clicked(self, widget):
         # cancelling in this stage is not critical, so we don't
@@ -371,8 +370,7 @@ class CommandWindow:
         self.execute_button.set_sensitive(False)
         self.finish_button.set_sensitive(False)
 
-        self.sending_form_progressbar.show()
-        self.setup_pulsing(self.sending_form_progressbar)
+        self.sending_form_spinner.start()
         self.send_command(action)
 
     def stage3_next_form(self, command):
@@ -380,8 +378,7 @@ class CommandWindow:
             self.stage5(error=_('Service sent malformed data'), senderror=True)
             return
 
-        self.remove_pulsing()
-        self.sending_form_progressbar.hide()
+        self.sending_form_spinner.stop()
 
         if not self.sessionid:
             self.sessionid = command.getAttr('sessionid')
@@ -529,30 +526,6 @@ class CommandWindow:
 
     def stage5_restart_button_clicked(self, widget):
         self.restart()
-
-# helpers to handle pulsing in progressbar
-    def setup_pulsing(self, progressbar):
-        """
-        Set the progressbar to pulse. Makes a custom function to repeatedly call
-        progressbar.pulse() method
-        """
-        assert not self.pulse_id
-        assert isinstance(progressbar, Gtk.ProgressBar)
-
-        def callback():
-            progressbar.pulse()
-            return True     # important to keep callback be called back!
-
-        # 12 times per second (80 milliseconds)
-        self.pulse_id = GLib.timeout_add(80, callback)
-
-    def remove_pulsing(self):
-        """
-        Stop pulsing, useful when especially when removing widget
-        """
-        if self.pulse_id:
-            GLib.source_remove(self.pulse_id)
-        self.pulse_id = None
 
 # handling xml stanzas
     def request_command_list(self):
