@@ -61,12 +61,6 @@ try:
 except ImportError:
     HAS_PRECIS_I18N = False
 
-try:
-    import idna
-    HAS_IDNA = True
-except ImportError:
-    HAS_IDNA = False
-
 HAS_SOUND = True
 if sys.platform == 'win32':
     try:
@@ -291,16 +285,13 @@ def prep(user, server, resource):
 
     if not ip_address:
         if server is not None:
-            if server.endswith('.'): # RFC7622, 3.2
+            if server.endswith('.'):  # RFC7622, 3.2
                 server = server[:-1]
             if len(server) < 1 or len(server.encode('utf-8')) > 1023:
                 raise InvalidFormat(_('Server must be between 1 and 1023 bytes'))
             try:
-                if HAS_IDNA:
-                    server = idna.encode(server).decode('utf-8')
-                else:
-                    from nbxmpp.stringprepare import nameprep
-                    server = nameprep.prepare(server)
+                from nbxmpp.stringprepare import nameprep
+                server = nameprep.prepare(server)
             except UnicodeError:
                 raise InvalidFormat(_('Invalid character in hostname.'))
         else:
