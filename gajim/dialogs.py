@@ -2460,6 +2460,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
                 return
             self.room_jid = '%s@%s' % (room, server)
 
+        self.room_jid = self.room_jid.lower()
+
         if app.in_groupchat(account, self.room_jid):
             # If we already in the groupchat, join_gc_room will bring
             # it to front
