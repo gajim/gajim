@@ -142,6 +142,10 @@ def _translate(gui_file, widget):
         xml_text = ET.tostring(tree.getroot(),
                                encoding='unicode',
                                method='xml')
+        if widget is not None:
+            builder = Gtk.Builder()
+            builder.add_objects_from_string(xml_text, [widget])
+            return builder
         return Gtk.Builder.new_from_string(xml_text, -1)
     else:
         if widget is not None:
