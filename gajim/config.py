@@ -466,14 +466,6 @@ class PreferencesWindow:
         st = app.config.get('log_contact_status_changes')
         self.xml.get_object('log_show_changes_checkbutton').set_active(st)
 
-        # log encrypted chat sessions
-        w = self.xml.get_object('log_encrypted_chats_checkbutton')
-        st = self.get_per_account_option('log_encrypted_sessions')
-        if st == 'mixed':
-            w.set_inconsistent(True)
-        else:
-            w.set_active(st)
-
         # send os info
         w = self.xml.get_object('send_os_info_checkbutton')
         st = self.get_per_account_option('send_os_info')
@@ -1064,10 +1056,6 @@ class PreferencesWindow:
 
     def on_log_show_changes_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'log_contact_status_changes')
-
-    def on_log_encrypted_chats_checkbutton_toggled(self, widget):
-        widget.set_inconsistent(False)
-        self.on_per_account_checkbutton_toggled(widget, 'log_encrypted_sessions')
 
     def on_send_os_info_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
