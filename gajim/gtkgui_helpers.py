@@ -38,6 +38,7 @@ import cairo
 import os
 import sys
 import math
+import xml.etree.ElementTree as ET
 try:
     from PIL import Image
 except:
@@ -125,13 +126,29 @@ def get_image_button(icon_name, tooltip, toggle=False):
 
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(configpaths.get('GUI'), file_name)
-    builder = Gtk.Builder()
+    builder = _translate(file_path, widget)
     builder.set_translation_domain(i18n.DOMAIN)
-    if widget:
-        builder.add_objects_from_file(file_path, [widget])
-    else:
-        builder.add_from_file(file_path)
     return builder
+
+def _translate(gui_file, widget):
+    """
+    This is a workaround for non working translation on Windows
+    """
+    if sys.platform == "win32":
+        tree = ET.parse(gui_file)
+        for node in tree.iter():
+            if 'translatable' in node.attrib:
+                node.text = _(node.text)
+        xml_text = ET.tostring(tree.getroot(),
+                               encoding='unicode',
+                               method='xml')
+        return Gtk.Builder.new_from_string(xml_text, -1)
+    else:
+        if widget is not None:
+            builder = Gtk.Builder()
+            builder.add_objects_from_file(gui_file, [widget])
+            return builder
+        return Gtk.Builder.new_from_file(gui_file)
 
 def get_completion_liststore(entry):
     """

@@ -40,7 +40,6 @@ def initialize():
     except locale.Error as error:
         print(error)
 
-    # initialize_win_translation() broken
     initialize_lang()
     set_i18n_env()
 
@@ -75,8 +74,7 @@ def initialize_lang():
 
 def get_locale_dir():
     if os.name == 'nt':
-        return "../po"
-
+        return None
     # try to find domain in localedir
     path = gettext.find(DOMAIN)
     if path:
@@ -94,44 +92,6 @@ def get_locale_dir():
             base = os.path.expanduser('~/.local/share')
         localedir = os.path.join(base, "locale")
     return localedir
-
-
-def initialize_win_translation():
-    # broken for now
-    return
-
-    if os.name != 'nt':
-        return
-
-    # needed for docutils
-    # sys.path.append('.')
-    APP = 'gajim'
-    DIR = '../po'
-    lang = locale.getdefaultlocale()[0]
-    os.environ['LANG'] = lang
-    gettext.bindtextdomain(APP, DIR)
-    gettext.textdomain(APP)
-    gettext.install(APP, DIR)
-
-    # This is for Windows translation which is currently not
-    # working on GTK 3.18.9
-    #    locale.setlocale(locale.LC_ALL, '')
-    #    import ctypes
-    #    import ctypes.util
-    #    libintl_path = ctypes.util.find_library('intl')
-    #    if libintl_path == None:
-    #        local_intl = os.path.join('gtk', 'bin', 'intl.dll')
-    #        if os.path.exists(local_intl):
-    #            libintl_path = local_intl
-    #    if libintl_path == None:
-    #        raise ImportError('intl.dll library not found')
-    #    libintl = ctypes.cdll.LoadLibrary(libintl_path)
-    #    libintl.bindtextdomain(APP, DIR)
-    #    libintl.bind_textdomain_codeset(APP, 'UTF-8')
-    #    plugins_locale_dir = os.path.join(common.configpaths[
-    #       'PLUGINS_USER'], 'locale').encode(locale.getpreferredencoding())
-    #    libintl.bindtextdomain('gajim_plugins', plugins_locale_dir)
-    #    libintl.bind_textdomain_codeset('gajim_plugins', 'UTF-8')
 
 
 def initialize_direction_mark():
