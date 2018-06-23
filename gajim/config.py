@@ -1642,9 +1642,12 @@ class GroupchatConfigWindow:
                 affiliation)
 
         self.xml.connect_signals(self)
+        self.window.connect('delete-event', self.on_cancel_button_clicked)
         self.window.show_all()
 
-    def on_cancel_button_clicked(self, widget):
+    def on_cancel_button_clicked(self, *args):
+        if self.form:
+            app.connections[self.account].cancel_gc_config(self.room_jid)
         self.window.destroy()
 
     def on_cell_edited(self, cell, path, new_text):

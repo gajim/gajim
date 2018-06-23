@@ -2720,6 +2720,17 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.add_lang(iq)
         self.connection.send(iq)
 
+    def cancel_gc_config(self, room_jid):
+        if not app.account_is_connected(self.name):
+            return
+        cancel = nbxmpp.Node(tag='x', attrs={'xmlns': nbxmpp.NS_DATA,
+                                             'type': 'cancel'})
+        iq = nbxmpp.Iq(typ='set',
+                       queryNS=nbxmpp.NS_MUC_OWNER,
+                       payload=cancel,
+                       to=room_jid)
+        self.connection.send(iq)
+
     def destroy_gc_room(self, room_jid, reason = '', jid = ''):
         if not app.account_is_connected(self.name):
             return
