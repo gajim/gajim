@@ -63,6 +63,7 @@ from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import i18n
 from gajim.common import idle
+from gajim.common.modules.entity_time import EntityTime
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -81,6 +82,7 @@ class CommonConnection:
 
     def __init__(self, name):
         self.name = name
+        self._modules = {}
         # self.connected:
         # 0=>offline,
         # 1=>connection in progress,
@@ -161,6 +163,15 @@ class CommonConnection:
         Always passes account name as first param
         """
         app.ged.raise_event(event, self.name, data)
+
+    def get_module(self, name):
+        return self._modules[name]
+
+    def get_module_handlers(self):
+        return self._modules.values()
+
+    def register_module(self, name, cls, *args, **kwargs):
+        self._modules[name] = cls(*args, **kwargs)
 
     def reconnect(self):
         """
@@ -652,6 +663,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._posh_errors = [18, 19]
 
         self.sm = Smacks(self) # Stream Management
+
+        self.register_module('EntityTime', EntityTime, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -2252,29 +2265,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if groupchat_jid:
             self.groupchat_jids[id_] = groupchat_jid
         self.version_ids.append(id_)
-        self.connection.send(iq)
-
-    def request_entity_time(self, jid, resource, groupchat_jid=None):
-        """
-        groupchat_jid is used when we want to send a request to a real jid and
-        act as if the answer comes from the groupchat_jid
-        """
-        if not app.account_is_connected(self.name):
-            return
-        # If we are invisible, do not request
-        if self.connected == app.SHOW_LIST.index('invisible'):
-            self.dispatch('ENTITY_TIME', (jid, resource, _('Not fetched because of invisible status')))
-            return
-        to_whom_jid = jid
-        if resource:
-            to_whom_jid += '/' + resource
-        iq = nbxmpp.Iq(to=to_whom_jid, typ='get')
-        iq.addChild('time', namespace=nbxmpp.NS_TIME_REVISED)
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        if groupchat_jid:
-            self.groupchat_jids[id_] = groupchat_jid
-        self.entity_time_ids.append(id_)
         self.connection.send(iq)
 
     def request_gateway_prompt(self, jid, prompt=None):

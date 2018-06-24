@@ -1326,8 +1326,6 @@ ConnectionHTTPUpload):
         self.subscribed_events = {}
         # IDs of jabber:iq:version requests
         self.version_ids = []
-        # IDs of urn:xmpp:time requests
-        self.entity_time_ids = []
         # IDs of disco#items requests
         self.disco_items_ids = []
         # IDs of disco#info requests
@@ -1359,8 +1357,6 @@ ConnectionHTTPUpload):
             self._nec_last_request_received)
         app.ged.register_event_handler('time-request-received', ged.CORE,
             self._nec_time_request_received)
-        app.ged.register_event_handler('time-revised-request-received',
-            ged.CORE, self._nec_time_revised_request_received)
         app.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('private-storage-bookmarks-received',
@@ -1404,8 +1400,6 @@ ConnectionHTTPUpload):
             self._nec_last_request_received)
         app.ged.remove_event_handler('time-request-received', ged.CORE,
             self._nec_time_request_received)
-        app.ged.remove_event_handler('time-revised-request-received',
-            ged.CORE, self._nec_time_revised_request_received)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('private-storage-bookmarks-received',
@@ -1589,10 +1583,6 @@ ConnectionHTTPUpload):
             app.nec.push_incoming_event(VersionResultReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
             return True
-        if obj.id_ in self.entity_time_ids:
-            app.nec.push_incoming_event(TimeResultReceivedEvent(None,
-                conn=self, stanza=obj.stanza))
-            return True
         if obj.id_ in self.disco_items_ids:
             app.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
@@ -1758,37 +1748,6 @@ ConnectionHTTPUpload):
                 ' service-unavailable')
             iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
-
-    def _TimeRevisedCB(self, con, iq_obj):
-        log.debug('TimeRevisedCB')
-        if not self.connection or self.connected < 2:
-            return
-        app.nec.push_incoming_event(TimeRevisedRequestEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_time_revised_request_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if app.config.get_per('accounts', self.name, 'send_time_info'):
-            iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.setTag('time', namespace=nbxmpp.NS_TIME_REVISED)
-            qp.setTagData('utc', strftime('%Y-%m-%dT%H:%M:%SZ', gmtime()))
-            isdst = localtime().tm_isdst
-            zone = -(timezone, altzone)[isdst] / 60.0
-            tzo = (zone / 60, abs(zone % 60))
-            qp.setTagData('tzo', '%+03d:%02d' % (tzo))
-        else:
-            iq_obj = obj.stanza.buildReply('error')
-            err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
-                ' service-unavailable')
-            iq_obj.addChild(node=err)
-        self.connection.send(iq_obj)
-
-    def _TimeRevisedResultCB(self, con, iq_obj):
-        log.debug('TimeRevisedResultCB')
-        app.nec.push_incoming_event(TimeResultReceivedEvent(None, conn=self,
-            stanza=iq_obj))
 
     def _rosterItemExchangeCB(self, con, msg):
         """
@@ -2263,13 +2222,9 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._VersionCB, 'get', nbxmpp.NS_VERSION)
         con.RegisterHandler('iq', self._TimeCB, 'get', nbxmpp.NS_TIME)
-        con.RegisterHandler('iq', self._TimeRevisedCB, 'get',
-            nbxmpp.NS_TIME_REVISED)
         con.RegisterHandler('iq', self._LastCB, 'get', nbxmpp.NS_LAST)
         con.RegisterHandler('iq', self._VersionResultCB, 'result',
             nbxmpp.NS_VERSION)
-        con.RegisterHandler('iq', self._TimeRevisedResultCB, 'result',
-            nbxmpp.NS_TIME_REVISED)
         con.RegisterHandler('iq', self._MucOwnerCB, 'result',
             nbxmpp.NS_MUC_OWNER)
         con.RegisterHandler('iq', self._MucAdminCB, 'result',
@@ -2310,3 +2265,7 @@ ConnectionHTTPUpload):
             nbxmpp.NS_BLOCKING)
         con.RegisterHandler('iq', self._BlockingResultCB, 'result',
             nbxmpp.NS_BLOCKING)
+
+        for module in self.get_module_handlers():
+            for handler in module.handlers:
+                con.RegisterHandler(*handler)

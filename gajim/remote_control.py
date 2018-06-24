@@ -149,8 +149,9 @@ class Remote:
             obj.client_info, obj.os_info]))
 
     def on_time(self, obj):
-        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid, obj.resource,
-            obj.time_info]))
+        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.getStripped(),
+                                                         obj.jid.getResource(),
+                                                         obj.time_info]))
 
     def on_roster_info(self, obj):
         self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.nickname,

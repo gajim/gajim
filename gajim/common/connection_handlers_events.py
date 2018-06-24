@@ -219,74 +219,6 @@ class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         return True
 
-class TimeResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'time-result-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_id()
-        self.get_jid_resource(check_fake_jid=True)
-        if self.id_ in self.conn.entity_time_ids:
-            self.conn.entity_time_ids.remove(self.id_)
-
-        self.time_info = ''
-
-        if self.stanza.getType() == 'error':
-            return True
-
-        qp = self.stanza.getTag('time')
-        if not qp:
-            # wrong answer
-            return
-        tzo = qp.getTag('tzo').getData()
-        if tzo.lower() == 'z':
-            tzo = '0:0'
-        try:
-            tzoh, tzom = tzo.split(':')
-        except Exception as e:
-            # wrong tzo
-            return
-        utc_time = qp.getTag('utc').getData()
-        ZERO = datetime.timedelta(0)
-        class UTC(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return ZERO
-            def tzname(self, dt):
-                return "UTC"
-            def dst(self, dt):
-                return ZERO
-
-        class contact_tz(datetime.tzinfo):
-            def utcoffset(self, dt):
-                return datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
-            def tzname(self, dt):
-                return "remote timezone"
-            def dst(self, dt):
-                return ZERO
-
-        if utc_time[-1:] == 'Z':
-            # Remove the trailing 'Z'
-            utc_time = utc_time[:-1]
-        elif utc_time[-6:] == "+00:00":
-            # Remove the trailing "+00:00"
-            utc_time = utc_time[:-6]
-        else:
-            log.info("Wrong timezone defintion: %s" % utc_time)
-            return
-        try:
-            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
-        except ValueError:
-            try:
-                t = datetime.datetime.strptime(utc_time,
-                                               '%Y-%m-%dT%H:%M:%S.%f')
-            except ValueError as e:
-                log.info('Wrong time format: %s' % str(e))
-                return
-
-        t = t.replace(tzinfo=UTC())
-        self.time_info = t.astimezone(contact_tz()).strftime('%c')
-        return True
-
 class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'roster-item-exchange-received'
     base_network_events = []
@@ -342,10 +274,6 @@ class LastRequestEvent(nec.NetworkIncomingEvent):
 
 class TimeRequestEvent(nec.NetworkIncomingEvent):
     name = 'time-request-received'
-    base_network_events = []
-
-class TimeRevisedRequestEvent(nec.NetworkIncomingEvent):
-    name = 'time-revised-request-received'
     base_network_events = []
 
 class RosterReceivedEvent(nec.NetworkIncomingEvent):

@@ -315,14 +315,14 @@ class VcardWindow:
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         if self.gc_contact:
-            if obj.fjid != self.contact.jid:
+            if obj.jid != self.contact.jid:
                 return
-        elif app.get_jid_without_resource(obj.fjid) != self.contact.jid:
+        elif obj.jid.getStripped() != self.contact.jid:
             return
         i = 0
         time_s = ''
         while i in self.time_info:
-            if self.time_info[i]['resource'] == obj.resource:
+            if self.time_info[i]['resource'] == obj.jid.getResource():
                 if obj.time_info:
                     self.time_info[i]['time'] = obj.time_info
                 else:
@@ -415,6 +415,8 @@ class VcardWindow:
         if not self.contact.status:
             self.contact.status = ''
 
+        con = app.connections[self.account]
+
         # do not wait for os_info if contact is not connected or has error
         # additional check for observer is needed, as show is offline for him
         if self.contact.show in ('offline', 'error')\
@@ -437,11 +439,11 @@ class VcardWindow:
         else: # Request entity time if contact is connected
             if self.gc_contact:
                 j, r = app.get_room_and_nick_from_fjid(self.real_jid)
-                GLib.idle_add(app.connections[self.account].\
-                    request_entity_time, j, r, self.contact.jid)
+                GLib.idle_add(con.get_module('EntityTime').request_entity_time,
+                              j, r)
             else:
-                GLib.idle_add(app.connections[self.account].\
-                    request_entity_time, self.contact.jid, self.contact.resource)
+                GLib.idle_add(con.get_module('EntityTime').request_entity_time,
+                              self.contact.jid, self.contact.resource)
 
         self.os_info = {0: {'resource': self.real_resource, 'client': '',
                 'os': ''}}
@@ -458,8 +460,8 @@ class VcardWindow:
                     if c.show not in ('offline', 'error'):
                         GLib.idle_add(app.connections[self.account].\
                             request_os_info, c.jid, c.resource)
-                        GLib.idle_add(app.connections[self.account].\
-                            request_entity_time, c.jid, c.resource)
+                        GLib.idle_add(con.get_module('EntityTime').request_entity_time,
+                                      c.jid, c.resource)
                     self.os_info[i] = {'resource': c.resource, 'client': '',
                             'os': ''}
                     self.time_info[i] = {'resource': c.resource, 'time': ''}
