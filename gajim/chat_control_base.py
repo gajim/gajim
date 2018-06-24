@@ -193,16 +193,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
-    def _nec_ping_sent(self, obj):
-        if self.contact != obj.contact:
-            return
-        self.print_conversation(_('Ping?'), 'status')
-
-    def _nec_ping_error(self, obj):
-        if self.contact != obj.contact:
-            return
-        self.print_conversation(_('Error.'), 'status')
-
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
 
@@ -381,11 +371,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         app.ged.register_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
         app.ged.register_event_handler('ping-sent', ged.GUI1,
-            self._nec_ping_sent)
+            self._nec_ping)
         app.ged.register_event_handler('ping-reply', ged.GUI1,
-            self._nec_ping_reply)
+            self._nec_ping)
         app.ged.register_event_handler('ping-error', ged.GUI1,
-            self._nec_ping_error)
+            self._nec_ping)
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.

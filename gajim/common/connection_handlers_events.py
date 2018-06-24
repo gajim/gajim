@@ -573,10 +573,6 @@ class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.errcode = self.stanza.getErrorCode()
         return True
 
-class PingReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'ping-received'
-    base_network_events = []
-
 class StreamReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stream-received'
     base_network_events = []
@@ -1969,18 +1965,6 @@ class ConnectionLostEvent(nec.NetworkIncomingEvent):
         app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
             show='offline'))
         return True
-
-class PingSentEvent(nec.NetworkIncomingEvent):
-    name = 'ping-sent'
-    base_network_events = []
-
-class PingReplyEvent(nec.NetworkIncomingEvent):
-    name = 'ping-reply'
-    base_network_events = []
-
-class PingErrorEvent(nec.NetworkIncomingEvent):
-    name = 'ping-error'
-    base_network_events = []
 
 class CapsPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
 PresenceHelperEvent):

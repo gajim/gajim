@@ -1230,14 +1230,16 @@ class ChatControl(ChatControlBase):
             return
         self.update_ui()
 
-    def _nec_ping_reply(self, obj):
-        if obj.control:
-            if obj.control != self:
-                return
-        else:
-            if self.contact != obj.contact:
-                return
-        self.print_conversation(_('Pong! (%s s.)') % obj.seconds, 'status')
+    def _nec_ping(self, obj):
+        if self.contact != obj.contact:
+            return
+        if obj.name == 'ping-sent':
+            self.print_conversation(_('Ping?'), 'status')
+        elif obj.name == 'ping-reply':
+            self.print_conversation(
+                _('Pong! (%s s.)') % obj.seconds, 'status')
+        elif obj.name == 'ping-error':
+            self.print_conversation(_('Error.'), 'status')
 
     def show_avatar(self):
         if not app.config.get('show_avatar_in_chat'):

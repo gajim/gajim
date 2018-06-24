@@ -1572,14 +1572,18 @@ class GroupchatControl(ChatControlBase):
                     obj.xhtml, self.session, msg_log_id=obj.msg_log_id,
                     encrypted=obj.encrypted, displaymarking=obj.displaymarking)
 
-    def _nec_ping_reply(self, obj):
-        if obj.control:
-            if obj.control != self:
-                return
-        else:
-            if self.contact != obj.contact:
-                return
-        self.print_conversation(_('Pong! (%s s.)') % obj.seconds)
+    def _nec_ping(self, obj):
+        if self.contact.jid != obj.contact.room_jid:
+            return
+
+        nick = obj.contact.get_shown_name()
+        if obj.name == 'ping-sent':
+            self.print_conversation(_('Ping? (%s)') % nick)
+        elif obj.name == 'ping-reply':
+            self.print_conversation(
+                _('Pong! (%s %s s.)') % (nick, obj.seconds))
+        elif obj.name == 'ping-error':
+            self.print_conversation(_('Error.'))
 
     def got_connected(self):
         # Make autorejoin stop.

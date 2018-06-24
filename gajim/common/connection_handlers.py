@@ -1328,8 +1328,7 @@ ConnectionHTTPUpload):
         self.disco_items_ids = []
         # IDs of disco#info requests
         self.disco_info_ids = []
-        # ID of urn:xmpp:ping requests
-        self.awaiting_xmpp_ping_id = None
+
         self.continue_connect_info = None
 
         self.privacy_default_list = None
@@ -1363,8 +1362,6 @@ ConnectionHTTPUpload):
             self._nec_roster_received)
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
-        app.ged.register_event_handler('ping-received', ged.CORE,
-            self._nec_ping_received)
         app.ged.register_event_handler('subscribe-presence-received',
             ged.CORE, self._nec_subscribe_presence_received)
         app.ged.register_event_handler('subscribed-presence-received',
@@ -1404,8 +1401,6 @@ ConnectionHTTPUpload):
             self._nec_roster_received)
         app.ged.remove_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
-        app.ged.remove_event_handler('ping-received', ged.CORE,
-            self._nec_ping_received)
         app.ged.remove_event_handler('subscribe-presence-received',
             ged.CORE, self._nec_subscribe_presence_received)
         app.ged.remove_event_handler('subscribed-presence-received',
@@ -1902,23 +1897,6 @@ ConnectionHTTPUpload):
         app.nec.push_incoming_event(MucAdminReceivedEvent(None, conn=self,
             stanza=iq_obj))
 
-    def _IqPingCB(self, con, iq_obj):
-        log.debug('IqPingCB')
-        app.nec.push_incoming_event(PingReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_ping_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if not self.connection or self.connected < 2:
-            return
-        iq_obj = obj.stanza.buildReply('result')
-        q = iq_obj.getTag('ping')
-        if q:
-            iq_obj.delChild(q)
-        self.connection.send(iq_obj)
-
     def _PrivacySetCB(self, con, iq_obj):
         """
         Privacy lists (XEP 016)
@@ -2196,7 +2174,6 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
             nbxmpp.NS_DISCO_ITEMS)
-        con.RegisterHandler('iq', self._IqPingCB, 'get', nbxmpp.NS_PING)
         con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)

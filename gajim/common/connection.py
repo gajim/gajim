@@ -65,6 +65,7 @@ from gajim.common import i18n
 from gajim.common import idle
 from gajim.common.modules.entity_time import EntityTime
 from gajim.common.modules.software_version import SoftwareVersion
+from gajim.common.modules.ping import Ping
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -661,6 +662,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.register_module('EntityTime', EntityTime, self)
         self.register_module('SoftwareVersion', SoftwareVersion, self)
+        self.register_module('Ping', Ping, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -1527,45 +1529,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             self.connection.send(' ')
 
-    def _on_xmpp_ping_answer(self, iq_obj):
-        self.awaiting_xmpp_ping_id = None
-
-    def sendPing(self, pingTo=None, control=None):
-        """
-        Send XMPP Ping (XEP-0199) request. If pingTo is not set, ping is sent to
-        server to detect connection failure at application level
-        If control is set, display result there
-        """
-        if not app.account_is_connected(self.name):
-            return
-        id_ = self.connection.getAnID()
-        if pingTo:
-            to = pingTo.get_full_jid()
-            app.nec.push_incoming_event(PingSentEvent(None, conn=self,
-                contact=pingTo))
-        else:
-            to = app.config.get_per('accounts', self.name, 'hostname')
-            self.awaiting_xmpp_ping_id = id_
-        iq = nbxmpp.Iq('get', to=to)
-        iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
-        iq.setID(id_)
-        def _on_response(resp):
-            timePong = time.time()
-            if not nbxmpp.isResultNode(resp):
-                app.nec.push_incoming_event(PingErrorEvent(None, conn=self,
-                    contact=pingTo))
-                return
-            timeDiff = round(timePong - timePing, 2)
-            app.nec.push_incoming_event(PingReplyEvent(None, conn=self,
-                contact=pingTo, seconds=timeDiff, control=control))
-        if pingTo:
-            timePing = time.time()
-            self.connection.SendAndCallForResponse(iq, _on_response)
-        else:
-            self.connection.SendAndCallForResponse(iq, self._on_xmpp_ping_answer)
-            app.idlequeue.set_alarm(self.check_pingalive, app.config.get_per(
-                'accounts', self.name, 'time_for_ping_alive_answer'))
-
     def get_active_default_lists(self):
         if not app.account_is_connected(self.name):
             return
@@ -1832,8 +1795,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection = con
         if not app.account_is_connected(self.name):
             return
+
         self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
-        self.connection.set_send_timeout2(self.pingalives, self.sendPing)
+        self.connection.set_send_timeout2(
+            self.pingalives, self.get_module('Ping').send_keepalive_ping)
         self.connection.onreceive(None)
 
         self.privacy_rules_requested = False
@@ -2962,15 +2927,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         message.addChild(node=x)
 
         self.connection.send(message)
-
-    def check_pingalive(self):
-        if not app.config.get_per('accounts', self.name, 'active'):
-            # Account may have been disabled
-            return
-        if self.awaiting_xmpp_ping_id:
-            # We haven't got the pong in time, disco and reconnect
-            log.warning("No reply received for keepalive ping. Reconnecting.")
-            self.disconnectedReconnCB()
 
     def _reconnect_alarm(self):
         if not app.config.get_per('accounts', self.name, 'active'):

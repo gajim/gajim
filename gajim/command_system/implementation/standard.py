@@ -178,7 +178,7 @@ class StandardCommonChatCommands(CommandContainer):
     def ping(self):
         if self.account == app.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
-        app.connections[self.account].sendPing(self.contact)
+        app.connections[self.account].get_module('Ping').send_ping(self.contact)
 
     @command
     @doc(_("Send DTMF sequence through an open audio session"))
@@ -391,5 +391,5 @@ class StandardGroupChatCommands(CommandContainer):
         if self.account == app.ZEROCONF_ACC_NAME:
             raise CommandError(_('Command is not supported for zeroconf accounts'))
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        app.connections[self.account].sendPing(gc_c, self)
+        app.connections[self.account].get_module('Ping').send_ping(gc_c)
 
