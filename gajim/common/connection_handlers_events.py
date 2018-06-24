@@ -193,32 +193,6 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
         self.msg = self.stanza.getTagData('body')
         return True
 
-class VersionResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'version-result-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_id()
-        self.get_jid_resource(check_fake_jid=True)
-        if self.id_ in self.conn.version_ids:
-            self.conn.version_ids.remove(self.id_)
-
-        self.client_info = ''
-        self.os_info = ''
-
-        if self.stanza.getType() == 'error':
-            return True
-
-        qp = self.stanza.getTag('query')
-        if qp.getTag('name'):
-            self.client_info += qp.getTag('name').getData()
-        if qp.getTag('version'):
-            self.client_info += ' ' + qp.getTag('version').getData()
-        if qp.getTag('os'):
-            self.os_info += qp.getTag('os').getData()
-
-        return True
-
 class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'roster-item-exchange-received'
     base_network_events = []
@@ -263,10 +237,6 @@ class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.exchange_items_list[jid].append(groups)
         if self.exchange_items_list:
             return True
-
-class VersionRequestEvent(nec.NetworkIncomingEvent):
-    name = 'version-request-received'
-    base_network_events = []
 
 class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'

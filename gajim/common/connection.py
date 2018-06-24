@@ -64,6 +64,7 @@ from gajim.common import passwords
 from gajim.common import i18n
 from gajim.common import idle
 from gajim.common.modules.entity_time import EntityTime
+from gajim.common.modules.software_version import SoftwareVersion
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -482,12 +483,6 @@ class CommonConnection:
     def account_changed(self, new_name):
         self.name = new_name
 
-    def request_os_info(self, jid, resource):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def get_settings(self):
         """
         To be implemented by derived classes
@@ -665,6 +660,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.sm = Smacks(self) # Stream Management
 
         self.register_module('EntityTime', EntityTime, self)
+        self.register_module('SoftwareVersion', SoftwareVersion, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -2244,28 +2240,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_failure = None
         self.connection = con
         nbxmpp.features_nb.getRegInfo(con, self._hostname)
-
-    def request_os_info(self, jid, resource, groupchat_jid=None):
-        """
-        groupchat_jid is used when we want to send a request to a real jid and
-        act as if the answer comes from the groupchat_jid
-        """
-        if not app.account_is_connected(self.name):
-            return
-        # If we are invisible, do not request
-        if self.connected == app.SHOW_LIST.index('invisible'):
-            self.dispatch('OS_INFO', (jid, resource, _('Not fetched because of invisible status'), _('Not fetched because of invisible status')))
-            return
-        to_whom_jid = jid
-        if resource:
-            to_whom_jid += '/' + resource
-        iq = nbxmpp.Iq(to=to_whom_jid, typ='get', queryNS=nbxmpp.NS_VERSION)
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        if groupchat_jid:
-            self.groupchat_jids[id_] = groupchat_jid
-        self.version_ids.append(id_)
-        self.connection.send(iq)
 
     def request_gateway_prompt(self, jid, prompt=None):
         def _on_prompt_result(resp):

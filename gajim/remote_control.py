@@ -145,8 +145,10 @@ class Remote:
             obj.jid, obj.message, obj.keyID, chatstate]))
 
     def on_os_info(self, obj):
-        self.raise_signal('OsInfo', (obj.conn.name, [obj.jid, obj.resource,
-            obj.client_info, obj.os_info]))
+        self.raise_signal('OsInfo', (obj.conn.name, [obj.jid.getStripped(),
+                                                     obj.getResource(),
+                                                     obj.client_info,
+                                                     obj.os_info]))
 
     def on_time(self, obj):
         self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.getStripped(),

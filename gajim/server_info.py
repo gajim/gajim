@@ -74,7 +74,8 @@ class ServerInfoDialog(Gtk.Dialog):
         self.version = ''
         self.uptime = ''
         self.hostname = app.get_hostname_from_account(account)
-        app.connections[account].request_os_info(self.hostname, None)
+        con = app.connections[account]
+        con.get_module('SoftwareVersion').request_os_info(self.hostname, None)
         self.request_last_activity()
 
         for feature in self.get_features():

@@ -1324,8 +1324,6 @@ ConnectionHTTPUpload):
         # keep the latest subscribed event for each jid to prevent loop when we
         # acknowledge presences
         self.subscribed_events = {}
-        # IDs of jabber:iq:version requests
-        self.version_ids = []
         # IDs of disco#items requests
         self.disco_items_ids = []
         # IDs of disco#info requests
@@ -1351,8 +1349,6 @@ ConnectionHTTPUpload):
 
         app.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
-        app.ged.register_event_handler('version-request-received', ged.CORE,
-            self._nec_version_request_received)
         app.ged.register_event_handler('last-request-received', ged.CORE,
             self._nec_last_request_received)
         app.ged.register_event_handler('time-request-received', ged.CORE,
@@ -1394,8 +1390,6 @@ ConnectionHTTPUpload):
         ConnectionHTTPUpload.cleanup(self)
         app.ged.remove_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
-        app.ged.remove_event_handler('version-request-received', ged.CORE,
-            self._nec_version_request_received)
         app.ged.remove_event_handler('last-request-received', ged.CORE,
             self._nec_last_request_received)
         app.ged.remove_event_handler('time-request-received', ged.CORE,
@@ -1579,10 +1573,6 @@ ConnectionHTTPUpload):
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
             return
-        if obj.id_ in self.version_ids:
-            app.nec.push_incoming_event(VersionResultReceivedEvent(None,
-                conn=self, stanza=obj.stanza))
-            return True
         if obj.id_ in self.disco_items_ids:
             app.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
@@ -1672,31 +1662,6 @@ ConnectionHTTPUpload):
             app.config.set_per('accounts', self.name, 'roster_version',
                 obj.version)
 
-    def _VersionCB(self, con, iq_obj):
-        log.debug('VersionCB')
-        if not self.connection or self.connected < 2:
-            return
-        app.nec.push_incoming_event(VersionRequestEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_version_request_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        send_os = app.config.get_per('accounts', self.name, 'send_os_info')
-        if send_os:
-            iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.getQuery()
-            qp.setTagData('name', 'Gajim')
-            qp.setTagData('version', app.version)
-            qp.setTagData('os', helpers.get_os_info())
-        else:
-            iq_obj = obj.stanza.buildReply('error')
-            err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
-                ' service-unavailable')
-            iq_obj.addChild(node=err)
-        self.connection.send(iq_obj)
-
     def _LastCB(self, con, iq_obj):
         log.debug('LastCB')
         if not self.connection or self.connected < 2:
@@ -1719,11 +1684,6 @@ ConnectionHTTPUpload):
                 ' service-unavailable')
             iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
-
-    def _VersionResultCB(self, con, iq_obj):
-        log.debug('VersionResultCB')
-        app.nec.push_incoming_event(VersionResultReceivedEvent(None,
-            conn=self, stanza=iq_obj))
 
     def _TimeCB(self, con, iq_obj):
         log.debug('TimeCB')
@@ -2220,11 +2180,8 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
             nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._VersionCB, 'get', nbxmpp.NS_VERSION)
         con.RegisterHandler('iq', self._TimeCB, 'get', nbxmpp.NS_TIME)
         con.RegisterHandler('iq', self._LastCB, 'get', nbxmpp.NS_LAST)
-        con.RegisterHandler('iq', self._VersionResultCB, 'result',
-            nbxmpp.NS_VERSION)
         con.RegisterHandler('iq', self._MucOwnerCB, 'result',
             nbxmpp.NS_MUC_OWNER)
         con.RegisterHandler('iq', self._MucAdminCB, 'result',

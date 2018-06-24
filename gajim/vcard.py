@@ -276,15 +276,15 @@ class VcardWindow:
         if self.xml.get_object('information_notebook').get_n_pages() < 5:
             return
         if self.gc_contact:
-            if obj.fjid != self.contact.jid:
+            if obj.jid != self.contact.jid:
                 return
-        elif app.get_jid_without_resource(obj.fjid) != self.contact.jid:
+        elif obj.jid.getStripped() != self.contact.jid:
             return
         i = 0
         client = ''
         os = ''
         while i in self.os_info:
-            if self.os_info[i]['resource'] == obj.resource:
+            if self.os_info[i]['resource'] == obj.jid.getResource():
                 if obj.client_info:
                     self.os_info[i]['client'] = obj.client_info
                 else:
@@ -425,11 +425,11 @@ class VcardWindow:
         else: # Request os info if contact is connected
             if self.gc_contact:
                 j, r = app.get_room_and_nick_from_fjid(self.real_jid)
-                GLib.idle_add(app.connections[self.account].request_os_info,
-                    j, r, self.contact.jid)
+                GLib.idle_add(con.get_module('SoftwareVersion').request_os_info,
+                              j, r)
             else:
-                GLib.idle_add(app.connections[self.account].request_os_info,
-                    self.contact.jid, self.contact.resource)
+                GLib.idle_add(con.get_module('SoftwareVersion').request_os_info,
+                              self.contact.jid, self.contact.resource)
 
         # do not wait for entity_time if contact is not connected or has error
         # additional check for observer is needed, as show is offline for him
@@ -458,8 +458,8 @@ class VcardWindow:
                     uf_resources += '\n' + c.resource + \
                             _(' resource with priority ') + str(c.priority)
                     if c.show not in ('offline', 'error'):
-                        GLib.idle_add(app.connections[self.account].\
-                            request_os_info, c.jid, c.resource)
+                        GLib.idle_add(con.get_module('SoftwareVersion').request_os_info,
+                                      c.jid, c.resource)
                         GLib.idle_add(con.get_module('EntityTime').request_entity_time,
                                       c.jid, c.resource)
                     self.os_info[i] = {'resource': c.resource, 'client': '',
@@ -474,7 +474,6 @@ class VcardWindow:
 
         self.fill_status_label()
 
-        con = app.connections[self.account]
         if self.gc_contact:
             con.request_vcard(self._nec_vcard_received,
                               self.gc_contact.get_full_jid(), room=True)
