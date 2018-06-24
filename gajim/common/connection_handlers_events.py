@@ -242,10 +242,6 @@ class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'
     base_network_events = []
 
-class TimeRequestEvent(nec.NetworkIncomingEvent):
-    name = 'time-request-received'
-    base_network_events = []
-
 class RosterReceivedEvent(nec.NetworkIncomingEvent):
     name = 'roster-received'
     base_network_events = []

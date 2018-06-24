@@ -1350,8 +1350,6 @@ ConnectionHTTPUpload):
             self._nec_http_auth_received)
         app.ged.register_event_handler('last-request-received', ged.CORE,
             self._nec_last_request_received)
-        app.ged.register_event_handler('time-request-received', ged.CORE,
-            self._nec_time_request_received)
         app.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('private-storage-bookmarks-received',
@@ -1389,8 +1387,6 @@ ConnectionHTTPUpload):
             self._nec_http_auth_received)
         app.ged.remove_event_handler('last-request-received', ged.CORE,
             self._nec_last_request_received)
-        app.ged.remove_event_handler('time-request-received', ged.CORE,
-            self._nec_time_request_received)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('private-storage-bookmarks-received',
@@ -1673,30 +1669,6 @@ ConnectionHTTPUpload):
             iq_obj = obj.stanza.buildReply('result')
             qp = iq_obj.setQuery()
             qp.attrs['seconds'] = idle.Monitor.get_idle_sec()
-        else:
-            iq_obj = obj.stanza.buildReply('error')
-            err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
-                ' service-unavailable')
-            iq_obj.addChild(node=err)
-        self.connection.send(iq_obj)
-
-    def _TimeCB(self, con, iq_obj):
-        log.debug('TimeCB')
-        if not self.connection or self.connected < 2:
-            return
-        app.nec.push_incoming_event(TimeRequestEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_time_request_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if app.config.get_per('accounts', self.name, 'send_time_info'):
-            iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.setQuery()
-            qp.setTagData('utc', strftime('%Y%m%dT%H:%M:%S', gmtime()))
-            qp.setTagData('tz', tzname[daylight])
-            qp.setTagData('display', strftime('%c', localtime()))
         else:
             iq_obj = obj.stanza.buildReply('error')
             err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
@@ -2158,7 +2130,6 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
             nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._TimeCB, 'get', nbxmpp.NS_TIME)
         con.RegisterHandler('iq', self._LastCB, 'get', nbxmpp.NS_LAST)
         con.RegisterHandler('iq', self._MucOwnerCB, 'result',
             nbxmpp.NS_MUC_OWNER)
