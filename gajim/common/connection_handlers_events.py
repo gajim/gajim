@@ -513,51 +513,6 @@ class PubsubBookmarksReceivedEvent(nec.NetworkIncomingEvent, BookmarksHelper):
         self.parse_bookmarks()
         return True
 
-class SearchFormReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'search-form-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        self.data = None
-        self.is_dataform = False
-        tag = self.stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
-        if not tag:
-            return True
-        self.data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
-        if self.data:
-            self.is_dataform = True
-            return True
-        self.data = {}
-        for i in self.stanza.getQueryPayload():
-            self.data[i.getName()] = i.getData()
-        return True
-
-
-class SearchResultReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'search-result-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        self.data = None
-        self.is_dataform = False
-        tag = self.stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
-        if not tag:
-            return True
-        self.data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
-        if self.data:
-            self.is_dataform = True
-            return True
-        self.data = []
-        for item in tag.getTags('item'):
-            # We also show attributes. jid is there
-            f = item.attrs
-            for i in item.getPayload():
-                f[i.getName()] = i.getData()
-            self.data.append(f)
-        return True
-
 class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'iq-error-received'
     base_network_events = []

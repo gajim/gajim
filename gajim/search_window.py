@@ -68,7 +68,8 @@ class SearchWindow:
             self._nec_search_result_received)
 
     def request_form(self):
-        app.connections[self.account].request_search_fields(self.jid)
+        con = app.connections[self.account]
+        con.get_module('Search').request_search_fields(self.jid)
 
     def pulse_callback(self):
         self.progressbar.pulse()
@@ -91,16 +92,16 @@ class SearchWindow:
         self.window.destroy()
 
     def on_search_button_clicked(self, button):
+        con = app.connections[self.account]
         if self.is_form:
             self.data_form_widget.data_form.type_ = 'submit'
-            app.connections[self.account].send_search_form(self.jid,
-                    self.data_form_widget.data_form.get_purged(), True)
+            con.get_module('Search').send_search_form(
+                self.jid, self.data_form_widget.data_form.get_purged(), True)
         else:
             infos = self.data_form_widget.get_infos()
             if 'instructions' in infos:
                 del infos['instructions']
-            app.connections[self.account].send_search_form(self.jid, infos,
-                    False)
+            con.get_module('Search').send_search_form(self.jid, infos, False)
 
         self.search_vbox.remove(self.data_form_widget)
 

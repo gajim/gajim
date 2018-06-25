@@ -2018,26 +2018,6 @@ ConnectionHTTPUpload):
         self.send_awaiting_pep()
         self.continue_connect_info = None
 
-    def _SearchCB(self, con, iq_obj):
-        log.debug('SearchCB')
-        app.nec.push_incoming_event(SearchFormReceivedEvent(None,
-            conn=self, stanza=iq_obj))
-
-    def _search_fields_received(self, con, iq_obj):
-        jid = jid = helpers.get_jid_from_iq(iq_obj)
-        tag = iq_obj.getTag('query', namespace = nbxmpp.NS_SEARCH)
-        if not tag:
-            self.dispatch('SEARCH_FORM', (jid, None, False))
-            return
-        df = tag.getTag('x', namespace=nbxmpp.NS_DATA)
-        if df:
-            self.dispatch('SEARCH_FORM', (jid, df, True))
-            return
-        df = {}
-        for i in iq_obj.getQueryPayload():
-            df[i.getName()] = i.getData()
-        self.dispatch('SEARCH_FORM', (jid, df, False))
-
     def _PubkeyGetCB(self, con, iq_obj):
         log.info('PubkeyGetCB')
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
@@ -2145,7 +2125,6 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
             nbxmpp.NS_DISCO_ITEMS)
-        con.RegisterHandler('iq', self._SearchCB, 'result', nbxmpp.NS_SEARCH)
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)

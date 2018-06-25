@@ -66,6 +66,7 @@ from gajim.common import idle
 from gajim.common.modules.entity_time import EntityTime
 from gajim.common.modules.software_version import SoftwareVersion
 from gajim.common.modules.ping import Ping
+from gajim.common.modules.search import Search
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -663,6 +664,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('EntityTime', EntityTime, self)
         self.register_module('SoftwareVersion', SoftwareVersion, self)
         self.register_module('Ping', Ping, self)
+        self.register_module('Search', Search, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -2937,24 +2939,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.reconnect()
             else:
                 self.time_to_reconnect = None
-
-    def request_search_fields(self, jid):
-        iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_SEARCH)
-        self.connection.send(iq)
-
-    def send_search_form(self, jid, form, is_form):
-        iq = nbxmpp.Iq(typ='set', to=jid, queryNS=nbxmpp.NS_SEARCH)
-        item = iq.setQuery()
-        if is_form:
-            item.addChild(node=form)
-        else:
-            for i in form.keys():
-                item.setTagData(i, form[i])
-        def _on_response(resp):
-            app.nec.push_incoming_event(SearchResultReceivedEvent(None,
-                conn=self, stanza=resp))
-
-        self.connection.SendAndCallForResponse(iq, _on_response)
 
     def load_roster_from_db(self):
         app.nec.push_incoming_event(RosterReceivedEvent(None, conn=self))
