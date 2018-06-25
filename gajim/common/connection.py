@@ -68,6 +68,7 @@ from gajim.common.modules.software_version import SoftwareVersion
 from gajim.common.modules.ping import Ping
 from gajim.common.modules.search import Search
 from gajim.common.modules.annotations import Annotations
+from gajim.common.modules.roster_item_exchange import RosterItemExchange
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -660,6 +661,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('Ping', Ping, self)
         self.register_module('Search', Search, self)
         self.register_module('Annotations', Annotations, self)
+        self.register_module('RosterItemExchange', RosterItemExchange, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -2045,32 +2047,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.log_message(obj, j)
         else:
             self.log_message(obj, obj.jid)
-
-    def send_contacts(self, contacts, fjid, type_='message'):
-        """
-        Send contacts with RosterX (Xep-0144)
-        """
-        if not app.account_is_connected(self.name):
-            return
-        if type_ == 'message':
-            if len(contacts) == 1:
-                msg = _('Sent contact: "%(jid)s" (%(name)s)') % {
-                    'jid': contacts[0].get_full_jid(),
-                    'name': contacts[0].get_shown_name()}
-            else:
-                msg = _('Sent contacts:')
-                for contact in contacts:
-                    msg += '\n "%s" (%s)' % (contact.get_full_jid(),
-                        contact.get_shown_name())
-            stanza = nbxmpp.Message(to=app.get_jid_without_resource(fjid),
-                body=msg)
-        elif type_ == 'iq':
-            stanza = nbxmpp.Iq(to=fjid, typ='set')
-        x = stanza.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
-        for contact in contacts:
-            x.addChild(name='item', attrs={'action': 'add', 'jid': contact.jid,
-                'name': contact.get_shown_name()})
-        self.connection.send(stanza)
 
     def send_stanza(self, stanza):
         """

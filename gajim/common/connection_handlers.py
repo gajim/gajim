@@ -1663,15 +1663,6 @@ ConnectionHTTPUpload):
             iq_obj.addChild(node=err)
         self.connection.send(iq_obj)
 
-    def _rosterItemExchangeCB(self, con, msg):
-        """
-        XEP-0144 Roster Item Echange
-        """
-        log.debug('rosterItemExchangeCB')
-        app.nec.push_incoming_event(RosterItemExchangeEvent(None, conn=self,
-            stanza=msg))
-        raise nbxmpp.NodeProcessed
-
     def _messageCB(self, con, msg):
         """
         Called when we receive a message
@@ -2075,8 +2066,6 @@ ConnectionHTTPUpload):
         con.RegisterHandler('message', self._pubsubEventCB, makefirst=True)
         con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
-        con.RegisterHandler('iq', self._rosterItemExchangeCB, 'set',
-            nbxmpp.NS_ROSTERX)
         con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siResultCB, 'result', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._discoGetCB, 'get', nbxmpp.NS_DISCO)

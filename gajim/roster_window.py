@@ -4117,13 +4117,14 @@ class RosterWindow:
         self.dragging = False
 
     def on_drop_rosterx(self, widget, account_source, c_source, account_dest,
-    c_dest, was_big_brother, context, etime):
+                        c_dest, was_big_brother, context, etime):
         type_ = 'message'
-        if c_dest.show not in ('offline', 'error') and c_dest.supports(
-        NS_ROSTERX):
+        if (c_dest.show not in ('offline', 'error') and
+                c_dest.supports(NS_ROSTERX)):
             type_ = 'iq'
-        app.connections[account_dest].send_contacts([c_source],
-             c_dest.get_full_jid(), type_=type_)
+        con = app.connections[account_dest]
+        con.get_module('RosterItemExchange').send_contacts(
+            [c_source], c_dest.get_full_jid(), type_=type_)
 
     def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
     c_dest, was_big_brother, context, etime):
@@ -4534,7 +4535,7 @@ class RosterWindow:
             menu.attach_to_widget(self.tree, None)
             menu.connect('selection-done', gtkgui_helpers.destroy_widget)
             menu.show_all()
-            menu.popup(None, None, None, None, 1, etime)
+            menu.popup_at_pointer(None)
 
 ################################################################################
 ### Everything about images and icons....

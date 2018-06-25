@@ -193,51 +193,6 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
         self.msg = self.stanza.getTagData('body')
         return True
 
-class RosterItemExchangeEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'roster-item-exchange-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_id()
-        self.get_jid_resource()
-        self.exchange_items_list = {}
-        items_list = self.stanza.getTag('x').getChildren()
-        if not items_list:
-            return
-        self.action = items_list[0].getAttr('action')
-        if self.action is None:
-            self.action = 'add'
-        for item in self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX).\
-        getChildren():
-            try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it' % item.getAttr('jid'))
-                continue
-            name = item.getAttr('name')
-            contact = app.contacts.get_contact(self.conn.name, jid)
-            groups = []
-            same_groups = True
-            for group in item.getTags('group'):
-                groups.append(group.getData())
-                # check that all suggested groups are in the groups we have for
-                # this contact
-                if not contact or group not in contact.groups:
-                    same_groups = False
-            if contact:
-                # check that all groups we have for this contact are in the
-                # suggested groups
-                for group in contact.groups:
-                    if group not in groups:
-                        same_groups = False
-                if contact.sub in ('both', 'to') and same_groups:
-                    continue
-            self.exchange_items_list[jid] = []
-            self.exchange_items_list[jid].append(name)
-            self.exchange_items_list[jid].append(groups)
-        if self.exchange_items_list:
-            return True
-
 class LastRequestEvent(nec.NetworkIncomingEvent):
     name = 'last-request-received'
     base_network_events = []
@@ -1103,8 +1058,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # check if the message is a roster item exchange (XEP-0144)
         if self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX):
-            app.nec.push_incoming_event(RosterItemExchangeEvent(None,
-                conn=self.conn, stanza=self.stanza))
+            self.conn.get_module('RosterItemExchange').received_item(
+                self.conn, self.stanza)
             return
 
         # check if the message is a XEP-0070 confirmation request
