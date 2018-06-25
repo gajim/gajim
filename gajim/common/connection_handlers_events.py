@@ -193,10 +193,6 @@ class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
         self.msg = self.stanza.getTagData('body')
         return True
 
-class LastRequestEvent(nec.NetworkIncomingEvent):
-    name = 'last-request-received'
-    base_network_events = []
-
 class RosterReceivedEvent(nec.NetworkIncomingEvent):
     name = 'roster-received'
     base_network_events = []

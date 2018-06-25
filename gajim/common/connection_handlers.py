@@ -48,7 +48,6 @@ from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
 from gajim.common import configpaths
-from gajim.common import idle
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.pubsub import ConnectionPubSub
@@ -1345,8 +1344,6 @@ ConnectionHTTPUpload):
 
         app.ged.register_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
-        app.ged.register_event_handler('last-request-received', ged.CORE,
-            self._nec_last_request_received)
         app.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('private-storage-bookmarks-received',
@@ -1380,8 +1377,6 @@ ConnectionHTTPUpload):
         ConnectionHTTPUpload.cleanup(self)
         app.ged.remove_event_handler('http-auth-received', ged.CORE,
             self._nec_http_auth_received)
-        app.ged.remove_event_handler('last-request-received', ged.CORE,
-            self._nec_last_request_received)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('private-storage-bookmarks-received',
@@ -1639,29 +1634,6 @@ ConnectionHTTPUpload):
         if obj.version:
             app.config.set_per('accounts', self.name, 'roster_version',
                 obj.version)
-
-    def _LastCB(self, con, iq_obj):
-        log.debug('LastCB')
-        if not self.connection or self.connected < 2:
-            return
-        app.nec.push_incoming_event(LastRequestEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_last_request_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if app.is_installed('IDLE') and app.config.get_per('accounts', self.name,
-        'send_idle_time'):
-            iq_obj = obj.stanza.buildReply('result')
-            qp = iq_obj.setQuery()
-            qp.attrs['seconds'] = idle.Monitor.get_idle_sec()
-        else:
-            iq_obj = obj.stanza.buildReply('error')
-            err = nbxmpp.ErrorNode(name=nbxmpp.NS_STANZAS + \
-                ' service-unavailable')
-            iq_obj.addChild(node=err)
-        self.connection.send(iq_obj)
 
     def _messageCB(self, con, msg):
         """
@@ -2086,7 +2058,6 @@ ConnectionHTTPUpload):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
             nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._LastCB, 'get', nbxmpp.NS_LAST)
         con.RegisterHandler('iq', self._MucOwnerCB, 'result',
             nbxmpp.NS_MUC_OWNER)
         con.RegisterHandler('iq', self._MucAdminCB, 'result',

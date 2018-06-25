@@ -69,6 +69,7 @@ from gajim.common.modules.ping import Ping
 from gajim.common.modules.search import Search
 from gajim.common.modules.annotations import Annotations
 from gajim.common.modules.roster_item_exchange import RosterItemExchange
+from gajim.common.modules.last_activity import LastActivity
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -662,6 +663,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('Search', Search, self)
         self.register_module('Annotations', Annotations, self)
         self.register_module('RosterItemExchange', RosterItemExchange, self)
+        self.register_module('LastActivity', LastActivity, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
