@@ -486,12 +486,6 @@ class CommonConnection:
     def account_changed(self, new_name):
         self.name = new_name
 
-    def get_settings(self):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def get_bookmarks(self):
         """
         To be implemented by derived classes
@@ -2222,17 +2216,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if prompt:
             query.setTagData('prompt', prompt)
         self.connection.SendAndCallForResponse(iq, _on_prompt_result)
-
-    def get_settings(self):
-        """
-        Get Gajim settings as described in XEP 0049
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='gajim', namespace='gajim:prefs')
-        self.connection.send(iq)
 
     def seclabel_catalogue(self, to, callback):
         if not app.account_is_connected(self.name):
