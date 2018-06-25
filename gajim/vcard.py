@@ -109,7 +109,8 @@ class VcardWindow:
             self.set_entity_time)
 
         self.fill_jabber_page()
-        annotations = app.connections[self.account].annotations
+        con = app.connections[self.account]
+        annotations = con.get_module('Annotations').annotations
         if self.contact.jid in annotations:
             buffer_ = self.xml.get_object('textview_annotation').get_buffer()
             buffer_.set_text(annotations[self.contact.jid])
@@ -140,12 +141,13 @@ class VcardWindow:
             GLib.source_remove(self.update_progressbar_timeout_id)
         del app.interface.instances[self.account]['infos'][self.contact.jid]
         buffer_ = self.xml.get_object('textview_annotation').get_buffer()
-        annotation = buffer_.get_text(buffer_.get_start_iter(),
+        new_annotation = buffer_.get_text(buffer_.get_start_iter(),
                 buffer_.get_end_iter(), True)
-        connection = app.connections[self.account]
-        if annotation != connection.annotations.get(self.contact.jid, ''):
-            connection.annotations[self.contact.jid] = annotation
-            connection.store_annotations()
+        con = app.connections[self.account]
+        annotations = con.get_module('Annotations').annotations
+        if new_annotation != annotations.get(self.contact.jid, ''):
+            annotations[self.contact.jid] = new_annotation
+            con.get_module('Annotations').store_annotations()
         app.ged.remove_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
         app.ged.remove_event_handler('time-result-received', ged.GUI1,

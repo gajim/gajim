@@ -1335,9 +1335,6 @@ ConnectionHTTPUpload):
 
         app.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
         app.nec.register_incoming_event(BookmarksReceivedEvent)
-        app.nec.register_incoming_event(
-            PrivateStorageRosternotesReceivedEvent)
-        app.nec.register_incoming_event(RosternotesReceivedEvent)
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(StreamOtherHostReceivedEvent)
         app.nec.register_incoming_event(MessageReceivedEvent)
@@ -1354,8 +1351,6 @@ ConnectionHTTPUpload):
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('private-storage-bookmarks-received',
             ged.CORE, self._nec_private_storate_bookmarks_received)
-        app.ged.register_event_handler('private-storage-rosternotes-received',
-            ged.CORE, self._nec_private_storate_rosternotes_received)
         app.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
         app.ged.register_event_handler('iq-error-received', ged.CORE,
@@ -1391,8 +1386,6 @@ ConnectionHTTPUpload):
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('private-storage-bookmarks-received',
             ged.CORE, self._nec_private_storate_bookmarks_received)
-        app.ged.remove_event_handler('private-storage-rosternotes-received',
-            ged.CORE, self._nec_private_storate_rosternotes_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
         app.ged.remove_event_handler('iq-error-received', ged.CORE,
@@ -1586,12 +1579,6 @@ ConnectionHTTPUpload):
                 resend_to_pubsub = True
         if resend_to_pubsub:
             self.store_bookmarks('pubsub')
-
-    def _nec_private_storate_rosternotes_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        for jid in obj.annotations:
-            self.annotations[jid] = obj.annotations[jid]
 
     def _PrivateCB(self, con, iq_obj):
         """
@@ -2011,7 +1998,7 @@ ConnectionHTTPUpload):
         self.get_bookmarks()
 
         # Get annotations from private namespace
-        self.get_annotations()
+        self.get_module('Annotations').get_annotations()
 
         # Inform GUI we just signed in
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))

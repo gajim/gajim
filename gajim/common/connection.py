@@ -67,6 +67,7 @@ from gajim.common.modules.entity_time import EntityTime
 from gajim.common.modules.software_version import SoftwareVersion
 from gajim.common.modules.ping import Ping
 from gajim.common.modules.search import Search
+from gajim.common.modules.annotations import Annotations
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -627,7 +628,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.last_time_to_reconnect = None
         self.new_account_info = None
         self.new_account_form = None
-        self.annotations = {}
         self.last_io = app.idlequeue.current_time()
         self.last_sent = []
         self.password = passwords.get_password(name)
@@ -665,6 +665,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('SoftwareVersion', SoftwareVersion, self)
         self.register_module('Ping', Ping, self)
         self.register_module('Search', Search, self)
+        self.register_module('Annotations', Annotations, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -1773,7 +1774,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_bookmarks()
 
             # Get annotations
-            self.get_annotations()
+            self.get_module('Annotations').get_annotations()
 
             # Inform GUI we just signed in
             app.nec.push_incoming_event(SignedInEvent(None, conn=self))
@@ -2379,34 +2380,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE, payload=storage_node)
             self.connection.send(iq)
             app.log('bookmarks').info('Bookmarks published (PrivateStorage)')
-
-    def get_annotations(self):
-        """
-        Get Annonations from storage as described in XEP 0048, and XEP 0145
-        """
-        self.annotations = {}
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='storage', namespace='storage:rosternotes')
-        self.connection.send(iq)
-
-    def store_annotations(self):
-        """
-        Set Annonations in private storage as described in XEP 0048, and XEP 0145
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
-        for jid in self.annotations.keys():
-            if self.annotations[jid]:
-                iq4 = iq3.addChild(name = "note")
-                iq4.setAttr('jid', jid)
-                iq4.setData(self.annotations[jid])
-        self.connection.send(iq)
 
     def get_roster_delimiter(self):
         """

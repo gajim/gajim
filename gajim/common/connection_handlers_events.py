@@ -450,36 +450,6 @@ class BookmarksReceivedEvent(nec.NetworkIncomingEvent):
         self.bookmarks = self.base_event.bookmarks
         return True
 
-class PrivateStorageRosternotesReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'private-storage-rosternotes-received'
-    base_network_events = ['private-storage-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        if self.base_event.namespace != nbxmpp.NS_ROSTERNOTES:
-            return
-        notes = self.base_event.storage_node.getTags('note')
-        self.annotations = {}
-        for note in notes:
-            try:
-                jid = helpers.parse_jid(note.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it' % note.getAttr('jid'))
-                continue
-            annotation = note.getData()
-            self.annotations[jid] = annotation
-        if self.annotations:
-            return True
-
-class RosternotesReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'rosternotes-received'
-    base_network_events = ['private-storage-rosternotes-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.annotations = self.base_event.annotations
-        return True
-
 class PubsubReceivedEvent(nec.NetworkIncomingEvent):
     name = 'pubsub-received'
     base_network_events = []
