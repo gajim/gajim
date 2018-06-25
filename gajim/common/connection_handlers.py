@@ -1342,8 +1342,6 @@ ConnectionHTTPUpload):
             Archiving313PreferencesChangedReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
-        app.ged.register_event_handler('http-auth-received', ged.CORE,
-            self._nec_http_auth_received)
         app.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('private-storage-bookmarks-received',
@@ -1375,8 +1373,6 @@ ConnectionHTTPUpload):
         ConnectionArchive313.cleanup(self)
         ConnectionPubSub.cleanup(self)
         ConnectionHTTPUpload.cleanup(self)
-        app.ged.remove_event_handler('http-auth-received', ged.CORE,
-            self._nec_http_auth_received)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('private-storage-bookmarks-received',
@@ -1418,32 +1414,6 @@ ConnectionHTTPUpload):
         c.setAttr('node', 'http://gajim.org')
         c.setAttr('ver', app.caps_hash[self.name])
         return p
-
-    def build_http_auth_answer(self, iq_obj, answer):
-        if not self.connection or self.connected < 2:
-            return
-        if answer == 'yes':
-            confirm = iq_obj.getTag('confirm')
-            reply = iq_obj.buildReply('result')
-            if iq_obj.getName() == 'message':
-                reply.addChild(node=confirm)
-            self.connection.send(reply)
-        elif answer == 'no':
-            err = nbxmpp.Error(iq_obj, nbxmpp.protocol.ERR_NOT_AUTHORIZED)
-            self.connection.send(err)
-
-    def _nec_http_auth_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if obj.opt in ('yes', 'no'):
-            obj.conn.build_http_auth_answer(obj.stanza, obj.opt)
-            return True
-
-    def _HttpAuthCB(self, con, iq_obj):
-        log.debug('HttpAuthCB')
-        app.nec.push_incoming_event(HttpAuthReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
 
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
@@ -2065,7 +2035,6 @@ ConnectionHTTPUpload):
         con.RegisterHandler('iq', self._PrivateCB, 'result', nbxmpp.NS_PRIVATE)
         con.RegisterHandler('iq', self._SecLabelCB, 'result',
             nbxmpp.NS_SECLABEL_CATALOG)
-        con.RegisterHandler('iq', self._HttpAuthCB, 'get', nbxmpp.NS_HTTP_AUTH)
         con.RegisterHandler('iq', self._CommandExecuteCB, 'set',
             nbxmpp.NS_COMMANDS)
         con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',

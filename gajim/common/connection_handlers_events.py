@@ -180,19 +180,6 @@ class HelperEvent:
             self.muc_pm = muc_user.getChildren() == []
         return self.muc_pm
 
-class HttpAuthReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'http-auth-received'
-    base_network_events = []
-
-    def generate(self):
-        self.opt = app.config.get_per('accounts', self.conn.name, 'http_auth')
-        self.iq_id = self.stanza.getTagAttr('confirm', 'id')
-        self.method = self.stanza.getTagAttr('confirm', 'method')
-        self.url = self.stanza.getTagAttr('confirm', 'url')
-        # In case it's a message with a body
-        self.msg = self.stanza.getTagData('body')
-        return True
-
 class RosterReceivedEvent(nec.NetworkIncomingEvent):
     name = 'roster-received'
     base_network_events = []
@@ -1060,8 +1047,8 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         # check if the message is a XEP-0070 confirmation request
         if self.stanza.getTag('confirm', namespace=nbxmpp.NS_HTTP_AUTH):
-            app.nec.push_incoming_event(HttpAuthReceivedEvent(None,
-                conn=self.conn, stanza=self.stanza))
+            self.conn.get_module('HTTPAuth').answer_request(
+                self.conn, self.stanza)
             return
 
         try:

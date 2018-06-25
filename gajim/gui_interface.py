@@ -173,7 +173,8 @@ class Interface:
     def handle_event_http_auth(obj):
         #('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
         def response(account, answer):
-            obj.conn.build_http_auth_answer(obj.stanza, answer)
+            obj.conn.get_module('HTTPAuth').build_http_auth_answer(
+                obj.stanza, answer)
 
         def on_yes(is_checked, obj):
             response(obj, 'yes')
