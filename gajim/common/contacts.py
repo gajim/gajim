@@ -475,7 +475,7 @@ class Contacts():
         contacts = self._contacts[contact.jid]
         # We had only one that was offline, remove it
         if len(contacts) == 1 and contacts[0].show == 'offline':
-            # Do not use self.remove_contact: it deteles
+            # Do not use self.remove_contact: it deletes
             # self._contacts[account][contact.jid]
             contacts.remove(contacts[0])
         # If same JID with same resource already exists, use the new one
@@ -868,7 +868,7 @@ class MetacontactManager():
 
     def _get_metacontacts_big_brother(self, family):
         """
-        Which of the family will be the big brother under wich all others will be
+        Which of the family will be the big brother under which all others will be
         ?
         """
         return max(family, key=self._metacontact_key)

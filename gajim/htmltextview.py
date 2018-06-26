@@ -184,9 +184,9 @@ LIST_ELEMS = set( 'dl, ol, ul'.split(', '))
 for name in BLOCK_HEAD:
     num = eval(name[1])
     header_size = (num-1) // 2
-    weigth = (num - 1) % 2
+    weight = (num - 1) % 2
     element_styles[name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[header_size],
-        ('font-weight: bold', 'font-style: oblique')[weigth],)
+        ('font-weight: bold', 'font-style: oblique')[weight],)
 
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
@@ -970,7 +970,7 @@ class HtmlTextView(Gtk.TextView):
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
         if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
-            # we get the begining of the tag
+            # we get the beginning of the tag
             while not begin_iter.begins_tag(texttag):
                 begin_iter.backward_char()
             end_iter = iter_.copy()
@@ -1084,7 +1084,7 @@ if __name__ == '__main__':
     from gajim.conversation_textview import ConversationTextview
     from gajim.gui_interface import Interface
     from gajim.common import app, logger, caps_cache
-    # TODO: dont call Logger() it will create the DB
+    # TODO: don't call Logger() it will create the DB
     # maybe mock this object for tests
     # app.logger = logger.Logger()
     # caps_cache.initialize(app.logger)

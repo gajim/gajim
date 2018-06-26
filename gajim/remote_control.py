@@ -506,7 +506,7 @@ class SignalObject(dbus.service.Object):
                 elif first_connected_acct is None:
                     first_connected_acct = acct
 
-        # if jid is not a conntact, open-chat with first connected account
+        # if jid is not a contact, open-chat with first connected account
         if connected_account is None and first_connected_acct:
             connected_account = first_connected_acct
 

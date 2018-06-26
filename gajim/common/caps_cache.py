@@ -171,7 +171,7 @@ class AbstractClientCaps(object):
 
     def _discover(self, connection, jid):
         """
-        To be implemented by subclassess
+        To be implemented by subclasses
         """
         raise NotImplementedError
 
@@ -180,7 +180,7 @@ class AbstractClientCaps(object):
 
     def _lookup_in_cache(self, caps_cache):
         """
-        To be implemented by subclassess
+        To be implemented by subclasses
         """
         raise NotImplementedError
 
@@ -189,7 +189,7 @@ class AbstractClientCaps(object):
 
     def _is_hash_valid(self, identities, features, dataforms):
         """
-        To be implemented by subclassess
+        To be implemented by subclasses
         """
         raise NotImplementedError
 
@@ -217,7 +217,7 @@ class ClientCaps(AbstractClientCaps):
 
 class OldClientCaps(AbstractClientCaps):
     """
-    Old XEP-115 implemtation. Kept around for background competability
+    Old XEP-115 implementation. Kept around for background compatibility
     """
     def __init__(self, caps_hash, node):
         AbstractClientCaps.__init__(self, caps_hash, node)
@@ -453,7 +453,7 @@ class MucCapsCache:
                     data.append(dataforms.ExtendForm(node=child))
 
         if nbxmpp.NS_MUC not in features:
-            # Not a MUC, dont cache info
+            # Not a MUC, don't cache info
             return
 
         self.cache[jid] = self.DiscoInfo(identities, features, data)

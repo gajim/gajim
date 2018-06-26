@@ -184,7 +184,7 @@ class ConversationTextview(GObject.GObject):
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView()
         # we have to override HtmlTextView Event handlers
-        # because we dont inherit
+        # because we don't inherit
         self.tv.hyperlink_handler = self.hyperlink_handler
         self.tv.connect_tooltip(self.query_tooltip)
 
@@ -391,7 +391,7 @@ class ConversationTextview(GObject.GObject):
             allowed = False
 
         if not allowed:
-            log.debug('Message correctiong not allowed')
+            log.debug('Message correction not allowed')
             return None
 
         end_mark, index = self.get_end_mark(correct_id, start_mark)
@@ -619,9 +619,9 @@ class ConversationTextview(GObject.GObject):
         self.emit('quote', self.selected_phrase)
 
     def on_textview_button_press_event(self, widget, event):
-        # If we clicked on a taged text do NOT open the standard popup menu
+        # If we clicked on a tagged text do NOT open the standard popup menu
         # if normal text check if we have sth selected
-        self.selected_phrase = '' # do not move belove event button check!
+        self.selected_phrase = '' # do not move below event button check!
 
         if event.button != 3: # if not right click
             return False
@@ -744,7 +744,7 @@ class ConversationTextview(GObject.GObject):
     def hyperlink_handler(self, texttag, widget, event, iter_, kind):
         if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
-            # we get the begining of the tag
+            # we get the beginning of the tag
             while not begin_iter.begins_tag(texttag):
                 begin_iter.backward_char()
             end_iter = iter_.copy()

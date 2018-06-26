@@ -362,7 +362,7 @@ class ServicesCache:
         # NS_BROWSE is deprecated, but we check for it anyways.
         # Some services list it in features and respond to
         # NS_DISCO_ITEMS anyways.
-        # Allow browsing for unknown types aswell.
+        # Allow browsing for unknown types as well.
         if (not features and not identities) or \
         nbxmpp.NS_DISCO_ITEMS in features or nbxmpp.NS_BROWSE in features:
             return ToplevelAgentBrowser
@@ -1217,7 +1217,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 # fetching or error
                 cell.set_property('foreground_set', True)
             else:
-                # Normal/succes
+                # Normal/success
                 cell.set_property('foreground_set', False)
         else:
             theme = app.config.get('roster_theme')

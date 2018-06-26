@@ -71,7 +71,7 @@ class MessageWindow(object):
         # If None, the window is not tied to any specific type
         self.type_ = type_
         # dict { handler id: widget}. Keeps callbacks, which
-        # lead to cylcular references
+        # lead to circular references
         self.handlers = {}
         # Don't show warning dialogs when we want to delete the window
         self.dont_warn_on_delete = False
@@ -398,7 +398,7 @@ class MessageWindow(object):
                 self.remove_tab(control, self.CLOSE_CTRL_KEY)
                 return True
             elif keyval == Gdk.KEY_w: # CTRL + w
-                # CTRL + w removes latest word before sursor when User uses emacs
+                # CTRL + w removes latest word before cursor when User uses emacs
                 # theme
                 if not Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') == 'Emacs':

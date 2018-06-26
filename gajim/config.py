@@ -531,7 +531,7 @@ class PreferencesWindow:
         returns "mixed"
         """
         if len(app.connections) == 0:
-            # a non existant key return default value
+            # a non existent key return default value
             return app.config.get_per('accounts', '__default__', opt)
         val = None
         for account in app.connections:
@@ -2025,7 +2025,7 @@ class ManageBookmarksWindow:
 
     def check_valid_bookmark(self):
         """
-        Check if all neccessary fields are entered correctly
+        Check if all necessary fields are entered correctly
         """
         (model, iter_) = self.selection.get_selected()
 

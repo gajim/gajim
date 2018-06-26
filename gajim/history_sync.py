@@ -287,7 +287,7 @@ class SummaryPage(Gtk.Box):
     def finished(self):
         received = self.assistant.download_history.received
         finished = _('''
-        Finshed synchronising your History.
+        Finished synchronising your History.
         {received} Messages downloaded.
         '''.format(received=received))
         self.label.set_text(finished)

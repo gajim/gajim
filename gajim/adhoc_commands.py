@@ -478,7 +478,7 @@ class CommandWindow:
     def on_check_commands_2_button_clicked(self, widget):
         self.stage1()
 
-# stage 5: an error has occured
+# stage 5: an error has occurred
     def stage5(self, error=None, errorid=None, senderror=False):
         """
         Display the error message. Wait for user to close the window

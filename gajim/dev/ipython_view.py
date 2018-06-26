@@ -303,7 +303,7 @@ class IterableIPShell:
 
     def complete(self, line):
         """
-        Returns an auto completed line and/or posibilities for completion
+        Returns an auto completed line and/or possibilities for completion
 
         @param line: Given line so far.
         @type line: string
@@ -537,10 +537,10 @@ class ConsoleView(Gtk.TextView):
     def onKeyPress(self, widget, event):
         """
         Key press callback used for correcting behavior for console-like
-        interfaces. For example 'home' should go to prompt, not to begining of
+        interfaces. For example 'home' should go to prompt, not to beginning of
         line
 
-        @param widget: Widget that key press accored in.
+        @param widget: Widget that key press occurred in.
         @type widget: Gtk.Widget
         @param event: Event object
         @type event: Gdk.Event
@@ -617,7 +617,7 @@ class IPythonView(ConsoleView, IterableIPShell):
         """
         Custom raw_input() replacement. Get's current line from console buffer
 
-        @param prompt: Prompt to print. Here for compatability as replacement.
+        @param prompt: Prompt to print. Here for compatibility as replacement.
         @type prompt: string
 
         @return: The current command line text.
@@ -633,7 +633,7 @@ class IPythonView(ConsoleView, IterableIPShell):
         Key press callback with plenty of shell goodness, like history,
         autocompletions, etc
 
-        @param widget: Widget that key press occured in.
+        @param widget: Widget that key press occurred in.
         @type widget: Gtk.Widget
         @param event: Event object.
         @type event: Gdk.Event

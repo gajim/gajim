@@ -824,7 +824,7 @@ class Interface:
     def handle_event_bookmarks(self, obj):
         # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
         # We received a bookmark item from the server (JEP48)
-        # Auto join GC windows if neccessary
+        # Auto join GC windows if necessary
 
         gui_menu_builder.build_bookmark_menu(obj.conn.name)
         invisible_show = app.SHOW_LIST.index('invisible')
@@ -1204,7 +1204,7 @@ class Interface:
 
         proposed_resource = conn.server_resource
         if proposed_resource.startswith('gajim.'):
-            # Dont notify the user about resource change if he didnt set
+            # Dont notify the user about resource change if he didn't set
             # a custom resource
             on_ok('gajim.$rand')
             return

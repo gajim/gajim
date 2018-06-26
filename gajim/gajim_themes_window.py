@@ -217,7 +217,7 @@ class GajimThemesWindow:
         self.background_checkbutton.set_active(state)
         self.background_colorbutton.set_sensitive(state)
 
-        # get the font name before we set widgets and it will not be overriden
+        # get the font name before we set widgets and it will not be overridden
         font_name = app.config.get_per('themes', theme, option + 'font')
         font_attrs = app.config.get_per('themes', theme, option + 'fontattrs')
         self._set_font_widgets(font_attrs)

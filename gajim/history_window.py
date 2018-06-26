@@ -196,7 +196,7 @@ class HistoryWindow:
                 info_completion = info_name
                 info_jid = contact.jid
             else:
-                # Corrensponding account is offline, we know nothing
+                # Corresponding account is offline, we know nothing
                 info_name = completed.split('@')[0]
                 info_completion = completed
                 info_jid = completed

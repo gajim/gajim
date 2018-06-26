@@ -94,7 +94,7 @@ class MessageControl(object):
 
     def safe_shutdown(self):
         """
-        Called to check if control can be closed without loosing data.
+        Called to check if control can be closed without losing data.
         returns True if control can be closed safely else False
 
         Derived classes MAY implement this.

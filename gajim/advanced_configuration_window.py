@@ -134,7 +134,7 @@ class AdvancedConfigurationWindow(object):
 
     def cb_value_column_data(self, col, cell, model, iter_, data):
         """
-        Check if it's boolen or holds password stuff and if yes  make the
+        Check if it's boolean or holds password stuff and if yes  make the
         cellrenderertext not editable, else - it's editable
         """
         optname = model[iter_][Column.PREFERENCE_NAME]

@@ -836,7 +836,7 @@ class GroupchatControl(ChatControlBase):
             if rend[0] not in ('avatar', 'icon'):
                 col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
-        # set renderers propertys
+        # set renderers properties
         for renderer in self.renderers_propertys.keys():
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])

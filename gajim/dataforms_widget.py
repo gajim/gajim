@@ -20,7 +20,7 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-''' This module contains widget that can display data form (JEP-0004).
+''' This module contains widget that can display data form (XEP-0004).
 Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <reported/> element),
 multiple - these which may contain more data (with <reported/> element).'''

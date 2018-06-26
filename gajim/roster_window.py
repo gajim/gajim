@@ -553,7 +553,7 @@ class RosterWindow:
                 family, account)[0]
 
         # Family might has changed (actual big brother not on top).
-        # Remove childs first then big brother
+        # Remove children first then big brother
         family_in_roster = False
         for data in nearby_family:
             _account = data['account']
@@ -786,7 +786,7 @@ class RosterWindow:
                 # Remove contact before redrawing, otherwise the old
                 # numbers will still be show
                 if not maximize:
-                    # Dont remove contact when we maximize a room
+                    # Don't remove contact when we maximize a room
                     app.contacts.remove_jid(account, jid, remove_meta=True)
                 if iters:
                     rest_of_family = [data for data in family
@@ -1006,10 +1006,10 @@ class RosterWindow:
             app.to_be_removed[account].remove(jid)
             family = app.contacts.get_metacontacts_family(account, jid)
             if family:
-                # Peform delayed recalibration
+                # Perform delayed recalibration
                 self._recalibrate_metacontact_family(family, account)
             self.draw_contact(jid, account)
-            # Hide Group if all childs are hidden
+            # Hide Group if all children are hidden
             contact = app.contacts.get_contact(account, jid)
             if not contact:
                 return
@@ -1242,7 +1242,7 @@ class RosterWindow:
                 status = helpers.reduce_chars_newlines(status,
                     max_lines = 1)
                 # escape markup entities and make them small
-                # italic and fg color color is calcuted to be
+                # italic and fg color color is calculated to be
                 # always readable
                 color = gtkgui_helpers.get_fade_color(self.tree, selected,
                     focus)
@@ -1811,7 +1811,7 @@ class RosterWindow:
 
 ################################################################################
 ### FIXME: Methods that don't belong to roster window...
-###             ... atleast not in there current form
+###             ... at least not in there current form
 ################################################################################
 
     def fire_up_unread_messages_events(self, account):
@@ -1846,7 +1846,7 @@ class RosterWindow:
         """
         Fill app.contacts and app.groups
         """
-        # FIXME: This function needs to be splitted
+        # FIXME: This function needs to be split
         # Most of the logic SHOULD NOT be done at GUI level
         if account not in app.contacts.get_accounts():
             app.contacts.add_account(account)
@@ -3004,7 +3004,7 @@ class RosterWindow:
 
     def on_disconnect(self, widget, jid, account):
         """
-        When disconnect menuitem is activated: disconect from room
+        When disconnect menuitem is activated: disconnect from room
         """
         if jid in app.interface.minimized_controls[account]:
             ctrl = app.interface.minimized_controls[account][jid]
@@ -4165,7 +4165,7 @@ class RosterWindow:
                 # We have got little brothers. Readd them all
                 self._remove_metacontact_family(old_family, account_source)
             else:
-                # We are only a litle brother. Simply remove us from our big
+                # We are only a little brother. Simply remove us from our big
                 # brother
                 if self._get_contact_iter(c_source.jid, account_source):
                     # When we have been in the group before.
@@ -4294,7 +4294,7 @@ class RosterWindow:
             return
         data = selection.get_data().decode()
         if not data:
-            return # prevents tb when several entrys are dragged
+            return # prevents tb when several entries are dragged
         model = treeview.get_model()
 
         path_dest, position = drop_info
@@ -5419,7 +5419,7 @@ class RosterWindow:
 
     def add_history_manager_menuitem(self, menu):
         """
-        Add a seperator and History Manager menuitem BELOW for account menuitems
+        Add a separator and History Manager menuitem BELOW for account menuitems
         """
         item = Gtk.SeparatorMenuItem.new() # separator
         menu.append(item)
@@ -5518,7 +5518,7 @@ class RosterWindow:
             if rend[0] != 'avatar':
                 col.add_attribute(rend[1], rend[3], rend[4])
             col.set_cell_data_func(rend[1], rend[5], rend[6])
-        # set renderers propertys
+        # set renderers properties
         for renderer in self.renderers_propertys.keys():
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
@@ -5660,7 +5660,7 @@ class RosterWindow:
         # no need of this variable
         self.have_new_chat_accel = False # Is the "Ctrl+N" shown ?
         self.regroup = app.config.get('mergeaccounts')
-        self.clicked_path = None # Used remember on wich row we clicked
+        self.clicked_path = None # Used remember on which row we clicked
         if len(app.connections) < 2:
             # Do not merge accounts if only one exists
             self.regroup = False
@@ -5805,7 +5805,7 @@ class RosterWindow:
         self.tree.set_tooltip_window(tooltips.RosterTooltip(self.window))
         self.current_tooltip = None
         self.tree.connect('query-tooltip', self.query_tooltip)
-        # Workaroung: For strange reasons signal is behaving like row-changed
+        # Workaround: For strange reasons signal is behaving like row-changed
         self._toggeling_row = False
         self.setup_and_draw_roster()
 

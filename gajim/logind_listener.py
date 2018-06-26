@@ -67,7 +67,7 @@ def signal_received(connection, sender_name, object_path,
         # something is wrong, the system is suspending but we don't have
         # a lock file
         log.warning("System suspend detected, but we don't seem to be holding "
-                    "a file descriptor for sleep inihibitor")
+                    "a file descriptor for sleep inhibitor")
 
 
 def get_inhibitor(connection):
@@ -76,7 +76,7 @@ def get_inhibitor(connection):
     global fd
 
     if fd is not None:
-        # someting is wrong, we haven't closed the previous file descriptor
+        # something is wrong, we haven't closed the previous file descriptor
         # and we ask for yet another one
         log.warning('We are about to ask for a sleep inhibitor, but we seem '
                     'to be holding one already')

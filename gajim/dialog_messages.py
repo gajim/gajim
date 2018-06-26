@@ -170,7 +170,7 @@ messages = {
 
     'httpupload-encryption-not-available': Message(
         _('Encryption Error'),
-        _('For the choosen encryption there is no encryption method available'),
+        _('For the chosen encryption there is no encryption method available'),
         ErrorDialog),
 
     'avatar-upload-error': Message(

@@ -929,9 +929,9 @@ class ChatControl(ChatControlBase):
                 status and error is mainly that with error, msg count as a new message
                 (in systray and in control).
         If frm is set to info: it's a information message.
-        If frm is set to print_queue: it is incomming from queue.
+        If frm is set to print_queue: it is incoming from queue.
         If frm is set to another value: it's an outgoing message.
-        If frm is not set: it's an incomming message.
+        If frm is not set: it's an incoming message.
         """
         contact = self.contact
 

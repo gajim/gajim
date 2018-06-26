@@ -333,7 +333,7 @@ class GajimRemote:
 
     def init_connection(self):
         """
-        Create the onnection to the session dbus, or exit if it is not possible
+        Create the connection to the session dbus, or exit if it is not possible
         """
         try:
             self.sbus = dbus.SessionBus()
@@ -397,7 +397,7 @@ class GajimRemote:
 
     def print_info(self, level, prop_dict, encode_return = False):
         """
-        Return formated string from data structure
+        Return formatted string from data structure
         """
         if prop_dict is None or not isinstance(prop_dict, (dict, list, tuple)):
             return ''

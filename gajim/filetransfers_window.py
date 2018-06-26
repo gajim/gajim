@@ -898,13 +898,13 @@ class FileTransfersWindow:
 
     def on_file_transfers_dialog_delete_event(self, widget, event):
         self.window.hide()
-        return True # do NOT destory window
+        return True # do NOT destroy window
 
     def on_close_button_clicked(self, widget):
         self.window.hide()
 
     def show_context_menu(self, event, iter_):
-        # change the sensitive propery of the buttons and menuitems
+        # change the sensitive property of the buttons and menuitems
         if iter_:
             path = self.model.get_path(iter_)
             self.set_buttons_sensitive(path, True)
