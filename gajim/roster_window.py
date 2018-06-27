@@ -3626,16 +3626,7 @@ class RosterWindow:
         """
         When the join gc menuitem is clicked, show the join gc window
         """
-        invisible_show = app.SHOW_LIST.index('invisible')
-        if app.connections[account].connected == invisible_show:
-            dialogs.ErrorDialog(_('You cannot join a group chat while you are '
-                'invisible'))
-            return
-        if 'join_gc' in app.interface.instances[account]:
-            app.interface.instances[account]['join_gc'].present()
-        else:
-            app.interface.instances[account]['join_gc'] = \
-                    dialogs.JoinGroupchatWindow(account, None)
+        app.app.activate_action('join-groupchat')
 
     def on_show_transports_action(self, action, param):
         app.config.set('show_transports_group', param.get_boolean())

@@ -120,16 +120,17 @@ def on_service_disco(action, param):
 
 
 def on_join_gc(action, param):
-    account = param.get_string()
-    invisible_show = app.SHOW_LIST.index('invisible')
-    if app.connections[account].connected == invisible_show:
-        app.interface.raise_dialog('join-while-invisible')
-        return
-    if 'join_gc' in interface.instances[account]:
-        interface.instances[account]['join_gc'].present()
+    account = None
+    if param is None:
+        if not app.get_connected_accounts():
+            return
     else:
-        interface.instances[account]['join_gc'] = \
-            dialogs.JoinGroupchatWindow(account, None)
+        account = param.get_string()
+    window = app.get_app_window(dialogs.JoinGroupchatWindow)
+    if window is None:
+        dialogs.JoinGroupchatWindow(account, None)
+    else:
+        window.present()
 
 
 def on_add_contact(action, param):

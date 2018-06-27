@@ -577,3 +577,9 @@ def prefers_app_menu():
     if sys.platform == 'win32':
         return False
     return app.prefers_app_menu()
+
+def get_app_window(cls):
+    for win in app.get_windows():
+        if isinstance(win, cls):
+            return win
+    return None

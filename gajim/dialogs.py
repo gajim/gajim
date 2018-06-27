@@ -2351,10 +2351,10 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         else:
             for widget in extended_widgets:
                 getattr(self, widget).show()
-            self._fill_recent_and_servers(account)
 
         if account is None:
             connected_accounts = app.get_connected_accounts()
+            account = connected_accounts[0]
             for acc in connected_accounts:
                 self.account_combo.append_text(acc)
         else:
@@ -2378,8 +2378,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Select first account
         self.account_combo.set_active(0)
-        if self.minimal_mode == 0:
-            self.recent_combo.set_active(0)
 
         if self.password is not None:
             self.password_entry.set_text(self.password)
@@ -2393,7 +2391,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         # Show password field if we are in extended mode or
         # The MUC is passwordprotected
         if self.minimal_mode == 0 or muc_caps_cache.supports(
-        room_jid, 'muc_passwordprotected'):
+                room_jid, 'muc_passwordprotected'):
             self.password_entry.show()
             self.password_label.show()
 
@@ -2405,12 +2403,15 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.server_combo.get_child().set_text(server)
 
     def _fill_recent_and_servers(self, account):
+        self.recent_combo.remove_all()
+        self.server_combo.remove_all()
         recent = app.get_recent_groupchats(account)
         servers = []
         for groupchat in recent:
             text = '%s on %s@%s' % (groupchat.nickname,
                                     groupchat.room,
                                     groupchat.server)
+
             self.recent_combo.append_text(text)
             servers.append(groupchat.server)
 
@@ -2435,7 +2436,11 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
     def _on_account_combo_changed(self, combo):
         account = combo.get_active_text()
+        self.account = account
         self.nick_entry.set_text(app.nicks[account])
+        if self.minimal_mode == 0:
+            self._fill_recent_and_servers(account)
+            self.recent_combo.set_active(0)
 
     def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -2447,6 +2452,11 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
     def _on_join_clicked(self, *args):
         account = self.account_combo.get_active_text()
         nickname = self.nick_entry.get_text()
+
+        invisible_show = app.SHOW_LIST.index('invisible')
+        if app.connections[account].connected == invisible_show:
+            app.interface.raise_dialog('join-while-invisible')
+            return
 
         if self.minimal_mode < 2:
             if self.minimal_mode == 0:
@@ -2526,7 +2536,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
     def _on_destroy(self, *args):
         if self.minimal_mode == 0:
-            del app.interface.instances[self.account]['join_gc']
             app.ged.remove_event_handler('agent-info-received', ged.GUI1,
                                          self._nec_agent_info_received)
             app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,

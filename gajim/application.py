@@ -303,6 +303,7 @@ class GajimApplication(Gtk.Application):
             ('quit', app_actions.on_quit),
             ('accounts', app_actions.on_accounts),
             ('add-account', app_actions.on_add_account),
+            ('join-groupchat', app_actions.on_join_gc),
             ('manage-proxies', app_actions.on_manage_proxies),
             ('start-chat', app_actions.on_new_chat),
             ('bookmarks', app_actions.on_manage_bookmarks),
