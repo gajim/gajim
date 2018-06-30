@@ -122,7 +122,7 @@ class VCardTemp:
         photo.addChild('TYPE', payload='image/png')
         photo.addChild('BINVAL', payload=data)
 
-        log.info('Upload avatar: %s %s', room_jid)
+        log.info('Upload avatar: %s', room_jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._upload_room_avatar_result)
 
