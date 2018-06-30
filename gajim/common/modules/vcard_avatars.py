@@ -62,7 +62,7 @@ class VCardAvatars:
         # Check if presence is from a MUC service
         contact = app.contacts.get_groupchat_contact(self._account, str(jid))
         if contact is not None:
-            self._update_received(jid, avatar_sha)
+            self._update_received(jid, avatar_sha, room=True)
         elif stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER):
             show = stanza.getShow()
             type_ = stanza.getType()
