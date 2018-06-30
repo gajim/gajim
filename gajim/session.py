@@ -280,9 +280,9 @@ class ChatControlSession(object):
         else:
             # Everything else
             obj.show_in_roster = notify.get_show_in_roster(event_type,
-                self.conn.name, contact, self)
+                self.conn.name, contact.jid, self)
             obj.show_in_systray = notify.get_show_in_systray(event_type,
-                self.conn.name, contact)
+                self.conn.name, contact.jid)
             if obj.mtype == 'normal' and obj.popup:
                 do_event = False
             else:
@@ -388,9 +388,9 @@ class ChatControlSession(object):
             event_type = 'single_message_received'
 
         show_in_roster = notify.get_show_in_roster(event_type, self.conn.name,
-                contact, self)
+                contact.jid, self)
         show_in_systray = notify.get_show_in_systray(event_type, self.conn.name,
-                contact)
+                contact.jid)
 
         event = event_t(msg, subject, msg_type, tim, encrypted, resource,
             msg_log_id, xhtml=xhtml, session=self, form_node=form_node,

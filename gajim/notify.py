@@ -38,7 +38,7 @@ from gajim.common import helpers
 from gajim.common import ged
 
 
-def get_show_in_roster(event, account, contact, session=None):
+def get_show_in_roster(event, account, jid, session=None):
     """
     Return True if this event must be shown in roster, else False
     """
@@ -50,14 +50,14 @@ def get_show_in_roster(event, account, contact, session=None):
     return True
 
 
-def get_show_in_systray(event, account, contact, type_=None):
+def get_show_in_systray(event, account, jid, type_=None):
     """
     Return True if this event must be shown in systray, else False
     """
 
     notify = app.config.get('notify_on_all_muc_messages')
     notify_for_jid = app.config.get_per(
-        'rooms', contact.jid, 'notify_on_all_messages')
+        'rooms', jid, 'notify_on_all_messages')
 
     if type_ == 'printed_gc_msg' and not notify and not notify_for_jid:
         # it's not an highlighted message, don't show in systray

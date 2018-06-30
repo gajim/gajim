@@ -1022,9 +1022,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                         event_type = events.PrintedPmEvent
                     event = 'message_received'
                 show_in_roster = notify.get_show_in_roster(event,
-                    self.account, self.contact, self.session)
+                    self.account, self.contact.jid, self.session)
                 show_in_systray = notify.get_show_in_systray(event,
-                    self.account, self.contact, event_type.type_)
+                    self.account, self.contact.jid, event_type.type_)
 
                 event = event_type(text, subject, self, msg_log_id,
                     show_in_roster=show_in_roster,
