@@ -77,7 +77,7 @@ class ProfileWindow:
             self._nec_vcard_not_published)
         self.window.show_all()
         self.xml.get_object('ok_button').grab_focus()
-        app.connections[account].request_vcard(
+        app.connections[account].get_module('VCardTemp').request_vcard(
             self._nec_vcard_received, self.jid)
 
     def on_information_notebook_switch_page(self, widget, page, page_num):
@@ -261,7 +261,7 @@ class ProfileWindow:
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
 
-    def _nec_vcard_received(self, jid, resource, room, vcard_):
+    def _nec_vcard_received(self, jid, resource, room, vcard_, *args):
         self.set_values(vcard_)
 
     def add_to_vcard(self, vcard_, entry, txt):
@@ -339,7 +339,8 @@ class ProfileWindow:
             app.connections[self.account].retract_nickname()
             nick = app.config.get_per('accounts', self.account, 'name')
         app.nicks[self.account] = nick
-        app.connections[self.account].send_vcard(vcard_, sha)
+        app.connections[self.account].get_module('VCardTemp').send_vcard(
+            vcard_, sha)
         self.message_id = self.statusbar.push(self.context_id,
                 _('Sending profile…'))
         self.progressbar.show()

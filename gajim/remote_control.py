@@ -840,10 +840,12 @@ class SignalObject(dbus.service.Object):
             if avatar_mime_type:
                 vcard['PHOTO']['TYPE'] = avatar_mime_type
             if account:
-                app.connections[account].send_vcard(vcard, sha)
+                app.connections[account].get_module('VCardTemp').send_vcard(
+                    vcard, sha)
             else:
                 for acc in app.connections:
-                    app.connections[acc].send_vcard(vcard, sha)
+                    app.connections[acc].get_module('VCardTemp').send_vcard(
+                        vcard, sha)
 
     @dbus.service.method(INTERFACE, in_signature='ssss', out_signature='')
     def join_room(self, room_jid, nick, password, account):

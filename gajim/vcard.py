@@ -268,7 +268,7 @@ class VcardWindow:
                 widget.set_text('')
         self.xml.get_object('DESC_textview').get_buffer().set_text('')
 
-    def _nec_vcard_received(self, jid, resource, room, vcard):
+    def _nec_vcard_received(self, jid, resource, room, vcard, *args):
         self.clear_values()
         self._set_values(vcard, jid)
 
@@ -477,10 +477,13 @@ class VcardWindow:
         self.fill_status_label()
 
         if self.gc_contact:
-            con.request_vcard(self._nec_vcard_received,
-                              self.gc_contact.get_full_jid(), room=True)
+            con.get_module('VCardTemp').request_vcard(
+                self._nec_vcard_received,
+                self.gc_contact.get_full_jid(),
+                room=True)
         else:
-            con.request_vcard(self._nec_vcard_received, self.contact.jid)
+            con.get_module('VCardTemp').request_vcard(
+                self._nec_vcard_received, self.contact.jid)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()

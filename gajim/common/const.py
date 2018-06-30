@@ -113,6 +113,12 @@ class IdleState(IntEnum):
     AWAY = 2
     AWAKE = 3
 
+@unique
+class RequestAvatar(IntEnum):
+    SELF = 0
+    ROOM = 1
+    USER = 2
+
 SSLError = {
     2: _("Unable to get issuer certificate"),
     3: _("Unable to get certificate CRL"),

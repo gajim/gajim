@@ -71,6 +71,8 @@ from gajim.common.modules.annotations import Annotations
 from gajim.common.modules.roster_item_exchange import RosterItemExchange
 from gajim.common.modules.last_activity import LastActivity
 from gajim.common.modules.http_auth import HTTPAuth
+from gajim.common.modules.vcard_temp import VCardTemp
+from gajim.common.modules.vcard_avatars import VCardAvatars
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -666,6 +668,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('RosterItemExchange', RosterItemExchange, self)
         self.register_module('LastActivity', LastActivity, self)
         self.register_module('HTTPAuth', HTTPAuth, self)
+        self.register_module('VCardTemp', VCardTemp, self)
+        self.register_module('VCardAvatars', VCardAvatars, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -756,7 +760,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 0
         self.time_to_reconnect = None
         self.privacy_rules_supported = False
-        self.avatar_presence_sent = False
+        self.get_module('VCardAvatars').avatar_advertised = False
         if on_purpose:
             self.sm = Smacks(self)
         if self.connection:
@@ -1768,7 +1772,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             show='invisible'))
         if initial:
             # ask our VCard
-            self.request_vcard(self._on_own_avatar_received)
+            self.get_module('VCardTemp').request_vcard()
 
             # Get bookmarks from private namespace
             self.get_bookmarks()

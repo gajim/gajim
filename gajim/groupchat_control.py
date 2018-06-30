@@ -762,8 +762,8 @@ class GroupchatControl(ChatControlBase):
 
             publish = app.interface.get_avatar(sha, publish=True)
             avatar = base64.b64encode(publish).decode('utf-8')
-
-            app.connections[self.account].upload_room_avatar(
+            con = app.connections[self.account]
+            con.get_module('VCardTemp').upload_room_avatar(
                 self.room_jid, avatar)
 
         AvatarChooserDialog(_on_accept,

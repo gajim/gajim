@@ -40,18 +40,12 @@ AGENT_REMOVED = 'agent_removed'
 
 from gajim.common import connection_handlers
 
-class ConnectionVcard(connection_handlers.ConnectionVcard):
+class ConnectionVcard:
     def add_sha(self, p, *args):
         return p
 
     def add_caps(self, p):
         return p
-
-    def request_vcard(self, *args):
-        pass
-
-    def send_vcard(self, *args):
-        pass
 
 
 class ConnectionHandlersZeroconf(ConnectionVcard,

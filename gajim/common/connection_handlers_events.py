@@ -550,16 +550,6 @@ PresenceHelperEvent):
             tim = helpers.datetime_tuple(time_str)
             self.idle_time = timegm(tim)
 
-        # Check if presence is from the room itself, used when the room
-        # sends a avatar hash
-        contact = app.contacts.get_groupchat_contact(self.conn.name, self.fjid)
-        if contact:
-            app.nec.push_incoming_event(
-                RoomAvatarReceivedEvent(
-                    None, conn=self.conn, stanza=self.stanza,
-                    contact=contact, jid=self.jid))
-            return
-
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
@@ -567,9 +557,6 @@ PresenceHelperEvent):
                 self.is_gc = True
             elif namespace == nbxmpp.NS_SIGNED:
                 sig_tag = x
-            elif namespace == nbxmpp.NS_VCARD_UPDATE:
-                self.avatar_sha = x.getTagData('photo')
-                self.contact_nickname = x.getTagData('nickname')
             elif namespace == nbxmpp.NS_DELAY and not self.timestamp:
                 # XEP-0091
                 self._generate_timestamp(self.stanza.timestamp)
@@ -1770,14 +1757,6 @@ class ConnectionTypeEvent(nec.NetworkIncomingEvent):
     name = 'connection-type'
     base_network_events = []
 
-class VcardPublishedEvent(nec.NetworkIncomingEvent):
-    name = 'vcard-published'
-    base_network_events = []
-
-class VcardNotPublishedEvent(nec.NetworkIncomingEvent):
-    name = 'vcard-not-published'
-    base_network_events = []
-
 class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
     base_network_events = []
@@ -1967,13 +1946,6 @@ class NonAnonymousServerErrorEvent(nec.NetworkIncomingEvent):
     name = 'non-anonymous-server-error'
     base_network_events = []
 
-class VcardReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'vcard-received'
-    base_network_events = []
-
-    def generate(self):
-        return True
-
 class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-gc-avatar'
     base_network_events = []
@@ -1993,19 +1965,6 @@ class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        return True
-
-class RoomAvatarReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'room-avatar-received'
-    base_network_events = []
-
-    def generate(self):
-        vcard = self.stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
-        if vcard is None:
-            app.log('avatar').info(
-                '%s has no avatar published (vCard)', self.jid)
-            return
-        self.avatar_sha = vcard.getTagData('photo')
         return True
 
 class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):

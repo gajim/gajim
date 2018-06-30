@@ -397,6 +397,9 @@ def account_is_connected(account):
     else:
         return False
 
+def is_invisible(account):
+    return SHOW_LIST[connections[account].connected] == 'invisible'
+
 def account_is_disconnected(account):
     return not account_is_connected(account)
 

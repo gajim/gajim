@@ -1398,15 +1398,7 @@ def get_subscription_request_msg(account=None):
     s = _('I would like to add you to my contact list.')
     if account:
         s = _('Hello, I am $name.') + ' ' + s
-        our_jid = app.get_jid_from_account(account)
-        vcard = app.connections[account].own_vcard
-        name = ''
-        if vcard:
-            if 'N' in vcard:
-                if 'GIVEN' in vcard['N'] and 'FAMILY' in vcard['N']:
-                    name = vcard['N']['GIVEN'] + ' ' + vcard['N']['FAMILY']
-            if not name and 'FN' in vcard:
-                name = vcard['FN']
+        name = app.connections[account].get_module('VCardTemp').get_vard_name()
         nick = app.nicks[account]
         if name and nick:
             name += ' (%s)' % nick
