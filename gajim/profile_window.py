@@ -56,6 +56,8 @@ class ProfileWindow:
 
         self.account = account
         self.jid = app.get_jid_from_account(account)
+        account_label = app.config.get_per('accounts', account, 'account_label')
+        self.set_value('account_label', account_label)
 
         self.dialog = None
         self.avatar_mime_type = None
@@ -67,9 +69,6 @@ class ProfileWindow:
             self.update_progressbar)
         self.remove_statusbar_timeout_id = None
 
-        # Create Image for avatar button
-        image = Gtk.Image()
-        self.xml.get_object('PHOTO_button').set_image(image)
         self.xml.connect_signals(self)
         app.ged.register_event_handler('vcard-published', ged.GUI1,
             self._nec_vcard_published)
@@ -111,13 +110,11 @@ class ProfileWindow:
     def _clear_photo(self, widget):
         # empty the image
         button = self.xml.get_object('PHOTO_button')
-        image = button.get_image()
+        image = self.xml.get_object('PHOTO_image')
         image.set_from_pixbuf(None)
         button.hide()
         text_button = self.xml.get_object('NOPHOTO_button')
         text_button.show()
-        remove_avatar = self.xml.get_object('remove_avatar')
-        remove_avatar.hide()
         self.avatar_encoded = None
         self.avatar_sha = None
         self.avatar_mime_type = None
@@ -134,14 +131,11 @@ class ProfileWindow:
             surface = app.interface.get_avatar(sha, AvatarSize.VCARD, scale)
 
             button = self.xml.get_object('PHOTO_button')
-            image = button.get_image()
+            image = self.xml.get_object('PHOTO_image')
             image.set_from_surface(surface)
             button.show()
             text_button = self.xml.get_object('NOPHOTO_button')
             text_button.hide()
-
-            remove_avatar = self.xml.get_object('remove_avatar')
-            remove_avatar.show()
 
             self.avatar_sha = sha
             publish = app.interface.get_avatar(sha, publish=True)
@@ -200,15 +194,13 @@ class ProfileWindow:
 
     def set_values(self, vcard_):
         button = self.xml.get_object('PHOTO_button')
-        image = button.get_image()
+        image = self.xml.get_object('PHOTO_image')
         text_button = self.xml.get_object('NOPHOTO_button')
-        remove_avatar = self.xml.get_object('remove_avatar')
         if not 'PHOTO' in vcard_:
             # set default image
             image.set_from_pixbuf(None)
             button.hide()
             text_button.show()
-            remove_avatar.hide()
         for i in vcard_.keys():
             if i == 'PHOTO':
                 photo_encoded = vcard_[i]['BINVAL']
@@ -230,7 +222,6 @@ class ProfileWindow:
                                                                    scale)
                 image.set_from_surface(surface)
                 button.show()
-                remove_avatar.show()
                 text_button.hide()
                 continue
             if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
@@ -293,7 +284,7 @@ class ProfileWindow:
         """
         Make the vCard dictionary
         """
-        entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'URL',
+        entries = ['FN', 'NICKNAME', 'BDAY', 'EMAIL_HOME_USERID', 'JABBERID', 'URL',
                 'TEL_HOME_NUMBER', 'N_FAMILY', 'N_GIVEN', 'N_MIDDLE', 'N_PREFIX',
                 'N_SUFFIX', 'ADR_HOME_STREET', 'ADR_HOME_EXTADR', 'ADR_HOME_LOCALITY',
                 'ADR_HOME_REGION', 'ADR_HOME_PCODE', 'ADR_HOME_CTRY', 'ORG_ORGNAME',
