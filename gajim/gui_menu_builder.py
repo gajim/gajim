@@ -842,7 +842,7 @@ def get_encryption_menu(control_id, type_id, zeroconf=False):
             if not hasattr(plugin, 'allow_groupchat'):
                 continue
         if type_id == 'pm':
-            if not hasattr(plugin, 'allow_privatchat'):
+            if not hasattr(plugin, 'allow_privatechat'):
                 continue
         if zeroconf:
             if not hasattr(plugin, 'allow_zeroconf'):
