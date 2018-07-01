@@ -146,7 +146,7 @@ class Remote:
 
     def on_os_info(self, obj):
         self.raise_signal('OsInfo', (obj.conn.name, [obj.jid.getStripped(),
-                                                     obj.getResource(),
+                                                     obj.jid.getResource(),
                                                      obj.client_info,
                                                      obj.os_info]))
 
