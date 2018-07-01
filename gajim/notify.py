@@ -45,6 +45,8 @@ def get_show_in_roster(event, account, jid, session=None):
     if event == 'gc_message_received':
         return True
     if event == 'message_received':
+        if app.config.get('autopopup_chat_opened'):
+            return True
         if session and session.control:
             return False
     return True
