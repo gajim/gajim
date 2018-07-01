@@ -268,9 +268,11 @@ class Interface:
             self.show_vcard_when_connect.remove(account)
 
     def edit_own_details(self, account):
-        if 'profile' not in self.instances[account]:
-            self.instances[account]['profile'] = \
-            profile_window.ProfileWindow(account, app.interface.roster.window)
+        window = app.get_app_window(profile_window.ProfileWindow)
+        if window is None:
+            profile_window.ProfileWindow(account)
+        else:
+            window.present()
 
     @staticmethod
     def handle_gc_error(gc_control, pritext, sectext):

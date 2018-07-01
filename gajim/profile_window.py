@@ -20,43 +20,46 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-# THIS FILE IS FOR **OUR** PROFILE (when we edit our INFO)
-
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import GLib
-from gi.repository import GdkPixbuf
 import base64
 import time
 import logging
 import hashlib
 
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GLib
+
 from gajim import gtkgui_helpers
 from gajim import dialogs
 from gajim.filechoosers import AvatarChooserDialog
 from gajim.common.const import AvatarSize
-
 from gajim.common import app
 from gajim.common import ged
 
 log = logging.getLogger('gajim.profile')
 
-class ProfileWindow:
-    """
-    Class for our information window
-    """
 
-    def __init__(self, account, transient_for=None):
+class ProfileWindow(Gtk.ApplicationWindow):
+    def __init__(self, account):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_title(_('Profile'))
+
+        self.connect('destroy', self.on_profile_window_destroy)
+        self.connect('key-press-event', self.on_profile_window_key_press_event)
+
         self.xml = gtkgui_helpers.get_gtk_builder('profile_window.ui')
-        self.window = self.xml.get_object('profile_window')
-        self.window.set_transient_for(transient_for)
+        self.add(self.xml.get_object('profile_box'))
         self.progressbar = self.xml.get_object('progressbar')
         self.statusbar = self.xml.get_object('statusbar')
         self.context_id = self.statusbar.get_context_id('profile')
 
         self.account = account
         self.jid = app.get_jid_from_account(account)
-        account_label = app.config.get_per('accounts', account, 'account_label')
+        account_label = app.config.get_per(
+            'accounts', account, 'account_label')
         self.set_value('account_label', account_label)
 
         self.dialog = None
@@ -64,17 +67,18 @@ class ProfileWindow:
         self.avatar_encoded = None
         self.avatar_sha = None
         self.message_id = self.statusbar.push(self.context_id,
-            _('Retrieving profile…'))
-        self.update_progressbar_timeout_id = GLib.timeout_add(100,
-            self.update_progressbar)
+                                              _('Retrieving profile…'))
+        self.update_progressbar_timeout_id = GLib.timeout_add(
+            100, self.update_progressbar)
         self.remove_statusbar_timeout_id = None
 
         self.xml.connect_signals(self)
         app.ged.register_event_handler('vcard-published', ged.GUI1,
-            self._nec_vcard_published)
+                                       self._nec_vcard_published)
         app.ged.register_event_handler('vcard-not-published', ged.GUI1,
-            self._nec_vcard_not_published)
-        self.window.show_all()
+                                       self._nec_vcard_not_published)
+
+        self.show_all()
         self.xml.get_object('ok_button').grab_focus()
         app.connections[account].get_module('VCardTemp').request_vcard(
             self._nec_vcard_received, self.jid)
@@ -99,13 +103,13 @@ class ProfileWindow:
             self._nec_vcard_published)
         app.ged.remove_event_handler('vcard-not-published', ged.GUI1,
             self._nec_vcard_not_published)
-        del app.interface.instances[self.account]['profile']
+
         if self.dialog: # Image chooser dialog
             self.dialog.destroy()
 
     def on_profile_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
+            self.destroy()
 
     def _clear_photo(self, widget):
         # empty the image
@@ -124,10 +128,10 @@ class ProfileWindow:
             sha = app.interface.save_avatar(path_to_file, publish=True)
             if sha is None:
                 dialogs.ErrorDialog(
-                    _('Could not load image'), transient_for=self.window)
+                    _('Could not load image'), transient_for=self)
                 return
 
-            scale = self.window.get_scale_factor()
+            scale = self.get_scale_factor()
             surface = app.interface.get_avatar(sha, AvatarSize.VCARD, scale)
 
             button = self.xml.get_object('PHOTO_button')
@@ -142,7 +146,7 @@ class ProfileWindow:
             self.avatar_encoded = base64.b64encode(publish).decode('utf-8')
             self.avatar_mime_type = 'image/png'
 
-        AvatarChooserDialog(on_ok, transient_for=self.window)
+        AvatarChooserDialog(on_ok, transient_for=self)
 
     def on_PHOTO_button_press_event(self, widget, event):
         """
@@ -178,7 +182,7 @@ class ProfileWindow:
             if not widget.is_focus():
                 pritext = _('Wrong date format')
                 dialogs.ErrorDialog(pritext, _('Format of the date must be '
-                    'YYYY-MM-DD'), transient_for=self.window)
+                    'YYYY-MM-DD'), transient_for=self)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
 
@@ -212,7 +216,7 @@ class ProfileWindow:
                 if 'TYPE' in vcard_[i]:
                     self.avatar_mime_type = vcard_[i]['TYPE']
 
-                scale = self.window.get_scale_factor()
+                scale = self.get_scale_factor()
                 surface = app.interface.get_avatar(
                     self.avatar_sha, AvatarSize.VCARD, scale)
                 if surface is None:
@@ -319,7 +323,7 @@ class ProfileWindow:
         if app.connections[self.account].connected < 2:
             dialogs.ErrorDialog(_('You are not connected to the server'),
                     _('Without a connection, you can not publish your contact '
-                    'information.'), transient_for=self.window)
+                    'information.'), transient_for=self)
             return
         vcard_, sha = self.make_vcard()
         nick = ''
@@ -344,7 +348,7 @@ class ProfileWindow:
         if self.update_progressbar_timeout_id is not None:
             GLib.source_remove(self.update_progressbar_timeout_id)
             self.update_progressbar_timeout_id = None
-        self.window.destroy()
+        self.destroy()
 
     def _nec_vcard_not_published(self, obj):
         if obj.conn.name != self.account:
@@ -361,7 +365,7 @@ class ProfileWindow:
             self.update_progressbar_timeout_id = None
         dialogs.InformationDialog(_('vCard publication failed'),
             _('There was an error while publishing your personal information, '
-            'try again later.'), transient_for=self.window)
+            'try again later.'), transient_for=self)
 
     def on_cancel_button_clicked(self, widget):
-        self.window.destroy()
+        self.destroy()
