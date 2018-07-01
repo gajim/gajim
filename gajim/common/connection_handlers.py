@@ -50,7 +50,6 @@ from gajim.common import jingle_xtls
 from gajim.common import configpaths
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
-from gajim.common.pubsub import ConnectionPubSub
 from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
@@ -339,15 +338,15 @@ class ConnectionPEP(object):
         if message:
             i = item.addChild('text')
             i.addData(message)
-        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_ACTIVITY, item,
-            '0')
+        self.get_module('PubSub').send_pb_publish(
+            '', nbxmpp.NS_ACTIVITY, item, '0')
 
     def retract_activity(self):
         if not self.pep_supported:
             return
         self.send_activity(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_ACTIVITY, '0')
+        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_ACTIVITY, '0')
 
     def send_mood(self, mood, message=None):
         if self.connected == 1:
@@ -363,14 +362,14 @@ class ConnectionPEP(object):
         if message:
             i = item.addChild('text')
             i.addData(message)
-        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_MOOD, item, '0')
+        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_MOOD, item, '0')
 
     def retract_mood(self):
         if not self.pep_supported:
             return
         self.send_mood(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_MOOD, '0')
+        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_MOOD, '0')
 
     def send_tune(self, artist='', title='', source='', track=0, length=0,
     items=None):
@@ -399,14 +398,14 @@ class ConnectionPEP(object):
             i.addData(length)
         if items:
             item.addChild(payload=items)
-        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_TUNE, item, '0')
+        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_TUNE, item, '0')
 
     def retract_tune(self):
         if not self.pep_supported:
             return
         self.send_tune(None)
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_TUNE, '0')
+        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_TUNE, '0')
 
     def send_nickname(self, nick):
         if self.connected == 1:
@@ -418,13 +417,13 @@ class ConnectionPEP(object):
             return
         item = nbxmpp.Node('nick', {'xmlns': nbxmpp.NS_NICK})
         item.addData(nick)
-        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_NICK, item, '0')
+        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_NICK, item, '0')
 
     def retract_nickname(self):
         if not self.pep_supported:
             return
 
-        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_NICK, '0')
+        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_NICK, '0')
 
     def send_location(self, info):
         if self.connected == 1:
@@ -439,14 +438,14 @@ class ConnectionPEP(object):
             if info.get(field, None):
                 i = item.addChild(field)
                 i.addData(info[field])
-        self._pubsub_connection.send_pb_publish('', nbxmpp.NS_LOCATION, item, '0')
+        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_LOCATION, item, '0')
 
     def retract_location(self):
         if not self.pep_supported:
             return
         self.send_location({})
         # not all client support new XEP, so we still retract
-        self._pubsub_connection.send_pb_retract('', nbxmpp.NS_LOCATION, '0')
+        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_LOCATION, '0')
 
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
@@ -915,7 +914,7 @@ class ConnectionHandlersBase:
 
 class ConnectionHandlers(ConnectionArchive313,
 ConnectionSocks5Bytestream, ConnectionDisco,
-ConnectionCommands, ConnectionPubSub, ConnectionPEP, ConnectionCaps,
+ConnectionCommands, ConnectionPEP, ConnectionCaps,
 ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream,
 ConnectionHTTPUpload):
     def __init__(self):
@@ -923,7 +922,6 @@ ConnectionHTTPUpload):
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
         ConnectionCommands.__init__(self)
-        ConnectionPubSub.__init__(self)
         ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
             pubsub_connection=self)
         ConnectionHTTPUpload.__init__(self)
@@ -949,8 +947,6 @@ ConnectionHTTPUpload):
 
         self.privacy_default_list = None
 
-        app.nec.register_incoming_event(PrivateStorageBookmarksReceivedEvent)
-        app.nec.register_incoming_event(BookmarksReceivedEvent)
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(StreamOtherHostReceivedEvent)
         app.nec.register_incoming_event(MessageReceivedEvent)
@@ -961,8 +957,6 @@ ConnectionHTTPUpload):
 
         app.ged.register_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
-        app.ged.register_event_handler('private-storage-bookmarks-received',
-            ged.CORE, self._nec_private_storate_bookmarks_received)
         app.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
         app.ged.register_event_handler('iq-error-received', ged.CORE,
@@ -988,12 +982,9 @@ ConnectionHTTPUpload):
         ConnectionHandlersBase.cleanup(self)
         ConnectionCaps.cleanup(self)
         ConnectionArchive313.cleanup(self)
-        ConnectionPubSub.cleanup(self)
         ConnectionHTTPUpload.cleanup(self)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
-        app.ged.remove_event_handler('private-storage-bookmarks-received',
-            ged.CORE, self._nec_private_storate_bookmarks_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
         app.ged.remove_event_handler('iq-error-received', ged.CORE,
@@ -1143,28 +1134,6 @@ ConnectionHTTPUpload):
             app.nec.push_incoming_event(AgentInfoErrorReceivedEvent(None,
                 conn=self, stanza=obj.stanza))
             return True
-
-    def _nec_private_storate_bookmarks_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        app.log('bookmarks').info('Received Bookmarks (PrivateStorage)')
-        resend_to_pubsub = False
-        bm_jids = [b['jid'] for b in self.bookmarks]
-        for bm in obj.bookmarks:
-            if bm['jid'] not in bm_jids:
-                self.bookmarks.append(bm)
-                # We got a bookmark that was not in pubsub
-                resend_to_pubsub = True
-        if resend_to_pubsub:
-            self.store_bookmarks('pubsub')
-
-    def _PrivateCB(self, con, iq_obj):
-        """
-        Private Data (XEP 048 and 049)
-        """
-        log.debug('PrivateCB')
-        app.nec.push_incoming_event(PrivateStorageReceivedEvent(None,
-            conn=self, stanza=iq_obj))
 
     def _SecLabelCB(self, con, iq_obj):
         """
@@ -1540,8 +1509,8 @@ ConnectionHTTPUpload):
             # ask our VCard
             self.get_module('VCardTemp').request_vcard()
 
-        # Get bookmarks from private namespace
-        self.get_bookmarks()
+        # Get bookmarks
+        self.get_module('Bookmarks').get_bookmarks()
 
         # Get annotations from private namespace
         self.get_module('Annotations').get_annotations()
@@ -1645,7 +1614,6 @@ ConnectionHTTPUpload):
             nbxmpp.NS_MUC_OWNER)
         con.RegisterHandler('iq', self._MucAdminCB, 'result',
             nbxmpp.NS_MUC_ADMIN)
-        con.RegisterHandler('iq', self._PrivateCB, 'result', nbxmpp.NS_PRIVATE)
         con.RegisterHandler('iq', self._SecLabelCB, 'result',
             nbxmpp.NS_SECLABEL_CATALOG)
         con.RegisterHandler('iq', self._CommandExecuteCB, 'set',
@@ -1657,8 +1625,6 @@ ConnectionHTTPUpload):
         con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
-        con.RegisterHandler('iq', self._PubSubCB, 'result')
-        con.RegisterHandler('iq', self._PubSubErrorCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'result')
         con.RegisterHandler('iq', self._JingleCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)

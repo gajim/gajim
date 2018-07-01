@@ -172,14 +172,15 @@ show_bookmarked=False, force_resource=False):
     rooms2 = [] # a list of (room_jid, account) tuple
     r_jids = [] # list of room jids
     for account in connected_accounts:
-        for room in app.connections[account].bookmarks:
-            r_jid = room['jid']
-            if r_jid in r_jids:
+        con = app.connections[account]
+        boomarks = con.get_module('Bookmarks').bookmarks
+        for jid, bookmark in boomarks.items():
+            if jid in r_jids:
                 continue
-            if r_jid not in app.gc_connected[account] or not \
-            app.gc_connected[account][r_jid]:
-                rooms2.append((r_jid, account))
-                r_jids.append(r_jid)
+            if jid not in app.gc_connected[account] or not \
+            app.gc_connected[account][jid]:
+                rooms2.append((jid, account))
+                r_jids.append(jid)
 
     if not rooms2:
         return
@@ -675,7 +676,9 @@ def get_groupchat_menu(control_id):
 
 
 def get_bookmarks_menu(account, rebuild=False):
-    if not app.connections[account].bookmarks:
+    con = app.connections[account]
+    boomarks = con.get_module('Bookmarks').bookmarks
+    if not boomarks:
         return None
     menu = Gio.Menu()
 
@@ -688,12 +691,12 @@ def get_bookmarks_menu(account, rebuild=False):
 
     # Build Bookmarks
     section = Gio.Menu()
-    for bookmark in app.connections[account].bookmarks:
+    for jid, bookmark in boomarks.items():
         name = bookmark['name']
         if not name:
             # No name was given for this bookmark.
             # Use the first part of JID instead...
-            name = bookmark['jid'].split("@")[0]
+            name = jid.split("@")[0]
 
         # Shorten long names
         name = (name[:42] + '..') if len(name) > 42 else name
@@ -703,7 +706,7 @@ def get_bookmarks_menu(account, rebuild=False):
 
         # Create Variant Dict
         dict_ = {'account': GLib.Variant('s', account),
-                 'jid': GLib.Variant('s', bookmark['jid'])}
+                 'jid': GLib.Variant('s', jid)}
         if bookmark['nick']:
             dict_['nick'] = GLib.Variant('s', bookmark['nick'])
         if bookmark['password']:

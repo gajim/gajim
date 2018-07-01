@@ -348,13 +348,10 @@ class GroupchatControl(ChatControlBase):
         self.room_jid = self.contact.jid
         self.nick = nick
         self.new_nick = ''
-        self.name = ''
-        for bm in app.connections[self.account].bookmarks:
-            if bm['jid'] == self.room_jid:
-                self.name = bm['name']
-                break
-        if not self.name:
-            self.name = self.room_jid.split('@')[0]
+
+        bm_module = app.connections[self.account].get_module('Bookmarks')
+        self.name = bm_module.get_name_from_bookmark(self.room_jid)
+
         self.contact.name = self.name
 
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
@@ -589,13 +586,9 @@ class GroupchatControl(ChatControlBase):
         # Bookmarks
         con = app.connections[self.account]
         bookmark_support = con.bookmarks_available()
-        not_bookmarked = True
-        for bm in con.bookmarks:
-            if bm['jid'] == self.room_jid:
-                not_bookmarked = False
-                break
+        bookmarked = self.room_jid in con.get_module('Bookmarks').bookmarks
         win.lookup_action('bookmark-' + self.control_id).set_enabled(
-            online and bookmark_support and not_bookmarked)
+            online and bookmark_support and not bookmarked)
 
         # Request Voice
         role = self.get_role(self.nick)
@@ -712,9 +705,10 @@ class GroupchatControl(ChatControlBase):
         Bookmark the room, without autojoin and not minimized
         """
         password = app.gc_passwords.get(self.room_jid, '')
-        app.interface.add_gc_bookmark(
-            self.account, self.name, self.room_jid,
-            '0', '0', password, self.nick)
+        con = app.connections[self.account]
+        con.get_module('Bookmarks').add_bookmark(
+            self.name, self.room_jid,
+            '1', '1', password, self.nick)
         self.update_actions()
 
     def _on_request_voice(self, action, param):

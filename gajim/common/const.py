@@ -119,6 +119,11 @@ class RequestAvatar(IntEnum):
     ROOM = 1
     USER = 2
 
+@unique
+class BookmarkStorageType(IntEnum):
+    PRIVATE = 0
+    PUBSUB = 1
+
 SSLError = {
     2: _("Unable to get issuer certificate"),
     3: _("Unable to get certificate CRL"),

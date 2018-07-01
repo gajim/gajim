@@ -485,7 +485,8 @@ class AvatarNotificationPEP(AbstractPEP):
         for item in items.getTags('item'):
             metadata = item.getTag('metadata')
             if metadata is None:
-                app.log('avatar').warning('Invalid avatar stanza:\n%s', items)
+                app.log('c.m.user_avatar').warning(
+                    'Invalid avatar stanza:\n%s', items)
                 break
             info = item.getTag('metadata').getTag('info')
             if info is not None:
@@ -498,23 +499,22 @@ class AvatarNotificationPEP(AbstractPEP):
         con = app.connections[account]
         if self.avatar is None:
             # Remove avatar
-            app.log('avatar').info('Remove (Pubsub): %s', jid)
+            app.log('c.m.user_avatar').info('Remove: %s', jid)
             app.contacts.set_avatar(account, jid, None)
             own_jid = con.get_own_jid().getStripped()
             app.logger.set_avatar_sha(own_jid, jid, None)
             app.interface.update_avatar(account, jid)
         else:
             sha = app.contacts.get_avatar_sha(account, jid)
-            app.log('avatar').info(
-                'Update (Pubsub): %s %s', jid, self.avatar['id'])
+            app.log('c.m.user_avatar').info(
+                'Update: %s %s', jid, self.avatar['id'])
             if sha == self.avatar['id']:
-                app.log('avatar').info(
-                    'Avatar already known (Pubsub): %s %s',
+                app.log('c.m.user_avatar').info(
+                    'Avatar already known: %s %s',
                     jid, self.avatar['id'])
                 return
-            app.log('avatar').info('Request (Pubsub): %s', jid)
-            con.get_pubsub_avatar(jid, 'urn:xmpp:avatar:data',
-                                  self.avatar['id'])
+            con.get_module('UserAvatar').get_pubsub_avatar(
+                jid, self.avatar['id'])
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [

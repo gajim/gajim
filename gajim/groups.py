@@ -67,7 +67,9 @@ class GroupsPostWindow:
         item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)])
 
         # publish it to node
-        app.connections[self.account].send_pb_publish(self.servicejid, self.groupid, item, '0')
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_publish(
+            self.servicejid, self.groupid, item, '0')
 
         # close the window
         self.window.destroy()

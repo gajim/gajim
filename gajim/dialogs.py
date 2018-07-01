@@ -2520,7 +2520,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.autojoin_switch.set_sensitive(switch.get_active())
 
     def _add_bookmark(self, account, nickname, password):
-        if not app.connections[account].private_storage_supported:
+        con = app.connections[account]
+        if not con.private_storage_supported:
             return
 
         add_bookmark = self.bookmark_switch.get_active()
@@ -2531,8 +2532,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Add as bookmark, with autojoin and not minimized
         name = app.get_nick_from_jid(self.room_jid)
-        app.interface.add_gc_bookmark(
-            account, name, self.room_jid, autojoin, 1, password, nickname)
+        con.get_module('Bookmarks').add_bookmark(
+            name, self.room_jid, autojoin, 1, password, nickname)
 
     def _on_destroy(self, *args):
         if self.minimal_mode == 0:
@@ -2784,10 +2785,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
         show_account = len(self.accounts) > 1
         for account in self.accounts:
             self.new_groupchat_rows[account] = None
-            bookmarks = app.connections[account].bookmarks
+            con = app.connections[account]
+            bookmarks = con.get_module('Bookmarks').bookmarks
             groupchats = {}
-            for bookmark in bookmarks:
-                groupchats[bookmark['jid']] = bookmark['name']
+            for jid, bookmark in bookmarks.items():
+                groupchats[jid] = bookmark['name']
 
             for jid in app.contacts.get_gc_list(account):
                 if jid in groupchats:

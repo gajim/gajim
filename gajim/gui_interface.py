@@ -824,17 +824,7 @@ class Interface:
             self.instances[account]['sub_request'][obj.jid].destroy()
 
     def handle_event_bookmarks(self, obj):
-        # ('BOOKMARKS', account, [{name,jid,autojoin,password,nick}, {}])
-        # We received a bookmark item from the server (JEP48)
-        # Auto join GC windows if necessary
-
-        gui_menu_builder.build_bookmark_menu(obj.conn.name)
-        invisible_show = app.SHOW_LIST.index('invisible')
-        # do not autojoin if we are invisible
-        if obj.conn.connected == invisible_show:
-            return
-
-        GLib.idle_add(self.auto_join_bookmarks, obj.conn.name)
+        gui_menu_builder.build_bookmark_menu(obj.account)
 
     def handle_event_file_send_error(self, account, array):
         jid = array[0]
@@ -1728,7 +1718,6 @@ class Interface:
             if isinstance(ctrl, ChatControlBase):
                 ctrl.scroll_to_end()
 
-
     def join_gc_minimal(self, account, room_jid, password=None,
     transient_for=None):
         if account is not None:
@@ -1738,9 +1727,10 @@ class Interface:
                 app.interface.join_gc_room(account, room_jid, '', '')
                 return
 
-            for bookmark in app.connections[account].bookmarks:
-                if bookmark['jid'] != room_jid:
-                    continue
+            con = app.connections[account]
+            bookmarks = con.get_module('Bookmarks').bookmarks
+            bookmark = bookmarks.get(room_jid, None)
+            if bookmark is not None:
                 app.interface.join_gc_room(
                     account, room_jid, bookmark['nick'], bookmark['password'])
                 return
@@ -2468,51 +2458,6 @@ class Interface:
         if not os.path.isfile(path):
             return False
         return True
-
-    def auto_join_bookmarks(self, account):
-        """
-        Autojoin bookmarked GCs that have 'auto join' on for this account
-        """
-        for bm in app.connections[account].bookmarks:
-            if bm['autojoin'] in ('1', 'true'):
-                jid = bm['jid']
-                # Only join non-opened groupchats. Opened one are already
-                # auto-joined on re-connection
-                if not jid in app.gc_connected[account]:
-                    # we are not already connected
-                    minimize = bm['minimize'] in ('1', 'true')
-                    self.join_gc_room(account, jid, bm['nick'],
-                        bm['password'], minimize = minimize)
-
-    def add_gc_bookmark(self, account, name, jid, autojoin, minimize, password,
-                        nick):
-        """
-        Add a bookmark for this account, sorted in bookmark list
-        """
-        bm = {
-                'name': name,
-                'jid': jid,
-                'autojoin': autojoin,
-                'minimize': minimize,
-                'password': password,
-                'nick': nick
-        }
-        place_found = False
-        index = 0
-        # check for duplicate entry and respect alpha order
-        for bookmark in app.connections[account].bookmarks:
-            if bookmark['jid'] == bm['jid']:
-                return
-            if bookmark['name'] > bm['name']:
-                place_found = True
-                break
-            index += 1
-        if place_found:
-            app.connections[account].bookmarks.insert(index, bm)
-        else:
-            app.connections[account].bookmarks.append(bm)
-        app.connections[account].store_bookmarks()
-        gui_menu_builder.build_bookmark_menu(account)
 
     # does JID exist only within a groupchat?
     def is_pm_contact(self, fjid, account):

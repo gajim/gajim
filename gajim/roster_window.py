@@ -2154,7 +2154,8 @@ class RosterWindow:
                             auto=auto)
             if was_invisible and status != 'offline':
                 # We come back from invisible, join bookmarks
-                app.interface.auto_join_bookmarks(account)
+                con = app.connections[account]
+                con.get_module('Bookmarks').auto_join_bookmarks()
 
 
     def chg_contact_status(self, contact, show, status, account):
@@ -2712,9 +2713,9 @@ class RosterWindow:
 ### FIXME: order callbacks in itself...
 ################################################################################
 
-    def on_bookmark_menuitem_activate(self, widget, account, bookmark):
-        app.interface.join_gc_room(account, bookmark['jid'], bookmark['nick'],
-                bookmark['password'])
+    def on_bookmark_menuitem_activate(self, widget, account, jid, bookmark):
+        app.interface.join_gc_room(
+            account, jid, bookmark['nick'], bookmark['password'])
 
     def on_info(self, widget, contact, account):
         """
@@ -5439,16 +5440,17 @@ class RosterWindow:
         gc_sub_menu.append(item)
 
         # User has at least one bookmark.
-        if app.connections[account].bookmarks:
+        con = app.connections[account]
+        if con.get_module('Bookmarks').bookmarks:
             item = Gtk.SeparatorMenuItem.new()
             gc_sub_menu.append(item)
 
-        for bookmark in app.connections[account].bookmarks:
+        for jid, bookmark in con.get_module('Bookmarks').bookmarks.items():
             name = bookmark['name']
             if not name:
                 # No name was given for this bookmark.
                 # Use the first part of JID instead...
-                name = bookmark['jid'].split("@")[0]
+                name = jid.split("@")[0]
 
             # Shorten long names
             name = (name[:42] + '..') if len(name) > 42 else name
@@ -5456,8 +5458,9 @@ class RosterWindow:
             # Do not use underline.
             item = Gtk.MenuItem.new_with_label(name)
             item.set_use_underline(False)
-            item.connect('activate', self.on_bookmark_menuitem_activate,
-                    account, bookmark)
+            item.connect(
+                'activate', self.on_bookmark_menuitem_activate,
+                account, jid, bookmark)
             gc_sub_menu.append(item)
 
     def show_appropriate_context_menu(self, event, iters):

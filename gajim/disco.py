@@ -1757,29 +1757,29 @@ class MucBrowser(AgentBrowser):
             self.join_button = None
 
     def on_bookmark_button_clicked(self, *args):
+        con = app.connections[self.account]
         model, iter = self.window.services_treeview.get_selection().get_selected()
         if not iter:
             return
         name = app.config.get_per('accounts', self.account, 'name')
         room_jid = model[iter][0]
         bm = {
-                'name': room_jid.split('@')[0],
-                'jid': room_jid,
-                'autojoin': '0',
-                'minimize': '0',
-                'password': '',
-                'nick': name
+            'name': room_jid.split('@')[0],
+            'autojoin': '0',
+            'minimize': '0',
+            'password': '',
+            'nick': name
         }
 
-        for bookmark in app.connections[self.account].bookmarks:
-            if bookmark['jid'] == bm['jid']:
-                dialogs.ErrorDialog( _('Bookmark already set'),
-                _('Group Chat "%s" is already in your bookmarks.') % bm['jid'],
+        if room_jid in con.get_module('Bookmarks').bookmarks:
+            dialogs.ErrorDialog(
+                _('Bookmark already set'),
+                _('Group Chat "%s" is already in your bookmarks.') % room_jid,
                 transient_for=self.window.window)
-                return
+            return
 
-        app.connections[self.account].bookmarks.append(bm)
-        app.connections[self.account].store_bookmarks()
+        con.get_module('Bookmarks').bookmarks[room_jid] = bm
+        con.get_module('Bookmarks').store_bookmarks()
 
         gui_menu_builder.build_bookmark_menu(self.account)
 
@@ -1951,8 +1951,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button = None
         self.unsubscribe_button = None
 
-        app.connections[account].send_pb_subscription_query(jid,
-            self._on_pep_subscriptions)
+        con = app.connections[account]
+        con.get_module('PubSub').send_pb_subscription_query(
+            jid, self._on_pep_subscriptions)
 
     def _create_treemodel(self):
         """
@@ -2122,10 +2123,11 @@ class DiscussionGroupsBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if iter_ is None: return
 
-        groupnode = model.get_value(iter_, 1)   # 1 = groupnode
+        node = model.get_value(iter_, 1)   # 1 = groupnode
 
-        app.connections[self.account].send_pb_subscribe(self.jid, groupnode,
-            self._on_pep_subscribe, groupnode)
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_subscribe(
+            self.jid, node, self._on_pep_subscribe, groupnode=node)
 
     def on_unsubscribe_button_clicked(self, widget):
         """
@@ -2134,10 +2136,11 @@ class DiscussionGroupsBrowser(AgentBrowser):
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if iter_ is None: return
 
-        groupnode = model.get_value(iter_, 1) # 1 = groupnode
+        node = model.get_value(iter_, 1) # 1 = groupnode
 
-        app.connections[self.account].send_pb_unsubscribe(self.jid, groupnode,
-            self._on_pep_unsubscribe, groupnode)
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_unsubscribe(
+            self.jid, node, self._on_pep_unsubscribe, groupnode=node)
 
     def _on_pep_subscriptions(self, conn, request):
         """
@@ -2168,8 +2171,6 @@ class DiscussionGroupsBrowser(AgentBrowser):
         # we now know subscriptions, update button states
         self.update_actions()
 
-        raise nbxmpp.NodeProcessed
-
     def _on_pep_subscribe(self, conn, request, groupnode):
         """
         We have just subscribed to a node. Update UI
@@ -2184,8 +2185,6 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         self.update_actions()
 
-        raise nbxmpp.NodeProcessed
-
     def _on_pep_unsubscribe(self, conn, request, groupnode):
         """
         We have just unsubscribed from a node. Update UI
@@ -2199,8 +2198,6 @@ class DiscussionGroupsBrowser(AgentBrowser):
                 break
 
         self.update_actions()
-
-        raise nbxmpp.NodeProcessed
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()

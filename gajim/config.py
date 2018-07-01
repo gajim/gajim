@@ -1900,11 +1900,13 @@ class ManageBookmarksWindow:
             iter_ = self.treestore.append(None, [None, account, None, None,
                     None, None, None, None])
 
-            for bookmark in app.connections[account].bookmarks:
+            con = app.connections[account]
+            bookmarks = con.get_module('Bookmarks').bookmarks
+            for jid, bookmark in bookmarks.items():
                 if not bookmark['name']:
                     # No name was given for this bookmark.
                     # Use the first part of JID instead...
-                    name = bookmark['jid'].split("@")[0]
+                    name = jid.split("@")[0]
                     bookmark['name'] = name
 
                 # make '1', '0', 'true', 'false' (or other) to True/False
@@ -1920,7 +1922,7 @@ class ManageBookmarksWindow:
                 self.treestore.append(iter_, [
                                 account,
                                 bookmark['name'],
-                                bookmark['jid'],
+                                jid,
                                 autojoin,
                                 minimize,
                                 bookmark['password'],
@@ -2047,15 +2049,17 @@ class ManageBookmarksWindow:
         Parse the treestore data into our new bookmarks array, then send the new
         bookmarks to the server.
         """
+
         (model, iter_) = self.selection.get_selected()
         if iter_ and model.iter_parent(iter_):
-            #bookmark selected, check it
+            # bookmark selected, check it
             if not self.check_valid_bookmark():
                 return
 
         for account in self.treestore:
             acct = account[1]
-            app.connections[acct].bookmarks = []
+            con = app.connections[acct]
+            con.get_module('Bookmarks').bookmarks = {}
 
             for bm in account.iterchildren():
                 # Convert True/False/None to '1' or '0'
@@ -2067,13 +2071,17 @@ class ManageBookmarksWindow:
                 nick = bm[6]
 
                 # create the bookmark-dict
-                bmdict = { 'name': name, 'jid': jid, 'autojoin': autojoin,
-                    'minimize': minimize, 'password': pw, 'nick': nick,
+                bmdict = {
+                    'name': name,
+                    'autojoin': autojoin,
+                    'minimize': minimize,
+                    'password': pw,
+                    'nick': nick,
                     'print_status': bm[7]}
 
-                app.connections[acct].bookmarks.append(bmdict)
+                con.get_module('Bookmarks').bookmarks[jid] = bmdict
 
-            app.connections[acct].store_bookmarks()
+            con.get_module('Bookmarks').store_bookmarks()
             gui_menu_builder.build_bookmark_menu(acct)
         self.window.destroy()
 
@@ -2900,8 +2908,10 @@ class ManagePEPServicesWindow:
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
         our_jid = app.get_jid_from_account(self.account)
-        app.connections[self.account].send_pb_delete(our_jid, node,
-            on_ok=self.node_removed, on_fail=self.node_not_removed)
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_delete(our_jid, node,
+                           on_ok=self.node_removed,
+                           on_fail=self.node_not_removed)
 
     def on_configure_button_clicked(self, widget):
         selection = self.treeview.get_selection()
@@ -2910,13 +2920,15 @@ class ManagePEPServicesWindow:
         model, iter_ = selection.get_selected()
         node = model[iter_][0]
         our_jid = app.get_jid_from_account(self.account)
-        app.connections[self.account].request_pb_configuration(our_jid, node)
+        con = app.connections[self.account]
+        con.get_module('PubSub').request_pb_configuration(our_jid, node)
 
     def _nec_pep_config_received(self, obj):
         def on_ok(form, node):
             form.type_ = 'submit'
             our_jid = app.get_jid_from_account(self.account)
-            app.connections[self.account].send_pb_configure(our_jid, node, form)
+            con = app.connections[self.account]
+            con.get_module('PubSub').send_pb_configure(our_jid, node, form)
         window = dialogs.DataFormWindow(obj.form, (on_ok, obj.node))
         title = _('Configure %s') % obj.node
         window.set_title(title)

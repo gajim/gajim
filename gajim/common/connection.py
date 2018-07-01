@@ -73,6 +73,9 @@ from gajim.common.modules.last_activity import LastActivity
 from gajim.common.modules.http_auth import HTTPAuth
 from gajim.common.modules.vcard_temp import VCardTemp
 from gajim.common.modules.vcard_avatars import VCardAvatars
+from gajim.common.modules.pubsub import PubSub
+from gajim.common.modules.bookmarks import Bookmarks
+from gajim.common.modules.user_avatar import UserAvatar
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -113,7 +116,6 @@ class CommonConnection:
         self.old_show = ''
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
-        self.bookmarks = []
 
         self.blocked_list = []
         self.blocked_contacts = []
@@ -491,18 +493,6 @@ class CommonConnection:
     def account_changed(self, new_name):
         self.name = new_name
 
-    def get_bookmarks(self):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def store_bookmarks(self):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def get_metacontacts(self):
         """
         To be implemented by derived classes
@@ -670,6 +660,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('HTTPAuth', HTTPAuth, self)
         self.register_module('VCardTemp', VCardTemp, self)
         self.register_module('VCardAvatars', VCardAvatars, self)
+        self.register_module('PubSub', PubSub, self)
+        self.register_module('Bookmarks', Bookmarks, self)
+        self.register_module('UserAvatar', UserAvatar, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -1774,8 +1767,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             # ask our VCard
             self.get_module('VCardTemp').request_vcard()
 
-            # Get bookmarks from private namespace
-            self.get_bookmarks()
+            # Get bookmarks
+            self.get_module('Bookmarks').get_bookmarks()
 
             # Get annotations
             self.get_module('Annotations').get_annotations()
@@ -1916,8 +1909,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.pubsub_publish_options_supported = True
                 else:
                     # Remove stored bookmarks accessible to everyone.
-                    self.send_pb_purge(our_jid, 'storage:bookmarks')
-                    self.send_pb_delete(our_jid, 'storage:bookmarks')
+                    self.get_module('Bookmarks').purge_pubsub_bookmarks()
 
             if obj.fjid == hostname:
                 if nbxmpp.NS_SECLABEL in obj.features:
@@ -2255,99 +2247,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             return True
         return False
 
-    def _request_bookmarks_xml(self):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='storage', namespace='storage:bookmarks')
-        self.connection.send(iq)
-        app.log('bookmarks').info('Request Bookmarks (PrivateStorage)')
-
-    def _check_bookmarks_received(self):
-        if not self.bookmarks:
-            self._request_bookmarks_xml()
-
-    def get_bookmarks(self, storage_type=None):
-        """
-        Get Bookmarks from storage or PubSub if supported as described in XEP
-        0048
-
-        storage_type can be set to xml to force request to xml storage
-        """
-        if not app.account_is_connected(self.name):
-            return
-
-        if storage_type != 'xml':
-            if self.pep_supported and self.pubsub_publish_options_supported:
-                self.send_pb_retrieve('', 'storage:bookmarks')
-                app.log('bookmarks').info('Request Bookmarks (PubSub)')
-                # some server (ejabberd) are so slow to answer that we
-                # request via XML if we don't get answer in the next 30 seconds
-                app.idlequeue.set_alarm(self._check_bookmarks_received, 30)
-                return
-
-        self._request_bookmarks_xml()
-
-    def get_bookmarks_storage_node(self):
-        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
-        storage_node = nbxmpp.Node(
-            tag='storage', attrs={'xmlns': 'storage:bookmarks'})
-        for bm in self.bookmarks:
-            conf_node = storage_node.addChild(name="conference")
-            conf_node.setAttr('jid', bm['jid'])
-            conf_node.setAttr('autojoin', bm['autojoin'])
-            conf_node.setAttr('name', bm['name'])
-            conf_node.setTag(
-                'minimize', namespace=NS_GAJIM_BM).setData(bm['minimize'])
-            # Only add optional elements if not empty
-            # Note: need to handle both None and '' as empty
-            #   thus shouldn't use "is not None"
-            if bm.get('nick', None):
-                conf_node.setTagData('nick', bm['nick'])
-            if bm.get('password', None):
-                conf_node.setTagData('password', bm['password'])
-            if bm.get('print_status', None):
-                conf_node.setTag(
-                    'print_status',
-                    namespace=NS_GAJIM_BM).setData(bm['print_status'])
-        return storage_node
-
-    @staticmethod
-    def get_bookmark_publish_options():
-        options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
-                              attrs={'type': 'submit'})
-        f = options.addChild('field',
-                             attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
-        f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-        f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-        f.setTagData('value', 'whitelist')
-        return options
-
-    def store_bookmarks(self, storage_type=None):
-        """
-        Send bookmarks to the storage namespace or PubSub if supported
-
-        storage_type can be set to 'pubsub' or 'xml' so store in only one method
-        else it will be stored on both
-        """
-        if not app.account_is_connected(self.name):
-            return
-
-        storage_node = self.get_bookmarks_storage_node()
-
-        if storage_type != 'xml':
-            if self.pep_supported and self.pubsub_publish_options_supported:
-                self.send_pb_publish(
-                    '', 'storage:bookmarks', storage_node, 'current',
-                    options=self.get_bookmark_publish_options())
-                app.log('bookmarks').info('Bookmarks published (PubSub)')
-
-        if storage_type != 'pubsub':
-            iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE, payload=storage_node)
-            self.connection.send(iq)
-            app.log('bookmarks').info('Bookmarks published (PrivateStorage)')
-
     def get_roster_delimiter(self):
         """
         Get roster group delimiter from storage as described in XEP 0083
@@ -2614,11 +2513,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             destroy.setAttr('jid', jid)
         self.connection.send(iq)
         i = 0
-        for bm in self.bookmarks:
-            if bm['jid'] == room_jid:
-                del self.bookmarks[i]
-                break
-            i += 1
+        self.get_module('Bookmarks').bookmarks.pop(jid, None)
         self.store_bookmarks()
 
     def send_gc_status(self, nick, jid, show, status, auto=False):
