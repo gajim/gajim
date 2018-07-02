@@ -295,7 +295,6 @@ class ConnectionPEP(object):
         self._account = new_name
 
     def reset_awaiting_pep(self):
-        self.to_be_sent_activity = None
         self.to_be_sent_mood = None
         self.to_be_sent_tune = None
         self.to_be_sent_nick = None
@@ -305,8 +304,6 @@ class ConnectionPEP(object):
         """
         Send pep info that were waiting for connection
         """
-        if self.to_be_sent_activity:
-            self.send_activity(*self.to_be_sent_activity)
         if self.to_be_sent_mood:
             self.send_mood(*self.to_be_sent_mood)
         if self.to_be_sent_tune:
@@ -316,37 +313,6 @@ class ConnectionPEP(object):
         if self.to_be_sent_location:
             self.send_location(self.to_be_sent_location)
         self.reset_awaiting_pep()
-
-    def _pubsubEventCB(self, xmpp_dispatcher, msg):
-        ''' Called when we receive <message /> with pubsub event. '''
-        app.nec.push_incoming_event(PEPReceivedEvent(None, conn=self,
-            stanza=msg))
-
-    def send_activity(self, activity, subactivity=None, message=None):
-        if self.connected == 1:
-            # We are connecting, keep activity in mem and send it when we'll be
-            # connected
-            self.to_be_sent_activity = (activity, subactivity, message)
-            return
-        if not self.pep_supported:
-            return
-        item = nbxmpp.Node('activity', {'xmlns': nbxmpp.NS_ACTIVITY})
-        if activity:
-            i = item.addChild(activity)
-        if subactivity:
-            i.addChild(subactivity)
-        if message:
-            i = item.addChild('text')
-            i.addData(message)
-        self.get_module('PubSub').send_pb_publish(
-            '', nbxmpp.NS_ACTIVITY, item, '0')
-
-    def retract_activity(self):
-        if not self.pep_supported:
-            return
-        self.send_activity(None)
-        # not all client support new XEP, so we still retract
-        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_ACTIVITY, '0')
 
     def send_mood(self, mood, message=None):
         if self.connected == 1:
@@ -1187,14 +1153,16 @@ ConnectionHTTPUpload):
             app.config.set_per('accounts', self.name, 'roster_version',
                 obj.version)
 
-    def _messageCB(self, con, msg):
+    def _messageCB(self, con, stanza):
         """
         Called when we receive a message
         """
+        if nbxmpp.NS_PUBSUB_EVENT in stanza.getProperties():
+            return
         log.debug('MessageCB')
 
         app.nec.push_incoming_event(NetworkEvent('raw-message-received',
-            conn=self, stanza=msg, account=self.name))
+            conn=self, stanza=stanza, account=self.name))
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza
@@ -1518,6 +1486,7 @@ ConnectionHTTPUpload):
         # Inform GUI we just signed in
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))
         self.send_awaiting_pep()
+        self.get_module('PEP').send_stored_publish()
         self.continue_connect_info = None
 
     def _PubkeyGetCB(self, con, iq_obj):
@@ -1583,11 +1552,6 @@ ConnectionHTTPUpload):
         # that defines handlers
         con.RegisterHandler('message', self._messageCB)
         con.RegisterHandler('presence', self._presenceCB)
-        # We use makefirst so that this handler is called before _messageCB, and
-        # can prevent calling it when it's not needed.
-        # We also don't check for namespace, else it cannot stop _messageCB to
-        # be called
-        con.RegisterHandler('message', self._pubsubEventCB, makefirst=True)
         con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)
@@ -1645,6 +1609,5 @@ ConnectionHTTPUpload):
         con.RegisterHandler('iq', self._BlockingResultCB, 'result',
             nbxmpp.NS_BLOCKING)
 
-        for module in self.get_module_handlers():
-            for handler in module.handlers:
-                con.RegisterHandler(*handler)
+        for handler in self.get_module_handlers():
+            con.RegisterHandler(*handler)

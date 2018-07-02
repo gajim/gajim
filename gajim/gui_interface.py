@@ -99,7 +99,7 @@ from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
 from gajim import emoticons
-from gajim.common.const import AvatarSize, SSLError
+from gajim.common.const import AvatarSize, SSLError, PEPEventType, ACTIVITIES
 
 from gajim import roster_window
 from gajim import profile_window
@@ -2481,13 +2481,13 @@ class Interface:
             path = os.path.join(
                 configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
-        elif isinstance(pep_obj, pep.UserActivityPEP):
+        elif pep_obj == PEPEventType.ACTIVITY:
             pep_ = pep_obj._pep_specific_data
             activity = pep_['activity']
 
-            has_known_activity = activity in pep.ACTIVITIES
+            has_known_activity = activity in ACTIVITIES
             has_known_subactivity = (has_known_activity  and ('subactivity' in
-                pep_) and (pep_['subactivity'] in pep.ACTIVITIES[activity]))
+                pep_) and (pep_['subactivity'] in ACTIVITIES[activity]))
 
             if has_known_activity:
                 if has_known_subactivity:

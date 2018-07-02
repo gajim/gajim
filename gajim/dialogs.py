@@ -51,7 +51,7 @@ from gajim.common import pep
 from gajim.common import ged
 from gajim.common import const
 from gajim.options_dialog import OptionsDialog
-from gajim.common.const import Option, OptionKind, OptionType
+from gajim.common.const import Option, OptionKind, OptionType, ACTIVITIES
 
 from gajim.common import app
 from gajim.common import helpers
@@ -371,11 +371,11 @@ class ChangeActivityDialog:
         rbtns = {}
         group = None
 
-        for category in pep.ACTIVITIES:
+        for category in ACTIVITIES:
             item = self.xml.get_object(category + '_image')
             item.set_from_pixbuf(
                     gtkgui_helpers.load_activity_icon(category).get_pixbuf())
-            item.set_tooltip_text(pep.ACTIVITIES[category]['category'])
+            item.set_tooltip_text(ACTIVITIES[category]['category'])
 
             vbox = self.xml.get_object(category + '_vbox')
             vbox.set_border_width(5)
@@ -392,7 +392,7 @@ class ChangeActivityDialog:
             hbox = Gtk.HBox(homogeneous=False, spacing=5)
             hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                 activity), False, False, 0)
-            lbl = Gtk.Label(label='<b>' + pep.ACTIVITIES[category]['category'] \
+            lbl = Gtk.Label(label='<b>' + ACTIVITIES[category]['category'] \
                 + '</b>')
             lbl.set_use_markup(True)
             hbox.pack_start(lbl, False, False, 0)
@@ -402,7 +402,7 @@ class ChangeActivityDialog:
             vbox.pack_start(rbtns[act], False, False, 0)
 
             activities = []
-            for activity in pep.ACTIVITIES[category]:
+            for activity in ACTIVITIES[category]:
                 activities.append(activity)
             activities.sort()
             for activity in activities:
@@ -420,7 +420,7 @@ class ChangeActivityDialog:
                 hbox = Gtk.HBox(homogeneous=False, spacing=5)
                 hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
                         activity), False, False, 0)
-                hbox.pack_start(Gtk.Label(label=pep.ACTIVITIES[category][activity]),
+                hbox.pack_start(Gtk.Label(label=ACTIVITIES[category][activity]),
                         False, False, 0)
                 rbtns[act].connect('toggled', self.on_rbtn_toggled,
                         [category, activity])
@@ -430,8 +430,8 @@ class ChangeActivityDialog:
 
         self.default_radio = rbtns['doing_chores_other']
 
-        if self.activity in pep.ACTIVITIES:
-            if not self.subactivity in pep.ACTIVITIES[self.activity]:
+        if self.activity in ACTIVITIES:
+            if not self.subactivity in ACTIVITIES[self.activity]:
                 self.subactivity = 'other'
 
             rbtns[self.activity + '_' + self.subactivity].set_active(True)
@@ -682,9 +682,9 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         img = self.xml.get_object('activity_image')
         label = self.xml.get_object('activity_button_label')
         if 'activity' in self.pep_dict and self.pep_dict['activity'] in \
-           pep.ACTIVITIES:
+           ACTIVITIES:
             if 'subactivity' in self.pep_dict and self.pep_dict['subactivity'] \
-            in pep.ACTIVITIES[self.pep_dict['activity']]:
+            in ACTIVITIES[self.pep_dict['activity']]:
                 img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
                     self.pep_dict['activity'], self.pep_dict['subactivity']).\
                         get_pixbuf())

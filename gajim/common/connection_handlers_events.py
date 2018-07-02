@@ -1780,7 +1780,6 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 if entry:
                     app.nec.push_incoming_event(AtomEntryReceived(None,
                         conn=self.conn, node=entry))
-        raise nbxmpp.NodeProcessed
 
 class AtomEntryReceived(nec.NetworkIncomingEvent):
     name = 'atom-entry-received'

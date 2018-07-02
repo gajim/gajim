@@ -52,6 +52,7 @@ from gajim.common import i18n
 from gajim.common import app
 from gajim.common import pep
 from gajim.common import configpaths
+from gajim.common.const import PEPEventType, ACTIVITIES
 from gajim.filechoosers import AvatarSaveDialog
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
@@ -635,14 +636,13 @@ def get_pep_as_pixbuf(pep_class):
                 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         return icon
-    elif isinstance(pep_class, pep.UserActivityPEP):
-        assert not pep_class._retracted
+    elif pep_class == PEPEventType.ACTIVITY:
         pep_ = pep_class._pep_specific_data
         activity = pep_['activity']
 
-        has_known_activity = activity in pep.ACTIVITIES
+        has_known_activity = activity in ACTIVITIES
         has_known_subactivity = (has_known_activity  and ('subactivity' in pep_)
-                and (pep_['subactivity'] in pep.ACTIVITIES[activity]))
+                and (pep_['subactivity'] in ACTIVITIES[activity]))
 
         if has_known_activity:
             if has_known_subactivity:

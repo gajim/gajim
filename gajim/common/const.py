@@ -124,6 +124,108 @@ class BookmarkStorageType(IntEnum):
     PRIVATE = 0
     PUBSUB = 1
 
+@unique
+class PEPHandlerType(IntEnum):
+    NOTIFY = 0
+    RETRACT = 1
+
+@unique
+class PEPEventType(IntEnum):
+    ACTIVITY = 0
+
+
+ACTIVITIES = {
+    'doing_chores': {
+        'category': _('Doing Chores'),
+        'buying_groceries': _('Buying Groceries'),
+        'cleaning': _('Cleaning'),
+        'cooking': _('Cooking'),
+        'doing_maintenance': _('Doing Maintenance'),
+        'doing_the_dishes': _('Doing the Dishes'),
+        'doing_the_laundry': _('Doing the Laundry'),
+        'gardening': _('Gardening'),
+        'running_an_errand': _('Running an Errand'),
+        'walking_the_dog': _('Walking the Dog')},
+    'drinking': {
+        'category': _('Drinking'),
+        'having_a_beer': _('Having a Beer'),
+        'having_coffee': _('Having Coffee'),
+        'having_tea': _('Having Tea')},
+    'eating': {
+        'category': _('Eating'),
+        'having_a_snack': _('Having a Snack'),
+        'having_breakfast': _('Having Breakfast'),
+        'having_dinner': _('Having Dinner'),
+        'having_lunch': _('Having Lunch')},
+    'exercising': {
+        'category': _('Exercising'),
+        'cycling': _('Cycling'),
+        'dancing': _('Dancing'),
+        'hiking': _('Hiking'),
+        'jogging': _('Jogging'),
+        'playing_sports': _('Playing Sports'),
+        'running': _('Running'),
+        'skiing': _('Skiing'),
+        'swimming': _('Swimming'),
+        'working_out': _('Working out')},
+    'grooming': {
+        'category': _('Grooming'),
+        'at_the_spa': _('At the Spa'),
+        'brushing_teeth': _('Brushing Teeth'),
+        'getting_a_haircut': _('Getting a Haircut'),
+        'shaving': _('Shaving'),
+        'taking_a_bath': _('Taking a Bath'),
+        'taking_a_shower': _('Taking a Shower')},
+    'having_appointment': {
+        'category': _('Having an Appointment')},
+    'inactive': {
+        'category': _('Inactive'),
+        'day_off': _('Day Off'),
+        'hanging_out': _('Hanging out'),
+        'hiding': _('Hiding'),
+        'on_vacation': _('On Vacation'),
+        'praying': _('Praying'),
+        'scheduled_holiday': _('Scheduled Holiday'),
+        'sleeping': _('Sleeping'),
+        'thinking': _('Thinking')},
+    'relaxing': {
+        'category': _('Relaxing'),
+        'fishing': _('Fishing'),
+        'gaming': _('Gaming'),
+        'going_out': _('Going out'),
+        'partying': _('Partying'),
+        'reading': _('Reading'),
+        'rehearsing': _('Rehearsing'),
+        'shopping': _('Shopping'),
+        'smoking': _('Smoking'),
+        'socializing': _('Socializing'),
+        'sunbathing': _('Sunbathing'),
+        'watching_tv': _('Watching TV'),
+        'watching_a_movie': _('Watching a Movie')},
+    'talking': {
+        'category': _('Talking'),
+        'in_real_life': _('In Real Life'),
+        'on_the_phone': _('On the Phone'),
+        'on_video_phone': _('On Video Phone')},
+    'traveling': {
+        'category': _('Traveling'),
+        'commuting': _('Commuting'),
+        'cycling': _('Cycling'),
+        'driving': _('Driving'),
+        'in_a_car': _('In a Car'),
+        'on_a_bus': _('On a Bus'),
+        'on_a_plane': _('On a Plane'),
+        'on_a_train': _('On a Train'),
+        'on_a_trip': _('On a Trip'),
+        'walking': _('Walking')},
+    'working': {
+        'category': _('Working'),
+        'coding': _('Coding'),
+        'in_a_meeting': _('In a Meeting'),
+        'studying': _('Studying'),
+        'writing': _('Writing')}}
+
+
 SSLError = {
     2: _("Unable to get issuer certificate"),
     3: _("Unable to get certificate CRL"),

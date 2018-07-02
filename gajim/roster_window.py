@@ -2099,9 +2099,10 @@ class RosterWindow:
             activity = pep_dict['activity']
             subactivity = pep_dict.get('subactivity', None)
             activity_text = pep_dict.get('activity_text', None)
-            connection.send_activity(activity, subactivity, activity_text)
+            connection.get_module('UserActivity').send_activity(
+                activity, subactivity, activity_text)
         else:
-            connection.retract_activity()
+            connection.get_module('UserActivity').retract_activity()
 
         if 'mood' in pep_dict:
             mood = pep_dict['mood']

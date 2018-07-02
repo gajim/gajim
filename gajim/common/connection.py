@@ -75,7 +75,9 @@ from gajim.common.modules.vcard_temp import VCardTemp
 from gajim.common.modules.vcard_avatars import VCardAvatars
 from gajim.common.modules.pubsub import PubSub
 from gajim.common.modules.bookmarks import Bookmarks
+from gajim.common.modules.pep import PEP
 from gajim.common.modules.user_avatar import UserAvatar
+from gajim.common.modules.user_activity import UserActivity
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -179,7 +181,10 @@ class CommonConnection:
         return self._modules[name]
 
     def get_module_handlers(self):
-        return self._modules.values()
+        handlers = []
+        for module in self._modules.values():
+            handlers += module.handlers
+        return handlers
 
     def register_module(self, name, cls, *args, **kwargs):
         self._modules[name] = cls(*args, **kwargs)
@@ -661,8 +666,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('VCardTemp', VCardTemp, self)
         self.register_module('VCardAvatars', VCardAvatars, self)
         self.register_module('PubSub', PubSub, self)
+        self.register_module('PEP', PEP, self)
         self.register_module('Bookmarks', Bookmarks, self)
         self.register_module('UserAvatar', UserAvatar, self)
+        self.register_module('UserActivity', UserActivity, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -749,6 +756,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def disconnect(self, on_purpose=False):
         app.interface.music_track_changed(None, None, self.name)
         self.reset_awaiting_pep()
+        self.get_module('PEP').reset_stored_publish()
         self.on_purpose = on_purpose
         self.connected = 0
         self.time_to_reconnect = None

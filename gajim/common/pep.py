@@ -109,86 +109,6 @@ MOODS = {
         'weak':                         _('Weak'),
         'worried':                      _('Worried')}
 
-ACTIVITIES = {
-        'doing_chores': {'category':            _('Doing Chores'),
-                'buying_groceries':                     _('Buying Groceries'),
-                'cleaning':                             _('Cleaning'),
-                'cooking':                              _('Cooking'),
-                'doing_maintenance':                    _('Doing Maintenance'),
-                'doing_the_dishes':                     _('Doing the Dishes'),
-                'doing_the_laundry':                    _('Doing the Laundry'),
-                'gardening':                            _('Gardening'),
-                'running_an_errand':                    _('Running an Errand'),
-                'walking_the_dog':                      _('Walking the Dog')},
-        'drinking': {'category':                _('Drinking'),
-                'having_a_beer':                         _('Having a Beer'),
-                'having_coffee':                        _('Having Coffee'),
-                'having_tea':                           _('Having Tea')},
-        'eating': {'category':                  _('Eating'),
-                'having_a_snack':                       _('Having a Snack'),
-                'having_breakfast':                     _('Having Breakfast'),
-                'having_dinner':                        _('Having Dinner'),
-                'having_lunch':                         _('Having Lunch')},
-        'exercising': {'category':              _('Exercising'),
-                'cycling':                              _('Cycling'),
-                'dancing':                              _('Dancing'),
-                'hiking':                               _('Hiking'),
-                'jogging':                              _('Jogging'),
-                'playing_sports':                       _('Playing Sports'),
-                'running':                              _('Running'),
-                'skiing':                               _('Skiing'),
-                'swimming':                             _('Swimming'),
-                'working_out':                          _('Working out')},
-        'grooming': {'category':                _('Grooming'),
-                'at_the_spa':                           _('At the Spa'),
-                'brushing_teeth':                       _('Brushing Teeth'),
-                'getting_a_haircut':                    _('Getting a Haircut'),
-                'shaving':                              _('Shaving'),
-                'taking_a_bath':                        _('Taking a Bath'),
-                'taking_a_shower':                      _('Taking a Shower')},
-        'having_appointment': {'category':      _('Having an Appointment')},
-        'inactive': {'category':                _('Inactive'),
-                'day_off':                              _('Day Off'),
-                'hanging_out':                          _('Hanging out'),
-                'hiding':                               _('Hiding'),
-                'on_vacation':                          _('On Vacation'),
-                'praying':                              _('Praying'),
-                'scheduled_holiday':                    _('Scheduled Holiday'),
-                'sleeping':                             _('Sleeping'),
-                'thinking':                             _('Thinking')},
-        'relaxing': {'category':                _('Relaxing'),
-                'fishing':                               _('Fishing'),
-                'gaming':                                _('Gaming'),
-                'going_out':                             _('Going out'),
-                'partying':                              _('Partying'),
-                'reading':                               _('Reading'),
-                'rehearsing':                            _('Rehearsing'),
-                'shopping':                              _('Shopping'),
-                'smoking':                               _('Smoking'),
-                'socializing':                           _('Socializing'),
-                'sunbathing':                            _('Sunbathing'),
-                'watching_tv':                           _('Watching TV'),
-                'watching_a_movie':                      _('Watching a Movie')},
-        'talking': {'category':                  _('Talking'),
-                'in_real_life':                          _('In Real Life'),
-                'on_the_phone':                          _('On the Phone'),
-                'on_video_phone':                        _('On Video Phone')},
-        'traveling': {'category':                _('Traveling'),
-                'commuting':                             _('Commuting'),
-                'cycling':                               _('Cycling'),
-                'driving':                               _('Driving'),
-                'in_a_car':                              _('In a Car'),
-                'on_a_bus':                              _('On a Bus'),
-                'on_a_plane':                            _('On a Plane'),
-                'on_a_train':                            _('On a Train'),
-                'on_a_trip':                             _('On a Trip'),
-                'walking':                               _('Walking')},
-        'working': {'category':                  _('Working'),
-                'coding':                                _('Coding'),
-                'in_a_meeting':                          _('In a Meeting'),
-                'studying':                              _('Studying'),
-                'writing':                               _('Writing')}}
-
 TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
 
 LOCATION_DATA = {
@@ -355,54 +275,6 @@ class UserTunePEP(AbstractPEP):
         return tune_string
 
 
-class UserActivityPEP(AbstractPEP):
-    '''XEP-0108: User Activity'''
-
-    type_ = 'activity'
-    namespace = nbxmpp.NS_ACTIVITY
-
-    def _extract_info(self, items):
-        activity_dict = {}
-
-        for item in items.getTags('item'):
-            activity_tag = item.getTag('activity')
-            if activity_tag:
-                for child in activity_tag.getChildren():
-                    name = child.getName().strip()
-                    data = child.getData().strip()
-                    if name == 'text':
-                        activity_dict['text'] = data
-                    else:
-                        activity_dict['activity'] = name
-                        for subactivity in child.getChildren():
-                            subactivity_name = subactivity.getName().strip()
-                            activity_dict['subactivity'] = subactivity_name
-
-        retracted = items.getTag('retract') or not 'activity' in activity_dict
-        return (activity_dict, retracted)
-
-    def asMarkupText(self):
-        assert not self._retracted
-        pep = self._pep_specific_data
-        activity = pep['activity']
-        subactivity = pep['subactivity'] if 'subactivity' in pep else None
-        text = pep['text'] if 'text' in pep else None
-
-        if activity in ACTIVITIES:
-            # Translate standard activities
-            if subactivity in ACTIVITIES[activity]:
-                subactivity = ACTIVITIES[activity][subactivity]
-            activity = ACTIVITIES[activity]['category']
-
-        markuptext = '<b>' + GLib.markup_escape_text(activity)
-        if subactivity:
-            markuptext += ': ' + GLib.markup_escape_text(subactivity)
-        markuptext += '</b>'
-        if text:
-            markuptext += ' (%s)' % GLib.markup_escape_text(text)
-        return markuptext
-
-
 class UserNicknamePEP(AbstractPEP):
     '''XEP-0172: User Nickname'''
 
@@ -518,5 +390,5 @@ class AvatarNotificationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [
-    UserMoodPEP, UserTunePEP, UserActivityPEP,
+    UserMoodPEP, UserTunePEP,
     UserNicknamePEP, UserLocationPEP, AvatarNotificationPEP]
