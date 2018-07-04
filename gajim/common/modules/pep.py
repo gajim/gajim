@@ -19,6 +19,7 @@ import logging
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.exceptions import StanzaMalformed
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import PEPHandlerType, PEPEventType
 
@@ -46,7 +47,7 @@ class PEP:
             self._pep_handlers[namespace] = [(notify_handler, retract_handler)]
         if notify_handler:
             module_instance = notify_handler.__self__
-            if hasattr(module_instance, 'send_stored_publish'):
+            if module_instance.store_publish:
                 if module_instance not in self._store_publish_modules:
                     self._store_publish_modules.append(module_instance)
 
@@ -98,29 +99,99 @@ class PEP:
             module.reset_stored_publish()
 
 
-class PEPEvent:
-
-    name = ''
-
+class AbstractPEPModule:
     def __init__(self, con, account):
-        self.__account = account
-        self.__con = con
+        self._account = account
+        self._con = con
+
+        self._stored_publish = None
+
+        self._con.get_module('PEP').register_pep_handler(
+            self.namespace,
+            self._pep_notify_received,
+            self._pep_retract_received)
+
+    def _pep_notify_received(self, jid, item):
+        try:
+            data = self._extract_info(item)
+        except StanzaMalformed as error:
+            log.warning('%s, %s: %s', jid, error, item)
+            return
+
+        self._log.info('Received: %s %s', jid, data)
+        self._push_event(jid, self.pep_class(data))
+
+    def _pep_retract_received(self, jid, id_):
+        self._log.info('Retract: %s %s', jid, id_)
+        self._push_event(jid, self.pep_class(None))
+
+    def _extract_info(self, item):
+        '''To be implemented by subclasses'''
+        raise NotImplementedError
+
+    def _build_node(self, data):
+        '''To be implemented by subclasses'''
+        raise NotImplementedError
+
+    def _push_event(self, jid, user_pep):
+        self._update_contacts(jid, user_pep)
+        app.nec.push_incoming_event(
+            PEPReceivedEvent(None, conn=self._con,
+                             jid=str(jid),
+                             pep_type=self.name,
+                             user_pep=user_pep))
 
     def _update_contacts(self, jid, user_pep):
-        for contact in app.contacts.get_contacts(self.__account, str(jid)):
+        for contact in app.contacts.get_contacts(self._account, str(jid)):
             if user_pep:
                 contact.pep[self.name] = user_pep
             else:
                 contact.pep.pop(self.name, None)
 
-        if jid == self.__con.get_own_jid().getStripped():
+        if jid == self._con.get_own_jid().getStripped():
             if user_pep:
-                self.__con.pep[self.name] = user_pep
+                self._con.pep[self.name] = user_pep
             else:
-                self.__con.pep.pop(self.name, None)
+                self._con.pep.pop(self.name, None)
+
+    def send_stored_publish(self):
+        if self._stored_publish is not None:
+            self._log.info('Send stored publish')
+            self.send(*self._stored_publish)
+            self._stored_publish = None
+
+    def reset_stored_publish(self):
+        self._log.info('Reset stored publish')
+        self._stored_publish = None
+
+    def send(self, data):
+        if not self._con.pep_supported:
+            return
+
+        if self._con.connected == 1:
+            # We are connecting, save activity and send it later
+            self._stored_publish = data
+            return
+
+        if data:
+            self._log.info('Send: %s', data)
+        else:
+            self._log.info('Remove')
+
+        item = self._build_node(data)
+
+        self._con.get_module('PubSub').send_pb_publish(
+            '', self.namespace, item, 'current')
+
+    def retract(self):
+        if not self._con.pep_supported:
+            return
+        self.send(None)
+        self._con.get_module('PubSub').send_pb_retract(
+            '', self.namespace, 'current')
 
 
-class AbstractPEP:
+class AbstractPEPData:
 
     type_ = PEPEventType
 
