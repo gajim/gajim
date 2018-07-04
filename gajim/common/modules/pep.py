@@ -157,7 +157,7 @@ class AbstractPEPModule:
     def send_stored_publish(self):
         if self._stored_publish is not None:
             self._log.info('Send stored publish')
-            self.send(*self._stored_publish)
+            self.send(self._stored_publish)
             self._stored_publish = None
 
     def reset_stored_publish(self):
