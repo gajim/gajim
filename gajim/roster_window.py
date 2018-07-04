@@ -3594,7 +3594,7 @@ class RosterWindow:
         if active:
             app.interface.enable_music_listener()
         else:
-            app.connections[account].retract_tune()
+            app.connections[account].get_module('UserTune').retract()
             # disable music listener only if no other account uses it
             for acc in app.connections:
                 if app.config.get_per('accounts', acc, 'publish_tune'):

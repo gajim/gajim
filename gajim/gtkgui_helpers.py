@@ -629,7 +629,7 @@ def get_pep_as_pixbuf(pep_class):
         mood = received_mood if received_mood in pep.MOODS else 'unknown'
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
-    elif isinstance(pep_class, pep.UserTunePEP):
+    elif pep_class == PEPEventType.TUNE:
         icon = get_icon_pixmap('audio-x-generic', quiet=True)
         if not icon:
             path = os.path.join(configpaths.get('DATA'), 'emoticons', 'static',

@@ -132,6 +132,7 @@ class PEPHandlerType(IntEnum):
 @unique
 class PEPEventType(IntEnum):
     ACTIVITY = 0
+    TUNE = 1
 
 
 ACTIVITIES = {

@@ -296,7 +296,6 @@ class ConnectionPEP(object):
 
     def reset_awaiting_pep(self):
         self.to_be_sent_mood = None
-        self.to_be_sent_tune = None
         self.to_be_sent_nick = None
         self.to_be_sent_location = None
 
@@ -306,8 +305,6 @@ class ConnectionPEP(object):
         """
         if self.to_be_sent_mood:
             self.send_mood(*self.to_be_sent_mood)
-        if self.to_be_sent_tune:
-            self.send_tune(*self.to_be_sent_tune)
         if self.to_be_sent_nick:
             self.send_nick(self.to_be_sent_nick)
         if self.to_be_sent_location:
@@ -336,42 +333,6 @@ class ConnectionPEP(object):
         self.send_mood(None)
         # not all client support new XEP, so we still retract
         self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_MOOD, '0')
-
-    def send_tune(self, artist='', title='', source='', track=0, length=0,
-    items=None):
-        if self.connected == 1:
-            # We are connecting, keep tune in mem and send it when we'll be
-            # connected
-            self.to_be_sent_tune = (artist, title, source, track, length, items)
-            return
-        if not self.pep_supported:
-            return
-        item = nbxmpp.Node('tune', {'xmlns': nbxmpp.NS_TUNE})
-        if artist:
-            i = item.addChild('artist')
-            i.addData(artist)
-        if title:
-            i = item.addChild('title')
-            i.addData(title)
-        if source:
-            i = item.addChild('source')
-            i.addData(source)
-        if track:
-            i = item.addChild('track')
-            i.addData(track)
-        if length:
-            i = item.addChild('length')
-            i.addData(length)
-        if items:
-            item.addChild(payload=items)
-        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_TUNE, item, '0')
-
-    def retract_tune(self):
-        if not self.pep_supported:
-            return
-        self.send_tune(None)
-        # not all client support new XEP, so we still retract
-        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_TUNE, '0')
 
     def send_nickname(self, nick):
         if self.connected == 1:

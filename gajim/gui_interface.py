@@ -2169,7 +2169,8 @@ class Interface:
                 continue
             if app.connections[acct].music_track_info == music_track_info:
                 continue
-            app.connections[acct].send_tune(artist, title, source)
+            app.connections[acct].get_module('UserTune').send(
+                (artist, title, source, None, None))
             app.connections[acct].music_track_info = music_track_info
 
     def read_sleepy(self):
@@ -2477,7 +2478,7 @@ class Interface:
             received_mood = pep_obj._pep_specific_data['mood']
             mood = received_mood if received_mood in pep.MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
-        elif isinstance(pep_obj, pep.UserTunePEP):
+        elif pep_obj == PEPEventType.TUNE:
             path = os.path.join(
                 configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)

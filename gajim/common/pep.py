@@ -109,8 +109,6 @@ MOODS = {
         'weak':                         _('Weak'),
         'worried':                      _('Worried')}
 
-TUNE_DATA = ['artist', 'title', 'source', 'track', 'length']
-
 LOCATION_DATA = {
         'accuracy':     _('accuracy'),
         'alt':          _('alt'),
@@ -234,47 +232,6 @@ class UserMoodPEP(AbstractPEP):
             return mood
 
 
-class UserTunePEP(AbstractPEP):
-    '''XEP-0118: User Tune'''
-
-    type_ = 'tune'
-    namespace = nbxmpp.NS_TUNE
-
-    def _extract_info(self, items):
-        tune_dict = {}
-
-        for item in items.getTags('item'):
-            tune_tag = item.getTag('tune')
-            if tune_tag:
-                for child in tune_tag.getChildren():
-                    name = child.getName().strip()
-                    data = child.getData().strip()
-                    if child.getName() in TUNE_DATA:
-                        tune_dict[name] = data
-
-        retracted = items.getTag('retract') or not ('artist' in tune_dict or
-            'title' in tune_dict)
-        return (tune_dict, retracted)
-
-    def asMarkupText(self):
-        assert not self._retracted
-        tune = self._pep_specific_data
-
-        artist = tune.get('artist', _('Unknown Artist'))
-        artist = GLib.markup_escape_text(artist)
-
-        title = tune.get('title', _('Unknown Title'))
-        title = GLib.markup_escape_text(title)
-
-        source = tune.get('source', _('Unknown Source'))
-        source = GLib.markup_escape_text(source)
-
-        tune_string =  _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-                'from <i>%(source)s</i>') % {'title': title,
-                'artist': artist, 'source': source}
-        return tune_string
-
-
 class UserNicknamePEP(AbstractPEP):
     '''XEP-0172: User Nickname'''
 
@@ -390,5 +347,5 @@ class AvatarNotificationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [
-    UserMoodPEP, UserTunePEP,
+    UserMoodPEP,
     UserNicknamePEP, UserLocationPEP, AvatarNotificationPEP]
