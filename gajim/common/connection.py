@@ -63,6 +63,7 @@ from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import i18n
 from gajim.common import idle
+from gajim.common.helpers import ModuleMock
 from gajim.common.modules.entity_time import EntityTime
 from gajim.common.modules.software_version import SoftwareVersion
 from gajim.common.modules.ping import Ping
@@ -179,7 +180,10 @@ class CommonConnection:
         app.ged.raise_event(event, self.name, data)
 
     def get_module(self, name):
-        return self._modules[name]
+        try:
+            return self._modules[name]
+        except KeyError:
+            return ModuleMock()
 
     def get_module_handlers(self):
         handlers = []
