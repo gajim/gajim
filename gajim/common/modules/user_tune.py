@@ -69,7 +69,7 @@ class UserTune(AbstractPEPModule):
         tune_dict = {}
         tune_tag = item.getTag('tune', namespace=self.namespace)
         if tune_tag is None:
-            raise StanzaMalformed('No activity node')
+            raise StanzaMalformed('No tune node')
 
         for child in tune_tag.getChildren():
             name = child.getName().strip()
