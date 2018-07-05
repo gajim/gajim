@@ -1978,8 +1978,11 @@ class GroupchatControl(ChatControlBase):
             con = app.connections[self.account]
             bookmarks = con.get_module('Bookmarks').bookmarks
             bookmark = bookmarks.get(self.room_jid, None)
-            print_status = bookmark.get(
-                'print_status', app.config.get('print_status_in_muc'))
+            if bookmark is None or not bookmark['print_status']:
+                print_status = app.config.get('print_status_in_muc')
+            else:
+                print_status = bookmark['print_status']
+
             if obj.show == 'offline':
                 if obj.nick in self.attention_list:
                     self.attention_list.remove(obj.nick)
