@@ -329,9 +329,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
         nick = ''
         if 'NICKNAME' in vcard_:
             nick = vcard_['NICKNAME']
-            app.connections[self.account].send_nickname(nick)
+            app.connections[self.account].get_module('UserNickname').send(nick)
         if nick == '':
-            app.connections[self.account].retract_nickname()
+            app.connections[self.account].get_module('UserNickname').retract()
             nick = app.config.get_per('accounts', self.account, 'name')
         app.nicks[self.account] = nick
         app.connections[self.account].get_module('VCardTemp').send_vcard(

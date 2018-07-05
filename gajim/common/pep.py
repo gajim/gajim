@@ -26,7 +26,6 @@
 import logging
 log = logging.getLogger('gajim.c.pep')
 
-import nbxmpp
 from gajim.common import app
 
 
@@ -81,35 +80,6 @@ class AbstractPEP(object):
         pass
 
 
-class UserNicknamePEP(AbstractPEP):
-    '''XEP-0172: User Nickname'''
-
-    type_ = 'nickname'
-    namespace = nbxmpp.NS_NICK
-
-    def _extract_info(self, items):
-        nick = ''
-        for item in items.getTags('item'):
-            child = item.getTag('nick')
-            if child:
-                nick = child.getData()
-                break
-
-        retracted = items.getTag('retract') or not nick
-        return (nick, retracted)
-
-    def _update_contacts(self, jid, account):
-        nick = '' if self._retracted else self._pep_specific_data
-        for contact in app.contacts.get_contacts(account, jid):
-            contact.contact_name = nick
-
-    def _update_account(self, account):
-        if self._retracted:
-            app.nicks[account] = app.config.get_per('accounts', account, 'name')
-        else:
-            app.nicks[account] = self._pep_specific_data
-
-
 class AvatarNotificationPEP(AbstractPEP):
     '''XEP-0084: Avatars'''
 
@@ -154,4 +124,4 @@ class AvatarNotificationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [
-    UserNicknamePEP, AvatarNotificationPEP]
+    AvatarNotificationPEP]

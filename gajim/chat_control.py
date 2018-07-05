@@ -422,7 +422,7 @@ class ChatControl(ChatControlBase):
         if obj.jid != self.contact.jid:
             return
 
-        if obj.pep_type == 'nickname':
+        if obj.pep_type == 'nick':
             self.update_ui()
             self.parent_win.redraw_tab(self)
             self.parent_win.show_title()

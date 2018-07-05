@@ -281,48 +281,6 @@ class ConnectionDisco:
         app.nec.push_incoming_event(AgentInfoReceivedEvent(None, conn=self,
             stanza=iq_obj))
 
-
-class ConnectionPEP(object):
-
-    def __init__(self, account, dispatcher, pubsub_connection):
-        self._account = account
-        self._dispatcher = dispatcher
-        self._pubsub_connection = pubsub_connection
-        self.reset_awaiting_pep()
-
-    def pep_change_account_name(self, new_name):
-        self._account = new_name
-
-    def reset_awaiting_pep(self):
-        self.to_be_sent_nick = None
-
-    def send_awaiting_pep(self):
-        """
-        Send pep info that were waiting for connection
-        """
-        if self.to_be_sent_nick:
-            self.send_nick(self.to_be_sent_nick)
-        self.reset_awaiting_pep()
-
-    def send_nickname(self, nick):
-        if self.connected == 1:
-            # We are connecting, keep nick in mem and send it when we'll be
-            # connected
-            self.to_be_sent_nick = nick
-            return
-        if not self.pep_supported:
-            return
-        item = nbxmpp.Node('nick', {'xmlns': nbxmpp.NS_NICK})
-        item.addData(nick)
-        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_NICK, item, '0')
-
-    def retract_nickname(self):
-        if not self.pep_supported:
-            return
-
-        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_NICK, '0')
-
-
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
     def __init__(self):
@@ -790,7 +748,7 @@ class ConnectionHandlersBase:
 
 class ConnectionHandlers(ConnectionArchive313,
 ConnectionSocks5Bytestream, ConnectionDisco,
-ConnectionCommands, ConnectionPEP, ConnectionCaps,
+ConnectionCommands, ConnectionCaps,
 ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream,
 ConnectionHTTPUpload):
     def __init__(self):
@@ -798,8 +756,6 @@ ConnectionHTTPUpload):
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
         ConnectionCommands.__init__(self)
-        ConnectionPEP.__init__(self, account=self.name, dispatcher=self,
-            pubsub_connection=self)
         ConnectionHTTPUpload.__init__(self)
 
         # Handle presences BEFORE caps
@@ -1395,7 +1351,6 @@ ConnectionHTTPUpload):
 
         # Inform GUI we just signed in
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))
-        self.send_awaiting_pep()
         self.get_module('PEP').send_stored_publish()
         self.continue_connect_info = None
 

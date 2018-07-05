@@ -50,7 +50,7 @@ class ConnectionVcard:
 
 class ConnectionHandlersZeroconf(ConnectionVcard,
 ConnectionSocks5BytestreamZeroconf, ConnectionCommands,
-connection_handlers.ConnectionPEP, connection_handlers.ConnectionHandlersBase,
+connection_handlers.ConnectionHandlersBase,
 connection_handlers.ConnectionJingle):
     def __init__(self):
         ConnectionVcard.__init__(self)

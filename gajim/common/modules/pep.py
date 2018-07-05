@@ -195,6 +195,10 @@ class AbstractPEPData:
 
     type_ = PEPEventType
 
+    def asMarkupText(self):
+        '''SHOULD be implemented by subclasses'''
+        return ''
+
     def __eq__(self, other):
         return other == self.type_
 

@@ -82,6 +82,7 @@ from gajim.common.modules.user_activity import UserActivity
 from gajim.common.modules.user_tune import UserTune
 from gajim.common.modules.user_mood import UserMood
 from gajim.common.modules.user_location import UserLocation
+from gajim.common.modules.user_nickname import UserNickname
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -680,6 +681,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('UserTune', UserTune, self)
         self.register_module('UserMood', UserMood, self)
         self.register_module('UserLocation', UserLocation, self)
+        self.register_module('UserNickname', UserNickname, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -765,7 +767,6 @@ class Connection(CommonConnection, ConnectionHandlers):
     # We are doing disconnect at so many places, better use one function in all
     def disconnect(self, on_purpose=False):
         app.interface.music_track_changed(None, None, self.name)
-        self.reset_awaiting_pep()
         self.get_module('PEP').reset_stored_publish()
         self.on_purpose = on_purpose
         self.connected = 0

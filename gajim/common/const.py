@@ -151,6 +151,7 @@ class PEPEventType(IntEnum):
     TUNE = 1
     MOOD = 2
     LOCATION = 3
+    NICKNAME = 4
 
 
 ACTIVITIES = {

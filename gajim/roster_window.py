@@ -2651,7 +2651,7 @@ class RosterWindow:
         if obj.jid == app.get_jid_from_account(obj.conn.name):
             self.draw_account(obj.conn.name)
 
-        if obj.pep_type == 'nickname':
+        if obj.pep_type == 'nick':
             self.draw_contact(obj.jid, obj.conn.name)
         else:
             self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
