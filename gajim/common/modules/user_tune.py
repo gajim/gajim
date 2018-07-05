@@ -81,8 +81,10 @@ class UserTune(AbstractPEPModule):
         return tune_dict or None
 
     def _build_node(self, data):
-        artist, title, source, track, length = data
         item = nbxmpp.Node('tune', {'xmlns': nbxmpp.NS_TUNE})
+        if data is None:
+            return item
+        artist, title, source, track, length = data
         if artist:
             item.addChild('artist', payload=artist)
         if title:

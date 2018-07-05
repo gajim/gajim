@@ -87,8 +87,10 @@ class UserActivity(AbstractPEPModule):
         return activity_dict or None
 
     def _build_node(self, data):
-        activity, subactivity, message = data
         item = nbxmpp.Node('activity', {'xmlns': self.namespace})
+        if data is None:
+            return
+        activity, subactivity, message = data
         if activity:
             i = item.addChild(activity)
             if subactivity:
