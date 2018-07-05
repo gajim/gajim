@@ -150,6 +150,7 @@ class PEPEventType(IntEnum):
     ACTIVITY = 0
     TUNE = 1
     MOOD = 2
+    LOCATION = 3
 
 
 ACTIVITIES = {
@@ -328,6 +329,31 @@ MOODS = {
     'undefined': _('Undefined'),
     'weak': _('Weak'),
     'worried': _('Worried')
+}
+
+LOCATION_DATA = {
+    'accuracy': _('accuracy'),
+    'alt': _('alt'),
+    'area': _('area'),
+    'bearing': _('bearing'),
+    'building': _('building'),
+    'country': _('country'),
+    'countrycode': _('countrycode'),
+    'datum': _('datum'),
+    'description': _('description'),
+    'error': _('error'),
+    'floor': _('floor'),
+    'lat': _('lat'),
+    'locality': _('locality'),
+    'lon': _('lon'),
+    'postalcode': _('postalcode'),
+    'region': _('region'),
+    'room': _('room'),
+    'speed': _('speed'),
+    'street': _('street'),
+    'text': _('text'),
+    'timestamp': _('timestamp'),
+    'uri': _('URI')
 }
 
 

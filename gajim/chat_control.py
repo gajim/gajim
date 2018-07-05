@@ -122,7 +122,7 @@ class ChatControl(ChatControlBase):
         self._pep_images['mood'] = self.xml.get_object('mood_image')
         self._pep_images['activity'] = self.xml.get_object('activity_image')
         self._pep_images['tune'] = self.xml.get_object('tune_image')
-        self._pep_images['location'] = self.xml.get_object('location_image')
+        self._pep_images['geoloc'] = self.xml.get_object('location_image')
         self.update_all_pep_types()
 
         self.show_avatar()
@@ -584,8 +584,8 @@ class ChatControl(ChatControlBase):
         return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
-        if 'location' in self.contact.pep:
-            location = self.contact.pep['location']._pep_specific_data
+        if 'geoloc' in self.contact.pep:
+            location = self.contact.pep['geoloc']._pep_specific_data
             if ('lat' in location) and ('lon' in location):
                 uri = 'https://www.openstreetmap.org/?' + \
                         'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],

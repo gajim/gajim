@@ -23,32 +23,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-LOCATION_DATA = {
-        'accuracy':     _('accuracy'),
-        'alt':          _('alt'),
-        'area':         _('area'),
-        'bearing':      _('bearing'),
-        'building':     _('building'),
-        'country':      _('country'),
-        'countrycode':  _('countrycode'),
-        'datum':        _('datum'),
-        'description':  _('description'),
-        'error':        _('error'),
-        'floor':        _('floor'),
-        'lat':          _('lat'),
-        'locality':     _('locality'),
-        'lon':          _('lon'),
-        'postalcode':   _('postalcode'),
-        'region':       _('region'),
-        'room':         _('room'),
-        'speed':        _('speed'),
-        'street':       _('street'),
-        'text':         _('text'),
-        'timestamp':    _('timestamp'),
-        'uri':          _('URI')}
-
-from gi.repository import GLib
-
 import logging
 log = logging.getLogger('gajim.c.pep')
 
@@ -136,48 +110,6 @@ class UserNicknamePEP(AbstractPEP):
             app.nicks[account] = self._pep_specific_data
 
 
-class UserLocationPEP(AbstractPEP):
-    '''XEP-0080: User Location'''
-
-    type_ = 'location'
-    namespace = nbxmpp.NS_LOCATION
-
-    def _extract_info(self, items):
-        location_dict = {}
-
-        for item in items.getTags('item'):
-            location_tag = item.getTag('geoloc')
-            if location_tag:
-                for child in location_tag.getChildren():
-                    name = child.getName().strip()
-                    data = child.getData().strip()
-                    if child.getName() in LOCATION_DATA:
-                        location_dict[name] = data
-
-        retracted = items.getTag('retract') or not location_dict
-        return (location_dict, retracted)
-
-    def _update_account(self, account):
-        AbstractPEP._update_account(self, account)
-        con = app.connections[account].location_info = \
-                self._pep_specific_data
-
-    def asMarkupText(self):
-        assert not self._retracted
-        location = self._pep_specific_data
-        location_string = ''
-
-        for entry in location.keys():
-            text = location[entry]
-            text = GLib.markup_escape_text(text)
-            # Translate standard location tag
-            tag = LOCATION_DATA.get(entry, entry)
-            location_string += '\n<b>%(tag)s</b>: %(text)s' % \
-                    {'tag': tag.capitalize(), 'text': text}
-
-        return location_string.strip()
-
-
 class AvatarNotificationPEP(AbstractPEP):
     '''XEP-0084: Avatars'''
 
@@ -222,4 +154,4 @@ class AvatarNotificationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [
-    UserNicknamePEP, UserLocationPEP, AvatarNotificationPEP]
+    UserNicknamePEP, AvatarNotificationPEP]

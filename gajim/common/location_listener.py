@@ -97,7 +97,7 @@ class LocationListener:
                 del new_data['timestamp']
                 if last_data == new_data:
                     continue
-            app.connections[acct].send_location(self._data)
+            app.connections[acct].get_module('UserLocation').send(self._data)
             self.location_info = self._data.copy()
 
     def _timestamp_to_utc(self, timestamp):

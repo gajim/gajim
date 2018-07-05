@@ -28,7 +28,6 @@
 ##
 
 import xml.sax.saxutils
-import gi
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -50,7 +49,6 @@ log = logging.getLogger('gajim.gtkgui_helpers')
 
 from gajim.common import i18n
 from gajim.common import app
-from gajim.common import pep
 from gajim.common import configpaths
 from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
 from gajim.filechoosers import AvatarSaveDialog
@@ -651,7 +649,7 @@ def get_pep_as_pixbuf(pep_class):
                 return load_activity_icon(activity).get_pixbuf()
         else:
             return load_activity_icon('unknown').get_pixbuf()
-    elif isinstance(pep_class, pep.UserLocationPEP):
+    elif pep_class == PEPEventType.LOCATION:
         icon = get_icon_pixmap('applications-internet', quiet=True)
         if not icon:
             icon = get_icon_pixmap('gajim-earth')

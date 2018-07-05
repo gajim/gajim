@@ -1090,10 +1090,10 @@ class RosterWindow:
         else:
             self.model[child_iter][Column.TUNE_PIXBUF] = empty_pixbuf
 
-        if app.config.get('show_location_in_roster') and 'location' in \
+        if app.config.get('show_location_in_roster') and 'geoloc' in \
         pep_dict:
             self.model[child_iter][Column.LOCATION_PIXBUF] = \
-                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['location'])
+                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['geoloc'])
         else:
             self.model[child_iter][Column.LOCATION_PIXBUF] = empty_pixbuf
 
@@ -1354,7 +1354,7 @@ class RosterWindow:
             return app.config.get('show_activity_in_roster')
         elif pep_type == 'tune':
             return  app.config.get('show_tunes_in_roster')
-        elif pep_type == 'location':
+        elif pep_type == 'geoloc':
             return  app.config.get('show_location_in_roster')
         else:
             return False
@@ -3610,7 +3610,7 @@ class RosterWindow:
         if active:
             location_listener.enable()
         else:
-            app.connections[account].retract_location()
+            app.connections[account].get_module('UserLocation').retract()
 
         helpers.update_optional_features(account)
 
@@ -5728,7 +5728,7 @@ class RosterWindow:
         self.renderers_propertys ={}
         self._pep_type_to_model_column = {'mood': Column.MOOD_PIXBUF,
             'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_PIXBUF,
-            'location': Column.LOCATION_PIXBUF}
+            'geoloc': Column.LOCATION_PIXBUF}
 
         renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
@@ -5761,7 +5761,7 @@ class RosterWindow:
                 'pixbuf', Column.TUNE_PIXBUF,
                 self._fill_pep_pixbuf_renderer, Column.TUNE_PIXBUF),
 
-                ('location', Gtk.CellRendererPixbuf(), False,
+                ('geoloc', Gtk.CellRendererPixbuf(), False,
                 'pixbuf', Column.LOCATION_PIXBUF,
                 self._fill_pep_pixbuf_renderer, Column.LOCATION_PIXBUF))
 

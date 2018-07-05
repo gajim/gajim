@@ -577,8 +577,8 @@ class RosterTooltip(Gtk.Window, StatusTable):
             self.tune.show()
             self.tune_label.show()
 
-        if 'location' in contact.pep:
-            location = contact.pep['location'].asMarkupText()
+        if 'geoloc' in contact.pep:
+            location = contact.pep['geoloc'].asMarkupText()
             self.location.set_markup(location)
             self.location.show()
             self.location_label.show()

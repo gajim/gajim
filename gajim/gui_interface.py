@@ -97,7 +97,6 @@ from gajim.common.connection_handlers_events import (
     HTTPUploadProgressEvent)
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
-from gajim.common import pep
 from gajim import emoticons
 from gajim.common.const import AvatarSize, SSLError, PEPEventType
 from gajim.common.const import ACTIVITIES, MOODS
@@ -2501,7 +2500,7 @@ class Interface:
                         get_pixbuf()
             else:
                 return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
-        elif isinstance(pep_obj, pep.UserLocationPEP):
+        elif pep_obj == PEPEventType.LOCATION:
             icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
                 quiet=True)
             return icon

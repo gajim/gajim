@@ -42,7 +42,6 @@ from gi.repository import GLib
 import nbxmpp
 from gajim.common import caps_cache as capscache
 
-from gajim.common.pep import LOCATION_DATA
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import dataforms
@@ -296,7 +295,6 @@ class ConnectionPEP(object):
 
     def reset_awaiting_pep(self):
         self.to_be_sent_nick = None
-        self.to_be_sent_location = None
 
     def send_awaiting_pep(self):
         """
@@ -304,8 +302,6 @@ class ConnectionPEP(object):
         """
         if self.to_be_sent_nick:
             self.send_nick(self.to_be_sent_nick)
-        if self.to_be_sent_location:
-            self.send_location(self.to_be_sent_location)
         self.reset_awaiting_pep()
 
     def send_nickname(self, nick):
@@ -326,27 +322,6 @@ class ConnectionPEP(object):
 
         self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_NICK, '0')
 
-    def send_location(self, info):
-        if self.connected == 1:
-            # We are connecting, keep location in mem and send it when we'll be
-            # connected
-            self.to_be_sent_location = info
-            return
-        if not self.pep_supported:
-            return
-        item = nbxmpp.Node('geoloc', {'xmlns': nbxmpp.NS_LOCATION})
-        for field in LOCATION_DATA:
-            if info.get(field, None):
-                i = item.addChild(field)
-                i.addData(info[field])
-        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_LOCATION, item, '0')
-
-    def retract_location(self):
-        if not self.pep_supported:
-            return
-        self.send_location({})
-        # not all client support new XEP, so we still retract
-        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_LOCATION, '0')
 
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
