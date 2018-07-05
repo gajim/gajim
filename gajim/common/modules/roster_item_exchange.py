@@ -44,7 +44,8 @@ class RosterItemExchange:
         items_list = stanza.getTag(
             'x', namespace=nbxmpp.NS_ROSTERX).getChildren()
         if items_list is None:
-            return
+            raise nbxmpp.NodeProcessed
+
         action = items_list[0].getAttr('action')
         if not action:
             action = 'add'
@@ -77,7 +78,7 @@ class RosterItemExchange:
             exchange_items_list[jid] = [name, groups]
 
         if not exchange_items_list:
-            return
+            raise nbxmpp.NodeProcessed
 
         log.info('Items: %s', exchange_items_list)
 
@@ -87,8 +88,7 @@ class RosterItemExchange:
             exchange_items_list=exchange_items_list,
             action=action))
 
-        if stanza.name == 'iq':
-            raise nbxmpp.NodeProcessed
+        raise nbxmpp.NodeProcessed
 
     def send_contacts(self, contacts, fjid, type_='message'):
         if not app.account_is_connected(self._account):
