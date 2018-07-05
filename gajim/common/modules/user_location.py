@@ -30,8 +30,8 @@ class UserLocationData(AbstractPEPData):
 
     type_ = PEPEventType.LOCATION
 
-    def __init__(self, mood):
-        self._pep_specific_data = mood
+    def __init__(self, location):
+        self._pep_specific_data = location
 
     def asMarkupText(self):
         location = self._pep_specific_data
