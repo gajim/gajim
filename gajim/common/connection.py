@@ -80,6 +80,7 @@ from gajim.common.modules.pep import PEP
 from gajim.common.modules.user_avatar import UserAvatar
 from gajim.common.modules.user_activity import UserActivity
 from gajim.common.modules.user_tune import UserTune
+from gajim.common.modules.user_mood import UserMood
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.gtkgui_helpers import get_action
@@ -676,6 +677,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_module('UserAvatar', UserAvatar, self)
         self.register_module('UserActivity', UserActivity, self)
         self.register_module('UserTune', UserTune, self)
+        self.register_module('UserMood', UserMood, self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)

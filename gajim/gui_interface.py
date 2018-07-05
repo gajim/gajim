@@ -99,7 +99,8 @@ from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common import pep
 from gajim import emoticons
-from gajim.common.const import AvatarSize, SSLError, PEPEventType, ACTIVITIES
+from gajim.common.const import AvatarSize, SSLError, PEPEventType
+from gajim.common.const import ACTIVITIES, MOODS
 
 from gajim import roster_window
 from gajim import profile_window
@@ -2474,9 +2475,9 @@ class Interface:
 
     @staticmethod
     def get_pep_icon(pep_obj):
-        if isinstance(pep_obj, pep.UserMoodPEP):
+        if pep_obj == PEPEventType.MOOD:
             received_mood = pep_obj._pep_specific_data['mood']
-            mood = received_mood if received_mood in pep.MOODS else 'unknown'
+            mood = received_mood if received_mood in MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
         elif pep_obj == PEPEventType.TUNE:
             path = os.path.join(

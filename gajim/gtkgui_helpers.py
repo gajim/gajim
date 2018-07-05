@@ -52,7 +52,7 @@ from gajim.common import i18n
 from gajim.common import app
 from gajim.common import pep
 from gajim.common import configpaths
-from gajim.common.const import PEPEventType, ACTIVITIES
+from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
 from gajim.filechoosers import AvatarSaveDialog
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
@@ -623,10 +623,9 @@ def load_activity_icon(category, activity = None):
     return icon_list[activity]
 
 def get_pep_as_pixbuf(pep_class):
-    if isinstance(pep_class, pep.UserMoodPEP):
-        assert not pep_class._retracted
+    if pep_class == PEPEventType.MOOD:
         received_mood = pep_class._pep_specific_data['mood']
-        mood = received_mood if received_mood in pep.MOODS else 'unknown'
+        mood = received_mood if received_mood in MOODS else 'unknown'
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
     elif pep_class == PEPEventType.TUNE:

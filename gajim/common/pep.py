@@ -23,92 +23,6 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-MOODS = {
-        'afraid':                       _('Afraid'),
-        'amazed':                       _('Amazed'),
-        'amorous':                      _('Amorous'),
-        'angry':                                _('Angry'),
-        'annoyed':                      _('Annoyed'),
-        'anxious':                      _('Anxious'),
-        'aroused':                      _('Aroused'),
-        'ashamed':                      _('Ashamed'),
-        'bored':                                _('Bored'),
-        'brave':                                _('Brave'),
-        'calm':                         _('Calm'),
-        'cautious':                     _('Cautious'),
-        'cold':                         _('Cold'),
-        'confident':            _('Confident'),
-        'confused':                     _('Confused'),
-        'contemplative':        _('Contemplative'),
-        'contented':            _('Contented'),
-        'cranky':                       _('Cranky'),
-        'crazy':                                _('Crazy'),
-        'creative':                     _('Creative'),
-        'curious':                      _('Curious'),
-        'dejected':                     _('Dejected'),
-        'depressed':            _('Depressed'),
-        'disappointed': _('Disappointed'),
-        'disgusted':            _('Disgusted'),
-        'dismayed':                     _('Dismayed'),
-        'distracted':           _('Distracted'),
-        'embarrassed':          _('Embarrassed'),
-        'envious':                      _('Envious'),
-        'excited':                      _('Excited'),
-        'flirtatious':          _('Flirtatious'),
-        'frustrated':           _('Frustrated'),
-        'grateful':                     _('Grateful'),
-        'grieving':                     _('Grieving'),
-        'grumpy':                       _('Grumpy'),
-        'guilty':                       _('Guilty'),
-        'happy':                                _('Happy'),
-        'hopeful':                      _('Hopeful'),
-        'hot':                          _('Hot'),
-        'humbled':                      _('Humbled'),
-        'humiliated':           _('Humiliated'),
-        'hungry':                       _('Hungry'),
-        'hurt':                         _('Hurt'),
-        'impressed':            _('Impressed'),
-        'in_awe':                       _('In Awe'),
-        'in_love':                      _('In Love'),
-        'indignant':            _('Indignant'),
-        'interested':           _('Interested'),
-        'intoxicated':          _('Intoxicated'),
-        'invincible':           _('Invincible'),
-        'jealous':                      _('Jealous'),
-        'lonely':                       _('Lonely'),
-        'lost':                         _('Lost'),
-        'lucky':                                _('Lucky'),
-        'mean':                         _('Mean'),
-        'moody':                                _('Moody'),
-        'nervous':                      _('Nervous'),
-        'neutral':                      _('Neutral'),
-        'offended':                     _('Offended'),
-        'outraged':                     _('Outraged'),
-        'playful':                      _('Playful'),
-        'proud':                                _('Proud'),
-        'relaxed':                      _('Relaxed'),
-        'relieved':                     _('Relieved'),
-        'remorseful':           _('Remorseful'),
-        'restless':                     _('Restless'),
-        'sad':                          _('Sad'),
-        'sarcastic':            _('Sarcastic'),
-        'satisfied':            _('Satisfied'),
-        'serious':                      _('Serious'),
-        'shocked':                      _('Shocked'),
-        'shy':                          _('Shy'),
-        'sick':                         _('Sick'),
-        'sleepy':                       _('Sleepy'),
-        'spontaneous':          _('Spontaneous'),
-        'stressed':                     _('Stressed'),
-        'strong':                       _('Strong'),
-        'surprised':            _('Surprised'),
-        'thankful':                     _('Thankful'),
-        'thirsty':                      _('Thirsty'),
-        'tired':                                _('Tired'),
-        'undefined':            _('Undefined'),
-        'weak':                         _('Weak'),
-        'worried':                      _('Worried')}
-
 LOCATION_DATA = {
         'accuracy':     _('accuracy'),
         'alt':          _('alt'),
@@ -191,45 +105,6 @@ class AbstractPEP(object):
     def _on_receive(self, jid, account):
         '''SHOULD be implemented by subclasses'''
         pass
-
-
-class UserMoodPEP(AbstractPEP):
-    '''XEP-0107: User Mood'''
-
-    type_ = 'mood'
-    namespace = nbxmpp.NS_MOOD
-
-    def _extract_info(self, items):
-        mood_dict = {}
-
-        for item in items.getTags('item'):
-            mood_tag = item.getTag('mood')
-            if mood_tag:
-                for child in mood_tag.getChildren():
-                    name = child.getName().strip()
-                    if name == 'text':
-                        mood_dict['text'] = child.getData()
-                    else:
-                        mood_dict['mood'] = name
-
-        retracted = items.getTag('retract') or not 'mood' in mood_dict
-        return (mood_dict, retracted)
-
-    def asMarkupText(self):
-        assert not self._retracted
-        untranslated_mood = self._pep_specific_data['mood']
-        mood = self._translate_mood(untranslated_mood)
-        markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
-        if 'text' in self._pep_specific_data:
-            text = self._pep_specific_data['text']
-            markuptext += ' (%s)' % GLib.markup_escape_text(text)
-        return markuptext
-
-    def _translate_mood(self, mood):
-        if mood in MOODS:
-            return MOODS[mood]
-        else:
-            return mood
 
 
 class UserNicknamePEP(AbstractPEP):
@@ -347,5 +222,4 @@ class AvatarNotificationPEP(AbstractPEP):
 
 
 SUPPORTED_PERSONAL_USER_EVENTS = [
-    UserMoodPEP,
     UserNicknamePEP, UserLocationPEP, AvatarNotificationPEP]

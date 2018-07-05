@@ -4,6 +4,7 @@ from collections import namedtuple
 Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
 Option.__new__.__defaults__ = (None,) * len(Option._fields)
 
+
 @unique
 class OptionKind(IntEnum):
     ENTRY = 0
@@ -20,6 +21,7 @@ class OptionKind(IntEnum):
     CHANGEPASSWORD = 11
     GPG = 12
 
+
 @unique
 class OptionType(IntEnum):
     ACCOUNT_CONFIG = 0
@@ -27,6 +29,7 @@ class OptionType(IntEnum):
     VALUE = 2
     ACTION = 3
     DIALOG = 4
+
 
 class AvatarSize(IntEnum):
     TAB = 16
@@ -37,9 +40,11 @@ class AvatarSize(IntEnum):
     VCARD = 200
     PUBLISH = 200
 
+
 class ArchiveState(IntEnum):
     NEVER = 0
     ALL = 1
+
 
 @unique
 class PathLocation(IntEnum):
@@ -47,11 +52,13 @@ class PathLocation(IntEnum):
     CACHE = 1
     DATA = 2
 
+
 @unique
 class PathType(IntEnum):
     FILE = 0
     FOLDER = 1
     FOLDER_OPTIONAL = 2
+
 
 @unique
 class KindConstant(IntEnum):
@@ -67,6 +74,7 @@ class KindConstant(IntEnum):
     def __str__(self):
         return str(self.value)
 
+
 @unique
 class ShowConstant(IntEnum):
     ONLINE = 0
@@ -75,6 +83,7 @@ class ShowConstant(IntEnum):
     XA = 3
     DND = 4
     OFFLINE = 5
+
 
 @unique
 class TypeConstant(IntEnum):
@@ -94,6 +103,7 @@ class TypeConstant(IntEnum):
     MRIM = 13
     NO_TRANSPORT = 14
 
+
 @unique
 class SubscriptionConstant(IntEnum):
     NONE = 0
@@ -101,10 +111,12 @@ class SubscriptionConstant(IntEnum):
     FROM = 2
     BOTH = 3
 
+
 @unique
 class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
+
 
 @unique
 class IdleState(IntEnum):
@@ -113,26 +125,31 @@ class IdleState(IntEnum):
     AWAY = 2
     AWAKE = 3
 
+
 @unique
 class RequestAvatar(IntEnum):
     SELF = 0
     ROOM = 1
     USER = 2
 
+
 @unique
 class BookmarkStorageType(IntEnum):
     PRIVATE = 0
     PUBSUB = 1
+
 
 @unique
 class PEPHandlerType(IntEnum):
     NOTIFY = 0
     RETRACT = 1
 
+
 @unique
 class PEPEventType(IntEnum):
     ACTIVITY = 0
     TUNE = 1
+    MOOD = 2
 
 
 ACTIVITIES = {
@@ -226,6 +243,93 @@ ACTIVITIES = {
         'studying': _('Studying'),
         'writing': _('Writing')}}
 
+MOODS = {
+    'afraid': _('Afraid'),
+    'amazed': _('Amazed'),
+    'amorous': _('Amorous'),
+    'angry': _('Angry'),
+    'annoyed': _('Annoyed'),
+    'anxious': _('Anxious'),
+    'aroused': _('Aroused'),
+    'ashamed': _('Ashamed'),
+    'bored': _('Bored'),
+    'brave': _('Brave'),
+    'calm': _('Calm'),
+    'cautious': _('Cautious'),
+    'cold': _('Cold'),
+    'confident': _('Confident'),
+    'confused': _('Confused'),
+    'contemplative': _('Contemplative'),
+    'contented': _('Contented'),
+    'cranky': _('Cranky'),
+    'crazy': _('Crazy'),
+    'creative': _('Creative'),
+    'curious': _('Curious'),
+    'dejected': _('Dejected'),
+    'depressed': _('Depressed'),
+    'disappointed': _('Disappointed'),
+    'disgusted': _('Disgusted'),
+    'dismayed': _('Dismayed'),
+    'distracted': _('Distracted'),
+    'embarrassed': _('Embarrassed'),
+    'envious': _('Envious'),
+    'excited': _('Excited'),
+    'flirtatious': _('Flirtatious'),
+    'frustrated': _('Frustrated'),
+    'grateful': _('Grateful'),
+    'grieving': _('Grieving'),
+    'grumpy': _('Grumpy'),
+    'guilty': _('Guilty'),
+    'happy': _('Happy'),
+    'hopeful': _('Hopeful'),
+    'hot': _('Hot'),
+    'humbled': _('Humbled'),
+    'humiliated': _('Humiliated'),
+    'hungry': _('Hungry'),
+    'hurt': _('Hurt'),
+    'impressed': _('Impressed'),
+    'in_awe': _('In Awe'),
+    'in_love': _('In Love'),
+    'indignant': _('Indignant'),
+    'interested': _('Interested'),
+    'intoxicated': _('Intoxicated'),
+    'invincible': _('Invincible'),
+    'jealous': _('Jealous'),
+    'lonely': _('Lonely'),
+    'lost': _('Lost'),
+    'lucky': _('Lucky'),
+    'mean': _('Mean'),
+    'moody': _('Moody'),
+    'nervous': _('Nervous'),
+    'neutral': _('Neutral'),
+    'offended': _('Offended'),
+    'outraged': _('Outraged'),
+    'playful': _('Playful'),
+    'proud': _('Proud'),
+    'relaxed': _('Relaxed'),
+    'relieved': _('Relieved'),
+    'remorseful': _('Remorseful'),
+    'restless': _('Restless'),
+    'sad': _('Sad'),
+    'sarcastic': _('Sarcastic'),
+    'satisfied': _('Satisfied'),
+    'serious': _('Serious'),
+    'shocked': _('Shocked'),
+    'shy': _('Shy'),
+    'sick': _('Sick'),
+    'sleepy': _('Sleepy'),
+    'spontaneous': _('Spontaneous'),
+    'stressed': _('Stressed'),
+    'strong': _('Strong'),
+    'surprised': _('Surprised'),
+    'thankful': _('Thankful'),
+    'thirsty': _('Thirsty'),
+    'tired': _('Tired'),
+    'undefined': _('Undefined'),
+    'weak': _('Weak'),
+    'worried': _('Worried')
+}
+
 
 SSLError = {
     2: _("Unable to get issuer certificate"),
@@ -260,7 +364,7 @@ SSLError = {
     31: _("Authority and issuer serial number mismatch"),
     32: _("Key usage does not include certificate signing"),
     50: _("Application verification failure"),
-    }
+}
 
 
 THANKS = u"""\

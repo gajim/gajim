@@ -2107,9 +2107,9 @@ class RosterWindow:
         if 'mood' in pep_dict:
             mood = pep_dict['mood']
             mood_text = pep_dict.get('mood_text', None)
-            connection.send_mood(mood, mood_text)
+            connection.get_module('UserMood').send((mood, mood_text))
         else:
-            connection.retract_mood()
+            connection.get_module('UserMood').retract()
 
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):

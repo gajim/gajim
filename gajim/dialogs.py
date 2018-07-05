@@ -52,6 +52,7 @@ from gajim.common import ged
 from gajim.common import const
 from gajim.options_dialog import OptionsDialog
 from gajim.common.const import Option, OptionKind, OptionType, ACTIVITIES
+from gajim.common.const import MOODS
 
 from gajim.common import app
 from gajim.common import helpers
@@ -505,7 +506,7 @@ class ChangeMoodDialog:
 
         # Order them first
         self.MOODS = []
-        for mood in pep.MOODS:
+        for mood in MOODS:
             self.MOODS.append(mood)
         self.MOODS.sort()
 
@@ -515,7 +516,7 @@ class ChangeMoodDialog:
             self.mood_buttons[mood].set_mode(False)
             self.mood_buttons[mood].add(gtkgui_helpers.load_mood_icon(mood))
             self.mood_buttons[mood].set_relief(Gtk.ReliefStyle.NONE)
-            self.mood_buttons[mood].set_tooltip_text(pep.MOODS[mood])
+            self.mood_buttons[mood].set_tooltip_text(MOODS[mood])
             self.mood_buttons[mood].connect('clicked',
                 self.on_mood_button_clicked, mood)
             table.attach(self.mood_buttons[mood], x, y, 1, 1)
@@ -526,9 +527,9 @@ class ChangeMoodDialog:
                 x = 0
                 y += 1
 
-        if self.mood in pep.MOODS:
+        if self.mood in MOODS:
             self.mood_buttons[self.mood].set_active(True)
-            self.label.set_text(pep.MOODS[self.mood])
+            self.label.set_text(MOODS[self.mood])
             self.entry.set_sensitive(True)
             if self.text:
                 self.entry.set_text(self.text)
@@ -543,7 +544,7 @@ class ChangeMoodDialog:
 
     def on_mood_button_clicked(self, widget, data):
         if data:
-            self.label.set_text(pep.MOODS[data])
+            self.label.set_text(MOODS[data])
             self.entry.set_sensitive(True)
         else:
             self.label.set_text(_('None'))
@@ -705,7 +706,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         """
         img = self.xml.get_object('mood_image')
         label = self.xml.get_object('mood_button_label')
-        if 'mood' in self.pep_dict and self.pep_dict['mood'] in pep.MOODS:
+        if 'mood' in self.pep_dict and self.pep_dict['mood'] in MOODS:
             img.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
                 self.pep_dict['mood']).get_pixbuf())
             if self.pep_dict['mood_text']:

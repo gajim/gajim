@@ -295,7 +295,6 @@ class ConnectionPEP(object):
         self._account = new_name
 
     def reset_awaiting_pep(self):
-        self.to_be_sent_mood = None
         self.to_be_sent_nick = None
         self.to_be_sent_location = None
 
@@ -303,36 +302,11 @@ class ConnectionPEP(object):
         """
         Send pep info that were waiting for connection
         """
-        if self.to_be_sent_mood:
-            self.send_mood(*self.to_be_sent_mood)
         if self.to_be_sent_nick:
             self.send_nick(self.to_be_sent_nick)
         if self.to_be_sent_location:
             self.send_location(self.to_be_sent_location)
         self.reset_awaiting_pep()
-
-    def send_mood(self, mood, message=None):
-        if self.connected == 1:
-            # We are connecting, keep mood in mem and send it when we'll be
-            # connected
-            self.to_be_sent_mood = (mood, message)
-            return
-        if not self.pep_supported:
-            return
-        item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
-        if mood:
-            item.addChild(mood)
-        if message:
-            i = item.addChild('text')
-            i.addData(message)
-        self.get_module('PubSub').send_pb_publish('', nbxmpp.NS_MOOD, item, '0')
-
-    def retract_mood(self):
-        if not self.pep_supported:
-            return
-        self.send_mood(None)
-        # not all client support new XEP, so we still retract
-        self.get_module('PubSub').send_pb_retract('', nbxmpp.NS_MOOD, '0')
 
     def send_nickname(self, nick):
         if self.connected == 1:
