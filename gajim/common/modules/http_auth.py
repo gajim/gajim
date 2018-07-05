@@ -30,7 +30,8 @@ class HTTPAuth:
         self._account = con.name
 
         self.handlers = [
-            ('iq', self.answer_request, 'get', nbxmpp.NS_HTTP_AUTH)
+            ('iq', self.answer_request, 'get', nbxmpp.NS_HTTP_AUTH),
+            ('message', self.answer_request, '', nbxmpp.NS_HTTP_AUTH)
         ]
 
     def answer_request(self, con, stanza):

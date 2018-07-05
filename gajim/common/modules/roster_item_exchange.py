@@ -31,7 +31,8 @@ class RosterItemExchange:
         self._account = con.name
 
         self.handlers = [
-            ('iq', self.received_item, 'set', nbxmpp.NS_ROSTERX)
+            ('iq', self.received_item, 'set', nbxmpp.NS_ROSTERX),
+            ('message', self.received_item, '', nbxmpp.NS_ROSTERX)
         ]
 
     def received_item(self, con, stanza):

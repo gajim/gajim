@@ -914,18 +914,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                      self.stanza.getFrom())
             return
 
-        # check if the message is a roster item exchange (XEP-0144)
-        if self.stanza.getTag('x', namespace=nbxmpp.NS_ROSTERX):
-            self.conn.get_module('RosterItemExchange').received_item(
-                self.conn, self.stanza)
-            return
-
-        # check if the message is a XEP-0070 confirmation request
-        if self.stanza.getTag('confirm', namespace=nbxmpp.NS_HTTP_AUTH):
-            self.conn.get_module('HTTPAuth').answer_request(
-                self.conn, self.stanza)
-            return
-
         try:
             self.get_jid_resource()
         except helpers.InvalidFormat:

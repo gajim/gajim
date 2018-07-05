@@ -302,6 +302,11 @@ class ConnectionHandlersBase:
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
+        # XEPs that are based on Message
+        self._message_namespaces = set([nbxmpp.NS_HTTP_AUTH,
+                                        nbxmpp.NS_PUBSUB_EVENT,
+                                        nbxmpp.NS_ROSTERX])
+
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
         app.ged.register_event_handler('presence-received', ged.CORE,
@@ -1023,7 +1028,13 @@ ConnectionHTTPUpload):
         """
         Called when we receive a message
         """
-        if nbxmpp.NS_PUBSUB_EVENT in stanza.getProperties():
+
+        # Check if a child of the message contains any
+        # of these namespaces, so we dont execute the
+        # message handler for them.
+        # They have defined their own message handlers
+        # but nbxmpp executes less common handlers last
+        if self._message_namespaces & set(stanza.getProperties()):
             return
         log.debug('MessageCB')
 
