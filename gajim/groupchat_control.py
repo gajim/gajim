@@ -1975,13 +1975,11 @@ class GroupchatControl(ChatControlBase):
         and (not obj.status_code or '303' not in obj.status_code) and not \
         right_changed:
             st = ''
-            print_status = None
-            for bookmark in app.connections[self.account].bookmarks:
-                if bookmark['jid'] == self.room_jid:
-                    print_status = bookmark.get('print_status', None)
-                    break
-            if not print_status:
-                print_status = app.config.get('print_status_in_muc')
+            con = app.connections[self.account]
+            bookmarks = con.get_module('Bookmarks').bookmarks
+            bookmark = bookmarks.get(self.room_jid, None)
+            print_status = bookmark.get(
+                'print_status', app.config.get('print_status_in_muc'))
             if obj.show == 'offline':
                 if obj.nick in self.attention_list:
                     self.attention_list.remove(obj.nick)
