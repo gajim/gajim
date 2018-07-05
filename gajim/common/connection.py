@@ -630,7 +630,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.last_time_to_reconnect = None
         self.new_account_info = None
         self.new_account_form = None
-        self.last_io = app.idlequeue.current_time()
         self.last_sent = []
         self.password = passwords.get_password(name)
 
@@ -1512,7 +1511,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(AnonymousAuthEvent(None,
                 conn=self, old_jid=old_jid, new_jid=new_jid))
         if auth:
-            self.last_io = app.idlequeue.current_time()
             self.connected = 2
             self.retrycount = 0
             if self.on_connect_auth:

@@ -1203,9 +1203,6 @@ ConnectionHTTPUpload):
                 # This way we'll really remove it
                 app.to_be_removed[self.name].remove(jid)
 
-    def _StanzaArrivedCB(self, con, obj):
-        self.last_io = app.idlequeue.current_time()
-
     def _MucOwnerCB(self, con, iq_obj):
         log.debug('MucOwnerCB')
         app.nec.push_incoming_event(MucOwnerReceivedEvent(None, conn=self,
@@ -1470,10 +1467,7 @@ ConnectionHTTPUpload):
         con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)
         con.RegisterHandler('iq', self._ErrorCB, 'error')
         con.RegisterHandler('iq', self._IqCB)
-        con.RegisterHandler('iq', self._StanzaArrivedCB)
         con.RegisterHandler('iq', self._ResultCB, 'result')
-        con.RegisterHandler('presence', self._StanzaArrivedCB)
-        con.RegisterHandler('message', self._StanzaArrivedCB)
         con.RegisterHandler('unknown', self._StreamCB,
             nbxmpp.NS_XMPP_STREAMS, xmlns=nbxmpp.NS_STREAMS)
         con.RegisterHandler('iq', self._PubkeyGetCB, 'get',
