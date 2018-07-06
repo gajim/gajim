@@ -22,7 +22,6 @@
 # pylint: disable=attribute-defined-outside-init
 
 from calendar import timegm
-import datetime
 import hashlib
 import hmac
 import logging
@@ -33,7 +32,6 @@ import OpenSSL.crypto
 import nbxmpp
 from nbxmpp.protocol import NS_CHATSTATES
 
-from gajim.common import atom
 from gajim.common import nec
 from gajim.common import helpers
 from gajim.common import app
@@ -1758,24 +1756,6 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             if pep:
                 self.pep_type = pep.type_
                 return True
-
-        items = self.event_tag.getTag('items')
-        if items:
-            # for each entry in feed (there shouldn't be more than one, but to
-            # be sure...
-            for item in items.getTags('item'):
-                entry = item.getTag('entry', namespace=nbxmpp.NS_ATOM)
-                if entry:
-                    app.nec.push_incoming_event(AtomEntryReceived(None,
-                        conn=self.conn, node=entry))
-
-class AtomEntryReceived(nec.NetworkIncomingEvent):
-    name = 'atom-entry-received'
-    base_network_events = []
-
-    def generate(self):
-        self.atom_entry = atom.OldEntry(node=self.node)
-        return True
 
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
     name = 'plain-connection'

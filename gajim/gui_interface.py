@@ -1166,7 +1166,10 @@ class Interface:
 
     @staticmethod
     def handle_atom_entry(obj):
-        AtomWindow.newAtomEntry(obj.atom_entry)
+        if obj != PEPEventType.ATOM:
+            return
+        if obj.get_entry():
+            AtomWindow.newAtomEntry(obj.get_entry())
 
     def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
@@ -1503,7 +1506,7 @@ class Interface:
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
             'FILE_SEND_ERROR': [self.handle_event_file_send_error],
-            'atom-entry-received': [self.handle_atom_entry],
+            'pep-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'client-cert-passphrase': [

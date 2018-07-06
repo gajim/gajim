@@ -153,6 +153,7 @@ class PEPEventType(IntEnum):
     LOCATION = 3
     NICKNAME = 4
     AVATAR = 5
+    ATOM = 6
 
 
 ACTIVITIES = {
