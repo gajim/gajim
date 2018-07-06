@@ -64,6 +64,7 @@ from gajim.common import helpers
 from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
+from gajim.common.const import PEPEventType
 if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener
 from gajim.common import ged
@@ -2648,6 +2649,13 @@ class RosterWindow:
             self.remove_contact(jid, obj.conn.name, backend=True)
 
     def _nec_pep_received(self, obj):
+        if obj.user_pep.type_ not in (PEPEventType.ACTIVITY,
+                                      PEPEventType.TUNE,
+                                      PEPEventType.MOOD,
+                                      PEPEventType.LOCATION,
+                                      PEPEventType.NICKNAME):
+            return
+
         if obj.jid == app.get_jid_from_account(obj.conn.name):
             self.draw_account(obj.conn.name)
 
