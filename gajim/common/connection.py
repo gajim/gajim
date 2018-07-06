@@ -32,14 +32,12 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
 import sys
 import random
 import socket
 import operator
 import string
 import time
-import locale
 import hmac
 import hashlib
 import json

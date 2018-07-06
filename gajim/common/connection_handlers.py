@@ -28,14 +28,9 @@
 ## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 ##
 
-import os
-import base64
-import binascii
 import operator
-import hashlib
 
-from time import (altzone, daylight, gmtime, localtime, strftime,
-        time as time_time, timezone, tzname)
+from time import time as time_time
 
 from gi.repository import GLib
 
@@ -46,7 +41,6 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import dataforms
 from gajim.common import jingle_xtls
-from gajim.common import configpaths
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
 from gajim.common.protocol.caps import ConnectionCaps
@@ -56,7 +50,6 @@ from gajim.common.message_archiving import ConnectionArchive313
 from gajim.common.connection_handlers_events import *
 
 from gajim.common import ged
-from gajim.common import nec
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
 
