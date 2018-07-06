@@ -781,7 +781,7 @@ class ConversationTextview(GObject.GObject):
                     if '?' in word:
                         (jid, action) = word.split('?')
                         if action == 'join':
-                            app.interface.join_gc_minimal(None, jid)
+                            app.interface.join_gc_minimal(self.account, jid)
                         else:
                             self.on_start_chat_activate(None, jid)
                     else:
