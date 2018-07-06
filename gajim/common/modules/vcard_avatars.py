@@ -119,7 +119,7 @@ class VCardAvatars:
                     app.contacts.set_avatar(self._account, jid, avatar_sha)
                     app.interface.update_avatar(
                         self._account, jid, room_avatar=room)
-                return
+                    return
 
             if avatar_sha not in self._requested_shas:
                 self._requested_shas.append(avatar_sha)
