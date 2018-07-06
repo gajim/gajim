@@ -845,64 +845,63 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         ChangeMoodDialog(on_response, self.pep_dict['mood'],
                                          self.pep_dict['mood_text'])
 
-class AddNewContactWindow:
+class AddNewContactWindow(Gtk.ApplicationWindow):
     """
     Class for AddNewContactWindow
     """
 
-    uid_labels = {'jabber': _('JID:'),
-        'gadu-gadu': _('GG Number:'),
-        'icq': _('ICQ Number:')}
+    uid_labels = {'jabber': _('Jabber ID'),
+        'gadu-gadu': _('GG Number'),
+        'icq': _('ICQ Number')}
 
     def __init__(self, account=None, jid=None, user_nick=None, group=None):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_resizable(False)
+        self.set_title(_('Add Contact'))
+
+        self.connect('destroy', self.on_add_new_contact_window_destroy)
+        self.connect('key-press-event', self.on_add_new_contact_window_key_press_event)
+
         self.account = account
         self.adding_jid = False
-        if account is None:
-            # fill accounts with active accounts
-            accounts = []
-            for account in app.connections.keys():
-                if account == 'Local':
-                    continue
-                if app.connections[account].connected > 1:
-                    accounts.append(account)
-            if not accounts:
-                return
-            if len(accounts) == 1:
-                self.account = account
-        else:
-            accounts = [self.account]
-        if self.account:
-            location = app.interface.instances[self.account]
-        else:
-            location = app.interface.instances
-        if 'add_contact' in location:
-            location['add_contact'].window.present()
-            # An instance is already opened
+
+        # fill accounts with active accounts
+        accounts = app.get_enabled_accounts_with_labels()
+
+        if not accounts:
             return
-        location['add_contact'] = self
+
+        if not account:
+            self.account = accounts[0][0]
+
         self.xml = gtkgui_helpers.get_gtk_builder('add_new_contact_window.ui')
+        self.add(self.xml.get_object('add_contact_box'))
         self.xml.connect_signals(self)
-        self.window = self.xml.get_object('add_new_contact_window')
-        for w in ('account_combobox', 'account_hbox', 'account_label',
+
+        for w in ('account_combobox', 'account_label', 'prompt_label',
         'uid_label', 'uid_entry', 'protocol_combobox', 'protocol_jid_combobox',
-        'protocol_hbox', 'nickname_entry', 'message_scrolledwindow',
-        'save_message_checkbutton', 'register_hbox', 'subscription_table',
+        'protocol_label', 'nickname_entry', 'message_scrolledwindow',
+        'save_message_checkbutton', 'register_hbox',
         'add_button', 'message_textview', 'connected_label',
-        'group_comboboxentry', 'auto_authorize_checkbutton'):
+        'group_comboboxentry', 'auto_authorize_checkbutton',
+        'save_message_revealer', 'nickname_label', 'group_label'):
             self.__dict__[w] = self.xml.get_object(w)
-        if account and len(app.connections) >= 2:
-            self.default_desc = _('Please fill in the data of the contact you want '
-                                  'to add to your account <b>%s</b>') % account
-        else:
-            self.default_desc = _('Please fill in the data of the contact you '
-                'want to add')
-        self.xml.get_object('prompt_label').set_markup(self.default_desc)
+
+        self.subscription_table = [self.uid_label, self.uid_entry,
+                                   self.nickname_label, self.nickname_entry,
+                                   self.group_label, self.group_comboboxentry]
+
+        self.add_button.grab_default()
+
         self.agents = {'jabber': []}
         self.gateway_prompt = {}
         # types to which we are not subscribed but account has an agent for it
         self.available_types = []
         for acct in accounts:
-            for j in app.contacts.get_jid_list(acct):
+            for j in app.contacts.get_jid_list(acct[0]):
                 if app.jid_is_transport(j):
                     type_ = app.get_transport_name_from_jid(j, False)
                     if not type_:
@@ -914,28 +913,20 @@ class AddNewContactWindow:
                     self.gateway_prompt[j] = {'desc': None, 'prompt': None}
         # Now add the one to which we can register
         for acct in accounts:
-            for type_ in app.connections[acct].available_transports:
+            for type_ in app.connections[acct[0]].available_transports:
                 if type_ in self.agents:
                     continue
                 self.agents[type_] = []
-                for jid_ in app.connections[acct].available_transports[type_]:
+                for jid_ in app.connections[acct[0]].available_transports[type_]:
                     if not jid_ in self.agents[type_]:
                         self.agents[type_].append(jid_)
                         self.gateway_prompt[jid_] = {'desc': None,
                             'prompt': None}
                 self.available_types.append(type_)
-        # Combobox with transport/jabber icons
-        liststore = Gtk.ListStore(str, str, str)
-        cell = Gtk.CellRendererPixbuf()
-        self.protocol_combobox.pack_start(cell, False)
-        self.protocol_combobox.add_attribute(cell, 'icon_name', 1)
-        cell = Gtk.CellRendererText()
-        cell.set_property('xpad', 5)
-        self.protocol_combobox.pack_start(cell, True)
-        self.protocol_combobox.add_attribute(cell, 'text', 0)
-        self.protocol_combobox.set_model(liststore)
+        
         uf_type = {'jabber': 'XMPP', 'gadu-gadu': 'Gadu Gadu', 'icq': 'ICQ'}
         # Jabber as first
+        liststore = self.protocol_combobox.get_model()
         liststore.append(['XMPP', 'xmpp', 'jabber'])
         for type_ in self.agents:
             if type_ == 'jabber':
@@ -950,8 +941,7 @@ class AddNewContactWindow:
                     app.connections[account].request_gateway_prompt(service)
         self.protocol_combobox.set_active(0)
         self.auto_authorize_checkbutton.show()
-        liststore = Gtk.ListStore(str)
-        self.protocol_jid_combobox.set_model(liststore)
+
         if jid:
             self.jid_escaped = True
             type_ = app.get_transport_name_from_jid(jid)
@@ -992,7 +982,7 @@ class AddNewContactWindow:
             self.uid_entry.grab_focus()
         group_names = []
         for acct in accounts:
-            for g in app.groups[acct].keys():
+            for g in app.groups[acct[0]].keys():
                 if g not in helpers.special_groups and g not in group_names:
                     group_names.append(g)
         group_names.sort()
@@ -1003,21 +993,25 @@ class AddNewContactWindow:
                 self.group_comboboxentry.set_active(i)
             i += 1
 
-        self.window.set_transient_for(app.interface.roster.window)
-        self.window.show_all()
+        self.show_all()
 
-        if self.account:
-            self.account_label.hide()
-            self.account_hbox.hide()
+        self.prompt_label.hide()
+        self.save_message_revealer.hide()
+
+        if len(accounts) > 1:
+            liststore = self.account_combobox.get_model()
+            for acc in accounts:
+                liststore.append(acc)
+
+            self.account_combobox.set_active_id(self.account)
         else:
-            liststore = Gtk.ListStore(str, str)
-            for acct in accounts:
-                liststore.append([acct, acct])
-            self.account_combobox.set_model(liststore)
-            self.account_combobox.set_active(0)
+            self.account_label.hide()
+            self.account_combobox.hide()
 
         if len(self.agents) == 1:
-            self.protocol_hbox.hide()
+            self.protocol_label.hide()
+            self.protocol_combobox.hide()
+            self.protocol_jid_combobox.hide()
 
         if self.account:
             message_buffer = self.message_textview.get_buffer()
@@ -1031,15 +1025,10 @@ class AddNewContactWindow:
             self._nec_presence_received)
 
     def on_add_new_contact_window_destroy(self, widget):
-        if self.account:
-            location = app.interface.instances[self.account]
-        else:
-            location = app.interface.instances
-        del location['add_contact']
         app.ged.remove_event_handler('presence-received', ged.GUI1,
-            self._nec_presence_received)
+                                     self._nec_presence_received)
         app.ged.remove_event_handler('gateway-prompt-received', ged.GUI1,
-            self._nec_gateway_prompt_received)
+                                     self._nec_gateway_prompt_received)
 
     def on_register_button_clicked(self, widget):
         model = self.protocol_jid_combobox.get_model()
@@ -1049,13 +1038,17 @@ class AddNewContactWindow:
 
     def on_add_new_contact_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape: # ESCAPE
-            self.window.destroy()
+            self.destroy()
 
     def on_cancel_button_clicked(self, widget):
         """
         When Cancel button is clicked
         """
-        self.window.destroy()
+        self.destroy()
+
+    def on_message_textbuffer_changed(self, widget):
+        self.save_message_revealer.show()
+        self.save_message_revealer.set_reveal_child(True)
 
     def on_add_button_clicked(self, widget):
         """
@@ -1063,6 +1056,11 @@ class AddNewContactWindow:
         """
         jid = self.uid_entry.get_text().strip()
         if not jid:
+            ErrorDialog(
+                _('%s Missing') % self.uid_label.get_text(),
+                _('You must supply the %s of the new contact.' %
+                    self.uid_label.get_text())
+            )
             return
 
         model = self.protocol_combobox.get_model()
@@ -1102,6 +1100,13 @@ class AddNewContactWindow:
             ErrorDialog(pritext, _('You cannot add yourself to your roster.'))
             return
 
+        if not app.account_is_connected(self.account):
+            ErrorDialog(
+                _('Account Offline'),
+                _('Your account must be online to add new contacts.')
+            )
+            return
+
         nickname = self.nickname_entry.get_text() or ''
         # get value of account combobox, if account was not specified
         if not self.account:
@@ -1135,14 +1140,13 @@ class AddNewContactWindow:
         auto_auth = self.auto_authorize_checkbutton.get_active()
         app.interface.roster.req_sub(self, jid, message, self.account,
             groups=groups, nickname=nickname, auto_auth=auto_auth)
-        self.window.destroy()
+        self.destroy()
 
     def on_account_combobox_changed(self, widget):
-        model = widget.get_model()
-        iter_ = widget.get_active_iter()
-        account = model[iter_][0]
+        account = widget.get_active_id()
         message_buffer = self.message_textview.get_buffer()
         message_buffer.set_text(helpers.get_subscription_request_msg(account))
+        self.account = account
 
     def on_protocol_jid_combobox_changed(self, widget):
         model = widget.get_model()
@@ -1153,12 +1157,16 @@ class AddNewContactWindow:
         model = self.protocol_combobox.get_model()
         iter_ = self.protocol_combobox.get_active_iter()
         type_ = model[iter_][2]
+
         desc = None
         if self.agents[type_] and jid_ in self.gateway_prompt:
             desc = self.gateway_prompt[jid_]['desc']
-        if not desc:
-            desc = self.default_desc
-        self.xml.get_object('prompt_label').set_markup(desc)
+
+        if desc:
+            self.prompt_label.set_markup(desc)
+            self.prompt_label.show()
+        else:
+            self.prompt_label.hide()
 
         prompt = None
         if self.agents[type_] and jid_ in self.gateway_prompt:
@@ -1185,9 +1193,13 @@ class AddNewContactWindow:
             jid_ = self.agents[type_][0]
             if jid_ in self.gateway_prompt:
                 desc = self.gateway_prompt[jid_]['desc']
-        if not desc:
-            desc = self.default_desc
-        self.xml.get_object('prompt_label').set_markup(desc)
+
+        if desc:
+            self.prompt_label.set_markup(desc)
+            self.prompt_label.show()
+        else:
+            self.prompt_label.hide()
+
         if len(self.agents[type_]) > 1:
             self.protocol_jid_combobox.show()
         else:
@@ -1214,7 +1226,7 @@ class AddNewContactWindow:
             self.register_hbox.show()
             self.auto_authorize_checkbutton.hide()
             self.connected_label.hide()
-            self.subscription_table.hide()
+            self._subscription_table_hide()
             self.add_button.set_sensitive(False)
         else:
             self.register_hbox.hide()
@@ -1224,13 +1236,13 @@ class AddNewContactWindow:
                 jid = model[row][0]
                 contact = app.contacts.get_first_contact_from_jid(
                     self.account, jid)
-                if contact.show in ('offline', 'error'):
-                    self.subscription_table.hide()
+                if contact is None or contact.show in ('offline', 'error'):
+                    self._subscription_table_hide()
                     self.connected_label.show()
                     self.add_button.set_sensitive(False)
                     self.auto_authorize_checkbutton.hide()
                     return
-            self.subscription_table.show()
+            self._subscription_table_show()
             self.auto_authorize_checkbutton.show()
             self.connected_label.hide()
             self.add_button.set_sensitive(True)
@@ -1242,7 +1254,7 @@ class AddNewContactWindow:
         if _jid == jid:
             self.register_hbox.hide()
             self.connected_label.hide()
-            self.subscription_table.show()
+            self._subscription_table_show()
             self.auto_authorize_checkbutton.show()
             self.add_button.set_sensitive(True)
 
@@ -1251,7 +1263,7 @@ class AddNewContactWindow:
         row = self.protocol_jid_combobox.get_active()
         _jid = model[row][0]
         if _jid == jid:
-            self.subscription_table.hide()
+            self._subscription_table_hide()
             self.auto_authorize_checkbutton.hide()
             self.connected_label.show()
             self.add_button.set_sensitive(False)
@@ -1282,6 +1294,14 @@ class AddNewContactWindow:
                 self.gateway_prompt[obj.jid]['desc'] = obj.desc
             if obj.prompt:
                 self.gateway_prompt[obj.jid]['prompt'] = obj.prompt
+
+    def _subscription_table_hide(self):
+        for widget in self.subscription_table:
+            widget.hide()
+
+    def _subscription_table_show(self):
+        for widget in self.subscription_table:
+            widget.show()
 
 class AboutDialog(Gtk.AboutDialog):
     def __init__(self):

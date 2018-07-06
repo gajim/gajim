@@ -134,7 +134,11 @@ def on_join_gc(action, param):
 
 
 def on_add_contact(action, param):
-    dialogs.AddNewContactWindow(param.get_string())
+    window = app.get_app_window(dialogs.AddNewContactWindow)
+    if window is None:
+        dialogs.AddNewContactWindow(param.get_string())
+    else:
+        window.present()
 
 
 def on_single_message(action, param):
