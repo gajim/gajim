@@ -1797,11 +1797,12 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if 'join_gc' not in app.interface.instances[self.account]:
+        window = app.get_app_window('JoinGroupchatWindow')
+        if window is None:
             app.interface.join_gc_minimal(self.account, service)
         else:
-            app.interface.instances[self.account]['join_gc'].set_room(service)
-            app.interface.instances[self.account]['join_gc'].present()
+            window.set_room(service)
+            window.present()
             self.window.destroy()
 
     def update_actions(self):

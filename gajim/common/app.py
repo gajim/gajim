@@ -583,6 +583,9 @@ def prefers_app_menu():
 
 def get_app_window(cls):
     for win in app.get_windows():
-        if isinstance(win, cls):
+        if isinstance(cls, str):
+            if type(win).__name__ == cls:
+                return win
+        elif isinstance(win, cls):
             return win
     return None
