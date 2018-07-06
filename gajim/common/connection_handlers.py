@@ -39,7 +39,6 @@ from gajim.common import caps_cache as capscache
 
 from gajim.common import helpers
 from gajim.common import app
-from gajim.common import dataforms
 from gajim.common import jingle_xtls
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.commands import ConnectionCommands
@@ -64,7 +63,6 @@ METACONTACTS_ARRIVED = 'metacontacts_arrived'
 ROSTER_ARRIVED = 'roster_arrived'
 DELIMITER_ARRIVED = 'delimiter_arrived'
 PRIVACY_ARRIVED = 'privacy_arrived'
-PEP_CONFIG = 'pep_config'
 
 
 class ConnectionDisco:
@@ -933,21 +931,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                 # connection process, we don't take the risk
                 self.privacy_rules_supported = False
                 self._continue_connection_request_privacy()
-        elif self.awaiting_answers[id_][0] == PEP_CONFIG:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() == 'error':
-                return
-            if not iq_obj.getTag('pubsub'):
-                return
-            conf = iq_obj.getTag('pubsub').getTag('configure')
-            if not conf:
-                return
-            node = conf.getAttr('node')
-            form_tag = conf.getTag('x', namespace=nbxmpp.NS_DATA)
-            if form_tag:
-                form = dataforms.ExtendForm(node=form_tag)
-                app.nec.push_incoming_event(PEPConfigReceivedEvent(None,
-                    conn=self, node=node, form=form))
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:

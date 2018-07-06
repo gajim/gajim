@@ -2839,7 +2839,7 @@ class ManagePEPServicesWindow:
         self.xml.get_object('services_treeview').get_selection().connect(
                 'changed', self.on_services_selection_changed)
 
-        app.ged.register_event_handler('pep-config-received', ged.GUI1,
+        app.ged.register_event_handler('pubsub-config-received', ged.GUI1,
             self._nec_pep_config_received)
         app.ged.register_event_handler('agent-items-received', ged.GUI1,
             self._nec_agent_items_received)
@@ -2849,7 +2849,7 @@ class ManagePEPServicesWindow:
     def on_manage_pep_services_window_destroy(self, widget):
         '''close window'''
         del app.interface.instances[self.account]['pep_services']
-        app.ged.remove_event_handler('pep-config-received', ged.GUI1,
+        app.ged.remove_event_handler('pubsub-config-received', ged.GUI1,
             self._nec_pep_config_received)
         app.ged.remove_event_handler('agent-items-received', ged.GUI1,
             self._nec_agent_items_received)

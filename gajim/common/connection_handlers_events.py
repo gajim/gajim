@@ -1822,10 +1822,6 @@ class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
     def generate(self):
         return True
 
-class PEPConfigReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'pep-config-received'
-    base_network_events = []
-
 class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
     name = 'metacontacts-received'
     base_network_events = []
