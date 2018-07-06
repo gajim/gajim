@@ -2300,7 +2300,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.set_show_menubar(False)
         self.set_resizable(False)
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_title(_('Join Groupchat'))
+        self.set_title(_('Join Group Chat'))
         if transient_for:
             self.set_transient_for(transient_for)
 
@@ -2309,92 +2309,85 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.requested_jid = None
         self.room_jid = room_jid
         self.account = account
-        self.minimal_mode = 0 # 2: very mini, 1: with room, 0: show all
-        if room_jid is not None:
-            if '@' in room_jid:
-                self.minimal_mode = 2
-            else:
-                self.minimal_mode = 1
 
-        glade_objects = ['grid', 'nick_entry', 'account_combo', 'jid_label',
-                         'bookmark_switch', 'autojoin_switch', 'headerbar',
-                         'account_label', 'password_entry', 'password_label',
-                         'join_button', 'button_box', 'server_label',
-                         'server_combo', 'recent_label', 'recent_combo',
-                         'room_label', 'room_entry', 'search_button']
+        if self.room_jid is None:
+            self.minimal_mode = False
+        else:
+            self.minimal_mode = True
 
-        minimal_widgets = ['jid_label']
-        room_widgets = ['room_label', 'room_entry']
+        glade_objects = ['main_box', 'account_label', 'account_combo',
+                         'server_label', 'server_combo', 'room_entry',
+                         'recently_button', 'recently_popover',
+                         'recently_treeview', 'search_button', 'password_label',
+                         'password_entry', 'nick_entry', 'bookmark_switch',
+                         'autojoin_switch']
 
-        extended_widgets = ['server_label', 'server_combo', 'recent_label',
-                            'recent_combo', 'room_label', 'room_entry',
-                            'search_button']
         self.builder = gtkgui_helpers.get_gtk_builder(
             'join_groupchat_window.ui')
         for obj in glade_objects:
             setattr(self, obj, self.builder.get_object(obj))
 
-        self.add(self.grid)
-
-        if os.environ.get('GTK_CSD', '1') == '1':
-            self.set_titlebar(self.headerbar)
-        else:
-            self.button_box.show()
+        self.add(self.main_box)
 
         # Show widgets depending on the mode the window is in
-        if self.minimal_mode > 0:
-            for widget in minimal_widgets:
-                getattr(self, widget).show()
-            if self.minimal_mode == 1:
-                for widget in room_widgets:
-                    getattr(self, widget).show()
-            self.jid_label.set_text(room_jid)
-        else:
-            for widget in extended_widgets:
-                getattr(self, widget).show()
+        if not self.minimal_mode:
+            self.recently_button.show()
+            self.search_button.show()
 
-        if account is None:
-            connected_accounts = app.get_connected_accounts()
-            account = connected_accounts[0]
-            for acc in connected_accounts:
-                self.account_combo.append_text(acc)
-        else:
-            connected_accounts = [account]
-            self.account_combo.append_text(account)
+        accounts = app.get_enabled_accounts_with_labels()
+        account_liststore  = self.account_combo.get_model()
+        for acc in accounts:
+            account_liststore.append(acc)
+
+        if not accounts:
+            return
+
+        if not self.account:
+            self.account = accounts[0][0]
 
         self.builder.connect_signals(self)
         self.connect('key-press-event', self._on_key_press_event)
         self.connect('destroy', self._on_destroy)
 
-        if self.minimal_mode == 0:
+        if not self.minimal_mode:
             app.ged.register_event_handler('agent-info-received', ged.GUI1,
                                            self._nec_agent_info_received)
             app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
                                            self._nec_agent_info_error_received)
 
         # Show account combobox if there is more than one account
-        if len(connected_accounts) > 1:
+        if len(accounts) > 1:
             self.account_combo.show()
             self.account_label.show()
 
-        # Select first account
-        self.account_combo.set_active(0)
+        self.account_combo.set_active_id(self.account)
+
+        if self.minimal_mode:
+            if '@' in self.room_jid:
+                (room, server) = self.room_jid.split('@')
+                self.room_entry.set_text(room)
+                if not muc_caps_cache.supports(
+                        self.room_jid, 'muc_passwordprotected'):
+                    self.password_entry.hide()
+                    self.password_label.hide()
+                    self.nick_entry.grab_focus()
+                else:
+                    self.password_entry.grab_focus()
+            else:
+                server = self.room_jid
+                self.room_entry.grab_focus()
+
+            self.server_combo.insert_text(0, server)
+            self.server_combo.set_active(0)
 
         if self.password is not None:
             self.password_entry.set_text(self.password)
 
         # Set bookmark switch sensitive if server supports bookmarks
-        acc = self.account_combo.get_active_text()
+        acc = self.account_combo.get_active_id()
         if not app.connections[acc].private_storage_supported:
             self.bookmark_switch.set_sensitive(False)
             self.autojoin_switch.set_sensitive(False)
-
-        # Show password field if we are in extended mode or
-        # The MUC is passwordprotected
-        if self.minimal_mode == 0 or muc_caps_cache.supports(
-                room_jid, 'muc_passwordprotected'):
-            self.password_entry.show()
-            self.password_label.show()
 
         self.show_all()
 
@@ -2404,16 +2397,18 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.server_combo.get_child().set_text(server)
 
     def _fill_recent_and_servers(self, account):
-        self.recent_combo.remove_all()
+        recently_liststore = self.recently_treeview.get_model()
+        recently_liststore.clear()
         self.server_combo.remove_all()
         recent = app.get_recent_groupchats(account)
         servers = []
         for groupchat in recent:
-            text = '%s on %s@%s' % (groupchat.nickname,
-                                    groupchat.room,
-                                    groupchat.server)
+            label = '%s@%s' % (groupchat.room, groupchat.server)
 
-            self.recent_combo.append_text(text)
+            recently_liststore.append([groupchat.server,
+                                       groupchat.room,
+                                       groupchat.nickname,
+                                       label])
             servers.append(groupchat.server)
 
         for server in set(servers):
@@ -2424,24 +2419,18 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         if muc_domain is not None:
             self.server_combo.insert_text(0, muc_domain)
 
-    def _on_recent_changed(self, combo):
-        text = combo.get_active_text()
-        if text is None:
-            self.server_combo.set_active(0)
-            return
-        nickname, _, room_jid = text.split()
-        room, server = app.get_name_and_server_from_jid(room_jid)
-        self.room_entry.set_text(room)
-        self.nick_entry.set_text(nickname)
-        self.server_combo.get_child().set_text(server)
+    def _on_recent_selected(self, treeview, *args):
+        (model, iter_) = treeview.get_selection().get_selected()
+        self.server_combo.get_child().set_text(model[iter_][0])
+        self.room_entry.set_text(model[iter_][1])
+        self.nick_entry.set_text(model[iter_][2])
+        self.recently_popover.popdown()
 
     def _on_account_combo_changed(self, combo):
-        account = combo.get_active_text()
+        account = combo.get_active_id()
         self.account = account
         self.nick_entry.set_text(app.nicks[account])
-        if self.minimal_mode == 0:
-            self._fill_recent_and_servers(account)
-            self.recent_combo.set_active(0)
+        self._fill_recent_and_servers(account)
 
     def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -2451,7 +2440,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             return True
 
     def _on_join_clicked(self, *args):
-        account = self.account_combo.get_active_text()
+        account = self.account_combo.get_active_id()
         nickname = self.nick_entry.get_text()
 
         invisible_show = app.SHOW_LIST.index('invisible')
@@ -2459,18 +2448,15 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             app.interface.raise_dialog('join-while-invisible')
             return
 
-        if self.minimal_mode < 2:
-            if self.minimal_mode == 0:
-                server = self.server_combo.get_active_text()
-            else: # mode 1
-                server = self.room_jid
-            room = self.room_entry.get_text()
-            if room == '':
-                ErrorDialog(_('Invalid Room'),
-                            _('Please choose a room'), transient_for=self)
-                return
-            self.room_jid = '%s@%s' % (room, server)
+        server = self.server_combo.get_active_text()
+        room = self.room_entry.get_text()
 
+        if room == '':
+            ErrorDialog(_('Invalid Room'),
+                        _('Please choose a room'), transient_for=self)
+            return
+
+        self.room_jid = '%s@%s' % (room, server)
         self.room_jid = self.room_jid.lower()
 
         if app.in_groupchat(account, self.room_jid):
@@ -2518,7 +2504,10 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.destroy()
 
     def _on_bookmark_activate(self, switch, param):
-        self.autojoin_switch.set_sensitive(switch.get_active())
+        bookmark_state = switch.get_active()
+        self.autojoin_switch.set_sensitive(bookmark_state)
+        if not bookmark_state:
+            self.autojoin_switch.set_active(False)
 
     def _add_bookmark(self, account, nickname, password):
         con = app.connections[account]
@@ -2537,7 +2526,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             name, self.room_jid, autojoin, 1, password, nickname)
 
     def _on_destroy(self, *args):
-        if self.minimal_mode == 0:
+        if not self.minimal_mode:
             app.ged.remove_event_handler('agent-info-received', ged.GUI1,
                                          self._nec_agent_info_received)
             app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,

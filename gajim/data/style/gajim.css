@@ -90,6 +90,11 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 #StartChatListBox > row { padding: 10px 20px 10px 10px; }
 #StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
+/* Popover Treeview */
+.popover_treeview { border-radius: 3px; background-color: @theme_bg_color; }
+.popover_treeview { padding: 6px; }
+.popover_treeview :hover { background-color: @theme_selected_bg_color; }
+
 /* Text style */
 
 .bold16 { font-size: 16px; font-weight: bold; }

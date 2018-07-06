@@ -389,6 +389,19 @@ def get_connected_accounts():
             account_list.append(account)
     return account_list
 
+def get_enabled_accounts_with_labels(exclude_local=True):
+    """
+    Returns a list with [account, account_label] entries.
+    Order by account_label
+    """
+    accounts = []
+    for acc in connections:
+        if not exclude_local or acc != 'Local':
+            acc_label = config.get_per('accounts', acc, 'account_label')
+            accounts.append([acc, acc_label])
+    accounts.sort(key=lambda xs: str.lower(xs[1]))
+    return accounts
+
 def account_is_connected(account):
     if account not in connections:
         return False
