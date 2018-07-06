@@ -101,7 +101,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
@@ -118,14 +118,16 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">9</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="account_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
             <property name="halign">end</property>
+            <property name="margin_bottom">12</property>
             <property name="label" translatable="yes">Account</property>
             <property name="justify">right</property>
             <style>
@@ -150,7 +152,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -166,7 +168,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
@@ -183,7 +185,7 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -195,7 +197,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">6</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
@@ -208,21 +210,6 @@
             <style>
               <class name="dim-label"/>
             </style>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="height_request">6</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -241,7 +228,22 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">7</property>
+            <property name="top_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="height_request">6</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
@@ -256,7 +258,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">8</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
@@ -273,28 +275,15 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="height_request">6</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="account_combo">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="margin_bottom">12</property>
             <property name="model">account_liststore</property>
             <property name="id_column">0</property>
             <signal name="changed" handler="_on_account_combo_changed" swapped="no"/>
@@ -320,7 +309,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
@@ -386,7 +375,7 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -404,11 +393,8 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="top_attach">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <placeholder/>

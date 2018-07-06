@@ -2375,10 +2375,10 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
                                            self._nec_agent_info_error_received)
 
-        # Show account combobox if there is more than one account
-        if len(accounts) > 1:
-            self.account_combo.show()
-            self.account_label.show()
+        # Hide account combobox if there is only one account
+        if len(accounts) == 1:
+            self.account_combo.hide()
+            self.account_label.hide()
 
         self.account_combo.set_active_id(self.account)
 
