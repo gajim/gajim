@@ -134,14 +134,14 @@ class AbstractPEPModule:
         raise NotImplementedError
 
     def _push_event(self, jid, user_pep):
-        self._update_contacts(jid, user_pep)
+        self._notification_received(jid, user_pep)
         app.nec.push_incoming_event(
             PEPReceivedEvent(None, conn=self._con,
                              jid=str(jid),
                              pep_type=self.name,
                              user_pep=user_pep))
 
-    def _update_contacts(self, jid, user_pep):
+    def _notification_received(self, jid, user_pep):
         for contact in app.contacts.get_contacts(self._account, str(jid)):
             if user_pep:
                 contact.pep[self.name] = user_pep

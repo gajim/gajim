@@ -66,7 +66,7 @@ class UserNickname(AbstractPEPModule):
         item.addData(data)
         return item
 
-    def _update_contacts(self, jid, user_pep):
+    def _notification_received(self, jid, user_pep):
         for contact in app.contacts.get_contacts(self._account, str(jid)):
             contact.contact_name = user_pep.get_nick()
 

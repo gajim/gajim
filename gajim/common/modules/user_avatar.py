@@ -123,7 +123,7 @@ class UserAvatar(AbstractPEPModule):
         avatar = info.getAttrs()
         return avatar or None
 
-    def _update_contacts(self, jid, user_pep):
+    def _notification_received(self, jid, user_pep):
         avatar = user_pep._pep_specific_data
         own_jid = self._con.get_own_jid()
         if avatar is None:
