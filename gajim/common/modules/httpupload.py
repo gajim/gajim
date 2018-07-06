@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # This file is part of Gajim.
 #
 # Gajim is free software; you can redistribute it and/or modify
@@ -14,13 +12,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+# XEP-0363: HTTP File Upload
+
+
 import os
 import sys
 import threading
 import ssl
 import urllib
 from urllib.request import Request, urlopen
-from urllib.parse import urlparse, quote
+from urllib.parse import urlparse
 import io
 import mimetypes
 import logging
@@ -31,26 +32,28 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.connection_handlers_events import InformationEvent
-from gajim.common.connection_handlers_events import HTTPUploadProgressEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 if sys.platform in ('win32', 'darwin'):
     import certifi
 
-log = logging.getLogger('gajim.c.httpupload')
+log = logging.getLogger('gajim.c.m.httpupload')
+
 
 NS_HTTPUPLOAD_0 = NS_HTTPUPLOAD + ':0'
 
-class ConnectionHTTPUpload:
-    """
-    Implement HTTP File Upload
-    (XEP-0363, https://xmpp.org/extensions/xep-0363.html)
-    """
-    def __init__(self):
-        self.httpupload = False
-        self.encrypted_upload = False
+
+class HTTPUpload:
+    def __init__(self, con):
+        self._con = con
+        self._account = con.name
+
+        self.handlers = []
+
+        self.available = False
         self.component = None
         self.httpupload_namespace = None
         self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
@@ -81,7 +84,7 @@ class ConnectionHTTPUpload:
 
     def handle_agent_info_received(self, event):
         account = event.conn.name
-        if account != self.name:
+        if account != self._account:
             return
 
         if not app.jid_is_transport(event.jid):
@@ -112,14 +115,14 @@ class ConnectionHTTPUpload:
             log.warning('%s does not provide maximum file size', account)
         else:
             log.info('%s has a maximum file size of: %s MiB',
-                     account, self.max_file_size/(1024*1024))
+                     account, self.max_file_size / (1024 * 1024))
 
-        self.httpupload = True
-        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self.name):
+        self.available = True
+        for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
 
     def handle_outgoing_stanza(self, event):
-        if event.conn.name != self.name:
+        if event.conn.name != self._account:
             return
         message = event.msg_iq.getTagData('body')
         if message and message in self.messages:
@@ -177,9 +180,9 @@ class ConnectionHTTPUpload:
             return
 
         if encryption is not None:
-            app.interface.encrypt_file(file, self.request_slot)
+            app.interface.encrypt_file(file, self._request_slot)
         else:
-            self.request_slot(file)
+            self._request_slot(file)
 
     @staticmethod
     def raise_progress_event(status, file, seen=None, total=None):
@@ -191,13 +194,13 @@ class ConnectionHTTPUpload:
         app.nec.push_incoming_event(InformationEvent(
             None, dialog_name=dialog_name, args=args))
 
-    def request_slot(self, file):
+    def _request_slot(self, file):
         GLib.idle_add(self.raise_progress_event, 'request', file)
         iq = self._build_request(file)
         log.info("Sending request for slot")
-        app.connections[self.name].connection.SendAndCallForResponse(
-            iq, self.received_slot, {'file': file})
-        
+        self._con.connection.SendAndCallForResponse(
+            iq, self._received_slot, {'file': file})
+
     def _build_request(self, file):
         iq = nbxmpp.Iq(typ='get', to=self.component)
         id_ = app.get_an_id()
@@ -230,7 +233,7 @@ class ConnectionHTTPUpload:
 
         return stanza.getErrorMsg()
 
-    def received_slot(self, conn, stanza, file):
+    def _received_slot(self, conn, stanza, file):
         log.info("Received slot")
         if stanza.getType() == 'error':
             self.raise_progress_event('close', file)
@@ -279,11 +282,11 @@ class ConnectionHTTPUpload:
         log.info('Uploading file to %s', file.put)
         log.info('Please download from %s', file.get)
 
-        thread = threading.Thread(target=self.upload_file, args=(file,))
+        thread = threading.Thread(target=self._upload_file, args=(file,))
         thread.daemon = True
         thread.start()
 
-    def upload_file(self, file):
+    def _upload_file(self, file):
         GLib.idle_add(self.raise_progress_event, 'upload', file)
         try:
             file.headers['User-Agent'] = 'Gajim %s' % app.version
@@ -294,7 +297,7 @@ class ConnectionHTTPUpload:
                 file.put, data=file.stream, headers=file.headers, method='PUT')
             log.info("Opening Urllib upload request...")
 
-            if not app.config.get_per('accounts', self.name, 'httpupload_verify'):
+            if not app.config.get_per('accounts', self._account, 'httpupload_verify'):
                 context = ssl.create_default_context()
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
@@ -309,7 +312,7 @@ class ConnectionHTTPUpload:
             file.stream.close()
             log.info('Urllib upload request done, response code: %s',
                      transfer.getcode())
-            GLib.idle_add(self.upload_complete, transfer.getcode(), file)
+            GLib.idle_add(self._upload_complete, transfer.getcode(), file)
             return
         except UploadAbortedException as exc:
             log.info(exc)
@@ -326,9 +329,9 @@ class ConnectionHTTPUpload:
             log.exception("Exception during upload")
             error_msg = exc
         GLib.idle_add(self.raise_progress_event, 'close', file)
-        GLib.idle_add(self.on_upload_error, file, error_msg)
+        GLib.idle_add(self._on_upload_error, file, error_msg)
 
-    def upload_complete(self, response_code, file):
+    def _upload_complete(self, response_code, file):
         self.raise_progress_event('close', file)
         if 200 <= response_code < 300:
             log.info("Upload completed successfully")
@@ -341,12 +344,12 @@ class ConnectionHTTPUpload:
 
             if file.groupchat:
                 app.nec.push_outgoing_event(GcMessageOutgoingEvent(
-                    None, account=self.name, jid=file.contact.jid,
+                    None, account=self._account, jid=file.contact.jid,
                     message=message, automatic_message=False,
                     session=file.session))
             else:
                 app.nec.push_outgoing_event(MessageOutgoingEvent(
-                    None, account=self.name, jid=file.contact.jid,
+                    None, account=self._account, jid=file.contact.jid,
                     message=message, keyID=file.keyID, type_='chat',
                     automatic_message=False, session=file.session))
 
@@ -356,7 +359,7 @@ class ConnectionHTTPUpload:
             self.raise_information_event('httpupload-response-error',
                                          response_code)
 
-    def on_upload_error(self, file, reason):
+    def _on_upload_error(self, file, reason):
         self.raise_progress_event('close', file)
         self.raise_information_event('httpupload-error', str(reason))
 
@@ -428,3 +431,8 @@ class StreamFileWithProgress:
 class UploadAbortedException(Exception):
     def __str__(self):
         return "Upload Aborted"
+
+
+class HTTPUploadProgressEvent(NetworkIncomingEvent):
+    name = 'httpupload-progress'
+    base_network_events = []

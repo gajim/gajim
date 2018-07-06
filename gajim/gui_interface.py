@@ -93,8 +93,9 @@ from gajim.common import passwords
 from gajim.common import logging_helpers
 from gajim.common.connection_handlers_events import (
     OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
-    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent,
-    HTTPUploadProgressEvent)
+    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent)
+
+from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim import emoticons
@@ -1142,11 +1143,12 @@ class Interface:
         con = app.connections[chat_control.account]
         groupchat = chat_control.type_id == message_control.TYPE_GC
         for path in paths:
-            con.check_file_before_transfer(path,
-                                           chat_control.encryption,
-                                           chat_control.contact,
-                                           chat_control.session,
-                                           groupchat)
+            con.get_module('HTTPUpload').check_file_before_transfer(
+                path,
+                chat_control.encryption,
+                chat_control.contact,
+                chat_control.session,
+                groupchat)
 
     def encrypt_file(self, file, callback):
         app.nec.push_incoming_event(HTTPUploadProgressEvent(

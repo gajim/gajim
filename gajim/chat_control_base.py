@@ -759,19 +759,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 # groupchat only supports httpupload on drag and drop
                 if httpupload.get_enabled():
                     # use httpupload
-                    con.check_file_before_transfer(
+                    con.get_module('HTTPUpload').check_file_before_transfer(
                         path, self.encryption, contact,
                         self.session, groupchat=True)
             else:
                 if httpupload.get_enabled() and jingle.get_enabled():
                     if ft_pref == 'httpupload':
-                        con.check_file_before_transfer(
+                        con.get_module('HTTPUpload').check_file_before_transfer(
                             path, self.encryption, contact, self.session)
                     else:
                         ft = app.interface.instances['file_transfers']
                         ft.send_file(self.account, contact, path)
                 elif httpupload.get_enabled():
-                    con.check_file_before_transfer(
+                    con.get_module('HTTPUpload').check_file_before_transfer(
                         path, self.encryption, contact, self.session)
                 elif jingle.get_enabled():
                     ft = app.interface.instances['file_transfers']

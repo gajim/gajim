@@ -574,6 +574,7 @@ class GroupchatControl(ChatControlBase):
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
         online = app.gc_connected[self.account][self.room_jid]
+        con = app.connections[self.account]
 
         # Destroy Room
         win.lookup_action('destroy-' + self.control_id).set_enabled(
@@ -615,7 +616,7 @@ class GroupchatControl(ChatControlBase):
         httpupload = win.lookup_action(
             'send-file-httpupload-' + self.control_id)
         httpupload.set_enabled(
-            online and app.connections[self.account].httpupload)
+            online and con.get_module('HTTPUpload').available)
         win.lookup_action('send-file-' + self.control_id).set_enabled(
             httpupload.get_enabled())
 

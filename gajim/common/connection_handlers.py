@@ -53,7 +53,6 @@ from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
 from gajim.common.message_archiving import ConnectionArchive313
-from gajim.common.httpupload import ConnectionHTTPUpload
 from gajim.common.connection_handlers_events import *
 
 from gajim.common import ged
@@ -754,14 +753,12 @@ class ConnectionHandlersBase:
 class ConnectionHandlers(ConnectionArchive313,
 ConnectionSocks5Bytestream, ConnectionDisco,
 ConnectionCommands, ConnectionCaps,
-ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream,
-ConnectionHTTPUpload):
+ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         ConnectionArchive313.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
         ConnectionCommands.__init__(self)
-        ConnectionHTTPUpload.__init__(self)
 
         # Handle presences BEFORE caps
         app.nec.register_incoming_event(PresenceReceivedEvent)
@@ -819,7 +816,6 @@ ConnectionHTTPUpload):
         ConnectionHandlersBase.cleanup(self)
         ConnectionCaps.cleanup(self)
         ConnectionArchive313.cleanup(self)
-        ConnectionHTTPUpload.cleanup(self)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,

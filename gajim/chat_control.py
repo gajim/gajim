@@ -274,6 +274,7 @@ class ChatControl(ChatControlBase):
     def update_actions(self):
         win = self.parent_win.window
         online = app.account_is_connected(self.account)
+        con = app.connections[self.account]
 
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
@@ -297,7 +298,7 @@ class ChatControl(ChatControlBase):
         httpupload = win.lookup_action(
             'send-file-httpupload-' + self.control_id)
         httpupload.set_enabled(
-            online and app.connections[self.account].httpupload)
+            online and con.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
         jingle_conditions = (
