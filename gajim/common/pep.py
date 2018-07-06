@@ -80,48 +80,4 @@ class AbstractPEP(object):
         pass
 
 
-class AvatarNotificationPEP(AbstractPEP):
-    '''XEP-0084: Avatars'''
-
-    type_ = 'avatar-notification'
-    namespace = 'urn:xmpp:avatar:metadata'
-
-    def _extract_info(self, items):
-        self.avatar = None
-        for item in items.getTags('item'):
-            metadata = item.getTag('metadata')
-            if metadata is None:
-                app.log('c.m.user_avatar').warning(
-                    'Invalid avatar stanza:\n%s', items)
-                break
-            info = item.getTag('metadata').getTag('info')
-            if info is not None:
-                self.avatar = info.getAttrs()
-            break
-
-        return (None, False)
-
-    def _on_receive(self, jid, account):
-        con = app.connections[account]
-        if self.avatar is None:
-            # Remove avatar
-            app.log('c.m.user_avatar').info('Remove: %s', jid)
-            app.contacts.set_avatar(account, jid, None)
-            own_jid = con.get_own_jid().getStripped()
-            app.logger.set_avatar_sha(own_jid, jid, None)
-            app.interface.update_avatar(account, jid)
-        else:
-            sha = app.contacts.get_avatar_sha(account, jid)
-            app.log('c.m.user_avatar').info(
-                'Update: %s %s', jid, self.avatar['id'])
-            if sha == self.avatar['id']:
-                app.log('c.m.user_avatar').info(
-                    'Avatar already known: %s %s',
-                    jid, self.avatar['id'])
-                return
-            con.get_module('UserAvatar').get_pubsub_avatar(
-                jid, self.avatar['id'])
-
-
-SUPPORTED_PERSONAL_USER_EVENTS = [
-    AvatarNotificationPEP]
+SUPPORTED_PERSONAL_USER_EVENTS = []

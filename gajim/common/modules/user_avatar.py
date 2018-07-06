@@ -21,15 +21,31 @@ import binascii
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.const import PEPEventType
 from gajim.common.exceptions import StanzaMalformed
+from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
 
 log = logging.getLogger('gajim.c.m.user_avatar')
 
 
-class UserAvatar:
+class UserAvatarData(AbstractPEPData):
+
+    type_ = PEPEventType.AVATAR
+
+    def __init__(self, avatar):
+        self._pep_specific_data = avatar
+
+
+class UserAvatar(AbstractPEPModule):
+
+    name = 'user-avatar'
+    namespace = 'urn:xmpp:avatar:metadata'
+    pep_class = UserAvatarData
+    store_publish = False
+    _log = log
+
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        AbstractPEPModule.__init__(self, con, con.name)
 
         self.handlers = []
 
@@ -83,7 +99,7 @@ class UserAvatar:
             log.warning('Error: %s %s', stanza.getFrom(), error)
             return
 
-        log.info('Received: %s %s', jid, sha)
+        log.info('Received Avatar: %s %s', jid, sha)
         app.interface.save_avatar(data)
 
         if self._con.get_own_jid().bareMatch(jid):
@@ -94,3 +110,45 @@ class UserAvatar:
             app.contacts.set_avatar(self._account, jid, sha)
 
         app.interface.update_avatar(self._account, jid)
+
+    def _extract_info(self, item):
+        metadata = item.getTag('metadata', namespace=self.namespace)
+        if metadata is None:
+            raise StanzaMalformed('No metadata node')
+
+        info = metadata.getTags('info', one=True)
+        if not info:
+            return None
+
+        avatar = info.getAttrs()
+        return avatar or None
+
+    def _update_contacts(self, jid, user_pep):
+        avatar = user_pep._pep_specific_data
+        own_jid = self._con.get_own_jid()
+        if avatar is None:
+            # Remove avatar
+            log.info('Remove: %s', jid)
+            app.contacts.set_avatar(self._account, str(jid), None)
+            app.logger.set_avatar_sha(own_jid.getStripped(), str(jid), None)
+            app.interface.update_avatar(self._account, str(jid))
+        else:
+            if own_jid.bareMatch(jid):
+                sha = app.config.get_per(
+                    'accounts', self._account, 'avatar_sha')
+            else:
+                sha = app.contacts.get_avatar_sha(self._account, str(jid))
+
+            if sha == avatar['id']:
+                log.info('Avatar already known: %s %s',
+                         jid, avatar['id'])
+                return
+            self.get_pubsub_avatar(jid, avatar['id'])
+
+    def send(self, data):
+        # Not implemented yet
+        return
+
+    def retract(self):
+        # Not implemented yet
+        return
