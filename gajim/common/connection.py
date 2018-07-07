@@ -593,7 +593,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected_hostname = None
         # Holds the full jid we received on the bind event
         self.registered_name = None
-        self.redirected = None
         self.last_time_to_reconnect = None
         self.new_account_info = None
         self.new_account_form = None
@@ -794,12 +793,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # show error dialog
                 self._connection_lost()
         else:
-            if self.redirected:
-                self.disconnect(on_purpose=True)
-                self.connect()
-                return
-            else:
-                self.disconnect()
+            self.disconnect()
         self.on_purpose = False
     # END disconnectedReconnCB
 
@@ -988,25 +982,21 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self.name, 'try_connecting_for_foo_secs')
             proxy = helpers.get_proxy_info(self.name)
             use_srv = app.config.get_per('accounts', self.name, 'use_srv')
-            if self.redirected:
-                use_custom = True
-                custom_h = self.redirected['host']
-                custom_p = self.redirected['port']
-            else:
-                use_custom = app.config.get_per('accounts', self.name,
-                    'use_custom_host')
-                if use_custom:
-                    custom_h = app.config.get_per('accounts', self.name,
-                        'custom_host')
-                    custom_p = app.config.get_per('accounts', self.name,
-                        'custom_port')
-                    try:
-                        helpers.idn_to_ascii(custom_h)
-                    except Exception:
-                        app.nec.push_incoming_event(InformationEvent(
-                            None, dialog_name='invalid-custom-hostname',
-                            args=custom_h))
-                        use_custom = False
+
+            use_custom = app.config.get_per('accounts', self.name,
+                'use_custom_host')
+            if use_custom:
+                custom_h = app.config.get_per('accounts', self.name,
+                    'custom_host')
+                custom_p = app.config.get_per('accounts', self.name,
+                    'custom_port')
+                try:
+                    helpers.idn_to_ascii(custom_h)
+                except Exception:
+                    app.nec.push_incoming_event(InformationEvent(
+                        None, dialog_name='invalid-custom-hostname',
+                        args=custom_h))
+                    use_custom = False
 
         # create connection if it doesn't already exist
         self.connected = 1
@@ -1018,10 +1008,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             h = custom_h
             p = custom_p
             ssl_p = custom_p
-            if not self.redirected:
-                use_srv = False
+            use_srv = False
 
-        self.redirected = None
         # SRV resolver
         self._proxy = proxy
         self._hosts = [
@@ -1147,11 +1135,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         self._current_host = host
-
-        if self.redirected:
-            self.disconnect(on_purpose=True)
-            self.connect()
-            return
 
         self._current_type = self._current_host['type']
 

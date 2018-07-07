@@ -774,7 +774,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         self.privacy_default_list = None
 
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
-        app.nec.register_incoming_event(StreamOtherHostReceivedEvent)
         app.nec.register_incoming_event(MessageReceivedEvent)
         app.nec.register_incoming_event(ArchivingErrorReceivedEvent)
         app.nec.register_incoming_event(
@@ -799,8 +798,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
-        app.ged.register_event_handler('stream-other-host-received', ged.CORE,
-            self._nec_stream_other_host_received)
         app.ged.register_event_handler('blocking', ged.CORE,
             self._nec_blocking)
 
@@ -826,8 +823,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
-        app.ged.remove_event_handler('stream-other-host-received', ged.CORE,
-            self._nec_stream_other_host_received)
         app.ged.remove_event_handler('blocking', ged.CORE, self._nec_blocking)
 
     def add_sha(self, p, send_caps=True):
@@ -1382,11 +1377,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                 # Send a presence Probe to get the current Status
                 probe = nbxmpp.Presence(jid, 'probe', frm=self.get_own_jid())
                 self.connection.send(probe)
-
-    def _nec_stream_other_host_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        self.redirected = obj.redirected
 
     def _StreamCB(self, con, obj):
         log.debug('StreamCB')
