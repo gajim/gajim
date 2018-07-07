@@ -1,46 +1,50 @@
-# this will go to src/common/xmpp later, for now it is in src/common
-# -*- coding:utf-8 -*-
-## src/common/dataforms.py
-##
-## Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
-##
-## This file is part of Gajim.
-##
-## Gajim is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 3 only.
-##
-## Gajim is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
-##
+# Copyright (C) 2006-2007 Tomasz Melcer <liori AT exroot.org>
+# Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+# Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This module contains wrappers for different parts of data forms (JEP 0004). For
+This module contains wrappers for different parts of data forms (XEP-0004). For
 information how to use them, read documentation
 """
 
 import nbxmpp
+
 from gajim.common import helpers
 
+
 # exceptions used in this module
-# base class
-class Error(Exception): pass
+class Error(Exception):
+    pass
+
+
 # when we get nbxmpp.Node which we do not understand
-class UnknownDataForm(Error): pass
+class UnknownDataForm(Error):
+    pass
+
+
 # when we get nbxmpp.Node which contains bad fields
-class WrongFieldValue(Error): pass
+class WrongFieldValue(Error):
+    pass
+
 
 # helper class to change class of already existing object
 class ExtendedNode(nbxmpp.Node, object):
     @classmethod
-    def __new__(cls,  *a, **b):
+    def __new__(cls, *a, **b):
         if 'extend' not in b.keys() or not b['extend']:
             return object.__new__(cls)
 
@@ -49,22 +53,24 @@ class ExtendedNode(nbxmpp.Node, object):
         extend.__class__ = cls
         return extend
 
+
 # helper to create fields from scratch
 def Field(typ, **attrs):
     ''' Helper function to create a field of given type. '''
     f = {
-            'boolean': BooleanField,
-            'fixed': StringField,
-            'hidden': StringField,
-            'text-private': StringField,
-            'text-single': StringField,
-            'jid-multi': JidMultiField,
-            'jid-single': JidSingleField,
-            'list-multi': ListMultiField,
-            'list-single': ListSingleField,
-            'text-multi': TextMultiField,
+        'boolean': BooleanField,
+        'fixed': StringField,
+        'hidden': StringField,
+        'text-private': StringField,
+        'text-single': StringField,
+        'jid-multi': JidMultiField,
+        'jid-single': JidSingleField,
+        'list-multi': ListMultiField,
+        'list-single': ListSingleField,
+        'text-multi': TextMultiField,
     }[typ](typ=typ, **attrs)
     return f
+
 
 def ExtendField(node):
     """
@@ -73,22 +79,23 @@ def ExtendField(node):
     # when validation (XEP-122) will go in, we could have another classes
     # like DateTimeField - so that dicts in Field() and ExtendField() will
     # be different...
-    typ=node.getAttr('type')
+    typ = node.getAttr('type')
     f = {
-            'boolean': BooleanField,
-            'fixed': StringField,
-            'hidden': StringField,
-            'text-private': StringField,
-            'text-single': StringField,
-            'jid-multi': JidMultiField,
-            'jid-single': JidSingleField,
-            'list-multi': ListMultiField,
-            'list-single': ListSingleField,
-            'text-multi': TextMultiField,
+        'boolean': BooleanField,
+        'fixed': StringField,
+        'hidden': StringField,
+        'text-private': StringField,
+        'text-single': StringField,
+        'jid-multi': JidMultiField,
+        'jid-single': JidSingleField,
+        'list-multi': ListMultiField,
+        'list-single': ListSingleField,
+        'text-multi': TextMultiField,
     }
     if typ not in f:
         typ = 'text-single'
     return f[typ](extend=node)
+
 
 def ExtendForm(node):
     """
@@ -99,6 +106,7 @@ def ExtendForm(node):
     else:
         return SimpleDataForm(extend=node)
 
+
 class DataField(ExtendedNode):
     """
     Keeps data about one field - var, field type, labels, instructions... Base
@@ -107,7 +115,7 @@ class DataField(ExtendedNode):
     """
 
     def __init__(self, typ=None, var=None, value=None, label=None, desc=None,
-                    required=False, options=None, extend=None):
+                 required=False, options=None, extend=None):
 
         if extend is None:
             ExtendedNode.__init__(self, 'field')
@@ -118,7 +126,7 @@ class DataField(ExtendedNode):
                 self.value = value
             if label is not None:
                 self.label = label
-            if desc  is not None:
+            if desc is not None:
                 self.desc = desc
             self.required = required
             self.options = options
@@ -162,10 +170,10 @@ class DataField(ExtendedNode):
         """
         Human-readable field name
         """
-        l = self.getAttr('label')
-        if not l:
-            l = self.var
-        return l
+        label_ = self.getAttr('label')
+        if not label_:
+            label_ = self.var
+        return label_
 
     @label.setter
     def label(self, value):
@@ -236,6 +244,7 @@ class DataField(ExtendedNode):
     def is_valid(self):
         return True
 
+
 class Uri(nbxmpp.Node):
     def __init__(self, uri_tag):
         nbxmpp.Node.__init__(self, node=uri_tag)
@@ -270,6 +279,7 @@ class Uri(nbxmpp.Node):
     def uri_data(self):
         self.setData(None)
 
+
 class Media(nbxmpp.Node):
     def __init__(self, media_tag):
         nbxmpp.Node.__init__(self, node=media_tag)
@@ -292,6 +302,7 @@ class Media(nbxmpp.Node):
         for element in self.getTags('uri'):
             self.delChild(element)
 
+
 class BooleanField(DataField):
     @property
     def value(self):
@@ -304,7 +315,7 @@ class BooleanField(DataField):
         if v in ('1', 'true'):
             return True
         if v is None:
-            return False # default value is False
+            return False  # default value is False
         raise WrongFieldValue
 
     @value.setter
@@ -316,6 +327,7 @@ class BooleanField(DataField):
         t = self.getTag('value')
         if t is not None:
             self.delChild(t)
+
 
 class StringField(DataField):
     """
@@ -341,8 +353,9 @@ class StringField(DataField):
     def value(self):
         try:
             self.delChild(self.getTag('value'))
-        except ValueError: # if there already were no value tag
+        except ValueError:  # if there already were no value tag
             pass
+
 
 class ListField(DataField):
     """
@@ -359,17 +372,18 @@ class ListField(DataField):
             v = element.getTagData('value')
             if v is None:
                 raise WrongFieldValue
-            l = element.getAttr('label')
-            if not l:
-                l = v
-            options.append((l, v))
+            label = element.getAttr('label')
+            if not label:
+                label = v
+            options.append((label, v))
         return options
 
     @options.setter
     def options(self, values):
         del self.options
         for value, label in values:
-            self.addChild('option', {'label': label}).setTagData('value', value)
+            self.addChild('option',
+                          {'label': label}).setTagData('value', value)
 
     @options.deleter
     def options(self):
@@ -381,10 +395,11 @@ class ListField(DataField):
             v = element.getTagData('value')
             if v is None:
                 raise WrongFieldValue
-            l = element.getAttr('label')
-            if not l:
-                l = v
-            yield (v, l)
+            label = element.getAttr('label')
+            if not label:
+                label = v
+            yield (v, label)
+
 
 class ListSingleField(ListField, StringField):
     """
@@ -397,6 +412,7 @@ class ListSingleField(ListField, StringField):
             return False
         return True
 
+
 class JidSingleField(ListSingleField):
     """
     Covers jid-single fields
@@ -406,11 +422,12 @@ class JidSingleField(ListSingleField):
             try:
                 helpers.parse_jid(self.value)
                 return True
-            except:
+            except Exception:
                 return False
         if self.required:
             return False
         return True
+
 
 class ListMultiField(ListField):
     """
@@ -449,6 +466,7 @@ class ListMultiField(ListField):
             return False
         return True
 
+
 class JidMultiField(ListMultiField):
     """
     Covers jid-multi fields
@@ -458,12 +476,13 @@ class JidMultiField(ListMultiField):
             for value in self.values:
                 try:
                     helpers.parse_jid(value)
-                except:
+                except Exception:
                     return False
             return True
         if self.required:
             return False
         return True
+
 
 class TextMultiField(DataField):
     @property
@@ -488,6 +507,7 @@ class TextMultiField(DataField):
     def value(self):
         for element in self.getTags('value'):
             self.delChild(element)
+
 
 class DataRecord(ExtendedNode):
     """
@@ -560,6 +580,7 @@ class DataRecord(ExtendedNode):
                 return False
         return True
 
+
 class DataForm(ExtendedNode):
     def __init__(self, type_=None, title=None, instructions=None, extend=None):
         if extend is None:
@@ -567,11 +588,11 @@ class DataForm(ExtendedNode):
             nbxmpp.Node.__init__(self, 'x', attrs={'xmlns': nbxmpp.NS_DATA})
 
         if type_ is not None:
-            self.type_=type_
+            self.type_ = type_
         if title is not None:
-            self.title=title
+            self.title = title
         if instructions is not None:
-            self.instructions=instructions
+            self.instructions = instructions
 
     @property
     def type_(self):
@@ -623,7 +644,8 @@ class DataForm(ExtendedNode):
     @instructions.setter
     def instructions(self, value):
         del self.instructions
-        if value == '': return
+        if value == '':
+            return
         for line in value.split('\n'):
             self.addChild('instructions').setData(line)
 
@@ -632,11 +654,12 @@ class DataForm(ExtendedNode):
         for value in self.getTags('instructions'):
             self.delChild(value)
 
+
 class SimpleDataForm(DataForm, DataRecord):
-    def __init__(self, type_=None, title=None, instructions=None, fields=None, \
-    extend=None):
+    def __init__(self, type_=None, title=None, instructions=None, fields=None,
+                 extend=None):
         DataForm.__init__(self, type_=type_, title=title,
-                instructions=instructions, extend=extend)
+                          instructions=instructions, extend=extend)
         DataRecord.__init__(self, fields=fields, extend=self, associated=self)
 
     def get_purged(self):
@@ -647,12 +670,12 @@ class SimpleDataForm(DataForm, DataRecord):
         for f in c.iter_fields():
             if f.required:
                 # add <value> if there is not
-                if hasattr(f, 'value') and  not f.value:
+                if hasattr(f, 'value') and not f.value:
                     f.value = ''
                 # Keep all required fields
                 continue
-            if (hasattr(f, 'value') and not f.value and f.value != 0) or (
-            hasattr(f, 'values') and len(f.values) == 0):
+            if ((hasattr(f, 'value') and not f.value and f.value != 0) or
+                    (hasattr(f, 'values') and len(f.values) == 0)):
                 to_be_removed.append(f)
             else:
                 del f.label
@@ -662,11 +685,12 @@ class SimpleDataForm(DataForm, DataRecord):
             c.delChild(f)
         return c
 
+
 class MultipleDataForm(DataForm):
     def __init__(self, type_=None, title=None, instructions=None, items=None,
-    extend=None):
+                 extend=None):
         DataForm.__init__(self, type_=type_, title=title,
-                instructions=instructions, extend=extend)
+                          instructions=instructions, extend=extend)
         # all records, recorded into DataRecords
         if extend is None:
             if items is not None:
