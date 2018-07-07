@@ -3503,7 +3503,14 @@ class XMLConsoleWindow(Gtk.Window):
         begin_iter, end_iter = buffer_.get_bounds()
         stanza = buffer_.get_text(begin_iter, end_iter, True)
         if stanza:
-            app.connections[self.account].send_stanza(stanza)
+            try:
+                node = nbxmpp.Protocol(node=stanza)
+                if node.getNamespace() == 'http://www.gajim.org/xmlns/undeclared':
+                    node.setNamespace(nbxmpp.NS_CLIENT)
+            except Exception as error:
+                ErrorDialog(_('Invalid Node'), str(error))
+                return
+            app.connections[self.account].connection.send(node)
             buffer_.set_text('')
 
     def on_input(self, button, *args):
