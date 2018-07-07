@@ -83,3 +83,7 @@ class UserLocation(AbstractPEPModule):
             if data.get(field, False):
                 item.addChild(field, payload=data[field])
         return item
+
+
+def get_instance(*args, **kwargs):
+    return UserLocation(*args, **kwargs), 'UserLocation'

@@ -306,3 +306,7 @@ class VcardNotPublishedEvent(NetworkIncomingEvent):
 class VcardReceivedEvent(NetworkIncomingEvent):
     name = 'vcard-received'
     base_network_events = []
+
+
+def get_instance(*args, **kwargs):
+    return VCardTemp(*args, **kwargs), 'VCardTemp'

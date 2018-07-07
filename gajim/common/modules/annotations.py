@@ -90,3 +90,7 @@ class Annotations:
             log.warning('Storing rosternotes failed: %s', stanza.getError())
             return
         log.info('Storing rosternotes successful')
+
+
+def get_instance(*args, **kwargs):
+    return Annotations(*args, **kwargs), 'Annotations'

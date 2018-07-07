@@ -120,3 +120,7 @@ class PingReplyEvent(NetworkIncomingEvent):
 class PingErrorEvent(NetworkIncomingEvent):
     name = 'ping-error'
     base_network_events = []
+
+
+def get_instance(*args, **kwargs):
+    return Ping(*args, **kwargs), 'Ping'

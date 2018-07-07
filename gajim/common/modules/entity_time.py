@@ -162,3 +162,7 @@ class contact_tz(datetime.tzinfo):
 
     def dst(self, dt):
         return ZERO
+
+
+def get_instance(*args, **kwargs):
+    return EntityTime(*args, **kwargs), 'EntityTime'

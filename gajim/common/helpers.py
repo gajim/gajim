@@ -165,13 +165,6 @@ class InvalidFormat(Exception):
     pass
 
 
-class ModuleMock:
-    def __getattr__(self, key):
-        def _mock(self, *args, **kwargs):
-            return
-        return _mock
-
-
 def decompose_jid(jidstring):
     user = None
     server = None

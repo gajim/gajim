@@ -76,3 +76,7 @@ class UserNickname(AbstractPEPModule):
             else:
                 app.nicks[self._account] = app.config.get_per(
                     'accounts', self._account, 'name')
+
+
+def get_instance(*args, **kwargs):
+    return UserNickname(*args, **kwargs), 'UserNickname'

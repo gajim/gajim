@@ -96,3 +96,7 @@ class UserTune(AbstractPEPModule):
         if length:
             item.addChild('length', payload=length)
         return item
+
+
+def get_instance(*args, **kwargs):
+    return UserTune(*args, **kwargs), 'UserTune'

@@ -292,3 +292,7 @@ class Bookmarks:
 class BookmarksReceivedEvent(NetworkIncomingEvent):
     name = 'bookmarks-received'
     base_network_events = []
+
+
+def get_instance(*args, **kwargs):
+    return Bookmarks(*args, **kwargs), 'Bookmarks'

@@ -104,3 +104,7 @@ class VersionResultReceivedEvent(NetworkIncomingEvent):
 
     def generate(self):
         return True
+
+
+def get_instance(*args, **kwargs):
+    return SoftwareVersion(*args, **kwargs), 'SoftwareVersion'

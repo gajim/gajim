@@ -436,3 +436,7 @@ class UploadAbortedException(Exception):
 class HTTPUploadProgressEvent(NetworkIncomingEvent):
     name = 'httpupload-progress'
     base_network_events = []
+
+
+def get_instance(*args, **kwargs):
+    return HTTPUpload(*args, **kwargs), 'HTTPUpload'

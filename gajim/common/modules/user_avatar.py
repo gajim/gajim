@@ -152,3 +152,7 @@ class UserAvatar(AbstractPEPModule):
     def retract(self):
         # Not implemented yet
         return
+
+
+def get_instance(*args, **kwargs):
+    return UserAvatar(*args, **kwargs), 'UserAvatar'

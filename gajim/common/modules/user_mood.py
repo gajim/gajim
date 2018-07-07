@@ -86,3 +86,7 @@ class UserMood(AbstractPEPModule):
         if text:
             item.addChild('text', payload=text)
         return item
+
+
+def get_instance(*args, **kwargs):
+    return UserMood(*args, **kwargs), 'UserMood'

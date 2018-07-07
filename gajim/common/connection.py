@@ -61,29 +61,9 @@ from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import i18n
 from gajim.common import idle
-from gajim.common.helpers import ModuleMock
-from gajim.common.modules.entity_time import EntityTime
-from gajim.common.modules.software_version import SoftwareVersion
-from gajim.common.modules.ping import Ping
-from gajim.common.modules.search import Search
-from gajim.common.modules.annotations import Annotations
-from gajim.common.modules.roster_item_exchange import RosterItemExchange
-from gajim.common.modules.last_activity import LastActivity
-from gajim.common.modules.http_auth import HTTPAuth
-from gajim.common.modules.vcard_temp import VCardTemp
-from gajim.common.modules.vcard_avatars import VCardAvatars
-from gajim.common.modules.pubsub import PubSub
-from gajim.common.modules.bookmarks import Bookmarks
-from gajim.common.modules.pep import PEP
-from gajim.common.modules.user_avatar import UserAvatar
-from gajim.common.modules.user_activity import UserActivity
-from gajim.common.modules.user_tune import UserTune
-from gajim.common.modules.user_mood import UserMood
-from gajim.common.modules.user_location import UserLocation
-from gajim.common.modules.user_nickname import UserNickname
-from gajim.common.modules.httpupload import HTTPUpload
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
+from gajim.common import modules
 from gajim.gtkgui_helpers import get_action
 
 
@@ -182,19 +162,7 @@ class CommonConnection:
         app.ged.raise_event(event, self.name, data)
 
     def get_module(self, name):
-        try:
-            return self._modules[name]
-        except KeyError:
-            return ModuleMock()
-
-    def get_module_handlers(self):
-        handlers = []
-        for module in self._modules.values():
-            handlers += module.handlers
-        return handlers
-
-    def register_module(self, name, cls, *args, **kwargs):
-        self._modules[name] = cls(*args, **kwargs)
+        return modules.get(self.name, name)
 
     def reconnect(self):
         """
@@ -661,26 +629,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.sm = Smacks(self) # Stream Management
 
-        self.register_module('EntityTime', EntityTime, self)
-        self.register_module('SoftwareVersion', SoftwareVersion, self)
-        self.register_module('Ping', Ping, self)
-        self.register_module('Search', Search, self)
-        self.register_module('Annotations', Annotations, self)
-        self.register_module('RosterItemExchange', RosterItemExchange, self)
-        self.register_module('LastActivity', LastActivity, self)
-        self.register_module('HTTPAuth', HTTPAuth, self)
-        self.register_module('VCardTemp', VCardTemp, self)
-        self.register_module('VCardAvatars', VCardAvatars, self)
-        self.register_module('PubSub', PubSub, self)
-        self.register_module('PEP', PEP, self)
-        self.register_module('Bookmarks', Bookmarks, self)
-        self.register_module('UserAvatar', UserAvatar, self)
-        self.register_module('UserActivity', UserActivity, self)
-        self.register_module('UserTune', UserTune, self)
-        self.register_module('UserMood', UserMood, self)
-        self.register_module('UserLocation', UserLocation, self)
-        self.register_module('UserNickname', UserNickname, self)
-        self.register_module('HTTPUpload', HTTPUpload, self)
+        # Register all modules
+        modules.register(self)
 
         app.ged.register_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
@@ -700,6 +650,8 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def cleanup(self):
         ConnectionHandlers.cleanup(self)
+        modules.unregister(self)
+
         app.ged.remove_event_handler('privacy-list-received', ged.CORE,
             self._nec_privacy_list_received)
         app.ged.remove_event_handler('agent-info-error-received', ged.CORE,
@@ -780,6 +732,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.terminate_sessions()
             self.remove_all_transfers()
             self.connection.disconnect()
+            ConnectionHandlers._unregister_handlers(self)
             self.connection = None
 
     def set_oldst(self): # Set old state

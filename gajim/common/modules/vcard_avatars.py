@@ -190,3 +190,7 @@ class VCardAvatars:
                      node.getTo() or own_jid, sha or 'no sha advertised')
             update.setTagData('photo', sha)
         return node
+
+
+def get_instance(*args, **kwargs):
+    return VCardAvatars(*args, **kwargs), 'VCardAvatars'

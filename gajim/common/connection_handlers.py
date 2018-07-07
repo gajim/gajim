@@ -37,6 +37,7 @@ from gi.repository import GLib
 import nbxmpp
 from gajim.common import caps_cache as capscache
 
+from gajim.common import modules
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import jingle_xtls
@@ -1451,5 +1452,9 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._BlockingResultCB, 'result',
             nbxmpp.NS_BLOCKING)
 
-        for handler in self.get_module_handlers():
+        for handler in modules.get_handlers(self):
             con.RegisterHandler(*handler)
+
+    def _unregister_handlers(self):
+        for handler in modules.get_handlers(self):
+            self.connection.UnregisterHandler(*handler)

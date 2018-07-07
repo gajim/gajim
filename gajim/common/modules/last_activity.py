@@ -50,3 +50,7 @@ class LastActivity:
         self._con.connection.send(iq)
 
         raise nbxmpp.NodeProcessed
+
+
+def get_instance(*args, **kwargs):
+    return LastActivity(*args, **kwargs), 'LastActivity'

@@ -99,3 +99,7 @@ class UserActivity(AbstractPEPModule):
             i = item.addChild('text')
             i.addData(message)
         return item
+
+
+def get_instance(*args, **kwargs):
+    return UserActivity(*args, **kwargs), 'UserActivity'
