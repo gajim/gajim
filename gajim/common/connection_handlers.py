@@ -1446,5 +1446,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             con.RegisterHandler(*handler)
 
     def _unregister_handlers(self):
+        if not self.connection:
+            return
         for handler in modules.get_handlers(self):
             self.connection.UnregisterHandler(*handler)
