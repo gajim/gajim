@@ -510,12 +510,12 @@ class CommonConnection:
 
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
-            if event == nbxmpp.transports_nb.DATA_RECEIVED:
-                app.nec.push_incoming_event(StanzaReceivedEvent(None,
-                    conn=self, stanza_str=data))
-            elif event == nbxmpp.transports_nb.DATA_SENT:
-                app.nec.push_incoming_event(StanzaSentEvent(None, conn=self,
-                    stanza_str=data))
+            if event == 'STANZA_RECEIVED':
+                app.nec.push_incoming_event(StanzaReceivedEvent(
+                    None, conn=self, stanza_str=str(data)))
+            elif event == 'STANZA_SENT':
+                app.nec.push_incoming_event(StanzaSentEvent(
+                    None, conn=self, stanza_str=str(data)))
 
     def change_status(self, show, msg, auto=False):
         if not msg:
