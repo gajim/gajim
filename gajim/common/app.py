@@ -397,7 +397,8 @@ def get_enabled_accounts_with_labels(exclude_local=True):
     accounts = []
     for acc in connections:
         if not exclude_local or acc != 'Local':
-            acc_label = config.get_per('accounts', acc, 'account_label')
+            acc_label = config.get_per(
+                'accounts', acc, 'account_label') or acc
             accounts.append([acc, acc_label])
     accounts.sort(key=lambda xs: str.lower(xs[1]))
     return accounts
