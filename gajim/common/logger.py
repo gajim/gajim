@@ -374,14 +374,10 @@ class Logger:
         """
         Return True if it's a room jid, False if it's not, None if we don't know
         """
-        row = self._con.execute(
-            'SELECT type FROM jids WHERE jid=?', (jid,)).fetchone()
-        if row is None:
-            return None
-        else:
-            if row.type == JIDConstant.ROOM_TYPE:
-                return True
-            return False
+        jid_ = self._jid_ids.get(jid)
+        if jid_ is None:
+            return
+        return jid_.type == JIDConstant.ROOM_TYPE
 
     @staticmethod
     def _get_family_jids(account, jid):

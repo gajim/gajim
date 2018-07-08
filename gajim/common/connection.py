@@ -121,9 +121,6 @@ class CommonConnection:
         self.privacy_rules_supported = False
         self.vcard_supported = False
         self.private_storage_supported = False
-        self.archiving_namespace = None
-        self.archiving_supported = False
-        self.archiving_313_supported = False
         self.roster_supported = True
         self.blocking_supported = False
         self.addressing_supported = False
@@ -1611,12 +1608,11 @@ class Connection(CommonConnection, ConnectionHandlers):
 
             if obj.fjid == our_jid:
                 if nbxmpp.NS_MAM_2 in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM_2
+                    self.get_module('MAM').archiving_namespace = nbxmpp.NS_MAM_2
                 elif nbxmpp.NS_MAM_1 in obj.features:
-                    self.archiving_namespace = nbxmpp.NS_MAM_1
-                if self.archiving_namespace:
-                    self.archiving_supported = True
-                    self.archiving_313_supported = True
+                    self.get_module('MAM').archiving_namespace = nbxmpp.NS_MAM_1
+                if self.get_module('MAM').archiving_namespace:
+                    self.get_module('MAM').available = True
                     get_action(self.name + '-archive').set_enabled(True)
                 for identity in obj.identities:
                     if identity['category'] == 'pubsub':

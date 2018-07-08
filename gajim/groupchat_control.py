@@ -1168,9 +1168,11 @@ class GroupchatControl(ChatControlBase):
         self._update_banner_state_image()
 
     def _nec_mam_decrypted_message_received(self, obj):
+        if obj.conn.name != self.account:
+            return
         if not obj.groupchat:
             return
-        if obj.room_jid != self.room_jid:
+        if obj.archive_jid != self.room_jid:
             return
         self.print_conversation(
             obj.msgtxt, contact=obj.nick,
@@ -1588,7 +1590,8 @@ class GroupchatControl(ChatControlBase):
 
         if muc_caps_cache.has_mam(self.room_jid):
             # Request MAM
-            app.connections[self.account].request_archive_on_muc_join(
+            con = app.connections[self.account]
+            con.get_module('MAM').request_archive_on_muc_join(
                 self.room_jid)
 
         app.gc_connected[self.account][self.room_jid] = True
@@ -2256,6 +2259,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_signed_in)
         app.ged.remove_event_handler('decrypted-message-received', ged.GUI2,
             self._nec_decrypted_message_received)
+        app.ged.remove_event_handler('mam-decrypted-message-received',
+            ged.GUI1, self._nec_mam_decrypted_message_received)
         app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
 

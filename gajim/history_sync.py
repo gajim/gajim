@@ -54,7 +54,6 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.end = None
         self.next = None
         self.hide_buttons()
-        self.event_id = id(self)
 
         own_jid = self.con.get_own_jid().getStripped()
 
@@ -88,9 +87,6 @@ class HistorySyncAssistant(Gtk.Assistant):
         app.ged.register_event_handler('archiving-count-received',
                                        ged.GUI1,
                                        self._received_count)
-        app.ged.register_event_handler('archiving-query-id',
-                                       ged.GUI1,
-                                       self._new_query_id)
         app.ged.register_event_handler('archiving-interval-finished',
                                        ged.GUI1,
                                        self._received_finished)
@@ -145,27 +141,26 @@ class HistorySyncAssistant(Gtk.Assistant):
         log.info('start: %s', self.start)
         log.info('end: %s', self.end)
 
-        self.con.request_archive_count(self.event_id, self.start, self.end)
+        self.query_id = self.con.get_module('MAM').request_archive_count(
+            self.start, self.end)
 
     def _received_count(self, event):
-        if event.event_id != self.event_id:
+        if event.query_id != self.query_id:
             return
+
         if event.count is not None:
             self.download_history.count = int(event.count)
-        self.con.request_archive_interval(self.event_id, self.start, self.end)
+        self.query_id = self.con.get_module('MAM').request_archive_interval(
+            self.start, self.end)
 
     def _received_finished(self, event):
-        if event.event_id != self.event_id:
+        if event.query_id != self.query_id:
             return
+        self.query_id = None
         log.info('query finished')
         GLib.idle_add(self.download_history.finished)
         self.set_current_page(Pages.SUMMARY)
         self.summary.finished()
-
-    def _new_query_id(self, event):
-        if event.event_id != self.event_id:
-            return
-        self.query_id = event.query_id
 
     def _nec_mam_message_received(self, obj):
         if obj.conn.name != self.account:
@@ -193,9 +188,6 @@ class HistorySyncAssistant(Gtk.Assistant):
         app.ged.remove_event_handler('archiving-count-received',
                                      ged.GUI1,
                                      self._received_count)
-        app.ged.remove_event_handler('archiving-query-id',
-                                     ged.GUI1,
-                                     self._new_query_id)
         app.ged.remove_event_handler('archiving-interval-finished',
                                      ged.GUI1,
                                      self._received_finished)

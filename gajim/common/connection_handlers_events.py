@@ -77,7 +77,10 @@ class HelperEvent:
             del self.conn.groupchat_jids[self.id_]
         else:
             self.fjid = helpers.get_full_jid_from_iq(self.stanza)
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
+        if self.fjid is None:
+            self.jid = None
+        else:
+            self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
 
     def get_id(self):
         self.id_ = self.stanza.getID()
@@ -630,240 +633,6 @@ class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
     name = 'before-change-show'
     base_network_events = []
 
-class MamMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'mam-message-received'
-    base_network_events = ['raw-mam-message-received']
-
-    def __init__(self, name, base_event):
-        '''
-        Pre-Generated attributes on self:
-
-        :conn:          Connection instance
-        :stanza:        Complete stanza Node
-        :forwarded:     Forwarded Node
-        :result:        Result Node
-        '''
-        self._set_base_event_vars_as_attributes(base_event)
-        self.additional_data = {}
-        self.encrypted = False
-        self.groupchat = False
-        self.nick = None
-        self.self_message = None
-        self.muc_pm = None
-
-    def generate(self):
-        account = self.conn.name
-        archive_jid = self.stanza.getFrom()
-        own_jid = self.conn.get_own_jid()
-        if archive_jid and not archive_jid.bareMatch(own_jid):
-            # MAM Message not from our Archive
-            return False
-
-        self.msg_ = self.forwarded.getTag('message', protocol=True)
-
-        if self.msg_.getType() == 'groupchat':
-            return False
-
-        # use stanza-id as unique-id
-        self.unique_id, origin_id = self.get_unique_id()
-        self.message_id = self.msg_.getID()
-
-        # Check for duplicates
-        if app.logger.find_stanza_id(account,
-                                     own_jid.getStripped(),
-                                     self.unique_id, origin_id):
-            return
-
-        self.msgtxt = self.msg_.getTagData('body')
-
-        frm = self.msg_.getFrom()
-        # Some servers dont set the 'to' attribute when
-        # we send a message to ourself
-        to = self.msg_.getTo()
-        if to is None:
-            to = own_jid
-
-        if frm.bareMatch(own_jid):
-            self.with_ = to
-            self.kind = KindConstant.CHAT_MSG_SENT
-        else:
-            self.with_ = frm
-            self.kind = KindConstant.CHAT_MSG_RECV
-
-        delay = self.forwarded.getTagAttr(
-            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
-        if delay is None:
-            log.error('Received MAM message without timestamp')
-            log.error(self.stanza)
-            return
-
-        self.timestamp = helpers.parse_datetime(
-            delay, check_utc=True, epoch=True)
-        if self.timestamp is None:
-            log.error('Received MAM message with invalid timestamp: %s', delay)
-            log.error(self.stanza)
-            return
-
-        # Save timestamp added by the user
-        user_delay = self.msg_.getTagAttr(
-            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
-        if user_delay is not None:
-            self.user_timestamp = helpers.parse_datetime(
-                user_delay, check_utc=True, epoch=True)
-            if self.user_timestamp is None:
-                log.warning('Received MAM message with '
-                            'invalid user timestamp: %s', user_delay)
-                log.warning(self.stanza)
-
-        log.debug('Received mam-message: unique id: %s', self.unique_id)
-        return True
-
-    def get_unique_id(self):
-        stanza_id = self.get_stanza_id(self.result, query=True)
-
-        if self._is_self_message(self.msg_) or self._is_muc_pm(self.msg_):
-            origin_id = self.msg_.getOriginID()
-            return stanza_id, origin_id
-
-        if self.conn.get_own_jid().bareMatch(self.msg_.getFrom()):
-            # message we sent
-            origin_id = self.msg_.getOriginID()
-            return stanza_id, origin_id
-
-        # A message we received
-        return stanza_id, None
-
-class MamGcMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'mam-gc-message-received'
-    base_network_events = ['raw-mam-message-received']
-
-    def __init__(self, name, base_event):
-        '''
-        Pre-Generated attributes on self:
-
-        :conn:          Connection instance
-        :stanza:        Complete stanza Node
-        :forwarded:     Forwarded Node
-        :result:        Result Node
-        :muc_pm:        True, if this is a MUC PM
-                        propagated to MamDecryptedMessageReceivedEvent
-        '''
-        self._set_base_event_vars_as_attributes(base_event)
-        self.additional_data = {}
-        self.encrypted = False
-        self.groupchat = True
-        self.kind = KindConstant.GC_MSG
-
-    def generate(self):
-        account = self.conn.name
-        self.msg_ = self.forwarded.getTag('message', protocol=True)
-
-        if self.msg_.getType() != 'groupchat':
-            return False
-
-        try:
-            self.room_jid = self.stanza.getFrom().getStripped()
-        except AttributeError:
-            log.warning('Received GC MAM message '
-                        'without from attribute\n%s', self.stanza)
-            return False
-
-        self.unique_id = self.get_stanza_id(self.result, query=True)
-        self.message_id = self.msg_.getID()
-
-        # Check for duplicates
-        if app.logger.find_stanza_id(account,
-                                     self.room_jid,
-                                     self.unique_id,
-                                     groupchat=True):
-            return
-
-        self.msgtxt = self.msg_.getTagData('body')
-        self.with_ = self.msg_.getFrom().getStripped()
-        self.nick = self.msg_.getFrom().getResource()
-
-        # Get the real jid if we have it
-        self.real_jid = None
-        muc_user = self.msg_.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
-            self.real_jid = muc_user.getTagAttr('item', 'jid')
-
-        delay = self.forwarded.getTagAttr(
-            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
-        if delay is None:
-            log.error('Received MAM message without timestamp')
-            log.error(self.stanza)
-            return
-
-        self.timestamp = helpers.parse_datetime(
-            delay, check_utc=True, epoch=True)
-        if self.timestamp is None:
-            log.error('Received MAM message with invalid timestamp: %s', delay)
-            log.error(self.stanza)
-            return
-
-        # Save timestamp added by the user
-        user_delay = self.msg_.getTagAttr(
-            'delay', 'stamp', namespace=nbxmpp.NS_DELAY2)
-        if user_delay is not None:
-            self.user_timestamp = helpers.parse_datetime(
-                user_delay, check_utc=True, epoch=True)
-            if self.user_timestamp is None:
-                log.warning('Received MAM message with '
-                            'invalid user timestamp: %s', user_delay)
-                log.warning(self.stanza)
-
-        log.debug('Received mam-gc-message: unique id: %s', self.unique_id)
-        return True
-
-class MamDecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'mam-decrypted-message-received'
-    base_network_events = []
-
-    def generate(self):
-        self.correct_id = None
-
-        if not self.msgtxt:
-            # For example Chatstates, Receipts, Chatmarkers
-            log.debug('Received MAM message without text')
-            return
-
-        replace = self.msg_.getTag('replace', namespace=nbxmpp.NS_CORRECT)
-        if replace is not None:
-            self.correct_id = replace.getAttr('id')
-
-        self.get_oob_data(self.msg_)
-
-        if self.groupchat:
-            return True
-
-        if not self.muc_pm:
-            # muc_pm = False, means only there was no muc#user namespace
-            # This could still be a muc pm, we check the database if we
-            # know this jid. If not we disco it.
-            self.muc_pm = app.logger.jid_is_room_jid(self.with_.getStripped())
-            if self.muc_pm is None:
-                # Check if this event is triggered after a disco, so we dont
-                # run into an endless loop
-                if hasattr(self, 'disco'):
-                    log.error('JID not known even after sucessful disco')
-                    log.error(self.with_.getStripped())
-                    return
-                # we don't know this JID, we need to disco it.
-                server = self.with_.getDomain()
-                if server not in self.conn.mam_awaiting_disco_result:
-                    self.conn.mam_awaiting_disco_result[server] = [self]
-                    self.conn.discoverInfo(server)
-                else:
-                    self.conn.mam_awaiting_disco_result[server].append(self)
-                return
-
-        if self.muc_pm:
-            self.with_ = str(self.with_)
-        else:
-            self.with_ = self.with_.getStripped()
-        return True
-
 class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-received'
     base_network_events = ['raw-message-received']
@@ -968,30 +737,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.forwarded = True
 
-        result = self.stanza.getTag('result', protocol=True)
-        if result and result.getNamespace() in (nbxmpp.NS_MAM_1,
-                                                nbxmpp.NS_MAM_2):
-
-            if result.getAttr('queryid') not in self.conn.mam_query_ids:
-                log.warning('Invalid MAM Message: unknown query id')
-                log.debug(self.stanza)
-                return
-
-            forwarded = result.getTag('forwarded',
-                                      namespace=nbxmpp.NS_FORWARD,
-                                      protocol=True)
-            if not forwarded:
-                log.warning('Invalid MAM Message: no forwarded child')
-                return
-
-            app.nec.push_incoming_event(
-                NetworkEvent('raw-mam-message-received',
-                             conn=self.conn,
-                             stanza=self.stanza,
-                             forwarded=forwarded,
-                             result=result))
-            return
-
         # Mediated invitation?
         muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
         if muc_user:
@@ -1085,7 +830,7 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             return
 
         # Messages we receive live
-        if self.conn.archiving_namespace != nbxmpp.NS_MAM_2:
+        if self.conn.get_module('MAM').archiving_namespace != nbxmpp.NS_MAM_2:
             # Only mam:2 ensures valid stanza-id
             return
 
@@ -1496,77 +1241,6 @@ class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
         self.fjid = self.jingle_session.peerjid
         self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
         self.sid = self.jingle_session.sid
-        return True
-
-class ArchivingReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-received'
-    base_network_events = []
-
-    def generate(self):
-        self.type_ = self.stanza.getType()
-        if self.type_ not in ('result', 'set', 'error'):
-            return
-        return True
-
-class ArchivingErrorReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-error-received'
-    base_network_events = ['archiving-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.type_
-
-        if self.type_ == 'error':
-            self.error_msg = self.stanza.getErrorMsg()
-            return True
-
-class ArchivingCountReceived(nec.NetworkIncomingEvent):
-    name = 'archiving-count-received'
-    base_network_events = []
-
-    def generate(self):
-        return True
-
-class ArchivingIntervalFinished(nec.NetworkIncomingEvent):
-    name = 'archiving-interval-finished'
-    base_network_events = []
-
-    def generate(self):
-        return True
-
-class ArchivingQueryID(nec.NetworkIncomingEvent):
-    name = 'archiving-query-id'
-    base_network_events = []
-
-    def generate(self):
-        return True
-
-class Archiving313PreferencesChangedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'archiving-313-preferences-changed-received'
-    base_network_events = ['archiving-received']
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-        self.type_ = self.base_event.type_
-        self.items = []
-        self.default = None
-        self.id = self.stanza.getID()
-        self.answer = None
-        prefs = self.stanza.getTag('prefs')
-
-        if self.type_ != 'result' or not prefs:
-            return
-
-        self.default = prefs.getAttr('default')
-
-        for item in prefs.getTag('always').getTags('jid'):
-            self.items.append((item.getData(), 'Always'))
-
-        for item in prefs.getTag('never').getTags('jid'):
-            self.items.append((item.getData(), 'Never'))
-
         return True
 
 class AccountCreatedEvent(nec.NetworkIncomingEvent):

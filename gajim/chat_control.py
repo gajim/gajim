@@ -809,8 +809,13 @@ class ChatControl(ChatControlBase):
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
             return
-        if obj.with_ != self.contact.jid:
-            return
+
+        if obj.muc_pm:
+            if not obj.with_ == self.contact.get_full_jid():
+                return
+        else:
+            if not obj.with_.bareMatch(self.contact.jid):
+                return
 
         kind = '' # incoming
         if obj.kind == KindConstant.CHAT_MSG_SENT:

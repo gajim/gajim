@@ -595,11 +595,17 @@ def prefers_app_menu():
         return False
     return app.prefers_app_menu()
 
-def get_app_window(cls):
+def get_app_window(cls, account=None):
     for win in app.get_windows():
         if isinstance(cls, str):
             if type(win).__name__ == cls:
+                if account is not None:
+                    if account != win.account:
+                        continue
                 return win
         elif isinstance(win, cls):
+            if account is not None:
+                if account != win.account:
+                    continue
             return win
     return None

@@ -29,6 +29,7 @@ from gajim import history_window
 from gajim import disco
 from gajim.history_sync import HistorySyncAssistant
 from gajim.server_info import ServerInfoDialog
+from gajim.gtk.mam_preferences import MamPreferences
 
 
 # General Actions
@@ -181,14 +182,13 @@ def on_import_contacts(action, param):
 # Advanced Actions
 
 
-def on_archiving_preferences(action, param):
+def on_mam_preferences(action, param):
     account = param.get_string()
-    if 'archiving_preferences' in interface.instances[account]:
-        interface.instances[account]['archiving_preferences'].window.\
-            present()
+    window = app.get_app_window(MamPreferences, account)
+    if window is None:
+        MamPreferences(account)
     else:
-        interface.instances[account]['archiving_preferences'] = \
-            dialogs.Archiving313PreferencesWindow(account)
+        window.present()
 
 
 def on_history_sync(action, param):

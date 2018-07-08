@@ -5404,7 +5404,7 @@ class RosterWindow:
                     self.on_privacy_lists_menuitem_activate, account)
             else:
                 privacy_lists_menuitem.set_sensitive(False)
-            if app.connections[account].archiving_313_supported:
+            if app.connections[account].get_module('MAM').available:
                 archiving_preferences_menuitem.connect(
                     'activate',
                     self.on_archiving_preferences_menuitem_activate, account)

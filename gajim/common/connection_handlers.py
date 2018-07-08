@@ -45,8 +45,8 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
-from gajim.common.message_archiving import ConnectionArchive313
 from gajim.common.connection_handlers_events import *
+from gajim.common.modules.misc import parse_eme
 
 from gajim.common import ged
 from gajim.common.nec import NetworkEvent
@@ -295,17 +295,15 @@ class ConnectionHandlersBase:
         # XEPs that are based on Message
         self._message_namespaces = set([nbxmpp.NS_HTTP_AUTH,
                                         nbxmpp.NS_PUBSUB_EVENT,
-                                        nbxmpp.NS_ROSTERX])
+                                        nbxmpp.NS_ROSTERX,
+                                        nbxmpp.NS_MAM_1,
+                                        nbxmpp.NS_MAM_2])
 
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
         app.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
         app.ged.register_event_handler('message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.register_event_handler('mam-message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.register_event_handler('mam-gc-message-received', ged.CORE,
             self._nec_message_received)
         app.ged.register_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
@@ -318,10 +316,6 @@ class ConnectionHandlersBase:
         app.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
         app.ged.remove_event_handler('message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.remove_event_handler('mam-message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.remove_event_handler('mam-gc-message-received', ged.CORE,
             self._nec_message_received)
         app.ged.remove_event_handler('decrypted-message-received', ged.CORE,
             self._nec_decrypted_message_received)
@@ -460,37 +454,15 @@ class ConnectionHandlersBase:
         app.plugin_manager.extension_point(
             'decrypt', self, obj, self._on_message_received)
         if not obj.encrypted:
-            # XEP-0380
-            enc_tag = obj.stanza.getTag('encryption', namespace=nbxmpp.NS_EME)
-            if enc_tag:
-                ns = enc_tag.getAttr('namespace')
-                if ns:
-                    if ns == 'urn:xmpp:otr:0':
-                        obj.msgtxt = _('This message was encrypted with OTR '
-                        'and could not be decrypted.')
-                    elif ns == 'jabber:x:encrypted':
-                        obj.msgtxt = _('This message was encrypted with Legacy '
-                        'OpenPGP and could not be decrypted. You can install '
-                        'the PGP plugin to handle those messages.')
-                    elif ns == 'urn:xmpp:openpgp:0':
-                        obj.msgtxt = _('This message was encrypted with '
-                        'OpenPGP for XMPP and could not be decrypted.')
-                    else:
-                        enc_name = enc_tag.getAttr('name')
-                        if not enc_name:
-                            enc_name = ns
-                        obj.msgtxt = _('This message was encrypted with %s '
-                        'and could not be decrypted.') % enc_name
+            eme = parse_eme(obj.stanza)
+            if eme is not None:
+                obj.msgtxt = eme
             self._on_message_received(obj)
 
     def _on_message_received(self, obj):
-        if isinstance(obj, MessageReceivedEvent):
-            app.nec.push_incoming_event(
-                DecryptedMessageReceivedEvent(
-                    None, conn=self, msg_obj=obj, stanza_id=obj.unique_id))
-        else:
-            app.nec.push_incoming_event(
-                MamDecryptedMessageReceivedEvent(None, **vars(obj)))
+        app.nec.push_incoming_event(
+            DecryptedMessageReceivedEvent(
+                None, conn=self, msg_obj=obj, stanza_id=obj.unique_id))
 
     def _nec_decrypted_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -564,7 +536,7 @@ class ConnectionHandlersBase:
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = muc_caps_cache.get_mam_namespace(room_jid)
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
-            helpers.add_to_mam_blacklist(room_jid)
+            log.warning('%s announces mam:2 without stanza-id')
 
     def _nec_gc_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -743,11 +715,10 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionArchive313,
-ConnectionSocks5Bytestream, ConnectionDisco, ConnectionCaps,
-ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
+class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
+                         ConnectionCaps, ConnectionHandlersBase,
+                         ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
-        ConnectionArchive313.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
 
@@ -772,9 +743,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
 
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(MessageReceivedEvent)
-        app.nec.register_incoming_event(ArchivingErrorReceivedEvent)
-        app.nec.register_incoming_event(
-            Archiving313PreferencesChangedReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
         app.ged.register_event_handler('roster-set-received',
@@ -799,7 +767,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
         ConnectionCaps.cleanup(self)
-        ConnectionArchive313.cleanup(self)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
@@ -1343,8 +1310,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
             nbxmpp.NS_DISCO_ITEMS)
 
-        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
-        con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
         con.RegisterHandler('iq', self._JingleCB, 'result')
         con.RegisterHandler('iq', self._JingleCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)

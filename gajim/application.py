@@ -356,7 +356,7 @@ class GajimApplication(Gtk.Application):
             ('-profile', app_actions.on_profile, 'feature', 's'),
             ('-xml-console', app_actions.on_xml_console, 'always', 's'),
             ('-server-info', app_actions.on_server_info, 'online', 's'),
-            ('-archive', app_actions.on_archiving_preferences, 'feature', 's'),
+            ('-archive', app_actions.on_mam_preferences, 'feature', 's'),
             ('-sync-history', app_actions.on_history_sync, 'online', 's'),
             ('-privacylists', app_actions.on_privacy_lists, 'feature', 's'),
             ('-send-server-message',
