@@ -26,7 +26,6 @@
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.commands import ConnectionCommands
 from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from gajim.common.connection_handlers_events import ZeroconfMessageReceivedEvent
 
@@ -49,13 +48,12 @@ class ConnectionVcard:
 
 
 class ConnectionHandlersZeroconf(ConnectionVcard,
-ConnectionSocks5BytestreamZeroconf, ConnectionCommands,
+ConnectionSocks5BytestreamZeroconf,
 connection_handlers.ConnectionHandlersBase,
 connection_handlers.ConnectionJingle):
     def __init__(self):
         ConnectionVcard.__init__(self)
         ConnectionSocks5BytestreamZeroconf.__init__(self)
-        ConnectionCommands.__init__(self)
         connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
@@ -82,13 +80,13 @@ connection_handlers.ConnectionJingle):
         if not self.connection or self.connected < 2:
             return
 
-        if self.commandItemsQuery(con, iq_obj):
+        if self.get_module('AdHocCommands').command_items_query(iq_obj):
             raise nbxmpp.NodeProcessed
         node = iq_obj.getTagAttr('query', 'node')
         if node is None:
             result = iq_obj.buildReply('result')
             self.connection.send(result)
             raise nbxmpp.NodeProcessed
-        if node==nbxmpp.NS_COMMANDS:
-            self.commandListQuery(con, iq_obj)
+        if node == nbxmpp.NS_COMMANDS:
+            self.get_module('AdHocCommands').command_list_query(iq_obj)
             raise nbxmpp.NodeProcessed

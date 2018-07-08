@@ -25,12 +25,12 @@
 # FIXME: think if we need caching command list. it may be wrong if there will
 # be entities that often change the list, it may be slow to fetch it every time
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 import nbxmpp
 from gajim.common import app
 from gajim.common import dataforms
+from gajim.common import ged
 
 from gajim import gtkgui_helpers
 from gajim import dialogs
@@ -55,7 +55,7 @@ class CommandWindow:
         """
 
         # an account object
-        self.account = app.connections[account]
+        self._con = app.connections[account]
         self.jid = jid
         self.commandnode = commandnode
         self.data_form_widget = None
@@ -86,6 +86,14 @@ class CommandWindow:
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Command", renderer, text=0)
         self.command_treeview.append_column(column)
+
+        app.ged.register_event_handler(
+            'adhoc-command-error', ged.CORE, self._on_command_error)
+        app.ged.register_event_handler(
+            'adhoc-command-list', ged.CORE, self._on_command_list)
+        app.ged.register_event_handler('adhoc-command-action-response',
+                                       ged.CORE,
+                                       self._on_action_response)
 
         self.initiate()
 
@@ -157,8 +165,13 @@ class CommandWindow:
         return False
 
     def on_adhoc_commands_window_destroy(self, *anything):
-        # TODO: do all actions that are needed to remove this object from memory
-        pass
+        app.ged.remove_event_handler(
+            'adhoc-command-error', ged.CORE, self._on_command_error)
+        app.ged.remove_event_handler(
+            'adhoc-command-list', ged.CORE, self._on_command_list)
+        app.ged.remove_event_handler('adhoc-command-action-response',
+                                     ged.CORE,
+                                     self._on_action_response)
 
     def on_adhoc_commands_window_delete_event(self, *anything):
         if self.stage_window_delete_cb:
@@ -190,7 +203,7 @@ class CommandWindow:
         self.finish_button.set_sensitive(False)
 
         # request command list
-        self.request_command_list()
+        self._con.get_module('AdHocCommands').request_command_list(self.jid)
         self.retrieving_commands_spinner.start()
 
         # setup the callbacks
@@ -304,7 +317,8 @@ class CommandWindow:
             return
 
         def on_yes(button):
-            self.send_cancel()
+            self._con.get_module('AdHocCommands').send_cancel(
+                self.jid, self.commandnode, self.sessionid)
             dialog.destroy()
             cb()
 
@@ -371,7 +385,9 @@ class CommandWindow:
         self.finish_button.set_sensitive(False)
 
         self.sending_form_spinner.start()
-        self.send_command(action)
+        self._con.get_module('AdHocCommands').send_command(
+            self.jid, self.commandnode, self.sessionid,
+            self.data_form_widget.data_form, action)
 
     def stage3_next_form(self, command):
         if not isinstance(command, nbxmpp.Node):
@@ -527,85 +543,15 @@ class CommandWindow:
     def stage5_restart_button_clicked(self, widget):
         self.restart()
 
-# handling xml stanzas
-    def request_command_list(self):
-        """
-        Request the command list. Change stage on delivery
-        """
-        query = nbxmpp.Iq(typ='get', to=nbxmpp.JID(self.jid),
-            queryNS=nbxmpp.NS_DISCO_ITEMS)
-        query.setQuerynode(nbxmpp.NS_COMMANDS)
+    def _on_command_error(self, obj):
+        self.stage5(errorid=obj.error)
 
-        def callback(response):
-            '''Called on response to query.'''
-            # FIXME: move to connection_handlers.py
-            # is error => error stage
-            error = response.getError()
-            if error:
-                # extracting error description
-                self.stage5(errorid=error)
-                return
-
-            # no commands => no commands stage
-            # commands => command selection stage
-            query = response.getTag('query')
-            if query and query.getAttr('node') == nbxmpp.NS_COMMANDS:
-                items = query.getTags('item')
-            else:
-                items = []
-            if len(items)==0:
-                self.commandlist = []
-                self.stage4()
-            else:
-                self.commandlist = [(t.getAttr('node'), t.getAttr('name')) \
-                    for t in items]
-                self.stage2()
-
-        self.account.connection.SendAndCallForResponse(query, callback)
-
-    def send_command(self, action='execute'):
-        """
-        Send the command with data form. Wait for reply
-        """
-        # create the stanza
-        assert action in ('execute', 'prev', 'next', 'complete')
-
-        stanza = nbxmpp.Iq(typ='set', to=self.jid)
-        cmdnode = stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS,
-            attrs={'node':self.commandnode, 'action':action})
-
-        if self.sessionid:
-            cmdnode.setAttr('sessionid', self.sessionid)
-
-        if self.data_form_widget.data_form:
-            cmdnode.addChild(node=self.data_form_widget.data_form.get_purged())
-
-        def callback(response):
-            # FIXME: move to connection_handlers.py
-            err = response.getError()
-            if err:
-                self.stage5(errorid = err)
-            else:
-                self.stage3_next_form(response.getTag('command'))
-
-        self.account.connection.SendAndCallForResponse(stanza, callback)
-
-    def send_cancel(self):
-        """
-        Send the command with action='cancel'
-        """
-        assert self.commandnode
-        if self.sessionid and self.account.connection:
-            # we already have sessionid, so the service sent at least one reply.
-            stanza = nbxmpp.Iq(typ='set', to=self.jid)
-            stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS, attrs={
-                            'node':self.commandnode,
-                            'sessionid':self.sessionid,
-                            'action':'cancel'
-                    })
-
-            self.account.connection.send(stanza)
+    def _on_command_list(self, obj):
+        self.commandlist = obj.commandlist
+        if not self.commandlist:
+            self.stage4()
         else:
-            # we did not received any reply from service;
-            # FIXME: we should wait and then send cancel; for now we do nothing
-            pass
+            self.stage2()
+
+    def _on_action_response(self, obj):
+        self.stage3_next_form(obj.command)

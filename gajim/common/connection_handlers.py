@@ -42,7 +42,6 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import jingle_xtls
 from gajim.common.caps_cache import muc_caps_cache
-from gajim.common.commands import ConnectionCommands
 from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
@@ -218,7 +217,7 @@ class ConnectionDisco:
         if not self.connection or self.connected < 2:
             return
 
-        if self.commandItemsQuery(con, iq_obj):
+        if self.get_module('AdHocCommands').command_items_query(iq_obj):
             raise nbxmpp.NodeProcessed
         node = iq_obj.getTagAttr('query', 'node')
         if node is None:
@@ -226,7 +225,7 @@ class ConnectionDisco:
             self.connection.send(result)
             raise nbxmpp.NodeProcessed
         if node == nbxmpp.NS_COMMANDS:
-            self.commandListQuery(con, iq_obj)
+            self.get_module('AdHocCommands').command_list_query(iq_obj)
             raise nbxmpp.NodeProcessed
 
     def _DiscoverInfoGetCB(self, con, iq_obj):
@@ -235,7 +234,7 @@ class ConnectionDisco:
             return
         node = iq_obj.getQuerynode()
 
-        if self.commandInfoQuery(con, iq_obj):
+        if self.get_module('AdHocCommands').command_info_query(iq_obj):
             raise nbxmpp.NodeProcessed
 
         id_ = iq_obj.getAttr('id')
@@ -743,14 +742,12 @@ class ConnectionHandlersBase:
         return sess
 
 class ConnectionHandlers(ConnectionArchive313,
-ConnectionSocks5Bytestream, ConnectionDisco,
-ConnectionCommands, ConnectionCaps,
+ConnectionSocks5Bytestream, ConnectionDisco, ConnectionCaps,
 ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         ConnectionArchive313.__init__(self)
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
-        ConnectionCommands.__init__(self)
 
         # Handle presences BEFORE caps
         app.nec.register_incoming_event(PresenceReceivedEvent)
@@ -1339,8 +1336,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             nbxmpp.NS_MUC_ADMIN)
         con.RegisterHandler('iq', self._SecLabelCB, 'result',
             nbxmpp.NS_SECLABEL_CATALOG)
-        con.RegisterHandler('iq', self._CommandExecuteCB, 'set',
-            nbxmpp.NS_COMMANDS)
         con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',

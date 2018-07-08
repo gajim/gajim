@@ -18,6 +18,8 @@ from pathlib import Path
 
 log = logging.getLogger('gajim.c.m')
 
+ZEROCONF_MODULES = ['adhoc_commands']
+
 imported_modules = []
 _modules = {}
 
@@ -31,12 +33,26 @@ for file in Path(__file__).parent.iterdir():
         if file.stem == 'pep':
             # Register the PEP module first, because other modules
             # depend on it
-            imported_modules.insert(0, module)
+            imported_modules.insert(0, (module, file.stem))
         else:
-            imported_modules.append(module)
+            imported_modules.append((module, file.stem))
 
 
 class ModuleMock:
+    def __init__(self, name):
+        self._name = name
+
+        # HTTPUpload
+        self.available = False
+
+        # Blocking
+        self.blocked = []
+
+        # Privacy Lists
+        self.blocked_contacts = []
+        self.blocked_groups = []
+        self.blocked_all = False
+
     def __getattr__(self, key):
         def _mock(self, *args, **kwargs):
             return
@@ -48,7 +64,11 @@ def register(con, *args, **kwargs):
         return
     _modules[con.name] = {}
     for module in imported_modules:
-        instance, name = module.get_instance(con, *args, **kwargs)
+        mod, name = module
+        if con.name == 'Local':
+            if name not in ZEROCONF_MODULES:
+                continue
+        instance, name = mod.get_instance(con, *args, **kwargs)
         _modules[con.name][name] = instance
 
 
@@ -60,7 +80,7 @@ def get(account, name):
     try:
         return _modules[account][name]
     except KeyError:
-        return ModuleMock()
+        return ModuleMock(name)
 
 
 def get_handlers(con):
