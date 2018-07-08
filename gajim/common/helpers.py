@@ -1385,12 +1385,15 @@ def update_optional_features(account = None):
                     app.connections[a].status)
 
 def jid_is_blocked(account, jid):
-    return ((jid in app.connections[account].blocked_contacts) or \
-            app.connections[account].blocked_all)
+    con = app.connections[account]
+    return (jid in con.get_module('Blocking').blocked or
+            jid in con.get_module('PrivacyLists').blocked_contacts or
+            con.get_module('PrivacyLists').blocked_all)
 
 def group_is_blocked(account, group):
-    return ((group in app.connections[account].blocked_groups) or \
-            app.connections[account].blocked_all)
+    con = app.connections[account]
+    return (group in con.get_module('PrivacyLists').blocked_groups or
+            con.get_module('PrivacyLists').blocked_all)
 
 def get_subscription_request_msg(account=None):
     s = app.config.get_per('accounts', account, 'subscription_request_msg')

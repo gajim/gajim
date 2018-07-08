@@ -2812,12 +2812,8 @@ class RosterWindow:
             on_response_ok = (remove, list_), transient_for=self.window)
 
     def _nec_blocking(self, obj):
-        if obj.unblock_all or obj.blocklist:
-            jids = app.contacts.get_jid_list(obj.conn.name)
-            self._idle_draw_jids_of_account(jids, obj.conn.name)
-        else:
-            for jid in obj.blocked_jids + obj.unblocked_jids:
-                self.draw_contact(jid, obj.conn.name)
+        for jid in obj.changed:
+            self.draw_contact(jid, obj.conn.name)
 
     def on_block(self, widget, list_, group=None):
         """
@@ -2834,13 +2830,15 @@ class RosterWindow:
             if group is None:
                 for acct in accounts:
                     l_ = [i[0] for i in list_ if i[1] == acct]
-                    app.connections[acct].block_contacts(l_, msg)
+                    con = app.connections[acct]
+                    con.get_module('PrivacyLists').block_contacts(l_, msg)
                     for contact in l_:
                         self.draw_contact(contact.jid, acct)
             else:
                 for acct in accounts:
                     l_ = [i[0] for i in list_ if i[1] == acct]
-                    app.connections[acct].block_group(group, l_, msg)
+                    con = app.connections[acct]
+                    con.get_module('PrivacyLists').block_group(group, l_, msg)
                     self.draw_group(group, acct)
                     for contact in l_:
                         self.draw_contact(contact.jid, acct)
@@ -2874,13 +2872,15 @@ class RosterWindow:
         if group is None:
             for acct in accounts:
                 l_ = [i[0] for i in list_ if i[1] == acct]
-                app.connections[acct].unblock_contacts(l_)
+                con = app.connections[acct]
+                con.get_module('PrivacyLists').unblock_contacts(l_)
                 for contact in l_:
                     self.draw_contact(contact.jid, acct)
         else:
             for acct in accounts:
                 l_ = [i[0] for i in list_ if i[1] == acct]
-                app.connections[acct].unblock_group(group, l_)
+                con = app.connections[acct]
+                con.get_module('PrivacyLists').unblock_group(group, l_)
                 self.draw_group(group, acct)
                 for contact in l_:
                     self.draw_contact(contact.jid, acct)
@@ -3462,7 +3462,8 @@ class RosterWindow:
             for account in account_list:
                 if app.SHOW_LIST[app.connections[account].connected] == \
                 'invisible':
-                    app.connections[account].set_invisible_rule()
+                    con = app.connections[account]
+                    con.get_module('PrivacyLists').set_invisible_rule()
 
             # 3. send directed presence
             for (contact, account) in contact_list:

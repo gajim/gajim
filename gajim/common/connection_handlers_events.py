@@ -1759,22 +1759,6 @@ class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-not-supported'
     base_network_events = []
 
-class PrivacyListsReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'privacy-lists-received'
-    base_network_events = []
-
-class PrivacyListReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'privacy-list-received'
-    base_network_events = []
-
-class PrivacyListRemovedEvent(nec.NetworkIncomingEvent):
-    name = 'privacy-list-removed'
-    base_network_events = []
-
-class PrivacyListActiveDefaultEvent(nec.NetworkIncomingEvent):
-    name = 'privacy-list-active-default'
-    base_network_events = []
-
 class NonAnonymousServerErrorEvent(nec.NetworkIncomingEvent):
     name = 'non-anonymous-server-error'
     base_network_events = []
@@ -2478,44 +2462,4 @@ class InformationEvent(nec.NetworkIncomingEvent):
             self.args = ()
         else:
             self.args = (self.args,)
-        return True
-
-class BlockingEvent(nec.NetworkIncomingEvent):
-    name = 'blocking'
-    base_network_events = []
-
-    def init(self):
-        self.blocklist = []
-        self.blocked_jids = []
-        self.unblocked_jids = []
-        self.unblock_all = False
-
-    def generate(self):
-        block_list = self.stanza.getTag(
-            'blocklist', namespace=nbxmpp.NS_BLOCKING)
-        if block_list is not None:
-            for item in block_list.getTags('item'):
-                self.blocklist.append(item.getAttr('jid'))
-            app.log('blocking').info(
-                'Blocklist Received: %s', self.blocklist)
-            return True
-
-        block_tag = self.stanza.getTag('block', namespace=nbxmpp.NS_BLOCKING)
-        if block_tag is not None:
-            for item in block_tag.getTags('item'):
-                self.blocked_jids.append(item.getAttr('jid'))
-            app.log('blocking').info(
-                'Blocking Push - blocked JIDs: %s', self.blocked_jids)
-
-        unblock_tag = self.stanza.getTag(
-            'unblock', namespace=nbxmpp.NS_BLOCKING)
-        if unblock_tag is not None:
-            if not unblock_tag.getTags('item'):
-                self.unblock_all = True
-                app.log('blocking').info('Blocking Push - unblocked all')
-                return True
-            for item in unblock_tag.getTags('item'):
-                self.unblocked_jids.append(item.getAttr('jid'))
-            app.log('blocking').info(
-                'Blocking Push - unblocked JIDs: %s', self.unblocked_jids)
         return True

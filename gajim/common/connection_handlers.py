@@ -771,8 +771,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
 
         self.continue_connect_info = None
 
-        self.privacy_default_list = None
-
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(MessageReceivedEvent)
         app.nec.register_incoming_event(ArchivingErrorReceivedEvent)
@@ -798,8 +796,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
-        app.ged.register_event_handler('blocking', ged.CORE,
-            self._nec_blocking)
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
@@ -823,7 +819,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
-        app.ged.remove_event_handler('blocking', ged.CORE, self._nec_blocking)
 
     def add_sha(self, p, send_caps=True):
         p = self.get_module('VCardAvatars').add_update_node(p)
@@ -912,21 +907,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
                     conn=self))
             GLib.timeout_add_seconds(10, self.discover_servers)
             del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == PRIVACY_ARRIVED:
-            del self.awaiting_answers[id_]
-            if iq_obj.getType() != 'error':
-                for list_ in iq_obj.getQueryPayload():
-                    if list_.getName() == 'default':
-                        self.privacy_default_list = list_.getAttr('name')
-                        self.get_privacy_list(self.privacy_default_list)
-                        break
-                # Ask metacontacts before roster
-                self.get_metacontacts()
-            else:
-                # That should never happen, but as it's blocking in the
-                # connection process, we don't take the risk
-                self.privacy_rules_supported = False
-                self._continue_connection_request_privacy()
 
     def _nec_iq_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -1181,27 +1161,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         app.nec.push_incoming_event(MucAdminReceivedEvent(None, conn=self,
             stanza=iq_obj))
 
-    def _PrivacySetCB(self, con, iq_obj):
-        """
-        Privacy lists (XEP 016)
-
-        A list has been set.
-        """
-        log.debug('PrivacySetCB')
-        if not self.connection or self.connected < 2:
-            return
-        result = iq_obj.buildReply('result')
-        q = result.getTag('query')
-        if q:
-            result.delChild(q)
-        self.connection.send(result)
-
-        for list_ in iq_obj.getQueryPayload():
-            if list_.getName() == 'list':
-                self.get_privacy_list(list_.getAttr('name'))
-
-        raise nbxmpp.NodeProcessed
-
     def _getRoster(self):
         log.debug('getRosterCB')
         if not self.connection:
@@ -1342,42 +1301,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
         jid_from = helpers.get_full_jid_from_iq(iq_obj)
         jingle_xtls.handle_new_cert(con, iq_obj, jid_from)
 
-    def _BlockingSetCB(self, con, iq_obj):
-        log.debug('_BlockingSetCB')
-        app.nec.push_incoming_event(
-            BlockingEvent(None, conn=self, stanza=iq_obj))
-        reply = nbxmpp.Iq(typ='result', attrs={'id': iq_obj.getID()},
-                          to=iq_obj.getFrom(), frm=iq_obj.getTo(), xmlns=None)
-        self.connection.send(reply)
-        raise nbxmpp.NodeProcessed
-
-    def _BlockingResultCB(self, con, iq_obj):
-        log.debug('_BlockingResultCB')
-        app.nec.push_incoming_event(
-            BlockingEvent(None, conn=self, stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_blocking(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if obj.unblock_all:
-            self.blocked_contacts = []
-        elif obj.blocklist:
-            self.blocked_contacts = obj.blocklist
-        else:
-            for jid in obj.blocked_jids:
-                if jid not in self.blocked_contacts:
-                    self.blocked_contacts.append(jid)
-                contact_list = app.contacts.get_contacts(self.name, jid)
-                for contact in contact_list:
-                    contact.show = 'offline'
-            for jid in obj.unblocked_jids:
-                if jid in self.blocked_contacts:
-                    self.blocked_contacts.remove(jid)
-                # Send a presence Probe to get the current Status
-                probe = nbxmpp.Presence(jid, 'probe', frm=self.get_own_jid())
-                self.connection.send(probe)
-
     def _StreamCB(self, con, obj):
         log.debug('StreamCB')
         app.nec.push_incoming_event(StreamReceivedEvent(None,
@@ -1422,7 +1345,7 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
             nbxmpp.NS_DISCO_ITEMS)
-        con.RegisterHandler('iq', self._PrivacySetCB, 'set', nbxmpp.NS_PRIVACY)
+
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_1)
         con.RegisterHandler('iq', self._ArchiveCB, ns=nbxmpp.NS_MAM_2)
         con.RegisterHandler('iq', self._JingleCB, 'result')
@@ -1437,10 +1360,6 @@ ConnectionHandlersBase, ConnectionJingle, ConnectionIBBytestream):
             nbxmpp.NS_PUBKEY_PUBKEY)
         con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
             nbxmpp.NS_PUBKEY_PUBKEY)
-        con.RegisterHandler('iq', self._BlockingSetCB, 'set',
-            nbxmpp.NS_BLOCKING)
-        con.RegisterHandler('iq', self._BlockingResultCB, 'result',
-            nbxmpp.NS_BLOCKING)
 
         for handler in modules.get_handlers(self):
             con.RegisterHandler(*handler)

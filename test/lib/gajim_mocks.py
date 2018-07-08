@@ -20,8 +20,6 @@ class MockConnection(Mock, ConnectionHandlers):
 
         self.connected = 2
         self.pep = {}
-        self.blocked_contacts = {}
-        self.blocked_groups = {}
         self.sessions = {}
         self.nested_group_delimiter = '::'
         self.server_resource = 'Gajim'

@@ -103,11 +103,6 @@ class CommonConnection:
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
 
-        self.blocked_list = []
-        self.blocked_contacts = []
-        self.blocked_groups = []
-        self.blocked_all = False
-
         self.seclabel_supported = False
         self.seclabel_catalogues = {}
 
@@ -631,8 +626,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Register all modules
         modules.register(self)
 
-        app.ged.register_event_handler('privacy-list-received', ged.CORE,
-            self._nec_privacy_list_received)
         app.ged.register_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error_received)
         app.ged.register_event_handler('agent-info-received', ged.CORE,
@@ -651,8 +644,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         ConnectionHandlers.cleanup(self)
         modules.unregister(self)
 
-        app.ged.remove_event_handler('privacy-list-received', ged.CORE,
-            self._nec_privacy_list_received)
         app.ged.remove_event_handler('agent-info-error-received', ged.CORE,
             self._nec_agent_info_error_received)
         app.ged.remove_event_handler('agent-info-received', ged.CORE,
@@ -702,7 +693,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Do not try to reco while we are already trying
         self.time_to_reconnect = None
         if self.connected < 2: # connection failed
-            log.debug('reconnect')
+            log.info('Reconnect')
             self.connected = 1
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='connecting'))
@@ -710,12 +701,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.on_connect_auth = self._discover_server_at_connection
             self.connect_and_init(self.old_show, self.status, self.USE_GPG)
         else:
+            log.info('Reconnect successfull')
             # reconnect succeeded
             self.time_to_reconnect = None
             self.retrycount = 0
 
     # We are doing disconnect at so many places, better use one function in all
     def disconnect(self, on_purpose=False):
+        log.info('Disconnect: on_purpose: %s', on_purpose)
         app.interface.music_track_changed(None, None, self.name)
         self.get_module('PEP').reset_stored_publish()
         self.on_purpose = on_purpose
@@ -798,7 +791,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     # END disconnectedReconnCB
 
     def _connection_lost(self):
-        log.debug('_connection_lost')
+        log.info('_connection_lost')
         self.disconnect(on_purpose = False)
         if self.removing_account:
             return
@@ -882,38 +875,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 app.nec.push_incoming_event(RegisterAgentInfoReceivedEvent(
                     None, conn=self, agent=data[0], config=conf,
                     is_form=is_form))
-        elif realm == nbxmpp.NS_PRIVACY:
-            if event == nbxmpp.features_nb.PRIVACY_LISTS_RECEIVED:
-                # data is (list)
-                app.nec.push_incoming_event(PrivacyListsReceivedEvent(None,
-                    conn=self, lists_list=data))
-            elif event == nbxmpp.features_nb.PRIVACY_LIST_RECEIVED:
-                # data is (resp)
-                if not data:
-                    return
-                rules = []
-                name = data.getTag('query').getTag('list').getAttr('name')
-                for child in data.getTag('query').getTag('list').getChildren():
-                    dict_item = child.getAttrs()
-                    childs = []
-                    if 'type' in dict_item:
-                        for scnd_child in child.getChildren():
-                            childs += [scnd_child.getName()]
-                        rules.append({'action':dict_item['action'],
-                                'type':dict_item['type'], 'order':dict_item['order'],
-                                'value':dict_item['value'], 'child':childs})
-                    else:
-                        for scnd_child in child.getChildren():
-                            childs.append(scnd_child.getName())
-                        rules.append({'action':dict_item['action'],
-                                'order':dict_item['order'], 'child':childs})
-                app.nec.push_incoming_event(PrivacyListReceivedEvent(None,
-                    conn=self, list_name=name, rules=rules))
-            elif event == nbxmpp.features_nb.PRIVACY_LISTS_ACTIVE_DEFAULT:
-                # data is (dict)
-                app.nec.push_incoming_event(PrivacyListActiveDefaultEvent(
-                    None, conn=self, active_list=data['active'],
-                    default_list=data['default']))
 
     def _select_next_host(self, hosts):
         """
@@ -952,6 +913,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             return self.connection, ''
 
+        log.info('Connect')
         if self.sm.resuming and self.sm.location:
             # If resuming and server gave a location, connect from there
             hostname = self.sm.location
@@ -1085,7 +1047,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                     app.config.add_per('proxies', p)
                     app.config.set_per('proxies', p, 'type', 'bosh')
                     app.config.set_per('proxies', p, 'bosh_uri', url)
-
 
     def _connect_to_next_host(self, retry=False):
         log.debug('Connection to next host')
@@ -1233,6 +1194,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not self.connected: # We went offline during connecting process
             # FIXME - not possible, maybe it was when we used threads
             return
+        log.info('Connect successfull')
         _con_type = con_type
         if _con_type != self._current_type:
             log.info('Connecting to next host beacuse desired type is %s and returned is %s'
@@ -1269,6 +1231,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 msg=_('Connection with account %s has been lost. Retry '
                 'connecting.') % self.name))
             return
+        log.info('Connection accepted')
         self._hosts = []
         self.connection_auto_accepted = False
         self.connected_hostname = self._current_host['host']
@@ -1389,6 +1352,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                           'Retry connecting.') % self.name))
             return
 
+        log.info('SSL Cert accepted')
         name = None
         if not app.config.get_per('accounts', self.name, 'anonymous_auth'):
             name = app.config.get_per('accounts', self.name, 'name')
@@ -1420,6 +1384,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         ConnectionHandlers._register_handlers(self, con, con_type)
 
     def __on_auth(self, con, auth):
+        log.info('auth')
         if not con:
             self.disconnect(on_purpose=True)
             app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
@@ -1472,206 +1437,10 @@ class Connection(CommonConnection, ConnectionHandlers):
     def add_lang(self, stanza):
         stanza.setAttr('xml:lang', i18n.LANG)
 
-    def get_privacy_lists(self):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.getPrivacyLists(self.connection)
-
     def send_keepalive(self):
         # nothing received for the last foo seconds
         if self.connection:
             self.connection.send(' ')
-
-    def get_active_default_lists(self):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.getActiveAndDefaultPrivacyLists(self.connection)
-
-    def del_privacy_list(self, privacy_list):
-        if not app.account_is_connected(self.name):
-            return
-        def _on_del_privacy_list_result(result):
-            if result:
-                app.nec.push_incoming_event(PrivacyListRemovedEvent(None,
-                    conn=self, list_name=privacy_list))
-            else:
-                app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='privacy-list-error', args=privacy_list))
-        nbxmpp.features_nb.delPrivacyList(self.connection, privacy_list,
-            _on_del_privacy_list_result)
-
-    def get_privacy_list(self, title):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.getPrivacyList(self.connection, title)
-
-    def set_privacy_list(self, listname, tags):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.setPrivacyList(self.connection, listname, tags)
-
-    def set_active_list(self, listname):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.setActivePrivacyList(self.connection, listname,
-            'active')
-
-    def set_default_list(self, listname):
-        if not app.account_is_connected(self.name):
-            return
-        nbxmpp.features_nb.setDefaultPrivacyList(self.connection, listname)
-
-    def build_privacy_rule(self, name, action, order=1):
-        """
-        Build a Privacy rule stanza for invisibility
-        """
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
-        l = iq.setQuery().setTag('list', {'name': name})
-        i = l.setTag('item', {'action': action, 'order': str(order)})
-        i.setTag('presence-out')
-        return iq
-
-    def build_invisible_rule(self):
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, xmlns='')
-        l = iq.setQuery().setTag('list', {'name': 'invisible'})
-        if self.name in app.interface.status_sent_to_groups and \
-        len(app.interface.status_sent_to_groups[self.name]) > 0:
-            for group in app.interface.status_sent_to_groups[self.name]:
-                i = l.setTag('item', {'type': 'group', 'value': group,
-                        'action': 'allow', 'order': '1'})
-                i.setTag('presence-out')
-        if self.name in app.interface.status_sent_to_users and \
-        len(app.interface.status_sent_to_users[self.name]) > 0:
-            for jid in app.interface.status_sent_to_users[self.name]:
-                i = l.setTag('item', {'type': 'jid', 'value': jid,
-                        'action': 'allow', 'order': '2'})
-                i.setTag('presence-out')
-        i = l.setTag('item', {'action': 'deny', 'order': '3'})
-        i.setTag('presence-out')
-        return iq
-
-    def set_invisible_rule(self):
-        if not app.account_is_connected(self.name):
-            return
-        iq = self.build_invisible_rule()
-        self.connection.send(iq)
-
-    def get_max_blocked_list_order(self):
-        max_order = 0
-        for rule in self.blocked_list:
-            order = int(rule['order'])
-            if order > max_order:
-                max_order = order
-        return max_order
-
-    def block_contacts(self, contact_list, message):
-        if self.privacy_default_list is None:
-            self.privacy_default_list = 'block'
-        if not self.privacy_rules_supported:
-            if self.blocking_supported: #XEP-0191
-                iq = nbxmpp.Iq('set', xmlns='')
-                query = iq.setQuery(name='block')
-                query.setNamespace(nbxmpp.NS_BLOCKING)
-                for contact in contact_list:
-                    query.addChild(name='item', attrs={'jid': contact.jid})
-                self.connection.send(iq)
-            return
-        for contact in contact_list:
-            contact.show = 'offline'
-            self.send_custom_status('offline', message, contact.jid)
-            max_order = self.get_max_blocked_list_order()
-            new_rule = {'order': str(max_order + 1),
-                        'type': 'jid',
-                        'action': 'deny',
-                        'value': contact.jid}
-            self.blocked_list.append(new_rule)
-            self.blocked_contacts.append(contact.jid)
-        self.set_privacy_list(self.privacy_default_list, self.blocked_list)
-        if len(self.blocked_list) == 1:
-            self.set_default_list(self.privacy_default_list)
-
-    def unblock_contacts(self, contact_list):
-        if not self.privacy_rules_supported:
-            if self.blocking_supported: #XEP-0191
-                iq = nbxmpp.Iq('set', xmlns='')
-                query = iq.setQuery(name='unblock')
-                query.setNamespace(nbxmpp.NS_BLOCKING)
-                for contact in contact_list:
-                    query.addChild(name='item', attrs={'jid': contact.jid})
-                self.connection.send(iq)
-            return
-        self.new_blocked_list = []
-        self.to_unblock = []
-        for contact in contact_list:
-            self.to_unblock.append(contact.jid)
-            if contact.jid in self.blocked_contacts:
-                self.blocked_contacts.remove(contact.jid)
-        for rule in self.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'jid' \
-            or rule['value'] not in self.to_unblock:
-                self.new_blocked_list.append(rule)
-        if len(self.new_blocked_list) == 0:
-            self.blocked_list = []
-            self.blocked_contacts = []
-            self.blocked_groups = []
-            self.set_default_list('')
-            self.del_privacy_list(self.privacy_default_list)
-        else:
-            self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
-        if not app.interface.roster.regroup:
-            show = app.SHOW_LIST[self.connected]
-        else:   # accounts merged
-            show = helpers.get_global_show()
-        if show == 'invisible':
-            return
-        for contact in contact_list:
-            self.send_custom_status(show, self.status, contact.jid)
-            # Send a presence Probe to get the current Status
-            probe = nbxmpp.Presence(contact.jid, 'probe', frm=self.get_own_jid())
-            self.connection.send(probe)
-
-    def block_group(self, group, contact_list, message):
-        if not self.privacy_rules_supported:
-            return
-        self.blocked_groups.append(group)
-        for contact in contact_list:
-            self.send_custom_status('offline', message, contact.jid)
-        max_order = self.get_max_blocked_list_order()
-        new_rule = {'order': str(max_order + 1),
-                    'type': 'group',
-                    'action': 'deny',
-                    'value': group}
-        self.blocked_list.append(new_rule)
-        self.set_privacy_list(self.privacy_default_list, self.blocked_list)
-        if len(self.blocked_list) == 1:
-            self.set_default_list(self.privacy_default_list)
-
-    def unblock_group(self, group, contact_list):
-        if not self.privacy_rules_supported:
-            return
-        if group in self.blocked_groups:
-            self.blocked_groups.remove(group)
-        self.new_blocked_list = []
-        for rule in self.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'group' or \
-            rule['value'] != group:
-                self.new_blocked_list.append(rule)
-        if len(self.new_blocked_list) == 0:
-            self.blocked_list = []
-            self.blocked_contacts = []
-            self.blocked_groups = []
-            self.set_default_list('')
-            self.del_privacy_list(self.privacy_default_list)
-        else:
-            self.set_privacy_list(self.privacy_default_list, self.new_blocked_list)
-        if not app.interface.roster.regroup:
-            show = app.SHOW_LIST[self.connected]
-        else:   # accounts merged
-            show = helpers.get_global_show()
-        if show == 'invisible':
-            return
-        for contact in contact_list:
-            self.send_custom_status(show, self.status, contact.jid)
 
     def send_invisible_presence(self, msg, signed, initial = False):
         if not app.account_is_connected(self.name):
@@ -1694,15 +1463,17 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.connection.send(p)
 
         # try to set the privacy rule
-        iq = self.build_invisible_rule()
-        self.connection.SendAndCallForResponse(iq, self._continue_invisible,
-                {'msg': msg, 'signed': signed, 'initial': initial})
+        iq = self.get_module('PrivacyLists').set_invisible_rule(
+            callback=self._continue_invisible,
+            msg=msg,
+            signed=signed,
+            initial=initial)
 
     def _continue_invisible(self, con, iq_obj, msg, signed, initial):
         if iq_obj.getType() == 'error': # server doesn't support privacy lists
             return
         # active the privacy rule
-        self.set_active_list('invisible')
+        self.get_module('PrivacyLists').set_active_list('invisible')
         self.connected = app.SHOW_LIST.index('invisible')
         self.status = msg
         priority = app.get_priority(self.name, 'invisible')
@@ -1777,42 +1548,35 @@ class Connection(CommonConnection, ConnectionHandlers):
         if len(result_array) != 0:
             self._stun_servers = self._hosts = [i for i in result_array]
 
-    def _request_privacy(self):
-        if not app.account_is_connected(self.name) or not self.connection:
-            return
-        iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY, xmlns='')
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        self.awaiting_answers[id_] = (PRIVACY_ARRIVED, )
-        self.connection.send(iq)
-
-    def _request_blocking(self):
-        if not app.account_is_connected(self.name) or not self.connection:
-            return
-        iq = nbxmpp.Iq('get', xmlns=None)
-        iq.setQuery('blocklist').setNamespace(nbxmpp.NS_BLOCKING)
-        self.connection.send(iq)
-
     def _continue_connection_request_privacy(self):
         if self.privacy_rules_supported:
             if not self.privacy_rules_requested:
                 self.privacy_rules_requested = True
-                self._request_privacy()
+                self.get_module('PrivacyLists').get_privacy_lists(
+                    self._received_privacy)
         else:
-            if self.continue_connect_info and self.continue_connect_info[0]\
-            == 'invisible':
+            # Privacy lists not supported
+            log.info('Privacy Lists not supported')
+            self._received_privacy(False)
+
+    def _received_privacy(self, result):
+        if not result:
+            if (self.continue_connect_info and
+                    self.continue_connect_info[0] == 'invisible'):
                 # Trying to login as invisible but privacy list not
                 # supported
                 self.disconnect(on_purpose=True)
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                    show='offline'))
+                app.nec.push_incoming_event(OurShowEvent(
+                    None, conn=self, show='offline'))
                 app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='invisibility-not-supported', args=self.name))
+                    None, dialog_name='invisibility-not-supported',
+                    args=self.name))
                 return
             if self.blocking_supported:
-                self._request_blocking()
-            # Ask metacontacts before roster
-            self.get_metacontacts()
+                self.get_module('Blocking').get_blocking_list()
+
+        # Ask metacontacts before roster
+        self.get_metacontacts()
 
     def _nec_agent_info_error_received(self, obj):
         if obj.conn.name != self.name:
@@ -1937,7 +1701,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _change_from_invisible(self):
         if self.privacy_rules_supported:
-            self.set_active_list('')
+            self.get_module('PrivacyLists').set_active_list(None)
 
     def _update_status(self, show, msg, idle_time=None):
         xmpp_show = helpers.get_xmpp_show(show)
@@ -2155,43 +1919,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq2 = iq.addChild(name='catalog', namespace=nbxmpp.NS_SECLABEL_CATALOG)
         iq2.setAttr('to', to)
         self.connection.send(iq)
-
-    def _nec_privacy_list_received(self, obj):
-        roster = app.interface.roster
-        if obj.conn.name != self.name:
-            return
-        if obj.list_name != self.privacy_default_list:
-            return
-        self.blocked_contacts = []
-        self.blocked_groups = []
-        self.blocked_list = []
-        self.blocked_all = False
-        for rule in obj.rules:
-            if rule['action'] == 'allow':
-                if not 'type' in rule:
-                    self.blocked_all = False
-                elif rule['type'] == 'jid' and rule['value'] in \
-                self.blocked_contacts:
-                    self.blocked_contacts.remove(rule['value'])
-                elif rule['type'] == 'group' and rule['value'] in \
-                self.blocked_groups:
-                    self.blocked_groups.remove(rule['value'])
-            elif rule['action'] == 'deny':
-                if not 'type' in rule:
-                    self.blocked_all = True
-                elif rule['type'] == 'jid' and rule['value'] not in \
-                self.blocked_contacts:
-                    self.blocked_contacts.append(rule['value'])
-                elif rule['type'] == 'group' and rule['value'] not in \
-                self.blocked_groups:
-                    self.blocked_groups.append(rule['value'])
-            self.blocked_list.append(rule)
-
-            if 'type' in rule:
-                if rule['type'] == 'jid':
-                    roster.draw_contact(rule['value'], self.name)
-                if rule['type'] == 'group':
-                    roster.draw_group(rule['value'], self.name)
 
     def bookmarks_available(self):
         if self.private_storage_supported:

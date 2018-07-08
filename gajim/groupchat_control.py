@@ -2919,46 +2919,15 @@ class GroupchatControl(ChatControlBase):
 
     def on_block(self, widget, nick):
         fjid = self.room_jid + '/' + nick
-        connection = app.connections[self.account]
-        default = connection.privacy_default_list
-        if fjid in connection.blocked_contacts:
-            return
-        max_order = connection.get_max_blocked_list_order()
-        new_rule = {'order': str(max_order + 1), 'type': 'jid',
-            'action': 'deny', 'value' : fjid, 'child': ['message', 'iq',
-            'presence-out']}
-        connection.blocked_list.append(new_rule)
-        connection.blocked_contacts.append(fjid)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').block_gc_contact(fjid)
         self.draw_contact(nick)
-        connection.set_privacy_list(default, connection.blocked_list)
-        if len(connection.blocked_list) == 1:
-            connection.set_default_list(default)
 
     def on_unblock(self, widget, nick):
         fjid = self.room_jid + '/' + nick
-        connection = app.connections[self.account]
-        default = connection.privacy_default_list
-        connection.new_blocked_list = []
-        # needed for draw_contact:
-        if fjid in connection.blocked_contacts:
-            connection.blocked_contacts.remove(fjid)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').unblock_gc_contact(fjid)
         self.draw_contact(nick)
-        for rule in connection.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'jid' \
-            or rule['value'] != fjid:
-                connection.new_blocked_list.append(rule)
-
-        if len(connection.new_blocked_list) == 0:
-            connection.blocked_list = []
-            connection.blocked_contacts = []
-            connection.blocked_groups = []
-            connection.set_default_list('')
-            connection.del_privacy_list(default)
-            if 'privay_list_block' in app.interface.instances[self.account]:
-                del app.interface.instances[self.account]\
-                    ['privay_list_block']
-        else:
-            connection.set_privacy_list(default, connection.new_blocked_list)
 
     def on_voice_checkmenuitem_activate(self, widget, nick):
         if widget.get_active():

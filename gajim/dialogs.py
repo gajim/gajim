@@ -4100,8 +4100,8 @@ class PrivacyListWindow:
 
         app.ged.register_event_handler('privacy-list-received', ged.GUI1,
             self._nec_privacy_list_received)
-        app.ged.register_event_handler('privacy-list-active-default',
-            ged.GUI1, self._nec_privacy_list_active_default)
+        app.ged.register_event_handler('privacy-lists-received', ged.GUI1,
+            self._nec_privacy_lists_received)
 
         self.window.show_all()
         self.add_edit_vbox.hide()
@@ -4118,10 +4118,10 @@ class PrivacyListWindow:
             del app.interface.instances[self.account][key_name]
         app.ged.remove_event_handler('privacy-list-received', ged.GUI1,
             self._nec_privacy_list_received)
-        app.ged.remove_event_handler('privacy-list-active-default',
-            ged.GUI1, self._nec_privacy_list_active_default)
+        app.ged.remove_event_handler('privacy-lists-received', ged.GUI1,
+            self._nec_privacy_lists_received)
 
-    def _nec_privacy_list_active_default(self, obj):
+    def _nec_privacy_lists_received(self, obj):
         if obj.conn.name != self.account:
             return
         if obj.active_list == self.privacy_list_name:
@@ -4166,7 +4166,8 @@ class PrivacyListWindow:
             self.privacy_list_active_checkbutton.set_sensitive(True)
             self.privacy_list_default_checkbutton.set_sensitive(True)
         self.reset_fields()
-        app.connections[self.account].get_active_default_lists()
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').get_privacy_lists()
 
     def _nec_privacy_list_received(self, obj):
         if obj.conn.name != self.account:
@@ -4176,7 +4177,8 @@ class PrivacyListWindow:
         self.privacy_list_received(obj.rules)
 
     def refresh_rules(self):
-        app.connections[self.account].get_privacy_list(self.privacy_list_name)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').get_privacy_list(self.privacy_list_name)
 
     def on_delete_rule_button_clicked(self, widget):
         model = self.list_of_rules_combobox.get_model()
@@ -4186,8 +4188,9 @@ class PrivacyListWindow:
         for rule in self.global_rules:
             if rule != _rule:
                 tags.append(self.global_rules[rule])
-        app.connections[self.account].set_privacy_list(
-                self.privacy_list_name, tags)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').set_privacy_list(
+            self.privacy_list_name, tags)
         self.privacy_list_received(tags)
         self.add_edit_vbox.hide()
         if not tags: # we removed latest rule
@@ -4279,18 +4282,20 @@ class PrivacyListWindow:
             self.edit_send_status_checkbutton.set_sensitive(True)
 
     def on_privacy_list_active_checkbutton_toggled(self, widget):
+        name = None
         if widget.get_active():
-            app.connections[self.account].set_active_list(
-                    self.privacy_list_name)
-        else:
-            app.connections[self.account].set_active_list(None)
+            name = self.privacy_list_name
+
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').set_active_list(name)
 
     def on_privacy_list_default_checkbutton_toggled(self, widget):
+        name = None
         if widget.get_active():
-            app.connections[self.account].set_default_list(
-                    self.privacy_list_name)
-        else:
-            app.connections[self.account].set_default_list(None)
+            name = self.privacy_list_name
+
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').set_default_list(name)
 
     def on_new_rule_button_clicked(self, widget):
         self.reset_fields()
@@ -4362,8 +4367,9 @@ class PrivacyListWindow:
             else:
                 tags.append(current_tags)
 
-        app.connections[self.account].set_privacy_list(
-                self.privacy_list_name, tags)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').set_privacy_list(
+            self.privacy_list_name, tags)
         self.refresh_rules()
         self.add_edit_vbox.hide()
         if 'privacy_lists' in app.interface.instances[self.account]:
@@ -4419,7 +4425,7 @@ class PrivacyListsWindow:
 
         app.ged.register_event_handler('privacy-lists-received', ged.GUI1,
             self._nec_privacy_lists_received)
-        app.ged.register_event_handler('privacy-lists-removed', ged.GUI1,
+        app.ged.register_event_handler('privacy-list-removed', ged.GUI1,
             self._nec_privacy_lists_removed)
 
         self.window.show_all()
@@ -4435,14 +4441,18 @@ class PrivacyListsWindow:
             del app.interface.instances[self.account]['privacy_lists']
         app.ged.remove_event_handler('privacy-lists-received', ged.GUI1,
             self._nec_privacy_lists_received)
-        app.ged.remove_event_handler('privacy-lists-removed', ged.GUI1,
+        app.ged.remove_event_handler('privacy-list-removed', ged.GUI1,
             self._nec_privacy_lists_removed)
 
     def remove_privacy_list_from_combobox(self, privacy_list):
         if privacy_list not in self.privacy_lists_save:
             return
-        privacy_list_index = self.privacy_lists_save.index(privacy_list)
-        self.list_of_privacy_lists_combobox.remove_text(privacy_list_index)
+
+        model = self.list_of_privacy_lists_combobox.get_model()
+        for entry in model:
+            if entry[0] == privacy_list:
+                model.remove(entry.iter)
+
         self.privacy_lists_save.remove(privacy_list)
 
     def add_privacy_list_to_combobox(self, privacy_list):
@@ -4477,32 +4487,32 @@ class PrivacyListsWindow:
     def on_delete_privacy_list_button_clicked(self, widget):
         active_list = self.privacy_lists_save[
             self.list_of_privacy_lists_combobox.get_active()]
-        app.connections[self.account].del_privacy_list(active_list)
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').del_privacy_list(active_list)
 
     def privacy_list_removed(self, active_list):
         self.privacy_lists_save.remove(active_list)
-        self.privacy_lists_received({'lists': self.privacy_lists_save})
+        self.privacy_lists_received(self.privacy_lists_save)
 
     def _nec_privacy_lists_removed(self, obj):
         if obj.conn.name != self.account:
             return
-        self.privacy_list_removed(obj.lists_list)
+        self.privacy_list_removed(obj.list_name)
 
     def privacy_lists_received(self, lists):
-        if not lists:
-            return
         privacy_lists = []
-        for privacy_list in lists['lists']:
+        for privacy_list in lists:
             privacy_lists.append(privacy_list)
         self.draw_privacy_lists_in_combobox(privacy_lists)
 
     def _nec_privacy_lists_received(self, obj):
         if obj.conn.name != self.account:
             return
-        self.privacy_lists_received(obj.lists_list)
+        self.privacy_lists_received(obj.lists)
 
     def privacy_lists_refresh(self):
-        app.connections[self.account].get_privacy_lists()
+        con = app.connections[self.account]
+        con.get_module('PrivacyLists').get_privacy_lists()
 
     def on_new_privacy_list_button_clicked(self, widget):
         name = self.new_privacy_list_entry.get_text()
