@@ -5521,9 +5521,10 @@ class RosterWindow:
         """
         # find a connected account:
         for account in app.connections:
+            if account == 'Local':
+                continue
             if app.account_is_connected(account):
-                break
-        self.on_join_gc_activate(None, account)
+                self.on_join_gc_activate(None, account)
         return True
 
     def fill_column(self, col):
