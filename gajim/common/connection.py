@@ -2467,7 +2467,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection.send(iq)
         i = 0
         self.get_module('Bookmarks').bookmarks.pop(jid, None)
-        self.store_bookmarks()
+        self.get_module('Bookmarks').store_bookmarks()
 
     def send_gc_status(self, nick, jid, show, status, auto=False):
         if not app.account_is_connected(self.name):
