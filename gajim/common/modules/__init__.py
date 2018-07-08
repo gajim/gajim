@@ -28,7 +28,12 @@ for file in Path(__file__).parent.iterdir():
     module = import_module('.%s' % file.stem, package='gajim.common.modules')
     if hasattr(module, 'get_instance'):
         log.info('Load module: %s', file.stem)
-        imported_modules.append(module)
+        if file.stem == 'pep':
+            # Register the PEP module first, because other modules
+            # depend on it
+            imported_modules.insert(0, module)
+        else:
+            imported_modules.append(module)
 
 
 class ModuleMock:
