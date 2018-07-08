@@ -53,26 +53,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">gtk-clear</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playback-pause</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">gtk-cancel</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">gtk-close</property>
-  </object>
   <object class="GtkWindow" id="file_transfers_window">
     <property name="can_focus">False</property>
     <property name="border_width">12</property>
@@ -134,8 +114,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Removes completed, cancelled and failed file transfers from the list</property>
-                <property name="image">image1</property>
+                <property name="tooltip_text" translatable="yes">Remove completed, cancelled and failed file transfers from the list</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_cleanup_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
@@ -159,7 +138,6 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="image">image2</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_pause_restore_button_clicked" swapped="no"/>
               </object>
@@ -177,8 +155,7 @@
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Cancels the selected file transfer and removes incomplete files</property>
-                <property name="image">image3</property>
+                <property name="tooltip_text" translatable="yes">Cancel the selected file transfer and remove incomplete files</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_cancel_button_clicked" swapped="no"/>
                 <child internal-child="accessible">
@@ -202,8 +179,7 @@
                 <property name="has_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_text" translatable="yes">Hides the window</property>
-                <property name="image">image4</property>
+                <property name="tooltip_text" translatable="yes">Hide the window</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_close_button_clicked" swapped="no"/>
               </object>
@@ -228,7 +204,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
-            <property name="xalign">0.5</property>
             <property name="draw_indicator">True</property>
             <signal name="toggled" handler="on_notify_ft_complete_checkbox_toggled" swapped="no"/>
             <child internal-child="accessible">
