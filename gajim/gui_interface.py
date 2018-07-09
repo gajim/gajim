@@ -47,6 +47,8 @@ from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gdk
 
+import OpenSSL
+
 try:
     from PIL import Image
 except:
@@ -1324,20 +1326,24 @@ class Interface:
         def on_ok(is_checked):
             del self.instances[account]['online_dialog']['ssl_error']
             if is_checked[0]:
+
+                pem = OpenSSL.crypto.dump_certificate(
+                    OpenSSL.crypto.FILETYPE_PEM, obj.cert).decode('utf-8')
+
                 # Check if cert is already in file
                 certs = ''
                 my_ca_certs = configpaths.get('MY_CACERTS')
                 if os.path.isfile(my_ca_certs):
                     with open(my_ca_certs, encoding='utf-8') as f:
                         certs = f.read()
-                if obj.cert in certs:
+                if pem in certs:
                     dialogs.ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % my_ca_certs)
                 else:
                     with open(my_ca_certs, 'a', encoding='utf-8') as f:
                         f.write(server + '\n')
-                        f.write(obj.cert + '\n\n')
+                        f.write(pem + '\n\n')
 
             if is_checked[1]:
                 ignore_ssl_errors = app.config.get_per('accounts', account,
