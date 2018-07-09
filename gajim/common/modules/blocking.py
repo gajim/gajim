@@ -79,7 +79,7 @@ class Blocking:
                 for jid in self.blocked:
                     self._presence_probe(jid)
                 log.info('Unblock all Push')
-                return
+                raise nbxmpp.NodeProcessed
 
             for item in items:
                 # Unblock some contacts
