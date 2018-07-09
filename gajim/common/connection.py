@@ -1268,7 +1268,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._get_posh_file(self._hostname)
             self._posh_requested = True
             cert_hash256 = self._calculate_cert_sha256(cert)
-            print(cert_hash256)
+
             if cert_hash256 in self._posh_hashes:
                 # Ignore this error if this cert is
                 # verifyed with POSH
