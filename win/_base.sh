@@ -34,7 +34,7 @@ function set_build_root {
     BUILD_ROOT="${DIR}/_build_root"
     REPO_CLONE="${BUILD_ROOT}/${MINGW}"/gajim
     MINGW_ROOT="${BUILD_ROOT}/${MINGW}"
-    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python3.6/site-packages"
+    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python3.7/site-packages"
 }
 
 function build_pacman {
@@ -295,8 +295,8 @@ function cleanup_install {
 function move_ssl_libs {
     # Pythons ssl module searches in that path for these dlls, if they are not there
     # C:/Windows/system32 is searcherd and potentially wrong versioned dlls are found there
-    cp "${MINGW_ROOT}"/bin/libeay32.dll "${MINGW_ROOT}"/lib/python3.6/lib-dynload/libeay32.dll
-    cp "${MINGW_ROOT}"/bin/ssleay32.dll "${MINGW_ROOT}"/lib/python3.6/lib-dynload/ssleay32.dll
+    cp "${MINGW_ROOT}"/bin/libeay32.dll "${MINGW_ROOT}"/lib/python3.7/lib-dynload/libeay32.dll
+    cp "${MINGW_ROOT}"/bin/ssleay32.dll "${MINGW_ROOT}"/lib/python3.7/lib-dynload/ssleay32.dll
 
 }
 
