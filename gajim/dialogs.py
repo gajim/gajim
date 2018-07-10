@@ -2431,6 +2431,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
                                        label])
             servers.append(groupchat.server)
 
+        self.recently_button.set_sensitive(bool(recent))
+
         for server in set(servers):
             self.server_combo.append_text(server)
 

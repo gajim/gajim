@@ -336,7 +336,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
-                <property name="tooltip_text" translatable="yes">Recently used channels</property>
+                <property name="tooltip_text" translatable="yes">Recently used group chats</property>
                 <property name="popover">recently_popover</property>
                 <child>
                   <object class="GtkImage">
@@ -357,7 +357,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
-                <property name="tooltip_text" translatable="yes">Search the rooms on this server</property>
+                <property name="tooltip_text" translatable="yes">Search group chats on selected server</property>
                 <signal name="clicked" handler="_on_search_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
