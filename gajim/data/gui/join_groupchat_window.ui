@@ -323,6 +323,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
+                <signal name="changed" handler="_on_jid_detection_changed" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -388,6 +389,7 @@
               <object class="GtkEntry">
                 <property name="can_focus">True</property>
                 <property name="caps_lock_warning">False</property>
+                <signal name="changed" handler="_on_jid_detection_changed" swapped="no"/>
               </object>
             </child>
           </object>

@@ -2452,6 +2452,23 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         self.nick_entry.set_text(app.nicks[account])
         self._fill_recent_and_servers(account)
 
+    def _on_jid_detection_changed(self, widget):
+        text = widget.get_text()
+        if text.startswith('xmpp:'):
+            text = text[5:]
+        if '@' in text:
+            room, server = text.split('@', 1)
+            server = server.split('?')[0]
+            widget.set_text('')
+
+            if room:
+                self.room_entry.set_text(room)
+
+            if server:
+                self.server_combo.get_child().set_text(server)
+            else:
+                self.server_combo.grab_focus()
+
     def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
