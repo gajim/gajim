@@ -162,7 +162,7 @@ class VCardAvatars:
                 return
 
             if gc_contact.avatar_sha != avatar_sha:
-                log.info('%s changed his Avatar: %s', nick, avatar_sha)
+                log.info('%s changed their Avatar: %s', nick, avatar_sha)
                 gc_contact.avatar_sha = avatar_sha
                 app.interface.update_avatar(contact=gc_contact)
             else:

@@ -531,7 +531,7 @@ class Interface:
             app.contacts.add_contact(account, contact1)
             self.roster.add_contact(obj.jid, account)
         dialogs.InformationDialog(_('Authorization accepted'),
-            _('The contact "%s" has authorized you to see his or her status.')
+            _('The contact "%s" has authorized you to see their status.')
             % obj.jid)
 
     def show_unsubscribed_dialog(self, account, contact):

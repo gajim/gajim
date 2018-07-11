@@ -214,7 +214,7 @@ class StandardCommonChatCommands(CommandContainer):
         self._video_button.set_active(not state)
 
     @command(raw=True)
-    @doc(_("Send a message to the contact that will attract his (her) attention"))
+    @doc(_("Send a message to the contact that will attract their attention"))
     def attention(self, message):
         self.send_message(message, process_commands=False, attention=True)
 

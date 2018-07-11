@@ -2162,7 +2162,7 @@ class RosterWindow:
 
     def chg_contact_status(self, contact, show, status, account):
         """
-        When a contact changes his or her status
+        When a contact changes their status
         """
         contact_instances = app.contacts.get_contacts(account, contact.jid)
         contact.show = show

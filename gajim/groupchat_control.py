@@ -1839,7 +1839,7 @@ class GroupchatControl(ChatControlBase):
                     self.print_conversation(s, 'info', graphics=False)
                     if obj.nick == self.nick:
                         self.autorejoin = False
-                elif '303' in obj.status_code: # Someone changed his or her nick
+                elif '303' in obj.status_code: # Someone changed their nick
                     if obj.new_nick == self.new_nick or obj.nick == self.nick:
                         # We changed our nick
                         self.nick = obj.new_nick
