@@ -1139,7 +1139,7 @@ class GroupchatControl(ChatControlBase):
             name = self.get_continued_conversation_name()
         else:
             name = self.room_jid
-        text = '<span %s>%s</span>' % (font_attrs, '\u200E' + name)
+        text = '<span %s>%s</span>' % (font_attrs, name)
         self.name_label.set_markup(text)
 
         if self.subject:
