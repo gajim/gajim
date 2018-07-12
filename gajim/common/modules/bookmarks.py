@@ -160,8 +160,9 @@ class Bookmarks:
                 continue
 
             if check_merge:
-                if jid not in self.bookmarks:
-                    merged = True
+                if jid in self.bookmarks:
+                    continue
+                merged = True
 
             log.debug('Found Bookmark: %s', jid)
             self.bookmarks[jid] = {
@@ -218,8 +219,7 @@ class Bookmarks:
         if storage_type is None:
             if self._pubsub_support():
                 self._pubsub_store(storage_node)
-            else:
-                self._private_store(storage_node)
+            self._private_store(storage_node)
         elif storage_type == BookmarkStorageType.PUBSUB:
             if self._pubsub_support():
                 self._pubsub_store(storage_node)
