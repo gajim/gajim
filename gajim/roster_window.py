@@ -43,6 +43,7 @@ import os
 import sys
 import time
 import locale
+import logging
 
 from enum import IntEnum, unique
 
@@ -71,6 +72,8 @@ from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
+
+log = logging.getLogger('gajim.roster')
 
 @unique
 class Column(IntEnum):
@@ -2381,6 +2384,7 @@ class RosterWindow:
         'on_event') or app.config.get('allow_hide_roster')):
             if app.config.get('save-roster-position'):
                 x, y = self.window.get_position()
+                log.debug('Save roster position (get_position): %s %s', x, y)
                 app.config.set('roster_x-position', x)
                 app.config.set('roster_y-position', y)
             if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
@@ -2409,6 +2413,7 @@ class RosterWindow:
         if self.window.get_window() is not None:
             if app.config.get('save-roster-position'):
                 x, y = self.window.get_window().get_root_origin()
+                log.debug('Save roster position (get_root_origin): %s %s', x, y)
                 app.config.set('roster_x-position', x)
                 app.config.set('roster_y-position', y)
             width, height = self.window.get_size()

@@ -102,7 +102,9 @@ from gajim.common import helpers
 def get_total_screen_geometry():
     screen = Gdk.Screen.get_default()
     window = Gdk.Screen.get_root_window(screen)
-    return window.get_width(), window.get_height()
+    w, h = window.get_width(), window.get_height()
+    log.debug('Get screen geometry: %s %s', w, h)
+    return w, h
 
 def add_image_to_button(button, icon_name):
     img = Gtk.Image()
