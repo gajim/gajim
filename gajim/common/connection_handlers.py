@@ -533,8 +533,7 @@ class ConnectionHandlersBase:
         # We got our message's receipt
         if obj.receipt_received_tag and app.config.get_per('accounts',
         self.name, 'request_receipt'):
-            ctrl = obj.session.control
-            if not ctrl:
+            if obj.session and not obj.session.ctrl:
                 # Received <message> doesn't have the <thread> element
                 # or control is not bound to session?
                 # --> search for it
