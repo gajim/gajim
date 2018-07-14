@@ -60,8 +60,9 @@ class SecretPasswordStorage(PasswordStorage):
         try:
             self.keyring.set_password('gajim', account_name, password)
             return True
-        except:
-            log.exception('error:')
+        except Exception as error:
+            log.warning('Save password failed')
+            log.debug(error)
             return False
 
     def get_password(self, account_name):
