@@ -1,17 +1,14 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2017 Philipp Hörist <philipp AT hoerist.com>
 #
 # This file is part of Gajim.
 #
-# Gajim is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
 #
 # Gajim is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -25,8 +22,8 @@ from gi.repository import Gtk, GLib
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.gtkgui_helpers import get_icon_pixmap
 from gajim.common.const import ArchiveState
+from gajim.gtk.util import load_icon
 
 log = logging.getLogger('gajim.c.message_archiving')
 
@@ -40,7 +37,7 @@ class Pages(IntEnum):
 class HistorySyncAssistant(Gtk.Assistant):
     def __init__(self, account, parent):
         Gtk.Assistant.__init__(self)
-        self.set_title(_('Synchronise History'))
+        # self.set_title(_('Synchronise History'))
         self.set_resizable(False)
         self.set_default_size(300, -1)
         self.set_name('HistorySyncAssistant')
@@ -103,10 +100,6 @@ class HistorySyncAssistant(Gtk.Assistant):
             self.set_current_page(Pages.SUMMARY)
             self.summary.nothing_to_do()
 
-        # if self.con.mam_query_ids:
-        #     self.set_current_page(Pages.SUMMARY)
-        #     self.summary.query_already_running()
-
         self.show_all()
 
     def hide_buttons(self):
@@ -162,11 +155,13 @@ class HistorySyncAssistant(Gtk.Assistant):
         self.set_current_page(Pages.SUMMARY)
         self.summary.finished()
 
-    def _nec_mam_message_received(self, obj):
-        if obj.conn.name != self.account:
+    def _nec_mam_message_received(self, event):
+        if event.conn.name != self.account:
             return
 
-        if obj.result.getAttr('queryid') != self.query_id:
+        result = event.stanza.getTag('result')
+        queryid = result.getAttr('queryid')
+        if queryid != self.query_id:
             return
 
         log.debug('received message')
@@ -236,9 +231,8 @@ class DownloadHistoryPage(Gtk.Box):
         self.count = 0
         self.received = 0
 
-        pix = get_icon_pixmap('folder-download-symbolic', size=64)
-        image = Gtk.Image()
-        image.set_from_pixbuf(pix)
+        surface = load_icon('folder-download-symbolic', self, size=64)
+        image = Gtk.Image.new_from_surface(surface)
 
         self.progress = Gtk.ProgressBar()
         self.progress.set_show_text(True)
@@ -304,7 +298,7 @@ class TimeOption(Gtk.Label):
         super().__init__(label=label)
         self.date = months
         if months:
-            self.date = timedelta(days=30*months)
+            self.date = timedelta(days=30 * months)
 
     def get_delta(self):
         return self.date

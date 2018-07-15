@@ -27,7 +27,7 @@ from gajim import accounts_window
 import gajim.plugins.gui
 from gajim import history_window
 from gajim import disco
-from gajim.history_sync import HistorySyncAssistant
+from gajim.gtk.history_sync import HistorySyncAssistant
 from gajim.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
 
