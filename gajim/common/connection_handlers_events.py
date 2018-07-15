@@ -42,7 +42,6 @@ from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
-from gajim.common.nec import NetworkEvent
 
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
@@ -643,9 +642,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         self.conn = self.base_event.conn
         self.stanza = self.base_event.stanza
-        self.get_id()
-        self.forwarded = False
-        self.sent = False
         self.encrypted = False
         self.self_message = None
         self.muc_pm = None
@@ -659,6 +655,11 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                      self.stanza.getFrom())
             return
 
+        from gajim.common.modules.carbons import parse_carbon
+        self.stanza, self.sent, self.forwarded = parse_carbon(self.conn,
+                                                              self.stanza)
+
+        self.get_id()
         try:
             self.get_jid_resource()
         except helpers.InvalidFormat:
@@ -695,47 +696,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                 address.getAttr('jid'))
                     return
                 self.jid = app.get_jid_without_resource(self.fjid)
-
-        carbon_marker = self.stanza.getTag('sent', namespace=nbxmpp.NS_CARBONS)
-        if not carbon_marker:
-            carbon_marker = self.stanza.getTag('received',
-                namespace=nbxmpp.NS_CARBONS)
-        # Be sure it comes from one of our resource, else ignore forward element
-        if carbon_marker and self.jid == app.get_jid_from_account(account):
-            forward_tag = carbon_marker.getTag('forwarded',
-                namespace=nbxmpp.NS_FORWARD)
-            if forward_tag:
-                msg = forward_tag.getTag('message')
-                self.stanza = nbxmpp.Message(node=msg)
-                self.get_id()
-                if carbon_marker.getName() == 'sent':
-                    to = self.stanza.getTo()
-                    frm = self.stanza.getFrom()
-                    if not frm:
-                        frm = app.get_jid_from_account(account)
-                    self.stanza.setTo(frm)
-                    if not to:
-                        to = app.get_jid_from_account(account)
-                    self.stanza.setFrom(to)
-                    self.sent = True
-                elif carbon_marker.getName() == 'received':
-                    full_frm = str(self.stanza.getFrom())
-                    frm = app.get_jid_without_resource(full_frm)
-                    if frm == app.get_jid_from_account(account):
-                        # Drop 'received' Carbons from ourself, we already
-                        # got the message with the 'sent' Carbon or via the
-                        # message itself
-                        log.info(
-                            'Drop "received"-Carbon from ourself: %s'
-                            % full_frm)
-                        return
-                try:
-                    self.get_jid_resource()
-                except helpers.InvalidFormat:
-                    log.warning('Invalid JID: %s, ignoring it',
-                                self.stanza.getFrom())
-                    return
-                self.forwarded = True
 
         # Mediated invitation?
         muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
