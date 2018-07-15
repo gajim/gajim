@@ -37,8 +37,8 @@ class MAM:
         self._account = con.name
 
         self.handlers = [
-            ('message', self._mam_message_received, nbxmpp.NS_MAM_1),
-            ('message', self._mam_message_received, nbxmpp.NS_MAM_2)
+            ('message', self._mam_message_received, '', nbxmpp.NS_MAM_1),
+            ('message', self._mam_message_received, '', nbxmpp.NS_MAM_2),
         ]
 
         self.available = False
