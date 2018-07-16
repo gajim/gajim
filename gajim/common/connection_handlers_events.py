@@ -230,9 +230,9 @@ class RosterSetReceivedEvent(nec.NetworkIncomingEvent):
     base_network_events = []
 
     def generate(self):
-        frm = helpers.get_jid_from_iq(self.stanza)
-        our_jid = app.get_jid_from_account(self.conn.name)
-        if frm and frm != our_jid and frm != app.get_server_from_jid(our_jid):
+        frm = self.stanza.getFrom()
+        our_jid = self.conn.get_own_jid()
+        if frm is not None and not frm.bareMatch(our_jid):
             return
         self.version = self.stanza.getTagAttr('query', 'ver')
         self.items = {}
