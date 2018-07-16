@@ -52,7 +52,8 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 
-from gajim import dialogs
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InformationDialog
 from gajim import gtkgui_helpers
 from gajim import groups
 from gajim import adhoc_commands
@@ -526,7 +527,7 @@ class ServiceDiscoveryWindow(object):
 
         # Check connection
         if app.connections[account].connected < 2:
-            dialogs.ErrorDialog(_('You are not connected to the server'),
+            ErrorDialog(_('You are not connected to the server'),
 _('Without a connection, you can not browse available services'))
             raise RuntimeError('You must be connected to browse services')
 
@@ -722,14 +723,14 @@ _('Without a connection, you can not browse available services'))
             if not self.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.destroy()
-            dialogs.ErrorDialog(_('The service could not be found'),
+            ErrorDialog(_('The service could not be found'),
                 _('There is no service at the address you entered, or it is '
                 'not responding. Check the address and try again.'),
                 transient_for=self.window)
             return
         klass = self.cache.get_browser(identities, features)
         if not klass:
-            dialogs.ErrorDialog(_('The service is not browsable'),
+            ErrorDialog(_('The service is not browsable'),
                 _('This type of service does not contain any items to browse.'),
                 transient_for=self.window)
             return
@@ -772,7 +773,7 @@ _('Without a connection, you can not browse available services'))
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
                 pritext = _('Invalid Server Name')
-                dialogs.ErrorDialog(pritext, str(s))
+                ErrorDialog(pritext, str(s))
                 return
             self.travel(jid, '')
 
@@ -782,7 +783,7 @@ _('Without a connection, you can not browse available services'))
             jid = helpers.parse_jid(jid)
         except helpers.InvalidFormat as s:
             pritext = _('Invalid Server Name')
-            dialogs.ErrorDialog(pritext, str(s),
+            ErrorDialog(pritext, str(s),
                 transient_for=self.window)
             return
         if jid == self.jid: # jid has not changed
@@ -1081,7 +1082,7 @@ class AgentBrowser:
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.window.destroy()
-            dialogs.ErrorDialog(_('The service is not browsable'),
+            ErrorDialog(_('The service is not browsable'),
                 _('This service does not contain any items to browse.'),
                 transient_for=self.window.window)
             return
@@ -1772,7 +1773,7 @@ class MucBrowser(AgentBrowser):
         }
 
         if room_jid in con.get_module('Bookmarks').bookmarks:
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('Bookmark already set'),
                 _('Group Chat "%s" is already in your bookmarks.') % room_jid,
                 transient_for=self.window.window)
@@ -1783,7 +1784,7 @@ class MucBrowser(AgentBrowser):
 
         gui_menu_builder.build_bookmark_menu(self.account)
 
-        dialogs.InformationDialog(
+        InformationDialog(
             _('Bookmark has been added successfully'),
             _('You can manage your bookmarks via Actions menu in your roster.'),
             transient_for=self.window.window)

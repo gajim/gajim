@@ -6,7 +6,6 @@ from gajim.common import app
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim.common import passwords
-from gajim import dialogs
 from gajim import config
 from gajim.common import helpers
 from gajim.common import ged
@@ -14,6 +13,8 @@ from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 from gajim.options_dialog import OptionsDialog, OptionsBox
 from gajim.common.const import Option, OptionKind, OptionType
+from gajim.gtk import ConfirmationDialog
+from gajim.gtk import YesNoDialog
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
@@ -143,7 +144,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 account, 'offline', _('Be right back.'))
             GLib.timeout_add(500, login, account, show_before, status_before)
 
-        dialogs.YesNoDialog(
+        YesNoDialog(
             _('Relogin now?'),
             _('If you want all the changes to apply instantly, '
               'you must relogin.'),
@@ -197,7 +198,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 app.interface.instances[account]['remove_account'] = \
                     config.RemoveAccountWindow(account)
         if win_opened:
-            dialogs.ConfirmationDialog(
+            ConfirmationDialog(
                 _('You have opened chat in account %s') % account,
                 _('All chat and groupchat windows will be closed. '
                   'Do you want to continue?'),

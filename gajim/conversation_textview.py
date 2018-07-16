@@ -38,7 +38,11 @@ from gajim import dialogs
 import queue
 import urllib
 
-from gajim import gtkgui_helpers
+from gajim.gtk import AddNewContactWindow
+from gajim.gtk import util
+from gajim.gtk.util import load_icon
+from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_cursor
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
@@ -163,11 +167,6 @@ class ConversationTextview(GObject.GObject):
                     (str, ) # arguments
             )
     )
-
-    MESSAGE_CORRECTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-        'document-edit-symbolic')
-    MESSAGE_ENCRYPTED_PIXBUF = gtkgui_helpers.get_icon_pixmap(
-        'channel-secure-croped-symbolic')
 
     def __init__(self, account, used_in_history_window = False):
         """
@@ -330,11 +329,11 @@ class ConversationTextview(GObject.GObject):
                     if len(text) > 50:
                         text = text[:47] + '…'
                     tooltip.set_text(text)
-                    window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                    window.set_cursor(get_cursor('HAND2'))
                     self.cursor_changed = True
                     return True
             if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
-                window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                window.set_cursor(get_cursor('HAND2'))
                 self.cursor_changed = True
                 return False
             try:
@@ -344,7 +343,7 @@ class ConversationTextview(GObject.GObject):
             except KeyError:
                 pass
         if self.cursor_changed:
-            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
+            window.set_cursor(get_cursor('XTERM'))
             self.cursor_changed = False
         return False
 
@@ -370,7 +369,7 @@ class ConversationTextview(GObject.GObject):
 
     def scroll_to_end(self, force=False):
         if self.autoscroll or force:
-            gtkgui_helpers.scroll_to_end(self.tv.get_parent())
+            util.scroll_to_end(self.tv.get_parent())
 
     def correct_message(self, correct_id, kind, name):
         allowed = True
@@ -674,10 +673,10 @@ class ConversationTextview(GObject.GObject):
         app.interface.join_gc_minimal(self.account, room_jid)
 
     def on_add_to_roster_activate(self, widget, jid):
-        dialogs.AddNewContactWindow(self.account, jid)
+        AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        xml = gtkgui_helpers.get_gtk_builder('chat_context_menu.ui')
+        xml = get_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
@@ -1142,8 +1141,9 @@ class ConversationTextview(GObject.GObject):
         self.print_time(text, kind, tim, simple, direction_mark,
             other_tags_for_time, iter_)
 
+        icon = load_icon('channel-secure-croped-symbolic', self.tv, pixbuf=True)
         if encrypted:
-            buffer_.insert_pixbuf(iter_, self.MESSAGE_ENCRYPTED_PIXBUF)
+            buffer_.insert_pixbuf(iter_, icon)
 
         # If there's a displaymarking, print it here.
         if displaymarking:
@@ -1185,8 +1185,9 @@ class ConversationTextview(GObject.GObject):
             # Show Correction Icon
             buffer_.create_tag(tag_name=msg_stanza_id)
             buffer_.insert(iter_, ' ')
+            icon = load_icon('document-edit-symbolic', self.tv, pixbuf=True)
             buffer_.insert_pixbuf(
-                iter_, ConversationTextview.MESSAGE_CORRECTED_PIXBUF)
+                iter_, icon)
             tag_start_iter = iter_.copy()
             tag_start_iter.backward_chars(2)
             buffer_.apply_tag_by_name(msg_stanza_id, tag_start_iter, iter_)

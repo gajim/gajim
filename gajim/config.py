@@ -52,6 +52,12 @@ from gajim.gajim_themes_window import GajimThemesWindow
 from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
+from gajim.gtk import AspellDictError
+from gajim.gtk import ConfirmationDialog
+from gajim.gtk import ConfirmationDialogDoubleRadio
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InputDialog
+from gajim.gtk import WarningDialog
 
 from gajim.common import helpers
 from gajim.common import app
@@ -653,7 +659,7 @@ class PreferencesWindow:
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
         if gspell_lang is None:
-            dialogs.AspellDictError(lang)
+            AspellDictError(lang)
             app.config.set('use_speller', False)
             widget.set_active(False)
         else:
@@ -1682,7 +1688,7 @@ class GroupchatConfigWindow:
                 return
             model = self.affiliation_treeview[affiliation].get_model()
             model.append((jid, '', '', ''))
-        dialogs.InputDialog(title, prompt, ok_handler=on_ok)
+        InputDialog(title, prompt, ok_handler=on_ok)
 
     def on_remove_button_clicked(self, widget, affiliation):
         selection = self.affiliation_treeview[affiliation].get_selection()
@@ -1785,7 +1791,7 @@ class RemoveAccountWindow:
                 app.connections[self.account].change_status('offline', 'offline')
             if self.remove_and_unregister_radiobutton.get_active():
                 if not self.account in app.connections:
-                    dialogs.ErrorDialog(
+                    ErrorDialog(
                         _('Account is disabled'),
                         _('To unregister from a server, account must be '
                         'enabled.'),
@@ -1813,7 +1819,7 @@ class RemoveAccountWindow:
 
         if self.account in app.connections and \
         app.connections[self.account].connected:
-            dialogs.ConfirmationDialog(
+            ConfirmationDialog(
                 _('Account "%s" is connected to the server') % self.account,
                 _('If you remove it, the connection will be lost.'),
                 on_response_ok=remove,
@@ -1829,7 +1835,7 @@ class RemoveAccountWindow:
         # action of unregistration has failed, we don't remove the account
         # Error message is send by connect_and_auth()
         if not res:
-            dialogs.ConfirmationDialogDoubleRadio(
+            ConfirmationDialogDoubleRadio(
                     _('Connection to server %s failed') % self.account,
                     _('What would you like to do?'),
                     _('Remove only from Gajim'),
@@ -2036,7 +2042,7 @@ class ManageBookmarksWindow:
 
         if self.server_entry.get_text() == '' or \
         self.room_entry.get_text() == '':
-            dialogs.ErrorDialog(_('This bookmark has invalid data'),
+            ErrorDialog(_('This bookmark has invalid data'),
                     _('Please be sure to fill out server and room fields or remove this'
                     ' bookmark.'))
             return False
@@ -2166,7 +2172,7 @@ class ManageBookmarksWindow:
             try:
                 nick = helpers.parse_resource(nick)
             except helpers.InvalidFormat:
-                dialogs.ErrorDialog(_('Invalid nickname'),
+                ErrorDialog(_('Invalid nickname'),
                     _('Character not allowed'), transient_for=self.window)
                 self.nick_entry.set_text(model[iter_][6])
                 return True
@@ -2182,7 +2188,7 @@ class ManageBookmarksWindow:
         if not server:
             return
         if '@' in server:
-            dialogs.ErrorDialog(_('Invalid server'),
+            ErrorDialog(_('Invalid server'),
                 _('Character not allowed'), transient_for=self.window)
             widget.set_text(server.replace('@', ''))
 
@@ -2193,7 +2199,7 @@ class ManageBookmarksWindow:
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat as e:
-            dialogs.ErrorDialog(_('Invalid server'),
+            ErrorDialog(_('Invalid server'),
                 _('Character not allowed'), transient_for=self.window)
             self.server_entry.set_text(model[iter_][2].split('@')[1])
             return True
@@ -2221,7 +2227,7 @@ class ManageBookmarksWindow:
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat:
-            dialogs.ErrorDialog(_('Invalid room'),
+            ErrorDialog(_('Invalid room'),
                 _('Character not allowed'), transient_for=self.window)
             return True
         model[iter_][2] = room_jid
@@ -2439,7 +2445,7 @@ class AccountCreationWizardWindow:
                 pritext = _('Invalid username')
                 sectext = _(
                     'You must provide a username to configure this account.')
-                dialogs.ErrorDialog(pritext, sectext)
+                ErrorDialog(pritext, sectext)
                 return
             server = self.xml.get_object('server_comboboxtext_entry').\
                 get_text().strip()
@@ -2457,7 +2463,7 @@ class AccountCreationWizardWindow:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
                 pritext = _('Invalid JID')
-                dialogs.ErrorDialog(pritext, str(s))
+                ErrorDialog(pritext, str(s))
                 return
 
             self.account = server
@@ -2478,7 +2484,7 @@ class AccountCreationWizardWindow:
                 get_text()
 
             if not server:
-                dialogs.ErrorDialog(_('Invalid server'),
+                ErrorDialog(_('Invalid server'),
                     _('Please provide a server on which you want to register.'))
                 return
             self.account = server
@@ -2502,7 +2508,7 @@ class AccountCreationWizardWindow:
             try:
                 custom_port = int(custom_port)
             except Exception:
-                dialogs.ErrorDialog(_('Invalid entry'),
+                ErrorDialog(_('Invalid entry'),
                     _('Custom port must be a port number.'))
                 return
             config['custom_port'] = custom_port
@@ -2535,7 +2541,7 @@ class AccountCreationWizardWindow:
                     with open(my_ca_certs) as f:
                         certs = f.read()
                 if self.ssl_cert in certs:
-                    dialogs.ErrorDialog(_('Certificate Already in File'),
+                    ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % my_ca_certs)
                 else:
@@ -2766,7 +2772,7 @@ class AccountCreationWizardWindow:
 
     def save_account(self, login, server, savepass, password, anonymous=False):
         if self.account in app.connections:
-            dialogs.ErrorDialog(_('Account name is in use'),
+            ErrorDialog(_('Account name is in use'),
                 _('You already have an account using this name.'))
             return
         con = connection.Connection(self.account)
@@ -2899,7 +2905,7 @@ class ManagePEPServicesWindow:
     def node_not_removed(self, jid, node, msg):
         if jid != app.get_jid_from_account(self.account):
             return
-        dialogs.WarningDialog(_('PEP node was not removed'),
+        WarningDialog(_('PEP node was not removed'),
             _('PEP node %(node)s was not removed: %(message)s') % {'node': node,
             'message': msg})
 

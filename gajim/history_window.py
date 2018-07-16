@@ -35,7 +35,7 @@ from enum import IntEnum, unique
 
 from gajim import gtkgui_helpers
 from gajim import conversation_textview
-from gajim import dialogs
+from gajim.gtk import ErrorDialog
 
 from gajim.common import app
 from gajim.common import helpers
@@ -386,7 +386,7 @@ class HistoryWindow:
             log_days = app.logger.get_days_with_logs(
                 self.account, self.jid, year, month)
         except exceptions.PysqliteOperationalError as e:
-            dialogs.ErrorDialog(_('Disk Error'), str(e))
+            ErrorDialog(_('Disk Error'), str(e))
             return
 
         for date in log_days:
@@ -439,7 +439,7 @@ class HistoryWindow:
                 logs = app.logger.get_date_has_logs(
                     self.account, self.jid, _date)
             except exceptions.PysqliteOperationalError as e:
-                dialogs.ErrorDialog(_('Disk Error'), str(e))
+                ErrorDialog(_('Disk Error'), str(e))
                 return
 
         gtk_month = gtkgui_helpers.make_python_month_gtk_month(_date.month)

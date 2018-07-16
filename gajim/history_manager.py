@@ -85,7 +85,9 @@ if is_standalone():
 from gajim.common import app
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
-from gajim import dialogs
+from gajim.gtk import YesNoDialog
+from gajim.gtk import ErrorDialog
+from gajim.gtk import ConfirmationDialog
 from gajim.filechoosers import FileSaveDialog
 from gajim import gtkgui_helpers
 
@@ -111,8 +113,8 @@ class HistoryManager:
 
         log_db_path = configpaths.get('LOG_DB')
         if not os.path.exists(log_db_path):
-            dialogs.ErrorDialog(_('Cannot find history logs database'),
-                                '%s does not exist.' % log_db_path)
+            ErrorDialog(_('Cannot find history logs database'),
+                        '%s does not exist.' % log_db_path)
             sys.exit()
 
         xml = gtkgui_helpers.get_gtk_builder('history_manager.ui')
@@ -250,7 +252,7 @@ class HistoryManager:
             if is_standalone():
                 Gtk.main_quit()
 
-        dialog = dialogs.YesNoDialog(
+        dialog = YesNoDialog(
             _('Do you want to clean up the database? '
             '(STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING)'),
             _('Normally allocated database size will not be freed, '
@@ -581,7 +583,7 @@ class HistoryManager:
         else:
             pri_text = _(
                 'Do you wish to delete all correspondence with the selected contacts?')
-        dialog = dialogs.ConfirmationDialog('',
+        dialog = ConfirmationDialog('',
             _('This can not be undone.'), on_response_ok=(on_ok,
             liststore, list_of_paths))
         dialog.set_title(_('Deletion Confirmation'))
@@ -620,7 +622,7 @@ class HistoryManager:
         pri_text = i18n.ngettext(
             'Do you really want to delete the selected message?',
             'Do you really want to delete the selected messages?', paths_len)
-        dialog = dialogs.ConfirmationDialog(pri_text,
+        dialog = ConfirmationDialog(pri_text,
             _('This is an irreversible operation.'), on_response_ok=(on_ok,
             liststore, list_of_paths))
         dialog.set_title(_('Deletion Confirmation'))

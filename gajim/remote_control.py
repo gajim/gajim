@@ -33,7 +33,7 @@ import mimetypes
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.dialogs import AddNewContactWindow
+from gajim.gtk import AddNewContactWindow
 from gajim.common import ged
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent

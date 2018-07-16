@@ -1,5 +1,3 @@
-# Copyright (C) 2017 Philipp Hörist <philipp AT hoerist.com>
-#
 # This file is part of Gajim.
 #
 # Gajim is free software; you can redistribute it and/or modify
@@ -25,7 +23,7 @@ from gajim.common import ged
 from gajim.common.const import ArchiveState
 from gajim.gtk.util import load_icon
 
-log = logging.getLogger('gajim.c.message_archiving')
+log = logging.getLogger('gajim.gtk.history_sync')
 
 
 class Pages(IntEnum):

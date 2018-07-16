@@ -58,6 +58,17 @@ from gajim import cell_renderer_image
 from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
+from gajim.gtk import JoinGroupchatWindow
+from gajim.gtk import ConfirmationDialogCheck
+from gajim.gtk import ConfirmationDialog
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InputDialog
+from gajim.gtk import WarningDialog
+from gajim.gtk import InformationDialog
+from gajim.gtk import NonModalConfirmationDialog
+from gajim.gtk import SingleMessageWindow
+from gajim.gtk import AddNewContactWindow
+
 from gajim.common.const import AvatarSize
 
 from gajim.common import app
@@ -1952,7 +1963,7 @@ class RosterWindow:
         ft = app.interface.instances['file_transfers']
         event = app.events.get_first_event(account, jid, event.type_)
         if event.type_ == 'normal':
-            dialogs.SingleMessageWindow(account, jid,
+            SingleMessageWindow(account, jid,
                 action='receive', from_whom=jid, subject=event.subject,
                 message=event.message, resource=event.resource,
                 session=event.session, form_node=event.form_node)
@@ -2025,7 +2036,7 @@ class RosterWindow:
         Authorize a contact (by re-sending auth menuitem)
         """
         app.connections[account].send_authorization(jid)
-        dialogs.InformationDialog(_('Authorization sent'),
+        InformationDialog(_('Authorization sent'),
             _('"%s" will now see your status.') %jid)
 
     def req_sub(self, widget, jid, txt, account, groups=None, nickname=None,
@@ -2049,7 +2060,7 @@ class RosterWindow:
             app.contacts.add_contact(account, contact)
         else:
             if not _('Not in Roster') in contact.get_shown_groups():
-                dialogs.InformationDialog(_('Subscription request has been '
+                InformationDialog(_('Subscription request has been '
                     'sent'), _('If "%s" accepts this request you will know his '
                     'or her status.') % jid)
                 return
@@ -2064,7 +2075,7 @@ class RosterWindow:
         Revoke a contact's authorization
         """
         app.connections[account].refuse_authorization(jid)
-        dialogs.InformationDialog(_('Authorization removed'),
+        InformationDialog(_('Authorization removed'),
             _('Now "%s" will always see you as offline.') %jid)
 
     def set_state(self, account, state):
@@ -2089,7 +2100,7 @@ class RosterWindow:
 
                 keyid = app.config.get_per('accounts', account, 'keyid')
                 if keyid and not app.connections[account].gpg:
-                    dialogs.WarningDialog(_('OpenPGP is not usable'),
+                    WarningDialog(_('OpenPGP is not usable'),
                         _('Gajim needs python-gnupg >= 0.3.8\n'
                           'Beware there is an incompatible Python package called gnupg.\n'
                           'You will be connected to %s without OpenPGP.') % account)
@@ -2298,7 +2309,7 @@ class RosterWindow:
             self.get_status_message(status, on_response)
 
         if status == 'invisible' and self.connected_rooms(account):
-            dialogs.ConfirmationDialog(
+            ConfirmationDialog(
                 _('You are participating in one or more group chats'),
                 _('Changing your status to invisible will result in '
                 'disconnection from those group chats. Are you sure you want '
@@ -2398,7 +2409,7 @@ class RosterWindow:
                 if checked:
                     app.config.set('quit_on_roster_x_button', True)
                 self.on_quit_request()
-            dialogs.ConfirmationDialogCheck(_('Really quit Gajim?'),
+            ConfirmationDialogCheck(_('Really quit Gajim?'),
                     _('Are you sure you want to quit Gajim?'),
                     _('Always close Gajim'), on_response_ok=on_ok)
         return True # do NOT destroy the window
@@ -2488,7 +2499,7 @@ class RosterWindow:
                         break
 
             if transfer_active:
-                dialogs.ConfirmationDialog(_('You have running file transfers'),
+                ConfirmationDialog(_('You have running file transfers'),
                         _('If you quit now, the file(s) being transferred will '
                         'be stopped. Do you still want to quit?'),
                         on_response_ok=(on_continue3, message, pep_dict))
@@ -2520,7 +2531,7 @@ class RosterWindow:
                     break
 
             if unread or recent:
-                dialogs.ConfirmationDialog(_('You have unread messages'),
+                ConfirmationDialog(_('You have unread messages'),
                     _('Messages will only be available for reading them later '
                     'if you have history enabled and contact is in your '
                     'roster.'), on_response_ok=(on_continue2,
@@ -2694,7 +2705,7 @@ class RosterWindow:
             return
         if obj.mtype == 'normal' and obj.popup:
             # it's single message to be autopopuped
-            dialogs.SingleMessageWindow(obj.conn.name, obj.jid,
+            SingleMessageWindow(obj.conn.name, obj.jid,
                 action='receive', from_whom=obj.jid, subject=obj.subject,
                 message=obj.msgtxt, resource=obj.resource, session=obj.session,
                 form_node=obj.form_node)
@@ -2798,7 +2809,7 @@ class RosterWindow:
                     has_unread_events = True
                     break
         if has_unread_events:
-            dialogs.ErrorDialog(_('You have unread messages'),
+            ErrorDialog(_('You have unread messages'),
                     _('You must read them before removing this transport.'))
             return
         if len(list_) == 1:
@@ -2813,7 +2824,7 @@ class RosterWindow:
             jids = jids[:-1] + '.'
             sectext = _('You will no longer be able to send and receive '
                 'messages to contacts from these transports: %s') % jids
-        dialogs.ConfirmationDialog(pritext, sectext,
+        ConfirmationDialog(pritext, sectext,
             on_response_ok = (remove, list_), transient_for=self.window)
 
     def _nec_blocking(self, obj):
@@ -2864,7 +2875,7 @@ class RosterWindow:
             ' to continue?')
         sectext = _('This contact will see you offline and you will not '
             'receive messages it sends you.')
-        dialogs.ConfirmationDialogCheck(pritext, sectext,
+        ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=_block_it)
 
     def on_unblock(self, widget, list_, group=None):
@@ -2943,7 +2954,7 @@ class RosterWindow:
             if 'rename' in app.interface.instances:
                 del app.interface.instances['rename']
 
-        app.interface.instances['rename'] = dialogs.InputDialog(title,
+        app.interface.instances['rename'] = InputDialog(title,
             message, old_text, False, (on_renamed, account, row_type, jid,
             old_text), on_canceled, transient_for=self.window)
 
@@ -2958,7 +2969,7 @@ class RosterWindow:
                     app.connections[account].unsubscribe(contact.jid)
                     self.remove_contact(contact.jid, account, backend=True)
 
-        dialogs.ConfirmationDialogCheck(_('Remove Group'),
+        ConfirmationDialogCheck(_('Remove Group'),
             _('Do you want to remove group %s from the roster?') % group,
             _('Also remove all contacts in this group from your roster'),
             on_response_ok=on_ok)
@@ -3039,14 +3050,14 @@ class RosterWindow:
     def on_send_single_message_menuitem_activate(self, widget, account,
     contact=None):
         if contact is None:
-            dialogs.SingleMessageWindow(account, action='send')
+            SingleMessageWindow(account, action='send')
         elif isinstance(contact, list):
-            dialogs.SingleMessageWindow(account, contact, 'send')
+            SingleMessageWindow(account, contact, 'send')
         else:
             jid = contact.jid
             if contact.jid == app.get_jid_from_account(account):
                 jid += '/' + contact.resource
-            dialogs.SingleMessageWindow(account, jid, 'send')
+            SingleMessageWindow(account, jid, 'send')
 
     def on_send_file_menuitem_activate(self, widget, contact, account,
     resource=None):
@@ -3077,7 +3088,7 @@ class RosterWindow:
                     app.interface.instances[account]['join_gc'].destroy()
                 else:
                     app.interface.instances[account]['join_gc'] = \
-                        dialogs.JoinGroupchatWindow(
+                        JoinGroupchatWindow(
                             account, None, automatic={'invities': jid_list})
                 break
 
@@ -3147,7 +3158,7 @@ class RosterWindow:
         dialogs.ChangeStatusMessageDialog(on_response, show)
 
     def on_add_to_roster(self, widget, contact, account):
-        dialogs.AddNewContactWindow(account, contact.jid, contact.name)
+        AddNewContactWindow(account, contact.jid, contact.name)
 
     def on_roster_treeview_key_press_event(self, widget, event):
         """
@@ -3410,17 +3421,17 @@ class RosterWindow:
                 'your roster.\n') % {'name': contact.get_shown_name(),
                 'jid': contact.jid}
             if contact.sub == 'to':
-                dialogs.ConfirmationDialog(pritext, sectext + \
+                ConfirmationDialog(pritext, sectext + \
                     _('By removing this contact you also remove authorization '
                     'resulting in them always seeing you as offline.'),
                     on_response_ok=(on_ok2, list_))
             elif _('Not in Roster') in contact.get_shown_groups():
                 # Contact is not in roster
-                dialogs.ConfirmationDialog(pritext, sectext + \
+                ConfirmationDialog(pritext, sectext + \
                     _('Do you want to continue?'), on_response_ok=(on_ok2,
                     list_))
             else:
-                dialogs.ConfirmationDialogCheck(pritext, sectext + \
+                ConfirmationDialogCheck(pritext, sectext + \
                     _('By removing this contact you also by default remove '
                     'authorization resulting in them always seeing you as'
                     ' offline.'),
@@ -3436,7 +3447,7 @@ class RosterWindow:
             sectext = _('By removing these contacts:%s\nyou also remove '
                 'authorization resulting in them always seeing you as '
                 'offline.') % jids
-            dialogs.ConfirmationDialog(pritext, sectext,
+            ConfirmationDialog(pritext, sectext,
                 on_response_ok=(on_ok2, list_))
 
     def on_send_custom_status(self, widget, contact_list, show, group=None):
@@ -3497,7 +3508,7 @@ class RosterWindow:
         sectext = _('This contact will temporarily see you as %(status)s, '
             'but only until you change your status. Then they will see '
             'your global status.') % {'status': show}
-        dialogs.ConfirmationDialogCheck(pritext, sectext,
+        ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=send_it)
 
     def on_status_combobox_changed(self, widget):
@@ -3513,7 +3524,7 @@ class RosterWindow:
             return
         accounts = list(app.connections.keys())
         if len(accounts) == 0:
-            dialogs.ErrorDialog(_('No account available'),
+            ErrorDialog(_('No account available'),
                 _('You must create an account before you can chat with other '
                 'contacts.'))
             self.update_status_combobox()
@@ -3593,7 +3604,7 @@ class RosterWindow:
                 def on_cancel():
                     self.update_status_combobox()
 
-                dialogs.ConfirmationDialog(
+                ConfirmationDialog(
                     _('You are participating in one or more group chats'),
                     _('Changing your status to invisible will result in '
                     'disconnection from those group chats. Are you sure you '
@@ -3637,7 +3648,7 @@ class RosterWindow:
                 config.ManagePEPServicesWindow(account)
 
     def on_add_new_contact(self, widget, account):
-        dialogs.AddNewContactWindow(account)
+        AddNewContactWindow(account)
 
     def on_join_gc_activate(self, widget, account):
         """
@@ -4140,7 +4151,7 @@ class RosterWindow:
 
         if not app.connections[account_source].private_storage_supported or \
         not app.connections[account_dest].private_storage_supported:
-            dialogs.WarningDialog(_('Metacontacts storage not supported by '
+            WarningDialog(_('Metacontacts storage not supported by '
                 'your server'),
                 _('Your server does not support storing metacontacts '
                 'information. So this information will not be saved on next '
@@ -4243,7 +4254,7 @@ class RosterWindow:
         sectext = _('Metacontacts are a way to regroup several contacts in one '
             'line. Generally it is used when the same person has several '
             'XMPP- or transport -accounts.')
-        dlg = dialogs.ConfirmationDialogCheck(pritext, sectext,
+        dlg = ConfirmationDialogCheck(pritext, sectext,
             _('_Do not ask me again'), on_response_ok=merge_contacts)
         if not confirm_metacontacts: # First time we see this window
             dlg.checkbutton.set_active(True)
@@ -4362,7 +4373,7 @@ class RosterWindow:
                 if not os.path.isfile(path):
                     bad_uris.append(a_uri)
             if len(bad_uris):
-                dialogs.ErrorDialog(_('Invalid file URI:'), '\n'.join(bad_uris))
+                ErrorDialog(_('Invalid file URI:'), '\n'.join(bad_uris))
                 return
             def _on_send_files(account, jid, uris):
                 c = app.contacts.get_contact_with_highest_priority(account,
@@ -4380,7 +4391,7 @@ class RosterWindow:
             for uri in uri_splitted:
                 path = helpers.get_file_path_from_dnd_dropped_uri(uri)
                 sec_text += '\n' + os.path.basename(path)
-            dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+            dialog = NonModalConfirmationDialog(prim_text, sec_text,
                 on_response_ok=(_on_send_files, account_dest, jid_dest,
                 uri_splitted))
             dialog.popup()
@@ -4475,7 +4486,7 @@ class RosterWindow:
         if (type_dest == 'account' or not self.regroup) and \
         account_source != account_dest:
             # add to account in specified group
-            dialogs.AddNewContactWindow(account=account_dest, jid=jid_source,
+            AddNewContactWindow(account=account_dest, jid=jid_source,
                 user_nick=c_source.name, group=grp_dest)
             return
 

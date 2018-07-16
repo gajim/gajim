@@ -28,14 +28,21 @@ import gajim.plugins.gui
 from gajim import history_window
 from gajim import disco
 from gajim.gtk.history_sync import HistorySyncAssistant
-from gajim.server_info import ServerInfoDialog
+from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
+from gajim.gtk import JoinGroupchatWindow
+from gajim.gtk import StartChatDialog
+from gajim.gtk import AddNewContactWindow
+from gajim.gtk import SingleMessageWindow
+from gajim.gtk import XMLConsoleWindow
+from gajim.gtk import AboutDialog
+from gajim.gtk import PrivacyListsWindow
 
 
 # General Actions
 
 def on_add_contact_jid(action, param):
-    dialogs.AddNewContactWindow(None, param.get_string())
+    AddNewContactWindow(None, param.get_string())
 
 # Application Menu Actions
 
@@ -79,7 +86,7 @@ def on_new_chat(action, param):
     if 'start_chat' in app.interface.instances:
         app.interface.instances['start_chat'].present()
     else:
-        app.interface.instances['start_chat'] = dialogs.StartChatDialog()
+        app.interface.instances['start_chat'] = StartChatDialog()
 
 # Accounts Actions
 
@@ -103,7 +110,7 @@ def on_send_server_message(action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/online'
-    dialogs.SingleMessageWindow(account, server, 'send')
+    SingleMessageWindow(account, server, 'send')
 
 
 def on_service_disco(action, param):
@@ -127,23 +134,23 @@ def on_join_gc(action, param):
             return
     else:
         account = param.get_string()
-    window = app.get_app_window(dialogs.JoinGroupchatWindow)
+    window = app.get_app_window(JoinGroupchatWindow)
     if window is None:
-        dialogs.JoinGroupchatWindow(account, None)
+        JoinGroupchatWindow(account, None)
     else:
         window.present()
 
 
 def on_add_contact(action, param):
-    window = app.get_app_window(dialogs.AddNewContactWindow)
+    window = app.get_app_window(AddNewContactWindow)
     if window is None:
-        dialogs.AddNewContactWindow(param.get_string())
+        AddNewContactWindow(param.get_string())
     else:
         window.present()
 
 
 def on_single_message(action, param):
-    dialogs.SingleMessageWindow(param.get_string(), action='send')
+    SingleMessageWindow(param.get_string(), action='send')
 
 
 def on_merge_accounts(action, param):
@@ -206,7 +213,7 @@ def on_privacy_lists(action, param):
         interface.instances[account]['privacy_lists'].window.present()
     else:
         interface.instances[account]['privacy_lists'] = \
-            dialogs.PrivacyListsWindow(account)
+            PrivacyListsWindow(account)
 
 
 def on_server_info(action, param):
@@ -224,7 +231,7 @@ def on_xml_console(action, param):
         interface.instances[account]['xml_console'].present()
     else:
         interface.instances[account]['xml_console'] = \
-            dialogs.XMLConsoleWindow(account)
+            XMLConsoleWindow(account)
 
 
 def on_manage_proxies(action, param):
@@ -241,14 +248,14 @@ def on_set_motd(action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/motd'
-    dialogs.SingleMessageWindow(account, server, 'send')
+    SingleMessageWindow(account, server, 'send')
 
 
 def on_update_motd(action, param):
     account = param.get_string()
     server = app.config.get_per('accounts', account, 'hostname')
     server += '/announce/motd/update'
-    dialogs.SingleMessageWindow(account, server, 'send')
+    SingleMessageWindow(account, server, 'send')
 
 
 def on_delete_motd(action, param):
@@ -279,7 +286,7 @@ def on_features(action, param):
 
 
 def on_about(action, param):
-    dialogs.AboutDialog()
+    AboutDialog()
 
 # View Actions
 

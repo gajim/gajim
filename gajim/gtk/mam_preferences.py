@@ -21,7 +21,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.gtk.util import get_builder
 
-from gajim.dialogs import HigDialog
+from gajim.gtk import HigDialog
 
 log = logging.getLogger('gajim.gtk.mam_preferences')
 

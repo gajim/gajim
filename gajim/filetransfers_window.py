@@ -36,7 +36,12 @@ from datetime import datetime
 
 from gajim import gtkgui_helpers
 from gajim import tooltips
-from gajim import dialogs
+from gajim.gtk import HigDialog
+from gajim.gtk import InformationDialog
+from gajim.gtk import YesNoDialog
+from gajim.gtk import ErrorDialog
+from gajim.gtk import FTOverwriteConfirmationDialog
+from gajim.gtk import NonModalConfirmationDialog
 
 from gajim.common import app
 from gajim.common import helpers
@@ -247,7 +252,7 @@ class FileTransfersWindow:
         sectext += recipient
         if file_props.type_ == 'r':
             sectext += '\n\t' + _('Saved in: %s') % file_path
-        dialog = dialogs.HigDialog(app.interface.roster.window, Gtk.MessageType.INFO,
+        dialog = HigDialog(app.interface.roster.window, Gtk.MessageType.INFO,
             Gtk.ButtonsType.NONE, _('File transfer completed'), sectext)
         if file_props.type_ == 'r':
             button = Gtk.Button.new_with_mnemonic(_('Open _Containing Folder'))
@@ -263,14 +268,14 @@ class FileTransfersWindow:
         """
         Show error dialog to the recipient saying that transfer has been canceled
         """
-        dialogs.InformationDialog(_('File transfer cancelled'), _('Connection with peer cannot be established.'))
+        InformationDialog(_('File transfer cancelled'), _('Connection with peer cannot be established.'))
         self.tree.get_selection().unselect_all()
 
     def show_send_error(self, file_props):
         """
         Show error dialog to the sender saying that transfer has been canceled
         """
-        dialogs.InformationDialog(_('File transfer cancelled'),
+        InformationDialog(_('File transfer cancelled'),
                 _('Connection with peer cannot be established.'))
         self.tree.get_selection().unselect_all()
 
@@ -283,7 +288,7 @@ class FileTransfersWindow:
         sectext += '\n\t' + _('Recipient: %s') % jid
         if error_msg:
             sectext += '\n\t' + _('Error message: %s') % error_msg
-        dialogs.ErrorDialog(_('File transfer stopped'), sectext)
+        ErrorDialog(_('File transfer stopped'), sectext)
         self.tree.get_selection().unselect_all()
 
     def show_hash_error(self, jid, file_props, account):
@@ -318,7 +323,7 @@ class FileTransfersWindow:
             file_name = os.path.basename(file_props.file_name)
         else:
             file_name = file_props.name
-        dialogs.YesNoDialog(('File transfer error'),
+        YesNoDialog(('File transfer error'),
             _('The file %(file)s has been received, but it seems to have '
             'been damaged along the way.\nDo you want to download it again?') % \
             {'file': file_name}, on_response_yes=(on_yes, jid, file_props,
@@ -335,7 +340,7 @@ class FileTransfersWindow:
         if gtkgui_helpers.file_is_locked(file_path):
             pritext = _('Gajim can not read this file')
             sextext = _('Another process is using this file.')
-            dialogs.ErrorDialog(pritext, sextext)
+            ErrorDialog(pritext, sextext)
             return
 
         if isinstance(contact, str):
@@ -378,7 +383,7 @@ class FileTransfersWindow:
                 if not os.access(file_path, os.W_OK):
                     file_name = GLib.markup_escape_text(os.path.basename(
                         file_path))
-                    dialogs.ErrorDialog(
+                    ErrorDialog(
                         _('Cannot overwrite existing file "%s"' % file_name),
                         _('A file with this name already exists and you do not '
                         'have permission to overwrite it.'))
@@ -395,7 +400,7 @@ class FileTransfersWindow:
                         file_props.offset = dl_size
                     self._start_receive(file_path, account, contact, file_props)
 
-                dialog = dialogs.FTOverwriteConfirmationDialog(
+                dialog = FTOverwriteConfirmationDialog(
                     _('This file already exists'), _('What do you want to do?'),
                     propose_resume=not dl_finished, on_response=on_response)
                 dialog.set_destroy_with_parent(True)
@@ -406,7 +411,7 @@ class FileTransfersWindow:
                     # read-only bit is used to mark special folder under
                     # windows, not to mark that a folder is read-only.
                     # See ticket #3587
-                    dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+                    ErrorDialog(_('Directory "%s" is not writable') % \
                         dirname, _('You do not have permission to create files '
                         'in this directory.'))
                     return
@@ -445,7 +450,7 @@ class FileTransfersWindow:
         def on_response_cancel(account, file_props):
             app.connections[account].send_file_rejection(file_props)
 
-        dialog = dialogs.NonModalConfirmationDialog(prim_text, sec_text,
+        dialog = NonModalConfirmationDialog(prim_text, sec_text,
                 on_response_ok=(on_response_ok, account, contact, file_props),
                 on_response_cancel=(on_response_cancel, account, file_props))
         dialog.connect('delete-event', lambda widget, event:
@@ -674,10 +679,10 @@ class FileTransfersWindow:
         if os.path.isfile(file_path):
             stat = os.stat(file_path)
         else:
-            dialogs.ErrorDialog(_('Invalid File'), _('File: ') + file_path)
+            ErrorDialog(_('Invalid File'), _('File: ') + file_path)
             return None
         if stat[6] == 0:
-            dialogs.ErrorDialog(_('Invalid File'),
+            ErrorDialog(_('Invalid File'),
             _('It is not possible to send empty files'))
             return None
         file_props = FilesProp.getNewFileProp(account,

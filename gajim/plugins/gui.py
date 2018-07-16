@@ -26,16 +26,16 @@ GUI classes related to plug-in management.
 
 __all__ = ['PluginsWindow']
 
-from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
-from gi.repository import GLib, Gdk
+from gi.repository import Gdk
 import os
 
 from enum import IntEnum, unique
 
 from gajim import gtkgui_helpers
-from gajim.dialogs import WarningDialog, YesNoDialog
+from gajim.gtk import WarningDialog
+from gajim.gtk import YesNoDialog
 from gajim.filechoosers import ArchiveChooserDialog
 from gajim.common import app
 from gajim.common import configpaths
@@ -43,6 +43,7 @@ from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
 from gajim.common.exceptions import PluginsystemError
+
 
 @unique
 class Column(IntEnum):

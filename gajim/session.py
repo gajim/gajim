@@ -35,7 +35,7 @@ from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
 from gajim.common.const import KindConstant
 from gajim import message_control
 from gajim import notify
-from gajim import dialogs
+from gajim.gtk import SingleMessageWindow
 
 
 class ChatControlSession(object):
@@ -358,7 +358,7 @@ class ChatControlSession(object):
         popup = helpers.allow_popup_window(self.conn.name)
 
         if msg_type == 'normal' and popup: # it's single message to be autopopuped
-            dialogs.SingleMessageWindow(self.conn.name, contact.jid,
+            SingleMessageWindow(self.conn.name, contact.jid,
                     action='receive', from_whom=jid, subject=subject, message=msg,
                     resource=resource, session=self, form_node=form_node)
             return

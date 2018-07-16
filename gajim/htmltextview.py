@@ -51,10 +51,12 @@ if __name__ == '__main__':
     from gajim.common import configpaths
     configpaths.init()
 from gajim.common import app
-from gajim import gtkgui_helpers
-from gajim.gtkgui_helpers import get_icon_pixmap
+from gajim.gtk.util import load_icon
+from gajim.gtk.util import get_cursor
+from gajim.gtk.util import get_builder
 from gajim.common import helpers
-from gajim import dialogs
+from gajim.gtk import JoinGroupchatWindow
+from gajim.gtk import AddNewContactWindow
 
 import logging
 log = logging.getLogger('gajim.htmlview')
@@ -554,7 +556,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     if alt:
                         alt += '\n'
                     alt += _('Loading')
-                    pixbuf = get_icon_pixmap('gtk-no')
+                    pixbuf = load_icon('image-missing', self.textview, pixbuf=True)
             if mem:
                 # Caveat: GdkPixbuf is known not to be safe to load
                 # images from network... this program is now potentially
@@ -889,11 +891,11 @@ class HtmlTextView(Gtk.TextView):
                         text = text[:47] + '…'
                     tooltip.set_text(text)
                 if not self._changed_cursor:
-                    window.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                    window.set_cursor(get_cursor('HAND2'))
                     self._changed_cursor = True
                 return True
         if self._changed_cursor:
-            window.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
+            window.set_cursor(get_cursor('XTERM'))
             self._changed_cursor = False
         return False
 
@@ -908,14 +910,13 @@ class HtmlTextView(Gtk.TextView):
 #        app.interface.new_chat_from_jid(self.account, jid)
 
     def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-        dialogs.JoinGroupchatWindow(None, room_jid)
+        JoinGroupchatWindow(None, room_jid)
 
     def on_add_to_roster_activate(self, widget, jid):
-        dialogs.AddNewContactWindow(self.account, jid)
+        AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        from gajim.gtkgui_helpers import get_gtk_builder
-        xml = get_gtk_builder('chat_context_menu.ui')
+        xml = get_builder('chat_context_menu.ui')
         menu = xml.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
@@ -1114,13 +1115,13 @@ if __name__ == '__main__':
         y = pointer[2]
         tags = htmlview.tv.get_iter_at_location(x, y)[1].get_tags()
         if change_cursor:
-            w.set_cursor(gtkgui_helpers.get_cursor('XTERM'))
+            w.set_cursor(get_cursor('XTERM'))
             change_cursor = None
         tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
-                    w.set_cursor(gtkgui_helpers.get_cursor('HAND2'))
+                    w.set_cursor(get_cursor('HAND2'))
                     change_cursor = tag
                 elif tag == tag_table.lookup('focus-out-line'):
                     over_line = True

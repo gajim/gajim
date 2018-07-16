@@ -37,7 +37,7 @@ from gi.repository import Gio
 
 from gajim import gtkgui_helpers
 from gajim import message_control
-from gajim import dialogs
+from gajim.gtk import NonModalConfirmationDialog
 from gajim import history_window
 from gajim import notify
 import re
@@ -1160,7 +1160,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     prim_text = _('Really send file?')
                     sec_text = _('If you send a file to %s, your real JID will '
                         'be revealed.') % gc_contact.name
-                    dialog = dialogs.NonModalConfirmationDialog(prim_text,
+                    dialog = NonModalConfirmationDialog(prim_text,
                         sec_text, on_response_ok=(_on_ok, gc_contact))
                     dialog.popup()
                     return

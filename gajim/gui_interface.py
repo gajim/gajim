@@ -69,6 +69,7 @@ from gajim import notify
 from gajim import message_control
 from gajim.dialog_messages import get_dialog
 from gajim.dialogs import ProgressWindow
+
 from gajim.filechoosers import FileChooserDialog
 
 from gajim.chat_control_base import ChatControlBase
@@ -111,6 +112,18 @@ from threading import Thread
 from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
 
+from gajim.gtk import JoinGroupchatWindow
+from gajim.gtk import ErrorDialog
+from gajim.gtk import WarningDialog
+from gajim.gtk import InformationDialog
+from gajim.gtk import InputDialog
+from gajim.gtk import YesNoDialog
+from gajim.gtk import InputTextDialog
+from gajim.gtk import PlainConnectionDialog
+from gajim.gtk import SSLErrorDialog
+from gajim.gtk import ConfirmationDialogDoubleCheck
+from gajim.gtk import ChangeNickDialog
+
 from gajim.common import configpaths
 
 from gajim.common import optparser
@@ -129,7 +142,7 @@ class Interface:
         #('DB_ERROR', account, error)
         if self.db_error_dialog:
             return
-        self.db_error_dialog = dialogs.ErrorDialog(_('Database Error'), error)
+        self.db_error_dialog = ErrorDialog(_('Database Error'), error)
         def destroyed(win):
             self.db_error_dialog = None
         self.db_error_dialog.connect('destroy', destroyed)
@@ -144,11 +157,11 @@ class Interface:
             return
 
         if obj.level == 'error':
-            cls = dialogs.ErrorDialog
+            cls = ErrorDialog
         elif obj.level == 'warn':
-            cls = dialogs.WarningDialog
+            cls = WarningDialog
         elif obj.level == 'info':
-            cls = dialogs.InformationDialog
+            cls = InformationDialog
         else:
             return
 
@@ -169,7 +182,7 @@ class Interface:
             self.instances['change_nick_dialog'].add_room(account, room_jid,
                 prompt)
         else:
-            self.instances['change_nick_dialog'] = dialogs.ChangeNickDialog(
+            self.instances['change_nick_dialog'] = ChangeNickDialog(
                 account, room_jid, title, prompt, transient_for=parent_win)
 
     @staticmethod
@@ -188,7 +201,7 @@ class Interface:
             sec_msg = _('Do you accept this request on account %s?') % account
         if obj.msg:
             sec_msg = obj.msg + '\n' + sec_msg
-        dialog = dialogs.YesNoDialog(_('HTTP (%(method)s) Authorization for '
+        dialog = YesNoDialog(_('HTTP (%(method)s) Authorization for '
             '%(url)s (ID: %(id)s)') % {'method': obj.method, 'url': obj.url,
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
@@ -285,14 +298,14 @@ class Interface:
             def on_close(dummy):
                 gc_control.error_dialog.destroy()
                 gc_control.error_dialog = None
-            gc_control.error_dialog = dialogs.ErrorDialog(pritext, sectext,
+            gc_control.error_dialog = ErrorDialog(pritext, sectext,
                 on_response_ok=on_close, on_response_cancel=on_close)
             gc_control.error_dialog.set_modal(False)
             if gc_control.parent_win:
                 gc_control.error_dialog.set_transient_for(
                     gc_control.parent_win.window)
         else:
-            d = dialogs.ErrorDialog(pritext, sectext)
+            d = ErrorDialog(pritext, sectext)
             if gc_control and gc_control.parent_win:
                 d.set_transient_for(gc_control.parent_win.window)
             d.set_modal(False)
@@ -318,7 +331,7 @@ class Interface:
             if gc_control.error_dialog:
                 gc_control.error_dialog.destroy()
 
-            gc_control.error_dialog = dialogs.InputDialog(_('Password Required'),
+            gc_control.error_dialog = InputDialog(_('Password Required'),
                 _('A Password is required to join the room %s. Please type it.') % \
                 room_jid, is_modal=False, ok_handler=on_ok,
                 cancel_handler=on_cancel)
@@ -530,7 +543,7 @@ class Interface:
                 status='online', ask='to', resource=obj.resource, keyID=keyID)
             app.contacts.add_contact(account, contact1)
             self.roster.add_contact(obj.jid, account)
-        dialogs.InformationDialog(_('Authorization accepted'),
+        InformationDialog(_('Authorization accepted'),
             _('The contact "%s" has authorized you to see their status.')
             % obj.jid)
 
@@ -538,7 +551,7 @@ class Interface:
         def on_yes(is_checked, list_):
             self.roster.on_req_usub(None, list_)
         list_ = [(contact, account)]
-        dialogs.YesNoDialog(
+        YesNoDialog(
                 _('Contact "%s" removed subscription from you') % contact.jid,
                 _('You will always see them as offline.\nDo you want to '
                         'remove them from your contact list?'),
@@ -575,7 +588,7 @@ class Interface:
             config.ServiceRegistrationWindow(obj.agent, obj.config,
                 obj.conn.name, obj.is_form)
         else:
-            dialogs.ErrorDialog(_('Contact with "%s" cannot be established') % \
+            ErrorDialog(_('Contact with "%s" cannot be established') % \
                 obj.agent, _('Check your connection or try again later.'))
 
     def handle_event_gc_config(self, obj):
@@ -673,7 +686,7 @@ class Interface:
                 '\n')
             sectext += _('You are currently connected without your OpenPGP '
                 'key.')
-            dialogs.WarningDialog(_('Wrong passphrase'), sectext)
+            WarningDialog(_('Wrong passphrase'), sectext)
         else:
             account = obj.conn.name
             app.notification.popup(
@@ -716,7 +729,7 @@ class Interface:
         def on_no():
             obj.callback(False)
 
-        dialogs.YesNoDialog(_('Untrusted OpenPGP key'), _('The OpenPGP key '
+        YesNoDialog(_('Untrusted OpenPGP key'), _('The OpenPGP key '
             'used to encrypt this chat is not trusted. Do you really want to '
             'encrypt this message?'), checktext=_('_Do not ask me again'),
             on_response_yes=on_yes, on_response_no=on_no)
@@ -764,7 +777,7 @@ class Interface:
 
         instruction = _('Please copy / paste the refresh token from the website'
             ' that has just been opened.')
-        self.pass_dialog[account] = dialogs.InputTextDialog(
+        self.pass_dialog[account] = InputTextDialog(
             _('Oauth2 Credentials'), instruction, is_modal=False,
             ok_handler=on_ok, cancel_handler=on_cancel)
 
@@ -917,7 +930,7 @@ class Interface:
 
     @staticmethod
     def handle_event_file_error(title, message):
-        dialogs.ErrorDialog(title, message)
+        ErrorDialog(title, message)
 
     def handle_event_file_progress(self, account, file_props):
         if time.time() - self.last_ftwindow_update > 0.5:
@@ -1185,7 +1198,7 @@ class Interface:
         def on_cancel():
             obj.conn.change_status('offline', '')
 
-        dlg = dialogs.InputDialog(_('Username Conflict'),
+        dlg = InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
             input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
             cancel_handler=on_cancel, transient_for=self.roster.window)
@@ -1337,7 +1350,7 @@ class Interface:
                     with open(my_ca_certs, encoding='utf-8') as f:
                         certs = f.read()
                 if pem in certs:
-                    dialogs.ErrorDialog(_('Certificate Already in File'),
+                    ErrorDialog(_('Certificate Already in File'),
                         _('This certificate is already in file %s, so it\'s '
                         'not added again.') % my_ca_certs)
                 else:
@@ -1384,7 +1397,7 @@ class Interface:
         if 'ssl_error' in self.instances[account]['online_dialog']:
             self.instances[account]['online_dialog']['ssl_error'].destroy()
         self.instances[account]['online_dialog']['ssl_error'] = \
-            dialogs.SSLErrorDialog(obj.conn.name, obj.cert, pritext,
+            SSLErrorDialog(obj.conn.name, obj.cert, pritext,
             sectext, checktext1, checktext2, on_response_ok=on_ok,
             on_response_cancel=on_cancel)
         self.instances[account]['online_dialog']['ssl_error'].set_title(
@@ -1393,7 +1406,7 @@ class Interface:
     def handle_event_non_anonymous_server(self, obj):
         account = obj.conn.name
         server = app.config.get_per('accounts', account, 'hostname')
-        dialogs.ErrorDialog(_('Non Anonymous Server'), sectext='Server "%s"'
+        ErrorDialog(_('Non Anonymous Server'), sectext='Server "%s"'
             'does not support anonymous connection' % server,
             transient_for=self.roster.window)
 
@@ -1426,7 +1439,7 @@ class Interface:
             self.instances[obj.conn.name]['online_dialog']['plain_connection'].\
                 destroy()
         self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
-            dialogs.PlainConnectionDialog(obj.conn.name, on_ok, on_cancel)
+            PlainConnectionDialog(obj.conn.name, on_ok, on_cancel)
 
     def handle_event_insecure_ssl_connection(self, obj):
         # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
@@ -1464,7 +1477,7 @@ class Interface:
             self.instances[obj.conn.name]['online_dialog']['insecure_ssl'].\
                 destroy()
         self.instances[obj.conn.name]['online_dialog']['insecure_ssl'] = \
-            dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
+            ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
@@ -1506,7 +1519,7 @@ class Interface:
             self.instances[obj.conn.name]['online_dialog']\
                 ['insecure_password'].destroy()
         self.instances[obj.conn.name]['online_dialog']['insecure_password'] = \
-            dialogs.ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
+            ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
@@ -1749,7 +1762,7 @@ class Interface:
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat:
-            dialogs.ErrorDialog('Invalid JID',
+            ErrorDialog('Invalid JID',
                                 transient_for=app.app.get_active_window())
             return
 
@@ -1757,7 +1770,7 @@ class Interface:
         if account is not None and account not in connected_accounts:
             connected_accounts = None
         if not connected_accounts:
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('You are not connected to the server'),
                 _('You can not join a group chat unless you are connected.'),
                 transient_for=app.app.get_active_window())
@@ -1765,10 +1778,10 @@ class Interface:
 
         def _on_discover_result():
             if not muc_caps_cache.is_cached(room_jid):
-                dialogs.ErrorDialog(_('JID is not a Groupchat'),
+                ErrorDialog(_('JID is not a Groupchat'),
                                     transient_for=app.app.get_active_window())
                 return
-            dialogs.JoinGroupchatWindow(account, room_jid, password=password,
+            JoinGroupchatWindow(account, room_jid, password=password,
                 transient_for=transient_for)
 
         disco_account = connected_accounts[0] if account is None else account
@@ -1928,7 +1941,7 @@ class Interface:
 
         path = helpers.get_emoticon_theme_path(emot_theme)
         if not emoticons.load(path, ascii_emoticons):
-            dialogs.WarningDialog(
+            WarningDialog(
                     _('Emoticons disabled'),
                     _('Your configured emoticons theme could not be loaded.'
                       ' See the log for more details.'),
@@ -1948,7 +1961,7 @@ class Interface:
 
         if app.contacts.get_contact(account, room_jid) and \
         not app.contacts.get_contact(account, room_jid).is_groupchat():
-            dialogs.ErrorDialog(_('This is not a group chat'),
+            ErrorDialog(_('This is not a group chat'),
                 _('%(room_jid)s is already in your roster. Please check '
                 'if %(room_jid)s is a correct group chat name. If it is, '
                 'delete it from your roster and try joining the group chat '
@@ -1973,7 +1986,7 @@ class Interface:
 
         invisible_show = app.SHOW_LIST.index('invisible')
         if app.connections[account].connected == invisible_show:
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('You cannot join a group chat while you are invisible'))
             return
 
@@ -2331,7 +2344,7 @@ class Interface:
             print(err_str, file=sys.stderr)
             # it is good to notify the user
             # in case he or she cannot see the output of the console
-            error_dialog = dialogs.ErrorDialog(_('Could not save your settings and '
+            error_dialog = ErrorDialog(_('Could not save your settings and '
                 'preferences'), err_str)
             error_dialog.run()
             sys.exit()
@@ -2923,7 +2936,7 @@ class PassphraseRequest:
                 self.complete(passphrase)
                 return
             elif result == 'expired':
-                dialogs.ErrorDialog(_('OpenPGP key expired'),
+                ErrorDialog(_('OpenPGP key expired'),
                     _('Your OpenPGP key has expired, you will be connected to '
                     '%s without OpenPGP.') % account)
                 # Don't try to connect with GPG

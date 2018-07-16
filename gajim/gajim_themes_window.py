@@ -25,15 +25,17 @@
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-from gajim import dialogs
-from gajim import gtkgui_helpers
 
 from gajim.common import app
+
+from gajim.gtk import ErrorDialog
+from gajim.gtk.util import get_builder
+
 
 class GajimThemesWindow:
 
     def __init__(self):
-        self.xml = gtkgui_helpers.get_gtk_builder('gajim_themes_window.ui')
+        self.xml = get_builder('gajim_themes_window.ui')
         self.window = self.xml.get_object('gajim_themes_window')
         self.window.set_transient_for(app.interface.instances[
             'preferences'].window)
@@ -94,7 +96,7 @@ class GajimThemesWindow:
         if old_name == new_name:
             return
         if old_name == 'default':
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('You cannot make changes to the default theme'),
             	_('Please create a new clean theme.'))
             return
@@ -183,7 +185,7 @@ class GajimThemesWindow:
         if not iter_:
             return
         if self.current_theme == app.config.get('roster_theme'):
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('You cannot delete your current theme'),
                 _('Pick another theme to use first.'))
             return

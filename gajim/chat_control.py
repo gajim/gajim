@@ -37,6 +37,8 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import dialogs
+from gajim.gtk import ConfirmationDialog
+from gajim.gtk import AddNewContactWindow
 
 from gajim.common import app
 from gajim.common import helpers
@@ -337,7 +339,7 @@ class ChatControl(ChatControlBase):
             'information-' + self.control_id).set_enabled(online)
 
     def _on_add_to_roster(self, action, param):
-        dialogs.AddNewContactWindow(self.account, self.contact.jid)
+        AddNewContactWindow(self.account, self.contact.jid)
 
     def _on_information(self, action, param):
         app.interface.roster.on_info(None, self.contact, self.account)
@@ -1208,7 +1210,7 @@ class ChatControl(ChatControlBase):
             def on_cancel():
                 on_no(self)
 
-            dialogs.ConfirmationDialog(
+            ConfirmationDialog(
                 #%s is being replaced in the code with JID
                 _('You just received a new message from "%s"') % \
                 self.contact.jid,

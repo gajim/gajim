@@ -479,7 +479,9 @@ def scale_pixbuf_from_data(data, size):
     return scale_pixbuf(pixbuf, size)
 
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
-    from gajim import dialogs
+    from gajim.gtk import ErrorDialog
+    from gajim.gtk import ConfirmationDialog
+    from gajim.gtk import FTOverwriteConfirmationDialog
     def on_continue(response, file_path):
         if response < 0:
             return
@@ -509,7 +511,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
             new_file_path = '.'.join(file_path.split('.')[:-1]) + '.png'
             def on_ok(file_path, pixbuf):
                 pixbuf.savev(file_path, 'png', [], [])
-            dialogs.ConfirmationDialog(_('Extension not supported'),
+            ConfirmationDialog(_('Extension not supported'),
                 _('Image cannot be saved in %(type)s format. Save as '
                 '%(new_filename)s?') % {'type': image_format,
                 'new_filename': new_file_path},
@@ -520,18 +522,18 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
             # check if we have write permissions
             if not os.access(file_path, os.W_OK):
                 file_name = os.path.basename(file_path)
-                dialogs.ErrorDialog(_('Cannot overwrite existing file "%s"') % \
+                ErrorDialog(_('Cannot overwrite existing file "%s"') % \
                     file_name, _('A file with this name already exists and you '
                     'do not have permission to overwrite it.'))
                 return
-            dialog2 = dialogs.FTOverwriteConfirmationDialog(
+            dialog2 = FTOverwriteConfirmationDialog(
                 _('This file already exists'), _('What do you want to do?'),
                 propose_resume=False, on_response=(on_continue, file_path))
             dialog2.set_destroy_with_parent(True)
         else:
             dirname = os.path.dirname(file_path)
             if not os.access(dirname, os.W_OK):
-                dialogs.ErrorDialog(_('Directory "%s" is not writable') % \
+                ErrorDialog(_('Directory "%s" is not writable') % \
                     dirname, _('You do not have permission to create files in '
                     'this directory.'))
                 return

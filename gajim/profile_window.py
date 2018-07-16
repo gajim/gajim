@@ -30,7 +30,8 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim import gtkgui_helpers
-from gajim import dialogs
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InformationDialog
 from gajim.filechoosers import AvatarChooserDialog
 from gajim.common.const import AvatarSize
 from gajim.common import app
@@ -127,7 +128,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         def on_ok(path_to_file):
             sha = app.interface.save_avatar(path_to_file, publish=True)
             if sha is None:
-                dialogs.ErrorDialog(
+                ErrorDialog(
                     _('Could not load image'), transient_for=self)
                 return
 
@@ -181,7 +182,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         except ValueError:
             if not widget.is_focus():
                 pritext = _('Wrong date format')
-                dialogs.ErrorDialog(pritext, _('Format of the date must be '
+                ErrorDialog(pritext, _('Format of the date must be '
                     'YYYY-MM-DD'), transient_for=self)
                 GLib.idle_add(lambda: widget.grab_focus())
             return True
@@ -321,7 +322,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             # Operation in progress
             return
         if app.connections[self.account].connected < 2:
-            dialogs.ErrorDialog(_('You are not connected to the server'),
+            ErrorDialog(_('You are not connected to the server'),
                     _('Without a connection, you can not publish your contact '
                     'information.'), transient_for=self)
             return
@@ -363,7 +364,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             GLib.source_remove(self.update_progressbar_timeout_id)
             self.progressbar.set_fraction(0)
             self.update_progressbar_timeout_id = None
-        dialogs.InformationDialog(_('vCard publication failed'),
+        InformationDialog(_('vCard publication failed'),
             _('There was an error while publishing your personal information, '
             'try again later.'), transient_for=self)
 

@@ -41,11 +41,11 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import tooltips
-from gajim import dialogs
 from gajim import config
 from gajim import vcard
 from gajim import dataforms_widget
 from gajim import adhoc_commands
+from gajim.gtk import AddNewContactWindow
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
 import nbxmpp
@@ -63,6 +63,12 @@ from gajim.common import contacts
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
 from gajim.filechoosers import AvatarChooserDialog
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InputTextDialog
+from gajim.gtk import ConfirmationDialogCheck
+from gajim.gtk import DoubleInputDialog
+from gajim.gtk import InputDialog
+from gajim.gtk import ChangeNickDialog
 
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 from gajim.command_system.implementation.hosts import GroupChatCommands
@@ -239,7 +245,7 @@ class PrivateChatControl(ChatControl):
             room, nick = app.get_room_and_nick_from_fjid(self.contact.jid)
             gc_contact = app.contacts.get_gc_contact(self.account, room, nick)
             if not gc_contact:
-                dialogs.ErrorDialog(
+                ErrorDialog(
                     _('Sending private message failed'),
                     #in second %s code replaces with nickname
                     _('You are no longer in group chat "%(room)s" or '
@@ -646,7 +652,7 @@ class GroupchatControl(ChatControlBase):
             app.connections[self.account].send_gc_subject(
                 self.room_jid, subject)
 
-        dialogs.InputTextDialog(_('Changing Subject'),
+        InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
             ok_handler=on_ok, transient_for=self.parent_win.window)
 
@@ -657,7 +663,7 @@ class GroupchatControl(ChatControlBase):
             title = _('Changing Nickname')
             prompt = _('Please specify the new nickname you want to use:')
             app.interface.instances['change_nick_dialog'] = \
-                dialogs.ChangeNickDialog(self.account, self.room_jid, title,
+                ChangeNickDialog(self.account, self.room_jid, title,
                 prompt, change_nick=True, transient_for=self.parent_win.window)
 
     def _on_disconnect(self, action, param):
@@ -672,7 +678,7 @@ class GroupchatControl(ChatControlBase):
                 try:
                     jid = helpers.parse_jid(jid)
                 except Exception:
-                    dialogs.ErrorDialog(_('Invalid group chat JID'),
+                    ErrorDialog(_('Invalid group chat JID'),
                     _('The group chat JID has not allowed characters.'))
                     return
             app.connections[self.account].destroy_gc_room(
@@ -683,7 +689,7 @@ class GroupchatControl(ChatControlBase):
             self.force_non_minimizable = False
 
         # Ask for a reason
-        dialogs.DoubleInputDialog(_('Destroying %s') % '\u200E' + \
+        DoubleInputDialog(_('Destroying %s') % '\u200E' + \
             self.room_jid, _('You are going to remove this room permanently.'
             '\nYou may specify a reason below:'),
             _('You may also enter an alternate venue:'), ok_handler=on_ok,
@@ -751,7 +757,7 @@ class GroupchatControl(ChatControlBase):
         def _on_accept(filename):
             sha = app.interface.save_avatar(filename, publish=True)
             if sha is None:
-                dialogs.ErrorDialog(
+                ErrorDialog(
                     _('Could not load image'),
                     transient_for=self.parent_win.window)
                 return
@@ -2343,7 +2349,7 @@ class GroupchatControl(ChatControlBase):
             sectext = _('If you close this window, you will be disconnected '
                 'from this group chat.')
 
-            dialogs.ConfirmationDialogCheck(pritext, sectext,
+            ConfirmationDialogCheck(pritext, sectext,
                 _('_Do not ask me again'), on_response_ok=on_ok,
                 on_response_cancel=on_cancel,
                 transient_for=self.parent_win.window)
@@ -2379,7 +2385,7 @@ class GroupchatControl(ChatControlBase):
             app.connections[self.account].send_gc_subject(self.room_jid,
                 subject)
 
-        dialogs.InputTextDialog(_('Changing Subject'),
+        InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
             ok_handler=on_ok, transient_for=self.parent_win.window)
 
@@ -2560,7 +2566,7 @@ class GroupchatControl(ChatControlBase):
                 'none', reason)
 
         # ask for reason
-        dialogs.InputDialog(_('Kicking %s') % nick,
+        InputDialog(_('Kicking %s') % nick,
             _('You may specify a reason below:'), ok_handler=on_ok,
             transient_for=self.parent_win.window)
 
@@ -2857,7 +2863,7 @@ class GroupchatControl(ChatControlBase):
         # to ban we know the real jid. so jid is not fakejid
         nick = app.get_nick_from_jid(jid)
         # ask for reason
-        dialogs.InputDialog(_('Banning %s') % nick,
+        InputDialog(_('Banning %s') % nick,
             _('You may specify a reason below:'), ok_handler=on_ok,
             transient_for=self.parent_win.window)
 
@@ -2922,7 +2928,7 @@ class GroupchatControl(ChatControlBase):
         self._on_history_menuitem_activate(widget=widget, jid=jid)
 
     def on_add_to_roster(self, widget, jid):
-        dialogs.AddNewContactWindow(self.account, jid)
+        AddNewContactWindow(self.account, jid)
 
     def on_block(self, widget, nick):
         fjid = self.room_jid + '/' + nick

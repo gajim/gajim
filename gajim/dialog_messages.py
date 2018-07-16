@@ -22,8 +22,8 @@ from collections import namedtuple
 from gi.repository import GLib
 
 from gajim.common.app import app
-from gajim.dialogs import ErrorDialog
-from gajim.dialogs import InformationDialog
+from gajim.gtk import ErrorDialog
+from gajim.gtk import InformationDialog
 
 Message = namedtuple('Message', ['title', 'text', 'dialog'])
 

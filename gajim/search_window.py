@@ -28,10 +28,11 @@ from gajim.common import dataforms
 from gajim.common import ged
 
 from gajim import gtkgui_helpers
-from gajim import dialogs
 from gajim import vcard
 from gajim import config
 from gajim import dataforms_widget
+from gajim.gtk import AddNewContactWindow
+
 
 class SearchWindow:
     def __init__(self, account, jid):
@@ -116,7 +117,7 @@ class SearchWindow:
         if not iter_:
             return
         jid = model[iter_][self.jid_column]
-        dialogs.AddNewContactWindow(self.account, jid)
+        AddNewContactWindow(self.account, jid)
 
     def on_information_button_clicked(self, widget):
         (model, iter_) = self.result_treeview.get_selection().get_selected()

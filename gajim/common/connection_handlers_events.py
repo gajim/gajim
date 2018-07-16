@@ -955,7 +955,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             if self.msg_obj.form_node:
                 # It could be a voice request. See
                 # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
-                from gajim.dialogs import SingleMessageWindow
+                from gajim.gtk import SingleMessageWindow
                 SingleMessageWindow(
                     self.conn.name, self.fjid,
                     action='receive', from_whom=self.fjid,

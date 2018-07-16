@@ -5,7 +5,7 @@ from gajim import gtkgui_helpers
 from gajim.common.const import OptionKind, OptionType
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
-
+from gajim.gtk import ErrorDialog
 
 class OptionsDialog(Gtk.ApplicationWindow):
     def __init__(self, parent, title, flags, options, account,
@@ -558,7 +558,7 @@ class GPGOption(DialogOption):
         secret_keys[_('None')] = _('None')
 
         if not secret_keys:
-            dialogs.ErrorDialog(
+            ErrorDialog(
                 _('Failed to get secret keys'),
                 _('There is no OpenPGP secret key available.'),
                 transient_for=parent)

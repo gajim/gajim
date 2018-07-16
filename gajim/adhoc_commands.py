@@ -33,7 +33,7 @@ from gajim.common import dataforms
 from gajim.common import ged
 
 from gajim import gtkgui_helpers
-from gajim import dialogs
+from gajim.gtk import HigDialog
 from gajim import dataforms_widget
 
 class CommandWindow:
@@ -322,7 +322,7 @@ class CommandWindow:
             dialog.destroy()
             cb()
 
-        dialog = dialogs.HigDialog(self.window, Gtk.MessageType.WARNING,
+        dialog = HigDialog(self.window, Gtk.MessageType.WARNING,
             Gtk.ButtonsType.YES_NO, _('Cancel confirmation'),
             _('You are in process of executing command. Do you really want to '
             'cancel it?'), on_response_yes=on_yes)

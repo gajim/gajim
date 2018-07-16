@@ -1,34 +1,28 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2017 Philipp Hörist <philipp AT hoerist.com>
-#
 # This file is part of Gajim.
 #
-# Gajim is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
 #
 # Gajim is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from collections import namedtuple
 from datetime import timedelta
-import logging
 
-from gi.repository import Gtk
 import nbxmpp
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.gtkgui_helpers import get_icon_pixmap, Color
 
-log = logging.getLogger('gajim.serverinfo')
+log = logging.getLogger('gajim.gtk.serverinfo')
 
 
 class ServerInfoDialog(Gtk.Dialog):
@@ -221,16 +215,18 @@ class FeatureItem(Gtk.Grid):
 
     def set_feature(self, available, enabled):
         if not available:
-            self.icon.set_from_pixbuf(
-                get_icon_pixmap('window-close-symbolic', color=[Color.RED]))
+            self.icon.set_from_icon_name('window-close-symbolic',
+                                         Gtk.IconSize.MENU)
+            self.icon.get_style_context().add_class('error-color')
         elif enabled is False:
-            self.icon.set_from_pixbuf(
-                get_icon_pixmap('dialog-warning-symbolic',
-                                color=[Color.ORANGE]))
+            self.icon.set_from_icon_name('dialog-warning-symbolic',
+                                         Gtk.IconSize.MENU)
             self.tooltip += _('\nDisabled in config')
+            self.icon.get_style_context().add_class('warning-color')
         else:
-            self.icon.set_from_pixbuf(
-                get_icon_pixmap('emblem-ok-symbolic', color=[Color.GREEN]))
+            self.icon.set_from_icon_name('emblem-ok-symbolic',
+                                         Gtk.IconSize.MENU)
+            self.icon.get_style_context().add_class('success-color')
 
     def update(self, feature):
         self.tooltip = feature.tooltip

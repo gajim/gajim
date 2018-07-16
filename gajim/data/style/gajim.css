@@ -128,3 +128,8 @@ button.flat.link { padding: 0; border: 0; }
 /*SendFileDialog*/
 #SendFileDialog grid {padding: 12px}
 #SendFileDialog grid list { background-color: @theme_bg_color}
+
+/*Icon colors*/
+.success-color { color: @success_color; }
+.error-color { color: @error_color; }
+.warning-color { color: @warning_color; }

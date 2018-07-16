@@ -34,6 +34,8 @@ from gajim import tooltips
 from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
+from gajim.gtk import SingleMessageWindow
+
 
 class StatusIcon:
     """
@@ -163,7 +165,7 @@ class StatusIcon:
                     jid, account)
 
     def on_single_message_menuitem_activate(self, widget, account):
-        dialogs.SingleMessageWindow(account, action='send')
+        SingleMessageWindow(account, action='send')
 
     def on_new_chat(self, widget, account):
         app.app.activate_action('start-chat')

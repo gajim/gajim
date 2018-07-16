@@ -37,7 +37,7 @@ from gi.repository import GLib
 from gajim import common
 from gajim import gtkgui_helpers
 from gajim import message_control
-from gajim import dialogs
+from gajim.gtk import YesNoDialog
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 from gajim.common import app
@@ -240,7 +240,7 @@ class MessageWindow(object):
                         ctrl.minimize()
                 # destroy window
                 return False
-            dialogs.YesNoDialog(
+            YesNoDialog(
                 _('You are going to close several tabs'),
                 _('Do you really want to close them all?'),
                 checktext=_('_Do not ask me again'), on_response_yes=on_yes1,
