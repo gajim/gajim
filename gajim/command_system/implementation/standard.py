@@ -291,7 +291,7 @@ class StandardGroupChatCommands(CommandContainer):
     @command(raw=True, empty=True)
     @doc(_("Invite a user to a room for a reason"))
     def invite(self, jid, reason):
-        self.connection.send_invite(self.room_jid, jid, reason)
+        self.connection.get_module('MUC').invite(self.room_jid, jid, reason)
         return _("Invited %(jid)s to %(room_jid)s") % {'jid': jid,
             'room_jid': self.room_jid}
 

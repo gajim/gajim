@@ -4437,8 +4437,8 @@ class InvitationReceivedDialog:
                     self.account, self.room_jid, password=self.password)
 
         def on_no(text):
-            app.connections[account].decline_invitation(self.room_jid,
-                self.contact_fjid, text)
+            app.connections[account].get_module('MUC').decline(
+                self.room_jid, self.contact_fjid, text)
 
         dlg = YesNoDialog(pritext, sectext,
             text_label=_('Reason (if you decline):'), on_response_yes=on_yes,

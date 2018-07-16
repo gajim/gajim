@@ -3091,7 +3091,8 @@ class RosterWindow:
             contact_jid = contact.jid
             if resource: # we MUST have one contact only in list_
                 contact_jid += '/' + resource
-            app.connections[room_account].send_invite(room_jid, contact_jid)
+            con = app.connections[room_account]
+            con.get_module('MUC').invite(room_jid, contact_jid)
             gc_control = app.interface.msg_win_mgr.get_gc_control(room_jid,
                 room_account)
             if gc_control:

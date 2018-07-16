@@ -297,7 +297,8 @@ class ConnectionHandlersBase:
                                         nbxmpp.NS_PUBSUB_EVENT,
                                         nbxmpp.NS_ROSTERX,
                                         nbxmpp.NS_MAM_1,
-                                        nbxmpp.NS_MAM_2])
+                                        nbxmpp.NS_MAM_2,
+                                        nbxmpp.NS_CONFERENCE])
 
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
@@ -950,6 +951,12 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         # but nbxmpp executes less common handlers last
         if self._message_namespaces & set(stanza.getProperties()):
             return
+
+        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user is not None:
+            if muc_user.getChildren():
+                # Not a PM, handled by MUC module
+                return
         log.debug('MessageCB')
 
         app.nec.push_incoming_event(NetworkEvent('raw-message-received',

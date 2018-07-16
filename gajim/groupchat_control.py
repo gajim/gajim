@@ -716,7 +716,8 @@ class GroupchatControl(ChatControlBase):
         """
         Request voice in the current room
         """
-        app.connections[self.account].request_voice(self.room_jid)
+        con = app.connections[self.account]
+        con.get_module('MUC').request_voice(self.room_jid)
 
     def _on_minimize(self, action, param):
         """
@@ -1797,7 +1798,7 @@ class GroupchatControl(ChatControlBase):
                             # We just need to invite contacts
                             for jid in app.automatic_rooms[self.account][
                             self.room_jid]['invities']:
-                                obj.conn.send_invite(self.room_jid, jid)
+                                obj.conn.get_module('MUC').invite(self.room_jid, jid)
                                 self.print_conversation(_('%(jid)s has been '
                                     'invited in this room') % {'jid': jid},
                                     graphics=False)
@@ -2405,7 +2406,8 @@ class GroupchatControl(ChatControlBase):
                 return
             contact_jid = data
 
-            app.connections[self.account].send_invite(self.room_jid, contact_jid)
+            con = app.connections[self.account]
+            con.get_module('MUC').invite(self.room_jid, contact_jid)
             self.print_conversation(_('%(jid)s has been invited in this room') %
                                     {'jid': contact_jid}, graphics=False)
 

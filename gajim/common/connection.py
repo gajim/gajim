@@ -2379,68 +2379,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         else:
             _on_unregister_account_connect(self.connection)
 
-    def send_invite(self, room, to, reason='', continue_tag=False):
-        """
-        Send invitation
-        """
-        if not app.account_is_connected(self.name):
-            return
-        contact = app.contacts.get_contact_from_full_jid(self.name, to)
-        if contact and contact.supports(nbxmpp.NS_CONFERENCE):
-            # send direct invite
-            message=nbxmpp.Message(to=to)
-            attrs = {'jid': room}
-            if reason:
-                attrs['reason'] = reason
-            if continue_tag:
-                attrs['continue'] = 'true'
-            password = app.gc_passwords.get(room, '')
-            if password:
-                attrs['password'] = password
-            c = message.addChild(name='x', attrs=attrs,
-                namespace=nbxmpp.NS_CONFERENCE)
-            self.connection.send(message)
-            return
-        message=nbxmpp.Message(to=room)
-        c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
-        c = c.addChild(name='invite', attrs={'to': to})
-        if continue_tag:
-            c.addChild(name='continue')
-        if reason != '':
-            c.setTagData('reason', reason)
-        self.connection.send(message)
-
-    def decline_invitation(self, room, to, reason=''):
-        """
-        decline a groupchat invitation
-        """
-        if not app.account_is_connected(self.name):
-            return
-        message=nbxmpp.Message(to=room)
-        c = message.addChild(name='x', namespace=nbxmpp.NS_MUC_USER)
-        c = c.addChild(name='decline', attrs={'to': to})
-        if reason != '':
-            c.setTagData('reason', reason)
-        self.connection.send(message)
-
-    def request_voice(self, room):
-        """
-        Request voice in a moderated room
-        """
-        if not app.account_is_connected(self.name):
-            return
-        message = nbxmpp.Message(to=room)
-
-        x = nbxmpp.DataForm(typ='submit')
-        x.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
-            value=nbxmpp.NS_MUC + '#request'))
-        x.addChild(node=nbxmpp.DataField(name='muc#role', value='participant',
-            typ='text-single'))
-
-        message.addChild(node=x)
-
-        self.connection.send(message)
-
     def _reconnect_alarm(self):
         if not app.config.get_per('accounts', self.name, 'active'):
             # Account may have been disabled

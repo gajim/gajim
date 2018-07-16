@@ -697,32 +697,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                     return
                 self.jid = app.get_jid_without_resource(self.fjid)
 
-        # Mediated invitation?
-        muc_user = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user:
-            if muc_user.getTag('decline'):
-                app.nec.push_incoming_event(
-                    GcDeclineReceivedEvent(
-                        None, conn=self.conn,
-                        room_jid=self.fjid, stanza=muc_user))
-                return
-            if muc_user.getTag('invite'):
-                app.nec.push_incoming_event(
-                    GcInvitationReceivedEvent(
-                        None, conn=self.conn, jid_from=self.fjid,
-                        mediated=True, stanza=muc_user))
-                return
-        else:
-            # Direct invitation?
-            direct = self.stanza.getTag(
-                'x', namespace=nbxmpp.NS_CONFERENCE)
-            if direct:
-                app.nec.push_incoming_event(
-                    GcInvitationReceivedEvent(
-                        None, conn=self.conn, jid_from=self.fjid,
-                        mediated=False, stanza=direct))
-                return
-
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()
         if not self.mtype or self.mtype not in ('chat', 'groupchat', 'error'):
@@ -840,72 +814,6 @@ class ZeroconfMessageReceivedEvent(MessageReceivedEvent):
                                                    stanza=self.stanza)
         return super(ZeroconfMessageReceivedEvent, self).generate()
 
-class GcInvitationReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gc-invitation-received'
-    base_network_events = []
-
-    def generate(self):
-        account = self.conn.name
-        if not self.mediated:
-            # direct invitation
-            try:
-                self.room_jid = helpers.parse_jid(self.stanza.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            self.stanza.getAttr('jid'))
-                return
-            self.reason = self.stanza.getAttr('reason')
-            self.password = self.stanza.getAttr('password')
-            self.is_continued = False
-            self.is_continued = self.stanza.getAttr('continue') == 'true'
-        else:
-            self.invite = self.stanza.getTag('invite')
-            self.room_jid = self.jid_from
-            try:
-                self.jid_from = helpers.parse_jid(self.invite.getAttr('from'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            self.invite.getAttr('from'))
-                return
-
-            self.reason = self.invite.getTagData('reason')
-            self.password = self.stanza.getTagData('password')
-            self.is_continued = self.stanza.getTag('continue') is not None
-
-        if self.room_jid in app.gc_connected[account] and \
-                app.gc_connected[account][self.room_jid]:
-            # We are already in groupchat. Ignore invitation
-            return
-        jid = app.get_jid_without_resource(self.jid_from)
-
-        ignore = app.config.get_per(
-            'accounts', account, 'ignore_unknown_contacts')
-        if ignore and not app.contacts.get_contacts(account, jid):
-            return
-
-        return True
-
-class GcDeclineReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gc-decline-received'
-    base_network_events = []
-
-    def generate(self):
-        account = self.conn.name
-        decline = self.stanza.getTag('decline')
-        try:
-            self.jid_from = helpers.parse_jid(decline.getAttr('from'))
-        except helpers.InvalidFormat:
-            log.warning('Invalid JID: %s, ignoring it',
-                        decline.getAttr('from'))
-            return
-        jid = app.get_jid_without_resource(self.jid_from)
-        ignore = app.config.get_per(
-            'accounts', account, 'ignore_unknown_contacts')
-        if ignore and not app.contacts.get_contacts(account, jid):
-            return
-        self.reason = decline.getTagData('reason')
-
-        return True
 
 class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'decrypted-message-received'

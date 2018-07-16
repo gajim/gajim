@@ -608,8 +608,8 @@ class Interface:
                 continue_tag = True
             if 'invities' in app.automatic_rooms[account][obj.jid]:
                 for jid in app.automatic_rooms[account][obj.jid]['invities']:
-                    obj.conn.send_invite(obj.jid, jid,
-                        continue_tag=continue_tag)
+                    obj.conn.get_module('MUC').invite(
+                        obj.jid, jid, continue_=continue_tag)
                     gc_control = self.msg_win_mgr.get_gc_control(obj.jid,
                         account)
                     if gc_control:
@@ -629,35 +629,35 @@ class Interface:
                 affiliation_list_received(obj.users_dict)
 
     def handle_event_gc_decline(self, obj):
-        account = obj.conn.name
-        gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, account)
+        gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, obj.account)
         if gc_control:
             if obj.reason:
                 gc_control.print_conversation(
                     _('%(jid)s declined the invitation: %(reason)s') % {
-                    'jid': obj.jid_from, 'reason': obj.reason}, graphics=False)
+                        'jid': obj.from_, 'reason': obj.reason},
+                    graphics=False)
             else:
                 gc_control.print_conversation(
                     _('%(jid)s declined the invitation') % {
-                    'jid': obj.jid_from}, graphics=False)
+                        'jid': obj.from_}, graphics=False)
 
     def handle_event_gc_invitation(self, obj):
-        #('GC_INVITATION', (room_jid, jid_from, reason, password, is_continued))
-        account = obj.conn.name
-        if helpers.allow_popup_window(account) or not self.systray_enabled:
-            dialogs.InvitationReceivedDialog(account, obj.room_jid,
-                obj.jid_from, obj.password, obj.reason,
+        if helpers.allow_popup_window(obj.account) or not self.systray_enabled:
+            dialogs.InvitationReceivedDialog(
+                obj.account, obj.room_jid,
+                str(obj.from_), obj.password, obj.reason,
                 is_continued=obj.is_continued)
             return
 
-        event = events.GcInvitationtEvent(obj.room_jid, obj.reason,
-            obj.password, obj.is_continued, obj.jid_from)
-        self.add_event(account, obj.jid_from, event)
+        event = events.GcInvitationtEvent(
+            obj.room_jid, obj.reason,
+            obj.password, obj.is_continued, str(obj.from_))
+        self.add_event(obj.account, str(obj.from_), event)
 
-        if helpers.allow_showing_notification(account):
+        if helpers.allow_showing_notification(obj.account):
             event_type = _('Groupchat Invitation')
             app.notification.popup(
-                event_type, obj.jid_from, account, 'gc-invitation',
+                event_type, str(obj.from_), obj.account, 'gc-invitation',
                 'gajim-gc_invitation', event_type, obj.room_jid)
 
     def forget_gpg_passphrase(self, keyid):
