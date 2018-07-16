@@ -37,7 +37,6 @@ from enum import IntEnum, unique
 from gajim import gtkgui_helpers
 from gajim.dialogs import WarningDialog, YesNoDialog
 from gajim.filechoosers import ArchiveChooserDialog
-from gajim.htmltextview import HtmlTextView
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.plugins.helpers import log_calls
@@ -68,16 +67,12 @@ class PluginsWindow(object):
             'plugin_version_label', 'plugin_authors_label',
             'plugin_homepage_linkbutton', 'uninstall_plugin_button',
             'configure_plugin_button', 'installed_plugins_treeview',
-            'close_button')
+            'available_text', 'available_text_label')
 
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, builder.get_object(widget_name))
 
-        self.plugin_description_textview = HtmlTextView()
-        self.plugin_description_textview.connect_tooltip()
-        self.plugin_description_textview.set_wrap_mode(Gtk.WrapMode.WORD)
-        sw = builder.get_object('scrolledwindow2')
-        sw.add(self.plugin_description_textview)
+        self.plugin_description_textview = builder.get_object('description')
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
@@ -116,7 +111,6 @@ class PluginsWindow(object):
         builder.connect_signals(self)
 
         self.plugins_notebook.set_current_page(0)
-        self.close_button.grab_focus()
 
         # Adding GUI extension point for Plugins that want to hook the Plugin Window
         app.plugin_manager.gui_extension_point('plugin_window', self)
@@ -127,9 +121,6 @@ class PluginsWindow(object):
     def on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.window.destroy()
-
-    def on_plugins_notebook_switch_page(self, widget, page, page_num):
-        GLib.idle_add(self.close_button.grab_focus)
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
@@ -144,25 +135,20 @@ class PluginsWindow(object):
         self.plugin_name_label.set_text(plugin.name)
         self.plugin_version_label.set_text(plugin.version)
         self.plugin_authors_label.set_text(plugin.authors)
-        self.plugin_homepage_linkbutton.set_uri(plugin.homepage)
-        self.plugin_homepage_linkbutton.set_label(plugin.homepage)
-        label = self.plugin_homepage_linkbutton.get_children()[0]
-        label.set_ellipsize(Pango.EllipsizeMode.END)
-        self.plugin_homepage_linkbutton.set_property('sensitive', True)
+        markup = '<a href="%s">%s</a>' % (plugin.homepage, plugin.homepage)
+        self.plugin_homepage_linkbutton.set_markup(markup)
 
-        desc_textbuffer = self.plugin_description_textview.get_buffer()
-        desc_textbuffer.set_text('')
-        txt = plugin.description
-        txt.replace('</body>', '')
         if plugin.available_text:
-            txt += '<br/><br/>' + _('Warning: %s') % plugin.available_text
-        if not txt.startswith('<body '):
-            txt = '<body  xmlns=\'http://www.w3.org/1999/xhtml\'>' + txt
-        txt += ' </body>'
-        self.plugin_description_textview.display_html(txt,
-            self.plugin_description_textview, None)
+            text = _('Warning: %s') % plugin.available_text
+            self.available_text_label.set_text(text)
+            self.available_text.show()
+            # Workaround for https://bugzilla.gnome.org/show_bug.cgi?id=710888
+            self.available_text.queue_resize()
+        else:
+            self.available_text.hide()
 
-        self.plugin_description_textview.set_property('sensitive', True)
+        self.plugin_description_textview.set_text(plugin.description)
+
         self.uninstall_plugin_button.set_property(
             'sensitive', configpaths.get('PLUGINS_USER') in plugin.__path__)
         self.configure_plugin_button.set_property(
@@ -172,13 +158,9 @@ class PluginsWindow(object):
         self.plugin_name_label.set_text('')
         self.plugin_version_label.set_text('')
         self.plugin_authors_label.set_text('')
-        self.plugin_homepage_linkbutton.set_uri('')
-        self.plugin_homepage_linkbutton.set_label('')
-        self.plugin_homepage_linkbutton.set_property('sensitive', False)
+        self.plugin_homepage_linkbutton.set_markup('')
 
-        desc_textbuffer = self.plugin_description_textview.get_buffer()
-        desc_textbuffer.set_text('')
-        self.plugin_description_textview.set_property('sensitive', False)
+        self.plugin_description_textview.set_text('')
         self.uninstall_plugin_button.set_property('sensitive', False)
         self.configure_plugin_button.set_property('sensitive', False)
 
@@ -223,10 +205,6 @@ class PluginsWindow(object):
         '''Close window'''
         app.plugin_manager.remove_gui_extension_point('plugin_window', self)
         del app.interface.instances['plugins']
-
-    @log_calls('PluginsWindow')
-    def on_close_button_clicked(self, widget):
-        self.window.destroy()
 
     @log_calls('PluginsWindow')
     def on_configure_plugin_button_clicked(self, widget):

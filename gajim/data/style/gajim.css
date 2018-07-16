@@ -111,13 +111,16 @@ list.settings > row > box {
 /* Text style */
 
 .bold16 { font-size: 16px; font-weight: bold; }
+.large-header { font-size: 20px; font-weight: bold; }
 .status-away { color: #ff8533;}
 .status-dnd { color: #e62e00;}
 .status-online { color: #66bf10;}
 
 /* Treeview */
-
 treeview.space { padding: 6px; }
+
+/* GtkLinkButton style */
+button.flat.link { padding: 0; border: 0; }
 
 /*MessageWindow Notebook*/
 .notebook-tab-label {min-width: 80px}
