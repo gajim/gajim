@@ -74,6 +74,19 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 .PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color }
 
+/* Settings ListBox */
+
+list.settings {
+	border: @borders 1px solid;
+}
+list.settings > row:not(:last-child) {
+	border-bottom: @theme_unfocused_bg_color 1px solid;
+}
+list.settings row { min-height: 52px; }
+list.settings > row > box {
+    margin: 6px 18px;
+}
+
 /* Accounts Window */
 #AccountsWindow > box > stack { padding:30px 30px 30px 30px;}
 #AccountsWindow scrolledwindow {border: none;}
@@ -101,6 +114,10 @@ popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 .status-away { color: #ff8533;}
 .status-dnd { color: #e62e00;}
 .status-online { color: #66bf10;}
+
+/* Treeview */
+
+treeview.space { padding: 6px; }
 
 /*MessageWindow Notebook*/
 .notebook-tab-label {min-width: 80px}

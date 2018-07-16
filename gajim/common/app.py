@@ -389,19 +389,33 @@ def get_connected_accounts():
             account_list.append(account)
     return account_list
 
-def get_enabled_accounts_with_labels(exclude_local=True):
+def get_enabled_accounts_with_labels(exclude_local=True, connected_only=False,
+                                     private_storage_only=False):
     """
     Returns a list with [account, account_label] entries.
     Order by account_label
     """
     accounts = []
     for acc in connections:
-        if not exclude_local or acc != 'Local':
-            acc_label = config.get_per(
-                'accounts', acc, 'account_label') or acc
-            accounts.append([acc, acc_label])
+        if exclude_local and account_is_zeroconf(acc):
+            continue
+        if connected_only and not account_is_connected(acc):
+            continue
+        if private_storage_only and not account_supports_private_storage(acc):
+            continue
+
+        acc_label = config.get_per(
+            'accounts', acc, 'account_label') or acc
+        accounts.append([acc, acc_label])
+
     accounts.sort(key=lambda xs: str.lower(xs[1]))
     return accounts
+
+def account_is_zeroconf(account):
+    return connections[account].is_zeroconf
+
+def account_supports_private_storage(account):
+    return connections[account].private_storage_supported
 
 def account_is_connected(account):
     if account not in connections:

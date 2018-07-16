@@ -1886,19 +1886,14 @@ class ManageBookmarksWindow:
 
         # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Password, Nick,
         # Show_Status
-        self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str)
+        self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str, str, str, str)
         self.treestore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Store bookmarks in treeview.
-        for account in app.connections:
-            if app.connections[account].connected <= 1:
-                continue
-            if app.connections[account].is_zeroconf:
-                continue
-            if not app.connections[account].private_storage_supported:
-                continue
+        for account, account_label in app.get_enabled_accounts_with_labels(
+                connected_only=True, private_storage_only=True):
             iter_ = self.treestore.append(None, [None, account, None, None,
-                    None, None, None, None])
+                    None, None, None, None, account_label])
 
             con = app.connections[account]
             bookmarks = con.get_module('Bookmarks').bookmarks
@@ -1927,7 +1922,8 @@ class ManageBookmarksWindow:
                                 minimize,
                                 bookmark['password'],
                                 bookmark['nick'],
-                                print_status ])
+                                print_status,
+                                bookmark['name'] ])
 
         self.print_status_combobox = self.xml.get_object('print_status_combobox')
         model = Gtk.ListStore(str, str)
@@ -1935,9 +1931,8 @@ class ManageBookmarksWindow:
         self.option_list = {'': _('Default'), 'all': Q_('?print_status:All'),
                 'in_and_out': _('Enter and leave only'),
                 'none': Q_('?print_status:None')}
-        opts = sorted(self.option_list.keys())
-        for opt in opts:
-            model.append([self.option_list[opt], opt])
+        for opt, label in sorted(self.option_list.items()):
+            model.append([label, opt])
 
         self.print_status_combobox.set_model(model)
         self.print_status_combobox.set_active(1)
@@ -1947,7 +1942,7 @@ class ManageBookmarksWindow:
         self.view.expand_all()
 
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=1)
+        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=8)
         self.view.append_column(column)
 
         self.selection = self.view.get_selection()
@@ -1968,6 +1963,8 @@ class ManageBookmarksWindow:
         self.pass_entry.connect('changed', self.on_pass_entry_changed)
         self.autojoin_checkbutton = self.xml.get_object('autojoin_checkbutton')
         self.minimize_checkbutton = self.xml.get_object('minimize_checkbutton')
+        self.settings_box = self.xml.get_object('settings_box')
+        self.remove_bookmark_button = self.xml.get_object('remove_bookmark_button')
 
         self.xml.connect_signals(self)
         self.window.show_all()
@@ -2001,8 +1998,9 @@ class ManageBookmarksWindow:
 
         account = model[add_to][1]
         nick = app.nicks[account]
-        iter_ = self.treestore.append(add_to, [account, _('New Group Chat'),
-            '@', False, False, '', nick, 'in_and_out'])
+        label = _('New Group Chat')
+        iter_ = self.treestore.append(add_to, [account, label,
+            '@', False, False, '', nick, 'in_and_out', label])
 
         self.view.expand_row(model.get_path(add_to), True)
         self.view.set_cursor(model.get_path(iter_))
@@ -2023,6 +2021,7 @@ class ManageBookmarksWindow:
         model.remove(iter_)
         self.selection.unselect_all()
         self.clear_fields()
+        self.set_sensitive_all(False)
         self.ignore_events = False
 
     def check_valid_bookmark(self):
@@ -2099,20 +2098,16 @@ class ManageBookmarksWindow:
             # this will be None, so we will just:
             return
 
-        widgets = [ self.title_entry, self.nick_entry, self.room_entry,
-                self.server_entry, self.pass_entry, self.autojoin_checkbutton,
-                self.minimize_checkbutton, self.print_status_combobox]
+
 
         if model.iter_parent(iter_):
             # make the fields sensitive
-            for field in widgets:
-                field.set_sensitive(True)
+            self.set_sensitive_all(True)
         else:
             # Top-level has no data (it's the account fields)
             # clear fields & make them insensitive
             self.clear_fields()
-            for field in widgets:
-                field.set_sensitive(False)
+            self.set_sensitive_all(False)
             return
 
         # Fill in the data for childs
@@ -2238,7 +2233,7 @@ class ManageBookmarksWindow:
         if iter_:
             model[iter_][5] = self.pass_entry.get_text()
 
-    def on_autojoin_checkbutton_toggled(self, widget):
+    def on_autojoin_checkbutton_toggled(self, widget, *args):
         if self.ignore_events:
             return
         (model, iter_) = self.selection.get_selected()
@@ -2246,7 +2241,7 @@ class ManageBookmarksWindow:
             model[iter_][3] = self.autojoin_checkbutton.get_active()
             self.minimize_checkbutton.set_sensitive(model[iter_][3])
 
-    def on_minimize_checkbutton_toggled(self, widget):
+    def on_minimize_checkbutton_toggled(self, widget, *args):
         if self.ignore_events:
             return
         (model, iter_) = self.selection.get_selected()
@@ -2271,6 +2266,13 @@ class ManageBookmarksWindow:
         self.autojoin_checkbutton.set_active(False)
         self.minimize_checkbutton.set_active(False)
         self.print_status_combobox.set_active(1)
+
+    def set_sensitive_all(self, sensitive):
+        widgets = [ self.title_entry, self.nick_entry, self.room_entry,
+                self.server_entry, self.pass_entry, self.settings_box,
+                self.remove_bookmark_button ]
+        for field in widgets:
+            field.set_sensitive(sensitive)
 
 class AccountCreationWizardWindow:
     def __init__(self):
