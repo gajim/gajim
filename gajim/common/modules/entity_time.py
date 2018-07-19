@@ -91,7 +91,8 @@ class EntityTime:
             # Remove the trailing "+00:00"
             utc_time = utc_time[:-6]
         else:
-            log.warning('Wrong timezone defintion: %s', utc_time)
+            log.warning('Wrong timezone defintion: %s %s',
+                        utc_time, stanza.getFrom())
             return
 
         try:
@@ -101,7 +102,8 @@ class EntityTime:
                 t = datetime.datetime.strptime(utc_time,
                                                '%Y-%m-%dT%H:%M:%S.%f')
             except ValueError as e:
-                log.warning('Wrong time format: %s', e)
+                log.warning('Wrong time format: %s %s',
+                            e, stanza.getFrom())
                 return
 
         t = t.replace(tzinfo=UTC())
