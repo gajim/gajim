@@ -863,9 +863,8 @@ class DecryptedMessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
         self.get_oob_data(self.stanza)
 
-        replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
-        if replace:
-            self.correct_id = replace.getAttr('id')
+        from gajim.common.modules.misc import parse_correction
+        self.correct_id = parse_correction(self.stanza)
 
         return True
 
@@ -978,9 +977,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                                     [self.stanza, self.msg_obj], 0)
                                 return
 
-        replace = self.stanza.getTag('replace', namespace=nbxmpp.NS_CORRECT)
-        if replace:
-            self.correct_id = replace.getAttr('id')
+        from gajim.common.modules.misc import parse_correction
+        self.correct_id = parse_correction(self.stanza)
 
         return True
 
