@@ -12,7 +12,7 @@ from gajim.common import app
 from gajim.common import nec
 from gajim.common import ged
 from gajim.common.nec import NetworkEvent
-from gajim.common.connection_handlers_events import MessageReceivedEvent
+from gajim.common.modules.message import MessageReceivedEvent
 from gajim.common.connection_handlers_events import DecryptedMessageReceivedEvent
 import nbxmpp
 

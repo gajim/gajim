@@ -18,6 +18,7 @@ import logging
 
 import nbxmpp
 
+from gajim.common import app
 from gajim.common.modules.date_and_time import parse_datetime
 
 log = logging.getLogger('gajim.c.m.misc')
@@ -111,3 +112,38 @@ def parse_correction(stanza):
         if id_ is not None:
             return id_
         log.warning('No id attr found: %s' % stanza)
+
+
+# XEP-0224: Attention
+
+def parse_attention(stanza):
+    attention = stanza.getTag('attention', namespace=nbxmpp.NS_ATTENTION)
+    if attention is None:
+        return False
+    delayed = stanza.getTag('x', namespace=nbxmpp.NS_DELAY2)
+    if delayed is not None:
+        return False
+    return True
+
+
+# XEP-0258: Security Labels in XMPP
+
+def parse_securitylabel(stanza):
+    seclabel = stanza.getTag('securitylabel', namespace=nbxmpp.NS_SECLABEL)
+    if seclabel is None:
+        return None
+    return seclabel.getTag('displaymarking')
+
+
+# XEP-0004: Data Forms
+
+def parse_form(stanza):
+    return stanza.getTag('x', namespace=nbxmpp.NS_DATA)
+
+
+# XEP-0071: XHTML-IM
+
+def parse_xhtml(stanza):
+    if app.config.get('ignore_incoming_xhtml'):
+        return None
+    return stanza.getXHTML()

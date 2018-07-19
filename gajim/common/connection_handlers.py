@@ -292,22 +292,10 @@ class ConnectionHandlersBase:
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
-        # XEPs that are based on Message
-        self._message_namespaces = set([nbxmpp.NS_HTTP_AUTH,
-                                        nbxmpp.NS_PUBSUB_EVENT,
-                                        nbxmpp.NS_ROSTERX,
-                                        nbxmpp.NS_MAM_1,
-                                        nbxmpp.NS_MAM_2,
-                                        nbxmpp.NS_CONFERENCE])
-
         app.ged.register_event_handler('iq-error-received', ged.CORE,
             self._nec_iq_error_received)
         app.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
-        app.ged.register_event_handler('message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.register_event_handler('decrypted-message-received', ged.CORE,
-            self._nec_decrypted_message_received)
         app.ged.register_event_handler('gc-message-received', ged.CORE,
             self._nec_gc_message_received)
 
@@ -316,10 +304,6 @@ class ConnectionHandlersBase:
             self._nec_iq_error_received)
         app.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
-        app.ged.remove_event_handler('message-received', ged.CORE,
-            self._nec_message_received)
-        app.ged.remove_event_handler('decrypted-message-received', ged.CORE,
-            self._nec_decrypted_message_received)
         app.ged.remove_event_handler('gc-message-received', ged.CORE,
             self._nec_gc_message_received)
 
@@ -448,96 +432,10 @@ class ConnectionHandlersBase:
                                             message=obj.status,
                                             show=show)
 
-    def _nec_message_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        app.plugin_manager.extension_point(
-            'decrypt', self, obj, self._on_message_received)
-        if not obj.encrypted:
-            eme = parse_eme(obj.stanza)
-            if eme is not None:
-                obj.msgtxt = eme
-            self._on_message_received(obj)
-
-    def _on_message_received(self, obj):
-        app.nec.push_incoming_event(
-            DecryptedMessageReceivedEvent(
-                None, conn=self, msg_obj=obj, stanza_id=obj.unique_id))
-
-    def _nec_decrypted_message_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        # Receipt requested
-        # TODO: We shouldn't answer if we're invisible!
-        contact = app.contacts.get_contact(self.name, obj.jid)
-        nick = obj.resource
-        gc_contact = app.contacts.get_gc_contact(self.name, obj.jid, nick)
-        if obj.sent:
-            jid_to = obj.stanza.getFrom()
-        else:
-            jid_to = obj.stanza.getTo()
-        reply = False
-        if not jid_to:
-            reply = True
-        else:
-            fjid_to = str(jid_to)
-            if self.name != 'Local':
-                # Dont check precis for zeroconf
-                fjid_to = helpers.parse_jid(str(jid_to))
-            jid_to = app.get_jid_without_resource(fjid_to)
-            if jid_to == app.get_jid_from_account(self.name):
-                reply = True
-
-        if obj.jid != app.get_jid_from_account(self.name):
-            if obj.receipt_request_tag and app.config.get_per('accounts',
-            self.name, 'answer_receipts') and ((contact and contact.sub \
-            not in ('to', 'none')) or gc_contact) and obj.mtype != 'error' and \
-            reply:
-                receipt = nbxmpp.Message(to=obj.fjid, typ='chat')
-                receipt.setTag('received', namespace='urn:xmpp:receipts',
-                    attrs={'id': obj.id_})
-
-                if obj.thread_id:
-                    receipt.setThread(obj.thread_id)
-                self.connection.send(receipt)
-
-        # We got our message's receipt
-        if obj.receipt_received_tag and app.config.get_per('accounts',
-        self.name, 'request_receipt'):
-            ctrl = None
-            if obj.session is not None:
-                ctrl = obj.session.control
-            if not ctrl:
-                # Received <message> doesn't have the <thread> element
-                # or control is not bound to session?
-                # --> search for it
-                ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
-                    obj.conn.name, obj.resource)
-            
-            if ctrl:
-                id_ = obj.receipt_received_tag.getAttr('id')
-                if not id_:
-                    # old XEP implementation
-                    id_ = obj.id_
-                ctrl.conv_textview.show_xep0184_ack(id_)
-
-        if obj.mtype == 'error':
-            if not obj.msgtxt:
-                obj.msgtxt = _('message')
-            self.dispatch_error_message(obj.stanza, obj.msgtxt,
-                obj.session, obj.fjid, obj.timestamp)
-            return True
-        elif obj.mtype == 'groupchat':
-            app.nec.push_incoming_event(GcMessageReceivedEvent(None,
-                conn=self, msg_obj=obj, stanza_id=obj.unique_id))
-            return True
-
     def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = muc_caps_cache.get_mam_namespace(room_jid)
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
-            log.warning('%s announces mam:2 without stanza-id')
+            log.warning('%s announces mam:2 without stanza-id', room_jid)
 
     def _nec_gc_message_received(self, obj):
         if obj.conn.name != self.name:
@@ -743,7 +641,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         self.continue_connect_info = None
 
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
-        app.nec.register_incoming_event(MessageReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
         app.ged.register_event_handler('roster-set-received',
@@ -938,29 +835,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         if obj.version:
             app.config.set_per('accounts', self.name, 'roster_version',
                 obj.version)
-
-    def _messageCB(self, con, stanza):
-        """
-        Called when we receive a message
-        """
-
-        # Check if a child of the message contains any
-        # of these namespaces, so we dont execute the
-        # message handler for them.
-        # They have defined their own message handlers
-        # but nbxmpp executes less common handlers last
-        if self._message_namespaces & set(stanza.getProperties()):
-            return
-
-        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
-            if muc_user.getChildren():
-                # Not a PM, handled by MUC module
-                return
-        log.debug('MessageCB')
-
-        app.nec.push_incoming_event(NetworkEvent('raw-message-received',
-            conn=self, stanza=stanza, account=self.name))
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza
@@ -1282,7 +1156,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
         # that defines handlers
-        con.RegisterHandler('message', self._messageCB)
         con.RegisterHandler('presence', self._presenceCB)
         con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)

@@ -241,6 +241,9 @@ class ChatControl(ChatControlBase):
         app.ged.register_event_handler(
             'decrypted-message-received',
             ged.GUI1, self._nec_decrypted_message_received)
+        app.ged.register_event_handler(
+            'receipt-received',
+            ged.GUI1, self._receipt_received)
 
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
@@ -984,6 +987,14 @@ class ChatControl(ChatControlBase):
         else:
             self.old_msg_kind = kind
 
+    def _receipt_received(self, event):
+        if event.conn.name != self.account:
+            return
+        if event.jid != self.contact.jid:
+            return
+
+        self.conv_textview.show_xep0184_ack(event.receipt_id)
+
     def get_tab_label(self):
         unread = ''
         if self.resource:
@@ -1153,6 +1164,9 @@ class ChatControl(ChatControlBase):
         app.ged.remove_event_handler(
             'decrypted-message-received',
             ged.GUI1, self._nec_decrypted_message_received)
+        app.ged.remove_event_handler(
+            'receipt-received',
+            ged.GUI1, self._receipt_received)
 
         self.unsubscribe_events()
 

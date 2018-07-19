@@ -18,7 +18,7 @@ from pathlib import Path
 
 log = logging.getLogger('gajim.c.m')
 
-ZEROCONF_MODULES = ['adhoc_commands']
+ZEROCONF_MODULES = ['adhoc_commands', 'receipts']
 
 imported_modules = []
 _modules = {}

@@ -27,6 +27,8 @@ from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_eme
+from gajim.common.modules.util import is_self_message
+from gajim.common.modules.util import is_muc_pm
 
 log = logging.getLogger('gajim.c.m.archiving')
 
@@ -60,28 +62,6 @@ class MAM:
         else:
             if archive_jid.bareMatch(expected_archive):
                 return archive_jid
-
-    @staticmethod
-    def _is_self_message(message, groupchat):
-        if groupchat:
-            return False
-        frm = message.getFrom()
-        to = message.getTo()
-        return frm.bareMatch(to)
-
-    @staticmethod
-    def _is_muc_pm(message, groupchat, with_):
-        if groupchat:
-            return False
-        muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
-            return muc_user.getChildren() == []
-        else:
-            # muc#user namespace was added in MUC 1.28 so we need a fallback
-            # Check if we know the jid, otherwise disco it
-            if app.logger.jid_is_room_jid(with_.getStripped()):
-                return True
-            return False
 
     def _get_unique_id(self, result, message, groupchat, self_message, muc_pm):
         stanza_id = result.getAttr('id')
@@ -150,8 +130,8 @@ class MAM:
         else:
             event_attrs.update(self._parse_chat_attrs(message))
 
-        self_message = self._is_self_message(message, groupchat)
-        muc_pm = self._is_muc_pm(message, groupchat, event_attrs['with_'])
+        self_message = is_self_message(message, groupchat)
+        muc_pm = is_muc_pm(message, event_attrs['with_'], groupchat)
 
         stanza_id, origin_id = self._get_unique_id(
             result, message, groupchat, self_message, muc_pm)

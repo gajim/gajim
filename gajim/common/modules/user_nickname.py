@@ -78,5 +78,12 @@ class UserNickname(AbstractPEPModule):
                     'accounts', self._account, 'name')
 
 
+def parse_nickname(stanza):
+    nick = stanza.getTag('nick', namespace=nbxmpp.NS_NICK)
+    if nick is None:
+        return ''
+    return nick.getData()
+
+
 def get_instance(*args, **kwargs):
     return UserNickname(*args, **kwargs), 'UserNickname'
