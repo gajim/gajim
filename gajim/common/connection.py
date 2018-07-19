@@ -346,12 +346,6 @@ class CommonConnection:
                 if obj.message and request:
                     msg_iq.setTag('request', namespace=nbxmpp.NS_RECEIPTS)
 
-            if obj.forward_from:
-                addresses = msg_iq.addChild('addresses',
-                    namespace=nbxmpp.NS_ADDRESS)
-                addresses.addChild('address', attrs = {'type': 'ofrom',
-                    'jid': obj.forward_from})
-
             if obj.session:
                 # XEP-0201
                 obj.session.last_send = time.time()
@@ -373,9 +367,6 @@ class CommonConnection:
 
     def log_message(self, obj, jid):
         if not obj.is_loggable:
-            return
-
-        if obj.forward_from:
             return
 
         if obj.session and not obj.session.is_loggable():

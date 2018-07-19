@@ -683,20 +683,6 @@ class MessageReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                                          groupchat=type_ == 'groupchat'):
                 return
 
-        address_tag = self.stanza.getTag('addresses',
-            namespace=nbxmpp.NS_ADDRESS)
-        # Be sure it comes from one of our resource, else ignore address element
-        if address_tag and self.jid == app.get_jid_from_account(account):
-            address = address_tag.getTag('address', attrs={'type': 'ofrom'})
-            if address:
-                try:
-                    self.fjid = helpers.parse_jid(address.getAttr('jid'))
-                except helpers.InvalidFormat:
-                    log.warning('Invalid JID: %s, ignoring it',
-                                address.getAttr('jid'))
-                    return
-                self.jid = app.get_jid_without_resource(self.fjid)
-
         self.thread_id = self.stanza.getThread()
         self.mtype = self.stanza.getType()
         if not self.mtype or self.mtype not in ('chat', 'groupchat', 'error'):
@@ -1921,7 +1907,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         self.xhtml = None
         self.label = None
         self.session = None
-        self.forward_from = None
         self.form_node = None
         self.delayed = None
         self.callback = None
