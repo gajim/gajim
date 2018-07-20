@@ -53,6 +53,9 @@ class ModuleMock:
         self.blocked_groups = []
         self.blocked_all = False
 
+        # Bookmarks
+        self.bookmarks = {}
+
     def __getattr__(self, key):
         def _mock(self, *args, **kwargs):
             return
