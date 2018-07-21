@@ -16,7 +16,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import helpers
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.gtk import ErrorDialog

@@ -449,7 +449,7 @@ class MucCapsCache:
                 features.append(child.getAttr('var'))
             elif child.getName() == 'x':
                 if child.getNamespace() == nbxmpp.NS_DATA:
-                    from gajim.common import dataforms
+                    from gajim.common.modules import dataforms
                     data.append(dataforms.ExtendForm(node=child))
 
         if nbxmpp.NS_MUC not in features:

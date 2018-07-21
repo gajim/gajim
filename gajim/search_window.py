@@ -24,7 +24,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import ged
 
 from gajim import gtkgui_helpers

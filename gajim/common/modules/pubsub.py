@@ -25,7 +25,7 @@ import logging
 import nbxmpp
 
 from gajim.common import app
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.pubsub')

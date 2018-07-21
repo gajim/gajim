@@ -22,7 +22,7 @@
 from gajim import gtkgui_helpers
 from gajim import dataforms_widget
 
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import app
 import nbxmpp
 

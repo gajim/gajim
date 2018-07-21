@@ -16,10 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-This module contains wrappers for different parts of data forms (XEP-0004). For
-information how to use them, read documentation
-"""
+# XEP-0004: Data Forms
 
 import nbxmpp
 

@@ -55,7 +55,7 @@ from enum import IntEnum, unique
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common import contacts

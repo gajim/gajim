@@ -62,7 +62,7 @@ from gajim.gtk import WarningDialog
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import connection
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.accounts_window import AccountsWindow

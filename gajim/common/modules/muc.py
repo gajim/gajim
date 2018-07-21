@@ -20,7 +20,7 @@ import logging
 import nbxmpp
 
 from gajim.common import i18n
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.nec import NetworkIncomingEvent

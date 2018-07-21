@@ -29,12 +29,13 @@ from gi.repository import Gtk
 
 import nbxmpp
 from gajim.common import app
-from gajim.common import dataforms
+from gajim.common.modules import dataforms
 from gajim.common import ged
 
 from gajim import gtkgui_helpers
 from gajim.gtk import HigDialog
 from gajim import dataforms_widget
+
 
 class CommandWindow:
     """
