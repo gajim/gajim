@@ -165,6 +165,9 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.blocking_supported, nbxmpp.NS_BLOCKING, None),
             Feature('XEP-0198: Stream Management',
                     con.sm.enabled, nbxmpp.NS_STREAM_MGMT, None),
+            Feature('XEP-0258: Security Labels in XMPP',
+                    con.get_module('SecLabels').supported,
+                    nbxmpp.NS_SECLABEL, None),
             Feature('XEP-0280: Message Carbons',
                     con.carbons_available, nbxmpp.NS_CARBONS, carbons_enabled),
             Feature('XEP-0313: Message Archive Management',
@@ -214,6 +217,10 @@ class FeatureItem(Gtk.Grid):
         self.add(self.feature_label)
 
     def set_feature(self, available, enabled):
+        self.icon.get_style_context().remove_class('error-color')
+        self.icon.get_style_context().remove_class('warning-color')
+        self.icon.get_style_context().remove_class('success-color')
+
         if not available:
             self.icon.set_from_icon_name('window-close-symbolic',
                                          Gtk.IconSize.MENU)
