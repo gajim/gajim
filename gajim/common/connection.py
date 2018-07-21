@@ -103,9 +103,6 @@ class CommonConnection:
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
 
-        self.seclabel_supported = False
-        self.seclabel_catalogues = {}
-
         self.pep_supported = False
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
@@ -1617,7 +1614,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
             if obj.fjid == hostname:
                 if nbxmpp.NS_SECLABEL in obj.features:
-                    self.seclabel_supported = True
+                    self.get_module('SecLabels').supported = True
                 if nbxmpp.NS_VCARD in obj.features:
                     self.vcard_supported = True
                     get_action(self.name + '-profile').set_enabled(True)
@@ -1896,16 +1893,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if prompt:
             query.setTagData('prompt', prompt)
         self.connection.SendAndCallForResponse(iq, _on_prompt_result)
-
-    def seclabel_catalogue(self, to, callback):
-        if not app.account_is_connected(self.name):
-            return
-        self.seclabel_catalogue_request(to, callback)
-        server = app.get_jid_from_account(self.name).split("@")[1] # Really, no better way?
-        iq = nbxmpp.Iq(typ='get', to=server)
-        iq2 = iq.addChild(name='catalog', namespace=nbxmpp.NS_SECLABEL_CATALOG)
-        iq2.setAttr('to', to)
-        self.connection.send(iq)
 
     def bookmarks_available(self):
         if self.private_storage_supported:

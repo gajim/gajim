@@ -670,11 +670,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                     form_node=self.msg_obj.form_node)
             return
 
-        self.displaymarking = None
-        seclabel = self.stanza.getTag('securitylabel')
-        if seclabel and seclabel.getNamespace() == nbxmpp.NS_SECLABEL:
-            # Ignore message from room in which we are not
-            self.displaymarking = seclabel.getTag('displaymarking')
+        from gajim.common.modules.security_labels import parse_securitylabel
+        self.displaymarking = parse_securitylabel(self.stanza)
 
         self.captcha_form = None
         captcha_tag = self.stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)

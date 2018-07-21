@@ -207,19 +207,23 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.seclabel_combo.pack_start(cell, True)
         # text to show is in in first column of liststore
         self.seclabel_combo.add_attribute(cell, 'text', 0)
-        if app.connections[self.account].seclabel_supported:
-            app.connections[self.account].seclabel_catalogue(self.contact.jid, self.on_seclabels_ready)
+        con = app.connections[self.account]
+        if con.get_module('SecLabels').supported:
+            con.get_module('SecLabels').request_catalog(self.contact.jid)
 
-    def on_seclabels_ready(self):
+    def _sec_labels_received(self, event):
+        if event.account != self.account:
+            return
+        if event.jid != self.contact.jid:
+            return
         lb = self.seclabel_combo.get_model()
         lb.clear()
         i = 0
         sel = 0
-        catalogue = app.connections[self.account].seclabel_catalogues[
-            self.contact.jid]
-        for label in catalogue[2]:
+        label_, labellist, default = event.catalog
+        for label in labellist:
             lb.append([label])
-            if label == catalogue[3]:
+            if label == default:
                 sel = i
             i += 1
         self.seclabel_combo.set_active(sel)
@@ -376,6 +380,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._nec_ping)
         app.ged.register_event_handler('ping-error', ged.GUI1,
             self._nec_ping)
+        app.ged.register_event_handler('sec-label-received', ged.GUI1,
+            self._sec_labels_received)
 
         # This is basically a very nasty hack to surpass the inability
         # to properly use the super, because of the old code.
@@ -550,6 +556,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             'chat_control_base_draw_banner', self)
         app.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
+        app.ged.remove_event_handler('sec-label-received', ged.GUI1,
+            self._sec_labels_received)
 
     def on_msg_textview_populate_popup(self, textview, menu):
         """
@@ -782,9 +790,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.seclabel_combo is not None:
             idx = self.seclabel_combo.get_active()
             if idx != -1:
-                cat = app.connections[self.account].seclabel_catalogues[self.contact.jid]
-                lname = cat[2][idx]
-                label = cat[1][lname]
+                con = app.connections[self.account]
+                catalog = con.get_module('SecLabels').get_catalog(self.contact.jid)
+                labels, label_list, _ = catalog
+                lname = label_list[idx]
+                label = labels[lname]
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,

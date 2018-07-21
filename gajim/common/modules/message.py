@@ -22,6 +22,7 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
+from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.chatstates import parse_chatstate
 from gajim.common.modules.carbons import parse_carbon
@@ -29,7 +30,6 @@ from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
-from gajim.common.modules.misc import parse_securitylabel
 from gajim.common.modules.misc import parse_form
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml

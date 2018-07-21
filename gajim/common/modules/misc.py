@@ -126,15 +126,6 @@ def parse_attention(stanza):
     return True
 
 
-# XEP-0258: Security Labels in XMPP
-
-def parse_securitylabel(stanza):
-    seclabel = stanza.getTag('securitylabel', namespace=nbxmpp.NS_SECLABEL)
-    if seclabel is None:
-        return None
-    return seclabel.getTag('displaymarking')
-
-
 # XEP-0004: Data Forms
 
 def parse_form(stanza):

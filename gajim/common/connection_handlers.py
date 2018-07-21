@@ -784,37 +784,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                 conn=self, stanza=obj.stanza))
             return True
 
-    def _SecLabelCB(self, con, iq_obj):
-        """
-        Security Label callback, used for catalogues.
-        """
-        log.debug('SecLabelCB')
-        query = iq_obj.getTag('catalog')
-        to = query.getAttr('to')
-        items = query.getTags('item')
-        labels = {}
-        ll = []
-        default = None
-        for item in items:
-            label = item.getAttr('selector')
-            labels[label] = item.getTag('securitylabel')
-            ll.append(label)
-            if item.getAttr('default') == 'true':
-                default = label
-        if to not in self.seclabel_catalogues:
-            self.seclabel_catalogues[to] = [[], None, None, None]
-        self.seclabel_catalogues[to][1] = labels
-        self.seclabel_catalogues[to][2] = ll
-        self.seclabel_catalogues[to][3] = default
-        for callback in self.seclabel_catalogues[to][0]:
-            callback()
-        self.seclabel_catalogues[to][0] = []
-
-    def seclabel_catalogue_request(self, to, callback):
-        if to not in self.seclabel_catalogues:
-            self.seclabel_catalogues[to] = [[], None, None, None]
-        self.seclabel_catalogues[to][0].append(callback)
-
     def _rosterSetCB(self, con, iq_obj):
         log.debug('rosterSetCB')
         app.nec.push_incoming_event(RosterSetReceivedEvent(None, conn=self,
@@ -1169,8 +1138,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
             nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._SecLabelCB, 'result',
-            nbxmpp.NS_SECLABEL_CATALOG)
         con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
