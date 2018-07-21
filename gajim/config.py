@@ -1644,8 +1644,8 @@ class GroupchatConfigWindow:
             sw = Gtk.ScrolledWindow()
             sw.add(self.affiliation_treeview[affiliation])
             add_on_vbox.pack_start(sw, True, True, 0)
-            app.connections[self.account].get_affiliation_list(self.room_jid,
-                affiliation)
+            con = app.connections[self.account]
+            con.get_module('MUC').get_affiliation(self.room_jid, affiliation)
 
         self.xml.connect_signals(self)
         self.window.connect('delete-event', self.on_cancel_button_clicked)
@@ -1653,7 +1653,8 @@ class GroupchatConfigWindow:
 
     def on_cancel_button_clicked(self, *args):
         if self.form:
-            app.connections[self.account].cancel_gc_config(self.room_jid)
+            con = app.connections[self.account]
+            con.get_module('MUC').cancel_config(self.room_jid)
         self.window.destroy()
 
     def on_cell_edited(self, cell, path, new_text):
@@ -1728,7 +1729,8 @@ class GroupchatConfigWindow:
     def on_ok_button_clicked(self, widget):
         if self.form:
             form = self.data_form_widget.data_form
-            app.connections[self.account].send_gc_config(self.room_jid, form)
+            con = app.connections[self.account]
+            con.get_module('MUC').set_config(self.room_jid, form)
         for affiliation in self.affiliation_labels.keys():
             users_dict = {}
             actual_jid_list = []
@@ -1751,7 +1753,8 @@ class GroupchatConfigWindow:
                 if jid not in actual_jid_list:
                     users_dict[jid] = {'affiliation': 'none'}
             if users_dict:
-                app.connections[self.account].send_gc_affiliation_list(
+                con = app.connections[self.account]
+                con.get_module('MUC').set_affiliation(
                     self.room_jid, users_dict)
         self.window.destroy()
 

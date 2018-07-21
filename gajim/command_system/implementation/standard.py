@@ -284,7 +284,8 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Display or change a group chat topic"))
     def topic(self, new_topic):
         if new_topic:
-            self.connection.send_gc_subject(self.room_jid, new_topic)
+            self.connection.get_module('MUC').set_subject(
+                self.room_jid, new_topic)
         else:
             return self.subject
 
@@ -314,18 +315,22 @@ class StandardGroupChatCommands(CommandContainer):
 
     If given nickname is not found it will be treated as a JID.
     """))
-    def ban(self, who, reason):
+    def ban(self, who, reason=''):
         if who in app.contacts.get_nick_list(self.account, self.room_jid):
             contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
             who = contact.jid
-        self.connection.gc_set_affiliation(self.room_jid, who, 'outcast', reason or str())
+        self.connection.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {who: {'affiliation': 'outcast',
+                   'reason': reason}})
 
     @command(raw=True, empty=True)
     @doc(_("Kick user by a nick from a groupchat"))
     def kick(self, who, reason):
         if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
-        self.connection.gc_set_role(self.room_jid, who, 'none', reason or str())
+        self.connection.get_module('MUC').set_role(
+            self.room_jid, who, 'none', reason or str())
 
     @command(raw=True)
     #Do not translate moderator, participant, visitor, none
@@ -337,7 +342,7 @@ class StandardGroupChatCommands(CommandContainer):
             raise CommandError(_("Invalid role given"))
         if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
-        self.connection.gc_set_role(self.room_jid, who, role)
+        self.connection.get_module('MUC').set_role(self.room_jid, who, role)
 
     @command(raw=True)
     #Do not translate owner, admin, member, outcast, none
@@ -347,11 +352,13 @@ class StandardGroupChatCommands(CommandContainer):
     def affiliate(self, who, affiliation):
         if affiliation not in ('owner', 'admin', 'member', 'outcast', 'none'):
             raise CommandError(_("Invalid affiliation given"))
-        if not who in app.contacts.get_nick_list(self.account, self.room_jid):
+        if who not in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))
         contact = app.contacts.get_gc_contact(self.account, self.room_jid, who)
-        self.connection.gc_set_affiliation(self.room_jid, contact.jid,
-            affiliation)
+
+        self.connection.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {contact.jid: {'affiliation': affiliation}})
 
     @command
     @doc(_("Display names of all group chat occupants"))

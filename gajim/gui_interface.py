@@ -606,14 +606,14 @@ class Interface:
                         f.value = True
                     elif f.var == 'public_list':
                         f.value = False
-                obj.conn.send_gc_config(obj.jid, obj.dataform.get_purged())
+                obj.conn.get_module('MUC').set_config(obj.jid, obj.dataform.get_purged())
                 user_list = {}
                 for jid in app.automatic_rooms[account][obj.jid]['invities']:
                     user_list[jid] = {'affiliation': 'member'}
-                obj.conn.send_gc_affiliation_list(obj.jid, user_list)
+                obj.conn.get_module('MUC').set_affiliation(obj.jid, user_list)
             else:
                 # use default configuration
-                obj.conn.send_gc_config(obj.jid, obj.form_node)
+                obj.conn.get_module('MUC').set_config(obj.jid, obj.form_node)
             # invite contacts
             # check if it is necessary to add <continue />
             continue_tag = False
@@ -637,8 +637,8 @@ class Interface:
     def handle_event_gc_affiliation(self, obj):
         #('GC_AFFILIATION', account, (room_jid, users_dict))
         account = obj.conn.name
-        if obj.jid in self.instances[account]['gc_config']:
-            self.instances[account]['gc_config'][obj.jid].\
+        if obj.room_jid in self.instances[account]['gc_config']:
+            self.instances[account]['gc_config'][obj.room_jid].\
                 affiliation_list_received(obj.users_dict)
 
     def handle_event_gc_decline(self, obj):

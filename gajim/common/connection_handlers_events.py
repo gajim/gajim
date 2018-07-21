@@ -267,48 +267,6 @@ class RosterInfoEvent(nec.NetworkIncomingEvent):
     def init(self):
         self.avatar_sha = None
 
-class MucOwnerReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'muc-owner-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        qp = self.stanza.getQueryPayload()
-        self.form_node = None
-        for q in qp:
-            if q.getNamespace() == nbxmpp.NS_DATA:
-                self.form_node = q
-                self.dataform = dataforms.ExtendForm(node=self.form_node)
-                return True
-
-class MucAdminReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'muc-admin-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        items = self.stanza.getTag('query',
-            namespace=nbxmpp.NS_MUC_ADMIN).getTags('item')
-        self.users_dict = {}
-        for item in items:
-            if item.has_attr('jid') and item.has_attr('affiliation'):
-                try:
-                    jid = helpers.parse_jid(item.getAttr('jid'))
-                except helpers.InvalidFormat:
-                    log.warning('Invalid JID: %s, ignoring it' % \
-                        item.getAttr('jid'))
-                    continue
-                affiliation = item.getAttr('affiliation')
-                self.users_dict[jid] = {'affiliation': affiliation}
-                if item.has_attr('nick'):
-                    self.users_dict[jid]['nick'] = item.getAttr('nick')
-                if item.has_attr('role'):
-                    self.users_dict[jid]['role'] = item.getAttr('role')
-                reason = item.getTagData('reason')
-                if reason:
-                    self.users_dict[jid]['reason'] = reason
-        return True
-
 class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'iq-error-received'
     base_network_events = []

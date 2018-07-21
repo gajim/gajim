@@ -2143,46 +2143,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             chatstate=None, automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
 
-    def send_gc_subject(self, jid, subject):
-        if not app.account_is_connected(self.name):
-            return
-        msg_iq = nbxmpp.Message(jid, typ='groupchat', subject=subject)
-        self.connection.send(msg_iq)
-
-    def request_gc_config(self, room_jid):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get', queryNS=nbxmpp.NS_MUC_OWNER,
-            to=room_jid)
-        self.add_lang(iq)
-        self.connection.send(iq)
-
-    def cancel_gc_config(self, room_jid):
-        if not app.account_is_connected(self.name):
-            return
-        cancel = nbxmpp.Node(tag='x', attrs={'xmlns': nbxmpp.NS_DATA,
-                                             'type': 'cancel'})
-        iq = nbxmpp.Iq(typ='set',
-                       queryNS=nbxmpp.NS_MUC_OWNER,
-                       payload=cancel,
-                       to=room_jid)
-        self.connection.send(iq)
-
-    def destroy_gc_room(self, room_jid, reason = '', jid = ''):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', queryNS=nbxmpp.NS_MUC_OWNER,
-            to=room_jid)
-        destroy = iq.setQuery().setTag('destroy')
-        if reason:
-            destroy.setTagData('reason', reason)
-        if jid:
-            destroy.setAttr('jid', jid)
-        self.connection.send(iq)
-        i = 0
-        self.get_module('Bookmarks').bookmarks.pop(jid, None)
-        self.get_module('Bookmarks').store_bookmarks()
-
     def send_gc_status(self, nick, jid, show, status, auto=False):
         if not app.account_is_connected(self.name):
             return
@@ -2212,63 +2172,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # send instantly so when we go offline, status is sent to gc before we
         # disconnect from jabber server
         self.connection.send(p)
-
-    def gc_set_role(self, room_jid, nick, role, reason=''):
-        """
-        Role is for all the life of the room so it's based on nick
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery().setTag('item')
-        item.setAttr('nick', nick)
-        item.setAttr('role', role)
-        if reason:
-            item.addChild(name='reason', payload=reason)
-        self.connection.send(iq)
-
-    def gc_set_affiliation(self, room_jid, jid, affiliation, reason = ''):
-        """
-        Affiliation is for all the life of the room so it's based on jid
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery().setTag('item')
-        item.setAttr('jid', jid)
-        item.setAttr('affiliation', affiliation)
-        if reason:
-            item.addChild(name = 'reason', payload = reason)
-        self.connection.send(iq)
-
-    def send_gc_affiliation_list(self, room_jid, users_dict):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery()
-        for jid in users_dict:
-            item_tag = item.addChild('item', {'jid': jid,
-                    'affiliation': users_dict[jid]['affiliation']})
-            if 'reason' in users_dict[jid] and users_dict[jid]['reason']:
-                item_tag.setTagData('reason', users_dict[jid]['reason'])
-        self.connection.send(iq)
-
-    def get_affiliation_list(self, room_jid, affiliation):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery().setTag('item')
-        item.setAttr('affiliation', affiliation)
-        self.connection.send(iq)
-
-    def send_gc_config(self, room_jid, form):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_OWNER)
-        query = iq.setQuery()
-        form.setAttr('type', 'submit')
-        query.addChild(node = form)
-        self.connection.send(iq)
 
     def change_password(self, password):
         if not app.account_is_connected(self.name):

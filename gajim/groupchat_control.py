@@ -649,8 +649,8 @@ class GroupchatControl(ChatControlBase):
         def on_ok(subject):
             # Note, we don't update self.subject since we don't know whether it
             # will work yet
-            app.connections[self.account].send_gc_subject(
-                self.room_jid, subject)
+            con = app.connections[self.account]
+            con.get_module('MUC').set_subject(self.room_jid, subject)
 
         InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
@@ -678,11 +678,14 @@ class GroupchatControl(ChatControlBase):
                 try:
                     jid = helpers.parse_jid(jid)
                 except Exception:
-                    ErrorDialog(_('Invalid group chat JID'),
-                    _('The group chat JID has not allowed characters.'))
+                    ErrorDialog(
+                        _('Invalid group chat JID'),
+                        _('The group chat JID has not allowed characters.'))
                     return
-            app.connections[self.account].destroy_gc_room(
-                self.room_jid, reason, jid)
+            con = app.connections[self.account]
+            con.get_module('MUC').destroy(self.room_jid, reason, jid)
+            con.get_module('Bookmarks').bookmarks.pop(self.room_jid, None)
+            con.get_module('Bookmarks').store_bookmarks()
             gui_menu_builder.build_bookmark_menu(self.account)
             self.force_non_minimizable = True
             self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
@@ -699,7 +702,8 @@ class GroupchatControl(ChatControlBase):
         c = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
         if c.affiliation == 'owner':
-            app.connections[self.account].request_gc_config(self.room_jid)
+            con = app.connections[self.account]
+            con.get_module('MUC').request_config(self.room_jid)
         elif c.affiliation == 'admin':
             if self.room_jid not in app.interface.instances[self.account][
             'gc_config']:
@@ -1797,8 +1801,8 @@ class GroupchatControl(ChatControlBase):
                             # We need to configure the room if it's a new one.
                             # We cannot know it's a new one. Status 201 is not
                             # sent by all servers.
-                            app.connections[self.account].request_gc_config(
-                                self.room_jid)
+                            con = app.connections[self.account]
+                            con.get_module('MUC').request_config(self.room_jid)
                         elif 'continue_tag' in app.automatic_rooms[
                         self.account][self.room_jid]:
                             # We just need to invite contacts
@@ -1932,8 +1936,8 @@ class GroupchatControl(ChatControlBase):
                 self.draw_all_roles()
                 if obj.status_code and '201' in obj.status_code:
                     # We just created the room
-                    app.connections[self.account].request_gc_config(
-                        self.room_jid)
+                    con = app.connections[self.account]
+                    con.get_module('MUC').request_config(self.room_jid)
             else:
                 gc_c = app.contacts.get_gc_contact(self.account,
                     self.room_jid, obj.nick)
@@ -2382,8 +2386,8 @@ class GroupchatControl(ChatControlBase):
         def on_ok(subject):
             # Note, we don't update self.subject since we don't know whether it
             # will work yet
-            app.connections[self.account].send_gc_subject(self.room_jid,
-                subject)
+            con = app.connections[self.account]
+            con.get_module('MUC').set_subject(self.room_jid, subject)
 
         InputTextDialog(_('Changing Subject'),
             _('Please specify the new subject:'), input_str=self.subject,
@@ -2562,8 +2566,8 @@ class GroupchatControl(ChatControlBase):
         Kick a user
         """
         def on_ok(reason):
-            app.connections[self.account].gc_set_role(self.room_jid, nick,
-                'none', reason)
+            con = app.connections[self.account]
+            con.get_module('MUC').set_role(self.room_jid, nick, 'none', reason)
 
         # ask for reason
         InputDialog(_('Kicking %s') % nick,
@@ -2828,37 +2832,40 @@ class GroupchatControl(ChatControlBase):
         """
         Grant voice privilege to a user
         """
-        app.connections[self.account].gc_set_role(self.room_jid, nick,
-            'participant')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(self.room_jid, nick, 'participant')
 
     def revoke_voice(self, widget, nick):
         """
         Revoke voice privilege to a user
         """
-        app.connections[self.account].gc_set_role(self.room_jid, nick,
-            'visitor')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(self.room_jid, nick, 'visitor')
 
     def grant_moderator(self, widget, nick):
         """
         Grant moderator privilege to a user
         """
-        app.connections[self.account].gc_set_role(self.room_jid, nick,
-            'moderator')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(self.room_jid, nick, 'moderator')
 
     def revoke_moderator(self, widget, nick):
         """
         Revoke moderator privilege to a user
         """
-        app.connections[self.account].gc_set_role(self.room_jid, nick,
-            'participant')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_role(self.room_jid, nick, 'participant')
 
     def ban(self, widget, jid):
         """
         Ban a user
         """
         def on_ok(reason):
-            app.connections[self.account].gc_set_affiliation(self.room_jid,
-                jid, 'outcast', reason)
+            con = app.connections[self.account]
+            con.get_module('MUC').set_affiliation(
+                self.room_jid,
+                {jid: {'affiliation': 'outcast',
+                       'reason': reason}})
 
         # to ban we know the real jid. so jid is not fakejid
         nick = app.get_nick_from_jid(jid)
@@ -2871,43 +2878,55 @@ class GroupchatControl(ChatControlBase):
         """
         Grant membership privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'member')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'member'}})
 
     def revoke_membership(self, widget, jid):
         """
         Revoke membership privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'none')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'none'}})
 
     def grant_admin(self, widget, jid):
         """
         Grant administrative privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'admin')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'admin'}})
 
     def revoke_admin(self, widget, jid):
         """
         Revoke administrative privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'member')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'member'}})
 
     def grant_owner(self, widget, jid):
         """
         Grant owner privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'owner')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'owner'}})
 
     def revoke_owner(self, widget, jid):
         """
         Revoke owner privilege to a user
         """
-        app.connections[self.account].gc_set_affiliation(self.room_jid, jid,
-            'admin')
+        con = app.connections[self.account]
+        con.get_module('MUC').set_affiliation(
+            self.room_jid,
+            {jid: {'affiliation': 'admin'}})
 
     def on_info(self, widget, nick):
         """

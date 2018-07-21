@@ -998,16 +998,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                 # This way we'll really remove it
                 app.to_be_removed[self.name].remove(jid)
 
-    def _MucOwnerCB(self, con, iq_obj):
-        log.debug('MucOwnerCB')
-        app.nec.push_incoming_event(MucOwnerReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-
-    def _MucAdminCB(self, con, iq_obj):
-        log.debug('MucAdminCB')
-        app.nec.push_incoming_event(MucAdminReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-
     def _getRoster(self):
         log.debug('getRosterCB')
         if not self.connection:
@@ -1179,10 +1169,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             nbxmpp.NS_DISCO_INFO)
         con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
             nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._MucOwnerCB, 'result',
-            nbxmpp.NS_MUC_OWNER)
-        con.RegisterHandler('iq', self._MucAdminCB, 'result',
-            nbxmpp.NS_MUC_ADMIN)
         con.RegisterHandler('iq', self._SecLabelCB, 'result',
             nbxmpp.NS_SECLABEL_CATALOG)
         con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
