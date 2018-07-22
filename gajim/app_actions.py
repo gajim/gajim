@@ -37,6 +37,7 @@ from gajim.gtk import SingleMessageWindow
 from gajim.gtk import XMLConsoleWindow
 from gajim.gtk import AboutDialog
 from gajim.gtk import PrivacyListsWindow
+from gajim.gtk import ManageBookmarksWindow
 
 
 # General Actions
@@ -75,7 +76,7 @@ def on_history_manager(action, param):
 
 
 def on_manage_bookmarks(action, param):
-    config.ManageBookmarksWindow()
+    ManageBookmarksWindow()
 
 
 def on_quit(action, param):

@@ -69,6 +69,7 @@ from gajim.gtk import NonModalConfirmationDialog
 from gajim.gtk import SingleMessageWindow
 from gajim.gtk import AddNewContactWindow
 from gajim.gtk import ManagePEPServicesWindow
+from gajim.gtk import ManageBookmarksWindow
 
 from gajim.common.const import AvatarSize
 
@@ -3673,7 +3674,7 @@ class RosterWindow:
         self.refilter_shown_roster_items()
 
     def on_manage_bookmarks_menuitem_activate(self, widget):
-        config.ManageBookmarksWindow()
+        ManageBookmarksWindow()
 
     def on_execute_command(self, widget, contact, account, resource=None):
         """
