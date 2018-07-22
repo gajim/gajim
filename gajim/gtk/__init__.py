@@ -54,3 +54,4 @@ from gajim.gtk.xml_console import XMLConsoleWindow
 from gajim.gtk.privacy_list import PrivacyListsWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.server_info import ServerInfoDialog
+from gajim.gtk.pep_config import ManagePEPServicesWindow

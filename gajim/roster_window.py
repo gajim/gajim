@@ -68,6 +68,7 @@ from gajim.gtk import InformationDialog
 from gajim.gtk import NonModalConfirmationDialog
 from gajim.gtk import SingleMessageWindow
 from gajim.gtk import AddNewContactWindow
+from gajim.gtk import ManagePEPServicesWindow
 
 from gajim.common.const import AvatarSize
 
@@ -3654,7 +3655,7 @@ class RosterWindow:
             app.interface.instances[account]['pep_services'].window.present()
         else:
             app.interface.instances[account]['pep_services'] = \
-                config.ManagePEPServicesWindow(account)
+                ManagePEPServicesWindow(account)
 
     def on_add_new_contact(self, widget, account):
         AddNewContactWindow(account)
