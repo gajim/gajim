@@ -191,20 +191,3 @@ connection_handlers.ConnectionJingle):
         # serverside metacontacts are not supported with zeroconf
         # (there is no server)
         pass
-
-    def _DiscoverItemsGetCB(self, con, iq_obj):
-        log.debug('DiscoverItemsGetCB')
-
-        if not self.connection or self.connected < 2:
-            return
-
-        if self.get_module('AdHocCommands').command_items_query(iq_obj):
-            raise nbxmpp.NodeProcessed
-        node = iq_obj.getTagAttr('query', 'node')
-        if node is None:
-            result = iq_obj.buildReply('result')
-            self.connection.send(result)
-            raise nbxmpp.NodeProcessed
-        if node == nbxmpp.NS_COMMANDS:
-            self.get_module('AdHocCommands').command_list_query(iq_obj)
-            raise nbxmpp.NodeProcessed

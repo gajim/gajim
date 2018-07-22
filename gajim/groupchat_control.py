@@ -1533,7 +1533,7 @@ class GroupchatControl(ChatControlBase):
         if '104' in obj.status_code:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
-            app.connections[self.account].discoverMUC(
+            app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid, self.update_actions, update=True)
         if '170' in obj.status_code:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
@@ -2693,7 +2693,7 @@ class GroupchatControl(ChatControlBase):
 
         item = xml.get_object('block_menuitem')
         item2 = xml.get_object('unblock_menuitem')
-        if not app.connections[self.account].privacy_rules_supported:
+        if not app.connections[self.account].get_module('PrivacyLists').supported:
             item2.set_no_show_all(True)
             item.set_no_show_all(True)
             item.hide()

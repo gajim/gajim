@@ -36,8 +36,16 @@ class PEP:
              'headline', nbxmpp.NS_PUBSUB_EVENT)
         ]
 
+        self.supported = False
         self._pep_handlers = {}
         self._store_publish_modules = []
+
+    def pass_disco(self, from_, identities, features, data, node):
+        for identity in identities:
+            if identity['category'] == 'pubsub':
+                if identity.get('type') == 'pep':
+                    log.info('Discovered PEP support: %s', from_)
+                    self.supported = True
 
     def register_pep_handler(self, namespace, notify_handler, retract_handler):
         if namespace in self._pep_handlers:
@@ -165,7 +173,7 @@ class AbstractPEPModule:
         self._stored_publish = None
 
     def send(self, data):
-        if not self._con.pep_supported:
+        if not self._con.get_module('PEP').supported:
             return
 
         if self._con.connected == 1:
@@ -184,7 +192,7 @@ class AbstractPEPModule:
             '', self.namespace, item, 'current')
 
     def retract(self):
-        if not self._con.pep_supported:
+        if not self._con.get_module('PEP').supported:
             return
         self.send(None)
         self._con.get_module('PubSub').send_pb_retract(

@@ -61,9 +61,9 @@ class ServerInfoDialog(Gtk.Dialog):
                                        ged.CORE,
                                        self._nec_version_result_received)
 
-        app.ged.register_event_handler('agent-info-received',
+        app.ged.register_event_handler('server-disco-received',
                                        ged.GUI1,
-                                       self._nec_agent_info_received)
+                                       self._server_disco_received)
 
         self.version = ''
         self.uptime = ''
@@ -132,9 +132,7 @@ class ServerInfoDialog(Gtk.Dialog):
         self.version = obj.client_info
         self.update(self.get_infos, self.info_listbox)
 
-    def _nec_agent_info_received(self, obj):
-        if 'Gajim_' not in obj.id_:
-            return
+    def _server_disco_received(self, obj):
         self.update(self.get_features, self.feature_listbox)
 
     def add_feature(self, feature):
@@ -154,22 +152,25 @@ class ServerInfoDialog(Gtk.Dialog):
 
         return [
             Feature('XEP-0016: Privacy Lists',
-                    con.privacy_rules_supported, '', None),
+                    con.get_module('PrivacyLists').supported, '', None),
             Feature('XEP-0045: Multi-User Chat', con.muc_jid, '', None),
-            Feature('XEP-0054: vcard-temp', con.vcard_supported, '', None),
+            Feature('XEP-0054: vcard-temp',
+                    con.get_module('VCardTemp').supported, '', None),
             Feature('XEP-0163: Personal Eventing Protocol',
-                    con.pep_supported, '', None),
+                    con.get_module('PEP').supported, '', None),
             Feature('XEP-0163: #publish-options',
-                    con.pubsub_publish_options_supported, '', None),
+                    con.get_module('PubSub').publish_options, '', None),
             Feature('XEP-0191: Blocking Command',
-                    con.blocking_supported, nbxmpp.NS_BLOCKING, None),
+                    con.get_module('Blocking').supported,
+                    nbxmpp.NS_BLOCKING, None),
             Feature('XEP-0198: Stream Management',
                     con.sm.enabled, nbxmpp.NS_STREAM_MGMT, None),
             Feature('XEP-0258: Security Labels in XMPP',
                     con.get_module('SecLabels').supported,
                     nbxmpp.NS_SECLABEL, None),
             Feature('XEP-0280: Message Carbons',
-                    con.carbons_available, nbxmpp.NS_CARBONS, carbons_enabled),
+                    con.get_module('Carbons').supported,
+                    nbxmpp.NS_CARBONS, carbons_enabled),
             Feature('XEP-0313: Message Archive Management',
                     con.get_module('MAM').archiving_namespace,
                     con.get_module('MAM').archiving_namespace,
@@ -198,9 +199,9 @@ class ServerInfoDialog(Gtk.Dialog):
                                      ged.CORE,
                                      self._nec_version_result_received)
 
-        app.ged.remove_event_handler('agent-info-received',
+        app.ged.remove_event_handler('server-disco-received',
                                      ged.GUI1,
-                                     self._nec_agent_info_received)
+                                     self._server_disco_received)
 
 
 class FeatureItem(Gtk.Grid):

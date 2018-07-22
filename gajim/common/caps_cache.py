@@ -207,11 +207,13 @@ class ClientCaps(AbstractClientCaps):
         return caps_cache[(self._hash_method, self._hash)]
 
     def _discover(self, connection, jid):
-        connection.discoverInfo(jid, '%s#%s' % (self._node, self._hash))
+        connection.get_module('Discovery').disco_contact(
+            jid, '%s#%s' % (self._node, self._hash))
 
     def _is_hash_valid(self, identities, features, dataforms):
-        computed_hash = compute_caps_hash(identities, features,
-                        dataforms=dataforms, hash_method=self._hash_method)
+        computed_hash = compute_caps_hash(
+            identities, features, dataforms=dataforms,
+            hash_method=self._hash_method)
         return computed_hash == self._hash
 
 
@@ -227,7 +229,7 @@ class OldClientCaps(AbstractClientCaps):
         return caps_cache[('old', self._node + '#' + self._hash)]
 
     def _discover(self, connection, jid):
-        connection.discoverInfo(jid)
+        connection.get_module('Discovery').disco_contact(jid)
 
     def _is_hash_valid(self, identities, features, dataforms):
         return True
@@ -244,7 +246,7 @@ class NoClientCaps(AbstractClientCaps):
         return caps_cache[('no', self._node)]
 
     def _discover(self, connection, jid):
-        connection.discoverInfo(jid)
+        connection.get_module('Discovery').disco_contact(jid)
 
     def _is_hash_valid(self, identities, features, dataforms):
         return True

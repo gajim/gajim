@@ -103,7 +103,6 @@ class CommonConnection:
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
 
-        self.pep_supported = False
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
         self.continue_connect_info = None
@@ -115,13 +114,9 @@ class CommonConnection:
         # the fake jid
         self.groupchat_jids = {} # {ID : groupchat_jid}
 
-        self.privacy_rules_supported = False
-        self.vcard_supported = False
         self.private_storage_supported = False
         self.roster_supported = True
-        self.blocking_supported = False
         self.addressing_supported = False
-        self.carbons_available = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -582,7 +577,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.music_track_info = 0
 
         self.register_supported = False
-        self.pubsub_publish_options_supported = False
         # Do we auto accept insecure connection
         self.connection_auto_accepted = False
         self.pasword_callback = None
@@ -611,10 +605,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Register all modules
         modules.register(self)
 
-        app.ged.register_event_handler('agent-info-error-received', ged.CORE,
-            self._nec_agent_info_error_received)
-        app.ged.register_event_handler('agent-info-received', ged.CORE,
-            self._nec_agent_info_received)
         app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
         app.ged.register_event_handler('gc-message-outgoing', ged.OUT_CORE,
@@ -629,10 +619,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         ConnectionHandlers.cleanup(self)
         modules.unregister(self)
 
-        app.ged.remove_event_handler('agent-info-error-received', ged.CORE,
-            self._nec_agent_info_error_received)
-        app.ged.remove_event_handler('agent-info-received', ged.CORE,
-            self._nec_agent_info_received)
         app.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
         app.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
@@ -699,7 +685,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_purpose = on_purpose
         self.connected = 0
         self.time_to_reconnect = None
-        self.privacy_rules_supported = False
+        self.get_module('PrivacyLists').supported = False
         self.get_module('VCardAvatars').avatar_advertised = False
         if on_purpose:
             self.sm = Smacks(self)
@@ -1430,7 +1416,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_invisible_presence(self, msg, signed, initial = False):
         if not app.account_is_connected(self.name):
             return
-        if not self.privacy_rules_supported:
+        if not self.get_module('PrivacyLists').supported:
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=app.SHOW_LIST[self.connected]))
             app.nec.push_incoming_event(InformationEvent(
@@ -1438,7 +1424,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
-        if self.connected > 1 and self.privacy_rules_supported:
+        if self.connected > 1 and self.get_module('PrivacyLists').supported:
             self.on_purpose = True
             p = nbxmpp.Presence(typ='unavailable')
             p = self.add_sha(p, False)
@@ -1515,10 +1501,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
         if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            our_jid = app.get_jid_from_account(self.name)
             our_server = app.config.get_per('accounts', self.name, 'hostname')
-            self.discoverInfo(our_jid, id_prefix='Gajim_')
-            self.discoverInfo(our_server, id_prefix='Gajim_')
+            self.get_module('Discovery').discover_account_info()
+            self.get_module('Discovery').discover_server_info()
         else:
             self.request_roster(resume=True)
 
@@ -1534,7 +1519,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._stun_servers = self._hosts = [i for i in result_array]
 
     def _continue_connection_request_privacy(self):
-        if self.privacy_rules_supported:
+        if self.get_module('PrivacyLists').supported:
             if not self.privacy_rules_requested:
                 self.privacy_rules_requested = True
                 self.get_module('PrivacyLists').get_privacy_lists(
@@ -1557,103 +1542,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                     None, dialog_name='invisibility-not-supported',
                     args=self.name))
                 return
-            if self.blocking_supported:
-                self.get_module('Blocking').get_blocking_list()
+
+            self.get_module('Blocking').get_blocking_list()
 
         # Ask metacontacts before roster
         self.get_metacontacts()
-
-    def _nec_agent_info_error_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
-        if obj.id_[:6] == 'Gajim_' and obj.fjid == hostname:
-            self._continue_connection_request_privacy()
-
-    def _nec_agent_info_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        is_muc = False
-        transport_type = ''
-        for identity in obj.identities:
-            if 'category' in identity and identity['category'] in ('gateway',
-            'headline') and 'type' in identity:
-                transport_type = identity['type']
-            if 'category' in identity and identity['category'] == 'server' and \
-            'type' in identity and identity['type'] == 'im':
-                transport_type = 'jabber' # it's a jabber server
-            if 'category' in identity and identity['category'] == 'conference' \
-            and 'type' in identity and identity['type'] == 'text':
-                is_muc = True
-
-        if transport_type != '' and obj.fjid not in app.transport_type:
-            app.transport_type[obj.fjid] = transport_type
-            app.logger.save_transport_type(obj.fjid, transport_type)
-
-        if obj.id_[:6] == 'Gajim_':
-            hostname = app.config.get_per('accounts', self.name, 'hostname')
-            our_jid = app.get_jid_from_account(self.name)
-
-            if obj.fjid == our_jid:
-                if nbxmpp.NS_MAM_2 in obj.features:
-                    self.get_module('MAM').archiving_namespace = nbxmpp.NS_MAM_2
-                elif nbxmpp.NS_MAM_1 in obj.features:
-                    self.get_module('MAM').archiving_namespace = nbxmpp.NS_MAM_1
-                if self.get_module('MAM').archiving_namespace:
-                    self.get_module('MAM').available = True
-                    get_action(self.name + '-archive').set_enabled(True)
-                for identity in obj.identities:
-                    if identity['category'] == 'pubsub':
-                        self.pep_supported = identity.get('type') == 'pep'
-                        break
-                if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS in obj.features:
-                    self.pubsub_publish_options_supported = True
-                else:
-                    # Remove stored bookmarks accessible to everyone.
-                    self.get_module('Bookmarks').purge_pubsub_bookmarks()
-
-            if obj.fjid == hostname:
-                if nbxmpp.NS_SECLABEL in obj.features:
-                    self.get_module('SecLabels').supported = True
-                if nbxmpp.NS_VCARD in obj.features:
-                    self.vcard_supported = True
-                    get_action(self.name + '-profile').set_enabled(True)
-                if nbxmpp.NS_REGISTER in obj.features:
-                    self.register_supported = True
-                if nbxmpp.NS_BLOCKING in obj.features:
-                    self.blocking_supported = True
-                if nbxmpp.NS_ADDRESS in obj.features:
-                    self.addressing_supported = True
-                if nbxmpp.NS_CARBONS in obj.features:
-                    self.carbons_available = True
-                    if app.config.get_per('accounts', self.name,
-                                          'enable_message_carbons'):
-                        # Server supports carbons, activate it
-                        iq = nbxmpp.Iq('set')
-                        iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
-                        self.connection.send(iq)
-                if nbxmpp.NS_PRIVACY in obj.features:
-                    self.privacy_rules_supported = True
-                    get_action(self.name + '-privacylists').set_enabled(True)
-
-                self._continue_connection_request_privacy()
-
-            if nbxmpp.NS_BYTESTREAM in obj.features and \
-            app.config.get_per('accounts', self.name, 'use_ft_proxies'):
-                our_fjid = helpers.parse_jid(our_jid + '/' + \
-                    self.server_resource)
-                testit = app.config.get_per('accounts', self.name,
-                    'test_ft_proxies_on_startup')
-                app.proxy65_manager.resolve(obj.fjid, self.connection,
-                    our_fjid, default=self.name, testit=testit)
-            if nbxmpp.NS_MUC in obj.features and is_muc:
-                type_ = transport_type or 'jabber'
-                self.muc_jid[type_] = obj.fjid
-            if transport_type:
-                if transport_type in self.available_transports:
-                    self.available_transports[transport_type].append(obj.fjid)
-                else:
-                    self.available_transports[transport_type] = [obj.fjid]
 
     def send_custom_status(self, show, msg, jid):
         if not show in app.SHOW_LIST:
@@ -1684,7 +1577,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.send_invisible_presence(msg, signed)
 
     def _change_from_invisible(self):
-        if self.privacy_rules_supported:
+        if self.get_module('PrivacyLists').supported:
             self.get_module('PrivacyLists').set_active_list(None)
 
     def _update_status(self, show, msg, idle_time=None):
@@ -1897,7 +1790,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def bookmarks_available(self):
         if self.private_storage_supported:
             return True
-        if self.pubsub_publish_options_supported:
+        if self.get_module('PubSub').publish_options:
             return True
         return False
 
@@ -2022,7 +1915,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Never join a room when invisible
             return
 
-        self.discoverMUC(
+        self.get_module('Discovery').disco_muc(
             room_jid, partial(self._join_gc, nick, show, room_jid,
                               password, change_nick, rejoin))
 

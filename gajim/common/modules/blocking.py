@@ -35,7 +35,18 @@ class Blocking:
             ('iq', self._blocking_push_received, 'set', nbxmpp.NS_BLOCKING)
         ]
 
+        self.supported = False
+
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_BLOCKING not in features:
+            return
+
+        self.supported = True
+        log.info('Discovered blocking: %s', from_)
+
     def get_blocking_list(self):
+        if not self.supported:
+            return
         iq = nbxmpp.Iq('get', nbxmpp.NS_BLOCKING)
         iq.setQuery('blocklist')
         log.info('Request list')
@@ -119,7 +130,7 @@ class Blocking:
         self._con.connection.send(probe)
 
     def block(self, contact_list):
-        if not self._con.blocking_supported:
+        if not self.supported:
             return
         iq = nbxmpp.Iq('set', nbxmpp.NS_BLOCKING)
         query = iq.setQuery(name='block')
@@ -131,7 +142,7 @@ class Blocking:
             iq, self._default_result_handler, {})
 
     def unblock(self, contact_list):
-        if not self._con.blocking_supported:
+        if not self.supported:
             return
         iq = nbxmpp.Iq('set', nbxmpp.NS_BLOCKING)
         query = iq.setQuery(name='unblock')

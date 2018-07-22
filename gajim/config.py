@@ -2845,6 +2845,7 @@ class ManagePEPServicesWindow:
         self.xml.get_object('delete_button').set_sensitive(False)
         self.xml.connect_signals(self)
         self.account = account
+        self._con = app.connections[self.account]
 
         self.init_services()
         self.xml.get_object('services_treeview').get_selection().connect(
@@ -2852,8 +2853,6 @@ class ManagePEPServicesWindow:
 
         app.ged.register_event_handler('pubsub-config-received', ged.GUI1,
             self._nec_pep_config_received)
-        app.ged.register_event_handler('agent-items-received', ged.GUI1,
-            self._nec_agent_items_received)
 
         self.window.show_all()
 
@@ -2862,8 +2861,6 @@ class ManagePEPServicesWindow:
         del app.interface.instances[self.account]['pep_services']
         app.ged.remove_event_handler('pubsub-config-received', ged.GUI1,
             self._nec_pep_config_received)
-        app.ged.remove_event_handler('agent-items-received', ged.GUI1,
-            self._nec_agent_items_received)
 
     def on_close_button_clicked(self, widget):
         self.window.destroy()
@@ -2885,14 +2882,18 @@ class ManagePEPServicesWindow:
         col.pack_start(cellrenderer_text, True)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
-        our_jid = app.get_jid_from_account(self.account)
-        app.connections[self.account].discoverItems(our_jid)
+        jid = self._con.get_own_jid().getStripped()
+        self._con.get_module('Discovery').disco_items(
+            jid, success_cb=self._items_received, error_cb=self._items_error)
 
-    def _nec_agent_items_received(self, obj):
-        our_jid = app.get_jid_from_account(self.account)
-        for item in obj.items:
-            if 'jid' in item and item['jid'] == our_jid and 'node' in item:
+    def _items_received(self, from_, node, items):
+        jid = self._con.get_own_jid().getStripped()
+        for item in items:
+            if item['jid'] == jid and 'node' in item:
                 self.treestore.append([item['node']])
+
+    def _items_error(self, from_, error):
+        ErrorDialog('Error', error)
 
     def node_removed(self, jid, node):
         if jid != app.get_jid_from_account(self.account):

@@ -18,7 +18,35 @@ import logging
 
 import nbxmpp
 
+from gajim.common import app
+
 log = logging.getLogger('gajim.c.m.carbons')
+
+
+class Carbons:
+    def __init__(self, con):
+        self._con = con
+        self._account = con.name
+
+        self.handlers = []
+
+        self.supported = False
+
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_CARBONS not in features:
+            return
+
+        self.supported = True
+        log.info('Discovered carbons: %s', from_)
+
+        if app.config.get_per('accounts', self._account,
+                              'enable_message_carbons'):
+            iq = nbxmpp.Iq('set')
+            iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
+            log.info('Activate')
+            self._con.connection.send(iq)
+        else:
+            log.warning('Carbons deactivated (user setting)')
 
 
 def parse_carbon(con, stanza):
@@ -75,3 +103,7 @@ def parse_carbon(con, stanza):
         raise nbxmpp.NodeProcessed
 
     return message, sent, True
+
+
+def get_instance(*args, **kwargs):
+    return Carbons(*args, **kwargs), 'Carbons'

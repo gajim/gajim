@@ -102,6 +102,9 @@ class Mock(object):
             if not name in baseMethods:
                 self.__dict__[name] = MockCallable(name, self, handcrafted=True)
 
+    def get_module(self, name):
+        return Mock()
+
     def __getattr__(self, name):
         return MockCallable(name, self)
 

@@ -59,9 +59,6 @@ class HTTPUpload:
         self._allowed_headers = ['Authorization', 'Cookie', 'Expires']
         self.max_file_size = None  # maximum file size in bytes
 
-        app.ged.register_event_handler('agent-info-received',
-                                       ged.GUI1,
-                                       self.handle_agent_info_received)
         app.ged.register_event_handler('stanza-message-outgoing',
                                        ged.OUT_PREGUI,
                                        self.handle_outgoing_stanza)
@@ -72,9 +69,6 @@ class HTTPUpload:
         self.messages = []
 
     def cleanup(self):
-        app.ged.remove_event_handler('agent-info-received',
-                                     ged.GUI1,
-                                     self.handle_agent_info_received)
         app.ged.remove_event_handler('stanza-message-outgoing',
                                      ged.OUT_PREGUI,
                                      self.handle_outgoing_stanza)
@@ -82,27 +76,18 @@ class HTTPUpload:
                                      ged.OUT_PREGUI,
                                      self.handle_outgoing_stanza)
 
-    def handle_agent_info_received(self, event):
-        account = event.conn.name
-        if account != self._account:
-            return
-
-        if not app.jid_is_transport(event.jid):
-            return
-
-        if not event.id_.startswith('Gajim_'):
-            return
-
-        if NS_HTTPUPLOAD_0 in event.features:
+    def pass_disco(self, from_, identities, features, data, node):
+        if NS_HTTPUPLOAD_0 in features:
             self.httpupload_namespace = NS_HTTPUPLOAD_0
-        elif NS_HTTPUPLOAD in event.features:
+        elif NS_HTTPUPLOAD in features:
             self.httpupload_namespace = NS_HTTPUPLOAD
         else:
             return
 
-        self.component = event.jid
+        self.component = from_
+        log.info('Discovered component: %s', from_)
 
-        for form in event.data:
+        for form in data:
             form_dict = form.asDict()
             if form_dict.get('FORM_TYPE', None) != self.httpupload_namespace:
                 continue
@@ -112,14 +97,16 @@ class HTTPUpload:
                 break
 
         if self.max_file_size is None:
-            log.warning('%s does not provide maximum file size', account)
+            log.warning('%s does not provide maximum file size', self._account)
         else:
             log.info('%s has a maximum file size of: %s MiB',
-                     account, self.max_file_size / (1024 * 1024))
+                     self._account, self.max_file_size / (1024 * 1024))
 
         self.available = True
+
         for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
+        raise nbxmpp.NodeProcessed
 
     def handle_outgoing_stanza(self, event):
         if event.conn.name != self._account:

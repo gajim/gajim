@@ -18,7 +18,7 @@ from pathlib import Path
 
 log = logging.getLogger('gajim.c.m')
 
-ZEROCONF_MODULES = ['adhoc_commands', 'receipts']
+ZEROCONF_MODULES = ['adhoc_commands', 'receipts', 'discovery']
 
 imported_modules = []
 _modules = {}
@@ -55,6 +55,9 @@ class ModuleMock:
 
         # Bookmarks
         self.bookmarks = {}
+
+        # Various Modules
+        self.supported = False
 
     def __getattr__(self, key):
         def _mock(self, *args, **kwargs):

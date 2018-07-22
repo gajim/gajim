@@ -47,6 +47,20 @@ class MAM:
         self.archiving_namespace = None
         self._mam_query_ids = {}
 
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_MAM_2 in features:
+            self.archiving_namespace = nbxmpp.NS_MAM_2
+        elif nbxmpp.NS_MAM_1 in features:
+            self.archiving_namespace = nbxmpp.NS_MAM_1
+        else:
+            return
+
+        self.available = True
+        log.info('Discovered MAM %s: %s', self.archiving_namespace, from_)
+        # TODO: Move this GUI code out
+        action = app.app.lookup_action('%s-archive' % self._account)
+        action.set_enabled(True)
+
     def _from_valid_archive(self, stanza, message, groupchat):
         if groupchat:
             expected_archive = message.getFrom()

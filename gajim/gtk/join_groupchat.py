@@ -80,13 +80,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         self.builder.connect_signals(self)
         self.connect('key-press-event', self._on_key_press_event)
-        self.connect('destroy', self._on_destroy)
-
-        if not self.minimal_mode:
-            app.ged.register_event_handler('agent-info-received', ged.GUI1,
-                                           self._nec_agent_info_received)
-            app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
-                                           self._nec_agent_info_error_received)
 
         # Hide account combobox if there is only one account
         if len(accounts) == 1:
@@ -277,48 +270,36 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         con.get_module('Bookmarks').add_bookmark(
             name, self.room_jid, autojoin, 1, password, nickname)
 
-    def _on_destroy(self, *args):
-        if not self.minimal_mode:
-            app.ged.remove_event_handler('agent-info-received', ged.GUI1,
-                                         self._nec_agent_info_received)
-            app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
-                                         self._nec_agent_info_error_received)
-
     def _on_search_clicked(self, widget):
         server = self.server_combo.get_active_text().strip()
-        self.requested_jid = server
-        app.connections[self.account].discoverInfo(server)
+        con = app.connections[self.account]
+        con.get_module('Discovery').disco_info(
+            server,
+            success_cb=self._disco_info_received,
+            error_cb=self._disco_info_error)
 
-    def _nec_agent_info_error_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.jid != self.requested_jid:
-            return
-        self.requested_jid = None
+    def _disco_info_error(self, from_, error):
         ErrorDialog(_('Wrong server'),
-                    _('%s is not a groupchat server') % obj.jid,
+                    _('%s is not a groupchat server') % from_,
                     transient_for=self)
 
-    def _nec_agent_info_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.jid != self.requested_jid:
-            return
-        self.requested_jid = None
-        if nbxmpp.NS_MUC not in obj.features:
+    def _disco_info_received(self, from_, identities, features, data, node):
+        if nbxmpp.NS_MUC not in features:
             ErrorDialog(_('Wrong server'),
-                        _('%s is not a groupchat server') % obj.jid,
+                        _('%s is not a groupchat server') % from_,
                         transient_for=self)
             return
-        if obj.jid in app.interface.instances[self.account]['disco']:
-            app.interface.instances[self.account]['disco'][obj.jid].window.\
+
+        jid = str(from_)
+        if jid in app.interface.instances[self.account]['disco']:
+            app.interface.instances[self.account]['disco'][jid].window.\
                 present()
         else:
             try:
                 # Object will add itself to the window dict
                 from gajim.disco import ServiceDiscoveryWindow
                 ServiceDiscoveryWindow(
-                    self.account, obj.jid,
+                    self.account, jid,
                     initial_identities=[{'category': 'conference',
                                          'type': 'text'}])
             except GajimGeneralException:

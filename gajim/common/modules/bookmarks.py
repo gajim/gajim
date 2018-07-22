@@ -35,8 +35,8 @@ class Bookmarks:
         self.handlers = []
 
     def _pubsub_support(self):
-        return (self._con.pep_supported and
-                self._con.pubsub_publish_options_supported)
+        return (self._con.get_module('PEP').supported and
+                self._con.get_module('PubSub').publish_options)
 
     def get_bookmarks(self, storage_type=None):
         if not app.account_is_connected(self._account):
@@ -86,7 +86,7 @@ class Bookmarks:
         else:
             log.info('Received Bookmarks (PrivateStorage)')
             merged = self._parse_bookmarks(stanza, check_merge=True)
-            if merged:
+            if merged and self._pubsub_support():
                 log.info('Merge PrivateStorage with PubSub')
                 self.store_bookmarks(BookmarkStorageType.PUBSUB)
         self.auto_join_bookmarks()

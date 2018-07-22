@@ -2840,9 +2840,14 @@ class RosterWindow:
             if msg is None:
                 # user pressed Cancel to change status message dialog
                 return
-            accounts = set(i[1] for i in list_ if (app.connections[i[1]].\
-                privacy_rules_supported or (group is None and app.\
-                connections[i[1]].blocking_supported)))
+
+            accounts = []
+            for _, account in list_:
+                con = app.connections[account]
+                if con.get_module('PrivacyLists').supported or (
+                        group is None and con.get_module('Blocking').supported):
+                    accounts.append(account)
+
             if group is None:
                 for acct in accounts:
                     l_ = [i[0] for i in list_ if i[1] == acct]
@@ -2882,9 +2887,13 @@ class RosterWindow:
         """
         When clicked on the 'unblock' button in context menu.
         """
-        accounts = set(i[1] for i in list_ if (app.connections[i[1]].\
-            privacy_rules_supported or (group is None and app.\
-            connections[i[1]].blocking_supported)))
+        accounts = []
+        for _, account in list_:
+            con = app.connections[account]
+            if con.get_module('PrivacyLists').supported or (
+                    group is None and con.get_module('Blocking').supported):
+                accounts.append(account)
+
         if group is None:
             for acct in accounts:
                 l_ = [i[0] for i in list_ if i[1] == acct]
@@ -4916,7 +4925,7 @@ class RosterWindow:
                 sub_menu.append(item)
                 con = app.connections[account]
                 if show == 'invisible' and con.connected > 1 and \
-                not con.privacy_rules_supported:
+                not con.get_module('PrivacyLists').supported:
                     item.set_sensitive(False)
                 else:
                     item.connect('activate', self.change_status, account, show)
@@ -4940,7 +4949,7 @@ class RosterWindow:
             item.connect('activate', self.change_status, account, 'offline')
 
             pep_menuitem = xml.get_object('pep_menuitem')
-            if app.connections[account].pep_supported:
+            if app.connections[account].get_module('PEP').supported:
                 pep_submenu = Gtk.Menu()
                 pep_menuitem.set_submenu(pep_submenu)
 
@@ -5183,8 +5192,7 @@ class RosterWindow:
                 if helpers.group_is_blocked(account, group):
                     is_blocked = True
 
-            if is_blocked and app.connections[account].\
-            privacy_rules_supported:
+            if is_blocked and app.connections[account].get_module('PrivacyLists').supported:
                 unblock_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Unblock'))
                 unblock_menuitem.connect('activate', self.on_unblock, list_,
                     group)
@@ -5193,7 +5201,7 @@ class RosterWindow:
                 block_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_Block'))
                 block_menuitem.connect('activate', self.on_block, list_, group)
                 menu.append(block_menuitem)
-                if not app.connections[account].privacy_rules_supported:
+                if not app.connections[account].get_module('PrivacyLists').supported:
                     block_menuitem.set_sensitive(False)
 
             # Remove group
@@ -5245,7 +5253,7 @@ class RosterWindow:
             account = model[titer][Column.ACCOUNT]
             if app.connections[account].connected < 2:
                 one_account_offline = True
-            if not app.connections[account].privacy_rules_supported:
+            if not app.connections[account].get_module('PrivacyLists').supported:
                 privacy_rules_supported = False
             contact = app.contacts.get_contact_with_highest_priority(account,
                 jid)
@@ -5411,7 +5419,7 @@ class RosterWindow:
             self.on_xml_console_menuitem_activate, account)
 
         if app.connections[account]:
-            if app.connections[account].privacy_rules_supported:
+            if app.connections[account].get_module('PrivacyLists').supported:
                 privacy_lists_menuitem.connect('activate',
                     self.on_privacy_lists_menuitem_activate, account)
             else:

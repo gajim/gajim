@@ -66,51 +66,6 @@ PRIVACY_ARRIVED = 'privacy_arrived'
 
 
 class ConnectionDisco:
-    """
-    Holds xmpppy handlers and public methods for discover services
-    """
-
-    def discoverItems(self, jid, node=None, id_prefix=None):
-        """
-        According to XEP-0030:
-            jid is mandatory;
-            name, node, action is optional.
-        """
-        id_ = self._discover(nbxmpp.NS_DISCO_ITEMS, jid, node, id_prefix)
-        self.disco_items_ids.append(id_)
-
-    def discoverInfo(self, jid, node=None, id_prefix=None):
-        """
-        According to XEP-0030:
-            For identity: category, type is mandatory, name is optional.
-            For feature: var is mandatory.
-        """
-        id_ = self._discover(nbxmpp.NS_DISCO_INFO, jid, node, id_prefix)
-        self.disco_info_ids.append(id_)
-
-    def discoverMUC(self, jid, callback, update=False):
-        if muc_caps_cache.is_cached(jid) and not update:
-            callback()
-            return
-        disco_info = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_INFO)
-        self.connection.SendAndCallForResponse(
-            disco_info, self.received_muc_info, {'callback': callback})
-
-    def received_muc_info(self, conn, stanza, callback):
-        if nbxmpp.isResultNode(stanza):
-            app.log('gajim.muc').info(
-                'Received MUC DiscoInfo for %s', stanza.getFrom())
-            muc_caps_cache.append(stanza)
-            callback()
-        else:
-            error = stanza.getError()
-            if error == 'item-not-found':
-                # Groupchat does not exist
-                callback()
-                return
-            app.nec.push_incoming_event(
-                InformationEvent(
-                    None, dialog_name='unable-join-groupchat', args=error))
 
     def request_register_agent_info(self, agent):
         if not self.connection or self.connected < 2:
@@ -159,117 +114,10 @@ class ConnectionDisco:
         self.agent_registrations[agent] = {'roster_push': False,
             'sub_received': False}
 
-    def _discover(self, ns, jid, node=None, id_prefix=None):
-        if not self.connection or self.connected < 2:
-            return
-        iq = nbxmpp.Iq(typ='get', to=jid, queryNS=ns)
-        id_ = self.connection.getAnID()
-        if id_prefix:
-            id_ = id_prefix + id_
-        iq.setID(id_)
-        if node:
-            iq.setQuerynode(node)
-        self.connection.send(iq)
-        return id_
-
     def _ReceivedRegInfo(self, con, resp, agent):
         nbxmpp.features_nb._ReceivedRegInfo(con, resp, agent)
         self._IqCB(con, resp)
 
-    def _discoGetCB(self, con, iq_obj):
-        """
-        Get disco info
-        """
-        if not self.connection or self.connected < 2:
-            return
-        frm = helpers.get_full_jid_from_iq(iq_obj)
-        to = iq_obj.getAttr('to')
-        id_ = iq_obj.getAttr('id')
-        iq = nbxmpp.Iq(to=frm, typ='result', queryNS=nbxmpp.NS_DISCO, frm=to)
-        iq.setAttr('id', id_)
-        query = iq.setTag('query')
-        query.setAttr('node', 'http://gajim.org#' + app.version.split('-', 1)[
-            0])
-        for f in (nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
-        nbxmpp.NS_COMMANDS, nbxmpp.NS_JINGLE_FILE_TRANSFER_5,
-        nbxmpp.NS_JINGLE_XTLS, nbxmpp.NS_PUBKEY_PUBKEY, nbxmpp.NS_PUBKEY_REVOKE,
-        nbxmpp.NS_PUBKEY_ATTEST):
-            feature = nbxmpp.Node('feature')
-            feature.setAttr('var', f)
-            query.addChild(node=feature)
-
-        self.connection.send(iq)
-        raise nbxmpp.NodeProcessed
-
-    def _DiscoverItemsErrorCB(self, con, iq_obj):
-        log.debug('DiscoverItemsErrorCB')
-        app.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
-            conn=self, stanza=iq_obj))
-
-    def _DiscoverItemsCB(self, con, iq_obj):
-        log.debug('DiscoverItemsCB')
-        app.nec.push_incoming_event(AgentItemsReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-
-    def _DiscoverItemsGetCB(self, con, iq_obj):
-        log.debug('DiscoverItemsGetCB')
-
-        if not self.connection or self.connected < 2:
-            return
-
-        if self.get_module('AdHocCommands').command_items_query(iq_obj):
-            raise nbxmpp.NodeProcessed
-        node = iq_obj.getTagAttr('query', 'node')
-        if node is None:
-            result = iq_obj.buildReply('result')
-            self.connection.send(result)
-            raise nbxmpp.NodeProcessed
-        if node == nbxmpp.NS_COMMANDS:
-            self.get_module('AdHocCommands').command_list_query(iq_obj)
-            raise nbxmpp.NodeProcessed
-
-    def _DiscoverInfoGetCB(self, con, iq_obj):
-        log.debug('DiscoverInfoGetCB')
-        if not self.connection or self.connected < 2:
-            return
-        node = iq_obj.getQuerynode()
-
-        if self.get_module('AdHocCommands').command_info_query(iq_obj):
-            raise nbxmpp.NodeProcessed
-
-        id_ = iq_obj.getAttr('id')
-        if id_[:6] == 'Gajim_':
-            # We get this request from echo.server
-            raise nbxmpp.NodeProcessed
-
-        iq = iq_obj.buildReply('result')
-        q = iq.setQuery()
-        if node:
-            q.setAttr('node', node)
-        q.addChild('identity', attrs=app.gajim_identity)
-        client_version = 'http://gajim.org#' + app.caps_hash[self.name]
-
-        if node in (None, client_version):
-            for f in app.gajim_common_features:
-                q.addChild('feature', attrs={'var': f})
-            for f in app.gajim_optional_features[self.name]:
-                q.addChild('feature', attrs={'var': f})
-
-        if q.getChildren():
-            self.connection.send(iq)
-            raise nbxmpp.NodeProcessed
-
-    def _DiscoverInfoErrorCB(self, con, iq_obj):
-        log.debug('DiscoverInfoErrorCB')
-        app.nec.push_incoming_event(AgentInfoErrorReceivedEvent(None,
-            conn=self, stanza=iq_obj))
-
-    def _DiscoverInfoCB(self, con, iq_obj):
-        log.debug('DiscoverInfoCB')
-        if not self.connection or self.connected < 2:
-            return
-        app.nec.push_incoming_event(AgentInfoReceivedEvent(None, conn=self,
-            stanza=iq_obj))
 
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
@@ -292,24 +140,16 @@ class ConnectionHandlersBase:
         # We decrypt GPG messages one after the other. Keep queue in mem
         self.gpg_messages_to_decrypt = []
 
-        app.ged.register_event_handler('iq-error-received', ged.CORE,
-            self._nec_iq_error_received)
         app.ged.register_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
         app.ged.register_event_handler('gc-message-received', ged.CORE,
             self._nec_gc_message_received)
 
     def cleanup(self):
-        app.ged.remove_event_handler('iq-error-received', ged.CORE,
-            self._nec_iq_error_received)
         app.ged.remove_event_handler('presence-received', ged.CORE,
             self._nec_presence_received)
         app.ged.remove_event_handler('gc-message-received', ged.CORE,
             self._nec_gc_message_received)
-
-    def _nec_iq_error_received(self, obj):
-        if obj.conn.name != self.name:
-            return
 
     def _nec_presence_received(self, obj):
         account = obj.conn.name
@@ -647,8 +487,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
-        app.ged.register_event_handler('iq-error-received', ged.CORE,
-            self._nec_iq_error_received)
         app.ged.register_event_handler('subscribe-presence-received',
             ged.CORE, self._nec_subscribe_presence_received)
         app.ged.register_event_handler('subscribed-presence-received',
@@ -669,8 +507,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
-        app.ged.remove_event_handler('iq-error-received', ged.CORE,
-            self._nec_iq_error_received)
         app.ged.remove_event_handler('subscribe-presence-received',
             ged.CORE, self._nec_subscribe_presence_received)
         app.ged.remove_event_handler('subscribed-presence-received',
@@ -762,27 +598,13 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                 self._getRoster()
             elif iq_obj.getType() == 'error':
                 self.roster_supported = False
-                self.discoverItems(app.config.get_per('accounts', self.name,
-                    'hostname'), id_prefix='Gajim_')
+                self.get_module('Discovery').discover_server_items()
                 if app.config.get_per('accounts', self.name,
                 'use_ft_proxies'):
                     self.discover_ft_proxies()
                 app.nec.push_incoming_event(RosterReceivedEvent(None,
                     conn=self))
-            GLib.timeout_add_seconds(10, self.discover_servers)
             del self.awaiting_answers[id_]
-
-    def _nec_iq_error_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        if obj.id_ in self.disco_items_ids:
-            app.nec.push_incoming_event(AgentItemsErrorReceivedEvent(None,
-                conn=self, stanza=obj.stanza))
-            return True
-        if obj.id_ in self.disco_info_ids:
-            app.nec.push_incoming_event(AgentInfoErrorReceivedEvent(None,
-                conn=self, stanza=obj.stanza))
-            return True
 
     def _rosterSetCB(self, con, iq_obj):
         log.debug('rosterSetCB')
@@ -972,8 +794,7 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         if not self.connection:
             return
         self.connection.getRoster(self._on_roster_set)
-        self.discoverItems(app.config.get_per('accounts', self.name,
-            'hostname'), id_prefix='Gajim_')
+        self.get_module('Discovery').discover_server_items()
         if app.config.get_per('accounts', self.name, 'use_ft_proxies'):
             self.discover_ft_proxies()
 
@@ -989,17 +810,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             for proxy in proxies:
                 app.proxy65_manager.resolve(proxy, self.connection, our_jid,
                     testit=testit)
-
-    def discover_servers(self):
-        if not self.connection:
-            return
-        servers = []
-        for c in app.contacts.iter_contacts(self.name):
-            s = app.get_server_from_jid(c.jid)
-            if s not in servers and s not in app.transport_type:
-                servers.append(s)
-        for s in servers:
-            self.discoverInfo(s)
 
     def _on_roster_set(self, roster):
         app.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
@@ -1026,13 +836,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                     send_first_presence = False
             if send_first_presence:
                 self._send_first_presence(signed)
-
-        if obj.received_from_server:
-            for jid in obj.roster:
-                if jid != our_jid and app.jid_is_transport(jid) and \
-                not app.get_transport_name_from_jid(jid):
-                    # we can't determine which iconset to use
-                    self.discoverInfo(jid)
 
             app.logger.replace_roster(self.name, obj.version, obj.roster)
 
@@ -1080,9 +883,9 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             self.priority = priority
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show=show))
-        if self.vcard_supported:
-            # ask our VCard
-            self.get_module('VCardTemp').request_vcard()
+
+        # ask our VCard
+        self.get_module('VCardTemp').request_vcard()
 
         # Get bookmarks
         self.get_module('Bookmarks').get_bookmarks()
@@ -1120,7 +923,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siResultCB, 'result', nbxmpp.NS_SI)
-        con.RegisterHandler('iq', self._discoGetCB, 'get', nbxmpp.NS_DISCO)
         con.RegisterHandler('iq', self._bytestreamSetCB, 'set',
             nbxmpp.NS_BYTESTREAM)
         con.RegisterHandler('iq', self._bytestreamResultCB, 'result',
@@ -1130,18 +932,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         con.RegisterHandlerOnce('iq', self.IBBAllIqHandler)
         con.RegisterHandler('iq', self.IBBIqHandler, ns=nbxmpp.NS_IBB)
         con.RegisterHandler('message', self.IBBMessageHandler, ns=nbxmpp.NS_IBB)
-        con.RegisterHandler('iq', self._DiscoverItemsCB, 'result',
-            nbxmpp.NS_DISCO_ITEMS)
-        con.RegisterHandler('iq', self._DiscoverItemsErrorCB, 'error',
-            nbxmpp.NS_DISCO_ITEMS)
-        con.RegisterHandler('iq', self._DiscoverInfoCB, 'result',
-            nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._DiscoverInfoErrorCB, 'error',
-            nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._DiscoverInfoGetCB, 'get',
-            nbxmpp.NS_DISCO_INFO)
-        con.RegisterHandler('iq', self._DiscoverItemsGetCB, 'get',
-            nbxmpp.NS_DISCO_ITEMS)
 
         con.RegisterHandler('iq', self._JingleCB, 'result')
         con.RegisterHandler('iq', self._JingleCB, 'error')

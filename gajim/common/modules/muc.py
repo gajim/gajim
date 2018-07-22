@@ -38,6 +38,18 @@ class MUC:
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
         ]
 
+    def pass_disco(self, from_, identities, features, data, node):
+        for identity in identities:
+            if identity.get('category') != 'conference':
+                continue
+            if identity.get('type') != 'text':
+                continue
+            if nbxmpp.NS_MUC in features:
+                log.info('Discovered MUC: %s', from_)
+                # TODO: make this nicer
+                self._con.muc_jid['jabber'] = from_
+                raise nbxmpp.NodeProcessed
+
     def set_subject(self, room_jid, subject):
         if not app.account_is_connected(self._account):
             return

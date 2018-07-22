@@ -1116,6 +1116,8 @@ class Interface:
         app.block_signed_in_notifications[account] = True
         connected = obj.conn.connected
 
+        pep_supported = obj.conn.get_module('PEP').supported
+
         if not idle.Monitor.is_unknown() and connected in (2, 3):
             # we go online or free for chat, so we activate auto status
             app.sleeper_state[account] = 'online'
@@ -1135,11 +1137,11 @@ class Interface:
         if connected == invisible_show:
             return
         # send currently played music
-        if (obj.conn.pep_supported and sys.platform == 'linux' and
+        if (pep_supported and sys.platform == 'linux' and
                 app.config.get_per('accounts', account, 'publish_tune')):
             self.enable_music_listener()
         # enable location listener
-        if (obj.conn.pep_supported and app.is_installed('GEOCLUE') and
+        if (pep_supported and app.is_installed('GEOCLUE') and
                 app.config.get_per('accounts', account, 'publish_location')):
             location_listener.enable()
 
@@ -1785,7 +1787,7 @@ class Interface:
                 transient_for=transient_for)
 
         disco_account = connected_accounts[0] if account is None else account
-        app.connections[disco_account].discoverMUC(
+        app.connections[disco_account].get_module('Discovery').disco_muc(
             room_jid, _on_discover_result)
 
 ################################################################################
@@ -2187,7 +2189,7 @@ class Interface:
         for acct in accounts:
             if not app.account_is_connected(acct):
                 continue
-            if not app.connections[acct].pep_supported:
+            if not app.connections[acct].get_module('PEP').supported:
                 continue
             if not app.config.get_per('accounts', acct, 'publish_tune'):
                 continue

@@ -43,6 +43,18 @@ class PrivacyLists:
             ('iq', self._list_push_received, 'set', nbxmpp.NS_PRIVACY)
         ]
 
+        self.supported = False
+
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_PRIVACY not in features:
+            return
+
+        self.supported = True
+        log.info('Discovered XEP-0016: Privacy Lists: %s', from_)
+        # TODO: Move this GUI code out
+        action = app.app.lookup_action('%s-privacylists' % self._account)
+        action.set_enabled(True)
+
     def _list_push_received(self, con, stanza):
         result = stanza.buildReply('result')
         result.delChild(result.getTag('query'))
@@ -287,7 +299,7 @@ class PrivacyLists:
             self.set_default_list(self.default_list)
 
     def block_contacts(self, contact_list, message):
-        if not self._con.privacy_rules_supported:
+        if not self.supported:
             self._con.get_module('Blocking').block(contact_list)
             return
 
@@ -332,7 +344,7 @@ class PrivacyLists:
             self.set_privacy_list(self.default_list, new_blocked_list)
 
     def unblock_contacts(self, contact_list):
-        if not self._con.privacy_rules_supported:
+        if not self.supported:
             self._con.get_module('Blocking').unblock(contact_list)
             return
 
@@ -367,7 +379,7 @@ class PrivacyLists:
             self._presence_probe(contact.jid)
 
     def block_group(self, group, contact_list, message):
-        if not self._con.privacy_rules_supported:
+        if not self.supported:
             return
         if group in self.blocked_groups:
             return
@@ -393,7 +405,7 @@ class PrivacyLists:
             self.set_default_list(self.default_list)
 
     def unblock_group(self, group, contact_list):
-        if not self._con.privacy_rules_supported:
+        if not self.supported:
             return
 
         if group not in self.blocked_groups:

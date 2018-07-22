@@ -329,8 +329,6 @@ class P2PClient(IdleObject):
             nbxmpp.NS_BYTESTREAM)
         self.RegisterHandler('iq', self._caller._bytestreamErrorCB, 'error',
             nbxmpp.NS_BYTESTREAM)
-        self.RegisterHandler('iq', self._caller._DiscoverItemsGetCB, 'get',
-            nbxmpp.NS_DISCO_ITEMS)
         self.RegisterHandler('iq', self._caller._JingleCB, 'result')
         self.RegisterHandler('iq', self._caller._JingleCB, 'error')
         self.RegisterHandler('iq', self._caller._JingleCB, 'set',

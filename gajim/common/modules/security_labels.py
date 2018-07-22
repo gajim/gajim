@@ -34,6 +34,13 @@ class SecLabels:
         self._catalogs = {}
         self.supported = False
 
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_SECLABEL not in features:
+            return
+
+        self.supported = True
+        log.info('Discovered security labels: %s', from_)
+
     def request_catalog(self, jid):
         server = app.get_jid_from_account(self._account).split("@")[1]
         iq = nbxmpp.Iq(typ='get', to=server)

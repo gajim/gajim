@@ -37,7 +37,6 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.modules import dataforms
-from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
@@ -1079,119 +1078,6 @@ class SignedInEvent(nec.NetworkIncomingEvent):
 class RegisterAgentInfoReceivedEvent(nec.NetworkIncomingEvent):
     name = 'register-agent-info-received'
     base_network_events = []
-
-class AgentItemsReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'agent-items-received'
-    base_network_events = []
-
-    def generate(self):
-        q = self.stanza.getTag('query')
-        self.node = q.getAttr('node')
-        if not self.node:
-            self.node = ''
-        qp = self.stanza.getQueryPayload()
-        self.items = []
-        if not qp:
-            qp = []
-        for i in qp:
-            # CDATA payload is not processed, only nodes
-            if not isinstance(i, nbxmpp.simplexml.Node):
-                continue
-            attr = {}
-            for key in i.getAttrs():
-                attr[key] = i.getAttrs()[key]
-            if 'jid' not in attr:
-                continue
-            try:
-                attr['jid'] = helpers.parse_jid(attr['jid'])
-            except helpers.InvalidFormat:
-                # jid is not conform
-                continue
-            self.items.append(attr)
-        self.get_jid_resource()
-        hostname = app.config.get_per('accounts', self.conn.name, 'hostname')
-        self.get_id()
-        if self.id_ in self.conn.disco_items_ids:
-            self.conn.disco_items_ids.remove(self.id_)
-        if self.fjid == hostname and self.id_[:6] == 'Gajim_':
-            for item in self.items:
-                self.conn.discoverInfo(item['jid'], id_prefix='Gajim_')
-        else:
-            return True
-
-class AgentItemsErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'agent-items-error-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        self.get_id()
-        if self.id_ in self.conn.disco_items_ids:
-            self.conn.disco_items_ids.remove(self.id_)
-        return True
-
-class AgentInfoReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'agent-info-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_id()
-        if self.id_ in self.conn.disco_info_ids:
-            self.conn.disco_info_ids.remove(self.id_)
-        if self.id_ is None:
-            log.warning('Invalid IQ received without an ID. '
-                        'Ignoring it: %s', self.stanza)
-            return
-        # According to XEP-0030:
-        # For identity: category, type is mandatory, name is optional.
-        # For feature: var is mandatory
-        self.identities, self.features, self.data, self.node = self.parse_stanza(self.stanza)
-
-        if not self.identities:
-            # ejabberd doesn't send identities when we browse online users
-            # see http://www.jabber.ru/bugzilla/show_bug.cgi?id=225
-            self.identities = [{'category': 'server', 'type': 'im',
-                'name': self.node}]
-        self.get_jid_resource()
-        return True
-
-    @classmethod
-    def parse_stanza(cls, stanza):
-        identities, features, data, node = [], [], [], None
-        q = stanza.getTag('query')
-        node = q.getAttr('node')
-        if not node:
-            node = ''
-
-        qc = stanza.getQueryChildren()
-        if not qc:
-            qc = []
-
-        for i in qc:
-            if i.getName() == 'identity':
-                attr = {}
-                for key in i.getAttrs().keys():
-                    attr[key] = i.getAttr(key)
-                identities.append(attr)
-            elif i.getName() == 'feature':
-                var = i.getAttr('var')
-                if var:
-                    features.append(var)
-            elif i.getName() == 'x' and i.getNamespace() == nbxmpp.NS_DATA:
-                data.append(nbxmpp.DataForm(node=i))
-
-        return identities, features, data, node
-
-class AgentInfoErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'agent-info-error-received'
-    base_network_events = []
-
-    def generate(self):
-        self.get_jid_resource()
-        self.get_id()
-        if self.id_ in self.conn.disco_info_ids:
-            self.conn.disco_info_ids.remove(self.id_)
-        return True
 
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'file-request-received'

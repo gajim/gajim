@@ -80,7 +80,20 @@ class ConnectionBytestream:
 
     def __init__(self):
         app.ged.register_event_handler('file-request-received', ged.GUI1,
-            self._nec_file_request_received)
+                                       self._nec_file_request_received)
+
+    def pass_bytestream_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_BYTESTREAM not in features:
+            return
+        if app.config.get_per('accounts', self.name, 'use_ft_proxies'):
+            log.info('Discovered proxy: %s', from_)
+            our_fjid = self.get_own_jid()
+            testit = app.config.get_per(
+                'accounts', self.name, 'test_ft_proxies_on_startup')
+            app.proxy65_manager.resolve(
+                from_, self.connection, str(our_fjid),
+                default=self.name, testit=testit)
+            raise nbxmpp.NodeProcessed
 
     def cleanup(self):
         app.ged.remove_event_handler('file-request-received', ged.GUI1,

@@ -460,8 +460,10 @@ control=None, gc_contact=None, is_anonymous=True):
         execute_command_menuitem, send_custom_status_menuitem):
             widget.set_sensitive(False)
 
-    if app.connections[account] and (app.connections[account].\
-    privacy_rules_supported or app.connections[account].blocking_supported):
+
+    con = app.connections[account]
+    if con and (con.get_module('PrivacyLists').supported or
+                con.get_module('Blocking').supported):
         if helpers.jid_is_blocked(account, jid):
             block_menuitem.set_no_show_all(True)
             block_menuitem.hide()

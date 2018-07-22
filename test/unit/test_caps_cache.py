@@ -6,10 +6,10 @@ import unittest
 import lib
 lib.setup_env()
 
+from unittest.mock import MagicMock
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, Iq
 from gajim.common import caps_cache as caps
-from gajim.common.contacts import Contact
-from gajim.common.connection_handlers_events import AgentInfoReceivedEvent
+from gajim.common.modules.discovery import Discovery
 
 from mock import Mock
 
@@ -106,29 +106,29 @@ class TestCapsCache(CommonCapsTest):
 
     def test_preload_triggering_query(self):
         ''' Make sure that preload issues a disco '''
-        connection = Mock()
+        connection = MagicMock()
         client_caps = caps.ClientCaps(self.caps_hash, self.node, self.caps_method)
 
-        self.cc.query_client_of_jid_if_unknown(connection, "test@gajim.org",
-                        client_caps)
+        self.cc.query_client_of_jid_if_unknown(
+            connection, "test@gajim.org", client_caps)
 
-        self.assertEqual(1, len(connection.mockGetAllCalls()))
+        self.assertEqual(1, connection.get_module('Discovery').disco_contact.call_count)
 
     def test_no_preload_query_if_cashed(self):
         ''' Preload must not send a query if the data is already cached '''
-        connection = Mock()
+        connection = MagicMock()
         client_caps = caps.ClientCaps(self.caps_hash, self.node, self.caps_method)
 
         self.cc.initialize_from_db()
-        self.cc.query_client_of_jid_if_unknown(connection, "test@gajim.org",
-                        client_caps)
+        self.cc.query_client_of_jid_if_unknown(
+            connection, "test@gajim.org", client_caps)
 
-        self.assertEqual(0, len(connection.mockGetAllCalls()))
+        self.assertEqual(0, connection.get_module('Discovery').disco_contact.call_count)
 
     def test_hash(self):
         '''tests the hash computation'''
         stanza = Iq(node=COMPLEX_EXAMPLE)
-        identities, features, data, _ = AgentInfoReceivedEvent.parse_stanza(stanza)
+        identities, features, data, _ = Discovery.parse_info_response(stanza)
         computed_hash = caps.compute_caps_hash(identities, features, data)
         self.assertEqual('q07IKJEyjvHSyhy//CH0CxmKi8w=', computed_hash)
 
@@ -141,12 +141,11 @@ class TestClientCaps(CommonCapsTest):
 
     def test_query_by_get_discover_strategy(self):
         ''' Client must be queried if the data is unkown '''
-        connection = Mock()
+        connection = MagicMock()
         discover = self.client_caps.get_discover_strategy()
         discover(connection, "test@gajim.org")
-
-        connection.mockCheckCall(0, "discoverInfo", "test@gajim.org",
-                        "http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=")
+        connection.get_module('Discovery').disco_contact.assert_called_once_with(
+            'test@gajim.org', 'http://gajim.org#m3P2WeXPMGVH2tZPe7yITnfY0Dw=')
 
     def test_client_supports(self):
         self.assertTrue(caps.client_supports(self.client_caps, NS_PING),
@@ -175,11 +174,11 @@ class TestOldClientCaps(TestClientCaps):
 
     def test_query_by_get_discover_strategy(self):
         ''' Client must be queried if the data is unknown '''
-        connection = Mock()
+        connection = MagicMock()
         discover = self.client_caps.get_discover_strategy()
         discover(connection, "test@gajim.org")
 
-        connection.mockCheckCall(0, "discoverInfo", "test@gajim.org")
+        connection.get_module('Discovery').disco_contact.assert_called_once_with('test@gajim.org')
 
 if __name__ == '__main__':
     unittest.main()

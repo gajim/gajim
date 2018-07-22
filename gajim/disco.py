@@ -258,24 +258,6 @@ class ServicesCache:
         self._info = CacheDictionary(0, getrefresh = False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
-        app.ged.register_event_handler('agent-items-received', ged.GUI1,
-            self._nec_agent_items_received)
-        app.ged.register_event_handler('agent-items-error-received', ged.GUI1,
-            self._nec_agent_items_error_received)
-        app.ged.register_event_handler('agent-info-received', ged.GUI1,
-                self._nec_agent_info_received)
-        app.ged.register_event_handler('agent-info-error-received', ged.GUI1,
-                self._nec_agent_info_error_received)
-
-    def __del__(self):
-        app.ged.remove_event_handler('agent-items-received', ged.GUI1,
-            self._nec_agent_items_received)
-        app.ged.remove_event_handler('agent-items-error-received', ged.GUI1,
-            self._nec_agent_items_error_received)
-        app.ged.remove_event_handler('agent-info-received', ged.GUI1,
-                self._nec_agent_info_received)
-        app.ged.remove_event_handler('agent-info-error-received', ged.GUI1,
-                self._nec_agent_info_error_received)
 
     def cleanup(self):
         self._items.cleanup()
@@ -391,7 +373,9 @@ class ServicesCache:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            app.connections[self.account].discoverInfo(jid, node)
+            con = app.connections[self.account]
+            con.get_module('Discovery').disco_info(
+                jid, node, self._disco_info_received, self._disco_info_error)
 
     def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
         """
@@ -409,24 +393,38 @@ class ServicesCache:
         # Create a closure object
         cbkey = ('items', addr)
         cb = Closure(cb, userargs=args, remove=self._clean_closure,
-            removeargs=cbkey)
+                     removeargs=cbkey)
         # Are we already fetching this?
         if cbkey in self._cbs:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            app.connections[self.account].discoverItems(jid, node)
+            con = app.connections[self.account]
+            con.get_module('Discovery').disco_items(
+                jid, node, self._disco_items_received, self._disco_items_error)
 
-    def _nec_agent_info_received(self, obj):
+    def _disco_info_received(self, from_, identities, features, data, node):
         """
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        self._on_agent_info(obj.fjid, obj.node, obj.identities, obj.features,
-            obj.data)
+        self._on_agent_info(str(from_), node, identities, features, data)
+
+    def _disco_info_error(self, from_, error):
+        """
+        Callback for when a query fails. Even after the browse and agents
+        namespaces
+        """
+        addr = get_agent_address(from_)
+
+        # Call callbacks
+        cbkey = ('info', addr)
+        if cbkey in self._cbs:
+            for cb in self._cbs[cbkey]:
+                cb(str(from_), '', 0, 0, 0)
+            # clean_closure may have beaten us to it
+            if cbkey in self._cbs:
+                del self._cbs[cbkey]
 
     def _on_agent_info(self, fjid, node, identities, features, data):
         addr = get_agent_address(fjid, node)
@@ -443,66 +441,41 @@ class ServicesCache:
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _nec_agent_items_received(self, obj):
+    def _disco_items_received(self, from_, node, items):
         """
         Callback for when we receive an agent's items
         array is (agent, node, items)
         """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-
-        addr = get_agent_address(obj.fjid, obj.node)
+        addr = get_agent_address(from_, node)
 
         # Store in cache
-        self._items[addr] = obj.items
+        self._items[addr] = items
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(obj.fjid, obj.node, obj.items)
+                cb(str(from_), node, items)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
 
-    def _nec_agent_info_error_received(self, obj):
+    def _disco_items_error(self, from_, error):
         """
         Callback for when a query fails. Even after the browse and agents
         namespaces
         """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        addr = get_agent_address(obj.fjid)
-
-        # Call callbacks
-        cbkey = ('info', addr)
-        if cbkey in self._cbs:
-            for cb in self._cbs[cbkey]:
-                cb(obj.fjid, '', 0, 0, 0)
-            # clean_closure may have beaten us to it
-            if cbkey in self._cbs:
-                del self._cbs[cbkey]
-
-    def _nec_agent_items_error_received(self, obj):
-        """
-        Callback for when a query fails. Even after the browse and agents
-        namespaces
-        """
-        # We receive events from all accounts from GED
-        if obj.conn.name != self.account:
-            return
-        addr = get_agent_address(obj.fjid)
+        addr = get_agent_address(from_)
 
         # Call callbacks
         cbkey = ('items', addr)
         if cbkey in self._cbs:
             for cb in self._cbs[cbkey]:
-                cb(obj.fjid, '', 0)
+                cb(str(from_), '', 0)
             # clean_closure may have beaten us to it
             if cbkey in self._cbs:
                 del self._cbs[cbkey]
+
 
 # object is needed so that @property works
 class ServiceDiscoveryWindow(object):

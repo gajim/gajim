@@ -41,6 +41,17 @@ class VCardTemp:
         self._own_vcard = None
         self.own_vcard_received = False
         self.room_jids = []
+        self.supported = False
+
+    def pass_disco(self, from_, identities, features, data, node):
+        if nbxmpp.NS_VCARD not in features:
+            return
+
+        self.supported = True
+        log.info('Discovered vcard-temp: %s', from_)
+        # TODO: Move this GUI code out
+        action = app.app.lookup_action('%s-profile' % self._account)
+        action.set_enabled(True)
 
     def _node_to_dict(self, node):
         dict_ = {}
@@ -67,6 +78,8 @@ class VCardTemp:
 
         if isinstance(callback, RequestAvatar):
             if callback == RequestAvatar.SELF:
+                if not self.supported:
+                    return
                 callback = self._on_own_avatar_received
             elif callback == RequestAvatar.ROOM:
                 callback = self._on_room_avatar_received
