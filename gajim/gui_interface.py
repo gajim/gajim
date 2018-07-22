@@ -106,7 +106,6 @@ from gajim.common.const import AvatarSize, SSLError, PEPEventType
 from gajim.common.const import ACTIVITIES, MOODS
 
 from gajim import roster_window
-from gajim import profile_window
 from gajim import config
 from threading import Thread
 from gajim.common import ged
@@ -123,6 +122,7 @@ from gajim.gtk import PlainConnectionDialog
 from gajim.gtk import SSLErrorDialog
 from gajim.gtk import ConfirmationDialogDoubleCheck
 from gajim.gtk import ChangeNickDialog
+from gajim.gtk import ProfileWindow
 
 from gajim.common import configpaths
 
@@ -284,9 +284,9 @@ class Interface:
             self.show_vcard_when_connect.remove(account)
 
     def edit_own_details(self, account):
-        window = app.get_app_window(profile_window.ProfileWindow)
+        window = app.get_app_window(ProfileWindow)
         if window is None:
-            profile_window.ProfileWindow(account)
+            ProfileWindow(account)
         else:
             window.present()
 
