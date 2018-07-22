@@ -231,7 +231,7 @@ class ChatControl(ChatControlBase):
                 self._nec_update_avatar)
         app.ged.register_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
-        app.ged.register_event_handler('caps-received', ged.GUI1,
+        app.ged.register_event_handler('caps-update', ged.GUI1,
             self._nec_caps_received)
         app.ged.register_event_handler('message-sent', ged.OUT_POSTCORE,
             self._message_sent)
@@ -1154,7 +1154,7 @@ class ChatControl(ChatControlBase):
                 self._nec_update_avatar)
         app.ged.remove_event_handler('chatstate-received', ged.GUI1,
             self._nec_chatstate_received)
-        app.ged.remove_event_handler('caps-received', ged.GUI1,
+        app.ged.remove_event_handler('caps-update', ged.GUI1,
             self._nec_caps_received)
         app.ged.remove_event_handler('message-sent', ged.OUT_POSTCORE,
             self._message_sent)

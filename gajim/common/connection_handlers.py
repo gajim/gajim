@@ -29,24 +29,18 @@
 ##
 
 import operator
-
 from time import time as time_time
 
-from gi.repository import GLib
-
 import nbxmpp
-from gajim.common import caps_cache as capscache
 
 from gajim.common import modules
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import jingle_xtls
 from gajim.common.caps_cache import muc_caps_cache
-from gajim.common.protocol.caps import ConnectionCaps
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
 from gajim.common.connection_handlers_events import *
-from gajim.common.modules.misc import parse_eme
 
 from gajim.common import ged
 from gajim.common.nec import NetworkEvent
@@ -455,7 +449,7 @@ class ConnectionHandlersBase:
         return sess
 
 class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
-                         ConnectionCaps, ConnectionHandlersBase,
+                         ConnectionHandlersBase,
                          ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
         ConnectionSocks5Bytestream.__init__(self)
@@ -464,9 +458,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         # Handle presences BEFORE caps
         app.nec.register_incoming_event(PresenceReceivedEvent)
 
-        ConnectionCaps.__init__(self, account=self.name,
-            capscache=capscache.capscache,
-            client_caps_factory=capscache.create_suitable_client_caps)
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
@@ -502,7 +493,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
-        ConnectionCaps.cleanup(self)
         app.ged.remove_event_handler('roster-set-received',
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
@@ -680,14 +670,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             namespace=nbxmpp.NS_BOB)
         self.connection.SendAndCallForResponse(iq, self._on_bob_received,
             {'cid': cid})
-
-    def _presenceCB(self, con, prs):
-        """
-        Called when we receive a presence
-        """
-        log.debug('PresenceCB')
-        app.nec.push_incoming_event(NetworkEvent('raw-pres-received',
-            conn=self, stanza=prs))
 
     def _nec_subscribe_presence_received(self, obj):
         account = obj.conn.name
@@ -918,7 +900,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
         # that defines handlers
-        con.RegisterHandler('presence', self._presenceCB)
         con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)

@@ -169,7 +169,7 @@ class PrivateChatControl(ChatControl):
         self.TYPE_ID = 'pm'
         app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
             self._nec_update_avatar)
-        app.ged.register_event_handler('caps-received', ged.GUI1,
+        app.ged.register_event_handler('caps-update', ged.GUI1,
             self._nec_caps_received_pm)
         app.ged.register_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)
@@ -181,7 +181,7 @@ class PrivateChatControl(ChatControl):
         super(PrivateChatControl, self).shutdown()
         app.ged.remove_event_handler('update-gc-avatar', ged.GUI1,
             self._nec_update_avatar)
-        app.ged.remove_event_handler('caps-received', ged.GUI1,
+        app.ged.remove_event_handler('caps-update', ged.GUI1,
             self._nec_caps_received_pm)
         app.ged.remove_event_handler('gc-presence-received', ged.GUI1,
             self._nec_gc_presence_received)

@@ -39,7 +39,7 @@ class Discovery:
         ]
 
     def disco_contact(self, jid, node=None):
-        success_cb = self._con._nec_agent_info_received_caps
+        success_cb = self._con.get_module('Caps').contact_info_received
         self._disco(nbxmpp.NS_DISCO_INFO, jid, node, success_cb, None)
 
     def disco_items(self, jid, node=None, success_cb=None, error_cb=None):

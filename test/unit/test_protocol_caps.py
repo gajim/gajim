@@ -1,7 +1,11 @@
 '''
 Tests for caps network coding
 '''
+
 import unittest
+from unittest.mock import MagicMock
+
+import nbxmpp
 
 import lib
 lib.setup_env()
@@ -10,56 +14,33 @@ from gajim.common import app
 from gajim.common import nec
 from gajim.common import ged
 from gajim.common import caps_cache
-from gajim.common.connection_handlers import ConnectionHandlers
-from gajim.common.protocol import caps
-from gajim.common.contacts import Contact
-from gajim.common.connection_handlers_events import CapsPresenceReceivedEvent
-
-from mock import Mock
-
-import nbxmpp
-
-class TestableConnectionCaps(ConnectionHandlers, caps.ConnectionCaps):
-
-    def __init__(self, *args, **kwargs):
-        self.name = 'account'
-        self._mocked_contacts = {}
-        caps.ConnectionCaps.__init__(self, *args, **kwargs)
-
-    def _get_contact_or_gc_contact_for_jid(self, jid):
-        """
-        Overwrite to decouple form contact handling
-        """
-        if jid not in self._mocked_contacts:
-            self._mocked_contacts[jid] = Mock(realClass=Contact)
-            self._mocked_contacts[jid].jid = jid
-        return self._mocked_contacts[jid]
-
-    def discoverInfo(self, *args, **kwargs):
-        pass
-
-    def get_mocked_contact_for_jid(self, jid):
-        return self._mocked_contacts[jid]
+from gajim.common.modules.caps import Caps
 
 
 class TestConnectionCaps(unittest.TestCase):
 
     def setUp(self):
+        app.contacts.add_account('account')
+        contact = app.contacts.create_contact(
+            'user@server.com', 'account', resource='a')
+        app.contacts.add_contact('account', contact)
+
         app.nec = nec.NetworkEventsController()
-        app.ged.register_event_handler('caps-presence-received', ged.GUI2,
+        app.ged.register_event_handler(
+            'caps-presence-received', ged.GUI2,
             self._nec_caps_presence_received)
 
+        self.module = Caps(MagicMock())
+        self.module._account = 'account'
+        self.module._capscache = MagicMock()
+
     def _nec_caps_presence_received(self, obj):
-        self.assertFalse(isinstance(obj.client_caps, caps_cache.NullClientCaps),
-            msg="On receive of proper caps, we must not use the fallback")
+        self.assertTrue(
+            isinstance(obj.client_caps, caps_cache.ClientCaps),
+            msg="On receive of valid caps, ClientCaps should be returned")
 
     def test_capsPresenceCB(self):
         fjid = "user@server.com/a"
-
-        connection_caps = TestableConnectionCaps("account", Mock(),
-            caps_cache.create_suitable_client_caps)
-
-        contact = connection_caps._get_contact_or_gc_contact_for_jid(fjid)
 
         xml = """<presence from='user@server.com/a' to='%s' id='123'>
             <c node='http://gajim.org' ver='pRCD6cgQ4SDqNMCjdhRV6TECx5o='
@@ -67,7 +48,8 @@ class TestConnectionCaps(unittest.TestCase):
             </presence>
         """ % (fjid)
         msg = nbxmpp.protocol.Presence(node=nbxmpp.simplexml.XML2Node(xml))
-        connection_caps._presenceCB(None, msg)
+        self.module._presence_received(None, msg)
+
 
 if __name__ == '__main__':
     unittest.main()
