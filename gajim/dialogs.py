@@ -31,11 +31,9 @@
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import GLib
 
 import os
-import nbxmpp
 import logging
 
 from gajim import gtkgui_helpers
@@ -44,7 +42,6 @@ from gajim import dataforms_widget
 
 from random import randrange
 from gajim.common import ged
-from gajim.common import const
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import MOODS
 
