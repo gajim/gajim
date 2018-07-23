@@ -146,6 +146,9 @@ class Discovery:
     def _server_items_received(self, from_, node, items):
         log.info('Server items received')
         for item in items:
+            if 'node' in item:
+                # Only disco components
+                continue
             self.disco_info(item['jid'],
                             success_cb=self._server_items_info_received)
 
