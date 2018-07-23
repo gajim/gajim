@@ -383,12 +383,6 @@ PresenceHelperEvent):
             elif namespace == nbxmpp.NS_DELAY and not self.timestamp:
                 # XEP-0091
                 self._generate_timestamp(self.stanza.timestamp)
-            elif namespace == 'http://delx.cjb.net/protocol/roster-subsync':
-                # see http://trac.gajim.org/ticket/326
-                agent = app.get_server_from_jid(self.jid)
-                if self.conn.connection.getRoster().getItem(agent):
-                    # to be sure it's a transport contact
-                    self.transport_auto_auth = True
 
         if not self.is_gc and self.id_ and self.id_.startswith('gajim_muc_') \
         and self.ptype == 'error':
@@ -413,19 +407,7 @@ PresenceHelperEvent):
                     presence_obj=self))
             return
 
-        if self.ptype == 'subscribe':
-            app.nec.push_incoming_event(SubscribePresenceReceivedEvent(None,
-                conn=self.conn, stanza=self.stanza, presence_obj=self))
-        elif self.ptype == 'subscribed':
-            # BE CAREFUL: no con.updateRosterItem() in a callback
-            app.nec.push_incoming_event(SubscribedPresenceReceivedEvent(None,
-                conn=self.conn, stanza=self.stanza, presence_obj=self))
-        elif self.ptype == 'unsubscribe':
-            log.debug(_('unsubscribe request from %s') % self.jid)
-        elif self.ptype == 'unsubscribed':
-            app.nec.push_incoming_event(UnsubscribedPresenceReceivedEvent(
-                None, conn=self.conn, stanza=self.stanza, presence_obj=self))
-        elif self.ptype == 'error':
+        if self.ptype == 'error':
             return
 
         if not self.ptype or self.ptype == 'unavailable':
@@ -550,35 +532,6 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.real_jid = self.stanza.getJid()
         self.actor = self.stanza.getActor()
         self.new_nick = self.stanza.getNewNick()
-        return True
-
-class SubscribePresenceReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'subscribe-presence-received'
-    base_network_events = []
-
-    def generate(self):
-        self.jid = self.presence_obj.jid
-        self.fjid = self.presence_obj.fjid
-        self.status = self.presence_obj.status
-        self.transport_auto_auth = self.presence_obj.transport_auto_auth
-        self.user_nick = self.presence_obj.user_nick
-        return True
-
-class SubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'subscribed-presence-received'
-    base_network_events = []
-
-    def generate(self):
-        self.jid = self.presence_obj.jid
-        self.resource = self.presence_obj.resource
-        return True
-
-class UnsubscribedPresenceReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'unsubscribed-presence-received'
-    base_network_events = []
-
-    def generate(self):
-        self.jid = self.presence_obj.jid
         return True
 
 class OurShowEvent(nec.NetworkIncomingEvent):

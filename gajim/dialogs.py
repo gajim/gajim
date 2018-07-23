@@ -881,7 +881,7 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         """
         Accept the request
         """
-        app.connections[self.account].send_authorization(self.jid)
+        app.connections[self.account].get_module('Presence').subscribed(self.jid)
         self.destroy()
         contact = app.contacts.get_contact(self.account, self.jid)
         if not contact or _('Not in Roster') in contact.groups:
@@ -911,7 +911,7 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         """
         Refuse the request
         """
-        app.connections[self.account].refuse_authorization(self.jid)
+        app.connections[self.account].get_module('Presence').unsubscribed(self.jid)
         contact = app.contacts.get_contact(self.account, self.jid)
         if contact and _('Not in Roster') in contact.get_shown_groups():
             app.interface.roster.remove_contact(self.jid, self.account)
@@ -1271,8 +1271,8 @@ class RosterItemExchangeWindow:
                         groups = []
                     jid = model[iter_][1]
                     if app.jid_is_transport(self.jid_from):
-                        app.connections[self.account].automatically_added.append(
-                                jid)
+                        con = app.connections[self.account]
+                        con.get_module('Presence').automatically_added.append(jid)
                     app.interface.roster.req_sub(self, jid, message,
                             self.account, groups=groups, nickname=model[iter_][2],
                             auto_auth=True)
@@ -1311,7 +1311,7 @@ class RosterItemExchangeWindow:
                     a+=1
                     # it is selected
                     jid = model[iter_][1]
-                    app.connections[self.account].unsubscribe(jid)
+                    app.connections[self.account].get_module('Presence').unsubscribe(jid)
                     app.interface.roster.remove_contact(jid, self.account)
                     app.contacts.remove_jid(self.account, jid)
                 iter_ = model.iter_next(iter_)

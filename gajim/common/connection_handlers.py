@@ -78,7 +78,7 @@ class ConnectionDisco:
         if resp.getType() == 'result':
             app.nec.push_incoming_event(InformationEvent(
                 None, dialog_name='agent-register-success', args=agent))
-            self.request_subscription(agent, auto_auth=True)
+            self.get_module('Presence').subscribe(agent, auto_auth=True)
             self.agent_registrations[agent]['roster_push'] = True
             if self.agent_registrations[agent]['sub_received']:
                 p = nbxmpp.Presence(agent, 'subscribed')
@@ -121,9 +121,6 @@ class ConnectionHandlersBase:
         # List of IDs that will produce a timeout is answer doesn't arrive
         # {time_of_the_timeout: (id, message to send to gui), }
         self.awaiting_timeouts = {}
-        # keep the jids we auto added (transports contacts) to not send the
-        # SUBSCRIBED event to gui
-        self.automatically_added = []
 
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
@@ -461,9 +458,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
-        # keep the latest subscribed event for each jid to prevent loop when we
-        # acknowledge presences
-        self.subscribed_events = {}
         # IDs of disco#items requests
         self.disco_items_ids = []
         # IDs of disco#info requests
@@ -478,16 +472,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             ged.CORE, self._nec_roster_set_received)
         app.ged.register_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
-        app.ged.register_event_handler('subscribe-presence-received',
-            ged.CORE, self._nec_subscribe_presence_received)
-        app.ged.register_event_handler('subscribed-presence-received',
-            ged.CORE, self._nec_subscribed_presence_received)
-        app.ged.register_event_handler('subscribed-presence-received',
-            ged.POSTGUI, self._nec_subscribed_presence_received_end)
-        app.ged.register_event_handler('unsubscribed-presence-received',
-            ged.CORE, self._nec_unsubscribed_presence_received)
-        app.ged.register_event_handler('unsubscribed-presence-received',
-            ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
@@ -497,16 +481,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             ged.CORE, self._nec_roster_set_received)
         app.ged.remove_event_handler('roster-received', ged.CORE,
             self._nec_roster_received)
-        app.ged.remove_event_handler('subscribe-presence-received',
-            ged.CORE, self._nec_subscribe_presence_received)
-        app.ged.remove_event_handler('subscribed-presence-received',
-            ged.CORE, self._nec_subscribed_presence_received)
-        app.ged.remove_event_handler('subscribed-presence-received',
-            ged.POSTGUI, self._nec_subscribed_presence_received_end)
-        app.ged.remove_event_handler('unsubscribed-presence-received',
-            ged.CORE, self._nec_unsubscribed_presence_received)
-        app.ged.remove_event_handler('unsubscribed-presence-received',
-            ged.POSTGUI, self._nec_unsubscribed_presence_received_end)
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
@@ -671,101 +645,13 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         self.connection.SendAndCallForResponse(iq, self._on_bob_received,
             {'cid': cid})
 
-    def _nec_subscribe_presence_received(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        if app.jid_is_transport(obj.fjid) and obj.fjid in \
-        self.agent_registrations:
-            self.agent_registrations[obj.fjid]['sub_received'] = True
-            if not self.agent_registrations[obj.fjid]['roster_push']:
-                # We'll reply after roster push result
-                return True
-        if app.config.get_per('accounts', self.name, 'autoauth') or \
-        app.jid_is_transport(obj.fjid) or obj.jid in self.jids_for_auto_auth \
-        or obj.transport_auto_auth:
-            if self.connection:
-                p = nbxmpp.Presence(obj.fjid, 'subscribed')
-                p = self.add_sha(p)
-                self.connection.send(p)
-            if app.jid_is_transport(obj.fjid) or obj.transport_auto_auth:
-                #TODO!?!?
-                #self.show = 'offline'
-                #self.status = 'offline'
-                #emit NOTIFY
-                pass
-            if obj.transport_auto_auth:
-                self.automatically_added.append(obj.jid)
-                self.request_subscription(obj.jid, name=obj.user_nick)
-            return True
-        if not obj.status:
-            obj.status = _('I would like to add you to my roster.')
-
-    def _nec_subscribed_presence_received(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        # BE CAREFUL: no con.updateRosterItem() in a callback
-        if obj.jid in self.automatically_added:
-            self.automatically_added.remove(obj.jid)
-            return True
-        # detect a subscription loop
-        if obj.jid not in self.subscribed_events:
-            self.subscribed_events[obj.jid] = []
-        self.subscribed_events[obj.jid].append(time_time())
-        block = False
-        if len(self.subscribed_events[obj.jid]) > 5:
-            if time_time() - self.subscribed_events[obj.jid][0] < 5:
-                block = True
-            self.subscribed_events[obj.jid] = \
-                self.subscribed_events[obj.jid][1:]
-        if block:
-            app.config.set_per('account', self.name, 'dont_ack_subscription',
-                True)
-            return True
-
-    def _nec_subscribed_presence_received_end(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        if not app.config.get_per('accounts', account,
-        'dont_ack_subscription'):
-            self.ack_subscribed(obj.jid)
-
-    def _nec_unsubscribed_presence_received(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        # detect a unsubscription loop
-        if obj.jid not in self.subscribed_events:
-            self.subscribed_events[obj.jid] = []
-        self.subscribed_events[obj.jid].append(time_time())
-        block = False
-        if len(self.subscribed_events[obj.jid]) > 5:
-            if time_time() - self.subscribed_events[obj.jid][0] < 5:
-                block = True
-            self.subscribed_events[obj.jid] = \
-                self.subscribed_events[obj.jid][1:]
-        if block:
-            app.config.set_per('account', self.name, 'dont_ack_subscription',
-                True)
-            return True
-
-    def _nec_unsubscribed_presence_received_end(self, obj):
-        account = obj.conn.name
-        if account != self.name:
-            return
-        if not app.config.get_per('accounts', account,
-        'dont_ack_subscription'):
-            self.ack_unsubscribed(obj.jid)
-
     def _nec_agent_removed(self, obj):
         if obj.conn.name != self.name:
             return
         for jid in obj.jid_list:
             log.debug('Removing contact %s due to unregistered transport %s' % \
                 (jid, obj.agent))
-            self.unsubscribe(jid)
+            self.get_module('Presence').unsubscribe(jid)
             # Transport contacts can't have 2 resources
             if jid in app.to_be_removed[self.name]:
                 # This way we'll really remove it

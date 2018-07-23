@@ -2037,7 +2037,7 @@ class RosterWindow:
         """
         Authorize a contact (by re-sending auth menuitem)
         """
-        app.connections[account].send_authorization(jid)
+        app.connections[account].get_module('Presence').subscribed(jid)
         InformationDialog(_('Authorization sent'),
             _('"%s" will now see your status.') %jid)
 
@@ -2047,8 +2047,8 @@ class RosterWindow:
         Request subscription to a contact
         """
         groups_list = groups or []
-        app.connections[account].request_subscription(jid, txt, nickname,
-            groups_list, auto_auth, app.nicks[account])
+        app.connections[account].get_module('Presence').subscribe(
+            jid, txt, nickname, groups_list, auto_auth, app.nicks[account])
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
         if not contact:
             keyID = ''
@@ -2076,7 +2076,7 @@ class RosterWindow:
         """
         Revoke a contact's authorization
         """
-        app.connections[account].refuse_authorization(jid)
+        app.connections[account].get_module('Presence').unsubscribed(jid)
         InformationDialog(_('Authorization removed'),
             _('Now "%s" will always see you as offline.') %jid)
 
@@ -2792,7 +2792,7 @@ class RosterWindow:
             contact.jid:
                 # We remove the server contact
                 # remove it from treeview
-                app.connections[account].unsubscribe(contact.jid)
+                app.connections[account].get_module('Presence').unsubscribe(contact.jid)
                 self.remove_contact(contact.jid, account, backend=True)
                 return
 
@@ -2977,7 +2977,7 @@ class RosterWindow:
                     self.remove_contact_from_groups(contact.jid, account,
                         [group])
                 else:
-                    app.connections[account].unsubscribe(contact.jid)
+                    app.connections[account].get_module('Presence').unsubscribe(contact.jid)
                     self.remove_contact(contact.jid, account, backend=True)
 
         ConfirmationDialogCheck(_('Remove Group'),
@@ -3410,7 +3410,7 @@ class RosterWindow:
                     remove_auth = False
             for (contact, account) in list_:
                 if _('Not in Roster') not in contact.get_shown_groups():
-                    app.connections[account].unsubscribe(contact.jid,
+                    app.connections[account].get_module('Presence').unsubscribe(contact.jid,
                         remove_auth)
                 self.remove_contact(contact.jid, account, backend=True)
                 if not remove_auth and contact.sub == 'both':

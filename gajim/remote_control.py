@@ -723,7 +723,7 @@ class SignalObject(dbus.service.Object):
         for account in accounts:
             contacts = app.contacts.get_contacts(account, jid)
             if contacts:
-                app.connections[account].unsubscribe(jid)
+                app.connections[account].get_module('Presence').unsubscribe(jid)
                 for contact in contacts:
                     app.interface.roster.remove_contact(contact, account)
                 app.contacts.remove_jid(account, jid)

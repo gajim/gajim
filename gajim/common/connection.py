@@ -380,43 +380,6 @@ class CommonConnection:
                                     additional_data=obj.additional_data,
                                     stanza_id=obj.stanza_id)
 
-    def ack_subscribed(self, jid):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def ack_unsubscribed(self, jid):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def request_subscription(self, jid, msg='', name='', groups=None,
-                    auto_auth=False):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def send_authorization(self, jid):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def refuse_authorization(self, jid):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
-    def unsubscribe(self, jid, remove_auth = True):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def unsubscribe_agent(self, agent):
         """
         To be implemented by derived classes
@@ -585,7 +548,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_success = None
         self.on_connect_failure = None
         self.retrycount = 0
-        self.jids_for_auto_auth = [] # list of jid to auto-authorize
         self.available_transports = {} # list of available transports on this
         # server {'icq': ['icq.server.com', 'icq2.server.com'], }
         self.private_storage_supported = True
@@ -1650,75 +1612,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not self.connection:
             return
         self.connection.send(stanza)
-
-    def ack_subscribed(self, jid):
-        if not app.account_is_connected(self.name):
-            return
-        log.debug('ack\'ing subscription complete for %s' % jid)
-        p = nbxmpp.Presence(jid, 'subscribe')
-        self.connection.send(p)
-
-    def ack_unsubscribed(self, jid):
-        if not app.account_is_connected(self.name):
-            return
-        log.debug('ack\'ing unsubscription complete for %s' % jid)
-        p = nbxmpp.Presence(jid, 'unsubscribe')
-        self.connection.send(p)
-
-    def request_subscription(self, jid, msg='', name='', groups=None,
-    auto_auth=False, user_nick=''):
-        if not app.account_is_connected(self.name):
-            return
-        if groups is None:
-            groups = []
-        log.debug('subscription request for %s' % jid)
-        if auto_auth:
-            self.jids_for_auto_auth.append(jid)
-        # RFC 3921 section 8.2
-        infos = {'jid': jid}
-        if name:
-            infos['name'] = name
-        iq = nbxmpp.Iq('set', nbxmpp.NS_ROSTER)
-        q = iq.setQuery()
-        item = q.addChild('item', attrs=infos)
-        for g in groups:
-            item.addChild('group').setData(g)
-        self.connection.send(iq)
-
-        p = nbxmpp.Presence(jid, 'subscribe')
-        if user_nick:
-            p.setTag('nick', namespace = nbxmpp.NS_NICK).setData(user_nick)
-        p = self.add_sha(p)
-        if msg:
-            p.setStatus(msg)
-        self.connection.send(p)
-
-    def send_authorization(self, jid):
-        if not app.account_is_connected(self.name):
-            return
-        p = nbxmpp.Presence(jid, 'subscribed')
-        p = self.add_sha(p)
-        self.connection.send(p)
-
-    def refuse_authorization(self, jid):
-        if not app.account_is_connected(self.name):
-            return
-        p = nbxmpp.Presence(jid, 'unsubscribed')
-        p = self.add_sha(p)
-        self.connection.send(p)
-
-    def unsubscribe(self, jid, remove_auth = True):
-        if not app.account_is_connected(self.name):
-            return
-        if remove_auth:
-            self.connection.getRoster().delItem(jid)
-            jid_list = app.config.get_per('contacts')
-            for j in jid_list:
-                if j.startswith(jid):
-                    app.config.del_per('contacts', j)
-        else:
-            self.connection.getRoster().Unsubscribe(jid)
-            self.update_contact(jid, '', [])
 
     def unsubscribe_agent(self, agent):
         if not app.account_is_connected(self.name):
