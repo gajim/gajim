@@ -43,6 +43,7 @@ import hashlib
 import json
 import logging
 import base64
+import ssl
 from functools import partial
 from string import Template
 from urllib.request import urlopen
@@ -1281,7 +1282,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         try:
             file = urlopen(
                 url, cafile=cafile, timeout=2)
-        except URLError as exc:
+        except (URLError, ssl.CertificateError) as exc:
             log.info('Error while requesting POSH: %s' % exc)
             return
 
