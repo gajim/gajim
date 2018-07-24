@@ -583,7 +583,7 @@ class GajimRemote(Server):
         'account'
         """
         if not jid:
-            raise dbus_support.MissingArgument()
+            raise ValueError('jid is missing')
         jid = self._get_real_jid(jid, account)
         try:
             jid = helpers.parse_jid(jid)
