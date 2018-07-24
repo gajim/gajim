@@ -92,6 +92,7 @@ function install_deps {
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
+git+https://github.com/enthought/pywin32-ctypes.git
 keyring
 python-gnupg
 python-axolotl
