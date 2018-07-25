@@ -156,12 +156,13 @@ class ProfileWindow(Gtk.ApplicationWindow):
             menu = Gtk.Menu()
 
             nick = app.config.get_per('accounts', self.account, 'name')
-            sha = app.contacts.get_avatar_sha(self.account, self.jid)
+            if self.avatar_sha is None:
+                return
             menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             menuitem.connect(
                 'activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                sha, nick)
+                self.avatar_sha, nick)
             menu.append(menuitem)
             menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
