@@ -2593,8 +2593,8 @@ class RosterWindow:
             return
 
         if obj.nick == gc_ctrl.nick:
-            contact = app.contacts.get_contact_with_highest_priority(account,
-                obj.room_jid)
+            contact = app.contacts.get_contact_with_highest_priority(
+                account, obj.room_jid)
             if contact:
                 contact.show = obj.show
                 self.draw_contact(obj.room_jid, account)
@@ -2615,28 +2615,28 @@ class RosterWindow:
                     if app.connections[account].server_resource:
                         resource = app.connections[account].server_resource
                     sha = app.config.get_per('accounts', account, 'avatar_sha')
-                    contact = app.contacts.create_contact(jid=self_jid,
-                        account=account, name=app.nicks[account],
+                    contact = app.contacts.create_contact(
+                        jid=self_jid, account=account, name=app.nicks[account],
                         groups=['self_contact'], show='offline', sub='both',
                         ask='none', resource=resource, avatar_sha=sha)
                     app.contacts.add_contact(account, contact)
                     self.add_contact(self_jid, account)
             if app.config.get('remember_opened_chat_controls'):
                 account = obj.conn.name
-                controls = app.config.get_per('accounts', account,
-                    'opened_chat_controls')
+                controls = app.config.get_per(
+                    'accounts', account, 'opened_chat_controls')
                 if controls:
                     for jid in controls.split(','):
                         contact = \
                             app.contacts.get_contact_with_highest_priority(
-                            account, jid)
+                                account, jid)
                         if not contact:
-                            contact = self.add_to_not_in_the_roster(account,
-                                jid)
-                        app.interface.on_open_chat_window(None, contact,
-                            account)
-                app.config.set_per('accounts', account,
-                    'opened_chat_controls', '')
+                            contact = self.add_to_not_in_the_roster(
+                                account, jid)
+                        app.interface.on_open_chat_window(
+                            None, contact, account)
+                app.config.set_per(
+                    'accounts', account, 'opened_chat_controls', '')
             GLib.idle_add(self.refilter_shown_roster_items)
 
     def _nec_anonymous_auth(self, obj):

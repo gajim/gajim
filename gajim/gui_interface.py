@@ -2628,7 +2628,7 @@ class Interface:
 
         self.roster._before_fill()
         for account in app.connections:
-            app.connections[account].load_roster_from_db()
+            app.connections[account].get_module('Roster').load_roster()
         self.roster._after_fill()
 
         # get instances for windows/dialogs that will show_all()/hide()

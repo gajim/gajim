@@ -18,15 +18,14 @@
 ##
 
 
-from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
+
 
 class Roster:
     def __init__(self, zeroconf):
         self._data = None
         self.zeroconf = zeroconf                 # our zeroconf instance
         self.version = ''
-        self.received_from_server = True
 
     def update_roster(self):
         for val in self.zeroconf.contacts.values():
@@ -109,6 +108,9 @@ class Roster:
     def __getitem__(self, jid):
         return self._data[jid]
 
+    def __setitem__(self, jid, value):
+        self._data[jid] = value
+
     def getItems(self):
         # Return list of all [bare] JIDs that the roster currently tracks.
         return self._data.keys()
@@ -157,3 +159,6 @@ class Roster:
 
     def Unauthorize(self, jid):
         pass
+
+    def copy(self):
+        return self._data.copy()

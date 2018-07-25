@@ -468,19 +468,11 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
-        app.ged.register_event_handler('roster-set-received',
-            ged.CORE, self._nec_roster_set_received)
-        app.ged.register_event_handler('roster-received', ged.CORE,
-            self._nec_roster_received)
         app.ged.register_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
-        app.ged.remove_event_handler('roster-set-received',
-            ged.CORE, self._nec_roster_set_received)
-        app.ged.remove_event_handler('roster-received', ged.CORE,
-            self._nec_roster_received)
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
@@ -555,41 +547,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
 
             # We can now continue connection by requesting the roster
             self.request_roster()
-        elif self.awaiting_answers[id_][0] == ROSTER_ARRIVED:
-            if iq_obj.getType() == 'result':
-                if not iq_obj.getTag('query'):
-                    self._init_roster_from_db()
-                self._getRoster()
-            elif iq_obj.getType() == 'error':
-                self.roster_supported = False
-                self.get_module('Discovery').discover_server_items()
-                if app.config.get_per('accounts', self.name,
-                'use_ft_proxies'):
-                    self.discover_ft_proxies()
-                app.nec.push_incoming_event(RosterReceivedEvent(None,
-                    conn=self))
-            del self.awaiting_answers[id_]
-
-    def _rosterSetCB(self, con, iq_obj):
-        log.debug('rosterSetCB')
-        app.nec.push_incoming_event(RosterSetReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-        raise nbxmpp.NodeProcessed
-
-    def _nec_roster_set_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        for jid in obj.items:
-            item = obj.items[jid]
-            app.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
-                jid=jid, nickname=item['name'], sub=item['sub'],
-                ask=item['ask'], groups=item['groups']))
-            account_jid = app.get_jid_from_account(self.name)
-            app.logger.add_or_update_contact(account_jid, jid, item['name'],
-                item['sub'], item['ask'], item['groups'])
-        if obj.version:
-            app.config.set_per('accounts', self.name, 'roster_version',
-                obj.version)
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza
@@ -657,15 +614,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                 # This way we'll really remove it
                 app.to_be_removed[self.name].remove(jid)
 
-    def _getRoster(self):
-        log.debug('getRosterCB')
-        if not self.connection:
-            return
-        self.connection.getRoster(self._on_roster_set)
-        self.get_module('Discovery').discover_server_items()
-        if app.config.get_per('accounts', self.name, 'use_ft_proxies'):
-            self.discover_ft_proxies()
-
     def discover_ft_proxies(self):
         cfg_proxies = app.config.get_per('accounts', self.name,
             'file_transfer_proxies')
@@ -679,15 +627,7 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                 app.proxy65_manager.resolve(proxy, self.connection, our_jid,
                     testit=testit)
 
-    def _on_roster_set(self, roster):
-        app.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
-            xmpp_roster=roster))
-
-    def _nec_roster_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-        our_jid = app.get_jid_from_account(self.name)
-
+    def send_first_presence(self):
         if self.connected > 1 and self.continue_connect_info:
             msg = self.continue_connect_info[1]
             sign_msg = self.continue_connect_info[2]
@@ -704,20 +644,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
                     send_first_presence = False
             if send_first_presence:
                 self._send_first_presence(signed)
-
-            app.logger.replace_roster(self.name, obj.version, obj.roster)
-
-        for contact in app.contacts.iter_contacts(self.name):
-            if not contact.is_groupchat() and contact.jid not in obj.roster\
-            and contact.jid != our_jid:
-                app.nec.push_incoming_event(RosterInfoEvent(None,
-                    conn=self, jid=contact.jid, nickname=None, sub=None,
-                    ask=None, groups=()))
-        for jid, info in obj.roster.items():
-            app.nec.push_incoming_event(RosterInfoEvent(None,
-                conn=self, jid=jid, nickname=info['name'],
-                sub=info['subscription'], ask=info['ask'],
-                groups=info['groups'], avatar_sha=info['avatar_sha']))
 
     def _send_first_presence(self, signed=''):
         show = self.continue_connect_info[0]
@@ -786,7 +712,7 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
     def _register_handlers(self, con, con_type):
         # try to find another way to register handlers in each class
         # that defines handlers
-        con.RegisterHandler('iq', self._rosterSetCB, 'set', nbxmpp.NS_ROSTER)
+
         con.RegisterHandler('iq', self._siSetCB, 'set', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siErrorCB, 'error', nbxmpp.NS_SI)
         con.RegisterHandler('iq', self._siResultCB, 'result', nbxmpp.NS_SI)

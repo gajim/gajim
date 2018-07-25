@@ -384,34 +384,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
                 contact.keyID = app.config.get_per('accounts',
                     connection.name, 'keyid')
             contacts.append(contact)
-            # if we're online ...
-            if connection.connection:
-                roster = connection.connection.getRoster()
-                # in threadless connection when no roster stanza is sent
-                # 'roster' is None
-                if roster and roster.getItem(jid):
-                    resources = roster.getResources(jid)
-                    # ...get the contact info for our other online
-                    # resources
-                    for resource in resources:
-                        # Check if we already have this resource
-                        found = False
-                        for contact_ in contacts:
-                            if contact_.resource == resource:
-                                found = True
-                                break
-                        if found:
-                            continue
-                        show = roster.getShow(jid + '/' + resource)
-                        if not show:
-                            show = 'online'
-                        contact = app.contacts.create_self_contact(
-                            jid=jid, account=account, show=show,
-                            status=roster.getStatus(
-                            jid + '/' + resource),
-                            priority=roster.getPriority(
-                            jid + '/' + resource), resource=resource)
-                        contacts.append(contact)
 
         # Username/Account/Groupchat
         self.prim_contact = app.contacts.get_highest_prio_contact_from_contacts(

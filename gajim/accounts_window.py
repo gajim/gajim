@@ -301,6 +301,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
             app.interface.roster.regroup = app.config.get('mergeaccounts')
         else:
             app.interface.roster.regroup = False
+        app.config.set_per(
+            'accounts', account, 'roster_version', '')
         app.interface.roster.setup_and_draw_roster()
         gui_menu_builder.build_accounts_menu()
 

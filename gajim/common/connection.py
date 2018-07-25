@@ -387,15 +387,15 @@ class CommonConnection:
         raise NotImplementedError
 
     def update_contact(self, jid, name, groups):
-        if self.connection and self.roster_supported:
-            self.connection.getRoster().setItem(jid=jid, name=name, groups=groups)
+        if self.connection:
+            self.getRoster().setItem(jid=jid, name=name, groups=groups)
 
     def update_contacts(self, contacts):
         """
         Update multiple roster items
         """
-        if self.connection and self.roster_supported:
-            self.connection.getRoster().setItemMulti(contacts)
+        if self.connection:
+            self.getRoster().setItemMulti(contacts)
 
     def new_account(self, name, config, sync=False):
         """
@@ -442,10 +442,6 @@ class CommonConnection:
         if self.gpg:
             return self.gpg.get_secret_keys()
         return None
-
-    def load_roster_from_db(self):
-        # Do nothing by default
-        return
 
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
@@ -1622,7 +1618,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.setID(id_)
         self.awaiting_answers[id_] = (AGENT_REMOVED, agent)
         self.connection.send(iq)
-        self.connection.getRoster().delItem(agent)
+        self.getRoster().delItem(agent)
 
     def send_new_account_infos(self, form, is_form):
         if is_form:
@@ -1747,6 +1743,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 iq3.addChild(name='meta', attrs=dict_)
         self.connection.send(iq)
 
+    def getRoster(self):
+        return self.get_module('Roster')
+
     def request_roster(self, resume=False):
         version = None
         features = self.connection.Dispatcher.Stream.features
@@ -1754,18 +1753,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             version = app.config.get_per(
                 'accounts', self.name, 'roster_version')
 
-        iq_id = self.connection.initRoster(version=version,
-                                           request=not resume)
-        if resume:
-            self._init_roster_from_db()
-        else:
-            self.awaiting_answers[iq_id] = (ROSTER_ARRIVED, )
-
-    def _init_roster_from_db(self):
-        account_jid = app.get_jid_from_account(self.name)
-        roster_data = app.logger.get_roster(account_jid)
-        roster = self.connection.getRoster(force=True)
-        roster.setRaw(roster_data)
+        if not resume:
+            self.get_module('Roster').request_roster(version)
 
     def send_agent_status(self, agent, ptype):
         if not app.account_is_connected(self.name):
@@ -2056,8 +2045,3 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.reconnect()
             else:
                 self.time_to_reconnect = None
-
-    def load_roster_from_db(self):
-        app.nec.push_incoming_event(RosterReceivedEvent(None, conn=self))
-
-# END Connection

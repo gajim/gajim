@@ -135,9 +135,11 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
-                app.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
-                    jid=key, nickname=self.roster.getName(key), sub='both',
-                    ask='no', groups=self.roster.getGroups(key)))
+                app.nec.push_incoming_event(NetworkEvent(
+                    'roster-info', conn=self,jid=key,
+                    nickname=self.roster.getName(key), sub='both',
+                    ask='no', groups=self.roster.getGroups(key),
+                    avatar_sha=None))
                 app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
                     None, conn=self, fjid=key, show=self.roster.getStatus(key),
                     status=self.roster.getMessage(key)))
@@ -147,9 +149,11 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     # callbacks called from zeroconf
     def _on_new_service(self, jid):
         self.roster.setItem(jid)
-        app.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
-            jid=jid, nickname=self.roster.getName(jid), sub='both',
-            ask='no', groups=self.roster.getGroups(jid)))
+        app.nec.push_incoming_event(NetworkEvent(
+            'roster-info', conn=self, jid=jid,
+            nickname=self.roster.getName(jid), sub='both',
+            ask='no', groups=self.roster.getGroups(jid),
+            avatar_sha=None))
         app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
             None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
             status=self.roster.getMessage(jid)))
@@ -219,14 +223,16 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         else:
             self.connection.announce()
         self.roster = self.connection.getRoster()
-        app.nec.push_incoming_event(RosterReceivedEvent(None, conn=self,
-            xmpp_roster=self.roster))
+        app.nec.push_incoming_event(NetworkEvent('roster-received', conn=self,
+            roster=self.roster.copy(), received_from_server=True))
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():
-            app.nec.push_incoming_event(RosterInfoEvent(None, conn=self,
-                jid=jid, nickname=self.roster.getName(jid), sub='both',
-                ask='no', groups=self.roster.getGroups(jid)))
+            app.nec.push_incoming_event(NetworkEvent(
+                'roster-info', conn=self, jid=jid,
+                nickname=self.roster.getName(jid), sub='both',
+                ask='no', groups=self.roster.getGroups(jid),
+                avatar_sha=None))
             app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
                 None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
                 status=self.roster.getMessage(jid)))

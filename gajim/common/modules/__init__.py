@@ -15,6 +15,7 @@
 import logging
 from importlib import import_module
 from pathlib import Path
+from unittest.mock import MagicMock
 
 log = logging.getLogger('gajim.c.m')
 
@@ -60,9 +61,7 @@ class ModuleMock:
         self.supported = False
 
     def __getattr__(self, key):
-        def _mock(self, *args, **kwargs):
-            return
-        return _mock
+        return MagicMock()
 
 
 def register(con, *args, **kwargs):
