@@ -106,7 +106,6 @@ class HTTPUpload:
 
         for ctrl in app.interface.msg_win_mgr.get_controls(acct=self._account):
             ctrl.update_actions()
-        raise nbxmpp.NodeProcessed
 
     def handle_outgoing_stanza(self, event):
         if event.conn.name != self._account:

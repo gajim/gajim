@@ -190,6 +190,7 @@ class Discovery:
         self._con.get_module('VCardTemp').pass_disco(from_, *args)
         self._con.get_module('Carbons').pass_disco(from_, *args)
         self._con.get_module('PrivacyLists').pass_disco(from_, *args)
+        self._con.get_module('HTTPUpload').pass_disco(from_, *args)
 
         identities, features, data, node = args
         if nbxmpp.NS_REGISTER in features:
