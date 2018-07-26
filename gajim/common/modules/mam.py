@@ -581,7 +581,7 @@ class MamMessageReceivedEvent(NetworkIncomingEvent):
 
 
 class MamGcMessageReceivedEvent(NetworkIncomingEvent):
-    name = 'mam-message-received'
+    name = 'mam-gc-message-received'
 
 
 class MamDecryptedMessageReceived(NetworkIncomingEvent):
