@@ -61,6 +61,12 @@ class Roster:
             app.config.set_per(
                 'accounts', self._account, 'roster_version', '')
 
+        app.nec.push_incoming_event(NetworkEvent(
+            'roster-received',
+            conn=self._con,
+            roster=self._data.copy(),
+            received_from_server=False))
+
     def request_roster(self):
         version = None
         features = self._con.connection.Dispatcher.Stream.features
