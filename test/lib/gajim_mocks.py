@@ -21,7 +21,6 @@ class MockConnection(Mock, ConnectionHandlers):
         self.connected = 2
         self.pep = {}
         self.sessions = {}
-        self.nested_group_delimiter = '::'
         self.server_resource = 'Gajim'
 
         app.interface.instances[account] = {'infos': {}, 'disco': {},

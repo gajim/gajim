@@ -24,10 +24,6 @@ from gajim.common.nec import NetworkEvent
 
 log = logging.getLogger('gajim.c.m.roster')
 
-
-# TODO: Error IQs
-# What if roster not supported on server -> error
-
 RosterItem = namedtuple('RosterItem', 'jid data')
 
 
@@ -65,7 +61,13 @@ class Roster:
             app.config.set_per(
                 'accounts', self._account, 'roster_version', '')
 
-    def request_roster(self, version):
+    def request_roster(self):
+        version = None
+        features = self._con.connection.Dispatcher.Stream.features
+        if features and features.getTag('ver', namespace=nbxmpp.NS_ROSTER_VER):
+            version = app.config.get_per(
+                'accounts', self._account, 'roster_version')
+
         log.info('Requested from server')
         iq = nbxmpp.Iq('get', nbxmpp.NS_ROSTER)
         if version is not None:
@@ -77,27 +79,26 @@ class Roster:
     def _roster_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Unable to retrive roster: %s', stanza.getError())
-            return
+        else:
+            log.info('Received Roster')
+            received_from_server = False
+            if stanza.getTag('query') is not None:
+                # clear Roster
+                self._data = {}
+                version = self._parse_roster(stanza)
 
-        log.info('Received Roster')
-        received_from_server = False
-        if stanza.getTag('query') is not None:
-            # clear Roster
-            self._data = {}
-            version = self._parse_roster(stanza)
+                log.info('New version: %s', version)
+                app.logger.replace_roster(self._account, version, self._data)
 
-            log.info('New version: %s', version)
-            app.logger.replace_roster(self._account, version, self._data)
+                received_from_server = True
 
-            received_from_server = True
+            app.nec.push_incoming_event(NetworkEvent(
+                'roster-received',
+                conn=self._con,
+                roster=self._data.copy(),
+                received_from_server=received_from_server))
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'roster-received',
-            conn=self._con,
-            roster=self._data.copy(),
-            received_from_server=received_from_server))
-
-        self._con.send_first_presence()
+        self._con.connect_maschine()
 
     def _roster_push_received(self, con, stanza):
         log.info('Push received')

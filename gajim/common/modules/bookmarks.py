@@ -31,6 +31,7 @@ class Bookmarks:
         self._con = con
         self._account = con.name
         self.bookmarks = {}
+        self.available = False
 
         self.handlers = []
 
@@ -65,6 +66,7 @@ class Bookmarks:
             self._request_private_bookmarks()
             return
 
+        self.available = True
         log.info('Received Bookmarks (PubSub)')
         self._parse_bookmarks(stanza)
         self._request_private_bookmarks()
@@ -84,6 +86,7 @@ class Bookmarks:
         if not nbxmpp.isResultNode(stanza):
             log.info('No private bookmarks: %s', stanza.getError())
         else:
+            self.available = True
             log.info('Received Bookmarks (PrivateStorage)')
             merged = self._parse_bookmarks(stanza, check_merge=True)
             if merged and self._pubsub_support():

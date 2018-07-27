@@ -115,7 +115,6 @@ class CommonConnection:
         # the fake jid
         self.groupchat_jids = {} # {ID : groupchat_jid}
 
-        self.private_storage_supported = False
         self.roster_supported = True
         self.addressing_supported = False
 
@@ -124,7 +123,8 @@ class CommonConnection:
 
         self.awaiting_cids = {} # Used for XEP-0231
 
-        self.nested_group_delimiter = '::'
+        # Tracks the calls of the connect_maschine() method
+        self._connect_maschine_calls = 0
 
         self.get_config_values_or_default()
 
@@ -412,12 +412,6 @@ class CommonConnection:
     def account_changed(self, new_name):
         self.name = new_name
 
-    def get_metacontacts(self):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def send_agent_status(self, agent, ptype):
         """
         To be implemented by derived classes
@@ -546,8 +540,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.retrycount = 0
         self.available_transports = {} # list of available transports on this
         # server {'icq': ['icq.server.com', 'icq2.server.com'], }
-        self.private_storage_supported = True
-        self.privacy_rules_requested = False
+
         self.streamError = ''
         self.secret_hmac = str(random.random())[2:].encode('utf-8')
         self.removing_account = False
@@ -644,7 +637,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_purpose = on_purpose
         self.connected = 0
         self.time_to_reconnect = None
-        self.get_module('PrivacyLists').supported = False
         self.get_module('VCardAvatars').avatar_advertised = False
         if on_purpose:
             self.sm = Smacks(self)
@@ -1427,6 +1419,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Get annotations
             self.get_module('Annotations').get_annotations()
 
+            # Blocking
+            self.get_module('Blocking').get_blocking_list()
+
             # Inform GUI we just signed in
             app.nec.push_incoming_event(SignedInEvent(None, conn=self))
 
@@ -1455,60 +1450,39 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.pingalives, self.get_module('Ping').send_keepalive_ping)
         self.connection.onreceive(None)
 
-        self.privacy_rules_requested = False
-
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
         if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            our_server = app.config.get_per('accounts', self.name, 'hostname')
-            self.get_module('Discovery').discover_account_info()
+            # This starts the connect_maschine
             self.get_module('Discovery').discover_server_info()
-        else:
-            self.request_roster(resume=True)
+            self.get_module('Discovery').discover_account_info()
 
-        self.sm.resuming = False # back to previous state
+        self.sm.resuming = False  # back to previous state
         # Discover Stun server(s)
         if self._proxy is None:
             hostname = app.config.get_per('accounts', self.name, 'hostname')
-            app.resolver.resolve('_stun._udp.' + helpers.idn_to_ascii(hostname),
-                    self._on_stun_resolved)
+            app.resolver.resolve(
+                '_stun._udp.' + helpers.idn_to_ascii(hostname),
+                self._on_stun_resolved)
 
     def _on_stun_resolved(self, host, result_array):
         if len(result_array) != 0:
             self._stun_servers = self._hosts = [i for i in result_array]
 
-    def _continue_connection_request_privacy(self):
-        if self.get_module('PrivacyLists').supported:
-            if not self.privacy_rules_requested:
-                self.privacy_rules_requested = True
-                self.get_module('PrivacyLists').get_privacy_lists(
-                    self._received_privacy)
-        else:
-            # Privacy lists not supported
-            log.info('Privacy Lists not supported')
-            self._received_privacy(False)
-
-    def _received_privacy(self, result):
-        if not result:
-            if (self.continue_connect_info and
-                    self.continue_connect_info[0] == 'invisible'):
-                # Trying to login as invisible but privacy list not
-                # supported
-                self.disconnect(on_purpose=True)
-                app.nec.push_incoming_event(OurShowEvent(
-                    None, conn=self, show='offline'))
-                app.nec.push_incoming_event(InformationEvent(
-                    None, dialog_name='invisibility-not-supported',
-                    args=self.name))
-                return
-
-            self.get_module('Blocking').get_blocking_list()
-
-        # Ask metacontacts before roster
-        self.get_metacontacts()
+    @helpers.call_counter
+    def connect_maschine(self, restart=False):
+        log.info('Connect maschine state: %s', self._connect_maschine_calls)
+        if self._connect_maschine_calls == 1:
+            self.get_module('MetaContacts').get_metacontacts()
+        elif self._connect_maschine_calls == 2:
+            self.get_module('Delimiter').get_roster_delimiter()
+        elif self._connect_maschine_calls == 3:
+            self.get_module('Roster').request_roster()
+        elif self._connect_maschine_calls == 4:
+            self.send_first_presence()
 
     def send_custom_status(self, show, msg, jid):
-        if not show in app.SHOW_LIST:
+        if show not in app.SHOW_LIST:
             return -1
         if not app.account_is_connected(self.name):
             return
@@ -1677,84 +1651,8 @@ class Connection(CommonConnection, ConnectionHandlers):
             query.setTagData('prompt', prompt)
         self.connection.SendAndCallForResponse(iq, _on_prompt_result)
 
-    def bookmarks_available(self):
-        if self.private_storage_supported:
-            return True
-        if self.get_module('PubSub').publish_options:
-            return True
-        return False
-
-    def get_roster_delimiter(self):
-        """
-        Get roster group delimiter from storage as described in XEP 0083
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='roster', namespace='roster:delimiter')
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        self.awaiting_answers[id_] = (DELIMITER_ARRIVED, )
-        self.connection.send(iq)
-
-    def set_roster_delimiter(self, delimiter='::'):
-        """
-        Set roster group delimiter to the storage namespace
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq3 = iq2.addChild(name='roster', namespace='roster:delimiter')
-        iq3.setData(delimiter)
-
-        self.connection.send(iq)
-
-    def get_metacontacts(self):
-        """
-        Get metacontacts list from storage as described in XEP 0049
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='storage', namespace='storage:metacontacts')
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        self.awaiting_answers[id_] = (METACONTACTS_ARRIVED, )
-        self.connection.send(iq)
-
-    def store_metacontacts(self, tags_list):
-        """
-        Send meta contacts to the storage namespace
-        """
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq3 = iq2.addChild(name='storage', namespace='storage:metacontacts')
-        for tag in tags_list:
-            for data in tags_list[tag]:
-                jid = data['jid']
-                dict_ = {'jid': jid, 'tag': tag}
-                if 'order' in data:
-                    dict_['order'] = data['order']
-                iq3.addChild(name='meta', attrs=dict_)
-        self.connection.send(iq)
-
     def getRoster(self):
         return self.get_module('Roster')
-
-    def request_roster(self, resume=False):
-        version = None
-        features = self.connection.Dispatcher.Stream.features
-        if features and features.getTag('ver', namespace=nbxmpp.NS_ROSTER_VER):
-            version = app.config.get_per(
-                'accounts', self.name, 'roster_version')
-
-        if not resume:
-            self.get_module('Roster').request_roster(version)
 
     def send_agent_status(self, agent, ptype):
         if not app.account_is_connected(self.name):

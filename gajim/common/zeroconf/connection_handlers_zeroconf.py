@@ -183,11 +183,3 @@ connection_handlers.ConnectionJingle):
 
         app.nec.push_incoming_event(
             DecryptedMessageReceivedEvent(None, **vars(event)))
-
-    def store_metacontacts(self, tags):
-        """
-        Fake empty method
-        """
-        # serverside metacontacts are not supported with zeroconf
-        # (there is no server)
-        pass

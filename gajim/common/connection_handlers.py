@@ -53,10 +53,6 @@ log = logging.getLogger('gajim.c.connection_handlers')
 
 # kind of events we can wait for an answer
 AGENT_REMOVED = 'agent_removed'
-METACONTACTS_ARRIVED = 'metacontacts_arrived'
-ROSTER_ARRIVED = 'roster_arrived'
-DELIMITER_ARRIVED = 'delimiter_arrived'
-PRIVACY_ARRIVED = 'privacy_arrived'
 
 
 class ConnectionDisco:
@@ -518,35 +514,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
             app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
                 agent=jid))
             del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == METACONTACTS_ARRIVED:
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                app.nec.push_incoming_event(MetacontactsReceivedEvent(None,
-                    conn=self, stanza=iq_obj))
-            else:
-                if iq_obj.getErrorCode() not in ('403', '406', '404'):
-                    self.private_storage_supported = False
-            self.get_roster_delimiter()
-            del self.awaiting_answers[id_]
-        elif self.awaiting_answers[id_][0] == DELIMITER_ARRIVED:
-            del self.awaiting_answers[id_]
-            if not self.connection:
-                return
-            if iq_obj.getType() == 'result':
-                query = iq_obj.getTag('query')
-                if not query:
-                    return
-                delimiter = query.getTagData('roster')
-                if delimiter:
-                    self.nested_group_delimiter = delimiter
-                else:
-                    self.set_roster_delimiter('::')
-            else:
-                self.private_storage_supported = False
-
-            # We can now continue connection by requesting the roster
-            self.request_roster()
 
     def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
         msg_obj.stanza = stanza

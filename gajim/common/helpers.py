@@ -1508,3 +1508,11 @@ def get_emoticon_theme_path(theme):
     emoticons_user_path = os.path.join(configpaths.get('MY_EMOTS'), theme)
     if os.path.exists(emoticons_user_path):
         return emoticons_user_path
+
+def call_counter(func):
+    def helper(self, restart=False):
+        if restart:
+            self._connect_maschine_calls = 0
+        self._connect_maschine_calls += 1
+        return func(self, restart=False)
+    return helper

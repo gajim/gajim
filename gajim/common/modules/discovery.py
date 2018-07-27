@@ -199,7 +199,7 @@ class Discovery:
         if nbxmpp.NS_ADDRESS in features:
             self._con.addressing_supported = True
 
-        self._con._continue_connection_request_privacy()
+        self._con.connect_maschine()
 
     def _parse_transports(self, from_, identities, features, data, node):
         for identity in identities:

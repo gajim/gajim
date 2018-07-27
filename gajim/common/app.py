@@ -415,7 +415,9 @@ def account_is_zeroconf(account):
     return connections[account].is_zeroconf
 
 def account_supports_private_storage(account):
-    return connections[account].private_storage_supported
+    # If Delimiter module is not available we can assume
+    # Private Storage is not available
+    return connections[account].get_module('Delimiter').available
 
 def account_is_connected(account):
     if account not in connections:

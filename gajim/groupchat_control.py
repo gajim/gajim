@@ -592,7 +592,7 @@ class GroupchatControl(ChatControlBase):
 
         # Bookmarks
         con = app.connections[self.account]
-        bookmark_support = con.bookmarks_available()
+        bookmark_support = con.get_module('Bookmarks').available
         bookmarked = self.room_jid in con.get_module('Bookmarks').bookmarks
         win.lookup_action('bookmark-' + self.control_id).set_enabled(
             online and bookmark_support and not bookmarked)

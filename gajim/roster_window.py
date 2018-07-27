@@ -343,7 +343,7 @@ class RosterWindow:
             account_group = 'MERGED'
         else:
             account_group = account
-        delimiter = app.connections[account].nested_group_delimiter
+        delimiter = app.connections[account].get_module('Delimiter').delimiter
         group_splited = group.split(delimiter)
         parent_group = delimiter.join(group_splited[:-1])
         if len(group_splited) > 1 and parent_group in self._iters[account_group]['groups']:
@@ -1347,7 +1347,7 @@ class RosterWindow:
                 self.draw_parent_contact(jid, account)
 
         if visible:
-            delimiter = app.connections[account].nested_group_delimiter
+            delimiter = app.connections[account].get_module('Delimiter').delimiter
             for group in contact.get_shown_groups():
                 group_splited = group.split(delimiter)
                 i = 1
@@ -1600,7 +1600,7 @@ class RosterWindow:
             return
         if account not in app.connections:
             return
-        delimiter = app.connections[account].nested_group_delimiter
+        delimiter = app.connections[account].get_module('Delimiter').delimiter
         group_splited = group.split(delimiter)
         i = 1
         while i < len(group_splited) + 1:
@@ -4159,9 +4159,10 @@ class RosterWindow:
 
     def on_drop_in_contact(self, widget, account_source, c_source, account_dest,
     c_dest, was_big_brother, context, etime):
-
-        if not app.connections[account_source].private_storage_supported or \
-        not app.connections[account_dest].private_storage_supported:
+        con_source = app.connections[account_source]
+        con_dest = app.connections[account_dest]
+        if (not con_source.get_module('MetaContacts').available or
+                not con_dest.get_module('MetaContacts').available):
             WarningDialog(_('Metacontacts storage not supported by '
                 'your server'),
                 _('Your server does not support storing metacontacts '
@@ -4433,7 +4434,7 @@ class RosterWindow:
                 # drop on another account
                 return
             grp_source = model[iter_source][Column.JID]
-            delimiter = app.connections[account_source].nested_group_delimiter
+            delimiter = app.connections[account_source].get_module('Delimiter').delimiter
             grp_source_list = grp_source.split(delimiter)
             new_grp = None
             if type_dest == 'account':

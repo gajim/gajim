@@ -732,8 +732,9 @@ class MetacontactManager():
             self._metacontacts_tags[brother_account][tag] = [{'jid': brother_jid,
                     'tag': tag}]
             if brother_account != account:
-                common.app.connections[brother_account].store_metacontacts(
-                        self._metacontacts_tags[brother_account])
+                con = common.app.connections[brother_account]
+                con.get_module('MetaContacts').store_metacontacts(
+                    self._metacontacts_tags[brother_account])
         # be sure jid has no other tag
         old_tag = self._get_metacontacts_tag(account, jid)
         while old_tag:
@@ -748,11 +749,12 @@ class MetacontactManager():
             else:
                 self._metacontacts_tags[account][tag].append({'jid': jid,
                         'tag': tag})
-        common.app.connections[account].store_metacontacts(
-                self._metacontacts_tags[account])
+        con = common.app.connections[account]
+        con.get_module('MetaContacts').store_metacontacts(
+            self._metacontacts_tags[account])
 
     def remove_metacontact(self, account, jid):
-        if not account in self._metacontacts_tags:
+        if account not in self._metacontacts_tags:
             return
 
         found = None
@@ -763,8 +765,9 @@ class MetacontactManager():
                     break
             if found:
                 self._metacontacts_tags[account][tag].remove(found)
-                common.app.connections[account].store_metacontacts(
-                        self._metacontacts_tags[account])
+                con = common.app.connections[account]
+                con.get_module('MetaContacts').store_metacontacts(
+                    self._metacontacts_tags[account])
                 break
 
     def has_brother(self, account, jid, accounts):

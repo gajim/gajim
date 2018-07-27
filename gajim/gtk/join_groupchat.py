@@ -111,7 +111,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Set bookmark switch sensitive if server supports bookmarks
         acc = self.account_combo.get_active_id()
-        if not app.connections[acc].private_storage_supported:
+        con = app.connections[acc]
+        if not con.get_module('Bookmarks').available:
             self.bookmark_switch.set_sensitive(False)
             self.autojoin_switch.set_sensitive(False)
 
@@ -256,8 +257,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
     def _add_bookmark(self, account, nickname, password):
         con = app.connections[account]
-        if not con.private_storage_supported:
-            return
 
         add_bookmark = self.bookmark_switch.get_active()
         if not add_bookmark:

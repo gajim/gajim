@@ -221,8 +221,6 @@ class StatusIcon:
         if connected_accounts < 1:
             item.set_sensitive(False)
 
-        connected_accounts_with_private_storage = 0
-
         item = Gtk.SeparatorMenuItem.new()
         sub_menu.append(item)
 
@@ -271,8 +269,6 @@ class StatusIcon:
             for account in app.connections:
                 if app.account_is_connected(account) and \
                 not app.config.get_per('accounts', account, 'is_zeroconf'):
-                    if app.connections[account].private_storage_supported:
-                        connected_accounts_with_private_storage += 1
 
                     # for single message
                     single_message_menuitem.set_submenu(None)
@@ -296,8 +292,6 @@ class StatusIcon:
                 if app.connections[account].is_zeroconf or \
                 not app.account_is_connected(account):
                     continue
-                if app.connections[account].private_storage_supported:
-                    connected_accounts_with_private_storage += 1
                 # for single message
                 item = Gtk.MenuItem.new_with_label(
                     _('using account %s') % account_label)
@@ -320,9 +314,12 @@ class StatusIcon:
         newitem = Gtk.MenuItem.new_with_mnemonic(_('_Manage Bookmarks…'))
         newitem.connect('activate',
             app.interface.roster.on_manage_bookmarks_menuitem_activate)
+        newitem.set_sensitive(False)
         gc_sub_menu.append(newitem)
-        if connected_accounts_with_private_storage == 0:
-            newitem.set_sensitive(False)
+        for account in accounts_list:
+            if app.account_supports_private_storage(account):
+                newitem.set_sensitive(True)
+                break
 
         sounds_mute_menuitem.set_active(not app.config.get('sounds_on'))
 

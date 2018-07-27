@@ -43,7 +43,7 @@ class ModuleMock:
     def __init__(self, name):
         self._name = name
 
-        # HTTPUpload
+        # HTTPUpload, ..
         self.available = False
 
         # Blocking
@@ -53,6 +53,9 @@ class ModuleMock:
         self.blocked_contacts = []
         self.blocked_groups = []
         self.blocked_all = False
+
+        # Delimiter
+        self.delimiter = '::'
 
         # Bookmarks
         self.bookmarks = {}

@@ -852,37 +852,6 @@ class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
     def generate(self):
         return True
 
-class MetacontactsReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'metacontacts-received'
-    base_network_events = []
-
-    def generate(self):
-        # Metacontact tags
-        # http://www.xmpp.org/extensions/xep-0209.html
-        self.meta_list = {}
-        query = self.stanza.getTag('query')
-        storage = query.getTag('storage')
-        metas = storage.getTags('meta')
-        for meta in metas:
-            try:
-                jid = helpers.parse_jid(meta.getAttr('jid'))
-            except helpers.InvalidFormat:
-                continue
-            tag = meta.getAttr('tag')
-            data = {'jid': jid}
-            order = meta.getAttr('order')
-            try:
-                order = int(order)
-            except Exception:
-                order = 0
-            if order is not None:
-                data['order'] = order
-            if tag in self.meta_list:
-                self.meta_list[tag].append(data)
-            else:
-                self.meta_list[tag] = [data]
-        return True
-
 class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
     name = 'zeroconf-name-conflict'
     base_network_events = []
