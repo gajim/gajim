@@ -51,7 +51,7 @@ class Delimiter:
             else:
                 self.set_roster_delimiter()
 
-        self._con.connect_maschine()
+        self._con.connect_machine()
 
     def set_roster_delimiter(self):
         log.info('Set delimiter')

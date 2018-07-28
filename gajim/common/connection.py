@@ -123,8 +123,8 @@ class CommonConnection:
 
         self.awaiting_cids = {} # Used for XEP-0231
 
-        # Tracks the calls of the connect_maschine() method
-        self._connect_maschine_calls = 0
+        # Tracks the calls of the connect_machine() method
+        self._connect_machine_calls = 0
 
         self.get_config_values_or_default()
 
@@ -1453,7 +1453,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are not resuming, we ask for discovery info
         # and archiving preferences
         if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            # This starts the connect_maschine
+            # This starts the connect_machine
             self.get_module('Discovery').discover_server_info()
             self.get_module('Discovery').discover_account_info()
 
@@ -1470,15 +1470,15 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._stun_servers = self._hosts = [i for i in result_array]
 
     @helpers.call_counter
-    def connect_maschine(self, restart=False):
-        log.info('Connect maschine state: %s', self._connect_maschine_calls)
-        if self._connect_maschine_calls == 1:
+    def connect_machine(self, restart=False):
+        log.info('Connect machine state: %s', self._connect_machine_calls)
+        if self._connect_machine_calls == 1:
             self.get_module('MetaContacts').get_metacontacts()
-        elif self._connect_maschine_calls == 2:
+        elif self._connect_machine_calls == 2:
             self.get_module('Delimiter').get_roster_delimiter()
-        elif self._connect_maschine_calls == 3:
+        elif self._connect_machine_calls == 3:
             self.get_module('Roster').request_roster()
-        elif self._connect_maschine_calls == 4:
+        elif self._connect_machine_calls == 4:
             self.send_first_presence()
 
     def send_custom_status(self, show, msg, jid):

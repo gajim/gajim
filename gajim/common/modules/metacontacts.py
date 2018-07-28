@@ -53,7 +53,7 @@ class MetaContacts:
             app.nec.push_incoming_event(NetworkEvent(
                 'metacontacts-received', conn=self._con, meta_list=meta_list))
 
-        self._con.connect_maschine()
+        self._con.connect_machine()
 
     @staticmethod
     def _parse_metacontacts(stanza):

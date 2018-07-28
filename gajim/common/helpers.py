@@ -1512,7 +1512,7 @@ def get_emoticon_theme_path(theme):
 def call_counter(func):
     def helper(self, restart=False):
         if restart:
-            self._connect_maschine_calls = 0
-        self._connect_maschine_calls += 1
+            self._connect_machine_calls = 0
+        self._connect_machine_calls += 1
         return func(self, restart=False)
     return helper

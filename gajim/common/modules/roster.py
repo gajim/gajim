@@ -104,7 +104,7 @@ class Roster:
                 roster=self._data.copy(),
                 received_from_server=received_from_server))
 
-        self._con.connect_maschine()
+        self._con.connect_machine()
 
     def _roster_push_received(self, con, stanza):
         log.info('Push received')
