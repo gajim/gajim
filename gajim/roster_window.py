@@ -2603,7 +2603,7 @@ class RosterWindow:
     def _nec_roster_received(self, obj):
         if obj.received_from_server:
             self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
-            self.add_account_contacts(obj.conn.name, improve_speed=False)
+            self.add_account_contacts(obj.conn.name)
             self.fire_up_unread_messages_events(obj.conn.name)
         else:
             # add self contact
