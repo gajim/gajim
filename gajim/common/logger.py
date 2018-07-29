@@ -1429,10 +1429,11 @@ class Logger:
         exists = self.get_archive_timestamp(jid)
         if not exists:
             sql = '''INSERT INTO last_archive_message VALUES (?, ?, ?, ?)'''
-            self._con.execute(sql, (jid_id,
-                                   kwargs.get('last_mam_id', None),
-                                   kwargs.get('oldest_mam_timestamp', None),
-                                   kwargs.get('last_muc_timestamp', None)))
+            self._con.execute(sql, (
+                jid_id,
+                kwargs.get('last_mam_id', None),
+                kwargs.get('oldest_mam_timestamp', None),
+                kwargs.get('last_muc_timestamp', None)))
         else:
             args = ' = ?, '.join(kwargs.keys()) + ' = ?'
             sql = '''UPDATE last_archive_message SET {}

@@ -139,6 +139,9 @@ class ChatControlSession(object):
                 additional_data=obj.additional_data,
                 stanza_id=obj.unique_id)
 
+        self.conn.get_module('MAM').save_archive_id(
+            None, obj.stanza_id, obj.timestamp)
+
         if obj.muc_pm and not obj.gc_control:
             # This is a carbon of a PM from a MUC we are not currently
             # joined. We log it silently without notification.

@@ -268,7 +268,7 @@ class ConnectionHandlersBase:
         if obj.conn.name != self.name:
             return
 
-        self._check_for_mam_compliance(obj.jid, obj.unique_id)
+        self._check_for_mam_compliance(obj.jid, obj.stanza_id)
 
         if (app.config.should_log(obj.conn.name, obj.jid) and
                 obj.msgtxt and obj.nick):
@@ -282,8 +282,10 @@ class ConnectionHandlersBase:
                                         message=obj.msgtxt,
                                         contact_name=obj.nick,
                                         additional_data=obj.additional_data,
-                                        stanza_id=obj.unique_id)
+                                        stanza_id=obj.stanza_id)
             app.logger.set_room_last_message_time(obj.room_jid, obj.timestamp)
+            self.get_module('MAM').save_archive_id(
+                obj.room_jid, obj.stanza_id, obj.timestamp)
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):

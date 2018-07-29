@@ -47,6 +47,9 @@ class MAM:
         self.archiving_namespace = None
         self._mam_query_ids = {}
 
+        # Holds archive jids where catch up was successful
+        self._catch_up_finished = []
+
     def pass_disco(self, from_, identities, features, data, node):
         if nbxmpp.NS_MAM_2 in features:
             self.archiving_namespace = nbxmpp.NS_MAM_2
@@ -369,6 +372,9 @@ class MAM:
             start_date = datetime.utcnow() - timedelta(days=7)
             log.info('First start: query archive start: %s', start_date)
             query = self._get_archive_query(query_id, start=start_date)
+
+        if own_jid in self._catch_up_finished:
+            self._catch_up_finished.remove(own_jid)
         self._send_archive_query(query, query_id, start_date)
 
     def request_archive_on_muc_join(self, jid):
@@ -388,6 +394,9 @@ class MAM:
             start_date = datetime.utcnow() - timedelta(days=1)
             log.info('First join: query archive %s from: %s', jid, start_date)
             query = self._get_archive_query(query_id, jid=jid, start=start_date)
+
+        if jid in self._catch_up_finished:
+            self._catch_up_finished.remove(jid)
         self._send_archive_query(query, query_id, start_date, groupchat=True)
 
     def _send_archive_query(self, query, query_id, start_date=None,
@@ -408,11 +417,13 @@ class MAM:
         last = set_.getTagData('last')
         if last is None:
             log.info('End of MAM query, no items retrieved')
+            self._catch_up_finished.append(jid)
             self._mam_query_ids.pop(jid)
             return
 
         complete = fin.getAttr('complete')
-        app.logger.set_archive_timestamp(jid, last_mam_id=last)
+        app.logger.set_archive_timestamp(
+            jid, last_mam_id=last, last_muc_timestamp=None)
         if complete != 'true':
             self._mam_query_ids.pop(jid)
             query_id = self._get_query_id(jid)
@@ -425,6 +436,8 @@ class MAM:
                     jid,
                     last_mam_id=last,
                     oldest_mam_timestamp=start_date.timestamp())
+
+            self._catch_up_finished.append(jid)
             log.info('End of MAM query, last mam id: %s', last)
 
     def request_archive_interval(self, start_date, end_date, after=None,
@@ -516,6 +529,17 @@ class MAM:
             set_.setTagData('after', after)
         query.setAttr('queryid', query_id)
         return iq
+
+    def save_archive_id(self, jid, stanza_id, timestamp):
+        if stanza_id is None:
+            return
+        if jid is None:
+            jid = self._con.get_own_jid().getStripped()
+        if jid not in self._catch_up_finished:
+            return
+        log.info('Save: %s: %s, %s', jid, stanza_id, timestamp)
+        app.logger.set_archive_timestamp(
+            jid, last_mam_id=stanza_id, last_muc_timestamp=timestamp)
 
     def request_mam_preferences(self):
         log.info('Request MAM preferences')

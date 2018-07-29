@@ -109,8 +109,8 @@ class Message:
         jid, resource = app.get_room_and_nick_from_fjid(fjid)
 
         # Check for duplicates
-        unique_id = self._get_unique_id(stanza, forwarded, sent,
-                                        self_message, muc_pm)
+        stanza_id, origin_id = self._get_unique_id(
+            stanza, forwarded, sent, self_message, muc_pm)
 
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
@@ -121,8 +121,9 @@ class Message:
                 archive_jid = self._con.get_own_jid().getStripped()
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
-                                         unique_id,
-                                         groupchat=type_ == 'groupchat'):
+                                         stanza_id,
+                                         origin_id,
+                                         type_ == 'groupchat'):
                 return
 
         thread_id = stanza.getThread()
@@ -177,7 +178,8 @@ class Message:
             'fjid': fjid,
             'jid': jid,
             'resource': resource,
-            'unique_id': unique_id,
+            'stanza_id': stanza_id,
+            'unique_id': stanza_id or origin_id,
             'mtype': type_,
             'msgtxt': msgtxt,
             'thread_id': thread_id,
@@ -215,7 +217,6 @@ class Message:
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'chatstate': parse_chatstate(event.stanza),
-            'stanza_id': event.unique_id
         }
         parse_oob(event.stanza, event.additional_data)
 
@@ -235,7 +236,7 @@ class Message:
                 None,
                 conn=self._con,
                 msg_obj=event,
-                stanza_id=event.unique_id))
+                stanza_id=event.stanza_id))
             return
 
         app.nec.push_incoming_event(
@@ -245,30 +246,19 @@ class Message:
     def _get_unique_id(self, stanza, forwarded, sent, self_message, muc_pm):
         if stanza.getType() == 'groupchat':
             # TODO: Disco the MUC check if 'urn:xmpp:mam:2' is announced
-            return self._get_stanza_id(stanza)
+            return self._get_stanza_id(stanza), None
 
         if stanza.getType() != 'chat':
-            return
+            return None, None
 
         # Messages we receive live
         if self._con.get_module('MAM').archiving_namespace != nbxmpp.NS_MAM_2:
             # Only mam:2 ensures valid stanza-id
-            return
+            return None, None
 
-        if forwarded:
-            if sent:
-                if self_message or muc_pm:
-                    return stanza.getOriginID()
-                return self._get_stanza_id(stanza)
-            else:
-                if muc_pm:
-                    return stanza.getOriginID()
-                return self._get_stanza_id(stanza)
-
-        # Normal Message
-        if self_message or muc_pm:
-            return stanza.getOriginID()
-        return self._get_stanza_id(stanza)
+        if self_message:
+            return self._get_stanza_id(stanza), stanza.getOriginID()
+        return self._get_stanza_id(stanza), None
 
     def _get_stanza_id(self, stanza):
         stanza_id, by = stanza.getStanzaIDAttrs()
