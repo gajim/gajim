@@ -179,6 +179,7 @@ class Discovery:
         self._con.get_module('PubSub').pass_disco(from_, *args)
 
     def discover_server_info(self):
+        # Calling this method starts the connect_maschine()
         server = self._con.get_own_jid().getDomain()
         self.disco_info(server, success_cb=self._server_info_received)
 
@@ -199,7 +200,7 @@ class Discovery:
         if nbxmpp.NS_ADDRESS in features:
             self._con.addressing_supported = True
 
-        self._con.connect_machine()
+        self._con.connect_machine(restart=True)
 
     def _parse_transports(self, from_, identities, features, data, node):
         for identity in identities:
