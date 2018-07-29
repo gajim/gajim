@@ -273,7 +273,8 @@ class Bookmarks:
             'autojoin': autojoin,
             'minimize': minimize,
             'password': password,
-            'nick': nick}
+            'nick': nick,
+            'print_status': None}
 
         self.store_bookmarks()
         app.nec.push_incoming_event(BookmarksReceivedEvent(
