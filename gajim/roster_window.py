@@ -70,6 +70,7 @@ from gajim.gtk import SingleMessageWindow
 from gajim.gtk import AddNewContactWindow
 from gajim.gtk import ManagePEPServicesWindow
 from gajim.gtk import ManageBookmarksWindow
+from gajim.gtk import AccountCreationWizard
 
 from gajim.common.const import AvatarSize
 
@@ -5881,7 +5882,7 @@ class RosterWindow:
         # if we have no account configured or only Local account but not enabled
             def _open_wizard():
                 app.interface.instances['account_creation_wizard'] = \
-                    config.AccountCreationWizardWindow()
+                    AccountCreationWizard()
             # Open wizard only after roster is created, so we can make it
             # transient for the roster window
             GLib.idle_add(_open_wizard)

@@ -38,6 +38,7 @@ from gajim.gtk import AboutDialog
 from gajim.gtk import PrivacyListsWindow
 from gajim.gtk import ManageBookmarksWindow
 from gajim.gtk import FeaturesDialog
+from gajim.gtk import AccountCreationWizard
 
 
 # General Actions
@@ -176,7 +177,7 @@ def on_add_account(action, param):
         app.interface.instances['account_creation_wizard'].window.present()
     else:
         app.interface.instances['account_creation_wizard'] = \
-            config.AccountCreationWizardWindow()
+            AccountCreationWizard()
 
 
 def on_import_contacts(action, param):
