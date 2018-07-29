@@ -1456,6 +1456,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # This starts the connect_machine
             self.get_module('Discovery').discover_server_info()
             self.get_module('Discovery').discover_account_info()
+            self.get_module('Discovery').discover_server_items()
 
         self.sm.resuming = False  # back to previous state
         # Discover Stun server(s)
