@@ -396,10 +396,12 @@ class RosterWindow:
             # Do not confuse get_contact_iter: Sync groups of family members
             contact.groups = big_brother_contact.groups[:]
 
+            image = self._get_avatar_image(account, contact.jid)
+
             for child_iter in parent_iters:
                 it = self.model.append(child_iter, [None,
                     contact.get_shown_name(), 'contact', contact.jid, account,
-                    None, None, None, None, None, None, visible] + \
+                    None, None, None, None, image, None, visible] + \
                     [None] * self.nb_ext_renderers)
                 added_iters.append(it)
                 if contact.jid in self._iters[account]['contacts']:
@@ -424,11 +426,13 @@ class RosterWindow:
                 else:
                     typestr = 'contact'
 
+                image = self._get_avatar_image(account, contact.jid)
+
                 # we add some values here. see draw_contact
                 # for more
                 i_ = self.model.append(child_iterG, [None,
                     contact.get_shown_name(), typestr, contact.jid, account,
-                    None, None, None, None, None, None, visible] + \
+                    None, None, None, None, image, None, visible] + \
                     [None] * self.nb_ext_renderers)
                 added_iters.append(i_)
                 if contact.jid in self._iters[account]['contacts']:
@@ -1399,16 +1403,21 @@ class RosterWindow:
         for child_iter in iters:
             self.model[child_iter][model_column] = pixbuf
 
+    def _get_avatar_image(self, account, jid):
+        if not app.config.get('show_avatars_in_roster'):
+            return None
+        scale = self.window.get_scale_factor()
+        surface = app.contacts.get_avatar(
+            account, jid, AvatarSize.ROSTER, scale)
+        return Gtk.Image.new_from_surface(surface)
+
     def draw_avatar(self, jid, account):
         iters = self._get_contact_iter(jid, account, model=self.model)
         if not iters or not app.config.get('show_avatars_in_roster'):
             return
         jid = self.model[iters[0]][Column.JID]
+        image = self._get_avatar_image(account, jid)
 
-        scale = self.window.get_scale_factor()
-        surface = app.contacts.get_avatar(
-            account, jid, AvatarSize.ROSTER, scale)
-        image = Gtk.Image.new_from_surface(surface)
         for child_iter in iters:
             self.model[child_iter][Column.AVATAR_IMG] = image
         return False
@@ -1417,10 +1426,10 @@ class RosterWindow:
         contact_instances = app.contacts.get_contacts(account, jid)
         contact = app.contacts.get_highest_prio_contact_from_contacts(
             contact_instances)
-        self.draw_contact(jid, account, contact_instances=contact_instances,
+        self.draw_contact(
+            jid, account,
+            contact_instances=contact_instances,
             contact=contact)
-        self.draw_all_pep_types(jid, account, contact=contact)
-        self.draw_avatar(jid, account)
 
     def adjust_and_draw_contact_context(self, jid, account):
         """
