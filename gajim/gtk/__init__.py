@@ -57,3 +57,4 @@ from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.pep_config import ManagePEPServicesWindow
 from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.profile import ProfileWindow
+from gajim.gtk.features import FeaturesDialog

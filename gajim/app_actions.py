@@ -21,7 +21,6 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import config
 from gajim import dialogs
-from gajim import features_window
 from gajim import shortcuts_window
 from gajim import accounts_window
 import gajim.plugins.gui
@@ -38,6 +37,7 @@ from gajim.gtk import XMLConsoleWindow
 from gajim.gtk import AboutDialog
 from gajim.gtk import PrivacyListsWindow
 from gajim.gtk import ManageBookmarksWindow
+from gajim.gtk import FeaturesDialog
 
 
 # General Actions
@@ -283,7 +283,7 @@ def on_keyboard_shortcuts(action, param):
 
 
 def on_features(action, param):
-    features_window.FeaturesWindow()
+    FeaturesDialog()
 
 
 def on_about(action, param):
