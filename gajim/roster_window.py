@@ -4324,10 +4324,10 @@ class RosterWindow:
             context.finish(True, True, etime)
 
     def drag_drop(self, treeview, context, x, y, timestamp):
+        treeview.stop_emission_by_name('drag-drop')
         target_list = treeview.drag_dest_get_target_list()
         target = treeview.drag_dest_find_target(context, target_list)
-        treeview.drag_get_data(context, target, 0)
-        context.finish(False, True, 0)
+        treeview.drag_get_data(context, target, timestamp)
         return True
 
     def move_group(self, old_name, new_name, account):
@@ -4338,7 +4338,7 @@ class RosterWindow:
 
     def drag_data_received_data(self, treeview, context, x, y, selection, info,
     etime):
-        treeview.stop_emission_by_name('drag_data_received')
+        treeview.stop_emission_by_name('drag-data-received')
         drop_info = treeview.get_dest_row_at_pos(x, y)
         if not drop_info:
             return
@@ -5843,11 +5843,11 @@ class RosterWindow:
         dst_targets.add_text_targets(0)
         dst_targets.add_uri_targets(self.TARGET_TYPE_URI_LIST)
         self.tree.drag_dest_set_target_list(dst_targets)
-        self.tree.connect('drag_begin', self.drag_begin)
-        self.tree.connect('drag_end', self.drag_end)
-        self.tree.connect('drag_drop', self.drag_drop)
-        self.tree.connect('drag_data_get', self.drag_data_get_data)
-        self.tree.connect('drag_data_received', self.drag_data_received_data)
+        self.tree.connect('drag-begin', self.drag_begin)
+        self.tree.connect('drag-end', self.drag_end)
+        self.tree.connect('drag-drop', self.drag_drop)
+        self.tree.connect('drag-data-get', self.drag_data_get_data)
+        self.tree.connect('drag-data-received', self.drag_data_received_data)
         self.dragging = False
         self.xml.connect_signals(self)
         self.combobox_callback_active = True
