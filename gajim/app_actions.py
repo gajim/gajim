@@ -21,7 +21,7 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import config
 from gajim import dialogs
-from gajim import shortcuts_window
+from gajim.gtk import shortcuts_window
 from gajim import accounts_window
 import gajim.plugins.gui
 from gajim import history_window
