@@ -58,6 +58,23 @@ class Message:
                                         nbxmpp.NS_IBB])
 
     def _message_received(self, con, stanza):
+        # https://tools.ietf.org/html/rfc6120#section-8.1.1.1
+        # If the stanza does not include a 'to' address then the client MUST
+        # treat it as if the 'to' address were included with a value of the
+        # client's full JID.
+        #
+        # Implementation Note: However, if the client does
+        # check the 'to' address then it is suggested to check at most the
+        # bare JID portion (not the full JID)
+
+        own_jid = self._con.get_own_jid().getStripped()
+        to = stanza.getTo()
+        if to is None:
+            stanza.setTo(own_jid)
+        elif not to.bareMatch(own_jid):
+            log.warning('Message addressed to someone else: %s', stanza)
+            raise nbxmpp.NodeProcessed
+
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
         # nbxmpp executes less common handlers last
@@ -118,7 +135,7 @@ class Message:
             if type_ == 'groupchat':
                 archive_jid = stanza.getFrom().getStripped()
             else:
-                archive_jid = self._con.get_own_jid().getStripped()
+                archive_jid = own_jid
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
                                          stanza_id,

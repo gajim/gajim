@@ -73,7 +73,7 @@ def parse_carbon(con, stanza):
     type_ = carbon.getName()
     to = message.getTo()
     frm = message.getFrom()
-    log.info('Received type: %s, from: %s, to: %s', type_, to, frm)
+    log.info('Received type: %s, from: %s', type_, frm)
 
     if type_ == 'received':
         sent = False
