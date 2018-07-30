@@ -19,6 +19,7 @@ clone_depth: 1
 
 build_script:
   - C:\msys64\usr\bin\pacman -Syu --needed --noconfirm --ask=20
+  - C:\msys64\usr\bin\pacman -Su --needed --noconfirm
   - ps: |
         $env:TIME_STRING=(get-date -UFormat "%Y-%m-%d").ToString()
         $env:BUILDROOT="C:\msys64\home\appveyor\gajim\win\_build_root"
