@@ -80,7 +80,7 @@ def parse_delay(stanza, epoch=True, convert='utc'):
 
 # XEP-0066: Out of Band Data
 
-def parse_oob(stanza, dict_=None, key='Gajim'):
+def parse_oob(stanza, dict_=None, key='gajim'):
     oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
     if oob_node is None:
         return
