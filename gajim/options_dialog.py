@@ -6,6 +6,8 @@ from gajim.common.const import OptionKind, OptionType
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 from gajim.gtk import ErrorDialog
+from gajim.gtk import ChangePasswordDialog
+
 
 class OptionsDialog(Gtk.ApplicationWindow):
     def __init__(self, parent, title, flags, options, account,
@@ -530,16 +532,14 @@ class ChangePasswordOption(DialogOption):
 
     def show_dialog(self, parent):
         try:
-            self.change_dialog = dialogs.ChangePasswordDialog(
+            self.change_dialog = ChangePasswordDialog(
                 self.account, self.on_changed, parent)
         except GajimGeneralException:
             return
-        self.change_dialog.dialog.set_modal(True)
+        self.change_dialog.set_modal(True)
 
     def on_changed(self, new_password):
-        if new_password is not None:
-            app.connections[self.account].change_password(new_password)
-            self.set_value(new_password)
+        self.set_value(new_password)
 
     def set_activatable(self, name, value):
         activatable = False

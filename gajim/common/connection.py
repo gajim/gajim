@@ -1835,17 +1835,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # disconnect from jabber server
         self.connection.send(p)
 
-    def change_password(self, password):
-        if not app.account_is_connected(self.name):
-            return
-        hostname = app.config.get_per('accounts', self.name, 'hostname')
-        username = app.config.get_per('accounts', self.name, 'name')
-        iq = nbxmpp.Iq(typ='set', to=hostname)
-        q = iq.setTag(nbxmpp.NS_REGISTER + ' query')
-        q.setTagData('username', username)
-        q.setTagData('password', password)
-        self.connection.send(iq)
-
     def get_password(self, callback, type_):
         if app.config.get_per('accounts', self.name, 'anonymous_auth') and \
         type_ != 'ANONYMOUS':

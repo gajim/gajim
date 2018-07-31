@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import helpers
@@ -931,3 +932,57 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
 
     def on_cert_clicked(self, button):
         CertificatDialog(self, self.account, self.cert)
+
+
+class ChangePasswordDialog(Gtk.Dialog):
+    def __init__(self, account, success_cb, transient_for):
+        flags = Gtk.DialogFlags.DESTROY_WITH_PARENT
+        super().__init__(_('Change Password'), None, flags)
+
+        self._account = account
+        self._success_cb = success_cb
+
+        self._builder = get_builder('change_password_dialog.ui')
+        self.get_content_area().add(
+            self._builder.get_object('change_password_box'))
+        self._password1_entry = self._builder.get_object('password1_entry')
+        self._password2_entry = self._builder.get_object('password2_entry')
+        self._error_label = self._builder.get_object('error_label')
+
+        self.set_transient_for(transient_for)
+
+        self.add_button(_('_OK'), Gtk.ResponseType.OK)
+        self.set_default_response(Gtk.ResponseType.OK)
+        self.get_style_context().add_class('dialog-margin')
+        self.connect('response', self._on_dialog_response)
+        self.show_all()
+
+    def _on_dialog_response(self, dialog, response):
+        if response != Gtk.ResponseType.OK:
+            self.destroy()
+            return
+
+        password1 = self._password1_entry.get_text()
+        if not password1:
+            self._error_label.set_text(_('You must enter a password'))
+            return
+        password2 = self._password2_entry.get_text()
+        if password1 != password2:
+            self._error_label.set_text(_('Passwords do not match'))
+            return
+
+        self._password1_entry.set_sensitive(False)
+        self._password2_entry.set_sensitive(False)
+
+        con = app.connections[self._account]
+        con.get_module('Register').change_password(
+            password1, self._on_success, self._on_error)
+
+    def _on_success(self):
+        self._success_cb(self._password1_entry.get_text())
+        self.destroy()
+
+    def _on_error(self, error_text):
+        self._error_label.set_text(error_text)
+        self._password1_entry.set_sensitive(True)
+        self._password2_entry.set_sensitive(True)

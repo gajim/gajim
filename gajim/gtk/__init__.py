@@ -51,6 +51,7 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.dialogs import HigDialog
 from gajim.gtk.dialogs import SSLErrorDialog
+from gajim.gtk.dialogs import ChangePasswordDialog
 
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.join_groupchat import JoinGroupchatWindow

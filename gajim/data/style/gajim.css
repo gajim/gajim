@@ -21,6 +21,8 @@
 	background-image: none;
 	}
 
+.dialog-margin > box { margin: 18px;}
+
 #MessageWindow, #RosterWindow paned { background-color:  @theme_base_color; }
 
 .chatcontrol-separator-top {margin-top: 5px;}

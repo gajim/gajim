@@ -1058,41 +1058,6 @@ class SynchroniseSelectContactsDialog:
             iter_ = model.iter_next(iter_)
         self.dialog.destroy()
 
-class ChangePasswordDialog:
-    def __init__(self, account, on_response, transient_for=None):
-        # 'account' can be None if we are about to create our first one
-        if not account or app.connections[account].connected < 2:
-            ErrorDialog(_('You are not connected to the server'),
-                _('Without a connection, you can not change your password.'))
-            raise GajimGeneralException('You are not connected to the server')
-        self.account = account
-        self.on_response = on_response
-        self.xml = gtkgui_helpers.get_gtk_builder('change_password_dialog.ui')
-        self.dialog = self.xml.get_object('change_password_dialog')
-        self.dialog.set_transient_for(transient_for)
-        self.password1_entry = self.xml.get_object('password1_entry')
-        self.password2_entry = self.xml.get_object('password2_entry')
-        self.dialog.connect('response', self.on_dialog_response)
-
-        self.dialog.show_all()
-
-    def on_dialog_response(self, dialog, response):
-        if response != Gtk.ResponseType.OK:
-            dialog.destroy()
-            self.on_response(None)
-            return
-        password1 = self.password1_entry.get_text()
-        if not password1:
-            ErrorDialog(_('Invalid password'), _('You must enter a password.'))
-            return
-        password2 = self.password2_entry.get_text()
-        if password1 != password2:
-            ErrorDialog(_('Passwords do not match'),
-                _('The passwords typed in both fields must be identical.'))
-            return
-        dialog.destroy()
-        self.on_response(password1)
-
 
 #Action that can be done with an incoming list of contacts
 TRANSLATED_ACTION = {'add': _('add'), 'modify': _('modify'),
