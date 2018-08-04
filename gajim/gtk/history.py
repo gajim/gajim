@@ -1,47 +1,43 @@
-# -*- coding:utf-8 -*-
-## src/history_window.py
-##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
-##                    Travis Shirk <travis AT pobox.com>
-## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
-##
-## This file is part of Gajim.
-##
-## Gajim is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 3 only.
-##
-## Gajim is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
-##
+# Copyright (C) 2003-2014 Yann Leboulanger <asterix AT lagaule.org>
+# Copyright (C) 2005 Vincent Hanquez <tab AT snarc.org>
+# Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
+# Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
+#                    Travis Shirk <travis AT pobox.com>
+# Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+# Copyright (C) 2007-2008 Stephan Erb <steve-e AT h3c.de>
+# Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+import time
+import datetime
+from enum import IntEnum, unique
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
-import time
-import datetime
 
-from enum import IntEnum, unique
-
-from gajim import gtkgui_helpers
 from gajim import conversation_textview
 from gajim.gtk import ErrorDialog
-
+from gajim.gtk import util
+from gajim.gtk.util import python_month, gtk_month
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import exceptions
-
 from gajim.common.const import ShowConstant, KindConstant
+
 
 @unique
 class InfoColumn(IntEnum):
@@ -50,6 +46,7 @@ class InfoColumn(IntEnum):
     ACCOUNT = 1
     NAME = 2
     COMPLETION = 3
+
 
 @unique
 class Column(IntEnum):
@@ -60,13 +57,14 @@ class Column(IntEnum):
     TIME = 4
     LOG_LINE_ID = 5
 
+
 class HistoryWindow:
     """
     Class for browsing logs of conversations with contacts
     """
 
     def __init__(self, jid=None, account=None):
-        xml = gtkgui_helpers.get_gtk_builder('history_window.ui')
+        xml = util.get_builder('history_window.ui')
         self.window = xml.get_object('history_window')
         self.window.set_application(app.app)
         self.calendar = xml.get_object('calendar')
@@ -76,7 +74,7 @@ class HistoryWindow:
         self.button_last_day = xml.get_object('button_last_day')
         scrolledwindow = xml.get_object('scrolledwindow')
         self.history_textview = conversation_textview.ConversationTextview(
-            account, used_in_history_window = True)
+            account, used_in_history_window=True)
         scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background='yellow')
@@ -102,7 +100,8 @@ class HistoryWindow:
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.CONTACT_NAME)
-        col.set_sort_column_id(Column.CONTACT_NAME) # user can click this header and sort
+        # user can click this header and sort
+        col.set_sort_column_id(Column.CONTACT_NAME)
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Date'))
@@ -110,7 +109,8 @@ class HistoryWindow:
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.UNIXTIME)
-        col.set_sort_column_id(Column.UNIXTIME) # user can click this header and sort
+        # user can click this header and sort
+        col.set_sort_column_id(Column.UNIXTIME)
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Message'))
@@ -120,10 +120,10 @@ class HistoryWindow:
         col.add_attribute(renderer, 'text', Column.MESSAGE)
         col.set_resizable(True)
 
-        self.jid = None # The history we are currently viewing
+        self.jid = None  # The history we are currently viewing
         self.account = account
         self.completion_dict = {}
-        self.accounts_seen_online = [] # Update dict when new accounts connect
+        self.accounts_seen_online = []  # Update dict when new accounts connect
         self.jids_to_search = []
 
         # This will load history too
@@ -135,12 +135,12 @@ class HistoryWindow:
         else:
             self._load_history(None)
 
-        gtkgui_helpers.resize_window(self.window,
-                app.config.get('history_window_width'),
-                app.config.get('history_window_height'))
-        gtkgui_helpers.move_window(self.window,
-                app.config.get('history_window_x-position'),
-                app.config.get('history_window_y-position'))
+        util.resize_window(self.window,
+                           app.config.get('history_window_width'),
+                           app.config.get('history_window_height'))
+        util.move_window(self.window,
+                         app.config.get('history_window_x-position'),
+                         app.config.get('history_window_y-position'))
 
         xml.connect_signals(self)
         self.window.show_all()
@@ -161,7 +161,8 @@ class HistoryWindow:
         {key : (jid, account, nick_name, full_completion_name}
         This is a generator and does pseudo-threading via idle_add().
         """
-        liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry.get_child())
+        liststore = util.get_completion_liststore(
+            self.jid_entry.get_child())
         liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         self.jid_entry.get_child().get_completion().connect(
             'match-selected', self.on_jid_entry_match_selected)
@@ -174,12 +175,14 @@ class HistoryWindow:
 
         self.accounts_seen_online = list(app.contacts.get_accounts())
 
-        # Enhance contacts of online accounts with contact. Needed for mapping below
+        # Enhance contacts of online accounts with contact.
+        # Needed for mapping below
         for account in self.accounts_seen_online:
-            completion_dict.update(helpers.get_contact_dict_for_account(account))
+            completion_dict.update(
+                helpers.get_contact_dict_for_account(account))
 
-        muc_active_icon = gtkgui_helpers.get_iconset_name_for('muc-active')
-        online_icon = gtkgui_helpers.get_iconset_name_for('online')
+        muc_active_icon = util.get_iconset_name_for('muc-active')
+        online_icon = util.get_iconset_name_for('online')
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
@@ -209,8 +212,8 @@ class HistoryWindow:
 
             info_acc = self._get_account_for_jid(info_jid)
 
-            if app.logger.jid_is_room_jid(completed) or\
-            app.logger.jid_is_from_pm(completed):
+            if (app.logger.jid_is_room_jid(completed) or
+                    app.logger.jid_is_from_pm(completed)):
                 icon = muc_active_icon
                 if app.logger.jid_is_from_pm(completed):
                     # It's PM. Make it easier to find
@@ -226,16 +229,16 @@ class HistoryWindow:
             if len(completed) > 70:
                 completed = completed[:70] + '[\u2026]'
             liststore.append((icon, completed))
-            self.completion_dict[key] = (info_jid, info_acc, info_name,
-                info_completion)
-            self.completion_dict[completed] = (info_jid, info_acc,
-                info_name, info_completion)
+            self.completion_dict[key] = (
+                info_jid, info_acc, info_name, info_completion)
+            self.completion_dict[completed] = (
+                info_jid, info_acc, info_name, info_completion)
             if completed2:
                 if len(completed2) > 70:
                     completed2 = completed2[:70] + '[\u2026]'
                 liststore.append((icon, completed2))
-                self.completion_dict[completed2] = (info_jid, info_acc,
-                    info_name, info_completion2)
+                self.completion_dict[completed2] = (
+                    info_jid, info_acc, info_name, info_completion2)
             if key == actual_jid:
                 self._load_history(info_jid, self.account or info_acc)
             yield True
@@ -295,7 +298,7 @@ class HistoryWindow:
         Load history for the given jid/name and show it
         """
         if jid_or_name and jid_or_name in self.completion_dict:
-        # a full qualified jid or a contact name was entered
+            # a full qualified jid or a contact name was entered
             info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
             self.jids_to_search = [info_jid]
             self.jid = info_jid
@@ -311,22 +314,22 @@ class HistoryWindow:
                 self.checkbutton.set_sensitive(False)
             else:
                 # Are log disabled for account ?
-                if self.account in app.config.get_per('accounts', self.account,
-                        'no_log_for').split(' '):
+                if self.account in app.config.get_per(
+                        'accounts', self.account, 'no_log_for').split(' '):
                     self.checkbutton.set_active(False)
                     self.checkbutton.set_sensitive(False)
                 else:
                     # Are log disabled for jid ?
                     log = True
-                    if self.jid in app.config.get_per('accounts', self.account,
-                            'no_log_for').split(' '):
+                    if self.jid in app.config.get_per(
+                            'accounts', self.account, 'no_log_for').split(' '):
                         log = False
                     self.checkbutton.set_active(log)
                     self.checkbutton.set_sensitive(True)
 
             self.jids_to_search = [info_jid]
 
-            # Get first/last date we have logs with contact (for log navigation)
+            # Get first/last date we have logs with contact
             self.first_log = app.logger.get_first_date_that_has_logs(
                 self.account, self.jid)
             self.first_day = self._get_date_from_timestamp(self.first_log)
@@ -336,9 +339,8 @@ class HistoryWindow:
 
             # Select logs for last date we have logs with contact
             self.search_menu_button.set_sensitive(True)
-            gtk_month = gtkgui_helpers.make_python_month_gtk_month(
-                self.last_day.month)
-            self.calendar.select_month(gtk_month, self.last_day.year)
+            month = gtk_month(self.last_day.month)
+            self.calendar.select_month(month, self.last_day.year)
             self.calendar.select_day(self.last_day.day)
 
             self.button_previous_day.set_sensitive(True)
@@ -351,12 +353,13 @@ class HistoryWindow:
 
             self.jid_entry.get_child().set_text(info_completion)
 
-        else:   # neither a valid jid, nor an existing contact name was entered
+        else:
+            # neither a valid jid, nor an existing contact name was entered
             # we have got nothing to show or to search in
             self.jid = None
             self.account = None
 
-            self.history_buffer.set_text('') # clear the buffer
+            self.history_buffer.set_text('')  # clear the buffer
             self.search_entry.set_sensitive(False)
 
             self.checkbutton.set_sensitive(False)
@@ -372,26 +375,27 @@ class HistoryWindow:
     def on_calendar_day_selected(self, widget):
         if not self.jid:
             return
-        year, month, day = self.calendar.get_date() # integers
-        month = gtkgui_helpers.make_gtk_month_python_month(month)
+        year, month, day = self.calendar.get_date()  # integers
+        month = python_month(month)
         date_str = datetime.date(year, month, day).strftime('%x')
         self.date_label.set_text(date_str)
         self._load_conversation(year, month, day)
 
     def on_calendar_month_changed(self, widget):
         """
-        Ask for days in this month, if they have logs it bolds them (marks them)
+        Ask for days in this month, if they have logs it bolds them
+        (marks them)
         """
         if not self.jid:
             return
-        year, month, day = widget.get_date() # integers
+        year, month, day = widget.get_date()  # integers
         if year < 1900:
             widget.select_month(0, 1900)
             widget.select_day(1)
             return
 
         widget.clear_marks()
-        month = gtkgui_helpers.make_gtk_month_python_month(month)
+        month = python_month(month)
 
         try:
             log_days = app.logger.get_days_with_logs(
@@ -413,17 +417,16 @@ class HistoryWindow:
     def _change_date(self, widget):
         # Get day selected in calendar
         y, m, d = self.calendar.get_date()
-        py_m = gtkgui_helpers.make_gtk_month_python_month(m)
+        py_m = python_month(m)
         _date = datetime.datetime(y, py_m, d)
 
         if widget is self.button_first_day:
-            gtk_m = gtkgui_helpers.make_python_month_gtk_month(
-                self.first_day.month)
+            gtk_m = gtk_month(self.first_day.month)
             self.calendar.select_month(gtk_m, self.first_day.year)
             self.calendar.select_day(self.first_day.day)
             return
         elif widget is self.button_last_day:
-            gtk_m = gtkgui_helpers.make_python_month_gtk_month(
+            gtk_m = gtk_month(
                 self.last_day.month)
             self.calendar.select_month(gtk_m, self.last_day.year)
             self.calendar.select_day(self.last_day.day)
@@ -453,8 +456,8 @@ class HistoryWindow:
                 ErrorDialog(_('Disk Error'), str(e))
                 return
 
-        gtk_month = gtkgui_helpers.make_python_month_gtk_month(_date.month)
-        self.calendar.select_month(gtk_month, _date.year)
+        gtk_m = gtk_month(_date.month)
+        self.calendar.select_month(gtk_m, _date.year)
         self.calendar.select_day(_date.day)
 
     def _get_string_show_from_constant_int(self, show):
@@ -521,13 +524,13 @@ class HistoryWindow:
             buf.insert(end_iter, tim)
         elif app.config.get('print_time') == 'sometimes':
             every_foo_seconds = 60 * app.config.get(
-                    'print_ichat_every_foo_minutes')
+                'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
             if seconds_passed > every_foo_seconds:
                 self.last_time_printout = tim
                 tim = time.strftime('%X ', time.localtime(float(tim)))
-                buf.insert_with_tags_by_name(end_iter, tim + '\n',
-                        'time_sometimes')
+                buf.insert_with_tags_by_name(
+                    end_iter, tim + '\n', 'time_sometimes')
 
         tag_name = ''
         tag_msg = ''
@@ -536,11 +539,13 @@ class HistoryWindow:
 
         if kind == KindConstant.GC_MSG:
             tag_name = 'incoming'
-        elif kind in (KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
+        elif kind in (KindConstant.SINGLE_MSG_RECV,
+                      KindConstant.CHAT_MSG_RECV):
             contact_name = self.completion_dict[self.jid][InfoColumn.NAME]
             tag_name = 'incoming'
             tag_msg = 'incomingtxt'
-        elif kind in (KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
+        elif kind in (KindConstant.SINGLE_MSG_SENT,
+                      KindConstant.CHAT_MSG_SENT):
             if self.account:
                 contact_name = app.nicks[self.account]
             else:
@@ -553,26 +558,29 @@ class HistoryWindow:
         elif kind == KindConstant.GCSTATUS:
             # message here (if not None) is status message
             if message:
-                message = _('%(nick)s is now %(status)s: %(status_msg)s') %\
-                        {'nick': contact_name, 'status': helpers.get_uf_show(show),
-                        'status_msg': message }
+                message = _('%(nick)s is now %(status)s: %(status_msg)s') % {
+                    'nick': contact_name,
+                    'status': helpers.get_uf_show(show),
+                    'status_msg': message}
             else:
-                message = _('%(nick)s is now %(status)s') % {'nick': contact_name,
-                        'status': helpers.get_uf_show(show) }
+                message = _('%(nick)s is now %(status)s') % {
+                    'nick': contact_name,
+                    'status': helpers.get_uf_show(show) }
             tag_msg = 'status'
-        else: # 'status'
+        else:  # 'status'
             # message here (if not None) is status message
-            if show is None: # it means error
+            if show is None:  # it means error
                 if message:
                     message = _('Error: %s') % message
                 else:
                     message = _('Error')
             elif message:
-                message = _('Status is now: %(status)s: %(status_msg)s') % \
-                        {'status': helpers.get_uf_show(show), 'status_msg': message}
+                message = _('Status is now: %(status)s: %(status_msg)s') % {
+                    'status': helpers.get_uf_show(show),
+                    'status_msg': message}
             else:
-                message = _('Status is now: %(status)s') % { 'status':
-                        helpers.get_uf_show(show) }
+                message = _('Status is now: %(status)s') % {
+                    'status': helpers.get_uf_show(show)}
             tag_msg = 'status'
 
         if message.startswith('/me ') or message.startswith('/me\n'):
@@ -586,11 +594,11 @@ class HistoryWindow:
                 before_str = helpers.from_one_line(before_str)
                 after_str = app.config.get('after_nickname')
                 after_str = helpers.from_one_line(after_str)
-                format = before_str + contact_name + after_str + ' '
+                format_ = before_str + contact_name + after_str + ' '
                 if tag_name:
-                    buf.insert_with_tags_by_name(end_iter, format, tag_name)
+                    buf.insert_with_tags_by_name(end_iter, format_, tag_name)
                 else:
-                    buf.insert(end_iter, format)
+                    buf.insert(end_iter, format_)
         if subject:
             message = _('Subject: %s\n') % subject + message
         xhtml = None
@@ -598,11 +606,17 @@ class HistoryWindow:
             xhtml = message
 
         if tag_msg:
-            self.history_textview.print_real_text(message, [tag_msg],
-                    name=contact_name, xhtml=xhtml, additional_data=additional_data)
+            self.history_textview.print_real_text(
+                message, [tag_msg],
+                name=contact_name,
+                xhtml=xhtml,
+                additional_data=additional_data)
         else:
-            self.history_textview.print_real_text(message, name=contact_name,
-                xhtml=xhtml, additional_data=additional_data)
+            self.history_textview.print_real_text(
+                message,
+                name=contact_name,
+                xhtml=xhtml,
+                additional_data=additional_data)
         self.history_textview.print_real_text('\n', text_tags=['eol'])
 
     def on_search_complete_history_toggled(self, widget):
@@ -634,23 +648,23 @@ class HistoryWindow:
         for jid in self.jids_to_search:
             account = self.completion_dict[jid][InfoColumn.ACCOUNT]
             if account is None:
-                # We do not know an account. This can only happen if the contact is offine,
-                # or if we browse a groupchat history. The account is not needed, a dummy can
-                # be set.
-                # This may leed to wrong self nick in the displayed history (Uggh!)
+                # We do not know an account. This can only happen if
+                # the contact is offine, or if we browse a groupchat history.
+                # The account is not needed, a dummy can be set.
+                # This may leed to wrong self nick in the displayed history
                 account = list(app.contacts.get_accounts())[0]
 
             date = None
             if self.search_in_date.get_active():
-                year, month, day = self.calendar.get_date() # integers
-                month = gtkgui_helpers.make_gtk_month_python_month(month)
+                year, month, day = self.calendar.get_date()  # integers
+                month = python_month(month)
                 date = datetime.datetime(year, month, day)
 
             show_status = self.show_status_checkbutton.get_active()
 
             results = app.logger.search_log(account, jid, text, date)
             result_found = False
-            #FIXME:
+            # FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
             for row in results:
@@ -660,7 +674,7 @@ class HistoryWindow:
 
                 contact_name = row.contact_name
                 if not contact_name:
-                    if row.kind == KindConstant.CHAT_MSG_SENT: # it's us! :)
+                    if row.kind == KindConstant.CHAT_MSG_SENT:
                         contact_name = app.nicks[account]
                     else:
                         contact_name = self.completion_dict[jid][InfoColumn.NAME]
@@ -685,7 +699,7 @@ class HistoryWindow:
 
         # get currently selected date
         cur_year, cur_month, cur_day = self.calendar.get_date()
-        cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
+        cur_month = python_month(cur_month)
         model, paths = self.results_treeview.get_selection().get_selected_rows()
 
         if not paths:
@@ -696,7 +710,7 @@ class HistoryWindow:
         tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
         gtk_month = tim[1]
-        month = gtkgui_helpers.make_python_month_gtk_month(gtk_month)
+        month = gtk_month(gtk_month)
         day = tim[2]
 
         # switch to belonging logfile if necessary
@@ -740,25 +754,27 @@ class HistoryWindow:
         match_end = match_start.copy()
         match_end.forward_to_tag_toggle(self.history_buffer.eol_tag)
 
-        self.history_buffer.apply_tag_by_name('highlight', match_start, match_end)
+        self.history_buffer.apply_tag_by_name(
+            'highlight', match_start, match_end)
         mark = self.history_buffer.create_mark('match', match_start, True)
-        GLib.idle_add(self.history_textview.tv.scroll_to_mark, mark, 0, True, 0.0, 0.5)
+        GLib.idle_add(
+            self.history_textview.tv.scroll_to_mark, mark, 0, True, 0.0, 0.5)
 
     def on_log_history_checkbutton_toggled(self, widget, *args):
         # log conversation history?
         oldlog = True
-        no_log_for = app.config.get_per('accounts', self.account,
-                'no_log_for').split()
+        no_log_for = app.config.get_per(
+            'accounts', self.account, 'no_log_for').split()
         if self.jid in no_log_for:
             oldlog = False
         log = widget.get_active()
-        if not log and not self.jid in no_log_for:
+        if not log and self.jid not in no_log_for:
             no_log_for.append(self.jid)
         if log and self.jid in no_log_for:
             no_log_for.remove(self.jid)
         if oldlog != log:
-            app.config.set_per('accounts', self.account, 'no_log_for',
-                    ' '.join(no_log_for))
+            app.config.set_per(
+                'accounts', self.account, 'no_log_for', ' '.join(no_log_for))
 
     def on_show_status_checkbutton_toggled(self, widget):
         # reload logs
@@ -773,8 +789,8 @@ class HistoryWindow:
             # Update dict to not only show bare jid
             GLib.idle_add(next, self._fill_completion_dict())
         else:
-            # Only in that case because it's called by self._fill_completion_dict()
-            # otherwise
+            # Only in that case because it's called by
+            # self._fill_completion_dict() otherwise
             self._load_history(jid, account)
         self.results_window.set_property('visible', False)
 

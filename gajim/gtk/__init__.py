@@ -67,3 +67,4 @@ from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
+from gajim.gtk.history import HistoryWindow

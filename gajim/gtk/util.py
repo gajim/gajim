@@ -203,3 +203,11 @@ def get_image_button(icon_name, tooltip, toggle=False):
             icon_name, Gtk.IconSize.MENU)
     button.set_tooltip_text(tooltip)
     return button
+
+
+def python_month(month):
+    return month + 1
+
+
+def gtk_month(month):
+    return month - 1

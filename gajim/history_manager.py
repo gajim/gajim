@@ -27,7 +27,7 @@
 ## NOTE: some method names may match those of logger.py but that's it
 ## someday (TM) should have common class
 ## that abstracts db connections and helpers on it
-## the same can be said for history_window.py
+## the same can be said for history.py
 
 import os
 import sys

@@ -38,7 +38,6 @@ from gi.repository import Gio
 from gajim import gtkgui_helpers
 from gajim import message_control
 from gajim.gtk import NonModalConfirmationDialog
-from gajim import history_window
 from gajim import notify
 import re
 
@@ -432,8 +431,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.interface.instances['logs'].window.present()
             app.interface.instances['logs'].open_history(jid, self.account)
         else:
-            app.interface.instances['logs'] = \
-                    history_window.HistoryWindow(jid, self.account)
+            from gajim.gtk import HistoryWindow
+            app.interface.instances['logs'] = HistoryWindow(jid, self.account)
 
     def change_encryption(self, action, param):
         encryption = param.get_string()
@@ -1119,8 +1118,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             app.interface.instances['logs'].window.present()
             app.interface.instances['logs'].open_history(jid, self.account)
         else:
-            app.interface.instances['logs'] = \
-                    history_window.HistoryWindow(jid, self.account)
+            from gajim.gtk import HistoryWindow
+            app.interface.instances['logs'] = HistoryWindow(jid, self.account)
 
     def _on_send_file(self, action, param):
         # get file transfer preference

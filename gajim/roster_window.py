@@ -47,7 +47,6 @@ import logging
 
 from enum import IntEnum, unique
 
-from gajim import history_window
 from gajim import dialogs
 from gajim import vcard
 from gajim import config
@@ -72,6 +71,7 @@ from gajim.gtk import ManagePEPServicesWindow
 from gajim.gtk import ManageBookmarksWindow
 from gajim.gtk import AccountCreationWizard
 from gajim.gtk import ServiceRegistration
+from gajim.gtk import HistoryWindow
 
 from gajim.common.const import AvatarSize
 
@@ -3047,8 +3047,7 @@ class RosterWindow:
             app.interface.instances['logs'].window.present()
             app.interface.instances['logs'].open_history(contact.jid, account)
         else:
-            app.interface.instances['logs'] = history_window.\
-                HistoryWindow(contact.jid, account)
+            app.interface.instances['logs'] = HistoryWindow(contact.jid, account)
 
     def on_disconnect(self, widget, jid, account):
         """

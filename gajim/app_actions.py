@@ -24,7 +24,6 @@ from gajim import dialogs
 from gajim.gtk import shortcuts_window
 from gajim import accounts_window
 import gajim.plugins.gui
-from gajim import history_window
 from gajim import disco
 from gajim.gtk.history_sync import HistorySyncAssistant
 from gajim.gtk.server_info import ServerInfoDialog
@@ -39,6 +38,7 @@ from gajim.gtk import PrivacyListsWindow
 from gajim.gtk import ManageBookmarksWindow
 from gajim.gtk import FeaturesDialog
 from gajim.gtk import AccountCreationWizard
+from gajim.gtk import HistoryWindow
 
 
 # General Actions
@@ -305,8 +305,7 @@ def on_history(action, param):
     if 'logs' in interface.instances:
         interface.instances['logs'].window.present()
     else:
-        interface.instances['logs'] = history_window.\
-            HistoryWindow()
+        interface.instances['logs'] = HistoryWindow()
 
 
 def on_open_event(action, param):
