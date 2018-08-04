@@ -312,8 +312,8 @@ class MUC:
         password = app.gc_passwords.get(room, None)
         if password:
             attrs['password'] = password
-        message = message.addChild(name='x', attrs=attrs,
-                                   namespace=nbxmpp.NS_CONFERENCE)
+        message.addChild(name='x', attrs=attrs,
+                         namespace=nbxmpp.NS_CONFERENCE)
         return message
 
     def _build_mediated_invite(self, room, to, reason, continue_):
