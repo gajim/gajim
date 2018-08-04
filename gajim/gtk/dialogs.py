@@ -13,10 +13,10 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.modules import dataforms
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
 

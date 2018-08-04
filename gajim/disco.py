@@ -59,6 +59,7 @@ from gajim import groups
 from gajim import adhoc_commands
 from gajim import search_window
 from gajim import gui_menu_builder
+from gajim.gtk import ServiceRegistration
 
 from gajim.common import app
 import nbxmpp
@@ -1355,8 +1356,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             return
         jid = model[iter_][0]
         if jid:
-            app.connections[self.account].request_register_agent_info(jid)
-            self.window.destroy(chain = True)
+            ServiceRegistration(self.account, jid)
+            self.window.destroy(chain=True)
 
     def on_join_button_clicked(self, widget):
         """

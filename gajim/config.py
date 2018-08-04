@@ -1486,57 +1486,6 @@ class FakeDataForm(Gtk.Table, object):
             self.infos[name] = self.entries[name].get_text()
         return self.infos
 
-class ServiceRegistrationWindow:
-    """
-    Class for Service registration window. Window that appears when we want to
-    subscribe to a service if is_form we use dataforms_widget else we use
-    service_registarion_window
-    """
-    def __init__(self, service, infos, account, is_form):
-        self.service = service
-        self.account = account
-        self.is_form = is_form
-        self.xml = gtkgui_helpers.get_gtk_builder('service_registration_window.ui')
-        self.window = self.xml.get_object('service_registration_window')
-        self.window.set_transient_for(app.interface.roster.window)
-        if self.is_form:
-            dataform = dataforms.ExtendForm(node = infos)
-            self.data_form_widget = dataforms_widget.DataFormWidget(dataform)
-            if self.data_form_widget.title:
-                self.window.set_title('%s - Gajim' % self.data_form_widget.title)
-            grid = self.xml.get_object('grid')
-            grid.attach(self.data_form_widget, 0, 0, 2, 1)
-        else:
-            if 'registered' in infos:
-                self.window.set_title(_('Edit %s') % service)
-            else:
-                self.window.set_title(_('Register to %s') % service)
-            self.data_form_widget = FakeDataForm(infos)
-            grid = self.xml.get_object('grid')
-            grid.attach(self.data_form_widget, 0, 0, 2, 1)
-
-        self.xml.connect_signals(self)
-        self.window.show_all()
-
-    def on_cancel_button_clicked(self, widget):
-        self.window.destroy()
-
-    def on_ok_button_clicked(self, widget):
-        # send registration info to the core
-        if self.is_form:
-            form = self.data_form_widget.data_form
-            app.connections[self.account].register_agent(self.service,
-                    form, True) # True is for is_form
-        else:
-            infos = self.data_form_widget.get_infos()
-            if 'instructions' in infos:
-                del infos['instructions']
-            if 'registered' in infos:
-                del infos['registered']
-            app.connections[self.account].register_agent(self.service, infos)
-
-        self.window.destroy()
-
 class GroupchatConfigWindow:
 
     def __init__(self, account, room_jid, form=None):

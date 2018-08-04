@@ -31,6 +31,8 @@ class Register:
 
         self.handlers = []
 
+        self.agent_registrations = {}
+
     def change_password(self, password, success_cb, error_cb):
         if not app.account_is_connected(self._account):
             return
@@ -52,10 +54,86 @@ class Register:
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             log.info('Error: %s', error)
-            error_cb()(error)
+            if error_cb() is not None:
+                error_cb()(error)
         else:
             log.info('Password changed')
+            if success_cb() is not None:
+                success_cb()()
+
+    def register_agent(self, agent, form, is_form, success_cb, error_cb):
+        if not app.account_is_connected(self._account):
+            return
+
+        weak_success_cb = weakref.WeakMethod(success_cb)
+        weak_error_cb = weakref.WeakMethod(error_cb)
+
+        iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
+        if is_form:
+            query = iq.setQuery()
+            form.setAttr('type', 'submit')
+            query.addChild(node=form)
+        else:
+            for field in form.keys():
+                iq.setTag('query').setTagData(field, form[field])
+
+        self._con.connection.SendAndCallForResponse(
+            iq, self._register_agent_response, {'agent': agent,
+                                                'success_cb': weak_success_cb,
+                                                'error_cb': weak_error_cb})
+
+        self.agent_registrations[agent] = {'roster_push': False,
+                                           'sub_received': False}
+
+    def _register_agent_response(self, con, stanza, agent,
+                                 success_cb, error_cb):
+        if not nbxmpp.isResultNode(stanza):
+            error = stanza.getErrorMsg()
+            log.info('Error: %s', error)
+            if error_cb() is not None:
+                error_cb()(error)
+            return
+
+        self._con.get_module('Presence').subscribe(agent, auto_auth=True)
+
+        self.agent_registrations[agent]['roster_push'] = True
+        if self.agent_registrations[agent]['sub_received']:
+            self._con.get_module('Presence').subscribed(agent)
+
+        if success_cb() is not None:
             success_cb()()
+
+    def get_register_form(self, jid, success_cb, error_cb):
+        if not app.account_is_connected(self._account):
+            return
+
+        weak_success_cb = weakref.WeakMethod(success_cb)
+        weak_error_cb = weakref.WeakMethod(error_cb)
+
+        iq = nbxmpp.Iq('get', nbxmpp.NS_REGISTER, to=jid)
+        self._con.connection.SendAndCallForResponse(
+            iq, self._register_info_response, {'success_cb': weak_success_cb,
+                                               'error_cb': weak_error_cb})
+
+    def _register_info_response(self, con, stanza, success_cb, error_cb):
+        if not nbxmpp.isResultNode(stanza):
+            error = stanza.getErrorMsg()
+            log.info('Error: %s', error)
+            if error_cb() is not None:
+                error_cb()(error)
+        else:
+            log.info('Register form received')
+            form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
+            is_form = form is not None
+            if not is_form:
+                form = {}
+                for field in stanza.getQueryPayload():
+                    if not isinstance(field, nbxmpp.Node):
+                        continue
+                    form[field.getName()] = field.getData()
+
+            if success_cb() is not None:
+                success_cb()(form, is_form)
 
 
 def get_instance(*args, **kwargs):

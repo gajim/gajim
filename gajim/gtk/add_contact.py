@@ -209,7 +209,8 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         model = self.protocol_jid_combobox.get_model()
         row = self.protocol_jid_combobox.get_active()
         jid = model[row][0]
-        app.connections[self.account].request_register_agent_info(jid)
+        from gajim.gtk import ServiceRegistration
+        ServiceRegistration(self.account, jid)
 
     def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:

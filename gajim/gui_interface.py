@@ -580,17 +580,6 @@ class Interface:
                 'unsubscribed', 'gajim-unsubscribed',
                 event_type, obj.jid)
 
-    @staticmethod
-    def handle_event_register_agent_info(obj):
-        # ('REGISTER_AGENT_INFO', account, (agent, infos, is_form))
-        # info in a dataform if is_form is True
-        if obj.is_form or 'instructions' in obj.config:
-            config.ServiceRegistrationWindow(obj.agent, obj.config,
-                obj.conn.name, obj.is_form)
-        else:
-            ErrorDialog(_('Contact with "%s" cannot be established') % \
-                obj.agent, _('Check your connection or try again later.'))
-
     def handle_event_gc_config(self, obj):
         #('GC_CONFIG', account, (jid, form_node))  config is a dict
         account = obj.conn.name
@@ -1565,7 +1554,6 @@ class Interface:
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],
             'presence-received': [self.handle_event_presence],
-            'register-agent-info-received': [self.handle_event_register_agent_info],
             'roster-info': [self.handle_event_roster_info],
             'roster-item-exchange-received': \
                 [self.handle_event_roster_item_exchange],

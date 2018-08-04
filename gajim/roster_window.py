@@ -71,6 +71,7 @@ from gajim.gtk import AddNewContactWindow
 from gajim.gtk import ManagePEPServicesWindow
 from gajim.gtk import ManageBookmarksWindow
 from gajim.gtk import AccountCreationWizard
+from gajim.gtk import ServiceRegistration
 
 from gajim.common.const import AvatarSize
 
@@ -2790,7 +2791,7 @@ class RosterWindow:
         """
         When we want to modify the agent registration
         """
-        app.connections[account].request_register_agent_info(contact.jid)
+        ServiceRegistration(account, contact.jid)
 
     def on_remove_agent(self, widget, list_):
         """

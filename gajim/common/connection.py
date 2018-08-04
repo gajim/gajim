@@ -792,11 +792,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                         None, dialog_name='invalid-answer',
                         kwargs={'name': data[0], 'error': data[3]}))
                     return
-                is_form = data[2]
-                conf = data[1]
-                app.nec.push_incoming_event(RegisterAgentInfoReceivedEvent(
-                    None, conn=self, agent=data[0], config=conf,
-                    is_form=is_form))
 
     def _select_next_host(self, hosts):
         """

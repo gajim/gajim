@@ -54,61 +54,6 @@ log = logging.getLogger('gajim.c.connection_handlers')
 # kind of events we can wait for an answer
 AGENT_REMOVED = 'agent_removed'
 
-
-class ConnectionDisco:
-
-    def request_register_agent_info(self, agent):
-        if not self.connection or self.connected < 2:
-            return None
-        iq = nbxmpp.Iq('get', nbxmpp.NS_REGISTER, to=agent)
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        # Wait the answer during 30 secondes
-        self.awaiting_timeouts[app.idlequeue.current_time() + 30] = (id_,
-            _('Registration information for transport %s has not arrived in '
-            'time') % agent)
-        self.connection.SendAndCallForResponse(iq, self._ReceivedRegInfo,
-            {'agent': agent})
-
-    def _agent_registered_cb(self, con, resp, agent):
-        if resp.getType() == 'result':
-            app.nec.push_incoming_event(InformationEvent(
-                None, dialog_name='agent-register-success', args=agent))
-            self.get_module('Presence').subscribe(agent, auto_auth=True)
-            self.agent_registrations[agent]['roster_push'] = True
-            if self.agent_registrations[agent]['sub_received']:
-                p = nbxmpp.Presence(agent, 'subscribed')
-                p = self.add_sha(p)
-                self.connection.send(p)
-        if resp.getType() == 'error':
-            app.nec.push_incoming_event(InformationEvent(
-                None, dialog_name='agent-register-error', 
-                kwargs={'agent': agent,
-                        'error': resp.getError(),
-                        'error_msg': resp.getErrorMsg()}))
-
-    def register_agent(self, agent, info, is_form=False):
-        if not self.connection or self.connected < 2:
-            return
-        if is_form:
-            iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
-            query = iq.setQuery()
-            info.setAttr('type', 'submit')
-            query.addChild(node=info)
-            self.connection.SendAndCallForResponse(iq,
-                self._agent_registered_cb, {'agent': agent})
-        else:
-            # fixed: blocking
-            nbxmpp.features_nb.register(self.connection, agent, info,
-                self._agent_registered_cb, {'agent': agent})
-        self.agent_registrations[agent] = {'roster_push': False,
-            'sub_received': False}
-
-    def _ReceivedRegInfo(self, con, resp, agent):
-        nbxmpp.features_nb._ReceivedRegInfo(con, resp, agent)
-        self._IqCB(con, resp)
-
-
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
     def __init__(self):
@@ -443,7 +388,7 @@ class ConnectionHandlersBase:
 
         return sess
 
-class ConnectionHandlers(ConnectionSocks5Bytestream, ConnectionDisco,
+class ConnectionHandlers(ConnectionSocks5Bytestream,
                          ConnectionHandlersBase,
                          ConnectionJingle, ConnectionIBBytestream):
     def __init__(self):
