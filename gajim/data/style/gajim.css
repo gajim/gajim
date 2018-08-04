@@ -110,6 +110,32 @@ list.settings > row > box {
 .popover_treeview { padding: 6px; }
 .popover_treeview :hover { background-color: @theme_selected_bg_color; }
 
+/* .inline-toolbar linked from top */
+.ontop-bar {
+    border-width: 1px;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    padding: 5px;
+}
+
+/* Container with buttons linked from below */
+.linked-up * {
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Highlighted label */
+.tagged {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    padding: 0 3px;
+    margin: 0 -3px;
+    border-radius: 3px;
+    text-shadow: none;
+    opacity: 0.95;
+}
+
 /* Text style */
 
 .bold16 { font-size: 16px; font-weight: bold; }

@@ -82,16 +82,17 @@ class HistoryWindow:
         self.history_buffer.create_tag('highlight', background='yellow')
         self.history_buffer.create_tag('invisible', invisible=True)
         self.checkbutton = xml.get_object('log_history_checkbutton')
-        self.checkbutton.connect('toggled',
-            self.on_log_history_checkbutton_toggled)
         self.show_status_checkbutton = xml.get_object('show_status_checkbutton')
         self.search_entry = xml.get_object('search_entry')
         self.query_liststore = xml.get_object('query_liststore')
         self.jid_entry = xml.get_object('query_entry')
-        self.jid_entry.connect('activate', self.on_jid_entry_activate)
         self.results_treeview = xml.get_object('results_treeview')
         self.results_window = xml.get_object('results_scrolledwindow')
         self.search_in_date = xml.get_object('search_in_date')
+        self.date_label = xml.get_object('date_label')
+        self.search_menu_button = xml.get_object('search_menu_button')
+
+        self.clearing_search = False
 
         # jid, contact_name, date, message, time, log_line_id
         model = Gtk.ListStore(str, str, str, str, str, int)
@@ -130,7 +131,7 @@ class HistoryWindow:
         GLib.idle_add(next, task)
 
         if jid:
-            self.jid_entry.set_text(jid)
+            self.jid_entry.get_child().set_text(jid)
         else:
             self._load_history(None)
 
@@ -160,7 +161,12 @@ class HistoryWindow:
         {key : (jid, account, nick_name, full_completion_name}
         This is a generator and does pseudo-threading via idle_add().
         """
-        liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry)
+        liststore = gtkgui_helpers.get_completion_liststore(self.jid_entry.get_child())
+        liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+        self.jid_entry.get_child().get_completion().connect(
+            'match-selected', self.on_jid_entry_match_selected)
+
+        self.jid_entry.set_model(liststore)
 
         # Add all jids in logs.db:
         db_jids = app.logger.get_jids_in_db()
@@ -177,7 +183,7 @@ class HistoryWindow:
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
-        actual_jid = self.jid_entry.get_text()
+        actual_jid = self.jid_entry.get_child().get_text()
         if actual_jid in keys:
             keys.remove(actual_jid)
             keys.insert(0, actual_jid)
@@ -251,6 +257,9 @@ class HistoryWindow:
                 break
         return account
 
+    def on_history_window_delete_event(self, widget, *args):
+        self.save_state()
+
     def on_history_window_destroy(self, widget):
         # PluginSystem: removing GUI extension points connected with
         # HistoryWindow instance object
@@ -264,17 +273,22 @@ class HistoryWindow:
             self.save_state()
             self.window.destroy()
 
-    def on_close_button_clicked(self, widget):
-        self.save_state()
-        self.window.destroy()
+    def on_jid_entry_match_selected(self, widget, model, iter_, *args):
+        self._jid_entry_search(model[iter_][1])
+        return True
+
+    def on_jid_entry_changed(self, widget):
+        # only if selected from combobox
+        jid = self.jid_entry.get_child().get_text()
+        if jid == self.jid_entry.get_active_id():
+            self._jid_entry_search(jid)
 
     def on_jid_entry_activate(self, widget):
-        jid = self.jid_entry.get_text()
+        self._jid_entry_search(self.jid_entry.get_child().get_text())
+
+    def _jid_entry_search(self, jid):
         self._load_history(jid, self.account)
         self.results_window.set_property('visible', False)
-
-    def on_jid_entry_focus(self, widget, event):
-        widget.select_region(0, -1) # select text
 
     def _load_history(self, jid_or_name, account=None):
         """
@@ -321,7 +335,7 @@ class HistoryWindow:
             self.last_day = self._get_date_from_timestamp(self.last_log)
 
             # Select logs for last date we have logs with contact
-            self.calendar.set_sensitive(True)
+            self.search_menu_button.set_sensitive(True)
             gtk_month = gtkgui_helpers.make_python_month_gtk_month(
                 self.last_day.month)
             self.calendar.select_month(gtk_month, self.last_day.year)
@@ -335,9 +349,7 @@ class HistoryWindow:
             self.search_entry.set_sensitive(True)
             self.search_entry.grab_focus()
 
-            title = _('Conversation History with %s') % info_name
-            self.window.set_title(title)
-            self.jid_entry.set_text(info_completion)
+            self.jid_entry.get_child().set_text(info_completion)
 
         else:   # neither a valid jid, nor an existing contact name was entered
             # we have got nothing to show or to search in
@@ -348,7 +360,7 @@ class HistoryWindow:
             self.search_entry.set_sensitive(False)
 
             self.checkbutton.set_sensitive(False)
-            self.calendar.set_sensitive(False)
+            self.search_menu_button.set_sensitive(False)
             self.calendar.clear_marks()
             self.button_previous_day.set_sensitive(False)
             self.button_next_day.set_sensitive(False)
@@ -357,14 +369,13 @@ class HistoryWindow:
 
             self.results_window.set_property('visible', False)
 
-            title = _('Conversation History')
-            self.window.set_title(title)
-
     def on_calendar_day_selected(self, widget):
         if not self.jid:
             return
         year, month, day = self.calendar.get_date() # integers
         month = gtkgui_helpers.make_gtk_month_python_month(month)
+        date_str = datetime.date(year, month, day).strftime('%x')
+        self.date_label.set_text(date_str)
         self._load_conversation(year, month, day)
 
     def on_calendar_month_changed(self, widget):
@@ -594,10 +605,24 @@ class HistoryWindow:
                 xhtml=xhtml, additional_data=additional_data)
         self.history_textview.print_real_text('\n', text_tags=['eol'])
 
+    def on_search_complete_history_toggled(self, widget):
+        self.date_label.get_style_context().remove_class('tagged')
+
+    def on_search_in_date_toggled(self, widget):
+        self.date_label.get_style_context().add_class('tagged')
+
     def on_search_entry_activate(self, widget):
         text = self.search_entry.get_text()
+
         model = self.results_treeview.get_model()
+        self.clearing_search = True
         model.clear()
+        self.clearing_search = False
+
+        start = self.history_buffer.get_start_iter()
+        end = self.history_buffer.get_end_iter()
+        self.history_buffer.remove_tag_by_name('highlight', start, end)
+
         if text == '':
             self.results_window.set_property('visible', False)
             return
@@ -624,6 +649,7 @@ class HistoryWindow:
             show_status = self.show_status_checkbutton.get_active()
 
             results = app.logger.search_log(account, jid, text, date)
+            result_found = False
             #FIXME:
             # add "subject:  | message: " in message column if kind is single
             # also do we need show at all? (we do not search on subject)
@@ -642,18 +668,30 @@ class HistoryWindow:
                 local_time = time.localtime(row.time)
                 date = time.strftime('%Y-%m-%d', local_time)
 
+                result_found = True
                 model.append((jid, contact_name, date, row.message,
                               str(row.time), row.log_line_id))
 
-    def on_results_treeview_row_activated(self, widget, path, column):
+            if result_found:
+                self.results_treeview.set_cursor(0)
+
+    def on_results_treeview_cursor_changed(self, *args):
         """
-        A row was double clicked, get date from row, and select it in calendar
+        A row was selected, get date from row, and select it in calendar
         which results to showing conversation logs for that date
         """
+        if self.clearing_search:
+            return
+
         # get currently selected date
         cur_year, cur_month, cur_day = self.calendar.get_date()
         cur_month = gtkgui_helpers.make_gtk_month_python_month(cur_month)
-        model = widget.get_model()
+        model, paths = self.results_treeview.get_selection().get_selected_rows()
+
+        if not paths:
+            return
+
+        path = paths[0]
         # make it a tuple (Y, M, D, 0, 0, 0...)
         tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
@@ -706,7 +744,7 @@ class HistoryWindow:
         mark = self.history_buffer.create_mark('match', match_start, True)
         GLib.idle_add(self.history_textview.tv.scroll_to_mark, mark, 0, True, 0.0, 0.5)
 
-    def on_log_history_checkbutton_toggled(self, widget):
+    def on_log_history_checkbutton_toggled(self, widget, *args):
         # log conversation history?
         oldlog = True
         no_log_for = app.config.get_per('accounts', self.account,
@@ -730,7 +768,7 @@ class HistoryWindow:
         """
         Load chat history of the specified jid
         """
-        self.jid_entry.set_text(jid)
+        self.jid_entry.get_child().set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid
             GLib.idle_add(next, self._fill_completion_dict())
