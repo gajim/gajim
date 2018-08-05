@@ -161,3 +161,9 @@ button.flat.link { padding: 0; border: 0; }
 .success-color { color: @success_color; }
 .error-color { color: @error_color; }
 .warning-color { color: @warning_color; }
+
+/*Dataforms*/
+.field-fixed { font-size: 16px; font-weight: bold; padding-top:5px;}
+.data-form-title { font-size: 16px; font-weight: bold; }
+.data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }
+.data-form-widget treeview { padding: 5px; }
