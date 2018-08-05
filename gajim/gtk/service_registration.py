@@ -19,6 +19,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.modules import dataforms
+from gajim.gtk.dataform import DataFormWidget
 
 log = logging.getLogger('gajim.gtk.registration')
 
@@ -45,37 +46,32 @@ class ServiceRegistration(Gtk.Assistant):
         self.set_resizable(True)
         self.set_position(Gtk.WindowPosition.CENTER)
 
-        self.set_default_size(500, 300)
+        self.set_default_size(600, 400)
         self.get_style_context().add_class('dialog-margin')
 
-        request = RequestPage()
-        self.append_page(request)
-        self.set_page_type(request, Gtk.AssistantPageType.INTRO)
-
-        form = FormPage()
-        self.append_page(form)
-        self.set_page_type(form, Gtk.AssistantPageType.INTRO)
-        self.set_page_complete(form, True)
-
-        sending = SendingPage()
-        self.append_page(sending)
-        self.set_page_type(sending, Gtk.AssistantPageType.PROGRESS)
-
-        success = SuccessfulPage()
-        self.append_page(success)
-        self.set_page_type(success, Gtk.AssistantPageType.SUMMARY)
-        self.set_page_complete(success, True)
-
-        error = ErrorPage()
-        self.append_page(error)
-        self.set_page_type(error, Gtk.AssistantPageType.SUMMARY)
-        self.set_page_complete(error, True)
+        self._add_page(RequestPage())
+        self._add_page(FormPage())
+        self._add_page(SendingPage())
+        self._add_page(SuccessfulPage())
+        self._add_page(ErrorPage())
 
         self.connect('prepare', self._on_page_change)
         self.connect('cancel', self._on_cancel)
         self.connect('close', self._on_cancel)
 
+        self._remove_sidebar()
         self.show_all()
+
+    def _add_page(self, page):
+        self.append_page(page)
+        self.set_page_type(page, page.type_)
+        self.set_page_title(page, page.title)
+        self.set_page_complete(page, page.complete)
+
+    def _remove_sidebar(self):
+        main_box = self.get_children()[0]
+        sidebar = main_box.get_children()[0]
+        main_box.remove(sidebar)
 
     def _on_page_change(self, assistant, page):
         if self.get_current_page() == Page.REQUEST:
@@ -90,22 +86,15 @@ class ServiceRegistration(Gtk.Assistant):
         log.info('Show Form page')
         self._is_form = is_form
         if is_form:
-            from gajim import dataforms_widget
             dataform = dataforms.ExtendForm(node=form)
-            self._data_form_widget = dataforms_widget.DataFormWidget(dataform)
-            if self._data_form_widget.title:
-                self.set_title('%s - Gajim' % self._data_form_widget.title)
+            self._data_form_widget = DataFormWidget(dataform)
         else:
-            if 'registered' in form:
-                self.set_title(_('Edit %s') % self._agent)
-            else:
-                self.set_title(_('Register to %s') % self._agent)
             from gajim import config
             self._data_form_widget = config.FakeDataForm(form)
 
         page = self.get_nth_page(Page.FORM)
         page.pack_start(self._data_form_widget, True, True, 0)
-        self._data_form_widget.show()
+        self._data_form_widget.show_all()
         self.set_current_page(Page.FORM)
 
     def _on_error(self, error_text):
@@ -120,7 +109,7 @@ class ServiceRegistration(Gtk.Assistant):
     def _register(self):
         log.info('Show Sending page')
         if self._is_form:
-            form = self._data_form_widget.data_form
+            form = self._data_form_widget.get_submit_form()
         else:
             form = self._data_form_widget.get_infos()
             if 'instructions' in form:
@@ -141,6 +130,11 @@ class ServiceRegistration(Gtk.Assistant):
 
 
 class RequestPage(Gtk.Box):
+
+    type_ = Gtk.AssistantPageType.INTRO
+    title = _('Register')
+    complete = False
+
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(18)
@@ -150,16 +144,31 @@ class RequestPage(Gtk.Box):
 
 
 class SendingPage(RequestPage):
+
+    type_ = Gtk.AssistantPageType.PROGRESS
+    title = _('Register')
+    complete = False
+
     def __init__(self):
         super().__init__()
 
 
 class FormPage(Gtk.Box):
+
+    type_ = Gtk.AssistantPageType.INTRO
+    title = _('Register')
+    complete = True
+
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
 
 
 class SuccessfulPage(Gtk.Box):
+
+    type_ = Gtk.AssistantPageType.SUMMARY
+    title = _('Successful registered')
+    complete = True
+
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(12)
@@ -178,6 +187,11 @@ class SuccessfulPage(Gtk.Box):
 
 
 class ErrorPage(Gtk.Box):
+
+    type_ = Gtk.AssistantPageType.SUMMARY
+    title = _('Registration failed')
+    complete = True
+
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(12)
