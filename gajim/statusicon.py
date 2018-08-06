@@ -365,10 +365,12 @@ class StatusIcon:
         win.hide()
 
     def on_preferences_menuitem_activate(self, widget):
-        if 'preferences' in app.interface.instances:
-            app.interface.instances['preferences'].window.present()
+        from gajim.gtk.preferences import Preferences
+        window = app.get_app_window(Preferences)
+        if window is None:
+            Preferences()
         else:
-            app.interface.instances['preferences'] = config.PreferencesWindow()
+            window.present()
 
     def on_quit_menuitem_activate(self, widget):
         app.interface.roster.on_quit_request()

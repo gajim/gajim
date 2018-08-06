@@ -69,11 +69,10 @@ def tree_model_pre_order(model, treeiter):
 
 
 class AdvancedConfigurationWindow(object):
-    def __init__(self):
+    def __init__(self, transient):
         self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')
-        self.window.set_transient_for(
-                app.interface.instances['preferences'].window)
+        self.window.set_transient_for(transient)
         self.entry = self.xml.get_object('advanced_entry')
         self.desc_label = self.xml.get_object('advanced_desc_label')
         self.restart_box = self.xml.get_object('restart_box')

@@ -28,6 +28,7 @@ from gajim import disco
 from gajim.gtk.history_sync import HistorySyncAssistant
 from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
+from gajim.gtk.preferences import Preferences
 from gajim.gtk import JoinGroupchatWindow
 from gajim.gtk import StartChatDialog
 from gajim.gtk import AddNewContactWindow
@@ -50,11 +51,11 @@ def on_add_contact_jid(action, param):
 
 
 def on_preferences(action, param):
-    if 'preferences' in interface.instances:
-        interface.instances['preferences'].window.present()
+    window = app.get_app_window(Preferences)
+    if window is None:
+        Preferences()
     else:
-        interface.instances['preferences'] = \
-            config.PreferencesWindow()
+        window.present()
 
 
 def on_plugins(action, param):

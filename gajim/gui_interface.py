@@ -1916,10 +1916,6 @@ class Interface:
         if not emot_theme:
             return
 
-        transient_for = None
-        if 'preferences' in app.interface.instances:
-            transient_for = app.interface.instances['preferences'].window
-
         themes = helpers.get_available_emoticon_themes()
         if emot_theme not in themes:
             if 'font-emoticons' in themes:
@@ -1935,7 +1931,7 @@ class Interface:
                     _('Emoticons disabled'),
                     _('Your configured emoticons theme could not be loaded.'
                       ' See the log for more details.'),
-                    transient_for=transient_for)
+                    transient_for=app.get_app_window('Preferences'))
             app.config.set('emoticons_theme', '')
             return
 

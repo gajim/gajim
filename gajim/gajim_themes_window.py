@@ -34,11 +34,10 @@ from gajim.gtk.util import get_builder
 
 class GajimThemesWindow:
 
-    def __init__(self):
+    def __init__(self, transient):
         self.xml = get_builder('gajim_themes_window.ui')
         self.window = self.xml.get_object('gajim_themes_window')
-        self.window.set_transient_for(app.interface.instances[
-            'preferences'].window)
+        self.window.set_transient_for(transient)
 
         self.options = ['account', 'group', 'contact', 'banner']
         self.options_combobox = self.xml.get_object('options_combobox')
@@ -85,8 +84,9 @@ class GajimThemesWindow:
         return True # do NOT destroy the window
 
     def on_close_button_clicked(self, widget):
-        if 'preferences' in app.interface.instances:
-            app.interface.instances['preferences'].update_theme_list()
+        window = app.get_app_window('Preferences')
+        if window is not None:
+            window.update_theme_list()
         self.window.hide()
 
     def on_theme_cell_edited(self, cell, row, new_name):
