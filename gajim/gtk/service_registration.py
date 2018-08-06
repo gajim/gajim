@@ -166,7 +166,7 @@ class FormPage(Gtk.Box):
 class SuccessfulPage(Gtk.Box):
 
     type_ = Gtk.AssistantPageType.SUMMARY
-    title = _('Successful registered')
+    title = _('Registration successful')
     complete = True
 
     def __init__(self):
