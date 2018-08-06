@@ -68,7 +68,7 @@ def get_builder(file_name, widget=None):
         if widget is not None:
             builder.add_objects_from_string(xml_text, [widget])
         else:
-            builder.add_from_string(xml_text, -1)
+            builder.add_from_string(xml_text)
     else:
         if widget is not None:
             builder.add_objects_from_file(file_path, [widget])
