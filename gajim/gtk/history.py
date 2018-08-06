@@ -709,8 +709,8 @@ class HistoryWindow:
         # make it a tuple (Y, M, D, 0, 0, 0...)
         tim = time.strptime(model[path][Column.UNIXTIME], '%Y-%m-%d')
         year = tim[0]
-        gtk_month = tim[1]
-        month = gtk_month(gtk_month)
+        gtk_m = tim[1]
+        month = gtk_month(gtk_m)
         day = tim[2]
 
         # switch to belonging logfile if necessary
@@ -719,10 +719,10 @@ class HistoryWindow:
             self._load_history(log_jid, None)
 
         # avoid reruning mark days algo if same month and year!
-        if year != cur_year or gtk_month != cur_month:
+        if year != cur_year or gtk_m != cur_month:
             self.calendar.select_month(month, year)
 
-        if year != cur_year or gtk_month != cur_month or day != cur_day:
+        if year != cur_year or gtk_m != cur_month or day != cur_day:
             self.calendar.select_day(day)
 
         self._scroll_to_message_and_highlight(model[path][Column.LOG_LINE_ID])
