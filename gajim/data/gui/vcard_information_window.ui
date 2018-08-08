@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="vcard_information_window">
@@ -38,7 +38,7 @@
               <object class="GtkGrid" id="contact">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="opacity">0.97999999999999998</property>
+                <property name="opacity">0.98</property>
                 <property name="halign">start</property>
                 <property name="margin_left">12</property>
                 <property name="margin_right">12</property>
@@ -52,8 +52,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Jabber ID:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Jabber ID</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -66,8 +69,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Resource:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Resource</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -80,8 +86,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Status:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Status</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -94,8 +103,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Client:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Client</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -108,8 +120,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;System:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">System</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -122,8 +137,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Contact time:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Contact time</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -219,8 +237,11 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;User avatar:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">User avatar</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -231,8 +252,11 @@
                   <object class="GtkLabel" id="custom_avatar_label">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Configured avatar:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Configured avatar</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -260,8 +284,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes" comments="Given Name">&lt;b&gt;Ask:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes" comments="Given Name">Ask</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -274,8 +301,11 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes" comments="Family Name">&lt;b&gt;Subscription:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes" comments="Family Name">Subscription</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -379,10 +409,13 @@
                   <object class="GtkLabel" id="label24">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Name:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Full Name</property>
                     <property name="use_markup">True</property>
                     <property name="ellipsize">start</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -407,9 +440,12 @@
                   <object class="GtkLabel" id="label20">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Nickname:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Nickname</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -451,9 +487,12 @@
                           <object class="GtkLabel" id="label31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Street:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Street</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -464,9 +503,12 @@
                           <object class="GtkLabel" id="label28">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;City:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">City</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -477,9 +519,12 @@
                           <object class="GtkLabel" id="label27">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;State:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">State</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -532,9 +577,12 @@
                           <object class="GtkLabel" id="label29">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Extra Address:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Extra Address</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -545,9 +593,12 @@
                           <object class="GtkLabel" id="label26">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Postal Code:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Postal Code</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -558,9 +609,12 @@
                           <object class="GtkLabel" id="label25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Country:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Country</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -632,9 +686,12 @@
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Homepage:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Homepage</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -645,9 +702,12 @@
                   <object class="GtkLabel" id="label57">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;E-Mail:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">E-Mail</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -658,9 +718,12 @@
                   <object class="GtkLabel" id="label23">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Phone No.:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Phone No.</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -705,9 +768,12 @@
                       <object class="GtkLabel" id="label13">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Birthday:&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">Birthday</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">1</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
                       </object>
                     </child>
                   </object>
@@ -737,9 +803,12 @@
                           <object class="GtkLabel" id="Family_Label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Family Name">&lt;b&gt;Family:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes" comments="Family Name">Family</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -750,9 +819,12 @@
                           <object class="GtkLabel" id="Middle_Label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Middle Name">&lt;b&gt;Middle:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes" comments="Middle Name">Middle</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -763,9 +835,12 @@
                           <object class="GtkLabel" id="Prefix_Label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Prefix in Name">&lt;b&gt;Prefix:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes" comments="Prefix in Name">Prefix</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -819,9 +894,12 @@
                           <object class="GtkLabel" id="label17">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Given Name">&lt;b&gt;Given:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes" comments="Given Name">Given</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -832,9 +910,12 @@
                           <object class="GtkLabel" id="Suffix_Label">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" comments="Suffix in Name">&lt;b&gt;Suffix:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes" comments="Suffix in Name">Suffix</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -875,7 +956,7 @@
                       <object class="GtkLabel" id="FullName_Label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Full Name&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Name Details&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">0</property>
                         <property name="yalign">0</property>
@@ -957,9 +1038,12 @@
                   <object class="GtkLabel" id="label44">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Company:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Company</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -987,9 +1071,12 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Department:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Department</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1015,9 +1102,12 @@
                   <object class="GtkLabel" id="label42">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Position:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Position</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1042,9 +1132,12 @@
                   <object class="GtkLabel" id="label41">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Role:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Role</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -1084,9 +1177,12 @@
                           <object class="GtkLabel" id="label39">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Street:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Street</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1097,9 +1193,12 @@
                           <object class="GtkLabel" id="label37">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;City:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">City</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1110,9 +1209,12 @@
                           <object class="GtkLabel" id="label36">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;State:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">State</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1123,10 +1225,13 @@
                           <object class="GtkLabel" id="label38">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Extra Address:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Extra Address</property>
                             <property name="use_markup">True</property>
                             <property name="single_line_mode">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1137,9 +1242,12 @@
                           <object class="GtkLabel" id="label35">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Postal Code:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Postal Code</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1150,9 +1258,12 @@
                           <object class="GtkLabel" id="label34">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Country:&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">Country</property>
                             <property name="use_markup">True</property>
                             <property name="xalign">1</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -1267,9 +1378,12 @@
                   <object class="GtkLabel" id="label32">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;E-Mail:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">E-Mail</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1280,10 +1394,13 @@
                   <object class="GtkLabel" id="label33">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Phone No.:&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Phone No.</property>
                     <property name="use_markup">True</property>
                     <property name="xalign">1</property>
                     <property name="yalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -1462,6 +1579,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
