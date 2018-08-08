@@ -1830,7 +1830,14 @@ class GroupchatControl(ChatControlBase):
 
         if obj.show in ('offline', 'error'):
             if obj.status_code:
-                if '307' in obj.status_code:
+                if '333' in obj.status_code:
+                    # Handle 333 before 307, some MUCs add both
+                    if obj.nick == self.nick:
+                        s = _('%s kicked us due to an error' % self.room_jid)
+                    else:
+                        s = _('%s has left due to an error' % nick)
+                    self.print_conversation(s, 'info', graphics=False)
+                elif '307' in obj.status_code:
                     if obj.actor is None: # do not print 'kicked by None'
                         s = _('%(nick)s has been kicked: %(reason)s') % {
                             'nick': nick, 'reason': obj.reason}
