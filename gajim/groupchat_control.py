@@ -1037,6 +1037,7 @@ class GroupchatControl(ChatControlBase):
             label_str = self.get_continued_conversation_name()
         else:
             label_str = self.name
+        label_str = GLib.markup_escape_text(label_str)
 
         # count waiting highlighted messages
         unread = ''
