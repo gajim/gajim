@@ -42,7 +42,7 @@ from gajim.gtk.util import convert_rgb_to_hex
 from gajim import notify
 import re
 
-from gajim import emoticons
+from gajim.gtk.emoji_chooser import emoji_chooser
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
@@ -676,7 +676,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         event.keyval == Gdk.KEY_KP_Enter:  # ENTER
             message_textview = widget
             message_buffer = message_textview.get_buffer()
-            emoticons.replace_with_codepoint(message_buffer)
+            message_textview.replace_emojis()
             start_iter, end_iter = message_buffer.get_bounds()
             message = message_buffer.get_text(start_iter, end_iter, False)
             xhtml = self.msg_textview.get_xhtml()
@@ -1055,10 +1055,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if not self.parent_win:
             return
 
-        popover = emoticons.get_popover()
-        popover.set_callbacks(self.msg_textview)
+        emoji_chooser.text_widget = self.msg_textview
         emoticons_button = self.xml.get_object('emoticons_button')
-        emoticons_button.set_popover(popover)
+        emoticons_button.set_popover(emoji_chooser)
 
     def on_color_menuitem_activate(self, widget):
         color_dialog = Gtk.ColorChooserDialog(None, self.parent_win.window)

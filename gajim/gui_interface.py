@@ -101,7 +101,6 @@ from gajim.common.connection_handlers_events import (
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
-from gajim import emoticons
 from gajim.common.const import AvatarSize, SSLError, PEPEventType
 from gajim.common.const import ACTIVITIES, MOODS
 
@@ -111,6 +110,7 @@ from threading import Thread
 from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
 
+from gajim.gtk.emoji_data import emoji_data, emoji_ascii_data
 from gajim.gtk import JoinGroupchatWindow
 from gajim.gtk import ErrorDialog
 from gajim.gtk import WarningDialog
@@ -1794,8 +1794,8 @@ class Interface:
     @property
     def emot_and_basic_re(self):
         if not self._emot_and_basic_re:
-            self._emot_and_basic_re = re.compile(self.emot_and_basic,
-                    re.IGNORECASE + re.UNICODE)
+            self._emot_and_basic_re = re.compile(
+                self.emot_and_basic, re.IGNORECASE)
         return self._emot_and_basic_re
 
     @property
@@ -1867,43 +1867,13 @@ class Interface:
             basic_pattern += formatting
         self.basic_pattern = basic_pattern
 
-        emoticons_pattern = ''
-        if app.config.get('emoticons_theme'):
-            # When an emoticon is bordered by an alpha-numeric character it is
-            # NOT expanded.  e.g., foo:) NO, foo :) YES, (brb) NO, (:)) YES, etc
-            # We still allow multiple emoticons side-by-side like :P:P:P
-            # sort keys by length so :qwe emot is checked before :q
-            keys = sorted(emoticons.codepoints.keys(), key=len, reverse=True)
-            emoticons_pattern_prematch = ''
-            emoticons_pattern_postmatch = ''
-            emoticon_length = 0
-            for emoticon in keys: # travel thru emoticons list
-                emoticon_escaped = re.escape(emoticon) # escape regexp metachars
-                # | means or in regexp
-                emoticons_pattern += emoticon_escaped + '|'
-                if (emoticon_length != len(emoticon)):
-                    # Build up expressions to match emoticons next to others
-                    emoticons_pattern_prematch  = \
-                        emoticons_pattern_prematch[:-1]  + ')|(?<='
-                    emoticons_pattern_postmatch = \
-                        emoticons_pattern_postmatch[:-1] + ')|(?='
-                    emoticon_length = len(emoticon)
-                emoticons_pattern_prematch += emoticon_escaped  + '|'
-                emoticons_pattern_postmatch += emoticon_escaped + '|'
-            # We match from our list of emoticons, but they must either have
-            # whitespace, or another emoticon next to it to match successfully
-            # [\w.] alphanumeric and dot (for not matching 8) in (2.8))
-            emoticons_pattern = '|' + r'(?:(?<![\w.]' + \
-                emoticons_pattern_prematch[:-1] + '))' + '(?:' + \
-                emoticons_pattern[:-1] + ')' + r'(?:(?![\w]' + \
-                emoticons_pattern_postmatch[:-1] + '))'
-
         # because emoticons match later (in the string) they need to be after
         # basic matches that may occur earlier
-        self.emot_and_basic = basic_pattern + emoticons_pattern
-
-        # needed for xhtml display
-        self.emot_only = emoticons_pattern
+        emoticons = emoji_data.get_regex()
+        if app.config.get('ascii_emoticons'):
+            emoticons += '|%s' % emoji_ascii_data.get_regex()
+            pass
+        self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
 
         # at least one character in 3 parts (before @, after @, after .)
         self.sth_at_sth_dot_sth = r'\S+@\S+\.\S*[^\s)?]'
@@ -1912,30 +1882,6 @@ class Interface:
         self.invalid_XML_chars = '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|'\
             '[\ud800-\udfff]|[\ufffe-\uffff]'
 
-    def init_emoticons(self):
-        emot_theme = app.config.get('emoticons_theme')
-        ascii_emoticons = app.config.get('ascii_emoticons')
-        if not emot_theme:
-            return
-
-        themes = helpers.get_available_emoticon_themes()
-        if emot_theme not in themes:
-            if 'font-emoticons' in themes:
-                emot_theme = 'font-emoticons'
-                app.config.set('emoticons_theme', 'font-emoticons')
-            else:
-                app.config.set('emoticons_theme', '')
-                return
-
-        path = helpers.get_emoticon_theme_path(emot_theme)
-        if not emoticons.load(path, ascii_emoticons):
-            WarningDialog(
-                    _('Emoticons disabled'),
-                    _('Your configured emoticons theme could not be loaded.'
-                      ' See the log for more details.'),
-                    transient_for=app.get_app_window('Preferences'))
-            app.config.set('emoticons_theme', '')
-            return
 
 ################################################################################
 ### Methods for opening new messages controls
@@ -2667,7 +2613,6 @@ class Interface:
         self.basic_pattern = None
         self.emot_and_basic = None
         self.sth_at_sth_dot_sth = None
-        self.emot_only = None
 
         cfg_was_read = parser.read()
 
@@ -2814,7 +2759,9 @@ class Interface:
             # set the icon to all windows
             Gtk.Window.set_default_icon_list(pixs)
 
-        self.init_emoticons()
+        # Init emoji_chooser
+        from gajim.gtk.emoji_chooser import emoji_chooser
+        emoji_chooser.load()
         self.make_regexps()
 
         # get transports type from DB

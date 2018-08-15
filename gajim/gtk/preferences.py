@@ -557,8 +557,8 @@ class Preferences(Gtk.ApplicationWindow):
         else:
             app.config.set('emoticons_theme', emot_theme)
 
-        app.interface.init_emoticons()
-        app.interface.make_regexps()
+        from gajim.gtk.emoji_chooser import emoji_chooser
+        emoji_chooser.load()
         self.toggle_emoticons()
 
     def toggle_emoticons(self):

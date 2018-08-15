@@ -1081,6 +1081,20 @@ class HtmlTextView(Gtk.TextView):
                 search_iter.forward_char()
         return selection
 
+    def replace_emojis(self, start_mark, end_mark, pixbuf, codepoint):
+        buffer_ = self.get_buffer()
+        start_iter = buffer_.get_iter_at_mark(start_mark)
+        end_iter = buffer_.get_iter_at_mark(end_mark)
+        buffer_.delete(start_iter, end_iter)
+
+        anchor = buffer_.create_child_anchor(start_iter)
+        anchor.plaintext = codepoint
+        emoji = Gtk.Image.new_from_pixbuf(pixbuf)
+        emoji.show()
+        self.add_child_at_anchor(emoji, anchor)
+        buffer_.delete_mark(start_mark)
+        buffer_.delete_mark(end_mark)
+
 change_cursor = None
 
 if __name__ == '__main__':

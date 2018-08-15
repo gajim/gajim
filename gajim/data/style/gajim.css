@@ -64,9 +64,13 @@
 popover#EmoticonPopover button { background: none; border: none; box-shadow:none; padding: 0px;}
 popover#EmoticonPopover button > label { font-size: 24px; }
 popover#EmoticonPopover flowboxchild > label { font-size: 24px; }
-popover#EmoticonPopover notebook label { font-size: 24px; }
-popover#EmoticonPopover flowbox { padding-left: 5px; padding-right: 6px; }
 popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
+popover#EmoticonPopover scrolledwindow { border: none; }
+popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_color}
+
+.emoji-chooser-heading { font-size: 13px; font-weight: bold; padding: 5px;}
+.emoji-chooser-flowbox { padding-left: 5px; padding-right: 11px; }
+.emoji-modifier-chooser-flowbox { padding-left: 5px; }
 
 /* HistorySyncAssistant */
 #HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
@@ -187,6 +191,7 @@ list.settings > row > box {
 /* Text style */
 
 .bold16 { font-size: 16px; font-weight: bold; }
+.bold24 { font-size: 24px; font-weight: bold; }
 .large-header { font-size: 20px; font-weight: bold; }
 .status-away { color: #ff8533;}
 .status-dnd { color: #e62e00;}

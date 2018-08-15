@@ -214,8 +214,7 @@ class update_po(Command):
 
 
 package_data_activities = ['data/activities/*/*/*.png']
-package_data_emoticons = ['data/emoticons/*/emoticons_theme.py',
-                          'data/emoticons/*/*.png',
+package_data_emoticons = ['data/emoticons/*/*.png',
                           'data/emoticons/*/LICENSE']
 package_data_gui = ['data/gui/*.ui']
 package_data_icons = ['data/icons/hicolor/*/*/*.png',

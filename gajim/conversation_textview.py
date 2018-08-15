@@ -34,7 +34,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 import time
 import os
-from gajim import dialogs
+
 import queue
 import urllib
 
@@ -43,12 +43,14 @@ from gajim.gtk import util
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_cursor
+from gajim.gtk.emoji_data import emoji_pixbufs
+from gajim.gtk.emoji_data import is_emoji
+from gajim.gtk.emoji_data import get_emoji_pixbuf
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
 from calendar import timegm
 from gajim.common.fuzzyclock import FuzzyClock
-from gajim import emoticons
 from gajim.common.const import StyleAttr
 
 from gajim.htmltextview import HtmlTextView
@@ -197,7 +199,6 @@ class ConversationTextview(GObject.GObject):
         self.tv.set_left_margin(2)
         self.tv.set_right_margin(2)
         self.handlers = {}
-        self.images = []
         self.image_cache = {}
         self.xep0184_marks = {}
         # self.last_sent_message_id = msg_stanza_id
@@ -927,16 +928,32 @@ class ConversationTextview(GObject.GObject):
         else:
             end_iter = buffer_.get_end_iter()
 
-        pixbuf = emoticons.get_pixbuf(special_text)
-        if app.config.get('emoticons_theme') and pixbuf and graphics:
+        theme = app.config.get('emoticons_theme')
+        show_emojis = theme and theme != 'font'
+        if show_emojis and graphics and is_emoji(special_text):
             # it's an emoticon
-            anchor = buffer_.create_child_anchor(end_iter)
-            img = TextViewImage(anchor,
-                GLib.markup_escape_text(special_text))
-            img.set_from_pixbuf(pixbuf)
-            img.show()
-            self.images.append(img)
-            self.tv.add_child_at_anchor(img, anchor)
+            if emoji_pixbufs.complete:
+                # only search for the pixbuf if we are sure
+                # that loading is completed
+                pixbuf = get_emoji_pixbuf(special_text)
+                if pixbuf is None:
+                    buffer_.insert(end_iter, special_text)
+                else:
+                    pixbuf = pixbuf.copy()
+                    anchor = buffer_.create_child_anchor(end_iter)
+                    anchor.plaintext = special_text
+                    img = Gtk.Image.new_from_pixbuf(pixbuf)
+                    img.show()
+                    self.tv.add_child_at_anchor(img, anchor)
+            else:
+                # Set marks and save them so we can replace the emojis
+                # once the loading is complete
+                start_mark = buffer_.create_mark(None, end_iter, True)
+                buffer_.insert(end_iter, special_text)
+                end_mark = buffer_.create_mark(None, end_iter, True)
+                emoji_pixbufs.append_marks(
+                    self.tv, start_mark, end_mark, special_text)
+
         elif special_text.startswith('www.') or \
             special_text.startswith('ftp.') or \
             text_is_valid_uri and not is_xhtml_link:

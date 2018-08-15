@@ -129,6 +129,7 @@ class ConfigPaths:
         source_paths = [
             ('DATA', os.path.join(basedir, 'data')),
             ('STYLE', os.path.join(basedir, 'data', 'style')),
+            ('EMOTICONS', os.path.join(basedir, 'data', 'emoticons')),
             ('GUI', os.path.join(basedir, 'data', 'gui')),
             ('ICONS', os.path.join(basedir, 'data', 'icons')),
             ('HOME', os.path.expanduser('~')),

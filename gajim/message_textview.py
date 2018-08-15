@@ -350,6 +350,53 @@ class MessageTextView(Gtk.TextView):
         else:
             return None
 
+    def replace_emojis(self):
+        theme = app.config.get('emoticons_theme')
+        if not theme or theme == 'font':
+            return
+
+        def replace(anchor):
+            if anchor is None:
+                return
+            image = anchor.get_widgets()[0]
+            if hasattr(image, 'codepoint'):
+                # found emoji
+                self.replace_char_at_iter(iter_, image.codepoint)
+                image.destroy()
+
+        iter_ = self.get_buffer().get_start_iter()
+        replace(iter_.get_child_anchor())
+
+        while iter_.forward_char():
+            replace(iter_.get_child_anchor())
+
+    def replace_char_at_iter(self, iter_, new_char):
+        buffer_ = self.get_buffer()
+        iter_2 = iter_.copy()
+        iter_2.forward_char()
+        buffer_.delete(iter_, iter_2)
+        buffer_.insert(iter_, new_char)
+
+    def insert_emoji(self, codepoint, pixbuf):
+        self.remove_placeholder()
+        buffer_ = self.get_buffer()
+        if buffer_.get_char_count():
+            # buffer contains text
+            buffer_.insert_at_cursor(' ')
+
+        insert_mark = buffer_.get_insert()
+        insert_iter = buffer_.get_iter_at_mark(insert_mark)
+
+        if pixbuf is None:
+            buffer_.insert(insert_iter, codepoint)
+        else:
+            anchor = buffer_.create_child_anchor(insert_iter)
+            image = Gtk.Image.new_from_pixbuf(pixbuf)
+            image.codepoint = codepoint
+            image.show()
+            self.add_child_at_anchor(image, anchor)
+        buffer_.insert_at_cursor(' ')
+
     def destroy(self):
         GLib.idle_add(gc.collect)
 

@@ -1479,35 +1479,28 @@ def version_condition(current_version, required_version):
 
 def get_available_emoticon_themes():
     emoticons_themes = []
-    emoticons_data_path = os.path.join(configpaths.get('DATA'), 'emoticons')
-    font_theme_path = os.path.join(
-        configpaths.get('DATA'), 'emoticons', 'font-emoticons', 'emoticons_theme.py')
+    if sys.platform not in ('win32', 'darwin'):
+        # Colored emoji fonts only supported on Linux
+        emoticons_themes.append('font')
 
-    folders = os.listdir(emoticons_data_path)
+    files = []
+    with os.scandir(configpaths.get('EMOTICONS')) as scan:
+        for entry in scan:
+            if not entry.is_dir():
+                continue
+            with os.scandir(entry.path) as scan_theme:
+                for theme in scan_theme:
+                    if theme.is_file():
+                        files.append(theme.name)
+
     if os.path.isdir(configpaths.get('MY_EMOTS')):
-        folders += os.listdir(configpaths.get('MY_EMOTS'))
+        files += os.listdir(configpaths.get('MY_EMOTS'))
 
-    file = 'emoticons_theme.py'
-    if os.name == 'nt' and not os.path.exists(font_theme_path):
-        # When starting Gajim from source .py files are available
-        # We test this with font-emoticons and fallback to .pyc files otherwise
-        file = 'emoticons_theme.pyc'
-
-    for theme in folders:
-        theme_path = os.path.join(emoticons_data_path, theme, file)
-        if os.path.exists(theme_path):
-            emoticons_themes.append(theme)
+    for file in files:
+        if file.endswith('.png'):
+            emoticons_themes.append(file[:-4])
     emoticons_themes.sort()
     return emoticons_themes
-
-def get_emoticon_theme_path(theme):
-    emoticons_data_path = os.path.join(configpaths.get('DATA'), 'emoticons', theme)
-    if os.path.exists(emoticons_data_path):
-        return emoticons_data_path
-
-    emoticons_user_path = os.path.join(configpaths.get('MY_EMOTS'), theme)
-    if os.path.exists(emoticons_user_path):
-        return emoticons_user_path
 
 def call_counter(func):
     def helper(self, restart=False):
