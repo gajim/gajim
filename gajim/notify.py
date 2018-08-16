@@ -25,6 +25,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import sys
 
 from gi.repository import GLib
@@ -36,6 +37,8 @@ from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
+
+log = logging.getLogger('gajim.notify')
 
 
 def get_show_in_roster(event, account, jid, session=None):
@@ -72,6 +75,32 @@ class Notification:
     Handle notifications
     """
     def __init__(self):
+        self.daemon_capabilities = ['actions']
+
+        # Detect if actions are supported by the notification daemon
+        if sys.platform == 'linux':
+            def on_proxy_ready(source, res, data=None):
+                try:
+                    proxy = Gio.DBusProxy.new_finish(res)
+                    self.daemon_capabilities = proxy.GetCapabilities()
+                except GLib.Error as e:
+                    if e.domain == 'g-dbus-error-quark':
+                        log.info('Notifications D-Bus connection failed: %s',
+                                 e.message)
+                    else:
+                        raise
+                else:
+                    log.debug('Notifications D-Bus connected')
+
+            log.debug('Connecting to Notifications D-Bus')
+            Gio.DBusProxy.new_for_bus(Gio.BusType.SESSION,
+                                      Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
+                                      None,
+                                      'org.freedesktop.Notifications',
+                                      '/org/freedesktop/Notifications',
+                                      'org.freedesktop.Notifications',
+                                      None, on_proxy_ready)
+
         app.ged.register_event_handler(
             'notification', ged.GUI2, self._nec_notification)
         app.ged.register_event_handler(
@@ -159,15 +188,18 @@ class Notification:
         _('File Transfer Error'), _('File Transfer Completed'),
         _('File Transfer Stopped'), _('Groupchat Invitation'),
         _('Connection Failed'), _('Subscription request'), _('Unsubscribed')):
-            # Create Variant Dict
-            dict_ = {'account': GLib.Variant('s', account),
-                     'jid': GLib.Variant('s', jid),
-                     'type_': GLib.Variant('s', type_)}
-            variant_dict = GLib.Variant('a{sv}', dict_)
-            action = 'app.{}-open-event'.format(account)
-            #Button in notification
-            notification.add_button_with_target(_('Open'), action, variant_dict)
-            notification.set_default_action_and_target(action, variant_dict)
+            if 'actions' in self.daemon_capabilities:
+                # Create Variant Dict
+                dict_ = {'account': GLib.Variant('s', account),
+                         'jid': GLib.Variant('s', jid),
+                         'type_': GLib.Variant('s', type_)}
+                variant_dict = GLib.Variant('a{sv}', dict_)
+                action = 'app.{}-open-event'.format(account)
+                #Button in notification
+                notification.add_button_with_target(_('Open'), action,
+                                                    variant_dict)
+                notification.set_default_action_and_target(action,
+                                                           variant_dict)
 
             # Only one notification per JID
             if event_type in (_('Contact Signed In'), _('Contact Signed Out'),
