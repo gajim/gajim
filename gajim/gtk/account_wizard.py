@@ -482,11 +482,12 @@ class AccountCreationWizard:
 
     def on_advanced_button_clicked(self, widget):
         from gajim.accounts_window import AccountsWindow
-        if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].present()
+        window = app.get_app_window(AccountsWindow)
+        if window is None:
+            window = AccountsWindow()
         else:
-            app.interface.instances['accounts'] = AccountsWindow()
-        app.interface.instances['accounts'].select_account(self.account)
+            window.present()
+        window.select_account(self.account)
         self.window.destroy()
 
     def on_finish_button_clicked(self, widget):
@@ -590,8 +591,9 @@ class AccountCreationWizard:
         # action must be added before account window is updated
         app.app.add_account_actions(self.account)
         # refresh accounts window
-        if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].add_account(self.account)
+        window = app.get_app_window('AccountsWindow')
+        if window is not None:
+            window.add_account(self.account)
         # refresh roster
         if len(app.connections) >= 2:
             # Do not merge accounts if only one exists

@@ -927,7 +927,7 @@ class SynchroniseSelectAccountDialog:
         self.account = account
         self.xml = gtkgui_helpers.get_gtk_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
-        self.dialog.set_transient_for(app.interface.instances['accounts'])
+        self.dialog.set_transient_for(app.get_app_window('AccountsWindow'))
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
         model = Gtk.ListStore(str, str, bool)
         self.accounts_treeview.set_model(model)

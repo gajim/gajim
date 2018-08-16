@@ -22,7 +22,7 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim import config
 from gajim import dialogs
 from gajim.gtk import shortcuts_window
-from gajim import accounts_window
+from gajim.accounts_window import AccountsWindow
 import gajim.plugins.gui
 from gajim import disco
 from gajim.gtk.history_sync import HistorySyncAssistant
@@ -66,10 +66,11 @@ def on_plugins(action, param):
 
 
 def on_accounts(action, param):
-    if 'accounts' in app.interface.instances:
-        app.interface.instances['accounts'].present()
+    window = app.get_app_window(AccountsWindow)
+    if window is None:
+        AccountsWindow()
     else:
-        app.interface.instances['accounts'] = accounts_window.AccountsWindow()
+        window.present()
 
 
 def on_history_manager(action, param):

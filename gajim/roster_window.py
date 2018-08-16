@@ -49,7 +49,6 @@ from enum import IntEnum, unique
 
 from gajim import dialogs
 from gajim import vcard
-from gajim import config
 from gajim import disco
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
@@ -57,6 +56,7 @@ from gajim import cell_renderer_image
 from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
+from gajim.accounts_window import AccountsWindow
 from gajim.gtk import JoinGroupchatWindow
 from gajim.gtk import ConfirmationDialogCheck
 from gajim.gtk import ConfirmationDialog
@@ -3163,11 +3163,12 @@ class RosterWindow:
         self.remove_groupchat(jid, account, maximize=True)
 
     def on_edit_account(self, widget, account):
-        if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].present()
+        window = app.get_app_window(AccountsWindow)
+        if window is None:
+            window = AccountsWindow()
         else:
-            app.interface.instances['accounts'] = config.AccountsWindow()
-        app.interface.instances['accounts'].select_account(account)
+            window.present()
+        window.select_account(account)
 
     def on_change_status_message_activate(self, widget, account):
         show = app.SHOW_LIST[app.connections[account].connected]

@@ -75,7 +75,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.check_relogin()
         app.ged.remove_event_handler(
             'our-show', ged.GUI2, self._nec_our_status)
-        del app.interface.instances['accounts']
 
     def on_child_visible(self, stack, *args):
         page = stack.get_visible_child_name()

@@ -104,9 +104,9 @@ class ManageProxiesWindow:
         self.xml.get_object('proxytype_combobox').set_active(0)
 
     def on_manage_proxies_window_destroy(self, widget):
-        if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].\
-                    update_proxy_list()
+        window = app.get_app_window('AccountsWindow')
+        if window is not None:
+            window.update_proxy_list()
         del app.interface.instances['manage_proxies']
 
     def on_add_proxy_button_clicked(self, widget):
@@ -691,8 +691,10 @@ class RemoveAccountWindow:
         app.interface.roster.setup_and_draw_roster()
         app.app.remove_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
-        if 'accounts' in app.interface.instances:
-            app.interface.instances['accounts'].remove_account(self.account)
+
+        window = app.get_app_window('AccountsWindow')
+        if window is not None:
+            window.remove_account(self.account)
         self.window.destroy()
 
 
