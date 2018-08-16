@@ -1114,27 +1114,23 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else:
             # We don't want message preview, do_preview = False
             self.popup_text = ''
+
         if msg_obj.mtype == 'normal': # single message
             self.popup_msg_type = 'normal'
             self.popup_event_type = _('New Single Message')
-            self.popup_title = _('New Single Message from %(nickname)s') % \
-                {'nickname': nick}
         elif msg_obj.mtype == 'pm':
             self.popup_msg_type = 'pm'
             self.popup_event_type = _('New Private Message')
-            self.popup_title = _('New Private Message from group chat %s') % \
-                msg_obj.jid
-            if self.popup_text:
-                self.popup_text = _('%(nickname)s: %(message)s') % \
-                    {'nickname': nick, 'message': self.popup_text}
-            else:
-                self.popup_text = _('Messaged by %(nickname)s') % \
-                    {'nickname': nick}
         else: # chat message
             self.popup_msg_type = 'chat'
             self.popup_event_type = _('New Message')
-            self.popup_title = _('New Message from %(nickname)s') % \
-                {'nickname': nick}
+
+        num_unread = len(app.events.get_events(self.conn.name, self.jid,
+            ['printed_' + self.popup_msg_type, self.popup_msg_type]))
+        self.popup_title = i18n.ngettext(
+            'New message from %(nickname)s',
+            '%(n_msgs)i unread messages from %(nickname)s',
+            num_unread) % {'nickname': nick, 'n_msgs': num_unread}
 
         if app.config.get('notify_on_new_message'):
             if self.first_unread or (app.config.get('autopopup_chat_opened') \

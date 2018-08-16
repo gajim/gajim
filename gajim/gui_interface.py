@@ -658,9 +658,11 @@ class Interface:
 
         if helpers.allow_showing_notification(obj.account):
             event_type = _('Groupchat Invitation')
+            text = _('Your are invited to {room} by {user}').format(
+                room=obj.room_jid, user=str(obj.from_))
             app.notification.popup(
-                event_type, str(obj.from_), obj.account, 'gc-invitation',
-                'gajim-gc_invitation', event_type, obj.room_jid)
+                event_type, obj.room_jid, obj.account, 'gc-invitation',
+                'gajim-gc_invitation', event_type, text)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:

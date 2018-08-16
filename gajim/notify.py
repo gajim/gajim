@@ -74,6 +74,9 @@ class Notification:
     def __init__(self):
         app.ged.register_event_handler(
             'notification', ged.GUI2, self._nec_notification)
+        app.ged.register_event_handler(
+            'our-show', ged.GUI2, self._nec_our_status)
+        app.events.event_removed_subscribe(self._on_event_removed)
 
     def _nec_notification(self, obj):
         if obj.do_popup:
@@ -94,6 +97,18 @@ class Notification:
                 helpers.exec_command(obj.command, use_shell=True)
             except Exception:
                 pass
+
+    def _on_event_removed(self, event_list):
+        for event in event_list:
+            if event.type_ == 'gc-invitation':
+                self.withdraw('gc-invitation', event.account, event.room_jid)
+            if event.type_ in ('normal', 'printed_chat', 'chat',
+            'printed_pm', 'pm'):
+                self.withdraw('new-message', event.account, event.jid)
+
+    def _nec_our_status(self, obj):
+        if app.account_is_connected(obj.conn.name):
+            self.withdraw('connection-failed', obj.conn.name)
 
     def _get_icon_name(self, obj):
         if obj.notif_type == 'msg':
@@ -153,13 +168,28 @@ class Notification:
             #Button in notification
             notification.add_button_with_target(_('Open'), action, variant_dict)
             notification.set_default_action_and_target(action, variant_dict)
-            if event_type in (_('New Message'), _('New Single Message'),
+
+            # Only one notification per JID
+            if event_type in (_('Contact Signed In'), _('Contact Signed Out'),
+            _('Contact Changed Status')):
+                notif_id = self._id('contact-status-changed', account, jid)
+            elif event_type == _('Groupchat Invitation'):
+                notif_id = self._id('gc-invitation', account, jid)
+            elif event_type == _('Connection Failed'):
+                notif_id = self._id('connection-failed', account)
+            elif event_type in (_('New Message'), _('New Single Message'),
             _('New Private Message')):
-                # Only one notification per JID
-                notif_id = jid
+                notif_id = self._id('new-message', account, jid)
+
         notification.set_priority(Gio.NotificationPriority.NORMAL)
         app.app.send_notification(notif_id, notification)
 
+    def withdraw(self, *args):
+        if sys.platform != 'win32':
+            app.app.withdraw_notification(self._id(*args))
+
+    def _id(self, *args):
+        return ','.join(args)
 
 class PopupNotificationWindow:
     def __init__(self, event_type, jid, account, msg_type='',
