@@ -20,8 +20,7 @@
 - For zeroconf (bonjour) you need python3-dbus
 - gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc
 - gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
-- D-Bus running to have gajim-remote working. Some distributions split dbus-x11, which is needed for dbus to work with Gajim. Version >= 0.80 is required.
-- python3-dbus bindings (>=1.2.0)
+- D-Bus running to have gajim-remote working
 - gir1.2-farstream-0.2, gir1.2-gstreamer-1.0 and gir1.2-gst-plugins-base-1.0 for audio and video calls
 - gir1.2-gupnpigd-1.0 for better NAT traversing
 - gir1.2-networkmanager-1.0 for network lose detection
