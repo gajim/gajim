@@ -226,7 +226,7 @@ package_data_iconsets = ['data/iconsets/*/*/*.gif',
 package_data_moods = ['data/moods/*/*.png']
 package_data_other = ['data/other/*']
 package_data_sounds = ['data/sounds/*.wav']
-package_data_style = ['data/style/gajim.css']
+package_data_style = ['data/style/*.css']
 package_plugins_data = ['data/plugins/*/*']
 package_data = (package_data_activities
                 + package_data_emoticons
@@ -288,5 +288,6 @@ setup(
         'keyring',
         'nbxmpp>=0.6.6',
         'pyOpenSSL>=0.12',
+        'cssutils>=1.0.2'
     ]
 )
