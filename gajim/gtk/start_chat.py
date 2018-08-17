@@ -297,7 +297,7 @@ class ContactRow(Gtk.Grid):
             else:
                 self.name = _('New Contact')
 
-        self.name_label = Gtk.Label(self.name)
+        self.name_label = Gtk.Label(label=self.name)
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.name_label.set_xalign(0)
         self.name_label.set_width_chars(25)
@@ -310,7 +310,7 @@ class ContactRow(Gtk.Grid):
             self.name_label.get_style_context().add_class(css_class)
         middle_box.add(self.name_label)
 
-        self.jid_label = Gtk.Label(jid)
+        self.jid_label = Gtk.Label(label=jid)
         self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.jid_label.set_xalign(0)
         self.jid_label.set_width_chars(25)
@@ -320,7 +320,7 @@ class ContactRow(Gtk.Grid):
         self.add(middle_box)
 
         if show_account:
-            account_label = Gtk.Label(self.account_label)
+            account_label = Gtk.Label(label=self.account_label)
             account_label.set_halign(Gtk.Align.START)
             account_label.set_valign(Gtk.Align.START)
 

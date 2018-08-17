@@ -409,7 +409,7 @@ class ChooseOption(Gtk.ListBoxRow):
     def __init__(self, option):
         Gtk.ListBoxRow.__init__(self)
         self.option = option
-        label = Gtk.Label(option.label)
+        label = Gtk.Label(label=option.label)
         label.set_xalign(0)
         self.add(label)
         self.show_all()

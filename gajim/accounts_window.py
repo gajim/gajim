@@ -313,7 +313,7 @@ class AddAccount(Gtk.Box):
 
         self.account = None
 
-        self.label = Gtk.Label(_('Add Account…'))
+        self.label = Gtk.Label(label=_('Add Account…'))
         self.label.set_halign(Gtk.Align.START)
         self.label.set_hexpand(True)
 
@@ -342,7 +342,7 @@ class Preferences(Gtk.Box):
         self.parent = parent
         self.account = None
 
-        self.label = Gtk.Label(_('Preferences'))
+        self.label = Gtk.Label(label=_('Preferences'))
         self.label.set_halign(Gtk.Align.START)
         self.label.set_hexpand(True)
 

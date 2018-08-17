@@ -1071,7 +1071,7 @@ class FileRow(Gtk.ListBoxRow):
     def __init__(self, path):
         Gtk.ListBoxRow.__init__(self)
         self.path = Path(path)
-        label = Gtk.Label(self.path.name)
+        label = Gtk.Label(label=self.path.name)
         label.set_ellipsize(Pango.EllipsizeMode.END)
         label.set_xalign(0)
         self.add(label)
