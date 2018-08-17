@@ -29,7 +29,6 @@
 import os
 import base64
 import mimetypes
-from time import time
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -58,7 +57,8 @@ def get_dbus_struct(obj):
     if isinstance(obj, bool):
         return GLib.Variant('b', obj)
     if isinstance(obj, (list, tuple)):
-        result = GLib.Variant('av', [get_dbus_struct(i) for i in obj])
+        lst = [get_dbus_struct(i) for i in obj if i is not None]
+        result = GLib.Variant('av', lst)
         return result
     if isinstance(obj, dict):
         result = GLib.VariantDict()
@@ -335,7 +335,7 @@ class GajimRemote(Server):
         try:
             chatstate = obj.chatstate
         except AttributeError:
-            chatstate = ""
+            chatstate = ''
         self.raise_signal('MessageSent', (obj.conn.name, [
             obj.jid, obj.message, obj.keyID, chatstate]))
 
@@ -877,7 +877,8 @@ class GajimRemote(Server):
             if prim_contact is None or contact.priority > prim_contact.priority:
                 prim_contact = contact
         contact_dict = {}
-        contact_dict['name'] = GLib.Variant('s', prim_contact.name)
+        name = prim_contact.name if prim_contact.name is not None else ''
+        contact_dict['name'] = GLib.Variant('s', name)
         contact_dict['show'] = GLib.Variant('s', prim_contact.show)
         contact_dict['jid'] = GLib.Variant('s', prim_contact.jid)
         if prim_contact.keyID:
@@ -892,11 +893,13 @@ class GajimRemote(Server):
         for contact in contacts:
             resource_props = (contact.resource, int(contact.priority),
                               contact.status)
-            resources.add_value(GLib.Variant("(sis)", resource_props))
+            resources.add_value(GLib.Variant('(sis)', resource_props))
         contact_dict['resources'] = resources.end()
-        #contact_dict['groups'] = []  # TODO
-        #for group in prim_contact.groups:
-        #    contact_dict['groups'].append((group, ))
+
+        groups = GLib.VariantBuilder(GLib.VariantType('as'))
+        for group in prim_contact.groups:
+            groups.add_value(GLib.Variant('s', group))
+        contact_dict['groups'] = groups.end()
         return contact_dict
 
     def get_unread_msgs_number(self):
