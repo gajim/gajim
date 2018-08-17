@@ -168,31 +168,26 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
                 self.group_comboboxentry.set_active(i)
             i += 1
 
-        self.show_all()
-
-        self.prompt_label.hide()
-        self.save_message_revealer.hide()
-
         if len(accounts) > 1:
             liststore = self.account_combobox.get_model()
             for acc in accounts:
                 liststore.append(acc)
 
             self.account_combobox.set_active_id(self.account)
-        else:
-            self.account_label.hide()
-            self.account_combobox.hide()
+            self.account_label.show()
+            self.account_combobox.show()
 
-        if len(self.agents) == 1:
-            self.protocol_label.hide()
-            self.protocol_combobox.hide()
-            self.protocol_jid_combobox.hide()
+        if len(self.agents) > 1:
+            self.protocol_label.show()
+            self.protocol_combobox.show()
 
         if self.account:
             message_buffer = self.message_textview.get_buffer()
             msg = helpers.from_one_line(helpers.get_subscription_request_msg(
                 self.account))
             message_buffer.set_text(msg)
+
+        self.show_all()
 
         app.ged.register_event_handler('gateway-prompt-received', ged.GUI1,
                                        self._nec_gateway_prompt_received)
