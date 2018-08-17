@@ -149,8 +149,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/1a/04/d6f1159feaccdfc508517dba1929eb93a2854de729fa68da9d5c6b48fa00/setuptools-39.2.0.zip",
-                    "sha256": "f7cddbb5f5c640311eb00eab6e849f7701fa70bf6a183fc8a2c33dd1d1672fb2"
+                    "url": "https://files.pythonhosted.org/packages/d3/3e/1d74cdcb393b68ab9ee18d78c11ae6df8447099f55fe86ee842f9c5b166c/setuptools-40.0.0.zip",
+                    "sha256": "012adb8e25fbfd64c652e99e7bab58799a3aaf05d39ab38561f69190a909015f"
                 }
             ]
         },
@@ -194,8 +194,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://files.pythonhosted.org/packages/ec/b2/faa78c1ab928d2b2c634c8b41ff1181f0abdd9adf9193211bd606ffa57e2/cryptography-2.2.2.tar.gz",
-                    "sha256": "9fc295bf69130a342e7a19a39d7bbeb15c0bcaabc7382ec33ef3b2b7d18d2f63"
+                    "url": "https://files.pythonhosted.org/packages/22/21/233e38f74188db94e8451ef6385754a98f3cad9b59bedf3a8e8b14988be4/cryptography-2.3.1.tar.gz",
+                    "sha256": "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6"
                 }
             ]
         },
@@ -274,13 +274,27 @@
             "name": "python3-keyring",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --prefix=/app keyring-13.0.0-py2.py3-none-any.whl"
+                "pip3 install --prefix=/app keyring-13.2.1-py2.py3-none-any.whl"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/a6/2a/f262337da5acd435e1013189e1cab16c40da2c79fc663477efb19156cdf9/keyring-13.0.0-py2.py3-none-any.whl",
-                    "sha256": "6849b41e69f77cdb122f026f78797675248252775a1db6ebc47610b769772b23"
+                    "url": "https://files.pythonhosted.org/packages/88/a8/341fa4686e98bf10289eb4eaea89e8176b93c1e38de52e3c42d9112baae1/keyring-13.2.1-py2.py3-none-any.whl",
+                    "sha256": "6e01954fd3e404820e1fade262ee661974051551ed08c899ffc5e88bb9df288e"
+                }
+            ]
+        },
+        {
+            "name": "python3-cssutils",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app cssutils-1.0.2-py3-none-any.whl"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/6b/15/a9fb9010f58d1c55dd0b7779db2334feb9a572d407024f39a60f44293861/cssutils-1.0.2-py3-none-any.whl",
+                    "sha256": "c74dbe19c92f5052774eadb15136263548dd013250f1ed1027988e7fef125c8d"
                 }
             ]
         },
