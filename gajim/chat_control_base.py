@@ -75,7 +75,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     A base class containing a banner, ConversationTextview, MessageTextView
     """
 
-    keymap = Gdk.Keymap.get_default()
+    keymap = Gdk.Keymap.get_for_display(Gdk.Display.get_default())
     try:
         keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[1][0].keycode
     except TypeError:
