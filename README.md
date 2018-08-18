@@ -10,11 +10,11 @@
 - python3-nbxmpp
 - python3-openssl (>=0.14)
 - python3-cssutils (>=1.0.2)
+- python3-keyring
 
 
 ### Optional Runtime Requirements
 
-- python3-keyring for saving your password to your system keyring
 - python3-pil (pillow) for support of webp avatars
 - python3-gnupg to enable GPG encryption
 - For zeroconf (bonjour) you need python3-dbus
