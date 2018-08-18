@@ -439,10 +439,10 @@ class CommonConnection:
 
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
-            if event == 'STANZA_RECEIVED':
+            if event == 'STANZA RECEIVED':
                 app.nec.push_incoming_event(StanzaReceivedEvent(
                     None, conn=self, stanza_str=str(data)))
-            elif event == 'STANZA_SENT':
+            elif event == 'DATA SENT':
                 app.nec.push_incoming_event(StanzaSentEvent(
                     None, conn=self, stanza_str=str(data)))
 
