@@ -1484,14 +1484,14 @@ def get_available_emoticon_themes():
         emoticons_themes.append('font')
 
     files = []
-    with os.scandir(configpaths.get('EMOTICONS')) as scan:
-        for entry in scan:
-            if not entry.is_dir():
-                continue
-            with os.scandir(entry.path) as scan_theme:
-                for theme in scan_theme:
-                    if theme.is_file():
-                        files.append(theme.name)
+    dir_iterator = os.scandir(configpaths.get('EMOTICONS'))
+    for folder in dir_iterator:
+        if not folder.is_dir():
+            continue
+        file_iterator = os.scandir(folder.path)
+        for theme in file_iterator:
+            if theme.is_file():
+                files.append(theme.name)
 
     if os.path.isdir(configpaths.get('MY_EMOTS')):
         files += os.listdir(configpaths.get('MY_EMOTS'))
