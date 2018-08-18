@@ -4,6 +4,7 @@ Gajim 1.0.99 (19 August 2018)
 
   * Support for setting a MUC Avatar
   * Support for PKIX over Secure HTTP (POSH)
+  * Support idle time for GNOME on Wayland
   * New Emoji chooser
   * Noto Emoji theme updated to Unicode 11
   * Twitter Emoji theme added
