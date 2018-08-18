@@ -1233,11 +1233,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.parent_win.get_active_control() == self and \
         self.parent_win.window.is_active():
             # we are at the end
-            if self.type_id == message_control.TYPE_GC:
-                if not app.events.remove_events(self.account, jid,
-                types=types_list):
-                    self.redraw_after_event_removed(jid)
-            elif not app.events.remove_events(
+            if not app.events.remove_events(
                     self.account, jid, types=types_list):
                 # There were events to remove
                 self.redraw_after_event_removed(jid)
