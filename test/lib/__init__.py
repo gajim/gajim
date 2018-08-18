@@ -55,5 +55,5 @@ def setup_env():
     if use_x:
         from gajim import gtkgui_helpers
         gtkgui_helpers.GUI_DIR = gajim_root + '/gajim/data/gui'
-        from gajim.gajim import GajimApplication
+        from gajim.application import GajimApplication
         app.app = GajimApplication()

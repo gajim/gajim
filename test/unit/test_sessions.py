@@ -13,13 +13,12 @@ from gajim.common import nec
 from gajim.common import ged
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.message import MessageReceivedEvent
-from gajim.common.connection_handlers_events import DecryptedMessageReceivedEvent
+from gajim.common.modules.message import DecryptedMessageReceivedEvent
 import nbxmpp
 
 from gajim.session import ChatControlSession
 from gajim.roster_window import RosterWindow
 
-from mock import Mock, expectParams
 from gajim_mocks import *
 from data import account1
 

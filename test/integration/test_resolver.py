@@ -9,7 +9,6 @@ from gi.repository import GLib
 
 from gajim.common import resolver
 
-from mock import Mock, expectParams
 from gajim_mocks import *
 from xmpp_mocks import IdleQueueThread
 

@@ -9,12 +9,11 @@ lib.setup_env()
 from mock import Mock
 
 from gajim.common.protocol.bytestream import ConnectionIBBytestream, ConnectionSocks5Bytestream
-from common.xmpp import dispatcher_nb
-from common.xmpp import protocol
+from nbxmpp import dispatcher_nb
+from nbxmpp import protocol
 from gajim.common.jingle import ConnectionJingle
-from gajim.common import gajim
+from gajim.common import app
 from gajim.common.socks5 import SocksQueue
-import gajim.common
 
 
 session_init = '''
@@ -72,17 +71,17 @@ class Connection(Mock, ConnectionJingle, ConnectionSocks5Bytestream,
         ConnectionIBBytestream.__init__(self)
         self.connected = 2 # This tells gajim we are connected
 
-
     def send(self, stanza=None, when=None):
         # Called when gajim wants to send something
         print(str(stanza))
+
 
 class TestJingle(unittest.TestCase):
 
     def setUp(self):
         self.dispatcher = dispatcher_nb.XMPPDispatcher()
-        gajim.nec = Mock()
-        gajim.socks5queue = SocksQueue(Mock())
+        app.nec = Mock()
+        app.socks5queue = SocksQueue(Mock())
         # Setup mock client
         self.client = Connection()
         self.client.__str__ = lambda: 'Mock' # FIXME: why do I need this one?
@@ -99,10 +98,10 @@ class TestJingle(unittest.TestCase):
         a lot of places. It is easier to just copy it in here.
         If the session_initiate stanza changes, this also must change.
         '''
-        self.recieve_file = {'stream-methods':
+        self.receive_file = {'stream-methods':
                              'http://jabber.org/protocol/bytestreams',
                              'sender': 'jtest@thiessen.im/Gajim',
-                             'file-name': 'test_recieved_file',
+                             'file-name': 'test_received_file',
                              'request-id': '43', 'sid': '39',
                              'session-sid': '38', 'session-type': 'jingle',
                              'transfered_size': [], 'receiver':
@@ -132,25 +131,22 @@ class TestJingle(unittest.TestCase):
 
     def _simulate_jingle_session(self):
 
-        self.dispatcher.RegisterHandler('iq', self.con._JingleCB, 'set'
-                                        , common.xmpp.NS_JINGLE)
+        self.dispatcher.RegisterHandler('iq', self.con._JingleCB, 'set',
+                                        protocol.NS_JINGLE)
         self.dispatcher.ProcessNonBlocking(session_init)
         session = list(self.con._sessions.values())[0] # The only session we have
         jft = list(session.contents.values())[0] # jingleFT object
-        jft.file_props = self.recieve_file # We plug file_props manually
-        # The user accepts to recieve the file
+        jft.file_props = self.receive_file # We plug file_props manually
+        # The user accepts to receive the file
         # we have to manually simulate this behavior
         session.approve_session()
-        self.con.send_file_approval(self.recieve_file)
+        self.con.send_file_approval(self.receive_file)
 
         self.dispatcher.ProcessNonBlocking(transport_info)
-
 
     def test_jingle_session(self):
         self._simulate_connect()
         self._simulate_jingle_session()
-
-
 
 
 if __name__ == '__main__':
