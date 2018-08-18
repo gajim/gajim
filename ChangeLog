@@ -1,8 +1,49 @@
-Gajim 1.1.0 (TBA)
+Gajim 1.0.99 (19 August 2018)
+
+  New
+
+  * Support for setting a MUC Avatar
+  * Support for PKIX over Secure HTTP (POSH)
+  * New Emoji chooser
+  * Noto Emoji theme updated to Unicode 11
+  * Twitter Emoji theme added
+  * Gajim Theming reworked
+  * Design updates to many dialogs
+    - Join Groupchat
+    - Bookmarks
+    - Add new contact
+    - History
+    - Profile
+    - Accounts
+
+  Bug fixes
+
+  * 8658 Translation doesnt work on Windows
+  * 8750 Increase time frame for duplicate search in MUCs
+  * 9138 Translation in Flatpak does not work
+  * 9140 Error when clicking on the notification of an incoming message
+  * 9159 Wrong form type when responding to a voice request
+  * 9069 Send cancel IQ if muc configuration is aborted 
+  * 9167 Flatpak fails to determine locale settings
+  * 9171 Gajim requests vcard multiple times
+  * 9198 Creating new MUCs with capital letters is not possible
+  * 9211 Punycode and Unicode with Internationalized Domain Names
+
+  Other changes
 
   * Support http:upload:0
-  * Support for displaying/uploading avatars for rooms
-  * Support for PKIX over Secure HTTP (POSH)
+  * Remove forward message adhoc commands 
+  * Remove support for XEP-0090
+  * Remove RC4-SHA because it is insecure (Was not used with current OpenSSL versions)
+  * Improve speed when loading the roster
+  * Handle new MUC status code 333
+  * Switch to GDBus for Gajim remote
+  * Removed support for ESessions
+  * Improvements to the dark theme of Gajim
+  * New dependency: python3-cssutils >= 1.0.2
+  * New dependency: python3-keyring
+  * Removed dependency: python3-avahi
+  * Removed dependency: python3-pyasn1
 
 Gajim 1.0.3 (20 May 2018)
 
