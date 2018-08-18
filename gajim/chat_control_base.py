@@ -1237,7 +1237,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 if not app.events.remove_events(self.account, jid,
                 types=types_list):
                     self.redraw_after_event_removed(jid)
-            elif self.session and self.session.remove_events(types_list):
+            elif not app.events.remove_events(types_list):
                 # There were events to remove
                 self.redraw_after_event_removed(jid)
 
