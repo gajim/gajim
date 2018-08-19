@@ -25,8 +25,6 @@ from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.entity_time')
 
-ZERO = datetime.timedelta(0)
-
 
 class EntityTime:
     def __init__(self, con):
@@ -79,7 +77,7 @@ class EntityTime:
             tzo = '0:0'
         try:
             tzoh, tzom = tzo.split(':')
-        except Exception as e:
+        except Exception:
             log.warning('Wrong tzo node: %s', stanza)
             return
         utc_time = time_.getTag('utc').getData()
@@ -106,8 +104,11 @@ class EntityTime:
                             e, stanza.getFrom())
                 return
 
-        t = t.replace(tzinfo=UTC())
-        return t.astimezone(contact_tz(tzoh, tzom)).strftime('%c')
+        utc = datetime.timezone(datetime.timedelta(0))
+        t = t.replace(tzinfo=utc)
+        utc_offset = datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
+        contact_tz = datetime.timezone(utc_offset, "remote timezone")
+        return t.astimezone(contact_tz).strftime('%c')
 
     def _answer_request(self, con, stanza):
         log.info('%s asked for the time', stanza.getFrom())
@@ -136,34 +137,6 @@ class TimeResultReceivedEvent(NetworkIncomingEvent):
 
     def generate(self):
         return True
-
-
-class UTC(datetime.tzinfo):
-    def utcoffset(self, dt):
-        return ZERO
-
-    def tzname(self, dt):
-        return "UTC"
-
-    def dst(self, dt):
-        return ZERO
-
-
-class contact_tz(datetime.tzinfo):
-
-    def __init__(self, tzoh, tzom):
-        self._tzoh = tzoh
-        self._tzom = tzom
-
-    def utcoffset(self, dt):
-        return datetime.timedelta(hours=int(self._tzoh),
-                                  minutes=int(self._tzom))
-
-    def tzname(self, dt):
-        return "remote timezone"
-
-    def dst(self, dt):
-        return ZERO
 
 
 def get_instance(*args, **kwargs):
