@@ -218,7 +218,9 @@ class VCardTemp:
                 app.nicks[self._account] = vcard['FN']
 
         app.nec.push_incoming_event(
-            VcardReceivedEvent(None, conn=self._con, vcard_dict=vcard))
+            VcardReceivedEvent(None, conn=self._con,
+                               vcard_dict=vcard,
+                               jid=jid))
 
         callback(jid, resource, room, vcard, expected_sha)
 
