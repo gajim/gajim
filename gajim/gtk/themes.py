@@ -74,7 +74,7 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-account-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Account Row Font Color'),
+    StyleOption(_('Account Row Font'),
                 '.gajim-account-row',
                 StyleAttr.FONT),
 
@@ -86,7 +86,7 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-group-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Group Row Font Color'),
+    StyleOption(_('Group Row Font'),
                 '.gajim-group-row',
                 StyleAttr.FONT),
 
@@ -98,7 +98,7 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-contact-row',
                 StyleAttr.BACKGROUND),
 
-    StyleOption(_('Contact Row Font Color'),
+    StyleOption(_('Contact Row Font'),
                 '.gajim-contact-row',
                 StyleAttr.FONT),
 
