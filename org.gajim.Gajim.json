@@ -334,10 +334,9 @@
             ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://dev.gajim.org/gajim/python-nbxmpp.git",
-                    "tag": "nbxmpp-0.6.6",
-                    "commit": "7256d13ebcde065824da4715df0db399fe9aaf57"
+                    "type": "archive",
+                    "url": "https://files.pythonhosted.org/packages/b2/2d/680b61de01eaaadfe1b57fe8a21cdfbce63fe51d36d3bf48b0dca5e14c57/nbxmpp-0.6.7.tar.gz",
+                    "sha256": "5b291d9604854b611479657867e2d5118b65f0e58280bcd19fb539c955245a39"
                 }
             ]
         },
