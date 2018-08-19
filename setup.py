@@ -285,7 +285,7 @@ setup(
     data_files=data_files,
     install_requires=[
         'keyring',
-        'nbxmpp>=0.6.6',
+        'nbxmpp>=0.6.7',
         'pyOpenSSL>=0.12',
         'cssutils>=1.0.2'
     ]
