@@ -88,7 +88,7 @@ from gajim.common import helpers
 from gajim.gtk import YesNoDialog
 from gajim.gtk import ErrorDialog
 from gajim.gtk import ConfirmationDialog
-from gajim.filechoosers import FileSaveDialog
+from gajim.gtk.filechoosers import FileSaveDialog
 from gajim import gtkgui_helpers
 
 

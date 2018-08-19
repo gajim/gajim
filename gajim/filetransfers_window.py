@@ -48,7 +48,7 @@ from gajim.common import helpers
 from gajim.common.file_props import FilesProp
 from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
-from gajim.filechoosers import FileSaveDialog, FileChooserDialog
+from gajim.gtk.filechoosers import FileSaveDialog, FileChooserDialog
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 import logging
 log = logging.getLogger('gajim.filetransfer_window')

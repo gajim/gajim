@@ -70,7 +70,7 @@ from gajim import message_control
 from gajim.dialog_messages import get_dialog
 from gajim.dialogs import ProgressWindow
 
-from gajim.filechoosers import FileChooserDialog
+from gajim.gtk.filechoosers import FileChooserDialog
 
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
