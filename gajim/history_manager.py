@@ -89,6 +89,7 @@ from gajim.gtk import YesNoDialog
 from gajim.gtk import ErrorDialog
 from gajim.gtk import ConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
+from gajim.gtk.util import convert_rgb_to_hex
 from gajim import gtkgui_helpers
 
 
@@ -393,16 +394,18 @@ class HistoryManager:
             else:
                 color = None
                 if kind in (KindConstant.SINGLE_MSG_RECV,
-                KindConstant.CHAT_MSG_RECV, KindConstant.GC_MSG):
-                    # it is the other side
-                    color = app.css_config.get_value('.gajim-incoming-nickname', StyleAttr.COLOR)  # so incoming color
+                            KindConstant.CHAT_MSG_RECV,
+                            KindConstant.GC_MSG):
+                    color = app.css_config.get_value(
+                        '.gajim-incoming-nickname', StyleAttr.COLOR)
                 elif kind in (KindConstant.SINGLE_MSG_SENT,
-                KindConstant.CHAT_MSG_SENT):  # it is us
-                    color = app.css_config.get_value('.gajim-outgoing-nickname', StyleAttr.COLOR)  # so outgoing color
+                              KindConstant.CHAT_MSG_SENT):
+                    color = app.css_config.get_value(
+                        '.gajim-outgoing-nickname', StyleAttr.COLOR)
                 elif kind in (KindConstant.STATUS,
-                KindConstant.GCSTATUS):  # is is statuses
-                    # so status color
-                    color = app.css_config.get_value('.gajim-status-message', StyleAttr.COLOR)
+                              KindConstant.GCSTATUS):
+                    color = app.css_config.get_value(
+                        '.gajim-status-message', StyleAttr.COLOR)
                     # include status into (status) message
                     if message is None:
                         message = ''
@@ -413,10 +416,11 @@ class HistoryManager:
 
                 message_ = '<span'
                 if color:
-                    message_ += ' foreground="%s"' % color
+                    message_ += ' foreground="%s"' % convert_rgb_to_hex(color)
                 message_ += '>%s</span>' % GLib.markup_escape_text(message)
-                self.logs_liststore.append((str(log_line_id), str(jid_id),
-                    time_, message_, subject, nickname))
+                self.logs_liststore.append(
+                    (str(log_line_id), str(jid_id),
+                     time_, message_, subject, nickname))
 
     def _fill_search_results_listview(self, text):
         """
