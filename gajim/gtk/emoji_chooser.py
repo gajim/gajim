@@ -276,10 +276,6 @@ class EmojiChooser(Gtk.Popover):
 
     def _get_current_theme(self):
         theme = app.config.get('emoticons_theme')
-        if not theme:
-            log.warning('No emoji theme set')
-            return
-
         themes = helpers.get_available_emoticon_themes()
         if theme not in themes:
             if sys.platform not in ('win32', 'darwin'):
