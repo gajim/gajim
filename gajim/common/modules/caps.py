@@ -97,7 +97,7 @@ class Caps:
         if contact is not None:
             contact.client_caps = client_caps
         else:
-            log.warning('Received Caps from unknown contact %s' % from_)
+            log.info('Received Caps from unknown contact %s' % from_)
 
     def _get_contact_or_gc_contact_for_jid(self, from_):
         contact = app.contacts.get_contact_from_full_jid(self._account,
