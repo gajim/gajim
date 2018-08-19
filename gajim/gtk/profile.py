@@ -29,7 +29,7 @@ from gajim import gtkgui_helpers
 from gajim.gtk import ErrorDialog
 from gajim.gtk import InformationDialog
 from gajim.gtk.util import get_builder
-from gajim.filechoosers import AvatarChooserDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.common.const import AvatarSize
 from gajim.common import app
 from gajim.common import ged

@@ -52,7 +52,6 @@ from gajim.common import i18n
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
-from gajim.filechoosers import AvatarSaveDialog
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(configpaths.get('ICONS'))
@@ -464,6 +463,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
     from gajim.gtk import ErrorDialog
     from gajim.gtk import ConfirmationDialog
     from gajim.gtk import FTOverwriteConfirmationDialog
+    from gajim.gtk.filechoosers import AvatarSaveDialog
     def on_continue(response, file_path):
         if response < 0:
             return

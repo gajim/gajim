@@ -36,7 +36,7 @@ from enum import IntEnum, unique
 from gajim import gtkgui_helpers
 from gajim.gtk import WarningDialog
 from gajim.gtk import YesNoDialog
-from gajim.filechoosers import ArchiveChooserDialog
+from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.plugins.helpers import log_calls

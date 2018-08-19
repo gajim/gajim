@@ -63,7 +63,7 @@ from gajim.common.const import StyleAttr
 
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
-from gajim.filechoosers import AvatarChooserDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk import ErrorDialog
 from gajim.gtk import InputTextDialog
 from gajim.gtk import ConfirmationDialogCheck
