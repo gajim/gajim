@@ -1828,6 +1828,8 @@ class GroupchatControl(ChatControlBase):
                         s = _('%s kicked us due to an error' % self.room_jid)
                     else:
                         s = _('%s has left due to an error' % nick)
+                    if obj.reason:
+                        s += ' (%s)' % obj.reason
                     self.print_conversation(s, 'info', graphics=False)
                 elif '307' in obj.status_code:
                     if obj.actor is None: # do not print 'kicked by None'
