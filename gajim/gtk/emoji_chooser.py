@@ -21,6 +21,7 @@ from collections import OrderedDict
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GdkPixbuf
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
@@ -38,8 +39,9 @@ log = logging.getLogger('gajim.emoji')
 
 
 class Section(Gtk.Box):
-    def __init__(self, name, search_entry, press_cb):
+    def __init__(self, name, search_entry, press_cb, chooser):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        self._chooser = chooser
         self._press_cb = press_cb
         self.pixbuf_generator = None
         self.heading = Gtk.Label(label=name)
@@ -83,22 +85,44 @@ class Section(Gtk.Box):
                 emoji_pixbufs[codepoint] = pixbuf
         else:
             if pixbuf is not None:
-                chooser = self._get_emoji_modifier(
-                    codepoint, pixbuf, attrs)
-                chooser.flowbox.connect(
-                    'child-activated', self._press_cb)
+                chooser = ModifierChooser()
+
+                # Iterate over the variations and add the codepoints
+                for codepoint_ in variations.keys():
+                    pixbuf_ = self._get_next_pixbuf()
+                    if pixbuf_ is None:
+                        continue
+
+                    if pixbuf_ == 'font':
+                        if not self._chooser._font_supports_codepoint(
+                                codepoint_):
+                            continue
+                    else:
+                        emoji_pixbufs[codepoint_] = pixbuf_
+
+                    # Only codepoints are added which the
+                    # font or theme supports
+                    chooser.add_emoji(codepoint_, pixbuf_)
+
+                # Check if we successfully added codepoints with modifiers
+                if chooser.has_child:
+                    # If we have children then add a button
+                    # and set the popover
+                    child = EmojiModifierChild(
+                        codepoint, pixbuf, attrs['desc'])
+                    child.button.set_popover(chooser)
+                    chooser.flowbox.connect(
+                        'child-activated', self._press_cb)
+                else:
+                    # If no children were added, destroy the chooser
+                    # and add a EmojiChild instead of a EmojiModifierChild
+                    chooser.destroy()
+                    child = EmojiChild(codepoint, pixbuf, attrs['desc'])
 
                 if pixbuf != 'font':
                     emoji_pixbufs[codepoint] = pixbuf
 
-                for codepoint, attrs in variations.items():
-                    pixbuf = self._get_next_pixbuf()
-                    if pixbuf is None:
-                        continue
-                    chooser.add_emoji(codepoint, pixbuf)
-
-                    if pixbuf != 'font':
-                        emoji_pixbufs[codepoint] = pixbuf
+                self.flowbox.add(child)
             else:
                 # We dont have a image for the base codepoint
                 # so skip all modifiers of it
@@ -111,13 +135,6 @@ class Section(Gtk.Box):
             self.flowbox.remove(emoji)
             emoji.destroy()
         self.flowbox.foreach(_remove_emoji)
-
-    def _get_emoji_modifier(self, codepoint, pixbuf, attrs):
-        chooser = ModifierChooser()
-        modifier_button = EmojiModifierChild(codepoint, pixbuf, attrs['desc'])
-        modifier_button.button.set_popover(chooser)
-        self.flowbox.add(modifier_button)
-        return chooser
 
     def _get_next_pixbuf(self):
         if self.pixbuf_generator is None:
@@ -193,6 +210,7 @@ class ModifierChooser(Gtk.Popover):
     def __init__(self):
         Gtk.Popover.__init__(self)
         self.set_name('EmoticonPopover')
+        self._has_child = False
 
         self.flowbox = Gtk.FlowBox()
         self.flowbox.get_style_context().add_class(
@@ -202,8 +220,13 @@ class ModifierChooser(Gtk.Popover):
         self.flowbox.show()
         self.add(self.flowbox)
 
+    @property
+    def has_child(self):
+        return self._has_child
+
     def add_emoji(self, codepoint, pixbuf):
         self.flowbox.add(EmojiChild(codepoint, pixbuf, None))
+        self._has_child = True
 
 
 class EmojiChooser(Gtk.Popover):
@@ -224,6 +247,7 @@ class EmojiChooser(Gtk.Popover):
         self.set_name('EmoticonPopover')
         self._text_widget = None
         self._load_source_id = None
+        self._pango_layout = Pango.Layout(self.get_pango_context())
 
         self._builder = get_builder('emoji_chooser.ui')
         self._search = self._builder.get_object('search')
@@ -232,7 +256,7 @@ class EmojiChooser(Gtk.Popover):
         self._sections = OrderedDict()
         for name in self._section_names:
             self._sections[name] = Section(
-                name, self._search, self._on_emoticon_press)
+                name, self._search, self._on_emoticon_press, self)
 
         section_box = self._builder.get_object('section_box')
         for section in self._sections.values():
@@ -326,20 +350,34 @@ class EmojiChooser(Gtk.Popover):
         self._clear_sections()
         emoji_pixbufs.clear()
 
-        factory = self._emoji_factory()
+        factory = self._emoji_factory(theme == 'font')
         self._load_source_id = GLib.idle_add(lambda: next(factory, False),
                                              priority=GLib.PRIORITY_LOW)
 
-    def _emoji_factory(self):
+    def _emoji_factory(self, font):
         for codepoint, attrs in emoji_data.items():
             if not attrs['fully-qualified']:
                 # We dont add these to the UI
+                continue
+
+            if font and not self._font_supports_codepoint(codepoint):
                 continue
 
             section = self._sections[attrs['group']]
             yield section.add_emoji(codepoint, attrs)
         self._load_source_id = None
         emoji_pixbufs.complete = True
+
+    def _font_supports_codepoint(self, codepoint):
+        self._pango_layout.set_text(codepoint, -1)
+        if self._pango_layout.get_unknown_glyphs_count():
+            return False
+        if len(codepoint) > 1:
+            # The font supports each of the codepoints
+            # Check if the rendered glyph is more than one char
+            if self._pango_layout.get_size()[0] > 19000:
+                return False
+        return True
 
     def _get_next_pixbuf(self, path):
         src_x = src_y = cur_column = 0
