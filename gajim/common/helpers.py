@@ -1478,11 +1478,7 @@ def version_condition(current_version, required_version):
     return True
 
 def get_available_emoticon_themes():
-    emoticons_themes = []
-    if sys.platform not in ('win32', 'darwin'):
-        # Colored emoji fonts only supported on Linux
-        emoticons_themes.append('font')
-
+    emoticons_themes = ['font']
     files = []
     dir_iterator = os.scandir(configpaths.get('EMOTICONS'))
     for folder in dir_iterator:
