@@ -32,6 +32,7 @@ import os
 import sys
 import logging
 import uuid
+from pathlib import Path
 from distutils.version import LooseVersion as V
 from collections import namedtuple
 
@@ -229,8 +230,11 @@ def detect_dependencies():
     # FARSTREAM
     try:
         if os.name == 'nt':
-            os.environ['FS_PLUGIN_PATH'] = 'gtk\\lib\\farstream-0.1'
-            os.environ['GST_PLUGIN_PATH'] = 'gtk\\lib\\gstreamer-0.10'
+            root_path = Path(sys.executable).parents[1]
+            fs_plugin_path = str(root_path / 'lib' / 'farstream-0.2')
+            gst_plugin_path = str(root_path / 'lib' / 'gstreamer-1.0')
+            os.environ['FS_PLUGIN_PATH'] = fs_plugin_path
+            os.environ['GST_PLUGIN_PATH'] = gst_plugin_path
         gi.require_version('Farstream', '0.2')
         from gi.repository import Farstream
         gi.require_version('Gst', '1.0')
