@@ -243,7 +243,7 @@ class JingleRTPContent(JingleContent):
                 # Add fallback source
                 self.src_bin = self.get_fallback_src()
                 self.pipeline.add(self.src_bin)
-                self.src_bin.link(sink_pad)
+                self.src_bin.get_static_pad('src').link(sink_pad)
                 self.stream_failed_once = True
             else:
                 reason = nbxmpp.Node('reason')
