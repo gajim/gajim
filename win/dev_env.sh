@@ -30,6 +30,7 @@ docutils
 qrcode
 keyring
 pillow==4.3.0
+cssutils
 "
 
     pip3 install --no-binary ":all:" \
