@@ -180,7 +180,6 @@ class Notification:
             notification.set_title(title)
         if text is not None:
             notification.set_body(text)
-        notification.set_icon(icon_pixbuf)
         notif_id = None
         if event_type in (_('Contact Signed In'), _('Contact Signed Out'),
         _('New Message'), _('New Single Message'), _('New Private Message'),
@@ -211,9 +210,14 @@ class Notification:
                 notif_id = self._id('connection-failed', account)
             elif event_type in (_('New Message'), _('New Single Message'),
             _('New Private Message')):
+                avatar = app.contacts.get_avatar(account, jid)
+                if avatar:
+                    icon_pixbuf = avatar
                 notif_id = self._id('new-message', account, jid)
 
+        notification.set_icon(icon_pixbuf)
         notification.set_priority(Gio.NotificationPriority.NORMAL)
+
         app.app.send_notification(notif_id, notification)
 
     def withdraw(self, *args):
