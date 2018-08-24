@@ -153,7 +153,7 @@ class Notification:
                 return gtkgui_helpers.get_iconset_name_for(obj.show)
 
     def popup(self, event_type, jid, account, type_='', icon_name=None,
-              title=None, text=None, timeout=-1):
+              title=None, text=None, timeout=-1, room_jid=None):
         """
         Notify a user of an event using GNotification and GApplication under
         Linux, Use PopupNotificationWindow under Windows
@@ -206,7 +206,7 @@ class Notification:
             _('Contact Changed Status')):
                 notif_id = self._id('contact-status-changed', account, jid)
             elif event_type == _('Groupchat Invitation'):
-                notif_id = self._id('gc-invitation', account, jid)
+                notif_id = self._id('gc-invitation', account, room_jid)
             elif event_type == _('Connection Failed'):
                 notif_id = self._id('connection-failed', account)
             elif event_type in (_('New Message'), _('New Single Message'),
