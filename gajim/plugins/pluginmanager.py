@@ -38,6 +38,7 @@ import gajim
 from gajim.common import app
 from gajim.common import nec
 from gajim.common import configpaths
+from gajim.common import modules
 from gajim.common.exceptions import PluginsystemError
 
 from gajim.plugins.helpers import log, log_calls, Singleton
@@ -352,6 +353,38 @@ class PluginManager(metaclass=Singleton):
         if plugin.encryption_name:
             del self.encryption_plugins[plugin.encryption_name]
 
+    def _register_modules_with_handlers(self, plugin):
+        if not hasattr(plugin, 'modules'):
+            return
+        for con in app.connections.values():
+            for module in plugin.modules:
+                instance, name = module.get_instance(con)
+                if not module.zeroconf and con.name == 'Local':
+                    continue
+                modules.register_single(con, instance, name)
+
+                # If handlers have been registered, register the
+                # plugin handlers. Otherwise this will be done
+                # automatically on connecting
+                # in connection_handlers._register_handlers()
+                if con.handlers_registered:
+                    for handler in instance.handlers:
+                        con.connection.RegisterHandler(*handler)
+
+    def _unregister_modules_with_handlers(self, plugin):
+        if not hasattr(plugin, 'modules'):
+            return
+        for con in app.connections.values():
+            for module in plugin.modules:
+                instance = con.get_module(module.name)
+                modules.unregister_single(con, module.name)
+
+                # Account is still connected and handlers are registered
+                # So just unregister the plugin handlers
+                if con.handlers_registered:
+                    for handler in instance.handlers:
+                        con.connection.UnregisterHandler(*handler)
+
     @log_calls('PluginManager')
     def activate_plugin(self, plugin):
         '''
@@ -365,6 +398,7 @@ class PluginManager(metaclass=Singleton):
             self._handle_all_gui_extension_points_with_plugin(plugin)
             self._register_events_handlers_in_ged(plugin)
             self._register_network_events_in_nec(plugin)
+            self._register_modules_with_handlers(plugin)
 
             self.active_plugins.append(plugin)
             try:
@@ -402,6 +436,7 @@ class PluginManager(metaclass=Singleton):
         self._remove_events_handler_from_ged(plugin)
         self._remove_network_events_from_nec(plugin)
         self._remove_name_from_encryption_plugins(plugin)
+        self._unregister_modules_with_handlers(plugin)
 
         # removing plug-in from active plug-ins list
         plugin.deactivate()
@@ -461,6 +496,24 @@ class PluginManager(metaclass=Singleton):
                     self.activate_plugin(plugin)
                 except GajimPluginActivateException:
                     pass
+
+    def register_modules_for_account(self, con):
+        '''
+        A new account has been added, register modules
+        of all active plugins
+        '''
+        for plugin in self.plugins:
+            if not plugin.active:
+                return
+
+            if not hasattr(plugin, 'modules'):
+                return
+
+            for module in plugin.modules:
+                instance, name = module.get_instance(con)
+                if not module.zeroconf and con.name == 'Local':
+                    continue
+                modules.register_single(con, instance, name)
 
     def _plugin_is_active_in_global_config(self, plugin):
         return app.config.get_per('plugins', plugin.short_name, 'active')

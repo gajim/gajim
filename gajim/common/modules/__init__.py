@@ -80,8 +80,25 @@ def register(con, *args, **kwargs):
         _modules[con.name][name] = instance
 
 
+def register_single(con, instance, name):
+    if con.name not in _modules:
+        raise ValueError('Unknown account name: %s' % con.name)
+    _modules[con.name][name] = instance
+
+
 def unregister(con):
+    for instance in _modules[con.name].values():
+        if hasattr(instance, 'cleanup'):
+            instance.cleanup()
     del _modules[con.name]
+
+
+def unregister_single(con, name):
+    if con.name not in _modules:
+        return
+    if name not in _modules[con.name]:
+        return
+    del _modules[con.name][name]
 
 
 def get(account, name):

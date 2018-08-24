@@ -236,6 +236,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
         else:
             app.connections[account] = Connection(account)
 
+        app.plugin_manager.register_modules_for_account(
+            app.connections[account])
+
         # update variables
         app.interface.instances[account] = {
             'infos': {}, 'disco': {}, 'gc_config': {}, 'search': {},
