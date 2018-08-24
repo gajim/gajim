@@ -288,6 +288,7 @@ class AccountCreationWizard:
                     100, self.update_progressbar)
                 # Get form from serveur
                 con = connection.Connection(self.account)
+                app.plugin_manager.register_modules_for_account(con)
                 app.connections[self.account] = con
                 con.new_account(self.account, config)
         elif cur_page == 3:
