@@ -129,7 +129,7 @@ class ServerInfoDialog(Gtk.Dialog):
     def _nec_version_result_received(self, obj):
         if obj.jid != self.hostname:
             return
-        self.version = obj.client_info
+        self.version = obj.client_info or _('Unknown')
         self.update(self.get_infos, self.info_listbox)
 
     def _server_disco_received(self, obj):
