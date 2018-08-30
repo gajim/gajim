@@ -178,10 +178,6 @@ class Message:
 
             session.last_receive = time.time()
 
-        timestamp = parse_delay(stanza)
-        if timestamp is None:
-            timestamp = time.time()
-
         event_attr = {
             'conn': self._con,
             'stanza': stanza,
@@ -191,7 +187,6 @@ class Message:
             'additional_data': {},
             'forwarded': forwarded,
             'sent': sent,
-            'timestamp': timestamp,
             'fjid': fjid,
             'jid': jid,
             'resource': resource,
@@ -223,6 +218,11 @@ class Message:
         except nbxmpp.NodeProcessed:
             return
 
+        timestamp, delayed = parse_delay(event.stanza), True
+        if timestamp is None:
+            timestamp = time.time()
+            delayed = False
+
         event_attr = {
             'popup': False,
             'msg_log_id': None,
@@ -234,6 +234,8 @@ class Message:
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'chatstate': parse_chatstate(event.stanza),
+            'timestamp': timestamp,
+            'delayed': delayed,
         }
         parse_oob(event.stanza, event.additional_data)
 
@@ -245,7 +247,7 @@ class Message:
                 event.msgtxt = _('message')
             self._con.dispatch_error_message(
                 event.stanza, event.msgtxt,
-                event.session, event.fjid, event.timestamp)
+                event.session, event.fjid, timestamp)
             return
 
         if event.mtype == 'groupchat':
