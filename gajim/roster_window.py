@@ -1075,8 +1075,7 @@ class RosterWindow:
             account_name = _('Merged accounts')
             accounts = []
         else:
-            acclabel = app.config.get_per('accounts', account, 'account_label')
-            account_name = acclabel or account
+            account_name = app.get_account_label(account)
             accounts = [account]
 
         if account in self.collapsed_rows and \
@@ -5075,9 +5074,8 @@ class RosterWindow:
                 accounts.append(account)
             accounts.sort()
             for account in accounts:
-                label = app.config.get_per('accounts', account,
-                                           'account_label')
-                item = Gtk.MenuItem.new_with_label(label or account)
+                label = app.get_account_label(account)
+                item = Gtk.MenuItem.new_with_label(label)
                 account_menu = self.build_account_menu(account)
                 item.set_submenu(account_menu)
                 menu.append(item)

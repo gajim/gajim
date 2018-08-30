@@ -377,8 +377,7 @@ class Account(Gtk.Box):
             self.options = AccountPage(account, parent)
         self.parent = parent
 
-        account_label = app.config.get_per('accounts', account, 'account_label')
-        self.label = Gtk.Label(label=account_label or account)
+        self.label = Gtk.Label(app.get_account_label(account))
         self.label.set_halign(Gtk.Align.START)
         self.label.set_hexpand(True)
 
@@ -402,9 +401,7 @@ class Account(Gtk.Box):
         self.parent.set_page(self.options, 'account')
 
     def update(self):
-        account_label = app.config.get_per(
-            'accounts', self.account, 'account_label')
-        self.label.set_text(account_label or self.account)
+        self.label.set_text(app.get_account_label(self.account))
         self._update_image()
 
     def _update_image(self):
@@ -453,10 +450,9 @@ class GenericOptionPage(Gtk.Box):
         row.get_child().on_row_activated()
 
     def set_entry_text(self, toggle, update=False):
-        account_label = app.config.get_per(
-            'accounts', self.account, 'account_label')
+        account_label = app.get_account_label(self.account)
         if update:
-            self.entry.set_text(account_label or self.account)
+            self.entry.set_text(account_label)
             return
         if toggle.get_active():
             self.entry.set_sensitive(True)
@@ -465,7 +461,7 @@ class GenericOptionPage(Gtk.Box):
             self.entry.set_sensitive(False)
             value = self.entry.get_text()
             if not value:
-                value = account_label or self.account
+                value = account_label
             app.config.set_per('accounts', self.account,
                                'account_label', value or self.account)
             if app.config.get_per('accounts', self.account, 'active'):

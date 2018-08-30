@@ -411,12 +411,13 @@ def get_enabled_accounts_with_labels(exclude_local=True, connected_only=False,
         if private_storage_only and not account_supports_private_storage(acc):
             continue
 
-        acc_label = config.get_per(
-            'accounts', acc, 'account_label') or acc
-        accounts.append([acc, acc_label])
+        accounts.append([acc, get_account_label(acc)])
 
     accounts.sort(key=lambda xs: str.lower(xs[1]))
     return accounts
+
+def get_account_label(account):
+    return config.get_per('accounts', account, 'account_label') or account
 
 def account_is_zeroconf(account):
     return connections[account].is_zeroconf

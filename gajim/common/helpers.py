@@ -1121,10 +1121,9 @@ def get_accounts_info():
             message = message.strip()
         if message != '':
             single_line += ': ' + message
-        account_label = app.config.get_per(
-            'accounts', account, 'account_label')
+        account_label = app.get_account_label(account)
         accounts.append({'name': account,
-                         'account_label': account_label or account,
+                         'account_label': account_label,
                          'status_line': single_line,
                          'show': status,
                          'message': message})

@@ -262,8 +262,7 @@ class ContactRow(Gtk.Grid):
         self.set_column_spacing(12)
         self.set_size_request(260, -1)
         self.account = account
-        self.account_label = app.config.get_per(
-            'accounts', account, 'account_label') or account
+        self.account_label = app.get_account_label(account)
         self.show_account = show_account
         self.jid = jid
         self.contact = contact
