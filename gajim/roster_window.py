@@ -2694,10 +2694,10 @@ class RosterWindow:
 
     def _nec_gc_subject_received(self, obj):
         contact = app.contacts.get_contact_with_highest_priority(
-            obj.conn.name, obj.room_jid)
+            obj.conn.name, obj.jid)
         if contact:
             contact.status = obj.subject
-            self.draw_contact(obj.room_jid, obj.conn.name)
+            self.draw_contact(obj.jid, obj.conn.name)
 
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)

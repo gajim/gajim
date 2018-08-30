@@ -25,7 +25,6 @@ from calendar import timegm
 import hashlib
 import hmac
 import logging
-import sys
 from time import time as time_time
 
 import OpenSSL.crypto
@@ -499,13 +498,13 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # message from server
             self.nick = ''
 
-        self.has_timestamp = bool(self.stanza.timestamp)
-
         self.subject = self.stanza.getSubject()
 
         if self.subject is not None:
-            app.nec.push_incoming_event(GcSubjectReceivedEvent(None,
-                conn=self.conn, msg_event=self))
+            app.nec.push_incoming_event(
+                nec.NetworkEvent('gc-subject-received',
+                                 nickname=self.msg_obj.resource,
+                                 **vars(self.msg_obj)))
             return
 
         conditions = self.stanza.getStatusConditions()
@@ -564,21 +563,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         from gajim.common.modules.misc import parse_correction
         self.correct_id = parse_correction(self.stanza)
 
-        return True
-
-class GcSubjectReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gc-subject-received'
-    base_network_events = []
-
-    def generate(self):
-        self.conn = self.msg_event.conn
-        self.stanza = self.msg_event.stanza
-        self.room_jid = self.msg_event.room_jid
-        self.nickname = self.msg_event.nickname
-        self.fjid = self.msg_event.fjid
-        self.subject = self.msg_event.subject
-        self.msgtxt = self.msg_event.msgtxt
-        self.has_timestamp = self.msg_event.has_timestamp
         return True
 
 class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
