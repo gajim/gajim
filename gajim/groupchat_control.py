@@ -1586,7 +1586,8 @@ class GroupchatControl(ChatControlBase):
             self.print_conversation(_('Ping? (%s)') % nick)
         elif obj.name == 'ping-reply':
             self.print_conversation(
-                _('Pong! (%s %s s.)') % (nick, obj.seconds))
+                _('Pong! (%(nick)s %(delay)s s.)') % {'nick': nick,
+                'delay': obj.seconds})
         elif obj.name == 'ping-error':
             self.print_conversation(_('Error.'))
 
