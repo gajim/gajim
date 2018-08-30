@@ -1239,7 +1239,7 @@ class GroupchatControl(ChatControlBase):
                 additional_data=obj.additional_data)
         else:
             # message from someone
-            if obj.has_timestamp:
+            if obj.delayed:
                 # don't print xhtml if it's an old message.
                 # Like that xhtml messages are grayed too.
                 self.print_old_conversation(
@@ -1492,20 +1492,22 @@ class GroupchatControl(ChatControlBase):
         self.subject = subject
         self.draw_banner_text()
 
-    def _nec_gc_subject_received(self, obj):
-        if obj.conn.name != self.account:
+    def _nec_gc_subject_received(self, event):
+        if event.conn.name != self.account:
             return
-        if obj.room_jid != self.room_jid:
+        if event.jid != self.room_jid:
             return
-        self.set_subject(obj.subject)
+        self.set_subject(event.subject)
         text = _('%(nick)s has set the subject to %(subject)s') % {
-            'nick': obj.nickname, 'subject': obj.subject}
-        if obj.has_timestamp:
-            self.print_old_conversation(text)
-        else:
-            self.print_conversation(text)
+            'nick': event.nickname, 'subject': event.subject}
 
-        if obj.subject == '':
+        if event.delayed:
+            date = time.strftime('%d-%m-%Y %H:%M:%S',
+                                 time.localtime(event.timestamp))
+            text = '%s - %s' % (text, date)
+        self.print_conversation(text)
+
+        if event.subject == '':
             self.subject_button.hide()
         else:
             self.subject_button.show()
