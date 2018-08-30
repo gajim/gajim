@@ -150,12 +150,12 @@ class NotificationAreaTooltip(StatusTable):
                 show_lock = False
             if message:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['account_label']) + ' - ' + message,
-                    show_lock=show_lock, indent=False)
+                    GLib.markup_escape_text(acct['account_label']) + ' - ' + \
+                    message, show_lock=show_lock, indent=False)
             else:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['account_label']), show_lock=show_lock,
-                    indent=False)
+                    GLib.markup_escape_text(acct['account_label']),
+                    show_lock=show_lock, indent=False)
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
 
@@ -333,12 +333,12 @@ class RosterTooltip(Gtk.Window, StatusTable):
                 show_lock = False
             if message:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['name']) + ' - ' + message,
-                    show_lock=show_lock, indent=False)
+                    GLib.markup_escape_text(acct['account_label']) + ' - ' + \
+                    message, show_lock=show_lock, indent=False)
             else:
                 self.add_status_row(file_path, acct['show'],
-                    GLib.markup_escape_text(acct['name']), show_lock=show_lock,
-                    indent=False)
+                    GLib.markup_escape_text(acct['account_label']),
+                    show_lock=show_lock, indent=False)
             for line in acct['event_lines']:
                 self.add_text_row('  ' + line, 1)
 
@@ -371,7 +371,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             nbr_on, nbr_total = app.\
                 contacts.get_nb_online_total_contacts(
                 accounts=[account])
-            account_name = account
+            account_name = app.get_account_label(account)
             if app.account_is_connected(account):
                 account_name += ' (%s/%s)' % (repr(nbr_on),
                     repr(nbr_total))

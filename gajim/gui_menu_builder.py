@@ -799,10 +799,9 @@ def build_accounts_menu():
         return
     if len(accounts_list) > 1:
         for acc in accounts_list:
-            label = escape_mnemonic(
-                app.config.get_per('accounts', acc, 'account_label'))
+            label = escape_mnemonic(app.get_account_label(acc))
             acc_menu.append_submenu(
-                label or acc, get_account_menu(acc))
+                label, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
         menubar.remove(menu_position)

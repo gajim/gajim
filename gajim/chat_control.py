@@ -663,7 +663,8 @@ class ChatControl(ChatControlBase):
                 if other_contact_.get_shown_name() == \
                 self.contact.get_shown_name():
                     acct_info = i18n.direction_mark + ' (%s)' % \
-                        GLib.markup_escape_text(self.account)
+                        GLib.markup_escape_text(
+                            app.get_account_label(self.account))
                     break
 
         status = contact.status
