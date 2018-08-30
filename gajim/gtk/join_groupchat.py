@@ -203,7 +203,12 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             return
 
         self.room_jid = '%s@%s' % (room, server)
-        self.room_jid = self.room_jid.lower()
+
+        try:
+            self.room_jid = helpers.parse_jid(self.room_jid)
+        except helpers.InvalidFormat as error:
+            ErrorDialog(_('Invalid JID'), str(error), transient_for=self)
+            return
 
         if app.in_groupchat(account, self.room_jid):
             # If we already in the groupchat, join_gc_room will bring
@@ -221,12 +226,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
             helpers.parse_resource(nickname)
         except helpers.InvalidFormat as error:
             ErrorDialog(_('Invalid Nickname'), str(error), transient_for=self)
-            return
-
-        try:
-            helpers.parse_jid(self.room_jid)
-        except helpers.InvalidFormat as error:
-            ErrorDialog(_('Invalid JID'), str(error), transient_for=self)
             return
 
         if not app.account_is_connected(account):
