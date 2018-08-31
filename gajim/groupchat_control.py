@@ -1818,6 +1818,8 @@ class GroupchatControl(ChatControlBase):
                 # app.py)
                 self.print_conversation(_('Room logging is enabled'))
             if '201' in obj.status_code:
+                app.connections[self.account].get_module('Discovery').disco_muc(
+                    self.room_jid, self.update_actions, update=True)
                 self.print_conversation(_('A new room has been created'))
             if '210' in obj.status_code:
                 self.print_conversation(\
