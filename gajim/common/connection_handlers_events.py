@@ -487,6 +487,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         self.xhtml_msgtxt = self.stanza.getXHTML()
         self.encrypted = self.msg_obj.encrypted
         self.correct_id = None # XEP-0308
+        self.delayed = self.msg_obj.delayed
 
         if app.config.get('ignore_incoming_xhtml'):
             self.xhtml_msgtxt = None
