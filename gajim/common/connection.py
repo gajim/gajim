@@ -38,7 +38,6 @@ import socket
 import operator
 import string
 import time
-import hmac
 import hashlib
 import json
 import logging
@@ -60,12 +59,10 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
-from gajim.common import i18n
 from gajim.common import idle
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.common import modules
-from gajim.gtkgui_helpers import get_action
 
 
 log = logging.getLogger('gajim.c.connection')
@@ -474,10 +471,11 @@ class CommonConnection:
             if self.connection:
                 app.nec.push_incoming_event(BeforeChangeShowEvent(None,
                     conn=self, show=show, message=msg))
-                p = nbxmpp.Presence(typ = 'unavailable')
-                p = self.add_sha(p, False)
-                if msg:
-                    p.setStatus(msg)
+
+                p = self.get_module('Presence').get_presence(
+                    typ='unavailable',
+                    status=msg,
+                    caps=False)
 
                 self.connection.RegisterDisconnectHandler(self._on_disconnected)
                 self.connection.send(p, now=True)
@@ -542,7 +540,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # server {'icq': ['icq.server.com', 'icq2.server.com'], }
 
         self.streamError = ''
-        self.secret_hmac = str(random.random())[2:].encode('utf-8')
         self.removing_account = False
 
         # We only request POSH once
@@ -1351,9 +1348,6 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.on_connect_auth = None
     # END connect
 
-    def add_lang(self, stanza):
-        stanza.setAttr('xml:lang', i18n.LANG)
-
     def send_keepalive(self):
         # nothing received for the last foo seconds
         if self.connection:
@@ -1372,15 +1366,15 @@ class Connection(CommonConnection, ConnectionHandlers):
         # offline presence first as it's required by XEP-0126
         if self.connected > 1 and self.get_module('PrivacyLists').supported:
             self.on_purpose = True
-            p = nbxmpp.Presence(typ='unavailable')
-            p = self.add_sha(p, False)
-            if msg:
-                p.setStatus(msg)
+
             self.remove_all_transfers()
-            self.connection.send(p)
+            self.get_module('Presence').send_presence(
+                typ='unavailable',
+                status=msg,
+                caps=False)
 
         # try to set the privacy rule
-        iq = self.get_module('PrivacyLists').set_invisible_rule(
+        self.get_module('PrivacyLists').set_invisible_rule(
             callback=self._continue_invisible,
             msg=msg,
             signed=signed,
@@ -1394,13 +1388,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = app.SHOW_LIST.index('invisible')
         self.status = msg
         priority = app.get_priority(self.name, 'invisible')
-        p = nbxmpp.Presence(priority=priority)
-        p = self.add_sha(p, True)
-        if msg:
-            p.setStatus(msg)
-        if signed:
-            p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
-        self.connection.send(p)
+
+        self.get_module('Presence').send_presence(
+            priority=priority,
+            status=msg,
+            sign=signed)
+
         self.priority = priority
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='invisible'))
@@ -1486,20 +1479,21 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not msg:
             msg = ''
         if show == 'offline':
-            p = nbxmpp.Presence(typ='unavailable', to=jid)
-            p = self.add_sha(p, False)
-            if msg:
-                p.setStatus(msg)
+            self.get_module('Presence').send_presence(
+                jid,
+                'unavailable',
+                caps=False,
+                status=msg)
+
         else:
             signed = self.get_signed_presence(msg)
             priority = app.get_priority(self.name, sshow)
-            p = nbxmpp.Presence(typ=None, priority=priority, show=sshow, to=jid)
-            p = self.add_sha(p)
-            if msg:
-                p.setStatus(msg)
-            if signed:
-                p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
-        self.connection.send(p)
+            self.get_module('Presence').send_presence(
+                jid,
+                priority=priority,
+                show=sshow,
+                status=msg,
+                sign=signed)
 
     def _change_to_invisible(self, msg):
         signed = self.get_signed_presence(msg)
@@ -1512,18 +1506,16 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _update_status(self, show, msg, idle_time=None):
         xmpp_show = helpers.get_xmpp_show(show)
         priority = app.get_priority(self.name, xmpp_show)
-        p = nbxmpp.Presence(typ=None, priority=priority, show=xmpp_show)
-        p = self.add_sha(p)
-        if msg:
-            p.setStatus(msg)
         signed = self.get_signed_presence(msg)
-        if signed:
-            p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
-        if idle_time:
-            idle_node = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
-            idle_node.setAttr('since', idle_time)
+
+        self.get_module('Presence').send_presence(
+            priority=priority,
+            show=xmpp_show,
+            status=msg,
+            sign=signed,
+            idle_time=idle_time)
+
         if self.connection:
-            self.connection.send(p)
             self.priority = priority
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
@@ -1654,9 +1646,12 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not app.account_is_connected(self.name):
             return
         show = helpers.get_xmpp_show(app.SHOW_LIST[self.connected])
-        p = nbxmpp.Presence(to=agent, typ=ptype, show=show)
-        p = self.add_sha(p, ptype != 'unavailable')
-        self.connection.send(p)
+
+        self.get_module('Presence').send_presence(
+            agent,
+            ptype,
+            show=show,
+            caps=ptype != 'unavailable')
 
     def send_captcha(self, jid, form_node):
         if not app.account_is_connected(self.name):
@@ -1697,56 +1692,19 @@ class Connection(CommonConnection, ConnectionHandlers):
                               password, change_nick, rejoin))
 
     def _join_gc(self, nick, show, room_jid, password, change_nick, rejoin):
-        # Check time first in the FAST table
-        last_date = app.logger.get_room_last_message_time(
-            self.name, room_jid)
-        if not last_date:
-            last_date = 0
-
-        p = nbxmpp.Presence(to='%s/%s' % (room_jid, nick),
-                show=show, status=self.status)
-        h = hmac.new(self.secret_hmac, room_jid.encode('utf-8'), hashlib.md5).\
-            hexdigest()[:6]
-        id_ = self.connection.getAnID()
-        id_ = 'gajim_muc_' + id_ + '_' + h
-        p.setID(id_)
-        if app.config.get('send_sha_in_gc_presence'):
-            p = self.add_sha(p)
-        self.add_lang(p)
         if change_nick:
-            self.connection.send(p)
-            return
-
-        t = p.setTag(nbxmpp.NS_MUC + ' x')
-        if muc_caps_cache.has_mam(room_jid):
-            # The room is MAM capable dont get MUC History
-            t.setTag('history', {'maxchars': '0'})
+            self.get_module('Presence').send_presence(
+                '%s/%s' % (room_jid, nick),
+                show=show,
+                status=self.status)
         else:
-            # Request MUC History (not MAM)
-            tags = {}
-            timeout = app.config.get_per('rooms', room_jid,
-                                         'muc_restore_timeout')
-            if timeout is None or timeout == -2:
-                timeout = app.config.get('muc_restore_timeout')
-            if last_date == 0 and timeout >= 0:
-                last_date = time.time() - timeout * 60
-            elif not rejoin and timeout >= 0:
-                last_date = max(last_date, time.time() - timeout * 60)
-            last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
-                last_date))
-            tags['since'] = last_date
-
-            nb = app.config.get_per('rooms', room_jid, 'muc_restore_lines')
-            if nb is None or nb == -2:
-                nb = app.config.get('muc_restore_lines')
-            if nb >= 0:
-                tags['maxstanzas'] = nb
-            if tags:
-                t.setTag('history', tags)
-
-        if password:
-            t.setTagData('password', password)
-        self.connection.send(p)
+            self.get_module('MUC').send_muc_join_presence(
+                '%s/%s' % (room_jid, nick),
+                show=show,
+                status=self.status,
+                room_jid=room_jid,
+                password=password,
+                rejoin=rejoin)
 
     def _nec_gc_message_outgoing(self, obj):
         if obj.account != self.name:
@@ -1809,26 +1767,20 @@ class Connection(CommonConnection, ConnectionHandlers):
         if show == 'offline':
             ptype = 'unavailable'
         xmpp_show = helpers.get_xmpp_show(show)
-        p = nbxmpp.Presence(to='%s/%s' % (jid, nick), typ=ptype,
-            show=xmpp_show, status=status)
-        h = hmac.new(self.secret_hmac, jid.encode('utf-8'), hashlib.md5).\
-            hexdigest()[:6]
-        id_ = self.connection.getAnID()
-        id_ = 'gajim_muc_' + id_ + '_' + h
-        p.setID(id_)
-        if app.config.get('send_sha_in_gc_presence') and show != 'offline':
-            p = self.add_sha(p, ptype != 'unavailable')
-        self.add_lang(p)
-        if auto:
-            if app.is_installed('IDLE') and app.config.get('autoaway'):
-                idle_sec = idle.Monitor.get_idle_sec()
-                idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                    time.gmtime(time.time() - idle_sec))
-                idle_node = p.setTag('idle', namespace=nbxmpp.NS_IDLE)
-                idle_node.setAttr('since', idle_time)
-        # send instantly so when we go offline, status is sent to gc before we
-        # disconnect from jabber server
-        self.connection.send(p)
+
+        idle_time = None
+        if auto and app.is_installed('IDLE') and app.config.get('autoaway'):
+            idle_sec = idle.Monitor.get_idle_sec()
+            idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
+                                      time.gmtime(time.time() - idle_sec))
+
+        self.get_module('Presence').send_presence(
+            '%s/%s' % (jid, nick),
+            typ=ptype,
+            show=xmpp_show,
+            status=status,
+            caps=ptype != 'unavailable',
+            idle_time=idle_time)
 
     def get_password(self, callback, type_):
         if app.config.get_per('accounts', self.name, 'anonymous_auth') and \

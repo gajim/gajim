@@ -15,6 +15,7 @@
 # XEP-0045: Multi-User Chat
 # XEP-0249: Direct MUC Invitations
 
+import time
 import logging
 
 import nbxmpp
@@ -23,6 +24,7 @@ from gajim.common import i18n
 from gajim.common.modules import dataforms
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.muc')
@@ -49,6 +51,56 @@ class MUC:
                 # TODO: make this nicer
                 self._con.muc_jid['jabber'] = from_
                 raise nbxmpp.NodeProcessed
+
+    def send_muc_join_presence(self, *args, room_jid=None, password=None,
+                               rejoin=False, **kwargs):
+        if not app.account_is_connected(self._account):
+            return
+        presence = self._con.get_module('Presence').get_presence(
+            *args, **kwargs)
+
+        if room_jid is not None:
+            self._add_history_query(presence, room_jid, rejoin)
+
+        if password is not None:
+            presence.setTagData('password', password)
+
+        log.debug('Send MUC join presence:\n%s', presence)
+
+        self._con.connection.send(presence)
+
+    def _add_history_query(self, presence, room_jid, rejoin):
+        last_date = app.logger.get_room_last_message_time(
+            self._account, room_jid)
+        if not last_date:
+            last_date = 0
+
+        history = presence.setTag(nbxmpp.NS_MUC + ' x')
+        if muc_caps_cache.has_mam(room_jid):
+            # The room is MAM capable dont get MUC History
+            history.setTag('history', {'maxchars': '0'})
+        else:
+            # Request MUC History (not MAM)
+            tags = {}
+            timeout = app.config.get_per('rooms', room_jid,
+                                         'muc_restore_timeout')
+            if timeout is None or timeout == -2:
+                timeout = app.config.get('muc_restore_timeout')
+            if last_date == 0 and timeout >= 0:
+                last_date = time.time() - timeout * 60
+            elif not rejoin and timeout >= 0:
+                last_date = max(last_date, time.time() - timeout * 60)
+            last_date = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(
+                last_date))
+            tags['since'] = last_date
+
+            nb = app.config.get_per('rooms', room_jid, 'muc_restore_lines')
+            if nb is None or nb == -2:
+                nb = app.config.get('muc_restore_lines')
+            if nb >= 0:
+                tags['maxstanzas'] = nb
+            if tags:
+                history.setTag('history', tags)
 
     def set_subject(self, room_jid, subject):
         if not app.account_is_connected(self._account):

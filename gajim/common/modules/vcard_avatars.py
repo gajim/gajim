@@ -173,10 +173,12 @@ class VCardAvatars:
             log.debug('Avatar already advertised')
             return
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
-        pres = nbxmpp.Presence(typ=None, priority=self._con.priority,
-                               show=show, status=self._con.status)
-        pres = self._con.add_sha(pres)
-        self._con.connection.send(pres)
+
+        self._con.get_module('Presence').send_presence(
+            priority=self._con.priority,
+            show=show,
+            status=self._con.status)
+
         self.avatar_advertised = True
         app.interface.update_avatar(self._account,
                                     self._con.get_own_jid().getStripped())
@@ -189,7 +191,6 @@ class VCardAvatars:
             log.info('Send avatar presence to: %s %s',
                      node.getTo() or own_jid, sha or 'no sha advertised')
             update.setTagData('photo', sha)
-        return node
 
 
 def get_instance(*args, **kwargs):

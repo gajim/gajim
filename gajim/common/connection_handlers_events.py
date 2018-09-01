@@ -288,7 +288,7 @@ PresenceHelperEvent):
         xtags = self.stanza.getTags('x')
         for x in xtags:
             namespace = x.getNamespace()
-            if namespace == nbxmpp.NS_MUC_USER:
+            if namespace in (nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC):
                 self.is_gc = True
             elif namespace == nbxmpp.NS_SIGNED:
                 sig_tag = x
@@ -296,14 +296,6 @@ PresenceHelperEvent):
                 # XEP-0091
                 self._generate_timestamp(self.stanza.timestamp)
 
-        if not self.is_gc and self.id_ and self.id_.startswith('gajim_muc_') \
-        and self.ptype == 'error':
-            # Error presences may not include sent stanza, so we don't detect
-            # it's a muc presence. So detect it by ID
-            h = hmac.new(self.conn.secret_hmac, self.jid.encode('utf-8'),
-                         hashlib.md5).hexdigest()[:6]
-            if self.id_.split('_')[-1] == h:
-                self.is_gc = True
         self.status = self.stanza.getStatus() or ''
         self._generate_show()
         self._generate_prio()
