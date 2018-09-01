@@ -469,7 +469,7 @@ class Contacts():
         self._contacts = {}
 
     def add_contact(self, contact):
-        if contact.jid not in self._contacts:
+        if contact.jid not in self._contacts or contact.is_groupchat():
             self._contacts[contact.jid] = [contact]
             return
         contacts = self._contacts[contact.jid]
