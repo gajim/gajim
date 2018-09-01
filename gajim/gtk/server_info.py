@@ -177,7 +177,10 @@ class ServerInfoDialog(Gtk.Dialog):
                     mam_enabled),
             Feature('XEP-0363: HTTP File Upload',
                     con.get_module('HTTPUpload').available,
-                    con.get_module('HTTPUpload').httpupload_namespace, None)]
+                    con.get_module('HTTPUpload').httpupload_namespace, None),
+            Feature('XEP-0398: Avatar Conversion',
+                    con.avatar_conversion, '', None)
+        ]
 
     def add_info(self, info):
         self.info_listbox.add(ServerInfoItem(info))

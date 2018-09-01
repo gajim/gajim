@@ -114,6 +114,7 @@ class CommonConnection:
 
         self.roster_supported = True
         self.addressing_supported = False
+        self.avatar_conversion = False
 
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
@@ -1398,8 +1399,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='invisible'))
         if initial:
-            # ask our VCard
-            self.get_module('VCardTemp').request_vcard()
+            if not self.avatar_conversion:
+                # ask our VCard
+                self.get_module('VCardTemp').request_vcard()
 
             # Get bookmarks
             self.get_module('Bookmarks').get_bookmarks()

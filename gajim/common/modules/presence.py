@@ -183,7 +183,10 @@ class Presence:
             idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)
             idle_node.setAttr('since', idle_time)
 
-        self._con.get_module('VCardAvatars').add_update_node(presence)
+        if not self._con.avatar_conversion:
+            # XEP-0398 not supported by server so
+            # we add the avatar sha to our presence
+            self._con.get_module('VCardAvatars').add_update_node(presence)
 
         if caps:
             attrs = {'hash': 'sha-1',

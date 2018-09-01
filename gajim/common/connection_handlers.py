@@ -580,8 +580,9 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show=show))
 
-        # ask our VCard
-        self.get_module('VCardTemp').request_vcard()
+        if not self.avatar_conversion:
+            # ask our VCard
+            self.get_module('VCardTemp').request_vcard()
 
         # Get bookmarks
         self.get_module('Bookmarks').get_bookmarks()
