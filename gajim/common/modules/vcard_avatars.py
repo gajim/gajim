@@ -16,6 +16,7 @@
 
 import os
 import logging
+from pathlib import Path
 
 import nbxmpp
 
@@ -38,6 +39,16 @@ class VCardAvatars:
         ]
 
         self.avatar_advertised = False
+        self._find_own_avatar()
+
+    def _find_own_avatar(self):
+        sha = app.config.get_per('accounts', self._account, 'avatar_sha')
+        if not sha:
+            return
+        path = Path(configpaths.get('AVATAR')) / sha
+        if not path.exists():
+            log.info('Missing own avatar, reset sha')
+            app.config.set_per('accounts', self._account, 'avatar_sha', '')
 
     def _presence_received(self, con, stanza):
         update = stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
@@ -54,9 +65,14 @@ class VCardAvatars:
 
         if self._con.get_own_jid().bareMatch(jid):
             if self._con.get_own_jid() == jid:
-                # Reflection of our own presence
-                return
-            self._self_update_received(jid, avatar_sha)
+                # Initial presence reflection
+                if self._con.avatar_conversion:
+                    # XEP-0398: Tells us the current avatar sha on the
+                    # inital presence reflection
+                    self._self_update_received(jid, avatar_sha)
+            else:
+                # Presence from another resource of ours
+                self._self_update_received(jid, avatar_sha)
             return
 
         # Check if presence is from a MUC service
@@ -76,6 +92,9 @@ class VCardAvatars:
         if avatar_sha == '':
             # Empty <photo/> tag, means no avatar is advertised
             log.info('%s has no avatar published', full_jid)
+            app.config.set_per('accounts', self._account, 'avatar_sha', '')
+            app.contacts.set_avatar(self._account, jid, None)
+            app.interface.update_avatar(self._account, jid)
             return
 
         log.info('Update: %s %s', jid, avatar_sha)
@@ -83,8 +102,16 @@ class VCardAvatars:
             'accounts', self._account, 'avatar_sha')
 
         if avatar_sha != current_sha:
-            log.info('Request : %s', jid)
-            self._con.get_module('VCardTemp').request_vcard(RequestAvatar.SELF)
+            path = Path(configpaths.get('AVATAR')) / avatar_sha
+            if path.exists():
+                app.config.set_per(
+                    'accounts', self._account, 'avatar_sha', avatar_sha)
+                app.contacts.set_avatar(self._account, jid, avatar_sha)
+                app.interface.update_avatar(self._account, jid)
+            else:
+                log.info('Request : %s', jid)
+                self._con.get_module('VCardTemp').request_vcard(
+                    RequestAvatar.SELF)
         else:
             log.info('Avatar already known: %s %s',
                      jid, avatar_sha)
@@ -168,10 +195,17 @@ class VCardAvatars:
             else:
                 log.info('Avatar already known: %s', nick)
 
-    def send_avatar_presence(self, force=False):
-        if self.avatar_advertised and not force:
-            log.debug('Avatar already advertised')
-            return
+    def send_avatar_presence(self, force=False, after_publish=False):
+        if self._con.avatar_conversion:
+            if not after_publish:
+                # XEP-0398: We only resend presence after we publish a
+                # new avatar
+                return
+        else:
+            if self.avatar_advertised and not force:
+                log.debug('Avatar already advertised')
+                return
+
         show = helpers.get_xmpp_show(app.SHOW_LIST[self._con.connected])
 
         self._con.get_module('Presence').send_presence(
@@ -180,8 +214,6 @@ class VCardAvatars:
             status=self._con.status)
 
         self.avatar_advertised = True
-        app.interface.update_avatar(self._account,
-                                    self._con.get_own_jid().getStripped())
 
     def add_update_node(self, node):
         update = node.setTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)

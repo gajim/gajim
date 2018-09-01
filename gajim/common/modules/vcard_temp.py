@@ -14,7 +14,6 @@
 
 # XEP-0054: vcard-temp
 
-import os
 import hashlib
 import binascii
 import base64
@@ -23,7 +22,6 @@ import logging
 import nbxmpp
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common.const import RequestAvatar
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.connection_handlers_events import InformationEvent
@@ -156,8 +154,10 @@ class VCardTemp:
                     'accounts', self._account, 'avatar_sha', sha or '')
                 own_jid = self._con.get_own_jid().getStripped()
                 app.contacts.set_avatar(self._account, own_jid, sha)
+                app.interface.update_avatar(
+                    self._account, self._con.get_own_jid().getStripped())
                 self._con.get_module('VCardAvatars').send_avatar_presence(
-                    force=True)
+                    after_publish=True)
             log.info('%s: Published: %s', self._account, sha)
             app.nec.push_incoming_event(
                 VcardPublishedEvent(None, conn=self._con))
@@ -231,28 +231,28 @@ class VCardTemp:
 
         self._own_vcard = vcard
         self.own_vcard_received = True
+
         if avatar_sha is None:
+            # No avatar found in vcard
             log.info('No avatar found')
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
+            app.contacts.set_avatar(self._account, jid, avatar_sha)
             self._con.get_module('VCardAvatars').send_avatar_presence(force=True)
             return
 
-        current_sha = app.config.get_per('accounts', self._account, 'avatar_sha')
+        # Avatar found in vcard
+        current_sha = app.config.get_per(
+            'accounts', self._account, 'avatar_sha')
         if current_sha == avatar_sha:
-            path = os.path.join(configpaths.get('AVATAR'), current_sha)
-            if not os.path.isfile(path):
-                log.info('Caching: %s', current_sha)
-                app.interface.save_avatar(photo_decoded)
             self._con.get_module('VCardAvatars').send_avatar_presence()
         else:
             app.interface.save_avatar(photo_decoded)
+            app.contacts.set_avatar(self._account, jid, avatar_sha)
+            app.config.set_per(
+                'accounts', self._account, 'avatar_sha', avatar_sha)
+            self._con.get_module('VCardAvatars').send_avatar_presence(force=True)
 
-        app.config.set_per('accounts', self._account, 'avatar_sha', avatar_sha)
-        if app.is_invisible(self._account):
-            log.info('We are invisible, not advertising avatar')
-            return
-
-        self._con.get_module('VCardAvatars').send_avatar_presence(force=True)
+        app.interface.update_avatar(self._account, jid)
 
     def _on_room_avatar_received(self, jid, resource, room, vcard,
                                  expected_sha):

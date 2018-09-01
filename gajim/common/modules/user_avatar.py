@@ -107,8 +107,8 @@ class UserAvatar(AbstractPEPModule):
         else:
             own_jid = self._con.get_own_jid().getStripped()
             app.logger.set_avatar_sha(own_jid, jid, sha)
-            app.contacts.set_avatar(self._account, jid, sha)
 
+        app.contacts.set_avatar(self._account, jid, sha)
         app.interface.update_avatar(self._account, jid)
 
     def _extract_info(self, item):
