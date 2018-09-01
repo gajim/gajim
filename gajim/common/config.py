@@ -241,7 +241,6 @@ class Config:
             'roster_window_skip_taskbar': [opt_bool, False, _('Don\'t show roster in the system taskbar.')],
             'use_urgency_hint': [opt_bool, True, _('If true, make the window flash (the default behaviour in most Window Managers) when holding pending events.')],
             'notification_timeout': [opt_int, 5],
-            'send_sha_in_gc_presence': [opt_bool, True, _('Jabberd1.4 does not like sha info when one join a password protected group chat. Turn this option to False to stop sending sha info in group chat presences.')],
             'one_message_window': [opt_str, 'always',
 #always, never, peracct, pertype should not be translated
                     _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the roster.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g. chats vs. groupchats) is sent to a specific window.')],

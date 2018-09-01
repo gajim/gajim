@@ -75,9 +75,7 @@ class Presence:
                 raise nbxmpp.NodeProcessed
 
         if auto_auth or is_transport or jid in self.jids_for_auto_auth:
-            presence = nbxmpp.Presence(fjid, 'subscribed')
-            presence = self._add_sha(presence)
-            self._con.connection.send(presence)
+            self.send_presence(fjid, 'subscribed')
 
         if not status:
             status = _('I would like to add you to my roster.')
@@ -124,17 +122,13 @@ class Presence:
         if not app.account_is_connected(self._account):
             return
         log.info('Subscribed: %s', jid)
-        presence = nbxmpp.Presence(jid, 'subscribed')
-        presence = self._add_sha(presence)
-        self._con.connection.send(presence)
+        self.send_presence(jid, 'subscribed')
 
     def unsubscribed(self, jid):
         if not app.account_is_connected(self._account):
             return
         log.info('Unsubscribed: %s', jid)
-        presence = nbxmpp.Presence(jid, 'unsubscribed')
-        presence = self._add_sha(presence)
-        self._con.connection.send(presence)
+        self.send_presence(jid, 'unsubscribed')
 
     def unsubscribe(self, jid, remove_auth=True):
         if not app.account_is_connected(self._account):
@@ -150,7 +144,7 @@ class Presence:
             self._con.getRoster().Unsubscribe(jid)
             self._con.getRoster().setItem(jid)
 
-    def subscribe(self, jid, msg='', name='', groups=None,
+    def subscribe(self, jid, msg=None, name='', groups=None,
                   auto_auth=False, user_nick=''):
         if not app.account_is_connected(self._account):
             return
@@ -172,28 +166,39 @@ class Presence:
             item.addChild('group').setData(group)
         self._con.connection.send(iq)
 
-        presence = nbxmpp.Presence(jid, 'subscribe')
-        if user_nick:
-            nick = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
-            nick.setData(user_nick)
-        presence = self._add_sha(presence)
-        if msg:
-            presence.setStatus(msg)
+        self.send_presence(jid, 'subscribe', msg)
+
+    def get_presence(self, to=None, typ=None, priority=None,
+                     show=None, status=None, nick=None, caps=True,
+                     sign=None, idle_time=None):
+        presence = nbxmpp.Presence(to, typ, priority, show, status)
+        if nick is not None:
+            nick_tag = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
+            nick_tag.setData(nick)
+
+        if sign:
+            presence.setTag(nbxmpp.NS_SIGNED + ' x').setData(sign)
+
+        if idle_time is not None:
+            idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)
+            idle_node.setAttr('since', idle_time)
+
+        self._con.get_module('VCardAvatars').add_update_node(presence)
+
+        if caps:
+            attrs = {'hash': 'sha-1',
+                     'node': 'http://gajim.org',
+                     'ver': app.caps_hash[self._account]}
+            presence.setTag('c', namespace=nbxmpp.NS_CAPS, attrs=attrs)
+
+        return presence
+
+    def send_presence(self, *args, **kwargs):
+        if not app.account_is_connected(self._account):
+            return
+        presence = self.get_presence(*args, **kwargs)
+        log.debug('Send presence:\n%s', presence)
         self._con.connection.send(presence)
-
-    def _add_sha(self, presence, send_caps=True):
-        vcard = self._con.get_module('VCardAvatars')
-        presence = vcard.add_update_node(presence)
-        if send_caps:
-            return self._add_caps(presence)
-        return presence
-
-    def _add_caps(self, presence):
-        c = presence.setTag('c', namespace=nbxmpp.NS_CAPS)
-        c.setAttr('hash', 'sha-1')
-        c.setAttr('node', 'http://gajim.org')
-        c.setAttr('ver', app.caps_hash[self._account])
-        return presence
 
 
 def parse_show(stanza):

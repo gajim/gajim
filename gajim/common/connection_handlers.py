@@ -422,20 +422,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
-    def add_sha(self, p, send_caps=True):
-        p = self.get_module('VCardAvatars').add_update_node(p)
-        if send_caps:
-            return self._add_caps(p)
-        return p
-
-    def _add_caps(self, p):
-        ''' advertise our capabilities in presence stanza (xep-0115)'''
-        c = p.setTag('c', namespace=nbxmpp.NS_CAPS)
-        c.setAttr('hash', 'sha-1')
-        c.setAttr('node', 'http://gajim.org')
-        c.setAttr('ver', app.caps_hash[self.name])
-        return p
-
     def _ErrorCB(self, con, iq_obj):
         log.debug('ErrorCB')
         app.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
@@ -582,15 +568,14 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
             return
         priority = app.get_priority(self.name, sshow)
-        p = nbxmpp.Presence(typ=None, priority=priority, show=sshow)
-        if msg:
-            p.setStatus(msg)
-        if signed:
-            p.setTag(nbxmpp.NS_SIGNED + ' x').setData(signed)
-        p = self.add_sha(p)
+
+        self.get_module('Presence').send_presence(
+            priority=priority,
+            show=sshow,
+            status=msg,
+            sign=signed)
 
         if self.connection:
-            self.connection.send(p)
             self.priority = priority
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show=show))
