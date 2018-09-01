@@ -30,20 +30,7 @@ from gi.repository import Gio, GLib
 
 log = logging.getLogger('gajim.music_track_listener')
 
-
-def _get_music_players():
-    players = [
-        'org.mpris.MediaPlayer2.audacious',
-        'org.mpris.MediaPlayer2.bmp',
-        'org.mpris.MediaPlayer2.clementine',
-        'org.mpris.MediaPlayer2.GnomeMusic',
-        'org.mpris.MediaPlayer2.quodlibet',
-        'org.mpris.MediaPlayer2.rhythmbox',
-        'org.mpris.MediaPlayer2.vlc',
-        'org.mpris.MediaPlayer2.xmms2'
-    ]
-
-    return players
+MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 
 
 class MusicTrackInfo(object):
@@ -65,22 +52,63 @@ class MusicTrackListener(GObject.GObject):
         return cls._instance
 
     def __init__(self):
-        super(MusicTrackListener, self).__init__()
-        self.con = {}
+        super().__init__()
+        self.players = {}
 
-        players = _get_music_players()
-        for name in players:
-            Gio.bus_watch_name(
-                Gio.BusType.SESSION,
-                name,
-                Gio.BusNameWatcherFlags.NONE,
-                self._appeared,
-                self._vanished)
+        proxy = Gio.DBusProxy.new_for_bus_sync(
+            Gio.BusType.SESSION,
+            Gio.DBusProxyFlags.NONE,
+            None,
+            'org.freedesktop.DBus',
+            '/org/freedesktop/DBus',
+            'org.freedesktop.DBus',
+            None)
 
-    def _appeared(self, connection, name, name_owner, *user_data):
+        self.connection = proxy.get_connection()
+        self.connection.signal_subscribe(
+            'org.freedesktop.DBus',
+            'org.freedesktop.DBus',
+            'NameOwnerChanged',
+            '/org/freedesktop/DBus',
+            None,
+            Gio.DBusSignalFlags.NONE,
+            self._signal_name_owner_changed)
+
+        try:
+            result = proxy.call_sync(
+                'ListNames',
+                None,
+                Gio.DBusCallFlags.NONE,
+                -1,
+                None)
+        except GLib.Error as e:
+            if e.domain == 'g-dbus-error-quark':
+                log.debug("Could not list names: %s", e.message)
+                return
+            else:
+                raise
+
+        for name in result[0]:
+            if name.startswith(MPRIS_PLAYER_PREFIX):
+                self._add_player(name)
+
+    def _signal_name_owner_changed(self, connection, sender_name, object_path,
+                         interface_name, signal_name, parameters, *user_data):
+        name, oldOwner, newOwner = parameters
+        if name.startswith(MPRIS_PLAYER_PREFIX):
+            if newOwner and not oldOwner:
+                self._add_player(name)
+            else:
+                self._remove_player(name)
+
+    def _add_player(self, name):
         '''Set up a listener for music player signals'''
         log.info('%s appeared', name)
-        self.con[name] = connection.signal_subscribe(
+
+        if name in self.players:
+            return
+
+        self.players[name] = self.connection.signal_subscribe(
             name,
             'org.freedesktop.DBus.Properties',
             'PropertiesChanged',
@@ -94,12 +122,12 @@ class MusicTrackListener(GObject.GObject):
         if info is not None:
             self.emit('music-track-changed', info)
 
-    def _vanished(self, connection, name, *user_data):
+    def _remove_player(self, name):
         log.info('%s vanished', name)
-        if name in self.con:
-            connection.signal_unsubscribe(
-                self.con[name])
-            self.con.pop(name)
+        if name in self.players:
+            self.connection.signal_unsubscribe(
+                self.players[name])
+            self.players.pop(name)
 
             self.emit('music-track-changed', None)
 
@@ -176,4 +204,4 @@ if __name__ == '__main__':
             print(music_track_info.title)
     listener = MusicTrackListener.get()
     listener.connect('music-track-changed', music_track_change_cb)
-    GObject.MainLoop().run()
+    GLib.MainLoop().run()
