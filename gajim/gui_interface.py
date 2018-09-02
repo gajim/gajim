@@ -2099,11 +2099,13 @@ class Interface:
         if not self.music_track_changed_signal:
             self.music_track_changed_signal = listener.connect(
                 'music-track-changed', self.music_track_changed)
+            listener.start()
 
     def disable_music_listener(self):
         listener = MusicTrackListener.get()
         listener.disconnect(self.music_track_changed_signal)
         self.music_track_changed_signal = None
+        listener.stop()
 
     @staticmethod
     def music_track_changed(unused_listener, music_track_info, account=None):
