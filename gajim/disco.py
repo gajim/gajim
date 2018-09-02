@@ -1569,11 +1569,14 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _update_info(self, iter_, jid, node, identities, features, data):
         addr = get_agent_address(jid, node)
-        name = identities[0].get('name', '')
-        if name:
-            descr = "<b>%s</b>\n%s" % (name, addr)
-        else:
+        if not identities:
             descr = "<b>%s</b>" % addr
+        else:
+            name = identities[0].get('name', '')
+            if name:
+                descr = "<b>%s</b>\n%s" % (name, addr)
+            else:
+                descr = "<b>%s</b>" % addr
 
         # Update progress
         self._progress += 1
