@@ -55,6 +55,7 @@ class MusicTrackListener(GObject.GObject):
         super().__init__()
         self.players = {}
 
+    def start(self):
         proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -91,6 +92,11 @@ class MusicTrackListener(GObject.GObject):
         for name in result[0]:
             if name.startswith(MPRIS_PLAYER_PREFIX):
                 self._add_player(name)
+
+    def stop(self):
+        for name in list(self.players):
+            if name.startswith(MPRIS_PLAYER_PREFIX):
+                self._remove_player(name)
 
     def _signal_name_owner_changed(self, connection, sender_name, object_path,
                          interface_name, signal_name, parameters, *user_data):
@@ -204,4 +210,5 @@ if __name__ == '__main__':
             print(music_track_info.title)
     listener = MusicTrackListener.get()
     listener.connect('music-track-changed', music_track_change_cb)
+    listener.start()
     GLib.MainLoop().run()
