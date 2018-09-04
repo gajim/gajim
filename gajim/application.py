@@ -1,50 +1,44 @@
-# -*- coding:utf-8 -*-
-## src/gajim.py
-##
-## Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
-## Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
-##                    Norman Rasmussen <norman AT rasmussen.co.za>
-##                    Stéphan Kochen <stephan AT kochen.nl>
-## Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
-##                         Alex Mauer <hawke AT hawkesnest.net>
-## Copyright (C) 2005-2007 Travis Shirk <travis AT pobox.com>
-##                         Nikos Kouremenos <kourem AT gmail.com>
-## Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
-##                    Stefan Bethge <stefan AT lanpartei.de>
-## Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
-##                    James Newton <redshodan AT gmail.com>
-## Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
-##                         Julien Pivotto <roidelapluie AT gmail.com>
-##                         Stephan Erb <steve-e AT h3c.de>
-## Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
-## Copyright (C) 2016-2017 Emmanuel Gil Peyrot <linkmauve AT linkmauve.fr>
-##                         Philipp Hörist <philipp AT hoerist.com>
-##
-## This file is part of Gajim.
-##
-## Gajim is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 3 only.
-##
-## Gajim is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
-##
+# Copyright (C) 2003-2017 Yann Leboulanger <asterix AT lagaule.org>
+# Copyright (C) 2004-2005 Vincent Hanquez <tab AT snarc.org>
+# Copyright (C) 2005 Alex Podaras <bigpod AT gmail.com>
+#                    Norman Rasmussen <norman AT rasmussen.co.za>
+#                    Stéphan Kochen <stephan AT kochen.nl>
+# Copyright (C) 2005-2006 Dimitur Kirov <dkirov AT gmail.com>
+#                         Alex Mauer <hawke AT hawkesnest.net>
+# Copyright (C) 2005-2007 Travis Shirk <travis AT pobox.com>
+#                         Nikos Kouremenos <kourem AT gmail.com>
+# Copyright (C) 2006 Junglecow J <junglecow AT gmail.com>
+#                    Stefan Bethge <stefan AT lanpartei.de>
+# Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+# Copyright (C) 2007 Lukas Petrovicky <lukas AT petrovicky.net>
+#                    James Newton <redshodan AT gmail.com>
+# Copyright (C) 2007-2008 Brendan Taylor <whateley AT gmail.com>
+#                         Julien Pivotto <roidelapluie AT gmail.com>
+#                         Stephan Erb <steve-e AT h3c.de>
+# Copyright (C) 2008 Jonathan Schleifer <js-gajim AT webkeks.org>
+# Copyright (C) 2016-2017 Emmanuel Gil Peyrot <linkmauve AT linkmauve.fr>
+#                         Philipp Hörist <philipp AT hoerist.com>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import os
 from urllib.parse import unquote
 
 from gi.repository import GLib, Gio, Gtk
 
 from gajim.common import app
-from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common import exceptions
@@ -56,47 +50,91 @@ class GajimApplication(Gtk.Application):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
-        Gtk.Application.__init__(self, application_id='org.gajim.Gajim',
-                                 flags=(
-                                    Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
-                                    Gio.ApplicationFlags.HANDLES_OPEN))
+        flags = (Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
+                 Gio.ApplicationFlags.HANDLES_OPEN)
+        Gtk.Application.__init__(self,
+                                 application_id='org.gajim.Gajim',
+                                 flags=flags)
 
-        self.add_main_option('version', ord('V'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Show the application\'s version'))
-        self.add_main_option('quiet', ord('q'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Show only critical errors'))
-        self.add_main_option('separate', ord('s'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Separate profile files completely (even '
-                               'history database and plugins)'))
-        self.add_main_option('verbose', ord('v'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Print XML stanzas and other debug '
-                               'information'))
-        self.add_main_option('profile', ord('p'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.STRING,
-                             _('Use defined profile in configuration '
-                               'directory'), 'NAME')
-        self.add_main_option('config-path', ord('c'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.STRING,
-                             _('Set configuration directory'), 'PATH')
-        self.add_main_option('loglevel', ord('l'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.STRING,
-                             _('Configure logging system'), 'LEVEL')
-        self.add_main_option('warnings', ord('w'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Show all warnings'))
-        self.add_main_option('ipython', ord('i'), GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Open IPython shell'))
-        self.add_main_option('show-next-pending-event', 0, GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Pops up a window with the next pending event'))
-        self.add_main_option('start-chat', 0, GLib.OptionFlags.NONE,
-                             GLib.OptionArg.NONE,
-                             _('Start a new chat'))
+        self.add_main_option(
+            'version',
+            ord('V'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Show the application\'s version'))
+
+        self.add_main_option(
+            'quiet',
+            ord('q'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Show only critical errors'))
+
+        self.add_main_option(
+            'separate',
+            ord('s'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Separate profile files completely '
+              '(even history database and plugins)'))
+
+        self.add_main_option(
+            'verbose',
+            ord('v'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Print XML stanzas and other debug information'))
+
+        self.add_main_option(
+            'profile',
+            ord('p'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _('Use defined profile in configuration directory'),
+            'NAME')
+
+        self.add_main_option(
+            'config-path',
+            ord('c'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _('Set configuration directory'),
+            'PATH')
+
+        self.add_main_option(
+            'loglevel',
+            ord('l'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _('Configure logging system'),
+            'LEVEL')
+
+        self.add_main_option(
+            'warnings',
+            ord('w'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Show all warnings'))
+
+        self.add_main_option(
+            'ipython',
+            ord('i'),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Open IPython shell'))
+
+        self.add_main_option(
+            'show-next-pending-event',
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Pops up a window with the next pending event'))
+
+        self.add_main_option(
+            'start-chat', 0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Start a new chat'))
 
         self.add_main_option_entries(self._get_remaining_entry())
 
@@ -186,11 +224,12 @@ class GajimApplication(Gtk.Application):
                 attributes = cmd.split(';')
                 message = None
                 for key in attributes:
-                    if key.startswith('body'):
-                        try:
-                            message = unquote(key.split('=')[1])
-                        except Exception:
-                            app.log('uri_handler').error('Invalid URI: %s', cmd)
+                    if not key.startswith('body'):
+                        continue
+                    try:
+                        message = unquote(key.split('=')[1])
+                    except Exception:
+                        app.log('uri_handler').error('Invalid URI: %s', cmd)
                 accounts = list(app.connections.keys())
                 if not accounts:
                     continue
@@ -339,33 +378,31 @@ class GajimApplication(Gtk.Application):
             self.add_account_actions(accounts_list[0])
 
     def _get_account_actions(self, account):
-        from gajim import app_actions
+        from gajim import app_actions as a
 
         if account == 'Local':
             return [
-                ('-xml-console', app_actions.on_xml_console, 'always', 's')
+                ('-xml-console', a.on_xml_console, 'always', 's')
             ]
 
         return [
-            ('-start-single-chat', app_actions.on_single_message, 'online', 's'),
-            ('-join-groupchat', app_actions.on_join_gc, 'online', 's'),
-            ('-add-contact', app_actions.on_add_contact, 'online', 's'),
-            ('-services', app_actions.on_service_disco, 'online', 's'),
-            ('-profile', app_actions.on_profile, 'feature', 's'),
-            ('-xml-console', app_actions.on_xml_console, 'always', 's'),
-            ('-server-info', app_actions.on_server_info, 'online', 's'),
-            ('-archive', app_actions.on_mam_preferences, 'feature', 's'),
-            ('-sync-history', app_actions.on_history_sync, 'online', 's'),
-            ('-privacylists', app_actions.on_privacy_lists, 'feature', 's'),
-            ('-send-server-message',
-                app_actions.on_send_server_message, 'online', 's'),
-            ('-set-motd', app_actions.on_set_motd, 'online', 's'),
-            ('-update-motd', app_actions.on_update_motd, 'online', 's'),
-            ('-delete-motd', app_actions.on_delete_motd, 'online', 's'),
-            ('-activate-bookmark',
-                app_actions.on_activate_bookmark, 'online', 'a{sv}'),
-            ('-open-event', app_actions.on_open_event, 'always', 'a{sv}'),
-            ('-import-contacts', app_actions.on_import_contacts, 'online', 's'),
+            ('-start-single-chat', a.on_single_message, 'online', 's'),
+            ('-join-groupchat', a.on_join_gc, 'online', 's'),
+            ('-add-contact', a.on_add_contact, 'online', 's'),
+            ('-services', a.on_service_disco, 'online', 's'),
+            ('-profile', a.on_profile, 'feature', 's'),
+            ('-xml-console', a.on_xml_console, 'always', 's'),
+            ('-server-info', a.on_server_info, 'online', 's'),
+            ('-archive', a.on_mam_preferences, 'feature', 's'),
+            ('-sync-history', a.on_history_sync, 'online', 's'),
+            ('-privacylists', a.on_privacy_lists, 'feature', 's'),
+            ('-send-server-message', a.on_send_server_message, 'online', 's'),
+            ('-set-motd', a.on_set_motd, 'online', 's'),
+            ('-update-motd', a.on_update_motd, 'online', 's'),
+            ('-delete-motd', a.on_delete_motd, 'online', 's'),
+            ('-activate-bookmark', a.on_activate_bookmark, 'online', 'a{sv}'),
+            ('-open-event', a.on_open_event, 'always', 'a{sv}'),
+            ('-import-contacts', a.on_import_contacts, 'online', 's'),
         ]
 
     def add_account_actions(self, account):
