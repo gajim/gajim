@@ -261,12 +261,16 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         if not add_bookmark:
             return
 
-        autojoin = int(self.autojoin_switch.get_active())
+        autojoin = self.autojoin_switch.get_active()
 
         # Add as bookmark, with autojoin and not minimized
         name = app.get_nick_from_jid(self.room_jid)
-        con.get_module('Bookmarks').add_bookmark(
-            name, self.room_jid, autojoin, 1, password, nickname)
+        con.get_module('Bookmarks').add_bookmark(name,
+                                                 self.room_jid,
+                                                 autojoin,
+                                                 True,
+                                                 password,
+                                                 nickname)
 
     def _on_search_clicked(self, widget):
         server = self.server_combo.get_active_text().strip()

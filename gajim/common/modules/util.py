@@ -39,3 +39,36 @@ def is_muc_pm(message, jid, groupchat=False):
         if app.logger.jid_is_room_jid(jid.getStripped()):
             return True
         return False
+
+
+def from_xs_boolean(value):
+    # Convert a xs:boolean ('true', 'false', '1', '0', '')
+    # to a python boolean (True, False)
+    if value in (True, False):
+        return value
+
+    if value in ('1', 'true'):
+        return True
+
+    # '0', 'false' or empty
+    if value in ('0', 'false', ''):
+        return False
+
+    raise ValueError(
+        'Cant convert %s to python boolean' % value)
+
+
+def to_xs_boolean(value):
+    # Convert to xs:boolean ('true', 'false')
+    # from a python boolean (True, False) or None
+    if value in ('true', 'false'):
+        return value
+
+    if value is True:
+        return 'true'
+
+    if value in (False, None):
+        return 'false'
+
+    raise ValueError(
+        'Cant convert %s to xs:boolean' % value)

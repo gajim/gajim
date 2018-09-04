@@ -48,22 +48,14 @@ class ManageBookmarksWindow:
             bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks()
 
             for jid, bookmark in bookmarks.items():
-
-                # make '1', '0', 'true', 'false' (or other) to True/False
-                autojoin = helpers.from_xs_boolean_to_python_boolean(
-                    bookmark['autojoin'])
-
-                minimize = helpers.from_xs_boolean_to_python_boolean(
-                    bookmark['minimize'])
-
                 print_status = bookmark.get('print_status', '')
                 if print_status not in ('', 'all', 'in_and_out', 'none'):
                     print_status = ''
                 self.treestore.append(iter_, [account,
                                               bookmark['name'],
                                               jid,
-                                              autojoin,
-                                              minimize,
+                                              bookmark['autojoin'],
+                                              bookmark['minimize'],
                                               bookmark['password'],
                                               bookmark['nick'],
                                               print_status,
@@ -211,23 +203,16 @@ class ManageBookmarksWindow:
             con.get_module('Bookmarks').bookmarks = {}
 
             for bm in account.iterchildren():
-                # Convert True/False/None to '1' or '0'
-                autojoin = str(int(bm[3]))
-                minimize = str(int(bm[4]))
-                name = bm[1]
-                jid = bm[2]
-                pw = bm[5]
-                nick = bm[6]
-
                 # create the bookmark-dict
                 bmdict = {
-                    'name': name,
-                    'autojoin': autojoin,
-                    'minimize': minimize,
-                    'password': pw,
-                    'nick': nick,
+                    'name': bm[1],
+                    'autojoin': bm[3],
+                    'minimize': bm[4],
+                    'password': bm[5],
+                    'nick': bm[6],
                     'print_status': bm[7]}
 
+                jid = bm[2]
                 con.get_module('Bookmarks').bookmarks[jid] = bmdict
 
             con.get_module('Bookmarks').store_bookmarks()

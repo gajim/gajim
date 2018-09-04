@@ -499,16 +499,6 @@ def get_file_path_from_dnd_dropped_uri(uri):
         path = path[5:] # 5 is len('file:')
     return path
 
-def from_xs_boolean_to_python_boolean(value):
-    # this is xs:boolean so 'true', 'false', '1', '0'
-    # convert those to True/False (python booleans)
-    if value in ('1', 'true'):
-        val = True
-    else: # '0', 'false' or anything else
-        val = False
-
-    return val
-
 def get_xmpp_show(show):
     if show in ('online', 'offline'):
         return None

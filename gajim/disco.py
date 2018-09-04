@@ -1708,19 +1708,11 @@ class MucBrowser(AgentBrowser):
 
     def on_bookmark_button_clicked(self, *args):
         con = app.connections[self.account]
-        model, iter = self.window.services_treeview.get_selection().get_selected()
-        if not iter:
+        model, iter_ = self.window.services_treeview.get_selection().get_selected()
+        if not iter_:
             return
-        name = app.config.get_per('accounts', self.account, 'name')
-        room_jid = model[iter][0]
-        bm = {
-            'name': room_jid.split('@')[0],
-            'autojoin': '0',
-            'minimize': '0',
-            'password': '',
-            'nick': name
-        }
 
+        room_jid = model[iter_][0]
         if room_jid in con.get_module('Bookmarks').bookmarks:
             ErrorDialog(
                 _('Bookmark already set'),
@@ -1728,10 +1720,12 @@ class MucBrowser(AgentBrowser):
                 transient_for=self.window.window)
             return
 
-        con.get_module('Bookmarks').bookmarks[room_jid] = bm
-        con.get_module('Bookmarks').store_bookmarks()
-
-        gui_menu_builder.build_bookmark_menu(self.account)
+        con.get_module('Bookmarks').add_bookmark(room_jid.split('@')[0],
+                                                 room_jid,
+                                                 False,
+                                                 False,
+                                                 ''
+                                                 '')
 
         InformationDialog(
             _('Bookmark has been added successfully'),
