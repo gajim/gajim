@@ -715,9 +715,12 @@ class GroupchatControl(ChatControlBase):
         """
         password = app.gc_passwords.get(self.room_jid, '')
         con = app.connections[self.account]
-        con.get_module('Bookmarks').add_bookmark(
-            self.name, self.room_jid,
-            '1', '1', password, self.nick)
+        con.get_module('Bookmarks').add_bookmark(self.name,
+                                                 self.room_jid,
+                                                 True,
+                                                 True,
+                                                 password,
+                                                 self.nick)
         self.update_actions()
 
     def _on_request_voice(self, action, param):

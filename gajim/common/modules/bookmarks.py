@@ -24,6 +24,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import BookmarkStorageType
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.util import from_xs_boolean
+from gajim.common.modules.util import to_xs_boolean
 
 log = logging.getLogger('gajim.c.m.bookmarks')
 
@@ -193,8 +195,8 @@ class Bookmarks:
             log.debug('Found Bookmark: %s', jid)
             self.bookmarks[jid] = {
                 'name': conf.getAttr('name'),
-                'autojoin': autojoin_val,
-                'minimize': minimize_val,
+                'autojoin': from_xs_boolean(autojoin_val),
+                'minimize': from_xs_boolean(minimize_val),
                 'password': conf.getTagData('password'),
                 'nick': conf.getTagData('nick'),
                 'print_status': print_status}
@@ -208,10 +210,10 @@ class Bookmarks:
         for jid, bm in self.bookmarks.items():
             conf_node = storage_node.addChild(name="conference")
             conf_node.setAttr('jid', jid)
-            conf_node.setAttr('autojoin', bm['autojoin'])
+            conf_node.setAttr('autojoin', to_xs_boolean(bm['autojoin']))
             conf_node.setAttr('name', bm['name'])
-            conf_node.setTag(
-                'minimize', namespace=NS_GAJIM_BM).setData(bm['minimize'])
+            conf_node.setTag('minimize', namespace=NS_GAJIM_BM).setData(
+                to_xs_boolean(bm['minimize']))
             # Only add optional elements if not empty
             # Note: need to handle both None and '' as empty
             #   thus shouldn't use "is not None"
@@ -279,15 +281,14 @@ class Bookmarks:
         if app.is_invisible(self._account):
             return
         for jid, bm in self.bookmarks.items():
-            if bm['autojoin'] in ('1', 'true'):
+            if bm['autojoin']:
                 # Only join non-opened groupchats. Opened one are already
                 # auto-joined on re-connection
                 if jid not in app.gc_connected[self._account]:
                     # we are not already connected
-                    minimize = bm['minimize'] in ('1', 'true')
                     app.interface.join_gc_room(
                         self._account, jid, bm['nick'],
-                        bm['password'], minimize=minimize)
+                        bm['password'], minimize=bm['minimize'])
 
     def add_bookmark(self, name, jid, autojoin,
                      minimize, password, nick):
