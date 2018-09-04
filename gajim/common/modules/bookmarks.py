@@ -15,6 +15,8 @@
 # XEP-0048: Bookmarks
 
 import logging
+import copy
+from collections import OrderedDict
 
 import nbxmpp
 
@@ -34,6 +36,27 @@ class Bookmarks:
         self.available = False
 
         self.handlers = []
+
+    def get_sorted_bookmarks(self, short_name=False):
+        # This returns a sorted by name copy of the bookmarks
+        sorted_bookmarks = {}
+        for jid, bookmarks in self.bookmarks.items():
+            bookmark_copy = copy.deepcopy(bookmarks)
+            if not bookmark_copy['name']:
+                # No name was given for this bookmark
+                # Use the first part of JID instead
+                name = jid.split("@")[0]
+                bookmark_copy['name'] = name
+
+            if short_name:
+                name = bookmark_copy['name']
+                name = (name[:42] + '..') if len(name) > 42 else name
+                bookmark_copy['name'] = name
+
+            sorted_bookmarks[jid] = bookmark_copy
+        return OrderedDict(
+            sorted(sorted_bookmarks.items(),
+                   key=lambda bookmark: bookmark[1]['name'].lower()))
 
     def _pubsub_support(self):
         return (self._con.get_module('PEP').supported and

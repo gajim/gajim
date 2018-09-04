@@ -679,7 +679,8 @@ def get_groupchat_menu(control_id):
 
 def get_bookmarks_menu(account, rebuild=False):
     con = app.connections[account]
-    boomarks = con.get_module('Bookmarks').bookmarks
+    boomarks = con.get_module('Bookmarks').get_sorted_bookmarks(
+        short_name=True)
     if not boomarks:
         return None
     menu = Gio.Menu()
@@ -695,13 +696,6 @@ def get_bookmarks_menu(account, rebuild=False):
     section = Gio.Menu()
     for jid, bookmark in boomarks.items():
         name = bookmark['name']
-        if not name:
-            # No name was given for this bookmark.
-            # Use the first part of JID instead...
-            name = jid.split("@")[0]
-
-        # Shorten long names
-        name = (name[:42] + '..') if len(name) > 42 else name
 
         action = 'app.{}-activate-bookmark'.format(account)
         menuitem = Gio.MenuItem.new(name, action)
