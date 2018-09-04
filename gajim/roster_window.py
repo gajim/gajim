@@ -5488,15 +5488,10 @@ class RosterWindow:
             item = Gtk.SeparatorMenuItem.new()
             gc_sub_menu.append(item)
 
-        for jid, bookmark in con.get_module('Bookmarks').bookmarks.items():
+        bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks(
+            short_name=True)
+        for jid, bookmark in bookmarks.items():
             name = bookmark['name']
-            if not name:
-                # No name was given for this bookmark.
-                # Use the first part of JID instead...
-                name = jid.split("@")[0]
-
-            # Shorten long names
-            name = (name[:42] + '..') if len(name) > 42 else name
 
             # Do not use underline.
             item = Gtk.MenuItem.new_with_label(name)

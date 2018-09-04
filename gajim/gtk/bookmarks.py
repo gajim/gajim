@@ -45,13 +45,9 @@ class ManageBookmarksWindow:
                 None, None, None, None, account_label])
 
             con = app.connections[account]
-            bookmarks = con.get_module('Bookmarks').bookmarks
+            bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks()
+
             for jid, bookmark in bookmarks.items():
-                if not bookmark['name']:
-                    # No name was given for this bookmark.
-                    # Use the first part of JID instead...
-                    name = jid.split("@")[0]
-                    bookmark['name'] = name
 
                 # make '1', '0', 'true', 'false' (or other) to True/False
                 autojoin = helpers.from_xs_boolean_to_python_boolean(
