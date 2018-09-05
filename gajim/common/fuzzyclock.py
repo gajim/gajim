@@ -1,25 +1,21 @@
-# -*- coding:utf-8 -*-
-## src/common/fuzzyclock.py
-##
-## Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
-## Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
-## Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
-## Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
-##
-## This file is part of Gajim.
-##
-## Gajim is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 3 only.
-##
-## Gajim is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim. If not, see <http://www.gnu.org/licenses/>.
-##
+# Copyright (C) 2006 Christoph Neuroth <delmonico AT gmx.net>
+# Copyright (C) 2006-2014 Yann Leboulanger <asterix AT lagaule.org>
+# Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
+# Copyright (C) 2009 Benjamin Richter <br AT waldteufel-online.net>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 """
 Python class to show a "fuzzy clock".
