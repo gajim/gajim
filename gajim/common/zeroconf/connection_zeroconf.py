@@ -1,35 +1,31 @@
-##      common/zeroconf/connection_zeroconf.py
-##
-## Contributors for this file:
-##      - Yann Leboulanger <asterix@lagaule.org>
-##      - Nikos Kouremenos <nkour@jabber.org>
-##      - Dimitur Kirov <dkirov@gmail.com>
-##      - Travis Shirk <travis@pobox.com>
-## - Stefan Bethge <stefan@lanpartei.de>
-##
-## Copyright (C) 2003-2014 Yann Leboulanger <asterix@lagaule.org>
-## Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
-## Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
-##                    Dimitur Kirov <dkirov@gmail.com>
-##                    Travis Shirk <travis@pobox.com>
-##                    Norman Rasmussen <norman@rasmussen.co.za>
-##                    Stefan Bethge <stefan@lanpartei.de>
-##
-## This file is part of Gajim.
-##
-## Gajim is free software; you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published
-## by the Free Software Foundation; version 3 only.
-##
-## Gajim is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
-##
-
+# Contributors for this file:
+#      - Yann Leboulanger <asterix@lagaule.org>
+#      - Nikos Kouremenos <nkour@jabber.org>
+#      - Dimitur Kirov <dkirov@gmail.com>
+#      - Travis Shirk <travis@pobox.com>
+# - Stefan Bethge <stefan@lanpartei.de>
+#
+# Copyright (C) 2003-2014 Yann Leboulanger <asterix@lagaule.org>
+# Copyright (C) 2003-2004 Vincent Hanquez <tab@snarc.org>
+# Copyright (C) 2006 Nikos Kouremenos <nkour@jabber.org>
+#                    Dimitur Kirov <dkirov@gmail.com>
+#                    Travis Shirk <travis@pobox.com>
+#                    Norman Rasmussen <norman@rasmussen.co.za>
+#                    Stefan Bethge <stefan@lanpartei.de>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import socket

@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 #
 # This file is part of Gajim.

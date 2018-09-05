@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2005 Sebastian Estienne
 # Copyright (C) 2005-2006 Andrew Sayman <lorien420 AT myrealbox.com>
 # Copyright (C) 2005-2007 Nikos Kouremenos <kourem AT gmail.com>
