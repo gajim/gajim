@@ -27,6 +27,7 @@ from gajim.common.zeroconf import zeroconf
 
 from nbxmpp.protocol import *
 import socket
+import platform
 import ssl
 import errno
 import sys
@@ -73,8 +74,7 @@ class ZeroconfListener(IdleObject):
         self._serv.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
         self._serv.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         if os.name == 'nt':
-            ver = os.sys.getwindowsversion()
-            if (ver[3], ver[0]) == (2, 6): # Win Vista +
+            if int(platform.win32_ver()[0]) >= 6:  # Win Vista +
                 # 47 is socket.IPPROTO_IPV6
                 # 27 is socket.IPV6_V6ONLY under windows, but not defined ...
                 self._serv.setsockopt(41, 27, 0)
