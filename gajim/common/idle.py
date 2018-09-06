@@ -257,7 +257,6 @@ class IdleMonitor:
             return True
 
         idle_time = self.get_idle_sec()
-        log.info('Idle time: %s', idle_time)
 
         # xa is stronger than away so check for xa first
         if idle_time > self._xa_interval:
