@@ -168,6 +168,13 @@ class WindowsIdleMonitor:
         info = self.SystemParametersInfo(0x72, 0, ctypes.byref(saver_runing), 0)
         if info and saver_runing.value:
             return True
+
+        # Check if Screen is locked
+        desk = self.OpenInputDesktop(0, False, 0)
+        if not desk:
+            return True
+        self.CloseDesktop(desk)
+
         return False
 
 
