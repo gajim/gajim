@@ -20,6 +20,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import time
 import ctypes
 import ctypes.util
 import logging
@@ -151,6 +152,8 @@ class WindowsIdleMonitor:
         self.GetTickCount = ctypes.windll.kernel32.GetTickCount
         self.GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
 
+        self._locked_time = None
+
         class LASTINPUTINFO(ctypes.Structure):
             _fields_ = [('cbSize', ctypes.c_uint), ('dwTime', ctypes.c_uint)]
 
@@ -165,17 +168,29 @@ class WindowsIdleMonitor:
         # Check if Screen Saver is running
         # 0x72 is SPI_GETSCREENSAVERRUNNING
         saver_runing = ctypes.c_int(0)
-        info = self.SystemParametersInfo(0x72, 0, ctypes.byref(saver_runing), 0)
+        info = self.SystemParametersInfo(
+            0x72, 0, ctypes.byref(saver_runing), 0)
         if info and saver_runing.value:
             return True
 
         # Check if Screen is locked
+        # Also a UAC prompt counts as locked
+        # So just return True if we are more than 10 seconds locked
         desk = self.OpenInputDesktop(0, False, 0)
-        if not desk:
-            return True
+        unlocked = bool(desk)
         self.CloseDesktop(desk)
 
-        return False
+        if unlocked:
+            self._locked_time = None
+            return False
+
+        if self._locked_time is None:
+            self._locked_time = time.time()
+            return False
+
+        threshold = time.time() - 10
+        if threshold > self._locked_time:
+            return True
 
 
 class IdleMonitor:
