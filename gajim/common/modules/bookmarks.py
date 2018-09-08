@@ -305,10 +305,11 @@ class Bookmarks:
             None, account=self._account))
 
     def get_name_from_bookmark(self, jid):
+        fallback = jid.split('@')[0]
         try:
-            return self.bookmarks[jid]['name']
+            return self.bookmarks[jid]['name'] or fallback
         except KeyError:
-            return jid.split('@')[0]
+            return fallback
 
     def purge_pubsub_bookmarks(self):
         log.info('Purge/Delete Bookmarks on PubSub, '
