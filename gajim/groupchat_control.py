@@ -399,11 +399,15 @@ class GroupchatControl(ChatControlBase):
         hpaned_position = app.config.get('gc-hpaned-position')
         self.hpaned.set_position(hpaned_position)
 
+        # Holds the Gtk.TreeRowReference for each contact
+        self._contact_refs = {}
+        # Holds the Gtk.TreeRowReference for each role
+        self._role_refs = {}
+
         #status_image, shown_nick, type, nickname, avatar
         self.columns = [Gtk.Image, str, str, str, Gtk.Image]
         self.model = Gtk.TreeStore(*self.columns)
         self.model.set_sort_func(Column.NICK, self.tree_compare_iters)
-        self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
 
         # columns
         column = Gtk.TreeViewColumn()
@@ -1297,16 +1301,11 @@ class GroupchatControl(ChatControlBase):
             app.interface.roster.draw_contact(self.room_jid, self.account)
 
     def get_contact_iter(self, nick):
-        role_iter = self.model.get_iter_first()
-        while role_iter:
-            user_iter = self.model.iter_children(role_iter)
-            while user_iter:
-                if nick == self.model[user_iter][Column.NICK]:
-                    return user_iter
-                else:
-                    user_iter = self.model.iter_next(user_iter)
-            role_iter = self.model.iter_next(role_iter)
-        return None
+        try:
+            ref = self._contact_refs[nick]
+            return self.model.get_iter(ref.get_path())
+        except KeyError:
+            return None
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
     displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
@@ -1606,6 +1605,9 @@ class GroupchatControl(ChatControlBase):
 
         app.gc_connected[self.account][self.room_jid] = True
         ChatControlBase.got_connected(self)
+
+        # Sort model and assign it to treeview
+        self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
         self.list_treeview.set_model(self.model)
         self.list_treeview.expand_all()
         # We don't redraw the whole banner here, because only icon change
@@ -1621,7 +1623,12 @@ class GroupchatControl(ChatControlBase):
     def got_disconnected(self):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
+
+        self.model.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+                                      Gtk.SortType.ASCENDING)
         self.list_treeview.set_model(None)
+        self._contact_refs = {}
+        self._role_refs = {}
         self.model.clear()
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:
@@ -2028,7 +2035,7 @@ class GroupchatControl(ChatControlBase):
                 self.update_actions()
 
     def add_contact_to_roster(self, nick, show, role, affiliation, status,
-    jid='', avatar_sha=None):
+                              jid='', avatar_sha=None):
         role_name = helpers.get_uf_role(role, plural=True)
 
         resource = ''
@@ -2042,43 +2049,57 @@ class GroupchatControl(ChatControlBase):
 
         name = nick
 
+        # Add Contact
+        gc_contact = app.contacts.create_gc_contact(
+            room_jid=self.room_jid, account=self.account,
+            name=nick, show=show, status=status, role=role,
+            affiliation=affiliation, jid=j, resource=resource,
+            avatar_sha=avatar_sha)
+        app.contacts.add_gc_contact(self.account, gc_contact)
+
+        # Create Role
         role_iter = self.get_role_iter(role)
         if not role_iter:
-            image = gtkgui_helpers.get_image_from_icon_name('closed', self.scale_factor)
-            role_iter = self.model.append(None,
-                [image, role, 'role', role_name,  None] + [None] * self.nb_ext_renderers)
+            image = gtkgui_helpers.get_image_from_icon_name('closed',
+                                                            self.scale_factor)
+            ext_columns = [None] * self.nb_ext_renderers
+            row = [image, role, 'role', role_name, None] + ext_columns
+            role_iter = self.model.append(None, row)
+            self._role_refs[role] = Gtk.TreeRowReference(
+                self.model, self.model.get_path(role_iter))
             self.draw_all_roles()
-        iter_ = self.model.append(role_iter, [None, nick, 'contact', name, None] + \
-                [None] * self.nb_ext_renderers)
-        if not nick in app.contacts.get_nick_list(self.account,
-        self.room_jid):
-            gc_contact = app.contacts.create_gc_contact(
-                room_jid=self.room_jid, account=self.account,
-                name=nick, show=show, status=status, role=role,
-                affiliation=affiliation, jid=j, resource=resource,
-                avatar_sha=avatar_sha)
-            app.contacts.add_gc_contact(self.account, gc_contact)
-        else:
-            gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
-        self.draw_contact(nick)
-        self.draw_avatar(gc_contact)
 
-        if nick == self.nick: # we became online
+        # Avatar
+        image = None
+        if app.config.get('show_avatars_in_roster'):
+            surface = app.interface.get_avatar(
+                avatar_sha, AvatarSize.ROSTER, self.scale_factor)
+            image = Gtk.Image.new_from_surface(surface)
+
+        # Add to model
+        ext_columns = [None] * self.nb_ext_renderers
+        row = [image, nick, 'contact', name, None] + ext_columns
+        iter_ = self.model.append(role_iter, row)
+        self._contact_refs[nick] = Gtk.TreeRowReference(
+            self.model, self.model.get_path(iter_))
+
+        self.draw_contact(nick)
+
+        if nick == self.nick:  # we became online
             self.got_connected()
         if self.list_treeview.get_model():
-            self.list_treeview.expand_row((self.model.get_path(role_iter)), False)
+            self.list_treeview.expand_row(
+                (self.model.get_path(role_iter)), False)
         if self.is_continued:
             self.draw_banner_text()
         return iter_
 
     def get_role_iter(self, role):
-        role_iter = self.model.get_iter_first()
-        while role_iter:
-            role_name = self.model[role_iter][Column.NICK]
-            if role == role_name:
-                return role_iter
-            role_iter = self.model.iter_next(role_iter)
-        return None
+        try:
+            ref = self._role_refs[role]
+            return self.model.get_iter(ref.get_path())
+        except KeyError:
+            return None
 
     def remove_contact(self, nick):
         """
@@ -2087,13 +2108,20 @@ class GroupchatControl(ChatControlBase):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
             return
-        gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid,
-                nick)
+        gc_contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, nick)
         if gc_contact:
             app.contacts.remove_gc_contact(self.account, gc_contact)
+
         parent_iter = self.model.iter_parent(iter_)
+        if parent_iter is None:
+            # This is not a child, should never happen
+            return
         self.model.remove(iter_)
+        del self._contact_refs[nick]
         if self.model.iter_n_children(parent_iter) == 0:
+            role = self.model[parent_iter][Column.NICK]
+            del self._role_refs[role]
             self.model.remove(parent_iter)
 
     def _message_sent(self, obj):

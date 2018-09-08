@@ -643,10 +643,10 @@ class GC_Contacts():
         return list(self._rooms[room_jid].keys())
 
     def get_gc_contact(self, room_jid, nick):
-        nick_list = self.get_nick_list(room_jid)
-        if not nick in nick_list:
+        try:
+            return self._rooms[room_jid][nick]
+        except KeyError:
             return None
-        return self._rooms[room_jid][nick]
 
     def is_gc_contact(self, jid):
         """
