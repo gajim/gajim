@@ -140,7 +140,10 @@ def get_gtk_builder(file_name, widget=None):
         if widget is not None:
             builder.add_objects_from_string(xml_text, [widget])
         else:
-            builder.add_from_string(xml_text)
+            # Workaround
+            # https://gitlab.gnome.org/GNOME/pygobject/issues/255
+            Gtk.Builder.__mro__[1].add_from_string(
+                builder, xml_text, len(xml_text.encode("utf-8")))
     else:
         if widget is not None:
             builder.add_objects_from_file(file_path, [widget])
