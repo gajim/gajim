@@ -182,8 +182,8 @@ class GajimApplication(Gtk.Application):
 
         # Set Application Menu
         app.app = self
-        from gajim import gtkgui_helpers
-        builder = gtkgui_helpers.get_gtk_builder('application_menu.ui')
+        from gajim.gtk.util import get_builder
+        builder = get_builder('application_menu.ui')
         menubar = builder.get_object("menubar")
         appmenu = builder.get_object("appmenu")
         if app.prefers_app_menu():
