@@ -52,6 +52,9 @@ class Presence:
             return
 
         log.info('Received from %s', stanza.getFrom())
+        if nbxmpp.isErrorNode(stanza):
+            log.info('Error:\n%s', stanza)
+
         app.nec.push_incoming_event(
             NetworkEvent('raw-pres-received',
                          conn=self._con,
@@ -166,7 +169,7 @@ class Presence:
             item.addChild('group').setData(group)
         self._con.connection.send(iq)
 
-        self.send_presence(jid, 'subscribe', msg)
+        self.send_presence(jid, 'subscribe', status=msg)
 
     def get_presence(self, to=None, typ=None, priority=None,
                      show=None, status=None, nick=None, caps=True,
