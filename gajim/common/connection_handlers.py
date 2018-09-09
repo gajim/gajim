@@ -580,11 +580,9 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
             # ask our VCard
             self.get_module('VCardTemp').request_vcard()
 
-        # Get bookmarks
         self.get_module('Bookmarks').get_bookmarks()
-
-        # Get annotations from private namespace
         self.get_module('Annotations').get_annotations()
+        self.get_module('Blocking').get_blocking_list()
 
         # Inform GUI we just signed in
         app.nec.push_incoming_event(SignedInEvent(None, conn=self))
