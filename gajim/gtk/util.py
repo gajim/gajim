@@ -31,6 +31,47 @@ _icon_theme.append_search_path(configpaths.get('ICONS'))
 log = logging.getLogger('gajim.gtk.util')
 
 
+class Builder:
+    def __init__(self, filename=None, widget=None):
+        self._builder = Gtk.Builder()
+        self._builder.set_translation_domain(i18n.DOMAIN)
+
+        file_path = os.path.join(configpaths.get('GUI'), filename)
+
+        if sys.platform == "win32":
+            # This is a workaround for non working translation on Windows
+            tree = ET.parse(file_path)
+            for node in tree.iter():
+                if 'translatable' in node.attrib:
+                    node.text = _(node.text)
+            xml_text = ET.tostring(tree.getroot(),
+                                   encoding='unicode',
+                                   method='xml')
+
+            if widget is not None:
+                self._builder.add_objects_from_string(xml_text, [widget])
+            else:
+                # Workaround
+                # https://gitlab.gnome.org/GNOME/pygobject/issues/255
+                Gtk.Builder.__mro__[1].add_from_string(
+                    self._builder, xml_text, len(xml_text.encode("utf-8")))
+        else:
+            if widget is not None:
+                self._builder.add_objects_from_file(file_path, [widget])
+            else:
+                self._builder.add_from_file(file_path)
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self._builder, name)
+        except AttributeError:
+            return self._builder.get_object(name)
+
+
+def get_builder(file_name, widget=None):
+    return Builder(file_name, widget)
+
+
 def load_icon(icon_name, widget, size=16, pixbuf=False,
               flags=Gtk.IconLookupFlags.FORCE_SIZE):
 
@@ -47,37 +88,6 @@ def load_icon(icon_name, widget, size=16, pixbuf=False,
         return iconinfo.load_surface(None)
     except GLib.GError as e:
         log.error('Unable to load icon %s: %s', icon_name, str(e))
-
-
-def get_builder(file_name, widget=None):
-    file_path = os.path.join(configpaths.get('GUI'), file_name)
-
-    builder = Gtk.Builder()
-    builder.set_translation_domain(i18n.DOMAIN)
-
-    if sys.platform == "win32":
-        # This is a workaround for non working translation on Windows
-        tree = ET.parse(file_path)
-        for node in tree.iter():
-            if 'translatable' in node.attrib:
-                node.text = _(node.text)
-        xml_text = ET.tostring(tree.getroot(),
-                               encoding='unicode',
-                               method='xml')
-
-        if widget is not None:
-            builder.add_objects_from_string(xml_text, [widget])
-        else:
-            # Workaround
-            # https://gitlab.gnome.org/GNOME/pygobject/issues/255
-            Gtk.Builder.__mro__[1].add_from_string(
-                builder, xml_text, len(xml_text.encode("utf-8")))
-    else:
-        if widget is not None:
-            builder.add_objects_from_file(file_path, [widget])
-        else:
-            builder.add_from_file(file_path)
-    return builder
 
 
 def get_iconset_name_for(name):
