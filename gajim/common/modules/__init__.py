@@ -13,6 +13,9 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+from typing import List  # noqa
+from typing import Dict  # noqa
+from typing import Any  # noqa
 from importlib import import_module
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -21,8 +24,8 @@ log = logging.getLogger('gajim.c.m')
 
 ZEROCONF_MODULES = ['adhoc_commands', 'receipts', 'discovery']
 
-imported_modules = []
-_modules = {}
+imported_modules = []  # type: List[tuple]
+_modules = {}  # type: Dict[str, Dict[str, Any]]
 
 for file in Path(__file__).parent.iterdir():
     if file.stem == '__init__':
@@ -40,30 +43,30 @@ for file in Path(__file__).parent.iterdir():
 
 
 class ModuleMock:
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self._name = name
 
         # HTTPUpload, ..
         self.available = False
 
         # Blocking
-        self.blocked = []
+        self.blocked = []  # type: List[Any]
 
         # Privacy Lists
-        self.blocked_contacts = []
-        self.blocked_groups = []
+        self.blocked_contacts = []  # type: List[Any]
+        self.blocked_groups = []  # type: List[Any]
         self.blocked_all = False
 
         # Delimiter
         self.delimiter = '::'
 
         # Bookmarks
-        self.bookmarks = {}
+        self.bookmarks = {}  # type: Dict[Any, Any]
 
         # Various Modules
         self.supported = False
 
-    def __getattr__(self, key):
+    def __getattr__(self, key: str) -> MagicMock:
         return MagicMock()
 
 
@@ -101,7 +104,7 @@ def unregister_single(con, name):
     del _modules[con.name][name]
 
 
-def get(account, name):
+def get(account: str, name: str) -> Any:
     try:
         return _modules[account][name]
     except KeyError:
