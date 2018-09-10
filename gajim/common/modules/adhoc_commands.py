@@ -556,17 +556,14 @@ class AdHocCommands:
 
 class AdHocCommandError(NetworkIncomingEvent):
     name = 'adhoc-command-error'
-    base_network_events = []
 
 
 class AdHocCommandListReceived(NetworkIncomingEvent):
     name = 'adhoc-command-list'
-    base_network_events = []
 
 
 class AdHocCommandActionResponse(NetworkIncomingEvent):
     name = 'adhoc-command-action-response'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

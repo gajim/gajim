@@ -133,10 +133,6 @@ class EntityTime:
 
 class TimeResultReceivedEvent(NetworkIncomingEvent):
     name = 'time-result-received'
-    base_network_events = []
-
-    def generate(self):
-        return True
 
 
 def get_instance(*args, **kwargs):

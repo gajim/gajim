@@ -263,7 +263,6 @@ class PubSub:
 
 class PubSubConfigReceivedEvent(NetworkIncomingEvent):
     name = 'pubsub-config-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

@@ -109,17 +109,14 @@ class Ping:
 
 class PingSentEvent(NetworkIncomingEvent):
     name = 'ping-sent'
-    base_network_events = []
 
 
 class PingReplyEvent(NetworkIncomingEvent):
     name = 'ping-reply'
-    base_network_events = []
 
 
 class PingErrorEvent(NetworkIncomingEvent):
     name = 'ping-error'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

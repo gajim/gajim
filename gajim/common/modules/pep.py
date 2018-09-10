@@ -219,7 +219,6 @@ class AbstractPEPData:
 
 class PEPReceivedEvent(NetworkIncomingEvent):
     name = 'pep-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

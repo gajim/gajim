@@ -160,7 +160,6 @@ class Blocking:
 
 class BlockingEvent(NetworkIncomingEvent):
     name = 'blocking'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):
