@@ -2500,6 +2500,7 @@ class Interface:
             # same state, not only on change.
             return
         self.network_state = connected
+        log.debug('NetworkMonitor state change: %s', connected)
         if connected:
             for connection in app.connections.values():
                 if connection.connected <= 0 and connection.time_to_reconnect:
