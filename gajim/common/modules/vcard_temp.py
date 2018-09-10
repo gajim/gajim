@@ -310,17 +310,14 @@ class VCardTemp:
 
 class VcardPublishedEvent(NetworkIncomingEvent):
     name = 'vcard-published'
-    base_network_events = []
 
 
 class VcardNotPublishedEvent(NetworkIncomingEvent):
     name = 'vcard-not-published'
-    base_network_events = []
 
 
 class VcardReceivedEvent(NetworkIncomingEvent):
     name = 'vcard-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

@@ -445,17 +445,14 @@ class PrivacyLists:
 
 class PrivacyListsReceivedEvent(NetworkIncomingEvent):
     name = 'privacy-lists-received'
-    base_network_events = []
 
 
 class PrivacyListReceivedEvent(NetworkIncomingEvent):
     name = 'privacy-list-received'
-    base_network_events = []
 
 
 class PrivacyListRemovedEvent(NetworkIncomingEvent):
     name = 'privacy-list-removed'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

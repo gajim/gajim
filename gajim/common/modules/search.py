@@ -106,12 +106,10 @@ class Search:
 
 class SearchFormReceivedEvent(NetworkIncomingEvent):
     name = 'search-form-received'
-    base_network_events = []
 
 
 class SearchResultReceivedEvent(NetworkIncomingEvent):
     name = 'search-result-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

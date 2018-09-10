@@ -74,7 +74,6 @@ class HTTPAuth:
 
 class HttpAuthReceivedEvent(NetworkIncomingEvent):
     name = 'http-auth-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):

@@ -100,10 +100,6 @@ class SoftwareVersion:
 
 class VersionResultReceivedEvent(NetworkIncomingEvent):
     name = 'version-result-received'
-    base_network_events = []
-
-    def generate(self):
-        return True
 
 
 def get_instance(*args, **kwargs):

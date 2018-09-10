@@ -120,7 +120,6 @@ class RosterItemExchange:
 
 class RosterItemExchangeEvent(NetworkIncomingEvent):
     name = 'roster-item-exchange-received'
-    base_network_events = []
 
 
 def get_instance(*args, **kwargs):
