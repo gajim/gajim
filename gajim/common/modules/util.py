@@ -14,12 +14,15 @@
 
 # Util module
 
+from typing import Union
+
 import nbxmpp
 
 from gajim.common import app
 
 
-def is_self_message(message, groupchat=False):
+def is_self_message(message: nbxmpp.Node,
+                    groupchat: bool = False) -> bool:
     if groupchat:
         return False
     frm = message.getFrom()
@@ -27,7 +30,9 @@ def is_self_message(message, groupchat=False):
     return frm.bareMatch(to)
 
 
-def is_muc_pm(message, jid, groupchat=False):
+def is_muc_pm(message: nbxmpp.Node,
+              jid: nbxmpp.JID,
+              groupchat: bool = False) -> bool:
     if groupchat:
         return False
     muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
@@ -41,10 +46,10 @@ def is_muc_pm(message, jid, groupchat=False):
         return False
 
 
-def from_xs_boolean(value):
+def from_xs_boolean(value: Union[str, bool]) -> bool:
     # Convert a xs:boolean ('true', 'false', '1', '0', '')
     # to a python boolean (True, False)
-    if value in (True, False):
+    if isinstance(value, bool):
         return value
 
     if value in ('1', 'true'):
@@ -58,16 +63,16 @@ def from_xs_boolean(value):
         'Cant convert %s to python boolean' % value)
 
 
-def to_xs_boolean(value):
+def to_xs_boolean(value: Union[bool, None]) -> str:
     # Convert to xs:boolean ('true', 'false')
     # from a python boolean (True, False) or None
-    if value in ('true', 'false'):
-        return value
-
     if value is True:
         return 'true'
 
-    if value in (False, None):
+    if value is False:
+        return 'false'
+
+    if value is None:
         return 'false'
 
     raise ValueError(
