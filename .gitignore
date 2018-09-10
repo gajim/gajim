@@ -19,6 +19,7 @@ po/stamp-it
 stamp-h1
 Makefile
 __pycache__/
+.mypy_cache/
 build/
 dist/
 gajim.egg-info/
