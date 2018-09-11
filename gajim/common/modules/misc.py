@@ -19,6 +19,7 @@ import logging
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.modules.date_and_time import parse_datetime
 
 log = logging.getLogger('gajim.c.m.misc')
