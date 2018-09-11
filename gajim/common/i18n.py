@@ -136,7 +136,11 @@ if hasattr(locale, 'bindtextdomain'):
 gettext.textdomain(DOMAIN)
 
 gettext.install(DOMAIN, _localedir)
-_ = gettext.translation(DOMAIN, _localedir).gettext
+
+try:
+    _ = gettext.translation(DOMAIN, _localedir).gettext
+except OSError:
+    _ = gettext.gettext
 
 if gettext._translations:
     _translations = list(gettext._translations.values())[0]
