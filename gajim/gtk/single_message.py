@@ -79,7 +79,7 @@ class SingleMessageWindow:
         parent_box = self.xml.get_object('conversation_scrolledwindow').\
                            get_parent()
         if form_node:
-            dataform = dataforms.ExtendForm(node=form_node)
+            dataform = dataforms.extend_form(node=form_node)
             dataform.type_ = 'submit'
             self.form_widget = DataFormWidget(dataform)
             self.form_widget.show_all()

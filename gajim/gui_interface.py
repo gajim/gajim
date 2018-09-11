@@ -2432,7 +2432,7 @@ class Interface:
     @staticmethod
     def get_pep_icon(pep_obj):
         if pep_obj == PEPEventType.MOOD:
-            received_mood = pep_obj._pep_specific_data['mood']
+            received_mood = pep_obj.data['mood']
             mood = received_mood if received_mood in MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
         elif pep_obj == PEPEventType.TUNE:
@@ -2440,7 +2440,7 @@ class Interface:
                 configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         elif pep_obj == PEPEventType.ACTIVITY:
-            pep_ = pep_obj._pep_specific_data
+            pep_ = pep_obj.data
             activity = pep_['activity']
 
             has_known_activity = activity in ACTIVITIES

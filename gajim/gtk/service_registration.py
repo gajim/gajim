@@ -86,7 +86,7 @@ class ServiceRegistration(Gtk.Assistant):
         log.info('Show Form page')
         self._is_form = is_form
         if is_form:
-            dataform = dataforms.ExtendForm(node=form)
+            dataform = dataforms.extend_form(node=form)
             self._data_form_widget = DataFormWidget(dataform)
         else:
             from gajim import config

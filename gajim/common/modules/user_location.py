@@ -31,10 +31,12 @@ class UserLocationData(AbstractPEPData):
     type_ = PEPEventType.LOCATION
 
     def __init__(self, location):
+        # set_location plugin uses self._pep_specific_data
         self._pep_specific_data = location
+        self.data = location
 
     def asMarkupText(self):
-        location = self._pep_specific_data
+        location = self.data
         location_string = ''
 
         for entry in location.keys():

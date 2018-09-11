@@ -130,7 +130,7 @@ class MUC:
 
         for form in payload:
             if form.getNamespace() == nbxmpp.NS_DATA:
-                dataform = dataforms.ExtendForm(node=form)
+                dataform = dataforms.extend_form(node=form)
                 log.info('Config form received for %s', room_jid)
                 app.nec.push_incoming_event(MucOwnerReceivedEvent(
                     None,

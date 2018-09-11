@@ -607,7 +607,7 @@ def load_activity_icon(category, activity = None):
 
 def get_pep_as_pixbuf(pep_class):
     if pep_class == PEPEventType.MOOD:
-        received_mood = pep_class._pep_specific_data['mood']
+        received_mood = pep_class.data['mood']
         mood = received_mood if received_mood in MOODS else 'unknown'
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
@@ -619,7 +619,7 @@ def get_pep_as_pixbuf(pep_class):
             return GdkPixbuf.Pixbuf.new_from_file(path)
         return icon
     elif pep_class == PEPEventType.ACTIVITY:
-        pep_ = pep_class._pep_specific_data
+        pep_ = pep_class.data
         activity = pep_['activity']
 
         has_known_activity = activity in ACTIVITIES

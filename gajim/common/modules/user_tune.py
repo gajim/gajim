@@ -31,10 +31,10 @@ class UserTuneData(AbstractPEPData):
     type_ = PEPEventType.TUNE
 
     def __init__(self, tune):
-        self._pep_specific_data = tune
+        self.data = tune
 
     def asMarkupText(self):
-        tune = self._pep_specific_data
+        tune = self.data
 
         artist = tune.get('artist', _('Unknown Artist'))
         artist = GLib.markup_escape_text(artist)

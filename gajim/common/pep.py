@@ -40,7 +40,7 @@ class AbstractPEP(object):
             return None
 
     def __init__(self, jid, account, items):
-        self._pep_specific_data, self._retracted = self._extract_info(items)
+        self.data, self._retracted = self._extract_info(items)
 
         self._update_contacts(jid, account)
         if jid == app.get_jid_from_account(account):

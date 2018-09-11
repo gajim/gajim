@@ -44,10 +44,10 @@ class AtomData(AbstractPEPData):
     type_ = PEPEventType.ATOM
 
     def __init__(self, atom):
-        self._pep_specific_data = atom
+        self.data = atom
 
     def get_entry(self):
-        return self._pep_specific_data
+        return self.data
 
 
 class Atom(AbstractPEPModule):

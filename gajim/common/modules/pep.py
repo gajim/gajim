@@ -211,10 +211,10 @@ class AbstractPEPData:
         return other == self.type_
 
     def __bool__(self):
-        return self._pep_specific_data is not None
+        return self.data is not None
 
     def __str__(self):
-        return str(self._pep_specific_data)
+        return str(self.data)
 
 
 class PEPReceivedEvent(NetworkIncomingEvent):

@@ -382,14 +382,14 @@ class CommonConnection:
 
     def update_contact(self, jid, name, groups):
         if self.connection:
-            self.getRoster().setItem(jid=jid, name=name, groups=groups)
+            self.getRoster().set_item(jid=jid, name=name, groups=groups)
 
     def update_contacts(self, contacts):
         """
         Update multiple roster items
         """
         if self.connection:
-            self.getRoster().setItemMulti(contacts)
+            self.getRoster().set_item_multi(contacts)
 
     def new_account(self, name, config, sync=False):
         """
@@ -1578,7 +1578,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         iq.setID(id_)
         self.awaiting_answers[id_] = (AGENT_REMOVED, agent)
         self.connection.send(iq)
-        self.getRoster().delItem(agent)
+        self.getRoster().del_item(agent)
 
     def send_new_account_infos(self, form, is_form):
         if is_form:
