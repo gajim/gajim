@@ -76,7 +76,7 @@ class Annotations:
         iq = nbxmpp.Iq(typ='set')
         iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
         iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
-        for jid in self.annotations.keys():
+        for jid in self.annotations:
             if self.annotations[jid]:
                 iq4 = iq3.addChild(name='note')
                 iq4.setAttr('jid', jid)
@@ -85,7 +85,8 @@ class Annotations:
         self._con.connection.SendAndCallForResponse(
             iq, self._store_result_received)
 
-    def _store_result_received(self, stanza):
+    @staticmethod
+    def _store_result_received(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Storing rosternotes failed: %s', stanza.getError())
             return

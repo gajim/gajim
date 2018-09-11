@@ -28,8 +28,9 @@ Implement more features if you need
 # register the module in connection.py with register_module() to activate again
 
 import logging
-import nbxmpp
 import time
+
+import nbxmpp
 
 from gajim.common.const import PEPEventType
 from gajim.common.exceptions import StanzaMalformed
@@ -69,8 +70,11 @@ class Atom(AbstractPEPModule):
 
         return OldEntry(node=entry) or None
 
+    def _build_node(self, data):
+        raise NotImplementedError
 
-class PersonConstruct(nbxmpp.Node, object):
+
+class PersonConstruct(nbxmpp.Node):
     """
     Not used for now, as we don't need authors/contributors
     in pubsub.com feeds. They rarely exist there
@@ -87,7 +91,8 @@ class PersonConstruct(nbxmpp.Node, object):
         get_name, None, None,
         '''Conveys a human-readable name for the person. Should not be None,
         although some badly generated atom feeds don't put anything here
-        (this is non-standard behavior, still pubsub.com sometimes does that.)''')
+        (this is non-standard behavior, still pubsub.com sometimes
+        does that.)''')
 
     def get_uri(self):
         return self.getTagData('uri')
@@ -102,11 +107,11 @@ class PersonConstruct(nbxmpp.Node, object):
 
     email = property(
         get_email, None, None,
-        '''Conveys an e-mail address associated with the person. Might be None when
-        not set.''')
+        '''Conveys an e-mail address associated with the person.
+        Might be None when not set.''')
 
 
-class Entry(nbxmpp.Node, object):
+class Entry(nbxmpp.Node):
     def __init__(self, node=None):
         nbxmpp.Node.__init__(self, 'entry', node=node)
 
@@ -114,7 +119,7 @@ class Entry(nbxmpp.Node, object):
         return '<Atom:Entry object of id="%r">' % self.getAttr('id')
 
 
-class OldEntry(nbxmpp.Node, object):
+class OldEntry(nbxmpp.Node):
     """
     Parser for feeds from pubsub.com. They use old Atom 0.3 format with their
     extensions
@@ -144,12 +149,11 @@ class OldEntry(nbxmpp.Node, object):
 
         if main_feed is not None and source_feed is not None:
             return '%s: %s' % (main_feed, source_feed)
-        elif main_feed is not None:
+        if main_feed is not None:
             return main_feed
-        elif source_feed is not None:
+        if source_feed is not None:
             return source_feed
-        else:
-            return ''
+        return ''
 
     feed_title = property(
         get_feed_title, None, None,
@@ -161,7 +165,8 @@ class OldEntry(nbxmpp.Node, object):
         Get source link
         """
         try:
-            return self.getTag('feed').getTags('link', {'rel': 'alternate'})[1].getData()
+            link = self.getTag('feed').getTags('link', {'rel': 'alternate'})
+            return link[1].getData()
         except Exception:
             return None
 

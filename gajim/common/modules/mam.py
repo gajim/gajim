@@ -50,7 +50,7 @@ class MAM:
         # Holds archive jids where catch up was successful
         self._catch_up_finished = []
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_MAM_2 in features:
             self.archiving_namespace = nbxmpp.NS_MAM_2
         elif nbxmpp.NS_MAM_1 in features:
@@ -76,9 +76,9 @@ class MAM:
                 return
             # Message from our own archive
             return self._con.get_own_jid()
-        else:
-            if archive_jid.bareMatch(expected_archive):
-                return archive_jid
+
+        if archive_jid.bareMatch(expected_archive):
+            return archive_jid
 
     def _get_unique_id(self, result, message, groupchat, self_message, muc_pm):
         stanza_id = result.getAttr('id')
@@ -99,7 +99,7 @@ class MAM:
         # A message we received
         return stanza_id, None
 
-    def _mam_message_received(self, conn, stanza):
+    def _mam_message_received(self, _con, stanza):
         app.nec.push_incoming_event(
             NetworkIncomingEvent('raw-mam-message-received',
                                  conn=self._con,
@@ -207,7 +207,8 @@ class MAM:
 
         raise nbxmpp.NodeProcessed
 
-    def _parse_gc_attrs(self, message):
+    @staticmethod
+    def _parse_gc_attrs(message):
         with_ = message.getFrom()
         nick = message.getFrom().getResource()
 
@@ -330,7 +331,7 @@ class MAM:
             query, self._received_count, {'query_id': query_id})
         return query_id
 
-    def _received_count(self, conn, stanza, query_id):
+    def _received_count(self, _con, stanza, query_id):
         try:
             _, set_ = self._parse_iq(stanza)
         except InvalidMamIQ:
@@ -393,7 +394,8 @@ class MAM:
             # of Messages even in just one day.
             start_date = datetime.utcnow() - timedelta(days=1)
             log.info('First join: query archive %s from: %s', jid, start_date)
-            query = self._get_archive_query(query_id, jid=jid, start=start_date)
+            query = self._get_archive_query(
+                query_id, jid=jid, start=start_date)
 
         if jid in self._catch_up_finished:
             self._catch_up_finished.remove(jid)
@@ -406,7 +408,7 @@ class MAM:
                                            'start_date': start_date,
                                            'groupchat': groupchat})
 
-    def _result_finished(self, conn, stanza, query_id, start_date, groupchat):
+    def _result_finished(self, _con, stanza, query_id, start_date, groupchat):
         try:
             fin, set_ = self._parse_iq(stanza)
         except InvalidMamIQ:
@@ -461,7 +463,7 @@ class MAM:
                                             'end_date': end_date})
         return query_id
 
-    def _intervall_result(self, conn, stanza, query_id,
+    def _intervall_result(self, _con, stanza, query_id,
                           start_date, end_date):
         try:
             fin, set_ = self._parse_iq(stanza)
@@ -510,9 +512,10 @@ class MAM:
                                  value=namespace)
         form.addChild(node=field)
         if start:
-            field = nbxmpp.DataField(typ='text-single',
-                                     name='start',
-                                     value=start.strftime('%Y-%m-%dT%H:%M:%SZ'))
+            field = nbxmpp.DataField(
+                typ='text-single',
+                name='start',
+                value=start.strftime('%Y-%m-%dT%H:%M:%SZ'))
             form.addChild(node=field)
         if end:
             field = nbxmpp.DataField(typ='text-single',
@@ -520,7 +523,9 @@ class MAM:
                                      value=end.strftime('%Y-%m-%dT%H:%M:%SZ'))
             form.addChild(node=field)
         if with_:
-            field = nbxmpp.DataField(typ='jid-single', name='with', value=with_)
+            field = nbxmpp.DataField(typ='jid-single',
+                                     name='with',
+                                     value=with_)
             form.addChild(node=field)
 
         set_ = query.setTag('set', namespace=nbxmpp.NS_RSM)

@@ -40,7 +40,7 @@ class PEP:
         self._pep_handlers = {}
         self._store_publish_modules = []
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, identities, _features, _data, _node):
         for identity in identities:
             if identity['category'] == 'pubsub':
                 if identity.get('type') == 'pep':
@@ -59,7 +59,7 @@ class PEP:
                 if module_instance not in self._store_publish_modules:
                     self._store_publish_modules.append(module_instance)
 
-    def _pep_event_received(self, conn, stanza):
+    def _pep_event_received(self, _con, stanza):
         jid = stanza.getFrom()
         event = stanza.getTag('event', namespace=nbxmpp.NS_PUBSUB_EVENT)
         items = event.getTag('items')

@@ -2049,7 +2049,7 @@ class RosterWindow:
         """
         groups_list = groups or []
         app.connections[account].get_module('Presence').subscribe(
-            jid, txt, nickname, groups_list, auto_auth, app.nicks[account])
+            jid, txt, nickname, groups_list, auto_auth)
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
         if not contact:
             keyID = ''

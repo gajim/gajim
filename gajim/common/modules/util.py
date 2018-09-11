@@ -38,12 +38,12 @@ def is_muc_pm(message: nbxmpp.Node,
     muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
     if muc_user is not None:
         return muc_user.getChildren() == []
-    else:
-        # muc#user namespace was added in MUC 1.28 so we need a fallback
-        # Check if we know the jid
-        if app.logger.jid_is_room_jid(jid.getStripped()):
-            return True
-        return False
+
+    # muc#user namespace was added in MUC 1.28 so we need a fallback
+    # Check if we know the jid
+    if app.logger.jid_is_room_jid(jid.getStripped()):
+        return True
+    return False
 
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:

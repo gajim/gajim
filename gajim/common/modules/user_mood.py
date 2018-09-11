@@ -41,11 +41,11 @@ class UserMoodData(AbstractPEPData):
             markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
-    def _translate_mood(self, mood):
+    @staticmethod
+    def _translate_mood(mood):
         if mood in MOODS:
             return MOODS[mood]
-        else:
-            return mood
+        return mood
 
 
 class UserMood(AbstractPEPModule):

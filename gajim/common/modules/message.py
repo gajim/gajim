@@ -57,7 +57,7 @@ class Message:
                                         nbxmpp.NS_CONFERENCE,
                                         nbxmpp.NS_IBB])
 
-    def _message_received(self, con, stanza):
+    def _message_received(self, _con, stanza):
         # https://tools.ietf.org/html/rfc6120#section-8.1.1.1
         # If the stanza does not include a 'to' address then the client MUST
         # treat it as if the 'to' address were included with a value of the
@@ -262,7 +262,7 @@ class Message:
             DecryptedMessageReceivedEvent(
                 None, **vars(event)))
 
-    def _get_unique_id(self, stanza, forwarded, sent, self_message, muc_pm):
+    def _get_unique_id(self, stanza, _forwarded, _sent, self_message, _muc_pm):
         if stanza.getType() == 'groupchat':
             # TODO: Disco the MUC check if 'urn:xmpp:mam:2' is announced
             return self._get_stanza_id(stanza), None

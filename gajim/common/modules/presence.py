@@ -45,7 +45,7 @@ class Presence:
         # list of jid to auto-authorize
         self.jids_for_auto_auth = []
 
-    def _presence_received(self, con, stanza):
+    def _presence_received(self, _con, stanza):
         if stanza.getType() in ('subscribe', 'subscribed',
                                 'unsubscribe', 'unsubscribed'):
             # Dont handle that here
@@ -60,7 +60,7 @@ class Presence:
                          conn=self._con,
                          stanza=stanza))
 
-    def _subscribe_received(self, con, stanza):
+    def _subscribe_received(self, _con, stanza):
         from_ = stanza.getFrom()
         jid = from_.getStripped()
         fjid = str(from_)
@@ -73,7 +73,7 @@ class Presence:
                  'user_nick: %s', from_, is_transport, auto_auth, user_nick)
         if is_transport and fjid in self._con.agent_registrations:
             self._con.agent_registrations[fjid]['sub_received'] = True
-            if not self.agent_registrations[fjid]['roster_push']:
+            if not self._con.agent_registrations[fjid]['roster_push']:
                 # We'll reply after roster push result
                 raise nbxmpp.NodeProcessed
 
@@ -94,7 +94,7 @@ class Presence:
 
         raise nbxmpp.NodeProcessed
 
-    def _subscribed_received(self, con, stanza):
+    def _subscribed_received(self, _con, stanza):
         from_ = stanza.getFrom()
         jid = from_.getStripped()
         resource = from_.getResource()
@@ -108,11 +108,12 @@ class Presence:
             conn=self._con, jid=jid, resource=resource))
         raise nbxmpp.NodeProcessed
 
-    def _unsubscribe_received(self, con, stanza):
+    @staticmethod
+    def _unsubscribe_received(_con, stanza):
         log.info('Received Unsubscribe: %s', stanza.getFrom())
         raise nbxmpp.NodeProcessed
 
-    def _unsubscribed_received(self, con, stanza):
+    def _unsubscribed_received(self, _con, stanza):
         from_ = stanza.getFrom()
         jid = from_.getStripped()
         log.info('Received Unsubscribed: %s', from_)
@@ -147,8 +148,7 @@ class Presence:
             self._con.getRoster().Unsubscribe(jid)
             self._con.getRoster().setItem(jid)
 
-    def subscribe(self, jid, msg=None, name='', groups=None,
-                  auto_auth=False, user_nick=''):
+    def subscribe(self, jid, msg=None, name='', groups=None, auto_auth=False):
         if not app.account_is_connected(self._account):
             return
         if groups is None:

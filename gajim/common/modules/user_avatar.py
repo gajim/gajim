@@ -92,7 +92,7 @@ class UserAvatar(AbstractPEPModule):
 
         return jid, sha, data
 
-    def _avatar_received(self, conn, stanza):
+    def _avatar_received(self, _con, stanza):
         try:
             jid, sha, data = self._validate_avatar_node(stanza)
         except (StanzaMalformed, binascii.Error) as error:
@@ -144,6 +144,9 @@ class UserAvatar(AbstractPEPModule):
                          jid, avatar['id'])
                 return
             self.get_pubsub_avatar(jid, avatar['id'])
+
+    def _build_node(self, data):
+        raise NotImplementedError
 
     def send(self, data):
         # Not implemented yet

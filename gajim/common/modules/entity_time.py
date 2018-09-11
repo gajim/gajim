@@ -66,7 +66,8 @@ class EntityTime:
                                     jid=stanza.getFrom(),
                                     time_info=time_info))
 
-    def _extract_info(self, stanza):
+    @staticmethod
+    def _extract_info(stanza):
         time_ = stanza.getTag('time')
         if not time_:
             log.warning('No time node: %s', stanza)
@@ -94,23 +95,23 @@ class EntityTime:
             return
 
         try:
-            t = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
+            dtime = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
         except ValueError:
             try:
-                t = datetime.datetime.strptime(utc_time,
-                                               '%Y-%m-%dT%H:%M:%S.%f')
-            except ValueError as e:
+                dtime = datetime.datetime.strptime(utc_time,
+                                                   '%Y-%m-%dT%H:%M:%S.%f')
+            except ValueError as error:
                 log.warning('Wrong time format: %s %s',
-                            e, stanza.getFrom())
+                            error, stanza.getFrom())
                 return
 
         utc = datetime.timezone(datetime.timedelta(0))
-        t = t.replace(tzinfo=utc)
+        dtime = dtime.replace(tzinfo=utc)
         utc_offset = datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
         contact_tz = datetime.timezone(utc_offset, "remote timezone")
-        return t.astimezone(contact_tz).strftime('%c')
+        return dtime.astimezone(contact_tz).strftime('%c')
 
-    def _answer_request(self, con, stanza):
+    def _answer_request(self, _con, stanza):
         log.info('%s asked for the time', stanza.getFrom())
         if app.config.get_per('accounts', self._account, 'send_time_info'):
             iq = stanza.buildReply('result')

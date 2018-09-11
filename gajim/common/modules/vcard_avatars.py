@@ -50,7 +50,7 @@ class VCardAvatars:
             log.info('Missing own avatar, reset sha')
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
 
-    def _presence_received(self, con, stanza):
+    def _presence_received(self, _con, stanza):
         update = stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
         if update is None:
             return

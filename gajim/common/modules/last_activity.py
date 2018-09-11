@@ -31,7 +31,7 @@ class LastActivity:
 
         self.handlers = [('iq', self._answer_request, 'get', nbxmpp.NS_LAST)]
 
-    def _answer_request(self, con, stanza):
+    def _answer_request(self, _con, stanza):
         log.info('Request from %s', stanza.getFrom())
         if not app.account_is_connected(self._account):
             return

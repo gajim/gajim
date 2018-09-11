@@ -32,7 +32,7 @@ class Carbons:
 
         self.supported = False
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_CARBONS not in features:
             return
 

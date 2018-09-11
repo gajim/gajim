@@ -45,7 +45,7 @@ class PrivacyLists:
 
         self.supported = False
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_PRIVACY not in features:
             return
 
@@ -55,7 +55,7 @@ class PrivacyLists:
         action = app.app.lookup_action('%s-privacylists' % self._account)
         action.set_enabled(True)
 
-    def _list_push_received(self, con, stanza):
+    def _list_push_received(self, _con, stanza):
         result = stanza.buildReply('result')
         result.delChild(result.getTag('query'))
         self._con.connection.send(result)
@@ -74,7 +74,7 @@ class PrivacyLists:
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_lists_received, {'callback': callback})
 
-    def _privacy_lists_received(self, conn, stanza, callback):
+    def _privacy_lists_received(self, _con, stanza, callback):
         lists = []
         new_default = None
         result = nbxmpp.isResultNode(stanza)
@@ -233,15 +233,16 @@ class PrivacyLists:
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
-    def _default_result_handler(self, conn, stanza):
+    @staticmethod
+    def _default_result_handler(_con, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Operation failed: %s', stanza.getError())
 
     def _build_invisible_rule(self):
         node = nbxmpp.Node('list', {'name': 'invisible'})
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
-        if self._account in app.interface.status_sent_to_groups and \
-        len(app.interface.status_sent_to_groups[self._account]) > 0:
+        if (self._account in app.interface.status_sent_to_groups and
+                app.interface.status_sent_to_groups[self._account]):
             for group in app.interface.status_sent_to_groups[self._account]:
                 item = node.setTag('item', {'type': 'group',
                                             'value': group,
@@ -249,8 +250,8 @@ class PrivacyLists:
                                             'order': '1'})
                 item.setTag('presence-out')
 
-        if self._account in app.interface.status_sent_to_users and \
-        len(app.interface.status_sent_to_users[self._account]) > 0:
+        if (self._account in app.interface.status_sent_to_users and
+                app.interface.status_sent_to_users[self._account]):
             for jid in app.interface.status_sent_to_users[self._account]:
                 item = node.setTag('item', {'type': 'jid',
                                             'value': jid,
@@ -330,11 +331,12 @@ class PrivacyLists:
 
         log.info('Unblock GC contact: %s', jid)
         for rule in self.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'jid' \
-            or rule['value'] != jid:
+            if (rule['action'] != 'deny' or
+                    rule['type'] != 'jid' or
+                    rule['value'] != jid):
                 new_blocked_list.append(rule)
 
-        if len(new_blocked_list) == 0:
+        if not new_blocked_list:
             self.blocked_list = []
             self.blocked_contacts = []
             self.blocked_groups = []
@@ -356,11 +358,12 @@ class PrivacyLists:
             if contact.jid in self.blocked_contacts:
                 self.blocked_contacts.remove(contact.jid)
         for rule in self.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'jid' \
-            or rule['value'] not in to_unblock:
+            if (rule['action'] != 'deny' or
+                    rule['type'] != 'jid' or
+                    rule['value'] not in to_unblock):
                 new_blocked_list.append(rule)
 
-        if len(new_blocked_list) == 0:
+        if not new_blocked_list:
             self.blocked_list = []
             self.blocked_contacts = []
             self.blocked_groups = []
@@ -415,11 +418,12 @@ class PrivacyLists:
         log.info('Unblock group: %s', group)
         new_blocked_list = []
         for rule in self.blocked_list:
-            if rule['action'] != 'deny' or rule['type'] != 'group' or \
-            rule['value'] != group:
+            if (rule['action'] != 'deny' or
+                    rule['type'] != 'group' or
+                    rule['value'] != group):
                 new_blocked_list.append(rule)
 
-        if len(new_blocked_list) == 0:
+        if not new_blocked_list:
             self.blocked_list = []
             self.blocked_contacts = []
             self.blocked_groups = []

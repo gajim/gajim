@@ -81,7 +81,8 @@ class Receipts:
                                                event.jid,
                                                event.resource)
 
-    def _build_answer_receipt(self, to, receipt_id):
+    @staticmethod
+    def _build_answer_receipt(to, receipt_id):
         receipt = nbxmpp.Message(to=to, typ='chat')
         receipt.setTag('received',
                        namespace='urn:xmpp:receipts',

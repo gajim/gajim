@@ -35,7 +35,7 @@ class RosterItemExchange:
             ('message', self.received_item, '', nbxmpp.NS_ROSTERX)
         ]
 
-    def received_item(self, con, stanza):
+    def received_item(self, _con, stanza):
         # stanza can be a message or a iq
 
         log.info('Received roster items from %s', stanza.getFrom())
@@ -108,12 +108,12 @@ class RosterItemExchange:
                                     body=msg)
         elif type_ == 'iq':
             stanza = nbxmpp.Iq(to=fjid, typ='set')
-        x = stanza.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
+        xdata = stanza.addChild(name='x', namespace=nbxmpp.NS_ROSTERX)
         for contact in contacts:
             name = contact.get_shown_name()
-            x.addChild(name='item', attrs={'action': 'add',
-                                           'jid': contact.jid,
-                                           'name': name})
+            xdata.addChild(name='item', attrs={'action': 'add',
+                                               'jid': contact.jid,
+                                               'name': name})
             log.info('Send contact: %s %s', contact.jid, name)
         self._con.connection.send(stanza)
 

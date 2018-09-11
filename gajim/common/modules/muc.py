@@ -40,7 +40,7 @@ class MUC:
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
         ]
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, identities, features, _data, _node):
         for identity in identities:
             if identity.get('category') != 'conference':
                 continue
@@ -248,7 +248,7 @@ class MUC:
         self._con.connection.SendAndCallForResponse(
             iq, self._default_response, {})
 
-    def _mediated_invite(self, con, stanza):
+    def _mediated_invite(self, _con, stanza):
         muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
         if muc_user is None:
             return
@@ -313,7 +313,7 @@ class MUC:
 
         return from_
 
-    def _direct_invite(self, con, stanza):
+    def _direct_invite(self, _con, stanza):
         direct = stanza.getTag('x', namespace=nbxmpp.NS_CONFERENCE)
         if direct is None:
             return
@@ -354,7 +354,8 @@ class MUC:
             invite = self._build_mediated_invite(room, to, reason, continue_)
         self._con.connection.send(invite)
 
-    def _build_direct_invite(self, room, to, reason, continue_):
+    @staticmethod
+    def _build_direct_invite(room, to, reason, continue_):
         message = nbxmpp.Message(to=to)
         attrs = {'jid': room}
         if reason:
@@ -368,7 +369,8 @@ class MUC:
                          namespace=nbxmpp.NS_CONFERENCE)
         return message
 
-    def _build_mediated_invite(self, room, to, reason, continue_):
+    @staticmethod
+    def _build_mediated_invite(room, to, reason, continue_):
         message = nbxmpp.Message(to=room)
         muc_user = message.addChild('x', namespace=nbxmpp.NS_MUC_USER)
         invite = muc_user.addChild('invite', attrs={'to': to})
@@ -395,16 +397,17 @@ class MUC:
         if not app.account_is_connected(self._account):
             return
         message = nbxmpp.Message(to=room)
-        x = nbxmpp.DataForm(typ='submit')
-        x.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
-                                         value=nbxmpp.NS_MUC + '#request'))
-        x.addChild(node=nbxmpp.DataField(name='muc#role',
-                                         value='participant',
-                                         typ='text-single'))
-        message.addChild(node=x)
+        xdata = nbxmpp.DataForm(typ='submit')
+        xdata.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
+                                             value=nbxmpp.NS_MUC + '#request'))
+        xdata.addChild(node=nbxmpp.DataField(name='muc#role',
+                                             value='participant',
+                                             typ='text-single'))
+        message.addChild(node=xdata)
         self._con.connection.send(message)
 
-    def _default_response(self, conn, stanza, **kwargs):
+    @staticmethod
+    def _default_response(_con, stanza, **kwargs):
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
 

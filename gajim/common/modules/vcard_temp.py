@@ -41,7 +41,7 @@ class VCardTemp:
         self.room_jids = []
         self.supported = False
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_VCARD not in features:
             return
 
@@ -51,22 +51,23 @@ class VCardTemp:
         action = app.app.lookup_action('%s-profile' % self._account)
         action.set_enabled(True)
 
-    def _node_to_dict(self, node):
+    @staticmethod
+    def _node_to_dict(node):
         dict_ = {}
         for info in node.getChildren():
             name = info.getName()
             if name in ('ADR', 'TEL', 'EMAIL'):  # we can have several
                 dict_.setdefault(name, [])
                 entry = {}
-                for c in info.getChildren():
-                    entry[c.getName()] = c.getData()
+                for child in info.getChildren():
+                    entry[child.getName()] = child.getData()
                 dict_[name].append(entry)
             elif info.getChildren() == []:
                 dict_[name] = info.getData()
             else:
                 dict_[name] = {}
-                for c in info.getChildren():
-                    dict_[name][c.getName()] = c.getData()
+                for child in info.getChildren():
+                    dict_[name][child.getName()] = child.getData()
         return dict_
 
     def request_vcard(self, callback=RequestAvatar.SELF, jid=None,
@@ -137,13 +138,14 @@ class VCardTemp:
         self._con.connection.SendAndCallForResponse(
             iq, self._upload_room_avatar_result)
 
-    def _upload_room_avatar_result(self, stanza):
+    @staticmethod
+    def _upload_room_avatar_result(stanza):
         if not nbxmpp.isResultNode(stanza):
             reason = stanza.getErrorMsg() or stanza.getError()
             app.nec.push_incoming_event(InformationEvent(
                 None, dialog_name='avatar-upload-error', args=reason))
 
-    def _avatar_publish_result(self, con, stanza, sha):
+    def _avatar_publish_result(self, _con, stanza, sha):
         if stanza.getType() == 'result':
             current_sha = app.config.get_per(
                 'accounts', self._account, 'avatar_sha')
@@ -166,7 +168,8 @@ class VCardTemp:
             app.nec.push_incoming_event(
                 VcardNotPublishedEvent(None, conn=self._con))
 
-    def _get_vcard_photo(self, vcard, jid):
+    @staticmethod
+    def _get_vcard_photo(vcard, jid):
         try:
             photo = vcard['PHOTO']['BINVAL']
         except (KeyError, AttributeError, TypeError):
@@ -186,7 +189,7 @@ class VCardTemp:
 
         return avatar_sha, photo_decoded
 
-    def _parse_vcard(self, con, stanza, callback, expected_sha):
+    def _parse_vcard(self, _con, stanza, callback, expected_sha):
         frm_jid = stanza.getFrom()
         room = False
         if frm_jid is None:
@@ -224,7 +227,7 @@ class VCardTemp:
 
         callback(jid, resource, room, vcard, expected_sha)
 
-    def _on_own_avatar_received(self, jid, resource, room, vcard, *args):
+    def _on_own_avatar_received(self, jid, _resource, _room, vcard, *args):
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
 
         log.info('Received own vcard, avatar sha is: %s', avatar_sha)
@@ -237,7 +240,8 @@ class VCardTemp:
             log.info('No avatar found')
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
             app.contacts.set_avatar(self._account, jid, avatar_sha)
-            self._con.get_module('VCardAvatars').send_avatar_presence(force=True)
+            self._con.get_module('VCardAvatars').send_avatar_presence(
+                force=True)
             return
 
         # Avatar found in vcard
@@ -250,11 +254,12 @@ class VCardTemp:
             app.contacts.set_avatar(self._account, jid, avatar_sha)
             app.config.set_per(
                 'accounts', self._account, 'avatar_sha', avatar_sha)
-            self._con.get_module('VCardAvatars').send_avatar_presence(force=True)
+            self._con.get_module('VCardAvatars').send_avatar_presence(
+                force=True)
 
         app.interface.update_avatar(self._account, jid)
 
-    def _on_room_avatar_received(self, jid, resource, room, vcard,
+    def _on_room_avatar_received(self, jid, _resource, _room, vcard,
                                  expected_sha):
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
         if expected_sha != avatar_sha:

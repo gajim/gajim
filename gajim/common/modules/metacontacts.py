@@ -98,7 +98,8 @@ class MetaContacts:
         self._con.connection.SendAndCallForResponse(
             iq, self._store_response_received)
 
-    def _store_response_received(self, stanza):
+    @staticmethod
+    def _store_response_received(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.info('Store error: %s', stanza.getError())
 
