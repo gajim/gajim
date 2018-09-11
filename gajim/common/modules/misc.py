@@ -112,7 +112,7 @@ def parse_correction(stanza):
         id_ = replace.getAttr('id')
         if id_ is not None:
             return id_
-        log.warning('No id attr found: %s' % stanza)
+        log.warning('No id attr found: %s', stanza)
 
 
 # XEP-0224: Attention

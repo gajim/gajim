@@ -91,10 +91,10 @@ class Search:
                 data = []
                 for item in tag.getTags('item'):
                     # We also show attributes. jid is there
-                    f = item.attrs
+                    field = item.attrs
                     for i in item.getPayload():
-                        f[i.getName()] = i.getData()
-                    data.append(f)
+                        field[i.getName()] = i.getData()
+                    data.append(field)
         else:
             log.info('Error: %s', stanza.getError())
 

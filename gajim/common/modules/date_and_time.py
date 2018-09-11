@@ -71,19 +71,18 @@ class LocalTimezone(tzinfo):
     def utcoffset(self, dt):
         if self._isdst(dt):
             return DSTOFFSET
-        else:
-            return STDOFFSET
+        return STDOFFSET
 
     def dst(self, dt):
         if self._isdst(dt):
             return DSTDIFF
-        else:
-            return ZERO
+        return ZERO
 
     def tzname(self, dt):
         return 'local'
 
-    def _isdst(self, dt):
+    @staticmethod
+    def _isdst(dt):
         tt = (dt.year, dt.month, dt.day,
               dt.hour, dt.minute, dt.second,
               dt.weekday(), 0, 0)

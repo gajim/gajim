@@ -76,7 +76,7 @@ class HTTPUpload:
                                      ged.OUT_PREGUI,
                                      self.handle_outgoing_stanza)
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, data, _node):
         if NS_HTTPUPLOAD_0 in features:
             self.httpupload_namespace = NS_HTTPUPLOAD_0
         elif NS_HTTPUPLOAD in features:
@@ -219,7 +219,7 @@ class HTTPUpload:
 
         return stanza.getErrorMsg()
 
-    def _received_slot(self, conn, stanza, file):
+    def _received_slot(self, _con, stanza, file):
         log.info("Received slot")
         if stanza.getType() == 'error':
             self.raise_progress_event('close', file)
@@ -283,7 +283,8 @@ class HTTPUpload:
                 file.put, data=file.stream, headers=file.headers, method='PUT')
             log.info("Opening Urllib upload request...")
 
-            if not app.config.get_per('accounts', self._account, 'httpupload_verify'):
+            if not app.config.get_per(
+                    'accounts', self._account, 'httpupload_verify'):
                 context = ssl.create_default_context()
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
@@ -336,7 +337,7 @@ class HTTPUpload:
             else:
                 app.nec.push_outgoing_event(MessageOutgoingEvent(
                     None, account=self._account, jid=file.contact.jid,
-                    message=message, keyID=file.keyID, type_='chat',
+                    message=message, keyID=file.key_id, type_='chat',
                     automatic_message=False, session=file.session))
 
         else:
@@ -356,13 +357,13 @@ class HTTPUpload:
 
 class File:
     def __init__(self, path, contact, **kwargs):
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+        for key, val in kwargs.items():
+            setattr(self, key, val)
         self.encrypted = False
         self.contact = contact
-        self.keyID = None
+        self.key_id = None
         if hasattr(contact, 'keyID'):
-            self.keyID = contact.keyID
+            self.key_id = contact.keyID
         self.stream = None
         self.path = path
         self.put = None

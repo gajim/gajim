@@ -106,7 +106,7 @@ class Roster:
 
         self._con.connect_machine()
 
-    def _roster_push_received(self, con, stanza):
+    def _roster_push_received(self, _con, stanza):
         log.info('Push received')
 
         sender = stanza.getFrom()
@@ -197,13 +197,12 @@ class Roster:
             attrs = self._get_item_attrs(item, update=False)
             return RosterItem(jid, attrs)
 
+        if jid not in self._data:
+            self._data[jid] = self._get_item_attrs(item, update=False)
         else:
-            if jid not in self._data:
-                self._data[jid] = self._get_item_attrs(item, update=False)
-            else:
-                self._data[jid].update(self._get_item_attrs(item))
+            self._data[jid].update(self._get_item_attrs(item))
 
-            return RosterItem(jid, self._data[jid])
+        return RosterItem(jid, self._data[jid])
 
     def _ack_roster_push(self, stanza):
         iq = nbxmpp.Iq('result',
@@ -212,7 +211,7 @@ class Roster:
                        attrs={'id': stanza.getID()})
         self._con.connection.send(iq)
 
-    def _presence_received(self, con, pres):
+    def _presence_received(self, _con, pres):
         '''
         Add contacts that request subscription to our internal
         roster and also to the database. The contact is put into the

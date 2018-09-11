@@ -29,6 +29,8 @@ from gajim.common.modules.util import to_xs_boolean
 
 log = logging.getLogger('gajim.c.m.bookmarks')
 
+NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
+
 
 class Bookmarks:
     def __init__(self, con):
@@ -84,7 +86,7 @@ class Bookmarks:
             '', 'storage:bookmarks',
             cb=self._pubsub_bookmarks_received)
 
-    def _pubsub_bookmarks_received(self, conn, stanza):
+    def _pubsub_bookmarks_received(self, _con, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.info('No pubsub bookmarks: %s', stanza.getError())
             # Fallback, request private storage
@@ -158,7 +160,6 @@ class Bookmarks:
         if storage is None:
             return
 
-        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
         confs = storage.getTags('conference')
         for conf in confs:
             autojoin_val = conf.getAttr('autojoin')
@@ -183,8 +184,8 @@ class Bookmarks:
             try:
                 jid = helpers.parse_jid(conf.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it'
-                            % conf.getAttr('jid'))
+                log.warning('Invalid JID: %s, ignoring it',
+                            conf.getAttr('jid'))
                 continue
 
             if check_merge:
@@ -204,7 +205,6 @@ class Bookmarks:
         return merged
 
     def _build_storage_node(self):
-        NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
         storage_node = nbxmpp.Node(
             tag='storage', attrs={'xmlns': 'storage:bookmarks'})
         for jid, bm in self.bookmarks.items():
@@ -231,11 +231,11 @@ class Bookmarks:
     def get_bookmark_publish_options():
         options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
                               attrs={'type': 'submit'})
-        f = options.addChild('field',
-                             attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
-        f.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-        f = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-        f.setTagData('value', 'whitelist')
+        field = options.addChild('field',
+                                 attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
+        field.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
+        field = options.addChild('field', attrs={'var': 'pubsub#access_model'})
+        field.setTagData('value', 'whitelist')
         return options
 
     def store_bookmarks(self, storage_type=None):
@@ -267,12 +267,14 @@ class Bookmarks:
         self._con.connection.SendAndCallForResponse(
             iq, self._private_store_result)
 
-    def _pubsub_store_result(self, conn, stanza):
+    @staticmethod
+    def _pubsub_store_result(_con, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.error('Error: %s', stanza.getError())
             return
 
-    def _private_store_result(self, stanza):
+    @staticmethod
+    def _private_store_result(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.error('Error: %s', stanza.getError())
             return

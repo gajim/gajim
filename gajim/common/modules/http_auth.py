@@ -34,7 +34,7 @@ class HTTPAuth:
             ('message', self.answer_request, '', nbxmpp.NS_HTTP_AUTH)
         ]
 
-    def answer_request(self, con, stanza):
+    def answer_request(self, _con, stanza):
         log.info('Auth request received')
         auto_answer = app.config.get_per(
             'accounts', self._account, 'http_auth')

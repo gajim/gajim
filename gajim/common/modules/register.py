@@ -39,9 +39,9 @@ class Register:
         hostname = app.config.get_per('accounts', self._account, 'hostname')
         username = app.config.get_per('accounts', self._account, 'name')
         iq = nbxmpp.Iq(typ='set', to=hostname)
-        q = iq.setTag(nbxmpp.NS_REGISTER + ' query')
-        q.setTagData('username', username)
-        q.setTagData('password', password)
+        query = iq.setTag(nbxmpp.NS_REGISTER + ' query')
+        query.setTagData('username', username)
+        query.setTagData('password', password)
 
         weak_success_cb = weakref.WeakMethod(success_cb)
         weak_error_cb = weakref.WeakMethod(error_cb)
@@ -50,7 +50,8 @@ class Register:
             iq, self._change_password_response, {'success_cb': weak_success_cb,
                                                  'error_cb': weak_error_cb})
 
-    def _change_password_response(self, con, stanza, success_cb, error_cb):
+    @staticmethod
+    def _change_password_response(_con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             log.info('Error: %s', error)
@@ -85,7 +86,7 @@ class Register:
         self.agent_registrations[agent] = {'roster_push': False,
                                            'sub_received': False}
 
-    def _register_agent_response(self, con, stanza, agent,
+    def _register_agent_response(self, _con, stanza, agent,
                                  success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
@@ -115,7 +116,8 @@ class Register:
             iq, self._register_info_response, {'success_cb': weak_success_cb,
                                                'error_cb': weak_error_cb})
 
-    def _register_info_response(self, con, stanza, success_cb, error_cb):
+    @staticmethod
+    def _register_info_response(_con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             log.info('Error: %s', error)

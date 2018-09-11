@@ -40,7 +40,7 @@ class PubSub:
 
         self.publish_options = False
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS not in features:
             # Remove stored bookmarks accessible to everyone.
             self._con.get_module('Bookmarks').purge_pubsub_bookmarks()
@@ -89,15 +89,15 @@ class PubSub:
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        e = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        p = e.addChild('publish', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        publish = pubsub.addChild('publish', {'node': node})
         attrs = {}
         if id_:
             attrs = {'id': id_}
-        p.addChild('item', attrs, [item])
+        publish.addChild('item', attrs, [item])
         if options:
-            p = e.addChild('publish-options')
-            p.addChild(node=options)
+            publish = pubsub.addChild('publish-options')
+            publish.addChild(node=options)
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
@@ -107,10 +107,10 @@ class PubSub:
         Get IQ to query items from a node
         """
         query = nbxmpp.Iq('get', to=jid)
-        r = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        r = r.addChild('items', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        items = pubsub.addChild('items', {'node': node})
         if item_id is not None:
-            r.addChild('item', {'id': item_id})
+            items.addChild('item', {'id': item_id})
         return query
 
     def send_pb_retrieve(self, jid, node, item_id=None, cb=None, **kwargs):
@@ -138,9 +138,9 @@ class PubSub:
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        r = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        r = r.addChild('retract', {'node': node, 'notify': '1'})
-        r = r.addChild('item', {'id': id_})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        retract = pubsub.addChild('retract', {'node': node, 'notify': '1'})
+        retract.addChild('item', {'id': id_})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
@@ -155,8 +155,8 @@ class PubSub:
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        d = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
-        d = d.addChild('purge', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub.addChild('purge', {'node': node})
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
@@ -167,10 +167,10 @@ class PubSub:
         if not app.account_is_connected(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
-        d = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
-        d = d.addChild('delete', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub.addChild('delete', {'node': node})
 
-        def response(con, resp, jid, node):
+        def response(_con, resp, jid, node):
             if resp.getType() == 'result' and on_ok:
                 on_ok(jid, node)
             elif on_fail:
@@ -188,10 +188,10 @@ class PubSub:
         if not app.account_is_connected(self._account):
             return
         query = nbxmpp.Iq('set', to=jid)
-        c = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        c = c.addChild('create', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB)
+        create = pubsub.addChild('create', {'node': node})
         if configure:
-            conf = c.addChild('configure')
+            conf = create.addChild('configure')
             if configure_form is not None:
                 conf.addChild(node=configure_form)
 
@@ -205,9 +205,9 @@ class PubSub:
             cb = self._default_callback
 
         query = nbxmpp.Iq('set', to=jid)
-        c = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
-        c = c.addChild('configure', {'node': node})
-        c.addChild(node=form)
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        configure = pubsub.addChild('configure', {'node': node})
+        configure.addChild(node=form)
 
         log.info('Send node config for %s', node)
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
@@ -217,14 +217,14 @@ class PubSub:
             return
 
         query = nbxmpp.Iq('get', to=jid)
-        e = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
-        e = e.addChild('configure', {'node': node})
+        pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
+        pubsub.addChild('configure', {'node': node})
 
         log.info('Request node config for %s', node)
         self._con.connection.SendAndCallForResponse(
             query, self._received_pb_configuration, {'node': node})
 
-    def _received_pb_configuration(self, conn, stanza, node):
+    def _received_pb_configuration(self, _con, stanza, node):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Error: %s', stanza.getError())
             return
@@ -256,7 +256,8 @@ class PubSub:
             None, conn=self._con, node=node,
             form=dataforms.ExtendForm(node=form)))
 
-    def _default_callback(self, conn, stanza, *args, **kwargs):
+    @staticmethod
+    def _default_callback(_con, stanza, *args, **kwargs):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Error: %s', stanza.getError())
 

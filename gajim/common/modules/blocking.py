@@ -37,7 +37,7 @@ class Blocking:
 
         self.supported = False
 
-    def pass_disco(self, from_, identities, features, data, node):
+    def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_BLOCKING not in features:
             return
 
@@ -71,7 +71,7 @@ class Blocking:
         app.nec.push_incoming_event(
             BlockingEvent(None, conn=self._con, changed=self.blocked))
 
-    def _blocking_push_received(self, conn, stanza):
+    def _blocking_push_received(self, _con, stanza):
         reply = stanza.buildReply('result')
         childs = reply.getChildren()
         for child in childs:
@@ -153,7 +153,8 @@ class Blocking:
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
-    def _default_result_handler(self, conn, stanza):
+    @staticmethod
+    def _default_result_handler(_con, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Operation failed: %s', stanza.getError())
 

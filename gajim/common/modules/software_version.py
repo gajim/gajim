@@ -69,7 +69,8 @@ class SoftwareVersion:
                                        client_info=client_info,
                                        os_info=os_info))
 
-    def _extract_info(self, stanza):
+    @staticmethod
+    def _extract_info(stanza):
         query = stanza.getTag('query')
         name = query.getTag('name').getData()
         version = query.getTag('version').getData()
@@ -79,7 +80,7 @@ class SoftwareVersion:
             os_info = os_info.getData()
         return client_info, os_info
 
-    def _answer_request(self, con, stanza):
+    def _answer_request(self, _con, stanza):
         log.info('%s asked for the software version', stanza.getFrom())
         if app.config.get_per('accounts', self._account, 'send_os_info'):
             os_info = get_os_info()

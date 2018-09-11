@@ -41,7 +41,7 @@ class Caps:
         self._capscache = caps_cache.capscache
         self._create_suitable_client_caps = caps_cache.create_suitable_client_caps
 
-    def _presence_received(self, con, stanza):
+    def _presence_received(self, _con, stanza):
         hash_method = node = caps_hash = None
 
         caps = stanza.getTag('c', namespace=nbxmpp.NS_CAPS)
@@ -73,19 +73,19 @@ class Caps:
         self._update_client_caps_of_contact(from_, client_caps)
 
         # Event is only used by ClientIcons Plugin
-        app.nec.push_incoming_event(NetworkEvent(
-                                    'caps-presence-received',
-                                    conn=self._con,
-                                    fjid=full_jid,
-                                    jid=from_.getStripped(),
-                                    resource=from_.getResource(),
-                                    hash_method=hash_method,
-                                    node=node,
-                                    caps_hash=caps_hash,
-                                    client_caps=client_caps,
-                                    show=show,
-                                    ptype=type_,
-                                    stanza=stanza))
+        app.nec.push_incoming_event(
+            NetworkEvent('caps-presence-received',
+                         conn=self._con,
+                         fjid=full_jid,
+                         jid=from_.getStripped(),
+                         resource=from_.getResource(),
+                         hash_method=hash_method,
+                         node=node,
+                         caps_hash=caps_hash,
+                         client_caps=client_caps,
+                         show=show,
+                         ptype=type_,
+                         stanza=stanza))
 
         app.nec.push_incoming_event(NetworkEvent('caps-update',
                                                  conn=self._con,
@@ -97,7 +97,7 @@ class Caps:
         if contact is not None:
             contact.client_caps = client_caps
         else:
-            log.info('Received Caps from unknown contact %s' % from_)
+            log.info('Received Caps from unknown contact %s', from_)
 
     def _get_contact_or_gc_contact_for_jid(self, from_):
         contact = app.contacts.get_contact_from_full_jid(self._account,
@@ -118,7 +118,7 @@ class Caps:
 
         contact = self._get_contact_or_gc_contact_for_jid(from_)
         if not contact:
-            log.info('Received Disco from unknown contact %s' % from_)
+            log.info('Received Disco from unknown contact %s', from_)
             return
 
         lookup = contact.client_caps.get_cache_lookup_strategy()
@@ -128,25 +128,25 @@ class Caps:
             # we already know that the hash is fine and have already cached
             # the identities and features
             return
+
+        validate = contact.client_caps.get_hash_validation_strategy()
+        hash_is_valid = validate(identities, features, data)
+
+        if hash_is_valid:
+            cache_item.set_and_store(identities, features)
         else:
-            validate = contact.client_caps.get_hash_validation_strategy()
-            hash_is_valid = validate(identities, features, data)
+            node = caps_hash = hash_method = None
+            contact.client_caps = self._create_suitable_client_caps(
+                node, caps_hash, hash_method)
+            log.warning(
+                'Computed and retrieved caps hash differ. Ignoring '
+                'caps of contact %s', contact.get_full_jid())
 
-            if hash_is_valid:
-                cache_item.set_and_store(identities, features)
-            else:
-                node = caps_hash = hash_method = None
-                contact.client_caps = self._create_suitable_client_caps(
-                    node, caps_hash, hash_method)
-                log.warning(
-                    'Computed and retrieved caps hash differ. Ignoring '
-                    'caps of contact %s' % contact.get_full_jid())
-
-            app.nec.push_incoming_event(
-                NetworkEvent('caps-update',
-                             conn=self._con,
-                             fjid=str(from_),
-                             jid=bare_jid))
+        app.nec.push_incoming_event(
+            NetworkEvent('caps-update',
+                         conn=self._con,
+                         fjid=str(from_),
+                         jid=bare_jid))
 
 
 def get_instance(*args, **kwargs):

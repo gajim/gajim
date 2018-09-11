@@ -72,7 +72,7 @@ class Discovery:
             iq, self._disco_response, {'success_cb': weak_success_cb,
                                        'error_cb': weak_error_cb})
 
-    def _disco_response(self, conn, stanza, success_cb, error_cb):
+    def _disco_response(self, _con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             if error_cb is not None:
                 error_cb()(stanza.getFrom(), stanza.getError())
@@ -115,16 +115,16 @@ class Discovery:
     @classmethod
     def parse_info_response(cls, stanza):
         identities, features, data, node = [], [], [], None
-        q = stanza.getTag('query')
-        node = q.getAttr('node')
+        query = stanza.getTag('query')
+        node = query.getAttr('node')
         if not node:
             node = ''
 
-        qc = stanza.getQueryChildren()
-        if not qc:
-            qc = []
+        childs = stanza.getQueryChildren()
+        if not childs:
+            childs = []
 
-        for i in qc:
+        for i in childs:
             if i.getName() == 'identity':
                 attr = {}
                 for key in i.getAttrs().keys():
@@ -143,7 +143,7 @@ class Discovery:
         server = self._con.get_own_jid().getDomain()
         self.disco_items(server, success_cb=self._server_items_received)
 
-    def _server_items_received(self, from_, node, items):
+    def _server_items_received(self, _from, _node, items):
         log.info('Server items received')
         for item in items:
             if 'node' in item:
@@ -178,7 +178,7 @@ class Discovery:
         self._con.get_module('PEP').pass_disco(from_, *args)
         self._con.get_module('PubSub').pass_disco(from_, *args)
 
-        identities, features, data, node = args
+        features = args[1]
         if 'urn:xmpp:pep-vcard-conversion:0' in features:
             self._con.avatar_conversion = True
 
@@ -197,7 +197,7 @@ class Discovery:
         self._con.get_module('PrivacyLists').pass_disco(from_, *args)
         self._con.get_module('HTTPUpload').pass_disco(from_, *args)
 
-        identities, features, data, node = args
+        features = args[1]
         if nbxmpp.NS_REGISTER in features:
             self._con.register_supported = True
 
@@ -206,7 +206,7 @@ class Discovery:
 
         self._con.connect_machine(restart=True)
 
-    def _parse_transports(self, from_, identities, features, data, node):
+    def _parse_transports(self, from_, identities, _features, _data, _node):
         for identity in identities:
             category = identity.get('category')
             if category not in ('gateway', 'headline'):
@@ -224,7 +224,7 @@ class Discovery:
             else:
                 self._con.available_transports[transport_type] = [jid]
 
-    def _answer_disco_items(self, con, stanza):
+    def _answer_disco_items(self, _con, stanza):
         from_ = stanza.getFrom()
         log.info('Answer disco items to %s', from_)
 
@@ -241,7 +241,7 @@ class Discovery:
             self._con.get_module('AdHocCommands').command_list_query(stanza)
             raise nbxmpp.NodeProcessed
 
-    def _answer_disco_info(self, con, stanza):
+    def _answer_disco_info(self, _con, stanza):
         from_ = stanza.getFrom()
         log.info('Answer disco info %s', from_)
         if str(from_).startswith('echo.'):
@@ -260,10 +260,10 @@ class Discovery:
         client_version = 'http://gajim.org#' + app.caps_hash[self._account]
 
         if node in (None, client_version):
-            for f in app.gajim_common_features:
-                query.addChild('feature', attrs={'var': f})
-            for f in app.gajim_optional_features[self._account]:
-                query.addChild('feature', attrs={'var': f})
+            for feature in app.gajim_common_features:
+                query.addChild('feature', attrs={'var': feature})
+            for feature in app.gajim_optional_features[self._account]:
+                query.addChild('feature', attrs={'var': feature})
 
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
@@ -281,7 +281,8 @@ class Discovery:
         self._con.connection.SendAndCallForResponse(
             iq, self._muc_info_response, {'callback': callback})
 
-    def _muc_info_response(self, conn, stanza, callback):
+    @staticmethod
+    def _muc_info_response(_con, stanza, callback):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getError()
             if error == 'item-not-found':

@@ -62,7 +62,8 @@ class Delimiter:
         self._con.connection.SendAndCallForResponse(
             iq, self._set_delimiter_response)
 
-    def _set_delimiter_response(self, stanza):
+    @staticmethod
+    def _set_delimiter_response(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.info('Store error: %s', stanza.getError())
 

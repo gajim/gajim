@@ -35,7 +35,8 @@ class Ping:
             ('iq', self._answer_request, 'get', nbxmpp.NS_PING),
         ]
 
-    def _get_ping_iq(self, to):
+    @staticmethod
+    def _get_ping_iq(to):
         iq = nbxmpp.Iq('get', to=to)
         iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
         return iq
@@ -54,7 +55,7 @@ class Ping:
                                      'time_for_ping_alive_answer')
         self._alarm_time = app.idlequeue.set_alarm(self._reconnect, seconds)
 
-    def _keepalive_received(self, stanza):
+    def _keepalive_received(self, _stanza):
         log.info('Received keepalive')
         app.idlequeue.remove_alarm(self._reconnect, self._alarm_time)
 
@@ -83,7 +84,7 @@ class Ping:
         app.nec.push_incoming_event(
             PingSentEvent(None, conn=self._con, contact=contact))
 
-    def _pong_received(self, con, stanza, ping_time, contact):
+    def _pong_received(self, _con, stanza, ping_time, contact):
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
             app.nec.push_incoming_event(
@@ -97,11 +98,11 @@ class Ping:
                            contact=contact,
                            seconds=diff))
 
-    def _answer_request(self, con, stanza):
+    def _answer_request(self, _con, stanza):
         iq = stanza.buildReply('result')
-        q = iq.getTag('ping')
-        if q is not None:
-            iq.delChild(q)
+        ping = iq.getTag('ping')
+        if ping is not None:
+            iq.delChild(ping)
         self._con.connection.send(iq)
         log.info('Send pong to %s', stanza.getFrom())
         raise nbxmpp.NodeProcessed
