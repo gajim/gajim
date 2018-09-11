@@ -926,7 +926,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             form_tag = feature_tag.getTag('x', namespace=nbxmpp.NS_DATA)
             if not form_tag:
                 return
-            self.dataform = dataforms.ExtendForm(node=form_tag)
+            self.dataform = dataforms.extend_form(node=form_tag)
             for f in self.dataform.iter_fields():
                 if f.var == 'stream-method' and f.type_ == 'list-single':
                     values = [o[1] for o in f.options]

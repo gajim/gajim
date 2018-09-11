@@ -588,7 +588,7 @@ class ChatControl(ChatControlBase):
 
     def on_location_eventbox_button_release_event(self, widget, event):
         if 'geoloc' in self.contact.pep:
-            location = self.contact.pep['geoloc']._pep_specific_data
+            location = self.contact.pep['geoloc'].data
             if ('lat' in location) and ('lon' in location):
                 uri = 'https://www.openstreetmap.org/?' + \
                         'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],

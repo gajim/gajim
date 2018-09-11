@@ -1200,7 +1200,7 @@ class GroupchatControl(ChatControlBase):
                 self.form_widget.hide()
                 self.form_widget.destroy()
                 self.btn_box.destroy()
-            dataform = dataforms.ExtendForm(node=obj.captcha_form)
+            dataform = dataforms.extend_form(node=obj.captcha_form)
             self.form_widget = dataforms_widget.DataFormWidget(dataform)
 
             def on_send_dataform_clicked(widget):

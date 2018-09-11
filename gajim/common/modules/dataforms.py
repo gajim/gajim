@@ -39,22 +39,22 @@ class WrongFieldValue(Error):
 
 
 # helper class to change class of already existing object
-class ExtendedNode(nbxmpp.Node, object):
+class ExtendedNode(nbxmpp.Node):
     @classmethod
-    def __new__(cls, *a, **b):
-        if 'extend' not in b.keys() or not b['extend']:
+    def __new__(cls, *args, **kwargs):
+        if 'extend' not in kwargs.keys() or not kwargs['extend']:
             return object.__new__(cls)
 
-        extend = b['extend']
+        extend = kwargs['extend']
         assert issubclass(cls, extend.__class__)
         extend.__class__ = cls
         return extend
 
 
 # helper to create fields from scratch
-def Field(typ, **attrs):
+def create_field(typ, **attrs):
     ''' Helper function to create a field of given type. '''
-    f = {
+    field = {
         'boolean': BooleanField,
         'fixed': StringField,
         'hidden': StringField,
@@ -66,18 +66,18 @@ def Field(typ, **attrs):
         'list-single': ListSingleField,
         'text-multi': TextMultiField,
     }[typ](typ=typ, **attrs)
-    return f
+    return field
 
 
-def ExtendField(node):
+def extend_field(node):
     """
     Helper function to extend a node to field of appropriate type
     """
     # when validation (XEP-122) will go in, we could have another classes
-    # like DateTimeField - so that dicts in Field() and ExtendField() will
-    # be different...
+    # like DateTimeField - so that dicts in create_field() and
+    # extend_field() will be different...
     typ = node.getAttr('type')
-    f = {
+    field = {
         'boolean': BooleanField,
         'fixed': StringField,
         'hidden': StringField,
@@ -89,25 +89,24 @@ def ExtendField(node):
         'list-single': ListSingleField,
         'text-multi': TextMultiField,
     }
-    if typ not in f:
+    if typ not in field:
         typ = 'text-single'
-    return f[typ](extend=node)
+    return field[typ](extend=node)
 
 
-def ExtendForm(node):
+def extend_form(node):
     """
     Helper function to extend a node to form of appropriate type
     """
     if node.getTag('reported') is not None:
         return MultipleDataForm(extend=node)
-    else:
-        return SimpleDataForm(extend=node)
+    return SimpleDataForm(extend=node)
 
 
 class DataField(ExtendedNode):
     """
     Keeps data about one field - var, field type, labels, instructions... Base
-    class for different kinds of fields. Use Field() function to construct one
+    class for different kinds of fields. Use create_field() function to construct one
     of these
     """
 
@@ -136,10 +135,10 @@ class DataField(ExtendedNode):
         'text-private', 'text-single'. If you set this to something different,
         DataField will store given name, but treat all data as text-single
         """
-        t = self.getAttr('type')
-        if t is None:
+        type_ = self.getAttr('type')
+        if type_ is None:
             return 'text-single'
-        return t
+        return type_
 
     @type_.setter
     def type_(self, value):
@@ -199,9 +198,9 @@ class DataField(ExtendedNode):
 
     @description.deleter
     def description(self):
-        t = self.getTag('desc')
-        if t is not None:
-            self.delChild(t)
+        desc = self.getTag('desc')
+        if desc is not None:
+            self.delChild(desc)
 
     @property
     def required(self):
@@ -212,10 +211,10 @@ class DataField(ExtendedNode):
 
     @required.setter
     def required(self, value):
-        t = self.getTag('required')
-        if t and not value:
-            self.delChild(t)
-        elif not t and value:
+        required = self.getTag('required')
+        if required and not value:
+            self.delChild(required)
+        elif not required and value:
             self.addChild('required')
 
     @property
@@ -234,11 +233,12 @@ class DataField(ExtendedNode):
 
     @media.deleter
     def media(self):
-        t = self.getTag('media')
-        if t is not None:
-            self.delChild(t)
+        media = self.getTag('media')
+        if media is not None:
+            self.delChild(media)
 
-    def is_valid(self):
+    @staticmethod
+    def is_valid():
         return True
 
 
@@ -306,12 +306,12 @@ class BooleanField(DataField):
         """
         Value of field. May contain True, False or None
         """
-        v = self.getTagData('value')
-        if v in ('0', 'false'):
+        value = self.getTagData('value')
+        if value in ('0', 'false'):
             return False
-        if v in ('1', 'true'):
+        if value in ('1', 'true'):
             return True
-        if v is None:
+        if value is None:
             return False  # default value is False
         raise WrongFieldValue
 
@@ -321,9 +321,9 @@ class BooleanField(DataField):
 
     @value.deleter
     def value(self):
-        t = self.getTag('value')
-        if t is not None:
-            self.delChild(t)
+        value = self.getTag('value')
+        if value is not None:
+            self.delChild(value)
 
 
 class StringField(DataField):
@@ -366,13 +366,13 @@ class ListField(DataField):
         """
         options = []
         for element in self.getTags('option'):
-            v = element.getTagData('value')
-            if v is None:
+            value = element.getTagData('value')
+            if value is None:
                 raise WrongFieldValue
             label = element.getAttr('label')
             if not label:
-                label = v
-            options.append((label, v))
+                label = value
+            options.append((label, value))
         return options
 
     @options.setter
@@ -389,13 +389,13 @@ class ListField(DataField):
 
     def iter_options(self):
         for element in self.iterTags('option'):
-            v = element.getTagData('value')
-            if v is None:
+            value = element.getTagData('value')
+            if value is None:
                 raise WrongFieldValue
             label = element.getAttr('label')
             if not label:
-                label = v
-            yield (v, label)
+                label = value
+            yield (value, label)
 
 
 class ListSingleField(ListField, StringField):
@@ -469,7 +469,7 @@ class JidMultiField(ListMultiField):
     Covers jid-multi fields
     """
     def is_valid(self):
-        if len(self.values):
+        if self.values:
             for value in self.values:
                 try:
                     helpers.parse_jid(value)
@@ -526,7 +526,7 @@ class DataRecord(ExtendedNode):
             if fields is None:
                 for field in self.iterTags('field'):
                     if not isinstance(field, DataField):
-                        ExtendField(field)
+                        extend_field(field)
                     self.vars[field.var] = field
             else:
                 for field in self.getTags('field'):
@@ -545,7 +545,7 @@ class DataRecord(ExtendedNode):
         del self.fields
         for field in fields:
             if not isinstance(field, DataField):
-                ExtendField(field)
+                extend_field(field)
             self.addChild(node=field)
 
     @fields.deleter
@@ -572,8 +572,8 @@ class DataRecord(ExtendedNode):
         return self.vars[item]
 
     def is_valid(self):
-        for f in self.iter_fields():
-            if not f.is_valid():
+        for field in self.iter_fields():
+            if not field.is_valid():
                 return False
         return True
 
@@ -660,27 +660,29 @@ class SimpleDataForm(DataForm, DataRecord):
         DataRecord.__init__(self, fields=fields, extend=self, associated=self)
 
     def get_purged(self):
-        c = SimpleDataForm(extend=self)
-        del c.title
-        c.instructions = ''
+        simple_form = SimpleDataForm(extend=self)
+        del simple_form.title
+        simple_form.instructions = ''
         to_be_removed = []
-        for f in c.iter_fields():
-            if f.required:
+        for field in simple_form.iter_fields():
+            if field.required:
                 # add <value> if there is not
-                if hasattr(f, 'value') and not f.value:
-                    f.value = ''
+                if hasattr(field, 'value') and not field.value:
+                    field.value = ''
                 # Keep all required fields
                 continue
-            if ((hasattr(f, 'value') and not f.value and f.value != 0) or
-                    (hasattr(f, 'values') and len(f.values) == 0)):
-                to_be_removed.append(f)
+            if ((hasattr(field, 'value') and
+                 not field.value and
+                 field.value != 0) or
+                    (hasattr(field, 'values') and not field.values)):
+                to_be_removed.append(field)
             else:
-                del f.label
-                del f.description
-                del f.media
-        for f in to_be_removed:
-            c.delChild(f)
-        return c
+                del field.label
+                del field.description
+                del field.media
+        for field in to_be_removed:
+            simple_form.delChild(field)
+        return simple_form
 
 
 class MultipleDataForm(DataForm):

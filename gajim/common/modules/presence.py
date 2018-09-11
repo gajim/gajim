@@ -138,15 +138,15 @@ class Presence:
         if not app.account_is_connected(self._account):
             return
         if remove_auth:
-            self._con.getRoster().delItem(jid)
+            self._con.getRoster().del_item(jid)
             jid_list = app.config.get_per('contacts')
             for j in jid_list:
                 if j.startswith(jid):
                     app.config.del_per('contacts', j)
         else:
             log.info('Unsubscribe from %s', jid)
-            self._con.getRoster().Unsubscribe(jid)
-            self._con.getRoster().setItem(jid)
+            self._con.getRoster().unsubscribe(jid)
+            self._con.getRoster().set_item(jid)
 
     def subscribe(self, jid, msg=None, name='', groups=None, auto_auth=False):
         if not app.account_is_connected(self._account):

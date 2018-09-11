@@ -31,10 +31,10 @@ class UserActivityData(AbstractPEPData):
     type_ = PEPEventType.ACTIVITY
 
     def __init__(self, activity):
-        self._pep_specific_data = activity
+        self.data = activity
 
     def asMarkupText(self):
-        pep = self._pep_specific_data
+        pep = self.data
         activity = pep['activity']
         subactivity = pep['subactivity'] if 'subactivity' in pep else None
         text = pep['text'] if 'text' in pep else None

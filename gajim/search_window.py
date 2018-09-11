@@ -136,7 +136,7 @@ class SearchWindow:
         if obj.is_dataform:
             self.is_form = True
             self.data_form_widget = dataforms_widget.DataFormWidget()
-            self.dataform = dataforms.ExtendForm(node=obj.data)
+            self.dataform = dataforms.extend_form(node=obj.data)
             self.data_form_widget.set_sensitive(True)
             try:
                 self.data_form_widget.data_form = self.dataform
@@ -208,7 +208,7 @@ class SearchWindow:
                 self.information_button.show()
             return
 
-        self.dataform = dataforms.ExtendForm(node=obj.data)
+        self.dataform = dataforms.extend_form(node=obj.data)
         if len(self.dataform.items) == 0:
             # No result
             self.label.set_text(_('No result'))

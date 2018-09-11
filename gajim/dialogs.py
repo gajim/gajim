@@ -1554,7 +1554,7 @@ class DataFormWindow(Dialog):
         self.set_resizable(True)
         gtkgui_helpers.resize_window(self, 600, 400)
         self.dataform_widget = dataforms_widget.DataFormWidget()
-        self.dataform = dataforms.ExtendForm(node=form)
+        self.dataform = dataforms.extend_form(node=form)
         self.dataform_widget.set_sensitive(True)
         self.dataform_widget.data_form = self.dataform
         self.dataform_widget.show_all()

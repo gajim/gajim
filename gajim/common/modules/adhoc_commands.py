@@ -39,7 +39,7 @@ class AdHocCommand:
     commandfeatures = (nbxmpp.NS_DATA,)
 
     @staticmethod
-    def isVisibleFor(samejid):
+    def is_visible_for(_samejid):
         """
         This returns True if that command should be visible and invokable for
         others
@@ -54,8 +54,8 @@ class AdHocCommand:
         self.jid = jid
         self.sessionid = sessionid
 
-    def buildResponse(self, request, status='executing', defaultaction=None,
-                      actions=None):
+    def build_response(self, request, status='executing', defaultaction=None,
+                       actions=None):
         assert status in ('executing', 'completed', 'canceled')
 
         response = request.buildReply('result')
@@ -74,12 +74,12 @@ class AdHocCommand:
             cmd.addChild('actions', attrs, actions)
         return response, cmd
 
-    def badRequest(self, stanza):
+    def bad_request(self, stanza):
         self.connection.connection.send(
             nbxmpp.Error(stanza, nbxmpp.NS_STANZAS + ' bad-request'))
 
     def cancel(self, request):
-        response = self.buildResponse(request, status='canceled')[0]
+        response = self.build_response(request, status='canceled')[0]
         self.connection.connection.send(response)
         return False    # finish the session
 
@@ -90,30 +90,30 @@ class ChangeStatusCommand(AdHocCommand):
 
     def __init__(self, conn, jid, sessionid):
         AdHocCommand.__init__(self, conn, jid, sessionid)
-        self.cb = self.first_step
+        self._callback = self.first_step
 
     @staticmethod
-    def isVisibleFor(samejid):
+    def is_visible_for(samejid):
         """
         Change status is visible only if the entity has the same bare jid
         """
         return samejid
 
     def execute(self, request):
-        return self.cb(request)
+        return self._callback(request)
 
     def first_step(self, request):
         # first query...
-        response, cmd = self.buildResponse(request,
-                                           defaultaction='execute',
-                                           actions=['execute'])
+        response, cmd = self.build_response(request,
+                                            defaultaction='execute',
+                                            actions=['execute'])
 
         cmd.addChild(
             node=dataforms.SimpleDataForm(
                 title=_('Change status'),
                 instructions=_('Set the presence type and description'),
                 fields=[
-                    dataforms.Field(
+                    dataforms.create_field(
                         'list-single',
                         var='presence-type',
                         label='Type of presence:',
@@ -126,7 +126,7 @@ class ChangeStatusCommand(AdHocCommand):
                             ('offline', _('Offline - disconnect'))],
                         value='online',
                         required=True),
-                    dataforms.Field(
+                    dataforms.create_field(
                         'text-multi',
                         var='presence-desc',
                         label=_('Presence description:'))
@@ -137,7 +137,7 @@ class ChangeStatusCommand(AdHocCommand):
         self.connection.connection.send(response)
 
         # for next invocation
-        self.cb = self.second_step
+        self._callback = self.second_step
 
         return True     # keep the session
 
@@ -147,19 +147,19 @@ class ChangeStatusCommand(AdHocCommand):
             form = dataforms.SimpleDataForm(
                 extend=request.getTag('command').getTag('x'))
         except Exception:
-            self.badRequest(request)
+            self.bad_request(request)
             return False
 
         try:
             presencetype = form['presence-type'].value
             if presencetype not in ('chat', 'online', 'away',
                                     'xa', 'dnd', 'offline'):
-                self.badRequest(request)
+                self.bad_request(request)
                 return False
         except Exception:
             # KeyError if there's no presence-type field in form or
             # AttributeError if that field is of wrong type
-            self.badRequest(request)
+            self.bad_request(request)
             return False
 
         try:
@@ -167,7 +167,7 @@ class ChangeStatusCommand(AdHocCommand):
         except Exception:       # same exceptions as in last comment
             presencedesc = ''
 
-        response, cmd = self.buildResponse(request, status='completed')
+        response, cmd = self.build_response(request, status='completed')
         cmd.addChild('note', {}, _('The status has been changed.'))
 
         # if going offline, we need to push response so it won't go into
@@ -206,23 +206,23 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
     def __init__(self, conn, jid, sessionid):
         AdHocCommand.__init__(self, conn, jid, sessionid)
-        self.cb = self.first_step
+        self._callback = self.first_step
 
     @staticmethod
-    def isVisibleFor(samejid):
+    def is_visible_for(samejid):
         """
         Leave groupchats is visible only if the entity has the same bare jid
         """
         return samejid
 
     def execute(self, request):
-        return self.cb(request)
+        return self._callback(request)
 
     def first_step(self, request):
         # first query...
-        response, cmd = self.buildResponse(request,
-                                           defaultaction='execute',
-                                           actions=['execute'])
+        response, cmd = self.build_response(request,
+                                            defaultaction='execute',
+                                            actions=['execute'])
         options = []
         account = self.connection.name
         for gc in find_current_groupchats(account):
@@ -230,8 +230,8 @@ class LeaveGroupchatsCommand(AdHocCommand):
                 ('%s' % gc[0],
                  _('%(nickname)s on %(room_jid)s') % {'nickname': gc[1],
                                                       'room_jid': gc[0]}))
-        if not len(options):
-            response, cmd = self.buildResponse(request, status='completed')
+        if not options:
+            response, cmd = self.build_response(request, status='completed')
             cmd.addChild('note', {}, _('You have not joined a groupchat.'))
 
             self.connection.connection.send(response)
@@ -242,7 +242,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
                 title=_('Leave Groupchats'),
                 instructions=_('Choose the groupchats you want to leave'),
                 fields=[
-                    dataforms.Field(
+                    dataforms.create_field(
                         'list-multi',
                         var='groupchats',
                         label=_('Groupchats'),
@@ -255,7 +255,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
         self.connection.connection.send(response)
 
         # for next invocation
-        self.cb = self.second_step
+        self._callback = self.second_step
 
         return True     # keep the session
 
@@ -265,13 +265,13 @@ class LeaveGroupchatsCommand(AdHocCommand):
             form = dataforms.SimpleDataForm(
                 extend=request.getTag('command').getTag('x'))
         except Exception:
-            self.badRequest(request)
+            self.bad_request(request)
             return False
 
         try:
             gc = form['groupchats'].values
         except Exception:       # KeyError if there's no groupchats in form
-            self.badRequest(request)
+            self.bad_request(request)
             return False
         account = self.connection.name
         try:
@@ -279,15 +279,16 @@ class LeaveGroupchatsCommand(AdHocCommand):
                 gc_control = app.interface.msg_win_mgr.get_gc_control(
                     room_jid, account)
                 if not gc_control:
-                    gc_control = app.interface.minimized_controls[account][room_jid]
+                    minimized_controls = app.interface.minimized_controls
+                    gc_control = minimized_controls[account][room_jid]
                     gc_control.shutdown()
                     app.interface.roster.remove_groupchat(room_jid, account)
                     continue
                 gc_control.parent_win.remove_tab(gc_control, None, force=True)
         except Exception:       # KeyError if there's no such room opened
-            self.badRequest(request)
+            self.bad_request(request)
             return False
-        response, cmd = self.buildResponse(request, status='completed')
+        response, cmd = self.build_response(request, status='completed')
         note = _('You left the following groupchats:')
         for room_jid in gc:
             note += '\n\t' + room_jid
@@ -327,13 +328,13 @@ class AdHocCommands:
     def command_list_query(self, stanza):
         iq = stanza.buildReply('result')
         jid = helpers.get_full_jid_from_iq(stanza)
-        q = iq.getTag('query')
+        query = iq.getTag('query')
         # buildReply don't copy the node attribute. Re-add it
-        q.setAttr('node', nbxmpp.NS_COMMANDS)
+        query.setAttr('node', nbxmpp.NS_COMMANDS)
 
         for node, cmd in self._commands.items():
-            if cmd.isVisibleFor(self.is_same_jid(jid)):
-                q.addChild('item', {
+            if cmd.is_visible_for(self.is_same_jid(jid)):
+                query.addChild('item', {
                     # TODO: find the jid
                     'jid': str(self._con.get_own_jid()),
                     'node': node,
@@ -349,7 +350,7 @@ class AdHocCommands:
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
-            log.warning('Invalid JID: %s, ignoring it' % stanza.getFrom())
+            log.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
             return
         node = stanza.getTagAttr('query', 'node')
 
@@ -357,16 +358,16 @@ class AdHocCommands:
             return False
 
         cmd = self._commands[node]
-        if cmd.isVisibleFor(self.is_same_jid(jid)):
+        if cmd.is_visible_for(self.is_same_jid(jid)):
             iq = stanza.buildReply('result')
-            q = iq.getTag('query')
-            q.addChild('identity',
-                       attrs={'type': 'command-node',
-                              'category': 'automation',
-                              'name': cmd.commandname})
-            q.addChild('feature', attrs={'var': nbxmpp.NS_COMMANDS})
+            query = iq.getTag('query')
+            query.addChild('identity',
+                           attrs={'type': 'command-node',
+                                  'category': 'automation',
+                                  'name': cmd.commandname})
+            query.addChild('feature', attrs={'var': nbxmpp.NS_COMMANDS})
             for feature in cmd.commandfeatures:
-                q.addChild('feature', attrs={'var': feature})
+                query.addChild('feature', attrs={'var': feature})
 
             self._con.connection.send(iq)
             return True
@@ -385,14 +386,14 @@ class AdHocCommands:
             return False
 
         cmd = self._commands[node]
-        if cmd.isVisibleFor(self.is_same_jid(jid)):
+        if cmd.is_visible_for(self.is_same_jid(jid)):
             iq = stanza.buildReply('result')
             self._con.connection.send(iq)
             return True
 
         return False
 
-    def _execute_command_received(self, con, stanza):
+    def _execute_command_received(self, _con, stanza):
         jid = helpers.get_full_jid_from_iq(stanza)
 
         cmd = stanza.getTag('command')
@@ -417,7 +418,7 @@ class AdHocCommands:
                 raise nbxmpp.NodeProcessed
 
             newcmd = self._commands[node]
-            if not newcmd.isVisibleFor(self.is_same_jid(jid)):
+            if not newcmd.is_visible_for(self.is_same_jid(jid)):
                 log.warning('Command not visible for jid: %s', jid)
                 raise nbxmpp.NodeProcessed
 
@@ -492,7 +493,9 @@ class AdHocCommands:
         items = stanza.getQueryPayload()
         commandlist = []
         if items:
-            commandlist = [(t.getAttr('node'), t.getAttr('name')) for t in items]
+            commandlist = [
+                (t.getAttr('node'), t.getAttr('name')) for t in items
+            ]
 
         log.info('Received: %s', commandlist)
         app.nec.push_incoming_event(
@@ -550,7 +553,8 @@ class AdHocCommands:
         self._con.connection.SendAndCallForResponse(
             stanza, self._cancel_result_received)
 
-    def _cancel_result_received(self, stanza):
+    @staticmethod
+    def _cancel_result_received(stanza):
         if not nbxmpp.isResultNode(stanza):
             log.warning('Error: %s', stanza.getError())
         else:

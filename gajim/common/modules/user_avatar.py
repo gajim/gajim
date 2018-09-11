@@ -33,7 +33,7 @@ class UserAvatarData(AbstractPEPData):
     type_ = PEPEventType.AVATAR
 
     def __init__(self, avatar):
-        self._pep_specific_data = avatar
+        self.data = avatar
 
 
 class UserAvatar(AbstractPEPModule):
@@ -124,7 +124,7 @@ class UserAvatar(AbstractPEPModule):
         return avatar or None
 
     def _notification_received(self, jid, user_pep):
-        avatar = user_pep._pep_specific_data
+        avatar = user_pep.data
         own_jid = self._con.get_own_jid()
         if avatar is None:
             # Remove avatar

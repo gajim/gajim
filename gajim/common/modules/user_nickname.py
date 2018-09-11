@@ -31,10 +31,10 @@ class UserNicknameData(AbstractPEPData):
     type_ = PEPEventType.NICKNAME
 
     def __init__(self, nickname):
-        self._pep_specific_data = nickname
+        self.data = nickname
 
     def get_nick(self):
-        return self._pep_specific_data or ''
+        return self.data or ''
 
 
 class UserNickname(AbstractPEPModule):

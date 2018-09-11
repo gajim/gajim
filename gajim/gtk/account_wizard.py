@@ -371,7 +371,7 @@ class AccountCreationWizard:
         self.is_form = obj.is_form
         empty_config = True
         if obj.is_form:
-            dataform = dataforms.ExtendForm(node=obj.config)
+            dataform = dataforms.extend_form(node=obj.config)
             self.data_form_widget = dataforms_widget.DataFormWidget()
             self.data_form_widget.selectable = True
             self.data_form_widget.set_data_form(dataform)

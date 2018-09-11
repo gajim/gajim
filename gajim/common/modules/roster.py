@@ -45,7 +45,7 @@ class Roster:
         account_jid = self._con.get_own_jid().getStripped()
         data = app.logger.get_roster(account_jid)
         if data:
-            self.setRaw(data)
+            self.set_raw(data)
             for jid, item in self._data.items():
                 app.nec.push_incoming_event(NetworkEvent(
                     'roster-info',
@@ -170,7 +170,7 @@ class Roster:
 
         attrs = item.getAttrs()
         del attrs['jid']
-        groups = set([group.getData() for group in item.getTags('group')])
+        groups = {group.getData() for group in item.getTags('group')}
         attrs['groups'] = list(groups)
 
         if update:
@@ -241,14 +241,14 @@ class Roster:
             self._data[jid]['ask'],
             self._data[jid]['groups'])
 
-    def _getItemData(self, jid, dataname):
+    def _get_item_data(self, jid, dataname):
         """
         Return specific jid's representation in internal format.
         """
         jid = jid[:(jid + '/').find('/')]
         return self._data[jid][dataname]
 
-    def delItem(self, jid):
+    def del_item(self, jid):
         """
         Delete contact 'jid' from roster
         """
@@ -256,19 +256,19 @@ class Roster:
             nbxmpp.Iq('set', nbxmpp.NS_ROSTER, payload=[
                 nbxmpp.Node('item', {'jid': jid, 'subscription': 'remove'})]))
 
-    def getGroups(self, jid):
+    def get_groups(self, jid):
         """
         Return groups list that contact 'jid' belongs to
         """
-        return self._getItemData(jid, 'groups')
+        return self._get_item_data(jid, 'groups')
 
-    def getName(self, jid):
+    def get_name(self, jid):
         """
         Return name of contact 'jid'
         """
-        return self._getItemData(jid, 'name')
+        return self._get_item_data(jid, 'name')
 
-    def setItem(self, jid, name=None, groups=None):
+    def set_item(self, jid, name=None, groups=None):
         """
         Rename contact 'jid' and sets the groups list that it now belongs to
         """
@@ -283,7 +283,7 @@ class Roster:
                 item.addChild(node=nbxmpp.Node('group', payload=[group]))
         self._con.connection.send(iq)
 
-    def setItemMulti(self, items):
+    def set_item_multi(self, items):
         """
         Rename multiple contacts and sets their group lists
         """
@@ -298,7 +298,7 @@ class Roster:
                 item.addChild(node=nbxmpp.Node('group', payload=[group]))
             self._con.connection.send(iq)
 
-    def getItems(self):
+    def get_items(self):
         """
         Return list of all [bare] JIDs that the roster is currently tracks
         """
@@ -306,7 +306,7 @@ class Roster:
 
     def keys(self):
         """
-        Same as getItems. Provided for the sake of dictionary interface
+        Same as get_items. Provided for the sake of dictionary interface
         """
         return list(self._data.keys())
 
@@ -317,7 +317,7 @@ class Roster:
         """
         return self._data[item]
 
-    def getItem(self, item):
+    def get_item(self, item):
         """
         Get the contact in the internal format (or None if JID 'item' is not in
         roster)
@@ -325,19 +325,19 @@ class Roster:
         if item in self._data:
             return self._data[item]
 
-    def Unsubscribe(self, jid):
+    def unsubscribe(self, jid):
         """
         Ask for removing our subscription for JID 'jid'
         """
         self._con.connection.send(nbxmpp.Presence(jid, 'unsubscribe'))
 
-    def getRaw(self):
+    def get_raw(self):
         """
         Return the internal data representation of the roster
         """
         return self._data
 
-    def setRaw(self, data):
+    def set_raw(self, data):
         """
         Set the internal data representation of the roster
         """

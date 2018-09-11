@@ -404,7 +404,7 @@ class CommandWindow:
 
         self.commandnode = command.getAttr('node')
         if command.getTag('x'):
-            self.dataform = dataforms.ExtendForm(node=command.getTag('x'))
+            self.dataform = dataforms.extend_form(node=command.getTag('x'))
 
             self.data_form_widget.set_sensitive(True)
             try:

@@ -254,7 +254,7 @@ class PubSub:
 
         app.nec.push_incoming_event(PubSubConfigReceivedEvent(
             None, conn=self._con, node=node,
-            form=dataforms.ExtendForm(node=form)))
+            form=dataforms.extend_form(node=form)))
 
     @staticmethod
     def _default_callback(_con, stanza, *args, **kwargs):

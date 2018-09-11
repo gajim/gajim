@@ -31,13 +31,13 @@ class UserMoodData(AbstractPEPData):
     type_ = PEPEventType.MOOD
 
     def __init__(self, mood):
-        self._pep_specific_data = mood
+        self.data = mood
 
     def asMarkupText(self):
-        mood = self._translate_mood(self._pep_specific_data['mood'])
+        mood = self._translate_mood(self.data['mood'])
         markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
-        if 'text' in self._pep_specific_data:
-            text = self._pep_specific_data['text']
+        if 'text' in self.data:
+            text = self.data['text']
             markuptext += ' (%s)' % GLib.markup_escape_text(text)
         return markuptext
 
