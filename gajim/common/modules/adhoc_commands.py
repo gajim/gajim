@@ -20,11 +20,14 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+
 import nbxmpp
 
-from gajim.common import helpers
-from gajim.common.modules import dataforms
 from gajim.common import app
+from gajim.common import helpers
+from gajim.common.i18n import _
+from gajim.common.modules import dataforms
+
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.commands')
