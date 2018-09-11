@@ -24,22 +24,22 @@ log = logging.getLogger('gajim.c.m')
 
 ZEROCONF_MODULES = ['adhoc_commands', 'receipts', 'discovery']
 
-imported_modules = []  # type: List[tuple]
+_imported_modules = []  # type: List[tuple]
 _modules = {}  # type: Dict[str, Dict[str, Any]]
 
 for file in Path(__file__).parent.iterdir():
     if file.stem == '__init__':
         continue
 
-    module = import_module('.%s' % file.stem, package='gajim.common.modules')
-    if hasattr(module, 'get_instance'):
+    _module = import_module('.%s' % file.stem, package='gajim.common.modules')
+    if hasattr(_module, 'get_instance'):
         log.info('Load module: %s', file.stem)
         if file.stem == 'pep':
             # Register the PEP module first, because other modules
             # depend on it
-            imported_modules.insert(0, (module, file.stem))
+            _imported_modules.insert(0, (_module, file.stem))
         else:
-            imported_modules.append((module, file.stem))
+            _imported_modules.append((_module, file.stem))
 
 
 class ModuleMock:
@@ -74,7 +74,7 @@ def register(con, *args, **kwargs):
     if con in _modules:
         return
     _modules[con.name] = {}
-    for module in imported_modules:
+    for module in _imported_modules:
         mod, name = module
         if con.name == 'Local':
             if name not in ZEROCONF_MODULES:
