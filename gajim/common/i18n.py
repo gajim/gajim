@@ -29,45 +29,6 @@ direction_mark = '\u200E'
 _translations = None
 
 
-def initialize():
-    global _translations
-    try:
-        locale.setlocale(locale.LC_ALL, '')
-    except locale.Error as error:
-        print(error)
-
-    initialize_lang()
-    set_i18n_env()
-
-    localedir = get_locale_dir()
-    if hasattr(locale, 'bindtextdomain'):
-        locale.bindtextdomain(DOMAIN, localedir)
-
-    gettext.install(DOMAIN, localedir)
-    if gettext._translations:
-        _translations = list(gettext._translations.values())[0]
-    else:
-        _translations = gettext.NullTranslations()
-
-
-def set_i18n_env():
-    if os.name == 'nt':
-        os.environ['LANG'] = LANG
-
-
-def initialize_lang():
-    global LANG
-    try:
-        # en_US, fr_FR, el_GR etc..
-        default = locale.getdefaultlocale()[0]
-        if default is None:
-            # LC_ALL=C
-            return
-        LANG = default[:2]
-    except (ValueError, locale.Error):
-        pass
-
-
 def get_locale_dir():
     if os.name == 'nt':
         return None
@@ -75,9 +36,9 @@ def get_locale_dir():
     path = gettext.find(DOMAIN)
     if path:
         # extract localedir from localedir/language/LC_MESSAGES/domain.mo
-        path, tail = os.path.split(path)
-        path, tail = os.path.split(path)
-        localedir, tail = os.path.split(path)
+        path = os.path.split(path)[1]
+        path = os.path.split(path)[1]
+        localedir = os.path.split(path)[1]
     elif os.path.exists('/app/share/run-as-flatpak'):
         # Check if we run as flatpak
         return '/app/share/locale'
@@ -110,7 +71,7 @@ def paragraph_direction_mark(text):
         bidi = unicodedata.bidirectional(char)
         if bidi == 'L':
             return '\u200E'
-        elif bidi == 'AL' or bidi == 'R':
+        if bidi in ('AL', 'R'):
             return '\u200F'
 
     return '\u200E'
@@ -133,14 +94,15 @@ def Q_(text):
     """
     text = _(text)
     if text.startswith('?'):
-        qualifier, text = text.split(':', 1)
+        text = text.split(':', 1)[1]
     return text
 
 
 def ngettext(s_sing, s_plural, n, replace_sing=None, replace_plural=None):
     """
     Use as:
-        i18n.ngettext('leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
+        i18n.ngettext(
+            'leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
 
     In other words this is a hack to ngettext() to support %s %d etc..
     """
@@ -152,4 +114,31 @@ def ngettext(s_sing, s_plural, n, replace_sing=None, replace_plural=None):
     return text
 
 
-initialize()
+try:
+    locale.setlocale(locale.LC_ALL, '')
+except locale.Error as error:
+    print(error)
+
+try:
+    # en_US, fr_FR, el_GR etc..
+    default = locale.getdefaultlocale()[0]
+    if default is not None:
+        LANG = default[:2]
+except (ValueError, locale.Error):
+    pass
+
+if os.name == 'nt':
+    os.environ['LANG'] = LANG
+
+_localedir = get_locale_dir()
+if hasattr(locale, 'bindtextdomain'):
+    locale.bindtextdomain(DOMAIN, _localedir)
+gettext.textdomain(DOMAIN)
+
+gettext.install(DOMAIN, _localedir)
+_ = gettext.translation(DOMAIN, _localedir).gettext
+
+if gettext._translations:
+    _translations = list(gettext._translations.values())[0]
+else:
+    _translations = gettext.NullTranslations()
