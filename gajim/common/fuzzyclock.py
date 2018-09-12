@@ -28,36 +28,67 @@ in turn based on the Fuzzy Clock Applet of Frerich Raabe (KDE).
 So most of the credit goes to this guys, thanks :-)
 """
 
+from gajim.common.i18n import _
+
 
 class FuzzyClock:
-    HOUR_NAMES = [ _('twelve'), _('one'), _('two'), _('three'), _('four'),
-            _('five'), _('six'), _('seven'), _('eight'), _('nine'), _('ten'),
-            _('eleven') ]
+    HOUR_NAMES = [
+        _('twelve'), _('one'), _('two'), _('three'), _('four'),
+        _('five'), _('six'), _('seven'), _('eight'), _('nine'), _('ten'),
+        _('eleven')
+    ]
 
-    #Strings to use for the output. %(0)s will be replaced with the preceding hour
-    #(e.g. "x PAST %(0)s"), %(1)s with the coming hour (e.g. "x TO %(0)s"). '''
-    FUZZY_TIME = [ _("%(0)s o'clock"), _('five past %(0)s'), _('ten past %(0)s'),
-            _('quarter past %(0)s'), _('twenty past %(0)s'), _('twenty five past %(0)s'),
-            _('half past %(0)s'), _('twenty five to %(1)s'), _('twenty to %(1)s'),
-            _('quarter to %(1)s'), _('ten to %(1)s'), _('five to %(1)s'), _("%(1)s o'clock") ]
+    # Strings to use for the output. %(0)s will be replaced with
+    # the preceding hour (e.g. "x PAST %(0)s"), %(1)s with the coming hour
+    # (e.g. "x TO %(0)s")
+    FUZZY_TIME = [
+        _("%(0)s o'clock"),
+        _('five past %(0)s'),
+        _('ten past %(0)s'),
+        _('quarter past %(0)s'),
+        _('twenty past %(0)s'),
+        _('twenty five past %(0)s'),
+        _('half past %(0)s'),
+        _('twenty five to %(1)s'),
+        _('twenty to %(1)s'),
+        _('quarter to %(1)s'),
+        _('ten to %(1)s'),
+        _('five to %(1)s'),
+        _("%(1)s o'clock")
+    ]
 
-    FUZZY_DAYTIME = [ _('Night'), _('Early morning'), _('Morning'),
-            _('Almost noon'), _('Noon'), _('Afternoon'), _('Evening'),
-            _('Late evening'), _('Night') ]
+    FUZZY_DAYTIME = [
+        _('Night'),
+        _('Early morning'),
+        _('Morning'),
+        _('Almost noon'),
+        _('Noon'),
+        _('Afternoon'),
+        _('Evening'),
+        _('Late evening'),
+        _('Night')
+    ]
 
-    FUZZY_WEEK = [ _('Start of week'), _('Middle of week'), _('Middle of week'),
-            _('Middle of week'), _('End of week'), _('Weekend!'), _('Weekend!') ]
+    FUZZY_WEEK = [
+        _('Start of week'),
+        _('Middle of week'),
+        _('Middle of week'),
+        _('Middle of week'),
+        _('End of week'),
+        _('Weekend!'),
+        _('Weekend!')
+    ]
 
     def fuzzy_time(self, fuzzyness, now):
-        if fuzzyness == 1 or fuzzyness == 2:
+        if fuzzyness in (1, 2):
             if fuzzyness == 1:
                 sector = int(round(now.tm_min / 5.0))
             else:
                 sector = int(round(now.tm_min / 15.0)) * 3
 
             return self.FUZZY_TIME[sector] % {
-                    '0': self.HOUR_NAMES[now.tm_hour % 12],
-                    '1': self.HOUR_NAMES[(now.tm_hour + 1) % 12]}
+                '0': self.HOUR_NAMES[now.tm_hour % 12],
+                '1': self.HOUR_NAMES[(now.tm_hour + 1) % 12]}
 
         elif fuzzyness == 3:
             return self.FUZZY_DAYTIME[int(round(now.tm_hour / 3.0))]
