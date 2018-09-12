@@ -88,7 +88,7 @@ def list_commands(host):
             yield name, command
 
 class Dispatchable(type):
-
+    # pylint: disable=no-value-for-parameter
     def __init__(self, name, bases, namespace):
         parents = super(Dispatchable, self)
         parents.__init__(name, bases, namespace)
