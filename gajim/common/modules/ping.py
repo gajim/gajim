@@ -36,12 +36,12 @@ class Ping:
         ]
 
     @staticmethod
-    def _get_ping_iq(to):
+    def _get_ping_iq(to: str) -> nbxmpp.Iq:
         iq = nbxmpp.Iq('get', to=to)
         iq.addChild(name='ping', namespace=nbxmpp.NS_PING)
         return iq
 
-    def send_keepalive_ping(self):
+    def send_keepalive_ping(self) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -55,11 +55,11 @@ class Ping:
                                      'time_for_ping_alive_answer')
         self._alarm_time = app.idlequeue.set_alarm(self._reconnect, seconds)
 
-    def _keepalive_received(self, _stanza):
+    def _keepalive_received(self, _stanza: nbxmpp.Iq) -> None:
         log.info('Received keepalive')
         app.idlequeue.remove_alarm(self._reconnect, self._alarm_time)
 
-    def _reconnect(self):
+    def _reconnect(self) -> None:
         if not app.config.get_per('accounts', self._account, 'active'):
             # Account may have been disabled
             return

@@ -44,7 +44,7 @@ class Blocking:
         self.supported = True
         log.info('Discovered blocking: %s', from_)
 
-    def get_blocking_list(self):
+    def get_blocking_list(self) -> None:
         if not self.supported:
             return
         iq = nbxmpp.Iq('get', nbxmpp.NS_BLOCKING)
@@ -53,7 +53,7 @@ class Blocking:
         self._con.connection.SendAndCallForResponse(
             iq, self._blocking_list_received)
 
-    def _blocking_list_received(self, stanza):
+    def _blocking_list_received(self, stanza: nbxmpp.Iq) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
             return
@@ -118,12 +118,12 @@ class Blocking:
 
         raise nbxmpp.NodeProcessed
 
-    def _set_contact_offline(self, jid):
+    def _set_contact_offline(self, jid: str) -> None:
         contact_list = app.contacts.get_contacts(self._account, jid)
         for contact in contact_list:
             contact.show = 'offline'
 
-    def _presence_probe(self, jid):
+    def _presence_probe(self, jid: str) -> None:
         log.info('Presence probe: %s', jid)
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())

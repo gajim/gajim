@@ -33,7 +33,7 @@ class Annotations:
         self.handlers = []
         self.annotations = {}
 
-    def get_annotations(self):
+    def get_annotations(self) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -44,7 +44,7 @@ class Annotations:
 
         self._con.connection.SendAndCallForResponse(iq, self._result_received)
 
-    def _result_received(self, stanza):
+    def _result_received(self, stanza: nbxmpp.Iq) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
             return
@@ -69,7 +69,7 @@ class Annotations:
                 continue
             self.annotations[jid] = note.getData()
 
-    def store_annotations(self):
+    def store_annotations(self) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -86,7 +86,7 @@ class Annotations:
             iq, self._store_result_received)
 
     @staticmethod
-    def _store_result_received(stanza):
+    def _store_result_received(stanza: nbxmpp.Iq) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.warning('Storing rosternotes failed: %s', stanza.getError())
             return
