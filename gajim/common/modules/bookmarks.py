@@ -16,6 +16,7 @@
 
 import logging
 import copy
+from typing import Optional
 from collections import OrderedDict
 
 import nbxmpp
@@ -62,7 +63,7 @@ class Bookmarks:
             sorted(sorted_bookmarks.items(),
                    key=lambda bookmark: bookmark[1]['name'].lower()))
 
-    def _pubsub_support(self):
+    def _pubsub_support(self) -> bool:
         return (self._con.get_module('PEP').supported and
                 self._con.get_module('PubSub').publish_options)
 
@@ -80,7 +81,7 @@ class Bookmarks:
             log.info('Request Bookmarks (PrivateStorage)')
             self._request_private_bookmarks()
 
-    def _request_pubsub_bookmarks(self):
+    def _request_pubsub_bookmarks(self) -> None:
         log.info('Request Bookmarks (PubSub)')
         self._con.get_module('PubSub').send_pb_retrieve(
             '', 'storage:bookmarks',
@@ -98,7 +99,7 @@ class Bookmarks:
         self._parse_bookmarks(stanza)
         self._request_private_bookmarks()
 
-    def _request_private_bookmarks(self):
+    def _request_private_bookmarks(self) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -109,7 +110,7 @@ class Bookmarks:
         self._con.connection.SendAndCallForResponse(
             iq, self._private_bookmarks_received)
 
-    def _private_bookmarks_received(self, stanza):
+    def _private_bookmarks_received(self, stanza: nbxmpp.Iq) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.info('No private bookmarks: %s', stanza.getError())
         else:
@@ -154,11 +155,12 @@ class Bookmarks:
             return
         return storage
 
-    def _parse_bookmarks(self, stanza, check_merge=False):
+    def _parse_bookmarks(self, stanza: nbxmpp.Iq,
+                         check_merge: bool = False) -> bool:
         merged = False
         storage = self._get_storage_node(stanza)
         if storage is None:
-            return
+            return False
 
         confs = storage.getTags('conference')
         for conf in confs:
@@ -204,7 +206,7 @@ class Bookmarks:
 
         return merged
 
-    def _build_storage_node(self):
+    def _build_storage_node(self) -> nbxmpp.Node:
         storage_node = nbxmpp.Node(
             tag='storage', attrs={'xmlns': 'storage:bookmarks'})
         for jid, bm in self.bookmarks.items():
@@ -228,7 +230,7 @@ class Bookmarks:
         return storage_node
 
     @staticmethod
-    def get_bookmark_publish_options():
+    def get_bookmark_publish_options() -> nbxmpp.Node:
         options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
                               attrs={'type': 'submit'})
         field = options.addChild('field',
@@ -254,14 +256,14 @@ class Bookmarks:
         elif storage_type == BookmarkStorageType.PRIVATE:
             self._private_store(storage_node)
 
-    def _pubsub_store(self, storage_node):
+    def _pubsub_store(self, storage_node: nbxmpp.Node) -> None:
         self._con.get_module('PubSub').send_pb_publish(
             '', 'storage:bookmarks', storage_node, 'current',
             options=self.get_bookmark_publish_options(),
             cb=self._pubsub_store_result)
         log.info('Publish Bookmarks (PubSub)')
 
-    def _private_store(self, storage_node):
+    def _private_store(self, storage_node: nbxmpp.Node) -> None:
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE, payload=storage_node)
         log.info('Publish Bookmarks (PrivateStorage)')
         self._con.connection.SendAndCallForResponse(
@@ -274,12 +276,12 @@ class Bookmarks:
             return
 
     @staticmethod
-    def _private_store_result(stanza):
+    def _private_store_result(stanza: nbxmpp.Iq) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.error('Error: %s', stanza.getError())
             return
 
-    def auto_join_bookmarks(self):
+    def auto_join_bookmarks(self) -> None:
         if app.is_invisible(self._account):
             return
         for jid, bm in self.bookmarks.items():
@@ -306,14 +308,14 @@ class Bookmarks:
         app.nec.push_incoming_event(BookmarksReceivedEvent(
             None, account=self._account))
 
-    def get_name_from_bookmark(self, jid):
+    def get_name_from_bookmark(self, jid: str) -> str:
         fallback = jid.split('@')[0]
         try:
             return self.bookmarks[jid]['name'] or fallback
         except KeyError:
             return fallback
 
-    def purge_pubsub_bookmarks(self):
+    def purge_pubsub_bookmarks(self) -> None:
         log.info('Purge/Delete Bookmarks on PubSub, '
                  'because publish options are not available')
         self._con.get_module('PubSub').send_pb_purge('', 'storage:bookmarks')
