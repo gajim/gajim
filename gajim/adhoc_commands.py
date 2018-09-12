@@ -60,6 +60,7 @@ class CommandWindow:
         self.stage_back_button_cb = None
         self.stage_forward_button_cb = None
         self.stage_execute_button_cb = None
+        self.stage_finish_button_cb = None
         self.stage_close_button_cb = None
         self.stage_restart_button_cb = None
         self.stage_window_delete_cb = None

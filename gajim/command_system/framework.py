@@ -75,6 +75,7 @@ class CommandProcessor(object):
         Try to process text as a command. Returns True if it has been
         processed as a command and False otherwise.
         """
+        # pylint: disable=assignment-from-no-return
         prefix = text.startswith(self.COMMAND_PREFIX)
         length = len(text) > len(self.COMMAND_PREFIX)
         if not (prefix and length):
