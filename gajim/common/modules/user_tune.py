@@ -14,14 +14,23 @@
 
 # XEP-0118: User Tune
 
+from typing import Any
+from typing import List  # pylint: disable=unused-import
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+
 import logging
 
 import nbxmpp
 from gi.repository import GLib
 
+from gajim.common.i18n import _
 from gajim.common.const import PEPEventType
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
+from gajim.common.types import ConnectionT
+from gajim.common.types import UserTuneDataT
 
 log = logging.getLogger('gajim.c.m.user_tune')
 
@@ -30,10 +39,13 @@ class UserTuneData(AbstractPEPData):
 
     type_ = PEPEventType.TUNE
 
-    def __init__(self, tune):
+    def __init__(self, tune: Optional[Dict[str, str]]) -> None:
         self.data = tune
 
-    def asMarkupText(self):
+    def as_markup_text(self) -> str:
+        if self.data is None:
+            return ''
+
         tune = self.data
 
         artist = tune.get('artist', _('Unknown Artist'))
@@ -60,12 +72,12 @@ class UserTune(AbstractPEPModule):
     store_publish = True
     _log = log
 
-    def __init__(self, con):
+    def __init__(self, con: ConnectionT) -> None:
         AbstractPEPModule.__init__(self, con, con.name)
 
-        self.handlers = []
+        self.handlers = []  # type: List[Tuple[Any, ...]]
 
-    def _extract_info(self, item):
+    def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
         tune_dict = {}
         tune_tag = item.getTag('tune', namespace=self.namespace)
         if tune_tag is None:
@@ -80,7 +92,7 @@ class UserTune(AbstractPEPModule):
 
         return tune_dict or None
 
-    def _build_node(self, data):
+    def _build_node(self, data: UserTuneDataT) -> nbxmpp.Node:
         item = nbxmpp.Node('tune', {'xmlns': nbxmpp.NS_TUNE})
         if data is None:
             return item
@@ -98,5 +110,5 @@ class UserTune(AbstractPEPModule):
         return item
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserTune, str]:
     return UserTune(*args, **kwargs), 'UserTune'

@@ -14,6 +14,11 @@
 
 # XEP-0163: Personal Eventing Protocol
 
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Tuple
+
 import logging
 
 import nbxmpp
@@ -22,12 +27,16 @@ from gajim.common import app
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import PEPHandlerType, PEPEventType
+from gajim.common.types import ConnectionT
+from gajim.common.types import PEPHandlersDict  # pylint: disable=unused-import
+from gajim.common.types import PEPNotifyCallback
+from gajim.common.types import PEPRetractCallback
 
 log = logging.getLogger('gajim.c.m.pep')
 
 
 class PEP:
-    def __init__(self, con):
+    def __init__(self, con: ConnectionT) -> None:
         self._con = con
         self._account = con.name
 
@@ -37,29 +46,40 @@ class PEP:
         ]
 
         self.supported = False
-        self._pep_handlers = {}
-        self._store_publish_modules = []
+        self._pep_handlers = {}  # type: PEPHandlersDict
+        self._store_publish_modules = []  # type: List[Any]
 
-    def pass_disco(self, from_, identities, _features, _data, _node):
+    def pass_disco(self,
+                   from_: nbxmpp.JID,
+                   identities: List[Dict[str, str]],
+                   _features: List[str],
+                   _data: List[nbxmpp.DataForm],
+                   _node: str) -> None:
         for identity in identities:
             if identity['category'] == 'pubsub':
                 if identity.get('type') == 'pep':
                     log.info('Discovered PEP support: %s', from_)
                     self.supported = True
 
-    def register_pep_handler(self, namespace, notify_handler, retract_handler):
+    def register_pep_handler(
+            self,
+            namespace: str,
+            notify_handler: PEPNotifyCallback,
+            retract_handler: PEPRetractCallback) -> None:
         if namespace in self._pep_handlers:
             self._pep_handlers[namespace].append(
                 (notify_handler, retract_handler))
         else:
             self._pep_handlers[namespace] = [(notify_handler, retract_handler)]
         if notify_handler:
-            module_instance = notify_handler.__self__
+            module_instance = notify_handler.__self__  # type: ignore
             if module_instance.store_publish:
                 if module_instance not in self._store_publish_modules:
                     self._store_publish_modules.append(module_instance)
 
-    def _pep_event_received(self, _con, stanza):
+    def _pep_event_received(self,
+                            _con: ConnectionT,
+                            stanza: nbxmpp.Message) -> None:
         jid = stanza.getFrom()
         event = stanza.getTag('event', namespace=nbxmpp.NS_PUBSUB_EVENT)
         items = event.getTag('items')
@@ -98,17 +118,47 @@ class PEP:
                 handler[PEPHandlerType.NOTIFY](jid, items_[0])
                 raise nbxmpp.NodeProcessed
 
-    def send_stored_publish(self):
+    def send_stored_publish(self) -> None:
         for module in self._store_publish_modules:
             module.send_stored_publish()
 
-    def reset_stored_publish(self):
+    def reset_stored_publish(self) -> None:
         for module in self._store_publish_modules:
             module.reset_stored_publish()
 
 
+class AbstractPEPData:
+
+    type_ = PEPEventType.ABSTRACT
+
+    def __init__(self, data: Any) -> None:
+        self.data = data
+
+    def as_markup_text(self) -> str:  # pylint: disable=no-self-use
+        '''SHOULD be implemented by subclasses'''
+        return ''
+
+    def __eq__(self, other: Any) -> bool:
+        return other == self.type_
+
+    def __bool__(self) -> bool:
+        return self.data is not None
+
+    def __str__(self) -> str:
+        return str(self.data)
+
+
 class AbstractPEPModule:
-    def __init__(self, con, account):
+
+    name = ''
+    namespace = ''
+    pep_class = AbstractPEPData
+    store_publish = True
+    _log = log
+
+    def __init__(self,
+                 con: ConnectionT,
+                 account: str) -> None:
         self._account = account
         self._con = con
 
@@ -119,7 +169,7 @@ class AbstractPEPModule:
             self._pep_notify_received,
             self._pep_retract_received)
 
-    def _pep_notify_received(self, jid, item):
+    def _pep_notify_received(self, jid: nbxmpp.JID, item: nbxmpp.Node) -> None:
         try:
             data = self._extract_info(item)
         except StanzaMalformed as error:
@@ -129,19 +179,19 @@ class AbstractPEPModule:
         self._log.info('Received: %s %s', jid, data)
         self._push_event(jid, self.pep_class(data))
 
-    def _pep_retract_received(self, jid, id_):
+    def _pep_retract_received(self, jid: nbxmpp.JID, id_: str) -> None:
         self._log.info('Retract: %s %s', jid, id_)
         self._push_event(jid, self.pep_class(None))
 
-    def _extract_info(self, item):
+    def _extract_info(self, item: nbxmpp.Node) -> Any:
         '''To be implemented by subclasses'''
         raise NotImplementedError
 
-    def _build_node(self, data):
+    def _build_node(self, data: Any) -> nbxmpp.Node:
         '''To be implemented by subclasses'''
         raise NotImplementedError
 
-    def _push_event(self, jid, user_pep):
+    def _push_event(self, jid: nbxmpp.JID, user_pep: Any) -> None:
         self._notification_received(jid, user_pep)
         app.nec.push_incoming_event(
             PEPReceivedEvent(None, conn=self._con,
@@ -149,7 +199,7 @@ class AbstractPEPModule:
                              pep_type=self.name,
                              user_pep=user_pep))
 
-    def _notification_received(self, jid, user_pep):
+    def _notification_received(self, jid: nbxmpp.JID, user_pep: Any) -> None:
         for contact in app.contacts.get_contacts(self._account, str(jid)):
             if user_pep:
                 contact.pep[self.name] = user_pep
@@ -162,17 +212,17 @@ class AbstractPEPModule:
             else:
                 self._con.pep.pop(self.name, None)
 
-    def send_stored_publish(self):
+    def send_stored_publish(self) -> None:
         if self._stored_publish is not None:
             self._log.info('Send stored publish')
             self.send(self._stored_publish)
             self._stored_publish = None
 
-    def reset_stored_publish(self):
+    def reset_stored_publish(self) -> None:
         self._log.info('Reset stored publish')
         self._stored_publish = None
 
-    def send(self, data):
+    def send(self, data: Any) -> None:
         if not self._con.get_module('PEP').supported:
             return
 
@@ -191,7 +241,7 @@ class AbstractPEPModule:
         self._con.get_module('PubSub').send_pb_publish(
             '', self.namespace, item, 'current')
 
-    def retract(self):
+    def retract(self) -> None:
         if not self._con.get_module('PEP').supported:
             return
         self.send(None)
@@ -199,27 +249,9 @@ class AbstractPEPModule:
             '', self.namespace, 'current')
 
 
-class AbstractPEPData:
-
-    type_ = PEPEventType
-
-    def asMarkupText(self):
-        '''SHOULD be implemented by subclasses'''
-        return ''
-
-    def __eq__(self, other):
-        return other == self.type_
-
-    def __bool__(self):
-        return self.data is not None
-
-    def __str__(self):
-        return str(self.data)
-
-
 class PEPReceivedEvent(NetworkIncomingEvent):
     name = 'pep-received'
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[PEP, str]:
     return PEP(*args, **kwargs), 'PEP'

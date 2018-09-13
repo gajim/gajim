@@ -12,13 +12,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Dict  # pylint: disable=unused-import
+from typing import List
+from typing import Tuple
+
 import logging
-from typing import List  # noqa
-from typing import Dict  # noqa
-from typing import Any  # noqa
 from importlib import import_module
 from pathlib import Path
 from unittest.mock import MagicMock
+
+from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m')
 
@@ -70,7 +74,7 @@ class ModuleMock:
         return MagicMock()
 
 
-def register(con, *args, **kwargs):
+def register(con: ConnectionT, *args: Any, **kwargs: Any) -> None:
     if con in _modules:
         return
     _modules[con.name] = {}
@@ -83,20 +87,20 @@ def register(con, *args, **kwargs):
         _modules[con.name][name] = instance
 
 
-def register_single(con, instance, name):
+def register_single(con: ConnectionT, instance: Any, name: str) -> None:
     if con.name not in _modules:
         raise ValueError('Unknown account name: %s' % con.name)
     _modules[con.name][name] = instance
 
 
-def unregister(con):
+def unregister(con: ConnectionT) -> None:
     for instance in _modules[con.name].values():
         if hasattr(instance, 'cleanup'):
             instance.cleanup()
     del _modules[con.name]
 
 
-def unregister_single(con, name):
+def unregister_single(con: ConnectionT, name: str) -> None:
     if con.name not in _modules:
         return
     if name not in _modules[con.name]:
@@ -111,8 +115,8 @@ def get(account: str, name: str) -> Any:
         return ModuleMock(name)
 
 
-def get_handlers(con):
-    handlers = []
+def get_handlers(con: ConnectionT) -> List[Tuple[Any, ...]]:
+    handlers = []  # type: List[Tuple[Any, ...]]
     for module in _modules[con.name].values():
         handlers += module.handlers
     return handlers

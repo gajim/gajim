@@ -19,82 +19,90 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict  # pylint: disable=unused-import
+from typing import List
+from typing import Generator
+from typing import Optional  # pylint: disable=unused-import
+from typing import Tuple
+from typing import Union
+
 import os
 import sys
 import tempfile
 from pathlib import Path
 
 import gajim
+from gajim.common.i18n import _
 from gajim.common.const import PathType, PathLocation
+from gajim.common.types import PathTuple
 
 
-def get(key):
+def get(key: str) -> Union[str, List[str]]:
     if key == 'PLUGINS_DIRS':
         if gajim.IS_FLATPAK:
             return ['/app/plugins',
                     _paths['PLUGINS_BASE']]
-        else:
-            return [_paths['PLUGINS_BASE'],
-                    _paths['PLUGINS_USER']]
+        return [_paths['PLUGINS_BASE'],
+                _paths['PLUGINS_USER']]
     return _paths[key]
 
 
-def get_paths(type_):
+def get_paths(type_: PathType) -> Generator[str, None, None]:
     for key, value in _paths.items():
-        location, path, path_type = value
+        path_type = value[2]
         if type_ != path_type:
             continue
         yield _paths[key]
 
 
 def override_path(*args, **kwargs):
-    _paths._add(*args, **kwargs)
+    _paths.add(*args, **kwargs)
 
 
-def set_separation(active: bool):
+def set_separation(active: bool) -> None:
     _paths.profile_separation = active
 
 
-def set_profile(profile: str):
+def set_profile(profile: str) -> None:
     _paths.profile = profile
 
 
-def set_config_root(config_root: str):
+def set_config_root(config_root: str) -> None:
     _paths.custom_config_root = config_root
 
 
-def init():
+def init() -> None:
     _paths.init()
 
 
-def create_paths():
+def create_paths() -> None:
     for path in get_paths(PathType.FOLDER):
         if not isinstance(path, Path):
-            path = Path(path)
+            path_ = Path(path)
 
-        if path.is_file():
-            print(_('%s is a file but it should be a directory') % path)
+        if path_.is_file():
+            print(_('%s is a file but it should be a directory') % path_)
             print(_('Gajim will now exit'))
             sys.exit()
 
-        if not path.exists():
-            for parent_path in reversed(path.parents):
+        if not path_.exists():
+            for parent_path in reversed(path_.parents):
                 # Create all parent folders
                 # don't use mkdir(parent=True), as it ignores `mode`
                 # when creating the parents
                 if not parent_path.exists():
                     print(('creating %s directory') % parent_path)
                     parent_path.mkdir(mode=0o700)
-            print(('creating %s directory') % path)
-            path.mkdir(mode=0o700)
+            print(('creating %s directory') % path_)
+            path_.mkdir(mode=0o700)
 
 
 class ConfigPaths:
-    def __init__(self):
-        self._paths = {}
+    def __init__(self) -> None:
+        self._paths = {}  # type: Dict[str, PathTuple]
         self.profile = ''
         self.profile_separation = False
-        self.custom_config_root = None
+        self.custom_config_root = None  # type: Optional[str]
 
         if os.name == 'nt':
             try:
@@ -133,23 +141,23 @@ class ConfigPaths:
         ]
 
         for path in source_paths:
-            self._add(*path)
+            self.add(*path)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> str:
         location, path, _ = self._paths[key]
         if location == PathLocation.CONFIG:
             return os.path.join(self.config_root, path)
-        elif location == PathLocation.CACHE:
+        if location == PathLocation.CACHE:
             return os.path.join(self.cache_root, path)
-        elif location == PathLocation.DATA:
+        if location == PathLocation.DATA:
             return os.path.join(self.data_root, path)
         return path
 
-    def items(self):
+    def items(self) -> Generator[Tuple[str, PathTuple], None, None]:
         for key, value in self._paths.items():
             yield (key, value)
 
-    def _prepare(self, path, unique):
+    def _prepare(self, path: str, unique: bool) -> str:
         if os.name == 'nt':
             path = path.capitalize()
         if self.profile:
@@ -157,7 +165,12 @@ class ConfigPaths:
                 return '%s.%s' % (path, self.profile)
         return path
 
-    def _add(self, name, path, location=None, path_type=None, unique=False):
+    def add(self,
+            name: str,
+            path: str,
+            location: PathLocation = None,
+            path_type: PathType = None,
+            unique: bool = False) -> None:
         if path and location is not None:
             path = self._prepare(path, unique)
         self._paths[name] = (location, path, path_type)
@@ -175,7 +188,7 @@ class ConfigPaths:
         ]
 
         for path in user_dir_paths:
-            self._add(*path)
+            self.add(*path)
 
         # These paths are unique per profile
         unique_profile_paths = [
@@ -191,7 +204,7 @@ class ConfigPaths:
         ]
 
         for path in unique_profile_paths:
-            self._add(*path, unique=True)
+            self.add(*path, unique=True)
 
         # These paths are only unique per profile if the commandline arg
         # `separate` is passed
@@ -219,7 +232,7 @@ class ConfigPaths:
         ]
 
         for path in paths:
-            self._add(*path)
+            self.add(*path)
 
 
 _paths = ConfigPaths()

@@ -25,6 +25,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import GObject
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 Filter = namedtuple('Filter', 'name pattern default')
 

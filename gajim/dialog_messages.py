@@ -20,6 +20,7 @@ from collections import namedtuple
 from gi.repository import GLib
 
 from gajim.common.app import app
+from gajim.common.i18n import _
 from gajim.gtk import ErrorDialog
 from gajim.gtk import InformationDialog
 

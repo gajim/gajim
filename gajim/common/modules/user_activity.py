@@ -33,7 +33,7 @@ class UserActivityData(AbstractPEPData):
     def __init__(self, activity):
         self.data = activity
 
-    def asMarkupText(self):
+    def as_markup_text(self):
         pep = self.data
         activity = pep['activity']
         subactivity = pep['subactivity'] if 'subactivity' in pep else None

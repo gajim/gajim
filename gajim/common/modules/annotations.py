@@ -14,24 +14,30 @@
 
 # XEP-0145: Annotations
 
+from typing import Any
+from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+from typing import Tuple
+
 import logging
 
 import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m.annotations')
 
 
 class Annotations:
-    def __init__(self, con):
+    def __init__(self, con: ConnectionT) -> None:
         self._con = con
         self._account = con.name
         self._server = self._con.get_own_jid().getDomain()
 
-        self.handlers = []
-        self.annotations = {}
+        self.handlers = []  # type: List[Tuple[Any, ...]]
+        self.annotations = {}  # type: Dict[str, str]
 
     def get_annotations(self) -> None:
         if not app.account_is_connected(self._account):
@@ -93,5 +99,5 @@ class Annotations:
         log.info('Storing rosternotes successful')
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[Annotations, str]:
     return Annotations(*args, **kwargs), 'Annotations'

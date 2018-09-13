@@ -79,6 +79,7 @@ if is_standalone():
     configpaths.init()
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim.gtk import YesNoDialog

@@ -31,24 +31,32 @@ to automatic discovery and dispatching, also features manual control
 over the process.
 """
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+
 from gajim.command_system.tools import remove
 
-COMMANDS = {}
-CONTAINERS = {}
+COMMANDS = {}  # type: Dict[Any, Any]
+CONTAINERS = {}  # type: Dict[Any, Any]
+
 
 def add_host(host):
     CONTAINERS[host] = []
 
+
 def remove_host(host):
     remove(CONTAINERS, host)
+
 
 def add_container(container):
     for host in container.HOSTS:
         CONTAINERS[host].append(container)
 
+
 def remove_container(container):
     for host in container.HOSTS:
         remove(CONTAINERS[host], container)
+
 
 def add_commands(container):
     commands = COMMANDS.setdefault(container, {})
@@ -56,8 +64,10 @@ def add_commands(container):
         for name in command.names:
             commands[name] = command
 
+
 def remove_commands(container):
     remove(COMMANDS, container)
+
 
 def traverse_commands(container):
     for name in dir(container):
@@ -65,9 +75,11 @@ def traverse_commands(container):
         if is_command(attribute):
             yield attribute
 
+
 def is_command(attribute):
     from gajim.command_system.framework import Command
     return isinstance(attribute, Command)
+
 
 def is_root(namespace):
     metaclass = namespace.get("__metaclass__", None)
@@ -75,17 +87,20 @@ def is_root(namespace):
         return False
     return issubclass(metaclass, Dispatchable)
 
+
 def get_command(host, name):
     for container in CONTAINERS[host]:
         command = COMMANDS[container].get(name)
         if command:
             return command
 
+
 def list_commands(host):
     for container in CONTAINERS[host]:
         commands = COMMANDS[container]
         for name, command in commands.items():
             yield name, command
+
 
 class Dispatchable(type):
     # pylint: disable=no-value-for-parameter
@@ -99,6 +114,7 @@ class Dispatchable(type):
         if self.AUTOMATIC:
             self.enable()
 
+
 class Host(Dispatchable):
 
     def enable(self):
@@ -106,6 +122,7 @@ class Host(Dispatchable):
 
     def disable(self):
         remove_host(self)
+
 
 class Container(Dispatchable):
 

@@ -38,6 +38,7 @@ from gajim import dataforms_widget
 
 from random import randrange
 from gajim.common import ged
+from gajim.common.i18n import _
 from gajim.common.const import ACTIVITIES
 from gajim.common.const import MOODS
 

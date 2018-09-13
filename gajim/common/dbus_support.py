@@ -25,6 +25,7 @@ import logging
 
 from gajim.common import app
 from gajim.common import exceptions
+from gajim.common.i18n import _
 
 _GAJIM_ERROR_IFACE = 'org.gajim.dbus.Error'
 

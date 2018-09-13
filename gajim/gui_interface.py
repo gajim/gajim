@@ -2127,7 +2127,7 @@ class Interface:
             if app.connections[acct].music_track_info == music_track_info:
                 continue
             app.connections[acct].get_module('UserTune').send(
-                (artist, title, source, None, None))
+                (artist, title, source, '', ''))
             app.connections[acct].music_track_info = music_track_info
 
     def read_sleepy(self):

@@ -42,11 +42,12 @@
 
 import types
 import weakref
+
+import nbxmpp
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-from gi.repository import Pango
 
 from gajim.gtk import ErrorDialog
 from gajim.gtk import InformationDialog
@@ -54,13 +55,11 @@ from gajim import gtkgui_helpers
 from gajim import groups
 from gajim import adhoc_commands
 from gajim import search_window
-from gajim import gui_menu_builder
 from gajim.gtk import ServiceRegistration
 
 from gajim.common import app
-import nbxmpp
+from gajim.common.i18n import _
 from gajim.common import helpers
-from gajim.common import ged
 from gajim.common.const import StyleAttr
 
 LABELS = {

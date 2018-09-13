@@ -176,7 +176,6 @@ class HelperEvent:
 
 class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'iq-error-received'
-    base_network_events = []
 
     def generate(self):
         self.get_id()
@@ -187,7 +186,6 @@ class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class StreamReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stream-received'
-    base_network_events = []
 
 class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stream-conflict-received'
@@ -321,7 +319,6 @@ PresenceHelperEvent):
 
 class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
     name = 'presence-received'
-    base_network_events = []
 
     def generate(self):
         self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
@@ -348,7 +345,6 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
 
 class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'gc-presence-received'
-    base_network_events = []
 
     def generate(self):
         self.ptype = self.presence_obj.ptype
@@ -436,15 +432,12 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
-    base_network_events = []
 
 class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
     name = 'before-change-show'
-    base_network_events = []
 
 class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
     name = 'chatstate-received'
-    base_network_events = []
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
@@ -456,7 +449,6 @@ class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
 
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
     name = 'gc-message-received'
-    base_network_events = []
 
     def generate(self):
         self.stanza = self.msg_obj.stanza
@@ -556,7 +548,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
 class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
     name = 'gc-config-changed-received'
-    base_network_events = []
 
     def generate(self):
         self.conn = self.msg_event.conn
@@ -567,7 +558,6 @@ class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
 
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
-    base_network_events = []
 
     def generate(self):
         if not self.automatic_message:
@@ -579,11 +569,9 @@ class MessageSentEvent(nec.NetworkIncomingEvent):
 
 class MessageNotSentEvent(nec.NetworkIncomingEvent):
     name = 'message-not-sent'
-    base_network_events = []
 
 class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'message-error'
-    base_network_events = []
 
     def init(self):
         self.zeroconf = False
@@ -600,11 +588,9 @@ class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class AnonymousAuthEvent(nec.NetworkIncomingEvent):
     name = 'anonymous-auth'
-    base_network_events = []
 
 class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-request-received'
-    base_network_events = []
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
@@ -614,7 +600,6 @@ class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
 
 class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-connected-received'
-    base_network_events = []
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
@@ -624,7 +609,6 @@ class JingleConnectedReceivedEvent(nec.NetworkIncomingEvent):
 
 class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-disconnected-received'
-    base_network_events = []
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
@@ -634,7 +618,6 @@ class JingleDisconnectedReceivedEvent(nec.NetworkIncomingEvent):
 
 class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
     name = 'jingleFT-cancelled-received'
-    base_network_events = []
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
@@ -644,7 +627,6 @@ class JingleTransferCancelledEvent(nec.NetworkIncomingEvent):
 
 class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-error-received'
-    base_network_events = []
 
     def generate(self):
         self.fjid = self.jingle_session.peerjid
@@ -654,15 +636,12 @@ class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
 
 class AccountCreatedEvent(nec.NetworkIncomingEvent):
     name = 'account-created'
-    base_network_events = []
 
 class AccountNotCreatedEvent(nec.NetworkIncomingEvent):
     name = 'account-not-created'
-    base_network_events = []
 
 class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-connected'
-    base_network_events = []
 
     def generate(self):
         try:
@@ -686,15 +665,12 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
 
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-not-connected'
-    base_network_events = []
 
 class ConnectionTypeEvent(nec.NetworkIncomingEvent):
     name = 'connection-type'
-    base_network_events = []
 
 class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
-    base_network_events = []
     
     def init(self):
         self.additional_data = {}
@@ -704,14 +680,12 @@ class StanzaReceivedEvent(nec.NetworkIncomingEvent):
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
-    base_network_events = []
     
     def init(self):
         self.additional_data = {}
 
 class AgentRemovedEvent(nec.NetworkIncomingEvent):
     name = 'agent-removed'
-    base_network_events = []
 
     def generate(self):
         self.jid_list = []
@@ -722,7 +696,6 @@ class AgentRemovedEvent(nec.NetworkIncomingEvent):
 
 class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'bad-gpg-passphrase'
-    base_network_events = []
 
     def generate(self):
         self.account = self.conn.name
@@ -732,7 +705,6 @@ class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
 
 class ConnectionLostEvent(nec.NetworkIncomingEvent):
     name = 'connection-lost'
-    base_network_events = []
 
     def generate(self):
         app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
@@ -741,11 +713,9 @@ class ConnectionLostEvent(nec.NetworkIncomingEvent):
 
 class GPGTrustKeyEvent(nec.NetworkIncomingEvent):
     name = 'gpg-trust-key'
-    base_network_events = []
 
 class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'gpg-password-required'
-    base_network_events = []
 
     def generate(self):
         self.keyid = app.config.get_per('accounts', self.conn.name, 'keyid')
@@ -753,7 +723,6 @@ class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
 
 class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'pep-received'
-    base_network_events = []
 
     def generate(self):
         if not self.stanza.getTag('event'):
@@ -778,72 +747,57 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
     name = 'plain-connection'
-    base_network_events = []
 
 class InsecurePasswordEvent(nec.NetworkIncomingEvent):
     name = 'insecure-password'
-    base_network_events = []
 
 class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
     name = 'insecure-ssl-connection'
-    base_network_events = []
 
 class SSLErrorEvent(nec.NetworkIncomingEvent):
     name = 'ssl-error'
-    base_network_events = []
 
 class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-supported'
-    base_network_events = []
 
 class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-not-supported'
-    base_network_events = []
 
 class NonAnonymousServerErrorEvent(nec.NetworkIncomingEvent):
     name = 'non-anonymous-server-error'
-    base_network_events = []
 
 class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-gc-avatar'
-    base_network_events = []
 
     def generate(self):
         return True
 
 class UpdateRosterAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-roster-avatar'
-    base_network_events = []
 
     def generate(self):
         return True
 
 class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-room-avatar'
-    base_network_events = []
 
     def generate(self):
         return True
 
 class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
     name = 'zeroconf-name-conflict'
-    base_network_events = []
 
 class PasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'password-required'
-    base_network_events = []
 
 class Oauth2CredentialsRequiredEvent(nec.NetworkIncomingEvent):
     name = 'oauth2-credentials-required'
-    base_network_events = []
 
 class SignedInEvent(nec.NetworkIncomingEvent):
     name = 'signed-in'
-    base_network_events = []
 
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'file-request-received'
-    base_network_events = []
 
     def init(self):
         self.jingle_content = None
@@ -960,7 +914,6 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 
 class FileRequestErrorEvent(nec.NetworkIncomingEvent):
     name = 'file-request-error'
-    base_network_events = []
 
     def generate(self):
         self.jid = app.get_jid_without_resource(self.jid)
@@ -968,7 +921,6 @@ class FileRequestErrorEvent(nec.NetworkIncomingEvent):
 
 class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
     name = 'file-transfer-completed'
-    base_network_events = []
 
     def generate(self):
         jid = str(self.file_props.receiver)
@@ -977,7 +929,6 @@ class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
 
 class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
     name = 'gateway-prompt-received'
-    base_network_events = []
 
     def generate(self):
         self.get_jid_resource()
@@ -1251,7 +1202,6 @@ class NotificationEvent(nec.NetworkIncomingEvent):
 
 class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'message-outgoing'
-    base_network_events = []
 
     def init(self):
         self.additional_data = {}
@@ -1297,21 +1247,18 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
 
 class StanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name='stanza-message-outgoing'
-    base_network_events = []
 
     def generate(self):
         return True
 
 class GcStanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name='gc-stanza-message-outgoing'
-    base_network_events = []
 
     def generate(self):
         return True
 
 class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'gc-message-outgoing'
-    base_network_events = []
 
     def init(self):
         self.additional_data = {}
@@ -1333,11 +1280,9 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
 
 class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'client-cert-passphrase'
-    base_network_events = []
 
 class InformationEvent(nec.NetworkIncomingEvent):
     name = 'information'
-    base_network_events = []
 
     def init(self):
         self.args = None
@@ -1355,7 +1300,6 @@ class InformationEvent(nec.NetworkIncomingEvent):
 
 class StyleChanged(nec.NetworkIncomingEvent):
     name = 'style-changed'
-    base_network_events = []
 
     def generate(self):
         return True

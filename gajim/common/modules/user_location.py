@@ -35,7 +35,7 @@ class UserLocationData(AbstractPEPData):
         self._pep_specific_data = location
         self.data = location
 
-    def asMarkupText(self):
+    def as_markup_text(self):
         location = self.data
         location_string = ''
 

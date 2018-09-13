@@ -413,7 +413,7 @@ class ChatControl(ChatControlBase):
         img = self._pep_images[pep_type]
         if pep_type in pep:
             img.set_from_pixbuf(gtkgui_helpers.get_pep_as_pixbuf(pep[pep_type]))
-            img.set_tooltip_markup(pep[pep_type].asMarkupText())
+            img.set_tooltip_markup(pep[pep_type].as_markup_text())
             img.show()
         else:
             img.hide()

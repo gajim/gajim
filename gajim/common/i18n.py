@@ -132,7 +132,7 @@ if os.name == 'nt':
 
 _localedir = get_locale_dir()
 if hasattr(locale, 'bindtextdomain'):
-    locale.bindtextdomain(DOMAIN, _localedir)
+    locale.bindtextdomain(DOMAIN, _localedir)  # type: ignore
 gettext.textdomain(DOMAIN)
 
 gettext.install(DOMAIN, _localedir)
@@ -142,7 +142,7 @@ try:
 except OSError:
     _ = gettext.gettext
 
-if gettext._translations:
-    _translations = list(gettext._translations.values())[0]
+if gettext._translations:    # type: ignore
+    _translations = list(gettext._translations.values())[0]  # type: ignore
 else:
     _translations = gettext.NullTranslations()

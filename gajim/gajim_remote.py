@@ -28,12 +28,12 @@ import os
 import sys
 import locale
 import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
-
 
 from gajim.common import exceptions
-from gajim.common import i18n # This installs _() function
+from gajim.common.i18n import _
 from gajim.common.i18n import Q_
+
+signal.signal(signal.SIGINT, signal.SIG_DFL) # ^C exits the application
 
 try:
     PREFERRED_ENCODING = locale.getpreferredencoding()

@@ -42,7 +42,7 @@ from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 from gajim.common.css_config import CSSConfig
 
-interface = None # The actual interface (the gtk one for the moment)
+interface = None  # type: gajim.interface.Interface
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
 config = c_config.Config()
 version = gajim.__version__
@@ -52,10 +52,10 @@ ipython_window = None
 app = None  # Gtk.Application
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
-nec = None # Network Events Controller
+nec = None  # type: gajim.common.nec.NetworkEventsController
 plugin_manager = None # Plugins Manager
 
-logger = None
+logger = None  # type: gajim.common.logger.Logger
 
 # For backwards compatibility needed
 # some plugins use that
@@ -122,7 +122,7 @@ SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
 ZEROCONF_ACC_NAME = 'Local'
 
 # These will be set in app.gui_interface.
-idlequeue = None
+idlequeue = None  # type: nbxmpp.idlequeue.IdleQueue
 socks5queue = None
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
