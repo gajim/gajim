@@ -14,6 +14,9 @@
 
 # XEP-0199: XMPP Ping
 
+from typing import Any
+from typing import Tuple
+
 import logging
 import time
 
@@ -21,12 +24,14 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.types import ConnectionT
+from gajim.common.types import ContactT
 
 log = logging.getLogger('gajim.c.m.ping')
 
 
 class Ping:
-    def __init__(self, con):
+    def __init__(self, con: ConnectionT) -> None:
         self._con = con
         self._account = con.name
         self._alarm_time = None
@@ -68,7 +73,7 @@ class Ping:
         log.warning('No reply received for keepalive ping. Reconnecting...')
         self._con.disconnectedReconnCB()
 
-    def send_ping(self, contact):
+    def send_ping(self, contact: ContactT) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -84,7 +89,11 @@ class Ping:
         app.nec.push_incoming_event(
             PingSentEvent(None, conn=self._con, contact=contact))
 
-    def _pong_received(self, _con, stanza, ping_time, contact):
+    def _pong_received(self,
+                       _con: ConnectionT,
+                       stanza: nbxmpp.Iq,
+                       ping_time: int,
+                       contact: ContactT) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
             app.nec.push_incoming_event(
@@ -98,7 +107,9 @@ class Ping:
                            contact=contact,
                            seconds=diff))
 
-    def _answer_request(self, _con, stanza):
+    def _answer_request(self,
+                        _con: ConnectionT,
+                        stanza: nbxmpp.Iq) -> None:
         iq = stanza.buildReply('result')
         ping = iq.getTag('ping')
         if ping is not None:
@@ -120,5 +131,5 @@ class PingErrorEvent(NetworkIncomingEvent):
     name = 'ping-error'
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[Ping, str]:
     return Ping(*args, **kwargs), 'Ping'

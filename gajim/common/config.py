@@ -32,6 +32,7 @@ from gi.repository import GLib
 from enum import IntEnum, unique
 
 import gajim
+from gajim.common.i18n import _
 
 
 @unique

@@ -34,6 +34,7 @@ code in here will not be executed and commands defined here will not be
 detected.
 """
 
+from gajim.common.i18n import _
 from gajim.command_system.framework import CommandContainer, command, doc
 from gajim.command_system.implementation.hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
 

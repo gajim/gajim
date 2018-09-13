@@ -19,6 +19,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.modules import dataforms
+from gajim.common.i18n import _
 from gajim.gtk.dataform import DataFormWidget
 
 log = logging.getLogger('gajim.gtk.registration')

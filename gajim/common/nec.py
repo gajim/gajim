@@ -22,11 +22,12 @@ Network Events Controller.
 :license: GPL
 '''
 
-#from plugins.helpers import log
+from typing import List  # pylint: disable=unused-import
+
 from gajim.common import app
 
-class NetworkEventsController(object):
 
+class NetworkEventsController:
     def __init__(self):
         self.incoming_events_generators = {}
         '''
@@ -45,7 +46,7 @@ class NetworkEventsController(object):
         for base_event_name in event_class.base_network_events:
             event_list = self.incoming_events_generators.setdefault(
                 base_event_name, [])
-            if not event_class in event_list:
+            if event_class not in event_list:
                 event_list.append(event_class)
 
     def unregister_incoming_event(self, event_class):
@@ -58,7 +59,7 @@ class NetworkEventsController(object):
         for base_event_name in event_class.base_network_events:
             event_list = self.outgoing_events_generators.setdefault(
                 base_event_name, [])
-            if not event_class in event_list:
+            if event_class not in event_list:
                 event_list.append(event_class)
 
     def unregister_outgoing_event(self, event_class):
@@ -89,12 +90,12 @@ class NetworkEventsController(object):
         base_event_name = event_object.name
         if base_event_name in self.incoming_events_generators:
             for new_event_class in self.incoming_events_generators[
-            base_event_name]:
-                new_event_object = new_event_class(None,
-                    base_event=event_object)
+                    base_event_name]:
+                new_event_object = new_event_class(
+                    None, base_event=event_object)
                 if new_event_object.generate():
                     if not app.ged.raise_event(new_event_object.name,
-                    new_event_object):
+                                               new_event_object):
                         self._generate_events_based_on_incoming_event(
                             new_event_object)
 
@@ -110,16 +111,17 @@ class NetworkEventsController(object):
         base_event_name = event_object.name
         if base_event_name in self.outgoing_events_generators:
             for new_event_class in self.outgoing_events_generators[
-            base_event_name]:
-                new_event_object = new_event_class(None,
-                    base_event=event_object)
+                    base_event_name]:
+                new_event_object = new_event_class(
+                    None, base_event=event_object)
                 if new_event_object.generate():
                     if not app.ged.raise_event(new_event_object.name,
-                    new_event_object):
+                                               new_event_object):
                         self._generate_events_based_on_outgoing_event(
                             new_event_object)
 
-class NetworkEvent(object):
+
+class NetworkEvent:
     name = ''
 
     def __init__(self, new_name, **kwargs):
@@ -133,14 +135,14 @@ class NetworkEvent(object):
     def init(self):
         pass
 
-
     def generate(self):
         '''
         Generates new event (sets it's attributes) based on event object.
 
         Base event object name is one of those in `base_network_events`.
 
-        Reference to base event object is stored in `self.base_event` attribute.
+        Reference to base event object is stored in `self.base_event`
+        attribute.
 
         Note that this is a reference, so modifications to that event object
         are possible before dispatching to Global Events Dispatcher.
@@ -159,15 +161,16 @@ class NetworkEvent(object):
             if k not in ('name', 'base_network_events'):
                 setattr(self, k, v)
 
+
 class NetworkIncomingEvent(NetworkEvent):
-    base_network_events = []
+    base_network_events = []  # type: List[str]
     '''
     Names of base network events that new event is going to be generated on.
     '''
 
 
 class NetworkOutgoingEvent(NetworkEvent):
-    base_network_events = []
+    base_network_events = []  # type: List[str]
     '''
     Names of base network events that new event is going to be generated on.
     '''

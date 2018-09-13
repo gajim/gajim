@@ -1,6 +1,8 @@
 from enum import IntEnum, Enum, unique
 from collections import namedtuple
 
+from gajim.common.i18n import _
+
 Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
 Option.__new__.__defaults__ = (None,) * len(Option._fields)
 
@@ -168,13 +170,14 @@ class PEPHandlerType(IntEnum):
 
 @unique
 class PEPEventType(IntEnum):
-    ACTIVITY = 0
-    TUNE = 1
-    MOOD = 2
-    LOCATION = 3
-    NICKNAME = 4
-    AVATAR = 5
-    ATOM = 6
+    ABSTRACT = 0
+    ACTIVITY = 1
+    TUNE = 2
+    MOOD = 3
+    LOCATION = 4
+    NICKNAME = 5
+    AVATAR = 6
+    ATOM = 7
 
 
 ACTIVITIES = {

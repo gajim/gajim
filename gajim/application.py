@@ -273,7 +273,8 @@ class GajimApplication(Gtk.Application):
         self.activate()
         return 0
 
-    def _handle_local_options(self, application,
+    def _handle_local_options(self,
+                              application: Gtk.Application,
                               options: GLib.VariantDict) -> int:
         # Parse all options that have to be executed before ::startup
         if options.contains('profile'):

@@ -528,25 +528,25 @@ class RosterTooltip(Gtk.Window, StatusTable):
         to the given property list.
         """
         if 'mood' in contact.pep:
-            mood = contact.pep['mood'].asMarkupText()
+            mood = contact.pep['mood'].as_markup_text()
             self.mood.set_markup(mood)
             self.mood.show()
             self.mood_label.show()
 
         if 'activity' in contact.pep:
-            activity = contact.pep['activity'].asMarkupText()
+            activity = contact.pep['activity'].as_markup_text()
             self.activity.set_markup(activity)
             self.activity.show()
             self.activity_label.show()
 
         if 'tune' in contact.pep:
-            tune = contact.pep['tune'].asMarkupText()
+            tune = contact.pep['tune'].as_markup_text()
             self.tune.set_markup(tune)
             self.tune.show()
             self.tune_label.show()
 
         if 'geoloc' in contact.pep:
-            location = contact.pep['geoloc'].asMarkupText()
+            location = contact.pep['geoloc'].as_markup_text()
             self.location.set_markup(location)
             self.location.show()
             self.location_label.show()

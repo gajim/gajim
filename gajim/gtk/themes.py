@@ -21,6 +21,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.const import StyleAttr, DialogButton, ButtonAction
 from gajim.common.connection_handlers_events import StyleChanged
 from gajim.gtk import ErrorDialog

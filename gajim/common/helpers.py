@@ -48,6 +48,7 @@ from string import Template
 import nbxmpp
 
 from gajim.common.i18n import Q_
+from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common import configpaths
 

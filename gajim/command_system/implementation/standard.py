@@ -23,6 +23,7 @@ from datetime import date
 from gajim import dialogs
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.const import KindConstant
 

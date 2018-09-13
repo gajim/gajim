@@ -24,6 +24,7 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim import gtkgui_helpers
 
 if app.is_installed('GSPELL'):

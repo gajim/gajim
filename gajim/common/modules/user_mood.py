@@ -14,6 +14,12 @@
 
 # XEP-0107: User Mood
 
+from typing import Any
+from typing import Dict
+from typing import List  # pylint: disable=unused-import
+from typing import Optional
+from typing import Tuple
+
 import logging
 
 import nbxmpp
@@ -22,6 +28,7 @@ from gi.repository import GLib
 from gajim.common.const import PEPEventType, MOODS
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
+from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m.user_mood')
 
@@ -30,10 +37,12 @@ class UserMoodData(AbstractPEPData):
 
     type_ = PEPEventType.MOOD
 
-    def __init__(self, mood):
+    def __init__(self, mood: Optional[Dict[str, str]]) -> None:
         self.data = mood
 
-    def asMarkupText(self):
+    def as_markup_text(self) -> str:
+        if self.data is None:
+            return ''
         mood = self._translate_mood(self.data['mood'])
         markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
         if 'text' in self.data:
@@ -42,7 +51,7 @@ class UserMoodData(AbstractPEPData):
         return markuptext
 
     @staticmethod
-    def _translate_mood(mood):
+    def _translate_mood(mood: str) -> str:
         if mood in MOODS:
             return MOODS[mood]
         return mood
@@ -56,12 +65,12 @@ class UserMood(AbstractPEPModule):
     store_publish = True
     _log = log
 
-    def __init__(self, con):
+    def __init__(self, con: ConnectionT) -> None:
         AbstractPEPModule.__init__(self, con, con.name)
 
-        self.handlers = []
+        self.handlers = []  # type: List[Tuple[Any, ...]]
 
-    def _extract_info(self, item):
+    def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
         mood_dict = {}
         mood_tag = item.getTag('mood', namespace=nbxmpp.NS_MOOD)
         if mood_tag is None:
@@ -76,7 +85,7 @@ class UserMood(AbstractPEPModule):
 
         return mood_dict or None
 
-    def _build_node(self, data):
+    def _build_node(self, data: Optional[Tuple[str, str]]) -> nbxmpp.Node:
         item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
         if data is None:
             return
@@ -88,5 +97,5 @@ class UserMood(AbstractPEPModule):
         return item
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserMood, str]:
     return UserMood(*args, **kwargs), 'UserMood'

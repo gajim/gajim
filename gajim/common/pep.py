@@ -67,7 +67,7 @@ class AbstractPEP(object):
         else:
             acc.pep[self.type_] = self
 
-    def asMarkupText(self):
+    def as_markup_text(self):
         '''SHOULD be implemented by subclasses'''
         return ''
 
