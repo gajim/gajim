@@ -42,6 +42,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
+from gajim.common import app
 from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common.const import StyleAttr
@@ -77,8 +78,8 @@ if is_standalone():
             configpaths.set_config_root(a)
 
     configpaths.init()
+    app.load_css_config()
 
-from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
