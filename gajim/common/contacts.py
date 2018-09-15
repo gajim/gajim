@@ -156,7 +156,7 @@ class Contact(CommonContact):
             return False
         if self.sub in ('none', 'from') and self.ask == 'subscribe':
             return False
-        if self.sub in ('none', 'from') and (self.name or len(self.groups)):
+        if self.sub in ('none', 'from') and (self.name or self.groups):
             return False
         if _('Not in Roster') in self.groups:
             return False
@@ -486,7 +486,7 @@ class Contacts():
             return
         if contact in self._contacts[contact.jid]:
             self._contacts[contact.jid].remove(contact)
-        if len(self._contacts[contact.jid]) == 0:
+        if not self._contacts[contact.jid]:
             del self._contacts[contact.jid]
 
     def remove_jid(self, jid):
@@ -626,7 +626,7 @@ class GC_Contacts():
             return
         del self._rooms[gc_contact.room_jid][gc_contact.name]
         # It was the last nick in room ?
-        if not len(self._rooms[gc_contact.room_jid]):
+        if not self._rooms[gc_contact.room_jid]:
             del self._rooms[gc_contact.room_jid]
 
     def remove_room(self, room_jid):

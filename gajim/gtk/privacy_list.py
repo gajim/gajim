@@ -153,7 +153,7 @@ class PrivacyListWindow:
                 self.max_order = int(rule['order'])
             self.global_rules[text_item] = rule
             model.append([text_item])
-        if len(rules) == 0:
+        if not rules:
             self.title_hbox.set_sensitive(False)
             self.list_of_rules_combobox.set_sensitive(False)
             self.delete_rule_button.set_sensitive(False)
@@ -474,7 +474,7 @@ class PrivacyListsWindow:
         self.draw_widgets()
 
     def draw_widgets(self):
-        if len(self.privacy_lists_save) == 0:
+        if not self.privacy_lists_save:
             self.list_of_privacy_lists_combobox.set_sensitive(False)
             self.open_privacy_list_button.set_sensitive(False)
             self.delete_privacy_list_button.set_sensitive(False)

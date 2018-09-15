@@ -481,7 +481,7 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 
     # host is now f.e. icq.foo.org or just icq (sometimes on hacky transports)
     host_splitted = host.split('.')
-    if len(host_splitted) != 0:
+    if host_splitted:
         # now we support both 'icq.' and 'icq' but not icqsucks.org
         host = host_splitted[0]
 

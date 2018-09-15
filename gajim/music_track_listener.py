@@ -155,7 +155,7 @@ class MusicTrackListener(GObject.GObject):
         info.title = meta.get('xesam:title')
         info.album = meta.get('xesam:album')
         artist = meta.get('xesam:artist')
-        if artist is not None and len(artist):
+        if artist:
             info.artist = artist[0]
         else:
             info.artist = None

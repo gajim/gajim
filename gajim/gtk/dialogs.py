@@ -727,7 +727,7 @@ class ChangeNickDialog(InputDialogCheck):
                 app.config.get('gc_proposed_nick_char'))
 
     def check_next(self):
-        if len(self.room_queue) == 0:
+        if not self.room_queue:
             self.cancel_handler = None
             self.dialog.destroy()
             if 'change_nick_dialog' in app.interface.instances:

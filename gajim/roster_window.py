@@ -388,7 +388,7 @@ class RosterWindow:
             parent_iters = self._get_contact_iter(
                     big_brother_contact.jid, big_brother_account,
                     big_brother_contact, self.model)
-            assert len(parent_iters) > 0, 'Big brother is not yet in roster!'
+            assert parent_iters, 'Big brother is not yet in roster!'
 
             # Do not confuse get_contact_iter: Sync groups of family members
             contact.groups = big_brother_contact.groups[:]
@@ -445,8 +445,7 @@ class RosterWindow:
                 if group not in app.groups[account]:
                     app.groups[account][group] = {'expand': is_expanded}
 
-        assert len(added_iters), '%s has not been added to roster!' % \
-        contact.jid
+        assert added_iters, '%s has not been added to roster!' % contact.jid
         return added_iters
 
     def _remove_entity(self, contact, account, groups=None):
@@ -530,8 +529,8 @@ class RosterWindow:
         big_brother_contact = app.contacts.get_first_contact_from_jid(
                 big_brother_account, big_brother_jid)
 
-        assert len(self._get_contact_iter(big_brother_jid,
-                big_brother_account, big_brother_contact, self.model)) == 0, \
+        assert not self._get_contact_iter(big_brother_jid,
+                big_brother_account, big_brother_contact, self.model), \
                 'Big brother %s already in roster\n Family: %s' \
                 % (big_brother_jid, family)
         self._add_entity(big_brother_contact, big_brother_account)
@@ -549,8 +548,8 @@ class RosterWindow:
                 # or brother already added
                 continue
 
-            assert len(self._get_contact_iter(_jid, _account,
-                    _contact, self.model)) == 0, \
+            assert not self._get_contact_iter(_jid, _account,
+                    _contact, self.model), \
                     "%s already in roster.\n Family: %s" % (_jid, nearby_family)
             self._add_entity(_contact, _account,
                     big_brother_contact = big_brother_contact,
@@ -600,8 +599,8 @@ class RosterWindow:
 
             ok = self._remove_entity(_contact, _account)
             assert ok, '%s was not removed' % _jid
-            assert len(self._get_contact_iter(_jid, _account, _contact,
-                self.model)) == 0, '%s is removed but still in roster' % _jid
+            assert not self._get_contact_iter(_jid, _account, _contact,
+                self.model), '%s is removed but still in roster' % _jid
 
         if not family_in_roster:
             return False
@@ -610,15 +609,15 @@ class RosterWindow:
             (nearby_family, family)
         iters = self._get_contact_iter(old_big_jid, old_big_account,
             old_big_contact, self.model)
-        assert len(iters) > 0, 'Old Big Brother %s is not in roster anymore' % \
+        assert iters, 'Old Big Brother %s is not in roster anymore' % \
             old_big_jid
         assert not self.model.iter_children(iters[0]), \
             'Old Big Brother %s still has children' % old_big_jid
 
         ok = self._remove_entity(old_big_contact, old_big_account)
         assert ok, "Old Big Brother %s not removed" % old_big_jid
-        assert len(self._get_contact_iter(old_big_jid, old_big_account,
-            old_big_contact, self.model)) == 0, \
+        assert not self._get_contact_iter(old_big_jid, old_big_account,
+            old_big_contact, self.model), \
             'Old Big Brother %s is removed but still in roster' % old_big_jid
 
         return True
@@ -683,8 +682,8 @@ class RosterWindow:
         jid = app.get_jid_from_account(account)
         contact = app.contacts.get_first_contact_from_jid(account, jid)
 
-        assert len(self._get_contact_iter(jid, account, contact,
-        self.model)) == 0, 'Self contact %s already in roster' % jid
+        assert not self._get_contact_iter(jid, account, contact,
+        self.model), 'Self contact %s already in roster' % jid
 
         child_iterA = self._get_account_iter(account, self.model)
         self._iters[account]['contacts'][jid] = [self.model.append(child_iterA,
@@ -716,7 +715,7 @@ class RosterWindow:
         account -- the corresponding account.
         """
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
-        if len(self._get_contact_iter(jid, account, contact, self.model)):
+        if self._get_contact_iter(jid, account, contact, self.model):
             # If contact already in roster, do nothing
             return
 
@@ -1152,8 +1151,8 @@ class RosterWindow:
         to_hide = []
         while(iterG):
             parent = self.modelfilter.iter_parent(iterG)
-            if (not self.modelfilter.iter_has_child(iterG)) or (len(to_hide) > \
-            0 and self.modelfilter.iter_n_children(iterG) == 1):
+            if (not self.modelfilter.iter_has_child(iterG)) or (to_hide \
+            and self.modelfilter.iter_n_children(iterG) == 1):
                 to_hide.append(iterG)
                 if not parent or self.modelfilter[parent][Column.TYPE] != \
                 'group':
@@ -1300,7 +1299,7 @@ class RosterWindow:
                         # a child has awaiting messages?
                         jidC = self.model[iterC][Column.JID]
                         accountC = self.model[iterC][Column.ACCOUNT]
-                        if len(app.events.get_events(accountC, jidC)):
+                        if app.events.get_events(accountC, jidC):
                             icon_name = 'event'
                             break
                         iterC = self.model.iter_next(iterC)
@@ -2583,7 +2582,7 @@ class RosterWindow:
                 GLib.idle_add(ctrl.parent_win.set_active_tab, ctrl)
             else:
                 ctrl = app.interface.new_chat(obj.contact, account)
-                if len(app.events.get_events(account, obj.jid)):
+                if app.events.get_events(account, obj.jid):
                     ctrl.read_queue()
 
     def _nec_gc_presence_received(self, obj):
@@ -2718,7 +2717,7 @@ class RosterWindow:
             contact = app.contacts.get_contact(obj.conn.name, obj.jid)
             obj.session.control = app.interface.new_chat(contact,
                 obj.conn.name, session=obj.session)
-            if len(app.events.get_events(obj.conn.name, obj.fjid)):
+            if app.events.get_events(obj.conn.name, obj.fjid):
                 obj.session.control.read_queue()
 
         if obj.show_in_roster:
@@ -3196,7 +3195,7 @@ class RosterWindow:
         elif event.keyval == Gdk.KEY_Delete:
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
-            if not len(list_of_paths):
+            if not list_of_paths:
                 return
             type_ = model[list_of_paths[0]][Column.TYPE]
             account = model[list_of_paths[0]][Column.ACCOUNT]
@@ -3535,7 +3534,7 @@ class RosterWindow:
             self.previous_status_combobox_active = active
             return
         accounts = list(app.connections.keys())
-        if len(accounts) == 0:
+        if not accounts:
             ErrorDialog(_('No account available'),
                 _('You must create an account before you can chat with other '
                 'contacts.'))
@@ -3697,7 +3696,7 @@ class RosterWindow:
         # if a contact row is selected, update colors (eg. for status msg)
         # because gtk engines may differ in bg when window is selected
         # or not
-        if len(self._last_selected_contact):
+        if self._last_selected_contact:
             for (jid, account) in self._last_selected_contact:
                 self.draw_contact(jid, account, selected=True, focus=True)
 
@@ -3705,7 +3704,7 @@ class RosterWindow:
         # if a contact row is selected, update colors (eg. for status msg)
         # because gtk engines may differ in bg when window is selected
         # or not
-        if len(self._last_selected_contact):
+        if self._last_selected_contact:
             for (jid, account) in self._last_selected_contact:
                 self.draw_contact(jid, account, selected=True, focus=False)
 
@@ -3720,7 +3719,7 @@ class RosterWindow:
                 # let message window close the tab
                 return
             list_of_paths = self.tree.get_selection().get_selected_rows()[1]
-            if not len(list_of_paths) and not app.config.get(
+            if not list_of_paths and not app.config.get(
             'quit_on_roster_x_button') and ((app.interface.systray_enabled and\
             app.config.get('trayicon') == 'always') or app.config.get(
             'allow_hide_roster')):
@@ -4385,7 +4384,7 @@ class RosterWindow:
                 path = helpers.get_file_path_from_dnd_dropped_uri(a_uri)
                 if not os.path.isfile(path):
                     bad_uris.append(a_uri)
-            if len(bad_uris):
+            if bad_uris:
                 ErrorDialog(_('Invalid file URI:'), '\n'.join(bad_uris))
                 return
             def _on_send_files(account, jid, uris):
@@ -5523,7 +5522,7 @@ class RosterWindow:
         except TypeError:
             self.tree.get_selection().unselect_all()
             return
-        if not len(list_of_paths):
+        if not list_of_paths:
             # no row is selected
             return
         if len(list_of_paths) > 1:

@@ -1222,7 +1222,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         else: # Not a GC
             types_list = ['printed_' + type_, type_]
 
-        if not len(app.events.get_events(self.account, jid, types_list)):
+        if not app.events.get_events(self.account, jid, types_list):
             return
         if not self.parent_win:
             return

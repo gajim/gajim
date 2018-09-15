@@ -404,7 +404,7 @@ class ChatControlSession(object):
                 self.control = app.interface.new_chat(contact,
                     self.conn.name, session=self)
 
-                if len(app.events.get_events(self.conn.name, fjid)):
+                if app.events.get_events(self.conn.name, fjid):
                     self.control.read_queue()
         else:
             if no_queue: # We didn't have a queue: we change icons

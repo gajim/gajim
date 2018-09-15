@@ -209,7 +209,7 @@ class SearchWindow:
             return
 
         self.dataform = dataforms.extend_form(node=obj.data)
-        if len(self.dataform.items) == 0:
+        if not self.dataform.items:
             # No result
             self.label.set_text(_('No result'))
             self.label.show()

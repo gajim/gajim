@@ -1275,7 +1275,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         for mech in auth_mechs:
             if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS | set(['XEP-0078']):
                 log.warning("Unknown authentication mechanisms %s" % mech)
-        if len(auth_mechs) == 0:
+        if not auth_mechs:
             auth_mechs = None
         else:
             auth_mechs = set(auth_mechs)
@@ -1453,7 +1453,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self._on_stun_resolved)
 
     def _on_stun_resolved(self, host, result_array):
-        if len(result_array) != 0:
+        if result_array:
             self._stun_servers = self._hosts = [i for i in result_array]
 
     @helpers.call_counter

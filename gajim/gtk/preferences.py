@@ -475,7 +475,7 @@ class Preferences(Gtk.ApplicationWindow):
         Return the value of the option opt if it's the same in all accounts else
         returns "mixed"
         """
-        if len(app.connections) == 0:
+        if not app.connections:
             # a non existent key return default value
             return app.config.get_per('accounts', '__default__', opt)
         val = None
