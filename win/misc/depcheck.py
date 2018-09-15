@@ -46,7 +46,11 @@ SYSTEM_LIBS = ['advapi32.dll',
 
 def get_dependencies(filename):
     deps = []
-    data = subprocess.check_output(["objdump", "-p", filename])
+    try:
+        data = subprocess.check_output(["objdump", "-p", filename])
+    except Exception as error:
+        print(error)
+        return deps
     data = data.decode("utf-8")
     for line in data.splitlines():
         line = line.strip()
