@@ -186,6 +186,7 @@ class ConversationTextview(GObject.GObject):
         self.tv.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         self.tv.set_left_margin(2)
         self.tv.set_right_margin(2)
+        self._buffer = self.tv.get_buffer()
         self.handlers = {}
         self.image_cache = {}
         self.xep0184_marks = {}
@@ -204,6 +205,7 @@ class ConversationTextview(GObject.GObject):
         self.account = account
         self.cursor_changed = False
         self.last_time_printout = 0
+        self.encryption_enabled = False
 
         style = self.tv.get_style_context()
         style.add_class('gajim-conversation-font')
@@ -260,6 +262,9 @@ class ConversationTextview(GObject.GObject):
             '.gajim-highlight-message', StyleAttr.COLOR)
         self.tagMarked.set_property('foreground', color)
         self.tagMarked.set_property('weight', Pango.Weight.BOLD)
+
+        textview_icon = buffer_.create_tag('textview-icon')
+        textview_icon.set_property('rise', Pango.units_from_double(-4.45))
 
         tag = buffer_.create_tag('time_sometimes')
         tag.set_property('foreground', 'darkgrey')
@@ -1147,13 +1152,12 @@ class ConversationTextview(GObject.GObject):
         if kind == 'status':
             direction_mark = i18n.direction_mark
 
+        # print the encryption icon
+        self.print_encryption_status(iter_, additional_data)
+
         # print the time stamp
         self.print_time(text, kind, tim, simple, direction_mark,
             other_tags_for_time, iter_)
-
-        icon = load_icon('channel-secure-croped-symbolic', self.tv, pixbuf=True)
-        if encrypted:
-            buffer_.insert_pixbuf(iter_, icon)
 
         # If there's a displaymarking, print it here.
         if displaymarking:
@@ -1274,6 +1278,52 @@ class ConversationTextview(GObject.GObject):
             return kind
         if text.startswith('/me ') or text.startswith('/me\n'):
             return kind
+
+    def print_encryption_status(self, iter_, additional_data):
+        details = self._get_encryption_details(additional_data)
+        if details is None:
+            # Message was not encrypted
+            if not self.encryption_enabled:
+                return
+            icon = 'security-low-symbolic'
+            color = 'error-color'
+            tooltip = _('Not encrypted')
+        else:
+            icon = 'security-high-symbolic'
+            color = 'success-color'
+            name, fingerprint = details
+            if fingerprint is None:
+                tooltip = name
+            else:
+                tooltip = '%s %s' % (name, fingerprint)
+
+        temp_mark = self._buffer.create_mark(None, iter_, True)
+        self._buffer.insert(iter_, ' ')
+        anchor = self._buffer.create_child_anchor(iter_)
+        anchor.plaintext = ''
+        self._buffer.insert(iter_, ' ')
+
+        # Apply mark to vertically center the icon
+        start = self._buffer.get_iter_at_mark(temp_mark)
+        self._buffer.apply_tag_by_name('textview-icon', start, iter_)
+
+        image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
+        image.show()
+        image.set_tooltip_text(tooltip)
+        image.get_style_context().add_class(color)
+        self.tv.add_child_at_anchor(image, anchor)
+
+    @staticmethod
+    def _get_encryption_details(additional_data):
+        encrypted = additional_data.get('encrypted')
+        if encrypted is None:
+            return
+
+        name = encrypted.get('name')
+        if name is None:
+            return
+        fingerprint = encrypted.get('fingerprint')
+        return name, fingerprint
 
     def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
         local_tim = time.localtime(tim)
