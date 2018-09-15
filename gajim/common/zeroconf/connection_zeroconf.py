@@ -352,6 +352,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             # Dont propagate event
             return True
 
+        obj.timestamp = time.time()
         ret = self.connection.send(
             obj.msg_iq, obj.message is not None,
             on_ok=on_send_ok, on_not_ok=on_send_not_ok)
