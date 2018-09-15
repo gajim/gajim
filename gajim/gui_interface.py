@@ -1974,7 +1974,7 @@ class Interface:
                 if s.control:
                     session = s
                     break
-            if not session and not len(sessions) == 0:
+            if not session and sessions:
                 # there are no sessions with chat controls, just take the first
                 # one
                 session = sessions[0]
@@ -2018,7 +2018,7 @@ class Interface:
 
         mw.new_tab(chat_control)
 
-        if len(app.events.get_events(account, fjid)):
+        if app.events.get_events(account, fjid):
             # We call this here to avoid race conditions with widget validation
             chat_control.read_queue()
 
@@ -2038,7 +2038,7 @@ class Interface:
         if not ctrl:
             ctrl = self.new_chat(contact, account,
                 resource=resource)
-            if len(app.events.get_events(account, fjid)):
+            if app.events.get_events(account, fjid):
                 ctrl.read_queue()
 
         if message:
@@ -2644,7 +2644,7 @@ class Interface:
 #        except Exception:
 #            pass
         # add default status messages if there is not in the config file
-        if len(app.config.get_per('statusmsg')) == 0:
+        if not app.config.get_per('statusmsg'):
             default = app.config.statusmsg_default
             for msg in default:
                 app.config.add_per('statusmsg', msg)
@@ -2662,7 +2662,7 @@ class Interface:
                     default[msg][5])
 
         # Add Tor proxy if there is not in the config
-        if len(app.config.get_per('proxies')) == 0:
+        if not app.config.get_per('proxies'):
             default = app.config.proxies_default
             for proxy in default:
                 app.config.add_per('proxies', proxy)
@@ -2807,7 +2807,7 @@ class PassphraseRequest:
                     self.callbacks.remove((acct, cb))
         else:
             self.callbacks = []
-        if not len(self.callbacks):
+        if not self.callbacks:
             self.dialog.window.destroy()
 
     def run_callback(self, account, callback):

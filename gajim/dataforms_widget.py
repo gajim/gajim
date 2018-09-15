@@ -265,7 +265,7 @@ class DataFormWidget(Gtk.Alignment, object):
             self.up_button.set_sensitive(False)
             self.down_button.set_sensitive(False)
 
-        if len(model) == 0:
+        if not model:
             self.clear_button.set_sensitive(False)
         else:
             self.clear_button.set_sensitive(True)

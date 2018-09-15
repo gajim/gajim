@@ -369,7 +369,7 @@ class GajimRemote:
             str_ = _('Usage: %(basename)s %(command)s %(arguments)s \n\t %(help)s')\
                     % {'basename': BASENAME, 'command': command,
                     'arguments': arguments_str, 'help': command_props[0]}
-            if len(command_props[1]) > 0:
+            if command_props[1]:
                 str_ += '\n\n' + _('Arguments:') + '\n'
                 for argument in command_props[1]:
                     str_ += ' ' + argument[0] + ' - ' + argument[1] + '\n'

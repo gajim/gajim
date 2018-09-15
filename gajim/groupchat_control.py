@@ -1702,8 +1702,7 @@ class GroupchatControl(ChatControlBase):
         gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid,
                 nick)
         theme = Gtk.IconTheme.get_default()
-        if len(app.events.get_events(self.account, self.room_jid + '/' + \
-        nick)):
+        if app.events.get_events(self.account, self.room_jid + '/' + nick):
             icon_name = gtkgui_helpers.get_iconset_name_for('event')
             surface = theme.load_surface(icon_name, 16, self.scale_factor, None, 0)
         else:
@@ -1914,8 +1913,8 @@ class GroupchatControl(ChatControlBase):
                     self.autorejoin = False
                     self.print_conversation(obj.reason, 'info', graphics=False)
 
-            if len(app.events.get_events(self.account, jid=obj.fjid,
-            types=['pm'])) == 0:
+            if not app.events.get_events(
+                    self.account, jid=obj.fjid, types=['pm']):
                 self.remove_contact(obj.nick)
                 self.draw_all_roles()
             else:
@@ -2471,7 +2470,7 @@ class GroupchatControl(ChatControlBase):
 
             # nick completion
             # check if tab is pressed with empty message
-            if len(splitted_text): # if there are any words
+            if splitted_text:  # if there are any words
                 begin = splitted_text[-1] # last word we typed
             else:
                 begin = ''
@@ -2485,7 +2484,7 @@ class GroupchatControl(ChatControlBase):
             gc_refer_to_nick_char + ' '):
                 with_refer_to_nick_char = True
                 after_nick_len = len(gc_refer_to_nick_char + ' ')
-            if len(self.nick_hits) and self.last_key_tabs and \
+            if self.nick_hits and self.last_key_tabs and \
                text[:-after_nick_len].endswith(self.nick_hits[0]):
                 # we should cycle
                 # Previous nick in list may had a space inside, so we check text
@@ -2512,7 +2511,7 @@ class GroupchatControl(ChatControlBase):
                        helpers.jid_is_blocked(self.account, fjid):
                         # the word is the beginning of a nick
                         self.nick_hits.append(nick)
-            if len(self.nick_hits):
+            if self.nick_hits:
                 if len(splitted_text) < 2 or with_refer_to_nick_char:
                 # This is the 1st word of the line or no word or we are cycling
                 # at the beginning, possibly with a space in one nick

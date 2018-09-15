@@ -373,14 +373,16 @@ class P2PConnection(IdleObject, PlugIn):
         except socket.gaierror as e:
             log.info('Lookup failure for %s: %s[%s]', self.host, e[1],
                 repr(e[0]), exc_info=True)
-            if len(self.addresses_) > 0: return self.get_next_addrinfo()
+            if self.addresses_:
+                return self.get_next_addrinfo()
         else:
             self.connect_to_next_ip()
 
     def connect_to_next_ip(self):
-        if len(self.ais) == 0:
+        if not self.ais:
             log.error('Connection failure to %s', str(self.host), exc_info=True)
-            if len(self.addresses_) > 0: return self.get_next_addrinfo()
+            if self.addresses_:
+                return self.get_next_addrinfo()
             self.disconnect()
             return
         ai = self.ais.pop(0)
@@ -449,7 +451,7 @@ class P2PConnection(IdleObject, PlugIn):
 
     def read_timeout(self):
         ids = self.client.conn_holder.ids_of_awaiting_messages
-        if self.fd in ids and len(ids[self.fd]) > 0:
+        if self.fd in ids and ids[self.fd]:
             for (id_, thread_id) in ids[self.fd]:
                 if hasattr(self._owner, 'Dispatcher'):
                     self._owner.Dispatcher.Event('', DATA_ERROR, (

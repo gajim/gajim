@@ -236,7 +236,7 @@ class CommandWindow:
         # close old stage
         self.stage_finish()
 
-        assert len(self.commandlist)>0
+        assert self.commandlist
 
         self.stages_notebook.set_current_page(
             self.stages_notebook.page_num(self.command_list_stage_vbox))

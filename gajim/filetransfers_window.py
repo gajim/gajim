@@ -532,7 +532,7 @@ class FileTransfersWindow:
         return _('%(hours)02.d:%(minutes)02.d:%(seconds)02.d') % times
 
     def _get_eta_and_speed(self, full_size, transfered_size, file_props):
-        if len(file_props.transfered_size) == 0:
+        if not file_props.transfered_size:
             return 0., 0.
         elif len(file_props.transfered_size) == 1:
             speed = round(float(transfered_size) / file_props.elapsed_time)
@@ -739,7 +739,7 @@ class FileTransfersWindow:
         Check if there are transfer rows and set cleanup_button sensitive, or
         insensitive if model is empty
         """
-        if len(self.model) == 0:
+        if not self.model:
             self.cleanup_button.set_sensitive(False)
         else:
             self.cleanup_button.set_sensitive(True)

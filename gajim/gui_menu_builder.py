@@ -111,7 +111,7 @@ show_bookmarked=False, force_resource=False):
         for (c, a) in list_:
             if c.supports(NS_MUC):
                 list2.append((c, a))
-        if len(list2) > 0:
+        if list2:
             invite_to_new_room_menuitem.connect('activate',
                 roster.on_invite_to_new_room, list2, None)
         else:
@@ -144,7 +144,7 @@ show_bookmarked=False, force_resource=False):
         app.gc_connected[acct][room_jid] and \
         contacts_transport in ['jabber', None]:
             rooms.append((room_jid, acct))
-    if len(rooms):
+    if rooms:
         item = Gtk.SeparatorMenuItem.new() # separator
         invite_to_submenu.append(item)
         for (room_jid, account) in rooms:

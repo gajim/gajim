@@ -1377,7 +1377,7 @@ class ChatControl(ChatControlBase):
                 local_old_kind = None
             else:
                 local_old_kind = kind
-        if len(rows):
+        if rows:
             self.conv_textview.print_empty_line()
 
     def read_queue(self):

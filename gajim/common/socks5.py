@@ -426,7 +426,7 @@ class SocksQueue:
                     self.remove_sender_by_key(key, do_disconnect=do_disconnect)
                     if not remove_all:
                         break
-            if len(self.senders) == 0 and self.listener is not None:
+            if not self.senders and self.listener is not None:
                 self.listener.disconnect()
                 self.listener = None
                 self.connected -= 1
@@ -646,7 +646,7 @@ class Socks5(object):
         except Exception:
             add = b''
         received += add
-        if len(add) == 0:
+        if not add:
             self.disconnect()
         return add
 
@@ -676,7 +676,7 @@ class Socks5(object):
                 self.file_props.error = -7 # unable to read from file
                 return -1
             buff = self.file.read(MAX_BUFF_LEN)
-        if len(buff) > 0:
+        if buff:
             lenn = 0
             try:
                 lenn = self._send(buff)
@@ -765,7 +765,7 @@ class Socks5(object):
                 self.file_props.last_time
             self.file_props.last_time = current_time
             self.file_props.received_len += len(buff)
-            if len(buff) == 0:
+            if not buff:
                 # Transfer stopped  somehow:
                 # reset, paused or network error
                 self.rem_fd(fd)

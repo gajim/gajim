@@ -126,11 +126,11 @@ class OptionsParser:
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
         old = []
-        while len(old_version_list):
+        while old_version_list:
             old.append(int(old_version_list.pop(0)))
         new_version_list = new_version.split('.')
         new = []
-        while len(new_version_list):
+        while new_version_list:
             new.append(int(new_version_list.pop(0)))
 
         if old < [0, 14, 0, 1] and new >= [0, 14, 0, 1]:

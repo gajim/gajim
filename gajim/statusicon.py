@@ -371,7 +371,7 @@ class StatusIcon:
 
     def on_left_click(self):
         win = app.interface.roster.window
-        if len(app.events.get_systray_events()) == 0:
+        if not app.events.get_systray_events():
             # No pending events, so toggle visible/hidden for roster window
             if win.get_property('visible') and (win.get_property(
             'has-toplevel-focus') or os.name == 'nt'):

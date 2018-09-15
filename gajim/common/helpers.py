@@ -214,7 +214,7 @@ def prep(user, server, resource):
         if server is not None:
             if server.endswith('.'):  # RFC7622, 3.2
                 server = server[:-1]
-            if len(server) < 1 or len(server.encode('utf-8')) > 1023:
+            if not server or len(server.encode('utf-8')) > 1023:
                 raise InvalidFormat(_('Server must be between 1 and 1023 bytes'))
             try:
                 from nbxmpp.stringprepare import nameprep
@@ -225,7 +225,7 @@ def prep(user, server, resource):
             raise InvalidFormat(_('Server address required.'))
 
     if user is not None:
-        if len(user) < 1 or len(user.encode('utf-8')) > 1023:
+        if not user or len(user.encode('utf-8')) > 1023:
             raise InvalidFormat(_('Username must be between 1 and 1023 bytes'))
         try:
             if HAS_PRECIS_I18N:
@@ -239,7 +239,7 @@ def prep(user, server, resource):
         user = None
 
     if resource is not None:
-        if len(resource) < 1 or len(resource.encode('utf-8')) > 1023:
+        if not resource or len(resource.encode('utf-8')) > 1023:
             raise InvalidFormat(_('Resource must be between 1 and 1023 bytes'))
         try:
             if HAS_PRECIS_I18N:
@@ -1054,7 +1054,7 @@ def get_notification_icon_tooltip_text():
 
     accounts = get_notification_icon_tooltip_dict()
 
-    if len(accounts) == 0:
+    if not accounts:
         # No configured account
         return _('Gajim')
 

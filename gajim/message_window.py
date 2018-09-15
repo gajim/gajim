@@ -570,7 +570,7 @@ class MessageWindow(object):
 
             del self._controls[ctrl.account][fjid]
 
-            if len(self._controls[ctrl.account]) == 0:
+            if not self._controls[ctrl.account]:
                 del self._controls[ctrl.account]
 
             self.check_tabs()

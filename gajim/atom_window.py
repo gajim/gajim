@@ -48,7 +48,7 @@ class AtomWindow:
         """
         Create new window... only if we have anything to show
         """
-        assert len(self.__class__.entries)
+        assert self.__class__.entries
 
         self.entry = None # the entry actually displayed
 
@@ -72,7 +72,7 @@ class AtomWindow:
         """
         Get next entry from the queue and display it in the window
         """
-        assert len(self.__class__.entries)>0
+        assert self.__class__.entries
 
         newentry = self.__class__.entries.pop(0)
 
