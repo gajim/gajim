@@ -51,6 +51,7 @@ from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.caps_cache import muc_caps_cache
 
 try:
     import precis_i18n.codec  # pylint: disable=unused-import
@@ -1481,3 +1482,13 @@ def call_counter(func):
         self._connect_machine_calls += 1
         return func(self, restart=False)
     return helper
+
+def get_sync_threshold(jid, archive_info):
+    if archive_info is None or archive_info.sync_threshold is None:
+        if muc_caps_cache.supports(jid, 'muc#roomconfig_membersonly'):
+            threshold = app.config.get('private_room_sync_threshold')
+        else:
+            threshold = app.config.get('public_room_sync_threshold')
+        app.logger.set_archive_infos(jid, sync_threshold=threshold)
+        return threshold
+    return archive_info.sync_threshold

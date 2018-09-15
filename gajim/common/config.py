@@ -293,6 +293,9 @@ class Config:
         'pgp_encoding': [opt_str, '', _('Sets the encoding used by python-gnupg'), True],
         'remote_commands': [opt_bool, False, _('If true, Gajim will execute XEP-0146 Commands.')],
         'dark_theme': [opt_int, 2, _('2: System, 1: Enabled, 0: Disabled')],
+        'threshold_options': [opt_str, '1, 2, 4, 10, 0', _('Options in days which can be chosen in the sync threshold menu'), True],
+        'public_room_sync_threshold': [opt_int, 1, _('Maximum history in days we request from a public room archive. 0: As much as possible')],
+        'private_room_sync_threshold': [opt_int, 0, _('Maximum history in days we request from a private room archive. 0: As much as possible')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
