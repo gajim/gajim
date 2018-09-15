@@ -358,7 +358,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         type_ = model[iter_][2]
         model = self.protocol_jid_combobox.get_model()
         model.clear()
-        if len(self.agents[type_]):
+        if self.agents[type_]:
             for jid_ in self.agents[type_]:
                 model.append([jid_])
             self.protocol_jid_combobox.set_active(0)
