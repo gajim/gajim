@@ -78,11 +78,12 @@ LOGS_SQL_STATEMENT = '''
             jid_id INTEGER PRIMARY KEY UNIQUE,
             last_mam_id TEXT,
             oldest_mam_timestamp TEXT,
-            last_muc_timestamp TEXT
+            last_muc_timestamp TEXT,
+            sync_threshold INTEGER
     );
     CREATE INDEX idx_logs_jid_id_time ON logs (jid_id, time DESC);
     CREATE INDEX idx_logs_stanza_id ON logs (stanza_id);
-    PRAGMA user_version=1;
+    PRAGMA user_version=2;
     '''
 
 CACHE_SQL_STATEMENT = '''
@@ -214,12 +215,16 @@ class Logger:
                 '''CREATE INDEX IF NOT EXISTS idx_logs_stanza_id
                     ON logs(stanza_id)''',
                 'PRAGMA user_version=1'
-                ]
+            ]
 
             self._execute_multiple(con, statements)
 
         if self._get_user_version(con) < 2:
-            pass
+            statements = [
+                'ALTER TABLE last_archive_message ADD COLUMN "sync_threshold" INTEGER',
+                'PRAGMA user_version=2'
+            ]
+            self._execute_multiple(con, statements)
 
     def _migrate_cache(self, con):
         if self._get_user_version(con) == 0:
@@ -1394,20 +1399,20 @@ class Logger:
         self._con.execute(sql, (sha, account_jid_id, jid_id))
         self._timeout_commit()
 
-    def get_archive_timestamp(self, jid, type_=None):
+    def get_archive_infos(self, jid):
         """
-        Get the last archive id/timestamp for a jid
+        Get the archive infos
 
         :param jid:     The jid that belongs to the avatar
 
         """
-        jid_id = self.get_jid_id(jid, type_=type_)
+        jid_id = self.get_jid_id(jid, type_=JIDConstant.ROOM_TYPE)
         sql = '''SELECT * FROM last_archive_message WHERE jid_id = ?'''
         return self._con.execute(sql, (jid_id,)).fetchone()
 
-    def set_archive_timestamp(self, jid, **kwargs):
+    def set_archive_infos(self, jid, **kwargs):
         """
-        Set the last archive id/timestamp
+        Set archive infos
 
         :param jid:                     The jid that belongs to the avatar
 
@@ -1419,20 +1424,28 @@ class Logger:
         :param last_muc_timestamp:      The timestamp of the last message we
                                         received in a MUC
 
+        :param sync_threshold:          The max days that we request from a
+                                        MUC archive
+
         """
         jid_id = self.get_jid_id(jid)
-        exists = self.get_archive_timestamp(jid)
+        exists = self.get_archive_infos(jid)
         if not exists:
-            sql = '''INSERT INTO last_archive_message VALUES (?, ?, ?, ?)'''
+            sql = '''INSERT INTO last_archive_message
+                     (jid_id, last_mam_id, oldest_mam_timestamp,
+                      last_muc_timestamp, sync_threshold)
+                      VALUES (?, ?, ?, ?, ?)'''
             self._con.execute(sql, (
                 jid_id,
                 kwargs.get('last_mam_id', None),
                 kwargs.get('oldest_mam_timestamp', None),
-                kwargs.get('last_muc_timestamp', None)))
+                kwargs.get('last_muc_timestamp', None),
+                kwargs.get('sync_threshold', None)
+            ))
         else:
             args = ' = ?, '.join(kwargs.keys()) + ' = ?'
             sql = '''UPDATE last_archive_message SET {}
                      WHERE jid_id = ?'''.format(args)
             self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
-        log.info('Save archive timestamps: %s', kwargs)
+        log.info('Save archive infos: %s', kwargs)
         self._timeout_commit()

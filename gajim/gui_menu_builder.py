@@ -23,6 +23,7 @@ from gajim import message_control
 from gajim.gtkgui_helpers import get_action
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import ngettext
 
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
@@ -634,7 +635,8 @@ def get_groupchat_menu(control_id):
             ('win.configure-', _('Configure Room')),
             ('win.upload-avatar-', _('Upload Avatar…')),
             ('win.destroy-', _('Destroy Room')),
-            ]),
+        ]),
+        (_('Sync Threshold'), []),
         ('win.change-nick-', _('Change Nick')),
         ('win.bookmark-', _('Bookmark Room')),
         ('win.request-voice-', _('Request Voice')),
@@ -643,7 +645,7 @@ def get_groupchat_menu(control_id):
         ('win.execute-command-', _('Execute command')),
         ('win.browse-history-', _('History')),
         ('win.disconnect-', _('Disconnect')),
-        ]
+    ]
 
     def build_menu(preset):
         menu = Gio.Menu()
@@ -656,9 +658,26 @@ def get_groupchat_menu(control_id):
                     menu.append(label, action_name + control_id)
             else:
                 label, sub_menu = item
-                # This is a submenu
-                submenu = build_menu(sub_menu)
+                if not sub_menu:
+                    # Sync threshold menu
+                    submenu = build_sync_menu()
+                else:
+                    # This is a submenu
+                    submenu = build_menu(sub_menu)
                 menu.append_submenu(label, submenu)
+        return menu
+
+    def build_sync_menu():
+        menu = Gio.Menu()
+        days = app.config.get('threshold_options').split(',')
+        days = [int(day) for day in days]
+        action_name = 'win.choose-sync-%s::' % control_id
+        for day in days:
+            if day == 0:
+                label = _('No threshold')
+            else:
+                label = ngettext('%i day', '%i days', day, day, day)
+            menu.append(label, '%s%s' % (action_name, day))
         return menu
 
     return build_menu(groupchat_menu)

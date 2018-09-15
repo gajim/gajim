@@ -186,6 +186,13 @@ class Chatstate(IntEnum):
         return self.name.lower()
 
 
+class SyncThreshold(IntEnum):
+    NO_THRESHOLD = 0
+
+    def __str__(self):
+        return str(self.value)
+
+
 ACTIVITIES = {
     'doing_chores': {
         'category': _('Doing Chores'),

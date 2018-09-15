@@ -60,6 +60,7 @@ from gajim.common import i18n
 from gajim.common import contacts
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
+
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
 
@@ -548,7 +549,7 @@ class GroupchatControl(ChatControlBase):
             ('request-voice-', self._on_request_voice),
             ('execute-command-', self._on_execute_command),
             ('upload-avatar-', self._on_upload_avatar),
-            ]
+        ]
 
         for action in actions:
             action_name, func = action
@@ -573,6 +574,17 @@ class GroupchatControl(ChatControlBase):
             'notify-on-message-' + self.control_id,
             None, GLib.Variant.new_boolean(value))
         act.connect('change-state', self._on_notify_on_all_messages)
+        self.parent_win.window.add_action(act)
+
+        archive_info = app.logger.get_archive_infos(self.contact.jid)
+        threshold = helpers.get_sync_threshold(self.contact.jid,
+                                               archive_info)
+
+        inital = GLib.Variant.new_string(str(threshold))
+        act = Gio.SimpleAction.new_stateful(
+            'choose-sync-' + self.control_id,
+            inital.get_type(), inital)
+        act.connect('change-state', self._on_sync_threshold)
         self.parent_win.window.add_action(act)
 
     def update_actions(self):
@@ -637,6 +649,25 @@ class GroupchatControl(ChatControlBase):
         vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
         win.lookup_action('upload-avatar-' + self.control_id).set_enabled(
             self.is_connected and vcard_support and contact.affiliation == 'owner')
+
+        # Sync Threshold
+        has_mam = muc_caps_cache.has_mam(self.room_jid)
+        win.lookup_action('choose-sync-' + self.control_id).set_enabled(has_mam)
+
+    def _on_room_created(self):
+        if self.parent_win is None:
+            return
+        win = self.parent_win.window
+        self.update_actions()
+
+        # After the room has been created, reevaluate threshold
+        if muc_caps_cache.has_mam(self.contact.jid):
+            archive_info = app.logger.get_archive_infos(self.contact.jid)
+            threshold = helpers.get_sync_threshold(self.contact.jid,
+                                                   archive_info)
+            win.change_action_state('choose-sync-%s' % self.control_id,
+                                    GLib.Variant('s', str(threshold)))
+
 
     def _connect_window_state_change(self, parent_win):
         if self._state_change_handler_id is None:
@@ -754,6 +785,11 @@ class GroupchatControl(ChatControlBase):
         action.set_state(param)
         app.config.set_per('rooms', self.contact.jid,
                            'notify_on_all_messages', param.get_boolean())
+
+    def _on_sync_threshold(self, action, param):
+        threshold = param.get_string()
+        action.set_state(param)
+        app.logger.set_archive_infos(self.contact.jid, sync_threshold=threshold)
 
     def _on_execute_command(self, action, param):
         """
@@ -1838,7 +1874,7 @@ class GroupchatControl(ChatControlBase):
                 self.print_conversation(_('Room logging is enabled'))
             if '201' in obj.status_code:
                 app.connections[self.account].get_module('Discovery').disco_muc(
-                    self.room_jid, self.update_actions, update=True)
+                    self.room_jid, self._on_room_created, update=True)
                 self.print_conversation(_('A new room has been created'))
             if '210' in obj.status_code:
                 self.print_conversation(\

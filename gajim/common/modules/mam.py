@@ -15,14 +15,18 @@
 # XEP-0313: Message Archive Management
 
 import logging
+import time
 from datetime import datetime, timedelta
 
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
-from gajim.common.const import ArchiveState, JIDConstant, KindConstant
+from gajim.common.const import ArchiveState
+from gajim.common.const import KindConstant
+from gajim.common.const import SyncThreshold
 from gajim.common.caps_cache import muc_caps_cache
+from gajim.common.helpers import get_sync_threshold
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
@@ -352,7 +356,7 @@ class MAM:
             log.warning('MAM request for %s already running', own_jid)
             return
 
-        archive = app.logger.get_archive_timestamp(own_jid)
+        archive = app.logger.get_archive_infos(own_jid)
 
         # Migration of last_mam_id from config to DB
         if archive is not None:
@@ -379,16 +383,12 @@ class MAM:
         self._send_archive_query(query, query_id, start_date)
 
     def request_archive_on_muc_join(self, jid):
-        archive = app.logger.get_archive_timestamp(
-            jid, type_=JIDConstant.ROOM_TYPE)
+        archive = app.logger.get_archive_infos(jid)
+        threshold = get_sync_threshold(jid, archive)
+        log.info('Threshold for %s: %s', jid, threshold)
         query_id = self._get_query_id(jid)
         start_date = None
-        if archive is not None:
-            log.info('Request from archive %s after %s:',
-                     jid, archive.last_mam_id)
-            query = self._get_archive_query(
-                query_id, jid=jid, after=archive.last_mam_id)
-        else:
+        if archive is None or archive.last_mam_id is None:
             # First Start, we dont request history
             # Depending on what a MUC saves, there could be thousands
             # of Messages even in just one day.
@@ -396,6 +396,37 @@ class MAM:
             log.info('First join: query archive %s from: %s', jid, start_date)
             query = self._get_archive_query(
                 query_id, jid=jid, start=start_date)
+
+        elif threshold == SyncThreshold.NO_THRESHOLD:
+            # Not our first join and no threshold set
+            log.info('Request from archive: %s, after mam-id %s',
+                     jid, archive.last_mam_id)
+            query = self._get_archive_query(
+                query_id, jid=jid, after=archive.last_mam_id)
+
+        else:
+            # Not our first join, check how much time elapsed since our
+            # last join and check against threshold
+            last_timestamp = archive.last_muc_timestamp
+            if last_timestamp is None:
+                log.info('No last muc timestamp found ( mam:1? )')
+                last_timestamp = 0
+
+            last = datetime.utcfromtimestamp(float(last_timestamp))
+            if datetime.utcnow() - last > timedelta(days=threshold):
+                # To much time has elapsed since last join, apply threshold
+                start_date = datetime.utcnow() - timedelta(days=threshold)
+                log.info('Too much time elapsed since last join, '
+                         'request from: %s, threshold: %s',
+                         start_date, threshold)
+                query = self._get_archive_query(
+                    query_id, jid=jid, start=start_date)
+            else:
+                # Request from last mam-id
+                log.info('Request from archive %s after %s:',
+                         jid, archive.last_mam_id)
+                query = self._get_archive_query(
+                    query_id, jid=jid, after=archive.last_mam_id)
 
         if jid in self._catch_up_finished:
             self._catch_up_finished.remove(jid)
@@ -424,20 +455,22 @@ class MAM:
             return
 
         complete = fin.getAttr('complete')
-        app.logger.set_archive_timestamp(
-            jid, last_mam_id=last, last_muc_timestamp=None)
         if complete != 'true':
+            app.logger.set_archive_infos(jid, last_mam_id=last)
             self._mam_query_ids.pop(jid)
             query_id = self._get_query_id(jid)
             query = self._get_archive_query(query_id, jid=jid, after=last)
             self._send_archive_query(query, query_id, groupchat=groupchat)
         else:
             self._mam_query_ids.pop(jid)
-            if start_date is not None:
-                app.logger.set_archive_timestamp(
-                    jid,
-                    last_mam_id=last,
-                    oldest_mam_timestamp=start_date.timestamp())
+            app.logger.set_archive_infos(
+                jid, last_mam_id=last, last_muc_timestamp=time.time())
+            if start_date is not None and not groupchat:
+                # Record the earliest timestamp we request from
+                # the account archive. For the account archive we only
+                # set start_date at the very first request.
+                app.logger.set_archive_infos(
+                    jid, oldest_mam_timestamp=start_date.timestamp())
 
             self._catch_up_finished.append(jid)
             log.info('End of MAM query, last mam id: %s', last)
@@ -481,7 +514,7 @@ class MAM:
         if last is None:
             app.nec.push_incoming_event(ArchivingIntervalFinished(
                 None, query_id=query_id))
-            app.logger.set_archive_timestamp(
+            app.logger.set_archive_infos(
                 jid, oldest_mam_timestamp=timestamp)
             log.info('End of MAM request, no items retrieved')
             return
@@ -491,7 +524,7 @@ class MAM:
             self.request_archive_interval(start_date, end_date, last, query_id)
         else:
             log.info('Request finished')
-            app.logger.set_archive_timestamp(
+            app.logger.set_archive_infos(
                 jid, oldest_mam_timestamp=timestamp)
             app.nec.push_incoming_event(ArchivingIntervalFinished(
                 None, query_id=query_id))
@@ -536,15 +569,18 @@ class MAM:
         return iq
 
     def save_archive_id(self, jid, stanza_id, timestamp):
-        if stanza_id is None:
-            return
         if jid is None:
             jid = self._con.get_own_jid().getStripped()
         if jid not in self._catch_up_finished:
             return
         log.info('Save: %s: %s, %s', jid, stanza_id, timestamp)
-        app.logger.set_archive_timestamp(
-            jid, last_mam_id=stanza_id, last_muc_timestamp=timestamp)
+        if stanza_id is None:
+            # mam:1
+            app.logger.set_archive_infos(jid, last_muc_timestamp=timestamp)
+        else:
+            # mam:2
+            app.logger.set_archive_infos(
+                jid, last_mam_id=stanza_id, last_muc_timestamp=timestamp)
 
     def request_mam_preferences(self):
         log.info('Request MAM preferences')
