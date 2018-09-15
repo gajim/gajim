@@ -534,6 +534,10 @@ class HistoryWindow:
                 buf.insert_with_tags_by_name(
                     end_iter, tim + '\n', 'time_sometimes')
 
+        # print the encryption icon
+        self.history_textview.print_encryption_status(
+            end_iter, additional_data)
+
         tag_name = ''
         tag_msg = ''
 

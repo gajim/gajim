@@ -338,6 +338,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._schedule_activity_timers()
 
         self.encryption = self.get_encryption_state()
+        self.conv_textview.encryption_enabled = self.encryption is not None
 
         # PluginSystem: adding GUI extension point for ChatControlBase
         # instance object (also subclasses, eg. ChatControl or GroupchatControl)
@@ -429,8 +430,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def set_encryption_state(self, encryption):
         config_key = '%s-%s' % (self.account, self.contact.jid)
         self.encryption = encryption
+        self.conv_textview.encryption_enabled = encryption is not None
         app.config.set_per('encryption', config_key,
-                             'encryption', self.encryption or '')
+                           'encryption', self.encryption or '')
 
     def get_encryption_state(self):
         config_key = '%s-%s' % (self.account, self.contact.jid)
