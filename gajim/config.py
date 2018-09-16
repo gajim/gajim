@@ -109,7 +109,7 @@ class ManageProxiesWindow:
         model = self.proxies_treeview.get_model()
         proxies = app.config.get_per('proxies')
         i = 1
-        while ('proxy' + str(i)) in proxies:
+        while 'proxy' + str(i) in proxies:
             i += 1
         iter_ = model.append()
         model.set(iter_, 0, 'proxy' + str(i))

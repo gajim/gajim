@@ -436,7 +436,7 @@ class GajimRemote:
                     res = self.print_info(level+1, val)
                     if res != '':
                         ret_str += '%s%s: \n%s' % (spacing, key, res)
-        if (encode_return):
+        if encode_return:
             try:
                 ret_str = ret_str.encode(PREFERRED_ENCODING)
             except Exception:

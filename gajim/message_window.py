@@ -722,7 +722,7 @@ class MessageWindow:
             return self._widget_to_control(nth_child)
 
     def has_control(self, jid, acct):
-        return (acct in self._controls and jid in self._controls[acct])
+        return acct in self._controls and jid in self._controls[acct]
 
     def change_key(self, old_jid, new_jid, acct):
         """

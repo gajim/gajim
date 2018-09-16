@@ -1428,7 +1428,7 @@ class ChatControl(ChatControlBase):
             typ = 'pm'
 
         self.redraw_after_event_removed(jid)
-        if (self.contact.show in ('offline', 'error')):
+        if self.contact.show in ('offline', 'error'):
             show_offline = app.config.get('showoffline')
             show_transports = app.config.get('show_transports_group')
             if (not show_transports and app.jid_is_transport(jid)) or \

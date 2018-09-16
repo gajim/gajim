@@ -1474,7 +1474,7 @@ class GroupchatControl(ChatControlBase):
 
         for special_word in special_words:
             found_here = text.find(special_word)
-            while(found_here > -1):
+            while found_here > -1:
                 end_here = found_here + len(special_word)
                 if (found_here == 0 or not text[found_here - 1].isalpha()) and \
                 (end_here == len(text) or not text[end_here].isalpha()):
@@ -2783,7 +2783,7 @@ class GroupchatControl(ChatControlBase):
         is set this way)
         """
         if path.get_depth() == 1: # It's a group
-            if (widget.row_expanded(path)):
+            if widget.row_expanded(path):
                 widget.collapse_row(path)
             else:
                 widget.expand_row(path, False)
@@ -2834,7 +2834,7 @@ class GroupchatControl(ChatControlBase):
                 self.room_jid):
                     # it's a group
                     if x < 27:
-                        if (widget.row_expanded(path)):
+                        if widget.row_expanded(path):
                             widget.collapse_row(path)
                         else:
                             widget.expand_row(path, False)

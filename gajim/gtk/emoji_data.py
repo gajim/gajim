@@ -145,7 +145,7 @@ class EmojiAsciiData(dict):
             # escape regexp metachars
             emoticon_escaped = re.escape(emoticon)
             emoticons_pattern += emoticon_escaped + '|'
-            if (emoticon_length != len(emoticon)):
+            if emoticon_length != len(emoticon):
                 # Build up expressions to match emoticons next to others
                 pre_pattern = pre_pattern[:-1] + ')|(?<='
                 post_pattern = post_pattern[:-1] + ')|(?='

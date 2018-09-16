@@ -1063,7 +1063,7 @@ class HtmlTextView(Gtk.TextView):
         if bounds:
             (search_iter, end) = bounds
 
-            while (search_iter.compare(end)):
+            while search_iter.compare(end):
                 character = search_iter.get_char()
                 if character == '\ufffc':
                     anchor = search_iter.get_child_anchor()

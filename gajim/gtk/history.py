@@ -412,7 +412,7 @@ class HistoryWindow:
         log = time.localtime(timestamp)
         y, m, d = log[0], log[1], log[2]
         date = datetime.datetime(y, m, d)
-        return(date)
+        return date
 
     def _change_date(self, widget):
         # Get day selected in calendar

@@ -1149,7 +1149,7 @@ class RosterWindow:
         # Hide group if no more contacts
         iterG = self._get_group_iter(group, account, model=self.modelfilter)
         to_hide = []
-        while(iterG):
+        while iterG:
             parent = self.modelfilter.iter_parent(iterG)
             if (not self.modelfilter.iter_has_child(iterG)) or (to_hide \
             and self.modelfilter.iter_n_children(iterG) == 1):
@@ -3220,8 +3220,9 @@ class RosterWindow:
             elif type_ == 'agent':
                 self.on_remove_agent(widget, list_)
 
-        elif not (event.get_state() & (Gdk.ModifierType.CONTROL_MASK | \
-        Gdk.ModifierType.MOD1_MASK)):
+        elif not (event.get_state() &
+                  (Gdk.ModifierType.CONTROL_MASK |
+                   Gdk.ModifierType.MOD1_MASK)):
             num = Gdk.keyval_to_unicode(event.keyval)
             if num and num > 31:
                 # if we got unicode symbol without ctrl / alt
@@ -3362,7 +3363,7 @@ class RosterWindow:
                 titer = model.get_iter(path)
                 if x > x_min and x < x_min + 27 and type_ == 'contact' and \
                 model.iter_has_child(titer):
-                    if (self.tree.row_expanded(path)):
+                    if self.tree.row_expanded(path):
                         self.tree.collapse_row(path)
                     else:
                         self.tree.expand_row(path, False)
@@ -3375,13 +3376,13 @@ class RosterWindow:
             else:
                 if type_ == 'group' and x < 27:
                     # first cell in 1st column (the arrow SINGLE clicked)
-                    if (self.tree.row_expanded(path)):
+                    if self.tree.row_expanded(path):
                         self.tree.collapse_row(path)
                     else:
                         self.expand_group_row(path)
 
                 elif type_ == 'contact' and x > x_min and x < x_min + 27:
-                    if (self.tree.row_expanded(path)):
+                    if self.tree.row_expanded(path):
                         self.tree.collapse_row(path)
                     else:
                         self.tree.expand_row(path, False)

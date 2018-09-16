@@ -751,8 +751,8 @@ class ChangeStatusMessageDialog(TimeoutDialog):
     def on_change_status_message_dialog_key_press_event(self, widget, event):
         self.countdown_enabled = False
         if event.keyval == Gdk.KEY_Return or \
-           event.keyval == Gdk.KEY_KP_Enter: # catch CTRL+ENTER
-            if (event.get_state() & Gdk.ModifierType.CONTROL_MASK):
+           event.keyval == Gdk.KEY_KP_Enter:  # catch CTRL+ENTER
+            if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
                 self.dialog.response(Gtk.ResponseType.OK)
                 # Stop the event
                 return True
