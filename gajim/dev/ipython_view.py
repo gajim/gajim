@@ -193,7 +193,7 @@ class IterableIPShell:
         if self.iter_more:
             try:
                 self.prompt = self.generatePrompt(True)
-            except:
+            except Exception:
                 self.IP.showtraceback()
             if self.IP.autoindent:
                 self.IP.rl_do_indent = True
@@ -203,7 +203,7 @@ class IterableIPShell:
         except KeyboardInterrupt:
             self.IP.write('\nKeyboardInterrupt\n')
             self.IP.input_splitter.reset()
-        except:
+        except Exception:
             self.IP.showtraceback()
         else:
             self.IP.input_splitter.push(line)

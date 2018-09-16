@@ -306,7 +306,7 @@ class AdvancedConfigurationWindow:
                     else:
                         try:
                             value = str(option)
-                        except:
+                        except Exception:
                             value = option
                 self.model.append(parent, [name, value, type_])
 

@@ -412,7 +412,7 @@ class JingleVideo(JingleRTPContent):
             framerate = ''
         try:
             w, h = app.config.get('video_size').split('x')
-        except:
+        except Exception:
             w = h = None
         if w and h:
             video_size = 'video/x-raw,width=%s,height=%s ! ' % (w, h)
