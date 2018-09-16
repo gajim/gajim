@@ -485,7 +485,7 @@ class MucCapsCache:
 
     def is_subject_change_allowed(self, jid, affiliation):
         allowed = True
-        if affiliation in ('owner, admin'):
+        if affiliation in ('owner', 'admin'):
             return allowed
 
         if jid in self.cache:
