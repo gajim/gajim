@@ -40,8 +40,7 @@ UserTuneDataT = Optional[Tuple[str, str, str, str, str]]
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
-PEPRetractCallback = Callable[[nbxmpp.JID, str], None]
-PEPHandlersDict = Dict[str, List[Tuple[PEPNotifyCallback, PEPRetractCallback]]]
+PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
 
 # Configpaths
 PathTuple = Tuple[Optional[PathLocation], str, Optional[PathType]]
