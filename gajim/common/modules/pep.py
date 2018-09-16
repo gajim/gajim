@@ -26,11 +26,10 @@ import nbxmpp
 from gajim.common import app
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.nec import NetworkIncomingEvent
-from gajim.common.const import PEPHandlerType, PEPEventType
+from gajim.common.const import PEPEventType
 from gajim.common.types import ConnectionT
 from gajim.common.types import PEPHandlersDict  # pylint: disable=unused-import
 from gajim.common.types import PEPNotifyCallback
-from gajim.common.types import PEPRetractCallback
 
 log = logging.getLogger('gajim.c.m.pep')
 
@@ -64,18 +63,16 @@ class PEP:
     def register_pep_handler(
             self,
             namespace: str,
-            notify_handler: PEPNotifyCallback,
-            retract_handler: PEPRetractCallback) -> None:
+            notify_handler: PEPNotifyCallback) -> None:
         if namespace in self._pep_handlers:
-            self._pep_handlers[namespace].append(
-                (notify_handler, retract_handler))
+            self._pep_handlers[namespace].append(notify_handler)
         else:
-            self._pep_handlers[namespace] = [(notify_handler, retract_handler)]
-        if notify_handler:
-            module_instance = notify_handler.__self__  # type: ignore
-            if module_instance.store_publish:
-                if module_instance not in self._store_publish_modules:
-                    self._store_publish_modules.append(module_instance)
+            self._pep_handlers[namespace] = [notify_handler]
+
+        module_instance = notify_handler.__self__  # type: ignore
+        if module_instance.store_publish:
+            if module_instance not in self._store_publish_modules:
+                self._store_publish_modules.append(module_instance)
 
     def _pep_event_received(self,
                             _con: ConnectionT,
@@ -105,9 +102,9 @@ class PEP:
             # Check if this is a retraction
             retract = items.getTag('retract')
             if retract is not None:
-                for handler in handlers:
-                    handler[PEPHandlerType.RETRACT](jid, retract.getAttr('id'))
-                    raise nbxmpp.NodeProcessed
+                id_ = retract.getAttr('id')
+                log.info('Received retract of id: %s', id_)
+                raise nbxmpp.NodeProcessed
 
             # Check if we have items
             items_ = items.getTags('item')
@@ -115,7 +112,7 @@ class PEP:
                 log.warning('Malformed PEP event received: %s', stanza)
                 raise nbxmpp.NodeProcessed
             for handler in handlers:
-                handler[PEPHandlerType.NOTIFY](jid, items_[0])
+                handler(jid, items_[0])
                 raise nbxmpp.NodeProcessed
 
     def send_stored_publish(self) -> None:
@@ -165,9 +162,7 @@ class AbstractPEPModule:
         self._stored_publish = None
 
         self._con.get_module('PEP').register_pep_handler(
-            self.namespace,
-            self._pep_notify_received,
-            self._pep_retract_received)
+            self.namespace, self._pep_notify_received)
 
     def _pep_notify_received(self, jid: nbxmpp.JID, item: nbxmpp.Node) -> None:
         try:
@@ -177,11 +172,14 @@ class AbstractPEPModule:
             return
 
         self._log.info('Received: %s %s', jid, data)
-        self._push_event(jid, self.pep_class(data))
-
-    def _pep_retract_received(self, jid: nbxmpp.JID, id_: str) -> None:
-        self._log.info('Retract: %s %s', jid, id_)
-        self._push_event(jid, self.pep_class(None))
+        user_pep = self.pep_class(data)
+        self._notification_received(jid, user_pep)
+        app.nec.push_incoming_event(
+            PEPReceivedEvent(None,
+                             conn=self._con,
+                             jid=str(jid),
+                             pep_type=self.name,
+                             user_pep=user_pep))
 
     def _extract_info(self, item: nbxmpp.Node) -> Any:
         '''To be implemented by subclasses'''
@@ -190,14 +188,6 @@ class AbstractPEPModule:
     def _build_node(self, data: Any) -> nbxmpp.Node:
         '''To be implemented by subclasses'''
         raise NotImplementedError
-
-    def _push_event(self, jid: nbxmpp.JID, user_pep: Any) -> None:
-        self._notification_received(jid, user_pep)
-        app.nec.push_incoming_event(
-            PEPReceivedEvent(None, conn=self._con,
-                             jid=str(jid),
-                             pep_type=self.name,
-                             user_pep=user_pep))
 
     def _notification_received(self, jid: nbxmpp.JID, user_pep: Any) -> None:
         for contact in app.contacts.get_contacts(self._account, str(jid)):
@@ -240,13 +230,6 @@ class AbstractPEPModule:
 
         self._con.get_module('PubSub').send_pb_publish(
             '', self.namespace, item, 'current')
-
-    def retract(self) -> None:
-        if not self._con.get_module('PEP').supported:
-            return
-        self.send(None)
-        self._con.get_module('PubSub').send_pb_retract(
-            '', self.namespace, 'current')
 
 
 class PEPReceivedEvent(NetworkIncomingEvent):

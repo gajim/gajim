@@ -163,12 +163,6 @@ class BookmarkStorageType(IntEnum):
 
 
 @unique
-class PEPHandlerType(IntEnum):
-    NOTIFY = 0
-    RETRACT = 1
-
-
-@unique
 class PEPEventType(IntEnum):
     ABSTRACT = 0
     ACTIVITY = 1

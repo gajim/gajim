@@ -2119,14 +2119,14 @@ class RosterWindow:
             connection.get_module('UserActivity').send(
                 (activity, subactivity, activity_text))
         else:
-            connection.get_module('UserActivity').retract()
+            connection.get_module('UserActivity').send(None)
 
         if 'mood' in pep_dict:
             mood = pep_dict['mood']
             mood_text = pep_dict.get('mood_text', None)
             connection.get_module('UserMood').send((mood, mood_text))
         else:
-            connection.get_module('UserMood').retract()
+            connection.get_module('UserMood').send(None)
 
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):
@@ -3631,7 +3631,7 @@ class RosterWindow:
         if active:
             app.interface.enable_music_listener()
         else:
-            app.connections[account].get_module('UserTune').retract()
+            app.connections[account].get_module('UserTune').send(None)
             # disable music listener only if no other account uses it
             for acc in app.connections:
                 if app.config.get_per('accounts', acc, 'publish_tune'):
@@ -3647,7 +3647,7 @@ class RosterWindow:
         if active:
             location_listener.enable()
         else:
-            app.connections[account].get_module('UserLocation').retract()
+            app.connections[account].get_module('UserLocation').send(None)
 
         helpers.update_optional_features(account)
 
