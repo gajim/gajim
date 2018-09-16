@@ -38,7 +38,6 @@ def _check_required_deps():
         print('Gajim needs python-nbxmpp to run. Quitting…')
         sys.exit(1)
 
-    from distutils.version import LooseVersion as V
     if V(nbxmpp.__version__) < V(_MIN_NBXMPP_VER):
         print('Gajim needs python-nbxmpp >= %s to run. '
               'Quitting...' % _MIN_NBXMPP_VER)

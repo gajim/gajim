@@ -2094,11 +2094,11 @@ class DiscussionGroupsBrowser(AgentBrowser):
         except Exception:
             return
 
-        groups = set()
+        groups_ = set()
         for child in subscriptions.getTags('subscription'):
-            groups.add(child['node'])
+            groups_.add(child['node'])
 
-        self.subscriptions = groups
+        self.subscriptions = groups_
 
         # try to setup existing items in model
         model = self.window.services_treeview.get_model()
@@ -2108,7 +2108,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
             # 4 = subscribed?
             groupnode = row[1]
             row[3] = False
-            row[4] = groupnode in groups
+            row[4] = groupnode in groups_
 
         # we now know subscriptions, update button states
         self.update_actions()

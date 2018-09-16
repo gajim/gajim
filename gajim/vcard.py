@@ -278,7 +278,7 @@ class VcardWindow:
             return
         i = 0
         client = ''
-        os = ''
+        os_info = ''
         while i in self.os_info:
             if self.os_info[i]['resource'] == obj.jid.getResource():
                 if obj.client_info:
@@ -296,13 +296,13 @@ class VcardWindow:
                     self.os_info[i]['os'] = Q_('?OS:Unknown')
             if i > 0:
                 client += '\n'
-                os += '\n'
+                os_info += '\n'
             client += self.os_info[i]['client']
-            os += self.os_info[i]['os']
+            os_info += self.os_info[i]['os']
             i += 1
 
         self.xml.get_object('client_name_version_label').set_text(client)
-        self.xml.get_object('os_label').set_text(os)
+        self.xml.get_object('os_label').set_text(os_info)
         self.os_info_arrived = True
 
     def set_entity_time(self, obj):

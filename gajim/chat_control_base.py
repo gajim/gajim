@@ -711,12 +711,12 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         pass
 
-    def _on_drag_leave(self, widget, context, time):
+    def _on_drag_leave(self, *args):
         # FIXME: DND on non editable TextView, find a better way
         self.drag_entered = False
         self.conv_textview.tv.set_editable(False)
 
-    def _on_drag_motion(self, widget, context, x, y, time):
+    def _on_drag_motion(self, *args):
         # FIXME: DND on non editable TextView, find a better way
         if not self.drag_entered:
             # We drag new data over the TextView, make it editable to catch dnd

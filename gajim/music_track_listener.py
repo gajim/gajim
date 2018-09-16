@@ -199,7 +199,7 @@ class MusicTrackListener(GObject.GObject):
 
 # here we test :)
 if __name__ == '__main__':
-    def music_track_change_cb(listener, music_track_info):
+    def music_track_change_cb(_listener, music_track_info):
         if music_track_info is None or music_track_info.paused:
             print('Stop!')
         else:

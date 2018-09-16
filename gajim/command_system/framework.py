@@ -96,17 +96,17 @@ class CommandProcessor:
         return True
 
     def execute_command(self, name, arguments):
-        command = self.get_command(name)
+        cmd = self.get_command(name)
 
         args, opts = parse_arguments(arguments) if arguments else ([], [])
-        args, kwargs = adapt_arguments(command, arguments, args, opts)
+        args, kwargs = adapt_arguments(cmd, arguments, args, opts)
 
-        if self.command_preprocessor(command, name, arguments, args, kwargs):
+        if self.command_preprocessor(cmd, name, arguments, args, kwargs):
             return
-        value = command(self, *args, **kwargs)
-        self.command_postprocessor(command, name, arguments, args, kwargs, value)
+        value = cmd(self, *args, **kwargs)
+        self.command_postprocessor(cmd, name, arguments, args, kwargs, value)
 
-    def command_preprocessor(self, command, name, arguments, args, kwargs):
+    def command_preprocessor(self, cmd, name, arguments, args, kwargs):
         """
         Redefine this method in the subclass to execute custom code
         before command gets executed.
@@ -116,7 +116,7 @@ class CommandProcessor:
         """
         pass
 
-    def command_postprocessor(self, command, name, arguments, args, kwargs, value):
+    def command_postprocessor(self, cmd, name, arguments, args, kwargs, value):
         """
         Redefine this method in the subclass to execute custom code
         after command gets executed.
@@ -135,10 +135,10 @@ class CommandProcessor:
         pass
 
     def get_command(self, name):
-        command = get_command(self.COMMAND_HOST, name)
-        if not command:
+        cmd = get_command(self.COMMAND_HOST, name)
+        if not cmd:
             raise NoCommandError("Command does not exist", name=name)
-        return command
+        return cmd
 
     def list_commands(self):
         commands = list_commands(self.COMMAND_HOST)
@@ -307,16 +307,16 @@ def command(*names, **properties):
         Decorator which receives handler as a first argument and then
         wraps it in the command which then returns back.
         """
-        command = Command(handler, *names, **properties)
+        cmd = Command(handler, *names, **properties)
 
         # Extract and inject a native name if either no other names are
         # specified or native property is enabled, while making
         # sure it is going to be the first one in the list.
         if not names or native:
-            names.insert(0, command.native_name)
-            command.names = tuple(names)
+            names.insert(0, cmd.native_name)
+            cmd.names = tuple(names)
 
-        return command
+        return cmd
 
     # Workaround if we are getting called without parameters. Keep in
     # mind that in that case - first item in the names will be the

@@ -1279,7 +1279,6 @@ def get_subscription_request_msg(account=None):
         return s
 
 def replace_dataform_media(form, stanza):
-    import nbxmpp
     found = False
     for field in form.getTags('field'):
         for media in field.getTags('media'):

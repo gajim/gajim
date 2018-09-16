@@ -24,11 +24,12 @@ from gajim.common import configpaths
 from gajim.common import helpers
 from gajim.common import connection
 from gajim.common.modules import dataforms
+from gajim.config import ManageProxiesWindow
+from gajim.config import FakeDataForm
 from gajim.gtk.util import get_builder
 from gajim.gtk import ErrorDialog
 from gajim import gtkgui_helpers
 from gajim import dataforms_widget
-from gajim import config
 from gajim import gui_menu_builder
 
 
@@ -347,7 +348,7 @@ class AccountCreationWizard:
             app.interface.instances['manage_proxies'].window.present()
         else:
             app.interface.instances['manage_proxies'] = \
-                config.ManageProxiesWindow()
+                ManageProxiesWindow()
 
     def on_custom_host_port_checkbutton_toggled(self, widget):
         self.xml.get_object('custom_host_hbox').set_sensitive(
@@ -377,8 +378,7 @@ class AccountCreationWizard:
             self.data_form_widget.set_data_form(dataform)
             empty_config = False
         else:
-            self.data_form_widget = config.FakeDataForm(
-                obj.config, selectable=True)
+            self.data_form_widget = FakeDataForm(obj.config, selectable=True)
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue

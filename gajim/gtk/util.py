@@ -198,8 +198,7 @@ def at_the_end(widget):
     """
     adj_v = widget.get_vadjustment()
     max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
-    at_the_end = (adj_v.get_value() == max_scroll_pos)
-    return at_the_end
+    return adj_v.get_value() == max_scroll_pos
 
 
 def get_image_button(icon_name, tooltip, toggle=False):

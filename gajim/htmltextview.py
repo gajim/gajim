@@ -72,7 +72,7 @@ classes = {
 }
 
 # styles for elements
-element_styles = {
+_element_styles = {
                 'u'             : ';text-decoration: underline',
                 'em'            : ';font-style: oblique',
                 'cite'          : '; background-color:rgb(170,190,250);'
@@ -90,12 +90,12 @@ element_styles = {
                 'dd'            : ';margin-left: 2em; font-style: oblique'
 }
 # no difference for the moment
-element_styles['dfn'] = element_styles['em']
-element_styles['var'] = element_styles['em']
+_element_styles['dfn'] = _element_styles['em']
+_element_styles['var'] = _element_styles['em']
 # deprecated, legacy, presentational
-element_styles['tt']  = element_styles['kbd']
-element_styles['i']   = element_styles['em']
-element_styles['b']   = element_styles['strong']
+_element_styles['tt']  = _element_styles['kbd']
+_element_styles['i']   = _element_styles['em']
+_element_styles['b']   = _element_styles['strong']
 
 # ==========
 #   XEP-0071
@@ -182,12 +182,12 @@ INLINE = INLINE_PHRASAL.union(INLINE_PRES).union(INLINE_STRUCT)
 
 LIST_ELEMS = set( 'dl, ol, ul'.split(', '))
 
-for name in BLOCK_HEAD:
-    num = eval(name[1])
-    header_size = (num-1) // 2
-    weight = (num - 1) % 2
-    element_styles[name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[header_size],
-        ('font-weight: bold', 'font-style: oblique')[weight],)
+for _name in BLOCK_HEAD:
+    _num = eval(_name[1])
+    _header_size = (_num - 1) // 2
+    _weight = (_num - 1) % 2
+    _element_styles[_name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[_header_size],
+        ('font-weight: bold', 'font-style: oblique')[_weight],)
 
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
@@ -741,8 +741,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             style += ';margin-left: 2em'
         elif name == 'img':
             tag = self._process_img(attrs)
-        if name in element_styles:
-            style += element_styles[name]
+        if name in _element_styles:
+            style += _element_styles[name]
         # so that explicit styles override implicit ones,
         # we add the attribute last
         style += ";"+attrs.get('style', '')
@@ -915,8 +915,8 @@ class HtmlTextView(Gtk.TextView):
         AddNewContactWindow(self.account, jid)
 
     def make_link_menu(self, event, kind, text):
-        xml = get_builder('chat_context_menu.ui')
-        menu = xml.get_object('chat_context_menu')
+        ui = get_builder('chat_context_menu.ui')
+        menu = ui.get_object('chat_context_menu')
         childs = menu.get_children()
         if kind == 'url':
             childs[0].connect('activate', self.on_copy_link_activate, text)
@@ -930,7 +930,7 @@ class HtmlTextView(Gtk.TextView):
             childs[7].hide() # add to roster
         else: # It's a mail or a JID
             # load muc icon
-            join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
+            join_group_chat_menuitem = ui.get_object('join_group_chat_menuitem')
 
             text = text.lower()
             if text.startswith('xmpp:'):
@@ -1270,9 +1270,9 @@ hhx4dbgYKAAA7' alt='Larry'/>
     frame.set_shadow_type(Gtk.ShadowType.IN)
     frame.show()
     frame.add(sw)
-    w = Gtk.Window()
-    w.add(frame)
-    w.set_default_size(400, 300)
-    w.show_all()
-    w.connect('destroy', lambda w: Gtk.main_quit())
+    win = Gtk.Window()
+    win.add(frame)
+    win.set_default_size(400, 300)
+    win.show_all()
+    win.connect('destroy', lambda win: Gtk.main_quit())
     Gtk.main()
