@@ -36,24 +36,24 @@ import select
 import base64
 import hashlib
 import shlex
-from gajim.common import caps_cache
 import socket
 import time
+import logging
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
-
 from encodings.punycode import punycode_encode
 from string import Template
 
 import nbxmpp
 
+from gajim.common import caps_cache
+from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
-from gajim.common import configpaths
 
 try:
-    import precis_i18n.codec
+    import precis_i18n.codec  # pylint: disable=unused-import
     HAS_PRECIS_I18N = True
 except ImportError:
     HAS_PRECIS_I18N = False
@@ -81,7 +81,6 @@ try:
 except Exception:
     pass
 
-import logging
 log = logging.getLogger('gajim.c.helpers')
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))

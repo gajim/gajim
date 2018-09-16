@@ -24,10 +24,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import time
+
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gio
 
@@ -36,8 +37,6 @@ from gajim import message_control
 from gajim.gtk import NonModalConfirmationDialog
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim import notify
-import re
-
 from gajim.gtk.emoji_chooser import emoji_chooser
 from gajim.common import events
 from gajim.common import app
@@ -58,8 +57,10 @@ from gajim.command_system.implementation.middleware import CommandTools
 # module, but still they need to be kept around. Importing them automatically
 # registers the contained CommandContainers with the command system, thereby
 # populating the list of available commands.
+# pylint: disable=unused-import
 from gajim.command_system.implementation import standard
 from gajim.command_system.implementation import execute
+# pylint: enable=unused-import
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell

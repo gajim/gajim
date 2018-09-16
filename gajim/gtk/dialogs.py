@@ -16,7 +16,6 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.modules import dataforms
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
 

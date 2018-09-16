@@ -14,17 +14,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk, Gio, GLib
 import os
-from gajim import gtkgui_helpers
-from gajim import message_control
 
-from gajim.common import app
-from gajim.common import helpers
-from gajim.common import i18n
+from gi.repository import Gtk, Gio, GLib
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
+
+from gajim import gtkgui_helpers
+from gajim import message_control
 from gajim.gtkgui_helpers import get_action
+from gajim.common import app
+from gajim.common import helpers
+
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):

@@ -29,10 +29,12 @@ Handles Jingle sessions (XEP 0166)
 
 import logging
 from enum import Enum, unique
+
 import nbxmpp
+
 from gajim.common import app
 from gajim.common.jingle_transport import get_jingle_transport, JingleTransportIBB
-from gajim.common.jingle_content import get_jingle_content, JingleContentSetupException, JingleContent
+from gajim.common.jingle_content import get_jingle_content, JingleContentSetupException
 from gajim.common.jingle_ft import State
 from gajim.common.connection_handlers_events import (
     FilesProp, JingleRequestReceivedEvent, JingleDisconnectedReceivedEvent,

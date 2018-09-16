@@ -31,32 +31,33 @@ with the markup that docutils generate, and also more
 modular.
 """
 
+import re
+import logging
+import urllib
+import xml.sax
+import xml.sax.handler
+from io import StringIO
+
 from gi.repository import GObject
 from gi.repository import Pango
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-import xml.sax
-import xml.sax.handler
-import re
-from io import StringIO
-import urllib
 
 if __name__ == '__main__':
-    from gajim.common import i18n
     from gajim.common import configpaths
     configpaths.init()
+
 from gajim.common import app
+from gajim.common import helpers
+from gajim.common.i18n import _
+from gajim.common.const import StyleAttr
+from gajim.gtk import JoinGroupchatWindow
+from gajim.gtk import AddNewContactWindow
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import get_builder
-from gajim.common import helpers
-from gajim.gtk import JoinGroupchatWindow
-from gajim.gtk import AddNewContactWindow
-from gajim.common.const import StyleAttr
 
-
-import logging
 log = logging.getLogger('gajim.htmlview')
 
 __all__ = ['HtmlTextView']
@@ -1096,11 +1097,6 @@ change_cursor = None
 if __name__ == '__main__':
     from gajim.conversation_textview import ConversationTextview
     from gajim.gui_interface import Interface
-    from gajim.common import app, logger, caps_cache
-    # TODO: don't call Logger() it will create the DB
-    # maybe mock this object for tests
-    # app.logger = logger.Logger()
-    # caps_cache.initialize(app.logger)
 
     Interface()
 

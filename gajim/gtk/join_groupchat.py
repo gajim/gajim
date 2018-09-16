@@ -18,7 +18,6 @@ from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.exceptions import GajimGeneralException
 from gajim.gtk import ErrorDialog
