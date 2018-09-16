@@ -741,7 +741,7 @@ class MultipleDataForm(DataForm):
 #    def reported(self, record):
 #        try:
 #            self.delChild('reported')
-#        except:
+#        except Exception:
 #            pass
 #
 #        record.setName('reported')

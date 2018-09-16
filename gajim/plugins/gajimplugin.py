@@ -258,7 +258,7 @@ class GajimPluginConfig():
             try:
                 self.data = pickle.load(fd)
                 fd.close()
-            except:
+            except Exception:
                 fd.close()
                 try:
                     import shelve
@@ -269,7 +269,7 @@ class GajimPluginConfig():
                         raise GajimPluginException
                     s.close()
                     self.save()
-                except:
+                except Exception:
                     log.warning('%s plugin config file not readable. Saving it as '
                         '%s and creating a new one' % (self.plugin.short_name,
                         self.FILE_PATH.decode(locale.getpreferredencoding()) + '.bak'))

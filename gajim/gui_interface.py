@@ -48,7 +48,7 @@ import OpenSSL
 
 try:
     from PIL import Image
-except:
+except Exception:
     pass
 
 from gajim.common import app
@@ -934,7 +934,7 @@ class Interface:
         h = Hashes2()
         try:
             file_ = open(file_props.file_name, 'rb')
-        except:
+        except Exception:
             return
         hash_ = h.calculateHash(file_props.algo, file_)
         file_.close()

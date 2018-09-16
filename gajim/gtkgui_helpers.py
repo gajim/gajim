@@ -37,7 +37,7 @@ import xml.etree.ElementTree as ET
 
 try:
     from PIL import Image
-except:
+except Exception:
     pass
 from io import BytesIO
 

@@ -283,7 +283,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         def get_val(min_val=minl, max_val=maxl):
             try:
                 val = float(value[:-2])
-            except:
+            except Exception:
                 log.warning('Unable to parse length value "%s"', value)
                 return None
             if val > 0:

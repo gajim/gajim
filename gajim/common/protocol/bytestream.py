@@ -813,7 +813,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         try:
             blocksize = int(blocksize)
-        except:
+        except Exception:
             err = nbxmpp.ERR_BAD_REQUEST
         if not sid or not blocksize:
             err = nbxmpp.ERR_BAD_REQUEST
