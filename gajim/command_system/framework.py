@@ -55,7 +55,7 @@ class CommandContainer(metaclass=Container):
     """
     __metaclass__ = Container
 
-class CommandProcessor(object):
+class CommandProcessor:
     """
     Command processor is an immediate command emitter. It does not
     participate in the dispatching process directly, but must define a
@@ -145,7 +145,7 @@ class CommandProcessor(object):
         commands = dict(commands)
         return sorted(set(commands.values()), key=lambda k: k.__repr__())
 
-class Command(object):
+class Command:
 
     def __init__(self, handler, *names, **properties):
         self.handler = handler

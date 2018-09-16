@@ -205,7 +205,7 @@ def get_agent_address(jid, node = None):
     else:
         return str(jid)
 
-class Closure(object):
+class Closure:
     """
     A weak reference to a callback with arguments as an object
 
@@ -474,8 +474,7 @@ class ServicesCache:
                 del self._cbs[cbkey]
 
 
-# object is needed so that @property works
-class ServiceDiscoveryWindow(object):
+class ServiceDiscoveryWindow:
     """
     Class that represents the Services Discovery window
     """

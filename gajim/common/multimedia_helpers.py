@@ -22,7 +22,7 @@ from gi.repository import Gst
 log = logging.getLogger('gajim.c.multimedia_helpers')
 
 
-class DeviceManager(object):
+class DeviceManager:
     def __init__(self):
         self.devices = {}
 

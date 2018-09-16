@@ -43,7 +43,7 @@ if app.is_installed('FARSTREAM'):
 logger = logging.getLogger('gajim.c.jingle')
 
 
-class ConnectionJingle(object):
+class ConnectionJingle:
     """
     This object depends on that it is a part of Connection class.
     """

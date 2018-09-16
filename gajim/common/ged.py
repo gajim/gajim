@@ -52,7 +52,7 @@ OUT_PRECORE = 90
 OUT_CORE = 100
 OUT_POSTCORE = 110
 
-class GlobalEventsDispatcher(object):
+class GlobalEventsDispatcher:
 
     def __init__(self):
         self.handlers = {}

@@ -25,7 +25,7 @@ log = logging.getLogger('gajim.c.pep')
 from gajim.common import app
 
 
-class AbstractPEP(object):
+class AbstractPEP:
 
     type_ = ''
     namespace = ''

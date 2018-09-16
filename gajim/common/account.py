@@ -15,7 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 
-class Account(object):
+class Account:
 
     def __init__(self, name, contacts, gc_contacts):
         self.name = name

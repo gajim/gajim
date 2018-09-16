@@ -152,7 +152,7 @@ def compute_caps_hash(identities, features, dataforms=None, hash_method='sha-1')
 ### Internal classes of this module
 ################################################################################
 
-class AbstractClientCaps(object):
+class AbstractClientCaps:
     """
     Base class representing a client and its capabilities as advertised by a
     caps tag in a presence
@@ -282,7 +282,7 @@ class NullClientCaps(AbstractClientCaps):
         return False
 
 
-class CapsCache(object):
+class CapsCache:
     """
     This object keeps the mapping between caps data and real disco features they
     represent, and provides simple way to query that info
@@ -295,7 +295,7 @@ class CapsCache(object):
         #   client (hash method/hash pair)
         self.__cache = {}
 
-        class CacheItem(object):
+        class CacheItem:
             # __names is a string cache; every string long enough is given
             #   another object, and we will have plenty of identical long
             #   strings. therefore we can cache them

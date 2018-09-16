@@ -39,7 +39,7 @@ class GajimPluginActivateException(Exception):
     '''
     pass
 
-class log_calls(object):
+class log_calls:
     '''
     Decorator class for functions to easily log when they are entered and left.
     '''

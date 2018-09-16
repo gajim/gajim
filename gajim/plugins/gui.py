@@ -51,7 +51,7 @@ class Column(IntEnum):
     ICON = 4
 
 
-class PluginsWindow(object):
+class PluginsWindow:
     '''Class for Plugins window'''
 
     @log_calls('PluginsWindow')

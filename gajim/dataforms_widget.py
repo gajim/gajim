@@ -36,7 +36,7 @@ from gajim.common import app
 
 import itertools
 
-class DataFormWidget(Gtk.Alignment, object):
+class DataFormWidget(Gtk.Alignment):
 # "public" interface
     """
     Data Form widget. Use like any other widget
@@ -306,7 +306,7 @@ class DataFormWidget(Gtk.Alignment, object):
     def on_records_selection_changed(self, widget):
         self.refresh_multiple_buttons()
 
-class SingleForm(Gtk.Table, object):
+class SingleForm(Gtk.Table):
     """
     Widget that represent DATAFORM_SINGLE mode form. Because this is used not
     only to display single forms, but to form input windows of multiple-type

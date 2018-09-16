@@ -33,7 +33,7 @@ from gajim.common.const import KindConstant
 from gajim.gtk import SingleMessageWindow
 
 
-class ChatControlSession(object):
+class ChatControlSession:
     def __init__(self, conn, jid, thread_id, type_='chat'):
         self.conn = conn
         self.jid = jid
