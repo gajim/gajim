@@ -51,7 +51,7 @@ class log_calls:
     even though `log_calls` decorator is used.
     '''
 
-    def __init__(self, classname='', log=log):
+    def __init__(self, classname=''):
         '''
         :Keywords:
           classname : str

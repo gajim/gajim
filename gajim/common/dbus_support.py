@@ -42,8 +42,8 @@ except ImportError:
 else:
     try:
         # test if dbus-x11 is installed
-        bus = dbus.SystemBus()
-        bus = dbus.SessionBus()
+        _bus = dbus.SystemBus()
+        _bus = dbus.SessionBus()
         supported = True # does user have D-Bus bindings?
     except dbus.DBusException:
         supported = False

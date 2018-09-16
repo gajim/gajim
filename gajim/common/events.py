@@ -61,16 +61,15 @@ class Event:
 
 class ChatEvent(Event):
     type_ = 'chat'
-    def __init__ (self, message, subject, kind, time, encrypted, resource,
+    def __init__ (self, message, subject, kind, time_, encrypted, resource,
     msg_log_id, correct_id=None, xhtml=None, session=None, form_node=None,
-    displaymarking=None, sent_forwarded=False, time_=None, show_in_roster=False,
+    displaymarking=None, sent_forwarded=False, show_in_roster=False,
     show_in_systray=True, additional_data=None):
         Event.__init__(self, time_, show_in_roster=show_in_roster,
             show_in_systray=show_in_systray)
         self.message = message
         self.subject = subject
         self.kind = kind
-        self.time = time
         self.encrypted = encrypted
         self.resource = resource
         self.msg_log_id = msg_log_id

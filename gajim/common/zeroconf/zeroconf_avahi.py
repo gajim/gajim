@@ -354,7 +354,7 @@ class Zeroconf:
     # connect to dbus
     def connect_dbus(self):
         try:
-            import dbus
+            import dbus  # pylint: disable=redefined-outer-name
             from dbus.mainloop.glib import DBusGMainLoop
             main_loop = DBusGMainLoop(set_as_default=True)
             dbus.set_default_main_loop(main_loop)
