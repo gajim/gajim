@@ -106,7 +106,7 @@ class PEP:
             retract = items.getTag('retract')
             if retract is not None:
                 for handler in handlers:
-                    handler[PEPHandlerType.RETRACT](jid, retract.getID())
+                    handler[PEPHandlerType.RETRACT](jid, retract.getAttr('id'))
                     raise nbxmpp.NodeProcessed
 
             # Check if we have items

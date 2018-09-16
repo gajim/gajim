@@ -88,7 +88,7 @@ class UserMood(AbstractPEPModule):
     def _build_node(self, data: Optional[Tuple[str, str]]) -> nbxmpp.Node:
         item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
         if data is None:
-            return
+            return item
         mood, text = data
         if mood:
             item.addChild(mood)

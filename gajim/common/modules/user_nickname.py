@@ -67,9 +67,8 @@ class UserNickname(AbstractPEPModule):
 
     def _build_node(self, data: Optional[str]) -> Optional[nbxmpp.Node]:
         item = nbxmpp.Node('nick', {'xmlns': nbxmpp.NS_NICK})
-        if data is None:
-            return None
-        item.addData(data)
+        if data is not None:
+            item.addData(data)
         return item
 
     def _notification_received(self,
