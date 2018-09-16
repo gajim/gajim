@@ -1075,7 +1075,7 @@ def get_notification_icon_tooltip_text():
     for account in accounts:
         account_name = account['name']
         # Set account status, if not set above
-        if (show_more_accounts):
+        if show_more_accounts:
             message = '\n' + indent_with + ' %s - %s'
             text += message % (account_name, get_account_status(account))
             # Account list shown, messages need to be indented more

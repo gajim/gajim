@@ -732,7 +732,7 @@ def make_jabber_state_images():
     app.interface.jabber_state_images['32'] = load_iconset(path)
 
     path = os.path.join(helpers.get_iconset_path(iconset), '24x24')
-    if (os.path.exists(path)):
+    if os.path.exists(path):
         app.interface.jabber_state_images['24'] = load_iconset(path)
     else:
         # Resize 32x32 icons to 24x24

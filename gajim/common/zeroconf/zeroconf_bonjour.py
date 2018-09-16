@@ -66,7 +66,7 @@ class Zeroconf:
         if errorCode != pybonjour.kDNSServiceErr_NoError:
             log.debug('Error in browse_callback: %s', str(errorCode))
             return
-        if not (flags & pybonjour.kDNSServiceFlagsAdd):
+        if not flags & pybonjour.kDNSServiceFlagsAdd:
             self.remove_service_callback(serviceName)
             return
 

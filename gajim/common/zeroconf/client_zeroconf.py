@@ -105,7 +105,7 @@ class ZeroconfListener(IdleObject):
         for jid in self.conn_holder.getRoster().keys():
             entry = self.conn_holder.getRoster().getItem(jid)
             for address in entry['addresses']:
-                if (address['address'] == ipaddr):
+                if address['address'] == ipaddr:
                     from_jid = jid
                     break
         P2PClient(sock[0], [{'host': ipaddr, 'address': ipaddr, 'port': sock[1][1]}], self.conn_holder, [], from_jid)

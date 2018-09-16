@@ -577,7 +577,7 @@ class FileTransfersWindow:
                         app.interface.roster.draw_contact(jid, account)
                         app.interface.roster.show_title()
         FilesProp.deleteFileProp(file_props)
-        del(file_props)
+        del file_props
 
     def set_progress(self, typ, sid, transfered_size, iter_=None):
         """

@@ -67,7 +67,7 @@ class CommonResolver():
         if host + type_ in self.handlers:
             for callback in self.handlers[host + type_]:
                 callback(host, result_list)
-            del(self.handlers[host + type_])
+            del self.handlers[host + type_]
 
     def start_resolve(self, host, type_):
         pass

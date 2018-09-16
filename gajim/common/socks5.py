@@ -390,7 +390,7 @@ class SocksQueue:
         else:
             if reader.streamhost is not None:
                 reader.streamhost['state'] = -1
-        del(self.readers[key])
+        del self.readers[key]
 
     def remove_sender_by_key(self, key, do_disconnect=True):
         sender = self.senders[key]
@@ -398,7 +398,7 @@ class SocksQueue:
             sender.disconnect()
         self.idlequeue.unplug_idle(sender.fd)
         self.idlequeue.remove_timeout(sender.fd)
-        del(self.senders[key])
+        del self.senders[key]
         if self.connected > 0:
             self.connected -= 1
 
