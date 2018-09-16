@@ -70,6 +70,7 @@ class ChatEvent(Event):
         self.message = message
         self.subject = subject
         self.kind = kind
+        self.time = time_
         self.encrypted = encrypted
         self.resource = resource
         self.msg_log_id = msg_log_id
