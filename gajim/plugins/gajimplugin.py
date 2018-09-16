@@ -33,7 +33,7 @@ import logging
 log = logging.getLogger('gajim.p.plugin')
 
 
-class GajimPlugin(object):
+class GajimPlugin:
     '''
     Base class for implementing Gajim plugins.
     '''

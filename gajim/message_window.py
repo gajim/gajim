@@ -41,7 +41,7 @@ from gajim.common.i18n import Q_
 
 ####################
 
-class MessageWindow(object):
+class MessageWindow:
     """
     Class for windows which contain message like things; chats, groupchats, etc
     """

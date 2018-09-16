@@ -29,7 +29,7 @@ log = logging.getLogger('gajim.music_track_listener')
 MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 
 
-class MusicTrackInfo(object):
+class MusicTrackInfo:
     __slots__ = ['title', 'album', 'artist', 'duration', 'track_number',
                  'paused']
 

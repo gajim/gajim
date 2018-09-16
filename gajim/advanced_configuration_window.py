@@ -64,7 +64,7 @@ def tree_model_pre_order(model, treeiter):
             yield it
 
 
-class AdvancedConfigurationWindow(object):
+class AdvancedConfigurationWindow:
     def __init__(self, transient):
         self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')

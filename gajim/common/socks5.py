@@ -450,7 +450,7 @@ class SocksQueue:
             if sock.host != host_to_keep and sock.mode == 'server':
                 self.remove_sender_by_key(key)
 
-class Socks5(object):
+class Socks5:
     def __init__(self, idlequeue, host, port, initiator, target, sid):
         if host is not None:
             try:

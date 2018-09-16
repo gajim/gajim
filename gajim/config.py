@@ -294,7 +294,7 @@ class ManageProxiesWindow:
         app.config.set_per('proxies', proxy, 'pass', value)
 
 
-class FakeDataForm(Gtk.Table, object):
+class FakeDataForm(Gtk.Table):
     """
     Class for forms that are in XML format <entry1>value1</entry1> infos in a
     table {entry1: value1}

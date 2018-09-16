@@ -90,7 +90,7 @@ class FilesProp:
             del files_props[a, s]
 
 
-class FileProp(object):
+class FileProp:
 
     def __init__(self, account, sid):
         # Do not instantiate this class directly. Call FilesProp.getNeFileProp

@@ -1583,7 +1583,7 @@ class ResourceConflictDialog(TimeoutDialog, InputDialog):
 
 
 
-class VoIPCallReceivedDialog(object):
+class VoIPCallReceivedDialog:
     instances = {}
     def __init__(self, account, contact_jid, sid, content_types):
         self.instances[(contact_jid, sid)] = self

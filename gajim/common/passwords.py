@@ -35,7 +35,7 @@ except ImportError:
     log.debug('python-keyring missing, falling back to plaintext storage')
 
 
-class PasswordStorage(object):
+class PasswordStorage:
     """Interface for password stores"""
     def get_password(self, account_name):
         """Return the password for account_name, or None if not found."""
