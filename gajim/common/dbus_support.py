@@ -23,7 +23,6 @@
 import sys
 import logging
 
-from gajim.common import app
 from gajim.common import exceptions
 from gajim.common.i18n import _
 

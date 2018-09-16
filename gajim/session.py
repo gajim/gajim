@@ -21,16 +21,15 @@ import string
 import random
 import itertools
 
+from gajim import message_control
+from gajim import notify
 from gajim.common import helpers
 from gajim.common import events
 from gajim.common import app
 from gajim.common import contacts
 from gajim.common import ged
-from gajim.common.connection_handlers_events import ChatstateReceivedEvent, \
-    InformationEvent
+from gajim.common.connection_handlers_events import ChatstateReceivedEvent
 from gajim.common.const import KindConstant
-from gajim import message_control
-from gajim import notify
 from gajim.gtk import SingleMessageWindow
 
 

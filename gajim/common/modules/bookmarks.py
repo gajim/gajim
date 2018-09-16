@@ -16,7 +16,6 @@
 
 import logging
 import copy
-from typing import Optional
 from collections import OrderedDict
 
 import nbxmpp

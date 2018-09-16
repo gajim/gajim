@@ -25,7 +25,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim import dialogs
-from gajim import config
 from gajim import tooltips
 from gajim import gtkgui_helpers
 from gajim.common import app

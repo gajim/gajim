@@ -25,16 +25,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import base64
+import binascii
+
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
-import base64
-import binascii
-import os
 
 from gajim import gtkgui_helpers
-
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import ged
@@ -43,6 +42,7 @@ from gajim.common.i18n import Q_
 from gajim.common.const import AvatarSize
 
 # log = logging.getLogger('gajim.vcard')
+
 
 class VcardWindow:
     """

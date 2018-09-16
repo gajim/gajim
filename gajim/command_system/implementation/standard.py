@@ -20,11 +20,9 @@ Provides an actual implementation for the standard commands.
 from time import localtime, strftime
 from datetime import date
 
-from gajim import dialogs
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.exceptions import GajimGeneralException
 from gajim.common.const import KindConstant
 
 from gajim.command_system.errors import CommandError
@@ -32,6 +30,7 @@ from gajim.command_system.framework import CommandContainer, command, doc
 from gajim.command_system.mapping import generate_usage
 
 from gajim.command_system.implementation.hosts import ChatCommands, PrivateChatCommands, GroupChatCommands
+
 
 class StandardCommonCommands(CommandContainer):
     """

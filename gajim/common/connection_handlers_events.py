@@ -18,8 +18,6 @@
 # pylint: disable=attribute-defined-outside-init
 
 from calendar import timegm
-import hashlib
-import hmac
 import logging
 from time import time as time_time
 
