@@ -331,11 +331,10 @@ class ProfileWindow(Gtk.ApplicationWindow):
                 transient_for=self)
             return
         vcard_, sha = self.make_vcard()
-        nick = ''
-        if 'NICKNAME' in vcard_:
-            nick = vcard_['NICKNAME']
+        nick = vcard_.get('NICKNAME')
+        if nick:
             app.connections[self.account].get_module('UserNickname').send(nick)
-        if nick == '':
+        else:
             app.connections[self.account].get_module('UserNickname').retract()
             nick = app.config.get_per('accounts', self.account, 'name')
         app.nicks[self.account] = nick

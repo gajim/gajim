@@ -89,7 +89,7 @@ class UserActivity(AbstractPEPModule):
     def _build_node(self, data):
         item = nbxmpp.Node('activity', {'xmlns': self.namespace})
         if data is None:
-            return
+            return item
         activity, subactivity, message = data
         if activity:
             i = item.addChild(activity)
