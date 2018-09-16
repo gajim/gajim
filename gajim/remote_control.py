@@ -62,7 +62,7 @@ def get_dbus_struct(obj):
             result.insert_value(key, get_dbus_struct(value))
         return result.end()
     # unknown type
-    return None
+    return GLib.Variant('s', str(obj))
 
 
 class Server:
