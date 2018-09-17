@@ -424,10 +424,8 @@ def account_supports_private_storage(account):
 def account_is_connected(account):
     if account not in connections:
         return False
-    if connections[account].connected > 1: # 0 is offline, 1 is connecting
-        return True
-    else:
-        return False
+    # 0 is offline, 1 is connecting
+    return connections[account].connected > 1
 
 def is_invisible(account):
     return SHOW_LIST[connections[account].connected] == 'invisible'
@@ -455,11 +453,9 @@ def get_number_of_securely_connected_accounts():
     return num_of_secured
 
 def account_is_securely_connected(account):
-    if account_is_connected(account) and \
-    account in con_types and con_types[account] in ('tls', 'ssl'):
-        return True
-    else:
+    if not account_is_connected(account):
         return False
+    return con_types.get(account) in ('tls', 'ssl')
 
 def get_transport_name_from_jid(jid, use_config_setting = True):
     """

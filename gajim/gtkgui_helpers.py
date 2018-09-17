@@ -266,10 +266,7 @@ def set_unset_urgency_hint(window, unread_messages_no):
     messages or not
     """
     if app.config.get('use_urgency_hint'):
-        if unread_messages_no > 0:
-            window.props.urgency_hint = True
-        else:
-            window.props.urgency_hint = False
+        window.props.urgency_hint = unread_messages_no > 0
 
 def get_pixbuf_from_data(file_data):
     """

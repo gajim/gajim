@@ -145,16 +145,14 @@ def get_interface(interface, path, start_service=True):
         started = True
         if interface not in running_services:
             # try to start the service
-            if start_service and dbus_iface.StartServiceByName(interface, dbus.UInt32(0)) == 1:
-                started = True
-            else:
-                started = False
+            started = start_service and dbus_iface.StartServiceByName(
+                interface, dbus.UInt32(0)) == 1
         if not started:
             return None
         obj = bus.get_object(interface, path)
         return dbus.Interface(obj, interface)
-    except Exception as e:
-        log.debug(str(e))
+    except Exception as error:
+        log.debug(error)
         return None
 
 

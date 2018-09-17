@@ -139,11 +139,9 @@ class NotificationAreaTooltip(StatusTable):
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GLib.markup_escape_text(message)
-            if acct['name'] in app.con_types and \
-                    app.con_types[acct['name']] in ('tls', 'ssl'):
-                show_lock = True
-            else:
-                show_lock = False
+            con_type = app.con_types.get(acct['name'])
+            show_lock = con_type in ('tls', 'ssl')
+
             if message:
                 self.add_status_row(file_path, acct['show'],
                     GLib.markup_escape_text(acct['account_label']) + ' - ' + \
@@ -322,11 +320,9 @@ class RosterTooltip(Gtk.Window, StatusTable):
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
             message = GLib.markup_escape_text(message)
-            if acct['name'] in app.con_types and \
-                    app.con_types[acct['name']] in ('tls', 'ssl'):
-                show_lock = True
-            else:
-                show_lock = False
+            con_type = app.con_types.get(acct['name'])
+            show_lock = con_type in ('tls', 'ssl')
+
             if message:
                 self.add_status_row(file_path, acct['show'],
                     GLib.markup_escape_text(acct['account_label']) + ' - ' + \

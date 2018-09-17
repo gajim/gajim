@@ -598,10 +598,7 @@ class P2PConnection(IdleObject, PlugIn):
 
     def _plug_idle(self):
         readable = self.state != 0
-        if self.sendqueue or self.sendbuff:
-            writable = True
-        else:
-            writable = False
+        writable = self.sendqueue or self.sendbuff
         if self.writable != writable or self.readable != readable:
             app.idlequeue.plug_idle(self, writable, readable)
 

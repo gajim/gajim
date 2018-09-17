@@ -60,10 +60,7 @@ log = logging.getLogger('gajim.conversation_textview')
 
 def is_selection_modified(mark):
     name = mark.get_name()
-    if name and name in ('selection_bound', 'insert'):
-        return True
-    else:
-        return False
+    return name in ('selection_bound', 'insert')
 
 def has_focus(widget):
     return widget.get_state_flags() & Gtk.StateFlags.FOCUSED == \
@@ -82,14 +79,12 @@ class TextViewImage(Gtk.Image):
 
     def _get_selected(self):
         parent = self.get_parent()
-        if not parent or not self.anchor: return False
+        if not parent or not self.anchor:
+            return False
         buffer_ = parent.get_buffer()
         position = buffer_.get_iter_at_child_anchor(self.anchor)
         bounds = buffer_.get_selection_bounds()
-        if bounds and position.in_range(*bounds):
-            return True
-        else:
-            return False
+        return bounds and position.in_range(*bounds)
 
     def get_state(self):
         parent = self.get_parent()
