@@ -1380,9 +1380,9 @@ class ConversationTextview(GObject.GObject):
                     xhtml = xhtml.replace('/me', '<i>* %s</i>' % (name,), 1)
                 self.tv.display_html(xhtml, self.tv, self, iter_=iter_)
                 return
-            except Exception as e:
-                log.debug('Error processing xhtml: ' + str(e))
-                log.debug('with |' + xhtml + '|')
+            except Exception as error:
+                log.debug('Error processing xhtml: %s', error)
+                log.debug('with |%s|', xhtml)
 
         # /me is replaced by name if name is given
         if name and (text.startswith('/me ') or text.startswith('/me\n')):

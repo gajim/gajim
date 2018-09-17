@@ -122,22 +122,22 @@ class ProxyResolver:
             self.state = S_FINISHED
             return
         self.state = S_INITIAL
-        log.info('start resolving %s:%s' % (self.host, self.port))
+        log.info('start resolving %s:%s', self.host, self.port)
         self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
                 self.sid, self.sender_jid, self._on_receiver_success,
                 self._on_connect_failure)
         self.receiver_tester.connect()
 
     def _on_receiver_success(self):
-        log.debug('Receiver successfully connected %s:%s' % (self.host,
-                self.port))
+        log.debug('Receiver successfully connected %s:%s',
+                  self.host, self.port)
         self.host_tester = HostTester(self.host, self.port, self.jid,
                 self.sid, self.sender_jid, self._on_connect_success,
                 self._on_connect_failure)
         self.host_tester.connect()
 
     def _on_connect_success(self):
-        log.debug('Host successfully connected %s:%s' % (self.host, self.port))
+        log.debug('Host successfully connected %s:%s', self.host, self.port)
         iq = nbxmpp.Protocol(name='iq', to=self.jid, typ='set')
         query = iq.setTag('query')
         query.setNamespace(nbxmpp.NS_BYTESTREAM)
@@ -147,7 +147,7 @@ class ProxyResolver:
         activate.setData('test@gajim.org/test2')
 
         if self.active_connection:
-            log.debug('Activating bytestream on %s:%s' % (self.host, self.port))
+            log.debug('Activating bytestream on %s:%s', self.host, self.port)
             self.active_connection.SendAndCallForResponse(iq,
                      self._result_received)
             self.state = S_ACTIVATED
@@ -162,11 +162,11 @@ class ProxyResolver:
             self._on_connect_failure()
 
     def keep_conf(self):
-        log.debug('Bytestream activated %s:%s' % (self.host, self.port))
+        log.debug('Bytestream activated %s:%s', self.host, self.port)
         self.state = S_FINISHED
 
     def _on_connect_failure(self):
-        log.debug('Connection failed with %s:%s' % (self.host, self.port))
+        log.debug('Connection failed with %s:%s', self.host, self.port)
         self.state = S_FINISHED
         self.host = None
         self.port = 0
@@ -318,9 +318,9 @@ class HostTester(Socks5, IdleObject):
             data = self._get_request_buff(self._get_sha1_auth())
             self.send_raw(data)
             self.state += 1
-            log.debug('Host authenticating to %s:%s' % (self.host, self.port))
+            log.debug('Host authenticating to %s:%s', self.host, self.port)
         elif self.state == 3:
-            log.debug('Host authenticated to %s:%s' % (self.host, self.port))
+            log.debug('Host authenticated to %s:%s', self.host, self.port)
             self.on_success()
             self.disconnect()
             self.state += 1
@@ -331,7 +331,7 @@ class HostTester(Socks5, IdleObject):
         try:
             self._sock.connect((self.host, self.port))
             self._sock.setblocking(False)
-            log.debug('Host Connecting to %s:%s' % (self.host, self.port))
+            log.debug('Host Connecting to %s:%s', self.host, self.port)
             self._send = self._sock.send
             self._recv = self._sock.recv
         except Exception as ee:
@@ -351,7 +351,7 @@ class HostTester(Socks5, IdleObject):
             self._recv = self._sock.recv
         self.buff = b''
         self.state = 1 # connected
-        log.debug('Host connected to %s:%s' % (self.host, self.port))
+        log.debug('Host connected to %s:%s', self.host, self.port)
         self.idlequeue.plug_idle(self, True, False)
         return
 
@@ -436,7 +436,7 @@ class ReceiverTester(Socks5, IdleObject):
             if version != 0x05 or method == 0xff:
                 self.pollend()
                 return
-            log.debug('Receiver authenticating to %s:%s' % (self.host, self.port))
+            log.debug('Receiver authenticating to %s:%s', self.host, self.port)
             data = self._get_request_buff(self._get_sha1_auth())
             self.send_raw(data)
             self.state += 1
@@ -448,7 +448,7 @@ class ReceiverTester(Socks5, IdleObject):
             if version != 0x05 or reply != 0x00:
                 self.pollend()
                 return
-            log.debug('Receiver authenticated to %s:%s' % (self.host, self.port))
+            log.debug('Receiver authenticated to %s:%s', self.host, self.port)
             self.on_success()
             self.disconnect()
             self.state += 1
@@ -459,7 +459,7 @@ class ReceiverTester(Socks5, IdleObject):
         try:
             self._sock.setblocking(False)
             self._sock.connect((self.host, self.port))
-            log.debug('Receiver Connecting to %s:%s' % (self.host, self.port))
+            log.debug('Receiver Connecting to %s:%s', self.host, self.port)
             self._send = self._sock.send
             self._recv = self._sock.recv
         except Exception as ee:
@@ -479,5 +479,5 @@ class ReceiverTester(Socks5, IdleObject):
             self._recv = self._sock.recv
         self.buff = ''
         self.state = 1 # connected
-        log.debug('Receiver connected to %s:%s' % (self.host, self.port))
+        log.debug('Receiver connected to %s:%s', self.host, self.port)
         self.idlequeue.plug_idle(self, True, False)

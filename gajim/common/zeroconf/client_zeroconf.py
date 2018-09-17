@@ -114,7 +114,7 @@ class ZeroconfListener(IdleObject):
         """
         Free all resources, we are not listening anymore
         """
-        log.info('Disconnecting ZeroconfListener: %s' % message)
+        log.info('Disconnecting ZeroconfListener: %s', message)
         app.idlequeue.remove_timeout(self.fd)
         app.idlequeue.unplug_idle(self.fd)
         self.fd = -1
@@ -252,8 +252,8 @@ class P2PClient(IdleObject):
 
     def _check_stream_start(self, ns, tag, attrs):
         if ns != NS_STREAMS or tag != 'stream':
-            log.error('Incorrect stream start: (%s,%s).Terminating!' % (tag,
-                ns), 'error')
+            log.error('Incorrect stream start: (%s,%s).Terminating!',
+                      tag, ns)
             self.Connection.disconnect()
             if self.on_not_ok:
                 self.on_not_ok('Connection to host could not be established: '
@@ -386,8 +386,8 @@ class P2PConnection(IdleObject, PlugIn):
             self.disconnect()
             return
         ai = self.ais.pop(0)
-        log.info('Trying to connect to %s through %s:%s', str(self.host),
-            ai[4][0], ai[4][1], exc_info=True)
+        log.info('Trying to connect to %s through %s:%s',
+                 str(self.host), ai[4][0], ai[4][1], exc_info=True)
         try:
             self._sock = socket.socket(*ai[:3])
             self._sock.setblocking(False)
@@ -543,7 +543,7 @@ class P2PConnection(IdleObject, PlugIn):
             self.on_receive(received)
         else:
             # This should never happed, so we need the debug
-            log.error('Unhandled data received: %s' % received)
+            log.error('Unhandled data received: %s', received)
             self.disconnect()
         return True
 
@@ -608,7 +608,7 @@ class P2PConnection(IdleObject, PlugIn):
 
     def _on_send(self):
         if self.sent_data and self.sent_data.strip():
-            log.debug('sent: %s' % self.sent_data)
+            log.debug('sent: %s', self.sent_data)
             if hasattr(self._owner, 'Dispatcher'):
                 self._owner.Dispatcher.Event(
                     '', DATA_SENT, self.sent_data.decode('utf-8'))
@@ -705,7 +705,7 @@ class ClientZeroconf:
             self.roster = None
         self.disconnecting = True
         for i in reversed(self.disconnect_handlers):
-            log.debug('Calling disconnect handler %s' % i)
+            log.debug('Calling disconnect handler %s', i)
             i()
         self.disconnecting = False
 

@@ -34,7 +34,7 @@ class AbstractPEP:
     def get_tag_as_PEP(cls, jid, account, event_tag):
         items = event_tag.getTag('items', {'node': cls.namespace})
         if items:
-            log.debug("Received PEP 'user %s' from %s" % (cls.type_, jid))
+            log.debug('Received PEP "user %s" from %s', cls.type_, jid)
             return cls(jid, account, items)
         else:
             return None

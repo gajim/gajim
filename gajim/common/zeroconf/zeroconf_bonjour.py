@@ -94,7 +94,7 @@ class Zeroconf:
                 resolve_sdRef.close()
 
     def remove_service_callback(self, name):
-        log.info('Service %s disappeared.' % name)
+        log.info('Service %s disappeared.', name)
         if not self.connected:
             return
         if name != self.name:

@@ -351,12 +351,13 @@ class FileTransfersWindow:
         if file_props is None:
             return False
         if contact.supports(NS_JINGLE_FILE_TRANSFER_5):
-            log.info("contact %s supports jingle file transfer"%(contact.get_full_jid()))
+            log.info('contact %s supports jingle file transfer',
+                     contact.get_full_jid())
             app.connections[account].start_file_transfer(contact.get_full_jid(),
                                                            file_props)
             self.add_transfer(account, contact, file_props)
         else:
-            log.info("contact does not support jingle file transfer")
+            log.info('contact does not support jingle file transfer')
             file_props.transport_sid = file_props.sid
             app.connections[account].send_file_request(file_props)
             self.add_transfer(account, contact, file_props)

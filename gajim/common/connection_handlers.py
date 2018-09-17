@@ -505,8 +505,8 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         if obj.conn.name != self.name:
             return
         for jid in obj.jid_list:
-            log.debug('Removing contact %s due to unregistered transport %s' % \
-                (jid, obj.agent))
+            log.debug('Removing contact %s due to unregistered transport %s',
+                      jid, obj.agent)
             self.get_module('Presence').unsubscribe(jid)
             # Transport contacts can't have 2 resources
             if jid in app.to_be_removed[self.name]:

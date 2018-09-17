@@ -132,22 +132,22 @@ class SocksQueue:
                 fp = fingerprint
             if receiving:
                 if 'candidate_id' in streamhost:
-                    log.debug('Trying to connect as receiver to cid ' + \
-                        streamhost['candidate_id'])
+                    log.debug('Trying to connect as receiver to cid %s',
+                              streamhost['candidate_id'])
                 else:
-                    log.debug('Trying to connect as receiver to jid ' + \
-                        streamhost['jid'])
+                    log.debug('Trying to connect as receiver to jid %s',
+                              streamhost['jid'])
                 file_props.type_ = 'r'
                 socks5obj = Socks5ReceiverClient(self.idlequeue, streamhost,
                     transport_sid, file_props, fingerprint=fp)
                 self.add_sockobj(account, socks5obj)
             else:
                 if 'candidate_id' in streamhost:
-                    log.debug('Trying to connect as sender to cid ' + \
-                        streamhost['candidate_id'])
+                    log.debug('Trying to connect as sender to cid %s',
+                              streamhost['candidate_id'])
                 else:
-                    log.debug('Trying to connect as sender to jid ' + \
-                        streamhost['jid'])
+                    log.debug('Trying to connect as sender to jid %s',
+                              streamhost['jid'])
                 if file_props.sha_str:
                     idx = file_props.sha_str
                 else:
@@ -175,9 +175,9 @@ class SocksQueue:
         streamhosts. Stop other attempts for connections
         """
         if 'candidate_id' in streamhost:
-            log.debug('Connected to cid ' + streamhost['candidate_id'])
+            log.debug('Connected to cid %s', streamhost['candidate_id'])
         else:
-            log.debug('Connected to jid ' + streamhost['jid'])
+            log.debug('Connected to jid %s', streamhost['jid'])
         for host in file_props.streamhosts:
             if host != streamhost and 'idx' in host:
                 if host['state'] == 1:
@@ -240,9 +240,10 @@ class SocksQueue:
         Called when we loose connection during transfer
         """
         if 'candidate_id' in streamhost:
-            log.debug('Connection refused to cid ' + streamhost['candidate_id'])
+            log.debug('Connection refused to cid %s',
+                      streamhost['candidate_id'])
         else:
-            log.debug('Connection refused to jid ' + streamhost['jid'])
+            log.debug('Connection refused to jid %s', streamhost['jid'])
         if file_props is None:
             return
         streamhost['state'] = -1
@@ -641,7 +642,7 @@ class Socks5:
             add = self._recv(64)
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
         OpenSSL.SSL.WantX509LookupError) as e:
-            log.info('SSL rehandshake request : ' + repr(e))
+            log.info('SSL rehandshake request: %s', repr(e))
             raise e
         except Exception:
             add = b''
@@ -658,7 +659,7 @@ class Socks5:
             self._send(raw_data)
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
         OpenSSL.SSL.WantX509LookupError) as e:
-            log.info('SSL rehandshake request :' + repr(e))
+            log.info('SSL rehandshake request: %s', repr(e))
             raise e
         except Exception:
             self.disconnect()
@@ -682,7 +683,7 @@ class Socks5:
                 lenn = self._send(buff)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
             OpenSSL.SSL.WantX509LookupError) as e:
-                log.info('SSL rehandshake request :' + repr(e))
+                log.info('SSL rehandshake request: %s', repr(e))
                 raise e
             except Exception as e:
                 if e.errno not in (EINTR, ENOBUFS, EWOULDBLOCK):
@@ -756,7 +757,7 @@ class Socks5:
                 buff = self._recv(MAX_BUFF_LEN)
             except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
             OpenSSL.SSL.WantX509LookupError) as e:
-                log.info('SSL rehandshake request :' + repr(e))
+                log.info('SSL rehandshake request: %s', repr(e))
                 raise e
             except Exception:
                 buff = b''
@@ -896,7 +897,7 @@ class Socks5:
             buff = self._recv().decode('utf-8')
         except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
         OpenSSL.SSL.WantX509LookupError) as e:
-            log.info("SSL rehandshake request : " + repr(e))
+            log.info("SSL rehandshake request: %s", repr(e))
             raise e
         try:
             version, method = struct.unpack('!BB', buff)
@@ -1269,8 +1270,9 @@ class Socks5Client(Socks5):
 
     def send_file(self):
         if self.ssl_errnum > 0:
-            log.error('remote certificate does not match the announced one.' + \
-                '\nSSL Error: %d\nCancelling file transfer' % self.ssl_errnum)
+            log.error('remote certificate does not match the announced one.'
+                      '\nSSL Error: %d\nCancelling file transfer',
+                      self.ssl_errnum)
             self.file_props.error = -12
             return -1
         return super(Socks5Client, self).send_file()
@@ -1435,7 +1437,7 @@ class Socks5Listener(IdleObject):
                 self.ai = None
                 continue
         if not self.ai:
-            log.error('unable to bind to port ' + str(self.port))
+            log.error('unable to bind to port %s', str(self.port))
             return None
         self._serv.listen(socket.SOMAXCONN)
         self._serv.setblocking(False)

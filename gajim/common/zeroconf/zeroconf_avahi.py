@@ -60,7 +60,7 @@ class Zeroconf:
         pass
 
     def error_callback1(self, err):
-        log.debug('Error while resolving: ' + str(err))
+        log.debug('Error while resolving: %s', str(err))
 
     def error_callback(self, err):
         log.debug(str(err))
@@ -71,8 +71,8 @@ class Zeroconf:
 
     def new_service_callback(self, interface, protocol, name, stype, domain,
     flags):
-        log.debug('Found service %s in domain %s on %i.%i.' % (name, domain,
-                interface, protocol))
+        log.debug('Found service %s in domain %s on %i.%i.',
+                  name, domain, interface, protocol)
         if not self.connected:
             return
 
@@ -84,8 +84,8 @@ class Zeroconf:
 
     def remove_service_callback(self, interface, protocol, name, stype, domain,
     flags):
-        log.debug('Service %s in domain %s on %i.%i disappeared.' % (name,
-                domain, interface, protocol))
+        log.debug('Service %s in domain %s on %i.%i disappeared.',
+                  name, domain, interface, protocol)
         if not self.connected:
             return
         if name != self.name:
@@ -161,10 +161,10 @@ class Zeroconf:
 
     def service_resolved_callback(self, interface, protocol, name, stype, domain,
     host, aprotocol, address, port, txt, flags):
-        log.debug('Service data for service %s in domain %s on %i.%i:'
-                % (name, domain, interface, protocol))
-        log.debug('Host %s (%s), port %i, TXT data: %s' % (host, address,
-                port, self.txt_array_to_dict(txt)))
+        log.debug('Service data for service %s in domain %s on %i.%i:',
+                  name, domain, interface, protocol)
+        log.debug('Host %s (%s), port %i, TXT data: %s',
+                  host, address, port, self.txt_array_to_dict(txt))
         if not self.connected:
             return
         bare_name = name
@@ -186,11 +186,13 @@ class Zeroconf:
                         # IPv6 aprotocol responses via the same protocol,
                         # so this probably needs to be revised again.
                         if old_resolved_info[i][0:2] == (interface, protocol):
-                            log.debug('Deleting resolved info for interface %i, protocol %i, host %s, aprotocol %i, address %s, port %i' % old_resolved_info[i])
+                            log.debug('Deleting resolved info for interface %s',
+                                      old_resolved_info[i])
                             del old_resolved_info[i]
                             break
                     resolved_info = resolved_info + old_resolved_info
-                    log.debug('Collected resolved info is now: %s' % (resolved_info,))
+                    log.debug('Collected resolved info is now: %s',
+                              resolved_info)
             self.contacts[name] = (name, domain, resolved_info, bare_name, txt)
             self.new_serviceCB(name)
         else:
@@ -225,7 +227,7 @@ class Zeroconf:
         log.debug('Service successfully updated')
 
     def service_add_fail_callback(self, err):
-        log.debug('Error while adding service. %s' % str(err))
+        log.debug('Error while adding service. %s', str(err))
         if 'Local name collision' in str(err):
             alternative_name = self.server.GetAlternativeServiceName(self.username)
             self.name_conflictCB(alternative_name)
@@ -234,7 +236,7 @@ class Zeroconf:
         self.disconnect()
 
     def server_state_changed_callback(self, state, error):
-        log.debug('server state changed to %s' % state)
+        log.debug('server state changed to %s', state)
         if state == ServerState.RUNNING:
             self.create_service()
         elif state in (ServerState.COLLISION,
@@ -292,8 +294,8 @@ class Zeroconf:
                 txt['status'] = 'avail'
 
             self.txt = txt
-            log.debug('Publishing service %s of type %s' % (self.name,
-                    self.stype))
+            log.debug('Publishing service %s of type %s',
+                      self.name, self.stype)
             self.entrygroup.AddService(Interface.UNSPEC,
                     Protocol.UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
                     '', dbus.UInt16(self.port), self.avahi_txt(),
@@ -360,7 +362,7 @@ class Zeroconf:
             dbus.set_default_main_loop(main_loop)
         except ImportError:
             log.debug('Error: python-dbus needs to be installed. No '
-                    'zeroconf support.')
+                      'zeroconf support.')
             return False
         if self.bus:
             return True

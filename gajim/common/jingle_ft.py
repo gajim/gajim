@@ -350,7 +350,7 @@ class JingleFileTransfer(JingleContent):
         self.__send_candidate(args)
 
     def _on_connect_error(self, sid):
-        log.info('connect error, sid=' + sid)
+        log.info('connect error, sid=%s', sid)
         args = {'candError' : True,
                 'sendCand'  : True}
         self.__send_candidate(args)
