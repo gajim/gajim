@@ -314,7 +314,7 @@ class PluginManager(metaclass=Singleton):
             gui_extpoint_name]:
                 try:
                     handlers[0](*args)
-                except Exception as e:
+                except Exception:
                     log.warning('Error executing %s',
                                 handlers[0], exc_info=True)
 

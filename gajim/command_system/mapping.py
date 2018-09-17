@@ -65,7 +65,7 @@ def parse_arguments(arguments):
         """
         Check if given span intersects with any of options.
         """
-        for key, value, (start, end) in opts:
+        for _key, _value, (start, end) in opts:
             if given_start >= start and given_end <= end:
                 return True
         return False
@@ -74,7 +74,7 @@ def parse_arguments(arguments):
         """
         Check if given span intersects with any of arguments.
         """
-        for arg, (start, end) in args:
+        for _arg, (start, end) in args:
             if given_start >= start and given_end <= end:
                 return True
         return False
@@ -124,7 +124,7 @@ def adapt_arguments(command, arguments, args, opts):
     by an argument - then this argument will be treated just like a
     normal positional argument.
     """
-    spec_args, spec_kwargs, var_args, var_kwargs = command.extract_specification()
+    spec_args, spec_kwargs, var_args, _var_kwargs = command.extract_specification()
     norm_kwargs = dict(spec_kwargs)
 
     # Quite complex piece of neck-breaking logic to extract raw
@@ -159,7 +159,7 @@ def adapt_arguments(command, arguments, args, opts):
 
             if spec_len > 1:
                 try:
-                    stopper, (start, end) = args[spec_len - 2]
+                    _stopper, (start, end) = args[spec_len - 2]
                 except IndexError:
                     raise CommandError(_("Missing arguments"), command)
 
@@ -206,7 +206,7 @@ def adapt_arguments(command, arguments, args, opts):
     # corresponding opt-in has been given.
     if command.expand:
         expanded = []
-        for spec_key, spec_value in norm_kwargs.items():
+        for spec_key in norm_kwargs.keys():
             letter = spec_key[0] if len(spec_key) > 1 else None
             if letter and letter not in expanded:
                 for index, (key, value, position) in enumerate(opts):
@@ -255,7 +255,7 @@ def adapt_arguments(command, arguments, args, opts):
         if command.overlap:
             overlapped = args[spec_len:]
             args = args[:spec_len]
-            for arg, (spec_key, spec_value) in zip(overlapped, spec_kwargs):
+            for arg, spec_key, _spec_value in zip(overlapped, spec_kwargs):
                 opts.append((spec_key, arg))
         else:
             raise CommandError(_("Too many arguments"), command)
@@ -288,7 +288,7 @@ def generate_usage(command, complete=True):
     # Remove some special positional arguments from the specification,
     # but store their names so they can be used for usage info
     # generation.
-    sp_source = spec_args.pop(0) if command.source else None
+    _sp_source = spec_args.pop(0) if command.source else None
     sp_extra = spec_args.pop() if command.extra else None
 
     kwargs = []

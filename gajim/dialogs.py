@@ -1514,7 +1514,7 @@ class Dialog(Gtk.Dialog):
         self.set_resizable(False)
 
         for stock, response in buttons:
-            b = self.add_button(stock, response)
+            self.add_button(stock, response)
 
         if default is not None:
             self.set_default_response(default)
@@ -1661,7 +1661,6 @@ class VoIPCallReceivedDialog:
         if response == Gtk.ResponseType.YES:
             #TODO: Ensure that ctrl.contact.resource == resource
             jid = app.get_jid_without_resource(self.fjid)
-            resource = app.get_resource_from_jid(self.fjid)
             ctrl = (app.interface.msg_win_mgr.get_control(self.fjid, self.account)
                 or app.interface.msg_win_mgr.get_control(jid, self.account)
                 or app.interface.new_chat_from_jid(self.account, jid))

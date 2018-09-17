@@ -612,13 +612,12 @@ class ChatControl(ChatControlBase):
         self.update_toolbar()
 
     def _update_banner_state_image(self):
-        contact = app.contacts.get_contact_with_highest_priority(self.account,
-                self.contact.jid)
+        contact = app.contacts.get_contact_with_highest_priority(
+            self.account, self.contact.jid)
         if not contact or self.resource:
             # For transient contacts
             contact = self.contact
         show = contact.show
-        jid = contact.jid
 
         # Set banner image
         icon = gtkgui_helpers.get_iconset_name_for(show)
@@ -727,10 +726,6 @@ class ChatControl(ChatControlBase):
         getattr(self, 'update_' + jingle_type)()
 
     def on_jingle_button_toggled(self, state, jingle_type):
-        img_name = 'gajim-%s_%s' % ({'audio': 'mic', 'video': 'cam'}[jingle_type],
-                        {True: 'active', False: 'inactive'}[state])
-        path_to_img = gtkgui_helpers.get_icon_path(img_name)
-
         if state:
             if getattr(self, jingle_type + '_state') == \
             self.JINGLE_STATE_NULL:
@@ -768,8 +763,6 @@ class ChatControl(ChatControlBase):
             self.close_jingle_content(jingle_type)
 
     def set_lock_image(self):
-        loggable = self.session and self.session.is_loggable()
-
         encryption_state = {'visible': self.encryption is not None,
                             'enc_type': self.encryption,
                             'authenticated': False}
@@ -797,7 +790,6 @@ class ChatControl(ChatControlBase):
 
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
-        context = self.msg_scrolledwindow.get_style_context()
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
@@ -902,9 +894,6 @@ class ChatControl(ChatControlBase):
 
         contact = self.contact
         keyID = contact.keyID
-
-        chatstates_on = app.config.get('outgoing_chat_state_notifications') != \
-                'disabled'
 
         chatstate_to_send = None
         if contact is not None:
@@ -1480,7 +1469,7 @@ class ChatControl(ChatControlBase):
             return
         if not self.info_bar_queue:
             return
-        markup, buttons, args, type_ = self.info_bar_queue[0]
+        markup, buttons, _args, type_ = self.info_bar_queue[0]
         self.info_bar_label.set_markup(markup)
 
         # Remove old buttons

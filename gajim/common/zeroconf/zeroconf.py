@@ -35,14 +35,14 @@ class ConstantRI(IntEnum):
 
 def test_avahi():
     try:
-        import dbus
+        import dbus  # pylint: disable=unused-variable
     except ImportError:
         return False
     return True
 
 def test_bonjour():
     try:
-        import pybonjour
+        import pybonjour  # pylint: disable=unused-variable
     except ImportError:
         return False
     except WindowsError: # pylint: disable=undefined-variable

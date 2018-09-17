@@ -84,7 +84,7 @@ class Proxy65Manager:
                 port = item.getAttr('port')
                 try:
                     port = int(port)
-                except (ValueError, TypeError) as e:
+                except (ValueError, TypeError):
                     port = 1080
                 if not host or not jid:
                     self.proxies[proxy]._on_connect_failure()

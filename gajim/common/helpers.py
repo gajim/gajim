@@ -685,8 +685,6 @@ def launch_browser_mailer(kind, uri):
 
 
 def launch_file_manager(path_to_open):
-    if not path_to_open.startswith('file://'):
-        uri = 'file://' + path_to_open
     if os.name == 'nt':
         try:
             os.startfile(path_to_open) # if pywin32 is installed we open
@@ -778,7 +776,7 @@ def play_sound_file(path_to_soundfile):
         if app.config.get('soundplayer') == '':
             def _oss_play():
                 sndfile = wave.open(path_to_soundfile, 'rb')
-                (nc, sw, fr, nf, comptype, compname) = sndfile.getparams()
+                nc, sw, fr, nf, _comptype, _compname = sndfile.getparams()
                 dev = oss.open('/dev/dsp', 'w')
                 dev.setparameters(sw * 8, nc, fr)
                 dev.write(sndfile.readframes(nf))
@@ -1356,7 +1354,6 @@ def _get_img_direct(attrs):
         f = urllib.request.urlopen(req)
     except Exception as ex:
         log.debug('Error loading image %s ', attrs['src']  + str(ex))
-        pixbuf = None
         alt = attrs.get('alt', 'Broken image')
     else:
         # Wait 2s between each byte
@@ -1404,7 +1401,7 @@ def _get_img_proxy(attrs, proxy):
     """
     if not app.is_installed('PYCURL'):
         return '', _('PyCURL is not installed')
-    mem, alt, max_size = '', '', 2*1024*1024
+    alt, max_size = '', 2*1024*1024
     if 'max_size' in attrs:
         max_size = attrs['max_size']
     try:
@@ -1430,7 +1427,6 @@ def _get_img_proxy(attrs, proxy):
             c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_HTTP)
         elif proxy['type'] == 'socks5':
             c.setopt(pycurl.PROXYTYPE, pycurl.PROXYTYPE_SOCKS5)
-        x = c.perform()
         c.close()
         t = b.getvalue()
         return (t, attrs.get('alt', ''))
@@ -1446,7 +1442,6 @@ def _get_img_proxy(attrs, proxy):
             alt += _('Error loading image')
     except Exception as ex:
         log.debug('Error loading image %s ', attrs['src']  + str(ex))
-        pixbuf = None
         alt = attrs.get('alt', 'Broken image')
     return ('', alt)
 

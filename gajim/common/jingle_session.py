@@ -485,23 +485,22 @@ class JingleSession:
         session-accept)
         """
         # check which contents are accepted
-        for content in jingle.iterTags('content'):
-            creator = content['creator']
-            # TODO
-            name = content['name']
+        # for content in jingle.iterTags('content'):
+        #     creator = content['creator']
+        #     name = content['name']
+        return
 
     def __on_content_add(self, stanza, jingle, error, action):
         if self.state == JingleStates.ENDED:
             raise OutOfOrder
         parse_result = self.__parse_contents(jingle)
         contents = parse_result[0]
-        rejected_contents = parse_result[1]
-#        for name, creator in rejected_contents:
-            # TODO
-#            content = JingleContent()
-#            self.add_content(name, content, creator)
-#            self.__content_reject(content)
-#            self.contents[(content.creator, content.name)].destroy()
+        # rejected_contents = parse_result[1]
+        # for name, creator in rejected_contents:
+        #     content = JingleContent()
+        #     self.add_content(name, content, creator)
+        #     self.__content_reject(content)
+        #     self.contents[(content.creator, content.name)].destroy()
         app.nec.push_incoming_event(JingleRequestReceivedEvent(None,
                                                                  conn=self.connection,
                                                                  jingle_session=self,
@@ -523,7 +522,7 @@ class JingleSession:
         # Jingle with unknown entities, it SHOULD return a <service-unavailable/>
         # error.
         # Lets check what kind of jingle session does the peer want
-        contents, contents_rejected, reason_txt = self.__parse_contents(jingle)
+        contents, _contents_rejected, reason_txt = self.__parse_contents(jingle)
 
         # If there's no content we understand...
         if not contents:
@@ -626,7 +625,6 @@ class JingleSession:
         contents_rejected = []
         reasons = set()
         for element in jingle.iterTags('content'):
-            senders = element.getAttr('senders')
             transport = get_jingle_transport(element.getTag('transport'))
             if transport:
                 transport.ourjid = self.ourjid

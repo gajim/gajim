@@ -329,7 +329,7 @@ class ManageBookmarksWindow:
         room_jid = room + '@' + server.strip()
         try:
             room_jid = helpers.parse_jid(room_jid)
-        except helpers.InvalidFormat as e:
+        except helpers.InvalidFormat:
             ErrorDialog(
                 _('Invalid server'),
                 _('Character not allowed'),

@@ -144,7 +144,7 @@ class Zeroconf:
             log.error('Error in query_record_callback: %s', str(errorCode))
             return
 
-        name, bare_name, protocol, domain = self._parse_name(hosttarget)
+        name = self._parse_name(hosttarget)[0]
 
         if name != self.name:
             # update TXT data only, as intended according to

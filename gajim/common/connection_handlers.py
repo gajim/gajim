@@ -496,8 +496,7 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         else:
             self.awaiting_cids[cid] = [(callback, args, position)]
         iq = nbxmpp.Iq(to=to, typ='get')
-        data = iq.addChild(name='data', attrs={'cid': cid},
-            namespace=nbxmpp.NS_BOB)
+        iq.addChild(name='data', attrs={'cid': cid}, namespace=nbxmpp.NS_BOB)
         self.connection.SendAndCallForResponse(iq, self._on_bob_received,
             {'cid': cid})
 

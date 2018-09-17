@@ -852,9 +852,9 @@ class AgentBrowser:
         name = ''
         if len(identities) > 1:
             # Check if an identity with server category is present
-            for i, _identity in enumerate(identities):
-                if _identity['category'] == 'server' and 'name' in _identity:
-                    name = _identity['name']
+            for _index, identity in enumerate(identities):
+                if identity['category'] == 'server' and 'name' in identity:
+                    name = identity['name']
                     break
                 elif 'name' in identities[0]:
                     name = identities[0]['name']

@@ -338,7 +338,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         if file_props is None:
             return
         self.disconnect_transfer(file_props)
-        sid = file_props.sid
 
     def disconnect_transfer(self, file_props):
         if file_props is None:
@@ -434,7 +433,7 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         # check if we are connected with an IPv4 address
         try:
             socket.inet_aton(my_ip)
-        except socket.error as e:
+        except socket.error:
             self.connection.send(iq)
             return
 

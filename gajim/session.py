@@ -171,14 +171,6 @@ class ChatControlSession:
         self.conn.name, obj.jid) and not pm:
             return True
 
-        highest_contact = app.contacts.get_contact_with_highest_priority(
-            self.conn.name, obj.jid)
-
-        # does this resource have the highest priority of any available?
-        is_highest = not highest_contact or not highest_contact.resource or \
-            obj.resource == highest_contact.resource or highest_contact.show ==\
-            'offline'
-
         if not self.control:
             ctrl = app.interface.msg_win_mgr.search_control(obj.jid,
                 obj.conn.name, obj.resource)
@@ -414,7 +406,7 @@ class ChatControlSession:
         # events.
         family = app.contacts.get_metacontacts_family(self.conn.name, jid)
         if family:
-            nearby_family, bb_jid, bb_account = \
+            _nearby_family, bb_jid, bb_account = \
                     app.contacts.get_nearby_family_and_big_brother(family,
                     self.conn.name)
         else:

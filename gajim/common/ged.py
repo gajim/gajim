@@ -22,10 +22,11 @@ Global Events Dispatcher module.
 :license: GPL
 '''
 
+import logging
 import traceback
 
 from nbxmpp import NodeProcessed
-import logging
+
 log = logging.getLogger('gajim.c.ged')
 
 PRECORE = 10
@@ -61,8 +62,8 @@ class GlobalEventsDispatcher:
         if event_name in self.handlers:
             handlers_list = self.handlers[event_name]
             i = 0
-            for i, h in enumerate(handlers_list):
-                if priority < h[0]:
+            for i, handler_tuple in enumerate(handlers_list):
+                if priority < handler_tuple[0]:
                     break
             else:
                 # no event with smaller prio found, put it at the end
@@ -86,7 +87,7 @@ class GlobalEventsDispatcher:
         log.debug('%s Args: %s', event_name, str(args))
         if event_name in self.handlers:
             node_processed = False
-            for priority, handler in self.handlers[event_name]:
+            for _priority, handler in self.handlers[event_name]:
                 try:
                     if handler(*args, **kwargs):
                         return True

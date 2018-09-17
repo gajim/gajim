@@ -116,13 +116,13 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     # First try user DH parameters, if this fails load the default DH parameters
     dh_params_name = os.path.join(configpaths.get('MY_CERT'), DH_PARAMS)
     try:
-        with open(dh_params_name, "r") as dh_params_file:
+        with open(dh_params_name, "r"):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError as err:
         default_dh_params_name = os.path.join(configpaths.get('DATA'),
                                               'other', DEFAULT_DH_PARAMS)
         try:
-            with open(default_dh_params_name, "r") as default_dh_params_file:
+            with open(default_dh_params_name, "r"):
                 ctx.load_tmp_dh(default_dh_params_name.encode('utf-8'))
         except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s, %s',
@@ -193,7 +193,7 @@ def check_cert(jid, fingerprint):
             try:
                 digest_algo = cert.get_signature_algorithm().decode('utf-8').\
                     split('With')[0]
-            except AttributeError as e:
+            except AttributeError:
                 # Old py-OpenSSL is missing get_signature_algorithm
                 digest_algo = "sha256"
             if cert.digest(digest_algo) == fingerprint:

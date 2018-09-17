@@ -82,8 +82,6 @@ gc_passwords = {}    # list of the pass required to enter a room
 automatic_rooms = {} # list of rooms that must be automaticaly configured
                      # and for which we have a list of invities
                      #{account: {room_jid: {'invities': []}}}
-new_room_nick = None # if it's != None, use this nick instead of asking for
-                     # a new nickname when there is a conflict.
 
 groups = {} # list of groups
 newly_added = {} # list of contacts that has just signed in
@@ -179,10 +177,10 @@ def detect_dependencies():
     # ZEROCONF
     try:
         if os.name == 'nt':
-            import pybonjour
+            import pybonjour  # pylint: disable=unused-variable
             _dependencies['PYBONJOUR'] = True
         else:
-            import dbus
+            import dbus  # pylint: disable=unused-variable
             _dependencies['PYTHON-DBUS'] = True
     except Exception:
         pass
@@ -238,7 +236,7 @@ def detect_dependencies():
         try:
             Gst.init(None)
             conference = Gst.ElementFactory.make('fsrtpconference', None)
-            session = conference.new_session(Farstream.MediaType.AUDIO)
+            conference.new_session(Farstream.MediaType.AUDIO)
         except Exception as error:
             log('gajim').info(error)
         _dependencies['FARSTREAM'] = True
@@ -248,7 +246,7 @@ def detect_dependencies():
     # GEOCLUE
     try:
         gi.require_version('Geoclue', '2.0')
-        from gi.repository import Geoclue
+        from gi.repository import Geoclue  # pylint: disable=unused-variable
         _dependencies['GEOCLUE'] = True
     except (ImportError, ValueError):
         pass
@@ -257,14 +255,14 @@ def detect_dependencies():
     try:
         gi.require_version('GUPnPIgd', '1.0')
         from gi.repository import GUPnPIgd
-        gupnp_igd = GUPnPIgd.SimpleIgd()
+        GUPnPIgd.SimpleIgd()
         _dependencies['UPNP'] = True
     except ValueError:
         pass
 
     # PYCURL
     try:
-        import pycurl
+        import pycurl  # pylint: disable=unused-variable
         _dependencies['PYCURL'] = True
     except ImportError:
         pass

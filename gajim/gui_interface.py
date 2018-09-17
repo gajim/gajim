@@ -174,10 +174,9 @@ class Interface:
                    '<b>%s</b>\n'
                    'is in use or registered by another occupant.\n'
                    'Please specify another nickname below:') % room_jid
-        check_text = _('Always use this nickname when there is a conflict')
         if 'change_nick_dialog' in self.instances:
-            self.instances['change_nick_dialog'].add_room(account, room_jid,
-                prompt)
+            self.instances['change_nick_dialog'].add_room(
+                account, room_jid, prompt)
         else:
             self.instances['change_nick_dialog'] = ChangeNickDialog(
                 account, room_jid, title, prompt, transient_for=parent_win)
@@ -198,7 +197,7 @@ class Interface:
             sec_msg = _('Do you accept this request on account %s?') % account
         if obj.msg:
             sec_msg = obj.msg + '\n' + sec_msg
-        dialog = YesNoDialog(_('HTTP (%(method)s) Authorization for '
+        YesNoDialog(_('HTTP (%(method)s) Authorization for '
             '%(url)s (ID: %(id)s)') % {'method': obj.method, 'url': obj.url,
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
@@ -207,7 +206,6 @@ class Interface:
         #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
         if str(obj.errcode) in ('400', '403', '406') and obj.id_:
             # show the error dialog
-            ft = self.instances['file_transfers']
             sid = obj.id_
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
@@ -392,11 +390,6 @@ class Interface:
         # Contact changed show
         account = obj.conn.name
         jid = obj.jid
-        show = obj.show
-        status = obj.status
-        resource = obj.resource or ''
-
-        jid_list = app.contacts.get_jid_list(account)
 
         # unset custom status
         if (obj.old_show == 0 and obj.new_show > 1) or \
@@ -414,9 +407,6 @@ class Interface:
             app.block_signed_in_notifications[account_jid] = True
             GLib.timeout_add_seconds(30, self.unblock_signed_in_notifications,
                 account_jid)
-
-        highest = app.contacts.get_contact_with_highest_priority(account, jid)
-        is_highest = (highest and highest.resource == resource)
 
         ctrl = self.msg_win_mgr.get_control(jid, account)
         if ctrl and ctrl.session and len(obj.contact_list) > 1:
@@ -1188,7 +1178,7 @@ class Interface:
         def on_cancel():
             obj.conn.change_status('offline', '')
 
-        dlg = InputDialog(_('Username Conflict'),
+        InputDialog(_('Username Conflict'),
             _('Please type a new username for your local account'),
             input_str=obj.alt_name, is_modal=True, ok_handler=on_ok,
             cancel_handler=on_cancel, transient_for=self.roster.window)
@@ -1212,7 +1202,7 @@ class Interface:
             return
 
         proposed_resource += app.config.get('gc_proposed_nick_char')
-        dlg = dialogs.ResourceConflictDialog(_('Resource Conflict'),
+        dialogs.ResourceConflictDialog(_('Resource Conflict'),
             _('You are already connected to this account with the same '
             'resource. Please type a new one'), resource=proposed_resource,
             ok_handler=on_ok)
@@ -1618,7 +1608,7 @@ class Interface:
         # events.
         family = app.contacts.get_metacontacts_family(account, jid)
         if family:
-            nearby_family, bb_jid, bb_account = \
+            _nearby_family, bb_jid, bb_account = \
                 app.contacts.get_nearby_family_and_big_brother(family,
                 account)
         else:
@@ -1628,7 +1618,6 @@ class Interface:
     def handle_event(self, account, fjid, type_):
         w = None
         ctrl = None
-        session = None
 
         resource = app.get_resource_from_jid(fjid)
         jid = app.get_jid_without_resource(fjid)
@@ -2228,7 +2217,7 @@ class Interface:
                 self.roster.send_status(a, show, message)
                 self.roster.send_pep(a, pep_dict)
         for show in shows:
-            message = self.roster.get_status_message(show, on_message)
+            self.roster.get_status_message(show, on_message)
         return False
 
     def show_systray(self):
@@ -2379,7 +2368,7 @@ class Interface:
                     path, size, size, True)
             else:
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-        except GLib.GError as error:
+        except GLib.GError:
             app.log('avatar').info(
                 'loading avatar %s failed. Try to convert '
                 'avatar image using pillow', filename)
@@ -2735,8 +2724,8 @@ class Interface:
 
         # Handle screensaver
         if sys.platform == 'linux':
-            from gajim import logind_listener
-            from gajim import screensaver_listener
+            from gajim import logind_listener  # pylint: disable=unused-variable
+            from gajim import screensaver_listener  # pylint: disable=unused-variable
 
         self.show_vcard_when_connect = []
 

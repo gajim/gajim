@@ -191,7 +191,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         lb.clear()
         i = 0
         sel = 0
-        label_, labellist, default = event.catalog
+        _label, labellist, default = event.catalog
         for label in labellist:
             lb.append([label])
             if label == default:
@@ -571,7 +571,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def _conv_textview_key_press_event(self, widget, event):
         # translate any layout to latin_layout
-        valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
+        _valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
         keycode = entries[0].keycode
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
         self.keycode_c, self.keycode_ins)):
@@ -916,7 +916,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         scroll = False if pos == size else True # are we scrolling?
         # we don't want size of the buffer to grow indefinitely
         max_size = app.config.get('key_up_lines')
-        for i in range(size - max_size + 1):
+        for _i in range(size - max_size + 1):
             if pos == 0:
                 break
             history.pop(0)

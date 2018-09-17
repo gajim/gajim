@@ -167,7 +167,7 @@ class Logger:
 
         try:
             con.executescript(statement)
-        except Exception as error:
+        except Exception:
             log.exception('Error')
             con.close()
             os.remove(path)
@@ -287,7 +287,7 @@ class Logger:
         try:
             self._con.execute("ATTACH DATABASE '%s' AS cache" %
                               self._cache_db_path.replace("'", "''"))
-        except Exception as error:
+        except Exception:
             log.exception('Error')
             self._con.close()
             sys.exit()
@@ -298,7 +298,7 @@ class Logger:
                 self._con.execute("PRAGMA synchronous = NORMAL")
             else:
                 self._con.execute("PRAGMA synchronous = OFF")
-        except sqlite.Error as e:
+        except sqlite.Error:
             log.exception('Error')
 
     @staticmethod
@@ -877,11 +877,11 @@ class Logger:
         """
         jids = self._get_family_jids(account, jid)
 
-        kinds = map(str, [KindConstant.STATUS,
-                          KindConstant.GCSTATUS])
-
         delta = datetime.timedelta(
             hours=23, minutes=59, seconds=59, microseconds=999999)
+
+        start = date.timestamp()
+        end = (date + delta).timestamp()
 
         sql = '''
             SELECT time
@@ -889,9 +889,8 @@ class Logger:
             AND time BETWEEN ? AND ?
             '''.format(jids=', '.join('?' * len(jids)))
 
-        return self._con.execute(sql, tuple(jids) +
-                                      (date.timestamp(),
-                                      (date + delta).timestamp())).fetchone()
+        return self._con.execute(
+            sql, tuple(jids) + (start, end)).fetchone()
 
     def get_room_last_message_time(self, account, jid):
         """
