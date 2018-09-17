@@ -98,7 +98,7 @@ class Zeroconf:
         if not self.connected:
             return
         if name != self.name:
-            for key in self.contacts.keys():
+            for key in self.contacts:
                 if self.contacts[key][Constant.NAME] == name:
                     del self.contacts[key]
                     self.remove_serviceCB(key)

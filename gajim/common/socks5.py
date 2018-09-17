@@ -294,7 +294,7 @@ class SocksQueue:
     def activate_proxy(self, idx):
         if not self.isHashInSockObjs(self.senders, idx):
             return
-        for key in self.senders.keys():
+        for key in self.senders:
             if idx in key:
                 sender = self.senders[key]
                 if sender.file_props.type_ != 's':

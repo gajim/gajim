@@ -341,7 +341,7 @@ class FakeDataForm(Gtk.Table):
                 entry.grab_focus()
 
     def get_infos(self):
-        for name in self.entries.keys():
+        for name in self.entries:
             self.infos[name] = self.entries[name].get_text()
         return self.infos
 
@@ -390,7 +390,7 @@ class GroupchatConfigWindow:
         # Draw the edit affiliation list things
         add_on_vbox = self.xml.get_object('add_on_vbox')
 
-        for affiliation in self.affiliation_labels.keys():
+        for affiliation in self.affiliation_labels:
             self.start_users_dict[affiliation] = {}
             hbox = Gtk.HBox(spacing=5)
             add_on_vbox.pack_start(hbox, False, True, 0)
@@ -539,7 +539,7 @@ class GroupchatConfigWindow:
             form = self.data_form_widget.data_form
             con = app.connections[self.account]
             con.get_module('MUC').set_config(self.room_jid, form)
-        for affiliation in self.affiliation_labels.keys():
+        for affiliation in self.affiliation_labels:
             users_dict = {}
             actual_jid_list = []
             model = self.affiliation_treeview[affiliation].get_model()

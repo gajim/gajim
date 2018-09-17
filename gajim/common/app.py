@@ -449,7 +449,7 @@ def get_number_of_securely_connected_accounts():
     Return the number of the accounts that are SSL/TLS connected
     """
     num_of_secured = 0
-    for account in connections.keys():
+    for account in connections:
         if account_is_securely_connected(account):
             num_of_secured += 1
     return num_of_secured

@@ -89,7 +89,7 @@ class Zeroconf:
         if not self.connected:
             return
         if name != self.name:
-            for key in self.contacts.keys():
+            for key in self.contacts:
                 val = self.contacts[key]
                 if val[Constant.BARE_NAME] == name:
                     # try to reduce instead of delete first
