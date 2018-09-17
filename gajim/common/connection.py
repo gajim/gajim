@@ -732,7 +732,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                         return
                     is_form = data[2]
                     conf = data[1]
-                    if data[4] is not '':
+                    if data[4] != '':
                         helpers.replace_dataform_media(conf, data[4])
                     if self.new_account_form:
                         def _on_register_result(result):
