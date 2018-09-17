@@ -1784,36 +1784,38 @@ class Connection(CommonConnection, ConnectionHandlers):
     def get_password(self, callback, type_):
         if app.config.get_per('accounts', self.name, 'anonymous_auth') and \
         type_ != 'ANONYMOUS':
-            app.nec.push_incoming_event(NonAnonymousServerErrorEvent(None,
-                conn=self))
+            app.nec.push_incoming_event(
+                NonAnonymousServerErrorEvent(None, conn=self))
             self._on_disconnected()
             return
         self.pasword_callback = (callback, type_)
         if type_ == 'X-MESSENGER-OAUTH2':
             client_id = app.config.get_per('accounts', self.name,
-                'oauth2_client_id')
+                                           'oauth2_client_id')
             refresh_token = app.config.get_per('accounts', self.name,
-                'oauth2_refresh_token')
+                                               'oauth2_refresh_token')
             if refresh_token:
-                renew_URL = 'https://oauth.live.com/token?client_id=' \
-                    '%(client_id)s&redirect_uri=https%%3A%%2F%%2Foauth.live.' \
-                    'com%%2Fdesktop&grant_type=refresh_token&refresh_token=' \
-                    '%(refresh_token)s' % locals()
-                result = helpers.download_image(self.name, {'src': renew_URL})[0]
+                renew_url = (
+                    'https://oauth.live.com/token?client_id='
+                    '%s&redirect_uri=https%%3A%%2F%%2Foauth.live.'
+                    'com%%2Fdesktop&grant_type=refresh_token&'
+                    'refresh_token=%s') % (client_id, refresh_token)
+                result = helpers.download_image(self.name, {'src': renew_url})[0]
                 if result:
                     dict_ = json.loads(result)
                     if 'access_token' in dict_:
                         self.set_password(dict_['access_token'])
                         return
             script_url = app.config.get_per('accounts', self.name,
-                'oauth2_redirect_url')
-            token_URL = 'https://oauth.live.com/authorize?client_id=' \
-                '%(client_id)s&scope=wl.messenger%%20wl.offline_access&' \
-                'response_type=code&redirect_uri=%(script_url)s' % locals()
-            helpers.launch_browser_mailer('url', token_URL)
+                                            'oauth2_redirect_url')
+            token_url = (
+                'https://oauth.live.com/authorize?client_id='
+                '%s&scope=wl.messenger%%20wl.offline_access&'
+                'response_type=code&redirect_uri=%s') % (client_id, script_url)
+            helpers.launch_browser_mailer('url', token_url)
             self.disconnect(on_purpose=True)
-            app.nec.push_incoming_event(Oauth2CredentialsRequiredEvent(None,
-                conn=self))
+            app.nec.push_incoming_event(
+                Oauth2CredentialsRequiredEvent(None, conn=self))
             return
         if self.password:
             self.set_password(self.password)
