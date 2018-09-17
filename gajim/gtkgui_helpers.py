@@ -68,20 +68,20 @@ def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
             pixbuf, was_symbolic = iconinfo.load_symbolic(*color)
             return pixbuf
         return iconinfo.load_icon()
-    except GLib.GError as e:
+    except GLib.GError as error:
         if not quiet:
-            log.error('Unable to load icon %s: %s' % (icon_name, str(e)))
+            log.error('Unable to load icon %s: %s', icon_name, str(error))
 
 def get_icon_path(icon_name, size=16):
     try:
         icon_info = gtk_icon_theme.lookup_icon(icon_name, size, 0)
         if icon_info == None:
-            log.error('Icon not found: %s' % icon_name)
-            return ""
+            log.error('Icon not found: %s', icon_name)
+            return ''
         else:
             return icon_info.get_filename()
-    except GLib.GError as e:
-        log.error("Unable to find icon %s: %s" % (icon_name, str(e)))
+    except GLib.GError as error:
+        log.error('Unable to find icon %s: %s', icon_name, str(error))
 
 
 HAS_PYWIN32 = True
@@ -484,8 +484,8 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
         # Save image
         try:
             pixbuf.savev(file_path, image_format, [], [])
-        except Exception as e:
-            log.error('Error saving avatar: %s' % str(e))
+        except Exception as error:
+            log.error('Error saving avatar: %s', error)
             if os.path.exists(file_path):
                 os.remove(file_path)
             new_file_path = '.'.join(file_path.split('.')[:-1]) + '.png'

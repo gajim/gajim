@@ -1953,8 +1953,8 @@ class GroupchatControl(ChatControlBase):
                 gc_c = app.contacts.get_gc_contact(self.account,
                     self.room_jid, obj.nick)
                 if not gc_c:
-                    log.error('%s has an iter, but no gc_contact instance' % \
-                        obj.nick)
+                    log.error('%s has an iter, but no gc_contact instance',
+                              obj.nick)
                     return
 
                 actual_affiliation = gc_c.affiliation

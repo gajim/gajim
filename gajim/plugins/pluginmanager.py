@@ -144,9 +144,10 @@ class PluginManager(metaclass=Singleton):
             self.plugins.append(plugin)
             plugin.active = False
         else:
-            log.info('Not loading plugin %s v%s from module %s (identified by'
-                ' short name: %s). Plugin already loaded.' % (plugin.name,
-                plugin.version, plugin.__module__, plugin.short_name))
+            log.info('Not loading plugin %s v%s from module %s '
+                     '(identified by short name: %s). Plugin already loaded.',
+                     plugin.name, plugin.version,
+                     plugin.__module__, plugin.short_name)
 
     @log_calls('PluginManager')
     def remove_plugin(self, plugin):
@@ -314,8 +315,8 @@ class PluginManager(metaclass=Singleton):
                 try:
                     handlers[0](*args)
                 except Exception as e:
-                    log.warning('Error executing %s', handlers[0],
-                        exc_info=True)
+                    log.warning('Error executing %s',
+                                handlers[0], exc_info=True)
 
     def _register_events_handlers_in_ged(self, plugin):
         for event_name, handler in plugin.events_handlers.items():
@@ -426,9 +427,9 @@ class PluginManager(metaclass=Singleton):
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
-                        except Exception as e:
-                            log.warning('Error executing %s', handler,
-                                exc_info=True)
+                        except Exception:
+                            log.warning('Error executing %s',
+                                        handler, exc_info=True)
 
         self._remove_events_handler_from_ged(plugin)
         self._remove_network_events_from_nec(plugin)
@@ -467,9 +468,9 @@ class PluginManager(metaclass=Singleton):
                     if handler:
                         try:
                             handler(*gui_extension_point_args)
-                        except Exception as e:
-                            log.warning('Error executing %s', handler,
-                                exc_info=True)
+                        except Exception:
+                            log.warning('Error executing %s',
+                                        handler, exc_info=True)
 
 
     @log_calls('PluginManager')
@@ -579,9 +580,8 @@ class PluginManager(metaclass=Singleton):
                 try:
                     conf.read_file(conf_file)
                 except configparser.Error:
-                    log.warning(("Plugin {plugin} not loaded, error loading"
-                                 " manifest").format(plugin=elem_name)
-                                , exc_info=True)
+                    log.warning('Plugin %s not loaded, error loading manifest',
+                                elem_name, exc_info=True)
                     continue
 
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
@@ -591,32 +591,24 @@ class PluginManager(metaclass=Singleton):
             gajim_v_cmp = parse_version(gajim_v)
 
             if min_v and gajim_v_cmp < parse_version(min_v):
-                log.warning(('Plugin {plugin} not loaded, newer version of'
-                             'gajim required: {gajim_v} < {min_v}').format(
-                                 plugin=elem_name,
-                                 gajim_v=gajim_v,
-                                 min_v=min_v
-                           ))
+                log.warning('Plugin %s not loaded, newer version of'
+                            'gajim required: %s < %s',
+                            elem_name, gajim_v, min_v)
                 continue
             if max_v and gajim_v_cmp > parse_version(max_v):
-                log.warning(('Plugin {plugin} not loaded, plugin incompatible '
-                             'with current version of gajim: '
-                             '{gajim_v} > {max_v}').format(
-                                 plugin=elem_name,
-                                 gajim_v=gajim_v,
-                                 max_v=max_v
-                           ))
+                log.warning('Plugin %s not loaded, plugin incompatible '
+                            'with current version of gajim: '
+                            '%s > %s', elem_name, gajim_v, max_v)
                 continue
 
             module = None
             try:
                 log.info('Loading %s', module_name)
                 module = __import__(module_name)
-            except Exception as error:
+            except Exception:
                 log.warning(
-                    "While trying to load {plugin}, exception occurred".format(plugin=elem_name),
-                    exc_info=sys.exc_info()
-                )
+                    'While trying to load %s, exception occurred',
+                    elem_name, exc_info=True)
                 continue
 
             if module is None:
@@ -626,7 +618,7 @@ class PluginManager(metaclass=Singleton):
             for module_attr_name in [attr_name for attr_name in dir(module)
             if not (attr_name.startswith('__') or attr_name.endswith('__'))]:
                 module_attr = getattr(module, module_attr_name)
-                log.debug('%s : %s' % (module_attr_name, module_attr))
+                log.debug('%s: %s', module_attr_name, module_attr)
 
                 try:
                     if not issubclass(module_attr, GajimPlugin) or \
@@ -653,16 +645,18 @@ class PluginManager(metaclass=Singleton):
                         pass
                 except configparser.NoOptionError:
                     # all fields are required
-                    log.debug('%s : %s' % (module_attr_name,
-                        'wrong manifest file. all fields are required!'))
+                    log.debug(
+                        '%s: wrong manifest file. all fields are required!',
+                        module_attr_name)
                 except configparser.NoSectionError:
                     # info section are required
-                    log.debug('%s : %s' % (module_attr_name,
-                        'wrong manifest file. info section are required!'))
+                    log.debug(
+                        '%s: wrong manifest file. info section are required!',
+                        module_attr_name)
                 except configparser.MissingSectionHeaderError:
                     # info section are required
-                    log.debug('%s : %s' % (module_attr_name,
-                        'wrong manifest file. section are required!'))
+                    log.debug('%s: wrong manifest file. section are required!',
+                              module_attr_name)
 
         sys.path.remove(path)
         return plugins_found

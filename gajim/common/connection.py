@@ -1094,7 +1094,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     conn=self, title=pritxt, msg=sectxt))
 
     def on_proxy_failure(self, reason):
-        log.error('Connection to proxy failed: %s' % reason)
+        log.error('Connection to proxy failed: %s', reason)
         self.time_to_reconnect = None
         self.on_connect_failure = None
         self.disconnect(on_purpose = True)
@@ -1108,8 +1108,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.info('Connect successfull')
         _con_type = con_type
         if _con_type != self._current_type:
-            log.info('Connecting to next host beacuse desired type is %s and returned is %s'
-                    % (self._current_type, _con_type))
+            log.info('Connecting to next host beacuse desired type '
+                     'is %s and returned is %s', self._current_type, _con_type)
             self._connect_to_next_host()
             return
         con.RegisterDisconnectHandler(self._on_disconnected)
@@ -1149,8 +1149,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_failure = None
         con.UnregisterDisconnectHandler(self._on_disconnected)
         con.RegisterDisconnectHandler(self.disconnectedReconnCB)
-        log.debug('Connected to server %s:%s with %s' % (
-                self._current_host['host'], self._current_host['port'], con_type))
+        log.debug('Connected to server %s:%s with %s',
+                  self._current_host['host'], self._current_host['port'],
+                  con_type)
 
         self.connection = con
 
@@ -1222,7 +1223,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             file = urlopen(
                 url, cafile=cafile, timeout=2)
         except (URLError, ssl.CertificateError) as exc:
-            log.info('Error while requesting POSH: %s' % exc)
+            log.info('Error while requesting POSH: %s', exc)
             return
 
         if file.getcode() != 200:
@@ -1274,7 +1275,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             'accounts', self.name, 'authentication_mechanisms').split()
         for mech in auth_mechs:
             if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS | set(['XEP-0078']):
-                log.warning("Unknown authentication mechanisms %s" % mech)
+                log.warning('Unknown authentication mechanisms %s', mech)
         if not auth_mechs:
             auth_mechs = None
         else:
@@ -1332,7 +1333,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             if not app.config.get_per('accounts', self.name, 'savepass'):
                 # Forget password, it's wrong
                 self.password = None
-            log.debug("Couldn't authenticate to %s" % self._hostname)
+            log.debug("Couldn't authenticate to %s", self._hostname)
             self.disconnect(on_purpose = True)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))

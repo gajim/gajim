@@ -1355,7 +1355,7 @@ def _get_img_direct(attrs):
         req.add_header('User-Agent', 'Gajim ' + app.version)
         f = urllib.request.urlopen(req)
     except Exception as ex:
-        log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+        log.debug('Error loading image %s ', attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')
     else:
@@ -1368,7 +1368,7 @@ def _get_img_direct(attrs):
         deadline = time.time() + (10 * (max_size / 1048576))
         while True:
             if time.time() > deadline:
-                log.debug('Timeout loading image %s ' % attrs['src'])
+                log.debug('Timeout loading image %s ', attrs['src'])
                 mem = ''
                 alt = attrs.get('alt', '')
                 if alt:
@@ -1378,7 +1378,7 @@ def _get_img_direct(attrs):
             try:
                 temp = f.read(100)
             except socket.timeout as ex:
-                log.debug('Timeout loading image %s ' % attrs['src'] + str(ex))
+                log.debug('Timeout loading image %s ', attrs['src'] + str(ex))
                 alt = attrs.get('alt', '')
                 if alt:
                     alt += '\n'
@@ -1445,7 +1445,7 @@ def _get_img_proxy(attrs, proxy):
         else:
             alt += _('Error loading image')
     except Exception as ex:
-        log.debug('Error loading image %s ' % attrs['src']  + str(ex))
+        log.debug('Error loading image %s ', attrs['src']  + str(ex))
         pixbuf = None
         alt = attrs.get('alt', 'Broken image')
     return ('', alt)

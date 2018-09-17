@@ -96,7 +96,7 @@ class HelperEvent:
             tim = helpers.datetime_tuple(tag)
             self.timestamp = timegm(tim)
         except Exception:
-            log.error('wrong timestamp, ignoring it: ' + tag)
+            log.error('wrong timestamp, ignoring it: %s', tag)
             self.timestamp = time_time()
 
     def get_chatstate(self):
@@ -253,7 +253,7 @@ PresenceHelperEvent):
         try:
             self.get_jid_resource()
         except Exception:
-            log.warning('Invalid JID: %s, ignoring it' % self.stanza.getFrom())
+            log.warning('Invalid JID: %s, ignoring it', self.stanza.getFrom())
             return
         jid_list = app.contacts.get_jid_list(self.conn.name)
         self.timestamp = None

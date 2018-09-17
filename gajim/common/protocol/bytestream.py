@@ -778,7 +778,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Handles streams state change. Used internally.
         """
         typ = stanza.getType()
-        log.debug('IBBIqHandler called typ->%s' % typ)
+        log.debug('IBBIqHandler called typ->%s', typ)
         if typ == 'set' and stanza.getTag('open'):
             self.StreamOpenHandler(conn, stanza)
         elif typ == 'set' and stanza.getTag('close'):
@@ -808,8 +808,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
         err = None
         sid = stanza.getTagAttr('open', 'sid')
         blocksize = stanza.getTagAttr('open', 'block-size')
-        log.debug('StreamOpenHandler called sid->%s blocksize->%s' % (sid,
-            blocksize))
+        log.debug('StreamOpenHandler called sid->%s blocksize->%s',
+                  sid, blocksize)
         file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         try:
             blocksize = int(blocksize)
@@ -822,7 +822,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
         if err:
             rep = nbxmpp.Error(stanza, err)
         else:
-            log.debug("Opening stream: id %s, block-size %s" % (sid, blocksize))
+            log.debug("Opening stream: id %s, block-size %s",
+                      sid, blocksize)
             rep = nbxmpp.Protocol('iq', stanza.getFrom(), 'result',
                 stanza.getTo(), {'id': stanza.getID()})
             file_props.block_size = blocksize
@@ -934,7 +935,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         sid = stanza.getTagAttr('data', 'sid')
         seq = stanza.getTagAttr('data', 'seq')
         data = stanza.getTagData('data')
-        log.debug('ReceiveHandler called sid->%s seq->%s' % (sid, seq))
+        log.debug('ReceiveHandler called sid->%s seq->%s', sid, seq)
         try:
             seq = int(seq)
             data = base64.b64decode(data.encode('utf-8'))
@@ -951,8 +952,8 @@ class ConnectionIBBytestream(ConnectionBytestream):
             elif seq != file_props.seq:
                 err = nbxmpp.ERR_UNEXPECTED_REQUEST
             else:
-                log.debug('Successfully received sid->%s %s+%s bytes' % (sid,
-                    file_props.fp.tell(), len(data)))
+                log.debug('Successfully received sid->%s %s+%s bytes',
+                          sid, file_props.fp.tell(), len(data))
                 file_props.seq += 1
                 file_props.started = True
                 file_props.fp.write(data)
@@ -964,7 +965,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
                 if file_props.received_len >= file_props.size:
                     file_props.completed = True
         if err:
-            log.debug('Error on receive: %s' % err)
+            log.debug('Error on receive: %s', err)
             conn.send(nbxmpp.Error(nbxmpp.Iq(to=stanza.getFrom(),
                 frm=stanza.getTo(),
                 payload=[nbxmpp.Node(nbxmpp.NS_IBB + ' close')]), err, reply=0))
@@ -977,7 +978,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         Raise xmpppy event specifying successful data receive.
         """
         sid = stanza.getTagAttr('close', 'sid')
-        log.debug('StreamCloseHandler called sid->%s' % sid)
+        log.debug('StreamCloseHandler called sid->%s', sid)
         # look in sending files
         file_props = FilesProp.getFilePropByTransportSid(self.name, sid)
         if file_props:
@@ -1002,7 +1003,7 @@ class ConnectionIBBytestream(ConnectionBytestream):
         is agreed upon.
         """
         syn_id = stanza.getID()
-        log.debug('IBBAllIqHandler called syn_id->%s' % syn_id)
+        log.debug('IBBAllIqHandler called syn_id->%s', syn_id)
         for file_props in FilesProp.getAllFileProp():
             if not file_props.direction or not file_props.connected:
                 # It's socks5 bytestream

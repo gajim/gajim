@@ -270,9 +270,12 @@ class GajimPluginConfig():
                     s.close()
                     self.save()
                 except Exception:
-                    log.warning('%s plugin config file not readable. Saving it as '
-                        '%s and creating a new one' % (self.plugin.short_name,
-                        self.FILE_PATH.decode(locale.getpreferredencoding()) + '.bak'))
+                    enc = locale.getpreferredencoding()
+                    filename = self.FILE_PATH.decode(enc) + '.bak'
+                    log.warning(
+                        '%s plugin config file not readable. Saving it as '
+                        '%s and creating a new one',
+                        self.plugin.short_name, filename)
                     if os.path.exists(self.FILE_PATH + '.bak'):
                         os.remove(self.FILE_PATH + '.bak')
                     os.rename(self.FILE_PATH, self.FILE_PATH + '.bak')

@@ -329,7 +329,7 @@ class JingleTransportSocks5(JingleTransport):
                 return content
 
     def _on_proxy_auth_ok(self, proxy):
-        log.info('proxy auth ok for ' + str(proxy))
+        log.info('proxy auth ok for %s', str(proxy))
         # send activate request to proxy, send activated confirmation to peer
         if not self.connection:
             return

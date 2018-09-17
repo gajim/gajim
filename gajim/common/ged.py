@@ -77,12 +77,13 @@ class GlobalEventsDispatcher:
             try:
                 self.handlers[event_name].remove((priority, handler))
             except ValueError as error:
-                log.warning('''Function (%s) with priority "%s" never registered
-                as handler of event "%s". Couldn\'t remove. Error: %s'''
-                                  %(handler, priority, event_name, error))
+                log.warning(
+                    '''Function (%s) with priority "%s" never
+                    registered as handler of event "%s". Couldn\'t remove.
+                    Error: %s''', handler, priority, event_name, error)
 
     def raise_event(self, event_name, *args, **kwargs):
-        log.debug('%s Args: %s'%(event_name, str(args)))
+        log.debug('%s Args: %s', event_name, str(args))
         if event_name in self.handlers:
             node_processed = False
             for priority, handler in self.handlers[event_name]:

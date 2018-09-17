@@ -99,11 +99,9 @@ class log_calls:
             @functools.wraps(f)
             def wrapper(*args, **kwargs):
 
-                log.debug('%(funcname)s() <entered>'%{
-                    'funcname': self.full_func_name})
+                log.debug('%s() <entered>', self.full_func_name)
                 result = f(*args, **kwargs)
-                log.debug('%(funcname)s() <left>'%{
-                    'funcname': self.full_func_name})
+                log.debug('%s() <left>', self.full_func_name)
                 return result
         else:
             @functools.wraps(f)
