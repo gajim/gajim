@@ -1107,7 +1107,7 @@ class MessageWindowMgr(GObject.GObject):
         return False
 
     def _on_window_destroy(self, win):
-        for k in self._windows:
+        for k in self._windows.keys():  # pylint: disable=C0201
             if self._windows[k].window == win:
                 self.emit('window-delete', self._windows[k])
                 del self._windows[k]

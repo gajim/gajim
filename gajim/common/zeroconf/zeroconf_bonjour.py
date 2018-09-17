@@ -98,7 +98,7 @@ class Zeroconf:
         if not self.connected:
             return
         if name != self.name:
-            for key in self.contacts:
+            for key in self.contacts.keys():  # pylint: disable=C0201
                 if self.contacts[key][Constant.NAME] == name:
                     del self.contacts[key]
                     self.remove_serviceCB(key)
