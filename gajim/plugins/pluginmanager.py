@@ -629,7 +629,7 @@ class PluginManager(metaclass=Singleton):
                         os.path.dirname(file_path))
 
                     for option in fields:
-                        if conf.get('info', option) is '':
+                        if conf.get('info', option) == '':
                             raise configparser.NoOptionError(option, 'info')
                         if option == 'description':
                             setattr(module_attr, option, _(conf.get('info', option)))
