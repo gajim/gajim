@@ -225,7 +225,7 @@ class StandardChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = ChatCommands,
+    HOSTS = (ChatCommands,)
 
 class StandardPrivateChatCommands(CommandContainer):
     """
@@ -234,7 +234,7 @@ class StandardPrivateChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = PrivateChatCommands,
+    HOSTS = (PrivateChatCommands,)
 
 class StandardGroupChatCommands(CommandContainer):
     """
@@ -243,7 +243,7 @@ class StandardGroupChatCommands(CommandContainer):
     """
 
     AUTOMATIC = True
-    HOSTS = GroupChatCommands,
+    HOSTS = (GroupChatCommands,)
 
     @command
     @doc(_("Clear the text window"))

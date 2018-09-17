@@ -103,9 +103,9 @@ class XssIdleMonitor:
             raise OSError('libX11 could not be found.')
         libX11 = ctypes.cdll.LoadLibrary(libX11path)
         libX11.XOpenDisplay.restype = display_p
-        libX11.XOpenDisplay.argtypes = ctypes.c_char_p,
+        libX11.XOpenDisplay.argtypes = (ctypes.c_char_p,)
         libX11.XDefaultRootWindow.restype = xid
-        libX11.XDefaultRootWindow.argtypes = display_p,
+        libX11.XDefaultRootWindow.argtypes = (display_p,)
 
         libXsspath = ctypes.util.find_library('Xss')
         if libXsspath is None:
