@@ -188,7 +188,7 @@ class AdvancedConfigurationWindow:
         modelrow = self.model[modelpath]
         option = modelrow[0]
         if modelrow[2] == self.types['boolean']:
-            for key in self.right_true_dict.keys():
+            for key in self.right_true_dict:
                 if self.right_true_dict[key] == modelrow[1]:
                     modelrow[1] = str(key)
             newval = {'False': True, 'True': False}[modelrow[1]]

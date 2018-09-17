@@ -352,7 +352,7 @@ class ConversationTextview(GObject.GObject):
         return False
 
     def del_handlers(self):
-        for i in self.handlers.keys():
+        for i in self.handlers:
             if self.handlers[i].handler_is_connected(i):
                 self.handlers[i].disconnect(i)
         del self.handlers
