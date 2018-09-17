@@ -133,7 +133,7 @@ else:
             """
             self.pub.set_source(text, None)
             self.pub.set_destination(destination, destination_path)
-            output = self.pub.publish(enable_exit_status=enable_exit_status)
+            self.pub.publish(enable_exit_status=enable_exit_status)
             # kludge until we can get docutils to stop generating (rare) &nbsp;
             # entities
             return '\u00a0'.join(self.pub.writer.parts['fragment'].strip().split(

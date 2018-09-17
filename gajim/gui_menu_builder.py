@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
 from gi.repository import Gtk, Gio, GLib
 from nbxmpp.protocol import NS_COMMANDS, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5, NS_CONFERENCE
@@ -39,7 +37,6 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
     iconset = app.config.get('iconset')
     if not iconset:
         iconset = app.config.DEFAULT_ICONSET
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
     for c in contacts:
         item = Gtk.MenuItem.new_with_label(
             '%s (%s)' % (c.resource, str(c.priority)))
@@ -171,7 +168,7 @@ show_bookmarked=False, force_resource=False):
     for account in connected_accounts:
         con = app.connections[account]
         boomarks = con.get_module('Bookmarks').bookmarks
-        for jid, bookmark in boomarks.items():
+        for jid in boomarks.keys():
             if jid in r_jids:
                 continue
             if jid not in app.gc_connected[account] or not \
@@ -222,8 +219,6 @@ control=None, gc_contact=None, is_anonymous=True):
     edit_groups_menuitem = xml.get_object('edit_groups_menuitem')
     send_file_menuitem = xml.get_object('send_file_menuitem')
     assign_openpgp_key_menuitem = xml.get_object('assign_openpgp_key_menuitem')
-    add_special_notification_menuitem = xml.get_object(
-            'add_special_notification_menuitem')
     information_menuitem = xml.get_object('information_menuitem')
     history_menuitem = xml.get_object('history_menuitem')
     send_custom_status_menuitem = xml.get_object('send_custom_status_menuitem')

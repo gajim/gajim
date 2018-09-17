@@ -530,7 +530,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         '''Process a img tag.
         '''
         mem = ''
-        update = False
         pixbuf = None
         replace_mark = None
         replace_tags = None
@@ -544,7 +543,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     img).encode('utf-8'))
             elif loaded is not None:
                 (mem, alt, replace_mark, replace_tags) = loaded
-                update = True
             else:
                 if self.conv_textview:
                     img_mark = self.textbuf.create_mark(None, self.iter, True)
@@ -929,9 +927,6 @@ class HtmlTextView(Gtk.TextView):
             childs[6].hide() # join group chat
             childs[7].hide() # add to roster
         else: # It's a mail or a JID
-            # load muc icon
-            join_group_chat_menuitem = ui.get_object('join_group_chat_menuitem')
-
             text = text.lower()
             if text.startswith('xmpp:'):
                 text = text[5:]
@@ -1125,14 +1120,11 @@ if __name__ == '__main__':
         if change_cursor:
             w.set_cursor(get_cursor('XTERM'))
             change_cursor = None
-        tag_table = htmlview.tv.get_buffer().get_tag_table()
         for tag in tags:
             try:
                 if tag.is_anchor:
                     w.set_cursor(get_cursor('HAND2'))
                     change_cursor = tag
-                elif tag == tag_table.lookup('focus-out-line'):
-                    over_line = True
             except Exception:
                 pass
 

@@ -299,7 +299,7 @@ class HistoryWindow:
         """
         if jid_or_name and jid_or_name in self.completion_dict:
             # a full qualified jid or a contact name was entered
-            info_jid, info_account, info_name, info_completion = self.completion_dict[jid_or_name]
+            info_jid, info_account, _info_name, info_completion = self.completion_dict[jid_or_name]
             self.jids_to_search = [info_jid]
             self.jid = info_jid
 
@@ -388,7 +388,7 @@ class HistoryWindow:
         """
         if not self.jid:
             return
-        year, month, day = widget.get_date()  # integers
+        year, month, _day = widget.get_date()  # integers
         if year < 1900:
             widget.select_month(0, 1900)
             widget.select_day(1)
@@ -400,8 +400,8 @@ class HistoryWindow:
         try:
             log_days = app.logger.get_days_with_logs(
                 self.account, self.jid, year, month)
-        except exceptions.PysqliteOperationalError as e:
-            ErrorDialog(_('Disk Error'), str(e))
+        except exceptions.PysqliteOperationalError as error:
+            ErrorDialog(_('Disk Error'), str(error))
             return
 
         for date in log_days:

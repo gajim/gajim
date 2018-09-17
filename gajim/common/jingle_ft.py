@@ -211,7 +211,6 @@ class JingleFileTransfer(JingleContent):
         self.continue_session_accept(stanza)
 
     def continue_session_accept(self, stanza):
-        con = self.session.connection
         if self.state == State.TRANSPORT_REPLACE:
             # If we are requesting we don't have the file
             if self.session.werequest:
@@ -300,7 +299,6 @@ class JingleFileTransfer(JingleContent):
                     app.socks5queue.listener.disconnect()
         if content.getTag('transport').getTag('activated'):
             self.state = State.TRANSFERING
-            jid = app.get_jid_without_resource(self.session.ourjid)
             app.socks5queue.send_file(self.file_props,
                                         self.session.connection.name, 'client')
             return

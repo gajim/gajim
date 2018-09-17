@@ -213,7 +213,6 @@ class StateTransfering(JingleFileTransferStates):
                     = self.jft.transport._on_proxy_auth_ok
             # TODO: add on failure
         else:
-            jid = app.get_jid_without_resource(self.jft.session.ourjid)
             app.socks5queue.send_file(self.jft.file_props,
                                         self.jft.session.connection.name, mode)
 

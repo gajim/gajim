@@ -511,15 +511,12 @@ class GajimRemote(Server):
         if not keyID:
             keyID = ''
 
-        connected_account, contact = self._get_account_and_contact(
-            account, jid)
+        connected_account = self._get_account_and_contact(account, jid)[0]
         if connected_account:
             connection = app.connections[connected_account]
             sessions = connection.get_sessions(jid)
-            if sessions:
-                session = sessions[0]
-            else:
-                session = connection.make_new_session(jid)
+            if not sessions:
+                connection.make_new_session(jid)
             ctrl = app.interface.msg_win_mgr.search_control(
                 jid, connected_account)
             if ctrl:
@@ -563,7 +560,6 @@ class GajimRemote(Server):
             return False
         connected_account = self._get_account_for_groupchat(account, room_jid)
         if connected_account:
-            connection = app.connections[connected_account]
             app.nec.push_outgoing_event(
                 GcMessageOutgoingEvent(
                     None,

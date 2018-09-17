@@ -195,10 +195,6 @@ class StatusIcon:
         gc_sub_menu = Gtk.Menu() # gc is always a submenu
         join_gc_menuitem.set_submenu(gc_sub_menu)
 
-        # We need our own set of status icons, let's make 'em!
-        iconset = app.config.get('iconset')
-        path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-
         for show in ('online', 'chat', 'away', 'xa', 'dnd', 'invisible'):
             uf_show = helpers.get_uf_show(show, use_mnemonic=True)
             item = Gtk.MenuItem.new_with_mnemonic(uf_show)

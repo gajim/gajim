@@ -1835,7 +1835,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def accept_insecure_password(self):
         if self.pasword_callback:
-            callback, type_ = self.pasword_callback
+            callback = self.pasword_callback[0]
             callback(self.password)
             self.pasword_callback = None
 

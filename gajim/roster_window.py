@@ -2728,7 +2728,7 @@ class RosterWindow:
             family = app.contacts.get_metacontacts_family(obj.conn.name,
                 obj.jid)
             if family:
-                nearby_family, bb_jid, bb_account = \
+                _nearby_family, bb_jid, bb_account = \
                     app.contacts.get_nearby_family_and_big_brother(family,
                     obj.conn.name)
             else:
@@ -3453,7 +3453,7 @@ class RosterWindow:
             # several contact to remove at the same time
             pritext = _('Contacts will be removed from your roster')
             jids = ''
-            for (contact, account) in list_:
+            for contact, _account in list_:
                 jids += '\n  ' + contact.get_shown_name() + ' (%s)' % \
                 contact.jid + ','
             sectext = _('By removing these contacts:%s\nyou also remove '
@@ -4742,7 +4742,7 @@ class RosterWindow:
             type_ = model[titer][Column.TYPE]
         except TypeError:
             return
-        theme = app.config.get('roster_theme')
+
         if type_ == 'account':
             color = app.css_config.get_value('.gajim-account-row', StyleAttr.COLOR)
             renderer.set_property('foreground', color)
@@ -4875,12 +4875,10 @@ class RosterWindow:
             renderer.set_property('visible', False)
 
     def _set_account_row_background_color(self, renderer):
-        theme = app.config.get('roster_theme')
         color = app.css_config.get_value('.gajim-account-row', StyleAttr.BACKGROUND)
         renderer.set_property('cell-background', color)
 
     def _set_contact_row_background_color(self, renderer, jid, account):
-        theme = app.config.get('roster_theme')
         if jid in app.newly_added[account]:
             renderer.set_property('cell-background', app.css_config.get_value(
                     '.gajim-roster-connected', StyleAttr.BACKGROUND))
@@ -4892,7 +4890,6 @@ class RosterWindow:
             renderer.set_property('cell-background', color)
 
     def _set_group_row_background_color(self, renderer):
-        theme = app.config.get('roster_theme')
         color = app.css_config.get_value('.gajim-group-row', 'background')
         renderer.set_property('cell-background', color)
 
@@ -4904,9 +4901,6 @@ class RosterWindow:
     def build_account_menu(self, account):
         # we have to create our own set of icons for the menu
         # using self.jabber_status_images is poopoo
-        iconset = app.config.get('iconset')
-        path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-
         if not app.config.get_per('accounts', account, 'is_zeroconf'):
             xml = gtkgui_helpers.get_gtk_builder('account_context_menu.ui')
             account_context_menu = xml.get_object('account_context_menu')
@@ -5063,8 +5057,6 @@ class RosterWindow:
             menu = self.build_account_menu(account)
         else:
             menu = Gtk.Menu()
-            iconset = app.config.get('iconset')
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
             accounts = [] # Put accounts in a list to sort them
             for account in app.connections:
                 accounts.append(account)
@@ -5088,7 +5080,6 @@ class RosterWindow:
         Make group's popup menu
         """
         model = self.modelfilter
-        path = model.get_path(titer)
         group = model[titer][Column.JID]
         account = model[titer][Column.ACCOUNT]
 
@@ -5155,8 +5146,6 @@ class RosterWindow:
                 send_custom_status_menuitem.set_sensitive(False)
             status_menuitems = Gtk.Menu()
             send_custom_status_menuitem.set_submenu(status_menuitems)
-            iconset = app.config.get('iconset')
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
             for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
                 status_menuitem = Gtk.MenuItem.new_with_label(
                     helpers.get_uf_show(s))
@@ -5343,7 +5332,6 @@ class RosterWindow:
         """
         model = self.modelfilter
         jid = model[titer][Column.JID]
-        path = model.get_path(titer)
         account = model[titer][Column.ACCOUNT]
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
         menu = gui_menu_builder.get_transport_menu(contact, account)

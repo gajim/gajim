@@ -696,9 +696,6 @@ class ConversationTextview(GObject.GObject):
             childs[6].hide() # join group chat
             childs[7].hide() # add to roster
         else: # It's a mail or a JID
-            # load muc icon
-            join_group_chat_menuitem = xml.get_object('join_group_chat_menuitem')
-
             text = text.lower()
             if text.startswith('xmpp:'):
                 text = text[5:]

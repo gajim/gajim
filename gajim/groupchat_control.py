@@ -1092,7 +1092,6 @@ class GroupchatControl(ChatControlBase):
 
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
-        context = self.msg_scrolledwindow.get_style_context()
         self.lock_image.set_sensitive(visible)
 
     def _on_authentication_button_clicked(self, widget):
@@ -1360,7 +1359,7 @@ class GroupchatControl(ChatControlBase):
 
         if kind == 'incoming': # it's a message NOT from us
             # highlighting and sounds
-            (highlight, sound) = self.highlighting_for_message(text, tim)
+            highlight, _sound = self.highlighting_for_message(text, tim)
             if contact in self.gc_custom_colors:
                 other_tags_for_name.append('gc_nickname_color_' + \
                     str(self.gc_custom_colors[contact]))

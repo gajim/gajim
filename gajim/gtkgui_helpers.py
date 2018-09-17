@@ -65,7 +65,7 @@ def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
         if not iconinfo:
             raise GLib.GError
         if color:
-            pixbuf, was_symbolic = iconinfo.load_symbolic(*color)
+            pixbuf, _was_symbolic = iconinfo.load_symbolic(*color)
             return pixbuf
         return iconinfo.load_icon()
     except GLib.GError as error:

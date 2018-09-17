@@ -176,7 +176,7 @@ class Zeroconf:
             resolved_info = [(interface, protocol, host, aprotocol, address, int(port))]
             if name in self.contacts:
                 # Decide whether to try to merge with existing resolved info:
-                old_name, old_domain, old_resolved_info, old_bare_name, old_txt = self.contacts[name]
+                old_name, old_domain, old_resolved_info, old_bare_name, _old_txt = self.contacts[name]
                 if name == old_name and domain == old_domain and bare_name == old_bare_name:
                     # Seems similar enough, try to merge resolved info:
                     for i in range(len(old_resolved_info)):
@@ -210,7 +210,7 @@ class Zeroconf:
     domain, host, aprotocol, address, port, txt, flags):
         if not self.connected:
             return
-        bare_name = name
+
         if name.find('@') == -1:
             name = name + '@' + name
         # update TXT data only, as intended according to resolve_all comment

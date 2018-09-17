@@ -699,7 +699,7 @@ class ChangeNickDialog(InputDialogCheck):
         change_nick must be set to True when we are already occupant of the room
         and we are changing our nick
         """
-        InputDialogCheck.__init__(self, title, '', checktext=check_text,
+        InputDialogCheck.__init__(self, title, '',
                                   input_str='', is_modal=True, ok_handler=None,
                                   cancel_handler=None,
                                   transient_for=transient_for)
@@ -735,14 +735,7 @@ class ChangeNickDialog(InputDialogCheck):
         self.account, self.room_jid, self.prompt, self.change_nick = \
             self.room_queue.pop(0)
         self.setup_dialog()
-
-        if app.new_room_nick is not None and not app.gc_connected[
-        self.account][self.room_jid] and self.gc_control.nick != \
-        app.new_room_nick:
-            self.dialog.hide()
-            self.on_ok(app.new_room_nick, True)
-        else:
-            self.dialog.show()
+        self.dialog.show()
 
     def on_okbutton_clicked(self, widget):
         nick = self.get_text()
@@ -759,8 +752,6 @@ class ChangeNickDialog(InputDialogCheck):
         self.on_ok(nick, self.is_checked())
 
     def on_ok(self, nick, is_checked):
-        if is_checked:
-            app.new_room_nick = nick
         app.connections[self.account].join_gc(nick, self.room_jid, None,
             change_nick=self.change_nick)
         if app.gc_connected[self.account][self.room_jid]:

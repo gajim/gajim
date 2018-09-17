@@ -59,28 +59,28 @@ class MessageTextView(Gtk.TextView):
         # needed to know if we undid something
         self.undo_pressed = False
 
-        _buffer = self.get_buffer()
+        buffer_ = self.get_buffer()
         self.begin_tags = {}
         self.end_tags = {}
         self.color_tags = []
         self.fonts_tags = []
         self.other_tags = {}
-        self.placeholder_tag = _buffer.create_tag('placeholder')
+        self.placeholder_tag = buffer_.create_tag('placeholder')
         self.placeholder_tag.set_property('foreground_rgba',
                                       gtkgui_helpers.Color.GREY)
-        self.other_tags['bold'] = _buffer.create_tag('bold')
+        self.other_tags['bold'] = buffer_.create_tag('bold')
         self.other_tags['bold'].set_property('weight', Pango.Weight.BOLD)
         self.begin_tags['bold'] = '<strong>'
         self.end_tags['bold'] = '</strong>'
-        self.other_tags['italic'] = _buffer.create_tag('italic')
+        self.other_tags['italic'] = buffer_.create_tag('italic')
         self.other_tags['italic'].set_property('style', Pango.Style.ITALIC)
         self.begin_tags['italic'] = '<em>'
         self.end_tags['italic'] = '</em>'
-        self.other_tags['underline'] = _buffer.create_tag('underline')
+        self.other_tags['underline'] = buffer_.create_tag('underline')
         self.other_tags['underline'].set_property('underline', Pango.Underline.SINGLE)
         self.begin_tags['underline'] = '<span style="text-decoration: underline;">'
         self.end_tags['underline'] = '</span>'
-        self.other_tags['strike'] = _buffer.create_tag('strike')
+        self.other_tags['strike'] = buffer_.create_tag('strike')
         self.other_tags['strike'].set_property('strikethrough', True)
         self.begin_tags['strike'] = '<span style="text-decoration: line-through;">'
         self.end_tags['strike'] = '</span>'
@@ -90,8 +90,8 @@ class MessageTextView(Gtk.TextView):
         self.connect('focus-in-event', self._on_focus_in)
         self.connect('focus-out-event', self._on_focus_out)
 
-        start, end = _buffer.get_bounds()
-        _buffer.insert_with_tags(
+        start = buffer_.get_bounds()[0]
+        buffer_.insert_with_tags(
             start, self.PLACEHOLDER, self.placeholder_tag)
 
     def has_text(self):
@@ -178,7 +178,7 @@ class MessageTextView(Gtk.TextView):
         return new_text # the position after *last* special text
 
     def get_active_tags(self):
-        start, finish = self.get_active_iters()
+        start = self.get_active_iters()[0]
         active_tags = []
         for tag in start.get_tags():
             active_tags.append(tag.get_property('name'))

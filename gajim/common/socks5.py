@@ -530,7 +530,7 @@ class Socks5:
             self._sock.connect(self._server)
             self._send=self._sock.send
             self._recv=self._sock.recv
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError) as e:
+        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError):
             pass
         except Exception as ee:
             errnum = ee.errno
@@ -1141,8 +1141,9 @@ class Socks5Server(Socks5):
                     self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
                     result = self.start_transfer() # send
                     self.queue.process_result(result, self)
-            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError) as e:
+            except (OpenSSL.SSL.WantReadError,
+                    OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError):
                 log.info('caught SSL exception, ignored')
         else:
             self.disconnect()
@@ -1179,8 +1180,9 @@ class Socks5Server(Socks5):
                 return
             else:
                 self.disconnect()
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError) as e:
+        except (OpenSSL.SSL.WantReadError,
+                OpenSSL.SSL.WantWriteError,
+                OpenSSL.SSL.WantX509LookupError):
             log.info('caught SSL exception, ignored')
             return
         if self.state < 5:
@@ -1221,15 +1223,17 @@ class Socks5Client(Socks5):
             addrlen = 0
             if address_type == 0x03:
                 addrlen = buff[4]
-                address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
+                # address = struct.unpack('!%ds' % addrlen, buff[5:addrlen + 5])
                 portlen = len(buff[addrlen + 5:])
-                if portlen == 1:
-                    port, = struct.unpack('!B', buff[addrlen + 5])
-                elif portlen == 2:
-                    port, = struct.unpack('!H', buff[addrlen + 5:])
-                else: # Gaim bug :)
-                    port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
+                # if portlen == 1:
+                #     port, = struct.unpack('!B', buff[addrlen + 5])
+                # elif portlen == 2:
+                #     port, = struct.unpack('!H', buff[addrlen + 5:])
+                # else: # Gaim bug :)
+                #     port, = struct.unpack('!H', buff[addrlen + 5:addrlen + 7])
+                if portlen not in (1, 2):
                     self.remaining_buff = buff[addrlen + 7:]
+
             self.state = 5 # for senders: init file_props and send '\n'
             if self.queue.on_success:
                 result = self.queue.send_success_reply(self.file_props,
@@ -1294,8 +1298,9 @@ class Socks5Client(Socks5):
                     self.idlequeue.set_read_timeout(self.fd, STALLED_TIMEOUT)
                     result = self.start_transfer() # receive
                     self.queue.process_result(result, self)
-            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError) as e:
+            except (OpenSSL.SSL.WantReadError,
+                    OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError):
                 log.info('caught SSL exception, ignored')
                 return
         else:
@@ -1318,8 +1323,9 @@ class Socks5Client(Socks5):
                 result = self.start_transfer() # send
                 self.queue.process_result(result, self)
                 return
-        except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-        OpenSSL.SSL.WantX509LookupError) as e:
+        except (OpenSSL.SSL.WantReadError,
+                OpenSSL.SSL.WantWriteError,
+                OpenSSL.SSL.WantX509LookupError):
             log.info('caught SSL exception, ignored')
             return
         self.state += 1
@@ -1430,7 +1436,6 @@ class Socks5Listener(IdleObject):
             # will fail when port as busy, or we don't have rights to bind
             try:
                 self._serv.bind(ai[4])
-                f = ai[4]
                 self.ai = ai
                 break
             except Exception:

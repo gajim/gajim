@@ -212,7 +212,7 @@ class P2PClient(IdleObject):
         return True
 
     def on_message_sent(self, connection_id):
-        id_, thread_id = \
+        id_, _thread_id = \
             self.conn_holder.ids_of_awaiting_messages[connection_id].pop(0)
         if self.on_ok:
             self.on_ok(id_)
@@ -452,7 +452,7 @@ class P2PConnection(IdleObject, PlugIn):
     def read_timeout(self):
         ids = self.client.conn_holder.ids_of_awaiting_messages
         if self.fd in ids and ids[self.fd]:
-            for (id_, thread_id) in ids[self.fd]:
+            for (_id, thread_id) in ids[self.fd]:
                 if hasattr(self._owner, 'Dispatcher'):
                     self._owner.Dispatcher.Event('', DATA_ERROR, (
                         self.client.to, thread_id))
