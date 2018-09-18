@@ -42,11 +42,11 @@ class CellRendererImage(Gtk.CellRendererPixbuf):
     def do_get_property(self, pspec):
         return getattr(self, pspec.name)
 
-    def do_activate(event, widget, path, bg_area, cell_area, flags):
+    def do_activate(self, *args, **kwargs):
         """Renderers cannot be activated; always return True."""
         return True
 
-    def do_editing_started(event, widget, path, fb_area, cell_area, flags):
+    def do_editing_started(self, *args, **kwargs):
         """Renderers cannot be edited; always return None."""
         return None
 
