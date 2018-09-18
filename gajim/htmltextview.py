@@ -804,7 +804,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             newLine = True
         elif name == 'img':
             pass
-        elif name == 'body' or name == 'html':
+        elif name in ('body', 'html'):
             pass
         elif name == 'a':
             pass

@@ -230,7 +230,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                 button.show()
                 text_button.hide()
                 continue
-            if i == 'ADR' or i == 'TEL' or i == 'EMAIL':
+            if i in ('ADR', 'TEL', 'EMAIL'):
                 for entry in vcard_[i]:
                     add_on = '_HOME'
                     if 'WORK' in entry:
