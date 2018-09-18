@@ -114,7 +114,6 @@ class PluginsWindow:
         app.plugin_manager.gui_extension_point('plugin_window', self)
 
         self.window.show_all()
-        gtkgui_helpers.possibly_move_window_in_current_desktop(self.window)
 
     def on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:

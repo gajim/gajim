@@ -316,39 +316,6 @@ def get_current_desktop(window):
         current_virtual_desktop_no = prop[2][0]
         return current_virtual_desktop_no
 
-def possibly_move_window_in_current_desktop(window):
-    """
-    Moves GTK window to current virtual desktop if it is not in the current
-    virtual desktop
-
-    NOTE: Window is a GDK window.
-    """
-    #TODO: property_get doesn't work:
-    #prop_atom = Gdk.Atom.intern('_NET_CURRENT_DESKTOP', False)
-    #type_atom = Gdk.Atom.intern("CARDINAL", False)
-    #w = Gdk.Screen.get_default().get_root_window()
-    #Gdk.property_get(w, prop_atom, type_atom, 0, 9999, False)
-    return False
-    if os.name == 'nt':
-        return False
-
-    root_window = Gdk.Screen.get_default().get_root_window()
-    # current user's vd
-    current_virtual_desktop_no = get_current_desktop(root_window)
-
-    # vd roster window is in
-    window_virtual_desktop = get_current_desktop(window.window)
-
-    # if one of those is None, something went wrong and we cannot know
-    # VD info, just hide it (default action) and not show it afterwards
-    if None not in (window_virtual_desktop, current_virtual_desktop_no):
-        if current_virtual_desktop_no != window_virtual_desktop:
-            # we are in another VD that the window was
-            # so show it in current VD
-            window.present()
-            return True
-    return False
-
 def file_is_locked(path_to_file):
     """
     Return True if file is locked
