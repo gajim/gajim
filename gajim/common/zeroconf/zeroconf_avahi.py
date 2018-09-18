@@ -99,7 +99,8 @@ class Zeroconf:
                             if resolved_info[i][ConstantRI.INTERFACE] == interface and resolved_info[i][ConstantRI.PROTOCOL] == protocol:
                                 del self.contacts[key][Constant.RESOLVED_INFO][i]
                         # if still something left, don't remove
-                        if len(self.contacts[key][Constant.RESOLVED_INFO]) > 1: return
+                        if len(self.contacts[key][Constant.RESOLVED_INFO]) > 1:
+                            return
                     del self.contacts[key]
                     self.remove_serviceCB(key)
                     return

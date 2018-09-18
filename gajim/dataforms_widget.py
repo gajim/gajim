@@ -349,7 +349,8 @@ class SingleForm(Gtk.Table):
 
         # for each field...
         for field in self._data_form.iter_fields():
-            if field.type_ == 'hidden': continue
+            if field.type_ == 'hidden':
+                continue
 
             commonlabel = True
             commonlabelcenter = False
