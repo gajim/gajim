@@ -120,7 +120,8 @@ if app.is_installed('GPG'):
             """
             Remove header and footer from data
             """
-            if not data: return ''
+            if not data:
+                return ''
             lines = data.splitlines()
             while lines[0] != '':
                 lines.remove(lines[0])
@@ -129,7 +130,8 @@ if app.is_installed('GPG'):
             i = 0
             for line in lines:
                 if line:
-                    if line[0] == '-': break
+                    if line[0] == '-':
+                        break
                 i = i+1
             line = '\n'.join(lines[0:i])
             return line

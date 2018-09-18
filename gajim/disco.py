@@ -2034,7 +2034,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         sensitive appropriately
         """
         # we have nothing to do if we don't have buttons...
-        if self.subscribe_button is None: return
+        if self.subscribe_button is None:
+            return
 
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
         if not iter_ or self.subscriptions is None:
@@ -2053,7 +2054,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Called when 'post' button is pressed. Open window to create post
         """
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
-        if iter_ is None: return
+        if iter_ is None:
+            return
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
 
@@ -2064,7 +2066,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Called when 'subscribe' button is pressed. Send subscribtion request
         """
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
-        if iter_ is None: return
+        if iter_ is None:
+            return
 
         node = model.get_value(iter_, 1)   # 1 = groupnode
 
@@ -2077,7 +2080,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         Called when 'unsubscribe' button is pressed. Send unsubscription request
         """
         model, iter_ = self.window.services_treeview.get_selection().get_selected()
-        if iter_ is None: return
+        if iter_ is None:
+            return
 
         node = model.get_value(iter_, 1) # 1 = groupnode
 
