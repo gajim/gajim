@@ -427,23 +427,28 @@ class MessageWindow:
                     new = 0
                 self.notebook.set_current_page(new)
                 return True
-            elif keyval == Gdk.KEY_Left: # ALT + LEFT
+
+            if keyval == Gdk.KEY_Left: # ALT + LEFT
                 new = self.notebook.get_current_page() - 1
                 if new < 0:
                     new = self.notebook.get_n_pages() - 1
                 self.notebook.set_current_page(new)
                 return True
-            elif chr(keyval) in st: # ALT + 1,2,3..
+
+            if chr(keyval) in st: # ALT + 1,2,3..
                 self.notebook.set_current_page(st.index(chr(keyval)))
                 return True
-            elif keyval == Gdk.KEY_m: # ALT + M show emoticons menu
+
+            if keyval == Gdk.KEY_m: # ALT + M show emoticons menu
                 control.emoticons_button.get_popover().show()
                 return True
-            elif control.type_id == message_control.TYPE_GC and \
-            keyval == Gdk.KEY_t: # ALT + t
+
+            if (control.type_id == message_control.TYPE_GC and
+                    keyval == Gdk.KEY_t): # ALT + t
                 self.window.lookup_action(
                     'change-subject-%s' % control.control_id).activate()
                 return True
+
         # Close tab bindings
         elif keyval == Gdk.KEY_Escape and \
         app.config.get('escape_key_closes'): # Escape
@@ -837,20 +842,22 @@ class MessageWindow:
                 self.move_to_next_unread_tab(False)
                 return True
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            elif event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
                 control.conv_textview.tv.event(event)
                 return True
+
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab: # CTRL + TAB
                 self.move_to_next_unread_tab(True)
                 return True
             # Ctrl+PageUP / DOWN has to be handled by notebook
-            elif event.keyval == Gdk.KEY_Page_Down:
+            if event.keyval == Gdk.KEY_Page_Down:
                 self.move_to_next_unread_tab(True)
                 return True
-            elif event.keyval == Gdk.KEY_Page_Up:
+            if event.keyval == Gdk.KEY_Page_Up:
                 self.move_to_next_unread_tab(False)
                 return True
+
         if event.keyval in (Gdk.KEY_Shift_L, Gdk.KEY_Shift_R,
         Gdk.KEY_Control_L, Gdk.KEY_Control_R, Gdk.KEY_Caps_Lock,
         Gdk.KEY_Shift_Lock, Gdk.KEY_Meta_L, Gdk.KEY_Meta_R,
@@ -1043,13 +1050,17 @@ class MessageWindowMgr(GObject.GObject):
             if resource:
                 key += '/' + resource
             return key
-        elif self.mode == self.ONE_MSG_WINDOW_ALWAYS:
+
+        if self.mode == self.ONE_MSG_WINDOW_ALWAYS:
             return self.MAIN_WIN
-        elif self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
+
+        if self.mode == self.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
             return self.ROSTER_MAIN_WIN
-        elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
+
+        if self.mode == self.ONE_MSG_WINDOW_PERACCT:
             return acct
-        elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
+
+        if self.mode == self.ONE_MSG_WINDOW_PERTYPE:
             return type_
 
     def create_window(self, contact, acct, type_, resource = None):
@@ -1195,7 +1206,7 @@ class MessageWindowMgr(GObject.GObject):
         if x < 0 or y < 0 or width < 0 or height < 0:
             return
 
-        elif self.mode == self.ONE_MSG_WINDOW_PERACCT:
+        if self.mode == self.ONE_MSG_WINDOW_PERACCT:
             acct = msg_win.account
         elif self.mode == self.ONE_MSG_WINDOW_PERTYPE:
             type_ = msg_win.type_

@@ -75,11 +75,10 @@ def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
 def get_icon_path(icon_name, size=16):
     try:
         icon_info = gtk_icon_theme.lookup_icon(icon_name, size, 0)
-        if icon_info == None:
+        if icon_info is None:
             log.error('Icon not found: %s', icon_name)
             return ''
-        else:
-            return icon_info.get_filename()
+        return icon_info.get_filename()
     except GLib.GError as error:
         log.error('Unable to find icon %s: %s', icon_name, str(error))
 
@@ -439,9 +438,9 @@ def scale_with_ratio(size, width, height):
     if height > width:
         ratio = height / float(width)
         return int(size / ratio), size
-    else:
-        ratio = width / float(height)
-        return size, int(size / ratio)
+
+    ratio = width / float(height)
+    return size, int(size / ratio)
 
 def scale_pixbuf(pixbuf, size):
     width, height = scale_with_ratio(size,
@@ -607,34 +606,37 @@ def get_pep_as_pixbuf(pep_class):
         mood = received_mood if received_mood in MOODS else 'unknown'
         pixbuf = load_mood_icon(mood).get_pixbuf()
         return pixbuf
-    elif pep_class == PEPEventType.TUNE:
+
+    if pep_class == PEPEventType.TUNE:
         icon = get_icon_pixmap('audio-x-generic', quiet=True)
         if not icon:
-            path = os.path.join(configpaths.get('DATA'), 'emoticons', 'static',
-                'music.png')
+            path = os.path.join(
+                configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
         return icon
-    elif pep_class == PEPEventType.ACTIVITY:
+
+    if pep_class == PEPEventType.ACTIVITY:
         pep_ = pep_class.data
         activity = pep_['activity']
 
         has_known_activity = activity in ACTIVITIES
-        has_known_subactivity = (has_known_activity  and ('subactivity' in pep_)
-                and (pep_['subactivity'] in ACTIVITIES[activity]))
+        has_known_subactivity = (has_known_activity and
+                                 'subactivity' in pep_ and
+                                 pep_['subactivity'] in ACTIVITIES[activity])
 
         if has_known_activity:
             if has_known_subactivity:
                 subactivity = pep_['subactivity']
                 return load_activity_icon(activity, subactivity).get_pixbuf()
-            else:
-                return load_activity_icon(activity).get_pixbuf()
-        else:
-            return load_activity_icon('unknown').get_pixbuf()
-    elif pep_class == PEPEventType.LOCATION:
+            return load_activity_icon(activity).get_pixbuf()
+        return load_activity_icon('unknown').get_pixbuf()
+
+    if pep_class == PEPEventType.LOCATION:
         icon = get_icon_pixmap('applications-internet', quiet=True)
         if not icon:
             icon = get_icon_pixmap('gajim-earth')
         return icon
+
     return None
 
 def get_iconset_name_for(name):

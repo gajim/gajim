@@ -115,26 +115,30 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
             self.search_entry.emit('next-match')
             return True
-        elif (event.state == Gdk.ModifierType.SHIFT_MASK and
+
+        if (event.state == Gdk.ModifierType.SHIFT_MASK and
               event.keyval == Gdk.KEY_ISO_Left_Tab):
             self.search_entry.emit('previous-match')
             return True
-        elif event.keyval == Gdk.KEY_Up:
+
+        if event.keyval == Gdk.KEY_Up:
             self.search_entry.emit('previous-match')
             return True
-        elif event.keyval == Gdk.KEY_Escape:
+
+        if event.keyval == Gdk.KEY_Escape:
             if self.search_entry.get_text() != '':
                 self.search_entry.emit('stop-search')
             else:
                 self.destroy()
             return True
-        elif event.keyval == Gdk.KEY_Return:
+
+        if event.keyval == Gdk.KEY_Return:
             row = self.listbox.get_selected_row()
             if row is not None:
                 row.emit('activate')
             return True
-        else:
-            self.search_entry.grab_focus_without_selecting()
+
+        self.search_entry.grab_focus_without_selecting()
 
     def _start_new_chat(self, row):
         if row.new:

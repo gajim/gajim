@@ -281,15 +281,13 @@ class ConnectionHandlersBase:
 
         if pm:
             return self.make_new_session(fjid, thread_id, type_='pm')
-        else:
-            return self.make_new_session(fjid, thread_id)
+        return self.make_new_session(fjid, thread_id)
 
     def find_session(self, jid, thread_id):
         try:
             if not thread_id:
                 return self.find_null_session(jid)
-            else:
-                return self.sessions[jid][thread_id]
+            return self.sessions[jid][thread_id]
         except KeyError:
             return None
 
@@ -324,10 +322,9 @@ class ConnectionHandlersBase:
 
         if chat_sessions:
             # return the session that we last sent a message in
-            return sorted(chat_sessions, key=operator.attrgetter('last_send'))[
-                -1]
-        else:
-            return None
+            return sorted(chat_sessions,
+                          key=operator.attrgetter('last_send'))[-1]
+        return None
 
     def get_latest_session(self, jid):
         """

@@ -93,10 +93,8 @@ class TextViewImage(Gtk.Image):
         if self._selected:
             if has_focus(parent):
                 return Gtk.StateType.SELECTED
-            else:
-                return Gtk.StateType.ACTIVE
-        else:
-            return Gtk.StateType.NORMAL
+            return Gtk.StateType.ACTIVE
+        return Gtk.StateType.NORMAL
 
     def _update_selected(self):
         selected = self._get_selected()
@@ -759,41 +757,42 @@ class ConversationTextview(GObject.GObject):
                     kind = 'sth_at_sth'
             else:
                 word = self.tv.get_buffer().get_text(begin_iter, end_iter, True)
+
             if event.button.button == 3: # right click
                 self.make_link_menu(event, kind, word)
                 return True
-            else:
-                self.plugin_modified = False
-                app.plugin_manager.extension_point(
-                    'hyperlink_handler', word, kind, self,
-                    self.tv.get_toplevel())
-                if self.plugin_modified:
-                    return
 
-                # we launch the correct application
-                if kind == 'xmpp':
-                    word = word[5:]
-                    if '?' in word:
-                        (jid, action) = word.split('?')
-                        if action == 'join':
-                            app.interface.join_gc_minimal(self.account, jid)
-                        else:
-                            self.on_start_chat_activate(None, jid)
+            self.plugin_modified = False
+            app.plugin_manager.extension_point(
+                'hyperlink_handler', word, kind, self,
+                self.tv.get_toplevel())
+            if self.plugin_modified:
+                return
+
+            # we launch the correct application
+            if kind == 'xmpp':
+                word = word[5:]
+                if '?' in word:
+                    (jid, action) = word.split('?')
+                    if action == 'join':
+                        app.interface.join_gc_minimal(self.account, jid)
                     else:
-                        self.on_start_chat_activate(None, word)
-                # handle geo:-URIs
-                elif word[:4] == 'geo:':
-                    location = word[4:]
-                    lat, _, lon = location.partition(',')
-                    if lon == '':
-                        return
-                    uri = 'https://www.openstreetmap.org/?' \
-                          'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
-                          {'lat': lat, 'lon': lon}
-                    helpers.launch_browser_mailer(kind, uri)
-                # other URIs
+                        self.on_start_chat_activate(None, jid)
                 else:
-                    helpers.launch_browser_mailer(kind, word)
+                    self.on_start_chat_activate(None, word)
+            # handle geo:-URIs
+            elif word[:4] == 'geo:':
+                location = word[4:]
+                lat, _, lon = location.partition(',')
+                if lon == '':
+                    return
+                uri = 'https://www.openstreetmap.org/?' \
+                      'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
+                      {'lat': lat, 'lon': lon}
+                helpers.launch_browser_mailer(kind, uri)
+            # other URIs
+            else:
+                helpers.launch_browser_mailer(kind, word)
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True,
     iter_=None, additional_data=None):
@@ -1274,7 +1273,7 @@ class ConversationTextview(GObject.GObject):
     def detect_other_text_tag(self, text, kind):
         if kind == 'status':
             return kind
-        elif text.startswith('/me ') or text.startswith('/me\n'):
+        if text.startswith('/me ') or text.startswith('/me\n'):
             return kind
 
     def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
@@ -1389,8 +1388,7 @@ class ConversationTextview(GObject.GObject):
         if self.plugin_modified:
             if not mark:
                 return buffer_.get_end_iter()
-            else:
-                return buffer_.get_iter_at_mark(mark)
+            return buffer_.get_iter_at_mark(mark)
 
         if not mark:
             iter_ = buffer_.get_end_iter()

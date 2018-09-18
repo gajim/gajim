@@ -213,7 +213,7 @@ class SocksQueue:
             if 'idx' in host:
                 if host['state'] >= 0:
                     return
-                elif host['state'] == -2:
+                if host['state'] == -2:
                     unused_hosts = True
         if unused_hosts:
             for host in file_props.streamhosts:
@@ -541,12 +541,12 @@ class Socks5:
                 self.connected = False
                 return None
             # win32 needs this
-            elif errnum not in  (10056, EISCONN) or self.state != 0:
+            if errnum not in  (10056, EISCONN) or self.state != 0:
                 return None
-            else: # socket is already connected
-                self._sock.setblocking(False)
-                self._send=self._sock.send
-                self._recv=self._sock.recv
+            # socket is already connected
+            self._sock.setblocking(False)
+            self._send=self._sock.send
+            self._recv=self._sock.recv
         self.buff = ''
         self.connected = True
         self.file_props.connected = True
@@ -1312,7 +1312,7 @@ class Socks5Client(Socks5):
             if self.state == 0:
                 self.do_connect()
                 return
-            elif self.state == 1: # send initially: version and auth types
+            if self.state == 1: # send initially: version and auth types
                 self.send_raw(self._get_auth_buff())
             elif self.state == 3: # send 'connect' request
                 self.send_raw(self._get_request_buff(self._get_sha1_auth()))

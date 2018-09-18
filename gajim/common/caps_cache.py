@@ -71,12 +71,11 @@ def client_supports(client_caps, requested_feature):
     supported_features = cache_item.features
     if requested_feature in supported_features:
         return True
-    elif not supported_features and cache_item.status in (NEW, QUERIED, FAKED):
+    if not supported_features and cache_item.status in (NEW, QUERIED, FAKED):
         # assume feature is supported, if we don't know yet, what the client
         # is capable of
         return requested_feature not in FEATURE_BLACKLIST
-    else:
-        return False
+    return False
 
 def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
     """
@@ -478,7 +477,7 @@ class MucCapsCache:
         try:
             if nbxmpp.NS_MAM_2 in self.cache[jid].features:
                 return nbxmpp.NS_MAM_2
-            elif nbxmpp.NS_MAM_1 in self.cache[jid].features:
+            if nbxmpp.NS_MAM_1 in self.cache[jid].features:
                 return nbxmpp.NS_MAM_1
         except (KeyError, AttributeError):
             return

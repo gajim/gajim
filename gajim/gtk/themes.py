@@ -402,8 +402,7 @@ class Option(Gtk.ListBoxRow):
     def __eq__(self, other):
         if isinstance(other, ChooseOption):
             return other.option == self._option
-        else:
-            return other._option == self._option
+        return other._option == self._option
 
 
 class ChooseOption(Gtk.ListBoxRow):

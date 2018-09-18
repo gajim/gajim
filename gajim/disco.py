@@ -196,14 +196,13 @@ class CacheDictionary:
 
 _icon_cache = CacheDictionary(15)
 
-def get_agent_address(jid, node = None):
+def get_agent_address(jid, node=None):
     """
     Get an agent's address for displaying in the GUI
     """
     if node:
         return '%s@%s' % (node, str(jid))
-    else:
-        return str(jid)
+    return str(jid)
 
 class Closure:
     """
@@ -668,18 +667,20 @@ _('Without a connection, you can not browse available services'))
             if not self.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.destroy()
-            ErrorDialog(_('The service could not be found'),
+            ErrorDialog(
+                _('The service could not be found'),
                 _('There is no service at the address you entered, or it is '
-                'not responding. Check the address and try again.'),
+                  'not responding. Check the address and try again.'),
                 transient_for=self.window)
             return
         klass = self.cache.get_browser(identities, features)
         if not klass:
-            ErrorDialog(_('The service is not browsable'),
+            ErrorDialog(
+                _('The service is not browsable'),
                 _('This type of service does not contain any items to browse.'),
                 transient_for=self.window)
             return
-        elif klass is None:
+        if klass is None:
             klass = AgentBrowser
         self.browser = klass(self.account, jid, node)
         self.browser.prepare_window(self)

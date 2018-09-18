@@ -1081,7 +1081,7 @@ class ChatControl(ChatControlBase):
         if self.contact.jid == app.get_jid_from_account(self.account):
             return
 
-        elif chatstate_setting == 'composing_only' and state != 'active' and\
+        if chatstate_setting == 'composing_only' and state != 'active' and\
                 state != 'composing':
             return
 

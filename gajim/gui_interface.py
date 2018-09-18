@@ -1631,8 +1631,7 @@ class Interface:
             if jid in self.minimized_controls[account]:
                 self.roster.on_groupchat_maximized(None, jid, account)
                 return
-            else:
-                ctrl = self.msg_win_mgr.get_gc_control(jid, account)
+            ctrl = self.msg_win_mgr.get_gc_control(jid, account)
 
         elif type_ in ('printed_chat', 'chat', ''):
             # '' is for log in/out notifications
@@ -2424,31 +2423,32 @@ class Interface:
             received_mood = pep_obj.data['mood']
             mood = received_mood if received_mood in MOODS else 'unknown'
             return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
-        elif pep_obj == PEPEventType.TUNE:
+
+        if pep_obj == PEPEventType.TUNE:
             path = os.path.join(
                 configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
             return GdkPixbuf.Pixbuf.new_from_file(path)
-        elif pep_obj == PEPEventType.ACTIVITY:
+
+        if pep_obj == PEPEventType.ACTIVITY:
             pep_ = pep_obj.data
             activity = pep_['activity']
 
             has_known_activity = activity in ACTIVITIES
-            has_known_subactivity = (has_known_activity  and ('subactivity' in
-                pep_) and (pep_['subactivity'] in ACTIVITIES[activity]))
+            has_known_subactivity = (has_known_activity and
+                                     'subactivity' in pep_ and
+                                     pep_['subactivity'] in ACTIVITIES[activity])
 
             if has_known_activity:
                 if has_known_subactivity:
                     subactivity = pep_['subactivity']
-                    return gtkgui_helpers.load_activity_icon(activity,
-                        subactivity).get_pixbuf()
-                else:
-                    return gtkgui_helpers.load_activity_icon(activity).\
-                        get_pixbuf()
-            else:
-                return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
-        elif pep_obj == PEPEventType.LOCATION:
-            icon = gtkgui_helpers.get_icon_pixmap('applications-internet',
-                quiet=True)
+                    return gtkgui_helpers.load_activity_icon(
+                        activity, subactivity).get_pixbuf()
+                return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
+            return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
+
+        if pep_obj == PEPEventType.LOCATION:
+            icon = gtkgui_helpers.get_icon_pixmap(
+                'applications-internet', quiet=True)
             return icon
 
     @staticmethod
@@ -2823,8 +2823,9 @@ class PassphraseRequest:
 
     def create_dialog(self, account):
         title = _('Passphrase Required')
-        second = _('Enter OpenPGP key passphrase for key %(keyid)s (account '
-            '%(account)s).') % {'keyid': self.keyid, 'account': account}
+        second = _('Enter OpenPGP key passphrase for key %(keyid)s '
+                   '(account %(account)s).') % {'keyid': self.keyid,
+                                                'account': account}
 
         def _cancel():
             # user cancelled, continue without GPG
@@ -2836,10 +2837,12 @@ class PassphraseRequest:
                 # passphrase is good
                 self.complete(passphrase)
                 return
-            elif result == 'expired':
-                ErrorDialog(_('OpenPGP key expired'),
+
+            if result == 'expired':
+                ErrorDialog(
+                    _('OpenPGP key expired'),
                     _('Your OpenPGP key has expired, you will be connected to '
-                    '%s without OpenPGP.') % account)
+                      '%s without OpenPGP.') % account)
                 # Don't try to connect with GPG
                 app.connections[account].continue_connect_info[2] = False
                 self.complete(None)
@@ -2847,15 +2850,16 @@ class PassphraseRequest:
 
             if count < 3:
                 # ask again
-                dialogs.PassphraseDialog(_('Wrong Passphrase'),
+                dialogs.PassphraseDialog(
+                    _('Wrong Passphrase'),
                     _('Please retype your OpenPGP passphrase or press Cancel.'),
                     ok_handler=(_ok, count + 1), cancel_handler=_cancel)
             else:
                 # user failed 3 times, continue without GPG
                 self.complete(None)
 
-        self.dialog = dialogs.PassphraseDialog(title, second, ok_handler=(_ok,
-            1), cancel_handler=_cancel)
+        self.dialog = dialogs.PassphraseDialog(
+            title, second, ok_handler=(_ok, 1), cancel_handler=_cancel)
         self.dialog_created = True
 
 

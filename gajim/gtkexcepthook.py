@@ -127,7 +127,7 @@ def init():
 def get_os_info():
     if os.name == 'nt' or sys.platform == 'darwin':
         return platform.system() + " " + platform.release()
-    elif os.name == 'posix':
+    if os.name == 'posix':
         try:
             import distro
             return distro.name(pretty=True)

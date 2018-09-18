@@ -474,14 +474,16 @@ class P2PConnection(IdleObject, PlugIn):
             errors += (errno.WSAEINVAL,)
         if errnum in errors:
             return
+
         # win32 needs this
-        elif errnum not in (0, 10056, errno.EISCONN) or self.state != 0:
+        if errnum not in (0, 10056, errno.EISCONN) or self.state != 0:
             log.error('Could not connect to %s: %s [%s]', str(self.host),
                 errnum, errstr)
             self.connect_to_next_ip()
             return
-        else: # socket is already connected
-            self._sock.setblocking(False)
+
+        # socket is already connected
+        self._sock.setblocking(False)
         self.state = 1 # connected
         # we are connected
         self.on_connect(self)

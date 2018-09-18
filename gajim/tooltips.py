@@ -586,7 +586,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
         """
         if contact.ask == 'subscribe':
             return 'requested'
-        elif contact.sub in ('both', 'to', ''):
+        if contact.sub in ('both', 'to', ''):
             return contact.show
         return 'not in roster'
 

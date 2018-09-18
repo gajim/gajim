@@ -356,8 +356,7 @@ def get_resource_from_jid(jid):
     jids = jid.split('/', 1)
     if len(jids) > 1:
         return jids[1] # abc@doremi.org/res/res-continued
-    else:
-        return ''
+    return ''
 
 def get_number_of_accounts():
     """
@@ -481,14 +480,13 @@ def get_transport_name_from_jid(jid, use_config_setting = True):
 
     if host in ('irc', 'icq', 'sms', 'weather', 'mrim', 'facebook'):
         return host
-    elif host == 'gg':
+    if host == 'gg':
         return 'gadu-gadu'
-    elif host == 'jit':
+    if host == 'jit':
         return 'icq'
-    elif host == 'facebook':
+    if host == 'facebook':
         return 'facebook'
-    else:
-        return None
+    return None
 
 def jid_is_transport(jid):
     # if not '@' or '@' starts the jid then it is transport

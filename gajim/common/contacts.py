@@ -88,8 +88,7 @@ class CommonContact(XMPPEntity):
             # show, so we can be sure it's existant. Otherwise, we still
             # return caps for a contact that has no resources left.
             return False
-        else:
-            return caps_cache.client_supports(self.client_caps, requested_feature)
+        return caps_cache.client_supports(self.client_caps, requested_feature)
 
 
 class Contact(CommonContact):
@@ -136,14 +135,13 @@ class Contact(CommonContact):
     def get_shown_groups(self):
         if self.is_observer():
             return [_('Observers')]
-        elif self.is_groupchat():
+        if self.is_groupchat():
             return [_('Groupchats')]
-        elif self.is_transport():
+        if self.is_transport():
             return [_('Transports')]
-        elif not self.groups:
+        if not self.groups:
             return [_('General')]
-        else:
-            return self.groups
+        return self.groups
 
     def is_hidden_from_roster(self):
         """
@@ -415,8 +413,7 @@ class LegacyContactsAPI:
         # Only called if self has no attr_name
         if hasattr(self._metacontact_manager, attr_name):
             return getattr(self._metacontact_manager, attr_name)
-        else:
-            raise AttributeError(attr_name)
+        raise AttributeError(attr_name)
 
     def create_gc_contact(self, room_jid, account, name='', show='', status='',
             role='', affiliation='', jid='', resource='', avatar_sha=None):

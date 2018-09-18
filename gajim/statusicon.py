@@ -133,9 +133,9 @@ class StatusIcon:
             icon_name = gtkgui_helpers.get_iconset_name_for('event')
             self.status_icon.set_from_icon_name(icon_name)
             return
-        else:
-            if app.config.get('trayicon') == 'on_event':
-                self.status_icon.set_visible(False)
+
+        if app.config.get('trayicon') == 'on_event':
+            self.status_icon.set_visible(False)
 
         icon_name = gtkgui_helpers.get_iconset_name_for(self.status)
         self.status_icon.set_from_icon_name(icon_name)

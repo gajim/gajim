@@ -877,9 +877,7 @@ class RosterWindow:
                 del app.interface.minimized_controls[account][jid]
             self.remove_contact(jid, account, force=True, backend=True, maximize=maximize)
             return True
-        else:
-            return False
-
+        return False
 
     # FIXME: This function is yet unused! Port to new API
     def add_transport(self, jid, account):
@@ -1362,14 +1360,17 @@ class RosterWindow:
     def _is_pep_shown_in_roster(self, pep_type):
         if pep_type == 'mood':
             return app.config.get('show_mood_in_roster')
-        elif pep_type == 'activity':
+
+        if pep_type == 'activity':
             return app.config.get('show_activity_in_roster')
-        elif pep_type == 'tune':
+
+        if pep_type == 'tune':
             return  app.config.get('show_tunes_in_roster')
-        elif pep_type == 'geoloc':
+
+        if pep_type == 'geoloc':
             return  app.config.get('show_location_in_roster')
-        else:
-            return False
+
+        return False
 
     def draw_all_pep_types(self, jid, account, contact=None):
         for pep_type in self._pep_type_to_model_column:
@@ -1803,7 +1804,7 @@ class RosterWindow:
                 return 1
             if show1 < show2:
                 return -1
-            elif show1 > show2:
+            if show1 > show2:
                 return 1
         # We compare names
         cmp_result = locale.strcoll(name1.lower(), name2.lower())
@@ -1971,17 +1972,20 @@ class RosterWindow:
                 session=event.session, form_node=event.form_node)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'file-request':
+
+        if event.type_ == 'file-request':
             contact = app.contacts.get_contact_with_highest_priority(account,
                     jid)
             ft.show_file_request(account, contact, event.file_props)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ in ('file-request-error', 'file-send-error'):
+
+        if event.type_ in ('file-request-error', 'file-send-error'):
             ft.show_send_error(event.file_props)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ in ('file-error', 'file-stopped'):
+
+        if event.type_ in ('file-error', 'file-stopped'):
             msg_err = ''
             if event.file_props.error == -1:
                 msg_err = _('Remote contact stopped transfer')
@@ -1990,34 +1994,41 @@ class RosterWindow:
             ft.show_stopped(jid, event.file_props, error_msg=msg_err)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'file-hash-error':
+
+        if event.type_ == 'file-hash-error':
             ft.show_hash_error(jid, event.file_props, account)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'file-completed':
+
+        if event.type_ == 'file-completed':
             ft.show_completed(jid, event.file_props)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'gc-invitation':
+
+        if event.type_ == 'gc-invitation':
             dialogs.InvitationReceivedDialog(account, event.room_jid,
                 event.jid_from, event.password, event.reason,
                 is_continued=event.is_continued)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'subscription_request':
+
+        if event.type_ == 'subscription_request':
             dialogs.SubscriptionRequestWindow(jid, event.text, account,
                 event.nick)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'unsubscribed':
+
+        if event.type_ == 'unsubscribed':
             app.interface.show_unsubscribed_dialog(account, event.contact)
             app.events.remove_events(account, jid, event)
             return True
-        elif event.type_ == 'jingle-incoming':
+
+        if event.type_ == 'jingle-incoming':
             dialogs.VoIPCallReceivedDialog(account, event.peerjid, event.sid,
                 event.content_types)
             app.events.remove_events(account, jid, event)
             return True
+
         return False
 
 ################################################################################
@@ -3244,7 +3255,7 @@ class RosterWindow:
             if model.iter_has_child(iter_) and self.tree.row_expanded(path):
                 self.tree.collapse_row(path)
                 return True
-            elif path.get_depth() > 1:
+            if path.get_depth() > 1:
                 self.tree.set_cursor(path[:-1])
                 return True
         elif event.keyval == Gdk.KEY_Right:
@@ -3291,7 +3302,7 @@ class RosterWindow:
                             self.send_pep(account, pep_dict)
                 dialogs.ChangeStatusMessageDialog(on_response, status)
                 return True
-            elif keyval == Gdk.KEY_k: # CTRL + k
+            if keyval == Gdk.KEY_k: # CTRL + k
                 self.enable_rfilter('')
 
     def on_roster_treeview_button_press_event(self, widget, event):
@@ -3313,7 +3324,7 @@ class RosterWindow:
                 self.tree.get_selection().select_path(path)
             return self.show_treeview_menu(event)
 
-        elif event.button == 2: # Middle click
+        if event.button == 2: # Middle click
             try:
                 model, list_of_paths = self.tree.get_selection().\
                     get_selected_rows()
@@ -3349,7 +3360,7 @@ class RosterWindow:
                 dialogs.ChangeStatusMessageDialog(on_response, show)
             return True
 
-        elif event.button == 1: # Left click
+        if event.button == 1: # Left click
             model = self.modelfilter
             type_ = model[path][Column.TYPE]
             # x_min is the x start position of status icon column
@@ -3357,8 +3368,9 @@ class RosterWindow:
                 x_min = AvatarSize.ROSTER
             else:
                 x_min = 0
-            if app.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
-            not event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+            if (app.single_click and
+                not event.get_state() & Gdk.ModifierType.SHIFT_MASK and
+                    not event.get_state() & Gdk.ModifierType.CONTROL_MASK):
                 # Don't handle double click if we press icon of a metacontact
                 titer = model.get_iter(path)
                 if x > x_min and x < x_min + 27 and type_ == 'contact' and \
@@ -3373,19 +3385,19 @@ class RosterWindow:
                 # chat window
                 self.clicked_path = path
                 return
-            else:
-                if type_ == 'group' and x < 27:
-                    # first cell in 1st column (the arrow SINGLE clicked)
-                    if self.tree.row_expanded(path):
-                        self.tree.collapse_row(path)
-                    else:
-                        self.expand_group_row(path)
 
-                elif type_ == 'contact' and x > x_min and x < x_min + 27:
-                    if self.tree.row_expanded(path):
-                        self.tree.collapse_row(path)
-                    else:
-                        self.tree.expand_row(path, False)
+            if type_ == 'group' and x < 27:
+                # first cell in 1st column (the arrow SINGLE clicked)
+                if self.tree.row_expanded(path):
+                    self.tree.collapse_row(path)
+                else:
+                    self.expand_group_row(path)
+
+            elif type_ == 'contact' and x > x_min and x < x_min + 27:
+                if self.tree.row_expanded(path):
+                    self.tree.collapse_row(path)
+                else:
+                    self.tree.expand_row(path, False)
 
     def expand_group_row(self, path):
         self.tree.expand_row(path, False)

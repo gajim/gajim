@@ -311,9 +311,9 @@ class ChooseGPGKeyDialog:
         value2 = model[iter2][1]
         if value1 == _('None'):
             return -1
-        elif value2 == _('None'):
+        if value2 == _('None'):
             return 1
-        elif value1 < value2:
+        if value1 < value2:
             return -1
         return 1
 
@@ -570,13 +570,13 @@ class TimeoutDialog:
             if self.countdown_left <= 0:
                 self.on_timeout()
                 return False
-            self.dialog.set_title('%s [%s]' % (self.title_text,
-                    str(self.countdown_left)))
+            self.dialog.set_title('%s [%s]' % (
+                self.title_text, str(self.countdown_left)))
             self.countdown_left -= 1
             return True
-        else:
-            self.dialog.set_title(self.title_text)
-            return False
+
+        self.dialog.set_title(self.title_text)
+        return False
 
 class ChangeStatusMessageDialog(TimeoutDialog):
     def __init__(self, on_response, show=None, show_pep=True):
@@ -970,12 +970,12 @@ class SynchroniseSelectAccountDialog:
             ErrorDialog(_('This account is not connected to the server'),
                 _('You cannot synchronize with an account unless it is connected.'))
             return
-        else:
-            try:
-                SynchroniseSelectContactsDialog(self.account, remote_account)
-            except GajimGeneralException:
-                # if we showed ErrorDialog, there will not be dialog instance
-                return
+
+        try:
+            SynchroniseSelectContactsDialog(self.account, remote_account)
+        except GajimGeneralException:
+            # if we showed ErrorDialog, there will not be dialog instance
+            return
         self.dialog.destroy()
 
     @staticmethod
@@ -1609,8 +1609,7 @@ class VoIPCallReceivedDialog:
     def get_dialog(cls, jid, sid):
         if (jid, sid) in cls.instances:
             return cls.instances[(jid, sid)]
-        else:
-            return None
+        return None
 
     def set_secondary_text(self):
         if 'audio' in self.content_types and 'video' in self.content_types:
