@@ -104,32 +104,32 @@ def list_commands(host):
 
 class Dispatchable(type):
     # pylint: disable=no-value-for-parameter
-    def __init__(self, name, bases, namespace):
-        parents = super(Dispatchable, self)
+    def __init__(cls, name, bases, namespace):
+        parents = super(Dispatchable, cls)
         parents.__init__(name, bases, namespace)
         if not is_root(namespace):
-            self.dispatch()
+            cls.dispatch()
 
-    def dispatch(self):
-        if self.AUTOMATIC:
-            self.enable()
+    def dispatch(cls):
+        if cls.AUTOMATIC:
+            cls.enable()
 
 
 class Host(Dispatchable):
 
-    def enable(self):
-        add_host(self)
+    def enable(cls):
+        add_host(cls)
 
-    def disable(self):
-        remove_host(self)
+    def disable(cls):
+        remove_host(cls)
 
 
 class Container(Dispatchable):
 
-    def enable(self):
-        add_container(self)
-        add_commands(self)
+    def enable(cls):
+        add_container(cls)
+        add_commands(cls)
 
-    def disable(self):
-        remove_commands(self)
-        remove_container(self)
+    def disable(cls):
+        remove_commands(cls)
+        remove_container(cls)
