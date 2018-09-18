@@ -61,7 +61,7 @@ class Event:
 
 class ChatEvent(Event):
     type_ = 'chat'
-    def __init__ (self, message, subject, kind, time_, encrypted, resource,
+    def __init__(self, message, subject, kind, time_, encrypted, resource,
     msg_log_id, correct_id=None, xhtml=None, session=None, form_node=None,
     displaymarking=None, sent_forwarded=False, show_in_roster=False,
     show_in_systray=True, additional_data=None):
@@ -301,7 +301,7 @@ class Events:
     def get_nb_events(self, types=None, account=None):
         if types is None:
             types = []
-        return self._get_nb_events(types = types, account = account)
+        return self._get_nb_events(types=types, account=account)
 
     def get_events(self, account, jid=None, types=None):
         """

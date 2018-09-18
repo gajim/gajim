@@ -58,7 +58,7 @@ class DomainBrowser(IntEnum):
 class Protocol(IntEnum):
     UNSPEC = -1
     INET = 0
-    INET6  = 1
+    INET6 = 1
 
 
 class Interface(IntEnum):

@@ -1306,7 +1306,7 @@ class GroupchatControl(ChatControlBase):
         except KeyError:
             return None
 
-    def print_old_conversation(self, text, contact='', tim=None, xhtml = None,
+    def print_old_conversation(self, text, contact='', tim=None, xhtml=None,
     displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
         if additional_data is None:
             additional_data = {}
@@ -1893,19 +1893,19 @@ class GroupchatControl(ChatControlBase):
                     self.print_conversation(s, 'info', graphics=False)
                 elif '321' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': nick,
-                        'reason': _('affiliation changed') }
+                        '(%(reason)s)') % {'nick': nick,
+                        'reason': _('affiliation changed')}
                     self.print_conversation(s, 'info', graphics=False)
                 elif '322' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % { 'nick': nick,
+                        '(%(reason)s)') % {'nick': nick,
                         'reason': _('room configuration changed to '
-                        'members-only') }
+                        'members-only')}
                     self.print_conversation(s, 'info', graphics=False)
                 elif '332' in obj.status_code:
                     s = _('%(nick)s has been removed from the room '
                         '(%(reason)s)') % {'nick': nick,
-                        'reason': _('system shutdown') }
+                        'reason': _('system shutdown')}
                     self.print_conversation(s, 'info', graphics=False)
                 # Room has been destroyed.
                 elif 'destroyed' in obj.status_code:
@@ -2640,7 +2640,7 @@ class GroupchatControl(ChatControlBase):
         item.set_active(target_role != 'visitor')
         if user_role != 'moderator' or \
         user_affiliation == 'none' or \
-        (user_affiliation=='member' and target_affiliation!='none') or \
+        (user_affiliation == 'member' and target_affiliation != 'none') or \
         target_affiliation in ('admin', 'owner'):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_voice_checkmenuitem_activate,
@@ -2695,7 +2695,7 @@ class GroupchatControl(ChatControlBase):
             bookmarked = False
             contact = app.contacts.get_contact(self.account, jid, c.resource)
             if contact and contact.supports(nbxmpp.NS_CONFERENCE):
-                bookmarked=True
+                bookmarked = True
             gui_menu_builder.build_invite_submenu(item, ((c, self.account),),
                 ignore_rooms=[self.room_jid], show_bookmarked=bookmarked)
         else:

@@ -567,7 +567,7 @@ class HistoryWindow:
             else:
                 message = _('%(nick)s is now %(status)s') % {
                     'nick': contact_name,
-                    'status': helpers.get_uf_show(show) }
+                    'status': helpers.get_uf_show(show)}
             tag_msg = 'status'
         else:  # 'status'
             # message here (if not None) is status message

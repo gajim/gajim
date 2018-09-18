@@ -96,14 +96,14 @@ class AdvancedConfigurationWindow:
         self.modelfilter.set_visible_func(self.visible_func)
 
         renderer_text = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(_('Preference Name'), renderer_text, text = 0)
+        col = Gtk.TreeViewColumn(_('Preference Name'), renderer_text, text=0)
         treeview.insert_column(col, -1)
         col.set_resizable(True)
 
         renderer_text = Gtk.CellRendererText()
         renderer_text.connect('edited', self.on_config_edited)
         renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
-        col = Gtk.TreeViewColumn(_('Value'),renderer_text, text = 1)
+        col = Gtk.TreeViewColumn(_('Value'), renderer_text, text=1)
         treeview.insert_column(col, -1)
         col.set_cell_data_func(renderer_text, self.cb_value_column_data)
 
@@ -112,7 +112,7 @@ class AdvancedConfigurationWindow:
         col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
 
         renderer_text = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(_('Type'), renderer_text, text = 2)
+        col = Gtk.TreeViewColumn(_('Type'), renderer_text, text=2)
         treeview.insert_column(col, -1)
         col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
 
@@ -211,7 +211,7 @@ class AdvancedConfigurationWindow:
         self.restart_box.hide()
         for opt in self.changed_opts:
             opt_path = opt.split('\n')
-            if len(opt_path)==3:
+            if len(opt_path) == 3:
                 restart = app.config.get_restart_per(opt_path[2], opt_path[1],
                         opt_path[0])
             else:
@@ -224,7 +224,7 @@ class AdvancedConfigurationWindow:
 
     def on_config_edited(self, cell, path, text):
         # convert modelfilter path to model path
-        path=Gtk.TreePath.new_from_string(path)
+        path = Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
         option = modelrow[0]
@@ -253,7 +253,7 @@ class AdvancedConfigurationWindow:
         # Check for GtkTreeIter
         if iter_:
             path = model.get_path(iter_)
-            opt_path =  self.get_option_path(model, iter_)
+            opt_path = self.get_option_path(model, iter_)
             if len(opt_path) == 1:
                 default = app.config.get_default(opt_path[0])
             elif len(opt_path) == 3:
@@ -311,7 +311,7 @@ class AdvancedConfigurationWindow:
                 self.model.append(parent, [name, value, type_])
 
     def visible_func(self, model, treeiter, data):
-        search_string  = self.entry.get_text().lower()
+        search_string = self.entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][Column.TYPE] != '':
                 opt_path = self.get_option_path(model, it)

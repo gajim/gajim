@@ -1010,9 +1010,9 @@ class Logger:
                 lang = data[i + 2]
                 name = data[i + 3]
                 identities.append({'category': category, 'type': type_,
-                        'xml:lang': lang, 'name': name})
+                                   'xml:lang': lang, 'name': name})
                 i += 4
-            i+=1
+            i += 1
             while i < len(data):
                 features.append(data[i])
                 i += 1

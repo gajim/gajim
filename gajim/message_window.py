@@ -109,7 +109,7 @@ class MessageWindow:
         id_ = self.window.connect('focus-in-event', self._on_window_focus)
         self.handlers[id_] = self.window
 
-        keys=['<Control>f', '<Control>g', '<Control>h', '<Control>i',
+        keys = ['<Control>f', '<Control>g', '<Control>h', '<Control>i',
                 '<Control>l', '<Control>L', '<Control><Shift>n', '<Control>u',
                 '<Control>b', '<Control>F4',
                 '<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
@@ -546,7 +546,7 @@ class MessageWindow:
         self.window.present()
         GLib.idle_add(ctrl.msg_textview.grab_focus)
 
-    def remove_tab(self, ctrl, method, reason = None, force = False):
+    def remove_tab(self, ctrl, method, reason=None, force=False):
         """
         Reason is only for gc (offline status message) if force is True, do not
         ask any confirmation
@@ -557,8 +557,9 @@ class MessageWindow:
             else: # We are leaving gc without status message or it's a chat
                 ctrl.shutdown()
             # Update external state
-            app.events.remove_events(ctrl.account, ctrl.get_full_jid,
-                    types = ['printed_msg', 'chat', 'gc_msg'])
+            app.events.remove_events(
+                ctrl.account, ctrl.get_full_jid,
+                types=['printed_msg', 'chat', 'gc_msg'])
 
             fjid = ctrl.get_full_jid()
             jid = app.get_jid_without_resource(fjid)
@@ -821,7 +822,7 @@ class MessageWindow:
 
         new_ctrl = self._widget_to_control(notebook.get_nth_page(page_num))
         new_ctrl.set_control_active(True)
-        self.show_title(control = new_ctrl)
+        self.show_title(control=new_ctrl)
 
         control = self.get_active_control()
         if isinstance(control, ChatControlBase):
@@ -1044,7 +1045,7 @@ class MessageWindowMgr(GObject.GObject):
 
         gtkgui_helpers.move_window(win.window, pos[0], pos[1])
 
-    def _mode_to_key(self, contact, acct, type_, resource = None):
+    def _mode_to_key(self, contact, acct, type_, resource=None):
         if self.mode == self.ONE_MSG_WINDOW_NEVER:
             key = acct + contact.jid
             if resource:
@@ -1063,7 +1064,7 @@ class MessageWindowMgr(GObject.GObject):
         if self.mode == self.ONE_MSG_WINDOW_PERTYPE:
             return type_
 
-    def create_window(self, contact, acct, type_, resource = None):
+    def create_window(self, contact, acct, type_, resource=None):
         win_acct = None
         win_type = None
         win_role = None # X11 window role

@@ -315,7 +315,7 @@ class P2PClient(IdleObject):
     def _register_handlers(self):
         self._caller.peerhost = self.Connection._sock.getsockname()
         self.RegisterHandler('message', lambda conn,
-            data:self._caller._messageCB(self.Server, conn, data))
+            data: self._caller._messageCB(self.Server, conn, data))
         self.RegisterHandler('iq', self._caller._siSetCB, 'set', nbxmpp.NS_SI)
         self.RegisterHandler('iq', self._caller._siErrorCB, 'error',
             nbxmpp.NS_SI)
@@ -522,7 +522,7 @@ class P2PConnection(IdleObject, PlugIn):
             self.pollend()
             # don't proccess result, cas it will raise error
             return
-        elif not received :
+        elif not received:
             if errnum != ssl.SSL_ERROR_EOF:
                 # 8 EOF occurred in violation of protocol
                 self.pollend()
@@ -716,7 +716,7 @@ class ClientZeroconf:
             connection.force_disconnect()
 
     def add_connection(self, connection, ip, port, recipient):
-        sock_hash=connection.sock_hash
+        sock_hash = connection.sock_hash
         if sock_hash not in self.connections:
             self.connections[sock_hash] = connection
         self.ip_to_hash[ip] = sock_hash

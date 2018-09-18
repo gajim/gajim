@@ -62,7 +62,7 @@ class Roster:
             i += 1
         txt = contact[Constant.TXT]
 
-        self._data[jid]={}
+        self._data[jid] = {}
         self._data[jid]['ask'] = 'none'
         self._data[jid]['subscription'] = 'both'
         self._data[jid]['groups'] = []

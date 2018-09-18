@@ -199,7 +199,7 @@ class ManageProxiesWindow:
         else:
             proxytype = app.config.get_per('proxies', proxy, 'type')
 
-            self.show_bosh_fields(proxytype=='bosh')
+            self.show_bosh_fields(proxytype == 'bosh')
 
             self.proxyname_entry.set_editable(True)
             self.xml.get_object('remove_proxy_button').set_sensitive(True)
@@ -254,7 +254,7 @@ class ManageProxiesWindow:
             return
         types = ['http', 'socks5', 'bosh']
         type_ = self.proxytype_combobox.get_active()
-        self.show_bosh_fields(types[type_]=='bosh')
+        self.show_bosh_fields(types[type_] == 'bosh')
         proxy = self.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'type', types[type_])
 
@@ -314,7 +314,7 @@ class FakeDataForm(Gtk.Table):
         nbrow = 0
         if 'instructions' in self.infos:
             nbrow = 1
-            self.resize(rows = nbrow, columns = 2)
+            self.resize(rows=nbrow, columns=2)
             label = Gtk.Label(label=self.infos['instructions'])
             if self.selectable:
                 label.set_selectable(True)
@@ -326,7 +326,7 @@ class FakeDataForm(Gtk.Table):
                 continue
 
             nbrow = nbrow + 1
-            self.resize(rows = nbrow, columns = 2)
+            self.resize(rows=nbrow, columns=2)
             label = Gtk.Label(label=name.capitalize() + ':')
             self.attach(label, 0, 1, nbrow - 1, nbrow, 0, 0, 0, 0)
             entry = Gtk.Entry()

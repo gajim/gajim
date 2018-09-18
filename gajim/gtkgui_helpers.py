@@ -491,7 +491,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
                 _('Image cannot be saved in %(type)s format. Save as '
                 '%(new_filename)s?') % {'type': image_format,
                 'new_filename': new_file_path},
-                on_response_ok = (on_ok, new_file_path, pixbuf))
+                on_response_ok=(on_ok, new_file_path, pixbuf))
 
     def on_ok(file_path):
         if os.path.exists(file_path):
@@ -522,7 +522,7 @@ def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
                      file_name='%s.png' % default_name,
                      transient_for=transient)
 
-def create_combobox(value_list, selected_value = None):
+def create_combobox(value_list, selected_value=None):
     """
     Value_list is [(label1, value1)]
     """
@@ -588,7 +588,7 @@ def load_mood_icon(icon_name):
     icon_list = _load_icon_list([icon_name], path)
     return icon_list[icon_name]
 
-def load_activity_icon(category, activity = None):
+def load_activity_icon(category, activity=None):
     """
     Load an icon from the activity iconset in 16x16
     """
@@ -672,7 +672,7 @@ def load_icons_meta():
         pixc = None
     return pixo, pixc
 
-def _load_icon_list(icons_list, path, pixbuf2 = None):
+def _load_icon_list(icons_list, path, pixbuf2=None):
     """
     Load icons in icons_list from the given path, and add pixbuf2 on top left of
     each static images
@@ -764,9 +764,9 @@ def label_set_autowrap(widget):
     Make labels automatically re-wrap if their containers are resized.
     Accepts label or container widgets
     """
-    if isinstance (widget, Gtk.Container):
+    if isinstance(widget, Gtk.Container):
         children = widget.get_children()
-        for i in list(range (len (children))):
+        for i in list(range(len(children))):
             label_set_autowrap(children[i])
     elif isinstance(widget, Gtk.Label):
         widget.set_line_wrap(True)
@@ -785,11 +785,11 @@ def __label_size_allocate(widget, allocation):
 
     # set wrap width to the Pango.Layout of the labels ###
     widget.set_alignment(0.0, 0.0)
-    layout.set_width (allocation.width * Pango.SCALE)
+    layout.set_width(allocation.width * Pango.SCALE)
     lh = layout.get_size()[1]
 
     if lh_old != lh:
-        widget.set_size_request (-1, lh / Pango.SCALE)
+        widget.set_size_request(-1, lh / Pango.SCALE)
 
 def get_action(action):
     return app.app.lookup_action(action)

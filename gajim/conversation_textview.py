@@ -153,14 +153,13 @@ class ConversationTextview(GObject.GObject):
     Class for the conversation textview (where user reads already said messages)
     for chat/groupchat windows
     """
-    __gsignals__ = dict(
-            quote = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-                    None, # return value
-                    (str, ) # arguments
-            )
-    )
+    __gsignals__ = dict(quote=(
+        GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+        None, # return value
+        (str, ) # arguments
+        ))
 
-    def __init__(self, account, used_in_history_window = False):
+    def __init__(self, account, used_in_history_window=False):
         """
         If used_in_history_window is True, then we do not show Clear menuitem in
         context menu
@@ -287,7 +286,7 @@ class ConversationTextview(GObject.GObject):
         tag = buffer_.create_tag('underline')
         tag.set_property('underline', Pango.Underline.SINGLE)
 
-        buffer_.create_tag('focus-out-line', justification = Gtk.Justification.CENTER)
+        buffer_.create_tag('focus-out-line', justification=Gtk.Justification.CENTER)
         self.displaymarking_tags = {}
 
         tag = buffer_.create_tag('xep0184-received')
@@ -494,7 +493,7 @@ class ConversationTextview(GObject.GObject):
             buffer_.end_user_action()
             self.scroll_to_end()
 
-    def clear(self, tv = None):
+    def clear(self, tv=None):
         """
         Clear text in the textview
         """
@@ -599,7 +598,7 @@ class ConversationTextview(GObject.GObject):
                 item.set_property('sensitive', False)
             else:
                 item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
-                link =  search_link % phrase_for_url
+                link = search_link % phrase_for_url
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item
             submenu.append(item)

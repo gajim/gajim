@@ -375,7 +375,7 @@ control=None, gc_contact=None, is_anonymous=True):
             c_ = app.contacts.get_contact(account, gc_contact.jid,
                 gc_contact.resource)
             if c_ and c_.supports(NS_CONFERENCE):
-                bookmarked=True
+                bookmarked = True
             build_invite_submenu(invite_menuitem, [(gc_contact, account)],
                 show_bookmarked=bookmarked)
     else:

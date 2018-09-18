@@ -173,7 +173,7 @@ class GajimRemote:
                         ],
                 'prefs_list': [
                                 _('Lists all preferences and their values'),
-                                [ ]
+                                []
                         ],
                 'prefs_put': [
                                 _('Sets value of \'key\' to \'value\'.'),
@@ -191,7 +191,7 @@ class GajimRemote:
                 'prefs_store': [
                                 _('Writes the current state of Gajim preferences to the .config '
                                         'file'),
-                                [ ]
+                                []
                         ],
                 'remove_contact': [
                                 _('Removes contact from roster'),
@@ -219,7 +219,7 @@ class GajimRemote:
 
                 'get_unread_msgs_number': [
                         _('Returns number of unread messages'),
-                                [ ]
+                                []
                         ],
 
                 'send_xml': [
@@ -380,7 +380,7 @@ class GajimRemote:
         """
         Print usage, and list available commands
         """
-        s = _('Usage:\n  %s command [arguments]\n\nCommand is one of:\n' ) % (
+        s = _('Usage:\n  %s command [arguments]\n\nCommand is one of:\n') % (
             BASENAME)
         for command in sorted(self.commands):
             s += '  ' + command
@@ -392,7 +392,7 @@ class GajimRemote:
             s += '\n'
         return s
 
-    def print_info(self, level, prop_dict, encode_return = False):
+    def print_info(self, level, prop_dict, encode_return=False):
         """
         Return formatted string from data structure
         """
@@ -404,11 +404,11 @@ class GajimRemote:
             spacing = ' ' * level * 4
             for val in prop_dict:
                 if val is None:
-                    ret_str +='\t'
+                    ret_str += '\t'
                 elif isinstance(val, int):
-                    ret_str +='\t' + str(val)
+                    ret_str += '\t' + str(val)
                 elif isinstance(val, str):
-                    ret_str +='\t' + val
+                    ret_str += '\t' + val
                 elif isinstance(val, (list, tuple)):
                     res = ''
                     for items in val:

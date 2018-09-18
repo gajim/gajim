@@ -316,7 +316,7 @@ class GajimPluginConfigDialog(Gtk.Dialog):
         self.on_run()
         self.show_all()
         self.connect('delete-event', self.on_close_dialog)
-        result =  super(GajimPluginConfigDialog, self)
+        result = super(GajimPluginConfigDialog, self)
         return result
 
     def init(self):

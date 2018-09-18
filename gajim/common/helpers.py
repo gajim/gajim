@@ -274,7 +274,7 @@ def temp_failure_retry(func, *args, **kwargs):
             else:
                 raise
 
-def get_uf_show(show, use_mnemonic = False):
+def get_uf_show(show, use_mnemonic=False):
     """
     Return a userfriendly string for dnd/xa/chat and make all strings
     translatable
@@ -361,7 +361,7 @@ def get_uf_ask(ask):
 
     return uf_ask
 
-def get_uf_role(role, plural = False):
+def get_uf_role(role, plural=False):
     ''' plural determines if you get Moderators or Moderator'''
     if role == 'none':
         role_name = Q_('?Group Chat Contact Role:None')
@@ -516,7 +516,7 @@ def sanitize_filename(filename):
 
     return filename
 
-def reduce_chars_newlines(text, max_chars = 0, max_lines = 0):
+def reduce_chars_newlines(text, max_chars=0, max_lines=0):
     """
     Cut the chars after 'max_chars' on each line and show only the first
     'max_lines'
@@ -984,7 +984,7 @@ def get_notification_icon_tooltip_dict():
         account_name = account['name']
         account['event_lines'] = []
         # Gather events per-account
-        pending_events = app.events.get_events(account = account_name)
+        pending_events = app.events.get_events(account=account_name)
         messages, non_messages, total_messages, total_non_messages = {}, {}, 0, 0
         for jid in pending_events:
             for event in pending_events[jid]:
@@ -1028,7 +1028,7 @@ def get_notification_icon_tooltip_dict():
                 text = ngettext(
                     '%d event pending',
                     '%d events pending',
-                    total_non_messages, total_non_messages,total_non_messages)
+                    total_non_messages, total_non_messages, total_non_messages)
                 account['event_lines'].append(text)
             else:
                 for jid in non_messages:
@@ -1194,7 +1194,7 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
             keyID = 'UNKNOWN'
     return keyID
 
-def update_optional_features(account = None):
+def update_optional_features(account=None):
     if account:
         accounts = [account]
     else:

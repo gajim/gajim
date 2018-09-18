@@ -396,7 +396,7 @@ class MessageTextView(Gtk.TextView):
     def destroy(self):
         GLib.idle_add(gc.collect)
 
-    def clear(self, widget = None):
+    def clear(self, widget=None):
         """
         Clear text in the textview
         """

@@ -364,7 +364,7 @@ def get_number_of_accounts():
     """
     return len(connections.keys())
 
-def get_number_of_connected_accounts(accounts_list = None):
+def get_number_of_connected_accounts(accounts_list=None):
     """
     Returns the number of CONNECTED accounts. Uou can optionally pass an
     accounts_list and if you do those will be checked, else all will be checked
@@ -456,7 +456,7 @@ def account_is_securely_connected(account):
         return False
     return con_types.get(account) in ('tls', 'ssl')
 
-def get_transport_name_from_jid(jid, use_config_setting = True):
+def get_transport_name_from_jid(jid, use_config_setting=True):
     """
     Returns 'gg', 'irc' etc
 
@@ -517,7 +517,7 @@ def get_our_jids():
         our_jids.append(get_jid_from_account(account))
     return our_jids
 
-def get_hostname_from_account(account_name, use_srv = False):
+def get_hostname_from_account(account_name, use_srv=False):
     """
     Returns hostname (if custom hostname is used, that is returned)
     """

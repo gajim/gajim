@@ -35,11 +35,11 @@ else:
         result = int(text)
         if result < 0:
             raise ValueError("Error: value '%(text)s' "
-                                            "must be a positive integer")
+                             "must be a positive integer")
         return result
 
-    def generate_uri_role( role_name, aliases, anchor_text, base_url,
-                    interpret_url, validator):
+    def generate_uri_role(role_name, aliases, anchor_text, base_url,
+                          interpret_url, validator):
         """
         Create and register a uri based "interpreted role"
 
@@ -58,13 +58,13 @@ else:
                 should return the validated text, or raise ValueError
         """
         def uri_reference_role(role, rawtext, text, lineno, inliner,
-                options=None, content=None):
+                               options=None, content=None):
             if options is None:
                 options = {}
             try:
                 valid_text = validator(text)
             except ValueError as e:
-                msg = inliner.reporter.error( e.message % dict(text=text), line=lineno)
+                msg = inliner.reporter.error(e.message % dict(text=text), line=lineno)
                 prb = inliner.problematic(rawtext, rawtext, msg)
                 return [prb], [msg]
             ref = base_url + interpret_url % valid_text

@@ -235,7 +235,7 @@ class PassphraseDialog:
         self.window.show_all()
 
         self.check = bool(checkbuttontext)
-        checkbutton =   self.xml.get_object('save_passphrase_checkbutton')
+        checkbutton = self.xml.get_object('save_passphrase_checkbutton')
         if self.check:
             checkbutton.set_label(checkbuttontext)
         else:
@@ -321,7 +321,7 @@ class ChooseGPGKeyDialog:
         selection = self.keys_treeview.get_selection()
         (model, iter_) = selection.get_selected()
         if iter_ and response == Gtk.ResponseType.OK:
-            keyID = [ model[iter_][0], model[iter_][1] ]
+            keyID = [model[iter_][0], model[iter_][1]]
         else:
             keyID = None
         self.on_response(keyID)
@@ -1048,8 +1048,8 @@ class SynchroniseSelectContactsDialog:
                         self.remote_account, remote_jid)
                 # keep same groups and same nickname
                 app.interface.roster.req_sub(self, remote_jid, message,
-                    self.local_account, groups = remote_contact.groups,
-                    nickname = remote_contact.name, auto_auth = True)
+                    self.local_account, groups=remote_contact.groups,
+                    nickname=remote_contact.name, auto_auth=True)
             iter_ = model.iter_next(iter_)
         self.dialog.destroy()
 
@@ -1219,7 +1219,7 @@ class RosterItemExchangeWindow:
             a = 0
             while iter_:
                 if model[iter_][0]:
-                    a+=1
+                    a += 1
                     # it is selected
                     #remote_jid = model[iter_][1]
                     message = _('%s suggested me to add you in my roster.'
@@ -1242,7 +1242,7 @@ class RosterItemExchangeWindow:
             a = 0
             while iter_:
                 if model[iter_][0]:
-                    a+=1
+                    a += 1
                     # it is selected
                     jid = model[iter_][1]
                     # keep same groups and same nickname
@@ -1267,7 +1267,7 @@ class RosterItemExchangeWindow:
             a = 0
             while iter_:
                 if model[iter_][0]:
-                    a+=1
+                    a += 1
                     # it is selected
                     jid = model[iter_][1]
                     app.connections[self.account].get_module('Presence').unsubscribe(jid)

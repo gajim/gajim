@@ -210,7 +210,7 @@ class Interface:
             if len(obj.id_) > 3 and obj.id_[2] == '_':
                 sid = obj.id_[3:]
             file_props = FilesProp.getFileProp(obj.conn.name, sid)
-            if file_props :
+            if file_props:
                 if str(obj.errcode) == '400':
                     file_props.error = -3
                 else:
@@ -1011,7 +1011,7 @@ class Interface:
             event_class = events.FileStoppedEvent
             msg_type = 'file-stopped'
             event_type = _('File Transfer Stopped')
-        elif file_props.error  == -10:
+        elif file_props.error == -10:
             event_class = events.FileHashErrorEvent
             msg_type = 'file-hash-error'
             event_type = _('File Transfer Failed')
