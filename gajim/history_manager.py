@@ -45,6 +45,7 @@ from gi.repository import Gio
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common import configpaths
+from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 
 def is_standalone():
@@ -80,7 +81,6 @@ if is_standalone():
     configpaths.init()
     app.load_css_config()
 
-from gajim.common.i18n import _
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim.gtk import YesNoDialog
@@ -346,12 +346,7 @@ class HistoryManager:
         """
         self.cur.execute('SELECT type FROM jids WHERE jid = ?', (jid,))
         row = self.cur.fetchone()
-        if row is None:
-            raise
-        elif row[0] == JIDConstant.ROOM_TYPE:
-            return True
-        else:  # normal type
-            return False
+        return row[0] == JIDConstant.ROOM_TYPE
 
     def _fill_logs_listview(self, jid):
         """
