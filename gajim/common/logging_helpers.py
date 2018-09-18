@@ -71,6 +71,7 @@ def parseAndSetLogLevels(arg):
 
 
 class colors:
+    # pylint: disable=C0326
     NONE         = chr(27) + "[0m"
     BLACk        = chr(27) + "[30m"
     RED          = chr(27) + "[31m"
@@ -97,11 +98,11 @@ class FancyFormatter(logging.Formatter):
     An eye-candy formatter with colors
     """
     colors_mapping = {
-            'DEBUG':                colors.BLUE,
-            'INFO':                colors.GREEN,
-            'WARNING':      colors.BROWN,
-            'ERROR':                colors.RED,
-            'CRITICAL':     colors.BRIGHT_RED,
+        'DEBUG': colors.BLUE,
+        'INFO': colors.GREEN,
+        'WARNING': colors.BROWN,
+        'ERROR': colors.RED,
+        'CRITICAL': colors.BRIGHT_RED,
     }
 
     def __init__(self, fmt, datefmt=None, use_color=False):
@@ -138,11 +139,11 @@ def init():
 
     consoleloghandler = logging.StreamHandler()
     consoleloghandler.setFormatter(
-            FancyFormatter(
-                    '%(asctime)s %(levelname)s %(name)s %(message)s',
-                    '%x %H:%M:%S',
-                    use_color
-            )
+        FancyFormatter(
+            '%(asctime)s %(levelname)s %(name)s %(message)s',
+            '%x %H:%M:%S',
+            use_color
+        )
     )
 
     # fake the root logger so we have 'gajim' root name instead of 'root'

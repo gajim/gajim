@@ -77,7 +77,7 @@ class Zeroconf:
             return
 
         # synchronous resolving
-        self.server.ResolveService( int(interface), int(protocol), name, stype,
+        self.server.ResolveService(int(interface), int(protocol), name, stype,
                 domain, Protocol.UNSPEC, dbus.UInt32(0),
                 reply_handler=self.service_resolved_callback,
                 error_handler=self.error_callback1)
@@ -474,7 +474,7 @@ class Zeroconf:
             return None
         return self.contacts[jid]
 
-    def update_txt(self, show = None):
+    def update_txt(self, show=None):
         if show:
             self.txt['status'] = self.replace_show(show)
 

@@ -552,8 +552,8 @@ class RosterWindow:
                     _contact, self.model), \
                     "%s already in roster.\n Family: %s" % (_jid, nearby_family)
             self._add_entity(_contact, _account,
-                    big_brother_contact = big_brother_contact,
-                    big_brother_account = big_brother_account)
+                    big_brother_contact=big_brother_contact,
+                    big_brother_account=big_brother_account)
             brothers.append((_contact, _account))
 
         brothers.insert(0, (big_brother_contact, big_brother_account))
@@ -1079,7 +1079,7 @@ class RosterWindow:
         app.get_number_of_connected_accounts())) and app.config.get(
         'show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
-                    accounts = accounts)
+                    accounts=accounts)
             account_name += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
         self.model[child_iter][Column.NAME] = GLib.markup_escape_text(account_name)
@@ -1139,7 +1139,7 @@ class RosterWindow:
             text = '<span strikethrough="true">%s</span>' % text
         if app.config.get('show_contacts_number'):
             nbr_on, nbr_total = app.contacts.get_nb_online_total_contacts(
-                    accounts = accounts, groups = [group])
+                    accounts=accounts, groups=[group])
             text += ' (%s/%s)' % (repr(nbr_on), repr(nbr_total))
 
         self.model[child_iter][Column.NAME] = text
@@ -1254,7 +1254,7 @@ class RosterWindow:
             status = contact.status.strip()
             if status != '':
                 status = helpers.reduce_chars_newlines(status,
-                    max_lines = 1)
+                    max_lines=1)
                 # escape markup entities and make them small
 
                 # italic
@@ -1304,12 +1304,12 @@ class RosterWindow:
 
                 if self.tree.row_expanded(path):
                     state_images = self.get_appropriate_state_images(
-                            jid, size = 'opened',
-                            icon_name = icon_name)
+                            jid, size='opened',
+                            icon_name=icon_name)
                 else:
                     state_images = self.get_appropriate_state_images(
-                            jid, size = 'closed',
-                            icon_name = icon_name)
+                            jid, size='closed',
+                            icon_name=icon_name)
 
                 # Expand/collapse icon might differ per iter
                 # (group)
@@ -1322,7 +1322,7 @@ class RosterWindow:
         else:
             # A normal contact or little brother
             state_images = self.get_appropriate_state_images(jid,
-                    icon_name = icon_name)
+                    icon_name=icon_name)
 
             visible = self.contact_is_visible(contact, account)
             # All iters have the same icon (no expand/collapse)
@@ -2326,7 +2326,7 @@ class RosterWindow:
                 _('You are participating in one or more group chats'),
                 _('Changing your status to invisible will result in '
                 'disconnection from those group chats. Are you sure you want '
-                'to go invisible?'), on_response_ok = (change, account, status))
+                'to go invisible?'), on_response_ok=(change, account, status))
         else:
             change(account, status)
 
@@ -2838,7 +2838,7 @@ class RosterWindow:
             sectext = _('You will no longer be able to send and receive '
                 'messages to contacts from these transports: %s') % jids
         ConfirmationDialog(pritext, sectext,
-            on_response_ok = (remove, list_), transient_for=self.window)
+            on_response_ok=(remove, list_), transient_for=self.window)
 
     def _nec_blocking(self, obj):
         for jid in obj.changed:
@@ -3918,7 +3918,7 @@ class RosterWindow:
         self._toggeling_row = True
         model = widget.get_model()
         child_model = model.get_model()
-        child_iter =  model.convert_iter_to_child_iter(titer)
+        child_iter = model.convert_iter_to_child_iter(titer)
 
         if self.regroup: # merged accounts
             accounts = list(app.connections.keys())
@@ -3954,7 +3954,7 @@ class RosterWindow:
                 if account + group + jid not in self.collapsed_rows:
                     self.collapsed_rows.append(account + group + jid)
             family = app.contacts.get_metacontacts_family(account, jid)
-            nearby_family  = \
+            nearby_family = \
                     self._get_nearby_family_and_big_brother(family, account)[0]
             # Redraw all brothers to show pending events
             for data in nearby_family:
@@ -4285,7 +4285,7 @@ class RosterWindow:
             dlg.checkbutton.set_active(True)
 
     def on_drop_in_group(self, widget, account, c_source, grp_dest,
-    is_big_brother, context, etime, grp_source = None):
+    is_big_brother, context, etime, grp_source=None):
         if is_big_brother:
             # add whole metacontact to new group
             self.add_contact_to_groups(c_source.jid, account, [grp_dest, ])
@@ -4516,7 +4516,7 @@ class RosterWindow:
             return
 
         # we may not add contacts from special_groups
-        if grp_source in helpers.special_groups :
+        if grp_source in helpers.special_groups:
             return
 
         # Is the contact we drag a meta contact?
@@ -5759,7 +5759,7 @@ class RosterWindow:
         # (name, renderer_object, expand?, attribute_name, attribute_value,
         # cell_data_func, func_arg)
         self.renderers_list = []
-        self.renderers_propertys ={}
+        self.renderers_propertys = {}
         self._pep_type_to_model_column = {'mood': Column.MOOD_PIXBUF,
             'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_PIXBUF,
             'geoloc': Column.LOCATION_PIXBUF}

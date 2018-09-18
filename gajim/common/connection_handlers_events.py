@@ -842,8 +842,8 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
                 n = file_tag.getTag('name')
                 n = n.getData() if n else None
                 pjid = app.get_jid_without_resource(self.fjid)
-                file_info = self.conn.get_file_info(pjid, hash_=h,
-                                                name=n,account=self.conn.name)
+                file_info = self.conn.get_file_info(
+                    pjid, hash_=h, name=n, account=self.conn.name)
                 self.file_props.file_name = file_info['file-name']
                 self.file_props.sender = self.conn._ft_get_our_jid()
                 self.file_props.receiver = self.fjid
@@ -1244,16 +1244,12 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
         return True
 
 class StanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name='stanza-message-outgoing'
+    name = 'stanza-message-outgoing'
 
-    def generate(self):
-        return True
 
 class GcStanzaMessageOutgoingEvent(nec.NetworkOutgoingEvent):
-    name='gc-stanza-message-outgoing'
+    name = 'gc-stanza-message-outgoing'
 
-    def generate(self):
-        return True
 
 class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'gc-message-outgoing'

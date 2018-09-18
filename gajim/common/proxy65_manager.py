@@ -141,7 +141,7 @@ class ProxyResolver:
         iq = nbxmpp.Protocol(name='iq', to=self.jid, typ='set')
         query = iq.setTag('query')
         query.setNamespace(nbxmpp.NS_BYTESTREAM)
-        query.setAttr('sid',  self.sid)
+        query.setAttr('sid', self.sid)
 
         activate = query.setTag('activate')
         activate.setData('test@gajim.org/test2')

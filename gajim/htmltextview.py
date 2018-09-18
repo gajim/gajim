@@ -93,9 +93,9 @@ _element_styles = {
 _element_styles['dfn'] = _element_styles['em']
 _element_styles['var'] = _element_styles['em']
 # deprecated, legacy, presentational
-_element_styles['tt']  = _element_styles['kbd']
-_element_styles['i']   = _element_styles['em']
-_element_styles['b']   = _element_styles['strong']
+_element_styles['tt'] = _element_styles['kbd']
+_element_styles['i'] = _element_styles['em']
+_element_styles['b'] = _element_styles['strong']
 
 # ==========
 #   XEP-0071
@@ -168,11 +168,11 @@ _element_styles['b']   = _element_styles['strong']
 # Param/Legacy    param, font, basefont, center, s, strike, u, dir, menu,
 #                 isindex
 
-BLOCK_HEAD = set(( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ))
-BLOCK_PHRASAL = set(( 'address', 'blockquote', 'pre', ))
-BLOCK_PRES = set(( 'hr', )) #not in xhtml-im
-BLOCK_STRUCT = set(( 'div', 'p', ))
-BLOCK_HACKS = set(( 'table', 'tr' )) # at the very least, they will start line ;)
+BLOCK_HEAD = set(('h1', 'h2', 'h3', 'h4', 'h5', 'h6',))
+BLOCK_PHRASAL = set(('address', 'blockquote', 'pre',))
+BLOCK_PRES = set(('hr', )) #not in xhtml-im
+BLOCK_STRUCT = set(('div', 'p', ))
+BLOCK_HACKS = set(('table', 'tr')) # at the very least, they will start line ;)
 BLOCK = BLOCK_HEAD.union(BLOCK_PHRASAL).union(BLOCK_STRUCT).union(BLOCK_PRES).union(BLOCK_HACKS)
 
 INLINE_PHRASAL = set('abbr, acronym, cite, code, dfn, em, kbd, q, samp, strong, var'.split(', '))
@@ -180,13 +180,13 @@ INLINE_PRES = set('b, i, u, tt'.split(', ')) #not in xhtml-im
 INLINE_STRUCT = set('br, span'.split(', '))
 INLINE = INLINE_PHRASAL.union(INLINE_PRES).union(INLINE_STRUCT)
 
-LIST_ELEMS = set( 'dl, ol, ul'.split(', '))
+LIST_ELEMS = set('dl, ol, ul'.split(', '))
 
 for _name in BLOCK_HEAD:
     _num = eval(_name[1])
     _header_size = (_num - 1) // 2
     _weight = (_num - 1) % 2
-    _element_styles[_name] = '; font-size: %s; %s' % ( ('large', 'medium', 'small')[_header_size],
+    _element_styles[_name] = '; font-size: %s; %s' % (('large', 'medium', 'small')[_header_size],
         ('font-weight: bold', 'font-style: oblique')[_weight],)
 
 def _parse_css_color(color):
@@ -214,7 +214,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.iter = startiter
         self.conv_textview = conv_textview
         self.text = ''
-        self.starting=True
+        self.starting = True
         self.preserve = False
         self.styles = [] # a Gtk.TextTag or None, for each span level
         self.list_counters = [] # stack (top at head) of list
@@ -359,12 +359,12 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'large': 1.2,
                     'x-large': 1.4399999999999,
                     'xx-large': 1.728,
-                    } [value]
+                    }[value]
         except KeyError:
             pass
         else:
             attrs = self._get_current_attributes()
-            if attrs.font_scale ==0:
+            if attrs.font_scale == 0:
                 tag.set_property('scale', scale)
             return
         if value == 'smaller':
@@ -383,7 +383,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'normal': Pango.Style.NORMAL,
                     'italic': Pango.Style.ITALIC,
                     'oblique': Pango.Style.OBLIQUE,
-                    } [value]
+                    }[value]
         except KeyError:
             log.warning('unknown font-style %s', value)
         else:
@@ -420,7 +420,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     '900': Pango.Weight.HEAVY,
                     'normal': Pango.Weight.NORMAL,
                     'bold': Pango.Weight.BOLD,
-                    } [value]
+                    }[value]
         except KeyError:
             log.warning('unknown font-style %s', value)
         else:
@@ -436,7 +436,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     'right': Gtk.Justification.RIGHT,
                     'center': Gtk.Justification.CENTER,
                     'justify': Gtk.Justification.FILL,
-                    } [value]
+                    }[value]
         except KeyError:
             log.warning('Invalid text-align: %s requested', value)
         else:
@@ -1065,11 +1065,11 @@ class HtmlTextView(Gtk.TextView):
                     if anchor:
                         text = anchor.plaintext
                         if text:
-                            selection+=text
+                            selection += text
                     else:
-                        selection+=character
+                        selection += character
                 else:
-                    selection+=character
+                    selection += character
                 search_iter.forward_char()
         return selection
 

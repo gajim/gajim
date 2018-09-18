@@ -88,7 +88,7 @@ class Preferences(Gtk.ApplicationWindow):
         # Display status msg under contact name in roster
         st = app.config.get('show_status_msgs_in_roster')
         self.xml.get_object('show_status_msgs_in_roster_checkbutton'). \
-            set_active( st)
+            set_active(st)
 
         # Display PEP in roster
         st1 = app.config.get('show_mood_in_roster')

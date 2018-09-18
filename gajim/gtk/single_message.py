@@ -96,7 +96,7 @@ class SingleMessageWindow:
         self.close_button = self.xml.get_object('close_button')
         self.message_tv_buffer.connect('changed', self.update_char_counter)
         if isinstance(to, list):
-            jid = ', '.join( [i[0].get_full_jid() for i in to])
+            jid = ', '.join([i[0].get_full_jid() for i in to])
             self.to_entry.set_text(jid)
             self.to_entry.set_sensitive(False)
         else:

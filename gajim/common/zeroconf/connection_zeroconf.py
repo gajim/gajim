@@ -132,7 +132,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             for key in diffs:
                 self.roster.setItem(key)
                 app.nec.push_incoming_event(NetworkEvent(
-                    'roster-info', conn=self,jid=key,
+                    'roster-info', conn=self, jid=key,
                     nickname=self.roster.getName(key), sub='both',
                     ask='no', groups=self.roster.getGroups(key),
                     avatar_sha=None))

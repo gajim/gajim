@@ -49,7 +49,7 @@ class VcardWindow:
     Class for contact's information window
     """
 
-    def __init__(self, contact, account, gc_contact = None):
+    def __init__(self, contact, account, gc_contact=None):
         # the contact variable is the jid if vcard is true
         self.xml = gtkgui_helpers.get_gtk_builder('vcard_information_window.ui')
         self.window = self.xml.get_object('vcard_information_window')
@@ -173,7 +173,7 @@ class VcardWindow:
             menuitem.connect('activate',
                 gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
             menu.append(menuitem)
-            menu.connect('selection-done', lambda w:w.destroy())
+            menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
             menu.show_all()
             menu.attach_to_widget(widget, None)
@@ -484,7 +484,7 @@ class VcardWindow:
 
 
 class ZeroconfVcardWindow:
-    def __init__(self, contact, account, is_fake = False):
+    def __init__(self, contact, account, is_fake=False):
         # the contact variable is the jid if vcard is true
         self.xml = gtkgui_helpers.get_gtk_builder('zeroconf_information_window.ui')
         self.window = self.xml.get_object('zeroconf_information_window')
@@ -517,7 +517,7 @@ class ZeroconfVcardWindow:
                     gtkgui_helpers.on_avatar_save_as_menuitem_activate,
                     self.contact.avatar_sha, self.contact.get_shown_name())
             menu.append(menuitem)
-            menu.connect('selection-done', lambda w:w.destroy())
+            menu.connect('selection-done', lambda w: w.destroy())
             # show the menu
             menu.show_all()
             menu.attach_to_widget(widget, None)

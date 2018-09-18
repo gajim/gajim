@@ -169,7 +169,7 @@ class CommonConnection:
             return 'bad_pass'
         return 'ok'
 
-    def get_signed_msg(self, msg, callback = None):
+    def get_signed_msg(self, msg, callback=None):
         """
         Returns the signed message if possible or an empty string if gpg is not
         used or None if waiting for passphrase
@@ -293,8 +293,8 @@ class CommonConnection:
                 addresses = msg_iq.addChild('addresses',
                     namespace=nbxmpp.NS_ADDRESS)
                 for j in obj.jid:
-                    addresses.addChild('address', attrs = {'type': 'to',
-                        'jid': j})
+                    addresses.addChild('address',
+                                       attrs={'type': 'to', 'jid': j})
             else:
                 iqs = []
                 for j in obj.jid:
@@ -708,7 +708,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _connection_lost(self):
         log.info('_connection_lost')
-        self.disconnect(on_purpose = False)
+        self.disconnect(on_purpose=False)
         if self.removing_account:
             return
         app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
@@ -746,7 +746,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 self.gpg = gpg.GnuPG()
                             app.nec.push_incoming_event(
                                 AccountCreatedEvent(None, conn=self,
-                                account_info = self.new_account_info))
+                                account_info=self.new_account_info))
                             self.new_account_info = None
                             self.new_account_form = None
                             if self.connection:
@@ -1062,7 +1062,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.info(msg)
         if self._proxy:
             msg = '>>>>>> '
-            if self._proxy['type']=='bosh':
+            if self._proxy['type'] == 'bosh':
                 msg = '%s over BOSH %s' % (msg, self._proxy['bosh_uri'])
             if self._proxy['type'] in ['http', 'socks5'] or self._proxy['bosh_useproxy']:
                 msg = '%s over proxy %s:%s' % (msg, self._proxy['host'], self._proxy['port'])
@@ -1072,7 +1072,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not con_type:
             # we are not retrying, and not conecting
             if not self.retrycount and self.connected != 0:
-                self.disconnect(on_purpose = True)
+                self.disconnect(on_purpose=True)
                 if self._proxy:
                     pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
                         {'host': self._hostname, 'proxy': self._proxy['host']}
@@ -1097,7 +1097,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.error('Connection to proxy failed: %s', reason)
         self.time_to_reconnect = None
         self.on_connect_failure = None
-        self.disconnect(on_purpose = True)
+        self.disconnect(on_purpose=True)
         app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
             title=_('Connection to proxy failed'), msg=reason))
 
@@ -1334,7 +1334,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 # Forget password, it's wrong
                 self.password = None
             log.debug("Couldn't authenticate to %s", self._hostname)
-            self.disconnect(on_purpose = True)
+            self.disconnect(on_purpose=True)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             app.nec.push_incoming_event(InformationEvent(None, conn=self,
@@ -1351,7 +1351,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             self.connection.send(' ')
 
-    def send_invisible_presence(self, msg, signed, initial = False):
+    def send_invisible_presence(self, msg, signed, initial=False):
         if not app.account_is_connected(self.name):
             return
         if not self.get_module('PrivacyLists').supported:
@@ -1412,7 +1412,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Inform GUI we just signed in
             app.nec.push_incoming_event(SignedInEvent(None, conn=self))
 
-    def get_signed_presence(self, msg, callback = None):
+    def get_signed_presence(self, msg, callback=None):
         if app.config.get_per('accounts', self.name, 'gpg_sign_presence'):
             return self.get_signed_msg(msg, callback)
         return ''

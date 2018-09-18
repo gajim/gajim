@@ -21,20 +21,20 @@ Words single and multiple refers here to types of data forms:
 single means these with one record of data (without <reported/> element),
 multiple - these which may contain more data (with <reported/> element).'''
 
+import itertools
+import base64
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import GLib
-import base64
 
 from gajim import gtkgui_helpers
-
 from gajim.common.modules import dataforms
 from gajim.common import helpers
 from gajim.common import app
 
-import itertools
 
 class DataFormWidget(Gtk.Alignment):
 # "public" interface
@@ -42,9 +42,8 @@ class DataFormWidget(Gtk.Alignment):
     Data Form widget. Use like any other widget
     """
 
-    __gsignals__ = dict(
-        validated = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ())
-    )
+    __gsignals__ = dict(validated=(
+        GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ()))
 
     def __init__(self, dataformnode=None):
         ''' Create a widget. '''
@@ -313,8 +312,8 @@ class SingleForm(Gtk.Table):
     forms, it is in another class
     """
 
-    __gsignals__ = dict(
-        validated = (GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ())
+    __gsignals__ = dict(validated=(
+        GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION, None, ())
     )
 
     def __init__(self, dataform, selectable=False):
@@ -376,7 +375,7 @@ class SingleForm(Gtk.Table):
                 widget.set_property('selectable', selectable)
                 widget.set_line_wrap(True)
                 self.attach(widget, leftattach, rightattach, linecounter,
-                    linecounter+1, xoptions=Gtk.AttachOptions.FILL,
+                    linecounter + 1, xoptions=Gtk.AttachOptions.FILL,
                     yoptions=Gtk.AttachOptions.FILL)
 
             elif field.type_ == 'list-single':
@@ -476,16 +475,16 @@ class SingleForm(Gtk.Table):
 
                 decorate_with_tooltip(treeview, field)
 
-                add_button=xml.get_object('add_button')
+                add_button = xml.get_object('add_button')
                 add_button.connect('clicked',
                         self.on_jid_multi_add_button_clicked, treeview, listmodel, field)
-                edit_button=xml.get_object('edit_button')
+                edit_button = xml.get_object('edit_button')
                 edit_button.connect('clicked',
                         self.on_jid_multi_edit_button_clicked, treeview)
-                remove_button=xml.get_object('remove_button')
+                remove_button = xml.get_object('remove_button')
                 remove_button.connect('clicked',
                         self.on_jid_multi_remove_button_clicked, treeview, field)
-                clear_button=xml.get_object('clear_button')
+                clear_button = xml.get_object('clear_button')
                 clear_button.connect('clicked',
                         self.on_jid_multi_clean_button_clicked, listmodel, field)
                 if not readwrite:
@@ -526,7 +525,7 @@ class SingleForm(Gtk.Table):
                 widget = Gtk.ScrolledWindow()
                 widget.add(textwidget)
 
-                widget=decorate_with_tooltip(widget, field)
+                widget = decorate_with_tooltip(widget, field)
                 self.attach(widget, 1, 2, linecounter, linecounter+1)
 
             else:
@@ -548,13 +547,13 @@ class SingleForm(Gtk.Table):
                         field.value = ''
                     widget.set_text(field.value)
                 else:
-                    commonwidget=False
+                    commonwidget = False
                     widget = Gtk.Label(label=field.value)
                     widget.set_property('selectable', selectable)
                     widget.set_sensitive(True)
                     widget.set_halign(Gtk.Align.START)
                     widget.set_valign(Gtk.Align.CENTER)
-                    widget=decorate_with_tooltip(widget, field)
+                    widget = decorate_with_tooltip(widget, field)
                     self.attach(widget, 1, 2, linecounter, linecounter+1,
                             yoptions=Gtk.AttachOptions.FILL)
 
@@ -602,7 +601,7 @@ class SingleForm(Gtk.Table):
                 self.attach(label, 2, 3, linecounter, linecounter+1, xoptions=0,
                     yoptions=0)
 
-            linecounter+=1
+            linecounter += 1
         if self.get_property('visible'):
             self.show_all()
 
@@ -621,7 +620,7 @@ class SingleForm(Gtk.Table):
         if widget.get_active() and value not in field.values:
             field.values += [value]
         elif not widget.get_active() and value in field.values:
-            field.values = [v for v in field.values if v!=value]
+            field.values = [v for v in field.values if v != value]
 
     def on_text_single_entry_changed(self, widget, field):
         field.value = widget.get_text()
@@ -644,10 +643,10 @@ class SingleForm(Gtk.Table):
             app.interface.raise_dialog('jid-in-list')
             GLib.idle_add(treeview.set_cursor, path)
             return
-        model[path][0]=newtext
+        model[path][0] = newtext
 
         values = field.values
-        values[values.index(old)]=newtext
+        values[values.index(old)] = newtext
         field.values = values
 
     def on_jid_multi_add_button_clicked(self, widget, treeview, model, field):
@@ -673,7 +672,7 @@ class SingleForm(Gtk.Table):
         deleted = []
 
         def remove(model, path, iter_, deleted):
-            deleted+=model[iter_]
+            deleted += model[iter_]
             model.remove(iter_)
 
         selection.selected_foreach(remove, deleted)

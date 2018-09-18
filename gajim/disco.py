@@ -132,7 +132,7 @@ class CacheDictionary:
     accessed instead of set as well
     """
 
-    def __init__(self, lifetime, getrefresh = True):
+    def __init__(self, lifetime, getrefresh=True):
         self.lifetime = lifetime * 1000 * 60
         self.getrefresh = getrefresh
         self.cache = {}
@@ -215,7 +215,7 @@ class Closure:
     Userargs and removeargs must be tuples.
     """
 
-    def __init__(self, cb, userargs = (), remove = None, removeargs = ()):
+    def __init__(self, cb, userargs=(), remove=None, removeargs=()):
         self.userargs = userargs
         self.remove = remove
         self.removeargs = removeargs
@@ -250,8 +250,8 @@ class ServicesCache:
 
     def __init__(self, account):
         self.account = account
-        self._items = CacheDictionary(0, getrefresh = False)
-        self._info = CacheDictionary(0, getrefresh = False)
+        self._items = CacheDictionary(0, getrefresh=False)
+        self._info = CacheDictionary(0, getrefresh=False)
         self._subscriptions = CacheDictionary(5, getrefresh=False)
         self._cbs = {}
 
@@ -597,7 +597,7 @@ _('Without a connection, you can not browse available services'))
             markup += '\n<span size="x-small">%s</span>' % text_after
         self.banner.set_markup(markup)
 
-    def destroy(self, chain = False):
+    def destroy(self, chain=False):
         """
         Close the browser. This can optionally close its children and propagate
         to the parent. This should happen on actions like register, or join to
@@ -621,13 +621,13 @@ _('Without a connection, you can not browse available services'))
         for child in self.children[:]:
             child.parent = None
             if chain:
-                child.destroy(chain = chain)
+                child.destroy(chain=chain)
                 self.children.remove(child)
         if self.parent:
             if self in self.parent.children:
                 self.parent.children.remove(self)
             if chain and not self.parent.children:
-                self.parent.destroy(chain = chain)
+                self.parent.destroy(chain=chain)
                 self.parent = None
         else:
             self.cache.cleanup()
@@ -746,7 +746,7 @@ _('Without a connection, you can not browse available services'))
                 ' '.join(self.latest_addresses))
         self.travel(jid, '')
 
-    def on_services_treeview_row_activated(self, widget, path, col = 0):
+    def on_services_treeview_row_activated(self, widget, path, col=0):
         if self.browser:
             self.browser.default_action()
 
@@ -915,7 +915,7 @@ class AgentBrowser:
         """
         pass
 
-    def on_browse_button_clicked(self, widget = None):
+    def on_browse_button_clicked(self, widget=None):
         """
         When we want to browse an agent: open a new services window with a
         browser for the agent type
@@ -940,7 +940,7 @@ class AgentBrowser:
         jid = model[iter_][0]
         node = model[iter_][1]
         if jid:
-            self.cache.get_info(jid, node, self._update_actions, nofetch = True)
+            self.cache.get_info(jid, node, self._update_actions, nofetch=True)
 
     def _update_actions(self, jid, node, identities, features, data):
         """
@@ -963,7 +963,7 @@ class AgentBrowser:
         jid = model[iter_][0]
         node = model[iter_][1]
         if jid:
-            self.cache.get_info(jid, node, self._default_action, nofetch = True)
+            self.cache.get_info(jid, node, self._default_action, nofetch=True)
 
     def _default_action(self, jid, node, identities, features, data):
         """
@@ -1079,7 +1079,7 @@ class AgentBrowser:
         """
         self.model.append((jid, node, item.get('name', ''),
                 get_agent_address(jid, node)))
-        self.cache.get_info(jid, node, self._agent_info, force = force)
+        self.cache.get_info(jid, node, self._agent_info, force=force)
 
     def _update_item(self, iter_, jid, node, item):
         """
@@ -1281,7 +1281,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.search_button = None
         AgentBrowser._clean_actions(self)
 
-    def on_search_button_clicked(self, widget = None):
+    def on_search_button_clicked(self, widget=None):
         """
         When we want to search something: open search window
         """
@@ -1316,7 +1316,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         node = model[iter_][1]
         adhoc_commands.CommandWindow(self.account, service, commandnode=node)
 
-    def on_register_button_clicked(self, widget = None):
+    def on_register_button_clicked(self, widget=None):
         """
         When we want to register an agent: request information about registering
         with the agent and close the window
@@ -1366,8 +1366,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             # Guess what kind of service we're dealing with
             if self.browse_button:
                 jid = model[iter_][0]
-                type_ = app.get_transport_name_from_jid(jid,
-                                        use_config_setting = False)
+                type_ = app.get_transport_name_from_jid(
+                    jid, use_config_setting=False)
                 if type_:
                     identity = {'category': '_jid', 'type': type_}
                     klass = self.cache.get_browser([identity])
@@ -1417,7 +1417,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def browse(self, force=False):
         self._progress = 0
-        AgentBrowser.browse(self, force = force)
+        AgentBrowser.browse(self, force=force)
 
     def _expand_all(self):
         """
@@ -1533,8 +1533,8 @@ class ToplevelAgentBrowser(AgentBrowser):
             descr = "<b>%s</b>" % addr
         # Guess which kind of service this is
         identities = []
-        type_ = app.get_transport_name_from_jid(jid,
-                                use_config_setting = False)
+        type_ = app.get_transport_name_from_jid(
+            jid, use_config_setting=False)
         if type_:
             identity = {'category': '_jid', 'type': type_}
             identities.append(identity)
@@ -1801,7 +1801,7 @@ class MucBrowser(AgentBrowser):
             iter_ = self.model.iter_next(iter_)
         self._fetch_source = None
 
-    def _channel_altinfo(self, jid, node, items, name = None):
+    def _channel_altinfo(self, jid, node, items, name=None):
         """
         Callback for the alternate disco#items query. We try to at least get the
         amount of users in the room if the service does not support MUC dataforms
@@ -1857,7 +1857,7 @@ class MucBrowser(AgentBrowser):
                 break
         else:
             # We didn't find a form, switch to alternate query mode
-            self.cache.get_items(jid, node, self._channel_altinfo, args = (name,))
+            self.cache.get_items(jid, node, self._channel_altinfo, args=(name,))
             return
         # Continue with the next
         self._fetch_source = None
@@ -1975,8 +1975,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
             parent_iter = None
         if not node or not self._in_list(node):
             self.model.append(parent_iter, (jid, node, name, dunno, subscribed))
-            self.cache.get_items(jid, node, self._add_items, force = force,
-                    args = (force,))
+            self.cache.get_items(
+                jid, node, self._add_items, force=force, args=(force,))
 
     def _get_child_iter(self, parent_iter, node):
         child_iter = self.model.iter_children(parent_iter)
@@ -2141,7 +2141,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         model = self.window.services_treeview.get_model()
         for row in model:
             if row[1] == groupnode: # 1 = groupnode
-                row[4]=False
+                row[4] = False
                 break
 
         self.update_actions()

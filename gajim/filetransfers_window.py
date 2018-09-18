@@ -459,7 +459,7 @@ class FileTransfersWindow:
         return self.images.setdefault(ident,
             gtkgui_helpers.get_icon_pixmap(self.icons[ident], 24))
 
-    def set_status(self,file_props, status):
+    def set_status(self, file_props, status):
         """
         Change the status of a transfer to state 'status'
         """
@@ -519,7 +519,7 @@ class FileTransfersWindow:
         return _str
 
     def _format_time(self, _time):
-        times = { 'hours': 0, 'minutes': 0, 'seconds': 0 }
+        times = {'hours': 0, 'minutes': 0, 'seconds': 0}
         _time = int(_time)
         times['seconds'] = _time % 60
         if _time >= 60:
