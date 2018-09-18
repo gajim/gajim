@@ -2203,9 +2203,9 @@ class Interface:
                         app.config.get_per('accounts', a, 'last_status_msg')))
                     continue
                 show = app.config.get_per('accounts', a, 'autoconnect_as')
-                if not show in app.SHOW_LIST:
+                if show not in app.SHOW_LIST:
                     continue
-                if not show in shows:
+                if show not in shows:
                     shows[show] = [a]
                 else:
                     shows[show].append(a)
