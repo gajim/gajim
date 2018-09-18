@@ -1873,18 +1873,19 @@ class Interface:
 ################################################################################
 
     def join_gc_room(self, account, room_jid, nick, password, minimize=False,
-    is_continued=False):
+                     is_continued=False):
         """
         Join the room immediately
         """
 
         if app.contacts.get_contact(account, room_jid) and \
         not app.contacts.get_contact(account, room_jid).is_groupchat():
-            ErrorDialog(_('This is not a group chat'),
+            ErrorDialog(
+                _('This is not a group chat'),
                 _('%(room_jid)s is already in your roster. Please check '
-                'if %(room_jid)s is a correct group chat name. If it is, '
-                'delete it from your roster and try joining the group chat '
-                'again.') % {'room_jid': room_jid, 'room_jid': room_jid})
+                  'if %(room_jid)s is a correct group chat name. If it is, '
+                  'delete it from your roster and try joining the group chat '
+                  'again.') % {'room_jid': room_jid})
             return
 
         if not nick:

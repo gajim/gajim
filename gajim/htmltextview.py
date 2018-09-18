@@ -183,7 +183,7 @@ INLINE = INLINE_PHRASAL.union(INLINE_PRES).union(INLINE_STRUCT)
 LIST_ELEMS = set('dl, ol, ul'.split(', '))
 
 for _name in BLOCK_HEAD:
-    _num = eval(_name[1])
+    _num = int(_name[1])
     _header_size = (_num - 1) // 2
     _weight = (_num - 1) % 2
     _element_styles[_name] = '; font-size: %s; %s' % (('large', 'medium', 'small')[_header_size],
