@@ -89,8 +89,8 @@ class ChatCommandProcessor(CommandProcessor):
         # the /help command. Don't forget to pass self, as all commands
         # are unbound. And also don't forget to print output.
         if 'h' in kwargs or 'help' in kwargs:
-            help = self.get_command('help')
-            self.echo(help(self, name))
+            help_ = self.get_command('help')
+            self.echo(help_(self, name))
             return True
 
     def command_postprocessor(self, command, name, arguments, args, kwargs, value):
@@ -111,29 +111,29 @@ class CommandTools:
         self.install_tags()
 
     def install_tags(self):
-        buffer = self.conv_textview.tv.get_buffer()
+        buffer_ = self.conv_textview.tv.get_buffer()
 
         name = "Monospace"
         font = Pango.FontDescription(name)
 
-        command_ok_tag = buffer.create_tag("command_ok")
+        command_ok_tag = buffer_.create_tag("command_ok")
         command_ok_tag.set_property("font-desc", font)
         command_ok_tag.set_property("foreground", "#3465A4")
 
-        command_error_tag = buffer.create_tag("command_error")
+        command_error_tag = buffer_.create_tag("command_error")
         command_error_tag.set_property("font-desc", font)
         command_error_tag.set_property("foreground", "#F57900")
 
     def shift_line(self):
-        buffer = self.conv_textview.tv.get_buffer()
-        iter = buffer.get_end_iter()
-        if iter.ends_line() and not iter.is_start():
-            buffer.insert_with_tags_by_name(iter, "\n", "eol")
+        buffer_ = self.conv_textview.tv.get_buffer()
+        iter_ = buffer_.get_end_iter()
+        if iter_.ends_line() and not iter_.is_start():
+            buffer_.insert_with_tags_by_name(iter_, "\n", "eol")
 
     def append_with_tags(self, text, *tags):
-        buffer = self.conv_textview.tv.get_buffer()
-        iter = buffer.get_end_iter()
-        buffer.insert_with_tags_by_name(iter, text, *tags)
+        buffer_ = self.conv_textview.tv.get_buffer()
+        iter_ = buffer_.get_end_iter()
+        buffer_.insert_with_tags_by_name(iter_, text, *tags)
 
     def echo(self, text, tag="command_ok"):
         """

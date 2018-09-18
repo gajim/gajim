@@ -3401,8 +3401,8 @@ class RosterWindow:
 
     def expand_group_row(self, path):
         self.tree.expand_row(path, False)
-        iter = self.modelfilter.get_iter(path)
-        child_iter = self.modelfilter.iter_children(iter)
+        iter_ = self.modelfilter.get_iter(path)
+        child_iter = self.modelfilter.iter_children(iter_)
         while child_iter:
             type_ = self.modelfilter[child_iter][Column.TYPE]
             account = self.modelfilter[child_iter][Column.ACCOUNT]

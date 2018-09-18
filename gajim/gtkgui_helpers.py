@@ -555,9 +555,9 @@ def create_list_multi(value_list, selected_values=None):
     col.pack_start(cell, True)
     col.set_attributes(cell, text=0)
     for value in value_list:
-        iter = liststore.append(value)
+        iter_ = liststore.append(value)
         if value[1] in selected_values:
-            treeview.get_selection().select_iter(iter)
+            treeview.get_selection().select_iter(iter_)
     treeview.show_all()
     return treeview
 

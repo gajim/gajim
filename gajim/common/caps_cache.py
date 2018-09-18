@@ -415,8 +415,8 @@ class CapsCache:
 
     def forget_caps(self, client_caps):
         hash_method = client_caps._hash_method
-        hash = client_caps._hash
-        key = (hash_method, hash)
+        hash_ = client_caps._hash
+        key = (hash_method, hash_)
         if key in self.__cache:
             del self.__cache[key]
 

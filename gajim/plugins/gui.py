@@ -122,9 +122,9 @@ class PluginsWindow:
 
     @log_calls('PluginsWindow')
     def installed_plugins_treeview_selection_changed(self, treeview_selection):
-        model, iter = treeview_selection.get_selected()
-        if iter:
-            plugin = model.get_value(iter, Column.PLUGIN)
+        model, iter_ = treeview_selection.get_selected()
+        if iter_:
+            plugin = model.get_value(iter_, Column.PLUGIN)
             self._display_installed_plugin_info(plugin)
         else:
             self._clear_installed_plugin_info()
@@ -207,9 +207,9 @@ class PluginsWindow:
     @log_calls('PluginsWindow')
     def on_configure_plugin_button_clicked(self, widget):
         selection = self.installed_plugins_treeview.get_selection()
-        model, iter = selection.get_selected()
-        if iter:
-            plugin = model.get_value(iter, Column.PLUGIN)
+        model, iter_ = selection.get_selected()
+        if iter_:
+            plugin = model.get_value(iter_, Column.PLUGIN)
 
             if isinstance(plugin.config_dialog, GajimPluginConfigDialog):
                 plugin.config_dialog.run(self.window)
@@ -225,16 +225,16 @@ class PluginsWindow:
     @log_calls('PluginsWindow')
     def on_uninstall_plugin_button_clicked(self, widget):
         selection = self.installed_plugins_treeview.get_selection()
-        model, iter = selection.get_selected()
-        if iter:
-            plugin = model.get_value(iter, Column.PLUGIN)
+        model, iter_ = selection.get_selected()
+        if iter_:
+            plugin = model.get_value(iter_, Column.PLUGIN)
             try:
                 app.plugin_manager.uninstall_plugin(plugin)
             except PluginsystemError as e:
                 WarningDialog(_('Unable to properly remove the plugin'),
                     str(e), self.window)
                 return
-            model.remove(iter)
+            model.remove(iter_)
 
     @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
