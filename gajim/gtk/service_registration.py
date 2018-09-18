@@ -149,9 +149,6 @@ class SendingPage(RequestPage):
     title = _('Register')
     complete = False
 
-    def __init__(self):
-        super().__init__()
-
 
 class FormPage(Gtk.Box):
 
