@@ -634,11 +634,11 @@ class FileTransfersWindow:
                 status = 'download'
             else:
                 status = 'upload'
-            if file_props.paused == True:
+            if file_props.paused is True:
                 status = 'pause'
-            elif file_props.stalled == True:
+            elif file_props.stalled is True:
                 status = 'waiting'
-            if file_props.connected == False:
+            if file_props.connected is False:
                 status = 'stop'
             self.model.set(iter_, 0, self.get_icon(status))
             if transfered_size == full_size:

@@ -323,7 +323,7 @@ class Zeroconf:
             return False
 
     def remove_announce(self):
-        if self.announced == False:
+        if self.announced is False:
             return False
         try:
             if self.entrygroup.GetState() != EntryGroup.FAILURE:

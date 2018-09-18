@@ -86,7 +86,7 @@ class FilesProp:
             if fp is file_prop:
                 a = account
                 s = sid
-        if a != None and s != None:
+        if a is not None and s is not None:
             del files_props[a, s]
 
 

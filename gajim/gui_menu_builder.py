@@ -84,7 +84,7 @@ show_bookmarked=False, force_resource=False):
         elif contacts_transport != transport:
             contacts_transport = False
 
-    if contacts_transport == False:
+    if contacts_transport is False:
         # they are not all from the same transport
         invite_menuitem.set_sensitive(False)
         return
