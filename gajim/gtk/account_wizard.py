@@ -339,8 +339,8 @@ class AccountCreationWizard:
         proxies_combobox.set_model(model)
         proxies = app.config.get_per('proxies')
         proxies.insert(0, _('None'))
-        for i in range(len(proxies)):
-            model.append([proxies[i]])
+        for proxy in proxies:
+            model.append([proxy])
         proxies_combobox.set_active(0)
 
     def on_manage_proxies_button_clicked(self, widget):
