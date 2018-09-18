@@ -428,12 +428,12 @@ class SingleForm(Gtk.Table):
                         widget.set_sensitive(readwrite)
                 else:
                     # more than 5 options: show combobox
-                    def on_list_multi_treeview_changed(selection, f):
-                        def for_selected(treemodel, path, iter_):
+                    def on_list_multi_treeview_changed(selection, field_):
+                        def for_selected(treemodel, _path, iter_):
                             vals.append(treemodel[iter_][1])
                         vals = []
                         selection.selected_foreach(for_selected)
-                        field.values = vals[:]
+                        field_.values = vals[:]
                     widget = Gtk.ScrolledWindow()
                     widget.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
                     tv = gtkgui_helpers.create_list_multi(field.options,

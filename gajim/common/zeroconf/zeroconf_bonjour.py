@@ -121,7 +121,7 @@ class Zeroconf:
                     }
 
         # Split on '.' but do not split on '\.'
-        result = re.split('(?<!\\\\)\.', fullname)
+        result = re.split(r'(?<!\\\\)\.', fullname)
         name = result[0]
         protocol, domain = result[2:4]
 
