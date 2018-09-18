@@ -1187,7 +1187,7 @@ class ConversationTextview(GObject.GObject):
                 text_tags.append('outgoingtxt')
 
         self.print_subject(subject, iter_=iter_)
-        
+
         iter_ = self.print_real_text(text, text_tags, name, xhtml, graphics=graphics,
             mark=insert_mark, additional_data=additional_data)
 

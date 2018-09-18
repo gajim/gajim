@@ -603,7 +603,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         if warn:
             log.warning('only bare JID available')
-        # This returns the bare jid 
+        # This returns the bare jid
         return nbxmpp.JID(app.get_jid_from_account(self.name))
 
     def reconnect(self):

@@ -669,16 +669,16 @@ class ConnectionTypeEvent(nec.NetworkIncomingEvent):
 
 class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
-    
+
     def init(self):
         self.additional_data = {}
-        
+
     def generate(self):
         return True
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
-    
+
     def init(self):
         self.additional_data = {}
 

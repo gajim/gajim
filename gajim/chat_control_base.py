@@ -576,7 +576,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
         self.keycode_c, self.keycode_ins)):
             return False
-        
+
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
         event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
             self._on_scroll(None, event.keyval)
