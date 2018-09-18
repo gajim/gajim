@@ -438,12 +438,12 @@ class GajimRemote(Server):
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
         else:
-            for account in accounts:
+            for account_ in accounts:
                 contact = app.contacts.get_contact_with_highest_priority(
                     account, jid)
-                if contact and app.connections[account].connected > 1:
+                if contact and app.connections[account_].connected > 1:
                     # account is connected
-                    connected_account = account
+                    connected_account = account_
                     break
         if not contact:
             contact = jid
@@ -468,12 +468,12 @@ class GajimRemote(Server):
                 # account and groupchat are connected
                 connected_account = account
         else:
-            for account in accounts:
-                if app.connections[account].connected > 1 and \
-                        room_jid in app.gc_connected[account] and \
-                        app.gc_connected[account][room_jid]:
+            for account_ in accounts:
+                if app.connections[account_].connected > 1 and \
+                        room_jid in app.gc_connected[account_] and \
+                        app.gc_connected[account_][room_jid]:
                     # account and groupchat are connected
-                    connected_account = account
+                    connected_account = account_
                     break
         return connected_account
 
@@ -813,13 +813,13 @@ class GajimRemote(Server):
         if account:
             accounts = [account]
         contact_exists = False
-        for account in accounts:
-            contacts = app.contacts.get_contacts(account, jid)
+        for account_ in accounts:
+            contacts = app.contacts.get_contacts(account_, jid)
             if contacts:
-                app.connections[account].get_module('Presence').unsubscribe(jid)
+                app.connections[account_].get_module('Presence').unsubscribe(jid)
                 for contact in contacts:
-                    app.interface.roster.remove_contact(contact, account)
-                app.contacts.remove_jid(account, jid)
+                    app.interface.roster.remove_contact(contact, account_)
+                app.contacts.remove_jid(account_, jid)
                 contact_exists = True
         return contact_exists
 
@@ -841,14 +841,14 @@ class GajimRemote(Server):
         if jid.startswith('xmpp:'):
             return jid[5:]  # len('xmpp:') = 5
         nick_in_roster = None  # Is jid a nick ?
-        for account in accounts:
+        for account_ in accounts:
             # Does jid exists in roster of one account ?
-            if app.contacts.get_contacts(account, jid):
+            if app.contacts.get_contacts(account_, jid):
                 return jid
             if not nick_in_roster:
                 # look in all contact if one has jid as nick
-                for jid_ in app.contacts.get_jid_list(account):
-                    c = app.contacts.get_contacts(account, jid_)
+                for jid_ in app.contacts.get_jid_list(account_):
+                    c = app.contacts.get_contacts(account_, jid_)
                     if c[0].name == jid:
                         nick_in_roster = jid_
                         break

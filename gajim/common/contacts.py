@@ -809,11 +809,10 @@ class MetacontactManager():
         if not tag:
             return []
         answers = []
-        for account in self._metacontacts_tags:
-            if tag in self._metacontacts_tags[account]:
-                for data in self._metacontacts_tags[account][tag]:
-                    data['account'] = account
-                    answers.append(data)
+        if tag in self._metacontacts_tags[account]:
+            for data in self._metacontacts_tags[account][tag]:
+                data['account'] = account
+                answers.append(data)
         return answers
 
     def _metacontact_key(self, data):

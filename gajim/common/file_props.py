@@ -38,8 +38,8 @@ class FilesProp:
     def getFilePropByAccount(cls, account):
         # Returns a list of file_props in one account
         file_props = []
-        for account, sid in cls._files_props:
-            if account == account:
+        for account_, sid in cls._files_props:
+            if account_ == account:
                 file_props.append(cls._files_props[account, sid])
         return file_props
 

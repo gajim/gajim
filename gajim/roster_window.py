@@ -3842,7 +3842,7 @@ class RosterWindow:
         self._toggeling_row = True
         model = widget.get_model()
         child_model = model.get_model()
-        child_iter =  model.convert_iter_to_child_iter(titer)
+        child_iter = model.convert_iter_to_child_iter(titer)
 
         if self.regroup: # merged accounts
             accounts = list(app.connections.keys())
@@ -3867,8 +3867,8 @@ class RosterWindow:
                     app.contacts.is_big_brother(account, jid, accounts) and \
                     account + group + jid not in self.collapsed_rows:
                         titers = self._get_contact_iter(jid, account)
-                        for titer in titers:
-                            path = model.get_path(titer)
+                        for titer_ in titers:
+                            path = model.get_path(titer_)
                             self.tree.expand_row(path, False)
         elif type_ == 'account':
             account = list(accounts)[0] # There is only one cause we don't use merge

@@ -337,14 +337,15 @@ class ChooseGPGKeyDialog:
 
 
 class ChangeActivityDialog:
-    PAGELIST = ['doing_chores', 'drinking', 'eating', 'exercising', 'grooming',
-            'having_appointment', 'inactive', 'relaxing', 'talking', 'traveling',
-            'working']
+    PAGELIST = [
+        'doing_chores', 'drinking', 'eating', 'exercising', 'grooming',
+        'having_appointment', 'inactive', 'relaxing', 'talking', 'traveling',
+        'working']
 
-    def __init__(self, on_response, activity=None, subactivity=None, text=''):
+    def __init__(self, on_response, activity_=None, subactivity_=None, text=''):
         self.on_response = on_response
-        self.activity = activity
-        self.subactivity = subactivity
+        self.activity = activity_
+        self.subactivity = subactivity_
         self.text = text
         self.xml = gtkgui_helpers.get_gtk_builder('change_activity_dialog.ui')
         self.window = self.xml.get_object('change_activity_dialog')
@@ -360,7 +361,7 @@ class ChangeActivityDialog:
         for category in ACTIVITIES:
             item = self.xml.get_object(category + '_image')
             item.set_from_pixbuf(
-                    gtkgui_helpers.load_activity_icon(category).get_pixbuf())
+                gtkgui_helpers.load_activity_icon(category).get_pixbuf())
             item.set_tooltip_text(ACTIVITIES[category]['category'])
 
             vbox = self.xml.get_object(category + '_vbox')
@@ -375,21 +376,19 @@ class ChangeActivityDialog:
             else:
                 rbtns[act] = group = Gtk.RadioButton()
 
+            icon = gtkgui_helpers.load_activity_icon(category, self.activity)
             hbox = Gtk.HBox(homogeneous=False, spacing=5)
-            hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
-                activity), False, False, 0)
-            lbl = Gtk.Label(label='<b>' + ACTIVITIES[category]['category'] \
-                + '</b>')
+            hbox.pack_start(icon, False, False, 0)
+            lbl = Gtk.Label(
+                label='<b>%s</b>' % ACTIVITIES[category]['category'])
             lbl.set_use_markup(True)
             hbox.pack_start(lbl, False, False, 0)
             rbtns[act].add(hbox)
-            rbtns[act].connect('toggled', self.on_rbtn_toggled,
-                    [category, 'other'])
+            rbtns[act].connect(
+                'toggled', self.on_rbtn_toggled, [category, 'other'])
             vbox.pack_start(rbtns[act], False, False, 0)
 
-            activities = []
-            for activity in ACTIVITIES[category]:
-                activities.append(activity)
+            activities = list(ACTIVITIES[category].keys())
             activities.sort()
             for activity in activities:
                 if activity == 'category':
@@ -403,13 +402,13 @@ class ChangeActivityDialog:
                 else:
                     rbtns[act] = group = Gtk.RadioButton()
 
+                icon = gtkgui_helpers.load_activity_icon(category, activity)
+                label = Gtk.Label(label=ACTIVITIES[category][activity])
                 hbox = Gtk.HBox(homogeneous=False, spacing=5)
-                hbox.pack_start(gtkgui_helpers.load_activity_icon(category,
-                        activity), False, False, 0)
-                hbox.pack_start(Gtk.Label(label=ACTIVITIES[category][activity]),
-                        False, False, 0)
-                rbtns[act].connect('toggled', self.on_rbtn_toggled,
-                        [category, activity])
+                hbox.pack_start(icon, False, False, 0)
+                hbox.pack_start(label, False, False, 0)
+                rbtns[act].connect(
+                    'toggled', self.on_rbtn_toggled, [category, activity])
                 rbtns[act].add(hbox)
                 vbox.pack_start(rbtns[act], False, False, 0)
 
@@ -427,8 +426,7 @@ class ChangeActivityDialog:
             self.entry.set_sensitive(True)
 
             self.notebook.set_current_page(
-                    self.PAGELIST.index(self.activity))
-
+                self.PAGELIST.index(self.activity))
             self.entry.set_text(text)
 
         else:
@@ -454,8 +452,8 @@ class ChangeActivityDialog:
         Return activity and messsage (None if no activity selected)
         """
         if self.checkbutton.get_active():
-            self.on_response(self.activity, self.subactivity,
-                    self.entry.get_text())
+            self.on_response(
+                self.activity, self.subactivity, self.entry.get_text())
         else:
             self.on_response(None, None, '')
         self.window.destroy()
@@ -466,9 +464,9 @@ class ChangeActivityDialog:
 class ChangeMoodDialog:
     COLS = 11
 
-    def __init__(self, on_response, mood=None, text=''):
+    def __init__(self, on_response, mood_=None, text=''):
         self.on_response = on_response
-        self.mood = mood
+        self.mood = mood_
         self.text = text
         self.xml = gtkgui_helpers.get_gtk_builder('change_mood_dialog.ui')
 
@@ -1418,18 +1416,18 @@ class TransformChatToMUC:
         #       transports, zeroconf contacts, minimized groupchats
         def invitable(contact, contact_transport=None):
             return (contact.jid not in self.auto_jids and
-                contact.jid != app.get_jid_from_account(self.account) and
+                contact.jid != app.get_jid_from_account(account) and
                 contact.jid not in app.interface.minimized_controls[account] and
                 not contact.is_transport() and
                 contact_transport in ('jabber', None))
 
         # set jabber id and pseudos
-        for account in app.contacts.get_accounts():
-            if app.connections[account].is_zeroconf:
+        for account_ in app.contacts.get_accounts():
+            if app.connections[account_].is_zeroconf:
                 continue
-            for jid in app.contacts.get_jid_list(account):
+            for jid in app.contacts.get_jid_list(account_):
                 contact = app.contacts.get_contact_with_highest_priority(
-                    account, jid)
+                    account_, jid)
                 contact_transport = app.get_transport_name_from_jid(jid)
                 # Add contact if it can be invited
                 if invitable(contact, contact_transport) and \

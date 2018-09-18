@@ -126,7 +126,7 @@ class Section(Gtk.Box):
             else:
                 # We dont have a image for the base codepoint
                 # so skip all modifiers of it
-                for codepoint, attrs in variations.items():
+                for _entry in variations:
                     pixbuf = self._get_next_pixbuf()
         return True
 
