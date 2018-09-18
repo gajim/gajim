@@ -1857,7 +1857,7 @@ class Interface:
         emoticons = emoji_data.get_regex()
         if app.config.get('ascii_emoticons'):
             emoticons += '|%s' % emoji_ascii_data.get_regex()
-            pass
+
         self.emot_and_basic = '%s|%s' % (basic_pattern, emoticons)
 
         # at least one character in 3 parts (before @, after @, after .)

@@ -81,7 +81,6 @@ class ServiceRegistration(Gtk.Assistant):
         elif self.get_current_page() == Page.SENDING:
             self._register()
             self.commit()
-            pass
 
     def _on_get_success(self, form, is_form):
         log.info('Show Form page')
