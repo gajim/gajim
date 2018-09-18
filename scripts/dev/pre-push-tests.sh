@@ -12,5 +12,27 @@ pylint --jobs=2 --disable=C0103,C0302,C0330,C0411,C0412,C0413,E0203,E0401,E0611,
 # E0611 no-name-in-module
 # E0710 raising-non-exception   - GLib.GError is not recognized
 # E0712 catching-non-exception  - GLib.GError is not recognized
+# E1101 no-member
+# E1102 not-callable
+# E1128 assignment-from-none
+# E1133 not-an-iterable
+# E1136 unsubscriptable-object
 # R0201 no-self-use
+# R0901 too-many-ancestors
+# R0904 too-many-public-methods
+# R0913 too-many-arguments
+# R0916 too-many-boolean-expressions
+# R1702
+# R1706
+# R1711
+# R1716
 # W0143 comparison-with-callable - Dont add to Server CI, only available on pylint 2.0+
+# W0201 attribute-defined-outside-init
+# W0212 protected-access
+# W0221 arguments-differ
+# W0223 abstract-method
+# W0311 bad-indentation
+# W0401 wildcard-import
+# W0603 global-statement
+# W0613 unused-argument
+# W0614 unused-wildcard-import
