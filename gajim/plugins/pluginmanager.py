@@ -115,8 +115,7 @@ class PluginManager(metaclass=Singleton):
     def _plugin_has_entry_in_global_config(self, plugin):
         if app.config.get_per('plugins', plugin.short_name) is None:
             return False
-        else:
-            return True
+        return True
 
     @log_calls('PluginManager')
     def _create_plugin_entry_in_global_config(self, plugin):

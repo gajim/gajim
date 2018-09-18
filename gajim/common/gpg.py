@@ -53,8 +53,7 @@ if app.is_installed('GPG'):
                     if key['trust'] not in ('f', 'u'):
                         if key['keyid'][-8:] not in self.always_trust:
                             return '', 'NOT_TRUSTED ' + key['keyid'][-8:]
-                        else:
-                            trust = True
+                        trust = True
             result = super(GnuPG, self).encrypt(str_.encode('utf8'), recipients,
                 always_trust=trust, passphrase=self.passphrase)
 

@@ -209,12 +209,10 @@ class GtkAvatarChooserDialog(BaseAvatarChooserDialog, GtkFileChooserDialog):
 def FileChooserDialog(*args, **kwargs):
     if _require_native():
         return NativeFileOpenDialog(*args, **kwargs)
-    else:
-        return GtkFileOpenDialog(*args, **kwargs)
+    return GtkFileOpenDialog(*args, **kwargs)
 
 
 def AvatarChooserDialog(*args, **kwargs):
     if _require_native():
         return NativeAvatarChooserDialog(*args, **kwargs)
-    else:
-        return GtkAvatarChooserDialog(*args, **kwargs)
+    return GtkAvatarChooserDialog(*args, **kwargs)

@@ -554,8 +554,8 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
                 }
                 proxyhost_dicts.append(host_dict)
             return proxyhost_dicts
-        else:
-            return []
+
+        return []
 
     def _result_socks5_sid(self, sid, hash_id):
         """

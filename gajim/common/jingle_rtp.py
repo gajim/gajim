@@ -470,7 +470,7 @@ class JingleVideo(JingleRTPContent):
 def get_content(desc):
     if desc['media'] == 'audio':
         return JingleAudio
-    elif desc['media'] == 'video':
+    if desc['media'] == 'video':
         return JingleVideo
 
 contents[nbxmpp.NS_JINGLE_RTP] = get_content

@@ -880,7 +880,7 @@ class GroupchatControl(ChatControlBase):
             show2 = cshow[gc_contact2.show]
             if show1 < show2:
                 return -1
-            elif show1 > show2:
+            if show1 > show2:
                 return 1
         # We compare names
         name1 = gc_contact1.get_shown_name()
@@ -2184,12 +2184,11 @@ class GroupchatControl(ChatControlBase):
             self.msg_textview.grab_focus()
 
     def get_role(self, nick):
-        gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid,
-                nick)
+        gc_contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, nick)
         if gc_contact:
             return gc_contact.role
-        else:
-            return 'visitor'
+        return 'visitor'
 
     def minimizable(self):
         if self.force_non_minimizable:
@@ -2245,8 +2244,9 @@ class GroupchatControl(ChatControlBase):
         if chatstate_setting == 'disabled':
             return
 
-        elif chatstate_setting == 'composing_only' and state != 'active' and\
-                state != 'composing':
+        if (chatstate_setting == 'composing_only' and
+            state != 'active' and
+                state != 'composing'):
             return
 
         # if the new state we wanna send (state) equals
@@ -2814,7 +2814,7 @@ class GroupchatControl(ChatControlBase):
                 self.mk_menu(event, iter_)
             return True
 
-        elif event.button == 2: # middle click
+        if event.button == 2: # middle click
             widget.get_selection().select_path(path)
             iter_ = self.model.get_iter(path)
             if path.get_depth() == 2:
@@ -2822,25 +2822,25 @@ class GroupchatControl(ChatControlBase):
                 self._start_private_message(nick)
             return True
 
-        elif event.button == 1: # left click
+        if event.button == 1: # left click
             if app.single_click and not event.get_state() & Gdk.ModifierType.SHIFT_MASK:
                 self.on_row_activated(widget, path)
                 return True
-            else:
-                iter_ = self.model.get_iter(path)
-                nick = self.model[iter_][Column.NICK]
-                if not nick in app.contacts.get_nick_list(self.account,
-                self.room_jid):
-                    # it's a group
-                    if x < 27:
-                        if widget.row_expanded(path):
-                            widget.collapse_row(path)
-                        else:
-                            widget.expand_row(path, False)
-                elif event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-                    self.append_nick_in_msg_textview(self.msg_textview, nick)
-                    self.msg_textview.grab_focus()
-                    return True
+
+            iter_ = self.model.get_iter(path)
+            nick = self.model[iter_][Column.NICK]
+            if not nick in app.contacts.get_nick_list(
+                    self.account, self.room_jid):
+                # it's a group
+                if x < 27:
+                    if widget.row_expanded(path):
+                        widget.collapse_row(path)
+                    else:
+                        widget.expand_row(path, False)
+            elif event.get_state() & Gdk.ModifierType.SHIFT_MASK:
+                self.append_nick_in_msg_textview(self.msg_textview, nick)
+                self.msg_textview.grab_focus()
+                return True
 
     def append_nick_in_msg_textview(self, widget, nick):
         self.msg_textview.remove_placeholder()

@@ -338,8 +338,7 @@ class HistoryManager:
         row = self.cur.fetchone()
         if row is None:
             return False
-        else:
-            return True
+        return True
 
     def _jid_is_room_type(self, jid):
         """

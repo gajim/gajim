@@ -610,11 +610,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 self.parent_win.move_to_next_unread_tab(False)
                 return True
             # SHIFT + PAGE_[UP|DOWN]: send to conv_textview
-            elif event.keyval == Gdk.KEY_Page_Down or \
+            if event.keyval == Gdk.KEY_Page_Down or \
                             event.keyval == Gdk.KEY_Page_Up:
                 self.conv_textview.tv.event(event)
                 return True
-        elif event.get_state() & Gdk.ModifierType.CONTROL_MASK:
+        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:  # CTRL + TAB
                 self.parent_win.move_to_next_unread_tab(True)
                 return True

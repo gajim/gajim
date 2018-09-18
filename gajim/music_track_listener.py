@@ -78,12 +78,11 @@ class MusicTrackListener(GObject.GObject):
                 Gio.DBusCallFlags.NONE,
                 -1,
                 None)
-        except GLib.Error as e:
-            if e.domain == 'g-dbus-error-quark':
-                log.debug("Could not list names: %s", e.message)
+        except GLib.Error as error:
+            if error.domain == 'g-dbus-error-quark':
+                log.debug("Could not list names: %s", error.message)
                 return
-            else:
-                raise
+            raise
 
         for name in result[0]:
             if name.startswith(MPRIS_PLAYER_PREFIX):
@@ -186,12 +185,11 @@ class MusicTrackListener(GObject.GObject):
                 Gio.DBusCallFlags.NONE,
                 -1,
                 None)
-        except GLib.Error as e:
-            if e.domain == 'g-dbus-error-quark':
-                log.debug("Could not enable music listener: %s", e.message)
+        except GLib.Error as error:
+            if error.domain == 'g-dbus-error-quark':
+                log.debug("Could not enable music listener: %s", error.message)
                 return None
-            else:
-                raise
+            raise
         else:
             info = self._properties_extract(result[0])
             return info

@@ -425,13 +425,15 @@ class HistoryWindow:
             self.calendar.select_month(gtk_m, self.first_day.year)
             self.calendar.select_day(self.first_day.day)
             return
-        elif widget is self.button_last_day:
+
+        if widget is self.button_last_day:
             gtk_m = gtk_month(
                 self.last_day.month)
             self.calendar.select_month(gtk_m, self.last_day.year)
             self.calendar.select_day(self.last_day.day)
             return
-        elif widget is self.button_previous_day:
+
+        if widget is self.button_previous_day:
             end_date = self.first_day
             timedelta = datetime.timedelta(days=-1)
             if end_date >= _date:
@@ -640,8 +642,8 @@ class HistoryWindow:
         if text == '':
             self.results_window.set_property('visible', False)
             return
-        else:
-            self.results_window.set_property('visible', True)
+
+        self.results_window.set_property('visible', True)
 
         # perform search in preselected jids
         # jids are preselected with the query_entry

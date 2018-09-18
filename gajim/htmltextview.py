@@ -191,10 +191,9 @@ for _name in BLOCK_HEAD:
 
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
-        r, g, b = [int(c)*257 for c in color[4:-1].split(',')]
-        return Gdk.Color(r, g, b)
-    else:
-        return Gdk.color_parse(color)
+        red, green, blue = [int(c)*257 for c in color[4:-1].split(',')]
+        return Gdk.Color(red, green, blue)
+    return Gdk.color_parse(color)
 
 def style_iter(style):
     return ([x.strip() for x in item.split(':', 1)] for item in style.split(';')\
@@ -990,20 +989,20 @@ class HtmlTextView(Gtk.TextView):
             if event.button == 3: # right click
                 self.make_link_menu(event, kind, word)
                 return True
-            else:
-                # we launch the correct application
-                if kind == 'xmpp':
-                    word = word[5:]
-                    if '?' in word:
-                        (jid, action) = word.split('?')
-                        if action == 'join':
-                            self.on_join_group_chat_menuitem_activate(None, jid)
-                        else:
-                            self.on_start_chat_activate(None, jid)
+
+            # we launch the correct application
+            if kind == 'xmpp':
+                word = word[5:]
+                if '?' in word:
+                    (jid, action) = word.split('?')
+                    if action == 'join':
+                        self.on_join_group_chat_menuitem_activate(None, jid)
                     else:
-                        self.on_start_chat_activate(None, word)
+                        self.on_start_chat_activate(None, jid)
                 else:
-                    helpers.launch_browser_mailer(kind, word)
+                    self.on_start_chat_activate(None, word)
+            else:
+                helpers.launch_browser_mailer(kind, word)
 
     def _hyperlink_handler(self, texttag, widget, event, iter_, kind):
         # self.hyperlink_handler can be overwritten, so call it when needed

@@ -344,8 +344,7 @@ class MessageTextView(Gtk.TextView):
 
         if modified:
             return '<p>' + self.make_clickable_urls(text) + '</p>'
-        else:
-            return None
+        return None
 
     def replace_emojis(self):
         theme = app.config.get('emoticons_theme')

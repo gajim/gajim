@@ -36,8 +36,7 @@ class AbstractPEP:
         if items:
             log.debug('Received PEP "user %s" from %s', cls.type_, jid)
             return cls(jid, account, items)
-        else:
-            return None
+        return None
 
     def __init__(self, jid, account, items):
         self.data, self._retracted = self._extract_info(items)

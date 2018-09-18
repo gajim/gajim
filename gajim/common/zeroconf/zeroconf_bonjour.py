@@ -257,7 +257,7 @@ class Zeroconf:
     def replace_show(self, show):
         if show in ['chat', 'online', '']:
             return 'avail'
-        elif show == 'xa':
+        if show == 'xa':
             return 'away'
         return show
 
@@ -327,9 +327,9 @@ class Zeroconf:
         # start browsing
         if self.browse_domain():
             return True
-        else:
-            self.disconnect()
-            return False
+
+        self.disconnect()
+        return False
 
     def disconnect(self):
         if self.connected:
@@ -362,8 +362,7 @@ class Zeroconf:
             if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
                 log.info('Service not running')
                 return False
-            else:
-                log.error('Error while browsing for services. %s', error)
+            log.error('Error while browsing for services. %s', error)
         return True
 
     # resolve_all() is called every X seconds and querys for new clients
@@ -401,8 +400,7 @@ class Zeroconf:
                 if error.errorCode == pybonjour.kDNSServiceErr_ServiceNotRunning:
                     log.info('Service not running')
                     return False
-                else:
-                    log.error('Error in query for TXT records. %s', error)
+                log.error('Error in query for TXT records. %s', error)
             finally:
                 if query_sdRef:
                     query_sdRef.close()

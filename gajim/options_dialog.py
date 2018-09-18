@@ -159,8 +159,7 @@ class GenericOption(Gtk.Grid):
     def do_get_property(self, prop):
         if prop.name == 'option-value':
             return self.option_value
-        else:
-            raise AttributeError('unknown property %s' % prop.name)
+        raise AttributeError('unknown property %s' % prop.name)
 
     def do_set_property(self, prop, value):
         if prop.name == 'option-value':
@@ -177,23 +176,25 @@ class GenericOption(Gtk.Grid):
             return
         if type_ == OptionType.VALUE:
             return value
-        elif type_ == OptionType.CONFIG:
+
+        if type_ == OptionType.CONFIG:
             return app.config.get(value)
-        elif type_ == OptionType.ACCOUNT_CONFIG:
+
+        if type_ == OptionType.ACCOUNT_CONFIG:
             if value == 'password':
                 return passwords.get_password(account)
-            elif value == 'no_log_for':
+            if value == 'no_log_for':
                 no_log = app.config.get_per(
                     'accounts', account, 'no_log_for').split()
                 return account not in no_log
-            else:
-                return app.config.get_per('accounts', account, value)
-        elif type_ == OptionType.ACTION:
+            return app.config.get_per('accounts', account, value)
+
+        if type_ == OptionType.ACTION:
             if value.startswith('-'):
                 return account + value
             return value
-        else:
-            raise ValueError('Wrong OptionType?')
+
+        raise ValueError('Wrong OptionType?')
 
     def set_value(self, state):
         if self.type_ == OptionType.CONFIG:

@@ -165,7 +165,7 @@ class CommonConnection:
         self.gpg.password = None
         if signed == 'KEYEXPIRED':
             return 'expired'
-        elif signed == 'BAD_PASSPHRASE':
+        if signed == 'BAD_PASSPHRASE':
             return 'bad_pass'
         return 'ok'
 
@@ -600,11 +600,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.registered_name:
             # This returns the full jid we received on the bind event
             return self.registered_name
-        else:
-            if warn:
-                log.warning('only bare JID available')
-            # This returns the bare jid 
-            return nbxmpp.JID(app.get_jid_from_account(self.name))
+
+        if warn:
+            log.warning('only bare JID available')
+        # This returns the bare jid 
+        return nbxmpp.JID(app.get_jid_from_account(self.name))
 
     def reconnect(self):
         # Do not try to reco while we are already trying
@@ -804,14 +804,14 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         if len(hosts_lowest_prio) == 1:
             return hosts_lowest_prio[0]
-        else:
-            rndint = random.randint(0, sum(h['weight'] for h in hosts_lowest_prio))
-            weightsum = 0
-            for host in sorted(hosts_lowest_prio, key=operator.itemgetter(
-            'weight')):
-                weightsum += host['weight']
-                if weightsum >= rndint:
-                    return host
+
+        rndint = random.randint(0, sum(h['weight'] for h in hosts_lowest_prio))
+        weightsum = 0
+        for host in sorted(hosts_lowest_prio,
+                           key=operator.itemgetter('weight')):
+            weightsum += host['weight']
+            if weightsum >= rndint:
+                return host
 
     def connect(self, data=None):
         """

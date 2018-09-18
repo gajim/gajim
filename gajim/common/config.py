@@ -537,15 +537,13 @@ class Config:
             return None
         if type_[0] == 'boolean':
             return self.is_valid_bool(val)
-        elif type_[0] == 'integer':
+        if type_[0] == 'integer':
             return self.is_valid_int(val)
-        elif type_[0] == 'string':
+        if type_[0] == 'string':
             return self.is_valid_string(val)
-        else:
-            if re.match(type_[1], val):
-                return val
-            else:
-                return None
+        if re.match(type_[1], val):
+            return val
+        return None
 
     def set(self, optname, value):
         if optname not in self.__options[1]:

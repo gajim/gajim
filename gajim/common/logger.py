@@ -362,9 +362,8 @@ class Logger:
         if jid.find('/') > -1:
             possible_room_jid = jid.split('/', 1)[0]
             return self.jid_is_room_jid(possible_room_jid)
-        else:
-            # it's not a full jid, so it's not a pm one
-            return False
+        # it's not a full jid, so it's not a pm one
+        return False
 
     def jid_is_room_jid(self, jid):
         """
@@ -465,21 +464,21 @@ class Logger:
 
         if show == 'online':
             return ShowConstant.ONLINE
-        elif show == 'chat':
+        if show == 'chat':
             return ShowConstant.CHAT
-        elif show == 'away':
+        if show == 'away':
             return ShowConstant.AWAY
-        elif show == 'xa':
+        if show == 'xa':
             return ShowConstant.XA
-        elif show == 'dnd':
+        if show == 'dnd':
             return ShowConstant.DND
-        elif show == 'offline':
+        if show == 'offline':
             return ShowConstant.OFFLINE
-        elif show is None:
+        if show is None:
             return ShowConstant.ONLINE
-        else: # invisible in GC when someone goes invisible
-            # it's a RFC violation .... but we should not crash
-            return None
+        # invisible in GC when someone goes invisible
+        # it's a RFC violation .... but we should not crash
+        return None
 
     def convert_human_transport_type_to_db_api_values(self, type_):
         """

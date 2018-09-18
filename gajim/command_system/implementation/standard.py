@@ -43,7 +43,7 @@ class StandardCommonCommands(CommandContainer):
 
     @command(overlap=True)
     @doc(_("Show help on a given command or a list of available commands if -a is given"))
-    def help(self, cmd=None, all=False):
+    def help(self, cmd=None, all_=False):
         if cmd:
             cmd = self.get_command(cmd)
 
@@ -58,7 +58,8 @@ class StandardCommonCommands(CommandContainer):
                 text.append(usage)
 
             return '\n\n'.join(text)
-        elif all:
+
+        if all_:
             for cmd_ in self.list_commands():
                 names = ', '.join(cmd_.names)
                 description = cmd_.extract_description()

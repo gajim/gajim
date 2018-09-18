@@ -148,8 +148,7 @@ class Notification:
         elif obj.notif_type == 'pres':
             if obj.transport_name is not None:
                 return '%s-%s' % (obj.transport_name, obj.show)
-            else:
-                return gtkgui_helpers.get_iconset_name_for(obj.show)
+            return gtkgui_helpers.get_iconset_name_for(obj.show)
 
     def popup(self, event_type, jid, account, type_='', icon_name=None,
               title=None, text=None, timeout=-1, room_jid=None):

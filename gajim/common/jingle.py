@@ -181,15 +181,15 @@ class ConnectionJingle:
         if contact.supports(nbxmpp.NS_HASHES_2):
             if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_512):
                 return 'blake2b-512'
-            elif contact.supports(nbxmpp.NS_HASHES_BLAKE2B_256):
+            if contact.supports(nbxmpp.NS_HASHES_BLAKE2B_256):
                 return 'blake2b-256'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA3_512):
+            if contact.supports(nbxmpp.NS_HASHES_SHA3_512):
                 return 'sha3-512'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA3_256):
+            if contact.supports(nbxmpp.NS_HASHES_SHA3_256):
                 return 'sha3-256'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA512):
+            if contact.supports(nbxmpp.NS_HASHES_SHA512):
                 return 'sha-512'
-            elif contact.supports(nbxmpp.NS_HASHES_SHA256):
+            if contact.supports(nbxmpp.NS_HASHES_SHA256):
                 return 'sha-256'
         return None
 
@@ -202,11 +202,8 @@ class ConnectionJingle:
         if media:
             if media not in ('audio', 'video', 'file'):
                 return tuple()
-            else:
-                return (session for session in sessions if \
-                    session.get_content(media))
-        else:
-            return sessions
+            return (session for session in sessions if session.get_content(media))
+        return sessions
 
     def set_file_info(self, file_):
         # Saves information about the files we have transferred in case they need
@@ -228,9 +225,8 @@ class ConnectionJingle:
         if sid:
             if sid in self._sessions:
                 return self._sessions[sid]
-            else:
-                return None
-        elif media:
+            return None
+        if media:
             if media not in ('audio', 'video', 'file'):
                 return None
             for session in self._sessions.values():

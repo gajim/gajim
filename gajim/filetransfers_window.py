@@ -383,7 +383,7 @@ class FileTransfersWindow:
                     ErrorDialog(
                         _('Cannot overwrite existing file "%s"' % file_name),
                         _('A file with this name already exists and you do not '
-                        'have permission to overwrite it.'))
+                          'have permission to overwrite it.'))
                     return
                 stat = os.stat(file_path)
                 dl_size = stat.st_size
@@ -393,7 +393,7 @@ class FileTransfersWindow:
                 def on_response(response):
                     if response < 0:
                         return
-                    elif response == 100:
+                    if response == 100:
                         file_props.offset = dl_size
                     self._start_receive(file_path, account, contact, file_props)
 
@@ -402,16 +402,17 @@ class FileTransfersWindow:
                     propose_resume=not dl_finished, on_response=on_response)
                 dialog.set_destroy_with_parent(True)
                 return
-            else:
-                dirname = os.path.dirname(file_path)
-                if not os.access(dirname, os.W_OK) and os.name != 'nt':
-                    # read-only bit is used to mark special folder under
-                    # windows, not to mark that a folder is read-only.
-                    # See ticket #3587
-                    ErrorDialog(_('Directory "%s" is not writable') % \
-                        dirname, _('You do not have permission to create files '
-                        'in this directory.'))
-                    return
+
+            dirname = os.path.dirname(file_path)
+            if not os.access(dirname, os.W_OK) and os.name != 'nt':
+                # read-only bit is used to mark special folder under
+                # windows, not to mark that a folder is read-only.
+                # See ticket #3587
+                ErrorDialog(
+                    _('Directory "%s" is not writable') % dirname,
+                    _('You do not have permission to create files '
+                      'in this directory.'))
+                return
             self._start_receive(file_path, account, contact, file_props)
 
         con = app.connections[account]
@@ -535,7 +536,8 @@ class FileTransfersWindow:
     def _get_eta_and_speed(self, full_size, transfered_size, file_props):
         if not file_props.transfered_size:
             return 0., 0.
-        elif len(file_props.transfered_size) == 1:
+
+        if len(file_props.transfered_size) == 1:
             speed = round(float(transfered_size) / file_props.elapsed_time)
         else:
             # first and last are (time, transfered_size)

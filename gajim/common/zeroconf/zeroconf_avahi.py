@@ -259,7 +259,7 @@ class Zeroconf:
     def replace_show(self, show):
         if show in ['chat', 'online', '']:
             return 'avail'
-        elif show == 'xa':
+        if show == 'xa':
             return 'away'
         return show
 
@@ -336,8 +336,7 @@ class Zeroconf:
                 self.announced = False
 
                 return True
-            else:
-                return False
+            return False
         except dbus.DBusException:
             log.debug("Can't remove service. That should not happen")
 
@@ -485,8 +484,7 @@ class Zeroconf:
                     txt, reply_handler=self.service_updated_callback,
                     error_handler=self.error_callback)
             return True
-        else:
-            return False
+        return False
 
 
 # END Zeroconf

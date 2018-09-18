@@ -288,7 +288,7 @@ class HostTester(Socks5, IdleObject):
         if self.state == 0:
             self.do_connect()
             return
-        elif self.state == 1: # send initially: version and auth types
+        if self.state == 1: # send initially: version and auth types
             data = self._get_auth_buff()
             self.send_raw(data)
         else:
@@ -408,7 +408,7 @@ class ReceiverTester(Socks5, IdleObject):
         if self.state == 0:
             self.do_connect()
             return
-        elif self.state == 1: # send initially: version and auth types
+        if self.state == 1: # send initially: version and auth types
             data = self._get_auth_buff()
             self.send_raw(data)
         else:

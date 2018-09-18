@@ -180,9 +180,8 @@ def parse_resource(resource):
         try:
             if HAS_PRECIS_I18N:
                 return resource.encode('Nickname').decode('utf-8')
-            else:
-                from nbxmpp.stringprepare import resourceprep
-                return resourceprep.prepare(resource)
+            from nbxmpp.stringprepare import resourceprep
+            return resourceprep.prepare(resource)
         except UnicodeError:
             raise InvalidFormat('Invalid character in resource.')
 
@@ -254,13 +253,11 @@ def prep(user, server, resource):
     if user:
         if resource:
             return '%s@%s/%s' % (user, server, resource)
-        else:
-            return '%s@%s' % (user, server)
-    else:
-        if resource:
-            return '%s/%s' % (server, resource)
-        else:
-            return server
+        return '%s@%s' % (user, server)
+
+    if resource:
+        return '%s/%s' % (server, resource)
+    return server
 
 def windowsify(s):
     if os.name == 'nt':
@@ -333,11 +330,11 @@ def get_uf_show(show, use_mnemonic = False):
 def get_css_show_color(show):
     if show in ('online', 'chat', 'invisible'):
         return 'status-online'
-    elif show in ('offline', 'not in roster', 'requested'):
+    if show in ('offline', 'not in roster', 'requested'):
         return None
-    elif show in ('xa', 'dnd'):
+    if show in ('xa', 'dnd'):
         return 'status-dnd'
-    elif show == 'away':
+    if show == 'away':
         return 'status-away'
 
 def get_uf_sub(sub):
@@ -434,14 +431,14 @@ def get_uf_chatstate(chatstate):
     """
     if chatstate == 'active':
         return _('is paying attention to the conversation')
-    elif chatstate == 'inactive':
+    if chatstate == 'inactive':
         return _('is doing something else')
-    elif chatstate == 'composing':
+    if chatstate == 'composing':
         return _('is composing a message…')
-    elif chatstate == 'paused':
+    if chatstate == 'paused':
         #paused means he or she was composing but has stopped for a while
         return _('paused composing a message')
-    elif chatstate == 'gone':
+    if chatstate == 'gone':
         return _('has closed the chat window or tab')
     return ''
 
@@ -456,8 +453,7 @@ def is_in_path(command, return_abs_path=False):
             if command in os.listdir(directory):
                 if return_abs_path:
                     return os.path.join(directory, command)
-                else:
-                    return True
+                return True
         except OSError:
             # If the user has non directories in his path
             pass
@@ -724,7 +720,7 @@ def check_soundfile_path(file_, dirs=None):
 
     if not file_:
         return None
-    elif os.path.exists(file_):
+    if os.path.exists(file_):
         return file_
 
     for d in dirs:
@@ -766,7 +762,7 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    elif sys.platform == 'win32' and HAS_SOUND:
+    if sys.platform == 'win32' and HAS_SOUND:
         try:
             winsound.PlaySound(path_to_soundfile,
                     winsound.SND_FILENAME|winsound.SND_ASYNC)
@@ -831,14 +827,14 @@ def statuses_unified():
             return False
     return True
 
-def get_icon_name_to_show(contact, account = None):
+def get_icon_name_to_show(contact, account=None):
     """
     Get the icon name to show in online, away, requested, etc
     """
     if account and app.events.get_nb_roster_events(account, contact.jid):
         return 'event'
-    if account and app.events.get_nb_roster_events(account,
-    contact.get_full_jid()):
+    if account and app.events.get_nb_roster_events(
+        account, contact.get_full_jid()):
         return 'event'
     if account and account in app.interface.minimized_controls and \
     contact.jid in app.interface.minimized_controls[account] and app.interface.\
@@ -847,8 +843,7 @@ def get_icon_name_to_show(contact, account = None):
     if account and contact.jid in app.gc_connected[account]:
         if app.gc_connected[account][contact.jid]:
             return 'muc_active'
-        else:
-            return 'muc_inactive'
+        return 'muc_inactive'
     if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
         return contact.show
     if contact.sub in ('both', 'to'):
@@ -956,7 +951,7 @@ def get_chat_control(account, contact):
     if contact.resource:
         full_jid_with_resource += '/' + contact.resource
     highest_contact = app.contacts.get_contact_with_highest_priority(
-            account, contact.jid)
+        account, contact.jid)
 
     # Look for a chat control that has the given resource, or default to
     # one without resource
@@ -965,12 +960,14 @@ def get_chat_control(account, contact):
 
     if ctrl:
         return ctrl
-    elif highest_contact and highest_contact.resource and \
-    contact.resource != highest_contact.resource:
+
+    if (highest_contact and
+        highest_contact.resource and
+            contact.resource != highest_contact.resource):
         return None
-    else:
-        # unknown contact or offline message
-        return app.interface.msg_win_mgr.get_control(contact.jid, account)
+
+    # unknown contact or offline message
+    return app.interface.msg_win_mgr.get_control(contact.jid, account)
 
 def get_notification_icon_tooltip_dict():
     """
@@ -1122,20 +1119,20 @@ def get_current_show(account):
 def get_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', iconset)):
         return os.path.join(configpaths.get('DATA'), 'iconsets', iconset)
-    elif os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), iconset)):
+    if os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), iconset)):
         return os.path.join(configpaths.get('MY_ICONSETS'), iconset)
 
 def get_mood_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'moods', iconset)):
         return os.path.join(configpaths.get('DATA'), 'moods', iconset)
-    elif os.path.isdir(
+    if os.path.isdir(
             os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)):
         return os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)
 
 def get_activity_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'activities', iconset)):
         return os.path.join(configpaths.get('DATA'), 'activities', iconset)
-    elif os.path.isdir(os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'),
+    if os.path.isdir(os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'),
     iconset)):
         return os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'), iconset)
 
@@ -1143,7 +1140,7 @@ def get_transport_path(transport):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', 'transports',
     transport)):
         return os.path.join(configpaths.get('DATA'), 'iconsets', 'transports', transport)
-    elif os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), 'transports',
+    if os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), 'transports',
     transport)):
         return os.path.join(configpaths.get('MY_ICONSETS'), 'transports', transport)
     # No transport folder found, use default jabber one
