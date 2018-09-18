@@ -59,9 +59,9 @@ class StandardCommonCommands(CommandContainer):
 
             return '\n\n'.join(text)
         elif all:
-            for cmd in self.list_commands():
-                names = ', '.join(cmd.names)
-                description = cmd.extract_description()
+            for cmd_ in self.list_commands():
+                names = ', '.join(cmd_.names)
+                description = cmd_.extract_description()
 
                 self.echo("%s - %s" % (names, description))
         else:
