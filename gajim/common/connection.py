@@ -1031,7 +1031,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
             self.try_connecting_for_foo_secs
         # FIXME: this is a hack; need a better way
-        if self.on_connect_success == self._on_new_account:
+        if self.on_connect_success == self._on_new_account:  # pylint: disable=W0143
             con.RegisterDisconnectHandler(self._on_new_account)
 
         if self.client_cert and app.config.get_per('accounts', self.name,
