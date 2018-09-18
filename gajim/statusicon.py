@@ -368,17 +368,12 @@ class StatusIcon:
         win = app.interface.roster.window
         if not app.events.get_systray_events():
             # No pending events, so toggle visible/hidden for roster window
-            if win.get_property('visible') and (win.get_property(
-            'has-toplevel-focus') or os.name == 'nt'):
-                # visible in ANY virtual desktop?
-
-                # we could be in another VD right now. eg vd2
-                # and we want to show it in vd2
-                if not gtkgui_helpers.possibly_move_window_in_current_desktop(
-                win) and app.config.get('save-roster-position'):
-                    x, y = win.get_position()
-                    app.config.set('roster_x-position', x)
-                    app.config.set('roster_y-position', y)
+            if win.get_property('visible'):
+                if win.get_property('has-toplevel-focus') or os.name == 'nt':
+                    if app.config.get('save-roster-position'):
+                        x, y = win.get_position()
+                        app.config.set('roster_x-position', x)
+                        app.config.set('roster_y-position', y)
                 win.hide() # else we hide it from VD that was visible in
             else:
                 if not win.get_property('visible'):
