@@ -466,7 +466,7 @@ class FileTransfersWindow:
         iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
-        self.model[iter_][Column.SID]
+
         if status == 'stop':
             file_props.stopped = True
         elif status == 'ok':
