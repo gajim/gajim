@@ -41,7 +41,6 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
         item = Gtk.MenuItem.new_with_label(
             '%s (%s)' % (c.resource, str(c.priority)))
         sub_menu.append(item)
-        # pylint: disable=W0143
         if action == roster.on_invite_to_room:
             item.connect('activate', action, [(c, account)], room_jid,
                     room_account, c.resource)
