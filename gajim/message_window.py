@@ -374,7 +374,7 @@ class MessageWindow:
                 self.window.lookup_action(
                     'information-%s' % control.control_id).activate()
                 return True
-            elif keyval == Gdk.KEY_l or keyval == Gdk.KEY_L: # CTRL + l|L
+            elif keyval in (Gdk.KEY_l, Gdk.KEY_L): # CTRL + l|L
                 control.conv_textview.clear()
                 return True
             elif keyval == Gdk.KEY_u: # CTRL + u: emacs style clear line

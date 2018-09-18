@@ -98,7 +98,7 @@ class MessageTextView(Gtk.TextView):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         text = buf.get_text(start, end, True)
-        return text != self.PLACEHOLDER and text != ''
+        return text not in (self.PLACEHOLDER, '')
 
     def get_text(self):
         # gets the text if its not PLACEHOLDER
@@ -211,7 +211,7 @@ class MessageTextView(Gtk.TextView):
         _buffer.remove_all_tags(start, finish)
 
     def color_set(self, widget, response):
-        if response == -6 or response == -4:
+        if response in (-6, -4):
             widget.destroy()
             return
 
@@ -238,7 +238,7 @@ class MessageTextView(Gtk.TextView):
         _buffer.apply_tag_by_name(tag_name, start, finish)
 
     def font_set(self, widget, response, start, finish):
-        if response == -6 or response == -4:
+        if response in (-6, -4):
             widget.destroy()
             return
 
