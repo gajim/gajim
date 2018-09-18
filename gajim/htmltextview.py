@@ -498,7 +498,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             log.warning('Style attribute "%s" not yet implemented', style)
         else:
             __style_methods[style] = method
-    del style
+    del style  # pylint: disable=undefined-loop-variable
     # --
 
     def _get_style_tags(self):
