@@ -429,8 +429,8 @@ class SingleForm(Gtk.Table):
                 else:
                     # more than 5 options: show combobox
                     def on_list_multi_treeview_changed(selection, f):
-                        def for_selected(treemodel, path, iter):
-                            vals.append(treemodel[iter][1])
+                        def for_selected(treemodel, path, iter_):
+                            vals.append(treemodel[iter_][1])
                         vals = []
                         selection.selected_foreach(for_selected)
                         field.values = vals[:]

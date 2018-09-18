@@ -503,8 +503,8 @@ def sanitize_filename(filename):
     """
     # 48 is the limit
     if len(filename) > 48:
-        hash = hashlib.md5(filename.encode('utf-8'))
-        filename = base64.b64encode(hash.digest()).decode('utf-8')
+        hash_ = hashlib.md5(filename.encode('utf-8'))
+        filename = base64.b64encode(hash_.digest()).decode('utf-8')
 
     # make it latin chars only
     filename = punycode_encode(filename).decode('utf-8')
@@ -729,7 +729,7 @@ def check_soundfile_path(file_, dirs=None):
             return d
     return None
 
-def strip_soundfile_path(file_, dirs=None, abs=True):
+def strip_soundfile_path(file_, dirs=None, abs_=True):
     """
     Remove knowns paths from a sound file
 
@@ -737,7 +737,7 @@ def strip_soundfile_path(file_, dirs=None, abs=True):
     So config have no hardcoded path        to DATA_DIR and text in textfield is shorther.
     param: file_: the filename to strip.
     param: dirs: list of knowns paths from which the filename should be stripped.
-    param:  abs: force absolute path on dirs
+    param:  abs_: force absolute path on dirs
     """
     if not file_:
         return None
@@ -749,7 +749,7 @@ def strip_soundfile_path(file_, dirs=None, abs=True):
     name = os.path.basename(file_)
     for d in dirs:
         d = os.path.join(d, 'sounds', name)
-        if abs:
+        if abs_:
             d = os.path.abspath(d)
         if file_ == d:
             return name

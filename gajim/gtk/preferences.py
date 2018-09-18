@@ -180,12 +180,12 @@ class Preferences(Gtk.ApplicationWindow):
         self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
         self.iconset_combobox.set_model(model)
         l = []
-        for dir in iconsets_list:
-            if not os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', dir)) \
-            and not os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), dir)):
+        for dir_ in iconsets_list:
+            if not os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', dir_)) \
+            and not os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), dir_)):
                 continue
-            if dir != '.svn' and dir != 'transports':
-                l.append(dir)
+            if dir_ not in ('.svn', 'transports'):
+                l.append(dir_)
         if l.count == 0:
             l.append(' ')
         for i in range(len(l)):

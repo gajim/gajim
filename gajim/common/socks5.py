@@ -331,12 +331,12 @@ class SocksQueue:
                 result = sender.send_file()
                 self.process_result(result, sender)
 
-    def isHashInSockObjs(self, sockobjs, hash):
+    def isHashInSockObjs(self, sockobjs, hash_):
         '''
         It tells wether there is a particular hash in sockobjs or not
         '''
         for key in sockobjs:
-            if hash in key:
+            if hash_ in key:
                 return True
         return False
 

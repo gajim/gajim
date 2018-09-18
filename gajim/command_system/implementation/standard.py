@@ -66,8 +66,8 @@ class StandardCommonCommands(CommandContainer):
 
                 self.echo("%s - %s" % (names, description))
         else:
-            help = self.get_command('help')
-            self.echo(help(self, 'help'))
+            help_ = self.get_command('help')
+            self.echo(help_(self, 'help'))
 
     @command(raw=True)
     @doc(_("Send a message to the contact"))

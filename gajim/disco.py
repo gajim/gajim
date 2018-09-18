@@ -1989,9 +1989,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
     def _get_iter(self, node):
         ''' Look for an iter with the given node '''
         self.found_iter = None
-        def is_node(model, path, iter, node):
-            if model[iter][1] == node:
-                self.found_iter = iter
+        def is_node(model, path, iter_, node):
+            if model[iter_][1] == node:
+                self.found_iter = iter_
                 return True
         self.model.foreach(is_node, node)
         return self.found_iter
