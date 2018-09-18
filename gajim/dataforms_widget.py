@@ -637,7 +637,7 @@ class SingleForm(Gtk.Table):
         try:
             newtext = helpers.parse_jid(newtext)
         except helpers.InvalidFormat as s:
-            app.interface.raise_dialog('invalid-jid-with-error', str(s))    
+            app.interface.raise_dialog('invalid-jid-with-error', str(s))
             return
         if newtext in field.values:
             app.interface.raise_dialog('jid-in-list')

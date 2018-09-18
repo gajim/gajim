@@ -151,17 +151,17 @@ class PluginManager(metaclass=Singleton):
     @log_calls('PluginManager')
     def remove_plugin(self, plugin):
         '''
-        removes the plugin from the plugin list and deletes all loaded modules 
+        removes the plugin from the plugin list and deletes all loaded modules
         from sys. This way we will have a fresh start when the plugin gets added
         again.
         '''
         if plugin.active:
             self.deactivate_plugin(plugin)
-            
+
         self.plugins.remove(plugin)
-        
+
         # remove modules from cache
-        base_package = plugin.__module__.split('.')[0]        
+        base_package = plugin.__module__.split('.')[0]
         # get the subpackages/-modules of the base_package. Add a dot to the
         # name to avoid name problems (removing module_abc if base_package is
         # module_ab)
@@ -170,10 +170,10 @@ class PluginManager(metaclass=Singleton):
         # remove the base_package itself
         if base_package in sys.modules:
             modules_to_remove.append(base_package)
-            
+
         for module_to_remove in modules_to_remove:
-            del sys.modules[module_to_remove] 
-        
+            del sys.modules[module_to_remove]
+
     @log_calls('PluginManager')
     def add_plugins(self, plugin_classes):
         for plugin_class in plugin_classes:

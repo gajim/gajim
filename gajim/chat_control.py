@@ -812,8 +812,9 @@ class ChatControl(ChatControlBase):
         if obj.kind == KindConstant.CHAT_MSG_SENT:
             kind = 'outgoing'
 
-        self.print_conversation(obj.msgtxt, kind, tim=obj.timestamp,
-            encrypted=obj.encrypted, correct_id=obj.correct_id, 
+        self.print_conversation(
+            obj.msgtxt, kind, tim=obj.timestamp,
+            encrypted=obj.encrypted, correct_id=obj.correct_id,
             msg_stanza_id=obj.message_id, additional_data=obj.additional_data)
 
     def _nec_decrypted_message_received(self, obj):
@@ -1039,7 +1040,7 @@ class ChatControl(ChatControlBase):
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """
         Set compact view menuitem active state sets active and sensitivity state
-        for history_menuitem (False for tranasports) and file_transfer_menuitem 
+        for history_menuitem (False for tranasports) and file_transfer_menuitem
         and hide()/show() for add_to_roster_menuitem
         """
         if app.jid_is_transport(self.contact.jid):

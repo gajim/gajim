@@ -4021,7 +4021,7 @@ class RosterWindow:
 #                       account = row[Column.ACCOUNT]
 #                       self._last_selected_contact.append((jid, account))
 #                       GLib.idle_add(self.draw_contact, jid, account, True)
-    
+
 
     def on_service_disco_menuitem_activate(self, widget, account):
         server_jid = app.config.get_per('accounts', account, 'hostname')
@@ -5583,7 +5583,7 @@ class RosterWindow:
 
         if typ in ('contact', 'self_contact'):
             contacts = app.contacts.get_contacts(account, jid)
-            
+
             for c in contacts:
                 if c.show not in ('offline', 'error'):
                     connected_contacts.append(c)
