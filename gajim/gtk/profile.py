@@ -185,7 +185,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                     pritext,
                     _('Format of the date must be YYYY-MM-DD'),
                     transient_for=self)
-                GLib.idle_add(lambda: widget.grab_focus())
+                GLib.idle_add(widget.grab_focus)
             return True
 
     def set_value(self, entry_name, value):

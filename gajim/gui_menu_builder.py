@@ -594,10 +594,6 @@ def get_transport_menu(contact, account):
     menu.show_all()
     return menu
 
-'''
-Build dynamic Application Menus
-'''
-
 
 def get_singlechat_menu(control_id):
     singlechat_menu = [

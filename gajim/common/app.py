@@ -188,14 +188,12 @@ def detect_dependencies():
     # python-gnupg
     try:
         import gnupg
-        '''
-        We need https://pypi.python.org/pypi/python-gnupg
-        but https://pypi.python.org/pypi/gnupg shares the same package name.
-        It cannot be used as a drop-in replacement.
-        We test with a version check if python-gnupg is installed as it is
-        on a much lower version number than gnupg
-        Also we need at least python-gnupg 0.3.8
-        '''
+        # We need https://pypi.python.org/pypi/python-gnupg
+        # but https://pypi.python.org/pypi/gnupg shares the same package name.
+        # It cannot be used as a drop-in replacement.
+        # We test with a version check if python-gnupg is installed as it is
+        # on a much lower version number than gnupg
+        # Also we need at least python-gnupg 0.3.8
         v_gnupg = gnupg.__version__
         if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
             log('gajim').info('Gajim needs python-gnupg >= 0.3.8')
