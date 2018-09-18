@@ -179,7 +179,7 @@ class OptionsParser:
     def update_config_to_01401(self):
         if 'autodetect_browser_mailer' not in self.old_values or 'openwith' \
         not in self.old_values or \
-        (self.old_values['autodetect_browser_mailer'] == False and \
+        (self.old_values['autodetect_browser_mailer'] is False and \
         self.old_values['openwith'] != 'custom'):
             app.config.set('autodetect_browser_mailer', True)
             app.config.set('openwith', app.config.DEFAULT_OPENWITH)

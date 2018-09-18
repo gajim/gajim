@@ -659,7 +659,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.starting = True
 
     def _insert_text(self, text, working_iter=None):
-        if working_iter == None:
+        if working_iter is None:
             working_iter = self.iter
         if self.starting and text != '\n':
             self.starting = (text[-1] == '\n')
@@ -673,7 +673,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         return self.starting or self.iter.starts_line()
 
     def _flush_text(self):
-        if not self.text: return
+        if not self.text:
+            return
         text, self.text = self.text, ''
         if not self.preserve:
             text = text.replace('\n', ' ')

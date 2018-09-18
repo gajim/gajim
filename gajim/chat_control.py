@@ -1098,7 +1098,7 @@ class ChatControl(ChatControlBase):
 
         if not contact.supports(NS_CHATSTATES):
             return
-        if contact.our_chatstate == False:
+        if contact.our_chatstate is False:
             return
 
         # if the new state we wanna send (state) equals

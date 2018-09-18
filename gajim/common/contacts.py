@@ -658,7 +658,7 @@ class GC_Contacts():
         if len(jid) != 2:
             return False
         gcc = self.get_gc_contact(jid[0], jid[1])
-        return gcc != None
+        return gcc is not None
 
     def get_nb_role_total_gc_contacts(self, room_jid, role):
         """

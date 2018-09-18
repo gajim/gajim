@@ -96,7 +96,7 @@ class SocksQueue:
         return self.listener
 
     def send_success_reply(self, file_props, streamhost):
-        if file_props.streamhost_used == True:
+        if file_props.streamhost_used is True:
             for proxy in file_props.proxyhosts:
                 if proxy['host'] == streamhost['host']:
                     self.on_success[file_props.transport_sid](proxy)
@@ -562,7 +562,7 @@ class Socks5:
         self.idlequeue.remove_timeout(self.fd)
         if self.state > 5:
             # no activity for foo seconds
-            if self.file_props.stalled == False:
+            if self.file_props.stalled is False:
                 self.file_props.stalled = True
                 self.queue.process_result(-1, self)
                 if not self.file_props.received_len:
