@@ -1568,7 +1568,7 @@ class Interface:
         for event_name, event_handlers in self.handlers.items():
             for event_handler in event_handlers:
                 prio = ged.GUI1
-                if type(event_handler) == tuple:
+                if isinstance(event_handler, tuple):
                     prio = event_handler[1]
                     event_handler = event_handler[0]
                 app.ged.register_event_handler(event_name, prio,

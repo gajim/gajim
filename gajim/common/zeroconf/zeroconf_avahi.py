@@ -95,7 +95,7 @@ class Zeroconf:
                     # try to reduce instead of delete first
                     resolved_info = val[Constant.RESOLVED_INFO]
                     if len(resolved_info) > 1:
-                        for i in range(len(resolved_info)):
+                        for i, _info in enumerate(resolved_info):
                             if resolved_info[i][ConstantRI.INTERFACE] == interface and resolved_info[i][ConstantRI.PROTOCOL] == protocol:
                                 del self.contacts[key][Constant.RESOLVED_INFO][i]
                         # if still something left, don't remove
@@ -180,7 +180,7 @@ class Zeroconf:
                 old_name, old_domain, old_resolved_info, old_bare_name, _old_txt = self.contacts[name]
                 if name == old_name and domain == old_domain and bare_name == old_bare_name:
                     # Seems similar enough, try to merge resolved info:
-                    for i in range(len(old_resolved_info)):
+                    for i, _info in enumerate(old_resolved_info):
                         # for now, keep a single record for each (interface, protocol) pair
                         #
                         # Note that, theoretically, we could both get IPv4 and

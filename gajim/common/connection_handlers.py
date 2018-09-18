@@ -371,7 +371,7 @@ class ConnectionHandlersBase:
 
         # determine if this session is a pm session
         # if not, discard the resource so that all sessions are stored bare
-        if not type_ == 'pm':
+        if type_ != 'pm':
             jid = app.get_jid_without_resource(jid)
 
         if not jid in self.sessions:

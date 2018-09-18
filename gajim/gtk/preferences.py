@@ -179,28 +179,28 @@ class Preferences(Gtk.ApplicationWindow):
         self.iconset_combobox.add_attribute(renderer_text, 'text', 1)
         self.iconset_combobox.add_attribute(renderer_image, 'image', 0)
         self.iconset_combobox.set_model(model)
-        l = []
+        dirlist = []
         for dir_ in iconsets_list:
             if not os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', dir_)) \
             and not os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), dir_)):
                 continue
             if dir_ not in ('.svn', 'transports'):
-                l.append(dir_)
-        if l.count == 0:
-            l.append(' ')
-        for i in range(len(l)):
+                dirlist.append(dir_)
+        if not dirlist:
+            dirlist.append(' ')
+        for index, dir_ in enumerate(dirlist):
             preview = Gtk.Image()
             files = []
-            files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
+            files.append(os.path.join(helpers.get_iconset_path(dir_), '16x16',
                     'online.png'))
-            files.append(os.path.join(helpers.get_iconset_path(l[i]), '16x16',
+            files.append(os.path.join(helpers.get_iconset_path(dir_), '16x16',
                     'online.gif'))
             for file_ in files:
                 if os.path.exists(file_):
                     preview.set_from_file(file_)
-            model.append([preview, l[i]])
-            if app.config.get('iconset') == l[i]:
-                self.iconset_combobox.set_active(i)
+            model.append([preview, dir_])
+            if app.config.get('iconset') == dir_:
+                self.iconset_combobox.set_active(index)
 
         # Use transports iconsets
         st = app.config.get('use_transports_iconsets')
@@ -985,12 +985,12 @@ class Preferences(Gtk.ApplicationWindow):
         proxy_combobox = self.xml.get_object('proxies_combobox')
         model = proxy_combobox.get_model()
         model.clear()
-        l = app.config.get_per('proxies')
-        l.insert(0, _('None'))
-        for i in range(len(l)):
-            model.append([l[i]])
-            if our_proxy == l[i]:
-                proxy_combobox.set_active(i)
+        proxies = app.config.get_per('proxies')
+        proxies.insert(0, _('None'))
+        for index, proxy in enumerate(proxies):
+            model.append([proxy])
+            if our_proxy == proxy:
+                proxy_combobox.set_active(index)
 
     def on_open_advanced_editor_button_clicked(self, widget, data=None):
         if 'advanced_config' in app.interface.instances:
