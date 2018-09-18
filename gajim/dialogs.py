@@ -104,6 +104,7 @@ class EditGroupsDialog:
                 account, [group])
 
         # FIXME: Ugly workaround.
+        # pylint: disable=undefined-loop-variable
         app.interface.roster.draw_group(_('General'), account)
 
     def add_group(self, group):
@@ -116,6 +117,7 @@ class EditGroupsDialog:
 
         # FIXME: Ugly workaround.
         # Maybe we haven't been in any group (defaults to General)
+        # pylint: disable=undefined-loop-variable
         app.interface.roster.draw_group(_('General'), account)
 
     def on_add_button_clicked(self, widget):
@@ -1692,17 +1694,15 @@ class VoIPCallReceivedDialog:
                         out_xid = ctrl.xml.get_object('outgoing_drawingarea').\
                             get_property('window').get_xid()
                     b = content.src_bin
-                    found = False
                     for e in b.children:
-                        if e.get_name().startswith('autovideosink'):
-                            found = True
-                            break
-                    if found:
+                        if not e.get_name().startswith('autovideosink'):
+                            continue
                         for f in e.children:
                             if f.get_name().startswith('autovideosink'):
                                 f.set_window_handle(out_xid)
                                 content.out_xid = out_xid
                                 break
+                        break
                 content.in_xid = in_xid
                 ctrl.set_video_state('connecting', self.sid)
             # Now, accept the content/sessions.

@@ -59,7 +59,7 @@ class OptionsParser:
         for line in fd:
             match = regex.match(line)
             if match is None:
-                log.warn('Invalid configuration line, ignoring it: %s', line)
+                log.warning('Invalid configuration line, ignoring it: %s', line)
                 continue
             optname, key, subname, value = match.groups()
             if key is None:

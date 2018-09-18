@@ -215,7 +215,7 @@ class Command:
         Extract handler's arguments specification, as it was defined
         preserving their order.
         """
-        names, var_args, var_kwargs, defaults = getargspec(self.handler)
+        names, var_args, var_kwargs, defaults = getargspec(self.handler)  # pylint: disable=W1505
 
         # Behavior of this code need to be checked. Might yield
         # incorrect results on some rare occasions.
