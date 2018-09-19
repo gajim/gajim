@@ -215,6 +215,10 @@ button.flat.link { padding: 0; border: 0; }
 .error-color { color: @error_color; }
 .warning-color { color: @warning_color; }
 
+/*Encryption*/
+.encrypted-color { color: rgb(75, 181, 67) }
+.unencrypted-color { color: @error_color }
+
 /*Dataforms*/
 .field-fixed { font-size: 16px; font-weight: bold; padding-top:5px;}
 .data-form-title { font-size: 16px; font-weight: bold; }

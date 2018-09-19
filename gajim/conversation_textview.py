@@ -1285,12 +1285,12 @@ class ConversationTextview(GObject.GObject):
             # Message was not encrypted
             if not self.encryption_enabled:
                 return
-            icon = 'security-low-symbolic'
-            color = 'error-color'
+            icon = 'channel-insecure-symbolic'
+            color = 'unencrypted-color'
             tooltip = _('Not encrypted')
         else:
-            icon = 'security-high-symbolic'
-            color = 'success-color'
+            icon = 'channel-secure-symbolic'
+            color = 'encrypted-color'
             name, fingerprint = details
             if fingerprint is None:
                 tooltip = name
