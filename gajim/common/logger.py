@@ -177,7 +177,7 @@ class Logger:
         con.close()
 
     @staticmethod
-    def _get_user_version(con) -> int:
+    def _get_user_version(con: sqlite.Connection) -> int:
         """ Return the value of PRAGMA user_version. """
         return con.execute('PRAGMA user_version').fetchone()[0]
 
@@ -547,7 +547,7 @@ class Logger:
         if type_id == TypeConstant.NO_TRANSPORT:
             return 'jabber'
 
-    def convert_human_subscription_values_to_db_api_values(self, sub):
+    def convert_xmpp_sub(self, sub):
         """
         Convert from string style to constant ints for db
         """
@@ -560,7 +560,7 @@ class Logger:
         if sub == 'both':
             return SubscriptionConstant.BOTH
 
-    def convert_db_api_values_to_human_subscription_values(self, sub):
+    def convert_db_sub(self, sub):
         """
         Convert from constant ints for db to string style
         """
@@ -577,9 +577,10 @@ class Logger:
         """
         Add unread message with id: message_id
         """
-        sql = 'INSERT INTO unread_messages VALUES (%d, %d, 0)' % (message_id,
-                jid_id)
-        self.simple_commit(sql)
+        sql = '''INSERT INTO unread_messages (message_id, jid_id, shown)
+                 VALUES (?, ?, 0)'''
+        self._con.execute(sql, (message_id, jid_id))
+        self._timeout_commit()
 
     def set_read_messages(self, message_ids):
         """
@@ -947,8 +948,9 @@ class Logger:
                     (type_id, jid)
             self.simple_commit(sql)
             return
-        sql = 'INSERT INTO transports_cache VALUES ("%s", %d)' % (jid, type_id)
-        self.simple_commit(sql)
+        sql = 'INSERT INTO transports_cache (transport, type) VALUES (?, ?)'
+        self._con.execute(sql, (jid, type_id))
+        self._timeout_commit()
 
     def get_transports_type(self):
         """
@@ -1113,7 +1115,7 @@ class Logger:
         self._timeout_commit()
 
     def add_or_update_contact(self, account_jid, jid, name, sub, ask, groups,
-    commit=True):
+                              commit=True):
         """
         Add or update a contact from account_jid roster
         """
@@ -1124,29 +1126,30 @@ class Logger:
         try:
             account_jid_id = self.get_jid_id(account_jid)
             jid_id = self.get_jid_id(jid, type_=JIDConstant.NORMAL_TYPE)
-        except exceptions.PysqliteOperationalError as e:
-            raise exceptions.PysqliteOperationalError(str(e))
+        except exceptions.PysqliteOperationalError as error:
+            raise exceptions.PysqliteOperationalError(str(error))
 
         # Update groups information
         # First we delete all previous groups information
-        self._con.execute(
-                'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?',
-                (account_jid_id, jid_id))
+        sql = 'DELETE FROM roster_group WHERE account_jid_id=? AND jid_id=?'
+        self._con.execute(sql, (account_jid_id, jid_id))
         # Then we add all new groups information
+        sql = '''INSERT INTO roster_group (account_jid_id, jid_id, group_name)
+                 VALUES (?, ?, ?)'''
         for group in groups:
-            self._con.execute('INSERT INTO roster_group VALUES(?, ?, ?)',
-                    (account_jid_id, jid_id, group))
+            self._con.execute(sql, (account_jid_id, jid_id, group))
 
         if name is None:
             name = ''
 
-        self._con.execute('''
-            REPLACE INTO roster_entry
-            (account_jid_id, jid_id, name, subscription, ask)
-            VALUES(?, ?, ?, ?, ?)''', (
-                account_jid_id, jid_id, name,
-                self.convert_human_subscription_values_to_db_api_values(sub),
-                bool(ask)))
+        sql = '''REPLACE INTO roster_entry
+                 (account_jid_id, jid_id, name, subscription, ask)
+                 VALUES(?, ?, ?, ?, ?)'''
+        self._con.execute(sql, (account_jid_id,
+                                jid_id,
+                                name,
+                                self.convert_xmpp_sub(sub),
+                                bool(ask)))
         if commit:
             self._timeout_commit()
 
@@ -1172,9 +1175,7 @@ class Logger:
                 data[jid]['name'] = name
             else:
                 data[jid]['name'] = None
-            data[jid]['subscription'] = \
-                    self.convert_db_api_values_to_human_subscription_values(
-                    row.subscription)
+            data[jid]['subscription'] = self.convert_db_sub(row.subscription)
             data[jid]['groups'] = []
             data[jid]['resources'] = {}
             if row.ask:
