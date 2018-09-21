@@ -59,6 +59,7 @@ from gajim.common import events
 from gajim.common.dbus import screensaver
 from gajim.common.dbus import location
 from gajim.common.dbus import music_track
+from gajim.common.dbus import logind
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
@@ -2723,7 +2724,7 @@ class Interface:
 
         # Handle screensaver
         if sys.platform == 'linux':
-            from gajim import logind_listener  # pylint: disable=unused-variable
+            logind.enable()
             screensaver.enable()
 
         self.show_vcard_when_connect = []
