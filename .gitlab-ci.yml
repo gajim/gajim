@@ -1,5 +1,5 @@
 before_script:
-  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config python3-openssl gir1.2-gtk-3.0 python3-gi python3-nbxmpp-nightly pylint3
+  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config python3-openssl gir1.2-gtk-3.0 python3-gi python3-nbxmpp-nightly pylint3 python3-cairo
   - sudo apt-get build-dep -y -qq gajim-default-nightly
 
 stages:
