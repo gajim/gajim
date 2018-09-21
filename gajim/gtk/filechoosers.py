@@ -18,7 +18,6 @@
 import os
 import sys
 from pathlib import Path
-from collections import namedtuple
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
@@ -26,11 +25,11 @@ from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.gtk.const import Filter
+from gajim.gtk.types import FilterList  # pylint: disable=unused-import
 
-Filter = namedtuple('Filter', 'name pattern default')
 
-
-def _require_native():
+def _require_native() -> bool:
     if app.is_flatpak():
         return True
     if sys.platform in ('win32', 'darwin'):
@@ -85,7 +84,7 @@ class BaseFileChooser:
 class BaseFileOpenDialog:
 
     _title = _('Choose File to Send…')
-    _filters = [Filter(_('All files'), '*', True)]
+    _filters = [Filter(_('All files'), '*', True)]  # type: FilterList
 
 
 class BaseAvatarChooserDialog:
@@ -96,7 +95,7 @@ class BaseAvatarChooserDialog:
     if _require_native():
         _filters = [Filter(_('PNG files'), '*.png', True),
                     Filter(_('JPEG files'), '*.jp*g', False),
-                    Filter(_('SVG files'), '*.svg', False)]
+                    Filter(_('SVG files'), '*.svg', False)]  # type: FilterList
     else:
         _filters = [Filter(_('Images'), ['image/png',
                                          'image/jpeg',
@@ -106,7 +105,7 @@ class BaseAvatarChooserDialog:
 class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
 
     _title = ''
-    _filters = []
+    _filters = []  # type: FilterList
     _action = Gtk.FileChooserAction.OPEN
 
     def __init__(self, accept_cb, cancel_cb=None, transient_for=None,
@@ -161,7 +160,7 @@ class NativeAvatarChooserDialog(BaseAvatarChooserDialog, NativeFileChooserDialog
 class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
 
     _title = ''
-    _filters = []
+    _filters = []  # type: FilterList
     _action = Gtk.FileChooserAction.OPEN
     _preivew_size = (200, 200)
 
