@@ -14,7 +14,7 @@ run-test:
 run-mypy:
   stage: test
   script:
-    - mypy -p gajim.common.modules --follow-imports=skip
+    - mypy gajim
 
 run-pylint:
   stage: test
