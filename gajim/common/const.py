@@ -4,10 +4,10 @@ from collections import namedtuple
 from gajim.common.i18n import _
 
 Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
-Option.__new__.__defaults__ = (None,) * len(Option._fields)
+Option.__new__.__defaults__ = (None,) * len(Option._fields)  # type: ignore
 
 DialogButton = namedtuple('DialogButton', 'text callback action')
-DialogButton.__new__.__defaults__ = (None, None)
+DialogButton.__new__.__defaults__ = (None, None)  # type: ignore
 
 
 @unique

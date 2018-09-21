@@ -16,14 +16,19 @@
 Handles Jingle contents (XEP 0166)
 """
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+
 import os
+
+import nbxmpp
+
 from gajim.common import app
 from gajim.common import configpaths
-import nbxmpp
 from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
 from gajim.common.jingle_xtls import load_cert_file
 
-contents = {}
+contents = {}  # type: Dict[str, Any]
 
 def get_jingle_content(node):
     namespace = node.getNamespace()

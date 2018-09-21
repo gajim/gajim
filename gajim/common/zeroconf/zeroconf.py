@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
+
 from enum import IntEnum, unique
+
 
 @unique
 class Constant(IntEnum):
@@ -54,7 +57,7 @@ def test_zeroconf():
 
 if test_avahi():
     from gajim.common.zeroconf import zeroconf_avahi
-    Zeroconf = zeroconf_avahi.Zeroconf
+    Zeroconf = zeroconf_avahi.Zeroconf  # type: Any
 elif test_bonjour():
     from gajim.common.zeroconf import zeroconf_bonjour
     Zeroconf = zeroconf_bonjour.Zeroconf

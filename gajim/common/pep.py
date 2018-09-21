@@ -19,11 +19,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+
 import logging
-log = logging.getLogger('gajim.c.pep')
 
 from gajim.common import app
 
+log = logging.getLogger('gajim.c.pep')
 
 class AbstractPEP:
 
@@ -75,4 +78,4 @@ class AbstractPEP:
         pass
 
 
-SUPPORTED_PERSONAL_USER_EVENTS = []
+SUPPORTED_PERSONAL_USER_EVENTS = []  # type: List[Any]

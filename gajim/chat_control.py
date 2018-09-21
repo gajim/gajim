@@ -23,12 +23,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import ClassVar  # pylint: disable=unused-import
+from typing import Type  # pylint: disable=unused-import
+
 import os
 import time
+
 from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import Pango
 from gi.repository import GLib
+from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
+from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
+from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
+from nbxmpp.protocol import NS_CHATSTATES
+
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
@@ -41,14 +50,11 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.contacts import GC_Contact
-from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
-from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
-from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
-from nbxmpp.protocol import NS_CHATSTATES
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import AvatarSize, KindConstant
 
 from gajim.command_system.implementation.hosts import ChatCommands
+from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
 from gajim.chat_control_base import ChatControlBase
 
 ################################################################################
@@ -69,7 +75,7 @@ class ChatControl(ChatControlBase):
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
-    COMMAND_HOST = ChatCommands
+    COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
 
     def __init__(self, parent_win, contact, acct, session, resource=None):
         ChatControlBase.__init__(self, self.TYPE_ID, parent_win,

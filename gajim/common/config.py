@@ -27,6 +27,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+from typing import Tuple  # pylint: disable=unused-import
+
 import re
 from enum import IntEnum, unique
 
@@ -287,7 +292,7 @@ class Config:
         'use_keyring': [opt_bool, True, _('If true, Gajim will use the Systems Keyring to store account passwords.')],
         'pgp_encoding': [opt_str, '', _('Sets the encoding used by python-gnupg'), True],
         'remote_commands': [opt_bool, False, _('If true, Gajim will execute XEP-0146 Commands.')],
-    }, {})
+    }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
         'accounts': ({
@@ -436,7 +441,7 @@ class Config:
         'plugins': ({
             'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],
         }, {}),
-    }
+    }  # type: Dict[str, Tuple[Dict[str, List[Any]], Dict[Any, Any]]]
 
     statusmsg_default = {
         _('Sleeping'): ['ZZZZzzzzzZZZZZ', 'inactive', 'sleeping', '', 'sleepy', ''],

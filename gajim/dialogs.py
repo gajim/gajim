@@ -25,18 +25,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import GLib
+from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+from typing import Tuple  # pylint: disable=unused-import
 
 import os
 import logging
+from random import randrange
+
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import GLib
 
 from gajim import gtkgui_helpers
 from gajim import vcard
 from gajim import dataforms_widget
 
-from random import randrange
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import ACTIVITIES
@@ -1363,7 +1367,7 @@ class ProgressDialog:
 
 class TransformChatToMUC:
     # Keep a reference on windows so garbage collector don't restroy them
-    instances = []
+    instances = []  # type: List[TransformChatToMUC]
     def __init__(self, account, jids, preselected=None):
         """
         This window is used to trasform a one-to-one chat to a MUC. We do 2
@@ -1584,7 +1588,7 @@ class ResourceConflictDialog(TimeoutDialog, InputDialog):
 
 
 class VoIPCallReceivedDialog:
-    instances = {}
+    instances = {}   # type: Dict[Tuple[str, str], VoIPCallReceivedDialog]
     def __init__(self, account, contact_jid, sid, content_types):
         self.instances[(contact_jid, sid)] = self
         self.account = account

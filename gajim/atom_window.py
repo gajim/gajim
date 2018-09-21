@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List  # pylint: disable=unused-import
+from typing import Any  # pylint: disable=unused-import
+
 from gi.repository import Gdk
 from gi.repository import GLib
 
@@ -26,7 +29,7 @@ from gajim.common import i18n
 
 class AtomWindow:
     window = None
-    entries = []
+    entries = []  # type: List[Any]
 
     @classmethod
     def newAtomEntry(cls, entry):

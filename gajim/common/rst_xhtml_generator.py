@@ -18,11 +18,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 try:
-    from docutils import io
+    from docutils import io  # type: ignore
     from docutils.core import Publisher
     from docutils.parsers.rst import roles
-    from docutils import nodes, utils
-    from docutils.parsers.rst.roles import set_classes
+    from docutils import nodes, utils  # type: ignore
+    from docutils.parsers.rst.roles import set_classes  # type: ignore
 except ImportError:
     print("Requires docutils 0.4 for set_classes to be available")
     def create_xhtml(text):

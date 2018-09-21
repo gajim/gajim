@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import List  # pylint: disable=unused-import
+
 from gi.repository import Gdk
 from gi.repository import GLib
 
@@ -40,7 +42,7 @@ class SingleMessageWindow:
     action argument which can be 'send' or 'receive'
     """
     # Keep a reference on windows so garbage collector don't restroy them
-    instances = []
+    instances = []  # type: List[SingleMessageWindow]
     def __init__(self, account, to='', action='', from_whom='', subject='',
             message='', resource='', session=None, form_node=None):
         self.instances.append(self)

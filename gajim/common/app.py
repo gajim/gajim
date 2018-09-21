@@ -24,8 +24,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
 from typing import Dict  # pylint: disable=unused-import
 from typing import List  # pylint: disable=unused-import
+from typing import Optional  # pylint: disable=unused-import
+from typing import cast
 
 import os
 import sys
@@ -44,21 +47,25 @@ from gajim.common import ged as ged_module
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 from gajim.common.css_config import CSSConfig
+from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
+from gajim.common.types import InterfaceT  # pylint: disable=unused-import
+from gajim.common.types import LoggerT  # pylint: disable=unused-import
+from gajim.common.types import ConnectionT  # pylint: disable=unused-import
 
-interface = None  # type: gajim.interface.Interface
+interface = cast(InterfaceT, None)
 thread_interface = lambda *args: None # Interface to run a thread and then a callback
 config = c_config.Config()
 version = gajim.__version__
-connections = {} # 'account name': 'account (connection.Connection) instance'
-avatar_cache = {}
+connections = {}  # type: Dict[str, ConnectionT]
+avatar_cache = {}  # type: Dict[str, Dict[str, Any]]
 ipython_window = None
 app = None  # Gtk.Application
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
-nec = None  # type: gajim.common.nec.NetworkEventsController
+nec = cast(NetworkEventsControllerT, None)
 plugin_manager = None # Plugins Manager
 
-logger = None  # type: gajim.common.logger.Logger
+logger = cast(LoggerT, None)
 
 # For backwards compatibility needed
 # some plugins use that
@@ -113,7 +120,7 @@ nicks = {}  # type: Dict[str, str]
 # to something else than offline
 # can also contain account/transport_jid to block notifications for contacts
 # from this transport
-block_signed_in_notifications = {}
+block_signed_in_notifications = {}  # type: Dict[str, bool]
 
  # type of each connection (ssl, tls, tcp, ...)
 con_types = {}  # type: Dict[str, Optional[str]]
@@ -153,10 +160,10 @@ gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_EME, 'urn:xmpp:avatar:metadata+notify']
 
 # Optional features gajim supports per account
-gajim_optional_features = {}
+gajim_optional_features = {}  # type: Dict[str, List[str]]
 
 # Capabilities hash per account
-caps_hash = {}
+caps_hash = {}  # type: Dict[str, List[str]]
 
 _dependencies = {
     'PYTHON-DBUS': False,

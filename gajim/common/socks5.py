@@ -799,7 +799,7 @@ class Socks5:
                 return self.file_props.received_len
         return None
 
-    def disconnect(self):
+    def disconnect(self, *args, **kwargs):
         """
         Close open descriptors and remover socket descr. from idleque
         """
