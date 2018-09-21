@@ -258,10 +258,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
                 'accounts', account, 'name')
         app.block_signed_in_notifications[account] = True
         app.sleeper_state[account] = 'off'
-        app.encrypted_chats[account] = []
         app.last_message_time[account] = {}
         app.status_before_autoaway[account] = ''
-        app.transport_avatar[account] = {}
         app.gajim_optional_features[account] = []
         app.caps_hash[account] = ''
         helpers.update_optional_features(account)
@@ -292,10 +290,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
         del app.to_be_removed[account]
         del app.newly_added[account]
         del app.sleeper_state[account]
-        del app.encrypted_chats[account]
         del app.last_message_time[account]
         del app.status_before_autoaway[account]
-        del app.transport_avatar[account]
         del app.gajim_optional_features[account]
         del app.caps_hash[account]
         if len(app.connections) >= 2:

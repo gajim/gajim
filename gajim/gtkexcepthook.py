@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
+
 import sys
 import os
 import traceback
@@ -40,7 +42,8 @@ if __name__ == '__main__':
     glade_file = os.path.join('data', 'gui', 'exception_dialog.ui')
 else:
     from gajim.common import configpaths
-    glade_file = os.path.join(configpaths.get('GUI'), 'exception_dialog.ui')
+    gui_path = cast(str, configpaths.get('GUI'))
+    glade_file = os.path.join(gui_path, 'exception_dialog.ui')
 
 
 _exception_in_progress = threading.Lock()

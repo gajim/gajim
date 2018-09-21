@@ -35,10 +35,8 @@ class MockConnection(Mock, ConnectionHandlers):
         app.nicks[account] = app.config.get_per('accounts', account, 'name')
         app.block_signed_in_notifications[account] = True
         app.sleeper_state[account] = 0
-        app.encrypted_chats[account] = []
         app.last_message_time[account] = {}
         app.status_before_autoaway[account] = ''
-        app.transport_avatar[account] = {}
         app.gajim_optional_features[account] = []
         app.caps_hash[account] = ''
 

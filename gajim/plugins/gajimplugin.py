@@ -21,15 +21,25 @@ Base class for implementing plugin.
 :license: GPL
 '''
 
+from typing import List  # pylint: disable=W0611
+from typing import Tuple  # pylint: disable=W0611
+from typing import Dict  # pylint: disable=W0611
+from typing import Any  # pylint: disable=W0611
+
 import os
 import locale
+import logging
+import pickle
 
 from gajim.common import configpaths
+from gajim.common.types import PluginExtensionPoints  # pylint: disable=W0611
+from gajim.common.types import EventHandlersDict  # pylint: disable=W0611
+from gajim.common.types import PluginEvents  # pylint: disable=W0611
 
 from gajim.plugins.helpers import log_calls, log
 from gajim.plugins.gui import GajimPluginConfigDialog
 
-import logging
+
 log = logging.getLogger('gajim.p.plugin')
 
 
@@ -86,7 +96,7 @@ class GajimPlugin:
 
     :todo: should be allow rich text here (like HTML or reStructuredText)?
     '''
-    authors = []
+    authors = []  # type: List[str]
     '''
     Plugin authors.
 
@@ -104,7 +114,7 @@ class GajimPlugin:
     :todo: should we check whether provided string is valid URI? (Maybe
     using 'property')
     '''
-    gui_extension_points = {}
+    gui_extension_points = {}  # type: PluginExtensionPoints
     '''
     Extension points that plugin wants to connect with and handlers to be used.
 
@@ -118,7 +128,7 @@ class GajimPlugin:
     or when extpoint is destroyed and plugin is activate (eg. chat window
     closed).
     '''
-    config_default_values = {}
+    config_default_values = {}  # type: Dict[str, Tuple[Any, str]]
     '''
     Default values for keys that should be stored in plug-in config.
 
@@ -132,7 +142,7 @@ class GajimPlugin:
 
     :type: {} of 2-element tuples
     '''
-    events_handlers = {}
+    events_handlers = {}  # type: EventHandlersDict
     '''
     Dictionary with events handlers.
 
@@ -143,7 +153,7 @@ class GajimPlugin:
 
     :type: {} with 2-element tuples
     '''
-    events = []
+    events = []  # type: PluginEvents
     '''
     New network event classes to be registered in Network Events Controller.
 
@@ -152,7 +162,7 @@ class GajimPlugin:
     '''
 
     @log_calls('GajimPlugin')
-    def __init__(self):
+    def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
         '''
         Plug-in configuration dictionary.
@@ -168,11 +178,11 @@ class GajimPlugin:
         self.init()
 
     @log_calls('GajimPlugin')
-    def save_config(self):
+    def save_config(self) -> None:
         self.config.save()
 
     @log_calls('GajimPlugin')
-    def load_config(self):
+    def load_config(self) -> None:
         self.config.load()
 
     def __eq__(self, plugin):
@@ -203,7 +213,6 @@ class GajimPlugin:
     def deactivate(self):
         pass
 
-import pickle
 
 class GajimPluginConfig():
     @log_calls('GajimPluginConfig')

@@ -582,10 +582,8 @@ class AccountCreationWizard:
         app.nicks[self.account] = config['name']
         app.block_signed_in_notifications[self.account] = True
         app.sleeper_state[self.account] = 'off'
-        app.encrypted_chats[self.account] = []
         app.last_message_time[self.account] = {}
         app.status_before_autoaway[self.account] = ''
-        app.transport_avatar[self.account] = {}
         app.gajim_optional_features[self.account] = []
         app.caps_hash[self.account] = ''
         helpers.update_optional_features(self.account)

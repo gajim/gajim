@@ -674,10 +674,8 @@ class RemoveAccountWindow:
             del app.to_be_removed[self.account]
             del app.newly_added[self.account]
             del app.sleeper_state[self.account]
-            del app.encrypted_chats[self.account]
             del app.last_message_time[self.account]
             del app.status_before_autoaway[self.account]
-            del app.transport_avatar[self.account]
             del app.gajim_optional_features[self.account]
             del app.caps_hash[self.account]
         if len(app.connections) >= 2: # Do not merge accounts if only one exists

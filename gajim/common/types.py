@@ -32,6 +32,7 @@ if TYPE_CHECKING:
     from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
     from gajim.common.contacts import Contact
     from gajim.common.contacts import GC_Contact
+    from gajim.common.nec import NetworkEvent
 
 ConnectionT = Union['Connection', 'ConnectionZeroconf']
 ContactT = Union['Contact', 'GC_Contact']
@@ -44,3 +45,9 @@ PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
 
 # Configpaths
 PathTuple = Tuple[Optional[PathLocation], str, Optional[PathType]]
+
+# Plugins
+PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
+                                        Optional[Callable[..., None]]]]
+EventHandlersDict = Dict[str, Tuple[int, Callable[['NetworkEvent'], Optional[bool]]]]
+PluginEvents = List['NetworkEvent']
