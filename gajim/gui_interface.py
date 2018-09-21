@@ -2714,10 +2714,8 @@ class Interface:
             app.nicks[a] = app.config.get_per('accounts', a, 'name')
             app.block_signed_in_notifications[a] = True
             app.sleeper_state[a] = 0
-            app.encrypted_chats[a] = []
             app.last_message_time[a] = {}
             app.status_before_autoaway[a] = ''
-            app.transport_avatar[a] = {}
             app.gajim_optional_features[a] = []
             app.caps_hash[a] = ''
 

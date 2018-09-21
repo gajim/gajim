@@ -24,6 +24,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+
 import os
 import sys
 import logging
@@ -68,53 +71,66 @@ css_config = None
 
 os_info = None # used to cache os information
 
-transport_type = {} # list the type of transport
+transport_type = {}  # type: Dict[str, str]
 
-last_message_time = {} # list of time of the latest incoming message
-                       # {acct1: {jid1: time1, jid2: time2}, }
-encrypted_chats = {}   # list of encrypted chats {acct1: [jid1, jid2], ..}
+# dict of time of the latest incoming message per jid
+# {acct1: {jid1: time1, jid2: time2}, }
+last_message_time = {}  # type: Dict[str, Dict[str, float]]
 
 contacts = LegacyContactsAPI()
-gc_connected = {}    # tell if we are connected to the room or not
-                     # {acct: {room_jid: True}}
-gc_passwords = {}    # list of the pass required to enter a room
-                     # {room_jid: password}
-automatic_rooms = {} # list of rooms that must be automaticaly configured
-                     # and for which we have a list of invities
-                     #{account: {room_jid: {'invities': []}}}
 
-groups = {} # list of groups
-newly_added = {} # list of contacts that has just signed in
-to_be_removed = {} # list of contacts that has just signed out
+# tell if we are connected to the room or not
+# {acct: {room_jid: True}}
+gc_connected = {}  # type: Dict[str, Dict[str, bool]]
+
+# dict of the pass required to enter a room
+# {room_jid: password}
+gc_passwords = {}  # type: Dict[str, str]
+
+# dict of rooms that must be automaticaly configured
+# and for which we have a list of invities
+# {account: {room_jid: {'invities': []}}}
+automatic_rooms = {}  # type: Dict[str, Dict[str, Dict[str, List[str]]]]
+
+ # dict of groups, holds if they are expanded or not
+groups = {}  # type: Dict[str, Dict[str, Dict[str, bool]]]
+
+# list of contacts that has just signed in
+newly_added = {}  # type: Dict[str, List[str]]
+
+# list of contacts that has just signed out
+to_be_removed = {}  # type: Dict[str, List[str]]
 
 events = Events()
 
 notification = None
 
-nicks = {} # list of our nick names in each account
+# list of our nick names in each account
+nicks = {}  # type: Dict[str, str]
+
 # should we block 'contact signed in' notifications for this account?
 # this is only for the first 30 seconds after we change our show
 # to something else than offline
 # can also contain account/transport_jid to block notifications for contacts
 # from this transport
 block_signed_in_notifications = {}
-con_types = {} # type of each connection (ssl, tls, tcp, ...)
 
-sleeper_state = {} # whether we pass auto away / xa or not
+ # type of each connection (ssl, tls, tcp, ...)
+con_types = {}  # type: Dict[str, Optional[str]]
+
+# whether we pass auto away / xa or not
 #'off': don't use sleeper for this account
 #'online': online and use sleeper
 #'autoaway': autoaway and use sleeper
 #'autoxa': autoxa and use sleeper
-status_before_autoaway = {}
+sleeper_state = {}  # type: Dict[str, str]
 
-# jid of transport contacts for which we need to ask avatar when transport will
-# be online
-transport_avatar = {} # {transport_jid: [jid_list]}
+status_before_autoaway = {}  # type: Dict[str, str]
 
 # Is Gnome configured to activate on single click ?
 single_click = False
 SHOW_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-        'invisible', 'error']
+             'invisible', 'error']
 
 # zeroconf account name
 ZEROCONF_ACC_NAME = 'Local'
