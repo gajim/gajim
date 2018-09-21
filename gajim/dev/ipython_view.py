@@ -40,17 +40,17 @@ available under the terms of the BSD which accompanies this distribution, and
 is available at U{http://www.opensource.org/licenses/bsd-license.php}
 """
 
+import re
+import sys
+import os
+from io import StringIO
 from functools import reduce
 
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import GLib
-import re
-import sys
-import os
 from gi.repository import Pango
-from io import StringIO
 
 try:
     import IPython
@@ -92,8 +92,8 @@ class IterableIPShell:
     @ivar complete_sep: Seperation delimeters for completion function.
     @type complete_sep: _sre.SRE_Pattern
     """
-    def __init__(self,argv=[],user_ns=None,user_global_ns=None, cin=None,
-                    cout=None,cerr=None, input_func=None):
+    def __init__(self, argv=None, user_ns=None, user_global_ns=None, cin=None,
+                 cout=None, cerr=None, input_func=None):
         """
         @param argv: Command line options for IPython
         @type argv: list
@@ -110,6 +110,9 @@ class IterableIPShell:
         @param input_func: Replacement for builtin raw_input()
         @type input_func: function
         """
+        if argv is None:
+            argv = []
+
         io = IPython.utils.io
         if input_func:
             if IPython.version_info[0] >= 1:
@@ -161,9 +164,9 @@ class IterableIPShell:
         sys.excepthook = excepthook
         self.iter_more = 0
         self.history_level = 0
-        self.complete_sep =  re.compile('[\s\{\}\[\]\(\)]')
-        self.updateNamespace({'exit':lambda:None})
-        self.updateNamespace({'quit':lambda:None})
+        self.complete_sep = re.compile(r'[\s\{\}\[\]\(\)]')
+        self.updateNamespace({'exit':lambda: None})
+        self.updateNamespace({'quit':lambda: None})
         #self.IP.readline_startup_hook(self.IP.pre_readline)
         # Workaround for updating namespace with sys.modules
         #
@@ -173,7 +176,7 @@ class IterableIPShell:
         '''
         Update self.IP namespace for autocompletion with sys.modules
         '''
-        for k,v in sys.modules.items():
+        for k, v in sys.modules.items():
             if not '.' in k:
                 self.IP.user_ns.update({k:v})
 
@@ -315,7 +318,7 @@ class IterableIPShell:
             possibilities = self.IP.complete(split_line[-1])
         else:
             completed = line
-            possibilities = ['',[]]
+            possibilities = ['', []]
         if possibilities:
             def _commonPrefix(str1, str2):
                 '''
@@ -361,14 +364,14 @@ class ConsoleView(Gtk.TextView):
     @type line_start: Gtk.TextMark
     """
 
-    ANSI_COLORS =  {'0;30': 'Black',     '0;31': 'Red',
-                    '0;32': 'Green',     '0;33': 'Brown',
-                    '0;34': 'Blue',      '0;35': 'Purple',
-                    '0;36': 'Cyan',      '0;37': 'LightGray',
-                    '1;30': 'DarkGray',  '1;31': 'DarkRed',
-                    '1;32': 'SeaGreen',  '1;33': 'Yellow',
-                    '1;34': 'LightBlue', '1;35': 'MediumPurple',
-                    '1;36': 'LightCyan', '1;37': 'White'}
+    ANSI_COLORS = {'0;30': 'Black', '0;31': 'Red',
+                   '0;32': 'Green', '0;33': 'Brown',
+                   '0;34': 'Blue', '0;35': 'Purple',
+                   '0;36': 'Cyan', '0;37': 'LightGray',
+                   '1;30': 'DarkGray', '1;31': 'DarkRed',
+                   '1;32': 'SeaGreen', '1;33': 'Yellow',
+                   '1;34': 'LightBlue', '1;35': 'MediumPurple',
+                   '1;36': 'LightCyan', '1;37': 'White'}
 
     def __init__(self):
         """
@@ -387,7 +390,7 @@ class ConsoleView(Gtk.TextView):
                                         weight=700)
         self.text_buffer.create_tag('0')
         self.text_buffer.create_tag('notouch', editable=False)
-        self.color_pat = re.compile('\x01?\x1b\[(.*?)m\x02?')
+        self.color_pat = re.compile(r'\x01?\x1b\[(.*?)m\x02?')
         if HAS_IPYTHON5:
             self.style_dict = {
                 Token.Prompt:        '0;32',
@@ -401,7 +404,7 @@ class ConsoleView(Gtk.TextView):
         self.connect('key-press-event', self.onKeyPress)
 
     def write(self, text, editable=False):
-        if type(text) == str:
+        if isinstance(text, str):
             GLib.idle_add(self._write, text, editable)
         elif IPython.version_info[0] >= 5:
             GLib.idle_add(self._write5, text, editable)
@@ -422,7 +425,7 @@ class ConsoleView(Gtk.TextView):
         for token, segment in text:
             tag = self.style_dict[token]
             self.text_buffer.insert_with_tags_by_name(self.text_buffer.get_end_iter(),
-                                                          segment, tag)
+                                                      segment, tag)
         if not editable:
             self.text_buffer.apply_tag_by_name('notouch',
                                                self.text_buffer.get_iter_at_mark(start_mark),
@@ -439,7 +442,7 @@ class ConsoleView(Gtk.TextView):
         @param editable: If true, added text is editable.
         @type editable: boolean
         """
-        if type(text) == list and IPython.version_info[0] >= 5:
+        if isinstance(text, list) and IPython.version_info[0] >= 5:
             self._write5(text, editable)
             return
         segments = self.color_pat.split(text)
@@ -454,7 +457,7 @@ class ConsoleView(Gtk.TextView):
             for tag in ansi_tags:
                 i = segments.index(tag)
                 self.text_buffer.insert_with_tags_by_name(self.text_buffer.get_end_iter(),
-                                                     segments[i+1], str(tag))
+                                                          segments[i+1], str(tag))
                 segments.pop(i)
         if not editable:
             self.text_buffer.apply_tag_by_name('notouch',
@@ -501,8 +504,8 @@ class ConsoleView(Gtk.TextView):
         @rtype: string
         """
         rv = self.text_buffer.get_slice(
-          self.text_buffer.get_iter_at_mark(self.line_start),
-          self.text_buffer.get_end_iter(), False)
+            self.text_buffer.get_iter_at_mark(self.line_start),
+            self.text_buffer.get_end_iter(), False)
         return rv
 
     def showReturned(self, text):
@@ -518,9 +521,9 @@ class ConsoleView(Gtk.TextView):
         iter_ = self.text_buffer.get_iter_at_mark(self.line_start)
         iter_.forward_to_line_end()
         self.text_buffer.apply_tag_by_name(
-          'notouch',
-          self.text_buffer.get_iter_at_mark(self.line_start),
-          iter_)
+            'notouch',
+            self.text_buffer.get_iter_at_mark(self.line_start),
+            iter_)
         self._write('\n'+text)
         if text:
             self._write('\n')
@@ -532,7 +535,7 @@ class ConsoleView(Gtk.TextView):
             indentation = self.IP.input_splitter.indent_spaces * ' '
             self.text_buffer.insert_at_cursor(indentation)
 
-    def onKeyPress(self, widget, event):
+    def onKeyPress(self, _widget, event):
         """
         Key press callback used for correcting behavior for console-like
         interfaces. For example 'home' should go to prompt, not to beginning of
@@ -555,10 +558,11 @@ class ConsoleView(Gtk.TextView):
             if event.get_state() == 0:
                 self.text_buffer.place_cursor(start_iter)
                 return True
-            elif event.get_state() == Gdk.ModifierType.SHIFT_MASK:
+            if event.get_state() == Gdk.ModifierType.SHIFT_MASK:
                 self.text_buffer.move_mark(insert_mark, start_iter)
                 return True
-        elif event.keyval == Gdk.KEY_Left:
+
+        if event.keyval == Gdk.KEY_Left:
             insert_iter.backward_cursor_position()
             if not insert_iter.editable(True):
                 return True
@@ -611,7 +615,7 @@ class IPythonView(ConsoleView, IterableIPShell):
         # IPython 5.0 calls prompt_for_code instead of raw_input
         return self.raw_input(self)
 
-    def raw_input(self, prompt=''):
+    def raw_input(self, _prompt=''):
         """
         Custom raw_input() replacement. Get's current line from console buffer
 
@@ -643,16 +647,16 @@ class IPythonView(ConsoleView, IterableIPShell):
             self.interrupt = True
             self._processLine()
             return True
-        elif event.keyval == Gdk.KEY_Return:
+        if event.keyval == Gdk.KEY_Return:
             self._processLine()
             return True
-        elif event.keyval == Gdk.KEY_Up:
+        if event.keyval == Gdk.KEY_Up:
             self.changeLine(self.historyBack())
             return True
-        elif event.keyval == Gdk.KEY_Down:
+        if event.keyval == Gdk.KEY_Down:
             self.changeLine(self.historyForward())
             return True
-        elif event.keyval == Gdk.KEY_Tab:
+        if event.keyval == Gdk.KEY_Tab:
             if not self.getCurrentLine().strip():
                 return False
             completed, possibilities = self.complete(self.getCurrentLine())
@@ -672,7 +676,8 @@ class IPythonView(ConsoleView, IterableIPShell):
         self.history_pos = 0
         self.execute()
         rv = self.cout.getvalue()
-        if rv: rv = rv.strip('\n')
+        if rv:
+            rv = rv.strip('\n')
         self.showReturned(rv)
         self.cout.truncate(0)
         self.cout.seek(0)
