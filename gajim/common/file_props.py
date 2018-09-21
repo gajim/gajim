@@ -17,8 +17,14 @@ Exception: this class should not be instatiated
 True
 """
 
+from typing import Any  # pylint: disable=unused-import
+from typing import ClassVar  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+from typing import Tuple  # pylint: disable=unused-import
+
+
 class FilesProp:
-    _files_props = {}
+    _files_props = {}  # type: ClassVar[Dict[Tuple[str, str], Any]]
 
     def __init__(self):
         raise Exception('this class should not be instantiated')

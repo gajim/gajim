@@ -5643,7 +5643,7 @@ class RosterWindow:
 ###
 ################################################################################
 
-    def __init__(self, application: Gtk.Application):
+    def __init__(self, application):
         self.application = application
         self.filtering = False
         self.starting = False

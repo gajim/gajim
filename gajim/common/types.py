@@ -33,6 +33,15 @@ if TYPE_CHECKING:
     from gajim.common.contacts import Contact
     from gajim.common.contacts import GC_Contact
     from gajim.common.nec import NetworkEvent
+    from gajim.common.nec import NetworkEventsController
+    from gajim.common.logger import Logger
+
+    from gajim.gui_interface import Interface
+
+
+NetworkEventsControllerT = Union['NetworkEventsController']
+InterfaceT = Union['Interface']
+LoggerT = Union['Logger']
 
 ConnectionT = Union['Connection', 'ConnectionZeroconf']
 ContactT = Union['Contact', 'GC_Contact']

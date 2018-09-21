@@ -23,31 +23,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import cairo
+import os
+import sys
+import math
+import logging
+from io import BytesIO
+import xml.etree.ElementTree as ET
 import xml.sax.saxutils
+from xml.sax import ContentHandler  # type: ignore
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
-import cairo
-import os
-import sys
-import math
-import xml.etree.ElementTree as ET
 
 try:
     from PIL import Image
 except Exception:
     pass
-from io import BytesIO
-
-import logging
-log = logging.getLogger('gajim.gtkgui_helpers')
 
 from gajim.common import i18n
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
+
+log = logging.getLogger('gajim.gtkgui_helpers')
 
 gtk_icon_theme = Gtk.IconTheme.get_default()
 gtk_icon_theme.append_search_path(configpaths.get('ICONS'))
@@ -234,9 +236,9 @@ def scroll_to_end(widget):
     return False
 
 
-class ServersXMLHandler(xml.sax.ContentHandler):
+class ServersXMLHandler(ContentHandler):
     def __init__(self):
-        xml.sax.ContentHandler.__init__(self)
+        ContentHandler.__init__(self)
         self.servers = []
 
     def startElement(self, name, attributes):

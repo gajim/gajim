@@ -28,10 +28,12 @@ __all__ = ['get_password', 'save_password']
 
 log = logging.getLogger('gajim.password')
 
-keyring = None
+
 try:
     import keyring
+    KEYRING_AVAILABLE = True
 except ImportError:
+    KEYRING_AVAILABLE = False
     log.debug('python-keyring missing, falling back to plaintext storage')
 
 
@@ -83,7 +85,7 @@ class PasswordStorageManager(PasswordStorage):
         """
         # TODO: handle disappearing backends
 
-        if app.config.get('use_keyring') and keyring:
+        if app.config.get('use_keyring') and KEYRING_AVAILABLE:
             self.secret = SecretPasswordStorage()
 
     def get_password(self, account_name):

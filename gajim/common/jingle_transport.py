@@ -16,16 +16,21 @@
 Handles Jingle Transports (currently only ICE-UDP)
 """
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+
 import logging
 import socket
 from enum import IntEnum, unique
+
 import nbxmpp
+
 from gajim.common import app
 
 log = logging.getLogger('gajim.c.jingle_transport')
 
 
-transports = {}
+transports = {}  # type: Dict[str, Any]
 
 def get_jingle_transport(node):
     namespace = node.getNamespace()
