@@ -230,7 +230,7 @@ class Message:
             'displaymarking': parse_securitylabel(event.stanza),
             'attention': parse_attention(event.stanza),
             'correct_id': parse_correction(event.stanza),
-            'user_nick': parse_nickname(event.stanza),
+            'user_nick': '' if event.sent else parse_nickname(event.stanza),
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'chatstate': parse_chatstate(event.stanza),
