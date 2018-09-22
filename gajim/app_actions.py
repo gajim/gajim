@@ -14,6 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from gi.repository import Gtk
+from gi.repository import Gdk
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.app import interface
@@ -130,24 +133,29 @@ def on_service_disco(action, param):
             pass
 
 
-def on_join_gc(action, param):
-    account = None
+def on_join_gc(_action, param):
+    account, jid = None, None
     if param is None:
         if not app.get_connected_accounts():
             return
     else:
-        account = param.get_string()
+        account, jid = param.get_strv()
+        if not jid:
+            jid = None
     window = app.get_app_window(JoinGroupchatWindow)
     if window is None:
-        JoinGroupchatWindow(account, None)
+        JoinGroupchatWindow(account, jid)
     else:
         window.present()
 
 
-def on_add_contact(action, param):
-    window = app.get_app_window(AddNewContactWindow)
+def on_add_contact(_action, param):
+    account, jid = param.get_strv()
+    if not jid:
+        jid = None
+    window = app.get_app_window(AddNewContactWindow, account)
     if window is None:
-        AddNewContactWindow(param.get_string())
+        AddNewContactWindow(account, jid)
     else:
         window.present()
 
@@ -337,3 +345,25 @@ def show_next_pending_event(action, param):
         if not event:
             return
         app.interface.handle_event(account, jid, event.type_)
+
+
+def open_link(_action, param):
+    kind, link = param.get_strv()
+    helpers.launch_browser_mailer(kind, link)
+
+
+def copy_link(_action, param):
+    text = param.get_string()
+    clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+    clip.set_text(text, -1)
+
+
+def start_chat(_action, param):
+    account, jid = param.get_strv()
+    app.interface.new_chat_from_jid(account, jid)
+
+
+def join_groupchat(_action, param):
+    account, jid = param.get_strv()
+    room_jid = jid.split('?')[0]
+    app.interface.join_gc_minimal(account, room_jid)

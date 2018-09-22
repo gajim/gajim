@@ -23,21 +23,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import time
+import os
+import queue
+import urllib
+import logging
+from calendar import timegm
+
 from gi.repository import Gtk
-from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
-import time
-import os
 
-import queue
-import urllib
-
-from gajim.gtk import AddNewContactWindow
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
-from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_cursor
 from gajim.gtk.emoji_data import emoji_pixbufs
 from gajim.gtk.emoji_data import is_emoji
@@ -45,7 +44,7 @@ from gajim.gtk.emoji_data import get_emoji_pixbuf
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
-from calendar import timegm
+
 from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr
 
@@ -55,7 +54,6 @@ NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
 SHOWN = 2
 
-import logging
 log = logging.getLogger('gajim.conversation_textview')
 
 def is_selection_modified(mark):
@@ -172,10 +170,7 @@ class ConversationTextview(GObject.GObject):
         self.fc = FuzzyClock()
 
         # no need to inherit TextView, use it as atrribute is safer
-        self.tv = HtmlTextView()
-        # we have to override HtmlTextView Event handlers
-        # because we don't inherit
-        self.tv.hyperlink_handler = self.hyperlink_handler
+        self.tv = HtmlTextView(account)
         self.tv.connect_tooltip(self.query_tooltip)
 
         # set properties
@@ -657,146 +652,6 @@ class ConversationTextview(GObject.GObject):
             if not finish_sel.ends_word():
                 finish_sel.forward_word_end()
             self.selected_phrase = buffer_.get_text(start_sel, finish_sel, True)
-
-    def on_open_link_activate(self, widget, kind, text):
-        helpers.launch_browser_mailer(kind, text)
-
-    def on_copy_link_activate(self, widget, text):
-        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clip.set_text(text, -1)
-
-    def on_start_chat_activate(self, widget, jid):
-        app.interface.new_chat_from_jid(self.account, jid)
-
-    def on_join_group_chat_menuitem_activate(self, widget, room_jid):
-        # Remove ?join
-        room_jid = room_jid.split('?')[0]
-        app.interface.join_gc_minimal(self.account, room_jid)
-
-    def on_add_to_roster_activate(self, widget, jid):
-        AddNewContactWindow(self.account, jid)
-
-    def make_link_menu(self, event, kind, text):
-        xml = get_builder('chat_context_menu.ui')
-        menu = xml.get_object('chat_context_menu')
-        childs = menu.get_children()
-        if kind == 'url':
-            id_ = childs[0].connect('activate', self.on_copy_link_activate, text)
-            self.handlers[id_] = childs[0]
-            id_ = childs[1].connect('activate', self.on_open_link_activate, kind,
-                    text)
-            self.handlers[id_] = childs[1]
-            childs[2].hide() # copy mail/jid address
-            childs[3].hide() # open mail composer
-            childs[4].hide() # jid section separator
-            childs[5].hide() # start chat
-            childs[6].hide() # join group chat
-            childs[7].hide() # add to roster
-        else: # It's a mail or a JID
-            text = text.lower()
-            if text.startswith('xmpp:'):
-                text = text[5:]
-            id_ = childs[2].connect('activate', self.on_copy_link_activate, text)
-            self.handlers[id_] = childs[2]
-            id_ = childs[3].connect('activate', self.on_open_link_activate, kind,
-                    text)
-            self.handlers[id_] = childs[3]
-            id_ = childs[5].connect('activate', self.on_start_chat_activate, text)
-            self.handlers[id_] = childs[5]
-            id_ = childs[6].connect('activate',
-                    self.on_join_group_chat_menuitem_activate, text)
-            self.handlers[id_] = childs[6]
-
-            if self.account and app.connections[self.account].\
-            roster_supported:
-                id_ = childs[7].connect('activate',
-                    self.on_add_to_roster_activate, text)
-                self.handlers[id_] = childs[7]
-                childs[7].show() # show add to roster menuitem
-            else:
-                childs[7].hide() # hide add to roster menuitem
-
-            if kind == 'xmpp':
-                id_ = childs[0].connect('activate', self.on_copy_link_activate,
-                    'xmpp:' + text)
-                self.handlers[id_] = childs[0]
-                childs[0].set_label(_('Copy JID'))
-                childs[2].hide() # copy mail/jid address
-                childs[3].hide() # open mail composer
-                childs[4].hide() # jid section separator
-            elif kind == 'mail':
-                childs[2].set_label(_('Copy Email Address'))
-                childs[4].hide() # jid section separator
-                childs[5].hide() # start chat
-                childs[6].hide() # join group chat
-                childs[7].hide() # add to roster
-
-            if kind != 'xmpp':
-                childs[0].hide() # copy link location
-            childs[1].hide() # open link in browser
-
-        menu.attach_to_widget(self.tv, None)
-        menu.popup(None, None, None, None, event.button.button, event.time)
-
-    def hyperlink_handler(self, texttag, widget, event, iter_, kind):
-        if event.type == Gdk.EventType.BUTTON_PRESS:
-            begin_iter = iter_.copy()
-            # we get the beginning of the tag
-            while not begin_iter.begins_tag(texttag):
-                begin_iter.backward_char()
-            end_iter = iter_.copy()
-            # we get the end of the tag
-            while not end_iter.ends_tag(texttag):
-                end_iter.forward_char()
-
-            # Detect XHTML-IM link
-            word = getattr(texttag, 'href', None)
-            if word:
-                if word.startswith('xmpp'):
-                    kind = 'xmpp'
-                elif word.startswith('mailto:'):
-                    kind = 'mail'
-                elif app.interface.sth_at_sth_dot_sth_re.match(word):
-                    # it's a JID or mail
-                    kind = 'sth_at_sth'
-            else:
-                word = self.tv.get_buffer().get_text(begin_iter, end_iter, True)
-
-            if event.button.button == 3: # right click
-                self.make_link_menu(event, kind, word)
-                return True
-
-            self.plugin_modified = False
-            app.plugin_manager.extension_point(
-                'hyperlink_handler', word, kind, self,
-                self.tv.get_toplevel())
-            if self.plugin_modified:
-                return
-
-            # we launch the correct application
-            if kind == 'xmpp':
-                word = word[5:]
-                if '?' in word:
-                    (jid, action) = word.split('?')
-                    if action == 'join':
-                        app.interface.join_gc_minimal(self.account, jid)
-                    else:
-                        self.on_start_chat_activate(None, jid)
-                else:
-                    self.on_start_chat_activate(None, word)
-            # handle geo:-URIs
-            elif word[:4] == 'geo:':
-                location = word[4:]
-                lat, _, lon = location.partition(',')
-                if lon == '':
-                    return
-                uri = 'https://www.openstreetmap.org/?' \
-                      'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
-                      {'lat': lat, 'lon': lon}
-                helpers.launch_browser_mailer(kind, uri)
-            # other URIs
-            else:
-                helpers.launch_browser_mailer(kind, word)
 
     def detect_and_print_special_text(self, otext, other_tags, graphics=True,
     iter_=None, additional_data=None):

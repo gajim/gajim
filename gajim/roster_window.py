@@ -3679,7 +3679,7 @@ class RosterWindow:
         When the join gc menuitem is clicked, show the join gc window
         """
         app.app.activate_action('%s-join-groupchat' % account,
-                                GLib.Variant('s', account))
+                                GLib.Variant('as', [account, '']))
 
     def on_show_transports_action(self, action, param):
         app.config.set('show_transports_group', param.get_boolean())

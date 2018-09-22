@@ -675,7 +675,7 @@ def get_bookmarks_menu(account, rebuild=False):
     # Build Join Groupchat
     action = 'app.{}-join-groupchat'.format(account)
     menuitem = Gio.MenuItem.new(_('Join Group Chat'), action)
-    variant = GLib.Variant('s', account)
+    variant = GLib.Variant('as', [account, ''])
     menuitem.set_action_and_target_value(action, variant)
     menu.append_item(menuitem)
 
@@ -749,7 +749,10 @@ def get_account_menu(account):
                         continue
                 action = 'app.{}{}'.format(account, action)
                 menuitem = Gio.MenuItem.new(label, action)
-                variant = GLib.Variant('s', account)
+                if 'add_contact' in action:
+                    variant = GLib.Variant('as', [account, ''])
+                else:
+                    variant = GLib.Variant('s', account)
                 menuitem.set_action_and_target_value(action, variant)
                 menu.append_item(menuitem)
             else:
@@ -837,6 +840,75 @@ def get_encryption_menu(control_id, type_id, zeroconf=False):
         menu.append(name, menu_action)
     if menu.get_n_items() == 1:
         return None
+    return menu
+
+
+def get_conv_context_menu(account, kind, text):
+    if kind == 'xmpp':
+        if '?join' in text:
+            context_menu = [
+                ('copy-link', _('Copy JID')),
+                ('-join-groupchat', _('Join Groupchat')),
+            ]
+        else:
+            context_menu = [
+                ('copy-link', _('Copy JID')),
+                ('-start-chat', _('Start Chat')),
+                ('-add-contact', _('Add to Roster…')),
+            ]
+
+    elif kind == 'url':
+        context_menu = [
+            ('copy-link', _('Copy Link Location')),
+            ('open-link', _('Open Link in Browser')),
+        ]
+
+    elif kind == 'mail':
+        context_menu = [
+            ('copy-link', _('Copy Email Address')),
+            ('open-link', _('Open Email Composer')),
+        ]
+
+    elif kind == 'sth_at_sth':
+        context_menu = [
+            ('copy-link', _('Copy JID/Email')),
+            ('open-link', _('Open Email Composer')),
+            ('-start-chat', _('Start Chat')),
+            ('-join-groupchat', _('Join Groupchat')),
+            ('-add-contact', _('Add to Roster…')),
+        ]
+    else:
+        return
+
+    menu = Gtk.Menu()
+    for item in context_menu:
+        action, label = item
+        menuitem = Gtk.MenuItem()
+        menuitem.set_label(label)
+
+        if action.startswith('-'):
+            action = 'app.%s%s' % (account, action)
+        else:
+            action = 'app.%s' % action
+        menuitem.set_action_name(action)
+
+        if 'join-groupchat' in action:
+            text = text.replace('xmpp:', '')
+            text = text.split('?')[0]
+
+        if 'add-contact' in action:
+            text = text.replace('xmpp:', '')
+            text = text.split('?')[0]
+
+        if action == 'app.open-link':
+            value = GLib.Variant.new_strv([kind, text])
+        elif action == 'app.copy-link':
+            value = GLib.Variant.new_string(text)
+        else:
+            value = GLib.Variant.new_strv([account, text])
+        menuitem.set_action_target_value(value)
+        menuitem.show()
+        menu.append(menuitem)
     return menu
 
 

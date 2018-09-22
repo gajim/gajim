@@ -363,6 +363,14 @@ class GajimApplication(Gtk.Application):
         act.connect("activate", app_actions.on_add_contact_jid)
         self.add_action(act)
 
+        act = Gio.SimpleAction.new('copy-link', GLib.VariantType.new('s'))
+        act.connect("activate", app_actions.copy_link)
+        self.add_action(act)
+
+        act = Gio.SimpleAction.new('open-link', GLib.VariantType.new('as'))
+        act.connect("activate", app_actions.open_link)
+        self.add_action(act)
+
         for action in general_actions:
             action_name, func = action
             act = Gio.SimpleAction.new(action_name, None)
@@ -388,8 +396,9 @@ class GajimApplication(Gtk.Application):
 
         return [
             ('-start-single-chat', a.on_single_message, 'online', 's'),
-            ('-join-groupchat', a.on_join_gc, 'online', 's'),
-            ('-add-contact', a.on_add_contact, 'online', 's'),
+            ('-start-chat', a.start_chat, 'online', 'as'),
+            ('-join-groupchat', a.on_join_gc, 'online', 'as'),
+            ('-add-contact', a.on_add_contact, 'online', 'as'),
             ('-services', a.on_service_disco, 'online', 's'),
             ('-profile', a.on_profile, 'feature', 's'),
             ('-xml-console', a.on_xml_console, 'always', 's'),
