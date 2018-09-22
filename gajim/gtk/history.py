@@ -535,8 +535,10 @@ class HistoryWindow:
                     end_iter, tim + '\n', 'time_sometimes')
 
         # print the encryption icon
-        self.history_textview.print_encryption_status(
-            end_iter, additional_data)
+        if kind in (KindConstant.CHAT_MSG_SENT,
+                    KindConstant.CHAT_MSG_RECV):
+            self.history_textview.print_encryption_status(
+                end_iter, additional_data)
 
         tag_name = ''
         tag_msg = ''
