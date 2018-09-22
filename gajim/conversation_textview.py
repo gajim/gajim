@@ -1153,7 +1153,8 @@ class ConversationTextview(GObject.GObject):
             direction_mark = i18n.direction_mark
 
         # print the encryption icon
-        self.print_encryption_status(iter_, additional_data)
+        if kind in ('incoming', 'outgoing'):
+            self.print_encryption_status(iter_, additional_data)
 
         # print the time stamp
         self.print_time(text, kind, tim, simple, direction_mark,
