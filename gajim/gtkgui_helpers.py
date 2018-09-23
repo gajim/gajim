@@ -132,7 +132,7 @@ def get_gtk_builder(file_name, widget=None):
         # This is a workaround for non working translation on Windows
         tree = ET.parse(file_path)
         for node in tree.iter():
-            if 'translatable' in node.attrib:
+            if 'translatable' in node.attrib and node.text is not None:
                 node.text = _(node.text)
         xml_text = ET.tostring(tree.getroot(),
                                encoding='unicode',
