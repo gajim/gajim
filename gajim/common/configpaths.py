@@ -24,7 +24,6 @@ from typing import List
 from typing import Generator
 from typing import Optional  # pylint: disable=unused-import
 from typing import Tuple
-from typing import Union
 
 import os
 import sys
@@ -37,14 +36,16 @@ from gajim.common.const import PathType, PathLocation
 from gajim.common.types import PathTuple
 
 
-def get(key: str) -> Union[str, List[str]]:
-    if key == 'PLUGINS_DIRS':
-        if gajim.IS_FLATPAK:
-            return ['/app/plugins',
-                    _paths['PLUGINS_BASE']]
-        return [_paths['PLUGINS_BASE'],
-                _paths['PLUGINS_USER']]
+def get(key: str) -> str:
     return _paths[key]
+
+
+def get_plugin_dirs() -> List[str]:
+    if gajim.IS_FLATPAK:
+        return ['/app/plugins',
+                _paths['PLUGINS_BASE']]
+    return [_paths['PLUGINS_BASE'],
+            _paths['PLUGINS_USER']]
 
 
 def get_paths(type_: PathType) -> Generator[str, None, None]:
