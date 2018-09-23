@@ -230,3 +230,13 @@ def convert_rgb_to_hex(rgb_string):
     green = int(rgb.green * 255)
     blue = int(rgb.blue * 255)
     return '#%02x%02x%02x' % (red, green, blue)
+
+
+def set_dark_theme(enable: bool) -> None:
+    settings = Gtk.Settings.get_default()
+    settings.set_property('gtk-application-prefer-dark-theme', enable)
+
+
+def get_dark_theme() -> bool:
+    settings = Gtk.Settings.get_default()
+    return settings.get_property('gtk-application-prefer-dark-theme')
