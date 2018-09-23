@@ -646,3 +646,19 @@ def get_app_window(cls, account=None):
 def load_css_config():
     global css_config
     css_config = CSSConfig()
+
+def set_win_debug_mode(enable: bool) -> None:
+    debug_folder = Path(configpaths.get('DEBUG'))
+    debug_enabled = debug_folder / 'debug-enabled'
+    if enable:
+        debug_enabled.touch()
+    else:
+        if debug_enabled.exists():
+            debug_enabled.unlink()
+
+def get_win_debug_mode() -> bool:
+    if sys.platform != 'win32':
+        return False
+    debug_folder = Path(configpaths.get('DEBUG'))
+    debug_enabled = debug_folder / 'debug-enabled'
+    return debug_enabled.exists()
