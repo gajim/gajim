@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -448,6 +449,11 @@ class Preferences(Gtk.ApplicationWindow):
             w.set_inconsistent(True)
         else:
             w.set_active(st)
+
+        if sys.platform == 'win32':
+            w = self.xml.get_object('enable_logging')
+            w.set_active(app.get_win_debug_mode())
+            w.show()
 
         self.xml.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
@@ -998,3 +1004,6 @@ class Preferences(Gtk.ApplicationWindow):
         else:
             app.interface.instances['advanced_config'] = \
                 AdvancedConfigurationWindow(self)
+
+    def on_enable_logging_toggled(self, widget):
+        app.set_win_debug_mode(widget.get_active())

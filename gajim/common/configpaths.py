@@ -195,6 +195,7 @@ class ConfigPaths:
             # Data paths
             ('SECRETS_FILE', 'secrets', PathLocation.DATA, PathType.FILE),
             ('MY_PEER_CERTS', 'certs', PathLocation.DATA, PathType.FOLDER),
+            ('DEBUG', 'debug', PathLocation.DATA, PathType.FOLDER),
 
             # Config paths
             ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),

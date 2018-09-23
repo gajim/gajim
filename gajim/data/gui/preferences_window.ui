@@ -1509,6 +1509,7 @@ $T will be replaced by auto-not-available timeout</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
+          <placeholder/>
         </child>
         <child>
           <object class="GtkFrame" id="frame3">
@@ -1640,6 +1641,7 @@ $T will be replaced by auto-not-available timeout</property>
           </packing>
         </child>
         <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
@@ -2382,6 +2384,23 @@ to discover one from server.</property>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="enable_logging">
+                    <property name="label" translatable="yes">Enable debug logging</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_enable_logging_toggled" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>

@@ -34,6 +34,8 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+from datetime import datetime
+from pathlib import Path
 from urllib.parse import unquote
 
 from gi.repository import GLib, Gio, Gtk
@@ -291,7 +293,14 @@ class GajimApplication(Gtk.Application):
             configpaths.set_config_root(path)
 
         configpaths.init()
-        logging_helpers.init()
+
+        if app.get_win_debug_mode():
+            # Redirect has to happen before logging init
+            self._redirect_output()
+            logging_helpers.init()
+            logging_helpers.set_verbose()
+        else:
+            logging_helpers.init()
 
         if options.contains('quiet'):
             logging_helpers.set_quiet()
@@ -317,6 +326,14 @@ class GajimApplication(Gtk.Application):
 
         warnings.showwarning = warn_with_traceback
         warnings.filterwarnings(action="always")
+
+    @staticmethod
+    def _redirect_output():
+        debug_folder = Path(configpaths.get('DEBUG'))
+        date = datetime.today().strftime('%Y-%m-%d')
+        filename = '%s-debug.log' % date
+        fd = open(debug_folder / filename, 'a')
+        sys.stderr = sys.stdout = fd
 
     def add_actions(self):
         ''' Build Application Actions '''
