@@ -1509,9 +1509,6 @@ $T will be replaced by auto-not-available timeout</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkFrame" id="frame3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -1617,6 +1614,28 @@ $T will be replaced by auto-not-available timeout</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="enable_dark_theme">
+                    <property name="label" translatable="yes">Enable dark theme</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_enable_dark_theme_toggled" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <placeholder/>
                 </child>
                 <child>
@@ -1639,9 +1658,6 @@ $T will be replaced by auto-not-available timeout</property>
             <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>

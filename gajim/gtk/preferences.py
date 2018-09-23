@@ -24,6 +24,8 @@ from gajim.common import helpers
 from gajim.common import configpaths
 from gajim.common import config as c_config
 from gajim.common import idle
+from gajim.gtk.util import get_dark_theme
+from gajim.gtk.util import set_dark_theme
 from gajim.gtk.util import get_builder
 from gajim.gtk import AspellDictError
 from gajim.gtk.themes import Themes
@@ -206,6 +208,9 @@ class Preferences(Gtk.ApplicationWindow):
         # Use transports iconsets
         st = app.config.get('use_transports_iconsets')
         self.xml.get_object('transports_iconsets_checkbutton').set_active(st)
+
+        # Dark theme
+        self.xml.get_object('enable_dark_theme').set_active(get_dark_theme())
 
         ### Personal Events tab ###
         # outgoing send chat state notifications
@@ -654,6 +659,9 @@ class Preferences(Gtk.ApplicationWindow):
     def on_transports_iconsets_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
         gtkgui_helpers.reload_jabber_state_images()
+
+    def on_enable_dark_theme_toggled(self, widget):
+        set_dark_theme(widget.get_active())
 
     def on_outgoing_chat_states_combobox_changed(self, widget):
         active = widget.get_active()
