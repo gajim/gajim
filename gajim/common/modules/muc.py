@@ -253,6 +253,9 @@ class MUC:
         if muc_user is None:
             return
 
+        if stanza.getType() == 'error':
+            return
+
         decline = muc_user.getTag('decline')
         if decline is not None:
 

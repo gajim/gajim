@@ -82,7 +82,7 @@ class Message:
             return
 
         muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
+        if muc_user is not None and (stanza.getType() != 'error'):
             if muc_user.getChildren():
                 # Not a PM, handled by MUC module
                 return
@@ -155,8 +155,11 @@ class Message:
 
         if gc_control and jid == fjid:
             if type_ == 'error':
-                msgtxt = _('error while sending %(message)s ( %(error)s )') % {
-                    'message': msgtxt, 'error': stanza.getErrorMsg()}
+                if msgtxt:
+                    msgtxt = _('error while sending %(message)s ( %(error)s )') % {
+                        'message': msgtxt, 'error': stanza.getErrorMsg()}
+                else:
+                    msgtxt = _('error: %s') % stanza.getErrorMsg()
                 # TODO: why is this here?
                 if stanza.getTag('html'):
                     stanza.delChild('html')
@@ -245,9 +248,12 @@ class Message:
         if event.mtype == 'error':
             if not event.msgtxt:
                 event.msgtxt = _('message')
-            self._con.dispatch_error_message(
-                event.stanza, event.msgtxt,
-                event.session, event.fjid, timestamp)
+            if event.gc_control:
+                event.gc_control.print_conversation(event.msgtxt)
+            else:
+                self._con.dispatch_error_message(
+                    event.stanza, event.msgtxt,
+                    event.session, event.fjid, timestamp)
             return
 
         if event.mtype == 'groupchat':
