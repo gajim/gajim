@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Tuple
+
 import os
 import sys
 import logging
@@ -22,8 +24,9 @@ from gi.repository import Gtk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import i18n
 from gajim.common import configpaths
+from gajim.common import i18n
+from gajim.common.i18n import _
 
 _icon_theme = Gtk.IconTheme.get_default()
 _icon_theme.append_search_path(configpaths.get('ICONS'))
@@ -32,7 +35,7 @@ log = logging.getLogger('gajim.gtk.util')
 
 
 class Builder:
-    def __init__(self, filename=None, widget=None):
+    def __init__(self, filename: str, widget: str = None) -> None:
         self._builder = Gtk.Builder()
         self._builder.set_translation_domain(i18n.DOMAIN)
 
@@ -42,7 +45,7 @@ class Builder:
             # This is a workaround for non working translation on Windows
             tree = ET.parse(file_path)
             for node in tree.iter():
-                if 'translatable' in node.attrib:
+                if 'translatable' in node.attrib and node.text is not None:
                     node.text = _(node.text)
             xml_text = ET.tostring(tree.getroot(),
                                    encoding='unicode',
@@ -68,7 +71,7 @@ class Builder:
             return self._builder.get_object(name)
 
 
-def get_builder(file_name, widget=None):
+def get_builder(file_name: str, widget: str = None) -> Builder:
     return Builder(file_name, widget)
 
 
@@ -86,11 +89,11 @@ def load_icon(icon_name, widget, size=16, pixbuf=False,
         if pixbuf:
             return iconinfo.load_icon()
         return iconinfo.load_surface(None)
-    except GLib.GError as e:
-        log.error('Unable to load icon %s: %s', icon_name, str(e))
+    except GLib.GError as error:
+        log.error('Unable to load icon %s: %s', icon_name, str(error))
 
 
-def get_iconset_name_for(name):
+def get_iconset_name_for(name: str) -> str:
     if name == 'not in roster':
         name = 'notinroster'
     iconset = app.config.get('iconset')
@@ -99,46 +102,46 @@ def get_iconset_name_for(name):
     return '%s-%s' % (iconset, name)
 
 
-def get_total_screen_geometry():
+def get_total_screen_geometry() -> Tuple[int, int]:
     screen = Gdk.Screen.get_default()
     window = Gdk.Screen.get_root_window(screen)
-    w, h = window.get_width(), window.get_height()
-    log.debug('Get screen geometry: %s %s', w, h)
-    return w, h
+    width, height = window.get_width(), window.get_height()
+    log.debug('Get screen geometry: %s %s', width, height)
+    return width, height
 
 
-def resize_window(window, w, h):
+def resize_window(window: Gtk.Window, width: int, height: int) -> None:
     """
     Resize window, but also checks if huge window or negative values
     """
     screen_w, screen_h = get_total_screen_geometry()
-    if not w or not h:
+    if not width or not height:
         return
-    if w > screen_w:
-        w = screen_w
-    if h > screen_h:
-        h = screen_h
-    window.resize(abs(w), abs(h))
+    if width > screen_w:
+        width = screen_w
+    if height > screen_h:
+        height = screen_h
+    window.resize(abs(width), abs(height))
 
 
-def move_window(window, x, y):
+def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     """
     Move the window, but also check if out of screen
     """
     screen_w, screen_h = get_total_screen_geometry()
-    if x < 0:
-        x = 0
-    if y < 0:
-        y = 0
-    w, h = window.get_size()
-    if x + w > screen_w:
-        x = screen_w - w
-    if y + h > screen_h:
-        y = screen_h - h
-    window.move(x, y)
+    if pos_x < 0:
+        pos_x = 0
+    if pos_y < 0:
+        pos_y = 0
+    width, height = window.get_size()
+    if pos_x + width > screen_w:
+        pos_x = screen_w - width
+    if pos_y + height > screen_h:
+        pos_y = screen_h - height
+    window.move(pos_x, pos_y)
 
 
-def get_completion_liststore(entry):
+def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
     """
     Create a completion model for entry widget completion list consists of
     (Pixbuf, Text) rows
@@ -159,13 +162,13 @@ def get_completion_liststore(entry):
     return liststore
 
 
-def get_cursor(attr):
+def get_cursor(attr: str) -> Gdk.Cursor:
     display = Gdk.Display.get_default()
     cursor = getattr(Gdk.CursorType, attr)
     return Gdk.Cursor.new_for_display(display, cursor)
 
 
-def scroll_to_end(widget):
+def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
     """Scrolls to the end of a GtkScrolledWindow.
 
     Args:
@@ -187,7 +190,7 @@ def scroll_to_end(widget):
     return False
 
 
-def at_the_end(widget):
+def at_the_end(widget: Gtk.ScrolledWindow) -> bool:
     """Determines if a Scrollbar in a GtkScrolledWindow is at the end.
 
     Args:
@@ -213,15 +216,15 @@ def get_image_button(icon_name, tooltip, toggle=False):
     return button
 
 
-def python_month(month):
+def python_month(month: int) -> int:
     return month + 1
 
 
-def gtk_month(month):
+def gtk_month(month: int) -> int:
     return month - 1
 
 
-def convert_rgb_to_hex(rgb_string):
+def convert_rgb_to_hex(rgb_string: str) -> str:
     rgb = Gdk.RGBA()
     rgb.parse(rgb_string)
     rgb.to_color()
