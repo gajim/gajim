@@ -14,8 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
-
 import os
 import locale
 import gettext
@@ -23,7 +21,7 @@ import gettext
 from gajim.common import configpaths
 
 APP = 'gajim_plugins'
-plugin_user_dir = cast(str, configpaths.get('PLUGINS_USER'))
+plugin_user_dir = configpaths.get('PLUGINS_USER')
 plugins_locale_dir = os.path.join(plugin_user_dir, 'locale')
 
 if os.name != 'nt':

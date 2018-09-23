@@ -107,7 +107,7 @@ class PluginManager(metaclass=Singleton):
         Registered names with instances of encryption Plugins.
         '''
 
-        for path in reversed(configpaths.get('PLUGINS_DIRS')):
+        for path in reversed(configpaths.get_plugin_dirs()):
             pc = PluginManager.scan_dir_for_plugins(path)
             self.add_plugins(pc)
 
