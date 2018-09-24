@@ -23,16 +23,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import time
 import locale
 import base64
+import logging
+from enum import IntEnum, unique
 
+import nbxmpp
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gio
+
+
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
@@ -44,10 +51,6 @@ from gajim import adhoc_commands
 from gajim.gtk import AddNewContactWindow
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
-import nbxmpp
-
-from enum import IntEnum, unique
-
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
@@ -56,7 +59,6 @@ from gajim.common import ged
 from gajim.common import i18n
 from gajim.common import contacts
 from gajim.common.const import StyleAttr
-
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
 from gajim.gtk.filechoosers import AvatarChooserDialog
@@ -72,7 +74,6 @@ from gajim.command_system.implementation.hosts import GroupChatCommands
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 
-import logging
 log = logging.getLogger('gajim.groupchat_control')
 
 @unique
@@ -1299,12 +1300,17 @@ class GroupchatControl(ChatControlBase):
         if contact:
             app.interface.roster.draw_contact(self.room_jid, self.account)
 
-    def get_contact_iter(self, nick):
+    def get_contact_iter(self, nick: str) -> Optional[Gtk.TreeIter]:
         try:
             ref = self._contact_refs[nick]
-            return self.model.get_iter(ref.get_path())
         except KeyError:
             return None
+
+        path = ref.get_path()
+        if path is None:
+            return None
+        return self.model.get_iter(path)
+
 
     def print_old_conversation(self, text, contact='', tim=None, xhtml=None,
     displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
@@ -2092,12 +2098,17 @@ class GroupchatControl(ChatControlBase):
             self.draw_banner_text()
         return iter_
 
-    def get_role_iter(self, role):
+    def get_role_iter(self, role: str) -> Optional[Gtk.TreeIter]:
         try:
             ref = self._role_refs[role]
-            return self.model.get_iter(ref.get_path())
         except KeyError:
             return None
+
+        path = ref.get_path()
+        if path is None:
+            return None
+        return self.model.get_iter(path)
+
 
     def remove_contact(self, nick):
         """
