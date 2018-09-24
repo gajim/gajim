@@ -518,7 +518,7 @@ class GroupchatControl(ChatControlBase):
             self._nec_decrypted_message_received)
         app.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
-        app.gc_connected[self.account][self.room_jid] = False
+        self.is_connected = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
 
@@ -578,28 +578,27 @@ class GroupchatControl(ChatControlBase):
         win = self.parent_win.window
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
-        online = app.gc_connected[self.account][self.room_jid]
         con = app.connections[self.account]
 
         # Destroy Room
         win.lookup_action('destroy-' + self.control_id).set_enabled(
-            online and contact.affiliation == 'owner')
+            self.is_connected and contact.affiliation == 'owner')
 
         # Configure Room
         win.lookup_action('configure-' + self.control_id).set_enabled(
-            online and contact.affiliation in ('admin', 'owner'))
+            self.is_connected and contact.affiliation in ('admin', 'owner'))
 
         # Bookmarks
         con = app.connections[self.account]
         bookmark_support = con.get_module('Bookmarks').available
         bookmarked = self.room_jid in con.get_module('Bookmarks').bookmarks
         win.lookup_action('bookmark-' + self.control_id).set_enabled(
-            online and bookmark_support and not bookmarked)
+            self.is_connected and bookmark_support and not bookmarked)
 
         # Request Voice
         role = self.get_role(self.nick)
         win.lookup_action('request-voice-' + self.control_id).set_enabled(
-            online and role == 'visitor')
+            self.is_connected and role == 'visitor')
 
         # Change Subject
         subject = False
@@ -607,25 +606,25 @@ class GroupchatControl(ChatControlBase):
             subject = muc_caps_cache.is_subject_change_allowed(
                 self.room_jid, contact.affiliation)
         win.lookup_action('change-subject-' + self.control_id).set_enabled(
-            online and subject)
+            self.is_connected and subject)
 
         # Change Nick
         win.lookup_action('change-nick-' + self.control_id).set_enabled(
-            online)
+            self.is_connected)
 
         # Execute command
         win.lookup_action('execute-command-' + self.control_id).set_enabled(
-            online)
+            self.is_connected)
 
         # Send file (HTTP File Upload)
         httpupload = win.lookup_action(
             'send-file-httpupload-' + self.control_id)
         httpupload.set_enabled(
-            online and con.get_module('HTTPUpload').available)
+            self.is_connected and con.get_module('HTTPUpload').available)
         win.lookup_action('send-file-' + self.control_id).set_enabled(
             httpupload.get_enabled())
 
-        if online and httpupload.get_enabled():
+        if self.is_connected and httpupload.get_enabled():
             tooltip_text = _('Send File…')
         else:
             tooltip_text = _('No File Transfer available')
@@ -634,7 +633,7 @@ class GroupchatControl(ChatControlBase):
         # Upload Avatar
         vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
         win.lookup_action('upload-avatar-' + self.control_id).set_enabled(
-            online and vcard_support and contact.affiliation == 'owner')
+            self.is_connected and vcard_support and contact.affiliation == 'owner')
 
     def _connect_window_state_change(self, parent_win):
         if self._state_change_handler_id is None:
@@ -1053,7 +1052,7 @@ class GroupchatControl(ChatControlBase):
 
     def get_tab_image(self, count_unread=True):
         tab_image = None
-        if app.gc_connected[self.account][self.room_jid]:
+        if self.is_connected:
             tab_image = gtkgui_helpers.get_iconset_name_for('muc-active')
         else:
             tab_image = gtkgui_helpers.get_iconset_name_for('muc-inactive')
@@ -1111,8 +1110,7 @@ class GroupchatControl(ChatControlBase):
 
     def _update_banner_state_image(self):
         banner_status_img = self.xml.get_object('gc_banner_status_image')
-        if self.room_jid in app.gc_connected[self.account] and \
-        app.gc_connected[self.account][self.room_jid]:
+        if self.is_connected:
             if self.contact.avatar_sha:
                 surface = app.interface.get_avatar(self.contact.avatar_sha,
                                                    AvatarSize.ROSTER,
@@ -1596,6 +1594,14 @@ class GroupchatControl(ChatControlBase):
         elif obj.name == 'ping-error':
             self.print_conversation(_('Error.'))
 
+    @property
+    def is_connected(self) -> bool:
+        return app.gc_connected[self.account][self.room_jid]
+
+    @is_connected.setter
+    def is_connected(self, value: bool) -> None:
+        app.gc_connected[self.account][self.room_jid] = value
+
     def got_connected(self):
         # Make autorejoin stop.
         if self.autorejoin:
@@ -1608,7 +1614,8 @@ class GroupchatControl(ChatControlBase):
             con.get_module('MAM').request_archive_on_muc_join(
                 self.room_jid)
 
-        app.gc_connected[self.account][self.room_jid] = True
+
+        self.is_connected = True
         ChatControlBase.got_connected(self)
 
         # Sort model and assign it to treeview
@@ -1651,7 +1658,7 @@ class GroupchatControl(ChatControlBase):
                     ctrl.parent_win.redraw_tab(ctrl)
 
             app.contacts.remove_gc_contact(self.account, gc_contact)
-        app.gc_connected[self.account][self.room_jid] = False
+        self.is_connected = False
         ChatControlBase.got_disconnected(self)
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
@@ -2317,8 +2324,7 @@ class GroupchatControl(ChatControlBase):
         app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
 
-        if self.room_jid in app.gc_connected[self.account] and \
-        app.gc_connected[self.account][self.room_jid]:
+        if self.is_connected:
             app.connections[self.account].send_gc_status(self.nick,
                 self.room_jid, show='offline', status=status)
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
@@ -2356,8 +2362,7 @@ class GroupchatControl(ChatControlBase):
         excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
         # whether to ask for confirmation before closing muc
         if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
-        and app.gc_connected[self.account][self.room_jid] and self.room_jid \
-        not in excludes:
+        and self.is_connected and self.room_jid not in excludes:
             return False
         return True
 
@@ -2375,7 +2380,7 @@ class GroupchatControl(ChatControlBase):
         excludes = app.config.get('noconfirm_close_muc_rooms').split(' ')
         # whether to ask for confirmation before closing muc
         if (app.config.get('confirm_close_muc') or self.room_jid in includes)\
-        and app.gc_connected[self.account][self.room_jid] and self.room_jid \
+        and self.is_connected and self.room_jid \
         not in excludes:
 
             def on_ok(clicked):
