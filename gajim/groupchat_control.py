@@ -8,6 +8,7 @@
 #                         Stephan Erb <steve-e AT h3c.de>
 # Copyright (C) 2008 Brendan Taylor <whateley AT gmail.com>
 #                    Jonathan Schleifer <js-gajim AT webkeks.org>
+# Copyright (C) 2018 Marcin Mielniczuk <marmistrz dot dev at zoho dot eu>
 #
 # This file is part of Gajim.
 #
@@ -32,6 +33,7 @@ import logging
 from enum import IntEnum, unique
 
 import nbxmpp
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -75,6 +77,7 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc_commands import CommandWindow
+from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
 from gajim.gtk.util import get_builder
@@ -317,6 +320,7 @@ class GroupchatControl(ChatControlBase):
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
         self.nick_hits = []
+        self._nick_completion = NickCompletionGenerator(self.nick)
         self.last_key_tabs = False
 
         self.subject = ''
@@ -1433,11 +1437,7 @@ class GroupchatControl(ChatControlBase):
                 other_tags_for_name.append('bold')
                 other_tags_for_text.append('marked')
 
-                if contact in self.attention_list:
-                    self.attention_list.remove(contact)
-                elif len(self.attention_list) > 6:
-                    self.attention_list.pop(0) # remove older
-                self.attention_list.append(contact)
+            self._nick_completion.record_message(contact, highlight)
 
             if text.startswith('/me ') or text.startswith('/me\n'):
                 other_tags_for_text.append('gc_nickname_color_' + \
@@ -1826,6 +1826,10 @@ class GroupchatControl(ChatControlBase):
         for role in ('visitor', 'participant', 'moderator'):
             self.draw_role(role)
 
+    def _change_nick(self, new_nick: str) -> None:
+        self.nick = new_nick
+        self._nick_completion.change_nick(new_nick)
+
     def _nec_gc_presence_received(self, obj):
         if obj.room_jid != self.room_jid or obj.conn.name != self.account:
             return
@@ -1945,7 +1949,7 @@ class GroupchatControl(ChatControlBase):
                 elif '303' in obj.status_code: # Someone changed their nick
                     if obj.new_nick == self.new_nick or obj.nick == self.nick:
                         # We changed our nick
-                        self.nick = obj.new_nick
+                        self.change_nick(obj.new_nick)
                         self.new_nick = ''
                         s = _('You are now known as %s') % self.nick
                     else:
@@ -1963,8 +1967,7 @@ class GroupchatControl(ChatControlBase):
                     # after that, but that doesn't hurt
                     self.add_contact_to_roster(obj.new_nick, obj.show, role,
                         affiliation, obj.status, obj.real_jid)
-                    if obj.nick in self.attention_list:
-                        self.attention_list.remove(obj.nick)
+                    self._nick_completion.contact_renamed(nick, obj.new_nick)
                     # keep nickname color
                     if obj.nick in self.gc_custom_colors:
                         self.gc_custom_colors[obj.new_nick] = \
@@ -2016,7 +2019,7 @@ class GroupchatControl(ChatControlBase):
             if not iter_:
                 if '210' in obj.status_code:
                     # Server changed our nick
-                    self.nick = obj.nick
+                    self.change_nick(obj.nick)
                     s = _('You are now known as %s') % nick
                     self.print_conversation(s, 'info', graphics=False)
                 iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
@@ -2080,9 +2083,6 @@ class GroupchatControl(ChatControlBase):
         right_changed:
             st = ''
 
-            if obj.show == 'offline':
-                if obj.nick in self.attention_list:
-                    self.attention_list.remove(obj.nick)
             if obj.show == 'offline' and print_status in ('all', 'in_and_out') \
             and (not obj.status_code or '307' not in obj.status_code):
                 st = _('%s has left') % nick_jid
@@ -2469,6 +2469,10 @@ class GroupchatControl(ChatControlBase):
             self.print_conversation(_('%(jid)s has been invited in this room') %
                                     {'jid': contact_jid}, graphics=False)
 
+    def _jid_not_blocked(self, bare_jid: str) -> bool:
+        fjid = self.room_jid + '/' + bare_jid
+        return not helpers.jid_is_blocked(self.account, fjid)
+
     def _on_message_textview_key_press_event(self, widget, event):
         res = ChatControlBase._on_message_textview_key_press_event(self, widget,
             event)
@@ -2508,29 +2512,21 @@ class GroupchatControl(ChatControlBase):
                 self.nick_hits.append(self.nick_hits[0])
                 begin = self.nick_hits.pop(0)
             else:
-                self.nick_hits = [] # clear the hit list
                 list_nick = app.contacts.get_nick_list(self.account,
                                                          self.room_jid)
-                list_nick.sort(key=str.lower) # case-insensitive sort
-                if begin == '':
-                    # empty message, show lasts nicks that highlighted us first
-                    for nick in self.attention_list:
-                        if nick in list_nick:
-                            list_nick.remove(nick)
-                        list_nick.insert(0, nick)
+                list_nick = list(filter(self._jid_not_blocked, list_nick))
 
-                if self.nick in list_nick:
-                    list_nick.remove(self.nick) # Skip self
-                for nick in list_nick:
-                    fjid = self.room_jid + '/' + nick
-                    if nick.lower().startswith(begin.lower()) and not \
-                       helpers.jid_is_blocked(self.account, fjid):
-                        # the word is the beginning of a nick
-                        self.nick_hits.append(nick)
+                log.debug("Nicks to be considered for autosuggestions: %s",
+                          list_nick)
+                self.nick_hits = self._nick_completion.generate_suggestions(
+                    nicks=list_nick, beginning=begin)
+                log.debug("Nicks filtered for autosuggestions: %s",
+                          self.nick_hits)
+
             if self.nick_hits:
                 if len(splitted_text) < 2 or with_refer_to_nick_char:
-                # This is the 1st word of the line or no word or we are cycling
-                # at the beginning, possibly with a space in one nick
+                    # This is the 1st word of the line or no word or we are cycling
+                    # at the beginning, possibly with a space in one nick
                     add = gc_refer_to_nick_char + ' '
                 else:
                     add = ' '
