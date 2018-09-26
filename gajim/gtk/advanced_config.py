@@ -22,15 +22,17 @@
 from enum import IntEnum, unique
 
 from gi.repository import Gtk
-from gajim import gtkgui_helpers
 from gi.repository import GLib
 from gi.repository import Pango
 
 from gajim.common import app
 
+from gajim.gtk.util import get_builder
+
+
 @unique
 class Column(IntEnum):
-    PREFERENCE_NAME = 0
+    NAME = 0
     VALUE = 1
     TYPE = 2
 
@@ -64,9 +66,9 @@ def tree_model_pre_order(model, treeiter):
             yield it
 
 
-class AdvancedConfigurationWindow:
+class AdvancedConfig:
     def __init__(self, transient):
-        self.xml = gtkgui_helpers.get_gtk_builder('advanced_configuration_window.ui')
+        self.xml = get_builder('advanced_configuration_window.ui')
         self.window = self.xml.get_object('advanced_configuration_window')
         self.window.set_transient_for(transient)
         self.entry = self.xml.get_object('advanced_entry')
@@ -132,7 +134,7 @@ class AdvancedConfigurationWindow:
         Check if it's boolean or holds password stuff and if yes  make the
         cellrenderertext not editable, else - it's editable
         """
-        optname = model[iter_][Column.PREFERENCE_NAME]
+        optname = model[iter_][Column.NAME]
         opttype = model[iter_][Column.TYPE]
         if opttype == self.types['boolean'] or optname == 'password':
             cell.set_property('editable', False)
@@ -319,7 +321,7 @@ class AdvancedConfigurationWindow:
                     desc = app.config.get_desc_per(opt_path[2], opt_path[0])
                 elif len(opt_path) == 1:
                     desc = app.config.get_desc(opt_path[0])
-                if search_string in model[it][Column.PREFERENCE_NAME] or (desc and \
+                if search_string in model[it][Column.NAME] or (desc and \
                 search_string in desc.lower()):
                     return True
         return False
