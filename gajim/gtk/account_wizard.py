@@ -482,7 +482,7 @@ class AccountCreationWizard:
             GLib.source_remove(self.update_progressbar_timeout_id)
 
     def on_advanced_button_clicked(self, widget):
-        from gajim.accounts_window import AccountsWindow
+        from gajim.gtk.accounts import AccountsWindow
         window = app.get_app_window(AccountsWindow)
         if window is None:
             window = AccountsWindow()

@@ -53,7 +53,6 @@ from gajim import cell_renderer_image
 from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
-from gajim.accounts_window import AccountsWindow
 
 from gajim.common import app
 from gajim.common import helpers
@@ -81,6 +80,7 @@ from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.history import HistoryWindow
+from gajim.gtk.accounts import AccountsWindow
 
 
 log = logging.getLogger('gajim.roster')
