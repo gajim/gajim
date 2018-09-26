@@ -15,5 +15,12 @@
 # Constants for the gtk module
 
 from collections import namedtuple
+from enum import IntEnum, unique
 
 Filter = namedtuple('Filter', 'name pattern default')
+
+@unique
+class Theme(IntEnum):
+    NOT_DARK = 0
+    DARK = 1
+    SYSTEM = 2

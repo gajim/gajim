@@ -1541,41 +1541,6 @@ $T will be replaced by auto-not-available timeout</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="label174">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Status _iconset</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
-                    <property name="label" translatable="yes">Use _transports icons</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkComboBoxText" id="theme_combobox">
                     <property name="width_request">200</property>
                     <property name="visible">True</property>
@@ -1614,19 +1579,70 @@ $T will be replaced by auto-not-available timeout</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="enable_dark_theme">
-                    <property name="label" translatable="yes">Enable dark theme</property>
+                  <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
+                    <property name="label" translatable="yes">Use _transports icons</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_enable_dark_theme_toggled" swapped="no"/>
+                    <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label174">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Status _iconset</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Dark Theme</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="dark_theme_combobox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item id="2" translatable="yes">System</item>
+                      <item id="1" translatable="yes">Enabled</item>
+                      <item id="0" translatable="yes">Disabled</item>
+                    </items>
+                    <signal name="changed" handler="on_dark_theme_changed" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
                   </packing>
                 </child>
                 <child>

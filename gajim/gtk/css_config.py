@@ -28,12 +28,10 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import StyleAttr, CSSPriority
 
-log = logging.getLogger('gajim.c.css')
+from gajim.gtk.const import Theme
 
-_settings = Gtk.Settings.get_default()
-PREFER_DARK = False
-if _settings is not None:
-    PREFER_DARK = _settings.get_property('gtk-application-prefer-dark-theme')
+log = logging.getLogger('gajim.gtk.css')
+settings = Gtk.Settings.get_default()
 
 
 class CSSConfig():
@@ -92,6 +90,7 @@ class CSSConfig():
         # Holds all currently available themes
         self.themes = []
 
+        self.set_dark_theme()
         self._load_css()
         self._gather_available_themes()
         self._load_default()
@@ -102,14 +101,37 @@ class CSSConfig():
             self._provider,
             CSSPriority.USER_THEME)
 
+    @property
+    def prefer_dark(self):
+        setting = app.config.get('dark_theme')
+        if setting == Theme.SYSTEM:
+            if settings is None:
+                return False
+            return settings.get_property('gtk-application-prefer-dark-theme')
+        return setting == Theme.DARK
+
+    @staticmethod
+    def set_dark_theme(value=None):
+        if value is None:
+            value = app.config.get('dark_theme')
+        else:
+            app.config.set('dark_theme', value)
+
+        if settings is None:
+            return
+        if value == Theme.SYSTEM:
+            settings.reset_property('gtk-application-prefer-dark-theme')
+            return
+        settings.set_property('gtk-application-prefer-dark-theme', bool(value))
+
     def _load_css(self):
         self._load_css_from_file('gajim.css', CSSPriority.APPLICATION)
-        if PREFER_DARK:
+        if self.prefer_dark:
             self._load_css_from_file('gajim-dark.css',
                                      CSSPriority.APPLICATION_DARK)
 
         self._load_css_from_file('default.css', CSSPriority.DEFAULT_THEME)
-        if PREFER_DARK:
+        if self.prefer_dark:
             self._load_css_from_file('default-dark.css',
                                      CSSPriority.DEFAULT_THEME_DARK)
 
@@ -151,9 +173,8 @@ class CSSConfig():
             # Ignore user created themes that are named 'default'
             self.themes.remove('default')
 
-    @classmethod
-    def get_theme_path(cls, theme, user=True):
-        if theme == 'default' and PREFER_DARK:
+    def get_theme_path(self, theme, user=True):
+        if theme == 'default' and self.prefer_dark:
             theme = 'default-dark'
 
         if user:

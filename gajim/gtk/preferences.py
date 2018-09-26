@@ -24,17 +24,17 @@ from gajim.common import helpers
 from gajim.common import configpaths
 from gajim.common import config as c_config
 from gajim.common import idle
-from gajim.gtk.util import get_dark_theme
-from gajim.gtk.util import set_dark_theme
-from gajim.gtk.util import get_builder
-from gajim.gtk.dialogs import AspellDictError
-from gajim.gtk.themes import Themes
+
 from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim.chat_control_base import ChatControlBase
 from gajim.config import ManageProxiesWindow, ManageSoundsWindow
 from gajim import message_control
 from gajim import cell_renderer_image
 from gajim import gtkgui_helpers
+
+from gajim.gtk.util import get_builder
+from gajim.gtk.dialogs import AspellDictError
+from gajim.gtk.themes import Themes
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -210,7 +210,8 @@ class Preferences(Gtk.ApplicationWindow):
         self.xml.get_object('transports_iconsets_checkbutton').set_active(st)
 
         # Dark theme
-        self.xml.get_object('enable_dark_theme').set_active(get_dark_theme())
+        dark_theme_combo = self.xml.get_object('dark_theme_combobox')
+        dark_theme_combo.set_active_id(str(app.config.get('dark_theme')))
 
         ### Personal Events tab ###
         # outgoing send chat state notifications
@@ -660,8 +661,8 @@ class Preferences(Gtk.ApplicationWindow):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
         gtkgui_helpers.reload_jabber_state_images()
 
-    def on_enable_dark_theme_toggled(self, widget):
-        set_dark_theme(widget.get_active())
+    def on_dark_theme_changed(self, widget):
+        app.css_config.set_dark_theme(int(widget.get_active_id()))
 
     def on_outgoing_chat_states_combobox_changed(self, widget):
         active = widget.get_active()
