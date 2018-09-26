@@ -23,9 +23,9 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import config
 from gajim import dialogs
-from gajim.accounts_window import AccountsWindow
-import gajim.plugins.gui
 from gajim import disco
+
+import gajim.plugins.gui
 
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.history_sync import HistorySyncAssistant
@@ -43,6 +43,7 @@ from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
+from gajim.gtk.accounts import AccountsWindow
 
 
 # General Actions
