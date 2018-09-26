@@ -53,7 +53,8 @@ from gajim.common.modules import dataforms
 from gajim.common.exceptions import GajimGeneralException
 
 # Compat with Gajim 1.0.3 for plugins
-from gajim.gtk import *
+from gajim.gtk.dialogs import *
+from gajim.gtk.add_contact import AddNewContactWindow
 
 
 log = logging.getLogger('gajim.dialogs')

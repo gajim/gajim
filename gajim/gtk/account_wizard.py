@@ -27,7 +27,7 @@ from gajim.common.modules import dataforms
 from gajim.config import ManageProxiesWindow
 from gajim.config import FakeDataForm
 from gajim.gtk.util import get_builder
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim import gtkgui_helpers
 from gajim import dataforms_widget
 from gajim import gui_menu_builder

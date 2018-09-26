@@ -423,9 +423,9 @@ def scale_pixbuf_from_data(data, size):
     return scale_pixbuf(pixbuf, size)
 
 def on_avatar_save_as_menuitem_activate(widget, avatar, default_name=''):
-    from gajim.gtk import ErrorDialog
-    from gajim.gtk import ConfirmationDialog
-    from gajim.gtk import FTOverwriteConfirmationDialog
+    from gajim.gtk.dialogs import ErrorDialog
+    from gajim.gtk.dialogs import ConfirmationDialog
+    from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
     from gajim.gtk.filechoosers import AvatarSaveDialog
     def on_continue(response, file_path):
         if response < 0:

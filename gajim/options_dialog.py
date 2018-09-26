@@ -5,8 +5,8 @@ from gajim import gtkgui_helpers
 from gajim.common.const import OptionKind, OptionType
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
-from gajim.gtk import ErrorDialog
-from gajim.gtk import ChangePasswordDialog
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import ChangePasswordDialog
 
 
 class OptionsDialog(Gtk.ApplicationWindow):

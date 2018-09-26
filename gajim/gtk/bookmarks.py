@@ -19,7 +19,7 @@ from gajim import gui_menu_builder
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import Q_
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 

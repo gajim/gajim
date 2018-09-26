@@ -30,7 +30,7 @@ from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.connection_handlers_events import ChatstateReceivedEvent
 from gajim.common.const import KindConstant
-from gajim.gtk import SingleMessageWindow
+from gajim.gtk.single_message import SingleMessageWindow
 
 
 class ChatControlSession:

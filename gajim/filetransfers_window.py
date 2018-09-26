@@ -17,36 +17,39 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import time
+import logging
+from functools import partial
+from pathlib import Path
+from enum import IntEnum, unique
+from datetime import datetime
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
-import os
-import time
-from functools import partial
-from pathlib import Path
-
-from enum import IntEnum, unique
-from datetime import datetime
+from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 
 from gajim import gtkgui_helpers
 from gajim import tooltips
-from gajim.gtk import HigDialog
-from gajim.gtk import InformationDialog
-from gajim.gtk import YesNoDialog
-from gajim.gtk import ErrorDialog
-from gajim.gtk import FTOverwriteConfirmationDialog
-from gajim.gtk import NonModalConfirmationDialog
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.file_props import FilesProp
 from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)
-from gajim.gtk.filechoosers import FileSaveDialog, FileChooserDialog
-from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
-import logging
+
+from gajim.gtk.dialogs import HigDialog
+from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
+from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.filechoosers import FileSaveDialog
+from gajim.gtk.filechoosers import FileChooserDialog
+
 log = logging.getLogger('gajim.filetransfer_window')
 
 @unique

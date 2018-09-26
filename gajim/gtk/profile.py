@@ -26,8 +26,8 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim import gtkgui_helpers
-from gajim.gtk import ErrorDialog
-from gajim.gtk import InformationDialog
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.util import get_builder
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.common.const import AvatarSize

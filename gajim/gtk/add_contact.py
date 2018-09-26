@@ -19,7 +19,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 
@@ -205,7 +205,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         model = self.protocol_jid_combobox.get_model()
         row = self.protocol_jid_combobox.get_active()
         jid = model[row][0]
-        from gajim.gtk import ServiceRegistration
+        from gajim.gtk.service_registration import ServiceRegistration
         ServiceRegistration(self.account, jid)
 
     def _on_key_press(self, widget, event):

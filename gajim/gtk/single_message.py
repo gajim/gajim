@@ -21,8 +21,8 @@ from gajim.common import app
 from gajim.common.modules import dataforms
 from gajim.common import helpers
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.gtk import ErrorDialog
-from gajim.gtk import AspellDictError
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_iconset_name_for
 from gajim.gtk.util import get_completion_liststore

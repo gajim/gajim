@@ -37,13 +37,13 @@ from gajim import gtkgui_helpers
 from gajim import dialogs
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
-from gajim.gtk import ConfirmationDialog
-from gajim.gtk import ConfirmationDialogDoubleRadio
-from gajim.gtk import ErrorDialog
-from gajim.gtk import InputDialog
 from gajim.common import helpers
 from gajim.common import app
 
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InputDialog
 
 #---------- ManageProxiesWindow class -------------#
 class ManageProxiesWindow:

@@ -22,15 +22,16 @@
 # be entities that often change the list, it may be slow to fetch it every time
 
 from gi.repository import Gtk
-
 import nbxmpp
+
 from gajim.common import app
 from gajim.common.modules import dataforms
 from gajim.common import ged
 
 from gajim import gtkgui_helpers
-from gajim.gtk import HigDialog
 from gajim import dataforms_widget
+
+from gajim.gtk.dialogs import HigDialog
 
 
 class CommandWindow:

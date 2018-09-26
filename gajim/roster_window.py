@@ -28,6 +28,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import sys
+import time
+import locale
+import logging
+from enum import IntEnum, unique
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -35,13 +42,7 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
-import os
-import sys
-import time
-import locale
-import logging
-
-from enum import IntEnum, unique
+from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
 from gajim import dialogs
 from gajim import vcard
@@ -54,22 +55,6 @@ from gajim import message_control
 from gajim import adhoc_commands
 from gajim.accounts_window import AccountsWindow
 
-from gajim.gtk import JoinGroupchatWindow
-from gajim.gtk import ConfirmationDialogCheck
-from gajim.gtk import ConfirmationDialog
-from gajim.gtk import ErrorDialog
-from gajim.gtk import InputDialog
-from gajim.gtk import WarningDialog
-from gajim.gtk import InformationDialog
-from gajim.gtk import NonModalConfirmationDialog
-from gajim.gtk import SingleMessageWindow
-from gajim.gtk import AddNewContactWindow
-from gajim.gtk import ManagePEPServicesWindow
-from gajim.gtk import ManageBookmarksWindow
-from gajim.gtk import AccountCreationWizard
-from gajim.gtk import ServiceRegistration
-from gajim.gtk import HistoryWindow
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import idle
@@ -80,7 +65,22 @@ if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
-from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
+
+from gajim.gtk.dialogs import ConfirmationDialogCheck
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.join_groupchat import JoinGroupchatWindow
+from gajim.gtk.single_message import SingleMessageWindow
+from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.pep_config import ManagePEPServicesWindow
+from gajim.gtk.bookmarks import ManageBookmarksWindow
+from gajim.gtk.account_wizard import AccountCreationWizard
+from gajim.gtk.service_registration import ServiceRegistration
+from gajim.gtk.history import HistoryWindow
 
 
 log = logging.getLogger('gajim.roster')

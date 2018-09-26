@@ -31,13 +31,15 @@ from gi.repository import GObject
 from gi.repository import GLib
 
 from gajim import common
-from gajim import gtkgui_helpers
-from gajim import message_control
-from gajim.gtk import YesNoDialog
-from gajim.chat_control_base import ChatControlBase
-from gajim.chat_control import ChatControl
 from gajim.common import app
 from gajim.common.i18n import Q_
+
+from gajim import gtkgui_helpers
+from gajim import message_control
+from gajim.chat_control_base import ChatControlBase
+from gajim.chat_control import ChatControl
+
+from gajim.gtk.dialogs import YesNoDialog
 
 ####################
 

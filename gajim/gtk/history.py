@@ -30,7 +30,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim import conversation_textview
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk import util
 from gajim.gtk.util import python_month, gtk_month
 from gajim.common import app

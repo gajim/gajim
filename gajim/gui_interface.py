@@ -36,14 +36,17 @@ import sys
 import re
 import time
 import hashlib
+import logging
 from functools import partial
+from threading import Thread
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gdk
-
+from nbxmpp import idlequeue
+from nbxmpp import Hashes2
 import OpenSSL
 
 try:
@@ -67,8 +70,6 @@ from gajim import message_control
 from gajim.dialog_messages import get_dialog
 from gajim.dialogs import ProgressWindow
 
-from gajim.gtk.filechoosers import FileChooserDialog
-
 from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 from gajim.groupchat_control import GroupchatControl
@@ -80,9 +81,6 @@ from gajim.atom_window import AtomWindow
 from gajim.session import ChatControlSession
 
 from gajim.common import idle
-
-from nbxmpp import idlequeue
-from nbxmpp import Hashes2
 from gajim.common.zeroconf import connection_zeroconf
 from gajim.common import resolver
 from gajim.common import caps_cache
@@ -103,30 +101,29 @@ from gajim.common.const import ACTIVITIES, MOODS
 
 from gajim import roster_window
 from gajim import config
-from threading import Thread
 from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
-
-from gajim.gtk.emoji_data import emoji_data, emoji_ascii_data
-from gajim.gtk import JoinGroupchatWindow
-from gajim.gtk import ErrorDialog
-from gajim.gtk import WarningDialog
-from gajim.gtk import InformationDialog
-from gajim.gtk import InputDialog
-from gajim.gtk import YesNoDialog
-from gajim.gtk import InputTextDialog
-from gajim.gtk import PlainConnectionDialog
-from gajim.gtk import SSLErrorDialog
-from gajim.gtk import ConfirmationDialogDoubleCheck
-from gajim.gtk import ChangeNickDialog
-from gajim.gtk import ProfileWindow
-
 from gajim.common import configpaths
-
 from gajim.common import optparser
-parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
 
-import logging
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import InputTextDialog
+from gajim.gtk.dialogs import PlainConnectionDialog
+from gajim.gtk.dialogs import SSLErrorDialog
+from gajim.gtk.dialogs import ConfirmationDialogDoubleCheck
+from gajim.gtk.dialogs import ChangeNickDialog
+from gajim.gtk.profile import ProfileWindow
+from gajim.gtk.join_groupchat import JoinGroupchatWindow
+from gajim.gtk.filechoosers import FileChooserDialog
+from gajim.gtk.emoji_data import emoji_data
+from gajim.gtk.emoji_data import emoji_ascii_data
+
+
+parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
 log = logging.getLogger('gajim.interface')
 
 class Interface:
