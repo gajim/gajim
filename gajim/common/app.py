@@ -46,7 +46,6 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
-from gajim.common.css_config import CSSConfig
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
 from gajim.common.types import InterfaceT  # pylint: disable=unused-import
 from gajim.common.types import LoggerT  # pylint: disable=unused-import
@@ -645,6 +644,7 @@ def get_app_window(cls, account=None):
 
 def load_css_config():
     global css_config
+    from gajim.gtk.css_config import CSSConfig
     css_config = CSSConfig()
 
 def set_win_debug_mode(enable: bool) -> None:

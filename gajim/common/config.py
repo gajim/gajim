@@ -292,6 +292,7 @@ class Config:
         'use_keyring': [opt_bool, True, _('If true, Gajim will use the Systems Keyring to store account passwords.')],
         'pgp_encoding': [opt_str, '', _('Sets the encoding used by python-gnupg'), True],
         'remote_commands': [opt_bool, False, _('If true, Gajim will execute XEP-0146 Commands.')],
+        'dark_theme': [opt_int, 2, _('2: System, 1: Enabled, 0: Disabled')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
