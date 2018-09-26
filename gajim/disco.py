@@ -49,18 +49,19 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-from gajim.gtk import ErrorDialog
-from gajim.gtk import InformationDialog
 from gajim import gtkgui_helpers
 from gajim import groups
 from gajim import adhoc_commands
 from gajim import search_window
-from gajim.gtk import ServiceRegistration
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common import helpers
 from gajim.common.const import StyleAttr
+
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.service_registration import ServiceRegistration
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),

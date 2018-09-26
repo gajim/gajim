@@ -19,7 +19,7 @@ from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 

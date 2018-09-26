@@ -20,7 +20,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.exceptions import GajimGeneralException
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 

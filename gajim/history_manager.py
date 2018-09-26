@@ -83,9 +83,9 @@ if is_standalone():
 
 from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
-from gajim.gtk import YesNoDialog
-from gajim.gtk import ErrorDialog
-from gajim.gtk import ConfirmationDialog
+from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim import gtkgui_helpers

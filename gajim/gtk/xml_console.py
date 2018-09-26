@@ -22,7 +22,7 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Option, OptionKind, OptionType, StyleAttr
-from gajim.gtk import ErrorDialog
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_image_button

@@ -19,9 +19,9 @@ from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.gtk.util import get_builder
 
-from gajim.gtk import HigDialog
+from gajim.gtk.util import get_builder
+from gajim.gtk.dialogs import HigDialog
 
 log = logging.getLogger('gajim.gtk.mam_preferences')
 

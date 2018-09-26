@@ -23,25 +23,26 @@ from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import config
 from gajim import dialogs
-from gajim.gtk import shortcuts_window
 from gajim.accounts_window import AccountsWindow
 import gajim.plugins.gui
 from gajim import disco
+
+from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.history_sync import HistorySyncAssistant
 from gajim.gtk.server_info import ServerInfoDialog
 from gajim.gtk.mam_preferences import MamPreferences
 from gajim.gtk.preferences import Preferences
-from gajim.gtk import JoinGroupchatWindow
-from gajim.gtk import StartChatDialog
-from gajim.gtk import AddNewContactWindow
-from gajim.gtk import SingleMessageWindow
-from gajim.gtk import XMLConsoleWindow
-from gajim.gtk import AboutDialog
-from gajim.gtk import PrivacyListsWindow
-from gajim.gtk import ManageBookmarksWindow
-from gajim.gtk import FeaturesDialog
-from gajim.gtk import AccountCreationWizard
-from gajim.gtk import HistoryWindow
+from gajim.gtk.join_groupchat import JoinGroupchatWindow
+from gajim.gtk.start_chat import StartChatDialog
+from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.single_message import SingleMessageWindow
+from gajim.gtk.xml_console import XMLConsoleWindow
+from gajim.gtk.about import AboutDialog
+from gajim.gtk.privacy_list import PrivacyListsWindow
+from gajim.gtk.bookmarks import ManageBookmarksWindow
+from gajim.gtk.features import FeaturesDialog
+from gajim.gtk.account_wizard import AccountCreationWizard
+from gajim.gtk.history import HistoryWindow
 
 
 # General Actions
@@ -289,7 +290,7 @@ def on_faq(action, param):
 
 
 def on_keyboard_shortcuts(action, param):
-    shortcuts_window.show(app.app.get_active_window())
+    ShortcutsWindow()
 
 
 def on_features(action, param):

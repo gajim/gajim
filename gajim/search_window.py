@@ -27,7 +27,7 @@ from gajim import gtkgui_helpers
 from gajim import vcard
 from gajim import config
 from gajim import dataforms_widget
-from gajim.gtk import AddNewContactWindow
+from gajim.gtk.add_contact import AddNewContactWindow
 
 
 class SearchWindow:

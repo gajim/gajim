@@ -29,7 +29,7 @@ from gajim import tooltips
 from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
-from gajim.gtk import SingleMessageWindow
+from gajim.gtk.single_message import SingleMessageWindow
 
 
 class StatusIcon:

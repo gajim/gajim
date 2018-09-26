@@ -48,7 +48,7 @@ from gajim import config
 from gajim import vcard
 from gajim import dataforms_widget
 from gajim import adhoc_commands
-from gajim.gtk import AddNewContactWindow
+
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import events
@@ -61,17 +61,19 @@ from gajim.common import contacts
 from gajim.common.const import StyleAttr
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
-from gajim.gtk.filechoosers import AvatarChooserDialog
-from gajim.gtk import ErrorDialog
-from gajim.gtk import InputTextDialog
-from gajim.gtk import ConfirmationDialogCheck
-from gajim.gtk import DoubleInputDialog
-from gajim.gtk import InputDialog
-from gajim.gtk import ChangeNickDialog
 
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 from gajim.command_system.implementation.hosts import GroupChatCommands
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
+
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InputTextDialog
+from gajim.gtk.dialogs import ConfirmationDialogCheck
+from gajim.gtk.dialogs import DoubleInputDialog
+from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import ChangeNickDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.add_contact import AddNewContactWindow
 
 
 log = logging.getLogger('gajim.groupchat_control')

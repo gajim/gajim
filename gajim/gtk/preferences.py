@@ -27,7 +27,7 @@ from gajim.common import idle
 from gajim.gtk.util import get_dark_theme
 from gajim.gtk.util import set_dark_theme
 from gajim.gtk.util import get_builder
-from gajim.gtk import AspellDictError
+from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
 from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim.chat_control_base import ChatControlBase

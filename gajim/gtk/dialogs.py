@@ -1015,3 +1015,18 @@ class NewConfirmationDialog(Gtk.MessageDialog):
         if button.callback is not None:
             button.callback()
         self.destroy()
+
+
+class ShortcutsWindow:
+    def __init__(self):
+        transient = app.app.get_active_window()
+        print(transient)
+        builder = get_builder('shortcuts_window.ui')
+        self.window = builder.get_object('shortcuts_window')
+        self.window.connect('destroy', self._on_window_destroy)
+        self.window.set_transient_for(transient)
+        self.window.show_all()
+        self.window.present()
+
+    def _on_window_destroy(self, widget):
+        self.window = None

@@ -31,8 +31,8 @@ import os
 from enum import IntEnum, unique
 
 from gajim import gtkgui_helpers
-from gajim.gtk import WarningDialog
-from gajim.gtk import YesNoDialog
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.common import app
 from gajim.common import configpaths

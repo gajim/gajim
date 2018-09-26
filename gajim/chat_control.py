@@ -42,8 +42,8 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import dialogs
-from gajim.gtk import ConfirmationDialog
-from gajim.gtk import AddNewContactWindow
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.add_contact import AddNewContactWindow
 
 from gajim.common import app
 from gajim.common import helpers

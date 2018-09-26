@@ -13,8 +13,8 @@ from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 from gajim.options_dialog import OptionsDialog, OptionsBox
 from gajim.common.const import Option, OptionKind, OptionType
-from gajim.gtk import ConfirmationDialog
-from gajim.gtk import YesNoDialog
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import YesNoDialog
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
