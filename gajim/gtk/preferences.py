@@ -25,7 +25,6 @@ from gajim.common import configpaths
 from gajim.common import config as c_config
 from gajim.common import idle
 
-from gajim.advanced_configuration_window import AdvancedConfigurationWindow
 from gajim.chat_control_base import ChatControlBase
 from gajim.config import ManageProxiesWindow, ManageSoundsWindow
 from gajim import message_control
@@ -35,6 +34,7 @@ from gajim import gtkgui_helpers
 from gajim.gtk.util import get_builder
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
+from gajim.gtk.advanced_config import AdvancedConfig
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -1011,8 +1011,7 @@ class Preferences(Gtk.ApplicationWindow):
         if 'advanced_config' in app.interface.instances:
             app.interface.instances['advanced_config'].window.present()
         else:
-            app.interface.instances['advanced_config'] = \
-                AdvancedConfigurationWindow(self)
+            app.interface.instances['advanced_config'] = AdvancedConfig(self)
 
     def on_enable_logging_toggled(self, widget):
         app.set_win_debug_mode(widget.get_active())
