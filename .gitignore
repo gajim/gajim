@@ -26,6 +26,7 @@ dist/
 gajim.egg-info/
 src/gtk/
 win/_build_root
+.vscode
 
 syntax: regexp
 ^config\.*
