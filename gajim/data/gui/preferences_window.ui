@@ -356,7 +356,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="speller_checkbutton">
-                    <property name="label" translatable="yes">_Highlight misspelled words</property>
+                    <property name="label" translatable="yes">Spell _checker</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">If checked, Gajim will highlight spelling errors in input fields of chat windows. If no language is explicitly set via right click on the input field, the default language will be used for this contact or group chat.</property>
@@ -373,11 +373,12 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="positive_184_ack_checkbutton">
-                    <property name="label" translatable="yes">Notify by icon when your messages are received</property>
+                    <property name="label" translatable="yes">Show message recei_pts</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="on_positive_184_ack_checkbutton_toggled" swapped="no"/>
                   </object>
@@ -389,11 +390,12 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="show_avatar_in_tabs_checkbutton">
-                    <property name="label" translatable="yes">Show avatar in chat tabs</property>
+                    <property name="label" translatable="yes">Show _avatar in chat tabs</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="halign">start</property>
+                    <property name="use_underline">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="toggled" handler="on_show_avatar_in_tabs_checkbutton_toggled" swapped="no"/>
                   </object>
@@ -411,6 +413,7 @@
                     <property name="label" translatable="yes">_Window behavior</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic_widget">one_window_type_combobox</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -466,6 +469,7 @@
                     <property name="label" translatable="yes">_Show roster on startup</property>
                     <property name="use_underline">True</property>
                     <property name="justify">right</property>
+                    <property name="mnemonic_widget">show_roster_on_startup</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -885,6 +889,7 @@
                         <property name="label" translatable="yes">_Display chat state notifications</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
+                        <property name="mnemonic_widget">displayed_chat_states_combobox</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
@@ -945,6 +950,7 @@
                         <property name="label" translatable="yes">_Send chat state notifications</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
+                        <property name="mnemonic_widget">outgoing_chat_states_combobox</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
@@ -1501,9 +1507,10 @@ $T will be replaced by auto-not-available timeout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Theme</property>
+                <property name="label" translatable="yes">_Theme</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
+                <property name="mnemonic_widget">theme_combobox</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -1545,9 +1552,10 @@ $T will be replaced by auto-not-available timeout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Dark Theme</property>
+                <property name="label" translatable="yes">_Dark Theme</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
+                <property name="mnemonic_widget">dark_theme_combobox</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -1595,9 +1603,10 @@ $T will be replaced by auto-not-available timeout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Emoji Theme</property>
+                <property name="label" translatable="yes">_Emoji Theme</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
+                <property name="mnemonic_widget">emoticons_combobox</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -1640,9 +1649,10 @@ $T will be replaced by auto-not-available timeout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Status iconset</property>
+                <property name="label" translatable="yes">_Status iconset</property>
                 <property name="use_underline">True</property>
                 <property name="justify">right</property>
+                <property name="mnemonic_widget">iconset_combobox</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -1665,7 +1675,7 @@ $T will be replaced by auto-not-available timeout</property>
             </child>
             <child>
               <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
-                <property name="label" translatable="yes">Use _transports icons</property>
+                <property name="label" translatable="yes">Use transports _icons</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -1700,6 +1710,7 @@ $T will be replaced by auto-not-available timeout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="halign">start</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="on_convert_ascii_toggle" swapped="no"/>
