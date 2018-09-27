@@ -490,7 +490,8 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
                                     uri.setData(data.getData())
                                     found = True
                             if not found:
-                                self.conn.get_bob_data(uri_data, self.fjid,
+                                self.conn.get_module('BitsOfBinary').get_bob_data(
+                                    uri_data, self.fjid,
                                     self.conn._dispatch_gc_msg_with_captcha,
                                     [self.stanza, self.msg_obj], 0)
                                 return

@@ -446,54 +446,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.nec.push_incoming_event(GcMessageReceivedEvent(None,
             conn=self, msg_obj=msg_obj))
 
-    def _on_bob_received(self, conn, result, cid):
-        """
-        Called when we receive BoB data
-        """
-        if cid not in self.awaiting_cids:
-            return
-
-        if result.getType() == 'result':
-            data = result.getTags('data', namespace=nbxmpp.NS_BOB)
-            if data.getAttr('cid') == cid:
-                for func in self.awaiting_cids[cid]:
-                    cb = func[0]
-                    args = func[1]
-                    pos = func[2]
-                    bob_data = data.getData()
-                    def recurs(node, cid, data):
-                        if node.getData() == 'cid:' + cid:
-                            node.setData(data)
-                        else:
-                            for child in node.getChildren():
-                                recurs(child, cid, data)
-                    recurs(args[pos], cid, bob_data)
-                    cb(*args)
-                del self.awaiting_cids[cid]
-                return
-
-        # An error occured, call callback without modifying data.
-        for func in self.awaiting_cids[cid]:
-            cb = func[0]
-            args = func[1]
-            cb(*args)
-        del self.awaiting_cids[cid]
-
-    def get_bob_data(self, cid, to, callback, args, position):
-        """
-        Request for BoB (XEP-0231) and when data will arrive, call callback
-        with given args, after having replaced cid by it's data in
-        args[position]
-        """
-        if cid in self.awaiting_cids:
-            self.awaiting_cids[cid].appends((callback, args, position))
-        else:
-            self.awaiting_cids[cid] = [(callback, args, position)]
-        iq = nbxmpp.Iq(to=to, typ='get')
-        iq.addChild(name='data', attrs={'cid': cid}, namespace=nbxmpp.NS_BOB)
-        self.connection.SendAndCallForResponse(iq, self._on_bob_received,
-            {'cid': cid})
-
     def _nec_agent_removed(self, obj):
         if obj.conn.name != self.name:
             return

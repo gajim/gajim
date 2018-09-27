@@ -116,8 +116,6 @@ class CommonConnection:
         self.muc_jid = {} # jid of muc server for each transport type
         self._stun_servers = [] # STUN servers of our jabber server
 
-        self.awaiting_cids = {} # Used for XEP-0231
-
         # Tracks the calls of the connect_machine() method
         self._connect_machine_calls = 0
 
