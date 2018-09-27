@@ -110,20 +110,6 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('sort_by_show_in_muc')
         self.xml.get_object('sort_by_show_in_muc_checkbutton').set_active(st)
 
-        # emoticons
-        emoticons_combobox = self.xml.get_object('emoticons_combobox')
-        emoticon_themes = helpers.get_available_emoticon_themes()
-
-        emoticons_combobox.append_text(_('Disabled'))
-        for theme in emoticon_themes:
-            emoticons_combobox.append_text(theme)
-
-        config_theme = app.config.get('emoticons_theme')
-        if config_theme not in emoticon_themes:
-            config_theme = _('Disabled')
-        emoticons_combobox.set_id_column(0)
-        emoticons_combobox.set_active_id(config_theme)
-
         # Set default for single window type
         choices = c_config.opt_one_window_types
         type_ = app.config.get('one_message_window')
@@ -212,6 +198,21 @@ class Preferences(Gtk.ApplicationWindow):
         # Dark theme
         dark_theme_combo = self.xml.get_object('dark_theme_combobox')
         dark_theme_combo.set_active_id(str(app.config.get('dark_theme')))
+
+        # Emoticons
+        emoticons_combobox = self.xml.get_object('emoticons_combobox')
+        emoticon_themes = helpers.get_available_emoticon_themes()
+
+        for theme in emoticon_themes:
+            emoticons_combobox.append_text(theme)
+
+        config_theme = app.config.get('emoticons_theme')
+        if config_theme not in emoticon_themes:
+            config_theme = 'font'
+        emoticons_combobox.set_id_column(0)
+        emoticons_combobox.set_active_id(config_theme)
+
+        self.xml.ascii_emoticons.set_active(app.config.get('ascii_emoticons'))
 
         ### Personal Events tab ###
         # outgoing send chat state notifications
@@ -564,11 +565,7 @@ class Preferences(Gtk.ApplicationWindow):
         active = widget.get_active()
         model = widget.get_model()
         emot_theme = model[active][0]
-        if emot_theme == _('Disabled'):
-            app.config.set('emoticons_theme', '')
-        else:
-            app.config.set('emoticons_theme', emot_theme)
-
+        app.config.set('emoticons_theme', emot_theme)
         from gajim.gtk.emoji_chooser import emoji_chooser
         emoji_chooser.load()
         self.toggle_emoticons()
@@ -656,6 +653,10 @@ class Preferences(Gtk.ApplicationWindow):
         icon_string = model[active][1]
         app.config.set('iconset', icon_string)
         gtkgui_helpers.reload_jabber_state_images()
+
+    def on_convert_ascii_toggle(self, widget):
+        app.config.set('ascii_emoticons', widget.get_active())
+        app.interface.make_regexps()
 
     def on_transports_iconsets_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')

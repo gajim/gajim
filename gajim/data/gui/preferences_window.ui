@@ -355,83 +355,6 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox5">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">If not disabled, Gajim will replace ascii smilies like ':)' with equivalent animated or static graphical emoticons</property>
-                    <child>
-                      <object class="GtkLabel" id="label381">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">_Emoticons</property>
-                        <property name="use_underline">True</property>
-                        <property name="justify">right</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label379">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Window behavior</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label28">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">_Show roster on startup</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="xhtml_checkbutton">
-                    <property name="label" translatable="yes">_Ignore rich content in incoming messages</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text.</property>
-                    <property name="halign">start</property>
-                    <property name="margin_top">18</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_xhtml_checkbutton_toggled" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="speller_checkbutton">
                     <property name="label" translatable="yes">_Highlight misspelled words</property>
                     <property name="can_focus">True</property>
@@ -444,7 +367,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">4</property>
+                    <property name="top_attach">3</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
@@ -460,27 +383,41 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
+                    <property name="top_attach">4</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="show_avatar_in_tabs_checkbutton">
+                    <property name="label" translatable="yes">Show avatar in chat tabs</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_show_avatar_in_tabs_checkbutton_toggled" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">5</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="show_roster_on_startup">
-                    <property name="width_request">50</property>
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">liststore7</property>
-                    <signal name="changed" handler="on_show_roster_on_startup_changed" swapped="no"/>
-                    <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext7"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">_Window behavior</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -499,40 +436,68 @@
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="show_roster_on_startup">
+                    <property name="width_request">50</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">liststore7</property>
+                    <signal name="changed" handler="on_show_roster_on_startup_changed" swapped="no"/>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="show_avatar_in_tabs_checkbutton">
-                    <property name="label" translatable="yes">Show avatar in chat tabs</property>
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_show_avatar_in_tabs_checkbutton_toggled" swapped="no"/>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">_Show roster on startup</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">right</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">6</property>
-                    <property name="width">2</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="emoticons_combobox">
+                  <object class="GtkCheckButton" id="xhtml_checkbutton">
+                    <property name="label" translatable="yes">_Ignore rich content in incoming messages</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="changed" handler="on_emoticons_combobox_changed" swapped="no"/>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Some messages may include rich content (formatting, colors etc). If checked, Gajim will just display the raw message text.</property>
+                    <property name="halign">start</property>
+                    <property name="margin_top">18</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_xhtml_checkbutton_toggled" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1499,7 +1464,7 @@ $T will be replaced by auto-not-available timeout</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="vbox58">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_left">18</property>
@@ -1509,170 +1474,300 @@ $T will be replaced by auto-not-available timeout</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkFrame" id="frame3">
+          <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
-              <object class="GtkGrid" id="grid10">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_left">12</property>
-                <property name="margin_top">6</property>
-                <property name="row_spacing">6</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkLabel" id="label249">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">T_heme</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="theme_combobox">
-                    <property name="width_request">200</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="iconset_combobox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="changed" handler="on_iconset_combobox_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="manage_theme_button">
-                    <property name="label" translatable="yes">Ma_nage...</property>
-                    <property name="width_request">120</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Configure color and font of the interface</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="on_manage_theme_button_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
-                    <property name="label" translatable="yes">Use _transports icons</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label174">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Status _iconset</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Dark Theme</property>
-                    <property name="use_underline">True</property>
-                    <property name="justify">right</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="dark_theme_combobox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <items>
-                      <item id="2" translatable="yes">System</item>
-                      <item id="1" translatable="yes">Enabled</item>
-                      <item id="0" translatable="yes">Disabled</item>
-                    </items>
-                    <signal name="changed" handler="on_dark_theme_changed" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label3">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">&lt;b&gt;Themes&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Themes</property>
+                <style>
+                  <class name="bold"/>
+                </style>
               </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Theme</property>
+                <property name="use_underline">True</property>
+                <property name="justify">right</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="theme_combobox">
+                <property name="width_request">200</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="manage_theme_button">
+                <property name="label" translatable="yes">Ma_nage...</property>
+                <property name="width_request">120</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">Configure color and font of the interface</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="on_manage_theme_button_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Dark Theme</property>
+                <property name="use_underline">True</property>
+                <property name="justify">right</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="dark_theme_combobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <items>
+                  <item id="2" translatable="yes">System</item>
+                  <item id="1" translatable="yes">Enabled</item>
+                  <item id="0" translatable="yes">Disabled</item>
+                </items>
+                <signal name="changed" handler="on_dark_theme_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Emojis</property>
+                <style>
+                  <class name="bold"/>
+                  <class name="margin-top6"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Emoji Theme</property>
+                <property name="use_underline">True</property>
+                <property name="justify">right</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="emoticons_combobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="on_emoticons_combobox_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Icons</property>
+                <style>
+                  <class name="bold"/>
+                  <class name="margin-top6"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Status iconset</property>
+                <property name="use_underline">True</property>
+                <property name="justify">right</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="iconset_combobox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <signal name="changed" handler="on_iconset_combobox_changed" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="transports_iconsets_checkbutton">
+                <property name="label" translatable="yes">Use _transports icons</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">If checked, Gajim will use protocol-specific status icons. (e.g. A contact from ICQ will have the equivalent ICQ icon for status online, away, busy, etc...)</property>
+                <property name="halign">start</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_transports_iconsets_checkbutton_toggled" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="ascii_emoticons">
+                <property name="label" translatable="yes">_Convert ASCII Emojis</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="use_underline">True</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="on_convert_ascii_toggle" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>

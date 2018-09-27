@@ -1819,6 +1819,11 @@ class Interface:
         # so http://be) will match http://be and http://be)be) will match
         # http://be)be
 
+        self._basic_pattern_re = None
+        self._emot_and_basic_re = None
+        self._sth_at_sth_dot_sth_re = None
+        self._invalid_XML_chars_re = None
+
         legacy_prefixes = r"((?<=\()(www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$"\
             r"&'\(\)\*\+,;=]|%[A-Fa-f0-9]{2})+(?=\)))"\
             r"|((www|ftp)\.([A-Za-z0-9\.\-_~:/\?#\[\]@!\$&'\(\)\*\+,;=]"\
