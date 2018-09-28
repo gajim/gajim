@@ -2351,7 +2351,7 @@ class RosterWindow:
         else:
             uf_show = helpers.get_uf_show(show)
             liststore.prepend(['SEPARATOR', None, '', True])
-            status_combobox_text = uf_show + ' (' + _("desync'ed") + ')'
+            status_combobox_text = uf_show + ' (' + _("desynced") + ')'
             liststore.prepend(
                 [status_combobox_text, show, 'desync', False])
             self.status_combobox.set_active(0)
