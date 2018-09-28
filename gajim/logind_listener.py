@@ -52,7 +52,7 @@ def signal_received(connection, sender_name, object_path,
         if app.account_is_connected(name):
             conn.old_show = app.SHOW_LIST[conn.connected]
             st = conn.status
-            conn.change_status('offline', _('Machine going to sleep'))
+            conn.change_status('offline', _('Machine is going to sleep'))
             conn.status = st
             conn.time_to_reconnect = 5
 
