@@ -20,7 +20,7 @@
     <ul>
       <li>Tabbed chat window and single window modes</li>
       <li>Group chat support (with Multi-User Chat protocol), invitation, chat to group chat transformation</li>
-      <li>Emoticons, avatars, PEP (user activity, mood and tune)</li>
+      <li>Emojis, avatars, PEP (user activity, mood and tune)</li>
       <li>Audio / video conferences</li>
       <li>File transfer, room bookmarks</li>
       <li>Metacontacts support</li>
