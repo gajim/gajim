@@ -914,7 +914,7 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
             self, pritext, sectext,
             checktext1, checktext2, on_response_ok=on_response_ok,
             on_response_cancel=on_response_cancel, is_modal=False)
-        b = Gtk.Button(_('View cert…'))
+        b = Gtk.Button(_('View certificate…'))
         b.connect('clicked', self.on_cert_clicked)
         b.show_all()
         area = self.get_action_area()

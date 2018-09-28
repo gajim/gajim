@@ -1249,7 +1249,7 @@ class ChatControl(ChatControlBase):
             self.print_conversation(_('Ping?'), 'status')
         elif obj.name == 'ping-reply':
             self.print_conversation(
-                _('Pong! (%s s.)') % obj.seconds, 'status')
+                _('Pong! (%s seconds)') % obj.seconds, 'status')
         elif obj.name == 'ping-error':
             self.print_conversation(_('Error.'), 'status')
 

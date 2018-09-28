@@ -4409,7 +4409,7 @@ class RosterWindow:
                         app.interface.instances['file_transfers'].send_file(
                             account, c, path)
             # Popup dialog to confirm sending
-            prim_text = 'Send file?'
+            prim_text = _('Send file?')
             sec_text = i18n.ngettext('Do you want to send this file to %s:',
                 'Do you want to send these files to %s:', nb_uri) %\
                 c_dest.get_shown_name()
