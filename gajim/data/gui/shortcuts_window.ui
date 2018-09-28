@@ -28,7 +28,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;alt&gt;m</property>
-                <property name="title" translatable="yes">Select an emoticon</property>
+                <property name="title" translatable="yes">Select an emoji</property>
               </object>
             </child>
             <child>
