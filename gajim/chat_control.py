@@ -205,7 +205,7 @@ class ChatControl(ChatControlBase):
             session = app.connections[self.account].find_controlless_session(
                 self.contact.jid, resource)
 
-        self.setup_seclabel(self.xml.get_object('label_selector'))
+        self.setup_seclabel()
         if session:
             session.control = self
             self.session = session

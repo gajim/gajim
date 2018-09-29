@@ -27,6 +27,7 @@ import os
 import re
 import time
 
+import nbxmpp
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -167,8 +168,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def status_url_clicked(self, widget, url):
         helpers.launch_browser_mailer('url', url)
 
-    def setup_seclabel(self, combo):
-        self.seclabel_combo = combo
+    def setup_seclabel(self):
         self.seclabel_combo.hide()
         self.seclabel_combo.set_no_show_all(True)
         lb = Gtk.ListStore(str)
@@ -185,7 +185,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def _sec_labels_received(self, event):
         if event.account != self.account:
             return
-        if event.jid != self.contact.jid:
+        jid = nbxmpp.JID(self.contact.jid)
+        if event.host != jid.getDomain():
             return
         lb = self.seclabel_combo.get_model()
         lb.clear()
@@ -323,6 +324,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.command_hits = []
         self.last_key_tabs = False
 
+        # Security Labels
+        self.seclabel_combo = self.xml.get_object('label_selector')
+
         # chatstate timers and state
         self.reset_kbd_mouse_timeout_vars()
         self.possible_paused_timeout_id = None
@@ -352,7 +356,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             self._nec_ping)
         app.ged.register_event_handler('ping-error', ged.GUI1,
             self._nec_ping)
-        app.ged.register_event_handler('sec-label-received', ged.GUI1,
+        app.ged.register_event_handler('sec-catalog-received', ged.GUI1,
             self._sec_labels_received)
         app.ged.register_event_handler('style-changed', ged.GUI1,
             self._style_changed)
@@ -531,7 +535,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             'chat_control_base_draw_banner', self)
         app.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
-        app.ged.remove_event_handler('sec-label-received', ged.GUI1,
+        app.ged.remove_event_handler('sec-catalog-received', ged.GUI1,
             self._sec_labels_received)
         app.ged.remove_event_handler('style-changed', ged.GUI1,
             self._style_changed)
@@ -764,15 +768,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     ft.send_file(self.account, contact, path)
 
     def get_seclabel(self):
-        label = None
-        if self.seclabel_combo is not None:
-            idx = self.seclabel_combo.get_active()
-            if idx != -1:
-                con = app.connections[self.account]
-                catalog = con.get_module('SecLabels').get_catalog(self.contact.jid)
-                labels, label_list, _ = catalog
-                lname = label_list[idx]
-                label = labels[lname]
+        idx = self.seclabel_combo.get_active()
+        if idx == -1:
+            return
+
+        con = app.connections[self.account]
+        jid = nbxmpp.JID(self.contact.jid)
+        catalog = con.get_module('SecLabels').get_catalog(jid.getDomain())
+        labels, label_list, _ = catalog
+        lname = label_list[idx]
+        label = labels[lname]
         return label
 
     def send_message(self, message, keyID='', type_='chat', chatstate=None,

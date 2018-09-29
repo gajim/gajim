@@ -1017,7 +1017,7 @@ class ConversationTextview(GObject.GObject):
 
         # If there's a displaymarking, print it here.
         if displaymarking:
-            self.print_displaymarking(displaymarking, iter_=iter_)
+            self.print_displaymarking(displaymarking, iter_)
 
         # kind = info, we print things as if it was a status: same color, ...
         if kind in ('error', 'info'):
@@ -1209,21 +1209,16 @@ class ConversationTextview(GObject.GObject):
                 buffer_.insert_with_tags_by_name(iter_, tim_format + '\n',
                     'time_sometimes')
 
-    def print_displaymarking(self, displaymarking, iter_=None):
+    def print_displaymarking(self, displaymarking, iter_):
         bgcolor = displaymarking.getAttr('bgcolor') or '#FFF'
         fgcolor = displaymarking.getAttr('fgcolor') or '#000'
         text = displaymarking.getData()
         if text:
             buffer_ = self.tv.get_buffer()
-            if iter_:
-                end_iter = iter_
-            else:
-                end_iter = buffer_.get_end_iter()
             tag = self.displaymarking_tags.setdefault(bgcolor + '/' + fgcolor,
                 buffer_.create_tag(None, background=bgcolor, foreground=fgcolor))
-            buffer_.insert_with_tags(end_iter, '[' + text + ']', tag)
-            end_iter = buffer_.get_end_iter()
-            buffer_.insert_with_tags(end_iter, ' ')
+            buffer_.insert_with_tags(iter_, '[' + text + ']', tag)
+            buffer_.insert_with_tags(iter_, ' ')
 
     def print_name(self, name, kind, other_tags_for_name, direction_mark='',
     iter_=None):

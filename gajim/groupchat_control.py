@@ -454,7 +454,7 @@ class GroupchatControl(ChatControlBase):
         column.set_visible(False)
         self.list_treeview.set_expander_column(column)
 
-        self.setup_seclabel(self.xml.get_object('label_selector'))
+        self.setup_seclabel()
 
         self.form_widget = None
 
