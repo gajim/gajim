@@ -23,7 +23,6 @@ from time import time as time_time
 
 import OpenSSL.crypto
 import nbxmpp
-from nbxmpp.protocol import NS_CHATSTATES
 
 from gajim.common import nec
 from gajim.common import helpers
@@ -98,22 +97,6 @@ class HelperEvent:
         except Exception:
             log.error('wrong timestamp, ignoring it: %s', tag)
             self.timestamp = time_time()
-
-    def get_chatstate(self):
-        """
-        Extract chatstate from a <message/> stanza
-        Requires self.stanza and self.msgtxt
-        """
-        self.chatstate = None
-
-        # chatstates - look for chatstate tags in a message if not delayed
-        delayed = self.stanza.getTag('x', namespace=nbxmpp.NS_DELAY) is not None
-        if not delayed:
-            children = self.stanza.getChildren()
-            for child in children:
-                if child.getNamespace() == NS_CHATSTATES:
-                    self.chatstate = child.getName()
-                    break
 
     def get_oob_data(self, stanza):
         oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
@@ -433,17 +416,6 @@ class OurShowEvent(nec.NetworkIncomingEvent):
 
 class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
     name = 'before-change-show'
-
-class ChatstateReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'chatstate-received'
-
-    def generate(self):
-        self.stanza = self.msg_obj.stanza
-        self.jid = self.msg_obj.jid
-        self.fjid = self.msg_obj.fjid
-        self.resource = self.msg_obj.resource
-        self.chatstate = self.msg_obj.chatstate
-        return True
 
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
     name = 'gc-message-received'

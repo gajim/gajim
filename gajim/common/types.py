@@ -44,7 +44,8 @@ InterfaceT = Union['Interface']
 LoggerT = Union['Logger']
 
 ConnectionT = Union['Connection', 'ConnectionZeroconf']
-ContactT = Union['Contact', 'GC_Contact']
+ContactsT = Union['Contact', 'GC_Contact']
+ContactT = Union['Contact']
 
 UserTuneDataT = Optional[Tuple[str, str, str, str, str]]
 

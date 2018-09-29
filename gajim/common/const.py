@@ -174,6 +174,18 @@ class PEPEventType(IntEnum):
     ATOM = 7
 
 
+@unique
+class Chatstate(IntEnum):
+    COMPOSING = 0
+    PAUSED = 1
+    ACTIVE = 2
+    INACTIVE = 3
+    GONE = 4
+
+    def __str__(self):
+        return self.name.lower()
+
+
 ACTIVITIES = {
     'doing_chores': {
         'category': _('Doing Chores'),

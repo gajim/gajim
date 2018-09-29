@@ -180,11 +180,8 @@ class ConnectionHandlersBase:
             return
 
         # It isn't an agent
-        # reset chatstate if needed:
         # (when contact signs out or has errors)
         if obj.show in ('offline', 'error'):
-            obj.contact.our_chatstate = obj.contact.chatstate = None
-
             # TODO: This causes problems when another
             # resource signs off!
             self.stop_all_active_file_transfers(obj.contact)

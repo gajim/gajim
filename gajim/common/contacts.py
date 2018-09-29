@@ -28,6 +28,7 @@ try:
     from gajim.common import caps_cache
     from gajim.common.account import Account
     from gajim import common
+    from gajim.common.const import Chatstate
 except ImportError as e:
     if __name__ != "__main__":
         raise ImportError(str(e))
@@ -45,7 +46,7 @@ class XMPPEntity:
 class CommonContact(XMPPEntity):
 
     def __init__(self, jid, account, resource, show, status, name,
-    our_chatstate, chatstate, client_caps=None):
+                 chatstate, client_caps=None):
 
         XMPPEntity.__init__(self, jid, account, resource)
 
@@ -55,11 +56,8 @@ class CommonContact(XMPPEntity):
 
         self.client_caps = client_caps or caps_cache.NullClientCaps()
 
-        # please read xep-85 http://www.xmpp.org/extensions/xep-0085.html
-        # this holds what WE SEND to contact (our current chatstate)
-        self.our_chatstate = our_chatstate
         # this is contact's chatstate
-        self.chatstate = chatstate
+        self._chatstate = chatstate
 
     @property
     def show(self):
@@ -70,6 +68,27 @@ class CommonContact(XMPPEntity):
         if not isinstance(value, str):
             raise TypeError('show must be a string')
         self._show = value
+
+    @property
+    def chatstate_enum(self):
+        return self._chatstate
+
+    @property
+    def chatstate(self):
+        if self._chatstate is None:
+            return
+        return str(self._chatstate)
+
+    @chatstate.setter
+    def chatstate(self, value):
+        if value is None:
+            self._chatstate = value
+        else:
+            self._chatstate = Chatstate[value.upper()]
+
+    @property
+    def is_gc_contact(self):
+        return isinstance(self, GC_Contact)
 
     def get_full_jid(self):
         raise NotImplementedError
@@ -97,14 +116,14 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    our_chatstate=None, chatstate=None, idle_time=None, avatar_sha=None, groupchat=False):
+    chatstate=None, idle_time=None, avatar_sha=None, groupchat=False):
         if not isinstance(jid, str):
             print('no str')
         if groups is None:
             groups = []
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
-            our_chatstate, chatstate, client_caps=client_caps)
+                               chatstate, client_caps=client_caps)
 
         self.contact_name = '' # nick choosen by contact
         self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
@@ -182,11 +201,10 @@ class GC_Contact(CommonContact):
     """
 
     def __init__(self, room_jid, account, name='', show='', status='', role='',
-    affiliation='', jid='', resource='', our_chatstate=None,
-    chatstate=None, avatar_sha=None):
+    affiliation='', jid='', resource='', chatstate=None, avatar_sha=None):
 
         CommonContact.__init__(self, jid, account, resource, show, status, name,
-            our_chatstate, chatstate)
+                               chatstate)
 
         self.room_jid = room_jid
         self.role = role
@@ -254,7 +272,7 @@ class LegacyContactsAPI:
 
     def create_contact(self, jid, account, name='', groups=None, show='',
     status='', sub='', ask='', resource='', priority=0, keyID='',
-    client_caps=None, our_chatstate=None, chatstate=None, idle_time=None,
+    client_caps=None, chatstate=None, idle_time=None,
     avatar_sha=None, groupchat=False):
         if groups is None:
             groups = []
@@ -263,8 +281,8 @@ class LegacyContactsAPI:
         return Contact(jid=jid, account=account, name=name, groups=groups,
             show=show, status=status, sub=sub, ask=ask, resource=resource,
             priority=priority, keyID=keyID, client_caps=client_caps,
-            our_chatstate=our_chatstate, chatstate=chatstate,
-            idle_time=idle_time, avatar_sha=avatar_sha, groupchat=groupchat)
+            chatstate=chatstate, idle_time=idle_time, avatar_sha=avatar_sha,
+            groupchat=groupchat)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
     name='', keyID=''):
@@ -292,7 +310,7 @@ class LegacyContactsAPI:
             status=contact.status, sub=contact.sub, ask=contact.ask,
             resource=contact.resource, priority=contact.priority,
             keyID=contact.keyID, client_caps=contact.client_caps,
-            our_chatstate=contact.our_chatstate, chatstate=contact.chatstate,
+            chatstate=contact.chatstate,
             idle_time=contact.idle_time, avatar_sha=contact.avatar_sha)
 
     def add_contact(self, account, contact):
@@ -451,6 +469,9 @@ class LegacyContactsAPI:
             return
         contact.avatar_sha = sha
 
+    def get_combined_chatstate(self, account, jid):
+        return self._accounts[account].contacts.get_combined_chatstate(jid)
+
 
 class Contacts():
     """
@@ -602,6 +623,18 @@ class Contacts():
             _contact.jid = new_jid
             self._contacts[new_jid].append(_contact)
             del self._contacts[old_jid]
+
+    def get_combined_chatstate(self, jid):
+        if jid not in self._contacts:
+            return
+        contacts = self._contacts[jid]
+        states = []
+        for contact in contacts:
+            if contact.chatstate_enum is None:
+                continue
+            states.append(contact.chatstate_enum)
+
+        return str(min(states)) if states else None
 
 
 class GC_Contacts():

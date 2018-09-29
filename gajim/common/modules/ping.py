@@ -25,7 +25,7 @@ import nbxmpp
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.types import ConnectionT
-from gajim.common.types import ContactT
+from gajim.common.types import ContactsT
 
 log = logging.getLogger('gajim.c.m.ping')
 
@@ -73,7 +73,7 @@ class Ping:
         log.warning('No reply received for keepalive ping. Reconnecting...')
         self._con.disconnectedReconnCB()
 
-    def send_ping(self, contact: ContactT) -> None:
+    def send_ping(self, contact: ContactsT) -> None:
         if not app.account_is_connected(self._account):
             return
 
@@ -93,7 +93,7 @@ class Ping:
                        _con: ConnectionT,
                        stanza: nbxmpp.Iq,
                        ping_time: int,
-                       contact: ContactT) -> None:
+                       contact: ContactsT) -> None:
         if not nbxmpp.isResultNode(stanza):
             log.info('Error: %s', stanza.getError())
             app.nec.push_incoming_event(

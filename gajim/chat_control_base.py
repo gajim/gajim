@@ -49,6 +49,7 @@ from gajim.message_textview import MessageTextView
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import StyleAttr
+from gajim.common.const import Chatstate
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
 from gajim.command_system.implementation.middleware import CommandTools
@@ -325,10 +326,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # Security Labels
         self.seclabel_combo = self.xml.get_object('label_selector')
 
-        # chatstate timers and state
-        self.reset_kbd_mouse_timeout_vars()
-        self.possible_paused_timeout_id = None
-        self.possible_inactive_timeout_id = None
+        con = app.connections[self.account]
+        con.get_module('Chatstate').set_active(self.contact.jid)
+
         message_tv_buffer = self.msg_textview.get_buffer()
         id_ = message_tv_buffer.connect('changed',
             self._on_message_tv_buffer_changed)
@@ -337,7 +337,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             id_ = parent_win.window.connect('motion-notify-event',
                 self._on_window_motion_notify)
             self.handlers[id_] = parent_win.window
-            self._schedule_activity_timers()
 
         self.encryption = self.get_encryption_state()
         self.conv_textview.encryption_enabled = self.encryption is not None
@@ -520,11 +519,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def shutdown(self):
         super(ChatControlBase, self).shutdown()
-        # Disconnect timer callbacks
-        if self.possible_paused_timeout_id:
-            GLib.source_remove(self.possible_paused_timeout_id)
-        if self.possible_inactive_timeout_id:
-            GLib.source_remove(self.possible_inactive_timeout_id)
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control_base',
@@ -777,7 +771,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         label = labels[lname]
         return label
 
-    def send_message(self, message, keyID='', type_='chat', chatstate=None,
+    def send_message(self, message, keyID='', type_='chat',
     resource=None, xhtml=None, process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
@@ -788,20 +782,16 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if process_commands and self.process_as_command(message):
             return
 
-        # refresh timers
-        self.reset_kbd_mouse_timeout_vars()
-
-        notifications = app.config.get('outgoing_chat_state_notifications')
-        if (self.contact.jid == app.get_jid_from_account(self.account) or
-                notifications == 'disabled'):
-            chatstate = None
-
         label = self.get_seclabel()
 
         if self.correcting and self.last_sent_msg:
             correct_id = self.last_sent_msg
         else:
             correct_id = None
+
+        con = app.connections[self.account]
+        chatstate = con.get_module('Chatstate').get_active_chatstate(
+            self.contact)
 
         app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
@@ -820,76 +810,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.set_text('') # clear message buffer (and tv of course)
 
-    def check_for_possible_paused_chatstate(self, arg):
-        """
-        Did we move mouse of that window or write something in message textview
-        in the last 5 seconds? If yes - we go active for mouse, composing for
-        kbd.  If not - we go paused if we were previously composing
-        """
-        contact = self.contact
-        jid = contact.jid
-        current_state = contact.our_chatstate
-        if current_state is False:  # jid doesn't support chatstates
-            self.possible_paused_timeout_id = None
-            return False  # stop looping
-
-        if current_state == 'composing':
-            if not self.kbd_activity_in_last_5_secs:
-                if self.msg_textview.has_text():
-                    self.send_chatstate('paused', self.contact)
-                else:
-                    self.send_chatstate('active', self.contact)
-        elif current_state == 'inactive':
-            if (self.mouse_over_in_last_5_secs and
-                    jid == self.parent_win.get_active_jid()):
-                self.send_chatstate('active', self.contact)
-
-        # assume no activity and let the motion-notify or 'insert-text' make them
-        # True refresh 30 seconds vars too or else it's 30 - 5 = 25 seconds!
-        self.reset_kbd_mouse_timeout_vars()
-        return True  # loop forever
-
-    def check_for_possible_inactive_chatstate(self, arg):
-        """
-        Did we move mouse over that window or wrote something in message textview
-        in the last 30 seconds? if yes - we go active. If no - we go inactive
-        """
-        contact = self.contact
-
-        current_state = contact.our_chatstate
-        if current_state is False: # jid doesn't support chatstates
-            self.possible_inactive_timeout_id = None
-            return False # stop looping
-
-        if self.mouse_over_in_last_5_secs or self.kbd_activity_in_last_5_secs:
-            return True # loop forever
-
-        if not self.mouse_over_in_last_30_secs or \
-        self.kbd_activity_in_last_30_secs:
-            self.send_chatstate('inactive', contact)
-
-        # assume no activity and let the motion-notify or 'insert-text' make them
-        # True refresh 30 seconds too or else it's 30 - 5 = 25 seconds!
-        self.reset_kbd_mouse_timeout_vars()
-        return True # loop forever
-
-    def _schedule_activity_timers(self):
-        if self.possible_paused_timeout_id:
-            GLib.source_remove(self.possible_paused_timeout_id)
-        if self.possible_inactive_timeout_id:
-            GLib.source_remove(self.possible_inactive_timeout_id)
-        self.possible_paused_timeout_id = GLib.timeout_add_seconds(5,
-                self.check_for_possible_paused_chatstate, None)
-        self.possible_inactive_timeout_id = GLib.timeout_add_seconds(30,
-                self.check_for_possible_inactive_chatstate, None)
-
-    def reset_kbd_mouse_timeout_vars(self):
-        self.kbd_activity_in_last_5_secs = False
-        self.mouse_over_in_last_5_secs = False
-        self.mouse_over_in_last_30_secs = False
-        self.kbd_activity_in_last_30_secs = False
-
-    def _on_window_motion_notify(self, widget, event):
+    def _on_window_motion_notify(self, *args):
         """
         It gets called no matter if it is the active window or not
         """
@@ -897,16 +818,19 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # when a groupchat is minimized there is no parent window
             return
         if self.parent_win.get_active_jid() == self.contact.jid:
-            # if window is the active one, change vars assisting chatstate
-            self.mouse_over_in_last_5_secs = True
-            self.mouse_over_in_last_30_secs = True
+            # if window is the active one, set last interaction
+            con = app.connections[self.account]
+            con.get_module('Chatstate').set_mouse_activity(self.contact)
 
-    def _on_message_tv_buffer_changed(self, textbuffer):
-        self.kbd_activity_in_last_5_secs = True
-        self.kbd_activity_in_last_30_secs = True
+    def _on_message_tv_buffer_changed(self, *args):
+        con = app.connections[self.account]
+        con.get_module('Chatstate').set_keyboard_activity(self.contact)
         if not self.msg_textview.has_text():
+            con.get_module('Chatstate').set_chatstate(self.contact,
+                                                      Chatstate.ACTIVE)
             return
-        self.send_chatstate('composing', self.contact)
+        con.get_module('Chatstate').set_chatstate(self.contact,
+                                                  Chatstate.COMPOSING)
 
     def save_message(self, message, msg_type):
         # save the message, so user can scroll though the list with key up/down
@@ -1183,6 +1107,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             widget.get_active())
 
     def set_control_active(self, state):
+        con = app.connections[self.account]
         if state:
             self.set_emoticon_popover()
             jid = self.contact.jid
@@ -1198,13 +1123,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             # send chatstate inactive to the one we're leaving
             # and active to the one we visit
             if self.msg_textview.has_text():
-                self.send_chatstate('paused', self.contact)
+                con.get_module('Chatstate').set_chatstate(self.contact,
+                                                          Chatstate.PAUSED)
             else:
-                self.send_chatstate('active', self.contact)
-            self.reset_kbd_mouse_timeout_vars()
-            self._schedule_activity_timers()
+                con.get_module('Chatstate').set_chatstate(self.contact,
+                                                          Chatstate.ACTIVE)
         else:
-            self.send_chatstate('inactive', self.contact)
+            con.get_module('Chatstate').set_chatstate(self.contact,
+                                                      Chatstate.INACTIVE)
 
     def scroll_to_end(self, force=False):
         self.conv_textview.scroll_to_end(force)

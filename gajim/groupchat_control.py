@@ -59,6 +59,7 @@ from gajim.common import ged
 from gajim.common import i18n
 from gajim.common import contacts
 from gajim.common.const import StyleAttr
+from gajim.common.const import Chatstate
 from gajim.chat_control import ChatControl
 from gajim.chat_control_base import ChatControlBase
 
@@ -794,7 +795,6 @@ class GroupchatControl(ChatControlBase):
         self.add_actions()
         self.update_actions()
         self.set_lock_image()
-        self._schedule_activity_timers()
         self._connect_window_state_change(self.parent_win)
 
     def set_tooltip(self):
@@ -2187,13 +2187,9 @@ class GroupchatControl(ChatControlBase):
                 correct_id = self.last_sent_msg
             else:
                 correct_id = None
-
-            # Set chatstate
-            chatstate = None
-            if app.config.get('outgoing_chat_state_notifications') != 'disabled':
-                chatstate = 'active'
-                self.reset_kbd_mouse_timeout_vars()
-                self.contact.our_chatstate = chatstate
+            con = app.connections[self.account]
+            chatstate = con.get_module('Chatstate').get_active_chatstate(
+                self.contact.jid)
 
             # Send the message
             app.nec.push_outgoing_event(GcMessageOutgoingEvent(
@@ -2228,68 +2224,15 @@ class GroupchatControl(ChatControlBase):
         control = win.notebook.get_nth_page(ctrl_page)
 
         win.notebook.remove_page(ctrl_page)
-        if self.possible_paused_timeout_id:
-            GLib.source_remove(self.possible_paused_timeout_id)
-            self.possible_paused_timeout_id = None
-        if self.possible_inactive_timeout_id:
-            GLib.source_remove(self.possible_inactive_timeout_id)
-            self.possible_inactive_timeout_id = None
         control.unparent()
         ctrl.parent_win = None
-        self.send_chatstate('inactive', self.contact)
+        con = app.connections[self.account]
+        con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.INACTIVE)
 
         app.interface.roster.minimize_groupchat(
             self.account, self.contact.jid, status=self.subject)
 
         del win._controls[self.account][self.contact.jid]
-
-    def send_chatstate(self, state, contact):
-        """
-        Send OUR chatstate as STANDLONE chat state message (eg. no body)
-        to contact only if new chatstate is different from the previous one
-        if jid is not specified, send to active tab
-        """
-        # JEP 85 does not allow resending the same chatstate
-        # this function checks for that and just returns so it's safe to call it
-        # with same state.
-
-        # This functions also checks for violation in state transitions
-        # and raises RuntimeException with appropriate message
-        # more on that http://xmpp.org/extensions/xep-0085.html#statechart
-
-        # do not send if we have chat state notifications disabled
-        # that means we won't reply to the <active/> from other peer
-        # so we do not broadcast jep85 capabalities
-        chatstate_setting = app.config.get('outgoing_chat_state_notifications')
-        if chatstate_setting == 'disabled':
-            return
-
-        if (chatstate_setting == 'composing_only' and
-            state != 'active' and
-                state != 'composing'):
-            return
-
-        # if the new state we wanna send (state) equals
-        # the current state (contact.our_chatstate) then return
-        if contact.our_chatstate == state:
-            return
-
-        # if we're inactive prevent composing (XEP violation)
-        if contact.our_chatstate == 'inactive' and state == 'composing':
-            # go active before
-            app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
-                account=self.account, jid=self.contact.jid, chatstate='active',
-                control=self))
-            contact.our_chatstate = 'active'
-            self.reset_kbd_mouse_timeout_vars()
-
-        app.nec.push_outgoing_event(GcMessageOutgoingEvent(None,
-            account=self.account, jid=self.contact.jid, chatstate=state,
-            control=self))
-
-        contact.our_chatstate = state
-        if state == 'active':
-            self.reset_kbd_mouse_timeout_vars()
 
     def shutdown(self, status='offline'):
         # PluginSystem: calling shutdown of super class (ChatControlBase)

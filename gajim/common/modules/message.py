@@ -24,7 +24,6 @@ from gajim.common import helpers
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
-from gajim.common.modules.chatstates import parse_chatstate
 from gajim.common.modules.carbons import parse_carbon
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_eme
@@ -218,6 +217,7 @@ class Message:
     def _on_message_decrypted(self, event):
         try:
             self._con.get_module('Receipts').delegate(event)
+            self._con.get_module('Chatstate').delegate(event)
         except nbxmpp.NodeProcessed:
             return
 
@@ -236,7 +236,6 @@ class Message:
             'user_nick': '' if event.sent else parse_nickname(event.stanza),
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
-            'chatstate': parse_chatstate(event.stanza),
             'timestamp': timestamp,
             'delayed': delayed,
         }
