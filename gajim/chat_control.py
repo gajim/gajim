@@ -36,7 +36,6 @@ from gi.repository import GLib
 from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
-from nbxmpp.protocol import NS_CHATSTATES
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
@@ -50,8 +49,9 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.contacts import GC_Contact
-from gajim.common.connection_handlers_events import MessageOutgoingEvent
-from gajim.common.const import AvatarSize, KindConstant
+from gajim.common.const import AvatarSize
+from gajim.common.const import KindConstant
+from gajim.common.const import Chatstate
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -678,7 +678,7 @@ class ChatControl(ChatControlBase):
         status_escaped = GLib.markup_escape_text(status_reduced)
 
         st = app.config.get('displayed_chat_state_notifications')
-        cs = contact.chatstate
+        cs = app.contacts.get_combined_chatstate(self.account, self.contact.jid)
         if cs and st in ('composing_only', 'all'):
             if contact.show == 'offline':
                 chatstate = ''
@@ -882,8 +882,8 @@ class ChatControl(ChatControlBase):
             correct_id=obj.correct_id,
             additional_data=obj.additional_data)
 
-    def send_message(self, message, keyID='', chatstate=None, xhtml=None,
-    process_commands=True, attention=False):
+    def send_message(self, message, keyID='', xhtml=None,
+                     process_commands=True, attention=False):
         """
         Send a message to contact
         """
@@ -902,18 +902,13 @@ class ChatControl(ChatControlBase):
         contact = self.contact
         keyID = contact.keyID
 
-        chatstate_to_send = None
-        if contact is not None:
-            if contact.supports(NS_CHATSTATES):
-                # send active chatstate on every message (as XEP says)
-                chatstate_to_send = 'active'
-                contact.our_chatstate = 'active'
-
-                self._schedule_activity_timers()
-
-        ChatControlBase.send_message(self, message, keyID, type_='chat',
-            chatstate=chatstate_to_send, xhtml=xhtml,
-            process_commands=process_commands, attention=attention)
+        ChatControlBase.send_message(self,
+                                     message,
+                                     keyID,
+                                     type_='chat',
+                                     xhtml=xhtml,
+                                     process_commands=process_commands,
+                                     attention=attention)
 
     def get_our_nick(self):
         return app.nicks[self.account]
@@ -1059,79 +1054,6 @@ class ChatControl(ChatControlBase):
                 show_buttonbar_items=not hide_buttonbar_items)
         return menu
 
-    def send_chatstate(self, state, contact=None):
-        """
-        Send OUR chatstate as STANDLONE chat state message (eg. no body)
-        to contact only if new chatstate is different from the previous one
-        if jid is not specified, send to active tab
-        """
-        # JEP 85 does not allow resending the same chatstate
-        # this function checks for that and just returns so it's safe to call it
-        # with same state.
-
-        # This functions also checks for violation in state transitions
-        # and raises RuntimeException with appropriate message
-        # more on that http://xmpp.org/extensions/xep-0085.html#statechart
-
-        # do not send if we have chat state notifications disabled
-        # that means we won't reply to the <active/> from other peer
-        # so we do not broadcast jep85 capabalities
-        chatstate_setting = app.config.get('outgoing_chat_state_notifications')
-        if chatstate_setting == 'disabled':
-            return
-
-        # Dont leak presence to contacts
-        # which are not allowed to see our status
-        if contact and contact.sub in ('to', 'none'):
-            return
-
-        if self.contact.jid == app.get_jid_from_account(self.account):
-            return
-
-        if chatstate_setting == 'composing_only' and state != 'active' and\
-                state != 'composing':
-            return
-
-        if contact is None:
-            contact = self.parent_win.get_active_contact()
-            if contact is None:
-                # contact was from pm in MUC, and left the room so contact is None
-                # so we cannot send chatstate anymore
-                return
-
-        # Don't send chatstates to offline contacts
-        if contact.show == 'offline':
-            return
-
-        if not contact.supports(NS_CHATSTATES):
-            return
-        if contact.our_chatstate is False:
-            return
-
-        # if the new state we wanna send (state) equals
-        # the current state (contact.our_chatstate) then return
-        if contact.our_chatstate == state:
-            return
-
-        # if wel're inactive prevent composing (XEP violation)
-        if contact.our_chatstate == 'inactive' and state == 'composing':
-            # go active before
-            app.log('chatstates').info('%-10s - %s', 'active', self.contact.jid)
-            app.nec.push_outgoing_event(MessageOutgoingEvent(None,
-                account=self.account, jid=self.contact.jid, chatstate='active',
-                control=self))
-            contact.our_chatstate = 'active'
-            self.reset_kbd_mouse_timeout_vars()
-
-        app.log('chatstates').info('%-10s - %s', state, self.contact.jid)
-        app.nec.push_outgoing_event(MessageOutgoingEvent(None,
-            account=self.account, jid=self.contact.jid, chatstate=state,
-            control=self))
-
-        contact.our_chatstate = state
-        if state == 'active':
-            self.reset_kbd_mouse_timeout_vars()
-
     def shutdown(self):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
@@ -1161,9 +1083,8 @@ class ChatControl(ChatControlBase):
         self.unsubscribe_events()
 
         # Send 'gone' chatstate
-        self.send_chatstate('gone', self.contact)
-        self.contact.chatstate = None
-        self.contact.our_chatstate = None
+        con = app.connections[self.account]
+        con.get_module('Chatstate').set_chatstate(self.contact, Chatstate.GONE)
 
         for jingle_type in ('audio', 'video'):
             self.close_jingle_content(jingle_type)
@@ -1225,13 +1146,18 @@ class ChatControl(ChatControlBase):
             return
         on_yes(self)
 
-    def _nec_chatstate_received(self, obj):
-        """
-        Handle incoming chatstate that jid SENT TO us
-        """
+    def _nec_chatstate_received(self, event):
+        if event.account != self.account:
+            return
+
+        if event.jid != self.contact.jid:
+            return
+
         self.draw_banner_text()
         # update chatstate in tab for this chat
-        self.parent_win.redraw_tab(self, self.contact.chatstate)
+        chatstate = app.contacts.get_combined_chatstate(
+            self.account, self.contact.jid)
+        self.parent_win.redraw_tab(self, chatstate)
 
     def _nec_caps_received(self, obj):
         if obj.conn.name != self.account:

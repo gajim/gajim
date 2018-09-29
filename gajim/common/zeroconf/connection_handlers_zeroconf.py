@@ -20,6 +20,7 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import time
+import logging
 
 import nbxmpp
 
@@ -30,14 +31,13 @@ from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common import connection_handlers
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.user_nickname import parse_nickname
-from gajim.common.modules.chatstates import parse_chatstate
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 
-import logging
+
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
@@ -147,6 +147,7 @@ connection_handlers.ConnectionJingle):
     def _on_message_decrypted(self, event):
         try:
             self.get_module('Receipts').delegate(event)
+            self.get_module('Chatstate').delegate(event)
         except nbxmpp.NodeProcessed:
             return
 
@@ -160,7 +161,6 @@ connection_handlers.ConnectionJingle):
             'correct_id': parse_correction(event.stanza),
             'user_nick': parse_nickname(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
-            'chatstate': parse_chatstate(event.stanza),
             'stanza_id': event.unique_id
         }
 

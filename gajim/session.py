@@ -21,14 +21,12 @@ import string
 import random
 import itertools
 
-from gajim import message_control
 from gajim import notify
 from gajim.common import helpers
 from gajim.common import events
 from gajim.common import app
 from gajim.common import contacts
 from gajim.common import ged
-from gajim.common.connection_handlers_events import ChatstateReceivedEvent
 from gajim.common.const import KindConstant
 from gajim.gtk.single_message import SingleMessageWindow
 
@@ -97,7 +95,7 @@ class ChatControlSession:
                     self.control.change_resource(self.resource)
 
         if obj.mtype == 'chat':
-            if not obj.msgtxt and obj.chatstate is None:
+            if not obj.msgtxt:
                 return
 
             log_type = KindConstant.CHAT_MSG_RECV
@@ -142,27 +140,6 @@ class ChatControlSession:
             # joined. We log it silently without notification.
             return True
 
-        # Handle chat states
-        if contact and (not obj.forwarded or not obj.sent):
-            if self.control and self.control.type_id == \
-            message_control.TYPE_CHAT:
-                if obj.chatstate is not None:
-                    # other peer sent us reply, so he supports jep85 or jep22
-                    contact.chatstate = obj.chatstate
-                    if contact.our_chatstate == 'ask': # we were jep85 disco?
-                        contact.our_chatstate = 'active' # no more
-                    app.nec.push_incoming_event(ChatstateReceivedEvent(None,
-                        conn=obj.conn, msg_obj=obj))
-                elif contact.chatstate != 'active':
-                    # got no valid jep85 answer, peer does not support it
-                    contact.chatstate = False
-            elif obj.chatstate == 'active':
-                # Brand new message, incoming.
-                contact.our_chatstate = obj.chatstate
-                contact.chatstate = obj.chatstate
-
-        # THIS MUST BE AFTER chatstates handling
-        # AND BEFORE playsound (else we hear sounding on chatstates!)
         if not obj.msgtxt: # empty message text
             return True
 
@@ -189,7 +166,7 @@ class ChatControlSession:
         if app.interface.remote_ctrl:
             app.interface.remote_ctrl.raise_signal('NewMessage', (
                 self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-                obj.encrypted, obj.mtype, obj.subject, obj.chatstate,
+                obj.encrypted, obj.mtype, obj.subject,
                 obj.msg_log_id, obj.user_nick, obj.xhtml, obj.form_node]))
 
     def roster_message2(self, obj):

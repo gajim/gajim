@@ -320,7 +320,7 @@ class CommonConnection:
             # chatstates - if peer supports xep85, send chatstates
             # please note that the only valid tag inside a message containing a
             # <body> tag is the active event
-            if obj.chatstate and contact and contact.supports(nbxmpp.NS_CHATSTATES):
+            if obj.chatstate is not None:
                 msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
                 if not obj.message:
                     msg_iq.setTag('no-store',
@@ -1727,7 +1727,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             msg_iq.setTag('replace', attrs={'id': obj.correct_id},
                           namespace=nbxmpp.NS_CORRECT)
 
-        if obj.chatstate:
+        if obj.chatstate is not None:
             msg_iq.setTag(obj.chatstate, namespace=nbxmpp.NS_CHATSTATES)
             if not obj.message:
                 msg_iq.setTag('no-store', namespace=nbxmpp.NS_MSG_HINTS)
@@ -1754,7 +1754,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         obj.stanza_id = self.connection.send(obj.msg_iq)
         app.nec.push_incoming_event(MessageSentEvent(
             None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
-            chatstate=None, automatic_message=obj.automatic_message,
+            automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
 
     def send_gc_status(self, nick, jid, show, status, auto=False):

@@ -14,9 +14,9 @@ from gajim.common import caps_cache
 class TestCommonContact(unittest.TestCase):
 
     def setUp(self):
-        self.contact = CommonContact(jid='', account="", resource='', show='',
-            status='', name='', our_chatstate=None, chatstate=None,
-            client_caps=None)
+        self.contact = CommonContact(
+            jid='', account="", resource='', show='',
+            status='', name='', chatstate=None, client_caps=None)
 
     def test_default_client_supports(self):
         '''
@@ -43,8 +43,8 @@ class TestContact(TestCommonContact):
         '''This test supports the migration from the old to the new contact
         domain model by smoke testing that no attribute values are lost'''
 
-        attributes = ["jid", "resource", "show", "status", "name", "our_chatstate",
-            "chatstate", "client_caps", "priority", "sub"]
+        attributes = ["jid", "resource", "show", "status", "name",
+                      "chatstate", "client_caps", "priority", "sub"]
         for attr in attributes:
             self.assertTrue(hasattr(self.contact, attr), msg="expected: " + attr)
 
@@ -59,8 +59,8 @@ class TestGC_Contact(TestCommonContact):
         '''This test supports the migration from the old to the new contact
         domain model by asserting no attributes have been lost'''
 
-        attributes = ["jid", "resource", "show", "status", "name", "our_chatstate",
-            "chatstate", "client_caps", "role", "room_jid"]
+        attributes = ["jid", "resource", "show", "status", "name",
+                      "chatstate", "client_caps", "role", "room_jid"]
         for attr in attributes:
             self.assertTrue(hasattr(self.contact, attr), msg="expected: " + attr)
 
