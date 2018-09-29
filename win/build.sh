@@ -17,6 +17,7 @@ function main {
     install_deps
     install_gajim
     cleanup_install
+    download_ssl_libs
     move_ssl_libs
     build_installer
 }
