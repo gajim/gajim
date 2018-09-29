@@ -27,7 +27,6 @@ import os
 import re
 import time
 
-import nbxmpp
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
