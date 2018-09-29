@@ -185,19 +185,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     def _sec_labels_received(self, event):
         if event.account != self.account:
             return
-        jid = nbxmpp.JID(self.contact.jid)
-        if event.host != jid.getDomain():
+        if event.jid != self.contact.jid:
             return
-        lb = self.seclabel_combo.get_model()
-        lb.clear()
-        i = 0
+        model = self.seclabel_combo.get_model()
+        model.clear()
+
         sel = 0
         _label, labellist, default = event.catalog
-        for label in labellist:
-            lb.append([label])
+        for index, label in enumerate(labellist):
+            model.append([label])
             if label == default:
-                sel = i
-            i += 1
+                sel = index
+
         self.seclabel_combo.set_active(sel)
         self.seclabel_combo.set_no_show_all(False)
         self.seclabel_combo.show_all()
@@ -773,8 +772,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         con = app.connections[self.account]
-        jid = nbxmpp.JID(self.contact.jid)
-        catalog = con.get_module('SecLabels').get_catalog(jid.getDomain())
+        catalog = con.get_module('SecLabels').get_catalog(self.contact.jid)
         labels, label_list, _ = catalog
         lname = label_list[idx]
         label = labels[lname]

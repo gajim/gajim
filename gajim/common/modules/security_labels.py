@@ -42,12 +42,11 @@ class SecLabels:
         log.info('Discovered security labels: %s', from_)
 
     def request_catalog(self, jid):
-        jid = nbxmpp.JID(jid)
         server = app.get_jid_from_account(self._account).split("@")[1]
         iq = nbxmpp.Iq(typ='get', to=server)
         iq.addChild(name='catalog',
                     namespace=nbxmpp.NS_SECLABEL_CATALOG,
-                    attrs={'to': jid.getDomain()})
+                    attrs={'to': jid})
         log.info('Request catalog: server: %s, to: %s', server, jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._catalog_received)
@@ -74,11 +73,11 @@ class SecLabels:
         catalog = (labels, label_list, default)
         self._catalogs[to] = catalog
 
-        log.info('Received catalog from %s', stanza.getFrom())
+        log.info('Received catalog: %s', to)
         log.debug(catalog)
 
         app.nec.push_incoming_event(SecLabelCatalog(
-            None, account=self._account, host=to, catalog=catalog))
+            None, account=self._account, jid=to, catalog=catalog))
 
     def get_catalog(self, jid):
         return self._catalogs.get(jid)
