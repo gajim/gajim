@@ -497,7 +497,7 @@ class MAM:
                 None, query_id=query_id))
 
     def _get_archive_query(self, query_id, jid=None, start=None, end=None,
-                           with_=None, after=None, max_=30):
+                           with_=None, after=None, max_=70):
         # Muc archive query?
         namespace = muc_caps_cache.get_mam_namespace(jid)
         if namespace is None:
