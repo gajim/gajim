@@ -749,7 +749,7 @@ def get_account_menu(account):
                         continue
                 action = 'app.{}{}'.format(account, action)
                 menuitem = Gio.MenuItem.new(label, action)
-                if 'add_contact' in action:
+                if 'add-contact' in action:
                     variant = GLib.Variant('as', [account, ''])
                 else:
                     variant = GLib.Variant('s', account)
