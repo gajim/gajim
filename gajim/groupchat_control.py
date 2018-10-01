@@ -2189,7 +2189,7 @@ class GroupchatControl(ChatControlBase):
                 correct_id = None
             con = app.connections[self.account]
             chatstate = con.get_module('Chatstate').get_active_chatstate(
-                self.contact.jid)
+                self.contact)
 
             # Send the message
             app.nec.push_outgoing_event(GcMessageOutgoingEvent(
