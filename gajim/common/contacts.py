@@ -310,7 +310,7 @@ class LegacyContactsAPI:
             status=contact.status, sub=contact.sub, ask=contact.ask,
             resource=contact.resource, priority=contact.priority,
             keyID=contact.keyID, client_caps=contact.client_caps,
-            chatstate=contact.chatstate,
+            chatstate=contact.chatstate_enum,
             idle_time=contact.idle_time, avatar_sha=contact.avatar_sha)
 
     def add_contact(self, account, contact):
