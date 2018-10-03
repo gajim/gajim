@@ -138,6 +138,21 @@ class GajimApplication(Gtk.Application):
             GLib.OptionArg.NONE,
             _('Start a new chat'))
 
+        self.add_main_option(
+            'simulate-network-lost',
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Simulate loss of connectivity'))
+
+        self.add_main_option(
+            'simulate-network-connected',
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Simulate regaining connectivity'))
+
+
         self.add_main_option_entries(self._get_remaining_entry())
 
         self.connect('handle-local-options', self._handle_local_options)
@@ -255,10 +270,11 @@ class GajimApplication(Gtk.Application):
         # Parse all options that should be executed on a remote instance
         options = command_line.get_options_dict()
 
-        remote_commands = ['ipython',
-                           'show-next-pending-event',
-                           'start-chat',
-                           ]
+        remote_commands = [
+            'ipython',
+            'show-next-pending-event',
+            'start-chat',
+        ]
 
         remaining = options.lookup_value(GLib.OPTION_REMAINING,
                                          GLib.VariantType.new('as'))
@@ -267,6 +283,14 @@ class GajimApplication(Gtk.Application):
             if options.contains(cmd):
                 self.activate_action(cmd)
                 return 0
+
+        if options.contains('simulate-network-lost'):
+            app.interface.network_status_changed(None, False)
+            return 0
+
+        if options.contains('simulate-network-connected'):
+            app.interface.network_status_changed(None, True)
+            return 0
 
         if remaining is not None:
             self._open_uris(remaining.unpack())
