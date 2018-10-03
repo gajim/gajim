@@ -166,12 +166,13 @@ class Chatstate:
         if setting == 'disabled':
             return None
 
-        # Dont send chatstates to ourself
-        if self._con.get_own_jid().bareMatch(contact.jid):
-            return None
+        if not contact.is_groupchat():
+            # Dont send chatstates to ourself
+            if self._con.get_own_jid().bareMatch(contact.jid):
+                return None
 
-        if not contact.supports(nbxmpp.NS_CHATSTATES):
-            return None
+            if not contact.supports(nbxmpp.NS_CHATSTATES):
+                return None
 
         self.set_active(contact.jid)
         return 'active'
