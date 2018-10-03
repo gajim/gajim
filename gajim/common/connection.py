@@ -647,7 +647,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.old_show:
             self.connected = app.SHOW_LIST.index(self.old_show)
             app.nec.push_incoming_event(OurShowEvent(
-                None, conn=self, show=app.SHOW_LIST[self.old_show]))
+                None, conn=self, show=self.old_show))
         else: # we default to online
             self.connected = 2
             app.nec.push_incoming_event(OurShowEvent(
