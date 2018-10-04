@@ -59,6 +59,7 @@ from gajim.common import helpers
 from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
+from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 if app.is_installed('GEOCLUE'):
     from gajim.common import location_listener

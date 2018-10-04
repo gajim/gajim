@@ -24,6 +24,7 @@ from gajim.gtkgui_helpers import get_action
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import ngettext
+from gajim.common.i18n import _
 
 
 def build_resources_submenu(contacts, account, action, room_jid=None,

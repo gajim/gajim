@@ -25,6 +25,7 @@ from gi.repository import Gtk
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.modules import dataforms
 from gajim.common import ged
 

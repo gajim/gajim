@@ -20,8 +20,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
-from gajim.common.modules import dataforms
 from gajim.common import ged
+from gajim.common.modules import dataforms
+from gajim.common.i18n import _
 
 from gajim import gtkgui_helpers
 from gajim import vcard

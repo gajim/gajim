@@ -18,9 +18,14 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common.modules import dataforms
 from gajim.common import helpers
+from gajim.common.i18n import _
+from gajim.common.modules import dataforms
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
+
+from gajim.dataforms_widget import DataFormWidget
+from gajim.conversation_textview import ConversationTextview
+
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
@@ -28,9 +33,6 @@ from gajim.gtk.util import get_iconset_name_for
 from gajim.gtk.util import get_completion_liststore
 from gajim.gtk.util import move_window
 from gajim.gtk.util import resize_window
-from gajim.dataforms_widget import DataFormWidget
-from gajim.conversation_textview import ConversationTextview
-
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell

@@ -33,12 +33,14 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GObject
 
+from gajim.common import helpers
+from gajim.common import app
+from gajim.common.i18n import _
+
 from gajim import gtkgui_helpers
 from gajim import dialogs
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
-from gajim.common import helpers
-from gajim.common import app
 
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio

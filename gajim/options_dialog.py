@@ -1,6 +1,7 @@
 from gi.repository import Gtk, GLib, Gdk, GObject
 from gajim.common import app
 from gajim.common import passwords
+from gajim.common.i18n import _
 from gajim import gtkgui_helpers
 from gajim.common.const import OptionKind, OptionType
 from gajim.common.exceptions import GajimGeneralException

@@ -29,6 +29,7 @@ from gajim.common import app
 from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common import connection_handlers
+from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_eme

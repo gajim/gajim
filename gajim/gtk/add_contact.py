@@ -19,6 +19,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.i18n import _
+
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 

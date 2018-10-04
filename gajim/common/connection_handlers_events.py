@@ -28,6 +28,7 @@ from gajim.common import nec
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
+from gajim.common.i18n import _
 from gajim.common.modules import dataforms
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS

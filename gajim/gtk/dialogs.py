@@ -16,6 +16,8 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
+
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
 

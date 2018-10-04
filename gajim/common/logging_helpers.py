@@ -18,6 +18,8 @@ import logging
 import os
 import sys
 
+from gajim.common.i18n import _
+
 def parseLogLevel(arg):
     """
     Eiter numeric value or level name from logging module

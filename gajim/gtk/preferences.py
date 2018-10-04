@@ -24,12 +24,16 @@ from gajim.common import helpers
 from gajim.common import configpaths
 from gajim.common import config as c_config
 from gajim.common import idle
+from gajim.common.i18n import _
 
-from gajim.chat_control_base import ChatControlBase
-from gajim.config import ManageProxiesWindow, ManageSoundsWindow
 from gajim import message_control
 from gajim import cell_renderer_image
 from gajim import gtkgui_helpers
+
+from gajim.chat_control_base import ChatControlBase
+
+from gajim.config import ManageProxiesWindow
+from gajim.config import ManageSoundsWindow
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.dialogs import AspellDictError

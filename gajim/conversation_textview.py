@@ -35,20 +35,21 @@ from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
 
+from gajim.common import app
+from gajim.common import helpers
+from gajim.common import i18n
+from gajim.common.i18n import _
+from gajim.common.fuzzyclock import FuzzyClock
+from gajim.common.const import StyleAttr
+
+from gajim.htmltextview import HtmlTextView
+
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 from gajim.gtk.emoji_data import emoji_pixbufs
 from gajim.gtk.emoji_data import is_emoji
 from gajim.gtk.emoji_data import get_emoji_pixbuf
-from gajim.common import app
-from gajim.common import helpers
-from gajim.common import i18n
-
-from gajim.common.fuzzyclock import FuzzyClock
-from gajim.common.const import StyleAttr
-
-from gajim.htmltextview import HtmlTextView
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1

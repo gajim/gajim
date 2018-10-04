@@ -37,6 +37,7 @@ from gajim import tooltips
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
 from gajim.common.protocol.bytestream import (is_transfer_active, is_transfer_paused,
         is_transfer_stopped)

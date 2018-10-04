@@ -20,6 +20,7 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.roster_item_exchange')

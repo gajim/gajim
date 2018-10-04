@@ -89,6 +89,7 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
+from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import (
     OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
     UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent)

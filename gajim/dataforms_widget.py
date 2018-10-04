@@ -34,6 +34,7 @@ from gajim import gtkgui_helpers
 from gajim.common.modules import dataforms
 from gajim.common import helpers
 from gajim.common import app
+from gajim.common.i18n import _
 
 
 class DataFormWidget(Gtk.Alignment):

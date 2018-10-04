@@ -32,24 +32,28 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
-from gajim import gtkgui_helpers
-from gajim import message_control
-from gajim.gtk.dialogs import NonModalConfirmationDialog
-from gajim.gtk.util import convert_rgb_to_hex
-from gajim import notify
-from gajim.gtk.emoji_chooser import emoji_chooser
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
-from gajim.message_control import MessageControl
-from gajim.conversation_textview import ConversationTextview
-from gajim.message_textview import MessageTextView
+from gajim.common.i18n import _
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
+
+from gajim import notify
+from gajim import gtkgui_helpers
+from gajim import message_control
+
+from gajim.message_control import MessageControl
+from gajim.conversation_textview import ConversationTextview
+from gajim.message_textview import MessageTextView
+
+from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.util import convert_rgb_to_hex
+from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
 from gajim.command_system.implementation.middleware import CommandTools

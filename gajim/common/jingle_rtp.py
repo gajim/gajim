@@ -27,7 +27,7 @@ from gi.repository import Gst
 from gi.repository import GLib
 
 from gajim.common import app
-
+from gajim.common.i18n import _
 from gajim.common.jingle_transport import JingleTransportICEUDP
 from gajim.common.jingle_content import contents, JingleContent, JingleContentSetupException
 from gajim.common.connection_handlers_events import InformationEvent
