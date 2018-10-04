@@ -15,22 +15,16 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import locale
 import gettext
 
 from gajim.common import configpaths
 
-APP = 'gajim_plugins'
+DOMAIN = 'gajim_plugins'
 plugin_user_dir = configpaths.get('PLUGINS_USER')
 plugins_locale_dir = os.path.join(plugin_user_dir, 'locale')
 
-if os.name != 'nt':
-    locale.setlocale(locale.LC_ALL, '')
-    gettext.bindtextdomain(APP, plugins_locale_dir)
-    gettext.textdomain(APP)
-
 try:
-    t = gettext.translation(APP, plugins_locale_dir)
+    t = gettext.translation(DOMAIN, plugins_locale_dir)
     _ = t.gettext
-except IOError:
+except OSError:
     _ = gettext.gettext
