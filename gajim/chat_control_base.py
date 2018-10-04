@@ -179,13 +179,21 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         # text to show is in in first column of liststore
         self.seclabel_combo.add_attribute(cell, 'text', 0)
         con = app.connections[self.account]
+        jid = self.contact.jid
+        if self.TYPE_ID == 'pm':
+            jid = self.gc_contact.room_jid
         if con.get_module('SecLabels').supported:
-            con.get_module('SecLabels').request_catalog(self.contact.jid)
+            con.get_module('SecLabels').request_catalog(jid)
 
     def _sec_labels_received(self, event):
         if event.account != self.account:
             return
-        if event.jid != self.contact.jid:
+
+        jid = self.contact.jid
+        if self.TYPE_ID == 'pm':
+            jid = self.gc_contact.room_jid
+
+        if event.jid != jid:
             return
         model = self.seclabel_combo.get_model()
         model.clear()
@@ -765,7 +773,10 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
 
         con = app.connections[self.account]
-        catalog = con.get_module('SecLabels').get_catalog(self.contact.jid)
+        jid = self.contact.jid
+        if self.TYPE_ID == 'pm':
+            jid = self.gc_contact.room_jid
+        catalog = con.get_module('SecLabels').get_catalog(jid)
         labels, label_list, _ = catalog
         lname = label_list[idx]
         label = labels[lname]
