@@ -18,38 +18,56 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import sys
 import locale
 import gettext
-import os
 import unicodedata
+from pathlib import Path
 
 DOMAIN = 'gajim'
 LANG = 'en'
 direction_mark = '\u200E'
-_translations = None
+_translation = gettext.NullTranslations()
 
 
-def get_locale_dir():
+def get_locale_dirs():
     if os.name == 'nt':
-        return None
-    # try to find domain in localedir
-    path = gettext.find(DOMAIN)
-    if path:
-        # extract localedir from localedir/language/LC_MESSAGES/domain.mo
-        path = os.path.split(path)[1]
-        path = os.path.split(path)[1]
-        localedir = os.path.split(path)[1]
-    elif os.path.exists('/app/share/run-as-flatpak'):
-        # Check if we run as flatpak
-        return '/app/share/locale'
-    else:
-        # fallback to user locale
-        base = os.getenv('XDG_DATA_HOME')
-        if base is None or base[0] != '/':
-            base = os.path.expanduser('~/.local/share')
-        localedir = os.path.join(base, "locale")
-    return localedir
+        return
 
+    path = gettext.find(DOMAIN)
+    if path is not None:
+        # gettext can find the location itself
+        # so we dont need the localedir
+        return
+
+    if Path('/app/share/run-as-flatpak').exists():
+        # Check if we run as flatpak
+        return [Path('/app/share/')]
+
+    data_dirs = os.getenv('XDG_DATA_DIRS')
+    if data_dirs:
+        return list(map(Path, data_dirs.split(':')))
+    return [Path('/usr/local/share/'), Path('/usr/share/')]
+
+
+def iter_locale_dirs():
+    locale_dirs = get_locale_dirs()
+    if locale_dirs is None:
+        yield None
+        return
+
+    # gettext fallback
+    locale_dirs.append(Path(sys.base_prefix) / 'share')
+
+    found_paths = []
+    for path in locale_dirs:
+        locale_dir = path / 'locale'
+        if locale_dir in found_paths:
+            continue
+        found_paths.append(locale_dir)
+        if locale_dir.is_dir():
+            yield locale_dir
 
 def initialize_direction_mark():
     from gi.repository import Gtk
@@ -106,7 +124,7 @@ def ngettext(s_sing, s_plural, n, replace_sing=None, replace_plural=None):
 
     In other words this is a hack to ngettext() to support %s %d etc..
     """
-    text = _translations.ngettext(s_sing, s_plural, n)
+    text = _translation.ngettext(s_sing, s_plural, n)
     if n == 1 and replace_sing is not None:
         text = text % replace_sing
     elif n > 1 and replace_plural is not None:
@@ -119,30 +137,26 @@ try:
 except locale.Error as error:
     print(error)
 
-try:
-    # en_US, fr_FR, el_GR etc..
-    default = locale.getdefaultlocale()[0]
-    if default is not None:
-        LANG = default[:2]
-except (ValueError, locale.Error):
-    pass
-
 if os.name == 'nt':
+    try:
+        # en_US, fr_FR, el_GR etc..
+        default = locale.getdefaultlocale()[0]
+        if default is not None:
+            LANG = default[:2]
+    except (ValueError, locale.Error):
+        pass
     os.environ['LANG'] = LANG
 
-_localedir = get_locale_dir()
-if hasattr(locale, 'bindtextdomain'):
-    locale.bindtextdomain(DOMAIN, _localedir)  # type: ignore
-gettext.textdomain(DOMAIN)
-
-gettext.install(DOMAIN, _localedir)
-
-try:
-    _ = gettext.translation(DOMAIN, _localedir).gettext
-except OSError:
-    _ = gettext.gettext
-
-if gettext._translations:    # type: ignore
-    _translations = list(gettext._translations.values())[0]  # type: ignore
+# Search for the translation in all locale dirs
+for dir_ in iter_locale_dirs():
+    try:
+        _translation = gettext.translation(DOMAIN, dir_)
+        _ = _translation.gettext
+    except OSError:
+        continue
+    else:
+        break
 else:
-    _translations = gettext.NullTranslations()
+    print('No translations found')
+    print('Dirs searched: %s' % get_locale_dirs())
+    _ = _translation.gettext

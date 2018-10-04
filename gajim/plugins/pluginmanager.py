@@ -38,6 +38,7 @@ from gajim.common import configpaths
 from gajim.common import modules
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
+from gajim.plugins import plugins_i18n
 
 from gajim.plugins.helpers import log, log_calls, Singleton
 from gajim.plugins.helpers import GajimPluginActivateException
@@ -542,7 +543,6 @@ class PluginManager(metaclass=Singleton):
 
         :todo: add scanning zipped modules
         '''
-        from gajim.plugins.plugins_i18n import _
         plugins_found = []
         conf = configparser.ConfigParser()
         fields = ('name', 'short_name', 'version', 'description', 'authors',
@@ -632,7 +632,7 @@ class PluginManager(metaclass=Singleton):
                         if conf.get('info', option) == '':
                             raise configparser.NoOptionError(option, 'info')
                         if option == 'description':
-                            setattr(module_attr, option, _(conf.get('info', option)))
+                            setattr(module_attr, option, plugins_i18n._(conf.get('info', option)))
                             continue
                         setattr(module_attr, option, conf.get('info', option))
 
@@ -640,7 +640,7 @@ class PluginManager(metaclass=Singleton):
                 except TypeError:
                     # set plugin localization
                     try:
-                        module_attr._ = _
+                        module_attr._ = plugins_i18n._
                     except AttributeError:
                         pass
                 except configparser.NoOptionError:
