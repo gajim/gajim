@@ -56,6 +56,7 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import idle
+from gajim.common.i18n import _
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
 from gajim.common import modules

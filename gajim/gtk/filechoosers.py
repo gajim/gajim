@@ -25,6 +25,7 @@ from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common.i18n import _
+
 from gajim.gtk.const import Filter
 from gajim.gtk.types import FilterList  # pylint: disable=unused-import
 

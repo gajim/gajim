@@ -37,21 +37,23 @@ from nbxmpp.protocol import NS_XHTML, NS_XHTML_IM, NS_FILE, NS_MUC
 from nbxmpp.protocol import NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO
 from nbxmpp.protocol import NS_JINGLE_ICE_UDP, NS_JINGLE_FILE_TRANSFER_5
 
-from gajim import gtkgui_helpers
-from gajim import gui_menu_builder
-from gajim import message_control
-from gajim import dialogs
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.add_contact import AddNewContactWindow
-
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
+from gajim.common.i18n import _
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import Chatstate
+
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import message_control
+from gajim import dialogs
+
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.add_contact import AddNewContactWindow
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import

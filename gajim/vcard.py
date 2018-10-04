@@ -39,6 +39,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common.i18n import Q_
+from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
 # log = logging.getLogger('gajim.vcard')

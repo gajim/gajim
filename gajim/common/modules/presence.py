@@ -19,6 +19,7 @@ import logging
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.user_nickname import parse_nickname
 

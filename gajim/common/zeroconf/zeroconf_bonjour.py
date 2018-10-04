@@ -19,6 +19,8 @@ import logging
 import select
 import socket
 import re
+
+from gajim.common.i18n import _
 from gajim.common.zeroconf.zeroconf import Constant
 
 

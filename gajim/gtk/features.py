@@ -26,6 +26,8 @@ from gi.repository import Gtk, Gdk
 
 from gajim.common import app
 from gajim.common.i18n import Q_
+from gajim.common.i18n import _
+
 from gajim.gtk.util import get_builder
 
 

@@ -16,11 +16,14 @@ import logging
 from enum import IntEnum
 from datetime import datetime, timedelta
 
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.i18n import _
 from gajim.common.const import ArchiveState
+
 from gajim.gtk.util import load_icon
 
 log = logging.getLogger('gajim.gtk.history_sync')

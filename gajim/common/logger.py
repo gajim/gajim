@@ -41,6 +41,7 @@ from gi.repository import GLib
 from gajim.common import exceptions
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.i18n import _
 from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
     SubscriptionConstant)

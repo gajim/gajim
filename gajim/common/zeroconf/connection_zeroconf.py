@@ -44,6 +44,7 @@ from gajim.common.connection import CommonConnection
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import modules
+from gajim.common.i18n import _
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import *

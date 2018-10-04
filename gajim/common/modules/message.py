@@ -21,6 +21,7 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname

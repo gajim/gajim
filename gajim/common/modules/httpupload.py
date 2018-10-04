@@ -32,6 +32,7 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent

@@ -19,6 +19,8 @@ import logging
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 
+from gajim.common.i18n import _
+
 log = logging.getLogger('gajim.c.multimedia_helpers')
 
 

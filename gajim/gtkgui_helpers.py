@@ -45,6 +45,7 @@ except Exception:
     pass
 
 from gajim.common import i18n
+from gajim.common.i18n import _
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import PEPEventType, ACTIVITIES, MOODS

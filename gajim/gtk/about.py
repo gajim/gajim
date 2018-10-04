@@ -18,6 +18,7 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.const import DEVS_CURRENT
 from gajim.common.const import DEVS_PAST
 from gajim.common.const import ARTISTS

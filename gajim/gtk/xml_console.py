@@ -21,11 +21,17 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.const import Option, OptionKind, OptionType, StyleAttr
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.common.i18n import _
+from gajim.common.const import Option
+from gajim.common.const import OptionKind
+from gajim.common.const import OptionType
+from gajim.common.const import StyleAttr
+
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_image_button
+from gajim.gtk.dialogs import ErrorDialog
+
 from gajim.options_dialog import OptionsDialog
 
 

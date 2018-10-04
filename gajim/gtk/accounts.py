@@ -18,18 +18,23 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import gtkgui_helpers
-from gajim import gui_menu_builder
-from gajim import config
-from gajim.options_dialog import OptionsDialog, OptionsBox
-
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common import helpers
 from gajim.common import ged
+from gajim.common.i18n import _
 from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
-from gajim.common.const import Option, OptionKind, OptionType
+from gajim.common.const import Option
+from gajim.common.const import OptionKind
+from gajim.common.const import OptionType
+
+from gajim import gtkgui_helpers
+from gajim import gui_menu_builder
+from gajim import config
+
+from gajim.options_dialog import OptionsDialog
+from gajim.options_dialog import OptionsBox
 
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import YesNoDialog

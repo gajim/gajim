@@ -33,6 +33,7 @@ from gi.repository import GLib
 from gajim import common
 from gajim.common import app
 from gajim.common.i18n import Q_
+from gajim.common.i18n import _
 
 from gajim import gtkgui_helpers
 from gajim import message_control

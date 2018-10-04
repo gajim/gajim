@@ -46,6 +46,7 @@ from gajim.common import logging_helpers
 from gajim.common import exceptions
 from gajim.common import caps_cache
 from gajim.common import logger
+from gajim.common.i18n import _
 
 
 class GajimApplication(Gtk.Application):

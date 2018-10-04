@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import nec
 from gajim.common import configpaths
 from gajim.common import modules
+from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
 
 from gajim.plugins.helpers import log, log_calls, Singleton

@@ -23,9 +23,11 @@ from typing import Any  # pylint: disable=unused-import
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import gtkgui_helpers
 from gajim.common import helpers
 from gajim.common import i18n
+from gajim.common.i18n import _
+
+from gajim import gtkgui_helpers
 
 class AtomWindow:
     window = None

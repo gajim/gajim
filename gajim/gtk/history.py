@@ -29,15 +29,17 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import conversation_textview
-from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk import util
-from gajim.gtk.util import python_month, gtk_month
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import exceptions
+from gajim.common.i18n import _
 from gajim.common.const import ShowConstant, KindConstant
 
+from gajim import conversation_textview
+
+from gajim.gtk import util
+from gajim.gtk.util import python_month, gtk_month
+from gajim.gtk.dialogs import ErrorDialog
 
 @unique
 class InfoColumn(IntEnum):

@@ -22,6 +22,7 @@ try:
 except ImportError:
     pass
 
+from gajim.common.i18n import _
 from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
 from gajim.common.zeroconf.zeroconf_avahi_const import *
 

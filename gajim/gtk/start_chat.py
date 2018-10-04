@@ -21,6 +21,7 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
 from gajim.gtk.util import get_iconset_name_for
