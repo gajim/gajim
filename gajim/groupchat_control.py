@@ -1837,6 +1837,14 @@ class GroupchatControl(ChatControlBase):
             simple_jid = app.get_jid_without_resource(obj.real_jid)
             nick_jid += ' (%s)' % simple_jid
 
+        con = app.connections[self.account]
+        bookmarks = con.get_module('Bookmarks').bookmarks
+        bookmark = bookmarks.get(self.room_jid, None)
+        if bookmark is None or not bookmark['print_status']:
+            print_status = app.config.get('print_status_in_muc')
+        else:
+            print_status = bookmark['print_status']
+
         # status_code
         # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-\
         # init
@@ -1884,13 +1892,14 @@ class GroupchatControl(ChatControlBase):
             if obj.status_code:
                 if '333' in obj.status_code:
                     # Handle 333 before 307, some MUCs add both
-                    if obj.nick == self.nick:
-                        s = _('%s kicked us due to an error' % self.room_jid)
-                    else:
-                        s = _('%s has left due to an error' % nick)
-                    if obj.reason:
-                        s += ' (%s)' % obj.reason
-                    self.print_conversation(s, 'info', graphics=False)
+                    if print_status != 'none':
+                        if obj.nick == self.nick:
+                            s = _('%s kicked us due to an error' % self.room_jid)
+                        else:
+                            s = _('%s has left due to an error' % nick)
+                        if obj.reason:
+                            s += ' (%s)' % obj.reason
+                        self.print_conversation(s, 'info', graphics=False)
                 elif '307' in obj.status_code:
                     if obj.actor is None: # do not print 'kicked by None'
                         s = _('%(nick)s has been kicked: %(reason)s') % {
@@ -2051,13 +2060,6 @@ class GroupchatControl(ChatControlBase):
         and (not obj.status_code or '303' not in obj.status_code) and not \
         right_changed:
             st = ''
-            con = app.connections[self.account]
-            bookmarks = con.get_module('Bookmarks').bookmarks
-            bookmark = bookmarks.get(self.room_jid, None)
-            if bookmark is None or not bookmark['print_status']:
-                print_status = app.config.get('print_status_in_muc')
-            else:
-                print_status = bookmark['print_status']
 
             if obj.show == 'offline':
                 if obj.nick in self.attention_list:
