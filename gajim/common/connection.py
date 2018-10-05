@@ -715,9 +715,20 @@ class Connection(CommonConnection, ConnectionHandlers):
             title=_('Connection with account "%s" has been lost') % self.name,
             msg=_('Reconnect manually.')))
 
+    def _on_resume_failed(self):
+        # SM resume failed, set all MUCs offline
+        # and lose the presence state of all contacts
+        app.nec.push_incoming_event(OurShowEvent(
+            None, conn=self, show='offline'))
+
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
-        if realm == nbxmpp.NS_REGISTER:
+        if realm == nbxmpp.NS_STREAM_MGMT:
+            if event == 'RESUME FAILED':
+                log.info('Resume failed')
+                self._on_resume_failed()
+
+        elif realm == nbxmpp.NS_REGISTER:
             if event == nbxmpp.features_nb.REGISTER_DATA_RECEIVED:
                 # data is (agent, DataFrom, is_form, error_msg)
                 if self.new_account_info and \
