@@ -1072,7 +1072,7 @@ class ConversationTextview(GObject.GObject):
         new_mark = buffer_.create_mark(
             str(self.line), temp_iter, left_gravity=False)
 
-        if not index:
+        if index is None:
             # New Message
             self.message_list.append((tim, new_mark, msg_stanza_id))
         elif corrected:
