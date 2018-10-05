@@ -370,7 +370,6 @@ class GroupchatControl(ChatControlBase):
 
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
-        self.room_creation = int(time.time()) # Use int to reduce mem usage
         self.nick_hits = []
         self.last_key_tabs = False
 
@@ -2056,7 +2055,7 @@ class GroupchatControl(ChatControlBase):
                     gc_c.affiliation = affiliation
                     gc_c.status = obj.status
                     self.draw_contact(obj.nick)
-        if (time.time() - self.room_creation) > 30 and obj.nick != self.nick \
+        if self.is_connected and obj.nick != self.nick \
         and (not obj.status_code or '303' not in obj.status_code) and not \
         right_changed:
             st = ''
