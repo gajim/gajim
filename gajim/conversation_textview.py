@@ -1186,7 +1186,7 @@ class ConversationTextview(GObject.GObject):
         buffer_ = self.tv.get_buffer()
         current_print_time = app.config.get('print_time')
 
-        if current_print_time == 'always' and kind != 'info' and not simple:
+        if current_print_time == 'always' and not simple:
             timestamp_str = self.get_time_to_show(local_tim, direction_mark)
             timestamp = time.strftime(timestamp_str, local_tim)
             timestamp = direction_mark + timestamp + direction_mark
@@ -1195,7 +1195,7 @@ class ConversationTextview(GObject.GObject):
                     *other_tags_for_time)
             else:
                 buffer_.insert(iter_, timestamp)
-        elif current_print_time == 'sometimes' and kind != 'info' and not simple:
+        elif current_print_time == 'sometimes' and not simple:
             every_foo_seconds = 60 * app.config.get(
                 'print_ichat_every_foo_minutes')
             seconds_passed = tim - self.last_time_printout
