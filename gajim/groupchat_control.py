@@ -1853,6 +1853,9 @@ class GroupchatControl(ChatControlBase):
         if obj.status_code and obj.nick == self.nick:
             if '110' in obj.status_code:
                 # We just join the room
+                self.print_conversation(
+                    _('You (%s) joined the room') % self.nick,
+                    'info', graphics=False)
                 if self.room_jid in app.automatic_rooms[self.account] and \
                 app.automatic_rooms[self.account][self.room_jid]['invities']:
                     if self.room_jid not in app.interface.instances[
