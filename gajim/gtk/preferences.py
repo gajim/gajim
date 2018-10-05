@@ -142,6 +142,9 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('positive_184_ack')
         self.xml.get_object('positive_184_ack_checkbutton').set_active(st)
 
+        st = app.config.get('show_subject_on_join')
+        self.xml.get_object('subject_on_join').set_active(st)
+
         # Show avatar in tabs
         st = app.config.get('show_avatar_in_tabs')
         self.xml.get_object('show_avatar_in_tabs_checkbutton').set_active(st)
@@ -499,6 +502,9 @@ class Preferences(Gtk.ApplicationWindow):
             elif val != v:
                 return 'mixed'
         return val
+
+    def on_subject_on_join_toggled(self, widget):
+        app.config.set('show_subject_on_join', widget.get_active())
 
     def on_checkbutton_toggled(self, widget, config_name,
     change_sensitivity_widgets=None):

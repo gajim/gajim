@@ -297,6 +297,7 @@ class GroupchatControl(ChatControlBase):
         self.force_non_minimizable = False
         self.is_continued = is_continued
         self.is_anonymous = True
+        self.join_time = 0
 
         # Controls the state of autorejoin.
         # None - autorejoin is neutral.
@@ -1546,7 +1547,10 @@ class GroupchatControl(ChatControlBase):
             date = time.strftime('%d-%m-%Y %H:%M:%S',
                                  time.localtime(event.timestamp))
             text = '%s - %s' % (text, date)
-        self.print_conversation(text)
+
+        just_joined = self.join_time > time.time() - 10
+        if app.config.get('show_subject_on_join') or not just_joined:
+            self.print_conversation(text)
 
         if event.subject == '':
             self.subject_button.hide()
@@ -1643,6 +1647,7 @@ class GroupchatControl(ChatControlBase):
         app.gc_connected[self.account][self.room_jid] = value
 
     def got_connected(self):
+        self.join_time = time.time()
         # Make autorejoin stop.
         if self.autorejoin:
             GLib.source_remove(self.autorejoin)
