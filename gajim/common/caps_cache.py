@@ -470,6 +470,7 @@ class MucCapsCache:
                 return True
             if nbxmpp.NS_MAM_1 in self.cache[jid].features:
                 return True
+            return False
         except (KeyError, AttributeError):
             return False
 
