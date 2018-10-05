@@ -1535,6 +1535,9 @@ class GroupchatControl(ChatControlBase):
             return
         if event.jid != self.room_jid:
             return
+        if self.subject == event.subject:
+            # Probably a rejoin, we already showed that subject
+            return
         self.set_subject(event.subject)
         text = _('%(nick)s has set the subject to %(subject)s') % {
             'nick': event.nickname, 'subject': event.subject}
