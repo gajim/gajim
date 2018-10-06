@@ -1,3 +1,30 @@
+Gajim 1.0.99.1 (07 October 2018)
+
+  New
+
+  * Implement XEP-0398
+  * MUC: Set Threshold for requesting history
+  * Show icon for unencrypted messages
+  * Support more media players for broadcasting the current tune
+  * Windows: Add a debug logging switch in preferences
+  * Preferences: enable/disable dark theme
+  * Preferences: enable/disable the MUC subject beeing shown on join
+  * Preferences: enable/disable ascii emoji conversion
+
+  Bug fixes
+
+  * 9198 Creating new MUCs with captial letters is not possible
+  * 9210 Error when clicking on new message indicator
+  * 9280 Inviting users to a MUC causes error
+  * 9301 Error when opening service discovery window
+  * 9309 Error when clicking on a groupchat invite notification
+  * 9311 Error when requesting server info
+  * 9117 Windows UAC changes status not available
+  * 9324 No menus/dialogs on Win7
+  * 9326 IPV6 Connection problem on Win10
+  * 9334 Joining big MUCs takes very long
+  * 9339 Error caused by remote_control
+
 Gajim 1.0.99 (19 August 2018)
 
   New
