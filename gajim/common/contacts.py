@@ -402,8 +402,8 @@ class LegacyContactsAPI:
             for jid in self.get_jid_list(account):
                 if jid == our_jid:
                     continue
-                if common.app.jid_is_transport(jid) and not \
-                _('Transports') in groups:
+                if (common.app.jid_is_transport(jid) and
+                        _('Transports') not in groups):
                     # do not count transports
                     continue
                 if self.has_brother(account, jid, accounts) and not \
