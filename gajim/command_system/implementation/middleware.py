@@ -34,7 +34,9 @@ don't need to dig up the code itself to write basic commands.
 from traceback import print_exc
 
 from gi.repository import Pango
+
 from gajim.common import app
+from gajim.common.i18n import _
 
 from gajim.command_system.framework import CommandProcessor
 from gajim.command_system.errors import CommandError, NoCommandError
