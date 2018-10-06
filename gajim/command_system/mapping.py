@@ -25,6 +25,8 @@ according to the command properties.
 import re
 from operator import itemgetter
 
+from gajim.common.i18n import _
+
 from gajim.command_system.errors import DefinitionError, CommandError
 
 # Quite complex piece of regular expression logic to parse options and

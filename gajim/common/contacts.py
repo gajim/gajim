@@ -26,6 +26,7 @@
 
 try:
     from gajim.common import caps_cache
+    from gajim.common.i18n import _
     from gajim.common.account import Account
     from gajim import common
     from gajim.common.const import Chatstate

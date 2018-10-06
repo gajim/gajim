@@ -25,6 +25,7 @@ import logging
 from gi.repository import Gio, GLib
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.logind_listener')
 
