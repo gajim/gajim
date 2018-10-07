@@ -67,7 +67,7 @@ def iter_locale_dirs():
             continue
         found_paths.append(locale_dir)
         if locale_dir.is_dir():
-            yield locale_dir
+            yield str(locale_dir)
 
 def initialize_direction_mark():
     from gi.repository import Gtk
@@ -150,7 +150,7 @@ if os.name == 'nt':
 # Search for the translation in all locale dirs
 for dir_ in iter_locale_dirs():
     try:
-        _translation = gettext.translation(DOMAIN, str(dir_))
+        _translation = gettext.translation(DOMAIN, dir_)
         _ = _translation.gettext
     except OSError:
         continue
