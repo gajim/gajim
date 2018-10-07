@@ -324,8 +324,9 @@ class GajimRemote(Server):
             self.on_message_sent)
 
     def on_chatstate_received(self, obj):
-        self.raise_signal('ChatState', (obj.account, [
-            obj.jid, obj.fjid, obj.stanza, obj.resource, obj.chatstate]))
+        chatstate = app.contacts.get_combined_chatstate(
+            obj.account, obj.jid)
+        self.raise_signal('ChatState', (obj.account, [obj.jid, chatstate]))
 
     def on_message_sent(self, obj):
         try:
