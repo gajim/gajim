@@ -60,6 +60,8 @@ class CommonContact(XMPPEntity):
         # this is contact's chatstate
         self._chatstate = chatstate
 
+        self._is_pm_contact = False
+
     @property
     def show(self):
         return self._show
@@ -91,6 +93,10 @@ class CommonContact(XMPPEntity):
     def is_gc_contact(self):
         return isinstance(self, GC_Contact)
 
+    @property
+    def is_pm_contact(self):
+        return self._is_pm_contact
+
     def get_full_jid(self):
         raise NotImplementedError
 
@@ -117,7 +123,8 @@ class Contact(CommonContact):
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
     sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
-    chatstate=None, idle_time=None, avatar_sha=None, groupchat=False):
+    chatstate=None, idle_time=None, avatar_sha=None, groupchat=False,
+    is_pm_contact=False):
         if not isinstance(jid, str):
             print('no str')
         if groups is None:
@@ -130,6 +137,7 @@ class Contact(CommonContact):
         self.groups = [i if i else _('General') for i in set(groups)] # filter duplicate values
         self.avatar_sha = avatar_sha
         self._is_groupchat = groupchat
+        self._is_pm_contact = is_pm_contact
 
         self.sub = sub
         self.ask = ask
@@ -227,7 +235,8 @@ class GC_Contact(CommonContact):
         """
         return Contact(jid=self.get_full_jid(), account=self.account,
             name=self.name, groups=[], show=self.show, status=self.status,
-            sub='none', client_caps=self.client_caps, avatar_sha=self.avatar_sha)
+            sub='none', client_caps=self.client_caps, avatar_sha=self.avatar_sha,
+            is_pm_contact=True)
 
 
 class LegacyContactsAPI:
