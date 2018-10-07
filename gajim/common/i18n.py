@@ -150,7 +150,7 @@ if os.name == 'nt':
 # Search for the translation in all locale dirs
 for dir_ in iter_locale_dirs():
     try:
-        _translation = gettext.translation(DOMAIN, dir_)
+        _translation = gettext.translation(DOMAIN, str(dir_))
         _ = _translation.gettext
     except OSError:
         continue
