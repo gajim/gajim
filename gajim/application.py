@@ -40,6 +40,7 @@ from urllib.parse import unquote
 
 from gi.repository import GLib, Gio, Gtk
 
+import gajim
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import logging_helpers
@@ -304,6 +305,9 @@ class GajimApplication(Gtk.Application):
                               application: Gtk.Application,
                               options: GLib.VariantDict) -> int:
         # Parse all options that have to be executed before ::startup
+        if options.contains('version'):
+            print(gajim.__version__)
+            return 0
         if options.contains('profile'):
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
