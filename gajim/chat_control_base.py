@@ -341,10 +341,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         con = app.connections[self.account]
         con.get_module('Chatstate').set_active(self.contact.jid)
 
-        message_tv_buffer = self.msg_textview.get_buffer()
-        id_ = message_tv_buffer.connect('changed',
+        id_ = self.msg_textview.connect('text-changed',
             self._on_message_tv_buffer_changed)
-        self.handlers[id_] = message_tv_buffer
+        self.handlers[id_] = self.msg_textview
         if parent_win is not None:
             id_ = parent_win.window.connect('motion-notify-event',
                 self._on_window_motion_notify)
@@ -837,10 +836,14 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             con = app.connections[self.account]
             con.get_module('Chatstate').set_mouse_activity(self.contact)
 
-    def _on_message_tv_buffer_changed(self, *args):
+    def _on_message_tv_buffer_changed(self, textview, textbuffer):
+        if textbuffer.get_char_count() and self.encryption:
+            app.plugin_manager.extension_point(
+                'typing' + self.encryption, self)
+
         con = app.connections[self.account]
         con.get_module('Chatstate').set_keyboard_activity(self.contact)
-        if not self.msg_textview.has_text():
+        if not textview.has_text():
             con.get_module('Chatstate').set_chatstate(self.contact,
                                                       Chatstate.ACTIVE)
             return

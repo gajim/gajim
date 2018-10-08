@@ -21,6 +21,7 @@ import gc
 
 from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Pango
 
 from gajim.common import app
@@ -36,6 +37,10 @@ class MessageTextView(Gtk.TextView):
     Class for the message textview (where user writes new messages) for
     chat/groupchat windows
     """
+    __gsignals__ = {
+        'text-changed': (GObject.SIGNAL_RUN_LAST, None, (Gtk.TextBuffer,))
+    }
+
     UNDO_LIMIT = 20
     PLACEHOLDER = _('Write a message…')
 
@@ -60,6 +65,9 @@ class MessageTextView(Gtk.TextView):
         self.undo_pressed = False
 
         buffer_ = self.get_buffer()
+        buffer_.connect('changed', self._on_buffer_changed)
+        self._last_text = ''
+
         self.begin_tags = {}
         self.end_tags = {}
         self.color_tags = []
@@ -93,6 +101,16 @@ class MessageTextView(Gtk.TextView):
         start = buffer_.get_bounds()[0]
         buffer_.insert_with_tags(
             start, self.PLACEHOLDER, self.placeholder_tag)
+
+    def _on_buffer_changed(self, *args):
+        text = self.get_text()
+        # Because of inserting and removing PLACEHOLDER text
+        # the signal becomes unreliable when determining if the user
+        # typed in new text. So we send our own signal depending on if
+        # there is real new text that is not the PLACEHOLDER
+        if text != self._last_text:
+            self.emit('text-changed', self.get_buffer())
+            self._last_text = text
 
     def has_text(self):
         buf = self.get_buffer()
