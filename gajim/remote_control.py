@@ -324,9 +324,14 @@ class GajimRemote(Server):
             self.on_message_sent)
 
     def on_chatstate_received(self, obj):
-        chatstate = app.contacts.get_combined_chatstate(
-            obj.account, obj.jid)
-        self.raise_signal('ChatState', (obj.account, [obj.jid, chatstate]))
+        if obj.contact.is_gc_contact:
+            jid = obj.contact.get_full_jid()
+            chatstate = obj.contact.chatstate
+        else:
+            jid = obj.contact.jid
+            chatstate = app.contacts.get_combined_chatstate(
+                obj.account, obj.contact.jid)
+        self.raise_signal('ChatState', (obj.account, [jid, chatstate]))
 
     def on_message_sent(self, obj):
         try:

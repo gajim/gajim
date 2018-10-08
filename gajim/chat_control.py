@@ -134,11 +134,6 @@ class ChatControl(ChatControlBase):
         self.show_avatar()
 
         # Hook up signals
-        message_tv_buffer = self.msg_textview.get_buffer()
-        id_ = message_tv_buffer.connect('changed',
-            self._on_message_tv_buffer_changed)
-        self.handlers[id_] = message_tv_buffer
-
         widget = self.xml.get_object('avatar_eventbox')
         widget.set_property('height-request', AvatarSize.CHAT)
 
@@ -680,7 +675,11 @@ class ChatControl(ChatControlBase):
         status_escaped = GLib.markup_escape_text(status_reduced)
 
         st = app.config.get('displayed_chat_state_notifications')
-        cs = app.contacts.get_combined_chatstate(self.account, self.contact.jid)
+        if self.TYPE_ID == 'pm':
+            cs = self.gc_contact.chatstate
+        else:
+            cs = app.contacts.get_combined_chatstate(
+                self.account, self.contact.jid)
         if cs and st in ('composing_only', 'all'):
             if contact.show == 'offline':
                 chatstate = ''
@@ -1152,13 +1151,21 @@ class ChatControl(ChatControlBase):
         if event.account != self.account:
             return
 
-        if event.jid != self.contact.jid:
-            return
+        if self.TYPE_ID == 'pm':
+            if event.contact != self.gc_contact:
+                return
+        else:
+            if event.contact.jid != self.contact.jid:
+                return
 
         self.draw_banner_text()
+
         # update chatstate in tab for this chat
-        chatstate = app.contacts.get_combined_chatstate(
-            self.account, self.contact.jid)
+        if event.contact.is_gc_contact:
+            chatstate = event.contact.chatstate
+        else:
+            chatstate = app.contacts.get_combined_chatstate(
+                self.account, self.contact.jid)
         self.parent_win.redraw_tab(self, chatstate)
 
     def _nec_caps_received(self, obj):
@@ -1238,12 +1245,6 @@ class ChatControl(ChatControlBase):
                 return # transport contacts cannot be invited
 
             dialogs.TransformChatToMUC(self.account, [c.jid], [dropped_jid])
-
-    def _on_message_tv_buffer_changed(self, textbuffer):
-        super()._on_message_tv_buffer_changed(textbuffer)
-        if textbuffer.get_char_count() and self.encryption:
-            app.plugin_manager.extension_point(
-                'typing' + self.encryption, self)
 
     def restore_conversation(self):
         jid = self.contact.jid

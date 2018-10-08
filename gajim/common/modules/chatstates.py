@@ -103,13 +103,21 @@ class Chatstate:
             # Dont show chatstates from our own resources
             return
 
+        if event.mtype == 'groupchat':
+            # Not implemented yet
+            return
+
         chatstate = parse_chatstate(event.stanza)
         if chatstate is None:
             return
 
-        contact = app.contacts.get_contact_from_full_jid(
-            self._account, event.fjid)
-        if contact is None or contact.is_gc_contact:
+        if event.muc_pm:
+            contact = app.contacts.get_gc_contact(
+                self._account, event.jid, event.resource)
+        else:
+            contact = app.contacts.get_contact_from_full_jid(
+                self._account, event.fjid)
+        if contact is None:
             return
 
         contact.chatstate = chatstate
@@ -117,7 +125,7 @@ class Chatstate:
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
-                         jid=event.jid))
+                         contact=contact))
 
     def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:
         setting = app.config.get('outgoing_chat_state_notifications')
@@ -129,10 +137,10 @@ class Chatstate:
             current_state = self._chatstates.get(jid)
             if current_state is None:
                 self._last_mouse_activity.pop(jid, None)
-                return GLib.SOURCE_CONTINUE
+                continue
 
             if current_state in (State.GONE, State.INACTIVE):
-                return GLib.SOURCE_CONTINUE
+                continue
 
             new_chatstate = None
             if now - time_ > INACTIVE_AFTER:
@@ -147,9 +155,15 @@ class Chatstate:
                 if self._chatstates.get(jid) != new_chatstate:
                     contact = app.contacts.get_contact(self._account, jid)
                     if contact is None:
-                        self._last_mouse_activity.pop(jid, None)
-                        return GLib.SOURCE_CONTINUE
-                    self.set_chatstate(contact, new_chatstate)
+                        room, nick = app.get_room_and_nick_from_fjid(jid)
+                        contact = app.contacts.get_gc_contact(
+                            self._account, room, nick)
+                        if contact is not None:
+                            contact = contact.as_contact()
+                        else:
+                            self._last_mouse_activity.pop(jid, None)
+                            continue
+                self.set_chatstate(contact, new_chatstate)
 
         return GLib.SOURCE_CONTINUE
 
@@ -196,8 +210,9 @@ class Chatstate:
         if not contact.is_groupchat():
             # Dont leak presence to contacts
             # which are not allowed to see our status
-            if contact and contact.sub in ('to', 'none'):
-                return
+            if not contact.is_pm_contact:
+                if contact and contact.sub in ('to', 'none'):
+                    return
 
             if contact.show == 'offline':
                 return
