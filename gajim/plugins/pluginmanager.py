@@ -110,7 +110,7 @@ class PluginManager(metaclass=Singleton):
         '''
 
         for path in reversed(configpaths.get_plugin_dirs()):
-            pc = PluginManager.scan_dir_for_plugins(path)
+            pc = self.scan_dir_for_plugins(path)
             self.add_plugins(pc)
 
     @log_calls('PluginManager')
@@ -137,7 +137,6 @@ class PluginManager(metaclass=Singleton):
         and adding class from reloaded module or ignoring adding plug-in?
         '''
         plugin = plugin_class()
-
         if plugin not in self.plugins:
             if not self._plugin_has_entry_in_global_config(plugin):
                 self._create_plugin_entry_in_global_config(plugin)
@@ -520,9 +519,8 @@ class PluginManager(metaclass=Singleton):
     def _set_plugin_active_in_global_config(self, plugin, active=True):
         app.config.set_per('plugins', plugin.short_name, 'active', active)
 
-    @staticmethod
     @log_calls('PluginManager')
-    def scan_dir_for_plugins(path, scan_dirs=True, package=False):
+    def scan_dir_for_plugins(self, path, scan_dirs=True, package=False):
         r'''
         Scans given directory for plugin classes.
 
@@ -583,6 +581,21 @@ class PluginManager(metaclass=Singleton):
                     log.warning('Plugin %s not loaded, error loading manifest',
                                 elem_name, exc_info=True)
                     continue
+
+            short_name = conf.get('info', 'short_name', fallback=None)
+            if short_name is None:
+                log.error('No short_name defined for %s', elem_name)
+
+            # Check if the plugin is already loaded
+            try:
+                for plugin in self.plugins:
+                    if plugin.short_name == short_name:
+                        raise PluginAlreadyLoaded(
+                            'Skip Plugin %s because its '
+                            'already loaded' % elem_name)
+            except PluginAlreadyLoaded as error:
+                log.warning(error)
+                continue
 
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
@@ -734,3 +747,7 @@ class PluginManager(metaclass=Singleton):
         for plugin in self.plugins:
             if plugin.__path__ in plugin_dir:
                 return plugin
+
+
+class PluginAlreadyLoaded(Exception):
+    pass
