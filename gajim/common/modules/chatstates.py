@@ -74,29 +74,37 @@ class Chatstate:
             return
 
         full_jid = stanza.getFrom()
-        jid = full_jid.getStripped()
 
         if self._con.get_own_jid().bareMatch(full_jid):
             return
 
-        contact = app.contacts.get_contact_from_full_jid(
-            self._account, str(full_jid))
-        if contact is None or contact.is_gc_contact:
+        contact = app.contacts.get_gc_contact(
+            self._account, full_jid.getStripped(), full_jid.getResource())
+        if contact is None:
+            contact = app.contacts.get_contact_from_full_jid(
+                self._account, str(full_jid))
+        if contact is None:
             return
 
         if contact.chatstate is None:
             return
 
+        if contact.is_gc_contact:
+            jid = contact.get_full_jid()
+        else:
+            jid = contact.jid
+
         contact.chatstate = None
-        self._chatstates.pop(contact.jid, None)
-        self._last_mouse_activity.pop(contact.jid, None)
+        self._chatstates.pop(jid, None)
+        self._last_mouse_activity.pop(jid, None)
+        self._last_keyboard_activity.pop(jid, None)
 
         log.info('Reset chatstate for %s', jid)
 
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
-                         jid=jid))
+                         contact=contact))
 
     def delegate(self, event: Any) -> None:
         if self._con.get_own_jid().bareMatch(event.jid) or event.sent:
@@ -133,10 +141,12 @@ class Chatstate:
             return GLib.SOURCE_CONTINUE
 
         now = time.time()
-        for jid, time_ in self._last_mouse_activity.items():
+        for jid in list(self._last_mouse_activity.keys()):
+            time_ = self._last_mouse_activity[jid]
             current_state = self._chatstates.get(jid)
             if current_state is None:
                 self._last_mouse_activity.pop(jid, None)
+                self._last_keyboard_activity.pop(jid, None)
                 continue
 
             if current_state in (State.GONE, State.INACTIVE):
@@ -162,6 +172,7 @@ class Chatstate:
                             contact = contact.as_contact()
                         else:
                             self._last_mouse_activity.pop(jid, None)
+                            self._last_keyboard_activity.pop(jid, None)
                             continue
                 self.set_chatstate(contact, new_chatstate)
 
@@ -205,6 +216,7 @@ class Chatstate:
                                          chatstate=str(State.GONE)))
             self._chatstates.pop(contact.jid, None)
             self._last_mouse_activity.pop(contact.jid, None)
+            self._last_keyboard_activity.pop(contact.jid, None)
             return
 
         if not contact.is_groupchat():
