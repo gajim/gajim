@@ -152,6 +152,8 @@ for dir_ in iter_locale_dirs():
     try:
         _translation = gettext.translation(DOMAIN, dir_)
         _ = _translation.gettext
+        if hasattr(locale, 'bindtextdomain'):
+            locale.bindtextdomain(DOMAIN, dir_)  # type: ignore
     except OSError:
         continue
     else:
