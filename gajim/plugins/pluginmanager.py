@@ -27,7 +27,7 @@ import os
 import sys
 import fnmatch
 import zipfile
-from shutil import rmtree
+from shutil import rmtree, move
 import configparser
 from pkg_resources import parse_version
 
@@ -109,6 +109,8 @@ class PluginManager(metaclass=Singleton):
         Registered names with instances of encryption Plugins.
         '''
 
+        self.update_plugins()
+
         for path in reversed(configpaths.get_plugin_dirs()):
             pc = self.scan_dir_for_plugins(path)
             self.add_plugins(pc)
@@ -125,6 +127,47 @@ class PluginManager(metaclass=Singleton):
 
     def _remove_plugin_entry_in_global_config(self, plugin):
         app.config.del_per('plugins', plugin.short_name)
+
+    @log_calls('PluginManager')
+    def update_plugins(self, replace=True, activate=False, plugin_name=None):
+        '''
+        Move plugins from the downloaded folder to the user plugin folder
+
+        :param replace: replace plugin files if they already exist.
+        :type replace: boolean
+        :param activate: load and activate the plugin
+        :type activate: boolean
+        :param plugin_name: if provided, update only this plugin
+        :type plugin_name: str
+        :return: list of updated plugins (files have been installed)
+        :rtype: [] of str
+        '''
+        updated_plugins = []
+        user_dir = configpaths.get('PLUGINS_USER')
+        dl_dir = configpaths.get('PLUGINS_DOWNLOAD')
+        to_update = [plugin_name] if plugin_name else next(os.walk(dl_dir))[1]
+        for directory in to_update:
+            src_dir = os.path.join(dl_dir, directory)
+            dst_dir = os.path.join(user_dir, directory)
+            try:
+                if os.path.exists(dst_dir):
+                    if not replace:
+                        continue
+                    self.delete_plugin_files(dst_dir)
+                move(src_dir, dst_dir)
+            except Exception:
+                log.exception('Upgrade of plugin %s failed. Impossible to move '
+                    'files from "%s" to "%s"', directory, src_dir, dst_dir)
+                continue
+            updated_plugins.append(directory)
+            if activate:
+                pc = self.scan_dir_for_plugins(dst_dir, scan_dirs=True,
+                    package=True)
+                self.add_plugin(pc[0])
+                plugin = self.plugins[-1]
+                self.activate_plugin(plugin)
+        return updated_plugins
+
 
     @log_calls('PluginManager')
     def init_plugins(self):
@@ -725,10 +768,7 @@ class PluginManager(metaclass=Singleton):
         plugin = self.plugins[-1]
         return plugin
 
-    def uninstall_plugin(self, plugin):
-        '''
-        Deactivate and remove plugin from `plugins` list
-        '''
+    def delete_plugin_files(self, plugin_path):
         def on_error(func, path, error):
             if func == os.path.islink:
             # if symlink
@@ -737,9 +777,15 @@ class PluginManager(metaclass=Singleton):
             # access is denied or other
             raise PluginsystemError(error[1][1])
 
+        rmtree(plugin_path, False, on_error)
+
+    def uninstall_plugin(self, plugin):
+        '''
+        Deactivate and remove plugin from `plugins` list
+        '''
         if plugin:
             self.remove_plugin(plugin)
-            rmtree(plugin.__path__, False, on_error)
+            self.delete_plugin_files(plugin.__path__)
             if self._plugin_has_entry_in_global_config(plugin):
                 self._remove_plugin_entry_in_global_config(plugin)
 
