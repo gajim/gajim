@@ -694,11 +694,7 @@ class PluginManager(metaclass=Singleton):
 
                     plugins_found.append(module_attr)
                 except TypeError:
-                    # set plugin localization
-                    try:
-                        module_attr._ = plugins_i18n._
-                    except AttributeError:
-                        pass
+                    pass
                 except configparser.NoOptionError:
                     # all fields are required
                     log.debug(
