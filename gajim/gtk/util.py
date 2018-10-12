@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Tuple
+from typing import Any
 
 import os
 import sys
@@ -35,9 +36,19 @@ log = logging.getLogger('gajim.gtk.util')
 
 
 class Builder:
-    def __init__(self, filename: str, widget: str = None) -> None:
+    def __init__(self,
+                 filename: str,
+                 widget: str = None,
+                 domain: str = None,
+                 gettext_: Any = None) -> None:
         self._builder = Gtk.Builder()
-        self._builder.set_translation_domain(i18n.DOMAIN)
+
+        if domain is None:
+            domain = i18n.DOMAIN
+        self._builder.set_translation_domain(domain)
+
+        if gettext_ is None:
+            gettext_ = _
 
         file_path = os.path.join(configpaths.get('GUI'), filename)
 
@@ -46,7 +57,8 @@ class Builder:
             tree = ET.parse(file_path)
             for node in tree.iter():
                 if 'translatable' in node.attrib and node.text is not None:
-                    node.text = _(node.text)
+                    node.text = gettext_(node.text)
+
             xml_text = ET.tostring(tree.getroot(),
                                    encoding='unicode',
                                    method='xml')

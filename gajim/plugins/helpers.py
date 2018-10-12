@@ -26,6 +26,9 @@ __all__ = ['log', 'log_calls', 'Singleton']
 import logging
 import functools
 
+from gajim.plugins import plugins_i18n
+from gajim.gtk.util import Builder
+
 log = logging.getLogger('gajim.plugin_system')
 '''
 Logger for code related to plug-in system.
@@ -130,3 +133,10 @@ class Singleton(type):
                 #'classname' : cls.__name__})
 
         return cls.instance
+
+
+def get_builder(file_name: str, widget: str = None) -> Builder:
+    return Builder(file_name,
+                   widget,
+                   domain=plugins_i18n.DOMAIN,
+                   gettext_=plugins_i18n._)
