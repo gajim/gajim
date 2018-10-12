@@ -12,8 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Tuple
 from typing import Any
+from typing import List
+from typing import Tuple
+
 
 import os
 import sys
@@ -38,7 +40,7 @@ log = logging.getLogger('gajim.gtk.util')
 class Builder:
     def __init__(self,
                  filename: str,
-                 widget: str = None,
+                 widgets: List[str] = None,
                  domain: str = None,
                  gettext_: Any = None) -> None:
         self._builder = Gtk.Builder()
@@ -63,16 +65,16 @@ class Builder:
                                    encoding='unicode',
                                    method='xml')
 
-            if widget is not None:
-                self._builder.add_objects_from_string(xml_text, [widget])
+            if widgets is not None:
+                self._builder.add_objects_from_string(xml_text, widgets)
             else:
                 # Workaround
                 # https://gitlab.gnome.org/GNOME/pygobject/issues/255
                 Gtk.Builder.__mro__[1].add_from_string(
                     self._builder, xml_text, len(xml_text.encode("utf-8")))
         else:
-            if widget is not None:
-                self._builder.add_objects_from_file(file_path, [widget])
+            if widgets is not None:
+                self._builder.add_objects_from_file(file_path, widgets)
             else:
                 self._builder.add_from_file(file_path)
 
@@ -83,8 +85,8 @@ class Builder:
             return self._builder.get_object(name)
 
 
-def get_builder(file_name: str, widget: str = None) -> Builder:
-    return Builder(file_name, widget)
+def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
+    return Builder(file_name, widgets)
 
 
 def load_icon(icon_name, widget, size=16, pixbuf=False,
