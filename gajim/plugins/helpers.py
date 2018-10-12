@@ -23,6 +23,8 @@ Helper code related to plug-ins management system.
 
 __all__ = ['log', 'log_calls', 'Singleton']
 
+from typing import List
+
 import logging
 import functools
 
@@ -135,8 +137,8 @@ class Singleton(type):
         return cls.instance
 
 
-def get_builder(file_name: str, widget: str = None) -> Builder:
+def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
     return Builder(file_name,
-                   widget,
+                   widgets,
                    domain=plugins_i18n.DOMAIN,
                    gettext_=plugins_i18n._)
