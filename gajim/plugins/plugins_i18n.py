@@ -15,6 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import locale
 import gettext
 
 from gajim.common import configpaths
@@ -28,3 +29,6 @@ try:
     _ = t.gettext
 except OSError:
     _ = gettext.gettext
+
+if hasattr(locale, 'bindtextdomain'):
+    locale.bindtextdomain(DOMAIN, plugins_locale_dir)  # type: ignore
