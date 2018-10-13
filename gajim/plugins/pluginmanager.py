@@ -179,7 +179,12 @@ class PluginManager(metaclass=Singleton):
         :todo: what about adding plug-ins that are already added? Module reload
         and adding class from reloaded module or ignoring adding plug-in?
         '''
-        plugin = plugin_class()
+        try:
+            plugin = plugin_class()
+        except Exception:
+            log.exception('Error while loading a plugin')
+            return
+
         if plugin not in self.plugins:
             if not self._plugin_has_entry_in_global_config(plugin):
                 self._create_plugin_entry_in_global_config(plugin)
