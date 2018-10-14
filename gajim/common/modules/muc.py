@@ -59,26 +59,26 @@ class MUC:
         presence = self._con.get_module('Presence').get_presence(
             *args, **kwargs)
 
+        muc_x = presence.setTag(nbxmpp.NS_MUC + ' x')
         if room_jid is not None:
-            self._add_history_query(presence, room_jid, rejoin)
+            self._add_history_query(muc_x, room_jid, rejoin)
 
         if password is not None:
-            presence.setTagData('password', password)
+            muc_x.setTagData('password', password)
 
         log.debug('Send MUC join presence:\n%s', presence)
 
         self._con.connection.send(presence)
 
-    def _add_history_query(self, presence, room_jid, rejoin):
+    def _add_history_query(self, muc_x, room_jid, rejoin):
         last_date = app.logger.get_room_last_message_time(
             self._account, room_jid)
         if not last_date:
             last_date = 0
 
-        history = presence.setTag(nbxmpp.NS_MUC + ' x')
         if muc_caps_cache.has_mam(room_jid):
             # The room is MAM capable dont get MUC History
-            history.setTag('history', {'maxchars': '0'})
+            muc_x.setTag('history', {'maxchars': '0'})
         else:
             # Request MUC History (not MAM)
             tags = {}
@@ -100,7 +100,7 @@ class MUC:
             if nb >= 0:
                 tags['maxstanzas'] = nb
             if tags:
-                history.setTag('history', tags)
+                muc_x.setTag('history', tags)
 
     def set_subject(self, room_jid, subject):
         if not app.account_is_connected(self._account):
