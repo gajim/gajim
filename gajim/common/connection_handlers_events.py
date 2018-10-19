@@ -30,6 +30,7 @@ from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.modules import dataforms
+from gajim.common.modules.misc import parse_idle
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
@@ -254,12 +255,7 @@ PresenceHelperEvent):
         if delay_tag:
             self._generate_timestamp(self.stanza.timestamp)
         # XEP-0319
-        self.idle_time = None
-        idle_tag = self.stanza.getTag('idle', namespace=nbxmpp.NS_IDLE)
-        if idle_tag:
-            time_str = idle_tag.getAttr('since')
-            tim = helpers.datetime_tuple(time_str)
-            self.idle_time = timegm(tim)
+        self.idle_time = parse_idle(self.stanza)
 
         xtags = self.stanza.getTags('x')
         for x in xtags:
