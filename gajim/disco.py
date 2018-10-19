@@ -405,6 +405,10 @@ class ServicesCache:
         Callback for when we receive an agent's info
         array is (agent, node, identities, features, data)
         """
+        if not identities:
+            # Ejabberd doesn't send identities when using admin nodes
+            identities = [{'category': 'server', 'type': 'im', 'name': node}]
+
         self._on_agent_info(str(from_), node, identities, features, data)
 
     def _disco_info_error(self, from_, error):
