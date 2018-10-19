@@ -17,7 +17,6 @@
 # pylint: disable=no-init
 # pylint: disable=attribute-defined-outside-init
 
-from calendar import timegm
 import logging
 from time import time as time_time
 
@@ -31,6 +30,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.modules import dataforms
 from gajim.common.modules.misc import parse_idle
+from gajim.common.modules.misc import parse_delay
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
@@ -87,18 +87,6 @@ class HelperEvent:
         if not self.gc_control:
             minimized = app.interface.minimized_controls[self.conn.name]
             self.gc_control = minimized.get(self.jid)
-
-    def _generate_timestamp(self, tag):
-        # Make sure we use only int/float Epoch time
-        if tag is None:
-            self.timestamp = time_time()
-            return
-        try:
-            tim = helpers.datetime_tuple(tag)
-            self.timestamp = timegm(tim)
-        except Exception:
-            log.error('wrong timestamp, ignoring it: %s', tag)
-            self.timestamp = time_time()
 
     def get_oob_data(self, stanza):
         oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
@@ -250,10 +238,12 @@ PresenceHelperEvent):
         self.user_nick = self.stanza.getTagData('nick') or ''
         self.contact_nickname = None
         self.transport_auto_auth = False
+
         # XEP-0203
-        delay_tag = self.stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2)
-        if delay_tag:
-            self._generate_timestamp(self.stanza.timestamp)
+        self.timestamp = parse_delay(self.stanza)
+        if self.timestamp is None:
+            self.timestamp = time_time()
+
         # XEP-0319
         self.idle_time = parse_idle(self.stanza)
 
