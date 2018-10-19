@@ -11,7 +11,8 @@
 - python3-openssl (>=0.14)
 - python3-cssutils (>=1.0.2)
 - python3-keyring
-
+- python3-idna
+- python3-precis-i18n
 
 ### Optional Runtime Requirements
 
@@ -25,7 +26,6 @@
 - gir1.2-gupnpigd-1.0 for better NAT traversing
 - gir1.2-networkmanager-1.0 for network lose detection
 - gir1.2-geoclue-2.0 for sharing your location
-- python3-idna and python3-precis-i18n for correctly parsing JIDs
 
 ### Compile-time Requirements
 

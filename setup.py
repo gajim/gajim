@@ -287,6 +287,8 @@ setup(
         'keyring',
         'nbxmpp>=0.6.8',
         'pyOpenSSL>=0.12',
-        'cssutils>=1.0.2'
+        'cssutils>=1.0.2',
+        'precis-i18n>=1.0.0',
+        'idna>=2.7',
     ]
 )
