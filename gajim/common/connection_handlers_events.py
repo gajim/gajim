@@ -264,9 +264,6 @@ PresenceHelperEvent):
                 self.is_gc = True
             elif namespace == nbxmpp.NS_SIGNED:
                 sig_tag = x
-            elif namespace == nbxmpp.NS_DELAY and not self.timestamp:
-                # XEP-0091
-                self._generate_timestamp(self.stanza.timestamp)
 
         self.status = self.stanza.getStatus() or ''
         self._generate_show()
