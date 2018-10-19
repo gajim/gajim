@@ -47,20 +47,16 @@ def is_muc_pm(message: nbxmpp.Node,
 
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:
-    # Convert a xs:boolean ('true', 'false', '1', '0', '')
-    # to a python boolean (True, False)
     if isinstance(value, bool):
         return value
 
-    if value in ('1', 'true'):
+    if value in ('1', 'true', 'True'):
         return True
 
-    # '0', 'false' or empty
-    if value in ('0', 'false', ''):
+    if value in ('0', 'false', 'False', ''):
         return False
 
-    raise ValueError(
-        'Cant convert %s to python boolean' % value)
+    raise ValueError('Cant convert %s to python boolean' % value)
 
 
 def to_xs_boolean(value: Union[bool, None]) -> str:
