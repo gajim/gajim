@@ -126,6 +126,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
                 type_ = 'jabber'
             if type_ == 'jabber':
                 self.uid_entry.set_text(jid)
+                transport = None
             else:
                 uid, transport = app.get_name_and_server_from_jid(jid)
                 self.uid_entry.set_text(uid.replace('%', '@', 1))
