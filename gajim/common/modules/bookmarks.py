@@ -166,6 +166,7 @@ class Bookmarks:
             autojoin_val = conf.getAttr('autojoin')
             if not autojoin_val:  # not there (it's optional)
                 autojoin_val = False
+
             minimize_val = conf.getTag('minimize', namespace=NS_GAJIM_BM)
             if not minimize_val:  # not there, try old Gajim behaviour
                 minimize_val = conf.getAttr('minimize')
@@ -189,19 +190,27 @@ class Bookmarks:
                             conf.getAttr('jid'))
                 continue
 
+            bookmark = {
+                'name': conf.getAttr('name'),
+                'password': conf.getTagData('password'),
+                'nick': conf.getTagData('nick'),
+                'print_status': print_status
+            }
+
+            try:
+                bookmark['autojoin'] = from_xs_boolean(autojoin_val)
+                bookmark['minimize'] = from_xs_boolean(minimize_val)
+            except ValueError as error:
+                log.warning(error)
+                continue
+
             if check_merge:
                 if jid in self.bookmarks:
                     continue
                 merged = True
 
             log.debug('Found Bookmark: %s', jid)
-            self.bookmarks[jid] = {
-                'name': conf.getAttr('name'),
-                'autojoin': from_xs_boolean(autojoin_val),
-                'minimize': from_xs_boolean(minimize_val),
-                'password': conf.getTagData('password'),
-                'nick': conf.getTagData('nick'),
-                'print_status': print_status}
+            self.bookmarks[jid] = bookmark
 
         return merged
 
