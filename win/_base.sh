@@ -103,6 +103,7 @@ python-axolotl
 qrcode
 cssutils
 precis-i18n
+idna
 "
 
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
