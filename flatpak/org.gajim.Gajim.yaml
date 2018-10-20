@@ -213,6 +213,15 @@ modules:
         url: https://files.pythonhosted.org/packages/6b/15/a9fb9010f58d1c55dd0b7779db2334feb9a572d407024f39a60f44293861/cssutils-1.0.2-py3-none-any.whl
         sha256: c74dbe19c92f5052774eadb15136263548dd013250f1ed1027988e7fef125c8d
 
+  - name: python3-precis_i18n
+    buildsystem: simple
+    build-commands:
+      - pip3 install --prefix=/app precis_i18n-1.0.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/08/9d/d32f1b7c6d280c82a786b629ba89bd9e3e8409b9e23a7309f76a78e46971/precis_i18n-1.0.0-py3-none-any.whl
+        sha256: f6942bbffec698d0d7e30c42f589f3f6da13e723d047997d0761a41facf2986f
+
   - name: gspell
     cleanup:
       - /bin
