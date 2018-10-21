@@ -11,7 +11,6 @@
 - python3-openssl (>=0.14)
 - python3-cssutils (>=1.0.2)
 - python3-keyring
-- python3-idna
 - python3-precis-i18n
 
 ### Optional Runtime Requirements
