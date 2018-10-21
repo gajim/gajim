@@ -209,7 +209,6 @@ class Config:
         'tabs_always_visible': [opt_bool, False, _('Show tab when only one conversation?')],
         'tabs_border': [opt_bool, False, _('Show tabbed notebook border in chat windows?')],
         'tabs_close_button': [opt_bool, True, _('Show close button in tab?')],
-        'esession_modp': [opt_str, '15,16,14', _('A list of modp groups to use in a Diffie-Hellman, highest preference first, separated by commas. Valid groups are 1, 2, 5, 14, 15, 16, 17 and 18. Higher numbers are more secure, but take longer to calculate when you start a session.')],
         'tooltip_status_online_color': [opt_color, '#73D216'],
         'tooltip_status_free_for_chat_color': [opt_color, '#3465A4'],
         'tooltip_status_away_color': [opt_color, '#EDD400'],
