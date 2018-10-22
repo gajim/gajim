@@ -275,7 +275,7 @@ def detect_dependencies():
     try:
         gi.require_version('GUPnPIgd', '1.0')
         from gi.repository import GUPnPIgd
-        GUPnPIgd.SimpleIgd()
+        gupnp_igd = GUPnPIgd.SimpleIgd()
         _dependencies['UPNP'] = True
     except ValueError:
         pass
