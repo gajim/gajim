@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkApplicationWindow" id="ExceptionDialog">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <child>
+      <placeholder/>
+    </child>
+    <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">12</property>
-        <property name="margin_right">12</property>
-        <property name="margin_top">12</property>
-        <property name="margin_bottom">12</property>
+        <property name="border_width">18</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkGrid" id="grid">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="row_spacing">20</property>
-            <property name="column_spacing">20</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkImage" id="image">
+              <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
@@ -31,59 +30,61 @@
                 <property name="icon_size">6</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="msglabel">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="valign">center</property>
-                <property name="hexpand">True</property>
-                <property name="label" translatable="yes">A programming error has been detected. It probably is not fatal, but should be reported to the developers nonetheless.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">60</property>
-                <property name="lines">3</property>
-                <attributes>
-                  <attribute name="font-desc" value="&lt;Geben Sie den Wert ein&gt; 12"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow">
-                <property name="height_request">150</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkTextView" id="exception_view">
+                  <object class="GtkLabel">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="editable">False</property>
-                    <property name="left_margin">4</property>
-                    <property name="right_margin">4</property>
-                    <property name="accepts_tab">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Sorry, that should not have happened</property>
+                    <style>
+                      <class name="large-header"/>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Gajim encountered an error. A report is shown below.
+By reporting this bug you might help people to fix this.</property>
+                    <property name="wrap">True</property>
+                    <property name="max_width_chars">60</property>
+                    <property name="lines">3</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">2</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
@@ -112,11 +113,15 @@
             </child>
             <child>
               <object class="GtkButton" id="report_btn">
-                <property name="label" translatable="yes">Report Bug</property>
+                <property name="label" translatable="yes">_Report Bug</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="on_report_clicked" swapped="no"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -132,10 +137,33 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="height_request">200</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="vexpand">True</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="exception_view">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="editable">False</property>
+                <property name="left_margin">4</property>
+                <property name="right_margin">4</property>
+                <property name="accepts_tab">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
       </object>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
 </interface>
