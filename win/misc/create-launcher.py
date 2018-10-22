@@ -87,10 +87,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_FrozenFlag = 1;
     Py_Initialize();
     PySys_SetArgvEx(__argc, szArglist, 0);
-    result = PyRun_SimpleString("import sys; import os;"
-                                "sys.frozen=True;"
-                                "from gajim import gajim;"
-                                "gajim.main();");
+    result = PyRun_SimpleString(
+        "import sys; import os;"
+        "sys.frozen=True;"
+        "from pathlib import Path;"
+        "root_path = Path(sys.executable).parents[1];"
+        "from ctypes import windll;"
+        "windll.kernel32.SetDllDirectoryW(str(root_path / 'bin'));"
+        "from gajim import gajim;"
+        "gajim.main();");
     Py_Finalize();
     return result;
 }
