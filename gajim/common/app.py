@@ -145,6 +145,8 @@ ZEROCONF_ACC_NAME = 'Local'
 idlequeue = None  # type: nbxmpp.idlequeue.IdleQueue
 socks5queue = None
 
+gupnp_igd = None
+
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
 gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
     nbxmpp.NS_MUC, nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC_ADMIN, nbxmpp.NS_MUC_OWNER,
@@ -275,6 +277,7 @@ def detect_dependencies():
     try:
         gi.require_version('GUPnPIgd', '1.0')
         from gi.repository import GUPnPIgd
+        global gupnp_igd
         gupnp_igd = GUPnPIgd.SimpleIgd()
         _dependencies['UPNP'] = True
     except ValueError:
