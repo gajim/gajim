@@ -1,4 +1,18 @@
-Gajim 1.0.99.1 (13 October 2018)
+Gajim 1.1.0 (TBA)
+
+  New
+
+  * Remove support for XEP-0091
+
+  Bug fixes
+
+  * 9322 Error when adding contact
+  * 9385 Ignore invalid bookmarks
+  * 9386 Discovery: Browsing nodes without identity
+  * 9393 Error when parsing invalid timestamps
+  * 9398 Error on jingle file transfer
+
+Gajim 1.0.99.1 (07 October 2018)
 
   New
 
