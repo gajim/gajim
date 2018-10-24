@@ -67,8 +67,8 @@ def _init_gtk():
               'Quitting...' % _MIN_GTK_VER)
         sys.exit(1)
 
-    from gajim import gtkexcepthook
-    gtkexcepthook.init()
+    from gajim.gtk import exception
+    exception.init()
 
     i18n.initialize_direction_mark()
 

@@ -23,25 +23,19 @@ import traceback
 import threading
 import webbrowser
 import platform
+from pathlib import Path
 from io import StringIO
 from urllib.parse import urlencode
 
+from gi.repository import Gtk
+from gi.repository import GObject
+from gi.repository import GLib
+
 import nbxmpp
-from gi.repository import Gtk, GObject
 
-try:
-    import gajim
-    gajim_version = gajim.__version__
-except ImportError:
-    # For standalone testing
-    gajim_version = 'Package not installed'
-
-if __name__ == '__main__':
-    glade_file = os.path.join('data', 'gui', 'exception_dialog.ui')
-else:
-    from gajim.common import configpaths
-    gui_path = configpaths.get('GUI')
-    glade_file = os.path.join(gui_path, 'exception_dialog.ui')
+import gajim
+from gajim.common import configpaths
+from gajim.gtk.util import get_builder
 
 
 _exception_in_progress = threading.Lock()
@@ -50,6 +44,7 @@ ISSUE_TEXT = '''## Versions
 - OS: {}
 - GTK+ Version: {}
 - PyGObject Version: {}
+- GLib Version : {}
 - python-nbxmpp Version: {}
 - Gajim Version: {}
 
@@ -74,22 +69,21 @@ def _hook(type_, value, tb):
 
 class ExceptionDialog():
     def __init__(self, type_, value, tb):
-        builder = Gtk.Builder()
-        builder.add_from_file(glade_file)
-        self.dialog = builder.get_object("ExceptionDialog")
-        builder.connect_signals(self)
-        builder.get_object("report_btn").grab_focus()
-        self.exception_view = builder.get_object("exception_view")
-        buffer_ = self.exception_view.get_buffer()
+        path = Path(configpaths.get('GUI')) / 'exception_dialog.ui'
+        self._ui = get_builder(path.resolve())
+        self._ui.connect_signals(self)
+
+        self._ui.report_btn.grab_focus()
+
+        buffer_ = self._ui.exception_view.get_buffer()
         trace = StringIO()
         traceback.print_exception(type_, value, tb, None, trace)
         self.text = self.get_issue_text(trace.getvalue())
         buffer_.set_text(self.text)
         print(self.text)
-        self.exception_view.set_editable(False)
-        self.dialog.show()
-        if __name__ == '__main__':
-            self.dialog.connect('delete-event', self._on_delete_event)
+
+        self._ui.exception_view.set_editable(False)
+        self._ui.exception_dialog.show()
 
     def on_report_clicked(self, *args):
         issue_url = 'https://dev.gajim.org/gajim/gajim/issues/new'
@@ -98,25 +92,23 @@ class ExceptionDialog():
         webbrowser.open(url, new=2)
 
     def on_close_clicked(self, *args):
-        self.dialog.destroy()
-        if __name__ == '__main__':
-            Gtk.main_quit()
+        self._ui.exception_dialog.destroy()
 
-    def _on_delete_event(self, *args):
-        Gtk.main_quit()
-
-    def get_issue_text(self, traceback_text):
+    @staticmethod
+    def get_issue_text(traceback_text):
         gtk_ver = '%i.%i.%i' % (
             Gtk.get_major_version(),
             Gtk.get_minor_version(),
             Gtk.get_micro_version())
         gobject_ver = '.'.join(map(str, GObject.pygobject_version))
+        glib_ver =  '.'.join(map(str, GLib.glib_version))
 
         return ISSUE_TEXT.format(get_os_info(),
                                  gtk_ver,
                                  gobject_ver,
+                                 glib_ver,
                                  nbxmpp.__version__,
-                                 gajim_version,
+                                 gajim.__version__,
                                  traceback_text)
 
 
@@ -135,11 +127,3 @@ def get_os_info():
         except ImportError:
             return platform.system()
     return ''
-
-
-# this is just to assist testing (python3 gtkexcepthook.py)
-if __name__ == '__main__':
-    init()
-    print(sys.version)
-    ExceptionDialog(None, None, None)
-    Gtk.main()
