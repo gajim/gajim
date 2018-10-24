@@ -101,7 +101,7 @@ class ExceptionDialog():
             Gtk.get_minor_version(),
             Gtk.get_micro_version())
         gobject_ver = '.'.join(map(str, GObject.pygobject_version))
-        glib_ver =  '.'.join(map(str, GLib.glib_version))
+        glib_ver = '.'.join(map(str, GLib.glib_version))
 
         return ISSUE_TEXT.format(get_os_info(),
                                  gtk_ver,
