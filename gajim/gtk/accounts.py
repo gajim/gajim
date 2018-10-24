@@ -396,7 +396,7 @@ class Account(Gtk.Box):
             self.options = AccountPage(account, parent)
         self.parent = parent
 
-        self.label = Gtk.Label(app.get_account_label(account))
+        self.label = Gtk.Label(label=app.get_account_label(account))
         self.label.set_halign(Gtk.Align.START)
         self.label.set_hexpand(True)
 
