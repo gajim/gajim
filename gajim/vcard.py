@@ -34,6 +34,7 @@ from gi.repository import GLib
 from gi.repository import Gdk
 
 from gajim import gtkgui_helpers
+from gajim.gui_menu_builder import show_save_as_menu
 from gajim.common import helpers
 from gajim.common import app
 from gajim.common import ged
@@ -160,8 +161,6 @@ class VcardWindow:
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = Gtk.Menu()
-            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             if self.gc_contact:
                 sha = self.gc_contact.avatar_sha
                 name = self.gc_contact.get_shown_name()
@@ -171,14 +170,7 @@ class VcardWindow:
                 name = self.contact.get_shown_name()
             if sha is None:
                 sha = self.avatar
-            menuitem.connect('activate',
-                gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
-            menu.append(menuitem)
-            menu.connect('selection-done', lambda w: w.destroy())
-            # show the menu
-            menu.show_all()
-            menu.attach_to_widget(widget, None)
-            menu.popup(None, None, None, None, event.button, event.time)
+            show_save_as_menu(sha, name)
 
     def set_value(self, entry_name, value):
         try:
@@ -512,17 +504,8 @@ class ZeroconfVcardWindow:
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = Gtk.Menu()
-            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
-            menuitem.connect('activate',
-                    gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                    self.contact.avatar_sha, self.contact.get_shown_name())
-            menu.append(menuitem)
-            menu.connect('selection-done', lambda w: w.destroy())
-            # show the menu
-            menu.show_all()
-            menu.attach_to_widget(widget, None)
-            menu.popup(None, None, None, None, event.button, event.time)
+            show_save_as_menu(self.contact.avatar_sha,
+                              self.contact.get_shown_name())
 
     def set_value(self, entry_name, value):
         try:

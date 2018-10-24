@@ -31,6 +31,7 @@ from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
 from gajim import gtkgui_helpers
+from gajim.gui_menu_builder import show_save_as_menu
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -154,25 +155,13 @@ class ProfileWindow(Gtk.ApplicationWindow):
         """
         If right-clicked, show popup
         """
-
         if event.button == 3:
             # right click
-            menu = Gtk.Menu()
-
             nick = app.config.get_per('accounts', self.account, 'name')
             if self.avatar_sha is None:
                 return
-            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
-            menuitem.connect(
-                'activate',
-                gtkgui_helpers.on_avatar_save_as_menuitem_activate,
-                self.avatar_sha, nick)
-            menu.append(menuitem)
-            menu.connect('selection-done', lambda w: w.destroy())
-            # show the menu
-            menu.show_all()
-            menu.attach_to_widget(widget, None)
-            menu.popup(None, None, None, None, event.button, event.time)
+            show_save_as_menu(self.avatar_sha, nick)
+            
         elif event.button == 1:  # left click
             self.on_set_avatar_button_clicked(widget)
 

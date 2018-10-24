@@ -568,8 +568,6 @@ class ChatControl(ChatControlBase):
         If right-clicked, show popup
         """
         if event.button == 3: # right click
-            menu = Gtk.Menu()
-            menuitem = Gtk.MenuItem.new_with_mnemonic(_('Save _As'))
             if self.TYPE_ID == message_control.TYPE_CHAT:
                 sha = app.contacts.get_avatar_sha(
                     self.account, self.contact.jid)
@@ -577,16 +575,7 @@ class ChatControl(ChatControlBase):
             else:
                 sha = self.gc_contact.avatar_sha
                 name = self.gc_contact.get_shown_name()
-            id_ = menuitem.connect('activate',
-                gtkgui_helpers.on_avatar_save_as_menuitem_activate, sha, name)
-            self.handlers[id_] = menuitem
-            menu.append(menuitem)
-            menu.show_all()
-            menu.connect('selection-done', lambda w: w.destroy())
-            # show the menu
-            menu.show_all()
-            menu.attach_to_widget(widget, None)
-            menu.popup(None, None, None, None, event.button, event.time)
+            gui_menu_builder.show_save_as_menu(sha, name)
         return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
