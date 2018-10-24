@@ -161,7 +161,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             if self.avatar_sha is None:
                 return
             show_save_as_menu(self.avatar_sha, nick)
-            
+
         elif event.button == 1:  # left click
             self.on_set_avatar_button_clicked(widget)
 
