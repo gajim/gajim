@@ -22,7 +22,6 @@
 import os
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 from gajim import dialogs
 from gajim import tooltips
@@ -30,6 +29,7 @@ from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
+from gajim.gtk.util import get_builder
 from gajim.gtk.single_message import SingleMessageWindow
 
 
@@ -45,9 +45,9 @@ class StatusIcon:
         # click somewhere else does not popdown menu. workaround this.
         self.added_hide_menuitem = False
         self.status = 'offline'
-        self.xml = gtkgui_helpers.get_gtk_builder('systray_context_menu.ui')
-        self.systray_context_menu = self.xml.get_object('systray_context_menu')
-        self.xml.connect_signals(self)
+        self._ui = get_builder('systray_context_menu.ui')
+        self.systray_context_menu = self._ui.systray_context_menu
+        self._ui.connect_signals(self)
         self.popup_menus = []
         self.status_icon = None
         self.tooltip = tooltips.NotificationAreaTooltip()
@@ -83,21 +83,15 @@ class StatusIcon:
         if not self.status_icon:
             self.status_icon = Gtk.StatusIcon()
             self.status_icon.set_property('has-tooltip', True)
-            self.status_icon.connect('activate',
-                self.on_status_icon_left_clicked)
-            self.status_icon.connect('popup-menu',
-                self.on_status_icon_right_clicked)
-            self.status_icon.connect('query-tooltip',
-                self.on_status_icon_query_tooltip)
+            self.status_icon.connect('activate', self._on_activate)
+            self.status_icon.connect('popup-menu', self._on_popup_menu)
+            self.status_icon.connect('query-tooltip', self._on_query_tooltip)
             self.status_icon.connect('size-changed', self.set_img)
 
         self.set_img()
         self.subscribe_events()
 
-    def on_status_icon_right_clicked(self, widget, event_button, event_time):
-        self.make_menu(event_button, event_time)
-
-    def on_status_icon_query_tooltip(self, widget, x, y, keyboard_mode, tooltip):
+    def _on_query_tooltip(self, _status_icon, _x, _y, _keyboard_mode, tooltip):
         tooltip.set_custom(self.tooltip.get_tooltip())
         return True
 
@@ -105,7 +99,15 @@ class StatusIcon:
         self.status_icon.set_visible(False)
         self.unsubscribe_events()
 
-    def on_status_icon_left_clicked(self, widget):
+    def _on_popup_menu(self, _status_icon, button, activate_time):
+        if button == 1: # Left click
+            self.on_left_click()
+        elif button == 2: # middle click
+            self.on_middle_click()
+        elif button == 3: # right click
+            self.make_menu(button, activate_time)
+
+    def _on_activate(self, _status_icon):
         self.on_left_click()
 
     def on_status_icon_size_changed(self, statusicon, size):
@@ -173,13 +175,12 @@ class StatusIcon:
         for m in self.popup_menus:
             m.destroy()
 
-        chat_with_menuitem = self.xml.get_object('chat_with_menuitem')
-        single_message_menuitem = self.xml.get_object(
-                'single_message_menuitem')
-        status_menuitem = self.xml.get_object('status_menu')
-        join_gc_menuitem = self.xml.get_object('join_gc_menuitem')
-        sounds_mute_menuitem = self.xml.get_object('sounds_mute_menuitem')
-        show_roster_menuitem = self.xml.get_object('show_roster_menuitem')
+        chat_with_menuitem = self._ui.chat_with_menuitem
+        single_message_menuitem = self._ui.single_message_menuitem
+        status_menuitem = self._ui.status_menu
+        join_gc_menuitem = self._ui.join_gc_menuitem
+        sounds_mute_menuitem = self._ui.sounds_mute_menuitem
+        show_roster_menuitem = self._ui.show_roster_menuitem
 
         if self.single_message_handler_id:
             single_message_menuitem.handler_disconnect(
@@ -411,17 +412,6 @@ class StatusIcon:
             win.hide()
         else:
             win.present()
-
-    def on_clicked(self, widget, event):
-        self.on_tray_leave_notify_event(widget, None)
-        if event.type_ != Gdk.EventType.BUTTON_PRESS:
-            return
-        if event.button == 1: # Left click
-            self.on_left_click()
-        elif event.button == 2: # middle click
-            self.on_middle_click()
-        elif event.button == 3: # right click
-            self.make_menu(event.button, event.time)
 
     def on_show_menuitem_activate(self, widget, show):
         # we all add some fake (we cannot select those nor have them as show)

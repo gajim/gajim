@@ -2737,7 +2737,7 @@ class Interface:
 
         self.systray_enabled = False
 
-        from gajim import statusicon
+        from gajim.gtk import statusicon
         self.systray = statusicon.StatusIcon()
 
         pixs = []
