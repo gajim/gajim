@@ -163,6 +163,8 @@ class PluginManager(metaclass=Singleton):
             if activate:
                 pc = self.scan_dir_for_plugins(dst_dir, scan_dirs=True,
                     package=True)
+                if not pc:
+                    continue
                 self.add_plugin(pc[0])
                 plugin = self.plugins[-1]
                 self.activate_plugin(plugin)
