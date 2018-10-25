@@ -24,7 +24,7 @@ gi.require_version('Geoclue', '2.0')
 from gi.repository import Geoclue
 from gi.repository import GLib
 
-log = logging.getLogger('gajim.c.location_listener')
+log = logging.getLogger('gajim.c.dbus.location')
 
 
 class LocationListener:
