@@ -38,7 +38,7 @@ class MessageTextView(Gtk.TextView):
     chat/groupchat windows
     """
     __gsignals__ = {
-        'text-changed': (GObject.SIGNAL_RUN_LAST, None, (Gtk.TextBuffer,))
+        'text-changed': (GObject.SignalFlags.RUN_LAST, None, (Gtk.TextBuffer,))
     }
 
     UNDO_LIMIT = 20
