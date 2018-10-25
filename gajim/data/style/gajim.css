@@ -119,6 +119,10 @@ list.settings > row > box {
     margin: 6px 18px;
 }
 
+/* Preferences Window */
+.PreferencesWindow { background-color: @theme_base_color; }
+.PreferencesStack { background-color: @theme_bg_color; }
+
 /* Accounts Window */
 #AccountsWindow > box > stack { padding:30px 30px 30px 30px;}
 #AccountsWindow scrolledwindow {border: none;}
