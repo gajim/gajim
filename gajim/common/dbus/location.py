@@ -21,6 +21,8 @@ from gi.repository import GLib
 
 from gajim.common import app
 
+if app.is_installed('GEOCLUE'):
+    from gi.repository import Geoclue
 
 log = logging.getLogger('gajim.c.dbus.location')
 
@@ -104,6 +106,5 @@ def enable():
         log.warning('GeoClue not installed')
         return
 
-    from gi.repository import Geoclue
     listener = LocationListener.get()
     listener.start()
