@@ -14,15 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
 import logging
+from datetime import datetime
+
+from gi.repository import GLib
 
 from gajim.common import app
 
-import gi
-gi.require_version('Geoclue', '2.0')
-from gi.repository import Geoclue
-from gi.repository import GLib
 
 log = logging.getLogger('gajim.c.dbus.location')
 
@@ -102,5 +100,10 @@ class LocationListener:
 
 
 def enable():
+    if not app.is_installed('GEOCLUE'):
+        log.warning('GeoClue not installed')
+        return
+
+    from gi.repository import Geoclue
     listener = LocationListener.get()
     listener.start()
