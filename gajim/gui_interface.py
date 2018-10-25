@@ -56,11 +56,7 @@ except Exception:
 
 from gajim.common import app
 from gajim.common import events
-
-from gajim.music_track_listener import MusicTrackListener
-
-if app.is_installed('GEOCLUE'):
-    from gajim.common import location_listener
+from gajim.common import dbus
 
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
@@ -1118,7 +1114,7 @@ class Interface:
         # enable location listener
         if (pep_supported and app.is_installed('GEOCLUE') and
                 app.config.get_per('accounts', account, 'publish_location')):
-            location_listener.enable()
+            dbus.location.enable()
 
     @staticmethod
     def show_httpupload_progress(file):
@@ -2083,14 +2079,14 @@ class Interface:
 
 
     def enable_music_listener(self):
-        listener = MusicTrackListener.get()
+        listener = dbus.music_track.MusicTrackListener.get()
         if not self.music_track_changed_signal:
             self.music_track_changed_signal = listener.connect(
                 'music-track-changed', self.music_track_changed)
             listener.start()
 
     def disable_music_listener(self):
-        listener = MusicTrackListener.get()
+        listener = dbus.music_track.MusicTrackListener.get()
         listener.disconnect(self.music_track_changed_signal)
         self.music_track_changed_signal = None
         listener.stop()
@@ -2726,7 +2722,7 @@ class Interface:
         # Handle screensaver
         if sys.platform == 'linux':
             from gajim import logind_listener  # pylint: disable=unused-variable
-            from gajim import screensaver_listener  # pylint: disable=unused-variable
+            dbus.screensaver.enable()
 
         self.show_vcard_when_connect = []
 

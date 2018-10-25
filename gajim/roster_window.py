@@ -62,7 +62,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 if app.is_installed('GEOCLUE'):
-    from gajim.common import location_listener
+    from gajim.common import dbus
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 
@@ -3659,7 +3659,7 @@ class RosterWindow:
         active = widget.get_active()
         app.config.set_per('accounts', account, 'publish_location', active)
         if active:
-            location_listener.enable()
+            dbus.location.enable()
         else:
             app.connections[account].get_module('UserLocation').send(None)
 

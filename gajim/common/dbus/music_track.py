@@ -24,7 +24,7 @@ import logging
 from gi.repository import GObject
 from gi.repository import Gio, GLib
 
-log = logging.getLogger('gajim.music_track_listener')
+log = logging.getLogger('gajim.c.dbus.music_track')
 
 MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 
