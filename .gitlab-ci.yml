@@ -24,6 +24,11 @@ run-pylint:
     - pylint --version
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
 
+run-appdata:
+  stage: test
+  script:
+    - appstream-util validate data/org.gajim.Gajim.appdata.xml.in
+
 run-build:
   stage: build
   script:
