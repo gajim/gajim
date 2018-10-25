@@ -69,13 +69,8 @@ def tree_model_pre_order(model, treeiter):
 
 class AdvancedConfig:
     def __init__(self, transient):
-        self.xml = get_builder('advanced_configuration_window.ui')
-        self.window = self.xml.get_object('advanced_configuration_window')
-        self.window.set_transient_for(transient)
-        self.entry = self.xml.get_object('advanced_entry')
-        self.desc_label = self.xml.get_object('advanced_desc_label')
-        self.restart_box = self.xml.get_object('restart_box')
-        self.reset_button = self.xml.get_object('reset_button')
+        self._ui = get_builder('advanced_configuration_window.ui')
+        self._ui.advanced_configuration_window.set_transient_for(transient)
 
         # Format:
         # key = option name (root/subopt/opt separated by \n then)
@@ -90,7 +85,7 @@ class AdvancedConfig:
                 'string': _('Text'),
                 'color': _('Color')}
 
-        treeview = self.xml.get_object('advanced_treeview')
+        treeview = self._ui.advanced_treeview
         self.treeview = treeview
         self.model = Gtk.TreeStore(str, str, str)
         self.fill_model()
@@ -121,13 +116,12 @@ class AdvancedConfig:
 
         treeview.set_model(self.modelfilter)
 
-        # connect signal for selection change
+        # Connect signal for selection change
         treeview.get_selection().connect('changed',
                 self.on_advanced_treeview_selection_changed)
 
-        self.xml.connect_signals(self)
-        self.restart_box.set_no_show_all(True)
-        self.window.show_all()
+        self._ui.connect_signals(self)
+        self._ui.advanced_configuration_window.show_all()
         app.interface.instances['advanced_config'] = self
 
     def cb_value_column_data(self, col, cell, model, iter_, data):
@@ -168,17 +162,17 @@ class AdvancedConfig:
             elif len(opt_path) == 1:
                 desc = app.config.get_desc(opt_path[0])
             if desc:
-                self.desc_label.set_text(desc)
+                self._ui.description.set_text(desc)
             else:
-                #we talk about option description in advanced configuration editor
-                self.desc_label.set_text(_('(None)'))
+                # We talk about option description in advanced configuration editor
+                self._ui.description.set_text(_('(None)'))
             if len(opt_path) == 3 or (len(opt_path) == 1 and not \
             model.iter_has_child(iter_)):
-                self.reset_button.set_sensitive(True)
+                self._ui.reset_button.set_sensitive(True)
             else:
-                self.reset_button.set_sensitive(False)
+                self._ui.reset_button.set_sensitive(False)
         else:
-            self.reset_button.set_sensitive(False)
+            self._ui.reset_button.set_sensitive(False)
 
     def remember_option(self, option, oldval, newval):
         if option in self.changed_opts:
@@ -211,7 +205,7 @@ class AdvancedConfig:
             self.check_for_restart()
 
     def check_for_restart(self):
-        self.restart_box.hide()
+        self._ui.restart_warning.hide()
         for opt in self.changed_opts:
             opt_path = opt.split('\n')
             if len(opt_path) == 3:
@@ -221,12 +215,12 @@ class AdvancedConfig:
                 restart = app.config.get_restart(opt_path[0])
             if restart:
                 if self.changed_opts[opt][0] != self.changed_opts[opt][1]:
-                    self.restart_box.set_no_show_all(False)
-                    self.restart_box.show_all()
+                    self._ui.restart_warning.set_no_show_all(False)
+                    self._ui.restart_warning.show()
                     break
 
     def on_config_edited(self, cell, path, text):
-        # convert modelfilter path to model path
+        # Convert modelfilter path to model path
         path = Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         modelrow = self.model[modelpath]
@@ -287,7 +281,7 @@ class AdvancedConfig:
                 self.on_config_edited(None, path.to_string(), str(default))
 
     def on_advanced_close_button_clicked(self, widget):
-        self.window.destroy()
+        self._ui.advanced_configuration_window.destroy()
 
     def fill_model(self, node=None, parent=None):
         for item, option in app.config.get_children(node):
@@ -314,7 +308,7 @@ class AdvancedConfig:
                 self.model.append(parent, [name, value, type_])
 
     def visible_func(self, model, treeiter, data):
-        search_string = self.entry.get_text().lower()
+        search_string = self._ui.advanced_entry.get_text().lower()
         for it in tree_model_pre_order(model, treeiter):
             if model[it][Column.TYPE] != '':
                 opt_path = self.get_option_path(model, it)
