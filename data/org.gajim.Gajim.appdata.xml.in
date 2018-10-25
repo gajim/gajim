@@ -7,32 +7,37 @@
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>Gajim</name>
-  <summary>A GTK+ Jabber client</summary>
+  <summary>A GTK+ XMPP client</summary>
   <description>
-    <p>Gajim is a chat client to be used with Jabber.org, Live Journal Talk,
-    Nimbuzz, Ovi, Talkonaut, and thousands of other services
-    run by companies and ISPs, and volunteers around the world.
+    <p>Gajim aims to be an easy to use and fully-featured XMPP client. 
+    With Gajim you can chat through various XMPP services of your choice 
+    (e.g. Jabber.org) as well as transports (e.g. Facebook, IRC).
     </p>
-    <p>If you have a few accounts on different servers, if you want to be in
-    contact with your friends and family all the time, then Gajim is for you.
+    <p>Just chat with your friends or family, easily share pictures and 
+    thoughts or discuss the news with your groups.
+    </p>
+    <p>Gajim integrates well with your other devices: just chat and see what's
+    been said on your mobile device.
     </p>
     <p>Features:</p>
     <ul>
-      <li>Tabbed chat window and single window modes</li>
-      <li>Group chat support (with Multi-User Chat protocol), invitation, chat to group chat transformation</li>
-      <li>Emojis, avatars, PEP (user activity, mood and tune)</li>
-      <li>Audio / video conferences</li>
-      <li>File transfer, room bookmarks</li>
-      <li>Metacontacts support</li>
-      <li>Trayicon, speller, extended chat history functionalities</li>
-      <li>TLS, GPG and End-To-End encryption support</li>
-      <li>Transport registration support</li>
-      <li>Service discovery including nodes, user search</li>
-      <li>Wikipedia, dictionary and search engine lookup</li>
-      <li>Multiple accounts support</li>
-      <li>XML console interface</li>
-      <li>Link local (bonjour / zeroconf), BOSH</li>
-      <li>Other features via plugins </li>
+      <li>Never miss a message, keep all your chat clients synchronized</li>
+      <li>Invite friends to group chats or join one</li>
+      <li>Easily send pictures, videos or other files to friends and groups</li>
+      <li>Chat securely with End-to-End encryption via OMEMO or PGP</li>
+      <li>Use your favorite emoticons, set your own profile picture</li>
+      <li>Keep and manage all your chat history</li>
+      <li>Organize your chats with tabs</li>
+      <li>Automatic spell-checking for your messages</li>
+      <li>Connect to other Messengers via Transports (Facebook, IRC, ...)</li>
+      <li>Lookup things on Wikipedia, dictionaries or other search engines directly from the chat window</li>
+      <li>Set your activity, tune, and mood to show your friends how you are feeling</li>
+      <li>Support for multiple accounts</li>
+      <li>Group multiple contacts from one friend to a single Meta-Contact</li>
+      <li>XML console to see what's happening on the protocol layer</li>
+      <li>Serverless messaging (Bonjour/Zeroconf), BOSH</li>
+      <li>Support for service discovery including nodes and search for users</li>
+      <li>Even more features via plugins</li>
     </ul>
   </description>
   <categories>
@@ -43,7 +48,7 @@
   </categories>
   <screenshots>
     <screenshot type="default">
-      <image>https://gajim.org/imgs/gajim_roster.png</image>
+      <image>https://gajim.org/imgs/gajim_single_window_mode.png</image>
       <caption>Roster, list of contacts</caption>
     </screenshot>
     <screenshot>
@@ -69,7 +74,7 @@
   <url type="homepage">https://gajim.org/</url>
   <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
   <url type="faq">https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq</url>
-  <url type="help">https://dev.gajim.org/gajim/gajim/wikis/help/home</url>
+  <url type="help">https://dev.gajim.org/gajim/gajim/wikis/help/Help</url>
   <url type="donation">https://gajim.org/dev.php#donate</url>
   <url type="translate">https://dev.gajim.org/gajim/gajim/wikis/development/DevTranslate</url>
   <translation type="gettext">gajim</translation>
