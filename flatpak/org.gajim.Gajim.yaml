@@ -69,54 +69,6 @@ modules:
         url: https://files.pythonhosted.org/packages/e7/a7/4cd50e57cc6f436f1cc3a7e8fa700ff9b8b4d471620629074913e3735fb2/cffi-1.11.5.tar.gz
         sha256: e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4
 
-  - name: python3-six
-    buildsystem: simple
-    build-commands:
-      - pip3 install --prefix=/app six-1.11.0-py2.py3-none-any.whl
-    sources:
-      - type: file
-        url: https://pypi.python.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
-        sha256: 832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb
-
-  - name: python3-pyparsing
-    buildsystem: simple
-    build-commands:
-      - pip3 install --prefix=/app pyparsing-2.2.2-py2.py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/2b/4a/f06b45ab9690d4c37641ec776f7ad691974f4cf6943a73267475b05cbfca/pyparsing-2.2.2-py2.py3-none-any.whl
-        sha256: d29593d8ebe7b57d6967b62494f8c72b03ac0262b1eed63826c6f788b3606401
-
-  - name: python3-packaging
-    buildsystem: simple
-    build-commands:
-      - pip3 install --prefix=/app packaging-18.0-py2.py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/89/d1/92e6df2e503a69df9faab187c684585f0136662c12bb1f36901d426f3fab/packaging-18.0-py2.py3-none-any.whl
-        sha256: f95a1e147590f204328170981833854229bb2912ac3d5f89e2a8ccd2834800c9
-
-  - name: python3-appdirs
-    buildsystem: simple
-    build-commands:
-      - pip3 install --prefix=/app appdirs-1.4.3-py2.py3-none-any.whl
-    sources:
-      - type: file
-        url: https://pypi.python.org/packages/56/eb/810e700ed1349edde4cbdc1b2a21e28cdf115f9faf263f6bbf8447c1abf3/appdirs-1.4.3-py2.py3-none-any.whl
-        sha256: d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e
-
-  - name: python3-setuptools
-    ensure-writable:
-      - easy-install.pth
-      - setuptools.pth
-    buildsystem: simple
-    build-commands:
-      - python3 setup.py install --prefix=/app
-    sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/6e/9c/6a003320b00ef237f94aa74e4ad66c57a7618f6c79d67527136e2544b728/setuptools-40.4.3.zip
-        sha256: acbc5740dd63f243f46c2b4b8e2c7fd92259c2ddb55a4115b16418a2ed371b15
-
   - name: python3-asn1crypto
     buildsystem: simple
     build-commands:
@@ -229,14 +181,6 @@ modules:
       - type: archive
         url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.1.tar.xz
         sha256: 819a1d23c7603000e73f5e738bdd284342e0cd345fb0c7650999c31ec741bbe5
-    modules:
-      - name: enchant2
-        cleanup:
-          - /bin
-        sources:
-          - type: archive
-            url: https://github.com/AbiWord/enchant/releases/download/v2.2.3/enchant-2.2.3.tar.gz
-            sha256: abd8e915675cff54c0d4da5029d95c528362266557c61c7149d53fa069b8076d
 
   - name: python3-nbxmpp
     buildsystem: simple
