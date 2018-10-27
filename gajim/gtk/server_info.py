@@ -18,6 +18,7 @@ from datetime import timedelta
 
 import nbxmpp
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import ged
@@ -50,8 +51,17 @@ class ServerInfoDialog(Gtk.Dialog):
         self.feature_listbox.set_header_func(self.header_func, 'Features')
         grid.attach(self.feature_listbox, 0, 1, 1, 1)
 
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard_button = Gtk.Button(halign=Gtk.Align.END)
+        clp_image = Gtk.Image.new_from_icon_name('edit-copy-symbolic',
+                                                 Gtk.IconSize.BUTTON)
+        clipboard_button.set_image(clp_image)
+        clipboard_button.set_tooltip_text(_('Copy info to clipboard'))
+        clipboard_button.connect('clicked', self.on_clipboard_button_clicked)
+
         box = self.get_content_area()
         box.pack_start(grid, True, True, 0)
+        box.pack_start(clipboard_button, False, True, 0)
         box.set_property('margin', 12)
         box.set_spacing(18)
 
@@ -192,6 +202,24 @@ class ServerInfoDialog(Gtk.Dialog):
             Info(_('Hostname'), self.hostname, None),
             Info(_('Server Software'), self.version, None),
             Info(_('Server Uptime'), self.uptime, None)]
+
+    def on_clipboard_button_clicked(self, widget):
+        server_software = 'Server Software: %s\n' % self.get_infos()[1].value
+        server_features = ''
+
+        for feature in self.get_features():
+            if feature.available:
+                available = 'Yes'
+            else:
+                available = 'No'
+            if feature.tooltip != '':
+                tooltip = '(%s)' % feature.tooltip
+            else:
+                tooltip = ''
+            server_features += '%s: %s %s\n' % (feature.name, available, tooltip)
+
+        clipboard_text = server_software + server_features
+        self.clipboard.set_text(clipboard_text, -1)
 
     def on_response(self, dialog, response):
         if response == Gtk.ResponseType.OK:
