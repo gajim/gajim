@@ -20,15 +20,13 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
+from collections import namedtuple
 
 import gi
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.i18n import Q_
 from gajim.common.i18n import _
-
-from gajim.gtk.util import get_builder
 
 
 class FeaturesDialog(Gtk.Dialog):
@@ -36,125 +34,133 @@ class FeaturesDialog(Gtk.Dialog):
         flags = Gtk.DialogFlags.DESTROY_WITH_PARENT
         super().__init__(_('Features'), None, flags)
 
-        self.connect('key-press-event', self.on_key_press_event)
         self.set_transient_for(app.interface.roster.window)
+        self.set_resizable(False)
 
-        self.builder = get_builder('features_window.ui')
-        content = self.get_content_area()
-        content.add(self.builder.get_object('features_box'))
+        grid = Gtk.Grid()
+        grid.set_name('FeaturesInfoGrid')
+        grid.set_row_spacing(10)
+        grid.set_hexpand(True)
 
-        treeview = self.builder.get_object('features_treeview')
-        self.desc_label = self.builder.get_object('feature_desc_label')
+        self.feature_listbox = Gtk.ListBox()
+        self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.feature_listbox.set_header_func(self.header_func, _('Features'))
 
-        # {name: (available_function, unix_text, windows_text)}
-        self.features = {
-            _('Bonjour / Zeroconf'): (
-                self.zeroconf_available,
-                _('Serverless chatting with autodetected clients in a local network.'),
-                _('Requires python-dbus.'),
-                _('Requires pybonjour and bonjour SDK running (%(url)s)') % {'url': 'https://developer.apple.com/opensource/).'}),
-            _('Command line'): (
-                self.dbus_available,
-                _('A script to control Gajim via commandline.'),
-                _('Requires python-dbus.'),
-                _('Feature not available under Windows.')),
-            _('OpenPGP message encryption'): (
-                self.gpg_available,
-                _('Ability to encrypting chat messages with OpenPGP.'),
-                _('Requires gpg and python-gnupg (%(url)s).') % {'url': 'https://bitbucket.org/vinay.sajip/python-gnupg'},
-                _('Requires gpg.exe in PATH.')),
-            _('Password encryption'): (
-                self.some_keyring_available,
-                _('Passwords can be stored securely and not just in plaintext.'),
-                _('Requires libsecret and a provider (such as GNOME Keyring and KSecretService).'),
-                _('On Windows the Windows Credential Vault is used.')),
-            _('Spell Checker'): (
-                self.speller_available,
-                _('Spellchecking of composed messages.'),
-                _('Requires Gspell'),
-                _('Requires Gspell')),
-            _('Automatic status'): (
-                self.idle_available,
-                _('Ability to measure idle time, in order to set auto status.'),
-                _('Requires libxss library.'),
-                _('Requires python2.5.')),
-            _('RST Generator'): (
-                self.docutils_available,
-                _('Generate XHTML output from RST code (see http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html).'),
-                _('Requires python-docutils.'),
-                _('Requires python-docutils.')),
-            _('Audio / Video'): (
-                self.farstream_available,
-                _('Ability to start audio and video chat.'),
-                _('Requires gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav and gstreamer1.0-plugins-ugly.'),
-                _('Feature not available under Windows.')),
-            _('UPnP-IGD'): (
-                self.gupnp_igd_available,
-                _('Ability to request your router to forward port for file transfer.'),
-                _('Requires gir1.2-gupnpigd-1.0.'),
-                _('Feature not available under Windows.')),
-        }
+        grid.attach(self.feature_listbox, 0, 0, 1, 1)
 
-        # name, supported
-        self.model = Gtk.ListStore(str, bool)
-        treeview.set_model(self.model)
+        box = self.get_content_area()
+        box.pack_start(grid, True, True, 0)
+        box.set_property('margin', 12)
+        box.set_spacing(18)
 
-        col = Gtk.TreeViewColumn(Q_('?features:Available'))
-        treeview.append_column(col)
-        cell = Gtk.CellRendererToggle()
-        cell.set_property('radio', True)
-        col.pack_start(cell, True)
-        col.add_attribute(cell, 'active', 1)
+        self.connect('response', self.on_response)
 
-        col = Gtk.TreeViewColumn(_('Feature'))
-        treeview.append_column(col)
-        cell = Gtk.CellRendererText()
-        col.pack_start(cell, True)
-        col.add_attribute(cell, 'text', 0)
+        for feature in self.get_features():
+            self.add_feature(feature)
 
-        # Fill model
-        for feature in self.features:
-            func = self.features[feature][0]
-            rep = func()
-            self.model.append([feature, rep])
-
-        self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
-
-        self.builder.connect_signals(self)
         self.show_all()
 
-    def on_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
+    @staticmethod
+    def header_func(row, before, user_data):
+        if before:
+            row.set_header(None)
+        else:
+            label = Gtk.Label(label=user_data)
+            label.set_halign(Gtk.Align.START)
+            row.set_header(label)
+
+    def on_response(self, dialog, response):
+        if response == Gtk.ResponseType.OK:
             self.destroy()
 
-    def on_close_button_clicked(self, widget):
-        self.destroy()
+    def add_feature(self, feature):
+        item = FeatureItem(feature)
+        self.feature_listbox.add(item)
+        item.get_parent().set_tooltip_text(item.tooltip)
 
-    def on_features_treeview_cursor_changed(self, widget):
-        selection = widget.get_selection()
-        if not selection:
-            return
-        rows = selection.get_selected_rows()[1]
-        if not rows:
-            return
-        path = rows[0]
-        feature = self.model[path][0]
-        text = self.features[feature][1] + '\n'
-        if os.name == 'nt':
-            text = text + self.features[feature][3]
-        else:
-            text = text + self.features[feature][2]
-        self.desc_label.set_text(text)
+    def get_features(self):
+        Feature = namedtuple('Feature',
+                             ['name', 'available', 'tooltip',
+                             'dependency_u', 'dependency_w', 'enabled'])
 
-    def zeroconf_available(self):
-        return app.is_installed('ZEROCONF')
+        spell_check_enabled = app.config.get('use_speller')
+
+        auto_status = [app.config.get('autoaway'), app.config.get('autoxa')]
+        auto_status_enabled = bool(any(auto_status))
+
+        return [
+            Feature(_('Audio / Video'),
+                    app.is_installed('FARSTREAM'),
+                    _('Enables Gajim to provide Audio and Video chats'),
+                    _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
+                      'gstreamer1.0-libav, gstreamer1.0-plugins-ugly'),
+                    _('Feature not available under Windows'),
+                    None),
+            Feature(_('Automatic Status'),
+                    self.idle_available(),
+                    _('Enables Gajim to measure your computer\'s idle time in '
+                      'order to set your Status automatically'),
+                    _('Requires: libxss'),
+                    _('No additional requirements'),
+                    auto_status_enabled),
+            Feature(_('Bonjour / Zeroconf (Serverless Chat)'),
+                    app.is_installed('ZEROCONF'),
+                    _('Enables Gajim to automatically detected clients in a '
+                      'local network for serverless chats'),
+                    _('Requires: python-dbus'),
+                    _('Requires: pybonjour and bonjour SDK running (%(url)s)')
+                    % {'url': 'https://developer.apple.com/opensource/)'},
+                    None),
+            Feature(_('Command line Control'),
+                    self.dbus_available(),
+                    _('Enables you to control Gajim with via commandline'),
+                    _('Requires: python-dbus'),
+                    _('Feature not available under Windows'),
+                    None),
+            Feature(_('OpenPGP Message Encryption'),
+                    app.is_installed('GPG'),
+                    _('Enables Gajim to encrypt chat messages with OpenPGP'),
+                    _('Requires: gpg and python-gnupg (%(url)s)')
+                    % {'url': 'https://bitbucket.org/vinay.sajip/python-gnupg'},
+                    _('Requires: gpg.exe in your PATH environment variable'),
+                    None),
+            Feature(_('RST XHTML Generator'),
+                    self.docutils_available(),
+                    _('Enables Gajim to generate XHTML output from RST '
+                      'code (%(url)s)') % {'url':
+                      'http://docutils.sourceforge.net/docs/ref/rst/'
+                      'restructuredtext.html'},
+                    _('Requires: python-docutils'),
+                    _('Requires: python-docutils'),
+                    None),
+            Feature(_('Secure Password Storage'),
+                    self.some_keyring_available(),
+                    _('Enables Gajim to store Passwords securely instead of '
+                      'storing them in plaintext'),
+                    _('Requires: libsecret and a provider (such as GNOME '
+                      'Keyring and KSecretService)'),
+                    _('Windows Credential Vault is used for secure password '
+                      'storage'),
+                    None),
+            Feature(_('Spell Checker'),
+                    app.is_installed('GSPELL'),
+                    _('Enables Gajim to spell check your messages while '
+                      'composing'),
+                    _('Requires: Gspell'),
+                    _('Requires: Gspell'),
+                    spell_check_enabled),
+            Feature(_('UPnP-IGD Port Forwarding'),
+                    app.is_installed('UPNP'),
+                    _('Enables Gajim to request your router to forward ports '
+                      'for file transfers'),
+                    _('Requires: gir1.2-gupnpigd-1.0'),
+                    _('Feature not available under Windows'),
+                    None)
+        ]
 
     def dbus_available(self):
         from gajim.common import dbus_support
         return dbus_support.supported
-
-    def gpg_available(self):
-        return app.is_installed('GPG')
 
     def some_keyring_available(self):
         if os.name == 'nt':
@@ -165,9 +171,6 @@ class FeaturesDialog(Gtk.Dialog):
         except (ValueError, ImportError):
             return False
         return True
-
-    def speller_available(self):
-        return app.is_installed('GSPELL')
 
     def idle_available(self):
         from gajim.common import idle
@@ -180,8 +183,66 @@ class FeaturesDialog(Gtk.Dialog):
             return False
         return True
 
-    def farstream_available(self):
-        return app.is_installed('FARSTREAM')
 
-    def gupnp_igd_available(self):
-        return app.is_installed('UPNP')
+class FeatureItem(Gtk.Grid):
+    def __init__(self, feature):
+        super().__init__()
+        self.set_column_spacing(12)
+
+        self.tooltip = feature.tooltip
+        self.feature_dependency_u_text = feature.dependency_u
+        self.feature_dependency_w_text = feature.dependency_w
+
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.feature_label = Gtk.Label(label=feature.name)
+        self.feature_label.set_halign(Gtk.Align.START)
+        self.box.pack_start(self.feature_label, True, True, 0)
+
+        self.feature_dependency_u = Gtk.Label(label=feature.dependency_u)
+        self.feature_dependency_u.get_style_context().add_class('dim-label')
+        self.feature_dependency_w = Gtk.Label(label=feature.dependency_w)
+        self.feature_dependency_w.get_style_context().add_class('dim-label')
+
+        if not feature.available:
+            self.feature_dependency_u.set_halign(Gtk.Align.START)
+            self.feature_dependency_u.set_alignment(0.0, 0.0)
+            self.feature_dependency_u.set_line_wrap(True)
+            self.feature_dependency_u.set_max_width_chars(50)
+            self.feature_dependency_u.set_selectable(True)
+            self.feature_dependency_w.set_halign(Gtk.Align.START)
+            self.feature_dependency_w.set_alignment(0.0, 0.0)
+            self.feature_dependency_w.set_line_wrap(True)
+            self.feature_dependency_w.set_max_width_chars(50)
+            self.feature_dependency_w.set_selectable(True)
+
+            if os.name == 'nt':
+                self.box.pack_start(self.feature_dependency_w, True, True, 0)
+            else:
+                self.box.pack_start(self.feature_dependency_u, True, True, 0)
+
+        self.icon = Gtk.Image()
+        self.label_disabled = Gtk.Label(label='Disabled in Preferences')
+        self.label_disabled.get_style_context().add_class('dim-label')
+        self.set_feature(feature.available, feature.enabled)
+
+        self.add(self.icon)
+        self.add(self.box)
+
+    def set_feature(self, available, enabled):
+        self.icon.get_style_context().remove_class('error-color')
+        self.icon.get_style_context().remove_class('warning-color')
+        self.icon.get_style_context().remove_class('success-color')
+
+        if not available:
+            self.icon.set_from_icon_name('window-close-symbolic',
+                                         Gtk.IconSize.MENU)
+            self.icon.get_style_context().add_class('error-color')
+        elif enabled is False:
+            self.icon.set_from_icon_name('dialog-warning-symbolic',
+                                         Gtk.IconSize.MENU)
+            self.box.pack_start(self.label_disabled, True, True, 0)
+            self.icon.get_style_context().add_class('warning-color')
+        else:
+            self.icon.set_from_icon_name('emblem-ok-symbolic',
+                                         Gtk.IconSize.MENU)
+            self.icon.get_style_context().add_class('success-color')
