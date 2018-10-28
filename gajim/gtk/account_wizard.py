@@ -179,10 +179,10 @@ class AccountCreationWizard:
         self.go_online_checkbutton.show()
         img = self.xml.get_object('finish_image')
         if self.modify:
-            img.set_from_icon_name(Gtk.STOCK_APPLY, Gtk.IconSize.DIALOG)
+            img.set_from_icon_name('emblem-ok-symbolic', Gtk.IconSize.DIALOG)
+            img.get_style_context().add_class('success-color')
         else:
-            path_to_file = gtkgui_helpers.get_icon_path('org.gajim.Gajim', 48)
-            img.set_from_file(path_to_file)
+            img.set_from_icon_name('org.gajim.Gajim', Gtk.IconSize.DIALOG)
         self.show_vcard_checkbutton.set_active(not self.modify)
         self.notebook.set_current_page(6) # show finish page
 
