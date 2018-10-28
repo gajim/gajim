@@ -27,7 +27,6 @@ from datetime import datetime
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5

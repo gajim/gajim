@@ -22,6 +22,7 @@ from gajim.common.i18n import _
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.exceptions import GajimGeneralException
 
+from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
@@ -300,7 +301,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         else:
             try:
                 # Object will add itself to the window dict
-                from gajim.disco import ServiceDiscoveryWindow
                 ServiceDiscoveryWindow(
                     self.account, jid,
                     initial_identities=[{'category': 'conference',

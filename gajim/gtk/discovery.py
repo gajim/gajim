@@ -48,7 +48,6 @@ import nbxmpp
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -280,7 +279,6 @@ class ServicesCache:
         if identities is None:
             identities = []
         # Grab the first identity with an icon
-        quiet = False
         for identity in identities:
             try:
                 cat, type_ = identity['category'], identity['type']
@@ -293,7 +291,6 @@ class ServicesCache:
         else:
             # Loop fell through, default to unknown
             service_name = addr.split('.')[0]
-            quiet = True
 
         # Or load it
         icon_name = 'gajim-agent-%s' % service_name

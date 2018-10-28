@@ -26,7 +26,6 @@ from gajim.common import connection
 from gajim.common.i18n import _
 from gajim.common.modules import dataforms
 
-from gajim import gtkgui_helpers
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
 

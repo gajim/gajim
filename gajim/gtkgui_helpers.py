@@ -30,8 +30,6 @@ import math
 import logging
 from io import BytesIO
 import xml.etree.ElementTree as ET
-import xml.sax.saxutils
-from xml.sax import ContentHandler  # type: ignore
 
 from gi.repository import Gtk
 from gi.repository import Gdk
