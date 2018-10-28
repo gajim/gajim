@@ -52,7 +52,6 @@ from gi.repository import GdkPixbuf
 from gajim import gtkgui_helpers
 from gajim import groups
 from gajim import adhoc_commands
-from gajim import search_window
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -62,6 +61,7 @@ from gajim.common.const import StyleAttr
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.service_registration import ServiceRegistration
+from gajim.gtk.discovery_search import SearchWindow
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
@@ -1299,7 +1299,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                     present()
         else:
             app.interface.instances[self.account]['search'][service] = \
-                    search_window.SearchWindow(self.account, service)
+                    SearchWindow(self.account, service)
 
     def cleanup(self):
         AgentBrowser.cleanup(self)
