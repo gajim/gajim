@@ -27,7 +27,6 @@ from gajim.common import idle
 from gajim.common.i18n import _
 
 from gajim import message_control
-from gajim import cell_renderer_image
 from gajim import gtkgui_helpers
 
 from gajim.chat_control_base import ChatControlBase
@@ -36,6 +35,7 @@ from gajim.config import ManageProxiesWindow
 from gajim.config import ManageSoundsWindow
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_icon_name
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
 from gajim.gtk.advanced_config import AdvancedConfig
@@ -337,15 +337,15 @@ class Preferences(Gtk.ApplicationWindow):
             os.path.join(configpaths.get('DATA'), 'iconsets'))
         if os.path.isdir(configpaths.get('MY_ICONSETS')):
             iconsets_list += os.listdir(configpaths.get('MY_ICONSETS'))
-        # New model, image in 0, string in 1
-        model = Gtk.ListStore(Gtk.Image, str)
-        renderer_image = cell_renderer_image.CellRendererImage(0, 0)
+
+        model = Gtk.ListStore(str, str)
+        renderer_image = Gtk.CellRendererPixbuf()
         renderer_text = Gtk.CellRendererText()
         renderer_text.set_property('xpad', 5)
         self._ui.iconset_combobox.pack_start(renderer_image, False)
         self._ui.iconset_combobox.pack_start(renderer_text, True)
         self._ui.iconset_combobox.add_attribute(renderer_text, 'text', 1)
-        self._ui.iconset_combobox.add_attribute(renderer_image, 'image', 0)
+        self._ui.iconset_combobox.add_attribute(renderer_image, 'icon_name', 0)
         self._ui.iconset_combobox.set_model(model)
         dirlist = []
         for dir_ in iconsets_list:
@@ -357,16 +357,8 @@ class Preferences(Gtk.ApplicationWindow):
         if not dirlist:
             dirlist.append(' ')
         for index, dir_ in enumerate(dirlist):
-            preview = Gtk.Image()
-            files = []
-            files.append(os.path.join(helpers.get_iconset_path(dir_), '16x16',
-                    'online.png'))
-            files.append(os.path.join(helpers.get_iconset_path(dir_), '16x16',
-                    'online.gif'))
-            for file_ in files:
-                if os.path.exists(file_):
-                    preview.set_from_file(file_)
-            model.append([preview, dir_])
+            icon_name = get_icon_name('online', iconset=dir_)
+            model.append([icon_name, dir_])
             if app.config.get('iconset') == dir_:
                 self._ui.iconset_combobox.set_active(index)
 
