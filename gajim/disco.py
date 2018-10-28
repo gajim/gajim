@@ -3,6 +3,7 @@
 # Copyright (C) 2005-2014 Yann Leboulanger <asterix AT lagaule.org>
 # Copyright (C) 2006 Dimitur Kirov <dkirov AT gmail.com>
 # Copyright (C) 2006-2008 Jean-Marie Traissard <jim AT lapin.org>
+# Copyright (C) 2006 Tomasz Melcer <liori AT exroot.org>
 # Copyright (C) 2007 Stephan Erb <steve-e AT h3c.de>
 #
 # This file is part of Gajim.
@@ -49,7 +50,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-from gajim import groups
 from gajim import adhoc_commands
 
 from gajim.common import app
@@ -2059,7 +2059,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
 
-        groups.GroupsPostWindow(self.account, self.jid, groupnode)
+        GroupsPostWindow(self.account, self.jid, groupnode)
 
     def on_subscribe_button_clicked(self, widget):
         """
@@ -2148,3 +2148,53 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
 # Fill the global agent type info dictionary
 _agent_type_info = _gen_agent_type_info()
+
+
+class GroupsPostWindow:
+    def __init__(self, account, servicejid, groupid):
+        """
+        Open new 'create post' window to create message for groupid on servicejid
+        service
+        """
+        assert isinstance(servicejid, str)
+        assert isinstance(groupid, str)
+
+        self.account = account
+        self.servicejid = servicejid
+        self.groupid = groupid
+
+        self.xml = get_builder('groups_post_window.ui')
+        self.window = self.xml.get_object('groups_post_window')
+        for name in ('from_entry', 'subject_entry', 'contents_textview'):
+            self.__dict__[name] = self.xml.get_object(name)
+
+        self.xml.connect_signals(self)
+        self.window.show_all()
+
+    def on_cancel_button_clicked(self, w):
+        """
+        Close window
+        """
+        self.window.destroy()
+
+    def on_send_button_clicked(self, w):
+        """
+        Gather info from widgets and send it as a message
+        """
+        # constructing item to publish... that's atom:entry element
+        item = nbxmpp.Node('entry', {'xmlns':'http://www.w3.org/2005/Atom'})
+        author = item.addChild('author')
+        author.addChild('name', {}, [self.from_entry.get_text()])
+        item.addChild('generator', {}, ['Gajim'])
+        item.addChild('title', {}, [self.subject_entry.get_text()])
+
+        buf = self.contents_textview.get_buffer()
+        item.addChild('content', {}, [buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)])
+
+        # publish it to node
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_publish(
+            self.servicejid, self.groupid, item, '0')
+
+        # close the window
+        self.window.destroy()
