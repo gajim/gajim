@@ -50,6 +50,7 @@ from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.tooltips import FileTransfersTooltip
+from gajim.gtk.util import get_builder
 
 log = logging.getLogger('gajim.filetransfer_window')
 
@@ -69,7 +70,7 @@ class FileTransfersWindow:
     def __init__(self):
         self.files_props = {'r' : {}, 's': {}}
         self.height_diff = 0
-        self.xml = gtkgui_helpers.get_gtk_builder('filetransfers.ui')
+        self.xml = get_builder('filetransfers.ui')
         self.window = self.xml.get_object('file_transfers_window')
         self.tree = self.xml.get_object('transfers_list')
         self.cancel_button = self.xml.get_object('cancel_button')
@@ -80,8 +81,7 @@ class FileTransfersWindow:
 
         shall_notify = app.config.get('notify_on_file_complete')
         self.notify_ft_checkbox.set_active(shall_notify)
-        self.model = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str, str, str, int,
-            int, str)
+        self.model = Gtk.ListStore(str, str, str, str, str, int, int, str)
         self.tree.set_model(self.model)
         col = Gtk.TreeViewColumn()
 
@@ -91,7 +91,7 @@ class FileTransfersWindow:
         render_pixbuf.set_property('xpad', 3)
         render_pixbuf.set_property('ypad', 3)
         render_pixbuf.set_property('yalign', .0)
-        col.add_attribute(render_pixbuf, 'pixbuf', 0)
+        col.add_attribute(render_pixbuf, 'icon_name', 0)
         self.tree.append_column(col)
 
         col = Gtk.TreeViewColumn(_('File'))
@@ -133,7 +133,6 @@ class FileTransfersWindow:
         col.set_expand(False)
         self.tree.append_column(col)
 
-        self.images = {}
         self.icons = {
                 'upload': 'go-up',
                 'download': 'go-down',
@@ -459,10 +458,6 @@ class FileTransfersWindow:
             on_response_cancel(account, file_props))
         dialog.popup()
 
-    def get_icon(self, ident):
-        return self.images.setdefault(ident,
-            gtkgui_helpers.get_icon_pixmap(self.icons[ident], 24))
-
     def set_status(self, file_props, status):
         """
         Change the status of a transfer to state 'status'
@@ -505,7 +500,7 @@ class FileTransfersWindow:
                 helpers.convert_bytes(full_size)
             self.model.set(iter_, Column.PROGRESS, text)
             self.model.set(iter_, Column.PULSE, GLib.MAXINT32)
-        self.model.set(iter_, Column.IMAGE, self.get_icon(status))
+        self.model.set(iter_, Column.IMAGE, self.icons[status])
         path = self.model.get_path(iter_)
         self.select_func(path)
 
@@ -644,7 +639,7 @@ class FileTransfersWindow:
                 status = 'waiting'
             if file_props.connected is False:
                 status = 'stop'
-            self.model.set(iter_, 0, self.get_icon(status))
+            self.model.set(iter_, 0, self.icons[status])
             if transfered_size == full_size:
                 # If we are receiver and this is a jingle session
                 if file_props.type_ == 'r' and  \
