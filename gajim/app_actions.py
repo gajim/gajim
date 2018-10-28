@@ -21,7 +21,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
-from gajim import config
 from gajim import dialogs
 from gajim import disco
 
@@ -44,6 +43,7 @@ from gajim.gtk.features import FeaturesDialog
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
+from gajim.gtk.proxies import ManageProxies
 
 
 # General Actions
@@ -252,7 +252,7 @@ def on_manage_proxies(action, param):
         app.interface.instances['manage_proxies'].window.present()
     else:
         app.interface.instances['manage_proxies'] = \
-            config.ManageProxiesWindow(interface.roster.window)
+            ManageProxies(interface.roster.window)
 
 # Admin Actions
 

@@ -30,12 +30,11 @@ from gajim import gtkgui_helpers
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
 
-from gajim.config import ManageProxiesWindow
 from gajim.config import FakeDataForm
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.dialogs import ErrorDialog
-
+from gajim.gtk.proxies import ManageProxies
 
 
 class AccountCreationWizard:
@@ -352,8 +351,7 @@ class AccountCreationWizard:
         if 'manage_proxies' in app.interface.instances:
             app.interface.instances['manage_proxies'].window.present()
         else:
-            app.interface.instances['manage_proxies'] = \
-                ManageProxiesWindow()
+            app.interface.instances['manage_proxies'] = ManageProxies()
 
     def on_custom_host_port_checkbutton_toggled(self, widget):
         self.xml.get_object('custom_host_hbox').set_sensitive(

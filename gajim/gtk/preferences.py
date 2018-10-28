@@ -31,7 +31,6 @@ from gajim import gtkgui_helpers
 
 from gajim.chat_control_base import ChatControlBase
 
-from gajim.config import ManageProxiesWindow
 from gajim.config import ManageSoundsWindow
 
 from gajim.gtk.util import get_builder
@@ -39,6 +38,7 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
 from gajim.gtk.advanced_config import AdvancedConfig
+from gajim.gtk.proxies import ManageProxies
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -1024,7 +1024,7 @@ class Preferences(Gtk.ApplicationWindow):
         if 'manage_proxies' in app.interface.instances:
             app.interface.instances['manage_proxies'].window.present()
         else:
-            app.interface.instances['manage_proxies'] = ManageProxiesWindow(self)
+            app.interface.instances['manage_proxies'] = ManageProxies(self)
 
     def update_proxy_list(self):
         our_proxy = app.config.get('global_proxy')
