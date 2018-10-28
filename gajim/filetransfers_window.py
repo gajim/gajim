@@ -33,7 +33,6 @@ from gi.repository import Pango
 from nbxmpp.protocol import NS_JINGLE_FILE_TRANSFER_5
 
 from gajim import gtkgui_helpers
-from gajim import tooltips
 
 from gajim.common import app
 from gajim.common import helpers
@@ -50,6 +49,7 @@ from gajim.gtk.dialogs import FTOverwriteConfirmationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.filechoosers import FileChooserDialog
+from gajim.gtk.tooltips import FileTransfersTooltip
 
 log = logging.getLogger('gajim.filetransfer_window')
 
@@ -152,7 +152,7 @@ class FileTransfersWindow:
         # Tooltip
         self.tree.connect('query-tooltip', self._query_tooltip)
         self.tree.set_has_tooltip(True)
-        self.tooltip = tooltips.FileTransfersTooltip()
+        self.tooltip = FileTransfersTooltip()
 
         self.file_transfers_menu = self.xml.get_object('file_transfers_menu')
         self.open_folder_menuitem = self.xml.get_object('open_folder_menuitem')

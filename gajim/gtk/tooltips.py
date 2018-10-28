@@ -41,7 +41,7 @@ from gajim.common import helpers
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
-log = logging.getLogger('gajim.tooltips')
+log = logging.getLogger('gajim.gtk.tooltips')
 
 
 class StatusTable:

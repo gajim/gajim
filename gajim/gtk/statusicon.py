@@ -24,13 +24,13 @@ import os
 from gi.repository import Gtk
 
 from gajim import dialogs
-from gajim import tooltips
 from gajim import gtkgui_helpers
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.gtk.util import get_builder
 from gajim.gtk.single_message import SingleMessageWindow
+from gajim.gtk.tooltips import NotificationAreaTooltip
 
 
 class StatusIcon:
@@ -50,7 +50,7 @@ class StatusIcon:
         self._ui.connect_signals(self)
         self.popup_menus = []
         self.status_icon = None
-        self.tooltip = tooltips.NotificationAreaTooltip()
+        self.tooltip = NotificationAreaTooltip()
 
     def subscribe_events(self):
         """

@@ -43,7 +43,6 @@ from gi.repository import Gio
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
-from gajim import tooltips
 from gajim import config
 from gajim import vcard
 from gajim import dataforms_widget
@@ -77,6 +76,7 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.tooltips import GCTooltip
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -495,7 +495,7 @@ class GroupchatControl(ChatControlBase):
         self.banner_actionbar.pack_start(self.subject_button)
 
         # GC Roster tooltip
-        self.gc_tooltip = tooltips.GCTooltip()
+        self.gc_tooltip = GCTooltip()
 
         self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id)
         settings_menu = self.xml.get_object('settings_menu')

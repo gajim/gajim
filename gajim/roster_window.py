@@ -50,7 +50,6 @@ from gajim import disco
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import cell_renderer_image
-from gajim import tooltips
 from gajim import message_control
 from gajim import adhoc_commands
 
@@ -82,6 +81,7 @@ from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
+from gajim.gtk.tooltips import RosterTooltip
 
 
 log = logging.getLogger('gajim.roster')
@@ -5841,7 +5841,7 @@ class RosterWindow:
 
         self.collapsed_rows = app.config.get('collapsed_rows').split('\t')
         self.tree.set_has_tooltip(True)
-        self.tree.set_tooltip_window(tooltips.RosterTooltip(self.window))
+        self.tree.set_tooltip_window(RosterTooltip(self.window))
         self.current_tooltip = None
         self.tree.connect('query-tooltip', self.query_tooltip)
         # Workaround: For strange reasons signal is behaving like row-changed
