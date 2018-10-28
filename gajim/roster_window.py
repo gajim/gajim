@@ -50,7 +50,6 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import cell_renderer_image
 from gajim import message_control
-from gajim import adhoc_commands
 
 from gajim.common import app
 from gajim.common import helpers
@@ -82,6 +81,7 @@ from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
+from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
@@ -3702,7 +3702,7 @@ class RosterWindow:
         jid = contact.jid
         if resource is not None:
             jid = jid + '/' + resource
-        adhoc_commands.CommandWindow(account, jid)
+        CommandWindow(account, jid)
 
     def on_roster_window_focus_in_event(self, widget, event):
         # roster received focus, so if we had urgency REMOVE IT

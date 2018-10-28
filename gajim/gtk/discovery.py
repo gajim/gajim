@@ -50,8 +50,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-from gajim import adhoc_commands
-
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common import helpers
@@ -61,6 +59,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery_search import SearchWindow
+from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import icon_exists
 from gajim.gtk.util import get_builder
 
@@ -1314,7 +1313,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             return
         service = model[iter_][0]
         node = model[iter_][1]
-        adhoc_commands.CommandWindow(self.account, service, commandnode=node)
+        CommandWindow(self.account, service, commandnode=node)
 
     def on_register_button_clicked(self, widget=None):
         """

@@ -44,7 +44,6 @@ from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import vcard
 from gajim import dataforms_widget
-from gajim import adhoc_commands
 
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
@@ -76,6 +75,7 @@ from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
+from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_image_from_icon_name
 
@@ -797,7 +797,7 @@ class GroupchatControl(ChatControlBase):
         """
         Execute AdHoc commands on the current room
         """
-        adhoc_commands.CommandWindow(self.account, self.room_jid)
+        CommandWindow(self.account, self.room_jid)
 
     def _on_upload_avatar(self, action, param):
         def _on_accept(filename):
@@ -2783,7 +2783,7 @@ class GroupchatControl(ChatControlBase):
 
     def _on_execute_command_occupant(self, widget, nick):
         jid = self.room_jid + '/' + nick
-        adhoc_commands.CommandWindow(self.account, jid)
+        CommandWindow(self.account, jid)
 
     def on_row_activated(self, widget, path):
         """

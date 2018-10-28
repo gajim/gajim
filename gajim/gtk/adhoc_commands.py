@@ -29,10 +29,10 @@ from gajim.common.i18n import _
 from gajim.common.modules import dataforms
 from gajim.common import ged
 
-from gajim import gtkgui_helpers
 from gajim import dataforms_widget
 
 from gajim.gtk.dialogs import HigDialog
+from gajim.gtk.util import get_builder
 
 
 class CommandWindow:
@@ -68,7 +68,7 @@ class CommandWindow:
         self.stage_window_delete_cb = None
 
         # retrieving widgets from xml
-        self.xml = gtkgui_helpers.get_gtk_builder('adhoc_commands_window.ui')
+        self.xml = get_builder('adhoc_commands_window.ui')
         self.window = self.xml.get_object('adhoc_commands_window')
         self.window.connect('delete-event',
             self.on_adhoc_commands_window_delete_event)
