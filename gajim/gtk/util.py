@@ -89,6 +89,10 @@ def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
     return Builder(file_name, widgets)
 
 
+def icon_exists(name: str) -> bool:
+    return _icon_theme.has_icon(name)
+
+
 def load_icon(icon_name, widget, size=16, pixbuf=False,
               flags=Gtk.IconLookupFlags.FORCE_SIZE):
 

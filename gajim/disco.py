@@ -49,7 +49,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
-from gajim import gtkgui_helpers
 from gajim import groups
 from gajim import adhoc_commands
 
@@ -62,6 +61,8 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery_search import SearchWindow
+from gajim.gtk.util import icon_exists
+from gajim.gtk.util import get_builder
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
@@ -287,28 +288,19 @@ class ServicesCache:
                 info = _agent_type_info[(cat, type_)]
             except KeyError:
                 continue
-            filename = info[1]
-            if filename:
+            service_name = info[1]
+            if service_name:
                 break
         else:
             # Loop fell through, default to unknown
-            filename = addr.split('.')[0]
+            service_name = addr.split('.')[0]
             quiet = True
-        # Use the cache if possible
-        if filename in _icon_cache:
-            return _icon_cache[filename]
+
         # Or load it
-        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-' + filename, size=32,
-            quiet=quiet)
-        if pix:
-            # Store in cache
-            _icon_cache[filename] = pix
-            return pix
-        if 'jabber' in _icon_cache:
-            return _icon_cache['jabber']
-        pix = gtkgui_helpers.get_icon_pixmap('gajim-agent-jabber', size=32)
-        _icon_cache['jabber'] = pix
-        return pix
+        icon_name = 'gajim-agent-%s' % service_name
+        if icon_exists(icon_name):
+            return icon_name
+        return 'gajim-agent-jabber'
 
     def get_browser(self, identities=None, features=None):
         """
@@ -513,7 +505,7 @@ _('Without a connection, you can not browse available services'))
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
-        self.xml = gtkgui_helpers.get_gtk_builder('service_discovery_window.ui')
+        self.xml = get_builder('service_discovery_window.ui')
         self.window = self.xml.get_object('service_discovery_window')
         self.services_treeview = self.xml.get_object('services_treeview')
         self.model = None
@@ -869,8 +861,9 @@ class AgentBrowser:
             self.window._set_window_banner_text(self._get_agent_address(), name)
 
         # Add an icon to the banner.
-        pix = self.cache.get_icon(identities, addr=self._get_agent_address())
-        self.window.banner_icon.set_from_pixbuf(pix)
+        icon_name = self.cache.get_icon(identities,
+                                        addr=self._get_agent_address())
+        self.window.banner_icon.set_from_icon_name(icon_name, Gtk.IconSize.DND)
         self.window.banner_icon.show()
 
     def _clean_title(self):
@@ -1138,8 +1131,9 @@ class ToplevelAgentBrowser(AgentBrowser):
             identity = {'category': '_jid', 'type': type_}
             identities.append(identity)
         # Set the pixmap for the row
-        pix = self.cache.get_icon(identities, addr=addr)
-        self.model.append(None, (self.jid, self.node, pix, descr, LABELS[1]))
+        icon_name = self.cache.get_icon(identities, addr=addr)
+        self.model.append(None,
+                          (self.jid, self.node, icon_name, descr, LABELS[1]))
         # Grab info on the service
         self.cache.get_info(self.jid, self.node, self._agent_info, force=False)
 
@@ -1149,9 +1143,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         """
         jid = model.get_value(iter_, 0)
         if jid:
-            pix = model.get_value(iter_, 2)
+            icon_name = model.get_value(iter_, 2)
             cell.set_property('visible', True)
-            cell.set_property('pixbuf', pix)
+            cell.set_property('icon_name', icon_name)
         else:
             cell.set_property('visible', False)
 
@@ -1202,7 +1196,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         # state is None on success or has a string
         # from LABELS on error or while fetching
         view = self.window.services_treeview
-        self.model = Gtk.TreeStore(str, str, GdkPixbuf.Pixbuf, str, str)
+        self.model = Gtk.TreeStore(str, str, str, str, str)
         self.model.set_sort_func(4, self._treemodel_sort_func)
         self.model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
         view.set_model(self.model)
@@ -1211,6 +1205,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Icon Renderer
         renderer = Gtk.CellRendererPixbuf()
         renderer.set_property('xpad', 6)
+        renderer.set_property('stock-size', Gtk.IconSize.DND)
         col.pack_start(renderer, False)
         col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
         # Text Renderer
@@ -1547,13 +1542,13 @@ class ToplevelAgentBrowser(AgentBrowser):
         else:
             # Put it in the 'other' category for now
             cat_args = ('other',)
-        # Set the pixmap for the row
-        pix = self.cache.get_icon(identities, addr=addr)
+
+        icon_name = self.cache.get_icon(identities, addr=addr)
         # Put it in the right category
         cat = self._find_category(*cat_args)
         if not cat:
             cat = self._create_category(*cat_args)
-        self.model.append(cat, (jid, node, pix, descr, LABELS[1]))
+        self.model.append(cat, (jid, node, icon_name, descr, LABELS[1]))
         GLib.idle_add(self._expand_all)
         # Grab info on the service
         self.cache.get_info(jid, node, self._agent_info, force=force)
@@ -1583,7 +1578,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         self._update_progressbar()
 
         # Search for an icon and category we can display
-        pix = self.cache.get_icon(identities, addr=addr)
+        icon_name = self.cache.get_icon(identities, addr=addr)
         cat, type_ = None, None
         for identity in identities:
             try:
@@ -1596,7 +1591,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         old_cat_iter = self.model.iter_parent(iter_)
         if not old_cat_iter or self.model.get_value(old_cat_iter, 3) == cat:
             # Already in the right category, just update
-            self.model[iter_][2] = pix
+            self.model[iter_][2] = icon_name
             self.model[iter_][3] = descr
             self.model[iter_][4] = None
             return
@@ -1613,7 +1608,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         cat_iter = self._find_category(cat, type_)
         if not cat_iter:
             cat_iter = self._create_category(cat, type_)
-        self.model.append(cat_iter, (jid, node, pix, descr, None))
+        self.model.append(cat_iter, (jid, node, icon_name, descr, None))
         self._expand_all()
 
     def _update_error(self, iter_, jid, node):
