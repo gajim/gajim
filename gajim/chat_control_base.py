@@ -52,7 +52,9 @@ from gajim.conversation_textview import ConversationTextview
 from gajim.message_textview import MessageTextView
 
 from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk import util
 from gajim.gtk.util import convert_rgb_to_hex
+from gajim.gtk.util import at_the_end
 from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -708,7 +710,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                 mark = message_buffer.get_insert()
                 iter_ = message_buffer.get_iter_at_mark(mark)
                 if message_buffer.get_end_iter().equal(iter_):
-                    GLib.idle_add(gtkgui_helpers.scroll_to_end, self.msg_scrolledwindow)
+                    GLib.idle_add(util.scroll_to_end, self.msg_scrolledwindow)
 
             return True
         elif event.keyval == Gdk.KEY_z: # CTRL+z
@@ -1192,7 +1194,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if event.get_button()[1] != 1:
             # We want only to catch the left mouse button
             return
-        if not gtkgui_helpers.at_the_end(scrollbar.get_parent()):
+        if not at_the_end(scrollbar.get_parent()):
             app.log('autoscroll').info('Autoscroll disabled')
             self.conv_textview.autoscroll = False
 

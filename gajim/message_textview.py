@@ -24,9 +24,12 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
+from gajim import gtkgui_helpers
+
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim import gtkgui_helpers
+
+from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell
@@ -166,7 +169,7 @@ class MessageTextView(Gtk.TextView):
         mark = buffer_.get_insert()
         iter_ = buffer_.get_iter_at_mark(mark)
         if iter_.get_offset() == buffer_.get_end_iter().get_offset():
-            GLib.idle_add(gtkgui_helpers.scroll_to_end, textview.get_parent())
+            GLib.idle_add(scroll_to_end, textview.get_parent())
 
     def make_clickable_urls(self, text):
         _buffer = self.get_buffer()

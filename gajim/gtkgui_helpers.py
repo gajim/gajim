@@ -75,16 +75,6 @@ def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
         if not quiet:
             log.error('Unable to load icon %s: %s', icon_name, str(error))
 
-def get_icon_path(icon_name, size=16):
-    try:
-        icon_info = gtk_icon_theme.lookup_icon(icon_name, size, 0)
-        if icon_info is None:
-            log.error('Icon not found: %s', icon_name)
-            return ''
-        return icon_info.get_filename()
-    except GLib.GError as error:
-        log.error('Unable to find icon %s: %s', icon_name, str(error))
-
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
@@ -97,11 +87,6 @@ if os.name == 'nt':
 
 from gajim.common import helpers
 
-def add_image_to_button(button, icon_name):
-    img = Gtk.Image()
-    path_img = get_icon_path(icon_name)
-    img.set_from_file(path_img)
-    button.set_image(img)
 
 def get_image_button(icon_name, tooltip, toggle=False):
     if toggle:
@@ -146,40 +131,6 @@ def get_gtk_builder(file_name, widget=None):
             builder.add_from_file(file_path)
     return builder
 
-def at_the_end(widget):
-    """Determines if a Scrollbar in a GtkScrolledWindow is at the end.
-
-    Args:
-        widget (GtkScrolledWindow)
-
-    Returns:
-        bool: The return value is True if at the end, False if not.
-    """
-    adj_v = widget.get_vadjustment()
-    max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
-    return adj_v.get_value() == max_scroll_pos
-
-def scroll_to_end(widget):
-    """Scrolls to the end of a GtkScrolledWindow.
-
-    Args:
-        widget (GtkScrolledWindow)
-
-    Returns:
-        bool: The return value is False so it can be used with GLib.idle_add.
-    """
-    adj_v = widget.get_vadjustment()
-    if adj_v is None:
-        # This can happen when the Widget is already destroyed when called
-        # from GLib.idle_add
-        return False
-    max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
-    adj_v.set_value(max_scroll_pos)
-
-    adj_h = widget.get_hadjustment()
-    adj_h.set_value(0)
-    return False
-
 def set_unset_urgency_hint(window, unread_messages_no):
     """
     Sets/unset urgency hint in window argument depending if we have unread
@@ -220,22 +171,6 @@ def get_cursor(attr):
     display = Gdk.Display.get_default()
     cursor = getattr(Gdk.CursorType, attr)
     return Gdk.Cursor.new_for_display(display, cursor)
-
-def get_current_desktop(window):
-    """
-    Return the current virtual desktop for given window
-
-    NOTE: Window is a GDK window.
-    """
-    prop = window.property_get('_NET_CURRENT_DESKTOP')
-    if prop is None: # it means it's normal window (not root window)
-        # so we look for it's current virtual desktop in another property
-        prop = window.property_get('_NET_WM_DESKTOP')
-
-    if prop is not None:
-        # f.e. prop is ('CARDINAL', 32, [0]) we want 0 or 1.. from [0]
-        current_virtual_desktop_no = prop[2][0]
-        return current_virtual_desktop_no
 
 def file_is_locked(path_to_file):
     """
