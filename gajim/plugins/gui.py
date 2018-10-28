@@ -21,25 +21,27 @@ GUI classes related to plug-in management.
 :license: GPL
 '''
 
-__all__ = ['PluginsWindow']
+import os
+from enum import IntEnum
+from enum import unique
 
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import Gdk
-import os
 
-from enum import IntEnum, unique
-
-from gajim import gtkgui_helpers
-from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.dialogs import YesNoDialog
-from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.exceptions import PluginsystemError
+
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
-from gajim.common.exceptions import PluginsystemError
+
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.filechoosers import ArchiveChooserDialog
+from gajim.gtk.util import get_builder
+from gajim.gtk.util import load_icon
 
 
 @unique
@@ -57,7 +59,7 @@ class PluginsWindow:
     @log_calls('PluginsWindow')
     def __init__(self):
         '''Initialize Plugins window'''
-        builder = gtkgui_helpers.get_gtk_builder('plugins_window.ui')
+        builder = get_builder('plugins_window.ui')
         self.window = builder.get_object('plugins_window')
         self.window.set_transient_for(app.interface.roster.window)
 
@@ -91,7 +93,9 @@ class PluginsWindow:
             activatable=Column.ACTIVATABLE)
         self.installed_plugins_treeview.append_column(col)
 
-        self.def_icon = gtkgui_helpers.get_icon_pixmap('preferences-desktop')
+        self.def_icon = load_icon('preferences-desktop',
+                                  self.window,
+                                  pixbuf=True)
 
         # connect signal for selection change
         selection = self.installed_plugins_treeview.get_selection()
