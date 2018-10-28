@@ -111,6 +111,15 @@ def load_icon(icon_name, widget, size=16, pixbuf=False,
         log.error('Unable to load icon %s: %s', icon_name, str(error))
 
 
+def get_app_icon_list(scale_widget):
+    pixbufs = []
+    for size in (16, 32, 48, 64, 128):
+        pixbuf = load_icon('org.gajim.Gajim', scale_widget, size, pixbuf=True)
+        if pixbuf is not None:
+            pixbufs.append(pixbuf)
+    return pixbufs
+
+
 def get_icon_name(name: str,
                   iconset: Optional[str] = None,
                   transport: Optional[str] = None) -> str:

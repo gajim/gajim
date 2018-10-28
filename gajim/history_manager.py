@@ -47,6 +47,8 @@ from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
+from gajim.common.const import JIDConstant
+from gajim.common.const import KindConstant
 
 def is_standalone():
     # Determine if we are in standalone mode
@@ -81,14 +83,14 @@ if is_standalone():
     configpaths.init()
     app.load_css_config()
 
-from gajim.common.const import JIDConstant, KindConstant
 from gajim.common import helpers
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.util import convert_rgb_to_hex
-from gajim import gtkgui_helpers
+from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_app_icon_list
 
 
 @unique
@@ -101,23 +103,16 @@ class Column(IntEnum):
 
 class HistoryManager:
     def __init__(self):
-        pixs = []
-        for size in (16, 32, 48, 64, 128):
-            pix = gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', size)
-            if pix:
-                pixs.append(pix)
-        if pixs:
-            # set the icon to all windows
-            Gtk.Window.set_default_icon_list(pixs)
-
         log_db_path = configpaths.get('LOG_DB')
         if not os.path.exists(log_db_path):
             ErrorDialog(_('Cannot find history logs database'),
                         '%s does not exist.' % log_db_path)
             sys.exit()
 
-        xml = gtkgui_helpers.get_gtk_builder('history_manager.ui')
+        xml = get_builder('history_manager.ui')
         self.window = xml.get_object('history_manager_window')
+        Gtk.Window.set_default_icon_list(get_app_icon_list(self.window))
+
         self.jids_listview = xml.get_object('jids_listview')
         self.logs_listview = xml.get_object('logs_listview')
         self.search_results_listview = xml.get_object('search_results_listview')
@@ -452,8 +447,7 @@ class HistoryManager:
 
     def on_listview_button_press_event(self, widget, event):
         if event.button == 3:  # right click
-            xml = gtkgui_helpers.get_gtk_builder('history_manager.ui',
-                'context_menu')
+            xml = get_builder('history_manager.ui', ['context_menu'])
             if Gtk.Buildable.get_name(widget) != 'jids_listview':
                 xml.get_object('export_menuitem').hide()
             xml.get_object('delete_menuitem').connect('activate',
