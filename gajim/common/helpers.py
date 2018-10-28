@@ -39,6 +39,7 @@ import shlex
 import socket
 import time
 import logging
+import json
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
@@ -1492,3 +1493,15 @@ def get_sync_threshold(jid, archive_info):
         app.logger.set_archive_infos(jid, sync_threshold=threshold)
         return threshold
     return archive_info.sync_threshold
+
+def load_json(path, key=None, default=None):
+    try:
+        with open(path, 'r') as file:
+            json_dict = json.loads(file.read())
+    except Exception:
+        log.exception('Parsing error')
+        return default
+
+    if key is None:
+        return json_dict
+    return json_dict.get(key, default)

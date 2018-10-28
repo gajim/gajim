@@ -236,32 +236,6 @@ def scroll_to_end(widget):
     adj_h.set_value(0)
     return False
 
-
-class ServersXMLHandler(ContentHandler):
-    def __init__(self):
-        ContentHandler.__init__(self)
-        self.servers = []
-
-    def startElement(self, name, attributes):
-        if name == 'item':
-            if 'jid' in attributes.getNames():
-                self.servers.append(attributes.getValue('jid'))
-
-    def endElement(self, name):
-        pass
-
-def parse_server_xml(path_to_file):
-    try:
-        handler = ServersXMLHandler()
-        xml.sax.parse(path_to_file, handler)
-        return handler.servers
-    # handle exception if unable to open file
-    except IOError as message:
-        print(_('Error reading file:') + str(message), file=sys.stderr)
-    # handle exception parsing file
-    except xml.sax.SAXParseException as message:
-        print(_('Error parsing file:') + str(message), file=sys.stderr)
-
 def set_unset_urgency_hint(window, unread_messages_no):
     """
     Sets/unset urgency hint in window argument depending if we have unread
