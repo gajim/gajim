@@ -8,6 +8,7 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ChangePasswordDialog
+from gajim.gtk.util import get_image_button
 
 
 class OptionsDialog(Gtk.ApplicationWindow):
@@ -398,7 +399,7 @@ class FileChooserOption(GenericOption):
             button.set_filename(self.option_value)
         button.connect('selection-changed', self.on_select)
 
-        clear_button = gtkgui_helpers.get_image_button(
+        clear_button = get_image_button(
             'edit-clear-all-symbolic', _('Clear File'))
         clear_button.connect('clicked', lambda *args: button.unselect_all())
         self.option_box.pack_start(button, True, True, 0)
@@ -480,7 +481,7 @@ class ProxyComboOption(GenericOption):
         self.combo.connect('changed', self.on_value_change)
         self.combo.set_valign(Gtk.Align.CENTER)
 
-        button = gtkgui_helpers.get_image_button(
+        button = get_image_button(
             'preferences-system-symbolic', _('Manage Proxies'))
         button.set_action_name('app.manage-proxies')
         button.set_valign(Gtk.Align.CENTER)

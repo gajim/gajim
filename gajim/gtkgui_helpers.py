@@ -86,19 +86,6 @@ if os.name == 'nt':
 from gajim.common import helpers
 
 
-def get_image_button(icon_name, tooltip, toggle=False):
-    if toggle:
-        button = Gtk.ToggleButton()
-        icon = get_icon_pixmap(icon_name)
-        image = Gtk.Image()
-        image.set_from_pixbuf(icon)
-        button.set_image(image)
-    else:
-        button = Gtk.Button.new_from_icon_name(
-            icon_name, Gtk.IconSize.MENU)
-    button.set_tooltip_text(tooltip)
-    return button
-
 def get_gtk_builder(file_name, widget=None):
     file_path = os.path.join(configpaths.get('GUI'), file_name)
 

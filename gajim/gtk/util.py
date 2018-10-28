@@ -246,8 +246,7 @@ def get_image_button(icon_name, tooltip, toggle=False):
         image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
         button.set_image(image)
     else:
-        button = Gtk.Button.new_from_icon_name(
-            icon_name, Gtk.IconSize.MENU)
+        button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
     button.set_tooltip_text(tooltip)
     return button
 
