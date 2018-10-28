@@ -27,12 +27,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
-
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from gajim.common import helpers
 from gajim.common import app
 from gajim.common.i18n import _
 
@@ -221,106 +218,3 @@ class RemoveAccountWindow:
         if window is not None:
             window.remove_account(self.account)
         self.window.destroy()
-
-
-class ManageSoundsWindow:
-    def __init__(self, transient):
-        self._builder = gtkgui_helpers.get_gtk_builder(
-            'manage_sounds_window.ui')
-        self.window = self._builder.get_object('manage_sounds_window')
-        self.window.set_transient_for(transient)
-
-        self.sound_button = self._builder.get_object('filechooser')
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('All files'))
-        filter_.add_pattern('*')
-        self.sound_button.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('Wav Sounds'))
-        filter_.add_pattern('*.wav')
-        self.sound_button.add_filter(filter_)
-        self.sound_button.set_filter(filter_)
-
-        self.sound_tree = self._builder.get_object('sounds_treeview')
-
-        self._fill_sound_treeview()
-
-        self._builder.connect_signals(self)
-
-        self.window.show_all()
-
-    def _on_row_changed(self, model, path, iter_):
-        sound_event = model[iter_][3]
-        app.config.set_per('soundevents', sound_event,
-                           'enabled', bool(model[path][0]))
-        app.config.set_per('soundevents', sound_event,
-                           'path', model[iter_][2])
-
-    def _on_toggle(self, cell, path):
-        if self.sound_button.get_filename() is None:
-            return
-        model = self.sound_tree.get_model()
-        model[path][0] = not model[path][0]
-
-    def _fill_sound_treeview(self):
-        model = self.sound_tree.get_model()
-        model.clear()
-
-        # NOTE: sounds_ui_names MUST have all items of
-        # sounds = app.config.get_per('soundevents') as keys
-        sounds_dict = {
-            'attention_received': _('Attention Message Received'),
-            'first_message_received': _('First Message Received'),
-            'next_message_received_focused': _('Next Message Received Focused'),
-            'next_message_received_unfocused': _('Next Message Received Unfocused'),
-            'contact_connected': _('Contact Connected'),
-            'contact_disconnected': _('Contact Disconnected'),
-            'message_sent': _('Message Sent'),
-            'muc_message_highlight': _('Group Chat Message Highlight'),
-            'muc_message_received': _('Group Chat Message Received'),
-        }
-
-        for config_name, sound_name in sounds_dict.items():
-            enabled = app.config.get_per('soundevents', config_name, 'enabled')
-            path = app.config.get_per('soundevents', config_name, 'path')
-            model.append((enabled, sound_name, path, config_name))
-
-    def _on_cursor_changed(self, treeview):
-        model, iter_ = treeview.get_selection().get_selected()
-        path_to_snd_file = helpers.check_soundfile_path(model[iter_][2])
-        if path_to_snd_file is None:
-            self.sound_button.unselect_all()
-        else:
-            self.sound_button.set_filename(path_to_snd_file)
-
-    def _on_file_set(self, button):
-        model, iter_ = self.sound_tree.get_selection().get_selected()
-
-        filename = button.get_filename()
-        directory = os.path.dirname(filename)
-        app.config.set('last_sounds_dir', directory)
-        path_to_snd_file = helpers.strip_soundfile_path(filename)
-
-        # set new path to sounds_model
-        model[iter_][2] = path_to_snd_file
-        # set the sound to enabled
-        model[iter_][0] = True
-
-    def _on_clear(self, *args):
-        self.sound_button.unselect_all()
-        model, iter_ = self.sound_tree.get_selection().get_selected()
-        model[iter_][2] = ''
-        model[iter_][0] = False
-
-    def _on_play(self, *args):
-        model, iter_ = self.sound_tree.get_selection().get_selected()
-        snd_event_config_name = model[iter_][3]
-        helpers.play_sound(snd_event_config_name)
-
-    def _on_destroy(self, *args):
-        self.window.destroy()
-        window = app.get_app_window('Preferences')
-        if window is not None:
-            window.sounds_preferences = None

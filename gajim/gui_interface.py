@@ -100,7 +100,6 @@ from gajim.common.const import AvatarSize, SSLError, PEPEventType
 from gajim.common.const import ACTIVITIES, MOODS
 
 from gajim import roster_window
-from gajim import config
 from gajim.common import ged
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import configpaths

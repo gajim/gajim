@@ -42,7 +42,6 @@ from gi.repository import Gio
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
-from gajim import config
 from gajim import vcard
 from gajim import dataforms_widget
 from gajim import adhoc_commands

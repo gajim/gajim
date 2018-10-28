@@ -31,14 +31,13 @@ from gajim import gtkgui_helpers
 
 from gajim.chat_control_base import ChatControlBase
 
-from gajim.config import ManageSoundsWindow
-
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
 from gajim.gtk.advanced_config import AdvancedConfig
 from gajim.gtk.proxies import ManageProxies
+from gajim.gtk.sounds import ManageSounds
 
 try:
     from gajim.common.multimedia_helpers import AudioInputManager, AudioOutputManager
@@ -683,7 +682,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_manage_sounds_button_clicked(self, widget):
         if self.sounds_preferences is None:
-            self.sounds_preferences = ManageSoundsWindow(self)
+            self.sounds_preferences = ManageSounds(self)
         else:
             self.sounds_preferences.window.present()
 
