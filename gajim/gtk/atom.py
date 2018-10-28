@@ -27,7 +27,7 @@ from gajim.common import helpers
 from gajim.common import i18n
 from gajim.common.i18n import _
 
-from gajim import gtkgui_helpers
+from gajim.gtk.util import get_builder
 
 class AtomWindow:
     window = None
@@ -57,7 +57,7 @@ class AtomWindow:
 
         self.entry = None # the entry actually displayed
 
-        self.xml = gtkgui_helpers.get_gtk_builder('atom_entry_window.ui')
+        self.xml = get_builder('atom_entry_window.ui')
         self.window = self.xml.get_object('atom_entry_window')
         for name in ('new_entry_label', 'feed_title_label',
         'feed_title_eventbox', 'feed_tagline_label', 'entry_title_label',

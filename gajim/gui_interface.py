@@ -76,7 +76,6 @@ from gajim.groupchat_control import PrivateChatControl
 from gajim.message_window import MessageWindowMgr
 from gajim.filetransfers_window import FileTransfersWindow
 
-from gajim.atom_window import AtomWindow
 from gajim.session import ChatControlSession
 
 from gajim.common import idle
@@ -121,6 +120,7 @@ from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
+from gajim.gtk.atom import AtomWindow
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
