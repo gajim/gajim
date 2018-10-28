@@ -41,6 +41,7 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_iconset_name_for
 
 log = logging.getLogger('gajim.gtk.tooltips')
 
@@ -91,22 +92,15 @@ class StatusTable:
                 str_status += ' - <i>' + status + '</i>'
         return str_status
 
-    def add_status_row(self, file_path, show, str_status, show_lock=False,
-                       indent=True):
+    def add_status_row(self, show, str_status, show_lock=False,
+                       indent=True, transport=None):
         """
         Append a new row with status icon to the table
         """
         self.table.insert_row(self.current_row)
-        state_file = show.replace(' ', '_')
-        files = []
-        files.append(os.path.join(file_path, state_file + '.png'))
-        files.append(os.path.join(file_path, state_file + '.gif'))
         image = Gtk.Image()
-        image.set_from_pixbuf(None)
-        for file in files:
-            if os.path.exists(file):
-                image.set_from_file(file)
-                break
+        icon_name = get_iconset_name_for(show, transport=transport)
+        image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
         spacer = Gtk.Label(label=self.spacer_label)
         image.set_halign(Gtk.Align.START)
         image.set_valign(Gtk.Align.CENTER)
@@ -126,10 +120,6 @@ class StatusTable:
         self.current_row += 1
 
     def fill_table_with_accounts(self, accounts):
-        iconset = app.config.get('iconset')
-        if not iconset:
-            iconset = 'dcraven'
-        file_path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
         for acct in accounts:
             message = acct['message']
             message = helpers.reduce_chars_newlines(message, 100, 1)
@@ -143,8 +133,7 @@ class StatusTable:
             else:
                 status = account_label
 
-            self.add_status_row(file_path,
-                                acct['show'],
+            self.add_status_row(acct['show'],
                                 status,
                                 show_lock=show_lock,
                                 indent=False)
@@ -394,21 +383,11 @@ class RosterTooltip(Gtk.Window, StatusTable):
         if self.num_resources > 1:
             self._ui.status_label.show()
             transport = app.get_transport_name_from_jid(self.prim_contact.jid)
-            if transport:
-                file_path = os.path.join(
-                    helpers.get_transport_path(transport), '16x16')
-            else:
-                iconset = app.config.get('iconset')
-                if not iconset:
-                    iconset = 'dcraven'
-                file_path = os.path.join(
-                    helpers.get_iconset_path(iconset), '16x16')
-
             contact_keys = sorted(contacts_dict.keys())
             contact_keys.reverse()
             for priority in contact_keys:
                 for acontact in contacts_dict[priority]:
-                    icon_name = self._get_icon_name_for_tooltip(acontact)
+                    show = self._get_icon_name_for_tooltip(acontact)
                     if acontact.status and len(acontact.status) > 25:
                         status = ''
                         add_text = True
@@ -421,7 +400,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
                         acontact.priority,
                         acontact.show,
                         status)
-                    self.add_status_row(file_path, icon_name, status_line)
+                    self.add_status_row(show, status_line, transport=transport)
                     if add_text:
                         self.add_text_row(acontact.status, 2)
 

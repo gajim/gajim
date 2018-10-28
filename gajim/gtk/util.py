@@ -15,7 +15,7 @@
 from typing import Any
 from typing import List
 from typing import Tuple
-
+from typing import Optional
 
 import os
 import sys
@@ -107,10 +107,12 @@ def load_icon(icon_name, widget, size=16, pixbuf=False,
         log.error('Unable to load icon %s: %s', icon_name, str(error))
 
 
-def get_iconset_name_for(name: str) -> str:
+def get_iconset_name_for(name: str, transport: Optional[str] = None) -> str:
     if name == 'not in roster':
         name = 'notinroster'
     iconset = app.config.get('iconset')
+    if transport is not None:
+        return '%s-%s' % (transport, name)
     if not iconset:
         iconset = app.config.DEFAULT_ICONSET
     return '%s-%s' % (iconset, name)
