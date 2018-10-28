@@ -82,6 +82,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[1][0].keycode
     except TypeError:
         keycode_c = 54
+    except IndexError:
+        # FIXME
+        # On some keyboard layouts there is no keyval for KEY_c
+        keycode_c = None
+
     try:
         keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[1][0].keycode
     except TypeError:
