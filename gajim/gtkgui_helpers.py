@@ -60,19 +60,6 @@ class Color:
     GREY = Gdk.RGBA(red=195/255, green=195/255, blue=192/255, alpha=1)
     ORANGE = Gdk.RGBA(red=245/255, green=121/255, blue=0/255, alpha=1)
 
-def get_icon_pixmap(icon_name, size=16, color=None, quiet=False):
-    try:
-        iconinfo = gtk_icon_theme.lookup_icon(icon_name, size, 0)
-        if not iconinfo:
-            raise GLib.GError
-        if color:
-            pixbuf, _was_symbolic = iconinfo.load_symbolic(*color)
-            return pixbuf
-        return iconinfo.load_icon()
-    except GLib.GError as error:
-        if not quiet:
-            log.error('Unable to load icon %s: %s', icon_name, str(error))
-
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
@@ -404,12 +391,7 @@ def get_pep_as_pixbuf(pep_class):
         return pixbuf
 
     if pep_class == PEPEventType.TUNE:
-        icon = get_icon_pixmap('audio-x-generic', quiet=True)
-        if not icon:
-            path = os.path.join(
-                configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
-            return GdkPixbuf.Pixbuf.new_from_file(path)
-        return icon
+        return 'audio-x-generic'
 
     if pep_class == PEPEventType.ACTIVITY:
         pep_ = pep_class.data
@@ -428,10 +410,7 @@ def get_pep_as_pixbuf(pep_class):
         return load_activity_icon('unknown').get_pixbuf()
 
     if pep_class == PEPEventType.LOCATION:
-        icon = get_icon_pixmap('applications-internet', quiet=True)
-        if not icon:
-            icon = get_icon_pixmap('gajim-earth')
-        return icon
+        return 'applications-internet'
 
     return None
 

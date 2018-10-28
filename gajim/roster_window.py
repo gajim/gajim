@@ -98,14 +98,11 @@ class Column(IntEnum):
     ACCOUNT = 4  # cellrenderer text that holds account name
     MOOD_PIXBUF = 5
     ACTIVITY_PIXBUF = 6
-    TUNE_PIXBUF = 7
-    LOCATION_PIXBUF = 8
+    TUNE_ICON = 7
+    LOCATION_ICON = 8
     AVATAR_IMG = 9  # avatar_sha
     PADLOCK_PIXBUF = 10  # use for account row only
     VISIBLE = 11
-
-empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
-empty_pixbuf.fill(0xffffff00)
 
 
 class RosterWindow:
@@ -1093,27 +1090,27 @@ class RosterWindow:
             self.model[child_iter][Column.MOOD_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['mood'])
         else:
-            self.model[child_iter][Column.MOOD_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.MOOD_PIXBUF] = None
 
         if app.config.get('show_activity_in_roster') and 'activity' in \
         pep_dict:
             self.model[child_iter][Column.ACTIVITY_PIXBUF] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['activity'])
         else:
-            self.model[child_iter][Column.ACTIVITY_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.ACTIVITY_PIXBUF] = None
 
         if app.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
-            self.model[child_iter][Column.TUNE_PIXBUF] = \
+            self.model[child_iter][Column.TUNE_ICON] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['tune'])
         else:
-            self.model[child_iter][Column.TUNE_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.TUNE_ICON] = None
 
         if app.config.get('show_location_in_roster') and 'geoloc' in \
         pep_dict:
-            self.model[child_iter][Column.LOCATION_PIXBUF] = \
+            self.model[child_iter][Column.LOCATION_ICON] = \
                 gtkgui_helpers.get_pep_as_pixbuf(pep_dict['geoloc'])
         else:
-            self.model[child_iter][Column.LOCATION_PIXBUF] = empty_pixbuf
+            self.model[child_iter][Column.LOCATION_ICON] = None
 
     def _really_draw_accounts(self):
         for acct in self.accounts_to_draw:
@@ -1392,10 +1389,11 @@ class RosterWindow:
             return
         if not contact:
             contact = app.contacts.get_contact(account, jid)
+
+        pixbuf = None
         if pep_type in contact.pep:
             pixbuf = gtkgui_helpers.get_pep_as_pixbuf(contact.pep[pep_type])
-        else:
-            pixbuf = empty_pixbuf
+
         for child_iter in iters:
             self.model[child_iter][model_column] = pixbuf
 
@@ -4817,7 +4815,7 @@ class RosterWindow:
             return
 
         # allocate space for the icon only if needed
-        if not model[titer][data] or model[titer][data] == empty_pixbuf:
+        if model[titer][data] is None:
             renderer.set_property('visible', False)
         else:
             renderer.set_property('visible', True)
@@ -5658,10 +5656,10 @@ class RosterWindow:
         self.save_done = False
 
         # [icon, name, type, jid, account, editable, mood_pixbuf,
-        # activity_pixbuf, tune_pixbuf, location_pixbuf, avatar_img,
+        # activity_pixbuf, TUNE_ICON, LOCATION_ICON, avatar_img,
         # padlock_pixbuf, visible]
         self.columns = [Gtk.Image, str, str, str, str,
-            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf,
+            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, str, str,
             Gtk.Image, str, bool]
 
         self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
@@ -5765,8 +5763,8 @@ class RosterWindow:
         self.renderers_list = []
         self.renderers_propertys = {}
         self._pep_type_to_model_column = {'mood': Column.MOOD_PIXBUF,
-            'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_PIXBUF,
-            'geoloc': Column.LOCATION_PIXBUF}
+            'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_ICON,
+            'geoloc': Column.LOCATION_ICON}
 
         renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
@@ -5796,12 +5794,12 @@ class RosterWindow:
                 self._fill_pep_pixbuf_renderer, Column.ACTIVITY_PIXBUF),
 
                 ('tune', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', Column.TUNE_PIXBUF,
-                self._fill_pep_pixbuf_renderer, Column.TUNE_PIXBUF),
+                'icon_name', Column.TUNE_ICON,
+                self._fill_pep_pixbuf_renderer, Column.TUNE_ICON),
 
                 ('geoloc', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', Column.LOCATION_PIXBUF,
-                self._fill_pep_pixbuf_renderer, Column.LOCATION_PIXBUF))
+                'icon_name', Column.LOCATION_ICON,
+                self._fill_pep_pixbuf_renderer, Column.LOCATION_ICON))
 
         if app.config.get('avatar_position_in_roster') == 'right':
             add_avatar_renderer()

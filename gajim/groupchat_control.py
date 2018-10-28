@@ -34,7 +34,6 @@ from enum import IntEnum, unique
 import nbxmpp
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gio
@@ -89,9 +88,6 @@ class Column(IntEnum):
     TYPE = 2 # type of the row ('contact' or 'role')
     TEXT = 3 # text shown in the cellrenderer
     AVATAR_IMG = 4 # avatar of the contact
-
-empty_pixbuf = GdkPixbuf.Pixbuf.new(GdkPixbuf.Colorspace.RGB, True, 8, 1, 1)
-empty_pixbuf.fill(0xffffff00)
 
 
 def cell_data_func(column, renderer, model, iter_, user_data):
