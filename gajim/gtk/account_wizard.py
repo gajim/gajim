@@ -54,10 +54,11 @@ class AccountCreationWizard:
 
         self.update_proxy_list()
 
-        # parse servers.xml
-        servers_xml = os.path.join(
-            configpaths.get('DATA'), 'other', 'servers.xml')
-        servers = gtkgui_helpers.parse_server_xml(servers_xml)
+        # parse servers.json
+        server_file_path = os.path.join(
+            configpaths.get('DATA'), 'other', 'servers.json')
+        servers = helpers.load_json(server_file_path, 'servers', [])
+
         servers_model = self.xml.get_object('server_liststore')
         for server in servers:
             servers_model.append((server,))
