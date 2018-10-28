@@ -29,7 +29,7 @@ from gajim.conversation_textview import ConversationTextview
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_iconset_name_for
+from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_completion_liststore
 from gajim.gtk.util import move_window
 from gajim.gtk.util import resize_window
@@ -134,7 +134,7 @@ class SingleMessageWindow:
             keys = sorted(self.completion_dict.keys())
             for jid in keys:
                 contact = self.completion_dict[jid]
-                status_icon = get_iconset_name_for(contact.show)
+                status_icon = get_icon_name(contact.show)
                 liststore.append((status_icon, jid))
         else:
             self.completion_dict = {}

@@ -41,7 +41,7 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import get_iconset_name_for
+from gajim.gtk.util import get_icon_name
 
 log = logging.getLogger('gajim.gtk.tooltips')
 
@@ -99,7 +99,7 @@ class StatusTable:
         """
         self.table.insert_row(self.current_row)
         image = Gtk.Image()
-        icon_name = get_iconset_name_for(show, transport=transport)
+        icon_name = get_icon_name(show, transport=transport)
         image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
         spacer = Gtk.Label(label=self.spacer_label)
         image.set_halign(Gtk.Align.START)

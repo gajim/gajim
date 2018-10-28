@@ -24,7 +24,7 @@ from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
-from gajim.gtk.util import get_iconset_name_for
+from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 
 
@@ -276,7 +276,7 @@ class ContactRow(Gtk.Grid):
         self.new = jid == ''
 
         if self.groupchat:
-            muc_icon = get_iconset_name_for(
+            muc_icon = get_icon_name(
                 'muc-inactive' if self.new else 'muc-active')
             image = Gtk.Image.new_from_icon_name(muc_icon, Gtk.IconSize.DND)
         else:

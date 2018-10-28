@@ -183,8 +183,8 @@ class HistoryWindow:
             completion_dict.update(
                 helpers.get_contact_dict_for_account(account))
 
-        muc_active_icon = util.get_iconset_name_for('muc-active')
-        online_icon = util.get_iconset_name_for('online')
+        muc_active_icon = util.get_icon_name('muc-active')
+        online_icon = util.get_icon_name('online')
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
