@@ -15,8 +15,6 @@ from distutils.util import convert_path, newer
 
 import subprocess
 
-import gajim
-
 pos = [x for x in os.listdir('po') if x[-3:] == ".po"]
 ALL_LINGUAS = sorted([os.path.split(x)[-1][:-3] for x in pos])
 MAN_FILES = ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']
@@ -213,32 +211,6 @@ class update_po(Command):
         update_trans()
 
 
-package_data_activities = ['data/activities/*/*/*.png']
-package_data_emoticons = ['data/emoticons/*/*.png',
-                          'data/emoticons/*/LICENSE']
-package_data_gui = ['data/gui/*.ui']
-package_data_icons = ['data/icons/hicolor/*/*/*.png',
-                      'data/icons/hicolor/*/*/*.svg']
-package_data_iconsets = ['data/iconsets/*/*/*.gif',
-                         'data/iconsets/*/*/*.png',
-                         'data/iconsets/transports/*/*/*.png']
-package_data_moods = ['data/moods/*/*.png']
-package_data_other = ['data/other/*']
-package_data_sounds = ['data/sounds/*.wav']
-package_data_style = ['data/style/*.css']
-package_plugins_data = ['data/plugins/*/*']
-package_data = (package_data_activities
-                + package_data_emoticons
-                + package_data_gui
-                + package_data_icons
-                + package_data_iconsets
-                + package_data_moods
-                + package_data_other
-                + package_data_sounds
-                + package_data_style
-                + package_plugins_data)
-
-
 # only install subdirectories of data
 data_files_app_icon = [
     ("share/icons/hicolor/64x64/apps",
@@ -254,16 +226,6 @@ data_files_app_icon = [
 data_files = data_files_app_icon
 
 setup(
-    name="gajim",
-    description='A GTK+ Jabber client',
-    version=gajim.__version__,
-    author="Philipp Hörist, Yann Leboulanger",
-    author_email="gajim-devel@gajim.org",
-    url='https://gajim.org',
-    license='GPL v3',
-    classifiers=[
-        'Programming Language :: Python :: 3',
-    ],
     cmdclass={
         'build_py': build,
         'install': install,
@@ -280,14 +242,5 @@ setup(
             'gajim-history-manager = gajim.history_manager:main',
         ]
     },
-    packages=find_packages(exclude=["gajim.dev", "test*"]),
-    package_data={'gajim': package_data},
-    data_files=data_files,
-    install_requires=[
-        'keyring',
-        'nbxmpp>=0.6.8,<0.7.0',
-        'pyOpenSSL>=0.12',
-        'cssutils>=1.0.2',
-        'precis-i18n>=1.0.0',
-    ]
+    data_files=data_files
 )
