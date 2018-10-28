@@ -76,6 +76,7 @@ from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
+from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_image_from_icon_name
 
@@ -742,7 +743,7 @@ class GroupchatControl(ChatControlBase):
             if self.room_jid not in app.interface.instances[self.account][
             'gc_config']:
                 app.interface.instances[self.account]['gc_config'][
-                    self.room_jid] = config.GroupchatConfigWindow(self.account,
+                    self.room_jid] = GroupchatConfig(self.account,
                     self.room_jid)
 
     def _on_bookmark_room(self, action, param):

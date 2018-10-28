@@ -121,6 +121,7 @@ from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
+from gajim.gtk.groupchat_config import GroupchatConfig
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
@@ -604,7 +605,7 @@ class Interface:
             del app.automatic_rooms[account][obj.jid]
         elif obj.jid not in self.instances[account]['gc_config']:
             self.instances[account]['gc_config'][obj.jid] = \
-                config.GroupchatConfigWindow(account, obj.jid, obj.dataform)
+                GroupchatConfig(account, obj.jid, obj.dataform)
 
     def handle_event_gc_affiliation(self, obj):
         #('GC_AFFILIATION', account, (room_jid, users_dict))
