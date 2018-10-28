@@ -44,6 +44,7 @@ from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
+from gajim.gtk.util import get_app_icon_list
 
 ####################
 
@@ -469,13 +470,11 @@ class MessageWindow:
 
     def show_icon(self):
         window_mode = app.interface.msg_win_mgr.mode
-        icon = 'org.gajim.Gajim'
         if window_mode in (MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE,
                            MessageWindowMgr.ONE_MSG_WINDOW_NEVER):
             if self.type_ == 'gc':
                 icon = get_icon_name('muc-active')
-
-        self.window.set_icon_name(icon)
+                self.window.set_icon_name(icon)
 
     def show_title(self, urgent=True, control=None):
         """
@@ -962,6 +961,8 @@ class MessageWindowMgr(GObject.GObject):
 
         self.parent_win = parent_window
         self.parent_paned = parent_paned
+
+        Gtk.Window.set_default_icon_list(get_app_icon_list(parent_window))
 
     def change_account_name(self, old_name, new_name):
         for win in self.windows():

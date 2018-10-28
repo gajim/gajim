@@ -2739,15 +2739,6 @@ class Interface:
         from gajim.gtk import statusicon
         self.systray = statusicon.StatusIcon()
 
-        pixs = []
-        for size in (16, 32, 48, 64, 128):
-            pix = gtkgui_helpers.get_icon_pixmap('org.gajim.Gajim', size)
-            if pix:
-                pixs.append(pix)
-        if pixs:
-            # set the icon to all windows
-            Gtk.Window.set_default_icon_list(pixs)
-
         # Init emoji_chooser
         from gajim.gtk.emoji_chooser import emoji_chooser
         emoji_chooser.load()
