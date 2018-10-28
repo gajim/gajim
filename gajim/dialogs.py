@@ -56,6 +56,7 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.gtk.dialogs import *
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import resize_window
 
 
 log = logging.getLogger('gajim.dialogs')
@@ -1559,7 +1560,7 @@ class DataFormWindow(Dialog):
             Gtk.ResponseType.CANCEL), (Gtk.STOCK_OK, Gtk.ResponseType.OK)],
             on_response_ok=self.on_ok)
         self.set_resizable(True)
-        gtkgui_helpers.resize_window(self, 600, 400)
+        resize_window(self, 600, 400)
         self.dataform_widget = dataforms_widget.DataFormWidget()
         self.dataform = dataforms.extend_form(node=form)
         self.dataform_widget.set_sensitive(True)

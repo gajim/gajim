@@ -97,13 +97,6 @@ if os.name == 'nt':
 
 from gajim.common import helpers
 
-def get_total_screen_geometry():
-    screen = Gdk.Screen.get_default()
-    window = Gdk.Screen.get_root_window(screen)
-    w, h = window.get_width(), window.get_height()
-    log.debug('Get screen geometry: %s %s', w, h)
-    return w, h
-
 def add_image_to_button(button, icon_name):
     img = Gtk.Image()
     path_img = get_icon_path(icon_name)
@@ -152,55 +145,6 @@ def get_gtk_builder(file_name, widget=None):
         else:
             builder.add_from_file(file_path)
     return builder
-
-def get_completion_liststore(entry):
-    """
-    Create a completion model for entry widget completion list consists of
-    (Pixbuf, Text) rows
-    """
-    completion = Gtk.EntryCompletion()
-    liststore = Gtk.ListStore(str, str)
-
-    render_pixbuf = Gtk.CellRendererPixbuf()
-    completion.pack_start(render_pixbuf, False)
-    completion.add_attribute(render_pixbuf, 'icon_name', 0)
-
-    render_text = Gtk.CellRendererText()
-    completion.pack_start(render_text, True)
-    completion.add_attribute(render_text, 'text', 1)
-    completion.set_property('text_column', 1)
-    completion.set_model(liststore)
-    entry.set_completion(completion)
-    return liststore
-
-def move_window(window, x, y):
-    """
-    Move the window, but also check if out of screen
-    """
-    screen_w, screen_h = get_total_screen_geometry()
-    if x < 0:
-        x = 0
-    if y < 0:
-        y = 0
-    w, h = window.get_size()
-    if x + w > screen_w:
-        x = screen_w - w
-    if y + h > screen_h:
-        y = screen_h - h
-    window.move(x, y)
-
-def resize_window(window, w, h):
-    """
-    Resize window, but also checks if huge window or negative values
-    """
-    screen_w, screen_h = get_total_screen_geometry()
-    if not w or not h:
-        return
-    if w > screen_w:
-        w = screen_w
-    if h > screen_h:
-        h = screen_h
-    window.resize(abs(w), abs(h))
 
 def at_the_end(widget):
     """Determines if a Scrollbar in a GtkScrolledWindow is at the end.
@@ -372,18 +316,6 @@ def get_fade_color(treeview, selected, focused):
     q = 0.7 # foreground # p + q should do 1.0
     return Gdk.RGBA(bg.red*p + fg.red*q, bg.green*p + fg.green*q,
         bg.blue*p + fg.blue*q)
-
-def make_gtk_month_python_month(month):
-    """
-    GTK starts counting months from 0, so January is 0 but Python's time start
-    from 1, so align to Python
-
-    NOTE: Month MUST be an integer.
-    """
-    return month + 1
-
-def make_python_month_gtk_month(month):
-    return month - 1
 
 def make_pixbuf_grayscale(pixbuf):
     pixbuf2 = pixbuf.copy()
@@ -805,11 +737,3 @@ def pango_to_css_weight(number):
     if number > 900:
         return 900
     return int(math.ceil(number / 100.0)) * 100
-
-def get_monitor_scale_factor():
-    display = Gdk.Display.get_default()
-    monitor = display.get_primary_monitor()
-    if monitor is None:
-        log.warning('Could not determine scale factor')
-        return 1
-    return monitor.get_scale_factor()

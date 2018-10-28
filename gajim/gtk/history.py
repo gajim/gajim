@@ -23,7 +23,8 @@
 
 import time
 import datetime
-from enum import IntEnum, unique
+from enum import IntEnum
+from enum import unique
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -33,12 +34,19 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import exceptions
 from gajim.common.i18n import _
-from gajim.common.const import ShowConstant, KindConstant
+from gajim.common.const import ShowConstant
+from gajim.common.const import KindConstant
 
 from gajim import conversation_textview
 
-from gajim.gtk import util
-from gajim.gtk.util import python_month, gtk_month
+from gajim.gtk.util import python_month
+from gajim.gtk.util import gtk_month
+from gajim.gtk.util import resize_window
+from gajim.gtk.util import move_window
+from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_completion_liststore
+from gajim.gtk.util import get_builder
+
 from gajim.gtk.dialogs import ErrorDialog
 
 @unique
@@ -66,7 +74,7 @@ class HistoryWindow:
     """
 
     def __init__(self, jid=None, account=None):
-        xml = util.get_builder('history_window.ui')
+        xml = get_builder('history_window.ui')
         self.window = xml.get_object('history_window')
         self.window.set_application(app.app)
         self.calendar = xml.get_object('calendar')
@@ -137,12 +145,12 @@ class HistoryWindow:
         else:
             self._load_history(None)
 
-        util.resize_window(self.window,
-                           app.config.get('history_window_width'),
-                           app.config.get('history_window_height'))
-        util.move_window(self.window,
-                         app.config.get('history_window_x-position'),
-                         app.config.get('history_window_y-position'))
+        resize_window(self.window,
+                      app.config.get('history_window_width'),
+                      app.config.get('history_window_height'))
+        move_window(self.window,
+                    app.config.get('history_window_x-position'),
+                    app.config.get('history_window_y-position'))
 
         xml.connect_signals(self)
         self.window.show_all()
@@ -163,7 +171,7 @@ class HistoryWindow:
         {key : (jid, account, nick_name, full_completion_name}
         This is a generator and does pseudo-threading via idle_add().
         """
-        liststore = util.get_completion_liststore(
+        liststore = get_completion_liststore(
             self.jid_entry.get_child())
         liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         self.jid_entry.get_child().get_completion().connect(
@@ -183,8 +191,8 @@ class HistoryWindow:
             completion_dict.update(
                 helpers.get_contact_dict_for_account(account))
 
-        muc_active_icon = util.get_icon_name('muc-active')
-        online_icon = util.get_icon_name('online')
+        muc_active_icon = get_icon_name('muc-active')
+        online_icon = get_icon_name('online')
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster

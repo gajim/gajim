@@ -42,6 +42,8 @@ from gajim.chat_control import ChatControl
 
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import resize_window
+from gajim.gtk.util import move_window
 
 ####################
 
@@ -185,7 +187,7 @@ class MessageWindow:
         return sum(len(d) for d in self._controls.values())
 
     def resize(self, width, height):
-        gtkgui_helpers.resize_window(self.window, width, height)
+        resize_window(self.window, width, height)
 
     def _on_window_focus(self, widget, event):
         # on destroy() the window that was last focused gets the focus
@@ -1047,7 +1049,7 @@ class MessageWindowMgr(GObject.GObject):
         else:
             return
 
-        gtkgui_helpers.move_window(win.window, pos[0], pos[1])
+        move_window(win.window, pos[0], pos[1])
 
     def _mode_to_key(self, contact, acct, type_, resource=None):
         if self.mode == self.ONE_MSG_WINDOW_NEVER:
@@ -1284,9 +1286,9 @@ class MessageWindowMgr(GObject.GObject):
                 child = w.parent_paned.get_child2()
                 w.parent_paned.remove(child)
                 self.parent_win.lookup_action('show-roster').set_enabled(False)
-                gtkgui_helpers.resize_window(w.window,
-                        app.config.get('roster_width'),
-                        app.config.get('roster_height'))
+                resize_window(w.window,
+                              app.config.get('roster_width'),
+                              app.config.get('roster_height'))
 
         self._windows = {}
 

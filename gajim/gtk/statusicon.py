@@ -24,12 +24,14 @@ import os
 from gi.repository import Gtk
 
 from gajim import dialogs
-from gajim import gtkgui_helpers
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
+
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import move_window
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.tooltips import NotificationAreaTooltip
 
@@ -382,9 +384,9 @@ class StatusIcon:
                 if not win.get_property('visible'):
                     win.show_all()
                     if app.config.get('save-roster-position'):
-                        gtkgui_helpers.move_window(win,
-                            app.config.get('roster_x-position'),
-                            app.config.get('roster_y-position'))
+                        move_window(win,
+                                    app.config.get('roster_x-position'),
+                                    app.config.get('roster_y-position'))
                 if not app.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
@@ -398,9 +400,9 @@ class StatusIcon:
         win = app.interface.roster.window
         if not win.get_property('visible') and app.config.get(
         'save-roster-position'):
-            gtkgui_helpers.move_window(win,
-                app.config.get('roster_x-position'),
-                app.config.get('roster_y-position'))
+            move_window(win,
+                        app.config.get('roster_x-position'),
+                        app.config.get('roster_y-position'))
         app.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):

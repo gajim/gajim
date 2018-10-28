@@ -262,3 +262,12 @@ def convert_rgb_to_hex(rgb_string: str) -> str:
     green = int(rgb.green * 255)
     blue = int(rgb.blue * 255)
     return '#%02x%02x%02x' % (red, green, blue)
+
+
+def get_monitor_scale_factor() -> int:
+    display = Gdk.Display.get_default()
+    monitor = display.get_primary_monitor()
+    if monitor is None:
+        log.warning('Could not determine scale factor')
+        return 1
+    return monitor.get_scale_factor()

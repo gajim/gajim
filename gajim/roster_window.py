@@ -83,6 +83,8 @@ from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import resize_window
+from gajim.gtk.util import move_window
 
 
 log = logging.getLogger('gajim.roster')
@@ -2373,9 +2375,9 @@ class RosterWindow:
     def on_message_window_delete(self, win_mgr, msg_win):
         if app.config.get('one_message_window') == 'always_with_roster':
             self.show_roster_vbox(True)
-            gtkgui_helpers.resize_window(self.window,
-                    app.config.get('roster_width'),
-                    app.config.get('roster_height'))
+            resize_window(self.window,
+                          app.config.get('roster_width'),
+                          app.config.get('roster_height'))
 
     def close_all_from_dict(self, dic):
         """
@@ -5704,13 +5706,13 @@ class RosterWindow:
         if len(app.connections) < 2:
             # Do not merge accounts if only one exists
             self.regroup = False
-        gtkgui_helpers.resize_window(self.window,
-            app.config.get('roster_width'),
-            app.config.get('roster_height'))
+        resize_window(self.window,
+                      app.config.get('roster_width'),
+                      app.config.get('roster_height'))
         if app.config.get('save-roster-position'):
-            gtkgui_helpers.move_window(self.window,
-                app.config.get('roster_x-position'),
-                app.config.get('roster_y-position'))
+            move_window(self.window,
+                        app.config.get('roster_x-position'),
+                        app.config.get('roster_y-position'))
 
         self.popups_notification_height = 0
         self.popup_notification_windows = []
