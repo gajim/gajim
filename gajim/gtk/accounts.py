@@ -38,6 +38,7 @@ from gajim.options_dialog import OptionsBox
 
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.util import get_icon_name
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
@@ -425,7 +426,7 @@ class Account(Gtk.Box):
 
     def _update_image(self):
         show = helpers.get_current_show(self.account)
-        icon = gtkgui_helpers.get_iconset_name_for(show)
+        icon = get_icon_name(show)
         self.image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
 

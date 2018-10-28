@@ -609,14 +609,6 @@ def get_pep_as_pixbuf(pep_class):
 
     return None
 
-def get_iconset_name_for(name):
-    if name == 'not in roster':
-        name = 'notinroster'
-    iconset = app.config.get('iconset')
-    if not iconset:
-        iconset = app.config.DEFAULT_ICONSET
-    return '%s-%s' % (iconset, name)
-
 def load_icons_meta():
     """
     Load and return  - AND + small icons to put on top left of an icon for meta
@@ -803,11 +795,6 @@ def draw_affiliation(surface, affiliation):
     elif affiliation == 'member':
         ctx.set_source_rgb(0, 255/255, 0)
     ctx.fill()
-
-def get_image_from_icon_name(icon_name, scale):
-    icon = get_iconset_name_for(icon_name)
-    surface = gtk_icon_theme.load_surface(icon, 16, scale, None, 0)
-    return Gtk.Image.new_from_surface(surface)
 
 def pango_to_css_weight(number):
     # Pango allows for weight values between 100 and 1000

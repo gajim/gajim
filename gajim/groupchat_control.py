@@ -39,7 +39,6 @@ from gi.repository import Pango
 from gi.repository import GLib
 from gi.repository import Gio
 
-
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
@@ -77,6 +76,8 @@ from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
+from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_image_from_icon_name
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -1092,9 +1093,9 @@ class GroupchatControl(ChatControlBase):
     def get_tab_image(self, count_unread=True):
         tab_image = None
         if self.is_connected:
-            tab_image = gtkgui_helpers.get_iconset_name_for('muc-active')
+            tab_image = get_icon_name('muc-active')
         else:
-            tab_image = gtkgui_helpers.get_iconset_name_for('muc-inactive')
+            tab_image = get_icon_name('muc-inactive')
         return tab_image
 
     def update_ui(self):
@@ -1156,9 +1157,9 @@ class GroupchatControl(ChatControlBase):
                                                    self.scale_factor)
                 banner_status_img.set_from_surface(surface)
                 return
-            icon = gtkgui_helpers.get_iconset_name_for('muc-active')
+            icon = get_icon_name('muc-active')
         else:
-            icon = gtkgui_helpers.get_iconset_name_for('muc-inactive')
+            icon = get_icon_name('muc-inactive')
         banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
 
     def get_continued_conversation_name(self):
@@ -1761,10 +1762,10 @@ class GroupchatControl(ChatControlBase):
                 nick)
         theme = Gtk.IconTheme.get_default()
         if app.events.get_events(self.account, self.room_jid + '/' + nick):
-            icon_name = gtkgui_helpers.get_iconset_name_for('event')
+            icon_name = get_icon_name('event')
             surface = theme.load_surface(icon_name, 16, self.scale_factor, None, 0)
         else:
-            icon_name = gtkgui_helpers.get_iconset_name_for(gc_contact.show)
+            icon_name = get_icon_name(gc_contact.show)
             surface = theme.load_surface(icon_name, 16, self.scale_factor, None, 0)
 
         name = GLib.markup_escape_text(gc_contact.name)
@@ -2123,8 +2124,7 @@ class GroupchatControl(ChatControlBase):
         # Create Role
         role_iter = self.get_role_iter(role)
         if not role_iter:
-            image = gtkgui_helpers.get_image_from_icon_name('closed',
-                                                            self.scale_factor)
+            image = get_image_from_icon_name('closed', self.scale_factor)
             ext_columns = [None] * self.nb_ext_renderers
             row = [image, role, 'role', role_name, None] + ext_columns
             role_iter = self.model.append(None, row)
@@ -2590,8 +2590,7 @@ class GroupchatControl(ChatControlBase):
         When a row is expanded: change the icon of the arrow
         """
         model = widget.get_model()
-        image = gtkgui_helpers.get_image_from_icon_name(
-            'opened', self.scale_factor)
+        image = get_image_from_icon_name('opened', self.scale_factor)
         model[iter_][Column.IMG] = image
 
     def on_list_treeview_row_collapsed(self, widget, iter_, path):
@@ -2599,8 +2598,7 @@ class GroupchatControl(ChatControlBase):
         When a row is collapsed: change the icon of the arrow
         """
         model = widget.get_model()
-        image = gtkgui_helpers.get_image_from_icon_name(
-            'closed', self.scale_factor)
+        image = get_image_from_icon_name('closed', self.scale_factor)
         model[iter_][Column.IMG] = image
 
     def kick(self, widget, nick):

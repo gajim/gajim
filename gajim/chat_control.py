@@ -54,6 +54,7 @@ from gajim import dialogs
 
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.util import get_icon_name
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -612,7 +613,7 @@ class ChatControl(ChatControlBase):
         show = contact.show
 
         # Set banner image
-        icon = gtkgui_helpers.get_iconset_name_for(show)
+        icon = get_icon_name(show)
         banner_status_img = self.xml.get_object('banner_status_image')
         banner_status_img.set_from_icon_name(icon, Gtk.IconSize.DND)
 

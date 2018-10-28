@@ -29,6 +29,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_icon_name
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.tooltips import NotificationAreaTooltip
 
@@ -133,14 +134,14 @@ class StatusIcon:
         if app.events.get_nb_systray_events():
             self.status_icon.set_visible(True)
 
-            icon_name = gtkgui_helpers.get_iconset_name_for('event')
+            icon_name = get_icon_name('event')
             self.status_icon.set_from_icon_name(icon_name)
             return
 
         if app.config.get('trayicon') == 'on_event':
             self.status_icon.set_visible(False)
 
-        icon_name = gtkgui_helpers.get_iconset_name_for(self.status)
+        icon_name = get_icon_name(self.status)
         self.status_icon.set_from_icon_name(icon_name)
 
     def change_status(self, global_status):

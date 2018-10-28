@@ -55,6 +55,7 @@ from gajim.common.exceptions import GajimGeneralException
 # Compat with Gajim 1.0.3 for plugins
 from gajim.gtk.dialogs import *
 from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.util import get_icon_name
 
 
 log = logging.getLogger('gajim.dialogs')
@@ -1439,7 +1440,7 @@ class TransformChatToMUC:
                 # Add contact if it can be invited
                 if invitable(contact, contact_transport) and \
                 contact.show not in ('offline', 'error'):
-                    icon_name = gtkgui_helpers.get_iconset_name_for(contact.show)
+                    icon_name = get_icon_name(contact.show)
                     name = contact.name
                     if name == '':
                         name = jid.split('@')[0]

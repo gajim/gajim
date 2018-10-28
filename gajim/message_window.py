@@ -41,6 +41,7 @@ from gajim.chat_control_base import ChatControlBase
 from gajim.chat_control import ChatControl
 
 from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.util import get_icon_name
 
 ####################
 
@@ -470,7 +471,7 @@ class MessageWindow:
         if window_mode in (MessageWindowMgr.ONE_MSG_WINDOW_PERTYPE,
                            MessageWindowMgr.ONE_MSG_WINDOW_NEVER):
             if self.type_ == 'gc':
-                icon = gtkgui_helpers.get_iconset_name_for('muc-active')
+                icon = get_icon_name('muc-active')
 
         self.window.set_icon_name(icon)
 

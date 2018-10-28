@@ -82,6 +82,7 @@ from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
+from gajim.gtk.util import get_icon_name
 
 
 log = logging.getLogger('gajim.roster')
@@ -257,7 +258,7 @@ class RosterWindow:
             if tree_model[iter_][2] == 'status':
                 cell.set_property('icon_name', icon_name)
             else:
-                iconset_name = gtkgui_helpers.get_iconset_name_for(icon_name)
+                iconset_name = get_icon_name(icon_name)
                 cell.set_property('icon_name', iconset_name)
         else:
             show = tree_model[iter_][0]

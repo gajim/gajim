@@ -239,6 +239,12 @@ def get_image_button(icon_name, tooltip, toggle=False):
     return button
 
 
+def get_image_from_icon_name(icon_name: str, scale: int) -> Any:
+    icon = get_icon_name(icon_name)
+    surface = _icon_theme.load_surface(icon, 16, scale, None, 0)
+    return Gtk.Image.new_from_surface(surface)
+
+
 def python_month(month: int) -> int:
     return month + 1
 
