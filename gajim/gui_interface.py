@@ -95,7 +95,6 @@ from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
 from gajim.common.const import AvatarSize, SSLError, PEPEventType
-from gajim.common.const import ACTIVITIES, MOODS
 
 from gajim import roster_window
 from gajim.common import ged
@@ -2418,40 +2417,6 @@ class Interface:
             gc_ctrl = self.minimized_controls[account][bare_jid]
 
         return gc_ctrl and gc_ctrl.type_id == message_control.TYPE_GC
-
-    @staticmethod
-    def get_pep_icon(pep_obj):
-        if pep_obj == PEPEventType.MOOD:
-            received_mood = pep_obj.data['mood']
-            mood = received_mood if received_mood in MOODS else 'unknown'
-            return gtkgui_helpers.load_mood_icon(mood).get_pixbuf()
-
-        if pep_obj == PEPEventType.TUNE:
-            path = os.path.join(
-                configpaths.get('DATA'), 'emoticons', 'static', 'music.png')
-            return GdkPixbuf.Pixbuf.new_from_file(path)
-
-        if pep_obj == PEPEventType.ACTIVITY:
-            pep_ = pep_obj.data
-            activity = pep_['activity']
-
-            has_known_activity = activity in ACTIVITIES
-            has_known_subactivity = (has_known_activity and
-                                     'subactivity' in pep_ and
-                                     pep_['subactivity'] in ACTIVITIES[activity])
-
-            if has_known_activity:
-                if has_known_subactivity:
-                    subactivity = pep_['subactivity']
-                    return gtkgui_helpers.load_activity_icon(
-                        activity, subactivity).get_pixbuf()
-                return gtkgui_helpers.load_activity_icon(activity).get_pixbuf()
-            return gtkgui_helpers.load_activity_icon('unknown').get_pixbuf()
-
-        if pep_obj == PEPEventType.LOCATION:
-            icon = gtkgui_helpers.get_icon_pixmap(
-                'applications-internet', quiet=True)
-            return icon
 
     @staticmethod
     def create_ipython_window():
