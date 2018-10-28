@@ -46,7 +46,6 @@ from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
 
 from gajim import dialogs
 from gajim import vcard
-from gajim import disco
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import cell_renderer_image
@@ -79,6 +78,7 @@ from gajim.gtk.pep_config import ManagePEPServicesWindow
 from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
+from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
@@ -4035,7 +4035,7 @@ class RosterWindow:
         else:
             try:
                 # Object will add itself to the window dict
-                disco.ServiceDiscoveryWindow(account, address_entry=True)
+                ServiceDiscoveryWindow(account, address_entry=True)
             except GajimGeneralException:
                 pass
 

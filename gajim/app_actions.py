@@ -22,7 +22,6 @@ from gajim.common import helpers
 from gajim.common.app import interface
 from gajim.common.exceptions import GajimGeneralException
 from gajim import dialogs
-from gajim import disco
 
 import gajim.plugins.gui
 
@@ -44,6 +43,7 @@ from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.proxies import ManageProxies
+from gajim.gtk.discovery import ServiceDiscoveryWindow
 
 
 # General Actions
@@ -130,7 +130,7 @@ def on_service_disco(action, param):
     else:
         try:
             # Object will add itself to the window dict
-            disco.ServiceDiscoveryWindow(account, address_entry=True)
+            ServiceDiscoveryWindow(account, address_entry=True)
         except GajimGeneralException:
             pass
 
