@@ -17,7 +17,7 @@ from gi.repository import Pango
 
 
 class DataFormWidget(Gtk.ScrolledWindow):
-    def __init__(self, form_node):
+    def __init__(self, form_node, options=None):
         Gtk.ScrolledWindow.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -25,7 +25,9 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
         self._form_node = form_node
 
-        self._form_grid = FormGrid(form_node)
+        if options is None:
+            options = {}
+        self._form_grid = FormGrid(form_node, options)
 
         self.add(self._form_grid)
 
@@ -43,7 +45,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
 
 class FormGrid(Gtk.Grid):
-    def __init__(self, form_node):
+    def __init__(self, form_node, options):
         Gtk.Grid.__init__(self)
         self.set_column_spacing(12)
         self.set_row_spacing(12)
@@ -75,20 +77,39 @@ class FormGrid(Gtk.Grid):
             self.instructions = form_node.instructions
             self.add_row(Instructions(form_node.instructions))
 
-        self.parse_form(form_node)
+        self.analyse_fields(form_node, options)
+        self.parse_form(form_node, options)
 
     def add_row(self, field):
         field.add(self, self.row_count)
         self.row_count += 1
         self.rows.append(field)
 
-    def parse_form(self, form_node):
+    @staticmethod
+    def analyse_fields(form_node, options):
+        if 'right_align' in options:
+            # Dont overwrite option
+            return
+
+        label_lengths = set([0])
+        for field in form_node.iter_fields():
+            if field.type_ == 'hidden':
+                continue
+
+            if field.label is None:
+                continue
+
+            label_lengths.add(len(field.label))
+
+        options['right_align'] = max(label_lengths) < 30
+
+    def parse_form(self, form_node, options):
         for field in form_node.iter_fields():
             if field.type_ == 'hidden':
                 continue
 
             widget = self._fields[field.type_]
-            self.add_row(widget(field))
+            self.add_row(widget(field, options))
 
     def is_valid(self):
         return self._data_form.is_valid()
@@ -114,7 +135,7 @@ class Instructions:
 
 
 class Field:
-    def __init__(self, field):
+    def __init__(self, field, options):
         self._field = field
 
         self._label = Gtk.Label(label=field.label)
@@ -123,7 +144,7 @@ class Field:
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_width_chars(15)
         self._label.set_size_request(100, -1)
-        self._label.set_xalign(1)
+        self._label.set_xalign(bool(options.get('right_align')))
         self._label.set_tooltip_text(field.description)
 
     def add(self, form_grid, row_number):
@@ -133,40 +154,40 @@ class Field:
 
 
 class BooleanField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
 
         self._widget = Gtk.CheckButton()
         self._widget.set_active(field.value)
         self._widget.connect('toggled', self._toggled)
 
-    def _toggled(self, widget):
+    def _toggled(self, _widget):
         self._field.value = self._widget.get_active()
 
 
 class FixedField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
 
         self._label.set_text(field.value)
 
-        # If the value is more than 30 chars it proabably isnt
+        # If the value is more than 40 chars it proabably isnt
         # meant as a section header
-        if len(field.value) < 30:
+        if len(field.value) < 40:
             self._label.get_style_context().add_class('field-fixed')
         else:
             self._label.set_xalign(0.5)
 
     def add(self, form_grid, row_number):
-        if len(self._field.value) < 30:
+        if len(self._field.value) < 40:
             form_grid.attach(self._label, 0, row_number, 1, 1)
         else:
             form_grid.attach(self._label, 0, row_number, 2, 1)
 
 
 class ListSingleField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
 
         self._widget = Gtk.ComboBoxText()
         for value, label in field.iter_options():
@@ -182,8 +203,8 @@ class ListSingleField(Field):
 
 
 class ListMultiField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
         self._label.set_valign(Gtk.Align.START)
 
         self._treeview = ListMutliTreeView(field)
@@ -226,7 +247,7 @@ class ListMutliTreeView(Gtk.TreeView):
 
         self.set_model(self._store)
 
-    def _toggled(self, renderer, path):
+    def _toggled(self, _renderer, path):
         iter_ = self._store.get_iter(path)
         current_value = self._store[iter_][2]
         self._store.set_value(iter_, 2, not current_value)
@@ -242,8 +263,8 @@ class ListMutliTreeView(Gtk.TreeView):
 
 
 class JidMultiField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
         self._label.set_valign(Gtk.Align.START)
 
         self._treeview = JidMutliTreeView(field)
@@ -278,10 +299,10 @@ class JidMultiField(Field):
         self._widget.pack_start(self._scrolled_window, True, True, 0)
         self._widget.pack_end(self._button_box, False, False, 0)
 
-    def _add_clicked(self, widget):
+    def _add_clicked(self, _widget):
         self._treeview.get_model().append([''])
 
-    def _remove_clicked(self, widget):
+    def _remove_clicked(self, _widget):
         mod, paths = self._treeview.get_selection().get_selected_rows()
         for path in paths:
             iter_ = mod.get_iter(path)
@@ -319,7 +340,7 @@ class JidMutliTreeView(Gtk.TreeView):
 
         self.set_model(self._store)
 
-    def _jid_edited(self, renderer, path, new_text):
+    def _jid_edited(self, _renderer, path, new_text):
         iter_ = self._store.get_iter(path)
         self._store.set_value(iter_, 0, new_text)
         self._set_values()
@@ -334,32 +355,32 @@ class JidMutliTreeView(Gtk.TreeView):
 
 
 class TextSingleField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
 
         self._widget = Gtk.Entry()
         self._widget.set_text(field.value)
         self._widget.connect('changed', self._changed)
 
-    def _changed(self, widget):
+    def _changed(self, _widget):
         self._field.value = self._widget.get_text()
 
 
 class TextPrivateField(TextSingleField):
-    def __init__(self, field):
-        TextSingleField.__init__(self, field)
+    def __init__(self, field, options):
+        TextSingleField.__init__(self, field, options)
         self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
         self._widget.set_visibility(False)
 
 
 class JidSingleField(TextSingleField):
-    def __init__(self, field):
-        TextSingleField.__init__(self, field)
+    def __init__(self, field, options):
+        TextSingleField.__init__(self, field, options)
 
 
 class TextMultiField(Field):
-    def __init__(self, field):
-        Field.__init__(self, field)
+    def __init__(self, field, options):
+        Field.__init__(self, field, options)
         self._label.set_valign(Gtk.Align.START)
 
         self._widget = Gtk.ScrolledWindow()
