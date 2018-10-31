@@ -492,14 +492,14 @@ class Preferences(Gtk.ApplicationWindow):
         return val
 
     def on_checkbutton_toggled(self, widget, config_name,
-    change_sensitivity_widgets=None):
+                               change_sensitivity_widgets=None):
         app.config.set(config_name, widget.get_active())
         if change_sensitivity_widgets:
             for w in change_sensitivity_widgets:
                 w.set_sensitive(widget.get_active())
 
     def on_per_account_checkbutton_toggled(self, widget, config_name,
-    change_sensitivity_widgets=None):
+                                           change_sensitivity_widgets=None):
         for account in app.connections:
             app.config.set_per('accounts', account, config_name,
                     widget.get_active())
@@ -1014,6 +1014,8 @@ class Preferences(Gtk.ApplicationWindow):
     # Proxies
     def on_proxies_combobox_changed(self, widget):
         active = widget.get_active()
+        if active == -1:
+            return
         proxy = widget.get_model()[active][0]
         if proxy == _('None'):
             proxy = ''
@@ -1037,6 +1039,8 @@ class Preferences(Gtk.ApplicationWindow):
             model.append([proxy])
             if our_proxy == proxy:
                 self._ui.proxies_combobox.set_active(index)
+        if not our_proxy in proxies:
+            self._ui.proxies_combobox.set_active(0)
 
     # Log status changes of contacts
     def on_log_show_changes_checkbutton_toggled(self, widget):

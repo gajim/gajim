@@ -24,26 +24,32 @@ from gajim.gtk.util import get_builder
 class ManageProxies:
     def __init__(self, transient_for=None):
         self._ui = get_builder('manage_proxies_window.ui')
-        self.window = self._ui.manage_proxies_window
-        self.window.set_transient_for(transient_for)
+        self._ui.manage_proxies_window.set_transient_for(transient_for)
 
         self.init_list()
         self.block_signal = False
         self._ui.connect_signals(self)
-        self.window.show_all()
+        self._ui.manage_proxies_window.connect('destroy', self._on_destroy)
+        self._ui.manage_proxies_window.show_all()
         # hide the BOSH fields by default
         self.show_bosh_fields()
+        self._ui.boshuri_entry.hide()
+        self._ui.boshuri_label.hide()
+        self._ui.boshuseproxy_checkbutton.hide()
 
     def show_bosh_fields(self, show=True):
         if show:
             self._ui.boshuri_entry.show()
             self._ui.boshuri_label.show()
             self._ui.boshuseproxy_checkbutton.show()
+            act = self._ui.boshuseproxy_checkbutton.get_active()
+            self._ui.proxyhost_entry.set_sensitive(act)
+            self._ui.proxyport_entry.set_sensitive(act)
         else:
-            cb = self._ui.boshuseproxy_checkbutton
-            cb.hide()
-            cb.set_active(True)
-            self.on_boshuseproxy_checkbutton_toggled(cb)
+            self._ui.boshuseproxy_checkbutton.hide()
+            self._ui.boshuseproxy_checkbutton.set_active(True)
+            self.on_boshuseproxy_checkbutton_toggled(
+                self._ui.boshuseproxy_checkbutton)
             self._ui.boshuri_entry.hide()
             self._ui.boshuri_label.hide()
 
@@ -102,9 +108,6 @@ class ManageProxies:
         self.on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
         self.block_signal = False
 
-    def on_close_button_clicked(self, _widget):
-        self.window.destroy()
-
     def on_useauth_checkbutton_toggled(self, widget):
         if self.block_signal:
             return
@@ -152,6 +155,7 @@ class ManageProxies:
         if proxy == _('None'): # special proxy None
             self.show_bosh_fields(False)
             self._ui.proxyname_entry.set_editable(False)
+            self._ui.proxyname_entry.set_sensitive(False)
             self._ui.remove_proxy_button.set_sensitive(False)
             self._ui.proxytype_combobox.set_sensitive(False)
             self._ui.proxy_table.set_sensitive(False)
@@ -161,9 +165,20 @@ class ManageProxies:
             self.show_bosh_fields(proxytype == 'bosh')
 
             self._ui.proxyname_entry.set_editable(True)
+            self._ui.proxyname_entry.set_sensitive(True)
             self._ui.remove_proxy_button.set_sensitive(True)
             self._ui.proxytype_combobox.set_sensitive(True)
             self._ui.proxy_table.set_sensitive(True)
+
+            self._ui.boshuri_entry.set_text(
+                app.config.get_per('proxies', proxy, 'bosh_uri'))
+            self._ui.boshuseproxy_checkbutton.set_active(
+                app.config.get_per('proxies', proxy, 'bosh_useproxy'))
+            if proxytype == 'bosh':
+                act = self._ui.boshuseproxy_checkbutton.get_active()
+                self._ui.proxyhost_entry.set_sensitive(act)
+                self._ui.proxyport_entry.set_sensitive(act)
+
             self._ui.proxyhost_entry.set_text(
                 app.config.get_per('proxies', proxy, 'host'))
             self._ui.proxyport_entry.set_text(
@@ -172,14 +187,15 @@ class ManageProxies:
                 app.config.get_per('proxies', proxy, 'user'))
             self._ui.proxypass_entry.set_text(
                 app.config.get_per('proxies', proxy, 'pass'))
-            self._ui.boshuri_entry.set_text(
-                app.config.get_per('proxies', proxy, 'bosh_uri'))
+
             types = ['http', 'socks5', 'bosh']
             self._ui.proxytype_combobox.set_active(types.index(proxytype))
-            self._ui.boshuseproxy_checkbutton.set_active(
-                app.config.get_per('proxies', proxy, 'bosh_useproxy'))
+
             self._ui.useauth_checkbutton.set_active(
                 app.config.get_per('proxies', proxy, 'useauth'))
+            act = self._ui.useauth_checkbutton.get_active()
+            self._ui.proxyuser_entry.set_sensitive(act)
+            self._ui.proxypass_entry.set_sensitive(act)
         self.block_signal = False
 
     def on_proxies_treeview_key_press_event(self, widget, event):
@@ -217,6 +233,13 @@ class ManageProxies:
         proxy = self._ui.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'type', types[type_])
 
+    def on_boshuri_entry_changed(self, widget):
+        if self.block_signal:
+            return
+        value = widget.get_text()
+        proxy = self._ui.proxyname_entry.get_text()
+        app.config.set_per('proxies', proxy, 'bosh_uri', value)
+
     def on_proxyhost_entry_changed(self, widget):
         if self.block_signal:
             return
@@ -238,16 +261,14 @@ class ManageProxies:
         proxy = self._ui.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'user', value)
 
-    def on_boshuri_entry_changed(self, widget):
-        if self.block_signal:
-            return
-        value = widget.get_text()
-        proxy = self._ui.proxyname_entry.get_text()
-        app.config.set_per('proxies', proxy, 'bosh_uri', value)
-
     def on_proxypass_entry_changed(self, widget):
         if self.block_signal:
             return
         value = widget.get_text()
         proxy = self._ui.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'pass', value)
+
+    def _on_destroy(self, *args):
+        window = app.get_app_window('Preferences')
+        if window is not None:
+            window.update_proxy_list()
