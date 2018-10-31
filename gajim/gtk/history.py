@@ -46,6 +46,7 @@ from gajim.gtk.util import move_window
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_completion_liststore
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import scroll_to_end
 
 from gajim.gtk.dialogs import ErrorDialog
 
@@ -74,39 +75,23 @@ class HistoryWindow:
     """
 
     def __init__(self, jid=None, account=None):
-        xml = get_builder('history_window.ui')
-        self.window = xml.get_object('history_window')
-        self.window.set_application(app.app)
-        self.calendar = xml.get_object('calendar')
-        self.button_first_day = xml.get_object('button_first_day')
-        self.button_previous_day = xml.get_object('button_previous_day')
-        self.button_next_day = xml.get_object('button_next_day')
-        self.button_last_day = xml.get_object('button_last_day')
-        scrolledwindow = xml.get_object('scrolledwindow')
+        self._ui = get_builder('history_window.ui')
+        self._ui.history_window.set_application(app.app)
+
         self.history_textview = conversation_textview.ConversationTextview(
             account, used_in_history_window=True)
-        scrolledwindow.add(self.history_textview.tv)
+        self._ui.scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
         self.history_buffer.create_tag('highlight', background='yellow')
         self.history_buffer.create_tag('invisible', invisible=True)
-        self.checkbutton = xml.get_object('log_history_checkbutton')
-        self.show_status_checkbutton = xml.get_object('show_status_checkbutton')
-        self.search_entry = xml.get_object('search_entry')
-        self.query_liststore = xml.get_object('query_liststore')
-        self.jid_entry = xml.get_object('query_entry')
-        self.results_treeview = xml.get_object('results_treeview')
-        self.results_window = xml.get_object('results_scrolledwindow')
-        self.search_in_date = xml.get_object('search_in_date')
-        self.date_label = xml.get_object('date_label')
-        self.search_menu_button = xml.get_object('search_menu_button')
 
         self.clearing_search = False
 
         # jid, contact_name, date, message, time, log_line_id
         model = Gtk.ListStore(str, str, str, str, str, int)
-        self.results_treeview.set_model(model)
+        self._ui.results_treeview.set_model(model)
         col = Gtk.TreeViewColumn(_('Name'))
-        self.results_treeview.append_column(col)
+        self._ui.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.CONTACT_NAME)
@@ -115,7 +100,7 @@ class HistoryWindow:
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Date'))
-        self.results_treeview.append_column(col)
+        self._ui.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.UNIXTIME)
@@ -124,7 +109,7 @@ class HistoryWindow:
         col.set_resizable(True)
 
         col = Gtk.TreeViewColumn(_('Message'))
-        self.results_treeview.append_column(col)
+        self._ui.results_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', Column.MESSAGE)
@@ -141,19 +126,19 @@ class HistoryWindow:
         GLib.idle_add(next, task)
 
         if jid:
-            self.jid_entry.get_child().set_text(jid)
+            self._ui.query_entry.get_child().set_text(jid)
         else:
             self._load_history(None)
 
-        resize_window(self.window,
+        resize_window(self._ui.history_window,
                       app.config.get('history_window_width'),
                       app.config.get('history_window_height'))
-        move_window(self.window,
+        move_window(self._ui.history_window,
                     app.config.get('history_window_x-position'),
                     app.config.get('history_window_y-position'))
 
-        xml.connect_signals(self)
-        self.window.show_all()
+        self._ui.connect_signals(self)
+        self._ui.history_window.show_all()
 
         # PluginSystem: adding GUI extension point for
         # HistoryWindow instance object
@@ -172,12 +157,12 @@ class HistoryWindow:
         This is a generator and does pseudo-threading via idle_add().
         """
         liststore = get_completion_liststore(
-            self.jid_entry.get_child())
+            self._ui.query_entry.get_child())
         liststore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        self.jid_entry.get_child().get_completion().connect(
+        self._ui.query_entry.get_child().get_completion().connect(
             'match-selected', self.on_jid_entry_match_selected)
 
-        self.jid_entry.set_model(liststore)
+        self._ui.query_entry.set_model(liststore)
 
         # Add all jids in logs.db:
         db_jids = app.logger.get_jids_in_db()
@@ -196,7 +181,7 @@ class HistoryWindow:
 
         keys = list(completion_dict.keys())
         # Move the actual jid at first so we load history faster
-        actual_jid = self.jid_entry.get_child().get_text()
+        actual_jid = self._ui.query_entry.get_child().get_text()
         if actual_jid in keys:
             keys.remove(actual_jid)
             keys.insert(0, actual_jid)
@@ -284,7 +269,7 @@ class HistoryWindow:
     def on_history_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.save_state()
-            self.window.destroy()
+            self._ui.history_window.destroy()
 
     def on_jid_entry_match_selected(self, widget, model, iter_, *args):
         self._jid_entry_search(model[iter_][1])
@@ -292,16 +277,16 @@ class HistoryWindow:
 
     def on_jid_entry_changed(self, widget):
         # only if selected from combobox
-        jid = self.jid_entry.get_child().get_text()
-        if jid == self.jid_entry.get_active_id():
+        jid = self._ui.query_entry.get_child().get_text()
+        if jid == self._ui.query_entry.get_active_id():
             self._jid_entry_search(jid)
 
     def on_jid_entry_activate(self, widget):
-        self._jid_entry_search(self.jid_entry.get_child().get_text())
+        self._jid_entry_search(self._ui.query_entry.get_child().get_text())
 
     def _jid_entry_search(self, jid):
         self._load_history(jid, self.account)
-        self.results_window.set_property('visible', False)
+        self._ui.results_scrolledwindow.set_property('visible', False)
 
     def _load_history(self, jid_or_name, account=None):
         """
@@ -321,21 +306,21 @@ class HistoryWindow:
                 # We don't know account. Probably a gc not opened or an
                 # account not connected.
                 # Disable possibility to say if we want to log or not
-                self.checkbutton.set_sensitive(False)
+                self._ui.log_history_checkbutton.set_sensitive(False)
             else:
                 # Are log disabled for account ?
                 if self.account in app.config.get_per(
                         'accounts', self.account, 'no_log_for').split(' '):
-                    self.checkbutton.set_active(False)
-                    self.checkbutton.set_sensitive(False)
+                    self._ui.log_history_checkbutton.set_active(False)
+                    self._ui.log_history_checkbutton.set_sensitive(False)
                 else:
                     # Are log disabled for jid ?
                     log = True
                     if self.jid in app.config.get_per(
                             'accounts', self.account, 'no_log_for').split(' '):
                         log = False
-                    self.checkbutton.set_active(log)
-                    self.checkbutton.set_sensitive(True)
+                    self._ui.log_history_checkbutton.set_active(log)
+                    self._ui.log_history_checkbutton.set_sensitive(True)
 
             self.jids_to_search = [info_jid]
 
@@ -348,20 +333,20 @@ class HistoryWindow:
             self.last_day = self._get_date_from_timestamp(self.last_log)
 
             # Select logs for last date we have logs with contact
-            self.search_menu_button.set_sensitive(True)
+            self._ui.search_menu_button.set_sensitive(True)
             month = gtk_month(self.last_day.month)
-            self.calendar.select_month(month, self.last_day.year)
-            self.calendar.select_day(self.last_day.day)
+            self._ui.calendar.select_month(month, self.last_day.year)
+            self._ui.calendar.select_day(self.last_day.day)
 
-            self.button_previous_day.set_sensitive(True)
-            self.button_next_day.set_sensitive(True)
-            self.button_first_day.set_sensitive(True)
-            self.button_last_day.set_sensitive(True)
+            self._ui.button_previous_day.set_sensitive(True)
+            self._ui.button_next_day.set_sensitive(True)
+            self._ui.button_first_day.set_sensitive(True)
+            self._ui.button_last_day.set_sensitive(True)
 
-            self.search_entry.set_sensitive(True)
-            self.search_entry.grab_focus()
+            self._ui.search_entry.set_sensitive(True)
+            self._ui.search_entry.grab_focus()
 
-            self.jid_entry.get_child().set_text(info_completion)
+            self._ui.query_entry.get_child().set_text(info_completion)
 
         else:
             # neither a valid jid, nor an existing contact name was entered
@@ -370,26 +355,27 @@ class HistoryWindow:
             self.account = None
 
             self.history_buffer.set_text('')  # clear the buffer
-            self.search_entry.set_sensitive(False)
+            self._ui.search_entry.set_sensitive(False)
 
-            self.checkbutton.set_sensitive(False)
-            self.search_menu_button.set_sensitive(False)
-            self.calendar.clear_marks()
-            self.button_previous_day.set_sensitive(False)
-            self.button_next_day.set_sensitive(False)
-            self.button_first_day.set_sensitive(False)
-            self.button_last_day.set_sensitive(False)
+            self._ui.log_history_checkbutton.set_sensitive(False)
+            self._ui.search_menu_button.set_sensitive(False)
+            self._ui.calendar.clear_marks()
+            self._ui.button_previous_day.set_sensitive(False)
+            self._ui.button_next_day.set_sensitive(False)
+            self._ui.button_first_day.set_sensitive(False)
+            self._ui.button_last_day.set_sensitive(False)
 
-            self.results_window.set_property('visible', False)
+            self._ui.results_scrolledwindow.set_property('visible', False)
 
     def on_calendar_day_selected(self, widget):
         if not self.jid:
             return
-        year, month, day = self.calendar.get_date()  # integers
+        year, month, day = self._ui.calendar.get_date()  # integers
         month = python_month(month)
         date_str = datetime.date(year, month, day).strftime('%x')
-        self.date_label.set_text(date_str)
+        self._ui.date_label.set_text(date_str)
         self._load_conversation(year, month, day)
+        GLib.idle_add(scroll_to_end, self._ui.scrolledwindow)
 
     def on_calendar_month_changed(self, widget):
         """
@@ -426,29 +412,29 @@ class HistoryWindow:
 
     def _change_date(self, widget):
         # Get day selected in calendar
-        y, m, d = self.calendar.get_date()
+        y, m, d = self._ui.calendar.get_date()
         py_m = python_month(m)
         _date = datetime.datetime(y, py_m, d)
 
-        if widget is self.button_first_day:
+        if widget is self._ui.button_first_day:
             gtk_m = gtk_month(self.first_day.month)
-            self.calendar.select_month(gtk_m, self.first_day.year)
-            self.calendar.select_day(self.first_day.day)
+            self._ui.calendar.select_month(gtk_m, self.first_day.year)
+            self._ui.calendar.select_day(self.first_day.day)
             return
 
-        if widget is self.button_last_day:
+        if widget is self._ui.button_last_day:
             gtk_m = gtk_month(
                 self.last_day.month)
-            self.calendar.select_month(gtk_m, self.last_day.year)
-            self.calendar.select_day(self.last_day.day)
+            self._ui.calendar.select_month(gtk_m, self.last_day.year)
+            self._ui.calendar.select_day(self.last_day.day)
             return
 
-        if widget is self.button_previous_day:
+        if widget is self._ui.button_previous_day:
             end_date = self.first_day
             timedelta = datetime.timedelta(days=-1)
             if end_date >= _date:
                 return
-        elif widget is self.button_next_day:
+        elif widget is self._ui.button_next_day:
             end_date = self.last_day
             timedelta = datetime.timedelta(days=1)
             if end_date <= _date:
@@ -469,8 +455,8 @@ class HistoryWindow:
                 return
 
         gtk_m = gtk_month(_date.month)
-        self.calendar.select_month(gtk_m, _date.year)
-        self.calendar.select_day(_date.day)
+        self._ui.calendar.select_month(gtk_m, _date.year)
+        self._ui.calendar.select_day(_date.day)
 
     def _get_string_show_from_constant_int(self, show):
         if show == ShowConstant.ONLINE:
@@ -496,7 +482,7 @@ class HistoryWindow:
         """
         self.history_buffer.set_text('')
         self.last_time_printout = 0
-        show_status = self.show_status_checkbutton.get_active()
+        show_status = self._ui.show_status_checkbutton.get_active()
 
         date = datetime.datetime(year, month, day)
 
@@ -638,15 +624,15 @@ class HistoryWindow:
         self.history_textview.print_real_text('\n', text_tags=['eol'])
 
     def on_search_complete_history_toggled(self, widget):
-        self.date_label.get_style_context().remove_class('tagged')
+        self._ui.date_label.get_style_context().remove_class('tagged')
 
     def on_search_in_date_toggled(self, widget):
-        self.date_label.get_style_context().add_class('tagged')
+        self._ui.date_label.get_style_context().add_class('tagged')
 
     def on_search_entry_activate(self, widget):
-        text = self.search_entry.get_text()
+        text = self._ui.search_entry.get_text()
 
-        model = self.results_treeview.get_model()
+        model = self._ui.results_treeview.get_model()
         self.clearing_search = True
         model.clear()
         self.clearing_search = False
@@ -656,10 +642,10 @@ class HistoryWindow:
         self.history_buffer.remove_tag_by_name('highlight', start, end)
 
         if text == '':
-            self.results_window.set_property('visible', False)
+            self._ui.results_scrolledwindow.set_property('visible', False)
             return
 
-        self.results_window.set_property('visible', True)
+        self._ui.results_scrolledwindow.set_property('visible', True)
 
         # perform search in preselected jids
         # jids are preselected with the query_entry
@@ -673,12 +659,12 @@ class HistoryWindow:
                 account = list(app.contacts.get_accounts())[0]
 
             date = None
-            if self.search_in_date.get_active():
-                year, month, day = self.calendar.get_date()  # integers
+            if self._ui.search_in_date.get_active():
+                year, month, day = self._ui.calendar.get_date()  # integers
                 month = python_month(month)
                 date = datetime.datetime(year, month, day)
 
-            show_status = self.show_status_checkbutton.get_active()
+            show_status = self._ui.show_status_checkbutton.get_active()
 
             results = app.logger.search_log(account, jid, text, date)
             result_found = False
@@ -705,7 +691,7 @@ class HistoryWindow:
                               str(row.time), row.log_line_id))
 
             if result_found:
-                self.results_treeview.set_cursor(0)
+                self._ui.results_treeview.set_cursor(0)
 
     def on_results_treeview_cursor_changed(self, *args):
         """
@@ -716,9 +702,9 @@ class HistoryWindow:
             return
 
         # get currently selected date
-        cur_year, cur_month, cur_day = self.calendar.get_date()
+        cur_year, cur_month, cur_day = self._ui.calendar.get_date()
         cur_month = python_month(cur_month)
-        model, paths = self.results_treeview.get_selection().get_selected_rows()
+        model, paths = self._ui.results_treeview.get_selection().get_selected_rows()
 
         if not paths:
             return
@@ -738,10 +724,10 @@ class HistoryWindow:
 
         # avoid reruning mark days algo if same month and year!
         if year != cur_year or gtk_m != cur_month:
-            self.calendar.select_month(month, year)
+            self._ui.calendar.select_month(month, year)
 
         if year != cur_year or gtk_m != cur_month or day != cur_day:
-            self.calendar.select_day(day)
+            self._ui.calendar.select_day(day)
 
         self._scroll_to_message_and_highlight(model[path][Column.LOG_LINE_ID])
 
@@ -802,7 +788,7 @@ class HistoryWindow:
         """
         Load chat history of the specified jid
         """
-        self.jid_entry.get_child().set_text(jid)
+        self._ui.query_entry.get_child().set_text(jid)
         if account and account not in self.accounts_seen_online:
             # Update dict to not only show bare jid
             GLib.idle_add(next, self._fill_completion_dict())
@@ -810,11 +796,11 @@ class HistoryWindow:
             # Only in that case because it's called by
             # self._fill_completion_dict() otherwise
             self._load_history(jid, account)
-        self.results_window.set_property('visible', False)
+        self._ui.results_scrolledwindow.set_property('visible', False)
 
     def save_state(self):
-        x, y = self.window.get_window().get_root_origin()
-        width, height = self.window.get_size()
+        x, y = self._ui.history_window.get_window().get_root_origin()
+        width, height = self._ui.history_window.get_size()
 
         app.config.set('history_window_x-position', x)
         app.config.set('history_window_y-position', y)
