@@ -29,7 +29,8 @@
     <property name="default_width">500</property>
     <property name="default_height">440</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="on_manage_proxies_window_destroy" swapped="no"/>
+    <signal name="destroy" handler="_on_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="_on_key_press" swapped="no"/>
     <child>
       <placeholder/>
     </child>

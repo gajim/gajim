@@ -251,8 +251,7 @@ def on_manage_proxies(action, param):
     if 'manage_proxies' in app.interface.instances:
         app.interface.instances['manage_proxies'].window.present()
     else:
-        app.interface.instances['manage_proxies'] = \
-            ManageProxies(interface.roster.window)
+        app.interface.instances['manage_proxies'] = ManageProxies()
 
 # Admin Actions
 

@@ -12,8 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -22,15 +22,16 @@ from gajim.gtk.util import get_builder
 
 
 class ManageProxies:
-    def __init__(self, transient_for=None):
+    def __init__(self):
         self._ui = get_builder('manage_proxies_window.ui')
-        self._ui.manage_proxies_window.set_transient_for(transient_for)
+        self.window = self._ui.manage_proxies_window
+        self.window.set_transient_for(app.app.get_active_window())
 
         self.init_list()
         self.block_signal = False
         self._ui.connect_signals(self)
-        self._ui.manage_proxies_window.connect('destroy', self._on_destroy)
-        self._ui.manage_proxies_window.show_all()
+        self.window.show_all()
+
         # hide the BOSH fields by default
         self.show_bosh_fields()
         self._ui.boshuri_entry.hide()
@@ -76,12 +77,6 @@ class ManageProxies:
         self.fill_proxies_treeview()
         self._ui.proxytype_combobox.set_active(0)
 
-    def on_manage_proxies_window_destroy(self, _widget):
-        window = app.get_app_window('AccountsWindow')
-        if window is not None:
-            window.update_proxy_list()
-        del app.interface.instances['manage_proxies']
-
     def on_add_proxy_button_clicked(self, _widget):
         model = self._ui.proxies_treeview.get_model()
         proxies = app.config.get_per('proxies')
@@ -101,6 +96,8 @@ class ManageProxies:
         if not iter_:
             return
         proxy = model[iter_][0]
+        if proxy == _('None'):
+            return
         model.remove(iter_)
         app.config.del_per('proxies', proxy)
         self._ui.remove_proxy_button.set_sensitive(False)
@@ -268,7 +265,16 @@ class ManageProxies:
         proxy = self._ui.proxyname_entry.get_text()
         app.config.set_per('proxies', proxy, 'pass', value)
 
+    def _on_key_press(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def _on_destroy(self, *args):
-        window = app.get_app_window('Preferences')
-        if window is not None:
-            window.update_proxy_list()
+        window_pref = app.get_app_window('Preferences')
+        window_accounts = app.get_app_window('AccountsWindow')
+        if window_pref is not None:
+            window_pref.update_proxy_list()
+        if window_accounts is not None:
+            window_accounts.update_proxy_list()
+        self.window.destroy()
+        del app.interface.instances['manage_proxies']
