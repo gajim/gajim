@@ -276,5 +276,4 @@ class ManageProxies:
             window_pref.update_proxy_list()
         if window_accounts is not None:
             window_accounts.update_proxy_list()
-        self.window.destroy()
         del app.interface.instances['manage_proxies']
