@@ -29,3 +29,9 @@ cssutils
 qrcode
 precis-i18n
 "
+
+pip3 install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
+
+}
+
+main;
