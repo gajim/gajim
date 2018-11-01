@@ -128,11 +128,8 @@ class NonModalConfirmationDialog(HigDialog):
     on_response_cancel=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-        if hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.QUESTION,
+        transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
             Gtk.ButtonsType.OK_CANCEL, pritext, sectext, self.on_response_ok,
             self.on_response_cancel)
         self.set_modal(False)
@@ -162,9 +159,8 @@ class WarningDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', transient_for=None):
-        if not transient_for and hasattr(app.interface, 'roster') and \
-        app.interface.roster:
-            transient_for = app.interface.roster.window
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
         HigDialog.__init__(self, transient_for, Gtk.MessageType.WARNING,
             Gtk.ButtonsType.OK, pritext, sectext)
         self.set_modal(False)
@@ -177,13 +173,9 @@ class InformationDialog(HigDialog):
     """
 
     def __init__(self, pritext, sectext='', transient_for=None):
-        if transient_for:
-            parent = transient_for
-        elif hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
             pritext, sectext)
         self.set_modal(False)
         self.popup()
@@ -196,13 +188,9 @@ class ErrorDialog(HigDialog):
 
     def __init__(self, pritext, sectext='', on_response_ok=None,
     on_response_cancel=None, transient_for=None):
-        if transient_for:
-            parent = transient_for
-        elif hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
             pritext, sectext, on_response_ok=on_response_ok,
             on_response_cancel=on_response_cancel)
         self.popup()
@@ -218,13 +206,9 @@ class YesNoDialog(HigDialog):
     transient_for=None):
         self.user_response_yes = on_response_yes
         self.user_response_no = on_response_no
-        if transient_for:
-            parent = transient_for
-        elif hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, type_, Gtk.ButtonsType.YES_NO, pritext,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, type_, Gtk.ButtonsType.YES_NO, pritext,
             sectext, on_response_yes=self.on_response_yes,
             on_response_no=self.on_response_no)
 
@@ -308,14 +292,9 @@ class ConfirmationDialogCheck(ConfirmationDialog):
     on_response_cancel=None, is_modal=True, transient_for=None):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-
-        if transient_for:
-            parent = transient_for
-        elif hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.QUESTION,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
            Gtk.ButtonsType.OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -363,15 +342,12 @@ class ConfirmationDialogDoubleCheck(ConfirmationDialog):
 
     def __init__(self, pritext, sectext='', checktext1='', checktext2='',
     tooltip1='', tooltip2='', on_response_ok=None, on_response_cancel=None,
-    is_modal=True):
+    transient_for=None, is_modal=True):
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel
-
-        if hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.QUESTION,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
            Gtk.ButtonsType.OK_CANCEL, pritext, sectext, self.on_response_ok,
            self.on_response_cancel)
 
@@ -524,13 +500,9 @@ class FTOverwriteConfirmationDialog(ConfirmationDialog):
     """
     def __init__(self, pritext, sectext='', propose_resume=True,
     on_response=None, transient_for=None):
-        if transient_for:
-            parent = transient_for
-        elif hasattr(app.interface, 'roster') and app.interface.roster:
-            parent = app.interface.roster.window
-        else:
-            parent = None
-        HigDialog.__init__(self, parent, Gtk.MessageType.QUESTION,
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        HigDialog.__init__(self, transient_for, Gtk.MessageType.QUESTION,
             Gtk.ButtonsType.CANCEL, pritext, sectext)
 
         self.on_response = on_response
@@ -578,10 +550,9 @@ class CommonInputDialog:
         label.set_markup(label_str)
         self.cancel_handler = cancel_handler
         self.vbox = self.xml.get_object('vbox')
-        if transient_for:
-            self.dialog.set_transient_for(transient_for)
-        else:
-            self.dialog.set_transient_for(app.interface.roster.window)
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        self.dialog.set_transient_for(transient_for)
 
         self.ok_handler = ok_handler
         okbutton = self.xml.get_object('okbutton')
@@ -821,8 +792,9 @@ class DoubleInputDialog:
         if input_str2:
             self.input_entry2.set_text(input_str2)
             self.input_entry2.select_region(0, -1) # select all
-        if transient_for:
-            self.dialog.set_transient_for(transient_for)
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        self.dialog.set_transient_for(transient_for)
 
         self.dialog.set_modal(is_modal)
 
@@ -865,7 +837,7 @@ class DoubleInputDialog:
 
 
 class CertificatDialog(InformationDialog):
-    def __init__(self, parent, account, cert):
+    def __init__(self, transient_for, account, cert):
         issuer = cert.get_issuer()
         subject = cert.get_subject()
         InformationDialog.__init__(self,
@@ -903,7 +875,7 @@ SHA-256 Fingerprint: %(sha256)s
             img = Gtk.Image.new_from_surface(surface)
             img.show_all()
             self.set_image(img)
-        self.set_transient_for(parent)
+        self.set_transient_for(transient_for)
         self.set_title(_('Certificate for account %s') % account)
 
 
