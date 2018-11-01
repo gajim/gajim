@@ -10,7 +10,7 @@ and development on Windows.
 Download [msys2](http://www.msys2.org/) (msys2-x86_64-xxx.exe) and follow the install instructions on the [msys2](http://www.msys2.org/) startpage (**Important!**)
 
 * Fork the master branch on dev.gajim.org
-* Execute ``C:\msys64\mingw32.exe``
+* Execute ``C:\msys64\msys2_shell.cmd -mingw64``
 * Run ``pacman -S git`` to install git
 * Run ``git clone https://dev.gajim.org/USERNAME/gajim.git``
 * Run ``cd gajim/win`` to end up where this README exists.
