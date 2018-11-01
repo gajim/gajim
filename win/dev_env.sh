@@ -9,22 +9,23 @@ function main {
         mingw-w64-x86_64-python3-gobject \
         mingw-w64-x86_64-python3-pip \
         mingw-w64-x86_64-toolchain \
+        mingw-w64-x86_64-adwaita-icon-theme \
         mingw-w64-x86_64-gtk3 \
+        mingw-w64-x86_64-python3-setuptools-scm \
+        mingw-w64-x86_64-python3-cryptography \
+        mingw-w64-x86_64-python3-certifi \
         mingw-w64-x86_64-python3-pyopenssl \
-        mingw-w64-x86_64-python3-pillow
+        mingw-w64-x86_64-python3-pillow \
+        mingw-w64-x86_64-python3-six
 
     PIP_REQUIREMENTS="\
-certifi
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
+git+https://github.com/enthought/pywin32-ctypes.git
 python-axolotl
 python-gnupg
 keyring
 cssutils
+qrcode
+precis-i18n
 "
-
-pip3 install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
-
-}
-
-main;
