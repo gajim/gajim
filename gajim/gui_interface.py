@@ -601,16 +601,12 @@ class Interface:
                             _('%(jid)s has been invited in this room') % {
                             'jid': jid}, graphics=False)
             del app.automatic_rooms[account][obj.jid]
-        elif obj.jid not in self.instances[account]['gc_config']:
-            self.instances[account]['gc_config'][obj.jid] = \
-                GroupchatConfig(account, obj.jid, obj.dataform)
-
-    def handle_event_gc_affiliation(self, obj):
-        #('GC_AFFILIATION', account, (room_jid, users_dict))
-        account = obj.conn.name
-        if obj.room_jid in self.instances[account]['gc_config']:
-            self.instances[account]['gc_config'][obj.room_jid].\
-                affiliation_list_received(obj.users_dict)
+        else:
+            win = app.get_app_window('GroupchatConfig', account, obj.jid)
+            if win is not None:
+                win.present()
+            else:
+                GroupchatConfig(account, obj.jid, 'owner', obj.dataform)
 
     def handle_event_gc_decline(self, obj):
         gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, obj.account)
@@ -1531,7 +1527,6 @@ class Interface:
             'message-not-sent': [self.handle_event_msgnotsent],
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],
-            'muc-admin-received': [self.handle_event_gc_affiliation],
             'muc-owner-received': [self.handle_event_gc_config],
             'oauth2-credentials-required': [self.handle_oauth2_credentials],
             'our-show': [self.handle_event_status],

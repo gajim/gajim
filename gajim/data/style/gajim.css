@@ -146,6 +146,14 @@ list.settings > row > box {
 #StartChatListBox > row { padding: 10px 20px 10px 10px; }
 #StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
+/* GroupchatConfig */
+#GroupchatConfig buttonbox { margin: 0px 12px 12px 12px; }
+#GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}
+#GroupchatConfig stacksidebar > scrolledwindow {
+    background-color:@theme_base_color;
+    border-bottom: 1px solid;
+    border-color: @borders;}
+
 /* Popover Treeview */
 .popover_treeview { border-radius: 3px; background-color: @theme_bg_color; }
 .popover_treeview { padding: 6px; }
@@ -211,6 +219,7 @@ list.settings > row > box {
 
 /* Padding/Margins */
 .margin-top6 { margin-top: 6px; }
+.margin-12 { margin: 12px; }
 
 /* Treeview */
 treeview.space { padding: 6px; }

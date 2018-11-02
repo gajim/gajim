@@ -728,18 +728,21 @@ class GroupchatControl(ChatControlBase):
             _('You may also enter an alternate venue:'), ok_handler=on_ok,
             transient_for=self.parent_win.window)
 
-    def _on_configure_room(self, action, param):
-        c = app.contacts.get_gc_contact(
+    def _on_configure_room(self, _action, _param):
+        contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
-        if c.affiliation == 'owner':
+        if contact.affiliation == 'owner':
             con = app.connections[self.account]
             con.get_module('MUC').request_config(self.room_jid)
-        elif c.affiliation == 'admin':
-            if self.room_jid not in app.interface.instances[self.account][
-            'gc_config']:
-                app.interface.instances[self.account]['gc_config'][
-                    self.room_jid] = GroupchatConfig(self.account,
-                    self.room_jid)
+        elif contact.affiliation == 'admin':
+            win = app.get_app_window(
+                'GroupchatConfig', self.account, self.room_jid)
+            if win is not None:
+                win.present()
+            else:
+                GroupchatConfig(self.account,
+                                self.room_jid,
+                                contact.affiliation)
 
     def _on_bookmark_room(self, action, param):
         """

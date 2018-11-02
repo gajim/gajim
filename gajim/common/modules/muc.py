@@ -17,6 +17,7 @@
 
 import time
 import logging
+import weakref
 
 import nbxmpp
 
@@ -187,28 +188,40 @@ class MUC:
         item = iq.setQuery()
         for jid in users_dict:
             affiliation = users_dict[jid].get('affiliation')
-            reason = users_dict[jid].get('reason') or None
+            reason = users_dict[jid].get('reason')
+            nick = users_dict[jid].get('nick')
             item_tag = item.addChild('item', {'jid': jid,
                                               'affiliation': affiliation})
             if reason is not None:
                 item_tag.setTagData('reason', reason)
+
+            if nick is not None:
+                item_tag.setAttr('nick', nick)
         log.info('Set affiliation for %s: %s', room_jid, users_dict)
         self._con.connection.SendAndCallForResponse(
             iq, self._default_response, {})
 
-    def get_affiliation(self, room_jid, affiliation):
+    def get_affiliation(self, room_jid, affiliation, success_cb, error_cb):
         if not app.account_is_connected(self._account):
             return
         iq = nbxmpp.Iq(typ='get', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
         item = iq.setQuery().setTag('item')
         item.setAttr('affiliation', affiliation)
         log.info('Get affiliation %s for %s', affiliation, room_jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._affiliation_received)
 
-    def _affiliation_received(self, stanza):
+        weak_success_cb = weakref.WeakMethod(success_cb)
+        weak_error_cb = weakref.WeakMethod(error_cb)
+
+        self._con.connection.SendAndCallForResponse(
+            iq, self._affiliation_received, {'affiliation': affiliation,
+                                             'success_cb': weak_success_cb,
+                                             'error_cb': weak_error_cb})
+
+    def _affiliation_received(self, _con, stanza, affiliation,
+                              success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            if error_cb() is not None:
+                error_cb()(affiliation, stanza.getError())
             return
 
         room_jid = stanza.getFrom().getStripped()
@@ -222,8 +235,8 @@ class MUC:
                 log.warning('Invalid JID: %s, ignoring it',
                             item.getAttr('jid'))
                 continue
-            affiliation = item.getAttr('affiliation')
-            users_dict[jid] = {'affiliation': affiliation}
+
+            users_dict[jid] = {}
             if item.has_attr('nick'):
                 users_dict[jid]['nick'] = item.getAttr('nick')
             if item.has_attr('role'):
@@ -231,9 +244,12 @@ class MUC:
             reason = item.getTagData('reason')
             if reason:
                 users_dict[jid]['reason'] = reason
-        log.info('Affiliations received from %s: %s', room_jid, users_dict)
-        app.nec.push_incoming_event(MucAdminReceivedEvent(
-            None, conn=self._con, room_jid=room_jid, users_dict=users_dict))
+
+        log.info('%s affiliations received from %s: %s',
+                 affiliation, room_jid, users_dict)
+
+        if success_cb() is not None:
+            success_cb()(self._account, room_jid, affiliation, users_dict)
 
     def set_role(self, room_jid, nick, role, reason=''):
         if not app.account_is_connected(self._account):
@@ -421,10 +437,6 @@ class GcInvitationReceived(NetworkIncomingEvent):
 
 class GcDeclineReceived(NetworkIncomingEvent):
     name = 'gc-decline-received'
-
-
-class MucAdminReceivedEvent(NetworkIncomingEvent):
-    name = 'muc-admin-received'
 
 
 class MucOwnerReceivedEvent(NetworkIncomingEvent):

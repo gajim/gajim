@@ -193,6 +193,16 @@ class SyncThreshold(IntEnum):
         return str(self.value)
 
 
+class MUCUser(IntEnum):
+    JID = 0
+    NICK = 1
+    REASON = 1
+    NICK_OR_REASON = 1
+    ROLE = 2
+    AFFILIATION = 3
+    AFFILIATION_TEXT = 4
+
+
 ACTIVITIES = {
     'doing_chores': {
         'category': _('Doing Chores'),
