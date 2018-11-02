@@ -78,19 +78,6 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
-            <property name="title" translatable="yes">Appearance</property>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;alt&gt;c</property>
-                <property name="title" translatable="yes">Toggle full / compact view</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
             <property name="title" translatable="yes">Recent history</property>
             <child>
               <object class="GtkShortcutsShortcut">
