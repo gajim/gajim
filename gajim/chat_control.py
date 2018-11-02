@@ -416,7 +416,11 @@ class ChatControl(ChatControlBase):
         pep = self.contact.pep
         img = self._pep_images[pep_type]
         if pep_type in pep:
-            img.set_from_pixbuf(gtkgui_helpers.get_pep_as_pixbuf(pep[pep_type]))
+            icon = gtkgui_helpers.get_pep_icon(pep[pep_type])
+            if isinstance(icon, str):
+                img.set_from_icon_name(icon, Gtk.IconSize.MENU)
+            else:
+                img.set_from_pixbuf(icon)
             img.set_tooltip_markup(pep[pep_type].as_markup_text())
             img.show()
         else:

@@ -1088,27 +1088,27 @@ class RosterWindow:
         pep_dict = app.connections[account].pep
         if app.config.get('show_mood_in_roster') and 'mood' in pep_dict:
             self.model[child_iter][Column.MOOD_PIXBUF] = \
-                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['mood'])
+                gtkgui_helpers.get_pep_icon(pep_dict['mood'])
         else:
             self.model[child_iter][Column.MOOD_PIXBUF] = None
 
         if app.config.get('show_activity_in_roster') and 'activity' in \
         pep_dict:
             self.model[child_iter][Column.ACTIVITY_PIXBUF] = \
-                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['activity'])
+                gtkgui_helpers.get_pep_icon(pep_dict['activity'])
         else:
             self.model[child_iter][Column.ACTIVITY_PIXBUF] = None
 
         if app.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
             self.model[child_iter][Column.TUNE_ICON] = \
-                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['tune'])
+                gtkgui_helpers.get_pep_icon(pep_dict['tune'])
         else:
             self.model[child_iter][Column.TUNE_ICON] = None
 
         if app.config.get('show_location_in_roster') and 'geoloc' in \
         pep_dict:
             self.model[child_iter][Column.LOCATION_ICON] = \
-                gtkgui_helpers.get_pep_as_pixbuf(pep_dict['geoloc'])
+                gtkgui_helpers.get_pep_icon(pep_dict['geoloc'])
         else:
             self.model[child_iter][Column.LOCATION_ICON] = None
 
@@ -1392,7 +1392,7 @@ class RosterWindow:
 
         pixbuf = None
         if pep_type in contact.pep:
-            pixbuf = gtkgui_helpers.get_pep_as_pixbuf(contact.pep[pep_type])
+            pixbuf = gtkgui_helpers.get_pep_icon(contact.pep[pep_type])
 
         for child_iter in iters:
             self.model[child_iter][model_column] = pixbuf

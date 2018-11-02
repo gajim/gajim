@@ -383,7 +383,7 @@ def load_activity_icon(category, activity=None):
     icon_list = _load_icon_list([activity], path)
     return icon_list[activity]
 
-def get_pep_as_pixbuf(pep_class):
+def get_pep_icon(pep_class):
     if pep_class == PEPEventType.MOOD:
         received_mood = pep_class.data['mood']
         mood = received_mood if received_mood in MOODS else 'unknown'
