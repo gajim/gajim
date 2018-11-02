@@ -14,6 +14,7 @@
 
 import os
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -24,10 +25,10 @@ from gajim.gtk.util import get_builder
 
 
 class ManageSounds:
-    def __init__(self, transient):
+    def __init__(self):
         self._ui = get_builder('manage_sounds_window.ui')
         self.window = self._ui.manage_sounds_window
-        self.window.set_transient_for(transient)
+        self.window.set_transient_for(app.app.get_active_window())
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))
@@ -115,8 +116,11 @@ class ManageSounds:
         snd_event_config_name = model[iter_][3]
         helpers.play_sound(snd_event_config_name)
 
+    def _on_key_press(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.window.destroy()
+
     def _on_destroy(self, *args):
-        self.window.destroy()
         window = app.get_app_window('Preferences')
         if window is not None:
             window.sounds_preferences = None

@@ -682,7 +682,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_manage_sounds_button_clicked(self, widget):
         if self.sounds_preferences is None:
-            self.sounds_preferences = ManageSounds(self)
+            self.sounds_preferences = ManageSounds()
         else:
             self.sounds_preferences.window.present()
 
