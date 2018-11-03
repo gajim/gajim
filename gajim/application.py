@@ -189,11 +189,12 @@ class GajimApplication(Gtk.Application):
             caps_cache.initialize(app.logger)
         except exceptions.DatabaseMalformed as error:
             dlg = Gtk.MessageDialog(
-                None,
-                Gtk.DialogFlags.DESTROY_WITH_PARENT | Gtk.DialogFlags.MODAL,
-                Gtk.MessageType.ERROR,
-                Gtk.ButtonsType.OK,
-                _('Database Error'))
+                transient_for=None,
+                destroy_with_parent=True,
+                modal=True,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text=_('Database Error'))
             dlg.format_secondary_text(str(error))
             dlg.run()
             dlg.destroy()

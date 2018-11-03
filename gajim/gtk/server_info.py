@@ -29,8 +29,9 @@ log = logging.getLogger('gajim.gtk.serverinfo')
 
 class ServerInfoDialog(Gtk.Dialog):
     def __init__(self, account):
-        flags = Gtk.DialogFlags.DESTROY_WITH_PARENT
-        super().__init__(_('Server Info'), None, flags)
+        super().__init__(title=_('Server Info'),
+                         transient_for=None,
+                         destroy_with_parent=True)
 
         self.account = account
         self.set_transient_for(app.interface.roster.window)

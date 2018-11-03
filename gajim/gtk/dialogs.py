@@ -900,8 +900,9 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
 
 class ChangePasswordDialog(Gtk.Dialog):
     def __init__(self, account, success_cb, transient_for):
-        flags = Gtk.DialogFlags.DESTROY_WITH_PARENT
-        super().__init__(_('Change Password'), None, flags)
+        super().__init__(title=_('Change Password'),
+                         transient_for=transient_for,
+                         destroy_with_parent=True)
 
         self._account = account
         self._success_cb = success_cb
@@ -912,8 +913,6 @@ class ChangePasswordDialog(Gtk.Dialog):
         self._password1_entry = self._builder.get_object('password1_entry')
         self._password2_entry = self._builder.get_object('password2_entry')
         self._error_label = self._builder.get_object('error_label')
-
-        self.set_transient_for(transient_for)
 
         self.add_button(_('_OK'), Gtk.ResponseType.OK)
         self.set_default_response(Gtk.ResponseType.OK)

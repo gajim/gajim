@@ -1511,8 +1511,9 @@ class TransformChatToMUC:
 class Dialog(Gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
     on_response_ok=None, on_response_cancel=None):
-        Gtk.Dialog.__init__(self, title, parent,
-            Gtk.DialogFlags.DESTROY_WITH_PARENT)
+        super().__init__(title=title,
+                         transient_for=parent,
+                         destroy_with_parent=True)
 
         self.user_response_ok = on_response_ok
         self.user_response_cancel = on_response_cancel

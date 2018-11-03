@@ -31,8 +31,9 @@ from gajim.common.i18n import _
 
 class FeaturesDialog(Gtk.Dialog):
     def __init__(self):
-        flags = Gtk.DialogFlags.DESTROY_WITH_PARENT
-        super().__init__(_('Features'), None, flags)
+        super().__init__(title=_('Features'),
+                         transient_for=None,
+                         destroy_with_parent=True)
 
         self.set_transient_for(app.interface.roster.window)
         self.set_resizable(False)
@@ -205,12 +206,14 @@ class FeatureItem(Gtk.Grid):
 
         if not feature.available:
             self.feature_dependency_u.set_halign(Gtk.Align.START)
-            self.feature_dependency_u.set_alignment(0.0, 0.0)
+            self.feature_dependency_u.set_xalign(0.0)
+            self.feature_dependency_u.set_yalign(0.0)
             self.feature_dependency_u.set_line_wrap(True)
             self.feature_dependency_u.set_max_width_chars(50)
             self.feature_dependency_u.set_selectable(True)
             self.feature_dependency_w.set_halign(Gtk.Align.START)
-            self.feature_dependency_w.set_alignment(0.0, 0.0)
+            self.feature_dependency_w.set_xalign(0.0)
+            self.feature_dependency_w.set_yalign(0.0)
             self.feature_dependency_w.set_line_wrap(True)
             self.feature_dependency_w.set_max_width_chars(50)
             self.feature_dependency_w.set_selectable(True)
