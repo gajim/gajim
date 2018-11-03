@@ -214,6 +214,7 @@ class ListMultiField(Field):
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
         self._widget.add(self._treeview)
+        self._widget.get_style_context().add_class('field-normal')
 
 
 class ListMutliTreeView(Gtk.TreeView):
@@ -299,6 +300,8 @@ class JidMultiField(Field):
         self._widget.pack_start(self._scrolled_window, True, True, 0)
         self._widget.pack_end(self._button_box, False, False, 0)
 
+        self._treeview.update_required_css()
+
     def _add_clicked(self, _widget):
         self._treeview.get_model().append([''])
 
@@ -314,6 +317,7 @@ class JidMultiField(Field):
                 continue
             jids.append(row[0])
         self._field.values = jids
+        self._treeview.update_required_css()
 
 
 class JidMutliTreeView(Gtk.TreeView):
@@ -344,6 +348,7 @@ class JidMutliTreeView(Gtk.TreeView):
         iter_ = self._store.get_iter(path)
         self._store.set_value(iter_, 0, new_text)
         self._set_values()
+        self.update_required_css()
 
     def _set_values(self):
         jids = []
@@ -353,6 +358,19 @@ class JidMutliTreeView(Gtk.TreeView):
             jids.append(row[0])
         self._field.values = jids
 
+    def update_required_css(self):
+        style = self.get_parent().get_style_context()
+        if not self._field.required:
+            style.add_class('field-normal')
+            return
+
+        if self._field.values:
+            style.remove_class('field-required')
+            style.add_class('field-normal')
+        else:
+            style.remove_class('field-normal')
+            style.add_class('field-required')
+
 
 class TextSingleField(Field):
     def __init__(self, field, options):
@@ -361,9 +379,20 @@ class TextSingleField(Field):
         self._widget = Gtk.Entry()
         self._widget.set_text(field.value)
         self._widget.connect('changed', self._changed)
+        self._update_required_css()
 
     def _changed(self, _widget):
         self._field.value = self._widget.get_text()
+        self._update_required_css()
+
+    def _update_required_css(self):
+        if not self._field.required:
+            return
+        style = self._widget.get_style_context()
+        if self._field.value:
+            style.remove_class('entry-field-required')
+        else:
+            style.add_class('entry-field-required')
 
 
 class TextPrivateField(TextSingleField):
@@ -387,12 +416,23 @@ class TextMultiField(Field):
         self._widget.set_propagate_natural_height(True)
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
-        self._textview = Gtk.TextView()
 
+        self._textview = Gtk.TextView()
         self._textview.get_buffer().set_text(field.value)
         self._textview.get_buffer().connect('changed', self._changed)
 
         self._widget.add(self._textview)
+        self._update_required_css()
 
     def _changed(self, widget):
         self._field.value = widget.get_text(*widget.get_bounds(), False)
+        self._update_required_css()
+
+    def _update_required_css(self):
+        if not self._field.required:
+            return
+        style = self._widget.get_style_context()
+        if self._field.value:
+            style.remove_class('field-required')
+        else:
+            style.add_class('field-required')
