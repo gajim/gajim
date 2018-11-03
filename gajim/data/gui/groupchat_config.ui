@@ -323,6 +323,7 @@
                         <property name="sort_column_id">1</property>
                         <child>
                           <object class="GtkCellRendererText">
+                            <property name="placeholder_text">Name</property>
                             <signal name="edited" handler="_on_nick_edited" swapped="no"/>
                           </object>
                           <attributes>
@@ -442,7 +443,7 @@
                         <property name="sort_column_id">1</property>
                         <child>
                           <object class="GtkCellRendererText">
-                            <property name="placeholder_text">spam</property>
+                            <property name="placeholder_text">Spam</property>
                             <signal name="edited" handler="_on_reason_edited" swapped="no"/>
                           </object>
                           <attributes>

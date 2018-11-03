@@ -153,6 +153,7 @@ list.settings > row > box {
     background-color:@theme_base_color;
     border-bottom: 1px solid;
     border-color: @borders;}
+#GroupchatConfig treeview { padding: 5px; }
 
 /* Popover Treeview */
 .popover_treeview { border-radius: 3px; background-color: @theme_bg_color; }

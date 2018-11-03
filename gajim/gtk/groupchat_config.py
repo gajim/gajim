@@ -75,6 +75,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             self._ui.stack.set_visible_child_name('affiliation')
 
         self._ui.connect_signals(self)
+        self.connect('delete-event', self._cancel)
         self.show_all()
         self._ui.stack.notify('visible-child-name')
 
@@ -94,19 +95,19 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             affiliation = 'member'
 
         treeview = self._get_current_treeview()
-        treeview.get_model().append([None,
-                                     None,
-                                     None,
-                                     affiliation,
-                                     text,
-                                     affiliation_edit,
-                                     jid_edit])
+        iter_ = treeview.get_model().append([None,
+                                             None,
+                                             None,
+                                             affiliation,
+                                             text,
+                                             affiliation_edit,
+                                             jid_edit])
 
         # Scroll to added row
-        row = treeview.get_model()[-1]
-        treeview.scroll_to_cell(row.path, None, False, 0, 0)
+        path = treeview.get_model().get_path(iter_)
+        treeview.scroll_to_cell(path, None, False, 0, 0)
         treeview.get_selection().unselect_all()
-        treeview.get_selection().select_path(row.path)
+        treeview.get_selection().select_path(path)
 
     def _on_remove(self, *args):
         treeview = self._get_current_treeview()
@@ -286,10 +287,13 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         return add, remove, modified
 
     def _on_cancel(self, *args):
+        self._cancel()
+        self.destroy()
+
+    def _cancel(self, *args):
         if self._form and self._own_affiliation == 'owner':
             con = app.connections[self.account]
             con.get_module('MUC').cancel_config(self.jid)
-        self.destroy()
 
     def _set_affiliations(self):
         add, remove, modified = self._get_diff()
