@@ -147,7 +147,7 @@ list.settings > row > box {
 #StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
 /* GroupchatConfig */
-#GroupchatConfig buttonbox { margin: 0px 12px 12px 12px; }
+#GroupchatConfig > box > buttonbox { margin: 0px 12px 12px 12px; }
 #GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}
 #GroupchatConfig stacksidebar > scrolledwindow {
     background-color:@theme_base_color;
@@ -249,8 +249,4 @@ button.flat.link { padding: 0; border: 0; }
 .data-form-title { font-size: 16px; font-weight: bold; }
 .data-form-widget grid { margin: 18px; }
 .data-form-widget treeview { padding: 5px; }
-.field-required { border: 1px solid; border-color: red; }
-.field-normal { border: 1px solid; border-color:@unfocused_borders; }
-
-.entry-field-required { border: 1px solid; border-color: red; }
-.entry-field-required:focus { box-shadow: inset 0 0 0 1px red; border-color: red; }
+.data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }

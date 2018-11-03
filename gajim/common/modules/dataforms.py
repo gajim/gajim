@@ -239,7 +239,7 @@ class DataField(ExtendedNode):
 
     @staticmethod
     def is_valid():
-        return True
+        return True, ''
 
 
 class Uri(nbxmpp.Node):
@@ -353,6 +353,13 @@ class StringField(DataField):
         except ValueError:  # if there already were no value tag
             pass
 
+    def is_valid(self):
+        if not self.required:
+            return True, ''
+        if not self.value:
+            return False, ''
+        return True, ''
+
 
 class ListField(DataField):
     """
@@ -404,10 +411,10 @@ class ListSingleField(ListField, StringField):
     """
     def is_valid(self):
         if not self.required:
-            return True
+            return True, ''
         if not self.value:
-            return False
-        return True
+            return False, ''
+        return True, ''
 
 
 class JidSingleField(ListSingleField):
@@ -418,12 +425,12 @@ class JidSingleField(ListSingleField):
         if self.value:
             try:
                 helpers.parse_jid(self.value)
-                return True
-            except Exception:
-                return False
+                return True, ''
+            except Exception as error:
+                return False, error
         if self.required:
-            return False
-        return True
+            return False, ''
+        return True, ''
 
 
 class ListMultiField(ListField):
@@ -458,10 +465,10 @@ class ListMultiField(ListField):
 
     def is_valid(self):
         if not self.required:
-            return True
+            return True, ''
         if not self.values:
-            return False
-        return True
+            return False, ''
+        return True, ''
 
 
 class JidMultiField(ListMultiField):
@@ -473,12 +480,12 @@ class JidMultiField(ListMultiField):
             for value in self.values:
                 try:
                     helpers.parse_jid(value)
-                except Exception:
-                    return False
-            return True
+                except Exception as error:
+                    return False, error
+            return True, ''
         if self.required:
-            return False
-        return True
+            return False, ''
+        return True, ''
 
 
 class TextMultiField(DataField):
@@ -504,6 +511,13 @@ class TextMultiField(DataField):
     def value(self):
         for element in self.getTags('value'):
             self.delChild(element)
+
+    def is_valid(self):
+        if not self.required:
+            return True, ''
+        if not self.value:
+            return False, ''
+        return True, ''
 
 
 class DataRecord(ExtendedNode):
@@ -573,7 +587,7 @@ class DataRecord(ExtendedNode):
 
     def is_valid(self):
         for field in self.iter_fields():
-            if not field.is_valid():
+            if not field.is_valid()[0]:
                 return False
         return True
 

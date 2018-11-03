@@ -13,10 +13,17 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Pango
+
+from gajim.common.i18n import _
 
 
 class DataFormWidget(Gtk.ScrolledWindow):
+
+    __gsignals__ = {'is-valid': (GObject.SignalFlags.RUN_LAST, None, (bool,))}
+
     def __init__(self, form_node, options=None):
         Gtk.ScrolledWindow.__init__(self)
         self.set_hexpand(True)
@@ -38,6 +45,9 @@ class DataFormWidget(Gtk.ScrolledWindow):
     @property
     def instructions(self):
         return self._form_grid.instructions
+
+    def validate(self):
+        return self._form_grid.validate(True)
 
     def get_submit_form(self):
         self._form_node.type_ = 'submit'
@@ -109,10 +119,11 @@ class FormGrid(Gtk.Grid):
                 continue
 
             widget = self._fields[field.type_]
-            self.add_row(widget(field, options))
+            self.add_row(widget(field, self, options))
 
-    def is_valid(self):
-        return self._data_form.is_valid()
+    def validate(self, is_valid):
+        value = self._data_form.is_valid() if is_valid else False
+        self.get_parent().get_parent().emit('is-valid', value)
 
 
 class Title:
@@ -135,8 +146,10 @@ class Instructions:
 
 
 class Field:
-    def __init__(self, field, options):
+    def __init__(self, field, form_grid, options):
         self._field = field
+        self._form_grid = form_grid
+        self._validate_source_id = None
 
         self._label = Gtk.Label(label=field.label)
         self._label.set_single_line_mode(False)
@@ -147,15 +160,64 @@ class Field:
         self._label.set_xalign(bool(options.get('right_align')))
         self._label.set_tooltip_text(field.description)
 
+        self._warning_image = Gtk.Image.new_from_icon_name(
+            'dialog-warning-symbolic', Gtk.IconSize.MENU)
+        self._warning_image.get_style_context().add_class('warning-color')
+        self._warning_image.set_no_show_all(True)
+        self._warning_image.set_valign(Gtk.Align.CENTER)
+        self._warning_image.set_tooltip_text(_('Required'))
+        self._warning_box = Gtk.Box()
+        self._warning_box.set_size_request(16, -1)
+        self._warning_box.add(self._warning_image)
+
     def add(self, form_grid, row_number):
         form_grid.attach(self._label, 0, row_number, 1, 1)
-        form_grid.attach_next_to(
-            self._widget, self._label, Gtk.PositionType.RIGHT, 1, 1)
+        form_grid.attach_next_to(self._widget,
+                                 self._label,
+                                 Gtk.PositionType.RIGHT, 1, 1)
+        if self._field.type_ in ('jid-single',
+                                 'jid-multi',
+                                 'text-single',
+                                 'text-private',
+                                 'text-multi'):
+            form_grid.attach_next_to(self._warning_box,
+                                     self._widget,
+                                     Gtk.PositionType.RIGHT, 1, 1)
+            self._set_warning(False, '')
+
+    def _set_warning(self, is_valid, error):
+        if not self._field.required and not is_valid and not error:
+            # If its not valid and no error is given, its the inital call
+            # to show all icons on required fields.
+            return
+
+        style = self._warning_image.get_style_context()
+        if error:
+            style.remove_class('warning-color')
+            style.add_class('error-color')
+        else:
+            error = _('Required')
+            style.remove_class('error-color')
+            style.add_class('warning-color')
+        self._warning_image.set_tooltip_text(str(error))
+        self._warning_image.set_visible(not is_valid)
+
+    def _validate(self):
+        if self._validate_source_id is not None:
+            GLib.source_remove(self._validate_source_id)
+
+        def _start_validation():
+            is_valid, error = self._field.is_valid()
+            self._set_warning(is_valid, error)
+            self._form_grid.validate(is_valid)
+            self._validate_source_id = None
+
+        self._validate_source_id = GLib.timeout_add(500, _start_validation)
 
 
 class BooleanField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
 
         self._widget = Gtk.CheckButton()
         self._widget.set_active(field.value)
@@ -166,8 +228,8 @@ class BooleanField(Field):
 
 
 class FixedField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
 
         self._label.set_text(field.value)
 
@@ -186,8 +248,8 @@ class FixedField(Field):
 
 
 class ListSingleField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
 
         self._widget = Gtk.ComboBoxText()
         for value, label in field.iter_options():
@@ -203,8 +265,8 @@ class ListSingleField(Field):
 
 
 class ListMultiField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
         self._treeview = ListMutliTreeView(field)
@@ -214,7 +276,6 @@ class ListMultiField(Field):
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
         self._widget.add(self._treeview)
-        self._widget.get_style_context().add_class('field-normal')
 
 
 class ListMutliTreeView(Gtk.TreeView):
@@ -264,32 +325,26 @@ class ListMutliTreeView(Gtk.TreeView):
 
 
 class JidMultiField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
-        self._treeview = JidMutliTreeView(field)
+        self._treeview = JidMutliTreeView(field, self)
 
-        self._add_button = Gtk.Button.new_from_icon_name(
-            'list-add-symbolic', Gtk.IconSize.MENU)
+        self._add_button = Gtk.ToolButton(icon_name='list-add-symbolic')
         self._add_button.connect('clicked', self._add_clicked)
-        self._add_button.set_halign(Gtk.Align.START)
 
-        self._remove_button = Gtk.Button.new_from_icon_name(
-            'list-remove-symbolic', Gtk.IconSize.MENU)
+        self._remove_button = Gtk.ToolButton(icon_name='list-remove-symbolic')
         self._remove_button.connect('clicked', self._remove_clicked)
-        self._remove_button.set_halign(Gtk.Align.START)
 
-        self._button_box = Gtk.ButtonBox(
-            orientation=Gtk.Orientation.HORIZONTAL)
-        self._button_box.set_layout(Gtk.ButtonBoxStyle.START)
-        self._button_box.add(self._add_button)
-        self._button_box.add(self._remove_button)
-        self._button_box.set_child_non_homogeneous(self._add_button, True)
-        self._button_box.set_child_non_homogeneous(self._remove_button, True)
+        self._toolbar = Gtk.Toolbar()
+        self._toolbar.set_icon_size(Gtk.IconSize.MENU)
+        self._toolbar.set_style(Gtk.ToolbarStyle.ICONS)
+        self._toolbar.get_style_context().add_class('inline-toolbar')
+        self._toolbar.add(self._add_button)
+        self._toolbar.add(self._remove_button)
 
         self._widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self._widget.set_spacing(6)
 
         self._scrolled_window = Gtk.ScrolledWindow()
         self._scrolled_window.set_propagate_natural_height(True)
@@ -298,9 +353,7 @@ class JidMultiField(Field):
         self._scrolled_window.add(self._treeview)
 
         self._widget.pack_start(self._scrolled_window, True, True, 0)
-        self._widget.pack_end(self._button_box, False, False, 0)
-
-        self._treeview.update_required_css()
+        self._widget.pack_end(self._toolbar, False, False, 0)
 
     def _add_clicked(self, _widget):
         self._treeview.get_model().append([''])
@@ -317,14 +370,18 @@ class JidMultiField(Field):
                 continue
             jids.append(row[0])
         self._field.values = jids
-        self._treeview.update_required_css()
+        self._validate()
+
+    def validate(self):
+        self._validate()
 
 
 class JidMutliTreeView(Gtk.TreeView):
-    def __init__(self, field):
+    def __init__(self, field, multi_field):
         Gtk.TreeView.__init__(self)
 
         self._field = field
+        self._multi_field = multi_field
 
         self._store = Gtk.ListStore(str)
 
@@ -348,7 +405,7 @@ class JidMutliTreeView(Gtk.TreeView):
         iter_ = self._store.get_iter(path)
         self._store.set_value(iter_, 0, new_text)
         self._set_values()
-        self.update_required_css()
+        self._multi_field.validate()
 
     def _set_values(self):
         jids = []
@@ -358,58 +415,35 @@ class JidMutliTreeView(Gtk.TreeView):
             jids.append(row[0])
         self._field.values = jids
 
-    def update_required_css(self):
-        style = self.get_parent().get_style_context()
-        if not self._field.required:
-            style.add_class('field-normal')
-            return
-
-        if self._field.values:
-            style.remove_class('field-required')
-            style.add_class('field-normal')
-        else:
-            style.remove_class('field-normal')
-            style.add_class('field-required')
-
 
 class TextSingleField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
 
         self._widget = Gtk.Entry()
         self._widget.set_text(field.value)
         self._widget.connect('changed', self._changed)
-        self._update_required_css()
 
     def _changed(self, _widget):
         self._field.value = self._widget.get_text()
-        self._update_required_css()
-
-    def _update_required_css(self):
-        if not self._field.required:
-            return
-        style = self._widget.get_style_context()
-        if self._field.value:
-            style.remove_class('entry-field-required')
-        else:
-            style.add_class('entry-field-required')
+        self._validate()
 
 
 class TextPrivateField(TextSingleField):
-    def __init__(self, field, options):
-        TextSingleField.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        TextSingleField.__init__(self, field, form_grid, options)
         self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
         self._widget.set_visibility(False)
 
 
 class JidSingleField(TextSingleField):
-    def __init__(self, field, options):
-        TextSingleField.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        TextSingleField.__init__(self, field, form_grid, options)
 
 
 class TextMultiField(Field):
-    def __init__(self, field, options):
-        Field.__init__(self, field, options)
+    def __init__(self, field, form_grid, options):
+        Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
         self._widget = Gtk.ScrolledWindow()
@@ -422,17 +456,7 @@ class TextMultiField(Field):
         self._textview.get_buffer().connect('changed', self._changed)
 
         self._widget.add(self._textview)
-        self._update_required_css()
 
     def _changed(self, widget):
         self._field.value = widget.get_text(*widget.get_bounds(), False)
-        self._update_required_css()
-
-    def _update_required_css(self):
-        if not self._field.required:
-            return
-        style = self._widget.get_style_context()
-        if self._field.value:
-            style.remove_class('field-required')
-        else:
-            style.add_class('field-required')
+        self._validate()
