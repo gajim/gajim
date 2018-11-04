@@ -89,6 +89,8 @@ class ServiceRegistration(Gtk.Assistant):
         if is_form:
             dataform = dataforms.extend_form(node=form)
             self._data_form_widget = DataFormWidget(dataform)
+            self._data_form_widget.connect('is-valid', self._on_is_valid)
+            self._data_form_widget.validate()
         else:
             from gajim import config
             self._data_form_widget = config.FakeDataForm(form)
@@ -97,6 +99,9 @@ class ServiceRegistration(Gtk.Assistant):
         page.pack_start(self._data_form_widget, True, True, 0)
         self._data_form_widget.show_all()
         self.set_current_page(Page.FORM)
+
+    def _on_is_valid(self, _widget, is_valid):
+        self.set_page_complete(self.get_nth_page(Page.FORM), is_valid)
 
     def _on_error(self, error_text):
         log.info('Show Error page')
