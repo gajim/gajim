@@ -10,7 +10,6 @@ from gi.repository import GLib
 from gajim.common import resolver
 
 from gajim_mocks import *
-from xmpp_mocks import IdleQueueThread
 
 NONSENSE_NAME = 'sfsdfsdfsdf.sdfs.fsd'
 JABBERCZ_TXT_NAME = '_xmppconnect.jabber.cz'
