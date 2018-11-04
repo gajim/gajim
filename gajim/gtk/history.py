@@ -69,14 +69,17 @@ class Column(IntEnum):
     LOG_LINE_ID = 5
 
 
-class HistoryWindow:
-    """
-    Class for browsing logs of conversations with contacts
-    """
-
+class HistoryWindow(Gtk.ApplicationWindow):
     def __init__(self, jid=None, account=None):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_application(app.app)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_show_menubar(False)
+        self.set_title(_('Conversation History'))
+
         self._ui = get_builder('history_window.ui')
-        self._ui.history_window.set_application(app.app)
+
+        self.add(self._ui.history_box)
 
         self.history_textview = conversation_textview.ConversationTextview(
             account, used_in_history_window=True)
@@ -130,15 +133,18 @@ class HistoryWindow:
         else:
             self._load_history(None)
 
-        resize_window(self._ui.history_window,
+        resize_window(self,
                       app.config.get('history_window_width'),
                       app.config.get('history_window_height'))
-        move_window(self._ui.history_window,
+        move_window(self,
                     app.config.get('history_window_x-position'),
                     app.config.get('history_window_y-position'))
 
         self._ui.connect_signals(self)
-        self._ui.history_window.show_all()
+        self.connect('delete-event', self._on_delete)
+        self.connect('destroy', self._on_destroy)
+        self.connect('key-press-event', self._on_key_press)
+        self.show_all()
 
         # PluginSystem: adding GUI extension point for
         # HistoryWindow instance object
@@ -255,21 +261,20 @@ class HistoryWindow:
                 break
         return account
 
-    def on_history_window_delete_event(self, widget, *args):
+    def _on_delete(self, widget, *args):
         self.save_state()
 
-    def on_history_window_destroy(self, widget):
+    def _on_destroy(self, widget):
         # PluginSystem: removing GUI extension points connected with
         # HistoryWindow instance object
         app.plugin_manager.remove_gui_extension_point(
             'history_window', self)
         self.history_textview.del_handlers()
-        del app.interface.instances['logs']
 
-    def on_history_window_key_press_event(self, widget, event):
+    def _on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.save_state()
-            self._ui.history_window.destroy()
+            self.destroy()
 
     def on_jid_entry_match_selected(self, widget, model, iter_, *args):
         self._jid_entry_search(model[iter_][1])
@@ -799,8 +804,8 @@ class HistoryWindow:
         self._ui.results_scrolledwindow.set_property('visible', False)
 
     def save_state(self):
-        x, y = self._ui.history_window.get_window().get_root_origin()
-        width, height = self._ui.history_window.get_size()
+        x, y = self.get_window().get_root_origin()
+        width, height = self.get_size()
 
         app.config.set('history_window_x-position', x)
         app.config.set('history_window_y-position', y)

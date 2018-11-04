@@ -78,7 +78,6 @@ from gajim.gtk.bookmarks import ManageBookmarksWindow
 from gajim.gtk.account_wizard import AccountCreationWizard
 from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
-from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.adhoc_commands import CommandWindow
@@ -3041,16 +3040,6 @@ class RosterWindow:
     def on_edit_groups(self, widget, list_):
         dialogs.EditGroupsDialog(list_)
 
-    def on_history(self, widget, contact, account):
-        """
-        When history menuitem is activated: call log window
-        """
-        if 'logs' in app.interface.instances:
-            app.interface.instances['logs'].window.present()
-            app.interface.instances['logs'].open_history(contact.jid, account)
-        else:
-            app.interface.instances['logs'] = HistoryWindow(contact.jid, account)
-
     def on_disconnect(self, widget, jid, account):
         """
         When disconnect menuitem is activated: disconnect from room
@@ -3756,6 +3745,9 @@ class RosterWindow:
                     self.on_info(widget, contact, account)
         elif event.get_state() & Gdk.ModifierType.CONTROL_MASK and event.keyval == \
         Gdk.KEY_h:
+            if app.config.get('one_message_window') == 'always_with_roster':
+                # Let MessageWindow handle this
+                return
             treeselection = self.tree.get_selection()
             model, list_of_paths = treeselection.get_selected_rows()
             if len(list_of_paths) != 1:
@@ -3767,7 +3759,10 @@ class RosterWindow:
                 account = model[path][Column.ACCOUNT]
                 contact = app.contacts.get_first_contact_from_jid(account,
                     jid)
-                self.on_history(widget, contact, account)
+                dict_ = {'jid': GLib.Variant('s', jid),
+                         'account': GLib.Variant('s', account)}
+                app.app.activate_action('browse-history',
+                                        GLib.Variant('a{sv}', dict_))
 
     def on_roster_window_popup_menu(self, widget):
         event = Gdk.Event.new(Gdk.EventType.KEY_PRESS)
@@ -5392,7 +5387,12 @@ class RosterWindow:
         menu.append(item)
 
         history_menuitem = Gtk.MenuItem.new_with_mnemonic(_('_History'))
-        history_menuitem.connect('activate', self.on_history, contact, account)
+        history_menuitem.set_action_name('app.browse-history')
+        dict_ = {'jid': GLib.Variant('s', contact.jid),
+                 'account': GLib.Variant('s', account)}
+        variant = GLib.Variant('a{sv}', dict_)
+        history_menuitem.set_action_target_value(variant)
+
         menu.append(history_menuitem)
 
         event_button = gtkgui_helpers.get_possible_button_event(event)

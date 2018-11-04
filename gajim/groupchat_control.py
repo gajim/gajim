@@ -494,7 +494,9 @@ class GroupchatControl(ChatControlBase):
         # GC Roster tooltip
         self.gc_tooltip = GCTooltip()
 
-        self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id)
+        self.control_menu = gui_menu_builder.get_groupchat_menu(self.control_id,
+                                                                self.account,
+                                                                self.room_jid)
         settings_menu = self.xml.get_object('settings_menu')
         settings_menu.set_menu_model(self.control_menu)
 
@@ -2714,8 +2716,11 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('history_menuitem')
-        id_ = item.connect('activate', self.on_history, nick)
-        self.handlers[id_] = item
+        item.set_action_name('app.browse-history')
+        dict_ = {'jid': GLib.Variant('s', fjid),
+                 'account': GLib.Variant('s', self.account)}
+        variant = GLib.Variant('a{sv}', dict_)
+        item.set_action_target_value(variant)
 
         item = xml.get_object('add_to_roster_menuitem')
         our_jid = app.get_jid_from_account(self.account)
@@ -2980,10 +2985,6 @@ class GroupchatControl(ChatControlBase):
         else:
             app.interface.instances[self.account]['infos'][contact.jid] = \
                 vcard.VcardWindow(contact, self.account, gc_contact)
-
-    def on_history(self, widget, nick):
-        jid = app.construct_fjid(self.room_jid, nick)
-        self._on_history_menuitem_activate(widget=widget, jid=jid)
 
     def on_add_to_roster(self, widget, jid):
         AddNewContactWindow(self.account, jid)

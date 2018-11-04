@@ -313,10 +313,7 @@ def on_file_transfers(action, param):
 
 
 def on_history(action, param):
-    if 'logs' in interface.instances:
-        interface.instances['logs'].window.present()
-    else:
-        interface.instances['logs'] = HistoryWindow()
+    on_browse_history(action, param)
 
 
 def on_open_event(action, param):
@@ -369,3 +366,19 @@ def join_groupchat(_action, param):
     account, jid = param.get_strv()
     room_jid = jid.split('?')[0]
     app.interface.join_gc_minimal(account, room_jid)
+
+
+def on_browse_history(_action, param):
+    jid, account = None, None
+    if param is not None:
+        dict_ = param.unpack()
+        jid = dict_.get('jid')
+        account = dict_.get('account')
+
+    window = app.get_app_window(HistoryWindow)
+    if window is None:
+        HistoryWindow(jid, account)
+    else:
+        window.present()
+        if jid is not None and account is not None:
+            window.open_history(jid, account)

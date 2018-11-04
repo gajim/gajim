@@ -272,7 +272,12 @@ control=None, gc_contact=None, is_anonymous=True):
 
     rename_menuitem.connect('activate', roster.on_rename, 'contact', jid,
         account)
-    history_menuitem.connect('activate', roster.on_history, contact, account)
+
+    history_menuitem.set_action_name('app.browse-history')
+    dict_ = {'jid': GLib.Variant('s', contact.jid),
+             'account': GLib.Variant('s', account)}
+    variant = GLib.Variant('a{sv}', dict_)
+    history_menuitem.set_action_target_value(variant)
 
     if control:
         convert_to_gc_menuitem.connect('activate',
@@ -605,7 +610,7 @@ def show_save_as_menu(sha, name):
     menu.popup_at_pointer()
 
 
-def get_singlechat_menu(control_id):
+def get_singlechat_menu(control_id, account, jid):
     singlechat_menu = [
         (_('Send File…'), [
             ('win.send-file-httpupload-', _('Upload File…')),
@@ -616,7 +621,7 @@ def get_singlechat_menu(control_id):
         ('win.toggle-audio-', _('Audio Session')),
         ('win.toggle-video-', _('Video Session')),
         ('win.information-', _('Information')),
-        ('win.browse-history-', _('History')),
+        ('app.browse-history', _('History')),
         ]
 
     def build_menu(preset):
@@ -624,8 +629,14 @@ def get_singlechat_menu(control_id):
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
-                if action_name == 'win.browse-history-':
-                    menu.append(label, action_name + control_id + '::none')
+                if action_name == 'app.browse-history':
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    dict_ = {'account': GLib.Variant('s', account),
+                             'jid': GLib.Variant('s', jid)}
+                    variant_dict = GLib.Variant('a{sv}', dict_)
+                    menuitem.set_action_and_target_value(action_name,
+                                                         variant_dict)
+                    menu.append_item(menuitem)
                 else:
                     menu.append(label, action_name + control_id)
             else:
@@ -638,7 +649,7 @@ def get_singlechat_menu(control_id):
     return build_menu(singlechat_menu)
 
 
-def get_groupchat_menu(control_id):
+def get_groupchat_menu(control_id, account, jid):
     groupchat_menu = [
         (_('Manage Room'), [
             ('win.change-subject-', _('Change Subject')),
@@ -653,7 +664,7 @@ def get_groupchat_menu(control_id):
         ('win.notify-on-message-', _('Notify on all messages')),
         ('win.minimize-', _('Minimize on close')),
         ('win.execute-command-', _('Execute command')),
-        ('win.browse-history-', _('History')),
+        ('app.browse-history', _('History')),
         ('win.disconnect-', _('Disconnect')),
     ]
 
@@ -662,8 +673,14 @@ def get_groupchat_menu(control_id):
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
-                if action_name == 'win.browse-history-':
-                    menu.append(label, action_name + control_id + '::none')
+                if action_name == 'app.browse-history':
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    dict_ = {'account': GLib.Variant('s', account),
+                             'jid': GLib.Variant('s', jid)}
+                    variant_dict = GLib.Variant('a{sv}', dict_)
+                    menuitem.set_action_and_target_value(action_name,
+                                                         variant_dict)
+                    menu.append_item(menuitem)
                 else:
                     menu.append(label, action_name + control_id)
             else:

@@ -389,11 +389,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.parent_win.window.add_action(action)
 
         action = Gio.SimpleAction.new(
-            'browse-history-%s' % self.control_id, GLib.VariantType.new('s'))
-        action.connect('activate', self._on_history)
-        self.parent_win.window.add_action(action)
-
-        action = Gio.SimpleAction.new(
             'send-file-%s' % self.control_id, None)
         action.connect('activate', self._on_send_file)
         action.set_enabled(False)
@@ -412,21 +407,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.parent_win.window.add_action(action)
 
     # Actions
-
-    def _on_history(self, action, param):
-        """
-        When history menuitem is pressed: call history window
-        """
-        jid = param.get_string()
-        if jid == 'none':
-            jid = self.contact.jid
-
-        if 'logs' in app.interface.instances:
-            app.interface.instances['logs'].window.present()
-            app.interface.instances['logs'].open_history(jid, self.account)
-        else:
-            from gajim.gtk.history import HistoryWindow
-            app.interface.instances['logs'] = HistoryWindow(jid, self.account)
 
     def change_encryption(self, action, param):
         encryption = param.get_string()
@@ -1038,20 +1018,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         buffer_ = tv.get_buffer()
         start, end = buffer_.get_bounds()
         buffer_.delete(start, end)
-
-    def _on_history_menuitem_activate(self, widget=None, jid=None):
-        """
-        When history menuitem is pressed: call history window
-        """
-        if not jid:
-            jid = self.contact.jid
-
-        if 'logs' in app.interface.instances:
-            app.interface.instances['logs'].window.present()
-            app.interface.instances['logs'].open_history(jid, self.account)
-        else:
-            from gajim.gtk.history import HistoryWindow
-            app.interface.instances['logs'] = HistoryWindow(jid, self.account)
 
     def _on_send_file(self, action, param):
         # get file transfer preference

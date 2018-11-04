@@ -355,9 +355,10 @@ class MessageWindow:
             if keyval == Gdk.KEY_h: # CTRL + h
                 if Gtk.Settings.get_default().get_property(
                 'gtk-key-theme-name') != 'Emacs':
-                    arg = GLib.Variant('s', 'none')
-                    self.window.lookup_action(
-                        'browse-history-%s' % control.control_id).activate(arg)
+                    dict_ = {'jid': GLib.Variant('s', control.contact.jid),
+                             'account': GLib.Variant('s', control.account)}
+                    variant = GLib.Variant('a{sv}', dict_)
+                    app.app.activate_action('browse-history', variant)
                     return True
             elif control.type_id == message_control.TYPE_CHAT and \
             keyval == Gdk.KEY_f: # CTRL + f

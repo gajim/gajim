@@ -110,7 +110,7 @@ class ChatControl(ChatControlBase):
 
         # Menu for the HeaderBar
         self.control_menu = gui_menu_builder.get_singlechat_menu(
-            self.control_id)
+            self.control_id, self.account, self.contact.jid)
         settings_menu = self.xml.get_object('settings_menu')
         settings_menu.set_menu_model(self.control_menu)
 

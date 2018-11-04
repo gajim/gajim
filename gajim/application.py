@@ -418,6 +418,11 @@ class GajimApplication(Gtk.Application):
         act.connect("activate", app_actions.open_link)
         self.add_action(act)
 
+        act = Gio.SimpleAction.new('browse-history',
+                                   GLib.VariantType.new('a{sv}'))
+        act.connect("activate", app_actions.on_browse_history)
+        self.add_action(act)
+
         for action in general_actions:
             action_name, func = action
             act = Gio.SimpleAction.new(action_name, None)
