@@ -51,6 +51,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
 
         visible = muc_caps_cache.supports(jid, nbxmpp.NS_REGISTER)
         self._ui.reserved_name_column.set_visible(visible)
+        self._ui.info_button.set_sensitive(False)
 
         self._form = form
         self._affiliations = {}
@@ -67,8 +68,9 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         if form is not None:
             self._ui.stack.set_visible_child_name('config')
             self._data_form_widget = DataFormWidget(form)
+            self._data_form_widget.connect('is-valid', self._on_is_valid)
+            self._data_form_widget.validate()
             self._ui.config_grid.add(self._data_form_widget)
-            # self._ui.stack.set_visible_child_name('affiliation')
         else:
             self._ui.stack.get_child_by_name('config').hide()
             self._ui.stack.get_child_by_name('config').set_no_show_all(True)
@@ -78,6 +80,9 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         self.connect('delete-event', self._cancel)
         self.show_all()
         self._ui.stack.notify('visible-child-name')
+
+    def _on_is_valid(self, _widget, is_valid):
+        self._ui.ok_button.set_sensitive(is_valid)
 
     def _get_current_treeview(self):
         page_name = self._ui.stack.get_visible_child_name()
@@ -208,6 +213,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         affiliation = self._own_affiliation in ('admin', 'owner')
         page = page_name != 'config'
         self._ui.treeview_buttonbox.set_visible(affiliation and page)
+        self._ui.info_button.set_sensitive(page_name == 'outcast')
 
     def _set_remove_button_state(self, sensitive, selected_affiliations):
         if self._own_affiliation not in ('admin', 'owner'):
