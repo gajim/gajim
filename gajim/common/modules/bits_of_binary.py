@@ -15,8 +15,14 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import hashlib
+from base64 import b64decode
+from pathlib import Path
 
 import nbxmpp
+
+from gajim.common import app
+from gajim.common import configpaths
 
 log = logging.getLogger('gajim.c.m.bob')
 
@@ -89,6 +95,79 @@ class BitsOfBinary:
         iq.addChild(name='data', attrs={'cid': cid}, namespace=nbxmpp.NS_BOB)
         self._con.connection.SendAndCallForResponse(
             iq, self._on_bob_received, {'cid': cid})
+
+
+def parse_bob_data(stanza):
+    data_node = stanza.getTag('data', namespace=nbxmpp.NS_BOB)
+    if data_node is None:
+        return
+
+    cid = data_node.getAttr('cid')
+    type_ = data_node.getAttr('type')
+    max_age = data_node.getAttr('max-age')
+    if max_age is not None:
+        try:
+            max_age = int(max_age)
+        except Exception:
+            log.exception(stanza)
+            return
+
+    if cid is None or type_ is None:
+        log.warning('Invalid data node (no cid or type attr): %s', stanza)
+        return
+
+    try:
+        algo_hash = cid.split('@')[0]
+        algo, hash_ = algo_hash.split('+')
+    except Exception:
+        log.exception('Invalid cid: %s', stanza)
+        return
+
+    bob_data = data_node.getData()
+    if not bob_data:
+        log.warning('No data found: %s', stanza)
+        return
+
+    filepath = Path(configpaths.get('BOB')) / algo_hash
+    if algo_hash in app.bob_cache or filepath.exists():
+        log.info('BoB data already cached')
+        return
+
+    try:
+        bob_data = b64decode(bob_data)
+    except Exception:
+        log.warning('Unable to decode data')
+        log.exception(stanza)
+        return
+
+    if len(bob_data) > 10000:
+        log.warning('%s: data > 10000 bytes', stanza.getFrom())
+        return
+
+    try:
+        sha = hashlib.new(algo)
+    except ValueError as error:
+        log.warning(stanza)
+        log.warning(error)
+        return
+
+    sha.update(bob_data)
+    if sha.hexdigest() != hash_:
+        log.warning('Invalid hash: %s', stanza)
+        return
+
+    if max_age == 0:
+        app.bob_cache[algo_hash] = bob_data
+    else:
+        try:
+            with open(str(filepath), 'w+b') as file:
+                file.write(bob_data)
+        except Exception:
+            log.warning('Unable to save data')
+            log.exception(stanza)
+            return
+    log.info('BoB data stored: %s', algo_hash)
+    return filepath
 
 
 def get_instance(*args, **kwargs):

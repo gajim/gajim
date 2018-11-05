@@ -17,6 +17,9 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
+from gajim.gtkgui_helpers import scale_pixbuf_from_data
+
+from gajim.common import app
 from gajim.common.i18n import _
 
 
@@ -82,21 +85,21 @@ class FormGrid(Gtk.Grid):
 
         if form_node.title is not None:
             self.title = form_node.title
-            self.add_row(Title(form_node.title))
+            self._add_row(Title(form_node.title))
         if form_node.instructions is not None:
             self.instructions = form_node.instructions
-            self.add_row(Instructions(form_node.instructions))
+            self._add_row(Instructions(form_node.instructions))
 
-        self.analyse_fields(form_node, options)
-        self.parse_form(form_node, options)
+        self._analyse_fields(form_node, options)
+        self._parse_form(form_node, options)
 
-    def add_row(self, field):
+    def _add_row(self, field):
         field.add(self, self.row_count)
         self.row_count += 1
         self.rows.append(field)
 
     @staticmethod
-    def analyse_fields(form_node, options):
+    def _analyse_fields(form_node, options):
         if 'right_align' in options:
             # Dont overwrite option
             return
@@ -113,13 +116,33 @@ class FormGrid(Gtk.Grid):
 
         options['right_align'] = max(label_lengths) < 30
 
-    def parse_form(self, form_node, options):
+    def _parse_form(self, form_node, options):
         for field in form_node.iter_fields():
             if field.type_ == 'hidden':
                 continue
 
+            if field.media:
+                if not self._add_media_field(field, options):
+                    # We dont understand this media element, ignore it
+                    continue
+
             widget = self._fields[field.type_]
-            self.add_row(widget(field, self, options))
+            self._add_row(widget(field, self, options))
+
+    def _add_media_field(self, field, options):
+        if not field.type_ in ('text-single', 'text-private', 'text-multi'):
+            return False
+
+        for uri in field.media.uris:
+            if not uri.type_.startswith('image/'):
+                continue
+
+            if not uri.uri_data.startswith('cid'):
+                continue
+
+            self._add_row(ImageMediaField(uri, self, options))
+            return True
+        return False
 
     def validate(self, is_valid):
         value = self._data_form.is_valid() if is_valid else False
@@ -460,3 +483,23 @@ class TextMultiField(Field):
     def _changed(self, widget):
         self._field.value = widget.get_text(*widget.get_bounds(), False)
         self._validate()
+
+
+class ImageMediaField():
+    def __init__(self, uri, form_grid, options):
+        self._uri = uri
+        self._form_grid = form_grid
+
+        filename = uri.uri_data.split(':')[1].split('@')[0]
+        data = app.bob_cache.get(filename)
+        if data is None:
+            self._image = Gtk.Image()
+            return
+
+        pixbuf = scale_pixbuf_from_data(data, 170)
+        self._image = Gtk.Image.new_from_pixbuf(pixbuf)
+        self._image.set_halign(Gtk.Align.CENTER)
+        self._image.get_style_context().add_class('preview-image')
+
+    def add(self, form_grid, row_number):
+        form_grid.attach(self._image, 1, row_number, 1, 1)

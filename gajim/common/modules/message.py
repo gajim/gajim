@@ -26,6 +26,7 @@ from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.carbons import parse_carbon
+from gajim.common.modules.bits_of_binary import parse_bob_data
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
@@ -227,6 +228,8 @@ class Message:
         if timestamp is None:
             timestamp = time.time()
             delayed = False
+
+        parse_bob_data(event.stanza)
 
         event_attr = {
             'popup': False,

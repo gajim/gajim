@@ -250,3 +250,6 @@ button.flat.link { padding: 0; border: 0; }
 .data-form-widget grid { margin: 18px; }
 .data-form-widget treeview { padding: 5px; }
 .data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }
+
+/*Image Preview*/
+.preview-image { box-shadow: 0px 0px 3px 0px alpha(@theme_text_color, 0.2); }

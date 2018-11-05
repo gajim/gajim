@@ -57,6 +57,7 @@ config = c_config.Config()
 version = gajim.__version__
 connections = {}  # type: Dict[str, ConnectionT]
 avatar_cache = {}  # type: Dict[str, Dict[str, Any]]
+bob_cache = {} # type: Dict[str, bytes]
 ipython_window = None
 app = None  # Gtk.Application
 
@@ -668,3 +669,14 @@ def get_win_debug_mode() -> bool:
     debug_folder = Path(configpaths.get('DEBUG'))
     debug_enabled = debug_folder / 'debug-enabled'
     return debug_enabled.exists()
+
+def get_stored_bob_data(algo_hash: str) -> Optional[bytes]:
+    try:
+        return bob_cache[algo_hash]
+    except KeyError:
+        filepath = Path(configpaths.get('BOB')) / algo_hash
+        if filepath.exists():
+            with open(str(filepath), 'r+b') as file:
+                data = file.read()
+            return data
+    return None

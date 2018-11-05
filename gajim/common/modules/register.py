@@ -20,6 +20,7 @@ import weakref
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.modules.bits_of_binary import parse_bob_data
 
 log = logging.getLogger('gajim.c.m.register')
 
@@ -125,6 +126,7 @@ class Register:
                 error_cb()(error)
         else:
             log.info('Register form received')
+            parse_bob_data(stanza.getQuery())
             form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
             is_form = form is not None
             if not is_form:
