@@ -1,4 +1,4 @@
-Gajim 1.1.0 (TBA)
+Gajim 1.1.0 (06 November 2018)
 
   New
 
@@ -6,7 +6,9 @@ Gajim 1.1.0 (TBA)
 
   Bug fixes
 
+  * 8968 Windows: Gajim loads DLLs from wrong location
   * 9322 Error when adding contact
+  * 9357 Acquire sleep inhibtor correctly after sleep
   * 9385 Ignore invalid bookmarks
   * 9386 Discovery: Browsing nodes without identity
   * 9393 Error when parsing invalid timestamps
