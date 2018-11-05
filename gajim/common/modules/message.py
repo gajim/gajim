@@ -163,6 +163,7 @@ class Message:
                 # TODO: why is this here?
                 if stanza.getTag('html'):
                     stanza.delChild('html')
+            type_ = 'groupchat'
 
         session = None
         if type_ != 'groupchat':
