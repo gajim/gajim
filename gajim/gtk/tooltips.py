@@ -383,6 +383,8 @@ class RosterTooltip(Gtk.Window, StatusTable):
         if self.num_resources > 1:
             self._ui.status_label.show()
             transport = app.get_transport_name_from_jid(self.prim_contact.jid)
+            if transport == 'jabber':
+                transport = None
             contact_keys = sorted(contacts_dict.keys())
             contact_keys.reverse()
             for priority in contact_keys:
