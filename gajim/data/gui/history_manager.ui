@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="context_menu">
     <property name="can_focus">False</property>
     <child>
@@ -22,34 +22,33 @@
       </object>
     </child>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-find</property>
-  </object>
   <object class="GtkWindow" id="history_manager_window">
+    <property name="width_request">1000</property>
+    <property name="height_request">500</property>
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="title" translatable="yes">Gajim History Logs Manager</property>
     <property name="window_position">center</property>
-    <property name="default_width">650</property>
+    <property name="default_width">1000</property>
     <property name="default_height">500</property>
     <signal name="delete-event" handler="on_history_manager_window_delete_event" swapped="no"/>
     <child>
       <placeholder/>
     </child>
     <child>
-      <object class="GtkBox" id="vbox">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="border_width">18</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
-          <object class="GtkPaned" id="hpaned">
+          <object class="GtkPaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">200</property>
+            <property name="position">250</property>
             <child>
               <object class="GtkScrolledWindow" id="jids_scrolledwindow">
+                <property name="width_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
@@ -72,13 +71,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="vbox1">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="welcome_vbox">
-                    <property name="width_request">300</property>
+                  <object class="GtkBox" id="welcome_box">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">20</property>
@@ -89,9 +88,12 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;Welcome to Gajim History Logs Manager&lt;/b&gt;&lt;/big&gt;</property>
+                        <property name="label" translatable="yes">Gajim History Logs Manager</property>
                         <property name="use_markup">True</property>
+                        <property name="xalign">0.5</property>
+                        <style>
+                          <class name="large-header"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -103,11 +105,11 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
                         <property name="label" translatable="yes">This log manager is not intended for log viewing. If you are looking for such functionality, use the history window instead.
 
 Use this program to delete or export logs. You can select logs from the left and/or search database from below.</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -119,11 +121,11 @@ Use this program to delete or export logs. You can select logs from the left and
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">start</property>
                         <property name="label" translatable="yes">&lt;b&gt;WARNING:&lt;/b&gt;
 If you plan to do massive deletions, please make sure Gajim is not running. Generally avoid deletions with contacts you currently chat with.</property>
                         <property name="use_markup">True</property>
                         <property name="wrap">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -142,6 +144,7 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
                   <object class="GtkScrolledWindow" id="logs_scrolledwindow">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="margin_left">6</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="logs_listview">
@@ -167,6 +170,7 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
                   <object class="GtkScrolledWindow" id="search_results_scrolledwindow">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="margin_left">6</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="search_results_listview">
@@ -201,15 +205,16 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkEntry" id="search_entry">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="placeholder_text" translatable="yes">Search database...</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -219,20 +224,26 @@ If you plan to do massive deletions, please make sure Gajim is not running. Gene
             </child>
             <child>
               <object class="GtkButton" id="search_db_button">
-                <property name="label" translatable="yes">_Search Database</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">False</property>
-                <property name="image">image1</property>
+                <property name="tooltip_text" translatable="yes">Search in database</property>
                 <property name="use_underline">True</property>
                 <property name="image_position">bottom</property>
                 <signal name="clicked" handler="on_search_db_button_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="icon_name">edit-find-symbolic</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
