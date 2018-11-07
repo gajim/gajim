@@ -5563,12 +5563,14 @@ class RosterWindow:
             renderer.set_property(self.renderers_propertys[renderer][0],
                 self.renderers_propertys[renderer][1])
 
-    def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+    def query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         try:
             row = widget.get_path_at_pos(x_pos, y_pos)[0]
         except TypeError:
+            self._roster_tooltip.clear_tooltip()
             return False
         if not row:
+            self._roster_tooltip.clear_tooltip()
             return False
 
         iter_ = None
@@ -5576,6 +5578,7 @@ class RosterWindow:
             model = widget.get_model()
             iter_ = model.get_iter(row)
         except Exception:
+            self._roster_tooltip.clear_tooltip()
             return False
 
         typ = model[iter_][Column.TYPE]
@@ -5586,9 +5589,9 @@ class RosterWindow:
         if typ in ('contact', 'self_contact'):
             contacts = app.contacts.get_contacts(account, jid)
 
-            for c in contacts:
-                if c.show not in ('offline', 'error'):
-                    connected_contacts.append(c)
+            for contact in contacts:
+                if contact.show not in ('offline', 'error'):
+                    connected_contacts.append(contact)
             if not connected_contacts:
                 # no connected contacts, show the offline one
                 connected_contacts = contacts
@@ -5597,19 +5600,10 @@ class RosterWindow:
         elif typ != 'account':
             return False
 
-        if self.current_tooltip != row:
-            # If the row changes we hide the current tooltip
-            self.current_tooltip = row
-            return False
-
-        tooltip = widget.get_tooltip_window()
-
-        if tooltip.row == row:
-            # We already populated the window with the row data
-            return True
-        tooltip.row = row
-        tooltip.populate(connected_contacts, account, typ)
-        return True
+        value, widget = self._roster_tooltip.get_tooltip(
+            row, connected_contacts, account, typ)
+        tooltip.set_custom(widget)
+        return value
 
     def add_actions(self):
         action = Gio.SimpleAction.new_stateful(
@@ -5842,8 +5836,7 @@ class RosterWindow:
 
         self.collapsed_rows = app.config.get('collapsed_rows').split('\t')
         self.tree.set_has_tooltip(True)
-        self.tree.set_tooltip_window(RosterTooltip(self.window))
-        self.current_tooltip = None
+        self._roster_tooltip = RosterTooltip()
         self.tree.connect('query-tooltip', self.query_tooltip)
         # Workaround: For strange reasons signal is behaving like row-changed
         self._toggeling_row = False

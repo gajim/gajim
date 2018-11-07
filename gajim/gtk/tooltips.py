@@ -258,9 +258,8 @@ class GCTooltip():
             affiliation = formatted % (color, affiliation)
         return affiliation
 
-class RosterTooltip(Gtk.Window, StatusTable):
-    def __init__(self, parent):
-        Gtk.Window.__init__(self, type=Gtk.WindowType.POPUP, transient_for=parent)
+class RosterTooltip(StatusTable):
+    def __init__(self):
         StatusTable.__init__(self)
         self.create_table()
         self.account = None
@@ -269,16 +268,8 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self.prim_contact = None
         self.last_widget = None
         self.num_resources = 0
-        self.set_title('tooltip')
-        self.set_border_width(3)
-        self.set_resizable(False)
-        self.set_name('gtk-tooltips')
-        self.set_type_hint(Gdk.WindowTypeHint.TOOLTIP)
 
         self._ui = get_builder('tooltip_roster_contact.ui')
-
-        self.add(self._ui.tooltip_grid)
-        self._ui.tooltip_grid.show()
 
     def clear_tooltip(self):
         """
@@ -290,8 +281,17 @@ class RosterTooltip(Gtk.Window, StatusTable):
         if status_table:
             status_table.destroy()
             self.create_table()
+        self.row = None
 
-    def populate(self, contacts, account, typ):
+    def get_tooltip(self, row, connected_contacts, account, typ):
+        if self.row == row:
+            return True, self._ui.tooltip_grid
+
+        self._populate_grid(connected_contacts, account, typ)
+        self.row = row
+        return False, self._ui.tooltip_grid
+
+    def _populate_grid(self, contacts, account, typ):
         """
         Populate the Tooltip Grid with data of from the contact
         """
@@ -447,7 +447,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
         self._set_idle_time(contact)
 
         # Avatar
-        scale = self.get_scale_factor()
+        scale = self._ui.tooltip_grid.get_scale_factor()
         surface = app.contacts.get_avatar(
             account, self.prim_contact.jid, AvatarSize.TOOLTIP, scale)
         if surface is None:
