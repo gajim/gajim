@@ -16,7 +16,6 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
 
@@ -57,8 +56,6 @@ class ManageProxies:
     def fill_proxies_treeview(self):
         model = self._ui.proxies_treeview.get_model()
         model.clear()
-        iter_ = model.append()
-        model.set(iter_, 0, _('None'))
         for proxy in app.config.get_per('proxies'):
             iter_ = model.append()
             model.set(iter_, 0, proxy)
@@ -96,8 +93,6 @@ class ManageProxies:
         if not iter_:
             return
         proxy = model[iter_][0]
-        if proxy == _('None'):
-            return
         model.remove(iter_)
         app.config.del_per('proxies', proxy)
         self._ui.remove_proxy_button.set_sensitive(False)
@@ -149,50 +144,43 @@ class ManageProxies:
         proxy = model[iter_][0]
         self._ui.proxyname_entry.set_text(proxy)
 
-        if proxy == _('None'): # special proxy None
-            self.show_bosh_fields(False)
-            self._ui.proxyname_entry.set_editable(False)
-            self._ui.proxyname_entry.set_sensitive(False)
-            self._ui.remove_proxy_button.set_sensitive(False)
-            self._ui.proxytype_combobox.set_sensitive(False)
-            self._ui.proxy_table.set_sensitive(False)
-        else:
-            proxytype = app.config.get_per('proxies', proxy, 'type')
+        proxytype = app.config.get_per('proxies', proxy, 'type')
 
-            self.show_bosh_fields(proxytype == 'bosh')
+        self.show_bosh_fields(proxytype == 'bosh')
 
-            self._ui.proxyname_entry.set_editable(True)
-            self._ui.proxyname_entry.set_sensitive(True)
-            self._ui.remove_proxy_button.set_sensitive(True)
-            self._ui.proxytype_combobox.set_sensitive(True)
-            self._ui.proxy_table.set_sensitive(True)
+        self._ui.proxyname_entry.set_editable(True)
+        self._ui.proxyname_entry.set_sensitive(True)
+        self._ui.remove_proxy_button.set_sensitive(True)
+        self._ui.proxytype_combobox.set_sensitive(True)
+        self._ui.proxy_table.set_sensitive(True)
 
-            self._ui.boshuri_entry.set_text(
-                app.config.get_per('proxies', proxy, 'bosh_uri'))
-            self._ui.boshuseproxy_checkbutton.set_active(
-                app.config.get_per('proxies', proxy, 'bosh_useproxy'))
-            if proxytype == 'bosh':
-                act = self._ui.boshuseproxy_checkbutton.get_active()
-                self._ui.proxyhost_entry.set_sensitive(act)
-                self._ui.proxyport_entry.set_sensitive(act)
+        self._ui.boshuri_entry.set_text(
+            app.config.get_per('proxies', proxy, 'bosh_uri'))
+        self._ui.boshuseproxy_checkbutton.set_active(
+            app.config.get_per('proxies', proxy, 'bosh_useproxy'))
+        if proxytype == 'bosh':
+            act = self._ui.boshuseproxy_checkbutton.get_active()
+            self._ui.proxyhost_entry.set_sensitive(act)
+            self._ui.proxyport_entry.set_sensitive(act)
 
-            self._ui.proxyhost_entry.set_text(
-                app.config.get_per('proxies', proxy, 'host'))
-            self._ui.proxyport_entry.set_text(
-                str(app.config.get_per('proxies', proxy, 'port')))
-            self._ui.proxyuser_entry.set_text(
-                app.config.get_per('proxies', proxy, 'user'))
-            self._ui.proxypass_entry.set_text(
-                app.config.get_per('proxies', proxy, 'pass'))
+        self._ui.proxyhost_entry.set_text(
+            app.config.get_per('proxies', proxy, 'host'))
+        self._ui.proxyport_entry.set_text(
+            str(app.config.get_per('proxies', proxy, 'port')))
+        self._ui.proxyuser_entry.set_text(
+            app.config.get_per('proxies', proxy, 'user'))
+        self._ui.proxypass_entry.set_text(
+            app.config.get_per('proxies', proxy, 'pass'))
 
-            types = ['http', 'socks5', 'bosh']
-            self._ui.proxytype_combobox.set_active(types.index(proxytype))
+        types = ['http', 'socks5', 'bosh']
+        self._ui.proxytype_combobox.set_active(types.index(proxytype))
 
-            self._ui.useauth_checkbutton.set_active(
-                app.config.get_per('proxies', proxy, 'useauth'))
-            act = self._ui.useauth_checkbutton.get_active()
-            self._ui.proxyuser_entry.set_sensitive(act)
-            self._ui.proxypass_entry.set_sensitive(act)
+        self._ui.useauth_checkbutton.set_active(
+            app.config.get_per('proxies', proxy, 'useauth'))
+        act = self._ui.useauth_checkbutton.get_active()
+        self._ui.proxyuser_entry.set_sensitive(act)
+        self._ui.proxypass_entry.set_sensitive(act)
+
         self.block_signal = False
 
     def on_proxies_treeview_key_press_event(self, widget, event):

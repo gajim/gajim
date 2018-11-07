@@ -1017,7 +1017,7 @@ class Preferences(Gtk.ApplicationWindow):
         if active == -1:
             return
         proxy = widget.get_model()[active][0]
-        if proxy == _('None'):
+        if proxy == _('No Proxy'):
             proxy = ''
         app.config.set('global_proxy', proxy)
 
@@ -1030,11 +1030,11 @@ class Preferences(Gtk.ApplicationWindow):
     def update_proxy_list(self):
         our_proxy = app.config.get('global_proxy')
         if not our_proxy:
-            our_proxy = _('None')
+            our_proxy = _('No Proxy')
         model = self._ui.proxies_combobox.get_model()
         model.clear()
         proxies = app.config.get_per('proxies')
-        proxies.insert(0, _('None'))
+        proxies.insert(0, _('No Proxy'))
         for index, proxy in enumerate(proxies):
             model.append([proxy])
             if our_proxy == proxy:

@@ -492,7 +492,7 @@ class ProxyComboOption(GenericOption):
 
     def update_values(self):
         proxies = app.config.get_per('proxies')
-        proxies.insert(0, _('None'))
+        proxies.insert(0, _('No Proxy'))
         self.combo.remove_all()
         for index, value in enumerate(proxies):
             self.combo.insert_text(-1, value)
