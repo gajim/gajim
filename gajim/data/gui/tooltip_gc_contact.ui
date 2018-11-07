@@ -1,59 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkGrid" id="tooltip_grid">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="column_spacing">5</property>
-    <child>
-      <object class="GtkLabel" id="nick">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="status">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="wrap">True</property>
-        <property name="wrap_mode">word-char</property>
-        <property name="max_width_chars">40</property>
-        <attributes>
-          <attribute name="style" value="italic"/>
-        </attributes>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="jid_label">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Jabber ID:</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
-      </packing>
-    </child>
+    <property name="column_spacing">6</property>
     <child>
       <object class="GtkImage" id="avatar">
         <property name="visible">True</property>
@@ -61,73 +13,9 @@
         <property name="stock">gtk-missing-image</property>
       </object>
       <packing>
-        <property name="left_attach">2</property>
+        <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="height">7</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="resource_label">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">Resource:</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="affiliation">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="user_show">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="fillelement">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="vexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">6</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="resource">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
+        <property name="height">6</property>
       </packing>
     </child>
     <child>
@@ -142,7 +30,81 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="nick">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="ellipsize">end</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+        </attributes>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="user_show">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
         <property name="top_attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="fillelement">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="vexpand">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="status">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="wrap">True</property>
+        <property name="wrap_mode">word-char</property>
+        <property name="max_width_chars">25</property>
+        <property name="xalign">0</property>
+        <attributes>
+          <attribute name="style" value="italic"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="affiliation">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
   </object>

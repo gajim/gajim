@@ -61,14 +61,14 @@ class StatusTable:
     def create_table(self):
         self.table = Gtk.Grid()
         self.table.insert_column(0)
-        self.table.set_property('column-spacing', 2)
+        self.table.set_property('column-spacing', 3)
 
     def add_text_row(self, text, col_inc=0):
         self.table.insert_row(self.current_row)
         self.text_label = Gtk.Label()
         self.text_label.set_line_wrap(True)
         self.text_label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.text_label.set_max_width_chars(35)
+        self.text_label.set_max_width_chars(25)
         self.text_label.set_halign(Gtk.Align.START)
         self.text_label.set_valign(Gtk.Align.START)
         self.text_label.set_selectable(False)
@@ -212,12 +212,6 @@ class GCTooltip():
         if contact.jid.strip():
             self._ui.jid.set_text(contact.jid)
             self._ui.jid.show()
-            self._ui.jid_label.show()
-        # Resource
-        if hasattr(contact, 'resource') and contact.resource.strip():
-            self._ui.resource.set_text(contact.resource)
-            self._ui.resource.show()
-            self._ui.resource_label.show()
 
         # Affiliation
         if contact.affiliation != 'none':
@@ -292,7 +286,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
         """
         for child in self._ui.tooltip_grid.get_children():
             child.hide()
-        status_table = self._ui.tooltip_grid.get_child_at(0, 3)
+        status_table = self._ui.tooltip_grid.get_child_at(1, 3)
         if status_table:
             status_table.destroy()
             self.create_table()
@@ -313,7 +307,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
             accounts = helpers.get_notification_icon_tooltip_dict()
             self.spacer_label = ''
             self.fill_table_with_accounts(accounts)
-            self._ui.tooltip_grid.attach(self.table, 0, 3, 2, 1)
+            self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
             self.table.show_all()
             return
 
@@ -381,7 +375,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
                 else:
                     contacts_dict[priority] = [contact]
         if self.num_resources > 1:
-            self._ui.status_label.show()
             transport = app.get_transport_name_from_jid(self.prim_contact.jid)
             if transport == 'jabber':
                 transport = None
@@ -406,7 +399,7 @@ class RosterTooltip(Gtk.Window, StatusTable):
                     if add_text:
                         self.add_text_row(acontact.status, 2)
 
-            self._ui.tooltip_grid.attach(self.table, 0, 3, 2, 1)
+            self._ui.tooltip_grid.attach(self.table, 1, 3, 2, 1)
             self.table.show_all()
 
         else:  # only one resource
@@ -415,7 +408,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
                 if status:
                     self._ui.status.set_text(status)
                     self._ui.status.show()
-                    self._ui.status_label.show()
 
         # PEP Info
         self._append_pep_info(contact)
@@ -423,7 +415,6 @@ class RosterTooltip(Gtk.Window, StatusTable):
         # JID
         self._ui.jid.set_text(self.prim_contact.jid)
         self._ui.jid.show()
-        self._ui.jid_label.show()
 
         # contact has only one resource
         if self.num_resources == 1 and contact.resource:
@@ -468,12 +459,12 @@ class RosterTooltip(Gtk.Window, StatusTable):
             'roster_tooltip_populate', self, contacts, self._ui.tooltip_grid)
 
         # Sets the Widget that is at the bottom to expand.
-        # This is needed in case the Picture takes more Space then the Labels
+        # This is needed in case the Picture takes more Space than the Labels
         i = 1
         while i < 15:
-            if self._ui.tooltip_grid.get_child_at(0, i):
-                if self._ui.tooltip_grid.get_child_at(0, i).get_visible():
-                    self.last_widget = self._ui.tooltip_grid.get_child_at(0, i)
+            if self._ui.tooltip_grid.get_child_at(1, i):
+                if self._ui.tooltip_grid.get_child_at(1, i).get_visible():
+                    self.last_widget = self._ui.tooltip_grid.get_child_at(1, i)
             i += 1
         self.last_widget.set_vexpand(True)
 
