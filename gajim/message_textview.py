@@ -98,12 +98,8 @@ class MessageTextView(Gtk.TextView):
 
         self.connect('paste-clipboard', self._paste_clipboard)
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
-        self.connect('focus-in-event', self._on_focus_in)
+        self.connect('grab-focus', self._on_grab_focus)
         self.connect('focus-out-event', self._on_focus_out)
-
-        start = buffer_.get_bounds()[0]
-        buffer_.insert_with_tags(
-            start, self.PLACEHOLDER, self.placeholder_tag)
 
     def _on_buffer_changed(self, *args):
         text = self.get_text()
@@ -136,10 +132,13 @@ class MessageTextView(Gtk.TextView):
         text = buf.get_text(start, end, True)
         return text == self.PLACEHOLDER
 
-    def _on_focus_in(self, *args):
+    def remove_placeholder(self):
         if self.is_placeholder():
             self.get_buffer().set_text('')
         self.toggle_speller(True)
+
+    def _on_grab_focus(self, *args):
+        self.remove_placeholder()
 
     def _on_focus_out(self, *args):
         buf = self.get_buffer()
@@ -154,9 +153,6 @@ class MessageTextView(Gtk.TextView):
         if app.is_installed('GSPELL') and app.config.get('use_speller'):
             spell_view = Gspell.TextView.get_from_gtk_text_view(self)
             spell_view.set_inline_spell_checking(activate)
-
-    def remove_placeholder(self):
-        self._on_focus_in()
 
     @staticmethod
     def _paste_clipboard(textview):
