@@ -33,10 +33,6 @@ add-extensions:
     no-autodownload: true
     autodelete: true
 
-build-options:
-  cflags: -O2 -g
-  cxxflags: -O2 -g
-
 cleanup:
   - '/bin/easy*'
   - /include
@@ -54,7 +50,7 @@ modules:
   - name: python3-pycparser
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app
+      - pip3 install --prefix=/app .
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/68/9e/49196946aee219aead1290e00d1e7fdeab8567783e83e1b9ab5585e6206a/pycparser-2.19.tar.gz
@@ -63,7 +59,7 @@ modules:
   - name: python3-cffi
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app
+      - pip3 install --prefix=/app .
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/e7/a7/4cd50e57cc6f436f1cc3a7e8fa700ff9b8b4d471620629074913e3735fb2/cffi-1.11.5.tar.gz
@@ -88,11 +84,9 @@ modules:
         sha256: 156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e
 
   - name: python3-cryptography
-    ensure-writable:
-      - easy-install.pth
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app
+      - pip3 install --prefix=/app .
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/22/21/233e38f74188db94e8451ef6385754a98f3cad9b59bedf3a8e8b14988be4/cryptography-2.3.1.tar.gz
@@ -146,13 +140,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-15.1.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app keyring-16.0.2-py2.py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/6c/3f/7a3f780dfa9ee5708507090ce15d6707aded2865f9e6999f48fa88b65bf3/keyring-15.1.0-py2.py3-none-any.whl
-        sha256: 16dddc3edaeb2703aaf5588a0b488b62f162e26f1877b6faf3a3db4b7712df61
+        url: https://files.pythonhosted.org/packages/5f/cb/dc7b2215cd82b77e7b8b48abd8989c1b09990d4c91a3ccfdc18a61157b36/keyring-16.0.2-py2.py3-none-any.whl
+        sha256: 2a5cf5e596cbf8b66b98b8df2c214adfe21e6e18baa82006b2c482bd0c4be94c
 
   - name: python3-cssutils
     buildsystem: simple
@@ -185,7 +179,7 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - python3 setup.py install --prefix=/app
+      - pip3 install --prefix=/app .
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/24/54/23a475a0d7d3664ea21b14ce907245dc390496f31d229a9aac2ae20c7c28/nbxmpp-0.6.8.tar.gz
