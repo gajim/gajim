@@ -40,6 +40,7 @@ import socket
 import time
 import logging
 import json
+import shutil
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
@@ -444,22 +445,26 @@ def get_uf_chatstate(chatstate):
         return _('has closed the chat window or tab')
     return ''
 
-def is_in_path(command, return_abs_path=False):
-    """
-    Return True if 'command' is found in one of the directories in the user's
-    path. If 'return_abs_path' is True, return the absolute path of the first
-    found command instead. Return False otherwise and on errors
-    """
-    for directory in os.getenv('PATH').split(os.pathsep):
-        try:
-            if command in os.listdir(directory):
-                if return_abs_path:
-                    return os.path.join(directory, command)
-                return True
-        except OSError:
-            # If the user has non directories in his path
-            pass
-    return False
+def find_soundplayer():
+    if sys.platform in ('win32', 'darwin'):
+        return
+
+    if app.config.get('soundplayer') != '':
+        return
+
+    commands = ('aucat', 'paplay', 'aplay', 'play', 'ossplay')
+    for command in commands:
+        if shutil.which(command) is not None:
+            if command == 'paplay':
+                command += ' -n gajim --property=media.role=event'
+            elif command in ('aplay', 'play'):
+                command += ' -q'
+            elif command == 'ossplay':
+                command += ' -qq'
+            elif command == 'aucat':
+                command += ' -i'
+            app.config.set('soundplayer', command)
+            break
 
 def exec_command(command, use_shell=False, posix=True):
     """
