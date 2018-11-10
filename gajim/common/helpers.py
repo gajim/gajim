@@ -62,15 +62,7 @@ except ImportError:
     HAS_PRECIS_I18N = False
 
 HAS_SOUND = True
-if sys.platform == 'win32':
-    try:
-        import winsound  # windows-only built-in module for playing wav
-    except ImportError:
-        HAS_SOUND = False
-        print('Gajim is not able to playback sound because'
-              'pywin32 is missing', file=sys.stderr)
-
-elif sys.platform == 'darwin':
+if sys.platform == 'darwin':
     try:
         from AppKit import NSSound
     except ImportError:
@@ -766,12 +758,15 @@ def play_sound_file(path_to_soundfile):
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
-    if sys.platform == 'win32' and HAS_SOUND:
+
+    if sys.platform == 'win32':
+        import winsound
         try:
             winsound.PlaySound(path_to_soundfile,
-                    winsound.SND_FILENAME|winsound.SND_ASYNC)
+                               winsound.SND_FILENAME|winsound.SND_ASYNC)
         except Exception:
             log.exception('Sound Playback Error')
+
     elif sys.platform == 'linux':
         if app.config.get('soundplayer') == '':
             def _oss_play():
