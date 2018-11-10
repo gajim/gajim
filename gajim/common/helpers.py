@@ -763,9 +763,6 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
     return file_
 
 def play_sound_file(path_to_soundfile):
-    if path_to_soundfile == 'beep':
-        exec_command('beep')
-        return
     path_to_soundfile = check_soundfile_path(path_to_soundfile)
     if path_to_soundfile is None:
         return
