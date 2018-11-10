@@ -61,21 +61,6 @@ try:
 except ImportError:
     HAS_PRECIS_I18N = False
 
-HAS_SOUND = True
-if sys.platform == 'darwin':
-    try:
-        from AppKit import NSSound
-    except ImportError:
-        HAS_SOUND = False
-        print('Gajim is not able to playback sound because'
-              'pyobjc is missing', file=sys.stderr)
-
-try:
-    import wave     # posix-only fallback wav playback
-    import ossaudiodev as oss
-except Exception:
-    pass
-
 log = logging.getLogger('gajim.c.helpers')
 
 special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
@@ -768,18 +753,28 @@ def play_sound_file(path_to_soundfile):
             log.exception('Sound Playback Error')
 
     elif sys.platform == 'darwin':
-        if not HAS_SOUND:
-            log.error('NSSound not available')
+        try:
+            from AppKit import NSSound
+        except ImportError:
+            log.exception('Sound Playback Error')
             return
+
         sound = NSSound.alloc()
         sound.initWithContentsOfFile_byReference_(path_to_soundfile, True)
         sound.play()
 
     elif app.config.get('soundplayer') == '':
+        try:
+            import wave
+            import ossaudiodev
+        except Exception:
+            log.exception('Sound Playback Error')
+            return
+
         def _oss_play():
             sndfile = wave.open(path_to_soundfile, 'rb')
             nc, sw, fr, nf, _comptype, _compname = sndfile.getparams()
-            dev = oss.open('/dev/dsp', 'w')
+            dev = ossaudiodev.open('/dev/dsp', 'w')
             dev.setparameters(sw * 8, nc, fr)
             dev.write(sndfile.readframes(nf))
             sndfile.close()
