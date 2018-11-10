@@ -2756,19 +2756,7 @@ class Interface:
         # get transports type from DB
         app.transport_type = app.logger.get_transports_type()
 
-        if app.config.get('soundplayer') == '':
-            # only on first time Gajim starts
-            commands = ('paplay', 'aplay', 'play', 'ossplay')
-            for command in commands:
-                if helpers.is_in_path(command):
-                    if command == 'paplay':
-                        command += ' -n gajim --property=media.role=event'
-                    if command in ('aplay', 'play'):
-                        command += ' -q'
-                    elif command == 'ossplay':
-                        command += ' -qq'
-                    app.config.set('soundplayer', command)
-                    break
+        helpers.find_soundplayer()
 
         self.last_ftwindow_update = 0
 
