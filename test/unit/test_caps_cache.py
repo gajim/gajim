@@ -6,12 +6,10 @@ import unittest
 import lib
 lib.setup_env()
 
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, Iq
 from gajim.common import caps_cache as caps
 from gajim.common.modules.discovery import Discovery
-
-from mock import Mock
 
 COMPLEX_EXAMPLE = '''
 <iq from='benvolio@capulet.lit/230193' id='disco1' to='juliet@capulet.lit/chamber' type='result'>
@@ -64,7 +62,8 @@ class CommonCapsTest(unittest.TestCase):
         db_caps_cache = [
                         (self.caps_method, self.caps_hash, self.identities, self.features),
                         ('old', self.node + '#' + self.caps_hash, self.identities, self.features)]
-        self.logger = Mock(returnValues={"iter_caps_data":db_caps_cache})
+        self.logger = Mock()
+        self.logger.iter_caps_data = Mock(return_value=db_caps_cache)
 
         self.cc = caps.CapsCache(self.logger)
         caps.capscache = self.cc
@@ -95,8 +94,10 @@ class TestCapsCache(CommonCapsTest):
         item = self.cc[self.client_caps]
         item.set_and_store(self.identities, self.features)
 
-        self.logger.mockCheckCall(0, "add_caps_entry", self.caps_method,
-                        self.caps_hash, self.identities, self.features)
+        self.logger.add_caps_entry.assert_called_once_with(self.caps_method,
+                                                           self.caps_hash,
+                                                           self.identities,
+                                                           self.features)
 
     def test_initialize_from_db(self):
         ''' Read cashed dummy data from db '''
