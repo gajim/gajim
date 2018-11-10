@@ -1111,7 +1111,7 @@ class Interface:
         if connected == invisible_show:
             return
         # send currently played music
-        if (pep_supported and sys.platform == 'linux' and
+        if (pep_supported and sys.platform not in ('win32', 'darwin') and
                 app.config.get_per('accounts', account, 'publish_tune')):
             self.enable_music_listener()
         # enable location listener
@@ -2723,7 +2723,7 @@ class Interface:
         self.remote_ctrl = None
 
         # Handle screensaver
-        if sys.platform == 'linux':
+        if sys.platform not in ('win32', 'darwin'):
             logind.enable()
             screensaver.enable()
 
