@@ -47,6 +47,8 @@ from encodings.punycode import punycode_encode
 from string import Template
 
 import nbxmpp
+from nbxmpp.stringprepare import nameprep
+import precis_i18n.codec  # pylint: disable=unused-import
 
 from gajim.common import caps_cache
 from gajim.common import configpaths
@@ -54,12 +56,6 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.caps_cache import muc_caps_cache
-
-try:
-    import precis_i18n.codec  # pylint: disable=unused-import
-    HAS_PRECIS_I18N = True
-except ImportError:
-    HAS_PRECIS_I18N = False
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -158,10 +154,7 @@ def parse_resource(resource):
     """
     if resource:
         try:
-            if HAS_PRECIS_I18N:
-                return resource.encode('Nickname').decode('utf-8')
-            from nbxmpp.stringprepare import resourceprep
-            return resourceprep.prepare(resource)
+            return resource.encode('Nickname').decode('utf-8')
         except UnicodeError:
             raise InvalidFormat('Invalid character in resource.')
 
@@ -195,7 +188,6 @@ def prep(user, server, resource):
             if not server or len(server.encode('utf-8')) > 1023:
                 raise InvalidFormat(_('Server must be between 1 and 1023 bytes'))
             try:
-                from nbxmpp.stringprepare import nameprep
                 server = nameprep.prepare(server)
             except UnicodeError:
                 raise InvalidFormat(_('Invalid character in hostname.'))
@@ -206,11 +198,7 @@ def prep(user, server, resource):
         if not user or len(user.encode('utf-8')) > 1023:
             raise InvalidFormat(_('Username must be between 1 and 1023 bytes'))
         try:
-            if HAS_PRECIS_I18N:
-                user = user.encode('UsernameCaseMapped').decode('utf-8')
-            else:
-                from nbxmpp.stringprepare import nodeprep
-                user = nodeprep.prepare(user)
+            user = user.encode('UsernameCaseMapped').decode('utf-8')
         except UnicodeError:
             raise InvalidFormat(_('Invalid character in username.'))
     else:
@@ -220,11 +208,7 @@ def prep(user, server, resource):
         if not resource or len(resource.encode('utf-8')) > 1023:
             raise InvalidFormat(_('Resource must be between 1 and 1023 bytes'))
         try:
-            if HAS_PRECIS_I18N:
-                resource = resource.encode('OpaqueString').decode('utf-8')
-            else:
-                from nbxmpp.stringprepare import resourceprep
-                resource = resourceprep.prepare(resource)
+            resource = resource.encode('OpaqueString').decode('utf-8')
         except UnicodeError:
             raise InvalidFormat(_('Invalid character in resource.'))
     else:
