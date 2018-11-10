@@ -767,25 +767,29 @@ def play_sound_file(path_to_soundfile):
         except Exception:
             log.exception('Sound Playback Error')
 
-    elif sys.platform == 'linux':
-        if app.config.get('soundplayer') == '':
-            def _oss_play():
-                sndfile = wave.open(path_to_soundfile, 'rb')
-                nc, sw, fr, nf, _comptype, _compname = sndfile.getparams()
-                dev = oss.open('/dev/dsp', 'w')
-                dev.setparameters(sw * 8, nc, fr)
-                dev.write(sndfile.readframes(nf))
-                sndfile.close()
-                dev.close()
-            app.thread_interface(_oss_play)
+    elif sys.platform == 'darwin':
+        if not HAS_SOUND:
+            log.error('NSSound not available')
             return
-        player = app.config.get('soundplayer')
-        command = build_command(player, path_to_soundfile)
-        exec_command(command)
-    elif sys.platform == 'darwin' and HAS_SOUND:
         sound = NSSound.alloc()
         sound.initWithContentsOfFile_byReference_(path_to_soundfile, True)
         sound.play()
+
+    elif app.config.get('soundplayer') == '':
+        def _oss_play():
+            sndfile = wave.open(path_to_soundfile, 'rb')
+            nc, sw, fr, nf, _comptype, _compname = sndfile.getparams()
+            dev = oss.open('/dev/dsp', 'w')
+            dev.setparameters(sw * 8, nc, fr)
+            dev.write(sndfile.readframes(nf))
+            sndfile.close()
+            dev.close()
+        app.thread_interface(_oss_play)
+
+    else:
+        player = app.config.get('soundplayer')
+        command = build_command(player, path_to_soundfile)
+        exec_command(command)
 
 def get_global_show():
     maxi = 0
