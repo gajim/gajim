@@ -9,8 +9,6 @@ from gi.repository import GLib
 
 from gajim.common import resolver
 
-from gajim_mocks import *
-
 NONSENSE_NAME = 'sfsdfsdfsdf.sdfs.fsd'
 JABBERCZ_TXT_NAME = '_xmppconnect.jabber.cz'
 JABBERCZ_SRV_NAME = '_xmpp-client._tcp.jabber.cz'

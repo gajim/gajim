@@ -1,12 +1,10 @@
 import unittest
 
-import time
-
 import lib
 lib.setup_env()
 
-
 import notify
+import nbxmpp
 
 from gajim.common import app
 from gajim.common import nec
@@ -14,7 +12,6 @@ from gajim.common import ged
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.message import MessageReceivedEvent
 from gajim.common.modules.message import DecryptedMessageReceivedEvent
-import nbxmpp
 
 from gajim.session import ChatControlSession
 from gajim.roster_window import RosterWindow
@@ -54,8 +51,6 @@ class TestChatControlSession(unittest.TestCase):
         msg.setBody(msgtxt)
         msg.setType('chat')
 
-        tim = time.localtime()
-        encrypted = False
         xml = """<message from='%s' id='1' type='chat'><body>%s</body>
             <thread>123</thread></message>""" % (jid, msgtxt)
         stanza = nbxmpp.protocol.Message(node=nbxmpp.simplexml.XML2Node(xml))
