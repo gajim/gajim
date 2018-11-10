@@ -4962,7 +4962,7 @@ class RosterWindow:
 
                 item = Gtk.CheckMenuItem(_('Publish Tune'))
                 pep_submenu.append(item)
-                if sys.platform != 'linux':
+                if sys.platform in ('win32', 'darwin'):
                     item.set_sensitive(False)
                 else:
                     activ = app.config.get_per('accounts', account,
