@@ -11,9 +11,6 @@ logging_helpers.set_quiet()
 
 from gajim.common import app
 
-from gajim_mocks import MockLogger
-app.logger = MockLogger()
-
 from gajim.gui_interface import Interface
 
 from gi.repository import GLib

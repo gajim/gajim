@@ -5,7 +5,6 @@ lib.setup_env()
 
 from data import *
 
-from mock import Mock, expectParams
 from gajim_mocks import *
 
 from gajim.common import app
