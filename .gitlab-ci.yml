@@ -10,7 +10,7 @@ stages:
 run-test:
   stage: test
   script:
-    - python3 setup.py test_nogui
+    - python3 setup.py test -s test.no_gui -q
 
 run-mypy:
   stage: test

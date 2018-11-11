@@ -167,8 +167,6 @@ class TestSocks5(unittest.TestCase):
         self._check_inout()
 
 
-
-
 if __name__ == '__main__':
 
     unittest.main()

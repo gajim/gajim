@@ -15,7 +15,6 @@ from gajim.gtk.util import get_cursor
 from gajim.conversation_textview import ConversationTextview
 from gajim.gui_interface import Interface
 
-
 caps_cache.capscache = MagicMock()
 app.plugin_manager = MagicMock()
 app.logger = MagicMock()
@@ -23,6 +22,7 @@ app.interface = Interface()
 
 change_cursor = None
 htmlview = ConversationTextview(None)
+
 
 def on_textview_motion_notify_event(widget, event):
     """
@@ -52,7 +52,6 @@ def handler(texttag, widget, event, iter_, kind):
     if event.type == Gdk.EventType.BUTTON_PRESS:
         pass
 
-htmlview.tv.hyperlink_handler = htmlview.hyperlink_handler
 
 htmlview.print_real_text(None, xhtml='<div>'
 '<span style="color: red; text-decoration:underline">Hello</span><br/>\n'

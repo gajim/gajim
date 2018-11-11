@@ -2,7 +2,7 @@
 Module with dummy classes for Gajim specific unit testing
 '''
 
-from mock import Mock
+from .mock import Mock
 from gajim.common import app
 from gajim.common import ged
 

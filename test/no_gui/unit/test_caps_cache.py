@@ -3,9 +3,6 @@ Tests for capabilities and the capabilities cache
 '''
 import unittest
 
-import lib
-lib.setup_env()
-
 from unittest.mock import MagicMock, Mock
 from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, Iq
 from gajim.common import caps_cache as caps

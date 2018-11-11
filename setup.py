@@ -176,27 +176,6 @@ class install(_install):
         _install.run(self)
 
 
-class test(Command):
-    description = "Run all tests"
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        exit(subprocess.call("./test/runtests.py"))
-
-
-class test_nogui(test):
-    description = "Run tests without GUI"
-
-    def run(self):
-        exit(subprocess.call(["./test/runtests.py", "-n"]))
-
-
 class update_po(Command):
     description = "Update po files"
     user_options = []
@@ -229,8 +208,6 @@ setup(
     cmdclass={
         'build_py': build,
         'install': install,
-        'test': test,
-        'test_nogui': test_nogui,
         'update_po': update_po,
     },
     entry_points={
