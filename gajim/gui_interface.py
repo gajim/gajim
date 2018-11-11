@@ -1141,13 +1141,13 @@ class Interface:
                 chat_control.session,
                 groupchat)
 
-    def encrypt_file(self, file, callback):
+    def encrypt_file(self, file, account, callback):
         app.nec.push_incoming_event(HTTPUploadProgressEvent(
             None, status='encrypt', file=file))
         encryption = file.encryption
         plugin = app.plugin_manager.encryption_plugins[encryption]
         if hasattr(plugin, 'encrypt_file'):
-            plugin.encrypt_file(file, None, callback)
+            plugin.encrypt_file(file, account, callback)
         else:
             app.nec.push_incoming_event(HTTPUploadProgressEvent(
                 None, status='close', file=file))

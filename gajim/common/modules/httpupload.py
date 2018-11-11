@@ -167,7 +167,7 @@ class HTTPUpload:
             return
 
         if encryption is not None:
-            app.interface.encrypt_file(file, self._request_slot)
+            app.interface.encrypt_file(file, self._account, self._request_slot)
         else:
             self._request_slot(file)
 
