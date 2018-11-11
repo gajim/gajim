@@ -3,7 +3,7 @@ Some diverse tests covering functionality in the GUI Interface class.
 '''
 import unittest
 
-import lib
+from test import lib
 lib.setup_env()
 
 from gajim.common import logging_helpers

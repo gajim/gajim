@@ -1,8 +1,6 @@
 import unittest
 
-import time
-
-import lib
+from test import lib
 lib.setup_env()
 
 from gi.repository import GLib
@@ -14,7 +12,8 @@ JABBERCZ_TXT_NAME = '_xmppconnect.jabber.cz'
 JABBERCZ_SRV_NAME = '_xmpp-client._tcp.jabber.cz'
 
 TEST_LIST = [(NONSENSE_NAME, 'srv', False),
-        (JABBERCZ_SRV_NAME, 'srv', True)]
+             (JABBERCZ_SRV_NAME, 'srv', True)]
+
 
 class TestResolver(unittest.TestCase):
     '''
@@ -45,9 +44,9 @@ class TestResolver(unittest.TestCase):
 
     def _runGR(self, name, type_):
         self.resolver.resolve(
-                host = name,
-                type_ = type_,
-                on_ready = self._myonready)
+                host=name,
+                type_=type_,
+                on_ready=self._myonready)
 
         self.main_loop.run()
 

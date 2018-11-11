@@ -7,9 +7,6 @@ from unittest.mock import MagicMock
 
 import nbxmpp
 
-import lib
-lib.setup_env()
-
 from gajim.common import app
 from gajim.common import nec
 from gajim.common import ged

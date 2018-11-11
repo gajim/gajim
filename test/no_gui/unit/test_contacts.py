@@ -2,12 +2,9 @@
 Test for Contact, GC_Contact and Contacts
 '''
 import unittest
-
-import lib
-lib.setup_env()
+from nbxmpp import NS_MUC
 
 from gajim.common.contacts import CommonContact, Contact, GC_Contact, LegacyContactsAPI
-from nbxmpp import NS_MUC
 
 from gajim.common import caps_cache
 
