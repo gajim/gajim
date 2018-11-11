@@ -650,6 +650,10 @@ class PluginManager(metaclass=Singleton):
             min_v = conf.get('info', 'min_gajim_version', fallback=None)
             max_v = conf.get('info', 'max_gajim_version', fallback=None)
 
+            if min_v is None or max_v is None:
+                log.warning('Plugin without min/max version: %s', elem_name)
+                continue
+
             gajim_v = gajim.__version__.split('+', 1)[0]
             gajim_v_cmp = parse_version(gajim_v)
 
