@@ -69,7 +69,7 @@ def set_profile(profile: str) -> None:
 
 
 def set_config_root(config_root: str) -> None:
-    _paths.custom_config_root = config_root
+    _paths.custom_config_root = str(Path(config_root).resolve())
 
 
 def init() -> None:
