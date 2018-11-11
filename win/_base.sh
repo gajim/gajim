@@ -71,9 +71,14 @@ function create_root {
 
 function install_deps {
     # Downgrade GLIB, resolver is broken on Windows 7
-    curl -o "${BUILD_ROOT}"/mingw-w64-x86_64-glib2-2.56.2-1-any.pkg.tar.xz \
-        https://gajim.org/downloads/snap/win/build/mingw-w64-x86_64-glib2-2.56.2-1-any.pkg.tar.xz
-    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-x86_64-glib2-2.56.2-1-any.pkg.tar.xz
+    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz \
+        https://gajim.org/downloads/snap/win/build/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
+    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
+
+    # Fix broken cryptography package
+    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz \
+        https://gajim.org/downloads/snap/win/build/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz
+    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz
 
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-gtk3 mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-gobject \
@@ -87,7 +92,6 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pillow \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-setuptools-scm \
-        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-cryptography \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pyopenssl \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-docutils \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-certifi \
