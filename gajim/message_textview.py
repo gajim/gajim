@@ -95,6 +95,7 @@ class MessageTextView(Gtk.TextView):
 
         self.connect('paste-clipboard', self._paste_clipboard)
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
+        self.connect('focus-in-event', self._on_grab_focus)
         self.connect('grab-focus', self._on_grab_focus)
         self.connect('focus-out-event', self._on_focus_out)
 
