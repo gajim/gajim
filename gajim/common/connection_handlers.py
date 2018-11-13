@@ -146,6 +146,7 @@ class ConnectionHandlersBase:
                 obj.contact_list.append(obj.contact)
             obj.contact.resource = resource
 
+            obj.need_redraw = True
             obj.need_add_in_roster = True
 
         if not app.jid_is_transport(jid) and len(obj.contact_list) == 1:
