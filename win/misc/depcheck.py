@@ -47,7 +47,7 @@ SYSTEM_LIBS = ['advapi32.dll',
 def get_dependencies(filename):
     deps = []
     try:
-        data = subprocess.check_output(["objdump", "-p", filename])
+        data = subprocess.getoutput("objdump -p %s" % filename)
     except Exception as error:
         print(error)
         return deps
