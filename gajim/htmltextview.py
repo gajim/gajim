@@ -813,11 +813,7 @@ class HtmlTextView(Gtk.TextView):
         self.set_editable(False)
         self._changed_cursor = False
         self.set_has_tooltip(True)
-        self.connect('realize', self.on_html_text_view_realized)
-        self.connect('unrealize', self.on_html_text_view_unrealized)
-        self.connect('copy-clipboard', self.on_html_text_view_copy_clipboard)
-        self.id_ = self.connect('button-release-event',
-                                self.on_left_mouse_button_release)
+        self.connect('copy-clipboard', self._on_copy_clipboard)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
         self.config = app.config
         self.interface = app.interface
@@ -967,31 +963,12 @@ class HtmlTextView(Gtk.TextView):
         #if not eob.starts_line():
         #    buffer_.insert(eob, '\n')
 
-    def on_html_text_view_copy_clipboard(self, unused_data):
-        clipboard = self.get_clipboard(Gdk.SELECTION_CLIPBOARD)
-        selected = self.get_selected_text()
+    @staticmethod
+    def _on_copy_clipboard(textview):
+        clipboard = textview.get_clipboard(Gdk.SELECTION_CLIPBOARD)
+        selected = textview.get_selected_text()
         clipboard.set_text(selected, -1)
-        GObject.signal_stop_emission_by_name(self, 'copy-clipboard')
-
-    def on_html_text_view_realized(self, unused_data):
-        self.get_buffer().remove_selection_clipboard(self.get_clipboard(
-            Gdk.SELECTION_PRIMARY))
-
-    def on_html_text_view_unrealized(self, unused_data):
-        self.get_buffer().add_selection_clipboard(self.get_clipboard(
-            Gdk.SELECTION_PRIMARY))
-
-    def on_left_mouse_button_release(self, widget, event):
-        if event.button != 1:
-            return
-
-        bounds = self.get_buffer().get_selection_bounds()
-        if bounds:
-            # textview can be hidden while we add a new line in it.
-            if self.has_screen():
-                clipboard = self.get_clipboard(Gdk.SELECTION_PRIMARY)
-                selected = self.get_selected_text()
-                clipboard.set_text(selected, -1)
+        GObject.signal_stop_emission_by_name(textview, 'copy-clipboard')
 
     def get_selected_text(self):
         bounds = self.get_buffer().get_selection_bounds()
