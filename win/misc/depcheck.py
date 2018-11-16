@@ -51,7 +51,7 @@ def get_dependencies(filename):
     except Exception as error:
         print(error)
         return deps
-    data = data.decode("utf-8")
+
     for line in data.splitlines():
         line = line.strip()
         if line.startswith("DLL Name:"):
