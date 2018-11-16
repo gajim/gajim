@@ -42,7 +42,7 @@ from gajim.common.i18n import _
 from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr
 
-from gajim.htmltextview import HtmlTextView
+from gajim.gtk.htmltextview import HtmlTextView
 
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
