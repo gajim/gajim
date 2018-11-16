@@ -16,11 +16,13 @@
 
 import re
 import time
+import logging
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 from datetime import tzinfo
 
+log = logging.getLogger('gajim.c.m.date_and_time')
 
 PATTERN_DATETIME = re.compile(
     r'([0-9]{4}-[0-9]{2}-[0-9]{2})'
@@ -94,7 +96,30 @@ class LocalTimezone(tzinfo):
         return tt.tm_isdst > 0
 
 
-def create_tzinfo(hours=0, minutes=0):
+def create_tzinfo(hours=0, minutes=0, tz_string=None):
+    if tz_string is None:
+        return timezone(timedelta(hours=hours, minutes=minutes))
+
+    if tz_string.lower() == 'z':
+        return timezone.utc
+
+    try:
+        hours, minutes = map(int, tz_string.split(':'))
+    except Exception:
+        log.warning('Wrong tz string: %s', tz_string)
+        return
+
+    if hours not in range(-24, 24):
+        log.warning('Wrong tz string: %s', tz_string)
+        return
+
+    if minutes not in range(0, 59):
+        log.warning('Wrong tz string: %s', tz_string)
+        return
+
+    if hours in (24, -24) and minutes != 0:
+        log.warning('Wrong tz string: %s', tz_string)
+        return
     return timezone(timedelta(hours=hours, minutes=minutes))
 
 

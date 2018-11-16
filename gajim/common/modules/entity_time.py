@@ -15,13 +15,14 @@
 # XEP-0202: Entity Time
 
 import logging
-import datetime
 import time
 
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
+from gajim.common.modules.date_and_time import parse_datetime
+from gajim.common.modules.date_and_time import create_tzinfo
 
 log = logging.getLogger('gajim.c.m.entity_time')
 
@@ -61,10 +62,10 @@ class EntityTime:
         log.info('Received: %s %s',
                  stanza.getFrom(), time_info)
 
-        app.nec.push_incoming_event(
-            TimeResultReceivedEvent(None, conn=self._con,
-                                    jid=stanza.getFrom(),
-                                    time_info=time_info))
+        app.nec.push_incoming_event(NetworkEvent('time-result-received',
+                                                 conn=self._con,
+                                                 jid=stanza.getFrom(),
+                                                 time_info=time_info))
 
     @staticmethod
     def _extract_info(stanza):
@@ -74,42 +75,24 @@ class EntityTime:
             return
 
         tzo = time_.getTag('tzo').getData()
-        if tzo.lower() == 'z':
-            tzo = '0:0'
-        try:
-            tzoh, tzom = tzo.split(':')
-        except Exception:
+        if not tzo:
             log.warning('Wrong tzo node: %s', stanza)
             return
-        utc_time = time_.getTag('utc').getData()
 
-        if utc_time[-1:] == 'Z':
-            # Remove the trailing 'Z'
-            utc_time = utc_time[:-1]
-        elif utc_time[-6:] == "+00:00":
-            # Remove the trailing "+00:00"
-            utc_time = utc_time[:-6]
-        else:
+        remote_tz = create_tzinfo(tz_string=tzo)
+        if remote_tz is None:
+            log.warning('Wrong tzo node: %s', stanza)
+            return
+
+        utc_time = time_.getTag('utc').getData()
+        date_time = parse_datetime(utc_time, check_utc=True)
+        if date_time is None:
             log.warning('Wrong timezone defintion: %s %s',
                         utc_time, stanza.getFrom())
             return
 
-        try:
-            dtime = datetime.datetime.strptime(utc_time, '%Y-%m-%dT%H:%M:%S')
-        except ValueError:
-            try:
-                dtime = datetime.datetime.strptime(utc_time,
-                                                   '%Y-%m-%dT%H:%M:%S.%f')
-            except ValueError as error:
-                log.warning('Wrong time format: %s %s',
-                            error, stanza.getFrom())
-                return
-
-        utc = datetime.timezone(datetime.timedelta(0))
-        dtime = dtime.replace(tzinfo=utc)
-        utc_offset = datetime.timedelta(hours=int(tzoh), minutes=int(tzom))
-        contact_tz = datetime.timezone(utc_offset, "remote timezone")
-        return dtime.astimezone(contact_tz).strftime('%c')
+        date_time = date_time.astimezone(remote_tz)
+        return date_time.strftime('%c %Z')
 
     def _answer_request(self, _con, stanza):
         log.info('%s asked for the time', stanza.getFrom())
@@ -130,10 +113,6 @@ class EntityTime:
             log.info('Send service-unavailable')
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
-
-
-class TimeResultReceivedEvent(NetworkIncomingEvent):
-    name = 'time-result-received'
 
 
 def get_instance(*args, **kwargs):
