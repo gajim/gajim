@@ -230,13 +230,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         tag.set_property('background-gdk', color)
         tag.set_property('paragraph-background-gdk', color)
 
-    def _get_current_attributes(self):
-        attrs = self.textview.get_default_attributes()
-        self.iter.backward_char()
-        attrs = (self.iter.get_attributes())[1]
-        self.iter.forward_char()
-        return attrs
-
     def __parse_length_frac_size_allocate(self, textview, allocation, frac,
         callback, args):
         callback(allocation.width*frac, *args)
@@ -338,30 +331,19 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def _parse_style_font_size(self, tag, value):
         try:
-            # see http://developer.gnome.org/pango/stable/pango-Text-Attributes.html#PANGO-SCALE-XX-SMALL:CAPS
-            # http://consciouslyusing.blogspot.ru/2012/01/heads-up-missing-pango-text-scale.html
             scale = {
-                    #'xx-small': Pango.SCALE_XX_SMALL,
-                    #'x-small': Pango.SCALE_X_SMALL,
-                    #'small': Pango.SCALE_SMALL,
-                    #'medium': Pango.SCALE_MEDIUM,
-                    #'large': Pango.SCALE_LARGE,
-                    #'x-large': Pango.SCALE_X_LARGE,
-                    #'xx-large': Pango.SCALE_XX_LARGE,
-                    'xx-small': 0.5787037037037,
-                    'x-small': 0.6444444444444,
-                    'small': 0.8333333333333,
-                    'medium': 1.0,
-                    'large': 1.2,
-                    'x-large': 1.4399999999999,
-                    'xx-large': 1.728,
-                    }[value]
+                'xx-small': 0.5787037037037,
+                'x-small': 0.6444444444444,
+                'small': 0.8333333333333,
+                'medium': 1.0,
+                'large': 1.2,
+                'x-large': 1.4399999999999,
+                'xx-large': 1.728,
+            }[value]
         except KeyError:
             pass
         else:
-            attrs = self._get_current_attributes()
-            if attrs.font_scale == 0:
-                tag.set_property('scale', scale)
+            tag.set_property('scale', scale)
             return
         if value == 'smaller':
             tag.set_property('scale', 0.8333333333333)
