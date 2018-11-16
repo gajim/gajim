@@ -55,6 +55,7 @@ from gajim import dialogs
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_cursor
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -596,11 +597,11 @@ class ChatControl(ChatControlBase):
         """
         Just moved the mouse so show the cursor
         """
-        cursor = gtkgui_helpers.get_cursor('LEFT_PTR')
+        cursor = get_cursor('LEFT_PTR')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def on_location_eventbox_enter_notify_event(self, widget, event):
-        cursor = gtkgui_helpers.get_cursor('HAND2')
+        cursor = get_cursor('HAND2')
         self.parent_win.window.get_window().set_cursor(cursor)
 
     def update_ui(self):

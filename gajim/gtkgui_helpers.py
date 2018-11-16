@@ -139,11 +139,6 @@ def get_pixbuf_from_data(file_data):
 
     return pixbuf
 
-def get_cursor(attr):
-    display = Gdk.Display.get_default()
-    cursor = getattr(Gdk.CursorType, attr)
-    return Gdk.Cursor.new_for_display(display, cursor)
-
 def file_is_locked(path_to_file):
     """
     Return True if file is locked
