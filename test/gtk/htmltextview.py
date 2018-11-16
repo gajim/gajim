@@ -20,6 +20,10 @@ app.interface = Interface()
 
 XHTML = [
     '''
+    <body xmlns='http://www.w3.org/1999/xhtml'><p><span style='font-size: xx-large;'>rexxnor: i nimes chum a...</span></p></body>
+    ''',
+
+    '''
     <div>
         <span style="color: red; text-decoration:underline">Hello</span>
         <br/>\n
