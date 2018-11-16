@@ -171,33 +171,6 @@ def file_is_locked(path_to_file):
         hfile.Close()
         return False
 
-def get_fade_color(treeview, selected, focused):
-    """
-    Get a gdk RGBA color that is between foreground and background in 0.3
-    0.7 respectively colors of the cell for the given treeview
-    """
-    context = treeview.get_style_context()
-    if selected:
-        if focused: # is the window focused?
-            state = Gtk.StateFlags.SELECTED
-        else: # is it not? NOTE: many gtk themes change bg on this
-            state = Gtk.StateFlags.ACTIVE
-    else:
-        state = Gtk.StateFlags.NORMAL
-
-    bg = context.get_property('background-color', state)
-    fg = context.get_color(state)
-
-    p = 0.3 # background
-    q = 0.7 # foreground # p + q should do 1.0
-    return Gdk.RGBA(bg.red*p + fg.red*q, bg.green*p + fg.green*q,
-        bg.blue*p + fg.blue*q)
-
-def make_pixbuf_grayscale(pixbuf):
-    pixbuf2 = pixbuf.copy()
-    pixbuf.saturate_and_pixelate(pixbuf2, 0.0, False)
-    return pixbuf2
-
 def get_possible_button_event(event):
     """
     Mouse or keyboard caused the event?
