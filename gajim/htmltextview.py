@@ -895,7 +895,7 @@ class HtmlTextView(Gtk.TextView):
         if event.type == Gdk.EventType.BUTTON_PRESS:
             begin_iter = iter_.copy()
             # we get the beginning of the tag
-            while not begin_iter.begins_tag(texttag):
+            while not begin_iter.starts_tag(texttag):
                 begin_iter.backward_char()
             end_iter = iter_.copy()
             # we get the end of the tag
