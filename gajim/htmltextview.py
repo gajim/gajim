@@ -563,20 +563,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 if height:
                     self._parse_length(height, False, False, 1, 1000, height_cb)
 
-                def set_size(_pixbuf, w, h, dims):
+                def set_size(_pixbuf, width_, height_, dims):
                     """
                     FIXME: Floats should be relative to the whole textview, and
                     resize with it. This needs new pifbufs for every resize,
                     GdkPixbuf.Pixbuf.scale_simple or similar.
                     """
                     if isinstance(dims[0], float):
-                        dims[0] = int(dims[0]*w)
+                        dims[0] = int(dims[0] * width_)
                     elif not dims[0]:
-                        dims[0] = w
+                        dims[0] = width_
                     if isinstance(dims[1], float):
-                        dims[1] = int(dims[1]*h)
+                        dims[1] = int(dims[1] * height_)
                     if not dims[1]:
-                        dims[1] = h
+                        dims[1] = height_
                     loader.set_size(*dims)
 
                 if width or height:
@@ -813,54 +813,48 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
 
 class HtmlTextView(Gtk.TextView):
-    def __init__(self, account=None):
+
+    _tags = ['url', 'mail', 'xmpp', 'sth_at_sth']
+
+    def __init__(self, account, standalone=False):
         Gtk.TextView.__init__(self)
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
         self.set_editable(False)
-        self._changed_cursor = False
         self.set_has_tooltip(True)
         self.connect('copy-clipboard', self._on_copy_clipboard)
         self.get_buffer().eol_tag = self.get_buffer().create_tag('eol')
-        self.config = app.config
-        self.interface = app.interface
+
         self.account = account
         self.plugin_modified = False
+        self._cursor_changed = False
 
-    def connect_tooltip(self, func=None):
-        self.connect('query-tooltip', func or self.__query_tooltip)
+        if standalone:
+            self.connect('query-tooltip', self._query_tooltip)
+            self.create_tags()
 
     def create_tags(self):
-        buffer_ = self.get_buffer()
-
-        self.tagURL = buffer_.create_tag('url')
         color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-        self.tagURL.set_property('foreground', color)
-        self.tagURL.set_property('underline', Pango.Underline.SINGLE)
-        self.tagURL.connect('event', self.hyperlink_handler, 'url')
 
-        self.tagMail = buffer_.create_tag('mail')
-        self.tagMail.set_property('foreground', color)
-        self.tagMail.set_property('underline', Pango.Underline.SINGLE)
-        self.tagMail.connect('event', self.hyperlink_handler, 'mail')
+        attrs = {'foreground': color,
+                 'underline': Pango.Underline.SINGLE}
 
-        self.tagXMPP = buffer_.create_tag('xmpp')
-        self.tagXMPP.set_property('foreground', color)
-        self.tagXMPP.set_property('underline', Pango.Underline.SINGLE)
-        self.tagXMPP.connect('event', self.hyperlink_handler, 'xmpp')
+        for tag in self._tags:
+            tag_ = self.get_buffer().create_tag(tag, **attrs)
+            tag_.connect('event', self.hyperlink_handler, tag)
 
-        self.tagSthAtSth = buffer_.create_tag('sth_at_sth')
-        self.tagSthAtSth.set_property('foreground', color)
-        self.tagSthAtSth.set_property('underline', Pango.Underline.SINGLE)
-        self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
+    def update_tags(self):
+        tag_table = self.get_buffer().get_tag_table()
+        color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
 
-    def __query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
+        for tag in self._tags:
+            tag_table.lookup(tag).set_property('foreground', color)
+
+    def _query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         window = widget.get_window(Gtk.TextWindowType.TEXT)
         x_pos, y_pos = self.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
-        if Gtk.MINOR_VERSION > 18:
-            iter_ = self.get_iter_at_position(x_pos, y_pos)[1]
-        else:
-            iter_ = self.get_iter_at_position(x_pos, y_pos)[0]
+        iter_ = self.get_iter_at_position(x_pos, y_pos)[1]
+
         for tag in iter_.get_tags():
             if getattr(tag, 'is_anchor', False):
                 text = getattr(tag, 'title', False)
@@ -868,13 +862,19 @@ class HtmlTextView(Gtk.TextView):
                     if len(text) > 50:
                         text = text[:47] + '…'
                     tooltip.set_text(text)
-                if not self._changed_cursor:
                     window.set_cursor(get_cursor('HAND2'))
-                    self._changed_cursor = True
-                return True
-        if self._changed_cursor:
+                    self._cursor_changed = True
+                    return True
+
+            tag_name = tag.get_property('name')
+            if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
+                window.set_cursor(get_cursor('HAND2'))
+                self._cursor_changed = True
+                return False
+
+        if self._cursor_changed:
             window.set_cursor(get_cursor('XTERM'))
-            self._changed_cursor = False
+            self._cursor_changed = False
         return False
 
     def show_context_menu(self, _event, kind, text):

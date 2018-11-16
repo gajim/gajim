@@ -172,7 +172,7 @@ class ConversationTextview(GObject.GObject):
 
         # no need to inherit TextView, use it as atrribute is safer
         self.tv = HtmlTextView(account)
-        self.tv.connect_tooltip(self.query_tooltip)
+        self.tv.connect('query-tooltip', self._query_tooltip)
 
         # set properties
         self.tv.set_border_width(1)
@@ -199,7 +199,7 @@ class ConversationTextview(GObject.GObject):
         self.handlers[id_] = self.tv
 
         self.account = account
-        self.cursor_changed = False
+        self._cursor_changed = False
         self.last_time_printout = 0
         self.encryption_enabled = False
 
@@ -304,14 +304,12 @@ class ConversationTextview(GObject.GObject):
 
         self.just_cleared = False
 
-    def query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+    def _query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
         window = widget.get_window(Gtk.TextWindowType.TEXT)
         x_pos, y_pos = self.tv.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
-        if Gtk.MINOR_VERSION > 18:
-            iter_ = self.tv.get_iter_at_position(x_pos, y_pos)[1]
-        else:
-            iter_ = self.tv.get_iter_at_position(x_pos, y_pos)[0]
+
+        iter_ = self.tv.get_iter_at_position(x_pos, y_pos)[1]
         for tag in iter_.get_tags():
             tag_name = tag.get_property('name')
             if tag_name == 'focus-out-line':
@@ -327,11 +325,11 @@ class ConversationTextview(GObject.GObject):
                         text = text[:47] + '…'
                     tooltip.set_text(text)
                     window.set_cursor(get_cursor('HAND2'))
-                    self.cursor_changed = True
+                    self._cursor_changed = True
                     return True
             if tag_name in ('url', 'mail', 'xmpp', 'sth_at_sth'):
                 window.set_cursor(get_cursor('HAND2'))
-                self.cursor_changed = True
+                self._cursor_changed = True
                 return False
             try:
                 text = self.corrected_text_list[tag_name]
@@ -339,9 +337,9 @@ class ConversationTextview(GObject.GObject):
                 return True
             except KeyError:
                 pass
-        if self.cursor_changed:
+        if self._cursor_changed:
             window.set_cursor(get_cursor('XTERM'))
-            self.cursor_changed = False
+            self._cursor_changed = False
         return False
 
     def del_handlers(self):
@@ -358,11 +356,7 @@ class ConversationTextview(GObject.GObject):
             app.css_config.get_value('.gajim-status-message', StyleAttr.COLOR))
         self.tagMarked.set_property('foreground',
             app.css_config.get_value('.gajim-highlight-message', StyleAttr.COLOR))
-        color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-        self.tv.tagURL.set_property('foreground', color)
-        self.tv.tagMail.set_property('foreground', color)
-        self.tv.tagXMPP.set_property('foreground', color)
-        self.tv.tagSthAtSth.set_property('foreground', color)
+        self.tv.update_tags()
 
     def scroll_to_end(self, force=False):
         if self.autoscroll or force:
