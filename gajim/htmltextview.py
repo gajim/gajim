@@ -56,34 +56,32 @@ from gajim.gui_menu_builder import get_conv_context_menu
 
 log = logging.getLogger('gajim.htmlview')
 
-__all__ = ['HtmlTextView']
-
 whitespace_rx = re.compile('\\s+')
 allwhitespace_rx = re.compile('^\\s*$')
 
 # embryo of CSS classes
 classes = {
-        #'system-message':';display: none',
-        'problematic': ';color: red',
+    #'system-message':';display: none',
+    'problematic': ';color: red',
 }
 
 # styles for elements
 _element_styles = {
-                'u'             : ';text-decoration: underline',
-                'em'            : ';font-style: oblique',
-                'cite'          : '; background-color:rgb(170,190,250);'
-                                  'font-style: oblique',
-                'li'            : '; margin-left: 1em; margin-right: 10%',
-                'strong'        : ';font-weight: bold',
-                'pre'           : '; background-color:rgb(190,190,190);'
-                                  'font-family: monospace; white-space: pre;'
-                                  'margin-left: 1em; margin-right: 10%',
-                'kbd'           : ';background-color:rgb(210,210,210);'
-                                  'font-family: monospace',
-                'blockquote'    : '; background-color:rgb(170,190,250);'
-                                  'margin-left: 2em; margin-right: 10%',
-                'dt'            : ';font-weight: bold; font-style: oblique',
-                'dd'            : ';margin-left: 2em; font-style: oblique'
+    'u'             : ';text-decoration: underline',
+    'em'            : ';font-style: oblique',
+    'cite'          : '; background-color:rgb(170,190,250);'
+                      'font-style: oblique',
+    'li'            : '; margin-left: 1em; margin-right: 10%',
+    'strong'        : ';font-weight: bold',
+    'pre'           : '; background-color:rgb(190,190,190);'
+                      'font-family: monospace; white-space: pre;'
+                      'margin-left: 1em; margin-right: 10%',
+    'kbd'           : ';background-color:rgb(210,210,210);'
+                      'font-family: monospace',
+    'blockquote'    : '; background-color:rgb(170,190,250);'
+                      'margin-left: 2em; margin-right: 10%',
+    'dt'            : ';font-weight: bold; font-style: oblique',
+    'dd'            : ';margin-left: 2em; font-style: oblique'
 }
 # no difference for the moment
 _element_styles['dfn'] = _element_styles['em']
@@ -92,6 +90,12 @@ _element_styles['var'] = _element_styles['em']
 _element_styles['tt'] = _element_styles['kbd']
 _element_styles['i'] = _element_styles['em']
 _element_styles['b'] = _element_styles['strong']
+
+_supported_style_attrs = [
+    'background-color', 'color', 'font-family', 'font-size', 'font-style',
+    'font-weight', 'margin-left', 'margin-right', 'text-align',
+    'text-decoration', 'white-space', 'display', 'width', 'height'
+]
 
 # ==========
 #   XEP-0071
@@ -182,8 +186,9 @@ for _name in BLOCK_HEAD:
     _num = int(_name[1])
     _header_size = (_num - 1) // 2
     _weight = (_num - 1) % 2
-    _element_styles[_name] = '; font-size: %s; %s' % (('large', 'medium', 'small')[_header_size],
-        ('font-weight: bold', 'font-style: oblique')[_weight],)
+    _element_styles[_name] = '; font-size: %s; %s' % (
+        ('large', 'medium', 'small')[_header_size],
+        ('font-weight: bold', 'font-style: oblique')[_weight])
 
 def _parse_css_color(color):
     if color.startswith('rgb(') and color.endswith(')'):
@@ -216,26 +221,35 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self.list_counters = [] # stack (top at head) of list
                                 # counters, or None for unordered list
 
+        # build a dictionary mapping styles to methods
+        self.__style_methods = {}
+        for style in _supported_style_attrs:
+            method_names = '_parse_style_%s' % style.replace('-', '_')
+            self.__style_methods[style] = method_names
+
     def _get_points_from_pixels(self, pixels):
         resolution = self.textview.get_screen().get_resolution()
         # points = pixels * 72 / resolution
         return pixels * 72 / resolution
 
-    def _parse_style_color(self, tag, value):
+    @staticmethod
+    def _parse_style_color(tag, value):
         color = _parse_css_color(value)
         tag.set_property('foreground-gdk', color)
 
-    def _parse_style_background_color(self, tag, value):
+    @staticmethod
+    def _parse_style_background_color(tag, value):
         color = _parse_css_color(value)
         tag.set_property('background-gdk', color)
         tag.set_property('paragraph-background-gdk', color)
 
-    def __parse_length_frac_size_allocate(self, textview, allocation, frac,
-        callback, args):
+    @staticmethod
+    def __parse_length_frac_size_allocate(_textview, allocation, frac,
+                                          callback, args):
         callback(allocation.width*frac, *args)
 
     def _parse_length(self, value, font_relative, block_relative, minl, maxl,
-        callback, *args):
+                      callback, *args):
         """
         Parse/calc length, converting to pixels, calls callback(length, *args)
         when the length is first computed or changes
@@ -259,11 +273,11 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 # This is difficult/impossible to implement, so we use
                 # textview width instead; a reasonable approximation..
                 alloc = self.textview.get_allocation()
-                self.__parse_length_frac_size_allocate(self.textview, alloc,
-                    frac, callback, args)
+                self.__parse_length_frac_size_allocate(
+                    self.textview, alloc, frac, callback, args)
                 self.textview.connect('size-allocate',
-                    self.__parse_length_frac_size_allocate,
-                    frac, callback, args)
+                                      self.__parse_length_frac_size_allocate,
+                                      frac, callback, args)
             else:
                 callback(frac, *args)
             return
@@ -324,7 +338,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif type_ == 'px':
             tag.set_property('size-points', self._get_points_from_pixels(size))
 
-    def _parse_style_display(self, tag, value):
+    @staticmethod
+    def _parse_style_display(tag, value):
         if value == 'none':
             tag.set_property('invisible', 'true')
         # FIXME: display: block, inline
@@ -355,13 +370,14 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         self._parse_length(
             value, True, False, 5, 110, self.__parse_font_size_cb, tag)
 
-    def _parse_style_font_style(self, tag, value):
+    @staticmethod
+    def _parse_style_font_style(tag, value):
         try:
             style = {
-                    'normal': Pango.Style.NORMAL,
-                    'italic': Pango.Style.ITALIC,
-                    'oblique': Pango.Style.OBLIQUE,
-                    }[value]
+                'normal': Pango.Style.NORMAL,
+                'italic': Pango.Style.ITALIC,
+                'oblique': Pango.Style.OBLIQUE,
+            }[value]
         except KeyError:
             log.warning('unknown font-style %s', value)
         else:
@@ -376,51 +392,55 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _parse_style_margin_left(self, tag, value):
         # block relative
         self._parse_length(value, False, True, 1, 1000,
-            self.__frac_length_tag_cb, tag, 'left-margin')
+                           self.__frac_length_tag_cb, tag, 'left-margin')
 
     def _parse_style_margin_right(self, tag, value):
         # block relative
         self._parse_length(value, False, True, 1, 1000,
-            self.__frac_length_tag_cb, tag, 'right-margin')
+                           self.__frac_length_tag_cb, tag, 'right-margin')
 
-    def _parse_style_font_weight(self, tag, value):
+    @staticmethod
+    def _parse_style_font_weight(tag, value):
         # TODO: missing 'bolder' and 'lighter'
         try:
             weight = {
-                    '100': Pango.Weight.ULTRALIGHT,
-                    '200': Pango.Weight.ULTRALIGHT,
-                    '300': Pango.Weight.LIGHT,
-                    '400': Pango.Weight.NORMAL,
-                    '500': Pango.Weight.NORMAL,
-                    '600': Pango.Weight.BOLD,
-                    '700': Pango.Weight.BOLD,
-                    '800': Pango.Weight.ULTRABOLD,
-                    '900': Pango.Weight.HEAVY,
-                    'normal': Pango.Weight.NORMAL,
-                    'bold': Pango.Weight.BOLD,
-                    }[value]
+                '100': Pango.Weight.ULTRALIGHT,
+                '200': Pango.Weight.ULTRALIGHT,
+                '300': Pango.Weight.LIGHT,
+                '400': Pango.Weight.NORMAL,
+                '500': Pango.Weight.NORMAL,
+                '600': Pango.Weight.BOLD,
+                '700': Pango.Weight.BOLD,
+                '800': Pango.Weight.ULTRABOLD,
+                '900': Pango.Weight.HEAVY,
+                'normal': Pango.Weight.NORMAL,
+                'bold': Pango.Weight.BOLD,
+            }[value]
         except KeyError:
             log.warning('unknown font-style %s', value)
         else:
             tag.set_property('weight', weight)
 
-    def _parse_style_font_family(self, tag, value):
+    @staticmethod
+    def _parse_style_font_family(tag, value):
         tag.set_property('family', value)
 
-    def _parse_style_text_align(self, tag, value):
+    @staticmethod
+    def _parse_style_text_align(tag, value):
         try:
             align = {
-                    'left': Gtk.Justification.LEFT,
-                    'right': Gtk.Justification.RIGHT,
-                    'center': Gtk.Justification.CENTER,
-                    'justify': Gtk.Justification.FILL,
-                    }[value]
+                'left': Gtk.Justification.LEFT,
+                'right': Gtk.Justification.RIGHT,
+                'center': Gtk.Justification.CENTER,
+                'justify': Gtk.Justification.FILL,
+            }[value]
         except KeyError:
             log.warning('Invalid text-align: %s requested', value)
         else:
             tag.set_property('justification', align)
 
-    def _parse_style_text_decoration(self, tag, value):
+    @staticmethod
+    def _parse_style_text_decoration(tag, value):
         values = value.split(' ')
         if 'none' in values:
             tag.set_property('underline', Pango.Underline.NONE)
@@ -438,7 +458,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         if 'overline' in values:
             log.warning('text-decoration:overline not implemented')
 
-    def _parse_style_white_space(self, tag, value):
+    @staticmethod
+    def _parse_style_white_space(tag, value):
         if value == 'pre':
             tag.set_property('wrap_mode', Gtk.WrapMode.NONE)
         elif value == 'normal':
@@ -446,7 +467,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif value == 'nowrap':
             tag.set_property('wrap_mode', Gtk.WrapMode.NONE)
 
-    def __length_tag_cb(self, value, tag, propname):
+    @staticmethod
+    def __length_tag_cb(value, tag, propname):
         try:
             tag.set_property(propname, value)
         except Exception:
@@ -455,29 +477,13 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
     def _parse_style_width(self, tag, value):
         if value == 'auto':
             return
-        self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
-            tag, "width")
+        self._parse_length(value, False, False, 1, 1000,
+                           self.__length_tag_cb, tag, "width")
     def _parse_style_height(self, tag, value):
         if value == 'auto':
             return
-        self._parse_length(value, False, False, 1, 1000, self.__length_tag_cb,
-            tag, "height")
-
-
-    # build a dictionary mapping styles to methods, for greater speed
-    __style_methods = dict()
-    for style in ('background-color', 'color', 'font-family', 'font-size',
-                  'font-style', 'font-weight', 'margin-left', 'margin-right',
-                  'text-align', 'text-decoration', 'white-space', 'display',
-                  'width', 'height'):
-        try:
-            method = locals()['_parse_style_%s' % style.replace('-', '_')]
-        except KeyError:
-            log.warning('Style attribute "%s" not yet implemented', style)
-        else:
-            __style_methods[style] = method
-    del style  # pylint: disable=undefined-loop-variable
-    # --
+        self._parse_length(value, False, False, 1, 1000,
+                           self.__length_tag_cb, tag, "height")
 
     def _get_style_tags(self):
         return [tag for tag in self.styles if tag is not None]
@@ -523,8 +529,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             else:
                 if self.conv_textview:
                     img_mark = self.textbuf.create_mark(None, self.iter, True)
-                    app.thread_interface(helpers.download_image, [
-                        self.conv_textview.account, attrs], self._update_img,
+                    app.thread_interface(
+                        helpers.download_image,
+                        [self.conv_textview.account, attrs],
+                        self._update_img,
                         [attrs, img_mark, self._get_style_tags()])
                     alt = attrs.get('alt', '')
                     if alt:
@@ -542,19 +550,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                 def width_cb(length):
                     dims[0] = length
                 # process width and height attributes
-                w = attrs.get('width')
-                h = attrs.get('height')
+                width = attrs.get('width')
+                height = attrs.get('height')
                 # override with width and height styles
                 for attr, val in style_iter(attrs.get('style', '')):
                     if attr == 'width':
-                        w = val
+                        width = val
                     elif attr == 'height':
-                        h = val
-                if w:
-                    self._parse_length(w, False, False, 1, 1000, width_cb)
-                if h:
-                    self._parse_length(h, False, False, 1, 1000, height_cb)
-                def set_size(pixbuf, w, h, dims):
+                        height = val
+                if width:
+                    self._parse_length(width, False, False, 1, 1000, width_cb)
+                if height:
+                    self._parse_length(height, False, False, 1, 1000, height_cb)
+
+                def set_size(_pixbuf, w, h, dims):
                     """
                     FIXME: Floats should be relative to the whole textview, and
                     resize with it. This needs new pifbufs for every resize,
@@ -569,7 +578,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
                     if not dims[1]:
                         dims[1] = h
                     loader.set_size(*dims)
-                if w or h:
+
+                if width or height:
                     loader.connect('size-prepared', set_size, dims)
                 loader.write(mem)
                 loader.close()
@@ -621,12 +631,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             attr = attr.lower()
             val = val
             try:
-                method = self.__style_methods[attr]
+                getattr(self, self.__style_methods[attr])(tag, val)
             except KeyError:
                 log.warning('Style attribute "%s" requested '
                             'but not yet implemented', attr)
-            else:
-                method(self, tag, val)
         self.styles.append(tag)
 
     def _end_span(self):
@@ -660,7 +668,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         else:
             self._insert_text(text.strip('\n'))
 
-    def _anchor_event(self, tag, textview, event, iter_, href, type_):
+    def _anchor_event(self, _tag, _textview, event, _iter, href, type_):
         if event.type == Gdk.EventType.BUTTON_PRESS:
             self.textview.emit('url-clicked', href, type_)
             return True
@@ -668,8 +676,8 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
 
     def handle_specials(self, text):
         if self.conv_textview:
-            self.iter = self.conv_textview.detect_and_print_special_text(text,
-                self._get_style_tags(), iter_=self.iter)
+            self.iter = self.conv_textview.detect_and_print_special_text(
+                text, self._get_style_tags(), iter_=self.iter)
         else:
             self._insert_text(text)
 
@@ -681,7 +689,6 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             return
         self.text += content
         self.starting = False
-
 
     def startElement(self, name, attrs):
         self._flush_text()
@@ -767,10 +774,10 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             log.warning('Unhandled element "%s"', name)
 
     def endElement(self, name):
-        endPreserving = False
-        newLine = False
+        end_preserving = False
+        newline = False
         if name == 'br':
-            newLine = True
+            newline = True
         elif name == 'hr':
             #FIXME: plenty of unused attributes (width, height,...) :)
             self._jump_line()
@@ -779,7 +786,7 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
         elif name in LIST_ELEMS:
             self.list_counters.pop()
         elif name == 'li':
-            newLine = True
+            newline = True
         elif name == 'img':
             pass
         elif name in ('body', 'html'):
@@ -792,21 +799,20 @@ class HtmlHandler(xml.sax.handler.ContentHandler):
             pass
         elif name in BLOCK:
             if name == 'pre':
-                endPreserving = True
+                end_preserving = True
             elif name in BLOCK_STRUCT:
-                newLine = True
+                newline = True
         else:
             log.warning("Unhandled element '%s'", name)
         self._flush_text()
-        if endPreserving:
+        if end_preserving:
             self.preserve = False
-        if newLine:
+        if newline:
             self._jump_line()
         self._end_span()
 
 
 class HtmlTextView(Gtk.TextView):
-
     def __init__(self, account=None):
         Gtk.TextView.__init__(self)
         self.set_wrap_mode(Gtk.WrapMode.CHAR)
@@ -847,7 +853,7 @@ class HtmlTextView(Gtk.TextView):
         self.tagSthAtSth.set_property('underline', Pango.Underline.SINGLE)
         self.tagSthAtSth.connect('event', self.hyperlink_handler, 'sth_at_sth')
 
-    def __query_tooltip(self, widget, x_pos, y_pos, keyboard_mode, tooltip):
+    def __query_tooltip(self, widget, x_pos, y_pos, _keyboard_mode, tooltip):
         window = widget.get_window(Gtk.TextWindowType.TEXT)
         x_pos, y_pos = self.window_to_buffer_coords(
             Gtk.TextWindowType.TEXT, x_pos, y_pos)
@@ -876,7 +882,7 @@ class HtmlTextView(Gtk.TextView):
         if menu is None:
             return
 
-        def destroy(menu, pspec):
+        def destroy(menu, _pspec):
             visible = menu.get_property('visible')
             if not visible:
                 GLib.idle_add(menu.destroy)
@@ -942,8 +948,8 @@ class HtmlTextView(Gtk.TextView):
                       'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
                       {'lat': lat, 'lon': lon}
                 helpers.launch_browser_mailer(kind, uri)
-            # other URIs
             else:
+                # other URIs
                 helpers.launch_browser_mailer(kind, word)
 
     def display_html(self, html, textview, conv_textview, iter_=None):
@@ -952,16 +958,9 @@ class HtmlTextView(Gtk.TextView):
             eob = iter_
         else:
             eob = buffer_.get_end_iter()
-        ## this works too if libxml2 is not available
-        # parser = xml.sax.make_parser(['drv_libxml2'])
-        # parser.setFeature(xml.sax.handler.feature_validation, True)
         parser = xml.sax.make_parser()
         parser.setContentHandler(HtmlHandler(textview, conv_textview, eob))
         parser.parse(StringIO(html))
-
-        # too much space after :)
-        #if not eob.starts_line():
-        #    buffer_.insert(eob, '\n')
 
     @staticmethod
     def _on_copy_clipboard(textview):
