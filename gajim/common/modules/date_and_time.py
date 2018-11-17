@@ -16,7 +16,10 @@
 
 import re
 import time
-from datetime import datetime, timedelta, timezone, tzinfo
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+from datetime import tzinfo
 
 
 PATTERN_DATETIME = re.compile(
@@ -91,6 +94,10 @@ class LocalTimezone(tzinfo):
         return tt.tm_isdst > 0
 
 
+def create_tzinfo(hours=0, minutes=0):
+    return timezone(timedelta(hours=hours, minutes=minutes))
+
+
 def parse_datetime(timestring, check_utc=False,
                    convert='utc', epoch=False):
     '''
@@ -133,11 +140,30 @@ def parse_datetime(timestring, check_utc=False,
         except ValueError:
             pass
         else:
-            if not check_utc and convert == 'utc':
+            if check_utc:
+                if convert != 'utc':
+                    raise ValueError(
+                        'check_utc can only be used with convert="utc"')
+                date_time.replace(tzinfo=timezone.utc)
+                if epoch:
+                    return date_time.timestamp()
+                return date_time
+
+            if convert == 'utc':
                 date_time = date_time.astimezone(timezone.utc)
+                if epoch:
+                    return date_time.timestamp()
+                return date_time
+
+            if epoch:
+                # epoch is always UTC, use convert='utc' or check_utc=True
+                raise ValueError(
+                    'epoch not available while converting to local')
+
             if convert == 'local':
                 date_time = date_time.astimezone(LocalTimezone())
-            if epoch:
-                return date_time.timestamp()
+                return date_time
+
+            # convert=None
             return date_time
     return None
