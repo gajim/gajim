@@ -31,6 +31,9 @@ class TestConnectionCaps(unittest.TestCase):
         self.module._account = 'account'
         self.module._capscache = MagicMock()
 
+    def tearDown(self):
+        app.contacts.remove_account('account')
+
     def _nec_caps_presence_received(self, obj):
         self.assertTrue(
             isinstance(obj.client_caps, caps_cache.ClientCaps),
