@@ -1015,24 +1015,22 @@ class ChatControl(ChatControlBase):
                     ['printed_' + self.type_id, self.type_id]))
         else:
             num_unread = 0
-        # Set tab image (always 16x16); unread messages show the 'event' image
-        tab_img = None
+
+        transport = None
+        if app.jid_is_transport(jid):
+            transport = app.get_transport_name_from_jid(jid)
 
         if num_unread and app.config.get('show_unread_tab_icon'):
-            img_16 = app.interface.roster.get_appropriate_state_images(
-                    self.contact.jid, icon_name='event')
-            tab_img = img_16['event']
+            icon_name = get_icon_name('event', transport=transport)
         else:
             contact = app.contacts.get_contact_with_highest_priority(
                     self.account, self.contact.jid)
             if not contact or self.resource:
                 # For transient contacts
                 contact = self.contact
-            img_16 = app.interface.roster.get_appropriate_state_images(
-                    self.contact.jid, icon_name=contact.show)
-            tab_img = img_16[contact.show]
+            icon_name = get_icon_name(contact.show, transport=transport)
 
-        return tab_img
+        return icon_name
 
     def prepare_context_menu(self, hide_buttonbar_items=False):
         """

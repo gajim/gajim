@@ -554,21 +554,6 @@ def remove_css_class(widget, class_name):
     style = widget.get_style_context()
     style.remove_class(class_name)
 
-def draw_affiliation(surface, affiliation):
-    icon_size = 16
-    size = 4 * 1
-    if affiliation not in ('owner', 'admin', 'member'):
-        return
-    ctx = cairo.Context(surface)
-    ctx.rectangle(icon_size-size, icon_size-size, size, size)
-    if affiliation == 'owner':
-        ctx.set_source_rgb(204/255, 0, 0)
-    elif affiliation == 'admin':
-        ctx.set_source_rgb(255/255, 140/255, 0)
-    elif affiliation == 'member':
-        ctx.set_source_rgb(0, 255/255, 0)
-    ctx.fill()
-
 def pango_to_css_weight(number):
     # Pango allows for weight values between 100 and 1000
     # CSS allows only full hundred numbers like 100, 200 ..

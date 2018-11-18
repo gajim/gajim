@@ -76,7 +76,7 @@ from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import get_image_from_icon_name
+from gajim.gtk.util import get_affiliation_surface
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -88,60 +88,6 @@ class Column(IntEnum):
     TYPE = 2 # type of the row ('contact' or 'role')
     TEXT = 3 # text shown in the cellrenderer
     AVATAR_IMG = 4 # avatar of the contact
-
-
-def cell_data_func(column, renderer, model, iter_, user_data):
-    # Background color has to be rendered for all cells
-    theme = app.config.get('roster_theme')
-    has_parent = bool(model.iter_parent(iter_))
-    if has_parent:
-        bgcolor = app.css_config.get_value('.gajim-contact-row', StyleAttr.BACKGROUND)
-        renderer.set_property('cell-background', bgcolor)
-    else:
-        bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
-        renderer.set_property('cell-background', bgcolor)
-
-    if user_data == 'status':
-        status_cell_data_func(column, renderer, model, iter_, has_parent)
-    elif user_data == 'name':
-        text_cell_data_func(column, renderer, model, iter_, has_parent, theme)
-    elif user_data == 'avatar':
-        avatar_cell_data_func(column, renderer, model, iter_, has_parent)
-
-def status_cell_data_func(column, renderer, model, iter_, has_parent):
-    renderer.set_property('width', 26)
-    image = model[iter_][Column.IMG]
-    surface = image.get_property('surface')
-    renderer.set_property('surface', surface)
-
-def avatar_cell_data_func(column, renderer, model, iter_, has_parent):
-    image = model[iter_][Column.AVATAR_IMG]
-    if image is None:
-        renderer.set_property('surface', None)
-    else:
-        surface = image.get_property('surface')
-        renderer.set_property('surface', surface)
-
-    renderer.set_property('xalign', 0.5)
-    if has_parent:
-        renderer.set_property('visible', True)
-        renderer.set_property('width', AvatarSize.ROSTER)
-    else:
-        renderer.set_property('visible', False)
-
-def text_cell_data_func(column, renderer, model, iter_, has_parent, theme):
-    # cell data func is global, because we don't want it to keep
-    # reference to GroupchatControl instance (self)
-    if has_parent:
-        color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
-        renderer.set_property('foreground', color)
-        desc = app.css_config.get_font('.gajim-contact-row')
-        renderer.set_property('font-desc', desc)
-    else:
-        color = app.css_config.get_value('.gajim-group-row', StyleAttr.COLOR)
-        renderer.set_property('foreground', color)
-        desc = app.css_config.get_font('.gajim-group-row')
-        renderer.set_property('font-desc', desc)
 
 
 class PrivateChatControl(ChatControl):
@@ -408,7 +354,7 @@ class GroupchatControl(ChatControlBase):
         self._role_refs = {}
 
         #status_image, shown_nick, type, nickname, avatar
-        self.columns = [Gtk.Image, str, str, str, Gtk.Image]
+        self.columns = [str, str, str, str, Gtk.Image]
         self.model = Gtk.TreeStore(*self.columns)
         self.model.set_sort_func(Column.NICK, self.tree_compare_iters)
 
@@ -428,15 +374,15 @@ class GroupchatControl(ChatControlBase):
         self.renderers_list += (
             # status img
             ('icon', Gtk.CellRendererPixbuf(), False,
-            None, Column.IMG, cell_data_func, 'status'),
+            'icon_name', Column.IMG, self._cell_data_func, 'status'),
             # contact name
             ('name', renderer_text, True,
-            'markup', Column.TEXT, cell_data_func, 'name'))
+            'markup', Column.TEXT, self._cell_data_func, 'name'))
 
         # avatar img
         avatar_renderer = ('avatar', Gtk.CellRendererPixbuf(),
             False, None, Column.AVATAR_IMG,
-            cell_data_func, 'avatar')
+            self._cell_data_func, 'avatar')
 
         if app.config.get('avatar_position_in_roster') == 'right':
             self.renderers_list.append(avatar_renderer)
@@ -653,6 +599,67 @@ class GroupchatControl(ChatControlBase):
         # Sync Threshold
         has_mam = muc_caps_cache.has_mam(self.room_jid)
         win.lookup_action('choose-sync-' + self.control_id).set_enabled(has_mam)
+
+    def _cell_data_func(self, column, renderer, model, iter_, user_data):
+        # Background color has to be rendered for all cells
+        theme = app.config.get('roster_theme')
+        has_parent = bool(model.iter_parent(iter_))
+        if has_parent:
+            bgcolor = app.css_config.get_value('.gajim-contact-row', StyleAttr.BACKGROUND)
+            renderer.set_property('cell-background', bgcolor)
+        else:
+            bgcolor = app.css_config.get_value('.gajim-group-row', StyleAttr.BACKGROUND)
+            renderer.set_property('cell-background', bgcolor)
+
+        if user_data == 'status':
+            self._status_cell_data_func(column, renderer, model, iter_, has_parent)
+        elif user_data == 'name':
+            self._text_cell_data_func(column, renderer, model, iter_, has_parent, theme)
+        elif user_data == 'avatar':
+            self._avatar_cell_data_func(column, renderer, model, iter_, has_parent)
+
+    def _status_cell_data_func(self, column, renderer, model, iter_, has_parent):
+        renderer.set_property('width', 26)
+        icon_name = model[iter_][Column.IMG]
+        if ':' in icon_name:
+            icon_name, affiliation = icon_name.split(':')
+            surface = get_affiliation_surface(
+                icon_name, affiliation, self.scale_factor)
+            renderer.set_property('icon_name', None)
+            renderer.set_property('surface', surface)
+        else:
+            renderer.set_property('surface', None)
+            renderer.set_property('icon_name', icon_name)
+
+    def _avatar_cell_data_func(self, column, renderer, model, iter_, has_parent):
+        image = model[iter_][Column.AVATAR_IMG]
+        if image is None:
+            renderer.set_property('surface', None)
+        else:
+            surface = image.get_property('surface')
+            renderer.set_property('surface', surface)
+
+        renderer.set_property('xalign', 0.5)
+        if has_parent:
+            renderer.set_property('visible', True)
+            renderer.set_property('width', AvatarSize.ROSTER)
+        else:
+            renderer.set_property('visible', False)
+
+    def _text_cell_data_func(self, column, renderer, model, iter_, has_parent, theme):
+        # cell data func is global, because we don't want it to keep
+        # reference to GroupchatControl instance (self)
+        if has_parent:
+            color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
+            renderer.set_property('foreground', color)
+            desc = app.css_config.get_font('.gajim-contact-row')
+            renderer.set_property('font-desc', desc)
+        else:
+            color = app.css_config.get_value('.gajim-group-row', StyleAttr.COLOR)
+            renderer.set_property('foreground', color)
+            desc = app.css_config.get_font('.gajim-group-row')
+            renderer.set_property('font-desc', desc)
+
 
     def _on_room_created(self):
         if self.parent_win is None:
@@ -1318,11 +1325,11 @@ class GroupchatControl(ChatControlBase):
         if not autopopup or (not autopopupaway and \
         app.connections[self.account].connected > 2):
             if no_queue: # We didn't have a queue: we change icons
-                state_images = \
-                    app.interface.roster.get_appropriate_state_images(
-                    self.room_jid, icon_name='event')
-                image = state_images['event']
-                self.model[iter_][Column.IMG] = image
+                transport = None
+                if app.jid_is_transport(self.room_jid):
+                    transport = app.get_transport_name_from_jid(self.room_jid)
+                self.model[iter_][Column.IMG] = get_icon_name(
+                    'event', transport=transport)
             if self.parent_win:
                 self.parent_win.show_title()
                 self.parent_win.redraw_tab(self)
@@ -1759,15 +1766,13 @@ class GroupchatControl(ChatControlBase):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
             return
-        gc_contact = app.contacts.get_gc_contact(self.account, self.room_jid,
-                nick)
-        theme = Gtk.IconTheme.get_default()
+        gc_contact = app.contacts.get_gc_contact(
+            self.account, self.room_jid, nick)
+
         if app.events.get_events(self.account, self.room_jid + '/' + nick):
             icon_name = get_icon_name('event')
-            surface = theme.load_surface(icon_name, 16, self.scale_factor, None, 0)
         else:
             icon_name = get_icon_name(gc_contact.show)
-            surface = theme.load_surface(icon_name, 16, self.scale_factor, None, 0)
 
         name = GLib.markup_escape_text(gc_contact.name)
 
@@ -1788,10 +1793,9 @@ class GroupchatControl(ChatControlBase):
 
         if (gc_contact.affiliation != 'none' and
                 app.config.get('show_affiliation_in_groupchat')):
-            gtkgui_helpers.draw_affiliation(surface, gc_contact.affiliation)
+            icon_name += ':%s' % gc_contact.affiliation
 
-        image = Gtk.Image.new_from_surface(surface)
-        self.model[iter_][Column.IMG] = image
+        self.model[iter_][Column.IMG] = icon_name
         self.model[iter_][Column.TEXT] = name
 
     def draw_avatar(self, gc_contact):
@@ -2125,9 +2129,9 @@ class GroupchatControl(ChatControlBase):
         # Create Role
         role_iter = self.get_role_iter(role)
         if not role_iter:
-            image = get_image_from_icon_name('closed', self.scale_factor)
+            icon_name = get_icon_name('closed')
             ext_columns = [None] * self.nb_ext_renderers
-            row = [image, role, 'role', role_name, None] + ext_columns
+            row = [icon_name, role, 'role', role_name, None] + ext_columns
             role_iter = self.model.append(None, row)
             self._role_refs[role] = Gtk.TreeRowReference(
                 self.model, self.model.get_path(role_iter))
@@ -2142,7 +2146,7 @@ class GroupchatControl(ChatControlBase):
 
         # Add to model
         ext_columns = [None] * self.nb_ext_renderers
-        row = [image, nick, 'contact', name, None] + ext_columns
+        row = [None, nick, 'contact', name, image] + ext_columns
         iter_ = self.model.append(role_iter, row)
         self._contact_refs[nick] = Gtk.TreeRowReference(
             self.model, self.model.get_path(iter_))
@@ -2591,16 +2595,14 @@ class GroupchatControl(ChatControlBase):
         When a row is expanded: change the icon of the arrow
         """
         model = widget.get_model()
-        image = get_image_from_icon_name('opened', self.scale_factor)
-        model[iter_][Column.IMG] = image
+        model[iter_][Column.IMG] = get_icon_name('opened')
 
     def on_list_treeview_row_collapsed(self, widget, iter_, path):
         """
         When a row is collapsed: change the icon of the arrow
         """
         model = widget.get_model()
-        image = get_image_from_icon_name('closed', self.scale_factor)
-        model[iter_][Column.IMG] = image
+        model[iter_][Column.IMG] = get_icon_name('closed')
 
     def kick(self, widget, nick):
         """
