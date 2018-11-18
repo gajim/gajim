@@ -43,7 +43,6 @@ from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import StyleAttr
 from gajim.common.const import Chatstate
 
-from gajim import notify
 from gajim import gtkgui_helpers
 from gajim import message_control
 
@@ -55,6 +54,8 @@ from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk import util
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import at_the_end
+from gajim.gtk.util import get_show_in_roster
+from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -940,10 +941,9 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     else:
                         event_type = events.PrintedPmEvent
                     event = 'message_received'
-                show_in_roster = notify.get_show_in_roster(event,
-                    self.account, self.contact.jid, self.session)
-                show_in_systray = notify.get_show_in_systray(event,
-                    self.account, self.contact.jid, event_type.type_)
+                show_in_roster = get_show_in_roster(event, self.session)
+                show_in_systray = get_show_in_systray(
+                    event_type.type_, self.contact.jid)
 
                 event = event_type(text, subject, self, msg_log_id,
                     show_in_roster=show_in_roster,
@@ -1221,7 +1221,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         self.parent_win.redraw_tab(self)
         self.parent_win.show_title()
-        # TODO : get the contact and check notify.get_show_in_roster()
+        # TODO : get the contact and check get_show_in_roster()
         if self.type_id == message_control.TYPE_PM:
             room_jid, nick = app.get_room_and_nick_from_fjid(jid)
             groupchat_control = app.interface.msg_win_mgr.get_gc_control(

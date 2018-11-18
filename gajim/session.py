@@ -21,7 +21,6 @@ import string
 import random
 import itertools
 
-from gajim import notify
 from gajim.common import helpers
 from gajim.common import events
 from gajim.common import app
@@ -29,6 +28,8 @@ from gajim.common import contacts
 from gajim.common import ged
 from gajim.common.const import KindConstant
 from gajim.gtk.single_message import SingleMessageWindow
+from gajim.gtk.util import get_show_in_roster
+from gajim.gtk.util import get_show_in_systray
 
 
 class ChatControlSession:
@@ -246,10 +247,8 @@ class ChatControlSession:
             do_event = False
         else:
             # Everything else
-            obj.show_in_roster = notify.get_show_in_roster(event_type,
-                self.conn.name, contact.jid, self)
-            obj.show_in_systray = notify.get_show_in_systray(event_type,
-                self.conn.name, contact.jid)
+            obj.show_in_roster = get_show_in_roster(event_type, self)
+            obj.show_in_systray = get_show_in_systray(event_type, contact.jid)
             if obj.mtype == 'normal' and obj.popup:
                 do_event = False
             else:
@@ -354,10 +353,8 @@ class ChatControlSession:
             event_t = events.NormalEvent
             event_type = 'single_message_received'
 
-        show_in_roster = notify.get_show_in_roster(event_type, self.conn.name,
-                contact.jid, self)
-        show_in_systray = notify.get_show_in_systray(event_type, self.conn.name,
-                contact.jid)
+        show_in_roster = get_show_in_roster(event_type, self)
+        show_in_systray = get_show_in_systray(event_type, contact.jid)
 
         event = event_t(msg, subject, msg_type, tim, encrypted, resource,
             msg_log_id, xhtml=xhtml, session=self, form_node=form_node,

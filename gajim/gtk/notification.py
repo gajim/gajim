@@ -46,35 +46,6 @@ from gajim.gtk.util import load_icon
 log = logging.getLogger('gajim.notify')
 
 
-def get_show_in_roster(event, account, jid, session=None):
-    """
-    Return True if this event must be shown in roster, else False
-    """
-    if event == 'gc_message_received':
-        return True
-    if event == 'message_received':
-        if app.config.get('autopopup_chat_opened'):
-            return True
-        if session and session.control:
-            return False
-    return True
-
-
-def get_show_in_systray(event, account, jid, type_=None):
-    """
-    Return True if this event must be shown in systray, else False
-    """
-
-    notify = app.config.get('notify_on_all_muc_messages')
-    notify_for_jid = app.config.get_per(
-        'rooms', jid, 'notify_on_all_messages')
-
-    if type_ == 'printed_gc_msg' and not notify and not notify_for_jid:
-        # it's not an highlighted message, don't show in systray
-        return False
-    return app.config.get('trayicon_notification_on_events')
-
-
 class Notification:
     """
     Handle notifications

@@ -64,7 +64,6 @@ from gajim.common.dbus import logind
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import dialogs
-from gajim import notify
 from gajim import message_control
 from gajim.dialog_messages import get_dialog
 from gajim.dialogs import ProgressWindow
@@ -102,6 +101,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import configpaths
 from gajim.common import optparser
 
+from gajim.gtk.notification import Notification
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
@@ -120,6 +120,8 @@ from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.atom import AtomWindow
 from gajim.gtk.filetransfer import FileTransfersWindow
+from gajim.gtk.util import get_show_in_roster
+from gajim.gtk.util import get_show_in_systray
 
 
 parser = optparser.OptionsParser(configpaths.get('CONFIG_FILE'))
@@ -1581,8 +1583,8 @@ class Interface:
         event_types = {'file-request': 'ft_request',
             'file-completed': 'ft_finished'}
         event_type = event_types.get(event.type_)
-        show_in_roster = notify.get_show_in_roster(event_type, account, jid)
-        show_in_systray = notify.get_show_in_systray(event_type, account, jid)
+        show_in_roster = get_show_in_roster(event_type, jid)
+        show_in_systray = get_show_in_systray(event_type, jid)
         event.show_in_roster = show_in_roster
         event.show_in_systray = show_in_systray
         app.events.add_event(account, jid, event)
@@ -2636,7 +2638,7 @@ class Interface:
         # Creating Network Events Controller
         from gajim.common import nec
         app.nec = nec.NetworkEventsController()
-        app.notification = notify.Notification()
+        app.notification = Notification()
 
         self.create_core_handlers_list()
         self.register_core_handlers()

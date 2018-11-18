@@ -23,7 +23,6 @@ from data import *
 
 from gajim import roster_window
 from gajim import plugins
-from gajim import notify
 
 class TestStatusChange(unittest.TestCase):
     '''tests gajim.py's incredibly complex presence handling'''
