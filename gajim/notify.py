@@ -41,6 +41,7 @@ from gajim.common.i18n import _
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_monitor_scale_factor
 from gajim.gtk.util import get_total_screen_geometry
+from gajim.gtk.util import load_icon
 
 log = logging.getLogger('gajim.notify')
 
@@ -175,8 +176,7 @@ class Notification:
             return
 
         scale = get_monitor_scale_factor()
-        icon_pixbuf = gtkgui_helpers.gtk_icon_theme.load_icon_for_scale(
-            icon_name, 48, scale, 0)
+        icon_pixbuf = load_icon(icon_name, size=48, pixbuf=True, scale=scale)
 
         notification = Gio.Notification()
         if title is not None:

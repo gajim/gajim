@@ -49,8 +49,6 @@ from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
 
 log = logging.getLogger('gajim.gtkgui_helpers')
 
-gtk_icon_theme = Gtk.IconTheme.get_default()
-gtk_icon_theme.append_search_path(configpaths.get('ICONS'))
 
 class Color:
     BLACK = Gdk.RGBA(red=0, green=0, blue=0, alpha=1)

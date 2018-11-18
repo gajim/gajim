@@ -98,10 +98,12 @@ def icon_exists(name: str) -> bool:
     return _icon_theme.has_icon(name)
 
 
-def load_icon(icon_name, widget, size=16, pixbuf=False,
-              flags=Gtk.IconLookupFlags.FORCE_SIZE):
+def load_icon(icon_name, widget=None, size=16, pixbuf=False,
+              scale=None, flags=Gtk.IconLookupFlags.FORCE_SIZE):
 
-    scale = widget.get_scale_factor()
+    if widget is not None:
+        scale = widget.get_scale_factor()
+
     if not scale:
         log.warning('Could not determine scale factor')
         scale = 1
