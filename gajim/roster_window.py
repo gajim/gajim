@@ -5668,9 +5668,6 @@ class RosterWindow:
                         app.config.get('roster_x-position'),
                         app.config.get('roster_y-position'))
 
-        self.popups_notification_height = 0
-        self.popup_notification_windows = []
-
         # Remove contact from roster when last event opened
         # { (contact, account): { backend: boolean }
         self.contacts_to_be_removed = {}
