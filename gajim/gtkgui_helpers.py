@@ -23,7 +23,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import cairo
 import os
 import sys
 import math
@@ -312,24 +311,6 @@ def create_list_multi(value_list, selected_values=None):
     treeview.show_all()
     return treeview
 
-def load_iconset(path, pixbuf2=None, transport=False):
-    """
-    Load full iconset from the given path, and add pixbuf2 on top left of each
-    static images
-    """
-    path += '/'
-    if transport:
-        list_ = ('online', 'chat', 'away', 'xa', 'dnd', 'offline',
-                'not in roster')
-    else:
-        list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-                'invisible', 'offline', 'error', 'requested', 'event', 'opened',
-                'closed', 'not in roster', 'muc_active', 'muc_inactive')
-        if pixbuf2:
-            list_ = ('connecting', 'online', 'chat', 'away', 'xa', 'dnd',
-                    'offline', 'error', 'requested', 'event', 'not in roster')
-    return _load_icon_list(list_, path, pixbuf2)
-
 def load_mood_icon(icon_name):
     """
     Load an icon from the mood iconset in 16x16
@@ -382,31 +363,6 @@ def get_pep_icon(pep_class):
 
     return None
 
-def load_icons_meta():
-    """
-    Load and return  - AND + small icons to put on top left of an icon for meta
-    contacts
-    """
-    iconset = app.config.get('iconset')
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    # try to find opened_meta.png file, else opened.png else nopixbuf merge
-    path_opened = os.path.join(path, 'opened_meta.png')
-    if not os.path.isfile(path_opened):
-        path_opened = os.path.join(path, 'opened.png')
-    if os.path.isfile(path_opened):
-        pixo = GdkPixbuf.Pixbuf.new_from_file(path_opened)
-    else:
-        pixo = None
-    # Same thing for closed
-    path_closed = os.path.join(path, 'opened_meta.png')
-    if not os.path.isfile(path_closed):
-        path_closed = os.path.join(path, 'closed.png')
-    if os.path.isfile(path_closed):
-        pixc = GdkPixbuf.Pixbuf.new_from_file(path_closed)
-    else:
-        pixc = None
-    return pixo, pixc
-
 def _load_icon_list(icons_list, path, pixbuf2=None):
     """
     Load icons in icons_list from the given path, and add pixbuf2 on top left of
@@ -435,64 +391,6 @@ def _load_icon_list(icons_list, path, pixbuf2=None):
                     image.set_from_pixbuf(pixbuf1)
                 break
     return imgs
-
-def make_jabber_state_images():
-    """
-    Initialize jabber_state_images dictionary
-    """
-    iconset = app.config.get('iconset')
-    if iconset:
-        if helpers.get_iconset_path(iconset):
-            path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-            if not os.path.exists(path):
-                iconset = app.config.DEFAULT_ICONSET
-                app.config.set('iconset', iconset)
-        else:
-            iconset = app.config.DEFAULT_ICONSET
-            app.config.set('iconset', iconset)
-    else:
-        iconset = app.config.DEFAULT_ICONSET
-        app.config.set('iconset', iconset)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '16x16')
-    app.interface.jabber_state_images['16'] = load_iconset(path)
-
-    pixo, pixc = load_icons_meta()
-    app.interface.jabber_state_images['opened'] = load_iconset(path, pixo)
-    app.interface.jabber_state_images['closed'] = load_iconset(path, pixc)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '32x32')
-    app.interface.jabber_state_images['32'] = load_iconset(path)
-
-    path = os.path.join(helpers.get_iconset_path(iconset), '24x24')
-    if os.path.exists(path):
-        app.interface.jabber_state_images['24'] = load_iconset(path)
-    else:
-        # Resize 32x32 icons to 24x24
-        for each in app.interface.jabber_state_images['32']:
-            img = Gtk.Image()
-            pix = app.interface.jabber_state_images['32'][each]
-            pix_type = pix.get_storage_type()
-            if pix_type == Gtk.ImageType.ANIMATION:
-                animation = pix.get_animation()
-                pixbuf = animation.get_static_image()
-            elif pix_type == Gtk.ImageType.EMPTY:
-                pix = app.interface.jabber_state_images['16'][each]
-                pix_16_type = pix.get_storage_type()
-                if pix_16_type == Gtk.ImageType.ANIMATION:
-                    animation = pix.get_animation()
-                    pixbuf = animation.get_static_image()
-                else:
-                    pixbuf = pix.get_pixbuf()
-            else:
-                pixbuf = pix.get_pixbuf()
-            scaled_pix = pixbuf.scale_simple(24, 24, GdkPixbuf.InterpType.BILINEAR)
-            img.set_from_pixbuf(scaled_pix)
-            app.interface.jabber_state_images['24'][each] = img
-
-def reload_jabber_state_images():
-    make_jabber_state_images()
-    app.interface.roster.update_jabber_state_images()
 
 def label_set_autowrap(widget):
     """

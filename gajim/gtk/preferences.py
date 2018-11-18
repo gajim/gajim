@@ -27,7 +27,6 @@ from gajim.common import idle
 from gajim.common.i18n import _
 
 from gajim import message_control
-from gajim import gtkgui_helpers
 
 from gajim.chat_control_base import ChatControlBase
 
@@ -951,11 +950,10 @@ class Preferences(Gtk.ApplicationWindow):
         active = widget.get_active()
         icon_string = model[active][1]
         app.config.set('iconset', icon_string)
-        gtkgui_helpers.reload_jabber_state_images()
+        app.interface.roster.update_icons()
 
     def on_transports_iconsets_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'use_transports_iconsets')
-        gtkgui_helpers.reload_jabber_state_images()
 
     ### Audio/Video tab ###
     def on_av_combobox_changed(self, combobox, config_name):

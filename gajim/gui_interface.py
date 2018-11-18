@@ -2544,8 +2544,6 @@ class Interface:
         app.thread_interface = ThreadInterface
         # This is the manager and factory of message windows set by the module
         self.msg_win_mgr = None
-        self.jabber_state_images = {'16': {}, '24': {}, '32': {}, 'opened': {},
-            'closed': {}}
         self.minimized_controls = {}
         self.status_sent_to_users = {}
         self.status_sent_to_groups = {}
@@ -2691,8 +2689,6 @@ class Interface:
 
         idle.Monitor.set_interval(app.config.get('autoawaytime') * 60,
                                   app.config.get('autoxatime') * 60)
-
-        gtkgui_helpers.make_jabber_state_images()
 
         self.systray_enabled = False
 

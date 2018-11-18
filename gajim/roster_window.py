@@ -4574,45 +4574,7 @@ class RosterWindow:
 ### Cleanup assigned to Jim++ :-)
 ################################################################################
 
-    def get_appropriate_state_images(self, jid, size='16', icon_name='online'):
-        """
-        Check jid and return the appropriate state images dict for the demanded
-        size. icon_name is taken into account when jid is from transport:
-        transport iconset doesn't contain all icons, so we fall back to jabber
-        one
-        """
-        transport = app.get_transport_name_from_jid(jid)
-        if transport and size in self.transports_state_images:
-            if transport not in self.transports_state_images[size]:
-                # we don't have iconset for this transport loaded yet. Let's do
-                # it
-                self.make_transport_state_images(transport)
-            if transport in self.transports_state_images[size] and \
-            icon_name in self.transports_state_images[size][transport]:
-                return self.transports_state_images[size][transport]
-        return app.interface.jabber_state_images[size]
-
-    def make_transport_state_images(self, transport):
-        """
-        Initialize opened and closed 'transport' iconset dict
-        """
-        if not app.config.get('use_transports_iconsets'):
-            return
-
-        folder = os.path.join(helpers.get_transport_path(transport), '32x32')
-        self.transports_state_images['32'][transport] = \
-            gtkgui_helpers.load_iconset(folder, transport=True)
-        folder = os.path.join(helpers.get_transport_path(transport), '16x16')
-        self.transports_state_images['16'][transport] = \
-            gtkgui_helpers.load_iconset(folder, transport=True)
-
-        pixo, pixc = gtkgui_helpers.load_icons_meta()
-        self.transports_state_images['opened'][transport] = \
-            gtkgui_helpers.load_iconset(folder, pixo, transport=True)
-        self.transports_state_images['closed'][transport] = \
-            gtkgui_helpers.load_iconset(folder, pixc, transport=True)
-
-    def update_jabber_state_images(self):
+    def update_icons(self):
         # Update the roster
         self.setup_and_draw_roster()
         # Update the status combobox

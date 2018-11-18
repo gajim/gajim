@@ -1098,12 +1098,6 @@ def get_current_show(account):
     status = app.connections[account].connected
     return app.SHOW_LIST[status]
 
-def get_iconset_path(iconset):
-    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', iconset)):
-        return os.path.join(configpaths.get('DATA'), 'iconsets', iconset)
-    if os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), iconset)):
-        return os.path.join(configpaths.get('MY_ICONSETS'), iconset)
-
 def get_mood_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'moods', iconset)):
         return os.path.join(configpaths.get('DATA'), 'moods', iconset)
@@ -1117,16 +1111,6 @@ def get_activity_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'),
     iconset)):
         return os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'), iconset)
-
-def get_transport_path(transport):
-    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', 'transports',
-    transport)):
-        return os.path.join(configpaths.get('DATA'), 'iconsets', 'transports', transport)
-    if os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), 'transports',
-    transport)):
-        return os.path.join(configpaths.get('MY_ICONSETS'), 'transports', transport)
-    # No transport folder found, use default jabber one
-    return get_iconset_path(app.config.get('iconset'))
 
 def prepare_and_validate_gpg_keyID(account, jid, keyID):
     """
