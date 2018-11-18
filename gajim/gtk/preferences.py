@@ -21,7 +21,6 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import configpaths
 from gajim.common import config as c_config
 from gajim.common import idle
 from gajim.common.i18n import _
@@ -32,6 +31,7 @@ from gajim.chat_control_base import ChatControlBase
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_available_iconsets
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.themes import Themes
 from gajim.gtk.advanced_config import AdvancedConfig
@@ -331,11 +331,6 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.ascii_emoticons.set_active(app.config.get('ascii_emoticons'))
 
         # Iconset
-        iconsets_list = os.listdir(
-            os.path.join(configpaths.get('DATA'), 'iconsets'))
-        if os.path.isdir(configpaths.get('MY_ICONSETS')):
-            iconsets_list += os.listdir(configpaths.get('MY_ICONSETS'))
-
         model = Gtk.ListStore(str, str)
         renderer_image = Gtk.CellRendererPixbuf()
         renderer_text = Gtk.CellRendererText()
@@ -345,19 +340,11 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.iconset_combobox.add_attribute(renderer_text, 'text', 1)
         self._ui.iconset_combobox.add_attribute(renderer_image, 'icon_name', 0)
         self._ui.iconset_combobox.set_model(model)
-        dirlist = []
-        for dir_ in iconsets_list:
-            if not os.path.isdir(os.path.join(configpaths.get('DATA'), 'iconsets', dir_)) \
-            and not os.path.isdir(os.path.join(configpaths.get('MY_ICONSETS'), dir_)):
-                continue
-            if dir_ not in ('.svn', 'transports'):
-                dirlist.append(dir_)
-        if not dirlist:
-            dirlist.append(' ')
-        for index, dir_ in enumerate(dirlist):
-            icon_name = get_icon_name('online', iconset=dir_)
-            model.append([icon_name, dir_])
-            if app.config.get('iconset') == dir_:
+
+        for index, iconset_name in enumerate(get_available_iconsets()):
+            icon_name = get_icon_name('online', iconset=iconset_name)
+            model.append([icon_name, iconset_name])
+            if app.config.get('iconset') == iconset_name:
                 self._ui.iconset_combobox.set_active(index)
 
         # Use transports iconsets

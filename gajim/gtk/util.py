@@ -21,6 +21,7 @@ import os
 import sys
 import logging
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -31,6 +32,8 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
+
+from gajim.gtk.const import GajimIconSet
 
 _icon_theme = Gtk.IconTheme.get_default()
 if _icon_theme is not None:
@@ -138,6 +141,34 @@ def get_icon_name(name: str,
     if not iconset:
         iconset = app.config.DEFAULT_ICONSET
     return '%s-%s' % (iconset, name)
+
+
+def load_user_iconsets():
+    iconsets_path = Path(configpaths.get('MY_ICONSETS'))
+    if not iconsets_path.exists():
+        return
+
+    for path in iconsets_path.iterdir():
+        if not path.is_dir():
+            continue
+        log.info('Found iconset: %s', path.stem)
+        _icon_theme.append_search_path(str(path))
+
+
+def get_available_iconsets():
+    iconsets = []
+    for iconset in GajimIconSet:
+        iconsets.append(iconset.value)
+
+    iconsets_path = Path(configpaths.get('MY_ICONSETS'))
+    if not iconsets_path.exists():
+        return iconsets
+
+    for path in iconsets_path.iterdir():
+        if not path.is_dir():
+            continue
+        iconsets.append(path.stem)
+    return iconsets
 
 
 def get_total_screen_geometry() -> Tuple[int, int]:

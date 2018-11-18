@@ -200,6 +200,9 @@ class GajimApplication(Gtk.Application):
             dlg.destroy()
             sys.exit()
 
+        from gajim.gtk.util import load_user_iconsets
+        load_user_iconsets()
+
         # Set Application Menu
         app.app = self
         from gajim.gtk.util import get_builder
