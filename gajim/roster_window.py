@@ -84,6 +84,7 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
 from gajim.gtk.util import get_metacontact_surface
+from gajim.gtk.util import get_builder
 
 
 log = logging.getLogger('gajim.roster')
@@ -4873,7 +4874,7 @@ class RosterWindow:
         # we have to create our own set of icons for the menu
         # using self.jabber_status_images is poopoo
         if not app.config.get_per('accounts', account, 'is_zeroconf'):
-            xml = gtkgui_helpers.get_gtk_builder('account_context_menu.ui')
+            xml = get_builder('account_context_menu.ui')
             account_context_menu = xml.get_object('account_context_menu')
 
             status_menuitem = xml.get_object('status_menuitem')
@@ -4982,7 +4983,7 @@ class RosterWindow:
                 pep_menuitem):
                     widget.set_sensitive(False)
         else:
-            xml = gtkgui_helpers.get_gtk_builder('zeroconf_context_menu.ui')
+            xml = get_builder('zeroconf_context_menu.ui')
             account_context_menu = xml.get_object('zeroconf_context_menu')
 
             status_menuitem = xml.get_object('status_menuitem')
@@ -5368,7 +5369,7 @@ class RosterWindow:
         """
         Add FOR ACCOUNT options
         """
-        xml = gtkgui_helpers.get_gtk_builder('advanced_menuitem_menu.ui')
+        xml = get_builder('advanced_menuitem_menu.ui')
         advanced_menuitem_menu = xml.get_object('advanced_menuitem_menu')
 
         xml_console_menuitem = xml.get_object('xml_console_menuitem')
@@ -5618,7 +5619,7 @@ class RosterWindow:
             GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, str, str,
             Gtk.Image, str, bool]
 
-        self.xml = gtkgui_helpers.get_gtk_builder('roster_window.ui')
+        self.xml = get_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
         application.add_window(self.window)
         self.add_actions()

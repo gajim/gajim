@@ -24,11 +24,9 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import sys
 import math
 import logging
 from io import BytesIO
-import xml.etree.ElementTree as ET
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -41,11 +39,21 @@ try:
 except Exception:
     pass
 
-from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common import app
-from gajim.common import configpaths
-from gajim.common.const import PEPEventType, ACTIVITIES, MOODS
+from gajim.common import helpers
+from gajim.common.const import PEPEventType
+from gajim.common.const import ACTIVITIES
+from gajim.common.const import MOODS
+
+HAS_PYWIN32 = True
+if os.name == 'nt':
+    try:
+        import win32file
+        import win32con
+        import pywintypes
+    except ImportError:
+        HAS_PYWIN32 = False
 
 log = logging.getLogger('gajim.gtkgui_helpers')
 
@@ -57,48 +65,6 @@ class Color:
     GREY = Gdk.RGBA(red=195/255, green=195/255, blue=192/255, alpha=1)
     ORANGE = Gdk.RGBA(red=245/255, green=121/255, blue=0/255, alpha=1)
 
-
-HAS_PYWIN32 = True
-if os.name == 'nt':
-    try:
-        import win32file
-        import win32con
-        import pywintypes
-    except ImportError:
-        HAS_PYWIN32 = False
-
-from gajim.common import helpers
-
-
-def get_gtk_builder(file_name, widget=None):
-    file_path = os.path.join(configpaths.get('GUI'), file_name)
-
-    builder = Gtk.Builder()
-    builder.set_translation_domain(i18n.DOMAIN)
-
-    if sys.platform == "win32":
-        # This is a workaround for non working translation on Windows
-        tree = ET.parse(file_path)
-        for node in tree.iter():
-            if 'translatable' in node.attrib and node.text is not None:
-                node.text = _(node.text)
-        xml_text = ET.tostring(tree.getroot(),
-                               encoding='unicode',
-                               method='xml')
-
-        if widget is not None:
-            builder.add_objects_from_string(xml_text, [widget])
-        else:
-            # Workaround
-            # https://gitlab.gnome.org/GNOME/pygobject/issues/255
-            Gtk.Builder.__mro__[1].add_from_string(
-                builder, xml_text, len(xml_text.encode("utf-8")))
-    else:
-        if widget is not None:
-            builder.add_objects_from_file(file_path, [widget])
-        else:
-            builder.add_from_file(file_path)
-    return builder
 
 def set_unset_urgency_hint(window, unread_messages_no):
     """

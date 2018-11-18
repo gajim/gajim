@@ -1015,20 +1015,16 @@ class SendFileDialog(Gtk.ApplicationWindow):
 
         self._send_callback = send_callback
 
-        xml = gtkgui_helpers.get_gtk_builder('send_file_dialog.ui')
-        grid = xml.get_object('send_file_grid')
+        self._ui = get_builder('send_file_dialog.ui')
 
-        self._filebox = xml.get_object('listbox')
-        self._description = xml.get_object('description')
-
-        self.add(grid)
+        self.add(self._ui.send_file_grid)
         self.connect('key-press-event', self._key_press_event)
 
-        xml.connect_signals(self)
+        self._ui.connect_signals(self)
         self.show_all()
 
     def _send(self, button):
-        for file in self._filebox.get_children():
+        for file in self._ui.listbox.get_children():
             self._send_callback(str(file.path), self._get_description())
         self.destroy()
 
@@ -1040,22 +1036,22 @@ class SendFileDialog(Gtk.ApplicationWindow):
 
     def _set_files(self, filenames):
         # Clear the ListBox
-        self._filebox.foreach(self._remove_widget, None)
+        self._ui.listbox.foreach(self._remove_widget, None)
 
         for file in filenames:
             row = FileRow(file)
             if row.path.is_dir():
                 continue
             last_dir = row.path.parent
-            self._filebox.add(row)
-        self._filebox.show_all()
+            self._ui.listbox.add(row)
+        self._ui.listbox.show_all()
         app.config.set('last_send_dir', str(last_dir))
 
     def _remove_widget(self, widget, data):
-        self._filebox.remove(widget)
+        self._ui.listbox.remove(widget)
 
     def _get_description(self):
-        buffer_ = self._description.get_buffer()
+        buffer_ = self._ui.description.get_buffer()
         start, end = buffer_.get_bounds()
         return buffer_.get_text(start, end, False)
 

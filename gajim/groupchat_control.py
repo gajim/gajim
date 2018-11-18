@@ -77,6 +77,7 @@ from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
+from gajim.gtk.util import get_builder
 
 
 log = logging.getLogger('gajim.groupchat_control')
@@ -2635,7 +2636,7 @@ class GroupchatControl(ChatControlBase):
         user_role = self.get_role(user_nick)
 
         # making menu from gtk builder
-        xml = gtkgui_helpers.get_gtk_builder('gc_occupants_menu.ui')
+        xml = get_builder('gc_occupants_menu.ui')
 
         # these conditions were taken from JEP 0045
         item = xml.get_object('kick_menuitem')

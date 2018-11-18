@@ -26,6 +26,8 @@ from gajim.common import helpers
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import _
 
+from gajim.gtk.util import get_builder
+
 
 def build_resources_submenu(contacts, account, action, room_jid=None,
                 room_account=None, cap=None):
@@ -208,7 +210,7 @@ control=None, gc_contact=None, is_anonymous=True):
     our_jid = jid == app.get_jid_from_account(account)
     roster = app.interface.roster
 
-    xml = gtkgui_helpers.get_gtk_builder('contact_context_menu.ui')
+    xml = get_builder('contact_context_menu.ui')
     contact_context_menu = xml.get_object('contact_context_menu')
 
     start_chat_menuitem = xml.get_object('start_chat_menuitem')

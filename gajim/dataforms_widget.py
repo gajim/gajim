@@ -36,6 +36,8 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.util import get_builder
+
 
 class DataFormWidget(Gtk.Alignment):
 # "public" interface
@@ -54,8 +56,7 @@ class DataFormWidget(Gtk.Alignment):
         self.selectable = False
         self.clean_cb = None
 
-        self.xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
-                'data_form_vbox')
+        self.xml = get_builder('data_form_window.ui', ['data_form_vbox'])
         self.xml.connect_signals(self)
         for name in ('instructions_label', 'instructions_hseparator',
                         'single_form_viewport', 'data_form_types_notebook',
@@ -453,8 +454,7 @@ class SingleForm(Gtk.Table):
             elif field.type_ == 'jid-multi':
                 commonwidget = False
 
-                xml = gtkgui_helpers.get_gtk_builder('data_form_window.ui',
-                    'multiple_form_hbox')
+                xml = get_builder('data_form_window.ui', ['multiple_form_hbox'])
                 widget = xml.get_object('multiple_form_hbox')
                 treeview = xml.get_object('records_treeview')
 

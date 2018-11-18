@@ -45,6 +45,7 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
 from gajim.gtk.util import get_app_icon_list
+from gajim.gtk.util import get_builder
 
 ####################
 
@@ -80,7 +81,7 @@ class MessageWindow:
         self.dont_warn_on_delete = False
 
         self.widget_name = 'message_window'
-        self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % self.widget_name)
+        self.xml = get_builder('%s.ui' % self.widget_name)
         self.window = self.xml.get_object(self.widget_name)
         self.window.set_application(app.app)
         self.notebook = self.xml.get_object('notebook')
@@ -300,7 +301,7 @@ class MessageWindow:
             ctrl.scroll_to_end()
 
         # Add notebook page and connect up to the tab's close button
-        xml = gtkgui_helpers.get_gtk_builder('message_window.ui', 'chat_tab_ebox')
+        xml = get_builder('message_window.ui', ['chat_tab_ebox'])
         tab_label_box = xml.get_object('chat_tab_ebox')
         widget = xml.get_object('tab_close_button')
         # this reduces the size of the button

@@ -33,7 +33,6 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim import gtkgui_helpers
 from gajim import dialogs
 
 from gajim import gui_menu_builder
@@ -41,6 +40,7 @@ from gajim import gui_menu_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import get_builder
 
 
 class FakeDataForm(Gtk.Table):
@@ -110,7 +110,7 @@ class RemoveAccountWindow:
 
     def __init__(self, account):
         self.account = account
-        xml = gtkgui_helpers.get_gtk_builder('remove_account_window.ui')
+        xml = get_builder('remove_account_window.ui')
         self.window = xml.get_object('remove_account_window')
         active_window = app.app.get_active_window()
         self.window.set_transient_for(active_window)

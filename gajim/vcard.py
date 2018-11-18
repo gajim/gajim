@@ -43,6 +43,8 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
+from gajim.gtk.util import get_builder
+
 # log = logging.getLogger('gajim.vcard')
 
 
@@ -53,7 +55,7 @@ class VcardWindow:
 
     def __init__(self, contact, account, gc_contact=None):
         # the contact variable is the jid if vcard is true
-        self.xml = gtkgui_helpers.get_gtk_builder('vcard_information_window.ui')
+        self.xml = get_builder('vcard_information_window.ui')
         self.window = self.xml.get_object('vcard_information_window')
         self.progressbar = self.xml.get_object('progressbar')
 
@@ -479,7 +481,7 @@ class VcardWindow:
 class ZeroconfVcardWindow:
     def __init__(self, contact, account, is_fake=False):
         # the contact variable is the jid if vcard is true
-        self.xml = gtkgui_helpers.get_gtk_builder('zeroconf_information_window.ui')
+        self.xml = get_builder('zeroconf_information_window.ui')
         self.window = self.xml.get_object('zeroconf_information_window')
 
         self.contact = contact

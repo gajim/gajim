@@ -29,7 +29,6 @@ from gajim.common.const import Option
 from gajim.common.const import OptionKind
 from gajim.common.const import OptionType
 
-from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import config
 
@@ -39,6 +38,7 @@ from gajim.options_dialog import OptionsBox
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_builder
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
@@ -53,14 +53,11 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.set_title(_('Accounts'))
         self.need_relogin = {}
 
-        glade_objects = ['stack', 'box', 'account_list']
-        self.builder = gtkgui_helpers.get_gtk_builder('accounts_window.ui')
-        for obj in glade_objects:
-            setattr(self, obj, self.builder.get_object(obj))
+        self._ui = get_builder('accounts_window.ui')
 
-        self.account_list.add(Preferences(self))
+        self._ui.account_list.add(Preferences(self))
         account_item = AddAccount()
-        self.account_list.add(account_item)
+        self._ui.account_list.add(account_item)
         account_item.set_activatable()
 
         accounts = app.config.get_per('accounts')
@@ -68,11 +65,11 @@ class AccountsWindow(Gtk.ApplicationWindow):
         for account in accounts:
             self.need_relogin[account] = self.get_relogin_options(account)
             account_item = Account(account, self)
-            self.account_list.add(account_item)
+            self._ui.account_list.add(account_item)
             account_item.set_activatable()
 
-        self.add(self.box)
-        self.builder.connect_signals(self)
+        self.add(self._ui.box)
+        self._ui.connect_signals(self)
 
         self.connect('destroy', self.on_destroy)
         self.connect('key-press-event', self.on_key_press)
@@ -87,9 +84,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.update_accounts()
 
     def _activate_preferences_page(self):
-        row = self.account_list.get_row_at_index(0)
-        self.account_list.select_row(row)
-        self.account_list.emit('row-activated', row)
+        row = self._ui.account_list.get_row_at_index(0)
+        self._ui.account_list.select_row(row)
+        self._ui.account_list.emit('row-activated', row)
 
     def on_key_press(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
@@ -108,7 +105,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             self.check_relogin()
 
     def update_accounts(self):
-        for row in self.account_list.get_children():
+        for row in self._ui.account_list.get_children():
             row.get_child().update()
 
     @staticmethod
@@ -116,18 +113,18 @@ class AccountsWindow(Gtk.ApplicationWindow):
         row.get_child().on_row_activated()
 
     def remove_all_pages(self):
-        for page in self.stack.get_children():
-            self.stack.remove(page)
+        for page in self._ui.stack.get_children():
+            self._ui.stack.remove(page)
 
     def set_page(self, page, name):
         self.remove_all_pages()
-        self.stack.add_named(page, name)
+        self._ui.stack.add_named(page, name)
         page.update()
         page.show_all()
-        self.stack.set_visible_child(page)
+        self._ui.stack.set_visible_child(page)
 
     def update_proxy_list(self):
-        page = self.stack.get_child_by_name('connection')
+        page = self._ui.stack.get_child_by_name('connection')
         if page is None:
             return
         page.listbox.get_option('proxy').update_values()
@@ -231,26 +228,26 @@ class AccountsWindow(Gtk.ApplicationWindow):
             remove(account)
 
     def remove_account(self, account):
-        for row in self.account_list.get_children():
+        for row in self._ui.account_list.get_children():
             if row.get_child().account == account:
-                self.account_list.remove(row)
+                self._ui.account_list.remove(row)
                 del self.need_relogin[account]
                 break
         self._activate_preferences_page()
 
     def add_account(self, account):
         account_item = Account(account, self)
-        self.account_list.add(account_item)
+        self._ui.account_list.add(account_item)
         account_item.set_activatable()
-        self.account_list.show_all()
-        self.stack.show_all()
+        self._ui.account_list.show_all()
+        self._ui.stack.show_all()
         self.need_relogin[account] = self.get_relogin_options(account)
 
     def select_account(self, account):
-        for row in self.account_list.get_children():
+        for row in self._ui.account_list.get_children():
             if row.get_child().account == account:
-                self.account_list.select_row(row)
-                self.account_list.emit('row-activated', row)
+                self._ui.account_list.select_row(row)
+                self._ui.account_list.emit('row-activated', row)
                 break
 
     @staticmethod

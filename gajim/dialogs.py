@@ -57,6 +57,7 @@ from gajim.gtk.dialogs import *
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
+from gajim.gtk.util import get_builder
 
 
 log = logging.getLogger('gajim.dialogs')
@@ -71,7 +72,7 @@ class EditGroupsDialog:
         """
         list_ is a list of (contact, account) tuples
         """
-        self.xml = gtkgui_helpers.get_gtk_builder('edit_groups_dialog.ui')
+        self.xml = get_builder('edit_groups_dialog.ui')
         self.dialog = self.xml.get_object('edit_groups_dialog')
         self.dialog.set_transient_for(app.interface.roster.window)
         self.list_ = list_
@@ -221,7 +222,7 @@ class PassphraseDialog:
     """
     def __init__(self, titletext, labeltext, checkbuttontext=None,
     ok_handler=None, cancel_handler=None, transient_for=None):
-        self.xml = gtkgui_helpers.get_gtk_builder('passphrase_dialog.ui')
+        self.xml = get_builder('passphrase_dialog.ui')
         self.window = self.xml.get_object('passphrase_dialog')
         self.passphrase_entry = self.xml.get_object('passphrase_entry')
         self.passphrase = -1
@@ -287,7 +288,7 @@ class ChooseGPGKeyDialog:
             selected=None, transient_for=None):
         '''secret_keys : {keyID: userName, ...}'''
         self.on_response = on_response
-        xml = gtkgui_helpers.get_gtk_builder('choose_gpg_key_dialog.ui')
+        xml = get_builder('choose_gpg_key_dialog.ui')
         self.window = xml.get_object('choose_gpg_key_dialog')
         self.window.set_title(title_text)
         self.window.set_transient_for(transient_for)
@@ -356,7 +357,7 @@ class ChangeActivityDialog:
         self.activity = activity_
         self.subactivity = subactivity_
         self.text = text
-        self.xml = gtkgui_helpers.get_gtk_builder('change_activity_dialog.ui')
+        self.xml = get_builder('change_activity_dialog.ui')
         self.window = self.xml.get_object('change_activity_dialog')
         self.window.set_transient_for(app.interface.roster.window)
 
@@ -477,7 +478,7 @@ class ChangeMoodDialog:
         self.on_response = on_response
         self.mood = mood_
         self.text = text
-        self.xml = gtkgui_helpers.get_gtk_builder('change_mood_dialog.ui')
+        self.xml = get_builder('change_mood_dialog.ui')
 
         self.window = self.xml.get_object('change_mood_dialog')
         self.window.set_transient_for(app.interface.roster.window)
@@ -595,7 +596,7 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         self.pep_dict = {}
         self.show_pep = show_pep
         self.on_response = on_response
-        self.xml = gtkgui_helpers.get_gtk_builder('change_status_message_dialog.ui')
+        self.xml = get_builder('change_status_message_dialog.ui')
         self.dialog = self.xml.get_object('change_status_message_dialog')
         self.dialog.set_transient_for(app.interface.roster.window)
         msg = None
@@ -848,7 +849,7 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('Subscription Request'))
 
-        xml = gtkgui_helpers.get_gtk_builder('subscription_request_window.ui')
+        xml = get_builder('subscription_request_window.ui')
         self.add(xml.get_object('subscription_box'))
         self.jid = jid
         self.account = account
@@ -929,7 +930,7 @@ class SynchroniseSelectAccountDialog:
                 _('Without a connection, you can not synchronise your contacts.'))
             raise GajimGeneralException('You are not connected to the server')
         self.account = account
-        self.xml = gtkgui_helpers.get_gtk_builder('synchronise_select_account_dialog.ui')
+        self.xml = get_builder('synchronise_select_account_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_account_dialog')
         self.dialog.set_transient_for(app.get_app_window('AccountsWindow'))
         self.accounts_treeview = self.xml.get_object('accounts_treeview')
@@ -995,8 +996,7 @@ class SynchroniseSelectContactsDialog:
     def __init__(self, account, remote_account):
         self.local_account = account
         self.remote_account = remote_account
-        self.xml = gtkgui_helpers.get_gtk_builder(
-            'synchronise_select_contacts_dialog.ui')
+        self.xml = get_builder('synchronise_select_contacts_dialog.ui')
         self.dialog = self.xml.get_object('synchronise_select_contacts_dialog')
         self.contacts_treeview = self.xml.get_object('contacts_treeview')
         model = Gtk.ListStore(bool, str)
@@ -1081,8 +1081,7 @@ class RosterItemExchangeWindow:
         show_dialog = False
 
         # Connect to gtk builder
-        self.xml = gtkgui_helpers.get_gtk_builder(
-            'roster_item_exchange_window.ui')
+        self.xml = get_builder('roster_item_exchange_window.ui')
         self.window = self.xml.get_object('roster_item_exchange_window')
 
         # Add Widgets.
@@ -1345,7 +1344,7 @@ class ProgressDialog:
         During text is what to show during the procedure, messages_queue has the
         message to show in the textview
         """
-        self.xml = gtkgui_helpers.get_gtk_builder('progress_dialog.ui')
+        self.xml = get_builder('progress_dialog.ui')
         self.dialog = self.xml.get_object('progress_dialog')
         self.label = self.xml.get_object('label')
         self.label.set_markup('<big>' + during_text + '</big>')
@@ -1382,7 +1381,7 @@ class TransformChatToMUC:
         self.auto_jids = jids
         self.preselected_jids = preselected
 
-        self.xml = gtkgui_helpers.get_gtk_builder('chat_to_muc_window.ui')
+        self.xml = get_builder('chat_to_muc_window.ui')
         self.window = self.xml.get_object('chat_to_muc_window')
 
         for widget_to_add in ('invite_button', 'cancel_button',
@@ -1600,7 +1599,7 @@ class VoIPCallReceivedDialog:
         self.sid = sid
         self.content_types = content_types
 
-        xml = gtkgui_helpers.get_gtk_builder('voip_call_received_dialog.ui')
+        xml = get_builder('voip_call_received_dialog.ui')
         xml.connect_signals(self)
 
         jid = app.get_jid_without_resource(self.fjid)
@@ -1740,8 +1739,7 @@ class ProgressWindow(Gtk.ApplicationWindow):
 
         self.event = file.event
         self.file = file
-        self.xml = gtkgui_helpers.get_gtk_builder(
-            'httpupload_progress_dialog.ui')
+        self.xml = get_builder('httpupload_progress_dialog.ui')
 
         self.label = self.xml.get_object('label')
         self.progressbar = self.xml.get_object('progressbar')

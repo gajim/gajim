@@ -22,12 +22,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from gajim import gtkgui_helpers
 import uuid
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
+
+from gajim.gtk.util import get_builder
 
 # Derived types MUST register their type IDs here if custom behavor is required
 TYPE_CHAT = 'chat'
@@ -60,7 +61,7 @@ class MessageControl:
 
         app.last_message_time[self.account][self.get_full_jid()] = 0
 
-        self.xml = gtkgui_helpers.get_gtk_builder('%s.ui' % widget_name)
+        self.xml = get_builder('%s.ui' % widget_name)
         self.xml.connect_signals(self)
         self.widget = self.xml.get_object('%s_hbox' % widget_name)
 
