@@ -48,7 +48,6 @@ from gajim import dialogs
 from gajim import vcard
 from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
-from gajim import cell_renderer_image
 from gajim import message_control
 
 from gajim.common import app
@@ -84,6 +83,7 @@ from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
+from gajim.gtk.util import get_metacontact_surface
 
 
 log = logging.getLogger('gajim.roster')
@@ -282,8 +282,7 @@ class RosterWindow:
         if self.regroup:
             # Merged accounts view
             show = helpers.get_global_show()
-            it = self.model.append(None, [
-                app.interface.jabber_state_images['16'][show],
+            it = self.model.append(None, [get_icon_name(show),
                 _('Merged accounts'), 'account', '', 'all', None, None, None,
                 None, None, None, True] + [None] * self.nb_ext_renderers)
             self._iters['MERGED']['account'] = it
@@ -295,8 +294,7 @@ class RosterWindow:
             if app.account_is_securely_connected(account):
                 tls_pixbuf = 'changes-prevent'
 
-            it = self.model.append(None, [
-                app.interface.jabber_state_images['16'][show],
+            it = self.model.append(None, [get_icon_name(show),
                 GLib.markup_escape_text(account), 'account', our_jid,
                 account, None, None, None, None, None, tls_pixbuf, True] +
                 [None] * self.nb_ext_renderers)
@@ -356,7 +354,7 @@ class RosterWindow:
         else:
             iter_parent = self._get_account_iter(account, self.model)
         iter_group = self.model.append(iter_parent,
-            [app.interface.jabber_state_images['16']['closed'],
+            [get_icon_name('closed'),
             GLib.markup_escape_text(group), 'group', group, account, None,
             None, None, None, None, None, False] + [None] * self.nb_ext_renderers)
         self.draw_group(group, account)
@@ -1266,7 +1264,7 @@ class RosterWindow:
         # look if another resource has awaiting events
         for c in contact_instances:
             c_icon_name = helpers.get_icon_name_to_show(c, account)
-            if c_icon_name in ('event', 'muc_active', 'muc_inactive'):
+            if c_icon_name in ('event', 'muc-active', 'muc-inactive'):
                 icon_name = c_icon_name
                 break
 
@@ -1303,32 +1301,27 @@ class RosterWindow:
                         iterC = self.model.iter_next(iterC)
 
                 if self.tree.row_expanded(path):
-                    state_images = self.get_appropriate_state_images(
-                            jid, size='opened',
-                            icon_name=icon_name)
+                    icon_name += ':opened'
                 else:
-                    state_images = self.get_appropriate_state_images(
-                            jid, size='closed',
-                            icon_name=icon_name)
+                    icon_name += ':closed'
 
-                # Expand/collapse icon might differ per iter
-                # (group)
-                img = state_images[icon_name]
-                self.model[child_iter][Column.IMG] = img
+                theme_icon = get_icon_name(icon_name)
+                self.model[child_iter][Column.IMG] = theme_icon
                 self.model[child_iter][Column.NAME] = name
                 #TODO: compute visible
                 visible = True
                 self.model[child_iter][Column.VISIBLE] = visible
         else:
             # A normal contact or little brother
-            state_images = self.get_appropriate_state_images(jid,
-                    icon_name=icon_name)
+            transport = app.get_transport_name_from_jid(jid)
+            if transport == 'jabber':
+                transport = None
+            theme_icon = get_icon_name(icon_name, transport=transport)
 
             visible = self.contact_is_visible(contact, account)
             # All iters have the same icon (no expand/collapse)
-            img = state_images[icon_name]
             for child_iter in child_iters:
-                self.model[child_iter][Column.IMG] = img
+                self.model[child_iter][Column.IMG] = theme_icon
                 self.model[child_iter][Column.NAME] = name
                 self.model[child_iter][Column.VISIBLE] = visible
                 if visible:
@@ -2095,8 +2088,7 @@ class RosterWindow:
     def set_state(self, account, state):
         child_iterA = self._get_account_iter(account, self.model)
         if child_iterA:
-            self.model[child_iterA][0] = \
-                    app.interface.jabber_state_images['16'][state]
+            self.model[child_iterA][0] = get_icon_name(state)
         if app.interface.systray_enabled:
             app.interface.systray.change_status(state)
 
@@ -3861,8 +3853,7 @@ class RosterWindow:
         type_ = model[titer][Column.TYPE]
         if type_ == 'group':
             group = model[titer][Column.JID]
-            child_model[child_iter][Column.IMG] = \
-                app.interface.jabber_state_images['16']['opened']
+            child_model[child_iter][Column.IMG] = get_icon_name('opened')
             if self.rfilter_enabled:
                 return
             for account in accounts:
@@ -3924,8 +3915,7 @@ class RosterWindow:
 
         type_ = model[titer][Column.TYPE]
         if type_ == 'group':
-            child_model[child_iter][Column.IMG] = app.interface.\
-                jabber_state_images['16']['closed']
+            child_model[child_iter][Column.IMG] = get_icon_name('closed')
             if self.rfilter_enabled:
                 return
             group = model[titer][Column.JID]
@@ -4647,8 +4637,7 @@ class RosterWindow:
             show = app.SHOW_LIST[status]
         else: # accounts merged
             show = helpers.get_global_show()
-        self.model[child_iterA][Column.IMG] = app.interface.jabber_state_images[
-            '16'][show]
+        self.model[child_iterA][Column.IMG] = get_icon_name(show)
 
 ################################################################################
 ### Style and theme related methods
@@ -4714,6 +4703,17 @@ class RosterWindow:
         """
         When a row is added, set properties for icon renderer
         """
+        icon_name = model[titer][Column.IMG]
+        if ':' in icon_name:
+            icon_name, expanded = icon_name.split(':')
+            surface = get_metacontact_surface(
+                icon_name, expanded == 'opened', self.scale_factor)
+            renderer.set_property('icon_name', None)
+            renderer.set_property('surface', surface)
+        else:
+            renderer.set_property('surface', None)
+            renderer.set_property('icon_name', icon_name)
+
         try:
             type_ = model[titer][Column.TYPE]
         except TypeError:
@@ -4727,7 +4727,7 @@ class RosterWindow:
             if model[parent_iter][Column.TYPE] == 'group':
                 renderer.set_property('xalign', 0.4)
             else:
-                renderer.set_property('xalign', 0.2)
+                renderer.set_property('xalign', 0.6)
         elif type_:
             # prevent type_ = None, see http://trac.gajim.org/ticket/2534
             if not model[titer][Column.JID] or not model[titer][Column.ACCOUNT]:
@@ -5652,7 +5652,7 @@ class RosterWindow:
         # [icon, name, type, jid, account, editable, mood_pixbuf,
         # activity_pixbuf, TUNE_ICON, LOCATION_ICON, avatar_img,
         # padlock_pixbuf, visible]
-        self.columns = [Gtk.Image, str, str, str, str,
+        self.columns = [str, str, str, str, str,
             GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, str, str,
             Gtk.Image, str, bool]
 
@@ -5773,8 +5773,8 @@ class RosterWindow:
             add_avatar_renderer()
 
         self.renderers_list += (
-                ('icon', cell_renderer_image.CellRendererImage(0, 0), False,
-                'image', Column.IMG, self._iconCellDataFunc, None),
+                ('icon', Gtk.CellRendererPixbuf(), False,
+                'icon_name', Column.IMG, self._iconCellDataFunc, None),
 
                 ('name', renderer_text, True,
                 'markup', Column.NAME, self._nameCellDataFunc, None),

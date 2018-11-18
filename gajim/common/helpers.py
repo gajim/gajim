@@ -824,8 +824,8 @@ def get_icon_name_to_show(contact, account=None):
         return 'event'
     if account and contact.jid in app.gc_connected[account]:
         if app.gc_connected[account][contact.jid]:
-            return 'muc_active'
-        return 'muc_inactive'
+            return 'muc-active'
+        return 'muc-inactive'
     if contact.jid.find('@') <= 0: # if not '@' or '@' starts the jid ==> agent
         return contact.show
     if contact.sub in ('both', 'to'):
@@ -837,7 +837,7 @@ def get_icon_name_to_show(contact, account=None):
         return contact.show
     if contact.show in app.SHOW_LIST:
         return contact.show
-    return 'not in roster'
+    return 'notinroster'
 
 def get_full_jid_from_iq(iq_obj):
     """

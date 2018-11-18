@@ -25,6 +25,7 @@ import xml.etree.ElementTree as ET
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
+import cairo
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -284,3 +285,25 @@ def get_monitor_scale_factor() -> int:
         log.warning('Could not determine scale factor')
         return 1
     return monitor.get_scale_factor()
+
+
+def get_metacontact_surface(icon_name, expanded, scale):
+    icon_size = 16
+    state_surface = _icon_theme.load_surface(
+        icon_name, icon_size, scale, None, 0)
+    if 'event' in icon_name:
+        return state_surface
+
+    if expanded:
+        icon = get_icon_name('opened')
+        expanded_surface = _icon_theme.load_surface(
+            icon, icon_size, scale, None, 0)
+    else:
+        icon = get_icon_name('closed')
+        expanded_surface = _icon_theme.load_surface(
+            icon, icon_size, scale, None, 0)
+    ctx = cairo.Context(state_surface)
+    ctx.rectangle(0, 0, icon_size, icon_size)
+    ctx.set_source_surface(expanded_surface)
+    ctx.fill()
+    return state_surface
