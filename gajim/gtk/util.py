@@ -32,7 +32,8 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 
 _icon_theme = Gtk.IconTheme.get_default()
-_icon_theme.append_search_path(configpaths.get('ICONS'))
+if _icon_theme is not None:
+    _icon_theme.append_search_path(configpaths.get('ICONS'))
 
 log = logging.getLogger('gajim.gtk.util')
 
