@@ -374,7 +374,8 @@ class FileChooserOption(GenericOption):
     def __init__(self, *args, filefilter):
         GenericOption.__init__(self, *args)
 
-        button = Gtk.FileChooserButton(self.label, Gtk.FileChooserAction.OPEN)
+        button = Gtk.FileChooserButton(title=self.label,
+                                       action=Gtk.FileChooserAction.OPEN)
         button.set_halign(Gtk.Align.END)
 
         # GTK Bug: The FileChooserButton expands without limit
