@@ -57,7 +57,7 @@ class Notification:
 
         # Detect if actions are supported by the notification daemon
         if sys.platform not in ('win32', 'darwin'):
-            def on_proxy_ready(_source, res, _data):
+            def on_proxy_ready(_source, res, _data=None):
                 try:
                     proxy = Gio.DBusProxy.new_finish(res)
                     self._daemon_capabilities = proxy.GetCapabilities()
