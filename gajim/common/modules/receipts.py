@@ -49,7 +49,7 @@ class Receipts:
                                   'answer_receipts'):
             return
 
-        if event.mtype not in ('chat', 'groupchat'):
+        if event.mtype not in ('chat', 'normal'):
             return
 
         if event.sent:
