@@ -207,6 +207,9 @@ class ConnectionHandlersBase:
         if obj.conn.name != self.name:
             return
 
+        if obj.stanza.getType() == 'error':
+            return
+
         self._check_for_mam_compliance(obj.jid, obj.stanza_id)
 
         if (app.config.should_log(obj.conn.name, obj.jid) and
