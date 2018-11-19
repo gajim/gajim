@@ -72,14 +72,14 @@ class Receipts:
         self._con.connection.send(receipt)
 
     def _get_contact(self, event):
-        if event.mtype == 'chat':
-            contact = app.contacts.get_contact(self._account, event.jid)
-            if contact and contact.sub not in ('to', 'none'):
-                return contact
-        else:
+        if event.muc_pm:
             return app.contacts.get_gc_contact(self._account,
                                                event.jid,
                                                event.resource)
+
+        contact = app.contacts.get_contact(self._account, event.jid)
+        if contact is None and contact.sub not in ('to', 'none'):
+            return contact
 
     @staticmethod
     def _build_answer_receipt(to, receipt_id):
@@ -95,11 +95,16 @@ class Receipts:
             log.warning('Receipt without ID: %s', event.stanza)
             return
         log.info('Received %s', receipt_id)
+
+        jid = event.jid
+        if event.muc_pm:
+            jid = event.fjid
+
         app.nec.push_incoming_event(
             NetworkIncomingEvent('receipt-received',
                                  conn=self._con,
                                  receipt_id=receipt_id,
-                                 jid=event.jid))
+                                 jid=jid))
 
 
 def get_instance(*args, **kwargs):
