@@ -51,6 +51,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.helpers import launch_browser_mailer
 from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import i18n
@@ -3047,6 +3048,7 @@ class SubjectPopover(Gtk.Popover):
         self.label.set_line_wrap(True)
         self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.label.set_max_width_chars(80)
+        self.label.connect('activate-link', self._on_activate_link)
 
         scrolledwindow.add(self.label)
 
@@ -3066,3 +3068,10 @@ class SubjectPopover(Gtk.Popover):
         # So we switch after show to False and again to True
         self.label.set_selectable(False)
         self.label.set_selectable(True)
+
+    @staticmethod
+    def _on_activate_link(_label, uri):
+        # We have to use this, because the default GTK handler
+        # is not cross-platform compatible
+        launch_browser_mailer(None, uri)
+        return Gdk.EVENT_STOP
