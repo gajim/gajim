@@ -66,14 +66,6 @@ class Color:
     ORANGE = Gdk.RGBA(red=245/255, green=121/255, blue=0/255, alpha=1)
 
 
-def set_unset_urgency_hint(window, unread_messages_no):
-    """
-    Sets/unset urgency hint in window argument depending if we have unread
-    messages or not
-    """
-    if app.config.get('use_urgency_hint'):
-        window.props.urgency_hint = unread_messages_no > 0
-
 def get_pixbuf_from_data(file_data):
     """
     Get image data and returns GdkPixbuf.Pixbuf

@@ -46,6 +46,7 @@ from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
 from gajim.gtk.util import get_app_icon_list
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import set_urgency_hint
 
 ####################
 
@@ -203,7 +204,7 @@ class MessageWindow:
         # window received focus, so if we had urgency REMOVE IT
         # NOTE: we do not have to read the message (it maybe in a bg tab)
         # to remove urgency hint so this functions does that
-        gtkgui_helpers.set_unset_urgency_hint(self.window, False)
+        set_urgency_hint(self.window, False)
 
         ctrl = self.get_active_control()
         if ctrl:
@@ -541,11 +542,7 @@ class MessageWindow:
             title = title + ": " + control.account
 
         self.window.set_title(unread_str + title)
-
-        if urgent:
-            gtkgui_helpers.set_unset_urgency_hint(self.window, unread)
-        else:
-            gtkgui_helpers.set_unset_urgency_hint(self.window, False)
+        set_urgency_hint(self.window, urgent and unread > 0)
 
     def set_active_tab(self, ctrl):
         ctrl_page = self.notebook.page_num(ctrl.widget)

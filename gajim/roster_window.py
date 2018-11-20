@@ -85,6 +85,7 @@ from gajim.gtk.util import resize_window
 from gajim.gtk.util import move_window
 from gajim.gtk.util import get_metacontact_surface
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import set_urgency_hint
 
 
 log = logging.getLogger('gajim.roster')
@@ -3688,7 +3689,7 @@ class RosterWindow:
         # roster received focus, so if we had urgency REMOVE IT
         # NOTE: we do not have to read the message to remove urgency
         # so this functions does that
-        gtkgui_helpers.set_unset_urgency_hint(widget, False)
+        set_urgency_hint(widget, False)
 
         # if a contact row is selected, update colors (eg. for status msg)
         # because gtk engines may differ in bg when window is selected
@@ -4626,7 +4627,7 @@ class RosterWindow:
             if not app.interface.msg_win_mgr.one_window_opened():
                 # No MessageWindow to defer to
                 self.window.set_title('Gajim')
-            gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
+            set_urgency_hint(self.window, nb_unread > 0)
             return
 
         start = ''
@@ -4636,8 +4637,7 @@ class RosterWindow:
             start = '*  '
 
         self.window.set_title(start + 'Gajim')
-
-        gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
+        set_urgency_hint(self.window, nb_unread > 0)
 
     def _nec_chatstate_received(self, event):
         if event.contact.is_gc_contact or event.contact.is_pm_contact:

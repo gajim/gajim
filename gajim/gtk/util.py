@@ -180,6 +180,11 @@ def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
     return Builder(file_name, widgets)
 
 
+def set_urgency_hint(window: Any, setting: bool):
+    if app.config.get('use_urgency_hint'):
+        window.set_urgency_hint(setting)
+
+
 def icon_exists(name: str) -> bool:
     return _icon_theme.has_icon(name)
 
