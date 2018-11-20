@@ -1,17 +1,5 @@
 /* Gajim Application CSS File */
 
-.gajim-state-composing {
-    color: rgb(0, 139, 0)
-    }
-.gajim-state-inactive {
-    color: rgb(158, 158, 158)
-    }
-.gajim-state-gone {
-    color: rgb(128, 128, 128)
-    }
-.gajim-state-paused {
-    color: rgb(0, 0, 205)
-    }
 .gajim-msg-correcting text {
     background: rgb(238, 232, 170)
     }
