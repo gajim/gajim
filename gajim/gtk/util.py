@@ -180,7 +180,7 @@ def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
     return Builder(file_name, widgets)
 
 
-def set_urgency_hint(window: Any, setting: bool):
+def set_urgency_hint(window: Any, setting: bool) -> None:
     if app.config.get('use_urgency_hint'):
         window.set_urgency_hint(setting)
 
