@@ -27,7 +27,6 @@ from gajim.common import app
 from gajim.common.const import PEPEventType
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
-from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m.user_nickname')
 

@@ -29,7 +29,6 @@ from gajim.common.i18n import _
 from gajim.common.const import PEPEventType
 from gajim.common.exceptions import StanzaMalformed
 from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
-from gajim.common.types import ConnectionT
 from gajim.common.types import UserTuneDataT
 
 log = logging.getLogger('gajim.c.m.user_tune')
