@@ -157,13 +157,14 @@ class Preferences(Gtk.ApplicationWindow):
             self._ui.print_status_in_muc_combobox.set_active(2)
 
         # Displayed chat state notifications
-        st = app.config.get('displayed_chat_state_notifications')
-        if st == 'all':
-            self._ui.displayed_chat_states_combobox.set_active(0)
-        elif st == 'composing_only':
-            self._ui.displayed_chat_states_combobox.set_active(1)
-        else: # disabled
-            self._ui.displayed_chat_states_combobox.set_active(2)
+        st = app.config.get('show_chatstate_in_tabs')
+        self._ui.show_chatstate_in_tabs.set_active(st)
+
+        st = app.config.get('show_chatstate_in_roster')
+        self._ui.show_chatstate_in_roster.set_active(st)
+
+        st = app.config.get('show_chatstate_in_banner')
+        self._ui.show_chatstate_in_banner.set_active(st)
 
         ### Notifications tab ###
         ## Visual Notifications
@@ -612,15 +613,14 @@ class Preferences(Gtk.ApplicationWindow):
         else: # in_and_out
             app.config.set('print_status_in_muc', 'in_and_out')
 
-    def on_displayed_chat_states_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == 0: # all
-            app.config.set('displayed_chat_state_notifications', 'all')
-        elif active == 1: # only composing
-            app.config.set('displayed_chat_state_notifications',
-                    'composing_only')
-        else: # disabled
-            app.config.set('displayed_chat_state_notifications', 'disabled')
+    def on_show_chatstate_in_tabs_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')
+
+    def on_show_chatstate_in_roster_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'show_chatstate_in_roster')
+
+    def on_show_chatstate_in_banner_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'show_chatstate_in_banner')
 
     ### Notifications tab ###
     def on_systray_combobox_changed(self, widget):

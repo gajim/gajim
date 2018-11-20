@@ -4639,6 +4639,11 @@ class RosterWindow:
 
         gtkgui_helpers.set_unset_urgency_hint(self.window, nb_unread)
 
+    def _nec_chatstate_received(self, event):
+        if event.contact.is_gc_contact or event.contact.is_pm_contact:
+            return
+        self.draw_contact(event.contact.jid, event.account)
+
     def _style_changed(self, *args):
         self.change_roster_style(None)
 
@@ -4741,17 +4746,22 @@ class RosterWindow:
                 return
             jid = model[titer][Column.JID]
             account = model[titer][Column.ACCOUNT]
+
             color = None
             if type_ == 'groupchat':
-                ctrl = app.interface.minimized_controls[account].get(jid,
-                    None)
+                ctrl = app.interface.minimized_controls[account].get(jid, None)
                 if ctrl and ctrl.attention_flag:
                     color = app.css_config.get_value(
                         '.state_muc_directed_msg_color', StyleAttr.COLOR)
-                    renderer.set_property('foreground', color)
-            if not color:
-                color = app.css_config.get_value('.gajim-contact-row', StyleAttr.COLOR)
-                renderer.set_property('foreground', color)
+            elif app.config.get('show_chatstate_in_roster'):
+                chatstate = app.contacts.get_combined_chatstate(account, jid)
+                if chatstate not in (None, 'active'):
+                    color = app.css_config.get_value(
+                        '.gajim-state-%s' % chatstate, StyleAttr.COLOR)
+            else:
+                color = app.css_config.get_value(
+                    '.gajim-contact-row', StyleAttr.COLOR)
+            renderer.set_property('foreground', color)
 
             self._set_contact_row_background_color(renderer, jid, account)
             desc = app.css_config.get_font('.gajim-contact-row')
@@ -5886,3 +5896,5 @@ class RosterWindow:
             self._nec_blocking)
         app.ged.register_event_handler('style-changed', ged.GUI1,
             self._style_changed)
+        app.ged.register_event_handler('chatstate-received', ged.GUI1,
+                                       self._nec_chatstate_received)

@@ -669,19 +669,14 @@ class ChatControl(ChatControlBase):
             status_reduced = ''
         status_escaped = GLib.markup_escape_text(status_reduced)
 
-        st = app.config.get('displayed_chat_state_notifications')
         if self.TYPE_ID == 'pm':
             cs = self.gc_contact.chatstate
         else:
             cs = app.contacts.get_combined_chatstate(
                 self.account, self.contact.jid)
-        if cs and st in ('composing_only', 'all'):
-            if contact.show == 'offline':
-                chatstate = ''
-            elif st == 'all' or cs == 'composing':
-                chatstate = helpers.get_uf_chatstate(cs)
-            else:
-                chatstate = ''
+
+        if app.config.get('show_chatstate_in_banner'):
+            chatstate = helpers.get_uf_chatstate(cs)
 
             label_text = '<span>%s</span><span size="x-small" weight="light">%s %s</span>' \
                 % (name, acct_info, chatstate)

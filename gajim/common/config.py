@@ -187,7 +187,6 @@ class Config:
         'always_english_wiktionary': [opt_bool, True],
         'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
         'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
-        'displayed_chat_state_notifications': [opt_str, 'all', _('Displayed chat state notifications in chat windows. Can be one of all, composing_only, disabled.')],
         'autodetect_browser_mailer': [opt_bool, True, '', True],
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
@@ -296,6 +295,9 @@ class Config:
         'public_room_sync_threshold': [opt_int, 1, _('Maximum history in days we request from a public room archive. 0: As much as possible')],
         'private_room_sync_threshold': [opt_int, 0, _('Maximum history in days we request from a private room archive. 0: As much as possible')],
         'show_subject_on_join': [opt_bool, True, _('If the room subject is shown in chat on join')],
+        'show_chatstate_in_roster': [opt_bool, True, _('If the contact row is colored according to the current chatstate of the contact')],
+        'show_chatstate_in_tabs': [opt_bool, True, _('If the tab is colored according to the current chatstate of the contact')],
+        'show_chatstate_in_banner': [opt_bool, True, _('Shows a text in the banner that describes the current chatstate of the contact')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {

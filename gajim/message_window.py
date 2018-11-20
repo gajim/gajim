@@ -652,7 +652,9 @@ class MessageWindow:
         if isinstance(ctrl, ChatControl):
             tab_label_str = ctrl.get_tab_label()
             # Set Label Color
-            gtkgui_helpers.add_css_class(nick_label, chatstate, 'gajim-state-')
+            if app.config.get('show_chatstate_in_tabs'):
+                gtkgui_helpers.add_css_class(
+                    nick_label, chatstate, 'gajim-state-')
         else:
             tab_label_str, color = ctrl.get_tab_label(chatstate)
             # Set Label Color
