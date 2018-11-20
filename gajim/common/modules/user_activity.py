@@ -30,9 +30,6 @@ class UserActivityData(AbstractPEPData):
 
     type_ = PEPEventType.ACTIVITY
 
-    def __init__(self, activity):
-        self.data = activity
-
     def as_markup_text(self):
         pep = self.data
         activity = pep['activity']
@@ -61,11 +58,6 @@ class UserActivity(AbstractPEPModule):
     pep_class = UserActivityData
     store_publish = True
     _log = log
-
-    def __init__(self, con):
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []
 
     def _extract_info(self, item):
         activity_dict = {}

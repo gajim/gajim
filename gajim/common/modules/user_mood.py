@@ -37,9 +37,6 @@ class UserMoodData(AbstractPEPData):
 
     type_ = PEPEventType.MOOD
 
-    def __init__(self, mood: Optional[Dict[str, str]]) -> None:
-        self.data = mood
-
     def as_markup_text(self) -> str:
         if self.data is None:
             return ''
@@ -64,11 +61,6 @@ class UserMood(AbstractPEPModule):
     pep_class = UserMoodData
     store_publish = True
     _log = log
-
-    def __init__(self, con: ConnectionT) -> None:
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []  # type: List[Tuple[Any, ...]]
 
     def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
         mood_dict = {}

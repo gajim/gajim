@@ -36,9 +36,6 @@ class UserNicknameData(AbstractPEPData):
 
     type_ = PEPEventType.NICKNAME
 
-    def __init__(self, nickname: Optional[str]) -> None:
-        self.data = nickname
-
     def get_nick(self) -> str:
         return self.data or ''
 
@@ -50,11 +47,6 @@ class UserNickname(AbstractPEPModule):
     pep_class = UserNicknameData
     store_publish = True
     _log = log
-
-    def __init__(self, con: ConnectionT) -> None:
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []  # type: List[Tuple[Any, ...]]
 
     def _extract_info(self, item: nbxmpp.Node) -> Optional[str]:
         nick = ''

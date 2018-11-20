@@ -58,11 +58,6 @@ class Atom(AbstractPEPModule):
     store_publish = False
     _log = log
 
-    def __init__(self, con):
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []
-
     def _extract_info(self, item):
         entry = item.getTag('entry', namespace=nbxmpp.NS_ATOM)
         if entry is None:

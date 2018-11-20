@@ -153,11 +153,11 @@ class AbstractPEPModule:
     store_publish = True
     _log = log
 
-    def __init__(self,
-                 con: ConnectionT,
-                 account: str) -> None:
-        self._account = account
+    def __init__(self, con: ConnectionT) -> None:
         self._con = con
+        self._account = con.name
+
+        self.handlers = []  # type: List[Tuple[Any, ...]]
 
         self._stored_publish = None
 

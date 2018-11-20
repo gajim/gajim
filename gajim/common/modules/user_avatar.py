@@ -32,9 +32,6 @@ class UserAvatarData(AbstractPEPData):
 
     type_ = PEPEventType.AVATAR
 
-    def __init__(self, avatar):
-        self.data = avatar
-
 
 class UserAvatar(AbstractPEPModule):
 
@@ -43,11 +40,6 @@ class UserAvatar(AbstractPEPModule):
     pep_class = UserAvatarData
     store_publish = False
     _log = log
-
-    def __init__(self, con):
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []
 
     def get_pubsub_avatar(self, jid, item_id):
         log.info('Request: %s %s', jid, item_id)

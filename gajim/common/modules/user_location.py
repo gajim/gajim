@@ -30,11 +30,6 @@ class UserLocationData(AbstractPEPData):
 
     type_ = PEPEventType.LOCATION
 
-    def __init__(self, location):
-        # set_location plugin uses self._pep_specific_data
-        self._pep_specific_data = location
-        self.data = location
-
     def as_markup_text(self):
         location = self.data
         location_string = ''
@@ -57,11 +52,6 @@ class UserLocation(AbstractPEPModule):
     pep_class = UserLocationData
     store_publish = True
     _log = log
-
-    def __init__(self, con):
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []
 
     def _extract_info(self, item):
         location_dict = {}

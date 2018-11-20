@@ -39,9 +39,6 @@ class UserTuneData(AbstractPEPData):
 
     type_ = PEPEventType.TUNE
 
-    def __init__(self, tune: Optional[Dict[str, str]]) -> None:
-        self.data = tune
-
     def as_markup_text(self) -> str:
         if self.data is None:
             return ''
@@ -71,11 +68,6 @@ class UserTune(AbstractPEPModule):
     pep_class = UserTuneData
     store_publish = True
     _log = log
-
-    def __init__(self, con: ConnectionT) -> None:
-        AbstractPEPModule.__init__(self, con, con.name)
-
-        self.handlers = []  # type: List[Tuple[Any, ...]]
 
     def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
         tune_dict = {}
