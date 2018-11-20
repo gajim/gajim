@@ -75,11 +75,6 @@ function install_deps {
         https://gajim.org/downloads/snap/win/build/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
     build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
 
-    # Fix broken cryptography package
-    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz \
-        https://gajim.org/downloads/snap/win/build/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz
-    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-python3-cryptography-2.3.1-1-any.pkg.tar.xz
-
     build_pacman --noconfirm -S mingw-w64-"${ARCH}"-gtk3 mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-gobject \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip \
