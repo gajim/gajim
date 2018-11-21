@@ -21,7 +21,13 @@ import gettext
 from gajim.common import configpaths
 
 DOMAIN = 'gajim_plugins'
-plugin_user_dir = configpaths.get('PLUGINS_USER')
+try:
+    plugin_user_dir = configpaths.get('PLUGINS_USER')
+except KeyError:
+    # This allows to import the module for tests
+    print('No plugin translation path available')
+    plugin_user_dir = ''
+
 plugins_locale_dir = os.path.join(plugin_user_dir, 'locale')
 
 try:
