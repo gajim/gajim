@@ -8,8 +8,8 @@ from nbxmpp import NS_MUC, NS_PING, NS_XHTML_IM, Iq
 from gajim.common import caps_cache as caps
 from gajim.common.modules.discovery import Discovery
 
-COMPLEX_EXAMPLE = '''
-<iq from='benvolio@capulet.lit/230193' id='disco1' to='juliet@capulet.lit/chamber' type='result'>
+EXAMPLES = [
+'''<iq>
 <query xmlns='http://jabber.org/protocol/disco#info' node='http://psi-im.org#q07IKJEyjvHSyhy//CH0CxmKi8w='>
 <identity xml:lang='en' category='client' name='Psi 0.11' type='pc'/>
 <identity xml:lang='el' category='client' name='Ψ 0.11' type='pc'/>
@@ -39,7 +39,94 @@ COMPLEX_EXAMPLE = '''
 </field>
 </x>
 </query>
-</iq>'''
+</iq>
+''',
+
+'''<iq>
+<query node="http://bombusmod.net.ru/caps#tbBQGBMv8g8U7kW55TEZZRnMCJ4=" xmlns="http://jabber.org/protocol/disco#info">
+<identity category="client" name="BombusMod" type="mobile"/>
+<feature var="http://jabber.org/protocol/chatstates"/>
+<feature var="http://jabber.org/protocol/disco#info"/>
+<feature var="http://jabber.org/protocol/disco#items"/>
+<feature var="http://jabber.org/protocol/rosterx"/>
+<feature var="jabber:iq:last"/>
+<feature var="jabber:iq:privacy"/>
+<feature var="jabber:iq:roster"/>
+<feature var="jabber:iq:time"/>
+<feature var="jabber:iq:version"/>
+<feature var="jabber:x:oob"/>
+<feature var="urn:xmpp:ping"/>
+<feature var="urn:xmpp:receipts"/>
+<feature var="urn:xmpp:time"/>
+</query>
+</iq>
+''',
+
+'''<iq>
+<query node="http://jappix.org/#qRsaGbKTz8EwAOakYO00InkZUxM=" xmlns="http://jabber.org/protocol/disco#info">
+    <identity category="client" name="Jappix" type="web"/>
+    <feature var="http://jabber.org/protocol/activity"/>
+    <feature var="http://jabber.org/protocol/activity+notify"/>
+    <feature var="http://jabber.org/protocol/caps"/>
+    <feature var="http://jabber.org/protocol/chatstates"/>
+    <feature var="http://jabber.org/protocol/commands"/>
+    <feature var="http://jabber.org/protocol/disco#info"/>
+    <feature var="http://jabber.org/protocol/disco#items"/>
+    <feature var="http://jabber.org/protocol/geoloc"/>
+    <feature var="http://jabber.org/protocol/geoloc+notify"/>
+    <feature var="http://jabber.org/protocol/http-auth"/>
+    <feature var="http://jabber.org/protocol/httpbind"/>
+    <feature var="http://jabber.org/protocol/mood"/>
+    <feature var="http://jabber.org/protocol/mood+notify"/>
+    <feature var="http://jabber.org/protocol/muc"/>
+    <feature var="http://jabber.org/protocol/muc#admin"/>
+    <feature var="http://jabber.org/protocol/muc#owner"/>
+    <feature var="http://jabber.org/protocol/muc#roomconfig"/>
+    <feature var="http://jabber.org/protocol/muc#user"/>
+    <feature var="http://jabber.org/protocol/nick"/>
+    <feature var="http://jabber.org/protocol/pubsub#retrieve-items"/>
+    <feature var="http://jabber.org/protocol/rosterx"/>
+    <feature var="http://jabber.org/protocol/tune"/>
+    <feature var="http://jabber.org/protocol/tune+notify"/>
+    <feature var="http://jabber.org/protocol/xhtml-im"/>
+    <feature var="ipv6"/>
+    <feature var="jabber:iq:last"/>
+    <feature var="jabber:iq:oob"/>
+    <feature var="jabber:iq:privacy"/>
+    <feature var="jabber:iq:private"/>
+    <feature var="jabber:iq:register"/>
+    <feature var="jabber:iq:roster"/>
+    <feature var="jabber:iq:search"/>
+    <feature var="jabber:iq:version"/>
+    <feature var="jabber:x:data"/>
+    <feature var="jabber:x:oob"/>
+    <feature var="urn:ietf:params:xml:ns:vcard-4.0"/>
+    <feature var="urn:ietf:rfc:3264"/>
+    <feature var="urn:xmpp:avatar:data"/>
+    <feature var="urn:xmpp:avatar:metadata"/>
+    <feature var="urn:xmpp:delay"/>
+    <feature var="urn:xmpp:extdisco:1"/>
+    <feature var="urn:xmpp:inbox"/>
+    <feature var="urn:xmpp:inbox+notify"/>
+    <feature var="urn:xmpp:jingle:1"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:1"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:audio"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:rtcp-fb:0"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:rtp-hdrext:0"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:video"/>
+    <feature var="urn:xmpp:jingle:apps:rtp:zrtp:1"/>
+    <feature var="urn:xmpp:jingle:transports:ice-udp:1"/>
+    <feature var="urn:xmpp:mam:0"/>
+    <feature var="urn:xmpp:microblog:0"/>
+    <feature var="urn:xmpp:microblog:0+notify"/>
+    <feature var="urn:xmpp:ping"/>
+    <feature var="urn:xmpp:receipts"/>
+    <feature var="urn:xmpp:time"/>
+    <feature var="urn:xmpp:tmp:jingle:apps:dtls:0"/>
+    <feature var="vcard-temp"/>
+</query>
+</iq>''',
+]
 
 
 class CommonCapsTest(unittest.TestCase):
@@ -125,10 +212,12 @@ class TestCapsCache(CommonCapsTest):
 
     def test_hash(self):
         '''tests the hash computation'''
-        stanza = Iq(node=COMPLEX_EXAMPLE)
-        identities, features, data, _ = Discovery.parse_info_response(stanza)
-        computed_hash = caps.compute_caps_hash(identities, features, data)
-        self.assertEqual('q07IKJEyjvHSyhy//CH0CxmKi8w=', computed_hash)
+        for example in EXAMPLES:
+            stanza = Iq(node=example)
+            identities, features, data, node = Discovery.parse_info_response(stanza)
+            computed_hash = caps.compute_caps_hash(identities, features, data)
+            hash_ = node.split('#')[1]
+            self.assertEqual(hash_, computed_hash)
 
 
 class TestClientCaps(CommonCapsTest):
