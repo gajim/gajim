@@ -176,7 +176,7 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.get_module('Blocking').supported,
                     nbxmpp.NS_BLOCKING, None),
             Feature('XEP-0198: Stream Management',
-                    con.sm.enabled, nbxmpp.NS_STREAM_MGMT, None),
+                    con.connection.sm_enabled, nbxmpp.NS_STREAM_MGMT, None),
             Feature('XEP-0258: Security Labels in XMPP',
                     con.get_module('SecLabels').supported,
                     nbxmpp.NS_SECLABEL, None),

@@ -48,7 +48,8 @@ if sys.platform in ('win32', 'darwin'):
     import certifi
 import OpenSSL.crypto
 import nbxmpp
-from nbxmpp import Smacks
+from nbxmpp.const import Realm
+from nbxmpp.const import Event
 
 from gajim import common
 from gajim.common import helpers
@@ -522,6 +523,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.last_sent = []
         self.password = passwords.get_password(name)
 
+        self._unregister_account = False
+        self._unregister_account_cb = None
+
         self.music_track_info = 0
 
         self.register_supported = False
@@ -545,7 +549,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # The SSL Errors that we can override with POSH
         self._posh_errors = [18, 19]
 
-        self.sm = Smacks(self) # Stream Management
+        self._sm_resume_data = {}
 
         # Register all modules
         modules.register(self)
@@ -614,7 +618,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='connecting'))
             self.retrycount += 1
-            self.on_connect_auth = self._discover_server_at_connection
             self.connect_and_init(self.old_show, self.status, self.USE_GPG)
         else:
             log.info('Reconnect successfull')
@@ -625,22 +628,26 @@ class Connection(CommonConnection, ConnectionHandlers):
     # We are doing disconnect at so many places, better use one function in all
     def disconnect(self, on_purpose=False):
         log.info('Disconnect: on_purpose: %s', on_purpose)
-        app.interface.music_track_changed(None, None, self.name)
-        self.get_module('PEP').reset_stored_publish()
         self.on_purpose = on_purpose
         self.connected = 0
         self.time_to_reconnect = None
+
+        if self.connection is None:
+            return
+
+        app.interface.music_track_changed(None, None, self.name)
+        self.get_module('PEP').reset_stored_publish()
         self.get_module('VCardAvatars').avatar_advertised = False
-        if on_purpose:
-            self.sm = Smacks(self)
-        if self.connection:
-            # make sure previous connection is completely closed
-            app.proxy65_manager.disconnect(self.connection)
-            self.terminate_sessions()
-            self.remove_all_transfers()
-            self.connection.disconnect()
-            ConnectionHandlers._unregister_handlers(self)
-            self.connection = None
+
+        if not on_purpose:
+            self._sm_resume_data = self.connection.get_resume_data()
+
+        app.proxy65_manager.disconnect(self.connection)
+        self.terminate_sessions()
+        self.remove_all_transfers()
+        self.connection.disconnect()
+        ConnectionHandlers._unregister_handlers(self)
+        self.connection = None
 
     def set_oldst(self): # Set old state
         if self.old_show:
@@ -663,11 +670,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.old_show = app.SHOW_LIST[self.connected]
         self.connected = 0
         if not self.on_purpose:
-            if not (self.sm and self.sm.resumption):
+            if not self.connection.resume_supported:
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
             else:
-                self.sm.enabled = False
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='error'))
             if self.connection:
@@ -714,20 +720,38 @@ class Connection(CommonConnection, ConnectionHandlers):
             title=_('Connection with account "%s" has been lost') % self.name,
             msg=_('Reconnect manually.')))
 
-    def _on_resume_failed(self):
-        # SM resume failed, set all MUCs offline
-        # and lose the presence state of all contacts
-        app.nec.push_incoming_event(OurShowEvent(
-            None, conn=self, show='offline'))
-
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
-        if realm == nbxmpp.NS_STREAM_MGMT:
-            if event == 'RESUME FAILED':
-                log.info('Resume failed')
+        if realm == Realm.CONNECTING:
+            if event == Event.RESUME_FAILED:
+                log.info(event)
                 self._on_resume_failed()
 
-        elif realm == nbxmpp.NS_REGISTER:
+            elif event == Event.RESUME_SUCCESSFUL:
+                log.info(event)
+                self._on_resume_successful()
+
+            elif event == Event.AUTH_SUCCESSFUL:
+                log.info(event)
+                self._on_auth_successful()
+
+            elif event == Event.AUTH_FAILED:
+                log.error(event)
+                log.error(data)
+                self._on_auth_failed(*data)
+
+            elif event == Event.SESSION_FAILED:
+                log.error(event)
+
+            elif event == Event.BIND_FAILED:
+                log.error(event)
+
+            elif event == Event.CONNECTION_ACTIVE:
+                log.info(event)
+                self._on_connection_active()
+            return
+
+        if realm == nbxmpp.NS_REGISTER:
             if event == nbxmpp.features_nb.REGISTER_DATA_RECEIVED:
                 # data is (agent, DataFrom, is_form, error_msg)
                 if self.new_account_info and \
@@ -835,15 +859,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return self.connection, ''
 
         log.info('Connect')
-        if self.sm.resuming and self.sm.location:
-            # If resuming and server gave a location, connect from there
-            hostname = self.sm.location
-            self.try_connecting_for_foo_secs = app.config.get_per('accounts',
-                self.name, 'try_connecting_for_foo_secs')
-            use_custom = False
-            proxy = helpers.get_proxy_info(self.name)
-
-        elif data:
+        if data:
             hostname = data['hostname']
             self.try_connecting_for_foo_secs = 45
             p = data['proxy']
@@ -861,6 +877,9 @@ class Connection(CommonConnection, ConnectionHandlers):
                 custom_p = data['custom_port']
         else:
             hostname = app.config.get_per('accounts', self.name, 'hostname')
+            # Connect from location if we resume
+            hostname = self._sm_resume_data.get('location') or hostname
+
             self.try_connecting_for_foo_secs = app.config.get_per('accounts',
                     self.name, 'try_connecting_for_foo_secs')
             proxy = helpers.get_proxy_info(self.name)
@@ -1036,6 +1055,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             domain=self._hostname,
             caller=self,
             idlequeue=app.idlequeue)
+
+        if self._sm_resume_data:
+            con.set_resume_data(self._sm_resume_data)
 
         # increase default timeout for server responses
         nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
@@ -1284,7 +1306,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         auth_mechs = app.config.get_per(
             'accounts', self.name, 'authentication_mechanisms').split()
         for mech in auth_mechs:
-            if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS | set(['XEP-0078']):
+            if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS:
                 log.warning('Unknown authentication mechanisms %s', mech)
         if not auth_mechs:
             auth_mechs = None
@@ -1294,67 +1316,72 @@ class Connection(CommonConnection, ConnectionHandlers):
                              password=self.password,
                              resource=self.server_resource,
                              sasl=True,
-                             on_auth=self.__on_auth,
                              auth_mechs=auth_mechs)
 
     def _register_handlers(self, con, con_type):
         self.peerhost = con.get_peerhost()
         app.con_types[self.name] = con_type
         # notify the gui about con_type
-        app.nec.push_incoming_event(ConnectionTypeEvent(None,
-            conn=self, connection_type=con_type))
+        app.nec.push_incoming_event(
+            ConnectionTypeEvent(None, conn=self, connection_type=con_type))
         ConnectionHandlers._register_handlers(self, con, con_type)
 
-    def __on_auth(self, con, auth):
-        log.info('auth')
-        if not con:
-            self.disconnect(on_purpose=True)
-            app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
-                title=_('Could not connect to "%s"') % self._hostname,
-                msg=_('Check your connection or try again later.')))
-            if self.on_connect_auth:
-                self.on_connect_auth(None)
-                self.on_connect_auth = None
-            return
-        if not self.connected: # We went offline during connecting process
-            if self.on_connect_auth:
-                self.on_connect_auth(None)
-                self.on_connect_auth = None
-                return
-        if hasattr(con, 'Resource'):
-            self.server_resource = con.Resource
-        if con._registered_name is not None:
-            log.info('Bound JID: %s', con._registered_name)
-            self.registered_name = con._registered_name
+    def _on_auth_successful(self):
+        if self._unregister_account:
+            self._on_unregister_account_connect()
+        else:
+            self.connection.bind()
+
+    def _on_auth_failed(self, reason, text):
+        if not app.config.get_per('accounts', self.name, 'savepass'):
+            # Forget password, it's wrong
+            self.password = None
+        log.debug("Couldn't authenticate to %s", self._hostname)
+        self.disconnect(on_purpose=True)
+        app.nec.push_incoming_event(
+            OurShowEvent(None, conn=self, show='offline'))
+        app.nec.push_incoming_event(InformationEvent(
+            None,
+            conn=self,
+            level='error',
+            pri_txt=_('Authentication failed with "%s"') % self._hostname,
+            sec_txt=_('Please check your login and password for correctness.')
+        ))
+
+    def _on_resume_failed(self):
+        # SM resume failed, set show to offline so we lose the presence
+        # state of all contacts
+        app.nec.push_incoming_event(OurShowEvent(
+            None, conn=self, show='offline'))
+
+    def _on_resume_successful(self):
+        # Connection was successful, reset sm resume data
+        self._sm_resume_data = {}
+
+        self.connected = 2
+        self.retrycount = 0
+        self.set_oldst()
+
+    def _on_connection_active(self):
+        # Connection was successful, reset sm resume data
+        self._sm_resume_data = {}
+
+        self.server_resource = self.connection.Resource
+        self.registered_name = self.connection.get_bound_jid()
+        log.info('Bound JID: %s', self.registered_name)
+
         if app.config.get_per('accounts', self.name, 'anonymous_auth'):
             # Get jid given by server
             old_jid = app.get_jid_from_account(self.name)
-            app.config.set_per('accounts', self.name, 'name', con.User)
+            app.config.set_per('accounts', self.name,
+                               'name', self.connection.User)
             new_jid = app.get_jid_from_account(self.name)
-            app.nec.push_incoming_event(AnonymousAuthEvent(None,
-                conn=self, old_jid=old_jid, new_jid=new_jid))
-        if auth:
-            self.connected = 2
-            self.retrycount = 0
-            if self.on_connect_auth:
-                self.on_connect_auth(con)
-                self.on_connect_auth = None
-        else:
-            if not app.config.get_per('accounts', self.name, 'savepass'):
-                # Forget password, it's wrong
-                self.password = None
-            log.debug("Couldn't authenticate to %s", self._hostname)
-            self.disconnect(on_purpose=True)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                show='offline'))
-            app.nec.push_incoming_event(InformationEvent(None, conn=self,
-                level='error', pri_txt=_('Authentication failed with "%s"') % \
-                self._hostname, sec_txt=_('Please check your login and password'
-                ' for correctness.')))
-            if self.on_connect_auth:
-                self.on_connect_auth(None)
-                self.on_connect_auth = None
-    # END connect
+            app.nec.push_incoming_event(AnonymousAuthEvent(
+                None, conn=self, old_jid=old_jid, new_jid=new_jid))
+
+        self.connected = 2
+        self.retrycount = 0
+        self._discover_server()
 
     def send_keepalive(self):
         # nothing received for the last foo seconds
@@ -1434,11 +1461,9 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def connect_and_init(self, show, msg, sign_msg):
         self.continue_connect_info = [show, msg, sign_msg]
-        self.on_connect_auth = self._discover_server_at_connection
         self.connect_and_auth()
 
-    def _discover_server_at_connection(self, con):
-        self.connection = con
+    def _discover_server(self):
         if not app.account_is_connected(self.name):
             return
 
@@ -1447,15 +1472,10 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.pingalives, self.get_module('Ping').send_keepalive_ping)
         self.connection.onreceive(None)
 
-        # If we are not resuming, we ask for discovery info
-        # and archiving preferences
-        if not self.sm.supports_sm or (not self.sm.resuming and self.sm.enabled):
-            # This starts the connect_machine
-            self.get_module('Discovery').discover_server_info()
-            self.get_module('Discovery').discover_account_info()
-            self.get_module('Discovery').discover_server_items()
+        self.get_module('Discovery').discover_server_info()
+        self.get_module('Discovery').discover_account_info()
+        self.get_module('Discovery').discover_server_items()
 
-        self.sm.resuming = False  # back to previous state
         # Discover Stun server(s)
         if self._proxy is None:
             hostname = app.config.get_per('accounts', self.name, 'hostname')
@@ -1852,35 +1872,40 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.pasword_callback = None
 
     def unregister_account(self, on_remove_success):
-        # no need to write this as a class method and keep the value of
-        # on_remove_success as a class property as pass it as an argument
-        def _on_unregister_account_connect(con):
-            self.on_connect_auth = None
-            self.removing_account = True
-            if app.account_is_connected(self.name):
-                hostname = app.config.get_per('accounts', self.name, 'hostname')
-                iq = nbxmpp.Iq(typ='set', to=hostname)
-                id_ = self.connection.getAnID()
-                iq.setID(id_)
-                iq.setTag(nbxmpp.NS_REGISTER + ' query').setTag('remove')
-                def _on_answer(con, result):
-                    if result.getID() == id_:
-                        on_remove_success(True)
-                        return
-                    app.nec.push_incoming_event(InformationEvent(
-                        None, dialog_name='unregister-error',
-                        kwargs={'server': hostname, 'error': result.getErrorMsg()}))
-                    on_remove_success(False)
-                con.RegisterHandler('iq', _on_answer, 'result', system=True)
-                con.SendAndWaitForResponse(iq)
-                return
-            on_remove_success(False)
-            self.removing_account = False
+        self._unregister_account = True
+        self._unregister_account_cb = on_remove_success
         if self.connected == 0:
-            self.on_connect_auth = _on_unregister_account_connect
             self.connect_and_auth()
         else:
-            _on_unregister_account_connect(self.connection)
+            self._on_unregister_account_connect()
+
+    def _on_unregister_account_connect(self):
+        self.removing_account = True
+        if app.account_is_connected(self.name):
+            hostname = app.config.get_per('accounts', self.name, 'hostname')
+            iq = nbxmpp.Iq(typ='set', to=hostname)
+            id_ = self.connection.getAnID()
+            iq.setID(id_)
+            iq.setTag(nbxmpp.NS_REGISTER + ' query').setTag('remove')
+            def _on_answer(con, result):
+                if result.getID() == id_:
+                    self._on_unregister_finished(True)
+                    return
+                app.nec.push_incoming_event(InformationEvent(
+                    None, dialog_name='unregister-error',
+                    kwargs={'server': hostname, 'error': result.getErrorMsg()}))
+                self._on_unregister_finished(False)
+            self.connection.RegisterHandler(
+                'iq', _on_answer, 'result', system=True)
+            self.connection.SendAndWaitForResponse(iq)
+            return
+        self._on_unregister_finished(False)
+        self.removing_account = False
+
+    def _on_unregister_finished(self, result):
+        self._unregister_account_cb(result)
+        self._unregister_account = False
+        self._unregister_account_cb = None
 
     def _reconnect_alarm(self):
         if not app.config.get_per('accounts', self.name, 'active'):
