@@ -78,7 +78,7 @@ class Receipts:
                                                event.resource)
 
         contact = app.contacts.get_contact(self._account, event.jid)
-        if contact is None and contact.sub not in ('to', 'none'):
+        if contact is not None and contact.sub not in ('to', 'none'):
             return contact
 
     @staticmethod
