@@ -810,4 +810,4 @@ class LoginDialog(OptionsDialog):
     def on_destroy(self, *args):
         savepass = app.config.get_per('accounts', self.account, 'savepass')
         if not savepass:
-            passwords.save_password(self.account, '')
+            passwords.delete_password(self.account)

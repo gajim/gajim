@@ -681,9 +681,6 @@ class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
     name = 'plain-connection'
 
-class InsecurePasswordEvent(nec.NetworkIncomingEvent):
-    name = 'insecure-password'
-
 class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
     name = 'insecure-ssl-connection'
 
@@ -722,9 +719,6 @@ class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
 
 class PasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'password-required'
-
-class Oauth2CredentialsRequiredEvent(nec.NetworkIncomingEvent):
-    name = 'oauth2-credentials-required'
 
 class SignedInEvent(nec.NetworkIncomingEvent):
     name = 'signed-in'

@@ -87,7 +87,7 @@ class CommonConnection:
         self.connected = 0
         self.connection = None # xmpppy ClientCommon instance
         self.is_zeroconf = False
-        self.password = ''
+        self.password = None
         self.server_resource = self._compute_resource()
         self.gpg = None
         self.USE_GPG = False
@@ -500,7 +500,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.new_account_info = None
         self.new_account_form = None
         self.last_sent = []
-        self.password = passwords.get_password(name)
 
         self._unregister_account = False
         self._unregister_account_cb = None
@@ -510,7 +509,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.register_supported = False
         # Do we auto accept insecure connection
         self.connection_auto_accepted = False
-        self.pasword_callback = None
 
         self.on_connect_success = None
         self.on_connect_failure = None
@@ -1273,25 +1271,45 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         log.info('SSL Cert accepted')
-        name = None
-        if not app.config.get_per('accounts', self.name, 'anonymous_auth'):
-            name = app.config.get_per('accounts', self.name, 'name')
+        self._auth()
 
+    def _get_password(self, mechanism, on_password):
+        if not mechanism.startswith('SCRAM') and not mechanism == 'PLAIN':
+            log.error('No password method for %s known', mechanism)
+            return
+
+        if self.password is not None:
+            # Passord already known
+            on_password(self.password)
+            return
+
+        pass_saved = app.config.get_per('accounts', self.name, 'savepass')
+        if pass_saved:
+            # Request password from keyring only if the user chose to save
+            # his password
+            self.password = passwords.get_password(self.name)
+
+        if self.password is not None:
+            on_password(self.password)
+        else:
+            app.nec.push_incoming_event(PasswordRequiredEvent(
+                None, conn=self, on_password=on_password))
+
+    def _auth(self):
         self._register_handlers(self.connection, self._current_type)
 
-        auth_mechs = app.config.get_per(
-            'accounts', self.name, 'authentication_mechanisms').split()
-        for mech in auth_mechs:
-            if mech not in nbxmpp.auth_nb.SASL_AUTHENTICATION_MECHANISMS:
-                log.warning('Unknown authentication mechanisms %s', mech)
-        if not auth_mechs:
-            auth_mechs = None
+        if app.config.get_per('accounts', self.name, 'anonymous_auth'):
+            name = None
+            auth_mechs = {'ANONYMOUS'}
         else:
-            auth_mechs = set(auth_mechs)
-        self.connection.auth(user=name,
-                             password=self.password,
+            name = app.config.get_per('accounts', self.name, 'name')
+            auth_mechs = app.config.get_per(
+                'accounts', self.name, 'authentication_mechanisms').split()
+            auth_mechs = set(auth_mechs) if auth_mechs else None
+
+        self.connection.auth(name,
+                             get_password=self._get_password,
                              resource=self.server_resource,
-                             sasl=True,
                              auth_mechs=auth_mechs)
 
     def _register_handlers(self, con, con_type):
@@ -1794,66 +1812,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             status=status,
             caps=ptype != 'unavailable',
             idle_time=idle_time)
-
-    def get_password(self, callback, type_):
-        if app.config.get_per('accounts', self.name, 'anonymous_auth') and \
-        type_ != 'ANONYMOUS':
-            app.nec.push_incoming_event(
-                NonAnonymousServerErrorEvent(None, conn=self))
-            self.disconnect(reconnect=False)
-            return
-        self.pasword_callback = (callback, type_)
-        if type_ == 'X-MESSENGER-OAUTH2':
-            client_id = app.config.get_per('accounts', self.name,
-                                           'oauth2_client_id')
-            refresh_token = app.config.get_per('accounts', self.name,
-                                               'oauth2_refresh_token')
-            if refresh_token:
-                renew_url = (
-                    'https://oauth.live.com/token?client_id='
-                    '%s&redirect_uri=https%%3A%%2F%%2Foauth.live.'
-                    'com%%2Fdesktop&grant_type=refresh_token&'
-                    'refresh_token=%s') % (client_id, refresh_token)
-                result = helpers.download_image(self.name, {'src': renew_url})[0]
-                if result:
-                    dict_ = json.loads(result)
-                    if 'access_token' in dict_:
-                        self.set_password(dict_['access_token'])
-                        return
-            script_url = app.config.get_per('accounts', self.name,
-                                            'oauth2_redirect_url')
-            token_url = (
-                'https://oauth.live.com/authorize?client_id='
-                '%s&scope=wl.messenger%%20wl.offline_access&'
-                'response_type=code&redirect_uri=%s') % (client_id, script_url)
-            helpers.launch_browser_mailer('url', token_url)
-            self.disconnect(reconnect=False)
-            app.nec.push_incoming_event(
-                Oauth2CredentialsRequiredEvent(None, conn=self))
-            return
-        if self.password:
-            self.set_password(self.password)
-            return
-        app.nec.push_incoming_event(PasswordRequiredEvent(None, conn=self))
-
-    def set_password(self, password):
-        self.password = password
-        if self.pasword_callback:
-            callback, type_ = self.pasword_callback
-            if self._current_type == 'plain' and type_ == 'PLAIN' and \
-            app.config.get_per('accounts', self.name,
-            'warn_when_insecure_password'):
-                app.nec.push_incoming_event(InsecurePasswordEvent(None,
-                    conn=self))
-                return
-            callback(password)
-            self.pasword_callback = None
-
-    def accept_insecure_password(self):
-        if self.pasword_callback:
-            callback = self.pasword_callback[0]
-            callback(self.password)
-            self.pasword_callback = None
 
     def unregister_account(self, on_remove_success):
         self._unregister_account = True

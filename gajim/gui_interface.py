@@ -107,7 +107,6 @@ from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import YesNoDialog
-from gajim.gtk.dialogs import InputTextDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleCheck
@@ -713,44 +712,18 @@ class Interface:
         text = _('Enter your password for account %s') % account
 
         def on_ok(passphrase, save):
-            if save:
-                app.config.set_per('accounts', account, 'savepass', True)
-                passwords.save_password(account, passphrase)
-            obj.conn.set_password(passphrase)
+            app.config.set_per('accounts', account, 'savepass', save)
+            passwords.save_password(account, passphrase)
+            obj.on_password(passphrase)
             del self.pass_dialog[account]
 
         def on_cancel():
-            self.roster.set_state(account, 'offline')
-            self.roster.update_status_combobox()
+            obj.conn.disconnect(reconnect=False, immediately=True)
             del self.pass_dialog[account]
 
         self.pass_dialog[account] = dialogs.PassphraseDialog(
             _('Password Required'), text, _('Save password'), ok_handler=on_ok,
             cancel_handler=on_cancel)
-
-    def handle_oauth2_credentials(self, obj):
-        account = obj.conn.name
-        def on_ok(refresh):
-            app.config.set_per('accounts', account, 'oauth2_refresh_token',
-                refresh)
-            st = app.config.get_per('accounts', account, 'last_status')
-            msg = helpers.from_one_line(app.config.get_per('accounts',
-                account, 'last_status_msg'))
-            app.interface.roster.send_status(account, st, msg)
-            del self.pass_dialog[account]
-
-        def on_cancel():
-            app.config.set_per('accounts', account, 'oauth2_refresh_token',
-                '')
-            self.roster.set_state(account, 'offline')
-            self.roster.update_status_combobox()
-            del self.pass_dialog[account]
-
-        instruction = _('Please copy / paste the refresh token from the website'
-            ' that has just been opened.')
-        self.pass_dialog[account] = InputTextDialog(
-            _('Oauth2 Credentials'), instruction, is_modal=False,
-            ok_handler=on_ok, cancel_handler=on_cancel)
 
     def handle_event_roster_info(self, obj):
         #('ROSTER_INFO', account, (jid, name, sub, ask, groups))
@@ -1454,48 +1427,6 @@ class Interface:
             checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
             is_modal=False)
 
-    def handle_event_insecure_password(self, obj):
-        # ('INSECURE_PASSWORD', account, ())
-        def on_ok(is_checked):
-            if not is_checked[0]:
-                on_cancel()
-                return
-            del self.instances[obj.conn.name]['online_dialog']\
-                ['insecure_password']
-            if is_checked[1]:
-                app.config.set_per('accounts', obj.conn.name,
-                    'warn_when_insecure_password', False)
-            if obj.conn.connected == 0:
-                # We have been disconnecting (too long time since window is
-                # opened)
-                # re-connect with auto-accept
-                obj.conn.connection_auto_accepted = True
-                show, msg = obj.conn.continue_connect_info[:2]
-                self.roster.send_status(obj.conn.name, show, msg)
-                return
-            obj.conn.accept_insecure_password()
-
-        def on_cancel():
-            del self.instances[obj.conn.name]['online_dialog']\
-                ['insecure_password']
-            obj.conn.disconnect(reconnect=False)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                show='offline'))
-
-        pritext = _('Insecure connection')
-        sectext = _('You are about to send your password unencrypted on an '
-            'insecure connection. Are you sure you want to do that?')
-        checktext1 = _('Yes, I really want to connect insecurely')
-        checktext2 = _('_Do not ask me again')
-        if 'insecure_password' in self.instances[obj.conn.name]\
-        ['online_dialog']:
-            self.instances[obj.conn.name]['online_dialog']\
-                ['insecure_password'].destroy()
-        self.instances[obj.conn.name]['online_dialog']['insecure_password'] = \
-            ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
-            checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
-            is_modal=False)
-
     def create_core_handlers_list(self):
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
@@ -1515,7 +1446,6 @@ class Interface:
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
-            'insecure-password': [self.handle_event_insecure_password],
             'insecure-ssl-connection': \
                 [self.handle_event_insecure_ssl_connection],
             'iq-error-received': [self.handle_event_iq_error],
@@ -1530,7 +1460,6 @@ class Interface:
             'message-sent': [self.handle_event_msgsent],
             'metacontacts-received': [self.handle_event_metacontacts],
             'muc-owner-received': [self.handle_event_gc_config],
-            'oauth2-credentials-required': [self.handle_oauth2_credentials],
             'our-show': [self.handle_event_status],
             'password-required': [self.handle_event_password_required],
             'plain-connection': [self.handle_event_plain_connection],

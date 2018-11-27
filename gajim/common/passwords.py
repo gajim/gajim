@@ -43,10 +43,14 @@ class PasswordStorage:
     def get_password(self, account_name):
         """Return the password for account_name, or None if not found."""
         raise NotImplementedError
+
     def save_password(self, account_name, password):
         """Save password for account_name. Return a bool indicating success."""
         raise NotImplementedError
 
+    def delete_password(self, account_name):
+        """Delete password for account_name. Return a bool indicating success."""
+        raise NotImplementedError
 
 class SecretPasswordStorage(PasswordStorage):
     """ Store password using Keyring """
@@ -68,6 +72,10 @@ class SecretPasswordStorage(PasswordStorage):
     def get_password(self, account_name):
         log.debug('getting password')
         return self.keyring.get_password('gajim', account_name)
+
+    def delete_password(self, account_name):
+        return self.keyring.delete_password('gajim', account_name)
+
 
 class PasswordStorageManager(PasswordStorage):
     """Access all the implemented password storage backends, knowing which ones
@@ -118,17 +126,27 @@ class PasswordStorageManager(PasswordStorage):
         return pw
 
     def save_password(self, account_name, password):
+        if account_name in app.connections:
+            app.connections[account_name].password = password
+        if not app.config.get_per('accounts', account_name, 'savepass'):
+            return True
+
         if self.preferred_backend:
             if self.preferred_backend.save_password(account_name, password):
                 app.config.set_per('accounts', account_name, 'password',
                     self.preferred_backend.identifier)
-                if account_name in app.connections:
-                    app.connections[account_name].password = password
-                return True
+        else:
+            app.config.set_per('accounts', account_name, 'password', password)
+        return True
 
-        app.config.set_per('accounts', account_name, 'password', password)
+    def delete_password(self, account_name):
         if account_name in app.connections:
-            app.connections[account_name].password = password
+            app.connections[account_name].password = None
+
+        if not self.preferred_backend:
+            self.preferred_backend.delete_password(account_name)
+        else:
+            app.config.set_per('accounts', account_name, 'password', None)
         return True
 
     def set_preferred_backend(self):
@@ -148,7 +166,8 @@ def get_storage():
 def get_password(account_name):
     return get_storage().get_password(account_name)
 
+def delete_password(account_name):
+    return get_storage().delete_password(account_name)
+
 def save_password(account_name, password):
-    if account_name in app.connections:
-        app.connections[account_name].set_password(password)
     return get_storage().save_password(account_name, password)
