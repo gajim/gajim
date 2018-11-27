@@ -670,7 +670,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.old_show = app.SHOW_LIST[self.connected]
         self.connected = 0
         if not self.on_purpose:
-            if not self.connection.resume_supported:
+            if not self._sm_resume_data:
                 app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                     show='offline'))
             else:
