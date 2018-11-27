@@ -80,6 +80,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
         app.ged.register_event_handler(
             'our-show', ged.GUI2, self._nec_our_status)
 
+    @property
+    def stack(self):
+        return self._ui.stack
+
     def _nec_our_status(self, event):
         self.update_accounts()
 
