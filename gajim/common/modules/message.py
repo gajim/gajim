@@ -22,7 +22,9 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
+from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.carbons import parse_carbon
@@ -188,7 +190,7 @@ class Message:
             'account': self._account,
             'id_': id_,
             'encrypted': False,
-            'additional_data': {},
+            'additional_data': AdditionalDataDict(),
             'forwarded': forwarded,
             'sent': sent,
             'fjid': fjid,
@@ -266,7 +268,7 @@ class Message:
             'timestamp': timestamp,
             'delayed': user_timestamp is not None,
         }
-        parse_oob(event.stanza, event.additional_data)
+        parse_oob(event)
 
         for name, value in event_attr.items():
             setattr(event, name, value)

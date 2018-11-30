@@ -41,6 +41,7 @@ from gi.repository import GLib
 from gajim.common import exceptions
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
 from gajim.common.const import (
     JIDConstant, KindConstant, ShowConstant, TypeConstant,
@@ -265,8 +266,9 @@ class Logger:
         Row = namedtuple("Row", fields)
         named_row = Row(*row)
         if 'additional_data' in fields:
+            _dict = json.loads(named_row.additional_data or '{}')
             named_row = named_row._replace(
-                additional_data=json.loads(named_row.additional_data or '{}'))
+                additional_data=AdditionalDataDict(_dict))
 
         # if an alias `account` for the field `account_id` is used for the
         # query, the account_id is converted to the account jid
@@ -1355,7 +1357,8 @@ class Logger:
             if not kwargs['additional_data']:
                 del kwargs['additional_data']
             else:
-                kwargs['additional_data'] = json.dumps(kwargs["additional_data"])
+                serialized_dict = json.dumps(kwargs["additional_data"].data)
+                kwargs['additional_data'] = serialized_dict
 
         sql = '''
               INSERT INTO logs (account_id, jid_id, time, kind, {columns})

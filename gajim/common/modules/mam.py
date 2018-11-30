@@ -27,6 +27,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.helpers import get_sync_threshold
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
@@ -179,7 +180,7 @@ class MAM:
 
         event_attrs.update(
             {'conn': self._con,
-             'additional_data': {},
+             'additional_data': AdditionalDataDict(),
              'encrypted': False,
              'timestamp': delay_timestamp,
              'self_message': self_message,
@@ -192,6 +193,7 @@ class MAM:
              'archive_jid': archive_jid,
              'msgtxt': msgtxt,
              'message': message,
+             'stanza': message,
              'namespace': namespace,
              })
 
@@ -256,7 +258,7 @@ class MAM:
                 'gajim', 'user_timestamp', user_timestamp)
 
         event.correct_id = parse_correction(event.message)
-        parse_oob(event.message, event.additional_data)
+        parse_oob(event)
 
         with_ = event.with_.getStripped()
         if event.muc_pm:

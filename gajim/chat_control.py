@@ -42,6 +42,7 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
@@ -933,7 +934,7 @@ class ChatControl(ChatControlBase):
         contact = self.contact
 
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
 
         if frm == 'status':
             if not app.config.get('print_status_in_chats'):

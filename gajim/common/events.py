@@ -81,7 +81,8 @@ class ChatEvent(Event):
         self.displaymarking = displaymarking
         self.sent_forwarded = sent_forwarded
         if additional_data is None:
-            additional_data = {}
+            from gajim.common.helpers import AdditionalDataDict
+            additional_data = AdditionalDataDict()
         self.additional_data = additional_data
 
 class NormalEvent(ChatEvent):

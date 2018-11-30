@@ -108,27 +108,18 @@ def parse_delay(stanza, epoch=True, convert='utc', from_=None, not_from=None):
 
 # XEP-0066: Out of Band Data
 
-def parse_oob(stanza, dict_=None, key='gajim'):
-    oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
+def parse_oob(event):
+    oob_node = event.stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
     if oob_node is None:
         return
-    result = {}
+
     url = oob_node.getTagData('url')
     if url is not None:
-        result['oob_url'] = url
+        event.additional_data.set_value('gajim', 'oob_url', url)
+
     desc = oob_node.getTagData('desc')
     if desc is not None:
-        result['oob_desc'] = desc
-
-    if dict_ is None:
-        return result
-
-    if key in dict_:
-        dict_[key] += result
-    else:
-        dict_[key] = result
-
-    return dict_
+        event.additional_data.set_value('gajim', 'oob_desc', desc)
 
 
 # XEP-0308: Last Message Correction

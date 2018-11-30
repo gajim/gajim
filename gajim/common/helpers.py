@@ -41,6 +41,7 @@ import time
 import logging
 import json
 import shutil
+import collections
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
@@ -1485,3 +1486,51 @@ def load_json(path, key=None, default=None):
     if key is None:
         return json_dict
     return json_dict.get(key, default)
+
+class AdditionalDataDict(collections.UserDict):
+    def __init__(self, initialdata=None):
+        collections.UserDict.__init__(self, initialdata)
+
+    @staticmethod
+    def _get_path_childs(full_path):
+        path_childs = [full_path]
+        if ':' in full_path:
+            path_childs = full_path.split(':')
+        return path_childs
+
+    def set_value(self, full_path, key, value):
+        path_childs = self._get_path_childs(full_path)
+        _dict = self.data
+        for path in path_childs:
+            try:
+                _dict = _dict[path]
+            except KeyError:
+                _dict[path] = {}
+                _dict = _dict[path]
+        _dict[key] = value
+
+    def get_value(self, full_path, key, default=None):
+        path_childs = self._get_path_childs(full_path)
+        _dict = self.data
+        for path in path_childs:
+            try:
+                _dict = _dict[path]
+            except KeyError:
+                return default
+        try:
+            return _dict[key]
+        except KeyError:
+            return default
+
+    def remove_value(self, full_path, key):
+        path_childs = self._get_path_childs(full_path)
+        _dict = self.data
+        for path in path_childs:
+            try:
+                _dict = _dict[path]
+            except KeyError:
+                return
+        try:
+            del _dict[key]
+        except KeyError:
+            return

@@ -39,6 +39,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr
 
@@ -666,7 +667,7 @@ class ConversationTextview(GObject.GObject):
         if not otext:
             return
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
         buffer_ = self.tv.get_buffer()
         if other_tags:
             insert_tags_func = buffer_.insert_with_tags_by_name
@@ -686,13 +687,10 @@ class ConversationTextview(GObject.GObject):
         specials_limit = 100
 
         # add oob text to the end
-        try:
-            gajim_data = additional_data['gajim']
-            oob_url = gajim_data['oob_url']
-        except KeyError:
-            pass
-        else:
-            oob_desc = additional_data['gajim'].get('oob_desc', 'URL:')
+
+        oob_url = additional_data.get_value('gajim', 'oob_url')
+        if oob_url is not None:
+            oob_desc = additional_data.get_value('gajim', 'oob_desc', 'URL:')
             if oob_url != otext:
                 otext += '\n{} {}'.format(oob_desc, oob_url)
 
@@ -739,7 +737,7 @@ class ConversationTextview(GObject.GObject):
         (emots, links, formatting)
         """
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
 
         # PluginSystem: adding GUI extension point for ConversationTextview
         self.plugin_modified = False
@@ -941,7 +939,7 @@ class ConversationTextview(GObject.GObject):
         Print 'chat' type messages
         """
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
         buffer_ = self.tv.get_buffer()
         buffer_.begin_user_action()
         insert_mark = None
@@ -1172,14 +1170,11 @@ class ConversationTextview(GObject.GObject):
 
     @staticmethod
     def _get_encryption_details(additional_data):
-        encrypted = additional_data.get('encrypted')
-        if encrypted is None:
-            return
-
-        name = encrypted.get('name')
+        name = additional_data.get_value('encrypted', 'name')
         if name is None:
             return
-        fingerprint = encrypted.get('fingerprint')
+
+        fingerprint = additional_data.get_value('encrypted', 'fingerprint')
         return name, fingerprint
 
     def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
@@ -1260,7 +1255,7 @@ class ConversationTextview(GObject.GObject):
         if text_tags is None:
             text_tags = []
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
         buffer_ = self.tv.get_buffer()
         if not mark:
             iter_ = buffer_.get_end_iter()

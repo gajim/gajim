@@ -55,6 +55,7 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import launch_browser_mailer
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import i18n
@@ -1353,7 +1354,7 @@ class GroupchatControl(ChatControlBase):
     def print_old_conversation(self, text, contact='', tim=None, xhtml=None,
     displaymarking=None, msg_stanza_id=None, encrypted=None, additional_data=None):
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
 
         if contact:
             if contact == self.nick: # it's us
@@ -1384,7 +1385,7 @@ class GroupchatControl(ChatControlBase):
         If contact is not set: it's a message from the server or help.
         """
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
         other_tags_for_name = []
         other_tags_for_text = []
         if contact:
