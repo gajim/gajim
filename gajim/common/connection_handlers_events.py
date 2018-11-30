@@ -28,6 +28,7 @@ from gajim.common import helpers
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules import dataforms
 from gajim.common.modules.misc import parse_idle
 from gajim.common.modules.misc import parse_delay
@@ -91,14 +92,12 @@ class HelperEvent:
     def get_oob_data(self, stanza):
         oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
         if oob_node is not None:
-            if 'gajim' not in self.additional_data:
-                self.additional_data['gajim'] = {}
             oob_url = oob_node.getTagData('url')
             if oob_url is not None:
-                self.additional_data['gajim']['oob_url'] = oob_url
+                self.additional_data.set_value('gajim', 'oob_url', oob_url)
             oob_desc = oob_node.getTagData('desc')
             if oob_desc is not None:
-                self.additional_data['gajim']['oob_desc'] = oob_desc
+                self.additional_data.set_value('gajim', 'oob_desc', oob_desc)
 
     def get_stanza_id(self, stanza, query=False):
         if query:
@@ -407,7 +406,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.stanza = self.msg_obj.stanza
         if not hasattr(self.msg_obj, 'additional_data'):
-            self.additional_data = {}
+            self.additional_data = AdditionalDataDict()
         else:
             self.additional_data = self.msg_obj.additional_data
         self.id_ = self.msg_obj.stanza.getID()
@@ -627,17 +626,8 @@ class ConnectionTypeEvent(nec.NetworkIncomingEvent):
 class StanzaReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stanza-received'
 
-    def init(self):
-        self.additional_data = {}
-
-    def generate(self):
-        return True
-
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
-
-    def init(self):
-        self.additional_data = {}
 
 class AgentRemovedEvent(nec.NetworkIncomingEvent):
     name = 'agent-removed'
@@ -1159,7 +1149,7 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'message-outgoing'
 
     def init(self):
-        self.additional_data = {}
+        self.additional_data = AdditionalDataDict()
         self.message = None
         self.keyID = None
         self.type_ = 'chat'
@@ -1212,7 +1202,7 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     name = 'gc-message-outgoing'
 
     def init(self):
-        self.additional_data = {}
+        self.additional_data = AdditionalDataDict()
         self.message = ''
         self.chatstate = None
         self.xhtml = None

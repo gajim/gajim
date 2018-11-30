@@ -30,6 +30,7 @@ from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
 from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common import connection_handlers
 from gajim.common.i18n import _
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_eme
@@ -118,7 +119,7 @@ connection_handlers.ConnectionJingle):
             'account': self.name,
             'id_': id_,
             'encrypted': False,
-            'additional_data': {},
+            'additional_data': AdditionalDataDict(),
             'forwarded': False,
             'sent': False,
             'timestamp': time.time(),
@@ -165,7 +166,7 @@ connection_handlers.ConnectionJingle):
             'stanza_id': event.unique_id
         }
 
-        parse_oob(event.stanza, event.additional_data)
+        parse_oob(event)
 
         for name, value in event_attr.items():
             setattr(event, name, value)

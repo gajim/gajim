@@ -38,6 +38,7 @@ from gajim.common import helpers
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.const import StyleAttr
@@ -888,7 +889,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if other_tags_for_text is None:
             other_tags_for_text = []
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
 
         textview.print_conversation_line(text, jid, kind, name, tim,
             other_tags_for_name, other_tags_for_time, other_tags_for_text,

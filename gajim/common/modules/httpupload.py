@@ -118,10 +118,7 @@ class HTTPUpload:
             #  to distinguish HTTP File Upload Link from pasted URL
             oob = event.msg_iq.addChild('x', namespace=nbxmpp.NS_X_OOB)
             oob.addChild('url').setData(message)
-            if 'gajim' in event.additional_data:
-                event.additional_data['gajim']['oob_url'] = message
-            else:
-                event.additional_data['gajim'] = {'oob_url': message}
+            event.additional_data.set_value('gajim', 'oob_url', message)
 
     def check_file_before_transfer(self, path, encryption, contact, session,
                                    groupchat=False):

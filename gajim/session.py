@@ -26,6 +26,7 @@ from gajim.common import events
 from gajim.common import app
 from gajim.common import contacts
 from gajim.common import ged
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.util import get_show_in_roster
@@ -276,7 +277,7 @@ class ChatControlSession:
         fjid = jid
 
         if additional_data is None:
-            additional_data = {}
+            additional_data = AdditionalDataDict()
 
         # Try to catch the contact with correct resource
         if resource:
