@@ -130,11 +130,12 @@ class MAM:
             raise nbxmpp.NodeProcessed
 
         # Timestamp parsing
-        timestamp = parse_delay(forwarded)
-        if timestamp is None:
+        # Most servers dont set the 'from' attr, so we cant check for it
+        delay_timestamp = parse_delay(forwarded)
+        if delay_timestamp is None:
+            log.warning('No timestamp on MAM message')
+            log.warning(stanza)
             raise nbxmpp.NodeProcessed
-
-        user_timestamp = parse_delay(message)
 
         # Fix for self messaging
         if not groupchat:
@@ -180,8 +181,7 @@ class MAM:
             {'conn': self._con,
              'additional_data': {},
              'encrypted': False,
-             'timestamp': timestamp,
-             'user_timestamp': user_timestamp,
+             'timestamp': delay_timestamp,
              'self_message': self_message,
              'groupchat': groupchat,
              'muc_pm': muc_pm,
@@ -248,7 +248,12 @@ class MAM:
             # For example Chatstates, Receipts, Chatmarkers
             log.debug(event.message.getProperties())
             return
-        log.debug(event.msgtxt)
+
+        user_timestamp = parse_delay(event.stanza)
+        if user_timestamp is not None:
+            # Record it as a user timestamp
+            event.additional_data.set_value(
+                'gajim', 'user_timestamp', user_timestamp)
 
         event.correct_id = parse_correction(event.message)
         parse_oob(event.message, event.additional_data)
