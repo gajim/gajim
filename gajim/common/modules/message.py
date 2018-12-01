@@ -226,17 +226,42 @@ class Message:
         except nbxmpp.NodeProcessed:
             return
 
-        timestamp, delayed = parse_delay(event.stanza), True
-        if timestamp is None:
+        subject = event.stanza.getSubject()
+        groupchat = event.mtype == 'groupchat'
+        muc_subject = subject and groupchat
+
+        # Determine timestamps
+        if groupchat:
+            delay_entity_jid = event.jid
+        else:
+            delay_entity_jid = self._con.get_own_jid().getDomain()
+
+        if muc_subject:
+            # MUC Subjects can have a delay timestamp
+            # to indicate when the user has set the subject,
+            # the 'from' attr on these delays is the MUC server
+            # but we treat it as user timestamp
             timestamp = time.time()
-            delayed = False
+            user_timestamp = parse_delay(event.stanza, from_=delay_entity_jid)
+
+        else:
+            timestamp = parse_delay(event.stanza, from_=delay_entity_jid)
+            if timestamp is None:
+                timestamp = time.time()
+
+            user_timestamp = parse_delay(event.stanza,
+                                         not_from=[delay_entity_jid])
+
+        if user_timestamp is not None:
+            event.additional_data.set_value(
+                'gajim', 'user_timestamp', user_timestamp)
 
         parse_bob_data(event.stanza)
 
         event_attr = {
             'popup': False,
             'msg_log_id': None,
-            'subject': event.stanza.getSubject(),
+            'subject': subject,
             'displaymarking': parse_securitylabel(event.stanza),
             'attention': parse_attention(event.stanza),
             'correct_id': parse_correction(event.stanza),
@@ -244,7 +269,7 @@ class Message:
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
             'timestamp': timestamp,
-            'delayed': delayed,
+            'delayed': user_timestamp is not None,
         }
         parse_oob(event)
 
@@ -262,7 +287,7 @@ class Message:
                     event.session, event.fjid, timestamp)
             return
 
-        if event.mtype == 'groupchat':
+        if groupchat:
             app.nec.push_incoming_event(GcMessageReceivedEvent(
                 None,
                 conn=self._con,
