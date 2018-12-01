@@ -31,6 +31,7 @@ log = logging.getLogger('gajim.password')
 
 try:
     import keyring
+    from keyring.core import recommended
     KEYRING_AVAILABLE = True
 except ImportError:
     KEYRING_AVAILABLE = False
@@ -53,6 +54,7 @@ class SecretPasswordStorage(PasswordStorage):
 
     def __init__(self):
         self.keyring = keyring.get_keyring()
+        log.info('Chose %s backend', self.keyring)
 
     def save_password(self, account_name, password):
         try:
@@ -83,10 +85,20 @@ class PasswordStorageManager(PasswordStorage):
     def connect_backends(self):
         """Initialize backend connections, determining which ones are available.
         """
-        # TODO: handle disappearing backends
 
-        if app.config.get('use_keyring') and KEYRING_AVAILABLE:
-            self.secret = SecretPasswordStorage()
+        if not app.config.get('use_keyring') or not KEYRING_AVAILABLE:
+            return
+
+        backends = keyring.backend.get_all_keyring()
+        for backend in backends:
+            log.info('Found keyring backend: %s', backend)
+
+        for backend in backends:
+            if recommended(backend):
+                self.secret = SecretPasswordStorage()
+                return
+        log.warning('No recommended keyring backend found, '
+                    'plain storage is used')
 
     def get_password(self, account_name):
         pw = app.config.get_per('accounts', account_name, 'password')
