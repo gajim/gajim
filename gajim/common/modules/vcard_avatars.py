@@ -51,11 +51,14 @@ class VCardAvatars:
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
 
     def _presence_received(self, _con, stanza):
-        update = stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
-        if update is None:
+        if stanza.getType() in ('unavailable', 'error'):
             return
 
         jid = stanza.getFrom()
+
+        update = stanza.getTag('x', namespace=nbxmpp.NS_VCARD_UPDATE)
+        if update is None:
+            return
 
         avatar_sha = update.getTagData('photo')
         if avatar_sha is None:

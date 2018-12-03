@@ -42,6 +42,15 @@ class Caps:
         self._create_suitable_client_caps = caps_cache.create_suitable_client_caps
 
     def _presence_received(self, _con, stanza):
+        if stanza.getType() in ('unavailable', 'error'):
+            return
+
+        from_ = stanza.getFrom()
+        if from_ is None:
+            # Presence from ourself
+            return
+        full_jid = str(from_)
+
         hash_method = node = caps_hash = None
 
         caps = stanza.getTag('c', namespace=nbxmpp.NS_CAPS)
@@ -50,8 +59,6 @@ class Caps:
             node = caps['node']
             caps_hash = caps['ver']
 
-        from_ = stanza.getFrom()
-        full_jid = str(from_)
         show = parse_show(stanza)
         type_ = parse_type(stanza)
 

@@ -74,8 +74,8 @@ class Chatstate:
             return
 
         full_jid = stanza.getFrom()
-
-        if self._con.get_own_jid().bareMatch(full_jid):
+        if full_jid is None or self._con.get_own_jid().bareMatch(full_jid):
+            # Presence from ourself
             return
 
         contact = app.contacts.get_gc_contact(
