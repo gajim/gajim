@@ -55,7 +55,6 @@ from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
-from gajim.common.caps_cache import muc_caps_cache
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -1465,8 +1464,9 @@ def call_counter(func):
     return helper
 
 def get_sync_threshold(jid, archive_info):
+    cache = caps_cache.muc_caps_cache
     if archive_info is None or archive_info.sync_threshold is None:
-        if muc_caps_cache.supports(jid, 'muc#roomconfig_membersonly'):
+        if cache.supports(jid, 'muc#roomconfig_membersonly'):
             threshold = app.config.get('private_room_sync_threshold')
         else:
             threshold = app.config.get('public_room_sync_threshold')
