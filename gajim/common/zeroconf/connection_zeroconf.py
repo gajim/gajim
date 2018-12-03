@@ -127,7 +127,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def _on_resolve_timeout(self):
         if self.connected:
             if not self.connection.resolve_all():
-                self._on_disconnected()
+                self.disconnect()
                 return False
             diffs = self.roster.getDiffs()
             for key in diffs:
@@ -161,22 +161,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         # keyID, timestamp, contact_nickname))
         app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
             None, conn=self, fjid=jid, show='offline', status=''))
-
-    def disconnectedReconnCB(self):
-        """
-        Called when we are disconnected. Comes from network manager for example
-        we don't try to reconnect, network manager will tell us when we can
-        """
-        if app.account_is_connected(self.name):
-            # we cannot change our status to offline or connecting
-            # after we auth to server
-            self.old_show = STATUS_LIST[self.connected]
-        self.connected = 0
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show='offline'))
-        # random number to show we wait network manager to send us a reconenct
-        self.time_to_reconnect = 5
-        self.on_purpose = False
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()
@@ -241,14 +225,33 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         GLib.timeout_add_seconds(5, self._on_resolve_timeout)
         return True
 
-    def disconnect(self, on_purpose=False):
+    def disconnect(self, reconnect=True, immediately=True):
+        log.info('Start disconnecting zeroconf')
+        if reconnect:
+            if app.account_is_connected(self.name):
+                # we cannot change our status to offline or connecting
+                # after we auth to server
+                self.old_show = STATUS_LIST[self.connected]
+
+            # random number to show we wait network manager to send
+            # us a reconenct
+            self.time_to_reconnect = 5
+        else:
+            self.time_to_reconnect = None
+
         self.connected = 0
-        self.time_to_reconnect = None
         if self.connection:
             self.connection.disconnect()
             self.connection = None
             # stop calling the timeout
             self.call_resolve_timeout = False
+        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
+
+    def _on_disconnect(self):
+        self.connected = 0
+        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show='offline'))
 
     def reannounce(self):
         if self.connected:

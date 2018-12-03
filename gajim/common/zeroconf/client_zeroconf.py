@@ -676,7 +676,7 @@ class ClientZeroconf:
     def zeroconf_init(self, show, msg):
         self.zeroconf = zeroconf.Zeroconf(self.caller._on_new_service,
             self.caller._on_remove_service, self.caller._on_name_conflictCB,
-            self.caller._on_disconnected, self.caller._on_error,
+            self.caller._on_disconnect, self.caller._on_error,
             self.caller.username, self.caller.host, self.port)
         self.zeroconf.txt['msg'] = msg
         self.zeroconf.txt['status'] = show

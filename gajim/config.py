@@ -185,7 +185,7 @@ class RemoveAccountWindow:
         # Close all opened windows
         app.interface.roster.close_all(self.account, force=True)
         if self.account in app.connections:
-            app.connections[self.account].disconnect(on_purpose=True)
+            app.connections[self.account].disconnect(reconnect=False)
             app.connections[self.account].cleanup()
             del app.connections[self.account]
         app.logger.remove_roster(app.get_jid_from_account(self.account))

@@ -1341,7 +1341,7 @@ class Interface:
 
         def on_cancel():
             del self.instances[account]['online_dialog']['ssl_error']
-            obj.conn.disconnect(on_purpose=True)
+            obj.conn.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
@@ -1404,7 +1404,7 @@ class Interface:
         def on_cancel():
             del self.instances[obj.conn.name]['online_dialog']\
                 ['plain_connection']
-            obj.conn.disconnect(on_purpose=True)
+            obj.conn.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
@@ -1436,7 +1436,7 @@ class Interface:
 
         def on_cancel():
             del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
-            obj.conn.disconnect(on_purpose=True)
+            obj.conn.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
@@ -1478,7 +1478,7 @@ class Interface:
         def on_cancel():
             del self.instances[obj.conn.name]['online_dialog']\
                 ['insecure_password']
-            obj.conn.disconnect(on_purpose=True)
+            obj.conn.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
                 show='offline'))
 
@@ -2458,12 +2458,12 @@ class Interface:
             for connection in app.connections.values():
                 if connection.connected <= 0 and connection.time_to_reconnect:
                     log.info('Connect %s', connection.name)
-                    connection.reconnect()
+                    GLib.timeout_add_seconds(2, connection.reconnect)
         else:
             for connection in app.connections.values():
                 if connection.connected > 1:
                     log.info('Disconnect %s', connection.name)
-                    connection.disconnectedReconnCB()
+                    connection.disconnect(immediately=True)
 
     def create_zeroconf_default_config(self):
         if app.config.get_per('accounts', app.ZEROCONF_ACC_NAME, 'name'):

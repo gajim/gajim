@@ -71,7 +71,7 @@ class Ping:
 
         # We haven't got the pong in time, disco and reconnect
         log.warning('No reply received for keepalive ping. Reconnecting...')
-        self._con.disconnectedReconnCB()
+        self._con.disconnect(immediately=True)
 
     def send_ping(self, contact: ContactsT) -> None:
         if not app.account_is_connected(self._account):

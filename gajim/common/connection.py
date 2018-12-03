@@ -44,6 +44,7 @@ from string import Template
 from urllib.request import urlopen
 from urllib.error import URLError
 
+from gi.repository import GLib
 if sys.platform in ('win32', 'darwin'):
     import certifi
 import OpenSSL.crypto
@@ -85,7 +86,6 @@ class CommonConnection:
         # ...
         self.connected = 0
         self.connection = None # xmpppy ClientCommon instance
-        self.on_purpose = False
         self.is_zeroconf = False
         self.password = ''
         self.server_resource = self._compute_resource()
@@ -98,6 +98,7 @@ class CommonConnection:
         self.old_show = ''
         self.priority = app.get_priority(name, 'offline')
         self.time_to_reconnect = None
+        self._reconnect_timer_source = None
 
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
@@ -151,7 +152,7 @@ class CommonConnection:
 
     def quit(self, kill_core):
         if kill_core and app.account_is_connected(self.name):
-            self.disconnect(on_purpose=True)
+            self.disconnect(reconnect=False)
 
     def test_gpg_passphrase(self, password):
         """
@@ -189,14 +190,6 @@ class CommonConnection:
                 app.nec.push_incoming_event(BadGPGPassphraseEvent(None,
                     conn=self))
         return signed
-
-    def _on_disconnected(self):
-        """
-        Called when a disconnect request has completed successfully
-        """
-        self.disconnect(on_purpose=True)
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-            show='offline'))
 
     def get_status(self):
         return app.SHOW_LIST[self.connected]
@@ -453,7 +446,6 @@ class CommonConnection:
             # set old_show to requested 'show' in case we need to
             # recconect before we auth to server
             self.old_show = show
-            self.on_purpose = False
             self.server_resource = self._compute_resource()
             if app.is_installed('GPG'):
                 self.USE_GPG = True
@@ -464,7 +456,6 @@ class CommonConnection:
             return
 
         if show == 'offline':
-            self.connected = 0
             if self.connection:
                 app.nec.push_incoming_event(BeforeChangeShowEvent(None,
                     conn=self, show=show, message=msg))
@@ -474,11 +465,8 @@ class CommonConnection:
                     status=msg,
                     caps=False)
 
-                self.connection.RegisterDisconnectHandler(self._on_disconnected)
                 self.connection.send(p, now=True)
-                self.connection.start_disconnect()
-            else:
-                self._on_disconnected()
+            self.disconnect(reconnect=False)
             return
 
         if show != 'offline' and self.connected > 0:
@@ -625,29 +613,22 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.time_to_reconnect = None
             self.retrycount = 0
 
-    # We are doing disconnect at so many places, better use one function in all
-    def disconnect(self, on_purpose=False):
-        log.info('Disconnect: on_purpose: %s', on_purpose)
-        self.on_purpose = on_purpose
-        self.connected = 0
-        self.time_to_reconnect = None
-
+    def disconnect(self, reconnect=True, immediately=False):
         if self.connection is None:
+            if not reconnect:
+                self._sm_resume_data = {}
+            self._disconnect()
+            app.nec.push_incoming_event(OurShowEvent(
+                None, conn=self, show='offline'))
             return
 
-        app.interface.music_track_changed(None, None, self.name)
-        self.get_module('PEP').reset_stored_publish()
-        self.get_module('VCardAvatars').avatar_advertised = False
-
-        if not on_purpose:
-            self._sm_resume_data = self.connection.get_resume_data()
-
-        app.proxy65_manager.disconnect(self.connection)
-        self.terminate_sessions()
-        self.remove_all_transfers()
-        self.connection.disconnect()
-        ConnectionHandlers._unregister_handlers(self)
-        self.connection = None
+        log.info('Starting to disconnect %s', self.name)
+        disconnect_cb = partial(self._on_disconnect, reconnect)
+        self.connection.disconnect_handlers = [disconnect_cb]
+        if immediately:
+            self.connection.disconnect()
+        else:
+            self.connection.start_disconnect()
 
     def set_oldst(self): # Set old state
         if self.old_show:
@@ -659,61 +640,77 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(
                 None, conn=self, show=app.SHOW_LIST[self.connected]))
 
-    def disconnectedReconnCB(self):
-        """
-        Called when we are disconnected
-        """
-        log.info('disconnectedReconnCB called')
-        if app.account_is_connected(self.name):
-            # we cannot change our status to offline or connecting
-            # after we auth to server
-            self.old_show = app.SHOW_LIST[self.connected]
-        self.connected = 0
-        if not self.on_purpose:
+    def _on_disconnect(self, reconnect=True):
+        # Clear disconnect handlers
+        self.connection.disconnect_handlers = []
+
+        if reconnect:
+            reconnect = app.config.get_per(
+                'accounts', self.name, 'autoreconnect')
+
+        log.info('Disconnect %s, reconnect: %s', self.name, reconnect)
+
+        if reconnect:
+            if app.account_is_connected(self.name):
+                # we cannot change our status to offline or connecting
+                # after we auth to server
+                self.old_show = app.SHOW_LIST[self.connected]
+
             if not self._sm_resume_data:
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                    show='offline'))
-            else:
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                    show='error'))
-            if self.connection:
-                self.connection.UnregisterDisconnectHandler(
-                    self.disconnectedReconnCB)
-            self.disconnect()
-            if app.config.get_per('accounts', self.name, 'autoreconnect'):
-                self.connected = -1
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
-                    show='error'))
-                if app.status_before_autoaway[self.name]:
-                    # We were auto away. So go back online
-                    self.status = app.status_before_autoaway[self.name]
-                    app.status_before_autoaway[self.name] = ''
-                    self.old_show = 'online'
-                # this check has moved from reconnect method
-                # do exponential backoff until less than 5 minutes
-                if self.retrycount < 2 or self.last_time_to_reconnect is None:
-                    self.last_time_to_reconnect = 5
-                    self.last_time_to_reconnect += random.randint(0, 5)
-                if self.last_time_to_reconnect < 200:
-                    self.last_time_to_reconnect *= 1.5
-                self.time_to_reconnect = int(self.last_time_to_reconnect)
-                log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
-                app.idlequeue.set_alarm(self._reconnect_alarm,
-                        self.time_to_reconnect)
-            elif self.on_connect_failure:
-                self.on_connect_failure()
-                self.on_connect_failure = None
-            else:
-                # show error dialog
-                self._connection_lost()
+                self._sm_resume_data = self.connection.get_resume_data()
+            self._disconnect()
+            self._set_reconnect_timer()
+
         else:
-            self.disconnect()
-        self.on_purpose = False
-    # END disconnectedReconnCB
+            self._sm_resume_data = {}
+            self._disconnect()
+            app.nec.push_incoming_event(OurShowEvent(
+                None, conn=self, show='offline'))
+
+    def _disconnect(self):
+        log.info('Set state disconnected')
+        self.connected = 0
+        self.disable_reconnect_timer()
+
+        app.interface.music_track_changed(None, None, self.name)
+        self.get_module('PEP').reset_stored_publish()
+        self.get_module('VCardAvatars').avatar_advertised = False
+
+        app.proxy65_manager.disconnect(self.connection)
+        self.terminate_sessions()
+        self.remove_all_transfers()
+        ConnectionHandlers._unregister_handlers(self)
+        self.connection = None
+
+    def _set_reconnect_timer(self):
+        self.connected = -1
+        app.nec.push_incoming_event(OurShowEvent(
+            None, conn=self, show='error'))
+        if app.status_before_autoaway[self.name]:
+            # We were auto away. So go back online
+            self.status = app.status_before_autoaway[self.name]
+            app.status_before_autoaway[self.name] = ''
+            self.old_show = 'online'
+        # this check has moved from reconnect method
+        # do exponential backoff until less than 5 minutes
+        if self.retrycount < 2 or self.last_time_to_reconnect is None:
+            self.last_time_to_reconnect = 5
+            self.last_time_to_reconnect += random.randint(0, 5)
+        if self.last_time_to_reconnect < 200:
+            self.last_time_to_reconnect *= 1.5
+        self.time_to_reconnect = int(self.last_time_to_reconnect)
+        log.info("Reconnect to %s in %ss", self.name, self.time_to_reconnect)
+        self._reconnect_timer_source = GLib.timeout_add_seconds(
+            self.time_to_reconnect, self._reconnect_alarm)
+
+    def disable_reconnect_timer(self):
+        self.time_to_reconnect = None
+        if self._reconnect_timer_source is not None:
+            GLib.source_remove(self._reconnect_timer_source)
+            self._reconnect_timer_source = None
 
     def _connection_lost(self):
         log.info('_connection_lost')
-        self.disconnect(on_purpose=False)
         if self.removing_account:
             return
         app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
@@ -786,7 +783,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                             if self.connection:
                                 self.connection.UnregisterDisconnectHandler(
                                         self._on_new_account)
-                            self.disconnect(on_purpose=True)
+                            self.disconnect(reconnect=False)
                         # it's the second time we get the form, we have info user
                         # typed, so send them
                         if is_form:
@@ -813,7 +810,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                         conn=self, config=conf, is_form=is_form))
                     self.connection.UnregisterDisconnectHandler(
                         self._on_new_account)
-                    self.disconnect(on_purpose=True)
+                    self.disconnect(reconnect=False)
                     return
                 if not data[1]: # wrong answer
                     app.nec.push_incoming_event(InformationEvent(
@@ -1002,7 +999,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                     self._connection_lost()
             else:
                 # try reconnect if connection has failed before auth to server
-                self.disconnectedReconnCB()
+                self._set_reconnect_timer()
 
             return
 
@@ -1104,7 +1101,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if not con_type:
             # we are not retrying, and not conecting
             if not self.retrycount and self.connected != 0:
-                self.disconnect(on_purpose=True)
+                self._disconnect()
                 if self._proxy:
                     pritxt = _('Could not connect to "%(host)s" via proxy "%(proxy)s"') %\
                         {'host': self._hostname, 'proxy': self._proxy['host']}
@@ -1129,14 +1126,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         log.error('Connection to proxy failed: %s', reason)
         self.time_to_reconnect = None
         self.on_connect_failure = None
-        self.disconnect(on_purpose=True)
+        self._disconnect()
         app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
             title=_('Connection to proxy failed'), msg=reason))
 
     def _connect_success(self, con, con_type):
-        if not self.connected: # We went offline during connecting process
-            # FIXME - not possible, maybe it was when we used threads
-            return
         log.info('Connect successfull')
         _con_type = con_type
         if _con_type != self._current_type:
@@ -1144,7 +1138,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                      'is %s and returned is %s', self._current_type, _con_type)
             self._connect_to_next_host()
             return
-        con.RegisterDisconnectHandler(self._on_disconnected)
+        con.RegisterDisconnectHandler(self.disconnect)
         if _con_type == 'plain' and app.config.get_per('accounts', self.name,
         'action_when_plaintext_connection') == 'warn':
             app.nec.push_incoming_event(PlainConnectionEvent(None, conn=self,
@@ -1152,7 +1146,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return True
         if _con_type == 'plain' and app.config.get_per('accounts', self.name,
         'action_when_plaintext_connection') == 'disconnect':
-            self.disconnect(on_purpose=True)
+            self.disconnect(reconnect=False)
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             return False
@@ -1168,7 +1162,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def connection_accepted(self, con, con_type):
         if not con or not con.Connection:
-            self.disconnect(on_purpose=True)
+            self._disconnect()
             app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not connect to account %s') % self.name,
                 msg=_('Connection with account %s has been lost. Retry '
@@ -1179,8 +1173,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connection_auto_accepted = False
         self.connected_hostname = self._current_host['host']
         self.on_connect_failure = None
-        con.UnregisterDisconnectHandler(self._on_disconnected)
-        con.RegisterDisconnectHandler(self.disconnectedReconnCB)
+        con.UnregisterDisconnectHandler(self.disconnect)
+        con.RegisterDisconnectHandler(self._on_disconnect)
         log.debug('Connected to server %s:%s with %s',
                   self._current_host['host'], self._current_host['port'],
                   con_type)
@@ -1287,7 +1281,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def ssl_certificate_accepted(self):
         if not self.connection:
-            self.disconnect(on_purpose=True)
+            self._disconnect()
             app.nec.push_incoming_event(
                 ConnectionLostEvent(
                     None, conn=self,
@@ -1337,7 +1331,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Forget password, it's wrong
             self.password = None
         log.debug("Couldn't authenticate to %s", self._hostname)
-        self.disconnect(on_purpose=True)
+        self.disconnect(reconnect=False)
         app.nec.push_incoming_event(
             OurShowEvent(None, conn=self, show='offline'))
         app.nec.push_incoming_event(InformationEvent(
@@ -1400,8 +1394,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # If we are already connected, and privacy rules are supported, send
         # offline presence first as it's required by XEP-0126
         if self.connected > 1 and self.get_module('PrivacyLists').supported:
-            self.on_purpose = True
-
             self.remove_all_transfers()
             self.get_module('Presence').send_presence(
                 typ='unavailable',
@@ -1460,6 +1452,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connect()
 
     def connect_and_init(self, show, msg, sign_msg):
+        self.disable_reconnect_timer()
         self.continue_connect_info = [show, msg, sign_msg]
         self.connect_and_auth()
 
@@ -1816,7 +1809,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         type_ != 'ANONYMOUS':
             app.nec.push_incoming_event(
                 NonAnonymousServerErrorEvent(None, conn=self))
-            self._on_disconnected()
+            self.disconnect(reconnect=False)
             return
         self.pasword_callback = (callback, type_)
         if type_ == 'X-MESSENGER-OAUTH2':
@@ -1843,7 +1836,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 '%s&scope=wl.messenger%%20wl.offline_access&'
                 'response_type=code&redirect_uri=%s') % (client_id, script_url)
             helpers.launch_browser_mailer('url', token_url)
-            self.disconnect(on_purpose=True)
+            self.disconnect(reconnect=False)
             app.nec.push_incoming_event(
                 Oauth2CredentialsRequiredEvent(None, conn=self))
             return
