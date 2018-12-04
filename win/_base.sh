@@ -93,7 +93,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six
 
     PIP_REQUIREMENTS="\
-git+https://dev.gajim.org/gajim/python-nbxmpp.git
+nbxmpp==0.6.8
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
 git+https://github.com/enthought/pywin32-ctypes.git
 keyring
