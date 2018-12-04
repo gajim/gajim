@@ -397,9 +397,6 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
 
-class BeforeChangeShowEvent(nec.NetworkIncomingEvent):
-    name = 'before-change-show'
-
 class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
     name = 'gc-message-received'
 

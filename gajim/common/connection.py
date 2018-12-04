@@ -450,16 +450,11 @@ class CommonConnection:
             if app.is_installed('GPG'):
                 self.USE_GPG = True
                 self.gpg = gpg.GnuPG()
-            app.nec.push_incoming_event(BeforeChangeShowEvent(None,
-                conn=self, show=show, message=msg))
             self.connect_and_init(show, msg, sign_msg)
             return
 
         if show == 'offline':
             if self.connection:
-                app.nec.push_incoming_event(BeforeChangeShowEvent(None,
-                    conn=self, show=show, message=msg))
-
                 p = self.get_module('Presence').get_presence(
                     typ='unavailable',
                     status=msg,
@@ -474,8 +469,6 @@ class CommonConnection:
             if self.connected == 1:
                 return
             if show == 'invisible':
-                app.nec.push_incoming_event(BeforeChangeShowEvent(None,
-                    conn=self, show=show, message=msg))
                 self._change_to_invisible(msg)
                 return
             if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
@@ -488,8 +481,6 @@ class CommonConnection:
                     idle_sec = idle.Monitor.get_idle_sec()
                     idle_time = time.strftime('%Y-%m-%dT%H:%M:%SZ',
                         time.gmtime(time.time() - idle_sec))
-            app.nec.push_incoming_event(BeforeChangeShowEvent(None,
-                conn=self, show=show, message=msg))
             if was_invisible:
                 self._change_from_invisible()
             self._update_status(show, msg, idle_time=idle_time)
