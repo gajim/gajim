@@ -566,16 +566,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._nec_stanza_message_outgoing)
 
     def get_config_values_or_default(self):
-        if app.config.get_per('accounts', self.name, 'keep_alives_enabled'):
-            self.keepalives = app.config.get_per('accounts', self.name,
-                    'keep_alive_every_foo_secs')
-        else:
-            self.keepalives = 0
-        if app.config.get_per('accounts', self.name, 'ping_alives_enabled'):
-            self.pingalives = app.config.get_per('accounts', self.name,
-                    'ping_alive_every_foo_secs')
-        else:
-            self.pingalives = 0
         self.client_cert = app.config.get_per('accounts', self.name,
             'client_cert')
         self.client_cert_passphrase = ''
@@ -1355,6 +1345,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 2
         self.retrycount = 0
         self.set_oldst()
+        self._set_send_timeouts()
 
     def _on_connection_active(self):
         # Connection was successful, reset sm resume data
@@ -1376,9 +1367,22 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.connected = 2
         self.retrycount = 0
         self._discover_server()
+        self._set_send_timeouts()
 
-    def send_keepalive(self):
-        # nothing received for the last foo seconds
+    def _set_send_timeouts(self):
+        if app.config.get_per('accounts', self.name, 'keep_alives_enabled'):
+            keep_alive_seconds = app.config.get_per(
+                'accounts', self.name, 'keep_alive_every_foo_secs')
+            self.connection.set_send_timeout(keep_alive_seconds,
+                                             self._send_keepalive)
+
+        if app.config.get_per('accounts', self.name, 'ping_alives_enabled'):
+            ping_alive_seconds = app.config.get_per(
+                'accounts', self.name, 'ping_alive_every_foo_secs')
+            self.connection.set_send_timeout2(
+                ping_alive_seconds, self.get_module('Ping').send_keepalive_ping)
+
+    def _send_keepalive(self):
         if self.connection:
             self.connection.send(' ')
 
@@ -1459,11 +1463,6 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _discover_server(self):
         if not app.account_is_connected(self.name):
             return
-
-        self.connection.set_send_timeout(self.keepalives, self.send_keepalive)
-        self.connection.set_send_timeout2(
-            self.pingalives, self.get_module('Ping').send_keepalive_ping)
-        self.connection.onreceive(None)
 
         self.get_module('Discovery').discover_server_info()
         self.get_module('Discovery').discover_account_info()

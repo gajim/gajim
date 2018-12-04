@@ -574,8 +574,6 @@ class AccountCreationWizard:
             'sub_request': {}}
         app.interface.minimized_controls[self.account] = {}
         app.connections[self.account].connected = 0
-        app.connections[self.account].keepalives = app.config.get_per(
-            'accounts', self.account, 'keep_alive_every_foo_secs')
         app.groups[self.account] = {}
         app.contacts.add_account(self.account)
         app.gc_connected[self.account] = {}
