@@ -1812,7 +1812,7 @@ class GroupchatControl(ChatControlBase):
                 elif '303' in obj.status_code: # Someone changed their nick
                     if obj.new_nick == self.new_nick or obj.nick == self.nick:
                         # We changed our nick
-                        self.change_nick(obj.new_nick)
+                        self._change_nick(obj.new_nick)
                         self.new_nick = ''
                         s = _('You are now known as %s') % self.nick
                     else:
@@ -1882,7 +1882,7 @@ class GroupchatControl(ChatControlBase):
             if not iter_:
                 if '210' in obj.status_code:
                     # Server changed our nick
-                    self.change_nick(obj.nick)
+                    self._change_nick(obj.nick)
                     s = _('You are now known as %s') % nick
                     self.print_conversation(s, 'info', graphics=False)
                 iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
