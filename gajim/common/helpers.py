@@ -154,7 +154,7 @@ def parse_resource(resource):
     """
     if resource:
         try:
-            return resource.encode('Nickname').decode('utf-8')
+            return resource.encode('OpaqueString').decode('utf-8')
         except UnicodeError:
             raise InvalidFormat('Invalid character in resource.')
 
