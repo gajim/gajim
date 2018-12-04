@@ -191,7 +191,9 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.get_module('HTTPUpload').available,
                     con.get_module('HTTPUpload').httpupload_namespace, None),
             Feature('XEP-0398: Avatar Conversion',
-                    con.avatar_conversion, '', None)
+                    con.avatar_conversion, '', None),
+            Feature('XEP-0411: Bookmarks Conversion',
+                    con.get_module('Bookmarks').conversion, '', None)
         ]
 
     def add_info(self, info):

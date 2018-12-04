@@ -37,9 +37,16 @@ class Bookmarks:
         self._con = con
         self._account = con.name
         self.bookmarks = {}
+        self.conversion = False
         self.available = False
 
         self.handlers = []
+
+    def pass_disco(self, from_, _identities, features, _data, _node):
+        if nbxmpp.NS_BOOKMARK_CONVERSION not in features:
+            return
+        self.conversion = True
+        log.info('Discovered Bookmarks Conversion: %s', from_)
 
     def get_sorted_bookmarks(self, short_name=False):
         # This returns a sorted by name copy of the bookmarks

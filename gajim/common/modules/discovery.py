@@ -177,6 +177,7 @@ class Discovery:
         self._con.get_module('MAM').pass_disco(from_, *args)
         self._con.get_module('PEP').pass_disco(from_, *args)
         self._con.get_module('PubSub').pass_disco(from_, *args)
+        self._con.get_module('Bookmarks').pass_disco(from_, *args)
 
         features = args[1]
         if 'urn:xmpp:pep-vcard-conversion:0' in features:
