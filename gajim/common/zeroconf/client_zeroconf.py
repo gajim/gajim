@@ -240,10 +240,10 @@ class P2PClient(IdleObject):
             self.send_stream_header()
 
     def send_stream_header(self):
-        self.Dispatcher._metastream = Node('stream:stream')
+        self.Dispatcher._metastream = nbxmpp.Node('stream:stream')
         self.Dispatcher._metastream.setNamespace(self.Namespace)
         self.Dispatcher._metastream.setAttr('version', '1.0')
-        self.Dispatcher._metastream.setAttr('xmlns:stream', NS_STREAMS)
+        self.Dispatcher._metastream.setAttr('xmlns:stream', nbxmpp.NS_STREAMS)
         self.Dispatcher._metastream.setAttr('from',
             self.conn_holder.zeroconf.name)
         if self.to:
@@ -252,7 +252,7 @@ class P2PClient(IdleObject):
                 self.Dispatcher._metastream)[:-2])
 
     def _check_stream_start(self, ns, tag, attrs):
-        if ns != NS_STREAMS or tag != 'stream':
+        if ns != nbxmpp.NS_STREAMS or tag != 'stream':
             log.error('Incorrect stream start: (%s,%s).Terminating!',
                       tag, ns)
             self.Connection.disconnect()
@@ -266,7 +266,7 @@ class P2PClient(IdleObject):
             self.send_stream_header()
             if 'version' in attrs and attrs['version'] == '1.0':
                 # other part supports stream features
-                features = Node('stream:features')
+                features = nbxmpp.Node('stream:features')
                 self.Dispatcher.send(features)
             while self.stanzaqueue:
                 stanza, is_message = self.stanzaqueue.pop(0)
