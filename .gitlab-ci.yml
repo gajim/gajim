@@ -1,28 +1,25 @@
 before_script:
-  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config python3-openssl gir1.2-gtk-3.0 python3-gi python3-nbxmpp-nightly python3-cairo python3-pip
+  - sudo apt-get update -qq && sudo apt-get install -y -qq libtool pkg-config gir1.2-gtk-3.0 python3-gi python3-cairo
   - sudo apt-get build-dep -y -qq gajim-default-nightly
-  - sudo pip3 install pylint==2.1.1
 
 stages:
   - test
   - build
 
-run-test:
+run-tests:
   stage: test
   script:
-    - python3 setup.py test -s test.no_gui
-
-run-mypy:
-  stage: test
-  script:
+    - rm -rf civenv-master
+    - virtualenv --system-site-packages civenv
+    - . ./civenv/bin/activate
+    - pip3 install mypy
+    - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git@master
+    - pip3 install pylint==2.1.1
     - mypy gajim
-
-run-pylint:
-  stage: test
-  script:
-    - pylint3 --version
-    - pylint --version
     - scripts/dev/pylint-ci.sh --jobs=2 gajim
+    - python3 setup.py test -s test.no_gui
+    - deactivate
+    - rm -rf civenv-master
 
 run-appdata:
   stage: test
@@ -57,4 +54,4 @@ run-build:
     name: "gajim-default-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
     expire_in: 1 week
     paths:
-      - gajim-default-2???-??-??.tar.gz
+      - gajim-default-$CI_COMMIT_SHA.tar.gz
