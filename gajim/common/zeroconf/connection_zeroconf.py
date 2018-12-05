@@ -27,30 +27,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import socket
-import random
-random.seed()
+import getpass
 
 import nbxmpp
-
-import signal
-if os.name != 'nt':
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-import getpass
 from gi.repository import GLib
 
-from gajim.common.connection import CommonConnection
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import modules
 from gajim.common.i18n import _
+from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import *
 from gajim.common.connection_handlers_events import *
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
+
 
 class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def __init__(self, name):
