@@ -595,6 +595,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.retrycount = 0
 
     def disconnect(self, reconnect=True, immediately=False):
+        self.get_module('Ping').remove_timeout()
         if self.connection is None:
             if not reconnect:
                 self._sm_resume_data = {}

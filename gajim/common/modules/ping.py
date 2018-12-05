@@ -21,6 +21,7 @@ import logging
 import time
 
 import nbxmpp
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
@@ -34,7 +35,7 @@ class Ping:
     def __init__(self, con: ConnectionT) -> None:
         self._con = con
         self._account = con.name
-        self._alarm_time = None
+        self._timeout_id = None
 
         self.handlers = [
             ('iq', self._answer_request, 'get', nbxmpp.NS_PING),
@@ -50,19 +51,19 @@ class Ping:
         if not app.account_is_connected(self._account):
             return
 
-        to = app.config.get_per('accounts', self._account, 'hostname')
-        self._con.connection.SendAndCallForResponse(self._get_ping_iq(to),
-                                                    self._keepalive_received)
-
         log.info('Send keepalive')
 
         seconds = app.config.get_per('accounts', self._account,
                                      'time_for_ping_alive_answer')
-        self._alarm_time = app.idlequeue.set_alarm(self._reconnect, seconds)
+        self._timeout_id = GLib.timeout_add_seconds(seconds, self._reconnect)
+
+        to = app.config.get_per('accounts', self._account, 'hostname')
+        self._con.connection.SendAndCallForResponse(self._get_ping_iq(to),
+                                                    self._keepalive_received)
 
     def _keepalive_received(self, _stanza: nbxmpp.Iq) -> None:
         log.info('Received keepalive')
-        app.idlequeue.remove_alarm(self._reconnect, self._alarm_time)
+        self.remove_timeout()
 
     def _reconnect(self) -> None:
         if not app.config.get_per('accounts', self._account, 'active'):
@@ -117,6 +118,16 @@ class Ping:
         self._con.connection.send(iq)
         log.info('Send pong to %s', stanza.getFrom())
         raise nbxmpp.NodeProcessed
+
+    def remove_timeout(self) -> None:
+        if self._timeout_id is None:
+            return
+        log.info('Remove ping timeout')
+        GLib.source_remove(self._timeout_id)
+        self._timeout_id = None
+
+    def cleanup(self) -> None:
+        self.remove_timeout()
 
 
 class PingSentEvent(NetworkIncomingEvent):
