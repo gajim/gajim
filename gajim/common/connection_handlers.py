@@ -24,27 +24,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import operator
-from time import time as time_time
+import time
 
 import nbxmpp
 
-from gajim.common import modules
-from gajim.common import helpers
 from gajim.common import app
+from gajim.common import ged
+from gajim.common import helpers
 from gajim.common import jingle_xtls
+from gajim.common import modules
 from gajim.common.caps_cache import muc_caps_cache
+from gajim.common.connection_handlers_events import *
+from gajim.common.const import KindConstant
+from gajim.common.jingle import ConnectionJingle
+from gajim.common.nec import NetworkEvent
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
-from gajim.common.connection_handlers_events import *
 
-from gajim.common import ged
-from gajim.common.nec import NetworkEvent
-from gajim.common.const import KindConstant
 
-from gajim.common.jingle import ConnectionJingle
-
-import logging
 log = logging.getLogger('gajim.c.connection_handlers')
 
 # kind of events we can wait for an answer
@@ -193,7 +192,7 @@ class ConnectionHandlersBase:
             if show is not None:
                 app.logger.insert_into_logs(self.name,
                                             nbxmpp.JID(obj.jid).getStripped(),
-                                            time_time(),
+                                            time.time(),
                                             KindConstant.STATUS,
                                             message=obj.status,
                                             show=show)
