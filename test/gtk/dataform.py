@@ -112,7 +112,12 @@ class DataFormWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Data Form Test")
         self.set_default_size(600, 600)
-        self._widget = DataFormWidget(extend_form(node=nbxmpp.Node(node=FORM)))
+        options = {
+            'left-width': 100,
+            'form-width': 435,
+        }
+        self._widget = DataFormWidget(
+            extend_form(node=nbxmpp.Node(node=FORM)), options)
         self.add(self._widget)
         self.show()
 

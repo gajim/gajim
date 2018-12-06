@@ -66,6 +66,9 @@ class FormGrid(Gtk.Grid):
         self.row_count = 0
         self.rows = []
 
+        form_width = options.get('form-width', 435)
+        self.set_size_request(form_width, -1)
+
         self._data_form = form_node
 
         self.title = None
@@ -82,6 +85,8 @@ class FormGrid(Gtk.Grid):
             'text-private': TextPrivateField,
             'text-multi': TextMultiField
         }
+
+        self._add_row(SizeAdjustment(options))
 
         if form_node.title is not None:
             self.title = form_node.title
@@ -149,6 +154,22 @@ class FormGrid(Gtk.Grid):
         self.get_parent().get_parent().emit('is-valid', value)
 
 
+class SizeAdjustment:
+    def __init__(self, options):
+        self._left_box = Gtk.Box()
+        self._right_box = Gtk.Box()
+
+        left_width = options.get('left-width', 100)
+        self._left_box.set_size_request(left_width, -1)
+        self._right_box.set_hexpand(True)
+
+    def add(self, form_grid, row_number):
+        form_grid.attach(self._left_box, 0, row_number, 1, 1)
+        form_grid.attach_next_to(self._right_box,
+                                 self._left_box,
+                                 Gtk.PositionType.RIGHT, 1, 1)
+
+
 class Title:
     def __init__(self, title):
         self._label = Gtk.Label(label=title)
@@ -179,7 +200,6 @@ class Field:
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_width_chars(15)
-        self._label.set_size_request(100, -1)
         self._label.set_xalign(bool(options.get('right_align')))
         self._label.set_tooltip_text(field.description)
 
@@ -318,6 +338,8 @@ class ListMutliTreeView(Gtk.TreeView):
         col = Gtk.TreeViewColumn()
         cell = Gtk.CellRendererToggle()
         cell.set_activatable(True)
+        cell.set_property('xalign', 1)
+        cell.set_property('xpad', 10)
         cell.connect('toggled', self._toggled)
         col.pack_start(cell, True)
         col.set_attributes(cell, active=2)
@@ -470,11 +492,14 @@ class TextMultiField(Field):
         self._label.set_valign(Gtk.Align.START)
 
         self._widget = Gtk.ScrolledWindow()
+        self._widget.set_policy(Gtk.PolicyType.NEVER,
+                                Gtk.PolicyType.AUTOMATIC)
         self._widget.set_propagate_natural_height(True)
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
 
         self._textview = Gtk.TextView()
+        self._textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
         self._textview.get_buffer().set_text(field.value)
         self._textview.get_buffer().connect('changed', self._changed)
 
