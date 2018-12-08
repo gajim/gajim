@@ -1406,7 +1406,7 @@ class GroupchatControl(ChatControlBase):
         self.draw_banner_text()
 
     def _nec_gc_subject_received(self, event):
-        if event.conn.name != self.account:
+        if event.account != self.account:
             return
         if event.jid != self.room_jid:
             return
@@ -1415,7 +1415,7 @@ class GroupchatControl(ChatControlBase):
             return
         self.set_subject(event.subject)
         text = _('%(nick)s has set the subject to %(subject)s') % {
-            'nick': event.nickname, 'subject': event.subject}
+            'nick': event.resource, 'subject': event.subject}
 
         if event.delayed:
             date = time.strftime('%d-%m-%Y %H:%M:%S',
