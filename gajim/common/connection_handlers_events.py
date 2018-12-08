@@ -432,15 +432,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # message from server
             self.nick = ''
 
-        self.subject = self.stanza.getSubject()
-
-        if self.subject is not None:
-            app.nec.push_incoming_event(
-                nec.NetworkEvent('gc-subject-received',
-                                 nickname=self.msg_obj.resource,
-                                 **vars(self.msg_obj)))
-            return
-
         conditions = self.stanza.getStatusConditions()
         if conditions:
             self.status_code = []

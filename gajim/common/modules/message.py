@@ -227,7 +227,10 @@ class Message:
 
         subject = event.stanza.getSubject()
         groupchat = event.mtype == 'groupchat'
-        muc_subject = subject and groupchat
+
+        # XEP-0045: only a message that contains a <subject/> but no <body/>
+        # element shall be considered a subject change for MUC purposes.
+        muc_subject = subject and groupchat and not event.msgtxt
 
         # Determine timestamps
         if groupchat:
@@ -282,6 +285,11 @@ class Message:
                 self._con.dispatch_error_message(
                     event.stanza, event.msgtxt,
                     event.session, event.fjid, timestamp)
+            return
+
+        if muc_subject:
+            app.nec.push_incoming_event(NetworkEvent('gc-subject-received',
+                                                     **vars(event)))
             return
 
         if groupchat:
