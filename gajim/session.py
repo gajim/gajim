@@ -79,11 +79,13 @@ class ChatControlSession:
         """
         if obj.session != self:
             return
-        contact = app.contacts.get_contact(self.conn.name, obj.jid,
-            obj.resource)
-        if not contact:
-            contact = app.contacts.get_gc_contact(self.conn.name, obj.jid,
-                obj.resource)
+
+        if obj.muc_pm:
+            contact = app.contacts.get_gc_contact(
+                self.conn.name, obj.jid, obj.resource)
+        else:
+            contact = app.contacts.get_contact(
+                self.conn.name, obj.jid, obj.resource)
         if self.resource != obj.resource:
             self.resource = obj.resource
             if self.control:
