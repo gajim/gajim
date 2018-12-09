@@ -1,3 +1,24 @@
+Gajim 1.1.1 (10 December 2018)
+
+  Bug fixes
+
+  * 9427 Placeholder not cleared if pasting text into message input
+  * 9444 Determine the delay timestamp correctly when using mam:1
+  * 9453 Fix opening links inside the group chat subject (MacOS/Windows)
+  * 9465 Allow the full range of possible nicknames in group chats
+  * 9067 Gajim crashes when receiving xhtml messages
+  * 9472 Handle presences without from attr correctly
+  * 9473 Error when creating a new group chat
+  * 9491 Identify group chat subject changes correctly
+  * Determine soundplayer correctly on unix systems
+  * In some circumstances plugins could not be deleted
+  * Show correct contact status on tabs
+  * Dont answer group chat receipt requests
+  * Fix receipts for private messages
+  * Pressing the back button in the Accounts window leads to an error
+  * Better handle not available keyring backends
+  * Dont show incorrect contact on private messages
+
 Gajim 1.1.0 (06 November 2018)
 
   New
