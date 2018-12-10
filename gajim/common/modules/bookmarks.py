@@ -38,7 +38,6 @@ class Bookmarks:
         self._account = con.name
         self.bookmarks = {}
         self.conversion = False
-        self.available = False
 
         self.handlers = []
 
@@ -96,14 +95,18 @@ class Bookmarks:
     def _pubsub_bookmarks_received(self, _con, stanza):
         if not nbxmpp.isResultNode(stanza):
             log.info('No pubsub bookmarks: %s', stanza.getError())
-            # Fallback, request private storage
-            self._request_private_bookmarks()
+            # Fallback, request private storage, only if server
+            # doesnt have bookmark conversion
+            if not self.conversion:
+                self._request_private_bookmarks()
             return
 
-        self.available = True
         log.info('Received Bookmarks (PubSub)')
         self._parse_bookmarks(stanza)
-        self._request_private_bookmarks()
+        if not self.conversion:
+            # If server does not have bookmark conversion, request private
+            # storage and try to merge the bookmarks
+            self._request_private_bookmarks()
 
     def _request_private_bookmarks(self) -> None:
         if not app.account_is_connected(self._account):
@@ -120,7 +123,6 @@ class Bookmarks:
         if not nbxmpp.isResultNode(stanza):
             log.info('No private bookmarks: %s', stanza.getError())
         else:
-            self.available = True
             log.info('Received Bookmarks (PrivateStorage)')
             merged = self._parse_bookmarks(stanza, check_merge=True)
             if merged and self._pubsub_support():
@@ -264,6 +266,9 @@ class Bookmarks:
         if storage_type is None:
             if self._pubsub_support():
                 self._pubsub_store(storage_node)
+                if self.conversion:
+                    # Only push to either pubsub or private storage
+                    return
             self._private_store(storage_node)
         elif storage_type == BookmarkStorageType.PUBSUB:
             if self._pubsub_support():

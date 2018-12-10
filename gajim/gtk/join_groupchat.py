@@ -113,10 +113,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
         # Set bookmark switch sensitive if server supports bookmarks
         acc = self.account_combo.get_active_id()
-        con = app.connections[acc]
-        if not con.get_module('Bookmarks').available:
-            self.bookmark_switch.set_sensitive(False)
-            self.autojoin_switch.set_sensitive(False)
 
         self.show_all()
 
