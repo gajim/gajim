@@ -714,10 +714,8 @@ def get_groupchat_menu(control_id, account, jid):
 
 def get_bookmarks_menu(account, rebuild=False):
     con = app.connections[account]
-    boomarks = con.get_module('Bookmarks').get_sorted_bookmarks(
-        short_name=True)
-    if not boomarks:
-        return None
+    boomarks = con.get_module('Bookmarks').get_sorted_bookmarks(short_name=True)
+
     menu = Gio.Menu()
 
     # Build Join Groupchat
