@@ -172,6 +172,7 @@ class PEPEventType(IntEnum):
     NICKNAME = 5
     AVATAR = 6
     ATOM = 7
+    BOOKMARKS = 8
 
 
 @unique
