@@ -905,18 +905,12 @@ def get_conv_context_menu(account, kind, text):
         menuitem.set_label(label)
 
         if action.startswith('-'):
+            text = text.replace('xmpp:', '')
+            text = text.split('?')[0]
             action = 'app.%s%s' % (account, action)
         else:
             action = 'app.%s' % action
         menuitem.set_action_name(action)
-
-        if 'join-groupchat' in action:
-            text = text.replace('xmpp:', '')
-            text = text.split('?')[0]
-
-        if 'add-contact' in action:
-            text = text.replace('xmpp:', '')
-            text = text.split('?')[0]
 
         if action == 'app.open-link':
             value = GLib.Variant.new_strv([kind, text])
