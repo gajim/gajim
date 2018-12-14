@@ -174,8 +174,6 @@ class GroupchatControl(ChatControlBase):
         self.widget_set_visible(self.xml.get_object('banner_eventbox'),
             app.config.get('hide_groupchat_banner'))
 
-        self._last_selected_contact = None # None or holds jid, account tuple
-
         # muc attention flag (when we are mentioned in a muc)
         # if True, the room has mentioned us
         self.attention_flag = False
@@ -198,12 +196,8 @@ class GroupchatControl(ChatControlBase):
         self.event_box = self.xml.get_object('banner_eventbox')
 
         self.list_treeview = self.xml.get_object('list_treeview')
-        selection = self.list_treeview.get_selection()
-        id_ = selection.connect('changed',
-            self.on_list_treeview_selection_changed)
-        self.handlers[id_] = selection
         id_ = self.list_treeview.connect('style-set',
-            self.on_list_treeview_style_set)
+                                         self.on_list_treeview_style_set)
         self.handlers[id_] = self.list_treeview
 
         # flag that stops hpaned position event
@@ -912,21 +906,6 @@ class GroupchatControl(ChatControlBase):
             nick = contact[Column.NICK]
             self.draw_contact(nick)
 
-    def on_list_treeview_selection_changed(self, selection):
-        model, selected_iter = selection.get_selected()
-        self.draw_contact(self.nick)
-        if self._last_selected_contact is not None:
-            self.draw_contact(self._last_selected_contact)
-        if selected_iter is None:
-            self._last_selected_contact = None
-            return
-        contact = model[selected_iter]
-        nick = contact[Column.NICK]
-        self._last_selected_contact = nick
-        if contact[Column.TYPE] != 'contact':
-            return
-        self.draw_contact(nick, selected=True, focus=True)
-
     def get_tab_label(self, chatstate):
         """
         Markup the label if necessary. Returns a tuple such as: (new_label_str,
@@ -1625,7 +1604,7 @@ class GroupchatControl(ChatControlBase):
         if ctrl and msg:
             ctrl.send_message(msg)
 
-    def draw_contact(self, nick, selected=False, focus=False):
+    def draw_contact(self, nick):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
             return
