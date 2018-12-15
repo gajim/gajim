@@ -482,7 +482,7 @@ class Config:
         'contact_disconnected': [False, 'disconnected.wav'],
         'message_sent': [False, 'sent.wav'],
         'muc_message_highlight': [True, 'gc_message1.wav', _('Sound to play when a group chat message contains one of the words in muc_highlight_words, or when a group chat message contains your nickname.')],
-        'muc_message_received': [False, 'gc_message2.wav', _('Sound to play when any MUC message arrives.')],
+        'muc_message_received': [True, 'gc_message2.wav', _('Sound to play when any MUC message arrives.')],
     }
 
     proxies_default = {
@@ -638,13 +638,15 @@ class Config:
         obj[subname] = value
         self._timeout_save()
 
-    def get_per(self, optname, key=None, subname=None): # per_group_of_option
+    def get_per(self, optname, key=None, subname=None, default=None): # per_group_of_option
         if optname not in self.__options_per_key:
             return None
         dict_ = self.__options_per_key[optname][1]
         if not key:
             return list(dict_.keys())
         if key not in dict_:
+            if default is not None:
+                return default
             if subname in self.__options_per_key[optname][0]:
                 return self.__options_per_key[optname][0][subname][1]
             return None
@@ -711,6 +713,11 @@ class Config:
         no_log_for = no_log_for.split()
 
         return (account not in no_log_for) and (jid not in no_log_for)
+
+    def notify_for_muc(self, room):
+        all_ = self.get('notify_on_all_muc_messages')
+        room = self.get_per('rooms', room, 'notify_on_all_messages')
+        return all_ or room
 
     def _init_options(self):
         for opt in self.__options[0]:

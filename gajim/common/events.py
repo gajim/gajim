@@ -332,6 +332,16 @@ class Events:
                 events_list.append(ev)
         return events_list
 
+    def get_all_events(self, types=None):
+        accounts = self._events.keys()
+        events = []
+        for account in accounts:
+            for jid in self._events[account]:
+                for event in self._events[account][jid]:
+                    if types is None or event.type_ in types:
+                        events.append(event)
+        return events
+
     def get_first_event(self, account=None, jid=None, type_=None):
         """
         Return the first event of type type_ if given

@@ -905,8 +905,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         if kind == 'incoming':
             if not self.type_id == message_control.TYPE_GC or \
-            app.config.get('notify_on_all_muc_messages') or \
-            app.config.get_per('rooms', jid, 'notify_on_all_messages') or \
+            app.config.notify_for_muc(jid) or \
             'marked' in other_tags_for_text:
                 # it's a normal message, or a muc message with want to be
                 # notified about if quitting just after

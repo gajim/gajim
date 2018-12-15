@@ -111,7 +111,8 @@ class Notification:
             if event.type_ == 'gc-invitation':
                 self._withdraw('gc-invitation', event.account, event.room_jid)
             if event.type_ in ('normal', 'printed_chat', 'chat',
-                               'printed_pm', 'pm'):
+                               'printed_pm', 'pm', 'printed_marked_gc_msg',
+                               'printed_gc_msg'):
                 self._withdraw('new-message', event.account, event.jid)
 
     def _nec_our_status(self, obj):
@@ -164,6 +165,7 @@ class Notification:
         if event_type in (
                 _('Contact Signed In'), _('Contact Signed Out'),
                 _('New Message'), _('New Single Message'), _('New Private Message'),
+                _('New Group Chat Message'),
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
                 _('File Transfer Stopped'), _('Groupchat Invitation'),
@@ -193,7 +195,8 @@ class Notification:
                 notif_id = self._make_id('connection-failed', account)
             elif event_type in (_('New Message'),
                                 _('New Single Message'),
-                                _('New Private Message')):
+                                _('New Private Message'),
+                                _('New Group Chat Message')):
                 avatar = app.contacts.get_avatar(account, jid)
                 if avatar:
                     icon_pixbuf = avatar

@@ -375,8 +375,11 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize)
         self.parent_win.window.add_action(act)
 
+        # Enable notify on all for private rooms
+        members_only = muc_caps_cache.supports(self.contact.jid,
+                                               'muc#roomconfig_membersonly')
         value = app.config.get_per(
-            'rooms', self.contact.jid, 'notify_on_all_messages')
+            'rooms', self.contact.jid, 'notify_on_all_messages', members_only)
 
         act = Gio.SimpleAction.new_stateful(
             'notify-on-message-' + self.control_id,
@@ -1294,8 +1297,7 @@ class GroupchatControl(ChatControlBase):
 
     def get_nb_unread(self):
         type_events = ['printed_marked_gc_msg']
-        if app.config.get('notify_on_all_muc_messages') or \
-        app.config.get_per('rooms', self.room_jid, 'notify_on_all_messages'):
+        if app.config.notify_for_muc(self.room_jid):
             type_events.append('printed_gc_msg')
         nb = len(app.events.get_events(self.account, self.room_jid,
             type_events))
@@ -1314,25 +1316,30 @@ class GroupchatControl(ChatControlBase):
         Returns a 2-Tuple. The first says whether or not to highlight the text,
         the second, what sound to play
         """
-        highlight, sound = (None, None)
+        highlight, sound = None, None
+
+        notify = app.config.notify_for_muc(self.room_jid)
+        message_sound_enabled = app.config.get_per('soundevents',
+                                                   'muc_message_received',
+                                                   'enabled')
 
         # Are any of the defined highlighting words in the text?
         if self.needs_visual_notification(text):
             highlight = True
-            if app.config.get_per('soundevents', 'muc_message_highlight',
-            'enabled'):
+            if app.config.get_per('soundevents',
+                                  'muc_message_highlight',
+                                  'enabled'):
                 sound = 'highlight'
 
         # Do we play a sound on every muc message?
-        elif app.config.get_per('soundevents', 'muc_message_received', \
-        'enabled'):
+        elif notify and message_sound_enabled:
             sound = 'received'
 
         # Is it a history message? Don't want sound-floods when we join.
         if tim is not None and time.mktime(time.localtime()) - tim > 1:
             sound = None
 
-        return (highlight, sound)
+        return highlight, sound
 
     def check_and_possibly_add_focus_out_line(self):
         """

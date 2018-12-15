@@ -467,11 +467,8 @@ def get_show_in_systray(type_, jid):
     """
     Return True if this event must be shown in systray, else False
     """
-    notify = app.config.get('notify_on_all_muc_messages')
-    notify_for_jid = app.config.get_per(
-        'rooms', jid, 'notify_on_all_messages')
-
-    if type_ == 'printed_gc_msg' and not notify and not notify_for_jid:
+    notify = app.config.notify_for_muc(jid)
+    if type_ == 'printed_gc_msg' and not notify:
         # it's not an highlighted message, don't show in systray
         return False
     return app.config.get('trayicon_notification_on_events')

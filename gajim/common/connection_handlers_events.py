@@ -1036,7 +1036,46 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         else:
             self.do_sound = False
 
-        self.do_popup = False
+        self.control = app.interface.msg_win_mgr.search_control(
+            msg_obj.jid, self.account)
+
+        if self.control is not None:
+            self.control_focused = self.control.has_focus()
+
+        if app.config.get('notify_on_new_message'):
+            notify_for_muc = (app.config.notify_for_muc(self.jid) or
+                              sound == 'highlight')
+            if not notify_for_muc:
+                self.do_popup = False
+
+            elif self.control_focused:
+                self.do_popup = False
+
+            elif app.config.get('autopopupaway'):
+                # always show notification
+                self.do_popup = True
+
+            elif app.connections[self.conn.name].connected in (2, 3):
+                # we're online or chat
+                self.do_popup = True
+
+        self.popup_msg_type = 'gc_msg'
+        self.popup_event_type = _('New Group Chat Message')
+
+        if app.config.get('notification_preview_message'):
+            self.popup_text = msg_obj.msgtxt
+
+        type_events = ['printed_marked_gc_msg', 'printed_gc_msg']
+        count = len(app.events.get_events(self.account, self.jid, type_events))
+
+        contact = app.contacts.get_contact(self.account, self.jid)
+
+        self.popup_title = i18n.ngettext(
+            'New message from %(nickname)s',
+            '%(n_msgs)i unread messages in %(groupchat_name)s',
+            count) % {'nickname': self.base_event.nick,
+                      'n_msgs': count,
+                      'groupchat_name': contact.get_shown_name()}
 
     def handle_incoming_pres_event(self, pres_obj):
         if app.jid_is_transport(pres_obj.jid):
