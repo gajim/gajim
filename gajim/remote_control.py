@@ -901,7 +901,11 @@ class GajimRemote(Server):
         return contact_dict
 
     def get_unread_msgs_number(self):
-        return str(app.events.get_nb_events())
+        unread = app.events.get_nb_events()
+        for event in app.events.get_all_events(['printed_gc_msg']):
+            if not app.config.notify_for_muc(event.jid):
+                unread -= 1
+        return str(unread)
 
     def start_chat(self, account):
         if not account:
