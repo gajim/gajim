@@ -247,3 +247,11 @@ def convert_rgb_to_hex(rgb_string: str) -> str:
     green = int(rgb.green * 255)
     blue = int(rgb.blue * 255)
     return '#%02x%02x%02x' % (red, green, blue)
+
+
+def get_primary_accel_mod():
+    """
+    Returns the primary Gdk.ModifierType modifier.
+    cmd on osx, ctrl everywhere else.
+    """
+    return Gtk.accelerator_parse("<Primary>")[1]
