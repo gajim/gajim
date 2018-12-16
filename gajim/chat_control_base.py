@@ -57,6 +57,7 @@ from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
+from gajim.gtk.util import get_primary_accel_mod
 from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -80,24 +81,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
     A base class containing a banner, ConversationTextview, MessageTextView
     """
-
-    keymap = Gdk.Keymap.get_for_display(Gdk.Display.get_default())
-    try:
-        keycode_c = keymap.get_entries_for_keyval(Gdk.KEY_c)[1][0].keycode
-    except TypeError:
-        keycode_c = 54
-    except IndexError:
-        # FIXME
-        # On some keyboard layouts there is no keyval for KEY_c
-        keycode_c = None
-
-    try:
-        keycode_ins = keymap.get_entries_for_keyval(Gdk.KEY_Insert)[1][0].keycode
-    except TypeError:
-        keycode_ins = 118
-    except IndexError:
-        # There is no KEY_Insert (MacOS)
-        keycode_ins = None
 
     def make_href(self, match):
         url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
@@ -567,20 +550,18 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if event.button == 3:  # right click
             self.parent_win.popup_menu(event)
 
-    def _conv_textview_key_press_event(self, widget, event):
-        # translate any layout to latin_layout
-        _valid, entries = self.keymap.get_entries_for_keyval(event.keyval)
-        keycode = entries[0].keycode
-        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and keycode in (
-        self.keycode_c, self.keycode_ins)):
-            return False
+    def _conv_textview_key_press_event(self, _widget, event):
+        if (event.get_state() & get_primary_accel_mod() and
+                event.keyval in (Gdk.KEY_c, Gdk.KEY_Insert)):
+            return Gdk.EVENT_PROPAGATE
 
-        if event.get_state() & Gdk.ModifierType.SHIFT_MASK and \
-        event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
+        if (event.get_state() & Gdk.ModifierType.SHIFT_MASK and
+                event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up)):
             self._on_scroll(None, event.keyval)
-            return False
+            return Gdk.EVENT_PROPAGATE
+
         self.parent_win.notebook.event(event)
-        return True
+        return Gdk.EVENT_STOP
 
     def _on_message_textview_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_space:

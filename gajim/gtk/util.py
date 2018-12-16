@@ -472,3 +472,11 @@ def get_show_in_systray(type_, jid):
         # it's not an highlighted message, don't show in systray
         return False
     return app.config.get('trayicon_notification_on_events')
+
+
+def get_primary_accel_mod():
+    """
+    Returns the primary Gdk.ModifierType modifier.
+    cmd on osx, ctrl everywhere else.
+    """
+    return Gtk.accelerator_parse("<Primary>")[1]
