@@ -157,12 +157,6 @@ class RequestAvatar(IntEnum):
 
 
 @unique
-class BookmarkStorageType(IntEnum):
-    PRIVATE = 0
-    PUBSUB = 1
-
-
-@unique
 class PEPEventType(IntEnum):
     ABSTRACT = 0
     ACTIVITY = 1

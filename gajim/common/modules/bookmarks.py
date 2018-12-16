@@ -15,6 +15,7 @@
 # XEP-0048: Bookmarks
 
 from typing import Any
+from typing import Dict
 from typing import List
 from typing import Optional
 
@@ -27,7 +28,6 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.const import BookmarkStorageType
 from gajim.common.const import PEPEventType
 from gajim.common.nec import NetworkEvent
 from gajim.common.exceptions import StanzaMalformed
@@ -210,7 +210,7 @@ class Bookmarks(AbstractPEPModule):
         return storage
 
     @staticmethod
-    def _parse_bookmarks(storage: nbxmpp.Node) -> bool:
+    def _parse_bookmarks(storage: nbxmpp.Node) -> Dict[str, Dict[str, Any]]:
         bookmarks = {}
         confs = storage.getTags('conference')
         for conf in confs:
