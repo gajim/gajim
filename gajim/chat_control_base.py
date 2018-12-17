@@ -58,6 +58,7 @@ from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 from gajim.gtk.util import get_primary_accel_mod
+from gajim.gtk.util import get_hardware_key_codes
 from gajim.gtk.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
@@ -81,6 +82,13 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
     """
     A base class containing a banner, ConversationTextview, MessageTextView
     """
+
+    # This is needed so copying text from the conversation textview
+    # works with different language layouts. Pressing the key c on a russian
+    # layout yields another keyval than with the english layout.
+    # So we match hardware keycodes instead of keyvals.
+    # Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
+    keycodes_c = get_hardware_key_codes(Gdk.KEY_c)
 
     def make_href(self, match):
         url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
@@ -552,7 +560,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
     def _conv_textview_key_press_event(self, _widget, event):
         if (event.get_state() & get_primary_accel_mod() and
-                event.keyval in (Gdk.KEY_c, Gdk.KEY_Insert)):
+                event.hardware_keycode in self.keycodes_c):
             return Gdk.EVENT_PROPAGATE
 
         if (event.get_state() & Gdk.ModifierType.SHIFT_MASK and

@@ -480,3 +480,12 @@ def get_primary_accel_mod():
     cmd on osx, ctrl everywhere else.
     """
     return Gtk.accelerator_parse("<Primary>")[1]
+
+
+def get_hardware_key_codes(keyval):
+    keymap = Gdk.Keymap.get_for_display(Gdk.Display.get_default())
+
+    valid, key_map_keys = keymap.get_entries_for_keyval(keyval)
+    if not valid:
+        return []
+    return [key.keycode for key in key_map_keys]
