@@ -1572,9 +1572,10 @@ class Interface:
                     fjid = jid
                 contact = None
                 if resource:
-                    contact = app.contacts.get_contact(account, jid, resource)
-                if not contact:
-                    contact = highest_contact
+                    contact = app.contacts.get_contact(account, jid, resource) or highest_contact
+                if contact is None:
+                    # Maybe we deleted the contact from the roster
+                    return
 
                 ctrl = self.new_chat(contact, account, resource=resource)
 
