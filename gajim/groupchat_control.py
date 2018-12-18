@@ -1297,10 +1297,10 @@ class GroupchatControl(ChatControlBase):
         if not autopopup or (not autopopupaway and \
         app.connections[self.account].connected > 2):
             if no_queue: # We didn't have a queue: we change icons
-                state_images = \
-                    app.interface.roster.get_appropriate_state_images(
-                    self.room_jid, icon_name='event')
-                image = state_images['event']
+                icon_name = gtkgui_helpers.get_iconset_name_for('event')
+                surface = Gtk.IconTheme.get_default().load_surface(
+                    icon_name, 16, self.scale_factor, None, 0)
+                image = Gtk.Image.new_from_surface(surface)
                 self.model[iter_][Column.IMG] = image
             if self.parent_win:
                 self.parent_win.show_title()
