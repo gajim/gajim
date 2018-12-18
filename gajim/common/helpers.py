@@ -1161,56 +1161,47 @@ def prepare_and_validate_gpg_keyID(account, jid, keyID):
     return keyID
 
 def update_optional_features(account=None):
-    if account:
+    if account is not None:
         accounts = [account]
     else:
-        accounts = [a for a in app.connections]
-    for a in accounts:
-        app.gajim_optional_features[a] = []
-        if app.config.get_per('accounts', a, 'subscribe_mood'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_MOOD + '+notify')
-        if app.config.get_per('accounts', a, 'subscribe_activity'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_ACTIVITY + \
-                '+notify')
-        if app.config.get_per('accounts', a, 'publish_tune'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_TUNE)
-        if app.config.get_per('accounts', a, 'publish_location'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_LOCATION)
-        if app.config.get_per('accounts', a, 'subscribe_tune'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_TUNE + '+notify')
-        if app.config.get_per('accounts', a, 'subscribe_nick'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_NICK + '+notify')
-        if app.config.get_per('accounts', a, 'subscribe_location'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_LOCATION + \
-                '+notify')
+        accounts = app.connections.keys()
+
+    for account_ in accounts:
+        features = []
+        app.gajim_optional_features[account_] = features
+        if app.config.get_per('accounts', account_, 'subscribe_mood'):
+            features.append(nbxmpp.NS_MOOD + '+notify')
+        if app.config.get_per('accounts', account_, 'subscribe_activity'):
+            features.append(nbxmpp.NS_ACTIVITY + '+notify')
+        if app.config.get_per('accounts', account_, 'subscribe_tune'):
+            features.append(nbxmpp.NS_TUNE + '+notify')
+        if app.config.get_per('accounts', account_, 'subscribe_nick'):
+            features.append(nbxmpp.NS_NICK + '+notify')
+        if app.config.get_per('accounts', account_, 'subscribe_location'):
+            features.append(nbxmpp.NS_LOCATION + '+notify')
         if app.config.get('outgoing_chat_state_notifactions') != 'disabled':
-            app.gajim_optional_features[a].append(nbxmpp.NS_CHATSTATES)
+            features.append(nbxmpp.NS_CHATSTATES)
         if not app.config.get('ignore_incoming_xhtml'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_XHTML_IM)
-        if app.config.get_per('accounts', a, 'answer_receipts'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_RECEIPTS)
-        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE)
+            features.append(nbxmpp.NS_XHTML_IM)
+        if app.config.get_per('accounts', account_, 'answer_receipts'):
+            features.append(nbxmpp.NS_RECEIPTS)
         if app.is_installed('FARSTREAM'):
-            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP)
-            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_AUDIO)
-            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_RTP_VIDEO)
-            app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_ICE_UDP)
-        app.gajim_optional_features[a].append(
-            nbxmpp.NS_JINGLE_FILE_TRANSFER_5)
-        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_XTLS)
-        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_BYTESTREAM)
-        app.gajim_optional_features[a].append(nbxmpp.NS_JINGLE_IBB)
+            features.append(nbxmpp.NS_JINGLE_RTP)
+            features.append(nbxmpp.NS_JINGLE_RTP_AUDIO)
+            features.append(nbxmpp.NS_JINGLE_RTP_VIDEO)
+            features.append(nbxmpp.NS_JINGLE_ICE_UDP)
 
         # Give plugins the possibility to add their features
-        app.plugin_manager.extension_point('update_caps', a)
+        app.plugin_manager.extension_point('update_caps', account_)
 
-        app.caps_hash[a] = caps_cache.compute_caps_hash([app.gajim_identity],
-                app.gajim_common_features + app.gajim_optional_features[a])
+        app.caps_hash[account_] = caps_cache.compute_caps_hash(
+            [app.gajim_identity],
+            app.gajim_common_features + features)
         # re-send presence with new hash
-        connected = app.connections[a].connected
+        connected = app.connections[account_].connected
         if connected > 1 and app.SHOW_LIST[connected] != 'invisible':
-            app.connections[a].change_status(app.SHOW_LIST[connected],
-                    app.connections[a].status)
+            app.connections[account_].change_status(
+                app.SHOW_LIST[connected], app.connections[account_].status)
 
 def jid_is_blocked(account, jid):
     con = app.connections[account]

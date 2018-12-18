@@ -142,17 +142,43 @@ socks5queue = None
 gupnp_igd = None
 
 gajim_identity = {'type': 'pc', 'category': 'client', 'name': 'Gajim'}
-gajim_common_features = [nbxmpp.NS_BYTESTREAM, nbxmpp.NS_SI, nbxmpp.NS_FILE,
-    nbxmpp.NS_MUC, nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC_ADMIN, nbxmpp.NS_MUC_OWNER,
-    nbxmpp.NS_MUC_CONFIG, nbxmpp.NS_COMMANDS, nbxmpp.NS_DISCO_INFO, 'ipv6',
-    'jabber:iq:gateway', nbxmpp.NS_LAST, nbxmpp.NS_PRIVACY, nbxmpp.NS_PRIVATE,
-    nbxmpp.NS_REGISTER, nbxmpp.NS_VERSION, nbxmpp.NS_DATA, nbxmpp.NS_ENCRYPTED,
-    'msglog', 'sslc2s', 'stringprep', nbxmpp.NS_PING, nbxmpp.NS_TIME_REVISED,
-    nbxmpp.NS_SSN, nbxmpp.NS_MOOD, nbxmpp.NS_ACTIVITY, nbxmpp.NS_NICK,
-    nbxmpp.NS_ROSTERX, nbxmpp.NS_SECLABEL, nbxmpp.NS_HASHES_2,
-    nbxmpp.NS_HASHES_MD5, nbxmpp.NS_HASHES_SHA1, nbxmpp.NS_HASHES_SHA256,
-    nbxmpp.NS_HASHES_SHA512, nbxmpp.NS_CONFERENCE, nbxmpp.NS_CORRECT,
-    nbxmpp.NS_EME, 'urn:xmpp:avatar:metadata+notify', 'storage:bookmarks+notify']
+
+gajim_common_features = [
+    nbxmpp.NS_BYTESTREAM,
+    nbxmpp.NS_SI,
+    nbxmpp.NS_FILE,
+    nbxmpp.NS_MUC,
+    nbxmpp.NS_COMMANDS,
+    nbxmpp.NS_DISCO_INFO,
+    nbxmpp.NS_LAST,
+    nbxmpp.NS_DATA,
+    nbxmpp.NS_ENCRYPTED,
+    nbxmpp.NS_PING,
+    nbxmpp.NS_TIME_REVISED,
+    nbxmpp.NS_VERSION,
+    nbxmpp.NS_ROSTERX,
+    nbxmpp.NS_SECLABEL,
+    nbxmpp.NS_CONFERENCE,
+    nbxmpp.NS_CORRECT,
+    nbxmpp.NS_EME,
+    nbxmpp.NS_HASHES,
+    nbxmpp.NS_HASHES_2,
+    nbxmpp.NS_HASHES_MD5,
+    nbxmpp.NS_HASHES_SHA1,
+    nbxmpp.NS_HASHES_SHA256,
+    nbxmpp.NS_HASHES_SHA512,
+    nbxmpp.NS_HASHES_SHA3_256,
+    nbxmpp.NS_HASHES_SHA3_512,
+    nbxmpp.NS_HASHES_BLAKE2B_256,
+    nbxmpp.NS_HASHES_BLAKE2B_512,
+    nbxmpp.NS_JINGLE,
+    nbxmpp.NS_JINGLE_FILE_TRANSFER_5,
+    nbxmpp.NS_JINGLE_XTLS,
+    nbxmpp.NS_JINGLE_BYTESTREAM,
+    nbxmpp.NS_JINGLE_IBB,
+    nbxmpp.NS_AVATAR_METADATA + '+notify',
+    nbxmpp.NS_BOOKMARKS + '+notify',
+]
 
 # Optional features gajim supports per account
 gajim_optional_features = {}  # type: Dict[str, List[str]]
