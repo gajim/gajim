@@ -241,7 +241,3 @@ class ConfigPaths:
 
 
 _paths = ConfigPaths()
-
-# For backwards compatibility needed
-# some plugins use that
-gajimpaths = _paths

@@ -67,11 +67,6 @@ plugin_manager = None # Plugins Manager
 
 logger = cast(LoggerT, None)
 
-# For backwards compatibility needed
-# some plugins use that
-gajimpaths = configpaths.gajimpaths
-
-
 RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
 
 css_config = None
