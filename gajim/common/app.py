@@ -67,8 +67,6 @@ plugin_manager = None # Plugins Manager
 
 logger = cast(LoggerT, None)
 
-RecentGroupchat = namedtuple('RecentGroupchat', ['room', 'server', 'nickname'])
-
 css_config = None
 
 os_info = None # used to cache os information
@@ -574,6 +572,9 @@ def get_muc_domain(account):
 def get_recent_groupchats(account):
     recent_groupchats = config.get_per(
         'accounts', account, 'recent_groupchats').split()
+
+    RecentGroupchat = namedtuple('RecentGroupchat',
+                                 ['room', 'server', 'nickname'])
 
     recent_list = []
     for groupchat in recent_groupchats:
