@@ -87,7 +87,9 @@ class GlobalEventsDispatcher:
         log.debug('%s Args: %s', event_name, str(args))
         if event_name in self.handlers:
             node_processed = False
-            for _priority, handler in self.handlers[event_name]:
+            # Iterate over a copy of the handlers list, so while iterating
+            # the original handlers list can be modified
+            for _priority, handler in list(self.handlers[event_name]):
                 try:
                     if handler(*args, **kwargs):
                         return True
