@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
@@ -65,9 +66,11 @@ class MAM:
 
         self.available = True
         log.info('Discovered MAM %s: %s', self.archiving_namespace, from_)
-        # TODO: Move this GUI code out
-        action = app.app.lookup_action('%s-archive' % self._account)
-        action.set_enabled(True)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('feature-discovered',
+                         account=self._account,
+                         feature=self.archiving_namespace))
 
     def _from_valid_archive(self, stanza, message, groupchat):
         if groupchat:

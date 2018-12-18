@@ -20,6 +20,7 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.connection_handlers_events import InformationEvent
 
@@ -51,9 +52,11 @@ class PrivacyLists:
 
         self.supported = True
         log.info('Discovered XEP-0016: Privacy Lists: %s', from_)
-        # TODO: Move this GUI code out
-        action = app.app.lookup_action('%s-privacylists' % self._account)
-        action.set_enabled(True)
+
+        app.nec.push_incoming_event(
+            NetworkEvent('feature-discovered',
+                         account=self._account,
+                         feature=nbxmpp.NS_PRIVACY))
 
     def _list_push_received(self, _con, stanza):
         result = stanza.buildReply('result')

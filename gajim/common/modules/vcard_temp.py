@@ -23,6 +23,7 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common.const import RequestAvatar
+from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.connection_handlers_events import InformationEvent
 
@@ -47,9 +48,10 @@ class VCardTemp:
 
         self.supported = True
         log.info('Discovered vcard-temp: %s', from_)
-        # TODO: Move this GUI code out
-        action = app.app.lookup_action('%s-profile' % self._account)
-        action.set_enabled(True)
+
+        app.nec.push_incoming_event(NetworkEvent('feature-discovered',
+                                                 account=self._account,
+                                                 feature=nbxmpp.NS_VCARD))
 
     @staticmethod
     def _node_to_dict(node):

@@ -38,10 +38,14 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import unquote
 
-from gi.repository import GLib, Gio, Gtk
+import nbxmpp
+from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import Gtk
 
 import gajim
 from gajim.common import app
+from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common import exceptions
@@ -226,6 +230,10 @@ class GajimApplication(Gtk.Application):
         self.add_actions()
         from gajim import gui_menu_builder
         gui_menu_builder.build_accounts_menu()
+
+        app.ged.register_event_handler('feature-discovered',
+                                       ged.CORE,
+                                       self._on_feature_discovered)
 
     def _open_uris(self, uris):
         for uri in uris:
@@ -498,3 +506,14 @@ class GajimApplication(Gtk.Application):
             elif new_state and state == 'online':
                 # We go online
                 self.lookup_action(account + action_name).set_enabled(True)
+
+    def _on_feature_discovered(self, event):
+        if event.feature == nbxmpp.NS_VCARD:
+            action = '%s-profile' % event.account
+            self.lookup_action(action).set_enabled(True)
+        elif event.feature in (nbxmpp.NS_MAM_1, nbxmpp.NS_MAM_2):
+            action = '%s-archive' % event.account
+            self.lookup_action(action).set_enabled(True)
+        elif event.feature == nbxmpp.NS_PRIVACY:
+            action = '%s-privacylists' % event.account
+            self.lookup_action(action).set_enabled(True)
