@@ -5908,7 +5908,7 @@ class RosterWindow:
             self._nec_roster_received)
         app.ged.register_event_handler('anonymous-auth', ged.GUI1,
             self._nec_anonymous_auth)
-        app.ged.register_event_handler('our-show', ged.GUI1,
+        app.ged.register_event_handler('our-show', ged.GUI2,
             self._nec_our_show)
         app.ged.register_event_handler('connection-type', ged.GUI1,
             self._nec_connection_type)
