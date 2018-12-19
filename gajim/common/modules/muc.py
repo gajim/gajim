@@ -40,7 +40,7 @@ class MUC:
 
         self.handlers = [
             ('message', self._on_config_change, '', nbxmpp.NS_MUC_USER),
-            ('message', self._mediated_invite, '', nbxmpp.NS_MUC_USER),
+            ('message', self._mediated_invite, 'normal', nbxmpp.NS_MUC_USER),
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
             ('message', self._on_captcha_challenge, '', nbxmpp.NS_CAPTCHA),
         ]
@@ -338,6 +338,9 @@ class MUC:
             return
 
         if stanza.getType() == 'error':
+            return
+
+        if stanza.getBody():
             return
 
         decline = muc_user.getTag('decline')
