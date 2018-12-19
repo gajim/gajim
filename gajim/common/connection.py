@@ -1684,14 +1684,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             show=show,
             caps=ptype != 'unavailable')
 
-    def send_captcha(self, jid, form_node):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='set', to=jid)
-        captcha = iq.addChild(name='captcha', namespace=nbxmpp.NS_CAPTCHA)
-        captcha.addChild(node=form_node)
-        self.connection.send(iq)
-
     def check_unique_room_id_support(self, server, instance):
         if not app.account_is_connected(self.name):
             return

@@ -386,7 +386,7 @@ class GajimRemote(Server):
             return
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
             obj.timestamp, obj.delayed, obj.xhtml_msgtxt,
-            obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
+            obj.displaymarking, obj.needs_highlight]))
 
     def on_our_status(self, obj):
         self.raise_signal('AccountPresence', (obj.show, obj.conn.name))

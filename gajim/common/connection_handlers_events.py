@@ -416,30 +416,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
         from gajim.common.modules.security_labels import parse_securitylabel
         self.displaymarking = parse_securitylabel(self.stanza)
 
-        self.captcha_form = None
-        captcha_tag = self.stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
-        if captcha_tag:
-            self.captcha_form = captcha_tag.getTag('x',
-                namespace=nbxmpp.NS_DATA)
-            for field in self.captcha_form.getTags('field'):
-                for media in field.getTags('media'):
-                    for uri in media.getTags('uri'):
-                        uri_data = uri.getData()
-                        if uri_data.startswith('cid:'):
-                            uri_data = uri_data[4:]
-                            found = False
-                            for data in self.stanza.getTags('data',
-                            namespace=nbxmpp.NS_BOB):
-                                if data.getAttr('cid') == uri_data:
-                                    uri.setData(data.getData())
-                                    found = True
-                            if not found:
-                                self.conn.get_module('BitsOfBinary').get_bob_data(
-                                    uri_data, self.fjid,
-                                    self.conn._dispatch_gc_msg_with_captcha,
-                                    [self.stanza, self.msg_obj], 0)
-                                return
-
         from gajim.common.modules.misc import parse_correction
         self.correct_id = parse_correction(self.stanza)
 

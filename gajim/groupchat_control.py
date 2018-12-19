@@ -44,7 +44,6 @@ from gajim import gtkgui_helpers
 from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import vcard
-from gajim import dataforms_widget
 
 from gajim.common.const import AvatarSize
 from gajim.common.caps_cache import muc_caps_cache
@@ -53,7 +52,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.helpers import launch_browser_mailer
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.modules import dataforms
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
@@ -77,6 +75,7 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.adhoc_commands import CommandWindow
+from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import NickCompletionGenerator
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_affiliation_surface
@@ -330,6 +329,8 @@ class GroupchatControl(ChatControlBase):
             self._nec_decrypted_message_received)
         app.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
+        app.ged.register_event_handler('captcha-challenge', ged.GUI1,
+                                       self._on_captcha_challenge)
         self.is_connected = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1073,6 +1074,48 @@ class GroupchatControl(ChatControlBase):
             return
         self._update_banner_state_image()
 
+    def _on_captcha_challenge(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        if self.form_widget:
+            self.form_widget.hide()
+            self.form_widget.destroy()
+            self.btn_box.destroy()
+
+        self.form_widget = DataFormWidget(event.form)
+
+        def on_send_dataform_clicked(widget):
+            if not self.form_widget:
+                return
+            form_node = self.form_widget.get_submit_form()
+            con = app.connections[self.account]
+            con.get_module('MUC').send_captcha(self.room_jid, form_node)
+            self.form_widget.hide()
+            self.form_widget.destroy()
+            self.btn_box.destroy()
+            self.form_widget = None
+            del self.btn_box
+
+        # self.form_widget.connect('validated', on_send_dataform_clicked)
+        self.form_widget.show_all()
+        vbox = self.xml.get_object('gc_textviews_vbox')
+        vbox.pack_start(self.form_widget, False, True, 0)
+
+        valid_button = Gtk.Button(stock=Gtk.STOCK_OK)
+        valid_button.connect('clicked', on_send_dataform_clicked)
+        self.btn_box = Gtk.HButtonBox()
+        self.btn_box.set_layout(Gtk.ButtonBoxStyle.END)
+        self.btn_box.pack_start(valid_button, True, True, 0)
+        self.btn_box.show_all()
+        vbox.pack_start(self.btn_box, False, False, 0)
+        if self.parent_win:
+            self.parent_win.redraw_tab(self, 'attention')
+        else:
+            self.attention_flag = True
+
     def _nec_mam_decrypted_message_received(self, obj):
         if obj.conn.name != self.account:
             return
@@ -1090,42 +1133,7 @@ class GroupchatControl(ChatControlBase):
     def _nec_gc_message_received(self, obj):
         if obj.room_jid != self.room_jid or obj.conn.name != self.account:
             return
-        if obj.captcha_form:
-            if self.form_widget:
-                self.form_widget.hide()
-                self.form_widget.destroy()
-                self.btn_box.destroy()
-            dataform = dataforms.extend_form(node=obj.captcha_form)
-            self.form_widget = dataforms_widget.DataFormWidget(dataform)
 
-            def on_send_dataform_clicked(widget):
-                if not self.form_widget:
-                    return
-                form_node = self.form_widget.data_form.get_purged()
-                form_node.type_ = 'submit'
-                obj.conn.send_captcha(self.room_jid, form_node)
-                self.form_widget.hide()
-                self.form_widget.destroy()
-                self.btn_box.destroy()
-                self.form_widget = None
-                del self.btn_box
-
-            self.form_widget.connect('validated', on_send_dataform_clicked)
-            self.form_widget.show_all()
-            vbox = self.xml.get_object('gc_textviews_vbox')
-            vbox.pack_start(self.form_widget, False, True, 0)
-
-            valid_button = Gtk.Button(stock=Gtk.STOCK_OK)
-            valid_button.connect('clicked', on_send_dataform_clicked)
-            self.btn_box = Gtk.HButtonBox()
-            self.btn_box.set_layout(Gtk.ButtonBoxStyle.END)
-            self.btn_box.pack_start(valid_button, True, True, 0)
-            self.btn_box.show_all()
-            vbox.pack_start(self.btn_box, False, False, 0)
-            if self.parent_win:
-                self.parent_win.redraw_tab(self, 'attention')
-            else:
-                self.attention_flag = True
         if not obj.nick:
             # message from server
             self.print_conversation(
@@ -2169,6 +2177,8 @@ class GroupchatControl(ChatControlBase):
             ged.GUI1, self._nec_mam_decrypted_message_received)
         app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
             self._message_sent)
+        app.ged.remove_event_handler('captcha-challenge', ged.GUI1,
+                                     self._on_captcha_challenge)
 
         if self.is_connected:
             app.connections[self.account].send_gc_status(self.nick,

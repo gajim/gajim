@@ -22,12 +22,13 @@ import weakref
 import nbxmpp
 
 from gajim.common import i18n
-from gajim.common.modules import dataforms
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules import dataforms
+from gajim.common.modules.bits_of_binary import parse_bob_data
 
 log = logging.getLogger('gajim.c.m.muc')
 
@@ -41,6 +42,7 @@ class MUC:
             ('message', self._on_config_change, '', nbxmpp.NS_MUC_USER),
             ('message', self._mediated_invite, '', nbxmpp.NS_MUC_USER),
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
+            ('message', self._on_captcha_challenge, '', nbxmpp.NS_CAPTCHA),
         ]
 
     def pass_disco(self, from_, identities, features, _data, _node):
@@ -111,6 +113,35 @@ class MUC:
         message = nbxmpp.Message(room_jid, typ='groupchat', subject=subject)
         log.info('Set subject for %s', room_jid)
         self._con.connection.send(message)
+
+    def _on_captcha_challenge(self, _con, stanza):
+        captcha = stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
+        if captcha is None:
+            return
+
+        parse_bob_data(stanza)
+        room_jid = str(stanza.getFrom())
+        contact = app.contacts.get_groupchat_contact(self._account, room_jid)
+        if contact is None:
+            return
+
+        log.info('Captcha challenge received from %s', room_jid)
+        data_form = captcha.getTag('x', namespace=nbxmpp.NS_DATA)
+        data_form = dataforms.extend_form(node=data_form)
+        app.nec.push_incoming_event(
+            NetworkEvent('captcha-challenge',
+                         account=self._account,
+                         room_jid=room_jid,
+                         form=data_form))
+        raise nbxmpp.NodeProcessed
+
+    def send_captcha(self, room_jid, form_node):
+        if not app.account_is_connected(self._account):
+            return
+        iq = nbxmpp.Iq(typ='set', to=room_jid)
+        captcha = iq.addChild(name='captcha', namespace=nbxmpp.NS_CAPTCHA)
+        captcha.addChild(node=form_node)
+        self._con.connection.send(iq)
 
     def request_config(self, room_jid):
         if not app.account_is_connected(self._account):

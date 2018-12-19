@@ -28,7 +28,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.carbons import parse_carbon
-from gajim.common.modules.bits_of_binary import parse_bob_data
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
@@ -58,7 +57,8 @@ class Message:
                                         nbxmpp.NS_MAM_1,
                                         nbxmpp.NS_MAM_2,
                                         nbxmpp.NS_CONFERENCE,
-                                        nbxmpp.NS_IBB])
+                                        nbxmpp.NS_IBB,
+                                        nbxmpp.NS_CAPTCHA,])
 
     def _message_received(self, _con, stanza):
         # https://tools.ietf.org/html/rfc6120#section-8.1.1.1
@@ -258,8 +258,6 @@ class Message:
         if user_timestamp is not None:
             event.additional_data.set_value(
                 'gajim', 'user_timestamp', user_timestamp)
-
-        parse_bob_data(event.stanza)
 
         event_attr = {
             'popup': False,
