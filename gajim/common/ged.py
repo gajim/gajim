@@ -24,6 +24,7 @@ Global Events Dispatcher module.
 
 import logging
 import traceback
+import inspect
 
 from nbxmpp import NodeProcessed
 
@@ -84,13 +85,19 @@ class GlobalEventsDispatcher:
                     Error: %s''', handler, priority, event_name, error)
 
     def raise_event(self, event_name, *args, **kwargs):
-        log.debug('%s Args: %s', event_name, str(args))
+        log.debug('Raise event: %s', event_name)
         if event_name in self.handlers:
             node_processed = False
             # Iterate over a copy of the handlers list, so while iterating
             # the original handlers list can be modified
             for _priority, handler in list(self.handlers[event_name]):
                 try:
+                    if inspect.ismethod(handler):
+                        log.debug('Call handler %s on %s',
+                                  handler.__name__,
+                                  handler.__self__)
+                    else:
+                        log.debug('Call handler %s', handler.__name__)
                     if handler(*args, **kwargs):
                         return True
                 except NodeProcessed:
