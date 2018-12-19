@@ -1126,9 +1126,6 @@ class GroupchatControl(ChatControlBase):
                 self.parent_win.redraw_tab(self, 'attention')
             else:
                 self.attention_flag = True
-        if '100' in obj.status_code:
-            # Room is not anonymous
-            self.is_anonymous = False
         if not obj.nick:
             # message from server
             self.print_conversation(
@@ -1416,40 +1413,40 @@ class GroupchatControl(ChatControlBase):
         else:
             self.subject_button.show()
 
-    def _nec_gc_config_changed_received(self, obj):
-        # statuscode is a list
+    def _nec_gc_config_changed_received(self, event):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-        # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes...
-        # -init
-        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
+        if event.account != self.account:
+            return
+
+        if event.room_jid != self.room_jid:
             return
 
         changes = []
-        if '100' in obj.status_code:
+        if '100' in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Any occupant is allowed to see your full JID'))
             self.is_anonymous = False
-        if '102' in obj.status_code:
+        if '102' in event.status_codes:
             changes.append(_('Room now shows unavailable members'))
-        if '103' in obj.status_code:
+        if '103' in event.status_codes:
             changes.append(_('Room now does not show unavailable members'))
-        if '104' in obj.status_code:
+        if '104' in event.status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
             app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid, self.update_actions, update=True)
-        if '170' in obj.status_code:
+        if '170' in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
-        if '171' in obj.status_code:
+        if '171' in event.status_codes:
             changes.append(_('Room logging is now disabled'))
-        if '172' in obj.status_code:
+        if '172' in event.status_codes:
             changes.append(_('Room is now non-anonymous'))
             self.is_anonymous = False
-        if '173' in obj.status_code:
+        if '173' in event.status_codes:
             changes.append(_('Room is now semi-anonymous'))
             self.is_anonymous = True
-        if '174' in obj.status_code:
+        if '174' in event.status_codes:
             changes.append(_('Room is now fully anonymous'))
             self.is_anonymous = True
 

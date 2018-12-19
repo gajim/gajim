@@ -40,27 +40,6 @@ from gajim.common.file_props import FilesProp
 
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
-CONDITION_TO_CODE = {
-    'realjid-public': 100,
-    'affiliation-changed': 101,
-    'unavailable-shown': 102,
-    'unavailable-not-shown': 103,
-    'configuration-changed': 104,
-    'self-presence': 110,
-    'logging-enabled': 170,
-    'logging-disabled': 171,
-    'non-anonymous': 172,
-    'semi-anonymous': 173,
-    'fully-anonymous': 174,
-    'room-created': 201,
-    'nick-assigned': 210,
-    'banned': 301,
-    'new-nick': 303,
-    'kicked': 307,
-    'removed-affiliation': 321,
-    'removed-membership': 322,
-    'removed-shutdown': 332,
-}
 
 class HelperEvent:
     def get_jid_resource(self, check_fake_jid=False):
@@ -378,14 +357,7 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
             self.status_code = ['destroyed']
         else:
             self.reason = self.stanza.getReason()
-            conditions = self.stanza.getStatusConditions()
-            if conditions:
-                self.status_code = []
-                for condition in conditions:
-                    if condition in CONDITION_TO_CODE:
-                        self.status_code.append(CONDITION_TO_CODE[condition])
-            else:
-                self.status_code = self.stanza.getStatusCode()
+            self.status_code = self.stanza.getStatusCode()
 
         self.role = self.stanza.getRole()
         self.affiliation = self.stanza.getAffiliation()
@@ -429,22 +401,7 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             # message from server
             self.nick = ''
 
-        conditions = self.stanza.getStatusConditions()
-        if conditions:
-            self.status_code = []
-            for condition in conditions:
-                if condition in CONDITION_TO_CODE:
-                    self.status_code.append(CONDITION_TO_CODE[condition])
-        else:
-            self.status_code = self.stanza.getStatusCode()
-
         if not self.stanza.getTag('body'): # no <body>
-            # It could be a config change. See
-            # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-            if self.stanza.getTag('x'):
-                if self.status_code != []:
-                    app.nec.push_incoming_event(GcConfigChangedReceivedEvent(
-                        None, conn=self.conn, msg_event=self))
             if self.msg_obj.form_node:
                 # It could be a voice request. See
                 # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove

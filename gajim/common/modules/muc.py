@@ -26,6 +26,7 @@ from gajim.common.modules import dataforms
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.caps_cache import muc_caps_cache
+from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.muc')
@@ -37,6 +38,7 @@ class MUC:
         self._account = con.name
 
         self.handlers = [
+            ('message', self._on_config_change, '', nbxmpp.NS_MUC_USER),
             ('message', self._mediated_invite, '', nbxmpp.NS_MUC_USER),
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
         ]
@@ -153,6 +155,41 @@ class MUC:
         log.info('Cancel config for %s', room_jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._default_response, {})
+
+    def _on_config_change(self, _con, stanza):
+        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
+        if muc_user is None:
+            return
+
+        if stanza.getBody():
+            return
+
+        room_list = app.contacts.get_gc_list(self._account)
+        room_jid = str(stanza.getFrom())
+        if room_jid not in room_list:
+            # Message not from a group chat
+            return
+
+        # https://xmpp.org/extensions/xep-0045.html#registrar-statuscodes
+        change_codes = ['100', '102', '103', '104',
+                        '170', '171', '172', '173', '174']
+
+        codes = set()
+        for status in muc_user.getTags('status'):
+            code = status.getAttr('code')
+            if code in change_codes:
+                codes.add(code)
+
+        if not codes:
+            return
+
+        log.info('Received config change: %s', codes)
+        app.nec.push_incoming_event(
+            NetworkEvent('gc-config-changed-received',
+                         account=self._account,
+                         room_jid=room_jid,
+                         status_codes=codes))
+        raise nbxmpp.NodeProcessed
 
     def destroy(self, room_jid, reason='', jid=''):
         if not app.account_is_connected(self._account):

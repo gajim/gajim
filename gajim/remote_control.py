@@ -385,7 +385,7 @@ class GajimRemote(Server):
             # event has not been handled at GUI level
             return
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
-            obj.timestamp, obj.delayed, obj.xhtml_msgtxt, obj.status_code,
+            obj.timestamp, obj.delayed, obj.xhtml_msgtxt,
             obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
 
     def on_our_status(self, obj):
