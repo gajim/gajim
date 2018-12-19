@@ -171,6 +171,11 @@ class Chatstate:
                         if contact is not None:
                             contact = contact.as_contact()
                         else:
+                            # Contact not found, maybe we left the group chat
+                            # or the contact was removed from the roster
+                            log.info(
+                                'Contact %s not found, reset chatstate', jid)
+                            self._chatstates.pop(jid, None)
                             self._last_mouse_activity.pop(jid, None)
                             self._last_keyboard_activity.pop(jid, None)
                             continue
@@ -206,14 +211,21 @@ class Chatstate:
         current_state = self._chatstates.get(contact.jid)
         setting = app.config.get('outgoing_chat_state_notifications')
         if setting == 'disabled':
-            # Send a last 'gone' state after user disabled chatstates
+            # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
-                log.info('Send: %-10s - %s', State.GONE, contact.jid)
-                app.nec.push_outgoing_event(
-                    MessageOutgoingEvent(None,
-                                         account=self._account,
-                                         jid=contact.jid,
-                                         chatstate=str(State.GONE)))
+                log.info('Send: %-10s - %s', State.ACTIVE, contact.jid)
+
+                event_attrs = {'account': self._account,
+                               'jid': contact.jid,
+                               'chatstate': str(State.ACTIVE)}
+
+                if contact.is_groupchat():
+                    app.nec.push_outgoing_event(
+                        GcMessageOutgoingEvent(None, **event_attrs))
+                else:
+                    app.nec.push_outgoing_event(
+                        MessageOutgoingEvent(None, **event_attrs))
+
             self._chatstates.pop(contact.jid, None)
             self._last_mouse_activity.pop(contact.jid, None)
             self._last_keyboard_activity.pop(contact.jid, None)
