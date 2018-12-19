@@ -585,12 +585,18 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
             nbxmpp.NS_PUBKEY_PUBKEY)
 
         for handler in modules.get_handlers(self):
-            con.RegisterHandler(*handler)
+            if len(handler) == 5:
+                name, func, typ, ns, priority = handler
+                con.RegisterHandler(name, func, typ, ns, priority=priority)
+            else:
+                con.RegisterHandler(*handler)
         self.handlers_registered = True
 
     def _unregister_handlers(self):
         if not self.connection:
             return
         for handler in modules.get_handlers(self):
+            if len(handler) > 4:
+                handler = handler[:4]
             self.connection.UnregisterHandler(*handler)
         self.handlers_registered = False
