@@ -70,6 +70,7 @@ from gajim.gtk.dialogs import ConfirmationDialogCheck
 from gajim.gtk.dialogs import DoubleInputDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import ChangeNickDialog
+from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.tooltips import GCTooltip
@@ -331,6 +332,8 @@ class GroupchatControl(ChatControlBase):
             self._message_sent)
         app.ged.register_event_handler('captcha-challenge', ged.GUI1,
                                        self._on_captcha_challenge)
+        app.ged.register_event_handler('voice-approval', ged.GUI1,
+                                       self._on_voice_approval)
         self.is_connected = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -1073,6 +1076,17 @@ class GroupchatControl(ChatControlBase):
         if obj.jid != self.room_jid:
             return
         self._update_banner_state_image()
+
+    def _on_voice_approval(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+        SingleMessageWindow(self.account,
+                            self.room_jid,
+                            action='receive',
+                            from_whom=self.room_jid,
+                            form_node=event.form)
 
     def _on_captcha_challenge(self, event):
         if event.account != self.account:
@@ -2179,6 +2193,8 @@ class GroupchatControl(ChatControlBase):
             self._message_sent)
         app.ged.remove_event_handler('captcha-challenge', ged.GUI1,
                                      self._on_captcha_challenge)
+        app.ged.remove_event_handler('voice-approval', ged.GUI1,
+                                     self._on_voice_approval)
 
         if self.is_connected:
             app.connections[self.account].send_gc_status(self.nick,

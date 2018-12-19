@@ -20,12 +20,11 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.modules import dataforms
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 
-from gajim.dataforms_widget import DataFormWidget
 from gajim.conversation_textview import ConversationTextview
 
+from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_builder
@@ -83,9 +82,7 @@ class SingleMessageWindow:
         parent_box = self.xml.get_object('conversation_scrolledwindow').\
                            get_parent()
         if form_node:
-            dataform = dataforms.extend_form(node=form_node)
-            dataform.type_ = 'submit'
-            self.form_widget = DataFormWidget(dataform)
+            self.form_widget = DataFormWidget(form_node)
             self.form_widget.show_all()
             parent_box.add(self.form_widget)
             parent_box.child_set_property(self.form_widget, 'position',
@@ -282,7 +279,7 @@ class SingleMessageWindow:
         message = self.message_tv_buffer.get_text(begin, end, True)
 
         if self.form_widget:
-            form_node = self.form_widget.data_form
+            form_node = self.form_widget.get_submit_form()
         else:
             form_node = None
 

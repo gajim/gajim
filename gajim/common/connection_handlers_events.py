@@ -402,15 +402,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
             self.nick = ''
 
         if not self.stanza.getTag('body'): # no <body>
-            if self.msg_obj.form_node:
-                # It could be a voice request. See
-                # http://www.xmpp.org/extensions/xep-0045.html#voiceapprove
-                from gajim.gtk.single_message import SingleMessageWindow
-                SingleMessageWindow(
-                    self.conn.name, self.fjid,
-                    action='receive', from_whom=self.fjid,
-                    subject='', message='', resource='', session=None,
-                    form_node=self.msg_obj.form_node)
             return
 
         from gajim.common.modules.security_labels import parse_securitylabel

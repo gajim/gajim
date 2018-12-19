@@ -43,6 +43,7 @@ class MUC:
             ('message', self._mediated_invite, 'normal', nbxmpp.NS_MUC_USER),
             ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
             ('message', self._on_captcha_challenge, '', nbxmpp.NS_CAPTCHA),
+            ('message', self._on_voice_request, '', nbxmpp.NS_DATA, 45),
         ]
 
     def pass_disco(self, from_, identities, features, _data, _node):
@@ -113,6 +114,33 @@ class MUC:
         message = nbxmpp.Message(room_jid, typ='groupchat', subject=subject)
         log.info('Set subject for %s', room_jid)
         self._con.connection.send(message)
+
+    def _on_voice_request(self, _con, stanza):
+        data_form = stanza.getTag('x', namespace=nbxmpp.NS_DATA)
+        if data_form is None:
+            return
+
+        if stanza.getBody():
+            return
+
+        room_jid = str(stanza.getFrom())
+        contact = app.contacts.get_groupchat_contact(self._account, room_jid)
+        if contact is None:
+            return
+
+        data_form = dataforms.extend_form(data_form)
+        try:
+            if data_form['FORM_TYPE'].value != nbxmpp.NS_MUC_REQUEST:
+                return
+        except KeyError:
+            return
+
+        app.nec.push_incoming_event(
+            NetworkEvent('voice-approval',
+                         account=self._account,
+                         room_jid=room_jid,
+                         form=data_form))
+        raise nbxmpp.NodeProcessed
 
     def _on_captcha_challenge(self, _con, stanza):
         captcha = stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
