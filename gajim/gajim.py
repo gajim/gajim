@@ -24,7 +24,6 @@ from ctypes import CDLL, byref, create_string_buffer
 from ctypes.util import find_library
 from distutils.version import LooseVersion as V
 
-# Install _() in namespace
 from gajim.common import i18n
 
 _MIN_NBXMPP_VER = "0.9.90.2"
