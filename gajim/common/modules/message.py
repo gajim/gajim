@@ -27,7 +27,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
-from gajim.common.modules.carbons import parse_carbon
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
@@ -60,24 +59,7 @@ class Message:
                                         nbxmpp.NS_IBB,
                                         nbxmpp.NS_CAPTCHA,])
 
-    def _message_received(self, _con, stanza):
-        # https://tools.ietf.org/html/rfc6120#section-8.1.1.1
-        # If the stanza does not include a 'to' address then the client MUST
-        # treat it as if the 'to' address were included with a value of the
-        # client's full JID.
-        #
-        # Implementation Note: However, if the client does
-        # check the 'to' address then it is suggested to check at most the
-        # bare JID portion (not the full JID)
-
-        own_jid = self._con.get_own_jid().getStripped()
-        to = stanza.getTo()
-        if to is None:
-            stanza.setTo(own_jid)
-        elif not to.bareMatch(own_jid):
-            log.warning('Message addressed to someone else: %s', stanza)
-            raise nbxmpp.NodeProcessed
-
+    def _message_received(self, _con, stanza, properties):
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
         # nbxmpp executes less common handlers last
@@ -98,20 +80,19 @@ class Message:
             stanza=stanza,
             account=self._account))
 
-        if stanza.getFrom() == self._con.get_own_jid(warn=True):
-            # Drop messages sent from our own full jid
-            # It can happen that when we sent message to our own bare jid
-            # that the server routes that message back to us
-            log.info('Received message from self: %s, message is dropped',
-                     stanza.getFrom())
-            return
-
-        stanza, sent, forwarded = parse_carbon(self._con, stanza)
+        forwarded = properties.carbon_type is not None
+        sent = properties.carbon_type == 'sent'
+        if sent:
+            # Ugly, we treat the from attr as the remote jid,
+            # to make that work with sent carbons we have to do this.
+            # TODO: Check where in Gajim and plugins we depend on that behavior
+            stanza.setFrom(stanza.getTo().getBare())
 
         from_ = stanza.getFrom()
         type_ = stanza.getType()
         if type_ is None:
             type_ = 'normal'
+
         self_message = is_self_message(stanza, type_ == 'groupchat')
         muc_pm = is_muc_pm(stanza, from_, type_ == 'groupchat')
 
@@ -138,7 +119,7 @@ class Message:
             if type_ == 'groupchat':
                 archive_jid = stanza.getFrom().getStripped()
             else:
-                archive_jid = own_jid
+                archive_jid = self._con.get_own_jid().getStripped()
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
                                          stanza_id,
