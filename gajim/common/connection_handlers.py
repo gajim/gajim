@@ -448,11 +448,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
                 agent=jid))
             del self.awaiting_answers[id_]
 
-    def _dispatch_gc_msg_with_captcha(self, stanza, msg_obj):
-        msg_obj.stanza = stanza
-        app.nec.push_incoming_event(GcMessageReceivedEvent(None,
-            conn=self, msg_obj=msg_obj))
-
     def _nec_agent_removed(self, obj):
         if obj.conn.name != self.name:
             return
