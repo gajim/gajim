@@ -412,16 +412,6 @@ class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
 
         return True
 
-class GcConfigChangedReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gc-config-changed-received'
-
-    def generate(self):
-        self.conn = self.msg_event.conn
-        self.stanza = self.msg_event.stanza
-        self.room_jid = self.msg_event.room_jid
-        self.status_code = self.msg_event.status_code
-        return True
-
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
 
