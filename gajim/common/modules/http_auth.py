@@ -19,7 +19,7 @@ import logging
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 
 log = logging.getLogger('gajim.c.m.http_auth')
 
@@ -29,12 +29,9 @@ class HTTPAuth:
         self._con = con
         self._account = con.name
 
-        self.handlers = [
-            ('iq', self.answer_request, 'get', nbxmpp.NS_HTTP_AUTH),
-            ('message', self.answer_request, '', nbxmpp.NS_HTTP_AUTH)
-        ]
+        self.handlers = []
 
-    def answer_request(self, _con, stanza):
+    def delegate(self, stanza, properties):
         log.info('Auth request received')
         auto_answer = app.config.get_per(
             'accounts', self._account, 'http_auth')
@@ -42,21 +39,14 @@ class HTTPAuth:
             self.build_http_auth_answer(stanza, auto_answer)
             raise nbxmpp.NodeProcessed
 
-        iq_id = stanza.getTagAttr('confirm', 'id')
-        method = stanza.getTagAttr('confirm', 'method')
-        url = stanza.getTagAttr('confirm', 'url')
-        # In case it's a message with a body
-        msg = stanza.getTagData('body')
-
         app.nec.push_incoming_event(
-            HttpAuthReceivedEvent(None, conn=self._con,
-                                  iq_id=iq_id,
-                                  method=method,
-                                  url=url,
-                                  msg=msg,
-                                  stanza=stanza))
-
-        raise nbxmpp.NodeProcessed
+            NetworkEvent('http-auth-received',
+                         conn=self._con,
+                         iq_id=properties['id'],
+                         method=properties['method'],
+                         url=properties['url'],
+                         msg=properties['body'],
+                         stanza=stanza))
 
     def build_http_auth_answer(self, stanza, answer):
         if answer == 'yes':
@@ -70,10 +60,6 @@ class HTTPAuth:
             log.info('Auth request denied')
             err = nbxmpp.Error(stanza, nbxmpp.protocol.ERR_NOT_AUTHORIZED)
             self._con.connection.send(err)
-
-
-class HttpAuthReceivedEvent(NetworkIncomingEvent):
-    name = 'http-auth-received'
 
 
 def get_instance(*args, **kwargs):

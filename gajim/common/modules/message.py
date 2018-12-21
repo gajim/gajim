@@ -50,8 +50,7 @@ class Message:
         self.handlers = [('message', self._message_received)]
 
         # XEPs for which this message module should not be executed
-        self._message_namespaces = set([nbxmpp.NS_HTTP_AUTH,
-                                        nbxmpp.NS_PUBSUB_EVENT,
+        self._message_namespaces = set([nbxmpp.NS_PUBSUB_EVENT,
                                         nbxmpp.NS_ROSTERX,
                                         nbxmpp.NS_MAM_1,
                                         nbxmpp.NS_MAM_2,
@@ -60,6 +59,10 @@ class Message:
                                         nbxmpp.NS_CAPTCHA,])
 
     def _message_received(self, _con, stanza, properties):
+        if properties.is_http_auth:
+            self._con.get_module('HTTPAuth').delegate(stanza, properties)
+            raise nbxmpp.NodeProcessed
+
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
         # nbxmpp executes less common handlers last

@@ -420,7 +420,11 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
             stanza=iq_obj))
 
-    def _IqCB(self, con, iq_obj):
+    def _IqCB(self, con, iq_obj, properties):
+        if properties.is_http_auth:
+            self.get_module('HTTPAuth').delegate(iq_obj, properties)
+            raise nbxmpp.NodeProcessed
+
         id_ = iq_obj.getID()
 
         app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
