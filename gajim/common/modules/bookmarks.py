@@ -80,6 +80,10 @@ class Bookmarks(AbstractPEPModule):
             log.info('Ignore update, pubsub request in progress')
             return
 
+        if not self._con.get_own_jid().bareMatch(jid):
+            log.warning('%s has an open access bookmarks node', jid)
+            return
+
         if not self._pubsub_support() or not self.conversion:
             return
 
