@@ -1694,18 +1694,24 @@ class Interface:
                 self.roster.open_event(account, fjid, event)
         elif type_ == 'gc-invitation':
             event = app.events.get_first_event(account, jid, type_)
+            if event is None:
+                return
             dialogs.InvitationReceivedDialog(account, event.room_jid, jid,
                 event.password, event.reason, event.is_continued)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':
             event = app.events.get_first_event(account, jid, type_)
+            if event is None:
+                return
             dialogs.SubscriptionRequestWindow(jid, event.text, account,
                 event.nick)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':
             event = app.events.get_first_event(account, jid, type_)
+            if event is None:
+                return
             self.show_unsubscribed_dialog(account, event.contact)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
