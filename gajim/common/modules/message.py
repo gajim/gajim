@@ -36,7 +36,6 @@ from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.modules.util import is_self_message
 from gajim.common.modules.util import is_muc_pm
-from gajim.common.connection_handlers_events import GcMessageReceivedEvent
 
 
 log = logging.getLogger('gajim.c.m.message')
@@ -278,11 +277,16 @@ class Message:
             return
 
         if groupchat:
-            app.nec.push_incoming_event(GcMessageReceivedEvent(
-                None,
-                conn=self._con,
-                msg_obj=event,
-                stanza_id=event.stanza_id))
+            if not event.msgtxt:
+                return
+
+            event.room_jid = event.jid
+            event.nickname = event.resource
+            event.xhtml_msgtxt = event.xhtml
+            event.nick = event.resource or ''
+
+            app.nec.push_incoming_event(NetworkEvent('gc-message-received',
+                                                     **vars(event)))
             return
 
         app.nec.push_incoming_event(

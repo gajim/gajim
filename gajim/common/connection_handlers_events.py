@@ -369,49 +369,6 @@ class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
 class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
 
-class GcMessageReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'gc-message-received'
-
-    def generate(self):
-        self.stanza = self.msg_obj.stanza
-        if not hasattr(self.msg_obj, 'additional_data'):
-            self.additional_data = AdditionalDataDict()
-        else:
-            self.additional_data = self.msg_obj.additional_data
-        self.id_ = self.msg_obj.stanza.getID()
-        self.unique_id = self.msg_obj.unique_id
-        self.fjid = self.msg_obj.fjid
-        self.msgtxt = self.msg_obj.msgtxt
-        self.jid = self.msg_obj.jid
-        self.room_jid = self.msg_obj.jid
-        self.nickname = self.msg_obj.resource
-        self.timestamp = self.msg_obj.timestamp
-        self.xhtml_msgtxt = self.stanza.getXHTML()
-        self.encrypted = self.msg_obj.encrypted
-        self.correct_id = None # XEP-0308
-        self.delayed = self.msg_obj.delayed
-
-        if app.config.get('ignore_incoming_xhtml'):
-            self.xhtml_msgtxt = None
-
-        if self.msg_obj.resource:
-            # message from someone
-            self.nick = self.msg_obj.resource
-        else:
-            # message from server
-            self.nick = ''
-
-        if not self.stanza.getTag('body'): # no <body>
-            return
-
-        from gajim.common.modules.security_labels import parse_securitylabel
-        self.displaymarking = parse_securitylabel(self.stanza)
-
-        from gajim.common.modules.misc import parse_correction
-        self.correct_id = parse_correction(self.stanza)
-
-        return True
-
 class MessageSentEvent(nec.NetworkIncomingEvent):
     name = 'message-sent'
 
@@ -932,14 +889,14 @@ class NotificationEvent(nec.NetworkIncomingEvent):
             self.do_sound = True
 
     def handle_incoming_gc_msg_event(self, msg_obj):
-        if not msg_obj.msg_obj.gc_control:
+        if not msg_obj.gc_control:
             # we got a message from a room we're not in? ignore it
             return
         self.jid = msg_obj.jid
-        sound = msg_obj.msg_obj.gc_control.highlighting_for_message(
+        sound = msg_obj.gc_control.highlighting_for_message(
             msg_obj.msgtxt, msg_obj.timestamp)[1]
 
-        if msg_obj.nickname != msg_obj.msg_obj.gc_control.nick:
+        if msg_obj.nickname != msg_obj.gc_control.nick:
             self.do_sound = True
             if sound == 'received':
                 self.sound_event = 'muc_message_received'
@@ -987,7 +944,7 @@ class NotificationEvent(nec.NetworkIncomingEvent):
         self.popup_title = i18n.ngettext(
             'New message from %(nickname)s',
             '%(n_msgs)i unread messages in %(groupchat_name)s',
-            count) % {'nickname': self.base_event.nick,
+            count) % {'nickname': msg_obj.nick,
                       'n_msgs': count,
                       'groupchat_name': contact.get_shown_name()}
 
