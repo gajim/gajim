@@ -1,4 +1,4 @@
-Gajim 1.1.1 (19 December 2018)
+Gajim 1.1.1 (23 December 2018)
 
   Bug fixes
 
@@ -8,6 +8,8 @@ Gajim 1.1.1 (19 December 2018)
   * 9453 Fix opening links inside the group chat subject (MacOS/Windows)
   * 9465 Allow the full range of possible nicknames in group chats
   * 9067 Gajim crashes when receiving xhtml messages
+  * 9096 Error when clicking on a subscription notification
+  * 9446 Chatstate error in MUC conversation
   * 9471 Conversation Textview: Error on key press
   * 9472 Handle presences without from attr correctly
   * 9473 Error when creating a new group chat
