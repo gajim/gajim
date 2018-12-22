@@ -93,6 +93,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six
 
     PIP_REQUIREMENTS="\
+precis-i18n
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
 git+https://github.com/enthought/pywin32-ctypes.git
@@ -101,7 +102,6 @@ python-gnupg
 python-axolotl
 qrcode
 cssutils
-precis-i18n
 "
 
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
