@@ -26,7 +26,10 @@ from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m')
 
-ZEROCONF_MODULES = ['adhoc_commands', 'receipts', 'discovery']
+ZEROCONF_MODULES = ['adhoc_commands',
+                    'receipts',
+                    'discovery',
+                    'chatstates']
 
 _imported_modules = []  # type: List[tuple]
 _modules = {}  # type: Dict[str, Dict[str, Any]]
