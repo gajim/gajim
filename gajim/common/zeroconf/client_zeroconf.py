@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from unittest.mock import Mock
+
 from gajim.common import app
 import nbxmpp
 from nbxmpp.idlequeue import IdleObject
@@ -141,6 +143,7 @@ class P2PClient(IdleObject):
         self.Namespace = 'jabber:client'
         self.protocol_type = 'XMPP'
         self.defaultNamespace = self.Namespace
+        self.Smacks = Mock()
         self._component = 0
         self._registered_name = None
         self._caller = conn_holder.caller
@@ -189,6 +192,9 @@ class P2PClient(IdleObject):
                         thread_id)]
 
         self.on_responses = {}
+
+    def get_bound_jid(self):
+        return self._caller.get_own_jid()
 
     def add_stanza(self, stanza, is_message=False):
         if self.Connection:
