@@ -1032,14 +1032,16 @@ class RosterWindow:
                 self.draw_group(group, account)
 
     # FIXME: integrate into add_contact()
-    def add_to_not_in_the_roster(self, account, jid, nick='', resource=''):
+    def add_to_not_in_the_roster(self, account, jid, nick='', resource='',
+                                 groupchat=False):
         keyID = ''
         attached_keys = app.config.get_per('accounts', account,
                 'attached_gpg_keys').split()
         if jid in attached_keys:
             keyID = attached_keys[attached_keys.index(jid) + 1]
-        contact = app.contacts.create_not_in_roster_contact(jid=jid,
-                account=account, resource=resource, name=nick, keyID=keyID)
+        contact = app.contacts.create_not_in_roster_contact(
+            jid=jid, account=account, resource=resource, name=nick,
+            keyID=keyID, groupchat=groupchat)
         app.contacts.add_contact(account, contact)
         self.add_contact(contact.jid, account)
         return contact
@@ -2002,9 +2004,7 @@ class RosterWindow:
             return True
 
         if event.type_ == 'gc-invitation':
-            dialogs.InvitationReceivedDialog(account, event.room_jid,
-                event.jid_from, event.password, event.reason,
-                is_continued=event.is_continued)
+            dialogs.InvitationReceivedDialog(account, event)
             app.events.remove_events(account, jid, event)
             return True
 
@@ -2692,12 +2692,8 @@ class RosterWindow:
         app.log('avatar').debug('Draw roster avatar: %s', obj.jid)
         self.draw_avatar(obj.jid, obj.account)
 
-    def _nec_gc_subject_received(self, obj):
-        contact = app.contacts.get_contact_with_highest_priority(
-            obj.account, obj.jid)
-        if contact:
-            contact.status = obj.subject
-            self.draw_contact(obj.jid, obj.account)
+    def _nec_gc_subject_received(self, event):
+        self.draw_contact(event.jid, event.account)
 
     def _nec_metacontacts_received(self, obj):
         self.redraw_metacontacts(obj.conn.name)

@@ -1482,12 +1482,12 @@ class ChatControl(ChatControlBase):
         self._add_info_bar_message(markup, [b], file_props, Gtk.MessageType.ERROR)
 
     def _on_accept_gc_invitation(self, widget, event):
-        if event.is_continued:
-            app.interface.join_gc_room(self.account, event.room_jid,
+        if event.continued:
+            app.interface.join_gc_room(self.account, str(event.muc),
                 app.nicks[self.account], event.password,
                 is_continued=True)
         else:
-            app.interface.join_gc_minimal(self.account, event.room_jid)
+            app.interface.join_gc_minimal(self.account, str(event.muc))
 
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
@@ -1495,14 +1495,14 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
-        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.room_jid)
+        markup = '<b>%s:</b> %s' % (_('Groupchat Invitation'), event.muc)
         if event.reason:
             markup += ' (%s)' % event.reason
         b1 = Gtk.Button.new_with_mnemonic(_('_Join'))
         b1.connect('clicked', self._on_accept_gc_invitation, event)
         b2 = Gtk.Button(stock=Gtk.STOCK_CANCEL)
         b2.connect('clicked', self._on_cancel_gc_invitation, event)
-        self._add_info_bar_message(markup, [b1, b2], (event.room_jid,
+        self._add_info_bar_message(markup, [b1, b2], (event.muc,
             event.reason), Gtk.MessageType.QUESTION)
 
     def on_event_added(self, event):
@@ -1546,7 +1546,7 @@ class ChatControl(ChatControlBase):
             removed = False
             for ib_msg in self.info_bar_queue:
                 if ev.type_ == 'gc-invitation':
-                    if ev.room_jid == ib_msg[2][0]:
+                    if ev.muc == ib_msg[2][0]:
                         self.info_bar_queue.remove(ib_msg)
                         removed = True
                 else: # file-*

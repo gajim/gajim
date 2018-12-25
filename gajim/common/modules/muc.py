@@ -17,18 +17,17 @@
 
 import time
 import logging
-import weakref
 
 import nbxmpp
+from nbxmpp.const import InviteType
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import i18n
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
-from gajim.common.nec import NetworkIncomingEvent
-from gajim.common.modules import dataforms
-from gajim.common.modules.bits_of_binary import parse_bob_data
+from gajim.common.modules.bits_of_binary import store_bob_data
 
 log = logging.getLogger('gajim.c.m.muc')
 
@@ -39,12 +38,54 @@ class MUC:
         self._account = con.name
 
         self.handlers = [
-            ('message', self._on_config_change, '', nbxmpp.NS_MUC_USER),
-            ('message', self._mediated_invite, 'normal', nbxmpp.NS_MUC_USER),
-            ('message', self._direct_invite, '', nbxmpp.NS_CONFERENCE),
-            ('message', self._on_captcha_challenge, '', nbxmpp.NS_CAPTCHA),
-            ('message', self._on_voice_request, '', nbxmpp.NS_DATA, 45),
+            StanzaHandler(name='message',
+                          callback=self._on_subject_change,
+                          typ='groupchat',
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_config_change,
+                          ns=nbxmpp.NS_MUC_USER,
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_invite_or_decline,
+                          typ='normal',
+                          ns=nbxmpp.NS_MUC_USER,
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_invite_or_decline,
+                          ns=nbxmpp.NS_CONFERENCE,
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_captcha_challenge,
+                          ns=nbxmpp.NS_CAPTCHA,
+                          priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_voice_request,
+                          ns=nbxmpp.NS_DATA,
+                          priority=49)
         ]
+
+        self._nbmxpp_methods = [
+            'get_affiliation',
+            'set_role',
+            'set_affiliation',
+            'set_config',
+            'set_subject',
+            'cancel_config',
+            'send_captcha',
+            'decline',
+            'request_voice'
+            'destroy',
+        ]
+
+    def __getattr__(self, key):
+        if key in self._nbmxpp_methods:
+            if not app.account_is_connected(self._account):
+                log.warning('Account %s not connected, cant use %s',
+                            self._account, key)
+                return
+            module = self._con.connection.get_module('MUC')
+            return getattr(module, key)
 
     def pass_disco(self, from_, identities, features, _data, _node):
         for identity in identities:
@@ -108,438 +149,136 @@ class MUC:
             if tags:
                 muc_x.setTag('history', tags)
 
-    def set_subject(self, room_jid, subject):
-        if not app.account_is_connected(self._account):
-            return
-        message = nbxmpp.Message(room_jid, typ='groupchat', subject=subject)
-        log.info('Set subject for %s', room_jid)
-        self._con.connection.send(message)
-
-    def _on_voice_request(self, _con, stanza):
-        data_form = stanza.getTag('x', namespace=nbxmpp.NS_DATA)
-        if data_form is None:
+    def _on_subject_change(self, _con, _stanza, properties):
+        if not properties.is_muc_subject:
             return
 
-        if stanza.getBody():
-            return
-
-        room_jid = str(stanza.getFrom())
-        contact = app.contacts.get_groupchat_contact(self._account, room_jid)
+        jid = properties.jid.getBare()
+        contact = app.contacts.get_groupchat_contact(self._account, jid)
         if contact is None:
             return
 
-        data_form = dataforms.extend_form(data_form)
-        try:
-            if data_form['FORM_TYPE'].value != nbxmpp.NS_MUC_REQUEST:
-                return
-        except KeyError:
+        contact.status = properties.subject
+
+        app.nec.push_incoming_event(
+            NetworkEvent('gc-subject-received',
+                         account=self._account,
+                         jid=jid,
+                         subject=properties.subject,
+                         nickname=properties.muc_nickname,
+                         user_timestamp=properties.user_timestamp))
+        raise nbxmpp.NodeProcessed
+
+    def _on_voice_request(self, _con, _stanza, properties):
+        if not properties.is_voice_request:
+            return
+
+        jid = str(properties.jid)
+        contact = app.contacts.get_groupchat_contact(self._account, jid)
+        if contact is None:
             return
 
         app.nec.push_incoming_event(
             NetworkEvent('voice-approval',
                          account=self._account,
-                         room_jid=room_jid,
-                         form=data_form))
+                         jid=jid,
+                         form=properties.voice_request.form))
         raise nbxmpp.NodeProcessed
 
-    def _on_captcha_challenge(self, _con, stanza):
-        captcha = stanza.getTag('captcha', namespace=nbxmpp.NS_CAPTCHA)
-        if captcha is None:
+    def _on_captcha_challenge(self, _con, _stanza, properties):
+        if not properties.is_captcha_challenge:
             return
 
-        parse_bob_data(stanza)
-        room_jid = str(stanza.getFrom())
-        contact = app.contacts.get_groupchat_contact(self._account, room_jid)
+        contact = app.contacts.get_groupchat_contact(self._account,
+                                                     str(properties.jid))
         if contact is None:
             return
 
-        log.info('Captcha challenge received from %s', room_jid)
-        data_form = captcha.getTag('x', namespace=nbxmpp.NS_DATA)
-        data_form = dataforms.extend_form(node=data_form)
+        log.info('Captcha challenge received from %s', properties.jid)
+        store_bob_data(properties.captcha.bob_data)
+
         app.nec.push_incoming_event(
             NetworkEvent('captcha-challenge',
                          account=self._account,
-                         room_jid=room_jid,
-                         form=data_form))
+                         jid=properties.jid,
+                         form=properties.captcha.form))
         raise nbxmpp.NodeProcessed
 
-    def send_captcha(self, room_jid, form_node):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid)
-        captcha = iq.addChild(name='captcha', namespace=nbxmpp.NS_CAPTCHA)
-        captcha.addChild(node=form_node)
-        self._con.connection.send(iq)
-
-    def request_config(self, room_jid):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='get',
-                       queryNS=nbxmpp.NS_MUC_OWNER,
-                       to=room_jid)
-        iq.setAttr('xml:lang', i18n.LANG)
-        log.info('Request config for %s', room_jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._config_received)
-
-    def _config_received(self, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+    def _on_config_change(self, _con, _stanza, properties):
+        if not properties.is_muc_config_change:
             return
 
-        room_jid = stanza.getFrom().getStripped()
-        payload = stanza.getQueryPayload()
-
-        for form in payload:
-            if form.getNamespace() == nbxmpp.NS_DATA:
-                dataform = dataforms.extend_form(node=form)
-                log.info('Config form received for %s', room_jid)
-                app.nec.push_incoming_event(MucOwnerReceivedEvent(
-                    None,
-                    conn=self._con,
-                    form_node=form,
-                    dataform=dataform,
-                    jid=room_jid))
-                break
-
-    def cancel_config(self, room_jid):
-        if not app.account_is_connected(self._account):
-            return
-        cancel = nbxmpp.Node(tag='x', attrs={'xmlns': nbxmpp.NS_DATA,
-                                             'type': 'cancel'})
-        iq = nbxmpp.Iq(typ='set',
-                       queryNS=nbxmpp.NS_MUC_OWNER,
-                       payload=cancel,
-                       to=room_jid)
-        log.info('Cancel config for %s', room_jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_response, {})
-
-    def _on_config_change(self, _con, stanza):
-        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is None:
-            return
-
-        if stanza.getBody():
-            return
-
-        room_list = app.contacts.get_gc_list(self._account)
-        room_jid = str(stanza.getFrom())
-        if room_jid not in room_list:
-            # Message not from a group chat
-            return
-
-        # https://xmpp.org/extensions/xep-0045.html#registrar-statuscodes
-        change_codes = ['100', '102', '103', '104',
-                        '170', '171', '172', '173', '174']
-
-        codes = set()
-        for status in muc_user.getTags('status'):
-            code = status.getAttr('code')
-            if code in change_codes:
-                codes.add(code)
-
-        if not codes:
-            return
-
-        log.info('Received config change: %s', codes)
+        log.info('Received config change: %s %s',
+                 properties.jid, properties.muc_status_codes)
         app.nec.push_incoming_event(
             NetworkEvent('gc-config-changed-received',
                          account=self._account,
-                         room_jid=room_jid,
-                         status_codes=codes))
+                         jid=properties.jid,
+                         status_codes=properties.muc_status_codes))
         raise nbxmpp.NodeProcessed
 
-    def destroy(self, room_jid, reason='', jid=''):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='set',
-                       queryNS=nbxmpp.NS_MUC_OWNER,
-                       to=room_jid)
-        destroy = iq.setQuery().setTag('destroy')
-        if reason:
-            destroy.setTagData('reason', reason)
-        if jid:
-            destroy.setAttr('jid', jid)
-        log.info('Destroy room: %s, reason: %s, alternate: %s',
-                 room_jid, reason, jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_response, {})
+    def _on_invite_or_decline(self, _con, _stanza, properties):
+        if properties.muc_decline is not None:
+            data = properties.muc_decline
+            if helpers.ignore_contact(self._account, data.from_):
+                raise nbxmpp.NodeProcessed
 
-    def set_config(self, room_jid, form):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_OWNER)
-        query = iq.setQuery()
-        form.setAttr('type', 'submit')
-        query.addChild(node=form)
-        log.info('Set config for %s', room_jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_response, {})
+            log.info('Invite declined from: %s, reason: %s',
+                     data.from_, data.reason)
 
-    def set_affiliation(self, room_jid, users_dict):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery()
-        for jid in users_dict:
-            affiliation = users_dict[jid].get('affiliation')
-            reason = users_dict[jid].get('reason')
-            nick = users_dict[jid].get('nick')
-            item_tag = item.addChild('item', {'jid': jid,
-                                              'affiliation': affiliation})
-            if reason is not None:
-                item_tag.setTagData('reason', reason)
-
-            if nick is not None:
-                item_tag.setAttr('nick', nick)
-        log.info('Set affiliation for %s: %s', room_jid, users_dict)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_response, {})
-
-    def get_affiliation(self, room_jid, affiliation, success_cb, error_cb):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='get', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery().setTag('item')
-        item.setAttr('affiliation', affiliation)
-        log.info('Get affiliation %s for %s', affiliation, room_jid)
-
-        weak_success_cb = weakref.WeakMethod(success_cb)
-        weak_error_cb = weakref.WeakMethod(error_cb)
-
-        self._con.connection.SendAndCallForResponse(
-            iq, self._affiliation_received, {'affiliation': affiliation,
-                                             'success_cb': weak_success_cb,
-                                             'error_cb': weak_error_cb})
-
-    def _affiliation_received(self, _con, stanza, affiliation,
-                              success_cb, error_cb):
-        if not nbxmpp.isResultNode(stanza):
-            if error_cb() is not None:
-                error_cb()(affiliation, stanza.getError())
-            return
-
-        room_jid = stanza.getFrom().getStripped()
-        query = stanza.getTag('query', namespace=nbxmpp.NS_MUC_ADMIN)
-        items = query.getTags('item')
-        users_dict = {}
-        for item in items:
-            try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            item.getAttr('jid'))
-                continue
-
-            users_dict[jid] = {}
-            if item.has_attr('nick'):
-                users_dict[jid]['nick'] = item.getAttr('nick')
-            if item.has_attr('role'):
-                users_dict[jid]['role'] = item.getAttr('role')
-            reason = item.getTagData('reason')
-            if reason:
-                users_dict[jid]['reason'] = reason
-
-        log.info('%s affiliations received from %s: %s',
-                 affiliation, room_jid, users_dict)
-
-        if success_cb() is not None:
-            success_cb()(self._account, room_jid, affiliation, users_dict)
-
-    def set_role(self, room_jid, nick, role, reason=''):
-        if not app.account_is_connected(self._account):
-            return
-        iq = nbxmpp.Iq(typ='set', to=room_jid, queryNS=nbxmpp.NS_MUC_ADMIN)
-        item = iq.setQuery().setTag('item')
-        item.setAttr('nick', nick)
-        item.setAttr('role', role)
-        if reason:
-            item.addChild(name='reason', payload=reason)
-        log.info('Set role for %s: %s %s %s', room_jid, nick, role, reason)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_response, {})
-
-    def _mediated_invite(self, _con, stanza):
-        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is None:
-            return
-
-        if stanza.getType() == 'error':
-            return
-
-        if stanza.getBody():
-            return
-
-        decline = muc_user.getTag('decline')
-        if decline is not None:
-
-            room_jid = stanza.getFrom().getStripped()
-            from_ = self._get_from(room_jid, decline)
-
-            reason = decline.getTagData('reason')
-            log.info('Invite declined: %s, %s', reason, from_)
             app.nec.push_incoming_event(
-                GcDeclineReceived(None,
-                                  account=self._account,
-                                  from_=from_,
-                                  room_jid=room_jid,
-                                  reason=reason))
+                NetworkEvent('gc-decline-received',
+                             account=self._account,
+                             **data._asdict()))
             raise nbxmpp.NodeProcessed
 
-        invite = muc_user.getTag('invite')
-        if invite is not None:
+        if properties.muc_invite is not None:
+            data = properties.muc_invite
+            if helpers.ignore_contact(self._account, data.from_):
+                raise nbxmpp.NodeProcessed
 
-            room_jid = stanza.getFrom().getStripped()
-            from_ = self._get_from(room_jid, invite)
+            log.info('Invite from: %s, to: %s', data.from_, data.muc)
 
-            reason = invite.getTagData('reason')
-            password = muc_user.getTagData('password')
-            is_continued = invite.getTag('continue') is not None
-            log.info('Mediated invite: continued: %s, reason: %s, from: %s',
-                     is_continued, reason, from_)
-            if room_jid in app.gc_connected[self._account] and \
-                    app.gc_connected[self._account][room_jid]:
+            if app.in_groupchat(self._account, data.muc):
                 # We are already in groupchat. Ignore invitation
                 log.info('We are already in this room')
                 raise nbxmpp.NodeProcessed
 
             app.nec.push_incoming_event(
-                GcInvitationReceived(None,
-                                     account=self._account,
-                                     from_=from_,
-                                     room_jid=room_jid,
-                                     reason=reason,
-                                     password=password,
-                                     is_continued=is_continued))
+                NetworkEvent('gc-invitation-received',
+                             account=self._account,
+                             **data._asdict()))
             raise nbxmpp.NodeProcessed
-
-    def _get_from(self, room_jid, stanza):
-        try:
-            from_ = nbxmpp.JID(helpers.parse_jid(stanza.getAttr('from')))
-        except helpers.InvalidFormat:
-            log.warning('Invalid JID on invite: %s, ignoring it',
-                        stanza.getAttr('from'))
-            raise nbxmpp.NodeProcessed
-
-        known_contact = app.contacts.get_contacts(self._account, room_jid)
-        ignore = app.config.get_per(
-            'accounts', self._account, 'ignore_unknown_contacts')
-        if ignore and not known_contact:
-            log.info('Ignore invite from unknown contact %s', from_)
-            raise nbxmpp.NodeProcessed
-
-        return from_
-
-    def _direct_invite(self, _con, stanza):
-        direct = stanza.getTag('x', namespace=nbxmpp.NS_CONFERENCE)
-        if direct is None:
-            return
-
-        from_ = stanza.getFrom()
-
-        try:
-            room_jid = helpers.parse_jid(direct.getAttr('jid'))
-        except helpers.InvalidFormat:
-            log.warning('Invalid JID on invite: %s, ignoring it',
-                        direct.getAttr('jid'))
-            raise nbxmpp.NodeProcessed
-
-        reason = direct.getAttr('reason')
-        password = direct.getAttr('password')
-        is_continued = direct.getAttr('continue') == 'true'
-
-        log.info('Direct invite: continued: %s, reason: %s, from: %s',
-                 is_continued, reason, from_)
-
-        app.nec.push_incoming_event(
-            GcInvitationReceived(None,
-                                 account=self._account,
-                                 from_=from_,
-                                 room_jid=room_jid,
-                                 reason=reason,
-                                 password=password,
-                                 is_continued=is_continued))
-        raise nbxmpp.NodeProcessed
 
     def invite(self, room, to, reason=None, continue_=False):
         if not app.account_is_connected(self._account):
             return
+
+        type_ = InviteType.MEDIATED
         contact = app.contacts.get_contact_from_full_jid(self._account, to)
         if contact and contact.supports(nbxmpp.NS_CONFERENCE):
-            invite = self._build_direct_invite(room, to, reason, continue_)
-        else:
-            invite = self._build_mediated_invite(room, to, reason, continue_)
-        self._con.connection.send(invite)
+            type_ = InviteType.DIRECT
 
-    @staticmethod
-    def _build_direct_invite(room, to, reason, continue_):
-        message = nbxmpp.Message(to=to)
-        attrs = {'jid': room}
-        if reason:
-            attrs['reason'] = reason
-        if continue_:
-            attrs['continue'] = 'true'
         password = app.gc_passwords.get(room, None)
-        if password:
-            attrs['password'] = password
-        message.addChild(name='x', attrs=attrs,
-                         namespace=nbxmpp.NS_CONFERENCE)
-        return message
+        self._con.connection.get_module('MUC').invite(
+            room, to, reason, password, continue_, type_)
 
-    @staticmethod
-    def _build_mediated_invite(room, to, reason, continue_):
-        message = nbxmpp.Message(to=room)
-        muc_user = message.addChild('x', namespace=nbxmpp.NS_MUC_USER)
-        invite = muc_user.addChild('invite', attrs={'to': to})
-        if continue_:
-            invite.addChild(name='continue')
-        if reason:
-            invite.setTagData('reason', reason)
-        password = app.gc_passwords.get(room, None)
-        if password:
-            muc_user.setTagData('password', password)
-        return message
-
-    def decline(self, room, to, reason=None):
+    def request_config(self, room_jid):
         if not app.account_is_connected(self._account):
             return
-        message = nbxmpp.Message(to=room)
-        muc_user = message.addChild('x', namespace=nbxmpp.NS_MUC_USER)
-        decline = muc_user.addChild('decline', attrs={'to': to})
-        if reason:
-            decline.setTagData('reason', reason)
-        self._con.connection.send(message)
 
-    def request_voice(self, room):
-        if not app.account_is_connected(self._account):
+        self._con.connection.get_module('MUC').request_config(
+            room_jid, i18n.LANG, callback=self._config_received)
+
+    def _config_received(self, result):
+        if result.is_error:
             return
-        message = nbxmpp.Message(to=room)
-        xdata = nbxmpp.DataForm(typ='submit')
-        xdata.addChild(node=nbxmpp.DataField(name='FORM_TYPE',
-                                             value=nbxmpp.NS_MUC + '#request'))
-        xdata.addChild(node=nbxmpp.DataField(name='muc#role',
-                                             value='participant',
-                                             typ='text-single'))
-        message.addChild(node=xdata)
-        self._con.connection.send(message)
 
-    @staticmethod
-    def _default_response(_con, stanza, **kwargs):
-        if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
-
-
-class GcInvitationReceived(NetworkIncomingEvent):
-    name = 'gc-invitation-received'
-
-
-class GcDeclineReceived(NetworkIncomingEvent):
-    name = 'gc-decline-received'
-
-
-class MucOwnerReceivedEvent(NetworkIncomingEvent):
-    name = 'muc-owner-received'
+        app.nec.push_incoming_event(NetworkEvent(
+            'muc-owner-received',
+            conn=self._con,
+            dataform=result.form,
+            jid=result.jid))
 
 
 def get_instance(*args, **kwargs):

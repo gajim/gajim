@@ -212,31 +212,14 @@ class Message:
         subject = event.stanza.getSubject()
         groupchat = event.mtype == 'groupchat'
 
-        # XEP-0045: only a message that contains a <subject/> but no <body/>
-        # element shall be considered a subject change for MUC purposes.
-        muc_subject = subject and groupchat and not event.msgtxt
-
         # Determine timestamps
-        if groupchat:
-            delay_entity_jid = event.jid
-        else:
-            delay_entity_jid = self._con.get_own_jid().getDomain()
-
-        if muc_subject:
-            # MUC Subjects can have a delay timestamp
-            # to indicate when the user has set the subject,
-            # the 'from' attr on these delays is the MUC server
-            # but we treat it as user timestamp
+        delay_jid = self._con.get_own_jid().getDomain()
+        timestamp = parse_delay(event.stanza, from_=delay_jid)
+        if timestamp is None:
             timestamp = time.time()
-            user_timestamp = parse_delay(event.stanza, from_=delay_entity_jid)
 
-        else:
-            timestamp = parse_delay(event.stanza, from_=delay_entity_jid)
-            if timestamp is None:
-                timestamp = time.time()
-
-            user_timestamp = parse_delay(event.stanza,
-                                         not_from=[delay_entity_jid])
+        user_timestamp = parse_delay(event.stanza,
+                                     not_from=[delay_jid])
 
         if user_timestamp is not None:
             event.additional_data.set_value(
@@ -269,11 +252,6 @@ class Message:
                 self._con.dispatch_error_message(
                     event.stanza, event.msgtxt,
                     event.session, event.fjid, timestamp)
-            return
-
-        if muc_subject:
-            app.nec.push_incoming_event(NetworkEvent('gc-subject-received',
-                                                     **vars(event)))
             return
 
         if groupchat:

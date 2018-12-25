@@ -307,12 +307,12 @@ class LegacyContactsAPI:
         return self_contact
 
     def create_not_in_roster_contact(self, jid, account, resource='', name='',
-    keyID=''):
+                                     keyID='', groupchat=False):
         # Use Account object if available
         account = self._accounts.get(account, account)
         return self.create_contact(jid=jid, account=account, resource=resource,
             name=name, groups=[_('Not in Roster')], show='not in roster',
-            status='', sub='none', keyID=keyID)
+            status='', sub='none', keyID=keyID, groupchat=groupchat)
 
     def copy_contact(self, contact):
         return self.create_contact(contact.jid, contact.account,

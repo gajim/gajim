@@ -33,6 +33,7 @@ import logging
 from enum import IntEnum, unique
 
 import nbxmpp
+from nbxmpp.const import StatusCode
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -1080,7 +1081,7 @@ class GroupchatControl(ChatControlBase):
     def _on_voice_approval(self, event):
         if event.account != self.account:
             return
-        if event.room_jid != self.room_jid:
+        if event.jid != self.room_jid:
             return
         SingleMessageWindow(self.account,
                             self.room_jid,
@@ -1091,7 +1092,7 @@ class GroupchatControl(ChatControlBase):
     def _on_captcha_challenge(self, event):
         if event.account != self.account:
             return
-        if event.room_jid != self.room_jid:
+        if event.jid != self.room_jid:
             return
 
         if self.form_widget:
@@ -1419,11 +1420,11 @@ class GroupchatControl(ChatControlBase):
             return
         self.set_subject(event.subject)
         text = _('%(nick)s has set the subject to %(subject)s') % {
-            'nick': event.resource, 'subject': event.subject}
+            'nick': event.nickname, 'subject': event.subject}
 
-        if event.delayed:
+        if event.user_timestamp:
             date = time.strftime('%d-%m-%Y %H:%M:%S',
-                                 time.localtime(event.timestamp))
+                                 time.localtime(event.user_timestamp))
             text = '%s - %s' % (text, date)
 
         just_joined = self.join_time > time.time() - 10
@@ -1440,35 +1441,31 @@ class GroupchatControl(ChatControlBase):
         if event.account != self.account:
             return
 
-        if event.room_jid != self.room_jid:
+        if event.jid != self.room_jid:
             return
 
         changes = []
-        if '100' in event.status_codes:
-            # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Any occupant is allowed to see your full JID'))
-            self.is_anonymous = False
-        if '102' in event.status_codes:
+        if StatusCode.SHOWING_UNAVAILABLE in event.status_codes:
             changes.append(_('Room now shows unavailable members'))
-        if '103' in event.status_codes:
+        if StatusCode.NOT_SHOWING_UNAVAILABLE in event.status_codes:
             changes.append(_('Room now does not show unavailable members'))
-        if '104' in event.status_codes:
+        if StatusCode.CONFIG_NON_PRIVACY_RELATED in event.status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
             app.connections[self.account].get_module('Discovery').disco_muc(
                 self.room_jid, self.update_actions, update=True)
-        if '170' in event.status_codes:
+        if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
             changes.append(_('Room logging is now enabled'))
-        if '171' in event.status_codes:
+        if StatusCode.CONFIG_NO_ROOM_LOGGING in event.status_codes:
             changes.append(_('Room logging is now disabled'))
-        if '172' in event.status_codes:
+        if StatusCode.CONFIG_NON_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now non-anonymous'))
             self.is_anonymous = False
-        if '173' in event.status_codes:
+        if StatusCode.CONFIG_SEMI_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now semi-anonymous'))
             self.is_anonymous = True
-        if '174' in event.status_codes:
+        if StatusCode.CONFIG_FULL_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now fully anonymous'))
             self.is_anonymous = True
 

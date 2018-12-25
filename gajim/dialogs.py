@@ -1291,51 +1291,60 @@ class RosterItemExchangeWindow:
 
 
 class InvitationReceivedDialog:
-    def __init__(self, account, room_jid, contact_fjid, password=None,
-    comment=None, is_continued=False):
-
-        self.room_jid = room_jid
+    def __init__(self, account, event):
         self.account = account
-        self.password = password
-        self.is_continued = is_continued
-        self.contact_fjid = contact_fjid
+        self.room_jid = str(event.muc)
+        self.from_ = str(event.from_)
+        self.password = event.password
+        self.is_continued = event.continued
 
-        jid = app.get_jid_without_resource(contact_fjid)
+        if event.from_.bareMatch(event.muc):
+            contact_text = event.from_.getResource()
+        else:
+            contact = app.contacts.get_first_contact_from_jid(
+                account, event.from_.getBare())
+            if contact is None:
+                contact_text = str(event.from_)
+            else:
+                contact_text = contact.get_shown_name()
 
         pritext = _('''You are invited to a groupchat''')
         #Don't translate $Contact
-        if is_continued:
+        if self.is_continued:
             sectext = _('$Contact has invited you to join a discussion')
         else:
             sectext = _('$Contact has invited you to group chat %(room_jid)s')\
-                % {'room_jid': room_jid}
-        contact = app.contacts.get_first_contact_from_jid(account, jid)
-        contact_text = contact and contact.name or jid
-        sectext = i18n.direction_mark + sectext.replace('$Contact',
-            contact_text)
+                % {'room_jid': self.room_jid}
 
-        if comment: # only if not None and not ''
-            comment = GLib.markup_escape_text(comment)
+        sectext = sectext.replace('$Contact', contact_text)
+
+        if event.reason:
+            comment = GLib.markup_escape_text(event.reason)
             comment = _('Comment: %s') % comment
             sectext += '\n\n%s' % comment
         sectext += '\n\n' + _('Do you want to accept the invitation?')
 
-        def on_yes(checked, text):
+        def on_yes(_checked, _text):
             if self.is_continued:
-                app.interface.join_gc_room(self.account, self.room_jid,
-                    app.nicks[self.account], self.password,
-                    is_continued=True)
+                app.interface.join_gc_room(self.account,
+                                           self.room_jid,
+                                           app.nicks[self.account],
+                                           self.password,
+                                           is_continued=True)
             else:
-                app.interface.join_gc_minimal(
-                    self.account, self.room_jid, password=self.password)
+                app.interface.join_gc_minimal(self.account,
+                                              self.room_jid,
+                                              password=self.password)
 
         def on_no(text):
             app.connections[account].get_module('MUC').decline(
-                self.room_jid, self.contact_fjid, text)
+                self.room_jid, self.from_, text)
 
-        dlg = YesNoDialog(pritext, sectext,
-            text_label=_('Reason (if you decline):'), on_response_yes=on_yes,
-            on_response_no=on_no)
+        dlg = YesNoDialog(pritext,
+                          sectext,
+                          text_label=_('Reason (if you decline):'),
+                          on_response_yes=on_yes,
+                          on_response_no=on_no)
         dlg.set_title(_('Groupchat Invitation'))
 
 class ProgressDialog:

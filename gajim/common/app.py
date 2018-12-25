@@ -480,6 +480,7 @@ def zeroconf_is_connected():
             config.get_per('accounts', ZEROCONF_ACC_NAME, 'is_zeroconf')
 
 def in_groupchat(account, room_jid):
+    room_jid = str(room_jid)
     if room_jid not in gc_connected[account]:
         return False
     return gc_connected[account][room_jid]

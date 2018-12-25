@@ -109,7 +109,7 @@ class Notification:
     def _on_event_removed(self, event_list):
         for event in event_list:
             if event.type_ == 'gc-invitation':
-                self._withdraw('gc-invitation', event.account, event.room_jid)
+                self._withdraw('gc-invitation', event.account, event.muc)
             if event.type_ in ('normal', 'printed_chat', 'chat',
                                'printed_pm', 'pm', 'printed_marked_gc_msg',
                                'printed_gc_msg'):

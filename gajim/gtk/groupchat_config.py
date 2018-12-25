@@ -62,8 +62,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
             con.get_module('MUC').get_affiliation(
                 self.jid,
                 affiliation,
-                self._on_affiliations_received,
-                self._on_affiliations_error)
+                callback=self._on_affiliations_received)
 
         if form is not None:
             self._ui.stack.set_visible_child_name('config')
@@ -340,29 +339,28 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         con = app.connections[self.account]
         con.get_module('MUC').set_affiliation(self.jid, diff_dict)
 
-    def _on_affiliations_error(self, affiliation, error):
-        log.info('Error while requesting %s affiliations: %s',
-                 affiliation, error)
+    def _on_affiliations_received(self, result):
+        if result.is_error:
+            log.info('Error while requesting %s affiliations: %s',
+                     result.affiliation, result.error)
+            return
 
-    def _on_affiliations_received(self, _account, _room_jid,
-                                  affiliation, users):
-
-        if affiliation == 'outcast':
+        if result.affiliation == 'outcast':
             self._ui.stack.get_child_by_name('outcast').show()
 
-        for jid, attrs in users.items():
-            affiliation_edit, jid_edit = self._allowed_to_edit(affiliation)
-            if affiliation == 'outcast':
+        for jid, attrs in result.users.items():
+            affiliation_edit, jid_edit = self._allowed_to_edit(result.affiliation)
+            if result.affiliation == 'outcast':
                 reason = attrs.get('reason')
                 self._ui.outcast_store.append(
                     [jid,
                      reason,
                      None,
-                     affiliation,
+                     result.affiliation,
                      None,
                      affiliation_edit,
                      jid_edit])
-                self._affiliations[jid] = {'affiliation': affiliation,
+                self._affiliations[jid] = {'affiliation': result.affiliation,
                                            'reason': reason}
             else:
                 nick = attrs.get('nick')
@@ -371,11 +369,11 @@ class GroupchatConfig(Gtk.ApplicationWindow):
                     [jid,
                      nick,
                      role,
-                     affiliation,
-                     _(affiliation.capitalize()),
+                     result.affiliation,
+                     _(result.affiliation.capitalize()),
                      affiliation_edit,
                      jid_edit])
-                self._affiliations[jid] = {'affiliation': affiliation,
+                self._affiliations[jid] = {'affiliation': result.affiliation,
                                            'nick': nick}
                 if role is not None:
                     self._ui.role_column.set_visible(True)

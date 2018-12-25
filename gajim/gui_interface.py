@@ -609,39 +609,43 @@ class Interface:
             else:
                 GroupchatConfig(account, obj.jid, 'owner', obj.dataform)
 
-    def handle_event_gc_decline(self, obj):
-        gc_control = self.msg_win_mgr.get_gc_control(obj.room_jid, obj.account)
+    def handle_event_gc_decline(self, event):
+        gc_control = self.msg_win_mgr.get_gc_control(str(event.muc),
+                                                     event.account)
         if gc_control:
-            if obj.reason:
+            if event.reason:
                 gc_control.print_conversation(
                     _('%(jid)s declined the invitation: %(reason)s') % {
-                        'jid': obj.from_, 'reason': obj.reason},
+                        'jid': event.from_, 'reason': event.reason},
                     graphics=False)
             else:
                 gc_control.print_conversation(
                     _('%(jid)s declined the invitation') % {
-                        'jid': obj.from_}, graphics=False)
+                        'jid': event.from_}, graphics=False)
 
-    def handle_event_gc_invitation(self, obj):
-        if helpers.allow_popup_window(obj.account) or not self.systray_enabled:
-            dialogs.InvitationReceivedDialog(
-                obj.account, obj.room_jid,
-                str(obj.from_), obj.password, obj.reason,
-                is_continued=obj.is_continued)
+    def handle_event_gc_invitation(self, event):
+        if helpers.allow_popup_window(event.account) or not self.systray_enabled:
+            dialogs.InvitationReceivedDialog(event.account, event)
             return
 
-        event = events.GcInvitationtEvent(
-            obj.room_jid, obj.reason,
-            obj.password, obj.is_continued, str(obj.from_))
-        self.add_event(obj.account, str(obj.from_), event)
+        from_ = str(event.from_)
+        muc = str(event.muc)
 
-        if helpers.allow_showing_notification(obj.account):
+        event_ = events.GcInvitationtEvent(event)
+        self.add_event(event.account, from_, event_)
+
+        if helpers.allow_showing_notification(event.account):
             event_type = _('Groupchat Invitation')
-            text = _('You are invited to {room} by {user}').format(
-                room=obj.room_jid, user=str(obj.from_))
-            app.notification.popup(
-                event_type, str(obj.from_), obj.account, 'gc-invitation',
-                'gajim-gc_invitation', event_type, text, room_jid=obj.room_jid)
+            text = _('You are invited to {room} by {user}').format(room=muc,
+                                                                   user=from_)
+            app.notification.popup(event_type,
+                                   from_,
+                                   event.account,
+                                   'gc-invitation',
+                                   'gajim-gc_invitation',
+                                   event_type,
+                                   text,
+                                   room_jid=muc)
 
     def forget_gpg_passphrase(self, keyid):
         if keyid in self.gpg_passphrase:
@@ -1523,7 +1527,9 @@ class Interface:
             if app.contacts.get_contact_with_highest_priority(account, jid):
                 self.roster.draw_contact(jid, account)
             else:
-                self.roster.add_to_not_in_the_roster(account, jid)
+                groupchat = event.type_ == 'gc-invitation'
+                self.roster.add_to_not_in_the_roster(
+                    account, jid, groupchat=groupchat)
 
         # Select the big brother contact in roster, it's visible because it has
         # events.
@@ -1621,8 +1627,7 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            dialogs.InvitationReceivedDialog(account, event.room_jid, jid,
-                event.password, event.reason, event.is_continued)
+            dialogs.InvitationReceivedDialog(account, event)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':

@@ -170,5 +170,29 @@ def parse_bob_data(stanza):
     return filepath
 
 
+def store_bob_data(bob_data):
+    if bob_data is None:
+        return
+
+    algo_hash = '%s+%s' % (bob_data.algo, bob_data.hash_)
+
+    filepath = Path(configpaths.get('BOB')) / algo_hash
+    if algo_hash in app.bob_cache or filepath.exists():
+        log.info('BoB data already cached')
+        return
+
+    if bob_data.max_age == 0:
+        app.bob_cache[algo_hash] = bob_data.data
+    else:
+        try:
+            with open(str(filepath), 'w+b') as file:
+                file.write(bob_data.data)
+        except Exception:
+            log.exception('Unable to save data')
+            return
+    log.info('BoB data stored: %s', algo_hash)
+    return filepath
+
+
 def get_instance(*args, **kwargs):
     return BitsOfBinary(*args, **kwargs), 'BitsOfBinary'
