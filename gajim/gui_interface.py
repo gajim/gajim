@@ -1645,10 +1645,13 @@ class Interface:
                     app.events.change_jid(account, fjid, jid)
                     resource = None
                     fjid = jid
+
                 contact = None
                 if resource:
-                    contact = app.contacts.get_contact(account, jid, resource) or highest_contact
-                if contact is None:
+                    contact = app.contacts.get_contact(account, jid, resource)
+                if not contact:
+                    contact = highest_contact
+                if not contact:
                     # Maybe we deleted the contact from the roster
                     return
 
