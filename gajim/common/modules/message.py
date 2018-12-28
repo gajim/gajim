@@ -213,7 +213,10 @@ class Message:
         groupchat = event.mtype == 'groupchat'
 
         # Determine timestamps
-        delay_jid = self._con.get_own_jid().getDomain()
+        if groupchat:
+            delay_jid = event.jid
+        else:
+            delay_jid = self._con.get_own_jid().getDomain()
         timestamp = parse_delay(event.stanza, from_=delay_jid)
         if timestamp is None:
             timestamp = time.time()
