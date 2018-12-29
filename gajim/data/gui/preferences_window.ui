@@ -524,6 +524,7 @@
                             <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_sort_by_show_in_roster_checkbutton_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -540,6 +541,7 @@
                             <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="on_sort_by_show_in_muc_checkbutton_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
