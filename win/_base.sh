@@ -92,8 +92,9 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-certifi \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six
 
+        build_pip install precis-i18n
+
     PIP_REQUIREMENTS="\
-precis-i18n
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/lovetox/pybonjour-python3.git
 git+https://github.com/enthought/pywin32-ctypes.git
