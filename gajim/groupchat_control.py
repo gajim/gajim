@@ -1883,6 +1883,7 @@ class GroupchatControl(ChatControlBase):
 
         self.print_conversation(message, graphics=False)
         self.draw_contact(nick)
+        self.update_actions()
 
     def _on_role_changed(self, event):
         if event.account != self.account:
@@ -1914,6 +1915,7 @@ class GroupchatControl(ChatControlBase):
         self.print_conversation(message, graphics=False)
         self.remove_contact(nick)
         self.add_contact_to_roster(nick)
+        self.update_actions()
 
     def _on_self_kicked(self, event):
         if event.account != self.account:
