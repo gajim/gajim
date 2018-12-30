@@ -329,57 +329,6 @@ class Interface:
                 cancel_handler=on_cancel)
             gc_control.error_dialog.input_entry.set_visibility(False)
 
-    def handle_event_gc_presence(self, obj):
-        gc_control = obj.gc_control
-        parent_win = None
-        if gc_control and gc_control.parent_win:
-            parent_win = gc_control.parent_win.window
-        if obj.ptype == 'error':
-            if obj.errcode == '503':
-                # maximum user number reached
-                self.handle_gc_error(gc_control,
-                    _('Unable to join group chat'),
-                    _('<b>%s</b> is full')\
-                    % obj.room_jid)
-            elif (obj.errcode == '401') or (obj.errcon == 'not-authorized'):
-                # password required to join
-                self.handle_gc_password_required(obj.conn.name, obj.room_jid,
-                    obj.nick)
-            elif (obj.errcode == '403') or (obj.errcon == 'forbidden'):
-                # we are banned
-                self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('You are banned from group chat <b>%s</b>.') % \
-                    obj.room_jid)
-            elif (obj.errcode == '404') or (obj.errcon in ('item-not-found',
-            'remote-server-not-found')):
-                # remote server does not exist
-                if obj.errcon == 'remote-server-not-found':
-                    self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Remote server <b>%s</b> does not exist.') % obj.room_jid)
-                # group chat does not exist
-                else:
-                    self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Group chat <b>%s</b> does not exist.') % obj.room_jid)
-            elif (obj.errcode == '405') or (obj.errcon == 'not-allowed'):
-                self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('Group chat creation is not permitted.'))
-            elif (obj.errcode == '406') or (obj.errcon == 'not-acceptable'):
-                self.handle_gc_error(gc_control, _('Unable to join groupchat'),
-                    _('You must use your registered nickname in <b>%s</b>.')\
-                    % obj.room_jid)
-            elif (obj.errcode == '407') or (obj.errcon == \
-            'registration-required'):
-                self.handle_gc_error(gc_control, _('Unable to join group chat'),
-                    _('You are not in the members list in groupchat %s.') % \
-                    obj.room_jid)
-            elif (obj.errcode == '409') or (obj.errcon == 'conflict'):
-                self.handle_ask_new_nick(obj.conn.name, obj.room_jid, parent_win)
-            elif gc_control:
-                gc_control.print_conversation('Error %s: %s' % (obj.errcode,
-                    obj.errmsg))
-            if gc_control and gc_control.autorejoin:
-                gc_control.autorejoin = False
-
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
         # priority, # keyID, timestamp, contact_nickname))
@@ -1445,7 +1394,6 @@ class Interface:
             'file-request-received': [self.handle_event_file_request],
             'gc-invitation-received': [self.handle_event_gc_invitation],
             'gc-decline-received': [self.handle_event_gc_decline],
-            'gc-presence-received': [self.handle_event_gc_presence],
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
@@ -1597,14 +1545,6 @@ class Interface:
                 nick = resource
                 gc_contact = app.contacts.get_gc_contact(
                     account, room_jid, nick)
-                if gc_contact:
-                    show = gc_contact.show
-                else:
-                    show = 'offline'
-                    gc_contact = app.contacts.create_gc_contact(
-                        room_jid=room_jid, account=account, name=nick,
-                        show=show)
-
                 ctrl = self.new_private_chat(gc_contact, account)
 
             w = ctrl.parent_win

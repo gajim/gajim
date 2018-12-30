@@ -235,7 +235,6 @@ class Config:
         'show_location_in_roster': [opt_bool, True, '', True],
         'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
         'print_status_in_chats': [opt_bool, False, _('If False, Gajim will no longer print status line in chats when a contact changes their status and/or their status message.')],
-        'print_status_in_muc': [opt_str, 'none', _('Can be "none", "all" or "in_and_out". If "none", Gajim will no longer print status line in groupchats when a member changes their status and/or their status message. If "all" Gajim will print all status messages. If "in_and_out", Gajim will only print FOO enters/leaves group chat.')],
         'log_contact_status_changes': [opt_bool, False],
         'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
         'restored_messages_small': [opt_bool, True, _('If true, restored messages will use a smaller font than the default one.')],
@@ -440,6 +439,8 @@ class Config:
             'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a groupchat. -1 means no limit, -2 means global value')],
             'muc_restore_timeout': [opt_int, -2, _('Minutes of backlog to request when entering a groupchat. -1 means no limit, -2 means global value')],
             'notify_on_all_messages': [opt_bool, False, _('State whether a notification is created for every message in this room')],
+            'print_status': [opt_bool, False, _('Show a status message for all status (away, dnd, etc.) changes of users in a group chat')],
+            'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat')],
         }, {}),
         'plugins': ({
             'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],

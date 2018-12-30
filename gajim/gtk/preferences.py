@@ -147,15 +147,6 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('show_subject_on_join')
         self._ui.subject_on_join_checkbutton.set_active(st)
 
-        # Print status in MUC
-        st = app.config.get('print_status_in_muc')
-        if st == 'none':
-            self._ui.print_status_in_muc_combobox.set_active(0)
-        elif st == 'all':
-            self._ui.print_status_in_muc_combobox.set_active(1)
-        else: # in_and_out
-            self._ui.print_status_in_muc_combobox.set_active(2)
-
         # Displayed chat state notifications
         st = app.config.get('show_chatstate_in_tabs')
         self._ui.show_chatstate_in_tabs.set_active(st)
@@ -603,15 +594,6 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_subject_on_join_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_subject_on_join')
-
-    def print_status_in_muc_combobox_changed(self, widget):
-        active = widget.get_active()
-        if active == 0: # none
-            app.config.set('print_status_in_muc', 'none')
-        elif active == 1: # all
-            app.config.set('print_status_in_muc', 'all')
-        else: # in_and_out
-            app.config.set('print_status_in_muc', 'in_and_out')
 
     def on_show_chatstate_in_tabs_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')

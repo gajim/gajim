@@ -379,8 +379,8 @@ class StandardGroupChatCommands(CommandContainer):
 
         for nick in nicks:
             contact = get_contact(nick)
-            role = helpers.get_uf_role(contact.role)
-            affiliation = helpers.get_uf_affiliation(contact.affiliation)
+            role = helpers.get_uf_role(contact.role.value)
+            affiliation = helpers.get_uf_affiliation(contact.affiliation.value)
             self.echo("%s - %s - %s" % (nick, role, affiliation))
 
     @command('ignore', raw=True)

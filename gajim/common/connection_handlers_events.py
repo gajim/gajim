@@ -209,8 +209,6 @@ PresenceHelperEvent):
         jid_list = app.contacts.get_jid_list(self.conn.name)
         self.timestamp = None
         self.get_id()
-        self.is_gc = False # is it a GC presence ?
-        sig_tag = None
         self.avatar_sha = None
         # XEP-0172 User Nickname
         self.user_nick = self.stanza.getTagData('nick') or ''
@@ -225,13 +223,7 @@ PresenceHelperEvent):
         # XEP-0319
         self.idle_time = parse_idle(self.stanza)
 
-        xtags = self.stanza.getTags('x')
-        for x in xtags:
-            namespace = x.getNamespace()
-            if namespace in (nbxmpp.NS_MUC_USER, nbxmpp.NS_MUC):
-                self.is_gc = True
-            elif namespace == nbxmpp.NS_SIGNED:
-                sig_tag = x
+        sig_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_SIGNED)
 
         self.status = self.stanza.getStatus() or ''
         self._generate_show()
@@ -240,13 +232,6 @@ PresenceHelperEvent):
 
         self.errcode = self.stanza.getErrorCode()
         self.errmsg = self.stanza.getErrorMsg()
-
-        if self.is_gc:
-            app.nec.push_incoming_event(
-                GcPresenceReceivedEvent(
-                    None, conn=self.conn, stanza=self.stanza,
-                    presence_obj=self))
-            return
 
         if self.ptype == 'error':
             return
@@ -278,92 +263,11 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
             self.ptype = 'unavailable'
         else:
             self.ptype = None
-        self.is_gc = False
         self.user_nick = ''
         self.transport_auto_auth = False
         self.errcode = None
         self.errmsg = ''
         self.popup = False # Do we want to open chat window ?
-        return True
-
-class GcPresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'gc-presence-received'
-
-    def generate(self):
-        self.ptype = self.presence_obj.ptype
-        self.fjid = self.presence_obj.fjid
-        self.jid = self.presence_obj.jid
-        self.room_jid = self.presence_obj.jid
-        self.nick = self.presence_obj.resource
-        self.show = self.presence_obj.show
-        self.status = self.presence_obj.status
-        self.avatar_sha = self.presence_obj.avatar_sha
-        self.errcode = self.presence_obj.errcode
-        self.errmsg = self.presence_obj.errmsg
-        self.errcon = self.stanza.getError()
-        self.get_gc_control()
-        self.gc_contact = app.contacts.get_gc_contact(self.conn.name,
-            self.room_jid, self.nick)
-
-        if self.ptype == 'error':
-            return True
-
-        if self.ptype and self.ptype != 'unavailable':
-            return
-        if app.config.get('log_contact_status_changes') and \
-        app.config.should_log(self.conn.name, self.room_jid):
-            if self.gc_contact:
-                jid = self.gc_contact.jid
-            else:
-                jid = self.stanza.getJid()
-            st = self.status
-            if jid:
-                # we know real jid, save it in db
-                st += ' (%s)' % jid
-            show = app.logger.convert_show_values_to_db_api_values(self.show)
-            if show is not None:
-                fjid = nbxmpp.JID(self.fjid)
-                app.logger.insert_into_logs(self.conn.name,
-                                            fjid.getStripped(),
-                                            time_time(),
-                                            KindConstant.GCSTATUS,
-                                            contact_name=fjid.getResource(),
-                                            message=st,
-                                            show=show)
-
-
-        # NOTE: if it's a gc presence, don't ask vcard here.
-        # We may ask it to real jid in gui part.
-        self.status_code = []
-        ns_muc_user_x = self.stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if ns_muc_user_x:
-            destroy = ns_muc_user_x.getTag('destroy')
-        else:
-            destroy = None
-        if ns_muc_user_x and destroy:
-            # Room has been destroyed. see
-            # http://www.xmpp.org/extensions/xep-0045.html#destroyroom
-            self.reason = _('Room has been destroyed')
-            r = destroy.getTagData('reason')
-            if r:
-                self.reason += ' (%s)' % r
-            if destroy.getAttr('jid'):
-                try:
-                    jid = helpers.parse_jid(destroy.getAttr('jid'))
-                    self.reason += '\n' + \
-                        _('You can join this room instead: %s') % jid
-                except helpers.InvalidFormat:
-                    pass
-            self.status_code = ['destroyed']
-        else:
-            self.reason = self.stanza.getReason()
-            self.status_code = self.stanza.getStatusCode()
-
-        self.role = self.stanza.getRole()
-        self.affiliation = self.stanza.getAffiliation()
-        self.real_jid = self.stanza.getJid()
-        self.actor = self.stanza.getActor()
-        self.new_nick = self.stanza.getNewNick()
         return True
 
 class OurShowEvent(nec.NetworkIncomingEvent):

@@ -34,6 +34,10 @@ from enum import IntEnum, unique
 
 import nbxmpp
 from nbxmpp.const import StatusCode
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
+from nbxmpp.const import Error
+from nbxmpp.const import PresenceType
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -54,7 +58,6 @@ from gajim.common import helpers
 from gajim.common.helpers import launch_browser_mailer
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common import ged
-from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common import contacts
 from gajim.common.const import StyleAttr
@@ -309,32 +312,34 @@ class GroupchatControl(ChatControlBase):
         settings_menu = self.xml.get_object('settings_menu')
         settings_menu.set_menu_model(self.control_menu)
 
-        app.ged.register_event_handler('gc-presence-received', ged.GUI1,
-            self._nec_gc_presence_received)
-        app.ged.register_event_handler('gc-message-received', ged.GUI1,
-            self._nec_gc_message_received)
-        app.ged.register_event_handler('mam-decrypted-message-received',
-            ged.GUI1, self._nec_mam_decrypted_message_received)
-        app.ged.register_event_handler('vcard-published', ged.GUI1,
-            self._nec_vcard_published)
-        app.ged.register_event_handler('update-gc-avatar', ged.GUI1,
-            self._nec_update_avatar)
-        app.ged.register_event_handler('update-room-avatar', ged.GUI1,
-            self._nec_update_room_avatar)
-        app.ged.register_event_handler('gc-subject-received', ged.GUI1,
-            self._nec_gc_subject_received)
-        app.ged.register_event_handler('gc-config-changed-received', ged.GUI1,
-            self._nec_gc_config_changed_received)
-        app.ged.register_event_handler('signed-in', ged.GUI1,
-            self._nec_signed_in)
-        app.ged.register_event_handler('decrypted-message-received', ged.GUI2,
-            self._nec_decrypted_message_received)
-        app.ged.register_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
-            self._message_sent)
-        app.ged.register_event_handler('captcha-challenge', ged.GUI1,
-                                       self._on_captcha_challenge)
-        app.ged.register_event_handler('voice-approval', ged.GUI1,
-                                       self._on_voice_approval)
+        self._event_handlers = [
+            ('muc-user-joined', ged.GUI1, self._on_user_joined),
+            ('muc-user-left', ged.GUI1, self._on_user_left),
+            ('muc-nickname-changed', ged.GUI1, self._on_nickname_changed),
+            ('muc-self-presence', ged.GUI1, self._on_self_presence),
+            ('muc-self-kicked', ged.GUI1, self._on_self_kicked),
+            ('muc-user-affiliation-changed', ged.GUI1, self._on_affiliation_changed),
+            ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
+            ('muc-user-role-changed', ged.GUI1, self._on_role_changed),
+            ('muc-destroyed', ged.GUI1, self._on_muc_destroyed),
+            ('muc-presence-error', ged.GUI1, self._on_muc_presence_error),
+            ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
+            ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
+            ('vcard-published', ged.GUI1, self._nec_vcard_published),
+            ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
+            ('update-room-avatar', ged.GUI1, self._nec_update_room_avatar),
+            ('gc-subject-received', ged.GUI1, self._nec_gc_subject_received),
+            ('gc-config-changed-received', ged.GUI1, self._nec_gc_config_changed_received),
+            ('signed-in', ged.GUI1, self._nec_signed_in),
+            ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
+            ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
+            ('captcha-challenge', ged.GUI1, self._on_captcha_challenge),
+            ('voice-approval', ged.GUI1, self._on_voice_approval),
+        ]
+
+        for handler in self._event_handlers:
+            app.ged.register_event_handler(*handler)
+
         self.is_connected = False
         # disable win, we are not connected yet
         ChatControlBase.got_disconnected(self)
@@ -392,6 +397,22 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_notify_on_all_messages)
         self.parent_win.window.add_action(act)
 
+        value = app.config.get_per('rooms', self.contact.jid, 'print_status')
+
+        act = Gio.SimpleAction.new_stateful(
+            'print-status-' + self.control_id,
+            None, GLib.Variant.new_boolean(value))
+        act.connect('change-state', self._on_print_status)
+        self.parent_win.window.add_action(act)
+
+        value = app.config.get_per('rooms', self.contact.jid, 'print_join_left')
+
+        act = Gio.SimpleAction.new_stateful(
+            'print-join-left-' + self.control_id,
+            None, GLib.Variant.new_boolean(value))
+        act.connect('change-state', self._on_print_join_left)
+        self.parent_win.window.add_action(act)
+
         archive_info = app.logger.get_archive_infos(self.contact.jid)
         threshold = helpers.get_sync_threshold(self.contact.jid,
                                                archive_info)
@@ -413,11 +434,12 @@ class GroupchatControl(ChatControlBase):
 
         # Destroy Room
         win.lookup_action('destroy-' + self.control_id).set_enabled(
-            self.is_connected and contact.affiliation == 'owner')
+            self.is_connected and contact.affiliation.is_owner)
 
         # Configure Room
         win.lookup_action('configure-' + self.control_id).set_enabled(
-            self.is_connected and contact.affiliation in ('admin', 'owner'))
+            self.is_connected and contact.affiliation in (Affiliation.ADMIN,
+                                                          Affiliation.OWNER))
 
         # Bookmarks
         con = app.connections[self.account]
@@ -428,7 +450,7 @@ class GroupchatControl(ChatControlBase):
         # Request Voice
         role = self.get_role(self.nick)
         win.lookup_action('request-voice-' + self.control_id).set_enabled(
-            self.is_connected and role == 'visitor')
+            self.is_connected and role.is_visitor)
 
         # Change Subject
         subject = False
@@ -463,7 +485,7 @@ class GroupchatControl(ChatControlBase):
         # Upload Avatar
         vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
         win.lookup_action('upload-avatar-' + self.control_id).set_enabled(
-            self.is_connected and vcard_support and contact.affiliation == 'owner')
+            self.is_connected and vcard_support and contact.affiliation.is_owner)
 
         # Sync Threshold
         has_mam = muc_caps_cache.has_mam(self.room_jid)
@@ -609,10 +631,10 @@ class GroupchatControl(ChatControlBase):
     def _on_configure_room(self, _action, _param):
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
-        if contact.affiliation == 'owner':
+        if contact.affiliation.is_owner:
             con = app.connections[self.account]
             con.get_module('MUC').request_config(self.room_jid)
-        elif contact.affiliation == 'admin':
+        elif contact.affiliation.is_admin:
             win = app.get_app_window(
                 'GroupchatConfig', self.account, self.room_jid)
             if win is not None:
@@ -620,7 +642,17 @@ class GroupchatControl(ChatControlBase):
             else:
                 GroupchatConfig(self.account,
                                 self.room_jid,
-                                contact.affiliation)
+                                contact.affiliation.value)
+
+    def _on_print_join_left(self, action, param):
+        action.set_state(param)
+        app.config.set_per('rooms', self.contact.jid,
+                           'print_join_left', param.get_boolean())
+
+    def _on_print_status(self, action, param):
+        action.set_state(param)
+        app.config.set_per('rooms', self.contact.jid,
+                           'print_status', param.get_boolean())
 
     def _on_bookmark_room(self, action, param):
         """
@@ -791,10 +823,9 @@ class GroupchatControl(ChatControlBase):
                 return 0
         if type1 == 'contact' and type2 == 'contact' and \
         app.config.get('sort_by_show_in_muc'):
-            cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4,
-                'invisible': 5, 'offline': 6, 'error': 7}
-            show1 = cshow[gc_contact1.show]
-            show2 = cshow[gc_contact2.show]
+            cshow = {'chat':0, 'online': 1, 'away': 2, 'xa': 3, 'dnd': 4}
+            show1 = cshow[gc_contact1.show.value]
+            show2 = cshow[gc_contact2.show.value]
             if show1 < show2:
                 return -1
             if show1 > show2:
@@ -1521,6 +1552,21 @@ class GroupchatControl(ChatControlBase):
     def is_connected(self, value: bool) -> None:
         app.gc_connected[self.account][self.room_jid] = value
 
+    def _disable_roster_sort(self):
+        self.model.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+                                      Gtk.SortType.ASCENDING)
+        self.list_treeview.set_model(None)
+
+    def _enable_roster_sort(self):
+        self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
+        self.list_treeview.set_model(self.model)
+        self.list_treeview.expand_all()
+
+    def _reset_roster(self):
+        self._contact_refs = {}
+        self._role_refs = {}
+        self.model.clear()
+
     def got_connected(self):
         self.join_time = time.time()
         # Make autorejoin stop.
@@ -1534,14 +1580,12 @@ class GroupchatControl(ChatControlBase):
             con.get_module('MAM').request_archive_on_muc_join(
                 self.room_jid)
 
-
         self.is_connected = True
         ChatControlBase.got_connected(self)
 
         # Sort model and assign it to treeview
-        self.model.set_sort_column_id(Column.NICK, Gtk.SortType.ASCENDING)
-        self.list_treeview.set_model(self.model)
-        self.list_treeview.expand_all()
+        self._enable_roster_sort()
+
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
         if self.parent_win:
@@ -1556,30 +1600,27 @@ class GroupchatControl(ChatControlBase):
         formattings_button = self.xml.get_object('formattings_button')
         formattings_button.set_sensitive(False)
 
-        self.model.set_sort_column_id(Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
-                                      Gtk.SortType.ASCENDING)
-        self.list_treeview.set_model(None)
-        self._contact_refs = {}
-        self._role_refs = {}
-        self.model.clear()
-        nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
-        for nick in nick_list:
-            # Update pm chat window
-            fjid = self.room_jid + '/' + nick
-            gc_contact = app.contacts.get_gc_contact(self.account,
-                self.room_jid, nick)
+        self._reset_roster()
+        self._disable_roster_sort()
 
-            ctrl = app.interface.msg_win_mgr.get_control(fjid, self.account)
+        for contact in app.contacts.get_gc_contact_list(
+                self.account, self.room_jid):
+            contact.presence = PresenceType.UNAVAILABLE
+            ctrl = app.interface.msg_win_mgr.get_control(contact.get_full_jid,
+                                                         self.account)
             if ctrl:
-                gc_contact.show = 'offline'
-                gc_contact.status = ''
-                ctrl.update_ui()
-                if ctrl.parent_win:
-                    ctrl.parent_win.redraw_tab(ctrl)
+                ctrl.got_disconnected()
 
-            app.contacts.remove_gc_contact(self.account, gc_contact)
+            app.contacts.remove_gc_contact(self.account, contact)
+
         self.is_connected = False
         ChatControlBase.got_disconnected(self)
+
+        contact = app.contacts.get_groupchat_contact(self.account,
+                                                     self.room_jid)
+        if contact is not None:
+            app.interface.roster.draw_contact(self.room_jid, self.account)
+
         # We don't redraw the whole banner here, because only icon change
         self._update_banner_state_image()
         if self.parent_win:
@@ -1604,12 +1645,13 @@ class GroupchatControl(ChatControlBase):
         return True
 
     def draw_roster(self):
-        self.model.clear()
+        self._reset_roster()
+        self._disable_roster_sort()
+
         for nick in app.contacts.get_nick_list(self.account, self.room_jid):
-            gc_contact = app.contacts.get_gc_contact(self.account,
-                self.room_jid, nick)
-            self.add_contact_to_roster(nick, gc_contact.show, gc_contact.role,
-                gc_contact.affiliation, gc_contact.status, gc_contact.jid)
+            self.add_contact_to_roster(nick)
+
+        self._enable_roster_sort()
         self.draw_all_roles()
         # Recalculate column width for ellipsizin
         self.list_treeview.columns_autosize()
@@ -1631,13 +1673,14 @@ class GroupchatControl(ChatControlBase):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
             return
+
         gc_contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, nick)
 
         if app.events.get_events(self.account, self.room_jid + '/' + nick):
             icon_name = get_icon_name('event')
         else:
-            icon_name = get_icon_name(gc_contact.show)
+            icon_name = get_icon_name(gc_contact.show.value)
 
         name = GLib.markup_escape_text(gc_contact.name)
 
@@ -1656,9 +1699,9 @@ class GroupchatControl(ChatControlBase):
                 name += ('\n<span size="small" style="italic" alpha="70%">'
                          '{}</span>'.format(GLib.markup_escape_text(status)))
 
-        if (gc_contact.affiliation != 'none' and
+        if (not gc_contact.affiliation.is_none and
                 app.config.get('show_affiliation_in_groupchat')):
-            icon_name += ':%s' % gc_contact.affiliation
+            icon_name += ':%s' % gc_contact.affiliation.value
 
         self.model[iter_][Column.IMG] = icon_name
         self.model[iter_][Column.TEXT] = name
@@ -1694,338 +1737,449 @@ class GroupchatControl(ChatControlBase):
         self.nick = new_nick
         self._nick_completion.change_nick(new_nick)
 
-    def _nec_gc_presence_received(self, obj):
-        if obj.room_jid != self.room_jid or obj.conn.name != self.account:
+    def _on_self_presence(self, event):
+        if event.account != self.account:
             return
-        if obj.ptype == 'error':
+        if event.room_jid != self.room_jid:
             return
 
-        role = obj.role
-        if not role:
-            role = 'visitor'
+        nick = event.properties.muc_nickname
+        affiliation = event.properties.affiliation
+        jid = str(event.properties.jid)
+        status_codes = event.properties.muc_status_codes or []
 
-        affiliation = obj.affiliation
-        if not affiliation:
-            affiliation = 'none'
+        if not self.is_connected:
+            # We just joined the room
+            self.print_conversation(_('You (%s) joined the room') % nick,
+                                    'info', graphics=False)
+            self.add_contact_to_roster(nick)
+            self.got_connected()
 
-        newly_created = False
-        nick = i18n.direction_mark + obj.nick
-        nick_jid = nick + i18n.direction_mark
-
-        # Set to true if role or affiliation have changed
-        right_changed = False
-
-        if obj.real_jid:
-            # delete resource
-            simple_jid = app.get_jid_without_resource(obj.real_jid)
-            nick_jid += ' (%s)' % simple_jid
-
-        con = app.connections[self.account]
-        bookmarks = con.get_module('Bookmarks').bookmarks
-        bookmark = bookmarks.get(self.room_jid, None)
-        if bookmark is None or not bookmark['print_status']:
-            print_status = app.config.get('print_status_in_muc')
-        else:
-            print_status = bookmark['print_status']
-
-        # status_code
-        # http://www.xmpp.org/extensions/xep-0045.html#registrar-statuscodes-\
-        # init
-        if obj.status_code and obj.nick == self.nick:
-            if '110' in obj.status_code:
-                if not self.is_connected:
-                    # We just join the room
-                    self.print_conversation(
-                        _('You (%s) joined the room') % self.nick,
-                        'info', graphics=False)
-                if self.room_jid in app.automatic_rooms[self.account] and \
-                app.automatic_rooms[self.account][self.room_jid]['invities']:
-                    if self.room_jid not in app.interface.instances[
-                    self.account]['gc_config']:
-                        if obj.affiliation == 'owner':
-                            # We need to configure the room if it's a new one.
-                            # We cannot know it's a new one. Status 201 is not
-                            # sent by all servers.
-                            con = app.connections[self.account]
-                            con.get_module('MUC').request_config(self.room_jid)
-                        elif 'continue_tag' in app.automatic_rooms[
-                        self.account][self.room_jid]:
-                            # We just need to invite contacts
-                            for jid in app.automatic_rooms[self.account][
-                            self.room_jid]['invities']:
-                                obj.conn.get_module('MUC').invite(self.room_jid, jid)
-                                self.print_conversation(_('%(jid)s has been '
-                                    'invited in this room') % {'jid': jid},
-                                    graphics=False)
-            if '100' in obj.status_code:
-                # Can be a message (see handle_event_gc_config_change in
-                # app.py)
-                self.print_conversation(
-                    _('Any occupant is allowed to see your full JID'))
-                self.is_anonymous = False
-            if '170' in obj.status_code:
-                # Can be a message (see handle_event_gc_config_change in
-                # app.py)
-                self.print_conversation(_('Room logging is enabled'))
-            if '201' in obj.status_code:
-                app.connections[self.account].get_module('Discovery').disco_muc(
-                    self.room_jid, self._on_room_created, update=True)
-                self.print_conversation(_('A new room has been created'))
-            if '210' in obj.status_code:
-                self.print_conversation(\
-                    _('The server has assigned or modified your roomnick'))
-
-        if obj.show in ('offline', 'error'):
-            if obj.status_code:
-                if '333' in obj.status_code:
-                    # Handle 333 before 307, some MUCs add both
-                    if print_status != 'none':
-                        if obj.nick == self.nick:
-                            s = _('%s kicked us due to an error' % self.room_jid)
-                        else:
-                            s = _('%s has left due to an error' % nick)
-                        if obj.reason:
-                            s += ' (%s)' % obj.reason
-                        self.print_conversation(s, 'info', graphics=False)
-                elif '307' in obj.status_code:
-                    if obj.actor is None: # do not print 'kicked by None'
-                        s = _('%(nick)s has been kicked: %(reason)s') % {
-                            'nick': nick, 'reason': obj.reason}
-                    else:
-                        s = _('%(nick)s has been kicked by %(who)s: '
-                            '%(reason)s') % {'nick': nick, 'who': obj.actor,
-                            'reason': obj.reason}
-                    self.print_conversation(s, 'info', graphics=False)
-                    if obj.nick == self.nick and not app.config.get(
-                    'muc_autorejoin_on_kick'):
-                        self.autorejoin = False
-                elif '301' in obj.status_code:
-                    if obj.actor is None: # do not print 'banned by None'
-                        s = _('%(nick)s has been banned: %(reason)s') % {
-                            'nick': nick, 'reason': obj.reason}
-                    else:
-                        s = _('%(nick)s has been banned by %(who)s: '
-                            '%(reason)s') % {'nick': nick, 'who': obj.actor,
-                            'reason': obj.reason}
-                    self.print_conversation(s, 'info', graphics=False)
-                    if obj.nick == self.nick:
-                        self.autorejoin = False
-                elif '303' in obj.status_code: # Someone changed their nick
-                    if obj.new_nick == self.new_nick or obj.nick == self.nick:
-                        # We changed our nick
-                        self._change_nick(obj.new_nick)
-                        self.new_nick = ''
-                        s = _('You are now known as %s') % self.nick
-                    else:
-                        s = _('%(nick)s is now known as %(new_nick)s') % {
-                            'nick': nick, 'new_nick': obj.new_nick}
-                    tv = self.conv_textview
-                    if obj.nick in tv.last_received_message_id:
-                        tv.last_received_message_id[obj.new_nick] = \
-                            tv.last_received_message_id[obj.nick]
-                        del tv.last_received_message_id[obj.nick]
-                    # We add new nick to muc roster here, so we don't see
-                    # that "new_nick has joined the room" when he just changed
-                    # nick.
-                    # add_contact_to_roster will be called a second time
-                    # after that, but that doesn't hurt
-                    self.add_contact_to_roster(obj.new_nick, obj.show, role,
-                        affiliation, obj.status, obj.real_jid)
-                    self._nick_completion.contact_renamed(nick, obj.new_nick)
-                    # keep nickname color
-                    if obj.nick in self.gc_custom_colors:
-                        self.gc_custom_colors[obj.new_nick] = \
-                            self.gc_custom_colors[obj.nick]
-                    self.print_conversation(s, 'info', graphics=False)
-                elif '321' in obj.status_code:
-                    s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % {'nick': nick,
-                        'reason': _('affiliation changed')}
-                    self.print_conversation(s, 'info', graphics=False)
-                elif '322' in obj.status_code:
-                    s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % {'nick': nick,
-                        'reason': _('room configuration changed to '
-                        'members-only')}
-                    self.print_conversation(s, 'info', graphics=False)
-                elif '332' in obj.status_code:
-                    s = _('%(nick)s has been removed from the room '
-                        '(%(reason)s)') % {'nick': nick,
-                        'reason': _('system shutdown')}
-                    self.print_conversation(s, 'info', graphics=False)
-                # Room has been destroyed.
-                elif 'destroyed' in obj.status_code:
-                    self.autorejoin = False
-                    self.print_conversation(obj.reason, 'info', graphics=False)
-
-            if not app.events.get_events(
-                    self.account, jid=obj.fjid, types=['pm']):
-                self.remove_contact(obj.nick)
-                self.draw_all_roles()
-            else:
-                c = app.contacts.get_gc_contact(self.account, self.room_jid,
-                    obj.nick)
-                c.show = obj.show
-                c.status = obj.status
-            if obj.nick == self.nick and (not obj.status_code or \
-            '303' not in obj.status_code): # We became offline
-                self.got_disconnected()
-                contact = app.contacts.\
-                    get_contact_with_highest_priority(self.account,
-                    self.room_jid)
-                if contact:
-                    app.interface.roster.draw_contact(self.room_jid,
-                        self.account)
-                if self.parent_win:
-                    self.parent_win.redraw_tab(self)
-        else:
-            iter_ = self.get_contact_iter(obj.nick)
-            if not iter_:
-                if '210' in obj.status_code:
-                    # Server changed our nick
-                    self._change_nick(obj.nick)
-                    s = _('You are now known as %s') % nick
-                    self.print_conversation(s, 'info', graphics=False)
-                iter_ = self.add_contact_to_roster(obj.nick, obj.show, role,
-                    affiliation, obj.status, obj.real_jid, obj.avatar_sha)
-                newly_created = True
-                self.draw_all_roles()
-                if obj.status_code and '201' in obj.status_code:
-                    # We just created the room
-                    con = app.connections[self.account]
+        if self.room_jid in app.automatic_rooms[self.account] and \
+        app.automatic_rooms[self.account][self.room_jid]['invities']:
+            if self.room_jid not in app.interface.instances[self.account]['gc_config']:
+                con = app.connections[self.account]
+                if affiliation.is_owner:
+                    # We need to configure the room if it's a new one.
+                    # We cannot know it's a new one. Status 201 is not
+                    # sent by all servers.
                     con.get_module('MUC').request_config(self.room_jid)
-            else:
-                gc_c = app.contacts.get_gc_contact(self.account,
-                    self.room_jid, obj.nick)
-                if not gc_c:
-                    log.error('%s has an iter, but no gc_contact instance',
-                              obj.nick)
-                    return
 
-                actual_affiliation = gc_c.affiliation
-                if affiliation != actual_affiliation:
-                    if obj.actor:
-                        st = _('** Affiliation of %(nick)s has been set to '
-                            '%(affiliation)s by %(actor)s') % {'nick': nick_jid,
-                            'affiliation': affiliation, 'actor': obj.actor}
-                    else:
-                        st = _('** Affiliation of %(nick)s has been set to '
-                            '%(affiliation)s') % {'nick': nick_jid,
-                            'affiliation': affiliation}
-                    if obj.reason:
-                        st += ' (%s)' % obj.reason
-                    self.print_conversation(st, graphics=False)
-                    right_changed = True
-                actual_role = self.get_role(obj.nick)
-                if role != actual_role:
-                    self.remove_contact(obj.nick)
-                    self.add_contact_to_roster(obj.nick, obj.show, role,
-                        affiliation, obj.status, obj.real_jid)
-                    self.draw_role(actual_role)
-                    self.draw_role(role)
-                    if obj.actor:
-                        st = _('** Role of %(nick)s has been set to %(role)s '
-                            'by %(actor)s') % {'nick': nick_jid, 'role': role,
-                            'actor': obj.actor}
-                    else:
-                        st = _('** Role of %(nick)s has been set to '
-                            '%(role)s') % {'nick': nick_jid, 'role': role}
-                    if obj.reason:
-                        st += ' (%s)' % obj.reason
-                    self.print_conversation(st, graphics=False)
-                    right_changed = True
-                else:
-                    if gc_c.show == obj.show and gc_c.status == obj.status and \
-                    gc_c.affiliation == affiliation: # no change
-                        return
-                    gc_c.show = obj.show
-                    gc_c.affiliation = affiliation
-                    gc_c.status = obj.status
-                    self.draw_contact(obj.nick)
-        if self.is_connected and obj.nick != self.nick \
-        and (not obj.status_code or '303' not in obj.status_code) and not \
-        right_changed:
-            st = ''
+                elif 'continue_tag' in app.automatic_rooms[self.account][self.room_jid]:
+                    # We just need to invite contacts
+                    for jid in app.automatic_rooms[self.account][self.room_jid]['invities']:
+                        con.get_module('MUC').invite(self.room_jid, jid)
+                        self.print_conversation(
+                            _('%(jid)s has been '
+                              'invited in this room') % {'jid': jid},
+                            graphics=False)
 
-            if obj.show == 'offline' and print_status in ('all', 'in_and_out') \
-            and (not obj.status_code or '307' not in obj.status_code):
-                st = _('%s has left') % nick_jid
-                if obj.reason:
-                    st += ' [%s]' % obj.reason
-            else:
-                if newly_created and print_status in ('all', 'in_and_out'):
-                    st = _('%s has joined the group chat') % nick_jid
-                elif print_status == 'all':
-                    st = _('%(nick)s is now %(status)s') % {'nick': nick_jid,
-                        'status': helpers.get_uf_show(obj.show)}
-            if st:
-                if obj.status:
-                    st += ' (' + obj.status + ')'
-                self.print_conversation(st, graphics=False)
+        if StatusCode.NON_ANONYMOUS in status_codes:
+            self.print_conversation(
+                _('Any occupant is allowed to see your full JID'))
+            self.is_anonymous = False
+
+        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
+            self.print_conversation(_('Room logging is enabled'))
+
+        if StatusCode.NICKNAME_MODIFIED in status_codes:
+            self.print_conversation(\
+                _('The server has assigned or modified your roomnick'))
+
+        if event.properties.is_new_room:
+            app.connections[self.account].get_module('Discovery').disco_muc(
+                self.room_jid, self._on_room_created, update=True)
+            self.print_conversation(_('A new room has been created'))
+            con = app.connections[self.account]
+            con.get_module('MUC').request_config(self.room_jid)
 
         # Update Actions
-        if obj.status_code:
-            if '110' in obj.status_code:
-                self.update_actions()
+        self.update_actions()
 
-    def add_contact_to_roster(self, nick, show, role, affiliation, status,
-                              jid='', avatar_sha=None):
-        role_name = helpers.get_uf_role(role, plural=True)
+    def _on_nickname_changed(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
 
-        resource = ''
-        if jid:
-            jids = jid.split('/', 1)
-            j = jids[0]
-            if len(jids) > 1:
-                resource = jids[1]
+        nick = event.properties.muc_nickname
+        new_nick = event.properties.muc_user.nick
+        if event.properties.is_muc_self_presence:
+            self._change_nick(new_nick)
+            message = _('You are now known as %s') % new_nick
         else:
-            j = ''
+            message = _('{nick} is now known '
+                        'as {new_nick}').format(nick=nick, new_nick=new_nick)
+            self._nick_completion.contact_renamed(nick, new_nick)
 
-        name = nick
+        self.print_conversation(message, 'info', graphics=False)
 
-        # Add Contact
-        gc_contact = app.contacts.create_gc_contact(
-            room_jid=self.room_jid, account=self.account,
-            name=nick, show=show, status=status, role=role,
-            affiliation=affiliation, jid=j, resource=resource,
-            avatar_sha=avatar_sha)
-        app.contacts.add_gc_contact(self.account, gc_contact)
+        tv = self.conv_textview
+        if nick in tv.last_received_message_id:
+            tv.last_received_message_id[new_nick] = \
+                tv.last_received_message_id[nick]
+            del tv.last_received_message_id[nick]
+
+        # keep nickname color
+        if nick in self.gc_custom_colors:
+            self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
+
+        self.remove_contact(nick)
+        self.add_contact_to_roster(new_nick)
+
+    def _on_status_show_changed(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        nick = event.properties.muc_nickname
+        status = event.properties.status
+        status = '' if status is None else ' (%s)' % status
+        show = helpers.get_uf_show(event.properties.show.value)
+
+        if event.properties.is_muc_self_presence:
+            message = _('You are now {show}{status}').format(show=show,
+                                                             status=status)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif app.config.get_per('rooms', self.room_jid, 'print_status'):
+            message = _('{nick} is now {show}{status}').format(nick=nick,
+                                                               show=show,
+                                                               status=status)
+            self.print_conversation(message, 'info', graphics=False)
+
+        self.draw_contact(nick)
+
+    def _on_affiliation_changed(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        affiliation = helpers.get_uf_affiliation(
+            event.properties.affiliation.value)
+        nick = event.properties.muc_nickname
+        reason = event.properties.muc_user.reason
+        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+
+        actor = event.properties.muc_user.actor
+        #Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
+
+        if event.properties.is_muc_self_presence:
+            message = _('** Your Affiliation has been set to '
+                        '{affiliation}{actor}{reason}').format(
+                            affiliation=affiliation,
+                            actor=actor,
+                            reason=reason)
+        else:
+            message = _('** Affiliation of {nick} has been set to '
+                        '{affiliation}{actor}{reason}').format(
+                            nick=nick,
+                            affiliation=affiliation,
+                            actor=actor,
+                            reason=reason)
+
+        self.print_conversation(message, graphics=False)
+        self.draw_contact(nick)
+
+    def _on_role_changed(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        role = helpers.get_uf_role(event.properties.role.value)
+        nick = event.properties.muc_nickname
+        reason = event.properties.muc_user.reason
+        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+
+        actor = event.properties.muc_user.actor
+        #Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
+
+        if event.properties.is_muc_self_presence:
+            message = _('** Your Role has been set to '
+                        '{role}{actor}{reason}').format(role=role,
+                                                        actor=actor,
+                                                        reason=reason)
+        else:
+            message = _('** Role of {nick} has been set to '
+                        '{role}{actor}{reason}').format(nick=nick,
+                                                        role=role,
+                                                        actor=actor,
+                                                        reason=reason)
+
+        self.print_conversation(message, graphics=False)
+        self.remove_contact(nick)
+        self.add_contact_to_roster(nick)
+
+    def _on_self_kicked(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        self.autorejoin = False
+
+        status_codes = event.properties.muc_status_codes or []
+
+        reason = event.properties.muc_user.reason
+        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+
+        actor = event.properties.muc_user.actor
+        #Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
+
+        #Group Chat: We have been removed from the room by Alice: reason
+        message = _('You have been removed from the room{actor}{reason}')
+
+        if StatusCode.REMOVED_ERROR in status_codes:
+            # Handle 333 before 307, some MUCs add both
+            #Group Chat: Server kicked us because of an server error
+            message = _('You have left due '
+                        'to an error{reason}').format(reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_KICKED in status_codes:
+            #Group Chat: We have been kicked by Alice: reason
+            message = _('You have been '
+                        'kicked{actor}{reason}').format(actor=actor,
+                                                        reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_BANNED in status_codes:
+            #Group Chat: We have been banned by Alice: reason
+            message = _('You have been '
+                        'banned{actor}{reason}').format(actor=actor,
+                                                        reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
+            #Group Chat: We were removed because of an affiliation change
+            reason = _(': Affiliation changed')
+            message = message.format(actor=actor, reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
+            #Group Chat: Room configuration changed
+            reason = _(': Room configuration changed to members-only')
+            message = message.format(actor=actor, reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
+            #Group Chat: Kicked because of server shutdown
+            reason = ': System shutdown'
+            message = message.format(actor=actor, reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+            self.autorejoin = True
+
+        self.got_disconnected()
+
+        # Update Actions
+        self.update_actions()
+
+    def _on_user_left(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        status_codes = event.properties.muc_status_codes or []
+        nick = event.properties.muc_nickname
+
+        reason = event.properties.muc_user.reason
+        reason = '' if reason is None else ': {reason}'.format(reason=reason)
+
+        actor = event.properties.muc_user.actor
+        #Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
+
+        #Group Chat: We have been removed from the room
+        message = _('{nick} has been removed from the room{by}{reason}')
+
+        print_join_left = app.config.get_per(
+            'rooms', self.room_jid, 'print_join_left')
+
+        if StatusCode.REMOVED_ERROR in status_codes:
+            # Handle 333 before 307, some MUCs add both
+            if print_join_left:
+                #Group Chat: User was kicked because of an server error: reason
+                message = _('{nick} has left due to '
+                            'an error{reason}').format(nick=nick, reason=reason)
+                self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_KICKED in status_codes:
+            #Group Chat: User was kicked by Alice: reason
+            message = _('{nick} has been '
+                        'kicked{actor}{reason}').format(nick=nick,
+                                                        actor=actor,
+                                                        reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_BANNED in status_codes:
+            #Group Chat: User was banned by Alice: reason
+            message = _('{nick} has been '
+                        'banned{actor}{reason}').format(nick=nick,
+                                                        actor=actor,
+                                                        reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
+            reason = _(': Affiliation changed')
+            message = message.format(nick=nick, actor=actor, reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
+            reason = _(': Room configuration changed to members-only')
+            message = message.format(nick=nick, actor=actor, reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        elif print_join_left:
+            message = _('{nick} has left{reason}').format(nick=nick,
+                                                          reason=reason)
+            self.print_conversation(message, 'info', graphics=False)
+
+        self.remove_contact(nick)
+        self.draw_all_roles()
+
+    def _on_user_joined(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        nick = event.properties.muc_nickname
+        print_join_left = app.config.get_per(
+            'rooms', self.room_jid, 'print_join_left')
+
+        self.add_contact_to_roster(nick)
+
+        if self.is_connected and print_join_left:
+            self.print_conversation(_('%s has joined the group chat') % nick,
+                                    graphics=False)
+
+    def _on_muc_presence_error(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        nick = event.properties.muc_nickname
+        error_type = event.properties.error.type
+        error_message = event.properties.error.message
+
+        if error_type == Error.NOT_AUTHORIZED:
+            app.interface.handle_gc_password_required(
+                self.account, self.room_jid, nick)
+
+        elif error_type == Error.FORBIDDEN:
+            # we are banned
+            ErrorDialog(
+                _('Unable to join group chat'),
+                _('You are banned from group chat <b>%s</b>.') % self.room_jid)
+
+        elif error_type == Error.REMOTE_SERVER_NOT_FOUND:
+            ErrorDialog(
+                _('Unable to join group chat'),
+                _('Remote server <b>%s</b> does not exist.') % self.room_jid)
+
+        elif error_type == Error.ITEM_NOT_FOUND:
+            ErrorDialog(
+                _('Unable to join group chat'),
+                _('Group chat <b>%s</b> does not exist.') % self.room_jid)
+
+        elif error_type == Error.NOT_ALLOWED:
+            ErrorDialog(
+                _('Unable to join group chat'),
+                _('Group chat creation is not permitted.'))
+
+        elif error_type == Error.NOT_ACCEPTABLE:
+            ErrorDialog(
+                _('Unable to join groupchat'),
+                _('You must use your registered '
+                  'nickname in <b>%s</b>.') % self.room_jid)
+
+        elif error_type == Error.REGISTRATION_REQUIRED:
+            ErrorDialog(
+                _('Unable to join group chat'),
+                _('You are not in the members '
+                  'list in groupchat %s.') % self.room_jid)
+
+        elif error_type == Error.CONFLICT:
+            win = None if self.parent_win is None else self.parent_win.window
+            app.interface.handle_ask_new_nick(
+                self.account, self.room_jid, win)
+
+        else:
+            self.print_conversation(
+                'Error %s: %s' % (error_type.value, error_message))
+
+        self.autorejoin = False
+
+    def add_contact_to_roster(self, nick):
+        contact = app.contacts.get_gc_contact(self.account,
+                                              self.room_jid,
+                                              nick)
+        role_name = helpers.get_uf_role(contact.role.value, plural=True)
 
         # Create Role
-        role_iter = self.get_role_iter(role)
+        role_iter = self.get_role_iter(contact.role.value)
         if not role_iter:
             icon_name = get_icon_name('closed')
             ext_columns = [None] * self.nb_ext_renderers
-            row = [icon_name, role, 'role', role_name, None] + ext_columns
+            row = [icon_name, contact.role.value,
+                   'role', role_name, None] + ext_columns
             role_iter = self.model.append(None, row)
-            self._role_refs[role] = Gtk.TreeRowReference(
+            self._role_refs[contact.role.value] = Gtk.TreeRowReference(
                 self.model, self.model.get_path(role_iter))
-            self.draw_all_roles()
 
         # Avatar
         image = None
         if app.config.get('show_avatars_in_roster'):
             surface = app.interface.get_avatar(
-                avatar_sha, AvatarSize.ROSTER, self.scale_factor)
+                contact.avatar_sha, AvatarSize.ROSTER, self.scale_factor)
             image = Gtk.Image.new_from_surface(surface)
 
         # Add to model
         ext_columns = [None] * self.nb_ext_renderers
-        row = [None, nick, 'contact', name, image] + ext_columns
+        row = [None, nick, 'contact', nick, image] + ext_columns
         iter_ = self.model.append(role_iter, row)
         self._contact_refs[nick] = Gtk.TreeRowReference(
             self.model, self.model.get_path(iter_))
 
+        self.draw_all_roles()
         self.draw_contact(nick)
 
-        if nick == self.nick:  # we became online
-            self.got_connected()
         if self.list_treeview.get_model():
             self.list_treeview.expand_row(
                 (self.model.get_path(role_iter)), False)
         if self.is_continued:
             self.draw_banner_text()
-        return iter_
+
+    def _on_muc_destroyed(self, event):
+        if event.account != self.account:
+            return
+        if event.room_jid != self.room_jid:
+            return
+
+        destroyed = event.properties.muc_destroyed
+
+        reason = destroyed.reason
+        reason = '' if reason is None else ': %s' % reason
+
+        message = _('Room has been destroyed')
+        self.print_conversation(message, 'info', graphics=False)
+
+        alternate = destroyed.alternate
+        if alternate is not None:
+            join_message = _('You can join this room '
+                             'instead: xmpp:%s?join') % alternate
+            self.print_conversation(join_message, 'info', graphics=False)
+
+        self.autorejoin = False
+        self.got_disconnected()
 
     def get_role_iter(self, role: str) -> Optional[Gtk.TreeIter]:
         try:
@@ -2046,10 +2200,6 @@ class GroupchatControl(ChatControlBase):
         iter_ = self.get_contact_iter(nick)
         if not iter_:
             return
-        gc_contact = app.contacts.get_gc_contact(
-            self.account, self.room_jid, nick)
-        if gc_contact:
-            app.contacts.remove_gc_contact(self.account, gc_contact)
 
         parent_iter = self.model.iter_parent(iter_)
         if parent_iter is None:
@@ -2124,7 +2274,7 @@ class GroupchatControl(ChatControlBase):
             self.account, self.room_jid, nick)
         if gc_contact:
             return gc_contact.role
-        return 'visitor'
+        return Role.VISITOR
 
     def minimizable(self):
         if self.force_non_minimizable:
@@ -2166,36 +2316,14 @@ class GroupchatControl(ChatControlBase):
         # Preventing autorejoin from being activated
         self.autorejoin = False
 
-        app.ged.remove_event_handler('gc-presence-received', ged.GUI1,
-            self._nec_gc_presence_received)
-        app.ged.remove_event_handler('gc-message-received', ged.GUI1,
-            self._nec_gc_message_received)
-        app.ged.remove_event_handler('vcard-published', ged.GUI1,
-            self._nec_vcard_published)
-        app.ged.remove_event_handler('update-gc-avatar', ged.GUI1,
-            self._nec_update_avatar)
-        app.ged.remove_event_handler('update-room-avatar', ged.GUI1,
-            self._nec_update_room_avatar)
-        app.ged.remove_event_handler('gc-subject-received', ged.GUI1,
-            self._nec_gc_subject_received)
-        app.ged.remove_event_handler('gc-config-changed-received', ged.GUI1,
-            self._nec_gc_config_changed_received)
-        app.ged.remove_event_handler('signed-in', ged.GUI1,
-            self._nec_signed_in)
-        app.ged.remove_event_handler('decrypted-message-received', ged.GUI2,
-            self._nec_decrypted_message_received)
-        app.ged.remove_event_handler('mam-decrypted-message-received',
-            ged.GUI1, self._nec_mam_decrypted_message_received)
-        app.ged.remove_event_handler('gc-stanza-message-outgoing', ged.OUT_POSTCORE,
-            self._message_sent)
-        app.ged.remove_event_handler('captcha-challenge', ged.GUI1,
-                                     self._on_captcha_challenge)
-        app.ged.remove_event_handler('voice-approval', ged.GUI1,
-                                     self._on_voice_approval)
+        # Unregister handlers
+        for handler in self._event_handlers:
+            app.ged.remove_event_handler(*handler)
 
         if self.is_connected:
             app.connections[self.account].send_gc_status(self.nick,
                 self.room_jid, show='offline', status=status)
+
         nick_list = app.contacts.get_nick_list(self.account, self.room_jid)
         for nick in nick_list:
             # Update pm chat window
@@ -2209,10 +2337,12 @@ class GroupchatControl(ChatControlBase):
                 contact.status = ''
                 ctrl.update_ui()
                 ctrl.parent_win.redraw_tab(ctrl)
+
         # They can already be removed by the destroy function
         if self.room_jid in app.contacts.get_gc_list(self.account):
             app.contacts.remove_room(self.account, self.room_jid)
             del app.gc_connected[self.account][self.room_jid]
+
         # Save hpaned position
         app.config.set('gc-hpaned-position', self.hpaned.get_position())
         # remove all register handlers on wigets, created by self.xml
@@ -2504,64 +2634,62 @@ class GroupchatControl(ChatControlBase):
 
         # these conditions were taken from JEP 0045
         item = xml.get_object('kick_menuitem')
-        if user_role != 'moderator' or \
-        (user_affiliation == 'admin' and target_affiliation == 'owner') or \
-        (user_affiliation == 'member' and target_affiliation in ('admin',
-        'owner')) or (user_affiliation == 'none' and target_affiliation != \
-        'none'):
+        if not user_role.is_moderator or \
+        (user_affiliation.is_admin and target_affiliation.is_owner) or \
+        (user_affiliation.is_member and target_affiliation in (Affiliation.ADMIN,
+        Affiliation.OWNER)) or (user_affiliation.is_none and not target_affiliation.is_none):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.kick, nick)
         self.handlers[id_] = item
 
         item = xml.get_object('voice_checkmenuitem')
-        item.set_active(target_role != 'visitor')
-        if user_role != 'moderator' or \
-        user_affiliation == 'none' or \
-        (user_affiliation == 'member' and target_affiliation != 'none') or \
-        target_affiliation in ('admin', 'owner'):
+        item.set_active(not target_role.is_visitor)
+        if not user_role.is_moderator or \
+        user_affiliation.is_none or \
+        (user_affiliation.is_member and not target_affiliation.is_none) or \
+        target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_voice_checkmenuitem_activate,
             nick)
         self.handlers[id_] = item
 
         item = xml.get_object('moderator_checkmenuitem')
-        item.set_active(target_role == 'moderator')
-        if not user_affiliation in ('admin', 'owner') or \
-        target_affiliation in ('admin', 'owner'):
+        item.set_active(target_role.is_moderator)
+        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
+        target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_moderator_checkmenuitem_activate,
             nick)
         self.handlers[id_] = item
 
         item = xml.get_object('ban_menuitem')
-        if not user_affiliation in ('admin', 'owner') or \
-        (target_affiliation in ('admin', 'owner') and\
-        user_affiliation != 'owner'):
+        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
+        (target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) and\
+        not user_affiliation.is_owner):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.ban, jid)
         self.handlers[id_] = item
 
         item = xml.get_object('member_checkmenuitem')
-        item.set_active(target_affiliation != 'none')
-        if not user_affiliation in ('admin', 'owner') or \
-        (user_affiliation != 'owner' and target_affiliation in ('admin',
-        'owner')):
+        item.set_active(not target_affiliation.is_none)
+        if not user_affiliation in (Affiliation.ADMIN, Affiliation.OWNER) or \
+        (not user_affiliation.is_owner and target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER)):
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_member_checkmenuitem_activate,
             jid)
         self.handlers[id_] = item
 
         item = xml.get_object('admin_checkmenuitem')
-        item.set_active(target_affiliation in ('admin', 'owner'))
-        if not user_affiliation == 'owner':
+        item.set_active(target_affiliation in (Affiliation.ADMIN, Affiliation.OWNER))
+        if not user_affiliation.is_owner:
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_admin_checkmenuitem_activate,
             jid)
         self.handlers[id_] = item
 
         item = xml.get_object('owner_checkmenuitem')
-        item.set_active(target_affiliation == 'owner')
-        if not user_affiliation == 'owner':
+        item.set_active(target_affiliation.is_owner)
+        if not user_affiliation.is_owner:
             item.set_sensitive(False)
         id_ = item.connect('activate', self.on_owner_checkmenuitem_activate,
             jid)

@@ -512,10 +512,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         super(ChatControlBase, self).shutdown()
         # PluginSystem: removing GUI extension points connected with ChatControlBase
         # instance object
-        app.plugin_manager.remove_gui_extension_point('chat_control_base',
-            self)
+        app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
         app.plugin_manager.remove_gui_extension_point(
             'chat_control_base_draw_banner', self)
+        app.plugin_manager.remove_gui_extension_point(
+            'chat_control_base_update_toolbar', self)
         app.ged.remove_event_handler('our-show', ged.GUI1,
             self._nec_our_status)
         app.ged.remove_event_handler('sec-catalog-received', ged.GUI1,
@@ -1049,8 +1050,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
                     gc_contact.room_jid, self.account)
             self_contact = app.contacts.get_gc_contact(self.account,
                     gc_control.room_jid, gc_control.nick)
-            if gc_control.is_anonymous and gc_contact.affiliation not in ['admin',
-            'owner'] and self_contact.affiliation in ['admin', 'owner']:
+            if gc_control.is_anonymous and gc_contact.affiliation.value not in ['admin',
+            'owner'] and self_contact.affiliation.value in ['admin', 'owner']:
                 contact = app.contacts.get_contact(self.account, gc_contact.jid)
                 if not contact or contact.sub not in ('both', 'to'):
                     prim_text = _('Really send file?')

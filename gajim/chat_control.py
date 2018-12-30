@@ -1182,12 +1182,8 @@ class ChatControl(ChatControlBase):
             return
 
         scale = self.parent_win.window.get_scale_factor()
-        if self.TYPE_ID == message_control.TYPE_CHAT:
-            surface = app.contacts.get_avatar(
-                self.account, self.contact.jid, AvatarSize.CHAT, scale)
-        else:
-            surface = app.interface.get_avatar(
-                self.gc_contact.avatar_sha, AvatarSize.CHAT, scale)
+        surface = app.contacts.get_avatar(
+            self.account, self.contact.jid, AvatarSize.CHAT, scale)
 
         image = self.xml.get_object('avatar_image')
         if surface is None:

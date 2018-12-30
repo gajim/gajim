@@ -220,8 +220,9 @@ class Chatstate:
                                'chatstate': str(State.ACTIVE)}
 
                 if contact.is_groupchat():
-                    app.nec.push_outgoing_event(
-                        GcMessageOutgoingEvent(None, **event_attrs))
+                    if contact.is_connected:
+                        app.nec.push_outgoing_event(
+                            GcMessageOutgoingEvent(None, **event_attrs))
                 else:
                     app.nec.push_outgoing_event(
                         MessageOutgoingEvent(None, **event_attrs))
@@ -265,8 +266,9 @@ class Chatstate:
                        'chatstate': str(state)}
 
         if contact.is_groupchat():
-            app.nec.push_outgoing_event(
-                GcMessageOutgoingEvent(None, **event_attrs))
+            if contact.is_connected:
+                app.nec.push_outgoing_event(
+                    GcMessageOutgoingEvent(None, **event_attrs))
         else:
             app.nec.push_outgoing_event(
                 MessageOutgoingEvent(None, **event_attrs))

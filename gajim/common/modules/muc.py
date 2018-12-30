@@ -20,11 +20,14 @@ import logging
 
 import nbxmpp
 from nbxmpp.const import InviteType
+from nbxmpp.const import PresenceType
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import i18n
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.const import KindConstant
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -38,6 +41,14 @@ class MUC:
         self._account = con.name
 
         self.handlers = [
+            StanzaHandler(name='presence',
+                          callback=self._on_muc_user_presence,
+                          ns=nbxmpp.NS_MUC_USER,
+                          priority=49),
+            StanzaHandler(name='presence',
+                          callback=self._on_muc_presence,
+                          ns=nbxmpp.NS_MUC,
+                          priority=49),
             StanzaHandler(name='message',
                           callback=self._on_subject_change,
                           typ='groupchat',
@@ -79,13 +90,14 @@ class MUC:
         ]
 
     def __getattr__(self, key):
-        if key in self._nbmxpp_methods:
-            if not app.account_is_connected(self._account):
-                log.warning('Account %s not connected, cant use %s',
-                            self._account, key)
-                return
-            module = self._con.connection.get_module('MUC')
-            return getattr(module, key)
+        if key not in self._nbmxpp_methods:
+            raise AttributeError
+        if not app.account_is_connected(self._account):
+            log.warning('Account %s not connected, cant use %s',
+                        self._account, key)
+            return
+        module = self._con.connection.get_module('MUC')
+        return getattr(module, key)
 
     def pass_disco(self, from_, identities, features, _data, _node):
         for identity in identities:
@@ -148,6 +160,163 @@ class MUC:
                 tags['maxstanzas'] = nb
             if tags:
                 muc_x.setTag('history', tags)
+
+    def _on_muc_presence(self, _con, _stanza, properties):
+        if properties.type == PresenceType.ERROR:
+            self._raise_muc_event('muc-presence-error', properties)
+            raise nbxmpp.NodeProcessed
+
+    def _on_muc_user_presence(self, _con, _stanza, properties):
+        if properties.type == PresenceType.ERROR:
+            return
+
+        if properties.is_muc_destroyed:
+            for contact in app.contacts.get_gc_contact_list(
+                    self._account, properties.jid.getBare()):
+                contact.presence = PresenceType.UNAVAILABLE
+            log.info('MUC destroyed: %s', properties.jid.getBare())
+            self._raise_muc_event('muc-destroyed', properties)
+            raise nbxmpp.NodeProcessed
+
+        contact = app.contacts.get_gc_contact(self._account,
+                                              properties.jid.getBare(),
+                                              properties.muc_nickname)
+
+        if properties.is_nickname_changed:
+            app.contacts.remove_gc_contact(self._account, contact)
+            contact.name = properties.muc_user.nick
+            app.contacts.add_gc_contact(self._account, contact)
+            log.info('Nickname changed: %s to %s',
+                     properties.jid,
+                     properties.muc_user.nick)
+            self._raise_muc_event('muc-nickname-changed', properties)
+            raise nbxmpp.NodeProcessed
+
+        if contact is None and properties.type.is_available:
+            self._add_new_muc_contact(properties)
+            if properties.is_muc_self_presence:
+                log.info('Self presence: %s', properties.jid)
+                self._raise_muc_event('muc-self-presence', properties)
+            else:
+                log.info('User joined: %s', properties.jid)
+                self._raise_muc_event('muc-user-joined', properties)
+            raise nbxmpp.NodeProcessed
+
+        if properties.is_muc_self_presence and properties.is_kicked:
+            self._raise_muc_event('muc-self-kicked', properties)
+            raise nbxmpp.NodeProcessed
+
+        if properties.is_muc_self_presence and properties.type.is_unavailable:
+            # Its not a kick, so this is the reflection of our own
+            # unavailable presence, because we left the MUC
+            raise nbxmpp.NodeProcessed
+
+        if properties.type.is_unavailable:
+            for _event in app.events.get_events(self._account,
+                                                jid=str(properties.jid),
+                                                types=['pm']):
+                contact.show = properties.show
+                contact.presence = properties.type
+                contact.status = properties.status
+                contact.affiliation = properties.affiliation
+                app.interface.handle_event(self._account,
+                                           str(properties.jid),
+                                           'pm')
+                # Handle only the first pm event, the rest will be
+                # handled by the opened ChatControl
+                break
+
+            # We remove the contact from the MUC, but there could be
+            # a PrivateChatControl open, so we update the contacts presence
+            contact.presence = properties.type
+            app.contacts.remove_gc_contact(self._account, contact)
+            log.info('User %s left', properties.jid)
+            self._raise_muc_event('muc-user-left', properties)
+            raise nbxmpp.NodeProcessed
+
+        if contact.affiliation != properties.affiliation:
+            contact.affiliation = properties.affiliation
+            log.info('Affiliation changed: %s %s',
+                     properties.jid,
+                     properties.affiliation)
+            self._raise_muc_event('muc-user-affiliation-changed', properties)
+
+        if contact.role != properties.role:
+            contact.role = properties.role
+            log.info('Role changed: %s %s',
+                     properties.jid,
+                     properties.role)
+            self._raise_muc_event('muc-user-role-changed', properties)
+
+        if (contact.status != properties.status or
+                contact.show != properties.show):
+            contact.status = properties.status
+            contact.show = properties.show
+            log.info('Show/Status changed: %s %s %s',
+                     properties.jid,
+                     properties.status,
+                     properties.show)
+            self._raise_muc_event('muc-user-status-show-changed', properties)
+
+        raise nbxmpp.NodeProcessed
+
+    def _raise_muc_event(self, event_name, properties):
+        app.nec.push_incoming_event(
+            NetworkEvent(event_name,
+                         account=self._account,
+                         room_jid=properties.jid.getBare(),
+                         properties=properties))
+        self._log_muc_event(event_name, properties)
+
+    def _log_muc_event(self, event_name, properties):
+        if event_name not in ['muc-user-joined',
+                              'muc-user-left',
+                              'muc-user-status-show-changed']:
+            return
+
+        if (not app.config.get('log_contact_status_changes') or
+                not app.config.should_log(self._account, properties.jid)):
+            return
+
+        additional_data = AdditionalDataDict()
+        if properties.muc_user is not None:
+            if properties.muc_user.jid is not None:
+                additional_data.set_value(
+                    'gajim', 'real_jid', str(properties.muc_user.jid))
+
+        # TODO: Refactor
+        if properties.type == PresenceType.UNAVAILABLE:
+            show = 'offline'
+        else:
+            show = properties.show.value
+        show = app.logger.convert_show_values_to_db_api_values(show)
+
+        app.logger.insert_into_logs(
+            self._account,
+            properties.jid.getBare(),
+            properties.timestamp,
+            KindConstant.GCSTATUS,
+            contact_name=properties.muc_nickname,
+            message=properties.status or None,
+            show=show,
+            additional_data=additional_data)
+
+    def _add_new_muc_contact(self, properties):
+        real_jid = None
+        if properties.muc_user.jid is not None:
+            real_jid = str(properties.muc_user.jid)
+        contact = app.contacts.create_gc_contact(
+            room_jid=properties.jid.getBare(),
+            account=self._account,
+            name=properties.muc_nickname,
+            show=properties.show,
+            status=properties.status,
+            presence=properties.type,
+            role=properties.role,
+            affiliation=properties.affiliation,
+            jid=real_jid,
+            avatar_sha=properties.avatar_sha)
+        app.contacts.add_gc_contact(self._account, contact)
 
     def _on_subject_change(self, _con, _stanza, properties):
         if not properties.is_muc_subject:

@@ -35,6 +35,7 @@ import logging
 log = logging.getLogger('gajim.c.caps_cache')
 
 import nbxmpp
+from nbxmpp.const import Affiliation
 from nbxmpp import (NS_XHTML_IM, NS_ESESSION, NS_CHATSTATES,
     NS_JINGLE_ICE_UDP, NS_JINGLE_RTP_AUDIO, NS_JINGLE_RTP_VIDEO,
     NS_JINGLE_FILE_TRANSFER_5)
@@ -485,7 +486,7 @@ class MucCapsCache:
 
     def is_subject_change_allowed(self, jid, affiliation):
         allowed = True
-        if affiliation in ('owner', 'admin'):
+        if affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
             return allowed
 
         if jid in self.cache:

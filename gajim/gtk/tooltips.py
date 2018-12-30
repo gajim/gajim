@@ -203,18 +203,18 @@ class GCTooltip():
                 self._ui.status.show()
 
         # Status
-        show = helpers.get_uf_show(contact.show)
+        show = helpers.get_uf_show(contact.show.value)
         self._ui.user_show.set_markup(colorize_status(show))
         self._ui.user_show.show()
 
         # JID
-        if contact.jid.strip():
-            self._ui.jid.set_text(contact.jid)
+        if contact.jid is not None:
+            self._ui.jid.set_text(str(contact.jid))
             self._ui.jid.show()
 
         # Affiliation
-        if contact.affiliation != 'none':
-            uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
+        if not contact.affiliation.is_none:
+            uf_affiliation = helpers.get_uf_affiliation(contact.affiliation.value)
             uf_affiliation = \
                 _('%(owner_or_admin_or_member)s of this group chat') \
                 % {'owner_or_admin_or_member': uf_affiliation}

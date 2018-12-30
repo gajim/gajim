@@ -2591,21 +2591,6 @@ class RosterWindow:
                 if app.events.get_events(account, obj.jid):
                     ctrl.read_queue()
 
-    def _nec_gc_presence_received(self, obj):
-        account = obj.conn.name
-        if obj.room_jid in app.interface.minimized_controls[account]:
-            gc_ctrl = app.interface.minimized_controls[account][obj.room_jid]
-        else:
-            return
-
-        if obj.nick == gc_ctrl.nick:
-            contact = app.contacts.get_contact_with_highest_priority(
-                account, obj.room_jid)
-            if contact:
-                contact.show = obj.show
-                self.draw_contact(obj.room_jid, account)
-                self.draw_group(_('Groupchats'), account)
-
     def _nec_roster_received(self, obj):
         if obj.received_from_server:
             self.fill_contacts_and_groups_dicts(obj.roster, obj.conn.name)
@@ -5860,10 +5845,6 @@ class RosterWindow:
 
         app.ged.register_event_handler('presence-received', ged.GUI1,
             self._nec_presence_received)
-        # presence has to be fully handled so that contact is added to occupant
-        # list before roster can be correctly updated
-        app.ged.register_event_handler('gc-presence-received', ged.GUI2,
-            self._nec_gc_presence_received)
         app.ged.register_event_handler('roster-received', ged.GUI1,
             self._nec_roster_received)
         app.ged.register_event_handler('anonymous-auth', ged.GUI1,

@@ -46,12 +46,13 @@ class XMPPEntity:
 
 class CommonContact(XMPPEntity):
 
-    def __init__(self, jid, account, resource, show, status, name,
+    def __init__(self, jid, account, resource, show, presence, status, name,
                  chatstate, client_caps=None):
 
         XMPPEntity.__init__(self, jid, account, resource)
 
-        self.show = show
+        self._show = show
+        self._presence = presence
         self.status = status
         self.name = name
 
@@ -68,9 +69,21 @@ class CommonContact(XMPPEntity):
 
     @show.setter
     def show(self, value):
-        if not isinstance(value, str):
-            raise TypeError('show must be a string')
+        if isinstance(value, str) and isinstance(self, GC_Contact):
+            breakpoint()
         self._show = value
+
+    @property
+    def presence(self):
+        return self._presence
+
+    @presence.setter
+    def presence(self, value):
+        self._presence = value
+
+    @property
+    def is_available(self):
+        return self._presence.is_available
 
     @property
     def chatstate_enum(self):
@@ -130,7 +143,8 @@ class Contact(CommonContact):
         if groups is None:
             groups = []
 
-        CommonContact.__init__(self, jid, account, resource, show, status, name,
+        CommonContact.__init__(self, jid, account, resource, show,
+                               None, status, name,
                                chatstate, client_caps=client_caps)
 
         self.contact_name = '' # nick choosen by contact
@@ -199,6 +213,14 @@ class Contact(CommonContact):
     def is_groupchat(self):
         return self._is_groupchat
 
+    @property
+    def is_connected(self):
+        from gajim.common import app
+        try:
+            return app.gc_connected[self.account.name][self.jid]
+        except Exception as error:
+            return False
+
     def is_transport(self):
         # if not '@' or '@' starts the jid then contact is transport
         return self.jid.find('@') <= 0
@@ -209,11 +231,12 @@ class GC_Contact(CommonContact):
     Information concerning each groupchat contact
     """
 
-    def __init__(self, room_jid, account, name='', show='', status='', role='',
-    affiliation='', jid='', resource='', chatstate=None, avatar_sha=None):
+    def __init__(self, room_jid, account, name='', show='', presence=None,
+                 status='', role='', affiliation='', jid='', resource='',
+                 chatstate=None, avatar_sha=None):
 
-        CommonContact.__init__(self, jid, account, resource, show, status, name,
-                               chatstate)
+        CommonContact.__init__(self, jid, account, resource, show,
+                               presence, status, name, chatstate)
 
         self.room_jid = room_jid
         self.role = role
@@ -443,11 +466,12 @@ class LegacyContactsAPI:
             return getattr(self._metacontact_manager, attr_name)
         raise AttributeError(attr_name)
 
-    def create_gc_contact(self, room_jid, account, name='', show='', status='',
-            role='', affiliation='', jid='', resource='', avatar_sha=None):
+    def create_gc_contact(self, room_jid, account, name='', show='',
+                          presence=None, status='', role='',
+                          affiliation='', jid='', resource='', avatar_sha=None):
         account = self._accounts.get(account, account) # Use Account object if available
-        return GC_Contact(room_jid, account, name, show, status, role, affiliation, jid,
-                resource, avatar_sha=avatar_sha)
+        return GC_Contact(room_jid, account, name, show, presence, status,
+                          role, affiliation, jid, resource, avatar_sha=avatar_sha)
 
     def add_gc_contact(self, account, gc_contact):
         return self._accounts[account].gc_contacts.add_gc_contact(gc_contact)
@@ -463,6 +487,9 @@ class LegacyContactsAPI:
 
     def get_nick_list(self, account, room_jid):
         return self._accounts[account].gc_contacts.get_nick_list(room_jid)
+
+    def get_gc_contact_list(self, account, room_jid):
+        return self._accounts[account].gc_contacts.get_gc_contact_list(room_jid)
 
     def get_gc_contact(self, account, room_jid, nick):
         return self._accounts[account].gc_contacts.get_gc_contact(room_jid, nick)
@@ -681,6 +708,12 @@ class GC_Contacts():
         if not room_jid in gc_list:
             return []
         return list(self._rooms[room_jid].keys())
+
+    def get_gc_contact_list(self, room_jid):
+        try:
+            return list(self._rooms[room_jid].values())
+        except Exception:
+            return []
 
     def get_gc_contact(self, room_jid, nick):
         try:
