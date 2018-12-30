@@ -330,7 +330,7 @@ class MUC:
         contact.status = properties.subject
 
         app.nec.push_incoming_event(
-            NetworkEvent('gc-subject-received',
+            NetworkEvent('muc-subject',
                          account=self._account,
                          jid=jid,
                          subject=properties.subject,
@@ -348,7 +348,7 @@ class MUC:
             return
 
         app.nec.push_incoming_event(
-            NetworkEvent('voice-approval',
+            NetworkEvent('muc-voice-approval',
                          account=self._account,
                          jid=jid,
                          form=properties.voice_request.form))
@@ -367,7 +367,7 @@ class MUC:
         store_bob_data(properties.captcha.bob_data)
 
         app.nec.push_incoming_event(
-            NetworkEvent('captcha-challenge',
+            NetworkEvent('muc-captcha-challenge',
                          account=self._account,
                          jid=properties.jid,
                          form=properties.captcha.form))
@@ -380,7 +380,7 @@ class MUC:
         log.info('Received config change: %s %s',
                  properties.jid, properties.muc_status_codes)
         app.nec.push_incoming_event(
-            NetworkEvent('gc-config-changed-received',
+            NetworkEvent('muc-config-changed',
                          account=self._account,
                          jid=properties.jid,
                          status_codes=properties.muc_status_codes))
@@ -396,7 +396,7 @@ class MUC:
                      data.from_, data.reason)
 
             app.nec.push_incoming_event(
-                NetworkEvent('gc-decline-received',
+                NetworkEvent('muc-decline',
                              account=self._account,
                              **data._asdict()))
             raise nbxmpp.NodeProcessed
@@ -414,7 +414,7 @@ class MUC:
                 raise nbxmpp.NodeProcessed
 
             app.nec.push_incoming_event(
-                NetworkEvent('gc-invitation-received',
+                NetworkEvent('muc-invitation',
                              account=self._account,
                              **data._asdict()))
             raise nbxmpp.NodeProcessed
@@ -444,7 +444,7 @@ class MUC:
             return
 
         app.nec.push_incoming_event(NetworkEvent(
-            'muc-owner-received',
+            'muc-config',
             conn=self._con,
             dataform=result.form,
             jid=result.jid))

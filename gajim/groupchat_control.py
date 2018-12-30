@@ -321,20 +321,20 @@ class GroupchatControl(ChatControlBase):
             ('muc-user-affiliation-changed', ged.GUI1, self._on_affiliation_changed),
             ('muc-user-status-show-changed', ged.GUI1, self._on_status_show_changed),
             ('muc-user-role-changed', ged.GUI1, self._on_role_changed),
-            ('muc-destroyed', ged.GUI1, self._on_muc_destroyed),
-            ('muc-presence-error', ged.GUI1, self._on_muc_presence_error),
+            ('muc-destroyed', ged.GUI1, self._on_destroyed),
+            ('muc-presence-error', ged.GUI1, self._on_presence_error),
+            ('muc-config-changed', ged.GUI1, self._on_config_changed),
+            ('muc-subject', ged.GUI1, self._on_subject),
+            ('muc-captcha-challenge', ged.GUI1, self._on_captcha_challenge),
+            ('muc-voice-approval', ged.GUI1, self._on_voice_approval),
             ('gc-message-received', ged.GUI1, self._nec_gc_message_received),
             ('mam-decrypted-message-received', ged.GUI1, self._nec_mam_decrypted_message_received),
             ('vcard-published', ged.GUI1, self._nec_vcard_published),
             ('update-gc-avatar', ged.GUI1, self._nec_update_avatar),
             ('update-room-avatar', ged.GUI1, self._nec_update_room_avatar),
-            ('gc-subject-received', ged.GUI1, self._nec_gc_subject_received),
-            ('gc-config-changed-received', ged.GUI1, self._nec_gc_config_changed_received),
             ('signed-in', ged.GUI1, self._nec_signed_in),
             ('decrypted-message-received', ged.GUI2, self._nec_decrypted_message_received),
             ('gc-stanza-message-outgoing', ged.OUT_POSTCORE, self._message_sent),
-            ('captcha-challenge', ged.GUI1, self._on_captcha_challenge),
-            ('voice-approval', ged.GUI1, self._on_voice_approval),
         ]
 
         for handler in self._event_handlers:
@@ -1441,7 +1441,7 @@ class GroupchatControl(ChatControlBase):
         self.subject = subject
         self.draw_banner_text()
 
-    def _nec_gc_subject_received(self, event):
+    def _on_subject(self, event):
         if event.account != self.account:
             return
         if event.jid != self.room_jid:
@@ -1467,7 +1467,7 @@ class GroupchatControl(ChatControlBase):
         else:
             self.subject_button.show()
 
-    def _nec_gc_config_changed_received(self, event):
+    def _on_config_changed(self, event):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
         if event.account != self.account:
             return
@@ -2060,7 +2060,7 @@ class GroupchatControl(ChatControlBase):
             self.print_conversation(_('%s has joined the group chat') % nick,
                                     graphics=False)
 
-    def _on_muc_presence_error(self, event):
+    def _on_presence_error(self, event):
         if event.account != self.account:
             return
         if event.room_jid != self.room_jid:
@@ -2158,7 +2158,7 @@ class GroupchatControl(ChatControlBase):
         if self.is_continued:
             self.draw_banner_text()
 
-    def _on_muc_destroyed(self, event):
+    def _on_destroyed(self, event):
         if event.account != self.account:
             return
         if event.room_jid != self.room_jid:

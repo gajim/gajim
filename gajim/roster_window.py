@@ -2677,7 +2677,7 @@ class RosterWindow:
         app.log('avatar').debug('Draw roster avatar: %s', obj.jid)
         self.draw_avatar(obj.jid, obj.account)
 
-    def _nec_gc_subject_received(self, event):
+    def _nec_muc_subject_received(self, event):
         self.draw_contact(event.jid, event.account)
 
     def _nec_metacontacts_received(self, obj):
@@ -5861,8 +5861,8 @@ class RosterWindow:
             self._nec_update_avatar)
         app.ged.register_event_handler('update-room-avatar', ged.GUI1,
             self._nec_update_avatar)
-        app.ged.register_event_handler('gc-subject-received', ged.GUI1,
-            self._nec_gc_subject_received)
+        app.ged.register_event_handler('muc-subject', ged.GUI1,
+            self._nec_muc_subject_received)
         app.ged.register_event_handler('metacontacts-received', ged.GUI2,
             self._nec_metacontacts_received)
         app.ged.register_event_handler('signed-in', ged.GUI1,
