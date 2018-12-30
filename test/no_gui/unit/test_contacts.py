@@ -12,7 +12,7 @@ class TestCommonContact(unittest.TestCase):
 
     def setUp(self):
         self.contact = CommonContact(
-            jid='', account="", resource='', show='',
+            jid='', account="", resource='', show='', presence=None,
             status='', name='', chatstate=None, client_caps=None)
 
     def test_default_client_supports(self):
