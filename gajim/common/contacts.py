@@ -69,8 +69,6 @@ class CommonContact(XMPPEntity):
 
     @show.setter
     def show(self, value):
-        if isinstance(value, str) and isinstance(self, GC_Contact):
-            breakpoint()
         self._show = value
 
     @property
@@ -218,7 +216,7 @@ class Contact(CommonContact):
         from gajim.common import app
         try:
             return app.gc_connected[self.account.name][self.jid]
-        except Exception as error:
+        except Exception:
             return False
 
     def is_transport(self):
