@@ -93,27 +93,23 @@ class PEP:
 
         handlers = self._pep_handlers.get(namespace, None)
         if handlers is None:
-            # Old Fallback
-            from gajim.common.connection_handlers_events import PEPReceivedEvent as OldPEPReceivedEvent
-            app.nec.push_incoming_event(
-                OldPEPReceivedEvent(None, conn=self._con, stanza=stanza))
             raise nbxmpp.NodeProcessed
-        else:
-            # Check if this is a retraction
-            retract = items.getTag('retract')
-            if retract is not None:
-                id_ = retract.getAttr('id')
-                log.info('Received retract of id: %s', id_)
-                raise nbxmpp.NodeProcessed
 
-            # Check if we have items
-            items_ = items.getTags('item')
-            if items_ is None:
-                log.warning('Malformed PEP event received: %s', stanza)
-                raise nbxmpp.NodeProcessed
-            for handler in handlers:
-                handler(jid, items_[0])
-                raise nbxmpp.NodeProcessed
+        # Check if this is a retraction
+        retract = items.getTag('retract')
+        if retract is not None:
+            id_ = retract.getAttr('id')
+            log.info('Received retract of id: %s', id_)
+            raise nbxmpp.NodeProcessed
+
+        # Check if we have items
+        items_ = items.getTags('item')
+        if items_ is None:
+            log.warning('Malformed PEP event received: %s', stanza)
+            raise nbxmpp.NodeProcessed
+        for handler in handlers:
+            handler(jid, items_[0])
+            raise nbxmpp.NodeProcessed
 
     def send_stored_publish(self) -> None:
         for module in self._store_publish_modules:

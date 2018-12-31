@@ -33,7 +33,6 @@ from gajim.common.modules import dataforms
 from gajim.common.modules.misc import parse_idle
 from gajim.common.modules.misc import parse_delay
 from gajim.common.const import KindConstant, SSLError
-from gajim.common.pep import SUPPORTED_PERSONAL_USER_EVENTS
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
 
@@ -428,30 +427,6 @@ class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
     def generate(self):
         self.keyid = app.config.get_per('accounts', self.conn.name, 'keyid')
         return True
-
-class PEPReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'pep-received'
-
-    def generate(self):
-        if not self.stanza.getTag('event'):
-            return
-        if self.stanza.getTag('error'):
-            log.debug('PEPReceivedEvent received error stanza. Ignoring')
-            return
-
-        try:
-            self.get_jid_resource()
-        except Exception:
-            return
-
-        self.event_tag = self.stanza.getTag('event')
-
-        for pep_class in SUPPORTED_PERSONAL_USER_EVENTS:
-            pep = pep_class.get_tag_as_PEP(self.fjid, self.conn.name,
-                self.event_tag)
-            if pep:
-                self.pep_type = pep.type_
-                return True
 
 class PlainConnectionEvent(nec.NetworkIncomingEvent):
     name = 'plain-connection'
