@@ -431,6 +431,8 @@ class PluginManager(metaclass=Singleton):
                 # So just unregister the plugin handlers
                 if con.handlers_registered:
                     for handler in instance.handlers:
+                        if len(handler) > 4:
+                            handler = handler[:4]
                         con.connection.UnregisterHandler(*handler)
 
     @log_calls('PluginManager')
