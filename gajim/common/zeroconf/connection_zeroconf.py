@@ -152,7 +152,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def _on_remove_service(self, jid):
         self.roster.delItem(jid)
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
-        # keyID, timestamp, contact_nickname))
+        # keyID, timestamp))
         app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
             None, conn=self, fjid=jid, show='offline', status=''))
 

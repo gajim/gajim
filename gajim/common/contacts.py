@@ -368,6 +368,9 @@ class LegacyContactsAPI:
     def get_contact(self, account, jid, resource=None):
         return self._accounts[account].contacts.get_contact(jid, resource=resource)
 
+    def get_contact_strict(self, account, jid, resource):
+        return self._accounts[account].contacts.get_contact_strict(jid, resource)
+
     def get_avatar(self, account, *args, **kwargs):
         return self._accounts[account].contacts.get_avatar(*args, **kwargs)
 
@@ -553,7 +556,7 @@ class Contacts():
         """
         Return the list of contact instances for this jid
         """
-        return self._contacts.get(jid, [])
+        return list(self._contacts.get(jid, []))
 
     def get_contact(self, jid, resource=None):
         ### WARNING ###

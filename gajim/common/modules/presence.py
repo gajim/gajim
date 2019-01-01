@@ -15,13 +15,17 @@
 # Presence handler
 
 import logging
+import time
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
+from nbxmpp.const import PresenceType
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
-from gajim.common.modules.user_nickname import parse_nickname
+from gajim.common.const import KindConstant
+from gajim.common.helpers import prepare_and_validate_gpg_keyID
 
 log = logging.getLogger('gajim.c.m.presence')
 
@@ -32,11 +36,25 @@ class Presence:
         self._account = con.name
 
         self.handlers = [
-            ('presence', self._presence_received),
-            ('presence', self._subscribe_received, 'subscribe'),
-            ('presence', self._subscribed_received, 'subscribed'),
-            ('presence', self._unsubscribe_received, 'unsubscribe'),
-            ('presence', self._unsubscribed_received, 'unsubscribed'),
+            StanzaHandler(name='presence',
+                          callback=self._presence_received,
+                          priority=50),
+            StanzaHandler(name='presence',
+                          callback=self._subscribe_received,
+                          typ='subscribe',
+                          priority=49),
+            StanzaHandler(name='presence',
+                          callback=self._subscribed_received,
+                          typ='subscribed',
+                          priority=49),
+            StanzaHandler(name='presence',
+                          callback=self._unsubscribe_received,
+                          typ='unsubscribe',
+                          priority=49),
+            StanzaHandler(name='presence',
+                          callback=self._unsubscribed_received,
+                          typ='unsubscribed',
+                          priority=49),
         ]
 
         # keep the jids we auto added (transports contacts) to not send the
@@ -46,32 +64,198 @@ class Presence:
         # list of jid to auto-authorize
         self.jids_for_auto_auth = []
 
-    def _presence_received(self, _con, stanza):
-        if stanza.getType() in ('subscribe', 'subscribed',
-                                'unsubscribe', 'unsubscribed'):
-            # Dont handle that here
+    def _presence_received(self, _con, stanza, properties):
+        log.info('Received from %s', properties.jid)
+
+        if properties.type == PresenceType.ERROR:
+            log.info('Error: %s %s', properties.jid, properties.error)
+            raise nbxmpp.NodeProcessed
+
+        if self._account == 'Local':
+            app.nec.push_incoming_event(
+                NetworkEvent('raw-pres-received',
+                             conn=self._con,
+                             stanza=stanza))
+            raise nbxmpp.NodeProcessed
+
+        if properties.is_self_presence:
+            app.nec.push_incoming_event(
+                NetworkEvent('our-show',
+                             conn=self._con,
+                             show=properties.show.value))
+            raise nbxmpp.NodeProcessed
+
+        contacts = app.contacts.get_jid_list(self._account)
+        if properties.jid.getBare() not in contacts and not properties.is_self_bare:
+            # Handle only presence from roster contacts
+            log.warning('Unkown presence received')
+            log.warning(stanza)
             return
 
-        log.info('Received from %s', stanza.getFrom())
-        if nbxmpp.isErrorNode(stanza):
-            log.info('Error:\n%s', stanza)
+        key_id = ''
+        if properties.signed is not None and self._con.USE_GPG:
+            key_id = self._con.gpg.verify(properties.status, properties.signed)
+            key_id = prepare_and_validate_gpg_keyID(
+                self._account, properties.jid.getBare(), key_id)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('raw-pres-received',
-                         conn=self._con,
-                         stanza=stanza))
+        show = properties.show.value
+        if properties.type.is_unavailable:
+            show = 'offline'
 
-    def _subscribe_received(self, _con, stanza):
-        from_ = stanza.getFrom()
-        jid = from_.getStripped()
-        fjid = str(from_)
-        status = stanza.getStatus()
+        event_attrs = {
+            'conn': self._con,
+            'stanza': stanza,
+            'keyID': key_id,
+            'prio': properties.priority,
+            'need_add_in_roster': False,
+            'popup': False,
+            'ptype': properties.type.value,
+            'jid': properties.jid.getBare(),
+            'resource': properties.jid.getResource(),
+            'id_': properties.id,
+            'fjid': str(properties.jid),
+            'timestamp': properties.timestamp,
+            'avatar_sha': properties.avatar_sha,
+            'user_nick': properties.nickname,
+            'idle_time': properties.idle_timestamp,
+            'show': show,
+            'new_show': show,
+            'old_show': 0,
+            'status': properties.status,
+            'contact_list': [],
+            'contact': None,
+            'need_add_in_roster': False,
+        }
+
+        event_ = NetworkEvent('presence-received', **event_attrs)
+
+        # TODO: Refactor
+        self._update_contact(event_, properties)
+
+        app.nec.push_incoming_event(event_)
+
+        raise nbxmpp.NodeProcessed
+
+    def _update_contact(self, event, properties):
+        jid = properties.jid.getBare()
+        resource = properties.jid.getResource()
+
+        status_strings = ['offline', 'error', 'online', 'chat', 'away',
+                          'xa', 'dnd', 'invisible']
+
+        event.new_show = status_strings.index(event.show)
+
+        # Update contact
+        contact_list = app.contacts.get_contacts(self._account, jid)
+        if not contact_list:
+            log.warning('No contact found')
+            return
+
+        event.contact_list = contact_list
+
+        contact = app.contacts.get_contact_strict(self._account,
+                                                  properties.jid.getBare(),
+                                                  properties.jid.getResource())
+        if contact is None:
+            contact = app.contacts.get_first_contact_from_jid(self._account, jid)
+            if contact is None:
+                log.warning('First contact not found')
+                return
+
+            if self._is_resource_known(contact_list) and not app.jid_is_transport(jid):
+                # Another resource of an existing contact connected
+                # Add new contact
+                event.old_show = 0
+                contact = app.contacts.copy_contact(contact)
+                contact.resource = resource
+                app.contacts.add_contact(self._account, contact)
+            else:
+                # Convert the inital roster contact to a contact with resource
+                contact.resource = resource
+                event.old_show = status_strings.index(contact.show)
+
+            event.need_add_in_roster = True
+
+        elif contact.show in status_strings:
+            event.old_show = status_strings.index(contact.show)
+
+        # Update contact with presence data
+        contact.show = event.show
+        contact.status = properties.status
+        contact.priority = properties.priority
+        attached_keys = app.config.get_per('accounts', self._account,
+                                           'attached_gpg_keys').split()
+        if jid in attached_keys:
+            contact.keyID = attached_keys[attached_keys.index(jid) + 1]
+        else:
+            # Do not override assigned key
+            contact.keyID = event.keyID
+        contact.idle_time = properties.idle_timestamp
+
+        event.contact = contact
+
+        if not app.jid_is_transport(jid) and len(contact_list) == 1:
+            # It's not an agent
+            if event.old_show == 0 and event.new_show > 1:
+                if not jid in app.newly_added[self._account]:
+                    app.newly_added[self._account].append(jid)
+                if jid in app.to_be_removed[self._account]:
+                    app.to_be_removed[self._account].remove(jid)
+            elif event.old_show > 1 and event.new_show == 0 and \
+            self._con.connected > 1:
+                if not jid in app.to_be_removed[self._account]:
+                    app.to_be_removed[self._account].append(jid)
+                if jid in app.newly_added[self._account]:
+                    app.newly_added[self._account].remove(jid)
+
+        if app.jid_is_transport(jid):
+            return
+
+        if properties.type.is_unavailable:
+            # TODO: This causes problems when another
+            # resource signs off!
+            self._con.stop_all_active_file_transfers(contact)
+        self._log_presence(properties)
+
+    @staticmethod
+    def _is_resource_known(contact_list):
+        if len(contact_list) > 1:
+            return True
+
+        if contact_list[0].resource == '':
+            return False
+        return contact_list[0].show not in ('not in roster', 'offline')
+
+    def _log_presence(self, properties):
+        if not app.config.get('log_contact_status_changes'):
+            return
+        if not app.config.should_log(self._account, properties.jid.getBare()):
+            return
+
+        # TODO: Refactor
+        if properties.type.is_unavailable:
+            show = 'offline'
+        else:
+            show = properties.show.value
+
+        app.logger.insert_into_logs(self._account,
+                                    properties.jid.getBare(),
+                                    time.time(),
+                                    KindConstant.STATUS,
+                                    message=properties.status,
+                                    show=show)
+
+    def _subscribe_received(self, _con, _stanza, properties):
+        jid = properties.jid.getBare()
+        fjid = str(properties.jid)
+
         is_transport = app.jid_is_transport(fjid)
         auto_auth = app.config.get_per('accounts', self._account, 'autoauth')
-        user_nick = parse_nickname(stanza)
 
-        log.info('Received Subscribe: %s, transport: %s, auto_auth: %s, '
-                 'user_nick: %s', from_, is_transport, auto_auth, user_nick)
+        log.info('Received Subscribe: %s, transport: %s, '
+                 'auto_auth: %s, user_nick: %s',
+                 properties.jid, is_transport, auto_auth, properties.nickname)
+
         if is_transport and fjid in self._con.agent_registrations:
             self._con.agent_registrations[fjid]['sub_received'] = True
             if not self._con.agent_registrations[fjid]['roster_push']:
@@ -81,8 +265,8 @@ class Presence:
         if auto_auth or is_transport or jid in self.jids_for_auto_auth:
             self.send_presence(fjid, 'subscribed')
 
-        if not status:
-            status = _('I would like to add you to my roster.')
+        status = (properties.status or
+                  _('I would like to add you to my roster.'))
 
         app.nec.push_incoming_event(NetworkEvent(
             'subscribe-presence-received',
@@ -90,16 +274,15 @@ class Presence:
             jid=jid,
             fjid=fjid,
             status=status,
-            user_nick=user_nick,
+            user_nick=properties.nickname,
             is_transport=is_transport))
 
         raise nbxmpp.NodeProcessed
 
-    def _subscribed_received(self, _con, stanza):
-        from_ = stanza.getFrom()
-        jid = from_.getStripped()
-        resource = from_.getResource()
-        log.info('Received Subscribed: %s', from_)
+    def _subscribed_received(self, _con, _stanza, properties):
+        jid = properties.jid.getBare()
+        resource = properties.jid.getResource()
+        log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
             self.automatically_added.remove(jid)
             raise nbxmpp.NodeProcessed
@@ -110,17 +293,15 @@ class Presence:
         raise nbxmpp.NodeProcessed
 
     @staticmethod
-    def _unsubscribe_received(_con, stanza):
-        log.info('Received Unsubscribe: %s', stanza.getFrom())
+    def _unsubscribe_received(_con, _stanza, properties):
+        log.info('Received Unsubscribe: %s', properties.jid)
         raise nbxmpp.NodeProcessed
 
-    def _unsubscribed_received(self, _con, stanza):
-        from_ = stanza.getFrom()
-        jid = from_.getStripped()
-        log.info('Received Unsubscribed: %s', from_)
+    def _unsubscribed_received(self, _con, _stanza, properties):
+        log.info('Received Unsubscribed: %s', properties.jid)
         app.nec.push_incoming_event(NetworkEvent(
             'unsubscribed-presence-received',
-            conn=self._con, jid=jid))
+            conn=self._con, jid=properties.jid.getBare()))
         raise nbxmpp.NodeProcessed
 
     def subscribed(self, jid):

@@ -331,7 +331,7 @@ class Interface:
 
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
-        # priority, # keyID, timestamp, contact_nickname))
+        # priority, # keyID, timestamp))
         #
         # Contact changed show
         account = obj.conn.name

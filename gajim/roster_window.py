@@ -720,14 +720,7 @@ class RosterWindow:
             return
 
         if jid == app.get_jid_from_account(account):
-            show_self_contact = app.config.get('show_self_contact')
-            if show_self_contact == 'never':
-                return
-            if (contact.resource != app.connections[account].server_resource \
-            and show_self_contact == 'when_other_resource') or \
-            show_self_contact == 'always':
-                return self._add_self_contact(account)
-            return
+            return self._add_self_contact(account)
 
         is_observer = contact.is_observer()
         if is_observer:
@@ -1871,13 +1864,13 @@ class RosterWindow:
                 'contacts': {}}
         if account not in app.groups:
             app.groups[account] = {}
-        if app.config.get('show_self_contact') == 'always':
-            self_jid = app.get_jid_from_account(account)
-            if app.connections[account].server_resource:
-                self_jid += '/' + app.connections[account].server_resource
-            array[self_jid] = {'name': app.nicks[account],
-                'groups': ['self_contact'], 'subscription': 'both',
-                'ask': 'none'}
+
+        self_jid = app.get_jid_from_account(account)
+        if app.connections[account].server_resource:
+            self_jid += '/' + app.connections[account].server_resource
+        array[self_jid] = {'name': app.nicks[account],
+            'groups': ['self_contact'], 'subscription': 'both',
+            'ask': 'none'}
 
         # .keys() is needed
         for jid in list(array.keys()):
@@ -2212,10 +2205,7 @@ class RosterWindow:
 
         elif contact.jid == app.get_jid_from_account(account) and \
         show in ('offline', 'error'):
-            if app.config.get('show_self_contact') != 'never':
-                # SelfContact went offline. Remove him when last pending
-                # message was read
-                self.remove_contact(contact.jid, account, backend=True)
+            self.remove_contact(contact.jid, account, backend=True)
 
         uf_show = helpers.get_uf_show(show)
 
@@ -2249,13 +2239,12 @@ class RosterWindow:
         if account not in app.contacts.get_accounts():
             return
         child_iterA = self._get_account_iter(account, self.model)
-        if app.config.get('show_self_contact') == 'always':
-            self_resource = app.connections[account].server_resource
-            self_contact = app.contacts.get_contact(account,
-                    app.get_jid_from_account(account), resource=self_resource)
-            if self_contact:
-                status = app.connections[account].status
-                self.chg_contact_status(self_contact, show, status, account)
+        self_resource = app.connections[account].server_resource
+        self_contact = app.contacts.get_contact(account,
+                app.get_jid_from_account(account), resource=self_resource)
+        if self_contact:
+            status = app.connections[account].status
+            self.chg_contact_status(self_contact, show, status, account)
         self.set_account_status_icon(account)
         if show == 'offline':
             if self.quit_on_next_offline > -1:
@@ -2570,8 +2559,7 @@ class RosterWindow:
                     GLib.timeout_add_seconds(5, self.remove_to_be_removed,
                         jid, account)
 
-        if obj.need_redraw:
-            self.draw_contact(jid, account)
+        self.draw_contact(jid, account)
 
         if app.jid_is_transport(jid) and jid in jid_list:
             # It must be an agent
@@ -2579,7 +2567,7 @@ class RosterWindow:
             self.draw_contact(jid, account)
             self.draw_group(_('Transports'), account)
 
-        if obj.contact and obj.need_redraw:
+        if obj.contact:
             self.chg_contact_status(obj.contact, obj.show, obj.status, account)
 
         if obj.popup:
@@ -2598,20 +2586,20 @@ class RosterWindow:
             self.fire_up_unread_messages_events(obj.conn.name)
         else:
             # add self contact
-            if app.config.get('show_self_contact') == 'always':
-                account = obj.conn.name
-                self_jid = app.get_jid_from_account(account)
-                if self_jid not in app.contacts.get_jid_list(account):
-                    resource = ''
-                    if app.connections[account].server_resource:
-                        resource = app.connections[account].server_resource
-                    sha = app.config.get_per('accounts', account, 'avatar_sha')
-                    contact = app.contacts.create_contact(
-                        jid=self_jid, account=account, name=app.nicks[account],
-                        groups=['self_contact'], show='offline', sub='both',
-                        ask='none', resource=resource, avatar_sha=sha)
-                    app.contacts.add_contact(account, contact)
-                    self.add_contact(self_jid, account)
+            account = obj.conn.name
+            self_jid = app.get_jid_from_account(account)
+            if self_jid not in app.contacts.get_jid_list(account):
+                resource = ''
+                if app.connections[account].server_resource:
+                    resource = app.connections[account].server_resource
+                sha = app.config.get_per('accounts', account, 'avatar_sha')
+                contact = app.contacts.create_contact(
+                    jid=self_jid, account=account, name=app.nicks[account],
+                    groups=['self_contact'], show='offline', sub='both',
+                    ask='none', resource=resource, avatar_sha=sha)
+                app.contacts.add_contact(account, contact)
+                self.add_contact(self_jid, account)
+
             if app.config.get('remember_opened_chat_controls'):
                 account = obj.conn.name
                 controls = app.config.get_per(

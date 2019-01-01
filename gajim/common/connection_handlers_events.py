@@ -144,105 +144,8 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
             self.conn = self.base_event.conn
             return True
 
-class PresenceHelperEvent:
-    def _generate_show(self):
-        self.show = self.stanza.getShow()
-        if self.show not in ('chat', 'away', 'xa', 'dnd'):
-            self.show = '' # We ignore unknown show
-        if not self.ptype and not self.show:
-            self.show = 'online'
-        elif self.ptype == 'unavailable':
-            self.show = 'offline'
-
-    def _generate_ptype(self):
-        self.ptype = self.stanza.getType()
-        if self.ptype == 'available':
-            self.ptype = None
-        rfc_types = ('unavailable', 'error', 'subscribe', 'subscribed',
-            'unsubscribe', 'unsubscribed')
-        if self.ptype and not self.ptype in rfc_types:
-            self.ptype = None
-
-class PresenceReceivedEvent(nec.NetworkIncomingEvent, HelperEvent,
-PresenceHelperEvent):
+class PresenceReceivedEvent(nec.NetworkIncomingEvent):
     name = 'presence-received'
-    base_network_events = ['raw-pres-received']
-
-    def _generate_keyID(self, sig_tag):
-        self.keyID = ''
-        if sig_tag and self.conn.USE_GPG and self.ptype != 'error':
-            # error presences contain our own signature
-            # verify
-            sig_msg = sig_tag.getData()
-            self.keyID = self.conn.gpg.verify(self.status, sig_msg)
-            self.keyID = helpers.prepare_and_validate_gpg_keyID(self.conn.name,
-                                                                self.jid,
-                                                                self.keyID)
-
-    def _generate_prio(self):
-        self.prio = self.stanza.getPriority()
-        try:
-            self.prio = int(self.prio)
-        except Exception:
-            self.prio = 0
-
-    def generate(self):
-        self.conn = self.base_event.conn
-        self.stanza = self.base_event.stanza
-
-        self.need_add_in_roster = False
-        self.need_redraw = False
-
-        self.popup = False # Do we want to open chat window ?
-
-        if not self.conn or self.conn.connected < 2:
-            log.debug('account is no more connected')
-            return
-
-        self._generate_ptype()
-        try:
-            self.get_jid_resource()
-        except Exception:
-            log.warning('Invalid JID: %s, ignoring it', self.stanza.getFrom())
-            return
-        jid_list = app.contacts.get_jid_list(self.conn.name)
-        self.timestamp = None
-        self.get_id()
-        self.avatar_sha = None
-        # XEP-0172 User Nickname
-        self.user_nick = self.stanza.getTagData('nick') or ''
-        self.contact_nickname = None
-        self.transport_auto_auth = False
-
-        # XEP-0203
-        self.timestamp = parse_delay(self.stanza)
-        if self.timestamp is None:
-            self.timestamp = time_time()
-
-        # XEP-0319
-        self.idle_time = parse_idle(self.stanza)
-
-        sig_tag = self.stanza.getTag('x', namespace=nbxmpp.NS_SIGNED)
-
-        self.status = self.stanza.getStatus() or ''
-        self._generate_show()
-        self._generate_prio()
-        self._generate_keyID(sig_tag)
-
-        self.errcode = self.stanza.getErrorCode()
-        self.errmsg = self.stanza.getErrorMsg()
-
-        if self.ptype == 'error':
-            return
-
-        if not self.ptype or self.ptype == 'unavailable':
-            our_jid = app.get_jid_from_account(self.conn.name)
-            if self.jid == our_jid and self.resource == self.conn.server_resource:
-                # We got our own presence
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
-                                                           show=self.show))
-            elif self.jid in jid_list or self.jid == our_jid:
-                return True
 
 class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
     name = 'presence-received'
@@ -254,16 +157,13 @@ class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
         self.keyID = None
         self.idle_time = None
         self.timestamp = 0
-        self.contact_nickname = None
         self.avatar_sha = None
         self.need_add_in_roster = False
-        self.need_redraw = False
         if self.show == 'offline':
             self.ptype = 'unavailable'
         else:
             self.ptype = None
         self.user_nick = ''
-        self.transport_auto_auth = False
         self.errcode = None
         self.errmsg = ''
         self.popup = False # Do we want to open chat window ?

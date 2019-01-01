@@ -366,8 +366,7 @@ class GajimRemote(Server):
         else:
             return
         self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
-                obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp,
-                obj.contact_nickname]))
+                obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp]))
 
     def on_subscribe_presence_received(self, obj):
         self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
