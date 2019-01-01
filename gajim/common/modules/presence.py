@@ -389,34 +389,5 @@ class Presence:
         self._con.connection.send(presence)
 
 
-def parse_show(stanza):
-    show = stanza.getShow()
-    type_ = parse_type(stanza)
-    if show is None and type_ is None:
-        return 'online'
-
-    if type_ == 'unavailable':
-        return 'offline'
-
-    if show not in (None, 'chat', 'away', 'xa', 'dnd'):
-        log.warning('Invalid show element: %s', stanza)
-        if type_ is None:
-            return 'online'
-        return 'offline'
-
-    if show is None:
-        return 'online'
-    return show
-
-
-def parse_type(stanza):
-    type_ = stanza.getType()
-    if type_ not in (None, 'unavailable', 'error', 'subscribe',
-                     'subscribed', 'unsubscribe', 'unsubscribed'):
-        log.warning('Invalid type: %s', stanza)
-        return None
-    return type_
-
-
 def get_instance(*args, **kwargs):
     return Presence(*args, **kwargs), 'Presence'

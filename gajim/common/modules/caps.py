@@ -1,4 +1,5 @@
 # Copyright (C) 2009 Stephan Erb <steve-e AT h3c.de>
+# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 #
 # This file is part of Gajim.
 #
@@ -19,12 +20,11 @@
 import logging
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import caps_cache
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
-from gajim.common.modules.presence import parse_show
-from gajim.common.modules.presence import parse_type
 
 log = logging.getLogger('gajim.c.m.caps')
 
@@ -35,69 +35,50 @@ class Caps:
         self._account = con.name
 
         self.handlers = [
-            ('presence', self._presence_received, '', nbxmpp.NS_CAPS)
+            StanzaHandler(name='presence',
+                          callback=self._entity_caps,
+                          ns=nbxmpp.NS_CAPS,
+                          priority=45),
         ]
 
         self._capscache = caps_cache.capscache
         self._create_suitable_client_caps = caps_cache.create_suitable_client_caps
 
-    def _presence_received(self, _con, stanza):
-        if stanza.getType() in ('unavailable', 'error'):
+    def _entity_caps(self, _con, _stanza, properties):
+        if properties.type.is_error or properties.type.is_unavailable:
             return
 
-        from_ = stanza.getFrom()
-        if from_ is None:
-            # Presence from ourself
+        if properties.is_self_presence:
             return
-        full_jid = str(from_)
 
-        hash_method = node = caps_hash = None
+        jid = str(properties.jid)
 
-        caps = stanza.getTag('c', namespace=nbxmpp.NS_CAPS)
-        if caps is not None:
-            hash_method = caps['hash']
-            node = caps['node']
-            caps_hash = caps['ver']
-
-        show = parse_show(stanza)
-        type_ = parse_type(stanza)
+        hash_method = properties.entity_caps.hash
+        node = properties.entity_caps.node
+        caps_hash = properties.entity_caps.ver
 
         log.info('Received from %s, type: %s, method: %s, node: %s, hash: %s',
-                 from_, stanza.getType(), hash_method, node, caps_hash)
+                 jid, properties.type, hash_method, node, caps_hash)
 
         client_caps = self._create_suitable_client_caps(
-            node, caps_hash, hash_method, full_jid)
+            node, caps_hash, hash_method, jid)
 
         # Type is None means 'available'
-        if stanza.getType() is None and client_caps._hash_method == 'no':
+        if properties.type.is_available and client_caps._hash_method == 'no':
             self._capscache.forget_caps(client_caps)
             client_caps = self._create_suitable_client_caps(
                 node, caps_hash, hash_method)
         else:
             self._capscache.query_client_of_jid_if_unknown(
-                self._con, full_jid, client_caps)
+                self._con, jid, client_caps)
 
-        self._update_client_caps_of_contact(from_, client_caps)
+        self._update_client_caps_of_contact(properties.jid, client_caps)
 
-        # Event is only used by ClientIcons Plugin
         app.nec.push_incoming_event(
-            NetworkEvent('caps-presence-received',
+            NetworkEvent('caps-update',
                          conn=self._con,
-                         fjid=full_jid,
-                         jid=from_.getStripped(),
-                         resource=from_.getResource(),
-                         hash_method=hash_method,
-                         node=node,
-                         caps_hash=caps_hash,
-                         client_caps=client_caps,
-                         show=show,
-                         ptype=type_,
-                         stanza=stanza))
-
-        app.nec.push_incoming_event(NetworkEvent('caps-update',
-                                                 conn=self._con,
-                                                 fjid=full_jid,
-                                                 jid=from_.getStripped()))
+                         fjid=jid,
+                         jid=properties.jid.getBare()))
 
     def _update_client_caps_of_contact(self, from_, client_caps):
         contact = self._get_contact_or_gc_contact_for_jid(from_)
