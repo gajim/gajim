@@ -18,7 +18,6 @@
 # pylint: disable=attribute-defined-outside-init
 
 import logging
-from time import time as time_time
 
 import OpenSSL.crypto
 import nbxmpp
@@ -30,8 +29,6 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules import dataforms
-from gajim.common.modules.misc import parse_idle
-from gajim.common.modules.misc import parse_delay
 from gajim.common.const import KindConstant, SSLError
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.file_props import FilesProp
