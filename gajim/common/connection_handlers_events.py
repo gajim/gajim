@@ -210,12 +210,6 @@ class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
 class SSLErrorEvent(nec.NetworkIncomingEvent):
     name = 'ssl-error'
 
-class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
-    name = 'unique-room-id-supported'
-
-class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
-    name = 'unique-room-id-not-supported'
-
 class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-gc-avatar'
 

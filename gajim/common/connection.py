@@ -1653,22 +1653,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             show=show,
             caps=ptype != 'unavailable')
 
-    def check_unique_room_id_support(self, server, instance):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq(typ='get', to=server)
-        iq.setAttr('id', 'unique1')
-        iq.addChild('unique', namespace=nbxmpp.NS_MUC_UNIQUE)
-        def _on_response(resp):
-            if not nbxmpp.isResultNode(resp):
-                app.nec.push_incoming_event(UniqueRoomIdNotSupportedEvent(
-                    None, conn=self, instance=instance, server=server))
-                return
-            app.nec.push_incoming_event(UniqueRoomIdSupportedEvent(None,
-                conn=self, instance=instance, server=server,
-                room_id=resp.getTag('unique').getData()))
-        self.connection.SendAndCallForResponse(iq, _on_response)
-
     def join_gc(self, nick, room_jid, password, change_nick=False,
     rejoin=False):
         # FIXME: This room JID needs to be normalized; see #1364

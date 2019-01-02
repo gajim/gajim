@@ -30,8 +30,8 @@ from typing import List  # pylint: disable=unused-import
 from typing import Tuple  # pylint: disable=unused-import
 
 import os
+import uuid
 import logging
-from random import randrange
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -1459,21 +1459,12 @@ class TransformChatToMUC:
                         path = self.guests_store.get_path(iter_)
                         self.guests_treeview.get_selection().select_path(path)
 
-        app.ged.register_event_handler('unique-room-id-supported', ged.GUI1,
-            self._nec_unique_room_id_supported)
-        app.ged.register_event_handler('unique-room-id-not-supported',
-            ged.GUI1, self._nec_unique_room_id_not_supported)
-
         # show all
         self.window.show_all()
 
         self.xml.connect_signals(self)
 
     def on_chat_to_muc_window_destroy(self, widget):
-        app.ged.remove_event_handler('unique-room-id-supported', ged.GUI1,
-            self._nec_unique_room_id_supported)
-        app.ged.remove_event_handler('unique-room-id-not-supported', ged.GUI1,
-            self._nec_unique_room_id_not_supported)
         self.instances.remove(self)
 
     def on_chat_to_muc_window_key_press_event(self, widget, event):
@@ -1486,11 +1477,7 @@ class TransformChatToMUC:
         server = model[row][0].strip()
         if server == '':
             return
-        app.connections[self.account].check_unique_room_id_support(server, self)
 
-    def _nec_unique_room_id_supported(self, obj):
-        if obj.instance != self:
-            return
         guest_list = []
         guests = self.guests_treeview.get_selection().get_selected_rows()
         for guest in guests[1]:
@@ -1498,7 +1485,7 @@ class TransformChatToMUC:
             guest_list.append(self.guests_store[iter_][2])
         for guest in self.auto_jids:
             guest_list.append(guest)
-        room_jid = obj.room_id + '@' + obj.server
+        room_jid = str(uuid.uuid4()) + '@' + server
         app.automatic_rooms[self.account][room_jid] = {}
         app.automatic_rooms[self.account][room_jid]['invities'] = guest_list
         app.automatic_rooms[self.account][room_jid]['continue_tag'] = True
@@ -1508,13 +1495,6 @@ class TransformChatToMUC:
 
     def on_cancel_button_clicked(self, widget):
         self.window.destroy()
-
-    def _nec_unique_room_id_not_supported(self, obj):
-        if obj.instance != self:
-            return
-        obj.room_id = app.nicks[self.account].lower().replace(' ', '') + \
-            str(randrange(9999999))
-        self._nec_unique_room_id_supported(obj)
 
 class Dialog(Gtk.Dialog):
     def __init__(self, parent, title, buttons, default=None,
