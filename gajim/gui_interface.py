@@ -87,7 +87,7 @@ from gajim.common import passwords
 from gajim.common import logging_helpers
 from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import (
-    OurShowEvent, FileRequestErrorEvent, FileTransferCompletedEvent,
+    OurShowEvent, FileTransferCompletedEvent,
     UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent)
 
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
@@ -199,38 +199,11 @@ class Interface:
             'id': obj.iq_id}, sec_msg, on_response_yes=(on_yes, obj),
             on_response_no=(response, obj, 'no'))
 
-    def handle_event_iq_error(self, obj):
-        #('ERROR_ANSWER', account, (id_, fjid, errmsg, errcode))
-        if str(obj.errcode) in ('400', '403', '406') and obj.id_:
-            # show the error dialog
-            sid = obj.id_
-            if len(obj.id_) > 3 and obj.id_[2] == '_':
-                sid = obj.id_[3:]
-            file_props = FilesProp.getFileProp(obj.conn.name, sid)
-            if file_props:
-                if str(obj.errcode) == '400':
-                    file_props.error = -3
-                else:
-                    file_props.error = -4
-                app.nec.push_incoming_event(FileRequestErrorEvent(None,
-                    conn=obj.conn, jid=obj.jid, file_props=file_props,
-                    error_msg=obj.errmsg))
-                obj.conn.disconnect_transfer(file_props)
-                return
-        elif str(obj.errcode) == '404':
-            sid = obj.id_
-            if len(obj.id_) > 3 and obj.id_[2] == '_':
-                sid = obj.id_[3:]
-            file_props = FilesProp.getFileProp(obj.conn.name, sid)
-            if file_props:
-                self.handle_event_file_send_error(obj.conn.name, (obj.fjid,
-                    file_props))
-                obj.conn.disconnect_transfer(file_props)
-                return
-
-        ctrl = self.msg_win_mgr.get_control(obj.fjid, obj.conn.name)
+    def handle_event_iq_error(self, event):
+        ctrl = self.msg_win_mgr.get_control(event.properties.jid.getBare(),
+                                            event.account)
         if ctrl and ctrl.type_id == message_control.TYPE_GC:
-            ctrl.print_conversation('Error %s: %s' % (obj.errcode, obj.errmsg))
+            ctrl.print_conversation('Error: %s' % event.properties.error)
 
     @staticmethod
     def handle_event_connection_lost(obj):
@@ -739,25 +712,23 @@ class Interface:
     def handle_event_bookmarks(self, obj):
         gui_menu_builder.build_bookmark_menu(obj.account)
 
-    def handle_event_file_send_error(self, account, array):
-        jid = array[0]
-        file_props = array[1]
+    def handle_event_file_send_error(self, event):
         ft = self.instances['file_transfers']
-        ft.set_status(file_props, 'stop')
+        ft.set_status(event.file_props, 'stop')
 
-        if helpers.allow_popup_window(account):
-            ft.show_send_error(file_props)
+        if helpers.allow_popup_window(event.account):
+            ft.show_send_error(event.file_props)
             return
 
-        event = events.FileSendErrorEvent(file_props)
-        self.add_event(account, jid, event)
+        event = events.FileSendErrorEvent(event.file_props)
+        self.add_event(event.account, event.jid, event)
 
-        if helpers.allow_showing_notification(account):
+        if helpers.allow_showing_notification(event.account):
             event_type = _('File Transfer Error')
             app.notification.popup(
-                event_type, jid, account,
+                event_type, event.jid, event.account,
                 'file-send-error', 'gajim-ft_error',
-                event_type, file_props.name)
+                event_type, event.file_props.name)
 
     def handle_event_file_request_error(self, obj):
         # ('FILE_REQUEST_ERROR', account, (jid, file_props, error_msg))
@@ -1383,7 +1354,7 @@ class Interface:
     def create_core_handlers_list(self):
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
-            'FILE_SEND_ERROR': [self.handle_event_file_send_error],
+            'file-send-error': [self.handle_event_file_send_error],
             'pep-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],

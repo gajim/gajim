@@ -38,25 +38,15 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.connection_handlers_events import *
 from gajim.common.const import KindConstant
 from gajim.common.jingle import ConnectionJingle
-from gajim.common.nec import NetworkEvent
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
 
 
 log = logging.getLogger('gajim.c.connection_handlers')
 
-# kind of events we can wait for an answer
-AGENT_REMOVED = 'agent_removed'
-
 # basic connection handlers used here and in zeroconf
 class ConnectionHandlersBase:
     def __init__(self):
-        # List of IDs we are waiting answers for {id: (type_of_request, data), }
-        self.awaiting_answers = {}
-        # List of IDs that will produce a timeout is answer doesn't arrive
-        # {time_of_the_timeout: (id, message to send to gui), }
-        self.awaiting_timeouts = {}
-
         # keep track of sessions this connection has with other JIDs
         self.sessions = {}
 
@@ -291,35 +281,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.ged.remove_event_handler('agent-removed', ged.CORE,
             self._nec_agent_removed)
 
-    def _ErrorCB(self, con, iq_obj):
-        log.debug('ErrorCB')
-        app.nec.push_incoming_event(IqErrorReceivedEvent(None, conn=self,
-            stanza=iq_obj))
-
-    def _IqCB(self, con, iq_obj, properties):
-        id_ = iq_obj.getID()
-
-        app.nec.push_incoming_event(NetworkEvent('raw-iq-received',
-            conn=self, stanza=iq_obj))
-
-        # Check if we were waiting a timeout for this id
-        found_tim = None
-        for tim in self.awaiting_timeouts:
-            if id_ == self.awaiting_timeouts[tim][0]:
-                found_tim = tim
-                break
-        if found_tim:
-            del self.awaiting_timeouts[found_tim]
-
-        if id_ not in self.awaiting_answers:
-            return
-
-        if self.awaiting_answers[id_][0] == AGENT_REMOVED:
-            jid = self.awaiting_answers[id_][1]
-            app.nec.push_incoming_event(AgentRemovedEvent(None, conn=self,
-                agent=jid))
-            del self.awaiting_answers[id_]
-
     def _nec_agent_removed(self, obj):
         if obj.conn.name != self.name:
             return
@@ -445,8 +406,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         con.RegisterHandler('iq', self._JingleCB, 'result')
         con.RegisterHandler('iq', self._JingleCB, 'error')
         con.RegisterHandler('iq', self._JingleCB, 'set', nbxmpp.NS_JINGLE)
-        con.RegisterHandler('iq', self._ErrorCB, 'error')
-        con.RegisterHandler('iq', self._IqCB)
         con.RegisterHandler('iq', self._ResultCB, 'result')
         con.RegisterHandler('unknown', self._StreamCB,
             nbxmpp.NS_XMPP_STREAMS, xmlns=nbxmpp.NS_STREAMS)

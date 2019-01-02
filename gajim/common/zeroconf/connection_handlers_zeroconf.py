@@ -44,8 +44,6 @@ log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
 
 STATUS_LIST = ['offline', 'connecting', 'online', 'chat', 'away', 'xa', 'dnd',
                'invisible']
-# kind of events we can wait for an answer
-AGENT_REMOVED = 'agent_removed'
 
 
 class ZeroconfMessageReceivedEvent(NetworkIncomingEvent):

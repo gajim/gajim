@@ -26,7 +26,8 @@ from gajim.common.types import ConnectionT
 
 log = logging.getLogger('gajim.c.m')
 
-ZEROCONF_MODULES = ['adhoc_commands',
+ZEROCONF_MODULES = ['iq',
+                    'adhoc_commands',
                     'receipts',
                     'discovery',
                     'chatstates']

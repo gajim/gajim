@@ -2774,7 +2774,7 @@ class RosterWindow:
         def remove(list_):
             for (contact, account) in list_:
                 full_jid = contact.get_full_jid()
-                app.connections[account].unsubscribe_agent(full_jid)
+                app.connections[account].get_module('Gateway').unsubscribe(full_jid)
                 # remove transport from treeview
                 self.remove_contact(contact.jid, account, backend=True)
 

@@ -115,7 +115,8 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
 
             if account:
                 for service in self.agents[type_]:
-                    app.connections[account].request_gateway_prompt(service)
+                    con = app.connections[account]
+                    con.get_module('Gateway').request_gateway_prompt(service)
         self.protocol_combobox.set_active(0)
         self.auto_authorize_checkbutton.show()
 
@@ -246,8 +247,8 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
             transport = model[row][0]
             if self.account and not self.jid_escaped:
                 self.adding_jid = (jid, transport, type_)
-                app.connections[self.account].request_gateway_prompt(
-                    transport, jid)
+                con = app.connections[self.account]
+                con.get_module('Gateway').request_gateway_prompt(transport, jid)
             else:
                 jid = jid.replace('@', '%') + '@' + transport
                 self._add_jid(jid, type_)

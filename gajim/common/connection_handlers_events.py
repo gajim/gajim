@@ -119,16 +119,6 @@ class HelperEvent:
             self.muc_pm = muc_user.getChildren() == []
         return self.muc_pm
 
-class IqErrorReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'iq-error-received'
-
-    def generate(self):
-        self.get_id()
-        self.get_jid_resource(check_fake_jid=True)
-        self.errmsg = self.stanza.getErrorMsg()
-        self.errcode = self.stanza.getErrorCode()
-        return True
-
 class StreamReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stream-received'
 
@@ -265,16 +255,6 @@ class StanzaReceivedEvent(nec.NetworkIncomingEvent):
 
 class StanzaSentEvent(nec.NetworkIncomingEvent):
     name = 'stanza-sent'
-
-class AgentRemovedEvent(nec.NetworkIncomingEvent):
-    name = 'agent-removed'
-
-    def generate(self):
-        self.jid_list = []
-        for jid in app.contacts.get_jid_list(self.conn.name):
-            if jid.endswith('@' + self.agent):
-                self.jid_list.append(jid)
-        return True
 
 class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'bad-gpg-passphrase'
@@ -477,22 +457,6 @@ class FileTransferCompletedEvent(nec.NetworkIncomingEvent):
     def generate(self):
         jid = str(self.file_props.receiver)
         self.jid = app.get_jid_without_resource(jid)
-        return True
-
-class GatewayPromptReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
-    name = 'gateway-prompt-received'
-
-    def generate(self):
-        self.get_jid_resource()
-        query = self.stanza.getTag('query')
-        if query:
-            self.desc = query.getTagData('desc')
-            self.prompt = query.getTagData('prompt')
-            self.prompt_jid = query.getTagData('jid')
-        else:
-            self.desc = None
-            self.prompt = None
-            self.prompt_jid = None
         return True
 
 class NotificationEvent(nec.NetworkIncomingEvent):

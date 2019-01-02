@@ -367,12 +367,6 @@ class CommonConnection:
                                     additional_data=obj.additional_data,
                                     stanza_id=obj.stanza_id)
 
-    def unsubscribe_agent(self, agent):
-        """
-        To be implemented by derived classes
-        """
-        raise NotImplementedError
-
     def update_contact(self, jid, name, groups):
         if self.connection:
             self.getRoster().set_item(jid=jid, name=name, groups=groups)
@@ -1602,17 +1596,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         self.connection.send(stanza)
 
-    def unsubscribe_agent(self, agent):
-        if not app.account_is_connected(self.name):
-            return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_REGISTER, to=agent)
-        iq.setQuery().setTag('remove')
-        id_ = self.connection.getAnID()
-        iq.setID(id_)
-        self.awaiting_answers[id_] = (AGENT_REMOVED, agent)
-        self.connection.send(iq)
-        self.getRoster().del_item(agent)
-
     def send_new_account_infos(self, form, is_form):
         if is_form:
             # Get username and password and put them in new_account_info
@@ -1655,20 +1638,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.on_connect_failure = None
         self.connection = con
         nbxmpp.features_nb.getRegInfo(con, self._hostname)
-
-    def request_gateway_prompt(self, jid, prompt=None):
-        def _on_prompt_result(resp):
-            app.nec.push_incoming_event(GatewayPromptReceivedEvent(None,
-                conn=self, stanza=resp))
-        if prompt:
-            typ_ = 'set'
-        else:
-            typ_ = 'get'
-        iq = nbxmpp.Iq(typ=typ_, to=jid)
-        query = iq.addChild(name='query', namespace=nbxmpp.NS_GATEWAY)
-        if prompt:
-            query.setTagData('prompt', prompt)
-        self.connection.SendAndCallForResponse(iq, _on_prompt_result)
 
     def getRoster(self):
         return self.get_module('Roster')
