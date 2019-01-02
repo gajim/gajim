@@ -17,6 +17,8 @@
 import logging
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
+from nbxmpp.protocol import NS_HTTP_AUTH
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -29,9 +31,22 @@ class HTTPAuth:
         self._con = con
         self._account = con.name
 
-        self.handlers = []
+        self.handlers = [
+            StanzaHandler(name='message',
+                          callback=self._http_auth,
+                          ns=NS_HTTP_AUTH,
+                          priority=45),
+            StanzaHandler(name='iq',
+                          callback=self._http_auth,
+                          typ='get',
+                          ns=NS_HTTP_AUTH,
+                          priority=45)
+        ]
 
-    def delegate(self, stanza, properties):
+    def _http_auth(self, _con, stanza, properties):
+        if not properties.is_http_auth:
+            return
+
         log.info('Auth request received')
         auto_answer = app.config.get_per(
             'accounts', self._account, 'http_auth')
@@ -42,11 +57,12 @@ class HTTPAuth:
         app.nec.push_incoming_event(
             NetworkEvent('http-auth-received',
                          conn=self._con,
-                         iq_id=properties['id'],
-                         method=properties['method'],
-                         url=properties['url'],
-                         msg=properties['body'],
+                         iq_id=properties.http_auth.id,
+                         method=properties.http_auth.method,
+                         url=properties.http_auth.url,
+                         msg=properties.http_auth.body,
                          stanza=stanza))
+        raise nbxmpp.NodeProcessed
 
     def build_http_auth_answer(self, stanza, answer):
         if answer == 'yes':

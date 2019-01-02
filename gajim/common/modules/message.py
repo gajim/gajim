@@ -58,10 +58,6 @@ class Message:
                                         nbxmpp.NS_CAPTCHA,])
 
     def _message_received(self, _con, stanza, properties):
-        if properties.is_http_auth:
-            self._con.get_module('HTTPAuth').delegate(stanza, properties)
-            raise nbxmpp.NodeProcessed
-
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
         # nbxmpp executes less common handlers last
