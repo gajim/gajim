@@ -260,11 +260,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
-        # IDs of disco#items requests
-        self.disco_items_ids = []
-        # IDs of disco#info requests
-        self.disco_info_ids = []
-
         self.continue_connect_info = None
 
         # If handlers have been registered

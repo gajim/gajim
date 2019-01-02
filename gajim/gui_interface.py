@@ -1273,13 +1273,6 @@ class Interface:
         self.instances[account]['online_dialog']['ssl_error'].set_title(
             _('SSL Certificate Verification for %s') % account)
 
-    def handle_event_non_anonymous_server(self, obj):
-        account = obj.conn.name
-        server = app.config.get_per('accounts', account, 'hostname')
-        ErrorDialog(_('Non Anonymous Server'), sectext='Server "%s"'
-            'does not support anonymous connection' % server,
-            transient_for=self.roster.window)
-
     def handle_event_plain_connection(self, obj):
         # ('PLAIN_CONNECTION', account, (connection))
         def on_ok(is_checked):
@@ -1392,7 +1385,6 @@ class Interface:
                 [self.handle_event_roster_item_exchange],
             'signed-in': [self.handle_event_signed_in],
             'ssl-error': [self.handle_event_ssl_error],
-            'non-anonymous-server-error': [self.handle_event_non_anonymous_server],
             'stream-conflict-received': [self.handle_event_resource_conflict],
             'subscribe-presence-received': [
                 self.handle_event_subscribe_presence],

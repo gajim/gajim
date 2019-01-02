@@ -54,20 +54,11 @@ class DecryptedMessageReceivedEvent(NetworkIncomingEvent):
     name = 'decrypted-message-received'
 
 
-class ConnectionVcard:
-    def add_sha(self, p, *args):
-        return p
 
-    def add_caps(self, p):
-        return p
-
-
-class ConnectionHandlersZeroconf(ConnectionVcard,
-ConnectionSocks5BytestreamZeroconf,
-connection_handlers.ConnectionHandlersBase,
-connection_handlers.ConnectionJingle):
+class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
+                                 connection_handlers.ConnectionHandlersBase,
+                                 connection_handlers.ConnectionJingle):
     def __init__(self):
-        ConnectionVcard.__init__(self)
         ConnectionSocks5BytestreamZeroconf.__init__(self)
         connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)

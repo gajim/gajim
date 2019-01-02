@@ -37,88 +37,6 @@ from gajim.common.file_props import FilesProp
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
 
-class HelperEvent:
-    def get_jid_resource(self, check_fake_jid=False):
-        if check_fake_jid and hasattr(self, 'id_') and \
-                self.id_ in self.conn.groupchat_jids:
-            self.fjid = self.conn.groupchat_jids[self.id_]
-            del self.conn.groupchat_jids[self.id_]
-        else:
-            self.fjid = helpers.get_full_jid_from_iq(self.stanza)
-        if self.fjid is None:
-            self.jid = None
-        else:
-            self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-
-    def get_id(self):
-        self.id_ = self.stanza.getID()
-
-    def get_gc_control(self):
-        self.gc_control = app.interface.msg_win_mgr.get_gc_control(self.jid,
-                                                                     self.conn.name)
-
-        # If gc_control is missing - it may be minimized. Try to get it
-        # from there. If it's not there - then it's missing anyway and
-        # will remain set to None.
-        if not self.gc_control:
-            minimized = app.interface.minimized_controls[self.conn.name]
-            self.gc_control = minimized.get(self.jid)
-
-    def get_oob_data(self, stanza):
-        oob_node = stanza.getTag('x', namespace=nbxmpp.NS_X_OOB)
-        if oob_node is not None:
-            oob_url = oob_node.getTagData('url')
-            if oob_url is not None:
-                self.additional_data.set_value('gajim', 'oob_url', oob_url)
-            oob_desc = oob_node.getTagData('desc')
-            if oob_desc is not None:
-                self.additional_data.set_value('gajim', 'oob_desc', oob_desc)
-
-    def get_stanza_id(self, stanza, query=False):
-        if query:
-            # On a MAM query the stanza-id is maybe not set, so
-            # get the id of the stanza
-            return stanza.getAttr('id')
-        stanza_id, by = stanza.getStanzaIDAttrs()
-        if by is None:
-            # We can not verify who set this stanza-id, ignore it.
-            return
-        if stanza.getType() == 'groupchat':
-            if stanza.getFrom().bareMatch(by):
-                # by attribute must match the server
-                return stanza_id
-        elif self.conn.get_own_jid().bareMatch(by):
-            # by attribute must match the server
-            return stanza_id
-        return
-
-    @staticmethod
-    def get_forwarded_message(stanza):
-        forwarded = stanza.getTag('forwarded',
-                                  namespace=nbxmpp.NS_FORWARD,
-                                  protocol=True)
-        if forwarded is not None:
-            return forwarded.getTag('message', protocol=True)
-
-    def _is_self_message(self, message):
-        if self.self_message is not None:
-            return self.self_message
-        own_jid = self.conn.get_own_jid()
-        frm = message.getFrom()
-        to = message.getTo()
-        # If 'to' is not set we assume own jid
-        self.self_message = frm.bareMatch(to or own_jid)
-        return self.self_message
-
-    def _is_muc_pm(self, message):
-        if self.muc_pm is not None:
-            return self.muc_pm
-        self.muc_pm = False
-        muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
-            self.muc_pm = muc_user.getChildren() == []
-        return self.muc_pm
-
 class StreamReceivedEvent(nec.NetworkIncomingEvent):
     name = 'stream-received'
 
@@ -151,7 +69,7 @@ class MessageSentEvent(nec.NetworkIncomingEvent):
 class MessageNotSentEvent(nec.NetworkIncomingEvent):
     name = 'message-not-sent'
 
-class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
+class MessageErrorEvent(nec.NetworkIncomingEvent):
     name = 'message-error'
 
     def init(self):
@@ -160,7 +78,7 @@ class MessageErrorEvent(nec.NetworkIncomingEvent, HelperEvent):
     def generate(self):
         if self.zeroconf:
             return True
-        self.get_id()
+        self.id_ = self.stanza.getID()
         #only alert for errors of explicitly sent messages (see https://trac.gajim.org/ticket/8222)
         if self.id_ in self.conn.sent_message_ids:
             self.conn.sent_message_ids.remove(self.id_)
@@ -298,9 +216,6 @@ class UniqueRoomIdSupportedEvent(nec.NetworkIncomingEvent):
 class UniqueRoomIdNotSupportedEvent(nec.NetworkIncomingEvent):
     name = 'unique-room-id-not-supported'
 
-class NonAnonymousServerErrorEvent(nec.NetworkIncomingEvent):
-    name = 'non-anonymous-server-error'
-
 class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
     name = 'update-gc-avatar'
 
@@ -328,7 +243,7 @@ class PasswordRequiredEvent(nec.NetworkIncomingEvent):
 class SignedInEvent(nec.NetworkIncomingEvent):
     name = 'signed-in'
 
-class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
+class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'file-request-received'
 
     def init(self):
@@ -336,7 +251,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent, HelperEvent):
         self.FT_content = None
 
     def generate(self):
-        self.get_id()
+        self.id_ = self.stanza.getID()
         self.fjid = self.conn._ft_get_from(self.stanza)
         self.jid = app.get_jid_without_resource(self.fjid)
         if self.jingle_content:
