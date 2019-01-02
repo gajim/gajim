@@ -26,7 +26,6 @@
 
 import logging
 import operator
-import time
 
 import nbxmpp
 

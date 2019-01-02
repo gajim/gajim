@@ -124,7 +124,6 @@ class Presence:
             'status': properties.status,
             'contact_list': [],
             'contact': None,
-            'need_add_in_roster': False,
         }
 
         event_ = NetworkEvent('presence-received', **event_attrs)
