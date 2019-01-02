@@ -131,9 +131,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                     nickname=self.roster.getName(key), sub='both',
                     ask='no', groups=self.roster.getGroups(key),
                     avatar_sha=None))
-                app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-                    None, conn=self, fjid=key, show=self.roster.getStatus(key),
-                    status=self.roster.getMessage(key)))
+                self._on_presence(key)
                 #XXX open chat windows don't get refreshed (full name), add that
         return self.call_resolve_timeout
 
@@ -145,16 +143,98 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             nickname=self.roster.getName(jid), sub='both',
             ask='no', groups=self.roster.getGroups(jid),
             avatar_sha=None))
-        app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-            None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
-            status=self.roster.getMessage(jid)))
+        self._on_presence(jid)
 
     def _on_remove_service(self, jid):
         self.roster.delItem(jid)
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
         # keyID, timestamp))
-        app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-            None, conn=self, fjid=jid, show='offline', status=''))
+        self._on_presence(jid, show='offline', status='')
+
+    def _on_presence(self, jid, show=None, status=None):
+        if status is None:
+            status = self.roster.getMessage(jid)
+        if show is None:
+            show = self.roster.getStatus(jid)
+
+        ptype = 'unavailable' if show == 'offline' else None
+
+        event_attrs = {
+            'conn': self,
+            'keyID': None,
+            'prio': 0,
+            'need_add_in_roster': False,
+            'popup': False,
+            'ptype': ptype,
+            'jid': jid,
+            'resource': 'local',
+            'id_': None,
+            'fjid': jid,
+            'timestamp': 0,
+            'avatar_sha': None,
+            'user_nick': '',
+            'idle_time': None,
+            'show': show,
+            'new_show': show,
+            'old_show': 0,
+            'status': status,
+            'contact_list': [],
+            'contact': None,
+        }
+
+        event_ = NetworkEvent('presence-received', **event_attrs)
+
+        self._update_contact(event_)
+
+        app.nec.push_incoming_event(event_)
+
+    def _update_contact(self, event):
+        jid = event.jid
+
+        status_strings = ['offline', 'error', 'online', 'chat', 'away',
+                          'xa', 'dnd', 'invisible']
+
+        event.new_show = status_strings.index(event.show)
+
+        contact = app.contacts.get_contact_strict(self.name, jid, '')
+        if contact is None:
+            contact = app.contacts.get_contact_strict(self.name, jid, 'local')
+
+        if contact.show in status_strings:
+            event.old_show = status_strings.index(contact.show)
+
+        # Update contact with presence data
+        contact.resource = 'local'
+        contact.show = event.show
+        contact.status = event.status
+        contact.priority = event.prio
+        attached_keys = app.config.get_per('accounts', self.name,
+                                           'attached_gpg_keys').split()
+        if jid in attached_keys:
+            contact.keyID = attached_keys[attached_keys.index(jid) + 1]
+        else:
+            # Do not override assigned key
+            contact.keyID = event.keyID
+        contact.idle_time = event.idle_time
+
+        event.contact = contact
+
+        # It's not an agent
+        if event.old_show == 0 and event.new_show > 1:
+            if not jid in app.newly_added[self.name]:
+                app.newly_added[self.name].append(jid)
+            if jid in app.to_be_removed[self.name]:
+                app.to_be_removed[self.name].remove(jid)
+        elif event.old_show > 1 and event.new_show == 0 and self.connected > 1:
+            if not jid in app.to_be_removed[self.name]:
+                app.to_be_removed[self.name].append(jid)
+            if jid in app.newly_added[self.name]:
+                app.newly_added[self.name].remove(jid)
+
+        if event.ptype == 'unavailable':
+            # TODO: This causes problems when another
+            # resource signs off!
+            self.stop_all_active_file_transfers(contact)
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()
@@ -208,9 +288,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
                 nickname=self.roster.getName(jid), sub='both',
                 ask='no', groups=self.roster.getGroups(jid),
                 avatar_sha=None))
-            app.nec.push_incoming_event(ZeroconfPresenceReceivedEvent(
-                None, conn=self, fjid=jid, show=self.roster.getStatus(jid),
-                status=self.roster.getMessage(jid)))
+            self._on_presence(jid)
 
         self.connected = STATUS_LIST.index(show)
 

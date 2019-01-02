@@ -136,6 +136,7 @@ class Presence:
         raise nbxmpp.NodeProcessed
 
     def _update_contact(self, event, properties):
+        # Note: A similar method also exists in connection_zeroconf
         jid = properties.jid.getBare()
         resource = properties.jid.getResource()
 

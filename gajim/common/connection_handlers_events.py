@@ -144,28 +144,6 @@ class StreamConflictReceivedEvent(nec.NetworkIncomingEvent):
 class PresenceReceivedEvent(nec.NetworkIncomingEvent):
     name = 'presence-received'
 
-class ZeroconfPresenceReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'presence-received'
-
-    def generate(self):
-        self.jid, self.resource = app.get_room_and_nick_from_fjid(self.fjid)
-        self.resource = 'local'
-        self.prio = 0
-        self.keyID = None
-        self.idle_time = None
-        self.timestamp = 0
-        self.avatar_sha = None
-        self.need_add_in_roster = False
-        if self.show == 'offline':
-            self.ptype = 'unavailable'
-        else:
-            self.ptype = None
-        self.user_nick = ''
-        self.errcode = None
-        self.errmsg = ''
-        self.popup = False # Do we want to open chat window ?
-        return True
-
 class OurShowEvent(nec.NetworkIncomingEvent):
     name = 'our-show'
 
