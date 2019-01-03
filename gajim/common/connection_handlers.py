@@ -56,9 +56,6 @@ class ConnectionHandlersBase:
         # IDs of sent messages (https://trac.gajim.org/ticket/8222)
         self.sent_message_ids = []
 
-        # We decrypt GPG messages one after the other. Keep queue in mem
-        self.gpg_messages_to_decrypt = []
-
         app.ged.register_event_handler('gc-message-received', ged.CORE,
             self._nec_gc_message_received)
 
@@ -256,15 +253,10 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
     def __init__(self):
         ConnectionSocks5Bytestream.__init__(self)
         ConnectionIBBytestream.__init__(self)
-
-        # Handle presences BEFORE caps
-        app.nec.register_incoming_event(PresenceReceivedEvent)
-
         ConnectionJingle.__init__(self)
         ConnectionHandlersBase.__init__(self)
 
-        self.continue_connect_info = None
-
+        app.nec.register_incoming_event(PresenceReceivedEvent)
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 

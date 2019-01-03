@@ -121,10 +121,6 @@ class CommonConnection:
 
         # Remember where we are in the register agent process
         self.agent_registrations = {}
-        # To know the groupchat jid associated with a stanza ID. Useful to
-        # request vcard or os info... to a real JID but act as if it comes from
-        # the fake jid
-        self.groupchat_jids = {} # {ID : groupchat_jid}
 
         self.roster_supported = True
         self.addressing_supported = False
