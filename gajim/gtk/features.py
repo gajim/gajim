@@ -112,12 +112,6 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Requires: pybonjour and bonjour SDK running (%(url)s)')
                     % {'url': 'https://developer.apple.com/opensource/)'},
                     None),
-            Feature(_('Command line Control'),
-                    self.dbus_available(),
-                    _('Enables you to control Gajim with via commandline'),
-                    _('Requires: python-dbus'),
-                    _('Feature not available under Windows'),
-                    None),
             Feature(_('OpenPGP Message Encryption'),
                     app.is_installed('GPG'),
                     _('Enables Gajim to encrypt chat messages with OpenPGP'),
@@ -158,10 +152,6 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Feature not available under Windows'),
                     None)
         ]
-
-    def dbus_available(self):
-        from gajim.common import dbus_support
-        return dbus_support.supported
 
     def some_keyring_available(self):
         if os.name == 'nt':
