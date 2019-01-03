@@ -33,7 +33,6 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import jingle_xtls
-from gajim.common import modules
 from gajim.common.nec import NetworkEvent
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.connection_handlers_events import *
@@ -263,9 +262,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
 
         self.continue_connect_info = None
 
-        # If handlers have been registered
-        self.handlers_registered = False
-
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
@@ -409,20 +405,3 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
             nbxmpp.NS_PUBKEY_PUBKEY)
         con.RegisterHandler('iq', self._PubkeyResultCB, 'result',
             nbxmpp.NS_PUBKEY_PUBKEY)
-
-        for handler in modules.get_handlers(self):
-            if len(handler) == 5:
-                name, func, typ, ns, priority = handler
-                con.RegisterHandler(name, func, typ, ns, priority=priority)
-            else:
-                con.RegisterHandler(*handler)
-        self.handlers_registered = True
-
-    def _unregister_handlers(self):
-        if not self.connection:
-            return
-        for handler in modules.get_handlers(self):
-            if len(handler) > 4:
-                handler = handler[:4]
-            self.connection.UnregisterHandler(*handler)
-        self.handlers_registered = False

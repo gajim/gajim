@@ -288,6 +288,7 @@ class P2PClient(IdleObject):
                 del self.conn_holder.ids_of_awaiting_messages[self.fd]
             self.conn_holder.remove_connection(self.sock_hash)
         if 'Dispatcher' in self.__dict__:
+            self._caller._unregister_new_handlers(self)
             self.Dispatcher.PlugOut()
         if 'P2PConnection' in self.__dict__:
             self.P2PConnection.PlugOut()
@@ -338,6 +339,8 @@ class P2PClient(IdleObject):
         self.RegisterHandler('iq', self._caller._JingleCB, 'error')
         self.RegisterHandler('iq', self._caller._JingleCB, 'set',
             nbxmpp.NS_JINGLE)
+        self._caller._register_new_handlers(self)
+
 
 class P2PConnection(IdleObject, PlugIn):
     def __init__(self, sock_hash, _sock, addresses=None, caller=None,

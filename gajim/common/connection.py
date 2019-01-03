@@ -101,6 +101,9 @@ class CommonConnection:
         self.time_to_reconnect = None
         self._reconnect_timer_source = None
 
+        # If handlers have been registered
+        self.handlers_registered = False
+
         self.pep = {}
         # Do we continue connection when we get roster (send presence,get vcard..)
         self.continue_connect_info = None
@@ -123,6 +126,24 @@ class CommonConnection:
         self._connect_machine_calls = 0
 
         self.get_config_values_or_default()
+
+    def _register_new_handlers(self, con):
+        for handler in modules.get_handlers(self):
+            if len(handler) == 5:
+                name, func, typ, ns, priority = handler
+                con.RegisterHandler(name, func, typ, ns, priority=priority)
+            else:
+                con.RegisterHandler(*handler)
+        self.handlers_registered = True
+
+    def _unregister_new_handlers(self, con):
+        if not con:
+            return
+        for handler in modules.get_handlers(self):
+            if len(handler) > 4:
+                handler = handler[:4]
+            con.UnregisterHandler(*handler)
+        self.handlers_registered = False
 
     def _compute_resource(self):
         resource = app.config.get_per('accounts', self.name, 'resource')
@@ -484,6 +505,7 @@ class CommonConnection:
                 self._change_from_invisible()
             self._update_status(show, msg, idle_time=idle_time)
 
+
 class Connection(CommonConnection, ConnectionHandlers):
     def __init__(self, name):
         CommonConnection.__init__(self, name)
@@ -658,7 +680,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         app.proxy65_manager.disconnect(self.connection)
         self.terminate_sessions()
         self.remove_all_transfers()
-        ConnectionHandlers._unregister_handlers(self)
+        self._unregister_new_handlers(self.connection)
         self.connection = None
 
     def _set_reconnect_timer(self):
@@ -1331,6 +1353,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                          conn=self,
                          connection_type=con_type))
         ConnectionHandlers._register_handlers(self, con, con_type)
+        self._register_new_handlers(con)
 
     def _on_auth_successful(self):
         if self._unregister_account:
