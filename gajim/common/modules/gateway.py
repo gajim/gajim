@@ -51,6 +51,13 @@ class Gateway:
         for jid in app.contacts.get_jid_list(self._account):
             if jid.endswith('@' + agent):
                 jid_list.append(jid)
+                log.info('Removing contact %s due to unregistered transport %s',
+                          jid, agent)
+                self._con.get_module('Presence').unsubscribe(jid)
+                # Transport contacts can't have 2 resources
+                if jid in app.to_be_removed[self._account]:
+                    # This way we'll really remove it
+                    app.to_be_removed[self._account].remove(jid)
 
         app.nec.push_incoming_event(
             NetworkEvent('agent-removed',

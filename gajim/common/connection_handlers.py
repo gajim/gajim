@@ -265,25 +265,8 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
 
-        app.ged.register_event_handler('agent-removed', ged.CORE,
-            self._nec_agent_removed)
-
     def cleanup(self):
         ConnectionHandlersBase.cleanup(self)
-        app.ged.remove_event_handler('agent-removed', ged.CORE,
-            self._nec_agent_removed)
-
-    def _nec_agent_removed(self, obj):
-        if obj.conn.name != self.name:
-            return
-        for jid in obj.jid_list:
-            log.debug('Removing contact %s due to unregistered transport %s',
-                      jid, obj.agent)
-            self.get_module('Presence').unsubscribe(jid)
-            # Transport contacts can't have 2 resources
-            if jid in app.to_be_removed[self.name]:
-                # This way we'll really remove it
-                app.to_be_removed[self.name].remove(jid)
 
     def discover_ft_proxies(self):
         cfg_proxies = app.config.get_per('accounts', self.name,
