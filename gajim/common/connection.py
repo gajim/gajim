@@ -675,6 +675,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
     def _disconnect(self):
         log.info('Set state disconnected')
+        self.get_module('Ping').remove_timeout()
         self.connected = 0
         self.disable_reconnect_timer()
 

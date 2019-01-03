@@ -66,10 +66,8 @@ class Ping:
         self.remove_timeout()
 
     def _reconnect(self) -> None:
-        if not app.config.get_per('accounts', self._account, 'active'):
-            # Account may have been disabled
+        if not app.account_is_connected(self._account):
             return
-
         # We haven't got the pong in time, disco and reconnect
         log.warning('No reply received for keepalive ping. Reconnecting...')
         self._con.disconnect(immediately=True)
