@@ -16,35 +16,6 @@
 
 from typing import Union
 
-import nbxmpp
-
-from gajim.common import app
-
-
-def is_self_message(message: nbxmpp.Node,
-                    groupchat: bool = False) -> bool:
-    if groupchat:
-        return False
-    frm = message.getFrom()
-    to = message.getTo()
-    return frm.bareMatch(to)
-
-
-def is_muc_pm(message: nbxmpp.Node,
-              jid: nbxmpp.JID,
-              groupchat: bool = False) -> bool:
-    if groupchat:
-        return False
-    muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-    if muc_user is not None:
-        return muc_user.getChildren() == []
-
-    # muc#user namespace was added in MUC 1.28 so we need a fallback
-    # Check if we know the jid
-    if app.logger.jid_is_room_jid(jid.getStripped()):
-        return True
-    return False
-
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:
     if isinstance(value, bool):

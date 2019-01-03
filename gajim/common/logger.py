@@ -72,6 +72,7 @@ LOGS_SQL_STATEMENT = '''
             subject TEXT,
             additional_data TEXT,
             stanza_id TEXT,
+            message_id TEXT,
             encryption TEXT,
             encryption_state TEXT,
             marker INTEGER
@@ -225,6 +226,13 @@ class Logger:
             statements = [
                 'ALTER TABLE last_archive_message ADD COLUMN "sync_threshold" INTEGER',
                 'PRAGMA user_version=2'
+            ]
+            self._execute_multiple(con, statements)
+
+        if self._get_user_version(con) < 3:
+            statements = [
+                'ALTER TABLE logs ADD COLUMN "message_id" TEXT',
+                'PRAGMA user_version=3'
             ]
             self._execute_multiple(con, statements)
 

@@ -134,7 +134,8 @@ class ChatControlSession:
                 message=msg_to_log,
                 subject=obj.subject,
                 additional_data=obj.additional_data,
-                stanza_id=obj.unique_id)
+                stanza_id=obj.unique_id,
+                message_id=obj.message_id)
 
         self.conn.get_module('MAM').save_archive_id(
             None, obj.stanza_id, obj.timestamp)

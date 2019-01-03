@@ -19,6 +19,7 @@ import time
 from datetime import datetime, timedelta
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -33,8 +34,6 @@ from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_eme
-from gajim.common.modules.util import is_self_message
-from gajim.common.modules.util import is_muc_pm
 
 log = logging.getLogger('gajim.c.m.archiving')
 
@@ -45,8 +44,9 @@ class MAM:
         self._account = con.name
 
         self.handlers = [
-            ('message', self._mam_message_received, '', nbxmpp.NS_MAM_1),
-            ('message', self._mam_message_received, '', nbxmpp.NS_MAM_2),
+            StanzaHandler(name='message',
+                          callback=self._mam_message_received,
+                          priority=51),
         ]
 
         self.available = False
@@ -72,132 +72,91 @@ class MAM:
                          account=self._account,
                          feature=self.archiving_namespace))
 
-    def _from_valid_archive(self, stanza, message, groupchat):
-        if groupchat:
-            expected_archive = message.getFrom()
+    def _from_valid_archive(self, stanza, properties):
+        if properties.type.is_groupchat:
+            expected_archive = properties.jid
         else:
             expected_archive = self._con.get_own_jid()
 
-        archive_jid = stanza.getFrom()
-        if archive_jid is None:
-            if groupchat:
-                return
-            # Message from our own archive
-            return self._con.get_own_jid()
+        return properties.mam.archive.bareMatch(expected_archive)
 
-        if archive_jid.bareMatch(expected_archive):
-            return archive_jid
+    def _get_unique_id(self, properties):
+        if properties.type.is_groupchat:
+            return properties.mam.id, None
 
-    def _get_unique_id(self, result, message, groupchat, self_message, muc_pm):
-        stanza_id = result.getAttr('id')
-        if groupchat:
-            return stanza_id, None
+        if properties.is_self_message:
+            return None, properties.id
 
-        origin_id = message.getOriginID()
-        if self_message:
-            return None, origin_id
+        if properties.is_muc_pm:
+            return properties.mam.id, properties.id
 
-        if muc_pm:
-            return stanza_id, origin_id
-
-        if self._con.get_own_jid().bareMatch(message.getFrom()):
+        if self._con.get_own_jid().bareMatch(properties.jid):
             # message we sent
-            return stanza_id, origin_id
+            return properties.mam.id, properties.id
 
         # A message we received
-        return stanza_id, None
+        return properties.mam.id, None
 
-    def _mam_message_received(self, _con, stanza):
+    def _mam_message_received(self, _con, stanza, properties):
+        if not properties.is_mam_message:
+            return
+
         app.nec.push_incoming_event(
             NetworkIncomingEvent('raw-mam-message-received',
                                  conn=self._con,
                                  stanza=stanza))
 
-        result = stanza.getTag('result', protocol=True)
-        queryid = result.getAttr('queryid')
-        forwarded = result.getTag('forwarded',
-                                  namespace=nbxmpp.NS_FORWARD,
-                                  protocol=True)
-        message = forwarded.getTag('message', protocol=True)
-
-        groupchat = message.getType() == 'groupchat'
-
-        archive_jid = self._from_valid_archive(stanza, message, groupchat)
-        if archive_jid is None:
-            log.warning('Message from invalid archive %s', stanza)
+        if not self._from_valid_archive(stanza, properties):
+            log.warning('Message from invalid archive %s',
+                        properties.mam.archive)
             raise nbxmpp.NodeProcessed
 
-        log.info('Received message from archive: %s', archive_jid)
-        if not self._is_valid_request(archive_jid, queryid):
-            log.warning('Invalid MAM Message: unknown query id')
+        log.info('Received message from archive: %s', properties.mam.archive)
+        if not self._is_valid_request(properties):
+            log.warning('Invalid MAM Message: unknown query id %s',
+                        properties.mam.query_id)
             log.debug(stanza)
             raise nbxmpp.NodeProcessed
 
-        # Timestamp parsing
-        # Most servers dont set the 'from' attr, so we cant check for it
-        delay_timestamp = parse_delay(forwarded)
-        if delay_timestamp is None:
-            log.warning('No timestamp on MAM message')
-            log.warning(stanza)
-            raise nbxmpp.NodeProcessed
-
-        # Fix for self messaging
-        if not groupchat:
-            to = message.getTo()
-            if to is None:
-                # Some servers dont set the 'to' attribute when
-                # we send a message to ourself
-                message.setTo(self._con.get_own_jid())
-
         event_attrs = {}
 
+        groupchat = properties.type.is_groupchat
+
         if groupchat:
-            event_attrs.update(self._parse_gc_attrs(message))
+            event_attrs.update(self._parse_gc_attrs(properties))
         else:
-            event_attrs.update(self._parse_chat_attrs(message))
+            event_attrs.update(self._parse_chat_attrs(stanza, properties))
 
-        self_message = is_self_message(message, groupchat)
-        muc_pm = is_muc_pm(message, event_attrs['with_'], groupchat)
+        stanza_id, message_id = self._get_unique_id(properties)
 
-        stanza_id, origin_id = self._get_unique_id(
-            result, message, groupchat, self_message, muc_pm)
-        message_id = message.getID()
-
-        # Check for duplicates
-        namespace = self.archiving_namespace
-        if groupchat:
-            namespace = muc_caps_cache.get_mam_namespace(
-                archive_jid.getStripped())
-
-        if namespace == nbxmpp.NS_MAM_2:
+        if properties.mam.is_ver_2:
             # Search only with stanza-id for duplicates on mam:2
             if app.logger.find_stanza_id(self._account,
-                                         archive_jid.getStripped(),
+                                         str(properties.mam.archive),
                                          stanza_id,
-                                         origin_id,
+                                         message_id,
                                          groupchat=groupchat):
-                log.info('Found duplicate with stanza-id')
+                log.info('Found duplicate with stanza-id: %s, message-id: %s',
+                         stanza_id, message_id)
                 raise nbxmpp.NodeProcessed
-
-        msgtxt = message.getTagData('body')
 
         event_attrs.update(
             {'conn': self._con,
              'additional_data': AdditionalDataDict(),
              'encrypted': False,
-             'timestamp': delay_timestamp,
-             'self_message': self_message,
+             'timestamp': properties.mam.timestamp,
+             'self_message': properties.is_self_message,
              'groupchat': groupchat,
-             'muc_pm': muc_pm,
+             'muc_pm': properties.is_muc_pm,
              'stanza_id': stanza_id,
-             'origin_id': origin_id,
-             'message_id': message_id,
+             'origin_id': message_id,
+             'message_id': properties.id,
              'correct_id': None,
-             'archive_jid': archive_jid,
-             'msgtxt': msgtxt,
-             'message': message,
-             'stanza': message,
-             'namespace': namespace,
+             'archive_jid': properties.mam.archive,
+             'msgtxt': properties.body,
+             'message': stanza,
+             'stanza': stanza,
+             'namespace': properties.mam.namespace,
              })
 
         if groupchat:
@@ -217,26 +176,18 @@ class MAM:
         raise nbxmpp.NodeProcessed
 
     @staticmethod
-    def _parse_gc_attrs(message):
-        with_ = message.getFrom()
-        nick = message.getFrom().getResource()
-
-        # Get the real jid if we have it
+    def _parse_gc_attrs(properties):
         real_jid = None
-        muc_user = message.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None:
-            real_jid = muc_user.getTagAttr('item', 'jid')
-            if real_jid is not None:
-                real_jid = nbxmpp.JID(real_jid)
-
-        return {'with_': with_,
-                'nick': nick,
+        if properties.muc_user is not None:
+            real_jid = properties.muc_user.jid
+        return {'with_': properties.jid,
+                'nick': properties.muc_nickname,
                 'real_jid': real_jid,
                 'kind': KindConstant.GC_MSG}
 
-    def _parse_chat_attrs(self, message):
-        frm = message.getFrom()
-        to = message.getTo()
+    def _parse_chat_attrs(self, stanza, properties):
+        frm = properties.jid
+        to = stanza.getTo()
         if frm.bareMatch(self._con.get_own_jid()):
             with_ = to
             kind = KindConstant.CHAT_MSG_SENT
@@ -290,17 +241,15 @@ class MAM:
                                     message=event.msgtxt,
                                     contact_name=event.nick,
                                     additional_data=event.additional_data,
-                                    stanza_id=stanza_id)
+                                    stanza_id=stanza_id,
+                                    message_id=event.message_id)
 
         app.nec.push_incoming_event(
             MamDecryptedMessageReceived(None, **vars(event)))
 
-    def _is_valid_request(self, jid, query_id):
-        if query_id is None:
-            return False
-
-        valid_id = self._mam_query_ids.get(jid.getStripped(), None)
-        return valid_id == query_id
+    def _is_valid_request(self, properties):
+        valid_id = self._mam_query_ids.get(str(properties.mam.archive), None)
+        return valid_id == properties.mam.query_id
 
     def _get_query_id(self, jid):
         query_id = self._con.connection.getAnID()

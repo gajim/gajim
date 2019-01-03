@@ -18,9 +18,10 @@ import time
 import logging
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
+from nbxmpp.const import MessageType
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import caps_cache
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
@@ -36,8 +37,6 @@ from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_form
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
-from gajim.common.modules.util import is_self_message
-from gajim.common.modules.util import is_muc_pm
 from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
@@ -49,29 +48,25 @@ class Message:
         self._con = con
         self._account = con.name
 
-        self.handlers = [('message', self._message_received)]
+        self.handlers = [
+            StanzaHandler(name='message',
+                          callback=self._message_received,
+                          priority=50),
+        ]
 
         # XEPs for which this message module should not be executed
         self._message_namespaces = set([nbxmpp.NS_PUBSUB_EVENT,
                                         nbxmpp.NS_ROSTERX,
-                                        nbxmpp.NS_MAM_1,
-                                        nbxmpp.NS_MAM_2,
-                                        nbxmpp.NS_CONFERENCE,
-                                        nbxmpp.NS_IBB,
-                                        nbxmpp.NS_CAPTCHA,])
+                                        nbxmpp.NS_IBB])
 
     def _message_received(self, _con, stanza, properties):
+        if properties.is_mam_message:
+            return
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.
         # nbxmpp executes less common handlers last
         if self._message_namespaces & set(stanza.getProperties()):
             return
-
-        muc_user = stanza.getTag('x', namespace=nbxmpp.NS_MUC_USER)
-        if muc_user is not None and (stanza.getType() != 'error'):
-            if muc_user.getChildren():
-                # Not a PM, handled by MUC module
-                return
 
         log.info('Received from %s', stanza.getFrom())
 
@@ -87,49 +82,36 @@ class Message:
             # Ugly, we treat the from attr as the remote jid,
             # to make that work with sent carbons we have to do this.
             # TODO: Check where in Gajim and plugins we depend on that behavior
-            stanza.setFrom(stanza.getTo().getBare())
+            stanza.setFrom(stanza.getTo())
 
         from_ = stanza.getFrom()
-        type_ = stanza.getType()
-        if type_ is None:
-            type_ = 'normal'
+        fjid = str(from_)
+        jid = from_.getBare()
+        resource = from_.getResource()
 
-        self_message = is_self_message(stanza, type_ == 'groupchat')
-        muc_pm = is_muc_pm(stanza, from_, type_ == 'groupchat')
-
-        id_ = stanza.getID()
-
-        fjid = None
-        if from_ is not None:
-            try:
-                fjid = helpers.parse_jid(str(from_))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            stanza.getFrom())
-                return
-
-        jid, resource = app.get_room_and_nick_from_fjid(fjid)
+        type_ = properties.type
 
         # Check for duplicates
-        stanza_id, origin_id = self._get_unique_id(
-            stanza, forwarded, sent, self_message, muc_pm)
+        stanza_id, message_id = self._get_unique_id(properties)
 
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
-        if type_ == 'groupchat' or self_message or muc_pm:
-            if type_ == 'groupchat':
+        if (properties.type.is_groupchat or
+            properties.is_self_message or
+                properties.is_muc_pm):
+            if properties.type.is_groupchat:
                 archive_jid = stanza.getFrom().getStripped()
             else:
                 archive_jid = self._con.get_own_jid().getStripped()
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
                                          stanza_id,
-                                         origin_id,
-                                         type_ == 'groupchat'):
+                                         message_id,
+                                         properties.type.is_groupchat):
                 return
 
-        thread_id = stanza.getThread()
-        msgtxt = stanza.getBody()
+        thread_id = properties.thread
+        msgtxt = properties.body
 
         # TODO: remove all control UI stuff
         gc_control = app.interface.msg_win_mgr.get_gc_control(
@@ -139,7 +121,7 @@ class Message:
             gc_control = minimized.get(jid)
 
         if gc_control and jid == fjid:
-            if type_ == 'error':
+            if properties.type.is_error:
                 if msgtxt:
                     msgtxt = _('error while sending %(message)s ( %(error)s )') % {
                         'message': msgtxt, 'error': stanza.getErrorMsg()}
@@ -148,11 +130,11 @@ class Message:
                 # TODO: why is this here?
                 if stanza.getTag('html'):
                     stanza.delChild('html')
-            type_ = 'groupchat'
+            type_ = MessageType.GROUPCHAT
 
         session = None
-        if type_ != 'groupchat':
-            if muc_pm and type_ == 'error':
+        if not properties.type.is_groupchat:
+            if properties.is_muc_pm and properties.type.is_error:
                 session = self._con.find_session(fjid, thread_id)
                 if not session:
                     session = self._con.get_latest_session(fjid)
@@ -171,7 +153,7 @@ class Message:
             'conn': self._con,
             'stanza': stanza,
             'account': self._account,
-            'id_': id_,
+            'id_': properties.id,
             'encrypted': False,
             'additional_data': AdditionalDataDict(),
             'forwarded': forwarded,
@@ -180,13 +162,14 @@ class Message:
             'jid': jid,
             'resource': resource,
             'stanza_id': stanza_id,
-            'unique_id': stanza_id or origin_id,
-            'mtype': type_,
+            'unique_id': stanza_id or message_id,
+            'message_id': properties.id,
+            'mtype': type_.value,
             'msgtxt': msgtxt,
             'thread_id': thread_id,
             'session': session,
-            'self_message': self_message,
-            'muc_pm': muc_pm,
+            'self_message': properties.is_self_message,
+            'muc_pm': properties.is_muc_pm,
             'gc_control': gc_control
         }
 
@@ -313,7 +296,8 @@ class Message:
                                         message=event.msgtxt,
                                         contact_name=event.nick,
                                         additional_data=event.additional_data,
-                                        stanza_id=event.stanza_id)
+                                        stanza_id=event.stanza_id,
+                                        message_id=event.message_id)
             app.logger.set_room_last_message_time(event.room_jid, event.timestamp)
             self._con.get_module('MAM').save_archive_id(
                 event.room_jid, event.stanza_id, event.timestamp)
@@ -324,36 +308,29 @@ class Message:
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
             log.warning('%s announces mam:2 without stanza-id', room_jid)
 
-    def _get_unique_id(self, stanza, _forwarded, _sent, self_message, _muc_pm):
-        if stanza.getType() == 'groupchat':
-            # TODO: Disco the MUC check if 'urn:xmpp:mam:2' is announced
-            return self._get_stanza_id(stanza), None
+    def _get_unique_id(self, properties):
+        if properties.is_self_message:
+            # Deduplicate self message with message-id
+            return None, properties.id
 
-        if stanza.getType() != 'chat':
+        if properties.stanza_id.by is None:
+            # We can not verify who sent this stanza-id, ignore it.
             return None, None
 
-        # Messages we receive live
-        if self._con.get_module('MAM').archiving_namespace != nbxmpp.NS_MAM_2:
+        if properties.type.is_groupchat:
+            namespace = caps_cache.muc_caps_cache.get_mam_namespace(
+                properties.jid.getBare())
+            archive = properties.jid
+        else:
+            namespace = self._con.get_module('MAM').archiving_namespace
+            archive = self._con.get_own_jid()
+
+        if namespace != nbxmpp.NS_MAM_2:
             # Only mam:2 ensures valid stanza-id
             return None, None
 
-        if self_message:
-            return self._get_stanza_id(stanza), stanza.getOriginID()
-        return self._get_stanza_id(stanza), None
-
-    def _get_stanza_id(self, stanza):
-        stanza_id, by = stanza.getStanzaIDAttrs()
-        if by is None:
-            # We can not verify who set this stanza-id, ignore it.
-            return
-        if stanza.getType() == 'groupchat':
-            if stanza.getFrom().bareMatch(by):
-                # by attribute must match the server
-                return stanza_id
-        elif self._con.get_own_jid().bareMatch(by):
-            # by attribute must match the server
-            return stanza_id
-        return
+        if archive.bareMatch(properties.stanza_id.by):
+            return properties.stanza_id.id, None
 
 
 class MessageReceivedEvent(NetworkIncomingEvent):
