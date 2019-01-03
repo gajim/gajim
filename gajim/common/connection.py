@@ -1538,6 +1538,86 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_module('Roster').request_roster()
         elif self._connect_machine_calls == 4:
             self.send_first_presence()
+            self.discover_ft_proxies()
+
+    def discover_ft_proxies(self):
+        if not app.config.get_per('accounts', self.name, 'use_ft_proxies'):
+            return
+
+        cfg_proxies = app.config.get_per('accounts', self.name,
+            'file_transfer_proxies')
+        our_jid = helpers.parse_jid(app.get_jid_from_account(self.name) + \
+            '/' + self.server_resource)
+        testit = app.config.get_per('accounts', self.name,
+            'test_ft_proxies_on_startup')
+        if cfg_proxies:
+            proxies = [e.strip() for e in cfg_proxies.split(',')]
+            for proxy in proxies:
+                app.proxy65_manager.resolve(proxy, self.connection, our_jid,
+                    testit=testit)
+
+    def send_first_presence(self):
+        if self.connected > 1 and self.continue_connect_info:
+            msg = self.continue_connect_info[1]
+            sign_msg = self.continue_connect_info[2]
+            signed = ''
+            send_first_presence = True
+            if sign_msg:
+                signed = self.get_signed_presence(msg,
+                    self._send_first_presence)
+                if signed is None:
+                    app.nec.push_incoming_event(GPGPasswordRequiredEvent(None,
+                        conn=self, callback=self._send_first_presence))
+                    # _send_first_presence will be called when user enter
+                    # passphrase
+                    send_first_presence = False
+            if send_first_presence:
+                self._send_first_presence(signed)
+
+    def _send_first_presence(self, signed=''):
+        show = self.continue_connect_info[0]
+        msg = self.continue_connect_info[1]
+        sign_msg = self.continue_connect_info[2]
+        if sign_msg and not signed:
+            signed = self.get_signed_presence(msg)
+            if signed is None:
+                app.nec.push_incoming_event(BadGPGPassphraseEvent(None,
+                    conn=self))
+                self.USE_GPG = False
+                signed = ''
+        self.connected = app.SHOW_LIST.index(show)
+        sshow = helpers.get_xmpp_show(show)
+        # send our presence
+        if show == 'invisible':
+            self.send_invisible_presence(msg, signed, True)
+            return
+        if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
+            return
+        priority = app.get_priority(self.name, sshow)
+
+        self.get_module('Presence').send_presence(
+            priority=priority,
+            show=sshow,
+            status=msg,
+            sign=signed)
+
+        if self.connection:
+            self.priority = priority
+        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            show=show))
+
+        if not self.avatar_conversion:
+            # ask our VCard
+            self.get_module('VCardTemp').request_vcard()
+
+        self.get_module('Bookmarks').get_bookmarks()
+        self.get_module('Annotations').get_annotations()
+        self.get_module('Blocking').get_blocking_list()
+
+        # Inform GUI we just signed in
+        app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
+        self.get_module('PEP').send_stored_publish()
+        self.continue_connect_info = None
 
     def send_custom_status(self, show, msg, jid):
         if show not in app.SHOW_LIST:
