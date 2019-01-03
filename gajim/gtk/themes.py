@@ -21,11 +21,11 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 from gajim.common.const import DialogButton
 from gajim.common.const import ButtonAction
-from gajim.common.connection_handlers_events import StyleChanged
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import NewConfirmationDialog
@@ -388,18 +388,18 @@ class Option(Gtk.ListBoxRow):
         color_string = color.to_string()
         app.css_config.set_value(
             self._option.selector, self._option.attr, color_string, pre=True)
-        app.nec.push_incoming_event(StyleChanged(None))
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
     def _on_font_set(self, font_button):
         desc = font_button.get_font_desc()
         app.css_config.set_font(self._option.selector, desc, pre=True)
-        app.nec.push_incoming_event(StyleChanged(None,))
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
 
     def _on_remove(self, *args):
         self.get_parent().remove(self)
         app.css_config.remove_value(
             self._option.selector, self._option.attr, pre=True)
-        app.nec.push_incoming_event(StyleChanged(None))
+        app.nec.push_incoming_event(NetworkEvent('style-changed'))
         self.destroy()
 
     def __eq__(self, other):

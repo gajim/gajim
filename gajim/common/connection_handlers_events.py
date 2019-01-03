@@ -66,9 +66,6 @@ class MessageSentEvent(nec.NetworkIncomingEvent):
             self.conn.sent_message_ids = self.conn.sent_message_ids[-20000:]
         return True
 
-class MessageNotSentEvent(nec.NetworkIncomingEvent):
-    name = 'message-not-sent'
-
 class MessageErrorEvent(nec.NetworkIncomingEvent):
     name = 'message-error'
 
@@ -84,9 +81,6 @@ class MessageErrorEvent(nec.NetworkIncomingEvent):
             self.conn.sent_message_ids.remove(self.id_)
             return True
         return False
-
-class AnonymousAuthEvent(nec.NetworkIncomingEvent):
-    name = 'anonymous-auth'
 
 class JingleRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'jingle-request-received'
@@ -133,12 +127,6 @@ class JingleErrorReceivedEvent(nec.NetworkIncomingEvent):
         self.sid = self.jingle_session.sid
         return True
 
-class AccountCreatedEvent(nec.NetworkIncomingEvent):
-    name = 'account-created'
-
-class AccountNotCreatedEvent(nec.NetworkIncomingEvent):
-    name = 'account-not-created'
-
 class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-connected'
 
@@ -165,15 +153,6 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-not-connected'
 
-class ConnectionTypeEvent(nec.NetworkIncomingEvent):
-    name = 'connection-type'
-
-class StanzaReceivedEvent(nec.NetworkIncomingEvent):
-    name = 'stanza-received'
-
-class StanzaSentEvent(nec.NetworkIncomingEvent):
-    name = 'stanza-sent'
-
 class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
     name = 'bad-gpg-passphrase'
 
@@ -191,51 +170,12 @@ class ConnectionLostEvent(nec.NetworkIncomingEvent):
             show='offline'))
         return True
 
-class GPGTrustKeyEvent(nec.NetworkIncomingEvent):
-    name = 'gpg-trust-key'
-
 class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
     name = 'gpg-password-required'
 
     def generate(self):
         self.keyid = app.config.get_per('accounts', self.conn.name, 'keyid')
         return True
-
-class PlainConnectionEvent(nec.NetworkIncomingEvent):
-    name = 'plain-connection'
-
-class InsecureSSLConnectionEvent(nec.NetworkIncomingEvent):
-    name = 'insecure-ssl-connection'
-
-class SSLErrorEvent(nec.NetworkIncomingEvent):
-    name = 'ssl-error'
-
-class UpdateGCAvatarEvent(nec.NetworkIncomingEvent):
-    name = 'update-gc-avatar'
-
-    def generate(self):
-        return True
-
-class UpdateRosterAvatarEvent(nec.NetworkIncomingEvent):
-    name = 'update-roster-avatar'
-
-    def generate(self):
-        return True
-
-class UpdateRoomAvatarEvent(nec.NetworkIncomingEvent):
-    name = 'update-room-avatar'
-
-    def generate(self):
-        return True
-
-class ZeroconfNameConflictEvent(nec.NetworkIncomingEvent):
-    name = 'zeroconf-name-conflict'
-
-class PasswordRequiredEvent(nec.NetworkIncomingEvent):
-    name = 'password-required'
-
-class SignedInEvent(nec.NetworkIncomingEvent):
-    name = 'signed-in'
 
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
     name = 'file-request-received'
@@ -737,10 +677,6 @@ class GcMessageOutgoingEvent(nec.NetworkOutgoingEvent):
     def generate(self):
         return True
 
-
-class ClientCertPassphraseEvent(nec.NetworkIncomingEvent):
-    name = 'client-cert-passphrase'
-
 class InformationEvent(nec.NetworkIncomingEvent):
     name = 'information'
 
@@ -755,11 +691,4 @@ class InformationEvent(nec.NetworkIncomingEvent):
             self.args = ()
         else:
             self.args = (self.args,)
-        return True
-
-
-class StyleChanged(nec.NetworkIncomingEvent):
-    name = 'style-changed'
-
-    def generate(self):
         return True

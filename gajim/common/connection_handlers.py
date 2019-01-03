@@ -34,6 +34,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import jingle_xtls
 from gajim.common import modules
+from gajim.common.nec import NetworkEvent
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.connection_handlers_events import *
 from gajim.common.const import KindConstant
@@ -360,7 +361,7 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         self.get_module('Blocking').get_blocking_list()
 
         # Inform GUI we just signed in
-        app.nec.push_incoming_event(SignedInEvent(None, conn=self))
+        app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
         self.get_module('PEP').send_stored_publish()
         self.continue_connect_info = None
 

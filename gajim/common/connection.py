@@ -58,6 +58,7 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import idle
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
@@ -421,11 +422,15 @@ class CommonConnection:
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
             if event == 'STANZA RECEIVED':
-                app.nec.push_incoming_event(StanzaReceivedEvent(
-                    None, conn=self, stanza_str=str(data)))
+                app.nec.push_incoming_event(
+                    NetworkEvent('stanza-received',
+                                 conn=self,
+                                 stanza_str=str(data)))
             elif event == 'DATA SENT':
-                app.nec.push_incoming_event(StanzaSentEvent(
-                    None, conn=self, stanza_str=str(data)))
+                app.nec.push_incoming_event(
+                    NetworkEvent('stanza-sent',
+                                 conn=self,
+                                 stanza_str=str(data)))
 
     def change_status(self, show, msg, auto=False):
         if not msg:
@@ -732,8 +737,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                         reason = _('Server %(name)s answered wrongly to '
                             'register request: %(error)s') % {'name': data[0],
                             'error': data[3]}
-                        app.nec.push_incoming_event(AccountNotCreatedEvent(
-                            None, conn=self, reason=reason))
+                        app.nec.push_incoming_event(NetworkEvent(
+                            'account-not-created', conn=self, reason=reason))
                         return
                     is_form = data[2]
                     conf = data[1]
@@ -743,15 +748,16 @@ class Connection(CommonConnection, ConnectionHandlers):
                         def _on_register_result(result):
                             if not nbxmpp.isResultNode(result):
                                 reason = result.getErrorMsg() or result.getError()
-                                app.nec.push_incoming_event(AccountNotCreatedEvent(
-                                    None, conn=self, reason=reason))
+                                app.nec.push_incoming_event(NetworkEvent(
+                                    'account-not-created', conn=self, reason=reason))
                                 return
                             if app.is_installed('GPG'):
                                 self.USE_GPG = True
                                 self.gpg = gpg.GnuPG()
                             app.nec.push_incoming_event(
-                                AccountCreatedEvent(None, conn=self,
-                                account_info=self.new_account_info))
+                                NetworkEvent('account-created',
+                                             conn=self,
+                                             account_info=self.new_account_info))
                             self.new_account_info = None
                             self.new_account_form = None
                             if self.connection:
@@ -773,8 +779,8 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 # requested config has changed since first connection
                                 reason = _('Server %s provided a different '
                                     'registration form') % data[0]
-                                app.nec.push_incoming_event(AccountNotCreatedEvent(
-                                    None, conn=self, reason=reason))
+                                app.nec.push_incoming_event(NetworkEvent(
+                                    'account-not-created', conn=self, reason=reason))
                                 return
                             nbxmpp.features_nb.register(self.connection,
                                     self._hostname, self.new_account_form,
@@ -1039,9 +1045,12 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         if self.client_cert and app.config.get_per('accounts', self.name,
         'client_cert_encrypted'):
-            app.nec.push_incoming_event(ClientCertPassphraseEvent(
-                None, conn=self, con=con, port=port,
-                secure_tuple=secure_tuple))
+            app.nec.push_incoming_event(
+                NetworkEvent('client-cert-passphrase',
+                             conn=self,
+                             con=con,
+                             port=port,
+                             secure_tuple=secure_tuple))
             return
         self.on_client_cert_passphrase('', con, port, secure_tuple)
 
@@ -1115,8 +1124,10 @@ class Connection(CommonConnection, ConnectionHandlers):
         con.RegisterDisconnectHandler(self.disconnect)
         if _con_type == 'plain' and app.config.get_per('accounts', self.name,
         'action_when_plaintext_connection') == 'warn':
-            app.nec.push_incoming_event(PlainConnectionEvent(None, conn=self,
-                xmpp_client=con))
+            app.nec.push_incoming_event(
+                NetworkEvent('plain-connection',
+                             conn=self,
+                             xmpp_client=con))
             return True
         if _con_type == 'plain' and app.config.get_per('accounts', self.name,
         'action_when_plaintext_connection') == 'disconnect':
@@ -1129,8 +1140,11 @@ class Connection(CommonConnection, ConnectionHandlers):
         'warn_when_insecure_ssl_connection') and \
         not self.connection_auto_accepted:
             # Pyopenssl is not used
-            app.nec.push_incoming_event(InsecureSSLConnectionEvent(None,
-                conn=self, xmpp_client=con, conn_type=_con_type))
+            app.nec.push_incoming_event(
+                NetworkEvent('insecure-ssl-connection',
+                             conn=self,
+                             xmpp_client=con,
+                             conn_type=_con_type))
             return True
         return self.connection_accepted(con, con_type)
 
@@ -1187,9 +1201,11 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.process_ssl_errors()
                 return
 
-        app.nec.push_incoming_event(SSLErrorEvent(None, conn=self,
-                                                  error_num=errnum,
-                                                  cert=cert))
+        app.nec.push_incoming_event(
+            NetworkEvent('ssl-error',
+                         conn=self,
+                         error_num=errnum,
+                         cert=cert))
 
     @staticmethod
     def _calculate_cert_sha256(cert):
@@ -1286,8 +1302,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.password is not None:
             on_password(self.password)
         else:
-            app.nec.push_incoming_event(PasswordRequiredEvent(
-                None, conn=self, on_password=on_password))
+            app.nec.push_incoming_event(NetworkEvent(
+                'password-required', conn=self, on_password=on_password))
 
     def _auth(self):
         self._register_handlers(self.connection, self._current_type)
@@ -1311,7 +1327,9 @@ class Connection(CommonConnection, ConnectionHandlers):
         app.con_types[self.name] = con_type
         # notify the gui about con_type
         app.nec.push_incoming_event(
-            ConnectionTypeEvent(None, conn=self, connection_type=con_type))
+            NetworkEvent('connection-type',
+                         conn=self,
+                         connection_type=con_type))
         ConnectionHandlers._register_handlers(self, con, con_type)
 
     def _on_auth_successful(self):
@@ -1365,8 +1383,11 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.config.set_per('accounts', self.name,
                                'name', self.connection.User)
             new_jid = app.get_jid_from_account(self.name)
-            app.nec.push_incoming_event(AnonymousAuthEvent(
-                None, conn=self, old_jid=old_jid, new_jid=new_jid))
+            app.nec.push_incoming_event(
+                NetworkEvent('anonymous-auth',
+                             conn=self,
+                             old_jid=old_jid,
+                             new_jid=new_jid))
 
         self.connected = 2
         self.retrycount = 0
@@ -1447,7 +1468,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_module('Blocking').get_blocking_list()
 
             # Inform GUI we just signed in
-            app.nec.push_incoming_event(SignedInEvent(None, conn=self))
+            app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
 
     def get_signed_presence(self, msg, callback=None):
         if app.config.get_per('accounts', self.name, 'gpg_sign_presence'):

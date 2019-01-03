@@ -36,6 +36,7 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import modules
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
@@ -240,8 +241,10 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.disconnect()
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
             show='offline'))
-        app.nec.push_incoming_event(ZeroconfNameConflictEvent(None, conn=self,
-            alt_name=alt_name))
+        app.nec.push_incoming_event(
+            NetworkEvent('zeroconf-name-conflict',
+                         conn=self,
+                         alt_name=alt_name))
 
     def _on_error(self, message):
         app.nec.push_incoming_event(InformationEvent(
@@ -362,7 +365,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             check = self.connection.announce()
         else:
             self.connected = STATUS_LIST.index(show)
-        app.nec.push_incoming_event(SignedInEvent(None, conn=self))
+        app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
 
         # stay offline when zeroconf does something wrong
         if check:

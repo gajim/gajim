@@ -85,10 +85,10 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common import logging_helpers
+from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.connection_handlers_events import (
-    OurShowEvent, FileTransferCompletedEvent,
-    UpdateRosterAvatarEvent, UpdateGCAvatarEvent, UpdateRoomAvatarEvent)
+    OurShowEvent, FileTransferCompletedEvent)
 
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
@@ -613,22 +613,6 @@ class Interface:
             request = PassphraseRequest(obj.keyid)
             self.gpg_passphrase[obj.keyid] = request
         request.add_callback(obj.conn.name, obj.callback)
-
-    @staticmethod
-    def handle_event_gpg_trust_key(obj):
-        #('GPG_ALWAYS_TRUST', account, callback)
-        def on_yes(checked):
-            if checked:
-                obj.conn.gpg.always_trust.append(obj.keyID)
-            obj.callback(True)
-
-        def on_no():
-            obj.callback(False)
-
-        YesNoDialog(_('Untrusted OpenPGP key'), _('The OpenPGP key '
-            'used to encrypt this chat is not trusted. Do you really want to '
-            'encrypt this message?'), checktext=_('_Do not ask me again'),
-            on_response_yes=on_yes, on_response_no=on_no)
 
     def handle_event_password_required(self, obj):
         #('PASSWORD_REQUIRED', account, None)
@@ -1359,7 +1343,6 @@ class Interface:
             'muc-invitation': [self.handle_event_gc_invitation],
             'muc-decline': [self.handle_event_gc_decline],
             'gpg-password-required': [self.handle_event_gpg_password_required],
-            'gpg-trust-key': [self.handle_event_gpg_trust_key],
             'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
             'insecure-ssl-connection': \
@@ -2116,13 +2099,13 @@ class Interface:
     def update_avatar(account=None, jid=None, contact=None, room_avatar=False):
         if room_avatar:
             app.nec.push_incoming_event(
-                UpdateRoomAvatarEvent(None, account=account, jid=jid))
+                NetworkEvent('update-room-avatar', account=account, jid=jid))
         elif contact is None:
             app.nec.push_incoming_event(
-                UpdateRosterAvatarEvent(None, account=account, jid=jid))
+                NetworkEvent('update-roster-avatar', account=account, jid=jid))
         else:
             app.nec.push_incoming_event(
-                UpdateGCAvatarEvent(None, contact=contact))
+                NetworkEvent('update-gc-avatar', contact=contact))
 
     def save_avatar(self, data, publish=False):
         """
