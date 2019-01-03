@@ -38,6 +38,7 @@ from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.modules.util import is_self_message
 from gajim.common.modules.util import is_muc_pm
+from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
 log = logging.getLogger('gajim.c.m.message')
@@ -250,9 +251,19 @@ class Message:
             if event.gc_control:
                 event.gc_control.print_conversation(event.msgtxt)
             else:
-                self._con.dispatch_error_message(
-                    event.stanza, event.msgtxt,
-                    event.session, event.fjid, timestamp)
+                self._log_error_message(event)
+                error_msg = event.stanza.getErrorMsg() or event.msgtxt
+                msgtxt = None if error_msg == event.msgtxt else event.msgtxt
+                app.nec.push_incoming_event(
+                    MessageErrorEvent(None,
+                                      conn=self._con,
+                                      fjid=event.fjid,
+                                      error_code=event.stanza.getErrorCode(),
+                                      error_msg=error_msg,
+                                      msg=msgtxt,
+                                      time_=event.timestamp,
+                                      session=event.session,
+                                      stanza=event.stanza))
             return
 
         if groupchat:
@@ -273,6 +284,16 @@ class Message:
         app.nec.push_incoming_event(
             DecryptedMessageReceivedEvent(
                 None, **vars(event)))
+
+    def _log_error_message(self, event):
+        error_msg = event.stanza.getErrorMsg() or event.msgtxt
+        if app.config.should_log(self._account, event.jid):
+            app.logger.insert_into_logs(self._account,
+                                        event.jid,
+                                        event.timestamp,
+                                        KindConstant.ERROR,
+                                        message=error_msg,
+                                        subject=event.subject)
 
     def _log_muc_message(self, event):
         if event.mtype == 'error':

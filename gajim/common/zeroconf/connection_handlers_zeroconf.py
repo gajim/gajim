@@ -32,12 +32,14 @@ from gajim.common import connection_handlers
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
+from gajim.common.const import KindConstant
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
+from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
 log = logging.getLogger('gajim.c.z.connection_handlers_zeroconf')
@@ -163,10 +165,31 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
         if event.mtype == 'error':
             if not event.msgtxt:
                 event.msgtxt = _('message')
-            self.dispatch_error_message(
-                event.stanza, event.msgtxt,
-                event.session, event.fjid, event.timestamp)
+            self._log_error_message(event)
+            error_msg = event.stanza.getErrorMsg() or event.msgtxt
+            msgtxt = None if error_msg == event.msgtxt else event.msgtxt
+            app.nec.push_incoming_event(
+                MessageErrorEvent(None,
+                                  conn=self,
+                                  fjid=event.fjid,
+                                  error_code=event.stanza.getErrorCode(),
+                                  error_msg=error_msg,
+                                  msg=msgtxt,
+                                  time_=event.timestamp,
+                                  session=event.session,
+                                  stanza=event.stanza))
+
             return
 
         app.nec.push_incoming_event(
             DecryptedMessageReceivedEvent(None, **vars(event)))
+
+    def _log_error_message(self, event):
+        error_msg = event.stanza.getErrorMsg() or event.msgtxt
+        if app.config.should_log(self.name, event.jid):
+            app.logger.insert_into_logs(self.name,
+                                        event.jid,
+                                        event.timestamp,
+                                        KindConstant.ERROR,
+                                        message=error_msg,
+                                        subject=event.subject)

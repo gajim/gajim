@@ -32,12 +32,10 @@ import nbxmpp
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import jingle_xtls
-from gajim.common.const import KindConstant
 from gajim.common.jingle import ConnectionJingle
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
 from gajim.common.connection_handlers_events import StreamReceivedEvent
-from gajim.common.connection_handlers_events import MessageErrorEvent
 from gajim.common.connection_handlers_events import PresenceReceivedEvent
 from gajim.common.connection_handlers_events import StreamConflictReceivedEvent
 from gajim.common.connection_handlers_events import NotificationEvent
@@ -53,28 +51,6 @@ class ConnectionHandlersBase:
 
         # IDs of sent messages (https://trac.gajim.org/ticket/8222)
         self.sent_message_ids = []
-
-    # process and dispatch an error message
-    def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
-        error_msg = msg.getErrorMsg()
-
-        if not error_msg:
-            error_msg = msgtxt
-            msgtxt = None
-
-        subject = msg.getSubject()
-
-        if session.is_loggable():
-            app.logger.insert_into_logs(self.name,
-                                        nbxmpp.JID(frm).getStripped(),
-                                        tim,
-                                        KindConstant.ERROR,
-                                        message=error_msg,
-                                        subject=subject)
-
-        app.nec.push_incoming_event(MessageErrorEvent(None, conn=self,
-            fjid=frm, error_code=msg.getErrorCode(), error_msg=error_msg,
-            msg=msgtxt, time_=tim, session=session, stanza=msg))
 
     def get_sessions(self, jid):
         """
