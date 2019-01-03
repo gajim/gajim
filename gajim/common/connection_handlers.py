@@ -30,10 +30,8 @@ import operator
 import nbxmpp
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import jingle_xtls
-from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.const import KindConstant
 from gajim.common.jingle import ConnectionJingle
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
@@ -55,44 +53,6 @@ class ConnectionHandlersBase:
 
         # IDs of sent messages (https://trac.gajim.org/ticket/8222)
         self.sent_message_ids = []
-
-        app.ged.register_event_handler('gc-message-received', ged.CORE,
-            self._nec_gc_message_received)
-
-    def cleanup(self):
-        app.ged.remove_event_handler('gc-message-received', ged.CORE,
-            self._nec_gc_message_received)
-
-    def _check_for_mam_compliance(self, room_jid, stanza_id):
-        namespace = muc_caps_cache.get_mam_namespace(room_jid)
-        if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
-            log.warning('%s announces mam:2 without stanza-id', room_jid)
-
-    def _nec_gc_message_received(self, obj):
-        if obj.conn.name != self.name:
-            return
-
-        if obj.stanza.getType() == 'error':
-            return
-
-        self._check_for_mam_compliance(obj.jid, obj.stanza_id)
-
-        if (app.config.should_log(obj.conn.name, obj.jid) and
-                obj.msgtxt and obj.nick):
-            # if not obj.nick, it means message comes from room itself
-            # usually it hold description and can be send at each connection
-            # so don't store it in logs
-            app.logger.insert_into_logs(self.name,
-                                        obj.jid,
-                                        obj.timestamp,
-                                        KindConstant.GC_MSG,
-                                        message=obj.msgtxt,
-                                        contact_name=obj.nick,
-                                        additional_data=obj.additional_data,
-                                        stanza_id=obj.stanza_id)
-            app.logger.set_room_last_message_time(obj.room_jid, obj.timestamp)
-            self.get_module('MAM').save_archive_id(
-                obj.room_jid, obj.stanza_id, obj.timestamp)
 
     # process and dispatch an error message
     def dispatch_error_message(self, msg, msgtxt, session, frm, tim):
@@ -259,9 +219,6 @@ class ConnectionHandlers(ConnectionSocks5Bytestream,
         app.nec.register_incoming_event(PresenceReceivedEvent)
         app.nec.register_incoming_event(StreamConflictReceivedEvent)
         app.nec.register_incoming_event(NotificationEvent)
-
-    def cleanup(self):
-        ConnectionHandlersBase.cleanup(self)
 
     def _PubkeyGetCB(self, con, iq_obj):
         log.info('PubkeyGetCB')

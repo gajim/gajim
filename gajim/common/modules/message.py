@@ -21,10 +21,12 @@ import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common import caps_cache
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.const import KindConstant
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_delay
@@ -264,11 +266,42 @@ class Message:
 
             app.nec.push_incoming_event(NetworkEvent('gc-message-received',
                                                      **vars(event)))
+            # TODO: Some plugins modify msgtxt in the GUI event
+            self._log_muc_message(event)
             return
 
         app.nec.push_incoming_event(
             DecryptedMessageReceivedEvent(
                 None, **vars(event)))
+
+    def _log_muc_message(self, event):
+        if event.mtype == 'error':
+            return
+
+        self._check_for_mam_compliance(event.room_jid, event.stanza_id)
+
+        if (app.config.should_log(self._account, event.jid) and
+                event.msgtxt and event.nick):
+            # if not event.nick, it means message comes from room itself
+            # usually it hold description and can be send at each connection
+            # so don't store it in logs
+            app.logger.insert_into_logs(self._account,
+                                        event.jid,
+                                        event.timestamp,
+                                        KindConstant.GC_MSG,
+                                        message=event.msgtxt,
+                                        contact_name=event.nick,
+                                        additional_data=event.additional_data,
+                                        stanza_id=event.stanza_id)
+            app.logger.set_room_last_message_time(event.room_jid, event.timestamp)
+            self._con.get_module('MAM').save_archive_id(
+                event.room_jid, event.stanza_id, event.timestamp)
+
+    @staticmethod
+    def _check_for_mam_compliance(room_jid, stanza_id):
+        namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)
+        if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
+            log.warning('%s announces mam:2 without stanza-id', room_jid)
 
     def _get_unique_id(self, stanza, _forwarded, _sent, self_message, _muc_pm):
         if stanza.getType() == 'groupchat':

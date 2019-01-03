@@ -570,9 +570,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     # END __init__
 
     def cleanup(self):
-        ConnectionHandlers.cleanup(self)
         modules.unregister(self)
-
         app.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
         app.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
