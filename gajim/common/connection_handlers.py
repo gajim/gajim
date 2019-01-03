@@ -34,11 +34,15 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import jingle_xtls
 from gajim.common.caps_cache import muc_caps_cache
-from gajim.common.connection_handlers_events import *
 from gajim.common.const import KindConstant
 from gajim.common.jingle import ConnectionJingle
 from gajim.common.protocol.bytestream import ConnectionSocks5Bytestream
 from gajim.common.protocol.bytestream import ConnectionIBBytestream
+from gajim.common.connection_handlers_events import StreamReceivedEvent
+from gajim.common.connection_handlers_events import MessageErrorEvent
+from gajim.common.connection_handlers_events import PresenceReceivedEvent
+from gajim.common.connection_handlers_events import StreamConflictReceivedEvent
+from gajim.common.connection_handlers_events import NotificationEvent
 
 
 log = logging.getLogger('gajim.c.connection_handlers')

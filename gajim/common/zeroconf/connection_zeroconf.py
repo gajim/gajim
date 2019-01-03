@@ -29,6 +29,8 @@
 
 import socket
 import getpass
+import logging
+import time
 
 import nbxmpp
 from gi.repository import GLib
@@ -41,8 +43,13 @@ from gajim.common.i18n import _
 from gajim.common.connection import CommonConnection
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
-from gajim.common.zeroconf.connection_handlers_zeroconf import *
-from gajim.common.connection_handlers_events import *
+from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
+from gajim.common.zeroconf.connection_handlers_zeroconf import STATUS_LIST
+from gajim.common.connection_handlers_events import OurShowEvent
+from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.connection_handlers_events import ConnectionLostEvent
+from gajim.common.connection_handlers_events import MessageSentEvent
+from gajim.common.connection_handlers_events import MessageErrorEvent
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
 

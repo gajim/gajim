@@ -15,18 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-from unittest.mock import Mock
-
-from gajim.common import app
-import nbxmpp
-from nbxmpp.idlequeue import IdleObject
-from nbxmpp import dispatcher_nb, simplexml
-from nbxmpp.plugin import PlugIn
-from nbxmpp.plugin import *
-from nbxmpp.transports_nb import DATA_RECEIVED, DATA_SENT, DATA_ERROR
-from gajim.common.zeroconf import zeroconf
-
-from nbxmpp.protocol import *
 import socket
 import platform
 import ssl
@@ -34,12 +22,25 @@ import errno
 import sys
 import os
 import string
-from random import Random
-
 import logging
+from random import Random
+from unittest.mock import Mock
+
+import nbxmpp
+from nbxmpp import dispatcher_nb
+from nbxmpp import simplexml
+from nbxmpp.plugin import PlugIn
+from nbxmpp.idlequeue import IdleObject
+from nbxmpp.transports_nb import DATA_RECEIVED
+from nbxmpp.transports_nb import DATA_SENT
+from nbxmpp.transports_nb import DATA_ERROR
+
+from gajim.common import app
+from gajim.common.zeroconf import zeroconf
+from gajim.common.zeroconf import roster_zeroconf
+
 log = logging.getLogger('gajim.c.z.client_zeroconf')
 
-from gajim.common.zeroconf import roster_zeroconf
 
 MAX_BUFF_LEN = 65536
 TYPE_SERVER, TYPE_CLIENT = range(2)

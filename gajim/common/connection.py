@@ -58,11 +58,22 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import idle
+from gajim.common import modules
+from gajim.common import ged
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
-from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
-from gajim.common import modules
+from gajim.common.connection_handlers import ConnectionHandlers
+from gajim.common.connection_handlers_events import OurShowEvent
+from gajim.common.connection_handlers_events import BadGPGPassphraseEvent
+from gajim.common.connection_handlers_events import GPGPasswordRequiredEvent
+from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.connection_handlers_events import StanzaMessageOutgoingEvent
+from gajim.common.connection_handlers_events import GcStanzaMessageOutgoingEvent
+from gajim.common.connection_handlers_events import ConnectionLostEvent
+from gajim.common.connection_handlers_events import NewAccountConnectedEvent
+from gajim.common.connection_handlers_events import NewAccountNotConnectedEvent
+from gajim.common.connection_handlers_events import MessageSentEvent
 
 
 log = logging.getLogger('gajim.c.connection')
