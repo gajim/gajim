@@ -24,6 +24,7 @@ from gajim.common import helpers
 from gajim.common import config as c_config
 from gajim.common import idle
 from gajim.common.i18n import _
+from gajim.common.i18n import ngettext
 
 from gajim import message_control
 
@@ -146,6 +147,25 @@ class Preferences(Gtk.ApplicationWindow):
         # Show subject on join
         st = app.config.get('show_subject_on_join')
         self._ui.subject_on_join_checkbutton.set_active(st)
+
+
+        # Group chat settings
+        threshold_model = self._ui.sync_threshold_combobox.get_model()
+        for day in app.config.get_options('threshold_options'):
+            if day == '0':
+                label = _('No threshold')
+            else:
+                label = ngettext('%s day' % day, '%s days' % day, int(day))
+            threshold_model.append([day, label])
+        public_threshold = app.config.get('public_room_sync_threshold')
+        self._ui.sync_threshold_combobox.set_id_column(0)
+        self._ui.sync_threshold_combobox.set_active_id(str(public_threshold))
+
+        st = app.config.get('print_join_leave_in_mucs')
+        self._ui.join_leave_checkbutton.set_active(st)
+
+        st = app.config.get('print_status_in_mucs')
+        self._ui.status_change_checkbutton.set_active(st)
 
         # Displayed chat state notifications
         st = app.config.get('show_chatstate_in_tabs')
@@ -594,6 +614,16 @@ class Preferences(Gtk.ApplicationWindow):
 
     def on_subject_on_join_checkbutton_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_subject_on_join')
+
+    def _on_sync_threshold_changed(self, widget):
+        active = widget.get_active_id()
+        app.config.set('public_room_sync_threshold', int(active))
+
+    def _on_join_leave_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'print_join_leave_in_mucs')
+
+    def _on_status_change_toggled(self, widget):
+        self.on_checkbutton_toggled(widget, 'print_status_in_mucs')
 
     def on_show_chatstate_in_tabs_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')

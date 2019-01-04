@@ -397,7 +397,9 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_notify_on_all_messages)
         self.parent_win.window.add_action(act)
 
-        value = app.config.get_per('rooms', self.contact.jid, 'print_status')
+        status_default = app.config.get('print_status_in_mucs')
+        value = app.config.get_per('rooms', self.contact.jid,
+                                   'print_status', status_default)
 
         act = Gio.SimpleAction.new_stateful(
             'print-status-' + self.control_id,
@@ -405,7 +407,9 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_status)
         self.parent_win.window.add_action(act)
 
-        value = app.config.get_per('rooms', self.contact.jid, 'print_join_left')
+        join_default = app.config.get('print_join_leave_in_mucs')
+        value = app.config.get_per('rooms', self.contact.jid,
+                                   'print_join_left', join_default)
 
         act = Gio.SimpleAction.new_stateful(
             'print-join-left-' + self.control_id,

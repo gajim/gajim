@@ -235,6 +235,8 @@ class Config:
         'show_location_in_roster': [opt_bool, True, '', True],
         'avatar_position_in_roster': [opt_str, 'right', _('Define the position of the avatar in roster. Can be left or right'), True],
         'print_status_in_chats': [opt_bool, False, _('If False, Gajim will no longer print status line in chats when a contact changes their status and/or their status message.')],
+        'print_join_leave_in_mucs': [opt_bool, False, _('Default Setting: Show a status message for every join or leave in a group chat')],
+        'print_status_in_mucs': [opt_bool, False, _('Default Setting: Show a status message for all status (away, dnd, etc.) changes of users in a group chat')],
         'log_contact_status_changes': [opt_bool, False],
         'log_xhtml_messages': [opt_bool, False, _('Log XHTML messages instead of plain text messages.')],
         'restored_messages_small': [opt_bool, True, _('If true, restored messages will use a smaller font than the default one.')],
@@ -718,6 +720,11 @@ class Config:
         all_ = self.get('notify_on_all_muc_messages')
         room = self.get_per('rooms', room, 'notify_on_all_messages')
         return all_ or room
+
+    def get_options(self, optname, return_type=str):
+        options = self.get(optname).split(',')
+        options = [return_type(option.strip()) for option in options]
+        return options
 
     def _init_options(self):
         for opt in self.__options[0]:
