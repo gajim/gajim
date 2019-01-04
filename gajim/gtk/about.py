@@ -14,10 +14,12 @@
 
 import nbxmpp
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GObject
 
 from gajim.common import app
+from gajim.common.helpers import launch_browser_mailer
 from gajim.common.i18n import _
 from gajim.common.const import DEVS_CURRENT
 from gajim.common.const import DEVS_PAST
@@ -65,3 +67,25 @@ class AboutDialog(Gtk.AboutDialog):
             'response', lambda dialog, *args: Gtk.AboutDialog.do_close(dialog))
 
         self.show()
+        self.connect('activate-link', self._on_activate_link)
+        # See https://gitlab.gnome.org/GNOME/gtk/issues/1561
+        self._connect_link_handler(self)
+
+    @staticmethod
+    def _on_activate_link(_label, uri):
+        # We have to use this, because the default GTK handler
+        # is not cross-platform compatible
+        launch_browser_mailer(None, uri)
+        return Gdk.EVENT_STOP
+
+    def _connect_link_handler(self, parent):
+        def _find_child(parent_):
+            if not hasattr(parent_, 'get_children'):
+                return
+
+            for child in parent_.get_children():
+                if isinstance(child, Gtk.Label):
+                    if 'href' in child.get_label():
+                        child.connect('activate-link', self._on_activate_link)
+                _find_child(child)
+        _find_child(parent)
