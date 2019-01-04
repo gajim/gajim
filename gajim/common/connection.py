@@ -622,6 +622,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.get_module('Ping').remove_timeout()
         if self.connection is None:
             if not reconnect:
+                self.get_module('Chatstate').enabled = False
                 self._sm_resume_data = {}
             self._disconnect()
             app.nec.push_incoming_event(OurShowEvent(
@@ -668,6 +669,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self._set_reconnect_timer()
 
         else:
+            self.get_module('Chatstate').enabled = False
             self._sm_resume_data = {}
             self._disconnect()
             app.nec.push_incoming_event(OurShowEvent(
@@ -1388,6 +1390,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         # state of all contacts
         app.nec.push_incoming_event(OurShowEvent(
             None, conn=self, show='offline'))
+        self.get_module('Chatstate').enabled = False
 
     def _on_resume_successful(self):
         # Connection was successful, reset sm resume data
@@ -1422,6 +1425,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.retrycount = 0
         self._discover_server()
         self._set_send_timeouts()
+        self.get_module('Chatstate').enabled = True
 
     def _set_send_timeouts(self):
         if app.config.get_per('accounts', self.name, 'keep_alives_enabled'):

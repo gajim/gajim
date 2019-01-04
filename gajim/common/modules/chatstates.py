@@ -16,11 +16,13 @@
 
 from typing import Any
 from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
 from typing import Optional
 from typing import Tuple
 
 import time
 import logging
+from functools import wraps
 
 import nbxmpp
 from gi.repository import GLib
@@ -39,6 +41,15 @@ log = logging.getLogger('gajim.c.m.chatstates')
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 5
+
+
+def ensure_enabled(func):
+    @wraps(func)
+    def func_wrapper(self, *args, **kwargs):
+        if not self.enabled:
+            return
+        return func(self, *args, **kwargs)
+    return func_wrapper
 
 
 def parse_chatstate(stanza: nbxmpp.Message) -> Optional[str]:
@@ -60,13 +71,39 @@ class Chatstate:
         self.handlers = [
             ('presence', self._presence_received),
         ]
+
+        # Our current chatstate with a specific contact
         self._chatstates = {}  # type: Dict[str, State]
+
         self._last_keyboard_activity = {}  # type: Dict[str, float]
         self._last_mouse_activity = {}  # type: Dict[str, float]
+        self._timeout_id = None
+        self._delay_timeout_ids = {}  # type: Dict[str, str]
+        self._blocked = []  # type: List[str]
+        self._enabled = False
 
-        self._timeout_id = GLib.timeout_add_seconds(
-            2, self._check_last_interaction)
+    @property
+    def enabled(self):
+        return self._enabled
 
+    @enabled.setter
+    def enabled(self, value):
+        if self._enabled == value:
+            return
+        log.info('Chatstate module %s', 'enabled' if value else 'disabled')
+        self._enabled = value
+
+        if value:
+            self._timeout_id = GLib.timeout_add_seconds(
+                2, self._check_last_interaction)
+        else:
+            self.cleanup()
+            self._chatstates = {}
+            self._last_keyboard_activity = {}
+            self._last_mouse_activity = {}
+            self._blocked = []
+
+    @ensure_enabled
     def _presence_received(self,
                            _con: ConnectionT,
                            stanza: nbxmpp.Presence) -> None:
@@ -135,6 +172,7 @@ class Chatstate:
                          account=self._account,
                          contact=contact))
 
+    @ensure_enabled
     def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:
         setting = app.config.get('outgoing_chat_state_notifications')
         if setting in ('composing_only', 'disabled'):
@@ -183,6 +221,7 @@ class Chatstate:
 
         return GLib.SOURCE_CONTINUE
 
+    @ensure_enabled
     def set_active(self, jid: str) -> None:
         self._last_mouse_activity[jid] = time.time()
         setting = app.config.get('outgoing_chat_state_notifications')
@@ -207,7 +246,36 @@ class Chatstate:
         self.set_active(contact.jid)
         return 'active'
 
+    @ensure_enabled
+    def block_chatstates(self, contact: ContactT, block: bool) -> None:
+        # Block sending chatstates to a contact
+        # Used for example if we cycle through the MUC nick list, which
+        # produces a lot of text-changed signals from the textview. This
+        # Would lead to sending ACTIVE -> COMPOSING -> ACTIVE ...
+        if block:
+            self._blocked.append(contact.jid)
+        else:
+            self._blocked.remove(contact.jid)
+
+    @ensure_enabled
+    def set_chatstate_delayed(self, contact: ContactT, state: State) -> None:
+        # Used when we go from Composing -> Active after deleting all text
+        # from the Textview. We delay the Active state because maybe the
+        # User starts writing again.
+        self.remove_delay_timeout(contact)
+        self._delay_timeout_ids[contact.jid] = GLib.timeout_add_seconds(
+            2, self.set_chatstate, contact, state)
+
+    @ensure_enabled
     def set_chatstate(self, contact: ContactT, state: State) -> None:
+        # Dont send chatstates to ourself
+        if self._con.get_own_jid().bareMatch(contact.jid):
+            return
+
+        if contact.jid in self._blocked:
+            return
+
+        self.remove_delay_timeout(contact)
         current_state = self._chatstates.get(contact.jid)
         setting = app.config.get('outgoing_chat_state_notifications')
         if setting == 'disabled':
@@ -255,10 +323,6 @@ class Chatstate:
         if current_state == state:
             return
 
-        # Dont send chatstates to ourself
-        if self._con.get_own_jid().bareMatch(contact.jid):
-            return
-
         log.info('Send: %-10s - %s', state, contact.jid)
 
         event_attrs = {'account': self._account,
@@ -275,6 +339,7 @@ class Chatstate:
 
         self._chatstates[contact.jid] = state
 
+    @ensure_enabled
     def set_mouse_activity(self, contact: ContactT) -> None:
         self._last_mouse_activity[contact.jid] = time.time()
         setting = app.config.get('outgoing_chat_state_notifications')
@@ -283,11 +348,25 @@ class Chatstate:
         if self._chatstates.get(contact.jid) == State.INACTIVE:
             self.set_chatstate(contact, State.ACTIVE)
 
+    @ensure_enabled
     def set_keyboard_activity(self, contact: ContactT) -> None:
         self._last_keyboard_activity[contact.jid] = time.time()
 
+    def remove_delay_timeout(self, contact):
+        timeout = self._delay_timeout_ids.get(contact.jid)
+        if timeout is not None:
+            GLib.source_remove(timeout)
+            del self._delay_timeout_ids[contact.jid]
+
+    def remove_all_delay_timeouts(self):
+        for timeout in self._delay_timeout_ids.values():
+            GLib.source_remove(timeout)
+        self._delay_timeout_ids = {}
+
     def cleanup(self):
-        GLib.source_remove(self._timeout_id)
+        self.remove_all_delay_timeouts()
+        if self._timeout_id is not None:
+            GLib.source_remove(self._timeout_id)
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Chatstate, str]:

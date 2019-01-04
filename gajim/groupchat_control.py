@@ -1620,6 +1620,9 @@ class GroupchatControl(ChatControlBase):
         self.is_connected = False
         ChatControlBase.got_disconnected(self)
 
+        con = app.connections[self.account]
+        con.get_module('Chatstate').remove_delay_timeout(self.contact)
+
         contact = app.contacts.get_groupchat_contact(self.account,
                                                      self.room_jid)
         if contact is not None:
@@ -2550,6 +2553,9 @@ class GroupchatControl(ChatControlBase):
                 else:
                     start_iter.backward_chars(len(begin))
 
+                con = app.connections[self.account]
+                con.get_module('Chatstate').block_chatstates(self.contact, True)
+
                 message_buffer.delete(start_iter, end_iter)
                 # get a shell-like completion
                 # if there's more than one nick for this completion, complete
@@ -2579,6 +2585,9 @@ class GroupchatControl(ChatControlBase):
                 else:
                     completion = self.nick_hits[0]
                 message_buffer.insert_at_cursor(completion + add)
+
+                con.get_module('Chatstate').block_chatstates(self.contact, False)
+
                 self.last_key_tabs = True
                 return True
             self.last_key_tabs = False

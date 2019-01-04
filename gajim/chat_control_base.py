@@ -823,8 +823,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         con = app.connections[self.account]
         con.get_module('Chatstate').set_keyboard_activity(self.contact)
         if not textview.has_text():
-            con.get_module('Chatstate').set_chatstate(self.contact,
-                                                      Chatstate.ACTIVE)
+            con.get_module('Chatstate').set_chatstate_delayed(self.contact,
+                                                              Chatstate.ACTIVE)
             return
         con.get_module('Chatstate').set_chatstate(self.contact,
                                                   Chatstate.COMPOSING)
