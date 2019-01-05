@@ -437,48 +437,45 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
 
         # Destroy Room
-        win.lookup_action('destroy-' + self.control_id).set_enabled(
-            self.is_connected and contact.affiliation.is_owner)
+        self._get_action('destroy-').set_enabled(self.is_connected and
+                                                 contact.affiliation.is_owner)
 
         # Configure Room
-        win.lookup_action('configure-' + self.control_id).set_enabled(
+        self._get_action('configure-').set_enabled(
             self.is_connected and contact.affiliation in (Affiliation.ADMIN,
                                                           Affiliation.OWNER))
 
         # Bookmarks
         con = app.connections[self.account]
         bookmarked = self.room_jid in con.get_module('Bookmarks').bookmarks
-        win.lookup_action('bookmark-' + self.control_id).set_enabled(
-            self.is_connected and not bookmarked)
+        self._get_action('bookmark-').set_enabled(self.is_connected and
+                                                  not bookmarked)
 
         # Request Voice
         role = self.get_role(self.nick)
-        win.lookup_action('request-voice-' + self.control_id).set_enabled(
-            self.is_connected and role.is_visitor)
+        self._get_action('request-voice-').set_enabled(self.is_connected and
+                                                       role.is_visitor)
 
         # Change Subject
         subject = False
         if contact is not None:
             subject = muc_caps_cache.is_subject_change_allowed(
                 self.room_jid, contact.affiliation)
-        win.lookup_action('change-subject-' + self.control_id).set_enabled(
-            self.is_connected and subject)
+        self._get_action('change-subject-').set_enabled(self.is_connected and
+                                                        subject)
 
         # Change Nick
-        win.lookup_action('change-nick-' + self.control_id).set_enabled(
-            self.is_connected)
+        self._get_action('change-nick-').set_enabled(self.is_connected)
 
         # Execute command
-        win.lookup_action('execute-command-' + self.control_id).set_enabled(
-            self.is_connected)
+        self._get_action('execute-command-').set_enabled(self.is_connected)
 
         # Send file (HTTP File Upload)
-        httpupload = win.lookup_action(
-            'send-file-httpupload-' + self.control_id)
-        httpupload.set_enabled(
-            self.is_connected and con.get_module('HTTPUpload').available)
-        win.lookup_action('send-file-' + self.control_id).set_enabled(
-            httpupload.get_enabled())
+        httpupload = self._get_action(
+            'send-file-httpupload-')
+        httpupload.set_enabled(self.is_connected and
+                               con.get_module('HTTPUpload').available)
+        self._get_action('send-file-').set_enabled(httpupload.get_enabled())
 
         if self.is_connected and httpupload.get_enabled():
             tooltip_text = _('Send File…')
@@ -488,12 +485,32 @@ class GroupchatControl(ChatControlBase):
 
         # Upload Avatar
         vcard_support = muc_caps_cache.supports(self.room_jid, nbxmpp.NS_VCARD)
-        win.lookup_action('upload-avatar-' + self.control_id).set_enabled(
-            self.is_connected and vcard_support and contact.affiliation.is_owner)
+        self._get_action('upload-avatar-').set_enabled(
+            self.is_connected and
+            vcard_support and
+            contact.affiliation.is_owner)
 
         # Sync Threshold
         has_mam = muc_caps_cache.has_mam(self.room_jid)
-        win.lookup_action('choose-sync-' + self.control_id).set_enabled(has_mam)
+        self._get_action('choose-sync-').set_enabled(has_mam)
+
+        # Print join/left
+        join_default = app.config.get('print_join_left_default')
+        value = app.config.get_per('rooms', self.contact.jid,
+                                   'print_join_left', join_default)
+        self._get_action('print-join-left-').set_state(
+            GLib.Variant.new_boolean(value))
+
+        # Print join/left
+        status_default = app.config.get('print_status_muc_default')
+        value = app.config.get_per('rooms', self.contact.jid,
+                                   'print_status', status_default)
+        self._get_action('print-status-').set_state(
+            GLib.Variant.new_boolean(value))
+
+    def _get_action(self, name):
+        win = self.parent_win.window
+        return win.lookup_action(name + self.control_id)
 
     def _cell_data_func(self, column, renderer, model, iter_, user_data):
         # Background color has to be rendered for all cells
