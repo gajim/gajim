@@ -69,6 +69,22 @@ def iter_locale_dirs():
         if locale_dir.is_dir():
             yield str(locale_dir)
 
+def get_default_lang():
+    if os.name == "nt":
+        import ctypes
+        windll = ctypes.windll.kernel32
+        lang = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        return lang[:2]
+
+    if sys.platform == "darwin":
+        from AppKit import NSLocale
+        return NSLocale.currentLocale().languageCode()
+
+    default = locale.getdefaultlocale()[0]
+    if default is not None:
+        return default[:2]
+    return 'en'
+
 def initialize_direction_mark():
     from gi.repository import Gtk
 
@@ -137,15 +153,13 @@ try:
 except locale.Error as error:
     print(error)
 
-if os.name == 'nt':
-    try:
-        # en_US, fr_FR, el_GR etc..
-        default = locale.getdefaultlocale()[0]
-        if default is not None:
-            LANG = default[:2]
-    except (ValueError, locale.Error):
-        pass
-    os.environ['LANG'] = LANG
+try:
+    LANG = get_default_lang()
+    print('Found default language: %s' % LANG)
+except Exception as error:
+    print('Failed to determine default language')
+    import traceback
+    traceback.print_exc()
 
 # Search for the translation in all locale dirs
 for dir_ in iter_locale_dirs():
