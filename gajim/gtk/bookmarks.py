@@ -19,7 +19,6 @@ from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from gajim import gui_menu_builder
