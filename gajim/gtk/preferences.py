@@ -161,10 +161,10 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.sync_threshold_combobox.set_id_column(0)
         self._ui.sync_threshold_combobox.set_active_id(str(public_threshold))
 
-        st = app.config.get('print_join_leave_in_mucs')
+        st = app.config.get('print_join_left_default')
         self._ui.join_leave_checkbutton.set_active(st)
 
-        st = app.config.get('print_status_in_mucs')
+        st = app.config.get('print_status_muc_default')
         self._ui.status_change_checkbutton.set_active(st)
 
         # Displayed chat state notifications
@@ -620,10 +620,10 @@ class Preferences(Gtk.ApplicationWindow):
         app.config.set('public_room_sync_threshold', int(active))
 
     def _on_join_leave_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'print_join_leave_in_mucs')
+        self.on_checkbutton_toggled(widget, 'print_join_left_default')
 
     def _on_status_change_toggled(self, widget):
-        self.on_checkbutton_toggled(widget, 'print_status_in_mucs')
+        self.on_checkbutton_toggled(widget, 'print_status_muc_default')
 
     def on_show_chatstate_in_tabs_toggled(self, widget):
         self.on_checkbutton_toggled(widget, 'show_chatstate_in_tabs')

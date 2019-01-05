@@ -397,7 +397,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_notify_on_all_messages)
         self.parent_win.window.add_action(act)
 
-        status_default = app.config.get('print_status_in_mucs')
+        status_default = app.config.get('print_status_muc_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_status', status_default)
 
@@ -407,7 +407,7 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_print_status)
         self.parent_win.window.add_action(act)
 
-        join_default = app.config.get('print_join_leave_in_mucs')
+        join_default = app.config.get('print_join_left_default')
         value = app.config.get_per('rooms', self.contact.jid,
                                    'print_join_left', join_default)
 
@@ -2008,8 +2008,9 @@ class GroupchatControl(ChatControlBase):
         #Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the room{by}{reason}')
 
+        join_default = app.config.get('print_join_left_default')
         print_join_left = app.config.get_per(
-            'rooms', self.room_jid, 'print_join_left')
+            'rooms', self.room_jid, 'print_join_left', join_default)
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
@@ -2060,8 +2061,9 @@ class GroupchatControl(ChatControlBase):
             return
 
         nick = event.properties.muc_nickname
+        join_default = app.config.get('print_join_left_default')
         print_join_left = app.config.get_per(
-            'rooms', self.room_jid, 'print_join_left')
+            'rooms', self.room_jid, 'print_join_left', join_default)
 
         self.add_contact_to_roster(nick)
 
