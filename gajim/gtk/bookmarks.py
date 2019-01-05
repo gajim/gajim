@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from enum import IntEnum
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -26,6 +28,16 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
 
+class Row(IntEnum):
+    ACCOUNT_JID = 0
+    ROOM_NAME = 1
+    ROOM_JID = 2
+    AUTOJOIN = 3
+    PASSWORD = 4
+    NICK = 5
+    LABEL = 6
+
+
 class ManageBookmarksWindow:
     def __init__(self):
         self.xml = get_builder('manage_bookmarks_window.ui')
@@ -34,10 +46,8 @@ class ManageBookmarksWindow:
 
         self.ignore_events = False
 
-        # Account-JID, RoomName, Room-JID, Autojoin, Minimize, Password, Nick,
-        # Show_Status
-        self.treestore = Gtk.TreeStore(str, str, str, bool, bool, str,
-                                       str, str, str)
+        # Account-JID, RoomName, Room-JID, Autojoin, Password, Nick, Name
+        self.treestore = Gtk.TreeStore(str, str, str, bool, str, str, str)
         self.treestore.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 
         # Store bookmarks in treeview.
@@ -45,45 +55,26 @@ class ManageBookmarksWindow:
                 connected_only=True, private_storage_only=True):
             iter_ = self.treestore.append(None, [
                 None, account, None, None,
-                None, None, None, None, account_label])
+                None, None, account_label])
 
             con = app.connections[account]
             bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks()
 
             for jid, bookmark in bookmarks.items():
-                print_status = bookmark.get('print_status', '')
-                if print_status not in ('', 'all', 'in_and_out', 'none'):
-                    print_status = ''
                 self.treestore.append(iter_, [account,
                                               bookmark['name'],
                                               jid,
                                               bookmark['autojoin'],
-                                              bookmark['minimize'],
                                               bookmark['password'],
                                               bookmark['nick'],
-                                              print_status,
                                               bookmark['name']])
-
-        self.print_status_combobox = self.xml.get_object(
-            'print_status_combobox')
-        model = Gtk.ListStore(str, str)
-
-        self.option_list = {
-            '': _('Default'), 'all': Q_('?print_status:All'),
-            'in_and_out': _('Enter and leave only'),
-            'none': Q_('?print_status:None')}
-        for opt, label in sorted(self.option_list.items()):
-            model.append([label, opt])
-
-        self.print_status_combobox.set_model(model)
-        self.print_status_combobox.set_active(1)
 
         self.view = self.xml.get_object('bookmarks_treeview')
         self.view.set_model(self.treestore)
         self.view.expand_all()
 
         renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=8)
+        column = Gtk.TreeViewColumn('Bookmarks', renderer, text=Row.LABEL)
         self.view.append_column(column)
 
         self.selection = self.view.get_selection()
@@ -103,7 +94,6 @@ class ManageBookmarksWindow:
         self.pass_entry = self.xml.get_object('pass_entry')
         self.pass_entry.connect('changed', self.on_pass_entry_changed)
         self.autojoin_checkbutton = self.xml.get_object('autojoin_checkbutton')
-        self.minimize_checkbutton = self.xml.get_object('minimize_checkbutton')
         self.settings_box = self.xml.get_object('settings_box')
         self.remove_bookmark_button = self.xml.get_object(
             'remove_bookmark_button')
@@ -142,7 +132,7 @@ class ManageBookmarksWindow:
         nick = app.nicks[account]
         label = _('New Group Chat')
         iter_ = self.treestore.append(add_to, [
-            account, label, '@', False, False, '', nick, 'in_and_out', label])
+            account, label, '@', False, '', nick, label])
 
         self.view.expand_row(model.get_path(add_to), True)
         self.view.set_cursor(model.get_path(iter_))
@@ -208,14 +198,13 @@ class ManageBookmarksWindow:
             for bm in account.iterchildren():
                 # create the bookmark-dict
                 bmdict = {
-                    'name': bm[1],
-                    'autojoin': bm[3],
-                    'minimize': bm[4],
-                    'password': bm[5],
-                    'nick': bm[6],
-                    'print_status': bm[7]}
+                    'name': bm[Row.ROOM_NAME],
+                    'autojoin': bm[Row.AUTOJOIN],
+                    'password': bm[Row.PASSWORD],
+                    'nick': bm[Row.NICK],
+                }
 
-                jid = bm[2]
+                jid = bm[Row.ROOM_JID]
                 con.get_module('Bookmarks').bookmarks[jid] = bmdict
 
             con.get_module('Bookmarks').store_bookmarks()
@@ -247,8 +236,8 @@ class ManageBookmarksWindow:
             return
 
         # Fill in the data for childs
-        self.title_entry.set_text(model[iter_][1])
-        room_jid = model[iter_][2]
+        self.title_entry.set_text(model[iter_][Row.ROOM_NAME])
+        room_jid = model[iter_][Row.ROOM_JID]
         room_jid_s = room_jid.split('@')
         if len(room_jid_s) == 1:
             room = ''
@@ -260,13 +249,11 @@ class ManageBookmarksWindow:
         self.room_entry.handler_unblock(self.room_entry_changed_id)
         self.server_entry.set_text(server)
 
-        self.autojoin_checkbutton.set_active(model[iter_][3])
-        self.minimize_checkbutton.set_active(model[iter_][4])
+        self.autojoin_checkbutton.set_active(model[iter_][Row.AUTOJOIN])
         # sensitive only if auto join is checked
-        self.minimize_checkbutton.set_sensitive(model[iter_][3])
 
-        if model[iter_][5] is not None:
-            password = model[iter_][5]
+        if model[iter_][Row.PASSWORD] is not None:
+            password = model[iter_][Row.PASSWORD]
         else:
             password = None
 
@@ -274,15 +261,11 @@ class ManageBookmarksWindow:
             self.pass_entry.set_text(password)
         else:
             self.pass_entry.set_text('')
-        nick = model[iter_][6]
+        nick = model[iter_][Row.NICK]
         if nick:
             self.nick_entry.set_text(nick)
         else:
             self.nick_entry.set_text('')
-
-        print_status = model[iter_][7]
-        opts = sorted(self.option_list.keys())
-        self.print_status_combobox.set_active(opts.index(print_status))
 
     def on_title_entry_changed(self, widget):
         if self.ignore_events:
@@ -291,7 +274,7 @@ class ManageBookmarksWindow:
         if iter_:  # After removing a bookmark, we got nothing selected
             if model.iter_parent(iter_):
                 # Don't clear the title field for account nodes
-                model[iter_][1] = self.title_entry.get_text()
+                model[iter_][Row.ROOM_NAME] = self.title_entry.get_text()
 
     def on_nick_entry_changed(self, widget):
         if self.ignore_events:
@@ -306,9 +289,9 @@ class ManageBookmarksWindow:
                     _('Invalid nickname'),
                     _('Character not allowed'),
                     transient_for=self.window)
-                self.nick_entry.set_text(model[iter_][6])
+                self.nick_entry.set_text(model[iter_][Row.NICK])
                 return True
-            model[iter_][6] = nick
+            model[iter_][Row.NICK] = nick
 
     def on_server_entry_focus_out(self, widget, event):
         if self.ignore_events:
@@ -337,9 +320,9 @@ class ManageBookmarksWindow:
                 _('Invalid server'),
                 _('Character not allowed'),
                 transient_for=self.window)
-            self.server_entry.set_text(model[iter_][2].split('@')[1])
+            self.server_entry.set_text(model[iter_][Row.ROOM_JID].split('@')[1])
             return True
-        model[iter_][2] = room_jid
+        model[iter_][Row.ROOM_JID] = room_jid
 
     def on_room_entry_changed(self, widget):
         if self.ignore_events:
@@ -368,39 +351,21 @@ class ManageBookmarksWindow:
                 _('Character not allowed'),
                 transient_for=self.window)
             return True
-        model[iter_][2] = room_jid
+        model[iter_][Row.ROOM_JID] = room_jid
 
     def on_pass_entry_changed(self, widget):
         if self.ignore_events:
             return
         (model, iter_) = self.selection.get_selected()
         if iter_:
-            model[iter_][5] = self.pass_entry.get_text()
+            model[iter_][Row.PASSWORD] = self.pass_entry.get_text()
 
     def on_autojoin_checkbutton_toggled(self, widget, *args):
         if self.ignore_events:
             return
         (model, iter_) = self.selection.get_selected()
         if iter_:
-            model[iter_][3] = self.autojoin_checkbutton.get_active()
-            self.minimize_checkbutton.set_sensitive(model[iter_][3])
-
-    def on_minimize_checkbutton_toggled(self, widget, *args):
-        if self.ignore_events:
-            return
-        (model, iter_) = self.selection.get_selected()
-        if iter_:
-            model[iter_][4] = self.minimize_checkbutton.get_active()
-
-    def on_print_status_combobox_changed(self, widget):
-        if self.ignore_events:
-            return
-        active = widget.get_active()
-        model = widget.get_model()
-        print_status = model[active][1]
-        (model2, iter_) = self.selection.get_selected()
-        if iter_:
-            model2[iter_][7] = print_status
+            model[iter_][Row.AUTOJOIN] = self.autojoin_checkbutton.get_active()
 
     def clear_fields(self):
         widgets = [
@@ -409,8 +374,6 @@ class ManageBookmarksWindow:
         for field in widgets:
             field.set_text('')
         self.autojoin_checkbutton.set_active(False)
-        self.minimize_checkbutton.set_active(False)
-        self.print_status_combobox.set_active(1)
 
     def set_sensitive_all(self, sensitive):
         widgets = [

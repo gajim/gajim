@@ -1065,24 +1065,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             return
         _on_ok(self.contact)
 
-    def on_minimize_menuitem_toggled(self, widget):
-        """
-        When a groupchat is minimized, unparent the tab, put it in roster etc
-        """
-        old_value = True
-        non_minimized_gc = app.config.get_per('accounts', self.account,
-                'non_minimized_gc').split()
-        if self.contact.jid in non_minimized_gc:
-            old_value = False
-        minimize = widget.get_active()
-        if not minimize and not self.contact.jid in non_minimized_gc:
-            non_minimized_gc.append(self.contact.jid)
-        if minimize and self.contact.jid in non_minimized_gc:
-            non_minimized_gc.remove(self.contact.jid)
-        if old_value != minimize:
-            app.config.set_per('accounts', self.account, 'non_minimized_gc',
-                    ' '.join(non_minimized_gc))
-
     def on_notify_menuitem_toggled(self, widget):
         app.config.set_per('rooms', self.contact.jid, 'notify_on_all_messages',
             widget.get_active())

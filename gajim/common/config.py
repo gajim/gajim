@@ -346,7 +346,6 @@ class Config:
             'no_log_for': [opt_str, '', _('Space separated list of JIDs for which you do not want to store logs. You can also add account name to log nothing for this account.')],
             'sync_logs_with_server': [opt_bool, True, _('On startup, Gajim will download logs stored on server, provided the server supports XEP-0313')],
             'allow_no_log_for': [opt_str, '', _('Space separated list of JIDs for which you accept to not log conversations if he does not want to.')],
-            'non_minimized_gc': [opt_str, ''],
             'attached_gpg_keys': [opt_str, ''],
             'keep_alives_enabled': [opt_bool, True, _('Whitespace sent after inactivity')],
             'ping_alives_enabled': [opt_bool, True, _('XMPP ping sent after inactivity')],
@@ -442,6 +441,8 @@ class Config:
             'notify_on_all_messages': [opt_bool, False, _('State whether a notification is created for every message in this room')],
             'print_status': [opt_bool, False, _('Show a status message for all status (away, dnd, etc.) changes of users in a group chat')],
             'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat')],
+            'minimize_on_autojoin': [opt_bool, True, _('If the group chat is minimized into the roster on autojoin')],
+            'minimize_on_close': [opt_bool, True, _('If the group chat is minimized into the roster on close')],
         }, {}),
         'plugins': ({
             'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],

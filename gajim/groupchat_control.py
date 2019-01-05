@@ -375,14 +375,22 @@ class GroupchatControl(ChatControlBase):
             act.connect("activate", func)
             self.parent_win.window.add_action(act)
 
-        non_minimized_gc = app.config.get_per(
-            'accounts', self.account, 'non_minimized_gc').split()
-        value = self.contact.jid not in non_minimized_gc
+        minimize = app.config.get_per(
+            'rooms', self.contact.jid, 'minimize_on_close', True)
 
         act = Gio.SimpleAction.new_stateful(
-            'minimize-' + self.control_id, None,
-            GLib.Variant.new_boolean(value))
-        act.connect('change-state', self._on_minimize)
+            'minimize-on-close-' + self.control_id, None,
+            GLib.Variant.new_boolean(minimize))
+        act.connect('change-state', self._on_minimize_on_close)
+        self.parent_win.window.add_action(act)
+
+        minimize = app.config.get_per(
+            'rooms', self.contact.jid, 'minimize_on_autojoin', True)
+
+        act = Gio.SimpleAction.new_stateful(
+            'minimize-on-autojoin-' + self.control_id, None,
+            GLib.Variant.new_boolean(minimize))
+        act.connect('change-state', self._on_minimize_on_autojoin)
         self.parent_win.window.add_action(act)
 
         # Enable notify on all for private rooms
@@ -684,7 +692,6 @@ class GroupchatControl(ChatControlBase):
         con.get_module('Bookmarks').add_bookmark(self.name,
                                                  self.room_jid,
                                                  True,
-                                                 True,
                                                  password,
                                                  self.nick)
         self.update_actions()
@@ -696,22 +703,15 @@ class GroupchatControl(ChatControlBase):
         con = app.connections[self.account]
         con.get_module('MUC').request_voice(self.room_jid)
 
-    def _on_minimize(self, action, param):
-        """
-        When a groupchat is minimized, unparent the tab, put it in roster etc
-        """
+    def _on_minimize_on_close(self, action, param):
         action.set_state(param)
-        non_minimized_gc = app.config.get_per(
-            'accounts', self.account, 'non_minimized_gc').split()
+        minimize = app.config.set_per(
+            'rooms', self.contact.jid, 'minimize_on_close', param.get_boolean())
 
-        minimize = param.get_boolean()
-        if minimize:
-            non_minimized_gc.remove(self.contact.jid)
-        else:
-            non_minimized_gc.append(self.contact.jid)
-
-        app.config.set_per('accounts', self.account,
-                           'non_minimized_gc', ' '.join(non_minimized_gc))
+    def _on_minimize_on_autojoin(self, action, param):
+        action.set_state(param)
+        minimize = app.config.set_per(
+            'rooms', self.contact.jid, 'minimize_on_autojoin', param.get_boolean())
 
     def _on_notify_on_all_messages(self, action, param):
         action.set_state(param)
@@ -2310,10 +2310,8 @@ class GroupchatControl(ChatControlBase):
     def minimizable(self):
         if self.force_non_minimizable:
             return False
-        if self.contact.jid not in app.config.get_per('accounts', self.account,
-        'non_minimized_gc').split(' '):
-            return True
-        return False
+        return app.config.get_per('rooms', self.contact.jid,
+                                  'minimize_on_close', True)
 
     def minimize(self, status='offline'):
         # Minimize it

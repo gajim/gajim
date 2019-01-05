@@ -266,7 +266,6 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         con.get_module('Bookmarks').add_bookmark(name,
                                                  self.room_jid,
                                                  autojoin,
-                                                 True,
                                                  password,
                                                  nickname)
 

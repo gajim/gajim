@@ -39,8 +39,6 @@ from gajim.common.modules.util import to_xs_boolean
 
 log = logging.getLogger('gajim.c.m.bookmarks')
 
-NS_GAJIM_BM = 'xmpp:gajim.org/bookmarks'
-
 
 class BookmarksData(AbstractPEPData):
 
@@ -222,18 +220,6 @@ class Bookmarks(AbstractPEPModule):
             if not autojoin_val:  # not there (it's optional)
                 autojoin_val = False
 
-            minimize_val = conf.getTag('minimize', namespace=NS_GAJIM_BM)
-            if not minimize_val:
-                minimize_val = False
-            else:
-                minimize_val = minimize_val.getData()
-
-            print_status = conf.getTag('print_status', namespace=NS_GAJIM_BM)
-            if not print_status:  # not there, try old Gajim behaviour
-                print_status = None
-            else:
-                print_status = print_status.getData()
-
             try:
                 jid = helpers.parse_jid(conf.getAttr('jid'))
             except helpers.InvalidFormat:
@@ -245,12 +231,10 @@ class Bookmarks(AbstractPEPModule):
                 'name': conf.getAttr('name'),
                 'password': conf.getTagData('password'),
                 'nick': conf.getTagData('nick'),
-                'print_status': print_status
             }
 
             try:
                 bookmark['autojoin'] = from_xs_boolean(autojoin_val)
-                bookmark['minimize'] = from_xs_boolean(minimize_val)
             except ValueError as error:
                 log.warning(error)
                 continue
@@ -269,8 +253,6 @@ class Bookmarks(AbstractPEPModule):
             conf_node.setAttr('jid', jid)
             conf_node.setAttr('autojoin', to_xs_boolean(bm['autojoin']))
             conf_node.setAttr('name', bm['name'])
-            conf_node.setTag('minimize', namespace=NS_GAJIM_BM).setData(
-                to_xs_boolean(bm['minimize']))
             # Only add optional elements if not empty
             # Note: need to handle both None and '' as empty
             #   thus shouldn't use "is not None"
@@ -278,10 +260,6 @@ class Bookmarks(AbstractPEPModule):
                 conf_node.setTagData('nick', bm['nick'])
             if bm.get('password', None):
                 conf_node.setTagData('password', bm['password'])
-            if bm.get('print_status', None):
-                conf_node.setTag(
-                    'print_status',
-                    namespace=NS_GAJIM_BM).setData(bm['print_status'])
         return storage_node
 
     def _build_node(self, _data):
@@ -351,19 +329,21 @@ class Bookmarks(AbstractPEPModule):
                 if jid not in app.gc_connected[self._account]:
                     # we are not already connected
                     log.info('Autojoin Bookmark: %s', jid)
+
+                    minimize = app.config.get_per('rooms', jid,
+                                                  'minimize_on_autojoin', True)
+                    print(minimize)
                     app.interface.join_gc_room(
                         self._account, jid, bookmark['nick'],
-                        bookmark['password'], minimize=bookmark['minimize'])
+                        bookmark['password'], minimize=minimize)
 
-    def add_bookmark(self, name, jid, autojoin,
-                     minimize, password, nick):
+    def add_bookmark(self, name, jid, autojoin, password, nick):
         self.bookmarks[jid] = {
             'name': name,
             'autojoin': autojoin,
-            'minimize': minimize,
             'password': password,
             'nick': nick,
-            'print_status': None}
+        }
 
         self.store_bookmarks()
         app.nec.push_incoming_event(
