@@ -200,12 +200,14 @@ def detect_dependencies():
 
     # ZEROCONF
     try:
-        if os.name == 'nt':
-            import pybonjour  # pylint: disable=unused-variable
-            _dependencies['PYBONJOUR'] = True
-        else:
-            import dbus  # pylint: disable=unused-variable
-            _dependencies['PYTHON-DBUS'] = True
+        import pybonjour  # pylint: disable=unused-variable
+        _dependencies['PYBONJOUR'] = True
+    except Exception:
+        pass
+
+    try:
+        import dbus  # pylint: disable=unused-variable
+        _dependencies['PYTHON-DBUS'] = True
     except Exception:
         pass
 
