@@ -431,7 +431,7 @@ class GroupchatControl(ChatControlBase):
     def update_actions(self):
         if self.parent_win is None:
             return
-        win = self.parent_win.window
+
         contact = app.contacts.get_gc_contact(
             self.account, self.room_jid, self.nick)
         con = app.connections[self.account]
