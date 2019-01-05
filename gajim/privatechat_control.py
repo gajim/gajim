@@ -135,12 +135,15 @@ class PrivateChatControl(ChatControl):
         status = '' if status is None else ' (%s)' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
+        status_default = app.config.get('print_status_muc_default')
+
         if event.properties.is_muc_self_presence:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
             self.print_conversation(message, 'info')
 
-        elif app.config.get_per('rooms', self.room_name, 'print_status'):
+        elif app.config.get_per('rooms', self.room_name,
+                                'print_status', status_default):
             message = _('{nick} is now {show}{status}').format(nick=nick,
                                                                show=show,
                                                                status=status)
