@@ -226,10 +226,16 @@ class MUC:
                 # handled by the opened ChatControl
                 break
 
-            # We remove the contact from the MUC, but there could be
-            # a PrivateChatControl open, so we update the contacts presence
-            contact.presence = properties.type
-            app.contacts.remove_gc_contact(self._account, contact)
+            if contact is None:
+                # If contact is None, its probably that a user left from a not
+                # insync MUC, can happen on older servers
+                log.warning('Unknown contact left groupchat: %s',
+                            properties.jid)
+            else:
+                # We remove the contact from the MUC, but there could be
+                # a PrivateChatControl open, so we update the contacts presence
+                contact.presence = properties.type
+                app.contacts.remove_gc_contact(self._account, contact)
             log.info('User %s left', properties.jid)
             self._raise_muc_event('muc-user-left', properties)
             raise nbxmpp.NodeProcessed
