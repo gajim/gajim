@@ -329,10 +329,8 @@ class Bookmarks(AbstractPEPModule):
                 if jid not in app.gc_connected[self._account]:
                     # we are not already connected
                     log.info('Autojoin Bookmark: %s', jid)
-
                     minimize = app.config.get_per('rooms', jid,
                                                   'minimize_on_autojoin', True)
-                    print(minimize)
                     app.interface.join_gc_room(
                         self._account, jid, bookmark['nick'],
                         bookmark['password'], minimize=minimize)
