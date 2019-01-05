@@ -705,13 +705,13 @@ class GroupchatControl(ChatControlBase):
 
     def _on_minimize_on_close(self, action, param):
         action.set_state(param)
-        minimize = app.config.set_per(
-            'rooms', self.contact.jid, 'minimize_on_close', param.get_boolean())
+        app.config.set_per('rooms', self.contact.jid,
+                           'minimize_on_close', param.get_boolean())
 
     def _on_minimize_on_autojoin(self, action, param):
         action.set_state(param)
-        minimize = app.config.set_per(
-            'rooms', self.contact.jid, 'minimize_on_autojoin', param.get_boolean())
+        app.config.set_per('rooms', self.contact.jid,
+                           'minimize_on_autojoin', param.get_boolean())
 
     def _on_notify_on_all_messages(self, action, param):
         action.set_state(param)
