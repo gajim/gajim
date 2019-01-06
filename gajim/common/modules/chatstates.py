@@ -301,12 +301,15 @@ class Chatstate:
             # which are not allowed to see our status
             if not contact.is_pm_contact:
                 if contact and contact.sub in ('to', 'none'):
+                    log.info('Contact not subscribed: %s', contact.jid)
                     return
 
             if contact.show == 'offline':
+                log.info('Contact offline: %s', contact.jid)
                 return
 
             if not contact.supports(nbxmpp.NS_CHATSTATES):
+                log.info('Chatstates not supported: %s', contact.jid)
                 return
 
         if state in (State.ACTIVE, State.COMPOSING):
