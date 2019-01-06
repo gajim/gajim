@@ -237,7 +237,7 @@ class Chatstate:
             if not contact.supports(nbxmpp.NS_CHATSTATES):
                 return None
 
-        self.set_active(contact.jid)
+        self.set_active(contact)
         return 'active'
 
     @ensure_enabled
