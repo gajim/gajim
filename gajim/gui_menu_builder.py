@@ -665,8 +665,9 @@ def get_groupchat_menu(control_id, account, jid):
             ('win.notify-on-message-', _('Notify on all messages')),
             ('win.minimize-on-close-', _('Minimize on close')),
             ('win.minimize-on-autojoin-', _('Minimize on autojoin')),
+            (_('Send Chatstate'), ['chatstate']),
         ]),
-        (_('Sync Threshold'), []),
+        (_('Sync Threshold'), ['sync']),
         ('win.change-nick-', _('Change Nick')),
         ('win.bookmark-', _('Bookmark Room')),
         ('win.request-voice-', _('Request Voice')),
@@ -692,9 +693,11 @@ def get_groupchat_menu(control_id, account, jid):
                     menu.append(label, action_name + control_id)
             else:
                 label, sub_menu = item
-                if not sub_menu:
+                if 'sync' in sub_menu:
                     # Sync threshold menu
                     submenu = build_sync_menu()
+                elif 'chatstate' in sub_menu:
+                    submenu = build_chatstate_menu()
                 else:
                     # This is a submenu
                     submenu = build_menu(sub_menu)
@@ -712,6 +715,20 @@ def get_groupchat_menu(control_id, account, jid):
             else:
                 label = ngettext('%i day', '%i days', day, day, day)
             menu.append(label, '%s%s' % (action_name, day))
+        return menu
+
+    def build_chatstate_menu():
+        menu = Gio.Menu()
+        entrys = [
+            (_('Disabled'), 'disabled'),
+            (_('Composing only'), 'composing_only'),
+            (_('All chat states'), 'all')
+        ]
+
+        for entry in entrys:
+            label, setting = entry
+            action = 'win.send-chatstate-%s::%s' % (control_id, setting)
+            menu.append(label, action)
         return menu
 
     return build_menu(groupchat_menu)

@@ -40,7 +40,7 @@ from gajim.common.types import ConnectionT
 log = logging.getLogger('gajim.c.m.chatstates')
 
 INACTIVE_AFTER = 60
-PAUSED_AFTER = 5
+PAUSED_AFTER = 10
 
 
 def ensure_enabled(func):
@@ -174,10 +174,6 @@ class Chatstate:
 
     @ensure_enabled
     def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:
-        setting = app.config.get('outgoing_chat_state_notifications')
-        if setting in ('composing_only', 'disabled'):
-            return GLib.SOURCE_CONTINUE
-
         now = time.time()
         for jid in list(self._last_mouse_activity.keys()):
             time_ = self._last_mouse_activity[jid]
@@ -222,17 +218,15 @@ class Chatstate:
         return GLib.SOURCE_CONTINUE
 
     @ensure_enabled
-    def set_active(self, jid: str) -> None:
-        self._last_mouse_activity[jid] = time.time()
-        setting = app.config.get('outgoing_chat_state_notifications')
-        if setting == 'disabled':
+    def set_active(self, contact: ContactT) -> None:
+        if self._get_chatstate_setting(contact) == 'disabled':
             return
-        self._chatstates[jid] = State.ACTIVE
+        self._last_mouse_activity[contact.jid] = time.time()
+        self._chatstates[contact.jid] = State.ACTIVE
 
     def get_active_chatstate(self, contact: ContactT) -> Optional[str]:
         # determines if we add 'active' on outgoing messages
-        setting = app.config.get('outgoing_chat_state_notifications')
-        if setting == 'disabled':
+        if self._get_chatstate_setting(contact) == 'disabled':
             return None
 
         if not contact.is_groupchat():
@@ -277,11 +271,13 @@ class Chatstate:
 
         self.remove_delay_timeout(contact)
         current_state = self._chatstates.get(contact.jid)
-        setting = app.config.get('outgoing_chat_state_notifications')
+        setting = self._get_chatstate_setting(contact)
         if setting == 'disabled':
             # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
-                log.info('Send: %-10s - %s', State.ACTIVE, contact.jid)
+                log.info('Disabled for %s', contact.jid)
+                log.info('Send last state: %-10s - %s',
+                         State.ACTIVE, contact.jid)
 
                 event_attrs = {'account': self._account,
                                'jid': contact.jid,
@@ -317,7 +313,7 @@ class Chatstate:
             self._last_mouse_activity[contact.jid] = time.time()
 
         if setting == 'composing_only':
-            if state in (State.INACTIVE, State.GONE, State.PAUSED):
+            if state in (State.INACTIVE, State.GONE):
                 state = State.ACTIVE
 
         if current_state == state:
@@ -340,17 +336,27 @@ class Chatstate:
         self._chatstates[contact.jid] = state
 
     @ensure_enabled
-    def set_mouse_activity(self, contact: ContactT) -> None:
-        self._last_mouse_activity[contact.jid] = time.time()
-        setting = app.config.get('outgoing_chat_state_notifications')
-        if setting == 'disabled':
+    def set_mouse_activity(self, contact: ContactT, was_paused: bool) -> None:
+        if self._get_chatstate_setting(contact) == 'disabled':
             return
+        self._last_mouse_activity[contact.jid] = time.time()
         if self._chatstates.get(contact.jid) == State.INACTIVE:
-            self.set_chatstate(contact, State.ACTIVE)
+            if was_paused:
+                self.set_chatstate(contact, State.PAUSED)
+            else:
+                self.set_chatstate(contact, State.ACTIVE)
 
     @ensure_enabled
     def set_keyboard_activity(self, contact: ContactT) -> None:
         self._last_keyboard_activity[contact.jid] = time.time()
+
+    @staticmethod
+    def _get_chatstate_setting(contact):
+        if contact.is_groupchat():
+            return app.config.get_per(
+                'rooms', contact.jid, 'send_chatstate', 'composing_only')
+        else:
+            return app.config.get('outgoing_chat_state_notifications')
 
     def remove_delay_timeout(self, contact):
         timeout = self._delay_timeout_ids.get(contact.jid)

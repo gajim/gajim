@@ -339,7 +339,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.seclabel_combo = self.xml.get_object('label_selector')
 
         con = app.connections[self.account]
-        con.get_module('Chatstate').set_active(self.contact.jid)
+        con.get_module('Chatstate').set_active(self.contact)
 
         id_ = self.msg_textview.connect('text-changed',
             self._on_message_tv_buffer_changed)
@@ -813,7 +813,8 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.parent_win.get_active_jid() == self.contact.jid:
             # if window is the active one, set last interaction
             con = app.connections[self.account]
-            con.get_module('Chatstate').set_mouse_activity(self.contact)
+            con.get_module('Chatstate').set_mouse_activity(
+                self.contact, self.msg_textview.has_text())
 
     def _on_message_tv_buffer_changed(self, textview, textbuffer):
         if textbuffer.get_char_count() and self.encryption:

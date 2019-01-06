@@ -443,6 +443,7 @@ class Config:
             'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat')],
             'minimize_on_autojoin': [opt_bool, True, _('If the group chat is minimized into the roster on autojoin')],
             'minimize_on_close': [opt_bool, True, _('If the group chat is minimized into the roster on close')],
+            'send_chatstate': [opt_str, 'composing_only', _('Chat state notifications that are sent to the group chat. Possible values: all, composing_only, disabled')],
         }, {}),
         'plugins': ({
             'active': [opt_bool, False, _('State whether plugins should be activated on startup (this is saved on Gajim exit). This option SHOULD NOT be used to (de)activate plug-ins. Use GUI instead.')],

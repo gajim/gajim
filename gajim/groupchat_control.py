@@ -393,6 +393,16 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize_on_autojoin)
         self.parent_win.window.add_action(act)
 
+        chatstate = app.config.get_per(
+            'rooms', self.contact.jid, 'send_chatstate', 'composing_only')
+
+        act = Gio.SimpleAction.new_stateful(
+            'send-chatstate-' + self.control_id,
+            GLib.VariantType.new("s"),
+            GLib.Variant("s", chatstate))
+        act.connect('change-state', self._on_send_chatstate)
+        self.parent_win.window.add_action(act)
+
         # Enable notify on all for private rooms
         members_only = muc_caps_cache.supports(self.contact.jid,
                                                'muc#roomconfig_membersonly')
@@ -712,6 +722,11 @@ class GroupchatControl(ChatControlBase):
         action.set_state(param)
         app.config.set_per('rooms', self.contact.jid,
                            'minimize_on_autojoin', param.get_boolean())
+
+    def _on_send_chatstate(self, action, param):
+        action.set_state(param)
+        app.config.set_per('rooms', self.contact.jid,
+                           'send_chatstate', param.get_string())
 
     def _on_notify_on_all_messages(self, action, param):
         action.set_state(param)
