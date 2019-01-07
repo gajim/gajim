@@ -23,7 +23,6 @@ from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
 from nbxmpp.structs import StanzaHandler
 
-from gajim.common import i18n
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
