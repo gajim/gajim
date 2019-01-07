@@ -60,8 +60,9 @@ from gajim.common import passwords
 from gajim.common import idle
 from gajim.common import modules
 from gajim.common import ged
-from gajim.common.nec import NetworkEvent
+from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.nec import NetworkEvent
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
@@ -1061,7 +1062,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         con = nbxmpp.NonBlockingClient(
             domain=self._hostname,
             caller=self,
-            idlequeue=app.idlequeue)
+            idlequeue=app.idlequeue,
+            lang=i18n.LANG)
 
         if self._sm_resume_data:
             con.set_resume_data(self._sm_resume_data)

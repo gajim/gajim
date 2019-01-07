@@ -443,7 +443,7 @@ class MUC:
             return
 
         self._con.connection.get_module('MUC').request_config(
-            room_jid, i18n.LANG, callback=self._config_received)
+            room_jid, callback=self._config_received)
 
     def _config_received(self, result):
         if result.is_error:
