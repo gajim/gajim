@@ -26,7 +26,7 @@ from distutils.version import LooseVersion as V
 
 from gajim.common import i18n
 
-_MIN_NBXMPP_VER = "0.9.90.2"
+_MIN_NBXMPP_VER = "0.9.90.4"
 _MIN_GTK_VER = "3.22.0"
 
 
