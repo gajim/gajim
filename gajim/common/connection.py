@@ -56,6 +56,7 @@ from gajim.common import app
 from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import idle
+from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.connection_handlers import *
 from gajim.common.contacts import GC_Contact
@@ -1037,7 +1038,8 @@ class Connection(CommonConnection, ConnectionHandlers):
         con = nbxmpp.NonBlockingClient(
             domain=self._hostname,
             caller=self,
-            idlequeue=app.idlequeue)
+            idlequeue=app.idlequeue,
+            lang=i18n.LANG)
 
         # increase default timeout for server responses
         nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
