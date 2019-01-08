@@ -69,13 +69,19 @@ function create_root {
     build_pacman --noconfirm -S base
 }
 
+function download_install_dep () {
+    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz \
+    http://repo.msys2.org/mingw/"${ARCH}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz
+    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-"$1"-any.pkg.tar.xz
+}
+
 function install_deps {
     # Downgrade GLIB, resolver is broken on Windows 7
-    curl -o "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz \
-        https://gajim.org/downloads/snap/win/build/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
-    build_pacman --noconfirm -U "${BUILD_ROOT}"/mingw-w64-"${ARCH}"-glib2-2.56.2-1-any.pkg.tar.xz
+    download_install_dep glib2-2.56.2-1
+    # Downgrade Gtk, Gtk 24.2 has broken keyboard layout change
+    download_install_dep gtk3-3.24.1-1
 
-    build_pacman --noconfirm -S mingw-w64-"${ARCH}"-gtk3 mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
+    build_pacman --noconfirm -S mingw-w64-"${ARCH}"-"${PYTHON_ID}" \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-gobject \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
