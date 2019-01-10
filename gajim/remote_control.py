@@ -25,6 +25,7 @@
 import os
 import base64
 import mimetypes
+import logging
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -35,6 +36,8 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.common import ged
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
+
+log = logging.getLogger('gajim.remote_control')
 
 
 def get_dbus_struct(obj):
@@ -405,6 +408,7 @@ class GajimRemote(Server):
         self.raise_signal('VcardInfo', (obj.conn.name, obj.vcard_dict))
 
     def raise_signal(self, event_name, data):
+        log.info('Send event %s', event_name)
         self.con.emit_signal(None,
                              '/org/gajim/dbus/RemoteObject',
                              'org.gajim.dbus.RemoteInterface',
