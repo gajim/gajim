@@ -102,7 +102,6 @@ class MockInterface(Mock):
         from gajim import plugins
         app.plugin_manager = plugins.PluginManager()
 
-        self.remote_ctrl = None
         self.instances = {}
         self.minimized_controls = {}
         self.status_sent_to_users = Mock()

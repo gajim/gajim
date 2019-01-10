@@ -2507,8 +2507,6 @@ class Interface:
             app.gajim_optional_features[a] = []
             app.caps_hash[a] = ''
 
-        self.remote_ctrl = None
-
         # Handle screensaver
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
