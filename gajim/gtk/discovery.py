@@ -1717,7 +1717,7 @@ class MucBrowser(AgentBrowser):
         con.get_module('Bookmarks').add_bookmark(room_jid.split('@')[0],
                                                  room_jid,
                                                  False,
-                                                 ''
+                                                 '',
                                                  '')
 
         InformationDialog(
