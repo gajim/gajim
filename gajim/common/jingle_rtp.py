@@ -301,8 +301,9 @@ class JingleRTPContent(JingleContent):
             attrs = {
                 'name': codec.encoding_name,
                 'id': codec.id,
-                'channels': codec.channels
             }
+            if codec.channels > 0:
+                attrs['channels'] = codec.channels
             if codec.clock_rate:
                 attrs['clockrate'] = codec.clock_rate
             if codec.optional_params:
@@ -350,18 +351,35 @@ class JingleAudio(JingleRTPContent):
     def setup_stream(self):
         JingleRTPContent.setup_stream(self, self._on_src_pad_added)
 
-        # Configure SPEEX
-        # Workaround for psi (not needed since rev
-        # 147aedcea39b43402fe64c533d1866a25449888a):
-        #  place 16kHz before 8kHz, as buggy psi versions will take in
-        #  account only the first codec
-
-        codecs = [
+        # list of codecs that are explicitly allowed
+        allow_codecs = [
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'OPUS',
+                                Farstream.MediaType.AUDIO, 48000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
+                                Farstream.MediaType.AUDIO, 32000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
                                 Farstream.MediaType.AUDIO, 16000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'G722',
+                                Farstream.MediaType.AUDIO, 8000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
+                                Farstream.MediaType.AUDIO, 8000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'PCMA',
+                                Farstream.MediaType.AUDIO, 8000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'PCMU',
                                 Farstream.MediaType.AUDIO, 8000)]
-        self.p2psession.set_codec_preferences(codecs)
+
+        # disable all other codecs
+        disable_codecs = []
+        codecs_without_config = self.p2psession.props.codecs_without_config
+        allowed_encoding_names = [c.encoding_name for c in allow_codecs] + ['telephone-event']
+        for codec in codecs_without_config:
+            if codec.encoding_name not in allowed_encoding_names:
+                disable_codecs.append(Farstream.Codec.new(Farstream.CODEC_ID_DISABLE,
+                                                          codec.encoding_name,
+                                                          Farstream.MediaType.AUDIO,
+                                                          codec.clock_rate))
+
+        self.p2psession.set_codec_preferences(allow_codecs + disable_codecs)
 
         # the local parts
         # TODO: Add queues?
