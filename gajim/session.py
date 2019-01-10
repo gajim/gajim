@@ -168,12 +168,6 @@ class ChatControlSession:
         if not pm:
             self.roster_message2(obj)
 
-        if app.interface.remote_ctrl:
-            app.interface.remote_ctrl.raise_signal('NewMessage', (
-                self.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
-                obj.encrypted, obj.mtype, obj.subject,
-                obj.msg_log_id, obj.user_nick, obj.xhtml, obj.form_node]))
-
     def roster_message2(self, obj):
         """
         Display the message or show notification in the roster
