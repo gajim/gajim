@@ -312,6 +312,8 @@ class GajimRemote(Server):
             ged.POSTGUI, self.on_unsubscribed_presence_received)
         app.ged.register_event_handler('gc-message-received',
             ged.POSTGUI, self.on_gc_message_received)
+        app.ged.register_event_handler('decrypted-message-received',
+            ged.POSTGUI, self._nec_decrypted_message_received)
         app.ged.register_event_handler('our-show', ged.POSTGUI,
             self.on_our_status)
         app.ged.register_event_handler('account-created', ged.POSTGUI,
@@ -387,6 +389,12 @@ class GajimRemote(Server):
         self.raise_signal('GCMessage', (obj.conn.name, [obj.fjid, obj.msgtxt,
             obj.timestamp, obj.delayed, obj.xhtml_msgtxt, obj.status_code,
             obj.displaymarking, obj.captcha_form, obj.needs_highlight]))
+
+    def _nec_decrypted_message_received(self, obj):
+        self.raise_signal('NewMessage', (
+            obj.conn.name, [obj.fjid, obj.msgtxt, obj.timestamp,
+            obj.encrypted, obj.mtype, obj.subject,
+            obj.msg_log_id, obj.user_nick, obj.xhtml, obj.form_node]))
 
     def on_our_status(self, obj):
         self.raise_signal('AccountPresence', (obj.show, obj.conn.name))
