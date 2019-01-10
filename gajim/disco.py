@@ -1727,7 +1727,7 @@ class MucBrowser(AgentBrowser):
                                                  room_jid,
                                                  False,
                                                  False,
-                                                 ''
+                                                 '',
                                                  '')
 
         InformationDialog(
