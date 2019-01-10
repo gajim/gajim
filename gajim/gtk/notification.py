@@ -89,7 +89,7 @@ class Notification:
     def _nec_notification(self, obj):
         if obj.do_popup:
             icon_name = self._get_icon_name(obj)
-            self.popup(obj.popup_event_type, obj.jid, obj.conn.name,
+            self.popup(obj.popup_event_type, str(obj.jid), obj.conn.name,
                        obj.popup_msg_type, icon_name=icon_name,
                        title=obj.popup_title, text=obj.popup_text,
                        timeout=obj.popup_timeout)
@@ -219,7 +219,7 @@ class Notification:
 
     @staticmethod
     def _make_id(*args):
-        return ','.join(args)
+        return ','.join(map(str, args))
 
 
 class PopupNotification(Gtk.Window):
