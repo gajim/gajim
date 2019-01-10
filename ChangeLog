@@ -6,6 +6,7 @@ Gajim 1.1.2 (11 January 2019)
   * #9522 Windows: Switching keyboard layouts leads to a crash
   * #9525 Windows/Mac: Links are not clickable in the About dialog
   * #9535 Jingle Audio: Update codecs
+  * #9537 DiscoveryWindow: Fix bookmarking a group chat
   * DBus: Correctly raise NewMessage signal
   * Clicking on tray notifications does not open the chat
 
