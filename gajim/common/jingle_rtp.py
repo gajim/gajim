@@ -224,12 +224,15 @@ class JingleRTPContent(JingleContent):
             # TODO: Fix it to fallback to videotestsrc anytime an error occur,
             # or raise an error, Jingle way
             # or maybe one-sided stream?
+            gerror_msg = message.get_structure().get_value('gerror')
+            debug_msg = message.get_structure().get_value('debug')
+            log.error(gerror_msg)
+            log.error(debug_msg)
             if not self.stream_failed_once:
                 app.nec.push_incoming_event(
                     InformationEvent(
                         None, dialog_name='gstreamer-error',
-                        kwargs={'error': message.get_structure().get_value('gerror'),
-                                'debug': message.get_structure().get_value('debug')}))
+                        kwargs={'error': gerror_msg, 'debug': debug_msg}))
 
             sink_pad = self.p2psession.get_property('sink-pad')
 
