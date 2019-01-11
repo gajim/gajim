@@ -38,7 +38,7 @@ class Caps:
             StanzaHandler(name='presence',
                           callback=self._entity_caps,
                           ns=nbxmpp.NS_CAPS,
-                          priority=45),
+                          priority=51),
         ]
 
         self._capscache = caps_cache.capscache

@@ -163,7 +163,7 @@ class MUC:
     def _on_muc_presence(self, _con, _stanza, properties):
         if properties.type == PresenceType.ERROR:
             self._raise_muc_event('muc-presence-error', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
     def _on_muc_user_presence(self, _con, _stanza, properties):
         if properties.type == PresenceType.ERROR:
@@ -175,7 +175,7 @@ class MUC:
                 contact.presence = PresenceType.UNAVAILABLE
             log.info('MUC destroyed: %s', properties.jid.getBare())
             self._raise_muc_event('muc-destroyed', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
         contact = app.contacts.get_gc_contact(self._account,
                                               properties.jid.getBare(),
@@ -189,7 +189,7 @@ class MUC:
                      properties.jid,
                      properties.muc_user.nick)
             self._raise_muc_event('muc-nickname-changed', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
         if contact is None and properties.type.is_available:
             self._add_new_muc_contact(properties)
@@ -199,16 +199,16 @@ class MUC:
             else:
                 log.info('User joined: %s', properties.jid)
                 self._raise_muc_event('muc-user-joined', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
         if properties.is_muc_self_presence and properties.is_kicked:
             self._raise_muc_event('muc-self-kicked', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
         if properties.is_muc_self_presence and properties.type.is_unavailable:
             # Its not a kick, so this is the reflection of our own
             # unavailable presence, because we left the MUC
-            raise nbxmpp.NodeProcessed
+            return
 
         if properties.type.is_unavailable:
             for _event in app.events.get_events(self._account,
@@ -237,7 +237,7 @@ class MUC:
                 app.contacts.remove_gc_contact(self._account, contact)
             log.info('User %s left', properties.jid)
             self._raise_muc_event('muc-user-left', properties)
-            raise nbxmpp.NodeProcessed
+            return
 
         if contact.affiliation != properties.affiliation:
             contact.affiliation = properties.affiliation
@@ -262,8 +262,6 @@ class MUC:
                      properties.status,
                      properties.show)
             self._raise_muc_event('muc-user-status-show-changed', properties)
-
-        raise nbxmpp.NodeProcessed
 
     def _raise_muc_event(self, event_name, properties):
         app.nec.push_incoming_event(

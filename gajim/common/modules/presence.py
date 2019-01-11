@@ -65,25 +65,29 @@ class Presence:
         self.jids_for_auto_auth = []
 
     def _presence_received(self, _con, stanza, properties):
+        if properties.from_muc:
+            # Already handled in MUC module
+            return
+
         log.info('Received from %s', properties.jid)
 
         if properties.type == PresenceType.ERROR:
             log.info('Error: %s %s', properties.jid, properties.error)
-            raise nbxmpp.NodeProcessed
+            return
 
         if self._account == 'Local':
             app.nec.push_incoming_event(
                 NetworkEvent('raw-pres-received',
                              conn=self._con,
                              stanza=stanza))
-            raise nbxmpp.NodeProcessed
+            return
 
         if properties.is_self_presence:
             app.nec.push_incoming_event(
                 NetworkEvent('our-show',
                              conn=self._con,
                              show=properties.show.value))
-            raise nbxmpp.NodeProcessed
+            return
 
         contacts = app.contacts.get_jid_list(self._account)
         if properties.jid.getBare() not in contacts and not properties.is_self_bare:
@@ -132,8 +136,6 @@ class Presence:
         self._update_contact(event_, properties)
 
         app.nec.push_incoming_event(event_)
-
-        raise nbxmpp.NodeProcessed
 
     def _update_contact(self, event, properties):
         # Note: A similar method also exists in connection_zeroconf

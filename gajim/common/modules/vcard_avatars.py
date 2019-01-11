@@ -56,6 +56,9 @@ class VCardAvatars:
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
 
     def _presence_received(self, _con, _stanza, properties):
+        if not properties.type.is_available:
+            return
+
         if properties.avatar_state in (AvatarState.IGNORE,
                                        AvatarState.NOT_READY):
             return
