@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 0.15a1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -870,7 +870,7 @@ msgstr "%(jid)s 對帳號 %(account)s 的認證請求"
 msgid "Subscription request from %s"
 msgstr "%s 的認證請求"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1483,8 +1483,8 @@ msgstr "服務代理"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "多人聊天"
@@ -2841,20 +2841,20 @@ msgid ""
 "Are you sure you want to do that?"
 msgstr "您將透過不安全的連線傳送未經加密的密碼。您確定要這樣做嗎?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr "您必須連線才能加入聊天室。"
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "這不是一個聊天室"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "這不是一個聊天室"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2862,39 +2862,39 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr "隱身時無法加入聊天室"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "無法儲存您的設定。"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "要求密文"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "輸入 GPG 密鑰 %(keyid)s (帳號 %(account)s) 的密碼。"
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG 密鑰過期"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "您的 GPG 密鑰已過期，您將在沒有 OpenPGP 情況下連線到 %s。"
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "錯誤欄位"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "請重新輸入您的 GPG 欄位或點\"取消\""
@@ -5640,70 +5640,70 @@ msgstr "應用程式驗證失敗"
 msgid "%s is not a valid loglevel"
 msgstr "%s 不是一個合法的日誌層級"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "帳號\"%s\"的連線丟失"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "手動重連。"
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "伺服器 %(name)s 對註冊請求的回應有誤: %(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "伺服器 %s 提供了一個不同的註冊表單"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "檢查連線或稍後重試。"
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "伺服器回應: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "連線代理伺服器失敗"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "沒有能夠連線到帳號 %s"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "帳號 %s 的連線丟失。重新嘗試連線。"
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "沒有能夠連線到\"%s\""
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\"登入驗證失敗"
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "請檢查登入資訊和密碼的正確性"
 
@@ -5808,19 +5808,19 @@ msgstr ""
 "錯誤: \n"
 "%s"
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr "音訊輸入"
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr "音訊輸出"
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr "視訊輸入"
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr "視訊輸出"
 
@@ -9567,55 +9567,55 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "一個 GTK+ 的 Jabber 客戶端"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ 版本:"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK 版本:"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 #, fuzzy
 msgid "Current Developers"
 msgstr "目前的開發者:"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 #, fuzzy
 msgid "Past Developers"
 msgstr "既往開發者:"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr ""
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr "最後但不是最不重要的，我們要感謝所有的套件維護者。"
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 #, fuzzy
 msgid "Thanks"
 msgstr "感激"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr ""
 "wwld <wwld@radio.lzusiyu.org>\n"

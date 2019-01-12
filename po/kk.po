@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2011-02-03 14:51+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
@@ -881,7 +881,7 @@ msgstr "%(account)s тіркелгісінен жазылуға сұраным �
 msgid "Subscription request from %s"
 msgstr "%s жіберген жазылуға сұраным"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1502,8 +1502,8 @@ msgstr "Қызметтер"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "Топтық чаттар"
@@ -2889,20 +2889,20 @@ msgstr ""
 "Қауіпсіз емес байланыс арқылы шифрленбеген пароліңізді жібересіз. Осыны "
 "жасауды шынымен қалайсыз ба?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr "Байланыс орнатпасаңыз, топтық чатқа кіре алмайсыз."
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "Бұл топтық чат"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "Бұл топтық чат"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2910,30 +2910,30 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Жасырын болған кезде топ чатқа кіре алмайсыз"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "Баптауларыңызды сақтау мүмкін емес"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "Кілтсөз керек"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "%(keyid)s кілті үшін GPG кілт құпия сөзін енгізіңіз (%(account)s тіркелгісі)."
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "GPG кілтінің мерзімі біткен"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
@@ -2941,11 +2941,11 @@ msgstr ""
 "Сіздің GPG кілтіңіздің мерзімі біткен, сол үшін сіз %s үшін байланысыңыз "
 "OpenPGP-сіз іске асырылады."
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "Кілтсөз қате"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Өзіңіздің GPG кілтсөзіңізді қайта енгізіңіз не Бас тартуды қалаңыз."
@@ -5801,70 +5801,70 @@ msgstr "Қолданбаны растау қатесі"
 msgid "%s is not a valid loglevel"
 msgstr "%s дұрыс loglevel емес"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "\"%s\" тіркелгісімен байланыс үзілді"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "Қолмен қайта байланысты орнату."
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "%(name)s сервері тіркелу сұранымына қате жауап берген: %(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "%s сервері басқа тіркелу формасын ұсынды"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "Байланысты тексеріңіз не кейін қайталап көріңіз."
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "Сервер жауабы: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "Проксиге байланыс орнату сәтсіз аяқталды"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "%s тіркелгісіне байланыс орнату сәтсіз аяқталды"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "%s тіркелгісімен байланыс үзілген. Қайтадан орнатып көреміз."
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" үішн аутентификация сәтсіз"
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "Тіркелгі атын мен пароліңізді тексеріңіз."
 
@@ -5969,19 +5969,19 @@ msgstr ""
 "Қатесі:\n"
 "%s"
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr "аудио кірісі"
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr "аудио шығысы"
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr "видео кірісі"
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr "видео шығысы"
 
@@ -9754,55 +9754,55 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "GTK+ Jabber қолданбасы"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, fuzzy, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ нұсқасы:"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK нұсқасы:"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 #, fuzzy
 msgid "Current Developers"
 msgstr "Ағымдағы жасаушылар:"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 #, fuzzy
 msgid "Past Developers"
 msgstr "Бұрынғы жасаушылар:"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr ""
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr "Барлық дестелер жинаушыларға ризамызды білдіреміз."
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 #, fuzzy
 msgid "Thanks"
 msgstr "Сыйлаушы"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2009-2010"
 

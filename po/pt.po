@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2005-08-18 18:21-0300\n"
 "Last-Translator: Miguel Fonseca <miguelcsf@gmail.com>\n"
 "Language-Team: none\n"
@@ -887,7 +887,7 @@ msgstr "Pedido de subscrição para a conta %s por parte de %s"
 msgid "Subscription request from %s"
 msgstr "Pedido de subscrição de %s"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1522,8 +1522,8 @@ msgstr "Transportes"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 #, fuzzy
 msgid "Groupchats"
@@ -2926,20 +2926,20 @@ msgid ""
 "Are you sure you want to do that?"
 msgstr "Tem de criar uma conta antes de poder conversar com outros contactos."
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr "Não pode entrar num chat sem estar ligado."
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "Perguntar antes de fechar uma janela/aba de chat."
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr ""
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2947,41 +2947,41 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 #, fuzzy
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Não pode entrar numa sala quando está invisível"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "Impossível salvar as suas definições e preferências"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "Frase de acesso Necessária"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Introduza a chave GPG para a conta %s"
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "Encriptação OpenPGP"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "O utilizador será ligado a %s sem OpenPGP."
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 #, fuzzy
 msgid "Wrong Passphrase"
 msgstr "Frase de acesso"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr ""
 
@@ -5790,71 +5790,71 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr ""
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Ligação com conta \"%s\" foi perdida"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr ""
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr ""
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Impossível ligar a \"%s\""
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Impossível ligar a \"%s\""
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "Verifique a sua ligação ou tente novamente mais tarde."
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, fuzzy, python-format
 msgid "Server replied: %s"
 msgstr "Guardado em: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 #, fuzzy
 msgid "Connection to proxy failed"
 msgstr "Ligação"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, fuzzy, python-format
 msgid "Could not connect to account %s"
 msgstr "Impossível ligar a \"%s\""
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, fuzzy, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Ligação com conta \"%s\" foi perdida"
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Impossível ligar a \"%s\""
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Falha na autenticação com \"%s\""
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "Por favor, verifique se o seu login e senha estão correctos."
 
@@ -5953,19 +5953,19 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr ""
 
@@ -9811,51 +9811,51 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "Cliente Jabber GTK+"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 msgid "Current Developers"
 msgstr ""
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 msgid "Past Developers"
 msgstr ""
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr ""
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 msgid "we would like to thank all the package maintainers."
 msgstr ""
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 msgid "Thanks"
 msgstr ""
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr "Miguel Fonseca <miguelcsf@gmail.com>"
 

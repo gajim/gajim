@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim 2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:49+0200\n"
 "Last-Translator: Membris Khan <frank@giingo.org>\n"
 "Language-Team: none <>\n"
@@ -696,9 +696,8 @@ msgid "Copy JID/Email"
 msgstr "_Copiar la dirección de correo/ID de Jabber"
 
 #: gajim/history_manager.py:71
-#, fuzzy
 msgid "Usage:"
-msgstr "mensaje"
+msgstr "Utilización:"
 
 #: gajim/history_manager.py:73
 #, fuzzy
@@ -707,7 +706,7 @@ msgstr "_Emoticonos:"
 
 #: gajim/history_manager.py:75
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Mostrar este mensaje de ayuda y salir"
 
 #: gajim/history_manager.py:76
 msgid "Choose folder for logfile"
@@ -884,7 +883,7 @@ msgstr "Petición de adición para la cuenta %(account)s de %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Petición de adición de %s"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -917,9 +916,8 @@ msgid "Synchronise"
 msgstr "Sincronizar"
 
 #: gajim/dialogs.py:1064
-#, fuzzy
 msgid "add"
-msgstr "Triste"
+msgstr "añadir"
 
 #: gajim/dialogs.py:1064
 #, fuzzy
@@ -1016,6 +1014,7 @@ msgstr ""
 msgid "a video"
 msgstr ""
 
+# Hello. What kind of types of session are there?
 #: gajim/dialogs.py:1631
 #, python-format
 msgid ""
@@ -1037,9 +1036,8 @@ msgid "Uploading file via HTTP File Upload…"
 msgstr ""
 
 #: gajim/dialogs.py:1767
-#, fuzzy
 msgid "Encrypting file…"
-msgstr "Encriptación desactivada"
+msgstr "Cifrando archivo…"
 
 #: gajim/groupchat_control.py:203 gajim/groupchat_control.py:1926
 #, python-format
@@ -1162,7 +1160,7 @@ msgstr "el salón ahora no muestra miembros no disponibles"
 
 #: gajim/groupchat_control.py:1560
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "Una configuración no relacionada con la privacidad ha sido cambiada"
 
 #: gajim/groupchat_control.py:1566
 msgid "Room logging is now enabled"
@@ -1506,8 +1504,8 @@ msgstr "Transportes"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "Grupos de charla"
@@ -1593,6 +1591,8 @@ msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
 msgstr ""
+"Si sale ahora, las transferencias de archivos en curso serán detenidas. "
+"¿Todavía quiere salir?"
 
 #: gajim/roster_window.py:2548 gajim/roster_window.py:2826
 msgid "You have unread messages"
@@ -1787,9 +1787,8 @@ msgid "Invalid file URI:"
 msgstr "URI de archivo no válido:"
 
 #: gajim/roster_window.py:4413
-#, fuzzy
 msgid "Send file?"
-msgstr "Enviar archivo"
+msgstr "¿Enviar archivo?"
 
 #: gajim/roster_window.py:4414
 #, python-format
@@ -2006,6 +2005,7 @@ msgstr "Emoticonos desactivados"
 #: gajim/config.py:609
 msgid "To unregister from a server, account must be enabled."
 msgstr ""
+"Para anular el registro de un servidor, la cuenta debe estar habilitada."
 
 #: gajim/config.py:623 gajim/gui_interface.py:326 gajim/gui_interface.py:731
 msgid "Password Required"
@@ -2243,7 +2243,7 @@ msgstr "Tipo de medio no admitido: %s"
 
 #: gajim/dataforms_widget.py:601
 msgid "This field is required"
-msgstr ""
+msgstr "Este campo es requerido"
 
 #: gajim/dataforms_widget.py:655
 msgid "new@jabber.id"
@@ -2460,11 +2460,11 @@ msgid ""
 msgstr ""
 
 #: gajim/conversation_textview.py:1115
-#, fuzzy, python-format
+#, python-format
 msgid "Yesterday"
 msgid_plural "%(nb_days)i days ago"
 msgstr[0] "Ayer"
-msgstr[1] "Ayer"
+msgstr[1] "Hace %(nb_days)i días"
 
 #: gajim/conversation_textview.py:1145
 #, fuzzy
@@ -2635,12 +2635,12 @@ msgstr "Eliminado"
 #: gajim/gui_interface.py:621
 #, python-format
 msgid "%(jid)s declined the invitation: %(reason)s"
-msgstr ""
+msgstr "%(jid)s ha declinado la invitación: %(reason)s"
 
 #: gajim/gui_interface.py:626
 #, python-format
 msgid "%(jid)s declined the invitation"
-msgstr ""
+msgstr "%(jid)s ha declinado la invitación"
 
 #: gajim/gui_interface.py:644
 #, fuzzy, python-brace-format
@@ -2899,20 +2899,20 @@ msgstr ""
 "Vas a enviar tu contraseña en una conexión no cifrada- ¿Estás seguro de "
 "querer hacer esto?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr "No puedes entrar a un salón de chat hasta que no estés conectado."
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 #, fuzzy
 msgid "JID is not a Groupchat"
 msgstr "Esto no es un grupo de charla"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "Esto no es un grupo de charla"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2920,40 +2920,40 @@ msgid ""
 "joining the group chat again."
 msgstr ""
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr "No puedes entrar a un grupo de charla estando invisible"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "No se pueden guardar las preferencias"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "Contraseña requerida"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, fuzzy, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "Introduce la contraseña GPG para la clave %(keyid)s (cuenta %(account)s)."
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 #, fuzzy
 msgid "OpenPGP key expired"
 msgstr "La clave GPG expiró"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, fuzzy, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "Tu clave GPG ha expirado, te conectarás a %s sin OpenPGP"
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "Contraseña equivocada"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 #, fuzzy
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Por favor, vuelve a escribir tu contraseña GPG o presiona Cancelar."
@@ -3820,9 +3820,9 @@ msgid "%s is a directory but should be a file"
 msgstr "%s es un directorio pero podría ser un archivo"
 
 #: gajim/common/logger.py:167
-#, fuzzy, python-format
+#, python-format
 msgid "Creating %s"
-msgstr "Destruyendo %s"
+msgstr "Creando %s"
 
 #. #destroyroom
 #: gajim/common/connection_handlers_events.py:367
@@ -3840,11 +3840,11 @@ msgid "Unknown SSL error: %d"
 msgstr "Error SSL desconocido: %d"
 
 #: gajim/common/connection_handlers_events.py:990
-#, fuzzy, python-format
+#, python-format
 msgid "New message from %(nickname)s"
 msgid_plural "%(n_msgs)i unread messages from %(nickname)s"
 msgstr[0] "Nuevo mensaje de %(nickname)s"
-msgstr[1] "Nuevo mensaje de %(nickname)s"
+msgstr[1] "%(n_msgs)i mensajes sin leer de %(nickname)s"
 
 #: gajim/common/connection_handlers_events.py:1118
 #, python-format
@@ -5593,9 +5593,8 @@ msgid "bearing"
 msgstr "marino"
 
 #: gajim/common/const.py:379
-#, fuzzy
 msgid "building"
-msgstr "Escondiéndome"
+msgstr "construyendo"
 
 #: gajim/common/const.py:380
 #, fuzzy
@@ -5803,72 +5802,72 @@ msgstr "Falló la verificación de la aplicación"
 msgid "%s is not a valid loglevel"
 msgstr "%s no es un nivel de registro válido"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Se ha perdido la conexión de la cuenta \"%s\""
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "Reconectar manualmente."
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "El servidor %(name)s contestó incorrectamente a la petición de registro: "
 "%(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "El servidor %s provee un formulario de registro diferente"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "No se pudo conectar a \"%(host)s\" a través del proxy \"%(proxy)s\""
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "No se puede conectar a \"%s\""
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "Comprueba tu conexión o reinténtalo más tarde."
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "El servidor respondió: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "Falló la conexión al proxy"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "No se puede conectar a la cuenta %s"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Se perdió la conexión con la cuenta %s. Reintentando la conexión."
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "No se puede conectar a \"%s\""
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Falló la autentificación con \"%s\""
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr ""
 "Por favor, comprueba que tu nombre de usuario y contraseña sean correctos."
@@ -5934,9 +5933,8 @@ msgid "V4L2: %s"
 msgstr ""
 
 #: gajim/common/multimedia_helpers.py:108
-#, fuzzy
 msgid "Screen"
-msgstr "verde"
+msgstr "Pantalla"
 
 #: gajim/common/multimedia_helpers.py:115
 msgid "Fake video output"
@@ -5968,19 +5966,19 @@ msgid ""
 "%(error)s"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr ""
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr ""
 
@@ -6192,8 +6190,8 @@ msgstr " de %s"
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d evento pendiente"
+msgstr[1] "%d eventos pendientes"
 
 #: gajim/common/helpers.py:1035 gajim/common/helpers.py:1047
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
@@ -6212,7 +6210,7 @@ msgstr "Me gustaría añadirte a mi lista de contactos."
 
 #: gajim/common/helpers.py:1248
 msgid "Hello, I am $name."
-msgstr ""
+msgstr "Hola, soy $name."
 
 #: gajim/common/helpers.py:1352 gajim/common/helpers.py:1361
 #: gajim/common/helpers.py:1419
@@ -6381,6 +6379,7 @@ msgstr ""
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted."
 msgstr ""
+"Este mensaje fue cifrado con OpenPGP para XMPP y no pudo ser descifrado."
 
 #: gajim/common/modules/misc.py:42
 #, python-format
@@ -6514,7 +6513,7 @@ msgstr ""
 
 #: gajim/data/gui/join_groupchat_window.ui:97
 msgid "Join group chat every time Gajim is started"
-msgstr ""
+msgstr "Unirse al grupo cada vez que se arranque Gajim"
 
 #: gajim/data/gui/join_groupchat_window.ui:113
 #: gajim/data/gui/manage_bookmarks_window.ui:301
@@ -6913,9 +6912,8 @@ msgstr "Sufijo:"
 #: gajim/data/gui/profile_window.ui:596 gajim/data/gui/profile_window.ui:1031
 #: gajim/data/gui/vcard_information_window.ui:490
 #: gajim/data/gui/vcard_information_window.ui:1180
-#, fuzzy
 msgid "Street"
-msgstr "Estresado"
+msgstr "Calle"
 
 #: gajim/data/gui/profile_window.ui:624 gajim/data/gui/profile_window.ui:1058
 #: gajim/data/gui/vcard_information_window.ui:580
@@ -7697,7 +7695,7 @@ msgstr "Gajim - %s"
 
 #: gajim/data/gui/preferences_window.ui:1650
 msgid "Icons"
-msgstr ""
+msgstr "Iconos"
 
 #: gajim/data/gui/preferences_window.ui:1667
 #, fuzzy
@@ -9455,6 +9453,7 @@ msgstr "_Añadir contacto..."
 msgid "%s Missing"
 msgstr ""
 
+# Hello. What does it mean "%s" in this string? Is possible to have an example?
 #: gajim/gtk/add_contact.py:235
 #, fuzzy, python-format
 msgid "You must supply the %s of the new contact."
@@ -9692,6 +9691,8 @@ msgid ""
 "You tried to delete the currently active theme. Please switch to a different "
 "theme first."
 msgstr ""
+"Ha intentado eliminar el tema actualmente activo. Por favor, cambie primero "
+"a un tema diferente."
 
 #: gajim/gtk/history.py:406 gajim/gtk/history.py:460
 msgid "Disk Error"
@@ -9729,15 +9730,15 @@ msgstr "¿Qué quieres hacer?"
 
 #: gajim/gtk/history_sync.py:209
 msgid "One Month"
-msgstr ""
+msgstr "Un mes"
 
 #: gajim/gtk/history_sync.py:210
 msgid "Three Months"
-msgstr ""
+msgstr "Tres meses"
 
 #: gajim/gtk/history_sync.py:211
 msgid "One Year"
-msgstr ""
+msgstr "Un año"
 
 #: gajim/gtk/history_sync.py:212
 msgid "Everything"
@@ -9783,57 +9784,57 @@ msgid ""
 "        "
 msgstr ""
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 #, fuzzy
 msgid "A GTK+ XMPP client"
 msgstr "Un cliente de Jabber en GTK"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ Version: %s"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "Versión de PyGObject: %s"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr ""
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 #, fuzzy
 msgid "Current Developers"
 msgstr "Desarrolladores actuales:"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 #, fuzzy
 msgid "Past Developers"
 msgstr "Desarrolladores anteriores:"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr ""
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr ""
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 #, fuzzy
 msgid "we would like to thank all the package maintainers."
 msgstr ""
 "Por último pero no menos importante, queremos agradecer a todos los "
 "mantenedores de paquetes."
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 #, fuzzy
 msgid "Thanks"
 msgstr "Agradecido"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr "translator-credits"
 
@@ -10591,7 +10592,7 @@ msgstr "Salón no válido"
 
 #: gajim/plugins/pluginmanager.py:739 gajim/plugins/pluginmanager.py:745
 msgid "Archive corrupted"
-msgstr ""
+msgstr "Archivo corrupto"
 
 #: gajim/plugins/pluginmanager.py:741
 #, fuzzy

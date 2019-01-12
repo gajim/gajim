@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -823,7 +823,7 @@ msgstr "Abonneringsverzoek voor account %(account)s van %(jid)s"
 msgid "Subscription request from %s"
 msgstr "Abonneringsverzoek van %s"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1429,8 +1429,8 @@ msgstr "Transporten"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "Groepsgesprekken"
@@ -2800,21 +2800,21 @@ msgstr ""
 "Je staat op het punt je wachtwoord onversleuteld via een onveilige "
 "verbinding te verzenden. Weet je het zeker?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Het is niet mogelijk aan een groepsgesprek deel te nemen zonder verbonden te "
 "zijn."
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 msgid "JID is not a Groupchat"
 msgstr "Deze JID is geen groepsgesprek"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "Dit is geen groepsgesprek"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2825,31 +2825,31 @@ msgstr ""
 "groepsgespreksnaam is. Zo ja, verwijder het van je rooster en probeer "
 "opnieuw deel te nemen aan het groepsgesprek."
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr ""
 "Je kan niet deelnemen aan een groepsgesprek terwijl je onzichtbaar bent"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "Kan je instellingen en voorkeuren niet opslaan"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "Wachtwoord vereist"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "Voer het wachtwoord in voor de OpenPGP-sleutel %(keyid)s (account "
 "%(account)s)."
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 msgid "OpenPGP key expired"
 msgstr "OpenPGP-sleutel verlopen"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
@@ -2857,11 +2857,11 @@ msgstr ""
 "Je OpenPGP-sleutel is verlopen, je zal verbonden worden met %s zonder "
 "OpenPGP."
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "Verkeerd wachtwoord"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr "Voer je OpenPGP-wachtwoord opnieuw in of druk op Annuleren."
 
@@ -5725,72 +5725,72 @@ msgstr "Toepassingsverificatie mislukt"
 msgid "%s is not a valid loglevel"
 msgstr "%s is geen geldig logniveau"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "Verbinding met account ‘%s’ verbroken"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "Handmatig opnieuw verbinden."
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Server %(name)s gaf een verkeerd antwoord op het registratieverzoek: "
 "%(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "Server %s gaf een ander registratieformulier op"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Kon geen verbinding maken met ‘%(host)s’ via proxy ‘%(proxy)s’"
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Kon geen verbinding maken met ‘%(host)s’"
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "Controleer de verbinding of probeer later nogmaals."
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "Server antwoordde: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "Verbinding met proxy mislukt"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Kon geen verbinding maken met account %s"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "Verbinding met account %s verbroken. Probeer opnieuw te verbinden."
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Kon geen verbinding maken met ‘%s’"
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Authenticatie met ‘%s’ mislukt"
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "Controleer gebruikersnaam en wachtwoord."
 
@@ -5893,19 +5893,19 @@ msgstr ""
 "Fout was:\n"
 "%(error)s"
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr "audio-invoer"
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr "audio-uitvoer"
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr "video-invoer"
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr "video-uitvoer"
 
@@ -9511,50 +9511,50 @@ msgstr ""
 
 # TODO: Loop alles na, zet zinnen in de goede vorm, volg GNOME NL richtlijnen,
 #       ruim mnemonics op. Zie ook: http://nl.gnome.org/
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 msgid "A GTK+ XMPP client"
 msgstr "Een GTK+ XMPP-cliënt"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+-versie: %s"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject-versie: %s"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr "python-nbxmpp-versie: %s"
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 msgid "Current Developers"
 msgstr "Huidige ontwikkelaars"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 msgid "Past Developers"
 msgstr "Vroegere ontwikkelaars"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr "Artiesten"
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr "Tenslotte"
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 msgid "we would like to thank all the package maintainers."
 msgstr "willen we alle pakketonderhouders bedanken."
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 msgid "Thanks"
 msgstr "Met dank aan"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr ""
 "Nathan Follens <nthn@unseen.is>\n"

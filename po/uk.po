@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.14.0.1-2fa5ddcd1adf\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: 2013-08-30 12:04+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -828,7 +828,7 @@ msgstr "Запит на підписку до облікового запису 
 msgid "Subscription request from %s"
 msgstr "Запит на підписку від %s"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1436,8 +1436,8 @@ msgstr "Транспорти"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "Групові балачки"
@@ -2807,20 +2807,20 @@ msgstr ""
 "Ви маєте намір надіслати ваш пароль незашифрованим з’єднанням у відкритому "
 "вигляді. Виконати надсилання пароля?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
 "Вам слід з’єднати ваш обліковий запис, щоб взяти участь у груповій балачці."
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 msgid "JID is not a Groupchat"
 msgstr "Це не групова балачка"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "Це не групова балачка"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2831,38 +2831,38 @@ msgstr ""
 "назвою групової балачки. Якщо так, то видаліть її зі свого реєструта "
 "спробуйте приєднатись знову."
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr "Ви не можете приєднуватися до групової балачки зі станом «невидимий»"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "Не вдалося зберегти ваші налаштування і параметри"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "Слід вказати пароль"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr "Введіть пароль ключа GPG для ключа %(keyid)s (account %(account)s)."
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 msgid "OpenPGP key expired"
 msgstr "GPG ключ застарів"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "Ваш ключ GPG застарів. З’єднання з %s буде встановлено без OpenPGP."
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "Вказано помилковий пароль"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr ""
 "Будь ласка, введіть ще раз свій пароль GPG або натисніть кнопку «Скасувати»."
@@ -5735,73 +5735,73 @@ msgstr "Помилка під час перевірки програми"
 msgid "%s is not a valid loglevel"
 msgstr "%s не є коректним рівнем журналювання"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "З’єднання з обліковим записом «%s» було втрачено"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "Виконати повторне з’єднання вручну."
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr ""
 "Від сервера %(name)s було отримано помилкову відповідь на запит щодо "
 "реєстрації: %(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "На сервері %s передбачено іншу форму реєстрації"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "Не вдалося з’єднатися з «%(host)s» через проксі «%(proxy)s»"
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "Не вдалося з’єднатися з «%(host)s»"
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "Перевірте ваше з’єднання, а потім повторіть спробу."
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "Збережено за адресою: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "Спроба встановити з'єднання з проксі-сервером завершилася невдало"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "Не вдалося з’єднатися з обліковим записом %s"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr ""
 "З’єднання з обліковим записом було втрачено %s. Повторна спроба з’єднання."
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "Не вдалося з’єднатися з «%s»"
 
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "Спроба розпізнавання за допомогою «%s» завершилася невдало"
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "Будь ласка, перевірте, чи правильно вказано ім’я користувача і пароль."
 
@@ -5903,19 +5903,19 @@ msgstr ""
 "Помилка:\n"
 "%(error)s"
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr "аудіо вхід"
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr "аудіо вихід"
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr "відео вхід"
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr "відео вихід"
 
@@ -9523,50 +9523,50 @@ msgstr ""
 "        Будь ласка, спробуйте пізніше.\n"
 "        "
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 msgid "A GTK+ XMPP client"
 msgstr "Jabber/XMPP клієнт, що базується на GTK+"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr "Версія GTK+: %s"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "Версія PyGTK: %s"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr "Версія python-nbxmpp: %s"
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 msgid "Current Developers"
 msgstr "Поточні розробники"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 msgid "Past Developers"
 msgstr "Колишні розробники"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr "Митці"
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr "І, насамкінець"
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 msgid "we would like to thank all the package maintainers."
 msgstr "ми вдячні всім супровідникам пакунків з програмою."
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 msgid "Thanks"
 msgstr "Подяка"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr "Сергій Єгоров, Andriy Kushnir"
 

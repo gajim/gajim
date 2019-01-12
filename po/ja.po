@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-23 03:05+0000\n"
+"POT-Creation-Date: 2019-01-11 03:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -816,7 +816,7 @@ msgstr "アカウント %(account)s に対して、%(jid)s さんからの在席
 msgid "Subscription request from %s"
 msgstr "%s さんから在席通知の申し込み"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1754
+#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
@@ -1421,8 +1421,8 @@ msgstr "中継先"
 
 #: gajim/roster_window.py:1755 gajim/roster_window.py:1757
 #: gajim/roster_window.py:2613 gajim/roster_window.py:5117
-#: gajim/message_window.py:522 gajim/gui_interface.py:1927
-#: gajim/gui_interface.py:1952 gajim/common/contacts.py:167
+#: gajim/message_window.py:522 gajim/gui_interface.py:1930
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
 #: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "グループチャット"
@@ -2780,19 +2780,19 @@ msgstr ""
 "安全でない接続で暗号化されていないパスワードを送ろうとしています。それでも続"
 "けますか ?"
 
-#: gajim/gui_interface.py:1755 gajim/gtk/join_groupchat.py:235
+#: gajim/gui_interface.py:1758 gajim/gtk/join_groupchat.py:235
 msgid "You can not join a group chat unless you are connected."
 msgstr "接続しないと、グループチャットに参加できません。"
 
-#: gajim/gui_interface.py:1761
+#: gajim/gui_interface.py:1764
 msgid "JID is not a Groupchat"
 msgstr "JID はグループチャットではありません"
 
-#: gajim/gui_interface.py:1892
+#: gajim/gui_interface.py:1895
 msgid "This is not a group chat"
 msgstr "グループチャットではありません"
 
-#: gajim/gui_interface.py:1893
+#: gajim/gui_interface.py:1896
 #, python-format
 msgid ""
 "%(room_jid)s is already in your roster. Please check if %(room_jid)s is a "
@@ -2803,40 +2803,40 @@ msgstr ""
 "どうか確認してください。もし正しければ、それを名簿から削除して、もう一度その"
 "グループチャットに参加してみてください。"
 
-#: gajim/gui_interface.py:1918 gajim/dialog_messages.py:63
+#: gajim/gui_interface.py:1921 gajim/dialog_messages.py:63
 msgid "You cannot join a group chat while you are invisible"
 msgstr "「居ないふり」のあいだはグループチャットに参加できません"
 
-#: gajim/gui_interface.py:2277
+#: gajim/gui_interface.py:2280
 msgid "Could not save your settings and preferences"
 msgstr "設定を保存できませんでした"
 
-#: gajim/gui_interface.py:2820
+#: gajim/gui_interface.py:2823
 msgid "Passphrase Required"
 msgstr "パスフレーズが必要です"
 
-#: gajim/gui_interface.py:2821
+#: gajim/gui_interface.py:2824
 #, python-format
 msgid "Enter OpenPGP key passphrase for key %(keyid)s (account %(account)s)."
 msgstr ""
 "鍵ID %(keyid)s (アカウント %(account)s) の OpenPGP 鍵のパスフレーズを入力して"
 "ください。"
 
-#: gajim/gui_interface.py:2838
+#: gajim/gui_interface.py:2841
 msgid "OpenPGP key expired"
 msgstr "OpenPGP 鍵は期限切れです"
 
-#: gajim/gui_interface.py:2839
+#: gajim/gui_interface.py:2842
 #, python-format
 msgid ""
 "Your OpenPGP key has expired, you will be connected to %s without OpenPGP."
 msgstr "OpenPGP 鍵は有効期限が切れています。OpenPGP なしに %s に接続します。"
 
-#: gajim/gui_interface.py:2849
+#: gajim/gui_interface.py:2852
 msgid "Wrong Passphrase"
 msgstr "パスフレーズが間違っています"
 
-#: gajim/gui_interface.py:2850
+#: gajim/gui_interface.py:2853
 msgid "Please retype your OpenPGP passphrase or press Cancel."
 msgstr ""
 "OpenPGP のパスフレーズをもういちど入力するか、または「中止」を押してくださ"
@@ -5626,71 +5626,71 @@ msgstr "アプリケーションの検証に失敗しました"
 msgid "%s is not a valid loglevel"
 msgstr "%s は正しいログレベルではありません"
 
-#: gajim/common/connection.py:716
+#: gajim/common/connection.py:717
 #, python-format
 msgid "Connection with account \"%s\" has been lost"
 msgstr "アカウント \"%s\" での接続が切れました"
 
-#: gajim/common/connection.py:717
+#: gajim/common/connection.py:718
 msgid "Reconnect manually."
 msgstr "手動で再接続してください。"
 
-#: gajim/common/connection.py:739
+#: gajim/common/connection.py:740
 #, python-format
 msgid "Server %(name)s answered wrongly to register request: %(error)s"
 msgstr "サーバー %(name)s は登録要求に対してエラーを返しました: %(error)s"
 
-#: gajim/common/connection.py:781
+#: gajim/common/connection.py:782
 #, python-format
 msgid "Server %s provided a different registration form"
 msgstr "サーバー %s は異なる登録フォームを提供しています"
 
-#: gajim/common/connection.py:1089
+#: gajim/common/connection.py:1091
 #, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "\"%(proxy)s\" 経由で \"%(host)s\" に接続できませんでした"
 
-#: gajim/common/connection.py:1092
+#: gajim/common/connection.py:1094
 #, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "\"%(host)s\" に接続できませんでした"
 
-#: gajim/common/connection.py:1094 gajim/common/connection.py:1316
+#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
 msgid "Check your connection or try again later."
 msgstr "設定を確認するか、あとで試してください。"
 
-#: gajim/common/connection.py:1099
+#: gajim/common/connection.py:1101
 #, python-format
 msgid "Server replied: %s"
 msgstr "サーバーの応答: %s"
 
-#: gajim/common/connection.py:1114
+#: gajim/common/connection.py:1116
 msgid "Connection to proxy failed"
 msgstr "プロキシへの接続に失敗"
 
-#: gajim/common/connection.py:1153 gajim/common/connection.py:1274
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "アカウント %s に接続できませんでした"
 
-#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
+#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "アカウント %s での接続が切れました。再接続を試みます。"
 
-#: gajim/common/connection.py:1315 gajim/common/connection.py:1631
+#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "\"%s\" に接続できませんでした"
 
 # (Mako) %s はアカウントか
-#: gajim/common/connection.py:1353
+#: gajim/common/connection.py:1355
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" の認証に失敗しました"
 
-#: gajim/common/connection.py:1354
+#: gajim/common/connection.py:1356
 msgid "Please check your login and password for correctness."
 msgstr "整合性のために、ログインとパスワードを確認してください。"
 
@@ -5796,19 +5796,19 @@ msgstr ""
 "エラー:\n"
 "%(error)s"
 
-#: gajim/common/jingle_rtp.py:370
+#: gajim/common/jingle_rtp.py:388
 msgid "audio input"
 msgstr "音声入力"
 
-#: gajim/common/jingle_rtp.py:374
+#: gajim/common/jingle_rtp.py:392
 msgid "audio output"
 msgstr "音声出力"
 
-#: gajim/common/jingle_rtp.py:432
+#: gajim/common/jingle_rtp.py:450
 msgid "video input"
 msgstr "ビデオ入力"
 
-#: gajim/common/jingle_rtp.py:439
+#: gajim/common/jingle_rtp.py:457
 msgid "video output"
 msgstr "ビデオ出力"
 
@@ -9404,50 +9404,50 @@ msgstr ""
 "        後で試してください。\n"
 "        "
 
-#: gajim/gtk/about.py:45 data/org.gajim.Gajim.appdata.xml.in:10
+#: gajim/gtk/about.py:47 data/org.gajim.Gajim.appdata.xml.in:10
 msgid "A GTK+ XMPP client"
 msgstr "GTK+ XMPP クライアント"
 
-#: gajim/gtk/about.py:46
+#: gajim/gtk/about.py:48
 #, python-format
 msgid "GTK+ Version: %s"
 msgstr "GTK+ バージョン: %s"
 
-#: gajim/gtk/about.py:47
+#: gajim/gtk/about.py:49
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject バージョン: %s"
 
-#: gajim/gtk/about.py:48
+#: gajim/gtk/about.py:50
 #, python-format
 msgid "python-nbxmpp Version: %s"
 msgstr "python-nbxmpp バージョン: %s"
 
-#: gajim/gtk/about.py:51
+#: gajim/gtk/about.py:53
 msgid "Current Developers"
 msgstr "現在の開発者"
 
-#: gajim/gtk/about.py:52
+#: gajim/gtk/about.py:54
 msgid "Past Developers"
 msgstr "過去の開発者"
 
-#: gajim/gtk/about.py:53
+#: gajim/gtk/about.py:55
 msgid "Artists"
 msgstr "アーティスト"
 
-#: gajim/gtk/about.py:57
+#: gajim/gtk/about.py:59
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
 
-#: gajim/gtk/about.py:58
+#: gajim/gtk/about.py:60
 msgid "we would like to thank all the package maintainers."
 msgstr "すべてのパッケージのメンテナに感謝いたします。"
 
-#: gajim/gtk/about.py:59
+#: gajim/gtk/about.py:61
 msgid "Thanks"
 msgstr "多謝"
 
-#: gajim/gtk/about.py:61
+#: gajim/gtk/about.py:63
 msgid "translator-credits"
 msgstr "Mako N (mako AT pasero.net)"
 
