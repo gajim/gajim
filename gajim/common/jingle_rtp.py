@@ -360,16 +360,19 @@ class JingleAudio(JingleRTPContent):
                                 Farstream.MediaType.AUDIO, 48000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
                                 Farstream.MediaType.AUDIO, 32000),
-            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
-                                Farstream.MediaType.AUDIO, 16000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'G722',
                                 Farstream.MediaType.AUDIO, 8000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
-                                Farstream.MediaType.AUDIO, 8000),
+                                Farstream.MediaType.AUDIO, 16000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'PCMA',
                                 Farstream.MediaType.AUDIO, 8000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'PCMU',
-                                Farstream.MediaType.AUDIO, 8000)]
+                                Farstream.MediaType.AUDIO, 8000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'SPEEX',
+                                Farstream.MediaType.AUDIO, 8000),
+            Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'AMR',
+                                Farstream.MediaType.AUDIO, 8000),
+            ]
 
         # disable all other codecs
         disable_codecs = []
