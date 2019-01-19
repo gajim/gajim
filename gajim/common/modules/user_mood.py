@@ -67,6 +67,9 @@ class UserMood(AbstractPEPModule):
         if mood_tag is None:
             raise StanzaMalformed('No mood node')
 
+        if not mood_tag.getChildren():
+            return None
+
         for child in mood_tag.getChildren():
             name = child.getName().strip()
             if name == 'text':
@@ -74,15 +77,20 @@ class UserMood(AbstractPEPModule):
             else:
                 mood_dict['mood'] = name
 
-        return mood_dict or None
+        if 'mood' not in mood_dict:
+            raise StanzaMalformed('No mood value found')
+        return mood_dict
 
     def _build_node(self, data: Optional[Tuple[str, str]]) -> nbxmpp.Node:
         item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
         if data is None:
             return item
+
         mood, text = data
-        if mood:
-            item.addChild(mood)
+        if not mood:
+            return item
+        item.addChild(mood)
+
         if text:
             item.addChild('text', payload=text)
         return item
