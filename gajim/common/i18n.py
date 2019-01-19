@@ -155,6 +155,10 @@ except locale.Error as error:
 
 try:
     LANG = get_default_lang()
+    if os.name == 'nt':
+        # Set the env var on Windows because gettext.find() uses it to
+        # find the translation
+        os.environ['LANG'] = LANG
     print('Found default language: %s' % LANG)
 except Exception as error:
     print('Failed to determine default language')
