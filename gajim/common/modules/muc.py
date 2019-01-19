@@ -84,7 +84,7 @@ class MUC:
             'cancel_config',
             'send_captcha',
             'decline',
-            'request_voice'
+            'request_voice',
             'destroy',
         ]
 

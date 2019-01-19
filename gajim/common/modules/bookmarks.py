@@ -286,6 +286,9 @@ class Bookmarks(AbstractPEPModule):
         else:
             self._private_store(storage_node)
 
+        app.nec.push_incoming_event(
+            NetworkEvent('bookmarks-received', account=self._account))
+
     def _pubsub_store(self, storage_node: nbxmpp.Node) -> None:
         self._con.get_module('PubSub').send_pb_publish(
             '', 'storage:bookmarks', storage_node, 'current',
@@ -344,8 +347,12 @@ class Bookmarks(AbstractPEPModule):
         }
 
         self.store_bookmarks()
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
+
+    def remove(self, jid: str, publish: bool = True) -> None:
+        if self.bookmarks.pop(jid, None) is None:
+            return
+        if publish:
+            self.store_bookmarks()
 
     def get_name_from_bookmark(self, jid: str) -> str:
         fallback = jid.split('@')[0]
@@ -353,6 +360,9 @@ class Bookmarks(AbstractPEPModule):
             return self.bookmarks[jid]['name'] or fallback
         except KeyError:
             return fallback
+
+    def is_bookmark(self, jid: str) -> bool:
+        return jid in self.bookmarks
 
     def purge_pubsub_bookmarks(self) -> None:
         log.info('Purge/Delete Bookmarks on PubSub, '

@@ -182,6 +182,9 @@ class GroupchatControl(ChatControlBase):
         # if True, the room has mentioned us
         self.attention_flag = False
 
+        # True if we initiated room destruction
+        self._wait_for_destruction = False
+
         # sorted list of nicks who mentioned us (last at the end)
         self.attention_list = []
         self.nick_hits = []
@@ -651,14 +654,10 @@ class GroupchatControl(ChatControlBase):
                         _('Invalid group chat JID'),
                         _('The group chat JID has not allowed characters.'))
                     return
+
+            self._wait_for_destruction = True
             con = app.connections[self.account]
             con.get_module('MUC').destroy(self.room_jid, reason, jid)
-            con.get_module('Bookmarks').bookmarks.pop(self.room_jid, None)
-            con.get_module('Bookmarks').store_bookmarks()
-            gui_menu_builder.build_bookmark_menu(self.account)
-            self.force_non_minimizable = True
-            self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
-            self.force_non_minimizable = False
 
         # Ask for a reason
         DoubleInputDialog(_('Destroying %s') % '\u200E' + \
@@ -2226,6 +2225,14 @@ class GroupchatControl(ChatControlBase):
 
         self.autorejoin = False
         self.got_disconnected()
+
+        con = app.connections[self.account]
+        con.get_module('Bookmarks').remove(self.room_jid)
+
+        if self._wait_for_destruction:
+            self.force_non_minimizable = True
+            self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND)
+            self.force_non_minimizable = False
 
     def get_role_iter(self, role: str) -> Optional[Gtk.TreeIter]:
         try:

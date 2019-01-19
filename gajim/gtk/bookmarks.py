@@ -21,8 +21,6 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 
-from gajim import gui_menu_builder
-
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_builder
 
@@ -207,7 +205,6 @@ class ManageBookmarksWindow:
                 con.get_module('Bookmarks').bookmarks[jid] = bmdict
 
             con.get_module('Bookmarks').store_bookmarks()
-            gui_menu_builder.build_bookmark_menu(acct)
         self.window.destroy()
 
     def on_cancel_button_clicked(self, widget):
