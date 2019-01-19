@@ -331,6 +331,8 @@ class Message:
 
         if archive.bareMatch(properties.stanza_id.by):
             return properties.stanza_id.id, None
+        # stanza-id not added by the archive, ignore it.
+        return None, None
 
 
 class MessageReceivedEvent(NetworkIncomingEvent):
