@@ -69,21 +69,33 @@ def iter_locale_dirs():
         if locale_dir.is_dir():
             yield str(locale_dir)
 
+
 def get_default_lang():
     if os.name == "nt":
         import ctypes
         windll = ctypes.windll.kernel32
-        lang = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        return lang[:2]
+        return locale.windows_locale[windll.GetUserDefaultUILanguage()]
 
     if sys.platform == "darwin":
         from AppKit import NSLocale
+        # FIXME: This returns a two letter language code (en, de, fr)
+        # We need a way to get en_US, de_DE etc.
         return NSLocale.currentLocale().languageCode()
 
-    default = locale.getdefaultlocale()[0]
-    if default is not None:
-        return default[:2]
-    return 'en'
+    return locale.getdefaultlocale()[0] or 'en'
+
+
+def get_rfc5646_lang(lang=None):
+    if lang is None:
+        lang = LANG
+    return lang.replace('_', '-')
+
+
+def get_short_lang_code(lang=None):
+    if lang is None:
+        lang = LANG
+    return lang[:2]
+
 
 def initialize_direction_mark():
     from gi.repository import Gtk

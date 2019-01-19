@@ -1059,11 +1059,14 @@ class Connection(CommonConnection, ConnectionHandlers):
         secure_tuple = (self._current_type, cacerts, mycerts, tls_version,
                         cipher_list, self._current_host['alpn'])
 
+        lang = i18n.get_rfc5646_lang()
+        log.info('Set stream language: %s', lang)
+
         con = nbxmpp.NonBlockingClient(
             domain=self._hostname,
             caller=self,
             idlequeue=app.idlequeue,
-            lang=i18n.LANG)
+            lang=lang)
 
         if self._sm_resume_data:
             con.set_resume_data(self._sm_resume_data)
