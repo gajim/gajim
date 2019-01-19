@@ -65,6 +65,9 @@ class UserActivity(AbstractPEPModule):
         if activity_tag is None:
             raise StanzaMalformed('No activity node')
 
+        if not activity_tag.getChildren():
+            return None
+
         for child in activity_tag.getChildren():
             name = child.getName().strip()
             data = child.getData().strip()
@@ -76,17 +79,22 @@ class UserActivity(AbstractPEPModule):
                     subactivity_name = subactivity.getName().strip()
                     activity_dict['subactivity'] = subactivity_name
 
-        return activity_dict or None
+        if 'activity' not in activity_dict:
+            raise StanzaMalformed('No activity value found')
+        return activity_dict
 
     def _build_node(self, data):
         item = nbxmpp.Node('activity', {'xmlns': self.namespace})
         if data is None:
             return item
+
         activity, subactivity, message = data
-        if activity:
-            i = item.addChild(activity)
-            if subactivity:
-                i.addChild(subactivity)
+        if not activity:
+            return item
+
+        i = item.addChild(activity)
+        if subactivity:
+            i.addChild(subactivity)
         if message:
             i = item.addChild('text')
             i.addData(message)
