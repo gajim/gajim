@@ -388,7 +388,6 @@ class RosterWindow:
             parent_iters = self._get_contact_iter(
                     big_brother_contact.jid, big_brother_account,
                     big_brother_contact, self.model)
-            assert parent_iters, 'Big brother is not yet in roster!'
 
             # Do not confuse get_contact_iter: Sync groups of family members
             contact.groups = big_brother_contact.groups[:]
@@ -445,7 +444,6 @@ class RosterWindow:
                 if group not in app.groups[account]:
                     app.groups[account][group] = {'expand': is_expanded}
 
-        assert added_iters, '%s has not been added to roster!' % contact.jid
         return added_iters
 
     def _remove_entity(self, contact, account, groups=None):
@@ -464,7 +462,6 @@ class RosterWindow:
         """
         iters = self._get_contact_iter(contact.jid, account, contact,
             self.model)
-        assert iters, '%s shall be removed but is not in roster' % contact.jid
 
         parent_iter = self.model.iter_parent(iters[0])
         parent_type = self.model[parent_iter][Column.TYPE]
@@ -484,10 +481,6 @@ class RosterWindow:
             return False
         # Remove us and empty groups from the model
         for i in iters:
-            assert self.model[i][Column.JID] == contact.jid and \
-                    self.model[i][Column.ACCOUNT] == account, \
-                    "Invalidated iters of %s" % contact.jid
-
             parent_i = self.model.iter_parent(i)
             parent_type = self.model[parent_i][Column.TYPE]
 
@@ -529,10 +522,6 @@ class RosterWindow:
         big_brother_contact = app.contacts.get_first_contact_from_jid(
                 big_brother_account, big_brother_jid)
 
-        assert not self._get_contact_iter(big_brother_jid,
-                big_brother_account, big_brother_contact, self.model), \
-                'Big brother %s already in roster\n Family: %s' \
-                % (big_brother_jid, family)
         self._add_entity(big_brother_contact, big_brother_account)
 
         brothers = []
@@ -548,9 +537,6 @@ class RosterWindow:
                 # or brother already added
                 continue
 
-            assert not self._get_contact_iter(_jid, _account,
-                    _contact, self.model), \
-                    "%s already in roster.\n Family: %s" % (_jid, nearby_family)
             self._add_entity(_contact, _account,
                     big_brother_contact=big_brother_contact,
                     big_brother_account=big_brother_account)
@@ -582,8 +568,6 @@ class RosterWindow:
                 # Family might not be up to date.
                 # Only try to remove what is actually in the roster
                 continue
-            assert iters, '%s shall be removed but is not in roster \
-                    \n Family: %s' % (_jid, family)
 
             family_in_roster = True
 
@@ -594,31 +578,14 @@ class RosterWindow:
                 # The contact on top
                 old_big_account = _account
                 old_big_contact = _contact
-                old_big_jid = _jid
                 continue
 
-            ok = self._remove_entity(_contact, _account)
-            assert ok, '%s was not removed' % _jid
-            assert not self._get_contact_iter(_jid, _account, _contact,
-                self.model), '%s is removed but still in roster' % _jid
+            self._remove_entity(_contact, _account)
 
         if not family_in_roster:
             return False
 
-        assert old_big_jid, 'No Big Brother in nearby family %s (Family: %s)' %\
-            (nearby_family, family)
-        iters = self._get_contact_iter(old_big_jid, old_big_account,
-            old_big_contact, self.model)
-        assert iters, 'Old Big Brother %s is not in roster anymore' % \
-            old_big_jid
-        assert not self.model.iter_children(iters[0]), \
-            'Old Big Brother %s still has children' % old_big_jid
-
-        ok = self._remove_entity(old_big_contact, old_big_account)
-        assert ok, "Old Big Brother %s not removed" % old_big_jid
-        assert not self._get_contact_iter(old_big_jid, old_big_account,
-            old_big_contact, self.model), \
-            'Old Big Brother %s is removed but still in roster' % old_big_jid
+        self._remove_entity(old_big_contact, old_big_account)
 
         return True
 
@@ -681,9 +648,6 @@ class RosterWindow:
         """
         jid = app.get_jid_from_account(account)
         contact = app.contacts.get_first_contact_from_jid(account, jid)
-
-        assert not self._get_contact_iter(jid, account, contact,
-        self.model), 'Self contact %s already in roster' % jid
 
         child_iterA = self._get_account_iter(account, self.model)
         self._iters[account]['contacts'][jid] = [self.model.append(child_iterA,
@@ -1047,7 +1011,6 @@ class RosterWindow:
     def _really_draw_account(self, account):
         child_iter = self._get_account_iter(account, self.model)
         if not child_iter:
-            assert False, 'Account iter of %s could not be found.' % account
             return
 
         num_of_accounts = app.get_number_of_connected_accounts()
