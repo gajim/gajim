@@ -788,6 +788,7 @@ def get_account_menu(account):
         ('-start-single-chat', _('Send Single Message…')),
         (_('Advanced'), [
             ('-archive', _('Archiving Preferences')),
+            ('-blocking', _('Blocking List')),
             ('-sync-history', _('Synchronise History')),
             ('-privacylists', _('Privacy Lists')),
             ('-server-info', _('Server Info')),

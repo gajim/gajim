@@ -304,7 +304,8 @@ class PrivacyLists:
 
     def block_contacts(self, contact_list, message):
         if not self.supported:
-            self._con.get_module('Blocking').block(contact_list)
+            jid_list = [contact.jid for contact in contact_list]
+            self._con.get_module('Blocking').block(jid_list)
             return
 
         if self.default_list is None:
@@ -350,7 +351,8 @@ class PrivacyLists:
 
     def unblock_contacts(self, contact_list):
         if not self.supported:
-            self._con.get_module('Blocking').unblock(contact_list)
+            jid_list = [contact.jid for contact in contact_list]
+            self._con.get_module('Blocking').unblock(jid_list)
             return
 
         new_blocked_list = []

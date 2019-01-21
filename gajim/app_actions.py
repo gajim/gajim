@@ -44,6 +44,7 @@ from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.proxies import ManageProxies
 from gajim.gtk.discovery import ServiceDiscoveryWindow
+from gajim.gtk.blocking import BlockingList
 
 
 # General Actions
@@ -207,6 +208,15 @@ def on_mam_preferences(action, param):
     window = app.get_app_window(MamPreferences, account)
     if window is None:
         MamPreferences(account)
+    else:
+        window.present()
+
+
+def on_blocking_list(action, param):
+    account = param.get_string()
+    window = app.get_app_window(MamPreferences, account)
+    if window is None:
+        BlockingList(account)
     else:
         window.present()
 

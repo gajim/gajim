@@ -15,13 +15,24 @@
 # XEP-0191: Blocking Command
 
 import logging
+from functools import wraps
 
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 
 log = logging.getLogger('gajim.c.m.blocking')
+
+
+def ensure_online(func):
+    @wraps(func)
+    def func_wrapper(self, *args, **kwargs):
+        if not app.account_is_connected(self._account):
+            return
+        return func(self, *args, **kwargs)
+    return func_wrapper
 
 
 class Blocking:
@@ -37,37 +48,48 @@ class Blocking:
 
         self.supported = False
 
+        self._nbmxpp_methods = [
+            'block',
+            'unblock',
+        ]
+
+    def __getattr__(self, key):
+        if key not in self._nbmxpp_methods:
+            raise AttributeError
+        if not app.account_is_connected(self._account):
+            log.warning('Account %s not connected, cant use %s',
+                        self._account, key)
+            return
+        module = self._con.connection.get_module('Blocking')
+        return getattr(module, key)
+
     def pass_disco(self, from_, _identities, features, _data, _node):
         if nbxmpp.NS_BLOCKING not in features:
             return
 
         self.supported = True
+        app.nec.push_incoming_event(
+            NetworkEvent('feature-discovered',
+                         account=self._account,
+                         feature=nbxmpp.NS_BLOCKING))
+
         log.info('Discovered blocking: %s', from_)
 
-    def get_blocking_list(self) -> None:
-        if not self.supported:
-            return
-        iq = nbxmpp.Iq('get', nbxmpp.NS_BLOCKING)
-        iq.setQuery('blocklist')
+    @ensure_online
+    def get_blocking_list(self, callback=None):
         log.info('Request list')
-        self._con.connection.SendAndCallForResponse(
-            iq, self._blocking_list_received)
+        if callback is None:
+            callback = self._blocking_list_received
 
-    def _blocking_list_received(self, stanza: nbxmpp.Iq) -> None:
-        if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+        self._con.connection.get_module('Blocking').get_blocking_list(
+            callback=callback)
+
+    def _blocking_list_received(self, result):
+        if result.is_error:
+            log.info('Error: %s', result.error)
             return
 
-        self.blocked = []
-        blocklist = stanza.getTag('blocklist', namespace=nbxmpp.NS_BLOCKING)
-        if blocklist is None:
-            log.error('No blocklist node')
-            return
-
-        for item in blocklist.getTags('item'):
-            self.blocked.append(item.getAttr('jid'))
-        log.info('Received list: %s', self.blocked)
-
+        self.blocked = result.blocking_list
         app.nec.push_incoming_event(
             BlockingEvent(None, conn=self._con, changed=self.blocked))
 
@@ -128,35 +150,6 @@ class Blocking:
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
         self._con.connection.send(probe)
-
-    def block(self, contact_list):
-        if not self.supported:
-            return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_BLOCKING)
-        query = iq.setQuery(name='block')
-
-        for contact in contact_list:
-            query.addChild(name='item', attrs={'jid': contact.jid})
-            log.info('Block: %s', contact.jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_result_handler, {})
-
-    def unblock(self, contact_list):
-        if not self.supported:
-            return
-        iq = nbxmpp.Iq('set', nbxmpp.NS_BLOCKING)
-        query = iq.setQuery(name='unblock')
-
-        for contact in contact_list:
-            query.addChild(name='item', attrs={'jid': contact.jid})
-            log.info('Unblock: %s', contact.jid)
-        self._con.connection.SendAndCallForResponse(
-            iq, self._default_result_handler, {})
-
-    @staticmethod
-    def _default_result_handler(_con, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            log.warning('Operation failed: %s', stanza.getError())
 
 
 class BlockingEvent(NetworkIncomingEvent):
