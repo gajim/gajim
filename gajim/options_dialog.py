@@ -477,10 +477,10 @@ class ProxyComboOption(GenericOption):
         GenericOption.__init__(self, *args)
 
         self.combo = Gtk.ComboBoxText()
-        self.update_values()
-
-        self.combo.connect('changed', self.on_value_change)
         self.combo.set_valign(Gtk.Align.CENTER)
+
+        self._signal_id = None
+        self.update_values()
 
         button = get_image_button(
             'preferences-system-symbolic', _('Manage Proxies'))
@@ -491,7 +491,18 @@ class ProxyComboOption(GenericOption):
         self.option_box.pack_start(button, False, True, 0)
         self.show_all()
 
+    def _block_signal(self, state):
+        if state:
+            if self._signal_id is None:
+                return
+            self.combo.disconnect(self._signal_id)
+        else:
+            self._signal_id = self.combo.connect('changed',
+                                                 self.on_value_change)
+            self.combo.emit('changed')
+
     def update_values(self):
+        self._block_signal(True)
         proxies = app.config.get_per('proxies')
         proxies.insert(0, _('No Proxy'))
         self.combo.remove_all()
@@ -499,9 +510,13 @@ class ProxyComboOption(GenericOption):
             self.combo.insert_text(-1, value)
             if value == self.option_value or index == 0:
                 self.combo.set_active(index)
+        self._block_signal(False)
 
     def on_value_change(self, combo):
-        self.set_value(combo.get_active_text())
+        if combo.get_active() == 0:
+            self.set_value('')
+        else:
+            self.set_value(combo.get_active_text())
 
     def on_row_activated(self):
         pass
