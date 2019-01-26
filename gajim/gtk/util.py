@@ -25,6 +25,7 @@ import sys
 import logging
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from functools import wraps
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -489,3 +490,12 @@ def get_hardware_key_codes(keyval):
     if not valid:
         return []
     return [key.keycode for key in key_map_keys]
+
+
+def ensure_not_destroyed(func):
+    @wraps(func)
+    def func_wrapper(self, *args, **kwargs):
+        if self._destroyed:
+            return
+        return func(self, *args, **kwargs)
+    return func_wrapper

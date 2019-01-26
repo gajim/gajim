@@ -15,6 +15,7 @@
 import logging
 
 import nbxmpp
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -25,6 +26,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gtk.groupchat_config')
 
@@ -36,6 +38,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Group Chat Configuration'))
+        self._destroyed = False
 
         self.account = account
         self.jid = jid
@@ -77,6 +80,8 @@ class GroupchatConfig(Gtk.ApplicationWindow):
 
         self._ui.connect_signals(self)
         self.connect('delete-event', self._cancel)
+        self.connect('destroy', self._on_destroy)
+        self.connect('key-press-event', self._on_key_press)
         self.show_all()
         self._ui.stack.notify('visible-child-name')
 
@@ -291,6 +296,10 @@ class GroupchatConfig(Gtk.ApplicationWindow):
 
         return add, remove, modified
 
+    def _on_key_press(self, _widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self._on_cancel()
+
     def _on_cancel(self, *args):
         self._cancel()
         self.destroy()
@@ -299,6 +308,9 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         if self._form and self._own_affiliation == 'owner':
             con = app.connections[self.account]
             con.get_module('MUC').cancel_config(self.jid)
+
+    def _on_destroy(self, *args):
+        self._destroyed = True
 
     def _set_affiliations(self):
         add, remove, modified = self._get_diff()
@@ -339,6 +351,7 @@ class GroupchatConfig(Gtk.ApplicationWindow):
         con = app.connections[self.account]
         con.get_module('MUC').set_affiliation(self.jid, diff_dict)
 
+    @ensure_not_destroyed
     def _on_affiliations_received(self, result):
         if result.is_error:
             log.info('Error while requesting %s affiliations: %s',
