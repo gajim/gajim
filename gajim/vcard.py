@@ -372,11 +372,11 @@ class VcardWindow:
         ask_label = self.xml.get_object('ask_label')
         if self.gc_contact:
             self.xml.get_object('subscription_title_label').set_markup(Q_("?Role in Group Chat:<b>Role:</b>"))
-            uf_role = helpers.get_uf_role(self.gc_contact.role.value)
+            uf_role = helpers.get_uf_role(self.gc_contact.role)
             subscription_label.set_text(uf_role)
 
             self.xml.get_object('ask_title_label').set_markup(_("<b>Affiliation:</b>"))
-            uf_affiliation = helpers.get_uf_affiliation(self.gc_contact.affiliation.value)
+            uf_affiliation = helpers.get_uf_affiliation(self.gc_contact.affiliation)
             ask_label.set_text(uf_affiliation)
         else:
             uf_sub = helpers.get_uf_sub(self.contact.sub)

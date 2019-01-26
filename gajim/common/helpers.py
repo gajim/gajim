@@ -327,19 +327,19 @@ def get_uf_ask(ask):
 
 def get_uf_role(role, plural=False):
     ''' plural determines if you get Moderators or Moderator'''
-    if role == 'none':
+    if role.value == 'none':
         role_name = Q_('?Group Chat Contact Role:None')
-    elif role == 'moderator':
+    elif role.value == 'moderator':
         if plural:
             role_name = _('Moderators')
         else:
             role_name = _('Moderator')
-    elif role == 'participant':
+    elif role.value == 'participant':
         if plural:
             role_name = _('Participants')
         else:
             role_name = _('Participant')
-    elif role == 'visitor':
+    elif role.value == 'visitor':
         if plural:
             role_name = _('Visitors')
         else:
@@ -348,13 +348,13 @@ def get_uf_role(role, plural=False):
 
 def get_uf_affiliation(affiliation):
     '''Get a nice and translated affilition for muc'''
-    if affiliation == 'none':
+    if affiliation.value == 'none':
         affiliation_name = Q_('?Group Chat Contact Affiliation:None')
-    elif affiliation == 'owner':
+    elif affiliation.value == 'owner':
         affiliation_name = _('Owner')
-    elif affiliation == 'admin':
+    elif affiliation.value == 'admin':
         affiliation_name = _('Administrator')
-    elif affiliation == 'member':
+    elif affiliation.value == 'member':
         affiliation_name = _('Member')
     else: # Argl ! An unknown affiliation !
         affiliation_name = affiliation.capitalize()

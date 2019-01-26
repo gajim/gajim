@@ -214,7 +214,7 @@ class GCTooltip():
 
         # Affiliation
         if not contact.affiliation.is_none:
-            uf_affiliation = helpers.get_uf_affiliation(contact.affiliation.value)
+            uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
             uf_affiliation = \
                 _('%(owner_or_admin_or_member)s of this group chat') \
                 % {'owner_or_admin_or_member': uf_affiliation}

@@ -1768,7 +1768,7 @@ class GroupchatControl(ChatControlBase):
         self.model[role_iter][Column.TEXT] = role_name
 
     def draw_all_roles(self):
-        for role in ('visitor', 'participant', 'moderator'):
+        for role in (Role.VISITOR, Role.PARTICIPANT, Role.MODERATOR):
             self.draw_role(role)
 
     def _change_nick(self, new_nick: str) -> None:
@@ -1899,7 +1899,7 @@ class GroupchatControl(ChatControlBase):
             return
 
         affiliation = helpers.get_uf_affiliation(
-            event.properties.affiliation.value)
+            event.properties.affiliation)
         nick = event.properties.muc_nickname
         reason = event.properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
@@ -1932,7 +1932,7 @@ class GroupchatControl(ChatControlBase):
         if event.room_jid != self.room_jid:
             return
 
-        role = helpers.get_uf_role(event.properties.role.value)
+        role = helpers.get_uf_role(event.properties.role)
         nick = event.properties.muc_nickname
         reason = event.properties.muc_user.reason
         reason = '' if reason is None else ': {reason}'.format(reason=reason)
@@ -2167,17 +2167,17 @@ class GroupchatControl(ChatControlBase):
         contact = app.contacts.get_gc_contact(self.account,
                                               self.room_jid,
                                               nick)
-        role_name = helpers.get_uf_role(contact.role.value, plural=True)
+        role_name = helpers.get_uf_role(contact.role, plural=True)
 
         # Create Role
-        role_iter = self.get_role_iter(contact.role.value)
+        role_iter = self.get_role_iter(contact.role)
         if not role_iter:
             icon_name = get_icon_name('closed')
             ext_columns = [None] * self.nb_ext_renderers
             row = [icon_name, contact.role.value,
                    'role', role_name, None] + ext_columns
             role_iter = self.model.append(None, row)
-            self._role_refs[contact.role.value] = Gtk.TreeRowReference(
+            self._role_refs[contact.role] = Gtk.TreeRowReference(
                 self.model, self.model.get_path(role_iter))
 
         # Avatar
@@ -2262,7 +2262,7 @@ class GroupchatControl(ChatControlBase):
         del self._contact_refs[nick]
         if self.model.iter_n_children(parent_iter) == 0:
             role = self.model[parent_iter][Column.NICK]
-            del self._role_refs[role]
+            del self._role_refs[Role(role)]
             self.model.remove(parent_iter)
 
     def _message_sent(self, obj):
