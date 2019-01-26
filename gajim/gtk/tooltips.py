@@ -449,10 +449,9 @@ class RosterTooltip(StatusTable):
         scale = self._ui.tooltip_grid.get_scale_factor()
         surface = app.contacts.get_avatar(
             account, self.prim_contact.jid, AvatarSize.TOOLTIP, scale)
-        if surface is None:
-            return
-        self._ui.avatar.set_from_surface(surface)
-        self._ui.avatar.show()
+        if surface is not None:
+            self._ui.avatar.set_from_surface(surface)
+            self._ui.avatar.show()
 
         app.plugin_manager.gui_extension_point(
             'roster_tooltip_populate', self, contacts, self._ui.tooltip_grid)
