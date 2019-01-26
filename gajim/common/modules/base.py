@@ -12,6 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+from typing import List  # pylint: disable=unused-import
+
 import logging
 from functools import partial
 from unittest.mock import Mock
@@ -24,13 +28,13 @@ log = logging.getLogger('gajim.c.m.base')
 class BaseModule:
 
     _nbxmpp_extends = ''
-    _nbxmpp_methods = []
+    _nbxmpp_methods = []  # type: List[str]
 
     def __init__(self, con):
         self._con = con
         self._account = con.name
-        self._nbxmpp_callbacks = {}
-        self.handlers = []
+        self._nbxmpp_callbacks = {}  # type: Dict[str, Any]
+        self.handlers = []  # type: List[str]
 
     def __getattr__(self, key):
         if key not in self._nbxmpp_methods:
