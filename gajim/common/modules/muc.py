@@ -30,14 +30,32 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
+from gajim.common.modules.base import BaseModule
+
 
 log = logging.getLogger('gajim.c.m.muc')
 
 
-class MUC:
+class MUC(BaseModule):
+
+    _nbxmpp_extends = 'MUC'
+    _nbxmpp_methods = [
+        'get_affiliation',
+        'set_role',
+        'set_affiliation',
+        'set_config',
+        'set_subject',
+        'cancel_config',
+        'send_captcha',
+        'decline',
+        'invite',
+        'request_config',
+        'request_voice',
+        'destroy',
+    ]
+
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='presence',
@@ -75,28 +93,7 @@ class MUC:
                           priority=49)
         ]
 
-        self._nbmxpp_methods = [
-            'get_affiliation',
-            'set_role',
-            'set_affiliation',
-            'set_config',
-            'set_subject',
-            'cancel_config',
-            'send_captcha',
-            'decline',
-            'request_voice',
-            'destroy',
-        ]
-
-    def __getattr__(self, key):
-        if key not in self._nbmxpp_methods:
-            raise AttributeError
-        if not app.account_is_connected(self._account):
-            log.warning('Account %s not connected, cant use %s',
-                        self._account, key)
-            return
-        module = self._con.connection.get_module('MUC')
-        return getattr(module, key)
+        self._register_callback('request_config', self._config_received)
 
     def pass_disco(self, from_, identities, features, _data, _node):
         for identity in identities:
@@ -423,24 +420,13 @@ class MUC:
             raise nbxmpp.NodeProcessed
 
     def invite(self, room, to, reason=None, continue_=False):
-        if not app.account_is_connected(self._account):
-            return
-
         type_ = InviteType.MEDIATED
         contact = app.contacts.get_contact_from_full_jid(self._account, to)
         if contact and contact.supports(nbxmpp.NS_CONFERENCE):
             type_ = InviteType.DIRECT
 
         password = app.gc_passwords.get(room, None)
-        self._con.connection.get_module('MUC').invite(
-            room, to, reason, password, continue_, type_)
-
-    def request_config(self, room_jid):
-        if not app.account_is_connected(self._account):
-            return
-
-        self._con.connection.get_module('MUC').request_config(
-            room_jid, callback=self._config_received)
+        self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
 
     def _config_received(self, result):
         if result.is_error:
