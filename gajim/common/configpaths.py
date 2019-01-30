@@ -221,8 +221,6 @@ class ConfigPaths:
              'emoticons', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
             ('MY_ICONSETS',
              'iconsets', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
-            ('MY_ACTIVITY_ICONSETS',
-             'activities', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
 
             # Cache paths
             ('CACHE_DB', 'cache.db', PathLocation.CACHE, PathType.FILE),

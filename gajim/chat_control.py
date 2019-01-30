@@ -60,6 +60,8 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_cursor
 from gajim.gtk.util import ensure_proper_control
 from gajim.gtk.util import format_mood
+from gajim.gtk.util import format_activity
+from gajim.gtk.util import get_activity_icon_name
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
@@ -131,7 +133,6 @@ class ChatControl(ChatControlBase):
         self.update_toolbar()
 
         self._pep_images = {}
-        self._pep_images['activity'] = self.xml.get_object('activity_image')
         self._pep_images['tune'] = self.xml.get_object('tune_image')
         self._pep_images['geoloc'] = self.xml.get_object('location_image')
         self.update_all_pep_types()
@@ -233,6 +234,8 @@ class ChatControl(ChatControlBase):
             self._on_nickname_received)
         app.ged.register_event_handler('mood-received', ged.GUI1,
             self._on_mood_received)
+        app.ged.register_event_handler('activity-received', ged.GUI1,
+            self._on_activity_received)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             # Dont connect this when PrivateChatControl is used
             app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
@@ -416,6 +419,7 @@ class ChatControl(ChatControlBase):
         for pep_type in self._pep_images:
             self.update_pep(pep_type)
         self._update_pep(PEPEventType.MOOD)
+        self._update_pep(PEPEventType.ACTIVITY)
 
     def update_pep(self, pep_type):
         if isinstance(self.contact, GC_Contact):
@@ -453,6 +457,9 @@ class ChatControl(ChatControlBase):
         if type_ == PEPEventType.MOOD:
             icon = 'mood-%s' % data.mood
             formated_text = format_mood(*data)
+        elif type_ == PEPEventType.ACTIVITY:
+            icon = get_activity_icon_name(data.activity, data.subactivity)
+            formated_text = format_activity(*data)
 
         image.set_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_tooltip_markup(formated_text)
@@ -461,10 +468,16 @@ class ChatControl(ChatControlBase):
     def _get_pep_widget(self, type_):
         if type_ == PEPEventType.MOOD:
             return self.xml.get_object('mood_image')
+        if type_ == PEPEventType.ACTIVITY:
+            return self.xml.get_object('activity_image')
 
     @ensure_proper_control
     def _on_mood_received(self, _event):
         self._update_pep(PEPEventType.MOOD)
+
+    @ensure_proper_control
+    def _on_activity_received(self, _event):
+        self._update_pep(PEPEventType.ACTIVITY)
 
     @ensure_proper_control
     def _on_nickname_received(self, _event):
@@ -1086,6 +1099,8 @@ class ChatControl(ChatControlBase):
             self._on_nickname_received)
         app.ged.remove_event_handler('mood-received', ged.GUI1,
             self._on_mood_received)
+        app.ged.remove_event_handler('activity-received', ged.GUI1,
+            self._on_activity_received)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
                 self._nec_update_avatar)

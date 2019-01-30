@@ -35,7 +35,9 @@ ZEROCONF_MODULES = ['iq',
 _imported_modules = []  # type: List[tuple]
 _modules = {}  # type: Dict[str, Dict[str, Any]]
 _store_publish_modules = [
-    'UserMood']  # type: List[str]
+    'UserMood',
+    'UserActivity',
+]  # type: List[str]
 
 for file in Path(__file__).parent.iterdir():
     if file.stem == '__init__':

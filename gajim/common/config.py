@@ -93,8 +93,6 @@ class Config:
         'trayicon': [opt_str, 'always', _("When to show notification area icon. Can be 'never', 'on_event', 'always'."), False],
         'allow_hide_roster': [opt_bool, False, _("Allow to hide the roster window even if the tray icon is not shown."), False],
         'iconset': [opt_str, DEFAULT_ICONSET, '', True],
-        'mood_iconset': [opt_str, DEFAULT_MOOD_ICONSET, '', True],
-        'activity_iconset': [opt_str, DEFAULT_ACTIVITY_ICONSET, '', True],
         'use_transports_iconsets': [opt_bool, True, '', True],
         'notif_signin_color': [opt_color, '#32CD32', _('Contact signed in notification color.')], # limegreen
         'notif_signout_color': [opt_color, '#FF0000', _('Contact signout notification color')], # red

@@ -41,10 +41,7 @@ except Exception:
 
 from gajim.common.i18n import _
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.const import PEPEventType
-from gajim.common.const import ACTIVITIES
-from gajim.common.const import MOODS
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
@@ -267,71 +264,14 @@ def create_list_multi(value_list, selected_values=None):
     treeview.show_all()
     return treeview
 
-def load_activity_icon(category, activity=None):
-    """
-    Load an icon from the activity iconset in 16x16
-    """
-    iconset = app.config.get('activity_iconset')
-    path = os.path.join(helpers.get_activity_iconset_path(iconset),
-            category, '')
-    if activity is None:
-        activity = 'category'
-    icon_list = _load_icon_list([activity], path)
-    return icon_list[activity]
-
 def get_pep_icon(pep_class):
     if pep_class == PEPEventType.TUNE:
         return 'audio-x-generic'
-
-    if pep_class == PEPEventType.ACTIVITY:
-        pep_ = pep_class.data
-        activity = pep_['activity']
-
-        has_known_activity = activity in ACTIVITIES
-        has_known_subactivity = (has_known_activity and
-                                 'subactivity' in pep_ and
-                                 pep_['subactivity'] in ACTIVITIES[activity])
-
-        if has_known_activity:
-            if has_known_subactivity:
-                subactivity = pep_['subactivity']
-                return load_activity_icon(activity, subactivity).get_pixbuf()
-            return load_activity_icon(activity).get_pixbuf()
-        return load_activity_icon('unknown').get_pixbuf()
 
     if pep_class == PEPEventType.LOCATION:
         return 'applications-internet'
 
     return None
-
-def _load_icon_list(icons_list, path, pixbuf2=None):
-    """
-    Load icons in icons_list from the given path, and add pixbuf2 on top left of
-    each static images
-    """
-    imgs = {}
-    for icon in icons_list:
-        # try to open a pixfile with the correct method
-        icon_file = icon.replace(' ', '_')
-        files = []
-        files.append(path + icon_file + '.gif')
-        files.append(path + icon_file + '.png')
-        image = Gtk.Image()
-        image.show()
-        imgs[icon] = image
-        for file_ in files: # loop seeking for either gif or png
-            if os.path.exists(file_):
-                image.set_from_file(file_)
-                if pixbuf2 and image.get_storage_type() == Gtk.ImageType.PIXBUF:
-                    # add pixbuf2 on top-left corner of image
-                    pixbuf1 = image.get_pixbuf()
-                    pixbuf2.composite(pixbuf1, 0, 0,
-                            pixbuf2.get_property('width'),
-                            pixbuf2.get_property('height'), 0, 0, 1.0, 1.0,
-                            GdkPixbuf.InterpType.NEAREST, 255)
-                    image.set_from_pixbuf(pixbuf1)
-                break
-    return imgs
 
 def label_set_autowrap(widget):
     """

@@ -14,92 +14,62 @@
 
 # XEP-0108: User Activity
 
+from typing import Any
+from typing import Tuple
+
 import logging
 
 import nbxmpp
-from gi.repository import GLib
 
-from gajim.common.const import PEPEventType, ACTIVITIES
-from gajim.common.exceptions import StanzaMalformed
-from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
+from gajim.common import app
+from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
+from gajim.common.modules.util import store_publish
+from gajim.common.const import PEPEventType
 
 log = logging.getLogger('gajim.c.m.user_activity')
 
 
-class UserActivityData(AbstractPEPData):
+class UserActivity(BaseModule):
 
-    type_ = PEPEventType.ACTIVITY
+    _nbxmpp_extends = 'Activity'
+    _nbxmpp_methods = [
+        'set_activity',
+    ]
 
-    def as_markup_text(self):
-        pep = self.data
-        activity = pep['activity']
-        subactivity = pep['subactivity'] if 'subactivity' in pep else None
-        text = pep['text'] if 'text' in pep else None
+    def __init__(self, con):
+        BaseModule.__init__(self, con)
+        self._register_pubsub_handler(self._activity_received)
 
-        if activity in ACTIVITIES:
-            # Translate standard activities
-            if subactivity in ACTIVITIES[activity]:
-                subactivity = ACTIVITIES[activity][subactivity]
-            activity = ACTIVITIES[activity]['category']
-
-        markuptext = '<b>' + GLib.markup_escape_text(activity)
-        if subactivity:
-            markuptext += ': ' + GLib.markup_escape_text(subactivity)
-        markuptext += '</b>'
-        if text:
-            markuptext += ' (%s)' % GLib.markup_escape_text(text)
-        return markuptext
-
-
-class UserActivity(AbstractPEPModule):
-
-    name = 'activity'
-    namespace = nbxmpp.NS_ACTIVITY
-    pep_class = UserActivityData
-    store_publish = True
-    _log = log
-
-    def _extract_info(self, item):
-        activity_dict = {}
-        activity_tag = item.getTag('activity', namespace=self.namespace)
-        if activity_tag is None:
-            raise StanzaMalformed('No activity node')
-
-        if not activity_tag.getChildren():
-            return None
-
-        for child in activity_tag.getChildren():
-            name = child.getName().strip()
-            data = child.getData().strip()
-            if name == 'text':
-                activity_dict['text'] = data
+    @event_node(nbxmpp.NS_ACTIVITY)
+    def _activity_received(self, _con, _stanza, properties):
+        data = properties.pubsub_event.data
+        for contact in app.contacts.get_contacts(self._account,
+                                                 str(properties.jid)):
+            if data.activity is not None:
+                contact.pep[PEPEventType.ACTIVITY] = data
             else:
-                activity_dict['activity'] = name
-                for subactivity in child.getChildren():
-                    subactivity_name = subactivity.getName().strip()
-                    activity_dict['subactivity'] = subactivity_name
+                contact.pep.pop(PEPEventType.ACTIVITY, None)
 
-        if 'activity' not in activity_dict:
-            raise StanzaMalformed('No activity value found')
-        return activity_dict
+        if properties.is_self_message:
+            if data.activity is not None:
+                self._con.pep[PEPEventType.ACTIVITY] = data
+            else:
+                self._con.pep.pop(PEPEventType.ACTIVITY, None)
 
-    def _build_node(self, data):
-        item = nbxmpp.Node('activity', {'xmlns': self.namespace})
-        if data is None:
-            return item
+        app.nec.push_incoming_event(
+            NetworkEvent('activity-received',
+                         account=self._account,
+                         jid=properties.jid.getBare(),
+                         activity=data,
+                         is_self_message=properties.is_self_message))
 
-        activity, subactivity, message = data
-        if not activity:
-            return item
-
-        i = item.addChild(activity)
-        if subactivity:
-            i.addChild(subactivity)
-        if message:
-            i = item.addChild('text')
-            i.addData(message)
-        return item
+    @store_publish
+    def set_activity(self, activity):
+        log.info('Send %s', activity)
+        self._nbxmpp('Activity').set_activity(activity)
 
 
-def get_instance(*args, **kwargs):
+def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserActivity, str]:
     return UserActivity(*args, **kwargs), 'UserActivity'

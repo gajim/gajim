@@ -1098,13 +1098,6 @@ def get_current_show(account):
     status = app.connections[account].connected
     return app.SHOW_LIST[status]
 
-def get_activity_iconset_path(iconset):
-    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'activities', iconset)):
-        return os.path.join(configpaths.get('DATA'), 'activities', iconset)
-    if os.path.isdir(os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'),
-    iconset)):
-        return os.path.join(configpaths.get('MY_ACTIVITY_ICONSETS'), iconset)
-
 def prepare_and_validate_gpg_keyID(account, jid, keyID):
     """
     Return an eight char long keyID that can be used with for GPG encryption

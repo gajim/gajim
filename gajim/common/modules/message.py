@@ -59,7 +59,7 @@ class Message:
                                         nbxmpp.NS_IBB])
 
     def _message_received(self, _con, stanza, properties):
-        if properties.is_mam_message or properties.is_pubsub_event:
+        if properties.is_mam_message or properties.is_pubsub:
             return
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.

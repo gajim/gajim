@@ -37,6 +37,7 @@ from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.const import MOODS
+from gajim.common.const import ACTIVITIES
 
 from gajim.gtk.const import GajimIconSet
 
@@ -521,3 +522,27 @@ def format_mood(mood, text):
     if text is not None:
         markuptext += ' (%s)' % GLib.markup_escape_text(text)
     return markuptext
+
+
+def format_activity(activity, subactivity, text):
+    if activity is None:
+        return
+
+    if subactivity in ACTIVITIES[activity]:
+        subactivity = ACTIVITIES[activity][subactivity]
+    activity = ACTIVITIES[activity]['category']
+
+    markuptext = '<b>' + GLib.markup_escape_text(activity)
+    if subactivity:
+        markuptext += ': ' + GLib.markup_escape_text(subactivity)
+    markuptext += '</b>'
+    if text:
+        markuptext += ' (%s)' % GLib.markup_escape_text(text)
+    return markuptext
+
+
+def get_activity_icon_name(activity, subactivity=None):
+    icon_name = 'activity-%s' % activity.replace('_', '-')
+    if subactivity is not None:
+        icon_name += '-%s' % subactivity.replace('_', '-')
+    return icon_name

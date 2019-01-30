@@ -37,7 +37,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import gtkgui_helpers
 from gajim import vcard
 from gajim import dataforms_widget
 
@@ -58,6 +57,7 @@ from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import get_activity_icon_name
 
 
 log = logging.getLogger('gajim.dialogs')
@@ -369,9 +369,9 @@ class ChangeActivityDialog:
         group = None
 
         for category in ACTIVITIES:
+            icon_name = get_activity_icon_name(category)
             item = self.xml.get_object(category + '_image')
-            item.set_from_pixbuf(
-                gtkgui_helpers.load_activity_icon(category).get_pixbuf())
+            item.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
             item.set_tooltip_text(ACTIVITIES[category]['category'])
 
             vbox = self.xml.get_object(category + '_vbox')
@@ -386,7 +386,7 @@ class ChangeActivityDialog:
             else:
                 rbtns[act] = group = Gtk.RadioButton()
 
-            icon = gtkgui_helpers.load_activity_icon(category, self.activity)
+            icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
             hbox = Gtk.HBox(homogeneous=False, spacing=5)
             hbox.pack_start(icon, False, False, 0)
             lbl = Gtk.Label(
@@ -412,7 +412,8 @@ class ChangeActivityDialog:
                 else:
                     rbtns[act] = group = Gtk.RadioButton()
 
-                icon = gtkgui_helpers.load_activity_icon(category, activity)
+                icon_name = get_activity_icon_name(category, activity)
+                icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
                 label = Gtk.Label(label=ACTIVITIES[category][activity])
                 hbox = Gtk.HBox(homogeneous=False, spacing=5)
                 hbox.pack_start(icon, False, False, 0)
@@ -681,12 +682,12 @@ class ChangeStatusMessageDialog(TimeoutDialog):
            ACTIVITIES:
             if 'subactivity' in self.pep_dict and self.pep_dict['subactivity'] \
             in ACTIVITIES[self.pep_dict['activity']]:
-                img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
-                    self.pep_dict['activity'], self.pep_dict['subactivity']).\
-                        get_pixbuf())
+                icon_name = get_activity_icon_name(self.pep_dict['activity'],
+                                                   self.pep_dict['subactivity'])
+                img.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
             else:
-                img.set_from_pixbuf(gtkgui_helpers.load_activity_icon(
-                    self.pep_dict['activity']).get_pixbuf())
+                icon_name = get_activity_icon_name(self.pep_dict['activity'])
+                img.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
             if self.pep_dict['activity_text']:
                 label.set_text(self.pep_dict['activity_text'])
             else:
