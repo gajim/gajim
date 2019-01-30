@@ -267,15 +267,6 @@ def create_list_multi(value_list, selected_values=None):
     treeview.show_all()
     return treeview
 
-def load_mood_icon(icon_name):
-    """
-    Load an icon from the mood iconset in 16x16
-    """
-    iconset = app.config.get('mood_iconset')
-    path = os.path.join(helpers.get_mood_iconset_path(iconset), '')
-    icon_list = _load_icon_list([icon_name], path)
-    return icon_list[icon_name]
-
 def load_activity_icon(category, activity=None):
     """
     Load an icon from the activity iconset in 16x16
@@ -289,12 +280,6 @@ def load_activity_icon(category, activity=None):
     return icon_list[activity]
 
 def get_pep_icon(pep_class):
-    if pep_class == PEPEventType.MOOD:
-        received_mood = pep_class.data['mood']
-        mood = received_mood if received_mood in MOODS else 'unknown'
-        pixbuf = load_mood_icon(mood).get_pixbuf()
-        return pixbuf
-
     if pep_class == PEPEventType.TUNE:
         return 'audio-x-generic'
 

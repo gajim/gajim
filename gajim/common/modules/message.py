@@ -55,12 +55,11 @@ class Message:
         ]
 
         # XEPs for which this message module should not be executed
-        self._message_namespaces = set([nbxmpp.NS_PUBSUB_EVENT,
-                                        nbxmpp.NS_ROSTERX,
+        self._message_namespaces = set([nbxmpp.NS_ROSTERX,
                                         nbxmpp.NS_IBB])
 
     def _message_received(self, _con, stanza, properties):
-        if properties.is_mam_message:
+        if properties.is_mam_message or properties.is_pubsub_event:
             return
         # Check if a child of the message contains any
         # namespaces that we handle in other modules.

@@ -20,6 +20,9 @@ import logging
 from functools import partial
 from unittest.mock import Mock
 
+import nbxmpp
+from nbxmpp.structs import StanzaHandler
+
 from gajim.common import app
 
 log = logging.getLogger('gajim.c.m.base')
@@ -34,6 +37,7 @@ class BaseModule:
         self._con = con
         self._account = con.name
         self._nbxmpp_callbacks = {}  # type: Dict[str, Any]
+        self._stored_publish = None  # type: Callable
         self.handlers = []  # type: List[str]
 
     def __getattr__(self, key):
@@ -46,8 +50,10 @@ class BaseModule:
 
         module = self._con.connection.get_module(self._nbxmpp_extends)
 
-        return partial(getattr(module, key),
-                       callback=self._nbxmpp_callbacks.get(key))
+        callback = self._nbxmpp_callbacks.get(key)
+        if callback is None:
+            return getattr(module, key)
+        return partial(getattr(module, key), callback=callback)
 
     def _nbxmpp(self, module_name=None):
         if not app.account_is_connected(self._account):
@@ -61,3 +67,16 @@ class BaseModule:
 
     def _register_callback(self, method, callback):
         self._nbxmpp_callbacks[method] = callback
+
+    def _register_pubsub_handler(self, callback):
+        handler = StanzaHandler(name='message',
+                                callback=callback,
+                                ns=nbxmpp.NS_PUBSUB_EVENT,
+                                priority=49)
+        self.handlers.append(handler)
+
+    def send_stored_publish(self):
+        if self._stored_publish is None:
+            return
+        log.info('Send stored publish')
+        self._stored_publish()

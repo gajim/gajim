@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.const import MOODS
 
 from gajim.gtk.const import GajimIconSet
 
@@ -499,3 +500,24 @@ def ensure_not_destroyed(func):
             return
         return func(self, *args, **kwargs)
     return func_wrapper
+
+
+def ensure_proper_control(func):
+    @wraps(func)
+    def func_wrapper(self, event):
+        if event.account != self.account:
+            return
+        if event.jid != self.contact.jid:
+            return
+        return func(self, event)
+    return func_wrapper
+
+
+def format_mood(mood, text):
+    if mood is None:
+        return ''
+    mood = MOODS[mood]
+    markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
+    if text is not None:
+        markuptext += ' (%s)' % GLib.markup_escape_text(text)
+    return markuptext

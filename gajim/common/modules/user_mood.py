@@ -6,94 +6,69 @@
 #
 # Gajim is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 # XEP-0107: User Mood
 
 from typing import Any
-from typing import Dict
-from typing import List  # pylint: disable=unused-import
-from typing import Optional
 from typing import Tuple
 
 import logging
 
 import nbxmpp
-from gi.repository import GLib
 
-from gajim.common.const import PEPEventType, MOODS
-from gajim.common.exceptions import StanzaMalformed
-from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
+from gajim.common import app
+from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
+from gajim.common.modules.util import store_publish
+from gajim.common.const import PEPEventType
 
 log = logging.getLogger('gajim.c.m.user_mood')
 
 
-class UserMoodData(AbstractPEPData):
+class UserMood(BaseModule):
 
-    type_ = PEPEventType.MOOD
+    _nbxmpp_extends = 'Mood'
+    _nbxmpp_methods = [
+        'set_mood',
+    ]
 
-    def as_markup_text(self) -> str:
-        if self.data is None:
-            return ''
-        mood = self._translate_mood(self.data['mood'])
-        markuptext = '<b>%s</b>' % GLib.markup_escape_text(mood)
-        if 'text' in self.data:
-            text = self.data['text']
-            markuptext += ' (%s)' % GLib.markup_escape_text(text)
-        return markuptext
+    def __init__(self, con):
+        BaseModule.__init__(self, con)
+        self._register_pubsub_handler(self._mood_received)
 
-    @staticmethod
-    def _translate_mood(mood: str) -> str:
-        if mood in MOODS:
-            return MOODS[mood]
-        return mood
-
-
-class UserMood(AbstractPEPModule):
-
-    name = 'mood'
-    namespace = nbxmpp.NS_MOOD
-    pep_class = UserMoodData
-    store_publish = True
-    _log = log
-
-    def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
-        mood_dict = {}
-        mood_tag = item.getTag('mood', namespace=nbxmpp.NS_MOOD)
-        if mood_tag is None:
-            raise StanzaMalformed('No mood node')
-
-        if not mood_tag.getChildren():
-            return None
-
-        for child in mood_tag.getChildren():
-            name = child.getName().strip()
-            if name == 'text':
-                mood_dict['text'] = child.getData()
+    @event_node(nbxmpp.NS_MOOD)
+    def _mood_received(self, _con, _stanza, properties):
+        data = properties.pubsub_event.data
+        for contact in app.contacts.get_contacts(self._account,
+                                                 str(properties.jid)):
+            if data.mood is not None:
+                contact.pep[PEPEventType.MOOD] = data
             else:
-                mood_dict['mood'] = name
+                contact.pep.pop(PEPEventType.MOOD, None)
 
-        if 'mood' not in mood_dict:
-            raise StanzaMalformed('No mood value found')
-        return mood_dict
+        if properties.is_self_message:
+            if data.mood is not None:
+                self._con.pep[PEPEventType.MOOD] = data
+            else:
+                self._con.pep.pop(PEPEventType.MOOD, None)
 
-    def _build_node(self, data: Optional[Tuple[str, str]]) -> nbxmpp.Node:
-        item = nbxmpp.Node('mood', {'xmlns': nbxmpp.NS_MOOD})
-        if data is None:
-            return item
+        app.nec.push_incoming_event(
+            NetworkEvent('mood-received',
+                         account=self._account,
+                         jid=properties.jid.getBare(),
+                         mood=data,
+                         is_self_message=properties.is_self_message))
 
-        mood, text = data
-        if not mood:
-            return item
-        item.addChild(mood)
-
-        if text:
-            item.addChild('text', payload=text)
-        return item
+    @store_publish
+    def set_mood(self, mood):
+        log.info('Send %s', mood)
+        self._nbxmpp('Mood').set_mood(mood)
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserMood, str]:

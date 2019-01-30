@@ -43,6 +43,7 @@ from gi.repository import GObject
 from gi.repository import GLib
 from gi.repository import Gio
 from nbxmpp.protocol import NS_FILE, NS_ROSTERX, NS_CONFERENCE
+from nbxmpp.structs import MoodData
 
 from gajim import dialogs
 from gajim import vcard
@@ -1043,9 +1044,8 @@ class RosterWindow:
         self.model[child_iter][Column.NAME] = GLib.markup_escape_text(account_name)
 
         pep_dict = app.connections[account].pep
-        if app.config.get('show_mood_in_roster') and 'mood' in pep_dict:
-            self.model[child_iter][Column.MOOD_PIXBUF] = \
-                gtkgui_helpers.get_pep_icon(pep_dict['mood'])
+        if app.config.get('show_mood_in_roster') and PEPEventType.MOOD in pep_dict:
+            self.model[child_iter][Column.MOOD_PIXBUF] = 'mood-%s' % pep_dict[PEPEventType.MOOD].mood
         else:
             self.model[child_iter][Column.MOOD_PIXBUF] = None
 
@@ -1311,7 +1311,7 @@ class RosterWindow:
         return False
 
     def _is_pep_shown_in_roster(self, pep_type):
-        if pep_type == 'mood':
+        if pep_type == PEPEventType.MOOD:
             return app.config.get('show_mood_in_roster')
 
         if pep_type == 'activity':
@@ -1328,6 +1328,7 @@ class RosterWindow:
     def draw_all_pep_types(self, jid, account, contact=None):
         for pep_type in self._pep_type_to_model_column:
             self.draw_pep(jid, account, pep_type, contact=contact)
+        self._draw_pep(account, jid, PEPEventType.MOOD)
 
     def draw_pep(self, jid, account, pep_type, contact=None):
         if pep_type not in self._pep_type_to_model_column:
@@ -1348,6 +1349,26 @@ class RosterWindow:
 
         for child_iter in iters:
             self.model[child_iter][model_column] = pixbuf
+
+    def _draw_pep(self, account, jid, type_):
+        if not self._is_pep_shown_in_roster(type_):
+            return
+
+        iters = self._get_contact_iter(jid, account, model=self.model)
+        if not iters:
+            return
+        contact = app.contacts.get_contact(account, jid)
+
+        icon = None
+        data = contact.pep.get(type_)
+
+        if type_ == PEPEventType.MOOD:
+            column = Column.MOOD_PIXBUF
+            if data is not None:
+                icon = 'mood-%s' % data.mood
+
+        for child_iter in iters:
+            self.model[child_iter][column] = icon
 
     def _get_avatar_image(self, account, jid):
         if not app.config.get('show_avatars_in_roster'):
@@ -2086,9 +2107,9 @@ class RosterWindow:
         if 'mood' in pep_dict:
             mood = pep_dict['mood']
             mood_text = pep_dict.get('mood_text', None)
-            connection.get_module('UserMood').send((mood, mood_text))
+            connection.get_module('UserMood').set_mood(MoodData(mood, mood_text))
         else:
-            connection.get_module('UserMood').send(None)
+            connection.get_module('UserMood').set_mood(None)
 
     def delete_pep(self, jid, account):
         if jid == app.get_jid_from_account(account):
@@ -2611,18 +2632,21 @@ class RosterWindow:
     def _nec_pep_received(self, obj):
         if obj.user_pep.type_ not in (PEPEventType.ACTIVITY,
                                       PEPEventType.TUNE,
-                                      PEPEventType.MOOD,
-                                      PEPEventType.LOCATION,
-                                      PEPEventType.NICKNAME):
+                                      PEPEventType.LOCATION):
             return
 
         if obj.jid == app.get_jid_from_account(obj.conn.name):
             self.draw_account(obj.conn.name)
 
-        if obj.pep_type == 'nick':
-            self.draw_contact(obj.jid, obj.conn.name)
-        else:
-            self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
+        self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
+
+    def _on_mood_received(self, event):
+        if event.is_self_message:
+            self.draw_account(event.account)
+        self._draw_pep(event.account, event.jid, PEPEventType.MOOD)
+
+    def _on_nickname_received(self, event):
+        self.draw_contact(event.jid, event.account)
 
     def _nec_update_avatar(self, obj):
         app.log('avatar').debug('Draw roster avatar: %s', obj.jid)
@@ -5558,7 +5582,7 @@ class RosterWindow:
         # activity_pixbuf, TUNE_ICON, LOCATION_ICON, avatar_img,
         # padlock_pixbuf, visible]
         self.columns = [str, str, str, str, str,
-            GdkPixbuf.Pixbuf, GdkPixbuf.Pixbuf, str, str,
+            str, GdkPixbuf.Pixbuf, str, str,
             Gtk.Image, str, bool]
 
         self.xml = get_builder('roster_window.ui')
@@ -5658,7 +5682,7 @@ class RosterWindow:
         # cell_data_func, func_arg)
         self.renderers_list = []
         self.renderers_propertys = {}
-        self._pep_type_to_model_column = {'mood': Column.MOOD_PIXBUF,
+        self._pep_type_to_model_column = {
             'activity': Column.ACTIVITY_PIXBUF, 'tune': Column.TUNE_ICON,
             'geoloc': Column.LOCATION_ICON}
 
@@ -5682,7 +5706,7 @@ class RosterWindow:
                 'markup', Column.NAME, self._nameCellDataFunc, None),
 
                 ('mood', Gtk.CellRendererPixbuf(), False,
-                'pixbuf', Column.MOOD_PIXBUF,
+                'icon_name', Column.MOOD_PIXBUF,
                 self._fill_pep_pixbuf_renderer, Column.MOOD_PIXBUF),
 
                 ('activity', Gtk.CellRendererPixbuf(), False,
@@ -5808,6 +5832,10 @@ class RosterWindow:
             self._nec_agent_removed)
         app.ged.register_event_handler('pep-received', ged.GUI1,
             self._nec_pep_received)
+        app.ged.register_event_handler('nickname-received', ged.GUI1,
+            self._on_nickname_received)
+        app.ged.register_event_handler('mood-received', ged.GUI1,
+            self._on_mood_received)
         app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
             self._nec_update_avatar)
         app.ged.register_event_handler('update-room-avatar', ged.GUI1,

@@ -1098,13 +1098,6 @@ def get_current_show(account):
     status = app.connections[account].connected
     return app.SHOW_LIST[status]
 
-def get_mood_iconset_path(iconset):
-    if os.path.isdir(os.path.join(configpaths.get('DATA'), 'moods', iconset)):
-        return os.path.join(configpaths.get('DATA'), 'moods', iconset)
-    if os.path.isdir(
-            os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)):
-        return os.path.join(configpaths.get('MY_MOOD_ICONSETS'), iconset)
-
 def get_activity_iconset_path(iconset):
     if os.path.isdir(os.path.join(configpaths.get('DATA'), 'activities', iconset)):
         return os.path.join(configpaths.get('DATA'), 'activities', iconset)

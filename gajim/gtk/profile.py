@@ -325,7 +325,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             return
         vcard_, sha = self.make_vcard()
         nick = vcard_.get('NICKNAME') or None
-        app.connections[self.account].get_module('UserNickname').send(nick)
+        app.connections[self.account].get_module('UserNickname').set_nickname(nick)
         if not nick:
             nick = app.config.get_per('accounts', self.account, 'name')
         app.nicks[self.account] = nick

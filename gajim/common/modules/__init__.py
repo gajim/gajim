@@ -34,6 +34,8 @@ ZEROCONF_MODULES = ['iq',
 
 _imported_modules = []  # type: List[tuple]
 _modules = {}  # type: Dict[str, Dict[str, Any]]
+_store_publish_modules = [
+    'UserMood']  # type: List[str]
 
 for file in Path(__file__).parent.iterdir():
     if file.stem == '__init__':
@@ -110,6 +112,11 @@ def unregister_single(con: ConnectionT, name: str) -> None:
     if name not in _modules[con.name]:
         return
     del _modules[con.name][name]
+
+
+def send_stored_publish(account: str) -> None:
+    for name in _store_publish_modules:
+        _modules[account][name].send_stored_publish()
 
 
 def get(account: str, name: str) -> Any:

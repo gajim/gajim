@@ -36,11 +36,13 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
+from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import format_mood
 
 log = logging.getLogger('gajim.gtk.tooltips')
 
@@ -471,8 +473,8 @@ class RosterTooltip(StatusTable):
         Append Tune, Mood, Activity, Location information of the specified contact
         to the given property list.
         """
-        if 'mood' in contact.pep:
-            mood = contact.pep['mood'].as_markup_text()
+        if PEPEventType.MOOD in contact.pep:
+            mood = format_mood(*contact.pep[PEPEventType.MOOD])
             self._ui.mood.set_markup(mood)
             self._ui.mood.show()
             self._ui.mood_label.show()

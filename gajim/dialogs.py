@@ -504,10 +504,12 @@ class ChangeMoodDialog:
         self.MOODS.sort()
 
         for mood in self.MOODS:
+            image = Gtk.Image.new_from_icon_name(
+                'mood-%s' % mood, Gtk.IconSize.MENU)
             self.mood_buttons[mood] = Gtk.RadioButton()
             self.mood_buttons[mood].join_group(no_mood_button)
             self.mood_buttons[mood].set_mode(False)
-            self.mood_buttons[mood].add(gtkgui_helpers.load_mood_icon(mood))
+            self.mood_buttons[mood].add(image)
             self.mood_buttons[mood].set_relief(Gtk.ReliefStyle.NONE)
             self.mood_buttons[mood].set_tooltip_text(MOODS[mood])
             self.mood_buttons[mood].connect('clicked',
@@ -700,8 +702,8 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         img = self.xml.get_object('mood_image')
         label = self.xml.get_object('mood_button_label')
         if 'mood' in self.pep_dict and self.pep_dict['mood'] in MOODS:
-            img.set_from_pixbuf(gtkgui_helpers.load_mood_icon(
-                self.pep_dict['mood']).get_pixbuf())
+            img.set_from_icon_name('mood-%s' % self.pep_dict['mood'],
+                                   Gtk.IconSize.MENU)
             if self.pep_dict['mood_text']:
                 label.set_text(self.pep_dict['mood_text'])
             else:

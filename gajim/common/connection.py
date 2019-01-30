@@ -1631,6 +1631,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         # Inform GUI we just signed in
         app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
+        modules.send_stored_publish(self.name)
         self.get_module('PEP').send_stored_publish()
         self.continue_connect_info = None
 

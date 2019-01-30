@@ -16,6 +16,11 @@
 
 from typing import Union
 
+from functools import wraps
+from functools import partial
+
+from gajim.common import app
+
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:
     if isinstance(value, bool):
@@ -44,3 +49,25 @@ def to_xs_boolean(value: Union[bool, None]) -> str:
 
     raise ValueError(
         'Cant convert %s to xs:boolean' % value)
+
+
+def event_node(node):
+    def event_node_decorator(func):
+        @wraps(func)
+        def func_wrapper(self, _con, _stanza, properties):
+            if properties.pubsub_event.node != node:
+                return
+            func(self, _con, _stanza, properties)
+
+        return func_wrapper
+    return event_node_decorator
+
+
+def store_publish(func):
+    @wraps(func)
+    def func_wrapper(self, *args, **kwargs):
+        if not app.account_is_connected(self._account):
+            self._stored_publish = partial(func, self, *args, **kwargs)
+            return
+        return func(self, *args, **kwargs)
+    return func_wrapper
