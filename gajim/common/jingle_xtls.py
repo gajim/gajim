@@ -15,14 +15,13 @@
 import logging
 import os
 
+from OpenSSL import SSL, crypto
+
 import nbxmpp
 from gajim.common import app
 from gajim.common import configpaths
 
 log = logging.getLogger('gajim.c.jingle_xtls')
-
-
-PYOPENSSL_PRESENT = False
 
 # key-exchange id -> [callback, args], accept that session once key-exchange completes
 pending_contents = {}
@@ -36,16 +35,8 @@ def approve_pending_content(id_):
     args = pending_contents[id_][1]
     cb(*args)
 
-try:
-    import OpenSSL.SSL
-    PYOPENSSL_PRESENT = True
-except ImportError:
-    log.info("PyOpenSSL not available")
-
-if PYOPENSSL_PRESENT:
-    from OpenSSL import SSL, crypto
-    TYPE_RSA = crypto.TYPE_RSA
-    TYPE_DSA = crypto.TYPE_DSA
+TYPE_RSA = crypto.TYPE_RSA
+TYPE_DSA = crypto.TYPE_DSA
 
 SELF_SIGNED_CERTIFICATE = 'localcert'
 DH_PARAMS = 'dh_params.pem'
@@ -76,13 +67,12 @@ def load_cert_file(cert_path, cert_store=None):
         elif 'END CERTIFICATE' in line and begin > -1:
             cert = ''.join(lines[begin:i+2])
             try:
-                x509cert = OpenSSL.crypto.load_certificate(
-                    OpenSSL.crypto.FILETYPE_PEM, cert)
+                x509cert = crypto.load_certificate(crypto.FILETYPE_PEM, cert)
                 if cert_store:
                     cert_store.add_cert(x509cert)
                 f.close()
                 return x509cert
-            except OpenSSL.crypto.Error as exception_obj:
+            except crypto.Error as exception_obj:
                 log.warning('Unable to load a certificate from file %s: %s',
                             cert_path, exception_obj.args[0][0][2])
             except Exception:
@@ -190,12 +180,8 @@ def check_cert(jid, fingerprint):
     if os.path.exists(certpath):
         cert = load_cert_file(certpath)
         if cert:
-            try:
-                digest_algo = cert.get_signature_algorithm().decode('utf-8').\
-                    split('With')[0]
-            except AttributeError:
-                # Old py-OpenSSL is missing get_signature_algorithm
-                digest_algo = "sha256"
+            digest_algo = cert.get_signature_algorithm().decode('utf-8')\
+                    .split('With')[0]
             if cert.digest(digest_algo) == fingerprint:
                 return True
     return False

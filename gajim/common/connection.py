@@ -1170,17 +1170,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='offline'))
             return False
-        if _con_type in ('tls', 'ssl') and con.Connection.ssl_lib != 'PYOPENSSL' \
-        and app.config.get_per('accounts', self.name,
-        'warn_when_insecure_ssl_connection') and \
-        not self.connection_auto_accepted:
-            # Pyopenssl is not used
-            app.nec.push_incoming_event(
-                NetworkEvent('insecure-ssl-connection',
-                             conn=self,
-                             xmpp_client=con,
-                             conn_type=_con_type))
-            return True
         return self.connection_accepted(con, con_type)
 
     def connection_accepted(self, con, con_type):

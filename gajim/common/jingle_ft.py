@@ -116,12 +116,11 @@ class JingleFileTransfer(JingleContent):
             State.CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
         }
 
-        if jingle_xtls.PYOPENSSL_PRESENT:
-            cert_name = os.path.join(configpaths.get('MY_CERT'),
-                                     jingle_xtls.SELF_SIGNED_CERTIFICATE)
-            if not (os.path.exists(cert_name + '.cert')
-                    and os.path.exists(cert_name + '.pkey')):
-                jingle_xtls.make_certs(cert_name, 'gajim')
+        cert_name = os.path.join(configpaths.get('MY_CERT'),
+                                 jingle_xtls.SELF_SIGNED_CERTIFICATE)
+        if not (os.path.exists(cert_name + '.cert')
+                and os.path.exists(cert_name + '.pkey')):
+            jingle_xtls.make_certs(cert_name, 'gajim')
 
     def __state_changed(self, nextstate, args=None):
         # Executes the next state action and sets the next state
