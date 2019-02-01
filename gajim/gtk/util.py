@@ -38,6 +38,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.const import MOODS
 from gajim.common.const import ACTIVITIES
+from gajim.common.const import LOCATION_DATA
 
 from gajim.gtk.const import GajimIconSet
 
@@ -560,3 +561,20 @@ def format_tune(artist, length, rating, source, title, track, uri):
                                                  'artist': artist,
                                                  'source': source}
     return tune_string
+
+
+def format_location(location):
+    location = location._asdict()
+    location_string = ''
+    for attr, value in location.items():
+        if value is None:
+            continue
+        text = GLib.markup_escape_text(value)
+        # Translate standard location tag
+        tag = LOCATION_DATA.get(attr)
+        if tag is None:
+            continue
+        location_string += '\n<b>%(tag)s</b>: %(text)s' % {
+            'tag': tag.capitalize(), 'text': text}
+
+    return location_string.strip()

@@ -264,12 +264,6 @@ def create_list_multi(value_list, selected_values=None):
     treeview.show_all()
     return treeview
 
-def get_pep_icon(pep_class):
-    if pep_class == PEPEventType.LOCATION:
-        return 'applications-internet'
-
-    return None
-
 def label_set_autowrap(widget):
     """
     Make labels automatically re-wrap if their containers are resized.

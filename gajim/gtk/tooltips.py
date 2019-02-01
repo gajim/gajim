@@ -45,6 +45,7 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
 from gajim.gtk.util import format_tune
+from gajim.gtk.util import format_location
 
 
 log = logging.getLogger('gajim.gtk.tooltips')
@@ -494,8 +495,8 @@ class RosterTooltip(StatusTable):
             self._ui.tune.show()
             self._ui.tune_label.show()
 
-        if 'geoloc' in contact.pep:
-            location = contact.pep['geoloc'].as_markup_text()
+        if PEPEventType.LOCATION in contact.pep:
+            location = format_location(contact.pep[PEPEventType.LOCATION])
             self._ui.location.set_markup(location)
             self._ui.location.show()
             self._ui.location_label.show()

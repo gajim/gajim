@@ -18,6 +18,7 @@ import logging
 from datetime import datetime
 
 from gi.repository import GLib
+from nbxmpp.structs import LocationData
 
 from gajim.common import app
 
@@ -93,7 +94,8 @@ class LocationListener:
                 del new_data['timestamp']
                 if last_data == new_data:
                     continue
-            app.connections[acct].get_module('UserLocation').send(self._data)
+            app.connections[acct].get_module('UserLocation').set_location(
+                LocationData(**self._data))
             self.location_info = self._data.copy()
 
     def _timestamp_to_utc(self, timestamp):

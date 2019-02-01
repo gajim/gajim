@@ -1063,10 +1063,8 @@ class RosterWindow:
         else:
             self.model[child_iter][Column.TUNE_ICON] = None
 
-        if app.config.get('show_location_in_roster') and 'geoloc' in \
-        pep_dict:
-            self.model[child_iter][Column.LOCATION_ICON] = \
-                gtkgui_helpers.get_pep_icon(pep_dict['geoloc'])
+        if app.config.get('show_location_in_roster') and PEPEventType.LOCATION in pep_dict:
+            self.model[child_iter][Column.LOCATION_ICON] = 'applications-internet'
         else:
             self.model[child_iter][Column.LOCATION_ICON] = None
 
@@ -1321,37 +1319,16 @@ class RosterWindow:
         if pep_type == PEPEventType.TUNE:
             return  app.config.get('show_tunes_in_roster')
 
-        if pep_type == 'geoloc':
+        if pep_type == PEPEventType.LOCATION:
             return  app.config.get('show_location_in_roster')
 
         return False
 
     def draw_all_pep_types(self, jid, account, contact=None):
-        for pep_type in self._pep_type_to_model_column:
-            self.draw_pep(jid, account, pep_type, contact=contact)
         self._draw_pep(account, jid, PEPEventType.MOOD)
         self._draw_pep(account, jid, PEPEventType.ACTIVITY)
         self._draw_pep(account, jid, PEPEventType.TUNE)
-
-    def draw_pep(self, jid, account, pep_type, contact=None):
-        if pep_type not in self._pep_type_to_model_column:
-            return
-        if not self._is_pep_shown_in_roster(pep_type):
-            return
-
-        model_column = self._pep_type_to_model_column[pep_type]
-        iters = self._get_contact_iter(jid, account, model=self.model)
-        if not iters:
-            return
-        if not contact:
-            contact = app.contacts.get_contact(account, jid)
-
-        pixbuf = None
-        if pep_type in contact.pep:
-            pixbuf = gtkgui_helpers.get_pep_icon(contact.pep[pep_type])
-
-        for child_iter in iters:
-            self.model[child_iter][model_column] = pixbuf
+        self._draw_pep(account, jid, PEPEventType.LOCATION)
 
     def _draw_pep(self, account, jid, type_):
         if not self._is_pep_shown_in_roster(type_):
@@ -1377,6 +1354,10 @@ class RosterWindow:
             column = Column.TUNE_ICON
             if data is not None:
                 icon = 'audio-x-generic'
+        elif type_ == PEPEventType.LOCATION:
+            column = Column.LOCATION_ICON
+            if data is not None:
+                icon = 'applications-internet'
 
         for child_iter in iters:
             self.model[child_iter][column] = icon
@@ -2663,6 +2644,11 @@ class RosterWindow:
             self.draw_account(event.account)
         self._draw_pep(event.account, event.jid, PEPEventType.TUNE)
 
+    def _on_location_received(self, event):
+        if event.is_self_message:
+            self.draw_account(event.account)
+        self._draw_pep(event.account, event.jid, PEPEventType.LOCATION)
+
     def _on_nickname_received(self, event):
         self.draw_contact(event.jid, event.account)
 
@@ -3619,7 +3605,7 @@ class RosterWindow:
         if active:
             location.enable()
         else:
-            app.connections[account].get_module('UserLocation').send(None)
+            app.connections[account].get_module('UserLocation').set_location(None)
 
         helpers.update_optional_features(account)
 
@@ -5699,7 +5685,6 @@ class RosterWindow:
         # cell_data_func, func_arg)
         self.renderers_list = []
         self.renderers_propertys = {}
-        self._pep_type_to_model_column = {'geoloc': Column.LOCATION_ICON}
 
         renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
@@ -5855,6 +5840,8 @@ class RosterWindow:
             self._on_activity_received)
         app.ged.register_event_handler('tune-received', ged.GUI1,
             self._on_tune_received)
+        app.ged.register_event_handler('location-received', ged.GUI1,
+            self._on_location_received)
         app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
             self._nec_update_avatar)
         app.ged.register_event_handler('update-room-avatar', ged.GUI1,

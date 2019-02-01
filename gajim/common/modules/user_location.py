@@ -17,64 +17,57 @@
 import logging
 
 import nbxmpp
-from gi.repository import GLib
 
-from gajim.common.const import PEPEventType, LOCATION_DATA
-from gajim.common.exceptions import StanzaMalformed
-from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
+from gajim.common import app
+from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
+from gajim.common.modules.util import store_publish
+from gajim.common.const import PEPEventType
 
 log = logging.getLogger('gajim.c.m.user_location')
 
 
-class UserLocationData(AbstractPEPData):
+class UserLocation(BaseModule):
 
-    type_ = PEPEventType.LOCATION
+    _nbxmpp_extends = 'Location'
+    _nbxmpp_methods = [
+        'set_location',
+    ]
 
-    def as_markup_text(self):
-        location = self.data
-        location_string = ''
+    def __init__(self, con):
+        BaseModule.__init__(self, con)
+        self._register_pubsub_handler(self._location_received)
 
-        for entry in location.keys():
-            text = location[entry]
-            text = GLib.markup_escape_text(text)
-            # Translate standard location tag
-            tag = LOCATION_DATA.get(entry, entry)
-            location_string += '\n<b>%(tag)s</b>: %(text)s' % {
-                'tag': tag.capitalize(), 'text': text}
+    @event_node(nbxmpp.NS_LOCATION)
+    def _location_received(self, _con, _stanza, properties):
+        data = properties.pubsub_event.data
+        empty = properties.pubsub_event.empty
 
-        return location_string.strip()
+        for contact in app.contacts.get_contacts(self._account,
+                                                 str(properties.jid)):
+            if not empty:
+                contact.pep[PEPEventType.LOCATION] = data
+            else:
+                contact.pep.pop(PEPEventType.LOCATION, None)
 
+        if properties.is_self_message:
+            if not empty:
+                self._con.pep[PEPEventType.LOCATION] = data
+            else:
+                self._con.pep.pop(PEPEventType.LOCATION, None)
 
-class UserLocation(AbstractPEPModule):
+        app.nec.push_incoming_event(
+            NetworkEvent('location-received',
+                         account=self._account,
+                         jid=properties.jid.getBare(),
+                         location=data,
+                         is_self_message=properties.is_self_message))
 
-    name = 'geoloc'
-    namespace = nbxmpp.NS_LOCATION
-    pep_class = UserLocationData
-    store_publish = True
-    _log = log
-
-    def _extract_info(self, item):
-        location_dict = {}
-        location_tag = item.getTag('geoloc', namespace=nbxmpp.NS_LOCATION)
-        if location_tag is None:
-            raise StanzaMalformed('No geoloc node')
-
-        for child in location_tag.getChildren():
-            name = child.getName().strip()
-            data = child.getData().strip()
-            if child.getName() in LOCATION_DATA:
-                location_dict[name] = data
-
-        return location_dict or None
-
-    def _build_node(self, data):
-        item = nbxmpp.Node('geoloc', {'xmlns': nbxmpp.NS_LOCATION})
-        if data is None:
-            return item
-        for field in LOCATION_DATA:
-            if data.get(field, False):
-                item.addChild(field, payload=data[field])
-        return item
+    @store_publish
+    def set_location(self, location):
+        log.info('Send %s', location)
+        self._nbxmpp('Location').set_location(location)
 
 
 def get_instance(*args, **kwargs):

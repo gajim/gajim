@@ -62,6 +62,7 @@ from gajim.gtk.util import ensure_proper_control
 from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
 from gajim.gtk.util import format_tune
+from gajim.gtk.util import format_location
 from gajim.gtk.util import get_activity_icon_name
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -132,11 +133,7 @@ class ChatControl(ChatControlBase):
         self.video_available = False
 
         self.update_toolbar()
-
-        self._pep_images = {}
-        self._pep_images['geoloc'] = self.xml.get_object('location_image')
         self.update_all_pep_types()
-
         self.show_avatar()
 
         # Hook up signals
@@ -228,8 +225,6 @@ class ChatControl(ChatControlBase):
         self.restore_conversation()
         self.msg_textview.grab_focus()
 
-        app.ged.register_event_handler('pep-received', ged.GUI1,
-            self._nec_pep_received)
         app.ged.register_event_handler('nickname-received', ged.GUI1,
             self._on_nickname_received)
         app.ged.register_event_handler('mood-received', ged.GUI1,
@@ -238,6 +233,8 @@ class ChatControl(ChatControlBase):
             self._on_activity_received)
         app.ged.register_event_handler('tune-received', ged.GUI1,
             self._on_tune_received)
+        app.ged.register_event_handler('location-received', ged.GUI1,
+            self._on_location_received)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             # Dont connect this when PrivateChatControl is used
             app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
@@ -418,37 +415,10 @@ class ChatControl(ChatControlBase):
             self.audio_available = False
 
     def update_all_pep_types(self):
-        for pep_type in self._pep_images:
-            self.update_pep(pep_type)
+        self._update_pep(PEPEventType.LOCATION)
         self._update_pep(PEPEventType.MOOD)
         self._update_pep(PEPEventType.ACTIVITY)
         self._update_pep(PEPEventType.TUNE)
-
-    def update_pep(self, pep_type):
-        if isinstance(self.contact, GC_Contact):
-            return
-        if pep_type not in self._pep_images:
-            return
-        pep = self.contact.pep
-        img = self._pep_images[pep_type]
-        if pep_type in pep:
-            icon = gtkgui_helpers.get_pep_icon(pep[pep_type])
-            if isinstance(icon, str):
-                img.set_from_icon_name(icon, Gtk.IconSize.MENU)
-            else:
-                img.set_from_pixbuf(icon)
-            img.set_tooltip_markup(pep[pep_type].as_markup_text())
-            img.show()
-        else:
-            img.hide()
-
-    def _nec_pep_received(self, obj):
-        if obj.conn.name != self.account:
-            return
-        if obj.jid != self.contact.jid:
-            return
-
-        self.update_pep(obj.pep_type)
 
     def _update_pep(self, type_):
         image = self._get_pep_widget(type_)
@@ -466,6 +436,9 @@ class ChatControl(ChatControlBase):
         elif type_ == PEPEventType.TUNE:
             icon = 'audio-x-generic'
             formated_text = format_tune(*data)
+        elif type_ == PEPEventType.LOCATION:
+            icon = 'applications-internet'
+            formated_text = format_location(data)
 
         image.set_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_tooltip_markup(formated_text)
@@ -478,6 +451,8 @@ class ChatControl(ChatControlBase):
             return self.xml.get_object('activity_image')
         if type_ == PEPEventType.TUNE:
             return self.xml.get_object('tune_image')
+        if type_ == PEPEventType.LOCATION:
+            return self.xml.get_object('location_image')
 
     @ensure_proper_control
     def _on_mood_received(self, _event):
@@ -490,6 +465,10 @@ class ChatControl(ChatControlBase):
     @ensure_proper_control
     def _on_tune_received(self, _event):
         self._update_pep(PEPEventType.TUNE)
+
+    @ensure_proper_control
+    def _on_location_received(self, _event):
+        self._update_pep(PEPEventType.LOCATION)
 
     @ensure_proper_control
     def _on_nickname_received(self, _event):
@@ -1104,9 +1083,6 @@ class ChatControl(ChatControlBase):
         # PluginSystem: removing GUI extension points connected with ChatControl
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
-
-        app.ged.remove_event_handler('pep-received', ged.GUI1,
-            self._nec_pep_received)
         app.ged.remove_event_handler('nickname-received', ged.GUI1,
             self._on_nickname_received)
         app.ged.remove_event_handler('mood-received', ged.GUI1,
@@ -1115,6 +1091,8 @@ class ChatControl(ChatControlBase):
             self._on_activity_received)
         app.ged.remove_event_handler('tune-received', ged.GUI1,
             self._on_tune_received)
+        app.ged.remove_event_handler('location-received', ged.GUI1,
+            self._on_location_received)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
                 self._nec_update_avatar)
