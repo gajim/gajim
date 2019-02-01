@@ -47,8 +47,6 @@ ConnectionT = Union['Connection', 'ConnectionZeroconf']
 ContactsT = Union['Contact', 'GC_Contact']
 ContactT = Union['Contact']
 
-UserTuneDataT = Optional[Tuple[str, str, str, str, str]]
-
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
 PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]

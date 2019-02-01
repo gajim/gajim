@@ -47,6 +47,7 @@ from gi.repository import Gio
 from gi.repository import Gdk
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
+from nbxmpp.structs import TuneData
 import OpenSSL
 
 try:
@@ -1942,8 +1943,8 @@ class Interface:
                 continue
             if app.connections[acct].music_track_info == music_track_info:
                 continue
-            app.connections[acct].get_module('UserTune').send(
-                (artist, title, source, '', ''))
+            app.connections[acct].get_module('UserTune').set_tune(
+                TuneData(artist=artist, title=title, source=source))
             app.connections[acct].music_track_info = music_track_info
 
     def read_sleepy(self):

@@ -44,6 +44,7 @@ from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import format_mood
 from gajim.gtk.util import format_activity
+from gajim.gtk.util import format_tune
 
 
 log = logging.getLogger('gajim.gtk.tooltips')
@@ -487,8 +488,8 @@ class RosterTooltip(StatusTable):
             self._ui.activity.show()
             self._ui.activity_label.show()
 
-        if 'tune' in contact.pep:
-            tune = contact.pep['tune'].as_markup_text()
+        if PEPEventType.TUNE in contact.pep:
+            tune = format_tune(*contact.pep[PEPEventType.TUNE])
             self._ui.tune.set_markup(tune)
             self._ui.tune.show()
             self._ui.tune_label.show()

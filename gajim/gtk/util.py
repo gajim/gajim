@@ -546,3 +546,17 @@ def get_activity_icon_name(activity, subactivity=None):
     if subactivity is not None:
         icon_name += '-%s' % subactivity.replace('_', '-')
     return icon_name
+
+
+def format_tune(artist, length, rating, source, title, track, uri):
+    if artist is None and title is None and source is None:
+        return
+    artist = GLib.markup_escape_text(artist or _('Unknown Artist'))
+    title = GLib.markup_escape_text(title or _('Unknown Title'))
+    source = GLib.markup_escape_text(source or _('Unknown Source'))
+
+    tune_string = _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+                    'from <i>%(source)s</i>') % {'title': title,
+                                                 'artist': artist,
+                                                 'source': source}
+    return tune_string

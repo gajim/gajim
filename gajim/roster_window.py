@@ -1058,9 +1058,8 @@ class RosterWindow:
         else:
             self.model[child_iter][Column.ACTIVITY_PIXBUF] = None
 
-        if app.config.get('show_tunes_in_roster') and 'tune' in pep_dict:
-            self.model[child_iter][Column.TUNE_ICON] = \
-                gtkgui_helpers.get_pep_icon(pep_dict['tune'])
+        if app.config.get('show_tunes_in_roster') and PEPEventType.TUNE in pep_dict:
+            self.model[child_iter][Column.TUNE_ICON] = 'audio-x-generic'
         else:
             self.model[child_iter][Column.TUNE_ICON] = None
 
@@ -1319,7 +1318,7 @@ class RosterWindow:
         if pep_type == PEPEventType.ACTIVITY:
             return app.config.get('show_activity_in_roster')
 
-        if pep_type == 'tune':
+        if pep_type == PEPEventType.TUNE:
             return  app.config.get('show_tunes_in_roster')
 
         if pep_type == 'geoloc':
@@ -1332,6 +1331,7 @@ class RosterWindow:
             self.draw_pep(jid, account, pep_type, contact=contact)
         self._draw_pep(account, jid, PEPEventType.MOOD)
         self._draw_pep(account, jid, PEPEventType.ACTIVITY)
+        self._draw_pep(account, jid, PEPEventType.TUNE)
 
     def draw_pep(self, jid, account, pep_type, contact=None):
         if pep_type not in self._pep_type_to_model_column:
@@ -1373,6 +1373,10 @@ class RosterWindow:
             column = Column.ACTIVITY_PIXBUF
             if data is not None:
                 icon = get_activity_icon_name(data.activity, data.subactivity)
+        elif type_ == PEPEventType.TUNE:
+            column = Column.TUNE_ICON
+            if data is not None:
+                icon = 'audio-x-generic'
 
         for child_iter in iters:
             self.model[child_iter][column] = icon
@@ -2636,8 +2640,7 @@ class RosterWindow:
             self.remove_contact(jid, obj.conn.name, backend=True)
 
     def _nec_pep_received(self, obj):
-        if obj.user_pep.type_ not in (PEPEventType.TUNE,
-                                      PEPEventType.LOCATION):
+        if obj.user_pep.type_ != PEPEventType.LOCATION:
             return
 
         if obj.jid == app.get_jid_from_account(obj.conn.name):
@@ -2654,6 +2657,11 @@ class RosterWindow:
         if event.is_self_message:
             self.draw_account(event.account)
         self._draw_pep(event.account, event.jid, PEPEventType.ACTIVITY)
+
+    def _on_tune_received(self, event):
+        if event.is_self_message:
+            self.draw_account(event.account)
+        self._draw_pep(event.account, event.jid, PEPEventType.TUNE)
 
     def _on_nickname_received(self, event):
         self.draw_contact(event.jid, event.account)
@@ -3595,7 +3603,7 @@ class RosterWindow:
         if active:
             app.interface.enable_music_listener()
         else:
-            app.connections[account].get_module('UserTune').send(None)
+            app.connections[account].get_module('UserTune').set_tune(None)
             # disable music listener only if no other account uses it
             for acc in app.connections:
                 if app.config.get_per('accounts', acc, 'publish_tune'):
@@ -5591,9 +5599,8 @@ class RosterWindow:
         # [icon, name, type, jid, account, editable, mood_pixbuf,
         # activity_pixbuf, TUNE_ICON, LOCATION_ICON, avatar_img,
         # padlock_pixbuf, visible]
-        self.columns = [str, str, str, str, str,
-            str, str, str, str,
-            Gtk.Image, str, bool]
+        self.columns = [str, str, str, str, str, str, str, str, str,
+                        Gtk.Image, str, bool]
 
         self.xml = get_builder('roster_window.ui')
         self.window = self.xml.get_object('roster_window')
@@ -5692,8 +5699,7 @@ class RosterWindow:
         # cell_data_func, func_arg)
         self.renderers_list = []
         self.renderers_propertys = {}
-        self._pep_type_to_model_column = {'tune': Column.TUNE_ICON,
-            'geoloc': Column.LOCATION_ICON}
+        self._pep_type_to_model_column = {'geoloc': Column.LOCATION_ICON}
 
         renderer_text = Gtk.CellRendererText()
         self.renderers_propertys[renderer_text] = ('ellipsize',
@@ -5847,6 +5853,8 @@ class RosterWindow:
             self._on_mood_received)
         app.ged.register_event_handler('activity-received', ged.GUI1,
             self._on_activity_received)
+        app.ged.register_event_handler('tune-received', ged.GUI1,
+            self._on_tune_received)
         app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
             self._nec_update_avatar)
         app.ged.register_event_handler('update-room-avatar', ged.GUI1,

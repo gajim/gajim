@@ -265,9 +265,6 @@ def create_list_multi(value_list, selected_values=None):
     return treeview
 
 def get_pep_icon(pep_class):
-    if pep_class == PEPEventType.TUNE:
-        return 'audio-x-generic'
-
     if pep_class == PEPEventType.LOCATION:
         return 'applications-internet'
 

@@ -15,90 +15,62 @@
 # XEP-0118: User Tune
 
 from typing import Any
-from typing import List  # pylint: disable=unused-import
-from typing import Dict
-from typing import Optional
 from typing import Tuple
 
 import logging
 
 import nbxmpp
-from gi.repository import GLib
 
-from gajim.common.i18n import _
+from gajim.common import app
+from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
+from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
-from gajim.common.exceptions import StanzaMalformed
-from gajim.common.modules.pep import AbstractPEPModule, AbstractPEPData
-from gajim.common.types import UserTuneDataT
 
 log = logging.getLogger('gajim.c.m.user_tune')
 
 
-class UserTuneData(AbstractPEPData):
+class UserTune(BaseModule):
 
-    type_ = PEPEventType.TUNE
+    _nbxmpp_extends = 'Tune'
+    _nbxmpp_methods = [
+        'set_tune',
+    ]
 
-    def as_markup_text(self) -> str:
-        if self.data is None:
-            return ''
+    def __init__(self, con):
+        BaseModule.__init__(self, con)
+        self._register_pubsub_handler(self._tune_received)
 
-        tune = self.data
+    @event_node(nbxmpp.NS_TUNE)
+    def _tune_received(self, _con, _stanza, properties):
+        data = properties.pubsub_event.data
+        empty = properties.pubsub_event.empty
 
-        artist = tune.get('artist', _('Unknown Artist'))
-        artist = GLib.markup_escape_text(artist)
+        for contact in app.contacts.get_contacts(self._account,
+                                                 str(properties.jid)):
+            if not empty:
+                contact.pep[PEPEventType.TUNE] = data
+            else:
+                contact.pep.pop(PEPEventType.TUNE, None)
 
-        title = tune.get('title', _('Unknown Title'))
-        title = GLib.markup_escape_text(title)
+        if properties.is_self_message:
+            if not empty:
+                self._con.pep[PEPEventType.TUNE] = data
+            else:
+                self._con.pep.pop(PEPEventType.TUNE, None)
 
-        source = tune.get('source', _('Unknown Source'))
-        source = GLib.markup_escape_text(source)
+        app.nec.push_incoming_event(
+            NetworkEvent('tune-received',
+                         account=self._account,
+                         jid=properties.jid.getBare(),
+                         tune=data,
+                         is_self_message=properties.is_self_message))
 
-        tune_string = _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-                        'from <i>%(source)s</i>') % {'title': title,
-                                                     'artist': artist,
-                                                     'source': source}
-        return tune_string
-
-
-class UserTune(AbstractPEPModule):
-
-    name = 'tune'
-    namespace = nbxmpp.NS_TUNE
-    pep_class = UserTuneData
-    store_publish = True
-    _log = log
-
-    def _extract_info(self, item: nbxmpp.Node) -> Optional[Dict[str, str]]:
-        tune_dict = {}
-        tune_tag = item.getTag('tune', namespace=self.namespace)
-        if tune_tag is None:
-            raise StanzaMalformed('No tune node')
-
-        for child in tune_tag.getChildren():
-            name = child.getName().strip()
-            data = child.getData().strip()
-            if child.getName() in ['artist', 'title', 'source',
-                                   'track', 'length']:
-                tune_dict[name] = data
-
-        return tune_dict or None
-
-    def _build_node(self, data: UserTuneDataT) -> nbxmpp.Node:
-        item = nbxmpp.Node('tune', {'xmlns': nbxmpp.NS_TUNE})
-        if data is None:
-            return item
-        artist, title, source, track, length = data
-        if artist:
-            item.addChild('artist', payload=artist)
-        if title:
-            item.addChild('title', payload=title)
-        if source:
-            item.addChild('source', payload=source)
-        if track:
-            item.addChild('track', payload=track)
-        if length:
-            item.addChild('length', payload=length)
-        return item
+    @store_publish
+    def set_tune(self, tune):
+        log.info('Send %s', tune)
+        self._nbxmpp('Tune').set_tune(tune)
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[UserTune, str]:
