@@ -171,7 +171,6 @@ try:
         # Set the env var on Windows because gettext.find() uses it to
         # find the translation
         os.environ['LANG'] = LANG
-    print('Found default language: %s' % LANG)
 except Exception as error:
     print('Failed to determine default language')
     import traceback

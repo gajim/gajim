@@ -44,6 +44,7 @@ import gajim
 from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
+from gajim.common.i18n import LANG
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
@@ -336,6 +337,8 @@ def detect_dependencies():
     # Print results
     for dep, val in _dependencies.items():
         log('gajim').info('%-13s %s', dep, val)
+
+    log('gajim').info('Used language: %s', LANG)
 
 def get_gpg_binary():
     return _dependencies['GPG_BINARY']
