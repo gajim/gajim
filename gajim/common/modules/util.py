@@ -55,6 +55,8 @@ def event_node(node):
     def event_node_decorator(func):
         @wraps(func)
         def func_wrapper(self, _con, _stanza, properties):
+            if not properties.is_pubsub_event:
+                return
             if properties.pubsub_event.node != node:
                 return
             func(self, _con, _stanza, properties)

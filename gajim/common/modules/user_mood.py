@@ -45,6 +45,8 @@ class UserMood(BaseModule):
     @event_node(nbxmpp.NS_MOOD)
     def _mood_received(self, _con, _stanza, properties):
         data = properties.pubsub_event.data
+        if data is None:
+            return
         for contact in app.contacts.get_contacts(self._account,
                                                  str(properties.jid)):
             if data.mood is not None:
