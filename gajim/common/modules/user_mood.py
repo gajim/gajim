@@ -45,17 +45,17 @@ class UserMood(BaseModule):
     @event_node(nbxmpp.NS_MOOD)
     def _mood_received(self, _con, _stanza, properties):
         data = properties.pubsub_event.data
-        if data is None:
-            return
+        empty = properties.pubsub_event.empty
+
         for contact in app.contacts.get_contacts(self._account,
                                                  str(properties.jid)):
-            if data.mood is not None:
+            if not empty:
                 contact.pep[PEPEventType.MOOD] = data
             else:
                 contact.pep.pop(PEPEventType.MOOD, None)
 
         if properties.is_self_message:
-            if data.mood is not None:
+            if not empty:
                 self._con.pep[PEPEventType.MOOD] = data
             else:
                 self._con.pep.pop(PEPEventType.MOOD, None)
