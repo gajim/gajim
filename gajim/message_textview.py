@@ -24,10 +24,9 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
-from gajim import gtkgui_helpers
-
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.const import StyleAttr
 
 from gajim.gtk.util import scroll_to_end
 
@@ -76,9 +75,12 @@ class MessageTextView(Gtk.TextView):
         self.color_tags = []
         self.fonts_tags = []
         self.other_tags = {}
+
+        color = app.css_config.get_value(
+            '.gajim-message-placeholder', StyleAttr.COLOR)
         self.placeholder_tag = buffer_.create_tag('placeholder')
-        self.placeholder_tag.set_property('foreground_rgba',
-                                      gtkgui_helpers.Color.GREY)
+        self.placeholder_tag.set_property('foreground', color)
+
         self.other_tags['bold'] = buffer_.create_tag('bold')
         self.other_tags['bold'].set_property('weight', Pango.Weight.BOLD)
         self.begin_tags['bold'] = '<strong>'
