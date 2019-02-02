@@ -37,6 +37,8 @@ _modules = {}  # type: Dict[str, Dict[str, Any]]
 _store_publish_modules = [
     'UserMood',
     'UserActivity',
+    'UserLocation',
+    'UserTune',
 ]  # type: List[str]
 
 for file in Path(__file__).parent.iterdir():
