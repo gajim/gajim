@@ -41,7 +41,6 @@ except Exception:
 
 from gajim.common.i18n import _
 from gajim.common import app
-from gajim.common.const import PEPEventType
 
 HAS_PYWIN32 = True
 if os.name == 'nt':
