@@ -15,96 +15,97 @@
 # XEP-0048: Bookmarks
 
 from typing import Any
-from typing import Dict
 from typing import List
 from typing import Optional
 
 import logging
 import copy
-from collections import OrderedDict
 
 import nbxmpp
+from nbxmpp.structs import BookmarkData
+from nbxmpp.const import BookmarkStoreType
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import helpers
-from gajim.common.const import PEPEventType
 from gajim.common.nec import NetworkEvent
-from gajim.common.exceptions import StanzaMalformed
-from gajim.common.modules.pep import AbstractPEPModule
-from gajim.common.modules.pep import AbstractPEPData
-from gajim.common.modules.util import from_xs_boolean
-from gajim.common.modules.util import to_xs_boolean
+from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import event_node
 
 
 log = logging.getLogger('gajim.c.m.bookmarks')
 
 
-class BookmarksData(AbstractPEPData):
+class Bookmarks(BaseModule):
 
-    type_ = PEPEventType.BOOKMARKS
-
-
-class Bookmarks(AbstractPEPModule):
-
-    name = 'storage'
-    namespace = 'storage:bookmarks'
-    pep_class = BookmarksData
-    store_publish = False
-    _log = log
+    _nbxmpp_extends = 'Bookmarks'
+    _nbxmpp_methods = [
+        'request_bookmarks',
+        'store_bookmarks',
+    ]
 
     def __init__(self, con):
-        AbstractPEPModule.__init__(self, con)
-
-        self.bookmarks = {}
-        self.conversion = False
+        BaseModule.__init__(self, con)
+        self._register_pubsub_handler(self._bookmark_event_received)
+        self._conversion = False
+        self._bookmarks = []
         self._join_timeouts = []
         self._request_in_progress = False
 
-    def pass_disco(self, from_, _identities, features, _data, _node):
-        if nbxmpp.NS_BOOKMARK_CONVERSION not in features:
-            return
-        self.conversion = True
-        log.info('Discovered Bookmarks Conversion: %s', from_)
+    @property
+    def conversion(self):
+        return self._conversion
 
-    def _extract_info(self, item):
-        storage = item.getTag('storage', namespace=self.namespace)
-        if storage is None:
-            raise StanzaMalformed('No storage node')
-        return storage
+    @property
+    def bookmarks(self):
+        return self._bookmarks
 
-    def _notification_received(self, jid: nbxmpp.JID, user_pep: Any) -> None:
-        if self._request_in_progress:
-            log.info('Ignore update, pubsub request in progress')
-            return
+    @bookmarks.setter
+    def bookmarks(self, value):
+        self._bookmarks = value
 
-        if not self._con.get_own_jid().bareMatch(jid):
-            log.warning('%s has an open access bookmarks node', jid)
+    @event_node(nbxmpp.NS_BOOKMARKS)
+    def _bookmark_event_received(self, _con, _stanza, properties):
+        bookmarks = properties.pubsub_event.data
+
+        if not properties.is_self_message:
+            log.warning('%s has an open access bookmarks node', properties.jid)
             return
 
         if not self._pubsub_support() or not self.conversion:
             return
 
-        old_bookmarks = self._convert_to_set(self.bookmarks)
-        self.bookmarks = self._parse_bookmarks(user_pep.data)
+        if self._request_in_progress:
+            log.info('Ignore update, pubsub request in progress')
+            return
+
+        old_bookmarks = self._convert_to_set(self._bookmarks)
+        self._bookmarks = bookmarks
         self._act_on_changed_bookmarks(old_bookmarks)
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
+    def pass_disco(self, from_, _identities, features, _data, _node):
+        if nbxmpp.NS_BOOKMARK_CONVERSION not in features:
+            return
+        self._conversion = True
+        log.info('Discovered Bookmarks Conversion: %s', from_)
+
     def _act_on_changed_bookmarks(self, old_bookmarks):
-        new_bookmarks = self._convert_to_set(self.bookmarks)
+        new_bookmarks = self._convert_to_set(self._bookmarks)
         changed = new_bookmarks - old_bookmarks
         if not changed:
             return
 
         join = [jid for jid, autojoin in changed if autojoin]
+        bookmarks = []
         for jid in join:
             log.info('Schedule autojoin in 10s for: %s', jid)
+            bookmarks.append(self.get_bookmark_from_jid(jid))
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
         # the configuration.
         timeout_id = GLib.timeout_add_seconds(
-            10, self._join_with_timeout, join)
+            10, self._join_with_timeout, bookmarks)
         self._join_timeouts.append(timeout_id)
 
         # TODO: leave mucs
@@ -113,256 +114,122 @@ class Bookmarks(AbstractPEPModule):
     @staticmethod
     def _convert_to_set(bookmarks):
         set_ = set()
-        for jid in bookmarks:
-            set_.add((jid, bookmarks[jid]['autojoin']))
+        for bookmark in bookmarks:
+            set_.add((bookmark.jid, bookmark.autojoin))
         return set_
+
+    def get_bookmark_from_jid(self, jid):
+        for bookmark in self._bookmarks:
+            if bookmark.jid == jid:
+                return bookmark
 
     def get_sorted_bookmarks(self, short_name=False):
         # This returns a sorted by name copy of the bookmarks
-        sorted_bookmarks = {}
-        for jid, bookmarks in self.bookmarks.items():
-            bookmark_copy = copy.deepcopy(bookmarks)
-            if not bookmark_copy['name']:
+        sorted_bookmarks = []
+        for bookmark in self._bookmarks:
+            bookmark_copy = copy.deepcopy(bookmark)
+            if not bookmark_copy.name:
                 # No name was given for this bookmark
                 # Use the first part of JID instead
-                name = jid.split("@")[0]
-                bookmark_copy['name'] = name
+                name = bookmark_copy.jid.split("@")[0]
+                bookmark_copy = bookmark_copy._replace(name=name)
 
             if short_name:
-                name = bookmark_copy['name']
+                name = bookmark_copy.name
                 name = (name[:42] + '..') if len(name) > 42 else name
-                bookmark_copy['name'] = name
+                bookmark_copy = bookmark_copy._replace(name=name)
 
-            sorted_bookmarks[jid] = bookmark_copy
-        return OrderedDict(
-            sorted(sorted_bookmarks.items(),
-                   key=lambda bookmark: bookmark[1]['name'].lower()))
+            sorted_bookmarks.append(bookmark_copy)
+
+        sorted_bookmarks.sort(key=lambda x: x.name.lower())
+        return sorted_bookmarks
 
     def _pubsub_support(self) -> bool:
         return (self._con.get_module('PEP').supported and
                 self._con.get_module('PubSub').publish_options)
 
-    def get_bookmarks(self):
+    def request_bookmarks(self):
         if not app.account_is_connected(self._account):
             return
 
+        self._request_in_progress = True
+        type_ = BookmarkStoreType.PRIVATE
         if self._pubsub_support() and self.conversion:
-            self._request_pubsub_bookmarks()
-        else:
-            self._request_private_bookmarks()
+            type_ = BookmarkStoreType.PUBSUB
 
-    def _request_pubsub_bookmarks(self) -> None:
-        log.info('Request Bookmarks (PubSub)')
-        self._request_in_progress = True
-        self._con.get_module('PubSub').send_pb_retrieve(
-            '', 'storage:bookmarks', cb=self._bookmarks_received)
+        self._nbxmpp('Bookmarks').request_bookmarks(
+            type_, callback=self._bookmarks_received)
 
-    def _request_private_bookmarks(self) -> None:
-        self._request_in_progress = True
-        iq = nbxmpp.Iq(typ='get')
-        query = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        query.addChild(name='storage', namespace='storage:bookmarks')
-        log.info('Request Bookmarks (PrivateStorage)')
-        self._con.connection.SendAndCallForResponse(
-            iq, self._bookmarks_received, {})
-
-    def _bookmarks_received(self, _con, stanza):
+    def _bookmarks_received(self, bookmarks):
         self._request_in_progress = False
-        if not nbxmpp.isResultNode(stanza):
-            log.info('No bookmarks found: %s', stanza.getError())
-        else:
-            log.info('Received Bookmarks')
-            storage = self._get_storage_node(stanza)
-            if storage is not None:
-                self.bookmarks = self._parse_bookmarks(storage)
-                self.auto_join_bookmarks()
-
+        self._bookmarks = bookmarks
+        self.auto_join_bookmarks()
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
-
-    @staticmethod
-    def _get_storage_node(stanza):
-        node = stanza.getTag('pubsub', namespace=nbxmpp.NS_PUBSUB)
-        if node is None:
-            node = stanza.getTag('event', namespace=nbxmpp.NS_PUBSUB_EVENT)
-            if node is None:
-                # Private Storage
-                query = stanza.getQuery()
-                if query is None:
-                    return
-                storage = query.getTag('storage',
-                                       namespace=nbxmpp.NS_BOOKMARKS)
-                if storage is None:
-                    return
-                return storage
-
-        items_node = node.getTag('items')
-        if items_node is None:
-            return
-        if items_node.getAttr('node') != nbxmpp.NS_BOOKMARKS:
-            return
-
-        item_node = items_node.getTag('item')
-        if item_node is None:
-            return
-
-        storage = item_node.getTag('storage', namespace=nbxmpp.NS_BOOKMARKS)
-        if storage is None:
-            return
-        return storage
-
-    @staticmethod
-    def _parse_bookmarks(storage: nbxmpp.Node) -> Dict[str, Dict[str, Any]]:
-        bookmarks = {}
-        confs = storage.getTags('conference')
-        for conf in confs:
-            autojoin_val = conf.getAttr('autojoin')
-            if not autojoin_val:  # not there (it's optional)
-                autojoin_val = False
-
-            try:
-                jid = helpers.parse_jid(conf.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            conf.getAttr('jid'))
-                continue
-
-            bookmark = {
-                'name': conf.getAttr('name'),
-                'password': conf.getTagData('password'),
-                'nick': conf.getTagData('nick'),
-            }
-
-            try:
-                bookmark['autojoin'] = from_xs_boolean(autojoin_val)
-            except ValueError as error:
-                log.warning(error)
-                continue
-
-            log.debug('Found Bookmark: %s', jid)
-            bookmarks[jid] = bookmark
-
-        return bookmarks
-
-    @staticmethod
-    def _build_storage_node(bookmarks):
-        storage_node = nbxmpp.Node(
-            tag='storage', attrs={'xmlns': 'storage:bookmarks'})
-        for jid, bm in bookmarks.items():
-            conf_node = storage_node.addChild(name="conference")
-            conf_node.setAttr('jid', jid)
-            conf_node.setAttr('autojoin', to_xs_boolean(bm['autojoin']))
-            conf_node.setAttr('name', bm['name'])
-            # Only add optional elements if not empty
-            # Note: need to handle both None and '' as empty
-            #   thus shouldn't use "is not None"
-            if bm.get('nick', None):
-                conf_node.setTagData('nick', bm['nick'])
-            if bm.get('password', None):
-                conf_node.setTagData('password', bm['password'])
-        return storage_node
-
-    def _build_node(self, _data):
-        pass
-
-    @staticmethod
-    def get_bookmark_publish_options() -> nbxmpp.Node:
-        options = nbxmpp.Node(nbxmpp.NS_DATA + ' x',
-                              attrs={'type': 'submit'})
-        field = options.addChild('field',
-                                 attrs={'var': 'FORM_TYPE', 'type': 'hidden'})
-        field.setTagData('value', nbxmpp.NS_PUBSUB_PUBLISH_OPTIONS)
-        field = options.addChild('field', attrs={'var': 'pubsub#access_model'})
-        field.setTagData('value', 'whitelist')
-        return options
 
     def store_bookmarks(self):
         if not app.account_is_connected(self._account):
             return
 
-        storage_node = self._build_storage_node(self.bookmarks)
+        type_ = BookmarkStoreType.PRIVATE
         if self._pubsub_support() and self.conversion:
-            self._pubsub_store(storage_node)
-        else:
-            self._private_store(storage_node)
+            type_ = BookmarkStoreType.PUBSUB
+
+        self._nbxmpp('Bookmarks').store_bookmarks(self._bookmarks, type_)
 
         app.nec.push_incoming_event(
             NetworkEvent('bookmarks-received', account=self._account))
 
-    def _pubsub_store(self, storage_node: nbxmpp.Node) -> None:
-        self._con.get_module('PubSub').send_pb_publish(
-            '', 'storage:bookmarks', storage_node, 'current',
-            options=self.get_bookmark_publish_options(),
-            cb=self._pubsub_store_result)
-        log.info('Publish Bookmarks (PubSub)')
-
-    def _private_store(self, storage_node: nbxmpp.Node) -> None:
-        iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE, payload=storage_node)
-        log.info('Publish Bookmarks (PrivateStorage)')
-        self._con.connection.SendAndCallForResponse(
-            iq, self._private_store_result)
-
-    @staticmethod
-    def _pubsub_store_result(_con, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            log.error('Error: %s', stanza.getError())
-            return
-
-    @staticmethod
-    def _private_store_result(stanza: nbxmpp.Iq) -> None:
-        if not nbxmpp.isResultNode(stanza):
-            log.error('Error: %s', stanza.getError())
-            return
-
-    def _join_with_timeout(self, bookmarks: Optional[List[str]] = None) -> None:
+    def _join_with_timeout(self, bookmarks: List[Any]) -> None:
         self._join_timeouts.pop(0)
         self.auto_join_bookmarks(bookmarks)
 
-    def auto_join_bookmarks(self, bookmarks: Optional[List[str]] = None) -> None:
+    def auto_join_bookmarks(self, bookmarks: Optional[List[Any]] = None) -> None:
         if app.is_invisible(self._account):
             return
-        if bookmarks is None:
-            bookmarks = self.bookmarks.keys()
 
-        for jid in bookmarks:
-            bookmark = self.bookmarks[jid]
-            if bookmark['autojoin']:
+        if bookmarks is None:
+            bookmarks = self._bookmarks
+
+        for bookmark in bookmarks:
+            if bookmark.autojoin:
                 # Only join non-opened groupchats. Opened one are already
                 # auto-joined on re-connection
-                if jid not in app.gc_connected[self._account]:
+                if bookmark.jid not in app.gc_connected[self._account]:
                     # we are not already connected
-                    log.info('Autojoin Bookmark: %s', jid)
-                    minimize = app.config.get_per('rooms', jid,
+                    log.info('Autojoin Bookmark: %s', bookmark.jid)
+                    minimize = app.config.get_per('rooms', bookmark.jid,
                                                   'minimize_on_autojoin', True)
                     app.interface.join_gc_room(
-                        self._account, jid, bookmark['nick'],
-                        bookmark['password'], minimize=minimize)
+                        self._account, bookmark.jid, bookmark.nick,
+                        bookmark.password, minimize=minimize)
 
     def add_bookmark(self, name, jid, autojoin, password, nick):
-        self.bookmarks[jid] = {
-            'name': name,
-            'autojoin': autojoin,
-            'password': password,
-            'nick': nick,
-        }
-
+        bookmark = BookmarkData(jid=jid,
+                                name=name,
+                                autojoin=autojoin,
+                                password=password,
+                                nick=nick)
+        self._bookmarks.append(bookmark)
         self.store_bookmarks()
 
     def remove(self, jid: str, publish: bool = True) -> None:
-        if self.bookmarks.pop(jid, None) is None:
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
             return
+        self.bookmark.remove(bookmark)
         if publish:
             self.store_bookmarks()
 
     def get_name_from_bookmark(self, jid: str) -> str:
         fallback = jid.split('@')[0]
-        try:
-            return self.bookmarks[jid]['name'] or fallback
-        except KeyError:
+        bookmark = self.get_bookmark_from_jid(jid)
+        if bookmark is None:
             return fallback
+        return bookmark.name or fallback
 
     def is_bookmark(self, jid: str) -> bool:
-        return jid in self.bookmarks
+        return self.get_bookmark_from_jid(jid) is not None
 
     def purge_pubsub_bookmarks(self) -> None:
         log.info('Purge/Delete Bookmarks on PubSub, '

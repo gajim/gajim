@@ -468,7 +468,7 @@ class GroupchatControl(ChatControlBase):
 
         # Bookmarks
         con = app.connections[self.account]
-        bookmarked = self.room_jid in con.get_module('Bookmarks').bookmarks
+        bookmarked = con.get_module('Bookmarks').is_bookmark(self.room_jid)
         self._get_action('bookmark-').set_enabled(self.is_connected and
                                                   not bookmarked)
 

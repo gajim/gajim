@@ -1497,7 +1497,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                 self.get_module('VCardTemp').request_vcard()
 
             # Get bookmarks
-            self.get_module('Bookmarks').get_bookmarks()
+            self.get_module('Bookmarks').request_bookmarks()
 
             # Get annotations
             self.get_module('Annotations').get_annotations()
@@ -1625,7 +1625,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             # ask our VCard
             self.get_module('VCardTemp').request_vcard()
 
-        self.get_module('Bookmarks').get_bookmarks()
+        self.get_module('Bookmarks').request_bookmarks()
         self.get_module('Annotations').get_annotations()
         self.get_module('Blocking').get_blocking_list()
 

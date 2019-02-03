@@ -16,6 +16,7 @@ from enum import IntEnum
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from nbxmpp.structs import BookmarkData
 
 from gajim.common import app
 from gajim.common import helpers
@@ -57,14 +58,14 @@ class ManageBookmarksWindow:
             con = app.connections[account]
             bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks()
 
-            for jid, bookmark in bookmarks.items():
+            for bookmark in bookmarks:
                 self.treestore.append(iter_, [account,
-                                              bookmark['name'],
-                                              jid,
-                                              bookmark['autojoin'],
-                                              bookmark['password'],
-                                              bookmark['nick'],
-                                              bookmark['name']])
+                                              bookmark.name,
+                                              bookmark.jid,
+                                              bookmark.autojoin,
+                                              bookmark.password,
+                                              bookmark.nick,
+                                              bookmark.name])
 
         self.view = self.xml.get_object('bookmarks_treeview')
         self.view.set_model(self.treestore)
@@ -190,20 +191,17 @@ class ManageBookmarksWindow:
         for account in self.treestore:
             acct = account[1]
             con = app.connections[acct]
-            con.get_module('Bookmarks').bookmarks = {}
 
+            bookmarks = []
             for bm in account.iterchildren():
                 # create the bookmark-dict
-                bmdict = {
-                    'name': bm[Row.ROOM_NAME],
-                    'autojoin': bm[Row.AUTOJOIN],
-                    'password': bm[Row.PASSWORD],
-                    'nick': bm[Row.NICK],
-                }
-
-                jid = bm[Row.ROOM_JID]
-                con.get_module('Bookmarks').bookmarks[jid] = bmdict
-
+                bookmark = BookmarkData(jid=bm[Row.ROOM_JID],
+                                        name=bm[Row.ROOM_NAME],
+                                        autojoin=bm[Row.AUTOJOIN],
+                                        password=bm[Row.PASSWORD],
+                                        nick=bm[Row.NICK])
+                bookmarks.append(bookmark)
+            con.get_module('Bookmarks').bookmarks = bookmarks
             con.get_module('Bookmarks').store_bookmarks()
         self.window.destroy()
 

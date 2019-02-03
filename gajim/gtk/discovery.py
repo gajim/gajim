@@ -1707,7 +1707,7 @@ class MucBrowser(AgentBrowser):
             return
 
         room_jid = model[iter_][0]
-        if room_jid in con.get_module('Bookmarks').bookmarks:
+        if con.get_module('Bookmarks').is_bookmark(room_jid):
             ErrorDialog(
                 _('Bookmark already set'),
                 _('Group Chat "%s" is already in your bookmarks.') % room_jid,

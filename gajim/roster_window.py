@@ -2706,9 +2706,9 @@ class RosterWindow:
 ### FIXME: order callbacks in itself...
 ################################################################################
 
-    def on_bookmark_menuitem_activate(self, widget, account, jid, bookmark):
+    def on_bookmark_menuitem_activate(self, widget, account, bookmark):
         app.interface.join_gc_room(
-            account, jid, bookmark['nick'], bookmark['password'])
+            account, bookmark.jid, bookmark.nick, bookmark.password)
 
     def on_info(self, widget, contact, account):
         """
@@ -5421,15 +5421,13 @@ class RosterWindow:
 
         bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks(
             short_name=True)
-        for jid, bookmark in bookmarks.items():
-            name = bookmark['name']
-
+        for bookmark in bookmarks:
             # Do not use underline.
-            item = Gtk.MenuItem.new_with_label(name)
+            item = Gtk.MenuItem.new_with_label(bookmark.name)
             item.set_use_underline(False)
             item.connect(
                 'activate', self.on_bookmark_menuitem_activate,
-                account, jid, bookmark)
+                account, bookmark)
             gc_sub_menu.append(item)
 
     def show_appropriate_context_menu(self, event, iters):

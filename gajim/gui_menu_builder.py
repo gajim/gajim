@@ -167,14 +167,13 @@ show_bookmarked=False, force_resource=False):
     r_jids = [] # list of room jids
     for account in connected_accounts:
         con = app.connections[account]
-        boomarks = con.get_module('Bookmarks').bookmarks
-        for jid in boomarks.keys():
-            if jid in r_jids:
+        for bookmark in con.get_module('Bookmarks').bookmarks:
+            if bookmark.jid in r_jids:
                 continue
-            if jid not in app.gc_connected[account] or not \
-            app.gc_connected[account][jid]:
-                rooms2.append((jid, account))
-                r_jids.append(jid)
+            if bookmark.jid not in app.gc_connected[account] or not \
+            app.gc_connected[account][bookmark.jid]:
+                rooms2.append((bookmark.jid, account))
+                r_jids.append(bookmark.jid)
 
     if not rooms2:
         return
@@ -736,7 +735,7 @@ def get_groupchat_menu(control_id, account, jid):
 
 def get_bookmarks_menu(account, rebuild=False):
     con = app.connections[account]
-    boomarks = con.get_module('Bookmarks').get_sorted_bookmarks(short_name=True)
+    bookmarks = con.get_module('Bookmarks').get_sorted_bookmarks(short_name=True)
 
     menu = Gio.Menu()
 
@@ -749,19 +748,17 @@ def get_bookmarks_menu(account, rebuild=False):
 
     # Build Bookmarks
     section = Gio.Menu()
-    for jid, bookmark in boomarks.items():
-        name = bookmark['name']
-
+    for bookmark in bookmarks:
         action = 'app.{}-activate-bookmark'.format(account)
-        menuitem = Gio.MenuItem.new(name, action)
+        menuitem = Gio.MenuItem.new(bookmark.name, action)
 
         # Create Variant Dict
         dict_ = {'account': GLib.Variant('s', account),
-                 'jid': GLib.Variant('s', jid)}
-        if bookmark['nick']:
-            dict_['nick'] = GLib.Variant('s', bookmark['nick'])
-        if bookmark['password']:
-            dict_['password'] = GLib.Variant('s', bookmark['password'])
+                 'jid': GLib.Variant('s', bookmark.jid)}
+        if bookmark.nick:
+            dict_['nick'] = GLib.Variant('s', bookmark.nick)
+        if bookmark.password:
+            dict_['password'] = GLib.Variant('s', bookmark.password)
         variant_dict = GLib.Variant('a{sv}', dict_)
 
         menuitem.set_action_and_target_value(action, variant_dict)
