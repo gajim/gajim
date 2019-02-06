@@ -1289,46 +1289,6 @@ class Interface:
         self.instances[obj.conn.name]['online_dialog']['plain_connection'] = \
             PlainConnectionDialog(obj.conn.name, on_ok, on_cancel)
 
-    def handle_event_insecure_ssl_connection(self, obj):
-        # ('INSECURE_SSL_CONNECTION', account, (connection, connection_type))
-        def on_ok(is_checked):
-            if not is_checked[0]:
-                on_cancel()
-                return
-            del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
-            if is_checked[1]:
-                app.config.set_per('accounts', obj.conn.name,
-                    'warn_when_insecure_ssl_connection', False)
-            if obj.conn.connected == 0:
-                # We have been disconnecting (too long time since window is
-                # opened)
-                # re-connect with auto-accept
-                obj.conn.connection_auto_accepted = True
-                show, msg = obj.conn.continue_connect_info[:2]
-                self.roster.send_status(obj.conn.name, show, msg)
-                return
-            obj.conn.connection_accepted(obj.xmpp_client, obj.conn_type)
-
-        def on_cancel():
-            del self.instances[obj.conn.name]['online_dialog']['insecure_ssl']
-            obj.conn.disconnect(reconnect=False)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=obj.conn,
-                show='offline'))
-
-        pritext = _('Insecure connection')
-        sectext = _('You are about to send your password on an insecure '
-            'connection. You should install PyOpenSSL to prevent that. Are you '
-            'sure you want to do that?')
-        checktext1 = _('Yes, I really want to connect insecurely')
-        checktext2 = _('_Do not ask me again')
-        if 'insecure_ssl' in self.instances[obj.conn.name]['online_dialog']:
-            self.instances[obj.conn.name]['online_dialog']['insecure_ssl'].\
-                destroy()
-        self.instances[obj.conn.name]['online_dialog']['insecure_ssl'] = \
-            ConfirmationDialogDoubleCheck(pritext, sectext, checktext1,
-            checktext2, on_response_ok=on_ok, on_response_cancel=on_cancel,
-            is_modal=False)
-
     def create_core_handlers_list(self):
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
@@ -1346,8 +1306,6 @@ class Interface:
             'gpg-password-required': [self.handle_event_gpg_password_required],
             'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
-            'insecure-ssl-connection': \
-                [self.handle_event_insecure_ssl_connection],
             'iq-error-received': [self.handle_event_iq_error],
             'jingle-connected-received': [self.handle_event_jingle_connected],
             'jingle-disconnected-received': [
