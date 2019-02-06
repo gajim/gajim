@@ -110,7 +110,6 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
-from gajim.gtk.dialogs import ConfirmationDialogDoubleCheck
 from gajim.gtk.dialogs import ChangeNickDialog
 from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
