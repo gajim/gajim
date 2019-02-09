@@ -97,7 +97,8 @@ function install_deps {
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pyopenssl \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-docutils \
         mingw-w64-"${ARCH}"-"${PYTHON_ID}"-certifi \
-        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-six \
+        mingw-w64-"${ARCH}"-"${PYTHON_ID}"-pygments
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git@nbxmpp_0.6
