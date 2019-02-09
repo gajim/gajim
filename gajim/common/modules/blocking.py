@@ -17,6 +17,7 @@
 import logging
 
 import nbxmpp
+from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
@@ -62,8 +63,8 @@ class Blocking(BaseModule):
         log.info('Discovered blocking: %s', from_)
 
     def _blocking_list_received(self, result):
-        if result.is_error:
-            log.info('Error: %s', result.error)
+        if is_error_result(result):
+            log.info('Error: %s', result)
             return
 
         self.blocked = result.blocking_list

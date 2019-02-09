@@ -22,6 +22,7 @@ import logging
 import copy
 
 import nbxmpp
+from nbxmpp.util import is_error_result
 from nbxmpp.structs import BookmarkData
 from nbxmpp.const import BookmarkStoreType
 from gi.repository import GLib
@@ -161,6 +162,10 @@ class Bookmarks(BaseModule):
             type_, callback=self._bookmarks_received)
 
     def _bookmarks_received(self, bookmarks):
+        if is_error_result(bookmarks):
+            log.info('Error: %s', bookmarks)
+            bookmarks = []
+
         self._request_in_progress = False
         self._bookmarks = bookmarks
         self.auto_join_bookmarks()

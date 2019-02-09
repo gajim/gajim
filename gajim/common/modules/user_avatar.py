@@ -17,6 +17,7 @@
 import logging
 
 import nbxmpp
+from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.modules.base import BaseModule
@@ -65,6 +66,10 @@ class UserAvatar(BaseModule):
                 jid, data.id, callback=self._avatar_received)
 
     def _avatar_received(self, result):
+        if is_error_result(result):
+            log.info('Error: %s', result)
+            return
+
         log.info('Received Avatar: %s %s', result.jid, result.sha)
         app.interface.save_avatar(result.data)
 
