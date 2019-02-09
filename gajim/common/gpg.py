@@ -20,7 +20,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import logging
 from gajim.common import app
 
 if app.is_installed('GPG'):
