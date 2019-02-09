@@ -175,13 +175,17 @@ class Message:
         event = MessageReceivedEvent(None, **event_attr)
         app.nec.push_incoming_event(event)
 
-        app.plugin_manager.extension_point(
-            'decrypt', self._con, event, self._on_message_decrypted)
-        if not event.encrypted:
-            eme = parse_eme(event.stanza)
-            if eme is not None:
-                event.msgtxt = eme
+        if properties.is_encrypted:
+            event.additional_data['encrypted'] = properties.encrypted.additional_data
             self._on_message_decrypted(event)
+        else:
+            app.plugin_manager.extension_point(
+                'decrypt', self._con, event, self._on_message_decrypted)
+            if not event.encrypted:
+                eme = parse_eme(event.stanza)
+                if eme is not None:
+                    event.msgtxt = eme
+                self._on_message_decrypted(event)
 
     def _on_message_decrypted(self, event):
         try:

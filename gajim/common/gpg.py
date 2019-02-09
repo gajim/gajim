@@ -25,7 +25,6 @@ from gajim.common import app
 
 if app.is_installed('GPG'):
     import gnupg
-    gnupg.logger = logging.getLogger('gajim.c.gnupg')
 
     class GnuPG(gnupg.GPG):
         def __init__(self):

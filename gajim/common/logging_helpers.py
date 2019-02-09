@@ -148,14 +148,17 @@ def init():
         )
     )
 
-    # fake the root logger so we have 'gajim' root name instead of 'root'
     root_log = logging.getLogger('gajim')
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 
-    # handle nbxmpp logs too
     root_log = logging.getLogger('nbxmpp')
+    root_log.setLevel(logging.WARNING)
+    root_log.addHandler(consoleloghandler)
+    root_log.propagate = False
+
+    root_log = logging.getLogger('gnupg')
     root_log.setLevel(logging.WARNING)
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False

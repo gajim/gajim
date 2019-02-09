@@ -9,6 +9,8 @@ Option.__new__.__defaults__ = (None,) * len(Option._fields)  # type: ignore
 DialogButton = namedtuple('DialogButton', 'text callback action')
 DialogButton.__new__.__defaults__ = (None, None)  # type: ignore
 
+EncryptionData = namedtuple('EncryptionData', 'additional_data')
+EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
 
 @unique
 class OptionKind(IntEnum):
