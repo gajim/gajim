@@ -222,7 +222,7 @@ class Bookmarks(BaseModule):
         bookmark = self.get_bookmark_from_jid(jid)
         if bookmark is None:
             return
-        self.bookmark.remove(bookmark)
+        self._bookmarks.remove(bookmark)
         if publish:
             self.store_bookmarks()
 
