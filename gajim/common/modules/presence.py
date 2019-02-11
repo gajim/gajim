@@ -92,7 +92,7 @@ class Presence:
         contacts = app.contacts.get_jid_list(self._account)
         if properties.jid.getBare() not in contacts and not properties.is_self_bare:
             # Handle only presence from roster contacts
-            log.warning('Unkown presence received')
+            log.warning('Unknown presence received')
             log.warning(stanza)
             return
 
