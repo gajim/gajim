@@ -22,6 +22,7 @@ import nbxmpp
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common import helpers
@@ -429,7 +430,7 @@ class MUC(BaseModule):
         self._nbxmpp('MUC').invite(room, to, reason, password, continue_, type_)
 
     def _config_received(self, result):
-        if result.is_error:
+        if is_error_result(result):
             return
 
         app.nec.push_incoming_event(NetworkEvent(
