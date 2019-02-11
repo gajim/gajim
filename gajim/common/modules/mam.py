@@ -164,14 +164,18 @@ class MAM:
         else:
             event = MamMessageReceivedEvent(None, **event_attrs)
 
-        app.plugin_manager.extension_point(
-            'decrypt', self._con, event, self._decryption_finished)
-
-        if not event.encrypted:
-            eme = parse_eme(event.message)
-            if eme is not None:
-                event.msgtxt = eme
+        if properties.is_encrypted:
+            event.additional_data['encrypted'] = properties.encrypted.additional_data
             self._decryption_finished(event)
+        else:
+            app.plugin_manager.extension_point(
+                'decrypt', self._con, event, self._decryption_finished)
+
+            if not event.encrypted:
+                eme = parse_eme(event.message)
+                if eme is not None:
+                    event.msgtxt = eme
+                self._decryption_finished(event)
 
         raise nbxmpp.NodeProcessed
 
