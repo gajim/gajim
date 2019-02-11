@@ -14,8 +14,10 @@
 
 import logging
 
+from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -67,15 +69,16 @@ class BlockingList(Gtk.ApplicationWindow):
         dialog = HigDialog(
             self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
             _('Error!'),
-            error)
+            GLib.markup_escape_text(str(error)))
         dialog.popup()
 
     def _on_blocking_list_received(self, result):
+        is_error = is_error_result(result)
         self._disable_spinner()
-        self._set_grid_state(not result.is_error)
+        self._set_grid_state(not is_error)
 
-        if result.is_error:
-            self._show_error(result.error)
+        if is_error:
+            self._show_error(result)
 
         else:
             self._prev_blocked_jids = set(result.blocking_list)
@@ -85,8 +88,8 @@ class BlockingList(Gtk.ApplicationWindow):
 
     def _on_save_result(self, result):
         self._await_results -= 1
-        if result.is_error and not self._received_errors:
-            self._show_error(result.error)
+        if is_error_result(result) and not self._received_errors:
+            self._show_error(result)
             self._received_errors = True
 
         if not self._await_results:
