@@ -207,6 +207,11 @@ class Message:
             'gc_control': gc_control
         }
 
+        app.nec.push_incoming_event(NetworkEvent('update-client-info',
+                                                 account=self._account,
+                                                 jid=jid,
+                                                 resource=resource))
+
         event = MessageReceivedEvent(None, **event_attr)
         app.nec.push_incoming_event(event)
 

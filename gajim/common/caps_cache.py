@@ -77,6 +77,14 @@ def client_supports(client_caps, requested_feature):
         return requested_feature not in FEATURE_BLACKLIST
     return False
 
+def get_client_identity(client_caps):
+    lookup_item = client_caps.get_cache_lookup_strategy()
+    cache_item = lookup_item(capscache)
+
+    for identity in cache_item.identities:
+        if identity.get('category') == 'client':
+            return identity.get('type')
+
 def create_suitable_client_caps(node, caps_hash, hash_method, fjid=None):
     """
     Create and return a suitable ClientCaps object for the given node,

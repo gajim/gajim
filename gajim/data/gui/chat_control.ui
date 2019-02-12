@@ -407,12 +407,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="banner_vbox">
+                      <object class="GtkGrid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="border_width">5</property>
-                        <property name="orientation">vertical</property>
+                        <property name="valign">center</property>
+                        <property name="margin_left">5</property>
+                        <property name="hexpand">True</property>
+                        <property name="row_spacing">2</property>
                         <child>
                           <object class="GtkLabel" id="banner_name_label">
                             <property name="name">ChatControl-BannerNameLabel</property>
@@ -423,9 +424,9 @@
                             <property name="xalign">0</property>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">2</property>
                           </packing>
                         </child>
                         <child>
@@ -433,6 +434,7 @@
                             <property name="name">ChatControl-BannerLabel</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
                             <property name="label">label</property>
                             <property name="use_markup">True</property>
                             <property name="selectable">True</property>
@@ -440,14 +442,27 @@
                             <signal name="populate-popup" handler="on_banner_label_populate_popup" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="phone_image">
+                            <property name="can_focus">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="tooltip_text" translatable="yes">The last message was written on a mobile client</property>
+                            <property name="halign">start</property>
+                            <property name="margin_right">4</property>
+                            <property name="icon_name">phone-apple-iphone-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>

@@ -116,6 +116,10 @@ class CommonContact(XMPPEntity):
             return False
         return caps_cache.client_supports(self.client_caps, requested_feature)
 
+    @property
+    def uses_phone(self):
+        return caps_cache.get_client_identity(self.client_caps) == 'phone'
+
 
 class Contact(CommonContact):
     """
