@@ -235,6 +235,8 @@ class ChatControl(ChatControlBase):
             self._on_tune_received)
         app.ged.register_event_handler('location-received', ged.GUI1,
             self._on_location_received)
+        app.ged.register_event_handler('update-client-info', ged.GUI1,
+            self._on_update_client_info)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             # Dont connect this when PrivateChatControl is used
             app.ged.register_event_handler('update-roster-avatar', ged.GUI1,
@@ -475,6 +477,14 @@ class ChatControl(ChatControlBase):
         self.update_ui()
         self.parent_win.redraw_tab(self)
         self.parent_win.show_title()
+
+    @ensure_proper_control
+    def _on_update_client_info(self, event):
+        contact = app.contacts.get_contact(
+            self.account, event.jid, event.resource)
+        if contact is None:
+            return
+        self.xml.get_object('phone_image').set_visible(contact.uses_phone)
 
     def _update_jingle(self, jingle_type):
         if jingle_type not in ('audio', 'video'):
@@ -1093,6 +1103,8 @@ class ChatControl(ChatControlBase):
             self._on_tune_received)
         app.ged.remove_event_handler('location-received', ged.GUI1,
             self._on_location_received)
+        app.ged.remove_event_handler('update-client-info', ged.GUI1,
+            self._on_update_client_info)
         if self.TYPE_ID == message_control.TYPE_CHAT:
             app.ged.remove_event_handler('update-roster-avatar', ged.GUI1,
                 self._nec_update_avatar)
