@@ -90,7 +90,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE \
              | SSL.OP_NO_TICKET)
     ctx.set_options(flags)
-    ctx.set_cipher_list('HIGH:!aNULL:!3DES')
+    ctx.set_cipher_list(b'HIGH:!aNULL:!3DES')
 
     if fingerprint == 'server': # for testing purposes only
         ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
