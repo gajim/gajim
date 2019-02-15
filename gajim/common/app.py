@@ -162,7 +162,6 @@ gajim_common_features = [
     nbxmpp.NS_CONFERENCE,
     nbxmpp.NS_CORRECT,
     nbxmpp.NS_EME,
-    nbxmpp.NS_HASHES,
     nbxmpp.NS_HASHES_2,
     nbxmpp.NS_HASHES_MD5,
     nbxmpp.NS_HASHES_SHA1,
