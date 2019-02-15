@@ -38,7 +38,9 @@ class ConstantRI(IntEnum):
 
 def test_avahi():
     try:
-        import dbus  # pylint: disable=unused-variable
+        import gi
+        gi.require_version('Avahi', '0.6')
+        from gi.repository import Avahi  # pylint: disable=unused-variable
     except ImportError:
         return False
     return True

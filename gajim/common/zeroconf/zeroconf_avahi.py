@@ -17,10 +17,11 @@
 import logging
 log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
-try:
-    import dbus.exceptions
-except ImportError:
-    pass
+import gi
+gi.require_version('Avahi', '0.6')
+from gi.repository import Avahi
+from gi.repository import Gio
+from gi.repository import GLib
 
 from gajim.common.i18n import _
 from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
@@ -45,8 +46,9 @@ class Zeroconf:
         self.error_CB = error_CB
 
         self.service_browser = None
+        self.sb_connections = []
+        self.connections = {}
         self.domain_browser = None
-        self.bus = None
         self.server = None
         self.contacts = {}    # all current local contacts with data
         self.entrygroup = None
@@ -60,6 +62,15 @@ class Zeroconf:
         # left blank for possible later usage
         pass
 
+    def _call(self, proxy, method_name):
+        try:
+            output = proxy.call_sync(
+                method_name, None, Gio.DBusCallFlags.NONE, -1, None)
+            if output:
+                return output[0]
+        except GLib.Error as e:
+            log.debug(str(e))
+
     def error_callback1(self, err):
         log.debug('Error while resolving: %s', str(err))
 
@@ -70,58 +81,67 @@ class Zeroconf:
             self.disconnect()
             self.disconnected_CB()
 
-    def new_service_callback(self, interface, protocol, name, stype, domain,
-    flags):
+    def new_service_callback(self, browser, interface, protocol, name, stype,
+                             domain, flags):
         log.debug('Found service %s in domain %s on %i.%i.',
                   name, domain, interface, protocol)
         if not self.connected:
             return
 
         # synchronous resolving
-        self.server.ResolveService(int(interface), int(protocol), name, stype,
-                domain, Protocol.UNSPEC, dbus.UInt32(0),
-                reply_handler=self.service_resolved_callback,
-                error_handler=self.error_callback1)
+        try:
+            output = self.server.call_sync(
+                'ResolveService',
+                GLib.Variant('(iisssiu)', (interface, protocol, name, stype,
+                                           domain, Protocol.UNSPEC, 0)),
+                Gio.DBusCallFlags.NONE, -1, None)
+            self.service_resolved_callback(*output)
+        except GLib.Error as e:
+            self.error_callback1(e)
 
-    def remove_service_callback(self, interface, protocol, name, stype, domain,
-    flags):
+    def remove_service_callback(self, browser, interface, protocol, name,
+                                stype, domain, flags):
         log.debug('Service %s in domain %s on %i.%i disappeared.',
                   name, domain, interface, protocol)
         if not self.connected:
             return
-        if name != self.name:
-            for key in list(self.contacts.keys()):
-                val = self.contacts[key]
-                if val[Constant.BARE_NAME] == name:
-                    # try to reduce instead of delete first
-                    resolved_info = val[Constant.RESOLVED_INFO]
-                    if len(resolved_info) > 1:
-                        for i, _info in enumerate(resolved_info):
-                            if resolved_info[i][ConstantRI.INTERFACE] == interface and resolved_info[i][ConstantRI.PROTOCOL] == protocol:
-                                del self.contacts[key][Constant.RESOLVED_INFO][i]
-                        # if still something left, don't remove
-                        if len(self.contacts[key][Constant.RESOLVED_INFO]) > 1:
-                            return
-                    del self.contacts[key]
-                    self.remove_serviceCB(key)
-                    return
+        if name == self.name:
+            return
+
+        for key in list(self.contacts.keys()):
+            val = self.contacts[key]
+            if val[Constant.BARE_NAME] == name:
+                # try to reduce instead of delete first
+                resolved_info = val[Constant.RESOLVED_INFO]
+                if len(resolved_info) > 1:
+                    for i, _info in enumerate(resolved_info):
+                        if resolved_info[i][ConstantRI.INTERFACE] == interface and resolved_info[i][ConstantRI.PROTOCOL] == protocol:
+                            del self.contacts[key][Constant.RESOLVED_INFO][i]
+                    # if still something left, don't remove
+                    if len(self.contacts[key][Constant.RESOLVED_INFO]) > 1:
+                        return
+                del self.contacts[key]
+                self.remove_serviceCB(key)
+                return
 
     def new_service_type(self, interface, protocol, stype, domain, flags):
         # Are we already browsing this domain for this type?
         if self.service_browser:
             return
 
-        object_path = self.server.ServiceBrowserNew(interface, protocol, \
-                        stype, domain, dbus.UInt32(0))
+        self.service_browser = Avahi.ServiceBrowser.new_full(
+            interface, protocol, stype, domain, 0)
 
-        self.service_browser = dbus.Interface(self.bus.get_object(
-                DBUS_NAME, object_path),
-                DBUS_INTERFACE_SERVICE_BROWSER)
-        self.service_browser.connect_to_signal('ItemNew',
-                self.new_service_callback)
-        self.service_browser.connect_to_signal('ItemRemove',
-                self.remove_service_callback)
-        self.service_browser.connect_to_signal('Failure', self.error_callback)
+        self.avahi_client = Avahi.Client(flags=0,)
+        self.avahi_client.start()
+        con = self.service_browser.connect('new_service', self.new_service_callback)
+        self.sb_connections.append(con)
+        con = self.service_browser.connect('removed_service', self.remove_service_callback)
+        self.sb_connections.append(con)
+        con = self.service_browser.connect('failure', self.error_callback)
+        self.sb_connections.append(con)
+
+        self.service_browser.attach(self.avahi_client)
 
     def new_domain_callback(self, interface, protocol, domain, flags):
         if domain != 'local':
@@ -142,22 +162,13 @@ class Zeroconf:
 
         return txt_dict
 
-    @staticmethod
-    def string_to_byte_array(s):
-        r = []
-
-        for c in s:
-            r.append(dbus.Byte(c))
-
-        return r
-
     def dict_to_txt_array(self, txt_dict):
         array = []
 
         for k, v in txt_dict.items():
             item = '%s=%s' % (k, v)
             item = item.encode('utf-8')
-            array.append(self.string_to_byte_array(item))
+            array.append(item)
 
         return array
 
@@ -206,10 +217,10 @@ class Zeroconf:
                     (interface, protocol, host, aprotocol, address, int(port)),
                     bare_name, txt)
 
-
     # different handler when resolving all contacts
     def service_resolved_all_callback(self, interface, protocol, name, stype,
-    domain, host, aprotocol, address, port, txt, flags):
+                                      domain, host, aprotocol, address, port,
+                                      txt, flags):
         if not self.connected:
             return
 
@@ -219,41 +230,45 @@ class Zeroconf:
         old_contact = self.contacts[name]
         self.contacts[name] = old_contact[0:Constant.TXT] + (txt,) + old_contact[Constant.TXT+1:]
 
-    def service_added_callback(self):
-        log.debug('Service successfully added')
-
-    def service_committed_callback(self):
-        log.debug('Service successfully committed')
-
     def service_updated_callback(self):
         log.debug('Service successfully updated')
 
     def service_add_fail_callback(self, err):
         log.debug('Error while adding service. %s', str(err))
         if 'Local name collision' in str(err):
-            alternative_name = self.server.GetAlternativeServiceName(self.username)
-            self.name_conflictCB(alternative_name)
+            alternative_name = self.server.call_sync(
+                'GetAlternativeServiceName',
+                GLib.Variant('(s)', (self.username,)),
+                Gio.DBusCallFlags.NONE, -1, None)
+            self.name_conflictCB(alternative_name[0])
             return
         self.error_CB(_('Error while adding service. %s') % str(err))
         self.disconnect()
 
-    def server_state_changed_callback(self, state, error):
+    def server_state_changed_callback(self, connection, sender_name,
+                                      object_path, interface_name,
+                                      signal_name, parameters):
+        state, _ = parameters
         log.debug('server state changed to %s', state)
         if state == ServerState.RUNNING:
             self.create_service()
         elif state in (ServerState.COLLISION,
                        ServerState.REGISTERING):
             self.disconnect()
-            self.entrygroup.Reset()
+            if self.entrygroup:
+                self._call(self.entrygroup, 'Reset')
 
-    def entrygroup_state_changed_callback(self, state, error):
+    def entrygroup_state_changed_callback(self, connection, sender_name,
+                                          object_path, interface_name,
+                                          signal_name, parameters):
+        state, _ = parameters
         # the name is already present, so recreate
         if state == EntryGroup.COLLISION:
             log.debug('zeroconf.py: local name collision')
             self.service_add_fail_callback('Local name collision')
         elif state == EntryGroup.FAILURE:
             self.disconnect()
-            self.entrygroup.Reset()
+            self._call(self.entrygroup, 'Reset')
             log.debug('zeroconf.py: ENTRY_GROUP_FAILURE reached(that'
                     ' should not happen)')
 
@@ -272,11 +287,20 @@ class Zeroconf:
         try:
             if not self.entrygroup:
                 # create an EntryGroup for publishing
-                self.entrygroup = dbus.Interface(self.bus.get_object(
-                        DBUS_NAME, self.server.EntryGroupNew()),
-                        DBUS_INTERFACE_ENTRY_GROUP)
-                self.entrygroup.connect_to_signal('StateChanged',
-                        self.entrygroup_state_changed_callback)
+                object_path = self.server.call_sync(
+                    'EntryGroupNew', None, Gio.DBusCallFlags.NONE, -1, None)
+
+                self.entrygroup = Gio.DBusProxy.new_for_bus_sync(
+                    Gio.BusType.SYSTEM, Gio.DBusProxyFlags.NONE, None,
+                    DBUS_NAME, *object_path, DBUS_INTERFACE_ENTRY_GROUP, None)
+
+                connection = self.entrygroup.get_connection()
+                subscription = connection.signal_subscribe(
+                    DBUS_NAME, DBUS_INTERFACE_ENTRY_GROUP, 'StateChanged',
+                    *object_path, None, Gio.DBusSignalFlags.NONE,
+                    self.entrygroup_state_changed_callback)
+
+                self.connections[connection] = [subscription]
 
             txt = {}
 
@@ -298,18 +322,28 @@ class Zeroconf:
             self.txt = txt
             log.debug('Publishing service %s of type %s',
                       self.name, self.stype)
-            self.entrygroup.AddService(Interface.UNSPEC,
-                    Protocol.UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
-                    '', dbus.UInt16(self.port), self.avahi_txt(),
-                    reply_handler=self.service_added_callback,
-                    error_handler=self.service_add_fail_callback)
 
-            self.entrygroup.Commit(reply_handler=self.service_committed_callback,
-                    error_handler=self.entrygroup_commit_error_CB)
+            try:
+                self.entrygroup.call_sync(
+                    'AddService',
+                    GLib.Variant('(iiussssqaay)', (Interface.UNSPEC,
+                                                   Protocol.UNSPEC, 0,
+                                                   self.name, self.stype, '',
+                                                   '', self.port,
+                                                   self.avahi_txt())),
+                    Gio.DBusCallFlags.NONE, -1, None)
+            except GLib.Error as e:
+                self.service_add_fail_callback(e)
+                return False
+
+            try:
+                self.entrygroup.call_sync('Commit', None,
+                                          Gio.DBusCallFlags.NONE, -1, None)
+            except GLib.Error as e:
+                self.entrygroup_commit_error_CB(e)
 
             return True
-
-        except dbus.DBusException as e:
+        except GLib.Error as e:
             log.debug(str(e))
             return False
 
@@ -317,8 +351,10 @@ class Zeroconf:
         if not self.connected:
             return False
 
-        state = self.server.GetState()
-        if state == ServerState.RUNNING:
+        state = self.server.call_sync(
+            'GetState', None, Gio.DBusCallFlags.NONE, -1, None)
+
+        if state[0] == ServerState.RUNNING:
             if self.create_service():
                 self.announced = True
                 return True
@@ -327,54 +363,46 @@ class Zeroconf:
     def remove_announce(self):
         if self.announced is False:
             return False
-        try:
-            if self.entrygroup.GetState() != EntryGroup.FAILURE:
-                self.entrygroup.Reset()
-                self.entrygroup.Free()
-                # .Free() has mem leaks
-                self.entrygroup._obj._bus = None
-                self.entrygroup._obj = None
-                self.entrygroup = None
-                self.announced = False
 
-                return True
-            return False
-        except dbus.DBusException:
-            log.debug("Can't remove service. That should not happen")
+        if self._call(self.entrygroup, 'GetState') != EntryGroup.FAILURE:
+            self._call(self.entrygroup, 'Reset')
+            self._call(self.entrygroup, 'Free')
+            self.entrygroup = None
+            self.announced = False
+
+            return True
+        return False
 
     def browse_domain(self, interface, protocol, domain):
         self.new_service_type(interface, protocol, self.stype, domain, '')
 
-    def avahi_dbus_connect_cb(self, a, connect, disconnect):
-        if connect != "":
-            log.debug('Lost connection to avahi-daemon')
-            self.disconnect()
-            if self.disconnected_CB:
-                self.disconnected_CB()
-        else:
-            log.debug('We are connected to avahi-daemon')
+    def avahi_dbus_connect_cb(self, connection, sender_name, object_path,
+                              interface_name, signal_name, parameters):
+        name, oldOwner, newOwner = parameters
+        if name == DBUS_NAME:
+            if newOwner and not oldOwner:
+                log.debug('We are connected to avahi-daemon')
+            else:
+                log.debug('Lost connection to avahi-daemon')
+                self.disconnect()
+                if self.disconnected_CB:
+                    self.disconnected_CB()
 
     # connect to dbus
     def connect_dbus(self):
         try:
-            import dbus  # pylint: disable=redefined-outer-name
-            from dbus.mainloop.glib import DBusGMainLoop
-            main_loop = DBusGMainLoop(set_as_default=True)
-            dbus.set_default_main_loop(main_loop)
-        except ImportError:
-            log.debug('Error: python-dbus needs to be installed. No '
-                      'zeroconf support.')
-            return False
-        if self.bus:
-            return True
-        try:
-            self.bus = dbus.SystemBus()
-            self.bus.add_signal_receiver(self.avahi_dbus_connect_cb,
-                    'NameOwnerChanged', 'org.freedesktop.DBus',
-                    arg0='org.freedesktop.Avahi')
-        except Exception as e:
-            # System bus is not present
-            self.bus = None
+            proxy = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SYSTEM, Gio.DBusProxyFlags.NONE, None,
+                'org.freedesktop.DBus', '/org/freedesktop/DBus',
+                'org.freedesktop.DBus', None)
+
+            connection = proxy.get_connection()
+            subscription = connection.signal_subscribe(
+                'org.freedesktop.DBus', 'org.freedesktop.DBus',
+                'NameOwnerChanged', '/org/freedesktop/DBus', None,
+                Gio.DBusSignalFlags.NONE, self.avahi_dbus_connect_cb)
+            self.connections[connection] = [subscription]
+        except GLib.Error as e:
             log.debug(str(e))
             return False
         else:
@@ -388,10 +416,15 @@ class Zeroconf:
         if self.server:
             return True
         try:
-            self.server = dbus.Interface(self.bus.get_object(DBUS_NAME,
-                    DBUS_PATH_SERVER), DBUS_INTERFACE_SERVER)
-            self.server.connect_to_signal('StateChanged',
-                    self.server_state_changed_callback)
+            self.server = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SYSTEM, Gio.DBusProxyFlags.NONE, None,
+                DBUS_NAME, '/', DBUS_INTERFACE_SERVER, None)
+
+            connection = self.server.get_connection()
+            subscription = connection.signal_subscribe(
+                DBUS_NAME, DBUS_INTERFACE_SERVER, 'StateChanged', '/', None,
+                Gio.DBusSignalFlags.NONE, self.server_state_changed_callback)
+            self.connections[connection] = [subscription]
         except Exception as e:
             # Avahi service is not present
             self.server = None
@@ -413,14 +446,28 @@ class Zeroconf:
                 Interface.UNSPEC, Protocol.UNSPEC, 'local')
 
             # Browse for other browsable domains
-            self.domain_browser = dbus.Interface(self.bus.get_object(
-                    DBUS_NAME, self.server.DomainBrowserNew(
-                    Interface.UNSPEC, Protocol.UNSPEC, '',
-                    DomainBrowser.BROWSE, dbus.UInt32(0))),
-                    DBUS_INTERFACE_DOMAIN_BROWSER)
-            self.domain_browser.connect_to_signal('ItemNew',
-                    self.new_domain_callback)
-            self.domain_browser.connect_to_signal('Failure', self.error_callback)
+            object_path = self.server.call_sync(
+                'DomainBrowserNew',
+                GLib.Variant('(iisiu)', (Interface.UNSPEC, Protocol.UNSPEC, '',
+                                         DomainBrowser.BROWSE, 0)),
+                Gio.DBusCallFlags.NONE, -1, None)
+
+            self.domain_browser = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SYSTEM, Gio.DBusProxyFlags.NONE, None, DBUS_NAME,
+                *object_path, DBUS_INTERFACE_DOMAIN_BROWSER, None)
+
+            connection = self.domain_browser.get_connection()
+            subscription = connection.signal_subscribe(
+                DBUS_NAME, DBUS_INTERFACE_DOMAIN_BROWSER, 'ItemNew',
+                *object_path, None, Gio.DBusSignalFlags.NONE,
+                self.new_domain_callback)
+            self.connections[connection] = [subscription]
+
+            subscription = connection.signal_subscribe(
+                DBUS_NAME, DBUS_INTERFACE_DOMAIN_BROWSER, 'Failure',
+                *object_path, None, Gio.DBusSignalFlags.NONE,
+                self.error_callback)
+            self.connections[connection].append(subscription)
         else:
             self.browse_domain(
                 Interface.UNSPEC, Protocol.UNSPEC, self.domain)
@@ -430,23 +477,14 @@ class Zeroconf:
     def disconnect(self):
         if self.connected:
             self.connected = False
-            if self.service_browser:
-                try:
-                    self.service_browser.Free()
-                except dbus.DBusException as e:
-                    log.debug(str(e))
-                self.service_browser._obj._bus = None
-                self.service_browser._obj = None
+            for connection, subscriptions in self.connections.items():
+                for subscription in subscriptions:
+                    connection.signal_unsubscribe(subscription)
+            for con in self.sb_connections:
+                self.service_browser.disconnect(con)
             if self.domain_browser:
-                try:
-                    self.domain_browser.Free()
-                except dbus.DBusException as e:
-                    log.debug(str(e))
-                self.domain_browser._obj._bus = None
-                self.domain_browser._obj = None
+                self._call(self.domain_browser, 'Free')
             self.remove_announce()
-            self.server._obj._bus = None
-            self.server._obj = None
         self.server = None
         self.service_browser = None
         self.domain_browser = None
@@ -459,11 +497,16 @@ class Zeroconf:
             # get txt data from last recorded resolved info
             # TODO: Better try to get it from last IPv6 mDNS, then last IPv4?
             ri = val[Constant.RESOLVED_INFO][0]
-            self.server.ResolveService(int(ri[ConstantRI.INTERFACE]), int(ri[ConstantRI.PROTOCOL]),
-                    val[Constant.BARE_NAME], self.stype, val[Constant.DOMAIN],
-                    Protocol.UNSPEC, dbus.UInt32(0),
-                    reply_handler=self.service_resolved_all_callback,
-                    error_handler=self.error_callback)
+            output = self.server.call_sync(
+                'ResolveService',
+                GLib.Variant('(iisssiu)', (ri[ConstantRI.INTERFACE], ri[ConstantRI.PROTOCOL],
+                                           val[Constant.BARE_NAME], self.stype, val[Constant.DOMAIN],
+                                           Protocol.UNSPEC, 0)),
+                Gio.DBusCallFlags.NONE,
+                -1,
+                None
+                )
+            self.service_resolved_all_callback(*output)
 
         return True
 
@@ -481,12 +524,16 @@ class Zeroconf:
 
         txt = self.avahi_txt()
         if self.connected and self.entrygroup:
-            self.entrygroup.UpdateServiceTxt(Interface.UNSPEC,
-                    Protocol.UNSPEC, dbus.UInt32(0), self.name, self.stype, '',
-                    txt, reply_handler=self.service_updated_callback,
-                    error_handler=self.error_callback)
+            try:
+                self.entrygroup.call_sync(
+                    'UpdateServiceTxt',
+                    GLib.Variant('(iiusssaay)', (Interface.UNSPEC,
+                                                 Protocol.UNSPEC, 0, self.name,
+                                                 self.stype, '', txt)),
+                    Gio.DBusCallFlags.NONE, -1, None)
+            except GLib.Error as e:
+                self.error_callback(e)
+                return False
+
             return True
         return False
-
-
-# END Zeroconf
