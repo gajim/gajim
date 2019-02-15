@@ -445,6 +445,8 @@ class JingleSession:
             if child.getName() == 'checksum':
                 hash_ = child.getTag('file').getTag(name='hash',
                                                     namespace=nbxmpp.NS_HASHES_2)
+                if hash_ is None:
+                    continue
                 algo = hash_.getAttr('algo')
                 if algo in nbxmpp.Hashes2.supported:
                     file_props = FilesProp.getFileProp(self.connection.name,
