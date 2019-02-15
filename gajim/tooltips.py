@@ -609,8 +609,7 @@ class FileTransfersTooltip():
         self.sid = sid
         return False, self.widget
 
-    @staticmethod
-    def _create_tooltip(file_props, sid):
+    def _create_tooltip(self, file_props, _sid):
         ft_table = Gtk.Table(2, 1)
         ft_table.set_property('column-spacing', 2)
         current_row = 1
@@ -642,26 +641,7 @@ class FileTransfersTooltip():
         if not transfered_len:
             transfered_len = 0
         properties.append((_('Transferred: '), helpers.convert_bytes(transfered_len)))
-        status = ''
-        if file_props.started:
-            status = _('Not started')
-        if file_props.stopped:
-            status = _('Stopped')
-        elif file_props.completed:
-            status = _('Completed')
-        elif not file_props.connected:
-            if file_props.completed:
-                status = _('Completed')
-            else:
-                if file_props.paused:
-                    status = Q_('?transfer status:Paused')
-                elif file_props.stalled:
-                    # stalled is not paused. it is like 'frozen' it stopped alone
-                    status = _('Stalled')
-                else:
-                    status = _('Transferring')
-        else:
-            status = _('Not started')
+        status = self._get_current_status(file_props)
         properties.append((_('Status: '), status))
         file_desc = file_props.desc or ''
         properties.append((_('Description: '), GLib.markup_escape_text(
@@ -685,6 +665,24 @@ class FileTransfersTooltip():
 
         ft_table.show_all()
         return ft_table
+
+    @staticmethod
+    def _get_current_status(file_props):
+        if file_props.stopped:
+            return _('Aborted')
+        if file_props.completed:
+            return _('Completed')
+        if file_props.paused:
+            return Q_('?transfer status:Paused')
+        if file_props.stalled:
+            # stalled is not paused. it is like 'frozen' it stopped alone
+            return _('Stalled')
+
+        if file_props.connected:
+            if file_props.started:
+                return _('Transferring')
+            return _('Not started')
+        return _('Not started')
 
 
 def colorize_status(status):
