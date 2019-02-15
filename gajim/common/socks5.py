@@ -687,13 +687,11 @@ class Socks5:
             OpenSSL.SSL.WantX509LookupError) as e:
                 log.info('SSL rehandshake request: %s', repr(e))
                 raise e
+            except OpenSSL.SSL.SysCallError:
+                return self._on_send_exception()
             except Exception as e:
                 if e.errno not in (EINTR, ENOBUFS, EWOULDBLOCK):
-                    # peer stopped reading
-                    self.state = 8 # end connection
-                    self.disconnect()
-                    self.file_props.error = -1
-                    return -1
+                    return self._on_send_exception()
             self.size += lenn
             current_time = time.time()
             self.file_props.elapsed_time += current_time - \
@@ -718,6 +716,13 @@ class Socks5:
             self.state = 8 # end connection
             self.disconnect()
             return -1
+
+    def _on_send_exception(self):
+        # peer stopped reading
+        self.state = 8 # end connection
+        self.disconnect()
+        self.file_props.error = -1
+        return -1
 
     def get_file_contents(self, timeout):
         """
