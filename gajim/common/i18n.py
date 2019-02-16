@@ -151,7 +151,7 @@ def ngettext(s_sing, s_plural, n, replace_sing=None, replace_plural=None):
 try:
     locale.setlocale(locale.LC_ALL, '')
 except locale.Error as error:
-    print(error)
+    print(error, file=sys.stderr)
 
 try:
     LANG = get_default_lang()
@@ -161,7 +161,7 @@ try:
         os.environ['LANG'] = LANG
     print('Found default language: %s' % LANG)
 except Exception as error:
-    print('Failed to determine default language')
+    print('Failed to determine default language', file=sys.stderr)
     import traceback
     traceback.print_exc()
 
@@ -177,6 +177,6 @@ for dir_ in iter_locale_dirs():
     else:
         break
 else:
-    print('No translations found')
-    print('Dirs searched: %s' % get_locale_dirs())
+    print('No translations found', file=sys.stderr)
+    print('Dirs searched: %s' % get_locale_dirs(), file=sys.stderr)
     _ = _translation.gettext

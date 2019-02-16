@@ -85,7 +85,7 @@ class ExceptionDialog():
         traceback.print_exception(type_, value, tb, None, trace)
         self.text = self.get_issue_text(trace.getvalue())
         buffer_.set_text(self.text)
-        print(self.text)
+        print(self.text, file=sys.stderr)
         self.exception_view.set_editable(False)
         self.dialog.show()
         if __name__ == '__main__':

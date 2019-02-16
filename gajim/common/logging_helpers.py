@@ -28,7 +28,7 @@ def parseLogLevel(arg):
         return int(arg)
     if arg.isupper() and hasattr(logging, arg):
         return getattr(logging, arg)
-    print(_('%s is not a valid loglevel') % repr(arg))
+    print(_('%s is not a valid loglevel') % repr(arg), file=sys.stderr)
     return 0
 
 def parseLogTarget(arg):
@@ -69,7 +69,8 @@ def parseAndSetLogLevels(arg):
             target = parseLogTarget(target.strip())
             if target:
                 logging.getLogger(target).setLevel(level)
-                print("Logger %s level set to %d" % (target, level))
+                print("Logger %s level set to %d" % (target, level),
+                      file=sys.stderr)
 
 
 class colors:
