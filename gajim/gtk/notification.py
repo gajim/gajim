@@ -61,12 +61,8 @@ class Notification:
                 try:
                     proxy = Gio.DBusProxy.new_finish(res)
                     self._daemon_capabilities = proxy.GetCapabilities()
-                except GLib.Error as error:
-                    if error.domain == 'g-dbus-error-quark':
-                        log.info('Notifications D-Bus connection failed: %s',
-                                 error.message)
-                    else:
-                        raise
+                except GLib.Error:
+                    log.exception('Notifications D-Bus connection failed')
                 else:
                     log.debug('Notifications D-Bus connected')
 
