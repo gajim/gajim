@@ -683,7 +683,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.disable_reconnect_timer()
 
         app.interface.music_track_changed(None, None, self.name)
-        self.get_module('PEP').reset_stored_publish()
         self.get_module('VCardAvatars').avatar_advertised = False
 
         app.proxy65_manager.disconnect(self.connection)
@@ -1621,7 +1620,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Inform GUI we just signed in
         app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
         modules.send_stored_publish(self.name)
-        self.get_module('PEP').send_stored_publish()
         self.continue_connect_info = None
 
     def send_custom_status(self, show, msg, jid):

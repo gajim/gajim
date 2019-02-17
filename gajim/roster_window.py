@@ -2620,15 +2620,6 @@ class RosterWindow:
         for jid in obj.jid_list:
             self.remove_contact(jid, obj.conn.name, backend=True)
 
-    def _nec_pep_received(self, obj):
-        if obj.user_pep.type_ != PEPEventType.LOCATION:
-            return
-
-        if obj.jid == app.get_jid_from_account(obj.conn.name):
-            self.draw_account(obj.conn.name)
-
-        self.draw_pep(obj.jid, obj.conn.name, obj.pep_type)
-
     def _on_mood_received(self, event):
         if event.is_self_message:
             self.draw_account(event.account)
@@ -5828,8 +5819,6 @@ class RosterWindow:
             self._nec_connection_type)
         app.ged.register_event_handler('agent-removed', ged.GUI1,
             self._nec_agent_removed)
-        app.ged.register_event_handler('pep-received', ged.GUI1,
-            self._nec_pep_received)
         app.ged.register_event_handler('nickname-received', ged.GUI1,
             self._on_nickname_received)
         app.ged.register_event_handler('mood-received', ged.GUI1,

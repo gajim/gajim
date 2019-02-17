@@ -94,7 +94,8 @@ from gajim.common.connection_handlers_events import (
 from gajim.common.modules.httpupload import HTTPUploadProgressEvent
 from gajim.common.connection import Connection
 from gajim.common.file_props import FilesProp
-from gajim.common.const import AvatarSize, SSLError, PEPEventType
+from gajim.common.const import AvatarSize
+from gajim.common.const import SSLError
 
 from gajim import roster_window
 from gajim.common import ged
