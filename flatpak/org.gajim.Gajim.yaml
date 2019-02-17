@@ -181,9 +181,8 @@ modules:
     build-commands:
       - pip3 install --prefix=/app .
     sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/e4/74/877d904d144163862edae107dc91902d8e6003d90e1baf3ebac8adb087ef/nbxmpp-0.6.9.tar.gz
-        sha256: 660d796f6d97b30a5e249417abf012ee30a22b9e40817dde05ca9f35c96cc80d
+      - type: git
+        url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
   - name: gajim
     buildsystem: simple
