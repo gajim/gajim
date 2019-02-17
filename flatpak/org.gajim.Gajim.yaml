@@ -62,8 +62,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/e7/a7/4cd50e57cc6f436f1cc3a7e8fa700ff9b8b4d471620629074913e3735fb2/cffi-1.11.5.tar.gz
-        sha256: e90f17980e6ab0f3c2f3730e56d1fe9bcba1891eeea58966e89d352492cc74f4
+        url: https://files.pythonhosted.org/packages/bc/81/47bd0404f2cb5363edb371e3b15da6387b5e9b80122e5b81be8b8f411e9b/cffi-1.12.1.tar.gz
+        sha256: 9b6f7ba4e78c52c1a291d0c0c0bd745d19adde1a9e1c03cb899f0c6efd6f8033
 
   - name: python3-asn1crypto
     buildsystem: simple
@@ -77,11 +77,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app idna-2.7-py2.py3-none-any.whl
+      - pip3 install --prefix=/app idna-2.8-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/4b/2a/0276479a4b3caeb8a8c1af2f8e4355746a97fab05a372e4a2c6a6b876165/idna-2.7-py2.py3-none-any.whl
-        sha256: 156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e
+        url: https://files.pythonhosted.org/packages/14/2c/cd551d81dbe15200be1cf41cd03869a46fe7226e7450af7a6545bfc474c9/idna-2.8-py2.py3-none-any.whl
+        sha256: ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c
 
   - name: python3-cryptography
     buildsystem: simple
@@ -95,11 +95,11 @@ modules:
   - name: python3-pyopenssl
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app pyOpenSSL-18.0.0-py2.py3-none-any.whl
+      - pip3 install --prefix=/app pyOpenSSL-19.0.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/96/af/9d29e6bd40823061aea2e0574ccb2fcf72bfd6130ce53d32773ec375458c/pyOpenSSL-18.0.0-py2.py3-none-any.whl
-        sha256: 26ff56a6b5ecaf3a2a59f132681e2a80afcc76b4f902f612f518f92c2a1bf854
+        url: https://files.pythonhosted.org/packages/01/c8/ceb170d81bd3941cbeb9940fc6cc2ef2ca4288d0ca8929ea4db5905d904d/pyOpenSSL-19.0.0-py2.py3-none-any.whl
+        sha256: c727930ad54b10fc157015014b666f2d8b41f70c0d03e83ab67624fd3dd5d1e6
 
   - name: python3-dbus-python
     build-options:
@@ -122,31 +122,31 @@ modules:
   - name: python3-secretstorage
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app SecretStorage-3.1.0-py3-none-any.whl
+      - pip3 install --prefix=/app SecretStorage-3.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/d8/e8/80975fd281764c80b2eb581a7f25d2109786e273b8925e8161bd2d06d10a/SecretStorage-3.1.0-py3-none-any.whl
-        sha256: 20196abd1a9d1310df7573d58ca6e7ed9292218c98ca3638eea07beb16080343
+        url: https://files.pythonhosted.org/packages/82/59/cb226752e20d83598d7fdcabd7819570b0329a61db07cfbdd21b2ef546e3/SecretStorage-3.1.1-py3-none-any.whl
+        sha256: 7a119fb52a88e398dbb22a4b3eb39b779bfbace7e4153b7bc6e5954d86282a8a
 
   - name: python3-entrypoints
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app entrypoints-0.2.3-py2.py3-none-any.whl
+      - pip3 install --prefix=/app entrypoints-0.3-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cc/8b/4eefa9b47f1910b3d2081da67726b066e379b04ca897acfe9f92bac56147/entrypoints-0.2.3-py2.py3-none-any.whl
-        sha256: 10ad569bb245e7e2ba425285b9fa3e8178a0dc92fc53b1e1c553805e15a8825b
+        url: https://files.pythonhosted.org/packages/ac/c6/44694103f8c221443ee6b0041f69e2740d89a25641e62fb4f2ee568f2f9c/entrypoints-0.3-py2.py3-none-any.whl
+        sha256: 589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app keyring-16.0.2-py2.py3-none-any.whl
+      - pip3 install --prefix=/app keyring-18.0.0-py2.py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/5f/cb/dc7b2215cd82b77e7b8b48abd8989c1b09990d4c91a3ccfdc18a61157b36/keyring-16.0.2-py2.py3-none-any.whl
-        sha256: 2a5cf5e596cbf8b66b98b8df2c214adfe21e6e18baa82006b2c482bd0c4be94c
+        url: https://files.pythonhosted.org/packages/a1/28/0058032477bfdf2003e605d175629963759220661615443e20711446bfa7/keyring-18.0.0-py2.py3-none-any.whl
+        sha256: ca33f5ccc542b9ffaa196ee9a33488069e5e7eac77d5b81969f8a3ce74d0230c
 
   - name: python3-cssutils
     buildsystem: simple
@@ -182,8 +182,8 @@ modules:
       - pip3 install --prefix=/app .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/24/54/23a475a0d7d3664ea21b14ce907245dc390496f31d229a9aac2ae20c7c28/nbxmpp-0.6.8.tar.gz
-        sha256: 8c2b4b8aac1a8c6d07c1e30af542fde20a70a9b8c7c04017e9cea0db654437c6
+        url: https://files.pythonhosted.org/packages/e4/74/877d904d144163862edae107dc91902d8e6003d90e1baf3ebac8adb087ef/nbxmpp-0.6.9.tar.gz
+        sha256: 660d796f6d97b30a5e249417abf012ee30a22b9e40817dde05ca9f35c96cc80d
 
   - name: gajim
     buildsystem: simple
