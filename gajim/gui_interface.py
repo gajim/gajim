@@ -117,7 +117,6 @@ from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
-from gajim.gtk.atom import AtomWindow
 from gajim.gtk.filetransfer import FileTransfersWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
@@ -1035,13 +1034,6 @@ class Interface:
     def handle_event_metacontacts(obj):
         app.contacts.define_metacontacts(obj.conn.name, obj.meta_list)
 
-    @staticmethod
-    def handle_atom_entry(obj):
-        if obj != PEPEventType.ATOM:
-            return
-        if obj.get_entry():
-            AtomWindow.newAtomEntry(obj.get_entry())
-
     def handle_event_zc_name_conflict(self, obj):
         def on_ok(new_name):
             app.config.set_per('accounts', obj.conn.name, 'name', new_name)
@@ -1292,7 +1284,6 @@ class Interface:
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
             'file-send-error': [self.handle_event_file_send_error],
-            'pep-received': [self.handle_atom_entry],
             'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'client-cert-passphrase': [
