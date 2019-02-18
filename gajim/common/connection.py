@@ -1488,7 +1488,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_module('Bookmarks').request_bookmarks()
 
             # Get annotations
-            self.get_module('Annotations').get_annotations()
+            self.get_module('Annotations').request_annotations()
 
             # Blocking
             self.get_module('Blocking').get_blocking_list()
@@ -1614,7 +1614,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             self.get_module('VCardTemp').request_vcard()
 
         self.get_module('Bookmarks').request_bookmarks()
-        self.get_module('Annotations').get_annotations()
+        self.get_module('Annotations').request_annotations()
         self.get_module('Blocking').get_blocking_list()
 
         # Inform GUI we just signed in

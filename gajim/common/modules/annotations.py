@@ -16,87 +16,49 @@
 
 from typing import Any
 from typing import Dict  # pylint: disable=unused-import
-from typing import List  # pylint: disable=unused-import
 from typing import Tuple
 
 import logging
 
-import nbxmpp
+from nbxmpp.util import is_error_result
 
-from gajim.common import app
-from gajim.common import helpers
 from gajim.common.types import ConnectionT
+from gajim.common.modules.base import BaseModule
 
 log = logging.getLogger('gajim.c.m.annotations')
 
 
-class Annotations:
-    def __init__(self, con: ConnectionT) -> None:
-        self._con = con
-        self._account = con.name
-        self._server = self._con.get_own_jid().getDomain()
+class Annotations(BaseModule):
 
-        self.handlers = []  # type: List[Tuple[Any, ...]]
-        self.annotations = {}  # type: Dict[str, str]
+    _nbxmpp_extends = 'Annotations'
+    _nbxmpp_methods = [
+        'request_annotations',
+        'set_annotations',
+    ]
 
-    def get_annotations(self) -> None:
-        if not app.account_is_connected(self._account):
+    def __init__(self, con: ConnectionT):
+        BaseModule.__init__(self, con)
+
+        self._register_callback('request_annotations',
+                                self._annotations_received)
+        self._annotations = {}  # type: Dict[str, Any]
+
+    def set_annotations(self):
+        self._nbxmpp('Annotations').set_annotations(self._annotations.values())
+
+    def _annotations_received(self, result):
+        if is_error_result(result):
+            self._annotations = {}
             return
+        for note in result:
+            self._annotations[note.jid] = note
 
-        log.info('Request annotations for %s', self._server)
-        iq = nbxmpp.Iq(typ='get')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq2.addChild(name='storage', namespace='storage:rosternotes')
+    def get_note(self, jid):
+        return self._annotations.get(jid)
 
-        self._con.connection.SendAndCallForResponse(iq, self._result_received)
-
-    def _result_received(self, stanza: nbxmpp.Iq) -> None:
-        if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
-            return
-
-        log.info('Received annotations from %s', self._server)
-        self.annotations = {}
-        query = stanza.getTag('query')
-        storage_node = query.getTag('storage')
-        if storage_node is None:
-            return
-
-        notes = storage_node.getTags('note')
-        if notes is None:
-            return
-
-        for note in notes:
-            try:
-                jid = helpers.parse_jid(note.getAttr('jid'))
-            except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            note.getAttr('jid'))
-                continue
-            self.annotations[jid] = note.getData()
-
-    def store_annotations(self) -> None:
-        if not app.account_is_connected(self._account):
-            return
-
-        iq = nbxmpp.Iq(typ='set')
-        iq2 = iq.addChild(name='query', namespace=nbxmpp.NS_PRIVATE)
-        iq3 = iq2.addChild(name='storage', namespace='storage:rosternotes')
-        for jid in self.annotations:
-            if self.annotations[jid]:
-                iq4 = iq3.addChild(name='note')
-                iq4.setAttr('jid', jid)
-                iq4.setData(self.annotations[jid])
-
-        self._con.connection.SendAndCallForResponse(
-            iq, self._store_result_received)
-
-    @staticmethod
-    def _store_result_received(stanza: nbxmpp.Iq) -> None:
-        if not nbxmpp.isResultNode(stanza):
-            log.warning('Storing rosternotes failed: %s', stanza.getError())
-            return
-        log.info('Storing rosternotes successful')
+    def set_note(self, note):
+        self._annotations[note.jid] = note
+        self.set_annotations()
 
 
 def get_instance(*args: Any, **kwargs: Any) -> Tuple[Annotations, str]:

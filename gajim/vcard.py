@@ -32,6 +32,7 @@ import binascii
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Gdk
+from nbxmpp.structs import AnnotationNote
 
 from gajim import gtkgui_helpers
 from gajim.gui_menu_builder import show_save_as_menu
@@ -108,10 +109,10 @@ class VcardWindow:
 
         self.fill_jabber_page()
         con = app.connections[self.account]
-        annotations = con.get_module('Annotations').annotations
-        if self.contact.jid in annotations:
+        note = con.get_module('Annotations').get_note(self.contact.jid)
+        if note is not None:
             buffer_ = self.xml.get_object('textview_annotation').get_buffer()
-            buffer_.set_text(annotations[self.contact.jid])
+            buffer_.set_text(note.data)
 
         for widget_name in ('URL_label',
                             'EMAIL_WORK_USERID_label',
@@ -140,12 +141,13 @@ class VcardWindow:
         del app.interface.instances[self.account]['infos'][self.contact.jid]
         buffer_ = self.xml.get_object('textview_annotation').get_buffer()
         new_annotation = buffer_.get_text(buffer_.get_start_iter(),
-                buffer_.get_end_iter(), True)
+                                          buffer_.get_end_iter(),
+                                          True)
         con = app.connections[self.account]
-        annotations = con.get_module('Annotations').annotations
-        if new_annotation != annotations.get(self.contact.jid, ''):
-            annotations[self.contact.jid] = new_annotation
-            con.get_module('Annotations').store_annotations()
+        note = con.get_module('Annotations').get_note(self.contact.jid)
+        if note is None or new_annotation != note.data:
+            new_note = AnnotationNote(jid=self.contact.jid, data=new_annotation)
+            con.get_module('Annotations').set_note(new_note)
         app.ged.remove_event_handler('version-result-received', ged.GUI1,
             self.set_os_info)
         app.ged.remove_event_handler('time-result-received', ged.GUI1,
