@@ -64,11 +64,14 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
         connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
-    def _messageCB(self, _con, stanza, properties):
+    def _messageCB(self, con, stanza, properties):
         """
         Called when we receive a message
         """
         log.info('Zeroconf MessageCB')
+
+        # Dont trust from attr set by sender
+        stanza.setFrom(con._owner.to)
 
         app.nec.push_incoming_event(NetworkEvent(
             'raw-message-received',
@@ -110,6 +113,7 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
             'jid': jid,
             'resource': resource,
             'unique_id': id_,
+            'message_id': properties.id,
             'mtype': type_,
             'msgtxt': msgtxt,
             'thread_id': thread_id,
