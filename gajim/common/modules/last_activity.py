@@ -17,31 +17,37 @@
 import logging
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import idle
+from gajim.common.modules.base import BaseModule
 
 log = logging.getLogger('gajim.c.m.last_activity')
 
 
-class LastActivity:
+class LastActivity(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
-        self.handlers = [('iq', self._answer_request, 'get', nbxmpp.NS_LAST)]
+        self.handlers = [
+            StanzaHandler(name='iq',
+                          typ='get',
+                          callback=self._answer_request,
+                          ns=nbxmpp.NS_LAST),
+        ]
 
-    def _answer_request(self, _con, stanza):
-        log.info('Request from %s', stanza.getFrom())
-        if not app.account_is_connected(self._account):
-            return
+    def _answer_request(self, _con, stanza, properties):
+        log.info('Request from %s', properties.jid)
 
         allow_send = app.config.get_per(
             'accounts', self._account, 'send_idle_time')
         if app.is_installed('IDLE') and allow_send:
             iq = stanza.buildReply('result')
             query = iq.setQuery()
-            query.attrs['seconds'] = idle.Monitor.get_idle_sec()
+            seconds = idle.Monitor.get_idle_sec()
+            query.attrs['seconds'] = seconds
+            log.info('Respond with seconds: %s', seconds)
         else:
             iq = stanza.buildReply('error')
             err = nbxmpp.ErrorNode(nbxmpp.ERR_SERVICE_UNAVAILABLE)
