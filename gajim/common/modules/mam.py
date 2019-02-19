@@ -33,7 +33,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
-from gajim.common.modules.misc import parse_eme
+from gajim.common.modules.util import get_eme_message
 
 log = logging.getLogger('gajim.c.m.archiving')
 
@@ -170,11 +170,9 @@ class MAM:
         else:
             app.plugin_manager.extension_point(
                 'decrypt', self._con, event, self._decryption_finished)
-
             if not event.encrypted:
-                eme = parse_eme(event.message)
-                if eme is not None:
-                    event.msgtxt = eme
+                if properties.eme is not None:
+                    event.msgtxt = get_eme_message(properties.eme)
                 self._decryption_finished(event)
 
         raise nbxmpp.NodeProcessed

@@ -200,6 +200,23 @@ class MUCUser(IntEnum):
     AFFILIATION_TEXT = 4
 
 
+EME_MESSAGES = {
+    'urn:xmpp:otr:0':
+        _('This message was encrypted with OTR '
+          'and could not be decrypted.'),
+    'jabber:x:encrypted':
+        _('This message was encrypted with Legacy '
+          'OpenPGP and could not be decrypted. You can install '
+          'the PGP plugin to handle those messages.'),
+    'urn:xmpp:openpgp:0':
+        _('This message was encrypted with '
+          'OpenPGP for XMPP and could not be decrypted.'),
+    'fallback':
+        _('This message was encrypted with %s '
+          'and could not be decrypted.')
+}
+
+
 ACTIVITIES = {
     'doing_chores': {
         'category': _('Doing Chores'),

@@ -28,10 +28,10 @@ from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
+from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
 from gajim.common.modules.misc import parse_delay
-from gajim.common.modules.misc import parse_eme
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_form
@@ -187,9 +187,8 @@ class Message:
             app.plugin_manager.extension_point(
                 'decrypt', self._con, event, self._on_message_decrypted)
             if not event.encrypted:
-                eme = parse_eme(event.stanza)
-                if eme is not None:
-                    event.msgtxt = eme
+                if properties.eme is not None:
+                    event.msgtxt = get_eme_message(properties.eme)
                 self._on_message_decrypted(event)
 
     def _on_message_decrypted(self, event):

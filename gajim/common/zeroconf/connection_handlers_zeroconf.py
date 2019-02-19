@@ -27,14 +27,13 @@ import nbxmpp
 from gajim.common import app
 
 from gajim.common.protocol.bytestream import ConnectionSocks5BytestreamZeroconf
-from gajim.common.zeroconf.zeroconf import Constant
 from gajim.common import connection_handlers
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.nec import NetworkIncomingEvent, NetworkEvent
 from gajim.common.const import KindConstant
 from gajim.common.modules.user_nickname import parse_nickname
-from gajim.common.modules.misc import parse_eme
+from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_oob
@@ -65,11 +64,11 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
         connection_handlers.ConnectionJingle.__init__(self)
         connection_handlers.ConnectionHandlersBase.__init__(self)
 
-    def _messageCB(self, ip, con, stanza):
+    def _messageCB(self, _con, stanza, properties):
         """
         Called when we receive a message
         """
-        log.debug('Zeroconf MessageCB')
+        log.info('Zeroconf MessageCB')
 
         app.nec.push_incoming_event(NetworkEvent(
             'raw-message-received',
@@ -84,13 +83,6 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
         id_ = stanza.getID()
 
         fjid = str(stanza.getFrom())
-
-        if fjid is None:
-            for key in self.connection.zeroconf.contacts:
-                if ip == self.connection.zeroconf.contacts[key][
-                        Constant.ADDRESS]:
-                    fjid = key
-                    break
 
         jid, resource = app.get_room_and_nick_from_fjid(fjid)
 
@@ -132,9 +124,8 @@ class ConnectionHandlersZeroconf(ConnectionSocks5BytestreamZeroconf,
         app.plugin_manager.extension_point(
             'decrypt', self, event, self._on_message_decrypted)
         if not event.encrypted:
-            eme = parse_eme(event.stanza)
-            if eme is not None:
-                event.msgtxt = eme
+            if properties.eme is not None:
+                event.msgtxt = get_eme_message(properties.eme)
             self._on_message_decrypted(event)
 
     def _on_message_decrypted(self, event):

@@ -28,6 +28,7 @@ from unittest.mock import Mock
 import nbxmpp
 from nbxmpp import dispatcher_nb
 from nbxmpp import simplexml
+from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
 from nbxmpp.idlequeue import IdleObject
 from nbxmpp.transports_nb import DATA_RECEIVED
@@ -322,8 +323,10 @@ class P2PClient(IdleObject):
 
     def _register_handlers(self):
         self._caller.peerhost = self.Connection._sock.getsockname()
-        self.RegisterHandler('message', lambda conn,
-            data: self._caller._messageCB(self.Server, conn, data))
+
+        self.RegisterHandler(*StanzaHandler(name='message',
+                                            callback=self._caller._messageCB))
+
         self.RegisterHandler('iq', self._caller._siSetCB, 'set', nbxmpp.NS_SI)
         self.RegisterHandler('iq', self._caller._siErrorCB, 'error',
             nbxmpp.NS_SI)

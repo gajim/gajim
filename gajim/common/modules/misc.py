@@ -19,48 +19,9 @@ import logging
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.modules.date_and_time import parse_datetime
 
 log = logging.getLogger('gajim.c.m.misc')
-
-
-# XEP-0380: Explicit Message Encryption
-
-_eme_namespaces = {
-    'urn:xmpp:otr:0':
-        _('This message was encrypted with OTR '
-          'and could not be decrypted.'),
-    'jabber:x:encrypted':
-        _('This message was encrypted with Legacy '
-          'OpenPGP and could not be decrypted. You can install '
-          'the PGP plugin to handle those messages.'),
-    'urn:xmpp:openpgp:0':
-        _('This message was encrypted with '
-          'OpenPGP for XMPP and could not be decrypted.'),
-    'fallback':
-        _('This message was encrypted with %s '
-          'and could not be decrypted.')
-}
-
-
-def parse_eme(stanza):
-    enc_tag = stanza.getTag('encryption', namespace=nbxmpp.NS_EME)
-    if enc_tag is None:
-        return
-
-    ns = enc_tag.getAttr('namespace')
-    if ns is None:
-        log.warning('No namespace on EME message')
-        return
-
-    if ns in _eme_namespaces:
-        log.info('Found not decrypted message: %s', ns)
-        return _eme_namespaces.get(ns)
-
-    enc_name = enc_tag.getAttr('name')
-    log.info('Found not decrypted message: %s', enc_name or ns)
-    return _eme_namespaces.get('fallback') % enc_name or ns
 
 
 # XEP-0203: Delayed Delivery

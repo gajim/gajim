@@ -20,6 +20,7 @@ from functools import wraps
 from functools import partial
 
 from gajim.common import app
+from gajim.common.const import EME_MESSAGES
 
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:
@@ -73,3 +74,10 @@ def store_publish(func):
             return
         return func(self, *args, **kwargs)
     return func_wrapper
+
+
+def get_eme_message(eme_data):
+    try:
+        return EME_MESSAGES[eme_data.namespace]
+    except KeyError:
+        return EME_MESSAGES['fallback'] % eme_data.name
