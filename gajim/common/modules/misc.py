@@ -157,24 +157,3 @@ def parse_xhtml(stanza):
     if app.config.get('ignore_incoming_xhtml'):
         return None
     return stanza.getXHTML()
-
-
-# XEP-0319: Last User Interaction in Presence
-
-def parse_idle(stanza):
-    idle_tag = stanza.getTag('idle', namespace=nbxmpp.NS_IDLE)
-    if idle_tag is None:
-        return
-
-    since = idle_tag.getAttr('since')
-    if since is None:
-        log.warning('No since attr in idle node')
-        log.warning(stanza)
-        return
-
-    timestamp = parse_datetime(since, convert='utc', epoch=True)
-    if timestamp is None:
-        log.warning('Invalid timestamp received: %s', since)
-        log.warning(stanza)
-
-    return timestamp
