@@ -43,6 +43,7 @@
 
 import types
 import weakref
+import uuid
 
 import nbxmpp
 from gi.repository import GLib
@@ -2189,7 +2190,7 @@ class GroupsPostWindow:
         # publish it to node
         con = app.connections[self.account]
         con.get_module('PubSub').send_pb_publish(
-            self.servicejid, self.groupid, item, '0')
+            self.servicejid, self.groupid, item, str(uuid.uuid4()))
 
         # close the window
         self.window.destroy()
