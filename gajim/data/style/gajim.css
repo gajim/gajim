@@ -134,6 +134,15 @@ list.settings > row > box {
 #StartChatListBox > row { padding: 10px 20px 10px 10px; }
 #StartChatListBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
+/* StartChatListBox */
+.start-chat-row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+.start-chat-row:last-child { border-bottom: 0px}
+.start-chat-row.activatable:active { box-shadow: none; }
+.start-chat-row { padding: 10px 20px 10px 10px; }
+.start-chat-row:not(.activatable) label { color: @insensitive_fg_color }
+.start-chat-row:focus { outline: none; }
+
+
 /* GroupchatConfig */
 #GroupchatConfig > box > buttonbox { margin: 0px 12px 12px 12px; }
 #GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}

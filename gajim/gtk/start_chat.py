@@ -13,11 +13,15 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 import locale
+from enum import IntEnum
 
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
+
+from nbxmpp.util import is_error_result
+from nbxmpp.const import AnonymityMode
 
 from gajim.common import app
 from gajim.common import helpers
@@ -26,6 +30,15 @@ from gajim.common.const import AvatarSize
 
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
+from gajim.gtk.util import ensure_not_destroyed
+
+
+SERVICE_JID = 'rodrigo.de.mucobedo@dreckshal.de'
+
+
+class Search(IntEnum):
+    CONTACT = 0
+    MUC = 1
 
 
 class StartChatDialog(Gtk.ApplicationWindow):
@@ -38,6 +51,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_title(_('Start new Conversation'))
         self.set_default_size(-1, 400)
         self.ready_to_destroy = False
+        self._parameter_form = None
+        self._destroyed = False
+        self._search_stopped = False
 
         self.builder = get_builder('start_chat_dialog.ui')
         self.listbox = self.builder.get_object('listbox')
@@ -65,6 +81,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.listbox.set_filter_func(self._filter_func, None)
         self.listbox.set_sort_func(self._sort_func, None)
         self.listbox.connect('row-activated', self._on_row_activated)
+
+        self._muc_search_listbox = MUCSearch()
+        self._current_listbox = self.listbox
 
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._destroy)
@@ -118,7 +137,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return True
 
         if (event.state == Gdk.ModifierType.SHIFT_MASK and
-              event.keyval == Gdk.KEY_ISO_Left_Tab):
+                event.keyval == Gdk.KEY_ISO_Left_Tab):
             self.search_entry.emit('previous-match')
             return True
 
@@ -127,6 +146,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return True
 
         if event.keyval == Gdk.KEY_Escape:
+            self._search_stopped = True
+            self._muc_search_listbox.remove_all()
             if self.search_entry.get_text() != '':
                 self.search_entry.emit('stop-search')
             else:
@@ -134,6 +155,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return True
 
         if event.keyval == Gdk.KEY_Return:
+            if self._current_listbox_is(Search.MUC):
+                self._muc_search_listbox.remove_all()
+                self._start_search()
+                return True
+
             row = self.listbox.get_selected_row()
             if row is not None:
                 row.emit('activate')
@@ -159,8 +185,27 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self.ready_to_destroy = True
 
+    def _set_listbox(self, listbox):
+        if self._current_listbox == listbox:
+            return
+        viewport = self.builder.scrolledwindow.get_child()
+        viewport.remove(viewport.get_child())
+        self.builder.scrolledwindow.remove(viewport)
+        self.builder.scrolledwindow.add(listbox)
+        self._current_listbox = listbox
+
+    def _current_listbox_is(self, box):
+        if self._current_listbox == self.listbox:
+            return box == Search.CONTACT
+        return box == Search.MUC
+
     def _on_search_changed(self, entry):
         search_text = entry.get_text()
+        if search_text.startswith('g:'):
+            self._set_listbox(self._muc_search_listbox)
+            return
+
+        self._set_listbox(self.listbox)
         if '@' in search_text:
             self._add_new_jid_row()
             self._update_new_jid_rows(search_text)
@@ -256,7 +301,83 @@ class StartChatDialog(Gtk.ApplicationWindow):
         return locale.strcoll(name1.lower(), name2.lower())
 
     @staticmethod
-    def _destroy(*args):
+    def _get_connection():
+        accounts = app.get_connected_accounts()
+        if not accounts:
+            raise NotConnected
+        return app.connections[accounts.pop()].connection
+
+    def _start_search(self):
+        self._search_stopped = False
+        try:
+            con = self._get_connection()
+        except NotConnected:
+            return
+
+        text = self.search_entry.get_text()
+        text = text[2:].strip()
+        self._muc_search_listbox.start_search()
+
+        if self._parameter_form is None:
+            con.get_module('Muclumbus').request_parameters(
+                SERVICE_JID,
+                callback=self._parameters_received,
+                user_data=(con, text))
+        else:
+            self._parameter_form.vars['q'].value = text
+
+            con.get_module('Muclumbus').set_search(
+                SERVICE_JID,
+                self._parameter_form,
+                callback=self._on_search_result,
+                user_data=con)
+
+    @ensure_not_destroyed
+    def _parameters_received(self, result, user_data):
+        if is_error_result(result):
+            self._on_error(result)
+            return
+
+        con, text = user_data
+        self._parameter_form = result
+        self._parameter_form.type_ = 'submit'
+        self._parameter_form.vars['q'].value = text
+
+        con.get_module('Muclumbus').set_search(
+            SERVICE_JID,
+            self._parameter_form,
+            callback=self._on_search_result,
+            user_data=con)
+
+    @ensure_not_destroyed
+    def _on_search_result(self, result, con):
+        if self._search_stopped:
+            return
+
+        if is_error_result(result):
+            self._on_error(result)
+            return
+
+        for item in result.items:
+            self._muc_search_listbox.add(ResultRow(item))
+
+        if result.end:
+            self._muc_search_listbox.end_search()
+            return
+
+        con.get_module('Muclumbus').set_search(
+            SERVICE_JID,
+            self._parameter_form,
+            items_per_page=result.max,
+            after=result.last,
+            callback=self._on_search_result,
+            user_data=con)
+
+    def _on_error(self, result):
+        self._muc_search_listbox.show_error(result)
+
+    def _destroy(self, *args):
+        self._destroyed = True
         del app.interface.instances['start_chat']
 
 
@@ -345,3 +466,149 @@ class ContactRow(Gtk.Grid):
         if self.show_account:
             return '%s %s %s' % (self.name, self.jid, self.account_label)
         return '%s %s' % (self.name, self.jid)
+
+
+class MUCSearch(Gtk.ListBox):
+    def __init__(self):
+        Gtk.ListBox.__init__(self)
+        self.set_has_tooltip(True)
+        self.set_activate_on_single_click(False)
+        self._progress = None
+
+        self._ui = get_builder('start_chat_dialog.ui', ['tooltip'])
+        self.connect('query-tooltip', self._query_tooltip)
+        self.connect('row-activated', self._on_row_activated)
+        self.show_all()
+
+    def remove_all(self):
+        def remove(row):
+            self.remove(row)
+            row.destroy()
+        self.foreach(remove)
+
+    def show_error(self, error):
+        self.insert(ErrorRow(error), 0)
+        self.remove(self._progress)
+        self._progress.destroy()
+
+    def start_search(self):
+        self._progress = ProgressRow()
+        super().add(self._progress)
+
+    def end_search(self):
+        self._progress.stop()
+
+    def add(self, row):
+        super().add(row)
+        self._progress.update()
+
+    def _query_tooltip(self, _widget, _x_pos, y_pos, _keyboard_mode, tooltip):
+        row = self.get_row_at_y(y_pos)
+        if row is None or not isinstance(row, ResultRow):
+            self._clear_tooltip()
+            return False
+
+        if row.item.anonymity_mode == AnonymityMode.SEMI:
+            self._ui.anonymous_icon.show()
+            self._ui.anonymous_label.show()
+
+        self._ui.tooltip_user.set_text(row.item.nusers)
+        self._ui.tooltip_jid.set_text(row.item.jid)
+        if row.item.description:
+            self._ui.tooltip_description.set_text(row.item.description)
+            self._ui.tooltip_description.show()
+            self._ui.tooltip_description_label.show()
+
+        if row.item.name:
+            self._ui.tooltip_name.set_text(row.item.name)
+            self._ui.tooltip_name.show()
+            self._ui.tooltip_name_label.show()
+
+        tooltip.set_custom(self._ui.tooltip)
+        return True
+
+    def _clear_tooltip(self):
+        self._ui.anonymous_icon.hide()
+        self._ui.anonymous_label.hide()
+        self._ui.tooltip_description.hide()
+        self._ui.tooltip_description_label.hide()
+        self._ui.tooltip_name.hide()
+        self._ui.tooltip_name_label.hide()
+
+    def _on_row_activated(self, _listbox, row):
+        app.interface.join_gc_minimal(None, row.item.jid)
+
+
+class ResultRow(Gtk.ListBoxRow):
+    def __init__(self, item):
+        Gtk.ListBoxRow.__init__(self)
+        self.set_activatable(True)
+        self.get_style_context().add_class('start-chat-row')
+        self.item = item
+        self._ui = get_builder('start_chat_dialog.ui', ['search_result_grid'])
+        self._ui.jid_label.set_text(item.jid)
+        self._ui.name_label.set_text(item.name)
+        self._ui.user_label.set_text(item.nusers)
+        self.add(self._ui.search_result_grid)
+        self.show_all()
+
+
+class ErrorRow(Gtk.ListBoxRow):
+    def __init__(self, error):
+        Gtk.ListBoxRow.__init__(self)
+        self.set_selectable(False)
+        self.set_activatable(False)
+        self.get_style_context().add_class('start-chat-row')
+        self._error = Gtk.Label(label=str(error))
+        self._error.set_line_wrap(True)
+        self._error.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._error.set_xalign(0)
+        self._error_image = Gtk.Image.new_from_icon_name(
+            'dialog-error', Gtk.IconSize.MENU)
+        self._error_image.get_style_context().add_class('error-color')
+        self._error_image.set_valign(Gtk.Align.CENTER)
+        box = Gtk.Box()
+        box.set_spacing(6)
+        box.add(self._error_image)
+        box.add(self._error)
+        self.add(box)
+        self.show_all()
+
+
+class ProgressRow(Gtk.ListBoxRow):
+    def __init__(self):
+        Gtk.ListBoxRow.__init__(self)
+        self.set_selectable(False)
+        self.set_activatable(False)
+        self.get_style_context().add_class('start-chat-row')
+        self._text = _('%s Group chats found')
+        self._count = 0
+        self._spinner = Gtk.Spinner()
+        self._spinner.start()
+        self._count_label = Gtk.Label(label=self._text % 0)
+        self._count_label.get_style_context().add_class('bold')
+        self._finished_image = Gtk.Image.new_from_icon_name(
+            'emblem-ok-symbolic', Gtk.IconSize.MENU)
+        self._finished_image.get_style_context().add_class('success-color')
+        self._finished_image.set_no_show_all(True)
+
+        box = Gtk.Box()
+        box.set_spacing(6)
+        box.add(self._finished_image)
+        box.add(self._spinner)
+        box.add(self._count_label)
+        self.add(box)
+        self.show_all()
+
+    def update(self):
+        self._count += 1
+        self._count_label.set_text(self._text % self._count)
+
+    def stop(self):
+        self._spinner.stop()
+        self._spinner.hide()
+        self._finished_image.show()
+
+
+class NotConnected(Exception):
+    pass
