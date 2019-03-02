@@ -17,6 +17,8 @@
 
 '''Window to create new post for discussion groups service.'''
 
+import uuid
+
 from gajim.common import app
 from nbxmpp import Node
 from gajim import gtkgui_helpers
@@ -65,7 +67,7 @@ class GroupsPostWindow:
         # publish it to node
         con = app.connections[self.account]
         con.get_module('PubSub').send_pb_publish(
-            self.servicejid, self.groupid, item, '0')
+            self.servicejid, self.groupid, item, str(uuid.uuid4()))
 
         # close the window
         self.window.destroy()
