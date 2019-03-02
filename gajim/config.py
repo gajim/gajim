@@ -31,6 +31,7 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 from gajim.common import app
+from gajim.common import passwords
 from gajim.common.i18n import _
 
 from gajim import dialogs
@@ -213,6 +214,7 @@ class RemoveAccountWindow:
         app.interface.roster.setup_and_draw_roster()
         app.app.remove_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
+        passwords.delete_password(self.account)
 
         window = app.get_app_window('AccountsWindow')
         if window is not None:

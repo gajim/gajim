@@ -35,7 +35,7 @@ try:
     KEYRING_AVAILABLE = True
 except ImportError:
     KEYRING_AVAILABLE = False
-    log.debug('python-keyring missing, falling back to plaintext storage')
+    log.warning('python-keyring missing, falling back to plaintext storage')
 
 
 class PasswordStorage:
@@ -58,24 +58,32 @@ class SecretPasswordStorage(PasswordStorage):
 
     def __init__(self):
         self.keyring = keyring.get_keyring()
-        log.info('Chose %s backend', self.keyring)
+        log.info('Select %s backend', self.keyring)
 
     def save_password(self, account_name, password):
         try:
+            log.info('Save password to keyring')
             self.keyring.set_password('gajim', account_name, password)
             return True
-        except Exception as error:
-            log.warning('Save password failed')
-            log.debug(error)
+        except Exception:
+            log.exception('Save password failed')
             return False
 
     def get_password(self, account_name):
-        log.debug('getting password')
-        return self.keyring.get_password('gajim', account_name)
+        log.info('Request password from keyring')
+        try:
+            return self.keyring.get_password('gajim', account_name)
+        except Exception:
+            log.exception('Request password failed')
+            return
 
     def delete_password(self, account_name):
-        return self.keyring.delete_password('gajim', account_name)
-
+        log.info('Remove password from keyring')
+        try:
+            return self.keyring.delete_password('gajim', account_name)
+        except Exception:
+            log.exception('Remove password failed')
+            return
 
 class PasswordStorageManager(PasswordStorage):
     """Access all the implemented password storage backends, knowing which ones
@@ -119,22 +127,23 @@ class PasswordStorageManager(PasswordStorage):
 
         if backend:
             pw = backend.get_password(account_name)
+
         if backend != self.preferred_backend:
             # migrate password to preferred_backend
             self.save_password(account_name, pw)
-            # TODO: remove from old backend
         return pw
 
     def save_password(self, account_name, password):
         if account_name in app.connections:
             app.connections[account_name].password = password
+
         if not app.config.get_per('accounts', account_name, 'savepass'):
             return True
 
         if self.preferred_backend:
             if self.preferred_backend.save_password(account_name, password):
                 app.config.set_per('accounts', account_name, 'password',
-                    self.preferred_backend.identifier)
+                                   self.preferred_backend.identifier)
         else:
             app.config.set_per('accounts', account_name, 'password', password)
         return True
@@ -143,10 +152,9 @@ class PasswordStorageManager(PasswordStorage):
         if account_name in app.connections:
             app.connections[account_name].password = None
 
-        if not self.preferred_backend:
+        if self.preferred_backend is not None:
             self.preferred_backend.delete_password(account_name)
-        else:
-            app.config.set_per('accounts', account_name, 'password', None)
+        app.config.set_per('accounts', account_name, 'password', None)
         return True
 
     def set_preferred_backend(self):
