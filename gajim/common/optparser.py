@@ -27,6 +27,7 @@ import os
 import sys
 import re
 import logging
+from pathlib import Path
 
 from gajim.common import app
 from gajim.common import caps_cache
@@ -104,25 +105,22 @@ class OptionsParser:
         fd.write(s + ' = ' + value + '\n')
 
     def write(self):
-        (base_dir, filename) = os.path.split(self.__filename)
-        self.__tempfile = os.path.join(base_dir, '.' + filename)
+        config_path = Path(self.__filename)
+        tempfile = 'temp_%s' % config_path.name
+        temp_filepath = config_path.parent / tempfile
         try:
-            with open(self.__tempfile, 'w', encoding='utf-8') as f:
-                app.config.foreach(self.write_line, f)
-        except IOError as e:
-            return str(e)
+            with open(str(temp_filepath), 'w', encoding='utf-8') as file:
+                app.config.foreach(self.write_line, file)
+        except IOError:
+            log.exception('Failed to write config file')
+            return
 
-        if os.path.exists(self.__filename):
-            if os.name == 'nt':
-                # win32 needs this
-                try:
-                    os.remove(self.__filename)
-                except Exception as e:
-                    return str(e)
         try:
-            os.rename(self.__tempfile, self.__filename)
-        except IOError as e:
-            return str(e)
+            temp_filepath.replace(config_path)
+        except Exception:
+            log.exception('Failed to replace config file')
+        else:
+            log.info('Successful saved config file')
 
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
