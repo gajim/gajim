@@ -244,7 +244,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Semi-Anonymous
-&lt;span size="small"&gt;Only moderators can see your XMPP-Address)&lt;/span&gt;</property>
+&lt;span size="small"&gt;(Only moderators can see your XMPP-Address)&lt;/span&gt;</property>
         <property name="use_markup">True</property>
         <property name="xalign">0</property>
       </object>
