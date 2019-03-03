@@ -1071,7 +1071,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             con.set_resume_data(self._sm_resume_data)
 
         # increase default timeout for server responses
-        nbxmpp.dispatcher_nb.DEFAULT_TIMEOUT_SECONDS = \
+        nbxmpp.dispatcher.DEFAULT_TIMEOUT_SECONDS = \
             self.try_connecting_for_foo_secs
         # FIXME: this is a hack; need a better way
         if self.on_connect_success == self._on_new_account: # pylint: disable=comparison-with-callable

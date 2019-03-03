@@ -26,7 +26,7 @@ from random import Random
 from unittest.mock import Mock
 
 import nbxmpp
-from nbxmpp import dispatcher_nb
+from nbxmpp import dispatcher
 from nbxmpp import simplexml
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
@@ -231,7 +231,7 @@ class P2PClient(IdleObject):
     def on_connect(self, conn):
         self.Connection = conn
         self.Connection.PlugIn(self)
-        dispatcher_nb.Dispatcher().PlugIn(self)
+        dispatcher.Dispatcher().PlugIn(self)
         self._register_handlers()
 
     def StreamInit(self):

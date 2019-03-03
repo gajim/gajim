@@ -1,5 +1,5 @@
 '''
-Tests for dispatcher_nb.py
+Tests for dispatcher.py
 '''
 import unittest
 
@@ -9,7 +9,7 @@ lib.setup_env()
 from mock import Mock
 
 from gajim.common.protocol.bytestream import ConnectionIBBytestream, ConnectionSocks5Bytestream
-from nbxmpp import dispatcher_nb
+from nbxmpp import dispatcher
 from nbxmpp import protocol
 from gajim.common.jingle import ConnectionJingle
 from gajim.common import app
@@ -79,7 +79,7 @@ class Connection(Mock, ConnectionJingle, ConnectionSocks5Bytestream,
 class TestJingle(unittest.TestCase):
 
     def setUp(self):
-        self.dispatcher = dispatcher_nb.XMPPDispatcher()
+        self.dispatcher = dispatcher.XMPPDispatcher()
         app.nec = Mock()
         app.socks5queue = SocksQueue(Mock())
         # Setup mock client

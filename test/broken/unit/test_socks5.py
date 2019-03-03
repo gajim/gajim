@@ -1,5 +1,5 @@
 '''
-Tests for dispatcher_nb.py
+Tests for dispatcher.py
 '''
 import unittest
 
