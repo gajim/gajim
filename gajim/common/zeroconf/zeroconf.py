@@ -41,7 +41,7 @@ def test_avahi():
         import gi
         gi.require_version('Avahi', '0.6')
         from gi.repository import Avahi  # pylint: disable=unused-variable
-    except ImportError:
+    except (ImportError, ValueError):
         return False
     return True
 
