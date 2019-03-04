@@ -465,7 +465,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def _event_dispatcher(self, realm, event, data):
         CommonConnection._event_dispatcher(self, realm, event, data)
         if realm == '':
-            if event == nbxmpp.transports_nb.DATA_ERROR:
+            if event == nbxmpp.transports.DATA_ERROR:
                 thread_id = data[1]
                 frm = data[0]
                 session = self.get_or_create_session(frm, thread_id)

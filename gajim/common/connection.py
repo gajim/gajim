@@ -1023,7 +1023,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self._proxy and self._proxy['type'] == 'bosh':
             # with BOSH, we can't do TLS negotiation with <starttls>, we do only "plain"
             # connection and TLS with handshake right after TCP connecting ("ssl")
-            scheme = nbxmpp.transports_nb.urisplit(self._proxy['bosh_uri'])[0]
+            scheme = nbxmpp.transports.urisplit(self._proxy['bosh_uri'])[0]
             if scheme == 'https':
                 connection_types = ['ssl']
             else:

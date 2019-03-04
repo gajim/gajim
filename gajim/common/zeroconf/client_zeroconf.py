@@ -31,9 +31,9 @@ from nbxmpp import simplexml
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.plugin import PlugIn
 from nbxmpp.idlequeue import IdleObject
-from nbxmpp.transports_nb import DATA_RECEIVED
-from nbxmpp.transports_nb import DATA_SENT
-from nbxmpp.transports_nb import DATA_ERROR
+from nbxmpp.transports import DATA_RECEIVED
+from nbxmpp.transports import DATA_SENT
+from nbxmpp.transports import DATA_ERROR
 
 from gajim.common import app
 from gajim.common.zeroconf import zeroconf
