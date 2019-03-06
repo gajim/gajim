@@ -50,6 +50,7 @@ from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 from gajim.common.const import JIDConstant
 from gajim.common.const import KindConstant
+from gajim.common.const import ShowConstant
 
 def is_standalone():
     # Determine if we are in standalone mode
@@ -398,7 +399,8 @@ class HistoryManager:
                         message = ''
                     else:
                         message = ' : ' + message
-                    message = helpers.get_uf_show(show) + message
+
+                    message = helpers.get_uf_show(ShowConstant(show)) + message
 
                 message_ = '<span'
                 if color:

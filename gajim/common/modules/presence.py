@@ -25,6 +25,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
+from gajim.common.const import ShowConstant
 from gajim.common.helpers import prepare_and_validate_gpg_keyID
 
 log = logging.getLogger('gajim.c.m.presence')
@@ -236,11 +237,9 @@ class Presence:
         if not app.config.should_log(self._account, properties.jid.getBare()):
             return
 
-        # TODO: Refactor
+        show = ShowConstant[properties.show.name]
         if properties.type.is_unavailable:
-            show = 'offline'
-        else:
-            show = properties.show.value
+            show = ShowConstant.OFFLINE
 
         app.logger.insert_into_logs(self._account,
                                     properties.jid.getBare(),

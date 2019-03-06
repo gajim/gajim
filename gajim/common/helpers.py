@@ -56,6 +56,7 @@ from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.const import ShowConstant
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -246,6 +247,9 @@ def get_uf_show(show, use_mnemonic=False):
     If use_mnemonic is True, it adds _ so GUI should call with True for
     accessibility issues
     """
+    if isinstance(show, ShowConstant):
+        show = show.name.lower()
+
     if show == 'dnd':
         if use_mnemonic:
             uf_show = _('_Busy')
