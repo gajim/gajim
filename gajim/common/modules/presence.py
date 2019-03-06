@@ -174,7 +174,9 @@ class Presence:
             else:
                 # Convert the inital roster contact to a contact with resource
                 contact.resource = resource
-                event.old_show = status_strings.index(contact.show)
+                event.old_show = 0
+                if contact.show in status_strings:
+                    event.old_show = status_strings.index(contact.show)
 
             event.need_add_in_roster = True
 
