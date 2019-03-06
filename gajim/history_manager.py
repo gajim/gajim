@@ -398,8 +398,7 @@ class HistoryManager:
                         message = ''
                     else:
                         message = ' : ' + message
-                    message = helpers.get_uf_show(app.SHOW_LIST[show]) + \
-                        message
+                    message = helpers.get_uf_show(show) + message
 
                 message_ = '<span'
                 if color:
