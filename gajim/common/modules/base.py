@@ -24,6 +24,7 @@ import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common.modules.util import LogAdapter
 
 log = logging.getLogger('gajim.c.m.base')
 
@@ -33,9 +34,11 @@ class BaseModule:
     _nbxmpp_extends = ''
     _nbxmpp_methods = []  # type: List[str]
 
-    def __init__(self, con):
+    def __init__(self, con, logger=None):
         self._con = con
         self._account = con.name
+        if logger is not None:
+            self._log = LogAdapter(logger, {'account': self._account})
         self._nbxmpp_callbacks = {}  # type: Dict[str, Any]
         self._stored_publish = None  # type: Callable
         self.handlers = []  # type: List[str]

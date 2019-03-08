@@ -16,6 +16,7 @@
 
 from typing import Union
 
+from logging import LoggerAdapter
 from functools import wraps
 from functools import partial
 
@@ -81,3 +82,8 @@ def get_eme_message(eme_data):
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
         return EME_MESSAGES['fallback'] % eme_data.name
+
+
+class LogAdapter(LoggerAdapter):
+    def process(self, msg, kwargs):
+        return '[%s] %s' % (self.extra['account'], msg), kwargs
