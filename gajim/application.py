@@ -220,12 +220,6 @@ class GajimApplication(Gtk.Application):
         from gajim.gtk.util import get_builder
         builder = get_builder('application_menu.ui')
         menubar = builder.get_object("menubar")
-        appmenu = builder.get_object("appmenu")
-        if app.prefers_app_menu():
-            self.set_app_menu(appmenu)
-        else:
-            # Add it to the menubar instead
-            menubar.prepend_submenu('Gajim', appmenu)
         self.set_menubar(menubar)
 
     def _activate(self, _application):

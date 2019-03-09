@@ -718,8 +718,6 @@ def build_accounts_menu():
     menubar = app.app.get_menubar()
     # Accounts Submenu
     menu_position = 1
-    if app.prefers_app_menu():
-        menu_position = 0
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
     acc_menu.remove_all()
