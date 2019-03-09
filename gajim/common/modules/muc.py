@@ -103,7 +103,7 @@ class MUC(BaseModule):
             if identity.get('type') != 'text':
                 continue
             if nbxmpp.NS_MUC in features:
-                log.info('Discovered MUC: %s', from_)
+                self._log.info('Discovered MUC: %s', from_)
                 # TODO: make this nicer
                 self._con.muc_jid['jabber'] = from_
                 raise nbxmpp.NodeProcessed
@@ -122,7 +122,7 @@ class MUC(BaseModule):
         if password is not None:
             muc_x.setTagData('password', password)
 
-        log.debug('Send MUC join presence:\n%s', presence)
+        self._log.debug('Send MUC join presence:\n%s', presence)
 
         self._con.connection.send(presence)
 
@@ -171,7 +171,7 @@ class MUC(BaseModule):
             for contact in app.contacts.get_gc_contact_list(
                     self._account, properties.jid.getBare()):
                 contact.presence = PresenceType.UNAVAILABLE
-            log.info('MUC destroyed: %s', properties.jid.getBare())
+            self._log.info('MUC destroyed: %s', properties.jid.getBare())
             self._raise_muc_event('muc-destroyed', properties)
             return
 
@@ -183,19 +183,19 @@ class MUC(BaseModule):
             app.contacts.remove_gc_contact(self._account, contact)
             contact.name = properties.muc_user.nick
             app.contacts.add_gc_contact(self._account, contact)
-            log.info('Nickname changed: %s to %s',
-                     properties.jid,
-                     properties.muc_user.nick)
+            self._log.info('Nickname changed: %s to %s',
+                           properties.jid,
+                           properties.muc_user.nick)
             self._raise_muc_event('muc-nickname-changed', properties)
             return
 
         if contact is None and properties.type.is_available:
             self._add_new_muc_contact(properties)
             if properties.is_muc_self_presence:
-                log.info('Self presence: %s', properties.jid)
+                self._log.info('Self presence: %s', properties.jid)
                 self._raise_muc_event('muc-self-presence', properties)
             else:
-                log.info('User joined: %s', properties.jid)
+                self._log.info('User joined: %s', properties.jid)
                 self._raise_muc_event('muc-user-joined', properties)
             return
 
@@ -226,39 +226,39 @@ class MUC(BaseModule):
             if contact is None:
                 # If contact is None, its probably that a user left from a not
                 # insync MUC, can happen on older servers
-                log.warning('Unknown contact left groupchat: %s',
-                            properties.jid)
+                self._log.warning('Unknown contact left groupchat: %s',
+                                  properties.jid)
             else:
                 # We remove the contact from the MUC, but there could be
                 # a PrivateChatControl open, so we update the contacts presence
                 contact.presence = properties.type
                 app.contacts.remove_gc_contact(self._account, contact)
-            log.info('User %s left', properties.jid)
+            self._log.info('User %s left', properties.jid)
             self._raise_muc_event('muc-user-left', properties)
             return
 
         if contact.affiliation != properties.affiliation:
             contact.affiliation = properties.affiliation
-            log.info('Affiliation changed: %s %s',
-                     properties.jid,
-                     properties.affiliation)
+            self._log.info('Affiliation changed: %s %s',
+                           properties.jid,
+                           properties.affiliation)
             self._raise_muc_event('muc-user-affiliation-changed', properties)
 
         if contact.role != properties.role:
             contact.role = properties.role
-            log.info('Role changed: %s %s',
-                     properties.jid,
-                     properties.role)
+            self._log.info('Role changed: %s %s',
+                           properties.jid,
+                           properties.role)
             self._raise_muc_event('muc-user-role-changed', properties)
 
         if (contact.status != properties.status or
                 contact.show != properties.show):
             contact.status = properties.status
             contact.show = properties.show
-            log.info('Show/Status changed: %s %s %s',
-                     properties.jid,
-                     properties.status,
-                     properties.show)
+            self._log.info('Show/Status changed: %s %s %s',
+                           properties.jid,
+                           properties.status,
+                           properties.show)
             self._raise_muc_event('muc-user-status-show-changed', properties)
 
     def _raise_muc_event(self, event_name, properties):
@@ -364,7 +364,7 @@ class MUC(BaseModule):
         if contact is None:
             return
 
-        log.info('Captcha challenge received from %s', properties.jid)
+        self._log.info('Captcha challenge received from %s', properties.jid)
         store_bob_data(properties.captcha.bob_data)
 
         app.nec.push_incoming_event(
@@ -378,8 +378,8 @@ class MUC(BaseModule):
         if not properties.is_muc_config_change:
             return
 
-        log.info('Received config change: %s %s',
-                 properties.jid, properties.muc_status_codes)
+        self._log.info('Received config change: %s %s',
+                       properties.jid, properties.muc_status_codes)
         app.nec.push_incoming_event(
             NetworkEvent('muc-config-changed',
                          account=self._account,
@@ -393,8 +393,8 @@ class MUC(BaseModule):
             if helpers.ignore_contact(self._account, data.from_):
                 raise nbxmpp.NodeProcessed
 
-            log.info('Invite declined from: %s, reason: %s',
-                     data.from_, data.reason)
+            self._log.info('Invite declined from: %s, reason: %s',
+                           data.from_, data.reason)
 
             app.nec.push_incoming_event(
                 NetworkEvent('muc-decline',
@@ -407,11 +407,11 @@ class MUC(BaseModule):
             if helpers.ignore_contact(self._account, data.from_):
                 raise nbxmpp.NodeProcessed
 
-            log.info('Invite from: %s, to: %s', data.from_, data.muc)
+            self._log.info('Invite from: %s, to: %s', data.from_, data.muc)
 
             if app.in_groupchat(self._account, data.muc):
                 # We are already in groupchat. Ignore invitation
-                log.info('We are already in this room')
+                self._log.info('We are already in this room')
                 raise nbxmpp.NodeProcessed
 
             app.nec.push_incoming_event(

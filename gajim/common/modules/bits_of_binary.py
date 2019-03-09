@@ -20,31 +20,35 @@ from base64 import b64decode
 from pathlib import Path
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.modules.base import BaseModule
 
 log = logging.getLogger('gajim.c.m.bob')
 
 
-class BitsOfBinary:
+class BitsOfBinary(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._answer_bob_request, 'get', nbxmpp.NS_BOB)
+            StanzaHandler(name='iq',
+                          callback=self._answer_bob_request,
+                          typ='get',
+                          ns=nbxmpp.NS_BOB),
         ]
 
         # Used to track which cids are in-flight.
         self.awaiting_cids = {}
 
-    def _answer_bob_request(self, _con, stanza):
-        log.info('Request from %s for BoB data', stanza.getFrom())
+    def _answer_bob_request(self, _con, stanza, _properties):
+        self._log.info('Request from %s for BoB data', stanza.getFrom())
         iq = stanza.buildReply('error')
         err = nbxmpp.ErrorNode(nbxmpp.ERR_ITEM_NOT_FOUND)
         iq.addChild(node=err)
-        log.info('Sending item-not-found')
+        self._log.info('Sending item-not-found')
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 

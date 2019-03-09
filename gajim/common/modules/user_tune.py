@@ -17,8 +17,6 @@
 from typing import Any
 from typing import Tuple
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
@@ -27,8 +25,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
-
-log = logging.getLogger('gajim.c.m.user_tune')
 
 
 class UserTune(BaseModule):
@@ -69,7 +65,7 @@ class UserTune(BaseModule):
 
     @store_publish
     def set_tune(self, tune):
-        log.info('Send %s', tune)
+        self._log.info('Send %s', tune)
         self._nbxmpp('Tune').set_tune(tune)
 
 

@@ -14,22 +14,16 @@
 
 # XEP-0184: Message Delivery Receipts
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.receipts')
 
-
-class Receipts:
+class Receipts(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
     def delegate(self, event):
         request = event.stanza.getTag('request',
@@ -68,7 +62,7 @@ class Receipts:
             return
 
         receipt = self._build_answer_receipt(from_, receipt_id)
-        log.info('Answer %s', receipt_id)
+        self._log.info('Answer %s', receipt_id)
         self._con.connection.send(receipt)
 
     def _get_contact(self, event):
@@ -92,9 +86,9 @@ class Receipts:
     def _receipt_received(self, event, received):
         receipt_id = received.getAttr('id')
         if receipt_id is None:
-            log.warning('Receipt without ID: %s', event.stanza)
+            self._log.warning('Receipt without ID: %s', event.stanza)
             return
-        log.info('Received %s', receipt_id)
+        self._log.info('Received %s', receipt_id)
 
         jid = event.jid
         if event.muc_pm:

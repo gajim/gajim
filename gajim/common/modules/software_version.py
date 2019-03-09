@@ -14,24 +14,24 @@
 
 # XEP-0092: Software Version
 
-import logging
-
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common.helpers import get_os_info
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.software_version')
 
-
-class SoftwareVersion:
+class SoftwareVersion(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._answer_request, 'get', nbxmpp.NS_VERSION),
+            StanzaHandler(name='iq',
+                          callback=self._answer_request,
+                          typ='get',
+                          ns=nbxmpp.NS_VERSION),
         ]
 
     def request_os_info(self, jid, resource):
@@ -45,23 +45,23 @@ class SoftwareVersion:
             jid += '/' + resource
         iq = nbxmpp.Iq(to=jid, typ='get', queryNS=nbxmpp.NS_VERSION)
 
-        log.info('Requested: %s', jid)
+        self._log.info('Requested: %s', jid)
 
         self._con.connection.SendAndCallForResponse(iq, self._result_received)
 
     def _result_received(self, stanza):
         client_info, os_info = None, None
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
         else:
             try:
                 client_info, os_info = self._extract_info(stanza)
             except Exception:
-                log.exception('Error')
-                log.error(stanza)
+                self._log.exception('Error')
+                self._log.error(stanza)
 
-        log.info('Received: %s %s %s',
-                 stanza.getFrom(), client_info, os_info)
+        self._log.info('Received: %s %s %s',
+                       stanza.getFrom(), client_info, os_info)
 
         app.nec.push_incoming_event(
             VersionResultReceivedEvent(None, conn=self._con,
@@ -80,8 +80,8 @@ class SoftwareVersion:
             os_info = os_info.getData()
         return client_info, os_info
 
-    def _answer_request(self, _con, stanza):
-        log.info('%s asked for the software version', stanza.getFrom())
+    def _answer_request(self, _con, stanza, _properties):
+        self._log.info('%s asked for the software version', stanza.getFrom())
         if app.config.get_per('accounts', self._account, 'send_os_info'):
             os_info = get_os_info()
             iq = stanza.buildReply('result')
@@ -89,12 +89,12 @@ class SoftwareVersion:
             query.setTagData('name', 'Gajim')
             query.setTagData('version', app.version)
             query.setTagData('os', os_info)
-            log.info('Answer: Gajim %s %s', app.version, os_info)
+            self._log.info('Answer: Gajim %s %s', app.version, os_info)
         else:
             iq = stanza.buildReply('error')
             err = nbxmpp.ErrorNode(nbxmpp.ERR_SERVICE_UNAVAILABLE)
             iq.addChild(node=err)
-            log.info('Send service-unavailable')
+            self._log.info('Send service-unavailable')
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 

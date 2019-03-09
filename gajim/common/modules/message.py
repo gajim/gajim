@@ -15,7 +15,6 @@
 # Message handler
 
 import time
-import logging
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
@@ -28,6 +27,7 @@ from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
+from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
@@ -40,13 +40,9 @@ from gajim.common.modules.misc import parse_xhtml
 from gajim.common.connection_handlers_events import MessageErrorEvent
 
 
-log = logging.getLogger('gajim.c.m.message')
-
-
-class Message:
+class Message(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='message',
@@ -67,7 +63,7 @@ class Message:
         if self._message_namespaces & set(stanza.getProperties()):
             return
 
-        log.info('Received from %s', stanza.getFrom())
+        self._log.info('Received from %s', stanza.getFrom())
 
         app.nec.push_incoming_event(NetworkEvent(
             'raw-message-received',
@@ -96,7 +92,7 @@ class Message:
         # Check groupchat messages for duplicates,
         # We do this because of MUC History messages
         if (properties.type.is_groupchat or
-            properties.is_self_message or
+                properties.is_self_message or
                 properties.is_muc_pm):
             if properties.type.is_groupchat:
                 archive_jid = stanza.getFrom().getStripped()
@@ -309,11 +305,10 @@ class Message:
             self._con.get_module('MAM').save_archive_id(
                 event.room_jid, event.stanza_id, event.timestamp)
 
-    @staticmethod
-    def _check_for_mam_compliance(room_jid, stanza_id):
+    def _check_for_mam_compliance(self, room_jid, stanza_id):
         namespace = caps_cache.muc_caps_cache.get_mam_namespace(room_jid)
         if stanza_id is None and namespace == nbxmpp.NS_MAM_2:
-            log.warning('%s announces mam:2 without stanza-id', room_jid)
+            self._log.warning('%s announces mam:2 without stanza-id', room_jid)
 
     def _get_unique_id(self, properties):
         if properties.is_self_message:

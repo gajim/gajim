@@ -14,23 +14,18 @@
 
 # XEP-0077: In-Band Registration
 
-import logging
 import weakref
 
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import parse_bob_data
 
-log = logging.getLogger('gajim.c.m.register')
 
-
-class Register:
+class Register(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self.agent_registrations = {}
 
@@ -46,20 +41,19 @@ class Register:
 
         weak_success_cb = weakref.WeakMethod(success_cb)
         weak_error_cb = weakref.WeakMethod(error_cb)
-        log.info('Send password change')
+        self._log.info('Send password change')
         self._con.connection.SendAndCallForResponse(
             iq, self._change_password_response, {'success_cb': weak_success_cb,
                                                  'error_cb': weak_error_cb})
 
-    @staticmethod
-    def _change_password_response(_con, stanza, success_cb, error_cb):
+    def _change_password_response(self, _con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
-            log.info('Error: %s', error)
+            self._log.info('Error: %s', error)
             if error_cb() is not None:
                 error_cb()(error)
         else:
-            log.info('Password changed')
+            self._log.info('Password changed')
             if success_cb() is not None:
                 success_cb()()
 
@@ -91,7 +85,7 @@ class Register:
                                  success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
-            log.info('Error: %s', error)
+            self._log.info('Error: %s', error)
             if error_cb() is not None:
                 error_cb()(error)
             return
@@ -117,15 +111,14 @@ class Register:
             iq, self._register_info_response, {'success_cb': weak_success_cb,
                                                'error_cb': weak_error_cb})
 
-    @staticmethod
-    def _register_info_response(_con, stanza, success_cb, error_cb):
+    def _register_info_response(self, _con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
-            log.info('Error: %s', error)
+            self._log.info('Error: %s', error)
             if error_cb() is not None:
                 error_cb()(error)
         else:
-            log.info('Register form received')
+            self._log.info('Register form received')
             parse_bob_data(stanza.getQuery())
             form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
             is_form = form is not None

@@ -18,7 +18,6 @@ from typing import Any
 from typing import List
 from typing import Optional
 
-import logging
 import copy
 
 import nbxmpp
@@ -31,9 +30,6 @@ from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-
-
-log = logging.getLogger('gajim.c.m.bookmarks')
 
 
 class Bookmarks(BaseModule):
@@ -69,14 +65,15 @@ class Bookmarks(BaseModule):
         bookmarks = properties.pubsub_event.data
 
         if not properties.is_self_message:
-            log.warning('%s has an open access bookmarks node', properties.jid)
+            self._log.warning('%s has an open access bookmarks node',
+                              properties.jid)
             return
 
         if not self._pubsub_support() or not self.conversion:
             return
 
         if self._request_in_progress:
-            log.info('Ignore update, pubsub request in progress')
+            self._log.info('Ignore update, pubsub request in progress')
             return
 
         old_bookmarks = self._convert_to_set(self._bookmarks)
@@ -89,7 +86,7 @@ class Bookmarks(BaseModule):
         if nbxmpp.NS_BOOKMARK_CONVERSION not in features:
             return
         self._conversion = True
-        log.info('Discovered Bookmarks Conversion: %s', from_)
+        self._log.info('Discovered Bookmarks Conversion: %s', from_)
 
     def _act_on_changed_bookmarks(self, old_bookmarks):
         new_bookmarks = self._convert_to_set(self._bookmarks)
@@ -100,7 +97,7 @@ class Bookmarks(BaseModule):
         join = [jid for jid, autojoin in changed if autojoin]
         bookmarks = []
         for jid in join:
-            log.info('Schedule autojoin in 10s for: %s', jid)
+            self._log.info('Schedule autojoin in 10s for: %s', jid)
             bookmarks.append(self.get_bookmark_from_jid(jid))
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
@@ -163,7 +160,7 @@ class Bookmarks(BaseModule):
 
     def _bookmarks_received(self, bookmarks):
         if is_error_result(bookmarks):
-            log.info('Error: %s', bookmarks)
+            self._log.info('Error: %s', bookmarks)
             bookmarks = []
 
         self._request_in_progress = False
@@ -202,7 +199,7 @@ class Bookmarks(BaseModule):
                 # auto-joined on re-connection
                 if bookmark.jid not in app.gc_connected[self._account]:
                     # we are not already connected
-                    log.info('Autojoin Bookmark: %s', bookmark.jid)
+                    self._log.info('Autojoin Bookmark: %s', bookmark.jid)
                     minimize = app.config.get_per('rooms', bookmark.jid,
                                                   'minimize_on_autojoin', True)
                     app.interface.join_gc_room(
@@ -237,8 +234,8 @@ class Bookmarks(BaseModule):
         return self.get_bookmark_from_jid(jid) is not None
 
     def purge_pubsub_bookmarks(self) -> None:
-        log.info('Purge/Delete Bookmarks on PubSub, '
-                 'because publish options are not available')
+        self._log.info('Purge/Delete Bookmarks on PubSub, '
+                       'because publish options are not available')
         self._con.get_module('PubSub').send_pb_purge('', 'storage:bookmarks')
         self._con.get_module('PubSub').send_pb_delete('', 'storage:bookmarks')
 

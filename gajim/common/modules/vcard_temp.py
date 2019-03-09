@@ -17,7 +17,6 @@
 import hashlib
 import binascii
 import base64
-import logging
 
 import nbxmpp
 
@@ -25,17 +24,13 @@ from gajim.common import app
 from gajim.common.const import RequestAvatar
 from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 
-log = logging.getLogger('gajim.c.m.vcard')
 
-
-class VCardTemp:
+class VCardTemp(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self._own_vcard = None
         self.own_vcard_received = False
@@ -47,7 +42,7 @@ class VCardTemp:
             return
 
         self.supported = True
-        log.info('Discovered vcard-temp: %s', from_)
+        self._log.info('Discovered vcard-temp: %s', from_)
 
         app.nec.push_incoming_event(NetworkEvent('feature-discovered',
                                                  account=self._account,
@@ -98,7 +93,7 @@ class VCardTemp:
         iq.setQuery('vCard').setNamespace(nbxmpp.NS_VCARD)
 
         own_jid = self._con.get_own_jid().getStripped()
-        log.info('Request: %s, expected sha: %s', jid or own_jid, sha)
+        self._log.info('Request: %s, expected sha: %s', jid or own_jid, sha)
 
         self._con.connection.SendAndCallForResponse(
             iq, self._parse_vcard, {'callback': callback, 'expected_sha': sha})
@@ -124,7 +119,7 @@ class VCardTemp:
             else:
                 iq2.addChild(i).setData(vcard[i])
 
-        log.info('Upload avatar: %s %s', self._account, sha)
+        self._log.info('Upload avatar: %s %s', self._account, sha)
 
         self._con.connection.SendAndCallForResponse(
             iq, self._avatar_publish_result, {'sha': sha})
@@ -136,7 +131,7 @@ class VCardTemp:
         photo.addChild('TYPE', payload='image/png')
         photo.addChild('BINVAL', payload=data)
 
-        log.info('Upload avatar: %s', room_jid)
+        self._log.info('Upload avatar: %s', room_jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._upload_room_avatar_result)
 
@@ -162,7 +157,7 @@ class VCardTemp:
                     self._account, self._con.get_own_jid().getStripped())
                 self._con.get_module('VCardAvatars').send_avatar_presence(
                     after_publish=True)
-            log.info('%s: Published: %s', self._account, sha)
+            self._log.info('%s: Published: %s', self._account, sha)
             app.nec.push_incoming_event(
                 VcardPublishedEvent(None, conn=self._con))
 
@@ -170,8 +165,7 @@ class VCardTemp:
             app.nec.push_incoming_event(
                 VcardNotPublishedEvent(None, conn=self._con))
 
-    @staticmethod
-    def _get_vcard_photo(vcard, jid):
+    def _get_vcard_photo(self, vcard, jid):
         try:
             photo = vcard['PHOTO']['BINVAL']
         except (KeyError, AttributeError, TypeError):
@@ -185,7 +179,7 @@ class VCardTemp:
                 try:
                     photo_decoded = base64.b64decode(photo.encode('utf-8'))
                 except binascii.Error as error:
-                    log.warning('Invalid avatar for %s: %s', jid, error)
+                    self._log.warning('Invalid avatar for %s: %s', jid, error)
                     return None, None
                 avatar_sha = hashlib.sha1(photo_decoded).hexdigest()
 
@@ -205,14 +199,14 @@ class VCardTemp:
         stanza_error = stanza.getError()
         if stanza_error in ('service-unavailable', 'item-not-found',
                             'not-allowed'):
-            log.info('vCard not available: %s %s', frm_jid, stanza_error)
+            self._log.info('vCard not available: %s %s', frm_jid, stanza_error)
             callback(jid, resource, room, {}, expected_sha)
             return
 
         vcard_node = stanza.getTag('vCard', namespace=nbxmpp.NS_VCARD)
         if vcard_node is None:
-            log.info('vCard not available: %s', frm_jid)
-            log.debug(stanza)
+            self._log.info('vCard not available: %s', frm_jid)
+            self._log.debug(stanza)
             return
         vcard = self._node_to_dict(vcard_node)
 
@@ -232,14 +226,14 @@ class VCardTemp:
     def _on_own_avatar_received(self, jid, _resource, _room, vcard, *args):
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
 
-        log.info('Received own vcard, avatar sha is: %s', avatar_sha)
+        self._log.info('Received own vcard, avatar sha is: %s', avatar_sha)
 
         self._own_vcard = vcard
         self.own_vcard_received = True
 
         if avatar_sha is None:
             # No avatar found in vcard
-            log.info('No avatar found')
+            self._log.info('No avatar found')
             app.config.set_per('accounts', self._account, 'avatar_sha', '')
             app.contacts.set_avatar(self._account, jid, avatar_sha)
             self._con.get_module('VCardAvatars').send_avatar_presence(
@@ -265,12 +259,12 @@ class VCardTemp:
                                  expected_sha):
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, jid)
         if expected_sha != avatar_sha:
-            log.warning('Avatar mismatch: %s %s', jid, avatar_sha)
+            self._log.warning('Avatar mismatch: %s %s', jid, avatar_sha)
             return
 
         app.interface.save_avatar(photo_decoded)
 
-        log.info('Received: %s %s', jid, avatar_sha)
+        self._log.info('Received: %s %s', jid, avatar_sha)
         app.contacts.set_avatar(self._account, jid, avatar_sha)
         app.interface.update_avatar(self._account, jid, room_avatar=True)
 
@@ -281,21 +275,21 @@ class VCardTemp:
 
         avatar_sha, photo_decoded = self._get_vcard_photo(vcard, request_jid)
         if expected_sha != avatar_sha:
-            log.warning('Received: avatar mismatch: %s %s',
-                        request_jid, avatar_sha)
+            self._log.warning('Received: avatar mismatch: %s %s',
+                              request_jid, avatar_sha)
             return
 
         app.interface.save_avatar(photo_decoded)
 
         # Received vCard from a contact
         if room:
-            log.info('Received: %s %s', resource, avatar_sha)
+            self._log.info('Received: %s %s', resource, avatar_sha)
             contact = app.contacts.get_gc_contact(self._account, jid, resource)
             if contact is not None:
                 contact.avatar_sha = avatar_sha
                 app.interface.update_avatar(contact=contact)
         else:
-            log.info('Received: %s %s', jid, avatar_sha)
+            self._log.info('Received: %s %s', jid, avatar_sha)
             own_jid = self._con.get_own_jid().getStripped()
             app.logger.set_avatar_sha(own_jid, jid, avatar_sha)
             app.contacts.set_avatar(self._account, jid, avatar_sha)

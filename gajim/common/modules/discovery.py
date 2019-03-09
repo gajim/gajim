@@ -14,28 +14,32 @@
 
 # XEP-0030: Service Discovery
 
-import logging
 import weakref
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 
-log = logging.getLogger('gajim.c.m.discovery')
 
-
-class Discovery:
+class Discovery(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._answer_disco_info, 'get', nbxmpp.NS_DISCO_INFO),
-            ('iq', self._answer_disco_items, 'get', nbxmpp.NS_DISCO_ITEMS),
+            StanzaHandler(name='iq',
+                          callback=self._answer_disco_info,
+                          typ='get',
+                          ns=nbxmpp.NS_DISCO_INFO),
+            StanzaHandler(name='iq',
+                          callback=self._answer_disco_items,
+                          typ='get',
+                          ns=nbxmpp.NS_DISCO_ITEMS),
         ]
 
     def disco_contact(self, jid, node=None):
@@ -60,7 +64,7 @@ class Discovery:
         log_str = 'Request info: %s %s'
         if namespace == nbxmpp.NS_DISCO_ITEMS:
             log_str = 'Request items: %s %s'
-        log.info(log_str, jid, node or '')
+        self._log.info(log_str, jid, node or '')
 
         # Create weak references so we can pass GUI object methods
         weak_success_cb = weakref.WeakMethod(success_cb)
@@ -77,7 +81,7 @@ class Discovery:
             if error_cb is not None:
                 error_cb()(stanza.getFrom(), stanza.getError())
             else:
-                log.info('Error: %s', stanza.getError())
+                self._log.info('Error: %s', stanza.getError())
             return
 
         from_ = stanza.getFrom()
@@ -90,10 +94,9 @@ class Discovery:
             items = self.parse_items_response(stanza)
             success_cb()(from_, node, items)
         else:
-            log.warning('Wrong query namespace: %s', stanza)
+            self._log.warning('Wrong query namespace: %s', stanza)
 
-    @classmethod
-    def parse_items_response(cls, stanza):
+    def parse_items_response(self, stanza):
         payload = stanza.getQueryPayload()
         items = []
         for item in payload:
@@ -102,12 +105,12 @@ class Discovery:
                 continue
             attr = item.getAttrs()
             if 'jid' not in attr:
-                log.warning('No jid attr in disco items: %s', stanza)
+                self._log.warning('No jid attr in disco items: %s', stanza)
                 continue
             try:
                 attr['jid'] = helpers.parse_jid(attr['jid'])
             except helpers.InvalidFormat:
-                log.warning('Invalid jid attr in disco items: %s', stanza)
+                self._log.warning('Invalid jid attr in disco items: %s', stanza)
                 continue
             items.append(attr)
         return items
@@ -144,7 +147,7 @@ class Discovery:
         self.disco_items(server, success_cb=self._server_items_received)
 
     def _server_items_received(self, _from, _node, items):
-        log.info('Server items received')
+        self._log.info('Server items received')
         for item in items:
             if 'node' in item:
                 # Only disco components
@@ -154,7 +157,7 @@ class Discovery:
 
     def _server_items_info_received(self, from_, *args):
         from_ = from_.getStripped()
-        log.info('Server item info received: %s', from_)
+        self._log.info('Server item info received: %s', from_)
         self._parse_transports(from_, *args)
         try:
             self._con.get_module('MUC').pass_disco(from_, *args)
@@ -172,7 +175,7 @@ class Discovery:
 
     def _account_info_received(self, from_, *args):
         from_ = from_.getStripped()
-        log.info('Account info received: %s', from_)
+        self._log.info('Account info received: %s', from_)
 
         self._con.get_module('MAM').pass_disco(from_, *args)
         self._con.get_module('PEP').pass_disco(from_, *args)
@@ -189,7 +192,7 @@ class Discovery:
         self.disco_info(server, success_cb=self._server_info_received)
 
     def _server_info_received(self, from_, *args):
-        log.info('Server info received: %s', from_)
+        self._log.info('Server info received: %s', from_)
 
         self._con.get_module('SecLabels').pass_disco(from_, *args)
         self._con.get_module('Blocking').pass_disco(from_, *args)
@@ -213,8 +216,8 @@ class Discovery:
             if category not in ('gateway', 'headline'):
                 continue
             transport_type = identity.get('type')
-            log.info('Found transport: %s %s %s',
-                     from_, category, transport_type)
+            self._log.info('Found transport: %s %s %s',
+                           from_, category, transport_type)
             jid = str(from_)
             if jid not in app.transport_type:
                 app.transport_type[jid] = transport_type
@@ -225,9 +228,9 @@ class Discovery:
             else:
                 self._con.available_transports[transport_type] = [jid]
 
-    def _answer_disco_items(self, _con, stanza):
+    def _answer_disco_items(self, _con, stanza, _properties):
         from_ = stanza.getFrom()
-        log.info('Answer disco items to %s', from_)
+        self._log.info('Answer disco items to %s', from_)
 
         if self._con.get_module('AdHocCommands').command_items_query(stanza):
             raise nbxmpp.NodeProcessed
@@ -242,9 +245,9 @@ class Discovery:
             self._con.get_module('AdHocCommands').command_list_query(stanza)
             raise nbxmpp.NodeProcessed
 
-    def _answer_disco_info(self, _con, stanza):
+    def _answer_disco_info(self, _con, stanza, _properties):
         from_ = stanza.getFrom()
-        log.info('Answer disco info %s', from_)
+        self._log.info('Answer disco info %s', from_)
         if str(from_).startswith('echo.'):
             # Service that echos all stanzas, ignore it
             raise nbxmpp.NodeProcessed
@@ -277,27 +280,26 @@ class Discovery:
             return
 
         iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_INFO)
-        log.info('Request MUC info %s', jid)
+        self._log.info('Request MUC info %s', jid)
 
         self._con.connection.SendAndCallForResponse(
             iq, self._muc_info_response, {'callback': callback})
 
-    @staticmethod
-    def _muc_info_response(_con, stanza, callback):
+    def _muc_info_response(self, _con, stanza, callback):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getError()
             if error == 'item-not-found':
                 # Groupchat does not exist
-                log.info('MUC does not exist: %s', stanza.getFrom())
+                self._log.info('MUC does not exist: %s', stanza.getFrom())
                 callback()
             else:
-                log.info('MUC disco error: %s', error)
+                self._log.info('MUC disco error: %s', error)
                 app.nec.push_incoming_event(
                     InformationEvent(
                         None, dialog_name='unable-join-groupchat', args=error))
             return
 
-        log.info('MUC info received: %s', stanza.getFrom())
+        self._log.info('MUC info received: %s', stanza.getFrom())
         muc_caps_cache.append(stanza)
         callback()
 

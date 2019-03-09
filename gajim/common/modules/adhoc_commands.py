@@ -19,18 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import logging
-
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.modules import dataforms
-
 from gajim.common.nec import NetworkIncomingEvent
-
-log = logging.getLogger('gajim.c.m.commands')
+from gajim.common.modules import dataforms
+from gajim.common.modules.base import BaseModule
 
 
 class AdHocCommand:
@@ -298,13 +295,15 @@ class LeaveGroupchatsCommand(AdHocCommand):
         return False
 
 
-class AdHocCommands:
+class AdHocCommands(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._execute_command_received, 'set', nbxmpp.NS_COMMANDS)
+            StanzaHandler(name='iq',
+                          callback=self._execute_command_received,
+                          typ='set',
+                          ns=nbxmpp.NS_COMMANDS),
         ]
 
         # a list of all commands exposed: node -> command class
@@ -350,7 +349,7 @@ class AdHocCommands:
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
         except helpers.InvalidFormat:
-            log.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
+            self._log.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
             return
         node = stanza.getTagAttr('query', 'node')
 
@@ -393,17 +392,17 @@ class AdHocCommands:
 
         return False
 
-    def _execute_command_received(self, _con, stanza):
+    def _execute_command_received(self, _con, stanza, _properties):
         jid = helpers.get_full_jid_from_iq(stanza)
 
         cmd = stanza.getTag('command')
         if cmd is None:
-            log.error('Malformed stanza (no command node) %s', stanza)
+            self._log.error('Malformed stanza (no command node) %s', stanza)
             raise nbxmpp.NodeProcessed
 
         node = cmd.getAttr('node')
         if node is None:
-            log.error('Malformed stanza (no node attr) %s', stanza)
+            self._log.error('Malformed stanza (no node attr) %s', stanza)
             raise nbxmpp.NodeProcessed
 
         sessionid = cmd.getAttr('sessionid')
@@ -414,12 +413,12 @@ class AdHocCommands:
                 self._con.connection.send(
                     nbxmpp.Error(
                         stanza, nbxmpp.NS_STANZAS + ' item-not-found'))
-                log.warning('Comand %s does not exist: %s', node, jid)
+                self._log.warning('Comand %s does not exist: %s', node, jid)
                 raise nbxmpp.NodeProcessed
 
             newcmd = self._commands[node]
             if not newcmd.is_visible_for(self.is_same_jid(jid)):
-                log.warning('Command not visible for jid: %s', jid)
+                self._log.warning('Command not visible for jid: %s', jid)
                 raise nbxmpp.NodeProcessed
 
             # generate new sessionid
@@ -430,14 +429,14 @@ class AdHocCommands:
             rc = obj.execute(stanza)
             if rc:
                 self._sessions[(jid, sessionid, node)] = obj
-            log.info('Comand %s executed: %s', node, jid)
+            self._log.info('Comand %s executed: %s', node, jid)
             raise nbxmpp.NodeProcessed
         else:
             # the command is already running, check for it
             magictuple = (jid, sessionid, node)
             if magictuple not in self._sessions:
                 # we don't have this session... ha!
-                log.warning('Invalid session %s', magictuple)
+                self._log.warning('Invalid session %s', magictuple)
                 raise nbxmpp.NodeProcessed
 
             action = cmd.getAttr('action')
@@ -461,7 +460,7 @@ class AdHocCommands:
                 # the command probably doesn't handle invoked action...
                 # stop the session, return error
                 del self._sessions[magictuple]
-                log.warning('Wrong action %s %s', node, jid)
+                self._log.warning('Wrong action %s %s', node, jid)
                 raise nbxmpp.NodeProcessed
 
             # delete the session if rc is False
@@ -474,7 +473,7 @@ class AdHocCommands:
         """
         Request the command list.
         """
-        log.info('Request Command List: %s', jid)
+        self._log.info('Request Command List: %s', jid)
         query = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_ITEMS)
         query.setQuerynode(nbxmpp.NS_COMMANDS)
 
@@ -483,7 +482,7 @@ class AdHocCommands:
 
     def _command_list_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
 
             app.nec.push_incoming_event(
                 AdHocCommandError(None, conn=self._con,
@@ -497,7 +496,7 @@ class AdHocCommands:
                 (t.getAttr('node'), t.getAttr('name')) for t in items
             ]
 
-        log.info('Received: %s', commandlist)
+        self._log.info('Received: %s', commandlist)
         app.nec.push_incoming_event(
             AdHocCommandListReceived(
                 None, conn=self._con, commandlist=commandlist))
@@ -507,7 +506,7 @@ class AdHocCommands:
         """
         Send the command with data form. Wait for reply
         """
-        log.info('Send Command: %s %s %s %s', jid, node, session_id, action)
+        self._log.info('Send Command: %s %s %s %s', jid, node, session_id, action)
         stanza = nbxmpp.Iq(typ='set', to=jid)
         cmdnode = stanza.addChild('command',
                                   namespace=nbxmpp.NS_COMMANDS,
@@ -525,13 +524,13 @@ class AdHocCommands:
 
     def _action_response_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
 
             app.nec.push_incoming_event(
                 AdHocCommandError(None, conn=self._con,
                                   error=stanza.getError()))
             return
-        log.info('Received action response')
+        self._log.info('Received action response')
         command = stanza.getTag('command')
         app.nec.push_incoming_event(
             AdHocCommandActionResponse(
@@ -541,7 +540,7 @@ class AdHocCommands:
         """
         Send the command with action='cancel'
         """
-        log.info('Cancel: %s %s %s', jid, node, session_id)
+        self._log.info('Cancel: %s %s %s', jid, node, session_id)
         stanza = nbxmpp.Iq(typ='set', to=jid)
         stanza.addChild('command', namespace=nbxmpp.NS_COMMANDS,
                         attrs={
@@ -553,12 +552,11 @@ class AdHocCommands:
         self._con.connection.SendAndCallForResponse(
             stanza, self._cancel_result_received)
 
-    @staticmethod
-    def _cancel_result_received(stanza):
+    def _cancel_result_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('Error: %s', stanza.getError())
+            self._log.warning('Error: %s', stanza.getError())
         else:
-            log.info('Cancel successful')
+            self._log.info('Cancel successful')
 
 
 class AdHocCommandError(NetworkIncomingEvent):

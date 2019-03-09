@@ -17,22 +17,18 @@
 
 # XEP-0115: Entity Capabilities
 
-import logging
-
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import caps_cache
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.caps')
 
-
-class Caps:
+class Caps(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='presence',
@@ -57,8 +53,9 @@ class Caps:
         node = properties.entity_caps.node
         caps_hash = properties.entity_caps.ver
 
-        log.info('Received from %s, type: %s, method: %s, node: %s, hash: %s',
-                 jid, properties.type, hash_method, node, caps_hash)
+        self._log.info(
+            'Received from %s, type: %s, method: %s, node: %s, hash: %s',
+            jid, properties.type, hash_method, node, caps_hash)
 
         client_caps = self._create_suitable_client_caps(
             node, caps_hash, hash_method, jid)
@@ -85,7 +82,7 @@ class Caps:
         if contact is not None:
             contact.client_caps = client_caps
         else:
-            log.info('Received Caps from unknown contact %s', from_)
+            self._log.info('Received Caps from unknown contact %s', from_)
 
     def _get_contact_or_gc_contact_for_jid(self, from_):
         contact = app.contacts.get_contact_from_full_jid(self._account,
@@ -106,7 +103,7 @@ class Caps:
 
         contact = self._get_contact_or_gc_contact_for_jid(from_)
         if not contact:
-            log.info('Received Disco from unknown contact %s', from_)
+            self._log.info('Received Disco from unknown contact %s', from_)
             return
 
         lookup = contact.client_caps.get_cache_lookup_strategy()
@@ -126,7 +123,7 @@ class Caps:
             node = caps_hash = hash_method = None
             contact.client_caps = self._create_suitable_client_caps(
                 node, caps_hash, hash_method)
-            log.warning(
+            self._log.warning(
                 'Computed and retrieved caps hash differ. Ignoring '
                 'caps of contact %s', contact.get_full_jid())
 

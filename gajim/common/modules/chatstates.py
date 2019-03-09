@@ -21,23 +21,23 @@ from typing import Optional
 from typing import Tuple
 
 import time
-import logging
 from functools import wraps
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import Chatstate as State
 from gajim.common.modules.misc import parse_delay
+from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 
 from gajim.common.types import ContactT
 from gajim.common.types import ConnectionT
 
-log = logging.getLogger('gajim.c.m.chatstates')
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 10
@@ -63,13 +63,13 @@ def parse_chatstate(stanza: nbxmpp.Message) -> Optional[str]:
     return None
 
 
-class Chatstate:
+class Chatstate(BaseModule):
     def __init__(self, con: ConnectionT) -> None:
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('presence', self._presence_received),
+            StanzaHandler(name='presence',
+                          callback=self._presence_received),
         ]
 
         # Our current chatstate with a specific contact
@@ -90,7 +90,7 @@ class Chatstate:
     def enabled(self, value):
         if self._enabled == value:
             return
-        log.info('Chatstate module %s', 'enabled' if value else 'disabled')
+        self._log.info('Chatstate module %s', 'enabled' if value else 'disabled')
         self._enabled = value
 
         if value:
@@ -106,7 +106,8 @@ class Chatstate:
     @ensure_enabled
     def _presence_received(self,
                            _con: ConnectionT,
-                           stanza: nbxmpp.Presence) -> None:
+                           stanza: nbxmpp.Presence,
+                           _properties: Any) -> None:
         if stanza.getType() not in ('unavailable', 'error'):
             return
 
@@ -136,7 +137,7 @@ class Chatstate:
         self._last_mouse_activity.pop(jid, None)
         self._last_keyboard_activity.pop(jid, None)
 
-        log.info('Reset chatstate for %s', jid)
+        self._log.info('Reset chatstate for %s', jid)
 
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
@@ -166,7 +167,7 @@ class Chatstate:
             return
 
         contact.chatstate = chatstate
-        log.info('Recv: %-10s - %s', chatstate, event.fjid)
+        self._log.info('Recv: %-10s - %s', chatstate, event.fjid)
         app.nec.push_outgoing_event(
             NetworkEvent('chatstate-received',
                          account=self._account,
@@ -207,7 +208,7 @@ class Chatstate:
                         else:
                             # Contact not found, maybe we left the group chat
                             # or the contact was removed from the roster
-                            log.info(
+                            self._log.info(
                                 'Contact %s not found, reset chatstate', jid)
                             self._chatstates.pop(jid, None)
                             self._last_mouse_activity.pop(jid, None)
@@ -275,9 +276,9 @@ class Chatstate:
         if setting == 'disabled':
             # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
-                log.info('Disabled for %s', contact.jid)
-                log.info('Send last state: %-10s - %s',
-                         State.ACTIVE, contact.jid)
+                self._log.info('Disabled for %s', contact.jid)
+                self._log.info('Send last state: %-10s - %s',
+                               State.ACTIVE, contact.jid)
 
                 event_attrs = {'account': self._account,
                                'jid': contact.jid,
@@ -301,15 +302,15 @@ class Chatstate:
             # which are not allowed to see our status
             if not contact.is_pm_contact:
                 if contact and contact.sub in ('to', 'none'):
-                    log.info('Contact not subscribed: %s', contact.jid)
+                    self._log.info('Contact not subscribed: %s', contact.jid)
                     return
 
             if contact.show == 'offline':
-                log.info('Contact offline: %s', contact.jid)
+                self._log.info('Contact offline: %s', contact.jid)
                 return
 
             if not contact.supports(nbxmpp.NS_CHATSTATES):
-                log.info('Chatstates not supported: %s', contact.jid)
+                self._log.info('Chatstates not supported: %s', contact.jid)
                 return
 
         if state in (State.ACTIVE, State.COMPOSING):
@@ -322,7 +323,7 @@ class Chatstate:
         if current_state == state:
             return
 
-        log.info('Send: %-10s - %s', state, contact.jid)
+        self._log.info('Send: %-10s - %s', state, contact.jid)
 
         event_attrs = {'account': self._account,
                        'jid': contact.jid,

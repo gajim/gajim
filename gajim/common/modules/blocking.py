@@ -14,17 +14,14 @@
 
 # XEP-0191: Blocking Command
 
-import logging
-
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.modules.base import BaseModule
-
-log = logging.getLogger('gajim.c.m.blocking')
 
 
 class Blocking(BaseModule):
@@ -42,7 +39,10 @@ class Blocking(BaseModule):
         self.blocked = []
 
         self.handlers = [
-            ('iq', self._blocking_push_received, 'set', nbxmpp.NS_BLOCKING)
+            StanzaHandler(name='iq',
+                          callback=self._blocking_push_received,
+                          typ='set',
+                          ns=nbxmpp.NS_BLOCKING),
         ]
 
         self._register_callback('get_blocking_list',
@@ -60,18 +60,18 @@ class Blocking(BaseModule):
                          account=self._account,
                          feature=nbxmpp.NS_BLOCKING))
 
-        log.info('Discovered blocking: %s', from_)
+        self._log.info('Discovered blocking: %s', from_)
 
     def _blocking_list_received(self, result):
         if is_error_result(result):
-            log.info('Error: %s', result)
+            self._log.info('Error: %s', result)
             return
 
         self.blocked = result.blocking_list
         app.nec.push_incoming_event(
             BlockingEvent(None, conn=self._con, changed=self.blocked))
 
-    def _blocking_push_received(self, _con, stanza):
+    def _blocking_push_received(self, _con, stanza, _properties):
         reply = stanza.buildReply('result')
         childs = reply.getChildren()
         for child in childs:
@@ -89,7 +89,7 @@ class Blocking(BaseModule):
                 self.blocked = []
                 for jid in self.blocked:
                     self._presence_probe(jid)
-                log.info('Unblock all Push')
+                self._log.info('Unblock all Push')
                 raise nbxmpp.NodeProcessed
 
             for item in items:
@@ -100,7 +100,7 @@ class Blocking(BaseModule):
                     continue
                 self.blocked.remove(jid)
                 self._presence_probe(jid)
-                log.info('Unblock Push: %s', jid)
+                self._log.info('Unblock Push: %s', jid)
 
         block = stanza.getTag('block', namespace=nbxmpp.NS_BLOCKING)
         if block is not None:
@@ -111,7 +111,7 @@ class Blocking(BaseModule):
                 changed_list.append(jid)
                 self.blocked.append(jid)
                 self._set_contact_offline(jid)
-                log.info('Block Push: %s', jid)
+                self._log.info('Block Push: %s', jid)
 
         app.nec.push_incoming_event(
             BlockingEvent(None, conn=self._con, changed=changed_list))
@@ -124,7 +124,7 @@ class Blocking(BaseModule):
             contact.show = 'offline'
 
     def _presence_probe(self, jid: str) -> None:
-        log.info('Presence probe: %s', jid)
+        self._log.info('Presence probe: %s', jid)
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
         self._nbxmpp().send(probe)

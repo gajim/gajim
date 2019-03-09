@@ -24,7 +24,6 @@ from urllib.request import Request, urlopen
 from urllib.parse import urlparse
 import io
 import mimetypes
-import logging
 
 import nbxmpp
 from nbxmpp import NS_HTTPUPLOAD
@@ -34,6 +33,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
@@ -41,18 +41,12 @@ from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
 if sys.platform in ('win32', 'darwin'):
     import certifi
 
-log = logging.getLogger('gajim.c.m.httpupload')
-
-
 NS_HTTPUPLOAD_0 = NS_HTTPUPLOAD + ':0'
 
 
-class HTTPUpload:
+class HTTPUpload(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self.available = False
         self.component = None
@@ -86,7 +80,7 @@ class HTTPUpload:
             return
 
         self.component = from_
-        log.info('Discovered component: %s', from_)
+        self._log.info('Discovered component: %s', from_)
 
         for form in data:
             form_dict = form.asDict()
@@ -98,10 +92,10 @@ class HTTPUpload:
                 break
 
         if self.max_file_size is None:
-            log.warning('%s does not provide maximum file size', self._account)
+            self._log.warning('Component does not provide maximum file size')
         else:
-            log.info('%s has a maximum file size of: %s MiB',
-                     self._account, self.max_file_size / (1024 * 1024))
+            self._log.info('Component has a maximum file size of: %s MiB',
+                           self.max_file_size / (1024 * 1024))
 
         self.available = True
 
@@ -151,7 +145,7 @@ class HTTPUpload:
         mime = mimetypes.MimeTypes().guess_type(path)[0]
         if not mime:
             mime = 'application/octet-stream'  # fallback mime type
-        log.info("Detected MIME type of file: %s", mime)
+        self._log.info("Detected MIME type of file: %s", mime)
 
         try:
             file = File(path, contact, mime=mime, encryption=encryption,
@@ -159,7 +153,7 @@ class HTTPUpload:
                         session=session, groupchat=groupchat)
             app.interface.show_httpupload_progress(file)
         except Exception as error:
-            log.exception('Error while loading file')
+            self._log.exception('Error while loading file')
             self.raise_information_event('open-file-error2', str(error))
             return
 
@@ -181,7 +175,7 @@ class HTTPUpload:
     def _request_slot(self, file):
         GLib.idle_add(self.raise_progress_event, 'request', file)
         iq = self._build_request(file)
-        log.info("Sending request for slot")
+        self._log.info("Sending request for slot")
         self._con.connection.SendAndCallForResponse(
             iq, self._received_slot, {'file': file})
 
@@ -218,12 +212,12 @@ class HTTPUpload:
         return stanza.getErrorMsg()
 
     def _received_slot(self, _con, stanza, file):
-        log.info("Received slot")
+        self._log.info("Received slot")
         if stanza.getType() == 'error':
             self.raise_progress_event('close', file)
             self.raise_information_event('request-upload-slot-error',
                                          self.get_slot_error_message(stanza))
-            log.error(stanza)
+            self._log.error(stanza)
             return
 
         try:
@@ -243,8 +237,8 @@ class HTTPUpload:
                         raise ValueError('Newline in header data')
                     file.headers[name] = data
         except Exception:
-            log.error("Got invalid stanza: %s", stanza)
-            log.exception('Error')
+            self._log.error("Got invalid stanza: %s", stanza)
+            self._log.exception('Error')
             self.raise_progress_event('close', file)
             self.raise_information_event('request-upload-slot-error2')
             return
@@ -258,13 +252,13 @@ class HTTPUpload:
         try:
             file.stream = StreamFileWithProgress(file)
         except Exception:
-            log.exception('Error')
+            self._log.exception('Error')
             self.raise_progress_event('close', file)
             self.raise_information_event('open-file-error')
             return
 
-        log.info('Uploading file to %s', file.put)
-        log.info('Please download from %s', file.get)
+        self._log.info('Uploading file to %s', file.put)
+        self._log.info('Please download from %s', file.get)
 
         thread = threading.Thread(target=self._upload_file, args=(file,))
         thread.daemon = True
@@ -279,14 +273,14 @@ class HTTPUpload:
 
             request = Request(
                 file.put, data=file.stream, headers=file.headers, method='PUT')
-            log.info("Opening Urllib upload request...")
+            self._log.info("Opening Urllib upload request...")
 
             if not app.config.get_per(
                     'accounts', self._account, 'httpupload_verify'):
                 context = ssl.create_default_context()
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
-                log.warning('CERT Verification disabled')
+                self._log.warning('CERT Verification disabled')
                 transfer = urlopen(request, timeout=30, context=context)
             else:
                 if sys.platform in ('win32', 'darwin'):
@@ -295,23 +289,23 @@ class HTTPUpload:
                 else:
                     transfer = urlopen(request, timeout=30)
             file.stream.close()
-            log.info('Urllib upload request done, response code: %s',
-                     transfer.getcode())
+            self._log.info('Urllib upload request done, response code: %s',
+                           transfer.getcode())
             GLib.idle_add(self._upload_complete, transfer.getcode(), file)
             return
         except UploadAbortedException as exc:
-            log.info(exc)
+            self._log.info(exc)
             error_msg = exc
         except urllib.error.URLError as exc:
             if isinstance(exc.reason, ssl.SSLError):
                 error_msg = exc.reason.reason
                 if error_msg == 'CERTIFICATE_VERIFY_FAILED':
-                    log.exception('Certificate verify failed')
+                    self._log.exception('Certificate verify failed')
             else:
-                log.exception('URLError')
+                self._log.exception('URLError')
                 error_msg = exc.reason
         except Exception as exc:
-            log.exception("Exception during upload")
+            self._log.exception("Exception during upload")
             error_msg = exc
         GLib.idle_add(self.raise_progress_event, 'close', file)
         GLib.idle_add(self._on_upload_error, file, error_msg)
@@ -319,7 +313,7 @@ class HTTPUpload:
     def _upload_complete(self, response_code, file):
         self.raise_progress_event('close', file)
         if 200 <= response_code < 300:
-            log.info("Upload completed successfully")
+            self._log.info("Upload completed successfully")
             message = file.get
             if file.user_data:
                 message += '#' + file.user_data
@@ -339,8 +333,8 @@ class HTTPUpload:
                     automatic_message=False, session=file.session))
 
         else:
-            log.error('Got unexpected http upload response code: %s',
-                      response_code)
+            self._log.error('Got unexpected http upload response code: %s',
+                            response_code)
             self.raise_information_event('httpupload-response-error',
                                          response_code)
 

@@ -14,25 +14,19 @@
 
 # XEP-0055: Jabber Search
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.search')
 
-
-class Search:
+class Search(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
     def request_search_fields(self, jid):
-        log.info('Request search fields from %s', jid)
+        self._log.info('Request search fields from %s', jid)
         iq = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_SEARCH)
         self._con.connection.SendAndCallForResponse(iq, self._fields_received)
 
@@ -41,10 +35,10 @@ class Search:
         is_dataform = False
 
         if nbxmpp.isResultNode(stanza):
-            log.info('Received search fields from %s', stanza.getFrom())
+            self._log.info('Received search fields from %s', stanza.getFrom())
             tag = stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
             if tag is None:
-                log.info('Invalid stanza: %s', stanza)
+                self._log.info('Invalid stanza: %s', stanza)
                 return
 
             data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
@@ -55,7 +49,7 @@ class Search:
                 for i in stanza.getQueryPayload():
                     data[i.getName()] = i.getData()
         else:
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
 
         app.nec.push_incoming_event(
             SearchFormReceivedEvent(None, conn=self._con,
@@ -78,10 +72,10 @@ class Search:
         is_dataform = False
 
         if nbxmpp.isResultNode(stanza):
-            log.info('Received result from %s', stanza.getFrom())
+            self._log.info('Received result from %s', stanza.getFrom())
             tag = stanza.getTag('query', namespace=nbxmpp.NS_SEARCH)
             if tag is None:
-                log.info('Invalid stanza: %s', stanza)
+                self._log.info('Invalid stanza: %s', stanza)
                 return
 
             data = tag.getTag('x', namespace=nbxmpp.NS_DATA)
@@ -96,7 +90,7 @@ class Search:
                         field[i.getName()] = i.getData()
                     data.append(field)
         else:
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
 
         app.nec.push_incoming_event(
             SearchResultReceivedEvent(None, conn=self._con,

@@ -14,27 +14,22 @@
 
 # XEP-0209: Metacontacts
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.metacontacts')
 
-
-class MetaContacts:
+class MetaContacts(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
+
         self.available = False
 
-        self.handlers = []
-
     def get_metacontacts(self):
-        log.info('Request')
+        self._log.info('Request')
         node = nbxmpp.Node('storage', attrs={'xmlns': 'storage:metacontacts'})
         iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVATE, payload=node)
 
@@ -43,12 +38,12 @@ class MetaContacts:
 
     def _metacontacts_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Request error: %s', stanza.getError())
+            self._log.info('Request error: %s', stanza.getError())
         else:
             self.available = True
             meta_list = self._parse_metacontacts(stanza)
 
-            log.info('Received: %s', meta_list)
+            self._log.info('Received: %s', meta_list)
 
             app.nec.push_incoming_event(NetworkEvent(
                 'metacontacts-received', conn=self._con, meta_list=meta_list))
@@ -94,14 +89,13 @@ class MetaContacts:
                 if 'order' in data:
                     dict_['order'] = data['order']
                 meta.addChild(name='meta', attrs=dict_)
-        log.info('Store: %s', tags_list)
+        self._log.info('Store: %s', tags_list)
         self._con.connection.SendAndCallForResponse(
             iq, self._store_response_received)
 
-    @staticmethod
-    def _store_response_received(stanza):
+    def _store_response_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Store error: %s', stanza.getError())
+            self._log.info('Store error: %s', stanza.getError())
 
 
 def get_instance(*args, **kwargs):

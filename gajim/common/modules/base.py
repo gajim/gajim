@@ -26,29 +26,33 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common.modules.util import LogAdapter
 
-log = logging.getLogger('gajim.c.m.base')
-
 
 class BaseModule:
 
     _nbxmpp_extends = ''
     _nbxmpp_methods = []  # type: List[str]
 
-    def __init__(self, con, logger=None):
+    def __init__(self, con, *args, plugin=False, **kwargs):
         self._con = con
         self._account = con.name
-        if logger is not None:
-            self._log = LogAdapter(logger, {'account': self._account})
+        self._log = self._set_logger(plugin)
         self._nbxmpp_callbacks = {}  # type: Dict[str, Any]
         self._stored_publish = None  # type: Callable
         self.handlers = []  # type: List[str]
+
+    def _set_logger(self, plugin):
+        logger_name = 'gajim.c.m.%s'
+        if plugin:
+            logger_name = 'gajim.p.%s'
+        logger_name = logger_name % self.__class__.__name__.lower()
+        logger = logging.getLogger(logger_name)
+        return LogAdapter(logger, {'account': self._account})
 
     def __getattr__(self, key):
         if key not in self._nbxmpp_methods:
             raise AttributeError
         if not app.account_is_connected(self._account):
-            log.warning('Account %s not connected, cant use %s',
-                        self._account, key)
+            self._log.warning('Account not connected, cant use %s', key)
             return
 
         module = self._con.connection.get_module(self._nbxmpp_extends)
@@ -60,8 +64,7 @@ class BaseModule:
 
     def _nbxmpp(self, module_name=None):
         if not app.account_is_connected(self._account):
-            log.warning('Account %s not connected, cant use nbxmpp method',
-                        self._account)
+            self._log.warning('Account not connected, cant use nbxmpp method')
             return Mock()
 
         if module_name is None:
@@ -81,5 +84,5 @@ class BaseModule:
     def send_stored_publish(self):
         if self._stored_publish is None:
             return
-        log.info('Send stored publish')
+        self._log.info('Send stored publish')
         self._stored_publish()

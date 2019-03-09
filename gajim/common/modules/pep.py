@@ -19,15 +19,10 @@ from typing import Dict
 from typing import List
 from typing import Tuple
 
-import logging
-
 import nbxmpp
 
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
-
-
-log = logging.getLogger('gajim.c.m.pep')
 
 
 class PEP(BaseModule):
@@ -45,7 +40,7 @@ class PEP(BaseModule):
         for identity in identities:
             if identity['category'] == 'pubsub':
                 if identity.get('type') == 'pep':
-                    log.info('Discovered PEP support: %s', from_)
+                    self._log.info('Discovered PEP support: %s', from_)
                     self.supported = True
 
 

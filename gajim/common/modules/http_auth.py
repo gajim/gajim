@@ -14,22 +14,18 @@
 
 # XEP-0070: Verifying HTTP Requests via XMPP
 
-import logging
-
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.protocol import NS_HTTP_AUTH
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.http_auth')
 
-
-class HTTPAuth:
+class HTTPAuth(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='message',
@@ -47,7 +43,7 @@ class HTTPAuth:
         if not properties.is_http_auth:
             return
 
-        log.info('Auth request received')
+        self._log.info('Auth request received')
         auto_answer = app.config.get_per(
             'accounts', self._account, 'http_auth')
         if auto_answer in ('yes', 'no'):
@@ -66,14 +62,14 @@ class HTTPAuth:
 
     def build_http_auth_answer(self, stanza, answer):
         if answer == 'yes':
-            log.info('Auth request approved')
+            self._log.info('Auth request approved')
             confirm = stanza.getTag('confirm')
             reply = stanza.buildReply('result')
             if stanza.getName() == 'message':
                 reply.addChild(node=confirm)
             self._con.connection.send(reply)
         elif answer == 'no':
-            log.info('Auth request denied')
+            self._log.info('Auth request denied')
             err = nbxmpp.Error(stanza, nbxmpp.protocol.ERR_NOT_AUTHORIZED)
             self._con.connection.send(err)
 

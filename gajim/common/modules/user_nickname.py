@@ -17,16 +17,12 @@
 from typing import Any
 from typing import Tuple
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-
-log = logging.getLogger('gajim.c.m.user_nickname')
 
 
 class UserNickname(BaseModule):

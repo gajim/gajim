@@ -14,24 +14,20 @@
 
 # XEP-0016: Privacy Lists
 
-import logging
-
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.nec import NetworkEvent
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import InformationEvent
 
 
-log = logging.getLogger('gajim.c.m.privacylists')
-
-
-class PrivacyLists:
+class PrivacyLists(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.default_list = None
         self.active_list = None
@@ -41,7 +37,10 @@ class PrivacyLists:
         self.blocked_all = False
 
         self.handlers = [
-            ('iq', self._list_push_received, 'set', nbxmpp.NS_PRIVACY)
+            StanzaHandler(name='iq',
+                          callback=self._list_push_received,
+                          typ='set',
+                          ns=nbxmpp.NS_PRIVACY),
         ]
 
         self.supported = False
@@ -51,14 +50,14 @@ class PrivacyLists:
             return
 
         self.supported = True
-        log.info('Discovered XEP-0016: Privacy Lists: %s', from_)
+        self._log.info('Discovered XEP-0016: Privacy Lists: %s', from_)
 
         app.nec.push_incoming_event(
             NetworkEvent('feature-discovered',
                          account=self._account,
                          feature=nbxmpp.NS_PRIVACY))
 
-    def _list_push_received(self, _con, stanza):
+    def _list_push_received(self, _con, stanza, _properties):
         result = stanza.buildReply('result')
         result.delChild(result.getTag('query'))
         self._con.connection.send(result)
@@ -66,13 +65,13 @@ class PrivacyLists:
         for list_ in stanza.getQueryPayload():
             if list_.getName() == 'list':
                 name = list_.getAttr('name')
-                log.info('Received Push: %s', name)
+                self._log.info('Received Push: %s', name)
                 self.get_privacy_list(name)
 
         raise nbxmpp.NodeProcessed
 
     def get_privacy_lists(self, callback=None):
-        log.info('Request lists')
+        self._log.info('Request lists')
         iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY)
         self._con.connection.SendAndCallForResponse(
             iq, self._privacy_lists_received, {'callback': callback})
@@ -82,7 +81,7 @@ class PrivacyLists:
         new_default = None
         result = nbxmpp.isResultNode(stanza)
         if not result:
-            log.warning('List not available: %s', stanza.getError())
+            self._log.warning('List not available: %s', stanza.getError())
         else:
             for list_ in stanza.getQueryPayload():
                 name = list_.getAttr('name')
@@ -93,13 +92,13 @@ class PrivacyLists:
                 else:
                     lists.append(name)
 
-        log.info('Received lists: %s', lists)
+        self._log.info('Received lists: %s', lists)
 
         # Download default list if we dont have it
         if self.default_list != new_default:
             self.default_list = new_default
             if new_default is not None:
-                log.info('Found new default list: %s', new_default)
+                self._log.info('Found new default list: %s', new_default)
                 self.get_privacy_list(new_default)
 
         if callback:
@@ -113,7 +112,7 @@ class PrivacyLists:
                                           lists=lists))
 
     def get_privacy_list(self, name):
-        log.info('Request list: %s', name)
+        self._log.info('Request list: %s', name)
         list_ = nbxmpp.Node('list', {'name': name})
         iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVACY, payload=[list_])
         self._con.connection.SendAndCallForResponse(
@@ -121,7 +120,7 @@ class PrivacyLists:
 
     def _privacy_list_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('List not available: %s', stanza.getError())
+            self._log.warning('List not available: %s', stanza.getError())
             return
 
         rules = []
@@ -138,11 +137,11 @@ class PrivacyLists:
 
             item['child'] = childs
             if len(item) not in (3, 5):
-                log.warning('Wrong count of attrs: %s', stanza)
+                self._log.warning('Wrong count of attrs: %s', stanza)
                 continue
             rules.append(item)
 
-        log.info('Received list: %s', name)
+        self._log.info('Received list: %s', name)
 
         if name == self.default_list:
             self._default_list_received(rules)
@@ -151,11 +150,11 @@ class PrivacyLists:
             None, conn=self._con, list_name=name, rules=rules))
 
     def del_privacy_list(self, name):
-        log.info('Remove list: %s', name)
+        self._log.info('Remove list: %s', name)
 
         def _del_privacy_list_result(stanza):
             if not nbxmpp.isResultNode(stanza):
-                log.warning('List deletion failed: %s', stanza.getError())
+                self._log.warning('List deletion failed: %s', stanza.getError())
                 app.nec.push_incoming_event(InformationEvent(
                     None, dialog_name='privacy-list-error', args=name))
             else:
@@ -176,7 +175,7 @@ class PrivacyLists:
                 node.setTag(child)
             item.pop('child', None)
             node.setTag('item', item)
-        log.info('Update list: %s %s', name, rules)
+        self._log.info('Update list: %s %s', name, rules)
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
@@ -217,7 +216,7 @@ class PrivacyLists:
                     roster.draw_group(rule['value'], self._account)
 
     def set_active_list(self, name=None):
-        log.info('Set active list: %s', name)
+        self._log.info('Set active list: %s', name)
         attr = {}
         if name:
             attr['name'] = name
@@ -227,7 +226,7 @@ class PrivacyLists:
             iq, self._default_result_handler, {})
 
     def set_default_list(self, name=None):
-        log.info('Set default list: %s', name)
+        self._log.info('Set default list: %s', name)
         attr = {}
         if name:
             attr['name'] = name
@@ -236,10 +235,9 @@ class PrivacyLists:
         self._con.connection.SendAndCallForResponse(
             iq, self._default_result_handler, {})
 
-    @staticmethod
-    def _default_result_handler(_con, stanza):
+    def _default_result_handler(self, _con, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('Operation failed: %s', stanza.getError())
+            self._log.warning('Operation failed: %s', stanza.getError())
 
     def _build_invisible_rule(self):
         node = nbxmpp.Node('list', {'name': 'invisible'})
@@ -267,7 +265,7 @@ class PrivacyLists:
         return iq
 
     def set_invisible_rule(self, callback=None, **kwargs):
-        log.info('Update invisible list')
+        self._log.info('Update invisible list')
         iq = self._build_invisible_rule()
         if callback is None:
             callback = self._default_result_handler
@@ -285,7 +283,7 @@ class PrivacyLists:
     def block_gc_contact(self, jid):
         if jid in self.blocked_contacts:
             return
-        log.info('Block GC contact: %s', jid)
+        self._log.info('Block GC contact: %s', jid)
 
         if self.default_list is None:
             self.default_list = 'block'
@@ -311,7 +309,7 @@ class PrivacyLists:
         if self.default_list is None:
             self.default_list = 'block'
         for contact in contact_list:
-            log.info('Block contacts: %s', contact.jid)
+            self._log.info('Block contacts: %s', contact.jid)
             contact.show = 'offline'
             self._con.send_custom_status('offline', message, contact.jid)
             max_order = self._get_max_blocked_list_order()
@@ -333,7 +331,7 @@ class PrivacyLists:
 
         self.blocked_contacts.remove(jid)
 
-        log.info('Unblock GC contact: %s', jid)
+        self._log.info('Unblock GC contact: %s', jid)
         for rule in self.blocked_list:
             if (rule['action'] != 'deny' or
                     rule['type'] != 'jid' or
@@ -358,7 +356,7 @@ class PrivacyLists:
         new_blocked_list = []
         to_unblock = []
         for contact in contact_list:
-            log.info('Unblock contacts: %s', contact.jid)
+            self._log.info('Unblock contacts: %s', contact.jid)
             to_unblock.append(contact.jid)
             if contact.jid in self.blocked_contacts:
                 self.blocked_contacts.remove(contact.jid)
@@ -393,7 +391,7 @@ class PrivacyLists:
             return
         self.blocked_groups.append(group)
 
-        log.info('Block group: %s', group)
+        self._log.info('Block group: %s', group)
 
         if self.default_list is None:
             self.default_list = 'block'
@@ -420,7 +418,7 @@ class PrivacyLists:
             return
         self.blocked_groups.remove(group)
 
-        log.info('Unblock group: %s', group)
+        self._log.info('Unblock group: %s', group)
         new_blocked_list = []
         for rule in self.blocked_list:
             if (rule['action'] != 'deny' or
@@ -446,7 +444,7 @@ class PrivacyLists:
             self._con.send_custom_status(show, self._con.status, contact.jid)
 
     def _presence_probe(self, jid):
-        log.info('Presence probe: %s', jid)
+        self._log.info('Presence probe: %s', jid)
         # Send a presence Probe to get the current Status
         probe = nbxmpp.Presence(jid, 'probe', frm=self._con.get_own_jid())
         self._con.connection.send(probe)

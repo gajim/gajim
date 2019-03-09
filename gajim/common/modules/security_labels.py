@@ -14,22 +14,16 @@
 
 # XEP-0258: Security Labels in XMPP
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.security_labels')
 
-
-class SecLabels:
+class SecLabels(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self._catalogs = {}
         self.supported = False
@@ -39,7 +33,7 @@ class SecLabels:
             return
 
         self.supported = True
-        log.info('Discovered security labels: %s', from_)
+        self._log.info('Discovered security labels: %s', from_)
 
     def request_catalog(self, jid):
         server = app.get_jid_from_account(self._account).split("@")[1]
@@ -47,13 +41,13 @@ class SecLabels:
         iq.addChild(name='catalog',
                     namespace=nbxmpp.NS_SECLABEL_CATALOG,
                     attrs={'to': jid})
-        log.info('Request catalog: server: %s, to: %s', server, jid)
+        self._log.info('Request catalog: server: %s, to: %s', server, jid)
         self._con.connection.SendAndCallForResponse(
             iq, self._catalog_received)
 
     def _catalog_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
             return
 
         query = stanza.getTag('catalog', namespace=nbxmpp.NS_SECLABEL_CATALOG)
@@ -73,8 +67,8 @@ class SecLabels:
         catalog = (labels, label_list, default)
         self._catalogs[to] = catalog
 
-        log.info('Received catalog: %s', to)
-        log.debug(catalog)
+        self._log.info('Received catalog: %s', to)
+        self._log.debug(catalog)
 
         app.nec.push_incoming_event(SecLabelCatalog(
             None, account=self._account, jid=to, catalog=catalog))

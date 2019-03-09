@@ -14,8 +14,6 @@
 
 # XEP-0080: User Location
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
@@ -24,8 +22,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
-
-log = logging.getLogger('gajim.c.m.user_location')
 
 
 class UserLocation(BaseModule):
@@ -66,7 +62,7 @@ class UserLocation(BaseModule):
 
     @store_publish
     def set_location(self, location):
-        log.info('Send %s', location)
+        self._log.info('Send %s', location)
         self._nbxmpp('Location').set_location(location)
 
 

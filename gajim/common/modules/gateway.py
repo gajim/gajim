@@ -14,22 +14,16 @@
 
 # XEP-0100: Gateway Interaction
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.gateway')
 
-
-class Gateway:
+class Gateway(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
     def unsubscribe(self, agent):
         if not app.account_is_connected(self._account):
@@ -43,7 +37,7 @@ class Gateway:
 
     def _on_unsubscribe_result(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
             return
 
         agent = stanza.getFrom().getBare()
@@ -51,8 +45,8 @@ class Gateway:
         for jid in app.contacts.get_jid_list(self._account):
             if jid.endswith('@' + agent):
                 jid_list.append(jid)
-                log.info('Removing contact %s due to unregistered transport %s',
-                          jid, agent)
+                self._log.info('Removing contact %s due to'
+                               ' unregistered transport %s', jid, agent)
                 self._con.get_module('Presence').unsubscribe(jid)
                 # Transport contacts can't have 2 resources
                 if jid in app.to_be_removed[self._account]:

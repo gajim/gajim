@@ -14,25 +14,19 @@
 
 # XEP-0083: Nested Roster Groups
 
-import logging
-
 import nbxmpp
 
-log = logging.getLogger('gajim.c.m.delimiter')
+from gajim.common.modules.base import BaseModule
 
 
-class Delimiter:
+class Delimiter(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
         self.available = False
-
         self.delimiter = '::'
 
-        self.handlers = []
-
     def get_roster_delimiter(self):
-        log.info('Request')
+        self._log.info('Request')
         node = nbxmpp.Node('storage', attrs={'xmlns': 'roster:delimiter'})
         iq = nbxmpp.Iq('get', nbxmpp.NS_PRIVATE, payload=node)
 
@@ -41,11 +35,11 @@ class Delimiter:
 
     def _delimiter_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Request error: %s', stanza.getError())
+            self._log.info('Request error: %s', stanza.getError())
         else:
             delimiter = stanza.getQuery().getTagData('roster')
             self.available = True
-            log.info('Delimiter received: %s', delimiter)
+            self._log.info('Delimiter received: %s', delimiter)
             if delimiter:
                 self.delimiter = delimiter
             else:
@@ -54,7 +48,7 @@ class Delimiter:
         self._con.connect_machine()
 
     def set_roster_delimiter(self):
-        log.info('Set delimiter')
+        self._log.info('Set delimiter')
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVATE)
         roster = iq.getQuery().addChild('roster', namespace='roster:delimiter')
         roster.setData('::')
@@ -62,10 +56,9 @@ class Delimiter:
         self._con.connection.SendAndCallForResponse(
             iq, self._set_delimiter_response)
 
-    @staticmethod
-    def _set_delimiter_response(stanza):
+    def _set_delimiter_response(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.info('Store error: %s', stanza.getError())
+            self._log.info('Store error: %s', stanza.getError())
 
 
 def get_instance(*args, **kwargs):

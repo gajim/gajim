@@ -14,32 +14,34 @@
 
 # XEP-0144: Roster Item Exchange
 
-import logging
-
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.roster_item_exchange')
 
-
-class RosterItemExchange:
+class RosterItemExchange(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self.received_item, 'set', nbxmpp.NS_ROSTERX),
-            ('message', self.received_item, '', nbxmpp.NS_ROSTERX)
+            StanzaHandler(name='iq',
+                          callback=self.received_item,
+                          typ='set',
+                          ns=nbxmpp.NS_ROSTERX),
+            StanzaHandler(name='message',
+                          callback=self.received_item,
+                          ns=nbxmpp.NS_ROSTERX),
         ]
 
-    def received_item(self, _con, stanza):
+    def received_item(self, _con, stanza, _properties):
         # stanza can be a message or a iq
 
-        log.info('Received roster items from %s', stanza.getFrom())
+        self._log.info('Received roster items from %s', stanza.getFrom())
 
         exchange_items_list = {}
         items_list = stanza.getTag(
@@ -55,8 +57,8 @@ class RosterItemExchange:
             try:
                 jid = helpers.parse_jid(item.getAttr('jid'))
             except helpers.InvalidFormat:
-                log.warning('Invalid JID: %s, ignoring it',
-                            item.getAttr('jid'))
+                self._log.warning('Invalid JID: %s, ignoring it',
+                                  item.getAttr('jid'))
                 continue
             name = item.getAttr('name')
             contact = app.contacts.get_contact(self._account, jid)
@@ -81,7 +83,7 @@ class RosterItemExchange:
         if not exchange_items_list:
             raise nbxmpp.NodeProcessed
 
-        log.info('Items: %s', exchange_items_list)
+        self._log.info('Items: %s', exchange_items_list)
 
         app.nec.push_incoming_event(RosterItemExchangeEvent(
             None, conn=self._con,
@@ -115,7 +117,7 @@ class RosterItemExchange:
             xdata.addChild(name='item', attrs={'action': 'add',
                                                'jid': contact.jid,
                                                'name': name})
-            log.info('Send contact: %s %s', contact.jid, name)
+            self._log.info('Send contact: %s %s', contact.jid, name)
         self._con.connection.send(stanza)
 
 

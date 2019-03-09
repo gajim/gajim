@@ -14,16 +14,12 @@
 
 # XEP-0084: User Avatar
 
-import logging
-
 import nbxmpp
 from nbxmpp.util import is_error_result
 
 from gajim.common import app
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
-
-log = logging.getLogger('gajim.c.m.user_avatar')
 
 
 class UserAvatar(BaseModule):
@@ -46,7 +42,7 @@ class UserAvatar(BaseModule):
 
         if empty:
             # Remove avatar
-            log.info('Remove: %s', jid)
+            self._log.info('Remove: %s', jid)
             app.contacts.set_avatar(self._account, jid, None)
             app.logger.set_avatar_sha(own_jid, jid, None)
             app.interface.update_avatar(self._account, jid)
@@ -58,19 +54,19 @@ class UserAvatar(BaseModule):
                 sha = app.contacts.get_avatar_sha(self._account, jid)
 
             if sha == data.id:
-                log.info('Avatar already known: %s %s', jid, data.id)
+                self._log.info('Avatar already known: %s %s', jid, data.id)
                 return
 
-            log.info('Request: %s %s', jid, data.id)
+            self._log.info('Request: %s %s', jid, data.id)
             self._nbxmpp('UserAvatar').request_avatar(
                 jid, data.id, callback=self._avatar_received)
 
     def _avatar_received(self, result):
         if is_error_result(result):
-            log.info('Error: %s', result)
+            self._log.info('Error: %s', result)
             return
 
-        log.info('Received Avatar: %s %s', result.jid, result.sha)
+        self._log.info('Received Avatar: %s %s', result.jid, result.sha)
         app.interface.save_avatar(result.data)
 
         if self._con.get_own_jid().bareMatch(result.jid):

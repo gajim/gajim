@@ -17,8 +17,6 @@
 from typing import Any
 from typing import Tuple
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
@@ -27,8 +25,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
 from gajim.common.const import PEPEventType
-
-log = logging.getLogger('gajim.c.m.user_mood')
 
 
 class UserMood(BaseModule):
@@ -69,7 +65,7 @@ class UserMood(BaseModule):
 
     @store_publish
     def set_mood(self, mood):
-        log.info('Send %s', mood)
+        self._log.info('Send %s', mood)
         self._nbxmpp('Mood').set_mood(mood)
 
 

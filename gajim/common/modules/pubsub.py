@@ -20,23 +20,17 @@
 
 # XEP-0060: Publish-Subscribe
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
 from gajim.common.modules import dataforms
 from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.pubsub')
 
-
-class PubSub:
+class PubSub(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self.publish_options = False
 
@@ -45,7 +39,7 @@ class PubSub:
             # Remove stored bookmarks accessible to everyone.
             self._con.get_module('Bookmarks').purge_pubsub_bookmarks()
             return
-        log.info('Discovered Pubsub publish options: %s', from_)
+        self._log.info('Discovered Pubsub publish options: %s', from_)
         self.publish_options = True
 
     def send_pb_subscription_query(self, jid, cb, **kwargs):
@@ -209,7 +203,7 @@ class PubSub:
         configure = pubsub.addChild('configure', {'node': node})
         configure.addChild(node=form)
 
-        log.info('Send node config for %s', node)
+        self._log.info('Send node config for %s', node)
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
     def request_pb_configuration(self, jid, node):
@@ -220,46 +214,45 @@ class PubSub:
         pubsub = query.addChild('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
         pubsub.addChild('configure', {'node': node})
 
-        log.info('Request node config for %s', node)
+        self._log.info('Request node config for %s', node)
         self._con.connection.SendAndCallForResponse(
             query, self._received_pb_configuration, {'node': node})
 
     def _received_pb_configuration(self, _con, stanza, node):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('Error: %s', stanza.getError())
+            self._log.warning('Error: %s', stanza.getError())
             return
 
         pubsub = stanza.getTag('pubsub', namespace=nbxmpp.NS_PUBSUB_OWNER)
         if pubsub is None:
-            log.warning('Malformed PubSub configure '
-                        'stanza (no pubsub node): %s', stanza)
+            self._log.warning('Malformed PubSub configure '
+                              'stanza (no pubsub node): %s', stanza)
             return
 
         configure = pubsub.getTag('configure')
         if configure is None:
-            log.warning('Malformed PubSub configure '
-                        'stanza (no configure node): %s', stanza)
+            self._log.warning('Malformed PubSub configure '
+                              'stanza (no configure node): %s', stanza)
             return
 
         if configure.getAttr('node') != node:
-            log.warning('Malformed PubSub configure '
-                        'stanza (wrong node): %s', stanza)
+            self._log.warning('Malformed PubSub configure '
+                              'stanza (wrong node): %s', stanza)
             return
 
         form = configure.getTag('x', namespace=nbxmpp.NS_DATA)
         if form is None:
-            log.warning('Malformed PubSub configure '
-                        'stanza (no form): %s', stanza)
+            self._log.warning('Malformed PubSub configure '
+                              'stanza (no form): %s', stanza)
             return
 
         app.nec.push_incoming_event(PubSubConfigReceivedEvent(
             None, conn=self._con, node=node,
             form=dataforms.extend_form(node=form)))
 
-    @staticmethod
-    def _default_callback(_con, stanza, *args, **kwargs):
+    def _default_callback(self, _con, stanza, *args, **kwargs):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('Error: %s', stanza.getError())
+            self._log.warning('Error: %s', stanza.getError())
 
 
 class PubSubConfigReceivedEvent(NetworkIncomingEvent):

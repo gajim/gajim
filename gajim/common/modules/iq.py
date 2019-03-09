@@ -14,8 +14,6 @@
 
 # Iq handler
 
-import logging
-
 import nbxmpp
 from nbxmpp.const import Error
 from nbxmpp.structs import StanzaHandler
@@ -23,15 +21,12 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.file_props import FilesProp
+from gajim.common.modules.base import BaseModule
 
 
-log = logging.getLogger('gajim.c.m.iq')
-
-
-class Iq:
+class Iq(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='iq',
@@ -41,7 +36,7 @@ class Iq:
         ]
 
     def _iq_error_received(self, _con, _stanza, properties):
-        log.info('Error: %s', properties.error)
+        self._log.info('Error: %s', properties.error)
         if properties.error.type in (Error.JID_MALFORMED,
                                      Error.FORBIDDEN,
                                      Error.NOT_ACCEPTABLE):

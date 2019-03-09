@@ -14,34 +14,36 @@
 
 # Roster
 
-import logging
 from collections import namedtuple
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
-
-log = logging.getLogger('gajim.c.m.roster')
+from gajim.common.modules.base import BaseModule
 
 RosterItem = namedtuple('RosterItem', 'jid data')
 
 
-class Roster:
+class Roster(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._roster_push_received, 'set', nbxmpp.NS_ROSTER),
-            ('presence', self._presence_received)
+            StanzaHandler(name='iq',
+                          callback=self._roster_push_received,
+                          typ='set',
+                          ns=nbxmpp.NS_ROSTER),
+            StanzaHandler(name='presence',
+                          callback=self._presence_received),
         ]
 
         self._data = {}
         self._set = None
 
     def load_roster(self):
-        log.info('Load from database')
+        self._log.info('Load from database')
         account_jid = self._con.get_own_jid().getStripped()
         data = app.logger.get_roster(account_jid)
         if data:
@@ -57,7 +59,7 @@ class Roster:
                     groups=item['groups'],
                     avatar_sha=item['avatar_sha']))
         else:
-            log.info('Database empty, reset roster version')
+            self._log.info('Database empty, reset roster version')
             app.config.set_per(
                 'accounts', self._account, 'roster_version', '')
 
@@ -74,26 +76,26 @@ class Roster:
             version = app.config.get_per(
                 'accounts', self._account, 'roster_version')
 
-        log.info('Requested from server')
+        self._log.info('Requested from server')
         iq = nbxmpp.Iq('get', nbxmpp.NS_ROSTER)
         if version is not None:
             iq.setTagAttr('query', 'ver', version)
-        log.info('Request version: %s', version)
+        self._log.info('Request version: %s', version)
         self._con.connection.SendAndCallForResponse(
             iq, self._roster_received)
 
     def _roster_received(self, stanza):
         if not nbxmpp.isResultNode(stanza):
-            log.warning('Unable to retrive roster: %s', stanza.getError())
+            self._log.warning('Unable to retrive roster: %s', stanza.getError())
         else:
-            log.info('Received Roster')
+            self._log.info('Received Roster')
             received_from_server = False
             if stanza.getTag('query') is not None:
                 # clear Roster
                 self._data = {}
                 version = self._parse_roster(stanza)
 
-                log.info('New version: %s', version)
+                self._log.info('New version: %s', version)
                 app.logger.replace_roster(self._account, version, self._data)
 
                 received_from_server = True
@@ -106,13 +108,13 @@ class Roster:
 
         self._con.connect_machine()
 
-    def _roster_push_received(self, _con, stanza):
-        log.info('Push received')
+    def _roster_push_received(self, _con, stanza, _properties):
+        self._log.info('Push received')
 
         sender = stanza.getFrom()
         if sender is not None:
             if not self._con.get_own_jid().bareMatch(sender):
-                log.warning('Wrong JID %s', stanza.getFrom())
+                self._log.warning('Wrong JID %s', stanza.getFrom())
                 return
 
         push_items, version = self._parse_push(stanza)
@@ -135,7 +137,7 @@ class Roster:
                 account_jid, item.jid, attrs['name'],
                 attrs['subscription'], attrs['ask'], attrs['groups'])
 
-        log.info('New version: %s', version)
+        self._log.info('New version: %s', version)
         app.config.set_per(
             'accounts', self._account, 'roster_version', version)
 
@@ -148,7 +150,7 @@ class Roster:
         for item in query.getTags('item'):
             jid = item.getAttr('jid')
             self._data[jid] = self._get_item_attrs(item, update=False)
-            log.info('Item %s: %s', jid, self._data[jid])
+            self._log.info('Item %s: %s', jid, self._data[jid])
         return version
 
     @staticmethod
@@ -186,7 +188,7 @@ class Roster:
         for item in query.getTags('item'):
             push_items.append(self._update_roster_item(item))
         for item in push_items:
-            log.info('Push: %s', item)
+            self._log.info('Push: %s', item)
         return push_items, version
 
     def _update_roster_item(self, item):
@@ -211,7 +213,7 @@ class Roster:
                        attrs={'id': stanza.getID()})
         self._con.connection.send(iq)
 
-    def _presence_received(self, _con, pres):
+    def _presence_received(self, _con, pres, _properties):
         '''
         Add contacts that request subscription to our internal
         roster and also to the database. The contact is put into the
@@ -227,7 +229,7 @@ class Roster:
         if jid in self._data:
             return
 
-        log.info('Add Contact from presence %s', jid)
+        self._log.info('Add Contact from presence %s', jid)
         self._data[jid] = {'name': None,
                            'ask': None,
                            'subscription':

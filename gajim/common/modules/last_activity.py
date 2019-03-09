@@ -14,16 +14,12 @@
 
 # XEP-0012: Last Activity
 
-import logging
-
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import idle
 from gajim.common.modules.base import BaseModule
-
-log = logging.getLogger('gajim.c.m.last_activity')
 
 
 class LastActivity(BaseModule):
@@ -38,7 +34,7 @@ class LastActivity(BaseModule):
         ]
 
     def _answer_request(self, _con, stanza, properties):
-        log.info('Request from %s', properties.jid)
+        self._log.info('Request from %s', properties.jid)
 
         allow_send = app.config.get_per(
             'accounts', self._account, 'send_idle_time')
@@ -47,7 +43,7 @@ class LastActivity(BaseModule):
             query = iq.setQuery()
             seconds = idle.Monitor.get_idle_sec()
             query.attrs['seconds'] = seconds
-            log.info('Respond with seconds: %s', seconds)
+            self._log.info('Respond with seconds: %s', seconds)
         else:
             iq = stanza.buildReply('error')
             err = nbxmpp.ErrorNode(nbxmpp.ERR_SERVICE_UNAVAILABLE)

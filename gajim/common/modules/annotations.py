@@ -18,14 +18,10 @@ from typing import Any
 from typing import Dict  # pylint: disable=unused-import
 from typing import Tuple
 
-import logging
-
 from nbxmpp.util import is_error_result
 
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
-
-log = logging.getLogger('gajim.c.m.annotations')
 
 
 class Annotations(BaseModule):

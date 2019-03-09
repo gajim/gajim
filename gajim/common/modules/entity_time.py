@@ -14,26 +14,27 @@
 
 # XEP-0202: Entity Time
 
-import logging
 import time
 
 import nbxmpp
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
+from gajim.common.modules.base import BaseModule
 from gajim.common.modules.date_and_time import parse_datetime
 from gajim.common.modules.date_and_time import create_tzinfo
 
-log = logging.getLogger('gajim.c.m.entity_time')
 
-
-class EntityTime:
+class EntityTime(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
-            ('iq', self._answer_request, 'get', nbxmpp.NS_TIME_REVISED),
+            StanzaHandler(name='iq',
+                          callback=self._answer_request,
+                          typ='get',
+                          ns=nbxmpp.NS_TIME_REVISED),
         ]
 
     def request_entity_time(self, jid, resource):
@@ -48,54 +49,52 @@ class EntityTime:
         iq = nbxmpp.Iq(to=jid, typ='get')
         iq.addChild('time', namespace=nbxmpp.NS_TIME_REVISED)
 
-        log.info('Requested: %s', jid)
+        self._log.info('Requested: %s', jid)
 
         self._con.connection.SendAndCallForResponse(iq, self._result_received)
 
     def _result_received(self, stanza):
         time_info = None
         if not nbxmpp.isResultNode(stanza):
-            log.info('Error: %s', stanza.getError())
+            self._log.info('Error: %s', stanza.getError())
         else:
             time_info = self._extract_info(stanza)
 
-        log.info('Received: %s %s',
-                 stanza.getFrom(), time_info)
+        self._log.info('Received: %s %s', stanza.getFrom(), time_info)
 
         app.nec.push_incoming_event(NetworkEvent('time-result-received',
                                                  conn=self._con,
                                                  jid=stanza.getFrom(),
                                                  time_info=time_info))
 
-    @staticmethod
-    def _extract_info(stanza):
+    def _extract_info(self, stanza):
         time_ = stanza.getTag('time')
         if not time_:
-            log.warning('No time node: %s', stanza)
+            self._log.warning('No time node: %s', stanza)
             return
 
         tzo = time_.getTag('tzo').getData()
         if not tzo:
-            log.warning('Wrong tzo node: %s', stanza)
+            self._log.warning('Wrong tzo node: %s', stanza)
             return
 
         remote_tz = create_tzinfo(tz_string=tzo)
         if remote_tz is None:
-            log.warning('Wrong tzo node: %s', stanza)
+            self._log.warning('Wrong tzo node: %s', stanza)
             return
 
         utc_time = time_.getTag('utc').getData()
         date_time = parse_datetime(utc_time, check_utc=True)
         if date_time is None:
-            log.warning('Wrong timezone defintion: %s %s',
-                        utc_time, stanza.getFrom())
+            self._log.warning('Wrong timezone defintion: %s %s',
+                              utc_time, stanza.getFrom())
             return
 
         date_time = date_time.astimezone(remote_tz)
         return date_time.strftime('%c %Z')
 
-    def _answer_request(self, _con, stanza):
-        log.info('%s asked for the time', stanza.getFrom())
+    def _answer_request(self, _con, stanza, _properties):
+        self._log.info('%s asked for the time', stanza.getFrom())
         if app.config.get_per('accounts', self._account, 'send_time_info'):
             iq = stanza.buildReply('result')
             time_ = iq.setTag('time', namespace=nbxmpp.NS_TIME_REVISED)
@@ -105,12 +104,12 @@ class EntityTime:
             zone = -(time.timezone, time.altzone)[isdst] / 60.0
             tzo = (zone / 60, abs(zone % 60))
             time_.setTagData('tzo', '%+03d:%02d' % (tzo))
-            log.info('Answer: %s %s', formated_time, '%+03d:%02d' % (tzo))
+            self._log.info('Answer: %s %s', formated_time, '%+03d:%02d' % (tzo))
         else:
             iq = stanza.buildReply('error')
             err = nbxmpp.ErrorNode(nbxmpp.ERR_SERVICE_UNAVAILABLE)
             iq.addChild(node=err)
-            log.info('Send service-unavailable')
+            self._log.info('Send service-unavailable')
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 

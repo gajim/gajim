@@ -14,7 +14,6 @@
 
 # Presence handler
 
-import logging
 import time
 
 import nbxmpp
@@ -27,14 +26,12 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
 from gajim.common.helpers import prepare_and_validate_gpg_keyID
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.presence')
 
-
-class Presence:
+class Presence(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
+        BaseModule.__init__(self, con)
 
         self.handlers = [
             StanzaHandler(name='presence',
@@ -70,10 +67,10 @@ class Presence:
             # Already handled in MUC module
             return
 
-        log.info('Received from %s', properties.jid)
+        self._log.info('Received from %s', properties.jid)
 
         if properties.type == PresenceType.ERROR:
-            log.info('Error: %s %s', properties.jid, properties.error)
+            self._log.info('Error: %s %s', properties.jid, properties.error)
             return
 
         if self._account == 'Local':
@@ -93,8 +90,8 @@ class Presence:
         contacts = app.contacts.get_jid_list(self._account)
         if properties.jid.getBare() not in contacts and not properties.is_self_bare:
             # Handle only presence from roster contacts
-            log.warning('Unknown presence received')
-            log.warning(stanza)
+            self._log.warning('Unknown presence received')
+            self._log.warning(stanza)
             return
 
         key_id = ''
@@ -151,7 +148,7 @@ class Presence:
         # Update contact
         contact_list = app.contacts.get_contacts(self._account, jid)
         if not contact_list:
-            log.warning('No contact found')
+            self._log.warning('No contact found')
             return
 
         event.contact_list = contact_list
@@ -162,7 +159,7 @@ class Presence:
         if contact is None:
             contact = app.contacts.get_first_contact_from_jid(self._account, jid)
             if contact is None:
-                log.warning('First contact not found')
+                self._log.warning('First contact not found')
                 return
 
             if self._is_resource_known(contact_list) and not app.jid_is_transport(jid):
@@ -255,9 +252,10 @@ class Presence:
         is_transport = app.jid_is_transport(fjid)
         auto_auth = app.config.get_per('accounts', self._account, 'autoauth')
 
-        log.info('Received Subscribe: %s, transport: %s, '
-                 'auto_auth: %s, user_nick: %s',
-                 properties.jid, is_transport, auto_auth, properties.nickname)
+        self._log.info('Received Subscribe: %s, transport: %s, '
+                       'auto_auth: %s, user_nick: %s',
+                       properties.jid, is_transport,
+                       auto_auth, properties.nickname)
 
         if is_transport and fjid in self._con.agent_registrations:
             self._con.agent_registrations[fjid]['sub_received'] = True
@@ -285,7 +283,7 @@ class Presence:
     def _subscribed_received(self, _con, _stanza, properties):
         jid = properties.jid.getBare()
         resource = properties.jid.getResource()
-        log.info('Received Subscribed: %s', properties.jid)
+        self._log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
             self.automatically_added.remove(jid)
             raise nbxmpp.NodeProcessed
@@ -295,13 +293,12 @@ class Presence:
             conn=self._con, jid=jid, resource=resource))
         raise nbxmpp.NodeProcessed
 
-    @staticmethod
-    def _unsubscribe_received(_con, _stanza, properties):
-        log.info('Received Unsubscribe: %s', properties.jid)
+    def _unsubscribe_received(self, _con, _stanza, properties):
+        self._log.info('Received Unsubscribe: %s', properties.jid)
         raise nbxmpp.NodeProcessed
 
     def _unsubscribed_received(self, _con, _stanza, properties):
-        log.info('Received Unsubscribed: %s', properties.jid)
+        self._log.info('Received Unsubscribed: %s', properties.jid)
         app.nec.push_incoming_event(NetworkEvent(
             'unsubscribed-presence-received',
             conn=self._con, jid=properties.jid.getBare()))
@@ -310,13 +307,13 @@ class Presence:
     def subscribed(self, jid):
         if not app.account_is_connected(self._account):
             return
-        log.info('Subscribed: %s', jid)
+        self._log.info('Subscribed: %s', jid)
         self.send_presence(jid, 'subscribed')
 
     def unsubscribed(self, jid):
         if not app.account_is_connected(self._account):
             return
-        log.info('Unsubscribed: %s', jid)
+        self._log.info('Unsubscribed: %s', jid)
         self.send_presence(jid, 'unsubscribed')
 
     def unsubscribe(self, jid, remove_auth=True):
@@ -329,7 +326,7 @@ class Presence:
                 if j.startswith(jid):
                     app.config.del_per('contacts', j)
         else:
-            log.info('Unsubscribe from %s', jid)
+            self._log.info('Unsubscribe from %s', jid)
             self._con.getRoster().unsubscribe(jid)
             self._con.getRoster().set_item(jid)
 
@@ -339,7 +336,7 @@ class Presence:
         if groups is None:
             groups = []
 
-        log.info('Request Subscription to %s', jid)
+        self._log.info('Request Subscription to %s', jid)
 
         if auto_auth:
             self.jids_for_auto_auth.append(jid)
@@ -388,7 +385,7 @@ class Presence:
         if not app.account_is_connected(self._account):
             return
         presence = self.get_presence(*args, **kwargs)
-        log.debug('Send presence:\n%s', presence)
+        self._log.debug('Send presence:\n%s', presence)
         self._con.connection.send(presence)
 
 

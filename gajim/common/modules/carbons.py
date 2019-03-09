@@ -14,21 +14,15 @@
 
 # XEP-0280: Message Carbons
 
-import logging
-
 import nbxmpp
 
 from gajim.common import app
+from gajim.common.modules.base import BaseModule
 
-log = logging.getLogger('gajim.c.m.carbons')
 
-
-class Carbons:
+class Carbons(BaseModule):
     def __init__(self, con):
-        self._con = con
-        self._account = con.name
-
-        self.handlers = []
+        BaseModule.__init__(self, con)
 
         self.supported = False
 
@@ -37,16 +31,16 @@ class Carbons:
             return
 
         self.supported = True
-        log.info('Discovered carbons: %s', from_)
+        self._log.info('Discovered carbons: %s', from_)
 
         if app.config.get_per('accounts', self._account,
                               'enable_message_carbons'):
             iq = nbxmpp.Iq('set')
             iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
-            log.info('Activate')
+            self._log.info('Activate')
             self._con.connection.send(iq)
         else:
-            log.warning('Carbons deactivated (user setting)')
+            self._log.warning('Carbons deactivated (user setting)')
 
 
 def get_instance(*args, **kwargs):
