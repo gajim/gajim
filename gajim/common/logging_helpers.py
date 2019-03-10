@@ -125,9 +125,9 @@ class FancyFormatter(logging.Formatter):
         if self.use_color:
             c = FancyFormatter.colors_mapping.get(level, '')
             record.levelname = colorize(record.levelname, c)
-            record.name = colorize(record.name, colors.CYAN)
+            record.name = '%-25s' % colorize(record.name, colors.CYAN)
         else:
-            record.name += ':'
+            record.name = '%-25s|' % record.name
 
         return logging.Formatter.format(self, record)
 

@@ -86,4 +86,4 @@ def get_eme_message(eme_data):
 
 class LogAdapter(LoggerAdapter):
     def process(self, msg, kwargs):
-        return '[%s] %s' % (self.extra['account'], msg), kwargs
+        return '(%s) %s' % (self.extra['account'], msg), kwargs
