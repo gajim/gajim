@@ -85,18 +85,20 @@ class Message(BaseModule):
 
         type_ = properties.type
 
-        # Check for duplicates
         stanza_id, message_id = self._get_unique_id(properties)
 
-        # Check groupchat messages for duplicates,
-        # We do this because of MUC History messages
-        if (properties.type.is_groupchat or
-                properties.is_self_message or
-                properties.is_muc_pm):
-            if properties.type.is_groupchat:
-                archive_jid = stanza.getFrom().getStripped()
-            else:
-                archive_jid = self._con.get_own_jid().getStripped()
+        if properties.type.is_groupchat and properties.has_server_delay:
+            # Only for XEP-0045 MUC History
+            # Dont check for message text because the message could be encrypted
+            if app.logger.deduplicate_muc_message(self._account,
+                                                  properties.jid.getBare(),
+                                                  properties.jid.getResource(),
+                                                  properties.timestamp,
+                                                  properties.id):
+                raise nbxmpp.NodeProcessed
+
+        if (properties.is_self_message or properties.is_muc_pm):
+            archive_jid = self._con.get_own_jid().getStripped()
             if app.logger.find_stanza_id(self._account,
                                          archive_jid,
                                          stanza_id,
