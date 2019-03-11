@@ -29,7 +29,6 @@ from gajim.common.const import SyncThreshold
 from gajim.common.caps_cache import muc_caps_cache
 from gajim.common.helpers import get_sync_threshold
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.util import get_eme_message
@@ -138,9 +137,15 @@ class MAM(BaseModule):
                                'message-id: %s', stanza_id, message_id)
                 raise nbxmpp.NodeProcessed
 
+        additional_data = AdditionalDataDict()
+        if properties.has_user_delay:
+            # Record it as a user timestamp
+            additional_data.set_value(
+                'gajim', 'user_timestamp', properties.user_timestamp)
+
         event_attrs.update(
             {'conn': self._con,
-             'additional_data': AdditionalDataDict(),
+             'additional_data': additional_data,
              'encrypted': False,
              'timestamp': properties.mam.timestamp,
              'self_message': properties.is_self_message,
@@ -204,12 +209,6 @@ class MAM(BaseModule):
             # For example Chatstates, Receipts, Chatmarkers
             self._log.debug(event.message.getProperties())
             return
-
-        user_timestamp = parse_delay(event.stanza)
-        if user_timestamp is not None:
-            # Record it as a user timestamp
-            event.additional_data.set_value(
-                'gajim', 'user_timestamp', user_timestamp)
 
         event.correct_id = parse_correction(event.message)
         parse_oob(event)

@@ -31,7 +31,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.security_labels import parse_securitylabel
 from gajim.common.modules.user_nickname import parse_nickname
-from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_attention
 from gajim.common.modules.misc import parse_form
@@ -144,13 +143,19 @@ class Message(BaseModule):
 
             session.last_receive = time.time()
 
+        additional_data = AdditionalDataDict()
+
+        if properties.has_user_delay:
+            additional_data.set_value(
+                'gajim', 'user_timestamp', properties.user_timestamp)
+
         event_attr = {
             'conn': self._con,
             'stanza': stanza,
             'account': self._account,
             'id_': properties.id,
             'encrypted': False,
-            'additional_data': AdditionalDataDict(),
+            'additional_data': additional_data,
             'forwarded': forwarded,
             'sent': sent,
             'fjid': fjid,
@@ -164,6 +169,8 @@ class Message(BaseModule):
             'thread_id': thread_id,
             'session': session,
             'self_message': properties.is_self_message,
+            'timestamp': properties.timestamp,
+            'delayed': properties.user_timestamp is not None,
             'muc_pm': properties.is_muc_pm,
             'gc_control': gc_control
         }
@@ -197,22 +204,6 @@ class Message(BaseModule):
         subject = event.stanza.getSubject()
         groupchat = event.mtype == 'groupchat'
 
-        # Determine timestamps
-        if groupchat:
-            delay_jid = event.jid
-        else:
-            delay_jid = self._con.get_own_jid().getDomain()
-        timestamp = parse_delay(event.stanza, from_=delay_jid)
-        if timestamp is None:
-            timestamp = time.time()
-
-        user_timestamp = parse_delay(event.stanza,
-                                     not_from=[delay_jid])
-
-        if user_timestamp is not None:
-            event.additional_data.set_value(
-                'gajim', 'user_timestamp', user_timestamp)
-
         event_attr = {
             'popup': False,
             'msg_log_id': None,
@@ -223,8 +214,6 @@ class Message(BaseModule):
             'user_nick': '' if event.sent else parse_nickname(event.stanza),
             'form_node': parse_form(event.stanza),
             'xhtml': parse_xhtml(event.stanza),
-            'timestamp': timestamp,
-            'delayed': user_timestamp is not None,
         }
         parse_oob(event)
 
