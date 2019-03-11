@@ -19,52 +19,8 @@ import logging
 import nbxmpp
 
 from gajim.common import app
-from gajim.common.modules.date_and_time import parse_datetime
 
 log = logging.getLogger('gajim.c.m.misc')
-
-
-# XEP-0203: Delayed Delivery
-
-def parse_delay(stanza, epoch=True, convert='utc', from_=None, not_from=None):
-    '''
-    Returns the first valid delay timestamp that matches
-
-    :param epoch:      Returns the timestamp as epoch
-
-    :param convert:    Converts the timestamp to either utc or local
-
-    :param from_:      Matches only delays that have the according
-                       from attr set
-
-    :param not_from:   Matches only delays that have the according
-                       from attr not set
-    '''
-    delays = stanza.getTags('delay', namespace=nbxmpp.NS_DELAY2)
-
-    for delay in delays:
-        stamp = delay.getAttr('stamp')
-        if stamp is None:
-            log.warning('Invalid timestamp received: %s', stamp)
-            log.warning(stanza)
-            continue
-
-        delay_from = delay.getAttr('from')
-        if from_ is not None:
-            if delay_from != from_:
-                continue
-        if not_from is not None:
-            if delay_from in not_from:
-                continue
-
-        timestamp = parse_datetime(stamp, check_utc=True,
-                                   epoch=epoch, convert=convert)
-        if timestamp is None:
-            log.warning('Invalid timestamp received: %s', stamp)
-            log.warning(stanza)
-            continue
-
-        return timestamp
 
 
 # XEP-0066: Out of Band Data

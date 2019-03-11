@@ -30,7 +30,6 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import Chatstate as State
-from gajim.common.modules.misc import parse_delay
 from gajim.common.modules.base import BaseModule
 from gajim.common.connection_handlers_events import MessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcMessageOutgoingEvent
@@ -53,7 +52,7 @@ def ensure_enabled(func):
 
 
 def parse_chatstate(stanza: nbxmpp.Message) -> Optional[str]:
-    if parse_delay(stanza) is not None:
+    if stanza.getTag('delay', namespace=nbxmpp.NS_DELAY2) is not None:
         return None
 
     children = stanza.getChildren()
