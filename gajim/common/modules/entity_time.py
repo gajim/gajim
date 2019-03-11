@@ -18,12 +18,12 @@ import time
 
 import nbxmpp
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.modules.date_and_time import parse_datetime
+from nbxmpp.modules.date_and_time import create_tzinfo
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.date_and_time import parse_datetime
-from gajim.common.modules.date_and_time import create_tzinfo
 
 
 class EntityTime(BaseModule):
