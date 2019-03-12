@@ -250,8 +250,6 @@ class StandardGroupChatCommands(CommandContainer):
     @doc(_("Clear the text window"))
     def clear(self):
         self.conv_textview.clear()
-        self.gc_count_nicknames_colors = -1
-        self.gc_custom_colors = {}
 
     @command(raw=True)
     @doc(_("Change your nickname in a group chat"))

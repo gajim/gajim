@@ -34,6 +34,9 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import GObject
 from gi.repository import GLib
+from gi.repository import Gdk
+
+from nbxmpp.util import text_to_colour
 
 from gajim.common import app
 from gajim.common import helpers
@@ -43,14 +46,13 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.fuzzyclock import FuzzyClock
 from gajim.common.const import StyleAttr
 
-from gajim.gtk.htmltextview import HtmlTextView
-
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 from gajim.gtk.emoji_data import emoji_pixbufs
 from gajim.gtk.emoji_data import is_emoji
 from gajim.gtk.emoji_data import get_emoji_pixbuf
+from gajim.gtk.htmltextview import HtmlTextView
 
 NOT_SHOWN = 0
 ALREADY_RECEIVED = 1
@@ -246,13 +248,6 @@ class ConversationTextview(GObject.GObject):
             self.tagOutText.set_property('foreground', color)
         desc = app.css_config.get_font('.gajim-outgoing-message-text')
         self.tagOutText.set_property('font-desc', desc)
-
-        colors = app.config.get('gc_nicknames_colors')
-        colors = colors.split(':')
-        for i, color in enumerate(colors):
-            tagname = 'gc_nickname_color_' + str(i)
-            tag = buffer_.create_tag(tagname)
-            tag.set_property('foreground', color)
 
         self.tagMarked = buffer_.create_tag('marked')
         color = app.css_config.get_value(
@@ -1223,12 +1218,23 @@ class ConversationTextview(GObject.GObject):
             if other_tags_for_name:
                 name_tags = other_tags_for_name[:]  # create a new list
             name_tags.append(kind)
+
+            for tag in name_tags:
+                if tag.startswith('muc_nickname_color_'):
+                    self._add_new_colour_tags(tag, name)
+
             before_str = app.config.get('before_nickname')
             before_str = helpers.from_one_line(before_str)
             after_str = app.config.get('after_nickname')
             after_str = helpers.from_one_line(after_str)
             format_ = before_str + name + direction_mark + after_str + ' '
             buffer_.insert_with_tags_by_name(end_iter, format_, *name_tags)
+
+    def _add_new_colour_tags(self, tag, name):
+        if self._buffer.get_tag_table().lookup(tag) is not None:
+            return
+        gdk_color = Gdk.Color.from_floats(*text_to_colour(name))
+        self._buffer.create_tag(tag, foreground_gdk=gdk_color)
 
     def print_subject(self, subject, iter_=None):
         if subject: # if we have subject, show it too!

@@ -193,12 +193,6 @@ class GroupchatControl(ChatControlBase):
 
         self.subject = ''
 
-        # nickname coloring
-        self.gc_count_nicknames_colors = -1
-        self.gc_custom_colors = {}
-        self.number_of_colors = len(app.config.get('gc_nicknames_colors').\
-            split(':'))
-
         self.name_label = self.xml.get_object('banner_name_label')
         self.event_box = self.xml.get_object('banner_eventbox')
 
@@ -1347,17 +1341,7 @@ class GroupchatControl(ChatControlBase):
         if kind == 'incoming': # it's a message NOT from us
             # highlighting and sounds
             highlight, _sound = self.highlighting_for_message(text, tim)
-            if contact in self.gc_custom_colors:
-                other_tags_for_name.append('gc_nickname_color_' + \
-                    str(self.gc_custom_colors[contact]))
-            else:
-                self.gc_count_nicknames_colors += 1
-                if self.gc_count_nicknames_colors == self.number_of_colors:
-                    self.gc_count_nicknames_colors = 0
-                self.gc_custom_colors[contact] = \
-                    self.gc_count_nicknames_colors
-                other_tags_for_name.append('gc_nickname_color_' + \
-                    str(self.gc_count_nicknames_colors))
+            other_tags_for_name.append('muc_nickname_color_%s' % contact)
             if highlight:
                 # muc-specific chatstate
                 if self.parent_win:
@@ -1368,10 +1352,6 @@ class GroupchatControl(ChatControlBase):
                 other_tags_for_text.append('marked')
 
             self._nick_completion.record_message(contact, highlight)
-
-            if text.startswith('/me ') or text.startswith('/me\n'):
-                other_tags_for_text.append('gc_nickname_color_' + \
-                    str(self.gc_custom_colors[contact]))
 
             self.check_and_possibly_add_focus_out_line()
 
@@ -1857,10 +1837,6 @@ class GroupchatControl(ChatControlBase):
             tv.last_received_message_id[new_nick] = \
                 tv.last_received_message_id[nick]
             del tv.last_received_message_id[nick]
-
-        # keep nickname color
-        if nick in self.gc_custom_colors:
-            self.gc_custom_colors[new_nick] = self.gc_custom_colors[nick]
 
         self.remove_contact(nick)
         self.add_contact_to_roster(new_nick)
