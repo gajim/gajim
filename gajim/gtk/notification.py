@@ -52,35 +52,41 @@ class Notification:
     Handle notifications
     """
     def __init__(self):
+        self._dbus_available = False
         self._daemon_capabilities = ['actions']
         self._win32_active_popup = None
 
-        # Detect if actions are supported by the notification daemon
-        if sys.platform not in ('win32', 'darwin'):
-            def on_proxy_ready(_source, res, _data=None):
-                try:
-                    proxy = Gio.DBusProxy.new_finish(res)
-                    self._daemon_capabilities = proxy.GetCapabilities()
-                except GLib.Error:
-                    log.exception('Notifications D-Bus connection failed')
-                else:
-                    log.debug('Notifications D-Bus connected')
-
-            log.debug('Connecting to Notifications D-Bus')
-            Gio.DBusProxy.new_for_bus(Gio.BusType.SESSION,
-                                      Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
-                                      None,
-                                      'org.freedesktop.Notifications',
-                                      '/org/freedesktop/Notifications',
-                                      'org.freedesktop.Notifications',
-                                      None,
-                                      on_proxy_ready)
+        self._detect_dbus_caps()
 
         app.ged.register_event_handler(
             'notification', ged.GUI2, self._nec_notification)
         app.ged.register_event_handler(
             'our-show', ged.GUI2, self._nec_our_status)
         app.events.event_removed_subscribe(self._on_event_removed)
+
+    def _detect_dbus_caps(self):
+        if sys.platform in ('win32', 'darwin'):
+            return
+
+        def on_proxy_ready(_source, res, _data=None):
+            try:
+                proxy = Gio.DBusProxy.new_finish(res)
+                self.daemon_capabilities = proxy.GetCapabilities()
+            except GLib.Error:
+                log.exception('Notifications D-Bus connection failed')
+            else:
+                self._dbus_available = True
+                log.info('Notifications D-Bus connected')
+
+        log.info('Connecting to Notifications D-Bus')
+        Gio.DBusProxy.new_for_bus(Gio.BusType.SESSION,
+                                  Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
+                                  None,
+                                  'org.freedesktop.Notifications',
+                                  '/org/freedesktop/Notifications',
+                                  'org.freedesktop.Notifications',
+                                  None,
+                                  on_proxy_ready)
 
     def _nec_notification(self, obj):
         if obj.do_popup:
@@ -149,6 +155,9 @@ class Notification:
             self._win32_active_popup.connect('destroy', self._on_popup_destroy)
             return
 
+        if not self._dbus_available:
+            return
+
         scale = get_monitor_scale_factor()
         icon_pixbuf = load_icon(icon_name, size=48, pixbuf=True, scale=scale)
 
@@ -210,7 +219,7 @@ class Notification:
         if sys.platform == 'win32':
             if self._win32_active_popup is not None:
                 self._win32_active_popup.destroy()
-        else:
+        elif self._dbus_available:
             app.app.withdraw_notification(self._make_id(*args))
 
     @staticmethod
