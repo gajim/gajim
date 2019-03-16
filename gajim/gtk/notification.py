@@ -232,6 +232,8 @@ class PopupNotification(Gtk.Window):
                  icon_name=None, title=None, text=None, timeout=-1):
         Gtk.Window.__init__(self)
         self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
+        self.set_focus_on_map(False)
+        self.set_accept_focus(False)
         self.set_name('NotificationPopup')
         self.set_skip_taskbar_hint(True)
         self.set_decorated(False)
