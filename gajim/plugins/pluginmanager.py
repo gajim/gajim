@@ -406,9 +406,9 @@ class PluginManager(metaclass=Singleton):
             return
         for con in app.connections.values():
             for module in plugin.modules:
-                instance, name = module.get_instance(con)
                 if not module.zeroconf and con.name == 'Local':
                     continue
+                instance, name = module.get_instance(con)
                 modules.register_single(con, instance, name)
 
                 # If handlers have been registered, register the
@@ -558,9 +558,9 @@ class PluginManager(metaclass=Singleton):
                 return
 
             for module in plugin.modules:
-                instance, name = module.get_instance(con)
                 if not module.zeroconf and con.name == 'Local':
                     continue
+                instance, name = module.get_instance(con)
                 modules.register_single(con, instance, name)
 
     def _plugin_is_active_in_global_config(self, plugin):
