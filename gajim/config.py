@@ -190,6 +190,9 @@ class RemoveAccountWindow:
             app.connections[self.account].cleanup()
             del app.connections[self.account]
         app.logger.remove_roster(app.get_jid_from_account(self.account))
+        # Delete password must be before del_per() because it calls set_per()
+        # which would recreate the account with defaults values if not found
+        passwords.delete_password(self.account)
         app.config.del_per('accounts', self.account)
         del app.interface.instances[self.account]
         if self.account in app.nicks:
@@ -214,7 +217,6 @@ class RemoveAccountWindow:
         app.interface.roster.setup_and_draw_roster()
         app.app.remove_account_actions(self.account)
         gui_menu_builder.build_accounts_menu()
-        passwords.delete_password(self.account)
 
         window = app.get_app_window('AccountsWindow')
         if window is not None:
