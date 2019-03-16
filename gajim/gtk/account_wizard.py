@@ -561,6 +561,7 @@ class AccountCreationWizard:
     def create_vars(self, config):
         app.config.add_per('accounts', self.account)
 
+        config['account_label'] = '%s@%s' % (config['name'], config['hostname'])
         if not config['savepass']:
             config['password'] = ''
 
