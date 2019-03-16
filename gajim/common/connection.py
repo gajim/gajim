@@ -758,7 +758,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
 
         if realm == nbxmpp.NS_REGISTER:
-            if event == nbxmpp.features_nb.REGISTER_DATA_RECEIVED:
+            if event == nbxmpp.features.REGISTER_DATA_RECEIVED:
                 # data is (agent, DataFrom, is_form, error_msg)
                 if self.new_account_info and \
                 self.new_account_info['hostname'] == data[0]:
@@ -812,7 +812,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 app.nec.push_incoming_event(NetworkEvent(
                                     'account-not-created', conn=self, reason=reason))
                                 return
-                            nbxmpp.features_nb.register(self.connection,
+                            nbxmpp.features.register(self.connection,
                                     self._hostname, self.new_account_form,
                                     _on_register_result)
                         return
@@ -1763,7 +1763,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             return
         self.on_connect_failure = None
         self.connection = con
-        nbxmpp.features_nb.getRegInfo(con, self._hostname)
+        nbxmpp.features.getRegInfo(con, self._hostname)
 
     def getRoster(self):
         return self.get_module('Roster')
