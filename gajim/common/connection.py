@@ -905,10 +905,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         ]
         self._hostname = hostname
 
-        if h:
-            app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(h),
-                                 self._on_resolve_txt, type_='txt')
-
         if use_srv and self._proxy is None:
             self._srv_hosts = []
 
@@ -918,6 +914,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             for service in services:
                 record_name = '_' + service + '._tcp.' + helpers.idn_to_ascii(h)
                 app.resolver.resolve(record_name, self._on_resolve_srv)
+
+            app.resolver.resolve('_xmppconnect.' + helpers.idn_to_ascii(h),
+                                 self._on_resolve_txt, type_='txt')
         else:
             self._connect_to_next_host()
 
