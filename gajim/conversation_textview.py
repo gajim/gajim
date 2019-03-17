@@ -44,7 +44,7 @@ from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.fuzzyclock import FuzzyClock
-from gajim.common.const import StyleAttr
+from gajim.common.const import StyleAttr, Trust
 
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
@@ -59,6 +59,22 @@ ALREADY_RECEIVED = 1
 SHOWN = 2
 
 log = logging.getLogger('gajim.conversation_textview')
+
+TRUST_SYMBOL_DATA = {
+    Trust.UNTRUSTED: ('dialog-error-symbolic',
+                      _('Untrusted'),
+                      'error-color'),
+    Trust.UNDECIDED: ('security-low-symbolic',
+                      _('Trust Not Decided'),
+                      'warning-color'),
+    Trust.BLIND: ('security-medium-symbolic',
+                  _('Unverified'),
+                  'success-color'),
+    Trust.VERIFIED: ('security-high-symbolic',
+                     _('Verified'),
+                     'encrypted-color')
+}
+
 
 def is_selection_modified(mark):
     name = mark.get_name()
@@ -1133,13 +1149,17 @@ class ConversationTextview(GObject.GObject):
             color = 'unencrypted-color'
             tooltip = _('Not encrypted')
         else:
-            icon = 'channel-secure-symbolic'
-            color = 'encrypted-color'
-            name, fingerprint = details
-            if fingerprint is None:
-                tooltip = name
+            name, fingerprint, trust = details
+            tooltip = _('Encrypted (%s)') % (name)
+            if trust is None:
+                # The encryption plugin did not pass trust information
+                icon = 'channel-secure-symbolic'
+                color = 'encrypted-color'
             else:
-                tooltip = '%s %s' % (name, fingerprint)
+                icon, trust_tooltip, color = TRUST_SYMBOL_DATA[trust]
+                tooltip = tooltip + '\n' + trust_tooltip
+            if fingerprint is not None:
+                tooltip = tooltip + ' (' + fingerprint + ')'
 
         temp_mark = self._buffer.create_mark(None, iter_, True)
         self._buffer.insert(iter_, ' ')
@@ -1164,7 +1184,8 @@ class ConversationTextview(GObject.GObject):
             return
 
         fingerprint = additional_data.get_value('encrypted', 'fingerprint')
-        return name, fingerprint
+        trust = additional_data.get_value('encrypted', 'trust')
+        return name, fingerprint, trust
 
     def print_time(self, text, kind, tim, simple, direction_mark, other_tags_for_time, iter_):
         local_tim = time.localtime(tim)

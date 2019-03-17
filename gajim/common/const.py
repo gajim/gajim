@@ -199,6 +199,12 @@ class MUCUser(IntEnum):
     AFFILIATION = 3
     AFFILIATION_TEXT = 4
 
+@unique
+class Trust(IntEnum):
+    UNTRUSTED = 0
+    UNDECIDED = 1
+    BLIND = 2
+    VERIFIED = 3
 
 EME_MESSAGES = {
     'urn:xmpp:otr:0':
