@@ -55,7 +55,7 @@
         <col id="0" translatable="yes">Notify me about it</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Show only in roster</col>
+        <col id="0" translatable="yes">Show only in contact list</col>
       </row>
     </data>
   </object>
@@ -66,19 +66,19 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Detached roster with detached chats</col>
+        <col id="0" translatable="yes">Detached contact list with detached chats</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Detached roster with single chat</col>
+        <col id="0" translatable="yes">Detached contact list with single chat</col>
       </row>
       <row>
         <col id="0" translatable="yes">Single window for everything</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Detached roster with chat grouped by account</col>
+        <col id="0" translatable="yes">Detached contact list with chat grouped by account</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Detached roster with chat grouped by type</col>
+        <col id="0" translatable="yes">Detached contact list with chat grouped by type</col>
       </row>
     </data>
   </object>
@@ -293,7 +293,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">_Show roster on startup</property>
+                        <property name="label" translatable="yes">_Show contact list on startup</property>
                         <property name="use_underline">True</property>
                         <property name="justify">right</property>
                         <property name="mnemonic_widget">show_roster_on_startup</property>
@@ -360,11 +360,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="quit_on_roster_x_checkbutton">
-                        <property name="label" translatable="yes">_Quit Gajim when closing roster window</property>
+                        <property name="label" translatable="yes">_Quit Gajim when closing contact list</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">If enabled, Gajim will quit when closing the roster window instead of minimizing to the system's notification area</property>
+                        <property name="tooltip_text" translatable="yes">If enabled, Gajim will quit when closing the contact list window instead of minimizing to the system's notification area</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
@@ -420,11 +420,11 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="show_avatars_in_roster_checkbutton">
-                        <property name="label" translatable="yes">Show a_vatars of contacts in roster</property>
+                        <property name="label" translatable="yes">Show a_vatars of contacts in contact list</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">If checked, avatars of contacts will be shown in the roster window and in group chats</property>
+                        <property name="tooltip_text" translatable="yes">If checked, avatars of contacts will be shown in the contact list window and in group chats</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
@@ -438,11 +438,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="show_status_msgs_in_roster_checkbutton">
-                        <property name="label" translatable="yes">Show status _messages of contacts in roster</property>
+                        <property name="label" translatable="yes">Show status _messages of contacts in contact list</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">If checked, status messages of contacts will be shown under the contact's name, in the roster window, and in group chats</property>
+                        <property name="tooltip_text" translatable="yes">If checked, status messages of contacts will be shown under the contact's name, in the contact list window, and in group chats</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
@@ -456,11 +456,11 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="show_pep_in_roster_checkbutton">
-                        <property name="label" translatable="yes">Show e_xtra information of contacts in roster (mood, activity, ...)</property>
+                        <property name="label" translatable="yes">Show e_xtra information of contacts in contact list (mood, activity, ...)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">If checked, additional info published by the contact will be shown in roster. Additional infos (published via PEP) may include e.g. mood, activity, tune, location, ...</property>
+                        <property name="tooltip_text" translatable="yes">If checked, additional info published by the contact will be shown in the contact list. Additional infos (published via PEP) may include e.g. mood, activity, tune, location, ...</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <property name="draw_indicator">True</property>
@@ -491,7 +491,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="sort_by_show_in_roster_checkbutton">
-                            <property name="label" translatable="yes">in _roster</property>
+                            <property name="label" translatable="yes">in _contact list</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -537,7 +537,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Roster Appearance</property>
+                    <property name="label" translatable="yes">Contact List Appearance</property>
                     <property name="use_markup">True</property>
                     <style>
                       <class name="bold"/>
@@ -840,7 +840,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="show_chatstate_in_roster">
-                            <property name="label" translatable="yes">Show chatstate in roster</property>
+                            <property name="label" translatable="yes">Show chatstate in contact list</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

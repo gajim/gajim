@@ -82,7 +82,7 @@ class GajimRemote:
                                 ]
                         ],
                 'list_contacts': [
-                                _('Lists all contacts in roster, one for each line'),
+                                _('Lists all contacts in the contact list, one for each line'),
                                 [
                                     (Q_('?CLI:account'), _('show only contacts of the given account'),
                                                 False)
@@ -115,7 +115,7 @@ class GajimRemote:
                                 ]
                         ],
                 'send_chat_message': [
-                                _('Sends new chat message to a contact in the roster. Account is optional.'),
+                                _('Sends new chat message to a contact in the contact list. Account is optional.'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
@@ -124,7 +124,7 @@ class GajimRemote:
                                 ]
                         ],
                 'send_single_message': [
-                                _('Sends a chat message to someone on your roster. '
+                                _('Sends a chat message to someone on your contact list. '
                                   'Account is optional.'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
@@ -187,7 +187,7 @@ class GajimRemote:
                                 []
                         ],
                 'remove_contact': [
-                                _('Removes contact from roster'),
+                                _('Removes contact from contact list'),
                                 [
                                         ('jid', _('JID of the contact'), True),
                                         (Q_('?CLI:account'), _('if specified, contact is taken from the '
@@ -272,7 +272,7 @@ class GajimRemote:
 
                 if res is False:
                     if self.argv_len < 4:
-                        send_error(_('\'%s\' is not in your roster.\n'
+                        send_error(_('\'%s\' is not in your contact list.\n'
                 'Please specify account for sending the message.') % sys.argv[2])
                     else:
                         send_error(_('You have no active account'))

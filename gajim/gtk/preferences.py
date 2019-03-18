@@ -98,7 +98,7 @@ class Preferences(Gtk.ApplicationWindow):
         st = app.config.get('show_avatar_in_tabs')
         self._ui.show_avatar_in_tabs_checkbutton.set_active(st)
 
-        ## Roster Appearance
+        ## Contact List Appearance
         # Display avatars in roster
         st = app.config.get('show_avatars_in_roster')
         self._ui.show_avatars_in_roster_checkbutton.set_active(st)

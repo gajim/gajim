@@ -296,11 +296,11 @@ class StatusIcon:
         if self.show_roster_handler_id:
             show_roster_menuitem.handler_disconnect(self.show_roster_handler_id)
         if win.get_property('has-toplevel-focus'):
-            show_roster_menuitem.get_children()[0].set_label(_('Hide _Roster'))
+            show_roster_menuitem.get_children()[0].set_label(_('Hide _Contact List'))
             self.show_roster_handler_id = show_roster_menuitem.connect(
                 'activate', self.on_hide_roster_menuitem_activate)
         else:
-            show_roster_menuitem.get_children()[0].set_label(_('Show _Roster'))
+            show_roster_menuitem.get_children()[0].set_label(_('Show _Contact List'))
             self.show_roster_handler_id = show_roster_menuitem.connect(
                 'activate', self.on_show_roster_menuitem_activate)
 

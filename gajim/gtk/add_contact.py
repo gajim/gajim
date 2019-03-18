@@ -296,7 +296,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
 
         if jid == app.get_jid_from_account(self.account):
             pritext = _('Invalid User ID')
-            ErrorDialog(pritext, _('You cannot add yourself to your roster.'))
+            ErrorDialog(pritext, _('You cannot add yourself to your contact list.'))
             return
 
         if not app.account_is_connected(self.account):
@@ -318,8 +318,8 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
             c = app.contacts.get_first_contact_from_jid(self.account, jid)
             if _('Not in Roster') not in c.groups and c.sub in ('both', 'to'):
                 ErrorDialog(
-                    _('Contact already in roster'),
-                    _('This contact is already listed in your roster.'))
+                    _('Contact Already in Contact List'),
+                    _('This contact is already in your contact list.'))
                 return
 
         if type_ == 'jabber':

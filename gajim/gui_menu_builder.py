@@ -352,7 +352,7 @@ control=None, gc_contact=None, is_anonymous=True):
             ask_auth_menuitem.set_sensitive(False)
         else:
             ask_auth_menuitem.connect('activate', roster.req_sub, jid,
-                    _('I would like to add you to my roster'), account,
+                    _('I would like to add you to my contact list'), account,
                     contact.groups, contact.name)
         transport = app.get_transport_name_from_jid(jid,
             use_config_setting=False)
@@ -529,7 +529,7 @@ def get_singlechat_menu(control_id, account, jid):
             ]),
         (_('Send Chatstate'), ['chatstate']),
         ('win.invite-contacts-', _('Invite Contacts')),
-        ('win.add-to-roster-', _('Add to Roster')),
+        ('win.add-to-roster-', _('Add to Contact List')),
         ('win.toggle-audio-', _('Audio Session')),
         ('win.toggle-video-', _('Video Session')),
         ('win.information-', _('Information')),
@@ -783,7 +783,7 @@ def get_conv_context_menu(account, uri):
             context_menu = [
                 ('copy-text', _('Copy JID')),
                 ('-start-chat', _('Start Chat')),
-                ('-add-contact', _('Add to Roster…')),
+                ('-add-contact', _('Add to Contact List…')),
             ]
 
     elif uri.type == URIType.WEB:
@@ -810,7 +810,7 @@ def get_conv_context_menu(account, uri):
             ('open-link', _('Open Email Composer')),
             ('-start-chat', _('Start Chat')),
             ('-join-groupchat', _('Join Groupchat')),
-            ('-add-contact', _('Add to Roster…')),
+            ('-add-contact', _('Add to Contact List…')),
         ]
     else:
         return

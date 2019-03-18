@@ -8,7 +8,7 @@
       <attribute name="label" translatable="yes">View</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">Show Roster</attribute>
+          <attribute name="label" translatable="yes">Show Contact List</attribute>
           <attribute name="action">win.show-roster</attribute>
           <attribute name="accel">&lt;Primary&gt;R</attribute>
         </item>

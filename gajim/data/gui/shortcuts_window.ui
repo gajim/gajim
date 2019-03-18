@@ -163,7 +163,7 @@
       <object class="GtkShortcutsSection">
         <property name="visible">1</property>
         <property name="section-name">roster</property>
-        <property name="title" translatable="yes">Roster Shortcuts</property>
+        <property name="title" translatable="yes">Contact List Shortcuts</property>
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
@@ -241,7 +241,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;k</property>
-                <property name="title" translatable="yes">Enable roster filtering</property>
+                <property name="title" translatable="yes">Enable contact list filtering</property>
               </object>
             </child>
           </object>

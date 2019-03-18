@@ -15,7 +15,7 @@
         <col id="1">always</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Roster</col>
+        <col id="0" translatable="yes">Contact List</col>
         <col id="1">roster</col>
       </row>
       <row>
