@@ -113,7 +113,7 @@ class Column(IntEnum):
 
 class RosterWindow:
     """
-    Class for main window of the GTK+ interface
+    Class for main window of the GTK interface
     """
 
     def _get_account_iter(self, name, model=None):

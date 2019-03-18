@@ -62,7 +62,7 @@ def _init_gtk():
                             Gtk.get_minor_version(),
                             Gtk.get_micro_version())
     if V(gtk_ver) < V(_MIN_GTK_VER):
-        print('Gajim needs GTK+ >= %s to run. '
+        print('Gajim needs GTK >= %s to run. '
               'Quitting...' % _MIN_GTK_VER)
         sys.exit(1)
 

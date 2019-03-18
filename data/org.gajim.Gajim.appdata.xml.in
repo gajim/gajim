@@ -7,7 +7,7 @@
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0</project_license>
   <name>Gajim</name>
-  <summary>A GTK+ XMPP client</summary>
+  <summary>A GTK XMPP client</summary>
   <description>
     <p>Gajim aims to be an easy to use and fully-featured XMPP client. 
     With Gajim you can chat through various XMPP services of your choice 

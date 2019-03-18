@@ -42,7 +42,7 @@ _exception_in_progress = threading.Lock()
 
 ISSUE_TEXT = '''## Versions
 - OS: {}
-- GTK+ Version: {}
+- GTK Version: {}
 - PyGObject Version: {}
 - GLib Version : {}
 - python-nbxmpp Version: {}

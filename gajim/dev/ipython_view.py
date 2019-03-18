@@ -92,7 +92,7 @@ class MyPromptDisplayHook(DisplayHook):
 class IterableIPShell:
     """
     Create an IPython instance. Does not start a blocking event loop,
-    instead allow single iterations. This allows embedding in GTK+
+    instead allow single iterations. This allows embedding in GTK
     without blockage
 
     @ivar IP: IPython instance.
@@ -595,7 +595,7 @@ class ConsoleView(Gtk.TextView):
 class IPythonView(ConsoleView, IterableIPShell):
     '''
     Sub-class of both modified IPython shell and L{ConsoleView} this makes
-    a GTK+ IPython console.
+    a GTK IPython console.
     '''
     def __init__(self):
         """
