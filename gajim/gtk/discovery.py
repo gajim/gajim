@@ -82,7 +82,7 @@ def _gen_agent_type_info():
         # Defaults
         (0, 0):                         (None, None),
 
-        # Jabber server
+        # XMPP server
         ('server', 'im'):               (ToplevelAgentBrowser, 'jabber'),
         ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber'),
         ('hierarchy', 'branch'):        (AgentBrowser, 'jabber'),

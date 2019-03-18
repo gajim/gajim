@@ -570,7 +570,7 @@ class Contacts():
         ### WARNING ###
         # This function returns a *RANDOM* resource if resource = None!
         # Do *NOT* use if you need to get the contact to which you
-        # send a message for example, as a bare JID in Jabber means
+        # send a message for example, as a bare JID in XMPP means
         # highest available resource, which this function ignores!
         """
         Return the contact instance for the given resource if it's given else the
