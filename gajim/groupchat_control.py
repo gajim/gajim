@@ -1700,7 +1700,7 @@ class GroupchatControl(ChatControlBase):
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
-                _('Any occupant is allowed to see your full XMPP Address'))
+                _('Any participant is allowed to see your full XMPP Address'))
             self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:

@@ -264,7 +264,7 @@ class StandardGroupChatCommands(CommandContainer):
         self.new_nick = new_nick
 
     @command('query', raw=True)
-    @doc(_("Open a private chat window with a specified occupant"))
+    @doc(_("Open a private chat window with a specified participant"))
     def chat(self, nick):
         nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
@@ -273,7 +273,7 @@ class StandardGroupChatCommands(CommandContainer):
             raise CommandError(_("Nickname not found"))
 
     @command('msg', raw=True)
-    @doc(_("Open a private chat window with a specified occupant and send him a message"))
+    @doc(_("Open a private chat window with a specified participant and send him a message"))
     def message(self, nick, a_message):
         nicks = app.contacts.get_nick_list(self.account, self.room_jid)
         if nick in nicks:
@@ -336,7 +336,7 @@ class StandardGroupChatCommands(CommandContainer):
 
     @command(raw=True)
     #Do not translate moderator, participant, visitor, none
-    @doc(_("""Set occupant role in group chat.
+    @doc(_("""Set participant role in group chat.
     Role can be given as one of the following values:
     moderator, participant, visitor, none"""))
     def role(self, who, role):
@@ -348,7 +348,7 @@ class StandardGroupChatCommands(CommandContainer):
 
     @command(raw=True)
     #Do not translate owner, admin, member, outcast, none
-    @doc(_("""Set occupant affiliation in group chat.
+    @doc(_("""Set participant affiliation in group chat.
     Affiliation can be given as one of the following values:
     owner, admin, member, outcast, none"""))
     def affiliate(self, who, affiliation):
@@ -363,7 +363,7 @@ class StandardGroupChatCommands(CommandContainer):
             {contact.jid: {'affiliation': affiliation}})
 
     @command
-    @doc(_("Display names of all group chat occupants"))
+    @doc(_("Display names of all group chat participants"))
     def names(self, verbose=False):
         ggc = app.contacts.get_gc_contact
         gnl = app.contacts.get_nick_list
@@ -385,12 +385,12 @@ class StandardGroupChatCommands(CommandContainer):
             self.echo("%s - %s - %s" % (nick, role, affiliation))
 
     @command('ignore', raw=True)
-    @doc(_("Forbid an occupant to send you public or private messages"))
+    @doc(_("Forbid a participant to send you public or private messages"))
     def block(self, who):
         self.on_block(None, who)
 
     @command('unignore', raw=True)
-    @doc(_("Allow an occupant to send you public or private messages"))
+    @doc(_("Allow a participant to send you public or private messages"))
     def unblock(self, who):
         self.on_unblock(None, who)
 

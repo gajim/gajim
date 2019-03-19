@@ -26,7 +26,7 @@
       <object class="GtkMenuItem" id="group_chat_actions_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Occupant Actions</property>
+        <property name="label" translatable="yes">Participant Actions</property>
         <property name="use_underline">True</property>
         <child type="submenu">
           <object class="GtkMenu" id="group_chat_actions_menuitem_menu">
