@@ -314,7 +314,7 @@
           <object class="GtkSwitch" id="log_history_checkbutton">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">Record history for this chat</property>
+            <property name="tooltip_text" translatable="yes">Store history for this chat</property>
             <property name="valign">center</property>
             <signal name="notify::active" handler="on_log_history_checkbutton_toggled" swapped="no"/>
           </object>
@@ -329,7 +329,7 @@
             <property name="can_focus">False</property>
             <property name="valign">center</property>
             <property name="margin_left">6</property>
-            <property name="label" translatable="yes">Record History</property>
+            <property name="label" translatable="yes">Store History</property>
             <style>
               <class name="dim-label"/>
             </style>

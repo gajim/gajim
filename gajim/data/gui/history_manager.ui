@@ -105,9 +105,9 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">This log manager is not intended for log viewing. If you are looking for such functionality, use the history window instead.
+                        <property name="label" translatable="yes">This history manager is not intended for viewing chat history. If you are looking for such functionality, please use the history window instead.
 
-Use this program to delete or export logs. You can select logs from the left and/or search database from below.</property>
+You can use this program to delete or export history. Either select logs from the left or search the database.</property>
                         <property name="wrap">True</property>
                         <property name="xalign">0</property>
                       </object>

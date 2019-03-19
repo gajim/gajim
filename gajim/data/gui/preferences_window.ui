@@ -2613,7 +2613,7 @@ to discover one from the server. (Example: stun.iptel.org)</property>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="log_show_changes_checkbutton">
-                        <property name="label" translatable="yes">_Log status changes of contacts</property>
+                        <property name="label" translatable="yes">_Store status changes of contacts in history</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

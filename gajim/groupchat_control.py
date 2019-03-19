@@ -1429,10 +1429,10 @@ class GroupchatControl(ChatControlBase):
 
         if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Room logging is now enabled'))
+            changes.append(_('Room history storing is now enabled'))
 
         if StatusCode.CONFIG_NO_ROOM_LOGGING in event.status_codes:
-            changes.append(_('Room logging is now disabled'))
+            changes.append(_('Room history storing is now disabled'))
 
         if StatusCode.CONFIG_NON_ANONYMOUS in event.status_codes:
             changes.append(_('Room is now non-anonymous'))
@@ -1704,7 +1704,7 @@ class GroupchatControl(ChatControlBase):
             self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
-            self.add_info_message(_('Room logging is enabled'))
+            self.add_info_message(_('Room history storing is enabled'))
 
         if StatusCode.NICKNAME_MODIFIED in status_codes:
             self.add_info_message(\
