@@ -1443,7 +1443,7 @@ class Interface:
         try:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat:
-            ErrorDialog('Invalid JID',
+            ErrorDialog(_('Invalid XMPP Address'),
                                 transient_for=app.app.get_active_window())
             return
 
@@ -1459,7 +1459,7 @@ class Interface:
 
         def _on_discover_result():
             if not muc_caps_cache.is_cached(room_jid):
-                ErrorDialog(_('JID is not a Groupchat'),
+                ErrorDialog(_('XMPP Address is not a Groupchat'),
                                     transient_for=app.app.get_active_window())
                 return
             JoinGroupchatWindow(account, room_jid, password=password,

@@ -117,7 +117,7 @@ class GajimRemote:
                 'send_chat_message': [
                                 _('Sends new chat message to a contact in the contact list. Account is optional.'),
                                 [
-                                        ('jid', _('JID of the contact that will receive the message'), True),
+                                        ('jid', _('XMPP Address of the contact that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
@@ -127,7 +127,7 @@ class GajimRemote:
                                 _('Sends a chat message to someone on your contact list. '
                                   'Account is optional.'),
                                 [
-                                        ('jid', _('JID of the contact that will receive the message'), True),
+                                        ('jid', _('XMPP Address of the contact that will receive the message'), True),
                                         (_('subject'), _('message subject'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
@@ -137,7 +137,7 @@ class GajimRemote:
                 'send_groupchat_message': [
                                 _('Sends new message to a groupchat you\'ve joined.'),
                                 [
-                                        ('room_jid', _('JID of the room that will receive the message'), True),
+                                        ('room_jid', _('XMPP Address of the room that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
@@ -146,7 +146,7 @@ class GajimRemote:
                 'contact_info': [
                                 _('Gets detailed info on a contact'),
                                 [
-                                        ('jid', _('JID of the contact'), True)
+                                        ('jid', _('XMPP Address of the contact'), True)
                                 ]
                         ],
                 'account_info': [
@@ -159,7 +159,7 @@ class GajimRemote:
                                 _('Sends file to a contact'),
                                 [
                                         (_('file'), _('File path'), True),
-                                        ('jid', _('JID of the contact'), True),
+                                        ('jid', _('XMPP Address of the contact'), True),
                                         (Q_('?CLI:account'), _('if specified, file will be sent using this '
                                                 'account'), False)
                                 ]
@@ -189,7 +189,7 @@ class GajimRemote:
                 'remove_contact': [
                                 _('Removes contact from contact list'),
                                 [
-                                        ('jid', _('JID of the contact'), True),
+                                        ('jid', _('XMPP Address of the contact'), True),
                                         (Q_('?CLI:account'), _('if specified, contact is taken from the '
                                                 'contact list of this account'), False)
 

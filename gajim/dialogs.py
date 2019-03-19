@@ -81,7 +81,7 @@ class EditGroupsDialog:
             self.xml.get_object('nickname_label').set_markup(
                     _('Contact name: <i>%s</i>') % contact.get_shown_name())
             self.xml.get_object('jid_label').set_markup(
-                    _('JID: <i>%s</i>') % contact.jid)
+                    _('XMPP Address: <i>%s</i>') % contact.jid)
         else:
             self.xml.get_object('nickname_label').set_no_show_all(True)
             self.xml.get_object('nickname_label').hide()

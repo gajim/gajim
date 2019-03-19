@@ -826,7 +826,7 @@ class AgentBrowser:
         self.window.services_treeview.insert_column(col, -1)
         col.set_resizable(True)
         # Address column
-        col = Gtk.TreeViewColumn(_('JID'))
+        col = Gtk.TreeViewColumn(_('XMPP Address'))
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
         col.add_attribute(renderer, 'text', 3)

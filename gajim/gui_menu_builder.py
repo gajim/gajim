@@ -776,12 +776,12 @@ def get_conv_context_menu(account, uri):
     if uri.type == URIType.XMPP:
         if uri.action == URIAction.JOIN:
             context_menu = [
-                ('copy-text', _('Copy JID')),
+                ('copy-text', _('Copy XMPP Address')),
                 ('-join-groupchat', _('Join Groupchat')),
             ]
         else:
             context_menu = [
-                ('copy-text', _('Copy JID')),
+                ('copy-text', _('Copy XMPP Address')),
                 ('-start-chat', _('Start Chat')),
                 ('-add-contact', _('Add to Contact List…')),
             ]
@@ -806,7 +806,7 @@ def get_conv_context_menu(account, uri):
 
     elif uri.type == URIType.AT:
         context_menu = [
-            ('copy-text', _('Copy JID/Email')),
+            ('copy-text', _('Copy XMPP Address/Email')),
             ('open-link', _('Open Email Composer')),
             ('-start-chat', _('Start Chat')),
             ('-join-groupchat', _('Join Groupchat')),

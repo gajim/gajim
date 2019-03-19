@@ -28,14 +28,14 @@ Message = namedtuple('Message', ['title', 'text', 'dialog'])
 
 messages = {
     'invalid-jid-with-error': Message(
-        _('Invalid JID'),
+        _('Invalid XMPP Address'),
         '%s',
         ErrorDialog),
 
     'invalid-jid': Message(
-        _('Invalid JID'),
+        _('Invalid XMPP Address'),
         _('It is not possible to send a message '
-          'to %s, this JID is not valid.'),
+          'to %s, this XMPP Address is not valid.'),
         ErrorDialog),
 
     'unread-events-on-remove-account': Message(
@@ -59,8 +59,8 @@ messages = {
         ErrorDialog),
 
     'jid-in-list': Message(
-        _('JID already in list'),
-        _('The JID you entered is already in the list. Choose another one.'),
+        _('XMPP Address already in list'),
+        _('The XMPP Address you entered is already in the list. Choose another one.'),
         ErrorDialog),
 
     'invalid-answer': Message(

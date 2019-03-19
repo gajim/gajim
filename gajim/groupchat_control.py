@@ -653,8 +653,8 @@ class GroupchatControl(ChatControlBase):
                     jid = helpers.parse_jid(jid)
                 except Exception:
                     ErrorDialog(
-                        _('Invalid group chat JID'),
-                        _('The group chat JID has not allowed characters.'))
+                        _('Invalid group chat XMPP Address'),
+                        _('The group chat XMPP Address has not allowed characters.'))
                     return
 
             self._wait_for_destruction = True
@@ -1700,7 +1700,7 @@ class GroupchatControl(ChatControlBase):
 
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
-                _('Any occupant is allowed to see your full JID'))
+                _('Any occupant is allowed to see your full XMPP Address'))
             self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:

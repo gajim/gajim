@@ -302,9 +302,9 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
             try:
                 to_whom_jid = helpers.parse_jid(to_whom_jid)
             except helpers.InvalidFormat:
-                ErrorDialog(_('Invalid JID'),
-                    _('It is not possible to send a message to %s, this JID '
-                      'is not valid.') % to_whom_jid)
+                ErrorDialog(_('Invalid XMPP Address'),
+                    _('It is not possible to send a message to %s, this '
+                      'XMPP Address is not valid.') % to_whom_jid)
                 return True
 
             if '/announce/' in to_whom_jid:

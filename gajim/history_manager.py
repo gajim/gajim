@@ -137,7 +137,7 @@ class HistoryManager:
         self._ui.jids_listview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
 
         renderer_text = Gtk.CellRendererText()  # holds jid
-        col = Gtk.TreeViewColumn(_('JID'), renderer_text, text=0)
+        col = Gtk.TreeViewColumn(_('XMPP Address'), renderer_text, text=0)
         self._ui.jids_listview.append_column(col)
 
         self._ui.jids_listview.get_selection().connect('changed',
@@ -191,7 +191,7 @@ class HistoryManager:
         self._ui.search_results_listview.set_model(self.search_results_liststore)
 
         renderer_text = Gtk.CellRendererText()  # holds JID (who said this)
-        col = Gtk.TreeViewColumn(_('JID'), renderer_text, text=1)
+        col = Gtk.TreeViewColumn(_('XMPP Address'), renderer_text, text=1)
         # user can click this header and sort
         col.set_sort_column_id(1)
         col.set_resizable(True)

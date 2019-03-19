@@ -298,7 +298,7 @@ class StandardGroupChatCommands(CommandContainer):
             'room_jid': self.room_jid}
 
     @command(raw=True, empty=True)
-    @doc(_("Join a group chat given by a JID"))
+    @doc(_("Join a group chat given by an XMPP Address"))
     def join(self, jid):
         if '@' not in jid:
             jid = jid + '@' + app.get_server_from_jid(self.room_jid)

@@ -209,7 +209,7 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         try:
             self.room_jid = helpers.parse_jid(self.room_jid)
         except helpers.InvalidFormat as error:
-            ErrorDialog(_('Invalid JID'), str(error), transient_for=self)
+            ErrorDialog(_('Invalid XMPP Address'), str(error), transient_for=self)
             return
 
         if app.in_groupchat(account, self.room_jid):

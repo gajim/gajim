@@ -226,7 +226,7 @@ class AccountCreationWizard:
             try:
                 jid = helpers.parse_jid(jid)
             except helpers.InvalidFormat as s:
-                pritext = _('Invalid JID')
+                pritext = _('Invalid XMPP Address')
                 ErrorDialog(pritext, str(s))
                 return
 
