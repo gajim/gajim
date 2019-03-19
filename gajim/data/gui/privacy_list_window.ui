@@ -314,7 +314,7 @@
                         <property name="border_width">5</property>
                         <child>
                           <object class="GtkRadioButton" id="edit_type_jabberid_radiobutton">
-                            <property name="label" translatable="yes">JabberID</property>
+                            <property name="label" translatable="yes">XMPP Address</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

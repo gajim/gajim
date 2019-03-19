@@ -396,4 +396,4 @@ class GroupchatConfig(Gtk.ApplicationWindow):
     @staticmethod
     def _raise_error():
         ErrorDialog(_('Error'),
-                    _('An entry with this Jabber-ID already exists'))
+                    _('An entry with this XMPP Address already exists'))

@@ -257,7 +257,7 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">Jabber ID:</property>
+                    <property name="label" translatable="yes">XMPP Address:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>

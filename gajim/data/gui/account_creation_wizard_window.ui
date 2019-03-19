@@ -68,7 +68,7 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">You need to have an account in order to connect
-to the Jabber network.</property>
+to the XMPP network.</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -184,7 +184,7 @@ to the Jabber network.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Jabber ID:</property>
+                        <property name="label" translatable="yes">_XMPP Address:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">username_entry</property>
                       </object>

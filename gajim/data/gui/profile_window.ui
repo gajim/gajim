@@ -401,7 +401,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Jabber ID</property>
+                    <property name="label" translatable="yes">XMPP Address</property>
                     <property name="use_markup">True</property>
                     <property name="justify">right</property>
                     <style>

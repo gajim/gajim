@@ -52,7 +52,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="label" translatable="yes">Jabber ID</property>
+                    <property name="label" translatable="yes">XMPP Address</property>
                     <property name="use_markup">True</property>
                     <style>
                       <class name="dim-label"/>

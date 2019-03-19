@@ -801,7 +801,7 @@ class ZeroconfProfileDialog(SettingsDialog):
             Setting(SettingKind.ENTRY, _('Last Name'),
                     SettingType.ACCOUNT_CONFIG, 'zeroconf_last_name'),
 
-            Setting(SettingKind.ENTRY, _('Jabber ID'),
+            Setting(SettingKind.ENTRY, _('XMPP Address'),
                     SettingType.ACCOUNT_CONFIG, 'zeroconf_jabber_id'),
 
             Setting(SettingKind.ENTRY, _('Email'),

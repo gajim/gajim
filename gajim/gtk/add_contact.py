@@ -27,7 +27,7 @@ from gajim.gtk.util import get_builder
 
 class AddNewContactWindow(Gtk.ApplicationWindow):
 
-    uid_labels = {'jabber': _('Jabber ID'),
+    uid_labels = {'jabber': _('XMPP Address'),
                   'gadu-gadu': _('GG Number'),
                   'icq': _('ICQ Number')}
 

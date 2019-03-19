@@ -114,7 +114,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">Jabber ID</property>
+                    <property name="title" translatable="yes">XMPP Address</property>
                     <property name="expand">True</property>
                     <property name="clickable">True</property>
                     <property name="sort_indicator">True</property>

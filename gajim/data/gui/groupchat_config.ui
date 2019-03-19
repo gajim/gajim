@@ -52,7 +52,7 @@
         <property name="margin_right">12</property>
         <property name="margin_top">12</property>
         <property name="margin_bottom">12</property>
-        <property name="label" translatable="yes">&lt;b&gt;Jabber-ID&lt;/b&gt;
+        <property name="label" translatable="yes">&lt;b&gt;XMPP Address&lt;/b&gt;
 &amp;lt;user@domain/resource&amp;gt; (only that resource matches)
 &amp;lt;user@domain&amp;gt; (any resource matches)
 &amp;lt;domain/resource&amp;gt; (only that resource matches)
@@ -298,7 +298,7 @@
                       <object class="GtkTreeViewColumn">
                         <property name="resizable">True</property>
                         <property name="sizing">autosize</property>
-                        <property name="title">Jabber-ID</property>
+                        <property name="title">XMPP Address</property>
                         <property name="expand">True</property>
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">0</property>
@@ -417,7 +417,7 @@
                       <object class="GtkTreeViewColumn">
                         <property name="resizable">True</property>
                         <property name="sizing">autosize</property>
-                        <property name="title">Jabber-ID</property>
+                        <property name="title">XMPP Address</property>
                         <property name="expand">True</property>
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">0</property>
