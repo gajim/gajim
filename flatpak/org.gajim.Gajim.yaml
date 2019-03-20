@@ -88,7 +88,7 @@ modules:
   - name: python3-cryptography
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app .
+      - python3 setup.py install --prefix=/app
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/07/ca/bc827c5e55918ad223d59d299fff92f3563476c3b00d0a9157d9c0217449/cryptography-2.6.1.tar.gz
