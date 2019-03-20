@@ -123,12 +123,12 @@ messages = {
         ErrorDialog),
 
     'request-upload-slot-error': Message(
-        _('Could not request upload slot'),
+        _('Could not request upload slot for HTTP File Upload'),
         '%s',
         ErrorDialog),
 
     'request-upload-slot-error2': Message(
-        _('Could not request upload slot'),
+        _('Could not request upload slot for HTTP File Upload'),
         _('Got unexpected response from server (see log)'),
         ErrorDialog),
 
