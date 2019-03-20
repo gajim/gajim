@@ -109,7 +109,7 @@ class RosterItemExchangeWindow(Gtk.ApplicationWindow):
             is_in_roster = True
             contact = app.contacts.get_contact_with_highest_priority(
                 self.account, jid)
-            if not contact or _('Not in Roster') in contact.groups:
+            if not contact or _('Not in contact list') in contact.groups:
                 is_in_roster = False
             name = self.exchange_list[jid][0]
             num_list = len(self.exchange_list[jid][1])

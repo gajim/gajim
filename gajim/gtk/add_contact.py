@@ -316,7 +316,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         # Check if jid is already in roster
         if jid in app.contacts.get_jid_list(self.account):
             c = app.contacts.get_first_contact_from_jid(self.account, jid)
-            if _('Not in Roster') not in c.groups and c.sub in ('both', 'to'):
+            if _('Not in contact list') not in c.groups and c.sub in ('both', 'to'):
                 ErrorDialog(
                     _('Contact Already in Contact List'),
                     _('This contact is already in your contact list.'))

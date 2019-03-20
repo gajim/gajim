@@ -301,7 +301,7 @@ class ChatControl(ChatControlBase):
 
         # Add to roster
         if not isinstance(self.contact, GC_Contact) \
-        and _('Not in Roster') in self.contact.groups and \
+        and _('Not in contact list') in self.contact.groups and \
         app.connections[self.account].roster_supported and online:
             win.lookup_action(
                 'add-to-roster-' + self.control_id).set_enabled(True)

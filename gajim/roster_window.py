@@ -782,7 +782,7 @@ class RosterWindow:
                     c.show = 'not in roster'
                     c.status = ''
                     old_grps = c.get_shown_groups()
-                    c.groups = [_('Not in Roster')]
+                    c.groups = [_('Not in contact list')]
                     self._add_entity(c, account)
                     self.draw_contact(jid, account)
 
@@ -1715,9 +1715,9 @@ class RosterWindow:
                 return 1
             if name2 == _('Transports'):
                 return -1
-            if name1 == _('Not in Roster'):
+            if name1 == _('Not in contact list'):
                 return 1
-            if name2 == _('Not in Roster'):
+            if name2 == _('Not in contact list'):
                 return -1
             if name1 == _('Group chats'):
                 return 1
@@ -2026,7 +2026,7 @@ class RosterWindow:
                 ask='none', sub='subscribe')
             app.contacts.add_contact(account, contact)
         else:
-            if not _('Not in Roster') in contact.get_shown_groups():
+            if not _('Not in contact list') in contact.get_shown_groups():
                 InformationDialog(_('Subscription request has been '
                     'sent'), _('If "%s" accepts this request you will know his '
                     'or her status.') % jid)
@@ -3297,7 +3297,7 @@ class RosterWindow:
                 if contact.sub != 'to' and is_checked:
                     remove_auth = False
             for (contact, account) in list_:
-                if _('Not in Roster') not in contact.get_shown_groups():
+                if _('Not in contact list') not in contact.get_shown_groups():
                     app.connections[account].get_module('Presence').unsubscribe(contact.jid,
                         remove_auth)
                 self.remove_contact(contact.jid, account, backend=True)
@@ -3330,7 +3330,7 @@ class RosterWindow:
                     [DialogButton.make('Cancel'),
                      DialogButton.make('Remove',
                                        callback=on_ok2)]).show()
-            elif _('Not in Roster') in contact.get_shown_groups():
+            elif _('Not in contact list') in contact.get_shown_groups():
                 # Contact is not in roster
                 NewConfirmationDialog(
                     title,

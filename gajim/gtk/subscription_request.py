@@ -67,7 +67,7 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         app.connections[self.account].get_module('Presence').subscribed(self.jid)
         self.destroy()
         contact = app.contacts.get_contact(self.account, self.jid)
-        if not contact or _('Not in Roster') in contact.groups:
+        if not contact or _('Not in contact list') in contact.groups:
             AddNewContactWindow(self.account, self.jid, self.user_nick)
 
     def on_contact_info_button_clicked(self, widget):
@@ -96,6 +96,6 @@ class SubscriptionRequestWindow(Gtk.ApplicationWindow):
         """
         app.connections[self.account].get_module('Presence').unsubscribed(self.jid)
         contact = app.contacts.get_contact(self.account, self.jid)
-        if contact and _('Not in Roster') in contact.get_shown_groups():
+        if contact and _('Not in contact list') in contact.get_shown_groups():
             app.interface.roster.remove_contact(self.jid, self.account)
         self.destroy()

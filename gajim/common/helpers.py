@@ -80,7 +80,7 @@ if app.is_installed('PYCURL'):
 
 log = logging.getLogger('gajim.c.helpers')
 
-special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Group chats'))
+special_groups = (_('Transports'), _('Not in contact list'), _('Observers'), _('Group chats'))
 
 
 class InvalidFormat(Exception):
@@ -308,7 +308,7 @@ def get_uf_show(show, use_mnemonic=False):
         else:
             uf_show = _('Invisible')
     elif show == 'not in roster':
-        uf_show = _('Not in Roster')
+        uf_show = _('Not in contact list')
     elif show == 'requested':
         uf_show = Q_('?contact has status:Unknown')
     else:

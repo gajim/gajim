@@ -217,7 +217,7 @@ class Roster(BaseModule):
         '''
         Add contacts that request subscription to our internal
         roster and also to the database. The contact is put into the
-        'Not in roster' group and because we save it to the database
+        'Not in contact list' group and because we save it to the database
         it is also after a restart available.
         '''
 
@@ -234,7 +234,7 @@ class Roster(BaseModule):
                            'ask': None,
                            'subscription':
                            'none',
-                           'groups': ['Not in roster']}
+                           'groups': ['Not in contact list']}
         account_jid = self._con.get_own_jid().getStripped()
         app.logger.add_or_update_contact(
             account_jid, jid,

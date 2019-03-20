@@ -203,7 +203,7 @@ class Contact(CommonContact):
             return False
         if self.sub in ('none', 'from') and (self.name or self.groups):
             return False
-        if _('Not in Roster') in self.groups:
+        if _('Not in contact list') in self.groups:
             return False
         return True
 
@@ -340,7 +340,7 @@ class LegacyContactsAPI:
         # Use Account object if available
         account = self._accounts.get(account, account)
         return self.create_contact(jid=jid, account=account, resource=resource,
-            name=name, groups=[_('Not in Roster')], show='not in roster',
+            name=name, groups=[_('Not in contact list')], show='not in roster',
             status='', sub='none', groupchat=groupchat)
 
     def copy_contact(self, contact):
@@ -452,7 +452,7 @@ class LegacyContactsAPI:
                     # count metacontacts only once
                     continue
                 contact = self._accounts[account].contacts._contacts[jid][0]
-                if _('Not in roster') in contact.groups:
+                if _('Not in contact list') in contact.groups:
                     continue
                 in_groups = False
                 if groups == []:

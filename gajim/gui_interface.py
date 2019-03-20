@@ -422,7 +422,7 @@ class Interface:
             c = app.contacts.get_first_contact_from_jid(account, obj.jid)
             c.resource = obj.resource
             self.roster.remove_contact_from_groups(c.jid, account,
-                [_('Not in Roster'), _('Observers')], update=False)
+                [_('Not in contact list'), _('Observers')], update=False)
         else:
             name = obj.jid.split('@', 1)[0]
             name = name.split('%', 1)[0]

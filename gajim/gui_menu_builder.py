@@ -248,12 +248,12 @@ control=None, gc_contact=None, is_anonymous=True):
     else:
         items_to_hide.append(convert_to_gc_menuitem)
 
-    if _('Not in Roster') not in contact.get_shown_groups():
+    if _('Not in contact list') not in contact.get_shown_groups():
         # contact is in normal group
         edit_groups_menuitem.connect('activate', roster.on_edit_groups, [(contact,
                 account)])
     else:
-        # contact is in group 'Not in Roster'
+        # contact is in group 'Not in contact list'
         edit_groups_menuitem.set_sensitive(False)
 
     # Hide items when it's self contact row
@@ -339,7 +339,7 @@ control=None, gc_contact=None, is_anonymous=True):
         [(contact, account)])
     information_menuitem.connect('activate', roster.on_info, contact, account)
 
-    if _('Not in Roster') not in contact.get_shown_groups():
+    if _('Not in contact list') not in contact.get_shown_groups():
         # contact is in normal group
         add_to_roster_menuitem.hide()
         add_to_roster_menuitem.set_no_show_all(True)
@@ -363,7 +363,7 @@ control=None, gc_contact=None, is_anonymous=True):
                     account)
 
     elif app.connections[account].roster_supported:
-        # contact is in group 'Not in Roster'
+        # contact is in group 'Not in contact list'
         add_to_roster_menuitem.set_no_show_all(False)
         subscription_menuitem.set_sensitive(False)
 
