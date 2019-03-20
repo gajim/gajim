@@ -35,7 +35,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">Tab</property>
-                <property name="title" translatable="yes">Complete a command or a nick</property>
+                <property name="title" translatable="yes">Complete a command or a nickname</property>
               </object>
             </child>
             <child>

@@ -98,7 +98,7 @@ log = logging.getLogger('gajim.roster')
 @unique
 class Column(IntEnum):
     IMG = 0  # image to show state (online, new message etc)
-    NAME = 1  # cellrenderer text that holds contact nickame
+    NAME = 1  # cellrenderer text that holds contact nickname
     TYPE = 2  # account, group or contact?
     JID = 3  # the jid of the row
     ACCOUNT = 4  # cellrenderer text that holds account name
