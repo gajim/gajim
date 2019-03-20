@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: 3.30
+runtime-version: 3.32
 sdk: org.gnome.Sdk
 command: gajim
 tags: nightly
@@ -13,6 +13,7 @@ finish-args:
   - --socket=pulseaudio
   - --system-talk-name=org.freedesktop.GeoClue2
   - --system-talk-name=org.freedesktop.login1
+  - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.gnome.ScreenSaver
   - --talk-name=org.mpris.MediaPlayer2.*
   # Keyring
