@@ -1416,10 +1416,10 @@ class GroupchatControl(ChatControlBase):
         # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
         changes = []
         if StatusCode.SHOWING_UNAVAILABLE in event.status_codes:
-            changes.append(_('Room now shows unavailable members'))
+            changes.append(_('Group chat now shows unavailable members'))
 
         if StatusCode.NOT_SHOWING_UNAVAILABLE in event.status_codes:
-            changes.append(_('Room now does not show unavailable members'))
+            changes.append(_('Group chat now does not show unavailable members'))
 
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in event.status_codes:
             changes.append(_('A setting not related to privacy has been '
@@ -1429,21 +1429,21 @@ class GroupchatControl(ChatControlBase):
 
         if StatusCode.CONFIG_ROOM_LOGGING in event.status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Room history storing is now enabled'))
+            changes.append(_('Conversations are stored on the server'))
 
         if StatusCode.CONFIG_NO_ROOM_LOGGING in event.status_codes:
-            changes.append(_('Room history storing is now disabled'))
+            changes.append(_('Conversations are not stored on the server'))
 
         if StatusCode.CONFIG_NON_ANONYMOUS in event.status_codes:
-            changes.append(_('Room is now non-anonymous'))
+            changes.append(_('Group chat is now non-anonymous'))
             self.is_anonymous = False
 
         if StatusCode.CONFIG_SEMI_ANONYMOUS in event.status_codes:
-            changes.append(_('Room is now semi-anonymous'))
+            changes.append(_('Group chat is now semi-anonymous'))
             self.is_anonymous = True
 
         if StatusCode.CONFIG_FULL_ANONYMOUS in event.status_codes:
-            changes.append(_('Room is now fully anonymous'))
+            changes.append(_('Group chat is now fully anonymous'))
             self.is_anonymous = True
 
         for change in changes:
@@ -1694,7 +1694,7 @@ class GroupchatControl(ChatControlBase):
 
         if not self.is_connected:
             # We just joined the room
-            self.add_info_message(_('You (%s) joined the room') % nick)
+            self.add_info_message(_('You (%s) joined the group chat') % nick)
             self.add_contact_to_roster(nick)
             self.got_connected()
 
@@ -1704,18 +1704,19 @@ class GroupchatControl(ChatControlBase):
             self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
-            self.add_info_message(_('Room history storing is enabled'))
+            self.add_info_message(_('Conversations are stored on the server'))
 
         if StatusCode.NICKNAME_MODIFIED in status_codes:
-            self.add_info_message(\
-                _('The server has assigned or modified your roomnick'))
+            self.add_info_message(
+                _('The server has assigned or modified your nickname in this '
+                  'group chat'))
 
         # Update Actions
         self.update_actions()
 
     @event_filter(['account', 'room_jid'])
     def _on_configuration_finished(self, _event):
-        self.add_info_message(_('A new room has been created'))
+        self.add_info_message(_('A new group chat has been created'))
 
     @event_filter(['account', 'room_jid'])
     def _on_nickname_changed(self, event):
@@ -1835,7 +1836,7 @@ class GroupchatControl(ChatControlBase):
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         #Group Chat: We have been removed from the room by Alice: reason
-        message = _('You have been removed from the room{actor}{reason}')
+        message = _('You have been removed from the group chat{actor}{reason}')
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
@@ -1866,7 +1867,7 @@ class GroupchatControl(ChatControlBase):
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
             #Group Chat: Room configuration changed
-            reason = _(': Room configuration changed to members-only')
+            reason = _(': Group chat configuration changed to members-only')
             message = message.format(actor=actor, reason=reason)
             self.add_info_message(message)
 
@@ -1895,7 +1896,7 @@ class GroupchatControl(ChatControlBase):
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         #Group Chat: We have been removed from the room
-        message = _('{nick} has been removed from the room{by}{reason}')
+        message = _('{nick} has been removed from the group chat{by}{reason}')
 
         join_default = app.config.get('print_join_left_default')
         print_join_left = app.config.get_per(
@@ -1931,7 +1932,7 @@ class GroupchatControl(ChatControlBase):
             self.add_info_message(message)
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
-            reason = _(': Room configuration changed to members-only')
+            reason = _(': Group chat configuration changed to members-only')
             message = message.format(nick=nick, actor=actor, reason=reason)
             self.add_info_message(message)
 
@@ -2051,12 +2052,12 @@ class GroupchatControl(ChatControlBase):
         reason = destroyed.reason
         reason = '' if reason is None else ': %s' % reason
 
-        message = _('Room has been destroyed')
+        message = _('Group chat has been destroyed')
         self.add_info_message(message)
 
         alternate = destroyed.alternate
         if alternate is not None:
-            join_message = _('You can join this room '
+            join_message = _('You can join this group chat '
                              'instead: xmpp:%s?join') % alternate
             self.add_info_message(join_message)
 

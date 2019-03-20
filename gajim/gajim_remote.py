@@ -137,7 +137,7 @@ class GajimRemote:
                 'send_groupchat_message': [
                                 _('Sends new message to a group chat you\'ve joined.'),
                                 [
-                                        ('room_jid', _('XMPP Address of the room that will receive the message'), True),
+                                        ('room_jid', _('XMPP Address of the group chat that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),

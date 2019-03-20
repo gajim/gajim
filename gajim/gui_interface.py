@@ -289,7 +289,7 @@ class Interface:
                 gc_control.error_dialog.destroy()
 
             gc_control.error_dialog = InputDialog(_('Password Required'),
-                _('A Password is required to join the room %s. Please type it.') % \
+                _('A Password is required to join the group chat %s. Please type it.') % \
                 room_jid, is_modal=False, ok_handler=on_ok,
                 cancel_handler=on_cancel)
             gc_control.error_dialog.input_entry.set_visibility(False)

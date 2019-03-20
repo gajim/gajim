@@ -226,7 +226,7 @@
   <object class="GtkWindow" id="data_form_window">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Room Configuration</property>
+    <property name="title" translatable="yes">Group Chat Configuration</property>
     <property name="default_width">650</property>
     <property name="default_height">450</property>
     <property name="type_hint">dialog</property>

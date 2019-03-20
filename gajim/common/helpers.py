@@ -947,7 +947,7 @@ def get_notification_icon_tooltip_dict():
                             account['name'], jid)
                     text += ' '
                     if jid in app.gc_connected[account['name']]:
-                        text += _('from room %s') % (jid)
+                        text += _('from group chat %s') % (jid)
                     elif contact:
                         name = contact.get_shown_name()
                         text += _('from user %s') % (name)

@@ -3013,7 +3013,7 @@ class RosterWindow:
                 room_account)
             if gc_control:
                 gc_control.add_info_message(
-                    _('%(jid)s has been invited in this room') % {
+                    _('%(jid)s has been invited to this group chat') % {
                     'jid': contact_jid})
 
     def on_all_groupchat_maximized(self, widget, group_list):

@@ -159,7 +159,7 @@ class ManageBookmarksWindow:
         if server == '' or room == '':
             ErrorDialog(
                 _('This bookmark has invalid data'),
-                _('Please be sure to fill out server and room fields '
+                _('Please be sure to fill out server and group chat fields '
                   'or remove this bookmark.'))
             return False
 
@@ -331,7 +331,7 @@ class ManageBookmarksWindow:
             room_jid = helpers.parse_jid(room_jid)
         except helpers.InvalidFormat:
             ErrorDialog(
-                _('Invalid room'),
+                _('Invalid Group Chat'),
                 _('Character not allowed'),
                 transient_for=self._ui.manage_bookmarks_window)
             return True

@@ -200,8 +200,8 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
         room = self.room_entry.get_text()
 
         if room == '':
-            ErrorDialog(_('Invalid Room'),
-                        _('Please choose a room'), transient_for=self)
+            ErrorDialog(_('Invalid Group Chat'),
+                        _('Please choose a group chat'), transient_for=self)
             return
 
         self.room_jid = '%s@%s' % (room, server)

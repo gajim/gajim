@@ -579,11 +579,11 @@ def get_singlechat_menu(control_id, account, jid):
 
 def get_groupchat_menu(control_id, account, jid):
     groupchat_menu = [
-        (_('Manage Room'), [
+        (_('Manage Group Chat'), [
             ('win.change-subject-', _('Change Subject')),
-            ('win.configure-', _('Configure Room')),
+            ('win.configure-', _('Configure Group Chat')),
             ('win.upload-avatar-', _('Upload Avatar…')),
-            ('win.destroy-', _('Destroy Room')),
+            ('win.destroy-', _('Destroy Group Chat')),
         ]),
         (_('Chat Settings'), [
             ('win.print-join-left-', _('Show join/leave')),
@@ -594,7 +594,7 @@ def get_groupchat_menu(control_id, account, jid):
             (_('Send Chatstate'), ['chatstate']),
         ]),
         (_('Sync Threshold'), ['sync']),
-        ('win.change-nickname-', _('Change Nick')),
+        ('win.change-nickname-', _('Change Nickname')),
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute command')),
         ('app.browse-history', _('History')),
