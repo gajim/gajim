@@ -1624,7 +1624,7 @@ class Interface:
             if minimize:
                 # GCMIN
                 contact = app.contacts.create_contact(jid=room_jid,
-                    account=account, groups=[_('Groupchats')], sub='none',
+                    account=account, groups=[_('Group chats')], sub='none',
                     groupchat=True)
                 app.contacts.add_contact(account, contact)
                 gc_control = GroupchatControl(None, contact, nick, account)
@@ -1650,7 +1650,7 @@ class Interface:
         # Get target window, create a control, and associate it with the window
         # GCMIN
         contact = app.contacts.create_contact(jid=room_jid, account=account,
-            groups=[_('Groupchats')], sub='none', groupchat=True)
+            groups=[_('Group chats')], sub='none', groupchat=True)
         app.contacts.add_contact(account, contact)
         mw = self.msg_win_mgr.get_window(contact.jid, account)
         if not mw:

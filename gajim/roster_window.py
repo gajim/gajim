@@ -1719,9 +1719,9 @@ class RosterWindow:
                 return 1
             if name2 == _('Not in Roster'):
                 return -1
-            if name1 == _('Groupchats'):
+            if name1 == _('Group chats'):
                 return 1
-            if name2 == _('Groupchats'):
+            if name2 == _('Group chats'):
                 return -1
         account1 = model[iter1][Column.ACCOUNT]
         account2 = model[iter2][Column.ACCOUNT]
@@ -4346,8 +4346,7 @@ class RosterWindow:
         while model[it][Column.TYPE] == 'contact':
             it = model.iter_parent(it)
         grp_source = model[it][Column.JID]
-        if grp_source in helpers.special_groups and \
-                grp_source not in ('Not in Roster', 'Observers'):
+        if grp_source in (_('Transports'), _('Group chats')):
             # a transport or a minimized groupchat was dragged
             # we can add it to other accounts but not move it to another group,
             # see below
@@ -4959,7 +4958,7 @@ class RosterWindow:
         menu = Gtk.Menu()
 
         # Make special context menu if group is Groupchats
-        if group == _('Groupchats'):
+        if group == _('Group chats'):
             maximize_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
                 '_Maximize All'))
             maximize_menuitem.connect('activate',

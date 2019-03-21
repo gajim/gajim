@@ -183,7 +183,7 @@ class Contact(CommonContact):
         if self.is_observer():
             return [_('Observers')]
         if self.is_groupchat:
-            return [_('Groupchats')]
+            return [_('Group chats')]
         if self.is_transport():
             return [_('Transports')]
         if not self.groups:

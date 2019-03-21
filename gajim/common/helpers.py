@@ -80,7 +80,7 @@ if app.is_installed('PYCURL'):
 
 log = logging.getLogger('gajim.c.helpers')
 
-special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Groupchats'))
+special_groups = (_('Transports'), _('Not in Roster'), _('Observers'), _('Group chats'))
 
 
 class InvalidFormat(Exception):
