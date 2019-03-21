@@ -1563,7 +1563,7 @@ class ChatControl(ChatControlBase):
         app.events.remove_events(self.account, self.contact.jid, event=event)
 
     def _get_gc_invitation(self, event):
-        markup = '<b>%s</b>\n%s' % (_('Groupchat Invitation'), event.muc)
+        markup = '<b>%s</b>\n%s' % (_('Group Chat Invitation'), event.muc)
         if event.reason:
             markup += '\n(%s)' % event.reason
         b1 = Gtk.Button.new_with_mnemonic(_('_Accept'))

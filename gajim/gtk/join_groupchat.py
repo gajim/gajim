@@ -281,18 +281,18 @@ class JoinGroupchatWindow(Gtk.ApplicationWindow):
 
     def _disco_info_error(self, from_, error):
         ErrorDialog(_('Wrong server'),
-                    _('%s is not a groupchat server') % from_,
+                    _('%s is not a group chat server') % from_,
                     transient_for=self)
 
     def _disco_info_received(self, result):
         if is_error_result(result):
             ErrorDialog(_('Wrong server'),
-                        _('%s is not a groupchat server') % result.jid,
+                        _('%s is not a group chat server') % result.jid,
                         transient_for=self)
             return
         if nbxmpp.NS_MUC not in result.features:
             ErrorDialog(_('Wrong server'),
-                        _('%s is not a groupchat server') % result.jid,
+                        _('%s is not a group chat server') % result.jid,
                         transient_for=self)
             return
 

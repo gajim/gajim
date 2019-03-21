@@ -171,7 +171,7 @@ class Notification:
                 _('New Group Chat Message'),
                 _('Contact Changed Status'), _('File Transfer Request'),
                 _('File Transfer Error'), _('File Transfer Completed'),
-                _('File Transfer Stopped'), _('Groupchat Invitation'),
+                _('File Transfer Stopped'), _('Group Chat Invitation'),
                 _('Connection Failed'), _('Subscription request'),
                 _('Unsubscribed')):
             if 'actions' in self._daemon_capabilities:
@@ -192,7 +192,7 @@ class Notification:
                               _('Contact Signed Out'),
                               _('Contact Changed Status')):
                 notif_id = self._make_id('contact-status-changed', account, jid)
-            elif event_type == _('Groupchat Invitation'):
+            elif event_type == _('Group Chat Invitation'):
                 notif_id = self._make_id('gc-invitation', account, room_jid)
             elif event_type == _('Connection Failed'):
                 notif_id = self._make_id('connection-failed', account)
@@ -278,7 +278,7 @@ class PopupNotification(Gtk.Window):
         elif event_type in (_('File Transfer Completed'),
                             _('File Transfer Stopped')):
             bg_color = app.config.get('notif_ftcomplete_color')
-        elif event_type == _('Groupchat Invitation'):
+        elif event_type == _('Group Chat Invitation'):
             bg_color = app.config.get('notif_invite_color')
         elif event_type == _('Contact Changed Status'):
             bg_color = app.config.get('notif_status_color')

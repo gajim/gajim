@@ -100,7 +100,7 @@ class Config:
         'notif_ftrequest_color': [opt_color, '#F0E68C', _('File transfer request notification color.')], # khaki
         'notif_fterror_color': [opt_color, '#B22222', _('File transfer error notification color.')], # firebrick
         'notif_ftcomplete_color': [opt_color, '#9ACD32', _('File transfer complete or stopped notification color.')], # yellowgreen
-        'notif_invite_color': [opt_color, '#D2B48C', _('Groupchat invitation notification color')], # tan1
+        'notif_invite_color': [opt_color, '#D2B48C', _('Group chat invitation notification color')], # tan1
         'notif_status_color': [opt_color, '#D8BFD8', _('Background color of status changed notification')], # thistle2
         'notif_other_color': [opt_color, '#FFFFFF', _('Other dialogs color.')], # white
         'collapsed_rows': [opt_str, '', _('List (space separated) of rows (accounts and groups) that are collapsed.'), True],
@@ -170,8 +170,8 @@ class Config:
         'change_roster_title': [opt_bool, True, _('Add * and [n] in contact list window title?')],
         'restore_lines': [opt_int, 10, _('How many history messages should be restored when a chat tab/window is reopened?')],
         'restore_timeout': [opt_int, -1, _('How far back in time (minutes) history is restored. -1 means no limit.')],
-        'muc_restore_lines': [opt_int, 100, _('How many lines to request from server when entering a groupchat. -1 means no limit')],
-        'muc_restore_timeout': [opt_int, -1, _('Minutes of backlog to request when entering a groupchat. -1 means no limit')],
+        'muc_restore_lines': [opt_int, 100, _('How many lines to request from server when entering a group chat. -1 means no limit')],
+        'muc_restore_timeout': [opt_int, -1, _('Minutes of backlog to request when entering a group chat. -1 means no limit')],
         'muc_autorejoin_timeout': [opt_int, 1, _('How many seconds to wait before trying to autorejoin to a conference you are being disconnected from. Set to 0 to disable autorejoining.')],
         'muc_autorejoin_on_kick': [opt_bool, False, _('Should autorejoin be activated when kicked from a conference?')],
         'send_on_ctrl_enter': [opt_bool, False, _('Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ Client default behaviour).')],
@@ -187,9 +187,9 @@ class Config:
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
         'confirm_paste_image': [opt_bool, True, _('Ask before pasting an image.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
-        'confirm_close_muc_rooms': [opt_str, '', _('Always ask for confirmation before closing groupchats with any of the XMPP Addresses on this space separated list.')],
-        'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask for confirmation before closing groupchats with any of the XMPP Addresses on this space separated list.')],
-        'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are controls that can lose data (chat, private chat, groupchat that will not be minimized)')],
+        'confirm_close_muc_rooms': [opt_str, '', _('Always ask for confirmation before closing group chats with any of the XMPP Addresses on this space separated list.')],
+        'noconfirm_close_muc_rooms': [opt_str, '', _('Never ask for confirmation before closing group chats with any of the XMPP Addresses on this space separated list.')],
+        'confirm_close_multiple_tabs': [opt_bool, True, _('Ask before closing tabbed chat window if there are controls that can lose data (Chat, Private Chat, group chat that will not be minimized)')],
         'notify_on_file_complete': [opt_bool, True],
         'file_transfers_port': [opt_int, 28011],
         'ft_add_hosts_to_send': [opt_str, '', _('Comma separated list of sent hosts, in addition of local interfaces, for File Transfer in case of address translation/port forwarding.')],
@@ -242,7 +242,7 @@ class Config:
         'notification_timeout': [opt_int, 5],
         'one_message_window': [opt_str, 'always',
             #always, never, peracct, pertype should not be translated
-                _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the contact list.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g. chats vs. groupchats) is sent to a specific window.')],
+                _('Controls the window where new messages are placed.\n\'always\' - All messages are sent to a single window.\n\'always_with_roster\' - Like \'always\' but the messages are in a single window along with the contact list.\n\'never\' - All messages get their own window.\n\'peracct\' - Messages for each account are sent to a specific window.\n\'pertype\' - Each message type (e.g. chats vs. group chats) is sent to a specific window.')],
         'show_roster_on_startup':[opt_str, 'always', _('Show the contact list window on startup.\n\'always\' - Always show the contact list window.\n\'never\' - Never show the contact list window.\n\'last_state\' - Restore last state of the contact list window.')],
         'show_avatar_in_chat': [opt_bool, True, _('If False, you will no longer see the avatar in the chat window.')],
         'escape_key_closes': [opt_bool, True, _('If true, pressing the escape key closes a tab/window.')],
@@ -264,7 +264,7 @@ class Config:
         'attach_notifications_to_systray': [opt_bool, False, _('If true, notification windows from notification-daemon will be attached to notification icon.')],
         'check_idle_every_foo_seconds': [opt_int, 2, _('Choose interval between 2 checks of idleness.')],
         'uri_schemes': [opt_str, 'aaa:// aaas:// acap:// cap:// cid: crid:// data: dav: dict:// dns: fax: file:/ ftp:// geo: go: gopher:// h323: http:// https:// iax: icap:// im: imap:// info: ipp:// iris: iris.beep: iris.xpc: iris.xpcs: iris.lwz: ldap:// mid: modem: msrp:// msrps:// mtqp:// mupdate:// news: nfs:// nntp:// opaquelocktoken: pop:// pres: prospero:// rtsp:// service: shttp:// sip: sips: sms: snmp:// soap.beep:// soap.beeps:// tag: tel: telnet:// tftp:// thismessage:/ tip:// tv: urn:// vemmi:// xmlrpc.beep:// xmlrpc.beeps:// z39.50r:// z39.50s:// about: apt: cvs:// daap:// ed2k:// feed: fish:// git:// iax2: irc:// ircs:// ldaps:// magnet: mms:// rsync:// ssh:// svn:// sftp:// smb:// webcal:// aesgcm://', _('Valid uri schemes. Only schemes in this list will be accepted as "real" uri. (mailto and xmpp are handled separately)'), True],
-        'shell_like_completion': [opt_bool, False, _('If true, completion in groupchats will be like a shell auto-completion')],
+        'shell_like_completion': [opt_bool, False, _('If true, completion in group chats will be like a shell auto-completion')],
         'audio_input_device': [opt_str, 'autoaudiosrc ! volume name=gajim_vol'],
         'audio_output_device': [opt_str, 'autoaudiosink'],
         'video_input_device': [opt_str, 'autovideosrc'],
@@ -276,7 +276,7 @@ class Config:
         'audio_output_volume': [opt_int, 50],
         'use_stun_server': [opt_bool, False, _('If true, Gajim will try to use a STUN server when using Jingle. The one in "stun_server" option, or the one given by the XMPP server.')],
         'stun_server': [opt_str, '', _('STUN server to use when using Jingle')],
-        'show_affiliation_in_groupchat': [opt_bool, True, _('If true, Gajim will show affiliation of groupchat participants by adding a colored square to the status icon')],
+        'show_affiliation_in_groupchat': [opt_bool, True, _('If true, Gajim will show affiliation of group chat participants by adding a colored square to the status icon')],
         'global_proxy': [opt_str, '', _('Proxy used for all outgoing connections if the account does not have a specific proxy configured')],
         'ignore_incoming_attention': [opt_bool, False, _('If true, Gajim will ignore incoming attention requests ("wizz").')],
         'remember_opened_chat_controls': [opt_bool, True, _('If enabled, Gajim will reopen chat windows that were opened last time Gajim was closed.')],
@@ -429,8 +429,8 @@ class Config:
         }, {}),
         'rooms': ({
             'speller_language': [opt_str, '', _('Language for which misspelled words will be checked')],
-            'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a groupchat. -1 means no limit, -2 means global value')],
-            'muc_restore_timeout': [opt_int, -2, _('Minutes of backlog to request when entering a groupchat. -1 means no limit, -2 means global value')],
+            'muc_restore_lines': [opt_int, -2, _('How many lines to request from server when entering a group chat. -1 means no limit, -2 means global value')],
+            'muc_restore_timeout': [opt_int, -2, _('Minutes of backlog to request when entering a group chat. -1 means no limit, -2 means global value')],
             'notify_on_all_messages': [opt_bool, False, _('State whether a notification is created for every message in this room')],
             'print_status': [opt_bool, False, _('Show a status message for all status (away, dnd, etc.) changes of users in a group chat')],
             'print_join_left': [opt_bool, False, _('Show a status message for every join or leave in a group chat')],

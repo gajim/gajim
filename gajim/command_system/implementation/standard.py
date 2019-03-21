@@ -306,7 +306,7 @@ class StandardGroupChatCommands(CommandContainer):
         app.interface.join_gc_minimal(self.account, room_jid=jid)
 
     @command('part', 'close', raw=True, empty=True)
-    @doc(_("Leave the groupchat, optionally giving a reason, and close tab or window"))
+    @doc(_("Leave the group chat, optionally giving a reason, and close tab or window"))
     def leave(self, reason):
         self.connection.get_module('MUC').leave(self.room_jid)
         self.parent_win.remove_tab(self, self.parent_win.CLOSE_COMMAND, reason)
@@ -327,7 +327,7 @@ class StandardGroupChatCommands(CommandContainer):
                    'reason': reason}})
 
     @command(raw=True, empty=True)
-    @doc(_("Kick user by a nick from a groupchat"))
+    @doc(_("Kick user by a nick from a group chat"))
     def kick(self, who, reason):
         if not who in app.contacts.get_nick_list(self.account, self.room_jid):
             raise CommandError(_("Nickname not found"))

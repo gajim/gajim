@@ -499,7 +499,7 @@ class Interface:
         self.add_event(event.account, from_, event_)
 
         if helpers.allow_showing_notification(event.account):
-            event_type = _('Groupchat Invitation')
+            event_type = _('Group Chat Invitation')
             text = _('You are invited to {room} by {user}').format(room=muc,
                                                                    user=from_)
             app.notification.popup(event_type,
@@ -1459,7 +1459,7 @@ class Interface:
 
         def _on_discover_result():
             if not muc_caps_cache.is_cached(room_jid):
-                ErrorDialog(_('XMPP Address is not a Groupchat'),
+                ErrorDialog(_('XMPP Address is not a group chat'),
                                     transient_for=app.app.get_active_window())
                 return
             JoinGroupchatWindow(account, room_jid, password=password,

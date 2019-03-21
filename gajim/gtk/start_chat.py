@@ -709,7 +709,7 @@ class ProgressRow(Gtk.ListBoxRow):
         self.set_selectable(False)
         self.set_activatable(False)
         self.get_style_context().add_class('start-chat-row')
-        self._text = _('%s Group chats found')
+        self._text = _('%s group chats found')
         self._count = 0
         self._spinner = Gtk.Spinner()
         self._spinner.start()

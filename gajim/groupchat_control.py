@@ -1988,7 +1988,7 @@ class GroupchatControl(ChatControlBase):
 
         elif error_type == Error.NOT_ACCEPTABLE:
             ErrorDialog(
-                _('Unable to join groupchat'),
+                _('Unable to join group chat'),
                 _('You must use your registered '
                   'nickname in <b>%s</b>.') % self.room_jid)
 
@@ -1996,7 +1996,7 @@ class GroupchatControl(ChatControlBase):
             ErrorDialog(
                 _('Unable to join group chat'),
                 _('You are not in the members '
-                  'list in groupchat %s.') % self.room_jid)
+                  'list in group chat %s.') % self.room_jid)
 
         else:
             self.add_info_message(

@@ -199,7 +199,7 @@ def find_current_groupchats(account):
 
 class LeaveGroupchatsCommand(AdHocCommand):
     commandnode = 'leave-groupchats'
-    commandname = _('Leave Groupchats')
+    commandname = _('Leave Group Chats')
 
     def __init__(self, conn, jid, sessionid):
         AdHocCommand.__init__(self, conn, jid, sessionid)
@@ -229,20 +229,20 @@ class LeaveGroupchatsCommand(AdHocCommand):
                                                       'room_jid': gc[0]}))
         if not options:
             response, cmd = self.build_response(request, status='completed')
-            cmd.addChild('note', {}, _('You have not joined a groupchat.'))
+            cmd.addChild('note', {}, _('You have not joined a group chat.'))
 
             self.connection.connection.send(response)
             return False
 
         cmd.addChild(
             node=dataforms.SimpleDataForm(
-                title=_('Leave Groupchats'),
-                instructions=_('Choose the groupchats you want to leave'),
+                title=_('Leave Group Chats'),
+                instructions=_('Choose the group chats you want to leave'),
                 fields=[
                     dataforms.create_field(
                         'list-multi',
                         var='groupchats',
-                        label=_('Groupchats'),
+                        label=_('Group chats'),
                         options=options,
                         required=True)
                 ]
@@ -286,7 +286,7 @@ class LeaveGroupchatsCommand(AdHocCommand):
             self.bad_request(request)
             return False
         response, cmd = self.build_response(request, status='completed')
-        note = _('You left the following groupchats:')
+        note = _('You left the following group chats:')
         for room_jid in gc:
             note += '\n\t' + room_jid
         cmd.addChild('note', {}, note)
