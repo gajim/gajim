@@ -49,11 +49,11 @@ CSS_STYLE_OPTIONS = [
                 '.gajim-state-paused',
                 StyleAttr.COLOR),
 
-    StyleOption(_('MUC Tab New Directed Message'),
+    StyleOption(_('Group Chat Tab New Directed Message'),
                 '.gajim-state-tab-muc-directed-msg',
                 StyleAttr.COLOR),
 
-    StyleOption(_('MUC Tab New Message'),
+    StyleOption(_('Group Chat Tab New Message'),
                 '.gajim-state-tab-muc-msg',
                 StyleAttr.COLOR),
 

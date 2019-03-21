@@ -109,7 +109,7 @@ Select the contacts you want to invite</property>
                   <object class="GtkLabel" id="server_select_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Please select a MUC server.</property>
+                    <property name="label" translatable="yes">Please select a group chat server.</property>
                     <property name="justify">center</property>
                     <property name="wrap">True</property>
                   </object>
@@ -138,7 +138,7 @@ Select the contacts you want to invite</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">MUC server</property>
+                <property name="label" translatable="yes">Group chat server</property>
               </object>
             </child>
           </object>
