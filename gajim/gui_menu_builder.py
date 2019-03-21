@@ -530,8 +530,8 @@ def get_singlechat_menu(control_id, account, jid):
         (_('Send Chatstate'), ['chatstate']),
         ('win.invite-contacts-', _('Invite Contacts')),
         ('win.add-to-roster-', _('Add to Contact List')),
-        ('win.toggle-audio-', _('Audio Session')),
-        ('win.toggle-video-', _('Video Session')),
+        ('win.toggle-audio-', _('Voice Chat')),
+        ('win.toggle-video-', _('Video Chat')),
         ('win.information-', _('Information')),
         ('app.browse-history', _('History')),
         ]

@@ -1048,7 +1048,7 @@ class VoIPCallReceivedDialog:
 
         # do the substitution
         self.dialog.set_property('secondary-text',
-            _('%(contact)s wants to start %(type)s session with you. Do you want '
+            _('%(contact)s wants to start a %(type)s chat with you. Do you want '
             'to answer the call?') % {'contact': self.contact_text,
             'type': types_text})
 

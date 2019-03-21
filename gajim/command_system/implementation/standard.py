@@ -182,10 +182,10 @@ class StandardCommonChatCommands(CommandContainer):
         app.connections[self.account].get_module('Ping').send_ping(self.contact)
 
     @command
-    @doc(_("Send DTMF sequence through an open audio session"))
+    @doc(_("Send DTMF sequence through an open voice chat"))
     def dtmf(self, sequence):
         if not self.audio_sid:
-            raise CommandError(_("No open audio sessions with the contact"))
+            raise CommandError(_("No open voice chats with the contact"))
         for tone in sequence:
             if not (tone in ("*", "#") or tone.isdigit()):
                 raise CommandError(_("%s is not a valid tone") % tone)
@@ -195,20 +195,20 @@ class StandardCommonChatCommands(CommandContainer):
         content.batch_dtmf(sequence)
 
     @command
-    @doc(_("Toggle audio session"))
+    @doc(_("Toggle Voice Chat"))
     def audio(self):
         if not self.audio_available:
-            raise CommandError(_("Audio sessions are not available"))
+            raise CommandError(_("Voice chats are not available"))
         # An audio session is toggled by inverting the state of the
         # appropriate button.
         state = self._audio_button.get_active()
         self._audio_button.set_active(not state)
 
     @command
-    @doc(_("Toggle video session"))
+    @doc(_("Toggle Video Chat"))
     def video(self):
         if not self.video_available:
-            raise CommandError(_("Video sessions are not available"))
+            raise CommandError(_("Video chats are not available"))
         # A video session is toggled by inverting the state of the
         # appropriate button.
         state = self._video_button.get_active()
