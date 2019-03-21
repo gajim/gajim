@@ -122,12 +122,11 @@ def _gen_agent_type_info():
 
 
 # Category type to "human-readable" description string
-# Conference is a category for listing mostly groupchats in service discovery
 _cat_to_descr = {
     'other': _('Others'),
     'gateway': _('Transports'),
     '_jid': _('Transports'),
-    'conference': _('Conference'),
+    'conference': _('Group Chat'),
 }
 
 
