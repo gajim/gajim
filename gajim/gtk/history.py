@@ -36,6 +36,7 @@ from gajim.common import exceptions
 from gajim.common.i18n import _
 from gajim.common.const import ShowConstant
 from gajim.common.const import KindConstant
+from gajim.common.const import StyleAttr
 
 from gajim import conversation_textview
 
@@ -85,7 +86,9 @@ class HistoryWindow(Gtk.ApplicationWindow):
             account, used_in_history_window=True)
         self._ui.scrolledwindow.add(self.history_textview.tv)
         self.history_buffer = self.history_textview.tv.get_buffer()
-        self.history_buffer.create_tag('highlight', background='yellow')
+        highlight_color = app.css_config.get_value(
+            '.gajim-highlight-message', StyleAttr.COLOR)
+        self.history_buffer.create_tag('highlight', background=highlight_color)
         self.history_buffer.create_tag('invisible', invisible=True)
 
         self.clearing_search = False
