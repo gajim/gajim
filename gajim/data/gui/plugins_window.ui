@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="plugins_window">
@@ -13,6 +13,9 @@
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="on_plugins_window_destroy" swapped="no"/>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkNotebook" id="plugins_notebook">
         <property name="visible">True</property>
@@ -232,6 +235,7 @@
                     <property name="wrap">True</property>
                     <property name="wrap_mode">word-char</property>
                     <property name="selectable">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -374,9 +378,6 @@
           <placeholder/>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1">

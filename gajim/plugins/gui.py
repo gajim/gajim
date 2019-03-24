@@ -36,6 +36,9 @@ from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.exceptions import PluginsystemError
+from gajim.common.helpers import launch_browser_mailer
+
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
@@ -63,14 +66,21 @@ class PluginsWindow:
 
         widgets_to_extract = ('plugins_notebook', 'plugin_name_label',
             'plugin_version_label', 'plugin_authors_label',
-            'plugin_homepage_linkbutton', 'uninstall_plugin_button',
-            'configure_plugin_button', 'installed_plugins_treeview',
-            'available_text', 'available_text_label')
+            'plugin_homepage_linkbutton', 'install_plugin_button',
+            'uninstall_plugin_button', 'configure_plugin_button',
+            'installed_plugins_treeview', 'available_text',
+            'available_text_label')
 
         for widget_name in widgets_to_extract:
             setattr(self, widget_name, builder.get_object(widget_name))
 
         self.plugin_description_textview = builder.get_object('description')
+
+        # Disable 'Install from ZIP' for Flatpak installs
+        if app.is_flatpak():
+            self.install_plugin_button.set_tooltip_text(
+                _('Click to view Gajim\'s wiki page on how to install plugins in Flatpak.'))
+
         self.installed_plugins_model = Gtk.ListStore(object, str, bool, bool,
             GdkPixbuf.Pixbuf)
         self.installed_plugins_treeview.set_model(self.installed_plugins_model)
@@ -237,6 +247,10 @@ class PluginsWindow:
 
     @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
+        if app.is_flatpak():
+            launch_browser_mailer('url', 'https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
+            return
+
         def show_warn_dialog():
             text = _('Archive is malformed')
             dialog = WarningDialog(text, '', transient_for=self.window)
