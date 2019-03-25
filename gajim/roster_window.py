@@ -59,6 +59,7 @@ from gajim.common import helpers
 from gajim.common import idle
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common import i18n
+from gajim.common.helpers import save_roster_position
 from gajim.common.i18n import _
 from gajim.common.const import PEPEventType, AvatarSize, StyleAttr
 from gajim.common.dbus import location
@@ -2407,11 +2408,7 @@ class RosterWindow:
         if not app.config.get('quit_on_roster_x_button') and (
         (app.interface.systray_enabled and app.config.get('trayicon') != \
         'on_event') or app.config.get('allow_hide_roster')):
-            if app.config.get('save-roster-position'):
-                x, y = self.window.get_position()
-                log.debug('Save roster position (get_position): %s %s', x, y)
-                app.config.set('roster_x-position', x)
-                app.config.set('roster_y-position', y)
+            save_roster_position(self.window)
             if os.name == 'nt' or app.config.get('hide_on_roster_x_button'):
                 self.window.hide()
             else:
@@ -2436,11 +2433,7 @@ class RosterWindow:
         # in case show_roster_on_start is False and roster is never shown
         # window.window is None
         if self.window.get_window() is not None:
-            if app.config.get('save-roster-position'):
-                x, y = self.window.get_window().get_root_origin()
-                log.debug('Save roster position (get_root_origin): %s %s', x, y)
-                app.config.set('roster_x-position', x)
-                app.config.set('roster_y-position', y)
+            save_roster_position(self.window)
             width, height = self.window.get_size()
             app.config.set('roster_width', width)
             app.config.set('roster_height', height)

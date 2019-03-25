@@ -51,11 +51,13 @@ import nbxmpp
 from nbxmpp.stringprepare import nameprep
 import precis_i18n.codec  # pylint: disable=unused-import
 
+from gajim.common import app
 from gajim.common import caps_cache
 from gajim.common import configpaths
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.const import Display
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -1534,3 +1536,14 @@ class AdditionalDataDict(collections.UserDict):
             del _dict[key]
         except KeyError:
             return
+
+
+def save_roster_position(window):
+    if not app.config.get('save-roster-position'):
+        return
+    if app.is_display(Display.WAYLAND):
+        return
+    x_pos, y_pos = window.get_position()
+    log.debug('Save roster position: %s %s', x_pos, y_pos)
+    app.config.set('roster_x-position', x_pos)
+    app.config.set('roster_y-position', y_pos)
