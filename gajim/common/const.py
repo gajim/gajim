@@ -199,12 +199,21 @@ class MUCUser(IntEnum):
     AFFILIATION = 3
     AFFILIATION_TEXT = 4
 
+
 @unique
 class Trust(IntEnum):
     UNTRUSTED = 0
     UNDECIDED = 1
     BLIND = 2
     VERIFIED = 3
+
+
+class Display(Enum):
+    X11 = 'X11Display'
+    WAYLAND = 'GdkWaylandDisplay'
+    WIN32 = 'GdkWin32Display'
+    QUARTZ = 'GdkQuartzDisplay'
+
 
 EME_MESSAGES = {
     'urn:xmpp:otr:0':
