@@ -84,6 +84,8 @@ from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.history import HistoryWindow
 from gajim.gtk.accounts import AccountsWindow
 
+from gajim.gtk.util import restore_roster_position
+
 
 log = logging.getLogger('gajim.roster')
 
@@ -5699,13 +5701,11 @@ class RosterWindow:
         if len(app.connections) < 2:
             # Do not merge accounts if only one exists
             self.regroup = False
+
         gtkgui_helpers.resize_window(self.window,
             app.config.get('roster_width'),
             app.config.get('roster_height'))
-        if app.config.get('save-roster-position'):
-            gtkgui_helpers.move_window(self.window,
-                app.config.get('roster_x-position'),
-                app.config.get('roster_y-position'))
+        restore_roster_position(self.window)
 
         self.popups_notification_height = 0
         self.popup_notification_windows = []

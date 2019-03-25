@@ -30,6 +30,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.const import Display
 
 _icon_theme = Gtk.IconTheme.get_default()
 _icon_theme.append_search_path(configpaths.get('ICONS'))
@@ -153,6 +154,16 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     if pos_y + height > screen_h:
         pos_y = screen_h - height
     window.move(pos_x, pos_y)
+
+
+def restore_roster_position(window):
+    if not app.config.get('save-roster-position'):
+        return
+    if app.is_display(Display.WAYLAND):
+        return
+    move_window(window,
+                app.config.get('roster_x-position'),
+                app.config.get('roster_y-position'))
 
 
 def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
