@@ -84,7 +84,7 @@ from gajim.gtk.tooltips import RosterTooltip
 from gajim.gtk.adhoc_commands import CommandWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
-from gajim.gtk.util import move_window
+from gajim.gtk.util import restore_roster_position
 from gajim.gtk.util import get_metacontact_surface
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import set_urgency_hint
@@ -5618,10 +5618,7 @@ class RosterWindow:
         resize_window(self.window,
                       app.config.get('roster_width'),
                       app.config.get('roster_height'))
-        if app.config.get('save-roster-position'):
-            move_window(self.window,
-                        app.config.get('roster_x-position'),
-                        app.config.get('roster_y-position'))
+        restore_roster_position(self.window)
 
         # Remove contact from roster when last event opened
         # { (contact, account): { backend: boolean }

@@ -32,7 +32,7 @@ from gajim.common.helpers import save_roster_position
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import move_window
+from gajim.gtk.util import restore_roster_position
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.tooltips import NotificationAreaTooltip
 
@@ -380,10 +380,7 @@ class StatusIcon:
                 win.hide() # else we hide it from VD that was visible in
             else:
                 win.show_all()
-                if app.config.get('save-roster-position'):
-                    move_window(win,
-                                app.config.get('roster_x-position'),
-                                app.config.get('roster_y-position'))
+                restore_roster_position(win)
                 if not app.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
@@ -395,11 +392,9 @@ class StatusIcon:
         if not event:
             return
         win = app.interface.roster.window
-        if not win.get_property('visible') and app.config.get(
-        'save-roster-position'):
-            move_window(win,
-                        app.config.get('roster_x-position'),
-                        app.config.get('roster_y-position'))
+        if not win.get_property('visible'):
+            # Needed if we are in one window mode
+            restore_roster_position(win)
         app.interface.handle_event(account, jid, event.type_)
 
     def on_middle_click(self):
