@@ -42,6 +42,7 @@ import logging
 import json
 import shutil
 import collections
+from io import StringIO
 from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
@@ -58,6 +59,10 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.const import Display
+
+if app.is_installed('PYCURL'):
+    import pycurl
+
 
 log = logging.getLogger('gajim.c.helpers')
 
@@ -553,12 +558,6 @@ def datetime_tuple(timestamp):
         tim += zone * sign
         tim = tim.timetuple()
     return tim
-
-
-from gajim.common import app
-if app.is_installed('PYCURL'):
-    import pycurl
-    from io import StringIO
 
 def convert_bytes(string):
     suffix = ''
