@@ -118,11 +118,17 @@ def get_iconset_name_for(name: str) -> str:
 
 
 def get_total_screen_geometry() -> Tuple[int, int]:
-    screen = Gdk.Screen.get_default()
-    window = Gdk.Screen.get_root_window(screen)
-    width, height = window.get_width(), window.get_height()
-    log.debug('Get screen geometry: %s %s', width, height)
-    return width, height
+    total_width = 0
+    total_height = 0
+    display = Gdk.Display.get_default()
+    monitors = display.get_n_monitors()
+    for num in range(0, monitors):
+        monitor = display.get_monitor(num)
+        geometry = monitor.get_geometry()
+        total_width += geometry.width
+        total_height = max(total_height, geometry.height)
+    log.debug('Get screen geometry: %s %s', total_width, total_height)
+    return total_width, total_height
 
 
 def resize_window(window: Gtk.Window, width: int, height: int) -> None:
