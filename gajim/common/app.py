@@ -39,11 +39,13 @@ from distutils.version import LooseVersion as V
 from collections import namedtuple
 
 import nbxmpp
+from gi.repository import Gdk
 
 import gajim
 from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
+from gajim.common.const import Display
 from gajim.common.contacts import LegacyContactsAPI
 from gajim.common.events import Events
 from gajim.common.types import NetworkEventsControllerT  # pylint: disable=unused-import
@@ -192,6 +194,18 @@ def is_installed(dependency):
 
 def is_flatpak():
     return gajim.IS_FLATPAK
+
+def is_display(display):
+    # XWayland reports as Display X11, so try with env var
+    is_wayland = os.environ.get('XDG_SESSION_TYPE') == 'wayland'
+    if is_wayland and display == Display.WAYLAND:
+        return True
+
+    default = Gdk.Display.get_default()
+    if default is None:
+        log('gajim').warning('Could not determine window manager')
+        return False
+    return default.__class__.__name__ == display.value
 
 def disable_dependency(dependency):
     _dependencies[dependency] = False

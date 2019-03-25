@@ -193,6 +193,13 @@ class SyncThreshold(IntEnum):
         return str(self.value)
 
 
+class Display(Enum):
+    X11 = 'X11Display'
+    WAYLAND = 'GdkWaylandDisplay'
+    WIN32 = 'GdkWin32Display'
+    QUARTZ = 'GdkQuartzDisplay'
+
+
 ACTIVITIES = {
     'doing_chores': {
         'category': _('Doing Chores'),
