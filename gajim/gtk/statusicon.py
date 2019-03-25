@@ -28,6 +28,7 @@ from gajim import dialogs
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
+from gajim.common.helpers import save_roster_position
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_icon_name
@@ -375,18 +376,14 @@ class StatusIcon:
             # No pending events, so toggle visible/hidden for roster window
             if win.get_property('visible'):
                 if win.get_property('has-toplevel-focus') or os.name == 'nt':
-                    if app.config.get('save-roster-position'):
-                        x, y = win.get_position()
-                        app.config.set('roster_x-position', x)
-                        app.config.set('roster_y-position', y)
+                    save_roster_position(win)
                 win.hide() # else we hide it from VD that was visible in
             else:
-                if not win.get_property('visible'):
-                    win.show_all()
-                    if app.config.get('save-roster-position'):
-                        move_window(win,
-                                    app.config.get('roster_x-position'),
-                                    app.config.get('roster_y-position'))
+                win.show_all()
+                if app.config.get('save-roster-position'):
+                    move_window(win,
+                                app.config.get('roster_x-position'),
+                                app.config.get('roster_y-position'))
                 if not app.config.get('roster_window_skip_taskbar'):
                     win.set_property('skip-taskbar-hint', False)
                 win.present_with_time(Gtk.get_current_event_time())
