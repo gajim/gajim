@@ -23,6 +23,7 @@ from typing import Optional
 import os
 import sys
 import logging
+import textwrap
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from functools import wraps
@@ -578,3 +579,13 @@ def format_location(location):
             'tag': tag.capitalize(), 'text': text}
 
     return location_string.strip()
+
+
+def format_fingerprint(fingerprint):
+    fplen = len(fingerprint)
+    wordsize = fplen // 8
+    buf = ''
+    for w in range(0, fplen, wordsize):
+        buf += '{0} '.format(fingerprint[w:w + wordsize])
+    buf = textwrap.fill(buf, width=36)
+    return buf.rstrip().upper()

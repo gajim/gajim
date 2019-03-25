@@ -49,6 +49,7 @@ from gajim.common.const import StyleAttr, Trust
 from gajim.gtk import util
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
+from gajim.gtk.util import format_fingerprint
 from gajim.gtk.emoji_data import emoji_pixbufs
 from gajim.gtk.emoji_data import is_emoji
 from gajim.gtk.emoji_data import get_emoji_pixbuf
@@ -1159,7 +1160,8 @@ class ConversationTextview(GObject.GObject):
                 icon, trust_tooltip, color = TRUST_SYMBOL_DATA[trust]
                 tooltip = tooltip + '\n' + trust_tooltip
             if fingerprint is not None:
-                tooltip = tooltip + ' (' + fingerprint + ')'
+                fingerprint = format_fingerprint(fingerprint)
+                tooltip = tooltip + '\n' + fingerprint
 
         temp_mark = self._buffer.create_mark(None, iter_, True)
         self._buffer.insert(iter_, ' ')
