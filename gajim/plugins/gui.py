@@ -42,7 +42,6 @@ from gajim.common.helpers import launch_browser_mailer
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _
-from gajim.common.exceptions import PluginsystemError
 
 
 @unique
