@@ -71,6 +71,8 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationCheckDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
@@ -3347,7 +3349,7 @@ class RosterWindow:
         """
         Remove a contact. list_ is a list of (contact, account) tuples
         """
-        def on_ok(is_checked, list_):
+        def on_ok(is_checked):
             remove_auth = True
             if len(list_) == 1:
                 contact = list_[0][0]
@@ -3366,8 +3368,8 @@ class RosterWindow:
                     contact.show = 'offline'
                     app.contacts.add_contact(account, contact)
                     self.add_contact(contact.jid, account)
-        def on_ok2(list_):
-            on_ok(False, list_)
+        def on_ok2():
+            on_ok(False)
 
         if len(list_) == 1:
             contact = list_[0][0]
@@ -3380,19 +3382,22 @@ class RosterWindow:
                 ConfirmationDialog(pritext, sectext + \
                     _('By removing this contact you also remove authorization '
                     'resulting in them always seeing you as offline.'),
-                    on_response_ok=(on_ok2, list_))
+                    on_response_ok=on_ok2)
             elif _('Not in Roster') in contact.get_shown_groups():
                 # Contact is not in roster
                 ConfirmationDialog(pritext, sectext + \
-                    _('Do you want to continue?'), on_response_ok=(on_ok2,
-                    list_))
+                    _('Do you want to continue?'), on_response_ok=on_ok2)
             else:
-                ConfirmationDialogCheck(pritext, sectext + \
+                NewConfirmationCheckDialog(
+                    _('Remove'),
+                    pritext, sectext + \
                     _('By removing this contact you also by default remove '
-                    'authorization resulting in them always seeing you as'
-                    ' offline.'),
-                    _('I want this contact to know my status after removal'),
-                    on_response_ok=(on_ok, list_))
+                      'authorization resulting in them always seeing you as'
+                      ' offline.'),
+                    _('_I want this contact to know my status after removal'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove', callback=on_ok)],
+                     modal=False).show()
         else:
             # several contact to remove at the same time
             pritext = _('Contacts will be removed from your roster')
@@ -3403,8 +3408,7 @@ class RosterWindow:
             sectext = _('By removing these contacts:%s\nyou also remove '
                 'authorization resulting in them always seeing you as '
                 'offline.') % jids
-            ConfirmationDialog(pritext, sectext,
-                on_response_ok=(on_ok2, list_))
+            ConfirmationDialog(pritext, sectext, on_response_ok=on_ok2)
 
     def on_send_custom_status(self, widget, contact_list, show, group=None):
         """

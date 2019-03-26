@@ -15,6 +15,7 @@
 from collections import namedtuple
 
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import helpers
@@ -52,6 +53,11 @@ class DialogButton(namedtuple('DialogButton', ('response text callback args '
             elif type_ == 'Delete':
                 default_kwargs['response'] = Gtk.ResponseType.OK
                 default_kwargs['text'] = _('Delete')
+                default_kwargs['action'] = ButtonAction.DESTRUCTIVE
+
+            elif type_ == 'Remove':
+                default_kwargs['response'] = Gtk.ResponseType.OK
+                default_kwargs['text'] = _('Remove')
                 default_kwargs['action'] = ButtonAction.DESTRUCTIVE
             else:
                 raise ValueError('Unknown button type: %s ' % type_)
@@ -1035,6 +1041,37 @@ class NewConfirmationDialog(Gtk.MessageDialog):
 
     def show(self):
         self.show_all()
+
+
+class NewConfirmationCheckDialog(NewConfirmationDialog):
+    def __init__(self, title, text, sec_text, check_text,
+                 buttons, modal=True, transient_for=None):
+        NewConfirmationDialog.__init__(self,
+                                       title,
+                                       text,
+                                       sec_text,
+                                       buttons,
+                                       transient_for=transient_for,
+                                       modal=modal)
+
+        self._checkbutton = Gtk.CheckButton.new_with_mnemonic(check_text)
+        self._checkbutton.set_can_focus(False)
+        self._checkbutton.set_margin_start(30)
+        self._checkbutton.set_margin_end(30)
+        label = self._checkbutton.get_child()
+        label.set_line_wrap(True)
+        label.set_max_width_chars(50)
+        label.set_halign(Gtk.Align.START)
+        label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        label.set_margin_start(10)
+
+        self.get_content_area().add(self._checkbutton)
+
+    def _on_response(self, _dialog, response):
+        button = self._buttons.get(response)
+        if button is not None:
+            button.args.insert(0, self._checkbutton.get_active())
+        super()._on_response(_dialog, response)
 
 
 class ShortcutsWindow:
