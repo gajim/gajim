@@ -577,7 +577,7 @@ class HistoryManager:
                      paths_len, liststore[list_of_paths[0]][0]),
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete', callback=on_ok)],
-            transient_for=self._ui.history_manager_window)
+            transient_for=self._ui.history_manager_window).show()
 
     def _delete_logs(self, liststore, list_of_paths):
         paths_len = len(list_of_paths)
@@ -614,7 +614,7 @@ class HistoryManager:
                      paths_len),
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete', callback=on_ok)],
-            transient_for=self._ui.history_manager_window)
+            transient_for=self._ui.history_manager_window).show()
 
     def on_search_db_button_clicked(self, widget):
         text = self._ui.search_entry.get_text()

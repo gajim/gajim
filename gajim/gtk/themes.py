@@ -325,7 +325,7 @@ class Themes(Gtk.ApplicationWindow):
             _('Do you want to permanently delete this theme?'),
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete', callback=_remove_theme)],
-            transient_for=self)
+            transient_for=self).show()
 
     @staticmethod
     def _on_destroy(*args):
