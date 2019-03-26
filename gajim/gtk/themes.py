@@ -24,10 +24,10 @@ from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
-from gajim.common.const import DialogButton
 from gajim.common.const import ButtonAction
 
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.util import get_builder
 
@@ -320,17 +320,17 @@ class Themes(Gtk.ApplicationWindow):
                 self._add_option_button.set_sensitive(False)
                 self._clear_options()
 
-        buttons = {
-            Gtk.ResponseType.CANCEL: DialogButton('Keep Theme'),
-            Gtk.ResponseType.OK: DialogButton('Delete',
-                                              _remove_theme,
-                                              ButtonAction.DESTRUCTIVE),
-        }
-
-        NewConfirmationDialog('Delete Theme',
-                              'Do you want to permanently delete this theme?',
-                              buttons,
-                              transient_for=self)
+        NewConfirmationDialog(
+            _('Delete'),
+            _('Delete Theme'),
+            _('Do you want to permanently '
+              'delete this theme?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('OK',
+                               text=_('Delete'),
+                               callback=_remove_theme,
+                               action=ButtonAction.DESTRUCTIVE)],
+            transient_for=self)
 
     @staticmethod
     def _on_destroy(*args):

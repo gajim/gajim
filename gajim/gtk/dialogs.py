@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from collections import namedtuple
+
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -20,6 +22,36 @@ from gajim.common.i18n import _
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
+
+
+class DialogButton(namedtuple('DialogButton', ('response text callback args '
+                                               'kwargs action is_default'))):
+    @classmethod
+    def make(cls, type_=None, **kwargs):
+        # Defaults
+        default_kwargs = {
+            'response': None,
+            'text': None,
+            'callback': None,
+            'args': [],
+            'kwargs': {},
+            'action': None,
+            'is_default': False
+        }
+
+        if type_ is not None:
+            if type_ == 'OK':
+                default_kwargs['response'] = Gtk.ResponseType.OK
+                default_kwargs['text'] = 'OK'
+
+            elif type_ == 'Cancel':
+                default_kwargs['response'] = Gtk.ResponseType.CANCEL
+                default_kwargs['text'] = _('Cancel')
+            else:
+                raise ValueError('Unknown button type: %s ' % type_)
+
+        default_kwargs.update(kwargs)
+        return cls(**default_kwargs)
 
 
 class HigDialog(Gtk.MessageDialog):
@@ -952,18 +984,22 @@ class ChangePasswordDialog(Gtk.Dialog):
 
 
 class NewConfirmationDialog(Gtk.MessageDialog):
-    def __init__(self, text, sec_text, buttons, transient_for=None):
+    def __init__(self, title, text, sec_text, buttons, transient_for=None):
         Gtk.MessageDialog.__init__(self,
+                                   title=title,
+                                   text=text,
                                    transient_for=transient_for,
-                                   message_type=Gtk.MessageType.QUESTION,
-                                   text=text)
+                                   message_type=Gtk.MessageType.QUESTION)
 
-        self._buttons = buttons
+        self._buttons = {}
 
-        for response, button in buttons.items():
-            self.add_button(button.text, response)
+        for button in buttons:
+            self._buttons[button.response] = button
+            self.add_button(button.text, button.response)
+            if button.is_default:
+                self.set_default_response(button.response)
             if button.action is not None:
-                widget = self.get_widget_for_response(response)
+                widget = self.get_widget_for_response(button.response)
                 widget.get_style_context().add_class(button.action.value)
 
         self.format_secondary_markup(sec_text)
@@ -972,7 +1008,7 @@ class NewConfirmationDialog(Gtk.MessageDialog):
 
         self.run()
 
-    def _on_response(self, dialog, response):
+    def _on_response(self, _dialog, response):
         if response == Gtk.ResponseType.DELETE_EVENT:
             # Look if DELETE_EVENT is mapped to another response
             response = self._buttons.get(response, None)
@@ -986,7 +1022,7 @@ class NewConfirmationDialog(Gtk.MessageDialog):
             return
 
         if button.callback is not None:
-            button.callback()
+            button.callback(*button.args, **button.kwargs)
         self.destroy()
 
 
