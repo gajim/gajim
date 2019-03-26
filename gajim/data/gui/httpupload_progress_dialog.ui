@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.14"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="box">
+    <property name="width_request">300</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">18</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
     <child>
-      <object class="GtkAlignment" id="alignment1">
+      <object class="GtkImage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="top_padding">8</property>
-        <property name="bottom_padding">4</property>
-        <property name="left_padding">8</property>
-        <property name="right_padding">8</property>
-        <child>
-          <object class="GtkLabel" id="label">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-              <attribute name="variant" value="normal"/>
-            </attributes>
-          </object>
-        </child>
+        <property name="icon_name">document-send-symbolic</property>
+        <property name="icon_size">6</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -32,26 +23,66 @@
       </packing>
     </child>
     <child>
-      <object class="GtkAlignment" id="alignment2">
+      <object class="GtkLabel" id="label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="top_padding">4</property>
-        <property name="bottom_padding">4</property>
-        <property name="left_padding">8</property>
-        <property name="right_padding">8</property>
-        <child>
-          <object class="GtkProgressBar" id="progressbar">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pulse_step">0.10000000149</property>
-            <property name="show_text">True</property>
-          </object>
-        </child>
+        <property name="margin_top">6</property>
+        <property name="label">&lt;placeholder&gt;</property>
+        <style>
+          <class name="bold"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="progress_label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label">&lt;progress&gt;</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkProgressBar" id="progressbar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="pulse_step">0.10000000149</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="cancel_upload_button">
+        <property name="label" translatable="yes">Cancel Upload</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">center</property>
+        <property name="margin_top">6</property>
+        <signal name="clicked" handler="on_cancel_upload_button_clicked" swapped="no"/>
+        <style>
+          <class name="destructive-action"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
       </packing>
     </child>
   </object>
