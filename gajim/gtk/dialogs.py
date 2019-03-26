@@ -990,12 +990,16 @@ class ChangePasswordDialog(Gtk.Dialog):
 
 
 class NewConfirmationDialog(Gtk.MessageDialog):
-    def __init__(self, title, text, sec_text, buttons, transient_for=None):
+    def __init__(self, title, text, sec_text, buttons,
+                 modal=True, transient_for=None):
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
         Gtk.MessageDialog.__init__(self,
                                    title=title,
                                    text=text,
                                    transient_for=transient_for,
-                                   message_type=Gtk.MessageType.QUESTION)
+                                   message_type=Gtk.MessageType.QUESTION,
+                                   modal=modal)
 
         self._buttons = {}
 
@@ -1011,8 +1015,6 @@ class NewConfirmationDialog(Gtk.MessageDialog):
         self.format_secondary_markup(sec_text)
 
         self.connect('response', self._on_response)
-
-        self.run()
 
     def _on_response(self, _dialog, response):
         if response == Gtk.ResponseType.DELETE_EVENT:
@@ -1030,6 +1032,9 @@ class NewConfirmationDialog(Gtk.MessageDialog):
         if button.callback is not None:
             button.callback(*button.args, **button.kwargs)
         self.destroy()
+
+    def show(self):
+        self.show_all()
 
 
 class ShortcutsWindow:
