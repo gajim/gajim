@@ -19,6 +19,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
+from gajim.common.const import ButtonAction
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import load_icon
@@ -47,6 +48,11 @@ class DialogButton(namedtuple('DialogButton', ('response text callback args '
             elif type_ == 'Cancel':
                 default_kwargs['response'] = Gtk.ResponseType.CANCEL
                 default_kwargs['text'] = _('Cancel')
+
+            elif type_ == 'Delete':
+                default_kwargs['response'] = Gtk.ResponseType.OK
+                default_kwargs['text'] = _('Delete')
+                default_kwargs['action'] = ButtonAction.DESTRUCTIVE
             else:
                 raise ValueError('Unknown button type: %s ' % type_)
 

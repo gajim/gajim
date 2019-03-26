@@ -47,6 +47,7 @@ from gajim.common import app
 from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common.i18n import _
+from gajim.common.i18n import ngettext
 from gajim.common.const import StyleAttr
 from gajim.common.const import JIDConstant
 from gajim.common.const import KindConstant
@@ -88,7 +89,8 @@ if is_standalone():
 from gajim.common import helpers
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import get_builder
@@ -539,7 +541,7 @@ class HistoryManager:
         if paths_len == 0:  # nothing is selected
             return
 
-        def on_ok(liststore, list_of_paths):
+        def on_ok():
             # delete all rows from db that match jid_id
             list_of_rowrefs = []
             for path in list_of_paths:  # make them treerowrefs (it's needed)
@@ -567,21 +569,16 @@ class HistoryManager:
 
             self.AT_LEAST_ONE_DELETION_DONE = True
 
-        if paths_len == 1:
-            jid_id = '<i>%s</i>' % liststore[list_of_paths[0]][0]
-            pri_text = _('Do you wish to delete all correspondence with %(jid)s?') \
-                % {'jid': jid_id}
-        else:
-            pri_text = _(
-                'Do you wish to delete all correspondence with the selected contacts?')
-        dialog = ConfirmationDialog('',
-            _('This can not be undone.'), on_response_ok=(on_ok,
-            liststore, list_of_paths))
-        dialog.set_title(_('Deletion Confirmation'))
-        dialog.set_markup(pri_text)
-        ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
-        ok_button.grab_focus()
-        dialog.set_transient_for(self._ui.history_manager_window)
+        NewConfirmationDialog(
+            _('Delete'),
+            ngettext('Delete Conversation', 'Delete Conversations', paths_len),
+            ngettext('Do you want to permanently delete this '
+                     'conversation with <b>%s</b>',
+                     'Do you want to permanently delete these Conversations',
+                     paths_len, liststore[list_of_paths[0]][0]),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Delete', callback=on_ok)],
+            transient_for=self._ui.history_manager_window)
 
     def _delete_logs(self, liststore, list_of_paths):
         paths_len = len(list_of_paths)
@@ -610,16 +607,15 @@ class HistoryManager:
 
             self.AT_LEAST_ONE_DELETION_DONE = True
 
-        pri_text = i18n.ngettext(
-            'Do you really want to delete the selected message?',
-            'Do you really want to delete the selected messages?', paths_len)
-        dialog = ConfirmationDialog(pri_text,
-            _('This can not be undone.'), on_response_ok=(on_ok,
-            liststore, list_of_paths))
-        dialog.set_title(_('Deletion Confirmation'))
-        ok_button = dialog.get_children()[0].get_children()[1].get_children()[0]
-        ok_button.grab_focus()
-        dialog.set_transient_for(self._ui.history_manager_window)
+        NewConfirmationDialog(
+            _('Delete'),
+            ngettext('Delete Message', 'Delete Messages', paths_len),
+            ngettext('Do you want to permanently delete this message',
+                     'Do you want to permanently delete these messages',
+                     paths_len),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Delete', callback=on_ok)],
+            transient_for=self._ui.history_manager_window)
 
     def on_search_db_button_clicked(self, widget):
         text = self._ui.search_entry.get_text()

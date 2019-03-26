@@ -323,13 +323,9 @@ class Themes(Gtk.ApplicationWindow):
         NewConfirmationDialog(
             _('Delete'),
             _('Delete Theme'),
-            _('Do you want to permanently '
-              'delete this theme?'),
+            _('Do you want to permanently delete this theme?'),
             [DialogButton.make('Cancel'),
-             DialogButton.make('OK',
-                               text=_('Delete'),
-                               callback=_remove_theme,
-                               action=ButtonAction.DESTRUCTIVE)],
+             DialogButton.make('Delete', callback=_remove_theme)],
             transient_for=self)
 
     @staticmethod
