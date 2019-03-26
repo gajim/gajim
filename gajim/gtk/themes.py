@@ -24,7 +24,6 @@ from gajim.common import app
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
-from gajim.common.const import ButtonAction
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import DialogButton

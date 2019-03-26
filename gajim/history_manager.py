@@ -44,7 +44,6 @@ from gi.repository import Gio
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common import i18n
 from gajim.common import configpaths
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
