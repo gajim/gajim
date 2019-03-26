@@ -35,12 +35,13 @@ messages = {
     'invalid-jid': Message(
         _('Invalid XMPP Address'),
         _('It is not possible to send a message '
-          'to %s, this XMPP Address is not valid.'),
+          'to %s. This XMPP Address is not valid.'),
         ErrorDialog),
 
     'unread-events-on-remove-account': Message(
-        _('Unread events'),
-        _('Read all pending events before removing this account.'),
+        _('Unread Events'),
+        _('Read or acknowledge all pending events before '
+          'removing this account.'),
         ErrorDialog),
 
     'invalid-form': Message(
@@ -50,54 +51,55 @@ messages = {
 
     'join-while-invisible': Message(
         _('Invisible'),
-        _('You cannot join a group chat while you are invisible'),
+        _('You cannot join a group chat while being invisible.'),
         ErrorDialog),
 
     'not-connected-while-sending': Message(
-        _('A connection is not available'),
+        _('No Connection Available'),
         _('Your message can not be sent until you are connected.'),
         ErrorDialog),
 
     'jid-in-list': Message(
-        _('XMPP Address already in list'),
-        _('The XMPP Address you entered is already in the list. Choose another one.'),
+        _('XMPP Address Already in List'),
+        _('The XMPP Address you entered is already in the list. '
+          'Please choose another one.'),
         ErrorDialog),
 
     'invalid-answer': Message(
-        _('Invalid answer'),
+        _('Invalid Answer'),
         _('Transport %(name)s answered wrongly to '
           'register request: %(error)s'),
         ErrorDialog),
 
     'invalid-custom-hostname': Message(
         _('Wrong Custom Hostname'),
-        _('Wrong custom hostname "%s". Ignoring it.'),
+        _('Custom hostname "%s" is wrong. It will be ignored.'),
         ErrorDialog),
 
     'privacy-list-error': Message(
-        _('Error while removing privacy list'),
+        _('Error While Removing Privacy List'),
         _('Privacy list %s has not been removed. '
-          'It is maybe active in one of your connected resources. '
-          'Deactivate it and try again.'),
+          'It is probably active in one of your connected resources. '
+          'Please deactivate it and try again.'),
         ErrorDialog),
 
     'invisibility-not-supported': Message(
-        _('Invisibility not supported'),
-        _('Account %s doesn\'t support invisibility.'),
+        _('Invisibility Not Supported'),
+        _('This account %s doesn\'t support invisibility.'),
         ErrorDialog),
 
     'unregister-error': Message(
-        _('Unregister failed'),
-        _('Unregistration with server %(server)s failed: %(error)s'),
+        _('Unregister Failed'),
+        _('Unregistration on server %(server)s failed: %(error)s'),
         ErrorDialog),
 
     'agent-register-success': Message(
-        _('Registration succeeded'),
-        _('Registration with agent %s succeeded'),
+        _('Registration Succeeded'),
+        _('Registration with agent %s succeeded.'),
         InformationDialog),
 
     'agent-register-error': Message(
-        _('Registration failed'),
+        _('Registration Failed'),
         _('Registration with agent %(agent)s failed with error %(error)s: '
           '%(error_msg)s'),
         ErrorDialog),
@@ -108,17 +110,17 @@ messages = {
         ErrorDialog),
 
     'gstreamer-error': Message(
-        _('GStreamer error'),
+        _('GStreamer Error'),
         _('Error: %(error)s\nDebug: %(debug)s'),
         ErrorDialog),
 
     'wrong-host': Message(
-        _('Wrong host'),
+        _('Wrong Host'),
         _('Invalid local address? :-O'),
         ErrorDialog),
 
     'avahi-error': Message(
-        _('Avahi error'),
+        _('Avahi Error'),
         _('%s\nLink-local messaging might not work properly.'),
         ErrorDialog),
 
@@ -129,26 +131,26 @@ messages = {
 
     'request-upload-slot-error2': Message(
         _('Could not request upload slot for HTTP File Upload'),
-        _('Got unexpected response from server (see log)'),
+        _('Got unexpected response from server (see log).'),
         ErrorDialog),
 
     'open-file-error': Message(
-        _('Could not open file'),
-        _('Exception raised while opening file (see log)'),
+        _('Could not Open File'),
+        _('Exception raised while trying to open file (see log).'),
         ErrorDialog),
 
     'open-file-error2': Message(
-        _('Could not open file'),
+        _('Could not Open File'),
         '%s',
         ErrorDialog),
 
     'unsecure-error': Message(
-        _('Unsecure'),
-        _('Server returned unsecure transport (HTTP)'),
+        _('Not Secure'),
+        _('The server returned an insecure transport (HTTP).'),
         ErrorDialog),
 
     'httpupload-response-error': Message(
-        _('Could not upload file'),
+        _('Could not Upload File'),
         _('HTTP response code from server: %s'),
         ErrorDialog),
 
@@ -159,11 +161,12 @@ messages = {
 
     'httpupload-encryption-not-available': Message(
         _('Encryption Error'),
-        _('For the chosen encryption there is no encryption method available'),
+        _('There is no encryption method available '
+          'for the chosen encryption.'),
         ErrorDialog),
 
     'avatar-upload-error': Message(
-        _('Avatar upload failed'),
+        _('Avatar Upload Failed'),
         '%s',
         ErrorDialog),
     }
