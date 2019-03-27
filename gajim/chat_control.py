@@ -54,7 +54,8 @@ from gajim import gui_menu_builder
 from gajim import message_control
 from gajim import dialogs
 
-from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_cursor
@@ -1168,25 +1169,22 @@ class ChatControl(ChatControlBase):
     def safe_shutdown(self):
         return False
 
-    def allow_shutdown(self, method, on_yes, on_no, on_minimize):
-        if time.time() - app.last_message_time[self.account]\
-        [self.get_full_jid()] < 2:
+    def allow_shutdown(self, method, on_yes, on_no, _on_minimize):
+        time_ = app.last_message_time[self.account][self.get_full_jid()]
+        if time.time() - time_ < 2:
             # 2 seconds
 
-            def on_ok():
-                on_yes(self)
-
-            def on_cancel():
-                on_no(self)
-
-            ConfirmationDialog(
-                #%s is being replaced in the code with JID
-                _('You just received a new message from "%s"') % \
-                self.contact.jid,
-                _('If you close this tab and you have history disabled, '\
-                'this message will be lost.'), on_response_ok=on_ok,
-                on_response_cancel=on_cancel,
-                transient_for=self.parent_win.window)
+            NewConfirmationDialog(
+                _('Close'),
+                _('You just received a new message from %s') % self.contact.jid,
+                _('If you close this tab and you have history disabled, '
+                  'this message will be lost.'),
+                [DialogButton.make('Cancel',
+                                   callback=lambda: on_no(self)),
+                 DialogButton.make('OK',
+                                   text=_('Close'),
+                                   callback=lambda: on_yes(self))],
+                transient_for=self.parent_win.window).show()
             return
         on_yes(self)
 
