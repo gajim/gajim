@@ -25,7 +25,7 @@ git+https://github.com/enthought/pywin32-ctypes.git
 python-axolotl
 python-gnupg
 keyring
-cssutils
+css_parser
 qrcode
 "
 pip3 install precis-i18n

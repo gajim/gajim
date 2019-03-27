@@ -9,7 +9,7 @@
 - gir1.2-gtk-3.0 (>=3.22)
 - python3-nbxmpp (>=0.9.90.4)
 - python3-openssl (>=16.2)
-- python3-cssutils (>=1.0.2)
+- python3-css-parser
 - python3-keyring
 - python3-precis-i18n
 

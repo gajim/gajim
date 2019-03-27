@@ -105,7 +105,7 @@ keyring
 python-gnupg
 python-axolotl
 qrcode
-cssutils
+css_parser
 "
 
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])

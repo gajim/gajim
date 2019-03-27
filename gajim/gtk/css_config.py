@@ -19,10 +19,10 @@ import os
 import math
 import logging
 
-import cssutils
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
+import css_parser
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -66,7 +66,7 @@ class CSSConfig():
         css here."""
 
         # Delete empty rules
-        cssutils.ser.prefs.keepEmptyRules = False
+        css_parser.ser.prefs.keepEmptyRules = False
 
         # Holds the currently selected theme in the Theme Editor
         self._pre_css = None
@@ -202,16 +202,16 @@ class CSSConfig():
             self._css_path = self._determine_theme_path()
         else:
             self._css_path = new_path
-        self._css = cssutils.parseFile(self._css_path)
+        self._css = css_parser.parseFile(self._css_path)
 
     def _load_default(self):
         self._default_css_path = self.get_theme_path('default', user=False)
-        self._default_css = cssutils.parseFile(self._default_css_path)
+        self._default_css = css_parser.parseFile(self._default_css_path)
 
     def _load_pre(self, theme):
         log.info('Preload theme %s', theme)
         self._pre_css_path = self.get_theme_path(theme)
-        self._pre_css = cssutils.parseFile(self._pre_css_path)
+        self._pre_css = css_parser.parseFile(self._pre_css_path)
 
     def _write(self, pre):
         path = self._css_path
@@ -251,7 +251,7 @@ class CSSConfig():
 
         # The rule was not found, so we add it to this theme
         log.info('Set %s %s %s', selector, attr, value)
-        rule = cssutils.css.CSSStyleRule(selectorText=selector)
+        rule = css_parser.css.CSSStyleRule(selectorText=selector)
         rule.style[attr] = value
         css.add(rule)
         self._write(pre)
@@ -282,7 +282,7 @@ class CSSConfig():
         # The rule was not found, so we add it to this theme
         log.info('Set Font for: %s %s %s %s %s',
                  selector, family, size, style, weight)
-        rule = cssutils.css.CSSStyleRule(selectorText=selector)
+        rule = css_parser.css.CSSStyleRule(selectorText=selector)
         rule.style['font-family'] = family
         rule.style['font-style'] = style
         rule.style['font-size'] = '%spt' % size

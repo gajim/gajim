@@ -147,16 +147,14 @@ modules:
         url: https://files.pythonhosted.org/packages/6e/b3/b4d443d2e30c00cdb73612426222172182e54359545cfb17774792619e49/keyring-19.0.2-py2.py3-none-any.whl
         sha256: afbfe7bc9bdba69d25c551b0c738adde533d87e0b51ad6bbe332cbea19ad8476
 
-  - name: python3-cssutils
+  - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install --prefix=/app cssutils-1.0.2-py3-none-any.whl
-    cleanup:
-      - /bin
+      - pip3 install --prefix=/app css-parser-1.0.4-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/6b/15/a9fb9010f58d1c55dd0b7779db2334feb9a572d407024f39a60f44293861/cssutils-1.0.2-py3-none-any.whl
-        sha256: c74dbe19c92f5052774eadb15136263548dd013250f1ed1027988e7fef125c8d
+        url: https://files.pythonhosted.org/packages/py3/c/css_parser/css_parser-1.0.4-py3-none-any.whl
+        sha256: 49d6906416569e715b144df97ed81a94b6dc663fbcae6d1dbf4807e7fb8367ae
 
   - name: python3-precis_i18n
     buildsystem: simple
