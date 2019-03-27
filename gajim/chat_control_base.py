@@ -51,7 +51,8 @@ from gajim.message_control import MessageControl
 from gajim.conversation_textview import ConversationTextview
 from gajim.message_textview import MessageTextView
 
-from gajim.gtk.dialogs import NonModalConfirmationDialog
+from gajim.gtk.dialogs import NewConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk import util
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import at_the_end
@@ -1042,29 +1043,38 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         def _on_ok(c):
             app.interface.instances['file_transfers'].show_file_send_request(
-                    self.account, c)
+                self.account, c)
         if self.type_id == message_control.TYPE_PM:
             gc_contact = self.gc_contact
-        if gc_contact:
-            # gc or pm
-            gc_control = app.interface.msg_win_mgr.get_gc_control(
-                    gc_contact.room_jid, self.account)
-            self_contact = app.contacts.get_gc_contact(self.account,
-                    gc_control.room_jid, gc_control.nick)
-            if gc_control.is_anonymous and gc_contact.affiliation.value not in ['admin',
-            'owner'] and self_contact.affiliation.value in ['admin', 'owner']:
-                contact = app.contacts.get_contact(self.account, gc_contact.jid)
-                if not contact or contact.sub not in ('both', 'to'):
-                    prim_text = _('Really send file?')
-                    sec_text = _('If you send a file to %s, your real JID will '
-                        'be revealed.') % gc_contact.name
-                    dialog = NonModalConfirmationDialog(prim_text,
-                        sec_text, on_response_ok=(_on_ok, gc_contact))
-                    dialog.popup()
-                    return
-            _on_ok(gc_contact)
+
+        if not gc_contact:
+            _on_ok(self.contact)
             return
-        _on_ok(self.contact)
+
+        # gc or pm
+        gc_control = app.interface.msg_win_mgr.get_gc_control(
+            gc_contact.room_jid, self.account)
+        self_contact = app.contacts.get_gc_contact(self.account,
+                                                   gc_control.room_jid,
+                                                   gc_control.nick)
+        if (gc_control.is_anonymous and
+                gc_contact.affiliation.value not in ['admin', 'owner'] and
+                self_contact.affiliation.value in ['admin', 'owner']):
+            contact = app.contacts.get_contact(self.account, gc_contact.jid)
+            if not contact or contact.sub not in ('both', 'to'):
+
+                NewConfirmationDialog(
+                    _('Privacy'),
+                    _('Warning'),
+                    _('If you send a file to <b>%s</b>, '
+                      'your real JID will be revealed.' % gc_contact.name),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make(
+                         'OK',
+                         text=_('Continue'),
+                         callback=lambda: _on_ok(gc_contact))]).show()
+                return
+        _on_ok(gc_contact)
 
     def on_notify_menuitem_toggled(self, widget):
         app.config.set_per('rooms', self.contact.jid, 'notify_on_all_messages',

@@ -2786,12 +2786,12 @@ class GroupchatControl(ChatControlBase):
         self.handlers[id_] = item
 
         item = xml.get_object('send_file_menuitem')
-        if not c.resource:
+        if not c.jid:
             item.set_sensitive(False)
         else:
-            item.set_sensitive(False)
+            item.set_sensitive(True)
             # ToDo: integrate HTTP File Upload
-            id_ = item.connect('activate', self._on_send_file_jingle, c)
+            id_ = item.connect('activate', lambda x: self._on_send_file_jingle(c))
             self.handlers[id_] = item
 
         # show the popup now!
