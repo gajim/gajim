@@ -48,11 +48,6 @@ messages = {
         _('Read all pending events before removing this account.'),
         ErrorDialog),
 
-    'connected-on-disable-account': Message(
-        _('You are currently connected to the server'),
-        _('To disable the account, you must be disconnected.'),
-        ErrorDialog),
-
     'invalid-form': Message(
         _('Invalid Form'),
         _('The form is not filled correctly.'),

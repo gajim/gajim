@@ -39,6 +39,8 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
 
@@ -512,7 +514,7 @@ class GenericOptionPage(Gtk.Box):
             switch.set_sensitive(False)
             switch.set_active(False)
 
-        switch.connect('notify::active', self._on_enable_switch, self.account)
+        switch.connect('state-set', self._on_enable_switch, self.account)
         box.pack_start(switch, False, False, 0)
         if self.account != app.ZEROCONF_ACC_NAME:
             button = Gtk.Button(label=_('Remove'))
@@ -524,18 +526,34 @@ class GenericOptionPage(Gtk.Box):
             box.pack_end(button, False, False, 0)
         self.pack_start(box, True, True, 0)
 
-    def _on_enable_switch(self, switch, param, account):
+    def _on_enable_switch(self, switch, state, account):
+        def _disable():
+            app.connections[account].change_status('offline', 'offline')
+            app.connections[account].disconnect(reconnect=False)
+            self.parent.disable_account(account)
+            app.config.set_per('accounts', account, 'active', False)
+            switch.set_state(state)
+
         old_state = app.config.get_per('accounts', account, 'active')
-        state = switch.get_active()
         if old_state == state:
             return
 
         if (account in app.connections and
                 app.connections[account].connected > 0):
-            # connecting or connected
-            app.interface.raise_dialog('connected-on-disable-account')
-            switch.set_active(not state)
-            return
+            # Connecting or connected
+            NewConfirmationDialog(
+                _('Disable Account'),
+                _('Account %s is still connected') % account,
+                _('All chat and group chat windows will be closed. '
+                  'Do you want to continue?'),
+                [DialogButton.make('Cancel',
+                                   callback=lambda: switch.set_active(True)),
+                 DialogButton.make('Remove',
+                                   text=_('Disable Account'),
+                                   callback=_disable)],
+                transient_for=self.parent).show()
+            return Gdk.EVENT_STOP
+
         if state:
             self.parent.enable_account(account)
         else:
