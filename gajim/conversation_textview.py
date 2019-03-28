@@ -1158,10 +1158,10 @@ class ConversationTextview(GObject.GObject):
                 color = 'encrypted-color'
             else:
                 icon, trust_tooltip, color = TRUST_SYMBOL_DATA[trust]
-                tooltip = tooltip + '\n' + trust_tooltip
+                tooltip = '%s\n%s' % (tooltip, trust_tooltip)
             if fingerprint is not None:
                 fingerprint = format_fingerprint(fingerprint)
-                tooltip = tooltip + '\n' + fingerprint
+                tooltip = '%s\n<tt>%s</tt>' % (tooltip, fingerprint)
 
         temp_mark = self._buffer.create_mark(None, iter_, True)
         self._buffer.insert(iter_, ' ')
@@ -1175,7 +1175,7 @@ class ConversationTextview(GObject.GObject):
 
         image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
         image.show()
-        image.set_tooltip_text(tooltip)
+        image.set_tooltip_markup(tooltip)
         image.get_style_context().add_class(color)
         self.tv.add_child_at_anchor(image, anchor)
 
