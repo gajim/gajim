@@ -108,7 +108,7 @@ class FeaturesDialog(Gtk.Dialog):
                     app.is_installed('ZEROCONF'),
                     _('Enables Gajim to automatically detected clients in a '
                       'local network for serverless chats'),
-                    _('Requires: python-dbus'),
+                    _('Requires: gir1.2-avahi-0.6'),
                     _('Requires: pybonjour and bonjour SDK running (%(url)s)')
                     % {'url': 'https://developer.apple.com/opensource/)'},
                     None),
