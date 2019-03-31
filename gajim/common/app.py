@@ -189,7 +189,7 @@ gajim_optional_features = {}  # type: Dict[str, List[str]]
 caps_hash = {}  # type: Dict[str, List[str]]
 
 _dependencies = {
-    'PYTHON-DBUS': False,
+    'AVAHI': False,
     'PYBONJOUR': False,
     'PYGPG': False,
     'GPG_BINARY': False,
@@ -208,7 +208,7 @@ def is_installed(dependency):
         return _dependencies['PYGPG'] and _dependencies['GPG_BINARY']
     if dependency == 'ZEROCONF':
         # Alias for checking zeroconf libs
-        return _dependencies['PYTHON-DBUS'] or _dependencies['PYBONJOUR']
+        return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
     return _dependencies[dependency]
 
 def is_flatpak():
@@ -240,8 +240,9 @@ def detect_dependencies():
         pass
 
     try:
-        import dbus  # pylint: disable=unused-variable
-        _dependencies['PYTHON-DBUS'] = True
+        gi.require_version('Avahi', '0.6')
+        from gi.repository import Avahi  # pylint: disable=unused-variable
+        _dependencies['AVAHI'] = True
     except Exception:
         pass
 
