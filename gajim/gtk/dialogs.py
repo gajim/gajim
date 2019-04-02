@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from datetime import datetime
+
 from collections import namedtuple
 
 from gi.repository import Gtk
@@ -23,7 +25,6 @@ from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
 
 from gajim.gtk.util import get_builder
-from gajim.gtk.util import load_icon
 
 
 class DialogButton(namedtuple('DialogButton', ('response text callback args '
@@ -880,47 +881,49 @@ class DoubleInputDialog:
             self.cancel_handler()
 
 
-class CertificatDialog(InformationDialog):
+class CertificateDialog(Gtk.ApplicationWindow):
     def __init__(self, transient_for, account, cert):
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_name('CertificateDialog')
+        self.set_application(app.app)
+        self.set_show_menubar(False)
+        self.set_resizable(False)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_title(_('Certificate'))
+
+        self._ui = get_builder('certificate_dialog.ui')
+        self.add(self._ui.certificate_box)
+
         issuer = cert.get_issuer()
         subject = cert.get_subject()
-        InformationDialog.__init__(self,
-            _('Certificate for account %s') % account, _('''<b>Issued to:</b>
-Common Name (CN): %(scn)s
-Organization (O): %(sorg)s
-Organizationl Unit (OU): %(sou)s
-Serial Number: %(sn)s
 
-<b>Issued by:</b>
-Common Name (CN): %(icn)s
-Organization (O): %(iorg)s
-Organizationl Unit (OU): %(iou)s
+        self._ui.label_cert_for_account.set_text(
+            _('Certificate for account\n%s') % account)
 
-<b>Validity:</b>
-Issued on: %(io)s
-Expires on: %(eo)s
+        self._ui.data_it_common_name.set_text(subject.commonName)
+        self._ui.data_it_organization.set_text(subject.organizationName)
+        self._ui.data_it_organizational_unit.set_text(
+            subject.organizationalUnitName)
+        self._ui.data_it_serial_number.set_text(str(cert.get_serial_number()))
 
-<b>Fingerprint</b>
-SHA-1 Fingerprint: %(sha1)s
+        self._ui.data_ib_common_name.set_text(issuer.commonName)
+        self._ui.data_ib_organization.set_text(issuer.organizationName)
+        self._ui.data_ib_organizational_unit.set_text(
+            issuer.organizationalUnitName)
 
-SHA-256 Fingerprint: %(sha256)s
-''') % {
-            'scn': subject.commonName, 'sorg': subject.organizationName,
-            'sou': subject.organizationalUnitName,
-            'sn': cert.get_serial_number(), 'icn': issuer.commonName,
-            'iorg': issuer.organizationName,
-            'iou': issuer.organizationalUnitName,
-            'io': cert.get_notBefore().decode('utf-8'),
-            'eo': cert.get_notAfter().decode('utf-8'),
-            'sha1': cert.digest('sha1').decode('utf-8'),
-            'sha256': cert.digest('sha256').decode('utf-8')})
-        surface = load_icon('application-certificate', self, size=32)
-        if surface is not None:
-            img = Gtk.Image.new_from_surface(surface)
-            img.show_all()
-            self.set_image(img)
+        issued = datetime.strptime(cert.get_notBefore().decode('ascii'), '%Y%m%d%H%M%SZ')
+        issued = issued.strftime('%B %d, %Y, %H:%M:%S %z')
+        self._ui.data_issued_on.set_text(issued)
+        expires = datetime.strptime(cert.get_notAfter().decode('ascii'), '%Y%m%d%H%M%SZ')
+        expires = expires.strftime('%B %d, %Y, %H:%M:%S %z')
+        self._ui.data_expires_on.set_text(expires)
+
+        self._ui.data_sha1.set_text(cert.digest('sha1').decode('utf-8'))
+        self._ui.data_sha256.set_text(cert.digest('sha256').decode('utf-8'))
+
         self.set_transient_for(transient_for)
-        self.set_title(_('Certificate for account %s') % account)
+        self._ui.connect_signals(self)
+        self.show_all()
 
 
 class SSLErrorDialog(ConfirmationDialogDoubleCheck):
@@ -939,7 +942,7 @@ class SSLErrorDialog(ConfirmationDialogDoubleCheck):
         area.pack_start(b, True, True, 0)
 
     def on_cert_clicked(self, button):
-        CertificatDialog(self, self.account, self.cert)
+        CertificateDialog(self, self.account, self.cert)
 
 
 class ChangePasswordDialog(Gtk.Dialog):
