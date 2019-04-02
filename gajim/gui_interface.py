@@ -119,6 +119,7 @@ from gajim.gtk.emoji_data import emoji_data
 from gajim.gtk.emoji_data import emoji_ascii_data
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.filetransfer import FileTransfersWindow
+from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_show_in_roster
 from gajim.gtk.util import get_show_in_systray
 
@@ -414,8 +415,8 @@ class Interface:
             if obj.jid in self.instances[account]['sub_request']:
                 self.instances[account]['sub_request'][obj.jid].destroy()
             self.instances[account]['sub_request'][obj.jid] = \
-                dialogs.SubscriptionRequestWindow(obj.jid, obj.status, account,
-                obj.user_nick)
+                SubscriptionRequestWindow(obj.jid, obj.status, account,
+                                          obj.user_nick)
             return
 
         event = events.SubscriptionRequestEvent(obj.status, obj.user_nick)
@@ -1473,8 +1474,7 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            dialogs.SubscriptionRequestWindow(jid, event.text, account,
-                event.nick)
+            SubscriptionRequestWindow(jid, event.text, account, event.nick)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'unsubscribed':

@@ -37,7 +37,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import vcard
 from gajim import dataforms_widget
 
 from gajim.common import ged
@@ -53,7 +52,6 @@ from gajim.common.exceptions import GajimGeneralException
 
 # Compat with Gajim 1.0.3 for plugins
 from gajim.gtk.dialogs import *
-from gajim.gtk.add_contact import AddNewContactWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import get_builder
@@ -841,89 +839,6 @@ class ChangeStatusMessageDialog(TimeoutDialog):
         ChangeMoodDialog(on_response, self.pep_dict['mood'],
                                          self.pep_dict['mood_text'])
 
-
-class SubscriptionRequestWindow(Gtk.ApplicationWindow):
-    def __init__(self, jid, text, account, user_nick=None):
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('SubscriptionRequest')
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_title(_('Subscription Request'))
-
-        xml = get_builder('subscription_request_window.ui')
-        self.add(xml.get_object('subscription_box'))
-        self.jid = jid
-        self.account = account
-        self.user_nick = user_nick
-        if len(app.connections) >= 2:
-            prompt_text = \
-                _('Subscription request for account %(account)s from %(jid)s')\
-                % {'account': account, 'jid': self.jid}
-        else:
-            prompt_text = _('Subscription request from %s') % self.jid
-
-        from_label = xml.get_object('from_label')
-        from_label.set_text(prompt_text)
-
-        textview = xml.get_object('message_textview')
-        textview.get_buffer().set_text(text)
-
-        self.set_default(xml.get_object('authorize_button'))
-        xml.connect_signals(self)
-        self.show_all()
-
-    def on_subscription_request_window_destroy(self, widget):
-        """
-        Close window
-        """
-        if self.jid in app.interface.instances[self.account]['sub_request']:
-            # remove us from open windows
-            del app.interface.instances[self.account]['sub_request'][self.jid]
-
-    def on_close_button_clicked(self, widget):
-        self.destroy()
-
-    def on_authorize_button_clicked(self, widget):
-        """
-        Accept the request
-        """
-        app.connections[self.account].get_module('Presence').subscribed(self.jid)
-        self.destroy()
-        contact = app.contacts.get_contact(self.account, self.jid)
-        if not contact or _('Not in Roster') in contact.groups:
-            AddNewContactWindow(self.account, self.jid, self.user_nick)
-
-    def on_contact_info_activate(self, widget):
-        """
-        Ask vcard
-        """
-        if self.jid in app.interface.instances[self.account]['infos']:
-            app.interface.instances[self.account]['infos'][self.jid].window.present()
-        else:
-            contact = app.contacts.create_contact(jid=self.jid, account=self.account)
-            app.interface.instances[self.account]['infos'][self.jid] = \
-                     vcard.VcardWindow(contact, self.account)
-            # Remove jabber page
-            app.interface.instances[self.account]['infos'][self.jid].xml.\
-                     get_object('information_notebook').remove_page(0)
-
-    def on_start_chat_activate(self, widget):
-        """
-        Open chat
-        """
-        app.interface.new_chat_from_jid(self.account, self.jid)
-
-    def on_deny_button_clicked(self, widget):
-        """
-        Refuse the request
-        """
-        app.connections[self.account].get_module('Presence').unsubscribed(self.jid)
-        contact = app.contacts.get_contact(self.account, self.jid)
-        if contact and _('Not in Roster') in contact.get_shown_groups():
-            app.interface.roster.remove_contact(self.jid, self.account)
-        self.destroy()
 
 class SynchroniseSelectAccountDialog:
     def __init__(self, account):
