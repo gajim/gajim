@@ -204,7 +204,7 @@
     <child internal-child="accessible">
       <object class="AtkObject" id="file_transfers_window-atkobject">
         <property name="AtkObject::accessible-name" translatable="yes">File Transfers</property>
-        <property name="AtkObject::accessible-description" translatable="yes">Shows a list of file transfers between you and others</property>
+        <property name="AtkObject::accessible-description" translatable="yes">Shows a list of file transfers between you and your contacts</property>
       </object>
     </child>
   </object>

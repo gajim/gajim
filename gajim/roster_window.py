@@ -2028,8 +2028,8 @@ class RosterWindow:
         else:
             if not _('Not in contact list') in contact.get_shown_groups():
                 InformationDialog(_('Subscription request has been '
-                    'sent'), _('If "%s" accepts this request you will know his '
-                    'or her status.') % jid)
+                    'sent'), _('If "%s" accepts this request you will know '
+                    'their status.') % jid)
                 return
             self.remove_contact(contact.jid, account, force=True)
             contact.groups = groups_list
