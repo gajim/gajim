@@ -175,6 +175,10 @@ class Presence:
     def get_presence(self, to=None, typ=None, priority=None,
                      show=None, status=None, nick=None, caps=True,
                      sign=None, idle_time=None):
+        if show not in ('chat', 'away', 'xa', 'dnd'):
+            # Gajim sometimes passes invalid show values here
+            # until this is fixed this is a workaround
+            show = None
         presence = nbxmpp.Presence(to, typ, priority, show, status)
         if nick is not None:
             nick_tag = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
