@@ -628,7 +628,8 @@ class ChatControl(ChatControlBase):
             else:
                 sha = self.gc_contact.avatar_sha
                 name = self.gc_contact.get_shown_name()
-            gui_menu_builder.show_save_as_menu(sha, name)
+            if sha is not None:
+                gui_menu_builder.show_save_as_menu(sha, name)
         return True
 
     def on_location_eventbox_button_release_event(self, widget, event):
