@@ -2249,7 +2249,7 @@ class RosterWindow:
                 _('Disconnect for Invisibility'),
                 _('You are participating in one or more group chats'),
                 _('Changing your status to invisible will result in '
-                  'disconnection from those group chats.\n'
+                  'you leaving those group chats.\n'
                   'Are you sure you want to go invisible?'),
                   [DialogButton.make('Cancel'),
                    DialogButton.make('Remove',
@@ -3468,7 +3468,7 @@ class RosterWindow:
                     _('Disconnect for Invisibility'),
                     _('You are participating in one or more group chats'),
                     _('Changing your status to invisible will result in '
-                      'disconnection from those group chats.\n'
+                      'you leaving those group chats.\n'
                       'Are you sure you want to go invisible?'),
                     [DialogButton.make('Cancel',
                                        callback=on_cancel),
@@ -5201,7 +5201,7 @@ class RosterWindow:
                 account)
             menu.append(connect_menuitem)
         disconnect_menuitem = Gtk.MenuItem.new_with_mnemonic(_(
-            '_Disconnect'))
+            '_Leave'))
         disconnect_menuitem.connect('activate', self.on_disconnect, jid,
             account)
         menu.append(disconnect_menuitem)

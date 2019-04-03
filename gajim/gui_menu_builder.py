@@ -598,7 +598,7 @@ def get_groupchat_menu(control_id, account, jid):
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute command')),
         ('app.browse-history', _('History')),
-        ('win.disconnect-', _('Disconnect')),
+        ('win.disconnect-', _('Leave')),
     ]
 
     def build_menu(preset):

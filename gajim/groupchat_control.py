@@ -2289,8 +2289,8 @@ class GroupchatControl(ChatControlBase):
             NewConfirmationCheckDialog(
                 _('Leave Group Chat'),
                 _('Are you sure you want to leave this group chat?'),
-                _('If you close this window, you will be disconnected '
-                  'from \'%s\'.') % self.name,
+                _('If you close this window, you will leave '
+                  '\'%s\'.') % self.name,
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel',
                                    callback=on_cancel),
