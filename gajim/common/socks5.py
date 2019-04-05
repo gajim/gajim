@@ -23,7 +23,7 @@ import struct
 import hashlib
 import os
 import time
-import platform
+import sys
 import logging
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
@@ -1436,7 +1436,7 @@ class Socks5Listener(IdleObject):
             # Under windows Vista, we need that to listen on ipv6 AND ipv4
             # Doesn't work under windows XP
             if os.name == 'nt':
-                if int(platform.win32_ver()[0]) >= 6:  # Win Vista +
+                if sys.getwindowsversion().major >= 6:  # Win Vista +
                     # 47 is socket.IPPROTO_IPV6
                     # 27 is socket.IPV6_V6ONLY under windows, but not defined ...
                     self._serv.setsockopt(41, 27, 0)
