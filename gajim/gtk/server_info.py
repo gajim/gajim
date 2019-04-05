@@ -17,12 +17,15 @@ from collections import namedtuple
 from datetime import timedelta
 
 import nbxmpp
+from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
+
+from gajim.gtk.util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gtk.serverinfo')
 
@@ -34,6 +37,7 @@ class ServerInfoDialog(Gtk.Dialog):
                          destroy_with_parent=True)
 
         self.account = account
+        self._destroyed = False
         self.set_transient_for(app.interface.roster.window)
         self.set_resizable(False)
 
@@ -69,10 +73,6 @@ class ServerInfoDialog(Gtk.Dialog):
         self.connect('response', self.on_response)
         self.connect('destroy', self.on_destroy)
 
-        app.ged.register_event_handler('version-result-received',
-                                       ged.CORE,
-                                       self._nec_version_result_received)
-
         app.ged.register_event_handler('server-disco-received',
                                        ged.GUI1,
                                        self._server_disco_received)
@@ -81,7 +81,8 @@ class ServerInfoDialog(Gtk.Dialog):
         self.uptime = ''
         self.hostname = app.get_hostname_from_account(account)
         con = app.connections[account]
-        con.get_module('SoftwareVersion').request_os_info(self.hostname, None)
+        con.get_module('SoftwareVersion').request_software_version(
+            self.hostname, callback=self._software_version_received)
         self.request_last_activity()
 
         for feature in self.get_features():
@@ -138,10 +139,12 @@ class ServerInfoDialog(Gtk.Dialog):
                 'days': delta.days, 'hours': hours}
             self.update(self.get_infos, self.info_listbox)
 
-    def _nec_version_result_received(self, obj):
-        if obj.jid != self.hostname:
-            return
-        self.version = obj.client_info or _('Unknown')
+    @ensure_not_destroyed
+    def _software_version_received(self, result):
+        if is_error_result(result):
+            self.version = _('Unknown')
+        else:
+            self.version = '%s %s' % (result.name, result.version)
         self.update(self.get_infos, self.info_listbox)
 
     def _server_disco_received(self, obj):
@@ -229,11 +232,8 @@ class ServerInfoDialog(Gtk.Dialog):
             self.destroy()
 
     def on_destroy(self, *args):
+        self._destroyed = True
         del app.interface.instances[self.account]['server_info']
-        app.ged.remove_event_handler('version-result-received',
-                                     ged.CORE,
-                                     self._nec_version_result_received)
-
         app.ged.remove_event_handler('server-disco-received',
                                      ged.GUI1,
                                      self._server_disco_received)

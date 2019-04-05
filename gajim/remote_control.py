@@ -267,9 +267,6 @@ class GajimRemote(Server):
             <signal name='NewMessage'>
                 <arg type='av' />
             </signal>
-            <signal name='OsInfo'>
-                <arg type='av' />
-            </signal>
             <signal name='Roster'>
                 <arg type='av' />
             </signal>
@@ -299,8 +296,6 @@ class GajimRemote(Server):
         super().__init__(self.con, '/org/gajim/dbus/RemoteObject')
         self.first_show = True
 
-        app.ged.register_event_handler('version-result-received', ged.POSTGUI,
-            self.on_os_info)
         app.ged.register_event_handler('time-result-received', ged.POSTGUI,
             self.on_time)
         app.ged.register_event_handler('roster-info', ged.POSTGUI,
@@ -345,12 +340,6 @@ class GajimRemote(Server):
             chatstate = ''
         self.raise_signal('MessageSent', (obj.conn.name, [
             obj.jid, obj.message, obj.keyID, chatstate]))
-
-    def on_os_info(self, obj):
-        self.raise_signal('OsInfo', (obj.conn.name, [obj.jid.getStripped(),
-                                                     obj.jid.getResource(),
-                                                     obj.client_info,
-                                                     obj.os_info]))
 
     def on_time(self, obj):
         self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.getStripped(),

@@ -1486,6 +1486,9 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Get bookmarks
             self.get_module('Bookmarks').request_bookmarks()
 
+            # Enable Software Version
+            self.get_module('SoftwareVersion').set_enabled(True)
+
             # Get annotations
             self.get_module('Annotations').request_annotations()
 

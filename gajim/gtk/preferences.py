@@ -879,6 +879,8 @@ class Preferences(Gtk.ApplicationWindow):
     def on_send_os_info_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'send_os_info')
+        for con in app.connections.values():
+            con.get_module('SoftwareVersion').set_enabled(widget.get_active())
 
     def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
