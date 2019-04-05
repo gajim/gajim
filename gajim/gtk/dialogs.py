@@ -901,21 +901,23 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui.label_cert_for_account.set_text(
             _('Certificate for account\n%s') % account)
 
-        self._ui.data_it_common_name.set_text(subject.commonName)
-        self._ui.data_it_organization.set_text(subject.organizationName)
+        self._ui.data_it_common_name.set_text(subject.commonName or '')
+        self._ui.data_it_organization.set_text(subject.organizationName or '')
         self._ui.data_it_organizational_unit.set_text(
-            subject.organizationalUnitName)
+            subject.organizationalUnitName or '')
         self._ui.data_it_serial_number.set_text(str(cert.get_serial_number()))
 
-        self._ui.data_ib_common_name.set_text(issuer.commonName)
-        self._ui.data_ib_organization.set_text(issuer.organizationName)
+        self._ui.data_ib_common_name.set_text(issuer.commonName or '')
+        self._ui.data_ib_organization.set_text(issuer.organizationName or '')
         self._ui.data_ib_organizational_unit.set_text(
-            issuer.organizationalUnitName)
+            issuer.organizationalUnitName or '')
 
-        issued = datetime.strptime(cert.get_notBefore().decode('ascii'), '%Y%m%d%H%M%SZ')
+        issued = datetime.strptime(cert.get_notBefore().decode('ascii'),
+                                   '%Y%m%d%H%M%SZ')
         issued = issued.strftime('%B %d, %Y, %H:%M:%S %z')
         self._ui.data_issued_on.set_text(issued)
-        expires = datetime.strptime(cert.get_notAfter().decode('ascii'), '%Y%m%d%H%M%SZ')
+        expires = datetime.strptime(cert.get_notAfter().decode('ascii'),
+                                    '%Y%m%d%H%M%SZ')
         expires = expires.strftime('%B %d, %Y, %H:%M:%S %z')
         self._ui.data_expires_on.set_text(expires)
 
