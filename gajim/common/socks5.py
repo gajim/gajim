@@ -23,7 +23,7 @@ import struct
 import hashlib
 import os
 import time
-import platform
+import sys
 import logging
 from errno import EWOULDBLOCK
 from errno import ENOBUFS
