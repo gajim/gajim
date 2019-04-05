@@ -170,7 +170,9 @@ try:
     if os.name == 'nt':
         # Set the env var on Windows because gettext.find() uses it to
         # find the translation
-        os.environ['LANG'] = LANG
+        # Use LANGUAGE instead of LANG, LANG sets LC_ALL and thus
+        # doesn't retain other region settings like LC_TIME
+        os.environ['LANGUAGE'] = LANG
 except Exception as error:
     print('Failed to determine default language', file=sys.stderr)
     import traceback
