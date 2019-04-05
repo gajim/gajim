@@ -112,6 +112,7 @@ from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import ChangeNickDialog
+from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.profile import ProfileWindow
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.filechoosers import FileChooserDialog
@@ -548,7 +549,7 @@ class Interface:
 
     def handle_event_gc_invitation(self, event):
         if helpers.allow_popup_window(event.account) or not self.systray_enabled:
-            dialogs.InvitationReceivedDialog(event.account, event)
+            InvitationReceivedDialog(event.account, event)
             return
 
         from_ = str(event.from_)
@@ -1467,7 +1468,7 @@ class Interface:
             event = app.events.get_first_event(account, jid, type_)
             if event is None:
                 return
-            dialogs.InvitationReceivedDialog(account, event)
+            InvitationReceivedDialog(account, event)
             app.events.remove_events(account, jid, event)
             self.roster.draw_contact(jid, account)
         elif type_ == 'subscription_request':

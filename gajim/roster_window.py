@@ -73,6 +73,7 @@ from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import NonModalConfirmationDialog
 from gajim.gtk.dialogs import NewConfirmationCheckDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import InvitationReceivedDialog
 from gajim.gtk.join_groupchat import JoinGroupchatWindow
 from gajim.gtk.single_message import SingleMessageWindow
 from gajim.gtk.add_contact import AddNewContactWindow
@@ -1977,7 +1978,7 @@ class RosterWindow:
             return True
 
         if event.type_ == 'gc-invitation':
-            dialogs.InvitationReceivedDialog(account, event)
+            InvitationReceivedDialog(account, event)
             app.events.remove_events(account, jid, event)
             return True
 
