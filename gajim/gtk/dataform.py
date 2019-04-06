@@ -22,6 +22,8 @@ from gajim.gtkgui_helpers import scale_pixbuf_from_data
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.util import MultiLineLabel
+
 
 class DataFormWidget(Gtk.ScrolledWindow):
 
@@ -32,6 +34,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.get_style_context().add_class('data-form-widget')
+        self.set_overlay_scrolling(False)
 
         self._form_node = form_node
 
@@ -91,7 +94,7 @@ class FormGrid(Gtk.Grid):
         if form_node.title is not None:
             self.title = form_node.title
             self._add_row(Title(form_node.title))
-        if form_node.instructions is not None:
+        if form_node.instructions:
             self.instructions = form_node.instructions
             self._add_row(Instructions(form_node.instructions))
 
@@ -194,6 +197,7 @@ class Field:
         self._field = field
         self._form_grid = form_grid
         self._validate_source_id = None
+        self._read_only = options.get('read-only', False)
 
         self._label = Gtk.Label(label=field.label)
         self._label.set_single_line_mode(False)
@@ -212,6 +216,10 @@ class Field:
         self._warning_box = Gtk.Box()
         self._warning_box.set_size_request(16, -1)
         self._warning_box.add(self._warning_image)
+
+    @property
+    def read_only(self):
+        return self._read_only
 
     def add(self, form_grid, row_number):
         form_grid.attach(self._label, 0, row_number, 1, 1)
@@ -262,9 +270,14 @@ class BooleanField(Field):
     def __init__(self, field, form_grid, options):
         Field.__init__(self, field, form_grid, options)
 
-        self._widget = Gtk.CheckButton()
-        self._widget.set_active(field.value)
-        self._widget.connect('toggled', self._toggled)
+        if self.read_only:
+            label = _('Yes') if field.value else _('No')
+            self._widget = Gtk.Label(label=label)
+            self._widget.set_xalign(0)
+        else:
+            self._widget = Gtk.CheckButton()
+            self._widget.set_active(field.value)
+            self._widget.connect('toggled', self._toggled)
 
     def _toggled(self, _widget):
         self._field.value = self._widget.get_active()
@@ -465,9 +478,13 @@ class TextSingleField(Field):
     def __init__(self, field, form_grid, options):
         Field.__init__(self, field, form_grid, options)
 
-        self._widget = Gtk.Entry()
-        self._widget.set_text(field.value)
-        self._widget.connect('changed', self._changed)
+        if self.read_only:
+            self._widget = Gtk.Label(label=field.value)
+            self._widget.set_xalign(0)
+        else:
+            self._widget = Gtk.Entry()
+            self._widget.set_text(field.value)
+            self._widget.connect('changed', self._changed)
 
     def _changed(self, _widget):
         self._field.value = self._widget.get_text()
@@ -498,10 +515,16 @@ class TextMultiField(Field):
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
 
-        self._textview = Gtk.TextView()
-        self._textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
-        self._textview.get_buffer().set_text(field.value)
-        self._textview.get_buffer().connect('changed', self._changed)
+        if self.read_only:
+            self._textview = MultiLineLabel(label=field.value)
+            self._textview.set_selectable(True)
+            self._textview.set_xalign(0)
+            self._textview.set_yalign(0)
+        else:
+            self._textview = Gtk.TextView()
+            self._textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
+            self._textview.get_buffer().set_text(field.value)
+            self._textview.get_buffer().connect('changed', self._changed)
 
         self._widget.add(self._textview)
 

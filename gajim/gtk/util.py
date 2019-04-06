@@ -31,6 +31,7 @@ from functools import wraps
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Pango
 import cairo
 
 from gajim.common import app
@@ -606,3 +607,19 @@ def format_fingerprint(fingerprint):
         buf += '{0} '.format(fingerprint[w:w + wordsize])
     buf = textwrap.fill(buf, width=36)
     return buf.rstrip().upper()
+
+
+def find_widget(name, container):
+    for child in container.get_children():
+        if Gtk.Buildable.get_name(child) == name:
+            return child
+        if isinstance(child, Gtk.Box):
+            return find_widget(name, child)
+
+
+class MultiLineLabel(Gtk.Label):
+    def __init__(self, *args, **kwargs):
+        Gtk.Label.__init__(self, *args, **kwargs)
+        self.set_line_wrap(True)
+        self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        self.set_single_line_mode(False)
