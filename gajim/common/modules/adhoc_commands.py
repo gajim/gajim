@@ -296,6 +296,13 @@ class LeaveGroupchatsCommand(AdHocCommand):
 
 
 class AdHocCommands(BaseModule):
+
+    _nbxmpp_extends = 'AdHoc'
+    _nbxmpp_methods = [
+        'request_command_list',
+        'execute_command',
+    ]
+
     def __init__(self, con):
         BaseModule.__init__(self, con)
 
@@ -469,38 +476,6 @@ class AdHocCommands(BaseModule):
 
             raise nbxmpp.NodeProcessed
 
-    def request_command_list(self, jid):
-        """
-        Request the command list.
-        """
-        self._log.info('Request Command List: %s', jid)
-        query = nbxmpp.Iq(typ='get', to=jid, queryNS=nbxmpp.NS_DISCO_ITEMS)
-        query.setQuerynode(nbxmpp.NS_COMMANDS)
-
-        self._con.connection.SendAndCallForResponse(
-            query, self._command_list_received)
-
-    def _command_list_received(self, stanza):
-        if not nbxmpp.isResultNode(stanza):
-            self._log.info('Error: %s', stanza.getError())
-
-            app.nec.push_incoming_event(
-                AdHocCommandError(None, conn=self._con,
-                                  error=stanza.getError()))
-            return
-
-        items = stanza.getQueryPayload()
-        commandlist = []
-        if items:
-            commandlist = [
-                (t.getAttr('node'), t.getAttr('name')) for t in items
-            ]
-
-        self._log.info('Received: %s', commandlist)
-        app.nec.push_incoming_event(
-            AdHocCommandListReceived(
-                None, conn=self._con, commandlist=commandlist))
-
     def send_command(self, jid, node, session_id,
                      form, action='execute'):
         """
@@ -561,10 +536,6 @@ class AdHocCommands(BaseModule):
 
 class AdHocCommandError(NetworkIncomingEvent):
     name = 'adhoc-command-error'
-
-
-class AdHocCommandListReceived(NetworkIncomingEvent):
-    name = 'adhoc-command-list'
 
 
 class AdHocCommandActionResponse(NetworkIncomingEvent):

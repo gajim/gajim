@@ -84,7 +84,7 @@ from gajim.gtk.service_registration import ServiceRegistration
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.tooltips import RosterTooltip
-from gajim.gtk.adhoc_commands import CommandWindow
+from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.subscription_request import SubscriptionRequestWindow
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
@@ -3635,7 +3635,7 @@ class RosterWindow:
         jid = contact.jid
         if resource is not None:
             jid = jid + '/' + resource
-        CommandWindow(account, jid)
+        AdHocCommand(account, jid)
 
     def on_roster_window_focus_in_event(self, widget, event):
         # roster received focus, so if we had urgency REMOVE IT
