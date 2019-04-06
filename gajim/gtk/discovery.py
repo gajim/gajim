@@ -1310,7 +1310,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        node = model[iter_][1]
         AdHocCommand(self.account, service)
 
     def on_register_button_clicked(self, widget=None):
