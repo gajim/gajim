@@ -42,10 +42,10 @@ def build_resources_submenu(contacts, account, action, room_jid=None,
         item = Gtk.MenuItem.new_with_label(
             '%s (%s)' % (c.resource, str(c.priority)))
         sub_menu.append(item)
-        if action == roster.on_invite_to_room:
+        if action == roster.on_invite_to_room:  # pylint: disable=comparison-with-callable
             item.connect('activate', action, [(c, account)], room_jid,
                     room_account, c.resource)
-        elif action == roster.on_invite_to_new_room:
+        elif action == roster.on_invite_to_new_room:  # pylint: disable=comparison-with-callable
             item.connect('activate', action, [(c, account)], c.resource)
         else: # start_chat, execute_command, send_file
             item.connect('activate', action, c, account, c.resource)
