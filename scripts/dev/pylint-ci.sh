@@ -24,10 +24,10 @@ PYLINT=${PYLINT:-pylint}
 # R0904 too-many-public-methods
 # R0913 too-many-arguments
 # R0916 too-many-boolean-expressions
-# R1702
-# R1706
-# R1711
-# R1716
+# R1702 too-many-nested-blocks
+# R1706 consider-using-ternary
+# R1711 useless-return
+# R1716 chained-comparison
 # W0201 attribute-defined-outside-init
 # W0212 protected-access
 # W0221 arguments-differ
