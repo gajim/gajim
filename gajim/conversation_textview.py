@@ -805,10 +805,10 @@ class ConversationTextview(GObject.GObject):
                 emoji_pixbufs.append_marks(
                     self.tv, start_mark, end_mark, special_text)
 
-        elif special_text.startswith('www.') or \
-            special_text.startswith('ftp.') or \
-            text_is_valid_uri and not is_xhtml_link:
-                tags.append('url')
+        elif (special_text.startswith('www.') or
+              special_text.startswith('ftp.') or
+              text_is_valid_uri and not is_xhtml_link):
+            tags.append('url')
         elif special_text.startswith('mailto:') and not is_xhtml_link:
             tags.append('mail')
         elif special_text.startswith('xmpp:') and not is_xhtml_link:
