@@ -96,7 +96,7 @@ class AdHocCommand(Gtk.Assistant):
 
         commands = Gtk.Button(label=_('Commands'))
         commands.connect('clicked',
-                       lambda *args: self.set_current_page(Page.COMMANDS))
+                         lambda *args: self.set_current_page(Page.COMMANDS))
         self._buttons['commands'] = commands
         self.add_action_widget(commands)
 
@@ -280,10 +280,11 @@ class Commands(Gtk.Box):
         self.pack_start(self._scrolled, True, True, 0)
         self.show_all()
 
-    def _search_func(self, model, column, search_text, iter_):
+    @staticmethod
+    def _search_func(model, _column, search_text, iter_):
         return search_text.lower() not in model[iter_][0].lower()
 
-    def _on_row_activate(self, tree_view, path, column):
+    def _on_row_activate(self, _tree_view, _path, _column):
         self.get_toplevel().execute_action()
 
     def add_commands(self, commands):
