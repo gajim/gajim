@@ -15,17 +15,25 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-log = logging.getLogger('gajim.c.z.zeroconf_avahi')
 
-import gi
-gi.require_version('Avahi', '0.6')
 from gi.repository import Avahi
 from gi.repository import Gio
 from gi.repository import GLib
 
 from gajim.common.i18n import _
 from gajim.common.zeroconf.zeroconf import Constant, ConstantRI
-from gajim.common.zeroconf.zeroconf_avahi_const import *
+from gajim.common.zeroconf.zeroconf_avahi_const import DBUS_NAME
+from gajim.common.zeroconf.zeroconf_avahi_const import DBUS_INTERFACE_SERVER
+from gajim.common.zeroconf.zeroconf_avahi_const import DBUS_INTERFACE_ENTRY_GROUP
+from gajim.common.zeroconf.zeroconf_avahi_const import DBUS_INTERFACE_DOMAIN_BROWSER
+from gajim.common.zeroconf.zeroconf_avahi_const import ServerState
+from gajim.common.zeroconf.zeroconf_avahi_const import EntryGroup
+from gajim.common.zeroconf.zeroconf_avahi_const import DomainBrowser
+from gajim.common.zeroconf.zeroconf_avahi_const import Protocol
+from gajim.common.zeroconf.zeroconf_avahi_const import Interface
+
+log = logging.getLogger('gajim.c.z.zeroconf_avahi')
+
 
 class Zeroconf:
     def __init__(self, new_serviceCB, remove_serviceCB, name_conflictCB,

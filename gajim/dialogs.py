@@ -50,8 +50,10 @@ from gajim.common import i18n
 from gajim.common.modules import dataforms
 from gajim.common.exceptions import GajimGeneralException
 
-# Compat with Gajim 1.0.3 for plugins
-from gajim.gtk.dialogs import *
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import get_builder
