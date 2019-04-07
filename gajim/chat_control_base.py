@@ -75,7 +75,7 @@ from gajim.command_system.implementation import execute
 # pylint: enable=unused-import
 
 if app.is_installed('GSPELL'):
-    from gi.repository import Gspell
+    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
 ################################################################################

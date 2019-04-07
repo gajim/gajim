@@ -47,7 +47,7 @@ except (ImportError, ValueError):
     HAS_GST = False
 
 if app.is_installed('GSPELL'):
-    from gi.repository import Gspell
+    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
 class Preferences(Gtk.ApplicationWindow):

@@ -60,8 +60,10 @@ except ImportError:
 HAS_IPYTHON5 = True
 try:
     from pygments.token import Token
+    # pylint: disable=ungrouped-imports
     from IPython.core.displayhook import DisplayHook
     from IPython.core.display_trap import DisplayTrap
+    # pylint: enable=ungrouped-imports
 
     class MyPromptDisplayHook(DisplayHook):
         def __init__(self, shell, view):

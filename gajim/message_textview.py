@@ -31,7 +31,7 @@ from gajim.common.const import StyleAttr
 from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL'):
-    from gi.repository import Gspell
+    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
 class MessageTextView(Gtk.TextView):
