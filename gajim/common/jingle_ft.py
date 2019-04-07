@@ -307,8 +307,7 @@ class JingleFileTransfer(JingleContent):
             self.__state_changed(State.CAND_SENT_AND_RECEIVED, args)
             self.__state_changed(State.TRANSFERING)
             raise nbxmpp.NodeProcessed
-        else:
-            self.__state_changed(State.CAND_RECEIVED, args)
+        self.__state_changed(State.CAND_RECEIVED, args)
 
     def __on_iq_result(self, stanza, content, error, action):
         log.info("__on_iq_result")

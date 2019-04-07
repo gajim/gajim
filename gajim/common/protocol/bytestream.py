@@ -757,11 +757,10 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
             app.socks5queue.on_success[file_props.sid] = self._proxy_auth_ok
             raise nbxmpp.NodeProcessed
 
+        if file_props.stopped:
+            self.remove_transfer(file_props)
         else:
-            if file_props.stopped:
-                self.remove_transfer(file_props)
-            else:
-                app.socks5queue.send_file(file_props, self.name, 'server')
+            app.socks5queue.send_file(file_props, self.name, 'server')
 
         raise nbxmpp.NodeProcessed
 

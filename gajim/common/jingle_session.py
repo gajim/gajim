@@ -593,9 +593,9 @@ class JingleSession:
                 text = 'Content %s (created by %s) does not exist' % (name, creator)
                 self.__send_error(stanza, 'bad-request', text=text, type_='_modify')
                 raise nbxmpp.NodeProcessed
-            else:
-                cn = self.contents[(creator, name)]
-                cn.on_stanza(stanza, content, error, action)
+
+            cn = self.contents[(creator, name)]
+            cn.on_stanza(stanza, content, error, action)
 
     def __on_session_terminate(self, stanza, jingle, error, action):
         self.connection.delete_jingle_session(self.sid)

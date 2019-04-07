@@ -438,43 +438,43 @@ class AdHocCommands(BaseModule):
                 self._sessions[(jid, sessionid, node)] = obj
             self._log.info('Comand %s executed: %s', node, jid)
             raise nbxmpp.NodeProcessed
-        else:
-            # the command is already running, check for it
-            magictuple = (jid, sessionid, node)
-            if magictuple not in self._sessions:
-                # we don't have this session... ha!
-                self._log.warning('Invalid session %s', magictuple)
-                raise nbxmpp.NodeProcessed
 
-            action = cmd.getAttr('action')
-            obj = self._sessions[magictuple]
-
-            try:
-                if action == 'cancel':
-                    rc = obj.cancel(stanza)
-                elif action == 'prev':
-                    rc = obj.prev(stanza)
-                elif action == 'next':
-                    rc = obj.next(stanza)
-                elif action == 'execute' or action is None:
-                    rc = obj.execute(stanza)
-                elif action == 'complete':
-                    rc = obj.complete(stanza)
-                else:
-                    # action is wrong. stop the session, send error
-                    raise AttributeError
-            except AttributeError:
-                # the command probably doesn't handle invoked action...
-                # stop the session, return error
-                del self._sessions[magictuple]
-                self._log.warning('Wrong action %s %s', node, jid)
-                raise nbxmpp.NodeProcessed
-
-            # delete the session if rc is False
-            if not rc:
-                del self._sessions[magictuple]
-
+        # the command is already running, check for it
+        magictuple = (jid, sessionid, node)
+        if magictuple not in self._sessions:
+            # we don't have this session... ha!
+            self._log.warning('Invalid session %s', magictuple)
             raise nbxmpp.NodeProcessed
+
+        action = cmd.getAttr('action')
+        obj = self._sessions[magictuple]
+
+        try:
+            if action == 'cancel':
+                rc = obj.cancel(stanza)
+            elif action == 'prev':
+                rc = obj.prev(stanza)
+            elif action == 'next':
+                rc = obj.next(stanza)
+            elif action == 'execute' or action is None:
+                rc = obj.execute(stanza)
+            elif action == 'complete':
+                rc = obj.complete(stanza)
+            else:
+                # action is wrong. stop the session, send error
+                raise AttributeError
+        except AttributeError:
+            # the command probably doesn't handle invoked action...
+            # stop the session, return error
+            del self._sessions[magictuple]
+            self._log.warning('Wrong action %s %s', node, jid)
+            raise nbxmpp.NodeProcessed
+
+        # delete the session if rc is False
+        if not rc:
+            del self._sessions[magictuple]
+
+        raise nbxmpp.NodeProcessed
 
     def send_command(self, jid, node, session_id,
                      form, action='execute'):
