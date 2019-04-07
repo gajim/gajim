@@ -26,10 +26,12 @@
 
 import socket
 import base64
-from gi.repository import GLib
 import time
+import logging
 
 import nbxmpp
+from gi.repository import GLib
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import ged
@@ -37,7 +39,7 @@ from gajim.common import jingle_xtls
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5SenderClient
 
-import logging
+
 log = logging.getLogger('gajim.c.p.bytestream')
 
 def is_transfer_paused(file_props):

@@ -12,12 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 import nbxmpp
 from gajim.common import app
 from gajim.common.jingle_transport import TransportType
-from gajim.common.socks5 import Socks5ReceiverClient, Socks5SenderClient
+from gajim.common.socks5 import Socks5ReceiverClient
+from gajim.common.socks5 import Socks5SenderClient
 
-import logging
 log = logging.getLogger('gajim.c.jingle_ftstates')
 
 
