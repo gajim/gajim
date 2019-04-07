@@ -563,7 +563,6 @@ class ConnectionSocks5Bytestream(ConnectionBytestream):
         """
         file_props = FilesProp.getFilePropBySid(sid)
         file_props.hash_ = hash_id
-        return
 
     def _connect_error(self, sid, error, error_type, msg=None):
         """
