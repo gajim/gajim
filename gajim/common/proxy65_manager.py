@@ -20,14 +20,16 @@ import socket
 import struct
 import errno
 import logging
-log = logging.getLogger('gajim.c.proxy65_manager')
 
 import nbxmpp
+from nbxmpp.idlequeue import IdleObject
+
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.socks5 import Socks5
-from nbxmpp.idlequeue import IdleObject
 from gajim.common.file_props import FilesProp
+
+log = logging.getLogger('gajim.c.proxy65_manager')
 
 S_INITIAL = 0
 S_STARTED = 1

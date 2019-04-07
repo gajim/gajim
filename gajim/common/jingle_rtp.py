@@ -18,22 +18,22 @@ Handles Jingle RTP sessions (XEP 0167)
 
 import logging
 import socket
-import nbxmpp
-import gi
-from gi.repository import Farstream
+from collections import deque
 
-gi.require_version('Gst', '1.0')
+import nbxmpp
+from gi.repository import Farstream
 from gi.repository import Gst
 from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.jingle_transport import JingleTransportICEUDP
-from gajim.common.jingle_content import contents, JingleContent, JingleContentSetupException
+from gajim.common.jingle_content import contents
+from gajim.common.jingle_content import JingleContent
+from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.jingle_session import FailedApplication
 
-from collections import deque
 
 log = logging.getLogger('gajim.c.jingle_rtp')
 

@@ -32,11 +32,6 @@ import getopt
 import sqlite3
 from enum import IntEnum, unique
 
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GLib', '2.0')
-gi.require_version('Gdk', '3.0')
-gi.require_version('Gio', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -85,6 +80,7 @@ if is_standalone():
     configpaths.init()
     app.load_css_config()
 
+# pylint: disable=C0413
 from gajim.common import helpers
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import ErrorDialog
@@ -94,7 +90,7 @@ from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.util import convert_rgb_to_hex
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_app_icon_list
-
+# pylint: enable=C0413
 
 @unique
 class Column(IntEnum):

@@ -32,7 +32,7 @@ import sys
 import random
 import socket
 import operator
-import string
+
 import time
 import hashlib
 import json
@@ -40,13 +40,13 @@ import logging
 import base64
 import ssl
 from functools import partial
+import string
 from string import Template
 from urllib.request import urlopen
 from urllib.error import URLError
 
 from gi.repository import GLib
-if sys.platform in ('win32', 'darwin'):
-    import certifi
+
 import OpenSSL.crypto
 import nbxmpp
 from nbxmpp.const import Realm
@@ -75,6 +75,9 @@ from gajim.common.connection_handlers_events import ConnectionLostEvent
 from gajim.common.connection_handlers_events import NewAccountConnectedEvent
 from gajim.common.connection_handlers_events import NewAccountNotConnectedEvent
 from gajim.common.connection_handlers_events import MessageSentEvent
+
+if sys.platform in ('win32', 'darwin'):
+    import certifi
 
 
 log = logging.getLogger('gajim.c.connection')
