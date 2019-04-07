@@ -4461,8 +4461,9 @@ class RosterWindow:
             return
 
         # Is the contact we drag a meta contact?
-        accounts = (self.regroup and app.contacts.get_accounts()) or \
-                account_source
+        accounts = account_source
+        if self.regroup:
+            accounts = app.contacts.get_accounts() or account_source
         is_big_brother = app.contacts.is_big_brother(account_source,
             jid_source, accounts)
 

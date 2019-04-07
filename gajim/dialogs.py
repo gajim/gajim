@@ -1399,9 +1399,6 @@ class Dialog(Gtk.Dialog):
     def just_destroy(self, widget):
         self.destroy()
 
-    def get_button(self, index):
-        buttons = self.get_action_area().get_children()
-        return index < len(buttons) and buttons[index] or None
 
 class DataFormWindow(Dialog):
     def __init__(self, form, on_response_ok):
