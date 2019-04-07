@@ -85,4 +85,4 @@ class BaseModule:
         if self._stored_publish is None:
             return
         self._log.info('Send stored publish')
-        self._stored_publish()
+        self._stored_publish()  # pylint: disable=not-callable
