@@ -1158,7 +1158,7 @@ class GroupchatControl(ChatControlBase):
         if self.form_widget:
             self.form_widget.hide()
             self.form_widget.destroy()
-            self.btn_box.destroy()
+            self.btn_box.destroy()  # pylint: disable=access-member-before-definition
 
         self.form_widget = DataFormWidget(event.form)
 
