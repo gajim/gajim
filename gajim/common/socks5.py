@@ -1297,8 +1297,7 @@ class Socks5Client(Socks5):
                     return
                 if self.state < 5:
                     self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
-                    result = self.main(0)
-                    self.queue.process_result(result, self)
+                    self.main(0)
                 elif self.state == 5: # wait for proxy reply
                     pass
                 elif self.file_props.type_ == 'r':

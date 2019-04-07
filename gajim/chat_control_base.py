@@ -497,7 +497,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         item = Gtk.SeparatorMenuItem.new()
         menu.prepend(item)
 
-        menu2 = self.prepare_context_menu()
+        menu2 = self.prepare_context_menu()  # pylint: disable=assignment-from-none
         i = 0
         for item in menu2:
             menu2.remove(item)

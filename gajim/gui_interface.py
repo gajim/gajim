@@ -2038,15 +2038,12 @@ class Interface:
 
     @staticmethod
     def save_config():
-        err_str = parser.write()
-        if err_str is not None:
-            print(err_str, file=sys.stderr)
-            # it is good to notify the user
-            # in case he or she cannot see the output of the console
-            error_dialog = ErrorDialog(_('Could not save your settings and '
-                'preferences'), err_str)
-            error_dialog.run()
-            sys.exit()
+        if parser.write():
+            return
+
+        error_dialog = ErrorDialog(
+            _('Could not save your settings and preferences'))
+        error_dialog.run()
 
     @staticmethod
     def update_avatar(account=None, jid=None, contact=None, room_avatar=False):

@@ -113,14 +113,16 @@ class OptionsParser:
                 app.config.foreach(self.write_line, file)
         except IOError:
             log.exception('Failed to write config file')
-            return
+            return False
 
         try:
             temp_filepath.replace(config_path)
         except Exception:
             log.exception('Failed to replace config file')
-        else:
-            log.info('Successful saved config file')
+            return False
+
+        log.info('Successful saved config file')
+        return True
 
     def update_config(self, old_version, new_version):
         old_version_list = old_version.split('.') # convert '0.x.y' to (0, x, y)
