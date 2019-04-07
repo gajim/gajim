@@ -540,13 +540,26 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         id_ = item.connect('activate', self.msg_textview.clear)
         self.handlers[id_] = item
 
+        paste_item = Gtk.MenuItem.new_with_label(_('Paste as quote'))
+        id_ = paste_item.connect('activate', self.paste_clipboard_as_quote)
+        self.handlers[id_] = paste_item
+        menu.append(paste_item)
+
         menu.show_all()
 
-    def on_quote(self, widget, text):
+    def insert_as_quote(self, text: str) -> None:
         self.msg_textview.remove_placeholder()
-        text = '>' + text.replace('\n', '\n>') + '\n'
+        text = '> ' + text.replace('\n', '\n> ') + '\n'
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
+
+    def paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        text = clipboard.wait_for_text()
+        self.insert_as_quote(text)
+
+    def on_quote(self, widget, text):
+        self.insert_as_quote(text)
 
     # moved from ChatControl
     def _on_banner_eventbox_button_press_event(self, widget, event):
