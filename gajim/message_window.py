@@ -890,15 +890,13 @@ class MessageWindow:
             tab = self.notebook.get_tab_label(page)
             tab_alloc = tab.get_allocation()
             if horiz:
-                if (x >= tab_alloc.x) and \
-                (x <= (tab_alloc.x + tab_alloc.width)):
+                if tab_alloc.x <= x <= (tab_alloc.x + tab_alloc.width):
                     page_num = i
                     if x >= tab_alloc.x + (tab_alloc.width / 2.0):
                         to_right = True
                     break
             else:
-                if (y >= tab_alloc.y) and \
-                (y <= (tab_alloc.y + tab_alloc.height)):
+                if tab_alloc.y <= y <= (tab_alloc.y + tab_alloc.height):
                     page_num = i
 
                     if y > tab_alloc.y + (tab_alloc.height / 2.0):

@@ -3308,7 +3308,7 @@ class RosterWindow:
                     not event.get_state() & Gdk.ModifierType.CONTROL_MASK):
                 # Don't handle double click if we press icon of a metacontact
                 titer = model.get_iter(path)
-                if x > x_min and x < x_min + 27 and type_ == 'contact' and \
+                if x_min < x < x_min + 27 and type_ == 'contact' and \
                 model.iter_has_child(titer):
                     if self.tree.row_expanded(path):
                         self.tree.collapse_row(path)
@@ -3328,7 +3328,7 @@ class RosterWindow:
                 else:
                     self.expand_group_row(path)
 
-            elif type_ == 'contact' and x > x_min and x < x_min + 27:
+            elif type_ == 'contact' and x_min < x < x_min + 27:
                 if self.tree.row_expanded(path):
                     self.tree.collapse_row(path)
                 else:
