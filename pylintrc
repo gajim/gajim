@@ -51,15 +51,8 @@ confidence=
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 # C0111 missing-docstring
-# C0301 line too long
-# R1710 inconsistent-return-statements
-# R0912 too-many-branches
-# R0914 too-many-locals
-# R0915 too-many-statements
 # W0511 fix-me
-# W0231 super-init-not-called
-# W0233 non-parent-init-called
-disable=C0111,C0301,R1710,R0912,R0914,R0915,W0511,W0231,W0233
+disable=C0111,W0511
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -229,7 +222,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=80
 
 # Maximum number of lines in a module
 max-module-lines=1000
