@@ -712,10 +712,10 @@ class Socks5:
                 return None
             self.file_props.stalled = False
             return lenn
-        else:
-            self.state = 8 # end connection
-            self.disconnect()
-            return -1
+
+        self.state = 8 # end connection
+        self.disconnect()
+        return -1
 
     def _on_send_exception(self):
         # peer stopped reading

@@ -261,8 +261,7 @@ class Events:
                     self._events[account][jid].remove(event)
                 self.fire_event_removed([event])
                 return
-            else:
-                return True
+            return True
         if types:
             new_list = [] # list of events to keep
             removed_list = [] # list of removed events

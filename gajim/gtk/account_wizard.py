@@ -200,7 +200,7 @@ class AccountCreationWizard:
             self.back_button.set_sensitive(True)
             return
 
-        elif cur_page == 1:
+        if cur_page == 1:
             # We are adding an existing account
             anonymous = self.xml.get_object('anonymous_checkbutton1').\
                 get_active()

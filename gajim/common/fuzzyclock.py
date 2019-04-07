@@ -90,8 +90,6 @@ class FuzzyClock:
                 '0': self.HOUR_NAMES[now.tm_hour % 12],
                 '1': self.HOUR_NAMES[(now.tm_hour + 1) % 12]}
 
-        elif fuzzyness == 3:
+        if fuzzyness == 3:
             return self.FUZZY_DAYTIME[int(round(now.tm_hour / 3.0))]
-
-        else:
-            return self.FUZZY_WEEK[now.tm_wday]
+        return self.FUZZY_WEEK[now.tm_wday]
