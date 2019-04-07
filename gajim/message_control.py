@@ -78,8 +78,9 @@ class MessageControl:
         """
         Called when the control becomes active (state is True) or inactive (state
         is False)
+
+        Derived classes MUST implement this method
         """
-        pass  # Derived classes MUST implement this method
 
     def minimizable(self):
         """
@@ -121,31 +122,26 @@ class MessageControl:
         """
         Derived classes SHOULD implement this
         """
-        pass
 
     def update_ui(self):
         """
         Derived classes SHOULD implement this
         """
-        pass
 
     def toggle_emoticons(self):
         """
         Derived classes MAY implement this
         """
-        pass
 
     def update_font(self):
         """
         Derived classes SHOULD implement this
         """
-        pass
 
     def update_tags(self):
         """
         Derived classes SHOULD implement this
         """
-        pass
 
     def get_tab_label(self, chatstate):
         """
@@ -157,7 +153,6 @@ class MessageControl:
         """
         # Return a markup'd label and optional Gtk.Color in a tuple like:
         # return (label_str, None)
-        pass
 
     def get_tab_image(self, count_unread=True):
         # Return a suitable tab image for display.

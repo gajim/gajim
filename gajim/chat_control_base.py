@@ -131,7 +131,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Derived types SHOULD implement this
         """
-        pass
 
     def update_ui(self):
         """
@@ -149,13 +148,11 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Derived types MAY implement this
         """
-        pass
 
     def _update_toolbar(self):
         """
         Derived types MAY implement this
         """
-        pass
 
     def _nec_our_status(self, obj):
         if self.account != obj.conn.name:
@@ -698,7 +695,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         """
         Derived types SHOULD implement this
         """
-        pass
 
     def _on_drag_leave(self, *args):
         # FIXME: DND on non editable TextView, find a better way

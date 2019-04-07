@@ -42,7 +42,6 @@ class GajimPluginActivateException(Exception):
     '''
     Raised when activation failed
     '''
-    pass
 
 class log_calls:
     '''

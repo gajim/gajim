@@ -97,13 +97,11 @@ class NegotiationError(Exception):
     """
     A session negotiation failed
     """
-    pass
 
 class Cancelled(Exception):
     """
     The user cancelled an operation
     """
-    pass
 
 class LatexError(Exception):
     """

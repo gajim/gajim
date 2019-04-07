@@ -585,7 +585,6 @@ class ConsoleView(Gtk.TextView):
         """
         For some reason we can't extend onKeyPress directly (bug #500900)
         """
-        pass
 
 class IPythonView(ConsoleView, IterableIPShell):
     '''

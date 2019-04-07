@@ -574,7 +574,6 @@ class TimeoutDialog:
         """
         To be implemented in derivated classes
         """
-        pass
 
     def countdown(self):
         if self.countdown_enabled:

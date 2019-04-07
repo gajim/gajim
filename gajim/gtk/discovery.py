@@ -908,7 +908,6 @@ class AgentBrowser:
         """
         Called when the default theme is changed
         """
-        pass
 
     def on_browse_button_clicked(self, widget=None):
         """
@@ -1095,7 +1094,6 @@ class AgentBrowser:
 
     def _update_error(self, iter_, jid, node):
         '''Called when a disco#info query failed for an item.'''
-        pass
 
 
 class ToplevelAgentBrowser(AgentBrowser):

@@ -38,16 +38,13 @@ class DefinitionError(BaseError):
     """
     Used to indicate errors occurred on command definition.
     """
-    pass
 
 class CommandError(BaseError):
     """
     Used to indicate errors occurred during command execution.
     """
-    pass
 
 class NoCommandError(BaseError):
     """
     Used to indicate an inability to find the specified command.
     """
-    pass

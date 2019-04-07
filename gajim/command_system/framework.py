@@ -114,14 +114,12 @@ class CommandProcessor:
         If returns True then command execution will be interrupted and
         command will not be executed.
         """
-        pass
 
     def command_postprocessor(self, cmd, name, arguments, args, kwargs, value):
         """
         Redefine this method in the subclass to execute custom code
         after command gets executed.
         """
-        pass
 
     def looks_like_command(self, text, body, name, arguments):
         """
@@ -132,7 +130,6 @@ class CommandProcessor:
         be interrupted and that value will be used to return from
         process_as_command.
         """
-        pass
 
     def get_command(self, name):
         cmd = get_command(self.COMMAND_HOST, name)

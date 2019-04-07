@@ -649,7 +649,6 @@ class InputDialog(CommonInputDialog):
         '''
         may be implemented by subclasses
         '''
-        pass
 
     def set_entry(self, value):
         self.input_entry.set_text(value)

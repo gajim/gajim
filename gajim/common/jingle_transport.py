@@ -74,7 +74,6 @@ class JingleTransport:
         """
         Build a candidate stanza for the given candidate
         """
-        pass
 
     def make_transport(self, candidates=None):
         """
