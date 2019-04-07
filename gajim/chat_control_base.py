@@ -836,7 +836,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
             history = self.received_history
             pos = self.received_history_pos
         size = len(history)
-        scroll = False if pos == size else True # are we scrolling?
+        scroll = pos != size
         # we don't want size of the buffer to grow indefinitely
         max_size = app.config.get('key_up_lines')
         for _i in range(size - max_size + 1):
