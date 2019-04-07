@@ -234,14 +234,14 @@ def detect_dependencies():
 
     # ZEROCONF
     try:
-        import pybonjour  # pylint: disable=unused-variable
+        import pybonjour  # pylint: disable=unused-import
         _dependencies['PYBONJOUR'] = True
     except Exception:
         pass
 
     try:
         gi.require_version('Avahi', '0.6')
-        from gi.repository import Avahi  # pylint: disable=unused-variable
+        from gi.repository import Avahi  # pylint: disable=unused-import
         _dependencies['AVAHI'] = True
     except Exception:
         pass
@@ -305,7 +305,7 @@ def detect_dependencies():
     # GEOCLUE
     try:
         gi.require_version('Geoclue', '2.0')
-        from gi.repository import Geoclue  # pylint: disable=unused-variable
+        from gi.repository import Geoclue  # pylint: disable=unused-import
         _dependencies['GEOCLUE'] = True
     except (ImportError, ValueError):
         pass
@@ -322,7 +322,7 @@ def detect_dependencies():
 
     # PYCURL
     try:
-        import pycurl  # pylint: disable=unused-variable
+        import pycurl  # pylint: disable=unused-import
         _dependencies['PYCURL'] = True
     except ImportError:
         pass

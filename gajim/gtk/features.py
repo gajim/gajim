@@ -158,7 +158,7 @@ class FeaturesDialog(Gtk.Dialog):
             return True
         try:
             gi.require_version('Secret', '1')
-            from gi.repository import Secret  # pylint: disable=unused-variable
+            from gi.repository import Secret  # pylint: disable=unused-import
         except (ValueError, ImportError):
             return False
         return True

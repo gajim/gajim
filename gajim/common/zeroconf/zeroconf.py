@@ -40,14 +40,14 @@ def test_avahi():
     try:
         import gi
         gi.require_version('Avahi', '0.6')
-        from gi.repository import Avahi  # pylint: disable=unused-variable
+        from gi.repository import Avahi  # pylint: disable=unused-import
     except (ImportError, ValueError):
         return False
     return True
 
 def test_bonjour():
     try:
-        import pybonjour  # pylint: disable=unused-variable
+        import pybonjour  # pylint: disable=unused-import
     except ImportError:
         return False
     except WindowsError: # pylint: disable=undefined-variable
