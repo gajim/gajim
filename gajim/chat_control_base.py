@@ -323,7 +323,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         self.set_emoticon_popover()
 
         # Attach speller
-        self.spell_checker = None
         self.set_speller()
         self.conv_textview.tv.show()
 
@@ -474,15 +473,15 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if gspell_lang is None:
             return
 
-        self.spell_checker = Gspell.Checker.new(gspell_lang)
+        spell_checker = Gspell.Checker.new(gspell_lang)
         spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
             self.msg_textview.get_buffer())
-        spell_buffer.set_spell_checker(self.spell_checker)
+        spell_buffer.set_spell_checker(spell_checker)
         spell_view = Gspell.TextView.get_from_gtk_text_view(self.msg_textview)
         spell_view.set_inline_spell_checking(False)
         spell_view.set_enable_language_menu(True)
 
-        self.spell_checker.connect('notify::language', self.on_language_changed)
+        spell_checker.connect('notify::language', self.on_language_changed)
 
     def get_speller_language(self):
         per_type = 'contacts'

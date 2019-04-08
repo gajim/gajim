@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import gc
-
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
@@ -407,9 +405,6 @@ class MessageTextView(Gtk.TextView):
             image.show()
             self.add_child_at_anchor(image, anchor)
         buffer_.insert_at_cursor(' ')
-
-    def destroy(self):
-        GLib.idle_add(gc.collect)
 
     def clear(self, widget=None):
         """
