@@ -55,10 +55,14 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_activity_icon_name
+
+if app.is_installed('GSPELL'):
+    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 
 log = logging.getLogger('gajim.dialogs')
@@ -624,6 +628,21 @@ class ChangeStatusMessageDialog(TimeoutDialog):
 
         message_textview = self.xml.get_object('message_textview')
         self.message_buffer = message_textview.get_buffer()
+
+        if app.config.get('use_speller') and app.is_installed('GSPELL'):
+            lang = app.config.get('speller_language')
+            gspell_lang = Gspell.language_lookup(lang)
+            if gspell_lang is None:
+                AspellDictError(lang)
+            else:
+                spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
+                    self.message_buffer)
+                spell_buffer.set_spell_checker(Gspell.Checker.new(gspell_lang))
+                spell_view = Gspell.TextView.get_from_gtk_text_view(
+                    message_textview)
+                spell_view.set_inline_spell_checking(True)
+                spell_view.set_enable_language_menu(True)
+
         self.message_buffer.connect('changed', self.on_message_buffer_changed)
         if not msg:
             msg = ''
