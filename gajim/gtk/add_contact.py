@@ -15,6 +15,7 @@
 from gi.repository import Gdk
 from gi.repository import Gtk
 
+from gajim import vcard
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
@@ -58,8 +59,9 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
         self.xml.connect_signals(self)
 
         for w in ('account_combobox', 'account_label', 'prompt_label',
-                  'uid_label', 'uid_entry', 'protocol_combobox',
-                  'protocol_jid_combobox', 'protocol_label', 'nickname_entry',
+                  'uid_label', 'uid_entry', 'show_contact_info_button',
+                  'protocol_combobox', 'protocol_jid_combobox',
+                  'protocol_label', 'nickname_entry',
                   'message_scrolledwindow', 'save_message_checkbutton',
                   'register_hbox', 'add_button', 'message_textview',
                   'connected_label', 'group_comboboxentry',
@@ -68,6 +70,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
             self.__dict__[w] = self.xml.get_object(w)
 
         self.subscription_table = [self.uid_label, self.uid_entry,
+                                   self.show_contact_info_button,
                                    self.nickname_label, self.nickname_entry,
                                    self.group_label, self.group_comboboxentry]
 
@@ -191,6 +194,7 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
                 self.account))
             message_buffer.set_text(msg)
 
+        self.uid_entry.connect('changed', self.on_uid_entry_changed)
         self.show_all()
 
         app.ged.register_event_handler('gateway-prompt-received', ged.GUI1,
@@ -203,6 +207,26 @@ class AddNewContactWindow(Gtk.ApplicationWindow):
                                      self._nec_presence_received)
         app.ged.remove_event_handler('gateway-prompt-received', ged.GUI1,
                                      self._nec_gateway_prompt_received)
+
+    def on_uid_entry_changed(self, widget):
+        is_empty = bool(not self.uid_entry.get_text() == '')
+        self.show_contact_info_button.set_sensitive(is_empty)
+
+    def on_show_contact_info_button_clicked(self, widget):
+        """
+        Ask for vCard
+        """
+        jid = self.uid_entry.get_text().strip()
+
+        if jid in app.interface.instances[self.account]['infos']:
+            app.interface.instances[self.account]['infos'][jid].window.present()
+        else:
+            contact = app.contacts.create_contact(jid=jid, account=self.account)
+            app.interface.instances[self.account]['infos'][jid] = \
+                     vcard.VcardWindow(contact, self.account)
+            # Remove xmpp page
+            app.interface.instances[self.account]['infos'][jid].xml.\
+                     get_object('information_notebook').remove_page(0)
 
     def on_register_button_clicked(self, widget):
         model = self.protocol_jid_combobox.get_model()
