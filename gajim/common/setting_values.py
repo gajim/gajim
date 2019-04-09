@@ -115,6 +115,7 @@ APP_SETTINGS = {
     'notification_position_x': -1,
     'notification_position_y': -1,
     'muc_highlight_words': '',
+    'muc_prefer_direct_msg': True,
     'quit_on_roster_x_button': False,
     'hide_on_roster_x_button': False,
     'show_status_msgs_in_roster': True,

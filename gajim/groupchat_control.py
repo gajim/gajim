@@ -1902,11 +1902,14 @@ class GroupchatControl(ChatControlBase):
         gc_c = app.contacts.get_gc_contact(self.account, self.room_jid, nick)
         nick_jid = gc_c.get_full_jid()
 
-        ctrl = app.interface.msg_win_mgr.get_control(nick_jid, self.account)
-        if not ctrl:
+        muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
+        pm_queue = len(app.events.get_events(
+            self.account, jid=nick_jid, types=['pm']))
+        if not self.is_anonymous and muc_prefer_direct_msg and not pm_queue:
+            jid = app.get_jid_without_resource(gc_c.jid)
+            ctrl = app.interface.new_chat_from_jid(self.account, jid)
+        else:
             ctrl = app.interface.new_private_chat(gc_c, self.account)
-
-        if ctrl:
             ctrl.parent_win.set_active_tab(ctrl)
 
         return ctrl
