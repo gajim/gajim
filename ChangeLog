@@ -15,6 +15,7 @@ Gajim 1.1.3 (TBA)
   * #9622 Fix an error while quitting Gajim
   * #9633 Fix an error while sending a file
   * #9637 Restore window size correctly on wayland
+  * #9660 GPG Agent setting is ignored
   * Improve dark theme colors
   * Fix access to GnuPG keys
   * Use UUID4 item ids for pubsub posts
