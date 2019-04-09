@@ -421,6 +421,12 @@ class GroupChats(PreferenceBox):
                     props={'entries': THRESHOLD_OPTIONS}),
 
             Setting(SettingKind.SWITCH,
+                    _('Direct Messages'),
+                    SettingType.CONFIG,
+                    'muc_prefer_direct_msg',
+                    desc=_('Prefer direct messages in private group chats ')),
+
+            Setting(SettingKind.SWITCH,
                     _('Show Joined / Left'),
                     SettingType.CONFIG,
                     'gc_print_join_left_default',
