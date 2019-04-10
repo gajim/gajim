@@ -50,51 +50,51 @@ class XMLConsoleWindow(Gtk.Window):
         self.incoming = True
         self.outgoing = True
         self.filter_dialog = None
+        self.last_stanza = None
 
-        glade_objects = ['textview', 'input', 'scrolled_input', 'headerbar',
-                         'scrolled', 'actionbar', 'paned', 'box', 'menubutton']
-        self.builder = get_builder('xml_console_window.ui')
-        for obj in glade_objects:
-            setattr(self, obj, self.builder.get_object(obj))
-
-        self.set_titlebar(self.headerbar)
+        self._ui = get_builder('xml_console_window.ui')
+        self.set_titlebar(self._ui.headerbar)
         jid = app.get_jid_from_account(account)
-        self.headerbar.set_subtitle(jid)
+        self._ui.headerbar.set_subtitle(jid)
         self.set_default_size(600, 600)
-        self.add(self.box)
+        self.add(self._ui.box)
 
-        self.paned.set_position(self.paned.get_property('max-position'))
+        self._ui.paned.set_position(self._ui.paned.get_property('max-position'))
 
         button = get_image_button(
             'edit-clear-all-symbolic', _('Clear'))
         button.connect('clicked', self.on_clear)
-        self.actionbar.pack_start(button)
+        self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
             'applications-system-symbolic', _('Filter'))
         button.connect('clicked', self.on_filter_options)
-        self.actionbar.pack_start(button)
+        self._ui.actionbar.pack_start(button)
 
         button = get_image_button(
             'document-edit-symbolic', _('XML Input'), toggle=True)
         button.connect('toggled', self.on_input)
-        self.actionbar.pack_start(button)
+        self._ui.actionbar.pack_start(button)
 
-        button = get_image_button('emblem-ok-symbolic', _('Send'))
+        button = get_image_button('insert-text-symbolic', _('Paste Last Input'))
+        button.connect('clicked', self.on_paste_last)
+        self._ui.actionbar.pack_start(button)
+
+        button = get_image_button('mail-send-symbolic', _('Send'))
         button.connect('clicked', self.on_send)
-        self.actionbar.pack_end(button)
+        self._ui.actionbar.pack_end(button)
 
-        self.actionbar.pack_start(self.menubutton)
+        self._ui.actionbar.pack_start(self._ui.menubutton)
 
         self.create_tags()
         self.show_all()
 
-        self.scrolled_input.hide()
-        self.menubutton.hide()
+        self._ui.scrolled_input.hide()
+        self._ui.menubutton.hide()
 
         self.connect("destroy", self.on_destroy)
         self.connect('key_press_event', self.on_key_press_event)
-        self.builder.connect_signals(self)
+        self._ui.connect_signals(self)
 
         app.ged.register_event_handler(
             'stanza-received', ged.GUI1, self._nec_stanza_received)
@@ -102,7 +102,7 @@ class XMLConsoleWindow(Gtk.Window):
             'stanza-sent', ged.GUI1, self._nec_stanza_sent)
 
     def create_tags(self):
-        buffer_ = self.textview.get_buffer()
+        buffer_ = self._ui.textview.get_buffer()
         in_color = app.css_config.get_value(
             '.gajim-incoming-nickname', StyleAttr.COLOR)
         out_color = app.css_config.get_value(
@@ -144,9 +144,9 @@ class XMLConsoleWindow(Gtk.Window):
                 '</iq>')
 
         if input_text is not None:
-            buffer_ = self.input.get_buffer()
+            buffer_ = self._ui.input_entry.get_buffer()
             buffer_.set_text(input_text)
-            self.input.grab_focus()
+            self._ui.input_entry.grab_focus()
 
     def on_send(self, *args):
         if app.connections[self.account].connected <= 1:
@@ -156,7 +156,7 @@ class XMLConsoleWindow(Gtk.Window):
                 _('Please make sure you are connected with "%s".') %
                 self.account)
             return
-        buffer_ = self.input.get_buffer()
+        buffer_ = self._ui.input_entry.get_buffer()
         begin_iter, end_iter = buffer_.get_bounds()
         stanza = buffer_.get_text(begin_iter, end_iter, True)
         if stanza:
@@ -168,16 +168,23 @@ class XMLConsoleWindow(Gtk.Window):
                 ErrorDialog(_('Invalid Node'), str(error))
                 return
             app.connections[self.account].connection.send(node)
+            self.last_stanza = stanza
             buffer_.set_text('')
+
+    def on_paste_last(self, button):
+        buffer_ = self._ui.input_entry.get_buffer()
+        if buffer_ is not None and self.last_stanza is not None:
+            buffer_.set_text(self.last_stanza)
+        self._ui.input_entry.grab_focus()
 
     def on_input(self, button, *args):
         if button.get_active():
-            self.paned.get_child2().show()
-            self.menubutton.show()
-            self.input.grab_focus()
+            self._ui.paned.get_child2().show()
+            self._ui.menubutton.show()
+            self._ui.input_entry.grab_focus()
         else:
-            self.paned.get_child2().hide()
-            self.menubutton.hide()
+            self._ui.paned.get_child2().hide()
+            self._ui.menubutton.hide()
 
     def on_filter_options(self, *args):
         if self.filter_dialog:
@@ -215,7 +222,7 @@ class XMLConsoleWindow(Gtk.Window):
         self.filter_dialog = None
 
     def on_clear(self, *args):
-        self.textview.get_buffer().set_text('')
+        self._ui.textview.get_buffer().set_text('')
 
     def on_destroy(self, *args):
         del app.interface.instances[self.account]['xml_console']
@@ -230,7 +237,7 @@ class XMLConsoleWindow(Gtk.Window):
     def on_option(self, value, data):
         setattr(self, data, value)
         value = not value
-        table = self.textview.get_buffer().get_tag_table()
+        table = self._ui.textview.get_buffer().get_tag_table()
         tag = table.lookup(data)
         if data in ('incoming', 'outgoing'):
             if value:
@@ -256,9 +263,9 @@ class XMLConsoleWindow(Gtk.Window):
         if not stanza:
             return
 
-        at_the_end = util.at_the_end(self.scrolled)
+        at_the_end = util.at_the_end(self._ui.scrolled)
 
-        buffer_ = self.textview.get_buffer()
+        buffer_ = self._ui.textview.get_buffer()
         end_iter = buffer_.get_end_iter()
 
         type_ = kind
@@ -278,4 +285,4 @@ class XMLConsoleWindow(Gtk.Window):
         buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
 
         if at_the_end:
-            GLib.idle_add(util.scroll_to_end, self.scrolled)
+            GLib.idle_add(util.scroll_to_end, self._ui.scrolled)
