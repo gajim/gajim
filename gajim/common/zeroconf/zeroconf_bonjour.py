@@ -17,7 +17,6 @@
 
 import logging
 import select
-import socket
 import re
 
 from gajim.common.i18n import _
@@ -157,16 +156,16 @@ class Zeroconf:
 
         self.queried.append(True)
 
-    def query_record_callback(self, sdRef, flags, interfaceIndex, errorCode,
-                              hosttarget, rrtype, rrclass, rdata, ttl):
+    def getaddrinfo_callback(self, sdRef, flags, interfaceIndex, errorCode,
+                             hosttarget, address, ttl):
         if errorCode != pybonjour.kDNSServiceErr_NoError:
-            log.error('Error in query_record_callback: %s', str(errorCode))
+            log.error('Error in getaddrinfo_callback: %s', str(errorCode))
             return
 
         fullname, port, txtRecord = self.resolved_contacts[hosttarget]
 
         txt = pybonjour.TXTRecord.parse(txtRecord)
-        ip = socket.inet_ntoa(rdata)
+        ip = address[1]
 
         name, bare_name, protocol, domain = self._parse_name(fullname)
 
@@ -207,20 +206,18 @@ class Zeroconf:
         self.resolved_contacts[hosttarget] = (fullname, port, txtRecord)
 
         try:
-            query_sdRef = None
-            query_sdRef = \
-                pybonjour.DNSServiceQueryRecord(
+            getaddrinfo_sdRef = \
+                pybonjour.DNSServiceGetAddrInfo(
                     interfaceIndex=interfaceIndex,
-                    fullname=hosttarget,
-                    rrtype=pybonjour.kDNSServiceType_A,
-                    callBack=self.query_record_callback)
+                    hostname=hosttarget,
+                    callBack=self.getaddrinfo_callback)
 
             while not self.queried:
-                ready = select.select([query_sdRef], [], [], resolve_timeout)
-                if query_sdRef not in ready[0]:
-                    log.warning('Query record timed out')
+                ready = select.select([getaddrinfo_sdRef], [], [], resolve_timeout)
+                if getaddrinfo_sdRef not in ready[0]:
+                    log.warning('GetAddrInfo timed out')
                     break
-                pybonjour.DNSServiceProcessResult(query_sdRef)
+                pybonjour.DNSServiceProcessResult(getaddrinfo_sdRef)
             else:
                 self.queried.pop()
 
@@ -231,8 +228,8 @@ class Zeroconf:
                 self.error_CB(_('Error while adding service. %s') % error)
 
         finally:
-            if query_sdRef:
-                query_sdRef.close()
+            if getaddrinfo_sdRef:
+                getaddrinfo_sdRef.close()
 
         self.resolved.append(True)
 
