@@ -149,10 +149,9 @@ class ManageBookmarksWindow:
 
         self.ignore_events = True
         model.remove(iter_)
-        self.selection.unselect_all()
         self.clear_fields()
-        self.set_sensitive_all(False)
         self.ignore_events = False
+        self.bookmark_selected(self.selection)
 
     def check_valid_bookmark(self):
         """
