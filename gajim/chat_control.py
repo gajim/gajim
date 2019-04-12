@@ -825,13 +825,14 @@ class ChatControl(ChatControlBase):
         if authenticated:
             authenticated_string = _('and authenticated')
             self.lock_image.set_from_icon_name(
-                'security-high', Gtk.IconSize.MENU)
+                'security-high-symbolic', Gtk.IconSize.MENU)
         else:
             authenticated_string = _('and NOT authenticated')
             self.lock_image.set_from_icon_name(
-                'security-low', Gtk.IconSize.MENU)
+                'security-low-symbolic', Gtk.IconSize.MENU)
 
-        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {'type': enc_type, 'authenticated': authenticated_string}
+        tooltip = _('%(type)s encryption is active %(authenticated)s') % \
+            {'type': enc_type, 'authenticated': authenticated_string}
 
         self.authentication_button.set_tooltip_text(tooltip)
         self.widget_set_visible(self.authentication_button, not visible)
