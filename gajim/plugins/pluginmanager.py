@@ -38,9 +38,10 @@ from gajim.common import configpaths
 from gajim.common import modules
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
+from gajim.common.helpers import Singleton
 from gajim.plugins import plugins_i18n
 
-from gajim.plugins.helpers import log, log_calls, Singleton
+from gajim.plugins.helpers import log, log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.gajimplugin import GajimPlugin, GajimPluginException
 
@@ -72,8 +73,6 @@ class PluginManager(metaclass=Singleton):
                Possible solution: add call to clean up method in classes
                'destructors' (classes that register GUI extension points)
     '''
-
-    __metaclass__ = Singleton
 
     #@log_calls('PluginManager')
     def __init__(self):

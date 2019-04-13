@@ -21,7 +21,7 @@ Helper code related to plug-ins management system.
 :license: GPL
 '''
 
-__all__ = ['log', 'log_calls', 'Singleton']
+__all__ = ['log', 'log_calls']
 
 from typing import List
 
@@ -114,26 +114,6 @@ class log_calls:
                 return result
 
         return wrapper
-
-class Singleton(type):
-    '''
-    Singleton metaclass.
-    '''
-    def __init__(cls, name, bases, dic):
-        super(Singleton, cls).__init__(name, bases, dic)
-        cls.instance = None
-
-    def __call__(cls, *args, **kwargs):
-        if cls.instance is None:
-            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)
-            #log.debug('%(classname)s - new instance created'%{
-                #'classname' : cls.__name__})
-        else:
-            pass
-            #log.debug('%(classname)s - returning already existing instance'%{
-                #'classname' : cls.__name__})
-
-        return cls.instance
 
 
 def get_builder(file_name: str, widgets: List[str] = None) -> Builder:

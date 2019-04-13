@@ -1520,3 +1520,11 @@ def save_roster_position(window):
     log.debug('Save roster position: %s %s', x_pos, y_pos)
     app.config.set('roster_x-position', x_pos)
     app.config.set('roster_y-position', y_pos)
+
+
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
