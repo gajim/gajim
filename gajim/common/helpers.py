@@ -50,9 +50,11 @@ from datetime import datetime, timedelta
 from distutils.version import LooseVersion as V
 from encodings.punycode import punycode_encode
 from string import Template
+from functools import wraps
 
 import nbxmpp
 from nbxmpp.stringprepare import nameprep
+from gi.repository import GLib
 import precis_i18n.codec  # pylint: disable=unused-import
 
 from gajim.common import app
@@ -1532,3 +1534,21 @@ class Singleton(type):
             cls._instances[cls] = super(Singleton, cls).__call__(
                 *args, **kwargs)
         return cls._instances[cls]
+
+
+def delay_execution(milliseconds):
+    # Delay the first call for `milliseconds`
+    # ignore all other calls while the delay is active
+    def delay_execution_decorator(func):
+        @wraps(func)
+        def func_wrapper(*args, **kwargs):
+            def timeout_wrapper():
+                func(*args, **kwargs)
+                delattr(func_wrapper, 'source_id')
+
+            if hasattr(func_wrapper, 'source_id'):
+                return
+            func_wrapper.source_id = GLib.timeout_add(
+                milliseconds, timeout_wrapper)
+        return func_wrapper
+    return delay_execution_decorator
