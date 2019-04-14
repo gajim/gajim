@@ -25,6 +25,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any  # pylint: disable=unused-import
+from typing import Dict  # pylint: disable=unused-import
+
 import sys
 import re
 import os
@@ -1523,8 +1526,9 @@ def save_roster_position(window):
 
 
 class Singleton(type):
-    _instances = {}
+    _instances = {}  # type: Dict[Any, Any]
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super(Singleton, cls).__call__(
+                *args, **kwargs)
         return cls._instances[cls]
