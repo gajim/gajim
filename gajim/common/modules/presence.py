@@ -389,6 +389,8 @@ class Presence(BaseModule):
         if not app.account_is_connected(self._account):
             return
         presence = self.get_presence(*args, **kwargs)
+        app.plugin_manager.extension_point(
+            'send-presence', self._account, presence)
         self._log.debug('Send presence:\n%s', presence)
         self._con.connection.send(presence)
 
