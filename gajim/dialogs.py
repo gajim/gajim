@@ -32,6 +32,7 @@ from typing import Tuple  # pylint: disable=unused-import
 import os
 import uuid
 import logging
+import time
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -1588,8 +1589,11 @@ class ProgressWindow(Gtk.ApplicationWindow):
         self.event = file.event
         self.file = file
         self._ui = get_builder('httpupload_progress_dialog.ui')
+        file_name = os.path.basename(file.path)
+        self._ui.file_name_label.set_text(file_name)
+        self._start_time = time.time()
 
-        self.add(self._ui.box)
+        self.add(self._ui.grid)
 
         self.pulse = GLib.timeout_add(100, self._pulse_progressbar)
         self.show_all()
@@ -1602,12 +1606,13 @@ class ProgressWindow(Gtk.ApplicationWindow):
     def _on_httpupload_progress(self, obj):
         if self.file != obj.file:
             return
+
         if obj.status == 'request':
-            self._ui.label.set_text(_('Requesting HTTP Upload Slot…'))
+            self._ui.label.set_text(_('Requesting HTTP File Upload Slot…'))
         elif obj.status == 'close':
             self.destroy()
         elif obj.status == 'upload':
-            self._ui.label.set_text(_('Uploading file via HTTP File Upload…'))
+            self._ui.label.set_text(_('Uploading via HTTP File Upload…'))
         elif obj.status == 'update':
             self.update_progress(obj.seen, obj.total)
         elif obj.status == 'encrypt':
@@ -1633,9 +1638,17 @@ class ProgressWindow(Gtk.ApplicationWindow):
         if self.pulse:
             GLib.source_remove(self.pulse)
             self.pulse = None
-        self._ui.progressbar.set_fraction(float(seen) / total)
+
         size_total = round(total / (1024 * 1024), 1)
         size_progress = round(seen / (1024 * 1024), 1)
+
+        time_now = time.time()
+        mbytes_sec = round(size_progress / (time_now - self._start_time), 1)
+
+        self._ui.progressbar.set_fraction(float(seen) / total)
+
         self._ui.progress_label.set_text(
-            _('%(progress)s of %(total)s MiB sent') % \
-            {'progress': str(size_progress), 'total': str(size_total)})
+            _('%(progress)s of %(total)s MiB sent (%(speed)s MiB/s)') % \
+            {'progress': str(size_progress),
+             'total': str(size_total),
+             'speed': str(mbytes_sec)})

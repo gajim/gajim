@@ -2,13 +2,14 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkBox" id="box">
+  <object class="GtkGrid" id="grid">
     <property name="width_request">300</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">18</property>
-    <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">12</property>
+    <property name="column_homogeneous">True</property>
     <child>
       <object class="GtkImage">
         <property name="visible">True</property>
@@ -17,40 +18,32 @@
         <property name="icon_size">6</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label">
+      <object class="GtkLabel" id="file_name_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_top">6</property>
-        <property name="label">&lt;placeholder&gt;</property>
-        <style>
-          <class name="bold"/>
-        </style>
+        <property name="label">&lt;file name&gt;</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="progress_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label">&lt;progress&gt;</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">3</property>
       </packing>
     </child>
     <child>
@@ -61,9 +54,8 @@
         <property name="pulse_step">0.10000000149</property>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
@@ -80,9 +72,23 @@
         </style>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
+        <property name="label">&lt;placeholder&gt;</property>
+        <style>
+          <class name="bold"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
       </packing>
     </child>
   </object>
