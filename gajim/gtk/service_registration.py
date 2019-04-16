@@ -75,6 +75,14 @@ class ServiceRegistration(Gtk.Assistant):
         sidebar = main_box.get_children()[0]
         main_box.remove(sidebar)
 
+    def _build_dataform(self, form, is_form):
+        if not is_form:
+            from gajim import config
+            return config.FakeDataForm(form)
+
+        dataform = dataforms.extend_form(node=form)
+        return DataFormWidget(dataform)
+
     def _on_page_change(self, assistant, page):
         if self.get_current_page() == Page.REQUEST:
             self._con.get_module('Register').get_register_form(
@@ -86,23 +94,22 @@ class ServiceRegistration(Gtk.Assistant):
     def _on_get_success(self, form, is_form):
         log.info('Show Form page')
         self._is_form = is_form
-        if is_form:
-            dataform = dataforms.extend_form(node=form)
-            self._data_form_widget = DataFormWidget(dataform)
-        else:
-            from gajim import config
-            self._data_form_widget = config.FakeDataForm(form)
+        self._data_form_widget = self._build_dataform(form, is_form)
 
-        page = self.get_nth_page(Page.FORM)
-        page.pack_start(self._data_form_widget, True, True, 0)
-        self._data_form_widget.show_all()
+        self.get_nth_page(Page.FORM).set_form(self._data_form_widget)
         self.set_current_page(Page.FORM)
 
-    def _on_error(self, error_text):
-        log.info('Show Error page')
-        page = self.get_nth_page(Page.ERROR)
-        page.set_text(error_text)
-        self.set_current_page(Page.ERROR)
+    def _on_error(self, error_text, form=None, is_form=False):
+        if form is not None:
+            log.info('Show Form page')
+            self._is_form = is_form
+            self._data_form_widget = self._build_dataform(form, is_form)
+            self.get_nth_page(Page.FORM).set_form(self._data_form_widget, error_text=error_text)
+            self.set_current_page(Page.FORM)
+        else:
+            log.info('Show Error page')
+            self.get_nth_page(Page.ERROR).set_text(error_text)
+            self.set_current_page(Page.ERROR)
 
     def _on_cancel(self, widget):
         self.destroy()
@@ -159,6 +166,25 @@ class FormPage(Gtk.Box):
 
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
+        self._form = None
+        self._label = Gtk.Label()
+        self._label.set_no_show_all(True)
+        self._label.get_style_context().add_class('error-color')
+        self.pack_end(self._label, False, False, 0)
+
+    def set_form(self, form, error_text=None):
+        if self._form is not None:
+            self.remove(self._form)
+            self._form.destroy()
+            self._label.hide()
+        self._form = form
+
+        if error_text is not None:
+            self._label.set_text(error_text)
+            self._label.show()
+
+        self.pack_start(form, True, True, 0)
+        self._form.show_all()
 
 
 class SuccessfulPage(Gtk.Box):

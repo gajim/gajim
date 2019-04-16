@@ -92,7 +92,10 @@ class Register:
             error = stanza.getErrorMsg()
             log.info('Error: %s', error)
             if error_cb() is not None:
-                error_cb()(error)
+                form = is_form = None
+                if stanza.getTagAttr('error', 'type') == 'modify':
+                    form, is_form = self._get_register_form(stanza)
+                error_cb()(error, form, is_form)
             return
 
         self._con.get_module('Presence').subscribe(agent, auto_auth=True)
@@ -116,8 +119,7 @@ class Register:
             iq, self._register_info_response, {'success_cb': weak_success_cb,
                                                'error_cb': weak_error_cb})
 
-    @staticmethod
-    def _register_info_response(_con, stanza, success_cb, error_cb):
+    def _register_info_response(self, _con, stanza, success_cb, error_cb):
         if not nbxmpp.isResultNode(stanza):
             error = stanza.getErrorMsg()
             log.info('Error: %s', error)
@@ -125,17 +127,27 @@ class Register:
                 error_cb()(error)
         else:
             log.info('Register form received')
-            form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
-            is_form = form is not None
-            if not is_form:
-                form = {}
-                for field in stanza.getQueryPayload():
-                    if not isinstance(field, nbxmpp.Node):
-                        continue
-                    form[field.getName()] = field.getData()
 
             if success_cb() is not None:
+                form, is_form = self._get_register_form(stanza)
                 success_cb()(form, is_form)
+
+    @staticmethod
+    def _get_register_form(stanza):
+        query = stanza.getTag('query')
+        if not query:
+            return None, False
+
+        form = query.getTag('x', namespace=nbxmpp.NS_DATA)
+        is_form = form is not None
+        if not is_form:
+            form = {}
+            for field in query.getPayload():
+                if not isinstance(field, nbxmpp.Node):
+                    continue
+                form[field.getName()] = field.getData()
+
+        return form, is_form
 
 
 def get_instance(*args, **kwargs):
