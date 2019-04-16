@@ -87,7 +87,10 @@ class Register(BaseModule):
             error = stanza.getErrorMsg()
             self._log.info('Error: %s', error)
             if error_cb() is not None:
-                error_cb()(error)
+                form = is_form = None
+                if stanza.getErrorType() == 'modify':
+                    form, is_form = self._get_register_form(stanza)
+                error_cb()(error, form, is_form)
             return
 
         self._con.get_module('Presence').subscribe(agent, auto_auth=True)
@@ -119,18 +122,24 @@ class Register(BaseModule):
                 error_cb()(error)
         else:
             self._log.info('Register form received')
-            parse_bob_data(stanza.getQuery())
-            form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
-            is_form = form is not None
-            if not is_form:
-                form = {}
-                for field in stanza.getQueryPayload():
-                    if not isinstance(field, nbxmpp.Node):
-                        continue
-                    form[field.getName()] = field.getData()
 
             if success_cb() is not None:
+                form, is_form = self._get_register_form(stanza)
                 success_cb()(form, is_form)
+
+    @staticmethod
+    def _get_register_form(stanza):
+        parse_bob_data(stanza.getQuery())
+        form = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_DATA)
+        is_form = form is not None
+        if not is_form:
+            form = {}
+            for field in stanza.getQueryPayload():
+                if not isinstance(field, nbxmpp.Node):
+                    continue
+                form[field.getName()] = field.getData()
+
+        return form, is_form
 
 
 def get_instance(*args, **kwargs):
