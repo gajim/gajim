@@ -335,9 +335,7 @@ class RosterTooltip(StatusTable):
                 status=connection.status,
                 resource=connection.server_resource,
                 priority=connection.priority)
-            if app.connections[account].gpg:
-                contact.keyID = app.config.get_per(
-                    'accounts', connection.name, 'keyid')
+
             contacts.append(contact)
 
         # Username/Account/Groupchat
@@ -437,17 +435,6 @@ class RosterTooltip(StatusTable):
                 self._ui.sub.set_text(helpers.get_uf_sub(self.prim_contact.sub))
                 self._ui.sub.show()
                 self._ui.sub_label.show()
-
-        if self.prim_contact.keyID:
-            key_id = None
-            if len(self.prim_contact.keyID) == 8:
-                key_id = self.prim_contact.keyID
-            elif len(self.prim_contact.keyID) == 16:
-                key_id = self.prim_contact.keyID[8:]
-            if key_id:
-                self._ui.pgp.set_text(key_id)
-                self._ui.pgp.show()
-                self._ui.pgp_label.show()
 
         self._set_idle_time(contact)
 

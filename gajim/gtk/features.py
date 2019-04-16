@@ -112,13 +112,6 @@ class FeaturesDialog(Gtk.Dialog):
                     _('Requires: pybonjour and bonjour SDK running (%(url)s)')
                     % {'url': 'https://developer.apple.com/opensource/)'},
                     None),
-            Feature(_('OpenPGP Message Encryption'),
-                    app.is_installed('GPG'),
-                    _('Enables Gajim to encrypt chat messages with OpenPGP'),
-                    _('Requires: gpg and python-gnupg (%(url)s)')
-                    % {'url': 'https://bitbucket.org/vinay.sajip/python-gnupg'},
-                    _('Requires: gpg.exe in your PATH environment variable'),
-                    None),
             Feature(_('RST XHTML Generator'),
                     self.docutils_available(),
                     _('Enables Gajim to generate XHTML output from RST '

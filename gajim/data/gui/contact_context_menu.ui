@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -98,14 +98,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Edit _Groups...</property>
                 <property name="use_underline">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="assign_openpgp_key_menuitem">
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Assign Open_PGP Key...</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="on_assign_openpgp_key_menuitem_activate" swapped="no"/>
               </object>
             </child>
             <child>

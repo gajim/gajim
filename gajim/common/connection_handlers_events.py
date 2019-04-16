@@ -153,28 +153,12 @@ class NewAccountConnectedEvent(nec.NetworkIncomingEvent):
 class NewAccountNotConnectedEvent(nec.NetworkIncomingEvent):
     name = 'new-account-not-connected'
 
-class BadGPGPassphraseEvent(nec.NetworkIncomingEvent):
-    name = 'bad-gpg-passphrase'
-
-    def generate(self):
-        self.account = self.conn.name
-        self.use_gpg_agent = app.config.get('use_gpg_agent')
-        self.keyID = app.config.get_per('accounts', self.conn.name, 'keyid')
-        return True
-
 class ConnectionLostEvent(nec.NetworkIncomingEvent):
     name = 'connection-lost'
 
     def generate(self):
         app.nec.push_incoming_event(OurShowEvent(None, conn=self.conn,
             show='offline'))
-        return True
-
-class GPGPasswordRequiredEvent(nec.NetworkIncomingEvent):
-    name = 'gpg-password-required'
-
-    def generate(self):
-        self.keyid = app.config.get_per('accounts', self.conn.name, 'keyid')
         return True
 
 class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
@@ -610,7 +594,6 @@ class MessageOutgoingEvent(nec.NetworkOutgoingEvent):
     def init(self):
         self.additional_data = AdditionalDataDict()
         self.message = None
-        self.keyID = None
         self.type_ = 'chat'
         self.kind = None
         self.timestamp = None

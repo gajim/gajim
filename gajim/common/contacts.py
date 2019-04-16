@@ -137,7 +137,7 @@ class Contact(CommonContact):
     Information concerning a contact
     """
     def __init__(self, jid, account, name='', groups=None, show='', status='',
-    sub='', ask='', resource='', priority=0, keyID='', client_caps=None,
+    sub='', ask='', resource='', priority=0, client_caps=None,
     chatstate=None, idle_time=None, avatar_sha=None, groupchat=False,
     is_pm_contact=False):
         if not isinstance(jid, str):
@@ -159,7 +159,6 @@ class Contact(CommonContact):
         self.ask = ask
 
         self.priority = priority
-        self.keyID = keyID
         self.idle_time = idle_time
 
         self.pep = {}
@@ -306,7 +305,7 @@ class LegacyContactsAPI:
         self._metacontact_manager.remove_account(account)
 
     def create_contact(self, jid, account, name='', groups=None, show='',
-    status='', sub='', ask='', resource='', priority=0, keyID='',
+    status='', sub='', ask='', resource='', priority=0,
     client_caps=None, chatstate=None, idle_time=None,
     avatar_sha=None, groupchat=False):
         if groups is None:
@@ -315,36 +314,36 @@ class LegacyContactsAPI:
         account = self._accounts.get(account, account)
         return Contact(jid=jid, account=account, name=name, groups=groups,
             show=show, status=status, sub=sub, ask=ask, resource=resource,
-            priority=priority, keyID=keyID, client_caps=client_caps,
+            priority=priority, client_caps=client_caps,
             chatstate=chatstate, idle_time=idle_time, avatar_sha=avatar_sha,
             groupchat=groupchat)
 
     def create_self_contact(self, jid, account, resource, show, status, priority,
-    name='', keyID=''):
+    name=''):
         conn = common.app.connections[account]
         nick = name or common.app.nicks[account]
         account = self._accounts.get(account, account) # Use Account object if available
         self_contact = self.create_contact(jid=jid, account=account,
                 name=nick, groups=['self_contact'], show=show, status=status,
-                sub='both', ask='none', priority=priority, keyID=keyID,
+                sub='both', ask='none', priority=priority,
                 resource=resource)
         self_contact.pep = conn.pep
         return self_contact
 
     def create_not_in_roster_contact(self, jid, account, resource='', name='',
-                                     keyID='', groupchat=False):
+                                     groupchat=False):
         # Use Account object if available
         account = self._accounts.get(account, account)
         return self.create_contact(jid=jid, account=account, resource=resource,
             name=name, groups=[_('Not in Roster')], show='not in roster',
-            status='', sub='none', keyID=keyID, groupchat=groupchat)
+            status='', sub='none', groupchat=groupchat)
 
     def copy_contact(self, contact):
         return self.create_contact(contact.jid, contact.account,
             name=contact.name, groups=contact.groups, show=contact.show,
             status=contact.status, sub=contact.sub, ask=contact.ask,
             resource=contact.resource, priority=contact.priority,
-            keyID=contact.keyID, client_caps=contact.client_caps,
+            client_caps=contact.client_caps,
             chatstate=contact.chatstate_enum,
             idle_time=contact.idle_time, avatar_sha=contact.avatar_sha)
 

@@ -183,11 +183,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
     def get_relogin_options(account):
         if account == app.ZEROCONF_ACC_NAME:
             options = ['zeroconf_first_name', 'zeroconf_last_name',
-                       'zeroconf_jabber_id', 'zeroconf_email', 'keyid']
+                       'zeroconf_jabber_id', 'zeroconf_email']
         else:
             options = ['client_cert', 'proxy', 'resource',
-                       'use_custom_host', 'custom_host', 'custom_port',
-                       'keyid']
+                       'use_custom_host', 'custom_host', 'custom_port']
 
         values = []
         for option in options:
@@ -567,9 +566,6 @@ class PreferencesPage(GenericOptionPage):
         options = [
             Option(OptionKind.SWITCH, _('Merge Accounts'),
                    OptionType.ACTION, 'merge'),
-
-            Option(OptionKind.SWITCH, _('Use PGP Agent'),
-                   OptionType.ACTION, 'agent'),
             ]
 
         GenericOptionPage.__init__(self, None, None, options)
@@ -605,9 +601,6 @@ class AccountPage(GenericOptionPage):
 
             Option(OptionKind.DIALOG, _('Client Certificate'),
                    OptionType.DIALOG, props={'dialog': CertificateDialog}),
-
-            Option(OptionKind.GPG, _('OpenPGP Key'), OptionType.DIALOG,
-                   props={'dialog': None}),
             ]
 
         GenericOptionPage.__init__(self, account, parent, options)
@@ -704,9 +697,6 @@ class ZeroConfPage(GenericOptionPage):
             Option(OptionKind.SWITCH, _('Global Status'),
                    OptionType.ACCOUNT_CONFIG, 'sync_with_global_status',
                    desc=_('Synchronize the status of all accounts')),
-
-            Option(OptionKind.GPG, _('OpenPGP Key'),
-                   OptionType.DIALOG, props={'dialog': None}),
             ]
 
         GenericOptionPage.__init__(self, account, parent, options)

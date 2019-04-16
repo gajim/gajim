@@ -179,11 +179,6 @@ def on_merge_accounts(action, param):
     app.interface.roster.setup_and_draw_roster()
 
 
-def on_use_pgp_agent(action, param):
-    action.set_state(param)
-    app.config.set('use_gpg_agent', param.get_boolean())
-
-
 def on_add_account(action, param):
     if 'account_creation_wizard' in app.interface.instances:
         app.interface.instances['account_creation_wizard'].window.present()

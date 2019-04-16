@@ -194,7 +194,6 @@ class GajimRemote(Server):
             <method name='send_chat_message'>
                 <arg name='jid' type='s' />
                 <arg name='message' type='s' />
-                <arg name='keyID' type='s' />
                 <arg name='account' type='s' />
                 <arg direction='out' type='b' />
             </method>
@@ -214,7 +213,6 @@ class GajimRemote(Server):
                 <arg name='jid' type='s' />
                 <arg name='subject' type='s' />
                 <arg name='message' type='s' />
-                <arg name='keyID' type='s' />
                 <arg name='account' type='s' />
                 <arg direction='out' type='b' />
             </method>
@@ -339,7 +337,7 @@ class GajimRemote(Server):
         except AttributeError:
             chatstate = ''
         self.raise_signal('MessageSent', (obj.conn.name, [
-            obj.jid, obj.message, obj.keyID, chatstate]))
+            obj.jid, obj.message, chatstate]))
 
     def on_time(self, obj):
         self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.getStripped(),
@@ -360,7 +358,7 @@ class GajimRemote(Server):
         else:
             return
         self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
-                obj.status, obj.resource, obj.prio, obj.keyID, obj.timestamp]))
+                obj.status, obj.resource, obj.prio, obj.timestamp]))
 
     def on_subscribe_presence_received(self, obj):
         self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
@@ -504,7 +502,6 @@ class GajimRemote(Server):
     def _send_message(self,
                       jid,
                       message,
-                      keyID,
                       account,
                       type_='chat',
                       subject=None):
@@ -514,8 +511,6 @@ class GajimRemote(Server):
         """
         if not jid or not message:
             return False
-        if not keyID:
-            keyID = ''
 
         connected_account = self._get_account_and_contact(account, jid)[0]
         if connected_account:
@@ -534,29 +529,25 @@ class GajimRemote(Server):
                         account=connected_account,
                         jid=jid,
                         message=message,
-                        keyID=keyID,
                         type_=type_,
                         control=ctrl))
 
             return True
         return False
 
-    def send_chat_message(self, jid, message, keyID, account):
+    def send_chat_message(self, jid, message, account):
         """
-        Send chat 'message' to 'jid', using account (optional) 'account'. If keyID
-        is specified, encrypt the message with the pgp key
+        Send chat 'message' to 'jid', using account (optional) 'account'.
         """
         jid = self._get_real_jid(jid, account)
-        return self._send_message(jid, message, keyID, account)
+        return self._send_message(jid, message, account)
 
-    def send_single_message(self, jid, subject, message, keyID, account):
+    def send_single_message(self, jid, subject, message, account):
         """
-        Send single 'message' to 'jid', using account (optional) 'account'. If
-        keyID is specified, encrypt the message with the pgp key
+        Send single 'message' to 'jid', using account (optional) 'account'.
         """
         jid = self._get_real_jid(jid, account)
-        return self._send_message(jid, message, keyID, account, 'normal',
-                                  subject)
+        return self._send_message(jid, message, account, 'normal', subject)
 
     def send_groupchat_message(self, room_jid, message, account):
         """
@@ -879,14 +870,7 @@ class GajimRemote(Server):
         contact_dict['name'] = GLib.Variant('s', name)
         contact_dict['show'] = GLib.Variant('s', prim_contact.show)
         contact_dict['jid'] = GLib.Variant('s', prim_contact.jid)
-        if prim_contact.keyID:
-            keyID = None
-            if len(prim_contact.keyID) == 8:
-                keyID = prim_contact.keyID
-            elif len(prim_contact.keyID) == 16:
-                keyID = prim_contact.keyID[8:]
-            if keyID:
-                contact_dict['openpgp'] = GLib.Variant('s', keyID)
+
         resources = GLib.VariantBuilder(GLib.VariantType('a(sis)'))
         for contact in contacts:
             resource_props = (contact.resource, int(contact.priority),

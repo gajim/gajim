@@ -998,14 +998,9 @@ class RosterWindow:
     # FIXME: integrate into add_contact()
     def add_to_not_in_the_roster(self, account, jid, nick='', resource='',
                                  groupchat=False):
-        keyID = ''
-        attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-        if jid in attached_keys:
-            keyID = attached_keys[attached_keys.index(jid) + 1]
         contact = app.contacts.create_not_in_roster_contact(
             jid=jid, account=account, resource=resource, name=nick,
-            keyID=keyID, groupchat=groupchat)
+            groupchat=groupchat)
         app.contacts.add_contact(account, contact)
         self.add_contact(contact.jid, account)
         return contact
@@ -1871,19 +1866,13 @@ class RosterWindow:
             show = 'offline' # show is offline by default
             status = '' # no status message by default
 
-            keyID = ''
-            attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-            if jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(jid) + 1]
-
             if app.jid_is_transport(jid):
                 array[jid]['groups'] = [_('Transports')]
             #TRANSP - potential
             contact1 = app.contacts.create_contact(jid=ji, account=account,
                 name=name, groups=array[jid]['groups'], show=show,
                 status=status, sub=array[jid]['subscription'],
-                ask=array[jid]['ask'], resource=resource, keyID=keyID)
+                ask=array[jid]['ask'], resource=resource)
             app.contacts.add_contact(account, contact1)
 
             # If we already have chat windows opened, update them with new
@@ -2031,14 +2020,9 @@ class RosterWindow:
             jid, txt, nickname, groups_list, auto_auth)
         contact = app.contacts.get_contact_with_highest_priority(account, jid)
         if not contact:
-            keyID = ''
-            attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-            if jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(jid) + 1]
             contact = app.contacts.create_contact(jid=jid, account=account,
                 name=nickname, groups=groups_list, show='requested', status='',
-                ask='none', sub='subscribe', keyID=keyID)
+                ask='none', sub='subscribe')
             app.contacts.add_contact(account, contact)
         else:
             if not _('Not in Roster') in contact.get_shown_groups():
@@ -2078,13 +2062,6 @@ class RosterWindow:
                         helpers.to_one_line(txt))
             if app.connections[account].connected < 2:
                 self.set_connecting_state(account)
-
-                keyid = app.config.get_per('accounts', account, 'keyid')
-                if keyid and not app.connections[account].gpg:
-                    WarningDialog(_('OpenPGP is not usable'),
-                        _('Gajim needs python-gnupg >= 0.3.8\n'
-                          'Beware there is an incompatible Python package called gnupg.\n'
-                          'You will be connected to %s without OpenPGP.') % account)
 
         self.send_status_continue(account, status, txt, auto, to)
 
@@ -2940,46 +2917,6 @@ class RosterWindow:
             _('Do you want to remove group %s from the roster?') % group,
             _('Also remove all contacts in this group from your roster'),
             on_response_ok=on_ok)
-
-    def on_assign_pgp_key(self, widget, contact, account):
-        attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-        keys = {}
-        keyID = _('None')
-        for i in range(len(attached_keys) // 2):
-            keys[attached_keys[2*i]] = attached_keys[2*i+1]
-            if attached_keys[2*i] == contact.jid:
-                keyID = attached_keys[2*i+1]
-        public_keys = app.connections[account].ask_gpg_keys()
-        public_keys[_('None')] = _('None')
-
-        def on_key_selected(keyID):
-            if keyID is None:
-                return
-            if keyID[0] == _('None'):
-                if contact.jid in keys:
-                    del keys[contact.jid]
-                keyID = ''
-            else:
-                keyID = keyID[0]
-                keys[contact.jid] = keyID
-
-            ctrl = app.interface.msg_win_mgr.get_control(contact.jid, account)
-            if ctrl:
-                ctrl.update_ui()
-
-            keys_str = ''
-            for jid in keys:
-                keys_str += jid + ' ' + keys[jid] + ' '
-            app.config.set_per('accounts', account, 'attached_gpg_keys',
-                    keys_str)
-            for u in app.contacts.get_contacts(account, contact.jid):
-                u.keyID = helpers.prepare_and_validate_gpg_keyID(account,
-                    contact.jid, keyID)
-
-        dialogs.ChooseGPGKeyDialog(_('Assign OpenPGP Key'),
-            _('Select a key to apply to the contact'), public_keys,
-            on_key_selected, selected=keyID, transient_for=self.window)
 
     def on_edit_groups(self, widget, list_):
         dialogs.EditGroupsDialog(list_)

@@ -115,28 +115,21 @@ class GajimRemote:
                                 ]
                         ],
                 'send_chat_message': [
-                                _('Sends new chat message to a contact in the roster. Both OpenPGP key '
-                                'and account are optional. If you want to set only \'account\', '
-                                'without \'OpenPGP key\', just set \'OpenPGP key\' to \'\'.'),
+                                _('Sends new chat message to a contact in the roster. Account is optional.'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
-                                        (_('PGP key'), _('if specified, the message will be encrypted '
-                                                'using this public key'), False),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]
                         ],
                 'send_single_message': [
                                 _('Sends a chat message to someone on your roster. '
-                                'Optionally with OpenPGP key and account. If you want '
-                                'to only set the latter, set OpenPGP key to "".'),
+                                  'Account is optional.'),
                                 [
                                         ('jid', _('JID of the contact that will receive the message'), True),
                                         (_('subject'), _('message subject'), True),
                                         (Q_('?CLI:message'), _('message contents'), True),
-                                        (_('PGP key'), _('if specified, the message will be encrypted '
-                                                'using this public key'), False),
                                         (Q_('?CLI:account'), _('if specified, the message will be sent '
                                                 'using this account'), False),
                                 ]

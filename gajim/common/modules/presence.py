@@ -25,7 +25,6 @@ from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
-from gajim.common.helpers import prepare_and_validate_gpg_keyID
 from gajim.common.modules.base import BaseModule
 
 
@@ -94,12 +93,6 @@ class Presence(BaseModule):
             self._log.warning(stanza)
             return
 
-        key_id = ''
-        if properties.signed is not None and self._con.USE_GPG:
-            key_id = self._con.gpg.verify(properties.status, properties.signed)
-            key_id = prepare_and_validate_gpg_keyID(
-                self._account, properties.jid.getBare(), key_id)
-
         show = properties.show.value
         if properties.type.is_unavailable:
             show = 'offline'
@@ -107,7 +100,6 @@ class Presence(BaseModule):
         event_attrs = {
             'conn': self._con,
             'stanza': stanza,
-            'keyID': key_id,
             'prio': properties.priority,
             'need_add_in_roster': False,
             'popup': False,
@@ -185,13 +177,6 @@ class Presence(BaseModule):
         contact.show = event.show
         contact.status = properties.status
         contact.priority = properties.priority
-        attached_keys = app.config.get_per('accounts', self._account,
-                                           'attached_gpg_keys').split()
-        if jid in attached_keys:
-            contact.keyID = attached_keys[attached_keys.index(jid) + 1]
-        else:
-            # Do not override assigned key
-            contact.keyID = event.keyID
         contact.idle_time = properties.idle_timestamp
 
         event.contact = contact
@@ -355,7 +340,7 @@ class Presence(BaseModule):
 
     def get_presence(self, to=None, typ=None, priority=None,
                      show=None, status=None, nick=None, caps=True,
-                     sign=None, idle_time=None):
+                     idle_time=None):
         if show not in ('chat', 'away', 'xa', 'dnd'):
             # Gajim sometimes passes invalid show values here
             # until this is fixed this is a workaround
@@ -364,9 +349,6 @@ class Presence(BaseModule):
         if nick is not None:
             nick_tag = presence.setTag('nick', namespace=nbxmpp.NS_NICK)
             nick_tag.setData(nick)
-
-        if sign:
-            presence.setTag(nbxmpp.NS_SIGNED + ' x').setData(sign)
 
         if idle_time is not None:
             idle_node = presence.setTag('idle', namespace=nbxmpp.NS_IDLE)

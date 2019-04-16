@@ -773,7 +773,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         label = labels[lname]
         return label
 
-    def send_message(self, message, keyID='', type_='chat',
+    def send_message(self, message, type_='chat',
     resource=None, xhtml=None, process_commands=True, attention=False):
         """
         Send the given message to the active tab. Doesn't return None if error
@@ -797,7 +797,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
 
         app.nec.push_outgoing_event(MessageOutgoingEvent(None,
             account=self.account, jid=self.contact.jid, message=message,
-            keyID=keyID, type_=type_, chatstate=chatstate,
+            type_=type_, chatstate=chatstate,
             resource=resource, user_nick=self.user_nick, xhtml=xhtml,
             label=label, control=self, attention=attention, correct_id=correct_id,
             automatic_message=False, encryption=self.encryption))

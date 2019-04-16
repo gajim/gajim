@@ -329,7 +329,7 @@ class HTTPUpload(BaseModule):
             else:
                 app.nec.push_outgoing_event(MessageOutgoingEvent(
                     None, account=self._account, jid=file.contact.jid,
-                    message=message, keyID=file.key_id, type_='chat',
+                    message=message, type_='chat',
                     automatic_message=False, session=file.session))
 
         else:
@@ -353,9 +353,6 @@ class File:
             setattr(self, key, val)
         self.encrypted = False
         self.contact = contact
-        self.key_id = None
-        if hasattr(contact, 'keyID'):
-            self.key_id = contact.keyID
         self.stream = None
         self.path = path
         self.put = None

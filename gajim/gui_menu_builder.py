@@ -217,7 +217,6 @@ control=None, gc_contact=None, is_anonymous=True):
     rename_menuitem = xml.get_object('rename_menuitem')
     edit_groups_menuitem = xml.get_object('edit_groups_menuitem')
     send_file_menuitem = xml.get_object('send_file_menuitem')
-    assign_openpgp_key_menuitem = xml.get_object('assign_openpgp_key_menuitem')
     information_menuitem = xml.get_object('information_menuitem')
     history_menuitem = xml.get_object('history_menuitem')
     send_custom_status_menuitem = xml.get_object('send_custom_status_menuitem')
@@ -290,16 +289,9 @@ control=None, gc_contact=None, is_anonymous=True):
         # contact is in normal group
         edit_groups_menuitem.connect('activate', roster.on_edit_groups, [(contact,
                 account)])
-
-        if app.connections[account].gpg:
-            assign_openpgp_key_menuitem.connect('activate',
-                    roster.on_assign_pgp_key, contact, account)
-        else:
-            assign_openpgp_key_menuitem.set_sensitive(False)
     else:
         # contact is in group 'Not in Roster'
         edit_groups_menuitem.set_sensitive(False)
-        assign_openpgp_key_menuitem.set_sensitive(False)
 
     # Hide items when it's self contact row
     if our_jid:

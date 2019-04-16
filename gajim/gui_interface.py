@@ -230,9 +230,7 @@ class Interface:
                 if name in self.instances[account]['online_dialog']:
                     # destroy handler may have already removed it
                     del self.instances[account]['online_dialog'][name]
-            for request in self.gpg_passphrase.values():
-                if request:
-                    request.interrupt(account=account)
+
             if account in self.pass_dialog:
                 self.pass_dialog[account].window.destroy()
         if obj.show == 'offline':
@@ -306,7 +304,7 @@ class Interface:
 
     def handle_event_presence(self, obj):
         # 'NOTIFY' (account, (jid, status, status message, resource,
-        # priority, # keyID, timestamp))
+        # priority, timestamp))
         #
         # Contact changed show
         account = obj.conn.name
@@ -390,7 +388,7 @@ class Interface:
 
     @staticmethod
     def handle_event_msgsent(obj):
-        #('MSGSENT', account, (jid, msg, keyID))
+        #('MSGSENT', account, (jid, msg))
         # do not play sound when standalone chatstate message (eg no msg)
         if obj.message and app.config.get_per('soundevents', 'message_sent',
         'enabled'):
@@ -438,16 +436,11 @@ class Interface:
             self.roster.remove_contact_from_groups(c.jid, account,
                 [_('Not in Roster'), _('Observers')], update=False)
         else:
-            keyID = ''
-            attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-            if obj.jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
             name = obj.jid.split('@', 1)[0]
             name = name.split('%', 1)[0]
             contact1 = app.contacts.create_contact(jid=obj.jid,
                 account=account, name=name, groups=[], show='online',
-                status='online', ask='to', resource=obj.resource, keyID=keyID)
+                status='online', ask='to', resource=obj.resource)
             app.contacts.add_contact(account, contact1)
             self.roster.add_contact(obj.jid, account)
         InformationDialog(_('Authorization accepted'),
@@ -571,28 +564,6 @@ class Interface:
                                    text,
                                    room_jid=muc)
 
-    def forget_gpg_passphrase(self, keyid):
-        if keyid in self.gpg_passphrase:
-            del self.gpg_passphrase[keyid]
-        return False
-
-    def handle_event_bad_gpg_passphrase(self, obj):
-        #('BAD_PASSPHRASE', account, ())
-        if obj.use_gpg_agent:
-            sectext = _('You configured Gajim to use OpenPGP agent, but there '
-                'is no OpenPGP agent running or it returned a wrong passphrase.'
-                '\n')
-            sectext += _('You are currently connected without your OpenPGP '
-                'key.')
-            WarningDialog(_('Wrong passphrase'), sectext)
-        else:
-            account = obj.conn.name
-            app.notification.popup(
-                'warning', account, account, '', 'dialog-warning',
-                _('Wrong OpenPGP passphrase'),
-                _('You are currently connected without your OpenPGP key.'))
-        self.forget_gpg_passphrase(obj.keyID)
-
     @staticmethod
     def handle_event_client_cert_passphrase(obj):
         def on_ok(passphrase, checked):
@@ -606,15 +577,6 @@ class Interface:
         dialogs.PassphraseDialog(_('Certificate Passphrase Required'),
             _('Enter the certificate passphrase for account %s') % \
             obj.conn.name, ok_handler=on_ok, cancel_handler=on_cancel)
-
-    def handle_event_gpg_password_required(self, obj):
-        #('GPG_PASSWORD_REQUIRED', account, (callback,))
-        if obj.keyid in self.gpg_passphrase:
-            request = self.gpg_passphrase[obj.keyid]
-        else:
-            request = PassphraseRequest(obj.keyid)
-            self.gpg_passphrase[obj.keyid] = request
-        request.add_callback(obj.conn.name, obj.callback)
 
     def handle_event_password_required(self, obj):
         #('PASSWORD_REQUIRED', account, None)
@@ -652,14 +614,10 @@ class Interface:
             if obj.sub == 'remove':
                 return
             # Add new contact to roster
-            keyID = ''
-            attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-            if obj.jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
+
             contact = app.contacts.create_contact(jid=obj.jid,
                 account=account, name=obj.nickname, groups=obj.groups,
-                show='offline', sub=obj.sub, ask=obj.ask, keyID=keyID,
+                show='offline', sub=obj.sub, ask=obj.ask,
                 avatar_sha=obj.avatar_sha)
             app.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
@@ -750,13 +708,8 @@ class Interface:
     def handle_event_file_request(self, obj):
         account = obj.conn.name
         if obj.jid not in app.contacts.get_jid_list(account):
-            keyID = ''
-            attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-            if obj.jid in attached_keys:
-                keyID = attached_keys[attached_keys.index(obj.jid) + 1]
             contact = app.contacts.create_not_in_roster_contact(jid=obj.jid,
-                account=account, keyID=keyID)
+                account=account)
             app.contacts.add_contact(account, contact)
             self.roster.add_contact(obj.jid, account)
         contact = app.contacts.get_first_contact_from_jid(account, obj.jid)
@@ -1287,7 +1240,6 @@ class Interface:
         self.handlers = {
             'DB_ERROR': [self.handle_event_db_error],
             'file-send-error': [self.handle_event_file_send_error],
-            'bad-gpg-passphrase': [self.handle_event_bad_gpg_passphrase],
             'bookmarks-received': [self.handle_event_bookmarks],
             'client-cert-passphrase': [
                 self.handle_event_client_cert_passphrase],
@@ -1296,7 +1248,6 @@ class Interface:
             'file-request-received': [self.handle_event_file_request],
             'muc-invitation': [self.handle_event_gc_invitation],
             'muc-decline': [self.handle_event_gc_decline],
-            'gpg-password-required': [self.handle_event_gpg_password_required],
             'http-auth-received': [self.handle_event_http_auth],
             'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],
@@ -2326,7 +2277,6 @@ class Interface:
         self.minimized_controls = {}
         self.status_sent_to_users = {}
         self.status_sent_to_groups = {}
-        self.gpg_passphrase = {}
         self.pass_dialog = {}
         self.db_error_dialog = None
 
@@ -2490,89 +2440,6 @@ class Interface:
         self.network_monitor.connect('network-changed',
                                      self.network_status_changed)
         self.network_state = self.network_monitor.get_network_available()
-
-
-class PassphraseRequest:
-    def __init__(self, keyid):
-        self.keyid = keyid
-        self.callbacks = []
-        self.dialog_created = False
-        self.dialog = None
-        self.passphrase = None
-        self.completed = False
-
-    def interrupt(self, account=None):
-        if account:
-            for (acct, cb) in self.callbacks:
-                if acct == account:
-                    self.callbacks.remove((acct, cb))
-        else:
-            self.callbacks = []
-        if not self.callbacks:
-            self.dialog.window.destroy()
-
-    def run_callback(self, account, callback):
-        app.connections[account].gpg_passphrase(self.passphrase)
-        callback()
-
-    def add_callback(self, account, cb):
-        if self.completed:
-            self.run_callback(account, cb)
-        else:
-            self.callbacks.append((account, cb))
-            if not self.dialog_created:
-                self.create_dialog(account)
-
-    def complete(self, passphrase):
-        self.passphrase = passphrase
-        self.completed = True
-        if passphrase is not None:
-            GLib.timeout_add_seconds(30, app.interface.forget_gpg_passphrase,
-                self.keyid)
-        for (account, cb) in self.callbacks:
-            self.run_callback(account, cb)
-        self.callbacks = []
-
-    def create_dialog(self, account):
-        title = _('Passphrase Required')
-        second = _('Enter OpenPGP key passphrase for key %(keyid)s '
-                   '(account %(account)s).') % {'keyid': self.keyid,
-                                                'account': account}
-
-        def _cancel():
-            # user cancelled, continue without GPG
-            self.complete(None)
-
-        def _ok(passphrase, checked, count):
-            result = app.connections[account].test_gpg_passphrase(passphrase)
-            if result == 'ok':
-                # passphrase is good
-                self.complete(passphrase)
-                return
-
-            if result == 'expired':
-                ErrorDialog(
-                    _('OpenPGP key expired'),
-                    _('Your OpenPGP key has expired, you will be connected to '
-                      '%s without OpenPGP.') % account)
-                # Don't try to connect with GPG
-                app.connections[account].continue_connect_info[2] = False
-                self.complete(None)
-                return
-
-            if count < 3:
-                # ask again
-                dialogs.PassphraseDialog(
-                    _('Wrong Passphrase'),
-                    _('Please retype your OpenPGP passphrase or press Cancel.'),
-                    ok_handler=(_ok, count + 1), cancel_handler=_cancel)
-            else:
-                # user failed 3 times, continue without GPG
-                self.complete(None)
-
-        self.dialog = dialogs.PassphraseDialog(
-            title, second, ok_handler=(_ok, 1), cancel_handler=_cancel)
-        self.dialog_created = True
 
 
 class ThreadInterface:

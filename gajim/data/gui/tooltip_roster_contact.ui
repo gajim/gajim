@@ -183,32 +183,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="pgp_label">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">end</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes">OpenPGP:</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="pgp">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">10</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="sub_label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -296,6 +270,12 @@
         <property name="top_attach">0</property>
         <property name="height">5</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
     <child>
       <placeholder/>

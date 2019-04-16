@@ -537,8 +537,6 @@ class AccountCreationWizard:
         config['use_custom_host'] = False
         config['custom_port'] = 0
         config['custom_host'] = ''
-        config['keyname'] = ''
-        config['keyid'] = ''
         return config
 
     def save_account(self, login, server, savepass, password, anonymous=False):

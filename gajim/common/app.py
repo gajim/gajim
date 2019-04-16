@@ -35,7 +35,6 @@ import sys
 import logging
 import uuid
 from pathlib import Path
-from distutils.version import LooseVersion as V
 from collections import namedtuple
 
 import nbxmpp
@@ -191,8 +190,6 @@ caps_hash = {}  # type: Dict[str, List[str]]
 _dependencies = {
     'AVAHI': False,
     'PYBONJOUR': False,
-    'PYGPG': False,
-    'GPG_BINARY': False,
     'FARSTREAM': False,
     'GEOCLUE': False,
     'UPNP': False,
@@ -203,9 +200,6 @@ _dependencies = {
 
 
 def is_installed(dependency):
-    if dependency == 'GPG':
-        # Alias for checking python-gnupg and the GPG binary
-        return _dependencies['PYGPG'] and _dependencies['GPG_BINARY']
     if dependency == 'ZEROCONF':
         # Alias for checking zeroconf libs
         return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
@@ -245,40 +239,6 @@ def detect_dependencies():
         _dependencies['AVAHI'] = True
     except Exception:
         pass
-
-    # python-gnupg
-    try:
-        import gnupg
-        # We need https://pypi.python.org/pypi/python-gnupg
-        # but https://pypi.python.org/pypi/gnupg shares the same package name.
-        # It cannot be used as a drop-in replacement.
-        # We test with a version check if python-gnupg is installed as it is
-        # on a much lower version number than gnupg
-        # Also we need at least python-gnupg 0.3.8
-        v_gnupg = gnupg.__version__
-        if V(v_gnupg) < V('0.3.8') or V(v_gnupg) > V('1.0.0'):
-            log('gajim').info('Gajim needs python-gnupg >= 0.3.8')
-            raise ImportError
-        _dependencies['PYGPG'] = True
-    except ImportError:
-        pass
-
-    # GPG BINARY
-    import subprocess
-
-    def test_gpg(binary='gpg'):
-        if os.name == 'nt':
-            gpg_cmd = binary + ' -h >nul 2>&1'
-        else:
-            gpg_cmd = binary + ' -h >/dev/null 2>&1'
-        if subprocess.call(gpg_cmd, shell=True):
-            return False
-        return True
-
-    if test_gpg(binary='gpg2'):
-        _dependencies['GPG_BINARY'] = 'gpg2'
-    elif test_gpg(binary='gpg'):
-        _dependencies['GPG_BINARY'] = 'gpg'
 
     # FARSTREAM
     try:
@@ -353,9 +313,6 @@ def detect_dependencies():
         log('gajim').info('%-13s %s', dep, val)
 
     log('gajim').info('Used language: %s', LANG)
-
-def get_gpg_binary():
-    return _dependencies['GPG_BINARY']
 
 def get_an_id():
     return str(uuid.uuid4())

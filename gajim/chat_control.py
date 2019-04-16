@@ -399,12 +399,8 @@ class ChatControl(ChatControlBase):
                 'Show a list of formattings'))
         else:
             self._formattings_button.set_sensitive(False)
-            if self.contact.supports(NS_XHTML_IM):
-                self._formattings_button.set_tooltip_text(_('Formatting is not '
-                    'available so long as GPG is active'))
-            else:
-                self._formattings_button.set_tooltip_text(_('This contact does '
-                    'not support HTML'))
+            self._formattings_button.set_tooltip_text(
+                _('This contact does not support HTML'))
 
         # Jingle detection
         if self.contact.supports(NS_JINGLE_ICE_UDP) and \
@@ -922,7 +918,7 @@ class ChatControl(ChatControlBase):
             correct_id=obj.correct_id,
             additional_data=obj.additional_data)
 
-    def send_message(self, message, keyID='', xhtml=None,
+    def send_message(self, message, xhtml=None,
                      process_commands=True, attention=False):
         """
         Send a message to contact
@@ -939,12 +935,8 @@ class ChatControl(ChatControlBase):
         if message in ('', None, '\n'):
             return None
 
-        contact = self.contact
-        keyID = contact.keyID
-
         ChatControlBase.send_message(self,
                                      message,
-                                     keyID,
                                      type_='chat',
                                      xhtml=xhtml,
                                      process_commands=process_commands,
@@ -1426,9 +1418,6 @@ class ChatControl(ChatControlBase):
         self.update_actions()
 
     def update_status_display(self, name, uf_show, status):
-        """
-        Print the contact's status and update the status/GPG image
-        """
         self.update_ui()
         self.parent_win.redraw_tab(self)
 

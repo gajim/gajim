@@ -1108,54 +1108,6 @@ def get_current_show(account):
     status = app.connections[account].connected
     return app.SHOW_LIST[status]
 
-def prepare_and_validate_gpg_keyID(account, jid, keyID):
-    """
-    Return an eight char long keyID that can be used with for GPG encryption
-    with this contact
-
-    If the given keyID is None, return UNKNOWN; if the key does not match the
-    assigned key XXXXXXXXMISMATCH is returned. If the key is trusted and not yet
-    assigned, assign it.
-    """
-    if app.connections[account].USE_GPG:
-        if keyID and len(keyID) == 16:
-            keyID = keyID[8:]
-
-        attached_keys = app.config.get_per('accounts', account,
-                'attached_gpg_keys').split()
-
-        if jid in attached_keys and keyID:
-            attachedkeyID = attached_keys[attached_keys.index(jid) + 1]
-            if attachedkeyID != keyID:
-                # Get signing subkeys for the attached key
-                subkeys = []
-                for key in app.connections[account].gpg.list_keys():
-                    if key['keyid'][8:] == attachedkeyID:
-                        subkeys = [subkey[0][8:] for subkey in key['subkeys'] \
-                            if subkey[1] == 's']
-                        break
-
-                if keyID not in subkeys:
-                    # Mismatch! Another gpg key was expected
-                    keyID += 'MISMATCH'
-        elif jid in attached_keys:
-            # An unsigned presence, just use the assigned key
-            keyID = attached_keys[attached_keys.index(jid) + 1]
-        elif keyID:
-            full_key = app.connections[account].ask_gpg_keys(keyID=keyID)
-            # Assign the corresponding key, if we have it in our keyring
-            if full_key:
-                for u in app.contacts.get_contacts(account, jid):
-                    u.keyID = keyID
-                keys_str = app.config.get_per('accounts', account,
-                    'attached_gpg_keys')
-                keys_str += jid + ' ' + keyID + ' '
-                app.config.set_per('accounts', account, 'attached_gpg_keys',
-                    keys_str)
-        elif keyID is None:
-            keyID = 'UNKNOWN'
-    return keyID
-
 def update_optional_features(account=None):
     if account is not None:
         accounts = [account]

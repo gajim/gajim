@@ -5,8 +5,6 @@ from gajim.common.i18n import _
 from gajim import gtkgui_helpers
 from gajim.common.const import OptionKind, OptionType
 from gajim.common.exceptions import GajimGeneralException
-from gajim import dialogs
-from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ChangePasswordDialog
 from gajim.gtk.util import get_image_button
 
@@ -74,7 +72,6 @@ class OptionsBox(Gtk.ListBox):
             OptionKind.PRIORITY: PriorityOption,
             OptionKind.HOSTNAME: CutstomHostnameOption,
             OptionKind.CHANGEPASSWORD: ChangePasswordOption,
-            OptionKind.GPG: GPGOption,
             }
 
         if extend is not None:
@@ -566,55 +563,3 @@ class ChangePasswordOption(DialogOption):
             con = app.connections[self.account]
             activatable = con.connected >= 2 and con.register_supported
         self.get_parent().set_activatable(activatable)
-
-
-class GPGOption(DialogOption):
-    def __init__(self, *args, **kwargs):
-        DialogOption.__init__(self, *args, **kwargs)
-
-    def show_dialog(self, parent):
-        secret_keys = app.connections[self.account].ask_gpg_secrete_keys()
-        secret_keys[_('None')] = _('None')
-
-        if not secret_keys:
-            ErrorDialog(
-                _('Failed to get secret keys'),
-                _('There is no OpenPGP secret key available.'),
-                transient_for=parent)
-            return
-
-        dialog = dialogs.ChooseGPGKeyDialog(
-            _('OpenPGP Key Selection'), _('Choose your OpenPGP key'),
-            secret_keys, self.on_key_selected, transient_for=parent)
-        dialog.window.connect('destroy', self.on_destroy)
-
-    def on_key_selected(self, keyID):
-        if keyID is None:
-            return
-        keyid_new, keyname_new = keyID
-
-        keyid = app.config.get_per('accounts', self.account, 'keyid')
-
-        if keyid_new == _('None'):
-            if keyid == '':
-                return
-            app.config.set_per('accounts', self.account, 'keyname', '')
-            app.config.set_per('accounts', self.account, 'keyid', '')
-        else:
-            if keyid == keyid_new:
-                return
-            app.config.set_per(
-                'accounts', self.account, 'keyname', keyname_new)
-            app.config.set_per(
-                'accounts', self.account, 'keyid', keyid_new)
-
-    def get_option_value(self):
-        keyid = app.config.get_per('accounts', self.account, 'keyid')
-        keyname = app.config.get_per('accounts', self.account, 'keyname')
-        if keyid is not None:
-            return '\n'.join((keyid, keyname))
-        return ''
-
-    def set_activatable(self, name, value):
-        active = self.account in app.connections
-        self.get_parent().set_activatable(app.is_installed('GPG') and active)

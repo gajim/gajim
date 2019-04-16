@@ -156,7 +156,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
     def _on_remove_service(self, jid):
         self.roster.delItem(jid)
         # 'NOTIFY' (account, (jid, status, status message, resource, priority,
-        # keyID, timestamp))
+        # timestamp))
         self._on_presence(jid, show='offline', status='')
 
     def _on_presence(self, jid, show=None, status=None):
@@ -169,7 +169,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
 
         event_attrs = {
             'conn': self,
-            'keyID': None,
             'prio': 0,
             'need_add_in_roster': False,
             'popup': False,
@@ -216,13 +215,6 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         contact.show = event.show
         contact.status = event.status
         contact.priority = event.prio
-        attached_keys = app.config.get_per('accounts', self.name,
-                                           'attached_gpg_keys').split()
-        if jid in attached_keys:
-            contact.keyID = attached_keys[attached_keys.index(jid) + 1]
-        else:
-            # Do not override assigned key
-            contact.keyID = event.keyID
         contact.idle_time = event.idle_time
 
         event.contact = contact
@@ -363,7 +355,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
             else:
                 self.reannounce()
 
-    def connect_and_init(self, show, msg, sign_msg):
+    def connect_and_init(self, show, msg):
         # to check for errors from zeroconf
         check = True
         if not self.connect(show, msg):

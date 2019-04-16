@@ -388,12 +388,6 @@ class GajimApplication(Gtk.Application):
         act.connect('change-state', app_actions.on_merge_accounts)
         self.add_action(act)
 
-        act = Gio.SimpleAction.new_stateful(
-            'agent', None,
-            GLib.Variant.new_boolean(app.config.get('use_gpg_agent')))
-        act.connect('change-state', app_actions.on_use_pgp_agent)
-        self.add_action(act)
-
         # General Actions
 
         general_actions = [

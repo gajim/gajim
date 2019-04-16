@@ -23,7 +23,6 @@ class OptionKind(IntEnum):
     PRIORITY = 9
     FILECHOOSER = 10
     CHANGEPASSWORD = 11
-    GPG = 12
 
 
 @unique

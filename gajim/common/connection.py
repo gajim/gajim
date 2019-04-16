@@ -55,7 +55,6 @@ from nbxmpp.const import Event
 from gajim import common
 from gajim.common import helpers
 from gajim.common import app
-from gajim.common import gpg
 from gajim.common import passwords
 from gajim.common import idle
 from gajim.common import modules
@@ -66,8 +65,6 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.contacts import GC_Contact
 from gajim.common.connection_handlers import ConnectionHandlers
 from gajim.common.connection_handlers_events import OurShowEvent
-from gajim.common.connection_handlers_events import BadGPGPassphraseEvent
-from gajim.common.connection_handlers_events import GPGPasswordRequiredEvent
 from gajim.common.connection_handlers_events import InformationEvent
 from gajim.common.connection_handlers_events import StanzaMessageOutgoingEvent
 from gajim.common.connection_handlers_events import GcStanzaMessageOutgoingEvent
@@ -105,11 +102,6 @@ class CommonConnection:
         self.is_zeroconf = False
         self.password = None
         self.server_resource = self._compute_resource()
-        self.gpg = None
-        self.USE_GPG = False
-        if app.is_installed('GPG'):
-            self.USE_GPG = True
-            self.gpg = gpg.GnuPG()
         self.status = ''
         self.old_show = ''
         self.priority = app.get_priority(name, 'offline')
@@ -186,43 +178,6 @@ class CommonConnection:
     def quit(self, kill_core):
         if kill_core and app.account_is_connected(self.name):
             self.disconnect(reconnect=False)
-
-    def test_gpg_passphrase(self, password):
-        """
-        Returns 'ok', 'bad_pass' or 'expired'
-        """
-        if not self.gpg:
-            return False
-        self.gpg.passphrase = password
-        keyID = app.config.get_per('accounts', self.name, 'keyid')
-        signed = self.gpg.sign('test', keyID)
-        self.gpg.password = None
-        if signed == 'KEYEXPIRED':
-            return 'expired'
-        if signed == 'BAD_PASSPHRASE':
-            return 'bad_pass'
-        return 'ok'
-
-    def get_signed_msg(self, msg, callback=None):
-        """
-        Returns the signed message if possible or an empty string if gpg is not
-        used or None if waiting for passphrase
-
-        callback is the function to call when user give the passphrase
-        """
-        signed = ''
-        keyID = app.config.get_per('accounts', self.name, 'keyid')
-        if keyID and self.USE_GPG:
-            if self.gpg.passphrase is None and not self.gpg.use_agent:
-                # We didn't set a passphrase
-                return None
-            signed = self.gpg.sign(msg, keyID)
-            if signed == 'BAD_PASSPHRASE':
-                self.USE_GPG = False
-                signed = ''
-                app.nec.push_incoming_event(BadGPGPassphraseEvent(None,
-                    conn=self))
-        return signed
 
     def get_status(self):
         return app.SHOW_LIST[self.connected]
@@ -432,25 +387,6 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def gpg_passphrase(self, passphrase):
-        if self.gpg:
-            if self.gpg.use_agent:
-                self.gpg.passphrase = None
-            else:
-                self.gpg.passphrase = passphrase
-
-    def ask_gpg_keys(self, keyID=None):
-        if self.gpg:
-            if keyID:
-                return self.gpg.get_key(keyID)
-            return self.gpg.get_keys()
-        return None
-
-    def ask_gpg_secrete_keys(self):
-        if self.gpg:
-            return self.gpg.get_secret_keys()
-        return None
-
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
             if event == 'STANZA RECEIVED':
@@ -467,9 +403,7 @@ class CommonConnection:
     def change_status(self, show, msg, auto=False):
         if not msg:
             msg = ''
-        sign_msg = False
-        if not auto and not show == 'offline':
-            sign_msg = True
+
         if show != 'invisible':
             # We save it only when privacy list is accepted
             self.status = msg
@@ -478,10 +412,7 @@ class CommonConnection:
             # recconect before we auth to server
             self.old_show = show
             self.server_resource = self._compute_resource()
-            if app.is_installed('GPG'):
-                self.USE_GPG = True
-                self.gpg = gpg.GnuPG()
-            self.connect_and_init(show, msg, sign_msg)
+            self.connect_and_init(show, msg)
             return
 
         if show == 'offline':
@@ -615,7 +546,7 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show='connecting'))
             self.retrycount += 1
-            self.connect_and_init(self.old_show, self.status, self.USE_GPG)
+            self.connect_and_init(self.old_show, self.status)
         else:
             log.info('Reconnect successfull')
             # reconnect succeeded
@@ -784,9 +715,7 @@ class Connection(CommonConnection, ConnectionHandlers):
                                 app.nec.push_incoming_event(NetworkEvent(
                                     'account-not-created', conn=self, reason=reason))
                                 return
-                            if app.is_installed('GPG'):
-                                self.USE_GPG = True
-                                self.gpg = gpg.GnuPG()
+
                             app.nec.push_incoming_event(
                                 NetworkEvent('account-created',
                                              conn=self,
@@ -1439,7 +1368,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         if self.connection:
             self.connection.send(' ')
 
-    def send_invisible_presence(self, msg, signed, initial=False):
+    def send_invisible_presence(self, msg, initial=False):
         if not app.account_is_connected(self.name):
             return
         if not self.get_module('PrivacyLists').supported:
@@ -1461,7 +1390,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.get_module('PrivacyLists').set_invisible_rule(
             callback=self._continue_invisible,
             msg=msg,
-            signed=signed,
             initial=initial)
 
     def _continue_invisible(self, con, iq_obj, msg, signed, initial):
@@ -1475,8 +1403,7 @@ class Connection(CommonConnection, ConnectionHandlers):
 
         self.get_module('Presence').send_presence(
             priority=priority,
-            status=msg,
-            sign=signed)
+            status=msg)
 
         self.priority = priority
         app.nec.push_incoming_event(OurShowEvent(None, conn=self,
@@ -1501,19 +1428,14 @@ class Connection(CommonConnection, ConnectionHandlers):
             # Inform GUI we just signed in
             app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
 
-    def get_signed_presence(self, msg, callback=None):
-        if app.config.get_per('accounts', self.name, 'gpg_sign_presence'):
-            return self.get_signed_msg(msg, callback)
-        return ''
-
     def connect_and_auth(self):
         self.on_connect_success = self._connect_success
         self.on_connect_failure = self._connect_failure
         self.connect()
 
-    def connect_and_init(self, show, msg, sign_msg):
+    def connect_and_init(self, show, msg):
         self.disable_reconnect_timer()
-        self.continue_connect_info = [show, msg, sign_msg]
+        self.continue_connect_info = [show, msg]
         self.connect_and_auth()
 
     def _discover_server(self):
@@ -1564,40 +1486,16 @@ class Connection(CommonConnection, ConnectionHandlers):
                 app.proxy65_manager.resolve(proxy, self.connection, our_jid,
                     testit=testit)
 
-    def send_first_presence(self):
-        if self.connected > 1 and self.continue_connect_info:
-            msg = self.continue_connect_info[1]
-            sign_msg = self.continue_connect_info[2]
-            signed = ''
-            send_first_presence = True
-            if sign_msg:
-                signed = self.get_signed_presence(msg,
-                    self._send_first_presence)
-                if signed is None:
-                    app.nec.push_incoming_event(GPGPasswordRequiredEvent(None,
-                        conn=self, callback=self._send_first_presence))
-                    # _send_first_presence will be called when user enter
-                    # passphrase
-                    send_first_presence = False
-            if send_first_presence:
-                self._send_first_presence(signed)
-
-    def _send_first_presence(self, signed=''):
+    def send_first_presence(self, signed=''):
+        if self.connected <= 1 or not self.continue_connect_info:
+            return
         show = self.continue_connect_info[0]
         msg = self.continue_connect_info[1]
-        sign_msg = self.continue_connect_info[2]
-        if sign_msg and not signed:
-            signed = self.get_signed_presence(msg)
-            if signed is None:
-                app.nec.push_incoming_event(BadGPGPassphraseEvent(None,
-                    conn=self))
-                self.USE_GPG = False
-                signed = ''
         self.connected = app.SHOW_LIST.index(show)
         sshow = helpers.get_xmpp_show(show)
         # send our presence
         if show == 'invisible':
-            self.send_invisible_presence(msg, signed, True)
+            self.send_invisible_presence(msg, True)
             return
         if show not in ['offline', 'online', 'chat', 'away', 'xa', 'dnd']:
             return
@@ -1606,8 +1504,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self.get_module('Presence').send_presence(
             priority=priority,
             show=sshow,
-            status=msg,
-            sign=signed)
+            status=msg)
 
         if self.connection:
             self.priority = priority
@@ -1643,18 +1540,15 @@ class Connection(CommonConnection, ConnectionHandlers):
                 status=msg)
 
         else:
-            signed = self.get_signed_presence(msg)
             priority = app.get_priority(self.name, sshow)
             self.get_module('Presence').send_presence(
                 jid,
                 priority=priority,
                 show=sshow,
-                status=msg,
-                sign=signed)
+                status=msg)
 
     def _change_to_invisible(self, msg):
-        signed = self.get_signed_presence(msg)
-        self.send_invisible_presence(msg, signed)
+        self.send_invisible_presence(msg)
 
     def _change_from_invisible(self):
         if self.get_module('PrivacyLists').supported:
@@ -1663,13 +1557,11 @@ class Connection(CommonConnection, ConnectionHandlers):
     def _update_status(self, show, msg, idle_time=None):
         xmpp_show = helpers.get_xmpp_show(show)
         priority = app.get_priority(self.name, xmpp_show)
-        signed = self.get_signed_presence(msg)
 
         self.get_module('Presence').send_presence(
             priority=priority,
             show=xmpp_show,
             status=msg,
-            sign=signed,
             idle_time=idle_time)
 
         if self.connection:
@@ -1862,7 +1754,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     def send_gc_message(self, obj):
         obj.stanza_id = self.connection.send(obj.msg_iq)
         app.nec.push_incoming_event(MessageSentEvent(
-            None, conn=self, jid=obj.jid, message=obj.message, keyID=None,
+            None, conn=self, jid=obj.jid, message=obj.message,
             automatic_message=obj.automatic_message,
             stanza_id=obj.stanza_id, additional_data=obj.additional_data))
 
