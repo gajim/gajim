@@ -70,7 +70,7 @@ class ConnectionZeroconf(CommonConnection, ConnectionHandlersZeroconf):
         self.is_zeroconf = True
 
         # Register all modules
-        modules.register(self)
+        modules.register_modules(self)
 
         app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)

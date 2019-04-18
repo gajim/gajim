@@ -408,7 +408,7 @@ class PluginManager(metaclass=Singleton):
                 if not module.zeroconf and con.name == 'Local':
                     continue
                 instance, name = module.get_instance(con)
-                modules.register_single(con, instance, name)
+                modules.register_single_module(con, instance, name)
 
                 # If handlers have been registered, register the
                 # plugin handlers. Otherwise this will be done
@@ -424,7 +424,7 @@ class PluginManager(metaclass=Singleton):
         for con in app.connections.values():
             for module in plugin.modules:
                 instance = con.get_module(module.name)
-                modules.unregister_single(con, module.name)
+                modules.unregister_single_module(con, module.name)
 
                 # Account is still connected and handlers are registered
                 # So just unregister the plugin handlers
@@ -562,7 +562,7 @@ class PluginManager(metaclass=Singleton):
                 instance, name = module.get_instance(con)
                 if not module.zeroconf and con.name == 'Local':
                     continue
-                modules.register_single(con, instance, name)
+                modules.register_single_module(con, instance, name)
 
     def _plugin_is_active_in_global_config(self, plugin):
         return app.config.get_per('plugins', plugin.short_name, 'active')

@@ -492,7 +492,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._sm_resume_data = {}
 
         # Register all modules
-        modules.register(self)
+        modules.register_modules(self)
 
         app.ged.register_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
@@ -505,7 +505,7 @@ class Connection(CommonConnection, ConnectionHandlers):
     # END __init__
 
     def cleanup(self):
-        modules.unregister(self)
+        modules.unregister_modules(self)
         app.ged.remove_event_handler('message-outgoing', ged.OUT_CORE,
             self._nec_message_outgoing)
         app.ged.remove_event_handler('gc-message-outgoing', ged.OUT_CORE,
