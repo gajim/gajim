@@ -256,3 +256,7 @@ button.flat.link { padding: 0; border: 0; }
 /* Treeview */
 .adhoc-treeview { padding: 5px; }
 .adhoc-scrolled { border: 1px solid; border-color:@unfocused_borders; }
+
+/* Search Dialog */
+.search-treeview { padding: 5px; }
+.search-scrolled { border: 1px solid; border-color:@unfocused_borders; }

@@ -58,7 +58,7 @@ from gajim.common.const import StyleAttr
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.service_registration import ServiceRegistration
-from gajim.gtk.discovery_search import SearchWindow
+from gajim.gtk.search import Search
 from gajim.gtk.adhoc import AdHocCommand
 from gajim.gtk.util import icon_exists
 from gajim.gtk.util import get_builder
@@ -1284,12 +1284,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        if service in app.interface.instances[self.account]['search']:
-            app.interface.instances[self.account]['search'][service].window.\
-                    present()
-        else:
-            app.interface.instances[self.account]['search'][service] = \
-                    SearchWindow(self.account, service)
+        Search(self.account, service, self.window.window)
 
     def cleanup(self):
         AgentBrowser.cleanup(self)

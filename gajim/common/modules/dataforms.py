@@ -665,6 +665,10 @@ class DataForm(ExtendedNode):
         for value in self.getTags('instructions'):
             self.delChild(value)
 
+    @property
+    def is_reported(self):
+        return self.getTag('reported') is not None
+
 
 class SimpleDataForm(DataForm, DataRecord):
     def __init__(self, type_=None, title=None, instructions=None, fields=None,
@@ -744,12 +748,6 @@ class MultipleDataForm(DataForm):
         for record in self.getTags('item'):
             yield record
 
-#    @property
-#    def reported(self):
-#        """
-#        DataRecord that contains descriptions of fields in records
-#        """
-#        return self.getTag('reported')
 #
 #    @reported.setter
 #    def reported(self, record):
