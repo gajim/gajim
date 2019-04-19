@@ -21,6 +21,7 @@ from gajim.gtkgui_helpers import scale_pixbuf_from_data
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.modules.dataforms import extend_form
 
 from gajim.gtk.util import MultiLineLabel
 
@@ -551,3 +552,33 @@ class ImageMediaField():
 
     def add(self, form_grid, row_number):
         form_grid.attach(self._image, 1, row_number, 1, 1)
+
+
+class DataFormDialog(Gtk.Dialog):
+    def __init__(self, title, transient_for, form, node, submit_callback):
+        Gtk.Dialog.__init__(self,
+                            title=title,
+                            transient_for=transient_for,
+                            modal=False)
+        self.set_default_size(600, 500)
+
+        self._submit_callback = submit_callback
+        self._form = DataFormWidget(extend_form(node=form))
+        self._node = node
+
+        self.get_content_area().get_style_context().add_class('dialog-margin')
+        self.get_content_area().add(self._form)
+
+        self.add_button(_('Cancel'), Gtk.ResponseType.CANCEL)
+
+        submit_button = self.add_button(_('Submit'), Gtk.ResponseType.OK)
+        submit_button.get_style_context().add_class('suggested-action')
+        self.set_default_response(Gtk.ResponseType.OK)
+
+        self.connect('response', self._on_response)
+        self.show_all()
+
+    def _on_response(self, _dialog, response):
+        if response == Gtk.ResponseType.OK:
+            self._submit_callback(self._form.get_submit_form(), self._node)
+        self.destroy()

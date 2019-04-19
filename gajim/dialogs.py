@@ -38,8 +38,6 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
 
-from gajim import dataforms_widget
-
 from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.const import ACTIVITIES
@@ -48,7 +46,6 @@ from gajim.common.const import MOODS
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import i18n
-from gajim.common.modules import dataforms
 from gajim.common.exceptions import GajimGeneralException
 
 from gajim.gtk.dialogs import ErrorDialog
@@ -57,7 +54,6 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import AspellDictError
 from gajim.gtk.util import get_icon_name
-from gajim.gtk.util import resize_window
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_activity_icon_name
 
@@ -1352,30 +1348,6 @@ class Dialog(Gtk.Dialog):
             self.destroy()
 
     def just_destroy(self, widget):
-        self.destroy()
-
-
-class DataFormWindow(Dialog):
-    def __init__(self, form, on_response_ok):
-        self.df_response_ok = on_response_ok
-        Dialog.__init__(self, None, 'test', [(Gtk.STOCK_CANCEL,
-            Gtk.ResponseType.CANCEL), (Gtk.STOCK_OK, Gtk.ResponseType.OK)],
-            on_response_ok=self.on_ok)
-        self.set_resizable(True)
-        resize_window(self, 600, 400)
-        self.dataform_widget = dataforms_widget.DataFormWidget()
-        self.dataform = dataforms.extend_form(node=form)
-        self.dataform_widget.set_sensitive(True)
-        self.dataform_widget.data_form = self.dataform
-        self.dataform_widget.show_all()
-        self.get_content_area().pack_start(self.dataform_widget, True, True, 0)
-
-    def on_ok(self):
-        form = self.dataform_widget.data_form
-        if isinstance(self.df_response_ok, tuple):
-            self.df_response_ok[0](form, *self.df_response_ok[1:])
-        else:
-            self.df_response_ok(form)
         self.destroy()
 
 

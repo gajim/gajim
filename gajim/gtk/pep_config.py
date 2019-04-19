@@ -20,6 +20,7 @@ from gajim.common.i18n import _
 
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dataform import DataFormDialog
 from gajim.gtk.util import get_builder
 
 
@@ -122,14 +123,14 @@ class ManagePEPServicesWindow:
         con = app.connections[self.account]
         con.get_module('PubSub').request_pb_configuration(our_jid, node)
 
+    def _on_config_submit(self, form, node):
+        our_jid = app.get_jid_from_account(self.account)
+        con = app.connections[self.account]
+        con.get_module('PubSub').send_pb_configure(our_jid, node, form)
+
     def _nec_pep_config_received(self, obj):
-        def on_ok(form, node):
-            form.type_ = 'submit'
-            our_jid = app.get_jid_from_account(self.account)
-            con = app.connections[self.account]
-            con.get_module('PubSub').send_pb_configure(our_jid, node, form)
-        from gajim.dialogs import DataFormWindow
-        window = DataFormWindow(obj.form, (on_ok, obj.node))
-        title = _('Configure %s') % obj.node
-        window.set_title(title)
-        window.show_all()
+        DataFormDialog(_('Configure %s') % obj.node,
+                       self.window,
+                       obj.form,
+                       obj.node,
+                       self._on_config_submit)
