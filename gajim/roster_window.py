@@ -4823,7 +4823,7 @@ class RosterWindow:
                 pep_submenu = Gtk.Menu()
                 pep_menuitem.set_submenu(pep_submenu)
 
-                item = Gtk.CheckMenuItem(_('Publish Tune'))
+                item = Gtk.CheckMenuItem(label=_('Publish Tune'))
                 pep_submenu.append(item)
                 if sys.platform in ('win32', 'darwin'):
                     item.set_sensitive(False)
@@ -4834,7 +4834,7 @@ class RosterWindow:
                     item.connect('toggled', self.on_publish_tune_toggled,
                                  account)
 
-                item = Gtk.CheckMenuItem(_('Publish Location'))
+                item = Gtk.CheckMenuItem(label=_('Publish Location'))
                 pep_submenu.append(item)
                 if not app.is_installed('GEOCLUE'):
                     item.set_sensitive(False)
