@@ -1006,6 +1006,7 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
         self.set_name('InvitationReceivedDialog')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_resizable(False)
         self.set_show_menubar(False)
         self.set_title(_('Group Chat Invitation '))
 

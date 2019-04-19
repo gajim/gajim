@@ -15,7 +15,7 @@
         <property name="label">&lt;b&gt;contact/jid&lt;/b&gt; has invited you to the group chat &lt;b&gt;muc.jid&lt;/b&gt;</property>
         <property name="use_markup">True</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">70</property>
+        <property name="max_width_chars">50</property>
         <property name="xalign">0</property>
       </object>
       <packing>
@@ -138,7 +138,7 @@
         <property name="no_show_all">True</property>
         <property name="label">&lt;comment&gt;</property>
         <property name="wrap">True</property>
-        <property name="max_width_chars">70</property>
+        <property name="max_width_chars">50</property>
         <property name="xalign">0</property>
       </object>
       <packing>
