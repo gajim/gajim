@@ -25,11 +25,11 @@ from gajim.common.modules import dataforms
 from gajim.common.i18n import _
 
 from gajim import vcard
-from gajim import config
 from gajim import dataforms_widget
 
 from gajim.gtk.util import get_builder
 from gajim.gtk.add_contact import AddNewContactWindow
+from gajim.gtk.dataform import FakeDataFormWidget
 
 
 class SearchWindow:
@@ -92,7 +92,7 @@ class SearchWindow:
             con.get_module('Search').send_search_form(
                 self.jid, self.data_form_widget.data_form.get_purged(), True)
         else:
-            infos = self.data_form_widget.get_infos()
+            infos = self.data_form_widget.get_submit_form()
             if 'instructions' in infos:
                 del infos['instructions']
             con.get_module('Search').send_search_form(self.jid, infos, False)
@@ -146,7 +146,7 @@ class SearchWindow:
                     '%s - Search - Gajim' % self.data_form_widget.title)
         else:
             self.is_form = False
-            self.data_form_widget = config.FakeDataForm(obj.data)
+            self.data_form_widget = FakeDataFormWidget(obj.data)
 
         self.data_form_widget.show_all()
         self._ui.search_vbox.pack_start(self.data_form_widget, True, True, 0)

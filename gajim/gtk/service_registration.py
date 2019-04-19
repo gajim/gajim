@@ -22,6 +22,7 @@ from gajim.common.modules import dataforms
 from gajim.common.i18n import _
 
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.dataform import FakeDataFormWidget
 
 log = logging.getLogger('gajim.gtk.registration')
 
@@ -77,8 +78,7 @@ class ServiceRegistration(Gtk.Assistant):
 
     def _build_dataform(self, form, is_form):
         if not is_form:
-            from gajim import config
-            return config.FakeDataForm(form)
+            return FakeDataFormWidget(form)
 
         dataform = dataforms.extend_form(node=form)
 
@@ -122,15 +122,7 @@ class ServiceRegistration(Gtk.Assistant):
 
     def _register(self):
         log.info('Show Sending page')
-        if self._is_form:
-            form = self._data_form_widget.get_submit_form()
-        else:
-            form = self._data_form_widget.get_infos()
-            if 'instructions' in form:
-                del form['instructions']
-            if 'registered' in form:
-                del form['registered']
-
+        form = self._data_form_widget.get_submit_form()
         self._con.get_module('Register').register_agent(
             self._agent,
             form,

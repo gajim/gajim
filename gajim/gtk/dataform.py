@@ -21,6 +21,7 @@ from gajim.gtkgui_helpers import scale_pixbuf_from_data
 
 from gajim.common import app
 from gajim.common.i18n import _
+from gajim.common.helpers import launch_browser_mailer
 from gajim.common.modules.dataforms import extend_form
 
 from gajim.gtk.util import MultiLineLabel
@@ -552,6 +553,76 @@ class ImageMediaField():
 
     def add(self, form_grid, row_number):
         form_grid.attach(self._image, 1, row_number, 1, 1)
+
+
+class FakeDataFormWidget(Gtk.ScrolledWindow):
+    def __init__(self, fields):
+        Gtk.ScrolledWindow.__init__(self)
+        self.set_hexpand(True)
+        self.set_vexpand(True)
+        self.set_overlay_scrolling(False)
+        self.get_style_context().add_class('data-form-widget')
+
+        self._grid = Gtk.Grid()
+        self._grid.set_column_spacing(12)
+        self._grid.set_row_spacing(12)
+        self._grid.set_halign(Gtk.Align.CENTER)
+
+        self._fields = fields
+        self._entries = {}
+        self._row_count = 0
+
+        instructions = fields.pop('instructions', None)
+        if instructions is not None:
+            label = Gtk.Label(label=instructions)
+            label.set_justify(Gtk.Justification.CENTER)
+            label.set_max_width_chars(40)
+            label.set_line_wrap(True)
+            label.set_line_wrap_mode(Pango.WrapMode.WORD)
+            self._grid.attach(label, 0, self._row_count, 2, 1)
+            self._row_count += 1
+
+        redirect_url = fields.pop('redirect-url', None)
+        if not fields and redirect_url is not None:
+            # Server wants to redirect registration
+            button = Gtk.Button(label='Register')
+            button.set_halign(Gtk.Align.CENTER)
+            button.get_style_context().add_class('suggested-action')
+            button.connect('clicked',
+                           lambda *args: launch_browser_mailer('url',
+                                                               redirect_url))
+            self._grid.attach(button, 0, self._row_count, 2, 1)
+        else:
+            self._add_fields()
+        self.add(self._grid)
+        self.show_all()
+
+    def _add_fields(self):
+        for name, value in self._fields.items():
+            if name in ('key', 'x', 'registered'):
+                continue
+
+            label = Gtk.Label(label=name.capitalize())
+            label.set_xalign(1)
+            self._grid.attach(label, 0, self._row_count, 1, 1)
+            self._row_count += 1
+
+            entry = Gtk.Entry()
+            entry.set_text(value)
+            if name == 'password':
+                entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
+                entry.set_visibility(False)
+            self._entries[name] = entry
+
+            self._grid.attach_next_to(entry, label,
+                                      Gtk.PositionType.RIGHT, 1, 1)
+
+    def get_submit_form(self):
+        fields = {}
+        for name, entry in self._entries.items():
+            fields[name] = entry.get_text()
+        return fields
+
 
 
 class DataFormDialog(Gtk.Dialog):

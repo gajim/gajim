@@ -29,11 +29,10 @@ from gajim.common.modules import dataforms
 from gajim import dataforms_widget
 from gajim import gui_menu_builder
 
-from gajim.config import FakeDataForm
-
 from gajim.gtk.util import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.proxies import ManageProxies
+from gajim.gtk.dataform import FakeDataFormWidget
 
 
 class AccountCreationWizard:
@@ -325,7 +324,7 @@ class AccountCreationWizard:
             if self.is_form:
                 form = self.data_form_widget.data_form
             else:
-                form = self.data_form_widget.get_infos()
+                form = self.data_form_widget.get_submit_form()
             app.connections[self.account].send_new_account_infos(
                 form, self.is_form)
             self.xml.get_object('form_vbox').remove(self.data_form_widget)
@@ -381,7 +380,7 @@ class AccountCreationWizard:
             self.data_form_widget.set_data_form(dataform)
             empty_config = False
         else:
-            self.data_form_widget = FakeDataForm(obj.config, selectable=True)
+            self.data_form_widget = FakeDataFormWidget(obj.config)
             for field in obj.config:
                 if field in ('key', 'instructions', 'x', 'registered'):
                     continue

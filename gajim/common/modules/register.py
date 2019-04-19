@@ -134,8 +134,13 @@ class Register(BaseModule):
         is_form = form is not None
         if not is_form:
             form = {}
+            oob = stanza.getQuery().getTag('x', namespace=nbxmpp.NS_X_OOB)
+            if oob is not None:
+                form['redirect-url'] = oob.getTagData('url')
             for field in stanza.getQueryPayload():
                 if not isinstance(field, nbxmpp.Node):
+                    continue
+                if field.getName() == 'x':
                     continue
                 form[field.getName()] = field.getData()
 
