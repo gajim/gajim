@@ -575,8 +575,12 @@ class AccountPage(GenericSettingPage):
 
         general = partial(
             self.set_page, GeneralPage(account, self), 'general')
+
         connection = partial(
             self.set_page, ConnectionPage(account, self), 'connection')
+
+        privacy = partial(
+            self.set_page, PrivacyPage(account, self), 'privacy')
 
         settings = [
             Setting(SettingKind.ENTRY, _('Label'),
@@ -591,6 +595,9 @@ class AccountPage(GenericSettingPage):
 
             Setting(SettingKind.CALLBACK, _('General'),
                     name='general', props={'callback': general}),
+
+            Setting(SettingKind.CALLBACK, _('Privacy'),
+                    name='privacy', props={'callback': privacy}),
 
             Setting(SettingKind.CALLBACK, _('Connection'),
                     name='connection', props={'callback': connection}),
@@ -640,6 +647,33 @@ class GeneralPage(GenericSettingPage):
 
             Setting(SettingKind.SWITCH, _('Use file transfer proxies'),
                     SettingType.ACCOUNT_CONFIG, 'use_ft_proxies'),
+            ]
+        GenericSettingPage.__init__(self, account, parent, settings)
+
+
+class PrivacyPage(GenericSettingPage):
+    def __init__(self, account, parent=None):
+
+        settings = [
+            Setting(SettingKind.SWITCH, _('Idle Time'),
+                    SettingType.ACCOUNT_CONFIG, 'send_idle_time',
+                    desc=_('Disclose the time of your last activity')),
+
+            Setting(SettingKind.SWITCH, _('Local System Time'),
+                    SettingType.ACCOUNT_CONFIG, 'send_time_info',
+                    desc=_('Disclose the local system time of the '
+                           'device Gajim runs on')),
+
+            Setting(SettingKind.SWITCH, _('Client / Operating System'),
+                    SettingType.ACCOUNT_CONFIG, 'send_os_info',
+                    desc=_('Disclose informations about the client '
+                           'and operating system you currently use')),
+
+            Setting(SettingKind.SWITCH, _('Ignore Unknown Contacts'),
+                    SettingType.ACCOUNT_CONFIG, 'ignore_unknown_contacts',
+                    desc=_('Ignore everything from contacts not in your '
+                           'Roster')),
+
             ]
         GenericSettingPage.__init__(self, account, parent, settings)
 

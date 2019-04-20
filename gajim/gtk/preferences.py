@@ -282,34 +282,6 @@ class Preferences(Gtk.ApplicationWindow):
         buf.connect('end-user-action', self.on_msg_textview_changed)
 
         ### Privacy tab ###
-        # Send idle time
-        st = self.get_per_account_option('send_idle_time')
-        if st == 'mixed':
-            self._ui.send_idle_time_checkbutton.set_inconsistent(True)
-        else:
-            self._ui.send_idle_time_checkbutton.set_active(st)
-
-        # Send absolute time info
-        st = self.get_per_account_option('send_time_info')
-        if st == 'mixed':
-            self._ui.send_time_info_checkbutton.set_inconsistent(True)
-        else:
-            self._ui.send_time_info_checkbutton.set_active(st)
-
-        # Send OS info
-        st = self.get_per_account_option('send_os_info')
-        if st == 'mixed':
-            self._ui.send_os_info_checkbutton.set_inconsistent(True)
-        else:
-            self._ui.send_os_info_checkbutton.set_active(st)
-
-        # Ignore messages from unknown contacts
-        st = self.get_per_account_option('ignore_unknown_contacts')
-        if st == 'mixed':
-            self._ui.ignore_events_from_unknown_contacts_checkbutton.set_inconsistent(True)
-        else:
-            self._ui.ignore_events_from_unknown_contacts_checkbutton.set_active(st)
-
         # Outgoing chat state notifications
         st = app.config.get('outgoing_chat_state_notifications')
         if st == 'all':
