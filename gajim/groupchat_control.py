@@ -392,7 +392,7 @@ class GroupchatControl(ChatControlBase):
 
         default_muc_chatstate = app.config.get('send_chatstate_muc_default')
         chatstate = app.config.get_per(
-            'rooms', self.contact.jid, 'send_chatstate', default_chatstate)
+            'rooms', self.contact.jid, 'send_chatstate', default_muc_chatstate)
 
         act = Gio.SimpleAction.new_stateful(
             'send-chatstate-' + self.control_id,
