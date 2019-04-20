@@ -7,3 +7,5 @@ If you want to create a fork and use an external account (Github, Google) drop u
 - gajim_0.16 - Stable Gajim 0.16.x branch
 
 If you are not familiar with Git please read the [HowTo](https://dev.gajim.org/gajim/gajim/wikis/development/howtogit)
+
+A good article regarding [good commit messages](https://chris.beams.io/posts/git-commit/)
