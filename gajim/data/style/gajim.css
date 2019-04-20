@@ -91,7 +91,7 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 #SettingsBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
 /* GenericSetting */
-#SubDescription { color: @insensitive_fg_color;}
+#SubDescription { color: @insensitive_fg_color; font-size: small;}
 #GenericSettingBox { margin-left: 30px; }
 #GenericSettingBox > label { padding-right: 3px; }
 
