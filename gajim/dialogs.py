@@ -1159,35 +1159,6 @@ class RosterItemExchangeWindow:
         self.window.destroy()
 
 
-class ProgressDialog:
-    def __init__(self, title_text, during_text, messages_queue):
-        """
-        During text is what to show during the procedure, messages_queue has the
-        message to show in the textview
-        """
-        self.xml = get_builder('progress_dialog.ui')
-        self.dialog = self.xml.get_object('progress_dialog')
-        self.label = self.xml.get_object('label')
-        self.label.set_markup('<big>' + during_text + '</big>')
-        self.progressbar = self.xml.get_object('progressbar')
-        self.dialog.set_title(title_text)
-        self.dialog.set_default_size(450, 250)
-        self.window.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
-        self.dialog.show_all()
-        self.xml.connect_signals(self)
-
-        self.update_progressbar_timeout_id = GLib.timeout_add(100,
-            self.update_progressbar)
-
-    def update_progressbar(self):
-        if self.dialog:
-            self.progressbar.pulse()
-            return True # loop forever
-        return False
-
-    def on_progress_dialog_delete_event(self, widget, event):
-        return True # WM's X button or Escape key should not destroy the window
-
 class TransformChatToMUC:
     # Keep a reference on windows so garbage collector don't restroy them
     instances = []  # type: List[TransformChatToMUC]
