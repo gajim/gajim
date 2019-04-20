@@ -355,7 +355,7 @@ def open_link(_action, param):
     helpers.launch_browser_mailer(kind, link)
 
 
-def copy_link(_action, param):
+def copy_text(_action, param):
     text = param.get_string()
     clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
     clip.set_text(text, -1)

@@ -26,6 +26,8 @@ from gajim.common.i18n import _
 
 from gajim.common.modules import dataforms
 
+from gajim.gui_menu_builder import SearchMenu
+
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import find_widget
@@ -259,6 +261,7 @@ class Completed(Gtk.Box):
         self._scrolled.get_style_context().add_class('search-scrolled')
         self._scrolled.set_no_show_all(True)
         self._treeview = None
+        self._menu = None
         self.add(self._label)
         self.add(self._scrolled)
         self.show_all()
@@ -268,6 +271,7 @@ class Completed(Gtk.Box):
             self._scrolled.remove(self._treeview)
             self._treeview.destroy()
             self._treeview = None
+            self._menu = None
             self._label.hide()
             self._scrolled.hide()
 
@@ -303,6 +307,8 @@ class Completed(Gtk.Box):
         self._treeview.set_hexpand(True)
         self._treeview.set_vexpand(True)
         self._treeview.get_style_context().add_class('search-treeview')
+        self._treeview.connect('button-press-event', self._on_button_press)
+        self._menu = SearchMenu(self._treeview)
 
         for field, counter in zip(form.reported.iter_fields(),
                                   itertools.count()):
@@ -315,6 +321,19 @@ class Completed(Gtk.Box):
         self._treeview.show()
         self._scrolled.add(self._treeview)
         self._scrolled.show()
+
+    def _on_button_press(self, treeview, event):
+        if event.button != 3:
+            return
+        path, _column, _x, _y = treeview.get_path_at_pos(event.x, event.y)
+        if path is None:
+            return
+        store = treeview.get_model()
+        iter_ = store.get_iter(path)
+        column_values = store[iter_]
+        text = ' '.join(column_values)
+        self._menu.set_copy_text(text)
+        self._menu.popup_at_pointer()
 
 
 class Error(Gtk.Box):

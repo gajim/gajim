@@ -905,31 +905,31 @@ def get_conv_context_menu(account, kind, text):
     if kind == 'xmpp':
         if '?join' in text:
             context_menu = [
-                ('copy-link', _('Copy JID')),
+                ('copy-text', _('Copy JID')),
                 ('-join-groupchat', _('Join Groupchat')),
             ]
         else:
             context_menu = [
-                ('copy-link', _('Copy JID')),
+                ('copy-text', _('Copy JID')),
                 ('-start-chat', _('Start Chat')),
                 ('-add-contact', _('Add to Roster…')),
             ]
 
     elif kind == 'url':
         context_menu = [
-            ('copy-link', _('Copy Link Location')),
+            ('copy-text', _('Copy Link Location')),
             ('open-link', _('Open Link in Browser')),
         ]
 
     elif kind == 'mail':
         context_menu = [
-            ('copy-link', _('Copy Email Address')),
+            ('copy-text', _('Copy Email Address')),
             ('open-link', _('Open Email Composer')),
         ]
 
     elif kind == 'sth_at_sth':
         context_menu = [
-            ('copy-link', _('Copy JID/Email')),
+            ('copy-text', _('Copy JID/Email')),
             ('open-link', _('Open Email Composer')),
             ('-start-chat', _('Start Chat')),
             ('-join-groupchat', _('Join Groupchat')),
@@ -954,7 +954,7 @@ def get_conv_context_menu(account, kind, text):
 
         if action == 'app.open-link':
             value = GLib.Variant.new_strv([kind, text])
-        elif action == 'app.copy-link':
+        elif action == 'app.copy-text':
             value = GLib.Variant.new_string(text)
         else:
             value = GLib.Variant.new_strv([account, text])
@@ -962,6 +962,20 @@ def get_conv_context_menu(account, kind, text):
         menuitem.show()
         menu.append(menuitem)
     return menu
+
+
+class SearchMenu(Gtk.Menu):
+    def __init__(self, treeview):
+        Gtk.Menu.__init__(self)
+        self._copy_item = Gtk.MenuItem(label=_('Copy'))
+        self._copy_item.set_action_name('app.copy-text')
+        self.set_copy_text('')
+        self._copy_item.show()
+        self.append(self._copy_item)
+        self.attach_to_widget(treeview, None)
+
+    def set_copy_text(self, text):
+        self._copy_item.set_action_target_value(GLib.Variant('s', text))
 
 
 def escape_mnemonic(label):
