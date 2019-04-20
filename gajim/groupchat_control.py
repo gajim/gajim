@@ -390,8 +390,9 @@ class GroupchatControl(ChatControlBase):
         act.connect('change-state', self._on_minimize_on_autojoin)
         self.parent_win.window.add_action(act)
 
+        default_muc_chatstate = app.config.get('send_chatstate_muc_default')
         chatstate = app.config.get_per(
-            'rooms', self.contact.jid, 'send_chatstate', 'composing_only')
+            'rooms', self.contact.jid, 'send_chatstate', default_chatstate)
 
         act = Gio.SimpleAction.new_stateful(
             'send-chatstate-' + self.control_id,

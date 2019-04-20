@@ -99,6 +99,7 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.HOSTNAME: CutstomHostnameSetting,
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             SettingKind.COMBO: ComboSetting,
+            SettingKind.CHATSTATE_COMBO: ChatstateComboSetting,
             }
 
         if extend is not None:
@@ -533,6 +534,15 @@ class ComboSetting(GenericSetting):
 
     def on_value_change(self, combo):
         self.set_value(combo.get_active_id())
+
+
+class ChatstateComboSetting(ComboSetting):
+    def on_value_change(self, combo):
+        self.set_value(combo.get_active_id())
+        if 'muc' in self.value:
+            app.config.del_all_per('rooms', 'send_chatstate')
+        else:
+            app.config.del_all_per('contacts', 'send_chatstate')
 
 
 class ProxyComboSetting(GenericSetting):

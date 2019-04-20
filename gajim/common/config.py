@@ -292,6 +292,8 @@ class Config:
         'show_chatstate_in_roster': [opt_bool, True, _('If the contact row is colored according to the current chatstate of the contact')],
         'show_chatstate_in_tabs': [opt_bool, True, _('If the tab is colored according to the current chatstate of the contact')],
         'show_chatstate_in_banner': [opt_bool, True, _('Shows a text in the banner that describes the current chatstate of the contact')],
+        'send_chatstate_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to contacts. Possible values: all, composing_only, disabled')],
+        'send_chatstate_muc_default': [opt_str, 'composing_only', _('Chat state notifications that are sent to the group chat. Possible values: all, composing_only, disabled')],
     }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
 
     __options_per_key = {
@@ -615,6 +617,20 @@ class Config:
         # if subname is specified, delete the item in the group.
         elif subname in opt[1][name]:
             del opt[1][name][subname]
+        self._timeout_save()
+
+    def del_all_per(self, typename, subname):
+        # Deletes all settings per typename
+        # Example: Delete `account_label` for all accounts
+        if typename not in self.__options_per_key:
+            raise ValueError('typename %s does not exist' % typename)
+
+        opt = self.__options_per_key[typename]
+        for name in opt[1]:
+            try:
+                del opt[1][name][subname]
+            except KeyError:
+                pass
         self._timeout_save()
 
     def set_per(self, optname, key, subname, value): # per_group_of_option
