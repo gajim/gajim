@@ -55,6 +55,7 @@ class SettingKind(IntEnum):
     PRIORITY = 9
     FILECHOOSER = 10
     CHANGEPASSWORD = 11
+    COMBO = 12
 
 
 @unique

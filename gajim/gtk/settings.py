@@ -97,6 +97,7 @@ class SettingsBox(Gtk.ListBox):
             SettingKind.PRIORITY: PrioritySetting,
             SettingKind.HOSTNAME: CutstomHostnameSetting,
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
+            SettingKind.COMBO: ComboSetting,
             }
 
         if extend is not None:
@@ -500,6 +501,33 @@ class LoginSetting(DialogSetting):
         super().update_activatable(name, value)
         anonym = app.config.get_per('accounts', self.account, 'anonymous_auth')
         self.set_activatable(not anonym)
+
+
+class ComboSetting(GenericSetting):
+
+    __gproperties__ = {
+        "setting-value": (str, 'Proxy', '', '',
+                         GObject.ParamFlags.READWRITE),}
+
+    def __init__(self, *args, combo_items):
+        GenericSetting.__init__(self, *args)
+
+        self.combo = Gtk.ComboBoxText()
+        self.combo.set_valign(Gtk.Align.CENTER)
+        text_renderer = self.combo.get_cells()[0]
+        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
+        for index, value in enumerate(combo_items):
+            self.combo.append(value, _(value))
+            if value == self.setting_value or index == 0:
+                self.combo.set_active(index)
+
+        self.combo.connect('changed', self.on_value_change)
+
+        self.setting_box.pack_start(self.combo, True, True, 0)
+        self.show_all()
+
+    def on_value_change(self, combo):
+        self.set_value(combo.get_active_id())
 
 
 class ProxyComboSetting(GenericSetting):
