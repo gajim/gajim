@@ -623,3 +623,21 @@ class MultiLineLabel(Gtk.Label):
         self.set_line_wrap(True)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_single_line_mode(False)
+
+
+class MaxWidthComboBoxText(Gtk.ComboBoxText):
+    def __init__(self, *args, **kwargs):
+        Gtk.ComboBoxText.__init__(self, *args, **kwargs)
+        self._max_width = 100
+
+    def set_max_size(self, size):
+        self._max_width = size
+
+    def do_get_preferred_width(self):
+        minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(self)
+
+        if natural_width > self._max_width:
+            natural_width = self._max_width
+        if minimum_width > self._max_width:
+            minimum_width = self._max_width
+        return minimum_width, natural_width

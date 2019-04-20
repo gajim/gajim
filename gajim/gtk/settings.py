@@ -30,6 +30,7 @@ from gajim import gtkgui_helpers
 
 from gajim.gtk.dialogs import ChangePasswordDialog
 from gajim.gtk.util import get_image_button
+from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 
@@ -512,12 +513,16 @@ class ComboSetting(GenericSetting):
     def __init__(self, *args, combo_items):
         GenericSetting.__init__(self, *args)
 
-        self.combo = Gtk.ComboBoxText()
+        self.combo = MaxWidthComboBoxText()
         self.combo.set_valign(Gtk.Align.CENTER)
         text_renderer = self.combo.get_cells()[0]
         text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
         for index, value in enumerate(combo_items):
-            self.combo.append(value, _(value))
+            if isinstance(value, tuple):
+                value, label = value
+                self.combo.append(value, _(label))
+            else:
+                self.combo.append(value, value)
             if value == self.setting_value or index == 0:
                 self.combo.set_active(index)
 
@@ -539,8 +544,10 @@ class ProxyComboSetting(GenericSetting):
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
 
-        self.combo = Gtk.ComboBoxText()
+        self.combo = MaxWidthComboBoxText()
         self.combo.set_valign(Gtk.Align.CENTER)
+        text_renderer = self.combo.get_cells()[0]
+        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
 
         self._signal_id = None
         self.update_values()
