@@ -3,35 +3,8 @@ from collections import namedtuple
 
 from gajim.common.i18n import _
 
-Option = namedtuple('Option', 'kind label type value name callback data desc enabledif props')
-Option.__new__.__defaults__ = (None,) * len(Option._fields)  # type: ignore
-
 EncryptionData = namedtuple('EncryptionData', 'additional_data')
 EncryptionData.__new__.__defaults__ = (None,)  # type: ignore
-
-@unique
-class OptionKind(IntEnum):
-    ENTRY = 0
-    SWITCH = 1
-    SPIN = 2
-    ACTION = 3
-    LOGIN = 4
-    DIALOG = 5
-    CALLBACK = 6
-    PROXY = 7
-    HOSTNAME = 8
-    PRIORITY = 9
-    FILECHOOSER = 10
-    CHANGEPASSWORD = 11
-
-
-@unique
-class OptionType(IntEnum):
-    ACCOUNT_CONFIG = 0
-    CONFIG = 1
-    VALUE = 2
-    ACTION = 3
-    DIALOG = 4
 
 
 class AvatarSize(IntEnum):

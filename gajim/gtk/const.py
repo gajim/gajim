@@ -21,6 +21,9 @@ from enum import unique
 
 Filter = namedtuple('Filter', 'name pattern default')
 
+Setting = namedtuple('Setting', 'kind label type value name callback data desc enabledif props')
+Setting.__new__.__defaults__ = (None,) * len(Setting._fields)  # type: ignore
+
 @unique
 class Theme(IntEnum):
     NOT_DARK = 0
@@ -36,3 +39,28 @@ class GajimIconSet(Enum):
     JABBERBULB = 'jabberbulb'
     SUN = 'sun'
     WROOP = 'wroop'
+
+
+@unique
+class SettingKind(IntEnum):
+    ENTRY = 0
+    SWITCH = 1
+    SPIN = 2
+    ACTION = 3
+    LOGIN = 4
+    DIALOG = 5
+    CALLBACK = 6
+    PROXY = 7
+    HOSTNAME = 8
+    PRIORITY = 9
+    FILECHOOSER = 10
+    CHANGEPASSWORD = 11
+
+
+@unique
+class SettingType(IntEnum):
+    ACCOUNT_CONFIG = 0
+    CONFIG = 1
+    VALUE = 2
+    ACTION = 3
+    DIALOG = 4

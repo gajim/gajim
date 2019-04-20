@@ -25,16 +25,12 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
-from gajim.common.const import Option
-from gajim.common.const import OptionKind
-from gajim.common.const import OptionType
 
 from gajim import gui_menu_builder
 from gajim.dialogs import PassphraseDialog
 
-from gajim.options_dialog import OptionsDialog
-from gajim.options_dialog import OptionsBox
-
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.settings import SettingsBox
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
@@ -43,6 +39,9 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog
 from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import get_builder
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
@@ -67,7 +66,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
         accounts = app.config.get_per('accounts')
         accounts.sort()
         for account in accounts:
-            self.need_relogin[account] = self.get_relogin_options(account)
+            self.need_relogin[account] = self.get_relogin_settings(account)
             account_item = Account(account, self)
             self._ui.account_list.add(account_item)
             account_item.set_activatable()
@@ -135,14 +134,14 @@ class AccountsWindow(Gtk.ApplicationWindow):
         page = self._ui.stack.get_child_by_name('connection')
         if page is None:
             return
-        page.listbox.get_option('proxy').update_values()
+        page.listbox.get_setting('proxy').update_values()
 
     def check_relogin(self):
         for account in self.need_relogin:
-            options = self.get_relogin_options(account)
+            settings = self.get_relogin_settings(account)
             active = app.config.get_per('accounts', account, 'active')
-            if options != self.need_relogin[account]:
-                self.need_relogin[account] = options
+            if settings != self.need_relogin[account]:
+                self.need_relogin[account] = settings
                 if active:
                     self.relog(account)
                 break
@@ -180,17 +179,17 @@ class AccountsWindow(Gtk.ApplicationWindow):
             on_response_yes=lambda *args: relog(account))
 
     @staticmethod
-    def get_relogin_options(account):
+    def get_relogin_settings(account):
         if account == app.ZEROCONF_ACC_NAME:
-            options = ['zeroconf_first_name', 'zeroconf_last_name',
-                       'zeroconf_jabber_id', 'zeroconf_email']
+            settings = ['zeroconf_first_name', 'zeroconf_last_name',
+                        'zeroconf_jabber_id', 'zeroconf_email']
         else:
-            options = ['client_cert', 'proxy', 'resource',
-                       'use_custom_host', 'custom_host', 'custom_port']
+            settings = ['client_cert', 'proxy', 'resource',
+                        'use_custom_host', 'custom_host', 'custom_port']
 
         values = []
-        for option in options:
-            values.append(app.config.get_per('accounts', account, option))
+        for setting in settings:
+            values.append(app.config.get_per('accounts', account, setting))
         return values
 
     def on_remove_account(self, button, account):
@@ -248,7 +247,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
         account_item.set_activatable()
         self._ui.account_list.show_all()
         self._ui.stack.show_all()
-        self.need_relogin[account] = self.get_relogin_options(account)
+        self.need_relogin[account] = self.get_relogin_settings(account)
 
     def select_account(self, account):
         for row in self._ui.account_list.get_children():
@@ -365,7 +364,7 @@ class Preferences(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=12)
 
-        self.options = PreferencesPage()
+        self.settings = PreferencesPage()
         self.parent = parent
         self.account = None
 
@@ -383,8 +382,8 @@ class Preferences(Gtk.Box):
         pass
 
     def on_row_activated(self):
-        self.options.update_states()
-        self.parent.set_page(self.options, 'pref')
+        self.settings.update_states()
+        self.parent.set_page(self.settings, 'pref')
 
     def update(self):
         pass
@@ -396,9 +395,9 @@ class Account(Gtk.Box):
                          spacing=12)
         self.account = account
         if account == app.ZEROCONF_ACC_NAME:
-            self.options = ZeroConfPage(account, parent)
+            self.settings = ZeroConfPage(account, parent)
         else:
-            self.options = AccountPage(account, parent)
+            self.settings = AccountPage(account, parent)
         self.parent = parent
 
         self.label = Gtk.Label(label=app.get_account_label(account))
@@ -421,8 +420,8 @@ class Account(Gtk.Box):
                     _('Please check if Avahi or Bonjour is installed.'))
 
     def on_row_activated(self):
-        self.options.update_states()
-        self.parent.set_page(self.options, 'account')
+        self.settings.update_states()
+        self.parent.set_page(self.settings, 'account')
 
     def update(self):
         self.label.set_text(app.get_account_label(self.account))
@@ -434,8 +433,8 @@ class Account(Gtk.Box):
         self.image.set_from_icon_name(icon, Gtk.IconSize.MENU)
 
 
-class GenericOptionPage(Gtk.Box):
-    def __init__(self, account, parent, options):
+class GenericSettingPage(Gtk.Box):
+    def __init__(self, account, parent, settings):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         self.account = account
         self.parent = parent
@@ -447,13 +446,13 @@ class GenericOptionPage(Gtk.Box):
         if not isinstance(self, (AccountPage, PreferencesPage, ZeroConfPage)):
             self.pack_start(button, False, True, 0)
 
-        self.listbox = OptionsBox(account)
+        self.listbox = SettingsBox(account)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.listbox.set_vexpand(False)
         self.listbox.set_valign(Gtk.Align.END)
 
-        for option in options:
-            self.listbox.add_option(option)
+        for setting in settings:
+            self.listbox.add_setting(setting)
         self.listbox.update_states()
 
         self.pack_end(self.listbox, True, True, 0)
@@ -471,7 +470,7 @@ class GenericOptionPage(Gtk.Box):
         self.listbox.update_states()
 
     def on_row_activated(self, listbox, row):
-        row.get_child().on_row_activated()
+        row.on_row_activated()
 
     def set_entry_text(self, toggle, update=False):
         account_label = app.get_account_label(self.account)
@@ -495,9 +494,9 @@ class GenericOptionPage(Gtk.Box):
     def update(self):
         pass
 
-    def set_page(self, options, name):
-        options.update_states()
-        self.get_toplevel().set_page(options, name)
+    def set_page(self, settings, name):
+        settings.update_states()
+        self.get_toplevel().set_page(settings, name)
 
     def _add_top_buttons(self, parent):
         # This adds the Account enable switch and the back button
@@ -560,18 +559,18 @@ class GenericOptionPage(Gtk.Box):
         app.config.set_per('accounts', account, 'active', state)
 
 
-class PreferencesPage(GenericOptionPage):
+class PreferencesPage(GenericSettingPage):
     def __init__(self):
 
-        options = [
-            Option(OptionKind.SWITCH, _('Merge Accounts'),
-                   OptionType.ACTION, 'merge'),
+        settings = [
+            Setting(SettingKind.SWITCH, _('Merge Accounts'),
+                    SettingType.ACTION, 'merge'),
             ]
 
-        GenericOptionPage.__init__(self, None, None, options)
+        GenericSettingPage.__init__(self, None, None, settings)
 
 
-class AccountPage(GenericOptionPage):
+class AccountPage(GenericSettingPage):
     def __init__(self, account, parent=None):
 
         general = partial(
@@ -579,152 +578,150 @@ class AccountPage(GenericOptionPage):
         connection = partial(
             self.set_page, ConnectionPage(account, self), 'connection')
 
-        options = [
-            Option(OptionKind.ENTRY, _('Label'),
-                   OptionType.ACCOUNT_CONFIG, 'account_label',
-                   callback=self._on_account_name_change),
+        settings = [
+            Setting(SettingKind.ENTRY, _('Label'),
+                    SettingType.ACCOUNT_CONFIG, 'account_label',
+                    callback=self._on_account_name_change),
 
-            Option(OptionKind.LOGIN, _('Login'), OptionType.DIALOG,
-                   props={'dialog': LoginDialog}),
+            Setting(SettingKind.LOGIN, _('Login'), SettingType.DIALOG,
+                    props={'dialog': LoginDialog}),
 
-            Option(OptionKind.ACTION, _('Profile'), OptionType.ACTION,
-                   '-profile', props={'action_args': account}),
+            Setting(SettingKind.ACTION, _('Profile'), SettingType.ACTION,
+                    '-profile', props={'action_args': account}),
 
-            Option(OptionKind.CALLBACK, _('General'),
-                   name='general', props={'callback': general}),
+            Setting(SettingKind.CALLBACK, _('General'),
+                    name='general', props={'callback': general}),
 
-            Option(OptionKind.CALLBACK, _('Connection'),
-                   name='connection', props={'callback': connection}),
+            Setting(SettingKind.CALLBACK, _('Connection'),
+                    name='connection', props={'callback': connection}),
 
-            Option(OptionKind.ACTION, _('Import Contacts'), OptionType.ACTION,
-                   '-import-contacts', props={'action_args': account}),
+            Setting(SettingKind.ACTION, _('Import Contacts'), SettingType.ACTION,
+                    '-import-contacts', props={'action_args': account}),
 
-            Option(OptionKind.DIALOG, _('Client Certificate'),
-                   OptionType.DIALOG, props={'dialog': CertificateDialog}),
+            Setting(SettingKind.DIALOG, _('Client Certificate'),
+                    SettingType.DIALOG, props={'dialog': CertificateDialog}),
             ]
 
-        GenericOptionPage.__init__(self, account, parent, options)
+        GenericSettingPage.__init__(self, account, parent, settings)
         self._add_top_buttons(parent)
 
     def _on_account_name_change(self, account_name, *args):
         self.parent.update_accounts()
 
 
-class GeneralPage(GenericOptionPage):
+class GeneralPage(GenericSettingPage):
     def __init__(self, account, parent=None):
 
-        options = [
-            Option(OptionKind.SWITCH, _('Connect on startup'),
-                   OptionType.ACCOUNT_CONFIG, 'autoconnect'),
+        settings = [
+            Setting(SettingKind.SWITCH, _('Connect on startup'),
+                    SettingType.ACCOUNT_CONFIG, 'autoconnect'),
 
-            Option(OptionKind.SWITCH, _('Reconnect when connection is lost'),
-                   OptionType.ACCOUNT_CONFIG, 'autoreconnect'),
+            Setting(SettingKind.SWITCH, _('Reconnect when connection is lost'),
+                    SettingType.ACCOUNT_CONFIG, 'autoreconnect'),
 
-            Option(OptionKind.SWITCH, _('Save conversations for all contacts'),
-                   OptionType.ACCOUNT_CONFIG, 'no_log_for',
-                   desc=_('Store conversations on the harddrive')),
+            Setting(SettingKind.SWITCH, _('Save conversations for all contacts'),
+                    SettingType.ACCOUNT_CONFIG, 'no_log_for',
+                    desc=_('Store conversations on the harddrive')),
 
-            Option(OptionKind.SWITCH, _('Server Message Archive'),
-                   OptionType.ACCOUNT_CONFIG, 'sync_logs_with_server',
-                   desc=_('Messages get stored on the server.\n'
-                          'The archive is used to sync messages\n'
-                          'between multiple devices.\n'
-                          'XEP-0313')),
+            Setting(SettingKind.SWITCH, _('Server Message Archive'),
+                    SettingType.ACCOUNT_CONFIG, 'sync_logs_with_server',
+                    desc=_('Messages get stored on the server. '
+                           'The archive is used to sync messages '
+                           'between multiple devices. (XEP-0313)')),
 
-            Option(OptionKind.SWITCH, _('Global Status'),
-                   OptionType.ACCOUNT_CONFIG, 'sync_with_global_status',
-                   desc=_('Synchronise the status of all accounts')),
+            Setting(SettingKind.SWITCH, _('Global Status'),
+                    SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
+                    desc=_('Synchronise the status of all accounts')),
 
-            Option(OptionKind.SWITCH, _('Message Carbons'),
-                   OptionType.ACCOUNT_CONFIG, 'enable_message_carbons',
-                   desc=_('All your other online devices get copies\n'
-                          'of sent and received messages.\n'
-                          'XEP-0280')),
+            Setting(SettingKind.SWITCH, _('Message Carbons'),
+                    SettingType.ACCOUNT_CONFIG, 'enable_message_carbons',
+                    desc=_('All your other online devices get copies '
+                           'of sent and received messages. XEP-0280')),
 
-            Option(OptionKind.SWITCH, _('Use file transfer proxies'),
-                   OptionType.ACCOUNT_CONFIG, 'use_ft_proxies'),
+            Setting(SettingKind.SWITCH, _('Use file transfer proxies'),
+                    SettingType.ACCOUNT_CONFIG, 'use_ft_proxies'),
             ]
-        GenericOptionPage.__init__(self, account, parent, options)
+        GenericSettingPage.__init__(self, account, parent, settings)
 
 
-class ConnectionPage(GenericOptionPage):
+class ConnectionPage(GenericSettingPage):
     def __init__(self, account, parent=None):
 
-        options = [
-            Option(OptionKind.SWITCH, 'HTTP_PROXY',
-                   OptionType.ACCOUNT_CONFIG, 'use_env_http_proxy',
-                   desc=_('Use environment variable')),
+        settings = [
+            Setting(SettingKind.SWITCH, 'HTTP_PROXY',
+                    SettingType.ACCOUNT_CONFIG, 'use_env_http_proxy',
+                    desc=_('Use environment variable')),
 
-            Option(OptionKind.PROXY, _('Proxy'),
-                   OptionType.ACCOUNT_CONFIG, 'proxy', name='proxy'),
+            Setting(SettingKind.PROXY, _('Proxy'),
+                    SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy'),
 
-            Option(OptionKind.SWITCH, _('Warn on insecure connection'),
-                   OptionType.ACCOUNT_CONFIG,
-                   'warn_when_insecure_ssl_connection'),
+            Setting(SettingKind.SWITCH, _('Warn on insecure connection'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'warn_when_insecure_ssl_connection'),
 
-            Option(OptionKind.SWITCH, _('Send keep-alive packets'),
-                   OptionType.ACCOUNT_CONFIG, 'keep_alives_enabled'),
+            Setting(SettingKind.SWITCH, _('Send keep-alive packets'),
+                    SettingType.ACCOUNT_CONFIG, 'keep_alives_enabled'),
 
-            Option(OptionKind.HOSTNAME, _('Hostname'), OptionType.DIALOG,
-                   desc=_('Manually set the hostname for the server'),
-                   props={'dialog': CutstomHostnameDialog}),
+            Setting(SettingKind.HOSTNAME, _('Hostname'), SettingType.DIALOG,
+                    desc=_('Manually set the hostname for the server'),
+                    props={'dialog': CutstomHostnameDialog}),
 
-            Option(OptionKind.ENTRY, _('Resource'),
-                   OptionType.ACCOUNT_CONFIG, 'resource'),
+            Setting(SettingKind.ENTRY, _('Resource'),
+                    SettingType.ACCOUNT_CONFIG, 'resource'),
 
-            Option(OptionKind.PRIORITY, _('Priority'),
-                   OptionType.DIALOG, props={'dialog': PriorityDialog}),
+            Setting(SettingKind.PRIORITY, _('Priority'),
+                    SettingType.DIALOG, props={'dialog': PriorityDialog}),
             ]
 
-        GenericOptionPage.__init__(self, account, parent, options)
+        GenericSettingPage.__init__(self, account, parent, settings)
 
 
-class ZeroConfPage(GenericOptionPage):
+class ZeroConfPage(GenericSettingPage):
     def __init__(self, account, parent=None):
 
-        options = [
-            Option(OptionKind.DIALOG, _('Profile'),
-                   OptionType.DIALOG, props={'dialog': ZeroconfProfileDialog}),
+        settings = [
+            Setting(SettingKind.DIALOG, _('Profile'),
+                    SettingType.DIALOG, props={'dialog': ZeroconfProfileDialog}),
 
-            Option(OptionKind.SWITCH, _('Connect on startup'),
-                   OptionType.ACCOUNT_CONFIG, 'autoconnect',
-                   desc=_('Use environment variable')),
+            Setting(SettingKind.SWITCH, _('Connect on startup'),
+                    SettingType.ACCOUNT_CONFIG, 'autoconnect',
+                    desc=_('Use environment variable')),
 
-            Option(OptionKind.SWITCH, _('Save conversations for all contacts'),
-                   OptionType.ACCOUNT_CONFIG, 'no_log_for',
-                   desc=_('Store conversations on the harddrive')),
+            Setting(SettingKind.SWITCH, _('Save conversations for all contacts'),
+                    SettingType.ACCOUNT_CONFIG, 'no_log_for',
+                    desc=_('Store conversations on the harddrive')),
 
-            Option(OptionKind.SWITCH, _('Global Status'),
-                   OptionType.ACCOUNT_CONFIG, 'sync_with_global_status',
-                   desc=_('Synchronize the status of all accounts')),
+            Setting(SettingKind.SWITCH, _('Global Status'),
+                    SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
+                    desc=_('Synchronize the status of all accounts')),
             ]
 
-        GenericOptionPage.__init__(self, account, parent, options)
+        GenericSettingPage.__init__(self, account, parent, settings)
         self._add_top_buttons(None)
 
 
-class ZeroconfProfileDialog(OptionsDialog):
+class ZeroconfProfileDialog(SettingsDialog):
     def __init__(self, account, parent):
 
-        options = [
-            Option(OptionKind.ENTRY, _('First Name'),
-                   OptionType.ACCOUNT_CONFIG, 'zeroconf_first_name'),
+        settings = [
+            Setting(SettingKind.ENTRY, _('First Name'),
+                    SettingType.ACCOUNT_CONFIG, 'zeroconf_first_name'),
 
-            Option(OptionKind.ENTRY, _('Last Name'),
-                   OptionType.ACCOUNT_CONFIG, 'zeroconf_last_name'),
+            Setting(SettingKind.ENTRY, _('Last Name'),
+                    SettingType.ACCOUNT_CONFIG, 'zeroconf_last_name'),
 
-            Option(OptionKind.ENTRY, _('Jabber ID'),
-                   OptionType.ACCOUNT_CONFIG, 'zeroconf_jabber_id'),
+            Setting(SettingKind.ENTRY, _('Jabber ID'),
+                    SettingType.ACCOUNT_CONFIG, 'zeroconf_jabber_id'),
 
-            Option(OptionKind.ENTRY, _('Email'),
-                   OptionType.ACCOUNT_CONFIG, 'zeroconf_email'),
+            Setting(SettingKind.ENTRY, _('Email'),
+                    SettingType.ACCOUNT_CONFIG, 'zeroconf_email'),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Profile'),
-                               Gtk.DialogFlags.MODAL, options, account)
+        SettingsDialog.__init__(self, parent, _('Profile'),
+                               Gtk.DialogFlags.MODAL, settings, account)
 
 
-class PriorityDialog(OptionsDialog):
+class PriorityDialog(SettingsDialog):
     def __init__(self, account, parent):
 
         neg_priority = app.config.get('enable_negative_priority')
@@ -733,18 +730,18 @@ class PriorityDialog(OptionsDialog):
         else:
             range_ = (0, 127)
 
-        options = [
-            Option(OptionKind.SWITCH, _('Adjust to status'),
-                   OptionType.ACCOUNT_CONFIG, 'adjust_priority_with_status',
-                   'adjust'),
+        settings = [
+            Setting(SettingKind.SWITCH, _('Adjust to status'),
+                    SettingType.ACCOUNT_CONFIG, 'adjust_priority_with_status',
+                    'adjust'),
 
-            Option(OptionKind.SPIN, _('Priority'),
-                   OptionType.ACCOUNT_CONFIG, 'priority',
-                   enabledif=('adjust', False), props={'range_': range_}),
+            Setting(SettingKind.SPIN, _('Priority'),
+                    SettingType.ACCOUNT_CONFIG, 'priority',
+                    enabledif=('adjust', False), props={'range_': range_}),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Priority'),
-                               Gtk.DialogFlags.MODAL, options, account)
+        SettingsDialog.__init__(self, parent, _('Priority'),
+                               Gtk.DialogFlags.MODAL, settings, account)
 
         self.connect('destroy', self.on_destroy)
 
@@ -757,60 +754,60 @@ class PriorityDialog(OptionsDialog):
         app.connections[self.account].change_status(show, status)
 
 
-class CutstomHostnameDialog(OptionsDialog):
+class CutstomHostnameDialog(SettingsDialog):
     def __init__(self, account, parent):
 
-        options = [
-            Option(OptionKind.SWITCH, _('Enable'),
-                   OptionType.ACCOUNT_CONFIG, 'use_custom_host', name='custom'),
+        settings = [
+            Setting(SettingKind.SWITCH, _('Enable'),
+                    SettingType.ACCOUNT_CONFIG, 'use_custom_host', name='custom'),
 
-            Option(OptionKind.ENTRY, _('Hostname'),
-                   OptionType.ACCOUNT_CONFIG, 'custom_host',
-                   enabledif=('custom', True)),
+            Setting(SettingKind.ENTRY, _('Hostname'),
+                    SettingType.ACCOUNT_CONFIG, 'custom_host',
+                    enabledif=('custom', True)),
 
-            Option(OptionKind.ENTRY, _('Port'),
-                   OptionType.ACCOUNT_CONFIG, 'custom_port',
-                   enabledif=('custom', True)),
+            Setting(SettingKind.ENTRY, _('Port'),
+                    SettingType.ACCOUNT_CONFIG, 'custom_port',
+                    enabledif=('custom', True)),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Connection Options'),
-                               Gtk.DialogFlags.MODAL, options, account)
+        SettingsDialog.__init__(self, parent, _('Connection Settings'),
+                               Gtk.DialogFlags.MODAL, settings, account)
 
 
-class CertificateDialog(OptionsDialog):
+class CertificateDialog(SettingsDialog):
     def __init__(self, account, parent):
 
-        options = [
-            Option(OptionKind.FILECHOOSER, _('Client Certificate'),
-                   OptionType.ACCOUNT_CONFIG, 'client_cert',
-                   props={'filefilter': (_('PKCS12 Files'), '*.p12')}),
+        Settings = [
+            Setting(SettingKind.FILECHOOSER, _('Client Certificate'),
+                    SettingType.ACCOUNT_CONFIG, 'client_cert',
+                    props={'filefilter': (_('PKCS12 Files'), '*.p12')}),
 
-            Option(OptionKind.SWITCH, _('Encrypted Certificate'),
-                   OptionType.ACCOUNT_CONFIG, 'client_cert_encrypted'),
+            Setting(SettingKind.SWITCH, _('Encrypted Certificate'),
+                    SettingType.ACCOUNT_CONFIG, 'client_cert_encrypted'),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Certificate Options'),
-                               Gtk.DialogFlags.MODAL, options, account)
+        SettingsDialog.__init__(self, parent, _('Certificate Settings'),
+                               Gtk.DialogFlags.MODAL, Settings, account)
 
 
-class LoginDialog(OptionsDialog):
+class LoginDialog(SettingsDialog):
     def __init__(self, account, parent):
 
-        options = [
-            Option(OptionKind.ENTRY, _('Password'),
-                   OptionType.ACCOUNT_CONFIG, 'password', name='password',
-                   enabledif=('savepass', True)),
+        settings = [
+            Setting(SettingKind.ENTRY, _('Password'),
+                    SettingType.ACCOUNT_CONFIG, 'password', name='password',
+                    enabledif=('savepass', True)),
 
-            Option(OptionKind.SWITCH, _('Save Password'),
-                   OptionType.ACCOUNT_CONFIG, 'savepass', name='savepass'),
+            Setting(SettingKind.SWITCH, _('Save Password'),
+                    SettingType.ACCOUNT_CONFIG, 'savepass', name='savepass'),
 
-            Option(OptionKind.CHANGEPASSWORD, _('Change Password'),
-                   OptionType.DIALOG, callback=self.on_password_change,
-                   props={'dialog': None}),
+            Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
+                    SettingType.DIALOG, callback=self.on_password_change,
+                    props={'dialog': None}),
             ]
 
-        OptionsDialog.__init__(self, parent, _('Login Options'),
-                               Gtk.DialogFlags.MODAL, options, account)
+        SettingsDialog.__init__(self, parent, _('Login Settings'),
+                               Gtk.DialogFlags.MODAL, settings, account)
 
         self.connect('destroy', self.on_destroy)
 

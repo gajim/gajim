@@ -22,17 +22,16 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
-from gajim.common.const import Option
-from gajim.common.const import OptionKind
-from gajim.common.const import OptionType
 from gajim.common.const import StyleAttr
 
 from gajim.gtk import util
 from gajim.gtk.util import get_builder
 from gajim.gtk.util import get_image_button
 from gajim.gtk.dialogs import ErrorDialog
-
-from gajim.options_dialog import OptionsDialog
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
 
 
 UNDECLARED = 'http://www.gajim.org/xmlns/undeclared'
@@ -191,31 +190,31 @@ class XMLConsoleWindow(Gtk.Window):
             self.filter_dialog.present()
             return
         options = [
-            Option(OptionKind.SWITCH, 'Presence',
-                   OptionType.VALUE, self.presence,
-                   callback=self.on_option, data='presence'),
+            Setting(SettingKind.SWITCH, 'Presence',
+                    SettingType.VALUE, self.presence,
+                    callback=self.on_option, data='presence'),
 
-            Option(OptionKind.SWITCH, 'Message',
-                   OptionType.VALUE, self.message,
-                   callback=self.on_option, data='message'),
+            Setting(SettingKind.SWITCH, 'Message',
+                    SettingType.VALUE, self.message,
+                    callback=self.on_option, data='message'),
 
-            Option(OptionKind.SWITCH, 'Iq', OptionType.VALUE, self.iq,
-                   callback=self.on_option, data='iq'),
+            Setting(SettingKind.SWITCH, 'Iq', SettingType.VALUE, self.iq,
+                    callback=self.on_option, data='iq'),
 
-            Option(OptionKind.SWITCH, 'Stream\nManagement',
-                   OptionType.VALUE, self.stream,
-                   callback=self.on_option, data='stream'),
+            Setting(SettingKind.SWITCH, 'Stream\nManagement',
+                    SettingType.VALUE, self.stream,
+                    callback=self.on_option, data='stream'),
 
-            Option(OptionKind.SWITCH, 'In', OptionType.VALUE, self.incoming,
-                   callback=self.on_option, data='incoming'),
+            Setting(SettingKind.SWITCH, 'In', SettingType.VALUE, self.incoming,
+                    callback=self.on_option, data='incoming'),
 
-            Option(OptionKind.SWITCH, 'Out', OptionType.VALUE, self.outgoing,
-                   callback=self.on_option, data='outgoing'),
+            Setting(SettingKind.SWITCH, 'Out', SettingType.VALUE, self.outgoing,
+                    callback=self.on_option, data='outgoing'),
         ]
 
-        self.filter_dialog = OptionsDialog(self, 'Filter',
-                                           Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                           options, self.account)
+        self.filter_dialog = SettingsDialog(self, 'Filter',
+                                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                                            options, self.account)
         self.filter_dialog.connect('destroy', self.on_filter_destroyed)
 
     def on_filter_destroyed(self, win):

@@ -83,17 +83,17 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 #FeaturesInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
 #FeaturesInfoGrid > list > row.activatable:active { box-shadow: none; }
 
-/* OptionsBox */
-#OptionsBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-#OptionsBox > row:last-child { border-bottom: 0px}
-#OptionsBox > row.activatable:active { box-shadow: none; }
-#OptionsBox > row { padding: 10px 20px 10px 10px; }
-#OptionsBox > row:not(.activatable) label { color: @insensitive_fg_color }
+/* SettingsBox */
+#SettingsBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+#SettingsBox > row:last-child { border-bottom: 0px}
+#SettingsBox > row.activatable:active { box-shadow: none; }
+#SettingsBox > row { padding: 10px 20px 10px 10px; }
+#SettingsBox > row:not(.activatable) label { color: @insensitive_fg_color }
 
-/* GenericOption */
+/* GenericSetting */
 #SubDescription { color: @insensitive_fg_color;}
-#GenericOptionBox { margin-left: 30px; }
-#GenericOptionBox > label { padding-right: 3px; }
+#GenericSettingBox { margin-left: 30px; }
+#GenericSettingBox > label { padding-right: 3px; }
 
 /* Generic Popover Menu with Buttons */
 .PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }

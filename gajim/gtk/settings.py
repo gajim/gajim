@@ -1,16 +1,41 @@
-from gi.repository import Gtk, GLib, Gdk, GObject
+# Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from gi.repository import Gtk
+from gi.repository import GLib
+from gi.repository import Gdk
+from gi.repository import GObject
+from gi.repository import Pango
+
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
-from gajim import gtkgui_helpers
-from gajim.common.const import OptionKind, OptionType
+
 from gajim.common.exceptions import GajimGeneralException
+
+from gajim import gtkgui_helpers
+
 from gajim.gtk.dialogs import ChangePasswordDialog
 from gajim.gtk.util import get_image_button
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
 
 
-class OptionsDialog(Gtk.ApplicationWindow):
-    def __init__(self, parent, title, flags, options, account,
+class SettingsDialog(Gtk.ApplicationWindow):
+    def __init__(self, parent, title, flags, settings, account,
                  extend=None):
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
@@ -26,12 +51,12 @@ class OptionsDialog(Gtk.ApplicationWindow):
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
             self.set_destroy_with_parent(True)
 
-        self.listbox = OptionsBox(account, extend)
+        self.listbox = SettingsBox(account, extend)
         self.listbox.set_hexpand(True)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
 
-        for option in options:
-            self.listbox.add_option(option)
+        for setting in settings:
+            self.listbox.add_setting(setting)
         self.listbox.update_states()
 
         self.add(self.listbox)
@@ -46,78 +71,81 @@ class OptionsDialog(Gtk.ApplicationWindow):
 
     @staticmethod
     def on_row_activated(listbox, row):
-        row.get_child().on_row_activated()
+        row.on_row_activated()
 
-    def get_option(self, name):
-        return self.listbox.get_option(name)
+    def get_setting(self, name):
+        return self.listbox.get_setting(name)
 
 
-class OptionsBox(Gtk.ListBox):
+class SettingsBox(Gtk.ListBox):
     def __init__(self, account, extend=None):
         Gtk.ListBox.__init__(self)
-        self.set_name('OptionsBox')
+        self.set_name('SettingsBox')
         self.account = account
-        self.named_options = {}
+        self.named_settings = {}
 
         self.map = {
-            OptionKind.SWITCH: SwitchOption,
-            OptionKind.SPIN: SpinOption,
-            OptionKind.DIALOG: DialogOption,
-            OptionKind.ENTRY: EntryOption,
-            OptionKind.ACTION: ActionOption,
-            OptionKind.LOGIN: LoginOption,
-            OptionKind.FILECHOOSER: FileChooserOption,
-            OptionKind.CALLBACK: CallbackOption,
-            OptionKind.PROXY: ProxyComboOption,
-            OptionKind.PRIORITY: PriorityOption,
-            OptionKind.HOSTNAME: CutstomHostnameOption,
-            OptionKind.CHANGEPASSWORD: ChangePasswordOption,
+            SettingKind.SWITCH: SwitchSetting,
+            SettingKind.SPIN: SpinSetting,
+            SettingKind.DIALOG: DialogSetting,
+            SettingKind.ENTRY: EntrySetting,
+            SettingKind.ACTION: ActionSetting,
+            SettingKind.LOGIN: LoginSetting,
+            SettingKind.FILECHOOSER: FileChooserSetting,
+            SettingKind.CALLBACK: CallbackSetting,
+            SettingKind.PROXY: ProxyComboSetting,
+            SettingKind.PRIORITY: PrioritySetting,
+            SettingKind.HOSTNAME: CutstomHostnameSetting,
+            SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
             }
 
         if extend is not None:
-            for option, callback in extend:
-                self.map[option] = callback
+            for setting, callback in extend:
+                self.map[setting] = callback
 
-    def add_option(self, option):
-        if option.props is not None:
-            listitem = self.map[option.kind](
-                self.account, *option[1:-1], **option.props)
-        else:
-            listitem = self.map[option.kind](self.account, *option[1:-1])
-        listitem.connect('notify::option-value', self.on_option_changed)
-        if option.name is not None:
-            self.named_options[option.name] = listitem
+    def add_setting(self, setting):
+        if not isinstance(setting, Gtk.ListBoxRow):
+            if setting.props is not None:
+                listitem = self.map[setting.kind](
+                    self.account, *setting[1:-1], **setting.props)
+            else:
+                listitem = self.map[setting.kind](self.account, *setting[1:-1])
+        listitem.connect('notify::setting-value', self.on_setting_changed)
+        if setting.name is not None:
+            self.named_settings[setting.name] = listitem
         self.add(listitem)
 
-    def get_option(self, name):
-        return self.named_options[name]
+    def get_setting(self, name):
+        return self.named_settings[name]
 
     def update_states(self):
         values = []
         values.append((None, None))
         for row in self.get_children():
-            name = row.get_child().name
+            name = row.name
             if name is None:
                 continue
-            value = row.get_child().get_property('option-value')
+            value = row.get_property('setting-value')
             values.append((name, value))
 
         for name, value in values:
             for row in self.get_children():
-                row.get_child().set_activatable(name, value)
+                row.update_activatable(name, value)
 
-    def on_option_changed(self, widget, *args):
-        value = widget.get_property('option-value')
+    def on_setting_changed(self, widget, *args):
+        value = widget.get_property('setting-value')
         for row in self.get_children():
-            row.get_child().set_activatable(widget.name, value)
+            row.update_activatable(widget.name, value)
 
 
-class GenericOption(Gtk.Grid):
+class GenericSetting(Gtk.ListBoxRow):
     def __init__(self, account, label, type_, value,
                  name, callback, data, desc, enabledif):
-        Gtk.Grid.__init__(self)
-        self.set_column_spacing(12)
-        self.set_size_request(-1, 25)
+        Gtk.ListBoxRow.__init__(self)
+        self._grid = Gtk.Grid()
+        self._grid.set_size_request(-1, 30)
+        self._grid.set_column_spacing(12)
+
         self.callback = callback
         self.type_ = type_
         self.value = value
@@ -126,18 +154,18 @@ class GenericOption(Gtk.Grid):
         self.account = account
         self.name = name
         self.enabledif = enabledif
-        self.option_value = self.get_value()
+        self.setting_value = self.get_value()
 
         description_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=0)
         description_box.set_valign(Gtk.Align.CENTER)
 
-        optiontext = Gtk.Label(label=label)
-        optiontext.set_hexpand(True)
-        optiontext.set_halign(Gtk.Align.START)
-        optiontext.set_valign(Gtk.Align.CENTER)
-        optiontext.set_vexpand(True)
-        description_box.add(optiontext)
+        settingtext = Gtk.Label(label=label)
+        settingtext.set_hexpand(True)
+        settingtext.set_halign(Gtk.Align.START)
+        settingtext.set_valign(Gtk.Align.CENTER)
+        settingtext.set_vexpand(True)
+        description_box.add(settingtext)
 
         if desc is not None:
             description = Gtk.Label(label=desc)
@@ -145,24 +173,29 @@ class GenericOption(Gtk.Grid):
             description.set_hexpand(True)
             description.set_halign(Gtk.Align.START)
             description.set_valign(Gtk.Align.CENTER)
+            description.set_xalign(0)
+            description.set_line_wrap(True)
+            description.set_line_wrap_mode(Pango.WrapMode.WORD)
+            description.set_max_width_chars(40)
             description_box.add(description)
 
-        self.add(description_box)
+        self._grid.add(description_box)
 
-        self.option_box = Gtk.Box(spacing=6)
-        self.option_box.set_size_request(200, -1)
-        self.option_box.set_valign(Gtk.Align.CENTER)
-        self.option_box.set_name('GenericOptionBox')
-        self.add(self.option_box)
+        self.setting_box = Gtk.Box(spacing=6)
+        self.setting_box.set_size_request(200, -1)
+        self.setting_box.set_valign(Gtk.Align.CENTER)
+        self.setting_box.set_name('GenericSettingBox')
+        self._grid.add(self.setting_box)
+        self.add(self._grid)
 
     def do_get_property(self, prop):
-        if prop.name == 'option-value':
-            return self.option_value
+        if prop.name == 'setting-value':
+            return self.setting_value
         raise AttributeError('unknown property %s' % prop.name)
 
     def do_set_property(self, prop, value):
-        if prop.name == 'option-value':
-            self.option_value = value
+        if prop.name == 'setting-value':
+            self.setting_value = value
         else:
             raise AttributeError('unknown property %s' % prop.name)
 
@@ -173,13 +206,13 @@ class GenericOption(Gtk.Grid):
     def __get_value(type_, value, account):
         if value is None:
             return
-        if type_ == OptionType.VALUE:
+        if type_ == SettingType.VALUE:
             return value
 
-        if type_ == OptionType.CONFIG:
+        if type_ == SettingType.CONFIG:
             return app.config.get(value)
 
-        if type_ == OptionType.ACCOUNT_CONFIG:
+        if type_ == SettingType.ACCOUNT_CONFIG:
             if value == 'password':
                 return passwords.get_password(account)
             if value == 'no_log_for':
@@ -188,17 +221,17 @@ class GenericOption(Gtk.Grid):
                 return account not in no_log
             return app.config.get_per('accounts', account, value)
 
-        if type_ == OptionType.ACTION:
+        if type_ == SettingType.ACTION:
             if value.startswith('-'):
                 return account + value
             return value
 
-        raise ValueError('Wrong OptionType?')
+        raise ValueError('Wrong SettingType?')
 
     def set_value(self, state):
-        if self.type_ == OptionType.CONFIG:
+        if self.type_ == SettingType.CONFIG:
             app.config.set(self.value, state)
-        if self.type_ == OptionType.ACCOUNT_CONFIG:
+        if self.type_ == SettingType.ACCOUNT_CONFIG:
             if self.value == 'password':
                 passwords.save_password(self.account, state)
             if self.value == 'no_log_for':
@@ -209,7 +242,7 @@ class GenericOption(Gtk.Grid):
         if self.callback is not None:
             self.callback(state, self.data)
 
-        self.set_property('option-value', state)
+        self.set_property('setting-value', state)
 
     @staticmethod
     def set_no_log_for(account, state):
@@ -223,36 +256,36 @@ class GenericOption(Gtk.Grid):
     def on_row_activated(self):
         raise NotImplementedError
 
-    def set_activatable(self, name, value):
+    def update_activatable(self, name, value):
         if self.enabledif is None or self.enabledif[0] != name:
             return
         activatable = (name, value) == self.enabledif
-        self.get_parent().set_activatable(activatable)
+        self.set_activatable(activatable)
         self.set_sensitive(activatable)
 
 
-class SwitchOption(GenericOption):
+class SwitchSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (bool, 'Switch Value', '', False,
+        "setting-value": (bool, 'Switch Value', '', False,
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
 
         self.switch = Gtk.Switch()
-        if self.type_ == OptionType.ACTION:
-            self.switch.set_action_name('app.%s' % self.option_value)
-            state = app.app.get_action_state(self.option_value)
+        if self.type_ == SettingType.ACTION:
+            self.switch.set_action_name('app.%s' % self.setting_value)
+            state = app.app.get_action_state(self.setting_value)
             self.switch.set_active(state.get_boolean())
         else:
-            self.switch.set_active(self.option_value)
+            self.switch.set_active(self.setting_value)
         self.switch.connect('notify::active', self.on_switch)
         self.switch.set_hexpand(True)
         self.switch.set_halign(Gtk.Align.END)
         self.switch.set_valign(Gtk.Align.CENTER)
 
-        self.option_box.add(self.switch)
+        self.setting_box.add(self.switch)
 
         self.show_all()
 
@@ -265,17 +298,17 @@ class SwitchOption(GenericOption):
         self.set_value(value)
 
 
-class EntryOption(GenericOption):
+class EntrySetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Entry Value', '', '',
+        "setting-value": (str, 'Entry Value', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
 
         self.entry = Gtk.Entry()
-        self.entry.set_text(str(self.option_value))
+        self.entry.set_text(str(self.setting_value))
         self.entry.connect('notify::text', self.on_text_change)
         self.entry.set_valign(Gtk.Align.CENTER)
         self.entry.set_alignment(1)
@@ -284,7 +317,7 @@ class EntryOption(GenericOption):
             self.entry.set_invisible_char('*')
             self.entry.set_visibility(False)
 
-        self.option_box.pack_end(self.entry, True, True, 0)
+        self.setting_box.pack_end(self.entry, True, True, 0)
 
         self.show_all()
 
@@ -296,20 +329,20 @@ class EntryOption(GenericOption):
         self.entry.grab_focus()
 
 
-class DialogOption(GenericOption):
+class DialogSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Dummy', '', '',
+        "setting-value": (str, 'Dummy', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, dialog):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
         self.dialog = dialog
 
-        self.option_value = Gtk.Label()
-        self.option_value.set_text(self.get_option_value())
-        self.option_value.set_halign(Gtk.Align.END)
-        self.option_box.pack_start(self.option_value, True, True, 0)
+        self.setting_value = Gtk.Label()
+        self.setting_value.set_text(self.get_setting_value())
+        self.setting_value.set_halign(Gtk.Align.END)
+        self.setting_box.pack_start(self.setting_value, True, True, 0)
 
         self.show_all()
 
@@ -319,38 +352,43 @@ class DialogOption(GenericOption):
             dialog.connect('destroy', self.on_destroy)
 
     def on_destroy(self, *args):
-        self.option_value.set_text(self.get_option_value())
+        self.setting_value.set_text(self.get_setting_value())
 
-    def get_option_value(self):
-        self.option_value.hide()
+    def get_setting_value(self):
+        self.setting_value.hide()
         return ''
 
     def on_row_activated(self):
         self.show_dialog(self.get_toplevel())
 
 
-class SpinOption(GenericOption):
+class SpinSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (int, 'Priority', '', -128, 127, 0,
+        "setting-value": (int, 'Priority', '', -128, 127, 0,
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, range_):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
 
         lower, upper = range_
-        adjustment = Gtk.Adjustment(0, lower, upper, 1, 10, 0)
+        adjustment = Gtk.Adjustment(value=0,
+                                    lower=lower,
+                                    upper=upper,
+                                    step_increment=1,
+                                    page_increment=10,
+                                    page_size=0)
 
         self.spin = Gtk.SpinButton()
         self.spin.set_adjustment(adjustment)
         self.spin.set_numeric(True)
         self.spin.set_update_policy(Gtk.SpinButtonUpdatePolicy.IF_VALID)
-        self.spin.set_value(self.option_value)
+        self.spin.set_value(self.setting_value)
         self.spin.set_halign(Gtk.Align.END)
         self.spin.set_valign(Gtk.Align.CENTER)
         self.spin.connect('notify::value', self.on_value_change)
 
-        self.option_box.pack_start(self.spin, True, True, 0)
+        self.setting_box.pack_start(self.spin, True, True, 0)
 
         self.show_all()
 
@@ -362,14 +400,14 @@ class SpinOption(GenericOption):
         self.set_value(value)
 
 
-class FileChooserOption(GenericOption):
+class FileChooserSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Certificate Path', '', '',
+        "setting-value": (str, 'Certificate Path', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, filefilter):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
 
         button = Gtk.FileChooserButton(title=self.label,
                                        action=Gtk.FileChooserAction.OPEN)
@@ -393,15 +431,15 @@ class FileChooserOption(GenericOption):
         filter_.add_pattern('*')
         button.add_filter(filter_)
 
-        if self.option_value:
-            button.set_filename(self.option_value)
+        if self.setting_value:
+            button.set_filename(self.setting_value)
         button.connect('selection-changed', self.on_select)
 
         clear_button = get_image_button(
             'edit-clear-all-symbolic', _('Clear File'))
         clear_button.connect('clicked', lambda *args: button.unselect_all())
-        self.option_box.pack_start(button, True, True, 0)
-        self.option_box.pack_start(clear_button, False, False, 0)
+        self.setting_box.pack_start(button, True, True, 0)
+        self.setting_box.pack_start(clear_button, False, False, 0)
 
         self.show_all()
 
@@ -412,14 +450,14 @@ class FileChooserOption(GenericOption):
         pass
 
 
-class CallbackOption(GenericOption):
+class CallbackSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Dummy', '', '',
+        "setting-value": (str, 'Dummy', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, callback):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
         self.callback = callback
         self.show_all()
 
@@ -427,15 +465,15 @@ class CallbackOption(GenericOption):
         self.callback()
 
 
-class ActionOption(GenericOption):
+class ActionSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Dummy', '', '',
+        "setting-value": (str, 'Dummy', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, action_args):
-        GenericOption.__init__(self, *args)
-        self.action = gtkgui_helpers.get_action(self.option_value)
+        GenericSetting.__init__(self, *args)
+        self.action = gtkgui_helpers.get_action(self.setting_value)
         self.variant = GLib.Variant.new_string(action_args)
         self.on_enable()
 
@@ -449,29 +487,29 @@ class ActionOption(GenericOption):
         self.action.activate(self.variant)
 
 
-class LoginOption(DialogOption):
+class LoginSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
-        DialogOption.__init__(self, *args, **kwargs)
-        self.option_value.set_selectable(True)
+        DialogSetting.__init__(self, *args, **kwargs)
+        self.setting_value.set_selectable(True)
 
-    def get_option_value(self):
+    def get_setting_value(self):
         jid = app.get_jid_from_account(self.account)
         return jid
 
-    def set_activatable(self, name, value):
-        DialogOption.set_activatable(self, name, value)
+    def update_activatable(self, name, value):
+        super().update_activatable(name, value)
         anonym = app.config.get_per('accounts', self.account, 'anonymous_auth')
-        self.get_parent().set_activatable(not anonym)
+        self.set_activatable(not anonym)
 
 
-class ProxyComboOption(GenericOption):
+class ProxyComboSetting(GenericSetting):
 
     __gproperties__ = {
-        "option-value": (str, 'Proxy', '', '',
+        "setting-value": (str, 'Proxy', '', '',
                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
-        GenericOption.__init__(self, *args)
+        GenericSetting.__init__(self, *args)
 
         self.combo = Gtk.ComboBoxText()
         self.combo.set_valign(Gtk.Align.CENTER)
@@ -484,8 +522,8 @@ class ProxyComboOption(GenericOption):
         button.set_action_name('app.manage-proxies')
         button.set_valign(Gtk.Align.CENTER)
 
-        self.option_box.pack_start(self.combo, True, True, 0)
-        self.option_box.pack_start(button, False, True, 0)
+        self.setting_box.pack_start(self.combo, True, True, 0)
+        self.setting_box.pack_start(button, False, True, 0)
         self.show_all()
 
     def _block_signal(self, state):
@@ -505,7 +543,7 @@ class ProxyComboOption(GenericOption):
         self.combo.remove_all()
         for index, value in enumerate(proxies):
             self.combo.insert_text(-1, value)
-            if value == self.option_value or index == 0:
+            if value == self.setting_value or index == 0:
                 self.combo.set_active(index)
         self._block_signal(False)
 
@@ -519,11 +557,11 @@ class ProxyComboOption(GenericOption):
         pass
 
 
-class PriorityOption(DialogOption):
+class PrioritySetting(DialogSetting):
     def __init__(self, *args, **kwargs):
-        DialogOption.__init__(self, *args, **kwargs)
+        DialogSetting.__init__(self, *args, **kwargs)
 
-    def get_option_value(self):
+    def get_setting_value(self):
         adjust = app.config.get_per(
             'accounts', self.account, 'adjust_priority_with_status')
         if adjust:
@@ -533,18 +571,18 @@ class PriorityOption(DialogOption):
         return str(priority)
 
 
-class CutstomHostnameOption(DialogOption):
+class CutstomHostnameSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
-        DialogOption.__init__(self, *args, **kwargs)
+        DialogSetting.__init__(self, *args, **kwargs)
 
-    def get_option_value(self):
+    def get_setting_value(self):
         custom = app.config.get_per('accounts', self.account, 'use_custom_host')
         return _('On') if custom else _('Off')
 
 
-class ChangePasswordOption(DialogOption):
+class ChangePasswordSetting(DialogSetting):
     def __init__(self, *args, **kwargs):
-        DialogOption.__init__(self, *args, **kwargs)
+        DialogSetting.__init__(self, *args, **kwargs)
 
     def show_dialog(self, parent):
         try:
@@ -557,9 +595,9 @@ class ChangePasswordOption(DialogOption):
     def on_changed(self, new_password):
         self.set_value(new_password)
 
-    def set_activatable(self, name, value):
+    def update_activatable(self, name, value):
         activatable = False
         if self.account in app.connections:
             con = app.connections[self.account]
             activatable = con.connected >= 2 and con.register_supported
-        self.get_parent().set_activatable(activatable)
+        self.set_activatable(activatable)
