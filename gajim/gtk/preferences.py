@@ -281,16 +281,6 @@ class Preferences(Gtk.ApplicationWindow):
         buf = self._ui.msg_textview.get_buffer()
         buf.connect('end-user-action', self.on_msg_textview_changed)
 
-        ### Privacy tab ###
-        # Outgoing chat state notifications
-        st = app.config.get('outgoing_chat_state_notifications')
-        if st == 'all':
-            self._ui.outgoing_chat_states_combobox.set_active(0)
-        elif st == 'composing_only':
-            self._ui.outgoing_chat_states_combobox.set_active(1)
-        else: # disabled
-            self._ui.outgoing_chat_states_combobox.set_active(2)
-
         ### Style tab ###
         # Themes
         self.changed_id = self._ui.theme_combobox.connect(
@@ -857,20 +847,6 @@ class Preferences(Gtk.ApplicationWindow):
     def on_ignore_events_from_unknown_contacts_checkbutton_toggled(self, widget):
         widget.set_inconsistent(False)
         self.on_per_account_checkbutton_toggled(widget, 'ignore_unknown_contacts')
-
-    def on_outgoing_chat_states_combobox_changed(self, widget):
-        active = widget.get_active()
-        old_value = app.config.get('outgoing_chat_state_notifications')
-        if active == 0: # all
-            app.config.set('outgoing_chat_state_notifications', 'all')
-        elif active == 1: # only composing
-            app.config.set('outgoing_chat_state_notifications', 'composing_only')
-        else: # disabled
-            app.config.set('outgoing_chat_state_notifications', 'disabled')
-        new_value = app.config.get('outgoing_chat_state_notifications')
-        if 'disabled' in (old_value, new_value):
-            # We changed from disabled to sth else or vice versa
-            helpers.update_optional_features()
 
     ### Style ###
     @staticmethod

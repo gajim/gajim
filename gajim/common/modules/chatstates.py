@@ -358,7 +358,8 @@ class Chatstate(BaseModule):
         if contact.is_groupchat():
             return app.config.get_per(
                 'rooms', contact.jid, 'send_chatstate', 'composing_only')
-        return app.config.get('outgoing_chat_state_notifications')
+        return app.config.get_per(
+            'contacts', contact.jid, 'send_chatstate', 'composing_only')
 
     def remove_delay_timeout(self, contact):
         timeout = self._delay_timeout_ids.get(contact.jid)

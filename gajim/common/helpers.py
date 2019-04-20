@@ -1127,8 +1127,6 @@ def update_optional_features(account=None):
             features.append(nbxmpp.NS_NICK + '+notify')
         if app.config.get_per('accounts', account_, 'subscribe_location'):
             features.append(nbxmpp.NS_LOCATION + '+notify')
-        if app.config.get('outgoing_chat_state_notifactions') != 'disabled':
-            features.append(nbxmpp.NS_CHATSTATES)
         if not app.config.get('ignore_incoming_xhtml'):
             features.append(nbxmpp.NS_XHTML_IM)
         if app.config.get_per('accounts', account_, 'answer_receipts'):

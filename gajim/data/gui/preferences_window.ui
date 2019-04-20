@@ -42,23 +42,6 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <object class="GtkListStore" id="display_chat_state_notifications_liststore">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">All chat states</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Composing only</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Disabled</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkListStore" id="on_event_received_liststore">
     <columns>
       <!-- column-name item -->
@@ -124,23 +107,6 @@
     <data>
       <row>
         <col id="0">None</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="send_chatstate_notifications_liststore">
-    <columns>
-      <!-- column-name item -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">All chat states</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Composing only</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Disabled</col>
       </row>
     </data>
   </object>
@@ -756,7 +722,6 @@
                                 <property name="label" translatable="yes">Default Sync Threshold</property>
                                 <property name="use_underline">True</property>
                                 <property name="justify">right</property>
-                                <property name="mnemonic_widget">outgoing_chat_states_combobox</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
@@ -1755,107 +1720,6 @@ $T will be replaced by auto-not-available timeout.</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="privacy_tab">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">18</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
-            <child>
-              <object class="GtkFrame">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">none</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_top">6</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Gajim can send and receive meta-information related to a conversation you may have with a contact. Here you can specify which chatstates you want to send to the other party.</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">S_end chat state notifications</property>
-                            <property name="use_underline">True</property>
-                            <property name="justify">right</property>
-                            <property name="mnemonic_widget">outgoing_chat_states_combobox</property>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="outgoing_chat_states_combobox">
-                            <property name="width_request">200</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="model">send_chatstate_notifications_liststore</property>
-                            <signal name="changed" handler="on_outgoing_chat_states_combobox_changed" swapped="no"/>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Privacy</property>
-                    <style>
-                      <class name="bold"/>
-                      <class name="margin-top6"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="name">privacy</property>
-            <property name="title" translatable="yes">Privacy</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkBox" id="style_tab">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -2169,7 +2033,7 @@ $T will be replaced by auto-not-available timeout.</property>
           <packing>
             <property name="name">style</property>
             <property name="title" translatable="yes">Style</property>
-            <property name="position">5</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -2479,7 +2343,7 @@ to discover one from the server. (Example: stun.iptel.org)</property>
           <packing>
             <property name="name">audio_video</property>
             <property name="title" translatable="yes">Audio/Video</property>
-            <property name="position">6</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -2875,7 +2739,7 @@ to discover one from the server. (Example: stun.iptel.org)</property>
           <packing>
             <property name="name">advanced</property>
             <property name="title" translatable="yes">Advanced</property>
-            <property name="position">7</property>
+            <property name="position">6</property>
           </packing>
         </child>
         <style>

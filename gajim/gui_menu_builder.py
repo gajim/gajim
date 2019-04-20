@@ -609,6 +609,7 @@ def get_singlechat_menu(control_id, account, jid):
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…')),
             ]),
+        (_('Send Chatstate'), ['chatstate']),
         ('win.invite-contacts-', _('Invite Contacts')),
         ('win.add-to-roster-', _('Add to Roster')),
         ('win.toggle-audio-', _('Audio Session')),
@@ -616,6 +617,20 @@ def get_singlechat_menu(control_id, account, jid):
         ('win.information-', _('Information')),
         ('app.browse-history', _('History')),
         ]
+
+    def build_chatstate_menu():
+        menu = Gio.Menu()
+        entrys = [
+            (_('Disabled'), 'disabled'),
+            (_('Composing only'), 'composing_only'),
+            (_('All chat states'), 'all')
+        ]
+
+        for entry in entrys:
+            label, setting = entry
+            action = 'win.send-chatstate-%s::%s' % (control_id, setting)
+            menu.append(label, action)
+        return menu
 
     def build_menu(preset):
         menu = Gio.Menu()
@@ -634,8 +649,10 @@ def get_singlechat_menu(control_id, account, jid):
                     menu.append(label, action_name + control_id)
             else:
                 label, sub_menu = item
-                # This is a submenu
-                submenu = build_menu(sub_menu)
+                if 'chatstate' in sub_menu:
+                    submenu = build_chatstate_menu()
+                else:
+                    submenu = build_menu(sub_menu)
                 menu.append_submenu(label, submenu)
         return menu
 

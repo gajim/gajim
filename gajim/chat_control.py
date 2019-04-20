@@ -289,6 +289,16 @@ class ChatControl(ChatControlBase):
         self.video_action.connect('change-state', self._on_video)
         self.parent_win.window.add_action(self.video_action)
 
+        chatstate = app.config.get_per(
+            'contacts', self.contact.jid, 'send_chatstate', 'composing_only')
+
+        act = Gio.SimpleAction.new_stateful(
+            'send-chatstate-' + self.control_id,
+            GLib.VariantType.new("s"),
+            GLib.Variant("s", chatstate))
+        act.connect('change-state', self._on_send_chatstate)
+        self.parent_win.window.add_action(act)
+
     def update_actions(self):
         win = self.parent_win.window
         online = app.account_is_connected(self.account)
@@ -375,6 +385,11 @@ class ChatControl(ChatControlBase):
         action.set_state(param)
         state = param.get_boolean()
         self.on_jingle_button_toggled(state, 'video')
+
+    def _on_send_chatstate(self, action, param):
+        action.set_state(param)
+        app.config.set_per('contacts', self.contact.jid,
+                           'send_chatstate', param.get_string())
 
     def subscribe_events(self):
         """

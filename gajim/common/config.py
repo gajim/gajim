@@ -183,7 +183,6 @@ class Config:
         'always_english_wikipedia': [opt_bool, False],
         'always_english_wiktionary': [opt_bool, True],
         'remote_control': [opt_bool, False, _('If checked, Gajim can be controlled remotely using gajim-remote.'), True],
-        'outgoing_chat_state_notifications': [opt_str, 'all', _('Sent chat state notifications. Can be one of all, composing_only, disabled.')],
         'autodetect_browser_mailer': [opt_bool, True, '', True],
         'print_ichat_every_foo_minutes': [opt_int, 5, _('When not printing time for every message (print_time==sometimes), print it every x minutes.')],
         'confirm_close_muc': [opt_bool, True, _('Ask before closing a group chat tab/window.')],
@@ -421,9 +420,9 @@ class Config:
             'bosh_http_pipelining': [opt_bool, False],
             'bosh_wait_for_restart_response': [opt_bool, False],
         }, {}),
-
         'contacts': ({
             'speller_language': [opt_str, '', _('Language for which misspelled words will be checked')],
+            'send_chatstate': [opt_str, 'composing_only', _('Chat state notifications that are sent to contacts. Possible values: all, composing_only, disabled')],
         }, {}),
         'encryption': ({
             'encryption': [opt_str, '', _('The currently active encryption for that contact')],
