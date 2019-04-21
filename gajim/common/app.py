@@ -409,6 +409,16 @@ def get_connected_accounts():
             account_list.append(account)
     return account_list
 
+def get_accounts_sorted():
+    '''
+    Get all accounts alphabetically sorted with Local first
+    '''
+    account_list = config.get_per('accounts')
+    account_list.sort(key=str.lower)
+    account_list.remove('Local')
+    account_list.insert(0, 'Local')
+    return account_list
+
 def get_enabled_accounts_with_labels(exclude_local=True, connected_only=False,
                                      private_storage_only=False):
     """

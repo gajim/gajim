@@ -84,11 +84,11 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 #FeaturesInfoGrid > list > row.activatable:active { box-shadow: none; }
 
 /* SettingsBox */
-#SettingsBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
-#SettingsBox > row:last-child { border-bottom: 0px}
-#SettingsBox > row.activatable:active { box-shadow: none; }
-#SettingsBox > row { padding: 10px 20px 10px 10px; }
-#SettingsBox > row:not(.activatable) label { color: @insensitive_fg_color }
+.settings-box > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+.settings-box > row:last-child { border-bottom: 0px}
+.settings-box > row.activatable:active { box-shadow: none; }
+.settings-box > row { padding: 10px 20px 10px 10px; }
+.settings-box > row:not(.activatable) label { color: @insensitive_fg_color }
 
 /* GenericSetting */
 #SubDescription { color: @insensitive_fg_color; font-size: small;}
@@ -119,13 +119,15 @@ list.settings > row > box {
 .PreferencesStack { background-color: @theme_bg_color; }
 
 /* Accounts Window */
-#AccountsWindow > box > stack { padding:30px 30px 30px 30px;}
-#AccountsWindow scrolledwindow {border: none;}
-#AccountsWindow stack list {border: 1px solid; border-color: @borders;}
-
-#AccountsWindow > box > box { border-right: 1px solid; border-color: @borders; }
-
-.account-list > row { padding: 20px 20px 20px 10px; }
+.accounts-menu { border-right: 1px solid; border-color: @borders;}
+.accounts-settings-border {border: 1px solid; border-color: @borders;}
+.accounts-settings stack > box { margin:30px; }
+.accounts-label-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: @insensitive_fg_color;}
 
 /* StartChatListBox */
 #StartChatListBox > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
@@ -214,6 +216,7 @@ list.settings > row > box {
 .status-away { color: #ff8533;}
 .status-dnd { color: #e62e00;}
 .status-online { color: #66bf10;}
+.insensitive-fg-color {color: @insensitive_fg_color;}
 
 /* Padding/Margins */
 .margin-top6 { margin-top: 6px; }

@@ -81,7 +81,7 @@ class SettingsDialog(Gtk.ApplicationWindow):
 class SettingsBox(Gtk.ListBox):
     def __init__(self, account, extend=None):
         Gtk.ListBox.__init__(self)
-        self.set_name('SettingsBox')
+        self.get_style_context().add_class('settings-box')
         self.account = account
         self.named_settings = {}
 
@@ -179,7 +179,7 @@ class GenericSetting(Gtk.ListBoxRow):
             description.set_xalign(0)
             description.set_line_wrap(True)
             description.set_line_wrap_mode(Pango.WrapMode.WORD)
-            description.set_max_width_chars(40)
+            description.set_max_width_chars(50)
             description_box.add(description)
 
         self._grid.add(description_box)
@@ -474,10 +474,11 @@ class ActionSetting(GenericSetting):
         "setting-value": (str, 'Dummy', '', '',
                          GObject.ParamFlags.READWRITE),}
 
-    def __init__(self, *args, action_args):
+    def __init__(self, *args, account):
         GenericSetting.__init__(self, *args)
-        self.action = gtkgui_helpers.get_action(self.setting_value)
-        self.variant = GLib.Variant.new_string(action_args)
+        action_name = '%s%s' % (account, self.value)
+        self.action = gtkgui_helpers.get_action(action_name)
+        self.variant = GLib.Variant.new_string(account)
         self.on_enable()
 
         self.show_all()
