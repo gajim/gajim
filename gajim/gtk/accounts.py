@@ -753,28 +753,14 @@ class GeneralPage(GenericSettingPage):
             Setting(SettingKind.SWITCH, _('Connect on startup'),
                     SettingType.ACCOUNT_CONFIG, 'autoconnect'),
 
-            Setting(SettingKind.SWITCH, _('Reconnect when connection is lost'),
-                    SettingType.ACCOUNT_CONFIG, 'autoreconnect'),
-
             Setting(SettingKind.SWITCH,
                     _('Save conversations for all contacts'),
                     SettingType.ACCOUNT_CONFIG, 'no_log_for',
                     desc=_('Store conversations on the harddrive')),
 
-            Setting(SettingKind.SWITCH, _('Server Message Archive'),
-                    SettingType.ACCOUNT_CONFIG, 'sync_logs_with_server',
-                    desc=_('Messages get stored on the server. '
-                           'The archive is used to sync messages '
-                           'between multiple devices. (XEP-0313)')),
-
             Setting(SettingKind.SWITCH, _('Global Status'),
                     SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
                     desc=_('Synchronise the status of all accounts')),
-
-            Setting(SettingKind.SWITCH, _('Message Carbons'),
-                    SettingType.ACCOUNT_CONFIG, 'enable_message_carbons',
-                    desc=_('All your other online devices get copies '
-                           'of sent and received messages. XEP-0280')),
 
             Setting(SettingKind.SWITCH, _('Use file transfer proxies'),
                     SettingType.ACCOUNT_CONFIG, 'use_ft_proxies'),

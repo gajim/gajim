@@ -16,7 +16,6 @@
 
 import nbxmpp
 
-from gajim.common import app
 from gajim.common.modules.base import BaseModule
 
 
@@ -33,14 +32,11 @@ class Carbons(BaseModule):
         self.supported = True
         self._log.info('Discovered carbons: %s', from_)
 
-        if app.config.get_per('accounts', self._account,
-                              'enable_message_carbons'):
-            iq = nbxmpp.Iq('set')
-            iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
-            self._log.info('Activate')
-            self._con.connection.send(iq)
-        else:
-            self._log.warning('Carbons deactivated (user setting)')
+        iq = nbxmpp.Iq('set')
+        iq.setTag('enable', namespace=nbxmpp.NS_CARBONS)
+        self._log.info('Activate')
+        self._con.connection.send(iq)
+
 
 
 def get_instance(*args, **kwargs):

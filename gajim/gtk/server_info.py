@@ -160,11 +160,6 @@ class ServerInfoDialog(Gtk.Dialog):
         Feature = namedtuple('Feature',
                              ['name', 'available', 'tooltip', 'enabled'])
 
-        carbons_enabled = app.config.get_per('accounts', self.account,
-                                             'enable_message_carbons')
-        mam_enabled = app.config.get_per('accounts', self.account,
-                                         'sync_logs_with_server')
-
         return [
             Feature('XEP-0016: Privacy Lists',
                     con.get_module('PrivacyLists').supported, '', None),
@@ -185,11 +180,10 @@ class ServerInfoDialog(Gtk.Dialog):
                     nbxmpp.NS_SECLABEL, None),
             Feature('XEP-0280: Message Carbons',
                     con.get_module('Carbons').supported,
-                    nbxmpp.NS_CARBONS, carbons_enabled),
+                    nbxmpp.NS_CARBONS, None),
             Feature('XEP-0313: Message Archive Management',
                     con.get_module('MAM').archiving_namespace,
-                    con.get_module('MAM').archiving_namespace,
-                    mam_enabled),
+                    con.get_module('MAM').archiving_namespace, None),
             Feature('XEP-0363: HTTP File Upload',
                     con.get_module('HTTPUpload').available,
                     con.get_module('HTTPUpload').httpupload_namespace, None),

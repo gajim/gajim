@@ -935,8 +935,7 @@ class Interface:
             # Else disable autoaway
             app.sleeper_state[account] = 'off'
 
-        if obj.conn.get_module('MAM').available and app.config.get_per('accounts',
-        account, 'sync_logs_with_server'):
+        if obj.conn.get_module('MAM').available:
             obj.conn.get_module('MAM').request_archive_on_signin()
 
         invisible_show = app.SHOW_LIST.index('invisible')

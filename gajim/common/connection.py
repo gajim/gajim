@@ -586,10 +586,6 @@ class Connection(CommonConnection, ConnectionHandlers):
         # Clear disconnect handlers
         self.connection.disconnect_handlers = []
 
-        if reconnect:
-            reconnect = app.config.get_per(
-                'accounts', self.name, 'autoreconnect')
-
         log.info('Disconnect %s, reconnect: %s', self.name, reconnect)
 
         if reconnect:
