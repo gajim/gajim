@@ -20,6 +20,7 @@ import nbxmpp
 from nbxmpp.util import is_error_result
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
@@ -39,7 +40,8 @@ class ServerInfoDialog(Gtk.Dialog):
         self.account = account
         self._destroyed = False
         self.set_transient_for(app.interface.roster.window)
-        self.set_resizable(False)
+        self.set_resizable(True)
+        self.set_size_request(300, 500)
 
         grid = Gtk.Grid()
         grid.set_name('ServerInfoGrid')
@@ -65,7 +67,11 @@ class ServerInfoDialog(Gtk.Dialog):
         clipboard_button.connect('clicked', self.on_clipboard_button_clicked)
 
         box = self.get_content_area()
-        box.pack_start(grid, True, True, 0)
+        scrolled = Gtk.ScrolledWindow()
+        scrolled.set_max_content_height(500)
+        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled.add(grid)
+        box.pack_start(scrolled, True, True, 0)
         box.pack_start(clipboard_button, False, True, 0)
         box.set_property('margin', 12)
         box.set_spacing(18)
@@ -274,15 +280,17 @@ class ServerInfoItem(Gtk.Grid):
     def __init__(self, info):
         super().__init__()
         self.tooltip = info.tooltip
-        self.set_hexpand(True)
         self.insert_column(0)
-        self.set_column_homogeneous(True)
 
         self.info = Gtk.Label(label=info.name)
         self.info.set_halign(Gtk.Align.START)
-        self.info.set_hexpand(True)
+        self.info.set_xalign(0)
+        self.info.set_size_request(160, -1)
         self.value = Gtk.Label(label=info.value)
         self.value.set_halign(Gtk.Align.START)
+        self.value.set_ellipsize(Pango.EllipsizeMode.END)
+        self.value.set_width_chars(20)
+        self.value.set_xalign(0)
         self.value.set_hexpand(True)
         self.value.set_selectable(True)
 
