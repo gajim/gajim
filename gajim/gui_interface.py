@@ -109,6 +109,7 @@ from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import YesNoDialog
+from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import PlainConnectionDialog
 from gajim.gtk.dialogs import SSLErrorDialog
 from gajim.gtk.dialogs import ChangeNickDialog
@@ -574,9 +575,10 @@ class Interface:
             obj.conn.on_client_cert_passphrase('', obj.con, obj.port,
                 obj.secure_tuple)
 
-        dialogs.PassphraseDialog(_('Certificate Passphrase Required'),
-            _('Enter the certificate passphrase for account %s') % \
-            obj.conn.name, ok_handler=on_ok, cancel_handler=on_cancel)
+        PassphraseDialog(_('Certificate Passphrase Required'),
+                         _('Enter the certificate passphrase for account %s') % \
+                         obj.conn.name, ok_handler=on_ok,
+                         cancel_handler=on_cancel)
 
     def handle_event_password_required(self, obj):
         #('PASSWORD_REQUIRED', account, None)
@@ -595,7 +597,7 @@ class Interface:
             obj.conn.disconnect(reconnect=False, immediately=True)
             del self.pass_dialog[account]
 
-        self.pass_dialog[account] = dialogs.PassphraseDialog(
+        self.pass_dialog[account] = PassphraseDialog(
             _('Password Required'), text, _('Save password'), ok_handler=on_ok,
             cancel_handler=on_cancel)
 

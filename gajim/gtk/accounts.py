@@ -31,13 +31,13 @@ from gajim.common.connection import Connection
 from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 
 from gajim import gui_menu_builder
-from gajim.dialogs import PassphraseDialog
 
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import ConfirmationDialogDoubleRadio
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import PassphraseDialog
 from gajim.gtk.dialogs import YesNoDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import NewConfirmationDialog

@@ -1071,6 +1071,65 @@ class InvitationReceivedDialog(Gtk.ApplicationWindow):
         self.destroy()
 
 
+class PassphraseDialog:
+    """
+    Class for Passphrase dialog
+    """
+    def __init__(self, titletext, labeltext, checkbuttontext=None,
+                 ok_handler=None, cancel_handler=None, transient_for=None):
+        self._ui = get_builder('passphrase_dialog.ui')
+        self.window = self._ui.get_object('passphrase_dialog')
+        self.passphrase = -1
+        self.window.set_title(titletext)
+        self._ui.message_label.set_text(labeltext)
+
+        self.ok = False
+
+        self.cancel_handler = cancel_handler
+        self.ok_handler = ok_handler
+        self._ui.ok_button.connect('clicked', self.on_okbutton_clicked)
+        self._ui.cancel_button.connect('clicked', self.on_cancelbutton_clicked)
+
+        self._ui.connect_signals(self)
+        if transient_for is None:
+            transient_for = app.app.get_active_window()
+        self.window.set_transient_for(transient_for)
+        self.window.show_all()
+
+        self.check = bool(checkbuttontext)
+        if self._ui.save_passphrase_checkbutton:
+            self._ui.save_passphrase_checkbutton.set_label(checkbuttontext)
+        else:
+            self._ui.save_passphrase_checkbutton.hide()
+
+    def on_okbutton_clicked(self, widget):
+        if not self.ok_handler:
+            return
+
+        passph = self._ui.passphrase_entry.get_text()
+
+        if self.check:
+            checked = self._ui.save_passphrase_checkbutton.get_active()
+        else:
+            checked = False
+
+        self.ok = True
+
+        self.window.destroy()
+
+        if isinstance(self.ok_handler, tuple):
+            self.ok_handler[0](passph, checked, *self.ok_handler[1:])
+        else:
+            self.ok_handler(passph, checked)
+
+    def on_cancelbutton_clicked(self, widget):
+        self.window.destroy()
+
+    def on_passphrase_dialog_destroy(self, widget):
+        if self.cancel_handler and not self.ok:
+            self.cancel_handler()
+
+
 class NewConfirmationDialog(Gtk.MessageDialog):
     def __init__(self, title, text, sec_text, buttons,
                  modal=True, transient_for=None):
