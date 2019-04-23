@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gajim.trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-11 03:05+0000\n"
+"POT-Creation-Date: 2019-04-17 02:05+0000\n"
 "PO-Revision-Date: 2011-02-03 14:51+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
@@ -19,19 +19,23 @@ msgstr ""
 "X-Poedit-Language: Kazakh\n"
 "X-Poedit-Country: KAZAKHSTAN\n"
 
-#: gajim/chat_control_base.py:550
+#: gajim/chat_control_base.py:549
 msgid "_Undo"
 msgstr ""
 
-#: gajim/chat_control_base.py:558 gajim/conversation_textview.py:530
+#: gajim/chat_control_base.py:557 gajim/conversation_textview.py:530
 msgid "_Clear"
 msgstr ""
 
-#: gajim/chat_control_base.py:1090
+#: gajim/chat_control_base.py:562
+msgid "Paste as quote"
+msgstr ""
+
+#: gajim/chat_control_base.py:1102
 msgid "Really send file?"
 msgstr "Файлды шынымен жіберу керек пе?"
 
-#: gajim/chat_control_base.py:1091
+#: gajim/chat_control_base.py:1103
 #, fuzzy, python-format
 msgid "If you send a file to %s, your real JID will be revealed."
 msgstr ""
@@ -70,7 +74,7 @@ msgid "Sender: %s"
 msgstr "Жіберуші: %s"
 
 #: gajim/filetransfers_window.py:243 gajim/filetransfers_window.py:718
-#: gajim/tooltips.py:632
+#: gajim/tooltips.py:631
 msgid "Recipient: "
 msgstr "Алушы: "
 
@@ -79,22 +83,22 @@ msgstr "Алушы: "
 msgid "Saved in: %s"
 msgstr "Сақталған: %s"
 
-#: gajim/filetransfers_window.py:256 gajim/chat_control.py:1480
+#: gajim/filetransfers_window.py:256 gajim/chat_control.py:1497
 msgid "File transfer completed"
 msgstr "Файлдармен алмасу аяқталды"
 
-#: gajim/filetransfers_window.py:258 gajim/chat_control.py:1484
+#: gajim/filetransfers_window.py:258 gajim/chat_control.py:1501
 #, fuzzy
 msgid "Open _Containing Folder"
 msgstr "_Орналасқан буманы ашу"
 
 #: gajim/filetransfers_window.py:271 gajim/filetransfers_window.py:278
-#: gajim/chat_control.py:1539
+#: gajim/chat_control.py:1556
 msgid "File transfer cancelled"
 msgstr "Файлдармен алмасу тоқтатылды"
 
 #: gajim/filetransfers_window.py:271 gajim/filetransfers_window.py:279
-#: gajim/chat_control.py:1540
+#: gajim/chat_control.py:1557
 msgid "Connection with peer cannot be established."
 msgstr "Тораппен байланысты орнату мүмкін емес."
 
@@ -108,7 +112,7 @@ msgstr "Алушы: %s"
 msgid "Error message: %s"
 msgstr "Қате хабарламасы: %s"
 
-#: gajim/filetransfers_window.py:291 gajim/chat_control.py:1536
+#: gajim/filetransfers_window.py:291 gajim/chat_control.py:1553
 msgid "File transfer stopped"
 msgstr "Файлдармен алмасу тоқтатылды"
 
@@ -209,11 +213,11 @@ msgstr "Файл: "
 msgid "It is not possible to send empty files"
 msgstr "Бос файлдарды жіберу мүмкін емес"
 
-#: gajim/filetransfers_window.py:714 gajim/tooltips.py:623
+#: gajim/filetransfers_window.py:714 gajim/tooltips.py:622
 msgid "Name: "
 msgstr "Аты:"
 
-#: gajim/filetransfers_window.py:716 gajim/tooltips.py:626
+#: gajim/filetransfers_window.py:716 gajim/tooltips.py:625
 msgid "Sender: "
 msgstr "Жіберуші: "
 
@@ -241,7 +245,7 @@ msgstr ""
 "Суретті %(type)s пішімінде сақтау мүмкін емес. %(new_filename)s ретінде "
 "сақтау керек пе?"
 
-#: gajim/vcard.py:164 gajim/vcard.py:516 gajim/chat_control.py:573
+#: gajim/vcard.py:164 gajim/vcard.py:516 gajim/chat_control.py:587
 #: gajim/gtk/profile.py:165
 #, fuzzy
 msgid "Save _As"
@@ -323,9 +327,9 @@ msgid "Manage Proxies"
 msgstr "Прокси профайлдарын басқару"
 
 #: gajim/options_dialog.py:494 gajim/options_dialog.py:560
-#: gajim/options_dialog.py:581 gajim/dialogs.py:319 gajim/dialogs.py:321
-#: gajim/dialogs.py:527 gajim/dialogs.py:540 gajim/roster_window.py:3004
-#: gajim/roster_window.py:3010 gajim/roster_window.py:3015 gajim/config.py:85
+#: gajim/options_dialog.py:581 gajim/dialogs.py:320 gajim/dialogs.py:322
+#: gajim/dialogs.py:528 gajim/dialogs.py:541 gajim/roster_window.py:3002
+#: gajim/roster_window.py:3008 gajim/roster_window.py:3013 gajim/config.py:85
 #: gajim/config.py:195 gajim/data/gui/account_creation_wizard_window.ui:22
 #: gajim/data/gui/change_mood_dialog.ui:98 gajim/gtk/account_wizard.py:268
 #: gajim/gtk/account_wizard.py:347 gajim/gtk/preferences.py:996
@@ -368,13 +372,13 @@ msgid "_New Group Chat"
 msgstr "_Жаңа чат бөлмесі"
 
 #: gajim/gui_menu_builder.py:286 gajim/gui_menu_builder.py:410
-#: gajim/dialogs.py:889 gajim/dialogs.py:918 gajim/dialogs.py:1137
-#: gajim/chat_control.py:286 gajim/roster_window.py:824
-#: gajim/roster_window.py:1751 gajim/roster_window.py:1753
-#: gajim/roster_window.py:2076 gajim/roster_window.py:3426
-#: gajim/roster_window.py:3453 gajim/gui_interface.py:515
-#: gajim/common/contacts.py:187 gajim/common/contacts.py:314
-#: gajim/common/helpers.py:62 gajim/common/helpers.py:287
+#: gajim/dialogs.py:890 gajim/dialogs.py:919 gajim/dialogs.py:1138
+#: gajim/chat_control.py:289 gajim/roster_window.py:827
+#: gajim/roster_window.py:1754 gajim/roster_window.py:1756
+#: gajim/roster_window.py:2079 gajim/roster_window.py:3424
+#: gajim/roster_window.py:3451 gajim/gui_interface.py:515
+#: gajim/common/contacts.py:191 gajim/common/contacts.py:318
+#: gajim/common/helpers.py:69 gajim/common/helpers.py:294
 #: gajim/gtk/add_contact.py:294
 msgid "Not in Roster"
 msgstr "Ростерде емес"
@@ -388,7 +392,7 @@ msgstr "Мен өз ростеріме сізді қосқым келеді"
 msgid "Send Single _Message…"
 msgstr "Бі_р хабарламаны жіберу..."
 
-#: gajim/gui_menu_builder.py:515 gajim/roster_window.py:5157
+#: gajim/gui_menu_builder.py:515 gajim/roster_window.py:5155
 #: gajim/data/gui/contact_context_menu.ui:58
 msgid "Send Cus_tom Status"
 msgstr "_Ол үшін қалып-күйді орнату"
@@ -406,25 +410,25 @@ msgstr "_Транспортты басқару"
 msgid "_Modify Transport"
 msgstr "Тр_анспортты басқару"
 
-#: gajim/gui_menu_builder.py:556 gajim/roster_window.py:5185
+#: gajim/gui_menu_builder.py:556 gajim/roster_window.py:5183
 #, fuzzy
 msgid "_Rename…"
 msgstr "Атын ауысты_ру"
 
-#: gajim/gui_menu_builder.py:567 gajim/roster_window.py:5201
-#: gajim/roster_window.py:5316 gajim/data/gui/blocked_contacts_window.ui:52
+#: gajim/gui_menu_builder.py:567 gajim/roster_window.py:5199
+#: gajim/roster_window.py:5314 gajim/data/gui/blocked_contacts_window.ui:52
 #: gajim/data/gui/gc_occupants_menu.ui:148
 #: gajim/data/gui/contact_context_menu.ui:166
 msgid "_Unblock"
 msgstr "Б_локтамау"
 
-#: gajim/gui_menu_builder.py:570 gajim/roster_window.py:5206
-#: gajim/roster_window.py:5320 gajim/data/gui/gc_occupants_menu.ui:140
+#: gajim/gui_menu_builder.py:570 gajim/roster_window.py:5204
+#: gajim/roster_window.py:5318 gajim/data/gui/gc_occupants_menu.ui:140
 #: gajim/data/gui/contact_context_menu.ui:174
 msgid "_Block"
 msgstr "_Блоктау"
 
-#: gajim/gui_menu_builder.py:578 gajim/roster_window.py:5213
+#: gajim/gui_menu_builder.py:578 gajim/roster_window.py:5211
 #: gajim/data/gui/contact_context_menu.ui:204
 msgid "Remo_ve"
 msgstr "Ө_шіру"
@@ -435,7 +439,7 @@ msgid "_Information"
 msgstr "_Ақпараты"
 
 #: gajim/gui_menu_builder.py:601 gajim/groupchat_control.py:640
-#: gajim/chat_control.py:323
+#: gajim/chat_control.py:326
 #, fuzzy
 msgid "Send File…"
 msgstr "_Файлды жіберу"
@@ -535,7 +539,7 @@ msgstr "Орнатылған хабарламалар:"
 msgid "Minimize on close"
 msgstr "_Жабылғанда, ростерге орналастыру"
 
-#: gajim/gui_menu_builder.py:646 gajim/roster_window.py:5385
+#: gajim/gui_menu_builder.py:646 gajim/roster_window.py:5383
 #, fuzzy
 msgid "Execute command"
 msgstr "К_оманда орындау"
@@ -715,12 +719,12 @@ msgid "Cannot find history logs database"
 msgstr "Тарих логтар дерекқоры табылмады"
 
 #: gajim/history_manager.py:156 gajim/history_manager.py:207
-#: gajim/dialogs.py:1118 gajim/config.py:425 gajim/disco.py:817
+#: gajim/dialogs.py:1119 gajim/config.py:425 gajim/disco.py:817
 msgid "JID"
 msgstr "JID"
 
 #: gajim/history_manager.py:169 gajim/history_manager.py:213
-#: gajim/data/gui/history_window.ui:89 gajim/gtk/history.py:109
+#: gajim/data/gui/history_window.ui:89 gajim/gtk/history.py:113
 msgid "Date"
 msgstr "Уақыты"
 
@@ -732,7 +736,7 @@ msgid "Nickname"
 msgstr "Ник аты"
 
 #: gajim/history_manager.py:185 gajim/history_manager.py:220
-#: gajim/gtk/history.py:118
+#: gajim/gtk/history.py:122
 msgid "Message"
 msgstr "Хабарлама"
 
@@ -802,130 +806,130 @@ msgstr[1] "Ерекшеленген хабарламаларды өшіруді 
 msgid "This is an irreversible operation."
 msgstr "Бұл қайтарылмайтын әрекет."
 
-#: gajim/dialogs.py:81
+#: gajim/dialogs.py:82
 #, python-format
 msgid "Contact name: <i>%s</i>"
 msgstr "Контакт аты: <i>%s</i>"
 
-#: gajim/dialogs.py:83
+#: gajim/dialogs.py:84
 #, fuzzy, python-format
 msgid "JID: <i>%s</i>"
 msgstr "Jabber ID: <i>%s</i>"
 
-#: gajim/dialogs.py:113 gajim/dialogs.py:126 gajim/roster_window.py:2946
-#: gajim/roster_window.py:3953 gajim/roster_window.py:5223
-#: gajim/common/contacts.py:137 gajim/common/contacts.py:171
+#: gajim/dialogs.py:114 gajim/dialogs.py:127 gajim/roster_window.py:2944
+#: gajim/roster_window.py:3951 gajim/roster_window.py:5221
+#: gajim/common/contacts.py:141 gajim/common/contacts.py:175
 #: gajim/data/gui/preferences_window.ui:540
 #: gajim/data/gui/shortcuts_window.ui:163 gajim/gtk/accounts.py:575
 msgid "General"
 msgstr "Жалпы"
 
-#: gajim/dialogs.py:199
+#: gajim/dialogs.py:200
 msgid "Group"
 msgstr "Топ"
 
-#: gajim/dialogs.py:206
+#: gajim/dialogs.py:207
 msgid "In the group"
 msgstr "Топта"
 
-#: gajim/dialogs.py:301
+#: gajim/dialogs.py:302
 msgid "KeyID"
 msgstr "KeyID"
 
-#: gajim/dialogs.py:306
+#: gajim/dialogs.py:307
 msgid "Contact name"
 msgstr "Контакт аты"
 
-#: gajim/dialogs.py:482
+#: gajim/dialogs.py:483
 msgid "Set Mood"
 msgstr "Көңіл-күйді орнату"
 
-#: gajim/dialogs.py:602
+#: gajim/dialogs.py:603
 #, python-format
 msgid "%s Status Message"
 msgstr "%s күй хабарламасы"
 
-#: gajim/dialogs.py:616
+#: gajim/dialogs.py:617
 msgid "Status Message"
 msgstr "Күй хабарламасы"
 
-#: gajim/dialogs.py:806
+#: gajim/dialogs.py:807
 msgid "Overwrite Status Message?"
 msgstr "Күй хабарламасын алмастыру керек пе?"
 
-#: gajim/dialogs.py:807
+#: gajim/dialogs.py:808
 msgid ""
 "This name is already used. Do you want to overwrite this status message?"
 msgstr ""
 "Бұл атау қолдануда. Бұл қалып-күй хабарламасын алмастыруды қалайсыз ба?"
 
-#: gajim/dialogs.py:815
+#: gajim/dialogs.py:816
 msgid "Save as Preset Status Message"
 msgstr "Орнатылған хабарлама ретінде сақтау"
 
-#: gajim/dialogs.py:816
+#: gajim/dialogs.py:817
 msgid "Please type a name for this status message"
 msgstr " Бұл қалып-күй хабарламасы үшін атын енгізіңіз"
 
-#: gajim/dialogs.py:847
+#: gajim/dialogs.py:848
 msgid "Subscription Request"
 msgstr "Жазылуға сұраным"
 
-#: gajim/dialogs.py:856
+#: gajim/dialogs.py:857
 #, python-format
 msgid "Subscription request for account %(account)s from %(jid)s"
 msgstr "%(account)s тіркелгісінен жазылуға сұраным түсті, кімнен: %(jid)s"
 
-#: gajim/dialogs.py:859
+#: gajim/dialogs.py:860
 #, python-format
 msgid "Subscription request from %s"
 msgstr "%s жіберген жазылуға сұраным"
 
-#: gajim/dialogs.py:926 gajim/disco.py:503 gajim/gui_interface.py:1757
+#: gajim/dialogs.py:927 gajim/disco.py:503 gajim/gui_interface.py:1757
 #: gajim/dialog_messages.py:31 gajim/gtk/profile.py:332
 #: gajim/gtk/join_groupchat.py:234
 msgid "You are not connected to the server"
 msgstr "Сервермен байланысты орнатқан жоқсыз"
 
-#: gajim/dialogs.py:927
+#: gajim/dialogs.py:928
 msgid "Without a connection, you can not synchronise your contacts."
 msgstr "Байланыс орнатылмаса, контакттарды синхрондай алмайсыз."
 
-#: gajim/dialogs.py:938 gajim/dialogs.py:1009 gajim/dialogs.py:1121
+#: gajim/dialogs.py:939 gajim/dialogs.py:1010 gajim/dialogs.py:1122
 #: gajim/disco.py:810 gajim/disco.py:1639 gajim/disco.py:1920
-#: gajim/data/gui/manage_bookmarks_window.ui:125 gajim/gtk/history.py:100
+#: gajim/data/gui/manage_bookmarks_window.ui:125 gajim/gtk/history.py:104
 msgid "Name"
 msgstr "Аты"
 
-#: gajim/dialogs.py:941 gajim/data/gui/join_groupchat_window.ui:163
+#: gajim/dialogs.py:942 gajim/data/gui/join_groupchat_window.ui:163
 msgid "Server"
 msgstr "Сервер"
 
-#: gajim/dialogs.py:977
+#: gajim/dialogs.py:978
 msgid "This account is not connected to the server"
 msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
 
-#: gajim/dialogs.py:978
+#: gajim/dialogs.py:979
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Байланыспаған тіркелгімен синхрондай алмайсыз."
 
-#: gajim/dialogs.py:1007
+#: gajim/dialogs.py:1008
 msgid "Synchronise"
 msgstr "Синхрондау"
 
-#: gajim/dialogs.py:1064
+#: gajim/dialogs.py:1065
 msgid "add"
 msgstr "қосу"
 
-#: gajim/dialogs.py:1064
+#: gajim/dialogs.py:1065
 msgid "modify"
 msgstr "түзету"
 
-#: gajim/dialogs.py:1065
+#: gajim/dialogs.py:1066
 msgid "remove"
 msgstr "өшіру"
 
-#: gajim/dialogs.py:1094
+#: gajim/dialogs.py:1095
 #, python-format
 msgid ""
 "<b>%(jid)s</b> would like you to <b>%(action)s</b> some contacts in your "
@@ -933,85 +937,85 @@ msgid ""
 msgstr ""
 "<b>%(jid)s</b> ростеріңіздегі кейбір контакттарды <b>%(action)s</b> келеді."
 
-#: gajim/dialogs.py:1110 gajim/dialogs.py:1156
+#: gajim/dialogs.py:1111 gajim/dialogs.py:1157
 msgid "Add"
 msgstr "Қосу"
 
-#: gajim/dialogs.py:1112 gajim/dialogs.py:1187
+#: gajim/dialogs.py:1113 gajim/dialogs.py:1188
 msgid "Modify"
 msgstr "Түзету"
 
-#: gajim/dialogs.py:1114 gajim/dialogs.py:1211
+#: gajim/dialogs.py:1115 gajim/dialogs.py:1212
 msgid "Delete"
 msgstr "Өшіру"
 
-#: gajim/dialogs.py:1124
+#: gajim/dialogs.py:1125
 msgid "Groups"
 msgstr "Топтар"
 
-#: gajim/dialogs.py:1232
+#: gajim/dialogs.py:1233
 #, python-format
 msgid "%s suggested me to add you in my roster."
 msgstr "%s маған сізді менің ростеріме қосуды ұсынған."
 
-#: gajim/dialogs.py:1246
+#: gajim/dialogs.py:1247
 #, fuzzy, python-format
 msgid "Added %d contact"
 msgid_plural "Added %d contacts"
 msgstr[0] "%s контак қосылған"
 msgstr[1] "%s контак қосылған"
 
-#: gajim/dialogs.py:1284
+#: gajim/dialogs.py:1285
 #, fuzzy, python-format
 msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "%s контакт өшірілген"
 msgstr[1] "%s контакт өшірілген"
 
-#: gajim/dialogs.py:1304
+#: gajim/dialogs.py:1305
 msgid "You are invited to a groupchat"
 msgstr "Сізді топтық чатқа шақырған"
 
-#: gajim/dialogs.py:1307
+#: gajim/dialogs.py:1308
 msgid "$Contact has invited you to join a discussion"
 msgstr "$Contact сізді талқылауға қатысуға шақырған"
 
-#: gajim/dialogs.py:1309
+#: gajim/dialogs.py:1310
 #, python-format
 msgid "$Contact has invited you to group chat %(room_jid)s"
 msgstr "$Contact сізді %(room_jid)s топ чатына қатысуға шақырған"
 
-#: gajim/dialogs.py:1318
+#: gajim/dialogs.py:1319
 #, python-format
 msgid "Comment: %s"
 msgstr "Түсіндірме: %s"
 
-#: gajim/dialogs.py:1320
+#: gajim/dialogs.py:1321
 msgid "Do you want to accept the invitation?"
 msgstr "Шақыруды қабылдайсыз ба?"
 
-#: gajim/dialogs.py:1336
+#: gajim/dialogs.py:1337
 msgid "Reason (if you decline):"
 msgstr ""
 
-#: gajim/dialogs.py:1338 gajim/chat_control.py:1510 gajim/gui_interface.py:643
-#: gajim/notify.py:187 gajim/notify.py:206 gajim/notify.py:272
+#: gajim/dialogs.py:1339 gajim/chat_control.py:1527 gajim/gui_interface.py:643
+#: gajim/notify.py:193 gajim/notify.py:212 gajim/notify.py:279
 msgid "Groupchat Invitation"
 msgstr "Топ чатына шақыру"
 
-#: gajim/dialogs.py:1623
+#: gajim/dialogs.py:1624
 msgid "an audio and video"
 msgstr "аудио мен видео"
 
-#: gajim/dialogs.py:1625
+#: gajim/dialogs.py:1626
 msgid "an audio"
 msgstr "аудио"
 
-#: gajim/dialogs.py:1627
+#: gajim/dialogs.py:1628
 msgid "a video"
 msgstr "видео"
 
-#: gajim/dialogs.py:1631
+#: gajim/dialogs.py:1632
 #, python-format
 msgid ""
 "%(contact)s wants to start %(type)s session with you. Do you want to answer "
@@ -1020,23 +1024,28 @@ msgstr ""
 "%(contact)s сізбен %(type)s сессияны бастағысы келеді. Қоңырау соғуға жауап "
 "бересіз бе?"
 
-#: gajim/dialogs.py:1735 gajim/data/gui/application_menu.ui:32
+#: gajim/dialogs.py:1736 gajim/data/gui/application_menu.ui:32
 #, fuzzy
 msgid "File Transfer"
 msgstr "Файлдармен алмасу"
 
-#: gajim/dialogs.py:1759
+#: gajim/dialogs.py:1756
 msgid "Requesting HTTP Upload Slot…"
 msgstr ""
 
-#: gajim/dialogs.py:1763
+#: gajim/dialogs.py:1760
 msgid "Uploading file via HTTP File Upload…"
 msgstr ""
 
-#: gajim/dialogs.py:1767
+#: gajim/dialogs.py:1764
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "E2E шифрлену сөндірулі"
+
+#: gajim/dialogs.py:1790
+#, python-format
+msgid "%(progress)s of %(total)s MiB sent"
+msgstr ""
 
 #: gajim/groupchat_control.py:203 gajim/groupchat_control.py:1926
 #, python-format
@@ -1044,7 +1053,7 @@ msgid "%(nick)s is now known as %(new_nick)s"
 msgstr "%(nick)s енді %(new_nick)s ретінде белгілі болады"
 
 #: gajim/groupchat_control.py:222 gajim/groupchat_control.py:2069
-#: gajim/common/connection_handlers_events.py:1120 gajim/gtk/history.py:576
+#: gajim/common/connection_handlers_events.py:1120 gajim/gtk/history.py:580
 #, python-format
 msgid "%(nick)s is now %(status)s"
 msgstr "%(nick)s қазір %(status)s"
@@ -1059,7 +1068,7 @@ msgid "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 msgstr ""
 "Сіз енді \"%(room)s\" топ чатында емессіз, немесе \"%(nick)s\" кетіп қалған."
 
-#: gajim/groupchat_control.py:642 gajim/chat_control.py:325
+#: gajim/groupchat_control.py:642 gajim/chat_control.py:328
 #, fuzzy
 msgid "No File Transfer available"
 msgstr "Файлдармен алмасу аяқталды"
@@ -1116,15 +1125,15 @@ msgstr "Суретті жүктеу мүмкін емес"
 msgid "Insert Nickname"
 msgstr "Ник кірістіру"
 
-#: gajim/groupchat_control.py:1102 gajim/chat_control.py:789
+#: gajim/groupchat_control.py:1102 gajim/chat_control.py:803
 msgid "and authenticated"
 msgstr "аутентификацияланған"
 
-#: gajim/groupchat_control.py:1106 gajim/chat_control.py:793
+#: gajim/groupchat_control.py:1106 gajim/chat_control.py:807
 msgid "and NOT authenticated"
 msgstr "аутентификацияланБАған"
 
-#: gajim/groupchat_control.py:1110 gajim/chat_control.py:797
+#: gajim/groupchat_control.py:1110 gajim/chat_control.py:811
 #, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
@@ -1193,7 +1202,7 @@ msgstr "Pong! (%s сек.)"
 msgid "Pong! (%(nick)s %(delay)s s.)"
 msgstr "Pong! (%s сек.)"
 
-#: gajim/groupchat_control.py:1621 gajim/chat_control.py:1190
+#: gajim/groupchat_control.py:1621 gajim/chat_control.py:1207
 msgid "Error."
 msgstr "Қате."
 
@@ -1203,7 +1212,7 @@ msgid "You (%s) joined the room"
 msgstr "%s чат бөлмесіне кірді"
 
 #: gajim/groupchat_control.py:1863 gajim/groupchat_control.py:2444
-#: gajim/roster_window.py:3133 gajim/gui_interface.py:602
+#: gajim/roster_window.py:3131 gajim/gui_interface.py:602
 #, fuzzy, python-format
 msgid "%(jid)s has been invited in this room"
 msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
@@ -1313,8 +1322,8 @@ msgid ""
 "If you close this window, you will be disconnected from this group chat."
 msgstr "Бұл терезені жапсаңыз, топ чатынан шығасыз."
 
-#: gajim/groupchat_control.py:2380 gajim/roster_window.py:2898
-#: gajim/roster_window.py:3537 gajim/roster_window.py:4284
+#: gajim/groupchat_control.py:2380 gajim/roster_window.py:2896
+#: gajim/roster_window.py:3535 gajim/roster_window.py:4282
 #: gajim/message_window.py:245 gajim/gui_interface.py:708
 #: gajim/gui_interface.py:1451 gajim/gui_interface.py:1492
 #: gajim/gtk/dialogs.py:447
@@ -1335,35 +1344,35 @@ msgstr "Төменде оның себебін көрсете аласыз:"
 msgid "Banning %s"
 msgstr "%s банға жіберу"
 
-#: gajim/chat_control.py:386
+#: gajim/chat_control.py:389
 msgid "Show a list of formattings"
 msgstr "Пішімдеулер тізімін көрсету"
 
-#: gajim/chat_control.py:390
+#: gajim/chat_control.py:393
 msgid "Formatting is not available so long as GPG is active"
 msgstr ""
 
-#: gajim/chat_control.py:393
+#: gajim/chat_control.py:396
 #, fuzzy
 msgid "This contact does not support HTML"
 msgstr "Контакт файлдармен алмасуды қолдамайды."
 
-#: gajim/chat_control.py:505
+#: gajim/chat_control.py:519
 #, python-format
 msgid "%(type)s state : %(state)s, reason: %(reason)s"
 msgstr "%(type)s қалып-күйі : %(state)s, себебі: %(reason)s"
 
-#: gajim/chat_control.py:646
+#: gajim/chat_control.py:660
 #, python-format
 msgid "%(nickname)s from group chat %(room_name)s"
 msgstr "%(nickname)s, %(room_name)s топ чатынан"
 
-#: gajim/chat_control.py:1142
+#: gajim/chat_control.py:1159
 #, python-format
 msgid "You just received a new message from \"%s\""
 msgstr "Сіз жаңа ғана \"%s\" жіберген жаңа хабарламаны алдыңыз"
 
-#: gajim/chat_control.py:1144
+#: gajim/chat_control.py:1161
 msgid ""
 "If you close this tab and you have history disabled, this message will be "
 "lost."
@@ -1371,16 +1380,16 @@ msgstr ""
 "Егер сіз бұл бетті жауып, тарихты сақтау сөндірілген болса, бұл хабарлама "
 "жоғалтылады."
 
-#: gajim/chat_control.py:1185
+#: gajim/chat_control.py:1202
 msgid "Ping?"
 msgstr "Ping?"
 
-#: gajim/chat_control.py:1188
+#: gajim/chat_control.py:1205
 #, fuzzy, python-format
 msgid "Pong! (%s seconds)"
 msgstr "Pong! (%s сек.)"
 
-#: gajim/chat_control.py:1296
+#: gajim/chat_control.py:1313
 #, python-format
 msgid ""
 "Subject: %(subject)s\n"
@@ -1389,36 +1398,36 @@ msgstr ""
 "Тақырыбы: %(subject)s\n"
 "%(message)s"
 
-#: gajim/chat_control.py:1399
+#: gajim/chat_control.py:1416
 #, fuzzy, python-format
 msgid "%(name)s is now %(show)s %(status)s"
 msgstr "%(name)s қазір %(status)s"
 
-#: gajim/chat_control.py:1454
+#: gajim/chat_control.py:1471
 #, fuzzy
 msgid "File transfer"
 msgstr "Файлдармен алмасу"
 
-#: gajim/chat_control.py:1457
+#: gajim/chat_control.py:1474
 #, fuzzy
 msgid "Size"
 msgstr "Өлшемі: %s"
 
-#: gajim/chat_control.py:1459
+#: gajim/chat_control.py:1476
 #, fuzzy
 msgid "Accept"
 msgstr "_Тіркелгілер"
 
-#: gajim/chat_control.py:1513 gajim/disco.py:1699
+#: gajim/chat_control.py:1530 gajim/disco.py:1699
 msgid "_Join"
 msgstr "_Кіру"
 
-#: gajim/chat_control.py:1532 gajim/roster_window.py:1992
+#: gajim/chat_control.py:1549 gajim/roster_window.py:1995
 #: gajim/gui_interface.py:988
 msgid "Remote contact stopped transfer"
 msgstr "Қашықтағы контакт файлдармен алмасуды тоқтатқан"
 
-#: gajim/chat_control.py:1534 gajim/roster_window.py:1994
+#: gajim/chat_control.py:1551 gajim/roster_window.py:1997
 #: gajim/gui_interface.py:991
 msgid "Error opening file"
 msgstr "Файлды ашу қатесі"
@@ -1487,63 +1496,63 @@ msgstr ""
 msgid "Database Error"
 msgstr "Дерекқор қатесі"
 
-#: gajim/roster_window.py:288 gajim/roster_window.py:1069
+#: gajim/roster_window.py:291 gajim/roster_window.py:1072
 msgid "Merged accounts"
 msgstr "Біріктірілген тіркелгілер"
 
-#: gajim/roster_window.py:891 gajim/roster_window.py:1663
-#: gajim/roster_window.py:1696 gajim/roster_window.py:1747
-#: gajim/roster_window.py:1749 gajim/roster_window.py:1910
-#: gajim/roster_window.py:2586 gajim/roster_window.py:5147 gajim/disco.py:122
-#: gajim/disco.py:123 gajim/disco.py:1403 gajim/common/contacts.py:169
-#: gajim/common/contacts.py:415 gajim/common/helpers.py:62
+#: gajim/roster_window.py:894 gajim/roster_window.py:1666
+#: gajim/roster_window.py:1699 gajim/roster_window.py:1750
+#: gajim/roster_window.py:1752 gajim/roster_window.py:1913
+#: gajim/roster_window.py:2584 gajim/roster_window.py:5145 gajim/disco.py:122
+#: gajim/disco.py:123 gajim/disco.py:1403 gajim/common/contacts.py:173
+#: gajim/common/contacts.py:419 gajim/common/helpers.py:69
 msgid "Transports"
 msgstr "Қызметтер"
 
-#: gajim/roster_window.py:1755 gajim/roster_window.py:1757
-#: gajim/roster_window.py:2613 gajim/roster_window.py:5117
+#: gajim/roster_window.py:1758 gajim/roster_window.py:1760
+#: gajim/roster_window.py:2611 gajim/roster_window.py:5115
 #: gajim/message_window.py:522 gajim/gui_interface.py:1930
-#: gajim/gui_interface.py:1955 gajim/common/contacts.py:167
-#: gajim/common/helpers.py:62 gajim/common/modules/adhoc_commands.py:248
+#: gajim/gui_interface.py:1955 gajim/common/contacts.py:171
+#: gajim/common/helpers.py:69 gajim/common/modules/adhoc_commands.py:248
 msgid "Groupchats"
 msgstr "Топтық чаттар"
 
-#: gajim/roster_window.py:2053
+#: gajim/roster_window.py:2056
 #, fuzzy
 msgid "Authorization sent"
 msgstr "Авторизация жіберілді"
 
-#: gajim/roster_window.py:2054
+#: gajim/roster_window.py:2057
 #, fuzzy, python-format
 msgid "\"%s\" will now see your status."
 msgstr "\"%s\" енді сіздің қалып-күйіңізді біле алады."
 
-#: gajim/roster_window.py:2077
+#: gajim/roster_window.py:2080
 msgid "Subscription request has been sent"
 msgstr "Жазылуға сұраным жіберілді"
 
-#: gajim/roster_window.py:2078
+#: gajim/roster_window.py:2081
 #, python-format
 msgid "If \"%s\" accepts this request you will know his or her status."
 msgstr ""
 "Егер \"%s\" сіздің сұранымыңызды қабылдаса, сіз оның қалып-күйін біле аласыз."
 
-#: gajim/roster_window.py:2092
+#: gajim/roster_window.py:2095
 #, fuzzy
 msgid "Authorization removed"
 msgstr "Авторизация өшірілді"
 
-#: gajim/roster_window.py:2093
+#: gajim/roster_window.py:2096
 #, python-format
 msgid "Now \"%s\" will always see you as offline."
 msgstr "\"%s\" енді сізді әрқашан желіде емес күйінде көреді."
 
-#: gajim/roster_window.py:2117
+#: gajim/roster_window.py:2120
 #, fuzzy
 msgid "OpenPGP is not usable"
 msgstr "GPG қолдануға мүмкін емес"
 
-#: gajim/roster_window.py:2118
+#: gajim/roster_window.py:2121
 #, python-format
 msgid ""
 "Gajim needs python-gnupg >= 0.3.8\n"
@@ -1551,11 +1560,11 @@ msgid ""
 "You will be connected to %s without OpenPGP."
 msgstr ""
 
-#: gajim/roster_window.py:2327 gajim/roster_window.py:3633
+#: gajim/roster_window.py:2330 gajim/roster_window.py:3631
 msgid "You are participating in one or more group chats"
 msgstr "Сіз бір не бірнеше чат бөлмесіне қатысушы болып тұрсыз"
 
-#: gajim/roster_window.py:2328 gajim/roster_window.py:3634
+#: gajim/roster_window.py:2331 gajim/roster_window.py:3632
 msgid ""
 "Changing your status to invisible will result in disconnection from those "
 "group chats. Are you sure you want to go invisible?"
@@ -1563,38 +1572,38 @@ msgstr ""
 "Қалып-күйіңізді жасырын етіп орнатсаңыз, келесі топ чаттарынан байланысты "
 "үзесіз. Жасырын етуді қалайсыз ба?"
 
-#: gajim/roster_window.py:2355
+#: gajim/roster_window.py:2358
 #, fuzzy
 msgid "desynced"
 msgstr "байланыспаған"
 
-#: gajim/roster_window.py:2426
+#: gajim/roster_window.py:2425
 msgid "Really quit Gajim?"
 msgstr "Gajim-нан шығу керек пе?"
 
-#: gajim/roster_window.py:2427
+#: gajim/roster_window.py:2426
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
 
-#: gajim/roster_window.py:2428
+#: gajim/roster_window.py:2427
 msgid "Always close Gajim"
 msgstr "Gajim-ді әрқашан жабу"
 
-#: gajim/roster_window.py:2516
+#: gajim/roster_window.py:2514
 msgid "You have running file transfers"
 msgstr "Қазір белсенді файлдармен алмасулар бар"
 
-#: gajim/roster_window.py:2517
+#: gajim/roster_window.py:2515
 msgid ""
 "If you quit now, the file(s) being transferred will be stopped. Do you still "
 "want to quit?"
 msgstr "Қазыр шықсаңыз, файлдармен алмасу(лар) тоқталады. Шығуды қалайсыз ба?"
 
-#: gajim/roster_window.py:2548 gajim/roster_window.py:2826
+#: gajim/roster_window.py:2546 gajim/roster_window.py:2824
 msgid "You have unread messages"
 msgstr "Сізде оқылмаған хабарламалар бар"
 
-#: gajim/roster_window.py:2549
+#: gajim/roster_window.py:2547
 msgid ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
@@ -1602,16 +1611,16 @@ msgstr ""
 "Кейінірек оқу үшін хабарламалар тек тарихыңыз қосулы және контакт "
 "ростеріңізде болса ғана қолжетерлік болады."
 
-#: gajim/roster_window.py:2827
+#: gajim/roster_window.py:2825
 msgid "You must read them before removing this transport."
 msgstr "Транспортты өшіру алдында келесіні оқуыңыз керек."
 
-#: gajim/roster_window.py:2830
+#: gajim/roster_window.py:2828
 #, python-format
 msgid "Transport \"%s\" will be removed"
 msgstr "\"%s\" транспорты өшіріледі"
 
-#: gajim/roster_window.py:2831
+#: gajim/roster_window.py:2829
 msgid ""
 "You will no longer be able to send and receive messages from contacts using "
 "this transport."
@@ -1619,11 +1628,11 @@ msgstr ""
 "Бұл транспортты қолданатын барлық контакттарға бұдан былай хабарламаларды "
 "жібере не ала алмайтын боласыз."
 
-#: gajim/roster_window.py:2834
+#: gajim/roster_window.py:2832
 msgid "Transports will be removed"
 msgstr "Транспорттар өшіріледі"
 
-#: gajim/roster_window.py:2839
+#: gajim/roster_window.py:2837
 #, python-format
 msgid ""
 "You will no longer be able to send and receive messages to contacts from "
@@ -1632,11 +1641,11 @@ msgstr ""
 "Келесі транспорттарды қолданатын барлық контакттарға бұдан былай "
 "хабарламаларды жібере не ала алмайтын боласыз: %s"
 
-#: gajim/roster_window.py:2893
+#: gajim/roster_window.py:2891
 msgid "You are about to block a contact. Are you sure you want to continue?"
 msgstr "Контактты блоктауды қалағансыз. Жалғастыруды қалайсыз ба?"
 
-#: gajim/roster_window.py:2895
+#: gajim/roster_window.py:2893
 #, fuzzy
 msgid ""
 "This contact will see you offline and you will not receive messages it sends "
@@ -1645,56 +1654,56 @@ msgstr ""
 "Контакт бұдан былай сізді желіде емес сияқты көреді және сіз ол сізге "
 "жібергісі келетін хабарламаларды ала алмайтын боласыз."
 
-#: gajim/roster_window.py:2941
+#: gajim/roster_window.py:2939
 msgid "Rename Contact"
 msgstr "Контакт атын ауыстыру"
 
-#: gajim/roster_window.py:2942
+#: gajim/roster_window.py:2940
 #, python-format
 msgid "Enter a new nickname for contact %s"
 msgstr "%s контакты үшін жаңа ник атын енгізіңіз"
 
-#: gajim/roster_window.py:2949
+#: gajim/roster_window.py:2947
 msgid "Rename Group"
 msgstr "Топ атын ауыстыру"
 
-#: gajim/roster_window.py:2950
+#: gajim/roster_window.py:2948
 #, python-format
 msgid "Enter a new name for group %s"
 msgstr "%s тобы үшін жаңа атын енгізіңіз"
 
-#: gajim/roster_window.py:2995
+#: gajim/roster_window.py:2993
 msgid "Remove Group"
 msgstr "Топты өшіру"
 
-#: gajim/roster_window.py:2996
+#: gajim/roster_window.py:2994
 #, python-format
 msgid "Do you want to remove group %s from the roster?"
 msgstr "Сіз ростерден %s тобын өшіруді қалайсыз ба?"
 
-#: gajim/roster_window.py:2997
+#: gajim/roster_window.py:2995
 msgid "Also remove all contacts in this group from your roster"
 msgstr "Сонымен қатар ростерден осы топтың барлық контакттарын өшіру"
 
-#: gajim/roster_window.py:3036
+#: gajim/roster_window.py:3034
 msgid "Assign OpenPGP Key"
 msgstr "OpenPGP кілтін орнату"
 
-#: gajim/roster_window.py:3037
+#: gajim/roster_window.py:3035
 msgid "Select a key to apply to the contact"
 msgstr "Контактқа ілу үшін кілт таңдаңыз"
 
-#: gajim/roster_window.py:3443
+#: gajim/roster_window.py:3441
 #, python-format
 msgid "Contact \"%s\" will be removed from your roster"
 msgstr "\"%s\" контакты ростеріңізден өшіріледі"
 
-#: gajim/roster_window.py:3445
+#: gajim/roster_window.py:3443
 #, python-format
 msgid "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 msgstr "Сіз \"%(name)s\" (%(jid)s) ростеріңізден өшіруді қалағансыз.\n"
 
-#: gajim/roster_window.py:3450
+#: gajim/roster_window.py:3448
 #, fuzzy
 msgid ""
 "By removing this contact you also remove authorization resulting in them "
@@ -1704,11 +1713,11 @@ msgstr ""
 "оларға берген авторизацияны да өшіресіз, ол енді сізді әрқашан желіде емес "
 "сияқты көреді."
 
-#: gajim/roster_window.py:3456
+#: gajim/roster_window.py:3454
 msgid "Do you want to continue?"
 msgstr "Жалғастыруды қалайсыз ба?"
 
-#: gajim/roster_window.py:3460
+#: gajim/roster_window.py:3458
 #, fuzzy
 msgid ""
 "By removing this contact you also by default remove authorization resulting "
@@ -1717,15 +1726,15 @@ msgstr ""
 "Контактты өшірумен қатар негізінде сіз оларға берген авторизацияны да "
 "өшіресіз, ол енді сізді әрқашан желіде емес сияқты көреді."
 
-#: gajim/roster_window.py:3463
+#: gajim/roster_window.py:3461
 msgid "I want this contact to know my status after removal"
 msgstr "Өшіруден кейін осы контакттар менің қалып-күйімді білуін қалаймын"
 
-#: gajim/roster_window.py:3467
+#: gajim/roster_window.py:3465
 msgid "Contacts will be removed from your roster"
 msgstr "Контакттар ростеріңізден өшіріледі"
 
-#: gajim/roster_window.py:3472
+#: gajim/roster_window.py:3470
 #, python-format
 msgid ""
 "By removing these contacts:%s\n"
@@ -1735,13 +1744,13 @@ msgstr ""
 "оларға берген авторизацияны да өшіресіз, ол енді сізді әрқашан желіде емес "
 "сияқты көреді."
 
-#: gajim/roster_window.py:3531
+#: gajim/roster_window.py:3529
 #, fuzzy
 msgid ""
 "You are about to send a custom status. Are you sure you want to continue?"
 msgstr "Сіз таңдауыңызша қалып-күйді жіберуді қалағансыз. Жалғастырамыз ба?"
 
-#: gajim/roster_window.py:3533
+#: gajim/roster_window.py:3531
 #, fuzzy, python-format
 msgid ""
 "This contact will temporarily see you as %(status)s, but only until you "
@@ -1751,19 +1760,19 @@ msgstr ""
 "күйіңізді өзгерткенге дейін. Одан кейін ол сіздің негізгі қалып-күйіңізді "
 "көретін болады."
 
-#: gajim/roster_window.py:3552
+#: gajim/roster_window.py:3550
 msgid "No account available"
 msgstr "Бірде-бір тіркелгі қолжетерсіз"
 
-#: gajim/roster_window.py:3553
+#: gajim/roster_window.py:3551
 msgid "You must create an account before you can chat with other contacts."
 msgstr "Басқа контакттармен сөйлесу үшін алдымен тіркелгіні жасауыңыз қажет."
 
-#: gajim/roster_window.py:4180
+#: gajim/roster_window.py:4178
 msgid "Metacontacts storage not supported by your server"
 msgstr "Метаконтакттарды сақтау серверіңіз қолдамайды"
 
-#: gajim/roster_window.py:4182
+#: gajim/roster_window.py:4180
 #, fuzzy
 msgid ""
 "Your server does not support storing metacontacts information. So this "
@@ -1772,12 +1781,12 @@ msgstr ""
 "Серверінің метаконтакттар ақпаратын сақтауды қолдамайды. Сол үшін, бұл "
 "ақпарат келесі рет қосылғаны үшін сақталмайды."
 
-#: gajim/roster_window.py:4278
+#: gajim/roster_window.py:4276
 msgid ""
 "You are about to create a metacontact. Are you sure you want to continue?"
 msgstr "Метаконтакт жасауды қалағансыз. Жалғастырамыз ба?"
 
-#: gajim/roster_window.py:4280
+#: gajim/roster_window.py:4278
 #, fuzzy
 msgid ""
 "Metacontacts are a way to regroup several contacts in one line. Generally it "
@@ -1786,114 +1795,114 @@ msgstr ""
 "Метаконтакт - бірнеше бірлік контактты бір жолға біріктіру тәсілі. Әдетте ол "
 "бір адамның бірнеше Jabber не транспорт тіркелгілері бар болса қолданылады."
 
-#: gajim/roster_window.py:4402
+#: gajim/roster_window.py:4400
 msgid "Invalid file URI:"
 msgstr "Файл URI қате:"
 
-#: gajim/roster_window.py:4413
+#: gajim/roster_window.py:4411
 #, fuzzy
 msgid "Send file?"
 msgstr "_Файлды жіберу"
 
-#: gajim/roster_window.py:4414
+#: gajim/roster_window.py:4412
 #, python-format
 msgid "Do you want to send this file to %s:"
 msgid_plural "Do you want to send these files to %s:"
 msgstr[0] "Бұл файлды %s үшін жіберуді қалайсыз ба:"
 msgstr[1] "Бұл файлдарды %s үшін жіберуді қалайсыз ба:"
 
-#: gajim/roster_window.py:4554
+#: gajim/roster_window.py:4552
 #, fuzzy, python-format
 msgid "Send %(from)s to %(to)s"
 msgstr "%s қазір %s үшін жіберу"
 
-#: gajim/roster_window.py:4567
+#: gajim/roster_window.py:4565
 #, python-format
 msgid "Make %s first contact"
 msgstr "%s бірінші контакт қылу"
 
-#: gajim/roster_window.py:4572
+#: gajim/roster_window.py:4570
 #, fuzzy, python-format
 msgid "Make %(contact1)s and %(contact2)s metacontacts"
 msgstr "%s және %s метаконтакт жасау"
 
-#: gajim/roster_window.py:4947 gajim/roster_window.py:5045
+#: gajim/roster_window.py:4945 gajim/roster_window.py:5043
 msgid "_Change Status Message"
 msgstr "Қалып-кү_й хабарламасын өзгерту"
 
-#: gajim/roster_window.py:4967
+#: gajim/roster_window.py:4965
 msgid "Publish Tune"
 msgstr "Өленді жариялау"
 
-#: gajim/roster_window.py:4978
+#: gajim/roster_window.py:4976
 msgid "Publish Location"
 msgstr "Орналасуды жариялау"
 
-#: gajim/roster_window.py:4990
+#: gajim/roster_window.py:4988
 #, fuzzy
 msgid "Configure Services…"
 msgstr "Қызметтерді баптау..."
 
-#: gajim/roster_window.py:5119
+#: gajim/roster_window.py:5117
 msgid "_Maximize All"
 msgstr "Бар_лығын жазу"
 
-#: gajim/roster_window.py:5126 gajim/roster_window.py:5285
+#: gajim/roster_window.py:5124 gajim/roster_window.py:5283
 msgid "Send Group M_essage"
 msgstr "Топ ү_шін хабарлама жіберу"
 
-#: gajim/roster_window.py:5133
+#: gajim/roster_window.py:5131
 msgid "To all users"
 msgstr "Барлық пайдаланушыларға"
 
-#: gajim/roster_window.py:5137
+#: gajim/roster_window.py:5135
 msgid "To all online users"
 msgstr "Барлық желідегі пайдаланушыларға"
 
-#: gajim/roster_window.py:5149 gajim/roster_window.py:5291
+#: gajim/roster_window.py:5147 gajim/roster_window.py:5289
 #: gajim/data/gui/gc_occupants_menu.ui:110
 #: gajim/data/gui/contact_context_menu.ui:36
 msgid "In_vite to"
 msgstr "_Шақыру"
 
-#: gajim/roster_window.py:5301
+#: gajim/roster_window.py:5299
 msgid "_Manage Contacts"
 msgstr "_Контакттарды басқару"
 
-#: gajim/roster_window.py:5307
+#: gajim/roster_window.py:5305
 #, fuzzy
 msgid "Edit _Groups…"
 msgstr "Топтар_ды түзету"
 
-#: gajim/roster_window.py:5328 gajim/data/gui/filetransfers.ui:11
+#: gajim/roster_window.py:5326 gajim/data/gui/filetransfers.ui:11
 #: gajim/data/gui/remove_account_window.ui:137
 msgid "_Remove"
 msgstr "Өші_ру"
 
-#: gajim/roster_window.py:5365
+#: gajim/roster_window.py:5363
 msgid "_Maximize"
 msgstr "_Максималды қылу"
 
-#: gajim/roster_window.py:5372
+#: gajim/roster_window.py:5370
 msgid "_Reconnect"
 msgstr "Қа_йта байланысу"
 
-#: gajim/roster_window.py:5377 gajim/data/gui/gc_control_popup_menu.ui:120
+#: gajim/roster_window.py:5375 gajim/data/gui/gc_control_popup_menu.ui:120
 msgid "_Disconnect"
 msgstr "Ба_йланысты үзу"
 
-#: gajim/roster_window.py:5393 gajim/data/gui/gc_occupants_menu.ui:170
+#: gajim/roster_window.py:5391 gajim/data/gui/gc_occupants_menu.ui:170
 #: gajim/data/gui/gc_control_popup_menu.ui:113
 #: gajim/data/gui/contact_context_menu.ui:228
 msgid "_History"
 msgstr "Тар_ихы"
 
-#: gajim/roster_window.py:5469 gajim/data/gui/application_menu.ui:86
+#: gajim/roster_window.py:5467 gajim/data/gui/application_menu.ui:86
 #: gajim/data/gui/history_window.ui:57
 msgid "History Manager"
 msgstr "Тарихты басқару"
 
-#: gajim/roster_window.py:5477
+#: gajim/roster_window.py:5475
 msgid "_Join New Group Chat"
 msgstr "Жаңа _чат бөлмесіне кіру"
 
@@ -2092,19 +2101,19 @@ msgstr "Бөлмеде хабарлама алынды"
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s осы чат бөлмесінде"
 
-#: gajim/tooltips.py:264 gajim/common/helpers.py:352
+#: gajim/tooltips.py:264 gajim/common/helpers.py:359
 msgid "?Group Chat Contact Affiliation:None"
 msgstr "?Group Chat Contact Affiliation:Жоқ"
 
-#: gajim/tooltips.py:266 gajim/common/helpers.py:358
+#: gajim/tooltips.py:266 gajim/common/helpers.py:365
 msgid "Member"
 msgstr "Мүше"
 
-#: gajim/tooltips.py:268 gajim/common/helpers.py:356
+#: gajim/tooltips.py:268 gajim/common/helpers.py:363
 msgid "Administrator"
 msgstr "Әкімші"
 
-#: gajim/tooltips.py:270 gajim/common/helpers.py:354
+#: gajim/tooltips.py:270 gajim/common/helpers.py:361
 msgid "Owner"
 msgstr "Иесі"
 
@@ -2124,106 +2133,106 @@ msgstr "Байланысқан"
 msgid "Disconnected"
 msgstr "Байланыспаған"
 
-#: gajim/tooltips.py:625
+#: gajim/tooltips.py:624
 #, fuzzy
 msgid "?Noun:Download"
 msgstr "Беру"
 
-#: gajim/tooltips.py:631
+#: gajim/tooltips.py:630
 #, fuzzy
 msgid "?Noun:Upload"
 msgstr "Тарату"
 
-#: gajim/tooltips.py:638
+#: gajim/tooltips.py:637
 msgid "Type: "
 msgstr "Түрі: "
 
-#: gajim/tooltips.py:644
+#: gajim/tooltips.py:643
 msgid "Transferred: "
 msgstr "Берілген: "
 
-#: gajim/tooltips.py:647 gajim/tooltips.py:664
-msgid "Not started"
-msgstr "Басталмаған"
-
-#: gajim/tooltips.py:649
-msgid "Stopped"
-msgstr "Тоқтатылған"
-
-#: gajim/tooltips.py:651 gajim/tooltips.py:654
-msgid "Completed"
-msgstr "Аяқталған"
-
-#: gajim/tooltips.py:657
-msgid "?transfer status:Paused"
-msgstr "?transfer status:Аялдатылған"
-
-#: gajim/tooltips.py:660
-msgid "Stalled"
-msgstr "Тежеліп қалған"
-
-#: gajim/tooltips.py:662
-msgid "Transferring"
-msgstr "Алмасуда"
-
-#: gajim/tooltips.py:665
+#: gajim/tooltips.py:645
 msgid "Status: "
 msgstr "Қалып-күй:"
 
-#: gajim/tooltips.py:667
+#: gajim/tooltips.py:647
 msgid "Description: "
 msgstr "Анықтамасы: "
 
-#: gajim/tooltips.py:697 gajim/common/helpers.py:268
+#: gajim/tooltips.py:672
+msgid "Aborted"
+msgstr ""
+
+#: gajim/tooltips.py:674
+msgid "Completed"
+msgstr "Аяқталған"
+
+#: gajim/tooltips.py:676
+msgid "?transfer status:Paused"
+msgstr "?transfer status:Аялдатылған"
+
+#: gajim/tooltips.py:679
+msgid "Stalled"
+msgstr "Тежеліп қалған"
+
+#: gajim/tooltips.py:683
+msgid "Transferring"
+msgstr "Алмасуда"
+
+#: gajim/tooltips.py:684 gajim/tooltips.py:685
+msgid "Not started"
+msgstr "Басталмаған"
+
+#: gajim/tooltips.py:695 gajim/common/helpers.py:275
 msgid "?user status:Available"
 msgstr "?user status:Осында"
 
-#: gajim/tooltips.py:699 gajim/common/helpers.py:263
+#: gajim/tooltips.py:697 gajim/common/helpers.py:270
 msgid "Free for Chat"
 msgstr "Чатқа дайын"
 
-#: gajim/tooltips.py:701 gajim/common/helpers.py:275
+#: gajim/tooltips.py:699 gajim/common/helpers.py:282
 #: gajim/common/modules/adhoc_commands.py:123
 #: gajim/command_system/implementation/standard.py:139
 msgid "Away"
 msgstr "Кетіп қалған"
 
-#: gajim/tooltips.py:703 gajim/common/helpers.py:253
+#: gajim/tooltips.py:701 gajim/common/helpers.py:260
 msgid "Busy"
 msgstr "Бос емес"
 
-#: gajim/tooltips.py:705 gajim/common/helpers.py:258
+#: gajim/tooltips.py:703 gajim/common/helpers.py:265
 msgid "Not Available"
 msgstr "Қол жетерсіз"
 
-#: gajim/tooltips.py:707 gajim/common/helpers.py:280
+#: gajim/tooltips.py:705 gajim/common/helpers.py:287
 msgid "Offline"
 msgstr "Желіде емес"
 
-#: gajim/statusicon.py:208
+#: gajim/statusicon.py:210
 #, fuzzy
 msgid "_Change Status Message…"
 msgstr "Қалып-кү_й хабарламасын өзгерту"
 
-#: gajim/statusicon.py:242 gajim/statusicon.py:287 gajim/statusicon.py:294
+#: gajim/statusicon.py:244 gajim/statusicon.py:289 gajim/statusicon.py:296
 #, python-format
 msgid "using account %s"
 msgstr "%s тіркелгісін қолданып"
 
-#: gajim/statusicon.py:304
+#: gajim/statusicon.py:306
 #, fuzzy
 msgid "_Manage Bookmarks…"
 msgstr "Бетбелгілерді басқару"
 
-#: gajim/statusicon.py:320
+#: gajim/statusicon.py:322
 msgid "Hide _Roster"
 msgstr "Р_остерді жасыру"
 
-#: gajim/statusicon.py:324
+#: gajim/statusicon.py:326
 msgid "Show _Roster"
 msgstr "_Ростерді көрсету"
 
-#: gajim/statusicon.py:332
+#: gajim/statusicon.py:334
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
 
@@ -2467,12 +2476,12 @@ msgstr[1] "%i күн бұрын"
 msgid "Not encrypted"
 msgstr "Басталмаған"
 
-#: gajim/conversation_textview.py:1241 gajim/gtk/history.py:613
+#: gajim/conversation_textview.py:1241 gajim/gtk/history.py:617
 #, python-format
 msgid "Subject: %s\n"
 msgstr "Тақырыбы: %s\n"
 
-#: gajim/message_textview.py:45
+#: gajim/message_textview.py:43
 #, fuzzy
 msgid "Write a message…"
 msgstr "Хабарлама алу"
@@ -2531,7 +2540,7 @@ msgstr "%s тіркелгісіндегі бұл сұранымды қабылд
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) %(url)s үшін авторизация (id: %(id)s)"
 
-#: gajim/gui_interface.py:240 gajim/notify.py:188 gajim/notify.py:208
+#: gajim/gui_interface.py:240 gajim/notify.py:194 gajim/notify.py:214
 msgid "Connection Failed"
 msgstr "Байланысу сәтсіз"
 
@@ -2591,12 +2600,12 @@ msgstr "Қате %(code)s: %(msg)s"
 msgid "error while sending %(message)s ( %(error)s )"
 msgstr "%(message)s жіберу кезіндегі қате ( %(error)s )"
 
-#: gajim/gui_interface.py:503 gajim/notify.py:188
+#: gajim/gui_interface.py:503 gajim/notify.py:194
 msgid "Subscription request"
 msgstr "Жазылуға сұраным"
 
-#: gajim/gui_interface.py:515 gajim/common/contacts.py:165
-#: gajim/common/helpers.py:62
+#: gajim/gui_interface.py:515 gajim/common/contacts.py:169
+#: gajim/common/helpers.py:69
 msgid "Observers"
 msgstr "Байқаушылар"
 
@@ -2623,7 +2632,7 @@ msgstr ""
 "Сіз енді оны әрқашан да желіде емес ретінде көресіз.\n"
 "Оны өз контакттар тізіміңізден өшіруді қалайсыз ба?"
 
-#: gajim/gui_interface.py:560 gajim/notify.py:188
+#: gajim/gui_interface.py:560 gajim/notify.py:194
 msgid "Unsubscribed"
 msgstr "Жазылмаған"
 
@@ -2700,8 +2709,8 @@ msgstr ""
 msgid "Oauth2 Credentials"
 msgstr ""
 
-#: gajim/gui_interface.py:833 gajim/gui_interface.py:864 gajim/notify.py:186
-#: gajim/notify.py:267
+#: gajim/gui_interface.py:833 gajim/gui_interface.py:864 gajim/notify.py:192
+#: gajim/notify.py:274
 msgid "File Transfer Error"
 msgstr "Файл алмасу қатесі"
 
@@ -2710,7 +2719,7 @@ msgstr "Файл алмасу қатесі"
 msgid "%s wants to send you a file."
 msgstr "%s сізге файлды жібергісі келеді:"
 
-#: gajim/gui_interface.py:900 gajim/notify.py:185 gajim/notify.py:265
+#: gajim/gui_interface.py:900 gajim/notify.py:191 gajim/notify.py:272
 msgid "File Transfer Request"
 msgstr "Файл алмасуға сұраным"
 
@@ -2719,12 +2728,12 @@ msgid "SSL certificate error"
 msgstr "SSL сертификат қатесі"
 
 #: gajim/gui_interface.py:1005 gajim/gui_interface.py:1034
-#: gajim/gui_interface.py:1055 gajim/notify.py:186 gajim/notify.py:269
+#: gajim/gui_interface.py:1055 gajim/notify.py:192 gajim/notify.py:276
 msgid "File Transfer Completed"
 msgstr "Файлдармен алмасу аяқталды"
 
 #: gajim/gui_interface.py:1009 gajim/gui_interface.py:1038
-#: gajim/gui_interface.py:1059 gajim/notify.py:187 gajim/notify.py:270
+#: gajim/gui_interface.py:1059 gajim/notify.py:193 gajim/notify.py:277
 msgid "File Transfer Stopped"
 msgstr "Файл алмасу тоқтатылған"
 
@@ -3009,42 +3018,42 @@ msgstr "Ad-hoc командалары - Gajim"
 msgid "Service returned an error."
 msgstr "Қызмет қатені қайтарған."
 
-#: gajim/notify.py:183 gajim/notify.py:203 gajim/notify.py:258
+#: gajim/notify.py:189 gajim/notify.py:209 gajim/notify.py:265
 #: gajim/common/connection_handlers_events.py:1130
 msgid "Contact Signed In"
 msgstr "Контакт кірді"
 
-#: gajim/notify.py:183 gajim/notify.py:203 gajim/notify.py:260
+#: gajim/notify.py:189 gajim/notify.py:209 gajim/notify.py:267
 #: gajim/common/connection_handlers_events.py:1136
 msgid "Contact Signed Out"
 msgstr "Контакт шықты"
 
-#: gajim/notify.py:184 gajim/notify.py:210 gajim/notify.py:262
+#: gajim/notify.py:190 gajim/notify.py:216 gajim/notify.py:269
 #: gajim/common/connection_handlers_events.py:985
 msgid "New Message"
 msgstr "Жаңа хабарлама"
 
-#: gajim/notify.py:184 gajim/notify.py:210 gajim/notify.py:262
+#: gajim/notify.py:190 gajim/notify.py:216 gajim/notify.py:269
 #: gajim/common/connection_handlers_events.py:979
 msgid "New Single Message"
 msgstr "Жаңа бір хабарлама"
 
-#: gajim/notify.py:184 gajim/notify.py:211 gajim/notify.py:263
+#: gajim/notify.py:190 gajim/notify.py:217 gajim/notify.py:270
 #: gajim/common/connection_handlers_events.py:982
 msgid "New Private Message"
 msgstr "Жаңа жеке хабарлама"
 
-#: gajim/notify.py:185 gajim/notify.py:204 gajim/notify.py:274
+#: gajim/notify.py:191 gajim/notify.py:210 gajim/notify.py:281
 #: gajim/common/connection_handlers_events.py:1124
 msgid "Contact Changed Status"
 msgstr "Контакт қалып-күйін өзгертті"
 
-#: gajim/notify.py:197
+#: gajim/notify.py:203
 #, fuzzy
 msgid "Open"
 msgstr "OpenPGP: "
 
-#: gajim/notify.py:263
+#: gajim/notify.py:270
 msgid "New E-mail"
 msgstr "Жаңа E-mail"
 
@@ -3089,7 +3098,7 @@ msgstr "Қате форма"
 msgid "The form is not filled correctly."
 msgstr "Форма дұрыс толтырылмаған."
 
-#: gajim/dialog_messages.py:62 gajim/common/helpers.py:285
+#: gajim/dialog_messages.py:62 gajim/common/helpers.py:292
 msgid "Invisible"
 msgstr "Жасырын"
 
@@ -3170,7 +3179,7 @@ msgstr "Тіркелу сәтті аяқталды"
 msgid "Registration with agent %s succeeded"
 msgstr "%s агенті көмегімен тіркелу сәтті аяқталды"
 
-#: gajim/dialog_messages.py:110 gajim/gtk/service_registration.py:190
+#: gajim/dialog_messages.py:110 gajim/gtk/service_registration.py:216
 msgid "Registration failed"
 msgstr "Тіркелу сәтсіз"
 
@@ -3835,7 +3844,7 @@ msgstr "%(nickname)s желіге кірді"
 msgid "%(nickname)s Signed Out"
 msgstr "%(nickname)s желіден шықты"
 
-#: gajim/common/contacts.py:423
+#: gajim/common/contacts.py:427
 msgid "Not in roster"
 msgstr "Ростерде емес"
 
@@ -4837,7 +4846,7 @@ msgstr ""
 "Gajim жұмыс аяқтағанда сақталады). Бұл опция плагиндерді белсенді(емес) қылу "
 "үшін ҚОЛДАНБАҢЫЗ. Орнына GUI қолданыңыз."
 
-#: gajim/common/config.py:451 gajim/common/const.py:248
+#: gajim/common/config.py:451 gajim/common/const.py:255
 msgid "Sleeping"
 msgstr "Ұйқыда"
 
@@ -4849,7 +4858,7 @@ msgstr "Жақында ораламын"
 msgid "Back in some minutes."
 msgstr "Бірнеше минутта ораламын."
 
-#: gajim/common/config.py:453 gajim/common/const.py:214
+#: gajim/common/config.py:453 gajim/common/const.py:221
 msgid "Eating"
 msgstr "Тамақ ішуде"
 
@@ -4865,7 +4874,7 @@ msgstr "Кино"
 msgid "I'm watching a movie."
 msgstr "Кино көрудемін."
 
-#: gajim/common/config.py:455 gajim/common/const.py:281
+#: gajim/common/config.py:455 gajim/common/const.py:288
 msgid "Working"
 msgstr "Жұмыс істеудемін"
 
@@ -4930,869 +4939,869 @@ msgstr "MUC хабарламасы келген кезде ойналатын д
 msgid "Tor"
 msgstr "Оған"
 
-#: gajim/common/optparser.py:51
+#: gajim/common/optparser.py:52
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
-#: gajim/common/const.py:198
+#: gajim/common/const.py:205
 msgid "Doing Chores"
 msgstr "Күнделікті істер"
 
-#: gajim/common/const.py:199
+#: gajim/common/const.py:206
 msgid "Buying Groceries"
 msgstr "Тамақты сатып алуда"
 
-#: gajim/common/const.py:200
+#: gajim/common/const.py:207
 msgid "Cleaning"
 msgstr "Тазалау"
 
-#: gajim/common/const.py:201
+#: gajim/common/const.py:208
 msgid "Cooking"
 msgstr "Тамақ жасауда"
 
-#: gajim/common/const.py:202
+#: gajim/common/const.py:209
 msgid "Doing Maintenance"
 msgstr "Қызмет көрсетуде"
 
-#: gajim/common/const.py:203
+#: gajim/common/const.py:210
 msgid "Doing the Dishes"
 msgstr "Ыдыс жууда"
 
-#: gajim/common/const.py:204
+#: gajim/common/const.py:211
 msgid "Doing the Laundry"
 msgstr "Кір жууда"
 
-#: gajim/common/const.py:205
+#: gajim/common/const.py:212
 msgid "Gardening"
 msgstr "Бақшамен айналысуда"
 
-#: gajim/common/const.py:206
+#: gajim/common/const.py:213
 msgid "Running an Errand"
 msgstr "Іссапарда"
 
-#: gajim/common/const.py:207
+#: gajim/common/const.py:214
 msgid "Walking the Dog"
 msgstr "Итті қыдыртуда"
 
-#: gajim/common/const.py:209
+#: gajim/common/const.py:216
 msgid "Drinking"
 msgstr "Ішуде"
 
-#: gajim/common/const.py:210
+#: gajim/common/const.py:217
 msgid "Having a Beer"
 msgstr "Сыра ішуде"
 
-#: gajim/common/const.py:211
+#: gajim/common/const.py:218
 msgid "Having Coffee"
 msgstr "Кофе ішуде"
 
-#: gajim/common/const.py:212
+#: gajim/common/const.py:219
 msgid "Having Tea"
 msgstr "Шай ішуде"
 
-#: gajim/common/const.py:215
+#: gajim/common/const.py:222
 msgid "Having a Snack"
 msgstr "Жеңіл тамақтану"
 
-#: gajim/common/const.py:216
+#: gajim/common/const.py:223
 msgid "Having Breakfast"
 msgstr "Таңертеңгі тамақ"
 
-#: gajim/common/const.py:217
+#: gajim/common/const.py:224
 msgid "Having Dinner"
 msgstr "Түскі тамақ"
 
-#: gajim/common/const.py:218
+#: gajim/common/const.py:225
 msgid "Having Lunch"
 msgstr "Ланч"
 
-#: gajim/common/const.py:220
+#: gajim/common/const.py:227
 msgid "Exercising"
 msgstr "Шынығу"
 
-#: gajim/common/const.py:221 gajim/common/const.py:272
+#: gajim/common/const.py:228 gajim/common/const.py:279
 msgid "Cycling"
 msgstr "Велосипед"
 
-#: gajim/common/const.py:222
+#: gajim/common/const.py:229
 msgid "Dancing"
 msgstr "Билеуде"
 
-#: gajim/common/const.py:223
+#: gajim/common/const.py:230
 msgid "Hiking"
 msgstr "Жаяу жүру"
 
-#: gajim/common/const.py:224
+#: gajim/common/const.py:231
 msgid "Jogging"
 msgstr "Жайлап жүгіру"
 
-#: gajim/common/const.py:225
+#: gajim/common/const.py:232
 msgid "Playing Sports"
 msgstr "Спортпен шұғылдануда"
 
-#: gajim/common/const.py:226
+#: gajim/common/const.py:233
 msgid "Running"
 msgstr "Жүгіруде"
 
-#: gajim/common/const.py:227
+#: gajim/common/const.py:234
 msgid "Skiing"
 msgstr "Шаңғы тебу"
 
-#: gajim/common/const.py:228
+#: gajim/common/const.py:235
 msgid "Swimming"
 msgstr "Шомылуда"
 
-#: gajim/common/const.py:229
+#: gajim/common/const.py:236
 msgid "Working out"
 msgstr "Бапталу"
 
-#: gajim/common/const.py:231
+#: gajim/common/const.py:238
 msgid "Grooming"
 msgstr "Өз-өзін күту"
 
-#: gajim/common/const.py:232
+#: gajim/common/const.py:239
 msgid "At the Spa"
 msgstr "Спа ішінде"
 
-#: gajim/common/const.py:233
+#: gajim/common/const.py:240
 msgid "Brushing Teeth"
 msgstr "Тіс жууда"
 
-#: gajim/common/const.py:234
+#: gajim/common/const.py:241
 msgid "Getting a Haircut"
 msgstr "Шаштаразда"
 
-#: gajim/common/const.py:235
+#: gajim/common/const.py:242
 msgid "Shaving"
 msgstr "Қырынуда"
 
-#: gajim/common/const.py:236
+#: gajim/common/const.py:243
 msgid "Taking a Bath"
 msgstr "Ваннада"
 
-#: gajim/common/const.py:237
+#: gajim/common/const.py:244
 msgid "Taking a Shower"
 msgstr "Душта"
 
-#: gajim/common/const.py:239
+#: gajim/common/const.py:246
 msgid "Having an Appointment"
 msgstr "Кездесу"
 
-#: gajim/common/const.py:241
+#: gajim/common/const.py:248
 msgid "Inactive"
 msgstr "Белсенді емес"
 
-#: gajim/common/const.py:242
+#: gajim/common/const.py:249
 msgid "Day Off"
 msgstr "Бос күн"
 
-#: gajim/common/const.py:243
+#: gajim/common/const.py:250
 msgid "Hanging out"
 msgstr "Қыдыруда"
 
-#: gajim/common/const.py:244
+#: gajim/common/const.py:251
 msgid "Hiding"
 msgstr "Жасырылуда"
 
-#: gajim/common/const.py:245
+#: gajim/common/const.py:252
 msgid "On Vacation"
 msgstr "Демалыста"
 
-#: gajim/common/const.py:246
+#: gajim/common/const.py:253
 msgid "Praying"
 msgstr "Сиыну"
 
-#: gajim/common/const.py:247
+#: gajim/common/const.py:254
 msgid "Scheduled Holiday"
 msgstr "Жоспарланған мейрам"
 
-#: gajim/common/const.py:249
+#: gajim/common/const.py:256
 msgid "Thinking"
 msgstr "Ойлауда"
 
-#: gajim/common/const.py:251
+#: gajim/common/const.py:258
 msgid "Relaxing"
 msgstr "Демалу"
 
-#: gajim/common/const.py:252
+#: gajim/common/const.py:259
 msgid "Fishing"
 msgstr "Балық аулауда"
 
-#: gajim/common/const.py:253
+#: gajim/common/const.py:260
 msgid "Gaming"
 msgstr "Ойнауда"
 
-#: gajim/common/const.py:254
+#: gajim/common/const.py:261
 msgid "Going out"
 msgstr "Қыдыруда"
 
-#: gajim/common/const.py:255
+#: gajim/common/const.py:262
 msgid "Partying"
 msgstr "Мереке"
 
-#: gajim/common/const.py:256
+#: gajim/common/const.py:263
 msgid "Reading"
 msgstr "Оқуда"
 
-#: gajim/common/const.py:257
+#: gajim/common/const.py:264
 msgid "Rehearsing"
 msgstr "Репитиция"
 
-#: gajim/common/const.py:258
+#: gajim/common/const.py:265
 msgid "Shopping"
 msgstr "Дүкенде"
 
-#: gajim/common/const.py:259
+#: gajim/common/const.py:266
 msgid "Smoking"
 msgstr "Темекі атуда"
 
-#: gajim/common/const.py:260
+#: gajim/common/const.py:267
 msgid "Socializing"
 msgstr "Адамдармен араласу"
 
-#: gajim/common/const.py:261
+#: gajim/common/const.py:268
 msgid "Sunbathing"
 msgstr "Күнге күю"
 
-#: gajim/common/const.py:262
+#: gajim/common/const.py:269
 msgid "Watching TV"
 msgstr "ТВ көруде"
 
-#: gajim/common/const.py:263
+#: gajim/common/const.py:270
 msgid "Watching a Movie"
 msgstr "Кино көрудемін."
 
-#: gajim/common/const.py:265
+#: gajim/common/const.py:272
 msgid "Talking"
 msgstr "Сөйлеуде"
 
-#: gajim/common/const.py:266
+#: gajim/common/const.py:273
 msgid "In Real Life"
 msgstr "Шын өмірде"
 
-#: gajim/common/const.py:267
+#: gajim/common/const.py:274
 msgid "On the Phone"
 msgstr "Телефонмен сөйлесуде"
 
-#: gajim/common/const.py:268
+#: gajim/common/const.py:275
 msgid "On Video Phone"
 msgstr "Видеофонда"
 
-#: gajim/common/const.py:270
+#: gajim/common/const.py:277
 msgid "Traveling"
 msgstr "Саяхатта"
 
-#: gajim/common/const.py:271
+#: gajim/common/const.py:278
 msgid "Commuting"
 msgstr "Қалыпты сапарда"
 
-#: gajim/common/const.py:273
+#: gajim/common/const.py:280
 msgid "Driving"
 msgstr "Жүргізуде"
 
-#: gajim/common/const.py:274
+#: gajim/common/const.py:281
 msgid "In a Car"
 msgstr "Машинада"
 
-#: gajim/common/const.py:275
+#: gajim/common/const.py:282
 msgid "On a Bus"
 msgstr "Автобуста"
 
-#: gajim/common/const.py:276
+#: gajim/common/const.py:283
 msgid "On a Plane"
 msgstr "Ұшақта"
 
-#: gajim/common/const.py:277
+#: gajim/common/const.py:284
 msgid "On a Train"
 msgstr "Пойызда"
 
-#: gajim/common/const.py:278
+#: gajim/common/const.py:285
 msgid "On a Trip"
 msgstr "Жол үстінде"
 
-#: gajim/common/const.py:279
+#: gajim/common/const.py:286
 msgid "Walking"
 msgstr "Қыдыруда"
 
-#: gajim/common/const.py:282
+#: gajim/common/const.py:289
 msgid "Coding"
 msgstr "Код жазуда"
 
-#: gajim/common/const.py:283
+#: gajim/common/const.py:290
 msgid "In a Meeting"
 msgstr "Кездесуде"
 
-#: gajim/common/const.py:284
+#: gajim/common/const.py:291
 msgid "Studying"
 msgstr "Оқуда"
 
-#: gajim/common/const.py:285
+#: gajim/common/const.py:292
 msgid "Writing"
 msgstr "Жазуда"
 
-#: gajim/common/const.py:288
+#: gajim/common/const.py:295
 msgid "Afraid"
 msgstr "Қорқуда"
 
-#: gajim/common/const.py:289
+#: gajim/common/const.py:296
 msgid "Amazed"
 msgstr "Таң қалған"
 
-#: gajim/common/const.py:290
+#: gajim/common/const.py:297
 msgid "Amorous"
 msgstr "Ғашық"
 
-#: gajim/common/const.py:291
+#: gajim/common/const.py:298
 msgid "Angry"
 msgstr "Ашулы"
 
-#: gajim/common/const.py:292
+#: gajim/common/const.py:299
 msgid "Annoyed"
 msgstr "Тітіркенген"
 
-#: gajim/common/const.py:293
+#: gajim/common/const.py:300
 msgid "Anxious"
 msgstr "Алаңдаған"
 
-#: gajim/common/const.py:294
+#: gajim/common/const.py:301
 msgid "Aroused"
 msgstr "Қоздырылған"
 
-#: gajim/common/const.py:295
+#: gajim/common/const.py:302
 msgid "Ashamed"
 msgstr "Ұялған"
 
-#: gajim/common/const.py:296
+#: gajim/common/const.py:303
 msgid "Bored"
 msgstr "Жалыққан"
 
-#: gajim/common/const.py:297
+#: gajim/common/const.py:304
 msgid "Brave"
 msgstr "Қайсар"
 
-#: gajim/common/const.py:298
+#: gajim/common/const.py:305
 msgid "Calm"
 msgstr "Тыныш"
 
-#: gajim/common/const.py:299
+#: gajim/common/const.py:306
 msgid "Cautious"
 msgstr "Абайлаған"
 
-#: gajim/common/const.py:300
+#: gajim/common/const.py:307
 msgid "Cold"
 msgstr "Суық"
 
-#: gajim/common/const.py:301
+#: gajim/common/const.py:308
 msgid "Confident"
 msgstr "Сенімді"
 
-#: gajim/common/const.py:302
+#: gajim/common/const.py:309
 msgid "Confused"
 msgstr "Шатасқан"
 
-#: gajim/common/const.py:303
+#: gajim/common/const.py:310
 msgid "Contemplative"
 msgstr "Маңырайған"
 
-#: gajim/common/const.py:304
+#: gajim/common/const.py:311
 msgid "Contented"
 msgstr "Мәз"
 
-#: gajim/common/const.py:305
+#: gajim/common/const.py:312
 msgid "Cranky"
 msgstr "Қырсық"
 
-#: gajim/common/const.py:306
+#: gajim/common/const.py:313
 msgid "Crazy"
 msgstr "Жынды"
 
-#: gajim/common/const.py:307
+#: gajim/common/const.py:314
 msgid "Creative"
 msgstr "Жасампаз"
 
-#: gajim/common/const.py:308
+#: gajim/common/const.py:315
 msgid "Curious"
 msgstr "Әуесқой"
 
-#: gajim/common/const.py:309
+#: gajim/common/const.py:316
 msgid "Dejected"
 msgstr "Қапа болған"
 
-#: gajim/common/const.py:310
+#: gajim/common/const.py:317
 msgid "Depressed"
 msgstr "Депрессияда"
 
-#: gajim/common/const.py:311
+#: gajim/common/const.py:318
 msgid "Disappointed"
 msgstr "Түңілген"
 
-#: gajim/common/const.py:312
+#: gajim/common/const.py:319
 msgid "Disgusted"
 msgstr "Жиіркенген"
 
-#: gajim/common/const.py:313
+#: gajim/common/const.py:320
 msgid "Dismayed"
 msgstr "Елегізген"
 
-#: gajim/common/const.py:314
+#: gajim/common/const.py:321
 msgid "Distracted"
 msgstr "Шашыраңқы"
 
-#: gajim/common/const.py:315
+#: gajim/common/const.py:322
 msgid "Embarrassed"
 msgstr "Қымсынған"
 
-#: gajim/common/const.py:316
+#: gajim/common/const.py:323
 msgid "Envious"
 msgstr "Қызғанған"
 
-#: gajim/common/const.py:317
+#: gajim/common/const.py:324
 msgid "Excited"
 msgstr "Қызыққан"
 
-#: gajim/common/const.py:318
+#: gajim/common/const.py:325
 msgid "Flirtatious"
 msgstr "Әсемпаз"
 
-#: gajim/common/const.py:319
+#: gajim/common/const.py:326
 msgid "Frustrated"
 msgstr "Көңілі қайтқан"
 
-#: gajim/common/const.py:320
+#: gajim/common/const.py:327
 msgid "Grateful"
 msgstr "Разы"
 
-#: gajim/common/const.py:321
+#: gajim/common/const.py:328
 msgid "Grieving"
 msgstr "Мұң"
 
-#: gajim/common/const.py:322
+#: gajim/common/const.py:329
 msgid "Grumpy"
 msgstr "Ашулы"
 
-#: gajim/common/const.py:323
+#: gajim/common/const.py:330
 msgid "Guilty"
 msgstr "Кінәлі"
 
-#: gajim/common/const.py:324
+#: gajim/common/const.py:331
 msgid "Happy"
 msgstr "Бақытты"
 
-#: gajim/common/const.py:325
+#: gajim/common/const.py:332
 msgid "Hopeful"
 msgstr "Сенімді"
 
-#: gajim/common/const.py:326
+#: gajim/common/const.py:333
 msgid "Hot"
 msgstr "Ыстық"
 
-#: gajim/common/const.py:327
+#: gajim/common/const.py:334
 msgid "Humbled"
 msgstr "Кемсітілген"
 
-#: gajim/common/const.py:328
+#: gajim/common/const.py:335
 msgid "Humiliated"
 msgstr "Қор болған"
 
-#: gajim/common/const.py:329
+#: gajim/common/const.py:336
 msgid "Hungry"
 msgstr "Аш"
 
-#: gajim/common/const.py:330
+#: gajim/common/const.py:337
 msgid "Hurt"
 msgstr "Жаралы"
 
-#: gajim/common/const.py:331
+#: gajim/common/const.py:338
 msgid "Impressed"
 msgstr "Әсер етілген"
 
-#: gajim/common/const.py:332
+#: gajim/common/const.py:339
 msgid "In Awe"
 msgstr "Қастерлеуде"
 
-#: gajim/common/const.py:333
+#: gajim/common/const.py:340
 msgid "In Love"
 msgstr "Ғашық"
 
-#: gajim/common/const.py:334
+#: gajim/common/const.py:341
 msgid "Indignant"
 msgstr "Ашынған"
 
-#: gajim/common/const.py:335
+#: gajim/common/const.py:342
 msgid "Interested"
 msgstr "Қызыққан"
 
-#: gajim/common/const.py:336
+#: gajim/common/const.py:343
 msgid "Intoxicated"
 msgstr "Мас"
 
-#: gajim/common/const.py:337
+#: gajim/common/const.py:344
 msgid "Invincible"
 msgstr "Жеңілмейтін"
 
-#: gajim/common/const.py:338
+#: gajim/common/const.py:345
 msgid "Jealous"
 msgstr "Қызғаншақ"
 
-#: gajim/common/const.py:339
+#: gajim/common/const.py:346
 msgid "Lonely"
 msgstr "Жалғыз"
 
-#: gajim/common/const.py:340
+#: gajim/common/const.py:347
 msgid "Lost"
 msgstr "Жоғалған"
 
-#: gajim/common/const.py:341
+#: gajim/common/const.py:348
 msgid "Lucky"
 msgstr "Сәтті"
 
-#: gajim/common/const.py:342
+#: gajim/common/const.py:349
 msgid "Mean"
 msgstr "Орташа"
 
-#: gajim/common/const.py:343
+#: gajim/common/const.py:350
 msgid "Moody"
 msgstr "Түнерген"
 
-#: gajim/common/const.py:344
+#: gajim/common/const.py:351
 msgid "Nervous"
 msgstr "Ашушаң"
 
-#: gajim/common/const.py:345
+#: gajim/common/const.py:352
 msgid "Neutral"
 msgstr "Бейтарап"
 
-#: gajim/common/const.py:346
+#: gajim/common/const.py:353
 msgid "Offended"
 msgstr "Ренжіген"
 
-#: gajim/common/const.py:347
+#: gajim/common/const.py:354
 msgid "Outraged"
 msgstr "Қорланған"
 
-#: gajim/common/const.py:348
+#: gajim/common/const.py:355
 msgid "Playful"
 msgstr "Ойнақы"
 
-#: gajim/common/const.py:349
+#: gajim/common/const.py:356
 msgid "Proud"
 msgstr "Мақтанған"
 
-#: gajim/common/const.py:350
+#: gajim/common/const.py:357
 msgid "Relaxed"
 msgstr "Босаң"
 
-#: gajim/common/const.py:351
+#: gajim/common/const.py:358
 msgid "Relieved"
 msgstr "Босатылған"
 
-#: gajim/common/const.py:352
+#: gajim/common/const.py:359
 msgid "Remorseful"
 msgstr "Өкінген"
 
-#: gajim/common/const.py:353
+#: gajim/common/const.py:360
 msgid "Restless"
 msgstr "Тынымсыз"
 
-#: gajim/common/const.py:354
+#: gajim/common/const.py:361
 msgid "Sad"
 msgstr "Көңілі жоқ"
 
-#: gajim/common/const.py:355
+#: gajim/common/const.py:362
 msgid "Sarcastic"
 msgstr "Мысқыл"
 
-#: gajim/common/const.py:356
+#: gajim/common/const.py:363
 msgid "Satisfied"
 msgstr "Қанағат"
 
-#: gajim/common/const.py:357
+#: gajim/common/const.py:364
 msgid "Serious"
 msgstr "Байсалды"
 
-#: gajim/common/const.py:358
+#: gajim/common/const.py:365
 msgid "Shocked"
 msgstr "Шокта"
 
-#: gajim/common/const.py:359
+#: gajim/common/const.py:366
 msgid "Shy"
 msgstr "Ұялшақ"
 
-#: gajim/common/const.py:360
+#: gajim/common/const.py:367
 msgid "Sick"
 msgstr "Ауырған"
 
-#: gajim/common/const.py:361
+#: gajim/common/const.py:368
 msgid "Sleepy"
 msgstr "Ұйқылы"
 
-#: gajim/common/const.py:362
+#: gajim/common/const.py:369
 msgid "Spontaneous"
 msgstr "Спонтанды"
 
-#: gajim/common/const.py:363
+#: gajim/common/const.py:370
 msgid "Stressed"
 msgstr "Қызулы"
 
-#: gajim/common/const.py:364
+#: gajim/common/const.py:371
 msgid "Strong"
 msgstr "Күшті"
 
-#: gajim/common/const.py:365
+#: gajim/common/const.py:372
 msgid "Surprised"
 msgstr "Таң қалған"
 
-#: gajim/common/const.py:366
+#: gajim/common/const.py:373
 msgid "Thankful"
 msgstr "Сыйлаушы"
 
-#: gajim/common/const.py:367
+#: gajim/common/const.py:374
 msgid "Thirsty"
 msgstr "Сусаған"
 
-#: gajim/common/const.py:368
+#: gajim/common/const.py:375
 msgid "Tired"
 msgstr "Шаршаған"
 
-#: gajim/common/const.py:369
+#: gajim/common/const.py:376
 msgid "Undefined"
 msgstr "Тағайындалмаған"
 
-#: gajim/common/const.py:370
+#: gajim/common/const.py:377
 msgid "Weak"
 msgstr "Әлсіз"
 
-#: gajim/common/const.py:371
+#: gajim/common/const.py:378
 msgid "Worried"
 msgstr "Абыржыған"
 
-#: gajim/common/const.py:375
-msgid "accuracy"
-msgstr ""
-
-#: gajim/common/const.py:376
-#, fuzzy
-msgid "alt"
-msgstr "бастапқысы"
-
-#: gajim/common/const.py:377
-msgid "area"
-msgstr ""
-
-#: gajim/common/const.py:378
-#, fuzzy
-msgid "bearing"
-msgstr "marine"
-
-#: gajim/common/const.py:379
-#, fuzzy
-msgid "building"
-msgstr "Жасырылуда"
-
-#: gajim/common/const.py:380
-#, fuzzy
-msgid "country"
-msgstr "Тіркелгі"
-
-#: gajim/common/const.py:381
-#, fuzzy
-msgid "countrycode"
-msgstr "Тіркелгі бағаны"
-
 #: gajim/common/const.py:382
-msgid "datum"
+msgid "accuracy"
 msgstr ""
 
 #: gajim/common/const.py:383
 #, fuzzy
+msgid "alt"
+msgstr "бастапқысы"
+
+#: gajim/common/const.py:384
+msgid "area"
+msgstr ""
+
+#: gajim/common/const.py:385
+#, fuzzy
+msgid "bearing"
+msgstr "marine"
+
+#: gajim/common/const.py:386
+#, fuzzy
+msgid "building"
+msgstr "Жасырылуда"
+
+#: gajim/common/const.py:387
+#, fuzzy
+msgid "country"
+msgstr "Тіркелгі"
+
+#: gajim/common/const.py:388
+#, fuzzy
+msgid "countrycode"
+msgstr "Тіркелгі бағаны"
+
+#: gajim/common/const.py:389
+msgid "datum"
+msgstr ""
+
+#: gajim/common/const.py:390
+#, fuzzy
 msgid "description"
 msgstr "Сипаттамасы"
 
-#: gajim/common/const.py:384
+#: gajim/common/const.py:391
 #, fuzzy
 msgid "error"
 msgstr "Қате"
 
-#: gajim/common/const.py:385
+#: gajim/common/const.py:392
 msgid "floor"
 msgstr ""
 
-#: gajim/common/const.py:386
+#: gajim/common/const.py:393
 msgid "lat"
 msgstr ""
 
-#: gajim/common/const.py:387
+#: gajim/common/const.py:394
 msgid "locality"
 msgstr ""
 
-#: gajim/common/const.py:388
+#: gajim/common/const.py:395
 #, fuzzy
 msgid "lon"
 msgstr "бір"
 
-#: gajim/common/const.py:389
+#: gajim/common/const.py:396
 msgid "postalcode"
 msgstr ""
 
-#: gajim/common/const.py:390
+#: gajim/common/const.py:397
 msgid "region"
 msgstr ""
 
-#: gajim/common/const.py:391
+#: gajim/common/const.py:398
 msgid "room"
 msgstr "бөлме"
 
-#: gajim/common/const.py:392
+#: gajim/common/const.py:399
 msgid "speed"
 msgstr ""
 
-#: gajim/common/const.py:393
+#: gajim/common/const.py:400
 #, fuzzy
 msgid "street"
 msgstr "stream"
 
-#: gajim/common/const.py:394
+#: gajim/common/const.py:401
 msgid "text"
 msgstr ""
 
-#: gajim/common/const.py:395
+#: gajim/common/const.py:402
 msgid "timestamp"
 msgstr ""
 
-#: gajim/common/const.py:396
+#: gajim/common/const.py:403
 msgid "URI"
 msgstr ""
 
-#: gajim/common/const.py:401
+#: gajim/common/const.py:408
 msgid "Unable to get issuer certificate"
 msgstr "Шығарушы сертификатын алу мүмкін емес"
 
-#: gajim/common/const.py:402
+#: gajim/common/const.py:409
 msgid "Unable to get certificate CRL"
 msgstr "Сертификат үшін CRL алу мүмкін емес"
 
-#: gajim/common/const.py:403
+#: gajim/common/const.py:410
 msgid "Unable to decrypt certificate's signature"
 msgstr "Сертификат қолтаңбасын декодалау мүмкін емес"
 
-#: gajim/common/const.py:404
+#: gajim/common/const.py:411
 msgid "Unable to decrypt CRL's signature"
 msgstr "CRL қолтаңбасын декодалау мүмкін емес"
 
-#: gajim/common/const.py:405
+#: gajim/common/const.py:412
 msgid "Unable to decode issuer public key"
 msgstr "Шығарушының ортақ кілтін декодалау мүмкін емес"
 
-#: gajim/common/const.py:406
+#: gajim/common/const.py:413
 msgid "Certificate signature failure"
 msgstr "Сертификат қолтаңба қатесі"
 
-#: gajim/common/const.py:407
+#: gajim/common/const.py:414
 msgid "CRL signature failure"
 msgstr "CRL қолтаңба қатесі"
 
-#: gajim/common/const.py:408
+#: gajim/common/const.py:415
 msgid "Certificate is not yet valid"
 msgstr "Сертификат мерзімі әлі басталмаған"
 
-#: gajim/common/const.py:409
+#: gajim/common/const.py:416
 msgid "Certificate has expired"
 msgstr "Сертификат мерзімі біткен"
 
-#: gajim/common/const.py:410
+#: gajim/common/const.py:417
 msgid "CRL is not yet valid"
 msgstr "CRL мерзімі әлі басталмаған"
 
-#: gajim/common/const.py:411
+#: gajim/common/const.py:418
 msgid "CRL has expired"
 msgstr "CRL мерзімі біткен"
 
-#: gajim/common/const.py:412
+#: gajim/common/const.py:419
 msgid "Format error in certificate's notBefore field"
 msgstr "Сертификаттың notBefore өрісіндегі пішім қатесі"
 
-#: gajim/common/const.py:413
+#: gajim/common/const.py:420
 msgid "Format error in certificate's notAfter field"
 msgstr "Сертификаттың notAfter өрісіндегі пішім қатесі"
 
-#: gajim/common/const.py:414
+#: gajim/common/const.py:421
 msgid "Format error in CRL's lastUpdate field"
 msgstr "CRL lastUpdate өрісіндегі пішім қатесі"
 
-#: gajim/common/const.py:415
+#: gajim/common/const.py:422
 msgid "Format error in CRL's nextUpdate field"
 msgstr "CRL nextUpdate өрісіндегі пішім қатесі"
 
-#: gajim/common/const.py:416
+#: gajim/common/const.py:423
 msgid "Out of memory"
 msgstr "Жады жеткіліксіз"
 
-#: gajim/common/const.py:417
+#: gajim/common/const.py:424
 msgid "Self signed certificate"
 msgstr "Өздігінен қолтаңбасы бар сертификат"
 
-#: gajim/common/const.py:418
+#: gajim/common/const.py:425
 msgid "Self signed certificate in certificate chain"
 msgstr "Сертификаттар тобындағы өздігінен қолтаңбасы бар сертификат"
 
-#: gajim/common/const.py:419
+#: gajim/common/const.py:426
 msgid "Unable to get local issuer certificate"
 msgstr "Жергілікті шығарушы сертификатын алу мүмкін емес"
 
-#: gajim/common/const.py:420
+#: gajim/common/const.py:427
 msgid "Unable to verify the first certificate"
 msgstr "Бірінші сертификатты тексеру мүмкін емес"
 
-#: gajim/common/const.py:421
+#: gajim/common/const.py:428
 msgid "Certificate chain too long"
 msgstr "Сертификаттар тізімі тым үлкен"
 
-#: gajim/common/const.py:422
+#: gajim/common/const.py:429
 msgid "Certificate revoked"
 msgstr "Сертификат қайта шақырылған"
 
-#: gajim/common/const.py:423
+#: gajim/common/const.py:430
 msgid "Invalid CA certificate"
 msgstr "CA қате сертификаты"
 
-#: gajim/common/const.py:424
+#: gajim/common/const.py:431
 msgid "Path length constraint exceeded"
 msgstr "Жол ұзындық шектеуі асырылған"
 
-#: gajim/common/const.py:425
+#: gajim/common/const.py:432
 msgid "Unsupported certificate purpose"
 msgstr "Қолдау жоқ сертификат мақсаты"
 
-#: gajim/common/const.py:426
+#: gajim/common/const.py:433
 msgid "Certificate not trusted"
 msgstr "Сертификатқа сенім жоқ"
 
-#: gajim/common/const.py:427
+#: gajim/common/const.py:434
 msgid "Certificate rejected"
 msgstr "Сертификат тайдырылған"
 
-#: gajim/common/const.py:428
+#: gajim/common/const.py:435
 msgid "Subject issuer mismatch"
 msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
-#: gajim/common/const.py:429
+#: gajim/common/const.py:436
 msgid "Authority and subject key identifier mismatch"
 msgstr ""
 "Сертификаттау орталығы мен иесі кілттерінің идентификаторлары өзара сәйкес "
 "емес"
 
-#: gajim/common/const.py:430
+#: gajim/common/const.py:437
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
 "Сертификаттау орталығы мен ұсынушы кілттерінің идентификаторлары өзара "
 "сәйкес емес"
 
-#: gajim/common/const.py:431
+#: gajim/common/const.py:438
 msgid "Key usage does not include certificate signing"
 msgstr "Кілтті қолдану сертификаттарға қолтаңбаны қою қамтымайды"
 
-#: gajim/common/const.py:432
+#: gajim/common/const.py:439
 msgid "Application verification failure"
 msgstr "Қолданбаны растау қатесі"
 
@@ -5820,51 +5829,51 @@ msgstr "%(name)s сервері тіркелу сұранымына қате ж�
 msgid "Server %s provided a different registration form"
 msgstr "%s сервері басқа тіркелу формасын ұсынды"
 
-#: gajim/common/connection.py:1091
+#: gajim/common/connection.py:1090
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1094
+#: gajim/common/connection.py:1093
 #, fuzzy, python-format
 msgid "Could not connect to \"%(host)s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1096 gajim/common/connection.py:1318
+#: gajim/common/connection.py:1095 gajim/common/connection.py:1317
 msgid "Check your connection or try again later."
 msgstr "Байланысты тексеріңіз не кейін қайталап көріңіз."
 
-#: gajim/common/connection.py:1101
+#: gajim/common/connection.py:1100
 #, python-format
 msgid "Server replied: %s"
 msgstr "Сервер жауабы: %s"
 
-#: gajim/common/connection.py:1116
+#: gajim/common/connection.py:1115
 msgid "Connection to proxy failed"
 msgstr "Проксиге байланыс орнату сәтсіз аяқталды"
 
-#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
+#: gajim/common/connection.py:1154 gajim/common/connection.py:1275
 #, python-format
 msgid "Could not connect to account %s"
 msgstr "%s тіркелгісіне байланыс орнату сәтсіз аяқталды"
 
-#: gajim/common/connection.py:1156 gajim/common/connection.py:1277
+#: gajim/common/connection.py:1155 gajim/common/connection.py:1276
 #, python-format
 msgid "Connection with account %s has been lost. Retry connecting."
 msgstr "%s тіркелгісімен байланыс үзілген. Қайтадан орнатып көреміз."
 
-#: gajim/common/connection.py:1317 gajim/common/connection.py:1633
+#: gajim/common/connection.py:1316 gajim/common/connection.py:1632
 #: gajim/common/zeroconf/connection_zeroconf.py:201
 #, python-format
 msgid "Could not connect to \"%s\""
 msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#: gajim/common/connection.py:1355
+#: gajim/common/connection.py:1354
 #, python-format
 msgid "Authentication failed with \"%s\""
 msgstr "\"%s\" үішн аутентификация сәтсіз"
 
-#: gajim/common/connection.py:1356
+#: gajim/common/connection.py:1355
 msgid "Please check your login and password for correctness."
 msgstr "Тіркелгі атын мен пароліңізді тексеріңіз."
 
@@ -5985,253 +5994,253 @@ msgstr "видео кірісі"
 msgid "video output"
 msgstr "видео шығысы"
 
-#: gajim/common/helpers.py:189
+#: gajim/common/helpers.py:196
 #, fuzzy
 msgid "Server must be between 1 and 1023 bytes"
 msgstr "Сервер 1 мен 1023 таңба арасында болуы керек"
 
-#: gajim/common/helpers.py:193
+#: gajim/common/helpers.py:200
 msgid "Invalid character in hostname."
 msgstr "Хост атындағы қате таңба."
 
-#: gajim/common/helpers.py:195
+#: gajim/common/helpers.py:202
 msgid "Server address required."
 msgstr "Сервер адресі керек."
 
-#: gajim/common/helpers.py:199
+#: gajim/common/helpers.py:206
 #, fuzzy
 msgid "Username must be between 1 and 1023 bytes"
 msgstr "Пайдаланушы аты 1 мен 1023 таңба арасында болуы керек"
 
-#: gajim/common/helpers.py:203
+#: gajim/common/helpers.py:210
 msgid "Invalid character in username."
 msgstr "Пайдаланушы атындағы қате таңба."
 
-#: gajim/common/helpers.py:209
+#: gajim/common/helpers.py:216
 #, fuzzy
 msgid "Resource must be between 1 and 1023 bytes"
 msgstr "Сервер 1 мен 1023 таңба арасында болуы керек"
 
-#: gajim/common/helpers.py:213
+#: gajim/common/helpers.py:220
 msgid "Invalid character in resource."
 msgstr "Ресурс атындағы қате таңба."
 
-#: gajim/common/helpers.py:251
+#: gajim/common/helpers.py:258
 msgid "_Busy"
 msgstr "_Бос емес"
 
-#: gajim/common/helpers.py:256
+#: gajim/common/helpers.py:263
 msgid "_Not Available"
 msgstr "Қо_л жетерсіз"
 
-#: gajim/common/helpers.py:261
+#: gajim/common/helpers.py:268
 msgid "_Free for Chat"
 msgstr "_Чатқа дайын"
 
-#: gajim/common/helpers.py:266
+#: gajim/common/helpers.py:273
 msgid "?user status:_Available"
 msgstr "?user status:_Осында"
 
-#: gajim/common/helpers.py:270
+#: gajim/common/helpers.py:277
 msgid "Connecting"
 msgstr "Байланыс орнату"
 
-#: gajim/common/helpers.py:273
+#: gajim/common/helpers.py:280
 msgid "A_way"
 msgstr "К_етіп қалған"
 
-#: gajim/common/helpers.py:278
+#: gajim/common/helpers.py:285
 msgid "_Offline"
 msgstr "Желі_де емес"
 
-#: gajim/common/helpers.py:283
+#: gajim/common/helpers.py:290
 msgid "_Invisible"
 msgstr "_Жасырын"
 
-#: gajim/common/helpers.py:289
+#: gajim/common/helpers.py:296
 msgid "?contact has status:Unknown"
 msgstr "?контакт күйі:Белгісіз"
 
-#: gajim/common/helpers.py:291
+#: gajim/common/helpers.py:298
 msgid "?contact has status:Has errors"
 msgstr "?контакт күйі:Қателері бар"
 
-#: gajim/common/helpers.py:306
+#: gajim/common/helpers.py:313
 msgid "?Subscription we already have:None"
 msgstr "?Subscription we already have:Жоқ"
 
-#: gajim/common/helpers.py:308
+#: gajim/common/helpers.py:315
 msgid "To"
 msgstr "Оған"
 
-#: gajim/common/helpers.py:310
+#: gajim/common/helpers.py:317
 msgid "From"
 msgstr "Одан"
 
-#: gajim/common/helpers.py:312
+#: gajim/common/helpers.py:319
 msgid "Both"
 msgstr "Екеуі де"
 
-#: gajim/common/helpers.py:314 gajim/gtk/server_info.py:133
+#: gajim/common/helpers.py:321 gajim/gtk/server_info.py:133
 #, fuzzy
 msgid "Unknown"
 msgstr "?ОЖ:Белгісіз"
 
-#: gajim/common/helpers.py:320
+#: gajim/common/helpers.py:327
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Жоқ"
 
-#: gajim/common/helpers.py:322
+#: gajim/common/helpers.py:329
 msgid "Subscribe"
 msgstr "Жазылу"
 
-#: gajim/common/helpers.py:331
+#: gajim/common/helpers.py:338
 msgid "?Group Chat Contact Role:None"
 msgstr "?Group Chat Contact Role:Жоқ"
 
-#: gajim/common/helpers.py:334
+#: gajim/common/helpers.py:341
 msgid "Moderators"
 msgstr "Модераторлар"
 
-#: gajim/common/helpers.py:336
+#: gajim/common/helpers.py:343
 msgid "Moderator"
 msgstr "Модератор"
 
-#: gajim/common/helpers.py:339
+#: gajim/common/helpers.py:346
 msgid "Participants"
 msgstr "Қатысушылар"
 
-#: gajim/common/helpers.py:341
+#: gajim/common/helpers.py:348
 msgid "Participant"
 msgstr "Қатысушы"
 
-#: gajim/common/helpers.py:344
+#: gajim/common/helpers.py:351
 msgid "Visitors"
 msgstr "Қонақтар"
 
-#: gajim/common/helpers.py:346
+#: gajim/common/helpers.py:353
 msgid "Visitor"
 msgstr "Қонақ"
 
-#: gajim/common/helpers.py:397
+#: gajim/common/helpers.py:404
 msgid "is paying attention to the conversation"
 msgstr "хабарламаға көңіл аударды"
 
-#: gajim/common/helpers.py:399
+#: gajim/common/helpers.py:406
 msgid "is doing something else"
 msgstr "басқа нәрсемен айналысуда"
 
-#: gajim/common/helpers.py:401
+#: gajim/common/helpers.py:408
 #, fuzzy
 msgid "is composing a message…"
 msgstr "хабарлама жазып тұр..."
 
-#: gajim/common/helpers.py:404
+#: gajim/common/helpers.py:411
 msgid "paused composing a message"
 msgstr "хабарлама жазуды аялдатқан"
 
-#: gajim/common/helpers.py:406
+#: gajim/common/helpers.py:413
 msgid "has closed the chat window or tab"
 msgstr "чат терезесін не бетін жапты"
 
-#: gajim/common/helpers.py:576
+#: gajim/common/helpers.py:577
 #, python-format
 msgid "%s GiB"
 msgstr "%s Гиб"
 
-#: gajim/common/helpers.py:579
+#: gajim/common/helpers.py:580
 #, python-format
 msgid "%s GB"
 msgstr "%s ГБ"
 
-#: gajim/common/helpers.py:583
+#: gajim/common/helpers.py:584
 #, python-format
 msgid "%s MiB"
 msgstr "%s МиБ"
 
-#: gajim/common/helpers.py:586
+#: gajim/common/helpers.py:587
 #, python-format
 msgid "%s MB"
 msgstr "%s МБ"
 
-#: gajim/common/helpers.py:590
+#: gajim/common/helpers.py:591
 #, python-format
 msgid "%s KiB"
 msgstr "%s КиБ"
 
-#: gajim/common/helpers.py:593
+#: gajim/common/helpers.py:594
 #, python-format
 msgid "%s KB"
 msgstr "%s КБ"
 
-#: gajim/common/helpers.py:596
+#: gajim/common/helpers.py:597
 #, python-format
 msgid "%s B"
 msgstr "%s Б"
 
-#: gajim/common/helpers.py:985 gajim/common/helpers.py:992
+#: gajim/common/helpers.py:986 gajim/common/helpers.py:993
 #, python-format
 msgid "%d message pending"
 msgid_plural "%d messages pending"
 msgstr[0] "%d хабарлама бар"
 msgstr[1] "%d хабарлама бар"
 
-#: gajim/common/helpers.py:999
+#: gajim/common/helpers.py:1000
 #, fuzzy, python-format
 msgid "from room %s"
 msgstr " %s бөлмесінен"
 
-#: gajim/common/helpers.py:1002 gajim/common/helpers.py:1019
+#: gajim/common/helpers.py:1003 gajim/common/helpers.py:1020
 #, fuzzy, python-format
 msgid "from user %s"
 msgstr " %s пайдаланушысынан"
 
-#: gajim/common/helpers.py:1004
+#: gajim/common/helpers.py:1005
 #, fuzzy, python-format
 msgid "from %s"
 msgstr ", қайдан: %s"
 
-#: gajim/common/helpers.py:1011 gajim/common/helpers.py:1017
+#: gajim/common/helpers.py:1012 gajim/common/helpers.py:1018
 #, python-format
 msgid "%d event pending"
 msgid_plural "%d events pending"
 msgstr[0] "%d оқиға бар"
 msgstr[1] "%d оқиға бар"
 
-#: gajim/common/helpers.py:1035 gajim/common/helpers.py:1047
+#: gajim/common/helpers.py:1036 gajim/common/helpers.py:1048
 #: gajim/data/gui/roster_window.ui:85 data/org.gajim.Gajim.desktop.in:4
 #: data/org.gajim.Gajim.appdata.xml.in:9
 msgid "Gajim"
 msgstr "Gajim"
 
-#: gajim/common/helpers.py:1049
+#: gajim/common/helpers.py:1050
 #, python-format
 msgid "Gajim - %s"
 msgstr "Gajim - %s"
 
-#: gajim/common/helpers.py:1246 gajim/data/gui/add_new_contact_window.ui:20
+#: gajim/common/helpers.py:1247 gajim/data/gui/add_new_contact_window.ui:20
 msgid "I would like to add you to my contact list."
 msgstr "Мен сізді өзімнің контакттар тізіміне қосқым келеді."
 
-#: gajim/common/helpers.py:1248
+#: gajim/common/helpers.py:1249
 msgid "Hello, I am $name."
 msgstr "Сәлем, мен - $name."
 
-#: gajim/common/helpers.py:1352 gajim/common/helpers.py:1361
-#: gajim/common/helpers.py:1419
+#: gajim/common/helpers.py:1353 gajim/common/helpers.py:1362
+#: gajim/common/helpers.py:1420
 msgid "Timeout loading image"
 msgstr "Суретті жүктеу уақыты бітті"
 
-#: gajim/common/helpers.py:1371 gajim/common/helpers.py:1417
+#: gajim/common/helpers.py:1372 gajim/common/helpers.py:1418
 msgid "Image is too big"
 msgstr "Сурет тым үлкен"
 
-#: gajim/common/helpers.py:1382
+#: gajim/common/helpers.py:1383
 #, fuzzy
 msgid "PyCURL is not installed"
 msgstr "CRL мерзімі әлі басталмаған"
 
-#: gajim/common/helpers.py:1421
+#: gajim/common/helpers.py:1422
 #, fuzzy
 msgid "Error loading image"
 msgstr "Суретті жүктеу уақыты бітті"
@@ -6334,7 +6343,7 @@ msgid "Error while adding service. %s"
 msgstr "Қызметті қосу қатесі. %s"
 
 #: gajim/common/zeroconf/connection_handlers_zeroconf.py:176
-#: gajim/common/modules/message.py:281
+#: gajim/common/modules/message.py:286
 msgid "message"
 msgstr "хабарлама"
 
@@ -6857,7 +6866,7 @@ msgstr "<b>Туған күні:</b>"
 
 #: gajim/data/gui/profile_window.ui:370
 #: gajim/data/gui/vcard_information_window.ui:689
-#: gajim/data/gui/plugins_window.ui:319
+#: gajim/data/gui/plugins_window.ui:323
 #, fuzzy
 msgid "Homepage"
 msgstr "Үй парағы:"
@@ -7117,12 +7126,12 @@ msgstr "Қаріп"
 msgid "Clear formatting"
 msgstr "Пішімдеуді тазарту"
 
-#: gajim/data/gui/groupchat_control.ui:286 gajim/data/gui/chat_control.ui:859
+#: gajim/data/gui/groupchat_control.ui:286 gajim/data/gui/chat_control.ui:874
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Клиент сертификатын таңдау"
 
-#: gajim/data/gui/groupchat_control.ui:332 gajim/data/gui/chat_control.ui:641
+#: gajim/data/gui/groupchat_control.ui:332 gajim/data/gui/chat_control.ui:656
 #, fuzzy
 msgid "Show a list of emojis (Alt+M)"
 msgstr "Смайликтер тізімін көрсету (Alt+M)"
@@ -7193,7 +7202,11 @@ msgstr "<b>Қаріп</b>"
 msgid "<b>#</b>"
 msgstr "<b>Қаріп</b>"
 
-#: gajim/data/gui/chat_control.ui:772
+#: gajim/data/gui/chat_control.ui:453
+msgid "The last message was written on a mobile client"
+msgstr ""
+
+#: gajim/data/gui/chat_control.ui:787
 msgid "#"
 msgstr "#"
 
@@ -7650,7 +7663,7 @@ msgstr "<b>Қалып-күй хабарламалары</b>"
 msgid "<b>Preset Status Messages</b>"
 msgstr "<b>Алдын-ала орнатылған қалып-күй хабарламалары</b>"
 
-#: gajim/data/gui/preferences_window.ui:1509 gajim/data/gui/themes_window.ui:64
+#: gajim/data/gui/preferences_window.ui:1509 gajim/data/gui/themes_window.ui:65
 #, fuzzy
 msgid "Themes"
 msgstr "Тақырыбы"
@@ -8210,55 +8223,55 @@ msgstr "<b>Хабарлама:</b>"
 msgid "Plugins"
 msgstr "Плагиндер"
 
-#: gajim/data/gui/plugins_window.ui:71
+#: gajim/data/gui/plugins_window.ui:74
 #, fuzzy
 msgid "Install Plugin from File"
 msgstr "Орнату"
 
-#: gajim/data/gui/plugins_window.ui:72
+#: gajim/data/gui/plugins_window.ui:75
 #, fuzzy
 msgid "Install from File…"
 msgstr "Орнату"
 
-#: gajim/data/gui/plugins_window.ui:86
+#: gajim/data/gui/plugins_window.ui:89
 #, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Өшіру"
 
-#: gajim/data/gui/plugins_window.ui:132
+#: gajim/data/gui/plugins_window.ui:135
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Плагин сәтсіз"
 
-#: gajim/data/gui/plugins_window.ui:149
+#: gajim/data/gui/plugins_window.ui:152
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Плагиндер"
 
-#: gajim/data/gui/plugins_window.ui:231
+#: gajim/data/gui/plugins_window.ui:234
 #, fuzzy
 msgid "<Description>"
 msgstr "Сипаттамасы"
 
-#: gajim/data/gui/plugins_window.ui:254
+#: gajim/data/gui/plugins_window.ui:258
 #, fuzzy
 msgid "Version"
 msgstr "Нұсқасы:"
 
-#: gajim/data/gui/plugins_window.ui:286
+#: gajim/data/gui/plugins_window.ui:290
 #, fuzzy
 msgid "Authors"
 msgstr "Авторлары:"
 
-#: gajim/data/gui/plugins_window.ui:334
+#: gajim/data/gui/plugins_window.ui:338
 msgid "<empty>"
 msgstr "<бос>"
 
-#: gajim/data/gui/plugins_window.ui:364
+#: gajim/data/gui/plugins_window.ui:368
 msgid "Installed"
 msgstr "Орнатылған"
 
-#: gajim/data/gui/plugins_window.ui:383
+#: gajim/data/gui/plugins_window.ui:384
 msgid ""
 "Plug-in decription should be displayed here. This text will be erased during "
 "PluginsWindow initialization."
@@ -8359,7 +8372,7 @@ msgstr "Реті:"
 msgid "Manage sounds"
 msgstr "Тіркелгілерді басқару"
 
-#: gajim/data/gui/manage_sounds_window.ui:52 gajim/plugins/gui.py:90
+#: gajim/data/gui/manage_sounds_window.ui:52 gajim/plugins/gui.py:99
 msgid "Active"
 msgstr "Белсенді"
 
@@ -8496,6 +8509,11 @@ msgstr "Баптаулар"
 #, fuzzy
 msgid "Quit"
 msgstr "_Шығу"
+
+#: gajim/data/gui/httpupload_progress_dialog.ui:71
+#, fuzzy
+msgid "Cancel Upload"
+msgstr "_Бас тарту"
 
 #: gajim/data/gui/features_window.ui:22
 msgid "<b>List of possible features in Gajim:</b>"
@@ -8863,22 +8881,22 @@ msgstr ""
 msgid "Conversation History"
 msgstr "Чат тарихы"
 
-#: gajim/data/gui/history_window.ui:314
+#: gajim/data/gui/history_window.ui:315
 #, fuzzy
 msgid "Chat"
 msgstr "Чаттар"
 
-#: gajim/data/gui/history_window.ui:328
+#: gajim/data/gui/history_window.ui:329
 #, fuzzy
 msgid "Record history for this chat"
 msgstr "Бұл сертификат үшін осы қатені елемеу."
 
-#: gajim/data/gui/history_window.ui:341
+#: gajim/data/gui/history_window.ui:344
 #, fuzzy
 msgid "Record History"
 msgstr "Соңғылар:"
 
-#: gajim/data/gui/history_window.ui:358
+#: gajim/data/gui/history_window.ui:362
 #, fuzzy
 msgid "Ttitle"
 msgstr "А_тауы:"
@@ -9301,13 +9319,13 @@ msgstr "%(node)s PEP торабы өшірілген жоқ: %(message)s"
 msgid "Configure %s"
 msgstr "%s баптау"
 
-#: gajim/gtk/service_registration.py:136 gajim/gtk/service_registration.py:150
-#: gajim/gtk/service_registration.py:157
+#: gajim/gtk/service_registration.py:143 gajim/gtk/service_registration.py:157
+#: gajim/gtk/service_registration.py:164
 #, fuzzy
 msgid "Register"
 msgstr "Ті_ркелу"
 
-#: gajim/gtk/service_registration.py:167 gajim/gtk/service_registration.py:179
+#: gajim/gtk/service_registration.py:193 gajim/gtk/service_registration.py:205
 #, fuzzy
 msgid "Registration successful"
 msgstr "Тіркелу сәтті аяқталды"
@@ -9665,30 +9683,30 @@ msgid ""
 "theme first."
 msgstr ""
 
-#: gajim/gtk/history.py:406 gajim/gtk/history.py:460
+#: gajim/gtk/history.py:410 gajim/gtk/history.py:464
 msgid "Disk Error"
 msgstr "Диск қатесі"
 
-#: gajim/gtk/history.py:571
+#: gajim/gtk/history.py:575
 #, python-format
 msgid "%(nick)s is now %(status)s: %(status_msg)s"
 msgstr "%(nick)s қазір %(status)s: %(status_msg)s"
 
-#: gajim/gtk/history.py:584
+#: gajim/gtk/history.py:588
 #, python-format
 msgid "Error: %s"
 msgstr "Қате: %s"
 
-#: gajim/gtk/history.py:586
+#: gajim/gtk/history.py:590
 msgid "Error"
 msgstr "Қате"
 
-#: gajim/gtk/history.py:588
+#: gajim/gtk/history.py:592
 #, python-format
 msgid "Status is now: %(status)s: %(status_msg)s"
 msgstr "Қазір қалып-күйі: %(status)s: %(status_msg)s"
 
-#: gajim/gtk/history.py:592
+#: gajim/gtk/history.py:596
 #, python-format
 msgid "Status is now: %(status)s"
 msgstr "Қазір қалып-күйі: %(status)s"
@@ -10561,37 +10579,41 @@ msgid "Archive empty"
 msgstr "Архив бос"
 
 #: gajim/plugins/pluginmanager.py:753 gajim/plugins/pluginmanager.py:761
-#: gajim/plugins/gui.py:241
+#: gajim/plugins/gui.py:254
 msgid "Archive is malformed"
 msgstr "Архив қате"
 
-#: gajim/plugins/pluginmanager.py:769 gajim/plugins/gui.py:265
-#: gajim/plugins/gui.py:273
+#: gajim/plugins/pluginmanager.py:769 gajim/plugins/gui.py:278
+#: gajim/plugins/gui.py:286
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
 
-#: gajim/plugins/gui.py:79
+#: gajim/plugins/gui.py:81
+msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+msgstr ""
+
+#: gajim/plugins/gui.py:88
 msgid "Plugin"
 msgstr "Плагин"
 
-#: gajim/plugins/gui.py:139
+#: gajim/plugins/gui.py:148
 #, fuzzy, python-format
 msgid "Warning: %s"
 msgstr "%s банға жіберу"
 
-#: gajim/plugins/gui.py:194
+#: gajim/plugins/gui.py:203
 msgid "Plugin failed"
 msgstr "Плагин сәтсіз"
 
-#: gajim/plugins/gui.py:233
+#: gajim/plugins/gui.py:242
 msgid "Unable to properly remove the plugin"
 msgstr "Плагинді дұрыс өшіру мүмкін емес"
 
-#: gajim/plugins/gui.py:265
+#: gajim/plugins/gui.py:278
 msgid "Overwrite?"
 msgstr "Үстінен жазу керек пе?"
 
-#: gajim/plugins/gui.py:296
+#: gajim/plugins/gui.py:309
 msgid "Configuration"
 msgstr "Баптаулар"
 
@@ -10737,6 +10759,9 @@ msgstr "Соңғылар:"
 #, fuzzy
 msgid "Plugin manager"
 msgstr "Плагин сәтсіз"
+
+#~ msgid "Stopped"
+#~ msgstr "Тоқтатылған"
 
 #~ msgid "Error reading file:"
 #~ msgstr "Файлды оқу қатесі:"
