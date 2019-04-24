@@ -296,7 +296,11 @@ class Discovery(BaseModule):
                 self._log.info('MUC disco error: %s', error)
                 app.nec.push_incoming_event(
                     InformationEvent(
-                        None, dialog_name='unable-join-groupchat', args=error))
+                        None,
+                        dialog_name='unable-join-groupchat',
+                        kwargs={
+                            'server':stanza.getFrom(),
+                            'error': error}))
             return
 
         self._log.info('MUC info received: %s', stanza.getFrom())

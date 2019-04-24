@@ -108,8 +108,8 @@ messages = {
         ErrorDialog),
 
     'unable-join-groupchat': Message(
-        _('Unable to join Groupchat'),
-        '%s',
+        _('Unable to Join Group Chat'),
+        '%(server)s\n%(error)s',
         ErrorDialog),
 
     'gstreamer-error': Message(
