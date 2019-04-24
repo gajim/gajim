@@ -18,6 +18,7 @@ from collections import namedtuple
 
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Pango
 
 from gajim.common import app
@@ -894,38 +895,67 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui = get_builder('certificate_dialog.ui')
         self.add(self._ui.certificate_box)
 
+        self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
+        # Get data for labels and copy button
         issuer = cert.get_issuer()
         subject = cert.get_subject()
 
-        self._ui.label_cert_for_account.set_text(
-            _('Certificate for account\n%s') % account)
-
-        self._ui.data_it_common_name.set_text(subject.commonName or '')
-        self._ui.data_it_organization.set_text(subject.organizationName or '')
-        self._ui.data_it_organizational_unit.set_text(
-            subject.organizationalUnitName or '')
-        self._ui.data_it_serial_number.set_text(str(cert.get_serial_number()))
-
-        self._ui.data_ib_common_name.set_text(issuer.commonName or '')
-        self._ui.data_ib_organization.set_text(issuer.organizationName or '')
-        self._ui.data_ib_organizational_unit.set_text(
-            issuer.organizationalUnitName or '')
-
+        self._headline = _('Certificate for account\n%s') % account
+        self._it_common_name = subject.commonName or ''
+        self._it_organization = subject.organizationName or ''
+        self._it_org_unit = subject.organizationalUnitName or ''
+        self._it_serial_number = str(cert.get_serial_number())
+        self._ib_common_name = issuer.commonName or ''
+        self._ib_organization = issuer.organizationName or ''
+        self._ib_org_unit = issuer.organizationalUnitName or ''
         issued = datetime.strptime(cert.get_notBefore().decode('ascii'),
-                                   '%Y%m%d%H%M%SZ')
-        issued = issued.strftime('%B %d, %Y, %H:%M:%S %z')
-        self._ui.data_issued_on.set_text(issued)
+                                         '%Y%m%d%H%M%SZ')
+        self._issued = issued.strftime('%B %d, %Y, %H:%M:%S %z')
         expires = datetime.strptime(cert.get_notAfter().decode('ascii'),
-                                    '%Y%m%d%H%M%SZ')
-        expires = expires.strftime('%B %d, %Y, %H:%M:%S %z')
-        self._ui.data_expires_on.set_text(expires)
+                                          '%Y%m%d%H%M%SZ')
+        self._expires = expires.strftime('%B %d, %Y, %H:%M:%S %z')
+        self._sha1 = cert.digest('sha1').decode('utf-8')
+        self._sha256 = cert.digest('sha256').decode('utf-8')
 
-        self._ui.data_sha1.set_text(cert.digest('sha1').decode('utf-8'))
-        self._ui.data_sha256.set_text(cert.digest('sha256').decode('utf-8'))
+        # Set labels
+        self._ui.label_cert_for_account.set_text(self._headline)
+        self._ui.data_it_common_name.set_text(self._it_common_name)
+        self._ui.data_it_organization.set_text(self._it_organization)
+        self._ui.data_it_organizational_unit.set_text(self._it_org_unit)
+        self._ui.data_it_serial_number.set_text(self._it_serial_number)
+        self._ui.data_ib_common_name.set_text(self._ib_common_name)
+        self._ui.data_ib_organization.set_text(self._ib_organization)
+        self._ui.data_ib_organizational_unit.set_text(self._ib_org_unit)
+        self._ui.data_issued_on.set_text(self._issued)
+        self._ui.data_expires_on.set_text(self._expires)
+        self._ui.data_sha1.set_text(self._sha1)
+        self._ui.data_sha256.set_text(self._sha256)
 
         self.set_transient_for(transient_for)
         self._ui.connect_signals(self)
         self.show_all()
+
+    def _on_copy_cert_info_button_clicked(self, widget):
+        clipboard_text = \
+            self._headline + '\n\n' + \
+            _('Issued to\n') + \
+            _('Common Name (CN): ') + self._it_common_name + '\n' + \
+            _('Organization (O): ') + self._it_organization + '\n' + \
+            _('Organizational Unit (OU): ') + self._it_org_unit + '\n' + \
+            _('Serial Number: ') + self._it_serial_number + '\n\n' + \
+            _('Issued by\n') + \
+            _('Common Name (CN): ') + self._ib_common_name + '\n' + \
+            _('Organization (O): ') + self._ib_organization + '\n' + \
+            _('Organizational Unit (OU): ') + self._ib_org_unit + '\n\n' + \
+            _('Validity\n') + \
+            _('Issued on: ') + self._issued + '\n' + \
+            _('Expires on: ') + self._expires + '\n\n' + \
+            _('SHA-1:') + '\n' + \
+            self._sha1 + '\n' + \
+            _('SHA-256:') + '\n' + \
+            self._sha256 + '\n'
+        self._clipboard.set_text(clipboard_text, -1)
 
 
 class SSLErrorDialog(ConfirmationDialogDoubleCheck):
