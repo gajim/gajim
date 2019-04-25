@@ -317,7 +317,8 @@ class MessageWindow:
         id_ = tab_label_box.connect('button-press-event',
             self.on_tab_eventbox_button_press_event, control.widget)
         control.handlers[id_] = tab_label_box
-        self.notebook.append_page(control.widget, tab_label_box)
+        position = self.notebook.get_current_page() + 1
+        self.notebook.insert_page(control.widget, tab_label_box, position)
 
         self.notebook.set_tab_reorderable(control.widget, True)
 
