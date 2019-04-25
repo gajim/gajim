@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.12"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="blocking_store">
     <columns>
       <!-- column-name jid -->
@@ -13,10 +13,7 @@
     <property name="height_request">300</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">18</property>
-    <property name="margin_right">18</property>
-    <property name="margin_top">18</property>
-    <property name="margin_bottom">18</property>
+    <property name="border_width">18</property>
     <property name="row_spacing">5</property>
     <property name="column_spacing">10</property>
     <child>
@@ -83,6 +80,9 @@
         <property name="halign">end</property>
         <property name="always_show_image">True</property>
         <signal name="clicked" handler="_on_save" swapped="no"/>
+        <style>
+          <class name="suggested-action"/>
+        </style>
       </object>
       <packing>
         <property name="left_attach">1</property>

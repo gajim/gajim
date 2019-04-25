@@ -64,8 +64,8 @@ from gajim.common.dbus import location
 from gajim.common import ged
 from gajim.message_window import MessageWindowMgr
 
-from gajim.gtk.dialogs import ConfirmationDialogCheck
 from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import ConfirmationDialogCheck
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import WarningDialog
@@ -2789,6 +2789,15 @@ class RosterWindow:
                     con = app.connections[acct]
                     con.get_module('PrivacyLists').block_contacts(l_, msg)
                     for contact in l_:
+                        ctrl = app.interface.msg_win_mgr.get_control(
+                            contact.jid, acct)
+                        if ctrl:
+                            ctrl.parent_win.remove_tab(
+                                ctrl, ctrl.parent_win.CLOSE_COMMAND, force=True)
+                        if contact.show == 'not in roster':
+                            self.remove_contact(contact.jid, acct, force=True,
+                                                backend=True)
+                            return
                         self.draw_contact(contact.jid, acct)
             else:
                 for acct in accounts:
@@ -2801,7 +2810,7 @@ class RosterWindow:
 
         def _block_it(is_checked=None):
             if is_checked is not None: # dialog has been shown
-                if is_checked: # user does not want to be asked again
+                if is_checked:  # user does not want to be asked again
                     app.config.set('confirm_block', 'no')
                 else:
                     app.config.set('confirm_block', 'yes')
@@ -2811,12 +2820,17 @@ class RosterWindow:
         if confirm_block == 'no':
             _block_it()
             return
-        pritext = _('You are about to block a contact. Are you sure you want'
-            ' to continue?')
-        sectext = _('This contact will see you offline and you will not '
-            'receive messages it sends you.')
-        ConfirmationDialogCheck(pritext, sectext,
-            _('_Do not ask me again'), on_response_ok=_block_it)
+        NewConfirmationCheckDialog(_('Block Contact'),
+                                   _('Really block this contact?'),
+                                   _('This contact will see you offline and '
+                                     'you will not receive messages sent to '
+                                     'you by this contact.'),
+                                   _('_Do not ask me again'),
+                                   [DialogButton.make('Cancel'),
+                                    DialogButton.make('Remove',
+                                                      text=_('Block Contact'),
+                                                      callback=_block_it)],
+                                    modal=False).show()
 
     def on_unblock(self, widget, list_, group=None):
         """
