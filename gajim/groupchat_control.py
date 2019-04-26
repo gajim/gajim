@@ -495,6 +495,10 @@ class GroupchatControl(ChatControlBase):
 
         if self.is_connected and httpupload.get_enabled():
             tooltip_text = _('Send File…')
+            max_file_size = con.get_module('HTTPUpload').max_file_size
+            if max_file_size is not None:
+                max_file_size = max_file_size / (1024 * 1024)
+                tooltip_text = _('Send File (max. %s MiB)…') % max_file_size
         else:
             tooltip_text = _('No File Transfer available')
         self.sendfile_button.set_tooltip_text(tooltip_text)

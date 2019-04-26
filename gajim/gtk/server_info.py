@@ -166,6 +166,13 @@ class ServerInfoDialog(Gtk.Dialog):
         Feature = namedtuple('Feature',
                              ['name', 'available', 'tooltip', 'enabled'])
 
+        # HTTP File Upload
+        max_file_size = con.get_module('HTTPUpload').max_file_size
+        tooltip_size = ''
+        if max_file_size is not None:
+            max_file_size = max_file_size / (1024 * 1024)
+            tooltip_size = ' (max. %s MiB)' % max_file_size
+
         return [
             Feature('XEP-0016: Privacy Lists',
                     con.get_module('PrivacyLists').supported, '', None),
@@ -192,7 +199,8 @@ class ServerInfoDialog(Gtk.Dialog):
                     con.get_module('MAM').archiving_namespace, None),
             Feature('XEP-0363: HTTP File Upload',
                     con.get_module('HTTPUpload').available,
-                    con.get_module('HTTPUpload').httpupload_namespace, None),
+                    con.get_module('HTTPUpload').httpupload_namespace + \
+                        tooltip_size, None),
             Feature('XEP-0398: Avatar Conversion',
                     con.avatar_conversion, '', None),
             Feature('XEP-0411: Bookmarks Conversion',
