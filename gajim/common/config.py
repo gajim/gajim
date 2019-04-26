@@ -73,7 +73,7 @@ class Config:
         # name: [ type, default_value, help_string ]
         'verbose': [opt_bool, False, '', True],
         'autopopup': [opt_bool, False],
-        'notify_on_signin': [opt_bool, True],
+        'notify_on_signin': [opt_bool, False],
         'notify_on_signout': [opt_bool, False],
         'notify_on_new_message': [opt_bool, True],
         'autopopupaway': [opt_bool, False],
