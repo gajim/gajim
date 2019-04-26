@@ -520,8 +520,12 @@ class MessageWindow:
             # Show the plural form since number of tabs > 1
             if self.type_ == 'chat':
                 label = Q_('?Noun:Chats')
+                if self.get_num_controls() == 1:
+                    label = name
             elif self.type_ == 'gc':
-                label = _('Groupchats')
+                label = _('Group Chats')
+                if self.get_num_controls() == 1:
+                    label = name
             else:
                 label = _('Private Chats')
         elif window_mode == MessageWindowMgr.ONE_MSG_WINDOW_ALWAYS_WITH_ROSTER:
