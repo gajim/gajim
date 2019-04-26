@@ -27,9 +27,8 @@ python-gnupg
 keyring
 cssutils
 qrcode
-precis-i18n
 "
-
+pip3 install precis-i18n
 pip3 install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
 }
