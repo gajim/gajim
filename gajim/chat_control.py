@@ -165,16 +165,6 @@ class ChatControl(ChatControlBase):
             id_ = widget.connect('released', self.on_num_button_released)
             self.handlers[id_] = widget
 
-        self.dtmf_window = self.xml.get_object('dtmf_window')
-        self.dtmf_window.get_child().set_direction(Gtk.TextDirection.LTR)
-        id_ = self.dtmf_window.connect('focus-out-event',
-            self.on_dtmf_window_focus_out_event)
-        self.handlers[id_] = self.dtmf_window
-
-        widget = self.xml.get_object('dtmf_button')
-        id_ = widget.connect('clicked', self.on_dtmf_button_clicked)
-        self.handlers[id_] = widget
-
         widget = self.xml.get_object('mic_hscale')
         id_ = widget.connect('value_changed', self.on_mic_hscale_value_changed)
         self.handlers[id_] = widget
@@ -512,16 +502,16 @@ class ChatControl(ChatControlBase):
             banner_image.show()
         if state == self.JINGLE_STATE_CONNECTING:
             banner_image.set_from_icon_name(
-                    Gtk.STOCK_CONVERT, Gtk.IconSize.MENU)
+                    'network-transmit-symbolic', Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTION_RECEIVED:
             banner_image.set_from_icon_name(
-                    "network-workgroup", Gtk.IconSize.MENU)
+                    'network-receive-symbolic', Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_CONNECTED:
             banner_image.set_from_icon_name(
-                    Gtk.STOCK_CONNECT, Gtk.IconSize.MENU)
+                    'network-transmit-receive-symbolic', Gtk.IconSize.MENU)
         elif state == self.JINGLE_STATE_ERROR:
             banner_image.set_from_icon_name(
-                    "dialog-warning", Gtk.IconSize.MENU)
+                    'network-error-symbolic', Gtk.IconSize.MENU)
         self.update_toolbar()
 
     def update_audio(self):
@@ -613,12 +603,6 @@ class ChatControl(ChatControlBase):
 
     def on_num_button_released(self, released):
         self._get_audio_content()._stop_dtmf()
-
-    def on_dtmf_button_clicked(self, widget):
-        self.dtmf_window.show_all()
-
-    def on_dtmf_window_focus_out_event(self, widget, event):
-        self.dtmf_window.hide()
 
     def on_mic_hscale_value_changed(self, widget, value):
         self._get_audio_content().set_mic_volume(value / 100)

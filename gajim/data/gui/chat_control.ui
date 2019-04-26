@@ -14,23 +14,13 @@
     <property name="page_increment">10</property>
     <property name="page_size">10</property>
   </object>
-  <object class="GtkWindow" id="dtmf_window">
+  <object class="GtkPopover" id="dtmf_popover">
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">mouse</property>
-    <property name="type_hint">menu</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
-    <property name="decorated">False</property>
-    <property name="deletable">False</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="border_width">6</property>
         <child>
           <object class="GtkButton" id="1_button">
             <property name="visible">True</property>
@@ -41,6 +31,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="label" translatable="yes">&lt;b&gt;1&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
                 <property name="xalign">0</property>
@@ -58,7 +49,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
@@ -79,7 +69,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
@@ -100,7 +89,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
@@ -121,7 +109,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
@@ -142,7 +129,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
@@ -183,7 +169,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
@@ -204,7 +189,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
-            <property name="xalign">0</property>
             <child>
               <object class="GtkLabel" id="label9">
                 <property name="visible">True</property>
@@ -725,11 +709,13 @@
                         <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                         <property name="orientation">vertical</property>
+                        <property name="size">menu</property>
                         <property name="adjustment">adjustment1</property>
-                        <property name="icons">audio-volume-muted
-audio-volume-high
-audio-volume-low
-audio-volume-medium</property>
+                        <property name="icons">audio-volume-muted-symbolic
+audio-volume-low-symbolic
+audio-volume-medium-symbolic
+audio-volume-high-symbolic</property>
+                        <property name="use_symbolic">False</property>
                         <child internal-child="plus_button">
                           <object class="GtkButton" id="volumebutton-plus_button1">
                             <property name="can_focus">False</property>
@@ -742,6 +728,9 @@ audio-volume-medium</property>
                             <property name="receives_default">False</property>
                           </object>
                         </child>
+                        <style>
+                          <class name="chatcontrol-actionbar-button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -758,11 +747,13 @@ audio-volume-medium</property>
                         <property name="has_tooltip">True</property>
                         <property name="relief">none</property>
                         <property name="orientation">vertical</property>
+                        <property name="size">menu</property>
                         <property name="adjustment">adjustment2</property>
-                        <property name="icons">audio-mic-volume-muted
-audio-mic-volume-high
-audio-mic-volume-medium
-audio-mic-volume-low</property>
+                        <property name="icons">microphone-sensitivity-muted-symbolic
+microphone-sensitivity-low-symbolic
+microphone-sensitivity-medium-symbolic
+microphone-sensitivity-high-symbolic</property>
+                        <property name="use_symbolic">False</property>
                         <child internal-child="plus_button">
                           <object class="GtkButton" id="volumebutton-plus_button2">
                             <property name="can_focus">False</property>
@@ -775,6 +766,9 @@ audio-mic-volume-low</property>
                             <property name="receives_default">False</property>
                           </object>
                         </child>
+                        <style>
+                          <class name="chatcontrol-actionbar-button"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -783,17 +777,29 @@ audio-mic-volume-low</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="dtmf_button">
-                        <property name="label" translatable="yes">#</property>
+                      <object class="GtkMenuButton" id="dtmf_button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="relief">none</property>
+                        <property name="direction">up</property>
+                        <property name="popover">dtmf_popover</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">input-dialpad-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="chatcontrol-actionbar-button"/>
+                        </style>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>

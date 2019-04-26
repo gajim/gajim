@@ -1088,7 +1088,7 @@ class Interface:
             event_type = _('Voice Chat Request')
             app.notification.popup(
                 event_type, obj.fjid, account, 'jingle-incoming',
-                icon_name='gajim-mic_active', title=event_type, text=txt)
+                icon_name='call-start-symbolic', title=event_type, text=txt)
 
     def handle_event_jingle_connected(self, obj):
         # ('JINGLE_CONNECTED', account, (peerjid, sid, media))
