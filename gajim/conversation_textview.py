@@ -561,10 +561,10 @@ class ConversationTextview(GObject.GObject):
 
             always_use_en = app.config.get('always_english_wikipedia')
             if always_use_en:
-                link = 'http://en.wikipedia.org/wiki/Special:Search?search=%s'\
+                link = 'https://en.wikipedia.org/wiki/Special:Search?search=%s'\
                         % phrase_for_url
             else:
-                link = 'http://%s.wikipedia.org/wiki/Special:Search?search=%s'\
+                link = 'https://%s.wikipedia.org/wiki/Special:Search?search=%s'\
                         % (i18n.get_short_lang_code(), phrase_for_url)
             item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
             id_ = item.connect('activate', self.visit_url_from_menuitem, link)
@@ -577,10 +577,10 @@ class ConversationTextview(GObject.GObject):
                 # special link (yeah undocumented but default)
                 always_use_en = app.config.get('always_english_wiktionary')
                 if always_use_en:
-                    link = 'http://en.wiktionary.org/wiki/Special:Search?search=%s'\
+                    link = 'https://en.wiktionary.org/wiki/Special:Search?search=%s'\
                             % phrase_for_url
                 else:
-                    link = 'http://%s.wiktionary.org/wiki/Special:Search?search=%s'\
+                    link = 'https://%s.wiktionary.org/wiki/Special:Search?search=%s'\
                             % (i18n.get_short_lang_code(), phrase_for_url)
                 id_ = item.connect('activate', self.visit_url_from_menuitem, link)
                 self.handlers[id_] = item

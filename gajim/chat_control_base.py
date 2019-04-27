@@ -96,7 +96,7 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         color = convert_rgb_to_hex(url_color)
         url = match.group()
         if '://' not in url:
-            url = 'http://' + url
+            url = 'https://' + url
         return '<a href="%s"><span foreground="%s">%s</span></a>' % (
             url, color, match.group())
 
