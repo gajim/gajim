@@ -225,7 +225,7 @@
               <object class="GtkLabel" id="from_entry_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;user@example.org&gt;</property>
+                <property name="label">&lt;user@example.org&gt;</property>
                 <property name="xalign">0</property>
                 <style>
                   <class name="bold"/>
@@ -240,7 +240,7 @@
               <object class="GtkLabel" id="subject_from_entry_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;from Subject&gt;</property>
+                <property name="label">&lt;from Subject&gt;</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
