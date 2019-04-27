@@ -1506,8 +1506,7 @@ def parse_uri(uri):
         if not lon:
             return URI(type=URIType.UNKNOWN, data=uri)
 
-        uri = ('https://www.openstreetmap.org/?'
-               'mlat=%s&mlon=%s&zoom=16') % (lat, lon)
+        uri = geo_provider_from_location(lat, lon)
         return URI(type=URIType.GEO, data=uri)
 
     if uri.startswith('file://'):
@@ -1565,3 +1564,8 @@ def open_uri_with_custom(config_app, uri):
         exec_command(command)
     except Exception:
         pass
+
+
+def geo_provider_from_location(lat, lon):
+    return ('https://www.openstreetmap.org/?'
+            'mlat=%s&mlon=%s&zoom=16') % (lat, lon)
