@@ -961,7 +961,6 @@ def get_conv_context_menu(account, uri):
             ('-add-contact', _('Add to Roster…')),
         ]
     else:
-        log.warning('No handler for URI type: %s', uri)
         return
 
     menu = Gtk.Menu()

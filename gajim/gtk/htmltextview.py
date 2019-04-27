@@ -882,6 +882,7 @@ class HtmlTextView(Gtk.TextView):
     def show_context_menu(self, uri):
         menu = get_conv_context_menu(self.account, uri)
         if menu is None:
+            log.warning('No handler for URI type: %s', uri)
             return
 
         def destroy(menu, _pspec):
