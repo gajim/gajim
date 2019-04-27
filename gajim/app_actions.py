@@ -285,13 +285,11 @@ def on_delete_motd(action, param):
 
 
 def on_contents(action, param):
-    helpers.launch_browser_mailer(
-        'url', 'https://dev.gajim.org/gajim/gajim/wikis')
+    helpers.open_uri('https://dev.gajim.org/gajim/gajim/wikis')
 
 
 def on_faq(action, param):
-    helpers.launch_browser_mailer(
-        'url', 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq')
+    helpers.open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq')
 
 
 def on_keyboard_shortcuts(action, param):
@@ -351,8 +349,8 @@ def show_next_pending_event(action, param):
 
 
 def open_link(_action, param):
-    kind, link = param.get_strv()
-    helpers.launch_browser_mailer(kind, link)
+    uri = param.get_string()
+    helpers.open_uri(uri)
 
 
 def copy_text(_action, param):

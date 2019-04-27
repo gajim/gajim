@@ -55,7 +55,7 @@ from gajim.common.caps_cache import muc_caps_cache
 from gajim.common import events
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.helpers import launch_browser_mailer
+from gajim.common.helpers import open_uri
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common import ged
 from gajim.common.i18n import _
@@ -3106,5 +3106,5 @@ class SubjectPopover(Gtk.Popover):
     def _on_activate_link(_label, uri):
         # We have to use this, because the default GTK handler
         # is not cross-platform compatible
-        launch_browser_mailer(None, uri)
+        open_uri(uri)
         return Gdk.EVENT_STOP

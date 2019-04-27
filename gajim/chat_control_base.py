@@ -167,9 +167,6 @@ class ChatControlBase(MessageControl, ChatCommandProcessor, CommandTools):
         if self.parent_win:
             self.parent_win.redraw_tab(self)
 
-    def status_url_clicked(self, widget, url):
-        helpers.launch_browser_mailer('url', url)
-
     def setup_seclabel(self):
         self.seclabel_combo.hide()
         self.seclabel_combo.set_no_show_all(True)

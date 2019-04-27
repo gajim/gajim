@@ -43,6 +43,7 @@ from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import open_uri
 from gajim.common.contacts import GC_Contact
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
@@ -651,7 +652,7 @@ class ChatControl(ChatControlBase):
                 uri = 'https://www.openstreetmap.org/?' + \
                         'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % {'lat': location['lat'],
                         'lon': location['lon']}
-                helpers.launch_browser_mailer('url', uri)
+                open_uri(uri)
 
     def on_location_eventbox_leave_notify_event(self, widget, event):
         """

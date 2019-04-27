@@ -49,6 +49,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
+from gajim.common.helpers import open_uri
+from gajim.common.helpers import parse_uri
 from gajim.gtk.util import load_icon
 from gajim.gtk.util import get_cursor
 
@@ -877,8 +879,8 @@ class HtmlTextView(Gtk.TextView):
             self._cursor_changed = False
         return False
 
-    def show_context_menu(self, _event, kind, text):
-        menu = get_conv_context_menu(self.account, kind, text)
+    def show_context_menu(self, uri):
+        menu = get_conv_context_menu(self.account, uri)
         if menu is None:
             return
 
@@ -904,53 +906,21 @@ class HtmlTextView(Gtk.TextView):
 
             # Detect XHTML-IM link
             word = getattr(texttag, 'href', None)
-            if word:
-                if word.startswith('xmpp'):
-                    kind = 'xmpp'
-                elif word.startswith('mailto:'):
-                    kind = 'mail'
-                elif app.interface.sth_at_sth_dot_sth_re.match(word):
-                    # it's a JID or mail
-                    kind = 'sth_at_sth'
-            else:
+            if not word:
                 word = self.get_buffer().get_text(begin_iter, end_iter, True)
 
+            uri = parse_uri(word)
             if event.button.button == 3: # right click
-                self.show_context_menu(event, kind, word)
+                self.show_context_menu(uri)
                 return True
 
             self.plugin_modified = False
             app.plugin_manager.extension_point(
-                'hyperlink_handler', word, kind, self,
-                self.get_toplevel())
+                'hyperlink_handler', uri, self, self.get_toplevel())
             if self.plugin_modified:
                 return
 
-            # we launch the correct application
-            if kind == 'xmpp':
-                word = word[5:]
-                if '?' in word:
-                    (jid, action) = word.split('?')
-                    if action == 'join':
-                        app.interface.join_gc_minimal(self.account, jid)
-                    else:
-                        app.interface.new_chat_from_jid(self.account, jid)
-                else:
-                    app.interface.new_chat_from_jid(self.account, word)
-
-            # handle geo:-URIs
-            elif word[:4] == 'geo:':
-                location = word[4:]
-                lat, _, lon = location.partition(',')
-                if lon == '':
-                    return
-                uri = 'https://www.openstreetmap.org/?' \
-                      'mlat=%(lat)s&mlon=%(lon)s&zoom=16' % \
-                      {'lat': lat, 'lon': lon}
-                helpers.launch_browser_mailer(kind, uri)
-            else:
-                # other URIs
-                helpers.launch_browser_mailer(kind, word)
+            open_uri(uri, account=self.account)
 
     def display_html(self, html, textview, conv_textview, iter_=None):
         buffer_ = self.get_buffer()

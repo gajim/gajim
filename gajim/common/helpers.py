@@ -65,6 +65,9 @@ from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.const import ShowConstant
 from gajim.common.const import Display
+from gajim.common.const import URIType
+from gajim.common.const import URIAction
+from gajim.common.structs import URI
 
 if app.is_installed('PYCURL'):
     import pycurl
@@ -628,35 +631,6 @@ def get_contact_dict_for_account(account):
                 del contacts_dict[jid]
             contacts_dict[name] = contact
     return contacts_dict
-
-def launch_browser_mailer(kind, uri):
-    # kind = 'url' or 'mail'
-    if kind == 'url' and uri.startswith('file://'):
-        launch_file_manager(uri)
-        return
-    if kind in ('mail', 'sth_at_sth') and not uri.startswith('mailto:'):
-        uri = 'mailto:' + uri
-
-    if kind == 'url' and uri.startswith('www.'):
-        uri = 'http://' + uri
-
-    if not app.config.get('autodetect_browser_mailer'):
-        if kind == 'url':
-            command = app.config.get('custombrowser')
-        elif kind in ('mail', 'sth_at_sth'):
-            command = app.config.get('custommailapp')
-        if command == '': # if no app is configured
-            return
-
-        command = build_command(command, uri)
-        try:
-            exec_command(command)
-        except Exception:
-            pass
-
-    else:
-        webbrowser.open(uri)
-
 
 def launch_file_manager(path_to_open):
     if os.name == 'nt':
@@ -1502,3 +1476,92 @@ def delay_execution(milliseconds):
                 milliseconds, timeout_wrapper)
         return func_wrapper
     return delay_execution_decorator
+
+
+def parse_uri(uri):
+    if uri.startswith('xmpp:'):
+        uri = uri[5:]
+        if '?' in uri:
+            jid, action = uri.split('?')
+            try:
+                return URI(type=URIType.XMPP,
+                           action=URIAction(action),
+                           data=jid)
+            except ValueError:
+                # Unknown action
+                pass
+
+        return URI(type=URIType.XMPP, action=URIAction.MESSAGE, data=uri)
+
+    if uri.startswith('mailto:'):
+        uri = uri[7:]
+        return URI(type=URIType.MAIL, data=uri)
+
+    if app.interface.sth_at_sth_dot_sth_re.match(uri):
+        return URI(type=URIType.AT, data=uri)
+
+    if uri.startswith('geo:'):
+        location = uri[4:]
+        lat, _, lon = location.partition(',')
+        if not lon:
+            return URI(type=URIType.UNKNOWN, data=uri)
+
+        uri = ('https://www.openstreetmap.org/?'
+               'mlat=%s&mlon=%s&zoom=16') % (lat, lon)
+        return URI(type=URIType.GEO, data=uri)
+
+    if uri.startswith('file://'):
+        return URI(type=URIType.FILE, data=uri)
+
+    return URI(type=URIType.WEB, data=uri)
+
+
+def open_uri(uri, account=None):
+    if not isinstance(uri, URI):
+        uri = parse_uri(uri)
+
+    if uri.type == URIType.FILE:
+        launch_file_manager(uri.data)
+
+    elif uri.type == URIType.MAIL:
+        uri = 'mailto:%s' % uri.data
+        if not app.config.get('autodetect_browser_mailer'):
+            open_uri_with_custom('custommailapp', 'mailto:%s' % uri)
+        else:
+            webbrowser.open(uri)
+
+    elif uri.type in (URIType.WEB, URIType.GEO):
+        if not app.config.get('autodetect_browser_mailer'):
+            open_uri_with_custom('custombrowser', uri.data)
+        else:
+            webbrowser.open(uri.data)
+
+    elif uri.type == URIType.AT:
+        app.interface.new_chat_from_jid(account, uri.data)
+
+    elif uri.type == URIType.XMPP:
+        if account is None:
+            log.warning('Account must be specified to open XMPP uri')
+            return
+
+        if uri.action == URIAction.JOIN:
+            app.interface.join_gc_minimal(account, uri.data)
+        elif uri.action == URIAction.MESSAGE:
+            app.interface.new_chat_from_jid(account, uri.data)
+        else:
+            log.warning('Cant open URI: %s', uri)
+
+    else:
+        log.warning('Cant open URI: %s', uri)
+
+
+def open_uri_with_custom(config_app, uri):
+    command = app.config.get(config_app)
+    if not command:
+        log.warning('No custom application set')
+        return
+    command = build_command(command, uri)
+    try:
+        exec_command(command)
+    except Exception:
+        pass

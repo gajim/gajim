@@ -1957,10 +1957,6 @@ class Interface:
         self.systray_enabled = False
         self.systray.hide_icon()
 
-    @staticmethod
-    def on_launch_browser_mailer(widget, url, kind):
-        helpers.launch_browser_mailer(kind, url)
-
     def process_connections(self):
         """
         Called each foo (200) milliseconds. Check for idlequeue timeouts
@@ -2380,11 +2376,6 @@ class Interface:
             if not app.config.get_per('accounts', account, 'is_zeroconf') and\
             app.config.get_per('accounts', account, 'active'):
                 app.connections[account] = Connection(account)
-
-        # gtk hooks
-#        Gtk.about_dialog_set_email_hook(self.on_launch_browser_mailer, 'mail')
-#        Gtk.about_dialog_set_url_hook(self.on_launch_browser_mailer, 'url')
-#        Gtk.link_button_set_uri_hook(self.on_launch_browser_mailer, 'url')
 
         self.instances = {}
 

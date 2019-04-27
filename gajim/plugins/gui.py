@@ -32,7 +32,7 @@ from gi.repository import Gdk
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.exceptions import PluginsystemError
-from gajim.common.helpers import launch_browser_mailer
+from gajim.common.helpers import open_uri
 
 from gajim.plugins.helpers import log_calls
 from gajim.plugins.helpers import GajimPluginActivateException
@@ -250,7 +250,7 @@ class PluginsWindow:
     @log_calls('PluginsWindow')
     def on_install_plugin_button_clicked(self, widget):
         if app.is_flatpak():
-            launch_browser_mailer('url', 'https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
+            open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
             return
 
         def show_warn_dialog():

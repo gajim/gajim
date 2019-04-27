@@ -518,7 +518,7 @@ class ConversationTextview(GObject.GObject):
         """
         Basically it filters out the widget instance
         """
-        helpers.launch_browser_mailer('url', link)
+        helpers.open_uri(link)
 
     def on_textview_populate_popup(self, textview, menu):
         """

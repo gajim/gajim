@@ -21,7 +21,7 @@ from gajim.gtkgui_helpers import scale_pixbuf_from_data
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.helpers import launch_browser_mailer
+from gajim.common.helpers import open_uri
 from gajim.common.modules.dataforms import extend_form
 
 from gajim.gtk.util import MultiLineLabel
@@ -588,9 +588,7 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
             button = Gtk.Button(label='Register')
             button.set_halign(Gtk.Align.CENTER)
             button.get_style_context().add_class('suggested-action')
-            button.connect('clicked',
-                           lambda *args: launch_browser_mailer('url',
-                                                               redirect_url))
+            button.connect('clicked', lambda *args: open_uri(redirect_url))
             self._grid.attach(button, 0, self._row_count, 2, 1)
         else:
             self._add_fields()

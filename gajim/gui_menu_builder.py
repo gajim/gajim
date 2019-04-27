@@ -25,6 +25,8 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import _
+from gajim.common.const import URIType
+from gajim.common.const import URIAction
 
 from gajim.gtk.util import get_builder
 
@@ -918,9 +920,9 @@ def get_encryption_menu(control_id, type_id, zeroconf=False):
     return menu
 
 
-def get_conv_context_menu(account, kind, text):
-    if kind == 'xmpp':
-        if '?join' in text:
+def get_conv_context_menu(account, uri):
+    if uri.type == URIType.XMPP:
+        if uri.action == URIAction.JOIN:
             context_menu = [
                 ('copy-text', _('Copy JID')),
                 ('-join-groupchat', _('Join Groupchat')),
@@ -932,19 +934,25 @@ def get_conv_context_menu(account, kind, text):
                 ('-add-contact', _('Add to Roster…')),
             ]
 
-    elif kind == 'url':
+    elif uri.type == URIType.WEB:
         context_menu = [
             ('copy-text', _('Copy Link Location')),
             ('open-link', _('Open Link in Browser')),
         ]
 
-    elif kind == 'mail':
+    elif uri.type == URIType.MAIL:
         context_menu = [
             ('copy-text', _('Copy Email Address')),
             ('open-link', _('Open Email Composer')),
         ]
 
-    elif kind == 'sth_at_sth':
+    elif uri.type == URIType.GEO:
+        context_menu = [
+            ('copy-text', _('Copy Location')),
+            ('open-link', _('Show Location')),
+        ]
+
+    elif uri.type == URIType.AT:
         context_menu = [
             ('copy-text', _('Copy JID/Email')),
             ('open-link', _('Open Email Composer')),
@@ -953,6 +961,7 @@ def get_conv_context_menu(account, kind, text):
             ('-add-contact', _('Add to Roster…')),
         ]
     else:
+        log.warning('No handler for URI type: %s', uri)
         return
 
     menu = Gtk.Menu()
@@ -962,19 +971,15 @@ def get_conv_context_menu(account, kind, text):
         menuitem.set_label(label)
 
         if action.startswith('-'):
-            text = text.replace('xmpp:', '')
-            text = text.split('?')[0]
             action = 'app.%s%s' % (account, action)
         else:
             action = 'app.%s' % action
         menuitem.set_action_name(action)
 
-        if action == 'app.open-link':
-            value = GLib.Variant.new_strv([kind, text])
-        elif action == 'app.copy-text':
-            value = GLib.Variant.new_string(text)
+        if action in ('app.open-link', 'app.copy-text'):
+            value = GLib.Variant.new_string(uri.data)
         else:
-            value = GLib.Variant.new_strv([account, text])
+            value = GLib.Variant.new_strv([account, uri.data])
         menuitem.set_action_target_value(value)
         menuitem.show()
         menu.append(menuitem)

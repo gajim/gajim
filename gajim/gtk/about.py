@@ -19,7 +19,7 @@ from gi.repository import Gtk
 from gi.repository import GObject
 
 from gajim.common import app
-from gajim.common.helpers import launch_browser_mailer
+from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.const import DEVS_CURRENT
 from gajim.common.const import DEVS_PAST
@@ -75,7 +75,7 @@ class AboutDialog(Gtk.AboutDialog):
     def _on_activate_link(_label, uri):
         # We have to use this, because the default GTK handler
         # is not cross-platform compatible
-        launch_browser_mailer(None, uri)
+        open_uri(uri)
         return Gdk.EVENT_STOP
 
     def _connect_link_handler(self, parent):

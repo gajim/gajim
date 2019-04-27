@@ -420,7 +420,7 @@ class GajimApplication(Gtk.Application):
         act.connect("activate", app_actions.copy_text)
         self.add_action(act)
 
-        act = Gio.SimpleAction.new('open-link', GLib.VariantType.new('as'))
+        act = Gio.SimpleAction.new('open-link', GLib.VariantType.new('s'))
         act.connect("activate", app_actions.open_link)
         self.add_action(act)
 

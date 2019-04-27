@@ -184,6 +184,22 @@ class Display(Enum):
     QUARTZ = 'GdkQuartzDisplay'
 
 
+class URIType(Enum):
+    UNKNOWN = 'unknown'
+    XMPP = 'xmpp'
+    MAIL = 'mail'
+    GEO = 'geo'
+    WEB = 'web'
+    FILE = 'file'
+    AT = 'at'
+
+
+class URIAction(Enum):
+    MESSAGE = 'message'
+    JOIN = 'join'
+    SUBSCRIBE = 'subscribe'
+
+
 EME_MESSAGES = {
     'urn:xmpp:otr:0':
         _('This message was encrypted with OTR '
