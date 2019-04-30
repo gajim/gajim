@@ -159,52 +159,54 @@ class ServerInfoDialog(Gtk.Dialog):
     def add_feature(self, feature):
         item = FeatureItem(feature)
         self.feature_listbox.add(item)
-        item.get_parent().set_tooltip_text(item.tooltip)
+        item.get_parent().set_tooltip_text(item.tooltip or '')
 
     def get_features(self):
         con = app.connections[self.account]
         Feature = namedtuple('Feature',
                              ['name', 'available', 'tooltip', 'enabled'])
+        Feature.__new__.__defaults__ = (None, None)  # type: ignore
 
         # HTTP File Upload
-        max_file_size = con.get_module('HTTPUpload').max_file_size
-        tooltip_size = ''
-        if max_file_size is not None:
-            max_file_size = max_file_size / (1024 * 1024)
-            tooltip_size = ' (max. %s MiB)' % max_file_size
+        http_upload_info = con.get_module('HTTPUpload').httpupload_namespace
+        if con.get_module('HTTPUpload').available:
+            max_file_size = con.get_module('HTTPUpload').max_file_size
+            if max_file_size is not None:
+                max_file_size = max_file_size / (1024 * 1024)
+                http_upload_info = http_upload_info + ' (max. %s MiB)' % \
+                    max_file_size
 
         return [
             Feature('XEP-0016: Privacy Lists',
-                    con.get_module('PrivacyLists').supported, '', None),
-            Feature('XEP-0045: Multi-User Chat', con.muc_jid, '', None),
+                    con.get_module('PrivacyLists').supported),
+            Feature('XEP-0045: Multi-User Chat', con.muc_jid),
             Feature('XEP-0054: vcard-temp',
-                    con.get_module('VCardTemp').supported, '', None),
+                    con.get_module('VCardTemp').supported),
             Feature('XEP-0163: Personal Eventing Protocol',
-                    con.get_module('PEP').supported, '', None),
+                    con.get_module('PEP').supported),
             Feature('XEP-0163: #publish-options',
-                    con.get_module('PubSub').publish_options, '', None),
+                    con.get_module('PubSub').publish_options),
             Feature('XEP-0191: Blocking Command',
                     con.get_module('Blocking').supported,
-                    nbxmpp.NS_BLOCKING, None),
+                    nbxmpp.NS_BLOCKING),
             Feature('XEP-0198: Stream Management',
-                    con.connection.sm_enabled, nbxmpp.NS_STREAM_MGMT, None),
+                    con.connection.sm_enabled, nbxmpp.NS_STREAM_MGMT),
             Feature('XEP-0258: Security Labels in XMPP',
                     con.get_module('SecLabels').supported,
-                    nbxmpp.NS_SECLABEL, None),
+                    nbxmpp.NS_SECLABEL),
             Feature('XEP-0280: Message Carbons',
                     con.get_module('Carbons').supported,
-                    nbxmpp.NS_CARBONS, None),
+                    nbxmpp.NS_CARBONS),
             Feature('XEP-0313: Message Archive Management',
-                    con.get_module('MAM').archiving_namespace,
-                    con.get_module('MAM').archiving_namespace, None),
+                    con.get_module('MAM').available,
+                    con.get_module('MAM').archiving_namespace),
             Feature('XEP-0363: HTTP File Upload',
                     con.get_module('HTTPUpload').available,
-                    con.get_module('HTTPUpload').httpupload_namespace + \
-                        tooltip_size, None),
+                    http_upload_info),
             Feature('XEP-0398: Avatar Conversion',
-                    con.avatar_conversion, '', None),
+                    con.avatar_conversion),
             Feature('XEP-0411: Bookmarks Conversion',
-                    con.get_module('Bookmarks').conversion, '', None)
+                    con.get_module('Bookmarks').conversion)
         ]
 
     def add_info(self, info):
@@ -226,7 +228,7 @@ class ServerInfoDialog(Gtk.Dialog):
                 available = 'Yes'
             else:
                 available = 'No'
-            if feature.tooltip != '':
+            if feature.tooltip is not None:
                 tooltip = '(%s)' % feature.tooltip
             else:
                 tooltip = ''
