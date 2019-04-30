@@ -109,7 +109,7 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;alt&gt;Left &lt;ctrl&gt;Page_Up</property>
+                <property name="accelerator">&lt;alt&gt;Left  &lt;ctrl&gt;Page_Up</property>
                 <property name="title" translatable="yes">Switch to the previous tab</property>
               </object>
             </child>
@@ -139,6 +139,20 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;ctrl&gt;Tab</property>
                 <property name="title" translatable="yes">Switch to the next unread tab</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;Page_Up</property>
+                <property name="title" translatable="yes">Move tab to the left</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;ctrl&gt;&lt;shift&gt;Page_Down</property>
+                <property name="title" translatable="yes">Move tab to the right</property>
               </object>
             </child>
             <child>

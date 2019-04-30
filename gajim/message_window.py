@@ -121,6 +121,7 @@ class MessageWindow:
         keys = ['<Control>f', '<Control>g', '<Control>h', '<Control>i',
                 '<Control>l', '<Control>L', '<Control><Shift>n', '<Control>u',
                 '<Control>b', '<Control>F4',
+                '<Control><Shift>Page_Up', '<Control><Shift>Page_Down',
                 '<Control>w', '<Control>Page_Up', '<Control>Page_Down', '<Alt>Right',
                 '<Alt>Left', '<Alt>d', '<Alt>c', '<Alt>m', '<Alt>t', 'Escape'] + \
                 ['<Alt>'+str(i) for i in range(10)]
@@ -411,7 +412,8 @@ class MessageWindow:
                 'gtk-key-theme-name') == 'Emacs':
                     self.remove_tab(control, self.CLOSE_CTRL_KEY)
                     return True
-            elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down):
+            elif keyval in (Gdk.KEY_Page_Up, Gdk.KEY_Page_Down) and not \
+                modifier & Gdk.ModifierType.SHIFT_MASK:
                 # CTRL + PageUp | PageDown
                 # Create event and send it to notebook
                 event = Gdk.Event.new(Gdk.EventType.KEY_PRESS)
@@ -425,9 +427,23 @@ class MessageWindow:
             if modifier & Gdk.ModifierType.SHIFT_MASK:
                 # CTRL + SHIFT
                 if control.type_id == message_control.TYPE_GC and \
-                keyval == Gdk.KEY_n: # CTRL + SHIFT + n
+                keyval == Gdk.KEY_n:  # CTRL + SHIFT + n
                     self.window.lookup_action(
                         'change-nick-%s' % control.control_id).activate()
+                    return True
+                # CTRL + SHIFT + PageUp | PageDown
+                old_position = self.notebook.get_current_page()
+                total_pages = self.notebook.get_n_pages()
+                if keyval == Gdk.KEY_Page_Up:
+                    self.notebook.reorder_child(control.widget,
+                                                old_position - 1)
+                    return True
+                if keyval == Gdk.KEY_Page_Down:
+                    if old_position == total_pages - 1:
+                        self.notebook.reorder_child(control.widget, 0)
+                        return True
+                    self.notebook.reorder_child(control.widget,
+                                                old_position + 1)
                     return True
         # MOD1 (ALT) mask
         elif modifier & Gdk.ModifierType.MOD1_MASK:
