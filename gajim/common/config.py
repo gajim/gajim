@@ -257,7 +257,7 @@ class Config:
         'confirm_custom_status': [opt_str, '', _('Show the confirm custom status dialog or not? Empty string means never show the dialog.')],
         'enable_negative_priority': [opt_bool, False, _('If true, you will be able to set a negative priority to your account in account modification window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.')],
         'show_contacts_number': [opt_bool, True, _('If true, Gajim will show number of online and total contacts in account and group rows.')],
-        'treat_incoming_messages': [opt_str, '', _('Can be empty, \'chat\' or \'normal\'. If not empty, treat all incoming messages as if they were of this type')],
+        'treat_incoming_messages': [opt_str, 'chat', _('Can be empty, \'chat\' or \'normal\'. If not empty, treat all incoming messages as if they were of this type')],
         'scroll_roster_to_last_message': [opt_bool, True, _('If true, Gajim will scroll and select the contact who sent you the last message, if chat window is not already opened.')],
         'change_status_window_timeout': [opt_int, 15, _('Time of inactivity needed before the change status window closes down.')],
         'max_conversation_lines': [opt_int, 500, _('Maximum number of lines that are printed in conversations. Oldest lines are cleared.')],
