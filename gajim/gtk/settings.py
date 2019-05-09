@@ -66,12 +66,12 @@ class SettingsDialog(Gtk.ApplicationWindow):
         self.listbox.connect('row-activated', self.on_row_activated)
         self.connect('key-press-event', self.on_key_press)
 
-    def on_key_press(self, widget, event):
+    def on_key_press(self, _widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
     @staticmethod
-    def on_row_activated(listbox, row):
+    def on_row_activated(_listbox, row):
         row.on_row_activated()
 
     def get_setting(self, name):
@@ -209,7 +209,7 @@ class GenericSetting(Gtk.ListBoxRow):
     @staticmethod
     def __get_value(type_, value, account):
         if value is None:
-            return
+            return None
         if type_ == SettingType.VALUE:
             return value
 
@@ -277,7 +277,7 @@ class SwitchSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (bool, 'Switch Value', '', False,
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
@@ -311,7 +311,7 @@ class EntrySetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Entry Value', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
@@ -342,7 +342,7 @@ class DialogSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Dummy', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, dialog):
         GenericSetting.__init__(self, *args)
@@ -375,7 +375,7 @@ class SpinSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (int, 'Priority', '', -128, 127, 0,
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, range_):
         GenericSetting.__init__(self, *args)
@@ -413,7 +413,7 @@ class FileChooserSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Certificate Path', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, filefilter):
         GenericSetting.__init__(self, *args)
@@ -463,7 +463,7 @@ class CallbackSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Dummy', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, callback):
         GenericSetting.__init__(self, *args)
@@ -478,7 +478,7 @@ class ActionSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Dummy', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, account):
         GenericSetting.__init__(self, *args)
@@ -516,7 +516,7 @@ class ComboSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Proxy', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args, combo_items):
         GenericSetting.__init__(self, *args)
@@ -556,7 +556,7 @@ class ProxyComboSetting(GenericSetting):
 
     __gproperties__ = {
         "setting-value": (str, 'Proxy', '', '',
-                         GObject.ParamFlags.READWRITE),}
+                          GObject.ParamFlags.READWRITE),}
 
     def __init__(self, *args):
         GenericSetting.__init__(self, *args)
