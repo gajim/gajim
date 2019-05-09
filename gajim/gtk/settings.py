@@ -143,7 +143,7 @@ class SettingsBox(Gtk.ListBox):
 
 class GenericSetting(Gtk.ListBoxRow):
     def __init__(self, account, label, type_, value,
-                 name, callback, data, desc, enabledif):
+                 name, callback, data, desc, enabledif, enabled_func):
         Gtk.ListBoxRow.__init__(self)
         self._grid = Gtk.Grid()
         self._grid.set_size_request(-1, 30)
@@ -157,6 +157,7 @@ class GenericSetting(Gtk.ListBoxRow):
         self.account = account
         self.name = name
         self.enabledif = enabledif
+        self.enabled_func = enabled_func
         self.setting_value = self.get_value()
 
         description_box = Gtk.Box(
@@ -260,11 +261,16 @@ class GenericSetting(Gtk.ListBoxRow):
         raise NotImplementedError
 
     def update_activatable(self, name, value):
-        if self.enabledif is None or self.enabledif[0] != name:
-            return
-        activatable = (name, value) == self.enabledif
-        self.set_activatable(activatable)
-        self.set_sensitive(activatable)
+        enabled_func_value = True
+        if self.enabled_func is not None:
+            enabled_func_value = self.enabled_func()
+
+        enabledif_value = True
+        if self.enabledif is not None and self.enabledif[0] == name:
+            enabledif_value = (name, value) == self.enabledif
+
+        self.set_activatable(enabled_func_value and enabledif_value)
+        self.set_sensitive(enabled_func_value and enabledif_value)
 
 
 class SwitchSetting(GenericSetting):
