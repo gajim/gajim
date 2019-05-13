@@ -1854,7 +1854,7 @@ class GroupchatControl(ChatControlBase):
 
         nick = event.properties.muc_nickname
         status = event.properties.status
-        status = '' if status is None else ' (%s)' % status
+        status = '' if status is None else ' - %s' % status
         show = helpers.get_uf_show(event.properties.show.value)
 
         status_default = app.config.get('print_status_muc_default')
