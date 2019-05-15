@@ -68,6 +68,10 @@ class MAM(BaseModule):
                          account=self._account,
                          feature=self.archiving_namespace))
 
+    def reset_state(self):
+        self._mam_query_ids.clear()
+        self._catch_up_finished.clear()
+
     def _from_valid_archive(self, _stanza, properties):
         if properties.type.is_groupchat:
             expected_archive = properties.jid

@@ -1346,6 +1346,7 @@ class Connection(CommonConnection, ConnectionHandlers):
         self._discover_server()
         self._set_send_timeouts()
         self.get_module('Chatstate').enabled = True
+        self.get_module('MAM').reset_state()
 
     def _set_send_timeouts(self):
         if app.config.get_per('accounts', self.name, 'keep_alives_enabled'):
