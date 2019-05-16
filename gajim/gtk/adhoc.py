@@ -137,7 +137,12 @@ class AdHocCommand(Gtk.Assistant):
                     if button is not None:
                         button.show()
 
-        elif page in (Page.ERROR, Page.COMPLETED):
+        elif page == Page.ERROR:
+            error_page = self.get_nth_page(page)
+            if error_page.show_command_button:
+                self._buttons['commands'].show()
+
+        elif page == Page.COMPLETED:
             self._buttons['commands'].show()
 
     def _add_page(self, page):
@@ -155,6 +160,10 @@ class AdHocCommand(Gtk.Assistant):
         dataform = None
         if action == AdHocAction.EXECUTE:
             command = self.get_nth_page(current_page).get_selected_command()
+            if command is None:
+                # The commands page should not show if there are no commands,
+                # but if for some reason it does dont fail horribly
+                return
         else:
             command, dataform = self.get_nth_page(current_page).stage_data
             if action == AdHocAction.PREV:
@@ -178,9 +187,19 @@ class AdHocCommand(Gtk.Assistant):
 
     @ensure_not_destroyed
     def _received_command_list(self, commands):
+        error_text = None
         if is_error_result(commands):
+            error_text = str(commands)
+
+        elif not commands:
+            error_text = _('No commands available')
+
+        if error_text is not None:
+            self.get_nth_page(Page.ERROR).set_text(error_text)
+            self.get_nth_page(Page.ERROR).show_command_button = False
             self.set_current_page(Page.ERROR)
             return
+
         self.get_nth_page(Page.COMMANDS).add_commands(commands)
         self.set_current_page(Page.COMMANDS)
 
@@ -188,6 +207,7 @@ class AdHocCommand(Gtk.Assistant):
     def _received_stage(self, stage):
         if is_error_result(stage):
             self.get_nth_page(Page.ERROR).set_text(str(stage))
+            self.get_nth_page(Page.ERROR).show_command_button = True
             self.set_current_page(Page.ERROR)
             return
 
@@ -210,12 +230,6 @@ class AdHocCommand(Gtk.Assistant):
 
     def _on_page_change(self, _assistant, _page):
         self._set_button_visibility(self.get_current_page())
-
-    def _on_error(self, error_text):
-        log.info('Show Error page')
-        page = self.get_nth_page(Page.ERROR)
-        page.set_text(error_text)
-        self.set_current_page(Page.ERROR)
 
     def _on_cancel(self, _widget):
         self.destroy()
@@ -443,6 +457,7 @@ class Error(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.VERTICAL)
         self.set_spacing(12)
         self.set_homogeneous(True)
+        self._show_command_button = False
 
         icon = Gtk.Image.new_from_icon_name('dialog-error-symbolic',
                                             Gtk.IconSize.DIALOG)
@@ -458,3 +473,11 @@ class Error(Gtk.Box):
 
     def set_text(self, text):
         self._label.set_text(text)
+
+    @property
+    def show_command_button(self):
+        return self._show_command_button
+
+    @show_command_button.setter
+    def show_command_button(self, value):
+        self._show_command_button = value
