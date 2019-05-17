@@ -277,9 +277,7 @@ def on_update_motd(action, param):
 
 def on_delete_motd(action, param):
     account = param.get_string()
-    server = app.config.get_per('accounts', account, 'hostname')
-    server += '/announce/motd/delete'
-    app.connections[account].send_motd(server)
+    app.connections[account].get_module('Announce').delete_motd()
 
 # Help Actions
 

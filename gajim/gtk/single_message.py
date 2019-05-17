@@ -308,8 +308,9 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
                 return True
 
             if '/announce/' in to_whom_jid:
-                app.connections[self.account].send_motd(to_whom_jid, subject,
-                    message)
+                con = app.connections[self.account]
+                con.get_module('Announce').set_announce(
+                    to_whom_jid, subject, message)
                 continue
 
             recipient_list.append(to_whom_jid)

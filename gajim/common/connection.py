@@ -1566,14 +1566,6 @@ class Connection(CommonConnection, ConnectionHandlers):
             app.nec.push_incoming_event(OurShowEvent(None, conn=self,
                 show=show))
 
-    def send_motd(self, jid, subject='', msg='', xhtml=None):
-        if not app.account_is_connected(self.name):
-            return
-        msg_iq = nbxmpp.Message(to=jid, body=msg, subject=subject,
-            xhtml=xhtml)
-
-        self.connection.send(msg_iq)
-
     def _nec_message_outgoing(self, obj):
         if obj.account != self.name:
             return
