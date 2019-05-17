@@ -270,6 +270,17 @@ class Roster(BaseModule):
         """
         return self._get_item_data(jid, 'name')
 
+    def update_contact(self, jid, name, groups):
+        if app.account_is_connected(self._account):
+            self.set_item(jid=jid, name=name, groups=groups)
+
+    def update_contacts(self, contacts):
+        """
+        Update multiple roster items
+        """
+        if app.account_is_connected(self._account):
+            self.set_item_multi(contacts)
+
     def set_item(self, jid, name=None, groups=None):
         """
         Rename contact 'jid' and sets the groups list that it now belongs to

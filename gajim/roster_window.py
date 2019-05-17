@@ -898,7 +898,8 @@ class RosterWindow:
                 changed_contacts.append({'jid': jid, 'name': contact.name,
                     'groups':contact.groups})
 
-            app.connections[acc].update_contacts(changed_contacts)
+            app.connections[acc].get_module('Roster').update_contacts(
+                changed_contacts)
 
             for c in changed_contacts:
                 self.add_contact(c['jid'], acc)
@@ -929,8 +930,9 @@ class RosterWindow:
                     # we might be dropped from meta to group
                     contact.groups.append(group)
             if update:
-                app.connections[account].update_contact(jid, contact.name,
-                        contact.groups)
+                con = app.connections[account]
+                con.get_module('Roster').update_contact(
+                    jid, contact.name, contact.groups)
 
         self.add_contact(jid, account)
 
@@ -957,8 +959,9 @@ class RosterWindow:
                     # Needed when we remove from "General" or "Observers"
                     contact.groups.remove(group)
             if update:
-                app.connections[account].update_contact(jid, contact.name,
-                        contact.groups)
+                con = app.connections[account]
+                con.get_module('Roster').update_contact(
+                    jid, contact.name, contact.groups)
         self.add_contact(jid, account)
 
         # Also redraw old groups
@@ -2890,8 +2893,9 @@ class RosterWindow:
                 contacts = app.contacts.get_contacts(account, jid)
                 for contact in contacts:
                     contact.name = new_text
-                app.connections[account].update_contact(jid, new_text, \
-                    contacts[0].groups)
+                con = app.connections[account]
+                con.get_module('Roster').update_contact(
+                    jid, new_text, contacts[0].groups)
                 self.draw_contact(jid, account)
                 # Update opened chats
                 for ctrl in app.interface.msg_win_mgr.get_controls(jid,
@@ -4075,8 +4079,9 @@ class RosterWindow:
                 _contact.groups = c_dest.groups[:]
                 app.contacts.add_metacontact(account_dest, c_dest.jid,
                     _account, _contact.jid, contacts)
-                app.connections[account_source].update_contact(_contact.jid,
-                    _contact.name, _contact.groups)
+                con = app.connections[account_source]
+                con.get_module('Roster').update_contact(
+                    _contact.jid, _contact.name, _contact.groups)
 
             # Re-add all and update GUI
             new_family = app.contacts.get_metacontacts_family(account_source,

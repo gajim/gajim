@@ -355,17 +355,6 @@ class CommonConnection:
                                     additional_data=obj.additional_data,
                                     stanza_id=obj.stanza_id)
 
-    def update_contact(self, jid, name, groups):
-        if self.connection:
-            self.getRoster().set_item(jid=jid, name=name, groups=groups)
-
-    def update_contacts(self, contacts):
-        """
-        Update multiple roster items
-        """
-        if self.connection:
-            self.getRoster().set_item_multi(contacts)
-
     def new_account(self, name, config, sync=False):
         """
         To be implemented by derived classes

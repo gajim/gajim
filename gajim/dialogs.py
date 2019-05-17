@@ -97,8 +97,9 @@ class EditGroupsDialog:
         self.dialog.show_all()
         if self.changes_made:
             for (contact, account) in self.list_:
-                app.connections[account].update_contact(contact.jid,
-                    contact.name, contact.groups)
+                con = app.connections[account]
+                con.get_module('Roster').update_contact(
+                    contact.jid, contact.name, contact.groups)
 
     def on_edit_groups_dialog_response(self, widget, response_id):
         if response_id == Gtk.ResponseType.CLOSE:
@@ -1066,8 +1067,9 @@ class RosterItemExchangeWindow:
                         groups = []
                     for u in app.contacts.get_contact(self.account, jid):
                         u.name = model[iter_][2]
-                    app.connections[self.account].update_contact(jid,
-                            model[iter_][2], groups)
+                    con = app.connections[self.account]
+                    con.get_module('Roster').update_contact(
+                        jid, model[iter_][2], groups)
                     self.draw_contact(jid, self.account)
                     # Update opened chat
                     ctrl = app.interface.msg_win_mgr.get_control(jid, self.account)
