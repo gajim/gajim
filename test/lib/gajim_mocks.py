@@ -104,7 +104,6 @@ class MockInterface(Mock):
 
         self.instances = {}
         self.minimized_controls = {}
-        self.status_sent_to_users = Mock()
 
 
 class MockLogger(Mock):

@@ -52,21 +52,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="send_custom_status_menuitem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Send Cus_tom Status</property>
-        <property name="use_underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="menu5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="execute_command_menuitem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

@@ -2113,10 +2113,6 @@ class RosterWindow:
                     app.SHOW_LIST.index('invisible')
             app.connections[account].change_status(status, txt, auto)
 
-            if account in app.interface.status_sent_to_users:
-                app.interface.status_sent_to_users[account] = {}
-            if account in app.interface.status_sent_to_groups:
-                app.interface.status_sent_to_groups[account] = {}
             for gc_control in app.interface.msg_win_mgr.get_controls(
             message_control.TYPE_GC) + \
             list(app.interface.minimized_controls[account].values()):
@@ -3361,67 +3357,6 @@ class RosterWindow:
                 'authorization resulting in them always seeing you as '
                 'offline.') % jids
             ConfirmationDialog(pritext, sectext, on_response_ok=on_ok2)
-
-    def on_send_custom_status(self, widget, contact_list, show, group=None):
-        """
-        Send custom status
-        """
-        # contact_list has only one element except if group != None
-        def on_response(message, pep_dict):
-            if message is None: # None if user pressed Cancel
-                return
-            account_list = []
-            for (contact, account) in contact_list:
-                if account not in account_list:
-                    account_list.append(account)
-            # 1. update status_sent_to_[groups|users] list
-            if group:
-                for account in account_list:
-                    if account not in app.interface.status_sent_to_groups:
-                        app.interface.status_sent_to_groups[account] = {}
-                    app.interface.status_sent_to_groups[account][group] = show
-            else:
-                for (contact, account) in contact_list:
-                    if account not in app.interface.status_sent_to_users:
-                        app.interface.status_sent_to_users[account] = {}
-                    app.interface.status_sent_to_users[account][contact.jid] \
-                        = show
-
-            # 2. update privacy lists if main status is invisible
-            for account in account_list:
-                if app.SHOW_LIST[app.connections[account].connected] == \
-                'invisible':
-                    con = app.connections[account]
-                    con.get_module('PrivacyLists').set_invisible_rule()
-
-            # 3. send directed presence
-            for (contact, account) in contact_list:
-                our_jid = app.get_jid_from_account(account)
-                jid = contact.jid
-                if jid == our_jid:
-                    jid += '/' + contact.resource
-                self.send_status(account, show, message, to=jid)
-
-        def send_it(is_checked=None):
-            if is_checked is not None: # dialog has been shown
-                if is_checked: # user does not want to be asked again
-                    app.config.set('confirm_custom_status', 'no')
-                else:
-                    app.config.set('confirm_custom_status', 'yes')
-            self.get_status_message(show, on_response, show_pep=False,
-                always_ask=True)
-
-        confirm_custom_status = app.config.get('confirm_custom_status')
-        if confirm_custom_status == 'no':
-            send_it()
-            return
-        pritext = _('You are about to send a custom status. Are you sure you '
-            'want to continue?')
-        sectext = _('This contact will temporarily see you as %(status)s, '
-            'but only until you change your status. Then they will see '
-            'your global status.') % {'status': show}
-        ConfirmationDialogCheck(pritext, sectext,
-            _('_Do not ask me again'), on_response_ok=send_it)
 
     def on_status_combobox_changed(self, widget):
         """
@@ -5025,30 +4960,13 @@ class RosterWindow:
                     list_online, show_bookmarked=show_bookmarked)
                 menu.append(invite_menuitem)
 
-            # Send Custom Status
-            send_custom_status_menuitem = Gtk.MenuItem.new_with_mnemonic(
-                _('Send Cus_tom Status'))
-            if helpers.group_is_blocked(account, group):
-                send_custom_status_menuitem.set_sensitive(False)
-            status_menuitems = Gtk.Menu()
-            send_custom_status_menuitem.set_submenu(status_menuitems)
-            for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
-                status_menuitem = Gtk.MenuItem.new_with_label(
-                    helpers.get_uf_show(s))
-                status_menuitem.connect('activate', self.on_send_custom_status,
-                    list_, s, group)
-                status_menuitems.append(status_menuitem)
-            menu.append(send_custom_status_menuitem)
-
             # there is no singlemessage and custom status for zeroconf
             if app.config.get_per('accounts', account, 'is_zeroconf'):
-                send_custom_status_menuitem.set_sensitive(False)
                 send_group_message_item.set_sensitive(False)
 
             if app.connections[account].connected < 2:
                 send_group_message_item.set_sensitive(False)
                 invite_menuitem.set_sensitive(False)
-                send_custom_status_menuitem.set_sensitive(False)
 
         if not group in helpers.special_groups:
             item = Gtk.SeparatorMenuItem.new() # separator

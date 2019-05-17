@@ -242,23 +242,6 @@ class PrivacyLists(BaseModule):
     def _build_invisible_rule(self):
         node = nbxmpp.Node('list', {'name': 'invisible'})
         iq = nbxmpp.Iq('set', nbxmpp.NS_PRIVACY, payload=[node])
-        if (self._account in app.interface.status_sent_to_groups and
-                app.interface.status_sent_to_groups[self._account]):
-            for group in app.interface.status_sent_to_groups[self._account]:
-                item = node.setTag('item', {'type': 'group',
-                                            'value': group,
-                                            'action': 'allow',
-                                            'order': '1'})
-                item.setTag('presence-out')
-
-        if (self._account in app.interface.status_sent_to_users and
-                app.interface.status_sent_to_users[self._account]):
-            for jid in app.interface.status_sent_to_users[self._account]:
-                item = node.setTag('item', {'type': 'jid',
-                                            'value': jid,
-                                            'action': 'allow',
-                                            'order': '2'})
-                item.setTag('presence-out')
 
         item = node.setTag('item', {'action': 'deny', 'order': '3'})
         item.setTag('presence-out')

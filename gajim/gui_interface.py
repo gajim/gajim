@@ -311,13 +311,6 @@ class Interface:
         account = obj.conn.name
         jid = obj.jid
 
-        # unset custom status
-        if (obj.old_show == 0 and obj.new_show > 1) or \
-        (obj.old_show > 1 and obj.new_show == 0 and obj.conn.connected > 1):
-            if account in self.status_sent_to_users and \
-            jid in self.status_sent_to_users[account]:
-                del self.status_sent_to_users[account][jid]
-
         if app.jid_is_transport(jid):
             # It must be an agent
 
@@ -2272,8 +2265,6 @@ class Interface:
         # This is the manager and factory of message windows set by the module
         self.msg_win_mgr = None
         self.minimized_controls = {}
-        self.status_sent_to_users = {}
-        self.status_sent_to_groups = {}
         self.pass_dialog = {}
         self.db_error_dialog = None
 

@@ -221,7 +221,6 @@ control=None, gc_contact=None, is_anonymous=True):
     send_file_menuitem = xml.get_object('send_file_menuitem')
     information_menuitem = xml.get_object('information_menuitem')
     history_menuitem = xml.get_object('history_menuitem')
-    send_custom_status_menuitem = xml.get_object('send_custom_status_menuitem')
     send_single_message_menuitem = xml.get_object('send_single_message_menuitem')
     invite_menuitem = xml.get_object('invite_menuitem')
     block_menuitem = xml.get_object('block_menuitem')
@@ -327,7 +326,7 @@ control=None, gc_contact=None, is_anonymous=True):
 
     # Zeroconf Account
     if app.config.get_per('accounts', account, 'is_zeroconf'):
-        for item in (send_custom_status_menuitem, send_single_message_menuitem,
+        for item in (send_single_message_menuitem,
         invite_menuitem, block_menuitem, unblock_menuitem, ignore_menuitem,
         unignore_menuitem, subscription_menuitem,
         manage_contact_menuitem, convert_to_gc_menuitem):
@@ -347,22 +346,6 @@ control=None, gc_contact=None, is_anonymous=True):
         return contact_context_menu
 
     # normal account
-
-    # send custom status icon
-    blocked = False
-    if helpers.jid_is_blocked(account, jid):
-        blocked = True
-    else:
-        for group in contact.get_shown_groups():
-            if helpers.group_is_blocked(account, group):
-                blocked = True
-                break
-    transport = app.get_transport_name_from_jid(jid, use_config_setting=False)
-    if transport and transport != 'jabber':
-        # Transport contact, send custom status unavailable
-        send_custom_status_menuitem.set_sensitive(False)
-    elif blocked:
-        send_custom_status_menuitem.set_sensitive(False)
 
     if gc_contact:
         if not gc_contact.jid:
@@ -386,16 +369,6 @@ control=None, gc_contact=None, is_anonymous=True):
 
     if app.account_is_disconnected(account):
         invite_menuitem.set_sensitive(False)
-
-    # One or several resource, we do the same for send_custom_status
-    status_menuitems = Gtk.Menu()
-    send_custom_status_menuitem.set_submenu(status_menuitems)
-    for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
-        # icon MUST be different instance for every item
-        status_menuitem = Gtk.MenuItem.new_with_label(helpers.get_uf_show(s))
-        status_menuitem.connect('activate', roster.on_send_custom_status,
-                                [(contact, account)], s)
-        status_menuitems.append(status_menuitem)
 
     send_single_message_menuitem.connect('activate',
         roster.on_send_single_message_menuitem_activate, account, contact)
@@ -447,7 +420,7 @@ control=None, gc_contact=None, is_anonymous=True):
     if app.account_is_disconnected(account):
         for widget in (send_single_message_menuitem, subscription_menuitem,
         add_to_roster_menuitem, remove_from_roster_menuitem,
-        execute_command_menuitem, send_custom_status_menuitem):
+        execute_command_menuitem):
             widget.set_sensitive(False)
 
 
@@ -506,24 +479,6 @@ def get_transport_menu(contact, account):
     blocked = False
     if helpers.jid_is_blocked(account, jid):
         blocked = True
-
-    # Send Custom Status
-    send_custom_status_menuitem = Gtk.MenuItem.new_with_mnemonic(
-        _('Send Cus_tom Status'))
-    if blocked:
-        send_custom_status_menuitem.set_sensitive(False)
-    else:
-        status_menuitems = Gtk.Menu()
-        send_custom_status_menuitem.set_submenu(status_menuitems)
-        for s in ('online', 'chat', 'away', 'xa', 'dnd', 'offline'):
-            status_menuitem = Gtk.MenuItem.new_with_label(helpers.get_uf_show(
-                s))
-            status_menuitem.connect('activate', roster.on_send_custom_status,
-                [(contact, account)], s)
-            status_menuitems.append(status_menuitem)
-    menu.append(send_custom_status_menuitem)
-    if app.account_is_disconnected(account):
-        send_custom_status_menuitem.set_sensitive(False)
 
     item = Gtk.SeparatorMenuItem.new() # separator
     menu.append(item)
