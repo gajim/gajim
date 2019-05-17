@@ -367,9 +367,6 @@ class CommonConnection:
         """
         raise NotImplementedError
 
-    def account_changed(self, new_name):
-        self.name = new_name
-
     def send_agent_status(self, agent, ptype):
         """
         To be implemented by derived classes
